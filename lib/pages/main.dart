@@ -8,6 +8,14 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,10 +27,41 @@ class _MainPageState extends State<MainPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Main body',
+              'Current bottom navigation index:',
+            ),
+            Text(
+              '$_selectedIndex',
+              style: Theme.of(context).textTheme.display1,
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history),
+            title: Text('Recents'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.contacts),
+            title: Text('Contacts'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.dialpad),
+            title: Text('Keypad'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.mail),
+            title: Text('Messages'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            title: Text('Settings'),
+          ),
+        ],
       ),
     );
   }
