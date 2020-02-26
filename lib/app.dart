@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/main.dart';
+import 'package:webtrit_phone/pages/main.dart';
 
 void main() => runApp(App());
 
