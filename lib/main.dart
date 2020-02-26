@@ -1,20 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(App());
-
-class App extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'WebTrit Phone',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MainPage(),
-    );
-  }
-}
-
 class MainPage extends StatefulWidget {
   MainPage({Key key}) : super(key: key);
 
