@@ -53,8 +53,7 @@ class MainPage extends StatefulWidget {
   _MainPageState createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage>
-    with TickerProviderStateMixin<MainPage> {
+class _MainPageState extends State<MainPage> with TickerProviderStateMixin<MainPage> {
   int _selectedIndex = 0;
   List<Key> _tabKeys;
   List<AnimationController> _faders;
@@ -69,8 +68,7 @@ class _MainPageState extends State<MainPage>
   void initState() {
     super.initState();
 
-    _tabKeys =
-        List<Key>.generate(tabs.length, (int index) => GlobalKey()).toList();
+    _tabKeys = List<Key>.generate(tabs.length, (int index) => GlobalKey()).toList();
 
     _faders = tabs.map<AnimationController>((Tab tab) {
       return AnimationController(
@@ -103,8 +101,7 @@ class _MainPageState extends State<MainPage>
               final Tab tab = entry.value;
 
               final Widget view = FadeTransition(
-                opacity: _faders[index]
-                    .drive(CurveTween(curve: Curves.fastOutSlowIn)),
+                opacity: _faders[index].drive(CurveTween(curve: Curves.fastOutSlowIn)),
                 child: KeyedSubtree(
                   key: _tabKeys[index],
                   child: tab.build(context),
@@ -116,8 +113,7 @@ class _MainPageState extends State<MainPage>
               } else {
                 if (_faders[index].value == 1.0) {
                   _faders[index].reverse().whenComplete(() {
-                    setState(
-                        () {}); // need to replace IgnorePointer by Offstage
+                    setState(() {}); // need to replace IgnorePointer by Offstage
                   });
                   return IgnorePointer(child: view);
                 } else {
