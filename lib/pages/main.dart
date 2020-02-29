@@ -7,17 +7,19 @@ import 'package:webtrit_phone/pages/recents.dart';
 import 'package:webtrit_phone/pages/settings.dart';
 
 class Tab {
-  const Tab({
+  Tab({
     @required this.icon,
     @required this.title,
     @required this.build,
   })  : assert(icon != null),
         assert(title != null),
-        assert(build != null);
+        assert(build != null),
+        globalKey = LabeledGlobalKey('${title}TabGlobalKey');
 
   final IconData icon;
   final String title;
   final Widget Function(BuildContext context) build;
+  final GlobalKey globalKey;
 }
 
 final List<Tab> tabs = <Tab>[
@@ -57,7 +59,6 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin<MainPage> {
   int _selectedIndex = 0;
-  List<Key> _tabKeys;
   List<AnimationController> _faders;
 
   void _onItemTapped(int index) {
@@ -69,8 +70,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin<MainP
   @override
   void initState() {
     super.initState();
-
-    _tabKeys = List<Key>.generate(tabs.length, (int index) => GlobalKey()).toList();
 
     _faders = tabs.map<AnimationController>((Tab tab) {
       return AnimationController(
@@ -105,7 +104,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin<MainP
               final Widget view = FadeTransition(
                 opacity: _faders[index].drive(CurveTween(curve: Curves.fastOutSlowIn)),
                 child: KeyedSubtree(
-                  key: _tabKeys[index],
+                  key: tab.globalKey,
                   child: tab.build(context),
                 ),
               );
