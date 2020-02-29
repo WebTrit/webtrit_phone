@@ -9,9 +9,11 @@ import 'package:webtrit_phone/pages/settings.dart';
 class Tab {
   const Tab({
     @required this.icon,
-    this.title,
-    this.build,
-  }) : assert(icon != null);
+    @required this.title,
+    @required this.build,
+  })  : assert(icon != null),
+        assert(title != null),
+        assert(build != null);
 
   final IconData icon;
   final String title;
