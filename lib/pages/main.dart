@@ -57,36 +57,13 @@ class MainPage extends StatefulWidget {
   _MainPageState createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> with TickerProviderStateMixin<MainPage> {
+class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
-  List<AnimationController> _faders;
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    _faders = tabs.map<AnimationController>((Tab tab) {
-      return AnimationController(
-        duration: kThemeAnimationDuration,
-        vsync: this,
-      );
-    }).toList();
-    _faders[_selectedIndex].value = 1.0;
-  }
-
-  @override
-  void dispose() {
-    _faders.forEach((controller) {
-      controller.dispose();
-    });
-
-    super.dispose();
   }
 
   @override
@@ -101,26 +78,13 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin<MainP
               final int index = entry.key;
               final Tab tab = entry.value;
 
-              final Widget view = FadeTransition(
-                opacity: _faders[index].drive(CurveTween(curve: Curves.fastOutSlowIn)),
+              return TabPage(
+                active: index == _selectedIndex,
                 child: KeyedSubtree(
                   key: tab.globalKey,
                   child: tab.build(context),
                 ),
               );
-              if (index == _selectedIndex) {
-                _faders[index].forward();
-                return view;
-              } else {
-                if (_faders[index].value == 1.0) {
-                  _faders[index].reverse().whenComplete(() {
-                    setState(() {}); // need to replace IgnorePointer by Offstage
-                  });
-                  return IgnorePointer(child: view);
-                } else {
-                  return Offstage(child: view);
-                }
-              }
             }).toList(),
           ),
         ),
@@ -137,5 +101,66 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin<MainP
         }).toList(),
       ),
     );
+  }
+}
+
+class TabPage extends StatefulWidget {
+  final bool active;
+  final Widget child;
+
+  const TabPage({
+    Key key,
+    this.active,
+    this.child,
+  }) : super(key: key);
+
+  @override
+  _TabPageState createState() => _TabPageState();
+}
+
+class _TabPageState extends State<TabPage> with SingleTickerProviderStateMixin<TabPage> {
+  AnimationController _fader;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _fader = AnimationController(
+      duration: kThemeAnimationDuration,
+      vsync: this,
+    );
+    if (widget.active) {
+      _fader.value = _fader.upperBound;
+    }
+  }
+
+  @override
+  void dispose() {
+    _fader.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final Widget view = FadeTransition(
+      opacity: _fader.drive(CurveTween(curve: Curves.fastOutSlowIn)),
+      child: widget.child,
+    );
+    if (widget.active) {
+      if (_fader.status != AnimationStatus.completed) {
+        _fader.forward();
+      }
+      return view;
+    } else {
+      if (_fader.status != AnimationStatus.dismissed) {
+        _fader.reverse().whenComplete(() {
+          setState(() {}); // need to replace IgnorePointer by Offstage
+        });
+        return IgnorePointer(child: view);
+      } else {
+        return Offstage(child: view);
+      }
+    }
   }
 }
