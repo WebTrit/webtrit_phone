@@ -10,43 +10,46 @@ class Tab {
   Tab({
     @required this.icon,
     @required this.title,
-    @required this.build,
+    @required create,
   })  : assert(icon != null),
         assert(title != null),
-        assert(build != null),
-        globalKey = LabeledGlobalKey('${title}TabGlobalKey');
+        assert(create != null),
+        _create = create,
+        _globalKey = LabeledGlobalKey('${title}TabGlobalKey');
 
   final IconData icon;
   final String title;
-  final Widget Function(BuildContext context) build;
-  final GlobalKey globalKey;
+  final Widget Function(Key key) _create;
+  final GlobalKey _globalKey;
+
+  Widget createWithGlobalKey() => this._create(this._globalKey);
 }
 
 final List<Tab> tabs = <Tab>[
   Tab(
     icon: Icons.history,
     title: 'Recents',
-    build: (BuildContext context) => RecentsPage(),
+    create: (Key key) => RecentsPage(key: key),
   ),
   Tab(
     icon: Icons.contacts,
     title: 'Contacts',
-    build: (BuildContext context) => ContactsPage(),
+    create: (Key key) => ContactsPage(key: key),
   ),
   Tab(
     icon: Icons.dialpad,
     title: 'Keypad',
-    build: (BuildContext context) => KeypadPage(),
+    create: (Key key) => KeypadPage(key: key),
   ),
   Tab(
     icon: Icons.mail,
     title: 'Messages',
-    build: (BuildContext context) => MessagesPage(),
+    create: (Key key) => MessagesPage(key: key),
   ),
   Tab(
     icon: Icons.settings,
     title: 'Settings',
-    build: (BuildContext context) => SettingsPage(),
+    create: (Key key) => SettingsPage(key: key),
   ),
 ];
 
@@ -80,10 +83,7 @@ class _MainPageState extends State<MainPage> {
 
               return TabPage(
                 active: index == _selectedIndex,
-                child: KeyedSubtree(
-                  key: tab.globalKey,
-                  child: tab.build(context),
-                ),
+                child: tab.createWithGlobalKey(),
               );
             }).toList(),
           ),
