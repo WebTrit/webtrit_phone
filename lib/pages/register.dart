@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/widgets/widgets.dart';
+
 class RegisterPage extends StatefulWidget {
   @override
   _RegisterPageState createState() => _RegisterPageState();
@@ -38,19 +40,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: 80,
                       ),
                       Center(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            Text(
-                              'WebTrit',
-                              style: Theme.of(context).textTheme.display3,
-                            ),
-                            Text(
-                              'Phone',
-                              style: Theme.of(context).textTheme.display1,
-                            ),
-                          ],
-                        ),
+                        child: WebTritPhoneTextLogo(),
                       ),
                       SizedBox(
                         height: 80,
