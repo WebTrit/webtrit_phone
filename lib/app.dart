@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/blocs/simple_bloc_delegate.dart';
+import 'package:webtrit_phone/pages/register.dart';
 import 'package:webtrit_phone/pages/main.dart';
 
 void main() {
@@ -18,7 +19,11 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MainPage(),
+      initialRoute: '/register',
+      routes: {
+        '/register': (BuildContext context) => RegisterPage(),
+        '/main': (BuildContext context) => MainPage(),
+      },
     );
   }
 }
