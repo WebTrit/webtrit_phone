@@ -9,7 +9,6 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final _registerFormKey = GlobalKey<FormState>();
-  final _registerFocusNode = FocusNode();
 
   String _username;
 
@@ -20,7 +19,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       body: GestureDetector(
         onTap: () {
-          _registerFocusNode.unfocus();
+          FocusManager.instance.primaryFocus.unfocus();
         },
         child: SafeArea(
           child: SingleChildScrollView(
@@ -47,7 +46,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       TextFormField(
                         initialValue: _username,
-                        focusNode: _registerFocusNode,
                         decoration: InputDecoration(
                           labelText: 'Choose a username',
                           helperText: '', // reserve space for validator message
