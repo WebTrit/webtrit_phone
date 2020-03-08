@@ -2,16 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-class RegisterPage extends StatefulWidget {
-  @override
-  _RegisterPageState createState() => _RegisterPageState();
-}
-
-class _RegisterPageState extends State<RegisterPage> {
-  final _registerFormKey = GlobalKey<FormState>();
-
-  String _username;
-
+class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final topMediaQueryData = MediaQuery.of(context);
@@ -29,59 +20,75 @@ class _RegisterPageState extends State<RegisterPage> {
                 minHeight: topHeight,
               ),
               child: IntrinsicHeight(
-                child: Form(
-                  key: _registerFormKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 80,
-                      ),
-                      Center(
-                        child: WebTritPhoneTextLogo(),
-                      ),
-                      SizedBox(
-                        height: 80,
-                      ),
-                      TextFormField(
-                        initialValue: _username,
-                        decoration: InputDecoration(
-                          labelText: 'Choose a username',
-                          helperText: '', // reserve space for validator message
-                        ),
-                        textInputAction: TextInputAction.send,
-                        onFieldSubmitted: (_) => _register(),
-                        onSaved: (value) {
-                          _username = value;
-                        },
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter a username';
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      OutlineButton(
-                        onPressed: _register,
-                        child: Text('Register'),
-                      ),
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.bottomCenter,
-                          child: Text('Some copyright'),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                child: RegisterForm(),
               ),
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class RegisterForm extends StatefulWidget {
+  @override
+  _RegisterFormState createState() => _RegisterFormState();
+}
+
+class _RegisterFormState extends State<RegisterForm> {
+  final _registerFormKey = GlobalKey<FormState>();
+
+  String _username;
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _registerFormKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          SizedBox(
+            height: 80,
+          ),
+          Center(
+            child: WebTritPhoneTextLogo(),
+          ),
+          SizedBox(
+            height: 80,
+          ),
+          TextFormField(
+            initialValue: _username,
+            decoration: InputDecoration(
+              labelText: 'Choose a username',
+              helperText: '', // reserve space for validator message
+            ),
+            textInputAction: TextInputAction.send,
+            onFieldSubmitted: (_) => _register(),
+            onSaved: (value) {
+              _username = value;
+            },
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter a username';
+              }
+              return null;
+            },
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          OutlineButton(
+            onPressed: _register,
+            child: Text('Register'),
+          ),
+          Expanded(
+            child: Container(
+              alignment: Alignment.bottomCenter,
+              child: Text('Some copyright'),
+            ),
+          ),
+        ],
       ),
     );
   }
