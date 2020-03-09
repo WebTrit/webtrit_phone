@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -96,7 +98,7 @@ class _RegisterFormState extends State<RegisterForm> {
   void _register() {
     if (_registerFormKey.currentState.validate()) {
       _registerFormKey.currentState.save();
-      Navigator.pushReplacementNamed(context, '/main');
+      BlocProvider.of<AppBloc>(context).add(AppRegistered());
     }
   }
 }
