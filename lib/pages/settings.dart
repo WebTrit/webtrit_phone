@@ -16,8 +16,10 @@ class SettingsPage extends StatelessWidget {
             icon: Icon(
               Icons.exit_to_app,
             ),
-            onPressed: () {
-              BlocProvider.of<AppBloc>(context).add(AppUnregistered());
+            onPressed: () async {
+              if (await _confirmUnregister(context)) {
+                BlocProvider.of<AppBloc>(context).add(AppUnregistered());
+              }
             },
           )
         ],
@@ -28,6 +30,33 @@ class SettingsPage extends StatelessWidget {
           size: 120,
         ),
       ),
+    );
+  }
+
+  Future<bool> _confirmUnregister(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Confirm unregister"),
+          content: new Text("Are you sure you want to unregister?"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("No".toUpperCase()),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            new FlatButton(
+              child: new Text("Yes".toUpperCase()),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
