@@ -5,6 +5,8 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class RegisterPage extends StatelessWidget {
+  const RegisterPage({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final topMediaQueryData = MediaQuery.of(context);
@@ -40,6 +42,8 @@ class RegisterPage extends StatelessWidget {
 }
 
 class RegisterForm extends StatefulWidget {
+  const RegisterForm({Key key}) : super(key: key);
+
   @override
   _RegisterFormState createState() => _RegisterFormState();
 }
