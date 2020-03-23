@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/pages/contacts.dart';
 import 'package:webtrit_phone/pages/keypad.dart';
 import 'package:webtrit_phone/pages/messages.dart';
@@ -71,34 +74,41 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: SafeArea(
-          top: false,
-          child: Stack(
-            fit: StackFit.expand,
-            children: tabs.asMap().entries.map((entry) {
-              final int index = entry.key;
-              final Tab tab = entry.value;
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<RecentsBloc>(
+          create: (BuildContext context) => RecentsBloc(recentsRepository: RecentsRepository())..add(RecentsFetched()),
+        ),
+      ],
+      child: Scaffold(
+        body: Center(
+          child: SafeArea(
+            top: false,
+            child: Stack(
+              fit: StackFit.expand,
+              children: tabs.asMap().entries.map((entry) {
+                final int index = entry.key;
+                final Tab tab = entry.value;
 
-              return TabPage(
-                active: index == _selectedIndex,
-                child: tab.createWithGlobalKey(),
-              );
-            }).toList(),
+                return TabPage(
+                  active: index == _selectedIndex,
+                  child: tab.createWithGlobalKey(),
+                );
+              }).toList(),
+            ),
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        items: tabs.map((Tab tab) {
-          return BottomNavigationBarItem(
-            icon: Icon(tab.icon),
-            title: Text(tab.title),
-          );
-        }).toList(),
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+          items: tabs.map((Tab tab) {
+            return BottomNavigationBarItem(
+              icon: Icon(tab.icon),
+              title: Text(tab.title),
+            );
+          }).toList(),
+        ),
       ),
     );
   }
