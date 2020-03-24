@@ -21,7 +21,7 @@ class RecentsPage extends StatelessWidget {
           }
         },
         buildWhen: (previous, current) {
-          return current is! RecentsRefreshFailure;
+          return current is! RecentsRefreshFailure && current is! RecentsLoadUnchangedSuccess;
         },
         // ignore: missing_return
         builder: (context, state) {
@@ -60,6 +60,13 @@ class RecentsPage extends StatelessWidget {
                     },
                     onLongPress: () {
                       _showSnackBar(context, 'LongPress on "${recent.username}"');
+                    },
+                    onDeleted: (recent) {
+                      _showSnackBar(context, '"${recent.username}" deleted');
+
+                      BlocProvider.of<RecentsBloc>(context).add(
+                        RecentsDelete(recent: recent),
+                      );
                     },
                   );
                 },
@@ -110,6 +117,7 @@ class RecentTile extends StatelessWidget {
   final GestureTapCallback onInfoTap;
   final GestureTapCallback onTap;
   final GestureLongPressCallback onLongPress;
+  final void Function(Recent) onDeleted;
 
   RecentTile({
     Key key,
@@ -117,33 +125,78 @@ class RecentTile extends StatelessWidget {
     this.onInfoTap,
     this.onTap,
     this.onLongPress,
+    this.onDeleted,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(recent.direction.icon),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text(
-            recent.time.format(),
-            style: DefaultTextStyle.of(context).style.apply(color: Colors.grey),
+    return Dismissible(
+      key: ObjectKey(recent),
+      background: Container(
+        color: Colors.red,
+        padding: EdgeInsets.only(right: 16),
+        child: Align(
+          alignment: Alignment.centerRight,
+          child: Icon(
+            Icons.delete,
           ),
-          Container(
-            margin: EdgeInsets.only(left: 8),
-            child: GestureDetector(
-              child: Icon(
-                Icons.info_outline,
-              ),
-              onTap: onInfoTap,
-            ),
-          ),
-        ],
+        ),
       ),
-      title: Text(recent.username),
-      onTap: onTap,
-      onLongPress: onLongPress,
+      confirmDismiss: (direction) => _confirmDelete(context, recent),
+      onDismissed: onDeleted == null ? null : (direction) => onDeleted(recent),
+      direction: DismissDirection.endToStart,
+      child: ListTile(
+        leading: Icon(recent.direction.icon),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+              recent.time.format(),
+              style: DefaultTextStyle.of(context).style.apply(color: Colors.grey),
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 8),
+              child: GestureDetector(
+                child: Icon(
+                  Icons.info_outline,
+                ),
+                onTap: onInfoTap,
+              ),
+            ),
+          ],
+        ),
+        title: Text(recent.username),
+        onTap: onTap,
+        onLongPress: onLongPress,
+      ),
+    );
+  }
+
+  Future<bool> _confirmDelete(BuildContext context, Recent recent) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Confirm delete"),
+          content: new Text("Are you sure you want to delete \"${recent.username}\"?"),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("No".toUpperCase()),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            new FlatButton(
+              child: new Text("Yes".toUpperCase()),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              textColor: Colors.red,
+              splashColor: Colors.red[100],
+            ),
+          ],
+        );
+      },
     );
   }
 }

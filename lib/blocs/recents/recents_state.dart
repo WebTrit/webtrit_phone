@@ -32,6 +32,14 @@ class RecentsLoadSuccess extends RecentsState {
       ];
 }
 
+// This state is used to release RefreshIndicator
+class RecentsLoadUnchangedSuccess extends RecentsLoadSuccess {
+  const RecentsLoadUnchangedSuccess();
+
+  @override
+  bool operator ==(Object other) => identical(this, other);
+}
+
 abstract class RecentsLoadFailure extends RecentsState {
   const RecentsLoadFailure();
 

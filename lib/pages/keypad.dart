@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/widgets/widgets.dart';
+
+import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 class KeypadPage extends StatefulWidget {
   const KeypadPage({Key key}) : super(key: key);
@@ -75,6 +79,10 @@ class _KeypadPageState extends State<KeypadPage> {
   }
 
   void _onCallPressed() {
+    BlocProvider.of<RecentsBloc>(context).add(
+      RecentsAdd(recent: Recent(Direction.outgoing, _controller.text, DateTime.now())),
+    );
+
     _focusNode.unfocus();
 
     Scaffold.of(context).removeCurrentSnackBar();

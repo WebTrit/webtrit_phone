@@ -1,21 +1,47 @@
+import 'dart:async';
+
 import 'package:meta/meta.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 
+// TODO: temporary code
 class RecentsRepository {
-  int _callCounter = 0;
+  final List<Recent> _recents = [];
+  final StreamController _controller = StreamController<List<Recent>>.broadcast();
 
-  Future<List<Recent>> getRecents() {
-    // TODO: temporary code
-    if (_callCounter++ % 2 == 0) throw Exception();
-    final recents = List.generate(
-      50,
-      (index) => Recent(
-        index % 2 == 0 ? Direction.incoming : Direction.outgoing,
-        'Recent call #$index',
-        DateTime.now().subtract(Duration(hours: index)),
-      ),
-    );
-    return Future.delayed(Duration(seconds: 3), () => recents);
+  int _fetchCallCounter = 0;
+
+  Stream<List<Recent>> recents() {
+    return _controller.stream;
+  }
+
+  Future<void> fetch() async {
+    if (_recents.isEmpty) {
+      _recents.addAll(List.generate(
+        50,
+        (index) => Recent(
+          index % 2 == 0 ? Direction.incoming : Direction.outgoing,
+          'Recent call #$index',
+          DateTime.now().subtract(Duration(hours: index)),
+        ),
+      ));
+    }
+
+    await Future.delayed(Duration(seconds: 1));
+    if (_fetchCallCounter++ % 3 == 0) throw Exception();
+
+    _controller.add(List<Recent>.from(_recents));
+  }
+
+  Future<void> add(Recent recent) {
+    _recents.insert(0, recent);
+
+    _controller.add(List<Recent>.from(_recents));
+  }
+
+  Future<void> delete(Recent recent) {
+    _recents.remove(recent);
+
+    _controller.add(List<Recent>.from(_recents));
   }
 }
