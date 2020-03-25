@@ -28,7 +28,6 @@ class App extends StatelessWidget {
       ),
       initialRoute: '/register',
       onGenerateRoute: (RouteSettings settings) {
-        print('settings: $settings');
         Widget page;
         switch (settings.name) {
           case '/register':
