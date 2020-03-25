@@ -10,7 +10,7 @@ import 'package:webtrit_phone/pages/main.dart';
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
 
-  runApp(BlocProvider(
+  runApp(BlocProvider<AppBloc>(
     create: (context) {
       return AppBloc();
     },
