@@ -27,14 +27,6 @@ class RecentsPage extends StatelessWidget {
         builder: (context, state) {
           if (state is RecentsInitial) {
             return Center(
-              child: Icon(
-                Icons.history,
-                size: 120,
-              ),
-            );
-          }
-          if (state is RecentsLoadInProgress) {
-            return Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -78,10 +70,10 @@ class RecentsPage extends StatelessWidget {
               ),
             );
           }
-          if (state is RecentsLoadFailure) {
+          if (state is RecentsInitialLoadFailure) {
             return Center(
               child: OutlineButton(
-                onPressed: () => BlocProvider.of<RecentsBloc>(context).add(RecentsFetched()),
+                onPressed: () => BlocProvider.of<RecentsBloc>(context).add(RecentsInitialLoaded()),
                 child: Text('Refresh'),
               ),
             );

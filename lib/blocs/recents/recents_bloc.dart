@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
+
 import 'package:webtrit_phone/repositories/recents_repository.dart';
 
 import './recents.dart';
@@ -18,8 +19,8 @@ class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
 
   @override
   Stream<RecentsState> mapEventToState(RecentsEvent event) async* {
-    if (event is RecentsFetched) {
-      yield* _mapRecentsFetchedToState(event);
+    if (event is RecentsInitialLoaded) {
+      yield* _mapRecentsInitialLoadedToState(event);
     } else if (event is RecentsRefreshed) {
       yield* _mapRecentsRefreshedToState(event);
     } else if (event is RecentsAdd) {
@@ -37,23 +38,23 @@ class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
     return super.close();
   }
 
-  Stream<RecentsState> _mapRecentsFetchedToState(RecentsFetched event) async* {
-    yield RecentsLoadInProgress();
+  Stream<RecentsState> _mapRecentsInitialLoadedToState(RecentsInitialLoaded event) async* {
+    yield RecentsInitial();
     _recentsSubscription?.cancel();
     _recentsSubscription = recentsRepository.recents().listen(
           (recents) => add(RecentsUpdated(recents: recents)),
         );
 
     try {
-      await recentsRepository.fetch();
+      await recentsRepository.load();
     } catch (error) {
-      yield RecentsFetchFailure();
+      yield RecentsInitialLoadFailure();
     }
   }
 
   Stream<RecentsState> _mapRecentsRefreshedToState(RecentsRefreshed event) async* {
     try {
-      await recentsRepository.fetch();
+      await recentsRepository.load();
     } catch (error) {
       yield RecentsRefreshFailure();
     }

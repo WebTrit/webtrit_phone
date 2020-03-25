@@ -15,10 +15,6 @@ class RecentsInitial extends RecentsState {
   const RecentsInitial();
 }
 
-class RecentsLoadInProgress extends RecentsState {
-  const RecentsLoadInProgress();
-}
-
 class RecentsLoadSuccess extends RecentsState {
   final List<Recent> recents;
 
@@ -47,8 +43,8 @@ abstract class RecentsLoadFailure extends RecentsState {
   bool operator ==(Object other) => identical(this, other);
 }
 
-class RecentsFetchFailure extends RecentsLoadFailure {
-  const RecentsFetchFailure();
+class RecentsInitialLoadFailure extends RecentsLoadFailure {
+  const RecentsInitialLoadFailure();
 }
 
 class RecentsRefreshFailure extends RecentsLoadFailure {

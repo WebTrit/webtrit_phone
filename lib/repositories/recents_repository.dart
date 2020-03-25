@@ -15,7 +15,7 @@ class RecentsRepository {
     return _controller.stream;
   }
 
-  Future<void> fetch() async {
+  Future<void> load() async {
     if (_recents.isEmpty) {
       _recents.addAll(List.generate(
         50,

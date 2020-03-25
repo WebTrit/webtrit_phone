@@ -77,7 +77,7 @@ class _MainPageState extends State<MainPage> {
     return MultiBlocProvider(
       providers: [
         BlocProvider<RecentsBloc>(
-          create: (BuildContext context) => RecentsBloc(recentsRepository: RecentsRepository())..add(RecentsFetched()),
+          create: (BuildContext context) => RecentsBloc(recentsRepository: RecentsRepository())..add(RecentsInitialLoaded()),
         ),
         BlocProvider<ContactsBloc>(
           create: (BuildContext context) => ContactsBloc(contactsRepository: ContactsRepository())..add(ContactsInitialLoaded()),
