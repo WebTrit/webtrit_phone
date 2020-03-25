@@ -20,10 +20,16 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   Stream<RegistrationState> mapEventToState(RegistrationEvent event) async* {
     if (event is RegistrationStarted) {
       yield* _mapRegistrationStartedToState(event);
+    } else if (event is RegistrationProcessed) {
+      yield* _mapRegistrationProcessedToState(event);
     }
   }
 
   Stream<RegistrationState> _mapRegistrationStartedToState(RegistrationStarted event) async* {
+    yield RegistrationInitial();
+  }
+
+  Stream<RegistrationState> _mapRegistrationProcessedToState(RegistrationProcessed event) async* {
     yield RegistrationInProgress();
     try {
       // TODO: temporary code

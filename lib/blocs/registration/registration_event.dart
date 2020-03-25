@@ -4,12 +4,19 @@ import 'package:equatable/equatable.dart';
 @immutable
 abstract class RegistrationEvent extends Equatable {
   const RegistrationEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
 class RegistrationStarted extends RegistrationEvent {
+  const RegistrationStarted();
+}
+
+class RegistrationProcessed extends RegistrationEvent {
   final String username;
 
-  const RegistrationStarted({
+  const RegistrationProcessed({
     @required this.username,
   });
 
@@ -17,5 +24,5 @@ class RegistrationStarted extends RegistrationEvent {
   List<Object> get props => [username];
 
   @override
-  String toString() => 'RegistrationStarted { username: $username }';
+  String toString() => 'RegistrationProcessed { username: $username }';
 }
