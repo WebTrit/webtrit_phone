@@ -79,6 +79,9 @@ class _MainPageState extends State<MainPage> {
         BlocProvider<RecentsBloc>(
           create: (BuildContext context) => RecentsBloc(recentsRepository: RecentsRepository())..add(RecentsFetched()),
         ),
+        BlocProvider<ContactsBloc>(
+          create: (BuildContext context) => ContactsBloc(contactsRepository: ContactsRepository())..add(ContactsInitialLoaded()),
+        ),
       ],
       child: Scaffold(
         body: Center(
