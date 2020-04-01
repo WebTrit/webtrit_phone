@@ -41,5 +41,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSCameraUsageDescription</key>
+	<string>A message that tells the user why the app is requesting access to the device’s camera.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>A message that tells the user why the app is requesting access to the device’s microphone.</string>
 </dict>
 </plist>
