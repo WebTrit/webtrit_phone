@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/blocs/simple_bloc_delegate.dart';
@@ -21,6 +22,8 @@ void main() {
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    setDefaultOrientations();
+
     return MaterialApp(
       title: 'WebTrit Phone',
       theme: ThemeData(
@@ -63,4 +66,20 @@ class App extends StatelessWidget {
       },
     );
   }
+}
+
+Future<void> setDefaultOrientations() {
+  return SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+}
+
+Future<void> setCallOrientations() {
+  return SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+  ]);
 }
