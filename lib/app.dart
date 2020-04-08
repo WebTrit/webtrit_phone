@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/blocs/simple_bloc_delegate.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/pages/register.dart';
 import 'package:webtrit_phone/pages/main.dart';
 
@@ -34,10 +35,35 @@ class App extends StatelessWidget {
         Widget page;
         switch (settings.name) {
           case '/register':
-            page = RegisterPage();
+            page = BlocProvider(
+              create: (context) {
+                return RegistrationBloc(
+                  appBloc: BlocProvider.of<AppBloc>(context),
+                )..add(RegistrationStarted());
+              },
+              child: RegisterPage(),
+            );
             break;
           case '/main':
-            page = MainPage();
+            page = MultiBlocProvider(
+              providers: [
+                BlocProvider<RecentsBloc>(
+                  create: (BuildContext context) {
+                    return RecentsBloc(
+                      recentsRepository: RecentsRepository(),
+                    )..add(RecentsInitialLoaded());
+                  },
+                ),
+                BlocProvider<ContactsBloc>(
+                  create: (BuildContext context) {
+                    return ContactsBloc(
+                      contactsRepository: ContactsRepository(),
+                    )..add(ContactsInitialLoaded());
+                  },
+                ),
+              ],
+              child: MainPage(),
+            );
             break;
           default:
             return null;

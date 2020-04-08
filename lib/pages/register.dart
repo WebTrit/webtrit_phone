@@ -11,27 +11,20 @@ class RegisterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final topMediaQueryData = MediaQuery.of(context);
     final topHeight = topMediaQueryData.viewPadding.deflateSize(topMediaQueryData.size).height;
-    return BlocProvider(
-      create: (context) {
-        return RegistrationBloc(
-          appBloc: BlocProvider.of<AppBloc>(context),
-        )..add(RegistrationStarted());
-      },
-      child: Scaffold(
-        body: GestureDetector(
-          onTap: () {
-            FocusManager.instance.primaryFocus.unfocus();
-          },
-          child: SafeArea(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: topHeight,
-                ),
-                child: IntrinsicHeight(
-                  child: RegisterForm(),
-                ),
+    return Scaffold(
+      body: GestureDetector(
+        onTap: () {
+          FocusManager.instance.primaryFocus.unfocus();
+        },
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: topHeight,
+              ),
+              child: IntrinsicHeight(
+                child: RegisterForm(),
               ),
             ),
           ),
