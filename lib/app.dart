@@ -14,6 +14,9 @@ void main() {
 
   runApp(MultiRepositoryProvider(
     providers: [
+      RepositoryProvider<CallRepository>(
+        create: (context) => CallRepository(),
+      ),
       RepositoryProvider<RecentsRepository>(
         create: (context) => RecentsRepository(),
       ),
