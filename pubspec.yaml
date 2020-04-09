@@ -27,6 +27,7 @@ dependencies:
   logging: ^0.11.4
   intl: ^0.16.1
   meta: ^1.1.8
+  collection: ^1.14.11
   equatable: ^1.1.1
   bloc: ^3.0.0
   flutter_bloc: ^3.2.0
