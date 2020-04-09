@@ -51,6 +51,7 @@ class App extends StatelessWidget {
             page = BlocProvider(
               create: (context) {
                 return RegistrationBloc(
+                  callRepository: context.repository<CallRepository>(),
                   appBloc: BlocProvider.of<AppBloc>(context),
                 )..add(RegistrationStarted());
               },

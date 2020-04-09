@@ -1,18 +1,22 @@
 import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
+import 'package:janus_client/janus_client.dart';
 
+import 'package:webtrit_phone/repositories/call_repository.dart';
 import 'package:webtrit_phone/blocs/app/app.dart';
 
 import './registration.dart';
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
+  final CallRepository callRepository;
   final AppBloc appBloc;
 
   @override
   RegistrationState get initialState => RegistrationInitial();
 
   RegistrationBloc({
+    @required this.callRepository,
     @required this.appBloc,
   });
 
@@ -27,22 +31,30 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
 
   Stream<RegistrationState> _mapRegistrationStartedToState(RegistrationStarted event) async* {
     yield RegistrationInitial();
+
+    if (callRepository.isAttached) {
+      await callRepository.detach();
+    }
   }
 
   Stream<RegistrationState> _mapRegistrationProcessedToState(RegistrationProcessed event) async* {
     yield RegistrationInProgress();
     try {
-      // TODO: temporary code
-      await Future.delayed(Duration(seconds: 1));
-      if (event.username.startsWith('e')) {
-        throw Exception('Username can\'t start with \'e\'');
-      }
+      await callRepository.attach();
+      await callRepository.register(event.username);
 
       appBloc.add(AppRegistered());
-      yield RegistrationInitial();
-    } catch (error) {
+    } on JanusPluginHandleErrorException catch (e) {
       yield RegistrationFailure(
-        reason: error.toString(),
+        reason: e.error,
+      );
+    } on JanusErrorException catch(e) {
+      yield RegistrationFailure(
+        reason: e.reason,
+      );
+    } on Exception catch (e) {
+      yield RegistrationFailure(
+        reason: e.toString(),
       );
     }
   }
