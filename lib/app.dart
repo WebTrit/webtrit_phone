@@ -12,11 +12,21 @@ import 'package:webtrit_phone/pages/main.dart';
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
 
-  runApp(BlocProvider<AppBloc>(
-    create: (context) {
-      return AppBloc();
-    },
-    child: App(),
+  runApp(MultiRepositoryProvider(
+    providers: [
+      RepositoryProvider<RecentsRepository>(
+        create: (context) => RecentsRepository(),
+      ),
+      RepositoryProvider<ContactsRepository>(
+        create: (context) => ContactsRepository(),
+      ),
+    ],
+    child: BlocProvider<AppBloc>(
+      create: (context) {
+        return AppBloc();
+      },
+      child: App(),
+    ),
   ));
 }
 
@@ -50,14 +60,14 @@ class App extends StatelessWidget {
                 BlocProvider<RecentsBloc>(
                   create: (BuildContext context) {
                     return RecentsBloc(
-                      recentsRepository: RecentsRepository(),
+                      recentsRepository: context.repository<RecentsRepository>(),
                     )..add(RecentsInitialLoaded());
                   },
                 ),
                 BlocProvider<ContactsBloc>(
                   create: (BuildContext context) {
                     return ContactsBloc(
-                      contactsRepository: ContactsRepository(),
+                      contactsRepository: context.repository<ContactsRepository>(),
                     )..add(ContactsInitialLoaded());
                   },
                 ),
