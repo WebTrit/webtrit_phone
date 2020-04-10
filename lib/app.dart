@@ -21,7 +21,9 @@ void main() {
         create: (context) => RecentsRepository(),
       ),
       RepositoryProvider<ContactsRepository>(
-        create: (context) => ContactsRepository(),
+        create: (context) => ContactsRepository(
+          callRepository: context.repository<CallRepository>(),
+        ),
       ),
     ],
     child: BlocProvider<AppBloc>(
