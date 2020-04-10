@@ -73,23 +73,25 @@ class ContactsPage extends StatelessWidget {
   }
 
   void _hideSnackBar(BuildContext context) {
-    Scaffold.of(context).removeCurrentSnackBar();
+    Scaffold.of(context)..removeCurrentSnackBar();
   }
 
   void _showSnackBar(BuildContext context, String data) {
-    Scaffold.of(context).removeCurrentSnackBar();
-    Scaffold.of(context).showSnackBar(SnackBar(
-      duration: Duration(seconds: 1),
-      content: Text(data),
-    ));
+    Scaffold.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+        duration: Duration(seconds: 1),
+        content: Text(data),
+      ));
   }
 
   void _showErrorSnackBar(BuildContext context, String data) {
-    Scaffold.of(context).removeCurrentSnackBar();
-    Scaffold.of(context).showSnackBar(SnackBar(
-      backgroundColor: Colors.red[900],
-      content: Text(data),
-    ));
+    Scaffold.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+        backgroundColor: Colors.red[900],
+        content: Text(data),
+      ));
   }
 }
 
