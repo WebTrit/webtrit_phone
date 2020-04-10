@@ -57,11 +57,6 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   }
 
   Stream<ContactsState> _mapContactsUpdatedToState(ContactsUpdated event) async* {
-    final newSate = ContactsLoadSuccess(contacts: event.contacts);
-    if (state == newSate) {
-      yield ContactsLoadUnchangedSuccess();
-    } else {
-      yield newSate;
-    }
+    yield ContactsLoadSuccess(contacts: event.contacts);
   }
 }

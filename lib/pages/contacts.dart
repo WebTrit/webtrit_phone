@@ -21,7 +21,7 @@ class ContactsPage extends StatelessWidget with PageSnackBarMixin {
           }
         },
         buildWhen: (previous, current) {
-          return current is! ContactsRefreshFailure && current is! ContactsLoadUnchangedSuccess;
+          return current is! ContactsRefreshFailure;
         },
         // ignore: missing_return
         builder: (context, state) {

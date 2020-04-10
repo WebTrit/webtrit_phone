@@ -23,17 +23,10 @@ class ContactsLoadSuccess extends ContactsState {
   });
 
   @override
-  List<Object> get props => [
-    contacts,
-  ];
-}
-
-// This state is used to release RefreshIndicator
-class ContactsLoadUnchangedSuccess extends ContactsLoadSuccess {
-  const ContactsLoadUnchangedSuccess();
+  bool operator ==(Object other) => identical(this, other);
 
   @override
-  bool operator ==(Object other) => identical(this, other);
+  int get hashCode => identityHashCode(this);
 }
 
 abstract class ContactsLoadFailure extends ContactsState {
@@ -41,6 +34,9 @@ abstract class ContactsLoadFailure extends ContactsState {
 
   @override
   bool operator ==(Object other) => identical(this, other);
+
+  @override
+  int get hashCode => identityHashCode(this);
 }
 
 class ContactsInitialLoadFailure extends ContactsLoadFailure {
