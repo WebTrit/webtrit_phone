@@ -69,11 +69,6 @@ class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
   }
 
   Stream<RecentsState> _mapRecentsUpdatedToState(RecentsUpdated event) async* {
-    final newSate = RecentsLoadSuccess(recents: event.recents);
-    if (state == newSate) {
-      yield RecentsLoadUnchangedSuccess();
-    } else {
-      yield newSate;
-    }
+    yield RecentsLoadSuccess(recents: event.recents);
   }
 }

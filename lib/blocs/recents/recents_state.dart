@@ -23,17 +23,10 @@ class RecentsLoadSuccess extends RecentsState {
   });
 
   @override
-  List<Object> get props => [
-        recents,
-      ];
-}
-
-// This state is used to release RefreshIndicator
-class RecentsLoadUnchangedSuccess extends RecentsLoadSuccess {
-  const RecentsLoadUnchangedSuccess();
+  bool operator ==(Object other) => identical(this, other);
 
   @override
-  bool operator ==(Object other) => identical(this, other);
+  int get hashCode => identityHashCode(this);
 }
 
 abstract class RecentsLoadFailure extends RecentsState {
@@ -41,6 +34,9 @@ abstract class RecentsLoadFailure extends RecentsState {
 
   @override
   bool operator ==(Object other) => identical(this, other);
+
+  @override
+  int get hashCode => identityHashCode(this);
 }
 
 class RecentsInitialLoadFailure extends RecentsLoadFailure {

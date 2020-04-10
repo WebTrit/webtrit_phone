@@ -22,7 +22,7 @@ class RecentsPage extends StatelessWidget with PageSnackBarMixin {
           }
         },
         buildWhen: (previous, current) {
-          return current is! RecentsRefreshFailure && current is! RecentsLoadUnchangedSuccess;
+          return current is! RecentsRefreshFailure;
         },
         // ignore: missing_return
         builder: (context, state) {
