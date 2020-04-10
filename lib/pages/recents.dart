@@ -4,8 +4,9 @@ import 'package:intl/intl.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
-class RecentsPage extends StatelessWidget {
+class RecentsPage extends StatelessWidget with PageSnackBarMixin {
   const RecentsPage({Key key}) : super(key: key);
 
   @override
@@ -17,7 +18,7 @@ class RecentsPage extends StatelessWidget {
       body: BlocConsumer<RecentsBloc, RecentsState>(
         listener: (context, state) {
           if (state is RecentsLoadFailure) {
-            _showErrorSnackBar(context, 'Ups error happened ☹️');
+            showErrorSnackBar(context, 'Ups error happened ☹️');
           }
         },
         buildWhen: (previous, current) {
@@ -33,7 +34,7 @@ class RecentsPage extends StatelessWidget {
           if (state is RecentsLoadSuccess) {
             return RefreshIndicator(
               onRefresh: () {
-                _hideSnackBar(context);
+                hideSnackBar(context);
                 return (BlocProvider.of<RecentsBloc>(context)..add(RecentsRefreshed()))
                     .skip(1)
                     .firstWhere((state) => state is RecentsLoadSuccess || state is RecentsRefreshFailure);
@@ -45,16 +46,16 @@ class RecentsPage extends StatelessWidget {
                   return RecentTile(
                     recent: recent,
                     onInfoTap: () {
-                      _showSnackBar(context, 'Tap info on "${recent.username}"');
+                      showSnackBar(context, 'Tap info on "${recent.username}"');
                     },
                     onTap: () {
-                      _showSnackBar(context, 'Tap on "${recent.username}"');
+                      showSnackBar(context, 'Tap on "${recent.username}"');
                     },
                     onLongPress: () {
-                      _showSnackBar(context, 'LongPress on "${recent.username}"');
+                      showSnackBar(context, 'LongPress on "${recent.username}"');
                     },
                     onDeleted: (recent) {
-                      _showSnackBar(context, '"${recent.username}" deleted');
+                      showSnackBar(context, '"${recent.username}" deleted');
 
                       BlocProvider.of<RecentsBloc>(context).add(
                         RecentsDelete(recent: recent),
@@ -81,28 +82,6 @@ class RecentsPage extends StatelessWidget {
         },
       ),
     );
-  }
-
-  void _hideSnackBar(BuildContext context) {
-    Scaffold.of(context)..removeCurrentSnackBar();
-  }
-
-  void _showSnackBar(BuildContext context, String data) {
-    Scaffold.of(context)
-      ..removeCurrentSnackBar()
-      ..showSnackBar(SnackBar(
-        duration: Duration(seconds: 1),
-        content: Text(data),
-      ));
-  }
-
-  void _showErrorSnackBar(BuildContext context, String data) {
-    Scaffold.of(context)
-      ..removeCurrentSnackBar()
-      ..showSnackBar(SnackBar(
-        backgroundColor: Colors.red[900],
-        content: Text(data),
-      ));
   }
 }
 

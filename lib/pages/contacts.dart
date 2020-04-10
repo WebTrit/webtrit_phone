@@ -3,8 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
-class ContactsPage extends StatelessWidget {
+class ContactsPage extends StatelessWidget with PageSnackBarMixin {
   const ContactsPage({Key key}) : super(key: key);
 
   @override
@@ -16,7 +17,7 @@ class ContactsPage extends StatelessWidget {
       body: BlocConsumer<ContactsBloc, ContactsState>(
         listener: (context, state) {
           if (state is ContactsLoadFailure) {
-            _showErrorSnackBar(context, 'Ups error happened ☹️');
+            showErrorSnackBar(context, 'Ups error happened ☹️');
           }
         },
         buildWhen: (previous, current) {
@@ -32,7 +33,7 @@ class ContactsPage extends StatelessWidget {
           if (state is ContactsLoadSuccess) {
             return RefreshIndicator(
               onRefresh: () {
-                _hideSnackBar(context);
+                hideSnackBar(context);
                 return (BlocProvider.of<ContactsBloc>(context)..add(ContactsRefreshed()))
                     .skip(1)
                     .firstWhere((state) => state is ContactsLoadSuccess || state is ContactsRefreshFailure);
@@ -44,10 +45,10 @@ class ContactsPage extends StatelessWidget {
                   return ContactTile(
                     contact: contact,
                     onTap: () {
-                      _showSnackBar(context, 'Tap on "${contact.username}"');
+                      showSnackBar(context, 'Tap on "${contact.username}"');
                     },
                     onLongPress: () {
-                      _showSnackBar(context, 'LongPress on "${contact.username}"');
+                      showSnackBar(context, 'LongPress on "${contact.username}"');
                     },
                   );
                 },
@@ -70,28 +71,6 @@ class ContactsPage extends StatelessWidget {
         },
       ),
     );
-  }
-
-  void _hideSnackBar(BuildContext context) {
-    Scaffold.of(context)..removeCurrentSnackBar();
-  }
-
-  void _showSnackBar(BuildContext context, String data) {
-    Scaffold.of(context)
-      ..removeCurrentSnackBar()
-      ..showSnackBar(SnackBar(
-        duration: Duration(seconds: 1),
-        content: Text(data),
-      ));
-  }
-
-  void _showErrorSnackBar(BuildContext context, String data) {
-    Scaffold.of(context)
-      ..removeCurrentSnackBar()
-      ..showSnackBar(SnackBar(
-        backgroundColor: Colors.red[900],
-        content: Text(data),
-      ));
   }
 }
 
