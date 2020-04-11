@@ -8,6 +8,7 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/pages/register.dart';
 import 'package:webtrit_phone/pages/main.dart';
+import 'package:webtrit_phone/pages/call.dart';
 
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
@@ -77,8 +78,31 @@ class App extends StatelessWidget {
                     )..add(ContactsInitialLoaded());
                   },
                 ),
+                BlocProvider<CallBloc>(
+                  create: (BuildContext context) {
+                    return CallBloc(
+                      callRepository: context.repository<CallRepository>(),
+                    );
+                  },
+                ),
               ],
-              child: MainPage(),
+              child: BlocListener<CallBloc, CallState>(
+                listener: (context, state) {
+                  if (state is CallIncoming) {
+                    Navigator.pushNamed(context, '/main/call', arguments: context.bloc<CallBloc>());
+                  }
+                  if (state is CallHangUp) {
+                    Navigator.pop(context);
+                  }
+                },
+                child: MainPage(),
+              ),
+            );
+            break;
+          case '/main/call':
+            page = BlocProvider<CallBloc>.value(
+              value: settings.arguments,
+              child: CallPage(),
             );
             break;
           default:
