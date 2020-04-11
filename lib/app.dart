@@ -89,7 +89,10 @@ class App extends StatelessWidget {
               child: BlocListener<CallBloc, CallState>(
                 listener: (context, state) {
                   if (state is CallIncoming) {
-                    Navigator.pushNamed(context, '/main/call', arguments: context.bloc<CallBloc>());
+                    Navigator.pushNamed(context, '/main/call',
+                        arguments: CallNavigationArguments(
+                          callBloc: context.bloc<CallBloc>(),
+                        ));
                   }
                   if (state is CallHangUp) {
                     Navigator.pop(context);
@@ -100,8 +103,9 @@ class App extends StatelessWidget {
             );
             break;
           case '/main/call':
+            final callNavigationArguments = settings.arguments as CallNavigationArguments;
             page = BlocProvider<CallBloc>.value(
-              value: settings.arguments,
+              value: callNavigationArguments.callBloc,
               child: CallPage(),
             );
             break;
@@ -148,4 +152,12 @@ Future<void> setCallOrientations() {
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
   ]);
+}
+
+class CallNavigationArguments {
+  final CallBloc callBloc;
+
+  CallNavigationArguments({
+    @required this.callBloc,
+  }) : assert(callBloc != null);
 }
