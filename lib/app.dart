@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/blocs/simple_bloc_delegate.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
@@ -11,6 +12,11 @@ import 'package:webtrit_phone/pages/main.dart';
 import 'package:webtrit_phone/pages/call.dart';
 
 void main() {
+  // default root logger level is INFO
+  Logger.root.onRecord.listen((record) {
+    print('${record.time} [${record.level.name}] ${record.loggerName}: ${record.message}');
+  });
+
   BlocSupervisor.delegate = SimpleBlocDelegate();
 
   runApp(MultiRepositoryProvider(
