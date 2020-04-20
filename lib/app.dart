@@ -19,9 +19,14 @@ void main(List<String> args) {
     allowed: List.from(Level.LEVELS.map((level) => level.name)),
     defaultsTo: 'INFO',
   );
+  argParser.addFlag(
+    'periodic-polling',
+    defaultsTo: true,
+  );
 
   final argParserResults = argParser.parse(args);
   final debugLevelOption = argParserResults['debug-level'] as String;
+  final periodicPollingFlag = argParserResults['periodic-polling'] as bool;
 
   Logger.root.level = Level.LEVELS.firstWhere((level) => level.name == debugLevelOption);
   Logger.root.onRecord.listen((record) {
@@ -41,6 +46,7 @@ void main(List<String> args) {
       RepositoryProvider<ContactsRepository>(
         create: (context) => ContactsRepository(
           callRepository: context.repository<CallRepository>(),
+          periodicPolling: periodicPollingFlag,
         ),
       ),
     ],
