@@ -1,3 +1,4 @@
+import 'package:args/args.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,8 +12,18 @@ import 'package:webtrit_phone/pages/register.dart';
 import 'package:webtrit_phone/pages/main.dart';
 import 'package:webtrit_phone/pages/call.dart';
 
-void main() {
-  // default root logger level is INFO
+void main(List<String> args) {
+  final argParser = ArgParser();
+  argParser.addOption(
+    'debug-level',
+    allowed: List.from(Level.LEVELS.map((level) => level.name)),
+    defaultsTo: 'INFO',
+  );
+
+  final argParserResults = argParser.parse(args);
+  final debugLevelOption = argParserResults['debug-level'] as String;
+
+  Logger.root.level = Level.LEVELS.firstWhere((level) => level.name == debugLevelOption);
   Logger.root.onRecord.listen((record) {
     print('${record.time} [${record.level.name}] ${record.loggerName}: ${record.message}');
   });
