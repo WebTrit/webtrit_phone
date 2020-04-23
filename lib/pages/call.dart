@@ -128,6 +128,7 @@ class _CallActions extends StatefulWidget {
   final bool speakerphoneEnabledByDefault;
   final void Function(bool enabled) onSpeakerphonePressed;
   final void Function() onHangupPressed;
+  final void Function() onAcceptPressed;
 
   _CallActions({
     Key key,
@@ -138,6 +139,7 @@ class _CallActions extends StatefulWidget {
     this.speakerphoneEnabledByDefault = true,
     this.onSpeakerphonePressed,
     this.onHangupPressed,
+    this.onAcceptPressed,
   }) : super(key: key);
 
   @override
@@ -221,6 +223,19 @@ class _CallActionsState extends State<_CallActions> {
               color: Colors.red,
               child: const Icon(Icons.call_end),
               onPressed: widget.onHangupPressed,
+            ),
+          ),
+          SizedBox(
+            width: 8,
+          ),
+          Tooltip(
+            message: 'Accept',
+            child: FlatButton(
+              textColor: Colors.white,
+              color: Colors.green,
+              disabledColor: Colors.grey,
+              child: const Icon(Icons.call),
+              onPressed: widget.onAcceptPressed,
             ),
           ),
         ],
