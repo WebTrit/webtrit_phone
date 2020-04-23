@@ -221,6 +221,7 @@ class _CallActionsState extends State<_CallActions> {
             child: FlatButton(
               textColor: Colors.white,
               color: Colors.red,
+              disabledColor: Colors.grey,
               child: const Icon(Icons.call_end),
               onPressed: widget.onHangupPressed,
             ),
