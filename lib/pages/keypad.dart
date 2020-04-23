@@ -79,10 +79,6 @@ class _KeypadPageState extends State<KeypadPage> {
   }
 
   void _onCallPressed() {
-    BlocProvider.of<RecentsBloc>(context).add(
-      RecentsAdd(recent: Recent(Direction.outgoing, _controller.text, DateTime.now())),
-    );
-
     _focusNode.unfocus();
 
     Scaffold.of(context).removeCurrentSnackBar();
