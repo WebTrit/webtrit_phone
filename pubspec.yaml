@@ -30,8 +30,8 @@ dependencies:
   meta: ^1.1.8
   collection: ^1.14.11
   equatable: ^1.1.1
-  bloc: ^3.0.0
-  flutter_bloc: ^3.2.0
+  bloc: ^4.0.0
+  flutter_bloc: ^4.0.0
   flutter_webrtc: ^0.2.7
 
   janus_client:
@@ -41,7 +41,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  bloc_test: ^4.0.0
+  bloc_test: ^5.0.0
   flutter_launcher_icons: ^0.7.4
 
 
