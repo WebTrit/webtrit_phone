@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_webrtc/webrtc.dart';
 
 @immutable
 abstract class CallEvent extends Equatable {
@@ -9,10 +10,30 @@ abstract class CallEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class CallReceived extends CallEvent {
+class CallIncomingReceived extends CallEvent {
+  final String username;
+  final Map<String, dynamic> jsepData;
+
+  const CallIncomingReceived({
+    @required this.username,
+    this.jsepData,
+  });
+
+  @override
+  List<Object> get props => [username, jsepData];
+
+  @override
+  String toString() => '$runtimeType { username: $username, with jsep: ${jsepData != null} }';
+}
+
+class CallIncomingAccepted extends CallEvent {
+  const CallIncomingAccepted();
+}
+
+class CallOutgoingStarted extends CallEvent {
   final String username;
 
-  const CallReceived({
+  const CallOutgoingStarted({
     @required this.username,
   });
 
@@ -21,6 +42,22 @@ class CallReceived extends CallEvent {
 
   @override
   String toString() => '$runtimeType { username: $username }';
+}
+
+class CallOutgoingAccepted extends CallEvent {
+  final String username;
+  final Map<String, dynamic> jsepData;
+
+  const CallOutgoingAccepted({
+    @required this.username,
+    this.jsepData,
+  });
+
+  @override
+  List<Object> get props => [username, jsepData];
+
+  @override
+  String toString() => '$runtimeType { username: $username, with jsep: ${jsepData != null} }';
 }
 
 abstract class CallHungUp extends CallEvent {
@@ -37,14 +74,36 @@ abstract class CallHungUp extends CallEvent {
   String toString() => '$runtimeType { reason: $reason }';
 }
 
-class CallHungUpRemote extends CallHungUp {
-  const CallHungUpRemote({
-    @required reason,
+class CallRemoteHungUp extends CallHungUp {
+  const CallRemoteHungUp({
+    @required String reason,
   }) : super(reason: reason);
 }
 
-class CallHungUpLocal extends CallHungUp {
-  const CallHungUpLocal({
-    @required reason,
+class CallLocalHungUp extends CallHungUp {
+  const CallLocalHungUp({
+    @required String reason,
   }) : super(reason: reason);
+}
+
+class CallRemoteStreamAdded extends CallEvent {
+  final MediaStream stream;
+
+  const CallRemoteStreamAdded({
+    this.stream,
+  });
+
+  @override
+  List<Object> get props => [stream];
+}
+
+class CallRemoteStreamRemoved extends CallEvent {
+  final MediaStream stream;
+
+  const CallRemoteStreamRemoved({
+    this.stream,
+  });
+
+  @override
+  List<Object> get props => [stream];
 }

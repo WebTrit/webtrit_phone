@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_webrtc/webrtc.dart';
 
 @immutable
 abstract class CallState extends Equatable {
@@ -9,24 +10,108 @@ abstract class CallState extends Equatable {
   List<Object> get props => [];
 }
 
-class CallInitial extends CallState {
-  const CallInitial();
+class CallIdle extends CallState {
+  const CallIdle();
 }
 
-class CallIncoming extends CallState {
+abstract class CallActive extends CallState {
   final String username;
+  final bool accepted;
+  final bool hungUp;
 
-  const CallIncoming({
+  final MediaStream localStream;
+  final MediaStream remoteStream;
+
+  const CallActive({
     @required this.username,
+    this.accepted = false,
+    this.hungUp = false,
+    this.localStream,
+    this.remoteStream,
+  })  : assert(username != null),
+        assert(accepted != null),
+        assert(hungUp != null);
+
+  @override
+  List<Object> get props => [username, accepted, localStream, remoteStream];
+
+  @override
+  String toString() =>
+      '$runtimeType { username: $username, accepted: $accepted, with localStream: ${localStream != null}, with remoteStream: ${remoteStream != null} }';
+
+  CallActive copyWith({
+    String username,
+    bool accepted,
+    bool hungUp,
+    MediaStream localStream,
+    MediaStream remoteStream,
   });
 }
 
-class CallHangUp extends CallState {
-  final String reason;
+class CallIncoming extends CallActive {
+  const CallIncoming({
+    @required String username,
+    bool accepted = false,
+    bool hungUp = false,
+    localStream,
+    remoteStream,
+  }) : super(
+          username: username,
+          accepted: accepted,
+          hungUp: hungUp,
+          localStream: localStream,
+          remoteStream: remoteStream,
+        );
 
-  const CallHangUp({
-    @required this.reason,
-  });
+  @override
+  CallIncoming copyWith({
+    @required String username,
+    bool accepted,
+    bool hungUp,
+    MediaStream localStream,
+    MediaStream remoteStream,
+  }) {
+    return CallIncoming(
+      username: username ?? this.username,
+      accepted: accepted ?? this.accepted,
+      hungUp: hungUp ?? this.hungUp,
+      localStream: localStream ?? this.localStream,
+      remoteStream: remoteStream ?? this.remoteStream,
+    );
+  }
+}
+
+class CallOutgoing extends CallActive {
+  const CallOutgoing({
+    @required String username,
+    bool accepted = false,
+    bool hungUp = false,
+    localStream,
+    remoteStream,
+  }) : super(
+          username: username,
+          accepted: accepted,
+          hungUp: hungUp,
+          localStream: localStream,
+          remoteStream: remoteStream,
+        );
+
+  @override
+  CallOutgoing copyWith({
+    String username,
+    bool accepted,
+    bool hungUp,
+    MediaStream localStream,
+    MediaStream remoteStream,
+  }) {
+    return CallOutgoing(
+      username: username ?? this.username,
+      accepted: accepted ?? this.accepted,
+      hungUp: hungUp ?? this.hungUp,
+      localStream: localStream ?? this.localStream,
+      remoteStream: remoteStream ?? this.remoteStream,
+    );
+  }
 }
 
 class CallFailure extends CallState {

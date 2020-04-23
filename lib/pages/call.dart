@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/widgets/rtc_video_view.dart';
 
 class CallPage extends StatefulWidget {
   @override
@@ -9,97 +10,151 @@ class CallPage extends StatefulWidget {
 }
 
 class _CallPageState extends State<CallPage> {
+  RTCVideoRendererExt _localRenderer = RTCVideoRendererExt();
+  RTCVideoRendererExt _remoteRenderer = RTCVideoRendererExt();
+
   bool _frontCamera = true;
 
   @override
   void initState() {
     super.initState();
+
+    _localRenderer.initialize();
+    _remoteRenderer.initialize();
   }
 
   @override
   void dispose() {
+    _localRenderer.dispose();
+    _remoteRenderer.dispose();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: OrientationBuilder(
-        builder: (context, orientation) {
-          return Container(
-            color: Colors.black,
-            child: SafeArea(
-              child: Stack(
-                children: <Widget>[
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    child: Container(
-                      child: Center(
-                        child: Text(
-                          'Remote Video',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
+    return BlocBuilder<CallBloc, CallState>(
+      // ignore: missing_return
+      builder: (context, state) {
+        if (state is CallIdle) {
+          _localRenderer.srcObject = null;
+          _remoteRenderer.srcObject = null;
+
+          return Scaffold(
+            body: Container(
+              color: Colors.black,
+            ),
+          );
+        }
+        if (state is CallActive) {
+          _localRenderer.srcObject = state.localStream;
+          _remoteRenderer.srcObject = state.remoteStream;
+
+          final acceptActionEnabled = state is CallIncoming && state.accepted != true;
+          final direction = state is CallIncoming ? 'Incoming call from' : 'Outgoing call to';
+          final username = state.username;
+          return Scaffold(
+            body: OrientationBuilder(
+              builder: (context, orientation) {
+                return Container(
+                  color: Colors.black,
+                  child: SafeArea(
+                    child: Stack(
+                      children: <Widget>[
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          top: 0,
+                          bottom: 0,
+                          child: Container(
+                            child: RTCVideoViewExt(_remoteRenderer),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    right: 20,
-                    top: 20,
-                    child: GestureDetector(
-                      onTap: _cameraSwitched,
-                      child: Stack(
-                        children: <Widget>[
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(width: 1, color: Colors.red),
+                        Positioned(
+                          right: 20,
+                          top: 20,
+                          child: GestureDetector(
+                            onTap: _cameraSwitched,
+                            child: Stack(
+                              children: <Widget>[
+                                ValueListenableBuilder<RTCVideoValue>(
+                                  valueListenable: _localRenderer,
+                                  builder: (BuildContext context, RTCVideoValue value, Widget child) {
+                                    if (value.isEmpty) {
+                                      return Container();
+                                    } else {
+                                      final size = MediaQuery.of(context).size;
+                                      final sizeWidthRatio = (orientation == Orientation.portrait ? 3 : 5);
+                                      final localVideoViewWidth = size.width / sizeWidthRatio;
+                                      final localVideoViewHeight = localVideoViewWidth / value.aspectRatio;
+                                      return Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(width: 1, color: Colors.red),
+                                        ),
+                                        width: localVideoViewWidth,
+                                        height: localVideoViewHeight,
+                                        child: child,
+                                      );
+                                    }
+                                  },
+                                  child: RTCVideoViewExt(_localRenderer),
+                                ),
+                                Positioned(
+                                  left: 0,
+                                  right: 0,
+                                  bottom: 1,
+                                  child: Container(
+                                    child: Icon(
+                                      Icons.switch_camera,
+                                      size: Theme.of(context).textTheme.subhead.fontSize,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                            width: 100,
-                            height: 100,
-                            child: Center(
-                              child: Text(
-                                'Local ${_frontCamera ? 'Front' : 'Back'} Video',
+                          ),
+                        ),
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          top: 30,
+                          child: Column(
+                            children: <Widget>[
+                              Text(
+                                direction,
                                 style: TextStyle(color: Colors.white),
                                 textAlign: TextAlign.center,
                               ),
-                            ),
-                          ),
-                          Positioned(
-                            left: 0,
-                            right: 0,
-                            bottom: 1,
-                            child: Container(
-                              child: Icon(
-                                Icons.switch_camera,
-                                size: Theme.of(context).textTheme.subhead.fontSize,
-                                color: Colors.white,
+                              Text(
+                                username,
+                                style: Theme.of(context).textTheme.display2.copyWith(color: Colors.white),
+                                textAlign: TextAlign.center,
                               ),
-                            ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          bottom: 20,
+                          child: _CallActions(
+                            onCameraPressed: _cameraPressed,
+                            onMicrophonePressed: _microphonePressed,
+                            onSpeakerphonePressed: _speakerphonePressed,
+                            onHangupPressed: _hangup,
+                            onAcceptPressed: acceptActionEnabled ? _accept : null,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 20,
-                    child: _CallActions(
-                      onCameraPressed: _cameraPressed,
-                      onMicrophonePressed: _microphonePressed,
-                      onSpeakerphonePressed: _speakerphonePressed,
-                      onHangupPressed: _hangup,
-                    ),
-                  ),
-                ],
-              ),
+                );
+              },
             ),
           );
-        },
-      ),
+        }
+      },
     );
   }
 
@@ -116,7 +171,11 @@ class _CallPageState extends State<CallPage> {
   void _speakerphonePressed(enabled) {}
 
   void _hangup() {
-    BlocProvider.of<CallBloc>(context).add(CallHungUpLocal(reason: 'some local reason'));
+    BlocProvider.of<CallBloc>(context).add(CallLocalHungUp(reason: 'some local reason'));
+  }
+
+  void _accept() {
+    BlocProvider.of<CallBloc>(context).add(CallIncomingAccepted());
   }
 }
 

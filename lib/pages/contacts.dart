@@ -45,7 +45,7 @@ class ContactsPage extends StatelessWidget with PageSnackBarMixin {
                   return ContactTile(
                     contact: contact,
                     onTap: () {
-                      showSnackBar(context, 'Tap on "${contact.username}"');
+                      BlocProvider.of<CallBloc>(context).add(CallOutgoingStarted(username: contact.username));
                     },
                     onLongPress: () {
                       showSnackBar(context, 'LongPress on "${contact.username}"');

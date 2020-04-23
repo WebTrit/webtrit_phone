@@ -110,8 +110,9 @@ class App extends StatelessWidget {
                 ),
               ],
               child: BlocListener<CallBloc, CallState>(
+                condition: (previous, current) => previous.runtimeType != current.runtimeType,
                 listener: (context, state) {
-                  if (state is CallIncoming) {
+                  if (state is CallActive) {
                     setCallOrientations().then((_) {
                       Navigator.pushNamed(context, '/main/call',
                           arguments: CallNavigationArguments(
@@ -119,7 +120,7 @@ class App extends StatelessWidget {
                           ));
                     });
                   }
-                  if (state is CallHangUp) {
+                  if (state is CallIdle) {
                     setDefaultOrientations().then((_) {
                       Navigator.pop(context);
                     });
