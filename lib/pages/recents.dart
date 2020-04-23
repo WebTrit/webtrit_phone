@@ -125,7 +125,7 @@ class RecentTile extends StatelessWidget {
           children: <Widget>[
             Text(
               recent.time.format(),
-              style: DefaultTextStyle.of(context).style.apply(color: Colors.grey),
+              style: TextStyle(color: Colors.grey),
             ),
             Container(
               margin: EdgeInsets.only(left: 8),
