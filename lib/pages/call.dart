@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/app.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 
 class CallPage extends StatefulWidget {
@@ -15,14 +14,10 @@ class _CallPageState extends State<CallPage> {
   @override
   void initState() {
     super.initState();
-
-    setCallOrientations();
   }
 
   @override
   void dispose() {
-    setDefaultOrientations();
-
     super.dispose();
   }
 

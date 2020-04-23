@@ -112,13 +112,17 @@ class App extends StatelessWidget {
               child: BlocListener<CallBloc, CallState>(
                 listener: (context, state) {
                   if (state is CallIncoming) {
-                    Navigator.pushNamed(context, '/main/call',
-                        arguments: CallNavigationArguments(
-                          callBloc: context.bloc<CallBloc>(),
-                        ));
+                    setCallOrientations().then((_) {
+                      Navigator.pushNamed(context, '/main/call',
+                          arguments: CallNavigationArguments(
+                            callBloc: context.bloc<CallBloc>(),
+                          ));
+                    });
                   }
                   if (state is CallHangUp) {
-                    Navigator.pop(context);
+                    setDefaultOrientations().then((_) {
+                      Navigator.pop(context);
+                    });
                   }
                 },
                 child: MainPage(),
