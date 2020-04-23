@@ -21,6 +21,7 @@ class RecentsRepository {
         50,
         (index) => Recent(
           index % 2 == 0 ? Direction.incoming : Direction.outgoing,
+          index % 3 == 0,
           'Recent call #$index',
           DateTime.now().subtract(Duration(hours: index)),
         ),

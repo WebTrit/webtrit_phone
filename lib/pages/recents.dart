@@ -138,7 +138,10 @@ class RecentTile extends StatelessWidget {
             ),
           ],
         ),
-        title: Text(recent.username),
+        title: Text(
+          recent.username,
+          style: TextStyle(color: recent.isComplete ? null : Colors.red),
+        ),
         onTap: onTap,
         onLongPress: onLongPress,
       ),
