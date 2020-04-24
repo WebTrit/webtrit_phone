@@ -166,11 +166,17 @@ class _CallPageState extends State<CallPage> {
     BlocProvider.of<CallBloc>(context).add(CallCameraSwitched());
   }
 
-  void _cameraPressed(enabled) {}
+  void _cameraPressed(enabled) {
+    BlocProvider.of<CallBloc>(context).add(CallCameraEnabled(enabled));
+  }
 
-  void _microphonePressed(enabled) {}
+  void _microphonePressed(enabled) {
+    BlocProvider.of<CallBloc>(context).add(CallMicrophoneEnabled(enabled));
+  }
 
-  void _speakerphonePressed(enabled) {}
+  void _speakerphonePressed(enabled) {
+    BlocProvider.of<CallBloc>(context).add(CallSpeakerphoneEnabled(enabled));
+  }
 
   void _hangup() {
     BlocProvider.of<CallBloc>(context).add(CallLocalHungUp(reason: 'some local reason'));

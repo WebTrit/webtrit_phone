@@ -68,6 +68,12 @@ class CallBloc extends Bloc<CallEvent, CallState> {
       yield* _mapCallHungUpLocalToState(event);
     } else if (event is CallCameraSwitched) {
       yield* _mapCallCameraSwitchedToState(event);
+    } else if (event is CallCameraEnabled) {
+      yield* _mapCallCameraEnabledToState(event);
+    } else if (event is CallMicrophoneEnabled) {
+      yield* _mapCallMicrophoneEnabledToState(event);
+    } else if (event is CallSpeakerphoneEnabled) {
+      yield* _mapCallSpeakerphoneEnabledToState(event);
     }
   }
 
@@ -161,6 +167,18 @@ class CallBloc extends Bloc<CallEvent, CallState> {
 
   Stream<CallState> _mapCallCameraSwitchedToState(CallCameraSwitched event) async* {
     await _localStream?.getVideoTracks()[0].switchCamera();
+  }
+
+  Stream<CallState> _mapCallCameraEnabledToState(CallCameraEnabled event) async* {
+    _localStream?.getVideoTracks()[0].enabled = event.mode;
+  }
+
+  Stream<CallState> _mapCallMicrophoneEnabledToState(CallMicrophoneEnabled event) async* {
+    await _localStream?.getAudioTracks()[0].setMicrophoneMute(!event.mode);
+  }
+
+  Stream<CallState> _mapCallSpeakerphoneEnabledToState(CallSpeakerphoneEnabled event) async* {
+    await _localStream?.getAudioTracks()[0].enableSpeakerphone(event.mode);
   }
 
   Future<MediaStream> _getUserMedia() async {

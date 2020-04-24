@@ -111,3 +111,21 @@ class CallRemoteStreamRemoved extends CallEvent {
 class CallCameraSwitched extends CallEvent {
   const CallCameraSwitched();
 }
+
+class CallCameraEnabled extends CallEvent {
+  final bool mode;
+
+  const CallCameraEnabled(this.mode);
+}
+
+class CallMicrophoneEnabled extends CallEvent {
+  final bool mode;
+
+  const CallMicrophoneEnabled(this.mode);
+}
+
+class CallSpeakerphoneEnabled extends CallEvent {
+  final bool mode;
+
+  const CallSpeakerphoneEnabled(this.mode);
+}
