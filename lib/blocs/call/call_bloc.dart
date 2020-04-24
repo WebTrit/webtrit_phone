@@ -5,11 +5,14 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_webrtc/webrtc.dart';
 
 import 'package:webtrit_phone/repositories/call_repository.dart';
+import 'package:webtrit_phone/blocs/recents/recents.dart';
+import 'package:webtrit_phone/models/recent.dart';
 
 import './call.dart';
 
 class CallBloc extends Bloc<CallEvent, CallState> {
   final CallRepository callRepository;
+  final RecentsBloc recentsBloc;
 
   StreamSubscription _onIncomingCallSubscription;
   StreamSubscription _onAcceptedSubscription;
@@ -24,6 +27,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
 
   CallBloc({
     @required this.callRepository,
+    @required this.recentsBloc,
   }) {
     _onIncomingCallSubscription = callRepository.onIncomingCall.listen((event) {
       add(CallIncomingReceived(username: event.username, jsepData: event.jsepData));
@@ -128,6 +132,8 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     await _localStream?.dispose();
     _localStream = null;
 
+    _addToRecents(state);
+
     yield CallIdle();
   }
 
@@ -141,6 +147,8 @@ class CallBloc extends Bloc<CallEvent, CallState> {
 
     await _localStream?.dispose();
     _localStream = null;
+
+    _addToRecents(state);
 
     yield CallIdle();
   }
@@ -205,5 +213,23 @@ class CallBloc extends Bloc<CallEvent, CallState> {
       ..onRenegotiationNeeded = () {
         logger.fine(() => 'onRenegotiationNeeded');
       };
+  }
+
+  void _addToRecents(CallActive state) {
+    Direction direction;
+    if (state is CallIncoming) {
+      direction = Direction.incoming;
+    } else if (state is CallOutgoing) {
+      direction = Direction.outgoing;
+    }
+
+    recentsBloc.add(RecentsAdd(
+      recent: Recent(
+        direction,
+        state.accepted,
+        state.username,
+        DateTime.now(),
+      ),
+    ));
   }
 }

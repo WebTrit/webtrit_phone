@@ -105,6 +105,7 @@ class App extends StatelessWidget {
                   create: (BuildContext context) {
                     return CallBloc(
                       callRepository: context.repository<CallRepository>(),
+                      recentsBloc: context.bloc<RecentsBloc>(),
                     );
                   },
                 ),
