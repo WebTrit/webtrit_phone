@@ -49,7 +49,7 @@ class RecentsPage extends StatelessWidget with PageSnackBarMixin {
                       showSnackBar(context, 'Tap info on "${recent.username}"');
                     },
                     onTap: () {
-                      showSnackBar(context, 'Tap on "${recent.username}"');
+                      BlocProvider.of<CallBloc>(context).add(CallOutgoingStarted(username: recent.username));
                     },
                     onLongPress: () {
                       showSnackBar(context, 'LongPress on "${recent.username}"');
