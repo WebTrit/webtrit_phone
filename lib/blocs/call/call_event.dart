@@ -129,3 +129,7 @@ class CallSpeakerphoneEnabled extends CallEvent {
 
   const CallSpeakerphoneEnabled(this.mode);
 }
+
+class CallFailureApproved extends CallEvent {
+  const CallFailureApproved();
+}

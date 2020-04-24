@@ -154,6 +154,39 @@ class _CallPageState extends State<CallPage> {
             ),
           );
         }
+        if (state is CallFailure) {
+          return Scaffold(
+            body: Container(
+              color: Colors.black,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Text(
+                    state.reason,
+                    style: Theme.of(context).textTheme.headline.copyWith(color: Colors.red),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Center(
+                    child: Tooltip(
+                      message: 'Ok',
+                      child: OutlineButton(
+                        textColor: Colors.white,
+                        borderSide: BorderSide(color: Colors.white),
+                        highlightedBorderColor: Colors.red,
+                        child: Text('Ok'),
+                        onPressed: () => BlocProvider.of<CallBloc>(context).add(CallFailureApproved()),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
       },
     );
   }

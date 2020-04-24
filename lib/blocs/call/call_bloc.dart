@@ -3,6 +3,7 @@ import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_webrtc/webrtc.dart';
+import 'package:janus_client/janus_client.dart';
 
 import 'package:webtrit_phone/repositories/call_repository.dart';
 import 'package:webtrit_phone/blocs/recents/recents.dart';
@@ -74,6 +75,8 @@ class CallBloc extends Bloc<CallEvent, CallState> {
       yield* _mapCallMicrophoneEnabledToState(event);
     } else if (event is CallSpeakerphoneEnabled) {
       yield* _mapCallSpeakerphoneEnabledToState(event);
+    } else if (event is CallFailureApproved) {
+      yield* _mapCallFailureApprovedToState(event);
     }
   }
 
@@ -113,7 +116,19 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     final localDescription = await _peerConnection.createOffer({});
     _peerConnection.setLocalDescription(localDescription);
 
-    await callRepository.call(event.username, localDescription.toMap());
+    try {
+      await callRepository.call(event.username, localDescription.toMap());
+    } on JanusPluginHandleErrorException catch (e) {
+      await _peerConnection.close();
+      _peerConnection = null;
+
+      await _localStream.dispose();
+      _localStream = null;
+
+      _addToRecents(state);
+
+      yield CallFailure(reason: e.error);
+    }
   }
 
   Stream<CallState> _mapCallOutgoingAcceptedToState(CallOutgoingAccepted event) async* {
@@ -179,6 +194,10 @@ class CallBloc extends Bloc<CallEvent, CallState> {
 
   Stream<CallState> _mapCallSpeakerphoneEnabledToState(CallSpeakerphoneEnabled event) async* {
     await _localStream?.getAudioTracks()[0].enableSpeakerphone(event.mode);
+  }
+
+  Stream<CallState> _mapCallFailureApprovedToState(CallFailureApproved event) async* {
+    yield CallIdle();
   }
 
   Future<MediaStream> _getUserMedia() async {
