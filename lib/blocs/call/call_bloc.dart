@@ -194,7 +194,9 @@ class CallBloc extends Bloc<CallEvent, CallState> {
         'optional': [],
       }
     };
-    return navigator.getUserMedia(mediaConstraints);
+    final localStream = await navigator.getUserMedia(mediaConstraints);
+    localStream.getAudioTracks()[0].enableSpeakerphone(true);
+    return localStream;
   }
 
   Future<RTCPeerConnection> _createPeerConnection() async {
