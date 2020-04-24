@@ -107,3 +107,7 @@ class CallRemoteStreamRemoved extends CallEvent {
   @override
   List<Object> get props => [stream];
 }
+
+class CallCameraSwitched extends CallEvent {
+  const CallCameraSwitched();
+}

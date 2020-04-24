@@ -66,6 +66,8 @@ class CallBloc extends Bloc<CallEvent, CallState> {
       yield* _mapCallHungUpRemoteToState(event);
     } else if (event is CallLocalHungUp) {
       yield* _mapCallHungUpLocalToState(event);
+    } else if (event is CallCameraSwitched) {
+      yield* _mapCallCameraSwitchedToState(event);
     }
   }
 
@@ -151,6 +153,10 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     _addToRecents(state);
 
     yield CallIdle();
+  }
+
+  Stream<CallState> _mapCallCameraSwitchedToState(CallCameraSwitched event) async* {
+    await _localStream?.getVideoTracks()[0].switchCamera();
   }
 
   Future<MediaStream> _getUserMedia() async {

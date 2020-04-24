@@ -162,6 +162,8 @@ class _CallPageState extends State<CallPage> {
     setState(() {
       _frontCamera = !_frontCamera;
     });
+
+    BlocProvider.of<CallBloc>(context).add(CallCameraSwitched());
   }
 
   void _cameraPressed(enabled) {}
