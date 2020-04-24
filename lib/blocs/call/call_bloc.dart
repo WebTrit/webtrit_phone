@@ -126,6 +126,8 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   }
 
   Stream<CallState> _mapCallHungUpRemoteToState(CallRemoteHungUp event) async* {
+    if (state is! CallActive) return; // TODO: get rid of double hangup event
+
     yield (state as CallActive).copyWith(hungUp: true);
 
     await _peerConnection?.close();
@@ -140,6 +142,8 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   }
 
   Stream<CallState> _mapCallHungUpLocalToState(CallLocalHungUp event) async* {
+    if (state is! CallActive) return; // TODO: get rid of double hangup event
+
     yield (state as CallActive).copyWith(hungUp: true);
 
     await callRepository.hangup();
