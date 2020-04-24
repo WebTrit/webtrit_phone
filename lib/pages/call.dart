@@ -89,7 +89,7 @@ class _CallPageState extends State<CallPage> {
                                       final localVideoViewHeight = localVideoViewWidth / value.aspectRatio;
                                       return Container(
                                         decoration: BoxDecoration(
-                                          border: Border.all(width: 1, color: Colors.red),
+                                          border: Border.all(width: 1, color: Colors.white),
                                         ),
                                         width: localVideoViewWidth,
                                         height: localVideoViewHeight,
