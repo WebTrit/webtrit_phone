@@ -71,6 +71,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   labelText: 'Choose a username',
                   helperText: '', // reserve space for validator message
                   errorText: state is RegistrationFailure ? state.reason : null,
+                  errorMaxLines: 3,
                 ),
                 textInputAction: TextInputAction.send,
                 onFieldSubmitted: (_) => _register(),
