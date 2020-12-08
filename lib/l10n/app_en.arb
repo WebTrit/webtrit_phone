@@ -1,0 +1,22 @@
+{
+  "@@locale": "en",
+
+  "recentTimeBeforeMidnight": "{time}",
+  "@recentTimeBeforeMidnight": {
+    "placeholders": {
+      "time": {
+        "type": "DateTime",
+        "format": "Hm"
+      }
+    }
+  },
+  "recentTimeAfterMidnight": "{time}",
+  "@recentTimeAfterMidnight": {
+    "placeholders": {
+      "time": {
+        "type": "DateTime",
+        "format": "yMd"
+      }
+    }
+  }
+}

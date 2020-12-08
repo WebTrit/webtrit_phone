@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -123,7 +123,7 @@ class RecentTile extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text(
-              recent.time.format(),
+              recent.time.format(context),
               style: TextStyle(color: Colors.grey),
             ),
             Container(
@@ -190,14 +190,14 @@ extension _DirectionConverting on Direction {
 }
 
 extension _DateTimeFormatting on DateTime {
-  String format() {
+  String format(BuildContext context) {
     final now = DateTime.now();
     final midnight = DateTime(now.year, now.month, now.day);
 
     if (midnight.isBefore(this)) {
-      return DateFormat.Hm().format(this);
+      return AppLocalizations.of(context).recentTimeBeforeMidnight(this);
     } else {
-      return DateFormat.yMd().format(this);
+      return AppLocalizations.of(context).recentTimeAfterMidnight(this);
     }
   }
 }

@@ -19,20 +19,22 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.0
-
+  intl: ^0.16.1
   args: ^1.6.0
   logging: ^0.11.4
-  intl: ^0.16.1
   meta: ^1.2.4
   collection: ^1.14.13
   equatable: ^1.2.5
   bloc: ^6.1.0
   flutter_bloc: ^6.1.0
   flutter_webrtc: ^0.5.7
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.0
 
   janus_client:
     path: ./janus_client
@@ -50,6 +52,7 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+  generate: true
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

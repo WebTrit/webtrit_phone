@@ -2,6 +2,7 @@ import 'package:args/args.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 
@@ -65,6 +66,8 @@ class App extends StatelessWidget {
     setDefaultOrientations();
 
     return MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       title: 'WebTrit Phone',
       theme: ThemeData(
         primarySwatch: Colors.blue,
