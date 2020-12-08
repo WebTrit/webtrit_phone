@@ -10,12 +10,10 @@ class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
   final RecentsRepository recentsRepository;
   StreamSubscription _recentsSubscription;
 
-  @override
-  RecentsState get initialState => RecentsInitial();
-
   RecentsBloc({
     @required this.recentsRepository,
-  }) : assert(recentsRepository != null);
+  })  : assert(recentsRepository != null),
+        super(RecentsInitial());
 
   @override
   Stream<RecentsState> mapEventToState(RecentsEvent event) async* {

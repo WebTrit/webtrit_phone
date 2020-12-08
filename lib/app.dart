@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 
-import 'package:webtrit_phone/blocs/simple_bloc_delegate.dart';
+import 'package:webtrit_phone/blocs/simple_bloc_observer.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/pages/register.dart';
@@ -33,7 +33,7 @@ void main(List<String> args) {
     print('${record.time} [${record.level.name}] ${record.loggerName}: ${record.message}');
   });
 
-  BlocSupervisor.delegate = SimpleBlocDelegate();
+  Bloc.observer = SimpleBlocObserver();
 
   runApp(MultiRepositoryProvider(
     providers: [
@@ -88,21 +88,21 @@ class App extends StatelessWidget {
             page = MultiBlocProvider(
               providers: [
                 BlocProvider<RecentsBloc>(
-                  create: (BuildContext context) {
+                  create: (context) {
                     return RecentsBloc(
                       recentsRepository: context.repository<RecentsRepository>(),
                     )..add(RecentsInitialLoaded());
                   },
                 ),
                 BlocProvider<ContactsBloc>(
-                  create: (BuildContext context) {
+                  create: (context) {
                     return ContactsBloc(
                       contactsRepository: context.repository<ContactsRepository>(),
                     )..add(ContactsInitialLoaded());
                   },
                 ),
                 BlocProvider<CallBloc>(
-                  create: (BuildContext context) {
+                  create: (context) {
                     return CallBloc(
                       callRepository: context.repository<CallRepository>(),
                       recentsBloc: context.bloc<RecentsBloc>(),
@@ -111,7 +111,7 @@ class App extends StatelessWidget {
                 ),
               ],
               child: BlocListener<CallBloc, CallState>(
-                condition: (previous, current) => previous.runtimeType != current.runtimeType,
+                listenWhen: (previous, current) => previous.runtimeType != current.runtimeType,
                 listener: (context, state) {
                   if (state is CallActive) {
                     setCallOrientations().then((_) {

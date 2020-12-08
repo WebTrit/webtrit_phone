@@ -12,13 +12,12 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   final CallRepository callRepository;
   final AppBloc appBloc;
 
-  @override
-  RegistrationState get initialState => RegistrationInitial();
-
   RegistrationBloc({
     @required this.callRepository,
     @required this.appBloc,
-  });
+  })  : assert(callRepository != null),
+        assert(appBloc != null),
+        super(RegistrationInitial());
 
   @override
   Stream<RegistrationState> mapEventToState(RegistrationEvent event) async* {
@@ -48,7 +47,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       yield RegistrationFailure(
         reason: e.error,
       );
-    } on JanusErrorException catch(e) {
+    } on JanusErrorException catch (e) {
       yield RegistrationFailure(
         reason: e.reason,
       );

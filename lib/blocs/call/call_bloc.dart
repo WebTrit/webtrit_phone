@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
-import 'package:flutter_webrtc/webrtc.dart';
+import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:janus_client/janus_client.dart';
 
 import 'package:webtrit_phone/repositories/call_repository.dart';
@@ -23,13 +23,12 @@ class CallBloc extends Bloc<CallEvent, CallState> {
 
   RTCPeerConnection _peerConnection;
 
-  @override
-  CallState get initialState => CallIdle();
-
   CallBloc({
     @required this.callRepository,
     @required this.recentsBloc,
-  }) {
+  })  : assert(callRepository != null),
+        assert(recentsBloc != null),
+        super(CallIdle()) {
     _onIncomingCallSubscription = callRepository.onIncomingCall.listen((event) {
       add(CallIncomingReceived(username: event.username, jsepData: event.jsepData));
     });

@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_webrtc/webrtc.dart';
+import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 @immutable
 abstract class CallState extends Equatable {

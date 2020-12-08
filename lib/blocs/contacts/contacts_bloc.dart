@@ -10,12 +10,10 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   final ContactsRepository contactsRepository;
   StreamSubscription _contactsSubscription;
 
-  @override
-  ContactsState get initialState => ContactsInitial();
-
   ContactsBloc({
     @required this.contactsRepository,
-  }) : assert(contactsRepository != null);
+  })  : assert(contactsRepository != null),
+        super(ContactsInitial());
 
   @override
   Stream<ContactsState> mapEventToState(ContactsEvent event) async* {

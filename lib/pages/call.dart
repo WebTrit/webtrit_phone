@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
-import 'package:webtrit_phone/widgets/rtc_video_view.dart';
 
 class CallPage extends StatefulWidget {
   @override
@@ -10,8 +10,8 @@ class CallPage extends StatefulWidget {
 }
 
 class _CallPageState extends State<CallPage> {
-  RTCVideoRendererExt _localRenderer = RTCVideoRendererExt();
-  RTCVideoRendererExt _remoteRenderer = RTCVideoRendererExt();
+  RTCVideoRenderer _localRenderer = RTCVideoRenderer();
+  RTCVideoRenderer _remoteRenderer = RTCVideoRenderer();
 
   bool _frontCamera = true;
 
@@ -67,7 +67,10 @@ class _CallPageState extends State<CallPage> {
                           top: 0,
                           bottom: 0,
                           child: Container(
-                            child: RTCVideoViewExt(_remoteRenderer),
+                            decoration: BoxDecoration(color: Colors.black54),
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height,
+                            child: RTCVideoView(_remoteRenderer),
                           ),
                         ),
                         Positioned(
@@ -77,27 +80,11 @@ class _CallPageState extends State<CallPage> {
                             onTap: _cameraSwitched,
                             child: Stack(
                               children: <Widget>[
-                                ValueListenableBuilder<RTCVideoValue>(
-                                  valueListenable: _localRenderer,
-                                  builder: (BuildContext context, RTCVideoValue value, Widget child) {
-                                    if (value.isEmpty) {
-                                      return Container();
-                                    } else {
-                                      final size = MediaQuery.of(context).size;
-                                      final sizeWidthRatio = (orientation == Orientation.portrait ? 3 : 5);
-                                      final localVideoViewWidth = size.width / sizeWidthRatio;
-                                      final localVideoViewHeight = localVideoViewWidth / value.aspectRatio;
-                                      return Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(width: 1, color: Colors.white),
-                                        ),
-                                        width: localVideoViewWidth,
-                                        height: localVideoViewHeight,
-                                        child: child,
-                                      );
-                                    }
-                                  },
-                                  child: RTCVideoViewExt(_localRenderer),
+                                Container(
+                                  decoration: BoxDecoration(color: Colors.black54),
+                                  width: orientation == Orientation.portrait ? 90.0 : 120.0,
+                                  height: orientation == Orientation.portrait ? 120.0 : 90.0,
+                                  child: RTCVideoView(_localRenderer, mirror: true),
                                 ),
                                 Positioned(
                                   left: 0,
