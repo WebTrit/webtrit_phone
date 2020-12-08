@@ -35,7 +35,6 @@ class ContactsPage extends StatelessWidget with PageSnackBarMixin {
               onRefresh: () {
                 hideSnackBar(context);
                 return (BlocProvider.of<ContactsBloc>(context)..add(ContactsRefreshed()))
-                    .skip(1)
                     .firstWhere((state) => state is ContactsLoadSuccess || state is ContactsRefreshFailure);
               },
               child: ListView.separated(

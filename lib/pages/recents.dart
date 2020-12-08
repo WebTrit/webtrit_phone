@@ -36,7 +36,6 @@ class RecentsPage extends StatelessWidget with PageSnackBarMixin {
               onRefresh: () {
                 hideSnackBar(context);
                 return (BlocProvider.of<RecentsBloc>(context)..add(RecentsRefreshed()))
-                    .skip(1)
                     .firstWhere((state) => state is RecentsLoadSuccess || state is RecentsRefreshFailure);
               },
               child: ListView.separated(
