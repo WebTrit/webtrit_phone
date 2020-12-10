@@ -12,6 +12,8 @@ class CallPage extends StatefulWidget {
 class _CallPageState extends State<CallPage> {
   RTCVideoRenderer _localRenderer = RTCVideoRenderer();
   RTCVideoRenderer _remoteRenderer = RTCVideoRenderer();
+  Future<List<void>> _renderersInitialized;
+  Future<List<void>> _renderersDisposed;
 
   bool _frontCamera = true;
 
@@ -19,20 +21,52 @@ class _CallPageState extends State<CallPage> {
   void initState() {
     super.initState();
 
-    _localRenderer.initialize();
-    _remoteRenderer.initialize();
+    _renderersInitialized = _renderersInitialize();
   }
 
   @override
   void dispose() {
-    _localRenderer.dispose();
-    _remoteRenderer.dispose();
+    _renderersDisposed = _renderersDispose();
 
     super.dispose();
   }
 
+  _renderersInitialize() {
+    return Future.wait([
+      _localRenderer.initialize(),
+      _remoteRenderer.initialize(),
+    ]);
+  }
+
+  _renderersDispose() {
+    return Future.wait([
+      _localRenderer.dispose(),
+      _remoteRenderer.dispose(),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: _renderersInitialized,
+      builder: (context, AsyncSnapshot<List<void>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return _build(context);
+        } else {
+          return Scaffold(
+            body: Container(
+              color: Colors.black,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  Widget _build(BuildContext context) {
     return BlocBuilder<CallBloc, CallState>(
       // ignore: missing_return
       builder: (context, state) {
