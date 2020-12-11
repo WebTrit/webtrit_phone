@@ -188,11 +188,11 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   }
 
   Stream<CallState> _mapCallMicrophoneEnabledToState(CallMicrophoneEnabled event) async* {
-    await _localStream?.getAudioTracks()[0].setMicrophoneMute(!event.mode);
+    _localStream?.getAudioTracks()[0].setMicrophoneMute(!event.mode);
   }
 
   Stream<CallState> _mapCallSpeakerphoneEnabledToState(CallSpeakerphoneEnabled event) async* {
-    await _localStream?.getAudioTracks()[0].enableSpeakerphone(event.mode);
+    _localStream?.getAudioTracks()[0].enableSpeakerphone(event.mode);
   }
 
   Stream<CallState> _mapCallFailureApprovedToState(CallFailureApproved event) async* {
