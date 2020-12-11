@@ -44,7 +44,7 @@ class _KeypadPageState extends State<KeypadPage> {
                   key: _keypadTextFieldKey,
                   controller: _controller,
                   focusNode: _focusNode,
-                  style: Theme.of(context).textTheme.display1,
+                  style: Theme.of(context).textTheme.headline4,
                   textAlign: TextAlign.center,
                   showCursor: true,
                 ),
@@ -212,7 +212,7 @@ class _Keypad extends StatelessWidget {
               children: <Widget>[
                 Text(
                   key.text,
-                  style: Theme.of(context).textTheme.display1,
+                  style: Theme.of(context).textTheme.headline4,
                 ),
                 Text(
                   key.subtext,
@@ -283,7 +283,7 @@ class _Actionpad extends StatelessWidget {
                     padding: actionPadding,
                     child: Icon(
                       Icons.phone,
-                      size: Theme.of(context).textTheme.display3.fontSize,
+                      size: Theme.of(context).textTheme.headline2.fontSize,
                     ),
                   ),
                 ),

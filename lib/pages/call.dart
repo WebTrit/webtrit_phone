@@ -127,7 +127,7 @@ class _CallPageState extends State<CallPage> {
                                   child: Container(
                                     child: Icon(
                                       Icons.switch_camera,
-                                      size: Theme.of(context).textTheme.subhead.fontSize,
+                                      size: Theme.of(context).textTheme.subtitle1.fontSize,
                                       color: Colors.white,
                                     ),
                                   ),
@@ -149,7 +149,7 @@ class _CallPageState extends State<CallPage> {
                               ),
                               Text(
                                 username,
-                                style: Theme.of(context).textTheme.display2.copyWith(color: Colors.white),
+                                style: Theme.of(context).textTheme.headline3.copyWith(color: Colors.white),
                                 textAlign: TextAlign.center,
                               ),
                             ],
@@ -185,7 +185,7 @@ class _CallPageState extends State<CallPage> {
                 children: <Widget>[
                   Text(
                     state.reason,
-                    style: Theme.of(context).textTheme.headline.copyWith(color: Colors.red),
+                    style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.red),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(

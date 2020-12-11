@@ -8,11 +8,11 @@ class WebTritPhoneTextLogo extends StatelessWidget {
       children: <Widget>[
         Text(
           'WebTrit',
-          style: Theme.of(context).textTheme.display3,
+          style: Theme.of(context).textTheme.headline2,
         ),
         Text(
           'Phone',
-          style: Theme.of(context).textTheme.display1,
+          style: Theme.of(context).textTheme.headline4,
         ),
       ],
     );
