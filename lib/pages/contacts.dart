@@ -34,7 +34,7 @@ class ContactsPage extends StatelessWidget with PageSnackBarMixin {
             return RefreshIndicator(
               onRefresh: () {
                 hideSnackBar(context);
-                return (BlocProvider.of<ContactsBloc>(context)..add(ContactsRefreshed()))
+                return (context.read<ContactsBloc>()..add(ContactsRefreshed()))
                     .firstWhere((state) => state is ContactsLoadSuccess || state is ContactsRefreshFailure);
               },
               child: ListView.separated(
@@ -44,7 +44,7 @@ class ContactsPage extends StatelessWidget with PageSnackBarMixin {
                   return ContactTile(
                     contact: contact,
                     onTap: () {
-                      BlocProvider.of<CallBloc>(context).add(CallOutgoingStarted(username: contact.username));
+                      context.read<CallBloc>().add(CallOutgoingStarted(username: contact.username));
                     },
                     onLongPress: () {
                       showSnackBar(context, 'LongPress on "${contact.username}"');
@@ -62,7 +62,7 @@ class ContactsPage extends StatelessWidget with PageSnackBarMixin {
           if (state is ContactsInitialLoadFailure) {
             return Center(
               child: OutlineButton(
-                onPressed: () => BlocProvider.of<ContactsBloc>(context).add(ContactsInitialLoaded()),
+                onPressed: () => context.read<ContactsBloc>().add(ContactsInitialLoaded()),
                 child: Text('Refresh'),
               ),
             );

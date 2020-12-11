@@ -46,7 +46,7 @@ void main(List<String> args) {
       ),
       RepositoryProvider<ContactsRepository>(
         create: (context) => ContactsRepository(
-          callRepository: context.repository<CallRepository>(),
+          callRepository: context.read<CallRepository>(),
           periodicPolling: periodicPollingFlag,
         ),
       ),
@@ -80,8 +80,8 @@ class App extends StatelessWidget {
             page = BlocProvider(
               create: (context) {
                 return RegistrationBloc(
-                  callRepository: context.repository<CallRepository>(),
-                  appBloc: BlocProvider.of<AppBloc>(context),
+                  callRepository: context.read<CallRepository>(),
+                  appBloc: context.read<AppBloc>(),
                 )..add(RegistrationStarted());
               },
               child: RegisterPage(),
@@ -93,22 +93,22 @@ class App extends StatelessWidget {
                 BlocProvider<RecentsBloc>(
                   create: (context) {
                     return RecentsBloc(
-                      recentsRepository: context.repository<RecentsRepository>(),
+                      recentsRepository: context.read<RecentsRepository>(),
                     )..add(RecentsInitialLoaded());
                   },
                 ),
                 BlocProvider<ContactsBloc>(
                   create: (context) {
                     return ContactsBloc(
-                      contactsRepository: context.repository<ContactsRepository>(),
+                      contactsRepository: context.read<ContactsRepository>(),
                     )..add(ContactsInitialLoaded());
                   },
                 ),
                 BlocProvider<CallBloc>(
                   create: (context) {
                     return CallBloc(
-                      callRepository: context.repository<CallRepository>(),
-                      recentsBloc: context.bloc<RecentsBloc>(),
+                      callRepository: context.read<CallRepository>(),
+                      recentsBloc: context.read<RecentsBloc>(),
                     );
                   },
                 ),
@@ -120,7 +120,7 @@ class App extends StatelessWidget {
                     setCallOrientations().then((_) {
                       Navigator.pushNamed(context, '/main/call',
                           arguments: CallNavigationArguments(
-                            callBloc: context.bloc<CallBloc>(),
+                            callBloc: context.read<CallBloc>(),
                           ));
                     });
                   }

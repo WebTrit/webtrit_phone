@@ -116,7 +116,7 @@ class _RegisterFormState extends State<RegisterForm> {
   void _register() {
     if (_registerFormKey.currentState.validate()) {
       _registerFormKey.currentState.save();
-      BlocProvider.of<RegistrationBloc>(context).add(RegistrationProcessed(username: _username));
+      context.read<RegistrationBloc>().add(RegistrationProcessed(username: _username));
     }
   }
 }

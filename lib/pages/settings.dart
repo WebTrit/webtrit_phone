@@ -18,7 +18,7 @@ class SettingsPage extends StatelessWidget {
             ),
             onPressed: () async {
               if (await _confirmUnregister(context)) {
-                BlocProvider.of<AppBloc>(context).add(AppUnregistered());
+                context.read<AppBloc>().add(AppUnregistered());
               }
             },
           )

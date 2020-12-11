@@ -199,7 +199,7 @@ class _CallPageState extends State<CallPage> {
                         borderSide: BorderSide(color: Colors.white),
                         highlightedBorderColor: Colors.red,
                         child: Text('Ok'),
-                        onPressed: () => BlocProvider.of<CallBloc>(context).add(CallFailureApproved()),
+                        onPressed: () => context.read<CallBloc>().add(CallFailureApproved()),
                       ),
                     ),
                   ),
@@ -217,27 +217,27 @@ class _CallPageState extends State<CallPage> {
       _frontCamera = !_frontCamera;
     });
 
-    BlocProvider.of<CallBloc>(context).add(CallCameraSwitched());
+    context.read<CallBloc>().add(CallCameraSwitched());
   }
 
   void _cameraPressed(enabled) {
-    BlocProvider.of<CallBloc>(context).add(CallCameraEnabled(enabled));
+    context.read<CallBloc>().add(CallCameraEnabled(enabled));
   }
 
   void _microphonePressed(enabled) {
-    BlocProvider.of<CallBloc>(context).add(CallMicrophoneEnabled(enabled));
+    context.read<CallBloc>().add(CallMicrophoneEnabled(enabled));
   }
 
   void _speakerphonePressed(enabled) {
-    BlocProvider.of<CallBloc>(context).add(CallSpeakerphoneEnabled(enabled));
+    context.read<CallBloc>().add(CallSpeakerphoneEnabled(enabled));
   }
 
   void _hangup() {
-    BlocProvider.of<CallBloc>(context).add(CallLocalHungUp(reason: 'some local reason'));
+    context.read<CallBloc>().add(CallLocalHungUp(reason: 'some local reason'));
   }
 
   void _accept() {
-    BlocProvider.of<CallBloc>(context).add(CallIncomingAccepted());
+    context.read<CallBloc>().add(CallIncomingAccepted());
   }
 }
 

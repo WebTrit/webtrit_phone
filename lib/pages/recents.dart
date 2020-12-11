@@ -35,7 +35,7 @@ class RecentsPage extends StatelessWidget with PageSnackBarMixin {
             return RefreshIndicator(
               onRefresh: () {
                 hideSnackBar(context);
-                return (BlocProvider.of<RecentsBloc>(context)..add(RecentsRefreshed()))
+                return (context.read<RecentsBloc>()..add(RecentsRefreshed()))
                     .firstWhere((state) => state is RecentsLoadSuccess || state is RecentsRefreshFailure);
               },
               child: ListView.separated(
@@ -48,7 +48,7 @@ class RecentsPage extends StatelessWidget with PageSnackBarMixin {
                       showSnackBar(context, 'Tap info on "${recent.username}"');
                     },
                     onTap: () {
-                      BlocProvider.of<CallBloc>(context).add(CallOutgoingStarted(username: recent.username));
+                      context.read<CallBloc>().add(CallOutgoingStarted(username: recent.username));
                     },
                     onLongPress: () {
                       showSnackBar(context, 'LongPress on "${recent.username}"');
@@ -56,7 +56,7 @@ class RecentsPage extends StatelessWidget with PageSnackBarMixin {
                     onDeleted: (recent) {
                       showSnackBar(context, '"${recent.username}" deleted');
 
-                      BlocProvider.of<RecentsBloc>(context).add(
+                      context.read<RecentsBloc>().add(
                         RecentsDelete(recent: recent),
                       );
                     },
@@ -73,7 +73,7 @@ class RecentsPage extends StatelessWidget with PageSnackBarMixin {
           if (state is RecentsInitialLoadFailure) {
             return Center(
               child: OutlineButton(
-                onPressed: () => BlocProvider.of<RecentsBloc>(context).add(RecentsInitialLoaded()),
+                onPressed: () => context.read<RecentsBloc>().add(RecentsInitialLoaded()),
                 child: Text('Refresh'),
               ),
             );
