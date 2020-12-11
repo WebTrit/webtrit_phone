@@ -96,7 +96,7 @@ class _MainPageState extends State<MainPage> {
         items: tabs.map((Tab tab) {
           return BottomNavigationBarItem(
             icon: Icon(tab.icon),
-            title: Text(tab.title),
+            label: tab.title,
           );
         }).toList(),
       ),
