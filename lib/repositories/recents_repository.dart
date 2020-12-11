@@ -15,13 +15,13 @@ class RecentsRepository {
     _controller.add(List<Recent>.from(_recents));
   }
 
-  Future<void> add(Recent recent) {
+  Future<void> add(Recent recent) async {
     _recents.insert(0, recent);
 
     _controller.add(List<Recent>.from(_recents));
   }
 
-  Future<void> delete(Recent recent) {
+  Future<void> delete(Recent recent) async {
     _recents.remove(recent);
 
     _controller.add(List<Recent>.from(_recents));
