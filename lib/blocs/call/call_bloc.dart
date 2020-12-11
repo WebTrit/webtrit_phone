@@ -218,7 +218,16 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   }
 
   Future<RTCPeerConnection> _createPeerConnection() async {
-    final peerConnection = await createPeerConnection({}, {});
+    final peerConnection = await createPeerConnection(
+      {
+        'iceServers': [
+          {
+            'url': 'stun:stun.l.google.com:19302',
+          },
+        ],
+      },
+      {},
+    );
     final logger = Logger(peerConnection.toString());
     return peerConnection
       ..onSignalingState = (state) {
