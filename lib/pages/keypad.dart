@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/widgets/widgets.dart';
-
-import 'package:webtrit_phone/blocs/blocs.dart';
-import 'package:webtrit_phone/models/models.dart';
 
 class KeypadPage extends StatefulWidget {
   const KeypadPage({Key key}) : super(key: key);

@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:meta/meta.dart';
-
 import 'package:webtrit_phone/models/models.dart';
 
 // TODO: add local persist and/or external sync of recents calls
