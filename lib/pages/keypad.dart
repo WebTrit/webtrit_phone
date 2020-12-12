@@ -263,39 +263,41 @@ class _Actionpad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final actionRows = [
+      TableRow(
+        children: [
+          Container(),
+          Center(
+            child: FlatButton(
+              onPressed: onCallPressed,
+              onLongPress: onCallLongPress,
+              splashColor: Theme.of(context).primaryColor,
+              padding: actionPadding,
+              child: Icon(
+                Icons.phone,
+                size: Theme.of(context).textTheme.headline2.fontSize,
+              ),
+            ),
+          ),
+          Center(
+            child: FlatButton(
+              onPressed: onBackspacePressed,
+              onLongPress: onBackspaceLongPress,
+              padding: actionPadding,
+              child: Icon(
+                Icons.backspace,
+              ),
+            ),
+          ),
+        ],
+      ),
+    ];
+
     return ButtonTheme(
       shape: CircleBorder(),
       child: Table(
         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-        children: [
-          TableRow(
-            children: [
-              Container(),
-              Center(
-                child: FlatButton(
-                  onPressed: onCallPressed,
-                  onLongPress: onCallLongPress,
-                  splashColor: Theme.of(context).primaryColor,
-                  padding: actionPadding,
-                  child: Icon(
-                    Icons.phone,
-                    size: Theme.of(context).textTheme.headline2.fontSize,
-                  ),
-                ),
-              ),
-              Center(
-                child: FlatButton(
-                  onPressed: onBackspacePressed,
-                  onLongPress: onBackspaceLongPress,
-                  padding: actionPadding,
-                  child: Icon(
-                    Icons.backspace,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
+        children: actionRows,
       ),
     );
   }
