@@ -266,38 +266,30 @@ class _Actionpad extends StatelessWidget {
     return ButtonTheme(
       shape: CircleBorder(),
       child: Table(
+        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
         children: [
           TableRow(
             children: [
-              TableCell(
-                verticalAlignment: TableCellVerticalAlignment.middle,
-                child: Container(),
-              ),
-              TableCell(
-                verticalAlignment: TableCellVerticalAlignment.middle,
-                child: Center(
-                  child: FlatButton(
-                    onPressed: onCallPressed,
-                    onLongPress: onCallLongPress,
-                    splashColor: Theme.of(context).primaryColor,
-                    padding: actionPadding,
-                    child: Icon(
-                      Icons.phone,
-                      size: Theme.of(context).textTheme.headline2.fontSize,
-                    ),
+              Container(),
+              Center(
+                child: FlatButton(
+                  onPressed: onCallPressed,
+                  onLongPress: onCallLongPress,
+                  splashColor: Theme.of(context).primaryColor,
+                  padding: actionPadding,
+                  child: Icon(
+                    Icons.phone,
+                    size: Theme.of(context).textTheme.headline2.fontSize,
                   ),
                 ),
               ),
-              TableCell(
-                verticalAlignment: TableCellVerticalAlignment.middle,
-                child: Center(
-                  child: FlatButton(
-                    onPressed: onBackspacePressed,
-                    onLongPress: onBackspaceLongPress,
-                    padding: actionPadding,
-                    child: Icon(
-                      Icons.backspace,
-                    ),
+              Center(
+                child: FlatButton(
+                  onPressed: onBackspacePressed,
+                  onLongPress: onBackspaceLongPress,
+                  padding: actionPadding,
+                  child: Icon(
+                    Icons.backspace,
                   ),
                 ),
               ),
