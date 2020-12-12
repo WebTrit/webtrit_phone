@@ -282,17 +282,21 @@ class _CallActionsState extends State<_CallActions> {
 
   @override
   Widget build(BuildContext context) {
-    return ButtonTheme(
-      shape: CircleBorder(),
-      minWidth: 56,
-      height: 56,
+    return TextButtonTheme(
+      data: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          primary: Colors.black,
+          backgroundColor: Colors.white,
+          minimumSize: Size.square(56),
+          shape: CircleBorder(),
+        ),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Tooltip(
             message: _cameraEnabled ? 'Disable camera' : 'Enable camera',
-            child: FlatButton(
-              color: Colors.white,
+            child: TextButton(
               child: _cameraEnabled ? Icon(Icons.videocam) : Icon(Icons.videocam_off),
               onPressed: () {
                 setState(() {
@@ -307,8 +311,7 @@ class _CallActionsState extends State<_CallActions> {
           ),
           Tooltip(
             message: _microphoneEnabled ? 'Mute microphone' : 'Unmute microphone',
-            child: FlatButton(
-              color: Colors.white,
+            child: TextButton(
               child: _microphoneEnabled ? const Icon(Icons.mic) : const Icon(Icons.mic_off),
               onPressed: () {
                 setState(() {
@@ -323,8 +326,7 @@ class _CallActionsState extends State<_CallActions> {
           ),
           Tooltip(
             message: _speakerphoneEnabled ? 'Disable speakerphone' : 'Enable speakerphone',
-            child: FlatButton(
-              color: Colors.white,
+            child: TextButton(
               child: _speakerphoneEnabled ? const Icon(Icons.volume_up) : const Icon(Icons.volume_off),
               onPressed: () {
                 setState(() {
@@ -339,12 +341,13 @@ class _CallActionsState extends State<_CallActions> {
           ),
           Tooltip(
             message: 'Hangup',
-            child: FlatButton(
-              textColor: Colors.white,
-              color: Colors.red,
-              disabledColor: Colors.grey,
+            child: TextButton(
               child: const Icon(Icons.call_end),
               onPressed: widget.onHangupPressed,
+              style: TextButton.styleFrom(
+                primary: Colors.white,
+                backgroundColor: Colors.red,
+              ),
             ),
           ),
           SizedBox(
@@ -352,16 +355,40 @@ class _CallActionsState extends State<_CallActions> {
           ),
           Tooltip(
             message: 'Accept',
-            child: FlatButton(
-              textColor: Colors.white,
-              color: Colors.green,
-              disabledColor: Colors.grey,
+            child: TextButton(
               child: const Icon(Icons.call),
               onPressed: widget.onAcceptPressed,
+              style: TextButton.styleFrom(
+                primary: Colors.white,
+              ).copyWith(
+                backgroundColor: _TextButtonBackground(Colors.green, Colors.grey),
+              ),
             ),
           ),
         ],
       ),
     );
+  }
+}
+
+@immutable
+class _TextButtonBackground extends MaterialStateProperty<Color> {
+  _TextButtonBackground(this.enabled, this.disabled);
+
+  final Color enabled;
+  final Color disabled;
+
+  @override
+  Color resolve(Set<MaterialState> states) {
+    if (states.contains(MaterialState.disabled)) {
+      return disabled;
+    } else {
+      return enabled;
+    }
+  }
+
+  @override
+  String toString() {
+    return '{disabled: $disabled, otherwise: $enabled}';
   }
 }
