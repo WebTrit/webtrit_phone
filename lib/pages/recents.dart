@@ -56,9 +56,7 @@ class RecentsPage extends StatelessWidget with PageSnackBarMixin {
                     onDeleted: (recent) {
                       showSnackBar(context, '"${recent.username}" deleted');
 
-                      context.read<RecentsBloc>().add(
-                        RecentsDelete(recent: recent),
-                      );
+                      context.read<RecentsBloc>().add(RecentsDelete(recent: recent));
                     },
                   );
                 },
