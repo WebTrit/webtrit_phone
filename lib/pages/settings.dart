@@ -42,13 +42,13 @@ class SettingsPage extends StatelessWidget {
           content: new Text("Are you sure you want to unregister?"),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
-            new FlatButton(
+            new TextButton(
               child: new Text("No".toUpperCase()),
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
             ),
-            new FlatButton(
+            new TextButton(
               child: new Text("Yes".toUpperCase()),
               onPressed: () {
                 Navigator.of(context).pop(true);

@@ -155,19 +155,20 @@ class RecentTile extends StatelessWidget {
           title: new Text("Confirm delete"),
           content: new Text("Are you sure you want to delete \"${recent.username}\"?"),
           actions: <Widget>[
-            new FlatButton(
+            new TextButton(
               child: new Text("No".toUpperCase()),
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
             ),
-            new FlatButton(
+            new TextButton(
               child: new Text("Yes".toUpperCase()),
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
-              textColor: Colors.red,
-              splashColor: Colors.red[100],
+              style: TextButton.styleFrom(
+                primary: Colors.red,
+              ),
             ),
           ],
         );
