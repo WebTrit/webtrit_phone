@@ -31,7 +31,7 @@ class _KeypadPageState extends State<KeypadPage> {
 
   @override
   Widget build(BuildContext context) {
-    final scaledInset = MediaQuery.of(context).size.height > 800 ? 20.0 : 10.0;
+    final scaledInset = MediaQuery.of(context).size.height > 800 ? 16.0 : 8.0;
 
     return Scaffold(
       body: Column(
@@ -53,7 +53,6 @@ class _KeypadPageState extends State<KeypadPage> {
           ),
           _Keypad(
             onKeypadPressed: _onKeypadPressed,
-            keyPadding: EdgeInsets.all(scaledInset),
           ),
           ValueListenableBuilder(
             valueListenable: _controller,
@@ -62,7 +61,6 @@ class _KeypadPageState extends State<KeypadPage> {
                 onCallPressed: _onCallPressed,
                 onBackspacePressed: value.text.isNotEmpty ? _onBackspacePressed : null,
                 onBackspaceLongPress: value.text.isNotEmpty ? _onBackspaceLongPress : null,
-                actionPadding: EdgeInsets.all(scaledInset),
               );
             },
           ),
@@ -172,12 +170,10 @@ class _Key {
 
 class _Keypad extends StatelessWidget {
   final void Function(String) onKeypadPressed;
-  final EdgeInsetsGeometry keyPadding;
 
   const _Keypad({
     Key key,
     this.onKeypadPressed,
-    this.keyPadding,
   }) : super(key: key);
 
   static const List<_Key> _keys = [
@@ -202,11 +198,10 @@ class _Keypad extends StatelessWidget {
       final key = _keys[i];
       keyButtons.add(
         Center(
-          child: FlatButton(
+          child: TextButton(
             onPressed: () {
               onKeypadPressed(key.text);
             },
-            padding: keyPadding,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -236,8 +231,13 @@ class _Keypad extends StatelessWidget {
       ));
     }
 
-    return ButtonTheme(
-      shape: CircleBorder(),
+    return TextButtonTheme(
+      data: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          minimumSize: Size.square(MediaQuery.of(context).size.width / 5),
+          shape: CircleBorder(),
+        ),
+      ),
       child: Table(
         children: tableRows,
       ),
@@ -250,7 +250,6 @@ class _Actionpad extends StatelessWidget {
   final VoidCallback onCallLongPress;
   final VoidCallback onBackspacePressed;
   final VoidCallback onBackspaceLongPress;
-  final EdgeInsetsGeometry actionPadding;
 
   const _Actionpad({
     Key key,
@@ -258,7 +257,6 @@ class _Actionpad extends StatelessWidget {
     this.onCallLongPress,
     this.onBackspacePressed,
     this.onBackspaceLongPress,
-    this.actionPadding,
   }) : super(key: key);
 
   @override
@@ -268,11 +266,12 @@ class _Actionpad extends StatelessWidget {
         children: [
           Container(),
           Center(
-            child: FlatButton(
+            child: TextButton(
               onPressed: onCallPressed,
               onLongPress: onCallLongPress,
-              splashColor: Theme.of(context).primaryColor,
-              padding: actionPadding,
+              style: TextButton.styleFrom(
+                minimumSize: Size.square(MediaQuery.of(context).size.width / 4),
+              ),
               child: Icon(
                 Icons.phone,
                 size: Theme.of(context).textTheme.headline2.fontSize,
@@ -280,10 +279,9 @@ class _Actionpad extends StatelessWidget {
             ),
           ),
           Center(
-            child: FlatButton(
+            child: TextButton(
               onPressed: onBackspacePressed,
               onLongPress: onBackspaceLongPress,
-              padding: actionPadding,
               child: Icon(
                 Icons.backspace,
               ),
@@ -293,8 +291,13 @@ class _Actionpad extends StatelessWidget {
       ),
     ];
 
-    return ButtonTheme(
-      shape: CircleBorder(),
+    return TextButtonTheme(
+      data: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          minimumSize: Size.square(MediaQuery.of(context).size.width / 5),
+          shape: CircleBorder(),
+        ),
+      ),
       child: Table(
         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
         children: actionRows,
