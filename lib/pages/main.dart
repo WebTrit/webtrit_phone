@@ -92,6 +92,8 @@ class _MainPageState extends State<MainPage> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
+        selectedFontSize: Theme.of(context).textTheme.caption.fontSize,
+        unselectedFontSize: Theme.of(context).textTheme.caption.fontSize,
         onTap: _onItemTapped,
         items: tabs.map((Tab tab) {
           return BottomNavigationBarItem(
