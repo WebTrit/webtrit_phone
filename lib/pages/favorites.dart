@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-class MessagesPage extends StatelessWidget {
-  const MessagesPage({Key key}) : super(key: key);
+class FavoritesPage extends StatelessWidget {
+  const FavoritesPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Messages'),
+        title: Text('Favorites'),
       ),
       body: Center(
         child: Icon(
-          Icons.mail,
+          Icons.star_outline,
           size: 120,
         ),
       ),

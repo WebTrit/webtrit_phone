@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/pages/contacts.dart';
+import 'package:webtrit_phone/pages/favorites.dart';
 import 'package:webtrit_phone/pages/keypad.dart';
-import 'package:webtrit_phone/pages/messages.dart';
 import 'package:webtrit_phone/pages/recents.dart';
 import 'package:webtrit_phone/pages/settings.dart';
 
@@ -42,9 +42,9 @@ final List<Tab> tabs = <Tab>[
     create: (Key key) => KeypadPage(key: key),
   ),
   Tab(
-    icon: Icons.mail,
-    title: 'Messages',
-    create: (Key key) => MessagesPage(key: key),
+    icon: Icons.star_outline,
+    title: 'Favorites',
+    create: (Key key) => FavoritesPage(key: key),
   ),
   Tab(
     icon: Icons.settings,
