@@ -32,7 +32,7 @@ final List<Tab> tabs = <Tab>[
     create: (Key key) => RecentsPage(key: key),
   ),
   Tab(
-    icon: Icons.contacts,
+    icon: Icons.contacts_outlined,
     title: 'Contacts',
     create: (Key key) => ContactsPage(key: key),
   ),
