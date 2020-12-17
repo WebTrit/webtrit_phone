@@ -72,21 +72,19 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: SafeArea(
-          top: false,
-          child: Stack(
-            fit: StackFit.expand,
-            children: tabs.asMap().entries.map((entry) {
-              final int index = entry.key;
-              final Tab tab = entry.value;
+      body: SafeArea(
+        top: false,
+        child: Stack(
+          fit: StackFit.expand,
+          children: tabs.asMap().entries.map((entry) {
+            final int index = entry.key;
+            final Tab tab = entry.value;
 
-              return TabPage(
-                active: index == _selectedIndex,
-                child: tab.createWithGlobalKey(),
-              );
-            }).toList(),
-          ),
+            return TabPage(
+              active: index == _selectedIndex,
+              child: tab.createWithGlobalKey(),
+            );
+          }).toList(),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
