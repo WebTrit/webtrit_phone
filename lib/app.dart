@@ -153,7 +153,7 @@ class App extends StatelessWidget {
                   Navigator.pushReplacementNamed(context, '/main');
                 }
                 if (state is AppUnregister) {
-                  Navigator.pushReplacementNamed(context, '/register');
+                  Navigator.pushNamedAndRemoveUntil(context, '/register', (route) => false);
                 }
               },
               child: page,
