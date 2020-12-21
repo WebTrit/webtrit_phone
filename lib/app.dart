@@ -186,17 +186,27 @@ class App extends StatelessWidget {
           child: page,
         );
 
-        return PageRouteBuilder(
-          settings: settings,
-          pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
-            return page;
-          },
-          transitionsBuilder:
-              (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
-            final PageTransitionsBuilder builder = ZoomPageTransitionsBuilder();
-            return builder.buildTransitions(null, context, animation, secondaryAnimation, child);
-          },
-        );
+        switch (settings.name) {
+          case '/main/call':
+            return PageRouteBuilder(
+              fullscreenDialog: true,
+              settings: settings,
+              pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+                return page;
+              },
+              transitionsBuilder: (BuildContext context, Animation<double> animation,
+                  Animation<double> secondaryAnimation, Widget child) {
+                final PageTransitionsBuilder builder = ZoomPageTransitionsBuilder();
+                return builder.buildTransitions(null, context, animation, secondaryAnimation, child);
+              },
+            );
+          default:
+            return MaterialPageRoute(
+              fullscreenDialog: true,
+              settings: settings,
+              builder: (BuildContext context) => page,
+            );
+        }
       },
     );
   }
