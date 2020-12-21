@@ -18,5 +18,18 @@
         "format": "yMd"
       }
     }
+  },
+
+  "recentsVisibilityFilterAll": "All",
+  "@recentsVisibilityFilterAll": {
+  },
+  "recentsVisibilityFilterMissed": "Missed",
+  "@recentsVisibilityFilterMissed": {
+  },
+  "recentsVisibilityFilterIncoming": "Incoming",
+  "@recentsVisibilityFilterIncoming": {
+  },
+  "recentsVisibilityFilterOutgoing": "Outgoing",
+  "@recentsVisibilityFilterOutgoing": {
   }
 }
