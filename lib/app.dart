@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/blocs/simple_bloc_observer.dart';
@@ -14,7 +15,20 @@ import 'package:webtrit_phone/pages/main.dart';
 import 'package:webtrit_phone/pages/call.dart';
 import 'package:webtrit_phone/pages/settings.dart';
 
-void main(List<String> args) {
+void main(List<String> args) async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Future.wait(
+    [
+      'assets/logo.svg',
+    ].map(
+      (assetName) => precachePicture(
+        ExactAssetPicture(SvgPicture.svgStringDecoder, assetName),
+        null,
+      ),
+    ),
+  );
+
   final argParser = ArgParser();
   argParser.addOption(
     'debug-level',
