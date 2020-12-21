@@ -7,13 +7,52 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/app_bar.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-class RecentsPage extends StatelessWidget with PageSnackBarMixin {
+class RecentsPage extends StatefulWidget {
   const RecentsPage({Key key}) : super(key: key);
 
   @override
+  _RecentsPageState createState() => _RecentsPageState();
+}
+
+class _RecentsPageState extends State<RecentsPage> with PageSnackBarMixin, SingleTickerProviderStateMixin {
+  TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(
+      length: RecentsVisibilityFilter.values.length,
+      vsync: this,
+    );
+    _tabController.addListener(_tabControllerListener);
+  }
+
+  @override
+  void dispose() {
+    _tabController.removeListener(_tabControllerListener);
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  void _tabControllerListener() {
+    if (!_tabController.indexIsChanging) {
+      // TODO
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
     return Scaffold(
-      appBar: MainAppBar(),
+      appBar: MainAppBar(
+        bottom: TabBar(
+          tabs: RecentsVisibilityFilter.values
+              .map((value) => Tab(child: Text(value.l10n(context), softWrap: false)))
+              .toList(),
+          controller: _tabController,
+          labelColor: themeData.textTheme.caption.color,
+        ),
+      ),
       body: BlocConsumer<RecentsBloc, RecentsState>(
         listener: (context, state) {
           if (state is RecentsLoadFailure) {
