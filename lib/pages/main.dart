@@ -31,6 +31,11 @@ final List<Tab> tabs = <Tab>[
     create: (Key key) => RecentsPage(key: key),
   ),
   Tab(
+    icon: Icons.star_outline,
+    title: 'Favorites',
+    create: (Key key) => FavoritesPage(key: key),
+  ),
+  Tab(
     icon: Icons.contacts_outlined,
     title: 'Contacts',
     create: (Key key) => ContactsPage(key: key),
@@ -39,11 +44,6 @@ final List<Tab> tabs = <Tab>[
     icon: Icons.dialpad,
     title: 'Keypad',
     create: (Key key) => KeypadPage(key: key),
-  ),
-  Tab(
-    icon: Icons.star_outline,
-    title: 'Favorites',
-    create: (Key key) => FavoritesPage(key: key),
   ),
 ];
 
