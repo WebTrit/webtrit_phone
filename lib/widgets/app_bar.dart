@@ -71,7 +71,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
             Icons.settings,
           ),
           onPressed: () async {
-            // TODO
+            Navigator.pushNamed(context, '/main/settings');
           },
         ),
       ],
