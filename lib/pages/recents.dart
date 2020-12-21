@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/widgets/app_bar.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class RecentsPage extends StatelessWidget with PageSnackBarMixin {
@@ -12,9 +13,7 @@ class RecentsPage extends StatelessWidget with PageSnackBarMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Recents'),
-      ),
+      appBar: MainAppBar(),
       body: BlocConsumer<RecentsBloc, RecentsState>(
         listener: (context, state) {
           if (state is RecentsLoadFailure) {

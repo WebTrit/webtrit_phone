@@ -74,6 +74,31 @@ class App extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       initialRoute: '/register',
+      builder: (BuildContext context, Widget child) {
+        final themeData = Theme.of(context);
+        return Theme(
+          data: themeData.copyWith(
+            appBarTheme: AppBarTheme(
+              brightness: Brightness.light,
+              color: themeData.canvasColor,
+              iconTheme: IconThemeData(
+                color: themeData.textTheme.caption.color,
+              ),
+              actionsIconTheme: IconThemeData(
+                color: themeData.textTheme.caption.color,
+              ),
+              textTheme: themeData.primaryTextTheme.copyWith(
+                headline6: themeData.primaryTextTheme.headline6.copyWith(
+                  color: themeData.accentColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              centerTitle: false,
+            ),
+          ),
+          child: child,
+        );
+      },
       onGenerateRoute: (RouteSettings settings) {
         Widget page;
         switch (settings.name) {

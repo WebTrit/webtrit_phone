@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/widgets/app_bar.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class KeypadPage extends StatefulWidget {
@@ -34,6 +35,7 @@ class _KeypadPageState extends State<KeypadPage> {
     final scaledInset = MediaQuery.of(context).size.height > 800 ? 16.0 : 8.0;
 
     return Scaffold(
+      appBar: MainAppBar(),
       body: Column(
         children: <Widget>[
           Expanded(
