@@ -7,19 +7,25 @@ class ExtAppBar extends AppBar {
     Widget leading,
     Widget title,
     List<Widget> actions,
+    PreferredSizeWidget bottom,
   }) : super(
           key: key,
           leading: leading,
           title: title,
           actions: actions,
           titleSpacing: 0,
+          bottom: bottom,
         );
 }
 
 class MainAppBar extends StatelessWidget with PreferredSizeWidget {
-  MainAppBar({Key key})
-      : preferredSize = Size.fromHeight(kToolbarHeight),
+  MainAppBar({
+    Key key,
+    this.bottom,
+  })  : preferredSize = Size.fromHeight(kToolbarHeight + (bottom?.preferredSize?.height ?? 0.0)),
         super(key: key);
+
+  final PreferredSizeWidget bottom;
 
   @override
   final Size preferredSize;
@@ -75,6 +81,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
           },
         ),
       ],
+      bottom: bottom,
     );
   }
 }
