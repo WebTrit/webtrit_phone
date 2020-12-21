@@ -1,18 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+class WebTritPhonePictureLogo extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        SvgPicture.asset(
+          'assets/logo.svg',
+          height: themeData.textTheme.headline2.fontSize * 1.4,
+          color: themeData.accentColor,
+        ),
+        SizedBox(
+          width: themeData.textTheme.headline2.fontSize * 0.5,
+        ),
+        Text(
+          'WebTrit',
+          style: themeData.textTheme.headline2.copyWith(
+            color: themeData.accentColor,
+          ),
+        ),
+      ],
+    );
+  }
+}
 
 class WebTritPhoneTextLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
         Text(
           'WebTrit',
-          style: Theme.of(context).textTheme.headline2,
+          style: themeData.textTheme.headline2,
         ),
         Text(
           'Phone',
-          style: Theme.of(context).textTheme.headline4,
+          style: themeData.textTheme.headline4,
         ),
       ],
     );

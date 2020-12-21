@@ -60,7 +60,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 height: 80,
               ),
               Center(
-                child: WebTritPhoneTextLogo(),
+                child: WebTritPhonePictureLogo(),
               ),
               SizedBox(
                 height: 80,
