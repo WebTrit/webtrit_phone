@@ -12,6 +12,7 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/pages/register.dart';
 import 'package:webtrit_phone/pages/main.dart';
 import 'package:webtrit_phone/pages/call.dart';
+import 'package:webtrit_phone/pages/settings.dart';
 
 void main(List<String> args) {
   final argParser = ArgParser();
@@ -140,6 +141,9 @@ class App extends StatelessWidget {
               value: callNavigationArguments.callBloc,
               child: CallPage(),
             );
+            break;
+          case '/main/settings':
+            page = SettingsPage();
             break;
           default:
             return null;

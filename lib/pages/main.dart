@@ -4,7 +4,6 @@ import 'package:webtrit_phone/pages/contacts.dart';
 import 'package:webtrit_phone/pages/favorites.dart';
 import 'package:webtrit_phone/pages/keypad.dart';
 import 'package:webtrit_phone/pages/recents.dart';
-import 'package:webtrit_phone/pages/settings.dart';
 
 class Tab {
   Tab({
@@ -45,11 +44,6 @@ final List<Tab> tabs = <Tab>[
     icon: Icons.star_outline,
     title: 'Favorites',
     create: (Key key) => FavoritesPage(key: key),
-  ),
-  Tab(
-    icon: Icons.settings,
-    title: 'Settings',
-    create: (Key key) => SettingsPage(key: key),
   ),
 ];
 
