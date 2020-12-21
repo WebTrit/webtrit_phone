@@ -173,20 +173,23 @@ class App extends StatelessWidget {
           default:
             return null;
         }
+
+        page = BlocListener<AppBloc, AppState>(
+          listener: (context, state) {
+            if (state is AppRegister) {
+              Navigator.pushReplacementNamed(context, '/main');
+            }
+            if (state is AppUnregister) {
+              Navigator.pushNamedAndRemoveUntil(context, '/register', (route) => false);
+            }
+          },
+          child: page,
+        );
+
         return PageRouteBuilder(
           settings: settings,
           pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
-            return BlocListener<AppBloc, AppState>(
-              listener: (context, state) {
-                if (state is AppRegister) {
-                  Navigator.pushReplacementNamed(context, '/main');
-                }
-                if (state is AppUnregister) {
-                  Navigator.pushNamedAndRemoveUntil(context, '/register', (route) => false);
-                }
-              },
-              child: page,
-            );
+            return page;
           },
           transitionsBuilder:
               (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
