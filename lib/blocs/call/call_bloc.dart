@@ -80,7 +80,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   }
 
   Stream<CallState> _mapCallIncomingReceivedToState(CallIncomingReceived event) async* {
-    yield CallIncoming(username: event.username, accepted: false);
+    yield CallIncoming(username: event.username);
 
     _localStream = await _getUserMedia();
 
