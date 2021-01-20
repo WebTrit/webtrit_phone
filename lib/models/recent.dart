@@ -12,12 +12,14 @@ class Recent extends Equatable {
   final bool isComplete;
   final String username;
   final DateTime time;
+  final Duration duration;
 
   Recent(
     this.direction,
     this.isComplete,
     this.username,
     this.time,
+    this.duration,
   );
 
   @override
@@ -26,5 +28,6 @@ class Recent extends Equatable {
         isComplete,
         username,
         time,
+        duration,
       ];
 }

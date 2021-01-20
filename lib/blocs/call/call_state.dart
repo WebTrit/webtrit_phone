@@ -18,6 +18,9 @@ abstract class CallActive extends CallState {
   final String username;
   final bool accepted;
   final bool hungUp;
+  final DateTime createdTime;
+  final DateTime acceptedTime;
+  final DateTime hungUpTime;
   final MediaStream localStream;
   final MediaStream remoteStream;
 
@@ -25,23 +28,40 @@ abstract class CallActive extends CallState {
     @required this.username,
     this.accepted = false,
     this.hungUp = false,
+    this.createdTime,
+    this.acceptedTime,
+    this.hungUpTime,
     this.localStream,
     this.remoteStream,
   })  : assert(username != null),
         assert(accepted != null),
-        assert(hungUp != null);
+        assert(hungUp != null),
+        assert(createdTime != null);
 
   @override
-  List<Object> get props => [username, accepted, hungUp, localStream, remoteStream];
+  List<Object> get props => [
+        username,
+        accepted,
+        hungUp,
+        createdTime,
+        acceptedTime,
+        hungUpTime,
+        localStream,
+        remoteStream,
+      ];
 
   @override
-  String toString() =>
-      '$runtimeType { username: $username, accepted: $accepted, with localStream: ${localStream != null}, with remoteStream: ${remoteStream != null} }';
+  String toString() => '$runtimeType { username: $username, accepted: $accepted,'
+      ' hungUp: $hungUp, createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime,'
+      ' with localStream: ${localStream != null}, with remoteStream: ${remoteStream != null} }';
 
   CallActive copyWith({
     String username,
     bool accepted,
     bool hungUp,
+    DateTime createdTime,
+    DateTime acceptedTime,
+    DateTime hungUpTime,
     MediaStream localStream,
     MediaStream remoteStream,
   });
@@ -52,12 +72,18 @@ class CallIncoming extends CallActive {
     @required String username,
     bool accepted = false,
     bool hungUp = false,
+    DateTime createdTime,
+    DateTime acceptedTime,
+    DateTime hungUpTime,
     MediaStream localStream,
     MediaStream remoteStream,
   }) : super(
           username: username,
           accepted: accepted,
           hungUp: hungUp,
+          createdTime: createdTime,
+          acceptedTime: acceptedTime,
+          hungUpTime: hungUpTime,
           localStream: localStream,
           remoteStream: remoteStream,
         );
@@ -67,6 +93,9 @@ class CallIncoming extends CallActive {
     @required String username,
     bool accepted,
     bool hungUp,
+    DateTime createdTime,
+    DateTime acceptedTime,
+    DateTime hungUpTime,
     MediaStream localStream,
     MediaStream remoteStream,
   }) {
@@ -74,6 +103,9 @@ class CallIncoming extends CallActive {
       username: username ?? this.username,
       accepted: accepted ?? this.accepted,
       hungUp: hungUp ?? this.hungUp,
+      createdTime: createdTime ?? this.createdTime,
+      acceptedTime: acceptedTime ?? this.acceptedTime,
+      hungUpTime: hungUpTime ?? this.hungUpTime,
       localStream: localStream ?? this.localStream,
       remoteStream: remoteStream ?? this.remoteStream,
     );
@@ -85,12 +117,18 @@ class CallOutgoing extends CallActive {
     @required String username,
     bool accepted = false,
     bool hungUp = false,
+    DateTime createdTime,
+    DateTime acceptedTime,
+    DateTime hungUpTime,
     MediaStream localStream,
     MediaStream remoteStream,
   }) : super(
           username: username,
           accepted: accepted,
           hungUp: hungUp,
+          createdTime: createdTime,
+          acceptedTime: acceptedTime,
+          hungUpTime: hungUpTime,
           localStream: localStream,
           remoteStream: remoteStream,
         );
@@ -100,6 +138,9 @@ class CallOutgoing extends CallActive {
     String username,
     bool accepted,
     bool hungUp,
+    DateTime createdTime,
+    DateTime acceptedTime,
+    DateTime hungUpTime,
     MediaStream localStream,
     MediaStream remoteStream,
   }) {
@@ -107,6 +148,9 @@ class CallOutgoing extends CallActive {
       username: username ?? this.username,
       accepted: accepted ?? this.accepted,
       hungUp: hungUp ?? this.hungUp,
+      createdTime: createdTime ?? this.createdTime,
+      acceptedTime: acceptedTime ?? this.acceptedTime,
+      hungUpTime: hungUpTime ?? this.hungUpTime,
       localStream: localStream ?? this.localStream,
       remoteStream: remoteStream ?? this.remoteStream,
     );

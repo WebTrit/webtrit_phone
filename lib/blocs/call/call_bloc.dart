@@ -80,7 +80,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   }
 
   Stream<CallState> _mapCallIncomingReceivedToState(CallIncomingReceived event) async* {
-    yield CallIncoming(username: event.username);
+    yield CallIncoming(username: event.username, createdTime: DateTime.now());
 
     _localStream = await _getUserMedia();
 
@@ -94,7 +94,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   }
 
   Stream<CallState> _mapCallIncomingAcceptedToState(CallIncomingAccepted event) async* {
-    yield (state as CallActive).copyWith(accepted: true);
+    yield (state as CallActive).copyWith(accepted: true, acceptedTime: DateTime.now());
 
     final localDescription = await _peerConnection.createAnswer({});
     _peerConnection.setLocalDescription(localDescription);
@@ -103,7 +103,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   }
 
   Stream<CallState> _mapCallOutgoingStartedToState(CallOutgoingStarted event) async* {
-    yield CallOutgoing(username: event.username);
+    yield CallOutgoing(username: event.username, createdTime: DateTime.now());
 
     _localStream = await _getUserMedia();
 
@@ -131,7 +131,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   }
 
   Stream<CallState> _mapCallOutgoingAcceptedToState(CallOutgoingAccepted event) async* {
-    yield (state as CallActive).copyWith(accepted: true);
+    yield (state as CallActive).copyWith(accepted: true, acceptedTime: DateTime.now());
 
     final remoteDescription = RTCSessionDescription(event.jsepData['sdp'], event.jsepData['type']);
     await _peerConnection.setRemoteDescription(remoteDescription);
@@ -148,7 +148,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   Stream<CallState> _mapCallHungUpRemoteToState(CallRemoteHungUp event) async* {
     if (state is! CallActive) return; // TODO: get rid of double hangup event
 
-    yield (state as CallActive).copyWith(hungUp: true);
+    yield (state as CallActive).copyWith(hungUp: true, hungUpTime: DateTime.now());
 
     await _peerConnection?.close();
     _peerConnection = null;
@@ -164,7 +164,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   Stream<CallState> _mapCallHungUpLocalToState(CallLocalHungUp event) async* {
     if (state is! CallActive) return; // TODO: get rid of double hangup event
 
-    yield (state as CallActive).copyWith(hungUp: true);
+    yield (state as CallActive).copyWith(hungUp: true, hungUpTime: DateTime.now());
 
     await callRepository.hangup();
 
@@ -285,7 +285,10 @@ class CallBloc extends Bloc<CallEvent, CallState> {
         direction,
         state.accepted,
         state.username,
-        DateTime.now(),
+        state.createdTime,
+        (state.hungUpTime != null && state.acceptedTime != null)
+            ? state.hungUpTime.difference(state.acceptedTime)
+            : null,
       ),
     ));
   }
