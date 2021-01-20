@@ -9,7 +9,7 @@ class KeypadPage extends StatefulWidget {
   _KeypadPageState createState() => _KeypadPageState();
 }
 
-class _KeypadPageState extends State<KeypadPage> {
+class _KeypadPageState extends State<KeypadPage> with PageSnackBarMixin {
   final _keypadTextFieldKey = GlobalKey();
   final _focusNode = PreventKeyboardFocusNode();
 
@@ -76,10 +76,7 @@ class _KeypadPageState extends State<KeypadPage> {
   void _onCallPressed() {
     _focusNode.unfocus();
 
-    Scaffold.of(context).removeCurrentSnackBar();
-    Scaffold.of(context).showSnackBar(SnackBar(
-      content: Text('Sorry, not implemented yet'),
-    ));
+    showSnackBar(context, 'Sorry, not implemented yet');
   }
 
   void _onKeypadPressed(keyText) {
