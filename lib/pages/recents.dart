@@ -36,7 +36,8 @@ class _RecentsPageState extends State<RecentsPage> with PageSnackBarMixin, Singl
 
   void _tabControllerListener() {
     if (!_tabController.indexIsChanging) {
-      // TODO
+      // TODO introduce FilteredRecentsBloc
+      setState(() {});
     }
   }
 
@@ -70,6 +71,19 @@ class _RecentsPageState extends State<RecentsPage> with PageSnackBarMixin, Singl
             );
           }
           if (state is RecentsLoadSuccess) {
+            RecentsVisibilityFilter filter = RecentsVisibilityFilter.values[_tabController.index];
+            final recentsFiltered = state.recents.where((recent) {
+              if (filter == RecentsVisibilityFilter.missed) {
+                return !recent.isComplete && recent.direction == Direction.incoming;
+              } else if (filter == RecentsVisibilityFilter.incoming) {
+                return recent.direction == Direction.incoming;
+              } else if (filter == RecentsVisibilityFilter.outgoing) {
+                return recent.direction == Direction.outgoing;
+              } else {
+                return true;
+              }
+            }).toList();
+
             return RefreshIndicator(
               onRefresh: () {
                 hideSnackBar(context);
@@ -77,9 +91,9 @@ class _RecentsPageState extends State<RecentsPage> with PageSnackBarMixin, Singl
                     .firstWhere((state) => state is RecentsLoadSuccess || state is RecentsRefreshFailure);
               },
               child: ListView.separated(
-                itemCount: state.recents.length,
+                itemCount: recentsFiltered.length,
                 itemBuilder: (context, index) {
-                  final recent = state.recents[index];
+                  final recent = recentsFiltered[index];
                   return RecentTile(
                     recent: recent,
                     onInfoTap: () {
@@ -154,33 +168,61 @@ class RecentTile extends StatelessWidget {
       onDismissed: onDeleted == null ? null : (direction) => onDeleted(recent),
       direction: DismissDirection.endToStart,
       child: ListTile(
-        leading: Icon(recent.direction.icon),
+        contentPadding: EdgeInsets.only(left: 16.0),
+        leading: LeadingAvatar(
+          username: recent.username,
+        ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text(
-              recent.time.format(context),
-              style: TextStyle(color: Colors.grey),
+            IconButton(
+              splashRadius: 24,
+              icon: Icon(Icons.call),
+              onPressed: () {
+                print('onTap call');
+              },
             ),
-            Container(
-              margin: EdgeInsets.only(left: 8),
-              child: GestureDetector(
-                child: Icon(
-                  Icons.info_outline,
-                ),
-                onTap: onInfoTap,
-              ),
+            IconButton(
+              splashRadius: 24,
+              icon: Icon(Icons.videocam),
+              onPressed: () {
+                print('onTap videocam');
+              },
             ),
           ],
         ),
         title: Text(
           recent.username,
-          style: TextStyle(color: recent.isComplete ? null : Colors.red),
+        ),
+        subtitle: Row(
+          children: [
+            Icon(
+              recent.direction.icon(recent.isComplete),
+              size: 16,
+              color: recent.isComplete
+                  ? (recent.direction == Direction.incoming ? Colors.blue : Colors.green)
+                  : Colors.red,
+            ),
+            Text(' · '),
+            Text(
+              recent.isComplete ? _formatDuration(recent.duration) : 'Missed',
+            ),
+            Text(' · '),
+            Text(
+              recent.time.format(context),
+            ),
+          ],
         ),
         onTap: onTap,
         onLongPress: onLongPress,
       ),
     );
+  }
+
+  String _formatDuration(Duration duration) {
+    return [duration.inHours, duration.inMinutes, duration.inSeconds]
+        .map((seg) => seg.remainder(60).toString().padLeft(2, '0'))
+        .join(':');
   }
 
   Future<bool> _confirmDelete(BuildContext context, Recent recent) {
@@ -214,12 +256,12 @@ class RecentTile extends StatelessWidget {
 }
 
 extension _DirectionConverting on Direction {
-  IconData get icon {
+  IconData icon(bool isComplete) {
     switch (this) {
       case Direction.incoming:
-        return Icons.call_received;
+        return isComplete ? Icons.call_received : Icons.call_missed;
       case Direction.outgoing:
-        return Icons.call_made;
+        return isComplete ? Icons.call_made : Icons.call_missed_outgoing;
       default:
         return Icons.close;
     }
