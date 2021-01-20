@@ -88,9 +88,8 @@ class ContactTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: EdgeInsets.only(left: 16.0),
-      leading: CircleAvatar(
-        backgroundColor: Colors.blue.shade100,
-        child: Text(contact.username.trim().split(' ').map((v) => v[0]).join()),
+      leading: LeadingAvatar(
+        username: contact.username,
       ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
