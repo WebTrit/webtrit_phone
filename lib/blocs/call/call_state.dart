@@ -18,7 +18,6 @@ abstract class CallActive extends CallState {
   final String username;
   final bool accepted;
   final bool hungUp;
-
   final MediaStream localStream;
   final MediaStream remoteStream;
 
@@ -53,8 +52,8 @@ class CallIncoming extends CallActive {
     @required String username,
     bool accepted = false,
     bool hungUp = false,
-    localStream,
-    remoteStream,
+    MediaStream localStream,
+    MediaStream remoteStream,
   }) : super(
           username: username,
           accepted: accepted,
@@ -86,8 +85,8 @@ class CallOutgoing extends CallActive {
     @required String username,
     bool accepted = false,
     bool hungUp = false,
-    localStream,
-    remoteStream,
+    MediaStream localStream,
+    MediaStream remoteStream,
   }) : super(
           username: username,
           accepted: accepted,
