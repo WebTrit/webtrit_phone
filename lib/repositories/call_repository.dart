@@ -31,7 +31,7 @@ class CallRepository {
     _acceptedStreamController = StreamController.broadcast();
     _hangupStreamController = StreamController.broadcast();
 
-    _gateway = await Gateway.connect('wss://janus.webtrit.com:8989/', _onErrorCallback, _onDoneCallback);
+    _gateway = await Gateway.connect('wss://janus.conf.meetecho.com:443/ws', _onErrorCallback, _onDoneCallback);
     _gateway.listen();
 
     _session = Session(_gateway, _onSessionTimeoutCallback);
