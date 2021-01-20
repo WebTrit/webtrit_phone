@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/widgets/app_bar.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class ContactsPage extends StatelessWidget with PageSnackBarMixin {

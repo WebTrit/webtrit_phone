@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/widgets/app_bar.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class KeypadPage extends StatefulWidget {
