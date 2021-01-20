@@ -87,6 +87,30 @@ class ContactTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      contentPadding: EdgeInsets.only(left: 16.0),
+      leading: CircleAvatar(
+        backgroundColor: Colors.blue.shade100,
+        child: Text(contact.username.trim().split(' ').map((v) => v[0]).join()),
+      ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          IconButton(
+            splashRadius: 24,
+            icon: Icon(Icons.call),
+            onPressed: () {
+              print('onTap call');
+            },
+          ),
+          IconButton(
+            splashRadius: 24,
+            icon: Icon(Icons.videocam),
+            onPressed: () {
+              print('onTap videocam');
+            },
+          ),
+        ],
+      ),
       title: Text(contact.username),
       onTap: onTap,
       onLongPress: onLongPress,
