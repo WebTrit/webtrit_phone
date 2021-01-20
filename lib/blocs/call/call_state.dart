@@ -32,7 +32,7 @@ abstract class CallActive extends CallState {
         assert(hungUp != null);
 
   @override
-  List<Object> get props => [username, accepted, localStream, remoteStream];
+  List<Object> get props => [username, accepted, hungUp, localStream, remoteStream];
 
   @override
   String toString() =>
