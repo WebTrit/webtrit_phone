@@ -1,4 +1,3 @@
-import 'package:args/args.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,8 +13,9 @@ import 'package:webtrit_phone/pages/register.dart';
 import 'package:webtrit_phone/pages/main.dart';
 import 'package:webtrit_phone/pages/call.dart';
 import 'package:webtrit_phone/pages/settings.dart';
+import 'package:webtrit_phone/environment_config.dart';
 
-void main(List<String> args) async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Future.wait(
@@ -29,22 +29,7 @@ void main(List<String> args) async {
     ),
   );
 
-  final argParser = ArgParser();
-  argParser.addOption(
-    'debug-level',
-    allowed: List.from(Level.LEVELS.map((level) => level.name)),
-    defaultsTo: 'INFO',
-  );
-  argParser.addFlag(
-    'periodic-polling',
-    defaultsTo: true,
-  );
-
-  final argParserResults = argParser.parse(args);
-  final debugLevelOption = argParserResults['debug-level'] as String;
-  final periodicPollingFlag = argParserResults['periodic-polling'] as bool;
-
-  Logger.root.level = Level.LEVELS.firstWhere((level) => level.name == debugLevelOption);
+  Logger.root.level = Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.DEBUG_LEVEL);
   Logger.root.onRecord.listen((record) {
     print('${record.time} [${record.level.name}] ${record.loggerName}: ${record.message}');
   });
@@ -62,7 +47,7 @@ void main(List<String> args) async {
       RepositoryProvider<ContactsRepository>(
         create: (context) => ContactsRepository(
           callRepository: context.read<CallRepository>(),
-          periodicPolling: periodicPollingFlag,
+          periodicPolling: EnvironmentConfig.PERIODIC_POLLING,
         ),
       ),
     ],

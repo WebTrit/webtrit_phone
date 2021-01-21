@@ -22,7 +22,6 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  args: ^1.6.0
   bloc: ^6.1.0
   collection: ^1.14.13
   equatable: ^1.2.5
