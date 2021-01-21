@@ -33,6 +33,7 @@ dependencies:
   intl: ^0.16.1
   logging: ^0.11.4
   meta: ^1.2.4
+  webview_flutter: ^1.0.7
 
   janus_client:
     path: ./janus_client
