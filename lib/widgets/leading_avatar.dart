@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class LeadingAvatar extends StatelessWidget {
   LeadingAvatar({
+    Key key,
     this.username,
-  });
+  }) : super(key: key);
 
   final String username;
 
