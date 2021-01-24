@@ -8,11 +8,13 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/blocs/simple_bloc_observer.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/pages/register.dart';
 import 'package:webtrit_phone/pages/main.dart';
 import 'package:webtrit_phone/pages/call.dart';
 import 'package:webtrit_phone/pages/settings.dart';
+import 'package:webtrit_phone/pages/web_registration.dart';
 import 'package:webtrit_phone/environment_config.dart';
 
 void main() async {
@@ -55,15 +57,26 @@ void main() async {
       create: (context) {
         return AppBloc();
       },
-      child: App(),
+      child: App(
+        isRegistered: await SecureStorage.readToken() != null,
+      ),
     ),
   ));
 }
 
 class App extends StatelessWidget {
+  App({
+    Key key,
+    @required this.isRegistered,
+  }) : super(key: key);
+
+  final bool isRegistered;
+
   @override
   Widget build(BuildContext context) {
     setDefaultOrientations();
+
+    final initialRoute = isRegistered ? '/register' : '/web-registration';
 
     return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -72,7 +85,7 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/register',
+      initialRoute: initialRoute,
       builder: (BuildContext context, Widget child) {
         final themeData = Theme.of(context);
         return Theme(
@@ -101,6 +114,11 @@ class App extends StatelessWidget {
       onGenerateRoute: (RouteSettings settings) {
         Widget page;
         switch (settings.name) {
+          case '/web-registration':
+            page = WebRegistrationPage(
+              initialUrl: EnvironmentConfig.WEB_REGISTRATION_INITIAL_URL,
+            );
+            break;
           case '/register':
             page = BlocProvider(
               create: (context) {
@@ -174,12 +192,15 @@ class App extends StatelessWidget {
         }
 
         page = BlocListener<AppBloc, AppState>(
-          listener: (context, state) {
+          listener: (context, state) async {
             if (state is AppRegister) {
               Navigator.pushReplacementNamed(context, '/main');
             }
             if (state is AppUnregister) {
-              Navigator.pushNamedAndRemoveUntil(context, '/register', (route) => false);
+              final isRegistered = await SecureStorage.readToken() != null;
+              final reinitialRoute = isRegistered ? '/register' : '/web-registration';
+
+              Navigator.pushNamedAndRemoveUntil(context, reinitialRoute, (route) => false);
             }
           },
           child: page,

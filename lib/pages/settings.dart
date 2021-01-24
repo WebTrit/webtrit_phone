@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget with PageSnackBarMixin {
   const SettingsPage({Key key}) : super(key: key);
 
+  @override
+  _SettingsPageState createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,9 +32,43 @@ class SettingsPage extends StatelessWidget {
         ],
       ),
       body: Center(
-        child: Icon(
-          Icons.settings,
-          size: 120,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Current toke:'),
+            Container(
+              alignment: Alignment.center,
+              height: 50,
+              child: FutureBuilder(
+                future: SecureStorage.readToken(),
+                builder: (context, AsyncSnapshot<String> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    final token = snapshot.data;
+                    if (token != null) {
+                      return Text(
+                        snapshot.data,
+                        style: TextStyle(fontSize: 20),
+                      );
+                    } else {
+                      return Text(
+                        'empty',
+                        style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
+                      );
+                    }
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
+              ),
+            ),
+            TextButton(
+              child: Text('Delete token'.toUpperCase()),
+              onPressed: () async {
+                await SecureStorage.deleteToken();
+                setState(() {});
+              },
+            )
+          ],
         ),
       ),
     );
