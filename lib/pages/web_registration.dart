@@ -15,6 +15,9 @@ const String kDemoPage = '''
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>WebTrit Web Registration Example</title>
   <style>
+    body {
+      margin-top: var(--safe-area-inset-top);
+    }
     p {
       text-align: center;
     }
@@ -73,6 +76,8 @@ class _WebRegistrationPageState extends State<WebRegistrationPage> {
         _controller.complete(controller);
       },
       onPageStarted: (url) async {
+        final webViewController = await _controller.future;
+        webViewController.evaluateJavascript(_definesCssVariablesJavascript(context));
       },
       onPageFinished: (url) async {
       },
@@ -129,5 +134,18 @@ class _WebRegistrationPageState extends State<WebRegistrationPage> {
 
   String _demoInitialUrl() {
     return 'data:text/html;base64,${base64Encode(const Utf8Encoder().convert(kDemoPage))}';
+  }
+
+  String _definesCssVariablesJavascript(BuildContext context) {
+    final safeAreaPadding = MediaQuery.of(context).padding;
+    return {
+      '--safe-area-inset-left': safeAreaPadding.left,
+      '--safe-area-inset-top': safeAreaPadding.top,
+      '--safe-area-inset-right': safeAreaPadding.right,
+      '--safe-area-inset-bottom': safeAreaPadding.bottom,
+    }
+        .entries
+        .map((mapEntry) => "document.documentElement.style.setProperty('${mapEntry.key}', '${mapEntry.value}px');")
+        .join();
   }
 }
