@@ -76,10 +76,10 @@ class _WebRegistrationPageState extends State<WebRegistrationPage> {
         _controller.complete(controller);
       },
       onPageStarted: (url) async {
-        final webViewController = await _controller.future;
-        webViewController.evaluateJavascript(_definesCssVariablesJavascript(context));
       },
       onPageFinished: (url) async {
+        final webViewController = await _controller.future;
+        webViewController.evaluateJavascript(_definesCssVariablesJavascript(context));
       },
       onWebResourceError: (WebResourceError error) async {
         final result = await _showWebResourceErrorDialog(context, error);
