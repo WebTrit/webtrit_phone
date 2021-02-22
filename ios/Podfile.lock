@@ -8,6 +8,8 @@ PODS:
     - Libyuv (= 1703)
   - GoogleWebRTC (1.1.31999)
   - Libyuv (1703)
+  - "permission_handler (5.1.0+2)":
+    - Flutter
   - webview_flutter (0.0.1):
     - Flutter
 
@@ -15,6 +17,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - flutter_webrtc (from `.symlinks/plugins/flutter_webrtc/ios`)
+  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
 
 SPEC REPOS:
@@ -29,6 +32,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
   flutter_webrtc:
     :path: ".symlinks/plugins/flutter_webrtc/ios"
+  permission_handler:
+    :path: ".symlinks/plugins/permission_handler/ios"
   webview_flutter:
     :path: ".symlinks/plugins/webview_flutter/ios"
 
@@ -38,8 +43,9 @@ SPEC CHECKSUMS:
   flutter_webrtc: 39898454258b54ba51996850d5da8d5d53bf1524
   GoogleWebRTC: b39a78c4f5cc6b0323415b9233db03a2faa7b0f0
   Libyuv: 5f79ced0ee66e60a612ca97de1e6ccacd187a437
+  permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   webview_flutter: d2b4d6c66968ad042ad94cbb791f5b72b4678a96
 
-PODFILE CHECKSUM: fe0e1ee7f3d1f7d00b11b474b62dd62134535aea
+PODFILE CHECKSUM: 93ca59897edb3a611a35f4619603d27fa371ae10
 
 COCOAPODS: 1.10.1
