@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
@@ -152,7 +154,16 @@ class _SettingsPageState extends State<SettingsPage> with PageSnackBarMixin {
                 },
               );
             },
-          )
+          ),
+          SizedBox(
+            height: 40,
+          ),
+          TextButton(
+            child: Text('Open OS App Settings'.toUpperCase()),
+            onPressed: () async {
+              await openAppSettings();
+            },
+          ),
         ],
       ),
     );
