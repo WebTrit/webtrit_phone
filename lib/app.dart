@@ -195,25 +195,28 @@ class App extends StatelessWidget {
             return null;
         }
 
-        page = BlocListener<AppBloc, AppState>(
-          listener: (context, state) async {
-            if (state is AppRegister) {
-              Navigator.pushReplacementNamed(context, '/main');
-            }
-            if (state is AppUnregister) {
-              final webRegistrationInitialUrl = await SecureStorage.readWebRegistrationInitialUrl();
-              final isRegistered = await SecureStorage.readToken() != null;
+        if ('/'.allMatches(settings.name).length <= 1) {
+          // add listener only to top level page
+          page = BlocListener<AppBloc, AppState>(
+            listener: (context, state) async {
+              if (state is AppRegister) {
+                Navigator.pushReplacementNamed(context, '/main');
+              }
+              if (state is AppUnregister) {
+                final webRegistrationInitialUrl = await SecureStorage.readWebRegistrationInitialUrl();
+                final isRegistered = await SecureStorage.readToken() != null;
 
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                _initialRoute(webRegistrationInitialUrl, isRegistered),
-                (route) => false,
-                arguments: webRegistrationInitialUrl,
-              );
-            }
-          },
-          child: page,
-        );
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  _initialRoute(webRegistrationInitialUrl, isRegistered),
+                  (route) => false,
+                  arguments: webRegistrationInitialUrl,
+                );
+              }
+            },
+            child: page,
+          );
+        }
 
         switch (settings.name) {
           case '/main/call':
