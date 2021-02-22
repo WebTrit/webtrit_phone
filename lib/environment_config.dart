@@ -10,9 +10,4 @@ class EnvironmentConfig {
     'PERIODIC_POLLING',
     defaultValue: true,
   );
-
-  static const WEB_REGISTRATION_INITIAL_URL = String.fromEnvironment(
-    'WEB_REGISTRATION_INITIAL_URL',
-    defaultValue: null,
-  );
 }

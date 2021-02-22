@@ -58,6 +58,7 @@ void main() async {
         return AppBloc();
       },
       child: App(
+        webRegistrationInitialUrl: await SecureStorage.readWebRegistrationInitialUrl(),
         isRegistered: await SecureStorage.readToken() != null,
       ),
     ),
@@ -67,16 +68,19 @@ void main() async {
 class App extends StatelessWidget {
   App({
     Key key,
+    @required this.webRegistrationInitialUrl,
     @required this.isRegistered,
   }) : super(key: key);
 
+  final String webRegistrationInitialUrl;
   final bool isRegistered;
+
+  String _initialRoute(String webRegistrationInitialUrl, bool isRegistered) =>
+      webRegistrationInitialUrl == null || isRegistered ? '/register' : '/web-registration';
 
   @override
   Widget build(BuildContext context) {
     setDefaultOrientations();
-
-    final initialRoute = isRegistered ? '/register' : '/web-registration';
 
     return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -85,7 +89,7 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: initialRoute,
+      initialRoute: _initialRoute(webRegistrationInitialUrl, isRegistered),
       builder: (BuildContext context, Widget child) {
         final themeData = Theme.of(context);
         return Theme(
@@ -116,7 +120,7 @@ class App extends StatelessWidget {
         switch (settings.name) {
           case '/web-registration':
             page = WebRegistrationPage(
-              initialUrl: EnvironmentConfig.WEB_REGISTRATION_INITIAL_URL,
+              initialUrl: settings.arguments != null ? settings.arguments as String : webRegistrationInitialUrl,
             );
             break;
           case '/register':
@@ -197,10 +201,15 @@ class App extends StatelessWidget {
               Navigator.pushReplacementNamed(context, '/main');
             }
             if (state is AppUnregister) {
+              final webRegistrationInitialUrl = await SecureStorage.readWebRegistrationInitialUrl();
               final isRegistered = await SecureStorage.readToken() != null;
-              final reinitialRoute = isRegistered ? '/register' : '/web-registration';
 
-              Navigator.pushNamedAndRemoveUntil(context, reinitialRoute, (route) => false);
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                _initialRoute(webRegistrationInitialUrl, isRegistered),
+                (route) => false,
+                arguments: webRegistrationInitialUrl,
+              );
             }
           },
           child: page,

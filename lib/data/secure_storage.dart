@@ -4,6 +4,7 @@ class SecureStorage {
   SecureStorage._();
 
   static const _kTokenKey = 'token';
+  static const _kWebRegistrationInitialUrl = 'initial-url';
 
   static const _storage = FlutterSecureStorage();
 
@@ -17,5 +18,17 @@ class SecureStorage {
 
   static Future<void> deleteToken() {
     return _storage.delete(key: _kTokenKey);
+  }
+
+  static Future<String> readWebRegistrationInitialUrl() {
+    return _storage.read(key: _kWebRegistrationInitialUrl);
+  }
+
+  static Future<void> writeWebRegistrationInitialUrl(String url) {
+    return _storage.write(key: _kWebRegistrationInitialUrl, value: url);
+  }
+
+  static Future<void> deleteWebRegistrationInitialUrl() {
+    return _storage.delete(key: _kWebRegistrationInitialUrl);
   }
 }
