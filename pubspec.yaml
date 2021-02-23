@@ -34,6 +34,7 @@ dependencies:
   logging: ^0.11.4
   meta: ^1.2.4
   permission_handler: ^5.1.0+2
+  phoenix_socket: ^0.4.11
   webview_flutter: ^1.0.7
 
   janus_client:
