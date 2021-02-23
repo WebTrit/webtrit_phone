@@ -21,7 +21,18 @@ class Tab {
   final Widget Function(Key key) _create;
   final GlobalKey _globalKey;
 
-  Widget createWithGlobalKey() => this._create(this._globalKey);
+  bool _wasActive = false;
+
+  Widget createWithGlobalKey(bool active) {
+    if (_wasActive) {
+      return this._create(this._globalKey);
+    } else if (active) {
+      _wasActive = active;
+      return this._create(this._globalKey);
+    } else {
+      return Container();
+    }
+  }
 }
 
 final List<Tab> tabs = <Tab>[
@@ -74,9 +85,10 @@ class _MainPageState extends State<MainPage> {
             final int index = entry.key;
             final Tab tab = entry.value;
 
+            final active = index == _selectedIndex;
             return TabPage(
-              active: index == _selectedIndex,
-              child: tab.createWithGlobalKey(),
+              active: active,
+              child: tab.createWithGlobalKey(active),
             );
           }).toList(),
         ),
