@@ -24,6 +24,7 @@ dependencies:
 
   bloc: ^6.1.0
   collection: ^1.14.13
+  dio: ^3.0.10
   equatable: ^1.2.5
   flutter_bloc: ^6.1.0
   flutter_contacts: ^0.1.3
