@@ -1,10 +1,15 @@
 import 'dart:async';
-import 'package:meta/meta.dart';
-import 'package:bloc/bloc.dart';
 
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
+
+import 'package:webtrit_phone/models/external_contact.dart';
 import 'package:webtrit_phone/repositories/external_contacts_repository.dart';
 
-import './external_contacts.dart';
+part 'external_contacts_event.dart';
+
+part 'external_contacts_state.dart';
 
 class ExternalContactsBloc extends Bloc<ExternalContactsEvent, ExternalContactsState> {
   final ExternalContactsRepository externalContactsRepository;

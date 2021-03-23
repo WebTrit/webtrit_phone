@@ -1,7 +1,4 @@
-import 'package:meta/meta.dart';
-import 'package:equatable/equatable.dart';
-
-import 'package:webtrit_phone/models/external_contact.dart';
+part of 'external_contacts_bloc.dart';
 
 @immutable
 abstract class ExternalContactsState extends Equatable {
