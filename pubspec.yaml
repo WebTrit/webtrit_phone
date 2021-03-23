@@ -35,7 +35,7 @@ dependencies:
   flutter_secure_storage: ^3.3.5
   flutter_svg: ^0.19.1
   flutter_webrtc: ^0.5.7
-  intl: ^0.16.1
+  intl: ^0.17.0
   logging: ^0.11.4
   meta: ^1.2.4
   permission_handler: ^5.1.0+2
