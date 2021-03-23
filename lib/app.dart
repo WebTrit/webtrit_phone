@@ -46,8 +46,8 @@ void main() async {
       RepositoryProvider<RecentsRepository>(
         create: (context) => RecentsRepository(),
       ),
-      RepositoryProvider<ContactsRepository>(
-        create: (context) => ContactsRepository(
+      RepositoryProvider<ExternalContactsRepository>(
+        create: (context) => ExternalContactsRepository(
           callRepository: context.read<CallRepository>(),
           periodicPolling: EnvironmentConfig.PERIODIC_POLLING,
         ),
@@ -144,11 +144,11 @@ class App extends StatelessWidget {
                     )..add(RecentsInitialLoaded());
                   },
                 ),
-                BlocProvider<ContactsBloc>(
+                BlocProvider<ExternalContactsBloc>(
                   create: (context) {
-                    return ContactsBloc(
-                      contactsRepository: context.read<ContactsRepository>(),
-                    )..add(ContactsInitialLoaded());
+                    return ExternalContactsBloc(
+                      externalContactsRepository: context.read<ExternalContactsRepository>(),
+                    )..add(ExternalContactsInitialLoaded());
                   },
                 ),
                 BlocProvider<CallBloc>(

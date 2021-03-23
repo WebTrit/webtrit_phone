@@ -7,7 +7,7 @@ import 'package:webtrit_phone/models/models.dart';
 
 import 'call_repository.dart';
 
-class ContactsRepository {
+class ExternalContactsRepository {
   final CallRepository callRepository;
   final bool periodicPolling;
 
@@ -15,20 +15,20 @@ class ContactsRepository {
   int _listenedCounter;
   Timer _periodicTimer;
 
-  List<Contact> _contacts;
+  List<ExternalContact> _contacts;
 
-  ContactsRepository({
+  ExternalContactsRepository({
     @required this.callRepository,
     this.periodicPolling = true,
   }) {
-    _controller = StreamController<List<Contact>>.broadcast(
+    _controller = StreamController<List<ExternalContact>>.broadcast(
       onListen: _onListenCallback,
       onCancel: _onCancelCallback,
     );
     _listenedCounter = 0;
   }
 
-  Stream<List<Contact>> contacts() {
+  Stream<List<ExternalContact>> contacts() {
     return _controller.stream;
   }
 
@@ -41,7 +41,7 @@ class ContactsRepository {
     if (periodicPolling && _listenedCounter++ == 0) {
       _periodicTimer = Timer.periodic(Duration(seconds: 3), (timer) async {
         final newContacts = await _listContacts();
-        if (!(const ListEquality<Contact>()).equals(newContacts, _contacts)) {
+        if (!(const ListEquality<ExternalContact>()).equals(newContacts, _contacts)) {
           _contacts = newContacts;
           _controller.add(_contacts);
         }
@@ -56,8 +56,8 @@ class ContactsRepository {
     }
   }
 
-  Future<List<Contact>> _listContacts() async {
+  Future<List<ExternalContact>> _listContacts() async {
     final list = await callRepository.list();
-    return List<Contact>.from(list.map<Contact>((username) => Contact(username)));
+    return List<ExternalContact>.from(list.map<ExternalContact>((username) => ExternalContact(username)));
   }
 }

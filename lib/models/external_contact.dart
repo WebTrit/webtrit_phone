@@ -2,10 +2,10 @@ import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 @immutable
-class Contact extends Equatable {
+class ExternalContact extends Equatable {
   final String username;
 
-  Contact(this.username);
+  ExternalContact(this.username);
 
   @override
   List<Object> get props => [

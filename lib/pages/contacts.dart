@@ -50,29 +50,29 @@ class _ContactsPageState extends State<ContactsPage> with PageSnackBarMixin, Sin
           labelColor: themeData.textTheme.caption.color,
         ),
       ),
-      body: BlocConsumer<ContactsBloc, ContactsState>(
+      body: BlocConsumer<ExternalContactsBloc, ExternalContactsState>(
         listener: (context, state) {
-          if (state is ContactsLoadFailure) {
+          if (state is ExternalContactsLoadFailure) {
             showErrorSnackBar(context, 'Ups error happened ☹️');
           }
         },
         buildWhen: (previous, current) {
-          return current is! ContactsRefreshFailure;
+          return current is! ExternalContactsRefreshFailure;
         },
         // ignore: missing_return
         builder: (context, state) {
-          if (state is ContactsInitial) {
+          if (state is ExternalContactsInitial) {
             return Center(
               child: CircularProgressIndicator(),
             );
           }
-          if (state is ContactsLoadSuccess) {
+          if (state is ExternalContactsLoadSuccess) {
             return RefreshIndicator(
               onRefresh: () {
                 hideSnackBar(context);
-                return (context.read<ContactsBloc>()..add(ContactsRefreshed()))
+                return (context.read<ExternalContactsBloc>()..add(ExternalContactsRefreshed()))
                     .stream
-                    .firstWhere((state) => state is ContactsLoadSuccess || state is ContactsRefreshFailure);
+                    .firstWhere((state) => state is ExternalContactsLoadSuccess || state is ExternalContactsRefreshFailure);
               },
               child: ListView.separated(
                 itemCount: state.contacts.length,
@@ -96,10 +96,10 @@ class _ContactsPageState extends State<ContactsPage> with PageSnackBarMixin, Sin
               ),
             );
           }
-          if (state is ContactsInitialLoadFailure) {
+          if (state is ExternalContactsInitialLoadFailure) {
             return Center(
               child: OutlineButton(
-                onPressed: () => context.read<ContactsBloc>().add(ContactsInitialLoaded()),
+                onPressed: () => context.read<ExternalContactsBloc>().add(ExternalContactsInitialLoaded()),
                 child: Text('Refresh'),
               ),
             );
@@ -111,7 +111,7 @@ class _ContactsPageState extends State<ContactsPage> with PageSnackBarMixin, Sin
 }
 
 class ContactTile extends StatelessWidget {
-  final Contact contact;
+  final ExternalContact contact;
   final GestureTapCallback onTap;
   final GestureLongPressCallback onLongPress;
 
