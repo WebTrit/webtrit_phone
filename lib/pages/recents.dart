@@ -87,6 +87,7 @@ class _RecentsPageState extends State<RecentsPage> with PageSnackBarMixin, Singl
               onRefresh: () {
                 hideSnackBar(context);
                 return (context.read<RecentsBloc>()..add(RecentsRefreshed()))
+                    .stream
                     .firstWhere((state) => state is RecentsLoadSuccess || state is RecentsRefreshFailure);
               },
               child: ListView.separated(

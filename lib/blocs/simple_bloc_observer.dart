@@ -2,9 +2,9 @@ import 'package:bloc/bloc.dart';
 
 class SimpleBlocObserver extends BlocObserver {
   @override
-  void onCreate(Cubit cubit) {
-    super.onCreate(cubit);
-    print('onCreate $cubit');
+  void onCreate(BlocBase bloc) {
+    super.onCreate(bloc);
+    print('onCreate $bloc');
   }
 
   @override
@@ -14,9 +14,9 @@ class SimpleBlocObserver extends BlocObserver {
   }
 
   @override
-  void onChange(Cubit cubit, Change change) {
-    super.onChange(cubit, change);
-    print('onChange $cubit: $change');
+  void onChange(BlocBase bloc, Change change) {
+    super.onChange(bloc, change);
+    print('onChange $bloc: $change');
   }
 
   @override
@@ -26,15 +26,15 @@ class SimpleBlocObserver extends BlocObserver {
   }
 
   @override
-  void onError(Cubit cubit, Object error, StackTrace stackTrace) {
-    super.onError(cubit, error, stackTrace);
-    print('onError $cubit: $error');
+  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
+    super.onError(bloc, error, stackTrace);
+    print('onError $bloc: $error');
     print(stackTrace);
   }
 
   @override
-  void onClose(Cubit cubit) {
-    super.onClose(cubit);
-    print('onClose $cubit');
+  void onClose(BlocBase bloc) {
+    super.onClose(bloc);
+    print('onClose $bloc');
   }
 }
