@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -5,130 +7,203 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-class ContactsPage extends StatefulWidget {
+class ContactsPage extends StatelessWidget {
   const ContactsPage({Key key}) : super(key: key);
-
-  @override
-  _ContactsPageState createState() => _ContactsPageState();
-}
-
-class _ContactsPageState extends State<ContactsPage> with PageSnackBarMixin, SingleTickerProviderStateMixin {
-  TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(
-      length: ContactsSource.values.length,
-      vsync: this,
-    );
-    _tabController.addListener(_tabControllerListener);
-  }
-
-  @override
-  void dispose() {
-    _tabController.removeListener(_tabControllerListener);
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  void _tabControllerListener() {
-    if (!_tabController.indexIsChanging) {
-      // TODO introduce FilteredRecentsBloc
-      setState(() {});
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    return Scaffold(
-      appBar: MainAppBar(
-        bottom: TabBar(
-          tabs: ContactsSource.values.map((value) => Tab(child: Text(value.l10n(context), softWrap: false))).toList(),
-          controller: _tabController,
-          labelColor: themeData.textTheme.caption.color,
+    return DefaultTabController(
+      length: ContactsSource.values.length,
+      child: Scaffold(
+        appBar: MainAppBar(
+          bottom: TabBar(
+            tabs: ContactsSource.values.map((value) => Tab(child: Text(value.l10n(context), softWrap: false))).toList(),
+            labelColor: themeData.textTheme.caption.color,
+          ),
         ),
+        body: TabBarView(children: [
+          _LocalContacts(),
+          _ExternalContacts(),
+        ]),
       ),
-      body: BlocConsumer<ExternalContactsBloc, ExternalContactsState>(
-        listener: (context, state) {
-          if (state is ExternalContactsLoadFailure) {
-            showErrorSnackBar(context, 'Ups error happened ☹️');
-          }
-        },
-        buildWhen: (previous, current) {
-          return current is! ExternalContactsRefreshFailure;
-        },
-        // ignore: missing_return
-        builder: (context, state) {
-          if (state is ExternalContactsInitial) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          if (state is ExternalContactsLoadSuccess) {
-            return RefreshIndicator(
-              onRefresh: () {
-                hideSnackBar(context);
-                return (context.read<ExternalContactsBloc>()..add(ExternalContactsRefreshed()))
-                    .stream
-                    .firstWhere((state) => state is ExternalContactsLoadSuccess || state is ExternalContactsRefreshFailure);
+    );
+  }
+}
+
+class _LocalContacts extends StatelessWidget with PageSnackBarMixin {
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<LocalContactsBloc, LocalContactsState>(
+      listener: (context, state) {
+        if (state is LocalContactsLoadFailure) {
+          showErrorSnackBar(context, 'Ups error happened ☹️');
+        }
+      },
+      buildWhen: (previous, current) {
+        return current is! LocalContactsRefreshFailure;
+      },
+      // ignore: missing_return
+      builder: (context, state) {
+        if (state is LocalContactsInitial) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        if (state is LocalContactsLoadSuccess) {
+          return RefreshIndicator(
+            onRefresh: () {
+              hideSnackBar(context);
+              return (context.read<LocalContactsBloc>()..add(LocalContactsRefreshed()))
+                  .stream
+                  .firstWhere((state) => state is LocalContactsLoadSuccess || state is LocalContactsRefreshFailure);
+            },
+            child: ListView.separated(
+              itemCount: state.contacts.length,
+              itemBuilder: (context, index) {
+                final contact = state.contacts[index];
+                return ContactTile(
+                  displayName: contact.displayName,
+                  thumbnail: contact.thumbnail,
+                  onTap: () {
+                    context.read<CallBloc>().add(CallOutgoingStarted(username: contact.displayName));
+                  },
+                  onLongPress: () {
+                    showSnackBar(context, 'LongPress on "${contact.displayName}"');
+                  },
+                );
               },
-              child: ListView.separated(
-                itemCount: state.contacts.length,
-                itemBuilder: (context, index) {
-                  final contact = state.contacts[index];
-                  return ContactTile(
-                    contact: contact,
-                    onTap: () {
-                      context.read<CallBloc>().add(CallOutgoingStarted(username: contact.username));
-                    },
-                    onLongPress: () {
-                      showSnackBar(context, 'LongPress on "${contact.username}"');
-                    },
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Divider(
-                    height: 1,
-                  );
-                },
-              ),
-            );
-          }
-          if (state is ExternalContactsInitialLoadFailure) {
-            return Center(
-              child: OutlineButton(
-                onPressed: () => context.read<ExternalContactsBloc>().add(ExternalContactsInitialLoaded()),
-                child: Text('Refresh'),
-              ),
-            );
-          }
-        },
-      ),
+              separatorBuilder: (context, index) {
+                return Divider(
+                  height: 1,
+                );
+              },
+            ),
+          );
+        }
+        if (state is ExternalContactsInitialLoadFailure) {
+          return Center(
+            child: OutlineButton(
+              onPressed: () => context.read<ExternalContactsBloc>().add(ExternalContactsInitialLoaded()),
+              child: Text('Refresh'),
+            ),
+          );
+        }
+      },
+    );
+  }
+}
+
+class _ExternalContacts extends StatelessWidget with PageSnackBarMixin {
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<ExternalContactsBloc, ExternalContactsState>(
+      listener: (context, state) {
+        if (state is ExternalContactsLoadFailure) {
+          showErrorSnackBar(context, 'Ups error happened ☹️');
+        }
+      },
+      buildWhen: (previous, current) {
+        return current is! ExternalContactsRefreshFailure;
+      },
+      // ignore: missing_return
+      builder: (context, state) {
+        if (state is ExternalContactsInitial) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        if (state is ExternalContactsLoadSuccess) {
+          return RefreshIndicator(
+            onRefresh: () {
+              hideSnackBar(context);
+              return (context.read<ExternalContactsBloc>()..add(ExternalContactsRefreshed())).stream.firstWhere(
+                  (state) => state is ExternalContactsLoadSuccess || state is ExternalContactsRefreshFailure);
+            },
+            child: ListView.separated(
+              itemCount: state.contacts.length,
+              itemBuilder: (context, index) {
+                final contact = state.contacts[index];
+                return ContactTile(
+                  displayName: contact.username,
+                  onTap: () {
+                    context.read<CallBloc>().add(CallOutgoingStarted(username: contact.username));
+                  },
+                  onLongPress: () {
+                    showSnackBar(context, 'LongPress on "${contact.username}"');
+                  },
+                );
+              },
+              separatorBuilder: (context, index) {
+                return Divider(
+                  height: 1,
+                );
+              },
+            ),
+          );
+        }
+        if (state is ExternalContactsInitialLoadFailure) {
+          return Center(
+            child: OutlineButton(
+              onPressed: () => context.read<ExternalContactsBloc>().add(ExternalContactsInitialLoaded()),
+              child: Text('Refresh'),
+            ),
+          );
+        }
+      },
     );
   }
 }
 
 class ContactTile extends StatelessWidget {
-  final ExternalContact contact;
-  final GestureTapCallback onTap;
-  final GestureLongPressCallback onLongPress;
-
   ContactTile({
     Key key,
-    @required this.contact,
+    @required this.displayName,
+    this.thumbnail,
+    this.smart = false,
     this.onTap,
     this.onLongPress,
   }) : super(key: key);
 
+  final String displayName;
+  final Uint8List thumbnail;
+  final bool smart;
+  final GestureTapCallback onTap;
+  final GestureLongPressCallback onLongPress;
+
   @override
   Widget build(BuildContext context) {
+    final avatar = Stack(
+      clipBehavior: Clip.none,
+      children: [
+        if (thumbnail == null)
+          LeadingAvatar(
+            username: displayName,
+          )
+        else
+          CircleAvatar(
+            foregroundImage: MemoryImage(thumbnail),
+          ),
+        if (smart)
+          Positioned(
+            right: -4,
+            bottom: -4,
+            width: 20,
+            height: 20,
+            child: CircleAvatar(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              child: Icon(
+                Icons.person,
+                size: 18,
+              ),
+            ),
+          )
+      ],
+    );
+
     return ListTile(
       contentPadding: EdgeInsets.only(left: 16.0),
-      leading: LeadingAvatar(
-        username: contact.username,
-      ),
+      leading: avatar,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -148,7 +223,7 @@ class ContactTile extends StatelessWidget {
           ),
         ],
       ),
-      title: Text(contact.username),
+      title: Text(displayName),
       onTap: onTap,
       onLongPress: onLongPress,
     );
