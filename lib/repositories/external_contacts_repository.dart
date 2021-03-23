@@ -58,6 +58,6 @@ class ExternalContactsRepository {
 
   Future<List<ExternalContact>> _listContacts() async {
     final list = await callRepository.list();
-    return List<ExternalContact>.from(list.map<ExternalContact>((username) => ExternalContact(username)));
+    return list.map((username) => ExternalContact(username)).toList();
   }
 }
