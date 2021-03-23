@@ -31,5 +31,12 @@
   },
   "recentsVisibilityFilterOutgoing": "Outgoing",
   "@recentsVisibilityFilterOutgoing": {
+  },
+
+  "contactsSourceLocal": "All",
+  "@contactsSourceLocal": {
+  },
+  "contactsSourceExternal": "Internal",
+  "@contactsSourceExternal": {
   }
 }
