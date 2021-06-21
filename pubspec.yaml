@@ -44,6 +44,8 @@ dependencies:
 
   janus_client:
     path: ./janus_client
+  webtrit_signaling:
+    path: ./packages/webtrit_signaling
 
 dev_dependencies:
   flutter_test:

@@ -120,13 +120,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
+  enum_to_string:
+    dependency: transitive
+    description:
+      name: enum_to_string
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
   equatable:
     dependency: "direct main"
     description:
       name: equatable
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.2"
+    version: "2.0.3"
   fake_async:
     dependency: transitive
     description:
@@ -587,6 +594,13 @@ packages:
       name: webkit_inspection_protocol
       url: "https://pub.dartlang.org"
     source: hosted
+    version: "1.0.0"
+  webtrit_signaling:
+    dependency: "direct main"
+    description:
+      path: "packages/webtrit_signaling"
+      relative: true
+    source: path
     version: "1.0.0"
   webview_flutter:
     dependency: "direct main"
