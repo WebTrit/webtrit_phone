@@ -595,6 +595,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  webtrit_api:
+    dependency: "direct main"
+    description:
+      path: "packages/webtrit_api"
+      relative: true
+    source: path
+    version: "1.0.0"
   webtrit_signaling:
     dependency: "direct main"
     description:

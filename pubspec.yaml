@@ -44,6 +44,8 @@ dependencies:
 
   janus_client:
     path: ./janus_client
+  webtrit_api:
+    path: ./packages/webtrit_api
   webtrit_signaling:
     path: ./packages/webtrit_signaling
 
