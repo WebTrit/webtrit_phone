@@ -20,6 +20,8 @@ import 'package:webtrit_phone/environment_config.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await DeviceInfo.init();
+
   await Future.wait(
     [
       'assets/logo.svg',
