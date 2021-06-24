@@ -67,7 +67,7 @@ class _WebRegistrationPageState extends State<WebRegistrationPage> {
             name: 'WebTritTokenChannel',
             onMessageReceived: (JavascriptMessage message) async {
               final token = message.message;
-              await SecureStorage.writeToken(token);
+              await SecureStorage().writeToken(token);
 
               Navigator.pushReplacementNamed(context, '/register');
             }),

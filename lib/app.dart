@@ -61,8 +61,8 @@ void main() async {
         return AppBloc();
       },
       child: App(
-        webRegistrationInitialUrl: await SecureStorage.readWebRegistrationInitialUrl(),
-        isRegistered: await SecureStorage.readToken() != null,
+        webRegistrationInitialUrl: await SecureStorage().readWebRegistrationInitialUrl(),
+        isRegistered: await SecureStorage().readToken() != null,
       ),
     ),
   ));
@@ -213,8 +213,8 @@ class App extends StatelessWidget {
                 Navigator.pushReplacementNamed(context, '/main');
               }
               if (state is AppUnregister) {
-                final webRegistrationInitialUrl = await SecureStorage.readWebRegistrationInitialUrl();
-                final isRegistered = await SecureStorage.readToken() != null;
+                final webRegistrationInitialUrl = await SecureStorage().readWebRegistrationInitialUrl();
+                final isRegistered = await SecureStorage().readToken() != null;
 
                 Navigator.pushNamedAndRemoveUntil(
                   context,

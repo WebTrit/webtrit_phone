@@ -40,7 +40,7 @@ class _SettingsPageState extends State<SettingsPage> with PageSnackBarMixin {
           ),
           Form(
             child: FutureBuilder(
-              future: SecureStorage.readWebRegistrationInitialUrl(),
+              future: SecureStorage().readWebRegistrationInitialUrl(),
               builder: (context, AsyncSnapshot<String> snapshot) {
                 final isDone = snapshot.connectionState == ConnectionState.done;
                 var webRegistrationInitialUrl = snapshot.data;
@@ -61,7 +61,7 @@ class _SettingsPageState extends State<SettingsPage> with PageSnackBarMixin {
                           final fromState = Form.of(context);
                           if (fromState.validate()) {
                             fromState.save();
-                            await SecureStorage.writeWebRegistrationInitialUrl(webRegistrationInitialUrl);
+                            await SecureStorage().writeWebRegistrationInitialUrl(webRegistrationInitialUrl);
                             showSnackBar(context, 'Registration initial url saved');
                           }
                         },
@@ -91,7 +91,7 @@ class _SettingsPageState extends State<SettingsPage> with PageSnackBarMixin {
                                     final fromState = Form.of(context);
                                     if (fromState.validate()) {
                                       fromState.save();
-                                      await SecureStorage.writeWebRegistrationInitialUrl(webRegistrationInitialUrl);
+                                      await SecureStorage().writeWebRegistrationInitialUrl(webRegistrationInitialUrl);
                                       showSnackBar(context, 'Registration initial url saved');
                                     }
                                   },
@@ -101,7 +101,7 @@ class _SettingsPageState extends State<SettingsPage> with PageSnackBarMixin {
                             onPressed: !isDone
                                 ? null
                                 : () async {
-                                    await SecureStorage.deleteWebRegistrationInitialUrl();
+                                    await SecureStorage().deleteWebRegistrationInitialUrl();
                                     showSnackBar(context, 'Registration initial url deleted');
                                     setState(() {});
                                   },
@@ -122,7 +122,7 @@ class _SettingsPageState extends State<SettingsPage> with PageSnackBarMixin {
             alignment: Alignment.center,
             height: 50,
             child: FutureBuilder(
-              future: SecureStorage.readToken(),
+              future: SecureStorage().readToken(),
               builder: (context, AsyncSnapshot<String> snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   final token = snapshot.data;
@@ -148,7 +148,7 @@ class _SettingsPageState extends State<SettingsPage> with PageSnackBarMixin {
               return TextButton(
                 child: Text('Delete token'.toUpperCase()),
                 onPressed: () async {
-                  await SecureStorage.deleteToken();
+                  await SecureStorage().deleteToken();
                   showSnackBar(context, 'Token deleted');
                   setState(() {});
                 },
