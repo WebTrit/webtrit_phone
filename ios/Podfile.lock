@@ -1,4 +1,6 @@
 PODS:
+  - device_info (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
   - flutter_contacts (0.0.1):
     - Flutter
@@ -18,6 +20,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - device_info (from `.symlinks/plugins/device_info/ios`)
   - Flutter (from `Flutter`)
   - flutter_contacts (from `.symlinks/plugins/flutter_contacts/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
@@ -32,6 +35,8 @@ SPEC REPOS:
     - Libyuv
 
 EXTERNAL SOURCES:
+  device_info:
+    :path: ".symlinks/plugins/device_info/ios"
   Flutter:
     :path: Flutter
   flutter_contacts:
@@ -48,6 +53,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
+  device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_contacts: edb1c5ce76aa433e20e6cb14c615f4c0b66e0983
   flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
