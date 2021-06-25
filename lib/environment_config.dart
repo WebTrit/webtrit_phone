@@ -10,4 +10,9 @@ class EnvironmentConfig {
     'PERIODIC_POLLING',
     defaultValue: true,
   );
+
+  static const WEBTRIT_CORE_URL = String.fromEnvironment(
+    'WEBTRIT_CORE_URL',
+    defaultValue: 'http://localhost:4000',
+  );
 }
