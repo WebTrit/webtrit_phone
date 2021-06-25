@@ -8,10 +8,10 @@ class Session {
   final Gateway _gateway;
   final Function _onError;
 
-  int _id;
-  Timer _keepalivePeriodicTimer;
+  int? _id;
+  late Timer _keepalivePeriodicTimer;
 
-  int get id => _id;
+  int? get id => _id;
 
   Session(this._gateway, this._onError);
 
@@ -76,13 +76,13 @@ class Session {
 
   _handleEvent(Map<String, dynamic> eventMessage) {
     if (eventMessage.containsKey('sender')) {
-      final int handleId = eventMessage['sender'];
+      final int? handleId = eventMessage['sender'];
       final handle = _handles[handleId];
 
       if (handle != null) {
         handle._handleEvent(eventMessage);
       } else {
-        _onError(JanusSessionHandleUnavailableException(handleId));
+        _onError(JanusSessionHandleUnavailableException(handleId!));
       }
     } else if (eventMessage['janus'] == 'timeout') {
       _onError(JanusSessionTimeoutException());

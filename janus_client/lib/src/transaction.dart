@@ -8,7 +8,7 @@ class Transaction {
   final id;
   final Completer<Map<String, dynamic>> _completer = new Completer();
 
-  Timer _timer;
+  late Timer _timer;
   bool _asynchronousAckReceived = false;
 
   Transaction(

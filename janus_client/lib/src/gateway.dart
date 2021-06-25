@@ -9,17 +9,15 @@ class Gateway {
   final WebSocket _webSocket;
   final _logger;
 
-  StreamSubscription<dynamic> _subscription;
+  StreamSubscription<dynamic>? _subscription;
   void Function(dynamic error, [StackTrace stackTrace]) _onError;
   Function() _onDone;
 
-  static Future<Gateway> connect(String url, Function onError, Function() onDone) async {
+  static Future<Gateway> connect(String url, Function(dynamic, [StackTrace]) onError, Function() onDone) async {
     return Gateway(await WebSocket.connect(url, protocols: [subprotocol]), onError, onDone);
   }
 
-  Gateway(this._webSocket, this._onError, this._onDone)
-      : assert(_webSocket != null),
-        _logger = Logger('Gateway-$_createCounter') {
+  Gateway(this._webSocket, this._onError, this._onDone) : _logger = Logger('Gateway-$_createCounter') {
     _createCounter++;
   }
 
@@ -65,7 +63,7 @@ class Gateway {
   }
 
   _create(Session session) {
-    _sessions[session.id] = session;
+    _sessions[session.id!] = session;
   }
 
   _destroy(Session session) {
@@ -106,8 +104,8 @@ class Gateway {
     if (message.containsKey('transaction')) {
       final responseMessage = message;
 
-      final String transactionId = responseMessage['transaction'];
-      final transaction = _transactions[transactionId];
+      final String? transactionId = responseMessage['transaction'];
+      final transaction = _transactions[transactionId!];
 
       if (transaction != null) {
         transaction.handleResponse(responseMessage);
@@ -120,13 +118,13 @@ class Gateway {
     } else if (message.containsKey('session_id')) {
       final eventMessage = message;
 
-      final int sessionId = eventMessage['session_id'];
+      final int? sessionId = eventMessage['session_id'];
       final session = _sessions[sessionId];
 
       if (session != null) {
         session._handleEvent(eventMessage);
       } else {
-        _onError(JanusGatewaySessionUnavailableException(sessionId));
+        _onError(JanusGatewaySessionUnavailableException(sessionId!));
       }
     } else {
       throw JanusGatewayException();

@@ -11,21 +11,20 @@ class VideoCallPlugin {
   final Session _session;
   final Logger _logger;
 
-  PluginHandle _handle;
-  void Function(String username, Map<String, dynamic> jsepData) _onIncomingCall;
-  void Function(String username, Map<String, dynamic> jsepData) _onAccepted;
-  void Function(String username, String reason) _onHangup;
+  late PluginHandle _handle;
+  late void Function(String username, Map<String, dynamic>? jsepData) _onIncomingCall;
+  late void Function(String username, Map<String, dynamic>? jsepData) _onAccepted;
+  late void Function(String username, String? reason) _onHangup;
 
   VideoCallPlugin(this._session)
-      : assert(_session != null),
-        _logger = Logger('VideoCallPlugin-$_createCounter') {
+      : _logger = Logger('VideoCallPlugin-$_createCounter') {
     _createCounter++;
   }
 
   Future<void> attach(
-    Function(String username, Map<String, dynamic> jsepData) onIncomingCall,
-    Function(String username, Map<String, dynamic> jsepData) onAccepted,
-    Function(String username, String reason) onHangup,
+    void Function(String username, Map<String, dynamic>? jsepData) onIncomingCall,
+    void Function(String username, Map<String, dynamic>? jsepData) onAccepted,
+    void Function(String username, String? reason) onHangup,
   ) async {
     _onIncomingCall = onIncomingCall;
     _onAccepted = onAccepted;
@@ -49,7 +48,7 @@ class VideoCallPlugin {
     return _handle.detach();
   }
 
-  Future<void> sendTrickle(Map<String, dynamic> candidate) {
+  Future<void> sendTrickle(Map<String, dynamic>? candidate) {
     return _handle.sendTrickle(candidate);
   }
 
@@ -78,7 +77,7 @@ class VideoCallPlugin {
     }
   }
 
-  Future<void> call(String username, Map<String, dynamic> jsepData) async {
+  Future<void> call(String? username, Map<String, dynamic> jsepData) async {
     final bodyData = <String, dynamic>{
       'request': 'call',
       'username': username,
@@ -107,7 +106,7 @@ class VideoCallPlugin {
     }
   }
 
-  Future<String> hangup([String reason]) async {
+  Future<String?> hangup([String? reason]) async {
     final bodyData = <String, dynamic>{
       'request': 'hangup',
       if (reason != null) 'reason': reason,
@@ -123,13 +122,13 @@ class VideoCallPlugin {
   }
 
   Future<void> set({
-    bool audio,
-    bool video,
-    int bitrate,
-    bool record,
-    String filename,
-    int substream,
-    int temporal,
+    bool? audio,
+    bool? video,
+    int? bitrate,
+    bool? record,
+    String? filename,
+    int? substream,
+    int? temporal,
   }) async {
     final bodyData = <String, dynamic>{
       'request': 'set',
@@ -151,7 +150,7 @@ class VideoCallPlugin {
     }
   }
 
-  _onEventCallback(Map<String, dynamic> pluginData, Map<String, dynamic> jsepData) {
+  void _onEventCallback(Map<String, dynamic> pluginData, Map<String, dynamic>? jsepData) {
     switch (pluginData['result']['event']) {
       case 'hangup':
         _onHangup(pluginData['result']['username'], pluginData['result']['reason']);
@@ -165,32 +164,32 @@ class VideoCallPlugin {
     }
   }
 
-  _onTrickle(Map<String, dynamic> candidate) {
+  void _onTrickle(Map<String, dynamic>? candidate) {
     // TODO: add necessary logic
-    _logger.warning('_onTrickle { candidate: ${candidate} } / not implemented');
+    _logger.warning('_onTrickle { candidate: $candidate } / not implemented');
   }
 
-  _onWebrtcupCallback() {
+  void _onWebrtcupCallback() {
     // TODO: add necessary logic
     _logger.warning('_onWebrtcupCallback / not implemented');
   }
 
-  _onMediaCallback(String type, bool receiving, int seconds) {
+  void _onMediaCallback(String type, bool receiving, int seconds) {
     // TODO: add necessary logic
     _logger.warning('_onMediaCallback { type: $type, receiving: $receiving, seconds: $seconds } / not implemented');
   }
 
-  _onSlowlinkCallback(String media, bool uplink, int lost) {
+  void _onSlowlinkCallback(String media, bool uplink, int lost) {
     // TODO: add necessary logic
     _logger.warning('_onSlowlinkCallback { media: $media, uplink: $uplink, lost: $lost } / not implemented');
   }
 
-  _onHangupCallback(String reason) {
+  void _onHangupCallback(String reason) {
     // TODO: add necessary logic
     _logger.warning('_onHangupCallback { reason: $reason } / not implemented');
   }
 
-  _onDetachedCallback() {
+  void _onDetachedCallback() {
     // TODO: add necessary logic
     _logger.warning('_onDetachedCallback / not implemented');
   }

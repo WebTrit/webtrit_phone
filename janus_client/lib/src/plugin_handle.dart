@@ -3,15 +3,15 @@ part of '../janus_client.dart';
 class PluginHandle {
   final String pluginName;
   final Session _session;
-  final void Function(Map<String, dynamic> data, Map<String, dynamic> jsep) _onEvent;
-  final void Function(Map<String, dynamic> candidate) _onTrickle;
+  final void Function(Map<String, dynamic> data, Map<String, dynamic>? jsep) _onEvent;
+  final void Function(Map<String, dynamic>? candidate) _onTrickle;
   final void Function() _onWebrtcup;
   final void Function(String type, bool receiving, int seconds) _onMedia;
   final void Function(String media, bool uplink, int lost) _onSlowlink;
   final void Function(String reason) _onHangup;
   final void Function() _onDetached;
 
-  int _id;
+  int? _id;
 
   bool _detachedReceived = false;
 
@@ -66,7 +66,7 @@ class PluginHandle {
     }
   }
 
-  Future<void> sendTrickle(Map<String, dynamic> candidate) async {
+  Future<void> sendTrickle(Map<String, dynamic>? candidate) async {
     final requestMessage = <String, dynamic>{
       'janus': 'trickle',
       'handle_id': _id,
@@ -104,7 +104,7 @@ class PluginHandle {
 
   Future<Map<String, dynamic>> executeMessage(
     Map<String, dynamic> body,
-    Map<String, dynamic> jsep,
+    Map<String, dynamic>? jsep,
     bool synchronous,
   ) async {
     final requestMessage = <String, dynamic>{
@@ -130,13 +130,9 @@ class PluginHandle {
   _handleEvent(Map<String, dynamic> eventMessage) {
     if (eventMessage['janus'] == 'event') {
       final Map<String, dynamic> pluginData = eventMessage['plugindata']['data'];
-      final Map<String, dynamic> jsep = eventMessage['jsep'];
+      final Map<String, dynamic>? jsep = eventMessage['jsep'];
 
-      if (_onEvent != null) {
-        _onEvent(pluginData, jsep);
-      } else {
-        _session._gateway._onError('Handle event callback unawalibale', StackTrace.current); // TODO refactoring
-      }
+      _onEvent(pluginData, jsep);
     } else if (eventMessage['janus'] == 'trickle') {
       final Map<String, dynamic> eventCandidate = eventMessage['candidate'];
       final isCompleted = eventCandidate['completed'] != null && eventCandidate['completed'] == true;
