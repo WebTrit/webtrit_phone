@@ -7,20 +7,20 @@ abstract class CallEvent extends Equatable {
   const CallEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class CallIncomingReceived extends CallEvent {
   final String username;
-  final Map<String, dynamic> jsepData;
+  final Map<String, dynamic>? jsepData;
 
   const CallIncomingReceived({
-    @required this.username,
+    required this.username,
     this.jsepData,
   });
 
   @override
-  List<Object> get props => [username, jsepData];
+  List<Object?> get props => [username, jsepData];
 
   @override
   String toString() => '$runtimeType { username: $username, with jsep: ${jsepData != null} }';
@@ -34,11 +34,11 @@ class CallOutgoingStarted extends CallEvent {
   final String username;
 
   const CallOutgoingStarted({
-    @required this.username,
+    required this.username,
   });
 
   @override
-  List<Object> get props => [username];
+  List<Object?> get props => [username];
 
   @override
   String toString() => '$runtimeType { username: $username }';
@@ -46,29 +46,29 @@ class CallOutgoingStarted extends CallEvent {
 
 class CallOutgoingAccepted extends CallEvent {
   final String username;
-  final Map<String, dynamic> jsepData;
+  final Map<String, dynamic>? jsepData;
 
   const CallOutgoingAccepted({
-    @required this.username,
+    required this.username,
     this.jsepData,
   });
 
   @override
-  List<Object> get props => [username, jsepData];
+  List<Object?> get props => [username, jsepData];
 
   @override
   String toString() => '$runtimeType { username: $username, with jsep: ${jsepData != null} }';
 }
 
 abstract class CallHungUp extends CallEvent {
-  final String reason;
+  final String? reason;
 
   const CallHungUp({
-    @required this.reason,
+    required this.reason,
   });
 
   @override
-  List<Object> get props => [reason];
+  List<Object?> get props => [reason];
 
   @override
   String toString() => '$runtimeType { reason: $reason }';
@@ -76,13 +76,13 @@ abstract class CallHungUp extends CallEvent {
 
 class CallRemoteHungUp extends CallHungUp {
   const CallRemoteHungUp({
-    @required String reason,
+    required String? reason,
   }) : super(reason: reason);
 }
 
 class CallLocalHungUp extends CallHungUp {
   const CallLocalHungUp({
-    @required String reason,
+    required String reason,
   }) : super(reason: reason);
 }
 
@@ -90,22 +90,22 @@ class CallRemoteStreamAdded extends CallEvent {
   final MediaStream stream;
 
   const CallRemoteStreamAdded({
-    this.stream,
+    required this.stream,
   });
 
   @override
-  List<Object> get props => [stream];
+  List<Object?> get props => [stream];
 }
 
 class CallRemoteStreamRemoved extends CallEvent {
   final MediaStream stream;
 
   const CallRemoteStreamRemoved({
-    this.stream,
+    required this.stream,
   });
 
   @override
-  List<Object> get props => [stream];
+  List<Object?> get props => [stream];
 }
 
 class CallCameraSwitched extends CallEvent {

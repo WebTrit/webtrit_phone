@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
-import 'package:meta/meta.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 
@@ -11,14 +10,14 @@ class ExternalContactsRepository {
   final CallRepository callRepository;
   final bool periodicPolling;
 
-  StreamController _controller;
-  int _listenedCounter;
-  Timer _periodicTimer;
+  late StreamController<List<ExternalContact>> _controller;
+  late int _listenedCounter;
+  Timer? _periodicTimer;
 
-  List<ExternalContact> _contacts;
+  List<ExternalContact> _contacts = [];
 
   ExternalContactsRepository({
-    @required this.callRepository,
+    required this.callRepository,
     this.periodicPolling = true,
   }) {
     _controller = StreamController<List<ExternalContact>>.broadcast(
@@ -51,7 +50,7 @@ class ExternalContactsRepository {
 
   void _onCancelCallback() {
     if (periodicPolling && --_listenedCounter == 0) {
-      _periodicTimer.cancel();
+      _periodicTimer?.cancel();
       _periodicTimer = null;
     }
   }

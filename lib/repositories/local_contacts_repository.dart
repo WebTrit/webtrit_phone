@@ -13,10 +13,10 @@ class LocalContactsRepository {
     _listenedCounter = 0;
   }
 
-  StreamController _controller;
-  int _listenedCounter;
+  late StreamController<List<LocalContact>> _controller;
+  late int _listenedCounter;
 
-  List<LocalContact> _localContacts;
+  List<LocalContact> _localContacts = [];
 
   Stream<List<LocalContact>> contacts() {
     return _controller.stream;

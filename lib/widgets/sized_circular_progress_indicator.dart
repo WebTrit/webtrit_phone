@@ -2,28 +2,33 @@ import 'package:flutter/material.dart';
 
 class SizedCircularProgressIndicator extends StatelessWidget {
   const SizedCircularProgressIndicator({
-    Key key,
-    @required this.size,
+    Key? key,
+    required this.size,
     this.outerSize,
     this.color,
     this.strokeWidth,
-  })  : assert(size != null),
-        super(key: key);
+  }) : super(key: key);
 
   final double size;
-  final double outerSize;
-  final Color color;
-  final double strokeWidth;
+  final double? outerSize;
+  final Color? color;
+  final double? strokeWidth;
 
   @override
   Widget build(BuildContext context) {
+    final strokeWidth = this.strokeWidth;
     final result = SizedBox.fromSize(
       size: Size.square(size),
-      child: CircularProgressIndicator(
-        color: color,
-        strokeWidth: strokeWidth,
-      ),
+      child: strokeWidth == null
+          ? CircularProgressIndicator(
+              color: color,
+            )
+          : CircularProgressIndicator(
+              color: color,
+              strokeWidth: strokeWidth,
+            ),
     );
+    final outerSize = this.outerSize;
     if (outerSize == null) {
       return result;
     } else {

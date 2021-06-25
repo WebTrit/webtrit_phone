@@ -20,11 +20,11 @@ class LocalContactsUpdated extends LocalContactsEvent {
   final List<LocalContact> contacts;
 
   const LocalContactsUpdated({
-    @required this.contacts,
+    required this.contacts,
   });
 
   @override
   List<Object> get props => [
-    contacts,
-  ];
+        contacts,
+      ];
 }

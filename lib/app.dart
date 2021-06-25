@@ -72,15 +72,15 @@ void main() async {
 
 class App extends StatelessWidget {
   App({
-    Key key,
-    @required this.webRegistrationInitialUrl,
-    @required this.isRegistered,
+    Key? key,
+    required this.webRegistrationInitialUrl,
+    required this.isRegistered,
   }) : super(key: key);
 
-  final String webRegistrationInitialUrl;
+  final String? webRegistrationInitialUrl;
   final bool isRegistered;
 
-  String _initialRoute(String webRegistrationInitialUrl, bool isRegistered) =>
+  String _initialRoute(String? webRegistrationInitialUrl, bool isRegistered) =>
       webRegistrationInitialUrl == null || isRegistered ? '/register' : '/web-registration';
 
   @override
@@ -95,7 +95,7 @@ class App extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       initialRoute: _initialRoute(webRegistrationInitialUrl, isRegistered),
-      builder: (BuildContext context, Widget child) {
+      builder: (BuildContext context, Widget? child) {
         final themeData = Theme.of(context);
         return Theme(
           data: themeData.copyWith(
@@ -103,13 +103,13 @@ class App extends StatelessWidget {
               brightness: Brightness.light,
               color: themeData.canvasColor,
               iconTheme: IconThemeData(
-                color: themeData.textTheme.caption.color,
+                color: themeData.textTheme.caption!.color,
               ),
               actionsIconTheme: IconThemeData(
-                color: themeData.textTheme.caption.color,
+                color: themeData.textTheme.caption!.color,
               ),
               textTheme: themeData.primaryTextTheme.copyWith(
-                headline6: themeData.primaryTextTheme.headline6.copyWith(
+                headline6: themeData.primaryTextTheme.headline6!.copyWith(
                   color: themeData.accentColor,
                   fontWeight: FontWeight.bold,
                 ),
@@ -117,7 +117,7 @@ class App extends StatelessWidget {
               centerTitle: false,
             ),
           ),
-          child: child,
+          child: child != null ? child : Container(),
         );
       },
       onGenerateRoute: (RouteSettings settings) {
@@ -125,7 +125,7 @@ class App extends StatelessWidget {
         switch (settings.name) {
           case '/web-registration':
             page = WebRegistrationPage(
-              initialUrl: settings.arguments != null ? settings.arguments as String : webRegistrationInitialUrl,
+              initialUrl: settings.arguments != null ? settings.arguments as String : webRegistrationInitialUrl!,
             );
             break;
           case '/register':
@@ -207,7 +207,7 @@ class App extends StatelessWidget {
             return null;
         }
 
-        if ('/'.allMatches(settings.name).length <= 1) {
+        if ('/'.allMatches(settings.name!).length <= 1) {
           // add listener only to top level page
           page = BlocListener<AppBloc, AppState>(
             listener: (context, state) async {
@@ -240,7 +240,7 @@ class App extends StatelessWidget {
               },
               transitionsBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation, Widget child) {
-                final PageTransitionsBuilder builder = ZoomPageTransitionsBuilder();
+                final builder = ZoomPageTransitionsBuilder();
                 return builder.buildTransitions(null, context, animation, secondaryAnimation, child);
               },
             );
@@ -276,6 +276,6 @@ class CallNavigationArguments {
   final CallBloc callBloc;
 
   CallNavigationArguments({
-    @required this.callBloc,
-  }) : assert(callBloc != null);
+    required this.callBloc,
+  });
 }

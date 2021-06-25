@@ -7,13 +7,10 @@ import 'package:webtrit_phone/pages/recents.dart';
 
 class Tab {
   Tab({
-    @required this.icon,
-    @required this.title,
-    @required create,
-  })  : assert(icon != null),
-        assert(title != null),
-        assert(create != null),
-        _create = create,
+    required this.icon,
+    required this.title,
+    required create,
+  })  : _create = create,
         _globalKey = LabeledGlobalKey('${title}TabGlobalKey');
 
   final IconData icon;
@@ -59,7 +56,7 @@ final List<Tab> tabs = <Tab>[
 ];
 
 class MainPage extends StatefulWidget {
-  MainPage({Key key}) : super(key: key);
+  MainPage({Key? key}) : super(key: key);
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -96,8 +93,8 @@ class _MainPageState extends State<MainPage> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
-        selectedFontSize: Theme.of(context).textTheme.caption.fontSize,
-        unselectedFontSize: Theme.of(context).textTheme.caption.fontSize,
+        selectedFontSize: Theme.of(context).textTheme.caption!.fontSize!,
+        unselectedFontSize: Theme.of(context).textTheme.caption!.fontSize!,
         onTap: _onItemTapped,
         items: tabs.map((Tab tab) {
           return BottomNavigationBarItem(
@@ -115,9 +112,9 @@ class TabPage extends StatefulWidget {
   final Widget child;
 
   const TabPage({
-    Key key,
-    this.active,
-    this.child,
+    Key? key,
+    required this.active,
+    required this.child,
   }) : super(key: key);
 
   @override
@@ -125,7 +122,7 @@ class TabPage extends StatefulWidget {
 }
 
 class _TabPageState extends State<TabPage> with SingleTickerProviderStateMixin<TabPage> {
-  AnimationController _fader;
+  late AnimationController _fader;
 
   @override
   void initState() {

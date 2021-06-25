@@ -5,7 +5,7 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class RegisterPage extends StatelessWidget {
-  const RegisterPage({Key key}) : super(key: key);
+  const RegisterPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class RegisterPage extends StatelessWidget {
     return Scaffold(
       body: GestureDetector(
         onTap: () {
-          FocusManager.instance.primaryFocus.unfocus();
+          FocusManager.instance.primaryFocus?.unfocus();
         },
         child: SafeArea(
           child: SingleChildScrollView(
@@ -35,7 +35,7 @@ class RegisterPage extends StatelessWidget {
 }
 
 class RegisterForm extends StatefulWidget {
-  const RegisterForm({Key key}) : super(key: key);
+  const RegisterForm({Key? key}) : super(key: key);
 
   @override
   _RegisterFormState createState() => _RegisterFormState();
@@ -44,7 +44,7 @@ class RegisterForm extends StatefulWidget {
 class _RegisterFormState extends State<RegisterForm> {
   final _registerFormKey = GlobalKey<FormState>();
 
-  String _username;
+  String? _username;
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +79,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   _username = value;
                 },
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value == null || value.isEmpty) {
                     return 'Please enter a username';
                   }
                   return null;
@@ -114,9 +114,9 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   void _register() {
-    if (_registerFormKey.currentState.validate()) {
-      _registerFormKey.currentState.save();
-      context.read<RegistrationBloc>().add(RegistrationProcessed(username: _username));
+    if (_registerFormKey.currentState!.validate()) {
+      _registerFormKey.currentState!.save();
+      context.read<RegistrationBloc>().add(RegistrationProcessed(username: _username!));
     }
   }
 }

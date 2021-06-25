@@ -37,8 +37,8 @@ const String kDemoPage = '''
 
 class WebRegistrationPage extends StatefulWidget {
   WebRegistrationPage({
-    Key key,
-    @required this.initialUrl,
+    Key? key,
+    required this.initialUrl,
   }) : super(key: key);
 
   final String initialUrl;
@@ -94,8 +94,8 @@ class _WebRegistrationPageState extends State<WebRegistrationPage> {
     );
   }
 
-  Future<bool> _showWebResourceErrorDialog(BuildContext context, WebResourceError error) {
-    return showDialog<bool>(
+  Future<bool?> _showWebResourceErrorDialog(BuildContext context, WebResourceError error) {
+    return showDialog<bool?>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {

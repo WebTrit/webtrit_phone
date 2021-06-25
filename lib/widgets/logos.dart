@@ -10,15 +10,15 @@ class WebTritPhonePictureLogo extends StatelessWidget {
       children: <Widget>[
         SvgPicture.asset(
           'assets/logo.svg',
-          height: themeData.textTheme.headline2.fontSize * 1.4,
+          height: themeData.textTheme.headline2!.fontSize !* 1.4,
           color: themeData.accentColor,
         ),
         SizedBox(
-          width: themeData.textTheme.headline2.fontSize * 0.5,
+          width: themeData.textTheme.headline2!.fontSize !* 0.5,
         ),
         Text(
           'WebTrit',
-          style: themeData.textTheme.headline2.copyWith(
+          style: themeData.textTheme.headline2!.copyWith(
             color: themeData.accentColor,
           ),
         ),

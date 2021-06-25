@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class FavoritesPage extends StatelessWidget with PageSnackBarMixin {
-  const FavoritesPage({Key key}) : super(key: key);
+  const FavoritesPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class FavoritesPage extends StatelessWidget with PageSnackBarMixin {
             Icon(
               Icons.star_outline,
               size: 80,
-              color: themeData.textTheme.caption.color,
+              color: themeData.textTheme.caption!.color,
             ),
             SizedBox(height: 10),
             Text(

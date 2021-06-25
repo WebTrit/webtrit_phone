@@ -8,12 +8,11 @@ import './recents.dart';
 
 class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
   final RecentsRepository recentsRepository;
-  StreamSubscription _recentsSubscription;
+  StreamSubscription? _recentsSubscription;
 
   RecentsBloc({
-    @required this.recentsRepository,
-  })  : assert(recentsRepository != null),
-        super(RecentsInitial());
+    required this.recentsRepository,
+  }) : super(RecentsInitial());
 
   @override
   Stream<RecentsState> mapEventToState(RecentsEvent event) async* {
@@ -36,7 +35,8 @@ class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
     return super.close();
   }
 
-  Stream<RecentsState> _mapRecentsInitialLoadedToState(RecentsInitialLoaded event) async* {
+  Stream<RecentsState> _mapRecentsInitialLoadedToState(
+      RecentsInitialLoaded event) async* {
     yield RecentsInitial();
     _recentsSubscription?.cancel();
     _recentsSubscription = recentsRepository.recents().listen(
@@ -50,7 +50,8 @@ class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
     }
   }
 
-  Stream<RecentsState> _mapRecentsRefreshedToState(RecentsRefreshed event) async* {
+  Stream<RecentsState> _mapRecentsRefreshedToState(
+      RecentsRefreshed event) async* {
     try {
       await recentsRepository.load();
     } catch (error) {

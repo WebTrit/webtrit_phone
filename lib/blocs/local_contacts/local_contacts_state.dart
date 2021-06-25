@@ -16,7 +16,7 @@ class LocalContactsLoadSuccess extends LocalContactsState {
   final List<LocalContact> contacts;
 
   const LocalContactsLoadSuccess({
-    @required this.contacts,
+    required this.contacts,
   });
 
   @override

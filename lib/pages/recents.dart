@@ -7,14 +7,14 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class RecentsPage extends StatefulWidget {
-  const RecentsPage({Key key}) : super(key: key);
+  const RecentsPage({Key? key}) : super(key: key);
 
   @override
   _RecentsPageState createState() => _RecentsPageState();
 }
 
 class _RecentsPageState extends State<RecentsPage> with PageSnackBarMixin, SingleTickerProviderStateMixin {
-  TabController _tabController;
+  late TabController _tabController;
 
   @override
   void initState() {
@@ -50,7 +50,7 @@ class _RecentsPageState extends State<RecentsPage> with PageSnackBarMixin, Singl
               .map((value) => Tab(child: Text(value.l10n(context), softWrap: false)))
               .toList(),
           controller: _tabController,
-          labelColor: themeData.textTheme.caption.color,
+          labelColor: themeData.textTheme.caption!.color,
         ),
       ),
       body: BlocConsumer<RecentsBloc, RecentsState>(
@@ -62,7 +62,6 @@ class _RecentsPageState extends State<RecentsPage> with PageSnackBarMixin, Singl
         buildWhen: (previous, current) {
           return current is! RecentsRefreshFailure;
         },
-        // ignore: missing_return
         builder: (context, state) {
           if (state is RecentsInitial) {
             return Center(
@@ -128,6 +127,7 @@ class _RecentsPageState extends State<RecentsPage> with PageSnackBarMixin, Singl
               ),
             );
           }
+          throw StateError(''); // TODO fix if logic
         },
       ),
     );
@@ -136,14 +136,14 @@ class _RecentsPageState extends State<RecentsPage> with PageSnackBarMixin, Singl
 
 class RecentTile extends StatelessWidget {
   final Recent recent;
-  final GestureTapCallback onInfoTap;
-  final GestureTapCallback onTap;
-  final GestureLongPressCallback onLongPress;
-  final void Function(Recent) onDeleted;
+  final GestureTapCallback? onInfoTap;
+  final GestureTapCallback? onTap;
+  final GestureLongPressCallback? onLongPress;
+  final void Function(Recent)? onDeleted;
 
   RecentTile({
-    Key key,
-    @required this.recent,
+    Key? key,
+    required this.recent,
     this.onInfoTap,
     this.onTap,
     this.onLongPress,
@@ -152,6 +152,7 @@ class RecentTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final onDeleted = this.onDeleted;
     return Dismissible(
       key: ObjectKey(recent),
       background: Container(
@@ -205,7 +206,7 @@ class RecentTile extends StatelessWidget {
             ),
             Text(' · '),
             Text(
-              recent.isComplete ? _formatDuration(recent.duration) : 'Missed',
+              recent.isComplete ? _formatDuration(recent.duration!) : 'Missed',
             ),
             Text(' · '),
             Text(
@@ -225,8 +226,8 @@ class RecentTile extends StatelessWidget {
         .join(':');
   }
 
-  Future<bool> _confirmDelete(BuildContext context, Recent recent) {
-    return showDialog(
+  Future<bool?> _confirmDelete(BuildContext context, Recent recent) {
+    return showDialog<bool?>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -274,9 +275,9 @@ extension _DateTimeFormatting on DateTime {
     final midnight = DateTime(now.year, now.month, now.day);
 
     if (midnight.isBefore(this)) {
-      return AppLocalizations.of(context).recentTimeBeforeMidnight(this);
+      return AppLocalizations.of(context)!.recentTimeBeforeMidnight(this);
     } else {
-      return AppLocalizations.of(context).recentTimeAfterMidnight(this);
+      return AppLocalizations.of(context)!.recentTimeAfterMidnight(this);
     }
   }
 }

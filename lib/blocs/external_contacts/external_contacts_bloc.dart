@@ -13,12 +13,11 @@ part 'external_contacts_state.dart';
 
 class ExternalContactsBloc extends Bloc<ExternalContactsEvent, ExternalContactsState> {
   final ExternalContactsRepository externalContactsRepository;
-  StreamSubscription _externalContactsSubscription;
+  StreamSubscription? _externalContactsSubscription;
 
   ExternalContactsBloc({
-    @required this.externalContactsRepository,
-  })  : assert(externalContactsRepository != null),
-        super(ExternalContactsInitial());
+    required this.externalContactsRepository,
+  }) : super(ExternalContactsInitial());
 
   @override
   Stream<ExternalContactsState> mapEventToState(ExternalContactsEvent event) async* {

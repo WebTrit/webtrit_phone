@@ -8,7 +8,7 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class ContactsPage extends StatelessWidget {
-  const ContactsPage({Key key}) : super(key: key);
+  const ContactsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class ContactsPage extends StatelessWidget {
         appBar: MainAppBar(
           bottom: TabBar(
             tabs: ContactsSource.values.map((value) => Tab(child: Text(value.l10n(context), softWrap: false))).toList(),
-            labelColor: themeData.textTheme.caption.color,
+            labelColor: themeData.textTheme.caption!.color,
           ),
         ),
         body: TabBarView(children: [
@@ -43,7 +43,6 @@ class _LocalContacts extends StatelessWidget with PageSnackBarMixin {
       buildWhen: (previous, current) {
         return current is! LocalContactsRefreshFailure;
       },
-      // ignore: missing_return
       builder: (context, state) {
         if (state is LocalContactsInitial) {
           return Center(
@@ -89,6 +88,7 @@ class _LocalContacts extends StatelessWidget with PageSnackBarMixin {
             ),
           );
         }
+        throw StateError(''); // TODO fix if logic
       },
     );
   }
@@ -106,7 +106,6 @@ class _ExternalContacts extends StatelessWidget with PageSnackBarMixin {
       buildWhen: (previous, current) {
         return current is! ExternalContactsRefreshFailure;
       },
-      // ignore: missing_return
       builder: (context, state) {
         if (state is ExternalContactsInitial) {
           return Center(
@@ -150,6 +149,7 @@ class _ExternalContacts extends StatelessWidget with PageSnackBarMixin {
             ),
           );
         }
+        throw StateError(''); // TODO fix if logic
       },
     );
   }
@@ -157,8 +157,8 @@ class _ExternalContacts extends StatelessWidget with PageSnackBarMixin {
 
 class ContactTile extends StatelessWidget {
   ContactTile({
-    Key key,
-    @required this.displayName,
+    Key? key,
+    required this.displayName,
     this.thumbnail,
     this.smart = false,
     this.onTap,
@@ -166,13 +166,14 @@ class ContactTile extends StatelessWidget {
   }) : super(key: key);
 
   final String displayName;
-  final Uint8List thumbnail;
+  final Uint8List? thumbnail;
   final bool smart;
-  final GestureTapCallback onTap;
-  final GestureLongPressCallback onLongPress;
+  final GestureTapCallback? onTap;
+  final GestureLongPressCallback? onLongPress;
 
   @override
   Widget build(BuildContext context) {
+    final Uint8List? thumbnail = this.thumbnail;
     final avatar = Stack(
       clipBehavior: Clip.none,
       children: [

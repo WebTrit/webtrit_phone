@@ -14,7 +14,7 @@ class SecureStorage {
 
   SecureStorage._();
 
-  Future<String> readToken() {
+  Future<String?> readToken() {
     return _storage.read(key: _kTokenKey);
   }
 
@@ -26,7 +26,7 @@ class SecureStorage {
     return _storage.delete(key: _kTokenKey);
   }
 
-  Future<String> readWebRegistrationInitialUrl() {
+  Future<String?> readWebRegistrationInitialUrl() {
     return _storage.read(key: _kWebRegistrationInitialUrl);
   }
 

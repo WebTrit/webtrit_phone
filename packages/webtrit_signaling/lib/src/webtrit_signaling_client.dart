@@ -74,9 +74,9 @@ class WebtritSignalingClient extends Stream<Event> {
 
   @override
   StreamSubscription<Event> listen(
-    void onData(Event event)?, {
+    void Function(Event event)? onData, {
     Function? onError,
-    void onDone()?,
+    void Function()? onDone,
     bool? cancelOnError,
   }) {
     return _controller.stream.listen(onData, onError: onError, onDone: onDone, cancelOnError: cancelOnError);
@@ -142,12 +142,12 @@ class WebtritSignalingClient extends Stream<Event> {
     return responseMessage;
   }
 
-  _addMessage(Map<String, dynamic> message) {
+  void _addMessage(Map<String, dynamic> message) {
     final data = jsonEncode(message);
     _addData(data);
   }
 
-  _addData(dynamic data) {
+  void _addData(dynamic data) {
     _ws.add(data);
 
     _logger.finer(() => '>> sent\n$data');

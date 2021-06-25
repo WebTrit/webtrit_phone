@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class KeypadPage extends StatefulWidget {
-  const KeypadPage({Key key}) : super(key: key);
+  const KeypadPage({Key? key}) : super(key: key);
 
   @override
   _KeypadPageState createState() => _KeypadPageState();
@@ -13,7 +13,7 @@ class _KeypadPageState extends State<KeypadPage> with PageSnackBarMixin {
   final _keypadTextFieldKey = GlobalKey();
   final _focusNode = PreventKeyboardFocusNode();
 
-  TextEditingController _controller;
+  late TextEditingController _controller;
 
   @override
   void initState() {
@@ -57,7 +57,7 @@ class _KeypadPageState extends State<KeypadPage> with PageSnackBarMixin {
           ),
           ValueListenableBuilder(
             valueListenable: _controller,
-            builder: (BuildContext context, TextEditingValue value, Widget child) {
+            builder: (BuildContext context, TextEditingValue value, Widget? child) {
               return _Actionpad(
                 onCallPressed: _onCallPressed,
                 onBackspacePressed: value.text.isNotEmpty ? _onBackspacePressed : null,
@@ -105,8 +105,8 @@ class _KeypadPageState extends State<KeypadPage> with PageSnackBarMixin {
     final textBefore = _controller.selection.textBefore(_controller.text);
     final textAfter = _controller.selection.textAfter(_controller.text);
 
-    String newText;
-    TextSelection newSelection;
+    String? newText;
+    TextSelection? newSelection;
     if (_controller.selection.isCollapsed) {
       if (textBefore.length > 0) {
         newText = textBefore.substring(0, textBefore.length - 1) + textAfter;
@@ -151,7 +151,7 @@ class _KeypadPageState extends State<KeypadPage> with PageSnackBarMixin {
 
   void _keypadTextFieldHideToolbar() {
     final delegate = _keypadTextFieldKey.currentState as TextSelectionGestureDetectorBuilderDelegate;
-    delegate.editableTextKey.currentState.hideToolbar();
+    delegate.editableTextKey.currentState?.hideToolbar();
   }
 }
 
@@ -170,8 +170,8 @@ class _Keypad extends StatelessWidget {
   final void Function(String) onKeypadPressed;
 
   const _Keypad({
-    Key key,
-    this.onKeypadPressed,
+    Key? key,
+    required this.onKeypadPressed,
   }) : super(key: key);
 
   static const List<_Key> _keys = [
@@ -244,13 +244,13 @@ class _Keypad extends StatelessWidget {
 }
 
 class _Actionpad extends StatelessWidget {
-  final VoidCallback onCallPressed;
-  final VoidCallback onCallLongPress;
-  final VoidCallback onBackspacePressed;
-  final VoidCallback onBackspaceLongPress;
+  final VoidCallback? onCallPressed;
+  final VoidCallback? onCallLongPress;
+  final VoidCallback? onBackspacePressed;
+  final VoidCallback? onBackspaceLongPress;
 
   const _Actionpad({
-    Key key,
+    Key? key,
     this.onCallPressed,
     this.onCallLongPress,
     this.onBackspacePressed,
@@ -272,7 +272,7 @@ class _Actionpad extends StatelessWidget {
               ),
               child: Icon(
                 Icons.phone,
-                size: Theme.of(context).textTheme.headline2.fontSize,
+                size: Theme.of(context).textTheme.headline2!.fontSize,
               ),
             ),
           ),

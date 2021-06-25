@@ -3,18 +3,16 @@ import 'dart:io' show Platform;
 import 'package:device_info/device_info.dart';
 
 abstract class DeviceInfo {
-  static DeviceInfo _instance;
+  static late DeviceInfo _instance;
 
   static Future<void> init() async {
-    if (_instance == null) {
-      final deviceInfo = DeviceInfoPlugin();
-      if (Platform.isAndroid) {
-        _instance = _AndroidDeviceInfo(await deviceInfo.androidInfo);
-      } else if (Platform.isIOS) {
-        _instance = _IosDeviceInfo(await deviceInfo.iosInfo);
-      } else {
-        throw UnsupportedError('platform not supported');
-      }
+    final deviceInfo = DeviceInfoPlugin();
+    if (Platform.isAndroid) {
+      _instance = _AndroidDeviceInfo(await deviceInfo.androidInfo);
+    } else if (Platform.isIOS) {
+      _instance = _IosDeviceInfo(await deviceInfo.iosInfo);
+    } else {
+      throw UnsupportedError('platform not supported');
     }
   }
 

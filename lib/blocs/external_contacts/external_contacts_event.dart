@@ -20,11 +20,11 @@ class ExternalContactsUpdated extends ExternalContactsEvent {
   final List<ExternalContact> contacts;
 
   const ExternalContactsUpdated({
-    @required this.contacts,
+    required this.contacts,
   });
 
   @override
   List<Object> get props => [
-    contacts,
-  ];
+        contacts,
+      ];
 }

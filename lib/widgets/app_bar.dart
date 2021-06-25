@@ -3,11 +3,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class ExtAppBar extends AppBar {
   ExtAppBar({
-    Key key,
-    Widget leading,
-    Widget title,
-    List<Widget> actions,
-    PreferredSizeWidget bottom,
+    Key? key,
+    Widget? leading,
+    Widget? title,
+    List<Widget>? actions,
+    PreferredSizeWidget? bottom,
   }) : super(
           key: key,
           leading: leading,
@@ -20,12 +20,12 @@ class ExtAppBar extends AppBar {
 
 class MainAppBar extends StatelessWidget with PreferredSizeWidget {
   MainAppBar({
-    Key key,
+    Key? key,
     this.bottom,
-  })  : preferredSize = Size.fromHeight(kToolbarHeight + (bottom?.preferredSize?.height ?? 0.0)),
+  })  : preferredSize = Size.fromHeight(kToolbarHeight + (bottom?.preferredSize.height ?? 0.0)),
         super(key: key);
 
-  final PreferredSizeWidget bottom;
+  final PreferredSizeWidget? bottom;
 
   @override
   final Size preferredSize;
@@ -37,7 +37,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
       leading: Center(
         child: SvgPicture.asset(
           'assets/logo.svg',
-          height: themeData.appBarTheme.textTheme.headline6.fontSize * 1.4,
+          height: themeData.appBarTheme.textTheme!.headline6!.fontSize !* 1.4,
           color: themeData.accentColor,
         ),
       ),
@@ -47,15 +47,15 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
           const Spacer(),
           Icon(
             Icons.account_balance_wallet_outlined,
-            size: themeData.textTheme.button.fontSize * 1.2,
+            size: themeData.textTheme.button!.fontSize !* 1.2,
           ),
           const SizedBox(
             width: 2,
           ),
           Text(
             '\$1,340.56',
-            style: themeData.textTheme.button.copyWith(
-              color: themeData.textTheme.caption.color,
+            style: themeData.textTheme.button!.copyWith(
+              color: themeData.textTheme.caption!.color,
             ),
           ),
           const SizedBox(

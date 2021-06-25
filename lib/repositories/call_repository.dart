@@ -10,15 +10,15 @@ class CallRepository {
 
   final Logger _logger;
 
-  Gateway _gateway;
-  Session _session;
-  VideoCallPlugin _videoCallPlugin;
+  Gateway? _gateway;
+  Session? _session;
+  VideoCallPlugin? _videoCallPlugin;
 
-  String _registeredUsername;
+  String? _registeredUsername;
 
-  StreamController<IncomingCallEvent> _incomingCallStreamController;
-  StreamController<AcceptedEvent> _acceptedStreamController;
-  StreamController<HangupEvent> _hangupStreamController;
+  StreamController<IncomingCallEvent>? _incomingCallStreamController;
+  StreamController<AcceptedEvent>? _acceptedStreamController;
+  StreamController<HangupEvent>? _hangupStreamController;
 
   bool get isAttached => _videoCallPlugin != null;
 
@@ -32,13 +32,13 @@ class CallRepository {
     _hangupStreamController = StreamController.broadcast();
 
     _gateway = await Gateway.connect('wss://janus.conf.meetecho.com:443/ws', _onErrorCallback, _onDoneCallback);
-    _gateway.listen();
+    _gateway!.listen();
 
-    _session = Session(_gateway, _onSessionTimeoutCallback);
-    await _session.create();
+    _session = Session(_gateway!, _onSessionTimeoutCallback);
+    await _session!.create();
 
-    _videoCallPlugin = VideoCallPlugin(_session);
-    await _videoCallPlugin.attach(
+    _videoCallPlugin = VideoCallPlugin(_session!);
+    await _videoCallPlugin!.attach(
       _onIncomingCallCallback,
       _onAcceptedCallCallback,
       _onHangupCallback,
@@ -46,62 +46,62 @@ class CallRepository {
   }
 
   Future<void> detach() async {
-    await _videoCallPlugin.detach();
+    await _videoCallPlugin!.detach();
     _videoCallPlugin = null;
 
-    await _session.destroy();
+    await _session!.destroy();
     _session = null;
 
-    await _gateway.close();
+    await _gateway!.close();
     _gateway = null;
 
-    await _incomingCallStreamController.close();
+    await _incomingCallStreamController!.close();
     _incomingCallStreamController = null;
-    await _acceptedStreamController.close();
+    await _acceptedStreamController!.close();
     _acceptedStreamController = null;
-    await _hangupStreamController.close();
+    await _hangupStreamController!.close();
     _hangupStreamController = null;
 
     _registeredUsername = null;
   }
 
-  Stream<IncomingCallEvent> get onIncomingCall => _incomingCallStreamController.stream;
+  Stream<IncomingCallEvent> get onIncomingCall => _incomingCallStreamController!.stream;
 
-  Stream<AcceptedEvent> get onAccepted => _acceptedStreamController.stream;
+  Stream<AcceptedEvent> get onAccepted => _acceptedStreamController!.stream;
 
-  Stream<HangupEvent> get onHangup => _hangupStreamController.stream;
+  Stream<HangupEvent> get onHangup => _hangupStreamController!.stream;
 
-  Future<void> sendTrickle(Map<String, dynamic> candidate) async {
-    await _videoCallPlugin.sendTrickle(candidate);
+  Future<void> sendTrickle(Map<String, dynamic>? candidate) async {
+    await _videoCallPlugin!.sendTrickle(candidate);
   }
 
   Future<List<String>> list() async {
-    return (await _videoCallPlugin.list())..remove(_registeredUsername);
+    return (await _videoCallPlugin!.list())..remove(_registeredUsername);
   }
 
   Future<void> register(String username) async {
-    await _videoCallPlugin.register(username);
+    await _videoCallPlugin!.register(username);
     _registeredUsername = username;
   }
 
-  Future<void> call(String username, Map<String, dynamic> jsepData) async {
-    await _videoCallPlugin.call(username, jsepData);
+  Future<void> call(String? username, Map<String, dynamic> jsepData) async {
+    await _videoCallPlugin!.call(username, jsepData);
   }
 
   Future<void> accept(Map<String, dynamic> jsepData) async {
-    await _videoCallPlugin.accept(jsepData);
+    await _videoCallPlugin!.accept(jsepData);
   }
 
   Future<void> set({
-    bool audio,
-    bool video,
-    int bitrate,
-    bool record,
-    String filename,
-    int substream,
-    int temporal,
+    bool? audio,
+    bool? video,
+    int? bitrate,
+    bool? record,
+    String? filename,
+    int? substream,
+    int? temporal,
   }) async {
-    await _videoCallPlugin.set(
+    await _videoCallPlugin!.set(
       audio: audio,
       video: video,
       bitrate: bitrate,
@@ -112,11 +112,11 @@ class CallRepository {
     );
   }
 
-  Future<String> hangup() {
-    return _videoCallPlugin.hangup();
+  Future<String?> hangup() {
+    return _videoCallPlugin!.hangup();
   }
 
-  void _onErrorCallback(error, [StackTrace stackTrace]) {
+  void _onErrorCallback(error, [StackTrace? stackTrace]) {
     // TODO: add necessary logic
     _logger.severe('_onErrorCallback { error: $error, stackTrace: $stackTrace } / not implemented');
   }
@@ -131,23 +131,23 @@ class CallRepository {
     _logger.warning('_onSessionTimeoutCallback / not implemented');
   }
 
-  void _onIncomingCallCallback(String username, Map<String, dynamic> jsepData) {
-    _incomingCallStreamController.add(IncomingCallEvent(username, jsepData));
+  void _onIncomingCallCallback(String username, Map<String, dynamic>? jsepData) {
+    _incomingCallStreamController!.add(IncomingCallEvent(username, jsepData));
   }
 
-  void _onAcceptedCallCallback(String username, Map<String, dynamic> jsepData) {
-    _acceptedStreamController.add(AcceptedEvent(username, jsepData));
+  void _onAcceptedCallCallback(String username, Map<String, dynamic>? jsepData) {
+    _acceptedStreamController!.add(AcceptedEvent(username, jsepData));
   }
 
-  void _onHangupCallback(String username, String reason) {
-    _hangupStreamController.add(HangupEvent(username, reason));
+  void _onHangupCallback(String username, String? reason) {
+    _hangupStreamController!.add(HangupEvent(username, reason));
   }
 }
 
 @immutable
 class IncomingCallEvent {
   final String username;
-  final Map<String, dynamic> jsepData;
+  final Map<String, dynamic>? jsepData;
 
   IncomingCallEvent(this.username, this.jsepData);
 }
@@ -155,15 +155,15 @@ class IncomingCallEvent {
 @immutable
 class AcceptedEvent {
   final String username;
-  final Map<String, dynamic> jsepData;
+  final Map<String, dynamic>? jsepData;
 
   AcceptedEvent(this.username, this.jsepData);
 }
 
 @immutable
 class HangupEvent {
-  final String username;
-  final String reason;
+  final String? username;
+  final String? reason;
 
   HangupEvent(this.username, this.reason);
 }

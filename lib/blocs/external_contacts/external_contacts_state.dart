@@ -16,7 +16,7 @@ class ExternalContactsLoadSuccess extends ExternalContactsState {
   final List<ExternalContact> contacts;
 
   const ExternalContactsLoadSuccess({
-    @required this.contacts,
+    required this.contacts,
   });
 
   @override

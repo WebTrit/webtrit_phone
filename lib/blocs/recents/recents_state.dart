@@ -19,7 +19,7 @@ class RecentsLoadSuccess extends RecentsState {
   final List<Recent> recents;
 
   const RecentsLoadSuccess({
-    @required this.recents,
+    required this.recents,
   });
 
   @override

@@ -12,7 +12,7 @@ class Recent extends Equatable {
   final bool isComplete;
   final String username;
   final DateTime time;
-  final Duration duration;
+  final Duration? duration;
 
   Recent(
     this.direction,
@@ -23,7 +23,7 @@ class Recent extends Equatable {
   );
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         direction,
         isComplete,
         username,

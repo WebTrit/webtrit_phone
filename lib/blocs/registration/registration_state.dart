@@ -21,7 +21,7 @@ class RegistrationFailure extends RegistrationState {
   final String reason;
 
   const RegistrationFailure({
-    @required this.reason,
+    required this.reason,
   });
 
   @override

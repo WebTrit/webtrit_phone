@@ -12,8 +12,8 @@ class CallPage extends StatefulWidget {
 class _CallPageState extends State<CallPage> {
   RTCVideoRenderer _localRenderer = RTCVideoRenderer();
   RTCVideoRenderer _remoteRenderer = RTCVideoRenderer();
-  Future<List<void>> _renderersInitialized;
-  Future<List<void>> _renderersDisposed;
+  late Future<List<void>> _renderersInitialized;
+  late Future<List<void>> _renderersDisposed;
 
   bool _frontCamera = true;
 
@@ -127,7 +127,7 @@ class _CallPageState extends State<CallPage> {
                                   child: Container(
                                     child: Icon(
                                       Icons.switch_camera,
-                                      size: Theme.of(context).textTheme.subtitle1.fontSize,
+                                      size: Theme.of(context).textTheme.subtitle1!.fontSize,
                                       color: Colors.white,
                                     ),
                                   ),
@@ -149,7 +149,7 @@ class _CallPageState extends State<CallPage> {
                               ),
                               Text(
                                 username,
-                                style: Theme.of(context).textTheme.headline3.copyWith(color: Colors.white),
+                                style: Theme.of(context).textTheme.headline3!.copyWith(color: Colors.white),
                                 textAlign: TextAlign.center,
                               ),
                             ],
@@ -185,7 +185,7 @@ class _CallPageState extends State<CallPage> {
                 children: <Widget>[
                   Text(
                     state.reason,
-                    style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.red),
+                    style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.red),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(
@@ -208,6 +208,7 @@ class _CallPageState extends State<CallPage> {
             ),
           );
         }
+        throw StateError(''); // TODO fix if logic
       },
     );
   }
@@ -243,16 +244,16 @@ class _CallPageState extends State<CallPage> {
 
 class _CallActions extends StatefulWidget {
   final bool cameraEnabledByDefault;
-  final void Function(bool enabled) onCameraPressed;
+  final void Function(bool enabled)? onCameraPressed;
   final bool microphoneEnabledByDefault;
-  final void Function(bool enabled) onMicrophonePressed;
+  final void Function(bool enabled)? onMicrophonePressed;
   final bool speakerphoneEnabledByDefault;
-  final void Function(bool enabled) onSpeakerphonePressed;
-  final void Function() onHangupPressed;
-  final void Function() onAcceptPressed;
+  final void Function(bool enabled)? onSpeakerphonePressed;
+  final void Function()? onHangupPressed;
+  final void Function()? onAcceptPressed;
 
   _CallActions({
-    Key key,
+    Key? key,
     this.cameraEnabledByDefault = true,
     this.onCameraPressed,
     this.microphoneEnabledByDefault = true,
@@ -268,9 +269,9 @@ class _CallActions extends StatefulWidget {
 }
 
 class _CallActionsState extends State<_CallActions> {
-  bool _cameraEnabled;
-  bool _microphoneEnabled;
-  bool _speakerphoneEnabled;
+  late bool _cameraEnabled;
+  late bool _microphoneEnabled;
+  late bool _speakerphoneEnabled;
 
   @override
   void initState() {

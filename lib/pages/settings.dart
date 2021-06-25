@@ -8,7 +8,7 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key key}) : super(key: key);
+  const SettingsPage({Key? key}) : super(key: key);
 
   @override
   _SettingsPageState createState() => _SettingsPageState();
@@ -26,7 +26,7 @@ class _SettingsPageState extends State<SettingsPage> with PageSnackBarMixin {
               Icons.exit_to_app,
             ),
             onPressed: () async {
-              if (await _confirmUnregister(context)) {
+              if (await _confirmUnregister(context) == true) {
                 context.read<AppBloc>().add(AppUnregistered());
               }
             },
@@ -41,7 +41,7 @@ class _SettingsPageState extends State<SettingsPage> with PageSnackBarMixin {
           Form(
             child: FutureBuilder(
               future: SecureStorage().readWebRegistrationInitialUrl(),
-              builder: (context, AsyncSnapshot<String> snapshot) {
+              builder: (context, AsyncSnapshot<String?> snapshot) {
                 final isDone = snapshot.connectionState == ConnectionState.done;
                 var webRegistrationInitialUrl = snapshot.data;
                 return Padding(
@@ -58,10 +58,10 @@ class _SettingsPageState extends State<SettingsPage> with PageSnackBarMixin {
                           helperText: '', // reserve space for validator message
                         ),
                         onFieldSubmitted: (_) async {
-                          final fromState = Form.of(context);
+                          final fromState = Form.of(context)!;
                           if (fromState.validate()) {
                             fromState.save();
-                            await SecureStorage().writeWebRegistrationInitialUrl(webRegistrationInitialUrl);
+                            await SecureStorage().writeWebRegistrationInitialUrl(webRegistrationInitialUrl!);
                             showSnackBar(context, 'Registration initial url saved');
                           }
                         },
@@ -69,7 +69,7 @@ class _SettingsPageState extends State<SettingsPage> with PageSnackBarMixin {
                           webRegistrationInitialUrl = value;
                         },
                         validator: (value) {
-                          if (value.isEmpty) {
+                          if (value == null || value.isEmpty) {
                             return 'Please enter not empty url';
                           } else if (!RegExp(
                                   r'https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)')
@@ -88,10 +88,10 @@ class _SettingsPageState extends State<SettingsPage> with PageSnackBarMixin {
                             onPressed: !isDone
                                 ? null
                                 : () async {
-                                    final fromState = Form.of(context);
+                                    final fromState = Form.of(context)!;
                                     if (fromState.validate()) {
                                       fromState.save();
-                                      await SecureStorage().writeWebRegistrationInitialUrl(webRegistrationInitialUrl);
+                                      await SecureStorage().writeWebRegistrationInitialUrl(webRegistrationInitialUrl!);
                                       showSnackBar(context, 'Registration initial url saved');
                                     }
                                   },
@@ -123,12 +123,12 @@ class _SettingsPageState extends State<SettingsPage> with PageSnackBarMixin {
             height: 50,
             child: FutureBuilder(
               future: SecureStorage().readToken(),
-              builder: (context, AsyncSnapshot<String> snapshot) {
+              builder: (context, AsyncSnapshot<String?> snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   final token = snapshot.data;
                   if (token != null) {
                     return Text(
-                      snapshot.data,
+                      snapshot.data!,
                       style: TextStyle(fontSize: 20),
                     );
                   } else {
@@ -169,8 +169,8 @@ class _SettingsPageState extends State<SettingsPage> with PageSnackBarMixin {
     );
   }
 
-  Future<bool> _confirmUnregister(BuildContext context) {
-    return showDialog(
+  Future<bool?> _confirmUnregister(BuildContext context) {
+    return showDialog<bool?>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(

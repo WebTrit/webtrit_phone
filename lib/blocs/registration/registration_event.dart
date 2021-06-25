@@ -17,7 +17,7 @@ class RegistrationProcessed extends RegistrationEvent {
   final String username;
 
   const RegistrationProcessed({
-    @required this.username,
+    required this.username,
   });
 
   @override

@@ -6,15 +6,15 @@ import 'package:equatable/equatable.dart';
 @immutable
 class LocalContact extends Equatable {
   LocalContact({
-    this.displayName,
+    required this.displayName,
     this.thumbnail,
   });
 
   final String displayName;
-  final Uint8List thumbnail;
+  final Uint8List? thumbnail;
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         displayName,
         thumbnail,
       ];

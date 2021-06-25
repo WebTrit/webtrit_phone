@@ -4,8 +4,8 @@ import 'package:webtrit_phone/models/models.dart';
 
 // TODO: add local persist and/or external sync of recents calls
 class RecentsRepository {
-  final List<Recent> _recents = [];
-  final StreamController _controller = StreamController<List<Recent>>.broadcast();
+  final _recents = <Recent>[];
+  final _controller = StreamController<List<Recent>>.broadcast();
 
   Stream<List<Recent>> recents() {
     return _controller.stream;

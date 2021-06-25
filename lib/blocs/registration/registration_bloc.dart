@@ -13,11 +13,9 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   final AppBloc appBloc;
 
   RegistrationBloc({
-    @required this.callRepository,
-    @required this.appBloc,
-  })  : assert(callRepository != null),
-        assert(appBloc != null),
-        super(RegistrationInitial());
+    required this.callRepository,
+    required this.appBloc,
+  }) : super(RegistrationInitial());
 
   @override
   Stream<RegistrationState> mapEventToState(RegistrationEvent event) async* {
@@ -28,7 +26,8 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     }
   }
 
-  Stream<RegistrationState> _mapRegistrationStartedToState(RegistrationStarted event) async* {
+  Stream<RegistrationState> _mapRegistrationStartedToState(
+      RegistrationStarted event) async* {
     yield RegistrationInitial();
 
     if (callRepository.isAttached) {
@@ -36,7 +35,8 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     }
   }
 
-  Stream<RegistrationState> _mapRegistrationProcessedToState(RegistrationProcessed event) async* {
+  Stream<RegistrationState> _mapRegistrationProcessedToState(
+      RegistrationProcessed event) async* {
     yield RegistrationInProgress();
     try {
       await callRepository.attach();

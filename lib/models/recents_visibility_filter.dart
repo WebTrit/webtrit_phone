@@ -10,7 +10,7 @@ enum RecentsVisibilityFilter {
 
 extension RecentsVisibilityFilterI10nExtension on RecentsVisibilityFilter {
   String l10n(BuildContext context) {
-    final appLocalizations = AppLocalizations.of(context);
+    final appLocalizations = AppLocalizations.of(context)!;
     switch (this) {
       case RecentsVisibilityFilter.all:
         return appLocalizations.recentsVisibilityFilterAll;
@@ -21,7 +21,7 @@ extension RecentsVisibilityFilterI10nExtension on RecentsVisibilityFilter {
       case RecentsVisibilityFilter.outgoing:
         return appLocalizations.recentsVisibilityFilterOutgoing;
       default:
-        return null;
+        throw ArgumentError();
     }
   }
 }

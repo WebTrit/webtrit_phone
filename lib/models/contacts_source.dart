@@ -8,14 +8,14 @@ enum ContactsSource {
 
 extension ContactsSourceI10nExtension on ContactsSource {
   String l10n(BuildContext context) {
-    final appLocalizations = AppLocalizations.of(context);
+    final appLocalizations = AppLocalizations.of(context)!;
     switch (this) {
       case ContactsSource.local:
         return appLocalizations.contactsSourceLocal;
       case ContactsSource.external:
         return appLocalizations.contactsSourceExternal;
       default:
-        return null;
+        throw ArgumentError();
     }
   }
 }

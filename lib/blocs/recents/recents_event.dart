@@ -23,7 +23,7 @@ class RecentsUpdated extends RecentsEvent {
   final List<Recent> recents;
 
   const RecentsUpdated({
-    @required this.recents,
+    required this.recents,
   });
 
   @override
@@ -36,7 +36,7 @@ class RecentsAdd extends RecentsEvent {
   final Recent recent;
 
   const RecentsAdd({
-    @required this.recent,
+    required this.recent,
   });
 
   @override
@@ -49,7 +49,7 @@ class RecentsDelete extends RecentsEvent {
   final Recent recent;
 
   const RecentsDelete({
-    @required this.recent,
+    required this.recent,
   });
 
   @override

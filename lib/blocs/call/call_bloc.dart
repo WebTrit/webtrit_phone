@@ -15,20 +15,18 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   final CallRepository callRepository;
   final RecentsBloc recentsBloc;
 
-  StreamSubscription _onIncomingCallSubscription;
-  StreamSubscription _onAcceptedSubscription;
-  StreamSubscription _onHangUpSubscription;
+  late StreamSubscription _onIncomingCallSubscription;
+  late StreamSubscription _onAcceptedSubscription;
+  late StreamSubscription _onHangUpSubscription;
 
-  MediaStream _localStream;
+  MediaStream? _localStream;
 
-  RTCPeerConnection _peerConnection;
+  RTCPeerConnection? _peerConnection;
 
   CallBloc({
-    @required this.callRepository,
-    @required this.recentsBloc,
-  })  : assert(callRepository != null),
-        assert(recentsBloc != null),
-        super(CallIdle()) {
+    required this.callRepository,
+    required this.recentsBloc,
+  }) : super(CallIdle()) {
     _onIncomingCallSubscription = callRepository.onIncomingCall.listen((event) {
       add(CallIncomingReceived(username: event.username, jsepData: event.jsepData));
     });
@@ -87,17 +85,17 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     yield (state as CallActive).copyWith(localStream: _localStream);
 
     _peerConnection = await _createPeerConnection();
-    await _peerConnection.addStream(_localStream);
+    await _peerConnection!.addStream(_localStream!);
 
-    final remoteDescription = RTCSessionDescription(event.jsepData['sdp'], event.jsepData['type']);
-    await _peerConnection.setRemoteDescription(remoteDescription);
+    final remoteDescription = RTCSessionDescription(event.jsepData!['sdp'], event.jsepData!['type']);
+    await _peerConnection!.setRemoteDescription(remoteDescription);
   }
 
   Stream<CallState> _mapCallIncomingAcceptedToState(CallIncomingAccepted event) async* {
     yield (state as CallActive).copyWith(accepted: true, acceptedTime: DateTime.now());
 
-    final localDescription = await _peerConnection.createAnswer({});
-    _peerConnection.setLocalDescription(localDescription);
+    final localDescription = await _peerConnection!.createAnswer({});
+    _peerConnection!.setLocalDescription(localDescription);
 
     await callRepository.accept(localDescription.toMap());
   }
@@ -110,18 +108,18 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     yield (state as CallActive).copyWith(localStream: _localStream);
 
     _peerConnection = await _createPeerConnection();
-    await _peerConnection.addStream(_localStream);
+    await _peerConnection!.addStream(_localStream!);
 
-    final localDescription = await _peerConnection.createOffer({});
-    _peerConnection.setLocalDescription(localDescription);
+    final localDescription = await _peerConnection!.createOffer({});
+    _peerConnection!.setLocalDescription(localDescription);
 
     try {
       await callRepository.call(event.username, localDescription.toMap());
     } on JanusPluginHandleErrorException catch (e) {
-      await _peerConnection.close();
+      await _peerConnection!.close();
       _peerConnection = null;
 
-      await _localStream.dispose();
+      await _localStream!.dispose();
       _localStream = null;
 
       _addToRecents(state);
@@ -133,8 +131,8 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   Stream<CallState> _mapCallOutgoingAcceptedToState(CallOutgoingAccepted event) async* {
     yield (state as CallActive).copyWith(accepted: true, acceptedTime: DateTime.now());
 
-    final remoteDescription = RTCSessionDescription(event.jsepData['sdp'], event.jsepData['type']);
-    await _peerConnection.setRemoteDescription(remoteDescription);
+    final remoteDescription = RTCSessionDescription(event.jsepData!['sdp'], event.jsepData!['type']);
+    await _peerConnection!.setRemoteDescription(remoteDescription);
   }
 
   Stream<CallState> _mapCallRemoteStreamAddedToState(CallRemoteStreamAdded event) async* {
@@ -272,23 +270,28 @@ class CallBloc extends Bloc<CallEvent, CallState> {
       };
   }
 
-  void _addToRecents(CallActive state) {
+  void _addToRecents(CallState state) {
+    if (state is! CallActive) return;
+
     Direction direction;
     if (state is CallIncoming) {
       direction = Direction.incoming;
     } else if (state is CallOutgoing) {
       direction = Direction.outgoing;
+    } else {
+      throw StateError('Incorrect state class');
     }
+
+    final hungUpTime = state.hungUpTime;
+    final acceptedTime = state.acceptedTime;
 
     recentsBloc.add(RecentsAdd(
       recent: Recent(
         direction,
         state.accepted,
         state.username,
-        state.createdTime,
-        (state.hungUpTime != null && state.acceptedTime != null)
-            ? state.hungUpTime.difference(state.acceptedTime)
-            : null,
+        state.createdTime!,
+        (hungUpTime != null && acceptedTime != null) ? hungUpTime.difference(acceptedTime) : null,
       ),
     ));
   }
