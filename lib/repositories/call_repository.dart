@@ -1,26 +1,23 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:logging/logging.dart';
-import 'package:janus_client/janus_client.dart';
-import 'package:janus_client/janus_videocall_plugin.dart';
+import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/environment_config.dart';
+
+import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 class CallRepository {
   static int _createCounter = 0;
 
   final Logger _logger;
 
-  Gateway? _gateway;
-  Session? _session;
-  VideoCallPlugin? _videoCallPlugin;
-
-  String? _registeredUsername;
+  WebtritSignalingClient? _signalingClient;
 
   StreamController<IncomingCallEvent>? _incomingCallStreamController;
-  StreamController<AcceptedEvent>? _acceptedStreamController;
+  StreamController<AnsweredEvent>? _acceptedStreamController;
   StreamController<HangupEvent>? _hangupStreamController;
 
-  bool get isAttached => _videoCallPlugin != null;
+  bool get isAttached => _signalingClient != null;
 
   CallRepository() : _logger = Logger('CallRepository-$_createCounter') {
     _createCounter++;
@@ -31,29 +28,33 @@ class CallRepository {
     _acceptedStreamController = StreamController.broadcast();
     _hangupStreamController = StreamController.broadcast();
 
-    _gateway = await Gateway.connect('wss://janus.conf.meetecho.com:443/ws', _onErrorCallback, _onDoneCallback);
-    _gateway!.listen();
+    final token = await SecureStorage().readToken();
+    if (token == null) {
+      throw Exception('incorrect token');
+    } else {
+      _signalingClient = await WebtritSignalingClient.connect(EnvironmentConfig.WEBTRIT_SIGNALING_URL, token);
 
-    _session = Session(_gateway!, _onSessionTimeoutCallback);
-    await _session!.create();
+      _signalingClient!.listen(
+        (event) {
+          print('>> event = $event');
 
-    _videoCallPlugin = VideoCallPlugin(_session!);
-    await _videoCallPlugin!.attach(
-      _onIncomingCallCallback,
-      _onAcceptedCallCallback,
-      _onHangupCallback,
-    );
+          if (event is IncomingCallEvent) {
+            _incomingCallStreamController!.add(event);
+          } else if (event is AnsweredEvent) {
+            _acceptedStreamController!.add(event);
+          } else if (event is HangupEvent) {
+            _hangupStreamController!.add(event);
+          }
+        },
+        onError: _onErrorCallback,
+        onDone: _onDoneCallback,
+      );
+    }
   }
 
   Future<void> detach() async {
-    await _videoCallPlugin!.detach();
-    _videoCallPlugin = null;
-
-    await _session!.destroy();
-    _session = null;
-
-    await _gateway!.close();
-    _gateway = null;
+    await _signalingClient!.close();
+    _signalingClient = null;
 
     await _incomingCallStreamController!.close();
     _incomingCallStreamController = null;
@@ -61,59 +62,36 @@ class CallRepository {
     _acceptedStreamController = null;
     await _hangupStreamController!.close();
     _hangupStreamController = null;
-
-    _registeredUsername = null;
   }
 
   Stream<IncomingCallEvent> get onIncomingCall => _incomingCallStreamController!.stream;
 
-  Stream<AcceptedEvent> get onAccepted => _acceptedStreamController!.stream;
+  Stream<AnsweredEvent> get onAccepted => _acceptedStreamController!.stream;
 
   Stream<HangupEvent> get onHangup => _hangupStreamController!.stream;
 
   Future<void> sendTrickle(Map<String, dynamic>? candidate) async {
-    await _videoCallPlugin!.sendTrickle(candidate);
+    await _signalingClient!.send(TrickleCommand(candidate));
   }
 
   Future<List<String>> list() async {
-    return (await _videoCallPlugin!.list())..remove(_registeredUsername);
+    return []; // TODO remove
   }
 
   Future<void> register(String username) async {
-    await _videoCallPlugin!.register(username);
-    _registeredUsername = username;
+    await _signalingClient!.send(RegisterCommand(username));
   }
 
-  Future<void> call(String? username, Map<String, dynamic> jsepData) async {
-    await _videoCallPlugin!.call(username, jsepData);
+  Future<void> call(String? username, Map<String, dynamic> jsepData) async { // TODO rename username to number
+    await _signalingClient!.send(CallCommand(number: username!, jsep: jsepData));
   }
 
   Future<void> accept(Map<String, dynamic> jsepData) async {
-    await _videoCallPlugin!.accept(jsepData);
+    await _signalingClient!.send(AcceptCommand(jsep: jsepData));
   }
 
-  Future<void> set({
-    bool? audio,
-    bool? video,
-    int? bitrate,
-    bool? record,
-    String? filename,
-    int? substream,
-    int? temporal,
-  }) async {
-    await _videoCallPlugin!.set(
-      audio: audio,
-      video: video,
-      bitrate: bitrate,
-      record: record,
-      filename: filename,
-      substream: substream,
-      temporal: temporal,
-    );
-  }
-
-  Future<String?> hangup() {
-    return _videoCallPlugin!.hangup();
+  Future<void> hangup() {
+    return _signalingClient!.send(HangupCommand());
   }
 
   void _onErrorCallback(error, [StackTrace? stackTrace]) {
@@ -125,45 +103,4 @@ class CallRepository {
     // TODO: add necessary logic
     _logger.warning('_onDoneCallback / not implemented');
   }
-
-  void _onSessionTimeoutCallback() {
-    // TODO: add necessary logic
-    _logger.warning('_onSessionTimeoutCallback / not implemented');
-  }
-
-  void _onIncomingCallCallback(String username, Map<String, dynamic>? jsepData) {
-    _incomingCallStreamController!.add(IncomingCallEvent(username, jsepData));
-  }
-
-  void _onAcceptedCallCallback(String username, Map<String, dynamic>? jsepData) {
-    _acceptedStreamController!.add(AcceptedEvent(username, jsepData));
-  }
-
-  void _onHangupCallback(String username, String? reason) {
-    _hangupStreamController!.add(HangupEvent(username, reason));
-  }
-}
-
-@immutable
-class IncomingCallEvent {
-  final String username;
-  final Map<String, dynamic>? jsepData;
-
-  IncomingCallEvent(this.username, this.jsepData);
-}
-
-@immutable
-class AcceptedEvent {
-  final String username;
-  final Map<String, dynamic>? jsepData;
-
-  AcceptedEvent(this.username, this.jsepData);
-}
-
-@immutable
-class HangupEvent {
-  final String? username;
-  final String? reason;
-
-  HangupEvent(this.username, this.reason);
 }

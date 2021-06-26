@@ -1,9 +1,8 @@
 import 'dart:async';
+
 import 'package:logging/logging.dart';
-import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-import 'package:janus_client/janus_client.dart';
 
 import 'package:webtrit_phone/repositories/call_repository.dart';
 import 'package:webtrit_phone/blocs/recents/recents.dart';
@@ -28,10 +27,10 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     required this.recentsBloc,
   }) : super(CallIdle()) {
     _onIncomingCallSubscription = callRepository.onIncomingCall.listen((event) {
-      add(CallIncomingReceived(username: event.username, jsepData: event.jsepData));
+      add(CallIncomingReceived(username: event.caller, jsepData: event.jsep));
     });
     _onAcceptedSubscription = callRepository.onAccepted.listen((event) {
-      add(CallOutgoingAccepted(username: event.username, jsepData: event.jsepData));
+      add(CallOutgoingAccepted(username: event.callee, jsepData: event.jsep));
     });
     _onHangUpSubscription = callRepository.onHangup.listen((event) {
       add(CallRemoteHungUp(reason: event.reason));
@@ -115,7 +114,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
 
     try {
       await callRepository.call(event.username, localDescription.toMap());
-    } on JanusPluginHandleErrorException catch (e) {
+    } catch (e) {
       await _peerConnection!.close();
       _peerConnection = null;
 
@@ -124,7 +123,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
 
       _addToRecents(state);
 
-      yield CallFailure(reason: e.error);
+      yield CallFailure(reason: e.toString());
     }
   }
 

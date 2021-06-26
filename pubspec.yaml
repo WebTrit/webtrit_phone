@@ -44,8 +44,6 @@ dependencies:
   permission_handler: ^8.0.1
   webview_flutter: ^2.0.8
 
-  janus_client:
-    path: ./janus_client
   webtrit_api:
     path: ./packages/webtrit_api
   webtrit_signaling:

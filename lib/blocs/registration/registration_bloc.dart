@@ -1,7 +1,6 @@
 import 'dart:async';
-import 'package:meta/meta.dart';
+
 import 'package:bloc/bloc.dart';
-import 'package:janus_client/janus_client.dart';
 
 import 'package:webtrit_phone/repositories/call_repository.dart';
 import 'package:webtrit_phone/blocs/app/app.dart';
@@ -43,15 +42,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       await callRepository.register(event.username);
 
       appBloc.add(AppRegistered());
-    } on JanusPluginHandleErrorException catch (e) {
-      yield RegistrationFailure(
-        reason: e.error,
-      );
-    } on JanusErrorException catch (e) {
-      yield RegistrationFailure(
-        reason: e.reason,
-      );
-    } on Exception catch (e) {
+    } catch (e) {
       yield RegistrationFailure(
         reason: e.toString(),
       );
