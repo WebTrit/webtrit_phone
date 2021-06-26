@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,15 +24,15 @@ void main() async {
 
   await DeviceInfo.init();
 
+  final assetManifestJson = await rootBundle.loadString('AssetManifest.json');
+  final assetManifest = jsonDecode(assetManifestJson) as Map<String, dynamic>;
   await Future.wait(
-    [
-      'assets/logo.svg',
-    ].map(
-      (assetName) => precachePicture(
-        ExactAssetPicture(SvgPicture.svgStringDecoder, assetName),
-        null,
-      ),
-    ),
+    assetManifest.keys.where((String key) => key.endsWith('.svg')).map(
+          (assetName) => precachePicture(
+            ExactAssetPicture(SvgPicture.svgStringDecoder, assetName),
+            null,
+          ),
+        ),
   );
 
   Logger.root.level = Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.DEBUG_LEVEL);
