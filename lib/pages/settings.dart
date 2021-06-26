@@ -5,6 +5,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -14,7 +15,7 @@ class SettingsPage extends StatefulWidget {
   _SettingsPageState createState() => _SettingsPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> with PageSnackBarMixin {
+class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +63,7 @@ class _SettingsPageState extends State<SettingsPage> with PageSnackBarMixin {
                           if (fromState.validate()) {
                             fromState.save();
                             await SecureStorage().writeWebRegistrationInitialUrl(webRegistrationInitialUrl!);
-                            showSnackBar(context, 'Registration initial url saved');
+                            context.showSnackBar('Registration initial url saved');
                           }
                         },
                         onSaved: (value) {
@@ -92,7 +93,7 @@ class _SettingsPageState extends State<SettingsPage> with PageSnackBarMixin {
                                     if (fromState.validate()) {
                                       fromState.save();
                                       await SecureStorage().writeWebRegistrationInitialUrl(webRegistrationInitialUrl!);
-                                      showSnackBar(context, 'Registration initial url saved');
+                                      context.showSnackBar('Registration initial url saved');
                                     }
                                   },
                           ),
@@ -102,7 +103,7 @@ class _SettingsPageState extends State<SettingsPage> with PageSnackBarMixin {
                                 ? null
                                 : () async {
                                     await SecureStorage().deleteWebRegistrationInitialUrl();
-                                    showSnackBar(context, 'Registration initial url deleted');
+                                    context.showSnackBar('Registration initial url deleted');
                                     setState(() {});
                                   },
                           ),
@@ -149,7 +150,7 @@ class _SettingsPageState extends State<SettingsPage> with PageSnackBarMixin {
                 child: Text('Delete token'.toUpperCase()),
                 onPressed: () async {
                   await SecureStorage().deleteToken();
-                  showSnackBar(context, 'Token deleted');
+                  context.showSnackBar('Token deleted');
                   setState(() {});
                 },
               );

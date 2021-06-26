@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-class FavoritesPage extends StatelessWidget with PageSnackBarMixin {
+class FavoritesPage extends StatelessWidget {
   const FavoritesPage({Key? key}) : super(key: key);
 
   @override
@@ -28,7 +29,7 @@ class FavoritesPage extends StatelessWidget with PageSnackBarMixin {
             TextButton(
               child: Text('Add new favorite'.toUpperCase()),
               onPressed: () {
-                showSnackBar(context, 'Sorry, not implemented yet');
+                context.showSnackBar('Sorry, not implemented yet');
               },
             )
           ],

@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -13,7 +14,7 @@ class RecentsPage extends StatefulWidget {
   _RecentsPageState createState() => _RecentsPageState();
 }
 
-class _RecentsPageState extends State<RecentsPage> with PageSnackBarMixin, SingleTickerProviderStateMixin {
+class _RecentsPageState extends State<RecentsPage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -56,7 +57,7 @@ class _RecentsPageState extends State<RecentsPage> with PageSnackBarMixin, Singl
       body: BlocConsumer<RecentsBloc, RecentsState>(
         listener: (context, state) {
           if (state is RecentsLoadFailure) {
-            showErrorSnackBar(context, 'Ups error happened ☹️');
+            context.showErrorSnackBar('Ups error happened ☹️');
           }
         },
         buildWhen: (previous, current) {
@@ -84,7 +85,7 @@ class _RecentsPageState extends State<RecentsPage> with PageSnackBarMixin, Singl
 
             return RefreshIndicator(
               onRefresh: () {
-                hideSnackBar(context);
+                context.hideCurrentSnackBar();
                 return (context.read<RecentsBloc>()..add(RecentsRefreshed()))
                     .stream
                     .firstWhere((state) => state is RecentsLoadSuccess || state is RecentsRefreshFailure);
@@ -96,16 +97,16 @@ class _RecentsPageState extends State<RecentsPage> with PageSnackBarMixin, Singl
                   return RecentTile(
                     recent: recent,
                     onInfoTap: () {
-                      showSnackBar(context, 'Tap info on "${recent.username}"');
+                      context.showSnackBar('Tap info on "${recent.username}"');
                     },
                     onTap: () {
                       context.read<CallBloc>().add(CallOutgoingStarted(username: recent.username));
                     },
                     onLongPress: () {
-                      showSnackBar(context, 'LongPress on "${recent.username}"');
+                      context.showSnackBar('LongPress on "${recent.username}"');
                     },
                     onDeleted: (recent) {
-                      showSnackBar(context, '"${recent.username}" deleted');
+                      context.showSnackBar('"${recent.username}" deleted');
 
                       context.read<RecentsBloc>().add(RecentsDelete(recent: recent));
                     },

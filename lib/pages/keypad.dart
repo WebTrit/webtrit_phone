@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class KeypadPage extends StatefulWidget {
@@ -9,7 +10,7 @@ class KeypadPage extends StatefulWidget {
   _KeypadPageState createState() => _KeypadPageState();
 }
 
-class _KeypadPageState extends State<KeypadPage> with PageSnackBarMixin {
+class _KeypadPageState extends State<KeypadPage> {
   final _keypadTextFieldKey = GlobalKey();
   final _focusNode = PreventKeyboardFocusNode();
 
@@ -76,7 +77,7 @@ class _KeypadPageState extends State<KeypadPage> with PageSnackBarMixin {
   void _onCallPressed() {
     _focusNode.unfocus();
 
-    showSnackBar(context, 'Sorry, not implemented yet');
+    context.showSnackBar('Sorry, not implemented yet');
   }
 
   void _onKeypadPressed(keyText) {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -31,13 +32,13 @@ class ContactsPage extends StatelessWidget {
   }
 }
 
-class _LocalContacts extends StatelessWidget with PageSnackBarMixin {
+class _LocalContacts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<LocalContactsBloc, LocalContactsState>(
       listener: (context, state) {
         if (state is LocalContactsLoadFailure) {
-          showErrorSnackBar(context, 'Ups error happened ☹️');
+          context.showErrorSnackBar('Ups error happened ☹️');
         }
       },
       buildWhen: (previous, current) {
@@ -52,7 +53,7 @@ class _LocalContacts extends StatelessWidget with PageSnackBarMixin {
         if (state is LocalContactsLoadSuccess) {
           return RefreshIndicator(
             onRefresh: () {
-              hideSnackBar(context);
+              context.hideCurrentSnackBar();
               return (context.read<LocalContactsBloc>()..add(LocalContactsRefreshed()))
                   .stream
                   .firstWhere((state) => state is LocalContactsLoadSuccess || state is LocalContactsRefreshFailure);
@@ -68,7 +69,7 @@ class _LocalContacts extends StatelessWidget with PageSnackBarMixin {
                     context.read<CallBloc>().add(CallOutgoingStarted(username: contact.displayName));
                   },
                   onLongPress: () {
-                    showSnackBar(context, 'LongPress on "${contact.displayName}"');
+                    context.showSnackBar('LongPress on "${contact.displayName}"');
                   },
                 );
               },
@@ -94,13 +95,13 @@ class _LocalContacts extends StatelessWidget with PageSnackBarMixin {
   }
 }
 
-class _ExternalContacts extends StatelessWidget with PageSnackBarMixin {
+class _ExternalContacts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ExternalContactsBloc, ExternalContactsState>(
       listener: (context, state) {
         if (state is ExternalContactsLoadFailure) {
-          showErrorSnackBar(context, 'Ups error happened ☹️');
+          context.showErrorSnackBar('Ups error happened ☹️');
         }
       },
       buildWhen: (previous, current) {
@@ -115,7 +116,7 @@ class _ExternalContacts extends StatelessWidget with PageSnackBarMixin {
         if (state is ExternalContactsLoadSuccess) {
           return RefreshIndicator(
             onRefresh: () {
-              hideSnackBar(context);
+              context.hideCurrentSnackBar();
               return (context.read<ExternalContactsBloc>()..add(ExternalContactsRefreshed())).stream.firstWhere(
                   (state) => state is ExternalContactsLoadSuccess || state is ExternalContactsRefreshFailure);
             },
@@ -129,7 +130,7 @@ class _ExternalContacts extends StatelessWidget with PageSnackBarMixin {
                     context.read<CallBloc>().add(CallOutgoingStarted(username: contact.username));
                   },
                   onLongPress: () {
-                    showSnackBar(context, 'LongPress on "${contact.username}"');
+                    context.showSnackBar('LongPress on "${contact.username}"');
                   },
                 );
               },
