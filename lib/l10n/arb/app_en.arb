@@ -1,6 +1,26 @@
 {
   "@@locale": "en",
 
+  "loginOtpRequestTabPhoneTextFieldLabel": "Enter your phone number",
+  "@loginOtpRequestTabPhoneTextFieldLabel": {
+  },
+  "loginOtpRequestTabProceedButtonLabel": "Proceed",
+  "@loginOtpRequestTabProceedButtonLabel": {
+  },
+  "loginOtpRequestTabCodeTextFieldLabel": "Enter the verification code",
+  "@loginOtpRequestTabCodeTextFieldLabel": {
+  },
+  "loginOtpRequestTabBackButtonLabel": "Back",
+  "@loginOtpRequestTabBackButtonLabel": {
+  },
+  "loginOtpRequestTabVerifyButtonLabel": "Verify",
+  "@loginOtpRequestTabVerifyButtonLabel": {
+  },
+
+  "validationBlankError": "can't be blank",
+  "@validationBlankError": {
+  },
+
   "recentTimeBeforeMidnight": "{time}",
   "@recentTimeBeforeMidnight": {
     "placeholders": {

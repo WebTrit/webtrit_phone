@@ -8,9 +8,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_api/webtrit_api.dart';
+
 import 'package:webtrit_phone/blocs/simple_bloc_observer.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/pages/register.dart';
 import 'package:webtrit_phone/pages/main.dart';
@@ -44,6 +47,9 @@ void main() async {
 
   runApp(MultiRepositoryProvider(
     providers: [
+      RepositoryProvider<WebtritApiClient>(
+        create: (context) => WebtritApiClient(Uri.parse(EnvironmentConfig.WEBTRIT_CORE_URL)),
+      ),
       RepositoryProvider<CallRepository>(
         create: (context) => CallRepository(),
       ),
@@ -82,8 +88,11 @@ class App extends StatelessWidget {
   final String? webRegistrationInitialUrl;
   final bool isRegistered;
 
-  String _initialRoute(String? webRegistrationInitialUrl, bool isRegistered) =>
-      webRegistrationInitialUrl == null || isRegistered ? '/register' : '/web-registration';
+  String _initialRoute(String? webRegistrationInitialUrl, bool isRegistered) => isRegistered
+      ? '/register'
+      : webRegistrationInitialUrl == null
+          ? '/login'
+          : '/web-registration';
 
   @override
   Widget build(BuildContext context) {
@@ -125,6 +134,9 @@ class App extends StatelessWidget {
       onGenerateRoute: (RouteSettings settings) {
         Widget page;
         switch (settings.name) {
+          case '/login':
+            page = LoginPage();
+            break;
           case '/web-registration':
             page = WebRegistrationPage(
               initialUrl: settings.arguments != null ? settings.arguments as String : webRegistrationInitialUrl!,
