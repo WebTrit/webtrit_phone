@@ -16,6 +16,9 @@ class KeypadView extends StatefulWidget {
 class _KeypadViewState extends State<KeypadView> {
   final _keypadTextFieldKey = GlobalKey();
 
+  EditableTextState? get _keypadTextFieldEditableTextState =>
+      (_keypadTextFieldKey.currentState as TextSelectionGestureDetectorBuilderDelegate).editableTextKey.currentState;
+
   late TextEditingController _controller;
   late FocusNode _focusNode;
 
@@ -97,7 +100,7 @@ class _KeypadViewState extends State<KeypadView> {
       selection: newSelection,
     );
 
-    _keypadTextFieldHideToolbar();
+    _keypadTextFieldEditableTextState?.hideToolbar();
   }
 
   void _onBackspacePressed() {
@@ -124,7 +127,7 @@ class _KeypadViewState extends State<KeypadView> {
       selection: newSelection,
     );
 
-    _keypadTextFieldHideToolbar();
+    _keypadTextFieldEditableTextState?.hideToolbar();
   }
 
   void _onBackspaceLongPress() {
@@ -149,12 +152,7 @@ class _KeypadViewState extends State<KeypadView> {
       selection: newSelection,
     );
 
-    _keypadTextFieldHideToolbar();
-  }
-
-  void _keypadTextFieldHideToolbar() {
-    final delegate = _keypadTextFieldKey.currentState as TextSelectionGestureDetectorBuilderDelegate;
-    delegate.editableTextKey.currentState?.hideToolbar();
+    _keypadTextFieldEditableTextState?.hideToolbar();
   }
 }
 
