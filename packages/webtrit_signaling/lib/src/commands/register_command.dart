@@ -1,14 +1,8 @@
 import 'command.dart';
 
 class RegisterCommand extends Command {
-  RegisterCommand(
-    this.displayName,
-  ) : super();
-
-  final String displayName;
+  RegisterCommand() : super();
 
   @override
-  List<Object?> get props => [
-        displayName,
-      ];
+  List<Object?> get props => [];
 }

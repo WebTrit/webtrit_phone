@@ -39,7 +39,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     yield RegistrationInProgress();
     try {
       await callRepository.attach();
-      await callRepository.register(event.username);
+      await callRepository.register();
 
       appBloc.add(AppRegistered());
     } catch (e) {

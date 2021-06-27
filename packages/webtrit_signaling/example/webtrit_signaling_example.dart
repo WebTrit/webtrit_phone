@@ -27,7 +27,7 @@ void main(List<String> arguments) async {
   );
 
   print('Register');
-  await clinet.send(RegisterCommand('tmp'));
+  await clinet.send(RegisterCommand());
 
   print('Wait');
   await Future.delayed(Duration(seconds: 5));

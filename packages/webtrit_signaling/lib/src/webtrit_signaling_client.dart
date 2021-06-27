@@ -159,7 +159,6 @@ class WebtritSignalingClient extends Stream<Event> {
     if (command is RegisterCommand) {
       return <String, dynamic>{
         'request': 'register',
-        'display_name': command.displayName,
       };
     } else if (command is UnregisterCommand) {
       return <String, dynamic>{

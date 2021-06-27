@@ -78,8 +78,8 @@ class CallRepository {
     return []; // TODO remove
   }
 
-  Future<void> register(String username) async {
-    await _signalingClient!.send(RegisterCommand(username));
+  Future<void> register() async {
+    await _signalingClient!.send(RegisterCommand());
   }
 
   Future<void> call(String? username, Map<String, dynamic> jsepData) async { // TODO rename username to number
