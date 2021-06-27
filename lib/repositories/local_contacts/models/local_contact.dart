@@ -1,9 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
-@immutable
 class LocalContact extends Equatable {
   LocalContact({
     required this.displayName,

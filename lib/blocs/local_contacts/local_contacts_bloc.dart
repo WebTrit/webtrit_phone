@@ -4,8 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-import 'package:webtrit_phone/models/local_contact.dart';
-import 'package:webtrit_phone/repositories/local_contacts_repository.dart';
+import 'package:webtrit_phone/repositories/local_contacts/local_contacts_repository.dart';
 
 part 'local_contacts_event.dart';
 

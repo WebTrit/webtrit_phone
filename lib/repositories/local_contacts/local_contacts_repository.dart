@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:flutter_contacts/flutter_contacts.dart';
 
-import 'package:webtrit_phone/models/models.dart';
+import 'models/models.dart';
+export 'models/models.dart';
 
 class LocalContactsRepository {
   LocalContactsRepository() {

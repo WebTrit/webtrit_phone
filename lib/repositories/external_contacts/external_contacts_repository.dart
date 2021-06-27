@@ -2,9 +2,10 @@ import 'dart:async';
 
 import 'package:collection/collection.dart';
 
-import 'package:webtrit_phone/models/models.dart';
+import 'models/models.dart';
+export 'models/models.dart';
 
-import 'call_repository.dart';
+import '../call_repository.dart';
 
 class ExternalContactsRepository {
   final CallRepository callRepository;
