@@ -1,14 +1,17 @@
 import 'dart:async';
 
-import 'package:logging/logging.dart';
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:logging/logging.dart';
 
-import 'package:webtrit_phone/repositories/call_repository.dart';
-import 'package:webtrit_phone/blocs/recents/recents.dart';
+import 'package:webtrit_phone/blocs/recents/recents_bloc.dart';
 import 'package:webtrit_phone/models/recent.dart';
+import 'package:webtrit_phone/repositories/call_repository.dart';
 
-import './call.dart';
+part 'call_event.dart';
+
+part 'call_state.dart';
 
 class CallBloc extends Bloc<CallEvent, CallState> {
   final CallRepository callRepository;

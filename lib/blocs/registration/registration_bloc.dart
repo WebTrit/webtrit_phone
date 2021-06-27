@@ -1,11 +1,14 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 
 import 'package:webtrit_phone/repositories/call_repository.dart';
-import 'package:webtrit_phone/blocs/app/app.dart';
+import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 
-import './registration.dart';
+part 'registration_event.dart';
+
+part 'registration_state.dart';
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   final CallRepository callRepository;

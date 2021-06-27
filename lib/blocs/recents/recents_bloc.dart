@@ -1,10 +1,14 @@
 import 'dart:async';
-import 'package:meta/meta.dart';
-import 'package:bloc/bloc.dart';
 
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+
+import 'package:webtrit_phone/models/recent.dart';
 import 'package:webtrit_phone/repositories/recents_repository.dart';
 
-import './recents.dart';
+part 'recents_event.dart';
+
+part 'recents_state.dart';
 
 class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
   final RecentsRepository recentsRepository;
@@ -35,8 +39,7 @@ class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
     return super.close();
   }
 
-  Stream<RecentsState> _mapRecentsInitialLoadedToState(
-      RecentsInitialLoaded event) async* {
+  Stream<RecentsState> _mapRecentsInitialLoadedToState(RecentsInitialLoaded event) async* {
     yield RecentsInitial();
     _recentsSubscription?.cancel();
     _recentsSubscription = recentsRepository.recents().listen(
@@ -50,8 +53,7 @@ class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
     }
   }
 
-  Stream<RecentsState> _mapRecentsRefreshedToState(
-      RecentsRefreshed event) async* {
+  Stream<RecentsState> _mapRecentsRefreshedToState(RecentsRefreshed event) async* {
     try {
       await recentsRepository.load();
     } catch (error) {

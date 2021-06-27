@@ -1,7 +1,5 @@
-import 'package:meta/meta.dart';
-import 'package:equatable/equatable.dart';
+part of 'registration_bloc.dart';
 
-@immutable
 abstract class RegistrationState extends Equatable {
   const RegistrationState();
 

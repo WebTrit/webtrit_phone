@@ -1,9 +1,5 @@
-import 'package:meta/meta.dart';
-import 'package:equatable/equatable.dart';
+part of 'recents_bloc.dart';
 
-import 'package:webtrit_phone/models/recent.dart';
-
-@immutable
 abstract class RecentsEvent extends Equatable {
   const RecentsEvent();
 

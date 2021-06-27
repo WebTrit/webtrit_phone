@@ -1,7 +1,5 @@
-import 'package:meta/meta.dart';
-import 'package:equatable/equatable.dart';
+part of 'app_bloc.dart';
 
-@immutable
 abstract class AppState extends Equatable {
   const AppState();
 

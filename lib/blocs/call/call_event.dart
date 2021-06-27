@@ -1,8 +1,5 @@
-import 'package:meta/meta.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter_webrtc/flutter_webrtc.dart';
+part of 'call_bloc.dart';
 
-@immutable
 abstract class CallEvent extends Equatable {
   const CallEvent();
 
