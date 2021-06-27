@@ -95,10 +95,11 @@ class _KeypadViewState extends State<KeypadView> {
 
     final newText = textBefore + keyText + textAfter;
     final newSelection = TextSelection.collapsed(offset: _controller.selection.start + 1);
-    _controller.value = _controller.value.copyWith(
+    final value = _controller.value.copyWith(
       text: newText,
       selection: newSelection,
     );
+    _keypadTextFieldEditableTextState?.userUpdateTextEditingValue(value, SelectionChangedCause.keyboard);
 
     _keypadTextFieldEditableTextState?.hideToolbar();
   }
@@ -122,10 +123,11 @@ class _KeypadViewState extends State<KeypadView> {
       newText = textBefore + textAfter;
       newSelection = TextSelection.collapsed(offset: _controller.selection.start);
     }
-    _controller.value = _controller.value.copyWith(
+    final value = _controller.value.copyWith(
       text: newText,
       selection: newSelection,
     );
+    _keypadTextFieldEditableTextState?.userUpdateTextEditingValue(value, SelectionChangedCause.keyboard);
 
     _keypadTextFieldEditableTextState?.hideToolbar();
   }
@@ -147,10 +149,11 @@ class _KeypadViewState extends State<KeypadView> {
       newText = textBefore + textAfter;
       newSelection = TextSelection.collapsed(offset: _controller.selection.start);
     }
-    _controller.value = _controller.value.copyWith(
+    final value = _controller.value.copyWith(
       text: newText,
       selection: newSelection,
     );
+    _keypadTextFieldEditableTextState?.userUpdateTextEditingValue(value, SelectionChangedCause.keyboard);
 
     _keypadTextFieldEditableTextState?.hideToolbar();
   }
