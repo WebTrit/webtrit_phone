@@ -43,10 +43,16 @@ class ContactsLocalTab extends StatelessWidget {
                   displayName: contact.displayName,
                   thumbnail: contact.thumbnail,
                   onTap: () {
-                    context.read<CallBloc>().add(CallOutgoingStarted(username: contact.displayName));
+                    context.showSnackBar('Phone contact details not implemented yet');
                   },
                   onLongPress: () {
                     context.showSnackBar('LongPress on "${contact.displayName}"');
+                  },
+                  onAudioPressed: () {
+                    context.showSnackBar('Audio call for phone contact not implemented yet');
+                  },
+                  onVideoPressed: () {
+                    context.showSnackBar('Video call for phone contact not implemented yet');
                   },
                 );
               },
