@@ -39,10 +39,16 @@ class ContactsExternalTab extends StatelessWidget {
                 return ContactTile(
                   displayName: contact.displayName,
                   onTap: () {
-                    context.read<CallBloc>().add(CallOutgoingStarted(username: contact.number));
+                    context.showSnackBar('Internal contact details not implemented yet');
                   },
                   onLongPress: () {
                     context.showSnackBar('LongPress on "${contact.displayName}"');
+                  },
+                  onAudioPressed: () {
+                    context.read<CallBloc>().add(CallOutgoingStarted(number: contact.number, video: false));
+                  },
+                  onVideoPressed: () {
+                    context.read<CallBloc>().add(CallOutgoingStarted(number: contact.number, video: true));
                   },
                 );
               },

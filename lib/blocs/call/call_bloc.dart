@@ -113,7 +113,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   Stream<CallState> _mapCallIncomingReceivedToState(CallIncomingReceived event) async* {
     yield CallIncoming(username: event.username, createdTime: DateTime.now());
 
-    _localStream = await _getUserMedia();
+    _localStream = await _getUserMedia(video: true);
 
     yield (state as CallActive).copyWith(localStream: _localStream);
 
@@ -134,9 +134,9 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   }
 
   Stream<CallState> _mapCallOutgoingStartedToState(CallOutgoingStarted event) async* {
-    yield CallOutgoing(username: event.username, createdTime: DateTime.now());
+    yield CallOutgoing(username: event.number, createdTime: DateTime.now());
 
-    _localStream = await _getUserMedia();
+    _localStream = await _getUserMedia(video: event.video);
 
     yield (state as CallActive).copyWith(localStream: _localStream);
 
@@ -147,7 +147,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     _peerConnection!.setLocalDescription(localDescription);
 
     try {
-      await callRepository.call(event.username, localDescription.toMap());
+      await callRepository.call(event.number, localDescription.toMap());
     } catch (e) {
       await _peerConnection!.close();
       _peerConnection = null;
@@ -230,21 +230,23 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     yield CallIdle();
   }
 
-  Future<MediaStream> _getUserMedia() async {
+  Future<MediaStream> _getUserMedia({required bool video}) async {
     final Map<String, dynamic> mediaConstraints = {
       'audio': true,
-      'video': {
-        'mandatory': {
-          'minWidth': '640',
-          'minHeight': '480',
-          'minFrameRate': '30',
-        },
-        'facingMode': 'user',
-        'optional': [],
-      }
+      'video': video
+          ? {
+              'mandatory': {
+                'minWidth': '640',
+                'minHeight': '480',
+                'minFrameRate': '30',
+              },
+              'facingMode': 'user',
+              'optional': [],
+            }
+          : false,
     };
-    final localStream = await navigator.getUserMedia(mediaConstraints);
-    localStream.getAudioTracks()[0].enableSpeakerphone(true);
+    final localStream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
+    localStream.getAudioTracks()[0].enableSpeakerphone(video);
     return localStream;
   }
 

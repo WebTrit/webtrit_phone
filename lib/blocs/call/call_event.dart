@@ -36,17 +36,22 @@ class CallIncomingAccepted extends CallEvent {
 }
 
 class CallOutgoingStarted extends CallEvent {
-  final String username;
-
   const CallOutgoingStarted({
-    required this.username,
+    required this.number,
+    required this.video,
   });
 
-  @override
-  List<Object?> get props => [username];
+  final String number;
+  final bool video;
 
   @override
-  String toString() => '$runtimeType { username: $username }';
+  List<Object?> get props => [
+        number,
+        video,
+      ];
+
+  @override
+  String toString() => '$runtimeType { number: $number, video: $video }';
 }
 
 class CallOutgoingAccepted extends CallEvent {
