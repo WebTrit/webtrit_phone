@@ -111,7 +111,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   }
 
   Stream<CallState> _mapCallIncomingReceivedToState(CallIncomingReceived event) async* {
-    yield CallIncoming(username: event.username, createdTime: DateTime.now());
+    yield CallIncoming(number: event.username, video: true, createdTime: DateTime.now());
 
     _localStream = await _getUserMedia(video: true);
 
@@ -134,7 +134,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   }
 
   Stream<CallState> _mapCallOutgoingStartedToState(CallOutgoingStarted event) async* {
-    yield CallOutgoing(username: event.number, createdTime: DateTime.now());
+    yield CallOutgoing(number: event.number, video: event.video, createdTime: DateTime.now());
 
     _localStream = await _getUserMedia(video: event.video);
 
@@ -324,7 +324,8 @@ class CallBloc extends Bloc<CallEvent, CallState> {
       recent: Recent(
         direction,
         state.accepted,
-        state.username,
+        state.number,
+        state.video,
         state.createdTime!,
         (hungUpTime != null && acceptedTime != null) ? hungUpTime.difference(acceptedTime) : null,
       ),

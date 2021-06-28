@@ -24,20 +24,20 @@ class CallAttachFailure extends CallState {
 
   @override
   List<Object> get props => [
-    reason,
-  ];
+        reason,
+      ];
 
   @override
   String toString() => 'CallAttachFailure { reason: $reason }';
 }
-
 
 class CallIdle extends CallState {
   const CallIdle();
 }
 
 abstract class CallActive extends CallState {
-  final String username;
+  final String number;
+  final bool video;
   final bool accepted;
   final bool hungUp;
   final DateTime? createdTime;
@@ -47,7 +47,8 @@ abstract class CallActive extends CallState {
   final MediaStream? remoteStream;
 
   const CallActive({
-    required this.username,
+    required this.number,
+    required this.video,
     this.accepted = false,
     this.hungUp = false,
     this.createdTime,
@@ -59,7 +60,8 @@ abstract class CallActive extends CallState {
 
   @override
   List<Object?> get props => [
-        username,
+        number,
+        video,
         accepted,
         hungUp,
         createdTime,
@@ -70,12 +72,13 @@ abstract class CallActive extends CallState {
       ];
 
   @override
-  String toString() => '$runtimeType { username: $username, accepted: $accepted,'
+  String toString() => '$runtimeType { number: $number, video: $video, accepted: $accepted,'
       ' hungUp: $hungUp, createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime,'
       ' with localStream: ${localStream != null}, with remoteStream: ${remoteStream != null} }';
 
   CallActive copyWith({
-    String? username,
+    String? number,
+    bool? video,
     bool? accepted,
     bool? hungUp,
     DateTime? createdTime,
@@ -88,7 +91,8 @@ abstract class CallActive extends CallState {
 
 class CallIncoming extends CallActive {
   const CallIncoming({
-    required String username,
+    required String number,
+    required bool video,
     bool accepted = false,
     bool hungUp = false,
     DateTime? createdTime,
@@ -97,7 +101,8 @@ class CallIncoming extends CallActive {
     MediaStream? localStream,
     MediaStream? remoteStream,
   }) : super(
-          username: username,
+          number: number,
+          video: video,
           accepted: accepted,
           hungUp: hungUp,
           createdTime: createdTime,
@@ -109,7 +114,8 @@ class CallIncoming extends CallActive {
 
   @override
   CallIncoming copyWith({
-    String? username,
+    String? number,
+    bool? video,
     bool? accepted,
     bool? hungUp,
     DateTime? createdTime,
@@ -119,7 +125,8 @@ class CallIncoming extends CallActive {
     MediaStream? remoteStream,
   }) {
     return CallIncoming(
-      username: username ?? this.username,
+      number: number ?? this.number,
+      video: video ?? this.video,
       accepted: accepted ?? this.accepted,
       hungUp: hungUp ?? this.hungUp,
       createdTime: createdTime ?? this.createdTime,
@@ -133,7 +140,8 @@ class CallIncoming extends CallActive {
 
 class CallOutgoing extends CallActive {
   const CallOutgoing({
-    required String username,
+    required String number,
+    required bool video,
     bool accepted = false,
     bool hungUp = false,
     DateTime? createdTime,
@@ -142,7 +150,8 @@ class CallOutgoing extends CallActive {
     MediaStream? localStream,
     MediaStream? remoteStream,
   }) : super(
-          username: username,
+          number: number,
+          video: video,
           accepted: accepted,
           hungUp: hungUp,
           createdTime: createdTime,
@@ -154,7 +163,8 @@ class CallOutgoing extends CallActive {
 
   @override
   CallOutgoing copyWith({
-    String? username,
+    String? number,
+    bool? video,
     bool? accepted,
     bool? hungUp,
     DateTime? createdTime,
@@ -164,7 +174,8 @@ class CallOutgoing extends CallActive {
     MediaStream? remoteStream,
   }) {
     return CallOutgoing(
-      username: username ?? this.username,
+      number: number ?? this.number,
+      video: video ?? this.video,
       accepted: accepted ?? this.accepted,
       hungUp: hungUp ?? this.hungUp,
       createdTime: createdTime ?? this.createdTime,

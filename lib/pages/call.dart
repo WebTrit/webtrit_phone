@@ -86,7 +86,7 @@ class _CallPageState extends State<CallPage> {
 
           final acceptActionEnabled = state is CallIncoming && state.accepted != true;
           final direction = state is CallIncoming ? 'Incoming call from' : 'Outgoing call to';
-          final username = state.username;
+          final username = state.number;
           return Scaffold(
             body: OrientationBuilder(
               builder: (context, orientation) {

@@ -10,14 +10,16 @@ enum Direction {
 class Recent extends Equatable {
   final Direction direction;
   final bool isComplete;
-  final String username;
+  final String number;
+  final bool video;
   final DateTime time;
   final Duration? duration;
 
   Recent(
     this.direction,
     this.isComplete,
-    this.username,
+    this.number,
+    this.video,
     this.time,
     this.duration,
   );
@@ -26,7 +28,8 @@ class Recent extends Equatable {
   List<Object?> get props => [
         direction,
         isComplete,
-        username,
+        number,
+        video,
         time,
         duration,
       ];

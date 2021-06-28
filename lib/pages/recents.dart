@@ -97,16 +97,16 @@ class _RecentsPageState extends State<RecentsPage> with SingleTickerProviderStat
                   return RecentTile(
                     recent: recent,
                     onInfoTap: () {
-                      context.showSnackBar('Tap info on "${recent.username}"');
+                      context.showSnackBar('Tap info on "${recent.number}"');
                     },
                     onTap: () {
-                      context.read<CallBloc>().add(CallOutgoingStarted(username: recent.username));
+                      context.read<CallBloc>().add(CallOutgoingStarted(number: recent.number, video: true));
                     },
                     onLongPress: () {
-                      context.showSnackBar('LongPress on "${recent.username}"');
+                      context.showSnackBar('LongPress on "${recent.number}"');
                     },
                     onDeleted: (recent) {
-                      context.showSnackBar('"${recent.username}" deleted');
+                      context.showSnackBar('"${recent.number}" deleted');
 
                       context.read<RecentsBloc>().add(RecentsDelete(recent: recent));
                     },
@@ -172,7 +172,7 @@ class RecentTile extends StatelessWidget {
       child: ListTile(
         contentPadding: EdgeInsets.only(left: 16.0),
         leading: LeadingAvatar(
-          username: recent.username,
+          username: recent.number,
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
@@ -194,7 +194,7 @@ class RecentTile extends StatelessWidget {
           ],
         ),
         title: Text(
-          recent.username,
+          recent.number,
         ),
         subtitle: Row(
           children: [
@@ -233,7 +233,7 @@ class RecentTile extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: new Text("Confirm delete"),
-          content: new Text("Are you sure you want to delete \"${recent.username}\"?"),
+          content: new Text("Are you sure you want to delete \"${recent.number}\"?"),
           actions: <Widget>[
             new TextButton(
               child: new Text("No".toUpperCase()),
