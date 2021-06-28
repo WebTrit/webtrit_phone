@@ -7,6 +7,14 @@ abstract class CallEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class CallAttached extends CallEvent {
+  const CallAttached();
+}
+
+class CallDetached extends CallEvent {
+  const CallDetached();
+}
+
 class CallIncomingReceived extends CallEvent {
   final String username;
   final Map<String, dynamic>? jsepData;

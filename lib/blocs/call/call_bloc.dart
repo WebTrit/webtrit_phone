@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/blocs/recents/recents_bloc.dart';
 import 'package:webtrit_phone/models/recent.dart';
 import 'package:webtrit_phone/repositories/call_repository.dart';
@@ -15,11 +16,12 @@ part 'call_state.dart';
 
 class CallBloc extends Bloc<CallEvent, CallState> {
   final CallRepository callRepository;
+  final AppBloc appBloc;
   final RecentsBloc recentsBloc;
 
-  late StreamSubscription _onIncomingCallSubscription;
-  late StreamSubscription _onAcceptedSubscription;
-  late StreamSubscription _onHangUpSubscription;
+  StreamSubscription? _onIncomingCallSubscription;
+  StreamSubscription? _onAcceptedSubscription;
+  StreamSubscription? _onHangUpSubscription;
 
   MediaStream? _localStream;
 
@@ -27,30 +29,25 @@ class CallBloc extends Bloc<CallEvent, CallState> {
 
   CallBloc({
     required this.callRepository,
+    required this.appBloc,
     required this.recentsBloc,
-  }) : super(CallIdle()) {
-    _onIncomingCallSubscription = callRepository.onIncomingCall.listen((event) {
-      add(CallIncomingReceived(username: event.caller, jsepData: event.jsep));
-    });
-    _onAcceptedSubscription = callRepository.onAccepted.listen((event) {
-      add(CallOutgoingAccepted(username: event.callee, jsepData: event.jsep));
-    });
-    _onHangUpSubscription = callRepository.onHangup.listen((event) {
-      add(CallRemoteHungUp(reason: event.reason));
-    });
-  }
+  }) : super(CallInitial()) {}
 
   @override
   Future<void> close() async {
-    await _onIncomingCallSubscription.cancel();
-    await _onAcceptedSubscription.cancel();
-    await _onHangUpSubscription.cancel();
+    await _onIncomingCallSubscription?.cancel();
+    await _onAcceptedSubscription?.cancel();
+    await _onHangUpSubscription?.cancel();
     await super.close();
   }
 
   @override
   Stream<CallState> mapEventToState(CallEvent event) async* {
-    if (event is CallIncomingReceived) {
+    if (event is CallAttached) {
+      yield* _mapCallAttachedToState(event);
+    } else if (event is CallDetached) {
+      yield* _mapCallDetachedToState(event);
+    } else if (event is CallIncomingReceived) {
       yield* _mapCallIncomingReceivedToState(event);
     } else if (event is CallIncomingAccepted) {
       yield* _mapCallIncomingAcceptedToState(event);
@@ -76,6 +73,40 @@ class CallBloc extends Bloc<CallEvent, CallState> {
       yield* _mapCallSpeakerphoneEnabledToState(event);
     } else if (event is CallFailureApproved) {
       yield* _mapCallFailureApprovedToState(event);
+    }
+  }
+
+  Stream<CallState> _mapCallAttachedToState(CallAttached event) async* {
+    yield CallAttachInProgress();
+    try {
+      await callRepository.attach();
+      await callRepository.register();
+
+      _onIncomingCallSubscription = callRepository.onIncomingCall.listen((event) {
+        add(CallIncomingReceived(username: event.caller, jsepData: event.jsep));
+      });
+      _onAcceptedSubscription = callRepository.onAccepted.listen((event) {
+        add(CallOutgoingAccepted(username: event.callee, jsepData: event.jsep));
+      });
+      _onHangUpSubscription = callRepository.onHangup.listen((event) {
+        add(CallRemoteHungUp(reason: event.reason));
+      });
+
+      yield CallIdle();
+
+      appBloc.add(AppRegistered());
+    } catch (e) {
+      yield CallAttachFailure(
+        reason: e.toString(),
+      );
+    }
+  }
+
+  Stream<CallState> _mapCallDetachedToState(CallDetached event) async* {
+    yield CallInitial();
+
+    if (callRepository.isAttached) {
+      await callRepository.detach();
     }
   }
 

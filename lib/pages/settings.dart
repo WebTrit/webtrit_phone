@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import 'package:webtrit_api/webtrit_api.dart';
+
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
@@ -28,6 +30,13 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             onPressed: () async {
               if (await _confirmUnregister(context) == true) {
+
+                // TODO: move logout logic to some bloc
+                final token = await SecureStorage().readToken();
+                await SecureStorage().deleteToken();
+                final webtritApiClient =  context.read<WebtritApiClient>();
+                await webtritApiClient.sessionLogout(token!);
+
                 context.read<AppBloc>().add(AppUnregistered());
               }
             },

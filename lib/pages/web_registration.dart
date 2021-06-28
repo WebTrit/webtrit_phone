@@ -69,7 +69,7 @@ class _WebRegistrationPageState extends State<WebRegistrationPage> {
               final token = message.message;
               await SecureStorage().writeToken(token);
 
-              Navigator.pushReplacementNamed(context, '/register');
+              Navigator.pushReplacementNamed(context, '/main');
             }),
       ].toSet(),
       onWebViewCreated: (WebViewController controller) {
@@ -84,7 +84,7 @@ class _WebRegistrationPageState extends State<WebRegistrationPage> {
       onWebResourceError: (WebResourceError error) async {
         final result = await _showWebResourceErrorDialog(context, error);
         if (result == null) {
-          Navigator.pushReplacementNamed(context, '/register');
+          Navigator.pushReplacementNamed(context, '/login');
         } else {
           final webViewController = await _controller.future;
           webViewController.loadUrl(result ? widget.initialUrl : _demoInitialUrl());

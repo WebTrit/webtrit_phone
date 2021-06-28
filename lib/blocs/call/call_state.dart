@@ -7,6 +7,31 @@ abstract class CallState extends Equatable {
   List<Object?> get props => [];
 }
 
+class CallInitial extends CallState {
+  const CallInitial();
+}
+
+class CallAttachInProgress extends CallState {
+  CallAttachInProgress();
+}
+
+class CallAttachFailure extends CallState {
+  final String reason;
+
+  const CallAttachFailure({
+    required this.reason,
+  });
+
+  @override
+  List<Object> get props => [
+    reason,
+  ];
+
+  @override
+  String toString() => 'CallAttachFailure { reason: $reason }';
+}
+
+
 class CallIdle extends CallState {
   const CallIdle();
 }

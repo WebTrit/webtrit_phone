@@ -20,7 +20,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
       listener: (context, state) {
         if (state.status == LoginStatus.ok) {
           context.hideCurrentSnackBar();
-          Navigator.pushReplacementNamed(context, '/register'); // TODO implement correct redirection
+          Navigator.pushReplacementNamed(context, '/main'); // TODO implement correct redirection way
         } else if (state.status == LoginStatus.back) {
           context.hideCurrentSnackBar();
           context.read<LoginCubit>().back();

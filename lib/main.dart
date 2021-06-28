@@ -15,7 +15,6 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/pages/register.dart';
 import 'package:webtrit_phone/pages/main.dart';
 import 'package:webtrit_phone/pages/call.dart';
 import 'package:webtrit_phone/pages/settings.dart';
@@ -89,7 +88,7 @@ class App extends StatelessWidget {
   final bool isRegistered;
 
   String _initialRoute(String? webRegistrationInitialUrl, bool isRegistered) => isRegistered
-      ? '/register'
+      ? '/main'
       : webRegistrationInitialUrl == null
           ? '/login'
           : '/web-registration';
@@ -142,17 +141,6 @@ class App extends StatelessWidget {
               initialUrl: settings.arguments != null ? settings.arguments as String : webRegistrationInitialUrl!,
             );
             break;
-          case '/register':
-            page = BlocProvider(
-              create: (context) {
-                return RegistrationBloc(
-                  callRepository: context.read<CallRepository>(),
-                  appBloc: context.read<AppBloc>(),
-                )..add(RegistrationStarted());
-              },
-              child: RegisterPage(),
-            );
-            break;
           case '/main':
             page = MultiBlocProvider(
               providers: [
@@ -181,8 +169,9 @@ class App extends StatelessWidget {
                   create: (context) {
                     return CallBloc(
                       callRepository: context.read<CallRepository>(),
+                      appBloc: context.read<AppBloc>(),
                       recentsBloc: context.read<RecentsBloc>(),
-                    );
+                    )..add(CallAttached());
                   },
                 ),
               ],
@@ -197,7 +186,8 @@ class App extends StatelessWidget {
                           ));
                     });
                   }
-                  if (state is CallIdle) {
+                  if (state is CallIdle && Navigator.canPop(context)) {
+                    // TODO canPop must be removed by reorganise states
                     setDefaultOrientations().then((_) {
                       Navigator.pop(context);
                     });
@@ -225,9 +215,6 @@ class App extends StatelessWidget {
           // add listener only to top level page
           page = BlocListener<AppBloc, AppState>(
             listener: (context, state) async {
-              if (state is AppRegister) {
-                Navigator.pushReplacementNamed(context, '/main');
-              }
               if (state is AppUnregister) {
                 final webRegistrationInitialUrl = await SecureStorage().readWebRegistrationInitialUrl();
                 final isRegistered = await SecureStorage().readToken() != null;
