@@ -37,12 +37,12 @@ class ContactsExternalTab extends StatelessWidget {
               itemBuilder: (context, index) {
                 final contact = state.contacts[index];
                 return ContactTile(
-                  displayName: contact.username,
+                  displayName: contact.displayName,
                   onTap: () {
-                    context.read<CallBloc>().add(CallOutgoingStarted(username: contact.username));
+                    context.read<CallBloc>().add(CallOutgoingStarted(username: contact.number));
                   },
                   onLongPress: () {
-                    context.showSnackBar('LongPress on "${contact.username}"');
+                    context.showSnackBar('LongPress on "${contact.displayName}"');
                   },
                 );
               },

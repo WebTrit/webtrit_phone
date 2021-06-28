@@ -2,13 +2,15 @@ import 'dart:async';
 
 import 'package:collection/collection.dart';
 
+import 'package:webtrit_api/webtrit_api.dart';
+
+import 'package:webtrit_phone/data/secure_storage.dart';
+
 import 'models/models.dart';
 export 'models/models.dart';
 
-import '../call_repository.dart';
-
 class ExternalContactsRepository {
-  final CallRepository callRepository;
+  final WebtritApiClient webtritApiClient;
   final bool periodicPolling;
 
   late StreamController<List<ExternalContact>> _controller;
@@ -18,7 +20,7 @@ class ExternalContactsRepository {
   List<ExternalContact> _contacts = [];
 
   ExternalContactsRepository({
-    required this.callRepository,
+    required this.webtritApiClient,
     this.periodicPolling = true,
   }) {
     _controller = StreamController<List<ExternalContact>>.broadcast(
@@ -57,7 +59,18 @@ class ExternalContactsRepository {
   }
 
   Future<List<ExternalContact>> _listContacts() async {
-    final list = await callRepository.list();
-    return list.map((username) => ExternalContact(username)).toList();
+    final token = await SecureStorage().readToken();
+    final contacts = await webtritApiClient.accountContacts(token!);
+
+    return contacts
+        .where((contact) {
+          // TODO: remove this temporary filter
+          return contact.extensionName != null && contact.extensionName!.isNotEmpty;
+        })
+        .map((contact) => ExternalContact(
+              displayName: contact.extensionName!,
+              number: contact.number,
+            ))
+        .toList();
   }
 }

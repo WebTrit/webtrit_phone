@@ -60,7 +60,7 @@ void main() async {
       ),
       RepositoryProvider<ExternalContactsRepository>(
         create: (context) => ExternalContactsRepository(
-          callRepository: context.read<CallRepository>(),
+          webtritApiClient: context.read<WebtritApiClient>(),
           periodicPolling: EnvironmentConfig.PERIODIC_POLLING,
         ),
       ),
