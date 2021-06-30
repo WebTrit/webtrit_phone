@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-class FavoritesPage extends StatelessWidget {
-  const FavoritesPage({Key? key}) : super(key: key);
+class FavoritesScaffold extends StatelessWidget {
+  const FavoritesScaffold({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,12 +23,12 @@ class FavoritesPage extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Text(
-              'There is no any favorite numbers',
+              context.l10n.favoritesScaffold_textLabel_empty,
               style: themeData.textTheme.subtitle1,
             ),
             SizedBox(height: 10),
             TextButton(
-              child: Text('Add new favorite'.toUpperCase()),
+              child: Text(context.l10n.favoritesScaffold_buttonLabel_addNew.toUpperCase()),
               onPressed: () {
                 context.showSnackBar('Sorry, not implemented yet');
               },

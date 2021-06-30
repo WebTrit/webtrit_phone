@@ -1,6 +1,13 @@
 {
   "@@locale": "en",
 
+  "favoritesScaffold_textLabel_empty": "There are no favorite numbers",
+  "@favoritesScaffold_textLabel_empty": {
+  },
+  "favoritesScaffold_buttonLabel_addNew": "Add new favorite",
+  "@favoritesScaffold_buttonLabel_addNew": {
+  },
+
   "loginOtpRequestTabPhoneTextFieldLabel": "Enter your phone number",
   "@loginOtpRequestTabPhoneTextFieldLabel": {
   },

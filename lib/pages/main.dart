@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/pages/favorites.dart';
 import 'package:webtrit_phone/pages/recents.dart';
 
 class Tab {
