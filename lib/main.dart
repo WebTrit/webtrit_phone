@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:logging/logging.dart';
+import 'package:logging_appenders/logging_appenders.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
@@ -37,10 +38,7 @@ void main() async {
         ),
   );
 
-  Logger.root.level = Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.DEBUG_LEVEL);
-  Logger.root.onRecord.listen((record) {
-    print('${record.time} [${record.level.name}] ${record.loggerName}: ${record.message}');
-  });
+  PrintAppender.setupLogging(level: Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.DEBUG_LEVEL));
 
   Bloc.observer = SimpleBlocObserver();
 
