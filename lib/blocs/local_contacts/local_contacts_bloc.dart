@@ -35,8 +35,7 @@ class LocalContactsBloc extends Bloc<LocalContactsEvent, LocalContactsState> {
     return super.close();
   }
 
-  Stream<LocalContactsState> _mapLocalContactsInitialLoadedToState(
-      LocalContactsInitialLoaded event) async* {
+  Stream<LocalContactsState> _mapLocalContactsInitialLoadedToState(LocalContactsInitialLoaded event) async* {
     yield LocalContactsInitial();
     _localContactsSubscription?.cancel();
     _localContactsSubscription = localContactsRepository.contacts().listen(
@@ -50,8 +49,7 @@ class LocalContactsBloc extends Bloc<LocalContactsEvent, LocalContactsState> {
     }
   }
 
-  Stream<LocalContactsState> _mapLocalContactsRefreshedToState(
-      LocalContactsRefreshed event) async* {
+  Stream<LocalContactsState> _mapLocalContactsRefreshedToState(LocalContactsRefreshed event) async* {
     try {
       await localContactsRepository.load();
     } catch (error) {
@@ -59,8 +57,7 @@ class LocalContactsBloc extends Bloc<LocalContactsEvent, LocalContactsState> {
     }
   }
 
-  Stream<LocalContactsState> _mapLocalContactsUpdatedToState(
-      LocalContactsUpdated event) async* {
+  Stream<LocalContactsState> _mapLocalContactsUpdatedToState(LocalContactsUpdated event) async* {
     yield LocalContactsLoadSuccess(contacts: event.contacts);
   }
 }
