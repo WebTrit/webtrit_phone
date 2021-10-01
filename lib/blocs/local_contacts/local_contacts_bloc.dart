@@ -40,10 +40,14 @@ class LocalContactsBloc extends Bloc<LocalContactsEvent, LocalContactsState> {
     _localContactsSubscription?.cancel();
     _localContactsSubscription = localContactsRepository.contacts().listen(
           (contacts) => add(LocalContactsUpdated(contacts: contacts)),
+          onError: (error, stackTrace) => add(LocalContactsUpdated(contacts: [])),
+          cancelOnError: false,
         );
 
     try {
       await localContactsRepository.load();
+    } on LocalContactsRepositoryPermissionException {
+      yield LocalContactsPermissionFailure();
     } catch (error) {
       yield LocalContactsInitialLoadFailure();
     }
@@ -52,6 +56,8 @@ class LocalContactsBloc extends Bloc<LocalContactsEvent, LocalContactsState> {
   Stream<LocalContactsState> _mapLocalContactsRefreshedToState(LocalContactsRefreshed event) async* {
     try {
       await localContactsRepository.load();
+    } on LocalContactsRepositoryPermissionException {
+      yield LocalContactsPermissionFailure();
     } catch (error) {
       yield LocalContactsRefreshFailure();
     }

@@ -43,3 +43,7 @@ class LocalContactsInitialLoadFailure extends LocalContactsLoadFailure {
 class LocalContactsRefreshFailure extends LocalContactsLoadFailure {
   const LocalContactsRefreshFailure();
 }
+
+class LocalContactsPermissionFailure extends LocalContactsLoadFailure {
+  const LocalContactsPermissionFailure();
+}
