@@ -5,6 +5,8 @@ import 'package:flutter_contacts/flutter_contacts.dart';
 import 'models/models.dart';
 export 'models/models.dart';
 
+class LocalContactsRepositoryPermissionException implements Exception {}
+
 class LocalContactsRepository {
   LocalContactsRepository() {
     _controller = StreamController<List<LocalContact>>.broadcast(
@@ -45,6 +47,10 @@ class LocalContactsRepository {
   }
 
   Future<List<LocalContact>> _listContacts() async {
+    if (!await FlutterContacts.requestPermission()) {
+      throw LocalContactsRepositoryPermissionException();
+    }
+
     final contacts = await FlutterContacts.getContacts(withThumbnail: true);
     return contacts
         .map((contact) => LocalContact(
