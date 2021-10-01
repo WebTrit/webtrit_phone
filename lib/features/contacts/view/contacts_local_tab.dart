@@ -72,6 +72,11 @@ class ContactsLocalTab extends StatelessWidget {
             ),
           );
         }
+        if (state is LocalContactsPermissionFailure) {
+          return Center(
+            child: Text('Permission not granted'),
+          );
+        }
         throw StateError(''); // TODO fix if logic
       },
     );
