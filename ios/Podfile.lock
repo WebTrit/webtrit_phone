@@ -8,15 +8,15 @@ PODS:
     - Flutter
   - flutter_webrtc (0.2.2):
     - Flutter
-    - GoogleWebRTC (= 1.1.31999)
     - Libyuv (= 1703)
-  - GoogleWebRTC (1.1.31999)
+    - WebRTC-SDK (= 92.4515.07)
   - Libyuv (1703)
   - path_provider (0.0.1):
     - Flutter
   - "permission_handler (5.1.0+2)":
     - Flutter
-  - webview_flutter (0.0.1):
+  - WebRTC-SDK (92.4515.07)
+  - webview_flutter_wkwebview (0.0.1):
     - Flutter
 
 DEPENDENCIES:
@@ -27,12 +27,12 @@ DEPENDENCIES:
   - flutter_webrtc (from `.symlinks/plugins/flutter_webrtc/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
-  - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
+  - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
 
 SPEC REPOS:
   trunk:
-    - GoogleWebRTC
     - Libyuv
+    - WebRTC-SDK
 
 EXTERNAL SOURCES:
   device_info:
@@ -49,21 +49,21 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
-  webview_flutter:
-    :path: ".symlinks/plugins/webview_flutter/ios"
+  webview_flutter_wkwebview:
+    :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
-  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_contacts: edb1c5ce76aa433e20e6cb14c615f4c0b66e0983
   flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
-  flutter_webrtc: 39898454258b54ba51996850d5da8d5d53bf1524
-  GoogleWebRTC: b39a78c4f5cc6b0323415b9233db03a2faa7b0f0
+  flutter_webrtc: 6b71a1fc1d931a3dfe879e578ea10e2e6cd84f53
   Libyuv: 5f79ced0ee66e60a612ca97de1e6ccacd187a437
-  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  path_provider: d1e9807085df1f9cc9318206cd649dc0b76be3de
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
-  webview_flutter: 3603125dfd3bcbc9d8d418c3f80aeecf331c068b
+  WebRTC-SDK: 540a44f2e30e89c75e331d5c4a372253ba668233
+  webview_flutter_wkwebview: 44aa025fbcf6730d808f1e0d86a5af5ac25fa8de
 
 PODFILE CHECKSUM: b313f8976fcf3db4c7d2e3d4cc8da152e84127d4
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2
