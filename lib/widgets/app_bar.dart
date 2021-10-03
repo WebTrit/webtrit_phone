@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
+import 'package:webtrit_phone/gen/assets.gen.dart';
 
 class ExtAppBar extends AppBar {
   ExtAppBar({
@@ -35,8 +36,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
     final themeData = Theme.of(context);
     return ExtAppBar(
       leading: Center(
-        child: SvgPicture.asset(
-          'assets/logo.svg',
+        child: Assets.logo.svg(
           height: themeData.appBarTheme.textTheme!.headline6!.fontSize !* 1.4,
           color: themeData.accentColor,
         ),

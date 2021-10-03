@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
+import 'package:webtrit_phone/gen/assets.gen.dart';
 
 class WebTritPhonePictureLogo extends StatelessWidget {
   @override
@@ -8,8 +9,7 @@ class WebTritPhonePictureLogo extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        SvgPicture.asset(
-          'assets/logo.svg',
+        Assets.logo.svg(
           height: themeData.textTheme.headline2!.fontSize !* 1.4,
           color: themeData.accentColor,
         ),
