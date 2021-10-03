@@ -37,7 +37,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
     return ExtAppBar(
       leading: Center(
         child: Assets.logo.svg(
-          height: themeData.appBarTheme.textTheme!.headline6!.fontSize !* 1.4,
+          height: themeData.appBarTheme.textTheme!.headline6!.fontSize! * 1.4,
           color: themeData.accentColor,
         ),
       ),
@@ -47,7 +47,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
           const Spacer(),
           Icon(
             Icons.account_balance_wallet_outlined,
-            size: themeData.textTheme.button!.fontSize !* 1.2,
+            size: themeData.textTheme.button!.fontSize! * 1.2,
           ),
           const SizedBox(
             width: 2,
