@@ -12,9 +12,9 @@ void main(List<String> arguments) async {
   final url = arguments[0];
   final token = arguments[1];
 
-  final clinet = await WebtritSignalingClient.connect(url, token);
+  final client = await WebtritSignalingClient.connect(url, token);
 
-  clinet.listen(
+  client.listen(
     (event) {
       print('>> event: $event');
     },
@@ -22,22 +22,22 @@ void main(List<String> arguments) async {
       print('>> error: $error\n$stackTrace');
     },
     onDone: () {
-      print('>> onDone with code: ${clinet.closeCode} and reason: ${clinet.closeReason}');
+      print('>> onDone with code: ${client.closeCode} and reason: ${client.closeReason}');
     },
   );
 
   print('Register');
-  await clinet.send(RegisterCommand());
+  await client.send(RegisterCommand());
 
   print('Wait');
   await Future.delayed(Duration(seconds: 5));
 
   print('Unregister');
-  await clinet.send(UnregisterCommand());
+  await client.send(UnregisterCommand());
 
   print('Wait');
   await Future.delayed(Duration(seconds: 3));
 
   print('Close');
-  await clinet.close();
+  await client.close();
 }
