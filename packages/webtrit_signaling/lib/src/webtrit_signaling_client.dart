@@ -150,7 +150,7 @@ class WebtritSignalingClient extends Stream<Event> {
   void _addData(dynamic data) {
     _ws.add(data);
 
-    _logger.finer(() => '>> sent\n$data');
+    _logger.finer(() => '_addData: $data');
   }
 
   //
