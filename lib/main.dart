@@ -40,10 +40,15 @@ void main() async {
 
   PrintAppender.setupLogging(level: Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.DEBUG_LEVEL));
 
+  final logRecordsRepository = LogRecordsRepository()..attachToLogger(Logger.root);
+
   Bloc.observer = SimpleBlocObserver();
 
   runApp(MultiRepositoryProvider(
     providers: [
+      RepositoryProvider.value(
+        value: logRecordsRepository,
+      ),
       RepositoryProvider<WebtritApiClient>(
         create: (context) => WebtritApiClient(Uri.parse(EnvironmentConfig.WEBTRIT_CORE_URL)),
       ),
