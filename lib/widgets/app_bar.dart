@@ -37,7 +37,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
     return ExtAppBar(
       leading: Center(
         child: Assets.logo.svg(
-          height: themeData.appBarTheme.textTheme!.headline6!.fontSize! * 1.4,
+          height: themeData.appBarTheme.titleTextStyle!.fontSize! * 1.4,
           color: themeData.accentColor,
         ),
       ),

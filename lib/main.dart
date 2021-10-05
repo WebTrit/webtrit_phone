@@ -113,7 +113,6 @@ class App extends StatelessWidget {
         return Theme(
           data: themeData.copyWith(
             appBarTheme: AppBarTheme(
-              brightness: Brightness.light,
               color: themeData.canvasColor,
               iconTheme: IconThemeData(
                 color: themeData.textTheme.caption!.color,
@@ -121,11 +120,9 @@ class App extends StatelessWidget {
               actionsIconTheme: IconThemeData(
                 color: themeData.textTheme.caption!.color,
               ),
-              textTheme: themeData.primaryTextTheme.copyWith(
-                headline6: themeData.primaryTextTheme.headline6!.copyWith(
-                  color: themeData.accentColor,
-                  fontWeight: FontWeight.bold,
-                ),
+              titleTextStyle: themeData.primaryTextTheme.headline6!.copyWith(
+                color: themeData.accentColor,
+                fontWeight: FontWeight.bold,
               ),
               centerTitle: false,
             ),
