@@ -174,6 +174,15 @@ class _SettingsPageState extends State<SettingsPage> {
               await openAppSettings();
             },
           ),
+          SizedBox(
+            height: 40,
+          ),
+          TextButton(
+            child: Text('Open log records console'.toUpperCase()),
+            onPressed: () async {
+              await Navigator.pushNamed(context, '/main/log-records-console');
+            },
+          ),
         ],
       ),
     );

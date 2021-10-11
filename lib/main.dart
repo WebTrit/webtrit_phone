@@ -207,6 +207,9 @@ class App extends StatelessWidget {
           case '/main/settings':
             page = SettingsPage();
             break;
+          case '/main/log-records-console':
+            page = LogRecordsConsolePage();
+            break;
           default:
             return null;
         }
