@@ -26,6 +26,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await DeviceInfo.init();
+  await PackageInfo.init();
 
   final assetManifestJson = await rootBundle.loadString('AssetManifest.json');
   final assetManifest = jsonDecode(assetManifestJson) as Map<String, dynamic>;
