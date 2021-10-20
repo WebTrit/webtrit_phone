@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:webtrit_api/webtrit_api.dart';
+
 import 'package:webtrit_phone/gen/assets.gen.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 
 class ExtAppBar extends AppBar {
   ExtAppBar({
@@ -52,11 +57,29 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
           const SizedBox(
             width: 2,
           ),
-          Text(
-            '\$1,340.56',
-            style: themeData.textTheme.button!.copyWith(
-              color: themeData.textTheme.caption!.color,
-            ),
+          StreamBuilder(
+            stream: context.read<AccountInfoRepository>().info(),
+            builder: (context, AsyncSnapshot<AccountInfo> snapshot) {
+              if (snapshot.connectionState == ConnectionState.active) {
+                final info = snapshot.data!;
+                return Text(
+                  '${info.balance.toStringAsFixed(2)} ${info.currency}',
+                  style: themeData.textTheme.button!.copyWith(
+                    color: themeData.textTheme.caption!.color,
+                  ),
+                );
+              } else {
+                return SizedBox(
+                  width: 10,
+                  height: 10,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                    ),
+                  ),
+                );
+              }
+            },
           ),
           const SizedBox(
             width: NavigationToolbar.kMiddleSpacing,
