@@ -68,6 +68,11 @@ void main() async {
           periodicPolling: EnvironmentConfig.PERIODIC_POLLING,
         ),
       ),
+      RepositoryProvider<AccountInfoRepository>(
+        create: (context) => AccountInfoRepository(
+          webtritApiClient: context.read<WebtritApiClient>(),
+        ),
+      ),
     ],
     child: BlocProvider<AppBloc>(
       create: (context) {
