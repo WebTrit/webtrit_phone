@@ -125,7 +125,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   }
 
   Stream<CallState> _mapCallIncomingAcceptedToState(CallIncomingAccepted event) async* {
-    yield (state as CallActive).copyWith(accepted: true, acceptedTime: DateTime.now());
+    yield (state as CallActive).copyWith(acceptedTime: DateTime.now());
 
     final localDescription = await _peerConnection!.createAnswer({});
     _peerConnection!.setLocalDescription(localDescription);
@@ -162,7 +162,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   }
 
   Stream<CallState> _mapCallOutgoingAcceptedToState(CallOutgoingAccepted event) async* {
-    yield (state as CallActive).copyWith(accepted: true, acceptedTime: DateTime.now());
+    yield (state as CallActive).copyWith(acceptedTime: DateTime.now());
 
     final remoteDescription = RTCSessionDescription(event.jsepData!['sdp'], event.jsepData!['type']);
     await _peerConnection!.setRemoteDescription(remoteDescription);
@@ -179,7 +179,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   Stream<CallState> _mapCallHungUpRemoteToState(CallRemoteHungUp event) async* {
     if (state is! CallActive) return; // TODO: get rid of double hangup event
 
-    yield (state as CallActive).copyWith(hungUp: true, hungUpTime: DateTime.now());
+    yield (state as CallActive).copyWith(hungUpTime: DateTime.now());
 
     await _peerConnection?.close();
     _peerConnection = null;
@@ -195,7 +195,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   Stream<CallState> _mapCallHungUpLocalToState(CallLocalHungUp event) async* {
     if (state is! CallActive) return; // TODO: get rid of double hangup event
 
-    yield (state as CallActive).copyWith(hungUp: true, hungUpTime: DateTime.now());
+    yield (state as CallActive).copyWith(hungUpTime: DateTime.now());
 
     await callRepository.hangup();
 

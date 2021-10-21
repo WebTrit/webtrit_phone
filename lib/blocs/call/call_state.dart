@@ -38,8 +38,6 @@ class CallIdle extends CallState {
 abstract class CallActive extends CallState {
   final String number;
   final bool video;
-  final bool accepted;
-  final bool hungUp;
   final DateTime? createdTime;
   final DateTime? acceptedTime;
   final DateTime? hungUpTime;
@@ -49,8 +47,6 @@ abstract class CallActive extends CallState {
   const CallActive({
     required this.number,
     required this.video,
-    this.accepted = false,
-    this.hungUp = false,
     this.createdTime,
     this.acceptedTime,
     this.hungUpTime,
@@ -58,12 +54,14 @@ abstract class CallActive extends CallState {
     this.remoteStream,
   }) : assert(createdTime != null);
 
+  bool get accepted => acceptedTime != null;
+
+  bool get hungUp => hungUpTime != null;
+
   @override
   List<Object?> get props => [
         number,
         video,
-        accepted,
-        hungUp,
         createdTime,
         acceptedTime,
         hungUpTime,
@@ -72,15 +70,13 @@ abstract class CallActive extends CallState {
       ];
 
   @override
-  String toString() => '$runtimeType { number: $number, video: $video, accepted: $accepted,'
-      ' hungUp: $hungUp, createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime,'
+  String toString() => '$runtimeType { number: $number, video: $video,'
+      ' createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime,'
       ' with localStream: ${localStream != null}, with remoteStream: ${remoteStream != null} }';
 
   CallActive copyWith({
     String? number,
     bool? video,
-    bool? accepted,
-    bool? hungUp,
     DateTime? createdTime,
     DateTime? acceptedTime,
     DateTime? hungUpTime,
@@ -93,8 +89,6 @@ class CallIncoming extends CallActive {
   const CallIncoming({
     required String number,
     required bool video,
-    bool accepted = false,
-    bool hungUp = false,
     DateTime? createdTime,
     DateTime? acceptedTime,
     DateTime? hungUpTime,
@@ -103,8 +97,6 @@ class CallIncoming extends CallActive {
   }) : super(
           number: number,
           video: video,
-          accepted: accepted,
-          hungUp: hungUp,
           createdTime: createdTime,
           acceptedTime: acceptedTime,
           hungUpTime: hungUpTime,
@@ -116,8 +108,6 @@ class CallIncoming extends CallActive {
   CallIncoming copyWith({
     String? number,
     bool? video,
-    bool? accepted,
-    bool? hungUp,
     DateTime? createdTime,
     DateTime? acceptedTime,
     DateTime? hungUpTime,
@@ -127,8 +117,6 @@ class CallIncoming extends CallActive {
     return CallIncoming(
       number: number ?? this.number,
       video: video ?? this.video,
-      accepted: accepted ?? this.accepted,
-      hungUp: hungUp ?? this.hungUp,
       createdTime: createdTime ?? this.createdTime,
       acceptedTime: acceptedTime ?? this.acceptedTime,
       hungUpTime: hungUpTime ?? this.hungUpTime,
@@ -142,8 +130,6 @@ class CallOutgoing extends CallActive {
   const CallOutgoing({
     required String number,
     required bool video,
-    bool accepted = false,
-    bool hungUp = false,
     DateTime? createdTime,
     DateTime? acceptedTime,
     DateTime? hungUpTime,
@@ -152,8 +138,6 @@ class CallOutgoing extends CallActive {
   }) : super(
           number: number,
           video: video,
-          accepted: accepted,
-          hungUp: hungUp,
           createdTime: createdTime,
           acceptedTime: acceptedTime,
           hungUpTime: hungUpTime,
@@ -165,8 +149,6 @@ class CallOutgoing extends CallActive {
   CallOutgoing copyWith({
     String? number,
     bool? video,
-    bool? accepted,
-    bool? hungUp,
     DateTime? createdTime,
     DateTime? acceptedTime,
     DateTime? hungUpTime,
@@ -176,8 +158,6 @@ class CallOutgoing extends CallActive {
     return CallOutgoing(
       number: number ?? this.number,
       video: video ?? this.video,
-      accepted: accepted ?? this.accepted,
-      hungUp: hungUp ?? this.hungUp,
       createdTime: createdTime ?? this.createdTime,
       acceptedTime: acceptedTime ?? this.acceptedTime,
       hungUpTime: hungUpTime ?? this.hungUpTime,
