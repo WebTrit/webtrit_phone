@@ -33,7 +33,7 @@ void main() async {
   await Future.wait(
     assetManifest.keys.where((String key) => key.endsWith('.svg')).map(
           (assetName) => precachePicture(
-            ExactAssetPicture(SvgPicture.svgStringDecoder, assetName),
+            ExactAssetPicture(SvgPicture.svgStringDecoderBuilder, assetName),
             null,
           ),
         ),
