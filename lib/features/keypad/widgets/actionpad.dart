@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Actionpad extends StatelessWidget {
+  final bool video;
   final VoidCallback? onCallPressed;
   final VoidCallback? onCallLongPress;
   final VoidCallback? onBackspacePressed;
@@ -8,6 +9,7 @@ class Actionpad extends StatelessWidget {
 
   const Actionpad({
     Key? key,
+    this.video = false,
     this.onCallPressed,
     this.onCallLongPress,
     this.onBackspacePressed,
@@ -28,7 +30,7 @@ class Actionpad extends StatelessWidget {
                 minimumSize: Size.square(MediaQuery.of(context).size.width / 4),
               ),
               child: Icon(
-                Icons.phone,
+                video ? Icons.videocam : Icons.call,
                 size: Theme.of(context).textTheme.headline2!.fontSize,
               ),
             ),
