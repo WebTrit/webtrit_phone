@@ -63,10 +63,16 @@ class _KeypadViewState extends State<KeypadView> {
         ValueListenableBuilder(
           valueListenable: _controller,
           builder: (BuildContext context, TextEditingValue value, Widget? child) {
-            return Actionpad(
-              onCallPressed: _onCallPressed,
-              onBackspacePressed: value.text.isEmpty ? null : _onBackspacePressed,
-              onBackspaceLongPress: value.text.isEmpty ? null : _onBackspaceLongPress,
+            return BlocBuilder<KeypadCubit, KeypadState>(
+              builder: (context, state) {
+                return Actionpad(
+                  video: state.video,
+                  onCallPressed: _onCallPressed,
+                  onCallLongPress: _onCallLongPress,
+                  onBackspacePressed: value.text.isEmpty ? null : _onBackspacePressed,
+                  onBackspaceLongPress: value.text.isEmpty ? null : _onBackspaceLongPress,
+                );
+              },
             );
           },
         ),
@@ -81,6 +87,10 @@ class _KeypadViewState extends State<KeypadView> {
     _focusNode.unfocus();
 
     context.read<KeypadCubit>().call(_controller.text);
+  }
+
+  void _onCallLongPress() {
+    context.read<KeypadCubit>().callTypeSiwtch();
   }
 
   void _onKeypadPressed(keyText) {

@@ -17,7 +17,11 @@ class KeypadCubit extends Cubit<KeypadState> {
   final _logger = Logger('$KeypadCubit');
 
   void call(String number) {
-    _logger.info('call to [$number]');
-    callBloc.add(CallOutgoingStarted(number: number, video: false));
+    _logger.info('${state.video ? 'video' : 'audio'} call to [$number]');
+    callBloc.add(CallOutgoingStarted(number: number, video: state.video));
+  }
+
+  void callTypeSiwtch() {
+    emit(KeypadState(video: !state.video));
   }
 }
