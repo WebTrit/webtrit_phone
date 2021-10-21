@@ -81,8 +81,6 @@ class _KeypadViewState extends State<KeypadView> {
     _focusNode.unfocus();
 
     context.read<KeypadCubit>().call(_controller.text);
-
-    context.showSnackBar('Sorry, not implemented yet');
   }
 
   void _onKeypadPressed(keyText) {
