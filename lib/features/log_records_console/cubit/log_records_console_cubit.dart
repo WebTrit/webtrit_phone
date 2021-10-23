@@ -14,13 +14,13 @@ class LogRecordsConsoleCubit extends Cubit<LogRecordsConsoleState> {
   LogRecordsConsoleCubit({
     required this.logRecordsRepository,
     this.logRecordsFormatter = const DefaultLogRecordFormatter(),
-  }) : super(LogRecordsConsoleState.initial());
+  }) : super(const LogRecordsConsoleState.initial());
 
   final LogRecordsRepository logRecordsRepository;
   final LogRecordFormatter logRecordsFormatter;
 
   void load() async {
-    emit(LogRecordsConsoleState.loading());
+    emit(const LogRecordsConsoleState.loading());
     try {
       final logRecords = await logRecordsRepository.getLogRecords();
       emit(LogRecordsConsoleState.success(logRecords));
@@ -32,7 +32,7 @@ class LogRecordsConsoleCubit extends Cubit<LogRecordsConsoleState> {
   void share() async {
     final logRecords = state.logRecords;
 
-    if (logRecords.length == 0) {
+    if (logRecords.isEmpty) {
       return;
     }
 

@@ -87,7 +87,7 @@ void main() async {
 }
 
 class App extends StatelessWidget {
-  App({
+  const App({
     Key? key,
     required this.webRegistrationInitialUrl,
     required this.isRegistered,
@@ -133,14 +133,14 @@ class App extends StatelessWidget {
               centerTitle: false,
             ),
           ),
-          child: child != null ? child : Container(),
+          child: child ?? Container(),
         );
       },
       onGenerateRoute: (RouteSettings settings) {
         Widget page;
         switch (settings.name) {
           case '/login':
-            page = LoginPage();
+            page = const LoginPage();
             break;
           case '/web-registration':
             page = WebRegistrationPage(
@@ -154,21 +154,21 @@ class App extends StatelessWidget {
                   create: (context) {
                     return RecentsBloc(
                       recentsRepository: context.read<RecentsRepository>(),
-                    )..add(RecentsInitialLoaded());
+                    )..add(const RecentsInitialLoaded());
                   },
                 ),
                 BlocProvider<LocalContactsBloc>(
                   create: (context) {
                     return LocalContactsBloc(
                       localContactsRepository: context.read<LocalContactsRepository>(),
-                    )..add(LocalContactsInitialLoaded());
+                    )..add(const LocalContactsInitialLoaded());
                   },
                 ),
                 BlocProvider<ExternalContactsBloc>(
                   create: (context) {
                     return ExternalContactsBloc(
                       externalContactsRepository: context.read<ExternalContactsRepository>(),
-                    )..add(ExternalContactsInitialLoaded());
+                    )..add(const ExternalContactsInitialLoaded());
                   },
                 ),
                 BlocProvider<CallBloc>(
@@ -177,7 +177,7 @@ class App extends StatelessWidget {
                       callRepository: context.read<CallRepository>(),
                       appBloc: context.read<AppBloc>(),
                       recentsBloc: context.read<RecentsBloc>(),
-                    )..add(CallAttached());
+                    )..add(const CallAttached());
                   },
                 ),
               ],
@@ -199,7 +199,7 @@ class App extends StatelessWidget {
                     });
                   }
                 },
-                child: MainPage(),
+                child: const MainPage(),
               ),
             );
             break;
@@ -207,14 +207,14 @@ class App extends StatelessWidget {
             final callNavigationArguments = settings.arguments as CallNavigationArguments;
             page = BlocProvider<CallBloc>.value(
               value: callNavigationArguments.callBloc,
-              child: CallPage(),
+              child: const CallPage(),
             );
             break;
           case '/main/settings':
-            page = SettingsPage();
+            page = const SettingsPage();
             break;
           case '/main/log-records-console':
-            page = LogRecordsConsolePage();
+            page = const LogRecordsConsolePage();
             break;
           default:
             return null;
@@ -250,7 +250,7 @@ class App extends StatelessWidget {
               },
               transitionsBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation, Widget child) {
-                final builder = ZoomPageTransitionsBuilder();
+                const builder = ZoomPageTransitionsBuilder();
                 return builder.buildTransitions(null, context, animation, secondaryAnimation, child);
               },
             );

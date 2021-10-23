@@ -11,7 +11,7 @@ class KeypadScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainAppBar(),
-      body: KeypadView(),
+      body: const KeypadView(),
     );
   }
 }

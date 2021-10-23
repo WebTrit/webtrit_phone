@@ -39,7 +39,7 @@ class Actionpad extends StatelessWidget {
             child: TextButton(
               onPressed: onBackspacePressed,
               onLongPress: onBackspaceLongPress,
-              child: Icon(
+              child: const Icon(
                 Icons.backspace,
               ),
             ),
@@ -52,7 +52,7 @@ class Actionpad extends StatelessWidget {
       data: TextButtonThemeData(
         style: TextButton.styleFrom(
           minimumSize: Size.square(MediaQuery.of(context).size.width / 5),
-          shape: CircleBorder(),
+          shape: const CircleBorder(),
         ),
       ),
       child: Table(

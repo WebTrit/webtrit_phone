@@ -20,10 +20,10 @@ class Tab {
 
   Widget createWithGlobalKey(bool active) {
     if (_wasActive) {
-      return this._create(this._globalKey);
+      return _create(_globalKey);
     } else if (active) {
       _wasActive = active;
-      return this._create(this._globalKey);
+      return _create(_globalKey);
     } else {
       return Container();
     }
@@ -54,7 +54,7 @@ final List<Tab> tabs = <Tab>[
 ];
 
 class MainPage extends StatefulWidget {
-  MainPage({Key? key}) : super(key: key);
+  const MainPage({Key? key}) : super(key: key);
 
   @override
   _MainPageState createState() => _MainPageState();

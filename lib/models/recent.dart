@@ -15,7 +15,7 @@ class Recent extends Equatable {
   final DateTime time;
   final Duration? duration;
 
-  Recent(
+  const Recent(
     this.direction,
     this.isComplete,
     this.number,

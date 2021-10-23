@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/gen/assets.gen.dart';
 
 class WebTritPhonePictureLogo extends StatelessWidget {
+  const WebTritPhonePictureLogo({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
+      children: [
         Assets.logo.svg(
           height: themeData.textTheme.headline2!.fontSize! * 1.4,
           color: themeData.accentColor,
@@ -28,12 +30,14 @@ class WebTritPhonePictureLogo extends StatelessWidget {
 }
 
 class WebTritPhoneTextLogo extends StatelessWidget {
+  const WebTritPhoneTextLogo({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
-      children: <Widget>[
+      children: [
         Text(
           'WebTrit',
           style: themeData.textTheme.headline2,

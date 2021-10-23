@@ -8,15 +8,15 @@ part 'app_event.dart';
 part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
-  AppBloc() : super(AppUnregister());
+  AppBloc() : super(const AppUnregister());
 
   @override
   Stream<AppState> mapEventToState(AppEvent event) async* {
     if (event is AppRegistered) {
-      yield AppRegister();
+      yield const AppRegister();
     }
     if (event is AppUnregistered) {
-      yield AppUnregister();
+      yield const AppUnregister();
     }
   }
 }

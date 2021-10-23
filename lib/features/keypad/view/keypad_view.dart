@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/extensions/extensions.dart';
-
 import '../keypad.dart';
 
 class KeypadView extends StatefulWidget {
@@ -123,7 +121,7 @@ class _KeypadViewState extends State<KeypadView> {
     String? newText;
     TextSelection? newSelection;
     if (_controller.selection.isCollapsed) {
-      if (textBefore.length > 0) {
+      if (textBefore.isNotEmpty) {
         newText = textBefore.substring(0, textBefore.length - 1) + textAfter;
         newSelection = TextSelection.collapsed(offset: _controller.selection.start - 1);
       }
@@ -152,7 +150,7 @@ class _KeypadViewState extends State<KeypadView> {
     TextSelection newSelection;
     if (_controller.selection.isCollapsed) {
       newText = textAfter;
-      newSelection = TextSelection.collapsed(offset: 0);
+      newSelection = const TextSelection.collapsed(offset: 0);
     } else {
       newText = textBefore + textAfter;
       newSelection = TextSelection.collapsed(offset: _controller.selection.start);

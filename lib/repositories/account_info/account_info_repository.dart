@@ -36,7 +36,7 @@ class AccountInfoRepository {
 
   void _onListenCallback() {
     if (periodicPolling && _listenedCounter++ == 0) {
-      _periodicTimer = Timer.periodic(Duration(seconds: 3), (timer) async {
+      _periodicTimer = Timer.periodic(const Duration(seconds: 3), (timer) async {
         final newInfo = await _listInfo();
         if (newInfo != _info) {
           _info = newInfo;

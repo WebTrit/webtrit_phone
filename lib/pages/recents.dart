@@ -65,7 +65,7 @@ class _RecentsPageState extends State<RecentsPage> with SingleTickerProviderStat
         },
         builder: (context, state) {
           if (state is RecentsInitial) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -86,7 +86,7 @@ class _RecentsPageState extends State<RecentsPage> with SingleTickerProviderStat
             return RefreshIndicator(
               onRefresh: () {
                 context.hideCurrentSnackBar();
-                return (context.read<RecentsBloc>()..add(RecentsRefreshed()))
+                return (context.read<RecentsBloc>()..add(const RecentsRefreshed()))
                     .stream
                     .firstWhere((state) => state is RecentsLoadSuccess || state is RecentsRefreshFailure);
               },
@@ -113,7 +113,7 @@ class _RecentsPageState extends State<RecentsPage> with SingleTickerProviderStat
                   );
                 },
                 separatorBuilder: (context, index) {
-                  return Divider(
+                  return const Divider(
                     height: 1,
                   );
                 },
@@ -123,8 +123,8 @@ class _RecentsPageState extends State<RecentsPage> with SingleTickerProviderStat
           if (state is RecentsInitialLoadFailure) {
             return Center(
               child: OutlineButton(
-                onPressed: () => context.read<RecentsBloc>().add(RecentsInitialLoaded()),
-                child: Text('Refresh'),
+                onPressed: () => context.read<RecentsBloc>().add(const RecentsInitialLoaded()),
+                child: const Text('Refresh'),
               ),
             );
           }
@@ -142,7 +142,7 @@ class RecentTile extends StatelessWidget {
   final GestureLongPressCallback? onLongPress;
   final void Function(Recent)? onDeleted;
 
-  RecentTile({
+  const RecentTile({
     Key? key,
     required this.recent,
     this.onInfoTap,
@@ -158,8 +158,8 @@ class RecentTile extends StatelessWidget {
       key: ObjectKey(recent),
       background: Container(
         color: Colors.red,
-        padding: EdgeInsets.only(right: 16),
-        child: Align(
+        padding: const EdgeInsets.only(right: 16),
+        child: const Align(
           alignment: Alignment.centerRight,
           child: Icon(
             Icons.delete,
@@ -170,23 +170,23 @@ class RecentTile extends StatelessWidget {
       onDismissed: onDeleted == null ? null : (direction) => onDeleted(recent),
       direction: DismissDirection.endToStart,
       child: ListTile(
-        contentPadding: EdgeInsets.only(left: 16.0),
+        contentPadding: const EdgeInsets.only(left: 16.0),
         leading: LeadingAvatar(
           username: recent.number,
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
+          children: [
             IconButton(
               splashRadius: 24,
-              icon: Icon(Icons.call),
+              icon: const Icon(Icons.call),
               onPressed: () {
                 print('onTap call');
               },
             ),
             IconButton(
               splashRadius: 24,
-              icon: Icon(Icons.videocam),
+              icon: const Icon(Icons.videocam),
               onPressed: () {
                 print('onTap videocam');
               },
@@ -205,11 +205,11 @@ class RecentTile extends StatelessWidget {
                   ? (recent.direction == Direction.incoming ? Colors.blue : Colors.green)
                   : Colors.red,
             ),
-            Text(' · '),
+            const Text(' · '),
             Text(
               recent.isComplete ? _formatDuration(recent.duration!) : 'Missed',
             ),
-            Text(' · '),
+            const Text(' · '),
             Text(
               recent.time.format(context),
             ),
@@ -232,17 +232,17 @@ class RecentTile extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text("Confirm delete"),
-          content: new Text("Are you sure you want to delete \"${recent.number}\"?"),
-          actions: <Widget>[
-            new TextButton(
-              child: new Text("No".toUpperCase()),
+          title: const Text("Confirm delete"),
+          content: Text("Are you sure you want to delete \"${recent.number}\"?"),
+          actions: [
+            TextButton(
+              child: Text("No".toUpperCase()),
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
             ),
-            new TextButton(
-              child: new Text("Yes".toUpperCase()),
+            TextButton(
+              child: Text("Yes".toUpperCase()),
               onPressed: () {
                 Navigator.of(context).pop(true);
               },

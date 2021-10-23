@@ -36,7 +36,7 @@ const String kDemoPage = '''
 ''';
 
 class WebRegistrationPage extends StatefulWidget {
-  WebRegistrationPage({
+  const WebRegistrationPage({
     Key? key,
     required this.initialUrl,
   }) : super(key: key);
@@ -62,7 +62,7 @@ class _WebRegistrationPageState extends State<WebRegistrationPage> {
     return WebView(
       initialUrl: widget.initialUrl,
       javascriptMode: JavascriptMode.unrestricted,
-      javascriptChannels: <JavascriptChannel>[
+      javascriptChannels: {
         JavascriptChannel(
             name: 'WebTritTokenChannel',
             onMessageReceived: (JavascriptMessage message) async {
@@ -71,11 +71,12 @@ class _WebRegistrationPageState extends State<WebRegistrationPage> {
 
               Navigator.pushReplacementNamed(context, '/main');
             }),
-      ].toSet(),
+      },
       onWebViewCreated: (WebViewController controller) {
         _controller.complete(controller);
       },
       onPageStarted: (url) async {
+        //
       },
       onPageFinished: (url) async {
         final webViewController = await _controller.future;
@@ -101,27 +102,27 @@ class _WebRegistrationPageState extends State<WebRegistrationPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           scrollable: true,
-          title: Text(
+          title: const Text(
             'WebResourceError',
           ),
           content: Text(
             error.description,
           ),
-          actions: <Widget>[
+          actions: [
             TextButton(
-              child: new Text("Demo".toUpperCase()),
+              child: Text("Demo".toUpperCase()),
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
             ),
             TextButton(
-              child: new Text("Skip".toUpperCase()),
+              child: Text("Skip".toUpperCase()),
               onPressed: () {
                 Navigator.of(context).pop(null);
               },
             ),
             TextButton(
-              child: new Text("Retry".toUpperCase()),
+              child: Text("Retry".toUpperCase()),
               onPressed: () {
                 Navigator.of(context).pop(true);
               },

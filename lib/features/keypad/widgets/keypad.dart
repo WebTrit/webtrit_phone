@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../keypad.dart';
-
 class Keypad extends StatelessWidget {
   const Keypad({
     Key? key,
@@ -45,7 +43,7 @@ class Keypad extends StatelessWidget {
       data: TextButtonThemeData(
         style: TextButton.styleFrom(
           minimumSize: Size.square(MediaQuery.of(context).size.width / 5),
-          shape: CircleBorder(),
+          shape: const CircleBorder(),
         ),
       ),
       child: Table(
@@ -59,7 +57,7 @@ class Keypad extends StatelessWidget {
       onPressed: () => onKeypadPressed(text),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
+        children: [
           Text(
             text,
             style: Theme.of(context).textTheme.headline4,

@@ -22,10 +22,10 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: ExtAppBar(
-        title: Text('Settings'),
+        title: const Text('Settings'),
         actions: [
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.exit_to_app,
             ),
             onPressed: () async {
@@ -37,7 +37,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 final webtritApiClient =  context.read<WebtritApiClient>();
                 await webtritApiClient.sessionLogout(token!);
 
-                context.read<AppBloc>().add(AppUnregistered());
+                context.read<AppBloc>().add(const AppUnregistered());
               }
             },
           )
@@ -45,7 +45,7 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Form(
@@ -63,7 +63,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       TextFormField(
                         key: ObjectKey(webRegistrationInitialUrl),
                         initialValue: webRegistrationInitialUrl,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Registration initial url',
                           helperText: '', // reserve space for validator message
                         ),
@@ -124,10 +124,10 @@ class _SettingsPageState extends State<SettingsPage> {
               },
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 40,
           ),
-          Text('Current token:'),
+          const Text('Current token:'),
           Container(
             alignment: Alignment.center,
             height: 50,
@@ -139,16 +139,16 @@ class _SettingsPageState extends State<SettingsPage> {
                   if (token != null) {
                     return Text(
                       snapshot.data!,
-                      style: TextStyle(fontSize: 20),
+                      style: const TextStyle(fontSize: 20),
                     );
                   } else {
-                    return Text(
+                    return const Text(
                       'empty',
                       style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
                     );
                   }
                 } else {
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 }
               },
             ),
@@ -165,7 +165,7 @@ class _SettingsPageState extends State<SettingsPage> {
               );
             },
           ),
-          SizedBox(
+          const SizedBox(
             height: 40,
           ),
           TextButton(
@@ -174,7 +174,7 @@ class _SettingsPageState extends State<SettingsPage> {
               await openAppSettings();
             },
           ),
-          SizedBox(
+          const SizedBox(
             height: 40,
           ),
           TextButton(
@@ -193,18 +193,18 @@ class _SettingsPageState extends State<SettingsPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text("Confirm unregister"),
-          content: new Text("Are you sure you want to unregister?"),
-          actions: <Widget>[
+          title: const Text("Confirm unregister"),
+          content: const Text("Are you sure you want to unregister?"),
+          actions: [
             // usually buttons at the bottom of the dialog
-            new TextButton(
-              child: new Text("No".toUpperCase()),
+            TextButton(
+              child: Text("No".toUpperCase()),
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
             ),
-            new TextButton(
-              child: new Text("Yes".toUpperCase()),
+            TextButton(
+              child: Text("Yes".toUpperCase()),
               onPressed: () {
                 Navigator.of(context).pop(true);
               },

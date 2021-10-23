@@ -23,7 +23,7 @@ class ContactsLocalTab extends StatelessWidget {
       },
       builder: (context, state) {
         if (state is LocalContactsInitial) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }
@@ -31,7 +31,7 @@ class ContactsLocalTab extends StatelessWidget {
           return RefreshIndicator(
             onRefresh: () {
               context.hideCurrentSnackBar();
-              return (context.read<LocalContactsBloc>()..add(LocalContactsRefreshed()))
+              return (context.read<LocalContactsBloc>()..add(const LocalContactsRefreshed()))
                   .stream
                   .firstWhere((state) => state is LocalContactsLoadSuccess || state is LocalContactsRefreshFailure);
             },
@@ -57,7 +57,7 @@ class ContactsLocalTab extends StatelessWidget {
                 );
               },
               separatorBuilder: (context, index) {
-                return Divider(
+                return const Divider(
                   height: 1,
                 );
               },
@@ -67,13 +67,13 @@ class ContactsLocalTab extends StatelessWidget {
         if (state is ExternalContactsInitialLoadFailure) {
           return Center(
             child: OutlineButton(
-              onPressed: () => context.read<ExternalContactsBloc>().add(ExternalContactsInitialLoaded()),
-              child: Text('Refresh'),
+              onPressed: () => context.read<ExternalContactsBloc>().add(const ExternalContactsInitialLoaded()),
+              child: const Text('Refresh'),
             ),
           );
         }
         if (state is LocalContactsPermissionFailure) {
-          return Center(
+          return const Center(
             child: Text('Permission not granted'),
           );
         }

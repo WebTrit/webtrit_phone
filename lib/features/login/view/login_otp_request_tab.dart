@@ -34,7 +34,7 @@ class LoginOtpRequestTab extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const SizedBox(height: kToolbarHeight),
-            WebTritPhonePictureLogo(),
+            const WebTritPhonePictureLogo(),
             const SizedBox(height: kToolbarHeight),
             BlocBuilder<LoginCubit, LoginState>(
               buildWhen: (previous, current) =>
@@ -63,7 +63,7 @@ class LoginOtpRequestTab extends StatelessWidget {
                   onPressed: !state.phoneInput.valid ? null : () => _onOtpRequest(context),
                   child: !state.status.isProcessing
                       ? Text(context.l10n.loginOtpRequestTabProceedButtonLabel)
-                      : SizedCircularProgressIndicator(
+                      : const SizedCircularProgressIndicator(
                           size: 16,
                           strokeWidth: 2,
                         ),

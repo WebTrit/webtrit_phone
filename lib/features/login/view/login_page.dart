@@ -10,6 +10,8 @@ import './login_scaffold.dart';
 import '../login.dart';
 
 class LoginPage extends StatelessWidget {
+  const LoginPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -17,7 +19,7 @@ class LoginPage extends StatelessWidget {
         webtritApiClient: context.read<WebtritApiClient>(),
         secureStorage: SecureStorage(),
       ),
-      child: LockScaffold(),
+      child: const LockScaffold(),
     );
   }
 }

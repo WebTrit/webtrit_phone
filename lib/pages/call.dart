@@ -5,13 +5,15 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 
 class CallPage extends StatefulWidget {
+  const CallPage({Key? key}) : super(key: key);
+
   @override
   _CallPageState createState() => _CallPageState();
 }
 
 class _CallPageState extends State<CallPage> {
-  RTCVideoRenderer _localRenderer = RTCVideoRenderer();
-  RTCVideoRenderer _remoteRenderer = RTCVideoRenderer();
+  final RTCVideoRenderer _localRenderer = RTCVideoRenderer();
+  final RTCVideoRenderer _remoteRenderer = RTCVideoRenderer();
   late Future<List<void>> _renderersInitialized;
   late Future<List<void>> _renderersDisposed;
 
@@ -56,7 +58,7 @@ class _CallPageState extends State<CallPage> {
           return Scaffold(
             body: Container(
               color: Colors.black,
-              child: Center(
+              child: const Center(
                 child: CircularProgressIndicator(),
               ),
             ),
@@ -94,14 +96,14 @@ class _CallPageState extends State<CallPage> {
                   color: Colors.black,
                   child: SafeArea(
                     child: Stack(
-                      children: <Widget>[
+                      children: [
                         Positioned(
                           left: 0,
                           right: 0,
                           top: 0,
                           bottom: 0,
                           child: Container(
-                            decoration: BoxDecoration(color: Colors.black54),
+                            decoration: const BoxDecoration(color: Colors.black54),
                             width: MediaQuery.of(context).size.width,
                             height: MediaQuery.of(context).size.height,
                             child: RTCVideoView(_remoteRenderer),
@@ -113,9 +115,9 @@ class _CallPageState extends State<CallPage> {
                           child: GestureDetector(
                             onTap: _cameraSwitched,
                             child: Stack(
-                              children: <Widget>[
+                              children: [
                                 Container(
-                                  decoration: BoxDecoration(color: Colors.black54),
+                                  decoration: const BoxDecoration(color: Colors.black54),
                                   width: orientation == Orientation.portrait ? 90.0 : 120.0,
                                   height: orientation == Orientation.portrait ? 120.0 : 90.0,
                                   child: RTCVideoView(_localRenderer, mirror: true),
@@ -124,12 +126,10 @@ class _CallPageState extends State<CallPage> {
                                   left: 0,
                                   right: 0,
                                   bottom: 1,
-                                  child: Container(
-                                    child: Icon(
-                                      Icons.switch_camera,
-                                      size: Theme.of(context).textTheme.subtitle1!.fontSize,
-                                      color: Colors.white,
-                                    ),
+                                  child: Icon(
+                                    Icons.switch_camera,
+                                    size: Theme.of(context).textTheme.subtitle1!.fontSize,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ],
@@ -141,10 +141,10 @@ class _CallPageState extends State<CallPage> {
                           right: 0,
                           top: 30,
                           child: Column(
-                            children: <Widget>[
+                            children: [
                               Text(
                                 direction,
-                                style: TextStyle(color: Colors.white),
+                                style: const TextStyle(color: Colors.white),
                                 textAlign: TextAlign.center,
                               ),
                               Text(
@@ -182,13 +182,13 @@ class _CallPageState extends State<CallPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
+                children: [
                   Text(
                     state.reason,
                     style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.red),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Center(
@@ -196,10 +196,10 @@ class _CallPageState extends State<CallPage> {
                       message: 'Ok',
                       child: OutlineButton(
                         textColor: Colors.white,
-                        borderSide: BorderSide(color: Colors.white),
+                        borderSide: const BorderSide(color: Colors.white),
                         highlightedBorderColor: Colors.red,
-                        child: Text('Ok'),
-                        onPressed: () => context.read<CallBloc>().add(CallFailureApproved()),
+                        child: const Text('Ok'),
+                        onPressed: () => context.read<CallBloc>().add(const CallFailureApproved()),
                       ),
                     ),
                   ),
@@ -218,7 +218,7 @@ class _CallPageState extends State<CallPage> {
       _frontCamera = !_frontCamera;
     });
 
-    context.read<CallBloc>().add(CallCameraSwitched());
+    context.read<CallBloc>().add(const CallCameraSwitched());
   }
 
   void _cameraPressed(enabled) {
@@ -234,11 +234,11 @@ class _CallPageState extends State<CallPage> {
   }
 
   void _hangup() {
-    context.read<CallBloc>().add(CallLocalHungUp(reason: 'some local reason'));
+    context.read<CallBloc>().add(const CallLocalHungUp(reason: 'some local reason'));
   }
 
   void _accept() {
-    context.read<CallBloc>().add(CallIncomingAccepted());
+    context.read<CallBloc>().add(const CallIncomingAccepted());
   }
 }
 
@@ -252,7 +252,7 @@ class _CallActions extends StatefulWidget {
   final void Function()? onHangupPressed;
   final void Function()? onAcceptPressed;
 
-  _CallActions({
+  const _CallActions({
     Key? key,
     this.cameraEnabledByDefault = true,
     this.onCameraPressed,
@@ -288,17 +288,17 @@ class _CallActionsState extends State<_CallActions> {
         style: TextButton.styleFrom(
           primary: Colors.black,
           backgroundColor: Colors.white,
-          minimumSize: Size.square(56),
-          shape: CircleBorder(),
+          minimumSize: const Size.square(56),
+          shape: const CircleBorder(),
         ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
+        children: [
           Tooltip(
             message: _cameraEnabled ? 'Disable camera' : 'Enable camera',
             child: TextButton(
-              child: _cameraEnabled ? Icon(Icons.videocam) : Icon(Icons.videocam_off),
+              child: _cameraEnabled ? const Icon(Icons.videocam) : const Icon(Icons.videocam_off),
               onPressed: () {
                 setState(() {
                   _cameraEnabled = !_cameraEnabled;
@@ -307,7 +307,7 @@ class _CallActionsState extends State<_CallActions> {
               },
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 8,
           ),
           Tooltip(
@@ -322,7 +322,7 @@ class _CallActionsState extends State<_CallActions> {
               },
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 8,
           ),
           Tooltip(
@@ -337,7 +337,7 @@ class _CallActionsState extends State<_CallActions> {
               },
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 8,
           ),
           Tooltip(
@@ -351,7 +351,7 @@ class _CallActionsState extends State<_CallActions> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 8,
           ),
           Tooltip(

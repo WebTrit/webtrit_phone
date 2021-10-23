@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class ExternalContact extends Equatable {
-  ExternalContact({
+  const ExternalContact({
     required this.displayName,
     required this.number,
   });

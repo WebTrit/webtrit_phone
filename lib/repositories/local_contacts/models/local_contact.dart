@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:equatable/equatable.dart';
 
 class LocalContact extends Equatable {
-  LocalContact({
+  const LocalContact({
     required this.displayName,
     this.thumbnail,
   });

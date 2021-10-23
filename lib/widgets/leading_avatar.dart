@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LeadingAvatar extends StatelessWidget {
-  LeadingAvatar({
+  const LeadingAvatar({
     Key? key,
     required this.username,
   }) : super(key: key);

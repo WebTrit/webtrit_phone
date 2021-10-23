@@ -22,7 +22,7 @@ class ContactsScaffold extends StatelessWidget {
             labelColor: themeData.textTheme.caption!.color,
           ),
         ),
-        body: TabBarView(children: [
+        body: const TabBarView(children: [
           ContactsLocalTab(),
           ContactsExternalTab(),
         ]),

@@ -20,7 +20,7 @@ extension LoginStatusX on LoginStatus {
 class LoginState extends Equatable {
   static const Object noError = Object();
 
-  LoginState({
+  const LoginState({
     this.tabIndex = 0,
     this.status = LoginStatus.input,
     this.error = noError,

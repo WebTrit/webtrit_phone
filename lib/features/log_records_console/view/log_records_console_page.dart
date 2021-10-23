@@ -17,7 +17,7 @@ class LogRecordsConsolePage extends StatelessWidget {
       create: (context) => LogRecordsConsoleCubit(
         logRecordsRepository: context.read<LogRecordsRepository>(),
       )..load(),
-      child: LogRecordsConsoleScaffold(),
+      child: const LogRecordsConsoleScaffold(),
     );
   }
 }

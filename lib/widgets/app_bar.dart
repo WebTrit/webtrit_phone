@@ -48,7 +48,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
       ),
       title: Row(
         children: [
-          Text('WebTrit'),
+          const Text('WebTrit'),
           const Spacer(),
           Icon(
             Icons.account_balance_wallet_outlined,
@@ -69,7 +69,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
                   ),
                 );
               } else {
-                return SizedBox(
+                return const SizedBox(
                   width: 10,
                   height: 10,
                   child: Center(
@@ -88,7 +88,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
       ),
       actions: [
         IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.cloud_outlined,
           ),
           onPressed: () async {
@@ -96,7 +96,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
           },
         ),
         IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.settings,
           ),
           onPressed: () async {

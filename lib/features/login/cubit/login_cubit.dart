@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -16,7 +14,7 @@ class LoginCubit extends Cubit<LoginState> {
   LoginCubit({
     required this.webtritApiClient,
     required this.secureStorage,
-  }) : super(LoginState());
+  }) : super(const LoginState());
 
   final WebtritApiClient webtritApiClient;
   final SecureStorage secureStorage;

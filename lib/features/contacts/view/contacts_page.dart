@@ -7,6 +7,6 @@ class ContactsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ContactsScaffold();
+    return const ContactsScaffold();
   }
 }

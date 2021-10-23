@@ -18,7 +18,7 @@ class LogRecordsConsoleScaffold extends StatelessWidget {
             builder: (context, state) {
               if (state.status.isSuccess) {
                 return IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.share,
                   ),
                   onPressed: state.logRecords.isEmpty
@@ -28,7 +28,7 @@ class LogRecordsConsoleScaffold extends StatelessWidget {
                         },
                 );
               } else {
-                return SizedBox();
+                return const SizedBox();
               }
             },
           ),
@@ -59,16 +59,16 @@ class LogRecordsConsoleScaffold extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('Ups error happened ☹️'),
+                    const Text('Ups error happened ☹️'),
                     OutlineButton(
                       onPressed: () => context.read<LogRecordsConsoleCubit>().load(),
-                      child: Text('Refresh'),
+                      child: const Text('Refresh'),
                     )
                   ],
                 ),
               );
             default:
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
           }

@@ -17,7 +17,7 @@ class KeypadPage extends StatelessWidget {
       create: (context) => KeypadCubit(
         callBloc: context.read<CallBloc>(),
       ),
-      child: KeypadScaffold(),
+      child: const KeypadScaffold(),
     );
   }
 }

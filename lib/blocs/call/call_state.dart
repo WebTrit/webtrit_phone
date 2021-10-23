@@ -12,7 +12,7 @@ class CallInitial extends CallState {
 }
 
 class CallAttachInProgress extends CallState {
-  CallAttachInProgress();
+  const CallAttachInProgress();
 }
 
 class CallAttachFailure extends CallState {

@@ -1,5 +1,3 @@
-import 'dart:io' show Platform;
-
 import 'package:package_info_plus/package_info_plus.dart' as plugin;
 
 class PackageInfo {

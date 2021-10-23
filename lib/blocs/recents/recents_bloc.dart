@@ -16,7 +16,7 @@ class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
 
   RecentsBloc({
     required this.recentsRepository,
-  }) : super(RecentsInitial());
+  }) : super(const RecentsInitial());
 
   @override
   Stream<RecentsState> mapEventToState(RecentsEvent event) async* {
@@ -40,7 +40,7 @@ class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
   }
 
   Stream<RecentsState> _mapRecentsInitialLoadedToState(RecentsInitialLoaded event) async* {
-    yield RecentsInitial();
+    yield const RecentsInitial();
     _recentsSubscription?.cancel();
     _recentsSubscription = recentsRepository.recents().listen(
           (recents) => add(RecentsUpdated(recents: recents)),
@@ -49,7 +49,7 @@ class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
     try {
       await recentsRepository.load();
     } catch (error) {
-      yield RecentsInitialLoadFailure();
+      yield const RecentsInitialLoadFailure();
     }
   }
 
@@ -57,7 +57,7 @@ class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
     try {
       await recentsRepository.load();
     } catch (error) {
-      yield RecentsRefreshFailure();
+      yield const RecentsRefreshFailure();
     }
   }
 

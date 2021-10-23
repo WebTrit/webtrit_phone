@@ -8,7 +8,7 @@ import './login_otp_verify_tab.dart';
 import '../login.dart';
 
 class LockScaffold extends StatefulWidget {
-  LockScaffold({
+  const LockScaffold({
     Key? key,
   }) : super(key: key);
 
@@ -42,8 +42,8 @@ class _LockScaffoldState extends State<LockScaffold> with SingleTickerProviderSt
         body: SafeArea(
           child: TabBarView(
             controller: _tabController,
-            physics: NeverScrollableScrollPhysics(),
-            children: [
+            physics: const NeverScrollableScrollPhysics(),
+            children: const [
               LoginOtpRequestTab(),
               LoginOtpVerifyTab(),
             ],

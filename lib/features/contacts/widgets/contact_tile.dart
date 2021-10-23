@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class ContactTile extends StatelessWidget {
-  ContactTile({
+  const ContactTile({
     Key? key,
     required this.displayName,
     this.thumbnail,
@@ -46,7 +46,7 @@ class ContactTile extends StatelessWidget {
             height: 20,
             child: CircleAvatar(
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              child: Icon(
+              child: const Icon(
                 Icons.person,
                 size: 18,
               ),
@@ -56,19 +56,19 @@ class ContactTile extends StatelessWidget {
     );
 
     return ListTile(
-      contentPadding: EdgeInsets.only(left: 16.0),
+      contentPadding: const EdgeInsets.only(left: 16.0),
       leading: avatar,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
+        children: [
           IconButton(
             splashRadius: 24,
-            icon: Icon(Icons.call),
+            icon: const Icon(Icons.call),
             onPressed: onAudioPressed,
           ),
           IconButton(
             splashRadius: 24,
-            icon: Icon(Icons.videocam),
+            icon: const Icon(Icons.videocam),
             onPressed: onVideoPressed,
           ),
         ],

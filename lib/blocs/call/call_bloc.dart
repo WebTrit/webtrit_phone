@@ -31,7 +31,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     required this.callRepository,
     required this.appBloc,
     required this.recentsBloc,
-  }) : super(CallInitial()) {}
+  }) : super(const CallInitial());
 
   @override
   Future<void> close() async {
@@ -77,7 +77,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   }
 
   Stream<CallState> _mapCallAttachedToState(CallAttached event) async* {
-    yield CallAttachInProgress();
+    yield const CallAttachInProgress();
     try {
       await callRepository.attach();
       await callRepository.register();
@@ -92,9 +92,9 @@ class CallBloc extends Bloc<CallEvent, CallState> {
         add(CallRemoteHungUp(reason: event.reason));
       });
 
-      yield CallIdle();
+      yield const CallIdle();
 
-      appBloc.add(AppRegistered());
+      appBloc.add(const AppRegistered());
     } catch (e) {
       yield CallAttachFailure(
         reason: e.toString(),
@@ -103,7 +103,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   }
 
   Stream<CallState> _mapCallDetachedToState(CallDetached event) async* {
-    yield CallInitial();
+    yield const CallInitial();
 
     if (callRepository.isAttached) {
       await callRepository.detach();
@@ -189,7 +189,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
 
     _addToRecents(state);
 
-    yield CallIdle();
+    yield const CallIdle();
   }
 
   Stream<CallState> _mapCallHungUpLocalToState(CallLocalHungUp event) async* {
@@ -207,7 +207,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
 
     _addToRecents(state);
 
-    yield CallIdle();
+    yield const CallIdle();
   }
 
   Stream<CallState> _mapCallCameraSwitchedToState(CallCameraSwitched event) async* {
@@ -227,7 +227,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   }
 
   Stream<CallState> _mapCallFailureApprovedToState(CallFailureApproved event) async* {
-    yield CallIdle();
+    yield const CallIdle();
   }
 
   Future<MediaStream> _getUserMedia({required bool video}) async {

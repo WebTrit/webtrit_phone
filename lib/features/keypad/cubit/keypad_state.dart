@@ -1,7 +1,7 @@
 part of 'keypad_cubit.dart';
 
 class KeypadState extends Equatable {
-  KeypadState({
+  const KeypadState({
     this.video = false,
   });
 

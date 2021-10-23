@@ -8,6 +8,8 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import '../contacts.dart';
 
 class ContactsExternalTab extends StatelessWidget {
+  const ContactsExternalTab({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ExternalContactsBloc, ExternalContactsState>(
@@ -21,7 +23,7 @@ class ContactsExternalTab extends StatelessWidget {
       },
       builder: (context, state) {
         if (state is ExternalContactsInitial) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }
@@ -29,8 +31,8 @@ class ContactsExternalTab extends StatelessWidget {
           return RefreshIndicator(
             onRefresh: () {
               context.hideCurrentSnackBar();
-              return (context.read<ExternalContactsBloc>()..add(ExternalContactsRefreshed())).stream.firstWhere(
-                      (state) => state is ExternalContactsLoadSuccess || state is ExternalContactsRefreshFailure);
+              return (context.read<ExternalContactsBloc>()..add(const ExternalContactsRefreshed())).stream.firstWhere(
+                  (state) => state is ExternalContactsLoadSuccess || state is ExternalContactsRefreshFailure);
             },
             child: ListView.separated(
               itemCount: state.contacts.length,
@@ -53,7 +55,7 @@ class ContactsExternalTab extends StatelessWidget {
                 );
               },
               separatorBuilder: (context, index) {
-                return Divider(
+                return const Divider(
                   height: 1,
                 );
               },
@@ -63,8 +65,8 @@ class ContactsExternalTab extends StatelessWidget {
         if (state is ExternalContactsInitialLoadFailure) {
           return Center(
             child: OutlineButton(
-              onPressed: () => context.read<ExternalContactsBloc>().add(ExternalContactsInitialLoaded()),
-              child: Text('Refresh'),
+              onPressed: () => context.read<ExternalContactsBloc>().add(const ExternalContactsInitialLoaded()),
+              child: const Text('Refresh'),
             ),
           );
         }
@@ -73,4 +75,3 @@ class ContactsExternalTab extends StatelessWidget {
     );
   }
 }
-

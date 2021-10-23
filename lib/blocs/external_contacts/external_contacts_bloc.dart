@@ -16,7 +16,7 @@ class ExternalContactsBloc extends Bloc<ExternalContactsEvent, ExternalContactsS
 
   ExternalContactsBloc({
     required this.externalContactsRepository,
-  }) : super(ExternalContactsInitial());
+  }) : super(const ExternalContactsInitial());
 
   @override
   Stream<ExternalContactsState> mapEventToState(ExternalContactsEvent event) async* {
@@ -36,7 +36,7 @@ class ExternalContactsBloc extends Bloc<ExternalContactsEvent, ExternalContactsS
   }
 
   Stream<ExternalContactsState> _mapExternalContactsInitialLoadedToState(ExternalContactsInitialLoaded event) async* {
-    yield ExternalContactsInitial();
+    yield const ExternalContactsInitial();
     _externalContactsSubscription?.cancel();
     _externalContactsSubscription = externalContactsRepository.contacts().listen(
           (contacts) => add(ExternalContactsUpdated(contacts: contacts)),
@@ -45,7 +45,7 @@ class ExternalContactsBloc extends Bloc<ExternalContactsEvent, ExternalContactsS
     try {
       await externalContactsRepository.load();
     } catch (error) {
-      yield ExternalContactsInitialLoadFailure();
+      yield const ExternalContactsInitialLoadFailure();
     }
   }
 
@@ -53,7 +53,7 @@ class ExternalContactsBloc extends Bloc<ExternalContactsEvent, ExternalContactsS
     try {
       await externalContactsRepository.load();
     } catch (error) {
-      yield ExternalContactsRefreshFailure();
+      yield const ExternalContactsRefreshFailure();
     }
   }
 

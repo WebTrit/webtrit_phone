@@ -16,7 +16,7 @@ class LocalContactsBloc extends Bloc<LocalContactsEvent, LocalContactsState> {
 
   LocalContactsBloc({
     required this.localContactsRepository,
-  }) : super(LocalContactsInitial());
+  }) : super(const LocalContactsInitial());
 
   @override
   Stream<LocalContactsState> mapEventToState(LocalContactsEvent event) async* {
@@ -36,20 +36,20 @@ class LocalContactsBloc extends Bloc<LocalContactsEvent, LocalContactsState> {
   }
 
   Stream<LocalContactsState> _mapLocalContactsInitialLoadedToState(LocalContactsInitialLoaded event) async* {
-    yield LocalContactsInitial();
+    yield const LocalContactsInitial();
     _localContactsSubscription?.cancel();
     _localContactsSubscription = localContactsRepository.contacts().listen(
           (contacts) => add(LocalContactsUpdated(contacts: contacts)),
-          onError: (error, stackTrace) => add(LocalContactsUpdated(contacts: [])),
+          onError: (error, stackTrace) => add(const LocalContactsUpdated(contacts: [])),
           cancelOnError: false,
         );
 
     try {
       await localContactsRepository.load();
     } on LocalContactsRepositoryPermissionException {
-      yield LocalContactsPermissionFailure();
+      yield const LocalContactsPermissionFailure();
     } catch (error) {
-      yield LocalContactsInitialLoadFailure();
+      yield const LocalContactsInitialLoadFailure();
     }
   }
 
@@ -57,9 +57,9 @@ class LocalContactsBloc extends Bloc<LocalContactsEvent, LocalContactsState> {
     try {
       await localContactsRepository.load();
     } on LocalContactsRepositoryPermissionException {
-      yield LocalContactsPermissionFailure();
+      yield const LocalContactsPermissionFailure();
     } catch (error) {
-      yield LocalContactsRefreshFailure();
+      yield const LocalContactsRefreshFailure();
     }
   }
 
