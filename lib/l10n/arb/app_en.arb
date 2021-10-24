@@ -60,7 +60,7 @@
   "@recentsVisibilityFilterOutgoing": {
   },
 
-  "contactsSourceLocal": "All",
+  "contactsSourceLocal": "Local",
   "@contactsSourceLocal": {
   },
   "contactsSourceExternal": "Internal",
