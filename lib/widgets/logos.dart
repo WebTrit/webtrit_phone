@@ -13,7 +13,7 @@ class WebTritPhonePictureLogo extends StatelessWidget {
       children: [
         Assets.logo.svg(
           height: themeData.textTheme.headline2!.fontSize! * 1.4,
-          color: themeData.accentColor,
+          color: themeData.colorScheme.secondary,
         ),
         SizedBox(
           width: themeData.textTheme.headline2!.fontSize! * 0.5,
@@ -21,7 +21,7 @@ class WebTritPhonePictureLogo extends StatelessWidget {
         Text(
           'WebTrit',
           style: themeData.textTheme.headline2!.copyWith(
-            color: themeData.accentColor,
+            color: themeData.colorScheme.secondary,
           ),
         ),
       ],

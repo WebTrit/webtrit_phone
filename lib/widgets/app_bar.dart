@@ -43,7 +43,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
       leading: Center(
         child: Assets.logo.svg(
           height: themeData.appBarTheme.titleTextStyle!.fontSize! * 1.4,
-          color: themeData.accentColor,
+          color: themeData.colorScheme.secondary,
         ),
       ),
       title: Row(

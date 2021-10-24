@@ -127,7 +127,7 @@ class App extends StatelessWidget {
                 color: themeData.textTheme.caption!.color,
               ),
               titleTextStyle: themeData.primaryTextTheme.headline6!.copyWith(
-                color: themeData.accentColor,
+                color: themeData.colorScheme.secondary,
                 fontWeight: FontWeight.bold,
               ),
               centerTitle: false,
