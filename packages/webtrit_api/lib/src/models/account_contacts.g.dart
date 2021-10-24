@@ -25,7 +25,7 @@ AccountContact _$AccountContactFromJson(Map<String, dynamic> json) {
     email: json['email'] as String?,
     mobile: json['mobile'] as String?,
     companyName: json['company_name'] as String?,
-    sip_status: json['sip_status'] as int,
+    sipStatus: json['sip_status'] as int,
   );
 }
 
@@ -39,5 +39,5 @@ Map<String, dynamic> _$AccountContactToJson(AccountContact instance) =>
       'email': instance.email,
       'mobile': instance.mobile,
       'company_name': instance.companyName,
-      'sip_status': instance.sip_status,
+      'sip_status': instance.sipStatus,
     };

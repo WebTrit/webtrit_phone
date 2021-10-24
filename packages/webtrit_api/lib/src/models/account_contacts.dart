@@ -24,7 +24,7 @@ class AccountContact {
     this.email,
     this.mobile,
     this.companyName,
-    required this.sip_status,
+    required this.sipStatus,
   });
 
   factory AccountContact.fromJson(Map<String, dynamic> json) => _$AccountContactFromJson(json);
@@ -42,5 +42,6 @@ class AccountContact {
   final String? mobile;
   @JsonKey(name: 'company_name')
   final String? companyName;
-  final int sip_status;
+  @JsonKey(name: 'sip_status')
+  final int sipStatus;
 }
