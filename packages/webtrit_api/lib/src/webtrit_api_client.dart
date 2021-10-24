@@ -47,6 +47,10 @@ class WebtritApiClient {
   final Uri baseUrl;
   final http.Client _httpClient;
 
+  void close() {
+    _httpClient.close();
+  }
+
   Future<String> sessionOtpRequest(AppType type, String identifier, String phone) async {
     final url = baseUrl.replace(
       pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['session', 'otp-request'],
