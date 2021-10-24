@@ -11,7 +11,7 @@ import 'package:logging_appenders/logging_appenders.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
-import 'package:webtrit_phone/blocs/simple_bloc_observer.dart';
+import 'package:webtrit_phone/blocs/logging_bloc_observer.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
@@ -43,7 +43,7 @@ void main() async {
 
   final logRecordsRepository = LogRecordsRepository()..attachToLogger(Logger.root);
 
-  Bloc.observer = SimpleBlocObserver();
+  Bloc.observer = LoggingBlocObserver();
 
   runApp(MultiRepositoryProvider(
     providers: [

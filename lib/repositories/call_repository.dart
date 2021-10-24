@@ -36,8 +36,6 @@ class CallRepository {
 
       _signalingClient!.listen(
         (event) {
-          print('>> event = $event');
-
           if (event is IncomingCallEvent) {
             _incomingCallStreamController!.add(event);
           } else if (event is AnsweredEvent) {
