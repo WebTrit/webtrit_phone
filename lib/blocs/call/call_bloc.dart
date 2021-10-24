@@ -211,7 +211,10 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   }
 
   Stream<CallState> _mapCallCameraSwitchedToState(CallCameraSwitched event) async* {
-    await _localStream?.getVideoTracks()[0].switchCamera();
+    final videoTrack = _localStream?.getVideoTracks()[0];
+    if (videoTrack != null) {
+      await Helper.switchCamera(videoTrack);
+    }
   }
 
   Stream<CallState> _mapCallCameraEnabledToState(CallCameraEnabled event) async* {
