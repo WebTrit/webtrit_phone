@@ -15,7 +15,6 @@ class _CallPageState extends State<CallPage> {
   final RTCVideoRenderer _localRenderer = RTCVideoRenderer();
   final RTCVideoRenderer _remoteRenderer = RTCVideoRenderer();
   late Future<List<void>> _renderersInitialized;
-  late Future<List<void>> _renderersDisposed;
 
   bool _frontCamera = true;
 
@@ -28,19 +27,19 @@ class _CallPageState extends State<CallPage> {
 
   @override
   void dispose() {
-    _renderersDisposed = _renderersDispose();
+    _renderersDispose();
 
     super.dispose();
   }
 
-  _renderersInitialize() {
+  Future<List<void>> _renderersInitialize() {
     return Future.wait([
       _localRenderer.initialize(),
       _remoteRenderer.initialize(),
     ]);
   }
 
-  _renderersDispose() {
+  Future<List<void>> _renderersDispose() {
     return Future.wait([
       _localRenderer.dispose(),
       _remoteRenderer.dispose(),
