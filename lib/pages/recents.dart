@@ -122,7 +122,7 @@ class _RecentsPageState extends State<RecentsPage> with SingleTickerProviderStat
           }
           if (state is RecentsInitialLoadFailure) {
             return Center(
-              child: OutlineButton(
+              child: OutlinedButton(
                 onPressed: () => context.read<RecentsBloc>().add(const RecentsInitialLoaded()),
                 child: const Text('Refresh'),
               ),

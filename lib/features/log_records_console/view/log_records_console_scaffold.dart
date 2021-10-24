@@ -60,7 +60,7 @@ class LogRecordsConsoleScaffold extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Text('Ups error happened ☹️'),
-                    OutlineButton(
+                    OutlinedButton(
                       onPressed: () => context.read<LogRecordsConsoleCubit>().load(),
                       child: const Text('Refresh'),
                     )

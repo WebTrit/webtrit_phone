@@ -64,7 +64,7 @@ class ContactsExternalTab extends StatelessWidget {
         }
         if (state is ExternalContactsInitialLoadFailure) {
           return Center(
-            child: OutlineButton(
+            child: OutlinedButton(
               onPressed: () => context.read<ExternalContactsBloc>().add(const ExternalContactsInitialLoaded()),
               child: const Text('Refresh'),
             ),

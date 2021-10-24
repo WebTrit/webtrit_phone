@@ -194,12 +194,13 @@ class _CallPageState extends State<CallPage> {
                   Center(
                     child: Tooltip(
                       message: 'Ok',
-                      child: OutlineButton(
-                        textColor: Colors.white,
-                        borderSide: const BorderSide(color: Colors.white),
-                        highlightedBorderColor: Colors.red,
-                        child: const Text('Ok'),
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          primary: Colors.white,
+                          side: const BorderSide(color: Colors.white),
+                        ),
                         onPressed: () => context.read<CallBloc>().add(const CallFailureApproved()),
+                        child: const Text('Ok'),
                       ),
                     ),
                   ),
