@@ -68,9 +68,15 @@ class LoginOtpVerifyTab extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: OutlinedButton(
-                    onPressed: () => context.read<LoginCubit>().loginOptVerifyBack(),
-                    child: Text(context.l10n.loginOtpRequestTabBackButtonLabel),
+                  child: BlocBuilder<LoginCubit, LoginState>(
+                    buildWhen: (previous, current) => previous.status != current.status,
+                    builder: (context, state) {
+                      return OutlinedButton(
+                        onPressed:
+                            state.status.isProcessing ? null : () => context.read<LoginCubit>().loginOptVerifyBack(),
+                        child: Text(context.l10n.loginOtpRequestTabBackButtonLabel),
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(width: 8),
