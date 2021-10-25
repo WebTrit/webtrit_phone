@@ -7,27 +7,25 @@ part of 'account_contacts.dart';
 // **************************************************************************
 
 AccountContactsResponse _$AccountContactsResponseFromJson(
-    Map<String, dynamic> json) {
-  return AccountContactsResponse(
-    data: (json['data'] as List<dynamic>)
-        .map((e) => AccountContact.fromJson(e as Map<String, dynamic>))
-        .toList(),
-  );
-}
+        Map<String, dynamic> json) =>
+    AccountContactsResponse(
+      data: (json['data'] as List<dynamic>)
+          .map((e) => AccountContact.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
 
-AccountContact _$AccountContactFromJson(Map<String, dynamic> json) {
-  return AccountContact(
-    number: json['number'] as String,
-    extensionId: json['extension_id'] as String,
-    extensionName: json['extension_name'] as String?,
-    firstname: json['firstname'] as String?,
-    lastname: json['lastname'] as String?,
-    email: json['email'] as String?,
-    mobile: json['mobile'] as String?,
-    companyName: json['company_name'] as String?,
-    sipStatus: json['sip_status'] as int,
-  );
-}
+AccountContact _$AccountContactFromJson(Map<String, dynamic> json) =>
+    AccountContact(
+      number: json['number'] as String,
+      extensionId: json['extension_id'] as String,
+      extensionName: json['extension_name'] as String?,
+      firstname: json['firstname'] as String?,
+      lastname: json['lastname'] as String?,
+      email: json['email'] as String?,
+      mobile: json['mobile'] as String?,
+      companyName: json['company_name'] as String?,
+      sipStatus: json['sip_status'] as int,
+    );
 
 Map<String, dynamic> _$AccountContactToJson(AccountContact instance) =>
     <String, dynamic>{

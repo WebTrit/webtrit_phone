@@ -14,8 +14,7 @@ Map<String, dynamic> _$SessionOtpVerifyRequestToJson(
     };
 
 SessionOtpVerifyResponse _$SessionOtpVerifyResponseFromJson(
-    Map<String, dynamic> json) {
-  return SessionOtpVerifyResponse(
-    token: json['token'] as String,
-  );
-}
+        Map<String, dynamic> json) =>
+    SessionOtpVerifyResponse(
+      token: json['token'] as String,
+    );

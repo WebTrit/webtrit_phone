@@ -26,8 +26,7 @@ const _$AppTypeEnumMap = {
 };
 
 SessionOtpRequestResponse _$SessionOtpRequestResponseFromJson(
-    Map<String, dynamic> json) {
-  return SessionOtpRequestResponse(
-    otpId: json['otpId'] as String,
-  );
-}
+        Map<String, dynamic> json) =>
+    SessionOtpRequestResponse(
+      otpId: json['otpId'] as String,
+    );

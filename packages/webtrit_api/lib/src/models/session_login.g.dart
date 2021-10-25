@@ -26,8 +26,8 @@ const _$AppTypeEnumMap = {
   AppType.ios: 'ios',
 };
 
-SessionLoginResponse _$SessionLoginResponseFromJson(Map<String, dynamic> json) {
-  return SessionLoginResponse(
-    token: json['token'] as String,
-  );
-}
+SessionLoginResponse _$SessionLoginResponseFromJson(
+        Map<String, dynamic> json) =>
+    SessionLoginResponse(
+      token: json['token'] as String,
+    );
