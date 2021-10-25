@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "524910534863",
+    "project_id": "webtrit-69559",
+    "storage_bucket": "webtrit-69559.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:524910534863:android:8035f3b2f5b319c14ad7ba",
+        "android_client_info": {
+          "package_name": "com.webtrit.phone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "524910534863-n8b1v78o66j02ha1g54fou9b01j1vimm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.webtrit.phone",
+            "certificate_hash": "68340ee475c5e35f08bda16b61d175b4cdc3ac83"
+          }
+        },
+        {
+          "client_id": "524910534863-lhoi358q61equvea5g61mpalo9nfafkl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiHZTx8_6-kdgVXwKoIxgfPAXL7ug6tVQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "524910534863-lhoi358q61equvea5g61mpalo9nfafkl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
