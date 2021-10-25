@@ -14,9 +14,9 @@ AccountInfoResponse _$AccountInfoResponseFromJson(Map<String, dynamic> json) =>
 AccountInfo _$AccountInfoFromJson(Map<String, dynamic> json) => AccountInfo(
       balance: (json['balance'] as num).toDouble(),
       currency: json['currency'] as String,
-      extensionName: json['extension_name'] as String,
-      firstname: json['firstname'] as String,
-      lastname: json['lastname'] as String,
+      extensionName: json['extension_name'] as String?,
+      firstname: json['firstname'] as String?,
+      lastname: json['lastname'] as String?,
       email: json['email'] as String?,
       mobile: json['mobile'] as String?,
       companyName: json['company_name'] as String?,

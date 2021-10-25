@@ -34,9 +34,9 @@ class AccountInfo {
   final double balance;
   final String currency;
   @JsonKey(name: 'extension_name')
-  final String extensionName;
-  final String firstname;
-  final String lastname;
+  final String? extensionName;
+  final String? firstname;
+  final String? lastname;
   final String? email;
   final String? mobile;
   @JsonKey(name: 'company_name')
