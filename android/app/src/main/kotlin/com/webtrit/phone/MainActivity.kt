@@ -1,4 +1,4 @@
-package com.webtrit.webtrit_phone
+package com.webtrit.phone
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
