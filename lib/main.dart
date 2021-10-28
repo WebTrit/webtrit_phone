@@ -90,6 +90,12 @@ void main() async {
       RepositoryProvider<LocalContactsRepository>(
         create: (context) => LocalContactsRepository(),
       ),
+      RepositoryProvider<PushTokensRepository>(
+        create: (context) => PushTokensRepository(
+          webtritApiClient: context.read<WebtritApiClient>(),
+          secureStorage: SecureStorage(),
+        ),
+      ),
       RepositoryProvider<ExternalContactsRepository>(
         create: (context) => ExternalContactsRepository(
           webtritApiClient: context.read<WebtritApiClient>(),
