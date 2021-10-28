@@ -127,6 +127,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "8.1.2"
+  callkeep:
+    dependency: "direct main"
+    description:
+      name: callkeep
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.2"
   characters:
     dependency: transitive
     description:

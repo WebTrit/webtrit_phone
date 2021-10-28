@@ -1,4 +1,6 @@
 PODS:
+  - callkeep (0.0.1):
+    - Flutter
   - device_info (0.0.1):
     - Flutter
   - Firebase/CoreOnly (8.8.0):
@@ -106,6 +108,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - callkeep (from `.symlinks/plugins/callkeep/ios`)
   - device_info (from `.symlinks/plugins/device_info/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
@@ -137,6 +140,8 @@ SPEC REPOS:
     - WebRTC-SDK
 
 EXTERNAL SOURCES:
+  callkeep:
+    :path: ".symlinks/plugins/callkeep/ios"
   device_info:
     :path: ".symlinks/plugins/device_info/ios"
   firebase_core:
@@ -167,6 +172,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
+  callkeep: 6b21abbd46786a36e482190816db99b391ada1e3
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Firebase: 629510f1a9ddb235f3a7c5c8ceb23ba887f0f814
   firebase_core: 3b4c707f5a8eff38f52fd5580895bcd89357bf42
