@@ -54,6 +54,7 @@ void main() async {
     logger.info('FirebaseMessaging request permission: User declined or has not accepted permission');
   }
 
+  await AppPath.init();
   await DeviceInfo.init();
   await PackageInfo.init();
 
