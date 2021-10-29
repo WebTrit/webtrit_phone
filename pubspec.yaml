@@ -50,6 +50,7 @@ dependencies:
   path: ^1.8.0
   path_provider: ^2.0.5
   permission_handler: ^8.2.5
+  provider: ^6.0.1
   share_plus: ^3.0.4
   sqlite3_flutter_libs: ^0.5.0
   webview_flutter: ^2.1.1
