@@ -11,6 +11,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
+import 'package:provider/provider.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
@@ -75,51 +76,57 @@ void main() async {
 
   Bloc.observer = LoggingBlocObserver();
 
-  runApp(MultiRepositoryProvider(
-    providers: [
-      RepositoryProvider.value(
-        value: logRecordsRepository,
-      ),
-      RepositoryProvider<WebtritApiClient>(
-        create: (context) => WebtritApiClient(Uri.parse(EnvironmentConfig.WEBTRIT_CORE_URL)),
-      ),
-      RepositoryProvider<CallRepository>(
-        create: (context) => CallRepository(),
-      ),
-      RepositoryProvider<RecentsRepository>(
-        create: (context) => RecentsRepository(),
-      ),
-      RepositoryProvider<LocalContactsRepository>(
-        create: (context) => LocalContactsRepository(),
-      ),
-      RepositoryProvider<PushTokensRepository>(
-        create: (context) => PushTokensRepository(
-          webtritApiClient: context.read<WebtritApiClient>(),
-          secureStorage: SecureStorage(),
+  final app = Provider<AppDatabase>(
+    create: (context) => AppDatabase(AppPath().databasePath),
+    dispose: (context, value) => value.close(),
+    child: MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider.value(
+          value: logRecordsRepository,
         ),
-      ),
-      RepositoryProvider<ExternalContactsRepository>(
-        create: (context) => ExternalContactsRepository(
-          webtritApiClient: context.read<WebtritApiClient>(),
-          periodicPolling: EnvironmentConfig.PERIODIC_POLLING,
+        RepositoryProvider<WebtritApiClient>(
+          create: (context) => WebtritApiClient(Uri.parse(EnvironmentConfig.WEBTRIT_CORE_URL)),
         ),
-      ),
-      RepositoryProvider<AccountInfoRepository>(
-        create: (context) => AccountInfoRepository(
-          webtritApiClient: context.read<WebtritApiClient>(),
+        RepositoryProvider<CallRepository>(
+          create: (context) => CallRepository(),
         ),
-      ),
-    ],
-    child: BlocProvider<AppBloc>(
-      create: (context) {
-        return AppBloc();
-      },
-      child: App(
-        webRegistrationInitialUrl: await SecureStorage().readWebRegistrationInitialUrl(),
-        isRegistered: await SecureStorage().readToken() != null,
+        RepositoryProvider<RecentsRepository>(
+          create: (context) => RecentsRepository(),
+        ),
+        RepositoryProvider<LocalContactsRepository>(
+          create: (context) => LocalContactsRepository(),
+        ),
+        RepositoryProvider<PushTokensRepository>(
+          create: (context) => PushTokensRepository(
+            webtritApiClient: context.read<WebtritApiClient>(),
+            secureStorage: SecureStorage(),
+          ),
+        ),
+        RepositoryProvider<ExternalContactsRepository>(
+          create: (context) => ExternalContactsRepository(
+            webtritApiClient: context.read<WebtritApiClient>(),
+            periodicPolling: EnvironmentConfig.PERIODIC_POLLING,
+          ),
+        ),
+        RepositoryProvider<AccountInfoRepository>(
+          create: (context) => AccountInfoRepository(
+            webtritApiClient: context.read<WebtritApiClient>(),
+          ),
+        ),
+      ],
+      child: BlocProvider<AppBloc>(
+        create: (context) {
+          return AppBloc();
+        },
+        child: App(
+          webRegistrationInitialUrl: await SecureStorage().readWebRegistrationInitialUrl(),
+          isRegistered: await SecureStorage().readToken() != null,
+        ),
       ),
     ),
-  ));
+  );
+
+  runApp(app);
 }
 
 class App extends StatelessWidget {
