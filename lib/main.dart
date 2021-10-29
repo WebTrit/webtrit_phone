@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:callkeep/callkeep.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -184,6 +185,16 @@ class App extends StatelessWidget {
           case '/main':
             page = MultiBlocProvider(
               providers: [
+                BlocProvider<PushTokensBloc>(
+                  lazy: false,
+                  create: (context) {
+                    return PushTokensBloc(
+                      pushTokensRepository: context.read<PushTokensRepository>(),
+                      firebaseMessaging: FirebaseMessaging.instance,
+                      callkeep: FlutterCallkeep(),
+                    )..add(const PushTokensStarted());
+                  },
+                ),
                 BlocProvider<RecentsBloc>(
                   create: (context) {
                     return RecentsBloc(
