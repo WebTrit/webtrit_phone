@@ -214,7 +214,7 @@ class WebtritApiClient {
       body: jsonEncode(request.toJson()),
     );
 
-    if (httpResponse.statusCode != 200) {
+    if (httpResponse.statusCode != 204) {
       _throwRequestFailure(httpResponse);
     }
   }
