@@ -1,4 +1,4 @@
-export 'app_database.dart';
+export 'app_database/app_database.dart';
 export 'app_path.dart';
 export 'device_info.dart';
 export 'package_info.dart';
