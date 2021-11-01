@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:webtrit_phone/models/recent.dart';
-import 'package:webtrit_phone/repositories/recents_repository.dart';
+import 'package:webtrit_phone/repositories/recents/recents_repository.dart';
 
 part 'recents_event.dart';
 
