@@ -1064,9 +1064,25 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $ContactsTable contacts = $ContactsTable(this);
   late final $ContactPhonesTable contactPhones = $ContactPhonesTable(this);
   late final $CallLogsTable callLogs = $CallLogsTable(this);
+  late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
+  late final CallLogsDao callLogsDao = CallLogsDao(this as AppDatabase);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
       [contacts, contactPhones, callLogs];
+}
+
+// **************************************************************************
+// DaoGenerator
+// **************************************************************************
+
+mixin _$ContactsDaoMixin on DatabaseAccessor<AppDatabase> {
+  $ContactsTable get contacts => attachedDatabase.contacts;
+  $ContactPhonesTable get contactPhones => attachedDatabase.contactPhones;
+}
+mixin _$CallLogsDaoMixin on DatabaseAccessor<AppDatabase> {
+  $CallLogsTable get callLogs => attachedDatabase.callLogs;
+  $ContactPhonesTable get contactPhones => attachedDatabase.contactPhones;
+  $ContactsTable get contacts => attachedDatabase.contacts;
 }

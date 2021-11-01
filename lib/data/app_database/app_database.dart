@@ -15,6 +15,10 @@ part 'app_database.g.dart';
     ContactPhones,
     CallLogs,
   ],
+  daos: [
+    ContactsDao,
+    CallLogsDao,
+  ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase(
@@ -65,8 +69,7 @@ class ContactPhones extends Table {
 
   TextColumn get label => text()();
 
-  IntColumn get contactId => integer()
-      .customConstraint('NOT NULL REFERENCES contacts(id) ON DELETE CASCADE')();
+  IntColumn get contactId => integer().customConstraint('NOT NULL REFERENCES contacts(id) ON DELETE CASCADE')();
 
   DateTimeColumn get insertedAt => dateTime().nullable()();
 
@@ -78,12 +81,29 @@ class CallLogs extends Table {
 
   IntColumn get direction => intEnum<Direction>()();
 
-  TextColumn get number => text().customConstraint(
-      'NOT NULL CONSTRAINT "call_logs.number not_empty" CHECK (length(number) > 0)')();
+  TextColumn get number =>
+      text().customConstraint('NOT NULL CONSTRAINT "call_logs.number not_empty" CHECK (length(number) > 0)')();
 
   DateTimeColumn get initiatedAt => dateTime().nullable()();
 
   DateTimeColumn get acceptedAt => dateTime().nullable()();
 
   DateTimeColumn get hungUpAt => dateTime().nullable()();
+}
+
+@DriftAccessor(tables: [
+  Contacts,
+  ContactPhones,
+])
+class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin {
+  ContactsDao(AppDatabase db) : super(db);
+}
+
+@DriftAccessor(tables: [
+  CallLogs,
+  ContactPhones,
+  Contacts,
+])
+class CallLogsDao extends DatabaseAccessor<AppDatabase> with _$CallLogsDaoMixin {
+  CallLogsDao(AppDatabase db) : super(db);
 }
