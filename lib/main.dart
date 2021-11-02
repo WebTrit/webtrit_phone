@@ -91,7 +91,9 @@ void main() async {
           create: (context) => CallRepository(),
         ),
         RepositoryProvider<RecentsRepository>(
-          create: (context) => RecentsRepository(),
+          create: (context) => RecentsRepository(
+            appDatabase: context.read<AppDatabase>(),
+          ),
         ),
         RepositoryProvider<LocalContactsRepository>(
           create: (context) => LocalContactsRepository(),

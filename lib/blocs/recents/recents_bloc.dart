@@ -22,8 +22,6 @@ class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
   Stream<RecentsState> mapEventToState(RecentsEvent event) async* {
     if (event is RecentsInitialLoaded) {
       yield* _mapRecentsInitialLoadedToState(event);
-    } else if (event is RecentsRefreshed) {
-      yield* _mapRecentsRefreshedToState(event);
     } else if (event is RecentsAdd) {
       yield* _mapRecentsAddToState(event);
     } else if (event is RecentsDelete) {
@@ -45,20 +43,6 @@ class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
     _recentsSubscription = recentsRepository.recents().listen(
           (recents) => add(RecentsUpdated(recents: recents)),
         );
-
-    try {
-      await recentsRepository.load();
-    } catch (error) {
-      yield const RecentsInitialLoadFailure();
-    }
-  }
-
-  Stream<RecentsState> _mapRecentsRefreshedToState(RecentsRefreshed event) async* {
-    try {
-      await recentsRepository.load();
-    } catch (error) {
-      yield const RecentsRefreshFailure();
-    }
   }
 
   Stream<RecentsState> _mapRecentsAddToState(RecentsAdd event) async* {

@@ -60,9 +60,6 @@ class _RecentsPageState extends State<RecentsPage> with SingleTickerProviderStat
             context.showErrorSnackBar('Ups error happened ☹️');
           }
         },
-        buildWhen: (previous, current) {
-          return current is! RecentsRefreshFailure;
-        },
         builder: (context, state) {
           if (state is RecentsInitial) {
             return const Center(
@@ -83,49 +80,33 @@ class _RecentsPageState extends State<RecentsPage> with SingleTickerProviderStat
               }
             }).toList();
 
-            return RefreshIndicator(
-              onRefresh: () {
-                context.hideCurrentSnackBar();
-                return (context.read<RecentsBloc>()..add(const RecentsRefreshed()))
-                    .stream
-                    .firstWhere((state) => state is RecentsLoadSuccess || state is RecentsRefreshFailure);
-              },
-              child: ListView.separated(
-                itemCount: recentsFiltered.length,
-                itemBuilder: (context, index) {
-                  final recent = recentsFiltered[index];
-                  return RecentTile(
-                    recent: recent,
-                    onInfoTap: () {
-                      context.showSnackBar('Tap info on "${recent.number}"');
-                    },
-                    onTap: () {
-                      context.read<CallBloc>().add(CallOutgoingStarted(number: recent.number, video: true));
-                    },
-                    onLongPress: () {
-                      context.showSnackBar('LongPress on "${recent.number}"');
-                    },
-                    onDeleted: (recent) {
-                      context.showSnackBar('"${recent.number}" deleted');
+            return ListView.separated(
+              itemCount: recentsFiltered.length,
+              itemBuilder: (context, index) {
+                final recent = recentsFiltered[index];
+                return RecentTile(
+                  recent: recent,
+                  onInfoTap: () {
+                    context.showSnackBar('Tap info on "${recent.number}"');
+                  },
+                  onTap: () {
+                    context.read<CallBloc>().add(CallOutgoingStarted(number: recent.number, video: true));
+                  },
+                  onLongPress: () {
+                    context.showSnackBar('LongPress on "${recent.number}"');
+                  },
+                  onDeleted: (recent) {
+                    context.showSnackBar('"${recent.number}" deleted');
 
-                      context.read<RecentsBloc>().add(RecentsDelete(recent: recent));
-                    },
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return const Divider(
-                    height: 1,
-                  );
-                },
-              ),
-            );
-          }
-          if (state is RecentsInitialLoadFailure) {
-            return Center(
-              child: OutlinedButton(
-                onPressed: () => context.read<RecentsBloc>().add(const RecentsInitialLoaded()),
-                child: const Text('Refresh'),
-              ),
+                    context.read<RecentsBloc>().add(RecentsDelete(recent: recent));
+                  },
+                );
+              },
+              separatorBuilder: (context, index) {
+                return const Divider(
+                  height: 1,
+                );
+              },
             );
           }
           throw StateError(''); // TODO fix if logic
@@ -211,7 +192,7 @@ class RecentTile extends StatelessWidget {
             ),
             const Text(' · '),
             Text(
-              recent.time.format(context),
+              recent.createdTime.format(context),
             ),
           ],
         ),

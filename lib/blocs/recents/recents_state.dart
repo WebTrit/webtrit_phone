@@ -25,7 +25,7 @@ class RecentsLoadSuccess extends RecentsState {
   int get hashCode => identityHashCode(this);
 }
 
-abstract class RecentsLoadFailure extends RecentsState {
+class RecentsLoadFailure extends RecentsState {
   const RecentsLoadFailure();
 
   @override
@@ -33,12 +33,4 @@ abstract class RecentsLoadFailure extends RecentsState {
 
   @override
   int get hashCode => identityHashCode(this);
-}
-
-class RecentsInitialLoadFailure extends RecentsLoadFailure {
-  const RecentsInitialLoadFailure();
-}
-
-class RecentsRefreshFailure extends RecentsLoadFailure {
-  const RecentsRefreshFailure();
 }

@@ -11,10 +11,6 @@ class RecentsInitialLoaded extends RecentsEvent {
   const RecentsInitialLoaded();
 }
 
-class RecentsRefreshed extends RecentsEvent {
-  const RecentsRefreshed();
-}
-
 class RecentsUpdated extends RecentsEvent {
   final List<Recent> recents;
 

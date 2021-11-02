@@ -9,28 +9,40 @@ enum Direction {
 @immutable
 class Recent extends Equatable {
   final Direction direction;
-  final bool isComplete;
   final String number;
-  final bool video;
-  final DateTime time;
-  final Duration? duration;
+  final DateTime createdTime;
+  final DateTime? acceptedTime;
+  final DateTime? hungUpTime;
+  final int? id;
 
-  const Recent(
-    this.direction,
-    this.isComplete,
-    this.number,
-    this.video,
-    this.time,
-    this.duration,
-  );
+  const Recent({
+    required this.direction,
+    required this.number,
+    required this.createdTime,
+    this.acceptedTime,
+    this.hungUpTime,
+    this.id,
+  });
+
+  bool get isComplete => acceptedTime != null;
+
+  Duration? get duration {
+    final hungUpTime = this.hungUpTime;
+    final acceptedTime = this.acceptedTime;
+    if (hungUpTime != null && acceptedTime != null) {
+      return hungUpTime.difference(acceptedTime);
+    } else {
+      return null;
+    }
+  }
 
   @override
   List<Object?> get props => [
         direction,
-        isComplete,
         number,
-        video,
-        time,
-        duration,
+        createdTime,
+        acceptedTime,
+        hungUpTime,
+        id,
       ];
 }

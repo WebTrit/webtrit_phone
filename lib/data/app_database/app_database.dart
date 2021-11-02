@@ -106,4 +106,13 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
 ])
 class CallLogsDao extends DatabaseAccessor<AppDatabase> with _$CallLogsDaoMixin {
   CallLogsDao(AppDatabase db) : super(db);
+
+  Stream<List<CallLog>> watchLastCallLogs([Duration period = const Duration(days: 14)]) => (select(callLogs)
+        ..where((t) => t.createdAt.isBiggerOrEqualValue(DateTime.now().subtract(period)))
+        ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
+      .watch();
+
+  Future<int> insertCallLog(Insertable<CallLog> callLog) => into(callLogs).insert(callLog);
+
+  Future<int> deleteCallLog(Insertable<CallLog> callLog) => delete(callLogs).delete(callLog);
 }

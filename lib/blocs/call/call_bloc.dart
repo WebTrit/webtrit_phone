@@ -320,16 +320,13 @@ class CallBloc extends Bloc<CallEvent, CallState> {
       throw StateError('Incorrect state class');
     }
 
-    final hungUpTime = state.hungUpTime;
-    final acceptedTime = state.acceptedTime;
-
     recentsBloc.add(RecentsAdd(
       recent: Recent(
-        direction,
-        state.accepted,
-        state.number,
-        state.createdTime,
-        (hungUpTime != null && acceptedTime != null) ? hungUpTime.difference(acceptedTime) : null,
+        direction: direction,
+        number: state.number,
+        createdTime: state.createdTime,
+        acceptedTime: state.acceptedTime,
+        hungUpTime: state.hungUpTime,
       ),
     ));
   }

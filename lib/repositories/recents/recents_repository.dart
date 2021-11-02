@@ -1,29 +1,44 @@
 import 'dart:async';
 
+import 'package:drift/drift.dart';
+
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 
-// TODO: add local persist and/or external sync of recents calls
 class RecentsRepository {
-  final _recents = <Recent>[];
-  final _controller = StreamController<List<Recent>>.broadcast();
+  RecentsRepository({required this.appDatabase});
+
+  final AppDatabase appDatabase;
 
   Stream<List<Recent>> recents() {
-    return _controller.stream;
-  }
-
-  Future<void> load() async {
-    _controller.add(List<Recent>.from(_recents));
+    return appDatabase.callLogsDao.watchLastCallLogs().map((callLogs) => callLogs
+        .map((callLog) => Recent(
+              direction: callLog.direction,
+              number: callLog.number,
+              createdTime: callLog.createdAt,
+              acceptedTime: callLog.acceptedAt,
+              hungUpTime: callLog.hungUpAt,
+              id: callLog.id,
+            ))
+        .toList(growable: false));
   }
 
   Future<void> add(Recent recent) async {
-    _recents.insert(0, recent);
-
-    _controller.add(List<Recent>.from(_recents));
+    appDatabase.callLogsDao.insertCallLog(CallLogsCompanion(
+      direction: Value(recent.direction),
+      number: Value(recent.number),
+      createdAt: Value(recent.createdTime),
+      acceptedAt: Value(recent.acceptedTime),
+      hungUpAt: Value(recent.hungUpTime),
+    ));
   }
 
   Future<void> delete(Recent recent) async {
-    _recents.remove(recent);
-
-    _controller.add(List<Recent>.from(_recents));
+    final id = recent.id;
+    if (id != null) {
+      appDatabase.callLogsDao.deleteCallLog(CallLogsCompanion(
+        id: Value(id),
+      ));
+    }
   }
 }
