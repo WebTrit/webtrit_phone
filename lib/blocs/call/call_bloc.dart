@@ -328,8 +328,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
         direction,
         state.accepted,
         state.number,
-        state.video,
-        state.createdTime!,
+        state.createdTime,
         (hungUpTime != null && acceptedTime != null) ? hungUpTime.difference(acceptedTime) : null,
       ),
     ));

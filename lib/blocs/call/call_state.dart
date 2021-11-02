@@ -38,7 +38,7 @@ class CallIdle extends CallState {
 abstract class CallActive extends CallState {
   final String number;
   final bool video;
-  final DateTime? createdTime;
+  final DateTime createdTime;
   final DateTime? acceptedTime;
   final DateTime? hungUpTime;
   final MediaStream? localStream;
@@ -47,12 +47,12 @@ abstract class CallActive extends CallState {
   const CallActive({
     required this.number,
     required this.video,
-    this.createdTime,
+    required this.createdTime,
     this.acceptedTime,
     this.hungUpTime,
     this.localStream,
     this.remoteStream,
-  }) : assert(createdTime != null);
+  });
 
   bool get accepted => acceptedTime != null;
 
@@ -89,7 +89,7 @@ class CallIncoming extends CallActive {
   const CallIncoming({
     required String number,
     required bool video,
-    DateTime? createdTime,
+    required DateTime createdTime,
     DateTime? acceptedTime,
     DateTime? hungUpTime,
     MediaStream? localStream,
@@ -130,7 +130,7 @@ class CallOutgoing extends CallActive {
   const CallOutgoing({
     required String number,
     required bool video,
-    DateTime? createdTime,
+    required DateTime createdTime,
     DateTime? acceptedTime,
     DateTime? hungUpTime,
     MediaStream? localStream,
