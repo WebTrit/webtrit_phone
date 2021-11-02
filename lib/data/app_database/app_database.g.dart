@@ -735,14 +735,14 @@ class CallLog extends DataClass implements Insertable<CallLog> {
   final int id;
   final Direction direction;
   final String number;
-  final DateTime? initiatedAt;
+  final DateTime createdAt;
   final DateTime? acceptedAt;
   final DateTime? hungUpAt;
   CallLog(
       {required this.id,
       required this.direction,
       required this.number,
-      this.initiatedAt,
+      required this.createdAt,
       this.acceptedAt,
       this.hungUpAt});
   factory CallLog.fromData(Map<String, dynamic> data, {String? prefix}) {
@@ -754,8 +754,8 @@ class CallLog extends DataClass implements Insertable<CallLog> {
           .mapFromDatabaseResponse(data['${effectivePrefix}direction']))!,
       number: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}number'])!,
-      initiatedAt: const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}initiated_at']),
+      createdAt: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}created_at'])!,
       acceptedAt: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}accepted_at']),
       hungUpAt: const DateTimeType()
@@ -771,9 +771,7 @@ class CallLog extends DataClass implements Insertable<CallLog> {
       map['direction'] = Variable<int>(converter.mapToSql(direction)!);
     }
     map['number'] = Variable<String>(number);
-    if (!nullToAbsent || initiatedAt != null) {
-      map['initiated_at'] = Variable<DateTime?>(initiatedAt);
-    }
+    map['created_at'] = Variable<DateTime>(createdAt);
     if (!nullToAbsent || acceptedAt != null) {
       map['accepted_at'] = Variable<DateTime?>(acceptedAt);
     }
@@ -788,9 +786,7 @@ class CallLog extends DataClass implements Insertable<CallLog> {
       id: Value(id),
       direction: Value(direction),
       number: Value(number),
-      initiatedAt: initiatedAt == null && nullToAbsent
-          ? const Value.absent()
-          : Value(initiatedAt),
+      createdAt: Value(createdAt),
       acceptedAt: acceptedAt == null && nullToAbsent
           ? const Value.absent()
           : Value(acceptedAt),
@@ -807,7 +803,7 @@ class CallLog extends DataClass implements Insertable<CallLog> {
       id: serializer.fromJson<int>(json['id']),
       direction: serializer.fromJson<Direction>(json['direction']),
       number: serializer.fromJson<String>(json['number']),
-      initiatedAt: serializer.fromJson<DateTime?>(json['initiatedAt']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       acceptedAt: serializer.fromJson<DateTime?>(json['acceptedAt']),
       hungUpAt: serializer.fromJson<DateTime?>(json['hungUpAt']),
     );
@@ -819,7 +815,7 @@ class CallLog extends DataClass implements Insertable<CallLog> {
       'id': serializer.toJson<int>(id),
       'direction': serializer.toJson<Direction>(direction),
       'number': serializer.toJson<String>(number),
-      'initiatedAt': serializer.toJson<DateTime?>(initiatedAt),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
       'acceptedAt': serializer.toJson<DateTime?>(acceptedAt),
       'hungUpAt': serializer.toJson<DateTime?>(hungUpAt),
     };
@@ -829,14 +825,14 @@ class CallLog extends DataClass implements Insertable<CallLog> {
           {int? id,
           Direction? direction,
           String? number,
-          Value<DateTime?> initiatedAt = const Value.absent(),
+          DateTime? createdAt,
           Value<DateTime?> acceptedAt = const Value.absent(),
           Value<DateTime?> hungUpAt = const Value.absent()}) =>
       CallLog(
         id: id ?? this.id,
         direction: direction ?? this.direction,
         number: number ?? this.number,
-        initiatedAt: initiatedAt.present ? initiatedAt.value : this.initiatedAt,
+        createdAt: createdAt ?? this.createdAt,
         acceptedAt: acceptedAt.present ? acceptedAt.value : this.acceptedAt,
         hungUpAt: hungUpAt.present ? hungUpAt.value : this.hungUpAt,
       );
@@ -846,7 +842,7 @@ class CallLog extends DataClass implements Insertable<CallLog> {
           ..write('id: $id, ')
           ..write('direction: $direction, ')
           ..write('number: $number, ')
-          ..write('initiatedAt: $initiatedAt, ')
+          ..write('createdAt: $createdAt, ')
           ..write('acceptedAt: $acceptedAt, ')
           ..write('hungUpAt: $hungUpAt')
           ..write(')'))
@@ -855,7 +851,7 @@ class CallLog extends DataClass implements Insertable<CallLog> {
 
   @override
   int get hashCode =>
-      Object.hash(id, direction, number, initiatedAt, acceptedAt, hungUpAt);
+      Object.hash(id, direction, number, createdAt, acceptedAt, hungUpAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -863,7 +859,7 @@ class CallLog extends DataClass implements Insertable<CallLog> {
           other.id == this.id &&
           other.direction == this.direction &&
           other.number == this.number &&
-          other.initiatedAt == this.initiatedAt &&
+          other.createdAt == this.createdAt &&
           other.acceptedAt == this.acceptedAt &&
           other.hungUpAt == this.hungUpAt);
 }
@@ -872,14 +868,14 @@ class CallLogsCompanion extends UpdateCompanion<CallLog> {
   final Value<int> id;
   final Value<Direction> direction;
   final Value<String> number;
-  final Value<DateTime?> initiatedAt;
+  final Value<DateTime> createdAt;
   final Value<DateTime?> acceptedAt;
   final Value<DateTime?> hungUpAt;
   const CallLogsCompanion({
     this.id = const Value.absent(),
     this.direction = const Value.absent(),
     this.number = const Value.absent(),
-    this.initiatedAt = const Value.absent(),
+    this.createdAt = const Value.absent(),
     this.acceptedAt = const Value.absent(),
     this.hungUpAt = const Value.absent(),
   });
@@ -887,16 +883,17 @@ class CallLogsCompanion extends UpdateCompanion<CallLog> {
     this.id = const Value.absent(),
     required Direction direction,
     required String number,
-    this.initiatedAt = const Value.absent(),
+    required DateTime createdAt,
     this.acceptedAt = const Value.absent(),
     this.hungUpAt = const Value.absent(),
   })  : direction = Value(direction),
-        number = Value(number);
+        number = Value(number),
+        createdAt = Value(createdAt);
   static Insertable<CallLog> custom({
     Expression<int>? id,
     Expression<Direction>? direction,
     Expression<String>? number,
-    Expression<DateTime?>? initiatedAt,
+    Expression<DateTime>? createdAt,
     Expression<DateTime?>? acceptedAt,
     Expression<DateTime?>? hungUpAt,
   }) {
@@ -904,7 +901,7 @@ class CallLogsCompanion extends UpdateCompanion<CallLog> {
       if (id != null) 'id': id,
       if (direction != null) 'direction': direction,
       if (number != null) 'number': number,
-      if (initiatedAt != null) 'initiated_at': initiatedAt,
+      if (createdAt != null) 'created_at': createdAt,
       if (acceptedAt != null) 'accepted_at': acceptedAt,
       if (hungUpAt != null) 'hung_up_at': hungUpAt,
     });
@@ -914,14 +911,14 @@ class CallLogsCompanion extends UpdateCompanion<CallLog> {
       {Value<int>? id,
       Value<Direction>? direction,
       Value<String>? number,
-      Value<DateTime?>? initiatedAt,
+      Value<DateTime>? createdAt,
       Value<DateTime?>? acceptedAt,
       Value<DateTime?>? hungUpAt}) {
     return CallLogsCompanion(
       id: id ?? this.id,
       direction: direction ?? this.direction,
       number: number ?? this.number,
-      initiatedAt: initiatedAt ?? this.initiatedAt,
+      createdAt: createdAt ?? this.createdAt,
       acceptedAt: acceptedAt ?? this.acceptedAt,
       hungUpAt: hungUpAt ?? this.hungUpAt,
     );
@@ -940,8 +937,8 @@ class CallLogsCompanion extends UpdateCompanion<CallLog> {
     if (number.present) {
       map['number'] = Variable<String>(number.value);
     }
-    if (initiatedAt.present) {
-      map['initiated_at'] = Variable<DateTime?>(initiatedAt.value);
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
     }
     if (acceptedAt.present) {
       map['accepted_at'] = Variable<DateTime?>(acceptedAt.value);
@@ -958,7 +955,7 @@ class CallLogsCompanion extends UpdateCompanion<CallLog> {
           ..write('id: $id, ')
           ..write('direction: $direction, ')
           ..write('number: $number, ')
-          ..write('initiatedAt: $initiatedAt, ')
+          ..write('createdAt: $createdAt, ')
           ..write('acceptedAt: $acceptedAt, ')
           ..write('hungUpAt: $hungUpAt')
           ..write(')'))
@@ -988,11 +985,10 @@ class $CallLogsTable extends CallLogs with TableInfo<$CallLogsTable, CallLog> {
       requiredDuringInsert: true,
       $customConstraints:
           'NOT NULL CONSTRAINT "call_logs.number not_empty" CHECK (length(number) > 0)');
-  final VerificationMeta _initiatedAtMeta =
-      const VerificationMeta('initiatedAt');
-  late final GeneratedColumn<DateTime?> initiatedAt =
-      GeneratedColumn<DateTime?>('initiated_at', aliasedName, true,
-          typeName: 'INTEGER', requiredDuringInsert: false);
+  final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
+  late final GeneratedColumn<DateTime?> createdAt = GeneratedColumn<DateTime?>(
+      'created_at', aliasedName, false,
+      typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _acceptedAtMeta = const VerificationMeta('acceptedAt');
   late final GeneratedColumn<DateTime?> acceptedAt = GeneratedColumn<DateTime?>(
       'accepted_at', aliasedName, true,
@@ -1003,7 +999,7 @@ class $CallLogsTable extends CallLogs with TableInfo<$CallLogsTable, CallLog> {
       typeName: 'INTEGER', requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, direction, number, initiatedAt, acceptedAt, hungUpAt];
+      [id, direction, number, createdAt, acceptedAt, hungUpAt];
   @override
   String get aliasedName => _alias ?? 'call_logs';
   @override
@@ -1023,11 +1019,11 @@ class $CallLogsTable extends CallLogs with TableInfo<$CallLogsTable, CallLog> {
     } else if (isInserting) {
       context.missing(_numberMeta);
     }
-    if (data.containsKey('initiated_at')) {
-      context.handle(
-          _initiatedAtMeta,
-          initiatedAt.isAcceptableOrUnknown(
-              data['initiated_at']!, _initiatedAtMeta));
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
     }
     if (data.containsKey('accepted_at')) {
       context.handle(

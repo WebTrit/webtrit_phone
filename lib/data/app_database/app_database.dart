@@ -84,7 +84,7 @@ class CallLogs extends Table {
   TextColumn get number =>
       text().customConstraint('NOT NULL CONSTRAINT "call_logs.number not_empty" CHECK (length(number) > 0)')();
 
-  DateTimeColumn get initiatedAt => dateTime().nullable()();
+  DateTimeColumn get createdAt => dateTime()();
 
   DateTimeColumn get acceptedAt => dateTime().nullable()();
 
