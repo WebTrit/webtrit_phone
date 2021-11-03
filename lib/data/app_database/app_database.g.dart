@@ -7,7 +7,7 @@ part of 'app_database.dart';
 // **************************************************************************
 
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
-class Contact extends DataClass implements Insertable<Contact> {
+class ContactData extends DataClass implements Insertable<ContactData> {
   final int id;
   final ContactsSource sourceType;
   final String sourceId;
@@ -16,7 +16,7 @@ class Contact extends DataClass implements Insertable<Contact> {
   final String? lastName;
   final DateTime? insertedAt;
   final DateTime? updatedAt;
-  Contact(
+  ContactData(
       {required this.id,
       required this.sourceType,
       required this.sourceId,
@@ -25,12 +25,12 @@ class Contact extends DataClass implements Insertable<Contact> {
       this.lastName,
       this.insertedAt,
       this.updatedAt});
-  factory Contact.fromData(Map<String, dynamic> data, {String? prefix}) {
+  factory ContactData.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    return Contact(
+    return ContactData(
       id: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      sourceType: $ContactsTable.$converter0.mapToDart(const IntType()
+      sourceType: $ContactsTableTable.$converter0.mapToDart(const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}source_type']))!,
       sourceId: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}source_id'])!,
@@ -51,7 +51,7 @@ class Contact extends DataClass implements Insertable<Contact> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     {
-      final converter = $ContactsTable.$converter0;
+      final converter = $ContactsTableTable.$converter0;
       map['source_type'] = Variable<int>(converter.mapToSql(sourceType)!);
     }
     map['source_id'] = Variable<String>(sourceId);
@@ -73,8 +73,8 @@ class Contact extends DataClass implements Insertable<Contact> {
     return map;
   }
 
-  ContactsCompanion toCompanion(bool nullToAbsent) {
-    return ContactsCompanion(
+  ContactsTableCompanion toCompanion(bool nullToAbsent) {
+    return ContactsTableCompanion(
       id: Value(id),
       sourceType: Value(sourceType),
       sourceId: Value(sourceId),
@@ -96,10 +96,10 @@ class Contact extends DataClass implements Insertable<Contact> {
     );
   }
 
-  factory Contact.fromJson(Map<String, dynamic> json,
+  factory ContactData.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Contact(
+    return ContactData(
       id: serializer.fromJson<int>(json['id']),
       sourceType: serializer.fromJson<ContactsSource>(json['sourceType']),
       sourceId: serializer.fromJson<String>(json['sourceId']),
@@ -125,7 +125,7 @@ class Contact extends DataClass implements Insertable<Contact> {
     };
   }
 
-  Contact copyWith(
+  ContactData copyWith(
           {int? id,
           ContactsSource? sourceType,
           String? sourceId,
@@ -134,7 +134,7 @@ class Contact extends DataClass implements Insertable<Contact> {
           Value<String?> lastName = const Value.absent(),
           Value<DateTime?> insertedAt = const Value.absent(),
           Value<DateTime?> updatedAt = const Value.absent()}) =>
-      Contact(
+      ContactData(
         id: id ?? this.id,
         sourceType: sourceType ?? this.sourceType,
         sourceId: sourceId ?? this.sourceId,
@@ -146,7 +146,7 @@ class Contact extends DataClass implements Insertable<Contact> {
       );
   @override
   String toString() {
-    return (StringBuffer('Contact(')
+    return (StringBuffer('ContactData(')
           ..write('id: $id, ')
           ..write('sourceType: $sourceType, ')
           ..write('sourceId: $sourceId, ')
@@ -165,7 +165,7 @@ class Contact extends DataClass implements Insertable<Contact> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Contact &&
+      (other is ContactData &&
           other.id == this.id &&
           other.sourceType == this.sourceType &&
           other.sourceId == this.sourceId &&
@@ -176,7 +176,7 @@ class Contact extends DataClass implements Insertable<Contact> {
           other.updatedAt == this.updatedAt);
 }
 
-class ContactsCompanion extends UpdateCompanion<Contact> {
+class ContactsTableCompanion extends UpdateCompanion<ContactData> {
   final Value<int> id;
   final Value<ContactsSource> sourceType;
   final Value<String> sourceId;
@@ -185,7 +185,7 @@ class ContactsCompanion extends UpdateCompanion<Contact> {
   final Value<String?> lastName;
   final Value<DateTime?> insertedAt;
   final Value<DateTime?> updatedAt;
-  const ContactsCompanion({
+  const ContactsTableCompanion({
     this.id = const Value.absent(),
     this.sourceType = const Value.absent(),
     this.sourceId = const Value.absent(),
@@ -195,7 +195,7 @@ class ContactsCompanion extends UpdateCompanion<Contact> {
     this.insertedAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   });
-  ContactsCompanion.insert({
+  ContactsTableCompanion.insert({
     this.id = const Value.absent(),
     required ContactsSource sourceType,
     required String sourceId,
@@ -206,7 +206,7 @@ class ContactsCompanion extends UpdateCompanion<Contact> {
     this.updatedAt = const Value.absent(),
   })  : sourceType = Value(sourceType),
         sourceId = Value(sourceId);
-  static Insertable<Contact> custom({
+  static Insertable<ContactData> custom({
     Expression<int>? id,
     Expression<ContactsSource>? sourceType,
     Expression<String>? sourceId,
@@ -228,7 +228,7 @@ class ContactsCompanion extends UpdateCompanion<Contact> {
     });
   }
 
-  ContactsCompanion copyWith(
+  ContactsTableCompanion copyWith(
       {Value<int>? id,
       Value<ContactsSource>? sourceType,
       Value<String>? sourceId,
@@ -237,7 +237,7 @@ class ContactsCompanion extends UpdateCompanion<Contact> {
       Value<String?>? lastName,
       Value<DateTime?>? insertedAt,
       Value<DateTime?>? updatedAt}) {
-    return ContactsCompanion(
+    return ContactsTableCompanion(
       id: id ?? this.id,
       sourceType: sourceType ?? this.sourceType,
       sourceId: sourceId ?? this.sourceId,
@@ -256,7 +256,7 @@ class ContactsCompanion extends UpdateCompanion<Contact> {
       map['id'] = Variable<int>(id.value);
     }
     if (sourceType.present) {
-      final converter = $ContactsTable.$converter0;
+      final converter = $ContactsTableTable.$converter0;
       map['source_type'] = Variable<int>(converter.mapToSql(sourceType.value)!);
     }
     if (sourceId.present) {
@@ -282,7 +282,7 @@ class ContactsCompanion extends UpdateCompanion<Contact> {
 
   @override
   String toString() {
-    return (StringBuffer('ContactsCompanion(')
+    return (StringBuffer('ContactsTableCompanion(')
           ..write('id: $id, ')
           ..write('sourceType: $sourceType, ')
           ..write('sourceId: $sourceId, ')
@@ -296,10 +296,11 @@ class ContactsCompanion extends UpdateCompanion<Contact> {
   }
 }
 
-class $ContactsTable extends Contacts with TableInfo<$ContactsTable, Contact> {
+class $ContactsTableTable extends ContactsTable
+    with TableInfo<$ContactsTableTable, ContactData> {
   final GeneratedDatabase _db;
   final String? _alias;
-  $ContactsTable(this._db, [this._alias]);
+  $ContactsTableTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
       'id', aliasedName, false,
@@ -310,7 +311,7 @@ class $ContactsTable extends Contacts with TableInfo<$ContactsTable, Contact> {
   late final GeneratedColumnWithTypeConverter<ContactsSource, int?> sourceType =
       GeneratedColumn<int?>('source_type', aliasedName, false,
               typeName: 'INTEGER', requiredDuringInsert: true)
-          .withConverter<ContactsSource>($ContactsTable.$converter0);
+          .withConverter<ContactsSource>($ContactsTableTable.$converter0);
   final VerificationMeta _sourceIdMeta = const VerificationMeta('sourceId');
   late final GeneratedColumn<String?> sourceId = GeneratedColumn<String?>(
       'source_id', aliasedName, false,
@@ -352,7 +353,7 @@ class $ContactsTable extends Contacts with TableInfo<$ContactsTable, Contact> {
   @override
   String get actualTableName => 'contacts';
   @override
-  VerificationContext validateIntegrity(Insertable<Contact> instance,
+  VerificationContext validateIntegrity(Insertable<ContactData> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -396,37 +397,39 @@ class $ContactsTable extends Contacts with TableInfo<$ContactsTable, Contact> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Contact map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Contact.fromData(data,
+  ContactData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return ContactData.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
-  $ContactsTable createAlias(String alias) {
-    return $ContactsTable(_db, alias);
+  $ContactsTableTable createAlias(String alias) {
+    return $ContactsTableTable(_db, alias);
   }
 
   static TypeConverter<ContactsSource, int> $converter0 =
       const EnumIndexConverter<ContactsSource>(ContactsSource.values);
 }
 
-class ContactPhone extends DataClass implements Insertable<ContactPhone> {
+class ContactPhoneData extends DataClass
+    implements Insertable<ContactPhoneData> {
   final int id;
   final String number;
   final String label;
   final int contactId;
   final DateTime? insertedAt;
   final DateTime? updatedAt;
-  ContactPhone(
+  ContactPhoneData(
       {required this.id,
       required this.number,
       required this.label,
       required this.contactId,
       this.insertedAt,
       this.updatedAt});
-  factory ContactPhone.fromData(Map<String, dynamic> data, {String? prefix}) {
+  factory ContactPhoneData.fromData(Map<String, dynamic> data,
+      {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    return ContactPhone(
+    return ContactPhoneData(
       id: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
       number: const StringType()
@@ -457,8 +460,8 @@ class ContactPhone extends DataClass implements Insertable<ContactPhone> {
     return map;
   }
 
-  ContactPhonesCompanion toCompanion(bool nullToAbsent) {
-    return ContactPhonesCompanion(
+  ContactPhonesTableCompanion toCompanion(bool nullToAbsent) {
+    return ContactPhonesTableCompanion(
       id: Value(id),
       number: Value(number),
       label: Value(label),
@@ -472,10 +475,10 @@ class ContactPhone extends DataClass implements Insertable<ContactPhone> {
     );
   }
 
-  factory ContactPhone.fromJson(Map<String, dynamic> json,
+  factory ContactPhoneData.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return ContactPhone(
+    return ContactPhoneData(
       id: serializer.fromJson<int>(json['id']),
       number: serializer.fromJson<String>(json['number']),
       label: serializer.fromJson<String>(json['label']),
@@ -497,14 +500,14 @@ class ContactPhone extends DataClass implements Insertable<ContactPhone> {
     };
   }
 
-  ContactPhone copyWith(
+  ContactPhoneData copyWith(
           {int? id,
           String? number,
           String? label,
           int? contactId,
           Value<DateTime?> insertedAt = const Value.absent(),
           Value<DateTime?> updatedAt = const Value.absent()}) =>
-      ContactPhone(
+      ContactPhoneData(
         id: id ?? this.id,
         number: number ?? this.number,
         label: label ?? this.label,
@@ -514,7 +517,7 @@ class ContactPhone extends DataClass implements Insertable<ContactPhone> {
       );
   @override
   String toString() {
-    return (StringBuffer('ContactPhone(')
+    return (StringBuffer('ContactPhoneData(')
           ..write('id: $id, ')
           ..write('number: $number, ')
           ..write('label: $label, ')
@@ -531,7 +534,7 @@ class ContactPhone extends DataClass implements Insertable<ContactPhone> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is ContactPhone &&
+      (other is ContactPhoneData &&
           other.id == this.id &&
           other.number == this.number &&
           other.label == this.label &&
@@ -540,14 +543,14 @@ class ContactPhone extends DataClass implements Insertable<ContactPhone> {
           other.updatedAt == this.updatedAt);
 }
 
-class ContactPhonesCompanion extends UpdateCompanion<ContactPhone> {
+class ContactPhonesTableCompanion extends UpdateCompanion<ContactPhoneData> {
   final Value<int> id;
   final Value<String> number;
   final Value<String> label;
   final Value<int> contactId;
   final Value<DateTime?> insertedAt;
   final Value<DateTime?> updatedAt;
-  const ContactPhonesCompanion({
+  const ContactPhonesTableCompanion({
     this.id = const Value.absent(),
     this.number = const Value.absent(),
     this.label = const Value.absent(),
@@ -555,7 +558,7 @@ class ContactPhonesCompanion extends UpdateCompanion<ContactPhone> {
     this.insertedAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   });
-  ContactPhonesCompanion.insert({
+  ContactPhonesTableCompanion.insert({
     this.id = const Value.absent(),
     required String number,
     required String label,
@@ -565,7 +568,7 @@ class ContactPhonesCompanion extends UpdateCompanion<ContactPhone> {
   })  : number = Value(number),
         label = Value(label),
         contactId = Value(contactId);
-  static Insertable<ContactPhone> custom({
+  static Insertable<ContactPhoneData> custom({
     Expression<int>? id,
     Expression<String>? number,
     Expression<String>? label,
@@ -583,14 +586,14 @@ class ContactPhonesCompanion extends UpdateCompanion<ContactPhone> {
     });
   }
 
-  ContactPhonesCompanion copyWith(
+  ContactPhonesTableCompanion copyWith(
       {Value<int>? id,
       Value<String>? number,
       Value<String>? label,
       Value<int>? contactId,
       Value<DateTime?>? insertedAt,
       Value<DateTime?>? updatedAt}) {
-    return ContactPhonesCompanion(
+    return ContactPhonesTableCompanion(
       id: id ?? this.id,
       number: number ?? this.number,
       label: label ?? this.label,
@@ -626,7 +629,7 @@ class ContactPhonesCompanion extends UpdateCompanion<ContactPhone> {
 
   @override
   String toString() {
-    return (StringBuffer('ContactPhonesCompanion(')
+    return (StringBuffer('ContactPhonesTableCompanion(')
           ..write('id: $id, ')
           ..write('number: $number, ')
           ..write('label: $label, ')
@@ -638,11 +641,11 @@ class ContactPhonesCompanion extends UpdateCompanion<ContactPhone> {
   }
 }
 
-class $ContactPhonesTable extends ContactPhones
-    with TableInfo<$ContactPhonesTable, ContactPhone> {
+class $ContactPhonesTableTable extends ContactPhonesTable
+    with TableInfo<$ContactPhonesTableTable, ContactPhoneData> {
   final GeneratedDatabase _db;
   final String? _alias;
-  $ContactPhonesTable(this._db, [this._alias]);
+  $ContactPhonesTableTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
       'id', aliasedName, false,
@@ -679,7 +682,7 @@ class $ContactPhonesTable extends ContactPhones
   @override
   String get actualTableName => 'contact_phones';
   @override
-  VerificationContext validateIntegrity(Insertable<ContactPhone> instance,
+  VerificationContext validateIntegrity(Insertable<ContactPhoneData> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -720,37 +723,37 @@ class $ContactPhonesTable extends ContactPhones
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  ContactPhone map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return ContactPhone.fromData(data,
+  ContactPhoneData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return ContactPhoneData.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
-  $ContactPhonesTable createAlias(String alias) {
-    return $ContactPhonesTable(_db, alias);
+  $ContactPhonesTableTable createAlias(String alias) {
+    return $ContactPhonesTableTable(_db, alias);
   }
 }
 
-class CallLog extends DataClass implements Insertable<CallLog> {
+class CallLogData extends DataClass implements Insertable<CallLogData> {
   final int id;
   final Direction direction;
   final String number;
   final DateTime createdAt;
   final DateTime? acceptedAt;
   final DateTime? hungUpAt;
-  CallLog(
+  CallLogData(
       {required this.id,
       required this.direction,
       required this.number,
       required this.createdAt,
       this.acceptedAt,
       this.hungUpAt});
-  factory CallLog.fromData(Map<String, dynamic> data, {String? prefix}) {
+  factory CallLogData.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    return CallLog(
+    return CallLogData(
       id: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      direction: $CallLogsTable.$converter0.mapToDart(const IntType()
+      direction: $CallLogsTableTable.$converter0.mapToDart(const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}direction']))!,
       number: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}number'])!,
@@ -767,7 +770,7 @@ class CallLog extends DataClass implements Insertable<CallLog> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     {
-      final converter = $CallLogsTable.$converter0;
+      final converter = $CallLogsTableTable.$converter0;
       map['direction'] = Variable<int>(converter.mapToSql(direction)!);
     }
     map['number'] = Variable<String>(number);
@@ -781,8 +784,8 @@ class CallLog extends DataClass implements Insertable<CallLog> {
     return map;
   }
 
-  CallLogsCompanion toCompanion(bool nullToAbsent) {
-    return CallLogsCompanion(
+  CallLogsTableCompanion toCompanion(bool nullToAbsent) {
+    return CallLogsTableCompanion(
       id: Value(id),
       direction: Value(direction),
       number: Value(number),
@@ -796,10 +799,10 @@ class CallLog extends DataClass implements Insertable<CallLog> {
     );
   }
 
-  factory CallLog.fromJson(Map<String, dynamic> json,
+  factory CallLogData.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return CallLog(
+    return CallLogData(
       id: serializer.fromJson<int>(json['id']),
       direction: serializer.fromJson<Direction>(json['direction']),
       number: serializer.fromJson<String>(json['number']),
@@ -821,14 +824,14 @@ class CallLog extends DataClass implements Insertable<CallLog> {
     };
   }
 
-  CallLog copyWith(
+  CallLogData copyWith(
           {int? id,
           Direction? direction,
           String? number,
           DateTime? createdAt,
           Value<DateTime?> acceptedAt = const Value.absent(),
           Value<DateTime?> hungUpAt = const Value.absent()}) =>
-      CallLog(
+      CallLogData(
         id: id ?? this.id,
         direction: direction ?? this.direction,
         number: number ?? this.number,
@@ -838,7 +841,7 @@ class CallLog extends DataClass implements Insertable<CallLog> {
       );
   @override
   String toString() {
-    return (StringBuffer('CallLog(')
+    return (StringBuffer('CallLogData(')
           ..write('id: $id, ')
           ..write('direction: $direction, ')
           ..write('number: $number, ')
@@ -855,7 +858,7 @@ class CallLog extends DataClass implements Insertable<CallLog> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is CallLog &&
+      (other is CallLogData &&
           other.id == this.id &&
           other.direction == this.direction &&
           other.number == this.number &&
@@ -864,14 +867,14 @@ class CallLog extends DataClass implements Insertable<CallLog> {
           other.hungUpAt == this.hungUpAt);
 }
 
-class CallLogsCompanion extends UpdateCompanion<CallLog> {
+class CallLogsTableCompanion extends UpdateCompanion<CallLogData> {
   final Value<int> id;
   final Value<Direction> direction;
   final Value<String> number;
   final Value<DateTime> createdAt;
   final Value<DateTime?> acceptedAt;
   final Value<DateTime?> hungUpAt;
-  const CallLogsCompanion({
+  const CallLogsTableCompanion({
     this.id = const Value.absent(),
     this.direction = const Value.absent(),
     this.number = const Value.absent(),
@@ -879,7 +882,7 @@ class CallLogsCompanion extends UpdateCompanion<CallLog> {
     this.acceptedAt = const Value.absent(),
     this.hungUpAt = const Value.absent(),
   });
-  CallLogsCompanion.insert({
+  CallLogsTableCompanion.insert({
     this.id = const Value.absent(),
     required Direction direction,
     required String number,
@@ -889,7 +892,7 @@ class CallLogsCompanion extends UpdateCompanion<CallLog> {
   })  : direction = Value(direction),
         number = Value(number),
         createdAt = Value(createdAt);
-  static Insertable<CallLog> custom({
+  static Insertable<CallLogData> custom({
     Expression<int>? id,
     Expression<Direction>? direction,
     Expression<String>? number,
@@ -907,14 +910,14 @@ class CallLogsCompanion extends UpdateCompanion<CallLog> {
     });
   }
 
-  CallLogsCompanion copyWith(
+  CallLogsTableCompanion copyWith(
       {Value<int>? id,
       Value<Direction>? direction,
       Value<String>? number,
       Value<DateTime>? createdAt,
       Value<DateTime?>? acceptedAt,
       Value<DateTime?>? hungUpAt}) {
-    return CallLogsCompanion(
+    return CallLogsTableCompanion(
       id: id ?? this.id,
       direction: direction ?? this.direction,
       number: number ?? this.number,
@@ -931,7 +934,7 @@ class CallLogsCompanion extends UpdateCompanion<CallLog> {
       map['id'] = Variable<int>(id.value);
     }
     if (direction.present) {
-      final converter = $CallLogsTable.$converter0;
+      final converter = $CallLogsTableTable.$converter0;
       map['direction'] = Variable<int>(converter.mapToSql(direction.value)!);
     }
     if (number.present) {
@@ -951,7 +954,7 @@ class CallLogsCompanion extends UpdateCompanion<CallLog> {
 
   @override
   String toString() {
-    return (StringBuffer('CallLogsCompanion(')
+    return (StringBuffer('CallLogsTableCompanion(')
           ..write('id: $id, ')
           ..write('direction: $direction, ')
           ..write('number: $number, ')
@@ -963,10 +966,11 @@ class CallLogsCompanion extends UpdateCompanion<CallLog> {
   }
 }
 
-class $CallLogsTable extends CallLogs with TableInfo<$CallLogsTable, CallLog> {
+class $CallLogsTableTable extends CallLogsTable
+    with TableInfo<$CallLogsTableTable, CallLogData> {
   final GeneratedDatabase _db;
   final String? _alias;
-  $CallLogsTable(this._db, [this._alias]);
+  $CallLogsTableTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
       'id', aliasedName, false,
@@ -977,7 +981,7 @@ class $CallLogsTable extends CallLogs with TableInfo<$CallLogsTable, CallLog> {
   late final GeneratedColumnWithTypeConverter<Direction, int?> direction =
       GeneratedColumn<int?>('direction', aliasedName, false,
               typeName: 'INTEGER', requiredDuringInsert: true)
-          .withConverter<Direction>($CallLogsTable.$converter0);
+          .withConverter<Direction>($CallLogsTableTable.$converter0);
   final VerificationMeta _numberMeta = const VerificationMeta('number');
   late final GeneratedColumn<String?> number = GeneratedColumn<String?>(
       'number', aliasedName, false,
@@ -1005,7 +1009,7 @@ class $CallLogsTable extends CallLogs with TableInfo<$CallLogsTable, CallLog> {
   @override
   String get actualTableName => 'call_logs';
   @override
-  VerificationContext validateIntegrity(Insertable<CallLog> instance,
+  VerificationContext validateIntegrity(Insertable<CallLogData> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -1041,14 +1045,14 @@ class $CallLogsTable extends CallLogs with TableInfo<$CallLogsTable, CallLog> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  CallLog map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return CallLog.fromData(data,
+  CallLogData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return CallLogData.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
-  $CallLogsTable createAlias(String alias) {
-    return $CallLogsTable(_db, alias);
+  $CallLogsTableTable createAlias(String alias) {
+    return $CallLogsTableTable(_db, alias);
   }
 
   static TypeConverter<Direction, int> $converter0 =
@@ -1057,16 +1061,17 @@ class $CallLogsTable extends CallLogs with TableInfo<$CallLogsTable, CallLog> {
 
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
-  late final $ContactsTable contacts = $ContactsTable(this);
-  late final $ContactPhonesTable contactPhones = $ContactPhonesTable(this);
-  late final $CallLogsTable callLogs = $CallLogsTable(this);
+  late final $ContactsTableTable contactsTable = $ContactsTableTable(this);
+  late final $ContactPhonesTableTable contactPhonesTable =
+      $ContactPhonesTableTable(this);
+  late final $CallLogsTableTable callLogsTable = $CallLogsTableTable(this);
   late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
   late final CallLogsDao callLogsDao = CallLogsDao(this as AppDatabase);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [contacts, contactPhones, callLogs];
+      [contactsTable, contactPhonesTable, callLogsTable];
 }
 
 // **************************************************************************
@@ -1074,11 +1079,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
 // **************************************************************************
 
 mixin _$ContactsDaoMixin on DatabaseAccessor<AppDatabase> {
-  $ContactsTable get contacts => attachedDatabase.contacts;
-  $ContactPhonesTable get contactPhones => attachedDatabase.contactPhones;
+  $ContactsTableTable get contactsTable => attachedDatabase.contactsTable;
+  $ContactPhonesTableTable get contactPhonesTable =>
+      attachedDatabase.contactPhonesTable;
 }
 mixin _$CallLogsDaoMixin on DatabaseAccessor<AppDatabase> {
-  $CallLogsTable get callLogs => attachedDatabase.callLogs;
-  $ContactPhonesTable get contactPhones => attachedDatabase.contactPhones;
-  $ContactsTable get contacts => attachedDatabase.contacts;
+  $CallLogsTableTable get callLogsTable => attachedDatabase.callLogsTable;
+  $ContactPhonesTableTable get contactPhonesTable =>
+      attachedDatabase.contactPhonesTable;
+  $ContactsTableTable get contactsTable => attachedDatabase.contactsTable;
 }

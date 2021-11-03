@@ -11,9 +11,9 @@ part 'app_database.g.dart';
 
 @DriftDatabase(
   tables: [
-    Contacts,
-    ContactPhones,
-    CallLogs,
+    ContactsTable,
+    ContactPhonesTable,
+    CallLogsTable,
   ],
   daos: [
     ContactsDao,
@@ -39,7 +39,11 @@ class AppDatabase extends _$AppDatabase {
       );
 }
 
-class Contacts extends Table {
+@DataClassName('ContactData')
+class ContactsTable extends Table {
+  @override
+  String get tableName => 'contacts';
+
   IntColumn get id => integer().autoIncrement()();
 
   IntColumn get sourceType => intEnum<ContactsSource>()();
@@ -62,7 +66,11 @@ class Contacts extends Table {
       ];
 }
 
-class ContactPhones extends Table {
+@DataClassName('ContactPhoneData')
+class ContactPhonesTable extends Table {
+  @override
+  String get tableName => 'contact_phones';
+
   IntColumn get id => integer().autoIncrement()();
 
   TextColumn get number => text()();
@@ -76,7 +84,11 @@ class ContactPhones extends Table {
   DateTimeColumn get updatedAt => dateTime().nullable()();
 }
 
-class CallLogs extends Table {
+@DataClassName('CallLogData')
+class CallLogsTable extends Table {
+  @override
+  String get tableName => 'call_logs';
+
   IntColumn get id => integer().autoIncrement()();
 
   IntColumn get direction => intEnum<Direction>()();
@@ -92,27 +104,27 @@ class CallLogs extends Table {
 }
 
 @DriftAccessor(tables: [
-  Contacts,
-  ContactPhones,
+  ContactsTable,
+  ContactPhonesTable,
 ])
 class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin {
   ContactsDao(AppDatabase db) : super(db);
 }
 
 @DriftAccessor(tables: [
-  CallLogs,
-  ContactPhones,
-  Contacts,
+  CallLogsTable,
+  ContactPhonesTable,
+  ContactsTable,
 ])
 class CallLogsDao extends DatabaseAccessor<AppDatabase> with _$CallLogsDaoMixin {
   CallLogsDao(AppDatabase db) : super(db);
 
-  Stream<List<CallLog>> watchLastCallLogs([Duration period = const Duration(days: 14)]) => (select(callLogs)
+  Stream<List<CallLogData>> watchLastCallLogs([Duration period = const Duration(days: 14)]) => (select(callLogsTable)
         ..where((t) => t.createdAt.isBiggerOrEqualValue(DateTime.now().subtract(period)))
         ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
       .watch();
 
-  Future<int> insertCallLog(Insertable<CallLog> callLog) => into(callLogs).insert(callLog);
+  Future<int> insertCallLog(Insertable<CallLogData> callLogData) => into(callLogsTable).insert(callLogData);
 
-  Future<int> deleteCallLog(Insertable<CallLog> callLog) => delete(callLogs).delete(callLog);
+  Future<int> deleteCallLog(Insertable<CallLogData> callLogData) => delete(callLogsTable).delete(callLogData);
 }
