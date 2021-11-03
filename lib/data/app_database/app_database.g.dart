@@ -73,8 +73,8 @@ class ContactData extends DataClass implements Insertable<ContactData> {
     return map;
   }
 
-  ContactsTableCompanion toCompanion(bool nullToAbsent) {
-    return ContactsTableCompanion(
+  ContactDataCompanion toCompanion(bool nullToAbsent) {
+    return ContactDataCompanion(
       id: Value(id),
       sourceType: Value(sourceType),
       sourceId: Value(sourceId),
@@ -176,7 +176,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
           other.updatedAt == this.updatedAt);
 }
 
-class ContactsTableCompanion extends UpdateCompanion<ContactData> {
+class ContactDataCompanion extends UpdateCompanion<ContactData> {
   final Value<int> id;
   final Value<ContactsSource> sourceType;
   final Value<String> sourceId;
@@ -185,7 +185,7 @@ class ContactsTableCompanion extends UpdateCompanion<ContactData> {
   final Value<String?> lastName;
   final Value<DateTime?> insertedAt;
   final Value<DateTime?> updatedAt;
-  const ContactsTableCompanion({
+  const ContactDataCompanion({
     this.id = const Value.absent(),
     this.sourceType = const Value.absent(),
     this.sourceId = const Value.absent(),
@@ -195,7 +195,7 @@ class ContactsTableCompanion extends UpdateCompanion<ContactData> {
     this.insertedAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   });
-  ContactsTableCompanion.insert({
+  ContactDataCompanion.insert({
     this.id = const Value.absent(),
     required ContactsSource sourceType,
     required String sourceId,
@@ -228,7 +228,7 @@ class ContactsTableCompanion extends UpdateCompanion<ContactData> {
     });
   }
 
-  ContactsTableCompanion copyWith(
+  ContactDataCompanion copyWith(
       {Value<int>? id,
       Value<ContactsSource>? sourceType,
       Value<String>? sourceId,
@@ -237,7 +237,7 @@ class ContactsTableCompanion extends UpdateCompanion<ContactData> {
       Value<String?>? lastName,
       Value<DateTime?>? insertedAt,
       Value<DateTime?>? updatedAt}) {
-    return ContactsTableCompanion(
+    return ContactDataCompanion(
       id: id ?? this.id,
       sourceType: sourceType ?? this.sourceType,
       sourceId: sourceId ?? this.sourceId,
@@ -282,7 +282,7 @@ class ContactsTableCompanion extends UpdateCompanion<ContactData> {
 
   @override
   String toString() {
-    return (StringBuffer('ContactsTableCompanion(')
+    return (StringBuffer('ContactDataCompanion(')
           ..write('id: $id, ')
           ..write('sourceType: $sourceType, ')
           ..write('sourceId: $sourceId, ')
@@ -460,8 +460,8 @@ class ContactPhoneData extends DataClass
     return map;
   }
 
-  ContactPhonesTableCompanion toCompanion(bool nullToAbsent) {
-    return ContactPhonesTableCompanion(
+  ContactPhoneDataCompanion toCompanion(bool nullToAbsent) {
+    return ContactPhoneDataCompanion(
       id: Value(id),
       number: Value(number),
       label: Value(label),
@@ -543,14 +543,14 @@ class ContactPhoneData extends DataClass
           other.updatedAt == this.updatedAt);
 }
 
-class ContactPhonesTableCompanion extends UpdateCompanion<ContactPhoneData> {
+class ContactPhoneDataCompanion extends UpdateCompanion<ContactPhoneData> {
   final Value<int> id;
   final Value<String> number;
   final Value<String> label;
   final Value<int> contactId;
   final Value<DateTime?> insertedAt;
   final Value<DateTime?> updatedAt;
-  const ContactPhonesTableCompanion({
+  const ContactPhoneDataCompanion({
     this.id = const Value.absent(),
     this.number = const Value.absent(),
     this.label = const Value.absent(),
@@ -558,7 +558,7 @@ class ContactPhonesTableCompanion extends UpdateCompanion<ContactPhoneData> {
     this.insertedAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   });
-  ContactPhonesTableCompanion.insert({
+  ContactPhoneDataCompanion.insert({
     this.id = const Value.absent(),
     required String number,
     required String label,
@@ -586,14 +586,14 @@ class ContactPhonesTableCompanion extends UpdateCompanion<ContactPhoneData> {
     });
   }
 
-  ContactPhonesTableCompanion copyWith(
+  ContactPhoneDataCompanion copyWith(
       {Value<int>? id,
       Value<String>? number,
       Value<String>? label,
       Value<int>? contactId,
       Value<DateTime?>? insertedAt,
       Value<DateTime?>? updatedAt}) {
-    return ContactPhonesTableCompanion(
+    return ContactPhoneDataCompanion(
       id: id ?? this.id,
       number: number ?? this.number,
       label: label ?? this.label,
@@ -629,7 +629,7 @@ class ContactPhonesTableCompanion extends UpdateCompanion<ContactPhoneData> {
 
   @override
   String toString() {
-    return (StringBuffer('ContactPhonesTableCompanion(')
+    return (StringBuffer('ContactPhoneDataCompanion(')
           ..write('id: $id, ')
           ..write('number: $number, ')
           ..write('label: $label, ')
@@ -784,8 +784,8 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
     return map;
   }
 
-  CallLogsTableCompanion toCompanion(bool nullToAbsent) {
-    return CallLogsTableCompanion(
+  CallLogDataCompanion toCompanion(bool nullToAbsent) {
+    return CallLogDataCompanion(
       id: Value(id),
       direction: Value(direction),
       number: Value(number),
@@ -867,14 +867,14 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
           other.hungUpAt == this.hungUpAt);
 }
 
-class CallLogsTableCompanion extends UpdateCompanion<CallLogData> {
+class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
   final Value<int> id;
   final Value<Direction> direction;
   final Value<String> number;
   final Value<DateTime> createdAt;
   final Value<DateTime?> acceptedAt;
   final Value<DateTime?> hungUpAt;
-  const CallLogsTableCompanion({
+  const CallLogDataCompanion({
     this.id = const Value.absent(),
     this.direction = const Value.absent(),
     this.number = const Value.absent(),
@@ -882,7 +882,7 @@ class CallLogsTableCompanion extends UpdateCompanion<CallLogData> {
     this.acceptedAt = const Value.absent(),
     this.hungUpAt = const Value.absent(),
   });
-  CallLogsTableCompanion.insert({
+  CallLogDataCompanion.insert({
     this.id = const Value.absent(),
     required Direction direction,
     required String number,
@@ -910,14 +910,14 @@ class CallLogsTableCompanion extends UpdateCompanion<CallLogData> {
     });
   }
 
-  CallLogsTableCompanion copyWith(
+  CallLogDataCompanion copyWith(
       {Value<int>? id,
       Value<Direction>? direction,
       Value<String>? number,
       Value<DateTime>? createdAt,
       Value<DateTime?>? acceptedAt,
       Value<DateTime?>? hungUpAt}) {
-    return CallLogsTableCompanion(
+    return CallLogDataCompanion(
       id: id ?? this.id,
       direction: direction ?? this.direction,
       number: number ?? this.number,
@@ -954,7 +954,7 @@ class CallLogsTableCompanion extends UpdateCompanion<CallLogData> {
 
   @override
   String toString() {
-    return (StringBuffer('CallLogsTableCompanion(')
+    return (StringBuffer('CallLogDataCompanion(')
           ..write('id: $id, ')
           ..write('direction: $direction, ')
           ..write('number: $number, ')
