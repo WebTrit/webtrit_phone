@@ -19,8 +19,8 @@ class AccountContact {
     required this.number,
     required this.extensionId,
     this.extensionName,
-    this.firstname,
-    this.lastname,
+    this.firstName,
+    this.lastName,
     this.email,
     this.mobile,
     this.companyName,
@@ -36,8 +36,10 @@ class AccountContact {
   final String extensionId;
   @JsonKey(name: 'extension_name')
   final String? extensionName;
-  final String? firstname;
-  final String? lastname;
+  @JsonKey(name: 'firstname')
+  final String? firstName;
+  @JsonKey(name: 'lastname')
+  final String? lastName;
   final String? email;
   final String? mobile;
   @JsonKey(name: 'company_name')
