@@ -61,16 +61,18 @@ class ContactTile extends StatelessWidget {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          IconButton(
-            splashRadius: 24,
-            icon: const Icon(Icons.call),
-            onPressed: onAudioPressed,
-          ),
-          IconButton(
-            splashRadius: 24,
-            icon: const Icon(Icons.videocam),
-            onPressed: onVideoPressed,
-          ),
+          if (onAudioPressed != null)
+            IconButton(
+              splashRadius: 24,
+              icon: const Icon(Icons.call),
+              onPressed: onAudioPressed,
+            ),
+          if (onVideoPressed != null)
+            IconButton(
+              splashRadius: 24,
+              icon: const Icon(Icons.videocam),
+              onPressed: onVideoPressed,
+            ),
         ],
       ),
       title: Text(displayName),
