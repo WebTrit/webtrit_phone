@@ -47,17 +47,15 @@ class _ContactsLocal extends StatelessWidget {
               return ContactTile(
                 displayName: contact.name,
                 thumbnail: contact.thumbnail,
-                onTap: () {
-                  context.showSnackBar('Phone contact details not implemented yet');
+                onTap: () async {
+                  final command = await Navigator.pushNamed(context, '/main/contact', arguments: contact);
+                  // TODO change this odd technique of call execute
+                  if (command is CallOutgoingStarted) {
+                    context.read<CallBloc>().add(command);
+                  }
                 },
                 onLongPress: () {
                   context.showSnackBar('LongPress on "${contact.name}"');
-                },
-                onAudioPressed: () {
-                  context.showSnackBar('Audio call for phone contact not implemented yet');
-                },
-                onVideoPressed: () {
-                  context.showSnackBar('Video call for phone contact not implemented yet');
                 },
               );
             },

@@ -280,6 +280,10 @@ class App extends StatelessWidget {
           case '/main/log-records-console':
             page = const LogRecordsConsolePage();
             break;
+          case '/main/contact':
+            final contact = settings.arguments! as Contact;
+            page = ContactPage(contact);
+            break;
           default:
             return null;
         }
