@@ -160,17 +160,8 @@ class RecentTile extends StatelessWidget {
           children: [
             IconButton(
               splashRadius: 24,
-              icon: const Icon(Icons.call),
-              onPressed: () {
-                // TODO
-              },
-            ),
-            IconButton(
-              splashRadius: 24,
-              icon: const Icon(Icons.videocam),
-              onPressed: () {
-                // TODO
-              },
+              icon: const Icon(Icons.info_outlined),
+              onPressed: onInfoTap,
             ),
           ],
         ),
