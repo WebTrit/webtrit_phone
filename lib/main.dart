@@ -95,6 +95,11 @@ void main() async {
             appDatabase: context.read<AppDatabase>(),
           ),
         ),
+        RepositoryProvider<ContactsRepository>(
+          create: (context) => ContactsRepository(
+            appDatabase: context.read<AppDatabase>(),
+          ),
+        ),
         RepositoryProvider<LocalContactsRepository>(
           create: (context) => LocalContactsRepository(),
         ),
@@ -212,18 +217,22 @@ class App extends StatelessWidget {
                     )..add(const RecentsInitialLoaded());
                   },
                 ),
-                BlocProvider<LocalContactsBloc>(
+                BlocProvider<LocalContactsSyncBloc>(
+                  lazy: false,
                   create: (context) {
-                    return LocalContactsBloc(
+                    return LocalContactsSyncBloc(
                       localContactsRepository: context.read<LocalContactsRepository>(),
-                    )..add(const LocalContactsInitialLoaded());
+                      appDatabase: context.read<AppDatabase>(),
+                    )..add(const LocalContactsSyncStarted());
                   },
                 ),
-                BlocProvider<ExternalContactsBloc>(
+                BlocProvider<ExternalContactsSyncBloc>(
+                  lazy: false,
                   create: (context) {
-                    return ExternalContactsBloc(
+                    return ExternalContactsSyncBloc(
                       externalContactsRepository: context.read<ExternalContactsRepository>(),
-                    )..add(const ExternalContactsInitialLoaded());
+                      appDatabase: context.read<AppDatabase>(),
+                    )..add(const ExternalContactsSyncStarted());
                   },
                 ),
                 BlocProvider<CallBloc>(

@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 
-import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/contacts/models/models.dart';
 
 part 'app_database.g.dart';
 
@@ -17,6 +17,7 @@ part 'app_database.g.dart';
   ],
   daos: [
     ContactsDao,
+    ContactPhonesDao,
     CallLogsDao,
   ],
 )
@@ -46,7 +47,7 @@ class ContactsTable extends Table {
 
   IntColumn get id => integer().autoIncrement()();
 
-  IntColumn get sourceType => intEnum<ContactsSource>()();
+  IntColumn get sourceType => intEnum<ContactSourceType>()();
 
   TextColumn get sourceId => text()();
 
@@ -82,6 +83,11 @@ class ContactPhonesTable extends Table {
   DateTimeColumn get insertedAt => dateTime().nullable()();
 
   DateTimeColumn get updatedAt => dateTime().nullable()();
+
+  @override
+  List<String> get customConstraints => [
+        'UNIQUE(number, contact_id)',
+      ];
 }
 
 @DataClassName('CallLogData')
@@ -105,10 +111,50 @@ class CallLogsTable extends Table {
 
 @DriftAccessor(tables: [
   ContactsTable,
-  ContactPhonesTable,
 ])
 class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin {
   ContactsDao(AppDatabase db) : super(db);
+
+  Selectable<ContactData> _selectAllContacts([ContactSourceType? sourceType]) => select(contactsTable)
+    ..where((t) => sourceType == null ? Variable.withBool(true) : t.sourceType.equals(sourceType.index))
+    ..orderBy([
+      (t) => OrderingTerm.asc(t.displayName),
+      (t) => OrderingTerm.asc(t.lastName),
+      (t) => OrderingTerm.asc(t.firstName),
+    ]);
+
+  Stream<List<ContactData>> watchAllContacts([ContactSourceType? sourceType]) => _selectAllContacts(sourceType).watch();
+
+  Future<List<ContactData>> getAllContacts([ContactSourceType? sourceType]) => _selectAllContacts(sourceType).get();
+
+  Future<ContactData> insertOnUniqueConflictUpdateContact(Insertable<ContactData> contact) =>
+      into(contactsTable).insertReturning(contact,
+          onConflict: DoUpdate((_) => contact, target: [contactsTable.sourceType, contactsTable.sourceId]));
+
+  Future<int> deleteContact(Insertable<ContactData> contact) => delete(contactsTable).delete(contact);
+}
+
+@DriftAccessor(tables: [
+  ContactPhonesTable,
+])
+class ContactPhonesDao extends DatabaseAccessor<AppDatabase> with _$ContactPhonesDaoMixin {
+  ContactPhonesDao(AppDatabase db) : super(db);
+
+  Future<List<ContactPhoneData>> getContactPhonesByContactId(int id) => (select(contactPhonesTable)
+        ..where((t) => t.contactId.equals(id))
+        ..orderBy([
+          (t) => OrderingTerm.asc(t.insertedAt),
+        ]))
+      .get();
+
+  Future<int> insertOnUniqueConflictUpdateContactPhone(Insertable<ContactPhoneData> contactPhone) =>
+      into(contactPhonesTable).insert(contactPhone,
+          onConflict: DoUpdate((_) => contactPhone, target: [contactPhonesTable.number, contactPhonesTable.contactId]));
+
+  Future<int> deleteOtherContactPhonesOfContactId(int id, Iterable<String> numbers) => (delete(contactPhonesTable)
+        ..where((t) => t.contactId.equals(id))
+        ..where((t) => t.number.isNotIn(numbers)))
+      .go();
 }
 
 @DriftAccessor(tables: [

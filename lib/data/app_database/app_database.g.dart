@@ -9,7 +9,7 @@ part of 'app_database.dart';
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
 class ContactData extends DataClass implements Insertable<ContactData> {
   final int id;
-  final ContactsSource sourceType;
+  final ContactSourceType sourceType;
   final String sourceId;
   final String? displayName;
   final String? firstName;
@@ -101,7 +101,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ContactData(
       id: serializer.fromJson<int>(json['id']),
-      sourceType: serializer.fromJson<ContactsSource>(json['sourceType']),
+      sourceType: serializer.fromJson<ContactSourceType>(json['sourceType']),
       sourceId: serializer.fromJson<String>(json['sourceId']),
       displayName: serializer.fromJson<String?>(json['displayName']),
       firstName: serializer.fromJson<String?>(json['firstName']),
@@ -115,7 +115,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'sourceType': serializer.toJson<ContactsSource>(sourceType),
+      'sourceType': serializer.toJson<ContactSourceType>(sourceType),
       'sourceId': serializer.toJson<String>(sourceId),
       'displayName': serializer.toJson<String?>(displayName),
       'firstName': serializer.toJson<String?>(firstName),
@@ -127,7 +127,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
 
   ContactData copyWith(
           {int? id,
-          ContactsSource? sourceType,
+          ContactSourceType? sourceType,
           String? sourceId,
           Value<String?> displayName = const Value.absent(),
           Value<String?> firstName = const Value.absent(),
@@ -178,7 +178,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
 
 class ContactDataCompanion extends UpdateCompanion<ContactData> {
   final Value<int> id;
-  final Value<ContactsSource> sourceType;
+  final Value<ContactSourceType> sourceType;
   final Value<String> sourceId;
   final Value<String?> displayName;
   final Value<String?> firstName;
@@ -197,7 +197,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
   });
   ContactDataCompanion.insert({
     this.id = const Value.absent(),
-    required ContactsSource sourceType,
+    required ContactSourceType sourceType,
     required String sourceId,
     this.displayName = const Value.absent(),
     this.firstName = const Value.absent(),
@@ -208,7 +208,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
         sourceId = Value(sourceId);
   static Insertable<ContactData> custom({
     Expression<int>? id,
-    Expression<ContactsSource>? sourceType,
+    Expression<ContactSourceType>? sourceType,
     Expression<String>? sourceId,
     Expression<String?>? displayName,
     Expression<String?>? firstName,
@@ -230,7 +230,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
 
   ContactDataCompanion copyWith(
       {Value<int>? id,
-      Value<ContactsSource>? sourceType,
+      Value<ContactSourceType>? sourceType,
       Value<String>? sourceId,
       Value<String?>? displayName,
       Value<String?>? firstName,
@@ -308,10 +308,10 @@ class $ContactsTableTable extends ContactsTable
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _sourceTypeMeta = const VerificationMeta('sourceType');
-  late final GeneratedColumnWithTypeConverter<ContactsSource, int?> sourceType =
-      GeneratedColumn<int?>('source_type', aliasedName, false,
+  late final GeneratedColumnWithTypeConverter<ContactSourceType, int?>
+      sourceType = GeneratedColumn<int?>('source_type', aliasedName, false,
               typeName: 'INTEGER', requiredDuringInsert: true)
-          .withConverter<ContactsSource>($ContactsTableTable.$converter0);
+          .withConverter<ContactSourceType>($ContactsTableTable.$converter0);
   final VerificationMeta _sourceIdMeta = const VerificationMeta('sourceId');
   late final GeneratedColumn<String?> sourceId = GeneratedColumn<String?>(
       'source_id', aliasedName, false,
@@ -407,8 +407,8 @@ class $ContactsTableTable extends ContactsTable
     return $ContactsTableTable(_db, alias);
   }
 
-  static TypeConverter<ContactsSource, int> $converter0 =
-      const EnumIndexConverter<ContactsSource>(ContactsSource.values);
+  static TypeConverter<ContactSourceType, int> $converter0 =
+      const EnumIndexConverter<ContactSourceType>(ContactSourceType.values);
 }
 
 class ContactPhoneData extends DataClass
@@ -1066,6 +1066,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $ContactPhonesTableTable(this);
   late final $CallLogsTableTable callLogsTable = $CallLogsTableTable(this);
   late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
+  late final ContactPhonesDao contactPhonesDao =
+      ContactPhonesDao(this as AppDatabase);
   late final CallLogsDao callLogsDao = CallLogsDao(this as AppDatabase);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
@@ -1080,6 +1082,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
 
 mixin _$ContactsDaoMixin on DatabaseAccessor<AppDatabase> {
   $ContactsTableTable get contactsTable => attachedDatabase.contactsTable;
+}
+mixin _$ContactPhonesDaoMixin on DatabaseAccessor<AppDatabase> {
   $ContactPhonesTableTable get contactPhonesTable =>
       attachedDatabase.contactPhonesTable;
 }

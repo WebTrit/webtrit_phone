@@ -63,13 +63,14 @@ class ExternalContactsRepository {
     final contacts = await webtritApiClient.accountContacts(token!);
 
     return contacts
-        .where((contact) {
-          // TODO: remove this temporary filter
-          return contact.extensionName != null && contact.extensionName!.isNotEmpty;
-        })
         .map((contact) => ExternalContact(
-              displayName: contact.extensionName!,
+              id: contact.number,
+              displayName: contact.extensionName,
+              firstName: contact.firstName,
+              lastName: contact.lastName,
               number: contact.number,
+              ext: contact.extensionId,
+              mobile: contact.mobile,
             ))
         .toList();
   }

@@ -51,11 +51,20 @@ class LocalContactsRepository {
       throw LocalContactsRepositoryPermissionException();
     }
 
-    final contacts = await FlutterContacts.getContacts(withThumbnail: true);
+    final contacts = await FlutterContacts.getContacts(withProperties: true, withThumbnail: true);
     return contacts
         .map((contact) => LocalContact(
+              id: contact.id,
               displayName: contact.displayName,
+              firstName: contact.name.first,
+              lastName: contact.name.last,
               thumbnail: contact.thumbnail,
+              phones: contact.phones
+                  .map((phone) => LocalContactPhone(
+                        number: phone.number,
+                        label: phone.label == PhoneLabel.custom ? phone.customLabel : phone.label.toString(),
+                      ))
+                  .toList(),
             ))
         .toList();
   }

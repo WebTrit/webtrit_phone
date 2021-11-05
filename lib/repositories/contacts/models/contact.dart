@@ -4,30 +4,35 @@ import 'package:equatable/equatable.dart';
 
 import 'models.dart';
 
-class LocalContact extends Equatable {
-  const LocalContact({
-    required this.id,
+class Contact extends Equatable {
+  const Contact({
+    this.id,
+    required this.sourceType,
+    required this.sourceId,
     this.displayName,
     this.firstName,
     this.lastName,
     this.thumbnail,
-    this.phones = const [],
   });
 
-  final String id;
+  final int? id;
+  final ContactSourceType sourceType;
+  final String sourceId;
   final String? displayName;
   final String? firstName;
   final String? lastName;
   final Uint8List? thumbnail;
-  final List<LocalContactPhone> phones;
+
+  String get name => displayName ?? '$firstName $lastName'.trim();
 
   @override
   List<Object?> get props => [
         id,
+        sourceType,
+        sourceId,
         displayName,
         firstName,
         lastName,
         thumbnail,
-        phones,
       ];
 }
