@@ -65,7 +65,7 @@ class _KeypadViewState extends State<KeypadView> {
               builder: (context, state) {
                 return Actionpad(
                   video: state.video,
-                  onCallPressed: _onCallPressed,
+                  onCallPressed: value.text.isEmpty ? null : _onCallPressed,
                   onCallLongPress: _onCallLongPress,
                   onBackspacePressed: value.text.isEmpty ? null : _onBackspacePressed,
                   onBackspaceLongPress: value.text.isEmpty ? null : _onBackspaceLongPress,
