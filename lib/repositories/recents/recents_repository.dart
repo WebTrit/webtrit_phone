@@ -15,6 +15,7 @@ class RecentsRepository {
         .map((callLog) => Recent(
               direction: callLog.direction,
               number: callLog.number,
+              video: callLog.video,
               createdTime: callLog.createdAt,
               acceptedTime: callLog.acceptedAt,
               hungUpTime: callLog.hungUpAt,
@@ -27,6 +28,7 @@ class RecentsRepository {
     appDatabase.callLogsDao.insertCallLog(CallLogDataCompanion(
       direction: Value(recent.direction),
       number: Value(recent.number),
+      video: Value(recent.video),
       createdAt: Value(recent.createdTime),
       acceptedAt: Value(recent.acceptedTime),
       hungUpAt: Value(recent.hungUpTime),

@@ -738,6 +738,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
   final int id;
   final Direction direction;
   final String number;
+  final bool video;
   final DateTime createdAt;
   final DateTime? acceptedAt;
   final DateTime? hungUpAt;
@@ -745,6 +746,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
       {required this.id,
       required this.direction,
       required this.number,
+      required this.video,
       required this.createdAt,
       this.acceptedAt,
       this.hungUpAt});
@@ -757,6 +759,8 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
           .mapFromDatabaseResponse(data['${effectivePrefix}direction']))!,
       number: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}number'])!,
+      video: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}video'])!,
       createdAt: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}created_at'])!,
       acceptedAt: const DateTimeType()
@@ -774,6 +778,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
       map['direction'] = Variable<int>(converter.mapToSql(direction)!);
     }
     map['number'] = Variable<String>(number);
+    map['video'] = Variable<bool>(video);
     map['created_at'] = Variable<DateTime>(createdAt);
     if (!nullToAbsent || acceptedAt != null) {
       map['accepted_at'] = Variable<DateTime?>(acceptedAt);
@@ -789,6 +794,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
       id: Value(id),
       direction: Value(direction),
       number: Value(number),
+      video: Value(video),
       createdAt: Value(createdAt),
       acceptedAt: acceptedAt == null && nullToAbsent
           ? const Value.absent()
@@ -806,6 +812,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
       id: serializer.fromJson<int>(json['id']),
       direction: serializer.fromJson<Direction>(json['direction']),
       number: serializer.fromJson<String>(json['number']),
+      video: serializer.fromJson<bool>(json['video']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       acceptedAt: serializer.fromJson<DateTime?>(json['acceptedAt']),
       hungUpAt: serializer.fromJson<DateTime?>(json['hungUpAt']),
@@ -818,6 +825,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
       'id': serializer.toJson<int>(id),
       'direction': serializer.toJson<Direction>(direction),
       'number': serializer.toJson<String>(number),
+      'video': serializer.toJson<bool>(video),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'acceptedAt': serializer.toJson<DateTime?>(acceptedAt),
       'hungUpAt': serializer.toJson<DateTime?>(hungUpAt),
@@ -828,6 +836,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
           {int? id,
           Direction? direction,
           String? number,
+          bool? video,
           DateTime? createdAt,
           Value<DateTime?> acceptedAt = const Value.absent(),
           Value<DateTime?> hungUpAt = const Value.absent()}) =>
@@ -835,6 +844,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
         id: id ?? this.id,
         direction: direction ?? this.direction,
         number: number ?? this.number,
+        video: video ?? this.video,
         createdAt: createdAt ?? this.createdAt,
         acceptedAt: acceptedAt.present ? acceptedAt.value : this.acceptedAt,
         hungUpAt: hungUpAt.present ? hungUpAt.value : this.hungUpAt,
@@ -845,6 +855,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
           ..write('id: $id, ')
           ..write('direction: $direction, ')
           ..write('number: $number, ')
+          ..write('video: $video, ')
           ..write('createdAt: $createdAt, ')
           ..write('acceptedAt: $acceptedAt, ')
           ..write('hungUpAt: $hungUpAt')
@@ -853,8 +864,8 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, direction, number, createdAt, acceptedAt, hungUpAt);
+  int get hashCode => Object.hash(
+      id, direction, number, video, createdAt, acceptedAt, hungUpAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -862,6 +873,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
           other.id == this.id &&
           other.direction == this.direction &&
           other.number == this.number &&
+          other.video == this.video &&
           other.createdAt == this.createdAt &&
           other.acceptedAt == this.acceptedAt &&
           other.hungUpAt == this.hungUpAt);
@@ -871,6 +883,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
   final Value<int> id;
   final Value<Direction> direction;
   final Value<String> number;
+  final Value<bool> video;
   final Value<DateTime> createdAt;
   final Value<DateTime?> acceptedAt;
   final Value<DateTime?> hungUpAt;
@@ -878,6 +891,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
     this.id = const Value.absent(),
     this.direction = const Value.absent(),
     this.number = const Value.absent(),
+    this.video = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.acceptedAt = const Value.absent(),
     this.hungUpAt = const Value.absent(),
@@ -886,16 +900,19 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
     this.id = const Value.absent(),
     required Direction direction,
     required String number,
+    required bool video,
     required DateTime createdAt,
     this.acceptedAt = const Value.absent(),
     this.hungUpAt = const Value.absent(),
   })  : direction = Value(direction),
         number = Value(number),
+        video = Value(video),
         createdAt = Value(createdAt);
   static Insertable<CallLogData> custom({
     Expression<int>? id,
     Expression<Direction>? direction,
     Expression<String>? number,
+    Expression<bool>? video,
     Expression<DateTime>? createdAt,
     Expression<DateTime?>? acceptedAt,
     Expression<DateTime?>? hungUpAt,
@@ -904,6 +921,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
       if (id != null) 'id': id,
       if (direction != null) 'direction': direction,
       if (number != null) 'number': number,
+      if (video != null) 'video': video,
       if (createdAt != null) 'created_at': createdAt,
       if (acceptedAt != null) 'accepted_at': acceptedAt,
       if (hungUpAt != null) 'hung_up_at': hungUpAt,
@@ -914,6 +932,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
       {Value<int>? id,
       Value<Direction>? direction,
       Value<String>? number,
+      Value<bool>? video,
       Value<DateTime>? createdAt,
       Value<DateTime?>? acceptedAt,
       Value<DateTime?>? hungUpAt}) {
@@ -921,6 +940,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
       id: id ?? this.id,
       direction: direction ?? this.direction,
       number: number ?? this.number,
+      video: video ?? this.video,
       createdAt: createdAt ?? this.createdAt,
       acceptedAt: acceptedAt ?? this.acceptedAt,
       hungUpAt: hungUpAt ?? this.hungUpAt,
@@ -940,6 +960,9 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
     if (number.present) {
       map['number'] = Variable<String>(number.value);
     }
+    if (video.present) {
+      map['video'] = Variable<bool>(video.value);
+    }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
@@ -958,6 +981,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
           ..write('id: $id, ')
           ..write('direction: $direction, ')
           ..write('number: $number, ')
+          ..write('video: $video, ')
           ..write('createdAt: $createdAt, ')
           ..write('acceptedAt: $acceptedAt, ')
           ..write('hungUpAt: $hungUpAt')
@@ -989,6 +1013,12 @@ class $CallLogsTableTable extends CallLogsTable
       requiredDuringInsert: true,
       $customConstraints:
           'NOT NULL CONSTRAINT "call_logs.number not_empty" CHECK (length(number) > 0)');
+  final VerificationMeta _videoMeta = const VerificationMeta('video');
+  late final GeneratedColumn<bool?> video = GeneratedColumn<bool?>(
+      'video', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: true,
+      defaultConstraints: 'CHECK (video IN (0, 1))');
   final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
   late final GeneratedColumn<DateTime?> createdAt = GeneratedColumn<DateTime?>(
       'created_at', aliasedName, false,
@@ -1003,7 +1033,7 @@ class $CallLogsTableTable extends CallLogsTable
       typeName: 'INTEGER', requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, direction, number, createdAt, acceptedAt, hungUpAt];
+      [id, direction, number, video, createdAt, acceptedAt, hungUpAt];
   @override
   String get aliasedName => _alias ?? 'call_logs';
   @override
@@ -1022,6 +1052,12 @@ class $CallLogsTableTable extends CallLogsTable
           number.isAcceptableOrUnknown(data['number']!, _numberMeta));
     } else if (isInserting) {
       context.missing(_numberMeta);
+    }
+    if (data.containsKey('video')) {
+      context.handle(
+          _videoMeta, video.isAcceptableOrUnknown(data['video']!, _videoMeta));
+    } else if (isInserting) {
+      context.missing(_videoMeta);
     }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,

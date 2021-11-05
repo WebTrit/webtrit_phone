@@ -324,6 +324,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
       recent: Recent(
         direction: direction,
         number: state.number,
+        video: state.video,
         createdTime: state.createdTime,
         acceptedTime: state.acceptedTime,
         hungUpTime: state.hungUpTime,

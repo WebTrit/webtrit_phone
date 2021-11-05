@@ -10,6 +10,7 @@ enum Direction {
 class Recent extends Equatable {
   final Direction direction;
   final String number;
+  final bool video;
   final DateTime createdTime;
   final DateTime? acceptedTime;
   final DateTime? hungUpTime;
@@ -18,6 +19,7 @@ class Recent extends Equatable {
   const Recent({
     required this.direction,
     required this.number,
+    required this.video,
     required this.createdTime,
     this.acceptedTime,
     this.hungUpTime,
@@ -40,6 +42,7 @@ class Recent extends Equatable {
   List<Object?> get props => [
         direction,
         number,
+        video,
         createdTime,
         acceptedTime,
         hungUpTime,

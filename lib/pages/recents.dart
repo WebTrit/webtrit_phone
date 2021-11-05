@@ -90,7 +90,7 @@ class _RecentsPageState extends State<RecentsPage> with SingleTickerProviderStat
                     context.showSnackBar('Tap info on "${recent.number}"');
                   },
                   onTap: () {
-                    context.read<CallBloc>().add(CallOutgoingStarted(number: recent.number, video: true));
+                    context.read<CallBloc>().add(CallOutgoingStarted(number: recent.number, video: recent.video));
                   },
                   onLongPress: () {
                     context.showSnackBar('LongPress on "${recent.number}"');
@@ -185,6 +185,12 @@ class RecentTile extends StatelessWidget {
               color: recent.isComplete
                   ? (recent.direction == Direction.incoming ? Colors.blue : Colors.green)
                   : Colors.red,
+            ),
+            const Text(' · '),
+            Icon(
+              recent.video ? Icons.videocam : Icons.call,
+              size: 16,
+              color: Colors.grey,
             ),
             const Text(' · '),
             Text(
