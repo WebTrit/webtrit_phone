@@ -5,7 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 
 class LogRecordsRepository {
-  LogRecordsRepository([this.capacity = 200]) : _logRecords = ListQueue<LogRecord>(capacity);
+  LogRecordsRepository([this.capacity = 1000]) : _logRecords = ListQueue<LogRecord>(capacity);
 
   final int capacity;
 
