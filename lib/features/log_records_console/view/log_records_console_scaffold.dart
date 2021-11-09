@@ -46,6 +46,7 @@ class LogRecordsConsoleScaffold extends StatelessWidget {
       ),
       body: BlocBuilder<LogRecordsConsoleCubit, LogRecordsConsoleState>(
         builder: (context, state) {
+          final logRecordsFormatter = context.read<LogRecordsConsoleCubit>().logRecordsFormatter;
           switch (state.status) {
             case LogRecordsConsoleStatus.success:
               return SingleChildScrollView(
@@ -56,7 +57,7 @@ class LogRecordsConsoleScaffold extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final logRecord = state.logRecords[index];
                       return Text(
-                        context.read<LogRecordsConsoleCubit>().logRecordsFormatter.format(logRecord),
+                        logRecordsFormatter.format(logRecord),
                         maxLines: 100,
                       );
                     },
