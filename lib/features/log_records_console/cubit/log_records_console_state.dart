@@ -49,4 +49,7 @@ class LogRecordsConsoleState extends Equatable {
         logRecords,
         error,
       ];
+
+  @override
+  String toString() => '$runtimeType($status, ${logRecords.length}, $error)';
 }
