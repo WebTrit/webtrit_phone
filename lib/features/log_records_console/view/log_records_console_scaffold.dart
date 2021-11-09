@@ -16,20 +16,30 @@ class LogRecordsConsoleScaffold extends StatelessWidget {
         actions: [
           BlocBuilder<LogRecordsConsoleCubit, LogRecordsConsoleState>(
             builder: (context, state) {
-              if (state.status.isSuccess) {
-                return IconButton(
-                  icon: const Icon(
-                    Icons.share,
-                  ),
-                  onPressed: state.logRecords.isEmpty
-                      ? null
-                      : () async {
-                          context.read<LogRecordsConsoleCubit>().share();
-                        },
-                );
-              } else {
-                return const SizedBox();
-              }
+              return IconButton(
+                icon: const Icon(
+                  Icons.delete_outline,
+                ),
+                onPressed: !state.status.isSuccess
+                    ? null
+                    : () async {
+                  context.read<LogRecordsConsoleCubit>().clear();
+                },
+              );
+            },
+          ),
+          BlocBuilder<LogRecordsConsoleCubit, LogRecordsConsoleState>(
+            builder: (context, state) {
+              return IconButton(
+                icon: const Icon(
+                  Icons.share,
+                ),
+                onPressed: !state.status.isSuccess || state.logRecords.isEmpty
+                    ? null
+                    : () async {
+                        context.read<LogRecordsConsoleCubit>().share();
+                      },
+              );
             },
           ),
         ],

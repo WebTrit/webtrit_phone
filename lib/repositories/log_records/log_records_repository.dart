@@ -19,6 +19,10 @@ class LogRecordsRepository {
     _subscriptions.add(logger.onRecord.listen(_log));
   }
 
+  void clear() {
+    _logRecords.clear();
+  }
+
   void _log(LogRecord record) {
     if (_logRecords.length >= capacity) {
       _logRecords.removeLast();

@@ -29,6 +29,12 @@ class LogRecordsConsoleCubit extends Cubit<LogRecordsConsoleState> {
     }
   }
 
+  void clear() async {
+    emit(const LogRecordsConsoleState.loading());
+    logRecordsRepository.clear();
+    emit(const LogRecordsConsoleState.success([]));
+  }
+
   void share() async {
     final logRecords = state.logRecords;
 
