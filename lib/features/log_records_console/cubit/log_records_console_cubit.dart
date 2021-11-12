@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
@@ -38,16 +40,22 @@ class LogRecordsConsoleCubit extends Cubit<LogRecordsConsoleState> {
   void share() async {
     final logRecords = state.logRecords;
 
-    if (logRecords.isEmpty) {
-      return;
-    }
+    final time = logRecords[0].time;
+    final timeSlug =
+        '${time.year.toString()}${time.month.toString().padLeft(2, '0')}${time.day.toString().padLeft(2, '0')}'
+        '${time.hour.toString()}${time.minute.toString().padLeft(2, '0')}${time.second.toString().padLeft(2, '0')}';
+    final name = '${PackageInfo().appName}_${DeviceInfo().identifierForVendor}_$timeSlug';
 
-    final sb = StringBuffer();
+    final logRecordsPath = AppPath().logRecordsPath(name);
+    final logRecordsFile = File(logRecordsPath);
+    final logRecordsSink = logRecordsFile.openWrite();
     for (final logRecord in logRecords) {
-      logRecordsFormatter.formatToStringBuffer(logRecord, sb);
-      sb.writeln();
+      logRecordsSink.writeln(logRecordsFormatter.format(logRecord));
     }
+    await logRecordsSink.close();
 
-    await Share.share(sb.toString(), subject: '${PackageInfo().appName} Log Records ${logRecords[0].time}');
+    await Share.shareFiles([logRecordsPath]);
+
+    await logRecordsFile.delete();
   }
 }

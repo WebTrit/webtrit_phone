@@ -7,18 +7,29 @@ class AppPath {
   static late AppPath _instance;
 
   static Future<void> init() async {
-    _instance = AppPath._(await getApplicationDocumentsDirectory());
+    _instance = AppPath._(
+      documentsDirectory: await getApplicationDocumentsDirectory(),
+      temporaryDirectory: await getTemporaryDirectory(),
+    );
   }
 
   factory AppPath() {
     return _instance;
   }
 
-  const AppPath._(this.documentsDirectory);
+  const AppPath._({
+    required this.documentsDirectory,
+    required this.temporaryDirectory,
+  });
 
   final Directory documentsDirectory;
+  final Directory temporaryDirectory;
 
   String get documentsPath => documentsDirectory.path;
 
+  String get temporaryPath => temporaryDirectory.path;
+
   String get databasePath => path.join(documentsPath, 'db.sqlite');
+
+  String logRecordsPath(String name) => path.join(temporaryPath, '$name.log');
 }
