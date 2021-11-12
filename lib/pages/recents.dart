@@ -153,7 +153,7 @@ class RecentTile extends StatelessWidget {
       child: ListTile(
         contentPadding: const EdgeInsets.only(left: 16.0),
         leading: LeadingAvatar(
-          username: recent.number,
+          username: recent.name,
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
@@ -166,7 +166,7 @@ class RecentTile extends StatelessWidget {
           ],
         ),
         title: Text(
-          recent.number,
+          recent.name,
         ),
         subtitle: Row(
           children: [
@@ -211,7 +211,7 @@ class RecentTile extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text("Confirm delete"),
-          content: Text("Are you sure you want to delete \"${recent.number}\"?"),
+          content: const Text("Are you sure you want to delete current call log?"),
           actions: [
             TextButton(
               child: Text("No".toUpperCase()),

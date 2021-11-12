@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
@@ -15,6 +17,10 @@ class Recent extends Equatable {
   final DateTime? acceptedTime;
   final DateTime? hungUpTime;
   final int? id;
+  final String? displayName;
+  final String? firstName;
+  final String? lastName;
+  final Uint8List? thumbnail;
 
   const Recent({
     required this.direction,
@@ -24,6 +30,10 @@ class Recent extends Equatable {
     this.acceptedTime,
     this.hungUpTime,
     this.id,
+    this.displayName,
+    this.firstName,
+    this.lastName,
+    this.thumbnail,
   });
 
   bool get isComplete => acceptedTime != null;
@@ -38,6 +48,20 @@ class Recent extends Equatable {
     }
   }
 
+  String get name {
+    final displayName = this.displayName;
+    if (displayName != null) {
+      return displayName;
+    } else {
+      final names = [firstName, lastName].where((name) => name != null);
+      if (names.isNotEmpty) {
+        return names.join(' ');
+      } else {
+        return number;
+      }
+    }
+  }
+
   @override
   List<Object?> get props => [
         direction,
@@ -47,5 +71,9 @@ class Recent extends Equatable {
         acceptedTime,
         hungUpTime,
         id,
+        displayName,
+        firstName,
+        lastName,
+        thumbnail,
       ];
 }

@@ -172,7 +172,37 @@ class CallLogsDao extends DatabaseAccessor<AppDatabase> with _$CallLogsDaoMixin 
         ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
       .watch();
 
+  Stream<List<CallLogDataWithContactPhoneDataAndContactData>> watchLastCallLogsExt(
+      [Duration period = const Duration(days: 14)]) {
+    final q = (select(callLogsTable)
+          ..where((t) => t.createdAt.isBiggerOrEqualValue(DateTime.now().subtract(period)))
+          ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
+        .join([
+      leftOuterJoin(contactPhonesTable, contactPhonesTable.number.equalsExp(callLogsTable.number)),
+      leftOuterJoin(contactsTable, contactsTable.id.equalsExp(contactPhonesTable.contactId)),
+    ]);
+    return q.watch().map((rows) => rows
+        .map((row) => CallLogDataWithContactPhoneDataAndContactData(
+              row.readTable(callLogsTable),
+              row.readTableOrNull(contactPhonesTable),
+              row.readTableOrNull(contactsTable),
+            ))
+        .toList());
+  }
+
   Future<int> insertCallLog(Insertable<CallLogData> callLogData) => into(callLogsTable).insert(callLogData);
 
   Future<int> deleteCallLog(Insertable<CallLogData> callLogData) => delete(callLogsTable).delete(callLogData);
+}
+
+class CallLogDataWithContactPhoneDataAndContactData {
+  CallLogDataWithContactPhoneDataAndContactData(
+    this.callLog,
+    this.contactPhoneData,
+    this.contactData,
+  );
+
+  final CallLogData callLog;
+  final ContactPhoneData? contactPhoneData;
+  final ContactData? contactData;
 }

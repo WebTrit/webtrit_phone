@@ -11,17 +11,22 @@ class RecentsRepository {
   final AppDatabase appDatabase;
 
   Stream<List<Recent>> recents() {
-    return appDatabase.callLogsDao.watchLastCallLogs().map((callLogs) => callLogs
-        .map((callLog) => Recent(
-              direction: callLog.direction,
-              number: callLog.number,
-              video: callLog.video,
-              createdTime: callLog.createdAt,
-              acceptedTime: callLog.acceptedAt,
-              hungUpTime: callLog.hungUpAt,
-              id: callLog.id,
-            ))
-        .toList(growable: false));
+    return appDatabase.callLogsDao.watchLastCallLogsExt().map((callLogsExt) => callLogsExt.map((callLogExt) {
+          final callLog = callLogExt.callLog;
+          final contactData = callLogExt.contactData;
+          return Recent(
+            direction: callLog.direction,
+            number: callLog.number,
+            video: callLog.video,
+            createdTime: callLog.createdAt,
+            acceptedTime: callLog.acceptedAt,
+            hungUpTime: callLog.hungUpAt,
+            id: callLog.id,
+            displayName: contactData?.displayName,
+            firstName: contactData?.firstName,
+            lastName: contactData?.lastName,
+          );
+        }).toList(growable: false));
   }
 
   Future<void> add(Recent recent) async {
