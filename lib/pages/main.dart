@@ -32,14 +32,14 @@ class Tab {
 
 final List<Tab> tabs = <Tab>[
   Tab(
-    icon: Icons.history,
-    title: 'Recents',
-    create: (Key key) => RecentsPage(key: key),
-  ),
-  Tab(
     icon: Icons.star_outline,
     title: 'Favorites',
     create: (Key key) => FavoritesPage(key: key),
+  ),
+  Tab(
+    icon: Icons.history,
+    title: 'Recents',
+    create: (Key key) => RecentsPage(key: key),
   ),
   Tab(
     icon: Icons.contacts_outlined,
