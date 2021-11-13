@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 
 import 'models/models.dart';
@@ -62,7 +63,9 @@ class LocalContactsRepository {
               phones: contact.phones
                   .map((phone) => LocalContactPhone(
                         number: phone.number,
-                        label: phone.label == PhoneLabel.custom ? phone.customLabel : phone.label.toString(),
+                        label: phone.label == PhoneLabel.custom
+                            ? phone.customLabel
+                            : EnumToString.convertToString(phone.label),
                       ))
                   .toList(),
             ))
