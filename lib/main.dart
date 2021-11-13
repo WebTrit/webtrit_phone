@@ -159,6 +159,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
+      restorationScopeId: 'App',
       title: 'WebTrit Phone',
       theme: ThemeData(
         primarySwatch: Colors.blue,
