@@ -60,13 +60,21 @@ class MainPage extends StatefulWidget {
   _MainPageState createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 0;
+class _MainPageState extends State<MainPage> with RestorationMixin {
+  final _restorableSelectedIndex = RestorableInt(0);
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  @override
+  void dispose() {
+    _restorableSelectedIndex.dispose();
+    super.dispose();
+  }
+
+  @override
+  String get restorationId => 'MainPage';
+
+  @override
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    registerForRestoration(_restorableSelectedIndex, 'BottomNavigationSelectedIndex');
   }
 
   @override
@@ -80,7 +88,7 @@ class _MainPageState extends State<MainPage> {
             final int index = entry.key;
             final Tab tab = entry.value;
 
-            final active = index == _selectedIndex;
+            final active = index == _restorableSelectedIndex.value;
             return TabPage(
               active: active,
               child: tab.createWithGlobalKey(active),
@@ -90,7 +98,7 @@ class _MainPageState extends State<MainPage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        currentIndex: _selectedIndex,
+        currentIndex: _restorableSelectedIndex.value,
         selectedFontSize: Theme.of(context).textTheme.caption!.fontSize!,
         unselectedFontSize: Theme.of(context).textTheme.caption!.fontSize!,
         onTap: _onItemTapped,
@@ -102,6 +110,12 @@ class _MainPageState extends State<MainPage> {
         }).toList(),
       ),
     );
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _restorableSelectedIndex.value = index;
+    });
   }
 }
 
