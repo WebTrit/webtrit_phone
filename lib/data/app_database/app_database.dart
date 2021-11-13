@@ -117,17 +117,32 @@ class CallLogsTable extends Table {
 class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin {
   ContactsDao(AppDatabase db) : super(db);
 
-  Selectable<ContactData> _selectAllContacts([ContactSourceType? sourceType]) => select(contactsTable)
-    ..where((t) => sourceType == null ? Variable.withBool(true) : t.sourceType.equals(sourceType.index))
-    ..orderBy([
-      (t) => OrderingTerm.asc(t.displayName),
-      (t) => OrderingTerm.asc(t.lastName),
-      (t) => OrderingTerm.asc(t.firstName),
-    ]);
+  SimpleSelectStatement<$ContactsTableTable, ContactData> _selectAllContacts([ContactSourceType? sourceType]) =>
+      select(contactsTable)
+        ..where((t) {
+          if (sourceType == null) {
+            return const Constant(true);
+          } else {
+            return t.sourceType.equals(sourceType.index);
+          }
+        })
+        ..orderBy([
+          (t) => OrderingTerm.asc(t.displayName),
+          (t) => OrderingTerm.asc(t.lastName),
+          (t) => OrderingTerm.asc(t.firstName),
+        ]);
 
   Stream<List<ContactData>> watchAllContacts([ContactSourceType? sourceType]) => _selectAllContacts(sourceType).watch();
 
   Future<List<ContactData>> getAllContacts([ContactSourceType? sourceType]) => _selectAllContacts(sourceType).get();
+
+  SimpleSelectStatement<$ContactsTableTable,
+      ContactData> _selectAllNotEmptyContacts([ContactSourceType? sourceType]) => _selectAllContacts(sourceType)
+    ..where((t) => const CustomExpression<bool?>(
+        "(display_name IS NOT NULL AND NOT (display_name = '')) OR (first_name IS NOT NULL AND NOT (first_name = '')) OR (last_name IS NOT NULL AND NOT (last_name = ''))"));
+
+  Stream<List<ContactData>> watchAllNotEmptyContacts([ContactSourceType? sourceType]) =>
+      _selectAllNotEmptyContacts(sourceType).watch();
 
   Future<ContactData> insertOnUniqueConflictUpdateContact(Insertable<ContactData> contact) =>
       into(contactsTable).insertReturning(contact,

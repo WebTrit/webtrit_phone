@@ -11,7 +11,7 @@ class ContactsRepository {
   final AppDatabase appDatabase;
 
   Stream<List<Contact>> watchContacts([ContactSourceType? sourceType]) {
-    return appDatabase.contactsDao.watchAllContacts(sourceType).map(((contactDatas) => contactDatas
+    return appDatabase.contactsDao.watchAllNotEmptyContacts(sourceType).map(((contactDatas) => contactDatas
         .map((contactData) => Contact(
               id: contactData.id,
               sourceType: contactData.sourceType,
