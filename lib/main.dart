@@ -183,6 +183,9 @@ class App extends StatelessWidget {
               ),
               centerTitle: false,
             ),
+            tabBarTheme: TabBarTheme(
+              labelColor: themeData.textTheme.caption!.color,
+            ),
           ),
           child: child ?? Container(),
         );

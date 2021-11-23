@@ -11,7 +11,6 @@ class ContactsScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -22,7 +21,6 @@ class ContactsScaffold extends StatelessWidget {
                 context.l10n.contactsSourceLocal,
                 context.l10n.contactsSourceExternal,
               ].map((value) => Tab(child: Text(value, softWrap: false))).toList(),
-              labelColor: themeData.textTheme.caption!.color,
             ),
             search: TextField(
               textAlignVertical: TextAlignVertical.center,

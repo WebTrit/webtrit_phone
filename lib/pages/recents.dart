@@ -43,7 +43,6 @@ class _RecentsPageState extends State<RecentsPage> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
     return Scaffold(
       appBar: MainAppBar(
         bottom: TabBar(
@@ -51,7 +50,6 @@ class _RecentsPageState extends State<RecentsPage> with SingleTickerProviderStat
               .map((value) => Tab(child: Text(value.l10n(context), softWrap: false)))
               .toList(),
           controller: _tabController,
-          labelColor: themeData.textTheme.caption!.color,
         ),
       ),
       body: BlocConsumer<RecentsBloc, RecentsState>(
