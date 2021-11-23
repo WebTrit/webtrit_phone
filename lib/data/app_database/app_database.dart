@@ -136,10 +136,14 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
 
   Future<List<ContactData>> getAllContacts([ContactSourceType? sourceType]) => _selectAllContacts(sourceType).get();
 
-  SimpleSelectStatement<$ContactsTableTable,
-      ContactData> _selectAllNotEmptyContacts([ContactSourceType? sourceType]) => _selectAllContacts(sourceType)
-    ..where((t) => const CustomExpression<bool?>(
-        "(display_name IS NOT NULL AND NOT (display_name = '')) OR (first_name IS NOT NULL AND NOT (first_name = '')) OR (last_name IS NOT NULL AND NOT (last_name = ''))"));
+  SimpleSelectStatement<$ContactsTableTable, ContactData> _selectAllNotEmptyContacts([ContactSourceType? sourceType]) =>
+      _selectAllContacts(sourceType)
+        ..where(
+          (t) =>
+              t.displayName.isNotNull() & t.displayName.equalsExp(const Constant('')).not() |
+              t.firstName.isNotNull() & t.firstName.equalsExp(const Constant('')).not() |
+              t.lastName.isNotNull() & t.lastName.equalsExp(const Constant('')).not(),
+        );
 
   Stream<List<ContactData>> watchAllNotEmptyContacts([ContactSourceType? sourceType]) =>
       _selectAllNotEmptyContacts(sourceType).watch();
