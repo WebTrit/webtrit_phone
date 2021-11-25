@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 enum Direction {
@@ -8,7 +7,6 @@ enum Direction {
   outgoing,
 }
 
-@immutable
 class Recent extends Equatable {
   final Direction direction;
   final String number;
