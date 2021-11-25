@@ -19,7 +19,7 @@ class ContactsScaffold extends StatelessWidget {
         length: 2,
         child: Scaffold(
           appBar: MainAppBar(
-            bottom: _TabBarSearch(
+            bottom: TabBarSearch(
               tabBar: TabBar(
                 tabs: [
                   context.l10n.contactsSourceLocal,
@@ -48,33 +48,4 @@ class ContactsScaffold extends StatelessWidget {
       ),
     );
   }
-}
-
-class _TabBarSearch extends StatelessWidget implements PreferredSizeWidget {
-  const _TabBarSearch({
-    Key? key,
-    required this.tabBar,
-    required this.search,
-  }) : super(key: key);
-
-  final PreferredSizeWidget tabBar;
-  final Widget search;
-
-  static const _searchHeight = kMinInteractiveDimension;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        tabBar,
-        SizedBox(
-          height: _searchHeight,
-          child: search,
-        ),
-      ],
-    );
-  }
-
-  @override
-  Size get preferredSize => Size.fromHeight(tabBar.preferredSize.height + _searchHeight);
 }
