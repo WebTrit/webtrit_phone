@@ -40,6 +40,50 @@ class AppDatabase extends _$AppDatabase {
           await customStatement('PRAGMA foreign_keys = ON;');
         },
       );
+
+  @override
+  List<DatabaseSchemaEntity> get allSchemaEntities {
+    return [
+      ...super.allSchemaEntities,
+      ...super
+          .allSchemaEntities
+          .whereType<TableInfo>()
+          .map((t) => [
+                if (t.columnsByName.containsKey('inserted_at')) _afterInsertTrigger(t.actualTableName),
+                if (t.columnsByName.containsKey('updated_at')) _afterUpdateTrigger(t.actualTableName),
+              ])
+          .expand((e) => e),
+    ];
+  }
+
+  Trigger _afterInsertTrigger(String tableName) {
+    final triggerName = '${tableName}_after_insert_trigger';
+    return Trigger(
+      '''
+      CREATE TRIGGER $triggerName
+        AFTER INSERT ON $tableName
+      BEGIN
+        UPDATE $tableName SET inserted_at = STRFTIME('%s', 'NOW') WHERE id = NEW.id AND inserted_at IS NULL;
+        UPDATE $tableName SET updated_at = STRFTIME('%s', 'NOW') WHERE id = NEW.id;
+      END;
+      ''',
+      triggerName,
+    );
+  }
+
+  Trigger _afterUpdateTrigger(String tableName) {
+    final triggerName = '${tableName}_after_update_trigger';
+    return Trigger(
+      '''
+      CREATE TRIGGER $triggerName
+        AFTER UPDATE ON $tableName
+      BEGIN
+        UPDATE $tableName SET updated_at = STRFTIME('%s', 'NOW') WHERE id = NEW.id;
+      END;
+      ''',
+      triggerName,
+    );
+  }
 }
 
 @DataClassName('ContactData')
