@@ -76,10 +76,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
 
     // to del
     for (final externalContactsId in delExternalContactsIds) {
-      await appDatabase.contactsDao.deleteContact(ContactDataCompanion(
-        sourceType: const Value(ContactSourceType.external),
-        sourceId: Value(externalContactsId),
-      ));
+      await appDatabase.contactsDao.deleteContactBySource(ContactSourceType.external, externalContactsId);
     }
 
     // to add or update

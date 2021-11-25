@@ -82,10 +82,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
 
     // to del
     for (final localContactsId in delLocalContactsIds) {
-      await appDatabase.contactsDao.deleteContact(ContactDataCompanion(
-        sourceType: const Value(ContactSourceType.local),
-        sourceId: Value(localContactsId),
-      ));
+      await appDatabase.contactsDao.deleteContactBySource(ContactSourceType.local, localContactsId);
     }
 
     // to add or update

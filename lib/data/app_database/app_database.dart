@@ -167,6 +167,9 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
           onConflict: DoUpdate((_) => contact, target: [contactsTable.sourceType, contactsTable.sourceId]));
 
   Future<int> deleteContact(Insertable<ContactData> contact) => delete(contactsTable).delete(contact);
+
+  Future<int> deleteContactBySource(ContactSourceType sourceType, String sourceId) =>
+      (delete(contactsTable)..where((t) => t.sourceType.equalsValue(sourceType) & t.sourceId.equals(sourceId))).go();
 }
 
 @DriftAccessor(tables: [
