@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+import '../contacts.dart';
 import '../features/contacts_local_tab/view/contacts_local_tab.dart';
 import '../features/contacts_external_tab/view/contacts_external_tab.dart';
 
@@ -24,16 +27,15 @@ class ContactsScaffold extends StatelessWidget {
                 ].map((value) => Tab(child: Text(value, softWrap: false))).toList(),
               ),
               search: IgnoreUnfocuser(
-                child: TextField(
-                  textAlignVertical: TextAlignVertical.center,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.search),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () {},
-                    ),
-                    border: InputBorder.none,
-                  ),
+                child: BlocBuilder<ContactsSearchBloc, String>(
+                  builder: (context, state) {
+                    final contactsSearchBloc = context.read<ContactsSearchBloc>();
+                    return ClearedTextField(
+                      initialValue: state,
+                      onChanged: (value) => contactsSearchBloc.add(ContactsSearchChanged(value)),
+                      onSubmitted: (value) => contactsSearchBloc.add(ContactsSearchSubmitted(value)),
+                    );
+                  },
                 ),
               ),
             ),
