@@ -22,7 +22,7 @@ class LeadingAvatar extends StatelessWidget {
       radius: radius,
       minRadius: minRadius,
       maxRadius: maxRadius,
-      backgroundColor: Colors.blue.shade100,
+      backgroundColor: Theme.of(context).primaryColorLight,
       child: Text(username.isEmpty ? '' : username.split(' ').map((v) => v[0]).join()),
     );
   }
