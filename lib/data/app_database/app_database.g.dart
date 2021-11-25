@@ -1095,21 +1095,233 @@ class $CallLogsTableTable extends CallLogsTable
       const EnumIndexConverter<Direction>(Direction.values);
 }
 
+class FavoriteData extends DataClass implements Insertable<FavoriteData> {
+  final int id;
+  final int contactPhoneId;
+  final int position;
+  FavoriteData(
+      {required this.id, required this.contactPhoneId, required this.position});
+  factory FavoriteData.fromData(Map<String, dynamic> data, {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return FavoriteData(
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      contactPhoneId: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}contact_phone_id'])!,
+      position: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}position'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['contact_phone_id'] = Variable<int>(contactPhoneId);
+    map['position'] = Variable<int>(position);
+    return map;
+  }
+
+  FavoriteDataCompanion toCompanion(bool nullToAbsent) {
+    return FavoriteDataCompanion(
+      id: Value(id),
+      contactPhoneId: Value(contactPhoneId),
+      position: Value(position),
+    );
+  }
+
+  factory FavoriteData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return FavoriteData(
+      id: serializer.fromJson<int>(json['id']),
+      contactPhoneId: serializer.fromJson<int>(json['contactPhoneId']),
+      position: serializer.fromJson<int>(json['position']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'contactPhoneId': serializer.toJson<int>(contactPhoneId),
+      'position': serializer.toJson<int>(position),
+    };
+  }
+
+  FavoriteData copyWith({int? id, int? contactPhoneId, int? position}) =>
+      FavoriteData(
+        id: id ?? this.id,
+        contactPhoneId: contactPhoneId ?? this.contactPhoneId,
+        position: position ?? this.position,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('FavoriteData(')
+          ..write('id: $id, ')
+          ..write('contactPhoneId: $contactPhoneId, ')
+          ..write('position: $position')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, contactPhoneId, position);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is FavoriteData &&
+          other.id == this.id &&
+          other.contactPhoneId == this.contactPhoneId &&
+          other.position == this.position);
+}
+
+class FavoriteDataCompanion extends UpdateCompanion<FavoriteData> {
+  final Value<int> id;
+  final Value<int> contactPhoneId;
+  final Value<int> position;
+  const FavoriteDataCompanion({
+    this.id = const Value.absent(),
+    this.contactPhoneId = const Value.absent(),
+    this.position = const Value.absent(),
+  });
+  FavoriteDataCompanion.insert({
+    this.id = const Value.absent(),
+    required int contactPhoneId,
+    required int position,
+  })  : contactPhoneId = Value(contactPhoneId),
+        position = Value(position);
+  static Insertable<FavoriteData> custom({
+    Expression<int>? id,
+    Expression<int>? contactPhoneId,
+    Expression<int>? position,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (contactPhoneId != null) 'contact_phone_id': contactPhoneId,
+      if (position != null) 'position': position,
+    });
+  }
+
+  FavoriteDataCompanion copyWith(
+      {Value<int>? id, Value<int>? contactPhoneId, Value<int>? position}) {
+    return FavoriteDataCompanion(
+      id: id ?? this.id,
+      contactPhoneId: contactPhoneId ?? this.contactPhoneId,
+      position: position ?? this.position,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (contactPhoneId.present) {
+      map['contact_phone_id'] = Variable<int>(contactPhoneId.value);
+    }
+    if (position.present) {
+      map['position'] = Variable<int>(position.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FavoriteDataCompanion(')
+          ..write('id: $id, ')
+          ..write('contactPhoneId: $contactPhoneId, ')
+          ..write('position: $position')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $FavoritesTableTable extends FavoritesTable
+    with TableInfo<$FavoritesTableTable, FavoriteData> {
+  final GeneratedDatabase _db;
+  final String? _alias;
+  $FavoritesTableTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _contactPhoneIdMeta =
+      const VerificationMeta('contactPhoneId');
+  late final GeneratedColumn<int?> contactPhoneId = GeneratedColumn<int?>(
+      'contact_phone_id', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: true,
+      $customConstraints:
+          'NOT NULL REFERENCES contact_phones(id) ON DELETE CASCADE');
+  final VerificationMeta _positionMeta = const VerificationMeta('position');
+  late final GeneratedColumn<int?> position = GeneratedColumn<int?>(
+      'position', aliasedName, false,
+      typeName: 'INTEGER', requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, contactPhoneId, position];
+  @override
+  String get aliasedName => _alias ?? 'favorites';
+  @override
+  String get actualTableName => 'favorites';
+  @override
+  VerificationContext validateIntegrity(Insertable<FavoriteData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('contact_phone_id')) {
+      context.handle(
+          _contactPhoneIdMeta,
+          contactPhoneId.isAcceptableOrUnknown(
+              data['contact_phone_id']!, _contactPhoneIdMeta));
+    } else if (isInserting) {
+      context.missing(_contactPhoneIdMeta);
+    }
+    if (data.containsKey('position')) {
+      context.handle(_positionMeta,
+          position.isAcceptableOrUnknown(data['position']!, _positionMeta));
+    } else if (isInserting) {
+      context.missing(_positionMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  FavoriteData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return FavoriteData.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $FavoritesTableTable createAlias(String alias) {
+    return $FavoritesTableTable(_db, alias);
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $ContactsTableTable contactsTable = $ContactsTableTable(this);
   late final $ContactPhonesTableTable contactPhonesTable =
       $ContactPhonesTableTable(this);
   late final $CallLogsTableTable callLogsTable = $CallLogsTableTable(this);
+  late final $FavoritesTableTable favoritesTable = $FavoritesTableTable(this);
   late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
   late final ContactPhonesDao contactPhonesDao =
       ContactPhonesDao(this as AppDatabase);
   late final CallLogsDao callLogsDao = CallLogsDao(this as AppDatabase);
+  late final FavoritesDao favoritesDao = FavoritesDao(this as AppDatabase);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [contactsTable, contactPhonesTable, callLogsTable];
+      [contactsTable, contactPhonesTable, callLogsTable, favoritesTable];
 }
 
 // **************************************************************************
@@ -1125,6 +1337,12 @@ mixin _$ContactPhonesDaoMixin on DatabaseAccessor<AppDatabase> {
 }
 mixin _$CallLogsDaoMixin on DatabaseAccessor<AppDatabase> {
   $CallLogsTableTable get callLogsTable => attachedDatabase.callLogsTable;
+  $ContactPhonesTableTable get contactPhonesTable =>
+      attachedDatabase.contactPhonesTable;
+  $ContactsTableTable get contactsTable => attachedDatabase.contactsTable;
+}
+mixin _$FavoritesDaoMixin on DatabaseAccessor<AppDatabase> {
+  $FavoritesTableTable get favoritesTable => attachedDatabase.favoritesTable;
   $ContactPhonesTableTable get contactPhonesTable =>
       attachedDatabase.contactPhonesTable;
   $ContactsTableTable get contactsTable => attachedDatabase.contactsTable;

@@ -14,11 +14,13 @@ part 'app_database.g.dart';
     ContactsTable,
     ContactPhonesTable,
     CallLogsTable,
+    FavoritesTable,
   ],
   daos: [
     ContactsDao,
     ContactPhonesDao,
     CallLogsDao,
+    FavoritesDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -109,6 +111,19 @@ class CallLogsTable extends Table {
   DateTimeColumn get acceptedAt => dateTime().nullable()();
 
   DateTimeColumn get hungUpAt => dateTime().nullable()();
+}
+
+@DataClassName('FavoriteData')
+class FavoritesTable extends Table {
+  @override
+  String get tableName => 'favorites';
+
+  IntColumn get id => integer().autoIncrement()();
+
+  IntColumn get contactPhoneId =>
+      integer().customConstraint('NOT NULL REFERENCES contact_phones(id) ON DELETE CASCADE')();
+
+  IntColumn get position => integer()();
 }
 
 @DriftAccessor(tables: [
@@ -241,4 +256,16 @@ class CallLogDataWithContactPhoneDataAndContactData {
   final CallLogData callLog;
   final ContactPhoneData? contactPhoneData;
   final ContactData? contactData;
+}
+
+@DriftAccessor(tables: [
+  FavoritesTable,
+  ContactPhonesTable,
+  ContactsTable,
+])
+class FavoritesDao extends DatabaseAccessor<AppDatabase> with _$FavoritesDaoMixin {
+  FavoritesDao(AppDatabase db) : super(db);
+
+  Stream<List<FavoriteData>> watchFavorites() =>
+      (select(favoritesTable)..orderBy([(t) => OrderingTerm.asc(t.position)])).watch();
 }
