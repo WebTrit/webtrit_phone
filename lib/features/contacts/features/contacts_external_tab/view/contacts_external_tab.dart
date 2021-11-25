@@ -65,19 +65,30 @@ class _ContactsExternal extends StatelessWidget {
             },
           );
         } else {
-          return Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (state.status == ContactsExternalTabStatus.failure)
-                  const Text('Failure to get external contacts')
-                else
-                  const Text('No external contacts'),
+          late final List<Widget> children;
+          if (state.status == ContactsExternalTabStatus.failure) {
+            children = [
+              const Text('Failure to get external contacts'),
+            ];
+          } else {
+            if (state.searching) {
+              children = [
+                const Text('No external contacts found'),
+              ];
+            } else {
+              children = [
+                const Text('No external contacts'),
                 OutlinedButton(
                   onPressed: () => context.read<ContactsExternalTabBloc>().add(const ContactsExternalTabRefreshed()),
                   child: const Text('Refresh'),
                 ),
-              ],
+              ];
+            }
+          }
+          return Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: children,
             ),
           );
         }

@@ -33,6 +33,7 @@ class ContactsLocalTabBloc extends Bloc<ContactsLocalTabEvent, ContactsLocalTabS
       onData: (List<Contact> contacts) => ContactsLocalTabState(
         status: _mapLocalContactsSyncStateToStatus(localContactsSyncBloc.state),
         contacts: contacts,
+        searching: event.search.isNotEmpty,
       ),
     );
 

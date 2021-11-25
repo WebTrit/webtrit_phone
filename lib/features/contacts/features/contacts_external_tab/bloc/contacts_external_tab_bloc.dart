@@ -35,6 +35,7 @@ class ContactsExternalTabBloc extends Bloc<ContactsExternalTabEvent, ContactsExt
       onData: (List<Contact> contacts) => state.copyWith(
         status: _mapExternalContactsSyncStateToStatus(externalContactsSyncBloc.state),
         contacts: contacts,
+        searching: event.search.isNotEmpty,
       ),
     );
 
