@@ -10,18 +10,27 @@ class ContactsRepository {
 
   final AppDatabase appDatabase;
 
-  Stream<List<Contact>> watchContacts([ContactSourceType? sourceType]) {
-    return appDatabase.contactsDao.watchAllNotEmptyContacts(sourceType).map(((contactDatas) => contactDatas
-        .map((contactData) => Contact(
-              id: contactData.id,
-              sourceType: contactData.sourceType,
-              sourceId: contactData.sourceId,
-              displayName: contactData.displayName,
-              firstName: contactData.firstName,
-              lastName: contactData.lastName,
-            ))
-        .toList()));
+  Stream<List<Contact>> watchContacts(String search, [ContactSourceType? sourceType]) {
+    final searchBits = search.split(' ').where((value) => value.isNotEmpty);
+    if (searchBits.isEmpty) {
+      return appDatabase.contactsDao
+          .watchAllNotEmptyContacts(sourceType)
+          .map(((contactDatas) => contactDatas.map(_mapContactDataToContact).toList()));
+    } else {
+      return appDatabase.contactsDao
+          .watchAllLikeContacts(searchBits, sourceType)
+          .map(((contactDatas) => contactDatas.map(_mapContactDataToContact).toList()));
+    }
   }
+
+  Contact _mapContactDataToContact(ContactData contactData) => Contact(
+        id: contactData.id,
+        sourceType: contactData.sourceType,
+        sourceId: contactData.sourceId,
+        displayName: contactData.displayName,
+        firstName: contactData.firstName,
+        lastName: contactData.lastName,
+      );
 
   Future<List<ContactPhone>> getContactPhones(Contact contact) {
     final contactId = contact.id;

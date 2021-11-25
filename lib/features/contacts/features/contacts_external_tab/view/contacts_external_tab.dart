@@ -15,10 +15,14 @@ class ContactsExternalTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ContactsExternalTabBloc(
-        contactsRepository: context.read<ContactsRepository>(),
-        externalContactsSyncBloc: context.read<ExternalContactsSyncBloc>(),
-      )..add(const ContactsExternalTabStarted()),
+      create: (context) {
+        final contactsSearchBloc = context.read<ContactsSearchBloc>();
+        return ContactsExternalTabBloc(
+          contactsRepository: context.read<ContactsRepository>(),
+          contactsSearchBloc: contactsSearchBloc,
+          externalContactsSyncBloc: context.read<ExternalContactsSyncBloc>(),
+        )..add(ContactsExternalTabStarted(search: contactsSearchBloc.state));
+      },
       child: const _ContactsExternal(),
     );
   }

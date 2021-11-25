@@ -6,7 +6,9 @@ abstract class ContactsLocalTabEvent {
 }
 
 class ContactsLocalTabStarted extends ContactsLocalTabEvent {
-  const ContactsLocalTabStarted();
+  const ContactsLocalTabStarted({required this.search});
+
+  final String search;
 }
 
 class ContactsLocalTabRefreshed extends ContactsLocalTabEvent {

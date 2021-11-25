@@ -6,7 +6,9 @@ abstract class ContactsExternalTabEvent {
 }
 
 class ContactsExternalTabStarted extends ContactsExternalTabEvent {
-  const ContactsExternalTabStarted();
+  const ContactsExternalTabStarted({required this.search});
+
+  final String search;
 }
 
 class ContactsExternalTabRefreshed extends ContactsExternalTabEvent {

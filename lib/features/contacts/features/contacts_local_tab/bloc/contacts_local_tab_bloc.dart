@@ -6,6 +6,8 @@ import 'package:meta/meta.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
+import '../../../contacts.dart';
+
 part 'contacts_local_tab_event.dart';
 
 part 'contacts_local_tab_state.dart';
@@ -13,6 +15,7 @@ part 'contacts_local_tab_state.dart';
 class ContactsLocalTabBloc extends Bloc<ContactsLocalTabEvent, ContactsLocalTabState> {
   ContactsLocalTabBloc({
     required this.contactsRepository,
+    required this.contactsSearchBloc,
     required this.localContactsSyncBloc,
   }) : super(const ContactsLocalTabState()) {
     on<ContactsLocalTabStarted>(_handleContactsLocalTabStarted, transformer: restartable());
@@ -20,17 +23,22 @@ class ContactsLocalTabBloc extends Bloc<ContactsLocalTabEvent, ContactsLocalTabS
   }
 
   final ContactsRepository contactsRepository;
+  final ContactsSearchBloc contactsSearchBloc;
   final LocalContactsSyncBloc localContactsSyncBloc;
 
   Future<void> _handleContactsLocalTabStarted(
       ContactsLocalTabStarted event, Emitter<ContactsLocalTabState> emit) async {
     final watchContactsForEachFuture = emit.forEach(
-      contactsRepository.watchContacts(ContactSourceType.local),
+      contactsRepository.watchContacts(event.search, ContactSourceType.local),
       onData: (List<Contact> contacts) => ContactsLocalTabState(
         status: _mapLocalContactsSyncStateToStatus(localContactsSyncBloc.state),
         contacts: contacts,
       ),
     );
+
+    final contactsSearchSateOnEachFuture = emit.onEach(contactsSearchBloc.stream, onData: (String value) {
+      add(ContactsLocalTabStarted(search: value));
+    });
 
     final localContactsSyncStateForEachFuture = emit.forEach(
       localContactsSyncBloc.stream,
@@ -41,6 +49,7 @@ class ContactsLocalTabBloc extends Bloc<ContactsLocalTabEvent, ContactsLocalTabS
 
     await Future.wait([
       watchContactsForEachFuture,
+      contactsSearchSateOnEachFuture,
       localContactsSyncStateForEachFuture,
     ]);
   }

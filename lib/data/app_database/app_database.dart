@@ -148,6 +148,20 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
   Stream<List<ContactData>> watchAllNotEmptyContacts([ContactSourceType? sourceType]) =>
       _selectAllNotEmptyContacts(sourceType).watch();
 
+  SimpleSelectStatement<$ContactsTableTable, ContactData> _selectAllLikeContacts(Iterable<String> searchBits,
+      [ContactSourceType? sourceType]) {
+    final q = _selectAllContacts(sourceType);
+    for (final searchBit in searchBits) {
+      q.where(
+        (t) => t.displayName.like('%$searchBit%') | t.firstName.like('%$searchBit%') | t.lastName.like('%$searchBit%'),
+      );
+    }
+    return q;
+  }
+
+  Stream<List<ContactData>> watchAllLikeContacts(Iterable<String> searchBits, [ContactSourceType? sourceType]) =>
+      _selectAllLikeContacts(searchBits, sourceType).watch();
+
   Future<ContactData> insertOnUniqueConflictUpdateContact(Insertable<ContactData> contact) =>
       into(contactsTable).insertReturning(contact,
           onConflict: DoUpdate((_) => contact, target: [contactsTable.sourceType, contactsTable.sourceId]));

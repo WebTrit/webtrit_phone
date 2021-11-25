@@ -8,6 +8,8 @@ import 'package:meta/meta.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
+import '../../../contacts.dart';
+
 part 'contacts_external_tab_event.dart';
 
 part 'contacts_external_tab_state.dart';
@@ -15,6 +17,7 @@ part 'contacts_external_tab_state.dart';
 class ContactsExternalTabBloc extends Bloc<ContactsExternalTabEvent, ContactsExternalTabState> {
   ContactsExternalTabBloc({
     required this.contactsRepository,
+    required this.contactsSearchBloc,
     required this.externalContactsSyncBloc,
   }) : super(const ContactsExternalTabState()) {
     on<ContactsExternalTabStarted>(_handleContactsExternalTabStarted, transformer: restartable());
@@ -22,17 +25,22 @@ class ContactsExternalTabBloc extends Bloc<ContactsExternalTabEvent, ContactsExt
   }
 
   final ContactsRepository contactsRepository;
+  final ContactsSearchBloc contactsSearchBloc;
   final ExternalContactsSyncBloc externalContactsSyncBloc;
 
   Future<void> _handleContactsExternalTabStarted(
       ContactsExternalTabStarted event, Emitter<ContactsExternalTabState> emit) async {
     final watchContactsForEachFuture = emit.forEach(
-      contactsRepository.watchContacts(ContactSourceType.external),
+      contactsRepository.watchContacts(event.search, ContactSourceType.external),
       onData: (List<Contact> contacts) => state.copyWith(
         status: _mapExternalContactsSyncStateToStatus(externalContactsSyncBloc.state),
         contacts: contacts,
       ),
     );
+
+    final contactsSearchSateOnEachFuture = emit.onEach(contactsSearchBloc.stream, onData: (String value) {
+      add(ContactsExternalTabStarted(search: value));
+    });
 
     final externalContactsSyncStateForEachFuture = emit.forEach(
       externalContactsSyncBloc.stream,
@@ -43,6 +51,7 @@ class ContactsExternalTabBloc extends Bloc<ContactsExternalTabEvent, ContactsExt
 
     await Future.wait([
       watchContactsForEachFuture,
+      contactsSearchSateOnEachFuture,
       externalContactsSyncStateForEachFuture,
     ]);
   }

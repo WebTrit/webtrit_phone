@@ -15,10 +15,14 @@ class ContactsLocalTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ContactsLocalTabBloc(
-        contactsRepository: context.read<ContactsRepository>(),
-        localContactsSyncBloc: context.read<LocalContactsSyncBloc>(),
-      )..add(ContactsLocalTabStarted()),
+      create: (context) {
+        final contactsSearchBloc = context.read<ContactsSearchBloc>();
+        return ContactsLocalTabBloc(
+          contactsRepository: context.read<ContactsRepository>(),
+          contactsSearchBloc: contactsSearchBloc,
+          localContactsSyncBloc: context.read<LocalContactsSyncBloc>(),
+        )..add(ContactsLocalTabStarted(search: contactsSearchBloc.state));
+      },
       child: const _ContactsLocal(),
     );
   }
