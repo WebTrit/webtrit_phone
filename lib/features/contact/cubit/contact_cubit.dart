@@ -12,8 +12,20 @@ class ContactCubit extends Cubit<ContactState> {
   }) : super(ContactInitial(contact: contact));
   final ContactsRepository contactsRepository;
 
-  void getContactPhones() async {
+  Future<void> getContactPhones() async {
     final phones = await contactsRepository.getContactPhones(state.contact);
     emit(ContactSuccess(contact: state.contact, phones: phones));
+  }
+
+  Future<void> addToFavorites(ContactPhone contactPhone) async {
+    contactsRepository.addContactPhoneToFavorites(contactPhone);
+
+    await getContactPhones();
+  }
+
+  Future<void> removeFromFavorites(ContactPhone contactPhone) async {
+    contactsRepository.removeContactPhoneFromFavorites(contactPhone);
+
+    await getContactPhones();
   }
 }

@@ -5,16 +5,20 @@ class ContactPhoneTile extends StatelessWidget {
     Key? key,
     required this.number,
     required this.label,
+    required this.favorite,
     this.onTap,
     this.onLongPress,
+    this.onFavoriteChanged,
     this.onAudioPressed,
     this.onVideoPressed,
   }) : super(key: key);
 
   final String number;
   final String label;
+  final bool favorite;
   final GestureTapCallback? onTap;
   final GestureLongPressCallback? onLongPress;
+  final ValueChanged<bool>? onFavoriteChanged;
   final VoidCallback? onAudioPressed;
   final VoidCallback? onVideoPressed;
 
@@ -25,6 +29,11 @@ class ContactPhoneTile extends StatelessWidget {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
+          IconButton(
+            splashRadius: 24,
+            icon: favorite ? const Icon(Icons.star) : const Icon(Icons.star_border),
+            onPressed: onFavoriteChanged == null ? null : () => onFavoriteChanged!(!favorite),
+          ),
           IconButton(
             splashRadius: 24,
             icon: const Icon(Icons.call),

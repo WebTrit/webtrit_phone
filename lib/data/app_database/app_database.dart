@@ -233,6 +233,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
 
 @DriftAccessor(tables: [
   ContactPhonesTable,
+  FavoritesTable,
 ])
 class ContactPhonesDao extends DatabaseAccessor<AppDatabase> with _$ContactPhonesDaoMixin {
   ContactPhonesDao(AppDatabase db) : super(db);
@@ -244,6 +245,22 @@ class ContactPhonesDao extends DatabaseAccessor<AppDatabase> with _$ContactPhone
         ]))
       .get();
 
+  Future<List<ContactPhoneDataWithFavoriteData>> getContactPhonesExtByContactId(int id) => (select(contactPhonesTable)
+        ..where((t) => t.contactId.equals(id))
+        ..orderBy([
+          (t) => OrderingTerm.asc(t.insertedAt),
+        ]))
+      .join([
+        leftOuterJoin(favoritesTable, favoritesTable.contactPhoneId.equalsExp(contactPhonesTable.id)),
+      ])
+      .get()
+      .then((rows) => rows
+          .map((row) => ContactPhoneDataWithFavoriteData(
+                row.readTable(contactPhonesTable),
+                row.readTableOrNull(favoritesTable),
+              ))
+          .toList());
+
   Future<int> insertOnUniqueConflictUpdateContactPhone(Insertable<ContactPhoneData> contactPhone) =>
       into(contactPhonesTable).insert(contactPhone,
           onConflict: DoUpdate((_) => contactPhone, target: [contactPhonesTable.number, contactPhonesTable.contactId]));
@@ -252,6 +269,16 @@ class ContactPhonesDao extends DatabaseAccessor<AppDatabase> with _$ContactPhone
         ..where((t) => t.contactId.equals(id))
         ..where((t) => t.number.isNotIn(numbers)))
       .go();
+}
+
+class ContactPhoneDataWithFavoriteData {
+  ContactPhoneDataWithFavoriteData(
+    this.contactPhoneData,
+    this.favoriteData,
+  );
+
+  final ContactPhoneData contactPhoneData;
+  final FavoriteData? favoriteData;
 }
 
 @DriftAccessor(tables: [
@@ -310,6 +337,40 @@ class CallLogDataWithContactPhoneDataAndContactData {
 class FavoritesDao extends DatabaseAccessor<AppDatabase> with _$FavoritesDaoMixin {
   FavoritesDao(AppDatabase db) : super(db);
 
-  Stream<List<FavoriteData>> watchFavorites() =>
-      (select(favoritesTable)..orderBy([(t) => OrderingTerm.asc(t.position)])).watch();
+  Stream<List<FavoriteDataWithContactPhoneDataAndContactData>> watchFavoritesExt() {
+    final q = (select(favoritesTable)..orderBy([(t) => OrderingTerm.asc(t.position)])).join([
+      leftOuterJoin(contactPhonesTable, contactPhonesTable.id.equalsExp(favoritesTable.contactPhoneId)),
+      leftOuterJoin(contactsTable, contactsTable.id.equalsExp(contactPhonesTable.contactId)),
+    ]);
+    return q.watch().map((rows) => rows
+        .map((row) => FavoriteDataWithContactPhoneDataAndContactData(
+              row.readTable(favoritesTable),
+              row.readTable(contactPhonesTable),
+              row.readTable(contactsTable),
+            ))
+        .toList());
+  }
+
+  Future<int> insertFavoriteByContactPhoneId(int contactPhoneId) => customInsert(
+        'INSERT INTO favorites (contact_phone_id, position) VALUES (?, (SELECT ifnull(max(position), 0) + 1 FROM favorites))',
+        variables: [Variable.withInt(contactPhoneId)],
+        updates: {favoritesTable},
+      );
+
+  Future<int> deleteByContactPhoneId(int contactPhoneId) =>
+      (delete(favoritesTable)..where((t) => t.contactPhoneId.equals(contactPhoneId))).go();
+
+  Future<int> deleteFavorite(Insertable<FavoriteData> favoriteData) => delete(favoritesTable).delete(favoriteData);
+}
+
+class FavoriteDataWithContactPhoneDataAndContactData {
+  FavoriteDataWithContactPhoneDataAndContactData(
+    this.favoriteData,
+    this.contactPhoneData,
+    this.contactData,
+  );
+
+  final FavoriteData favoriteData;
+  final ContactPhoneData contactPhoneData;
+  final ContactData contactData;
 }

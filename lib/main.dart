@@ -90,6 +90,11 @@ void main() async {
         RepositoryProvider<CallRepository>(
           create: (context) => CallRepository(),
         ),
+        RepositoryProvider<FavoritesRepository>(
+          create: (context) => FavoritesRepository(
+            appDatabase: context.read<AppDatabase>(),
+          ),
+        ),
         RepositoryProvider<RecentsRepository>(
           create: (context) => RecentsRepository(
             appDatabase: context.read<AppDatabase>(),

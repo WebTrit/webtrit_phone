@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../contact.dart';
@@ -44,6 +45,14 @@ class ContactScaffold extends StatelessWidget {
                   ContactPhoneTile(
                     number: phone.number,
                     label: phone.label,
+                    favorite: phone.favorite,
+                    onFavoriteChanged: (favorite) {
+                      if (favorite) {
+                        context.read<ContactCubit>().addToFavorites(phone);
+                      } else {
+                        context.read<ContactCubit>().removeFromFavorites(phone);
+                      }
+                    },
                     onAudioPressed: () {
                       Navigator.pop(context, CallOutgoingStarted(number: phone.number, video: false));
                     },

@@ -1334,6 +1334,7 @@ mixin _$ContactsDaoMixin on DatabaseAccessor<AppDatabase> {
 mixin _$ContactPhonesDaoMixin on DatabaseAccessor<AppDatabase> {
   $ContactPhonesTableTable get contactPhonesTable =>
       attachedDatabase.contactPhonesTable;
+  $FavoritesTableTable get favoritesTable => attachedDatabase.favoritesTable;
 }
 mixin _$CallLogsDaoMixin on DatabaseAccessor<AppDatabase> {
   $CallLogsTableTable get callLogsTable => attachedDatabase.callLogsTable;

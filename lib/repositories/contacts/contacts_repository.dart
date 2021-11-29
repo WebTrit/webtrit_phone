@@ -38,13 +38,23 @@ class ContactsRepository {
       return Future.value(const []); // TODO maybe error
     } else {
       return appDatabase.contactPhonesDao
-          .getContactPhonesByContactId(contactId)
+          .getContactPhonesExtByContactId(contactId)
           .then((contactPhoneDatas) => contactPhoneDatas
-              .map((contactPhoneData) => ContactPhone(
-                    number: contactPhoneData.number,
-                    label: contactPhoneData.label,
+              .map((contactPhoneDataWithFavoriteData) => ContactPhone(
+                    id: contactPhoneDataWithFavoriteData.contactPhoneData.id,
+                    number: contactPhoneDataWithFavoriteData.contactPhoneData.number,
+                    label: contactPhoneDataWithFavoriteData.contactPhoneData.label,
+                    favorite: contactPhoneDataWithFavoriteData.favoriteData != null,
                   ))
               .toList());
     }
+  }
+
+  Future<int> addContactPhoneToFavorites(ContactPhone contactPhone) {
+    return appDatabase.favoritesDao.insertFavoriteByContactPhoneId(contactPhone.id);
+  }
+
+  Future<int> removeContactPhoneFromFavorites(ContactPhone contactPhone) {
+    return appDatabase.favoritesDao.deleteByContactPhoneId(contactPhone.id);
   }
 }
