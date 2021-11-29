@@ -9,23 +9,32 @@ class WebTritPhonePictureLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Assets.logo.svg(
-          height: themeData.textTheme.headline2!.fontSize! * 1.4,
-          color: themeData.colorScheme.secondary,
-        ),
-        SizedBox(
-          width: themeData.textTheme.headline2!.fontSize! * 0.5,
-        ),
-        Text(
-          EnvironmentConfig.WEBTRIT_APP_NAME,
-          style: themeData.textTheme.headline2!.copyWith(
+    final baseFontSize = themeData.textTheme.headline2!.fontSize!;
+    return FittedBox(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: baseFontSize * 0.5,
+          ),
+          Assets.logo.svg(
+            height: baseFontSize * 1.4,
             color: themeData.colorScheme.secondary,
           ),
-        ),
-      ],
+          SizedBox(
+            width: baseFontSize * 0.5,
+          ),
+          Text(
+            EnvironmentConfig.WEBTRIT_APP_NAME,
+            style: themeData.textTheme.headline2!.copyWith(
+              color: themeData.colorScheme.secondary,
+            ),
+          ),
+          SizedBox(
+            width: baseFontSize * 0.5,
+          ),
+        ],
+      ),
     );
   }
 }
