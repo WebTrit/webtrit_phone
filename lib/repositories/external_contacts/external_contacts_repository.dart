@@ -41,7 +41,7 @@ class ExternalContactsRepository {
 
   void _onListenCallback() {
     if (periodicPolling && _listenedCounter++ == 0) {
-      _periodicTimer = Timer.periodic(const Duration(seconds: 3), (timer) async {
+      _periodicTimer = Timer.periodic(const Duration(seconds: 60), (timer) async {
         final newContacts = await _listContacts();
         if (!(const ListEquality<ExternalContact>()).equals(newContacts, _contacts)) {
           _contacts = newContacts;
