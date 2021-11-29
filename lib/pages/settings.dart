@@ -33,9 +33,11 @@ class _SettingsPageState extends State<SettingsPage> {
 
                 // TODO: move logout logic to some bloc
                 final token = await SecureStorage().readToken();
-                await SecureStorage().deleteToken();
-                final webtritApiClient =  context.read<WebtritApiClient>();
-                await webtritApiClient.sessionLogout(token!);
+                if (token != null) {
+                  await SecureStorage().deleteToken();
+                  final webtritApiClient =  context.read<WebtritApiClient>();
+                  await webtritApiClient.sessionLogout(token);
+                }
 
                 context.read<AppBloc>().add(const AppUnregistered());
               }
