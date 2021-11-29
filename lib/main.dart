@@ -167,7 +167,7 @@ class App extends StatelessWidget {
       restorationScopeId: 'App',
       title: 'WebTrit Phone',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.orange,
       ),
       initialRoute: _initialRoute(webRegistrationInitialUrl, isRegistered),
       builder: (BuildContext context, Widget? child) {
