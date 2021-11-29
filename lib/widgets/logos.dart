@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/gen/assets.gen.dart';
 
 class WebTritPhonePictureLogo extends StatelessWidget {
@@ -19,7 +20,7 @@ class WebTritPhonePictureLogo extends StatelessWidget {
           width: themeData.textTheme.headline2!.fontSize! * 0.5,
         ),
         Text(
-          'WebTrit',
+          EnvironmentConfig.WEBTRIT_APP_NAME,
           style: themeData.textTheme.headline2!.copyWith(
             color: themeData.colorScheme.secondary,
           ),
@@ -39,7 +40,7 @@ class WebTritPhoneTextLogo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Text(
-          'WebTrit',
+          EnvironmentConfig.WEBTRIT_APP_NAME,
           style: themeData.textTheme.headline2,
         ),
         Text(

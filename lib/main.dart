@@ -165,7 +165,7 @@ class App extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       restorationScopeId: 'App',
-      title: 'WebTrit Phone',
+      title: EnvironmentConfig.WEBTRIT_APP_NAME,
       theme: ThemeData(
         primarySwatch: Colors.orange,
       ),

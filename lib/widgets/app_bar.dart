@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/gen/assets.gen.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -48,7 +49,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
       ),
       title: Row(
         children: [
-          const Text('WebTrit'),
+          const Text(EnvironmentConfig.WEBTRIT_APP_NAME),
           const Spacer(),
           Icon(
             Icons.account_balance_wallet_outlined,

@@ -26,4 +26,9 @@ class EnvironmentConfig {
       return uri.replace(scheme: 'ws').toString();
     }
   }
+
+  static const WEBTRIT_APP_NAME = String.fromEnvironment(
+    'WEBTRIT_APP_NAME',
+    defaultValue: 'WebTrit',
+  );
 }
