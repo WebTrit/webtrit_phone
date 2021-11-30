@@ -21,6 +21,12 @@ class LogRecordsConsoleCubit extends Cubit<LogRecordsConsoleState> {
   final LogRecordsRepository logRecordsRepository;
   final LogRecordFormatter logRecordsFormatter;
 
+  @override
+  Future<void> close() async {
+    await super.close();
+    await deleteShareFiles();
+  }
+
   void load() async {
     emit(const LogRecordsConsoleState.loading());
     try {
@@ -37,14 +43,17 @@ class LogRecordsConsoleCubit extends Cubit<LogRecordsConsoleState> {
     emit(const LogRecordsConsoleState.success([]));
   }
 
-  void share() async {
+  String get _namePrefix => '${PackageInfo().appName}_${DeviceInfo().identifierForVendor}_';
+
+  String _timeSlug(DateTime time) =>
+      '${time.year.toString()}${time.month.toString().padLeft(2, '0')}${time.day.toString().padLeft(2, '0')}'
+      '${time.hour.toString()}${time.minute.toString().padLeft(2, '0')}${time.second.toString().padLeft(2, '0')}';
+
+  Future<void> share() async {
     final logRecords = state.logRecords;
 
     final time = logRecords[0].time;
-    final timeSlug =
-        '${time.year.toString()}${time.month.toString().padLeft(2, '0')}${time.day.toString().padLeft(2, '0')}'
-        '${time.hour.toString()}${time.minute.toString().padLeft(2, '0')}${time.second.toString().padLeft(2, '0')}';
-    final name = '${PackageInfo().appName}_${DeviceInfo().identifierForVendor}_$timeSlug';
+    final name = '$_namePrefix${_timeSlug(time)}';
 
     final logRecordsPath = AppPath().logRecordsPath(name);
     final logRecordsFile = File(logRecordsPath);
@@ -55,7 +64,15 @@ class LogRecordsConsoleCubit extends Cubit<LogRecordsConsoleState> {
     await logRecordsSink.close();
 
     await Share.shareFiles([logRecordsPath]);
+  }
 
-    await logRecordsFile.delete();
+  // Can't delete right after actual sharing because of https://github.com/fluttercommunity/plus_plugins/issues/263
+  Future<void> deleteShareFiles() async {
+    final nameRegExp = RegExp('$_namePrefix.+${AppPath().logRecordsExt}\$');
+    await for (final fileSystemEntity in Directory(AppPath().temporaryPath).list()) {
+      if (fileSystemEntity is File && nameRegExp.hasMatch(fileSystemEntity.path)) {
+        fileSystemEntity.delete();
+      }
+    }
   }
 }
