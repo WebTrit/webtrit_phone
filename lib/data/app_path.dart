@@ -31,5 +31,7 @@ class AppPath {
 
   String get databasePath => path.join(documentsPath, 'db.sqlite');
 
-  String logRecordsPath(String name) => path.join(temporaryPath, '$name.log');
+  final String logRecordsExt = '.log';
+
+  String logRecordsPath(String name) => path.join(temporaryPath, '$name$logRecordsExt');
 }
