@@ -16,7 +16,6 @@ class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
     required this.recentsRepository,
   }) : super(const RecentsInitial()) {
     on<RecentsInitialLoaded>(_handleRecentsInitialLoaded, transformer: restartable());
-    on<RecentsAdd>(_handleRecentsAdd);
     on<RecentsDelete>(_handleRecentsDelete);
   }
 
@@ -27,10 +26,6 @@ class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
       recentsRepository.recents(),
       onData: (List<Recent> recents) => RecentsLoadSuccess(recents: recents),
     );
-  }
-
-  Future<void> _handleRecentsAdd(RecentsAdd event, Emitter<RecentsState> emit) async {
-    await recentsRepository.add(event.recent);
   }
 
   Future<void> _handleRecentsDelete(RecentsDelete event, Emitter<RecentsState> emit) async {

@@ -248,8 +248,8 @@ class App extends StatelessWidget {
                   create: (context) {
                     return CallBloc(
                       callRepository: context.read<CallRepository>(),
+                      recentsRepository: context.read<RecentsRepository>(),
                       appBloc: context.read<AppBloc>(),
-                      recentsBloc: context.read<RecentsBloc>(),
                     )..add(const CallAttached());
                   },
                 ),

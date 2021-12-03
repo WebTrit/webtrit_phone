@@ -6,9 +6,8 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
-import 'package:webtrit_phone/features/recents/bloc/recents_bloc.dart';
 import 'package:webtrit_phone/models/recent.dart';
-import 'package:webtrit_phone/repositories/call_repository.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 
 part 'call_event.dart';
 
@@ -16,8 +15,8 @@ part 'call_state.dart';
 
 class CallBloc extends Bloc<CallEvent, CallState> {
   final CallRepository callRepository;
+  final RecentsRepository recentsRepository;
   final AppBloc appBloc;
-  final RecentsBloc recentsBloc;
 
   StreamSubscription? _onIncomingCallSubscription;
   StreamSubscription? _onAcceptedSubscription;
@@ -29,8 +28,8 @@ class CallBloc extends Bloc<CallEvent, CallState> {
 
   CallBloc({
     required this.callRepository,
+    required this.recentsRepository,
     required this.appBloc,
-    required this.recentsBloc,
   }) : super(const CallInitial());
 
   @override
@@ -320,15 +319,13 @@ class CallBloc extends Bloc<CallEvent, CallState> {
       throw StateError('Incorrect state class');
     }
 
-    recentsBloc.add(RecentsAdd(
-      recent: Recent(
-        direction: direction,
-        number: state.number,
-        video: state.video,
-        createdTime: state.createdTime,
-        acceptedTime: state.acceptedTime,
-        hungUpTime: state.hungUpTime,
-      ),
+    recentsRepository.add(Recent(
+      direction: direction,
+      number: state.number,
+      video: state.video,
+      createdTime: state.createdTime,
+      acceptedTime: state.acceptedTime,
+      hungUpTime: state.hungUpTime,
     ));
   }
 }

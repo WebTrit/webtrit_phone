@@ -24,19 +24,6 @@ class RecentsUpdated extends RecentsEvent {
       ];
 }
 
-class RecentsAdd extends RecentsEvent {
-  final Recent recent;
-
-  const RecentsAdd({
-    required this.recent,
-  });
-
-  @override
-  List<Object> get props => [
-        recent,
-      ];
-}
-
 class RecentsDelete extends RecentsEvent {
   final Recent recent;
 
