@@ -303,6 +303,7 @@ class CallLogsDao extends DatabaseAccessor<AppDatabase> with _$CallLogsDaoMixin 
       leftOuterJoin(contactPhonesTable, contactPhonesTable.number.equalsExp(callLogsTable.number)),
       leftOuterJoin(contactsTable, contactsTable.id.equalsExp(contactPhonesTable.contactId)),
     ]);
+    q.groupBy([callLogsTable.id]);
     return q.watch().map((rows) => rows
         .map((row) => CallLogDataWithContactPhoneDataAndContactData(
               row.readTable(callLogsTable),
