@@ -7,7 +7,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-import '../widgets/widgets.dart';
+import '../recents.dart';
 
 class RecentsScaffold extends StatefulWidget {
   const RecentsScaffold({Key? key}) : super(key: key);

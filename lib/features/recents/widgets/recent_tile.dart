@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-import '../extensions/extensions.dart';
+import '../recents.dart';
 
 class RecentTile extends StatelessWidget {
   final Recent recent;

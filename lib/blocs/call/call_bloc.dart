@@ -6,7 +6,7 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
-import 'package:webtrit_phone/blocs/recents/recents_bloc.dart';
+import 'package:webtrit_phone/features/recents/bloc/recents_bloc.dart';
 import 'package:webtrit_phone/models/recent.dart';
 import 'package:webtrit_phone/repositories/call_repository.dart';
 
