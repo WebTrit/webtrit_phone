@@ -42,6 +42,8 @@ class CallRepository {
             _acceptedStreamController!.add(event);
           } else if (event is HangupEvent) {
             _hangupStreamController!.add(event);
+          } else {
+            _logger.warning('unhandled signaling event $event');
           }
         },
         onError: _onErrorCallback,
