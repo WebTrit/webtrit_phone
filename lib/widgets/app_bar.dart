@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_api/webtrit_api.dart';
-
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/app/assets.gen.dart';
-import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/features/main/main.dart';
 
 class ExtAppBar extends AppBar {
   ExtAppBar({
@@ -59,11 +57,10 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
           const SizedBox(
             width: 2,
           ),
-          StreamBuilder(
-            stream: context.read<AccountInfoRepository>().info(),
-            builder: (context, AsyncSnapshot<AccountInfo> snapshot) {
-              if (snapshot.connectionState == ConnectionState.active) {
-                final info = snapshot.data!;
+          BlocBuilder<MainBloc, MainState>(
+            builder: (context, state) {
+              final info = state.info;
+              if (info != null) {
                 return Text(
                   '${info.balance.toStringAsFixed(2)} ${info.currency}',
                   style: themeData.textTheme.button!.copyWith(

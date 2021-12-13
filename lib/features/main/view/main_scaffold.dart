@@ -52,14 +52,14 @@ final List<Tab> tabs = <Tab>[
   ),
 ];
 
-class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+class MainScaffold extends StatefulWidget {
+  const MainScaffold({Key? key}) : super(key: key);
 
   @override
-  _MainPageState createState() => _MainPageState();
+  _MainScaffoldState createState() => _MainScaffoldState();
 }
 
-class _MainPageState extends State<MainPage> with RestorationMixin {
+class _MainScaffoldState extends State<MainScaffold> with RestorationMixin {
   final _restorableSelectedIndex = RestorableInt(0);
 
   @override
