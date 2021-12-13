@@ -3,7 +3,7 @@ description: WebTrit Signalling clinet.
 version: 1.0.0
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.15.0 <3.0.0'
 
 dependencies:
   enum_to_string: ^2.0.1
