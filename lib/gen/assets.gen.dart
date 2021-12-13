@@ -9,10 +9,21 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/services.dart';
 
+class $AssetsRingtonesGen {
+  const $AssetsRingtonesGen();
+
+  /// File path: assets/ringtones/incoming-call-1.mp3
+  String get incomingCall1 => 'assets/ringtones/incoming-call-1.mp3';
+
+  /// File path: assets/ringtones/outgoing-call-1.mp3
+  String get outgoingCall1 => 'assets/ringtones/outgoing-call-1.mp3';
+}
+
 class Assets {
   Assets._();
 
   static const SvgGenImage logo = SvgGenImage('assets/logo.svg');
+  static const $AssetsRingtonesGen ringtones = $AssetsRingtonesGen();
 }
 
 class AssetGenImage extends AssetImage {
