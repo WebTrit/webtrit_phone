@@ -10,6 +10,7 @@ class ContactCubit extends Cubit<ContactState> {
     Contact contact, {
     required this.contactsRepository,
   }) : super(ContactInitial(contact: contact));
+
   final ContactsRepository contactsRepository;
 
   Future<void> getContactPhones() async {
