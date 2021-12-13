@@ -6,7 +6,6 @@ environment:
   sdk: '>=2.15.0 <3.0.0'
 
 dependencies:
-  enum_to_string: ^2.0.1
   equatable: ^2.0.3
   logging: ^1.0.2
 

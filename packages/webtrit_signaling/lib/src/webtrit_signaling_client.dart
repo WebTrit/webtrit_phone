@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:enum_to_string/enum_to_string.dart';
 import 'package:logging/logging.dart';
 
 import 'commands/commands.dart';
@@ -201,9 +200,10 @@ class WebtritSignalingClient extends Stream<Event> {
         if (command.replace_call_id != null) 'replace_call_id': command.replace_call_id,
       };
     } else if (command is HoldCommand) {
+      final direction = command.direction;
       return <String, dynamic>{
         'request': 'hold',
-        if (command.direction != null) 'direction': EnumToString.convertToString(command.direction)
+        if (direction != null) 'direction': direction.name,
       };
     } else if (command is UnholdCommand) {
       return <String, dynamic>{
@@ -335,12 +335,12 @@ class WebtritSignalingClient extends Stream<Event> {
         return IceWebrtcUpEvent();
       case 'ice_media':
         return IceMediaEvent(
-          type: EnumToString.fromString(IceMediaType.values, eventMessage['type'])!,
+          type: IceMediaType.values.byName(eventMessage['type']),
           receiving: eventMessage['receiving'],
         );
       case 'ice_slowlink':
         return IceSlowLinkEvent(
-          media: EnumToString.fromString(IceMediaType.values, eventMessage['media'])!,
+          media: IceMediaType.values.byName(eventMessage['media']),
           uplink: eventMessage['uplink'],
           lost: eventMessage['lost'],
         );

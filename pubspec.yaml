@@ -19,7 +19,6 @@ dependencies:
   device_info: ^2.0.3
   dio: ^4.0.4
   drift: ^1.0.1
-  enum_to_string: ^2.0.1
   equatable: ^2.0.2
   firebase_core: ^1.10.0
   firebase_messaging: ^11.1.0
