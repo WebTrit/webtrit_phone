@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
+import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -88,12 +89,31 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
         ],
       ),
       actions: [
-        IconButton(
-          icon: const Icon(
-            Icons.cloud_outlined,
-          ),
-          onPressed: () async {
-            // TODO
+        BlocBuilder<CallBloc, CallState>(
+          builder: (context, state) {
+            if (state is CallAttachFailure || state is CallInitial) {
+              return IconButton(
+                icon: const Icon(
+                  Icons.public_off,
+                ),
+                onPressed: () async {
+                  if (await _showCallDetached(context) == true) {
+                    context.read<CallBloc>().add(const CallAttached());
+                  }
+                },
+              );
+            } else {
+              return IconButton(
+                icon: const Icon(
+                  Icons.public,
+                ),
+                onPressed: () async {
+                  if (await _showCallAttached(context) == true) {
+                    context.read<CallBloc>().add(const CallDetached());
+                  }
+                },
+              );
+            }
           },
         ),
         IconButton(
@@ -106,6 +126,64 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
         ),
       ],
       bottom: bottom,
+    );
+  }
+
+  Future<bool?> _showCallAttached(BuildContext context) {
+    return showDialog<bool?>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Registered"),
+          content: const Text("Are you sure you want to unregister?"),
+          actions: [
+            TextButton(
+              child: Text("No".toUpperCase()),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            TextButton(
+              child: Text("Yes".toUpperCase()),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              style: TextButton.styleFrom(
+                primary: Colors.red,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<bool?> _showCallDetached(BuildContext context) {
+    return showDialog<bool?>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Unregistered"),
+          content: const Text("Are you sure you want to register?"),
+          actions: [
+            TextButton(
+              child: Text("No".toUpperCase()),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            TextButton(
+              child: Text("Yes".toUpperCase()),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              style: TextButton.styleFrom(
+                primary: Colors.red,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

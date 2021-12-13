@@ -23,6 +23,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   StreamSubscription? _onIncomingCallSubscription;
   StreamSubscription? _onAcceptedSubscription;
   StreamSubscription? _onHangUpSubscription;
+  StreamSubscription? _onDoneSubscription;
 
   MediaStream? _localStream;
 
@@ -41,6 +42,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     await _onIncomingCallSubscription?.cancel();
     await _onAcceptedSubscription?.cancel();
     await _onHangUpSubscription?.cancel();
+    await _onDoneSubscription?.cancel();
     await _audioPlayer.dispose();
     await super.close();
   }
@@ -94,6 +96,9 @@ class CallBloc extends Bloc<CallEvent, CallState> {
       });
       _onHangUpSubscription = callRepository.onHangup.listen((event) {
         add(CallRemoteHungUp(reason: event.reason));
+      });
+      _onDoneSubscription = callRepository.onDone.listen((event) {
+        add(const CallDetached());
       });
 
       yield const CallIdle();
