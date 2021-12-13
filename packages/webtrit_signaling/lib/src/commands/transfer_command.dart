@@ -3,15 +3,15 @@ import 'command.dart';
 class TransferCommand extends Command {
   TransferCommand({
     required this.number,
-    this.replace_call_id,
+    this.replaceCallId,
   }) : super();
 
   final String number;
-  final String? replace_call_id;
+  final String? replaceCallId;
 
   @override
   List<Object?> get props => [
         number,
-        replace_call_id,
+        replaceCallId,
       ];
 }

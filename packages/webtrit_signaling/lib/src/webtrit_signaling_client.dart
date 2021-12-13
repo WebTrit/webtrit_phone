@@ -197,7 +197,7 @@ class WebtritSignalingClient extends Stream<Event> {
       return <String, dynamic>{
         'request': 'transfer',
         'number': command.number,
-        if (command.replace_call_id != null) 'replace_call_id': command.replace_call_id,
+        if (command.replaceCallId != null) 'replace_call_id': command.replaceCallId,
       };
     } else if (command is HoldCommand) {
       final direction = command.direction;
