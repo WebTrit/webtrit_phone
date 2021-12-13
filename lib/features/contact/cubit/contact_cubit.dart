@@ -19,13 +19,13 @@ class ContactCubit extends Cubit<ContactState> {
   }
 
   Future<void> addToFavorites(ContactPhone contactPhone) async {
-    contactsRepository.addContactPhoneToFavorites(contactPhone);
+    await contactsRepository.addContactPhoneToFavorites(contactPhone);
 
     await getContactPhones();
   }
 
   Future<void> removeFromFavorites(ContactPhone contactPhone) async {
-    contactsRepository.removeContactPhoneFromFavorites(contactPhone);
+    await contactsRepository.removeContactPhoneFromFavorites(contactPhone);
 
     await getContactPhones();
   }

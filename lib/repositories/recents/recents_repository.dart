@@ -30,7 +30,7 @@ class RecentsRepository {
   }
 
   Future<void> add(Recent recent) async {
-    appDatabase.callLogsDao.insertCallLog(CallLogDataCompanion(
+    await appDatabase.callLogsDao.insertCallLog(CallLogDataCompanion(
       direction: Value(recent.direction),
       number: Value(recent.number),
       video: Value(recent.video),
@@ -43,7 +43,7 @@ class RecentsRepository {
   Future<void> delete(Recent recent) async {
     final id = recent.id;
     if (id != null) {
-      appDatabase.callLogsDao.deleteCallLog(CallLogDataCompanion(
+      await appDatabase.callLogsDao.deleteCallLog(CallLogDataCompanion(
         id: Value(id),
       ));
     }
