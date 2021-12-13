@@ -29,12 +29,7 @@ class AccountInfoRepository {
     return _controller.stream;
   }
 
-  Future<void> load() async {
-    _info = await _listInfo();
-    _controller.add(_info!);
-  }
-
-  void _onListenCallback() {
+  void _onListenCallback() async {
     if (periodicPolling && _listenedCounter++ == 0) {
       _periodicTimer = Timer.periodic(const Duration(seconds: 10), (timer) async {
         final newInfo = await _listInfo();
@@ -43,6 +38,8 @@ class AccountInfoRepository {
           _controller.add(_info!);
         }
       });
+      _info = await _listInfo();
+      _controller.add(_info!);
     }
   }
 
