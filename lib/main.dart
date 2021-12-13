@@ -18,6 +18,7 @@ import 'package:webtrit_phone/blocs/logging_bloc_observer.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/pages/main.dart';
 import 'package:webtrit_phone/pages/call.dart';
@@ -291,6 +292,10 @@ class App extends StatelessWidget {
           case '/main/contact':
             final contact = settings.arguments! as Contact;
             page = ContactPage(contact);
+            break;
+          case '/main/recent':
+            final recent = settings.arguments! as Recent;
+            page = RecentScreen(recent);
             break;
           default:
             return null;

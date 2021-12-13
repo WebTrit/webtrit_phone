@@ -289,17 +289,22 @@ class ContactPhoneDataWithFavoriteData {
 class CallLogsDao extends DatabaseAccessor<AppDatabase> with _$CallLogsDaoMixin {
   CallLogsDao(AppDatabase db) : super(db);
 
-  Stream<List<CallLogData>> watchLastCallLogs([Duration period = const Duration(days: 14)]) => (select(callLogsTable)
-        ..where((t) => t.createdAt.isBiggerOrEqualValue(DateTime.now().subtract(period)))
-        ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
-      .watch();
+  SimpleSelectStatement<$CallLogsTableTable, CallLogData> _selectLastCallLogs(Duration period) => (select(callLogsTable)
+    ..where((t) => t.createdAt.isBiggerOrEqualValue(DateTime.now().subtract(period)))
+    ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]));
+
+  SimpleSelectStatement<$CallLogsTableTable, CallLogData> _selectLastCallLogsByNumber(String number, Duration period) =>
+      _selectLastCallLogs(period)..where((t) => t.number.equals(number));
+
+  Future<List<CallLogData>> getLastCallLogsByNumber(String number, [Duration period = const Duration(days: 14)]) =>
+      _selectLastCallLogsByNumber(number, period).get();
+
+  Stream<List<CallLogData>> watchLastCallLogsByNumber(String number, [Duration period = const Duration(days: 14)]) =>
+      _selectLastCallLogsByNumber(number, period).watch();
 
   Stream<List<CallLogDataWithContactPhoneDataAndContactData>> watchLastCallLogsExt(
       [Duration period = const Duration(days: 14)]) {
-    final q = (select(callLogsTable)
-          ..where((t) => t.createdAt.isBiggerOrEqualValue(DateTime.now().subtract(period)))
-          ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
-        .join([
+    final q = _selectLastCallLogs(period).join([
       leftOuterJoin(contactPhonesTable, contactPhonesTable.number.equalsExp(callLogsTable.number)),
       leftOuterJoin(contactsTable, contactsTable.id.equalsExp(contactPhonesTable.contactId)),
     ]);

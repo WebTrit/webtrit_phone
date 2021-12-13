@@ -87,7 +87,7 @@ class RecentsScaffoldState extends State<RecentsScaffold> with SingleTickerProvi
                 return RecentTile(
                   recent: recent,
                   onInfoTap: () {
-                    context.showSnackBar('Tap info on "${recent.number}"');
+                    Navigator.pushNamed(context, '/main/recent', arguments: recent);
                   },
                   onTap: () {
                     context.read<CallBloc>().add(CallOutgoingStarted(number: recent.number, video: recent.video));

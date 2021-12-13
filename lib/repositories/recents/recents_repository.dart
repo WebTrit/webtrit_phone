@@ -29,6 +29,20 @@ class RecentsRepository {
         }).toList(growable: false));
   }
 
+  Future<List<Recent>> history(Recent recent) {
+    return appDatabase.callLogsDao.getLastCallLogsByNumber(recent.number).then((callLogs) => callLogs
+        .map((callLog) => Recent(
+              direction: callLog.direction,
+              number: callLog.number,
+              video: callLog.video,
+              createdTime: callLog.createdAt,
+              acceptedTime: callLog.acceptedAt,
+              hungUpTime: callLog.hungUpAt,
+              id: callLog.id,
+            ))
+        .toList(growable: false));
+  }
+
   Future<void> add(Recent recent) async {
     await appDatabase.callLogsDao.insertCallLog(CallLogDataCompanion(
       direction: Value(recent.direction),
