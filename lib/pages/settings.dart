@@ -30,12 +30,11 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             onPressed: () async {
               if (await _confirmUnregister(context) == true) {
-
                 // TODO: move logout logic to some bloc
                 final token = await SecureStorage().readToken();
                 if (token != null) {
                   await SecureStorage().deleteToken();
-                  final webtritApiClient =  context.read<WebtritApiClient>();
+                  final webtritApiClient = context.read<WebtritApiClient>();
                   await webtritApiClient.sessionLogout(token);
                 }
 
