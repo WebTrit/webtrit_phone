@@ -221,7 +221,10 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   }
 
   Stream<CallState> _mapCallMicrophoneEnabledToState(CallMicrophoneEnabled event) async* {
-    _localStream?.getAudioTracks()[0].setMicrophoneMute(!event.mode);
+    final audioTrack = _localStream?.getAudioTracks()[0];
+    if (audioTrack != null) {
+      Helper.setMicrophoneMute(!event.mode, audioTrack);
+    }
   }
 
   Stream<CallState> _mapCallSpeakerphoneEnabledToState(CallSpeakerphoneEnabled event) async* {

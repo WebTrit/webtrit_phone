@@ -302,41 +302,49 @@ class $ContactsTableTable extends ContactsTable
   final String? _alias;
   $ContactsTableTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
       'id', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _sourceTypeMeta = const VerificationMeta('sourceType');
+  @override
   late final GeneratedColumnWithTypeConverter<ContactSourceType, int?>
       sourceType = GeneratedColumn<int?>('source_type', aliasedName, false,
-              typeName: 'INTEGER', requiredDuringInsert: true)
+              type: const IntType(), requiredDuringInsert: true)
           .withConverter<ContactSourceType>($ContactsTableTable.$converter0);
   final VerificationMeta _sourceIdMeta = const VerificationMeta('sourceId');
+  @override
   late final GeneratedColumn<String?> sourceId = GeneratedColumn<String?>(
       'source_id', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _displayNameMeta =
       const VerificationMeta('displayName');
+  @override
   late final GeneratedColumn<String?> displayName = GeneratedColumn<String?>(
       'display_name', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
+      type: const StringType(), requiredDuringInsert: false);
   final VerificationMeta _firstNameMeta = const VerificationMeta('firstName');
+  @override
   late final GeneratedColumn<String?> firstName = GeneratedColumn<String?>(
       'first_name', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
+      type: const StringType(), requiredDuringInsert: false);
   final VerificationMeta _lastNameMeta = const VerificationMeta('lastName');
+  @override
   late final GeneratedColumn<String?> lastName = GeneratedColumn<String?>(
       'last_name', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
+      type: const StringType(), requiredDuringInsert: false);
   final VerificationMeta _insertedAtMeta = const VerificationMeta('insertedAt');
+  @override
   late final GeneratedColumn<DateTime?> insertedAt = GeneratedColumn<DateTime?>(
       'inserted_at', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _updatedAtMeta = const VerificationMeta('updatedAt');
+  @override
   late final GeneratedColumn<DateTime?> updatedAt = GeneratedColumn<DateTime?>(
       'updated_at', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: const IntType(), requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -647,33 +655,39 @@ class $ContactPhonesTableTable extends ContactPhonesTable
   final String? _alias;
   $ContactPhonesTableTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
       'id', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _numberMeta = const VerificationMeta('number');
+  @override
   late final GeneratedColumn<String?> number = GeneratedColumn<String?>(
       'number', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _labelMeta = const VerificationMeta('label');
+  @override
   late final GeneratedColumn<String?> label = GeneratedColumn<String?>(
       'label', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _contactIdMeta = const VerificationMeta('contactId');
+  @override
   late final GeneratedColumn<int?> contactId = GeneratedColumn<int?>(
       'contact_id', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL REFERENCES contacts(id) ON DELETE CASCADE');
   final VerificationMeta _insertedAtMeta = const VerificationMeta('insertedAt');
+  @override
   late final GeneratedColumn<DateTime?> insertedAt = GeneratedColumn<DateTime?>(
       'inserted_at', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _updatedAtMeta = const VerificationMeta('updatedAt');
+  @override
   late final GeneratedColumn<DateTime?> updatedAt = GeneratedColumn<DateTime?>(
       'updated_at', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: const IntType(), requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns =>
       [id, number, label, contactId, insertedAt, updatedAt];
@@ -996,41 +1010,48 @@ class $CallLogsTableTable extends CallLogsTable
   final String? _alias;
   $CallLogsTableTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
       'id', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _directionMeta = const VerificationMeta('direction');
+  @override
   late final GeneratedColumnWithTypeConverter<Direction, int?> direction =
       GeneratedColumn<int?>('direction', aliasedName, false,
-              typeName: 'INTEGER', requiredDuringInsert: true)
+              type: const IntType(), requiredDuringInsert: true)
           .withConverter<Direction>($CallLogsTableTable.$converter0);
   final VerificationMeta _numberMeta = const VerificationMeta('number');
+  @override
   late final GeneratedColumn<String?> number = GeneratedColumn<String?>(
       'number', aliasedName, false,
-      typeName: 'TEXT',
+      type: const StringType(),
       requiredDuringInsert: true,
       $customConstraints:
           'NOT NULL CONSTRAINT "call_logs.number not_empty" CHECK (length(number) > 0)');
   final VerificationMeta _videoMeta = const VerificationMeta('video');
+  @override
   late final GeneratedColumn<bool?> video = GeneratedColumn<bool?>(
       'video', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const BoolType(),
       requiredDuringInsert: true,
       defaultConstraints: 'CHECK (video IN (0, 1))');
   final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
+  @override
   late final GeneratedColumn<DateTime?> createdAt = GeneratedColumn<DateTime?>(
       'created_at', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _acceptedAtMeta = const VerificationMeta('acceptedAt');
+  @override
   late final GeneratedColumn<DateTime?> acceptedAt = GeneratedColumn<DateTime?>(
       'accepted_at', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _hungUpAtMeta = const VerificationMeta('hungUpAt');
+  @override
   late final GeneratedColumn<DateTime?> hungUpAt = GeneratedColumn<DateTime?>(
       'hung_up_at', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: const IntType(), requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns =>
       [id, direction, number, video, createdAt, acceptedAt, hungUpAt];
@@ -1243,23 +1264,26 @@ class $FavoritesTableTable extends FavoritesTable
   final String? _alias;
   $FavoritesTableTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
       'id', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _contactPhoneIdMeta =
       const VerificationMeta('contactPhoneId');
+  @override
   late final GeneratedColumn<int?> contactPhoneId = GeneratedColumn<int?>(
       'contact_phone_id', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: true,
       $customConstraints:
           'NOT NULL REFERENCES contact_phones(id) ON DELETE CASCADE');
   final VerificationMeta _positionMeta = const VerificationMeta('position');
+  @override
   late final GeneratedColumn<int?> position = GeneratedColumn<int?>(
       'position', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [id, contactPhoneId, position];
   @override
