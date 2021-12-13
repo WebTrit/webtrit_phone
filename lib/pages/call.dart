@@ -161,6 +161,7 @@ class _CallPageState extends State<CallPage> {
                           child: _CallActions(
                             onCameraPressed: _cameraPressed,
                             onMicrophonePressed: _microphonePressed,
+                            speakerphoneEnabledByDefault: state.video,
                             onSpeakerphonePressed: _speakerphonePressed,
                             onHangupPressed: _hangup,
                             onAcceptPressed: acceptActionEnabled ? _accept : null,
