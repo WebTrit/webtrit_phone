@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
+import 'package:webtrit_phone/gen/assets.gen.dart';
 import 'package:webtrit_phone/models/recent.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -26,6 +28,8 @@ class CallBloc extends Bloc<CallEvent, CallState> {
 
   RTCPeerConnection? _peerConnection;
 
+  final _audioPlayer = AudioPlayer();
+
   CallBloc({
     required this.callRepository,
     required this.recentsRepository,
@@ -37,6 +41,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     await _onIncomingCallSubscription?.cancel();
     await _onAcceptedSubscription?.cancel();
     await _onHangUpSubscription?.cancel();
+    await _audioPlayer.dispose();
     await super.close();
   }
 
@@ -110,6 +115,10 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   }
 
   Stream<CallState> _mapCallIncomingReceivedToState(CallIncomingReceived event) async* {
+    await _audioPlayer.setAsset(Assets.ringtones.incomingCall1);
+    await _audioPlayer.setLoopMode(LoopMode.one);
+    _audioPlayer.play();
+
     yield CallIncoming(number: event.username, video: true, createdTime: DateTime.now());
 
     _localStream = await _getUserMedia(video: true);
@@ -124,6 +133,8 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   }
 
   Stream<CallState> _mapCallIncomingAcceptedToState(CallIncomingAccepted event) async* {
+    await _audioPlayer.stop();
+
     yield (state as CallActive).copyWith(acceptedTime: DateTime.now());
 
     final localDescription = await _peerConnection!.createAnswer({});
@@ -147,6 +158,10 @@ class CallBloc extends Bloc<CallEvent, CallState> {
 
     try {
       await callRepository.call(event.number, localDescription.toMap());
+
+      await _audioPlayer.setAsset(Assets.ringtones.outgoingCall1);
+      await _audioPlayer.setLoopMode(LoopMode.one);
+      _audioPlayer.play();
     } catch (e) {
       await _peerConnection!.close();
       _peerConnection = null;
@@ -161,6 +176,8 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   }
 
   Stream<CallState> _mapCallOutgoingAcceptedToState(CallOutgoingAccepted event) async* {
+    await _audioPlayer.stop();
+
     yield (state as CallActive).copyWith(acceptedTime: DateTime.now());
 
     final remoteDescription = RTCSessionDescription(event.jsepData!['sdp'], event.jsepData!['type']);
@@ -178,6 +195,8 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   Stream<CallState> _mapCallHungUpRemoteToState(CallRemoteHungUp event) async* {
     if (state is! CallActive) return; // TODO: get rid of double hangup event
 
+    await _audioPlayer.stop();
+
     yield (state as CallActive).copyWith(hungUpTime: DateTime.now());
 
     await _peerConnection?.close();
@@ -193,6 +212,8 @@ class CallBloc extends Bloc<CallEvent, CallState> {
 
   Stream<CallState> _mapCallHungUpLocalToState(CallLocalHungUp event) async* {
     if (state is! CallActive) return; // TODO: get rid of double hangup event
+
+    await _audioPlayer.stop();
 
     yield (state as CallActive).copyWith(hungUpTime: DateTime.now());
 
