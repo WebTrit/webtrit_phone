@@ -1,4 +1,6 @@
 PODS:
+  - audio_session (0.0.1):
+    - Flutter
   - callkeep (0.0.1):
     - Flutter
   - device_info (0.0.1):
@@ -68,6 +70,8 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.6.0):
     - GoogleUtilities/Logger
+  - just_audio (0.0.1):
+    - Flutter
   - Libyuv (1703)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
@@ -108,6 +112,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - audio_session (from `.symlinks/plugins/audio_session/ios`)
   - callkeep (from `.symlinks/plugins/callkeep/ios`)
   - device_info (from `.symlinks/plugins/device_info/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
@@ -116,6 +121,7 @@ DEPENDENCIES:
   - flutter_contacts (from `.symlinks/plugins/flutter_contacts/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - flutter_webrtc (from `.symlinks/plugins/flutter_webrtc/ios`)
+  - just_audio (from `.symlinks/plugins/just_audio/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
@@ -140,6 +146,8 @@ SPEC REPOS:
     - WebRTC-SDK
 
 EXTERNAL SOURCES:
+  audio_session:
+    :path: ".symlinks/plugins/audio_session/ios"
   callkeep:
     :path: ".symlinks/plugins/callkeep/ios"
   device_info:
@@ -156,6 +164,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
   flutter_webrtc:
     :path: ".symlinks/plugins/flutter_webrtc/ios"
+  just_audio:
+    :path: ".symlinks/plugins/just_audio/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_ios:
@@ -172,6 +182,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
+  audio_session: 4f3e461722055d21515cf3261b64c973c062f345
   callkeep: 6b21abbd46786a36e482190816db99b391ada1e3
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Firebase: 13d8d96499e2635428d5bf0ec675df21f95d9a95
@@ -187,6 +198,7 @@ SPEC CHECKSUMS:
   flutter_webrtc: a5a79904f0bca0ea23aff49c51ca765f70a0f703
   GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
   GoogleUtilities: 684ee790a24f73ebb2d1d966e9711c203f2a4237
+  just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
   Libyuv: 5f79ced0ee66e60a612ca97de1e6ccacd187a437
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
