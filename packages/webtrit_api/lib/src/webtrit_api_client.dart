@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-import 'package:webtrit_api/src/models/account_contacts.dart';
-import 'package:webtrit_api/src/models/app_contacts_smart.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:webtrit_signaling/src/commands/commands.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 void main(List<String> arguments) async {
