@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/environment_config.dart';
-import 'package:webtrit_phone/gen/assets.gen.dart';
+import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 class ExtAppBar extends AppBar {

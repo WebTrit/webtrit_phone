@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/environment_config.dart';
-import 'package:webtrit_phone/gen/assets.gen.dart';
+import 'package:webtrit_phone/app/assets.gen.dart';
 
 class WebTritPhonePictureLogo extends StatelessWidget {
   const WebTritPhonePictureLogo({Key? key}) : super(key: key);

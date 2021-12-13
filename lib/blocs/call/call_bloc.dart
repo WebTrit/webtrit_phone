@@ -7,7 +7,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
-import 'package:webtrit_phone/gen/assets.gen.dart';
+import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/models/recent.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 

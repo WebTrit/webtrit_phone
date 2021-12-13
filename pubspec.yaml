@@ -68,6 +68,7 @@ flutter:
     - assets/logo.svg
 
 flutter_gen:
+  output: lib/app/
   integrations:
     flutter_svg: true
     flare_flutter: true
