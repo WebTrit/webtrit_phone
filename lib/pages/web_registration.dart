@@ -50,13 +50,6 @@ class _WebRegistrationPageState extends State<WebRegistrationPage> {
   final Completer<WebViewController> _controller = Completer<WebViewController>();
 
   @override
-  void initState() {
-    super.initState();
-
-    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return WebView(
       initialUrl: widget.initialUrl,
