@@ -62,9 +62,7 @@ class LocalContactsRepository {
               phones: contact.phones
                   .map((phone) => LocalContactPhone(
                         number: phone.number,
-                        label: phone.label == PhoneLabel.custom
-                            ? phone.customLabel
-                            : phone.label.name,
+                        label: phone.label == PhoneLabel.custom ? phone.customLabel : phone.label.name,
                       ))
                   .toList(),
             ))
