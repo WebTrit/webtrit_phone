@@ -2,6 +2,8 @@ import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
 
+import 'package:webtrit_phone/utils/utils.dart';
+
 import 'models.dart';
 
 class LocalContact extends Equatable {
@@ -27,7 +29,7 @@ class LocalContact extends Equatable {
         displayName,
         firstName,
         lastName,
-        thumbnail,
+        EquatablePropToString(thumbnail, (p) => p != null ? 'present' : 'absent'),
         phones,
       ];
 }
