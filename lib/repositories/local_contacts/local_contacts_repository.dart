@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter_contacts/flutter_contacts.dart';
 
@@ -51,8 +52,24 @@ class LocalContactsRepository {
       throw LocalContactsRepositoryPermissionException();
     }
 
-    final contacts = await FlutterContacts.getContacts(withProperties: true, withThumbnail: true);
+    final contacts = await FlutterContacts.getContacts(
+      withProperties: true,
+      withThumbnail: true,
+      withAccounts: true,
+    );
     return contacts
+        .where((contact) {
+          if (Platform.isAndroid) {
+            for (final account in contact.accounts) {
+              if (account.mimetypes.contains('vnd.android.cursor.item/phone_v2')) {
+                return true;
+              }
+            }
+            return false;
+          } else {
+            return true;
+          }
+        })
         .map((contact) => LocalContact(
               id: contact.id,
               displayName: contact.displayName,
