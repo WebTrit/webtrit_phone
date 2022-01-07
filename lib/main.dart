@@ -84,7 +84,7 @@ void main() async {
           value: logRecordsRepository,
         ),
         RepositoryProvider<WebtritApiClient>(
-          create: (context) => WebtritApiClient(Uri.parse(EnvironmentConfig.WEBTRIT_CORE_URL)),
+          create: (context) => WebtritApiClient(Uri.parse(EnvironmentConfig.CORE_URL)),
         ),
         RepositoryProvider<CallRepository>(
           create: (context) => CallRepository(),
@@ -164,7 +164,7 @@ class App extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       restorationScopeId: 'App',
-      title: EnvironmentConfig.WEBTRIT_APP_NAME,
+      title: EnvironmentConfig.APP_NAME,
       theme: ThemeData(
         primarySwatch: Colors.orange,
       ),

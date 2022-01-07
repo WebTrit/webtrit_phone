@@ -25,7 +25,7 @@ class WebTritPhonePictureLogo extends StatelessWidget {
             width: baseFontSize * 0.5,
           ),
           Text(
-            EnvironmentConfig.WEBTRIT_APP_NAME,
+            EnvironmentConfig.APP_NAME,
             style: themeData.textTheme.headline2!.copyWith(
               color: themeData.colorScheme.secondary,
             ),
@@ -49,7 +49,7 @@ class WebTritPhoneTextLogo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Text(
-          EnvironmentConfig.WEBTRIT_APP_NAME,
+          EnvironmentConfig.APP_NAME,
           style: themeData.textTheme.headline2,
         ),
         Text(

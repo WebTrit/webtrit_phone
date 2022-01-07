@@ -36,7 +36,7 @@ class CallRepository {
     if (token == null) {
       throw Exception('incorrect token');
     } else {
-      _signalingClient = await WebtritSignalingClient.connect(EnvironmentConfig.WEBTRIT_SIGNALING_URL, token);
+      _signalingClient = await WebtritSignalingClient.connect(EnvironmentConfig.SIGNALING_URL, token);
 
       _signalingClient!.listen(
         (event) {

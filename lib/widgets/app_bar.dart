@@ -48,7 +48,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
       ),
       title: Row(
         children: [
-          const Text(EnvironmentConfig.WEBTRIT_APP_NAME),
+          const Text(EnvironmentConfig.APP_NAME),
           const Spacer(),
           Icon(
             Icons.account_balance_wallet_outlined,

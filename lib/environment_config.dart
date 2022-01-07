@@ -4,22 +4,22 @@ class EnvironmentConfig {
   EnvironmentConfig._();
 
   static const DEBUG_LEVEL = String.fromEnvironment(
-    'DEBUG_LEVEL',
+    'WEBTRIT_PHONE_DEBUG_LEVEL',
     defaultValue: 'INFO',
   );
 
   static const PERIODIC_POLLING = bool.fromEnvironment(
-    'PERIODIC_POLLING',
+    'WEBTRIT_PHONE_PERIODIC_POLLING',
     defaultValue: true,
   );
 
-  static const WEBTRIT_CORE_URL = String.fromEnvironment(
-    'WEBTRIT_CORE_URL',
+  static const CORE_URL = String.fromEnvironment(
+    'WEBTRIT_PHONE_WEBTRIT_CORE_URL',
     defaultValue: 'http://localhost:4000',
   );
 
-  static String get WEBTRIT_SIGNALING_URL {
-    final uri = Uri.parse(WEBTRIT_CORE_URL);
+  static String get SIGNALING_URL {
+    final uri = Uri.parse(CORE_URL);
     if (uri.scheme.endsWith('s')) {
       return uri.replace(scheme: 'wss').toString();
     } else {
@@ -27,8 +27,8 @@ class EnvironmentConfig {
     }
   }
 
-  static const WEBTRIT_APP_NAME = String.fromEnvironment(
-    'WEBTRIT_APP_NAME',
+  static const APP_NAME = String.fromEnvironment(
+    'WEBTRIT_PHONE_APP_NAME',
     defaultValue: 'WebTrit',
   );
 }
