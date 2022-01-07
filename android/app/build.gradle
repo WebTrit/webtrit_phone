@@ -21,6 +21,23 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def dartEnvironments = [
+    WEBTRIT_PHONE_APP_NAME: 'WebTrit',
+    WEBTRIT_PHONE_APP_ID_SUFFIX: null,
+]
+if (project.hasProperty('dart-defines')) {
+    dartEnvironments += project.property('dart-defines')
+        .split(',')
+        .collectEntries { entry ->
+            def pair = new String(entry.decodeBase64(), 'UTF-8').split('=')
+            if (pair.size() > 1) {
+                [(pair.first()): pair.last()]
+            } else {
+                [(pair.first()): '']
+            }
+        }
+}
+
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
@@ -53,12 +70,16 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        // Details about Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.webtrit.phone"
+        // Must use suffix to customize application id because of [issue 211768](https://code.google.com/p/android/issues/detail?id=211768).
+        applicationIdSuffix dartEnvironments.WEBTRIT_PHONE_APP_ID_SUFFIX
         minSdkVersion 23
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+
+        resValue "string", "APP_NAME", dartEnvironments.WEBTRIT_PHONE_APP_NAME
     }
 
     signingConfigs {

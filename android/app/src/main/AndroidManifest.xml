@@ -20,7 +20,7 @@
     <application
         android:allowBackup="false"
         android:name="io.flutter.app.FlutterApplication"
-        android:label="WebTrit"
+        android:label="@string/APP_NAME"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
