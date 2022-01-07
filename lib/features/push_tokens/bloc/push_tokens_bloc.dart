@@ -41,6 +41,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> {
           'notificationTitle': 'WebTrit app is running on background',
           'notificationIcon': 'Path to the resource icon of the notification',
         },
+        'additionalPermissions': [], // TODO remove after https://github.com/flutter-webrtc/callkeep/pull/127 merged and released
       },
     });
 
