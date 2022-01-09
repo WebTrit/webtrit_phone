@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 
-import 'package:webtrit_phone/blocs/blocs.dart';
+import '../../call/call.dart';
 
 part 'keypad_state.dart';
 

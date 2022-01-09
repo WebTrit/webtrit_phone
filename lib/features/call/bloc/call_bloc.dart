@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:just_audio/just_audio.dart';
@@ -35,7 +36,68 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     required this.callRepository,
     required this.recentsRepository,
     required this.appBloc,
-  }) : super(const CallInitial());
+  }) : super(const CallInitial()) {
+    on<CallAttached>(
+      _onAttached,
+      transformer: sequential(),
+    );
+    on<CallDetached>(
+      _onDetached,
+      transformer: sequential(),
+    );
+    on<CallIncomingReceived>(
+      _onIncomingReceived,
+      transformer: sequential(),
+    );
+    on<CallIncomingAccepted>(
+      _onIncomingAccepted,
+      transformer: sequential(),
+    );
+    on<CallOutgoingStarted>(
+      _onOutgoingStarted,
+      transformer: sequential(),
+    );
+    on<CallOutgoingAccepted>(
+      _onOutgoingAccepted,
+      transformer: sequential(),
+    );
+    on<CallRemoteStreamAdded>(
+      _onRemoteStreamAdded,
+      transformer: sequential(),
+    );
+    on<CallRemoteStreamRemoved>(
+      _onRemoteStreamRemoved,
+      transformer: sequential(),
+    );
+    on<CallRemoteHungUp>(
+      _onRemoteHungUp,
+      transformer: sequential(),
+    );
+    on<CallLocalHungUp>(
+      _onLocalHungUp,
+      transformer: sequential(),
+    );
+    on<CallCameraSwitched>(
+      _onCameraSwitched,
+      transformer: sequential(),
+    );
+    on<CallCameraEnabled>(
+      _onCameraEnabled,
+      transformer: sequential(),
+    );
+    on<CallMicrophoneEnabled>(
+      _onMicrophoneEnabled,
+      transformer: sequential(),
+    );
+    on<CallSpeakerphoneEnabled>(
+      _onSpeakerphoneEnabled,
+      transformer: sequential(),
+    );
+    on<CallFailureApproved>(
+      _onFailureApproved,
+      transformer: sequential(),
+    );
+  }
 
   @override
   Future<void> close() async {
@@ -47,43 +109,11 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     await super.close();
   }
 
-  @override
-  Stream<CallState> mapEventToState(CallEvent event) async* {
-    if (event is CallAttached) {
-      yield* _mapCallAttachedToState(event);
-    } else if (event is CallDetached) {
-      yield* _mapCallDetachedToState(event);
-    } else if (event is CallIncomingReceived) {
-      yield* _mapCallIncomingReceivedToState(event);
-    } else if (event is CallIncomingAccepted) {
-      yield* _mapCallIncomingAcceptedToState(event);
-    } else if (event is CallOutgoingStarted) {
-      yield* _mapCallOutgoingStartedToState(event);
-    } else if (event is CallOutgoingAccepted) {
-      yield* _mapCallOutgoingAcceptedToState(event);
-    } else if (event is CallRemoteStreamAdded) {
-      yield* _mapCallRemoteStreamAddedToState(event);
-    } else if (event is CallRemoteStreamRemoved) {
-      yield* _mapCallRemoteStreamRemovedToState(event);
-    } else if (event is CallRemoteHungUp) {
-      yield* _mapCallHungUpRemoteToState(event);
-    } else if (event is CallLocalHungUp) {
-      yield* _mapCallHungUpLocalToState(event);
-    } else if (event is CallCameraSwitched) {
-      yield* _mapCallCameraSwitchedToState(event);
-    } else if (event is CallCameraEnabled) {
-      yield* _mapCallCameraEnabledToState(event);
-    } else if (event is CallMicrophoneEnabled) {
-      yield* _mapCallMicrophoneEnabledToState(event);
-    } else if (event is CallSpeakerphoneEnabled) {
-      yield* _mapCallSpeakerphoneEnabledToState(event);
-    } else if (event is CallFailureApproved) {
-      yield* _mapCallFailureApprovedToState(event);
-    }
-  }
-
-  Stream<CallState> _mapCallAttachedToState(CallAttached event) async* {
-    yield const CallAttachInProgress();
+  Future<void> _onAttached(
+    CallAttached event,
+    Emitter<CallState> emit,
+  ) async {
+    emit(const CallAttachInProgress());
     try {
       await callRepository.attach();
       await callRepository.register();
@@ -100,35 +130,44 @@ class CallBloc extends Bloc<CallEvent, CallState> {
       _onDoneSubscription = callRepository.onDone.listen((event) {
         add(const CallDetached());
       });
-
-      yield const CallIdle();
+      emit(const CallIdle());
 
       appBloc.add(const AppRegistered());
     } catch (e) {
-      yield CallAttachFailure(
+      emit(CallAttachFailure(
         reason: e.toString(),
-      );
+      ));
     }
   }
 
-  Stream<CallState> _mapCallDetachedToState(CallDetached event) async* {
-    yield const CallInitial();
+  Future<void> _onDetached(
+    CallDetached event,
+    Emitter<CallState> emit,
+  ) async {
+    emit(const CallInitial());
 
     if (callRepository.isAttached) {
       await callRepository.detach();
     }
   }
 
-  Stream<CallState> _mapCallIncomingReceivedToState(CallIncomingReceived event) async* {
+  Future<void> _onIncomingReceived(
+    CallIncomingReceived event,
+    Emitter<CallState> emit,
+  ) async {
     await _audioPlayer.setAsset(Assets.ringtones.incomingCall1);
     await _audioPlayer.setLoopMode(LoopMode.one);
     _audioPlayer.play();
 
-    yield CallIncoming(number: event.username, video: true, createdTime: DateTime.now());
+    emit(CallIncoming(
+      number: event.username,
+      video: true,
+      createdTime: DateTime.now(),
+    ));
 
     _localStream = await _getUserMedia(video: true);
 
-    yield (state as CallActive).copyWith(localStream: _localStream);
+    emit((state as CallActive).copyWith(localStream: _localStream));
 
     _peerConnection = await _createPeerConnection();
     await _peerConnection!.addStream(_localStream!);
@@ -137,10 +176,13 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     await _peerConnection!.setRemoteDescription(remoteDescription);
   }
 
-  Stream<CallState> _mapCallIncomingAcceptedToState(CallIncomingAccepted event) async* {
+  Future<void> _onIncomingAccepted(
+    CallIncomingAccepted event,
+    Emitter<CallState> emit,
+  ) async {
     await _audioPlayer.stop();
 
-    yield (state as CallActive).copyWith(acceptedTime: DateTime.now());
+    emit((state as CallActive).copyWith(acceptedTime: DateTime.now()));
 
     final localDescription = await _peerConnection!.createAnswer({});
     _peerConnection!.setLocalDescription(localDescription);
@@ -148,12 +190,15 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     await callRepository.accept(localDescription.toMap());
   }
 
-  Stream<CallState> _mapCallOutgoingStartedToState(CallOutgoingStarted event) async* {
-    yield CallOutgoing(number: event.number, video: event.video, createdTime: DateTime.now());
+  Future<void> _onOutgoingStarted(
+    CallOutgoingStarted event,
+    Emitter<CallState> emit,
+  ) async {
+    emit(CallOutgoing(number: event.number, video: event.video, createdTime: DateTime.now()));
 
     _localStream = await _getUserMedia(video: event.video);
 
-    yield (state as CallActive).copyWith(localStream: _localStream);
+    emit((state as CallActive).copyWith(localStream: _localStream));
 
     _peerConnection = await _createPeerConnection();
     await _peerConnection!.addStream(_localStream!);
@@ -176,33 +221,45 @@ class CallBloc extends Bloc<CallEvent, CallState> {
 
       _addToRecents(state);
 
-      yield CallFailure(reason: e.toString());
+      emit(CallFailure(reason: e.toString()));
     }
   }
 
-  Stream<CallState> _mapCallOutgoingAcceptedToState(CallOutgoingAccepted event) async* {
+  Future<void> _onOutgoingAccepted(
+    CallOutgoingAccepted event,
+    Emitter<CallState> emit,
+  ) async {
     await _audioPlayer.stop();
 
-    yield (state as CallActive).copyWith(acceptedTime: DateTime.now());
+    emit((state as CallActive).copyWith(acceptedTime: DateTime.now()));
 
     final remoteDescription = RTCSessionDescription(event.jsepData!['sdp'], event.jsepData!['type']);
     await _peerConnection!.setRemoteDescription(remoteDescription);
   }
 
-  Stream<CallState> _mapCallRemoteStreamAddedToState(CallRemoteStreamAdded event) async* {
-    yield (state as CallActive).copyWith(remoteStream: event.stream);
+  Future<void> _onRemoteStreamAdded(
+    CallRemoteStreamAdded event,
+    Emitter<CallState> emit,
+  ) async {
+    emit((state as CallActive).copyWith(remoteStream: event.stream));
   }
 
-  Stream<CallState> _mapCallRemoteStreamRemovedToState(CallRemoteStreamRemoved event) async* {
-    yield (state as CallActive).copyWith(remoteStream: null);
+  Future<void> _onRemoteStreamRemoved(
+    CallRemoteStreamRemoved event,
+    Emitter<CallState> emit,
+  ) async {
+    emit((state as CallActive).copyWith(remoteStream: null));
   }
 
-  Stream<CallState> _mapCallHungUpRemoteToState(CallRemoteHungUp event) async* {
+  Future<void> _onRemoteHungUp(
+    CallRemoteHungUp event,
+    Emitter<CallState> emit,
+  ) async {
     if (state is! CallActive) return; // TODO: get rid of double hangup event
 
     await _audioPlayer.stop();
 
-    yield (state as CallActive).copyWith(hungUpTime: DateTime.now());
+    emit((state as CallActive).copyWith(hungUpTime: DateTime.now()));
 
     await _peerConnection?.close();
     _peerConnection = null;
@@ -212,15 +269,18 @@ class CallBloc extends Bloc<CallEvent, CallState> {
 
     _addToRecents(state);
 
-    yield const CallIdle();
+    emit(const CallIdle());
   }
 
-  Stream<CallState> _mapCallHungUpLocalToState(CallLocalHungUp event) async* {
+  Future<void> _onLocalHungUp(
+    CallLocalHungUp event,
+    Emitter<CallState> emit,
+  ) async {
     if (state is! CallActive) return; // TODO: get rid of double hangup event
 
     await _audioPlayer.stop();
 
-    yield (state as CallActive).copyWith(hungUpTime: DateTime.now());
+    emit((state as CallActive).copyWith(hungUpTime: DateTime.now()));
 
     await callRepository.hangup();
 
@@ -232,33 +292,48 @@ class CallBloc extends Bloc<CallEvent, CallState> {
 
     _addToRecents(state);
 
-    yield const CallIdle();
+    emit(const CallIdle());
   }
 
-  Stream<CallState> _mapCallCameraSwitchedToState(CallCameraSwitched event) async* {
+  Future<void> _onCameraSwitched(
+    CallCameraSwitched event,
+    Emitter<CallState> emit,
+  ) async {
     final videoTrack = _localStream?.getVideoTracks()[0];
     if (videoTrack != null) {
       await Helper.switchCamera(videoTrack);
     }
   }
 
-  Stream<CallState> _mapCallCameraEnabledToState(CallCameraEnabled event) async* {
+  Future<void> _onCameraEnabled(
+    CallCameraEnabled event,
+    Emitter<CallState> emit,
+  ) async {
     _localStream?.getVideoTracks()[0].enabled = event.mode;
   }
 
-  Stream<CallState> _mapCallMicrophoneEnabledToState(CallMicrophoneEnabled event) async* {
+  Future<void> _onMicrophoneEnabled(
+    CallMicrophoneEnabled event,
+    Emitter<CallState> emit,
+  ) async {
     final audioTrack = _localStream?.getAudioTracks()[0];
     if (audioTrack != null) {
       Helper.setMicrophoneMute(!event.mode, audioTrack);
     }
   }
 
-  Stream<CallState> _mapCallSpeakerphoneEnabledToState(CallSpeakerphoneEnabled event) async* {
+  Future<void> _onSpeakerphoneEnabled(
+    CallSpeakerphoneEnabled event,
+    Emitter<CallState> emit,
+  ) async {
     _localStream?.getAudioTracks()[0].enableSpeakerphone(event.mode);
   }
 
-  Stream<CallState> _mapCallFailureApprovedToState(CallFailureApproved event) async* {
-    yield const CallIdle();
+  Future<void> _onFailureApproved(
+    CallFailureApproved event,
+    Emitter<CallState> emit,
+  ) async {
+    emit(const CallIdle());
   }
 
   Future<MediaStream> _getUserMedia({required bool video}) async {
@@ -278,6 +353,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     };
     final localStream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
     localStream.getAudioTracks()[0].enableSpeakerphone(video);
+
     return localStream;
   }
 
@@ -293,6 +369,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
       {},
     );
     final logger = Logger(peerConnection.toString());
+
     return peerConnection
       ..onSignalingState = (state) {
         logger.fine(() => 'onSignalingState state: $state');

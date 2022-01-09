@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/app/assets.gen.dart';
-import 'package:webtrit_phone/features/main/main.dart';
+import 'package:webtrit_phone/features/features.dart';
 
 class ExtAppBar extends AppBar {
   ExtAppBar({

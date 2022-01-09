@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/blocs/blocs.dart';
-import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+import '../../call/call.dart';
 import '../contact.dart';
 
 class ContactScaffold extends StatelessWidget {
