@@ -1,4 +1,3 @@
-import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:test/test.dart';
 
 void main() {
