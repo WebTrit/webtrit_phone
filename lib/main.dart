@@ -28,6 +28,10 @@ import 'package:webtrit_phone/environment_config.dart';
 void main() async {
   final logger = Logger('main');
 
+  FlutterError.onError = (details) {
+    logger.severe('Flutter framework error', details.exception, details.stack);
+  };
+
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
