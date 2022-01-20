@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:callkeep/callkeep.dart';
@@ -136,7 +137,10 @@ void main() async {
     ),
   );
 
-  runApp(app);
+  await runZonedGuarded(
+    () async => runApp(app),
+    (error, stackTrace) => logger.severe('Top zone error', error, stackTrace),
+  );
 }
 
 class App extends StatelessWidget {
