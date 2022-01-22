@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:drift/isolate.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:drift/drift.dart';
@@ -6,6 +7,8 @@ import 'package:drift/native.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/contacts/models/models.dart';
+
+export 'package:drift/isolate.dart';
 
 part 'app_database.g.dart';
 
@@ -24,12 +27,26 @@ part 'app_database.g.dart';
   ],
 )
 class AppDatabase extends _$AppDatabase {
-  AppDatabase(
-    String databasePath,
-  ) : super(NativeDatabase(
+  static Future<DriftIsolate> spawn(String databasePath) {
+    return DriftIsolate.spawn(
+      () => DatabaseConnection.fromExecutor(
+        NativeDatabase(
           File(databasePath),
           logStatements: kDebugMode,
-        ));
+        ),
+      ),
+    );
+  }
+
+  AppDatabase._connect(DatabaseConnection connection) : super.connect(connection);
+
+  factory AppDatabase.fromIsolate(DriftIsolate isolate, {bool isolateDebugLog = false}) {
+    return AppDatabase._connect(
+      DatabaseConnection.delayed(isolate.connect(
+        isolateDebugLog: isolateDebugLog,
+      )),
+    );
+  }
 
   @override
   int get schemaVersion => 1;

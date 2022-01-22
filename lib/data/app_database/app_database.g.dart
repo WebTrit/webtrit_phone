@@ -1331,6 +1331,7 @@ class $FavoritesTableTable extends FavoritesTable
 
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
+  _$AppDatabase.connect(DatabaseConnection c) : super.connect(c);
   late final $ContactsTableTable contactsTable = $ContactsTableTable(this);
   late final $ContactPhonesTableTable contactPhonesTable =
       $ContactPhonesTableTable(this);

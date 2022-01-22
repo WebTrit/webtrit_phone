@@ -8,3 +8,4 @@ targets:
           new_sql_code_generation: true
           scoped_dart_components: true
           use_data_class_name_for_companions: true
+          generate_connect_constructor: true

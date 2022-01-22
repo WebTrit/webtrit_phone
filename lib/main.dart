@@ -79,8 +79,10 @@ void main() async {
 
   Bloc.observer = LoggingBlocObserver();
 
+  DriftIsolate isolate = await AppDatabase.spawn(AppPath().databasePath);
+
   final app = Provider<AppDatabase>(
-    create: (context) => AppDatabase(AppPath().databasePath),
+    create: (context) => AppDatabase.fromIsolate(isolate),
     dispose: (context, value) => value.close(),
     child: MultiRepositoryProvider(
       providers: [
