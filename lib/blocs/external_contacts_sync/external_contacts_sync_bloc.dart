@@ -1,6 +1,5 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -16,55 +15,36 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
   ExternalContactsSyncBloc({
     required this.externalContactsRepository,
     required this.appDatabase,
-  }) : super(const ExternalContactsSyncInitial());
+  }) : super(const ExternalContactsSyncInitial()) {
+    on<ExternalContactsSyncStarted>(_onStarted, transformer: restartable());
+    on<ExternalContactsSyncRefreshed>(_onRefreshed, transformer: droppable());
+    on<_ExternalContactsSyncUpdated>(_onUpdated, transformer: droppable());
+  }
 
   final ExternalContactsRepository externalContactsRepository;
   final AppDatabase appDatabase;
 
-  StreamSubscription? _externalContactsSubscription;
+  void _onStarted(ExternalContactsSyncStarted event, Emitter<ExternalContactsSyncState> emit) async {
+    final externalContactsForEachFuture = emit.onEach<List<ExternalContact>>(
+      externalContactsRepository.contacts(),
+      onData: (contacts) => add(_ExternalContactsSyncUpdated(contacts: contacts)),
+    );
 
-  @override
-  Stream<ExternalContactsSyncState> mapEventToState(ExternalContactsSyncEvent event) async* {
-    if (event is ExternalContactsSyncStarted) {
-      yield* _mapExternalContactsSyncStartedToState(event);
-    } else if (event is ExternalContactsSyncRefreshed) {
-      yield* _mapExternalContactsSyncRefreshedToState(event);
-    } else if (event is _ExternalContactsSyncUpdated) {
-      yield* _mapExternalContactsSyncUpdatedToState(event);
-    }
+    add(const ExternalContactsSyncRefreshed());
+
+    await externalContactsForEachFuture;
   }
 
-  @override
-  Future<void> close() {
-    _externalContactsSubscription?.cancel();
-    return super.close();
-  }
-
-  Stream<ExternalContactsSyncState> _mapExternalContactsSyncStartedToState(ExternalContactsSyncStarted event) async* {
-    _externalContactsSubscription?.cancel();
-    _externalContactsSubscription = externalContactsRepository.contacts().listen(
-          (contacts) => add(_ExternalContactsSyncUpdated(contacts: contacts)),
-        );
-
-    yield const ExternalContactsSyncRefreshInProgress();
+  void _onRefreshed(ExternalContactsSyncRefreshed event, Emitter<ExternalContactsSyncState> emit) async {
+    emit(const ExternalContactsSyncRefreshInProgress());
     try {
       await externalContactsRepository.load();
     } catch (error) {
-      yield const ExternalContactsSyncRefreshFailure();
+      emit(const ExternalContactsSyncRefreshFailure());
     }
   }
 
-  Stream<ExternalContactsSyncState> _mapExternalContactsSyncRefreshedToState(
-      ExternalContactsSyncRefreshed event) async* {
-    yield const ExternalContactsSyncRefreshInProgress();
-    try {
-      await externalContactsRepository.load();
-    } catch (error) {
-      yield const ExternalContactsSyncRefreshFailure();
-    }
-  }
-
-  Stream<ExternalContactsSyncState> _mapExternalContactsSyncUpdatedToState(_ExternalContactsSyncUpdated event) async* {
+  void _onUpdated(_ExternalContactsSyncUpdated event, Emitter<ExternalContactsSyncState> emit) async {
     final externalContacts = event.contacts;
 
     final contactDatas = await appDatabase.contactsDao.getAllContacts(ContactSourceType.external);
@@ -126,6 +106,6 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
       }
     }
 
-    yield const ExternalContactsSyncSuccess();
+    emit(const ExternalContactsSyncSuccess());
   }
 }

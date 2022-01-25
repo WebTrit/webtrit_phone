@@ -77,8 +77,6 @@ void main() async {
 
   final logRecordsRepository = LogRecordsRepository()..attachToLogger(Logger.root);
 
-  Bloc.observer = LoggingBlocObserver();
-
   DriftIsolate isolate = await AppDatabase.spawn(AppPath().databasePath);
 
   final app = Provider<AppDatabase>(
@@ -144,7 +142,10 @@ void main() async {
   );
 
   await runZonedGuarded(
-    () async => runApp(app),
+    () async => BlocOverrides.runZoned(
+      () => runApp(app),
+      blocObserver: LoggingBlocObserver(),
+    ),
     (error, stackTrace) => logger.severe('Top zone error', error, stackTrace),
   );
 }

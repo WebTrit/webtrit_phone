@@ -1,6 +1,5 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -16,60 +15,39 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
   LocalContactsSyncBloc({
     required this.localContactsRepository,
     required this.appDatabase,
-  }) : super(const LocalContactsSyncInitial());
+  }) : super(const LocalContactsSyncInitial()) {
+    on<LocalContactsSyncStarted>(_onStarted, transformer: restartable());
+    on<LocalContactsSyncRefreshed>(_onRefreshed, transformer: droppable());
+    on<_LocalContactsSyncUpdated>(_onUpdated, transformer: droppable());
+  }
 
   final LocalContactsRepository localContactsRepository;
   final AppDatabase appDatabase;
 
-  StreamSubscription? _localContactsSubscription;
+  void _onStarted(LocalContactsSyncStarted event, Emitter<LocalContactsSyncState> emit) async {
+    final localContactsForEachFuture = emit.onEach<List<LocalContact>>(
+      localContactsRepository.contacts(),
+      onData: (contacts) => add(_LocalContactsSyncUpdated(contacts: contacts)),
+      onError: (error, stackTrace) => add(const _LocalContactsSyncUpdated(contacts: [])),
+    );
 
-  @override
-  Stream<LocalContactsSyncState> mapEventToState(LocalContactsSyncEvent event) async* {
-    if (event is LocalContactsSyncStarted) {
-      yield* _mapLocalContactsSyncStartedToState(event);
-    } else if (event is LocalContactsSyncRefreshed) {
-      yield* _mapLocalContactsSyncRefreshedToState(event);
-    } else if (event is _LocalContactsSyncUpdated) {
-      yield* _mapLocalContactsSyncUpdatedToState(event);
-    }
+    add(const LocalContactsSyncRefreshed());
+
+    await localContactsForEachFuture;
   }
 
-  @override
-  Future<void> close() {
-    _localContactsSubscription?.cancel();
-    return super.close();
-  }
-
-  Stream<LocalContactsSyncState> _mapLocalContactsSyncStartedToState(LocalContactsSyncStarted event) async* {
-    _localContactsSubscription?.cancel();
-    _localContactsSubscription = localContactsRepository.contacts().listen(
-          (contacts) => add(_LocalContactsSyncUpdated(contacts: contacts)),
-          onError: (error, stackTrace) => add(const _LocalContactsSyncUpdated(contacts: [])),
-          cancelOnError: false,
-        );
-
-    yield const LocalContactsSyncRefreshInProgress();
+  void _onRefreshed(LocalContactsSyncRefreshed event, Emitter<LocalContactsSyncState> emit) async {
+    emit(const LocalContactsSyncRefreshInProgress());
     try {
       await localContactsRepository.load();
     } on LocalContactsRepositoryPermissionException {
-      yield const LocalContactsSyncPermissionFailure();
+      emit(const LocalContactsSyncPermissionFailure());
     } catch (error) {
-      yield const LocalContactsSyncRefreshFailure();
+      emit(const LocalContactsSyncRefreshFailure());
     }
   }
 
-  Stream<LocalContactsSyncState> _mapLocalContactsSyncRefreshedToState(LocalContactsSyncRefreshed event) async* {
-    yield const LocalContactsSyncRefreshInProgress();
-    try {
-      await localContactsRepository.load();
-    } on LocalContactsRepositoryPermissionException {
-      yield const LocalContactsSyncPermissionFailure();
-    } catch (error) {
-      yield const LocalContactsSyncRefreshFailure();
-    }
-  }
-
-  Stream<LocalContactsSyncState> _mapLocalContactsSyncUpdatedToState(_LocalContactsSyncUpdated event) async* {
+  void _onUpdated(_LocalContactsSyncUpdated event, Emitter<LocalContactsSyncState> emit) async {
     final localContacts = event.contacts;
 
     final contactDatas = await appDatabase.contactsDao.getAllContacts(ContactSourceType.local);
@@ -108,6 +86,6 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
       }
     }
 
-    yield const LocalContactsSyncSuccess();
+    emit(const LocalContactsSyncSuccess());
   }
 }
