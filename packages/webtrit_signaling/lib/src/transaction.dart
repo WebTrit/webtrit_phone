@@ -29,6 +29,11 @@ class Transaction {
     _completer.complete(responseMessage);
   }
 
+  void terminate([int? closeCode, String? closeReason]) {
+    _timer.cancel();
+    _completer.completeError(WebtritSignalingTerminateException());
+  }
+
   void _timeoutCallback() {
     if (_completer.isCompleted) {
       return;

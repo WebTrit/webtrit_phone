@@ -9,6 +9,13 @@ class WebtritSignalingTransactionUnavailableException implements WebtritSignalin
   String toString() => '$WebtritSignalingTransactionUnavailableException { transactionId: "$transactionId" }';
 }
 
+class WebtritSignalingTerminateException implements WebtritSignalingException {
+  const WebtritSignalingTerminateException([this.closeCode, this.closeReason]);
+
+  final int? closeCode;
+  final String? closeReason;
+}
+
 class WebtritSignalingTimeoutException implements WebtritSignalingException {}
 
 class WebtritSignalingErrorException implements WebtritSignalingException {

@@ -66,6 +66,9 @@ class WebtritSignalingClient extends Stream<Event> {
 
   void _wsOnDone() {
     _logger.fine('_wsOnDone');
+    for (final transaction in _transactions.values) {
+      transaction.terminate(_ws.closeCode, _ws.closeReason);
+    }
     _controller.close();
   }
 
