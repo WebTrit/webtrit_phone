@@ -1,6 +1,10 @@
 {
   "@@locale": "en",
 
+  "notifications_errorSnackBar_callNotIdle": "You are offline – please try to reregister",
+  "@notifications_errorSnackBar_callNotIdle": {
+  },
+
   "favoritesScaffold_textLabel_empty": "There are no favorite numbers",
   "@favoritesScaffold_textLabel_empty": {
   },

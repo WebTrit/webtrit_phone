@@ -7,7 +7,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
@@ -18,7 +17,9 @@ import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_phone/blocs/logging_bloc_observer.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/pages/settings.dart';
@@ -129,10 +130,15 @@ void main() async {
           ),
         ),
       ],
-      child: BlocProvider<AppBloc>(
-        create: (context) {
-          return AppBloc();
-        },
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<NotificationsBloc>(
+            create: (BuildContext context) => NotificationsBloc(),
+          ),
+          BlocProvider<AppBloc>(
+            create: (BuildContext context) => AppBloc(),
+          ),
+        ],
         child: App(
           webRegistrationInitialUrl: await SecureStorage().readWebRegistrationInitialUrl(),
           isRegistered: await SecureStorage().readToken() != null,
@@ -258,6 +264,7 @@ class App extends StatelessWidget {
                     return CallBloc(
                       callRepository: context.read<CallRepository>(),
                       recentsRepository: context.read<RecentsRepository>(),
+                      notificationsBloc: context.read<NotificationsBloc>(),
                       appBloc: context.read<AppBloc>(),
                     )..add(const CallAttached());
                   },
@@ -312,6 +319,19 @@ class App extends StatelessWidget {
 
         if ('/'.allMatches(settings.name!).length <= 1) {
           // add listener only to top level page
+          page = BlocListener<NotificationsBloc, NotificationsState>(
+            listener: (context, state) {
+              final lastNotification = state.lastNotification;
+              if (lastNotification != null) {
+                if (lastNotification is CallNotIdleErrorNotification) {
+                  context.showErrorSnackBar(context.l10n.notifications_errorSnackBar_callNotIdle);
+                }
+                context.read<NotificationsBloc>().add(const NotificationsCleared());
+              }
+            },
+            child: page,
+          );
+
           page = BlocListener<AppBloc, AppState>(
             listener: (context, state) async {
               if (state is AppUnregister) {

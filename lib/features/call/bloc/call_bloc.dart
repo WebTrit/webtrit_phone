@@ -7,6 +7,7 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_phone/features/notifications/notifications.dart';
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/models/recent.dart';
@@ -19,6 +20,7 @@ part 'call_state.dart';
 class CallBloc extends Bloc<CallEvent, CallState> {
   final CallRepository callRepository;
   final RecentsRepository recentsRepository;
+  final NotificationsBloc notificationsBloc;
   final AppBloc appBloc;
 
   StreamSubscription? _onIncomingCallSubscription;
@@ -35,6 +37,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   CallBloc({
     required this.callRepository,
     required this.recentsRepository,
+    required this.notificationsBloc,
     required this.appBloc,
   }) : super(const CallInitial()) {
     on<CallAttached>(
@@ -194,6 +197,11 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     CallOutgoingStarted event,
     Emitter<CallState> emit,
   ) async {
+    if (state is! CallIdle) {
+      notificationsBloc.add(const NotificationsIssued(CallNotIdleErrorNotification()));
+      return;
+    }
+
     emit(CallOutgoing(number: event.number, video: event.video, createdTime: DateTime.now()));
 
     _localStream = await _getUserMedia(video: event.video);
