@@ -137,6 +137,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
 
       appBloc.add(const AppRegistered());
     } catch (e) {
+      notificationsBloc.add(const NotificationsIssued(CallAttachErrorNotification()));
       emit(CallAttachFailure(
         reason: e.toString(),
       ));

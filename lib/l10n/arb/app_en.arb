@@ -1,8 +1,12 @@
 {
   "@@locale": "en",
 
-  "notifications_errorSnackBar_callNotIdle": "You are offline – please try to reregister",
+  "notifications_errorSnackBar_callNotIdle": "You are offline – please try to re-register",
   "@notifications_errorSnackBar_callNotIdle": {
+  },
+
+  "notifications_errorSnackBar_callAttach": "Registration is invalid – please try to re-login",
+  "@notifications_errorSnackBar_callAttach": {
   },
 
   "favoritesScaffold_textLabel_empty": "There are no favorite numbers",

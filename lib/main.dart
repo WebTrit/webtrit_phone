@@ -325,6 +325,8 @@ class App extends StatelessWidget {
               if (lastNotification != null) {
                 if (lastNotification is CallNotIdleErrorNotification) {
                   context.showErrorSnackBar(context.l10n.notifications_errorSnackBar_callNotIdle);
+                } else if (lastNotification is CallAttachErrorNotification) {
+                  context.showErrorSnackBar(context.l10n.notifications_errorSnackBar_callAttach);
                 }
                 context.read<NotificationsBloc>().add(const NotificationsCleared());
               }

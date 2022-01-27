@@ -4,3 +4,11 @@ import 'package:meta/meta.dart';
 abstract class Notification {
   const Notification();
 }
+
+class CallNotIdleErrorNotification extends Notification {
+  const CallNotIdleErrorNotification();
+}
+
+class CallAttachErrorNotification extends Notification {
+  const CallAttachErrorNotification();
+}
