@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-extension SnackBarBuildContextX on BuildContext {
+extension BuildContextSnackBar on BuildContext {
   void removeCurrentSnackBar() {
     ScaffoldMessenger.of(this).removeCurrentSnackBar();
   }
