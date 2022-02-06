@@ -1,9 +1,10 @@
 import 'dart:async';
 
-import 'package:callkeep/callkeep.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'package:callkeep/callkeep.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
@@ -262,24 +263,4 @@ class CallNavigationArguments {
   CallNavigationArguments({
     required this.callBloc,
   });
-}
-
-extension RemoteMessageX on RemoteMessage {
-  String toS() {
-    return '$RemoteMessage {\n'
-        'senderId: $senderId\n'
-        'category: $category\n'
-        'collapseKey: $collapseKey\n'
-        'contentAvailable: $contentAvailable\n'
-        'data: $data\n'
-        'from: $from\n'
-        'messageId: $messageId\n'
-        'messageType: $messageType\n'
-        'mutableContent: $mutableContent\n'
-        'notification: $notification\n'
-        'sentTime: $sentTime\n'
-        'threadId: $threadId\n'
-        'ttl: $ttl\n'
-        '}';
-  }
 }
