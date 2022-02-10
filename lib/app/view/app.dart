@@ -1,7 +1,4 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:callkeep/callkeep.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -18,6 +15,7 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/pages/settings.dart';
 import 'package:webtrit_phone/pages/web_registration.dart';
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -239,22 +237,6 @@ class App extends StatelessWidget {
       },
     );
   }
-}
-
-Future<void> setDefaultOrientations() {
-  return SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-}
-
-Future<void> setCallOrientations() {
-  return SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-    DeviceOrientation.landscapeLeft,
-    DeviceOrientation.landscapeRight,
-  ]);
 }
 
 class CallNavigationArguments {
