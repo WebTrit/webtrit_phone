@@ -298,9 +298,10 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
 
 class $ContactsTableTable extends ContactsTable
     with TableInfo<$ContactsTableTable, ContactData> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ContactsTableTable(this._db, [this._alias]);
+  $ContactsTableTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
@@ -412,7 +413,7 @@ class $ContactsTableTable extends ContactsTable
 
   @override
   $ContactsTableTable createAlias(String alias) {
-    return $ContactsTableTable(_db, alias);
+    return $ContactsTableTable(attachedDatabase, alias);
   }
 
   static TypeConverter<ContactSourceType, int> $converter0 =
@@ -651,9 +652,10 @@ class ContactPhoneDataCompanion extends UpdateCompanion<ContactPhoneData> {
 
 class $ContactPhonesTableTable extends ContactPhonesTable
     with TableInfo<$ContactPhonesTableTable, ContactPhoneData> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ContactPhonesTableTable(this._db, [this._alias]);
+  $ContactPhonesTableTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
@@ -744,7 +746,7 @@ class $ContactPhonesTableTable extends ContactPhonesTable
 
   @override
   $ContactPhonesTableTable createAlias(String alias) {
-    return $ContactPhonesTableTable(_db, alias);
+    return $ContactPhonesTableTable(attachedDatabase, alias);
   }
 }
 
@@ -1006,9 +1008,10 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
 
 class $CallLogsTableTable extends CallLogsTable
     with TableInfo<$CallLogsTableTable, CallLogData> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $CallLogsTableTable(this._db, [this._alias]);
+  $CallLogsTableTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
@@ -1109,7 +1112,7 @@ class $CallLogsTableTable extends CallLogsTable
 
   @override
   $CallLogsTableTable createAlias(String alias) {
-    return $CallLogsTableTable(_db, alias);
+    return $CallLogsTableTable(attachedDatabase, alias);
   }
 
   static TypeConverter<Direction, int> $converter0 =
@@ -1260,9 +1263,10 @@ class FavoriteDataCompanion extends UpdateCompanion<FavoriteData> {
 
 class $FavoritesTableTable extends FavoritesTable
     with TableInfo<$FavoritesTableTable, FavoriteData> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $FavoritesTableTable(this._db, [this._alias]);
+  $FavoritesTableTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
@@ -1325,7 +1329,7 @@ class $FavoritesTableTable extends FavoritesTable
 
   @override
   $FavoritesTableTable createAlias(String alias) {
-    return $FavoritesTableTable(_db, alias);
+    return $FavoritesTableTable(attachedDatabase, alias);
   }
 }
 

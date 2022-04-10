@@ -5,33 +5,33 @@ PODS:
     - Flutter
   - device_info (0.0.1):
     - Flutter
-  - Firebase/CoreOnly (8.11.0):
-    - FirebaseCore (= 8.11.0)
-  - Firebase/Messaging (8.11.0):
+  - Firebase/CoreOnly (8.14.0):
+    - FirebaseCore (= 8.14.0)
+  - Firebase/Messaging (8.14.0):
     - Firebase/CoreOnly
-    - FirebaseMessaging (~> 8.11.0)
-  - firebase_core (1.12.0):
-    - Firebase/CoreOnly (= 8.11.0)
+    - FirebaseMessaging (~> 8.14.0)
+  - firebase_core (1.14.0):
+    - Firebase/CoreOnly (= 8.14.0)
     - Flutter
-  - firebase_messaging (11.2.6):
-    - Firebase/Messaging (= 8.11.0)
+  - firebase_messaging (11.2.12):
+    - Firebase/Messaging (= 8.14.0)
     - firebase_core
     - Flutter
-  - FirebaseCore (8.11.0):
+  - FirebaseCore (8.14.0):
     - FirebaseCoreDiagnostics (~> 8.0)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/Logger (~> 7.7)
-  - FirebaseCoreDiagnostics (8.11.0):
+  - FirebaseCoreDiagnostics (8.14.0):
     - GoogleDataTransport (~> 9.1)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/Logger (~> 7.7)
     - nanopb (~> 2.30908.0)
-  - FirebaseInstallations (8.11.0):
+  - FirebaseInstallations (8.14.0):
     - FirebaseCore (~> 8.0)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/UserDefaults (~> 7.7)
     - PromisesObjC (< 3.0, >= 1.2)
-  - FirebaseMessaging (8.11.0):
+  - FirebaseMessaging (8.14.0):
     - FirebaseCore (~> 8.0)
     - FirebaseInstallations (~> 8.0)
     - GoogleDataTransport (~> 9.1)
@@ -48,7 +48,7 @@ PODS:
   - flutter_webrtc (0.7.1):
     - Flutter
     - Libyuv (= 1703)
-    - WebRTC-SDK (= 93.4577.01)
+    - WebRTC-SDK (= 97.4692.02)
   - GoogleDataTransport (9.1.2):
     - GoogleUtilities/Environment (~> 7.2)
     - nanopb (~> 2.30908.0)
@@ -82,32 +82,32 @@ PODS:
     - Flutter
   - path_provider_ios (0.0.1):
     - Flutter
-  - "permission_handler (5.1.0+2)":
+  - permission_handler_apple (9.0.2):
     - Flutter
-  - PromisesObjC (2.0.0)
+  - PromisesObjC (2.1.0)
   - share_plus (0.0.1):
     - Flutter
-  - sqlite3 (3.37.2):
-    - sqlite3/common (= 3.37.2)
-  - sqlite3/common (3.37.2)
-  - sqlite3/fts5 (3.37.2):
+  - sqlite3 (3.38.2):
+    - sqlite3/common (= 3.38.2)
+  - sqlite3/common (3.38.2)
+  - sqlite3/fts5 (3.38.2):
     - sqlite3/common
-  - sqlite3/json1 (3.37.2):
+  - sqlite3/json1 (3.38.2):
     - sqlite3/common
-  - sqlite3/perf-threadsafe (3.37.2):
+  - sqlite3/perf-threadsafe (3.38.2):
     - sqlite3/common
-  - sqlite3/rtree (3.37.2):
+  - sqlite3/rtree (3.38.2):
     - sqlite3/common
   - sqlite3_flutter_libs (0.0.1):
     - Flutter
-    - sqlite3 (~> 3.37.2)
+    - sqlite3 (~> 3.38.2)
     - sqlite3/fts5
     - sqlite3/json1
     - sqlite3/perf-threadsafe
     - sqlite3/rtree
   - url_launcher_ios (0.0.1):
     - Flutter
-  - WebRTC-SDK (93.4577.01)
+  - WebRTC-SDK (97.4692.02)
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
 
@@ -124,7 +124,7 @@ DEPENDENCIES:
   - just_audio (from `.symlinks/plugins/just_audio/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
-  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - sqlite3_flutter_libs (from `.symlinks/plugins/sqlite3_flutter_libs/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
@@ -170,8 +170,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_ios:
     :path: ".symlinks/plugins/path_provider_ios/ios"
-  permission_handler:
-    :path: ".symlinks/plugins/permission_handler/ios"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
   share_plus:
     :path: ".symlinks/plugins/share_plus/ios"
   sqlite3_flutter_libs:
@@ -185,33 +185,33 @@ SPEC CHECKSUMS:
   audio_session: 4f3e461722055d21515cf3261b64c973c062f345
   callkeep: 6b21abbd46786a36e482190816db99b391ada1e3
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
-  Firebase: 44dd9724c84df18b486639e874f31436eaa9a20c
-  firebase_core: 443bccfd6aa6b42f07be365b500773dc69db2d87
-  firebase_messaging: 8dc3a6f069774a0bf4dac04dd79fdaffcb62e145
-  FirebaseCore: 2f4f85b453cc8fea4bb2b37e370007d2bcafe3f0
-  FirebaseCoreDiagnostics: 64d9709d804a6c25bd77841371c1fcfd909d5601
-  FirebaseInstallations: 044eede8a049bce71c4541ee68d6e4364fcbe774
-  FirebaseMessaging: 02e248e8997f71fa8cc9d78e9d49ec1a701ba14a
+  Firebase: 7e8fe528c161b9271d365217a74c16aaf834578e
+  firebase_core: b0b382f1497ab407aceb25e41e3036c8798c1609
+  firebase_messaging: 34dd10d1aa6d8f40d03660eeacd0452d62eec7aa
+  FirebaseCore: b84a44ee7ba999e0f9f76d198a9c7f60a797b848
+  FirebaseCoreDiagnostics: fd0c8490f34287229c1d6c103d3a55f81ec85712
+  FirebaseInstallations: 7d1d967a307c12f1aadd76844fc321cef699b1ce
+  FirebaseMessaging: 5ebc42d281567658a2cb72b9ef3506e4a1a1a6e4
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_contacts: edb1c5ce76aa433e20e6cb14c615f4c0b66e0983
   flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
-  flutter_webrtc: 611cab01a48b1d20e2b2409783c182134b8729e5
+  flutter_webrtc: 3fd57d5bd9b6ce85d12d37f6f68d97be3b80509f
   GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
   Libyuv: 5f79ced0ee66e60a612ca97de1e6ccacd187a437
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
-  path_provider_ios: 7d7ce634493af4477d156294792024ec3485acd5
-  permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
-  PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
+  path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
+  permission_handler_apple: d21b38e1a4b2e041c63af9568f9165e114e507a6
+  PromisesObjC: 99b6f43f9e1044bd87a95a60beff28c2c44ddb72
   share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
-  sqlite3: c0ed2889f1853952214f34195c4a081a7a7a8015
-  sqlite3_flutter_libs: b26eb56ee9f5d821e55739a0e3917301e5ed4628
-  url_launcher_ios: 02f1989d4e14e998335b02b67a7590fa34f971af
-  WebRTC-SDK: 166b0e161d93d4b961f410bf7966a634f42aa17d
+  sqlite3: e26e8422c1f5780d0a3db283eb095a03a10e121c
+  sqlite3_flutter_libs: e21c8c90448ce608a0d685e717727c46f37c6695
+  url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
+  WebRTC-SDK: dda4e50186f9eed672dc6bcf4faafb30c6ce48e3
   webview_flutter_wkwebview: 005fbd90c888a42c5690919a1527ecc6649e1162
 
 PODFILE CHECKSUM: b313f8976fcf3db4c7d2e3d4cc8da152e84127d4
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3
