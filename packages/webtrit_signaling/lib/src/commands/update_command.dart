@@ -1,14 +1,16 @@
-import 'command.dart';
+import 'line_command.dart';
 
-class UpdateCommand extends Command {
-  UpdateCommand({
+class UpdateCommand extends LineCommand {
+  const UpdateCommand({
+    required int line,
     required this.jsep,
-  }) : super();
+  }) : super(line: line);
 
   final Map<String, dynamic> jsep;
 
   @override
   List<Object?> get props => [
+        ...super.props,
         jsep,
       ];
 }

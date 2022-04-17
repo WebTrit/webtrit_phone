@@ -1,12 +1,13 @@
-import 'event.dart';
+import 'line_event.dart';
 
-class TransferEvent extends Event {
-  TransferEvent({
+class TransferEvent extends LineEvent {
+  const TransferEvent({
+    required int line,
     required this.referId,
     required this.referTo,
     required this.referredBy,
     required this.replaceCallId,
-  }) : super();
+  }) : super(line: line);
 
   final String referId;
   final String referTo;
@@ -15,6 +16,7 @@ class TransferEvent extends Event {
 
   @override
   List<Object?> get props => [
+        ...super.props,
         referId,
         referTo,
         referredBy,

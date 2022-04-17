@@ -1,4 +1,4 @@
-import 'command.dart';
+import 'line_command.dart';
 
 enum HoldDirection {
   sendonly,
@@ -6,15 +6,17 @@ enum HoldDirection {
   inactive,
 }
 
-class HoldCommand extends Command {
-  HoldCommand({
+class HoldCommand extends LineCommand {
+  const HoldCommand({
+    required int line,
     this.direction,
-  }) : super();
+  }) : super(line: line);
 
   final HoldDirection? direction;
 
   @override
   List<Object?> get props => [
+        ...super.props,
         direction,
       ];
 }

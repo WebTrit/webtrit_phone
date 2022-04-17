@@ -1,8 +1,7 @@
-import 'event.dart';
+import 'line_event.dart';
 
-class IceWebrtcUpEvent extends Event {
-  IceWebrtcUpEvent() : super();
-
-  @override
-  List<Object?> get props => [];
+class IceWebrtcUpEvent extends LineEvent {
+  const IceWebrtcUpEvent({
+    required int line,
+  }) : super(line: line);
 }

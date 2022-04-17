@@ -1,8 +1,7 @@
-import 'command.dart';
+import 'line_command.dart';
 
-class DeclineCommand extends Command {
-  DeclineCommand() : super();
-
-  @override
-  List<Object?> get props => [];
+class DeclineCommand extends LineCommand {
+  const DeclineCommand({
+    required int line,
+  }) : super(line: line);
 }

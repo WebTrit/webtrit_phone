@@ -36,10 +36,10 @@ class CallRepository {
     if (token == null) {
       throw Exception('incorrect token');
     } else {
-      _signalingClient = await WebtritSignalingClient.connect(EnvironmentConfig.SIGNALING_URL, token);
-
-      _signalingClient!.listen(
-        (event) {
+      final signalingClient = WebtritSignalingClient(
+        EnvironmentConfig.SIGNALING_URL,
+        token,
+        onEvent: (event) {
           if (event is IncomingCallEvent) {
             _incomingCallStreamController!.add(event);
           } else if (event is AnsweredEvent) {
@@ -51,13 +51,15 @@ class CallRepository {
           }
         },
         onError: _onErrorCallback,
-        onDone: _onDoneCallback,
+        onDisconnect: _onDisconnectCallback,
       );
+      signalingClient.connect(true);
+      _signalingClient = signalingClient;
     }
   }
 
   Future<void> detach() async {
-    await _signalingClient!.close();
+    await _signalingClient!.disconnect();
     _signalingClient = null;
 
     await _incomingCallStreamController!.close();
@@ -79,28 +81,20 @@ class CallRepository {
   Stream<DoneEvent> get onDone => _doneStreamController!.stream;
 
   Future<void> sendTrickle(Map<String, dynamic>? candidate) async {
-    await _signalingClient!.send(TrickleCommand(candidate));
-  }
-
-  Future<List<String>> list() async {
-    return []; // TODO remove
-  }
-
-  Future<void> register() async {
-    await _signalingClient!.send(RegisterCommand());
+    await _signalingClient!.execute(TrickleCommand(line: 0, candidate: candidate));
   }
 
   Future<void> call(String? username, Map<String, dynamic> jsepData) async {
     // TODO rename username to number
-    await _signalingClient!.send(CallCommand(number: username!, jsep: jsepData));
+    await _signalingClient!.execute(CallCommand(line: 0, number: username!, jsep: jsepData));
   }
 
   Future<void> accept(Map<String, dynamic> jsepData) async {
-    await _signalingClient!.send(AcceptCommand(jsep: jsepData));
+    await _signalingClient!.execute(AcceptCommand(line: 0, jsep: jsepData));
   }
 
   Future<void> hangup() {
-    return _signalingClient!.send(HangupCommand());
+    return _signalingClient!.execute(const HangupCommand(line: 0));
   }
 
   void _onErrorCallback(error, [StackTrace? stackTrace]) {
@@ -108,7 +102,7 @@ class CallRepository {
     _logger.severe('_onErrorCallback { error: $error, stackTrace: $stackTrace } / not implemented');
   }
 
-  void _onDoneCallback() {
+  void _onDisconnectCallback(int? code, String? reason) {
     _doneStreamController?.add(DoneEvent());
   }
 }

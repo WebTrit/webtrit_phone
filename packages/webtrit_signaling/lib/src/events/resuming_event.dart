@@ -1,12 +1,11 @@
 import 'call_event.dart';
 
 class ResumingEvent extends CallEvent {
-  ResumingEvent({
+  const ResumingEvent({
+    required int line,
     required String callId,
-  }) : super(callId: callId);
-
-  @override
-  List<Object?> get props => [
-        ...super.props,
-      ];
+  }) : super(
+          line: line,
+          callId: callId,
+        );
 }

@@ -1,10 +1,14 @@
 import 'call_event.dart';
 
 class ProceedingEvent extends CallEvent {
-  ProceedingEvent({
+  const ProceedingEvent({
+    required int line,
     required String callId,
     required this.code,
-  }) : super(callId: callId);
+  }) : super(
+          line: line,
+          callId: callId,
+        );
 
   final int code;
 

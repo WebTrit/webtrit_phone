@@ -1,12 +1,16 @@
 import 'call_event.dart';
 
 class MissedCallEvent extends CallEvent {
-  MissedCallEvent({
+  const MissedCallEvent({
+    required int line,
     required String callId,
     required this.callee,
     required this.caller,
     this.callerDisplayName,
-  }) : super(callId: callId);
+  }) : super(
+          line: line,
+          callId: callId,
+        );
 
   final String callee;
   final String caller;

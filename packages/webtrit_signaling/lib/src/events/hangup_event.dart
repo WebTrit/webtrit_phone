@@ -1,11 +1,15 @@
 import 'call_event.dart';
 
 class HangupEvent extends CallEvent {
-  HangupEvent({
+  const HangupEvent({
+    required int line,
     required String callId,
     required this.code,
     required this.reason,
-  }) : super(callId: callId);
+  }) : super(
+          line: line,
+          callId: callId,
+        );
 
   final int code;
   final String reason;

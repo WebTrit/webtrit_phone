@@ -1,14 +1,16 @@
-import 'event.dart';
+import 'line_event.dart';
 
-class IceHangupEvent extends Event {
-  IceHangupEvent({
+class IceHangupEvent extends LineEvent {
+  const IceHangupEvent({
+    required int line,
     this.reason,
-  }) : super();
+  }) : super(line: line);
 
   final String? reason;
 
   @override
   List<Object?> get props => [
+        ...super.props,
         reason,
       ];
 }

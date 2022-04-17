@@ -1,23 +1,23 @@
 import 'call_event.dart';
 
-class DecliningEvent extends CallEvent {
-  const DecliningEvent({
+class CallErrorEvent extends CallEvent {
+  const CallErrorEvent({
     required int line,
     required String callId,
     required this.code,
-    this.referId,
+    required this.description,
   }) : super(
           line: line,
           callId: callId,
         );
 
   final int code;
-  final int? referId;
+  final String description;
 
   @override
   List<Object?> get props => [
         ...super.props,
         code,
-        referId,
+        description,
       ];
 }

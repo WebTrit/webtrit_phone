@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:logging/logging.dart';
+import 'package:logging_appenders/logging_appenders.dart';
+
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 void main(List<String> arguments) async {
@@ -8,35 +11,31 @@ void main(List<String> arguments) async {
     exit(1);
   }
 
+  PrintAppender.setupLogging(level: Level.ALL);
+
   final url = arguments[0];
   final token = arguments[1];
 
-  final client = await WebtritSignalingClient.connect(url, token);
-
-  client.listen(
-    (event) {
+  final client = WebtritSignalingClient(
+    url,
+    token,
+    onEvent: (event) {
       print('>> event: $event');
     },
     onError: (error, stackTrace) {
       print('>> error: $error\n$stackTrace');
     },
-    onDone: () {
-      print('>> onDone with code: ${client.closeCode} and reason: ${client.closeReason}');
+    onDisconnect: (code, reason) {
+      print('>> onDone with code: $code and reason: $reason');
     },
   );
 
-  print('Register');
-  await client.send(RegisterCommand());
+  print('Connect');
+  await client.connect(false);
 
-  print('Wait');
+  print('Wait StateEvent');
   await Future.delayed(Duration(seconds: 5));
 
-  print('Unregister');
-  await client.send(UnregisterCommand());
-
-  print('Wait');
-  await Future.delayed(Duration(seconds: 3));
-
-  print('Close');
-  await client.close();
+  print('Disconnect');
+  await client.disconnect();
 }

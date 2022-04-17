@@ -1,8 +1,7 @@
-import 'command.dart';
+import 'line_command.dart';
 
-class UnholdCommand extends Command {
-  UnholdCommand() : super();
-
-  @override
-  List<Object?> get props => [];
+class UnholdCommand extends LineCommand {
+  const UnholdCommand({
+    required int line,
+  }) : super(line: line);
 }

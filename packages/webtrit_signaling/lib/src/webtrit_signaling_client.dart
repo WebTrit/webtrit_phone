@@ -9,46 +9,71 @@ import 'events/events.dart';
 import 'exceptions.dart';
 import 'transaction.dart';
 
-class WebtritSignalingClient extends Stream<Event> {
+class WebtritSignalingClient {
   static const subprotocol = 'webtrit-protocol';
 
   static int _createCounter = 0;
 
   WebtritSignalingClient(
-    this._ws,
-  ) : _logger = Logger('$WebtritSignalingClient-$_createCounter') {
+    this.url,
+    this.token, {
+    required this.onEvent,
+    required this.onError,
+    required this.onDisconnect,
+  }) : _logger = Logger('$WebtritSignalingClient-$_createCounter') {
     _createCounter++;
-
-    _ws.listen(
-      _wsOnData,
-      onError: _wsOnError,
-      onDone: _wsOnDone,
-    );
   }
 
   final Logger _logger;
 
-  final WebSocket _ws;
-  final StreamController<Event> _controller = StreamController(sync: true);
+  final String url;
+  final String token;
+
+  final void Function(Event event) onEvent;
+  final void Function(Object error, StackTrace? stackTrace) onError;
+  final void Function(int? code, String? reason) onDisconnect;
+
+  WebSocket? _ws;
+  Duration? _keepaliveInterval;
+
+  Timer? _keepaliveTimer;
 
   final _transactions = <String, Transaction>{};
 
-  static Future<WebtritSignalingClient> connect(String url, String token) async {
-    final signalingUrl = Uri.parse(url).replace(
-      pathSegments: ['signaling', 'websocket'],
-      queryParameters: {'token': token},
-    ).toString();
-    return WebtritSignalingClient(await WebSocket.connect(signalingUrl, protocols: [subprotocol]));
+  String _signalingUrl(bool force) => Uri.parse(url).replace(
+        pathSegments: ['signaling', 'websocket'],
+        queryParameters: {
+          'token': token,
+          'force': force.toString(),
+        },
+      ).toString();
+
+  Future<void> connect(bool force) async {
+    if (_ws != null) {
+      throw WebtritSignalingAlreadyConnectException();
+    } else {
+      final ws = await WebSocket.connect(_signalingUrl(force), protocols: [subprotocol]);
+      ws.listen(
+        _wsOnData,
+        onError: _wsOnError,
+        onDone: () => _wsOnDone(ws.closeCode, ws.closeReason),
+      );
+      _ws = ws;
+    }
   }
-
-  int? get closeCode => _ws.closeCode;
-
-  String? get closeReason => _ws.closeReason;
 
   //
 
-  Future<void> close([int? code, String? reason]) {
-    return _ws.close(code, reason);
+  Future<void> disconnect([int? code, String? reason]) {
+    _stopKeepaliveTimer();
+
+    final ws = _ws;
+    _ws = null;
+    if (ws != null) {
+      return ws.close(code, reason);
+    } else {
+      return Future.value();
+    }
   }
 
   //
@@ -61,44 +86,38 @@ class WebtritSignalingClient extends Stream<Event> {
 
   void _wsOnError(dynamic error, StackTrace stackTrace) {
     _logger.warning('_wsOnError', error, stackTrace);
-    _controller.addError(error, stackTrace);
+    _stopKeepaliveTimer();
+    onError(error, stackTrace);
   }
 
-  void _wsOnDone() {
-    _logger.fine('_wsOnDone');
+  void _wsOnDone(int? closeCode, String? closeReason) {
+    _logger.fine('_wsOnDone code: $closeCode reason: $closeReason');
+    _stopKeepaliveTimer();
     for (final transaction in _transactions.values) {
-      transaction.terminate(_ws.closeCode, _ws.closeReason);
+      transaction.terminate(closeCode, closeReason);
     }
-    _controller.close();
-  }
-
-  // Stream<Event>
-
-  @override
-  StreamSubscription<Event> listen(
-    void Function(Event event)? onData, {
-    Function? onError,
-    void Function()? onDone,
-    bool? cancelOnError,
-  }) {
-    return _controller.stream.listen(onData, onError: onError, onDone: onDone, cancelOnError: cancelOnError);
+    onDisconnect(closeCode, closeReason);
   }
 
   //
 
-  Future<void> send(Command command) async {
+  Future<void> execute(Command command) async {
     final requestMessage = _toMap(command);
+    await _execute(requestMessage);
+  }
 
-    final responseMessage = await _executeTransaction(requestMessage);
+  Future<void> _execute(Map<String, dynamic> requestMessage) async {
+    _restartKeepaliveTimer();
 
-    final response = responseMessage['response'];
-    if (response == 'ack') {
+    final responseMessage = await _executeMessage(requestMessage);
+    final type = responseMessage['response'];
+    if (type == 'ack') {
       return;
-    } else if (response == 'error') {
+    } else if (type == 'error') {
       final Map<String, dynamic> responseError = responseMessage['error'];
       throw WebtritSignalingErrorException(responseError['code'], responseError['reason']);
     } else {
-      throw ArgumentError();
+      throw WebtritSignalingResponseException(responseMessage);
     }
   }
 
@@ -114,23 +133,23 @@ class WebtritSignalingClient extends Stream<Event> {
       if (transaction != null) {
         transaction.handleResponse(responseMessage);
       } else {
-        _controller.addError(WebtritSignalingTransactionUnavailableException(transactionId), StackTrace.current);
+        onError(WebtritSignalingTransactionUnavailableException(transactionId), StackTrace.current);
       }
     } else if (message.containsKey('event')) {
       final eventMessage = message;
 
       try {
         final event = _toEvent(eventMessage);
-        _controller.add(event);
+        onEvent(event);
       } catch (error, stackTrace) {
-        _controller.addError(error, stackTrace);
+        onError(error, stackTrace);
       }
     } else {
-      throw ArgumentError();
+      onError(WebtritSignalingUnknownMessageException(message), StackTrace.current);
     }
   }
 
-  Future<Map<String, dynamic>> _executeTransaction(Map<String, dynamic> requestMessage) async {
+  Future<Map<String, dynamic>> _executeMessage(Map<String, dynamic> requestMessage) async {
     final transaction = Transaction();
 
     _transactions[transaction.id] = transaction;
@@ -150,30 +169,61 @@ class WebtritSignalingClient extends Stream<Event> {
   }
 
   void _addData(dynamic data) {
-    _ws.add(data);
+    final ws = _ws;
+    if (ws != null) {
+      ws.add(data);
+      _logger.finer(() => '_addData add: $data');
+    } else {
+      _logger.finer(() => '_addData skip: $data');
+    }
+  }
 
-    _logger.finer(() => '_addData: $data');
+  //
+
+  void _startKeepaliveTimer() {
+    final keepaliveInterval = _keepaliveInterval;
+    if (keepaliveInterval != null) {
+      _keepaliveTimer = Timer(keepaliveInterval, _keepaliveCallback);
+    }
+  }
+
+  void _stopKeepaliveTimer() {
+    final keepaliveTimer = _keepaliveTimer;
+    if (keepaliveTimer != null && keepaliveTimer.isActive) {
+      keepaliveTimer.cancel();
+    }
+  }
+
+  void _restartKeepaliveTimer() {
+    _stopKeepaliveTimer();
+    _startKeepaliveTimer();
+  }
+
+  void _keepaliveCallback() async {
+    try {
+      await _execute(<String, dynamic>{
+        'request': 'keepalive',
+      });
+    } on WebtritSignalingTimeoutException catch (error, stackTrace) {
+      onError(WebtritSignalingKeepaliveTimeoutException(), stackTrace);
+    } catch (error, stackTrace) {
+      onError(error, stackTrace);
+    }
   }
 
   //
 
   Map<String, dynamic> _toMap(Command command) {
-    if (command is RegisterCommand) {
-      return <String, dynamic>{
-        'request': 'register',
-      };
-    } else if (command is UnregisterCommand) {
-      return <String, dynamic>{
-        'request': 'unregister',
-      };
-    } else if (command is TrickleCommand) {
+    if (command is TrickleCommand) {
       return <String, dynamic>{
         'request': 'trickle',
+        'line': command.line,
         'candidate': command.candidate,
       };
     } else if (command is CallCommand) {
       return <String, dynamic>{
         'request': 'call',
+        'line': command.line,
         if (command.callId != null) 'call_id': command.callId,
         'number': command.number,
         'jsep': command.jsep,
@@ -181,24 +231,29 @@ class WebtritSignalingClient extends Stream<Event> {
     } else if (command is AcceptCommand) {
       return <String, dynamic>{
         'request': 'accept',
+        'line': command.line,
         'jsep': command.jsep,
       };
     } else if (command is UpdateCommand) {
       return <String, dynamic>{
         'request': 'update',
+        'line': command.line,
         'jsep': command.jsep,
       };
     } else if (command is DeclineCommand) {
       return <String, dynamic>{
         'request': 'decline',
+        'line': command.line,
       };
     } else if (command is HangupCommand) {
       return <String, dynamic>{
         'request': 'hangup',
+        'line': command.line,
       };
     } else if (command is TransferCommand) {
       return <String, dynamic>{
         'request': 'transfer',
+        'line': command.line,
         'number': command.number,
         if (command.replaceCallId != null) 'replace_call_id': command.replaceCallId,
       };
@@ -206,11 +261,13 @@ class WebtritSignalingClient extends Stream<Event> {
       final direction = command.direction;
       return <String, dynamic>{
         'request': 'hold',
+        'line': command.line,
         if (direction != null) 'direction': direction.name,
       };
     } else if (command is UnholdCommand) {
       return <String, dynamic>{
         'request': 'unhold',
+        'line': command.line,
       };
     } else {
       throw ArgumentError();
@@ -221,29 +278,60 @@ class WebtritSignalingClient extends Stream<Event> {
 
   Event _toEvent(Map<String, dynamic> eventMessage) {
     switch (eventMessage['event']) {
+      case 'state':
+        final keepaliveInterval = Duration(milliseconds: eventMessage['keepalive_interval'] as int);
+        _keepaliveInterval = keepaliveInterval;
+
+        _restartKeepaliveTimer();
+
+        final registrationStateMessage = eventMessage['registration_state'];
+        final registrationState = RegistrationState(
+          status: RegistrationStatus.values.byName(registrationStateMessage['status']),
+          code: registrationStateMessage['code'],
+          reason: registrationStateMessage['reason'],
+        );
+        final lineStatesMessage = eventMessage['line_states'] as List<dynamic>;
+        final lineStates = lineStatesMessage
+            .map((lineStateMessage) => LineState(
+                  status: CallStatus.values.byName(lineStateMessage['status']),
+                ))
+            .toList();
+        return StateEvent(
+          registrationState: registrationState,
+          lineStates: lineStates,
+        );
       case 'registering':
         return RegisteringEvent();
       case 'registered':
         return RegisteredEvent();
+      case 'registration_failed':
+        return RegistrationFailedEvent(
+          code: eventMessage['code'],
+          reason: eventMessage['reason'],
+        );
       case 'unregistering':
         return UnregisteringEvent();
       case 'unregistered':
         return UnregisteredEvent();
       case 'calling':
         return CallingEvent(
+          line: eventMessage['line'],
           callId: eventMessage['call_id'],
         );
       case 'ringing':
         return RingingEvent(
+          line: eventMessage['line'],
           callId: eventMessage['call_id'],
         );
       case 'proceeding':
         return ProceedingEvent(
+          line: eventMessage['line'],
           callId: eventMessage['call_id'],
           code: eventMessage['code'],
         );
       case 'progress':
         return ProgressEvent(
+          line: eventMessage['line'],
           callId: eventMessage['call_id'],
           callee: eventMessage['callee'],
           isFocus: eventMessage['is_focus'],
@@ -251,6 +339,7 @@ class WebtritSignalingClient extends Stream<Event> {
         );
       case 'answered':
         return AnsweredEvent(
+          line: eventMessage['line'],
           callId: eventMessage['call_id'],
           callee: eventMessage['callee'],
           isFocus: eventMessage['is_focus'],
@@ -258,14 +347,17 @@ class WebtritSignalingClient extends Stream<Event> {
         );
       case 'accepting':
         return AcceptingEvent(
+          line: eventMessage['line'],
           callId: eventMessage['call_id'],
         );
       case 'accepted':
         return AcceptedEvent(
+          line: eventMessage['line'],
           callId: eventMessage['call_id'],
         );
       case 'incoming_call':
         return IncomingCallEvent(
+          line: eventMessage['line'],
           callId: eventMessage['call_id'] as String,
           callee: eventMessage['callee'],
           caller: eventMessage['caller'],
@@ -276,6 +368,7 @@ class WebtritSignalingClient extends Stream<Event> {
         );
       case 'updating_call':
         return UpdatingCallEvent(
+          line: eventMessage['line'],
           callId: eventMessage['call_id'],
           callee: eventMessage['callee'],
           caller: eventMessage['caller'],
@@ -286,6 +379,7 @@ class WebtritSignalingClient extends Stream<Event> {
         );
       case 'missed_call':
         return MissedCallEvent(
+          line: eventMessage['line'],
           callId: eventMessage['call_id'],
           callee: eventMessage['callee'],
           caller: eventMessage['caller'],
@@ -293,34 +387,41 @@ class WebtritSignalingClient extends Stream<Event> {
         );
       case 'hangingup':
         return HangingupEvent(
+          line: eventMessage['line'],
           callId: eventMessage['call_id'],
         );
       case 'hangup':
         return HangupEvent(
+          line: eventMessage['line'],
           callId: eventMessage['call_id'],
           code: eventMessage['code'],
           reason: eventMessage['reason'],
         );
       case 'declining':
         return DecliningEvent(
+          line: eventMessage['line'],
           callId: eventMessage['call_id'],
           code: eventMessage['code'],
           referId: eventMessage['refer_id'],
         );
       case 'updating':
         return UpdatingEvent(
+          line: eventMessage['line'],
           callId: eventMessage['call_id'],
         );
       case 'updated':
         return UpdatedEvent(
+          line: eventMessage['line'],
           callId: eventMessage['call_id'],
         );
       case 'transferring':
         return TransferringEvent(
+          line: eventMessage['line'],
           callId: eventMessage['call_id'],
         );
       case 'transfer':
         return TransferEvent(
+          line: eventMessage['line'],
           referId: eventMessage['refer_id'],
           referTo: eventMessage['refer_to'],
           referredBy: eventMessage['referred_by'],
@@ -328,29 +429,53 @@ class WebtritSignalingClient extends Stream<Event> {
         );
       case 'holding':
         return HoldingEvent(
+          line: eventMessage['line'],
           callId: eventMessage['call_id'],
         );
       case 'resuming':
         return ResumingEvent(
+          line: eventMessage['line'],
           callId: eventMessage['call_id'],
         );
       case 'ice_webrtcup':
-        return IceWebrtcUpEvent();
+        return IceWebrtcUpEvent(
+          line: eventMessage['line'],
+        );
       case 'ice_media':
         return IceMediaEvent(
+          line: eventMessage['line'],
           type: IceMediaType.values.byName(eventMessage['type']),
           receiving: eventMessage['receiving'],
         );
       case 'ice_slowlink':
         return IceSlowLinkEvent(
+          line: eventMessage['line'],
           media: IceMediaType.values.byName(eventMessage['media']),
           uplink: eventMessage['uplink'],
           lost: eventMessage['lost'],
         );
       case 'ice_hangup':
         return IceHangupEvent(
+          line: eventMessage['line'],
           reason: eventMessage['reason'],
         );
+      case 'error':
+        final line = eventMessage['line'];
+        final callId = eventMessage['call_id'];
+        if (callId != null) {
+          return CallErrorEvent(
+            line: line,
+            callId: callId,
+            code: eventMessage['code'],
+            description: eventMessage['description'],
+          );
+        } else {
+          return ErrorLineEvent(
+            line: line,
+            code: eventMessage['code'],
+            description: eventMessage['description'],
+          );
+        }
       default:
         throw ArgumentError();
     }

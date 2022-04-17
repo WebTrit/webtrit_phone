@@ -119,7 +119,6 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     emit(const CallAttachInProgress());
     try {
       await callRepository.attach();
-      await callRepository.register();
 
       _onIncomingCallSubscription = callRepository.onIncomingCall.listen((event) {
         add(CallIncomingReceived(username: event.caller, jsepData: event.jsep));

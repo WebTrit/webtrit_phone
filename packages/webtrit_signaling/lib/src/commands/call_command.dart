@@ -1,11 +1,12 @@
-import 'command.dart';
+import 'line_command.dart';
 
-class CallCommand extends Command {
-  CallCommand({
+class CallCommand extends LineCommand {
+  const CallCommand({
+    required int line,
     this.callId,
     required this.number,
     required this.jsep,
-  }) : super();
+  }) : super(line: line);
 
   final String? callId;
   final String number;
@@ -13,6 +14,7 @@ class CallCommand extends Command {
 
   @override
   List<Object?> get props => [
+        ...super.props,
         callId,
         number,
         jsep,
