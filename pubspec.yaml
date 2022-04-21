@@ -51,6 +51,8 @@ dependencies:
     path: ./packages/webtrit_api
   webtrit_signaling:
     path: ./packages/webtrit_signaling
+  webtrit_callkeep:
+    path: ./packages/webtrit_callkeep
 
 dev_dependencies:
   flutter_test:

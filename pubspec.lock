@@ -1209,6 +1209,13 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
+  webtrit_callkeep:
+    dependency: "direct main"
+    description:
+      path: "packages/webtrit_callkeep"
+      relative: true
+    source: path
+    version: "0.0.1"
   webtrit_signaling:
     dependency: "direct main"
     description:
@@ -1273,5 +1280,5 @@ packages:
     source: hosted
     version: "3.1.0"
 sdks:
-  dart: ">=2.16.0 <3.0.0"
+  dart: ">=2.16.2 <3.0.0"
   flutter: ">=2.10.0"
