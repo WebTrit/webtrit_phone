@@ -48,15 +48,18 @@ class LineState extends Equatable {
 
 class StateEvent extends Event {
   const StateEvent({
+    required this.timestamp,
     required this.registrationState,
     required this.lineStates,
   }) : super();
 
+  final int timestamp;
   final RegistrationState registrationState;
   final List<LineState> lineStates;
 
   @override
   List<Object?> get props => [
+        timestamp,
         registrationState,
         lineStates,
       ];

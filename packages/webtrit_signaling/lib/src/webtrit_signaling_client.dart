@@ -297,6 +297,7 @@ class WebtritSignalingClient {
                 ))
             .toList();
         return StateEvent(
+          timestamp: eventMessage['timestamp'],
           registrationState: registrationState,
           lineStates: lineStates,
         );
