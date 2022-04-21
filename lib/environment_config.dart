@@ -8,6 +8,11 @@ class EnvironmentConfig {
     defaultValue: 'INFO',
   );
 
+  static const DATABASE_LOG_STATEMENTS = bool.fromEnvironment(
+    'WEBTRIT_PHONE_DATABASE_LOG_STATEMENTS',
+    defaultValue: false,
+  );
+
   static const PERIODIC_POLLING = bool.fromEnvironment(
     'WEBTRIT_PHONE_PERIODIC_POLLING',
     defaultValue: true,

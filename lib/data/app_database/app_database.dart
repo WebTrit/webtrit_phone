@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:drift/isolate.dart';
-import 'package:flutter/foundation.dart';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/contacts/models/models.dart';
 
@@ -32,7 +32,7 @@ class AppDatabase extends _$AppDatabase {
       () => DatabaseConnection.fromExecutor(
         NativeDatabase(
           File(databasePath),
-          logStatements: kDebugMode,
+          logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
         ),
       ),
     );
