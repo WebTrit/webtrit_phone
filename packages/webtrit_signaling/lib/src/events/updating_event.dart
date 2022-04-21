@@ -8,4 +8,18 @@ class UpdatingEvent extends CallEvent {
           line: line,
           callId: callId,
         );
+
+  static const event = 'updating';
+
+  factory UpdatingEvent.fromJson(Map<String, dynamic> json) {
+    final eventValue = json['event'];
+    if (eventValue != event) {
+      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    }
+
+    return UpdatingEvent(
+      line: json['line'],
+      callId: json['call_id'],
+    );
+  }
 }

@@ -22,4 +22,21 @@ class TransferEvent extends LineEvent {
         referredBy,
         replaceCallId,
       ];
+
+  static const event = 'transfer';
+
+  factory TransferEvent.fromJson(Map<String, dynamic> json) {
+    final eventValue = json['event'];
+    if (eventValue != event) {
+      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    }
+
+    return TransferEvent(
+      line: json['line'],
+      referId: json['refer_id'],
+      referTo: json['refer_to'],
+      referredBy: json['referred_by'],
+      replaceCallId: json['replace_call_id'],
+    );
+  }
 }

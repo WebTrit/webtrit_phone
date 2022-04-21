@@ -23,4 +23,21 @@ class AnsweredEvent extends CallEvent {
         isFocus,
         jsep,
       ];
+
+  static const event = 'answered';
+
+  factory AnsweredEvent.fromJson(Map<String, dynamic> json) {
+    final eventValue = json['event'];
+    if (eventValue != event) {
+      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    }
+
+    return AnsweredEvent(
+      line: json['line'],
+      callId: json['call_id'],
+      callee: json['callee'],
+      isFocus: json['is_focus'],
+      jsep: json['jsep'],
+    );
+  }
 }

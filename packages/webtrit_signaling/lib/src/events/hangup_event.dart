@@ -20,4 +20,20 @@ class HangupEvent extends CallEvent {
         code,
         reason,
       ];
+
+  static const event = 'hangup';
+
+  factory HangupEvent.fromJson(Map<String, dynamic> json) {
+    final eventValue = json['event'];
+    if (eventValue != event) {
+      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    }
+
+    return HangupEvent(
+      line: json['line'],
+      callId: json['call_id'],
+      code: json['code'],
+      reason: json['reason'],
+    );
+  }
 }

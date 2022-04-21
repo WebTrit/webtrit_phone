@@ -102,7 +102,7 @@ class WebtritSignalingClient {
   //
 
   Future<void> execute(Request request) async {
-    final requestMessage = _toMap(request);
+    final requestMessage = request.toJson();
     await _execute(requestMessage);
   }
 
@@ -213,268 +213,77 @@ class WebtritSignalingClient {
 
   //
 
-  Map<String, dynamic> _toMap(Request request) {
-    if (request is TrickleRequest) {
-      return <String, dynamic>{
-        'request': 'trickle',
-        'line': request.line,
-        'candidate': request.candidate,
-      };
-    } else if (request is CallRequest) {
-      return <String, dynamic>{
-        'request': 'call',
-        'line': request.line,
-        if (request.callId != null) 'call_id': request.callId,
-        'number': request.number,
-        'jsep': request.jsep,
-      };
-    } else if (request is AcceptRequest) {
-      return <String, dynamic>{
-        'request': 'accept',
-        'line': request.line,
-        'jsep': request.jsep,
-      };
-    } else if (request is UpdateRequest) {
-      return <String, dynamic>{
-        'request': 'update',
-        'line': request.line,
-        'jsep': request.jsep,
-      };
-    } else if (request is DeclineRequest) {
-      return <String, dynamic>{
-        'request': 'decline',
-        'line': request.line,
-      };
-    } else if (request is HangupRequest) {
-      return <String, dynamic>{
-        'request': 'hangup',
-        'line': request.line,
-      };
-    } else if (request is TransferRequest) {
-      return <String, dynamic>{
-        'request': 'transfer',
-        'line': request.line,
-        'number': request.number,
-        if (request.replaceCallId != null) 'replace_call_id': request.replaceCallId,
-      };
-    } else if (request is HoldRequest) {
-      final direction = request.direction;
-      return <String, dynamic>{
-        'request': 'hold',
-        'line': request.line,
-        if (direction != null) 'direction': direction.name,
-      };
-    } else if (request is UnholdRequest) {
-      return <String, dynamic>{
-        'request': 'unhold',
-        'line': request.line,
-      };
-    } else {
-      throw ArgumentError();
-    }
-  }
-
-  //
-
   Event _toEvent(Map<String, dynamic> eventMessage) {
     switch (eventMessage['event']) {
-      case 'state':
+      case StateEvent.event:
         final keepaliveInterval = Duration(milliseconds: eventMessage['keepalive_interval'] as int);
         _keepaliveInterval = keepaliveInterval;
 
         _restartKeepaliveTimer();
 
-        final registrationStateMessage = eventMessage['registration_state'];
-        final registrationState = RegistrationState(
-          status: RegistrationStatus.values.byName(registrationStateMessage['status']),
-          code: registrationStateMessage['code'],
-          reason: registrationStateMessage['reason'],
-        );
-        final lineStatesMessage = eventMessage['line_states'] as List<dynamic>;
-        final lineStates = lineStatesMessage
-            .map((lineStateMessage) => LineState(
-                  status: CallStatus.values.byName(lineStateMessage['status']),
-                ))
-            .toList();
-        return StateEvent(
-          timestamp: eventMessage['timestamp'],
-          registrationState: registrationState,
-          lineStates: lineStates,
-        );
-      case 'registering':
-        return RegisteringEvent();
-      case 'registered':
-        return RegisteredEvent();
-      case 'registration_failed':
-        return RegistrationFailedEvent(
-          code: eventMessage['code'],
-          reason: eventMessage['reason'],
-        );
-      case 'unregistering':
-        return UnregisteringEvent();
-      case 'unregistered':
-        return UnregisteredEvent();
-      case 'calling':
-        return CallingEvent(
-          line: eventMessage['line'],
-          callId: eventMessage['call_id'],
-        );
-      case 'ringing':
-        return RingingEvent(
-          line: eventMessage['line'],
-          callId: eventMessage['call_id'],
-        );
-      case 'proceeding':
-        return ProceedingEvent(
-          line: eventMessage['line'],
-          callId: eventMessage['call_id'],
-          code: eventMessage['code'],
-        );
-      case 'progress':
-        return ProgressEvent(
-          line: eventMessage['line'],
-          callId: eventMessage['call_id'],
-          callee: eventMessage['callee'],
-          isFocus: eventMessage['is_focus'],
-          jsep: eventMessage['jsep'],
-        );
-      case 'answered':
-        return AnsweredEvent(
-          line: eventMessage['line'],
-          callId: eventMessage['call_id'],
-          callee: eventMessage['callee'],
-          isFocus: eventMessage['is_focus'],
-          jsep: eventMessage['jsep'],
-        );
-      case 'accepting':
-        return AcceptingEvent(
-          line: eventMessage['line'],
-          callId: eventMessage['call_id'],
-        );
-      case 'accepted':
-        return AcceptedEvent(
-          line: eventMessage['line'],
-          callId: eventMessage['call_id'],
-        );
-      case 'incoming_call':
-        return IncomingCallEvent(
-          line: eventMessage['line'],
-          callId: eventMessage['call_id'] as String,
-          callee: eventMessage['callee'],
-          caller: eventMessage['caller'],
-          callerDisplayName: eventMessage['caller_display_name'],
-          replaceCallId: eventMessage['replace_call_id'],
-          isFocus: eventMessage['is_focus'],
-          jsep: eventMessage['jsep'],
-        );
-      case 'updating_call':
-        return UpdatingCallEvent(
-          line: eventMessage['line'],
-          callId: eventMessage['call_id'],
-          callee: eventMessage['callee'],
-          caller: eventMessage['caller'],
-          callerDisplayName: eventMessage['caller_display_name'],
-          replaceCallId: eventMessage['replace_call_id'],
-          isFocus: eventMessage['is_focus'],
-          jsep: eventMessage['jsep'],
-        );
-      case 'missed_call':
-        return MissedCallEvent(
-          line: eventMessage['line'],
-          callId: eventMessage['call_id'],
-          callee: eventMessage['callee'],
-          caller: eventMessage['caller'],
-          callerDisplayName: eventMessage['caller_display_name'],
-        );
-      case 'hangingup':
-        return HangingupEvent(
-          line: eventMessage['line'],
-          callId: eventMessage['call_id'],
-        );
-      case 'hangup':
-        return HangupEvent(
-          line: eventMessage['line'],
-          callId: eventMessage['call_id'],
-          code: eventMessage['code'],
-          reason: eventMessage['reason'],
-        );
-      case 'declining':
-        return DecliningEvent(
-          line: eventMessage['line'],
-          callId: eventMessage['call_id'],
-          code: eventMessage['code'],
-          referId: eventMessage['refer_id'],
-        );
-      case 'updating':
-        return UpdatingEvent(
-          line: eventMessage['line'],
-          callId: eventMessage['call_id'],
-        );
-      case 'updated':
-        return UpdatedEvent(
-          line: eventMessage['line'],
-          callId: eventMessage['call_id'],
-        );
-      case 'transferring':
-        return TransferringEvent(
-          line: eventMessage['line'],
-          callId: eventMessage['call_id'],
-        );
-      case 'transfer':
-        return TransferEvent(
-          line: eventMessage['line'],
-          referId: eventMessage['refer_id'],
-          referTo: eventMessage['refer_to'],
-          referredBy: eventMessage['referred_by'],
-          replaceCallId: eventMessage['replace_call_id'],
-        );
-      case 'holding':
-        return HoldingEvent(
-          line: eventMessage['line'],
-          callId: eventMessage['call_id'],
-        );
-      case 'resuming':
-        return ResumingEvent(
-          line: eventMessage['line'],
-          callId: eventMessage['call_id'],
-        );
-      case 'ice_webrtcup':
-        return IceWebrtcUpEvent(
-          line: eventMessage['line'],
-        );
-      case 'ice_media':
-        return IceMediaEvent(
-          line: eventMessage['line'],
-          type: IceMediaType.values.byName(eventMessage['type']),
-          receiving: eventMessage['receiving'],
-        );
-      case 'ice_slowlink':
-        return IceSlowLinkEvent(
-          line: eventMessage['line'],
-          media: IceMediaType.values.byName(eventMessage['media']),
-          uplink: eventMessage['uplink'],
-          lost: eventMessage['lost'],
-        );
-      case 'ice_hangup':
-        return IceHangupEvent(
-          line: eventMessage['line'],
-          reason: eventMessage['reason'],
-        );
-      case 'call_error':
-        return CallErrorEvent(
-          line: eventMessage['line'],
-          callId: eventMessage['call_id'],
-          code: eventMessage['code'],
-          description: eventMessage['description'],
-        );
-      case 'error':
-        return ErrorEvent(
-          line: eventMessage['line'],
-          code: eventMessage['code'],
-          description: eventMessage['description'],
-        );
+        return StateEvent.fromJson(eventMessage);
+      case RegisteringEvent.event:
+        return RegisteringEvent.fromJson(eventMessage);
+      case RegisteredEvent.event:
+        return RegisteredEvent.fromJson(eventMessage);
+      case RegistrationFailedEvent.event:
+        return RegistrationFailedEvent.fromJson(eventMessage);
+      case UnregisteringEvent.event:
+        return UnregisteringEvent.fromJson(eventMessage);
+      case UnregisteredEvent.event:
+        return UnregisteredEvent.fromJson(eventMessage);
+      case CallingEvent.event:
+        return CallingEvent.fromJson(eventMessage);
+      case RingingEvent.event:
+        return RingingEvent.fromJson(eventMessage);
+      case ProceedingEvent.event:
+        return ProceedingEvent.fromJson(eventMessage);
+      case ProgressEvent.event:
+        return ProgressEvent.fromJson(eventMessage);
+      case AnsweredEvent.event:
+        return AnsweredEvent.fromJson(eventMessage);
+      case AcceptingEvent.event:
+        return AcceptingEvent.fromJson(eventMessage);
+      case AcceptedEvent.event:
+        return AcceptedEvent.fromJson(eventMessage);
+      case IncomingCallEvent.event:
+        return IncomingCallEvent.fromJson(eventMessage);
+      case UpdatingCallEvent.event:
+        return UpdatingCallEvent.fromJson(eventMessage);
+      case MissedCallEvent.event:
+        return MissedCallEvent.fromJson(eventMessage);
+      case HangingupEvent.event:
+        return HangingupEvent.fromJson(eventMessage);
+      case HangupEvent.event:
+        return HangupEvent.fromJson(eventMessage);
+      case DecliningEvent.event:
+        return DecliningEvent.fromJson(eventMessage);
+      case UpdatingEvent.event:
+        return UpdatingEvent.fromJson(eventMessage);
+      case UpdatedEvent.event:
+        return UpdatedEvent.fromJson(eventMessage);
+      case TransferringEvent.event:
+        return TransferringEvent.fromJson(eventMessage);
+      case TransferEvent.event:
+        return TransferEvent.fromJson(eventMessage);
+      case HoldingEvent.event:
+        return HoldingEvent.fromJson(eventMessage);
+      case ResumingEvent.event:
+        return ResumingEvent.fromJson(eventMessage);
+      case IceWebrtcUpEvent.event:
+        return IceWebrtcUpEvent.fromJson(eventMessage);
+      case IceMediaEvent.event:
+        return IceMediaEvent.fromJson(eventMessage);
+      case IceSlowLinkEvent.event:
+        return IceSlowLinkEvent.fromJson(eventMessage);
+      case IceHangupEvent.event:
+        return IceHangupEvent.fromJson(eventMessage);
+      case CallErrorEvent.event:
+        return CallErrorEvent.fromJson(eventMessage);
+      case ErrorEvent.event:
+        return ErrorEvent.fromJson(eventMessage);
       default:
-        throw ArgumentError();
+        throw ArgumentError.value(eventMessage, "eventMessage", "Unknown event message");
     }
   }
 }

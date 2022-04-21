@@ -17,4 +17,19 @@ class ProceedingEvent extends CallEvent {
         ...super.props,
         code,
       ];
+
+  static const event = 'proceeding';
+
+  factory ProceedingEvent.fromJson(Map<String, dynamic> json) {
+    final eventValue = json['event'];
+    if (eventValue != event) {
+      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    }
+
+    return ProceedingEvent(
+      line: json['line'],
+      callId: json['call_id'],
+      code: json['code'],
+    );
+  }
 }

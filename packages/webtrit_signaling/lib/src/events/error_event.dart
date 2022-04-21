@@ -16,4 +16,19 @@ class ErrorEvent extends LineEvent {
         code,
         description,
       ];
+
+  static const event = 'error';
+
+  factory ErrorEvent.fromJson(Map<String, dynamic> json) {
+    final eventValue = json['event'];
+    if (eventValue != event) {
+      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    }
+
+    return ErrorEvent(
+      line: json['line'],
+      code: json['code'],
+      description: json['description'],
+    );
+  }
 }

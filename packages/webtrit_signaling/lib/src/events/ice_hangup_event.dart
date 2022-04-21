@@ -13,4 +13,18 @@ class IceHangupEvent extends LineEvent {
         ...super.props,
         reason,
       ];
+
+  static const event = 'ice_hangup';
+
+  factory IceHangupEvent.fromJson(Map<String, dynamic> json) {
+    final eventValue = json['event'];
+    if (eventValue != event) {
+      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    }
+
+    return IceHangupEvent(
+      line: json['line'],
+      reason: json['reason'],
+    );
+  }
 }

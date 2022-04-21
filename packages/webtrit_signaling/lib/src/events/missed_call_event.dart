@@ -23,4 +23,21 @@ class MissedCallEvent extends CallEvent {
         caller,
         callerDisplayName,
       ];
+
+  static const event = 'missed_call';
+
+  factory MissedCallEvent.fromJson(Map<String, dynamic> json) {
+    final eventValue = json['event'];
+    if (eventValue != event) {
+      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    }
+
+    return MissedCallEvent(
+      line: json['line'],
+      callId: json['call_id'],
+      callee: json['callee'],
+      caller: json['caller'],
+      callerDisplayName: json['caller_display_name'],
+    );
+  }
 }

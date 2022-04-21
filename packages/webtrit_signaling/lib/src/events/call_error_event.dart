@@ -20,4 +20,20 @@ class CallErrorEvent extends CallEvent {
         code,
         description,
       ];
+
+  static const event = 'call_error';
+
+  factory CallErrorEvent.fromJson(Map<String, dynamic> json) {
+    final eventValue = json['event'];
+    if (eventValue != event) {
+      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    }
+
+    return CallErrorEvent(
+      line: json['line'],
+      callId: json['call_id'],
+      code: json['code'],
+      description: json['description'],
+    );
+  }
 }

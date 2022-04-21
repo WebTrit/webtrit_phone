@@ -8,4 +8,18 @@ class CallingEvent extends CallEvent {
           line: line,
           callId: callId,
         );
+
+  static const event = 'calling';
+
+  factory CallingEvent.fromJson(Map<String, dynamic> json) {
+    final eventValue = json['event'];
+    if (eventValue != event) {
+      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    }
+
+    return CallingEvent(
+      line: json['line'],
+      callId: json['call_id'],
+    );
+  }
 }

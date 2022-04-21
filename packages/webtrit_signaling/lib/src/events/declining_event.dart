@@ -20,4 +20,20 @@ class DecliningEvent extends CallEvent {
         code,
         referId,
       ];
+
+  static const event = 'declining';
+
+  factory DecliningEvent.fromJson(Map<String, dynamic> json) {
+    final eventValue = json['event'];
+    if (eventValue != event) {
+      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    }
+
+    return DecliningEvent(
+      line: json['line'],
+      callId: json['call_id'],
+      code: json['code'],
+      referId: json['refer_id'],
+    );
+  }
 }

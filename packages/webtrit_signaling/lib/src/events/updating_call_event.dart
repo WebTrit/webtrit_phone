@@ -32,4 +32,24 @@ class UpdatingCallEvent extends CallEvent {
         isFocus,
         jsep,
       ];
+
+  static const event = 'updating_call';
+
+  factory UpdatingCallEvent.fromJson(Map<String, dynamic> json) {
+    final eventValue = json['event'];
+    if (eventValue != event) {
+      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    }
+
+    return UpdatingCallEvent(
+      line: json['line'],
+      callId: json['call_id'],
+      callee: json['callee'],
+      caller: json['caller'],
+      callerDisplayName: json['caller_display_name'],
+      replaceCallId: json['replace_call_id'],
+      isFocus: json['is_focus'],
+      jsep: json['jsep'],
+    );
+  }
 }

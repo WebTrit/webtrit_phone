@@ -17,4 +17,19 @@ class IceMediaEvent extends LineEvent {
         type,
         receiving,
       ];
+
+  static const event = 'ice_media';
+
+  factory IceMediaEvent.fromJson(Map<String, dynamic> json) {
+    final eventValue = json['event'];
+    if (eventValue != event) {
+      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    }
+
+    return IceMediaEvent(
+      line: json['line'],
+      type: IceMediaType.values.byName(json['type']),
+      receiving: json['receiving'],
+    );
+  }
 }

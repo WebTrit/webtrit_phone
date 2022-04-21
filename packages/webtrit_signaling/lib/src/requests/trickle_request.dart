@@ -13,4 +13,27 @@ class TrickleRequest extends LineRequest {
         ...super.props,
         candidate,
       ];
+
+  static const request = 'trickle';
+
+  factory TrickleRequest.fromJson(Map<String, dynamic> json) {
+    final requestValue = json['request'];
+    if (requestValue != request) {
+      throw ArgumentError.value(requestValue, "request", "Not equal $request");
+    }
+
+    return TrickleRequest(
+      line: json['line'],
+      candidate: json['candidate'],
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'request': request,
+      'line': line,
+      'candidate': candidate,
+    };
+  }
 }

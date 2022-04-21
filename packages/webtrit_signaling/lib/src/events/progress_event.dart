@@ -23,4 +23,21 @@ class ProgressEvent extends CallEvent {
         isFocus,
         jsep,
       ];
+
+  static const event = 'progress';
+
+  factory ProgressEvent.fromJson(Map<String, dynamic> json) {
+    final eventValue = json['event'];
+    if (eventValue != event) {
+      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    }
+
+    return ProgressEvent(
+      line: json['line'],
+      callId: json['call_id'],
+      callee: json['callee'],
+      isFocus: json['is_focus'],
+      jsep: json['jsep'],
+    );
+  }
 }

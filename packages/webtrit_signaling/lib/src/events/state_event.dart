@@ -63,4 +63,31 @@ class StateEvent extends Event {
         registrationState,
         lineStates,
       ];
+
+  static const event = 'state';
+
+  factory StateEvent.fromJson(Map<String, dynamic> json) {
+    final eventValue = json['event'];
+    if (eventValue != event) {
+      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    }
+
+    final registrationStateMessage = json['registration_state'];
+    final registrationState = RegistrationState(
+      status: RegistrationStatus.values.byName(registrationStateMessage['status']),
+      code: registrationStateMessage['code'],
+      reason: registrationStateMessage['reason'],
+    );
+    final lineStatesMessage = json['line_states'] as List<dynamic>;
+    final lineStates = lineStatesMessage
+        .map((lineStateMessage) => LineState(
+              status: CallStatus.values.byName(lineStateMessage['status']),
+            ))
+        .toList();
+    return StateEvent(
+      timestamp: json['timestamp'],
+      registrationState: registrationState,
+      lineStates: lineStates,
+    );
+  }
 }

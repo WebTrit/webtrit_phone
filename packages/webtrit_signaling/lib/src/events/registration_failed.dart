@@ -14,4 +14,18 @@ class RegistrationFailedEvent extends Event {
         code,
         reason,
       ];
+
+  static const event = 'registration_failed';
+
+  factory RegistrationFailedEvent.fromJson(Map<String, dynamic> json) {
+    final eventValue = json['event'];
+    if (eventValue != event) {
+      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    }
+
+    return RegistrationFailedEvent(
+      code: json['code'],
+      reason: json['reason'],
+    );
+  }
 }
