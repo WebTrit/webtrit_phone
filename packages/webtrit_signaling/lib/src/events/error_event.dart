@@ -1,7 +1,7 @@
 import 'line_event.dart';
 
-class ErrorLineEvent extends LineEvent {
-  const ErrorLineEvent({
+class ErrorEvent extends LineEvent {
+  const ErrorEvent({
     required int line,
     required this.code,
     required this.description,

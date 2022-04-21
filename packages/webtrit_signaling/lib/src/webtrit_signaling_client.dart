@@ -460,23 +460,19 @@ class WebtritSignalingClient {
           line: eventMessage['line'],
           reason: eventMessage['reason'],
         );
+      case 'call_error':
+        return CallErrorEvent(
+          line: eventMessage['line'],
+          callId: eventMessage['call_id'],
+          code: eventMessage['code'],
+          description: eventMessage['description'],
+        );
       case 'error':
-        final line = eventMessage['line'];
-        final callId = eventMessage['call_id'];
-        if (callId != null) {
-          return CallErrorEvent(
-            line: line,
-            callId: callId,
-            code: eventMessage['code'],
-            description: eventMessage['description'],
-          );
-        } else {
-          return ErrorLineEvent(
-            line: line,
-            code: eventMessage['code'],
-            description: eventMessage['description'],
-          );
-        }
+        return ErrorEvent(
+          line: eventMessage['line'],
+          code: eventMessage['code'],
+          description: eventMessage['description'],
+        );
       default:
         throw ArgumentError();
     }
