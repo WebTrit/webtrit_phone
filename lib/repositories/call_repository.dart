@@ -81,20 +81,20 @@ class CallRepository {
   Stream<DoneEvent> get onDone => _doneStreamController!.stream;
 
   Future<void> sendTrickle(Map<String, dynamic>? candidate) async {
-    await _signalingClient!.execute(TrickleCommand(line: 0, candidate: candidate));
+    await _signalingClient!.execute(TrickleRequest(line: 0, candidate: candidate));
   }
 
   Future<void> call(String? username, Map<String, dynamic> jsepData) async {
     // TODO rename username to number
-    await _signalingClient!.execute(CallCommand(line: 0, number: username!, jsep: jsepData));
+    await _signalingClient!.execute(CallRequest(line: 0, number: username!, jsep: jsepData));
   }
 
   Future<void> accept(Map<String, dynamic> jsepData) async {
-    await _signalingClient!.execute(AcceptCommand(line: 0, jsep: jsepData));
+    await _signalingClient!.execute(AcceptRequest(line: 0, jsep: jsepData));
   }
 
   Future<void> hangup() {
-    return _signalingClient!.execute(const HangupCommand(line: 0));
+    return _signalingClient!.execute(const HangupRequest(line: 0));
   }
 
   void _onErrorCallback(error, [StackTrace? stackTrace]) {

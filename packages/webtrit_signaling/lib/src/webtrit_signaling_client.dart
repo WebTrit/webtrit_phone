@@ -4,9 +4,9 @@ import 'dart:io';
 
 import 'package:logging/logging.dart';
 
-import 'commands/commands.dart';
 import 'events/events.dart';
 import 'exceptions.dart';
+import 'requests/requests.dart';
 import 'transaction.dart';
 
 class WebtritSignalingClient {
@@ -101,8 +101,8 @@ class WebtritSignalingClient {
 
   //
 
-  Future<void> execute(Command command) async {
-    final requestMessage = _toMap(command);
+  Future<void> execute(Request request) async {
+    final requestMessage = _toMap(request);
     await _execute(requestMessage);
   }
 
@@ -213,61 +213,61 @@ class WebtritSignalingClient {
 
   //
 
-  Map<String, dynamic> _toMap(Command command) {
-    if (command is TrickleCommand) {
+  Map<String, dynamic> _toMap(Request request) {
+    if (request is TrickleRequest) {
       return <String, dynamic>{
         'request': 'trickle',
-        'line': command.line,
-        'candidate': command.candidate,
+        'line': request.line,
+        'candidate': request.candidate,
       };
-    } else if (command is CallCommand) {
+    } else if (request is CallRequest) {
       return <String, dynamic>{
         'request': 'call',
-        'line': command.line,
-        if (command.callId != null) 'call_id': command.callId,
-        'number': command.number,
-        'jsep': command.jsep,
+        'line': request.line,
+        if (request.callId != null) 'call_id': request.callId,
+        'number': request.number,
+        'jsep': request.jsep,
       };
-    } else if (command is AcceptCommand) {
+    } else if (request is AcceptRequest) {
       return <String, dynamic>{
         'request': 'accept',
-        'line': command.line,
-        'jsep': command.jsep,
+        'line': request.line,
+        'jsep': request.jsep,
       };
-    } else if (command is UpdateCommand) {
+    } else if (request is UpdateRequest) {
       return <String, dynamic>{
         'request': 'update',
-        'line': command.line,
-        'jsep': command.jsep,
+        'line': request.line,
+        'jsep': request.jsep,
       };
-    } else if (command is DeclineCommand) {
+    } else if (request is DeclineRequest) {
       return <String, dynamic>{
         'request': 'decline',
-        'line': command.line,
+        'line': request.line,
       };
-    } else if (command is HangupCommand) {
+    } else if (request is HangupRequest) {
       return <String, dynamic>{
         'request': 'hangup',
-        'line': command.line,
+        'line': request.line,
       };
-    } else if (command is TransferCommand) {
+    } else if (request is TransferRequest) {
       return <String, dynamic>{
         'request': 'transfer',
-        'line': command.line,
-        'number': command.number,
-        if (command.replaceCallId != null) 'replace_call_id': command.replaceCallId,
+        'line': request.line,
+        'number': request.number,
+        if (request.replaceCallId != null) 'replace_call_id': request.replaceCallId,
       };
-    } else if (command is HoldCommand) {
-      final direction = command.direction;
+    } else if (request is HoldRequest) {
+      final direction = request.direction;
       return <String, dynamic>{
         'request': 'hold',
-        'line': command.line,
+        'line': request.line,
         if (direction != null) 'direction': direction.name,
       };
-    } else if (command is UnholdCommand) {
+    } else if (request is UnholdRequest) {
       return <String, dynamic>{
         'request': 'unhold',
-        'line': command.line,
+        'line': request.line,
       };
     } else {
       throw ArgumentError();

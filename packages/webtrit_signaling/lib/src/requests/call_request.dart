@@ -1,7 +1,7 @@
-import 'line_command.dart';
+import 'line_request.dart';
 
-class CallCommand extends LineCommand {
-  const CallCommand({
+class CallRequest extends LineRequest {
+  const CallRequest({
     required int line,
     this.callId,
     required this.number,

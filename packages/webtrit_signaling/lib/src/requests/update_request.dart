@@ -1,7 +1,7 @@
-import 'line_command.dart';
+import 'line_request.dart';
 
-class UpdateCommand extends LineCommand {
-  const UpdateCommand({
+class UpdateRequest extends LineRequest {
+  const UpdateRequest({
     required int line,
     required this.jsep,
   }) : super(line: line);

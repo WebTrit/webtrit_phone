@@ -1,4 +1,4 @@
-import 'line_command.dart';
+import 'line_request.dart';
 
 enum HoldDirection {
   sendonly,
@@ -6,8 +6,8 @@ enum HoldDirection {
   inactive,
 }
 
-class HoldCommand extends LineCommand {
-  const HoldCommand({
+class HoldRequest extends LineRequest {
+  const HoldRequest({
     required int line,
     this.direction,
   }) : super(line: line);

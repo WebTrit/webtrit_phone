@@ -1,7 +1,7 @@
-import 'line_command.dart';
+import 'line_request.dart';
 
-class TrickleCommand extends LineCommand {
-  const TrickleCommand({
+class TrickleRequest extends LineRequest {
+  const TrickleRequest({
     required int line,
     this.candidate,
   }) : super(line: line);

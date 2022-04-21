@@ -1,7 +1,7 @@
-import 'line_command.dart';
+import 'line_request.dart';
 
-class AcceptCommand extends LineCommand {
-  const AcceptCommand({
+class AcceptRequest extends LineRequest {
+  const AcceptRequest({
     required int line,
     required this.jsep,
   }) : super(line: line);

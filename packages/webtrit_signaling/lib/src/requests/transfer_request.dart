@@ -1,7 +1,7 @@
-import 'line_command.dart';
+import 'line_request.dart';
 
-class TransferCommand extends LineCommand {
-  const TransferCommand({
+class TransferRequest extends LineRequest {
+  const TransferRequest({
     required int line,
     required this.number,
     this.replaceCallId,

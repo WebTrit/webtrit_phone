@@ -1,7 +1,7 @@
-import 'command.dart';
+import 'request.dart';
 
-abstract class LineCommand extends Command {
-  const LineCommand({
+abstract class LineRequest extends Request {
+  const LineRequest({
     required this.line,
   }) : super();
 
