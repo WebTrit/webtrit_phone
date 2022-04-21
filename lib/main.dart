@@ -68,6 +68,7 @@ void main() {
           RepositoryProvider<AccountInfoRepository>(
             create: (context) => AccountInfoRepository(
               webtritApiClient: context.read<WebtritApiClient>(),
+              periodicPolling: EnvironmentConfig.PERIODIC_POLLING,
             ),
           ),
         ],
