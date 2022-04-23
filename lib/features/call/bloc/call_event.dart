@@ -16,19 +16,21 @@ class CallDetached extends CallEvent {
 }
 
 class CallIncomingReceived extends CallEvent {
+  final String callId;
   final String username;
   final Map<String, dynamic>? jsepData;
 
   const CallIncomingReceived({
+    required this.callId,
     required this.username,
     this.jsepData,
   });
 
   @override
-  List<Object?> get props => [username, jsepData];
+  List<Object?> get props => [callId, username, jsepData];
 
   @override
-  String toString() => '$runtimeType { username: $username, with jsep: ${jsepData != null} }';
+  String toString() => '$runtimeType { callId: $callId, username: $username, with jsep: ${jsepData != null} }';
 }
 
 class CallIncomingAccepted extends CallEvent {

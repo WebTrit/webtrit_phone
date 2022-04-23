@@ -121,7 +121,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
       await callRepository.attach();
 
       _onIncomingCallSubscription = callRepository.onIncomingCall.listen((event) {
-        add(CallIncomingReceived(username: event.caller, jsepData: event.jsep));
+        add(CallIncomingReceived(callId: event.callId, username: event.caller, jsepData: event.jsep));
       });
       _onAcceptedSubscription = callRepository.onAccepted.listen((event) {
         add(CallOutgoingAccepted(username: event.callee, jsepData: event.jsep));
@@ -163,6 +163,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     _audioPlayer.play();
 
     emit(CallIncoming(
+      callId: event.callId,
       number: event.username,
       video: true,
       createdTime: DateTime.now(),
@@ -190,7 +191,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     final localDescription = await _peerConnection!.createAnswer({});
     _peerConnection!.setLocalDescription(localDescription);
 
-    await callRepository.accept(localDescription.toMap());
+    await callRepository.accept((state as CallActive).callId, localDescription.toMap());
   }
 
   Future<void> _onOutgoingStarted(
@@ -202,7 +203,8 @@ class CallBloc extends Bloc<CallEvent, CallState> {
       return;
     }
 
-    emit(CallOutgoing(number: event.number, video: event.video, createdTime: DateTime.now()));
+    final callId = callRepository.generateCallId();
+    emit(CallOutgoing(callId: callId, number: event.number, video: event.video, createdTime: DateTime.now()));
 
     _localStream = await _getUserMedia(video: event.video);
 
@@ -215,7 +217,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     _peerConnection!.setLocalDescription(localDescription);
 
     try {
-      await callRepository.call(event.number, localDescription.toMap());
+      await callRepository.call((state as CallActive).callId, event.number, localDescription.toMap());
 
       await _audioPlayer.setAsset(Assets.ringtones.outgoingCall1);
       await _audioPlayer.setLoopMode(LoopMode.one);
@@ -290,7 +292,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
 
     emit((state as CallActive).copyWith(hungUpTime: DateTime.now()));
 
-    await callRepository.hangup();
+    await callRepository.hangup((state as CallActive).callId);
 
     await _peerConnection?.close();
     _peerConnection = null;
@@ -386,7 +388,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
         logger.fine(() => 'onIceGatheringState state: $state');
 
         if (state == RTCIceGatheringState.RTCIceGatheringStateComplete) {
-          callRepository.sendTrickle(null);
+          callRepository.sendTrickle((state as CallActive).callId, null);
         }
       }
       ..onIceConnectionState = (state) {
@@ -395,7 +397,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
       ..onIceCandidate = (candidate) {
         logger.fine(() => 'onIceCandidate candidate: $candidate');
 
-        callRepository.sendTrickle(candidate.toMap());
+        callRepository.sendTrickle((state as CallActive).callId, candidate.toMap());
       }
       ..onAddStream = (stream) {
         logger.fine(() => 'onAddStream stream: $stream');

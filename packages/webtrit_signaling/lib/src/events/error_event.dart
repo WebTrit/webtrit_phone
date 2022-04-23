@@ -1,20 +1,21 @@
-import 'line_event.dart';
+import 'event.dart';
 
-class ErrorEvent extends LineEvent {
+class ErrorEvent extends Event {
   const ErrorEvent({
-    required int line,
     required this.code,
     required this.description,
-  }) : super(line: line);
+    this.callId,
+  }) : super();
 
   final int code;
   final String description;
+  final String? callId;
 
   @override
   List<Object?> get props => [
-        ...super.props,
         code,
         description,
+        callId,
       ];
 
   static const event = 'error';
@@ -26,9 +27,9 @@ class ErrorEvent extends LineEvent {
     }
 
     return ErrorEvent(
-      line: json['line'],
       code: json['code'],
       description: json['description'],
+      callId: json['call_id'],
     );
   }
 }

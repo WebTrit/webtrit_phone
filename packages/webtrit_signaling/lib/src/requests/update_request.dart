@@ -1,10 +1,10 @@
-import 'line_request.dart';
+import 'call_request.dart';
 
-class UpdateRequest extends LineRequest {
+class UpdateRequest extends CallRequest {
   const UpdateRequest({
-    required int line,
+    required String callId,
     required this.jsep,
-  }) : super(line: line);
+  }) : super(callId: callId);
 
   final Map<String, dynamic> jsep;
 
@@ -23,7 +23,7 @@ class UpdateRequest extends LineRequest {
     }
 
     return UpdateRequest(
-      line: json['line'],
+      callId: json['call_id'],
       jsep: json['jsep'],
     );
   }
@@ -32,7 +32,7 @@ class UpdateRequest extends LineRequest {
   Map<String, dynamic> toJson() {
     return {
       'request': request,
-      'line': line,
+      'call_id': callId,
       'jsep': jsep,
     };
   }

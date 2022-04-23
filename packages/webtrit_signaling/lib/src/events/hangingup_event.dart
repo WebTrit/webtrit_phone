@@ -2,12 +2,8 @@ import 'call_event.dart';
 
 class HangingupEvent extends CallEvent {
   const HangingupEvent({
-    required int line,
     required String callId,
-  }) : super(
-          line: line,
-          callId: callId,
-        );
+  }) : super(callId: callId);
 
   static const event = 'hangingup';
 
@@ -18,7 +14,6 @@ class HangingupEvent extends CallEvent {
     }
 
     return HangingupEvent(
-      line: json['line'],
       callId: json['call_id'],
     );
   }

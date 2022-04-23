@@ -2,12 +2,8 @@ import 'call_event.dart';
 
 class RingingEvent extends CallEvent {
   const RingingEvent({
-    required int line,
     required String callId,
-  }) : super(
-          line: line,
-          callId: callId,
-        );
+  }) : super(callId: callId);
 
   static const event = 'ringing';
 
@@ -18,7 +14,6 @@ class RingingEvent extends CallEvent {
     }
 
     return RingingEvent(
-      line: json['line'],
       callId: json['call_id'],
     );
   }

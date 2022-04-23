@@ -1,30 +1,34 @@
 import 'call_request.dart';
 
-class TrickleRequest extends CallRequest {
-  const TrickleRequest({
+class OutgoingCallRequest extends CallRequest {
+  const OutgoingCallRequest({
     required String callId,
-    this.candidate,
+    required this.number,
+    required this.jsep,
   }) : super(callId: callId);
 
-  final Map<String, dynamic>? candidate;
+  final String number;
+  final Map<String, dynamic> jsep;
 
   @override
   List<Object?> get props => [
         ...super.props,
-        candidate,
+        number,
+        jsep,
       ];
 
-  static const request = 'trickle';
+  static const request = 'outgoing_call';
 
-  factory TrickleRequest.fromJson(Map<String, dynamic> json) {
+  factory OutgoingCallRequest.fromJson(Map<String, dynamic> json) {
     final requestValue = json['request'];
     if (requestValue != request) {
       throw ArgumentError.value(requestValue, "request", "Not equal $request");
     }
 
-    return TrickleRequest(
+    return OutgoingCallRequest(
       callId: json['call_id'],
-      candidate: json['candidate'],
+      number: json['number'],
+      jsep: json['jsep'],
     );
   }
 
@@ -33,7 +37,8 @@ class TrickleRequest extends CallRequest {
     return {
       'request': request,
       'call_id': callId,
-      'candidate': candidate,
+      'number': number,
+      'jsep': jsep,
     };
   }
 }

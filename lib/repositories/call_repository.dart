@@ -26,6 +26,8 @@ class CallRepository {
     _createCounter++;
   }
 
+  String generateCallId() => WebtritSignalingClient.generateCallId();
+
   Future<void> attach() async {
     _incomingCallStreamController = StreamController.broadcast();
     _acceptedStreamController = StreamController.broadcast();
@@ -80,21 +82,21 @@ class CallRepository {
 
   Stream<DoneEvent> get onDone => _doneStreamController!.stream;
 
-  Future<void> sendTrickle(Map<String, dynamic>? candidate) async {
-    await _signalingClient!.execute(TrickleRequest(line: 0, candidate: candidate));
+  Future<void> sendTrickle(String callId, Map<String, dynamic>? candidate) async {
+    await _signalingClient!.execute(TrickleRequest(callId: callId, candidate: candidate));
   }
 
-  Future<void> call(String? username, Map<String, dynamic> jsepData) async {
+  Future<void> call(String callId, String? username, Map<String, dynamic> jsepData) async {
     // TODO rename username to number
-    await _signalingClient!.execute(CallRequest(line: 0, number: username!, jsep: jsepData));
+    await _signalingClient!.execute(OutgoingCallRequest(callId: callId, number: username!, jsep: jsepData));
   }
 
-  Future<void> accept(Map<String, dynamic> jsepData) async {
-    await _signalingClient!.execute(AcceptRequest(line: 0, jsep: jsepData));
+  Future<void> accept(String callId, Map<String, dynamic> jsepData) async {
+    await _signalingClient!.execute(AcceptRequest(callId: callId, jsep: jsepData));
   }
 
-  Future<void> hangup() {
-    return _signalingClient!.execute(const HangupRequest(line: 0));
+  Future<void> hangup(String callId) {
+    return _signalingClient!.execute(HangupRequest(callId: callId));
   }
 
   void _onErrorCallback(error, [StackTrace? stackTrace]) {

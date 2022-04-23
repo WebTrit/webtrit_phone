@@ -2,15 +2,11 @@ import 'call_event.dart';
 
 class AnsweredEvent extends CallEvent {
   const AnsweredEvent({
-    required int line,
     required String callId,
     required this.callee,
     this.isFocus,
     this.jsep,
-  }) : super(
-          line: line,
-          callId: callId,
-        );
+  }) : super(callId: callId);
 
   final String callee;
   final bool? isFocus;
@@ -33,7 +29,6 @@ class AnsweredEvent extends CallEvent {
     }
 
     return AnsweredEvent(
-      line: json['line'],
       callId: json['call_id'],
       callee: json['callee'],
       isFocus: json['is_focus'],

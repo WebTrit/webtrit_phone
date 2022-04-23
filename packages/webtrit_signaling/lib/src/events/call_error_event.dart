@@ -2,14 +2,10 @@ import 'call_event.dart';
 
 class CallErrorEvent extends CallEvent {
   const CallErrorEvent({
-    required int line,
     required String callId,
     required this.code,
     required this.description,
-  }) : super(
-          line: line,
-          callId: callId,
-        );
+  }) : super(callId: callId);
 
   final int code;
   final String description;
@@ -30,7 +26,6 @@ class CallErrorEvent extends CallEvent {
     }
 
     return CallErrorEvent(
-      line: json['line'],
       callId: json['call_id'],
       code: json['code'],
       description: json['description'],

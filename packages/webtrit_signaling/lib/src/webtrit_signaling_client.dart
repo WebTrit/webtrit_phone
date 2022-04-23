@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:logging/logging.dart';
 
@@ -10,6 +11,13 @@ import 'requests/requests.dart';
 import 'transaction.dart';
 
 class WebtritSignalingClient {
+  static final _callIdRandom = Random();
+  static const _callIdChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+  static String generateCallId([int length = 24]) {
+    return List.generate(length, (index) => _callIdChars[_callIdRandom.nextInt(_callIdChars.length)]).join();
+  }
+
   static const subprotocol = 'webtrit-protocol';
 
   static int _createCounter = 0;

@@ -36,6 +36,7 @@ class CallIdle extends CallState {
 }
 
 abstract class CallActive extends CallState {
+  final String callId;
   final String number;
   final bool video;
   final DateTime createdTime;
@@ -45,6 +46,7 @@ abstract class CallActive extends CallState {
   final MediaStream? remoteStream;
 
   const CallActive({
+    required this.callId,
     required this.number,
     required this.video,
     required this.createdTime,
@@ -60,6 +62,7 @@ abstract class CallActive extends CallState {
 
   @override
   List<Object?> get props => [
+        callId,
         number,
         video,
         createdTime,
@@ -70,7 +73,7 @@ abstract class CallActive extends CallState {
       ];
 
   @override
-  String toString() => '$runtimeType { number: $number, video: $video,'
+  String toString() => '$runtimeType { callId: $callId, number: $number, video: $video,'
       ' createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime,'
       ' with localStream: ${localStream != null}, with remoteStream: ${remoteStream != null} }';
 
@@ -87,6 +90,7 @@ abstract class CallActive extends CallState {
 
 class CallIncoming extends CallActive {
   const CallIncoming({
+    required String callId,
     required String number,
     required bool video,
     required DateTime createdTime,
@@ -95,6 +99,7 @@ class CallIncoming extends CallActive {
     MediaStream? localStream,
     MediaStream? remoteStream,
   }) : super(
+          callId: callId,
           number: number,
           video: video,
           createdTime: createdTime,
@@ -106,6 +111,7 @@ class CallIncoming extends CallActive {
 
   @override
   CallIncoming copyWith({
+    String? callId,
     String? number,
     bool? video,
     DateTime? createdTime,
@@ -115,6 +121,7 @@ class CallIncoming extends CallActive {
     MediaStream? remoteStream,
   }) {
     return CallIncoming(
+      callId: callId ?? this.callId,
       number: number ?? this.number,
       video: video ?? this.video,
       createdTime: createdTime ?? this.createdTime,
@@ -128,6 +135,7 @@ class CallIncoming extends CallActive {
 
 class CallOutgoing extends CallActive {
   const CallOutgoing({
+    required String callId,
     required String number,
     required bool video,
     required DateTime createdTime,
@@ -136,6 +144,7 @@ class CallOutgoing extends CallActive {
     MediaStream? localStream,
     MediaStream? remoteStream,
   }) : super(
+          callId: callId,
           number: number,
           video: video,
           createdTime: createdTime,
@@ -147,6 +156,7 @@ class CallOutgoing extends CallActive {
 
   @override
   CallOutgoing copyWith({
+    String? callId,
     String? number,
     bool? video,
     DateTime? createdTime,
@@ -156,6 +166,7 @@ class CallOutgoing extends CallActive {
     MediaStream? remoteStream,
   }) {
     return CallOutgoing(
+      callId: callId ?? this.callId,
       number: number ?? this.number,
       video: video ?? this.video,
       createdTime: createdTime ?? this.createdTime,

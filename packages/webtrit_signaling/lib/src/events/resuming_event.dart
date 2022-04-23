@@ -2,12 +2,8 @@ import 'call_event.dart';
 
 class ResumingEvent extends CallEvent {
   const ResumingEvent({
-    required int line,
     required String callId,
-  }) : super(
-          line: line,
-          callId: callId,
-        );
+  }) : super(callId: callId);
 
   static const event = 'resuming';
 
@@ -18,7 +14,6 @@ class ResumingEvent extends CallEvent {
     }
 
     return ResumingEvent(
-      line: json['line'],
       callId: json['call_id'],
     );
   }

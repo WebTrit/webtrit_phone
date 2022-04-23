@@ -2,13 +2,9 @@ import 'call_event.dart';
 
 class ProceedingEvent extends CallEvent {
   const ProceedingEvent({
-    required int line,
     required String callId,
     required this.code,
-  }) : super(
-          line: line,
-          callId: callId,
-        );
+  }) : super(callId: callId);
 
   final int code;
 
@@ -27,7 +23,6 @@ class ProceedingEvent extends CallEvent {
     }
 
     return ProceedingEvent(
-      line: json['line'],
       callId: json['call_id'],
       code: json['code'],
     );

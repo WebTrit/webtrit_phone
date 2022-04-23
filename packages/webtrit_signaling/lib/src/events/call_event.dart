@@ -1,16 +1,14 @@
-import 'line_event.dart';
+import 'event.dart';
 
-abstract class CallEvent extends LineEvent {
+abstract class CallEvent extends Event {
   const CallEvent({
-    required int line,
     required this.callId,
-  }) : super(line: line);
+  }) : super();
 
   final String callId;
 
   @override
   List<Object?> get props => [
-        ...super.props,
         callId,
       ];
 }

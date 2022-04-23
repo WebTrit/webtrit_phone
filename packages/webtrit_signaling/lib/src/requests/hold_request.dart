@@ -1,4 +1,4 @@
-import 'line_request.dart';
+import 'call_request.dart';
 
 enum HoldDirection {
   sendonly,
@@ -6,11 +6,11 @@ enum HoldDirection {
   inactive,
 }
 
-class HoldRequest extends LineRequest {
+class HoldRequest extends CallRequest {
   const HoldRequest({
-    required int line,
+    required String callId,
     this.direction,
-  }) : super(line: line);
+  }) : super(callId: callId);
 
   final HoldDirection? direction;
 
@@ -35,7 +35,7 @@ class HoldRequest extends LineRequest {
     }
 
     return HoldRequest(
-      line: json['line'],
+      callId: json['call_id'],
       direction: direction,
     );
   }
@@ -45,7 +45,7 @@ class HoldRequest extends LineRequest {
     final direction = this.direction;
     return {
       'request': request,
-      'line': line,
+      'call_id': callId,
       if (direction != null) 'direction': direction.name,
     };
   }

@@ -2,12 +2,8 @@ import 'call_event.dart';
 
 class AcceptedEvent extends CallEvent {
   const AcceptedEvent({
-    required int line,
     required String callId,
-  }) : super(
-          line: line,
-          callId: callId,
-        );
+  }) : super(callId: callId);
 
   static const event = 'accepted';
 
@@ -18,7 +14,6 @@ class AcceptedEvent extends CallEvent {
     }
 
     return AcceptedEvent(
-      line: json['line'],
       callId: json['call_id'],
     );
   }
