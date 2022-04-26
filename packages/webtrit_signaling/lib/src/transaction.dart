@@ -18,7 +18,7 @@ class Transaction {
 
     _timer = Timer(
       timeoutDuration,
-      _timeoutCallback,
+      _onTimeout,
     );
   }
 
@@ -34,7 +34,7 @@ class Transaction {
     _completer.completeError(WebtritSignalingTerminateException());
   }
 
-  void _timeoutCallback() {
+  void _onTimeout() {
     if (_completer.isCompleted) {
       return;
     }
