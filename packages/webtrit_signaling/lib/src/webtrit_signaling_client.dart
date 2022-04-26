@@ -89,7 +89,7 @@ class WebtritSignalingClient {
   void _wsOnData(dynamic data) {
     _logger.finer('_wsOnData: $data');
     final Map<String, dynamic> messageJson = jsonDecode(data);
-    _onMessageCallback(messageJson);
+    _onMessage(messageJson);
   }
 
   void _wsOnError(dynamic error, StackTrace stackTrace) {
@@ -131,7 +131,7 @@ class WebtritSignalingClient {
 
   //
 
-  void _onMessageCallback(Map<String, dynamic> messageJson) {
+  void _onMessage(Map<String, dynamic> messageJson) {
     if (messageJson.containsKey('transaction')) {
       final responseJson = messageJson;
 
@@ -191,7 +191,7 @@ class WebtritSignalingClient {
   void _startKeepaliveTimer() {
     final keepaliveInterval = _keepaliveInterval;
     if (keepaliveInterval != null) {
-      _keepaliveTimer = Timer(keepaliveInterval, _keepaliveCallback);
+      _keepaliveTimer = Timer(keepaliveInterval, _onKeepalive);
     }
   }
 
@@ -207,7 +207,7 @@ class WebtritSignalingClient {
     _startKeepaliveTimer();
   }
 
-  void _keepaliveCallback() async {
+  void _onKeepalive() async {
     try {
       await _execute(<String, dynamic>{
         'request': 'keepalive',
