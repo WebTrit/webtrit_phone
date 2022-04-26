@@ -2,6 +2,7 @@ export 'accepted_event.dart';
 export 'accepting_event.dart';
 export 'answered_event.dart';
 export 'call_error_event.dart';
+export 'call_event.dart';
 export 'calling_event.dart';
 export 'declining_event.dart';
 export 'error_event.dart';
