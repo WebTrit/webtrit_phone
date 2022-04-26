@@ -88,8 +88,8 @@ class WebtritSignalingClient {
 
   void _wsOnData(dynamic data) {
     _logger.finer('_wsOnData: $data');
-    final Map<String, dynamic> message = jsonDecode(data);
-    _onMessageCallback(message);
+    final Map<String, dynamic> messageJson = jsonDecode(data);
+    _onMessageCallback(messageJson);
   }
 
   void _wsOnError(dynamic error, StackTrace stackTrace) {
@@ -110,69 +110,69 @@ class WebtritSignalingClient {
   //
 
   Future<void> execute(Request request) async {
-    final requestMessage = request.toJson();
-    await _execute(requestMessage);
+    final requestJson = request.toJson();
+    await _execute(requestJson);
   }
 
-  Future<void> _execute(Map<String, dynamic> requestMessage) async {
+  Future<void> _execute(Map<String, dynamic> requestJson) async {
     _restartKeepaliveTimer();
 
-    final responseMessage = await _executeMessage(requestMessage);
-    final type = responseMessage['response'];
+    final responseJson = await _executeRequest(requestJson);
+    final type = responseJson['response'];
     if (type == 'ack') {
       return;
     } else if (type == 'error') {
-      final Map<String, dynamic> responseError = responseMessage['error'];
-      throw WebtritSignalingErrorException(responseError['code'], responseError['reason']);
+      final Map<String, dynamic> responseErrorJson = responseJson['error'];
+      throw WebtritSignalingErrorException(responseErrorJson['code'], responseErrorJson['reason']);
     } else {
-      throw WebtritSignalingResponseException(responseMessage);
+      throw WebtritSignalingResponseException(responseJson);
     }
   }
 
   //
 
-  void _onMessageCallback(Map<String, dynamic> message) {
-    if (message.containsKey('transaction')) {
-      final responseMessage = message;
+  void _onMessageCallback(Map<String, dynamic> messageJson) {
+    if (messageJson.containsKey('transaction')) {
+      final responseJson = messageJson;
 
-      final String transactionId = responseMessage['transaction'];
+      final String transactionId = responseJson['transaction'];
       final transaction = _transactions.remove(transactionId);
 
       if (transaction != null) {
-        transaction.handleResponse(responseMessage);
+        transaction.handleResponse(responseJson);
       } else {
         onError(WebtritSignalingTransactionUnavailableException(transactionId), StackTrace.current);
       }
-    } else if (message.containsKey('event')) {
-      final eventMessage = message;
+    } else if (messageJson.containsKey('event')) {
+      final eventJson = messageJson;
 
       try {
-        final event = _toEvent(eventMessage);
+        final event = _toEvent(eventJson);
         onEvent(event);
       } catch (error, stackTrace) {
         onError(error, stackTrace);
       }
     } else {
-      onError(WebtritSignalingUnknownMessageException(message), StackTrace.current);
+      onError(WebtritSignalingUnknownMessageException(messageJson), StackTrace.current);
     }
   }
 
-  Future<Map<String, dynamic>> _executeMessage(Map<String, dynamic> requestMessage) async {
+  Future<Map<String, dynamic>> _executeRequest(Map<String, dynamic> requestJson) async {
     final transaction = Transaction();
 
     _transactions[transaction.id] = transaction;
-    requestMessage['transaction'] = transaction.id;
+    requestJson['transaction'] = transaction.id;
 
-    _addMessage(requestMessage);
+    _addMessage(requestJson);
 
-    final responseMessage = await transaction.future;
-    responseMessage.remove('transaction');
+    final responseJson = await transaction.future;
+    responseJson.remove('transaction');
 
-    return responseMessage;
+    return responseJson;
   }
 
-  void _addMessage(Map<String, dynamic> message) {
-    final data = jsonEncode(message);
+  void _addMessage(Map<String, dynamic> messageJson) {
+    final data = jsonEncode(messageJson);
     _addData(data);
   }
 
@@ -221,77 +221,78 @@ class WebtritSignalingClient {
 
   //
 
-  Event _toEvent(Map<String, dynamic> eventMessage) {
-    switch (eventMessage['event']) {
+  Event _toEvent(Map<String, dynamic> eventJson) {
+    final eventType =  eventJson['event'];
+    switch (eventJson['event']) {
       case StateEvent.event:
-        final keepaliveInterval = Duration(milliseconds: eventMessage['keepalive_interval'] as int);
+        final keepaliveInterval = Duration(milliseconds: eventJson['keepalive_interval'] as int);
         _keepaliveInterval = keepaliveInterval;
 
         _restartKeepaliveTimer();
 
-        return StateEvent.fromJson(eventMessage);
+        return StateEvent.fromJson(eventJson);
       case RegisteringEvent.event:
-        return RegisteringEvent.fromJson(eventMessage);
+        return RegisteringEvent.fromJson(eventJson);
       case RegisteredEvent.event:
-        return RegisteredEvent.fromJson(eventMessage);
+        return RegisteredEvent.fromJson(eventJson);
       case RegistrationFailedEvent.event:
-        return RegistrationFailedEvent.fromJson(eventMessage);
+        return RegistrationFailedEvent.fromJson(eventJson);
       case UnregisteringEvent.event:
-        return UnregisteringEvent.fromJson(eventMessage);
+        return UnregisteringEvent.fromJson(eventJson);
       case UnregisteredEvent.event:
-        return UnregisteredEvent.fromJson(eventMessage);
+        return UnregisteredEvent.fromJson(eventJson);
       case CallingEvent.event:
-        return CallingEvent.fromJson(eventMessage);
+        return CallingEvent.fromJson(eventJson);
       case RingingEvent.event:
-        return RingingEvent.fromJson(eventMessage);
+        return RingingEvent.fromJson(eventJson);
       case ProceedingEvent.event:
-        return ProceedingEvent.fromJson(eventMessage);
+        return ProceedingEvent.fromJson(eventJson);
       case ProgressEvent.event:
-        return ProgressEvent.fromJson(eventMessage);
+        return ProgressEvent.fromJson(eventJson);
       case AnsweredEvent.event:
-        return AnsweredEvent.fromJson(eventMessage);
+        return AnsweredEvent.fromJson(eventJson);
       case AcceptingEvent.event:
-        return AcceptingEvent.fromJson(eventMessage);
+        return AcceptingEvent.fromJson(eventJson);
       case AcceptedEvent.event:
-        return AcceptedEvent.fromJson(eventMessage);
+        return AcceptedEvent.fromJson(eventJson);
       case IncomingCallEvent.event:
-        return IncomingCallEvent.fromJson(eventMessage);
+        return IncomingCallEvent.fromJson(eventJson);
       case UpdatingCallEvent.event:
-        return UpdatingCallEvent.fromJson(eventMessage);
+        return UpdatingCallEvent.fromJson(eventJson);
       case MissedCallEvent.event:
-        return MissedCallEvent.fromJson(eventMessage);
+        return MissedCallEvent.fromJson(eventJson);
       case HangingupEvent.event:
-        return HangingupEvent.fromJson(eventMessage);
+        return HangingupEvent.fromJson(eventJson);
       case HangupEvent.event:
-        return HangupEvent.fromJson(eventMessage);
+        return HangupEvent.fromJson(eventJson);
       case DecliningEvent.event:
-        return DecliningEvent.fromJson(eventMessage);
+        return DecliningEvent.fromJson(eventJson);
       case UpdatingEvent.event:
-        return UpdatingEvent.fromJson(eventMessage);
+        return UpdatingEvent.fromJson(eventJson);
       case UpdatedEvent.event:
-        return UpdatedEvent.fromJson(eventMessage);
+        return UpdatedEvent.fromJson(eventJson);
       case TransferringEvent.event:
-        return TransferringEvent.fromJson(eventMessage);
+        return TransferringEvent.fromJson(eventJson);
       case TransferEvent.event:
-        return TransferEvent.fromJson(eventMessage);
+        return TransferEvent.fromJson(eventJson);
       case HoldingEvent.event:
-        return HoldingEvent.fromJson(eventMessage);
+        return HoldingEvent.fromJson(eventJson);
       case ResumingEvent.event:
-        return ResumingEvent.fromJson(eventMessage);
+        return ResumingEvent.fromJson(eventJson);
       case IceWebrtcUpEvent.event:
-        return IceWebrtcUpEvent.fromJson(eventMessage);
+        return IceWebrtcUpEvent.fromJson(eventJson);
       case IceMediaEvent.event:
-        return IceMediaEvent.fromJson(eventMessage);
+        return IceMediaEvent.fromJson(eventJson);
       case IceSlowLinkEvent.event:
-        return IceSlowLinkEvent.fromJson(eventMessage);
+        return IceSlowLinkEvent.fromJson(eventJson);
       case IceHangupEvent.event:
-        return IceHangupEvent.fromJson(eventMessage);
+        return IceHangupEvent.fromJson(eventJson);
       case CallErrorEvent.event:
-        return CallErrorEvent.fromJson(eventMessage);
+        return CallErrorEvent.fromJson(eventJson);
       case ErrorEvent.event:
-        return ErrorEvent.fromJson(eventMessage);
+        return ErrorEvent.fromJson(eventJson);
       default:
-        throw ArgumentError.value(eventMessage, "eventMessage", "Unknown event message");
+        throw ArgumentError.value(eventType, "eventType", "Unknown event type");
     }
   }
 }
