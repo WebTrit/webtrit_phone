@@ -11,9 +11,7 @@ class Transaction {
 
   late Timer _timer;
 
-  Transaction({
-    this.timeoutDuration = const Duration(milliseconds: 10000),
-  }) : id = 'transaction-$_createCounter' {
+  Transaction(this.timeoutDuration) : id = 'transaction-$_createCounter' {
     _createCounter++;
 
     _timer = Timer(

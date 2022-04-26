@@ -20,6 +20,8 @@ class WebtritSignalingClient {
 
   static const subprotocol = 'webtrit-protocol';
 
+  static const defaultExecuteRequestTimeoutDuration = Duration(milliseconds: 5000);
+
   static int _createCounter = 0;
 
   WebtritSignalingClient(
@@ -109,15 +111,15 @@ class WebtritSignalingClient {
 
   //
 
-  Future<void> execute(Request request) async {
+  Future<void> execute(Request request, [Duration timeoutDuration = defaultExecuteRequestTimeoutDuration]) async {
     final requestJson = request.toJson();
-    await _execute(requestJson);
+    await _execute(requestJson, timeoutDuration);
   }
 
-  Future<void> _execute(Map<String, dynamic> requestJson) async {
+  Future<void> _execute(Map<String, dynamic> requestJson, Duration timeoutDuration) async {
     _restartKeepaliveTimer();
 
-    final responseJson = await _executeRequest(requestJson);
+    final responseJson = await _executeRequest(requestJson, timeoutDuration);
     final type = responseJson['response'];
     if (type == 'ack') {
       return;
@@ -157,8 +159,8 @@ class WebtritSignalingClient {
     }
   }
 
-  Future<Map<String, dynamic>> _executeRequest(Map<String, dynamic> requestJson) async {
-    final transaction = Transaction();
+  Future<Map<String, dynamic>> _executeRequest(Map<String, dynamic> requestJson, Duration timeoutDuration) async {
+    final transaction = Transaction(timeoutDuration);
 
     _transactions[transaction.id] = transaction;
     requestJson['transaction'] = transaction.id;
@@ -211,7 +213,7 @@ class WebtritSignalingClient {
     try {
       await _execute(<String, dynamic>{
         'request': 'keepalive',
-      });
+      }, defaultExecuteRequestTimeoutDuration);
     } on WebtritSignalingTimeoutException catch (error, stackTrace) {
       onError(WebtritSignalingKeepaliveTimeoutException(), stackTrace);
     } catch (error, stackTrace) {
@@ -222,7 +224,7 @@ class WebtritSignalingClient {
   //
 
   Event _toEvent(Map<String, dynamic> eventJson) {
-    final eventType =  eventJson['event'];
+    final eventType = eventJson['event'];
     switch (eventJson['event']) {
       case StateEvent.event:
         final keepaliveInterval = Duration(milliseconds: eventJson['keepalive_interval'] as int);
