@@ -73,17 +73,20 @@ class StateEvent extends Event {
   const StateEvent({
     required this.timestamp,
     required this.registrationState,
+    required this.maxActiveCallCount,
     required this.calls,
   }) : super();
 
   final int timestamp;
   final RegistrationState registrationState;
+  final int maxActiveCallCount;
   final Map<String, List<CallLog>> calls;
 
   @override
   List<Object?> get props => [
         timestamp,
         registrationState,
+        maxActiveCallCount,
         calls,
       ];
 
@@ -101,6 +104,7 @@ class StateEvent extends Event {
       code: registrationStateMessage['code'],
       reason: registrationStateMessage['reason'],
     );
+    final maxActiveCallCount = json['max_active_call_count'];
     final callsJson = json['calls'] as Map<String, dynamic>;
     final calls = callsJson.map((callId, callLogsJson) {
       final callLogs = (callLogsJson as List<dynamic>).map<CallLog>((callLogJson) {
@@ -122,6 +126,7 @@ class StateEvent extends Event {
     return StateEvent(
       timestamp: json['timestamp'],
       registrationState: registrationState,
+      maxActiveCallCount: maxActiveCallCount,
       calls: calls,
     );
   }
