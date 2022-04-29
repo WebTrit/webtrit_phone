@@ -5,13 +5,12 @@ import 'exceptions.dart';
 class Transaction {
   static int _createCounter = 0;
 
-  final Duration timeoutDuration;
   final String id;
   final _completer = Completer<Map<String, dynamic>>();
 
   late Timer _timer;
 
-  Transaction(this.timeoutDuration) : id = 'transaction-$_createCounter' {
+  Transaction(Duration timeoutDuration) : id = 'transaction-$_createCounter' {
     _createCounter++;
 
     _timer = Timer(
