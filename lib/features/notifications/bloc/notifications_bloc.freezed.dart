@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'notifications_bloc.dart';
@@ -11,21 +12,7 @@ part of 'notifications_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$NotificationsStateTearOff {
-  const _$NotificationsStateTearOff();
-
-  _NotificationsState call([Notification? lastNotification]) {
-    return _NotificationsState(
-      lastNotification,
-    );
-  }
-}
-
-/// @nodoc
-const $NotificationsState = _$NotificationsStateTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$NotificationsState {
@@ -133,11 +120,11 @@ class _$_NotificationsState implements _NotificationsState {
 }
 
 abstract class _NotificationsState implements NotificationsState {
-  const factory _NotificationsState([Notification? lastNotification]) =
+  const factory _NotificationsState([final Notification? lastNotification]) =
       _$_NotificationsState;
 
   @override
-  Notification? get lastNotification;
+  Notification? get lastNotification => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$NotificationsStateCopyWith<_NotificationsState> get copyWith =>
