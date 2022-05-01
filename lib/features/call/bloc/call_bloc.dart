@@ -387,6 +387,9 @@ class CallBloc extends Bloc<CallEvent, CallState> {
       ..onSignalingState = (signalingState) {
         logger.fine(() => 'onSignalingState state: $signalingState');
       }
+      ..onConnectionState = (connectionState) {
+        logger.fine(() => 'onConnectionState state: $connectionState');
+      }
       ..onIceGatheringState = (iceGatheringState) {
         logger.fine(() => 'onIceGatheringState state: $iceGatheringState');
 
