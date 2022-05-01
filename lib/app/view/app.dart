@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import 'package:webtrit_api/webtrit_api.dart';
+
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
@@ -38,7 +40,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     setDefaultOrientations();
 
-    return MaterialApp.router(
+    final materialApp = MaterialApp.router(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       restorationScopeId: 'App',
@@ -74,6 +76,25 @@ class App extends StatelessWidget {
       routeInformationParser: _routerTop.routeInformationParser,
       routerDelegate: _routerTop.routerDelegate,
     );
+
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<WebtritApiClient>(
+          create: (context) => WebtritApiClient(Uri.parse(EnvironmentConfig.CORE_URL)),
+        ),
+      ],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<NotificationsBloc>(
+            create: (context) => NotificationsBloc(),
+          ),
+          BlocProvider<AppBloc>(
+            create: (context) => AppBloc(),
+          ),
+        ],
+        child: materialApp,
+      ),
+    );
   }
 
   late final _routerTop = GoRouter(
@@ -94,56 +115,99 @@ class App extends StatelessWidget {
       GoRoute(
         name: 'main',
         path: '/main',
-        builder: (context, state) => MultiBlocProvider(
+        builder: (context, state) => MultiRepositoryProvider(
           providers: [
-            BlocProvider<PushTokensBloc>(
-              lazy: false,
-              create: (context) {
-                return PushTokensBloc(
-                  pushTokensRepository: context.read<PushTokensRepository>(),
-                  firebaseMessaging: FirebaseMessaging.instance,
-                  callkeep: FlutterCallkeep(),
-                )..add(const PushTokensStarted());
-              },
+            RepositoryProvider<CallRepository>(
+              create: (context) => CallRepository(),
             ),
-            BlocProvider<RecentsBloc>(
-              create: (context) {
-                return RecentsBloc(
-                  recentsRepository: context.read<RecentsRepository>(),
-                )..add(const RecentsInitialLoaded());
-              },
+            RepositoryProvider<FavoritesRepository>(
+              create: (context) => FavoritesRepository(
+                appDatabase: context.read<AppDatabase>(),
+              ),
             ),
-            BlocProvider<LocalContactsSyncBloc>(
-              lazy: false,
-              create: (context) {
-                return LocalContactsSyncBloc(
-                  localContactsRepository: context.read<LocalContactsRepository>(),
-                  appDatabase: context.read<AppDatabase>(),
-                )..add(const LocalContactsSyncStarted());
-              },
+            RepositoryProvider<RecentsRepository>(
+              create: (context) => RecentsRepository(
+                appDatabase: context.read<AppDatabase>(),
+              ),
             ),
-            BlocProvider<ExternalContactsSyncBloc>(
-              lazy: false,
-              create: (context) {
-                return ExternalContactsSyncBloc(
-                  externalContactsRepository: context.read<ExternalContactsRepository>(),
-                  appDatabase: context.read<AppDatabase>(),
-                )..add(const ExternalContactsSyncStarted());
-              },
+            RepositoryProvider<ContactsRepository>(
+              create: (context) => ContactsRepository(
+                appDatabase: context.read<AppDatabase>(),
+              ),
             ),
-            BlocProvider<CallBloc>(
-              create: (context) {
-                return CallBloc(
-                  callRepository: context.read<CallRepository>(),
-                  recentsRepository: context.read<RecentsRepository>(),
-                  notificationsBloc: context.read<NotificationsBloc>(),
-                  appBloc: context.read<AppBloc>(),
-                )..add(const CallAttached());
-              },
+            RepositoryProvider<LocalContactsRepository>(
+              create: (context) => LocalContactsRepository(),
+            ),
+            RepositoryProvider<PushTokensRepository>(
+              create: (context) => PushTokensRepository(
+                webtritApiClient: context.read<WebtritApiClient>(),
+                secureStorage: SecureStorage(),
+              ),
+            ),
+            RepositoryProvider<ExternalContactsRepository>(
+              create: (context) => ExternalContactsRepository(
+                webtritApiClient: context.read<WebtritApiClient>(),
+                periodicPolling: EnvironmentConfig.PERIODIC_POLLING,
+              ),
+            ),
+            RepositoryProvider<AccountInfoRepository>(
+              create: (context) => AccountInfoRepository(
+                webtritApiClient: context.read<WebtritApiClient>(),
+                periodicPolling: EnvironmentConfig.PERIODIC_POLLING,
+              ),
             ),
           ],
-          child: Router(
-            routerDelegate: _routerMain.routerDelegate,
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<PushTokensBloc>(
+                lazy: false,
+                create: (context) {
+                  return PushTokensBloc(
+                    pushTokensRepository: context.read<PushTokensRepository>(),
+                    firebaseMessaging: FirebaseMessaging.instance,
+                    callkeep: FlutterCallkeep(),
+                  )..add(const PushTokensStarted());
+                },
+              ),
+              BlocProvider<RecentsBloc>(
+                create: (context) {
+                  return RecentsBloc(
+                    recentsRepository: context.read<RecentsRepository>(),
+                  )..add(const RecentsInitialLoaded());
+                },
+              ),
+              BlocProvider<LocalContactsSyncBloc>(
+                lazy: false,
+                create: (context) {
+                  return LocalContactsSyncBloc(
+                    localContactsRepository: context.read<LocalContactsRepository>(),
+                    appDatabase: context.read<AppDatabase>(),
+                  )..add(const LocalContactsSyncStarted());
+                },
+              ),
+              BlocProvider<ExternalContactsSyncBloc>(
+                lazy: false,
+                create: (context) {
+                  return ExternalContactsSyncBloc(
+                    externalContactsRepository: context.read<ExternalContactsRepository>(),
+                    appDatabase: context.read<AppDatabase>(),
+                  )..add(const ExternalContactsSyncStarted());
+                },
+              ),
+              BlocProvider<CallBloc>(
+                create: (context) {
+                  return CallBloc(
+                    callRepository: context.read<CallRepository>(),
+                    recentsRepository: context.read<RecentsRepository>(),
+                    notificationsBloc: context.read<NotificationsBloc>(),
+                    appBloc: context.read<AppBloc>(),
+                  )..add(const CallAttached());
+                },
+              ),
+            ],
+            child: Router(
+              routerDelegate: _routerMain.routerDelegate,
+            ),
           ),
         ),
       ),
