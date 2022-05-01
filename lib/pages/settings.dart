@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
@@ -180,8 +181,8 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           TextButton(
             child: Text('Open log records console'.toUpperCase()),
-            onPressed: () async {
-              await Navigator.pushNamed(context, '/main/log-records-console');
+            onPressed: () {
+              context.goNamed('log-records-console');
             },
           ),
         ],

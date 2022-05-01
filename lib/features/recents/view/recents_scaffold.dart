@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -87,7 +88,7 @@ class RecentsScaffoldState extends State<RecentsScaffold> with SingleTickerProvi
                 return RecentTile(
                   recent: recent,
                   onInfoTap: () {
-                    Navigator.pushNamed(context, '/main/recent', arguments: recent);
+                    context.goNamed('recent', extra: recent);
                   },
                   onTap: () {
                     context.read<CallBloc>().add(CallOutgoingStarted(number: recent.number, video: recent.video));

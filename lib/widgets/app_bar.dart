@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/app/assets.gen.dart';
@@ -116,8 +117,8 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
           icon: const Icon(
             Icons.settings,
           ),
-          onPressed: () async {
-            Navigator.pushNamed(context, '/main/settings');
+          onPressed: () {
+            context.goNamed('settings');
           },
         ),
       ],

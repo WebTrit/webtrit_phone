@@ -7,6 +7,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 import '../../../../call/call.dart';
+import '../../../../contact/contact.dart';
 import '../../../contacts.dart';
 import '../contacts_external_tab.dart';
 
@@ -48,8 +49,14 @@ class _ContactsExternal extends StatelessWidget {
               return ContactTile(
                 displayName: contact.name,
                 onTap: () async {
-                  final command = await Navigator.pushNamed(context, '/main/contact', arguments: contact);
-                  // TODO change this odd technique of call execute
+                  // TODO change this even more odd then before technique of call execute
+                  final command = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ContactPage(contact),
+                      fullscreenDialog: true,
+                    ),
+                  );
                   if (command is CallOutgoingStarted) {
                     context.read<CallBloc>().add(command);
                   }

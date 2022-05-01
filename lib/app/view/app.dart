@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:callkeep/callkeep.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
@@ -18,7 +19,7 @@ import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 class App extends StatelessWidget {
-  const App({
+  App({
     Key? key,
     required this.webRegistrationInitialUrl,
     required this.isRegistered,
@@ -37,7 +38,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     setDefaultOrientations();
 
-    return MaterialApp(
+    return MaterialApp.router(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       restorationScopeId: 'App',
@@ -45,7 +46,6 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.orange,
       ),
-      initialRoute: _initialRoute(webRegistrationInitialUrl, isRegistered),
       builder: (BuildContext context, Widget? child) {
         final themeData = Theme.of(context);
         return Theme(
@@ -71,178 +71,177 @@ class App extends StatelessWidget {
           child: child ?? Container(),
         );
       },
-      onGenerateRoute: (RouteSettings settings) {
-        Widget page;
-        switch (settings.name) {
-          case '/login':
-            page = const LoginPage();
-            break;
-          case '/web-registration':
-            page = WebRegistrationPage(
-              initialUrl: settings.arguments != null ? settings.arguments as String : webRegistrationInitialUrl!,
-            );
-            break;
-          case '/main':
-            page = MultiBlocProvider(
-              providers: [
-                BlocProvider<PushTokensBloc>(
-                  lazy: false,
-                  create: (context) {
-                    return PushTokensBloc(
-                      pushTokensRepository: context.read<PushTokensRepository>(),
-                      firebaseMessaging: FirebaseMessaging.instance,
-                      callkeep: FlutterCallkeep(),
-                    )..add(const PushTokensStarted());
-                  },
-                ),
-                BlocProvider<RecentsBloc>(
-                  create: (context) {
-                    return RecentsBloc(
-                      recentsRepository: context.read<RecentsRepository>(),
-                    )..add(const RecentsInitialLoaded());
-                  },
-                ),
-                BlocProvider<LocalContactsSyncBloc>(
-                  lazy: false,
-                  create: (context) {
-                    return LocalContactsSyncBloc(
-                      localContactsRepository: context.read<LocalContactsRepository>(),
-                      appDatabase: context.read<AppDatabase>(),
-                    )..add(const LocalContactsSyncStarted());
-                  },
-                ),
-                BlocProvider<ExternalContactsSyncBloc>(
-                  lazy: false,
-                  create: (context) {
-                    return ExternalContactsSyncBloc(
-                      externalContactsRepository: context.read<ExternalContactsRepository>(),
-                      appDatabase: context.read<AppDatabase>(),
-                    )..add(const ExternalContactsSyncStarted());
-                  },
-                ),
-                BlocProvider<CallBloc>(
-                  create: (context) {
-                    return CallBloc(
-                      callRepository: context.read<CallRepository>(),
-                      recentsRepository: context.read<RecentsRepository>(),
-                      notificationsBloc: context.read<NotificationsBloc>(),
-                      appBloc: context.read<AppBloc>(),
-                    )..add(const CallAttached());
-                  },
-                ),
-              ],
-              child: BlocListener<CallBloc, CallState>(
-                listenWhen: (previous, current) => previous.runtimeType != current.runtimeType,
-                listener: (context, state) {
-                  if (state is CallActive) {
-                    setCallOrientations().then((_) {
-                      Navigator.pushNamed(context, '/main/call',
-                          arguments: CallNavigationArguments(
-                            callBloc: context.read<CallBloc>(),
-                          ));
-                    });
-                  }
-                  if (state is CallIdle && Navigator.canPop(context)) {
-                    // TODO canPop must be removed by reorganise states
-                    setDefaultOrientations().then((_) {
-                      Navigator.pop(context);
-                    });
-                  }
-                },
-                child: const MainPage(),
-              ),
-            );
-            break;
-          case '/main/call':
-            final callNavigationArguments = settings.arguments as CallNavigationArguments;
-            page = BlocProvider<CallBloc>.value(
-              value: callNavigationArguments.callBloc,
-              child: const CallPage(),
-            );
-            break;
-          case '/main/settings':
-            page = const SettingsPage();
-            break;
-          case '/main/log-records-console':
-            page = const LogRecordsConsolePage();
-            break;
-          case '/main/contact':
-            final contact = settings.arguments! as Contact;
-            page = ContactPage(contact);
-            break;
-          case '/main/recent':
-            final recent = settings.arguments! as Recent;
-            page = RecentScreen(recent);
-            break;
-          default:
-            return null;
-        }
+      routeInformationParser: _router.routeInformationParser,
+      routerDelegate: _router.routerDelegate,
+    );
+  }
 
-        if ('/'.allMatches(settings.name!).length <= 1) {
-          // add listener only to top level page
-          page = BlocListener<NotificationsBloc, NotificationsState>(
-            listener: (context, state) {
-              final lastNotification = state.lastNotification;
-              if (lastNotification != null) {
-                if (lastNotification is CallNotIdleErrorNotification) {
-                  context.showErrorSnackBar(context.l10n.notifications_errorSnackBar_callNotIdle);
-                } else if (lastNotification is CallAttachErrorNotification) {
-                  context.showErrorSnackBar(context.l10n.notifications_errorSnackBar_callAttach);
-                }
-                context.read<NotificationsBloc>().add(const NotificationsCleared());
-              }
-            },
-            child: page,
-          );
-
-          page = BlocListener<AppBloc, AppState>(
-            listener: (context, state) async {
-              if (state is AppUnregister) {
-                final webRegistrationInitialUrl = await SecureStorage().readWebRegistrationInitialUrl();
-                final isRegistered = await SecureStorage().readToken() != null;
-
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  _initialRoute(webRegistrationInitialUrl, isRegistered),
-                  (route) => false,
-                  arguments: webRegistrationInitialUrl,
-                );
-              }
-            },
-            child: page,
-          );
-        }
-
-        switch (settings.name) {
-          case '/main/call':
-            return PageRouteBuilder(
-              fullscreenDialog: true,
-              settings: settings,
-              pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
-                return page;
+  late final _router = GoRouter(
+    initialLocation: _initialRoute(webRegistrationInitialUrl, isRegistered),
+    routes: [
+      GoRoute(
+        name: 'login',
+        path: '/login',
+        builder: (context, state) => const LoginPage(),
+      ),
+      GoRoute(
+        name: 'web-registration',
+        path: '/web-registration',
+        builder: (context, state) => WebRegistrationPage(
+          initialUrl: state.extra != null ? state.extra! as String : webRegistrationInitialUrl!,
+        ),
+      ),
+      GoRoute(
+        name: 'main',
+        path: '/main',
+        builder: (context, state) => MultiBlocProvider(
+          providers: [
+            BlocProvider<PushTokensBloc>(
+              lazy: false,
+              create: (context) {
+                return PushTokensBloc(
+                  pushTokensRepository: context.read<PushTokensRepository>(),
+                  firebaseMessaging: FirebaseMessaging.instance,
+                  callkeep: FlutterCallkeep(),
+                )..add(const PushTokensStarted());
               },
+            ),
+            BlocProvider<RecentsBloc>(
+              create: (context) {
+                return RecentsBloc(
+                  recentsRepository: context.read<RecentsRepository>(),
+                )..add(const RecentsInitialLoaded());
+              },
+            ),
+            BlocProvider<LocalContactsSyncBloc>(
+              lazy: false,
+              create: (context) {
+                return LocalContactsSyncBloc(
+                  localContactsRepository: context.read<LocalContactsRepository>(),
+                  appDatabase: context.read<AppDatabase>(),
+                )..add(const LocalContactsSyncStarted());
+              },
+            ),
+            BlocProvider<ExternalContactsSyncBloc>(
+              lazy: false,
+              create: (context) {
+                return ExternalContactsSyncBloc(
+                  externalContactsRepository: context.read<ExternalContactsRepository>(),
+                  appDatabase: context.read<AppDatabase>(),
+                )..add(const ExternalContactsSyncStarted());
+              },
+            ),
+            BlocProvider<CallBloc>(
+              create: (context) {
+                return CallBloc(
+                  callRepository: context.read<CallRepository>(),
+                  recentsRepository: context.read<RecentsRepository>(),
+                  notificationsBloc: context.read<NotificationsBloc>(),
+                  appBloc: context.read<AppBloc>(),
+                )..add(const CallAttached());
+              },
+            ),
+          ],
+          child: BlocListener<CallBloc, CallState>(
+            listenWhen: (previous, current) => previous.runtimeType != current.runtimeType,
+            listener: (context, state) {
+              if (state is CallActive) {
+                setCallOrientations().then((_) {
+                  context.pushNamed('call', extra: context.read<CallBloc>());
+                });
+              }
+              if (state is CallIdle && Navigator.canPop(context)) {
+                // TODO canPop must be removed by reorganise states
+                setDefaultOrientations().then((_) {
+                  context.pop();
+                });
+              }
+            },
+            child: const MainPage(),
+          ),
+        ),
+        routes: [
+          GoRoute(
+            name: 'call',
+            path: 'call',
+            pageBuilder: (context, state) => CustomTransitionPage(
+              key: state.pageKey,
+              fullscreenDialog: true,
+              child: BlocProvider<CallBloc>.value(
+                value: state.extra as CallBloc,
+                child: const CallPage(),
+              ),
               transitionsBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation, Widget child) {
                 const builder = ZoomPageTransitionsBuilder();
                 return builder.buildTransitions(null, context, animation, secondaryAnimation, child);
               },
-            );
-          default:
-            return MaterialPageRoute(
+            ),
+          ),
+          GoRoute(
+            name: 'settings',
+            path: 'settings',
+            pageBuilder: (context, state) => MaterialPage(
+              key: state.pageKey,
               fullscreenDialog: true,
-              settings: settings,
-              builder: (BuildContext context) => page,
-            );
-        }
-      },
-    );
-  }
-}
+              child: const SettingsPage(),
+            ),
+            routes: [
+              GoRoute(
+                name: 'log-records-console',
+                path: 'log-records-console',
+                builder: (context, state) => const LogRecordsConsolePage(),
+              ),
+            ],
+          ),
+          GoRoute(
+            name: 'contact',
+            path: 'contact',
+            pageBuilder: (context, state) => MaterialPage(
+              key: state.pageKey,
+              fullscreenDialog: true,
+              child: ContactPage(state.extra as Contact),
+            ),
+          ),
+          GoRoute(
+            name: 'recent',
+            path: 'recent',
+            pageBuilder: (context, state) => MaterialPage(
+              key: state.pageKey,
+              fullscreenDialog: true,
+              child: RecentScreen(state.extra! as Recent),
+            ),
+          ),
+        ],
+      ),
+    ],
+    navigatorBuilder: (context, state, child) => MultiBlocListener(
+      listeners: [
+        BlocListener<NotificationsBloc, NotificationsState>(
+          listener: (context, state) {
+            final lastNotification = state.lastNotification;
+            if (lastNotification != null) {
+              if (lastNotification is CallNotIdleErrorNotification) {
+                context.showErrorSnackBar(context.l10n.notifications_errorSnackBar_callNotIdle);
+              } else if (lastNotification is CallAttachErrorNotification) {
+                context.showErrorSnackBar(context.l10n.notifications_errorSnackBar_callAttach);
+              }
+              context.read<NotificationsBloc>().add(const NotificationsCleared());
+            }
+          },
+        ),
+        BlocListener<AppBloc, AppState>(
+          listener: (context, state) async {
+            if (state is AppUnregister) {
+              final webRegistrationInitialUrl = await SecureStorage().readWebRegistrationInitialUrl();
+              final isRegistered = await SecureStorage().readToken() != null;
 
-class CallNavigationArguments {
-  final CallBloc callBloc;
-
-  CallNavigationArguments({
-    required this.callBloc,
-  });
+              context.go(_initialRoute(webRegistrationInitialUrl, isRegistered), extra: webRegistrationInitialUrl);
+            }
+          },
+        ),
+      ],
+      child: child,
+    ),
+  );
 }
