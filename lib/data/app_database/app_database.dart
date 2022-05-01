@@ -48,6 +48,16 @@ class AppDatabase extends _$AppDatabase {
     );
   }
 
+  Future<void> deleteEverything() {
+    return transaction(() async {
+      await customStatement('PRAGMA foreign_keys = OFF');
+      for (final table in allTables) {
+        await delete(table).go();
+      }
+      await customStatement('PRAGMA foreign_keys = ON');
+    });
+  }
+
   @override
   int get schemaVersion => 1;
 

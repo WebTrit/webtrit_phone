@@ -230,6 +230,8 @@ class App extends StatelessWidget {
         BlocListener<AppBloc, AppState>(
           listener: (context, state) async {
             if (state is AppUnregister) {
+              context.read<AppDatabase>().deleteEverything();
+
               final webRegistrationInitialUrl = await SecureStorage().readWebRegistrationInitialUrl();
               final isRegistered = await SecureStorage().readToken() != null;
 
