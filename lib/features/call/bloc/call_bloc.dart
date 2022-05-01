@@ -104,6 +104,9 @@ class CallBloc extends Bloc<CallEvent, CallState> {
 
   @override
   Future<void> close() async {
+    if (callRepository.isAttached) {
+      await callRepository.detach();
+    }
     await _onIncomingCallSubscription?.cancel();
     await _onAcceptedSubscription?.cancel();
     await _onHangUpSubscription?.cancel();
