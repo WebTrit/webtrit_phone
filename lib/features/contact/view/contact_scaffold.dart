@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -53,10 +54,12 @@ class ContactScaffold extends StatelessWidget {
                       }
                     },
                     onAudioPressed: () {
-                      Navigator.pop(context, CallOutgoingStarted(number: phone.number, video: false));
+                      context.read<CallBloc>().add(CallOutgoingStarted(number: phone.number, video: false));
+                      context.pop();
                     },
                     onVideoPressed: () {
-                      Navigator.pop(context, CallOutgoingStarted(number: phone.number, video: true));
+                      context.read<CallBloc>().add(CallOutgoingStarted(number: phone.number, video: true));
+                      context.pop();
                     },
                   )
             ],

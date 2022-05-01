@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-import '../../../../call/call.dart';
-import '../../../../contact/contact.dart';
 import '../../../contacts.dart';
 import '../contacts_local_tab.dart';
 
@@ -54,17 +53,7 @@ class _ContactsLocal extends StatelessWidget {
                 displayName: contact.name,
                 thumbnail: contact.thumbnail,
                 onTap: () async {
-                  // TODO change this even more odd then before technique of call execute
-                  final command = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ContactPage(contact),
-                      fullscreenDialog: true,
-                    ),
-                  );
-                  if (command is CallOutgoingStarted) {
-                    context.read<CallBloc>().add(command);
-                  }
+                  context.goNamed('contact', extra: contact);
                 },
                 onLongPress: () {
                   context.showSnackBar('LongPress on "${contact.name}"');

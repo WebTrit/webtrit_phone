@@ -71,12 +71,12 @@ class App extends StatelessWidget {
           child: child ?? Container(),
         );
       },
-      routeInformationParser: _router.routeInformationParser,
-      routerDelegate: _router.routerDelegate,
+      routeInformationParser: _routerTop.routeInformationParser,
+      routerDelegate: _routerTop.routerDelegate,
     );
   }
 
-  late final _router = GoRouter(
+  late final _routerTop = GoRouter(
     initialLocation: _initialRoute(webRegistrationInitialUrl, isRegistered),
     routes: [
       GoRoute(
@@ -142,23 +142,63 @@ class App extends StatelessWidget {
               },
             ),
           ],
-          child: BlocListener<CallBloc, CallState>(
-            listenWhen: (previous, current) => previous.runtimeType != current.runtimeType,
-            listener: (context, state) {
-              if (state is CallActive) {
-                setCallOrientations().then((_) {
-                  context.pushNamed('call', extra: context.read<CallBloc>());
-                });
-              }
-              if (state is CallIdle && Navigator.canPop(context)) {
-                // TODO canPop must be removed by reorganise states
-                setDefaultOrientations().then((_) {
-                  context.pop();
-                });
-              }
-            },
-            child: const MainPage(),
+          child: Router(
+            routerDelegate: _routerMain.routerDelegate,
           ),
+        ),
+      ),
+    ],
+    navigatorBuilder: (context, state, child) => MultiBlocListener(
+      listeners: [
+        BlocListener<NotificationsBloc, NotificationsState>(
+          listener: (context, state) {
+            final lastNotification = state.lastNotification;
+            if (lastNotification != null) {
+              if (lastNotification is CallNotIdleErrorNotification) {
+                context.showErrorSnackBar(context.l10n.notifications_errorSnackBar_callNotIdle);
+              } else if (lastNotification is CallAttachErrorNotification) {
+                context.showErrorSnackBar(context.l10n.notifications_errorSnackBar_callAttach);
+              }
+              context.read<NotificationsBloc>().add(const NotificationsCleared());
+            }
+          },
+        ),
+        BlocListener<AppBloc, AppState>(
+          listener: (context, state) async {
+            if (state is AppUnregister) {
+              final webRegistrationInitialUrl = await SecureStorage().readWebRegistrationInitialUrl();
+              final isRegistered = await SecureStorage().readToken() != null;
+
+              context.go(_initialRoute(webRegistrationInitialUrl, isRegistered), extra: webRegistrationInitialUrl);
+            }
+          },
+        ),
+      ],
+      child: child,
+    ),
+  );
+
+  late final _routerMain = GoRouter(
+    routes: [
+      GoRoute(
+        name: 'main',
+        path: '/',
+        builder: (context, state) => BlocListener<CallBloc, CallState>(
+          listenWhen: (previous, current) => previous.runtimeType != current.runtimeType,
+          listener: (context, state) {
+            if (state is CallActive) {
+              setCallOrientations().then((_) {
+                context.pushNamed('call');
+              });
+            }
+            if (state is CallIdle && Navigator.canPop(context)) {
+              // TODO canPop must be removed by reorganise states
+              setDefaultOrientations().then((_) {
+                context.pop();
+              });
+            }
+          },
+          child: const MainPage(),
         ),
         routes: [
           GoRoute(
@@ -167,10 +207,7 @@ class App extends StatelessWidget {
             pageBuilder: (context, state) => CustomTransitionPage(
               key: state.pageKey,
               fullscreenDialog: true,
-              child: BlocProvider<CallBloc>.value(
-                value: state.extra as CallBloc,
-                child: const CallPage(),
-              ),
+              child: const CallPage(),
               transitionsBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation, Widget child) {
                 const builder = ZoomPageTransitionsBuilder();
@@ -215,33 +252,5 @@ class App extends StatelessWidget {
         ],
       ),
     ],
-    navigatorBuilder: (context, state, child) => MultiBlocListener(
-      listeners: [
-        BlocListener<NotificationsBloc, NotificationsState>(
-          listener: (context, state) {
-            final lastNotification = state.lastNotification;
-            if (lastNotification != null) {
-              if (lastNotification is CallNotIdleErrorNotification) {
-                context.showErrorSnackBar(context.l10n.notifications_errorSnackBar_callNotIdle);
-              } else if (lastNotification is CallAttachErrorNotification) {
-                context.showErrorSnackBar(context.l10n.notifications_errorSnackBar_callAttach);
-              }
-              context.read<NotificationsBloc>().add(const NotificationsCleared());
-            }
-          },
-        ),
-        BlocListener<AppBloc, AppState>(
-          listener: (context, state) async {
-            if (state is AppUnregister) {
-              final webRegistrationInitialUrl = await SecureStorage().readWebRegistrationInitialUrl();
-              final isRegistered = await SecureStorage().readToken() != null;
-
-              context.go(_initialRoute(webRegistrationInitialUrl, isRegistered), extra: webRegistrationInitialUrl);
-            }
-          },
-        ),
-      ],
-      child: child,
-    ),
   );
 }
