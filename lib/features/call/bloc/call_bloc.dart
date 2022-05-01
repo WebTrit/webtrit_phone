@@ -381,18 +381,18 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     final logger = Logger(peerConnection.toString());
 
     return peerConnection
-      ..onSignalingState = (state) {
-        logger.fine(() => 'onSignalingState state: $state');
+      ..onSignalingState = (signalingState) {
+        logger.fine(() => 'onSignalingState state: $signalingState');
       }
-      ..onIceGatheringState = (state) {
-        logger.fine(() => 'onIceGatheringState state: $state');
+      ..onIceGatheringState = (iceGatheringState) {
+        logger.fine(() => 'onIceGatheringState state: $iceGatheringState');
 
-        if (state == RTCIceGatheringState.RTCIceGatheringStateComplete) {
+        if (iceGatheringState == RTCIceGatheringState.RTCIceGatheringStateComplete) {
           callRepository.sendTrickle((state as CallActive).callId, null);
         }
       }
-      ..onIceConnectionState = (state) {
-        logger.fine(() => 'onIceConnectionState state: $state');
+      ..onIceConnectionState = (iceConnectionState) {
+        logger.fine(() => 'onIceConnectionState state: $iceConnectionState');
       }
       ..onIceCandidate = (candidate) {
         logger.fine(() => 'onIceCandidate candidate: $candidate');
