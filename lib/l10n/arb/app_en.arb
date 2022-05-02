@@ -32,7 +32,7 @@
   "@loginOtpRequestTabVerifyButtonLabel": {
   },
 
-  "validationBlankError": "can't be blank",
+  "validationBlankError": "Please enter a value",
   "@validationBlankError": {
   },
 
