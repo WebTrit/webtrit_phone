@@ -18,6 +18,7 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/pages/settings.dart';
 import 'package:webtrit_phone/pages/web_registration.dart';
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/styles/styles.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 class App extends StatelessWidget {
@@ -46,7 +47,7 @@ class App extends StatelessWidget {
       restorationScopeId: 'App',
       title: EnvironmentConfig.APP_NAME,
       theme: ThemeData(
-        primarySwatch: Colors.orange,
+        primarySwatch: AppColors.primarySwatch,
       ),
       builder: (BuildContext context, Widget? child) {
         final themeData = Theme.of(context);
@@ -68,6 +69,42 @@ class App extends StatelessWidget {
             ),
             tabBarTheme: TabBarTheme(
               labelColor: themeData.textTheme.caption!.color,
+            ),
+            inputDecorationTheme: const InputDecorationTheme(
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              contentPadding: EdgeInsets.only(bottom: 10.0, left: 20.0, right: 10.0),
+              filled: true,
+              fillColor: AppColors.white,
+              errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: AppColors.red),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: AppColors.red),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: AppColors.primary),
+              ),
+              disabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: AppColors.lightGrey),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: AppColors.grey),
+              ),
+            ),
+            elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ElevatedButton.styleFrom(
+                shape: const StadiumBorder(),
+              ),
+            ),
+            outlinedButtonTheme: OutlinedButtonThemeData(
+              style: OutlinedButton.styleFrom(
+                shape: const StadiumBorder(),
+              ),
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                shape: const StadiumBorder(),
+              ),
             ),
           ),
           child: child ?? Container(),
