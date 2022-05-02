@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/styles/styles.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../login.dart';
@@ -37,9 +38,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SizedBox(height: kToolbarHeight),
             const WebTritPhonePictureLogo(),
-            const SizedBox(height: kToolbarHeight),
             BlocBuilder<LoginCubit, LoginState>(
               buildWhen: (previous, current) =>
                   previous.status != current.status || previous.codeInput != current.codeInput,
@@ -65,7 +64,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
                 );
               },
             ),
-            // const SizedBox(height: kToolbarHeight / 2),
+            const Spacer(),
             Row(
               children: [
                 Expanded(
@@ -75,6 +74,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
                       return OutlinedButton(
                         onPressed:
                             state.status.isProcessing ? null : () => context.read<LoginCubit>().loginOptVerifyBack(),
+                        style: AppOutlinedButtonStyle.mainThick,
                         child: Text(context.l10n.loginOtpRequestTabBackButtonLabel),
                       );
                     },
@@ -86,13 +86,15 @@ class LoginOtpVerifyTab extends StatelessWidget {
                     buildWhen: (previous, current) =>
                         previous.status != current.status || previous.codeInput != current.codeInput,
                     builder: (context, state) {
-                      return OutlinedButton(
+                      return TextButton(
                         onPressed: !state.codeInput.valid ? null : () => _onOtpVerify(context),
+                        style: AppTextButtonStyle.primaryThick,
                         child: !state.status.isProcessing
                             ? Text(context.l10n.loginOtpRequestTabVerifyButtonLabel)
                             : const SizedCircularProgressIndicator(
                                 size: 16,
                                 strokeWidth: 2,
+                                color: AppColors.white,
                               ),
                       );
                     },
@@ -100,6 +102,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
                 )
               ],
             ),
+            const SizedBox(height: kToolbarHeight / 2),
           ],
         ),
       ),

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/styles/styles.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../login.dart';
@@ -33,9 +34,7 @@ class LoginOtpRequestTab extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SizedBox(height: kToolbarHeight),
             const WebTritPhonePictureLogo(),
-            const SizedBox(height: kToolbarHeight),
             BlocBuilder<LoginCubit, LoginState>(
               buildWhen: (previous, current) =>
                   previous.status != current.status || previous.phoneInput != current.phoneInput,
@@ -55,21 +54,25 @@ class LoginOtpRequestTab extends StatelessWidget {
                 );
               },
             ),
+            const Spacer(),
             BlocBuilder<LoginCubit, LoginState>(
               buildWhen: (previous, current) =>
                   previous.status != current.status || previous.phoneInput != current.phoneInput,
               builder: (context, state) {
-                return OutlinedButton(
+                return TextButton(
                   onPressed: !state.phoneInput.valid ? null : () => _onOtpRequest(context),
+                  style: AppTextButtonStyle.primaryThick,
                   child: !state.status.isProcessing
                       ? Text(context.l10n.loginOtpRequestTabProceedButtonLabel)
                       : const SizedCircularProgressIndicator(
                           size: 16,
                           strokeWidth: 2,
+                          color: AppColors.white,
                         ),
                 );
               },
-            )
+            ),
+            const SizedBox(height: kToolbarHeight / 2),
           ],
         ),
       ),
