@@ -55,7 +55,7 @@ class CallRepository {
         onError: _onErrorCallback,
         onDisconnect: _onDisconnectCallback,
       );
-      signalingClient.connect(true);
+      await signalingClient.connect(true);
       _signalingClient = signalingClient;
     }
   }
