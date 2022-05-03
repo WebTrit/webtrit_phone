@@ -16,7 +16,6 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/pages/settings.dart';
 import 'package:webtrit_phone/pages/web_registration.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/styles/styles.dart';
@@ -328,7 +327,7 @@ class App extends StatelessWidget {
             pageBuilder: (context, state) => MaterialPage(
               key: state.pageKey,
               fullscreenDialog: true,
-              child: const SettingsPage(),
+              child: const SettingsScreen(),
             ),
             routes: [
               GoRoute(

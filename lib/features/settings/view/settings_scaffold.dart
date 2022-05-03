@@ -11,14 +11,14 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+class SettingsScaffold extends StatefulWidget {
+  const SettingsScaffold({Key? key}) : super(key: key);
 
   @override
-  _SettingsPageState createState() => _SettingsPageState();
+  _SettingsScaffoldState createState() => _SettingsScaffoldState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _SettingsScaffoldState extends State<SettingsScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,7 +84,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter not empty url';
                           } else if (!RegExp(
-                                  r'https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)')
+                              r'https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)')
                               .hasMatch(value)) {
                             return 'Please enter valid url';
                           }
@@ -93,30 +93,29 @@ class _SettingsPageState extends State<SettingsPage> {
                         enabled: isDone,
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextButton(
                             child: Text('Save'.toUpperCase()),
                             onPressed: !isDone
                                 ? null
                                 : () async {
-                                    final fromState = Form.of(context)!;
-                                    if (fromState.validate()) {
-                                      fromState.save();
-                                      await SecureStorage().writeWebRegistrationInitialUrl(webRegistrationInitialUrl!);
-                                      context.showSnackBar('Registration initial url saved');
-                                    }
-                                  },
+                              final fromState = Form.of(context)!;
+                              if (fromState.validate()) {
+                                fromState.save();
+                                await SecureStorage().writeWebRegistrationInitialUrl(webRegistrationInitialUrl!);
+                                context.showSnackBar('Registration initial url saved');
+                              }
+                            },
                           ),
                           TextButton(
                             child: Text('Delete'.toUpperCase()),
                             onPressed: !isDone
                                 ? null
                                 : () async {
-                                    await SecureStorage().deleteWebRegistrationInitialUrl();
-                                    context.showSnackBar('Registration initial url deleted');
-                                    setState(() {});
-                                  },
+                              await SecureStorage().deleteWebRegistrationInitialUrl();
+                              context.showSnackBar('Registration initial url deleted');
+                              setState(() {});
+                            },
                           ),
                         ],
                       ),
