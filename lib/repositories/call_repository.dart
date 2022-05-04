@@ -91,6 +91,10 @@ class CallRepository {
     await _signalingClient!.execute(OutgoingCallRequest(callId: callId, number: username!, jsep: jsepData));
   }
 
+  Future<void> decline(String callId) async {
+    await _signalingClient!.execute(DeclineRequest(callId: callId));
+  }
+
   Future<void> accept(String callId, Map<String, dynamic> jsepData) async {
     await _signalingClient!.execute(AcceptRequest(callId: callId, jsep: jsepData));
   }

@@ -295,7 +295,11 @@ class CallBloc extends Bloc<CallEvent, CallState> {
 
     emit((state as CallActive).copyWith(hungUpTime: DateTime.now()));
 
-    await callRepository.hangup((state as CallActive).callId);
+    if (state is CallIncoming && (state as CallActive).accepted != true) {
+      await callRepository.decline((state as CallActive).callId);
+    } else {
+      await callRepository.hangup((state as CallActive).callId);
+    }
 
     await _peerConnection?.close();
     _peerConnection = null;
