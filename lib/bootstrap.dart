@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,7 +36,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       () async => runApp(await builder()),
       blocObserver: _AppBlocObserver(),
     ),
-    (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
+    (error, stackTrace) => logger.severe('runZonedGuarded', error, stackTrace),
   );
 }
 
