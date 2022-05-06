@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:callkeep/callkeep.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:just_audio/just_audio.dart';
@@ -26,6 +27,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
   final NotificationsBloc notificationsBloc;
   final AppBloc appBloc;
   final FlutterCallkeep callkeep;
+
+  late final StreamSubscription<ConnectivityResult> _connectivityChangedSubscription;
 
   StreamSubscription? _onIncomingCallSubscription;
   StreamSubscription? _onAcceptedSubscription;
@@ -109,12 +112,22 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
       _onAppLifecycleStateChanged,
       transformer: sequential(),
     );
+    on<_ConnectivityResultChanged>(
+      _onConnectivityResultChanged,
+      transformer: sequential(),
+    );
 
     WidgetsBinding.instance!.addObserver(this);
+
+    _connectivityChangedSubscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      add(_ConnectivityResultChanged(result));
+    });
   }
 
   @override
   Future<void> close() async {
+    _connectivityChangedSubscription.cancel();
+
     WidgetsBinding.instance!.removeObserver(this);
 
     if (callRepository.isAttached) {
@@ -376,6 +389,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     Emitter<CallState> emit,
   ) async {
     final appLifecycleState = event.state;
+  }
+
+  Future<void> _onConnectivityResultChanged(
+    _ConnectivityResultChanged event,
+    Emitter<CallState> emit,
+  ) async {
+    final connectivityResult = event.result;
   }
 
   Future<MediaStream> _getUserMedia({required bool video}) async {

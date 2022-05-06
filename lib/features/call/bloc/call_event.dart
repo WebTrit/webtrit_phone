@@ -151,3 +151,9 @@ class _AppLifecycleStateChanged extends CallEvent {
 
   final AppLifecycleState state;
 }
+
+class _ConnectivityResultChanged extends CallEvent {
+  const _ConnectivityResultChanged(this.result);
+
+  final ConnectivityResult result;
+}
