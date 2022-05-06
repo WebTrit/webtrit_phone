@@ -17,6 +17,7 @@ dependencies:
   bloc_concurrency: ^0.2.0
   callkeep: ^0.3.2
   collection: ^1.15.0
+  connectivity_plus: ^2.3.0
   device_info: ^2.0.3
   dio: ^4.0.6
   drift: ^1.5.0
