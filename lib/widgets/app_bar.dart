@@ -48,72 +48,14 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
         ),
       ),
       title: Row(
-        children: [
-          const Text(EnvironmentConfig.APP_NAME),
-          const Spacer(),
-          Icon(
-            Icons.account_balance_wallet_outlined,
-            size: themeData.textTheme.button!.fontSize! * 1.2,
-          ),
-          const SizedBox(
-            width: 2,
-          ),
-          BlocBuilder<MainBloc, MainState>(
-            builder: (context, state) {
-              final info = state.info;
-              if (info != null) {
-                return Text(
-                  '${info.balance.toStringAsFixed(2)} ${info.currency}',
-                  style: themeData.textTheme.button!.copyWith(
-                    color: themeData.textTheme.caption!.color,
-                  ),
-                );
-              } else {
-                return const SizedBox(
-                  width: 10,
-                  height: 10,
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                    ),
-                  ),
-                );
-              }
-            },
-          ),
-          const SizedBox(
+        children: const [
+          Text(EnvironmentConfig.APP_NAME),
+          SizedBox(
             width: NavigationToolbar.kMiddleSpacing,
           ),
         ],
       ),
       actions: [
-        BlocBuilder<CallBloc, CallState>(
-          builder: (context, state) {
-            if (state is CallAttachFailure || state is CallInitial) {
-              return IconButton(
-                icon: const Icon(
-                  Icons.public_off,
-                ),
-                onPressed: () async {
-                  if (await _showCallDetached(context) == true) {
-                    context.read<CallBloc>().add(const CallAttached());
-                  }
-                },
-              );
-            } else {
-              return IconButton(
-                icon: const Icon(
-                  Icons.public,
-                ),
-                onPressed: () async {
-                  if (await _showCallAttached(context) == true) {
-                    context.read<CallBloc>().add(const CallDetached());
-                  }
-                },
-              );
-            }
-          },
-        ),
         IconButton(
           icon: const Icon(
             Icons.settings,
