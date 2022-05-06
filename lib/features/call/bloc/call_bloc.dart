@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:callkeep/callkeep.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:just_audio/just_audio.dart';
@@ -22,6 +23,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
   final RecentsRepository recentsRepository;
   final NotificationsBloc notificationsBloc;
   final AppBloc appBloc;
+  final FlutterCallkeep callkeep;
 
   StreamSubscription? _onIncomingCallSubscription;
   StreamSubscription? _onAcceptedSubscription;
@@ -39,6 +41,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     required this.recentsRepository,
     required this.notificationsBloc,
     required this.appBloc,
+    required this.callkeep,
   }) : super(const CallInitial()) {
     on<CallAttached>(
       _onAttached,

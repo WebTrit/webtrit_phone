@@ -25,6 +25,39 @@ class Main extends StatefulWidget {
 }
 
 class _MainState extends State<Main> {
+  late final FlutterCallkeep callkeep;
+
+  @override
+  void initState() {
+    super.initState();
+    callkeep = FlutterCallkeep();
+    callkeep.setup(null, <String, dynamic>{
+      'ios': {
+        'appName': 'WebTrit',
+      },
+      'android': {
+        'alertTitle': 'Permissions required',
+        'alertDescription': 'This application needs to access your phone accounts',
+        'cancelButton': 'Cancel',
+        'okButton': 'ok',
+        'foregroundService': {
+          'channelId': 'com.webtrit.phone',
+          'channelName': 'Foreground service for WebTrit app',
+          'notificationTitle': 'WebTrit app is running on background',
+          'notificationIcon': 'Path to the resource icon of the notification',
+        },
+        'additionalPermissions': [],
+        // TODO remove after https://github.com/flutter-webrtc/callkeep/pull/127 merged and released
+      },
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO add callkeep unsetup
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
@@ -77,7 +110,7 @@ class _MainState extends State<Main> {
               return PushTokensBloc(
                 pushTokensRepository: context.read<PushTokensRepository>(),
                 firebaseMessaging: FirebaseMessaging.instance,
-                callkeep: FlutterCallkeep(),
+                callkeep: callkeep,
               )..add(const PushTokensStarted());
             },
           ),
@@ -113,6 +146,7 @@ class _MainState extends State<Main> {
                 recentsRepository: context.read<RecentsRepository>(),
                 notificationsBloc: context.read<NotificationsBloc>(),
                 appBloc: context.read<AppBloc>(),
+                callkeep: callkeep,
               )..add(const CallAttached());
             },
           ),

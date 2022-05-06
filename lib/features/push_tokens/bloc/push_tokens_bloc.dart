@@ -25,26 +25,6 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> {
 
     callkeep.on(CallKeepPushKitToken(), _onCallKeepPushKitToken);
 
-    // TODO remove this setup logic from this bloc - currently it need to get apkvoip token
-    callkeep.setup(null, <String, dynamic>{
-      'ios': {
-        'appName': 'WebTrit',
-      },
-      'android': {
-        'alertTitle': 'Permissions required',
-        'alertDescription': 'This application needs to access your phone accounts',
-        'cancelButton': 'Cancel',
-        'okButton': 'ok',
-        'foregroundService': {
-          'channelId': 'com.webtrit.phone',
-          'channelName': 'Foreground service for WebTrit app',
-          'notificationTitle': 'WebTrit app is running on background',
-          'notificationIcon': 'Path to the resource icon of the notification',
-        },
-        'additionalPermissions': [], // TODO remove after https://github.com/flutter-webrtc/callkeep/pull/127 merged and released
-      },
-    });
-
     on<PushTokensStarted>(_onStarted);
     on<PushTokensInsertedOrUpdated>(_onInsertedOrUpdated);
   }
