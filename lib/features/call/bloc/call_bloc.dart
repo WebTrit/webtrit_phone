@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/widgets.dart';
+
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:callkeep/callkeep.dart';
@@ -18,7 +20,7 @@ part 'call_event.dart';
 
 part 'call_state.dart';
 
-class CallBloc extends Bloc<CallEvent, CallState> {
+class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
   final CallRepository callRepository;
   final RecentsRepository recentsRepository;
   final NotificationsBloc notificationsBloc;
@@ -103,10 +105,18 @@ class CallBloc extends Bloc<CallEvent, CallState> {
       _onFailureApproved,
       transformer: sequential(),
     );
+    on<_AppLifecycleStateChanged>(
+      _onAppLifecycleStateChanged,
+      transformer: sequential(),
+    );
+
+    WidgetsBinding.instance!.addObserver(this);
   }
 
   @override
   Future<void> close() async {
+    WidgetsBinding.instance!.removeObserver(this);
+
     if (callRepository.isAttached) {
       await callRepository.detach();
     }
@@ -147,6 +157,11 @@ class CallBloc extends Bloc<CallEvent, CallState> {
         reason: e.toString(),
       ));
     }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    add(_AppLifecycleStateChanged(state));
   }
 
   Future<void> _onDetached(
@@ -354,6 +369,13 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     Emitter<CallState> emit,
   ) async {
     emit(const CallIdle());
+  }
+
+  Future<void> _onAppLifecycleStateChanged(
+    _AppLifecycleStateChanged event,
+    Emitter<CallState> emit,
+  ) async {
+    final appLifecycleState = event.state;
   }
 
   Future<MediaStream> _getUserMedia({required bool video}) async {

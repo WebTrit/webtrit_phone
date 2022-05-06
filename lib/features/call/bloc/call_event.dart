@@ -145,3 +145,9 @@ class CallSpeakerphoneEnabled extends CallEvent {
 class CallFailureApproved extends CallEvent {
   const CallFailureApproved();
 }
+
+class _AppLifecycleStateChanged extends CallEvent {
+  const _AppLifecycleStateChanged(this.state);
+
+  final AppLifecycleState state;
+}
