@@ -75,44 +75,44 @@
   "@contactsSourceExternal": {
   },
 
-  "myAccount": "My account",
-  "@myAccount": {
+  "settings_AppBarTitle_myAccount": "My account",
+  "@settings_AppBarTitle_myAccount": {
   },
-  "doNotDisturb": "Do not disturb",
-  "@doNotDisturb": {
+  "settings_ListViewTileTitle_doNotDisturb": "Do not disturb",
+  "@settings_ListViewTileTitle_doNotDisturb": {
   },
-  "registered": "Registered",
-  "@registered": {
+  "settings_ListViewTileTitle_registered": "Registered",
+  "@settings_ListViewTileTitle_registered": {
   },
-  "logout": "Logout",
-  "@logout": {
+  "settings_ListViewTileTitle_logout": "Logout",
+  "@settings_ListViewTileTitle_logout": {
   },
-  "settings": "SETTINGS",
-  "@settings": {
+  "settings_ListViewTileTitle_settings": "SETTINGS",
+  "@settings_ListViewTileTitle_settings": {
   },
-  "networkSettings": "Network settings",
-  "@networkSettings": {
+  "settings_ListViewTileTitle_networkSettings": "Network settings",
+  "@settings_ListViewTileTitle_networkSettings": {
   },
-  "help": "Help",
-  "@help": {
+  "settings_ListViewTileTitle_help": "Help",
+  "@settings_ListViewTileTitle_help": {
   },
-  "language": "Language",
-  "@language": {
+  "settings_ListViewTileTitle_language": "Language",
+  "@settings_ListViewTileTitle_language": {
   },
-  "termsAndConditions": "Terms and conditions",
-  "@termsAndConditions": {
+  "settings_ListViewTileTitle_termsAndConditions": "Terms and conditions",
+  "@settings_ListViewTileTitle_termsAndConditions": {
   },
-  "aboutApplication": "About application",
-  "@aboutApplication": {
+  "settings_ListViewTileTitle_aboutApplication": "About application",
+  "@settings_ListViewTileTitle_aboutApplication": {
   },
-  "darkMode": "Dark mode",
-  "@darkMode": {
+  "settings_ListViewTileTitle_darkMode": "Dark mode",
+  "@settings_ListViewTileTitle_darkMode": {
   },
-  "toolbox": "TOOLBOX",
-  "@toolbox": {
+  "settings_ListViewTileTitle_toolbox": "TOOLBOX",
+  "@settings_ListViewTileTitle_toolbox": {
   },
-  "logRecordsConsole": "Log records console",
-  "@logRecordsConsole": {
+  "settings_ListViewTileTitle_logRecordsConsole": "Log records console",
+  "@settings_ListViewTileTitle_logRecordsConsole": {
   },
   "underDevelopment": "This page is under development.",
   "@underDevelopment": {

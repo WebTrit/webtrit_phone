@@ -14,7 +14,7 @@ class _AboutAppTabScaffoldState extends State<AboutAppTabScaffold> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: ExtAppBar(
-        title: Text(context.l10n.aboutApplication),
+        title: Text(context.l10n.settings_ListViewTileTitle_aboutApplication),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(

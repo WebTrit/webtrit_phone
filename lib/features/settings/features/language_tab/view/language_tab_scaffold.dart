@@ -14,7 +14,7 @@ class _LanguageTabScaffoldState extends State<LanguageTabScaffold> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: ExtAppBar(
-        title: Text(context.l10n.language),
+        title: Text(context.l10n.settings_ListViewTileTitle_language),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(

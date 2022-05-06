@@ -14,7 +14,7 @@ class _HelpTabScaffoldState extends State<HelpTabScaffold> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: ExtAppBar(
-        title: Text(context.l10n.help),
+        title: Text(context.l10n.settings_ListViewTileTitle_help),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(

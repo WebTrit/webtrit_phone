@@ -29,7 +29,7 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
 
     return Scaffold(
       appBar: ExtAppBar(
-        title: Text(context.l10n.myAccount),
+        title: Text(context.l10n.settings_AppBarTitle_myAccount),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(
@@ -112,7 +112,7 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
             endIndent: 15,
           ),
           SwitchListTile(
-            title: Text(context.l10n.doNotDisturb),
+            title: Text(context.l10n.settings_ListViewTileTitle_doNotDisturb),
             value: _dndSelected,
             onChanged: (bool value) {
               setState(() {
@@ -127,7 +127,7 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
             endIndent: 15,
           ),
           SwitchListTile(
-            title: Text(context.l10n.registered),
+            title: Text(context.l10n.settings_ListViewTileTitle_registered),
             value: _registeredSelected,
             onChanged: (bool value) {
               setState(() {
@@ -144,7 +144,7 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
           ),
           ListTile(
             leading: const Icon(Icons.logout),
-            title: Text(context.l10n.logout),
+            title: Text(context.l10n.settings_ListViewTileTitle_logout),
             onTap: () async {
               if (await _confirmUnregister(context) == true) {
                 // TODO: move logout logic to some bloc
@@ -159,12 +159,12 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
             },
           ),
           ListTile(
-            title: Text(context.l10n.settings, style: themeData.textTheme.bodyText2),
+            title: Text(context.l10n.settings_ListViewTileTitle_settings, style: themeData.textTheme.bodyText2),
             tileColor: AppColors.backgroundLight,
           ),
           ListTile(
             leading: const Icon(Icons.network_check),
-            title: Text(context.l10n.networkSettings),
+            title: Text(context.l10n.settings_ListViewTileTitle_networkSettings),
             trailing: const Icon(Icons.navigate_next),
             onTap: () {
               context.goNamed('network-settings-tab');
@@ -177,7 +177,7 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
           ),
           ListTile(
             leading: const Icon(Icons.help_outline),
-            title: Text(context.l10n.help),
+            title: Text(context.l10n.settings_ListViewTileTitle_help),
             trailing: const Icon(Icons.navigate_next),
             onTap: () {
               context.goNamed('help-tab');
@@ -190,7 +190,7 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
           ),
           ListTile(
             leading: const Icon(Icons.language),
-            title: Text(context.l10n.language),
+            title: Text(context.l10n.settings_ListViewTileTitle_language),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: const <Widget>[
@@ -209,7 +209,7 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
           ),
           ListTile(
             leading: const Icon(Icons.book_outlined),
-            title: Text(context.l10n.termsAndConditions),
+            title: Text(context.l10n.settings_ListViewTileTitle_termsAndConditions),
             trailing: const Icon(Icons.navigate_next),
             onTap: () {
               context.goNamed('terms-conditions-tab');
@@ -222,7 +222,7 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
           ),
           ListTile(
             leading: const Icon(Icons.card_travel),
-            title: Text(context.l10n.aboutApplication),
+            title: Text(context.l10n.settings_ListViewTileTitle_aboutApplication),
             trailing: const Icon(Icons.navigate_next),
             onTap: () {
               context.goNamed('about-app-tab');
@@ -234,7 +234,7 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
             endIndent: 15,
           ),
           SwitchListTile(
-            title: Text(context.l10n.darkMode),
+            title: Text(context.l10n.settings_ListViewTileTitle_darkMode),
             value: _darkModeSelected,
             onChanged: (bool value) {
               setState(() {
@@ -244,12 +244,12 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
             secondary: const Icon(Icons.nights_stay_outlined), // TODO implement Dark Theme
           ),
           ListTile(
-            title: Text(context.l10n.toolbox, style: themeData.textTheme.bodyText2),
+            title: Text(context.l10n.settings_ListViewTileTitle_toolbox, style: themeData.textTheme.bodyText2),
             tileColor: AppColors.backgroundLight,
           ),
           ListTile(
             leading: const Icon(Icons.aod_outlined),
-            title: Text(context.l10n.logRecordsConsole),
+            title: Text(context.l10n.settings_ListViewTileTitle_logRecordsConsole),
             trailing: const Icon(Icons.navigate_next),
             onTap: () {
               context.goNamed('log-records-console');

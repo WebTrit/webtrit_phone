@@ -14,7 +14,7 @@ class _NetworkSettingsTabScaffoldState extends State<NetworkSettingsTabScaffold>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: ExtAppBar(
-        title: Text(context.l10n.networkSettings),
+        title: Text(context.l10n.settings_ListViewTileTitle_networkSettings),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(

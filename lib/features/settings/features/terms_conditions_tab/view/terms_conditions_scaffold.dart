@@ -14,7 +14,7 @@ class _TermsConditionsTabScaffoldState extends State<TermsConditionsTabScaffold>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: ExtAppBar(
-        title: Text(context.l10n.termsAndConditions),
+        title: Text(context.l10n.settings_ListViewTileTitle_termsAndConditions),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(
