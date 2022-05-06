@@ -13,6 +13,7 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/features/settings/features/network_settings_tab/network_settings_tab.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -20,6 +21,11 @@ import 'package:webtrit_phone/pages/web_registration.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/styles/styles.dart';
 import 'package:webtrit_phone/utils/utils.dart';
+
+import '../../features/settings/features/about_app_tab/view/about_app_tab_screen.dart';
+import '../../features/settings/features/help_tab/view/help_tab_screen.dart';
+import '../../features/settings/features/language_tab/view/language_tab_screen.dart';
+import '../../features/settings/features/terms_conditions_tab/view/terms_conditions_screen.dart';
 
 class App extends StatelessWidget {
   App({
@@ -57,7 +63,8 @@ class App extends StatelessWidget {
         return Theme(
           data: themeData.copyWith(
             appBarTheme: AppBarTheme(
-              color: themeData.canvasColor,
+              backgroundColor: AppColors.backgroundLight,
+              elevation: 0,
               iconTheme: IconThemeData(
                 color: themeData.textTheme.caption!.color,
               ),
@@ -65,7 +72,7 @@ class App extends StatelessWidget {
                 color: themeData.textTheme.caption!.color,
               ),
               titleTextStyle: themeData.primaryTextTheme.headline6!.copyWith(
-                color: themeData.colorScheme.secondary,
+                color: AppColors.black,
                 fontWeight: FontWeight.bold,
               ),
               centerTitle: false,
@@ -330,6 +337,31 @@ class App extends StatelessWidget {
               child: const SettingsScreen(),
             ),
             routes: [
+              GoRoute(
+                name: 'network-settings-tab',
+                path: 'network-settings-tab',
+                builder: (context, state) => const NetworkSettingsTabScreen(),
+              ),
+              GoRoute(
+                name: 'about-app-tab',
+                path: 'about-app-tab',
+                builder: (context, state) => const AboutAppTabScreen(),
+              ),
+              GoRoute(
+                name: 'help-tab',
+                path: 'help-tab',
+                builder: (context, state) => const HelpTabScreen(),
+              ),
+              GoRoute(
+                name: 'language-tab',
+                path: 'language-tab',
+                builder: (context, state) => const LanguageTabScreen(),
+              ),
+              GoRoute(
+                name: 'terms-conditions-tab',
+                path: 'terms-conditions-tab',
+                builder: (context, state) => const TermsConditionsTabScreen(),
+              ),
               GoRoute(
                 name: 'log-records-console',
                 path: 'log-records-console',

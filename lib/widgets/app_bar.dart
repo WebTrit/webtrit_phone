@@ -14,6 +14,7 @@ class ExtAppBar extends AppBar {
     Widget? title,
     List<Widget>? actions,
     PreferredSizeWidget? bottom,
+    bool? centerTitle,
   }) : super(
           key: key,
           leading: leading,
@@ -21,6 +22,7 @@ class ExtAppBar extends AppBar {
           actions: actions,
           titleSpacing: 0,
           bottom: bottom,
+          centerTitle: centerTitle,
         );
 }
 

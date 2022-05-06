@@ -4,21 +4,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-import '../settings.dart';
-import 'settings_scaffold.dart';
+import '../terms_conditions_tab.dart';
+import 'terms_conditions_scaffold.dart';
 
-class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+class TermsConditionsTabScreen extends StatelessWidget {
+  const TermsConditionsTabScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        return SettingsBloc(
+        return TermsConditionsTabBloc(
           accountInfoRepository: context.read<AccountInfoRepository>(),
-        )..add(const SettingsStarted());
+        )..add(const TermsConditionsTabStarted());
       },
-      child: const SettingsScaffold(),
+      child: const TermsConditionsTabScaffold(),
     );
   }
 }

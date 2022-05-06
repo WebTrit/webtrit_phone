@@ -4,21 +4,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-import '../settings.dart';
-import 'settings_scaffold.dart';
+import '../network_settings_tab.dart';
+import 'network_settings_tab_scaffold.dart';
 
-class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+class NetworkSettingsTabScreen extends StatelessWidget {
+  const NetworkSettingsTabScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        return SettingsBloc(
+        return NetworkSettingsTabBloc(
           accountInfoRepository: context.read<AccountInfoRepository>(),
-        )..add(const SettingsStarted());
+        )..add(const NetworkSettingsTabStarted());
       },
-      child: const SettingsScaffold(),
+      child: const NetworkSettingsTabScaffold(),
     );
   }
 }

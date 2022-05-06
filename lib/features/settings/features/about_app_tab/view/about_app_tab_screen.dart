@@ -4,21 +4,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-import '../settings.dart';
-import 'settings_scaffold.dart';
+import '../about_app_tab.dart';
+import 'about_app_tab_scaffold.dart';
 
-class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+class AboutAppTabScreen extends StatelessWidget {
+  const AboutAppTabScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        return SettingsBloc(
+        return AboutAppTabBloc(
           accountInfoRepository: context.read<AccountInfoRepository>(),
-        )..add(const SettingsStarted());
+        )..add(const AboutAppTabStarted());
       },
-      child: const SettingsScaffold(),
+      child: const AboutAppTabScaffold(),
     );
   }
 }

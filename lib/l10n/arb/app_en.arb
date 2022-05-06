@@ -73,5 +73,48 @@
   },
   "contactsSourceExternal": "Internal",
   "@contactsSourceExternal": {
+  },
+
+  "myAccount": "My account",
+  "@myAccount": {
+  },
+  "doNotDisturb": "Do not disturb",
+  "@doNotDisturb": {
+  },
+  "registered": "Registered",
+  "@registered": {
+  },
+  "logout": "Logout",
+  "@logout": {
+  },
+  "settings": "SETTINGS",
+  "@settings": {
+  },
+  "networkSettings": "Network settings",
+  "@networkSettings": {
+  },
+  "help": "Help",
+  "@help": {
+  },
+  "language": "Language",
+  "@language": {
+  },
+  "termsAndConditions": "Terms and conditions",
+  "@termsAndConditions": {
+  },
+  "aboutApplication": "About application",
+  "@aboutApplication": {
+  },
+  "darkMode": "Dark mode",
+  "@darkMode": {
+  },
+  "toolbox": "TOOLBOX",
+  "@toolbox": {
+  },
+  "logRecordsConsole": "Log records console",
+  "@logRecordsConsole": {
+  },
+  "underDevelopment": "This page is under development.",
+  "@underDevelopment": {
   }
 }
