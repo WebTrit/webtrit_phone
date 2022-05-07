@@ -13,7 +13,6 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/features/settings/features/network_settings_tab/network_settings_tab.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -21,11 +20,6 @@ import 'package:webtrit_phone/pages/web_registration.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/styles/styles.dart';
 import 'package:webtrit_phone/utils/utils.dart';
-
-import '../../features/settings/features/about_app_tab/view/about_app_tab_screen.dart';
-import '../../features/settings/features/help_tab/view/help_tab_screen.dart';
-import '../../features/settings/features/language_tab/view/language_tab_screen.dart';
-import '../../features/settings/features/terms_conditions_tab/view/terms_conditions_screen.dart';
 
 class App extends StatelessWidget {
   App({
