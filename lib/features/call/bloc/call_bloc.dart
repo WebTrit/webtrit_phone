@@ -29,6 +29,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
   final FlutterCallkeep callkeep;
 
   late final StreamSubscription<ConnectivityResult> _connectivityChangedSubscription;
+  ConnectivityResult? _previousConnectivityResult; // necessary because of issue on iOS with doubling the same connectivity result
 
   StreamSubscription? _onIncomingCallSubscription;
   StreamSubscription? _onAcceptedSubscription;
@@ -120,7 +121,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     WidgetsBinding.instance!.addObserver(this);
 
     _connectivityChangedSubscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      add(_ConnectivityResultChanged(result));
+      if (_previousConnectivityResult != result) {
+        _previousConnectivityResult = result;
+        add(_ConnectivityResultChanged(result));
+      }
     });
   }
 
