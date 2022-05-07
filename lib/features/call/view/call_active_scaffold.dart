@@ -13,7 +13,7 @@ class CallActiveScaffold extends StatefulWidget {
     required this.remoteRenderer,
   }) : super(key: key);
 
-  final CallActive state;
+  final ActiveCallState state;
   final RTCVideoRenderer localRenderer;
   final RTCVideoRenderer remoteRenderer;
 
@@ -26,8 +26,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    final acceptActionEnabled = widget.state is CallIncoming && widget.state.accepted != true;
-    final direction = widget.state is CallIncoming ? 'Incoming call from' : 'Outgoing call to';
+    final acceptActionEnabled = widget.state.isIncoming && widget.state.accepted != true;
+    final direction = widget.state.isIncoming ? 'Incoming call from' : 'Outgoing call to';
     final username = widget.state.number;
 
     return Scaffold(

@@ -8,6 +8,7 @@ import 'package:callkeep/callkeep.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 
@@ -16,6 +17,8 @@ import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/models/recent.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+
+part 'call_bloc.freezed.dart';
 
 part 'call_event.dart';
 
@@ -29,7 +32,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
   final FlutterCallkeep callkeep;
 
   late final StreamSubscription<ConnectivityResult> _connectivityChangedSubscription;
-  ConnectivityResult? _previousConnectivityResult; // necessary because of issue on iOS with doubling the same connectivity result
+  ConnectivityResult?
+      _previousConnectivityResult; // necessary because of issue on iOS with doubling the same connectivity result
 
   StreamSubscription? _onIncomingCallSubscription;
   StreamSubscription? _onAcceptedSubscription;
@@ -48,7 +52,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     required this.notificationsBloc,
     required this.appBloc,
     required this.callkeep,
-  }) : super(const CallInitial()) {
+  }) : super(const CallState.initial()) {
     on<CallAttached>(
       _onAttached,
       transformer: sequential(),
@@ -149,7 +153,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     CallAttached event,
     Emitter<CallState> emit,
   ) async {
-    emit(const CallAttachInProgress());
+    emit(const CallState.attachInProgress());
     try {
       await callRepository.attach();
 
@@ -165,12 +169,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
       _onDoneSubscription = callRepository.onDone.listen((event) {
         add(const CallDetached());
       });
-      emit(const CallIdle());
+      emit(const CallState.idle());
 
       appBloc.add(const AppRegistered());
     } catch (e) {
       notificationsBloc.add(const NotificationsIssued(CallAttachErrorNotification()));
-      emit(CallAttachFailure(
+      emit(CallState.attachFailure(
         reason: e.toString(),
       ));
     }
@@ -185,7 +189,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     CallDetached event,
     Emitter<CallState> emit,
   ) async {
-    emit(const CallInitial());
+    emit(const CallState.initial());
 
     if (callRepository.isAttached) {
       await callRepository.detach();
@@ -200,7 +204,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     await _audioPlayer.setLoopMode(LoopMode.one);
     _audioPlayer.play();
 
-    emit(CallIncoming(
+    emit(CallState.active(
+      direction: Direction.incoming,
       callId: event.callId,
       number: event.username,
       video: true,
@@ -209,7 +214,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
 
     _localStream = await _getUserMedia(video: true);
 
-    emit((state as CallActive).copyWith(localStream: _localStream));
+    emit(state.maybeMap(
+      active: (state) => state.copyWith(localStream: _localStream),
+      orElse: () => throw StateError('Incorrect state: $state'),
+    ));
 
     _peerConnection = await _createPeerConnection();
     await _peerConnection!.addStream(_localStream!);
@@ -224,29 +232,44 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
   ) async {
     await _audioPlayer.stop();
 
-    emit((state as CallActive).copyWith(acceptedTime: DateTime.now()));
+    emit(state.maybeMap(
+      active: (state) => state.copyWith(acceptedTime: DateTime.now()),
+      orElse: () => throw StateError('Incorrect state: $state'),
+    ));
 
     final localDescription = await _peerConnection!.createAnswer({});
     _peerConnection!.setLocalDescription(localDescription);
 
-    await callRepository.accept((state as CallActive).callId, localDescription.toMap());
+    final callId = state.maybeMap(
+      active: (state) => state.callId,
+      orElse: () => throw StateError('Incorrect state: $state'),
+    );
+    await callRepository.accept(callId, localDescription.toMap());
   }
 
   Future<void> _onOutgoingStarted(
     CallOutgoingStarted event,
     Emitter<CallState> emit,
   ) async {
-    if (state is! CallIdle) {
+    if (state is! IdleCallState) {
       notificationsBloc.add(const NotificationsIssued(CallNotIdleErrorNotification()));
       return;
     }
 
-    final callId = callRepository.generateCallId();
-    emit(CallOutgoing(callId: callId, number: event.number, video: event.video, createdTime: DateTime.now()));
+    emit(CallState.active(
+      direction: Direction.outgoing,
+      callId: callRepository.generateCallId(),
+      number: event.number,
+      video: event.video,
+      createdTime: DateTime.now(),
+    ));
 
     _localStream = await _getUserMedia(video: event.video);
 
-    emit((state as CallActive).copyWith(localStream: _localStream));
+    emit(state.maybeMap(
+      active: (state) => state.copyWith(localStream: _localStream),
+      orElse: () => throw StateError('Incorrect state: $state'),
+    ));
 
     _peerConnection = await _createPeerConnection();
     await _peerConnection!.addStream(_localStream!);
@@ -254,8 +277,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     final localDescription = await _peerConnection!.createOffer({});
     _peerConnection!.setLocalDescription(localDescription);
 
+    final callId = state.maybeMap(
+      active: (state) => state.callId,
+      orElse: () => throw StateError('Incorrect state: $state'),
+    );
     try {
-      await callRepository.call((state as CallActive).callId, event.number, localDescription.toMap());
+      await callRepository.call(callId, event.number, localDescription.toMap());
 
       await _audioPlayer.setAsset(Assets.ringtones.outgoingCall1);
       await _audioPlayer.setLoopMode(LoopMode.one);
@@ -269,7 +296,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
 
       _addToRecents(state);
 
-      emit(CallFailure(reason: e.toString()));
+      emit(CallState.failure(reason: e.toString()));
     }
   }
 
@@ -279,7 +306,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
   ) async {
     await _audioPlayer.stop();
 
-    emit((state as CallActive).copyWith(acceptedTime: DateTime.now()));
+    emit(state.maybeMap(
+      active: (state) => state.copyWith(acceptedTime: DateTime.now()),
+      orElse: () => throw StateError('Incorrect state: $state'),
+    ));
 
     final remoteDescription = RTCSessionDescription(event.jsepData!['sdp'], event.jsepData!['type']);
     await _peerConnection!.setRemoteDescription(remoteDescription);
@@ -289,25 +319,34 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     CallRemoteStreamAdded event,
     Emitter<CallState> emit,
   ) async {
-    emit((state as CallActive).copyWith(remoteStream: event.stream));
+    emit(state.maybeMap(
+      active: (state) => state.copyWith(remoteStream: event.stream),
+      orElse: () => throw StateError('Incorrect state: $state'),
+    ));
   }
 
   Future<void> _onRemoteStreamRemoved(
     CallRemoteStreamRemoved event,
     Emitter<CallState> emit,
   ) async {
-    emit((state as CallActive).copyWith(remoteStream: null));
+    emit(state.maybeMap(
+      active: (state) => state.copyWith(remoteStream: null),
+      orElse: () => throw StateError('Incorrect state: $state'),
+    ));
   }
 
   Future<void> _onRemoteHungUp(
     CallRemoteHungUp event,
     Emitter<CallState> emit,
   ) async {
-    if (state is! CallActive) return; // TODO: get rid of double hangup event
+    final currentState = state;
+    if (currentState is! ActiveCallState) return; // TODO: get rid of double hangup event
 
     await _audioPlayer.stop();
 
-    emit((state as CallActive).copyWith(hungUpTime: DateTime.now()));
+    emit(currentState.copyWith(hungUpTime: DateTime.now()));
+
+    _addToRecents(currentState);
 
     await _peerConnection?.close();
     _peerConnection = null;
@@ -315,26 +354,27 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     await _localStream?.dispose();
     _localStream = null;
 
-    _addToRecents(state);
-
-    emit(const CallIdle());
+    emit(const CallState.idle());
   }
 
   Future<void> _onLocalHungUp(
     CallLocalHungUp event,
     Emitter<CallState> emit,
   ) async {
-    if (state is! CallActive) return; // TODO: get rid of double hangup event
+    final currentState = state;
+    if (currentState is! ActiveCallState) return; // TODO: get rid of double hangup event
 
     await _audioPlayer.stop();
 
-    emit((state as CallActive).copyWith(hungUpTime: DateTime.now()));
+    emit(currentState.copyWith(hungUpTime: DateTime.now()));
 
-    if (state is CallIncoming && (state as CallActive).accepted != true) {
-      await callRepository.decline((state as CallActive).callId);
+    if (currentState.isIncoming && !currentState.accepted) {
+      await callRepository.decline(currentState.callId);
     } else {
-      await callRepository.hangup((state as CallActive).callId);
+      await callRepository.hangup(currentState.callId);
     }
+
+    _addToRecents(currentState);
 
     await _peerConnection?.close();
     _peerConnection = null;
@@ -342,9 +382,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     await _localStream?.dispose();
     _localStream = null;
 
-    _addToRecents(state);
-
-    emit(const CallIdle());
+    emit(const CallState.idle());
   }
 
   Future<void> _onCameraSwitched(
@@ -385,7 +423,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     CallFailureApproved event,
     Emitter<CallState> emit,
   ) async {
-    emit(const CallIdle());
+    emit(const CallState.idle());
   }
 
   Future<void> _onAppLifecycleStateChanged(
@@ -447,7 +485,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
         logger.fine(() => 'onIceGatheringState state: $iceGatheringState');
 
         if (iceGatheringState == RTCIceGatheringState.RTCIceGatheringStateComplete) {
-          callRepository.sendTrickle((state as CallActive).callId, null);
+          final callId = state.maybeMap(
+            active: (state) => state.callId,
+            orElse: () => throw StateError('Incorrect state: $state'),
+          );
+          callRepository.sendTrickle(callId, null);
         }
       }
       ..onIceConnectionState = (iceConnectionState) {
@@ -456,7 +498,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
       ..onIceCandidate = (candidate) {
         logger.fine(() => 'onIceCandidate candidate: $candidate');
 
-        callRepository.sendTrickle((state as CallActive).callId, candidate.toMap());
+        final callId = state.maybeMap(
+          active: (state) => state.callId,
+          orElse: () => throw StateError('Incorrect state: $state'),
+        );
+        callRepository.sendTrickle(callId, candidate.toMap());
       }
       ..onAddStream = (stream) {
         logger.fine(() => 'onAddStream stream: $stream');
@@ -483,24 +529,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
   }
 
   void _addToRecents(CallState state) {
-    if (state is! CallActive) return;
+    final recent = state.maybeMap(
+      active: (state) => Recent(
+        direction: state.direction,
+        number: state.number,
+        video: state.video,
+        createdTime: state.createdTime,
+        acceptedTime: state.acceptedTime,
+        hungUpTime: state.hungUpTime,
+      ),
+      orElse: () => throw StateError('Incorrect state: $state'),
+    );
 
-    Direction direction;
-    if (state is CallIncoming) {
-      direction = Direction.incoming;
-    } else if (state is CallOutgoing) {
-      direction = Direction.outgoing;
-    } else {
-      throw StateError('Incorrect state class');
-    }
-
-    recentsRepository.add(Recent(
-      direction: direction,
-      number: state.number,
-      video: state.video,
-      createdTime: state.createdTime,
-      acceptedTime: state.acceptedTime,
-      hungUpTime: state.hungUpTime,
-    ));
+    recentsRepository.add(recent);
   }
 }

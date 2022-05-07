@@ -54,7 +54,7 @@ class _CallPageState extends State<CallPage> {
             ? BlocBuilder<CallBloc, CallState>(
                 // ignore: missing_return
                 builder: (context, state) {
-                  if (state is CallIdle) {
+                  if (state is IdleCallState) {
                     _localRenderer.srcObject = null;
                     _remoteRenderer.srcObject = null;
 
@@ -64,7 +64,7 @@ class _CallPageState extends State<CallPage> {
                       ),
                     );
                   }
-                  if (state is CallActive) {
+                  if (state is ActiveCallState) {
                     _localRenderer.srcObject = state.localStream;
                     _remoteRenderer.srcObject = state.remoteStream;
 
@@ -74,7 +74,7 @@ class _CallPageState extends State<CallPage> {
                       remoteRenderer: _remoteRenderer,
                     );
                   }
-                  if (state is CallFailure) {
+                  if (state is FailureCallState) {
                     return CallFailureScaffold(state: state);
                   }
                   throw StateError(''); // TODO fix if logic

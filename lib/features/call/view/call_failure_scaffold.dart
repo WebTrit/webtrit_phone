@@ -10,7 +10,7 @@ class CallFailureScaffold extends StatelessWidget {
     required this.state,
   }) : super(key: key);
 
-  final CallFailure state;
+  final FailureCallState state;
 
   @override
   Widget build(BuildContext context) {

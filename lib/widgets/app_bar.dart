@@ -87,7 +87,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
       actions: [
         BlocBuilder<CallBloc, CallState>(
           builder: (context, state) {
-            if (state is CallAttachFailure || state is CallInitial) {
+            if (state is AttachFailureCallState || state is InitialCallState) {
               return IconButton(
                 icon: const Icon(
                   Icons.public_off,
