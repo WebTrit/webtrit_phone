@@ -14,8 +14,10 @@ void main(List<String> arguments) async {
   final client = WebtritApiClient(Uri.parse(url));
 
   final info = await client.accountInfo(token);
-
   print(info.toJson());
+
+  final status = await client.appStatus(token);
+  print(status.toJson());
 
   client.close();
 }

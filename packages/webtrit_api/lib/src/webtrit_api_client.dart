@@ -164,6 +164,41 @@ class WebtritApiClient {
     return AccountContactsResponse.fromJson(jsonDecode(httpResponse.body)).data;
   }
 
+  Future<AppStatus> appStatus(String token) async {
+    final url = baseUrl.replace(
+      pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['app', 'status'],
+    );
+
+    final httpResponse = await _httpClient.get(
+      url,
+      headers: _headersWithToken(token),
+    );
+
+    if (httpResponse.statusCode != 200) {
+      _throwRequestFailure(httpResponse);
+    }
+
+    return AppStatusResponse.fromJson(jsonDecode(httpResponse.body)).data;
+  }
+
+  Future<void> appStatusUpdate(String token, AppStatus appStatus) async {
+    final url = baseUrl.replace(
+      pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['app', 'status'],
+    );
+
+    final request = AppStatusUpdateRequest(data: appStatus);
+
+    final httpResponse = await _httpClient.patch(
+      url,
+      headers: _headersWithToken(token),
+      body: jsonEncode(request.toJson()),
+    );
+
+    if (httpResponse.statusCode != 204) {
+      _throwRequestFailure(httpResponse);
+    }
+  }
+
   Future<void> appCreateContacts(String token, List<AppContact> appContacts) async {
     final url = baseUrl.replace(
       pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['app', 'contacts'],
