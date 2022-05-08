@@ -7,7 +7,6 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 
 import '../../../blocs/app/app_bloc.dart';
 import '../../../data/secure_storage.dart';
-import '../../../styles/app_colors.dart';
 import '../widgets/widgets.dart';
 
 class SettingsScaffold extends StatefulWidget {
@@ -24,7 +23,6 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.settings_AppBarTitle_myAccount),
@@ -72,9 +70,8 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
               }
             },
           ),
-          ListTile(
-            title: Text(context.l10n.settings_ListViewTileTitle_settings, style: themeData.textTheme.bodyText2),
-            tileColor: AppColors.backgroundLight,
+          GroupTitleListTile(
+            titleData: context.l10n.settings_ListViewTileTitle_settings,
           ),
           ListTile(
             leading: const Icon(Icons.network_check),
@@ -137,9 +134,8 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
             },
             secondary: const Icon(Icons.nights_stay_outlined), // TODO implement Dark Theme
           ),
-          ListTile(
-            title: Text(context.l10n.settings_ListViewTileTitle_toolbox, style: themeData.textTheme.bodyText2),
-            tileColor: AppColors.backgroundLight,
+          GroupTitleListTile(
+            titleData: context.l10n.settings_ListViewTileTitle_toolbox,
           ),
           ListTile(
             leading: const Icon(Icons.aod_outlined),
