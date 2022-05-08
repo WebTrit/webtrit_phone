@@ -20,14 +20,13 @@ class SettingsScaffold extends StatefulWidget {
 }
 
 class _SettingsScaffoldState extends State<SettingsScaffold> {
+  bool _dndSelected = false;
+  bool _registeredSelected = false;
+  bool _darkModeSelected = false;
+
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-
-    bool _dndSelected = false;
-    bool _registeredSelected = false;
-    bool _darkModeSelected = false;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.settings_AppBarTitle_myAccount),
