@@ -4,12 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../../../blocs/app/app_bloc.dart';
 import '../../../data/secure_storage.dart';
 import '../../../styles/app_colors.dart';
-import '../bloc/settings_bloc.dart';
 import '../widgets/widgets.dart';
 
 class SettingsScaffold extends StatefulWidget {
@@ -33,39 +31,7 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
       ),
       body: ListView(
         children: [
-          BlocBuilder<SettingsBloc, SettingsState>(
-            builder: (context, state) {
-              final info = state.info;
-              return ListTile(
-                leading: LeadingAvatar(
-                  username: info != null ? '${info.firstname} ${info.lastname}' : '?',
-                  radius: 50,
-                ),
-                title: Text(
-                  info != null ? '${info.firstname} ${info.lastname}' : '',
-                  style: themeData.textTheme.bodyText1!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                subtitle: Text(
-                  info != null ? '${info.balance.toStringAsFixed(2)} ${info.currency}' : '',
-                  style: themeData.textTheme.button!.copyWith(
-                    color: themeData.textTheme.caption!.color,
-                  ),
-                ),
-                trailing: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.edit_outlined),
-                      onPressed: null, // TODO implement edit account page
-                    ),
-                  ],
-                ),
-                isThreeLine: true,
-              );
-            },
-          ),
+          const AccountInfoListTile(),
           const ListTileSeparator(),
           SwitchListTile(
             title: Text(context.l10n.settings_ListViewTileTitle_doNotDisturb),
