@@ -60,9 +60,6 @@ class _MainState extends State<Main> {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider<CallRepository>(
-          create: (context) => CallRepository(),
-        ),
         RepositoryProvider<FavoritesRepository>(
           create: (context) => FavoritesRepository(
             appDatabase: context.read<AppDatabase>(),
@@ -140,7 +137,6 @@ class _MainState extends State<Main> {
           BlocProvider<CallBloc>(
             create: (context) {
               return CallBloc(
-                callRepository: context.read<CallRepository>(),
                 recentsRepository: context.read<RecentsRepository>(),
                 notificationsBloc: context.read<NotificationsBloc>(),
                 appBloc: context.read<AppBloc>(),

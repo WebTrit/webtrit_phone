@@ -12,9 +12,13 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 
-import 'package:webtrit_phone/features/notifications/notifications.dart';
-import 'package:webtrit_phone/blocs/app/app_bloc.dart';
+import 'package:webtrit_signaling/webtrit_signaling.dart';
+
 import 'package:webtrit_phone/app/assets.gen.dart';
+import 'package:webtrit_phone/blocs/app/app_bloc.dart';
+import 'package:webtrit_phone/data/secure_storage.dart';
+import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/features/notifications/notifications.dart';
 import 'package:webtrit_phone/models/recent.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -25,20 +29,18 @@ part 'call_event.dart';
 part 'call_state.dart';
 
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
-  final CallRepository callRepository;
   final RecentsRepository recentsRepository;
   final NotificationsBloc notificationsBloc;
   final AppBloc appBloc;
   final FlutterCallkeep callkeep;
 
+  final _logger = Logger('$CallBloc');
+
   late final StreamSubscription<ConnectivityResult> _connectivityChangedSubscription;
   ConnectivityResult?
       _previousConnectivityResult; // necessary because of issue on iOS with doubling the same connectivity result
 
-  StreamSubscription? _onIncomingCallSubscription;
-  StreamSubscription? _onAcceptedSubscription;
-  StreamSubscription? _onHangUpSubscription;
-  StreamSubscription? _onDoneSubscription;
+  late final WebtritSignalingClient _signalingClient;
 
   MediaStream? _localStream;
 
@@ -47,7 +49,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
   final _audioPlayer = AudioPlayer();
 
   CallBloc({
-    required this.callRepository,
     required this.recentsRepository,
     required this.notificationsBloc,
     required this.appBloc,
@@ -130,6 +131,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
         add(_ConnectivityResultChanged(result));
       }
     });
+
+    _signalingClient = WebtritSignalingClient(
+      EnvironmentConfig.SIGNALING_URL,
+      onEvent: _onSignalingEvent,
+      onError: _onSignalingError,
+      onDisconnect: _onSignalingDisconnect,
+    );
   }
 
   @override
@@ -138,13 +146,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
 
     WidgetsBinding.instance!.removeObserver(this);
 
-    if (callRepository.isAttached) {
-      await callRepository.detach();
-    }
-    await _onIncomingCallSubscription?.cancel();
-    await _onAcceptedSubscription?.cancel();
-    await _onHangUpSubscription?.cancel();
-    await _onDoneSubscription?.cancel();
+    await _signalingClient.disconnect();
     await _audioPlayer.dispose();
     await super.close();
   }
@@ -155,20 +157,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
   ) async {
     emit(const CallState.attachInProgress());
     try {
-      await callRepository.attach();
+      final token = await SecureStorage().readToken();
+      await _signalingClient.connect(token!, true);
 
-      _onIncomingCallSubscription = callRepository.onIncomingCall.listen((event) {
-        add(CallIncomingReceived(callId: event.callId, username: event.caller, jsepData: event.jsep));
-      });
-      _onAcceptedSubscription = callRepository.onAccepted.listen((event) {
-        add(CallOutgoingAccepted(username: event.callee, jsepData: event.jsep));
-      });
-      _onHangUpSubscription = callRepository.onHangup.listen((event) {
-        add(CallRemoteHungUp(reason: event.reason));
-      });
-      _onDoneSubscription = callRepository.onDone.listen((event) {
-        add(const CallDetached());
-      });
       emit(const CallState.idle());
 
       appBloc.add(const AppRegistered());
@@ -191,9 +182,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
   ) async {
     emit(const CallState.initial());
 
-    if (callRepository.isAttached) {
-      await callRepository.detach();
-    }
+    await _signalingClient.disconnect();
   }
 
   Future<void> _onIncomingReceived(
@@ -244,7 +233,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
       active: (state) => state.callId,
       orElse: () => throw StateError('Incorrect state: $state'),
     );
-    await callRepository.accept(callId, localDescription.toMap());
+    await _signalingClient.execute(AcceptRequest(
+      callId: callId,
+      jsep: localDescription.toMap(),
+    ));
   }
 
   Future<void> _onOutgoingStarted(
@@ -258,7 +250,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
 
     emit(CallState.active(
       direction: Direction.outgoing,
-      callId: callRepository.generateCallId(),
+      callId: WebtritSignalingClient.generateCallId(),
       number: event.number,
       video: event.video,
       createdTime: DateTime.now(),
@@ -282,7 +274,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
       orElse: () => throw StateError('Incorrect state: $state'),
     );
     try {
-      await callRepository.call(callId, event.number, localDescription.toMap());
+      await _signalingClient.execute(OutgoingCallRequest(
+        callId: callId,
+        number: event.number,
+        jsep: localDescription.toMap(),
+      ));
 
       await _audioPlayer.setAsset(Assets.ringtones.outgoingCall1);
       await _audioPlayer.setLoopMode(LoopMode.one);
@@ -369,9 +365,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     emit(currentState.copyWith(hungUpTime: DateTime.now()));
 
     if (currentState.isIncoming && !currentState.accepted) {
-      await callRepository.decline(currentState.callId);
+      await _signalingClient.execute(DeclineRequest(
+        callId: currentState.callId,
+      ));
     } else {
-      await callRepository.hangup(currentState.callId);
+      await _signalingClient.execute(HangupRequest(
+        callId: currentState.callId,
+      ));
     }
 
     _addToRecents(currentState);
@@ -489,7 +489,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
             active: (state) => state.callId,
             orElse: () => throw StateError('Incorrect state: $state'),
           );
-          callRepository.sendTrickle(callId, null);
+          _signalingClient.execute(TrickleRequest(
+            callId: callId,
+            candidate: null,
+          ));
         }
       }
       ..onIceConnectionState = (iceConnectionState) {
@@ -502,7 +505,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
           active: (state) => state.callId,
           orElse: () => throw StateError('Incorrect state: $state'),
         );
-        callRepository.sendTrickle(callId, candidate.toMap());
+        _signalingClient.execute(TrickleRequest(
+          callId: callId,
+          candidate: candidate.toMap(),
+        ));
       }
       ..onAddStream = (stream) {
         logger.fine(() => 'onAddStream stream: $stream');
@@ -542,5 +548,27 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     );
 
     recentsRepository.add(recent);
+  }
+
+  void _onSignalingEvent(Event event) {
+    if (event is IncomingCallEvent) {
+      add(CallIncomingReceived(callId: event.callId, username: event.caller, jsepData: event.jsep));
+    } else if (event is AnsweredEvent) {
+      add(CallOutgoingAccepted(username: event.callee, jsepData: event.jsep));
+    } else if (event is HangupEvent) {
+      add(CallRemoteHungUp(reason: event.reason));
+    } else {
+      _logger.warning('unhandled signaling event $event');
+    }
+  }
+
+  void _onSignalingError(error, [StackTrace? stackTrace]) {
+    // TODO: add necessary logic
+    _logger.severe('_onErrorCallback { error: $error, stackTrace: $stackTrace } / not implemented');
+  }
+
+  void _onSignalingDisconnect(int? code, String? reason) {
+    // TODO: check relevance to add this event
+    add(const CallDetached());
   }
 }
