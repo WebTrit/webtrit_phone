@@ -145,6 +145,7 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
               context.goNamed('log-records-console');
             },
           ),
+          const ListTileSeparator(),
         ],
       ),
     );
