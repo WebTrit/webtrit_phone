@@ -18,7 +18,6 @@ void main(List<String> arguments) async {
 
   final client = WebtritSignalingClient(
     url,
-    token,
     onEvent: (event) {
       print('>> event: $event');
     },
@@ -31,7 +30,7 @@ void main(List<String> arguments) async {
   );
 
   print('Connect');
-  await client.connect(false);
+  await client.connect(token, false);
 
   print('Wait StateEvent');
   await Future.delayed(Duration(seconds: 5));

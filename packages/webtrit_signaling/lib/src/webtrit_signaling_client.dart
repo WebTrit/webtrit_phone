@@ -25,8 +25,7 @@ class WebtritSignalingClient {
   static int _createCounter = 0;
 
   WebtritSignalingClient(
-    this.url,
-    this.token, {
+    this.url, {
     required this.onEvent,
     required this.onError,
     required this.onDisconnect,
@@ -37,7 +36,6 @@ class WebtritSignalingClient {
   final Logger _logger;
 
   final String url;
-  final String token;
 
   final void Function(Event event) onEvent;
   final void Function(Object error, StackTrace? stackTrace) onError;
@@ -50,7 +48,7 @@ class WebtritSignalingClient {
 
   final _transactions = <String, Transaction>{};
 
-  String _signalingUrl(bool force) => Uri.parse(url).replace(
+  String _signalingUrl(String token, bool force) => Uri.parse(url).replace(
         pathSegments: ['signaling', 'websocket'],
         queryParameters: {
           'token': token,
@@ -58,11 +56,11 @@ class WebtritSignalingClient {
         },
       ).toString();
 
-  Future<void> connect(bool force) async {
+  Future<void> connect(String token, bool force) async {
     if (_ws != null) {
       throw WebtritSignalingAlreadyConnectException();
     } else {
-      final ws = await WebSocket.connect(_signalingUrl(force), protocols: [subprotocol]);
+      final ws = await WebSocket.connect(_signalingUrl(token, force), protocols: [subprotocol]);
       ws.listen(
         _wsOnData,
         onError: _wsOnError,

@@ -40,7 +40,6 @@ class CallRepository {
     } else {
       final signalingClient = WebtritSignalingClient(
         EnvironmentConfig.SIGNALING_URL,
-        token,
         onEvent: (event) {
           if (event is IncomingCallEvent) {
             _incomingCallStreamController!.add(event);
@@ -55,7 +54,7 @@ class CallRepository {
         onError: _onErrorCallback,
         onDisconnect: _onDisconnectCallback,
       );
-      await signalingClient.connect(true);
+      await signalingClient.connect(token, true);
       _signalingClient = signalingClient;
     }
   }
