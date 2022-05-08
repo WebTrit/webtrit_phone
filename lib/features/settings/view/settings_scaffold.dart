@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 
+import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
-import '../../../blocs/app/app_bloc.dart';
-import '../../../data/secure_storage.dart';
 import '../widgets/widgets.dart';
 
 class SettingsScaffold extends StatefulWidget {
