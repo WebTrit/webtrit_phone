@@ -8,9 +8,10 @@ class ListTileSeparator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Divider(
-      color: AppColors.lightGrey,
+      height: 1,
       indent: 15,
       endIndent: 15,
+      color: AppColors.lightGrey,
     );
   }
 }
