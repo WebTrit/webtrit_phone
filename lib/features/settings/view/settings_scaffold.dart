@@ -28,17 +28,8 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
     bool _darkModeSelected = false;
 
     return Scaffold(
-      appBar: ExtAppBar(
+      appBar: AppBar(
         title: Text(context.l10n.settings_AppBarTitle_myAccount),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-          ),
-          onPressed: () {
-            Navigator.of(context).pop(true);
-          },
-        ),
       ),
       body: ListView(
         children: [

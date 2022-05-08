@@ -69,7 +69,7 @@ class App extends StatelessWidget {
                 color: AppColors.black,
                 fontWeight: FontWeight.bold,
               ),
-              centerTitle: false,
+              centerTitle: true,
             ),
             tabBarTheme: TabBarTheme(
               labelColor: themeData.textTheme.caption!.color,
