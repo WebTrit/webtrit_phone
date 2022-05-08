@@ -14,7 +14,7 @@ class WebTritPhonePictureLogo extends StatelessWidget {
       height: mediaQueryData.size.height / 3,
       child: Column(
         children: [
-          Spacer(),
+          const Spacer(),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
