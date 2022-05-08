@@ -33,69 +33,38 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
       ),
       body: ListView(
         children: [
-          ListTile(
-            leading: BlocBuilder<SettingsBloc, SettingsState>(
-              builder: (context, state) {
-                final info = state.info;
-                if (info != null) {
-                  return LeadingAvatar(
-                    username: '${info.firstname} ${info.lastname}',
-                    radius: 50,
-                  );
-                } else {
-                  return const SizedBox(
-                    width: 10,
-                    height: 10,
-                  );
-                }
-              },
-            ),
-            title: BlocBuilder<SettingsBloc, SettingsState>(
-              builder: (context, state) {
-                final info = state.info;
-                if (info != null) {
-                  return Text(
-                    '${info.firstname} ${info.lastname}',
-                    style: themeData.textTheme.bodyText1!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  );
-                } else {
-                  return const SizedBox(
-                    width: 10,
-                    height: 10,
-                  );
-                }
-              },
-            ),
-            subtitle: BlocBuilder<SettingsBloc, SettingsState>(
-              builder: (context, state) {
-                final info = state.info;
-                if (info != null) {
-                  return Text(
-                    '${info.balance.toStringAsFixed(2)} ${info.currency}',
-                    style: themeData.textTheme.button!.copyWith(
-                      color: themeData.textTheme.caption!.color,
-                    ),
-                  );
-                } else {
-                  return const SizedBox(
-                    width: 10,
-                    height: 10,
-                  );
-                }
-              },
-            ),
-            trailing: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const <Widget>[
-                IconButton(
-                  icon: Icon(Icons.edit_outlined),
-                  onPressed: null, // TODO implement edit account page
+          BlocBuilder<SettingsBloc, SettingsState>(
+            builder: (context, state) {
+              final info = state.info;
+              return ListTile(
+                leading: LeadingAvatar(
+                  username: info != null ? '${info.firstname} ${info.lastname}' : '?',
+                  radius: 50,
                 ),
-              ],
-            ),
-            isThreeLine: true,
+                title: Text(
+                  info != null ? '${info.firstname} ${info.lastname}' : '',
+                  style: themeData.textTheme.bodyText1!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                subtitle: Text(
+                  info != null ? '${info.balance.toStringAsFixed(2)} ${info.currency}' : '',
+                  style: themeData.textTheme.button!.copyWith(
+                    color: themeData.textTheme.caption!.color,
+                  ),
+                ),
+                trailing: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.edit_outlined),
+                      onPressed: null, // TODO implement edit account page
+                    ),
+                  ],
+                ),
+                isThreeLine: true,
+              );
+            },
           ),
           const ListTileSeparator(),
           SwitchListTile(
