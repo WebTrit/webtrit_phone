@@ -55,7 +55,8 @@ class App extends StatelessWidget {
         return Theme(
           data: themeData.copyWith(
             appBarTheme: AppBarTheme(
-              color: themeData.canvasColor,
+              backgroundColor: AppColors.backgroundLight,
+              elevation: 0,
               iconTheme: IconThemeData(
                 color: themeData.textTheme.caption!.color,
               ),
@@ -63,10 +64,10 @@ class App extends StatelessWidget {
                 color: themeData.textTheme.caption!.color,
               ),
               titleTextStyle: themeData.primaryTextTheme.headline6!.copyWith(
-                color: themeData.colorScheme.secondary,
+                color: AppColors.black,
                 fontWeight: FontWeight.bold,
               ),
-              centerTitle: false,
+              centerTitle: true,
             ),
             tabBarTheme: TabBarTheme(
               labelColor: themeData.textTheme.caption!.color,

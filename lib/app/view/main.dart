@@ -13,7 +13,6 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/pages/settings.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
@@ -201,9 +200,34 @@ class _MainState extends State<Main> {
             pageBuilder: (context, state) => MaterialPage(
               key: state.pageKey,
               fullscreenDialog: true,
-              child: const SettingsPage(),
+              child: const SettingsScreen(),
             ),
             routes: [
+              GoRoute(
+                name: 'network-settings-tab',
+                path: 'network-settings-tab',
+                builder: (context, state) => const NetworkSettingsTabScreen(),
+              ),
+              GoRoute(
+                name: 'about-app-tab',
+                path: 'about-app-tab',
+                builder: (context, state) => const AboutAppTabScreen(),
+              ),
+              GoRoute(
+                name: 'help-tab',
+                path: 'help-tab',
+                builder: (context, state) => const HelpTabScreen(),
+              ),
+              GoRoute(
+                name: 'language-tab',
+                path: 'language-tab',
+                builder: (context, state) => const LanguageTabScreen(),
+              ),
+              GoRoute(
+                name: 'terms-conditions-tab',
+                path: 'terms-conditions-tab',
+                builder: (context, state) => const TermsConditionsTabScreen(),
+              ),
               GoRoute(
                 name: 'log-records-console',
                 path: 'log-records-console',

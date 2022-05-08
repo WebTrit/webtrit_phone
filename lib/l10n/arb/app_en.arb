@@ -73,5 +73,48 @@
   },
   "contactsSourceExternal": "Internal",
   "@contactsSourceExternal": {
+  },
+
+  "settings_AppBarTitle_myAccount": "My account",
+  "@settings_AppBarTitle_myAccount": {
+  },
+  "settings_ListViewTileTitle_doNotDisturb": "Do not disturb",
+  "@settings_ListViewTileTitle_doNotDisturb": {
+  },
+  "settings_ListViewTileTitle_registered": "Registered",
+  "@settings_ListViewTileTitle_registered": {
+  },
+  "settings_ListViewTileTitle_logout": "Logout",
+  "@settings_ListViewTileTitle_logout": {
+  },
+  "settings_ListViewTileTitle_settings": "SETTINGS",
+  "@settings_ListViewTileTitle_settings": {
+  },
+  "settings_ListViewTileTitle_networkSettings": "Network settings",
+  "@settings_ListViewTileTitle_networkSettings": {
+  },
+  "settings_ListViewTileTitle_help": "Help",
+  "@settings_ListViewTileTitle_help": {
+  },
+  "settings_ListViewTileTitle_language": "Language",
+  "@settings_ListViewTileTitle_language": {
+  },
+  "settings_ListViewTileTitle_termsAndConditions": "Terms and conditions",
+  "@settings_ListViewTileTitle_termsAndConditions": {
+  },
+  "settings_ListViewTileTitle_aboutApplication": "About application",
+  "@settings_ListViewTileTitle_aboutApplication": {
+  },
+  "settings_ListViewTileTitle_darkMode": "Dark mode",
+  "@settings_ListViewTileTitle_darkMode": {
+  },
+  "settings_ListViewTileTitle_toolbox": "TOOLBOX",
+  "@settings_ListViewTileTitle_toolbox": {
+  },
+  "settings_ListViewTileTitle_logRecordsConsole": "Log records console",
+  "@settings_ListViewTileTitle_logRecordsConsole": {
+  },
+  "underDevelopment": "This page is under development.",
+  "@underDevelopment": {
   }
 }
