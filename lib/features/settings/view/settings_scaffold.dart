@@ -10,6 +10,7 @@ import '../../../blocs/app/app_bloc.dart';
 import '../../../data/secure_storage.dart';
 import '../../../styles/app_colors.dart';
 import '../bloc/settings_bloc.dart';
+import '../widgets/widgets.dart';
 
 class SettingsScaffold extends StatefulWidget {
   const SettingsScaffold({Key? key}) : super(key: key);
@@ -97,11 +98,7 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
             ),
             isThreeLine: true,
           ),
-          const Divider(
-            color: AppColors.lightGrey,
-            indent: 15,
-            endIndent: 15,
-          ),
+          const ListTileSeparator(),
           SwitchListTile(
             title: Text(context.l10n.settings_ListViewTileTitle_doNotDisturb),
             value: _dndSelected,
@@ -112,11 +109,7 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
             },
             secondary: const Icon(Icons.block), // TODO implement Do not Disturb functionality
           ),
-          const Divider(
-            color: AppColors.lightGrey,
-            indent: 15,
-            endIndent: 15,
-          ),
+          const ListTileSeparator(),
           SwitchListTile(
             title: Text(context.l10n.settings_ListViewTileTitle_registered),
             value: _registeredSelected,
@@ -128,11 +121,7 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
             secondary:
                 const Icon(Icons.account_circle_outlined), // TODO implement Registered/Unregistered functionality
           ),
-          const Divider(
-            color: AppColors.lightGrey,
-            indent: 15,
-            endIndent: 15,
-          ),
+          const ListTileSeparator(),
           ListTile(
             leading: const Icon(Icons.logout),
             title: Text(context.l10n.settings_ListViewTileTitle_logout),
@@ -161,11 +150,7 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
               context.goNamed('network-settings-tab');
             },
           ),
-          const Divider(
-            color: AppColors.lightGrey,
-            indent: 15,
-            endIndent: 15,
-          ),
+          const ListTileSeparator(),
           ListTile(
             leading: const Icon(Icons.help_outline),
             title: Text(context.l10n.settings_ListViewTileTitle_help),
@@ -174,11 +159,7 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
               context.goNamed('help-tab');
             },
           ),
-          const Divider(
-            color: AppColors.lightGrey,
-            indent: 15,
-            endIndent: 15,
-          ),
+          const ListTileSeparator(),
           ListTile(
             leading: const Icon(Icons.language),
             title: Text(context.l10n.settings_ListViewTileTitle_language),
@@ -193,11 +174,7 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
               context.goNamed('language-tab');
             },
           ),
-          const Divider(
-            color: AppColors.lightGrey,
-            indent: 15,
-            endIndent: 15,
-          ),
+          const ListTileSeparator(),
           ListTile(
             leading: const Icon(Icons.book_outlined),
             title: Text(context.l10n.settings_ListViewTileTitle_termsAndConditions),
@@ -206,11 +183,7 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
               context.goNamed('terms-conditions-tab');
             },
           ),
-          const Divider(
-            color: AppColors.lightGrey,
-            indent: 15,
-            endIndent: 15,
-          ),
+          const ListTileSeparator(),
           ListTile(
             leading: const Icon(Icons.card_travel),
             title: Text(context.l10n.settings_ListViewTileTitle_aboutApplication),
@@ -219,11 +192,7 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
               context.goNamed('about-app-tab');
             },
           ),
-          const Divider(
-            color: AppColors.lightGrey,
-            indent: 15,
-            endIndent: 15,
-          ),
+          const ListTileSeparator(),
           SwitchListTile(
             title: Text(context.l10n.settings_ListViewTileTitle_darkMode),
             value: _darkModeSelected,
