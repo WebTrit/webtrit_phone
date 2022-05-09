@@ -6,6 +6,7 @@ import './login_otp_request_tab.dart';
 import './login_otp_verify_tab.dart';
 
 import '../login.dart';
+import 'login_mode_selection_tab.dart';
 
 class LockScaffold extends StatefulWidget {
   const LockScaffold({
@@ -22,7 +23,7 @@ class _LockScaffoldState extends State<LockScaffold> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 2);
+    _tabController = TabController(vsync: this, length: 3);
   }
 
   @override
@@ -44,6 +45,7 @@ class _LockScaffoldState extends State<LockScaffold> with SingleTickerProviderSt
             controller: _tabController,
             physics: const NeverScrollableScrollPhysics(),
             children: const [
+              LoginModeSelectionTab(),
               LoginOtpRequestTab(),
               LoginOtpVerifyTab(),
             ],

@@ -116,5 +116,9 @@
   },
   "underDevelopment": "This page is under development.",
   "@underDevelopment": {
+  },
+
+  "loginModeSelectionTabDemoButtonLabel": "Demo",
+  "@loginModeSelectionTabDemoButtonLabel": {
   }
 }

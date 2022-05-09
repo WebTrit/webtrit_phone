@@ -23,6 +23,7 @@ class Assets {
   Assets._();
 
   static const SvgGenImage logo = SvgGenImage('assets/logo.svg');
+  static const SvgGenImage loginGirl = SvgGenImage('assets/login_carousel/login_girl_with_phone.svg');
   static const $AssetsRingtonesGen ringtones = $AssetsRingtonesGen();
 }
 
