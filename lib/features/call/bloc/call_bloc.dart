@@ -78,11 +78,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
       _onOutgoingAccepted,
       transformer: sequential(),
     );
-    on<CallRemoteStreamAdded>(
+    on<_RemoteStreamAdded>(
       _onRemoteStreamAdded,
       transformer: sequential(),
     );
-    on<CallRemoteStreamRemoved>(
+    on<_RemoteStreamRemoved>(
       _onRemoteStreamRemoved,
       transformer: sequential(),
     );
@@ -312,7 +312,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
   }
 
   Future<void> _onRemoteStreamAdded(
-    CallRemoteStreamAdded event,
+    _RemoteStreamAdded event,
     Emitter<CallState> emit,
   ) async {
     emit(state.maybeMap(
@@ -322,7 +322,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
   }
 
   Future<void> _onRemoteStreamRemoved(
-    CallRemoteStreamRemoved event,
+    _RemoteStreamRemoved event,
     Emitter<CallState> emit,
   ) async {
     emit(state.maybeMap(
@@ -513,12 +513,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
       ..onAddStream = (stream) {
         logger.fine(() => 'onAddStream stream: $stream');
 
-        add(CallRemoteStreamAdded(stream: stream));
+        add(_RemoteStreamAdded(stream: stream));
       }
       ..onRemoveStream = (stream) {
         logger.fine(() => 'onRemoveStream stream: $stream');
 
-        add(CallRemoteStreamRemoved(stream: stream));
+        add(_RemoteStreamRemoved(stream: stream));
       }
       ..onAddTrack = (stream, track) {
         logger.fine(() => 'onAddTrack stream: $stream track: $track');

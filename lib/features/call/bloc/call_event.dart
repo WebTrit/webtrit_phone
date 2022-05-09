@@ -98,10 +98,10 @@ class CallLocalHungUp extends CallHungUp {
   }) : super(reason: reason);
 }
 
-class CallRemoteStreamAdded extends CallEvent {
+class _RemoteStreamAdded extends CallEvent {
   final MediaStream stream;
 
-  const CallRemoteStreamAdded({
+  const _RemoteStreamAdded({
     required this.stream,
   });
 
@@ -109,10 +109,10 @@ class CallRemoteStreamAdded extends CallEvent {
   List<Object?> get props => [stream];
 }
 
-class CallRemoteStreamRemoved extends CallEvent {
+class _RemoteStreamRemoved extends CallEvent {
   final MediaStream stream;
 
-  const CallRemoteStreamRemoved({
+  const _RemoteStreamRemoved({
     required this.stream,
   });
 
