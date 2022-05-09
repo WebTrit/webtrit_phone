@@ -32,8 +32,13 @@ class LoginModeSelectionTab extends StatelessWidget {
           children: [
             const LoginCarouselPictureLogo(),
             const LoginCarouselPictureGirl(),
-            const Spacer(),
-            const Spacer(),
+            const Expanded(child: SizedBox()),
+            TextButton(
+              onPressed: null,
+              style: AppTextButtonStyle.primaryThick,
+              child: Text(context.l10n.loginModeSelectionTabSignInButtonLabel),
+            ),
+            const SizedBox(height: kToolbarHeight / 4),
             TextButton(
               onPressed: () {
                 context.read<LoginCubit>().next();

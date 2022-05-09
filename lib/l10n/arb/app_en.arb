@@ -120,5 +120,8 @@
 
   "loginModeSelectionTabDemoButtonLabel": "Demo",
   "@loginModeSelectionTabDemoButtonLabel": {
+  },
+  "loginModeSelectionTabSignInButtonLabel": "Sign in",
+  "@loginModeSelectionTabSignInButtonLabel": {
   }
 }
