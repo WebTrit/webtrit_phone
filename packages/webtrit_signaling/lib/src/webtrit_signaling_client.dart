@@ -104,6 +104,7 @@ class WebtritSignalingClient {
     for (final transaction in _transactions.values) {
       transaction.terminate(closeCode, closeReason);
     }
+    _ws = null;
     onDisconnect(closeCode, closeReason);
   }
 
