@@ -15,20 +15,14 @@ class LoginCarouselPictureLogo extends StatelessWidget {
     return SizedBox(
       height: mediaQueryData.size.height / 4,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Assets.logo.svg(
-                  height: themeData.textTheme.headline5!.fontSize! * 2.2,
-                ),
-                Text(
-                  EnvironmentConfig.APP_NAME,
-                  style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.white),
-                ),
-              ],
-            ),
+          Assets.logo.svg(
+            height: themeData.textTheme.headline5!.fontSize! * 2.2,
+          ),
+          Text(
+            EnvironmentConfig.APP_NAME,
+            style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.white),
           ),
         ],
       ),
@@ -51,19 +45,10 @@ class LoginCarouselPictureGirl extends StatelessWidget {
           Radius.circular(20.0),
         ),
       ),
-      child: Column(
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Assets.loginGirl.svg(
-                  height: themeData.textTheme.headline5!.fontSize! * 10,
-                ),
-              ],
-            ),
-          ),
-        ],
+      child: Center(
+        child: Assets.loginGirl.svg(
+          height: themeData.textTheme.headline5!.fontSize! * 10,
+        ),
       ),
     );
   }
