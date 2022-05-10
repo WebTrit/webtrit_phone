@@ -34,11 +34,11 @@ class LoginOtpVerifyTab extends StatelessWidget {
         }
       },
       child: Padding(
-        padding: kTabLabelPadding,
+        padding: kTabLabelPadding * 2,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const WebTritPhonePictureLogo(),
+            const OnboardingLogo(),
             BlocBuilder<LoginCubit, LoginState>(
               buildWhen: (previous, current) =>
                   previous.status != current.status || previous.codeInput != current.codeInput,

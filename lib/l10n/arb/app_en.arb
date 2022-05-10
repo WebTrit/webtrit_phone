@@ -116,5 +116,12 @@
   },
   "underDevelopment": "This page is under development.",
   "@underDevelopment": {
+  },
+
+  "loginModeSelectionTabDemoButtonLabel": "Demo",
+  "@loginModeSelectionTabDemoButtonLabel": {
+  },
+  "loginModeSelectionTabSignInButtonLabel": "Sign in",
+  "@loginModeSelectionTabSignInButtonLabel": {
   }
 }

@@ -75,6 +75,7 @@ flutter:
   assets:
     - assets/ringtones/
     - assets/logo.svg
+    - assets/login_carousel/login_girl_with_phone.svg
 
 flutter_gen:
   output: lib/app/
