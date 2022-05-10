@@ -40,16 +40,14 @@ class _LockScaffoldState extends State<LockScaffold> with SingleTickerProviderSt
         _tabController.animateTo(state.tabIndex);
       },
       child: Scaffold(
-        body: SafeArea(
-          child: TabBarView(
-            controller: _tabController,
-            physics: const NeverScrollableScrollPhysics(),
-            children: const [
-              LoginModeSelectTab(),
-              LoginOtpRequestTab(),
-              LoginOtpVerifyTab(),
-            ],
-          ),
+        body: TabBarView(
+          controller: _tabController,
+          physics: const NeverScrollableScrollPhysics(),
+          children: const [
+            LoginModeSelectTab(),
+            LoginOtpRequestTab(),
+            LoginOtpVerifyTab(),
+          ],
         ),
       ),
     );
