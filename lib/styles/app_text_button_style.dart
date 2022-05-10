@@ -19,6 +19,12 @@ abstract class AppTextButtonStyle {
     backgroundColor: AppColors.primary,
   );
 
+  static final white = TextButton.styleFrom(
+    primary: AppColors.black,
+    onSurface: AppColors.black,
+    backgroundColor: AppColors.white,
+  );
+
   static final red = TextButton.styleFrom(
     primary: AppColors.white,
     onSurface: AppColors.white,
@@ -26,6 +32,10 @@ abstract class AppTextButtonStyle {
   );
 
   static final primaryThick = primary.copyWith(
+    minimumSize: MaterialStateProperty.all(const Size(64, 42)),
+  );
+
+  static final whiteThick = white.copyWith(
     minimumSize: MaterialStateProperty.all(const Size(64, 42)),
   );
 }

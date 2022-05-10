@@ -43,7 +43,7 @@ class LoginModeSelectTab extends StatelessWidget {
               onPressed: () {
                 context.read<LoginCubit>().next();
               },
-              style: AppTextButtonStyle.primaryThick,
+              style: AppTextButtonStyle.whiteThick,
               child: Text(context.l10n.loginModeSelectionTabDemoButtonLabel),
             ),
             const SizedBox(height: kToolbarHeight / 2),
