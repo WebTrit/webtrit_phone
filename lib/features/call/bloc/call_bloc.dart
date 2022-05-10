@@ -151,6 +151,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     await super.close();
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    add(_AppLifecycleStateChanged(state));
+  }
+
   Future<void> _onAttached(
     CallAttached event,
     Emitter<CallState> emit,
@@ -169,11 +174,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
         reason: e.toString(),
       ));
     }
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async {
-    add(_AppLifecycleStateChanged(state));
   }
 
   Future<void> _onDetached(
