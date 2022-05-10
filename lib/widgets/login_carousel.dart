@@ -29,27 +29,3 @@ class LoginCarouselPictureLogo extends StatelessWidget {
     );
   }
 }
-
-class LoginCarouselPictureGirl extends StatelessWidget {
-  const LoginCarouselPictureGirl({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final mediaQueryData = MediaQuery.of(context);
-    final themeData = Theme.of(context);
-    return Container(
-      height: mediaQueryData.size.height / 2.5,
-      decoration: const BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.all(
-          Radius.circular(20.0),
-        ),
-      ),
-      child: Center(
-        child: Assets.loginGirl.svg(
-          height: themeData.textTheme.headline5!.fontSize! * 10,
-        ),
-      ),
-    );
-  }
-}
