@@ -9,6 +9,6 @@ class CallNotIdleErrorNotification extends Notification {
   const CallNotIdleErrorNotification();
 }
 
-class CallAttachErrorNotification extends Notification {
-  const CallAttachErrorNotification();
+class CallConnectErrorNotification extends Notification {
+  const CallConnectErrorNotification();
 }

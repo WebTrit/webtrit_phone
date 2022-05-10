@@ -141,7 +141,7 @@ class _MainState extends State<Main> {
                 notificationsBloc: context.read<NotificationsBloc>(),
                 appBloc: context.read<AppBloc>(),
                 callkeep: callkeep,
-              )..add(const CallAttached());
+              )..add(const CallStarted());
             },
           ),
         ],

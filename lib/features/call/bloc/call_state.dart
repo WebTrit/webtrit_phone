@@ -4,9 +4,9 @@ part of 'call_bloc.dart';
 class CallState with _$CallState {
   const factory CallState.initial() = InitialCallState;
 
-  const factory CallState.attachInProgress() = AttachInProgressCallState;
+  const factory CallState.signalingInProgress() = SignalingInProgressCallState;
 
-  const factory CallState.attachFailure({required String reason}) = AttachFailureCallState;
+  const factory CallState.signalingFailure({required String reason}) = SignalingFailureCallState;
 
   const factory CallState.idle() = IdleCallState;
 

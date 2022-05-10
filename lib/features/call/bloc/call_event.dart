@@ -7,12 +7,23 @@ abstract class CallEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class CallAttached extends CallEvent {
-  const CallAttached();
+class CallStarted extends CallEvent {
+  const CallStarted();
 }
 
-class CallDetached extends CallEvent {
-  const CallDetached();
+class _SignalingClientConnectInitiated extends CallEvent {
+  const _SignalingClientConnectInitiated();
+}
+
+class _SignalingClientDisconnectInitiated extends CallEvent {
+  const _SignalingClientDisconnectInitiated();
+}
+
+class _SignalingClientDisconnected extends CallEvent {
+  const _SignalingClientDisconnected(this.code, this.reason);
+
+  final int? code;
+  final String? reason;
 }
 
 class CallIncomingReceived extends CallEvent {

@@ -19,8 +19,8 @@ mixin _$CallState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() attachInProgress,
-    required TResult Function(String reason) attachFailure,
+    required TResult Function() signalingInProgress,
+    required TResult Function(String reason) signalingFailure,
     required TResult Function() idle,
     required TResult Function(
             Direction direction,
@@ -39,8 +39,8 @@ mixin _$CallState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? attachInProgress,
-    TResult Function(String reason)? attachFailure,
+    TResult Function()? signalingInProgress,
+    TResult Function(String reason)? signalingFailure,
     TResult Function()? idle,
     TResult Function(
             Direction direction,
@@ -59,8 +59,8 @@ mixin _$CallState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? attachInProgress,
-    TResult Function(String reason)? attachFailure,
+    TResult Function()? signalingInProgress,
+    TResult Function(String reason)? signalingFailure,
     TResult Function()? idle,
     TResult Function(
             Direction direction,
@@ -80,8 +80,9 @@ mixin _$CallState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(InitialCallState value) initial,
-    required TResult Function(AttachInProgressCallState value) attachInProgress,
-    required TResult Function(AttachFailureCallState value) attachFailure,
+    required TResult Function(SignalingInProgressCallState value)
+        signalingInProgress,
+    required TResult Function(SignalingFailureCallState value) signalingFailure,
     required TResult Function(IdleCallState value) idle,
     required TResult Function(ActiveCallState value) active,
     required TResult Function(FailureCallState value) failure,
@@ -90,8 +91,8 @@ mixin _$CallState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(InitialCallState value)? initial,
-    TResult Function(AttachInProgressCallState value)? attachInProgress,
-    TResult Function(AttachFailureCallState value)? attachFailure,
+    TResult Function(SignalingInProgressCallState value)? signalingInProgress,
+    TResult Function(SignalingFailureCallState value)? signalingFailure,
     TResult Function(IdleCallState value)? idle,
     TResult Function(ActiveCallState value)? active,
     TResult Function(FailureCallState value)? failure,
@@ -100,8 +101,8 @@ mixin _$CallState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(InitialCallState value)? initial,
-    TResult Function(AttachInProgressCallState value)? attachInProgress,
-    TResult Function(AttachFailureCallState value)? attachFailure,
+    TResult Function(SignalingInProgressCallState value)? signalingInProgress,
+    TResult Function(SignalingFailureCallState value)? signalingFailure,
     TResult Function(IdleCallState value)? idle,
     TResult Function(ActiveCallState value)? active,
     TResult Function(FailureCallState value)? failure,
@@ -166,8 +167,8 @@ class _$InitialCallState implements InitialCallState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() attachInProgress,
-    required TResult Function(String reason) attachFailure,
+    required TResult Function() signalingInProgress,
+    required TResult Function(String reason) signalingFailure,
     required TResult Function() idle,
     required TResult Function(
             Direction direction,
@@ -189,8 +190,8 @@ class _$InitialCallState implements InitialCallState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? attachInProgress,
-    TResult Function(String reason)? attachFailure,
+    TResult Function()? signalingInProgress,
+    TResult Function(String reason)? signalingFailure,
     TResult Function()? idle,
     TResult Function(
             Direction direction,
@@ -212,8 +213,8 @@ class _$InitialCallState implements InitialCallState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? attachInProgress,
-    TResult Function(String reason)? attachFailure,
+    TResult Function()? signalingInProgress,
+    TResult Function(String reason)? signalingFailure,
     TResult Function()? idle,
     TResult Function(
             Direction direction,
@@ -239,8 +240,9 @@ class _$InitialCallState implements InitialCallState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(InitialCallState value) initial,
-    required TResult Function(AttachInProgressCallState value) attachInProgress,
-    required TResult Function(AttachFailureCallState value) attachFailure,
+    required TResult Function(SignalingInProgressCallState value)
+        signalingInProgress,
+    required TResult Function(SignalingFailureCallState value) signalingFailure,
     required TResult Function(IdleCallState value) idle,
     required TResult Function(ActiveCallState value) active,
     required TResult Function(FailureCallState value) failure,
@@ -252,8 +254,8 @@ class _$InitialCallState implements InitialCallState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(InitialCallState value)? initial,
-    TResult Function(AttachInProgressCallState value)? attachInProgress,
-    TResult Function(AttachFailureCallState value)? attachFailure,
+    TResult Function(SignalingInProgressCallState value)? signalingInProgress,
+    TResult Function(SignalingFailureCallState value)? signalingFailure,
     TResult Function(IdleCallState value)? idle,
     TResult Function(ActiveCallState value)? active,
     TResult Function(FailureCallState value)? failure,
@@ -265,8 +267,8 @@ class _$InitialCallState implements InitialCallState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(InitialCallState value)? initial,
-    TResult Function(AttachInProgressCallState value)? attachInProgress,
-    TResult Function(AttachFailureCallState value)? attachFailure,
+    TResult Function(SignalingInProgressCallState value)? signalingInProgress,
+    TResult Function(SignalingFailureCallState value)? signalingFailure,
     TResult Function(IdleCallState value)? idle,
     TResult Function(ActiveCallState value)? active,
     TResult Function(FailureCallState value)? failure,
@@ -284,40 +286,42 @@ abstract class InitialCallState implements CallState {
 }
 
 /// @nodoc
-abstract class $AttachInProgressCallStateCopyWith<$Res> {
-  factory $AttachInProgressCallStateCopyWith(AttachInProgressCallState value,
-          $Res Function(AttachInProgressCallState) then) =
-      _$AttachInProgressCallStateCopyWithImpl<$Res>;
+abstract class $SignalingInProgressCallStateCopyWith<$Res> {
+  factory $SignalingInProgressCallStateCopyWith(
+          SignalingInProgressCallState value,
+          $Res Function(SignalingInProgressCallState) then) =
+      _$SignalingInProgressCallStateCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$AttachInProgressCallStateCopyWithImpl<$Res>
+class _$SignalingInProgressCallStateCopyWithImpl<$Res>
     extends _$CallStateCopyWithImpl<$Res>
-    implements $AttachInProgressCallStateCopyWith<$Res> {
-  _$AttachInProgressCallStateCopyWithImpl(AttachInProgressCallState _value,
-      $Res Function(AttachInProgressCallState) _then)
-      : super(_value, (v) => _then(v as AttachInProgressCallState));
+    implements $SignalingInProgressCallStateCopyWith<$Res> {
+  _$SignalingInProgressCallStateCopyWithImpl(
+      SignalingInProgressCallState _value,
+      $Res Function(SignalingInProgressCallState) _then)
+      : super(_value, (v) => _then(v as SignalingInProgressCallState));
 
   @override
-  AttachInProgressCallState get _value =>
-      super._value as AttachInProgressCallState;
+  SignalingInProgressCallState get _value =>
+      super._value as SignalingInProgressCallState;
 }
 
 /// @nodoc
 
-class _$AttachInProgressCallState implements AttachInProgressCallState {
-  const _$AttachInProgressCallState();
+class _$SignalingInProgressCallState implements SignalingInProgressCallState {
+  const _$SignalingInProgressCallState();
 
   @override
   String toString() {
-    return 'CallState.attachInProgress()';
+    return 'CallState.signalingInProgress()';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is AttachInProgressCallState);
+            other is SignalingInProgressCallState);
   }
 
   @override
@@ -327,8 +331,8 @@ class _$AttachInProgressCallState implements AttachInProgressCallState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() attachInProgress,
-    required TResult Function(String reason) attachFailure,
+    required TResult Function() signalingInProgress,
+    required TResult Function(String reason) signalingFailure,
     required TResult Function() idle,
     required TResult Function(
             Direction direction,
@@ -343,15 +347,15 @@ class _$AttachInProgressCallState implements AttachInProgressCallState {
         active,
     required TResult Function(String reason) failure,
   }) {
-    return attachInProgress();
+    return signalingInProgress();
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? attachInProgress,
-    TResult Function(String reason)? attachFailure,
+    TResult Function()? signalingInProgress,
+    TResult Function(String reason)? signalingFailure,
     TResult Function()? idle,
     TResult Function(
             Direction direction,
@@ -366,15 +370,15 @@ class _$AttachInProgressCallState implements AttachInProgressCallState {
         active,
     TResult Function(String reason)? failure,
   }) {
-    return attachInProgress?.call();
+    return signalingInProgress?.call();
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? attachInProgress,
-    TResult Function(String reason)? attachFailure,
+    TResult Function()? signalingInProgress,
+    TResult Function(String reason)? signalingFailure,
     TResult Function()? idle,
     TResult Function(
             Direction direction,
@@ -390,8 +394,8 @@ class _$AttachInProgressCallState implements AttachInProgressCallState {
     TResult Function(String reason)? failure,
     required TResult orElse(),
   }) {
-    if (attachInProgress != null) {
-      return attachInProgress();
+    if (signalingInProgress != null) {
+      return signalingInProgress();
     }
     return orElse();
   }
@@ -400,74 +404,76 @@ class _$AttachInProgressCallState implements AttachInProgressCallState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(InitialCallState value) initial,
-    required TResult Function(AttachInProgressCallState value) attachInProgress,
-    required TResult Function(AttachFailureCallState value) attachFailure,
+    required TResult Function(SignalingInProgressCallState value)
+        signalingInProgress,
+    required TResult Function(SignalingFailureCallState value) signalingFailure,
     required TResult Function(IdleCallState value) idle,
     required TResult Function(ActiveCallState value) active,
     required TResult Function(FailureCallState value) failure,
   }) {
-    return attachInProgress(this);
+    return signalingInProgress(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(InitialCallState value)? initial,
-    TResult Function(AttachInProgressCallState value)? attachInProgress,
-    TResult Function(AttachFailureCallState value)? attachFailure,
+    TResult Function(SignalingInProgressCallState value)? signalingInProgress,
+    TResult Function(SignalingFailureCallState value)? signalingFailure,
     TResult Function(IdleCallState value)? idle,
     TResult Function(ActiveCallState value)? active,
     TResult Function(FailureCallState value)? failure,
   }) {
-    return attachInProgress?.call(this);
+    return signalingInProgress?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(InitialCallState value)? initial,
-    TResult Function(AttachInProgressCallState value)? attachInProgress,
-    TResult Function(AttachFailureCallState value)? attachFailure,
+    TResult Function(SignalingInProgressCallState value)? signalingInProgress,
+    TResult Function(SignalingFailureCallState value)? signalingFailure,
     TResult Function(IdleCallState value)? idle,
     TResult Function(ActiveCallState value)? active,
     TResult Function(FailureCallState value)? failure,
     required TResult orElse(),
   }) {
-    if (attachInProgress != null) {
-      return attachInProgress(this);
+    if (signalingInProgress != null) {
+      return signalingInProgress(this);
     }
     return orElse();
   }
 }
 
-abstract class AttachInProgressCallState implements CallState {
-  const factory AttachInProgressCallState() = _$AttachInProgressCallState;
+abstract class SignalingInProgressCallState implements CallState {
+  const factory SignalingInProgressCallState() = _$SignalingInProgressCallState;
 }
 
 /// @nodoc
-abstract class $AttachFailureCallStateCopyWith<$Res> {
-  factory $AttachFailureCallStateCopyWith(AttachFailureCallState value,
-          $Res Function(AttachFailureCallState) then) =
-      _$AttachFailureCallStateCopyWithImpl<$Res>;
+abstract class $SignalingFailureCallStateCopyWith<$Res> {
+  factory $SignalingFailureCallStateCopyWith(SignalingFailureCallState value,
+          $Res Function(SignalingFailureCallState) then) =
+      _$SignalingFailureCallStateCopyWithImpl<$Res>;
   $Res call({String reason});
 }
 
 /// @nodoc
-class _$AttachFailureCallStateCopyWithImpl<$Res>
+class _$SignalingFailureCallStateCopyWithImpl<$Res>
     extends _$CallStateCopyWithImpl<$Res>
-    implements $AttachFailureCallStateCopyWith<$Res> {
-  _$AttachFailureCallStateCopyWithImpl(AttachFailureCallState _value,
-      $Res Function(AttachFailureCallState) _then)
-      : super(_value, (v) => _then(v as AttachFailureCallState));
+    implements $SignalingFailureCallStateCopyWith<$Res> {
+  _$SignalingFailureCallStateCopyWithImpl(SignalingFailureCallState _value,
+      $Res Function(SignalingFailureCallState) _then)
+      : super(_value, (v) => _then(v as SignalingFailureCallState));
 
   @override
-  AttachFailureCallState get _value => super._value as AttachFailureCallState;
+  SignalingFailureCallState get _value =>
+      super._value as SignalingFailureCallState;
 
   @override
   $Res call({
     Object? reason = freezed,
   }) {
-    return _then(AttachFailureCallState(
+    return _then(SignalingFailureCallState(
       reason: reason == freezed
           ? _value.reason
           : reason // ignore: cast_nullable_to_non_nullable
@@ -478,22 +484,22 @@ class _$AttachFailureCallStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$AttachFailureCallState implements AttachFailureCallState {
-  const _$AttachFailureCallState({required this.reason});
+class _$SignalingFailureCallState implements SignalingFailureCallState {
+  const _$SignalingFailureCallState({required this.reason});
 
   @override
   final String reason;
 
   @override
   String toString() {
-    return 'CallState.attachFailure(reason: $reason)';
+    return 'CallState.signalingFailure(reason: $reason)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is AttachFailureCallState &&
+            other is SignalingFailureCallState &&
             const DeepCollectionEquality().equals(other.reason, reason));
   }
 
@@ -503,16 +509,16 @@ class _$AttachFailureCallState implements AttachFailureCallState {
 
   @JsonKey(ignore: true)
   @override
-  $AttachFailureCallStateCopyWith<AttachFailureCallState> get copyWith =>
-      _$AttachFailureCallStateCopyWithImpl<AttachFailureCallState>(
+  $SignalingFailureCallStateCopyWith<SignalingFailureCallState> get copyWith =>
+      _$SignalingFailureCallStateCopyWithImpl<SignalingFailureCallState>(
           this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() attachInProgress,
-    required TResult Function(String reason) attachFailure,
+    required TResult Function() signalingInProgress,
+    required TResult Function(String reason) signalingFailure,
     required TResult Function() idle,
     required TResult Function(
             Direction direction,
@@ -527,15 +533,15 @@ class _$AttachFailureCallState implements AttachFailureCallState {
         active,
     required TResult Function(String reason) failure,
   }) {
-    return attachFailure(reason);
+    return signalingFailure(reason);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? attachInProgress,
-    TResult Function(String reason)? attachFailure,
+    TResult Function()? signalingInProgress,
+    TResult Function(String reason)? signalingFailure,
     TResult Function()? idle,
     TResult Function(
             Direction direction,
@@ -550,15 +556,15 @@ class _$AttachFailureCallState implements AttachFailureCallState {
         active,
     TResult Function(String reason)? failure,
   }) {
-    return attachFailure?.call(reason);
+    return signalingFailure?.call(reason);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? attachInProgress,
-    TResult Function(String reason)? attachFailure,
+    TResult Function()? signalingInProgress,
+    TResult Function(String reason)? signalingFailure,
     TResult Function()? idle,
     TResult Function(
             Direction direction,
@@ -574,8 +580,8 @@ class _$AttachFailureCallState implements AttachFailureCallState {
     TResult Function(String reason)? failure,
     required TResult orElse(),
   }) {
-    if (attachFailure != null) {
-      return attachFailure(reason);
+    if (signalingFailure != null) {
+      return signalingFailure(reason);
     }
     return orElse();
   }
@@ -584,53 +590,54 @@ class _$AttachFailureCallState implements AttachFailureCallState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(InitialCallState value) initial,
-    required TResult Function(AttachInProgressCallState value) attachInProgress,
-    required TResult Function(AttachFailureCallState value) attachFailure,
+    required TResult Function(SignalingInProgressCallState value)
+        signalingInProgress,
+    required TResult Function(SignalingFailureCallState value) signalingFailure,
     required TResult Function(IdleCallState value) idle,
     required TResult Function(ActiveCallState value) active,
     required TResult Function(FailureCallState value) failure,
   }) {
-    return attachFailure(this);
+    return signalingFailure(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(InitialCallState value)? initial,
-    TResult Function(AttachInProgressCallState value)? attachInProgress,
-    TResult Function(AttachFailureCallState value)? attachFailure,
+    TResult Function(SignalingInProgressCallState value)? signalingInProgress,
+    TResult Function(SignalingFailureCallState value)? signalingFailure,
     TResult Function(IdleCallState value)? idle,
     TResult Function(ActiveCallState value)? active,
     TResult Function(FailureCallState value)? failure,
   }) {
-    return attachFailure?.call(this);
+    return signalingFailure?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(InitialCallState value)? initial,
-    TResult Function(AttachInProgressCallState value)? attachInProgress,
-    TResult Function(AttachFailureCallState value)? attachFailure,
+    TResult Function(SignalingInProgressCallState value)? signalingInProgress,
+    TResult Function(SignalingFailureCallState value)? signalingFailure,
     TResult Function(IdleCallState value)? idle,
     TResult Function(ActiveCallState value)? active,
     TResult Function(FailureCallState value)? failure,
     required TResult orElse(),
   }) {
-    if (attachFailure != null) {
-      return attachFailure(this);
+    if (signalingFailure != null) {
+      return signalingFailure(this);
     }
     return orElse();
   }
 }
 
-abstract class AttachFailureCallState implements CallState {
-  const factory AttachFailureCallState({required final String reason}) =
-      _$AttachFailureCallState;
+abstract class SignalingFailureCallState implements CallState {
+  const factory SignalingFailureCallState({required final String reason}) =
+      _$SignalingFailureCallState;
 
   String get reason => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $AttachFailureCallStateCopyWith<AttachFailureCallState> get copyWith =>
+  $SignalingFailureCallStateCopyWith<SignalingFailureCallState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -675,8 +682,8 @@ class _$IdleCallState implements IdleCallState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() attachInProgress,
-    required TResult Function(String reason) attachFailure,
+    required TResult Function() signalingInProgress,
+    required TResult Function(String reason) signalingFailure,
     required TResult Function() idle,
     required TResult Function(
             Direction direction,
@@ -698,8 +705,8 @@ class _$IdleCallState implements IdleCallState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? attachInProgress,
-    TResult Function(String reason)? attachFailure,
+    TResult Function()? signalingInProgress,
+    TResult Function(String reason)? signalingFailure,
     TResult Function()? idle,
     TResult Function(
             Direction direction,
@@ -721,8 +728,8 @@ class _$IdleCallState implements IdleCallState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? attachInProgress,
-    TResult Function(String reason)? attachFailure,
+    TResult Function()? signalingInProgress,
+    TResult Function(String reason)? signalingFailure,
     TResult Function()? idle,
     TResult Function(
             Direction direction,
@@ -748,8 +755,9 @@ class _$IdleCallState implements IdleCallState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(InitialCallState value) initial,
-    required TResult Function(AttachInProgressCallState value) attachInProgress,
-    required TResult Function(AttachFailureCallState value) attachFailure,
+    required TResult Function(SignalingInProgressCallState value)
+        signalingInProgress,
+    required TResult Function(SignalingFailureCallState value) signalingFailure,
     required TResult Function(IdleCallState value) idle,
     required TResult Function(ActiveCallState value) active,
     required TResult Function(FailureCallState value) failure,
@@ -761,8 +769,8 @@ class _$IdleCallState implements IdleCallState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(InitialCallState value)? initial,
-    TResult Function(AttachInProgressCallState value)? attachInProgress,
-    TResult Function(AttachFailureCallState value)? attachFailure,
+    TResult Function(SignalingInProgressCallState value)? signalingInProgress,
+    TResult Function(SignalingFailureCallState value)? signalingFailure,
     TResult Function(IdleCallState value)? idle,
     TResult Function(ActiveCallState value)? active,
     TResult Function(FailureCallState value)? failure,
@@ -774,8 +782,8 @@ class _$IdleCallState implements IdleCallState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(InitialCallState value)? initial,
-    TResult Function(AttachInProgressCallState value)? attachInProgress,
-    TResult Function(AttachFailureCallState value)? attachFailure,
+    TResult Function(SignalingInProgressCallState value)? signalingInProgress,
+    TResult Function(SignalingFailureCallState value)? signalingFailure,
     TResult Function(IdleCallState value)? idle,
     TResult Function(ActiveCallState value)? active,
     TResult Function(FailureCallState value)? failure,
@@ -953,8 +961,8 @@ class _$ActiveCallState with Call implements ActiveCallState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() attachInProgress,
-    required TResult Function(String reason) attachFailure,
+    required TResult Function() signalingInProgress,
+    required TResult Function(String reason) signalingFailure,
     required TResult Function() idle,
     required TResult Function(
             Direction direction,
@@ -977,8 +985,8 @@ class _$ActiveCallState with Call implements ActiveCallState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? attachInProgress,
-    TResult Function(String reason)? attachFailure,
+    TResult Function()? signalingInProgress,
+    TResult Function(String reason)? signalingFailure,
     TResult Function()? idle,
     TResult Function(
             Direction direction,
@@ -1001,8 +1009,8 @@ class _$ActiveCallState with Call implements ActiveCallState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? attachInProgress,
-    TResult Function(String reason)? attachFailure,
+    TResult Function()? signalingInProgress,
+    TResult Function(String reason)? signalingFailure,
     TResult Function()? idle,
     TResult Function(
             Direction direction,
@@ -1029,8 +1037,9 @@ class _$ActiveCallState with Call implements ActiveCallState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(InitialCallState value) initial,
-    required TResult Function(AttachInProgressCallState value) attachInProgress,
-    required TResult Function(AttachFailureCallState value) attachFailure,
+    required TResult Function(SignalingInProgressCallState value)
+        signalingInProgress,
+    required TResult Function(SignalingFailureCallState value) signalingFailure,
     required TResult Function(IdleCallState value) idle,
     required TResult Function(ActiveCallState value) active,
     required TResult Function(FailureCallState value) failure,
@@ -1042,8 +1051,8 @@ class _$ActiveCallState with Call implements ActiveCallState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(InitialCallState value)? initial,
-    TResult Function(AttachInProgressCallState value)? attachInProgress,
-    TResult Function(AttachFailureCallState value)? attachFailure,
+    TResult Function(SignalingInProgressCallState value)? signalingInProgress,
+    TResult Function(SignalingFailureCallState value)? signalingFailure,
     TResult Function(IdleCallState value)? idle,
     TResult Function(ActiveCallState value)? active,
     TResult Function(FailureCallState value)? failure,
@@ -1055,8 +1064,8 @@ class _$ActiveCallState with Call implements ActiveCallState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(InitialCallState value)? initial,
-    TResult Function(AttachInProgressCallState value)? attachInProgress,
-    TResult Function(AttachFailureCallState value)? attachFailure,
+    TResult Function(SignalingInProgressCallState value)? signalingInProgress,
+    TResult Function(SignalingFailureCallState value)? signalingFailure,
     TResult Function(IdleCallState value)? idle,
     TResult Function(ActiveCallState value)? active,
     TResult Function(FailureCallState value)? failure,
@@ -1160,8 +1169,8 @@ class _$FailureCallState implements FailureCallState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() attachInProgress,
-    required TResult Function(String reason) attachFailure,
+    required TResult Function() signalingInProgress,
+    required TResult Function(String reason) signalingFailure,
     required TResult Function() idle,
     required TResult Function(
             Direction direction,
@@ -1183,8 +1192,8 @@ class _$FailureCallState implements FailureCallState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? attachInProgress,
-    TResult Function(String reason)? attachFailure,
+    TResult Function()? signalingInProgress,
+    TResult Function(String reason)? signalingFailure,
     TResult Function()? idle,
     TResult Function(
             Direction direction,
@@ -1206,8 +1215,8 @@ class _$FailureCallState implements FailureCallState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? attachInProgress,
-    TResult Function(String reason)? attachFailure,
+    TResult Function()? signalingInProgress,
+    TResult Function(String reason)? signalingFailure,
     TResult Function()? idle,
     TResult Function(
             Direction direction,
@@ -1233,8 +1242,9 @@ class _$FailureCallState implements FailureCallState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(InitialCallState value) initial,
-    required TResult Function(AttachInProgressCallState value) attachInProgress,
-    required TResult Function(AttachFailureCallState value) attachFailure,
+    required TResult Function(SignalingInProgressCallState value)
+        signalingInProgress,
+    required TResult Function(SignalingFailureCallState value) signalingFailure,
     required TResult Function(IdleCallState value) idle,
     required TResult Function(ActiveCallState value) active,
     required TResult Function(FailureCallState value) failure,
@@ -1246,8 +1256,8 @@ class _$FailureCallState implements FailureCallState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(InitialCallState value)? initial,
-    TResult Function(AttachInProgressCallState value)? attachInProgress,
-    TResult Function(AttachFailureCallState value)? attachFailure,
+    TResult Function(SignalingInProgressCallState value)? signalingInProgress,
+    TResult Function(SignalingFailureCallState value)? signalingFailure,
     TResult Function(IdleCallState value)? idle,
     TResult Function(ActiveCallState value)? active,
     TResult Function(FailureCallState value)? failure,
@@ -1259,8 +1269,8 @@ class _$FailureCallState implements FailureCallState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(InitialCallState value)? initial,
-    TResult Function(AttachInProgressCallState value)? attachInProgress,
-    TResult Function(AttachFailureCallState value)? attachFailure,
+    TResult Function(SignalingInProgressCallState value)? signalingInProgress,
+    TResult Function(SignalingFailureCallState value)? signalingFailure,
     TResult Function(IdleCallState value)? idle,
     TResult Function(ActiveCallState value)? active,
     TResult Function(FailureCallState value)? failure,

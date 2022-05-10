@@ -42,6 +42,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
 
   late final WebtritSignalingClient _signalingClient;
 
+  int _signalingClientConnectInSequanceErrorCount = 0; // TODO: reorganise this logic somehow
+
   MediaStream? _localStream;
 
   RTCPeerConnection? _peerConnection;
@@ -54,12 +56,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     required this.appBloc,
     required this.callkeep,
   }) : super(const CallState.initial()) {
-    on<CallAttached>(
-      _onAttached,
+    on<CallStarted>(
+      _onCallStarted,
       transformer: sequential(),
     );
-    on<CallDetached>(
-      _onDetached,
+    on<_SignalingClientConnectInitiated>(
+      _onSignalingClientConnectInitiated,
+      transformer: droppable(),
+    );
+    on<_SignalingClientDisconnectInitiated>(
+      _onSignalingClientDisconnectInitiated,
+      transformer: droppable(),
+    );
+    on<_SignalingClientDisconnected>(
+      _onSignalingClientDisconnected,
       transformer: sequential(),
     );
     on<CallIncomingReceived>(
@@ -156,33 +166,63 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     add(_AppLifecycleStateChanged(state));
   }
 
-  Future<void> _onAttached(
-    CallAttached event,
+  Future<void> _onCallStarted(
+    CallStarted event,
     Emitter<CallState> emit,
   ) async {
-    emit(const CallState.attachInProgress());
+    add(const _SignalingClientConnectInitiated());
+  }
+
+  Future<void> _onSignalingClientConnectInitiated(
+    _SignalingClientConnectInitiated event,
+    Emitter<CallState> emit,
+  ) async {
+    emit(const CallState.signalingInProgress());
     try {
       final token = await SecureStorage().readToken();
       await _signalingClient.connect(token!, true);
+      _signalingClientConnectInSequanceErrorCount = 0;
 
       emit(const CallState.idle());
 
-      appBloc.add(const AppRegistered());
+      appBloc.add(const AppRegistered()); // TODO: get rid of this event
     } catch (e) {
-      notificationsBloc.add(const NotificationsIssued(CallAttachErrorNotification()));
-      emit(CallState.attachFailure(
+      if (_signalingClientConnectInSequanceErrorCount <= 0) {
+        notificationsBloc.add(const NotificationsIssued(CallConnectErrorNotification()));
+        _signalingClientConnectInSequanceErrorCount++;
+      }
+
+      emit(CallState.signalingFailure(
         reason: e.toString(),
       ));
+
+      Future.delayed(const Duration(seconds: 3), () => add(const _SignalingClientConnectInitiated()));
     }
   }
 
-  Future<void> _onDetached(
-    CallDetached event,
+  Future<void> _onSignalingClientDisconnectInitiated(
+    _SignalingClientDisconnectInitiated event,
+    Emitter<CallState> emit,
+  ) async {
+    emit(const CallState.signalingInProgress());
+    try {
+      await _signalingClient.disconnect();
+    } catch (e) {
+      emit(CallState.signalingFailure(
+        reason: e.toString(),
+      ));
+    } finally {
+      emit(const CallState.initial());
+    }
+  }
+
+  Future<void> _onSignalingClientDisconnected(
+    _SignalingClientDisconnected event,
     Emitter<CallState> emit,
   ) async {
     emit(const CallState.initial());
 
-    await _signalingClient.disconnect();
+    add(const _SignalingClientConnectInitiated());
   }
 
   Future<void> _onIncomingReceived(
@@ -568,7 +608,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
   }
 
   void _onSignalingDisconnect(int? code, String? reason) {
-    // TODO: check relevance to add this event
-    add(const CallDetached());
+    _logger.info('_onSignalingDisconnect code: $code reason: $reason');
+    add(_SignalingClientDisconnected(code, reason));
   }
 }

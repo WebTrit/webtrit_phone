@@ -5,8 +5,8 @@
   "@notifications_errorSnackBar_callNotIdle": {
   },
 
-  "notifications_errorSnackBar_callAttach": "Registration is invalid – please try to re-login",
-  "@notifications_errorSnackBar_callAttach": {
+  "notifications_errorSnackBar_callConnect": "Connect to core is invalid – tring to re-connect",
+  "@notifications_errorSnackBar_callConnect": {
   },
 
   "favoritesScaffold_textLabel_empty": "There are no favorite numbers",
