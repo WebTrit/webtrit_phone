@@ -8,8 +8,8 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../login.dart';
 
-class LoginModeSelectionTab extends StatelessWidget {
-  const LoginModeSelectionTab({
+class LoginModeSelectTab extends StatelessWidget {
+  const LoginModeSelectTab({
     Key? key,
   }) : super(key: key);
 

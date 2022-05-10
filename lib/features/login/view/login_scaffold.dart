@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import './login_mode_selection_tab.dart';
+import './login_mode_select_tab.dart';
 import './login_otp_request_tab.dart';
 import './login_otp_verify_tab.dart';
 
@@ -45,7 +45,7 @@ class _LockScaffoldState extends State<LockScaffold> with SingleTickerProviderSt
             controller: _tabController,
             physics: const NeverScrollableScrollPhysics(),
             children: const [
-              LoginModeSelectionTab(),
+              LoginModeSelectTab(),
               LoginOtpRequestTab(),
               LoginOtpVerifyTab(),
             ],
