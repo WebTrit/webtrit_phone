@@ -30,7 +30,9 @@ class LoginModeSelectTab extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const LoginCarouselPictureLogo(),
+            const OnboardingLogo(
+              color: AppColors.white,
+            ),
             const OnboardingPicture(),
             const Expanded(child: SizedBox()),
             TextButton(
