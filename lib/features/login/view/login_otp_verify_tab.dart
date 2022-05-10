@@ -34,7 +34,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
         }
       },
       child: Padding(
-        padding: kTabLabelPadding,
+        padding: kTabLabelPadding * 2,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
