@@ -13,11 +13,9 @@ part 'login_state.dart';
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit({
     required this.webtritApiClient,
-    required this.secureStorage,
   }) : super(const LoginState());
 
   final WebtritApiClient webtritApiClient;
-  final SecureStorage secureStorage;
 
   void next() {
     var nextTabIndex = state.tabIndex + 1;
@@ -148,9 +146,9 @@ class LoginCubit extends Cubit<LoginState> {
     final code = state.codeInput.value;
     try {
       final token = await webtritApiClient.sessionOtpVerify(otpId, code);
-      await SecureStorage().writeToken(token);
       emit(state.copyWith(
         status: LoginStatus.ok,
+        token: token,
       ));
     } catch (e) {
       emit(state.copyWith(

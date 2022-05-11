@@ -7,10 +7,10 @@ abstract class AppState extends Equatable {
   List<Object> get props => [];
 }
 
-class AppUnregister extends AppState {
-  const AppUnregister();
+class AppLogout extends AppState {
+  const AppLogout();
 }
 
-class AppRegister extends AppState {
-  const AppRegister();
+class AppLogin extends AppState {
+  const AppLogin();
 }

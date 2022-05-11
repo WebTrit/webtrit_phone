@@ -139,7 +139,6 @@ class _MainState extends State<Main> {
               return CallBloc(
                 recentsRepository: context.read<RecentsRepository>(),
                 notificationsBloc: context.read<NotificationsBloc>(),
-                appBloc: context.read<AppBloc>(),
                 callkeep: callkeep,
               )..add(const CallStarted());
             },

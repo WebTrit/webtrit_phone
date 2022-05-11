@@ -7,10 +7,17 @@ abstract class AppEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class AppRegistered extends AppEvent {
-  const AppRegistered();
+class AppLogined extends AppEvent {
+  const AppLogined({
+    required this.token,
+  });
+
+  final String token;
+
+  @override
+  List<Object> get props => [token];
 }
 
-class AppUnregistered extends AppEvent {
-  const AppUnregistered();
+class AppLogouted extends AppEvent {
+  const AppLogouted();
 }

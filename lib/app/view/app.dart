@@ -127,7 +127,11 @@ class App extends StatelessWidget {
             create: (context) => NotificationsBloc(),
           ),
           BlocProvider<AppBloc>(
-            create: (context) => AppBloc(),
+            create: (context) => AppBloc(
+              webtritApiClient: context.read<WebtritApiClient>(),
+              secureStorage: SecureStorage(),
+              appDatabase: context.read<AppDatabase>(),
+            ),
           ),
         ],
         child: materialApp,
@@ -173,14 +177,10 @@ class App extends StatelessWidget {
         ),
         BlocListener<AppBloc, AppState>(
           listener: (context, state) async {
-            if (state is AppUnregister) {
-              context.read<AppDatabase>().deleteEverything();
+            final webRegistrationInitialUrl = await SecureStorage().readWebRegistrationInitialUrl();
+            final isRegistered = await SecureStorage().readToken() != null;
 
-              final webRegistrationInitialUrl = await SecureStorage().readWebRegistrationInitialUrl();
-              final isRegistered = await SecureStorage().readToken() != null;
-
-              context.go(_initialRoute(webRegistrationInitialUrl, isRegistered), extra: webRegistrationInitialUrl);
-            }
+            context.go(_initialRoute(webRegistrationInitialUrl, isRegistered), extra: webRegistrationInitialUrl);
           },
         ),
       ],

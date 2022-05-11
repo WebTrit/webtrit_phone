@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/styles/styles.dart';
@@ -22,7 +23,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
       listener: (context, state) {
         if (state.status == LoginStatus.ok) {
           context.hideCurrentSnackBar();
-          context.goNamed('main'); // TODO implement correct redirection way - via state
+          context.read<AppBloc>().add(AppLogined(token: state.token!));
         } else if (state.status == LoginStatus.back) {
           context.hideCurrentSnackBar();
           context.read<LoginCubit>().back();

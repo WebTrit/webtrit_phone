@@ -31,7 +31,6 @@ part 'call_state.dart';
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
   final RecentsRepository recentsRepository;
   final NotificationsBloc notificationsBloc;
-  final AppBloc appBloc;
   final FlutterCallkeep callkeep;
 
   final _logger = Logger('$CallBloc');
@@ -53,7 +52,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
   CallBloc({
     required this.recentsRepository,
     required this.notificationsBloc,
-    required this.appBloc,
     required this.callkeep,
   }) : super(const CallState.initial()) {
     on<CallStarted>(
@@ -184,8 +182,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
       _signalingClientConnectInSequanceErrorCount = 0;
 
       emit(const CallState.idle());
-
-      appBloc.add(const AppRegistered()); // TODO: get rid of this event
     } catch (e) {
       if (_signalingClientConnectInSequanceErrorCount <= 0) {
         notificationsBloc.add(const NotificationsIssued(CallConnectErrorNotification()));

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:go_router/go_router.dart';
-import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
-import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
 import '../widgets/widgets.dart';
@@ -59,14 +58,7 @@ class _SettingsScaffoldState extends State<SettingsScaffold> {
             title: Text(context.l10n.settings_ListViewTileTitle_logout),
             onTap: () async {
               if (await _confirmUnregister(context) == true) {
-                // TODO: move logout logic to some bloc
-                final token = await SecureStorage().readToken();
-                if (token != null) {
-                  await SecureStorage().deleteToken();
-                  final webtritApiClient = context.read<WebtritApiClient>();
-                  await webtritApiClient.sessionLogout(token);
-                }
-                context.read<AppBloc>().add(const AppUnregistered());
+                context.read<AppBloc>().add(const AppLogouted());
               }
             },
           ),
