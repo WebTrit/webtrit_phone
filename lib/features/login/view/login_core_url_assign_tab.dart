@@ -28,7 +28,7 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
         } else {
           if (state.error != LoginState.noError) {
             context.showErrorSnackBar(state.error.toString());
-            context.read<LoginCubit>().dismisError();
+            context.read<LoginCubit>().dismissError();
           }
         }
       },

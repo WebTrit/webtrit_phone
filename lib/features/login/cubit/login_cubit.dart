@@ -41,7 +41,7 @@ class LoginCubit extends Cubit<LoginState> {
     ));
   }
 
-  void dismisError() {
+  void dismissError() {
     emit(state.copyWith(
       error: LoginState.noError,
     ));
