@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/styles/styles.dart';
@@ -41,19 +40,13 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
     return ExtAppBar(
-      leading: Center(
-        child: Assets.logo.svg(
-          height: themeData.appBarTheme.titleTextStyle!.fontSize! * 1.4,
-        ),
-      ),
       title: Row(
         children: const [
-          Text(EnvironmentConfig.APP_NAME),
           SizedBox(
             width: NavigationToolbar.kMiddleSpacing,
           ),
+          Text(EnvironmentConfig.APP_NAME),
         ],
       ),
       actions: [
@@ -84,7 +77,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
           },
         ),
         const SizedBox(
-          width: 8.0,
+          width: NavigationToolbar.kMiddleSpacing,
         ),
       ],
       bottom: bottom,
