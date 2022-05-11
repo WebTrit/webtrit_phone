@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/styles/styles.dart';
+
 class LeadingAvatar extends StatelessWidget {
   const LeadingAvatar({
     Key? key,
@@ -22,7 +24,8 @@ class LeadingAvatar extends StatelessWidget {
       radius: radius,
       minRadius: minRadius,
       maxRadius: maxRadius,
-      backgroundColor: Theme.of(context).primaryColorLight,
+      backgroundColor: AppColors.darkBlue30,
+      foregroundColor: AppColors.darkBlueSecondary,
       child: Text(username.isEmpty ? '' : username.split(' ').map((v) => v[0]).join()),
     );
   }
