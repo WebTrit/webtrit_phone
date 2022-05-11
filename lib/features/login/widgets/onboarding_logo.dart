@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/styles/app_colors.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class OnboardingLogo extends StatelessWidget {
