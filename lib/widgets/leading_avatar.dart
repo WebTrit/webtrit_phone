@@ -19,14 +19,18 @@ class LeadingAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final username = this.username.trim();
     return CircleAvatar(
       radius: radius,
       minRadius: minRadius,
       maxRadius: maxRadius,
       backgroundColor: AppColors.darkBlue30,
       foregroundColor: AppColors.darkBlueSecondary,
-      child: Text(username.isEmpty ? '' : username.split(' ').map((v) => v[0]).join()),
+      child: Text(_usernameInitialism),
     );
+  }
+
+  String get _usernameInitialism {
+    final username = this.username.trim();
+    return username.isEmpty ? '' : username.split(' ').map((v) => v[0]).take(3).join();
   }
 }
