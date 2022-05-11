@@ -98,8 +98,6 @@ class _MainScaffoldState extends State<MainScaffold> with RestorationMixin {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _restorableSelectedIndex.value,
-        selectedFontSize: Theme.of(context).textTheme.caption!.fontSize!,
-        unselectedFontSize: Theme.of(context).textTheme.caption!.fontSize!,
         onTap: _onItemTapped,
         items: tabs.map((Tab tab) {
           return BottomNavigationBarItem(

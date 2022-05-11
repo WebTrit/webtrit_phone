@@ -68,6 +68,11 @@ class App extends StatelessWidget {
               ),
               centerTitle: true,
             ),
+            bottomNavigationBarTheme: BottomNavigationBarThemeData(
+              backgroundColor: AppColors.backgroundLight,
+              selectedLabelStyle: themeData.textTheme.caption!,
+              unselectedLabelStyle: themeData.textTheme.caption!,
+            ),
             tabBarTheme: TabBarTheme(
               labelColor: themeData.textTheme.caption!.color,
             ),
