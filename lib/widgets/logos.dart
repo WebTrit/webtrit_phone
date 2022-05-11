@@ -20,6 +20,9 @@ class WebTritPhonePictureLogo extends StatelessWidget {
         Assets.logo.svg(
           height: themeData.textTheme.headline5!.fontSize! * 2.2,
         ),
+        const SizedBox(
+          height: 8,
+        ),
         Text(
           EnvironmentConfig.APP_NAME,
           style: themeData.textTheme.headline5!.copyWith(color: color),
