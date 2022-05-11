@@ -661,7 +661,7 @@ class _$IdleCallStateCopyWithImpl<$Res> extends _$CallStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$IdleCallState implements IdleCallState {
+class _$IdleCallState with ReadyCallStateMixin implements IdleCallState {
   const _$IdleCallState();
 
   @override
@@ -796,7 +796,7 @@ class _$IdleCallState implements IdleCallState {
   }
 }
 
-abstract class IdleCallState implements CallState {
+abstract class IdleCallState implements CallState, ReadyCallStateMixin {
   const factory IdleCallState() = _$IdleCallState;
 }
 
@@ -882,7 +882,9 @@ class _$ActiveCallStateCopyWithImpl<$Res> extends _$CallStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ActiveCallState with Call implements ActiveCallState {
+class _$ActiveCallState
+    with ReadyCallStateMixin, CallMixin
+    implements ActiveCallState {
   const _$ActiveCallState(
       {required this.direction,
       required this.callId,
@@ -1078,7 +1080,8 @@ class _$ActiveCallState with Call implements ActiveCallState {
   }
 }
 
-abstract class ActiveCallState implements CallState, Call {
+abstract class ActiveCallState
+    implements CallState, ReadyCallStateMixin, CallMixin {
   const factory ActiveCallState(
       {required final Direction direction,
       required final String callId,
@@ -1137,7 +1140,7 @@ class _$FailureCallStateCopyWithImpl<$Res> extends _$CallStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$FailureCallState implements FailureCallState {
+class _$FailureCallState with ReadyCallStateMixin implements FailureCallState {
   const _$FailureCallState({required this.reason});
 
   @override
@@ -1283,7 +1286,7 @@ class _$FailureCallState implements FailureCallState {
   }
 }
 
-abstract class FailureCallState implements CallState {
+abstract class FailureCallState implements CallState, ReadyCallStateMixin {
   const factory FailureCallState({required final String reason}) =
       _$FailureCallState;
 

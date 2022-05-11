@@ -8,9 +8,11 @@ class CallState with _$CallState {
 
   const factory CallState.signalingFailure({required String reason}) = SignalingFailureCallState;
 
+  @With<ReadyCallStateMixin>()
   const factory CallState.idle() = IdleCallState;
 
-  @With<Call>()
+  @With<ReadyCallStateMixin>()
+  @With<CallMixin>()
   const factory CallState.active({
     required Direction direction,
     required String callId,
@@ -23,10 +25,13 @@ class CallState with _$CallState {
     MediaStream? remoteStream,
   }) = ActiveCallState;
 
+  @With<ReadyCallStateMixin>()
   const factory CallState.failure({required String reason}) = FailureCallState;
 }
 
-mixin Call {
+mixin ReadyCallStateMixin {}
+
+mixin CallMixin {
   Direction get direction;
 
   DateTime? get acceptedTime;

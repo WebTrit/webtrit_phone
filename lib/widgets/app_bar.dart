@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/app/assets.gen.dart';
+import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/styles/styles.dart';
 
 class ExtAppBar extends AppBar {
   ExtAppBar({
@@ -54,13 +57,34 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
         ],
       ),
       actions: [
-        IconButton(
-          icon: const Icon(
-            Icons.settings,
-          ),
-          onPressed: () {
-            context.goNamed('settings');
+        BlocBuilder<CallBloc, CallState>(
+          builder: (context, state) {
+            return Ink(
+              decoration: ShapeDecoration(
+                shape: CircleBorder(
+                  side: BorderSide(
+                    color: state is ReadyCallStateMixin ? AppColors.green : AppColors.red,
+                  ),
+                ),
+              ),
+              child: IconButton(
+                constraints: const BoxConstraints(
+                  maxWidth: kMinInteractiveDimension,
+                  maxHeight: kMinInteractiveDimension,
+                ),
+                icon: const Icon(
+                  Icons.person,
+                  color: AppColors.darkBlueSecondary,
+                ),
+                onPressed: () {
+                  context.goNamed('settings');
+                },
+              ),
+            );
           },
+        ),
+        const SizedBox(
+          width: 8.0,
         ),
       ],
       bottom: bottom,
