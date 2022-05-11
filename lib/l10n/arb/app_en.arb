@@ -16,6 +16,15 @@
   "@favoritesScaffold_buttonLabel_addNew": {
   },
 
+  "login_Button_back": "Back",
+  "@login_Button_back": {
+  },
+  "login_TextFieldLabelText_coreUrl": "Enter your WebTrit Core url",
+  "@login_TextFieldLabelText_coreUrl": {
+  },
+  "login_Button_coreUrlAssign": "Assign",
+  "@login_Button_coreUrlAssign": {
+  },
   "loginOtpRequestTabPhoneTextFieldLabel": "Enter your phone number",
   "@loginOtpRequestTabPhoneTextFieldLabel": {
   },
@@ -24,9 +33,6 @@
   },
   "loginOtpRequestTabCodeTextFieldLabel": "Enter the verification code",
   "@loginOtpRequestTabCodeTextFieldLabel": {
-  },
-  "loginOtpRequestTabBackButtonLabel": "Back",
-  "@loginOtpRequestTabBackButtonLabel": {
   },
   "loginOtpRequestTabVerifyButtonLabel": "Verify",
   "@loginOtpRequestTabVerifyButtonLabel": {

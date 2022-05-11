@@ -20,15 +20,23 @@ class LoginCubit extends Cubit<LoginState> {
   final SecureStorage secureStorage;
 
   void next() {
+    var nextTabIndex = state.tabIndex + 1;
+    if (nextTabIndex == 1 && state.demo == true) {
+      nextTabIndex++;
+    }
     emit(state.copyWith(
-      tabIndex: state.tabIndex + 1,
+      tabIndex: nextTabIndex,
       status: LoginStatus.input,
     ));
   }
 
   void back() {
+    var prevTabIndex = state.tabIndex - 1;
+    if (prevTabIndex == 1 && state.demo == true) {
+      prevTabIndex--;
+    }
     emit(state.copyWith(
-      tabIndex: state.tabIndex - 1,
+      tabIndex: prevTabIndex,
       status: LoginStatus.input,
     ));
   }
@@ -36,6 +44,41 @@ class LoginCubit extends Cubit<LoginState> {
   void dismisError() {
     emit(state.copyWith(
       error: LoginState.noError,
+    ));
+  }
+
+  // LoginModeSelectTab
+
+  void loginModeSelectSubmitter(bool demo) {
+    emit(LoginState(
+      status: LoginStatus.ok,
+      demo: demo,
+    ));
+  }
+
+  // LoginCoreUrlAssignTab
+
+  void loginCoreUrlAssignCoreUrlInputChanged(String value) {
+    emit(state.copyWith(
+      coreUrlInput: UrlInput.dirty(value),
+    ));
+  }
+
+  void loginCoreUrlAssignSubmitted() async {
+    // TODO: implement correct behaviour
+    emit(state.copyWith(
+      error: 'Sorry, not implemented yet',
+    ));
+  }
+
+  void loginCoreUrlAssignBack() async {
+    if (state.status != LoginStatus.input) {
+      return;
+    }
+
+    emit(state.copyWith(
+      status: LoginStatus.back,
+      coreUrlInput: const UrlInput.pure(),
     ));
   }
 
@@ -71,6 +114,17 @@ class LoginCubit extends Cubit<LoginState> {
         error: e,
       ));
     }
+  }
+
+  void loginOptRequestBack() async {
+    if (state.status != LoginStatus.input) {
+      return;
+    }
+
+    emit(state.copyWith(
+      status: LoginStatus.back,
+      phoneInput: const PhoneInput.pure(),
+    ));
   }
 
   // LoginOtpVerifyTab

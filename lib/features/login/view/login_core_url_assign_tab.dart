@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -10,19 +9,19 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../login.dart';
 
-class LoginOtpVerifyTab extends StatelessWidget {
-  const LoginOtpVerifyTab({
+class LoginCoreUrlAssignTab extends StatelessWidget {
+  const LoginCoreUrlAssignTab({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginCubit, LoginState>(
-      listenWhen: (previous, current) => previous.status != current.status,
+      listenWhen: (previous, current) => previous.status != current.status || previous.error != current.error,
       listener: (context, state) {
         if (state.status == LoginStatus.ok) {
           context.hideCurrentSnackBar();
-          context.goNamed('main'); // TODO implement correct redirection way - via state
+          context.read<LoginCubit>().next();
         } else if (state.status == LoginStatus.back) {
           context.hideCurrentSnackBar();
           context.read<LoginCubit>().back();
@@ -41,26 +40,20 @@ class LoginOtpVerifyTab extends StatelessWidget {
             const OnboardingLogo(),
             BlocBuilder<LoginCubit, LoginState>(
               buildWhen: (previous, current) =>
-                  previous.status != current.status || previous.codeInput != current.codeInput,
+                  previous.status != current.status || previous.coreUrlInput != current.coreUrlInput,
               builder: (context, state) {
                 return TextFormField(
                   enabled: !state.status.isProcessing,
-                  initialValue: state.codeInput.value,
+                  initialValue: state.coreUrlInput.value,
                   decoration: InputDecoration(
-                    labelText: context.l10n.loginOtpRequestTabCodeTextFieldLabel,
+                    labelText: context.l10n.login_TextFieldLabelText_coreUrl,
                     helperText: '', // reserve space for validator message
-                    errorText: _codeTextFieldErrorText(context, state.codeInput),
+                    errorText: _coreUrlTextFieldErrorText(context, state.coreUrlInput),
                     errorMaxLines: 3,
                   ),
-                  keyboardType: TextInputType.number,
-                  autofillHints: state.status.isProcessing
-                      ? null
-                      : const [
-                          AutofillHints.oneTimeCode,
-                          AutofillHints.password,
-                        ],
-                  onChanged: (value) => context.read<LoginCubit>().loginOptVerifyCodeInputChanged(value),
-                  onFieldSubmitted: !state.codeInput.valid ? null : (_) => _onOtpVerifySubmitted(context),
+                  keyboardType: TextInputType.url,
+                  onChanged: (value) => context.read<LoginCubit>().loginCoreUrlAssignCoreUrlInputChanged(value),
+                  onFieldSubmitted: !state.coreUrlInput.valid ? null : (_) => _onCoreUrlAssignSubmitted(context),
                 );
               },
             ),
@@ -73,7 +66,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
                     builder: (context, state) {
                       return OutlinedButton(
                         onPressed:
-                            state.status.isProcessing ? null : () => _onOtpVerifyBack(context),
+                            state.status.isProcessing ? null : () => _onCoreUrlAssignBack(context),
                         style: AppOutlinedButtonStyle.mainThick,
                         child: Text(context.l10n.login_Button_back),
                       );
@@ -84,13 +77,13 @@ class LoginOtpVerifyTab extends StatelessWidget {
                 Expanded(
                   child: BlocBuilder<LoginCubit, LoginState>(
                     buildWhen: (previous, current) =>
-                        previous.status != current.status || previous.codeInput != current.codeInput,
+                        previous.status != current.status || previous.coreUrlInput != current.coreUrlInput,
                     builder: (context, state) {
                       return TextButton(
-                        onPressed: !state.codeInput.valid ? null : () => _onOtpVerifySubmitted(context),
+                        onPressed: !state.coreUrlInput.valid ? null : () => _onCoreUrlAssignSubmitted(context),
                         style: AppTextButtonStyle.primaryThick,
                         child: !state.status.isProcessing
-                            ? Text(context.l10n.loginOtpRequestTabVerifyButtonLabel)
+                            ? Text(context.l10n.login_Button_coreUrlAssign)
                             : const SizedCircularProgressIndicator(
                                 size: 16,
                                 strokeWidth: 2,
@@ -99,7 +92,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
                       );
                     },
                   ),
-                )
+                ),
               ],
             ),
             const SizedBox(height: kToolbarHeight / 2),
@@ -109,25 +102,25 @@ class LoginOtpVerifyTab extends StatelessWidget {
     );
   }
 
-  void _onOtpVerifySubmitted(BuildContext context) {
+  void _onCoreUrlAssignSubmitted(BuildContext context) {
     // necessary for correctly calling dispose (https://github.com/flutter/flutter/issues/55571)
     primaryFocus?.unfocus();
 
-    context.read<LoginCubit>().loginOptVerifySubmitted();
+    context.read<LoginCubit>().loginCoreUrlAssignSubmitted();
   }
 
-  void _onOtpVerifyBack(BuildContext context) {
+  void _onCoreUrlAssignBack(BuildContext context) {
     primaryFocus?.unfocus();
 
     context.read<LoginCubit>().loginCoreUrlAssignBack();
   }
 
-  String? _codeTextFieldErrorText(BuildContext context, CodeInput codeInput) {
-    if (!codeInput.invalid) {
+  String? _coreUrlTextFieldErrorText(BuildContext context, UrlInput coreUrlInput) {
+    if (!coreUrlInput.invalid) {
       return null;
     } else {
-      switch (codeInput.error!) {
-        case CodeValidationError.blank:
+      switch (coreUrlInput.error!) {
+        case UrlValidationError.blank:
           return context.l10n.validationBlankError;
       }
     }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webtrit_phone/features/login/view/login_core_url_assign_tab.dart';
 
 import './login_mode_select_tab.dart';
 import './login_otp_request_tab.dart';
@@ -23,7 +24,7 @@ class _LockScaffoldState extends State<LockScaffold> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 3);
+    _tabController = TabController(vsync: this, length: 4);
   }
 
   @override
@@ -45,6 +46,7 @@ class _LockScaffoldState extends State<LockScaffold> with SingleTickerProviderSt
           physics: const NeverScrollableScrollPhysics(),
           children: const [
             LoginModeSelectTab(),
+            LoginCoreUrlAssignTab(),
             LoginOtpRequestTab(),
             LoginOtpVerifyTab(),
           ],

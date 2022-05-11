@@ -24,7 +24,9 @@ class LoginState extends Equatable {
     this.tabIndex = 0,
     this.status = LoginStatus.input,
     this.error = noError,
+    this.demo = false,
     this.otpId,
+    this.coreUrlInput = const UrlInput.pure(),
     this.phoneInput = const PhoneInput.pure(),
     this.codeInput = const CodeInput.pure(),
   });
@@ -33,8 +35,10 @@ class LoginState extends Equatable {
   final LoginStatus status;
 
   final Object error;
+  final bool demo;
   final String? otpId;
 
+  final UrlInput coreUrlInput;
   final PhoneInput phoneInput;
   final CodeInput codeInput;
 
@@ -43,7 +47,9 @@ class LoginState extends Equatable {
         tabIndex,
         status,
         error,
+        demo,
         otpId,
+        coreUrlInput,
         phoneInput,
         codeInput,
       ];
@@ -52,7 +58,9 @@ class LoginState extends Equatable {
     int? tabIndex,
     LoginStatus? status,
     Object? error,
+    bool? demo,
     String? otpId,
+    UrlInput? coreUrlInput,
     PhoneInput? phoneInput,
     CodeInput? codeInput,
   }) {
@@ -60,7 +68,9 @@ class LoginState extends Equatable {
       tabIndex: tabIndex ?? this.tabIndex,
       status: status ?? this.status,
       error: error ?? this.error,
+      demo: demo ?? this.demo,
       otpId: otpId ?? this.otpId,
+      coreUrlInput: coreUrlInput ?? this.coreUrlInput,
       phoneInput: phoneInput ?? this.phoneInput,
       codeInput: codeInput ?? this.codeInput,
     );

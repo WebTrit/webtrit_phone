@@ -22,6 +22,9 @@ class LoginOtpRequestTab extends StatelessWidget {
         if (state.status == LoginStatus.ok) {
           context.hideCurrentSnackBar();
           context.read<LoginCubit>().next();
+        } else if (state.status == LoginStatus.back) {
+          context.hideCurrentSnackBar();
+          context.read<LoginCubit>().back();
         } else {
           if (state.error != LoginState.noError) {
             context.showErrorSnackBar(state.error.toString());
@@ -50,27 +53,47 @@ class LoginOtpRequestTab extends StatelessWidget {
                   ),
                   keyboardType: TextInputType.phone,
                   onChanged: (value) => context.read<LoginCubit>().loginOptRequestPhoneInputChanged(value),
-                  onFieldSubmitted: !state.phoneInput.valid ? null : (_) => _onOtpRequest(context),
+                  onFieldSubmitted: !state.phoneInput.valid ? null : (_) => _onOtpRequestSubmitted(context),
                 );
               },
             ),
             const Spacer(),
-            BlocBuilder<LoginCubit, LoginState>(
-              buildWhen: (previous, current) =>
-                  previous.status != current.status || previous.phoneInput != current.phoneInput,
-              builder: (context, state) {
-                return TextButton(
-                  onPressed: !state.phoneInput.valid ? null : () => _onOtpRequest(context),
-                  style: AppTextButtonStyle.primaryThick,
-                  child: !state.status.isProcessing
-                      ? Text(context.l10n.loginOtpRequestTabProceedButtonLabel)
-                      : const SizedCircularProgressIndicator(
-                          size: 16,
-                          strokeWidth: 2,
-                          color: AppColors.white,
-                        ),
-                );
-              },
+            Row(
+              children: [
+                Expanded(
+                  child: BlocBuilder<LoginCubit, LoginState>(
+                    buildWhen: (previous, current) => previous.status != current.status,
+                    builder: (context, state) {
+                      return OutlinedButton(
+                        onPressed:
+                            state.status.isProcessing ? null : () => _onOtpRequestBack(context),
+                        style: AppOutlinedButtonStyle.mainThick,
+                        child: Text(context.l10n.login_Button_back),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: BlocBuilder<LoginCubit, LoginState>(
+                    buildWhen: (previous, current) =>
+                        previous.status != current.status || previous.phoneInput != current.phoneInput,
+                    builder: (context, state) {
+                      return TextButton(
+                        onPressed: !state.phoneInput.valid ? null : () => _onOtpRequestSubmitted(context),
+                        style: AppTextButtonStyle.primaryThick,
+                        child: !state.status.isProcessing
+                            ? Text(context.l10n.loginOtpRequestTabProceedButtonLabel)
+                            : const SizedCircularProgressIndicator(
+                                size: 16,
+                                strokeWidth: 2,
+                                color: AppColors.white,
+                              ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: kToolbarHeight / 2),
           ],
@@ -79,11 +102,17 @@ class LoginOtpRequestTab extends StatelessWidget {
     );
   }
 
-  void _onOtpRequest(BuildContext context) {
+  void _onOtpRequestSubmitted(BuildContext context) {
     // necessary for correctly calling dispose (https://github.com/flutter/flutter/issues/55571)
     primaryFocus?.unfocus();
 
     context.read<LoginCubit>().loginOptRequestSubmitted();
+  }
+
+  void _onOtpRequestBack(BuildContext context) {
+    primaryFocus?.unfocus();
+
+    context.read<LoginCubit>().loginOptRequestBack();
   }
 
   String? _phoneTextFieldErrorText(BuildContext context, PhoneInput phoneInput) {
