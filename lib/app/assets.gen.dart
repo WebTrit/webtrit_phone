@@ -9,6 +9,14 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/services.dart';
 
+class $AssetsLoginGen {
+  const $AssetsLoginGen();
+
+  /// File path: assets/login/onboarding-1.svg
+  SvgGenImage get onboarding1 =>
+      const SvgGenImage('assets/login/onboarding-1.svg');
+}
+
 class $AssetsRingtonesGen {
   const $AssetsRingtonesGen();
 
@@ -22,8 +30,8 @@ class $AssetsRingtonesGen {
 class Assets {
   Assets._();
 
+  static const $AssetsLoginGen login = $AssetsLoginGen();
   static const SvgGenImage logo = SvgGenImage('assets/logo.svg');
-  static const SvgGenImage loginGirl = SvgGenImage('assets/login_carousel/login_girl_with_phone.svg');
   static const $AssetsRingtonesGen ringtones = $AssetsRingtonesGen();
 }
 
