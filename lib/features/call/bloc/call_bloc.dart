@@ -378,7 +378,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
 
     emit(currentState.copyWith(hungUpTime: DateTime.now()));
 
-    _addToRecents(currentState);
+    _addToRecents(state);
 
     await _peerConnection?.close();
     _peerConnection = null;
@@ -410,7 +410,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
       ));
     }
 
-    _addToRecents(currentState);
+    _addToRecents(state);
 
     await _peerConnection?.close();
     _peerConnection = null;
