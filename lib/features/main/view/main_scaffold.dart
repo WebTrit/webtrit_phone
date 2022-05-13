@@ -36,12 +36,12 @@ final List<Tab> tabs = <Tab>[
     create: (Key key) => FavoritesPage(key: key),
   ),
   Tab(
-    icon: Icons.history,
+    icon: Icons.access_time,
     title: 'Recents',
     create: (Key key) => RecentsPage(key: key),
   ),
   Tab(
-    icon: Icons.contacts_outlined,
+    icon: Icons.account_circle_outlined,
     title: 'Contacts',
     create: (Key key) => ContactsPage(key: key),
   ),

@@ -40,7 +40,7 @@ class Actionpad extends StatelessWidget {
               onPressed: onBackspacePressed,
               onLongPress: onBackspaceLongPress,
               child: const Icon(
-                Icons.backspace,
+                Icons.backspace_outlined,
               ),
             ),
           ),
