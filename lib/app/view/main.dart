@@ -159,13 +159,13 @@ class _MainState extends State<Main> {
         builder: (context, state) => BlocListener<CallBloc, CallState>(
           listenWhen: (previous, current) => previous.runtimeType != current.runtimeType,
           listener: (context, state) {
+            // TODO push/pop of call screen mechanism must be remake
             if (state is ActiveCallState) {
               setCallOrientations().then((_) {
                 context.pushNamed('call');
               });
             }
-            if (state is IdleCallState && Navigator.canPop(context)) {
-              // TODO canPop must be removed by reorganise states
+            if (state is IdleCallState && GoRouter.of(context).location == '/call') {
               setDefaultOrientations().then((_) {
                 context.pop();
               });
