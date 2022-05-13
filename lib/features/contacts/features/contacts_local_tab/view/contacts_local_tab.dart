@@ -45,7 +45,7 @@ class _ContactsLocal extends StatelessWidget {
             child: Text('Permission failure to get local contacts'),
           );
         } else if (state.contacts.isNotEmpty) {
-          return ListView.separated(
+          return ListView.builder(
             itemCount: state.contacts.length,
             itemBuilder: (context, index) {
               final contact = state.contacts[index];
@@ -58,11 +58,6 @@ class _ContactsLocal extends StatelessWidget {
                 onLongPress: () {
                   context.showSnackBar('LongPress on "${contact.name}"');
                 },
-              );
-            },
-            separatorBuilder: (context, index) {
-              return const Divider(
-                height: 1,
               );
             },
           );

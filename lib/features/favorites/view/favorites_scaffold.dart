@@ -24,12 +24,15 @@ class FavoritesScaffold extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           } else if (state.favorites.isNotEmpty) {
-            return ListView.separated(
+            return ListView.builder(
               itemCount: state.favorites.length,
               itemBuilder: (context, index) {
                 final favorite = state.favorites[index];
                 return FavoriteTile(
                   favorite: favorite,
+                  onTap: () {
+                    context.read<CallBloc>().add(CallOutgoingStarted(number: favorite.number, video: false));
+                  },
                   onAudioPressed: () {
                     context.read<CallBloc>().add(CallOutgoingStarted(number: favorite.number, video: false));
                   },
@@ -41,11 +44,6 @@ class FavoritesScaffold extends StatelessWidget {
 
                     context.read<FavoritesBloc>().add(FavoritesRemoved(favorite: favorite));
                   },
-                );
-              },
-              separatorBuilder: (context, index) {
-                return const Divider(
-                  height: 1,
                 );
               },
             );

@@ -81,7 +81,7 @@ class RecentsScaffoldState extends State<RecentsScaffold> with SingleTickerProvi
               }
             }).toList();
 
-            return ListView.separated(
+            return ListView.builder(
               itemCount: recentsFiltered.length,
               itemBuilder: (context, index) {
                 final recent = recentsFiltered[index];
@@ -101,11 +101,6 @@ class RecentsScaffoldState extends State<RecentsScaffold> with SingleTickerProvi
 
                     context.read<RecentsBloc>().add(RecentsDelete(recent: recent));
                   },
-                );
-              },
-              separatorBuilder: (context, index) {
-                return const Divider(
-                  height: 1,
                 );
               },
             );

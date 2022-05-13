@@ -41,7 +41,7 @@ class _ContactsExternal extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         } else if (state.contacts.isNotEmpty) {
-          return ListView.separated(
+          return ListView.builder(
             itemCount: state.contacts.length,
             itemBuilder: (context, index) {
               final contact = state.contacts[index];
@@ -53,11 +53,6 @@ class _ContactsExternal extends StatelessWidget {
                 onLongPress: () {
                   context.showSnackBar('LongPress on "${contact.displayName}"');
                 },
-              );
-            },
-            separatorBuilder: (context, index) {
-              return const Divider(
-                height: 1,
               );
             },
           );
