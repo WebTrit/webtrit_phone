@@ -164,6 +164,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     add(_AppLifecycleStateChanged(state));
   }
 
+  void _reconnectInitiated() {
+    Future.delayed(
+      const Duration(seconds: 3),
+      () => add(const _SignalingClientConnectInitiated()),
+    );
+  }
+
   Future<void> _onCallStarted(
     CallStarted event,
     Emitter<CallState> emit,
@@ -192,7 +199,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
         reason: e.toString(),
       ));
 
-      Future.delayed(const Duration(seconds: 3), () => add(const _SignalingClientConnectInitiated()));
+      _reconnectInitiated();
     }
   }
 
@@ -218,7 +225,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
   ) async {
     emit(const CallState.initial());
 
-    add(const _SignalingClientConnectInitiated());
+    _reconnectInitiated();
   }
 
   Future<void> _onIncomingReceived(
