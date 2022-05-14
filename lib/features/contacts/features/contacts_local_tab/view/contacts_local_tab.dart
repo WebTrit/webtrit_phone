@@ -55,9 +55,6 @@ class _ContactsLocal extends StatelessWidget {
                 onTap: () async {
                   context.goNamed('contact', extra: contact);
                 },
-                onLongPress: () {
-                  context.showSnackBar('LongPress on "${contact.name}"');
-                },
               );
             },
           );

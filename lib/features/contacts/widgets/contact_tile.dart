@@ -12,8 +12,6 @@ class ContactTile extends StatelessWidget {
     this.smart = false,
     this.onTap,
     this.onLongPress,
-    this.onAudioPressed,
-    this.onVideoPressed,
   }) : super(key: key);
 
   final String displayName;
@@ -21,8 +19,6 @@ class ContactTile extends StatelessWidget {
   final bool smart;
   final GestureTapCallback? onTap;
   final GestureLongPressCallback? onLongPress;
-  final VoidCallback? onAudioPressed;
-  final VoidCallback? onVideoPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -58,23 +54,6 @@ class ContactTile extends StatelessWidget {
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 16.0),
       leading: avatar,
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (onAudioPressed != null)
-            IconButton(
-              splashRadius: 24,
-              icon: const Icon(Icons.call),
-              onPressed: onAudioPressed,
-            ),
-          if (onVideoPressed != null)
-            IconButton(
-              splashRadius: 24,
-              icon: const Icon(Icons.videocam),
-              onPressed: onVideoPressed,
-            ),
-        ],
-      ),
       title: Text(displayName),
       onTap: onTap,
       onLongPress: onLongPress,
