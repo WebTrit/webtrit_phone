@@ -6,6 +6,7 @@ import 'events.dart';
 enum RegistrationStatus {
   registering,
   registered,
+  // ignore: constant_identifier_names
   registration_failed,
   unregistering,
   unregistered,

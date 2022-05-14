@@ -56,10 +56,10 @@ class MainScaffold extends StatefulWidget {
   const MainScaffold({Key? key}) : super(key: key);
 
   @override
-  _MainScaffoldState createState() => _MainScaffoldState();
+  MainScaffoldState createState() => MainScaffoldState();
 }
 
-class _MainScaffoldState extends State<MainScaffold> with RestorationMixin {
+class MainScaffoldState extends State<MainScaffold> with RestorationMixin {
   final _restorableSelectedIndex = RestorableInt(0);
 
   @override
@@ -127,10 +127,10 @@ class TabPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _TabPageState createState() => _TabPageState();
+  TabPageState createState() => TabPageState();
 }
 
-class _TabPageState extends State<TabPage> with SingleTickerProviderStateMixin<TabPage> {
+class TabPageState extends State<TabPage> with SingleTickerProviderStateMixin<TabPage> {
   late AnimationController _fader;
 
   @override

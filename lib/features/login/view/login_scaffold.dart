@@ -15,10 +15,10 @@ class LockScaffold extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _LockScaffoldState createState() => _LockScaffoldState();
+  LockScaffoldState createState() => LockScaffoldState();
 }
 
-class _LockScaffoldState extends State<LockScaffold> with SingleTickerProviderStateMixin {
+class LockScaffoldState extends State<LockScaffold> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override

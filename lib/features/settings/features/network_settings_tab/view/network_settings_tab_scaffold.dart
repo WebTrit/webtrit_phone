@@ -7,10 +7,10 @@ class NetworkSettingsTabScaffold extends StatefulWidget {
   const NetworkSettingsTabScaffold({Key? key}) : super(key: key);
 
   @override
-  _NetworkSettingsTabScaffoldState createState() => _NetworkSettingsTabScaffoldState();
+  NetworkSettingsTabScaffoldState createState() => NetworkSettingsTabScaffoldState();
 }
 
-class _NetworkSettingsTabScaffoldState extends State<NetworkSettingsTabScaffold> {
+class NetworkSettingsTabScaffoldState extends State<NetworkSettingsTabScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

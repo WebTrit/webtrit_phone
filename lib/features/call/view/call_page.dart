@@ -9,10 +9,10 @@ class CallPage extends StatefulWidget {
   const CallPage({Key? key}) : super(key: key);
 
   @override
-  _CallPageState createState() => _CallPageState();
+  CallPageState createState() => CallPageState();
 }
 
-class _CallPageState extends State<CallPage> {
+class CallPageState extends State<CallPage> {
   final RTCVideoRenderer _localRenderer = RTCVideoRenderer();
   final RTCVideoRenderer _remoteRenderer = RTCVideoRenderer();
   late Future<List<void>> _renderersInitialized;

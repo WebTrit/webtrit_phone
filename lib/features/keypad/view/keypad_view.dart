@@ -8,10 +8,10 @@ class KeypadView extends StatefulWidget {
   const KeypadView({Key? key}) : super(key: key);
 
   @override
-  _KeypadViewState createState() => _KeypadViewState();
+  KeypadViewState createState() => KeypadViewState();
 }
 
-class _KeypadViewState extends State<KeypadView> {
+class KeypadViewState extends State<KeypadView> {
   final _keypadTextFieldKey = GlobalKey();
 
   EditableTextState? get _keypadTextFieldEditableTextState =>

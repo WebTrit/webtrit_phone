@@ -182,9 +182,11 @@ class App extends StatelessWidget {
         ),
         BlocListener<AppBloc, AppState>(
           listener: (context, state) async {
+            // TODO: move this awaits to bloc - this will prevent next context warning
             final webRegistrationInitialUrl = await SecureStorage().readWebRegistrationInitialUrl();
             final isRegistered = await SecureStorage().readToken() != null;
 
+            // ignore: use_build_context_synchronously
             context.go(_initialRoute(webRegistrationInitialUrl, isRegistered), extra: webRegistrationInitialUrl);
           },
         ),

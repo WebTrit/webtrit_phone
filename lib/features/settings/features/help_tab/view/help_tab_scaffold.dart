@@ -7,10 +7,10 @@ class HelpTabScaffold extends StatefulWidget {
   const HelpTabScaffold({Key? key}) : super(key: key);
 
   @override
-  _HelpTabScaffoldState createState() => _HelpTabScaffoldState();
+  HelpTabScaffoldState createState() => HelpTabScaffoldState();
 }
 
-class _HelpTabScaffoldState extends State<HelpTabScaffold> {
+class HelpTabScaffoldState extends State<HelpTabScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

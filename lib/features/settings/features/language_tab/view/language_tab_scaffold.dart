@@ -7,10 +7,10 @@ class LanguageTabScaffold extends StatefulWidget {
   const LanguageTabScaffold({Key? key}) : super(key: key);
 
   @override
-  _LanguageTabScaffoldState createState() => _LanguageTabScaffoldState();
+  LanguageTabScaffoldState createState() => LanguageTabScaffoldState();
 }
 
-class _LanguageTabScaffoldState extends State<LanguageTabScaffold> {
+class LanguageTabScaffoldState extends State<LanguageTabScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -101,12 +101,12 @@ class CallActionsState extends State<CallActions> {
           Tooltip(
             message: 'Hangup',
             child: TextButton(
-              child: const Icon(Icons.call_end),
               onPressed: widget.onHangupPressed,
               style: TextButton.styleFrom(
                 primary: Colors.white,
                 backgroundColor: Colors.red,
               ),
+              child: const Icon(Icons.call_end),
             ),
           ),
           const SizedBox(
@@ -115,13 +115,13 @@ class CallActionsState extends State<CallActions> {
           Tooltip(
             message: 'Accept',
             child: TextButton(
-              child: const Icon(Icons.call),
               onPressed: widget.onAcceptPressed,
               style: TextButton.styleFrom(
                 primary: Colors.white,
               ).copyWith(
                 backgroundColor: _TextButtonBackground(Colors.green, Colors.grey),
               ),
+              child: const Icon(Icons.call),
             ),
           ),
         ],

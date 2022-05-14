@@ -12,10 +12,10 @@ class Unfocuser extends StatefulWidget {
   final double minScrollDistanceToIgnore;
 
   @override
-  _UnfocuserState createState() => _UnfocuserState();
+  UnfocuserState createState() => UnfocuserState();
 }
 
-class _UnfocuserState extends State<Unfocuser> {
+class UnfocuserState extends State<Unfocuser> {
   Offset? _touchStartPosition;
 
   @override

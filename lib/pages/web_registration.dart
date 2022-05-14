@@ -42,10 +42,10 @@ class WebRegistrationPage extends StatefulWidget {
   final String initialUrl;
 
   @override
-  _WebRegistrationPageState createState() => _WebRegistrationPageState();
+  WebRegistrationPageState createState() => WebRegistrationPageState();
 }
 
-class _WebRegistrationPageState extends State<WebRegistrationPage> {
+class WebRegistrationPageState extends State<WebRegistrationPage> {
   final Completer<WebViewController> _controller = Completer<WebViewController>();
 
   @override
@@ -60,6 +60,7 @@ class _WebRegistrationPageState extends State<WebRegistrationPage> {
               final token = message.message;
               await SecureStorage().writeToken(token);
 
+              if (!mounted) return;
               Navigator.pushReplacementNamed(context, '/main');
             }),
       },
@@ -71,11 +72,13 @@ class _WebRegistrationPageState extends State<WebRegistrationPage> {
       },
       onPageFinished: (url) async {
         final webViewController = await _controller.future;
+        if (!mounted) return;
         webViewController.runJavascript(_definesCssVariablesJavascript(context));
       },
       onWebResourceError: (WebResourceError error) async {
         final result = await _showWebResourceErrorDialog(context, error);
         if (result == null) {
+          if (!mounted) return;
           Navigator.pushReplacementNamed(context, '/login');
         } else {
           final webViewController = await _controller.future;

@@ -7,10 +7,10 @@ class AboutAppTabScaffold extends StatefulWidget {
   const AboutAppTabScaffold({Key? key}) : super(key: key);
 
   @override
-  _AboutAppTabScaffoldState createState() => _AboutAppTabScaffoldState();
+  AboutAppTabScaffoldState createState() => AboutAppTabScaffoldState();
 }
 
-class _AboutAppTabScaffoldState extends State<AboutAppTabScaffold> {
+class AboutAppTabScaffoldState extends State<AboutAppTabScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

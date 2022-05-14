@@ -15,7 +15,6 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 import 'package:webtrit_phone/app/assets.gen.dart';
-import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/data/secure_storage.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/notifications/notifications.dart';
@@ -131,7 +130,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
       transformer: sequential(),
     );
 
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
 
     _connectivityChangedSubscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       if (_previousConnectivityResult != result) {
@@ -152,7 +151,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
   Future<void> close() async {
     _connectivityChangedSubscription.cancel();
 
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
 
     await _signalingClient.disconnect();
     await _audioPlayer.dispose();

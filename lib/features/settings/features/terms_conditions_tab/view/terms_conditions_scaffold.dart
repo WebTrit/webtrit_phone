@@ -7,10 +7,10 @@ class TermsConditionsTabScaffold extends StatefulWidget {
   const TermsConditionsTabScaffold({Key? key}) : super(key: key);
 
   @override
-  _TermsConditionsTabScaffoldState createState() => _TermsConditionsTabScaffoldState();
+  TermsConditionsTabScaffoldState createState() => TermsConditionsTabScaffoldState();
 }
 
-class _TermsConditionsTabScaffoldState extends State<TermsConditionsTabScaffold> {
+class TermsConditionsTabScaffoldState extends State<TermsConditionsTabScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

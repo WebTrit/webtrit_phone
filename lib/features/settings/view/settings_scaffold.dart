@@ -12,10 +12,10 @@ class SettingsScaffold extends StatefulWidget {
   const SettingsScaffold({Key? key}) : super(key: key);
 
   @override
-  _SettingsScaffoldState createState() => _SettingsScaffoldState();
+  SettingsScaffoldState createState() => SettingsScaffoldState();
 }
 
-class _SettingsScaffoldState extends State<SettingsScaffold> {
+class SettingsScaffoldState extends State<SettingsScaffold> {
   bool _dndSelected = false;
   bool _registeredSelected = false;
   bool _darkModeSelected = false;

@@ -13,10 +13,10 @@ PODS:
   - Firebase/Messaging (8.15.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 8.15.0)
-  - firebase_core (1.15.0):
+  - firebase_core (1.17.0):
     - Firebase/CoreOnly (= 8.15.0)
     - Flutter
-  - firebase_messaging (11.2.15):
+  - firebase_messaging (11.4.0):
     - Firebase/Messaging (= 8.15.0)
     - firebase_core
     - Flutter
@@ -104,7 +104,7 @@ PODS:
     - sqlite3/common
   - sqlite3_flutter_libs (0.0.1):
     - Flutter
-    - sqlite3 (~> 3.38.2)
+    - sqlite3 (~> 3.38.3)
     - sqlite3/fts5
     - sqlite3/json1
     - sqlite3/perf-threadsafe
@@ -200,8 +200,8 @@ SPEC CHECKSUMS:
   connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Firebase: 5f8193dff4b5b7c5d5ef72ae54bb76c08e2b841d
-  firebase_core: fa19947d8db1c0a62d8872c45039b3113829cd2e
-  firebase_messaging: 20522334f609978f782cff8c141f294bb2ca39c7
+  firebase_core: aa1b92020533f5c23955e388c347c58fd64f8627
+  firebase_messaging: 8957bf304b47daf8bf12d0b111fdecc5b33e77a3
   FirebaseCore: 5743c5785c074a794d35f2fff7ecc254a91e08b1
   FirebaseCoreDiagnostics: 92e07a649aeb66352b319d43bdd2ee3942af84cb
   FirebaseInstallations: 40bd9054049b2eae9a2c38ef1c3dd213df3605cd
@@ -222,7 +222,7 @@ SPEC CHECKSUMS:
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
   sqlite3: 3315c18c19fd107a68bf466f9f0adce934b03eaa
-  sqlite3_flutter_libs: e21c8c90448ce608a0d685e717727c46f37c6695
+  sqlite3_flutter_libs: 98c5c7c59b1ecfd0530a03412015d22db89ea261
   url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
   WebRTC-SDK: dda4e50186f9eed672dc6bcf4faafb30c6ce48e3
   webtrit_callkeep: 4f0437b91a9efdaf054306fc302c85877aaec80f

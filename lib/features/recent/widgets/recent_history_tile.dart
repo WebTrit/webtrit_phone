@@ -78,19 +78,19 @@ class RecentHistoryTile extends StatelessWidget {
           content: const Text("Are you sure you want to delete current call log?"),
           actions: [
             TextButton(
-              child: Text("No".toUpperCase()),
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
+              child: Text("No".toUpperCase()),
             ),
             TextButton(
-              child: Text("Yes".toUpperCase()),
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
               style: TextButton.styleFrom(
                 primary: Colors.red,
               ),
+              child: Text("Yes".toUpperCase()),
             ),
           ],
         );
