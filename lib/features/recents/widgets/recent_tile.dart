@@ -74,7 +74,7 @@ class RecentTile extends StatelessWidget {
             ),
             const Text(' · '),
             Text(
-              recent.isComplete ? _formatDuration(recent.duration!) : 'Missed',
+              recent.isComplete ? recent.duration!.format() : 'Missed',
             ),
             const Text(' · '),
             Text(
@@ -86,12 +86,6 @@ class RecentTile extends StatelessWidget {
         onLongPress: onLongPress,
       ),
     );
-  }
-
-  String _formatDuration(Duration duration) {
-    return [duration.inHours, duration.inMinutes, duration.inSeconds]
-        .map((seg) => seg.remainder(60).toString().padLeft(2, '0'))
-        .join(':');
   }
 
   Future<bool?> _confirmDelete(BuildContext context, Recent recent) {
