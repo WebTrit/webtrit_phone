@@ -47,6 +47,9 @@ class RecentTile extends StatelessWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
+            Text(
+              recent.createdTime.format(context),
+            ),
             IconButton(
               splashRadius: 24,
               icon: const Icon(Icons.info_outlined),
@@ -66,19 +69,15 @@ class RecentTile extends StatelessWidget {
                   ? (recent.direction == Direction.incoming ? Colors.blue : Colors.green)
                   : Colors.red,
             ),
-            const Text(' · '),
+            const Text(' '),
             Icon(
               recent.video ? Icons.videocam : Icons.call,
               size: 16,
               color: Colors.grey,
             ),
-            const Text(' · '),
+            const Text(' '),
             Text(
-              recent.isComplete ? recent.duration!.format() : 'Missed',
-            ),
-            const Text(' · '),
-            Text(
-              recent.createdTime.format(context),
+              recent.number,
             ),
           ],
         ),
