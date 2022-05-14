@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/styles/styles.dart';
 
 class LeadingAvatar extends StatelessWidget {
@@ -25,12 +26,7 @@ class LeadingAvatar extends StatelessWidget {
       maxRadius: maxRadius,
       backgroundColor: AppColors.darkBlue30,
       foregroundColor: AppColors.darkBlueSecondary,
-      child: Text(_usernameInitialism),
+      child: Text(username.initialism),
     );
-  }
-
-  String get _usernameInitialism {
-    final username = this.username.trim();
-    return username.isEmpty ? '' : username.split(' ').map((v) => v[0]).take(3).join();
   }
 }
