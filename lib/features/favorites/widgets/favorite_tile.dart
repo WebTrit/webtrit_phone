@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
+
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/favorite.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class FavoriteTile extends StatelessWidget {
-  final Favorite favorite;
-  final GestureTapCallback? onTap;
-  final GestureLongPressCallback? onLongPress;
-  final VoidCallback? onAudioPressed;
-  final VoidCallback? onVideoPressed;
-  final void Function(Favorite)? onDeleted;
-
   const FavoriteTile({
     Key? key,
     required this.favorite,
     this.onTap,
     this.onLongPress,
-    this.onAudioPressed,
-    this.onVideoPressed,
+    this.onInfoPressed,
     this.onDeleted,
   }) : super(key: key);
+
+  final Favorite favorite;
+  final GestureTapCallback? onTap;
+  final GestureLongPressCallback? onLongPress;
+  final VoidCallback? onInfoPressed;
+  final void Function(Favorite)? onDeleted;
 
   @override
   Widget build(BuildContext context) {
@@ -43,25 +43,15 @@ class FavoriteTile extends StatelessWidget {
         leading: LeadingAvatar(
           username: favorite.name,
         ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              splashRadius: 24,
-              icon: const Icon(Icons.call),
-              onPressed: onAudioPressed,
-            ),
-            IconButton(
-              splashRadius: 24,
-              icon: const Icon(Icons.videocam),
-              onPressed: onVideoPressed,
-            ),
-          ],
+        trailing: IconButton(
+          splashRadius: 24,
+          icon: const Icon(Icons.info_outline),
+          onPressed: onInfoPressed,
         ),
         title: Text(
           favorite.name,
         ),
-        subtitle: Text(favorite.label),
+        subtitle: Text('${favorite.label.capitalize}: ${favorite.number}'),
         onTap: onTap,
         onLongPress: onLongPress,
       ),

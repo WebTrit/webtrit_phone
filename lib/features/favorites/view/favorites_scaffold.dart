@@ -33,11 +33,11 @@ class FavoritesScaffold extends StatelessWidget {
                   onTap: () {
                     context.read<CallBloc>().add(CallOutgoingStarted(number: favorite.number, video: false));
                   },
-                  onAudioPressed: () {
-                    context.read<CallBloc>().add(CallOutgoingStarted(number: favorite.number, video: false));
-                  },
-                  onVideoPressed: () {
+                  onLongPress: () {
                     context.read<CallBloc>().add(CallOutgoingStarted(number: favorite.number, video: true));
+                  },
+                  onInfoPressed: () {
+                    context.showErrorSnackBar(context.l10n.notImplemented);
                   },
                   onDeleted: (recent) {
                     context.showSnackBar('"${recent.number}" deleted');

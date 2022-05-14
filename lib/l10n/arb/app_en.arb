@@ -120,8 +120,12 @@
   "settings_ListViewTileTitle_logRecordsConsole": "Log records console",
   "@settings_ListViewTileTitle_logRecordsConsole": {
   },
+
   "underDevelopment": "This page is under development.",
   "@underDevelopment": {
+  },
+  "notImplemented": "Sorry, not implemented yet",
+  "@notImplemented": {
   },
 
   "loginModeSelectionTabDemoButtonLabel": "Demo",
