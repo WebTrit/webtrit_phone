@@ -379,11 +379,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     Emitter<CallState> emit,
   ) async {
     final currentState = state;
-    if (currentState is! ActiveCallState) return; // TODO: get rid of double hangup event
+    if (currentState is! ActiveCallState || currentState.hungUp) return;
+    emit(currentState.copyWith(hungUpTime: DateTime.now()));
 
     await _audioPlayer.stop();
-
-    emit(currentState.copyWith(hungUpTime: DateTime.now()));
 
     _addToRecents(state);
 
@@ -401,10 +400,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     Emitter<CallState> emit,
   ) async {
     final currentState = state;
-    if (currentState is! ActiveCallState) return; // TODO: get rid of double hangup event
-
-    await _audioPlayer.stop();
-
+    if (currentState is! ActiveCallState || currentState.hungUp) return;
     emit(currentState.copyWith(hungUpTime: DateTime.now()));
 
     if (currentState.isIncoming && !currentState.accepted) {
@@ -416,6 +412,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
         callId: currentState.callId,
       ));
     }
+
+    await _audioPlayer.stop();
 
     _addToRecents(state);
 
