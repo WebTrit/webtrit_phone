@@ -55,6 +55,7 @@ class Keypad extends StatelessWidget {
   Widget _buildKeyButton(BuildContext context, String text, String subtext) {
     return TextButton(
       onPressed: () => onKeypadPressed(text),
+      onLongPress: subtext.length != 1 ? null : () => onKeypadPressed(subtext),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
