@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+
+import 'package:go_router/go_router.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'package:webtrit_phone/data/data.dart';
@@ -61,7 +63,7 @@ class WebRegistrationPageState extends State<WebRegistrationPage> {
               await SecureStorage().writeToken(token);
 
               if (!mounted) return;
-              Navigator.pushReplacementNamed(context, '/main');
+              context.goNamed('main');
             }),
       },
       onWebViewCreated: (WebViewController controller) {
@@ -79,7 +81,7 @@ class WebRegistrationPageState extends State<WebRegistrationPage> {
         final result = await _showWebResourceErrorDialog(context, error);
         if (result == null) {
           if (!mounted) return;
-          Navigator.pushReplacementNamed(context, '/login');
+          context.goNamed('login');
         } else {
           final webViewController = await _controller.future;
           webViewController.loadUrl(result ? widget.initialUrl : _demoInitialUrl());
