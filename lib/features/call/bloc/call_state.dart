@@ -42,7 +42,7 @@ mixin CallMixin {
 
   bool get isOutgoing => direction == Direction.outgoing;
 
-  bool get accepted => acceptedTime != null;
+  bool get wasAccepted => acceptedTime != null;
 
-  bool get hungUp => hungUpTime != null;
+  bool get wasHungUp => hungUpTime != null;
 }

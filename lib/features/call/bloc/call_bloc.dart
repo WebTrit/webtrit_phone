@@ -379,7 +379,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     Emitter<CallState> emit,
   ) async {
     final currentState = state;
-    if (currentState is! ActiveCallState || currentState.hungUp) return;
+    if (currentState is! ActiveCallState || currentState.wasHungUp) return;
     emit(currentState.copyWith(hungUpTime: DateTime.now()));
 
     await _audioPlayer.stop();
@@ -400,10 +400,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     Emitter<CallState> emit,
   ) async {
     final currentState = state;
-    if (currentState is! ActiveCallState || currentState.hungUp) return;
+    if (currentState is! ActiveCallState || currentState.wasHungUp) return;
     emit(currentState.copyWith(hungUpTime: DateTime.now()));
 
-    if (currentState.isIncoming && !currentState.accepted) {
+    if (currentState.isIncoming && !currentState.wasAccepted) {
       await _signalingClient.execute(DeclineRequest(
         callId: currentState.callId,
       ));

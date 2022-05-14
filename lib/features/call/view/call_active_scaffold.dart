@@ -26,7 +26,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    final acceptActionEnabled = widget.state.isIncoming && widget.state.accepted != true;
+    final acceptActionEnabled = widget.state.isIncoming && widget.state.wasAccepted != true;
     final direction = widget.state.isIncoming ? 'Incoming call from' : 'Outgoing call to';
     final username = widget.state.number;
 
