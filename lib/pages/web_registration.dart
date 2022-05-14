@@ -48,7 +48,7 @@ class WebRegistrationPage extends StatefulWidget {
 }
 
 class WebRegistrationPageState extends State<WebRegistrationPage> {
-  final Completer<WebViewController> _controller = Completer<WebViewController>();
+  late final WebViewController _controller;
 
   @override
   Widget build(BuildContext context) {
@@ -67,15 +67,13 @@ class WebRegistrationPageState extends State<WebRegistrationPage> {
             }),
       },
       onWebViewCreated: (WebViewController controller) {
-        _controller.complete(controller);
+        _controller = controller;
       },
       onPageStarted: (url) async {
         //
       },
       onPageFinished: (url) async {
-        final webViewController = await _controller.future;
-        if (!mounted) return;
-        webViewController.runJavascript(_definesCssVariablesJavascript(context));
+        _controller.runJavascript(_definesCssVariablesJavascript(context));
       },
       onWebResourceError: (WebResourceError error) async {
         final result = await _showWebResourceErrorDialog(context, error);
@@ -83,8 +81,7 @@ class WebRegistrationPageState extends State<WebRegistrationPage> {
           if (!mounted) return;
           context.goNamed('login');
         } else {
-          final webViewController = await _controller.future;
-          webViewController.loadUrl(result ? widget.initialUrl : _demoInitialUrl());
+          _controller.loadUrl(result ? widget.initialUrl : _demoInitialUrl());
         }
       },
       initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
