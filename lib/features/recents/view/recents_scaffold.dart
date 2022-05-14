@@ -87,7 +87,7 @@ class RecentsScaffoldState extends State<RecentsScaffold> with SingleTickerProvi
                 final recent = recentsFiltered[index];
                 return RecentTile(
                   recent: recent,
-                  onInfoTap: () {
+                  onInfoPressed: () {
                     context.goNamed('recent', extra: recent);
                   },
                   onTap: () {

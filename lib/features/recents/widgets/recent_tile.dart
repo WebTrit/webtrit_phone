@@ -6,20 +6,20 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../recents.dart';
 
 class RecentTile extends StatelessWidget {
-  final Recent recent;
-  final GestureTapCallback? onInfoTap;
-  final GestureTapCallback? onTap;
-  final GestureLongPressCallback? onLongPress;
-  final void Function(Recent)? onDeleted;
-
   const RecentTile({
     Key? key,
     required this.recent,
-    this.onInfoTap,
     this.onTap,
     this.onLongPress,
+    this.onInfoPressed,
     this.onDeleted,
   }) : super(key: key);
+
+  final Recent recent;
+  final GestureTapCallback? onTap;
+  final GestureLongPressCallback? onLongPress;
+  final GestureTapCallback? onInfoPressed;
+  final void Function(Recent)? onDeleted;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class RecentTile extends StatelessWidget {
             IconButton(
               splashRadius: 24,
               icon: const Icon(Icons.info_outlined),
-              onPressed: onInfoTap,
+              onPressed: onInfoPressed,
             ),
           ],
         ),
