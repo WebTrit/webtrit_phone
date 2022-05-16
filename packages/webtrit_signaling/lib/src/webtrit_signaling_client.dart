@@ -26,16 +26,19 @@ class WebtritSignalingClient {
 
   WebtritSignalingClient(
     this.url, {
+    HttpClient? customHttpClient,
     required this.onEvent,
     required this.onError,
     required this.onDisconnect,
-  }) : _logger = Logger('$WebtritSignalingClient-$_createCounter') {
+  })  : _logger = Logger('$WebtritSignalingClient-$_createCounter'),
+        _httpClient = customHttpClient ?? HttpClient() {
     _createCounter++;
   }
 
   final Logger _logger;
 
   final String url;
+  final HttpClient _httpClient;
 
   final void Function(Event event) onEvent;
   final void Function(Object error, StackTrace? stackTrace) onError;
@@ -47,6 +50,10 @@ class WebtritSignalingClient {
   Timer? _keepaliveTimer;
 
   final _transactions = <String, Transaction>{};
+
+  void close() {
+    _httpClient.close();
+  }
 
   String _signalingUrl(String token, bool force) => Uri.parse(url).replace(
         pathSegments: ['signaling', 'websocket'],
@@ -60,7 +67,11 @@ class WebtritSignalingClient {
     if (_ws != null) {
       throw WebtritSignalingAlreadyConnectException();
     } else {
-      final ws = await WebSocket.connect(_signalingUrl(token, force), protocols: [subprotocol]);
+      final ws = await WebSocket.connect(
+        _signalingUrl(token, force),
+        protocols: [subprotocol],
+        customClient: _httpClient,
+      );
       ws.listen(
         _wsOnData,
         onError: _wsOnError,

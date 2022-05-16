@@ -16,8 +16,11 @@ void main(List<String> arguments) async {
   final url = arguments[0];
   final token = arguments[1];
 
+  final httpClient = HttpClient();
+  httpClient.connectionTimeout = Duration(seconds: 5);
   final client = WebtritSignalingClient(
     url,
+    customHttpClient: httpClient,
     onEvent: (event) {
       print('>> event: $event');
     },
@@ -37,4 +40,6 @@ void main(List<String> arguments) async {
 
   print('Disconnect');
   await client.disconnect();
+
+  client.close();
 }
