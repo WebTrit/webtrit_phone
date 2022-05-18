@@ -78,6 +78,7 @@ class MainScaffoldState extends State<MainScaffold> with RestorationMixin {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
     return Scaffold(
       body: SafeArea(
         top: false,
@@ -97,6 +98,8 @@ class MainScaffoldState extends State<MainScaffold> with RestorationMixin {
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
+        selectedLabelStyle: themeData.textTheme.caption,
+        unselectedLabelStyle: themeData.textTheme.caption,
         currentIndex: _restorableSelectedIndex.value,
         onTap: _onItemTapped,
         items: tabs.map((Tab tab) {

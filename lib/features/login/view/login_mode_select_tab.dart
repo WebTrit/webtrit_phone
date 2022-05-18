@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/styles/styles.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 
 import '../login.dart';
 
@@ -14,6 +14,9 @@ class LoginModeSelectTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+    final Gradients? gradients = themeData.extension<Gradients>();
+    final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
     return BlocListener<LoginCubit, LoginState>(
       listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
@@ -22,35 +25,28 @@ class LoginModeSelectTab extends StatelessWidget {
         }
       },
       child: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              AppColors.gradientTop,
-              AppColors.gradientBottom,
-            ],
-          ),
+        decoration: BoxDecoration(
+          gradient: gradients?.tab,
         ),
         child: Padding(
           padding: kTabLabelPadding * 2,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const OnboardingLogo(
-                color: AppColors.white,
+              OnboardingLogo(
+                color: themeData.colorScheme.onPrimary,
               ),
               const OnboardingPicture(),
               const Expanded(child: SizedBox()),
-              TextButton(
+              ElevatedButton(
                 onPressed: () => context.read<LoginCubit>().loginModeSelectSubmitter(false),
-                style: AppTextButtonStyle.primaryThick,
+                style: elevatedButtonStyles?.primary,
                 child: Text(context.l10n.loginModeSelectionTabSignInButtonLabel),
               ),
               const SizedBox(height: kToolbarHeight / 4),
-              TextButton(
+              ElevatedButton(
                 onPressed: () => context.read<LoginCubit>().loginModeSelectSubmitter(true),
-                style: AppTextButtonStyle.whiteThick,
+                style: elevatedButtonStyles?.neutral,
                 child: Text(context.l10n.loginModeSelectionTabDemoButtonLabel),
               ),
               const SizedBox(height: kToolbarHeight / 2),

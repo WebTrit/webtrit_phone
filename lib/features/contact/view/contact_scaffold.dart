@@ -17,7 +17,7 @@ class ContactScaffold extends StatelessWidget {
       appBar: ExtAppBar(),
       body: BlocBuilder<ContactCubit, ContactState>(
         builder: (context, state) {
-          final theme = Theme.of(context);
+          final themeData = Theme.of(context);
           final contact = state.contact;
           return ListView(
             children: [
@@ -30,7 +30,7 @@ class ContactScaffold extends StatelessWidget {
               ),
               Text(
                 contact.name,
-                style: theme.textTheme.headline4,
+                style: themeData.textTheme.headline4,
                 textAlign: TextAlign.center,
               ),
               const Divider(

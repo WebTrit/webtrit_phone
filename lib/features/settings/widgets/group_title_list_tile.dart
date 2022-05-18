@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/styles/styles.dart';
-
 class GroupTitleListTile extends StatelessWidget {
   const GroupTitleListTile({
     Key? key,
@@ -18,7 +16,7 @@ class GroupTitleListTile extends StatelessWidget {
         titleData,
         style: themeData.textTheme.bodyText2,
       ),
-      tileColor: AppColors.backgroundLight,
+      tileColor: themeData.colorScheme.surface,
     );
   }
 }

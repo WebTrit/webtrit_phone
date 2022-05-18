@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
@@ -13,13 +12,13 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/pages/web_registration.dart';
-import 'package:webtrit_phone/styles/styles.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 import 'main.dart';
 
-class App extends StatelessWidget {
-  App({
+class App extends StatefulWidget {
+  const App({
     Key? key,
     required this.webRegistrationInitialUrl,
     required this.isRegistered,
@@ -28,96 +27,61 @@ class App extends StatelessWidget {
   final String? webRegistrationInitialUrl;
   final bool isRegistered;
 
+  @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
   String _initialRoute(String? webRegistrationInitialUrl, bool isRegistered) => isRegistered
       ? '/main'
       : webRegistrationInitialUrl == null
           ? '/login'
           : '/web-registration';
 
+  late final ValueNotifier<ThemeSettings> themeSettings;
+
+  @override
+  void initState() {
+    super.initState();
+    setDefaultOrientations();
+    themeSettings = ValueNotifier(portaoneThemeSettings);
+  }
+
+  @override
+  void dispose() {
+    themeSettings.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    setDefaultOrientations();
-
-    final materialApp = MaterialApp.router(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      restorationScopeId: 'App',
-      title: EnvironmentConfig.APP_NAME,
-      theme: ThemeData(
-        primarySwatch: AppColors.primarySwatch,
-        textTheme: GoogleFonts.montserratTextTheme(
-          Theme.of(context).textTheme,
+    final materialApp = ThemeProvider(
+      settings: themeSettings,
+      lightDynamic: null,
+      darkDynamic: null,
+      child: NotificationListener<ThemeSettingsChangedNotification>(
+        onNotification: (notification) {
+          themeSettings.value = notification.settings;
+          return true;
+        },
+        child: ValueListenableBuilder<ThemeSettings>(
+          valueListenable: themeSettings,
+          builder: (context, value, _) {
+            final themeProvider = ThemeProvider.of(context);
+            return MaterialApp.router(
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              restorationScopeId: 'App',
+              title: EnvironmentConfig.APP_NAME,
+              theme: themeProvider.light(),
+              darkTheme: themeProvider.dark(),
+              themeMode: themeProvider.themeMode(),
+              routeInformationParser: _router.routeInformationParser,
+              routerDelegate: _router.routerDelegate,
+            );
+          },
         ),
       ),
-      builder: (BuildContext context, Widget? child) {
-        final themeData = Theme.of(context);
-        return Theme(
-          data: themeData.copyWith(
-            appBarTheme: AppBarTheme(
-              backgroundColor: AppColors.backgroundLight,
-              elevation: 0,
-              iconTheme: IconThemeData(
-                color: themeData.textTheme.caption!.color,
-              ),
-              actionsIconTheme: IconThemeData(
-                color: themeData.textTheme.caption!.color,
-              ),
-              titleTextStyle: themeData.primaryTextTheme.headline6!.copyWith(
-                color: AppColors.black,
-                fontWeight: FontWeight.bold,
-              ),
-              centerTitle: true,
-            ),
-            bottomNavigationBarTheme: BottomNavigationBarThemeData(
-              backgroundColor: AppColors.backgroundLight,
-              selectedLabelStyle: themeData.textTheme.caption!,
-              unselectedLabelStyle: themeData.textTheme.caption!,
-            ),
-            tabBarTheme: TabBarTheme(
-              labelColor: themeData.textTheme.caption!.color,
-            ),
-            inputDecorationTheme: const InputDecorationTheme(
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-              contentPadding: EdgeInsets.only(bottom: 10.0, left: 20.0, right: 10.0),
-              filled: true,
-              fillColor: AppColors.white,
-              errorBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.red),
-              ),
-              focusedErrorBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.red),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.primary),
-              ),
-              disabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.lightGrey),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.grey),
-              ),
-            ),
-            elevatedButtonTheme: ElevatedButtonThemeData(
-              style: ElevatedButton.styleFrom(
-                shape: const StadiumBorder(),
-              ),
-            ),
-            outlinedButtonTheme: OutlinedButtonThemeData(
-              style: OutlinedButton.styleFrom(
-                shape: const StadiumBorder(),
-              ),
-            ),
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                shape: const StadiumBorder(),
-              ),
-            ),
-          ),
-          child: child ?? Container(),
-        );
-      },
-      routeInformationParser: _router.routeInformationParser,
-      routerDelegate: _router.routerDelegate,
     );
 
     return MultiRepositoryProvider(
@@ -145,7 +109,7 @@ class App extends StatelessWidget {
   }
 
   late final _router = GoRouter(
-    initialLocation: _initialRoute(webRegistrationInitialUrl, isRegistered),
+    initialLocation: _initialRoute(widget.webRegistrationInitialUrl, widget.isRegistered),
     routes: [
       GoRoute(
         name: 'login',
@@ -156,7 +120,7 @@ class App extends StatelessWidget {
         name: 'web-registration',
         path: '/web-registration',
         builder: (context, state) => WebRegistrationPage(
-          initialUrl: state.extra != null ? state.extra! as String : webRegistrationInitialUrl!,
+          initialUrl: state.extra != null ? state.extra! as String : widget.webRegistrationInitialUrl!,
         ),
       ),
       GoRoute(

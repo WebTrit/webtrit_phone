@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/styles/styles.dart';
 
 class ExtAppBar extends AppBar {
   ExtAppBar({
@@ -52,11 +51,12 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
       actions: [
         BlocBuilder<CallBloc, CallState>(
           builder: (context, state) {
+            final themeData = Theme.of(context);
             return Ink(
               decoration: ShapeDecoration(
                 shape: CircleBorder(
                   side: BorderSide(
-                    color: state is ReadyCallStateMixin ? AppColors.green : AppColors.red,
+                    color: state is ReadyCallStateMixin ? themeData.colorScheme.tertiary : themeData.colorScheme.error,
                   ),
                 ),
               ),
@@ -67,7 +67,6 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
                 ),
                 icon: const Icon(
                   Icons.person,
-                  color: AppColors.darkBlueSecondary,
                 ),
                 onPressed: () {
                   context.goNamed('settings');

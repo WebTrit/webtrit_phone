@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/styles/styles.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../login.dart';
@@ -16,6 +16,9 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+    final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
+    final OutlinedButtonStyles? outlinedButtonStyles = themeData.extension<OutlinedButtonStyles>();
     return BlocListener<LoginCubit, LoginState>(
       listenWhen: (previous, current) => previous.status != current.status || previous.error != current.error,
       listener: (context, state) {
@@ -65,9 +68,8 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
                     buildWhen: (previous, current) => previous.status != current.status,
                     builder: (context, state) {
                       return OutlinedButton(
-                        onPressed:
-                            state.status.isProcessing ? null : () => _onCoreUrlAssignBack(context),
-                        style: AppOutlinedButtonStyle.mainThick,
+                        onPressed: state.status.isProcessing ? null : () => _onCoreUrlAssignBack(context),
+                        style: outlinedButtonStyles?.neutral,
                         child: Text(context.l10n.login_Button_back),
                       );
                     },
@@ -79,15 +81,15 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
                     buildWhen: (previous, current) =>
                         previous.status != current.status || previous.coreUrlInput != current.coreUrlInput,
                     builder: (context, state) {
-                      return TextButton(
+                      return ElevatedButton(
                         onPressed: !state.coreUrlInput.valid ? null : () => _onCoreUrlAssignSubmitted(context),
-                        style: AppTextButtonStyle.primaryThick,
+                        style: elevatedButtonStyles?.primary,
                         child: !state.status.isProcessing
                             ? Text(context.l10n.login_Button_coreUrlAssign)
-                            : const SizedCircularProgressIndicator(
+                            : SizedCircularProgressIndicator(
                                 size: 16,
                                 strokeWidth: 2,
-                                color: AppColors.white,
+                                color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
                               ),
                       );
                     },

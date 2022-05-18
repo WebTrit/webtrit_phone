@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/styles/styles.dart';
 
 class LeadingAvatar extends StatelessWidget {
   const LeadingAvatar({
@@ -20,12 +19,13 @@ class LeadingAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
     return CircleAvatar(
       radius: radius,
       minRadius: minRadius,
       maxRadius: maxRadius,
-      backgroundColor: AppColors.darkBlue30,
-      foregroundColor: AppColors.darkBlueSecondary,
+      backgroundColor: themeData.colorScheme.secondaryContainer,
+      foregroundColor: themeData.colorScheme.onSecondaryContainer,
       child: Text(username.initialism),
     );
   }

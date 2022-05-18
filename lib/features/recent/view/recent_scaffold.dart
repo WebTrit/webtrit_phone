@@ -17,7 +17,7 @@ class RecentScaffold extends StatelessWidget {
       appBar: ExtAppBar(),
       body: BlocBuilder<RecentCubit, RecentState>(
         builder: (context, state) {
-          final theme = Theme.of(context);
+          final themeData = Theme.of(context);
           final recent = state.recent;
           return ListView(
             children: [
@@ -30,7 +30,7 @@ class RecentScaffold extends StatelessWidget {
               ),
               Text(
                 recent.name,
-                style: theme.textTheme.headline4,
+                style: themeData.textTheme.headline4,
                 textAlign: TextAlign.center,
               ),
               const Divider(

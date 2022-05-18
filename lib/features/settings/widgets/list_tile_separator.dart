@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/styles/styles.dart';
-
 class ListTileSeparator extends StatelessWidget {
   const ListTileSeparator({Key? key}) : super(key: key);
 
@@ -11,7 +9,6 @@ class ListTileSeparator extends StatelessWidget {
       height: 1,
       indent: 15,
       endIndent: 15,
-      color: AppColors.lightGrey,
     );
   }
 }

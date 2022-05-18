@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/widgets/widgets.dart';
 
 class LogRecordsConsoleScaffold extends StatelessWidget {
   const LogRecordsConsoleScaffold({Key? key}) : super(key: key);
@@ -11,7 +10,7 @@ class LogRecordsConsoleScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ExtAppBar(
+      appBar: AppBar(
         title: const Text('Log Console'),
         actions: [
           BlocBuilder<LogRecordsConsoleCubit, LogRecordsConsoleState>(

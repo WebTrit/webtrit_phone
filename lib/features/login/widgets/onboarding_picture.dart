@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/app/assets.gen.dart';
-import 'package:webtrit_phone/styles/app_colors.dart';
 
 class OnboardingPicture extends StatelessWidget {
   const OnboardingPicture({Key? key}) : super(key: key);
@@ -12,9 +11,9 @@ class OnboardingPicture extends StatelessWidget {
     final themeData = Theme.of(context);
     return Container(
       height: mediaQueryData.size.height / 2.5,
-      decoration: const BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.all(
+      decoration: BoxDecoration(
+        color: themeData.colorScheme.background,
+        borderRadius: const BorderRadius.all(
           Radius.circular(20.0),
         ),
       ),
