@@ -6,25 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 
-class ExtAppBar extends AppBar {
-  ExtAppBar({
-    Key? key,
-    Widget? leading,
-    Widget? title,
-    List<Widget>? actions,
-    PreferredSizeWidget? bottom,
-    bool? centerTitle,
-  }) : super(
-          key: key,
-          leading: leading,
-          title: title,
-          actions: actions,
-          titleSpacing: 0,
-          bottom: bottom,
-          centerTitle: centerTitle,
-        );
-}
-
 class MainAppBar extends StatelessWidget with PreferredSizeWidget {
   MainAppBar({
     Key? key,
@@ -39,15 +20,9 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ExtAppBar(
-      title: Row(
-        children: const [
-          SizedBox(
-            width: NavigationToolbar.kMiddleSpacing,
-          ),
-          Text(EnvironmentConfig.APP_NAME),
-        ],
-      ),
+    return AppBar(
+      title: const Text(EnvironmentConfig.APP_NAME),
+      centerTitle: false,
       actions: [
         BlocBuilder<CallBloc, CallState>(
           builder: (context, state) {

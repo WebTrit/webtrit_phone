@@ -14,7 +14,7 @@ class RecentScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ExtAppBar(),
+      appBar: AppBar(),
       body: BlocBuilder<RecentCubit, RecentState>(
         builder: (context, state) {
           final themeData = Theme.of(context);

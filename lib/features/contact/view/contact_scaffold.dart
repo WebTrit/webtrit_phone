@@ -14,7 +14,7 @@ class ContactScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ExtAppBar(),
+      appBar: AppBar(),
       body: BlocBuilder<ContactCubit, ContactState>(
         builder: (context, state) {
           final themeData = Theme.of(context);
