@@ -82,6 +82,16 @@ class ThemeProvider extends InheritedWidget {
         borderRadius: BorderRadius.circular(8),
       );
 
+  InputDecorations inputDecorations(ColorScheme colors) {
+    return const InputDecorations(
+      keypad: InputDecoration(
+        border: InputBorder.none,
+        focusedBorder: InputBorder.none,
+        focusedErrorBorder: InputBorder.none,
+      ),
+    );
+  }
+
   ElevatedButtonStyles elevatedButtonStyles(ColorScheme colors) {
     return ElevatedButtonStyles(
       primary: ElevatedButton.styleFrom(
@@ -103,6 +113,14 @@ class ThemeProvider extends InheritedWidget {
         side: BorderSide(
           color: colors.onBackground.withOpacity(0.2),
         ),
+      ),
+    );
+  }
+
+  TextButtonStyles textButtonStyles(ColorScheme colors) {
+    return TextButtonStyles(
+      neutral: TextButton.styleFrom(
+        primary: colors.secondary,
       ),
     );
   }
@@ -191,8 +209,10 @@ class ThemeProvider extends InheritedWidget {
       // GENERAL CONFIGURATIONValueNotifier
       inputDecorationTheme: inputDecorationTheme(colorScheme),
       extensions: [
+        inputDecorations(colorScheme),
         elevatedButtonStyles(colorScheme),
         outlinedButtonStyles(colorScheme),
+        textButtonStyles(colorScheme),
         gradients(colorScheme),
       ],
       // COLOR

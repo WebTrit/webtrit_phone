@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/theme/theme.dart';
+
 import '../keypad.dart';
 
 class KeypadView extends StatefulWidget {
@@ -37,7 +39,8 @@ class KeypadViewState extends State<KeypadView> {
   @override
   Widget build(BuildContext context) {
     final scaledInset = MediaQuery.of(context).size.height > 800 ? 16.0 : 8.0;
-
+    final themeData = Theme.of(context);
+    final InputDecorations? inputDecorations = themeData.extension<InputDecorations>();
     return Column(
       children: [
         Expanded(
@@ -48,7 +51,8 @@ class KeypadViewState extends State<KeypadView> {
                 key: _keypadTextFieldKey,
                 controller: _controller,
                 focusNode: _focusNode,
-                style: Theme.of(context).textTheme.headline4,
+                decoration: inputDecorations?.keypad,
+                style: themeData.textTheme.headlineLarge,
                 textAlign: TextAlign.center,
                 showCursor: true,
               ),

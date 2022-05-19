@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/theme/theme.dart';
+
 class Actionpad extends StatelessWidget {
   final bool video;
   final VoidCallback? onCallPressed;
@@ -18,6 +20,8 @@ class Actionpad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+    final TextButtonStyles? textButtonStyles = themeData.extension<TextButtonStyles>();
     final actionRows = [
       TableRow(
         children: [
@@ -39,6 +43,7 @@ class Actionpad extends StatelessWidget {
             child: TextButton(
               onPressed: onBackspacePressed,
               onLongPress: onBackspaceLongPress,
+              style: textButtonStyles?.neutral,
               child: const Icon(
                 Icons.backspace_outlined,
               ),

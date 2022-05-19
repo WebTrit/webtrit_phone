@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/theme/theme.dart';
+
 class Keypad extends StatelessWidget {
   const Keypad({
     Key? key,
@@ -53,19 +55,36 @@ class Keypad extends StatelessWidget {
   }
 
   Widget _buildKeyButton(BuildContext context, String text, String subtext) {
+    final themeData = Theme.of(context);
+    final TextButtonStyles? textButtonStyles = themeData.extension<TextButtonStyles>();
     return TextButton(
       onPressed: () => onKeypadPressed(text),
       onLongPress: subtext.length != 1 ? null : () => onKeypadPressed(subtext),
+      style: textButtonStyles?.neutral,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             text,
-            style: Theme.of(context).textTheme.headline4,
+            style: TextStyle(fontSize: themeData.textTheme.headlineLarge?.fontSize),
           ),
-          Text(
-            subtext,
-          ),
+          Builder(builder: (context) {
+            final defaultTextStyle = DefaultTextStyle.of(context);
+            var color = defaultTextStyle.style.color;
+            if (color != null) {
+              var opacity = color.opacity - 0.3;
+              if (opacity < 0.2) {
+                opacity = 0.2;
+              }
+              color = color.withOpacity(opacity);
+            }
+            return Text(
+              subtext,
+              style: themeData.textTheme.bodyMedium?.copyWith(
+                color: color,
+              ),
+            );
+          }),
         ],
       ),
     );
