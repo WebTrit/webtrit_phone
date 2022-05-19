@@ -17,16 +17,17 @@ class RecentHistoryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
     final onDeleted = this.onDeleted;
     return Dismissible(
       key: ObjectKey(recent),
       background: Container(
-        color: Colors.red,
+        color: themeData.colorScheme.error,
         padding: const EdgeInsets.only(right: 16),
         child: const Align(
           alignment: Alignment.centerRight,
           child: Icon(
-            Icons.delete,
+            Icons.delete_outline,
           ),
         ),
       ),

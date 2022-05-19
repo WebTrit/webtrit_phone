@@ -175,6 +175,12 @@ class ThemeProvider extends InheritedWidget {
     );
   }
 
+  ListTileThemeData listTileTheme(ColorScheme colors) {
+    return ListTileThemeData(
+      iconColor: colors.secondary,
+    );
+  }
+
   ThemeData? light([Color? targetColor]) {
     final colorScheme = colors(Brightness.light, targetColor);
     return ThemeData.from(
@@ -195,6 +201,7 @@ class ThemeProvider extends InheritedWidget {
       dividerColor: colorScheme.outline,
       unselectedWidgetColor: colorScheme.onSurface,
       indicatorColor: colorScheme.primary,
+      toggleableActiveColor: colorScheme.primary,
       // TYPOGRAPHY & ICONOGRAPHY
       // COMPONENT THEMES
       appBarTheme: appBarTheme(colorScheme),
@@ -202,6 +209,7 @@ class ThemeProvider extends InheritedWidget {
       elevatedButtonTheme: elevatedButtonTheme(colorScheme),
       outlinedButtonTheme: outlinedButtonTheme(colorScheme),
       textButtonTheme: textButtonTheme(colorScheme),
+      listTileTheme: listTileTheme(colorScheme),
     );
   }
 
