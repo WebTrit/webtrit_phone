@@ -22,6 +22,9 @@ class RecentsScaffoldState extends State<RecentsScaffold> with SingleTickerProvi
 
   static final _recentsFilters = [RecentsVisibilityFilter.all, RecentsVisibilityFilter.missed];
 
+  static const _tabHeight = 42.0;
+  static const _paddingGap = 6.0;
+
   @override
   void initState() {
     super.initState();
@@ -48,11 +51,21 @@ class RecentsScaffoldState extends State<RecentsScaffold> with SingleTickerProvi
 
   @override
   Widget build(BuildContext context) {
+    final mediaQueryData = MediaQuery.of(context);
+
     return Scaffold(
       appBar: MainAppBar(
-        bottom: TabBar(
-          tabs: _recentsFilters.map((value) => Tab(child: Text(value.l10n(context), softWrap: false))).toList(),
-          controller: _tabController,
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(_tabHeight),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, _paddingGap),
+            child: ExtTabBar(
+              width: mediaQueryData.size.width * 0.6,
+              height: _tabHeight - _paddingGap,
+              tabs: _recentsFilters.map((value) => Tab(child: Text(value.l10n(context), softWrap: false))).toList(),
+              controller: _tabController,
+            ),
+          ),
         ),
       ),
       body: BlocConsumer<RecentsBloc, RecentsState>(

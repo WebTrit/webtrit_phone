@@ -12,18 +12,25 @@ import '../features/contacts_external_tab/view/contacts_external_tab.dart';
 class ContactsScaffold extends StatelessWidget {
   const ContactsScaffold({Key? key}) : super(key: key);
 
+  static const _tabHeight = 42.0;
   static const _searchHeight = kMinInteractiveDimension;
   static const _paddingGap = 6.0;
 
   @override
   Widget build(BuildContext context) {
+    final mediaQueryData = MediaQuery.of(context);
     final themeData = Theme.of(context);
 
-    final tabbar = TabBar(
-      tabs: [
-        context.l10n.contactsSourceLocal,
-        context.l10n.contactsSourceExternal,
-      ].map((value) => Tab(child: Text(value, softWrap: false))).toList(),
+    final tabBar = Padding(
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, _paddingGap),
+      child: ExtTabBar(
+        width: mediaQueryData.size.width * 0.6,
+        height: _tabHeight - _paddingGap,
+        tabs: [
+          context.l10n.contactsSourceLocal,
+          context.l10n.contactsSourceExternal,
+        ].map((value) => Tab(text: value)).toList(),
+      ),
     );
 
     final search = Padding(
@@ -58,10 +65,10 @@ class ContactsScaffold extends StatelessWidget {
         child: Scaffold(
           appBar: MainAppBar(
             bottom: PreferredSize(
-              preferredSize: Size.fromHeight(tabbar.preferredSize.height + _searchHeight),
+              preferredSize: const Size.fromHeight(_tabHeight + _searchHeight),
               child: Column(
                 children: [
-                  tabbar,
+                  tabBar,
                   search,
                 ],
               ),
