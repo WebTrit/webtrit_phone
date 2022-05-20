@@ -86,8 +86,6 @@ class ThemeProvider extends InheritedWidget {
     return const InputDecorations(
       keypad: InputDecoration(
         border: InputBorder.none,
-        focusedBorder: InputBorder.none,
-        focusedErrorBorder: InputBorder.none,
       ),
     );
   }
@@ -139,20 +137,25 @@ class ThemeProvider extends InheritedWidget {
   InputDecorationTheme inputDecorationTheme(ColorScheme colors) {
     return InputDecorationTheme(
       floatingLabelBehavior: FloatingLabelBehavior.always,
+      isDense: true,
       filled: true,
       fillColor: colors.background,
-      contentPadding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
-      border: const OutlineInputBorder(),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: colors.primary,
-        ),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: colors.error,
-        ),
-      ),
+      border: MaterialStateOutlineInputBorder.resolveWith((states) {
+        final Color borderColor;
+        final bool isError = states.contains(MaterialState.error);
+        if (states.contains(MaterialState.disabled)) {
+          borderColor = isError ? colors.error.withOpacity(0.25) : colors.onBackground.withOpacity(0.25);
+        } else if (states.contains(MaterialState.focused)) {
+          borderColor = isError ? colors.error : colors.primary;
+        } else {
+          borderColor = isError ? colors.error.withOpacity(0.5) : colors.onBackground.withOpacity(0.5);
+        }
+        return OutlineInputBorder(
+          borderSide: BorderSide(
+            color: borderColor,
+          ),
+        );
+      }),
     );
   }
 
