@@ -41,35 +41,42 @@ class ClearedTextFieldState extends State<ClearedTextField> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final InputDecorations? inputDecorations = themeData.extension<InputDecorations>();
-    return TextField(
-      controller: _controller,
-      textAlignVertical: TextAlignVertical.center,
-      decoration: inputDecorations?.search?.copyWith(
-        prefixIcon: const Icon(Icons.search),
-        prefixIconConstraints: widget.iconConstraints,
-        suffixIcon: _isEmpty
-            ? null
-            : IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: () {
-                  setState(() {
-                    _isEmpty = true;
-                  });
-                  _controller.clear();
-                  widget.onChanged?.call('');
-                },
-                constraints: widget.iconConstraints,
-              ),
-        suffixIconConstraints: widget.iconConstraints,
+    final iconConstraints = widget.iconConstraints;
+    return Ink(
+      decoration: BoxDecoration(
+        color: themeData.colorScheme.background,
+        borderRadius: iconConstraints == null ? null : BorderRadius.circular(iconConstraints.minHeight / 2),
       ),
-      textInputAction: TextInputAction.search,
-      onChanged: (value) {
-        setState(() {
-          _isEmpty = value.isEmpty;
-        });
-        widget.onChanged?.call(value);
-      },
-      onSubmitted: (value) => widget.onSubmitted,
+      child: TextField(
+        controller: _controller,
+        textAlignVertical: TextAlignVertical.center,
+        decoration: inputDecorations?.search?.copyWith(
+          prefixIcon: const Icon(Icons.search),
+          prefixIconConstraints: iconConstraints,
+          suffixIcon: _isEmpty
+              ? null
+              : IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () {
+                    setState(() {
+                      _isEmpty = true;
+                    });
+                    _controller.clear();
+                    widget.onChanged?.call('');
+                  },
+                  constraints: iconConstraints,
+                ),
+          suffixIconConstraints: iconConstraints,
+        ),
+        textInputAction: TextInputAction.search,
+        onChanged: (value) {
+          setState(() {
+            _isEmpty = value.isEmpty;
+          });
+          widget.onChanged?.call(value);
+        },
+        onSubmitted: (value) => widget.onSubmitted,
+      ),
     );
   }
 }

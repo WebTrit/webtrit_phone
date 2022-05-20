@@ -19,7 +19,6 @@ class ContactsScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQueryData = MediaQuery.of(context);
-    final themeData = Theme.of(context);
 
     final tabBar = Padding(
       padding: const EdgeInsets.fromLTRB(0, 0, 0, _paddingGap),
@@ -35,26 +34,20 @@ class ContactsScaffold extends StatelessWidget {
 
     final search = Padding(
       padding: const EdgeInsets.fromLTRB(_paddingGap, 0, _paddingGap, _paddingGap),
-      child: Ink(
-        decoration: BoxDecoration(
-          color: themeData.colorScheme.background,
-          borderRadius: BorderRadius.circular(_searchHeight / 2),
-        ),
-        child: IgnoreUnfocuser(
-          child: BlocBuilder<ContactsSearchBloc, String>(
-            builder: (context, state) {
-              final contactsSearchBloc = context.read<ContactsSearchBloc>();
-              return ClearedTextField(
-                initialValue: state,
-                onChanged: (value) => contactsSearchBloc.add(ContactsSearchChanged(value)),
-                onSubmitted: (value) => contactsSearchBloc.add(ContactsSearchSubmitted(value)),
-                iconConstraints: const BoxConstraints(
-                  minWidth: _searchHeight,
-                  minHeight: _searchHeight - _paddingGap,
-                ),
-              );
-            },
-          ),
+      child: IgnoreUnfocuser(
+        child: BlocBuilder<ContactsSearchBloc, String>(
+          builder: (context, state) {
+            final contactsSearchBloc = context.read<ContactsSearchBloc>();
+            return ClearedTextField(
+              initialValue: state,
+              onChanged: (value) => contactsSearchBloc.add(ContactsSearchChanged(value)),
+              onSubmitted: (value) => contactsSearchBloc.add(ContactsSearchSubmitted(value)),
+              iconConstraints: const BoxConstraints(
+                minWidth: _searchHeight,
+                minHeight: _searchHeight - _paddingGap,
+              ),
+            );
+          },
         ),
       ),
     );
