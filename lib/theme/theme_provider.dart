@@ -91,6 +91,7 @@ class ThemeProvider extends InheritedWidget {
         border: InputBorder.none,
       ),
       keypad: InputDecoration(
+        filled: false,
         border: InputBorder.none,
       ),
     );
