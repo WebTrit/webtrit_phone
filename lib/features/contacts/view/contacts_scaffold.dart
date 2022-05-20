@@ -12,31 +12,58 @@ import '../features/contacts_external_tab/view/contacts_external_tab.dart';
 class ContactsScaffold extends StatelessWidget {
   const ContactsScaffold({Key? key}) : super(key: key);
 
+  static const _searchHeight = kMinInteractiveDimension;
+  static const _paddingGap = 6.0;
+
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+
+    final tabbar = TabBar(
+      tabs: [
+        context.l10n.contactsSourceLocal,
+        context.l10n.contactsSourceExternal,
+      ].map((value) => Tab(child: Text(value, softWrap: false))).toList(),
+    );
+
+    final search = Padding(
+      padding: const EdgeInsets.fromLTRB(_paddingGap, 0, _paddingGap, _paddingGap),
+      child: Ink(
+        decoration: BoxDecoration(
+          color: themeData.colorScheme.background,
+          borderRadius: BorderRadius.circular(_searchHeight / 2),
+        ),
+        child: IgnoreUnfocuser(
+          child: BlocBuilder<ContactsSearchBloc, String>(
+            builder: (context, state) {
+              final contactsSearchBloc = context.read<ContactsSearchBloc>();
+              return ClearedTextField(
+                initialValue: state,
+                onChanged: (value) => contactsSearchBloc.add(ContactsSearchChanged(value)),
+                onSubmitted: (value) => contactsSearchBloc.add(ContactsSearchSubmitted(value)),
+                iconConstraints: const BoxConstraints(
+                  minWidth: _searchHeight,
+                  minHeight: _searchHeight - _paddingGap,
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+
     return Unfocuser(
       child: DefaultTabController(
         length: 2,
         child: Scaffold(
           appBar: MainAppBar(
-            bottom: TabBarSearch(
-              tabBar: TabBar(
-                tabs: [
-                  context.l10n.contactsSourceLocal,
-                  context.l10n.contactsSourceExternal,
-                ].map((value) => Tab(child: Text(value, softWrap: false))).toList(),
-              ),
-              search: IgnoreUnfocuser(
-                child: BlocBuilder<ContactsSearchBloc, String>(
-                  builder: (context, state) {
-                    final contactsSearchBloc = context.read<ContactsSearchBloc>();
-                    return ClearedTextField(
-                      initialValue: state,
-                      onChanged: (value) => contactsSearchBloc.add(ContactsSearchChanged(value)),
-                      onSubmitted: (value) => contactsSearchBloc.add(ContactsSearchSubmitted(value)),
-                    );
-                  },
-                ),
+            bottom: PreferredSize(
+              preferredSize: Size.fromHeight(tabbar.preferredSize.height + _searchHeight),
+              child: Column(
+                children: [
+                  tabbar,
+                  search,
+                ],
               ),
             ),
           ),

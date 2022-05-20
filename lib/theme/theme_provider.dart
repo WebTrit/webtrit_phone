@@ -84,6 +84,12 @@ class ThemeProvider extends InheritedWidget {
 
   InputDecorations inputDecorations(ColorScheme colors) {
     return const InputDecorations(
+      search: InputDecoration(
+        isDense: false,
+        filled: false,
+        isCollapsed: true,
+        border: InputBorder.none,
+      ),
       keypad: InputDecoration(
         border: InputBorder.none,
       ),
