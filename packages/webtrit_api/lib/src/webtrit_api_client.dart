@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:http/http.dart' as http;
-
 import 'package:webtrit_api/webtrit_api.dart';
 
 class RequestFailure implements Exception {
@@ -33,20 +31,61 @@ class RequestFailure implements Exception {
 }
 
 class WebtritApiClient {
-  WebtritApiClient(this.baseUrl, {http.Client? httpClient}) : _httpClient = httpClient ?? http.Client();
+  WebtritApiClient(
+    this.baseUrl, {
+    HttpClient? customHttpClient,
+  }) : _httpClient = customHttpClient ?? HttpClient();
 
   static const _apiVersionPathSegments = ['api', 'v1'];
 
-  static const _headers = {
-    HttpHeaders.contentTypeHeader: 'application/json',
-    HttpHeaders.acceptHeader: 'application/json',
-  };
-
   final Uri baseUrl;
-  final http.Client _httpClient;
+  final HttpClient _httpClient;
 
   void close() {
     _httpClient.close();
+  }
+
+  Future<dynamic> _httpClientExecute(String method, Uri url, String? token, Object? requestDataJson) async {
+    final httpRequest = await _httpClient.openUrl(method, url);
+    httpRequest.headers.set(HttpHeaders.contentTypeHeader, 'application/json');
+    httpRequest.headers.set(HttpHeaders.acceptHeader, 'application/json');
+    if (token != null) {
+      httpRequest.headers.set(HttpHeaders.authorizationHeader, 'Bearer $token');
+    }
+    if (requestDataJson != null) {
+      final requestData = jsonEncode(requestDataJson);
+      httpRequest.add(utf8.encoder.convert(requestData));
+    }
+    final httpResponse = await httpRequest.close();
+
+    final responseData = await httpResponse.transform(utf8.decoder).join();
+    final responseDataJson = responseData.isEmpty ? {} : jsonDecode(responseData);
+
+    if (httpResponse.statusCode == 200 || httpResponse.statusCode == 204) {
+      return responseDataJson;
+    } else {
+      final error = responseDataJson.isEmpty ? null : ErrorResponse.fromJson(responseDataJson);
+      throw RequestFailure(
+        statusCode: httpResponse.statusCode,
+        error: error,
+      );
+    }
+  }
+
+  Future<dynamic> _httpClientExecuteGet(Uri url, String? token) {
+    return _httpClientExecute('get', url, token, null);
+  }
+
+  Future<dynamic> _httpClientExecutePost(Uri url, String? token, Object? requestDataJson) {
+    return _httpClientExecute('post', url, token, requestDataJson);
+  }
+
+  Future<dynamic> _httpClientExecutePatch(Uri url, String? token, Object? requestDataJson) {
+    return _httpClientExecute('patch', url, token, requestDataJson);
+  }
+
+  Future<dynamic> _httpClientExecuteDelete(Uri url, String? token) {
+    return _httpClientExecute('delete', url, token, null);
   }
 
   Future<String> sessionOtpRequest(AppType type, String identifier, String phone) async {
@@ -54,19 +93,15 @@ class WebtritApiClient {
       pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['session', 'otp-request'],
     );
 
-    final request = SessionOtpRequestRequest(type: type, identifier: identifier, phone: phone);
+    final requestJson = SessionOtpRequestRequest(
+      type: type,
+      identifier: identifier,
+      phone: phone,
+    ).toJson();
 
-    final httpResponse = await _httpClient.post(
-      url,
-      headers: _headers,
-      body: jsonEncode(request.toJson()),
-    );
+    final responseJson = await _httpClientExecutePost(url, null, requestJson);
 
-    if (httpResponse.statusCode != 200) {
-      _throwRequestFailure(httpResponse);
-    }
-
-    final response = SessionOtpRequestResponse.fromJson(jsonDecode(httpResponse.body));
+    final response = SessionOtpRequestResponse.fromJson(responseJson);
 
     return response.otpId;
   }
@@ -76,19 +111,14 @@ class WebtritApiClient {
       pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['session', 'otp-verify'],
     );
 
-    final request = SessionOtpVerifyRequest(otpId: otpId, code: code);
+    final requestJson = SessionOtpVerifyRequest(
+      otpId: otpId,
+      code: code,
+    ).toJson();
 
-    final httpResponse = await _httpClient.post(
-      url,
-      headers: _headers,
-      body: jsonEncode(request.toJson()),
-    );
+    final responseJson = await _httpClientExecutePost(url, null, requestJson);
 
-    if (httpResponse.statusCode != 200) {
-      _throwRequestFailure(httpResponse);
-    }
-
-    final response = SessionOtpVerifyResponse.fromJson(jsonDecode(httpResponse.body));
+    final response = SessionOtpVerifyResponse.fromJson(responseJson);
 
     return response.token;
   }
@@ -98,19 +128,16 @@ class WebtritApiClient {
       pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['session'],
     );
 
-    final request = SessionLoginRequest(type: type, identifier: identifier, login: login, password: password);
+    final requestJson = SessionLoginRequest(
+      type: type,
+      identifier: identifier,
+      login: login,
+      password: password,
+    ).toJson();
 
-    final httpResponse = await _httpClient.post(
-      url,
-      headers: _headers,
-      body: jsonEncode(request.toJson()),
-    );
+    final responseJson = await _httpClientExecutePost(url, null, requestJson);
 
-    if (httpResponse.statusCode != 200) {
-      _throwRequestFailure(httpResponse);
-    }
-
-    final response = SessionLoginResponse.fromJson(jsonDecode(httpResponse.body));
+    final response = SessionLoginResponse.fromJson(responseJson);
 
     return response.token;
   }
@@ -120,14 +147,7 @@ class WebtritApiClient {
       pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['session'],
     );
 
-    final httpResponse = await _httpClient.delete(
-      url,
-      headers: _headersWithToken(token),
-    );
-
-    if (httpResponse.statusCode != 204) {
-      _throwRequestFailure(httpResponse);
-    }
+    await _httpClientExecuteDelete(url, token);
   }
 
   Future<AccountInfo> accountInfo(String token) async {
@@ -135,16 +155,11 @@ class WebtritApiClient {
       pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['account', 'info'],
     );
 
-    final httpResponse = await _httpClient.get(
-      url,
-      headers: _headersWithToken(token),
-    );
+    final responseJson = await _httpClientExecuteGet(url, token);
 
-    if (httpResponse.statusCode != 200) {
-      _throwRequestFailure(httpResponse);
-    }
+    final response = AccountInfoResponse.fromJson(responseJson);
 
-    return AccountInfoResponse.fromJson(jsonDecode(httpResponse.body)).data;
+    return response.data;
   }
 
   Future<List<AccountContact>> accountContacts(String token) async {
@@ -152,16 +167,11 @@ class WebtritApiClient {
       pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['account', 'contacts'],
     );
 
-    final httpResponse = await _httpClient.get(
-      url,
-      headers: _headersWithToken(token),
-    );
+    final responseJson = await _httpClientExecuteGet(url, token);
 
-    if (httpResponse.statusCode != 200) {
-      _throwRequestFailure(httpResponse);
-    }
+    final response = AccountContactsResponse.fromJson(responseJson);
 
-    return AccountContactsResponse.fromJson(jsonDecode(httpResponse.body)).data;
+    return response.data;
   }
 
   Future<AppStatus> appStatus(String token) async {
@@ -169,16 +179,11 @@ class WebtritApiClient {
       pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['app', 'status'],
     );
 
-    final httpResponse = await _httpClient.get(
-      url,
-      headers: _headersWithToken(token),
-    );
+    final responseJson = await _httpClientExecuteGet(url, token);
 
-    if (httpResponse.statusCode != 200) {
-      _throwRequestFailure(httpResponse);
-    }
+    final response = AppStatusResponse.fromJson(responseJson);
 
-    return AppStatusResponse.fromJson(jsonDecode(httpResponse.body)).data;
+    return response.data;
   }
 
   Future<void> appStatusUpdate(String token, AppStatus appStatus) async {
@@ -186,17 +191,11 @@ class WebtritApiClient {
       pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['app', 'status'],
     );
 
-    final request = AppStatusUpdateRequest(data: appStatus);
+    final requestJson = AppStatusUpdateRequest(
+      data: appStatus,
+    ).toJson();
 
-    final httpResponse = await _httpClient.patch(
-      url,
-      headers: _headersWithToken(token),
-      body: jsonEncode(request.toJson()),
-    );
-
-    if (httpResponse.statusCode != 204) {
-      _throwRequestFailure(httpResponse);
-    }
+    await _httpClientExecutePatch(url, token, requestJson);
   }
 
   Future<void> appCreateContacts(String token, List<AppContact> appContacts) async {
@@ -204,17 +203,9 @@ class WebtritApiClient {
       pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['app', 'contacts'],
     );
 
-    final request = AppCreateContactsRequest(data: appContacts);
+    final requestJson = AppCreateContactsRequest(data: appContacts).toJson();
 
-    final httpResponse = await _httpClient.post(
-      url,
-      headers: _headersWithToken(token),
-      body: jsonEncode(request.toJson()),
-    );
-
-    if (httpResponse.statusCode != 200) {
-      _throwRequestFailure(httpResponse);
-    }
+    await _httpClientExecutePost(url, token, requestJson);
   }
 
   Future<List<AppSmartContact>> appSmartContacts(String token) async {
@@ -222,16 +213,11 @@ class WebtritApiClient {
       pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['app', 'contacts', 'smart'],
     );
 
-    final httpResponse = await _httpClient.get(
-      url,
-      headers: _headersWithToken(token),
-    );
+    final responseJson = await _httpClientExecuteGet(url, token);
 
-    if (httpResponse.statusCode != 200) {
-      _throwRequestFailure(httpResponse);
-    }
+    final response = AppSmartContactsResponse.fromJson(responseJson);
 
-    return AppSmartContactsResponse.fromJson(jsonDecode(httpResponse.body)).data;
+    return response.data;
   }
 
   Future<void> appCreatePushToken(String token, PushTokenType type, String value) async {
@@ -239,31 +225,11 @@ class WebtritApiClient {
       pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['app', 'push-tokens'],
     );
 
-    final request = AppCreatePushTokenRequest(type: type, value: value);
+    final requestJson = AppCreatePushTokenRequest(
+      type: type,
+      value: value,
+    ).toJson();
 
-    final httpResponse = await _httpClient.post(
-      url,
-      headers: _headersWithToken(token),
-      body: jsonEncode(request.toJson()),
-    );
-
-    if (httpResponse.statusCode != 204) {
-      _throwRequestFailure(httpResponse);
-    }
-  }
-
-  void _throwRequestFailure(http.Response httpResponse) {
-    final error = httpResponse.body.isEmpty ? null : ErrorResponse.fromJson(jsonDecode(httpResponse.body));
-    throw RequestFailure(
-      statusCode: httpResponse.statusCode,
-      error: error,
-    );
-  }
-
-  Map<String, String> _headersWithToken(String token) {
-    return {
-      ..._headers,
-      HttpHeaders.authorizationHeader: 'Bearer $token',
-    };
+    await _httpClientExecutePost(url, token, requestJson);
   }
 }
