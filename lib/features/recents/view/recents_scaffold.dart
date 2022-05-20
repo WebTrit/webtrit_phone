@@ -20,11 +20,13 @@ class RecentsScaffold extends StatefulWidget {
 class RecentsScaffoldState extends State<RecentsScaffold> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  static final _recentsFilters = [RecentsVisibilityFilter.all, RecentsVisibilityFilter.missed];
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(
-      length: RecentsVisibilityFilter.values.length,
+      length: _recentsFilters.length,
       vsync: this,
     );
     _tabController.addListener(_tabControllerListener);
@@ -49,9 +51,7 @@ class RecentsScaffoldState extends State<RecentsScaffold> with SingleTickerProvi
     return Scaffold(
       appBar: MainAppBar(
         bottom: TabBar(
-          tabs: RecentsVisibilityFilter.values
-              .map((value) => Tab(child: Text(value.l10n(context), softWrap: false)))
-              .toList(),
+          tabs: _recentsFilters.map((value) => Tab(child: Text(value.l10n(context), softWrap: false))).toList(),
           controller: _tabController,
         ),
       ),
