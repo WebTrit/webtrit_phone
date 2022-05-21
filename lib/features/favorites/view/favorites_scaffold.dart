@@ -39,8 +39,8 @@ class FavoritesScaffold extends StatelessWidget {
                   onInfoPressed: () {
                     context.showErrorSnackBar(context.l10n.notImplemented);
                   },
-                  onDeleted: (recent) {
-                    context.showSnackBar('"${recent.number}" deleted');
+                  onDeleted: (favorite) {
+                    context.showSnackBar(context.l10n.favorites_SnackBar_deleted(favorite.name));
 
                     context.read<FavoritesBloc>().add(FavoritesRemoved(favorite: favorite));
                   },
@@ -51,7 +51,7 @@ class FavoritesScaffold extends StatelessWidget {
             late final List<Widget> children;
             if (state.status == FavoritesStatus.failure) {
               children = [
-                const Text('Failure to get favorites'),
+                Text(context.l10n.favorites_BodyCenter_failure),
               ];
             } else {
               children = [
@@ -62,7 +62,7 @@ class FavoritesScaffold extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  context.l10n.favoritesScaffold_textLabel_empty,
+                  context.l10n.favorites_BodyCenter_empty,
                   style: themeData.textTheme.subtitle1,
                 ),
               ];

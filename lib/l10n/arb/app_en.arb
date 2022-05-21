@@ -1,6 +1,13 @@
 {
   "@@locale": "en",
 
+  "alertDialogActions_no": "No",
+  "@alertDialogActions_no": {
+  },
+  "alertDialogActions_yes": "Yes",
+  "@alertDialogActions_yes": {
+  },
+
   "notifications_errorSnackBar_callNotIdle": "You are offline – please try to re-register",
   "@notifications_errorSnackBar_callNotIdle": {
   },
@@ -9,11 +16,25 @@
   "@notifications_errorSnackBar_callConnect": {
   },
 
-  "favoritesScaffold_textLabel_empty": "There are no favorite numbers",
-  "@favoritesScaffold_textLabel_empty": {
+  "favorites_BodyCenter_failure": "Failure to get favorites",
+  "@favorites_BodyCenter_failure": {
   },
-  "favoritesScaffold_buttonLabel_addNew": "Add new favorite",
-  "@favoritesScaffold_buttonLabel_addNew": {
+  "favorites_BodyCenter_empty": "There are no favorite numbers",
+  "@favorites_BodyCenter_empty": {
+  },
+  "favorites_SnackBar_deleted": "{name} deleted",
+  "@favorites_SnackBar_deleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "favorites_DeleteConfirmDialog_title": "Confirm delete",
+  "@favorites_DeleteConfirmDialog_title": {
+  },
+  "favorites_DeleteConfirmDialog_content": "Are you sure you want to delete current favorite?",
+  "@favorites_DeleteConfirmDialog_content": {
   },
 
   "login_Button_back": "Back",
