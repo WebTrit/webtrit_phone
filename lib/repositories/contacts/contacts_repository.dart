@@ -1,9 +1,7 @@
 import 'dart:async';
 
 import 'package:webtrit_phone/data/data.dart';
-
-import 'models/models.dart';
-export 'models/models.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 class ContactsRepository {
   ContactsRepository({required this.appDatabase});

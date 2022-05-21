@@ -5,9 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/data/secure_storage.dart';
-
-import 'models/models.dart';
-export 'models/models.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 class ExternalContactsRepository {
   final WebtritApiClient webtritApiClient;

@@ -6,7 +6,6 @@ import 'package:drift/native.dart';
 
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/repositories/contacts/models/models.dart';
 
 export 'package:drift/isolate.dart';
 

@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 
 import 'package:webtrit_phone/utils/utils.dart';
 
-import 'models.dart';
+import 'local_contact_phone.dart';
 
 class LocalContact extends Equatable {
   const LocalContact({

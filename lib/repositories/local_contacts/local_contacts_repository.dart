@@ -3,8 +3,7 @@ import 'dart:io';
 
 import 'package:flutter_contacts/flutter_contacts.dart';
 
-import 'models/models.dart';
-export 'models/models.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 class LocalContactsRepositoryPermissionException implements Exception {}
 

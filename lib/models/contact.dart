@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
 
-import 'models.dart';
+import 'contact_source_type.dart';
 
 class Contact extends Equatable {
   const Contact({
