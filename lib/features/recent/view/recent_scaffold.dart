@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../recent.dart';
@@ -45,7 +46,7 @@ class RecentScaffold extends StatelessWidget {
                   RecentHistoryTile(
                     recent: recent,
                     onDeleted: (recent) {
-                      context.showSnackBar('"${recent.number}" deleted');
+                      context.showSnackBar(context.l10n.recents_snackBar_deleted(recent.name));
 
                       context.read<RecentCubit>().delete(recent);
                     },
