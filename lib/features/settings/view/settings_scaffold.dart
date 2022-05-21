@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../widgets/widgets.dart';
 
@@ -57,7 +58,13 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
             leading: const Icon(Icons.logout),
             title: Text(context.l10n.settings_ListViewTileTitle_logout),
             onTap: () async {
-              if (await _confirmUnregister(context) == true) {
+              final logout = await ConfirmDialog.show(
+                context,
+                title: context.l10n.settings_LogoutConfirmDialog_title,
+                content: context.l10n.settings_LogoutConfirmDialog_content,
+              );
+              if (logout == true) {
+                if (!mounted) return;
                 context.read<AppBloc>().add(const AppLogouted());
               }
             },
@@ -140,33 +147,6 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
           const ListTileSeparator(),
         ],
       ),
-    );
-  }
-
-  Future<bool?> _confirmUnregister(BuildContext context) {
-    return showDialog<bool?>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Confirm unregister"),
-          content: const Text("Are you sure you want to unregister?"),
-          actions: [
-            // usually buttons at the bottom of the dialog
-            TextButton(
-              child: Text("No".toUpperCase()),
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-            ),
-            TextButton(
-              child: Text("Yes".toUpperCase()),
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }

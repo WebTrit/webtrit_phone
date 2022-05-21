@@ -158,6 +158,12 @@
   "settings_ListViewTileTitle_logRecordsConsole": "Log records console",
   "@settings_ListViewTileTitle_logRecordsConsole": {
   },
+  "settings_LogoutConfirmDialog_title": "Confirm logout",
+  "@settings_LogoutConfirmDialog_title": {
+  },
+  "settings_LogoutConfirmDialog_content": "Are you sure you want to logout?",
+  "@settings_LogoutConfirmDialog_content": {
+  },
 
   "underDevelopment": "This page is under development.",
   "@underDevelopment": {

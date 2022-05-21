@@ -38,7 +38,11 @@ class RecentTile extends StatelessWidget {
           ),
         ),
       ),
-      confirmDismiss: (direction) => _confirmDelete(context, recent),
+      confirmDismiss: (direction) => ConfirmDialog.showDangerous(
+        context,
+        title: context.l10n.recents_DeleteConfirmDialog_title,
+        content: context.l10n.recents_DeleteConfirmDialog_content,
+      ),
       onDismissed: onDeleted == null ? null : (direction) => onDeleted(recent),
       direction: DismissDirection.endToStart,
       child: ListTile(
@@ -86,35 +90,6 @@ class RecentTile extends StatelessWidget {
         onTap: onTap,
         onLongPress: onLongPress,
       ),
-    );
-  }
-
-  Future<bool?> _confirmDelete(BuildContext context, Recent recent) {
-    return showDialog<bool?>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(context.l10n.recents_DeleteConfirmDialog_title),
-          content: Text(context.l10n.recents_DeleteConfirmDialog_content),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: Text(context.l10n.alertDialogActions_no),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              style: TextButton.styleFrom(
-                primary: Colors.red,
-              ),
-              child: Text(context.l10n.alertDialogActions_yes),
-            ),
-          ],
-        );
-      },
     );
   }
 }

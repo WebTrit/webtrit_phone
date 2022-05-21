@@ -37,7 +37,11 @@ class FavoriteTile extends StatelessWidget {
           ),
         ),
       ),
-      confirmDismiss: (direction) => _confirmDelete(context, favorite),
+      confirmDismiss: (direction) => ConfirmDialog.showDangerous(
+        context,
+        title: context.l10n.favorites_DeleteConfirmDialog_title,
+        content: context.l10n.favorites_DeleteConfirmDialog_content,
+      ),
       onDismissed: onDeleted == null ? null : (direction) => onDeleted(favorite),
       direction: DismissDirection.endToStart,
       child: ListTile(
@@ -57,35 +61,6 @@ class FavoriteTile extends StatelessWidget {
         onTap: onTap,
         onLongPress: onLongPress,
       ),
-    );
-  }
-
-  Future<bool?> _confirmDelete(BuildContext context, Favorite favorite) {
-    return showDialog<bool?>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(context.l10n.favorites_DeleteConfirmDialog_title),
-          content: Text(context.l10n.favorites_DeleteConfirmDialog_content),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: Text(context.l10n.alertDialogActions_no),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              style: TextButton.styleFrom(
-                primary: Colors.red,
-              ),
-              child: Text(context.l10n.alertDialogActions_yes),
-            ),
-          ],
-        );
-      },
     );
   }
 }

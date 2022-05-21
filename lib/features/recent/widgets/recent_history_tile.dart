@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../recent.dart';
 
@@ -31,7 +33,11 @@ class RecentHistoryTile extends StatelessWidget {
           ),
         ),
       ),
-      confirmDismiss: (direction) => _confirmDelete(context, recent),
+      confirmDismiss: (direction) => ConfirmDialog.showDangerous(
+        context,
+        title: context.l10n.recents_DeleteConfirmDialog_title,
+        content: context.l10n.recents_DeleteConfirmDialog_content,
+      ),
       onDismissed: onDeleted == null ? null : (direction) => onDeleted(recent),
       direction: DismissDirection.endToStart,
       child: ListTile(
@@ -68,34 +74,5 @@ class RecentHistoryTile extends StatelessWidget {
     return [duration.inHours, duration.inMinutes, duration.inSeconds]
         .map((seg) => seg.remainder(60).toString().padLeft(2, '0'))
         .join(':');
-  }
-
-  Future<bool?> _confirmDelete(BuildContext context, Recent recent) {
-    return showDialog<bool?>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Confirm delete"),
-          content: const Text("Are you sure you want to delete current call log?"),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: Text("No".toUpperCase()),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              style: TextButton.styleFrom(
-                primary: Colors.red,
-              ),
-              child: Text("Yes".toUpperCase()),
-            ),
-          ],
-        );
-      },
-    );
   }
 }

@@ -127,6 +127,9 @@ class ThemeProvider extends InheritedWidget {
       neutral: TextButton.styleFrom(
         primary: colors.secondary,
       ),
+      dangerous: TextButton.styleFrom(
+        primary: colors.error,
+      ),
     );
   }
 

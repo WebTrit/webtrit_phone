@@ -1,4 +1,5 @@
 export 'back_button.dart';
+export 'confirm_dialog.dart';
 export 'leading_avatar.dart';
 export 'logos.dart';
 export 'main_app_bar.dart';
