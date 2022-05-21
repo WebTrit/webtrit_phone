@@ -1,37 +1,28 @@
-import 'dart:typed_data';
-
 import 'package:equatable/equatable.dart';
+
+import 'contact.dart';
+
+typedef FavoriteId = int;
 
 class Favorite extends Equatable {
   const Favorite({
     required this.id,
     required this.number,
     required this.label,
-    this.displayName,
-    this.firstName,
-    this.lastName,
-    this.thumbnail,
+    required this.contact,
   });
 
-  final int id;
+  final FavoriteId id;
   final String number;
   final String label;
-  final String? displayName;
-  final String? firstName;
-  final String? lastName;
-  final Uint8List? thumbnail;
+  final Contact contact;
 
   String get name {
-    final displayName = this.displayName;
-    if (displayName != null) {
-      return displayName;
+    final name = contact.name;
+    if (name.isNotEmpty) {
+      return name;
     } else {
-      final names = [firstName, lastName].where((name) => name != null);
-      if (names.isNotEmpty) {
-        return names.join(' ');
-      } else {
-        return number;
-      }
+      return number;
     }
   }
 
@@ -40,9 +31,6 @@ class Favorite extends Equatable {
         id,
         number,
         label,
-        displayName,
-        firstName,
-        lastName,
-        thumbnail,
+        contact,
       ];
 }

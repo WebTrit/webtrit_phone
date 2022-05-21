@@ -4,9 +4,11 @@ import 'package:equatable/equatable.dart';
 
 import 'contact_source_type.dart';
 
+typedef ContactId = int;
+
 class Contact extends Equatable {
   const Contact({
-    this.id,
+    required this.id,
     required this.sourceType,
     required this.sourceId,
     this.displayName,
@@ -15,7 +17,7 @@ class Contact extends Equatable {
     this.thumbnail,
   });
 
-  final int? id;
+  final ContactId id;
   final ContactSourceType sourceType;
   final String sourceId;
   final String? displayName;
@@ -23,7 +25,15 @@ class Contact extends Equatable {
   final String? lastName;
   final Uint8List? thumbnail;
 
-  String get name => displayName ?? '$firstName $lastName'.trim();
+  String get name {
+    final displayName = this.displayName;
+    if (displayName != null) {
+      return displayName;
+    } else {
+      final names = [firstName, lastName].where((name) => name != null);
+      return names.join(' ').trim();
+    }
+  }
 
   @override
   List<Object?> get props => [

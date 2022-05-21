@@ -19,9 +19,14 @@ class FavoritesRepository {
             id: favoriteData.id,
             number: contactPhoneData.number,
             label: contactPhoneData.label,
-            displayName: contactData.displayName,
-            firstName: contactData.firstName,
-            lastName: contactData.lastName,
+            contact: Contact(
+              id: contactData.id,
+              sourceType: contactData.sourceType,
+              sourceId: contactData.sourceId,
+              displayName: contactData.displayName,
+              firstName: contactData.firstName,
+              lastName: contactData.lastName,
+            ),
           );
         }).toList(growable: false));
   }
