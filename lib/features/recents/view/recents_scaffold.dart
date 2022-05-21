@@ -107,7 +107,7 @@ class RecentsScaffoldState extends State<RecentsScaffold> with SingleTickerProvi
                     context.read<CallBloc>().add(CallOutgoingStarted(number: recent.number, video: recent.video));
                   },
                   onLongPress: () {
-                    context.showSnackBar('LongPress on "${recent.number}"');
+                    context.read<CallBloc>().add(CallOutgoingStarted(number: recent.number, video: !recent.video));
                   },
                   onDeleted: (recent) {
                     context.showSnackBar('"${recent.number}" deleted');
