@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'package:webtrit_phone/l10n/l10n.dart';
 
 enum RecentsVisibilityFilter {
   all,
@@ -10,16 +11,15 @@ enum RecentsVisibilityFilter {
 
 extension RecentsVisibilityFilterI10nExtension on RecentsVisibilityFilter {
   String l10n(BuildContext context) {
-    final appLocalizations = AppLocalizations.of(context)!;
     switch (this) {
       case RecentsVisibilityFilter.all:
-        return appLocalizations.recentsVisibilityFilterAll;
+        return context.l10n.recentsVisibilityFilter_all;
       case RecentsVisibilityFilter.missed:
-        return appLocalizations.recentsVisibilityFilterMissed;
+        return context.l10n.recentsVisibilityFilter_missed;
       case RecentsVisibilityFilter.incoming:
-        return appLocalizations.recentsVisibilityFilterIncoming;
+        return context.l10n.recentsVisibilityFilter_incoming;
       case RecentsVisibilityFilter.outgoing:
-        return appLocalizations.recentsVisibilityFilterOutgoing;
+        return context.l10n.recentsVisibilityFilter_outgoing;
       default:
         throw ArgumentError();
     }

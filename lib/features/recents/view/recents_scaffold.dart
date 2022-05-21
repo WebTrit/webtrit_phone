@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -71,7 +72,7 @@ class RecentsScaffoldState extends State<RecentsScaffold> with SingleTickerProvi
       body: BlocConsumer<RecentsBloc, RecentsState>(
         listener: (context, state) {
           if (state is RecentsLoadFailure) {
-            context.showErrorSnackBar('Ups error happened ☹️');
+            context.showErrorSnackBar(context.l10n.recents_errorSnackBar_loadFailure);
           }
         },
         builder: (context, state) {
@@ -110,7 +111,7 @@ class RecentsScaffoldState extends State<RecentsScaffold> with SingleTickerProvi
                     context.read<CallBloc>().add(CallOutgoingStarted(number: recent.number, video: !recent.video));
                   },
                   onDeleted: (recent) {
-                    context.showSnackBar('"${recent.number}" deleted');
+                    context.showSnackBar(context.l10n.recents_snackBar_deleted(recent.name));
 
                     context.read<RecentsBloc>().add(RecentsDelete(recent: recent));
                   },

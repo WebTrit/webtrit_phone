@@ -82,17 +82,34 @@
     }
   },
 
-  "recentsVisibilityFilterAll": "All",
-  "@recentsVisibilityFilterAll": {
+  "recentsVisibilityFilter_all": "All",
+  "@recentsVisibilityFilter_all": {
   },
-  "recentsVisibilityFilterMissed": "Missed",
-  "@recentsVisibilityFilterMissed": {
+  "recentsVisibilityFilter_missed": "Missed",
+  "@recentsVisibilityFilter_missed": {
   },
-  "recentsVisibilityFilterIncoming": "Incoming",
-  "@recentsVisibilityFilterIncoming": {
+  "recentsVisibilityFilter_incoming": "Incoming",
+  "@recentsVisibilityFilter_incoming": {
   },
-  "recentsVisibilityFilterOutgoing": "Outgoing",
-  "@recentsVisibilityFilterOutgoing": {
+  "recentsVisibilityFilter_outgoing": "Outgoing",
+  "@recentsVisibilityFilter_outgoing": {
+  },
+  "recents_errorSnackBar_loadFailure": "Ups error happened ☹️",
+  "@recents_errorSnackBar_loadFailure": {
+  },
+  "recents_snackBar_deleted": "{name} deleted",
+  "@recents_snackBar_deleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "recents_DeleteConfirmDialog_title": "Confirm delete",
+  "@recents_DeleteConfirmDialog_title": {
+  },
+  "recents_DeleteConfirmDialog_content": "Are you sure you want to delete current call log?",
+  "@recents_DeleteConfirmDialog_content": {
   },
 
   "contactsSourceLocal": "Local",

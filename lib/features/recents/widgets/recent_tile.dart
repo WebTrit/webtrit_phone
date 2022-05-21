@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -93,14 +94,14 @@ class RecentTile extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Confirm delete"),
-          content: const Text("Are you sure you want to delete current call log?"),
+          title: Text(context.l10n.recents_DeleteConfirmDialog_title),
+          content: Text(context.l10n.recents_DeleteConfirmDialog_content),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              child: Text("No".toUpperCase()),
+              child: Text(context.l10n.alertDialogActions_no),
             ),
             TextButton(
               onPressed: () {
@@ -109,7 +110,7 @@ class RecentTile extends StatelessWidget {
               style: TextButton.styleFrom(
                 primary: Colors.red,
               ),
-              child: Text("Yes".toUpperCase()),
+              child: Text(context.l10n.alertDialogActions_yes),
             ),
           ],
         );
