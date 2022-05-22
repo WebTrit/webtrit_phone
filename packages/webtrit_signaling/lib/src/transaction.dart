@@ -35,6 +35,6 @@ class Transaction {
     if (_completer.isCompleted) {
       return;
     }
-    _completer.completeError(WebtritSignalingTimeoutException());
+    _completer.completeError(WebtritSignalingTimeoutException(), StackTrace.current);
   }
 }
