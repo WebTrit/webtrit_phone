@@ -41,12 +41,12 @@ class Keypad extends StatelessWidget {
       ));
     }
 
+    final textButtonThemeData = TextButtonTheme.of(context);
     return TextButtonTheme(
       data: TextButtonThemeData(
         style: TextButton.styleFrom(
           minimumSize: Size.square(MediaQuery.of(context).size.width / 5),
-          shape: const CircleBorder(),
-        ),
+        ).merge(textButtonThemeData.style),
       ),
       child: Table(
         children: tableRows,

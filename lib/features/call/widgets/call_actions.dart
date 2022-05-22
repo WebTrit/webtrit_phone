@@ -41,14 +41,14 @@ class CallActionsState extends State<CallActions> {
 
   @override
   Widget build(BuildContext context) {
+    final textButtonThemeData = TextButtonTheme.of(context);
     return TextButtonTheme(
       data: TextButtonThemeData(
         style: TextButton.styleFrom(
           primary: Colors.black,
           backgroundColor: Colors.white,
           minimumSize: const Size.square(56),
-          shape: const CircleBorder(),
-        ),
+        ).merge(textButtonThemeData.style),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
