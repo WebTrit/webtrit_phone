@@ -227,8 +227,8 @@ class WebtritSignalingClient {
       await _execute(<String, dynamic>{
         'request': 'keepalive',
       }, defaultExecuteRequestTimeoutDuration);
-    } on WebtritSignalingTimeoutException catch (error, stackTrace) {
-      onError(WebtritSignalingKeepaliveTimeoutException(), stackTrace);
+    } on WebtritSignalingTimeoutException {
+      onError(WebtritSignalingKeepaliveTimeoutException(), StackTrace.current);
     } catch (error, stackTrace) {
       onError(error, stackTrace);
     }
