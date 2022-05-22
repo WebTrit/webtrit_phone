@@ -62,6 +62,9 @@ class KeypadViewState extends State<KeypadView> {
         Keypad(
           onKeypadPressed: _onKeypadPressed,
         ),
+        SizedBox(
+          height: scaledInset,
+        ),
         ValueListenableBuilder(
           valueListenable: _controller,
           builder: (BuildContext context, TextEditingValue value, Widget? child) {

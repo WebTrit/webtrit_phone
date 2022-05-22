@@ -130,6 +130,20 @@ class ThemeProvider extends InheritedWidget {
       dangerous: TextButton.styleFrom(
         primary: colors.error,
       ),
+      callStart: TextButton.styleFrom(
+        primary: colors.onTertiary,
+        onSurface: colors.onTertiary,
+        backgroundColor: colors.tertiary,
+      ),
+      callHangup: TextButton.styleFrom(
+        primary: colors.onError,
+        onSurface: colors.onError,
+        backgroundColor: colors.error,
+      ),
+      callAction: TextButton.styleFrom(
+        primary: colors.background,
+        backgroundColor: colors.background.withOpacity(0.3),
+      ),
     );
   }
 

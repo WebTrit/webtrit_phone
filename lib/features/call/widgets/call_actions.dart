@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/theme/theme.dart';
+
 class CallActions extends StatefulWidget {
   final bool cameraEnabledByDefault;
   final void Function(bool enabled)? onCameraPressed;
@@ -41,12 +43,13 @@ class CallActionsState extends State<CallActions> {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+    final TextButtonStyles? textButtonStyles = themeData.extension<TextButtonStyles>();
+
     final textButtonThemeData = TextButtonTheme.of(context);
     return TextButtonTheme(
       data: TextButtonThemeData(
         style: TextButton.styleFrom(
-          primary: Colors.black,
-          backgroundColor: Colors.white,
           minimumSize: const Size.square(56),
         ).merge(textButtonThemeData.style),
       ),
@@ -56,6 +59,7 @@ class CallActionsState extends State<CallActions> {
           Tooltip(
             message: _cameraEnabled ? 'Disable camera' : 'Enable camera',
             child: TextButton(
+              style: textButtonStyles?.callAction,
               child: _cameraEnabled ? const Icon(Icons.videocam) : const Icon(Icons.videocam_off),
               onPressed: () {
                 setState(() {
@@ -71,6 +75,7 @@ class CallActionsState extends State<CallActions> {
           Tooltip(
             message: _microphoneEnabled ? 'Mute microphone' : 'Unmute microphone',
             child: TextButton(
+              style: textButtonStyles?.callAction,
               child: _microphoneEnabled ? const Icon(Icons.mic) : const Icon(Icons.mic_off),
               onPressed: () {
                 setState(() {
@@ -86,6 +91,7 @@ class CallActionsState extends State<CallActions> {
           Tooltip(
             message: _speakerphoneEnabled ? 'Disable speakerphone' : 'Enable speakerphone',
             child: TextButton(
+              style: textButtonStyles?.callAction,
               child: _speakerphoneEnabled ? const Icon(Icons.volume_up) : const Icon(Icons.volume_off),
               onPressed: () {
                 setState(() {
@@ -102,10 +108,7 @@ class CallActionsState extends State<CallActions> {
             message: 'Hangup',
             child: TextButton(
               onPressed: widget.onHangupPressed,
-              style: TextButton.styleFrom(
-                primary: Colors.white,
-                backgroundColor: Colors.red,
-              ),
+              style: textButtonStyles?.callHangup,
               child: const Icon(Icons.call_end),
             ),
           ),
@@ -116,38 +119,12 @@ class CallActionsState extends State<CallActions> {
             message: 'Accept',
             child: TextButton(
               onPressed: widget.onAcceptPressed,
-              style: TextButton.styleFrom(
-                primary: Colors.white,
-              ).copyWith(
-                backgroundColor: _TextButtonBackground(Colors.green, Colors.grey),
-              ),
+              style: textButtonStyles?.callStart,
               child: const Icon(Icons.call),
             ),
           ),
         ],
       ),
     );
-  }
-}
-
-@immutable
-class _TextButtonBackground extends MaterialStateProperty<Color> {
-  _TextButtonBackground(this.enabled, this.disabled);
-
-  final Color enabled;
-  final Color disabled;
-
-  @override
-  Color resolve(Set<MaterialState> states) {
-    if (states.contains(MaterialState.disabled)) {
-      return disabled;
-    } else {
-      return enabled;
-    }
-  }
-
-  @override
-  String toString() {
-    return '{disabled: $disabled, otherwise: $enabled}';
   }
 }

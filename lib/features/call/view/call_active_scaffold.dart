@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
+import 'package:webtrit_phone/theme/theme.dart';
+
 import '../call.dart';
 
 class CallActiveScaffold extends StatefulWidget {
@@ -30,11 +32,16 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     final direction = widget.state.isIncoming ? 'Incoming call from' : 'Outgoing call to';
     final username = widget.state.number;
 
+    final themeData = Theme.of(context);
+    final Gradients? gradients = themeData.extension<Gradients>();
+    final onTabGradient = themeData.colorScheme.background;
     return Scaffold(
       body: OrientationBuilder(
         builder: (context, orientation) {
           return Container(
-            color: Colors.black,
+            decoration: BoxDecoration(
+              gradient: gradients?.tab,
+            ),
             child: SafeArea(
               child: Stack(
                 children: [
@@ -43,8 +50,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                     right: 0,
                     top: 0,
                     bottom: 0,
-                    child: Container(
-                      decoration: const BoxDecoration(color: Colors.black54),
+                    child: SizedBox(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height,
                       child: RTCVideoView(widget.remoteRenderer),
@@ -58,7 +64,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       child: Stack(
                         children: [
                           Container(
-                            decoration: const BoxDecoration(color: Colors.black54),
+                            decoration: BoxDecoration(color: onTabGradient.withOpacity(0.3)),
                             width: orientation == Orientation.portrait ? 90.0 : 120.0,
                             height: orientation == Orientation.portrait ? 120.0 : 90.0,
                             child: RTCVideoView(
@@ -73,7 +79,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                             child: Icon(
                               Icons.switch_camera,
                               size: Theme.of(context).textTheme.subtitle1!.fontSize,
-                              color: Colors.white,
+                              color: onTabGradient,
                             ),
                           ),
                         ],
@@ -88,12 +94,12 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       children: [
                         Text(
                           direction,
-                          style: const TextStyle(color: Colors.white),
+                          style: TextStyle(color: onTabGradient),
                           textAlign: TextAlign.center,
                         ),
                         Text(
                           username,
-                          style: Theme.of(context).textTheme.headline3!.copyWith(color: Colors.white),
+                          style: Theme.of(context).textTheme.headline3!.copyWith(color: onTabGradient),
                           textAlign: TextAlign.center,
                         ),
                       ],

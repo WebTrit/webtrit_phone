@@ -30,9 +30,7 @@ class Actionpad extends StatelessWidget {
             child: TextButton(
               onPressed: onCallPressed,
               onLongPress: onCallLongPress,
-              style: TextButton.styleFrom(
-                minimumSize: Size.square(MediaQuery.of(context).size.width / 4),
-              ),
+              style: textButtonStyles?.callStart,
               child: Icon(
                 video ? Icons.videocam : Icons.call,
                 size: Theme.of(context).textTheme.headline2!.fontSize,
