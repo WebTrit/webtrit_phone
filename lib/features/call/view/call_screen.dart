@@ -5,14 +5,14 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 import '../call.dart';
 
-class CallPage extends StatefulWidget {
-  const CallPage({Key? key}) : super(key: key);
+class CallScreen extends StatefulWidget {
+  const CallScreen({Key? key}) : super(key: key);
 
   @override
-  CallPageState createState() => CallPageState();
+  State<CallScreen> createState() => _CallScreenState();
 }
 
-class CallPageState extends State<CallPage> {
+class _CallScreenState extends State<CallScreen> {
   final RTCVideoRenderer _localRenderer = RTCVideoRenderer();
   final RTCVideoRenderer _remoteRenderer = RTCVideoRenderer();
   late Future<List<void>> _renderersInitialized;

@@ -7,9 +7,8 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 import '../main.dart';
 import 'main_scaffold.dart';
 
-class MainPage extends StatelessWidget {
-  const MainPage({Key? key}) : super(key: key);
-
+class MainScreen extends StatelessWidget {
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,5 +21,4 @@ class MainPage extends StatelessWidget {
       child: const MainScaffold(),
     );
   }
-
 }

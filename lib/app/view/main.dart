@@ -171,7 +171,7 @@ class _MainState extends State<Main> {
               });
             }
           },
-          child: const MainPage(),
+          child: const MainScreen(),
         ),
         routes: [
           GoRoute(
@@ -180,7 +180,7 @@ class _MainState extends State<Main> {
             pageBuilder: (context, state) => CustomTransitionPage(
               key: state.pageKey,
               fullscreenDialog: true,
-              child: const CallPage(),
+              child: const CallScreen(),
               transitionsBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation, Widget child) {
                 const builder = ZoomPageTransitionsBuilder();
@@ -225,7 +225,7 @@ class _MainState extends State<Main> {
               GoRoute(
                 name: 'log-records-console',
                 path: 'log-records-console',
-                builder: (context, state) => const LogRecordsConsolePage(),
+                builder: (context, state) => const LogRecordsConsoleScreen(),
               ),
             ],
           ),
@@ -235,7 +235,7 @@ class _MainState extends State<Main> {
             pageBuilder: (context, state) => MaterialPage(
               key: state.pageKey,
               fullscreenDialog: true,
-              child: ContactPage(state.extra as Contact),
+              child: ContactScreen(state.extra as Contact),
             ),
           ),
           GoRoute(

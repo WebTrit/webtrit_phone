@@ -6,8 +6,8 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 
 import '../contact.dart';
 
-class ContactPage extends StatelessWidget {
-  const ContactPage(this.contact, {Key? key}) : super(key: key);
+class ContactScreen extends StatelessWidget {
+  const ContactScreen(this.contact, {Key? key}) : super(key: key);
 
   final Contact contact;
 

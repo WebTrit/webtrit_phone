@@ -8,8 +8,8 @@ import './log_records_console_scaffold.dart';
 
 import '../log_records_console.dart';
 
-class LogRecordsConsolePage extends StatelessWidget {
-  const LogRecordsConsolePage({Key? key}) : super(key: key);
+class LogRecordsConsoleScreen extends StatelessWidget {
+  const LogRecordsConsoleScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
