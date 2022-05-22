@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class Actionpad extends StatelessWidget {
   final bool video;
@@ -22,46 +23,29 @@ class Actionpad extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final TextButtonStyles? textButtonStyles = themeData.extension<TextButtonStyles>();
-    final actionRows = [
-      TableRow(
-        children: [
-          Container(),
-          Center(
-            child: TextButton(
-              onPressed: onCallPressed,
-              onLongPress: onCallLongPress,
-              style: textButtonStyles?.callStart,
-              child: Icon(
-                video ? Icons.videocam : Icons.call,
-                size: Theme.of(context).textTheme.headline2!.fontSize,
-              ),
-            ),
-          ),
-          Center(
-            child: TextButton(
-              onPressed: onBackspacePressed,
-              onLongPress: onBackspaceLongPress,
-              style: textButtonStyles?.neutral,
-              child: const Icon(
-                Icons.backspace_outlined,
-              ),
-            ),
-          ),
-        ],
-      ),
-    ];
 
-    final textButtonThemeData = TextButtonTheme.of(context);
-    return TextButtonTheme(
-      data: TextButtonThemeData(
-        style: TextButton.styleFrom(
-          minimumSize: Size.square(MediaQuery.of(context).size.width / 5),
-        ).merge(textButtonThemeData.style),
-      ),
-      child: Table(
-        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-        children: actionRows,
-      ),
+    return TextButtonsTable(
+      minimumSize: Size.square(MediaQuery.of(context).size.width / 5),
+      children: [
+        Container(),
+        TextButton(
+          onPressed: onCallPressed,
+          onLongPress: onCallLongPress,
+          style: textButtonStyles?.callStart,
+          child: Icon(
+            video ? Icons.videocam : Icons.call,
+            size: Theme.of(context).textTheme.headline2!.fontSize,
+          ),
+        ),
+        TextButton(
+          onPressed: onBackspacePressed,
+          onLongPress: onBackspaceLongPress,
+          style: textButtonStyles?.neutral,
+          child: const Icon(
+            Icons.backspace_outlined,
+          ),
+        ),
+      ],
     );
   }
 }
