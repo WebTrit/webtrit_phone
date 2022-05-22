@@ -12,6 +12,7 @@ class TextButtonStyles extends ThemeExtension<TextButtonStyles> {
   @override
   ThemeExtension<TextButtonStyles> copyWith({
     ButtonStyle? neutral,
+    ButtonStyle? dangerous,
   }) {
     return TextButtonStyles(
       neutral: neutral ?? this.neutral,
