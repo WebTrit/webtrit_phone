@@ -180,10 +180,15 @@ class WebtritSignalingClient {
 
     _addMessage(requestJson);
 
-    final responseJson = await transaction.future;
-    responseJson.remove('transaction');
+    try {
+      final responseJson = await transaction.future;
+      responseJson.remove('transaction');
 
-    return responseJson;
+      return responseJson;
+    } catch (e) {
+      _transactions.remove(transaction.id);
+      rethrow;
+    }
   }
 
   void _addMessage(Map<String, dynamic> messageJson) {
