@@ -39,6 +39,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
       _previousConnectivityResult; // necessary because of issue on iOS with doubling the same connectivity result
 
   late final WebtritSignalingClient _signalingClient;
+  Timer? _signalingClientReconnectTimer;
 
   int _signalingClientConnectInSequanceErrorCount = 0; // TODO: reorganise this logic somehow
 
@@ -163,11 +164,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     add(_AppLifecycleStateChanged(state));
   }
 
-  void _reconnectInitiated() {
-    Future.delayed(
-      const Duration(seconds: 3),
-      () => add(const _SignalingClientConnectInitiated()),
-    );
+  void _reconnectInitiated([Duration duration = Duration.zero]) {
+    _signalingClientReconnectTimer?.cancel();
+    _signalingClientReconnectTimer = Timer(duration, () {
+      _logger.info('_reconnectInitiated Timer callback after $duration');
+      add(const _SignalingClientConnectInitiated());
+    });
   }
 
   Future<void> _onCallStarted(
@@ -198,7 +200,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
         reason: e.toString(),
       ));
 
-      _reconnectInitiated();
+      _reconnectInitiated(const Duration(seconds: 3));
     }
   }
 
