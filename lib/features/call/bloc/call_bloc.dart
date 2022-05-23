@@ -135,8 +135,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
 
     _connectivityChangedSubscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       if (_previousConnectivityResult != result) {
+        // Skip initial ConnectivityResult change if it is not none
+        // necessary to overcome double _SignalingClientConnectInitiated even add by:
+        // - processing CallStarted event
+        // - processing initial _ConnectivityResultChanged event
+        if (_previousConnectivityResult != null || result == ConnectivityResult.none) {
+          add(_ConnectivityResultChanged(result));
+        }
         _previousConnectivityResult = result;
-        add(_ConnectivityResultChanged(result));
       }
     });
 
@@ -170,6 +176,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
       _logger.info('_reconnectInitiated Timer callback after $duration');
       add(const _SignalingClientConnectInitiated());
     });
+  }
+
+  void _disconnectInitiated() {
+    _signalingClientReconnectTimer?.cancel();
+    _signalingClientReconnectTimer = null;
+    add(const _SignalingClientDisconnectInitiated());
   }
 
   Future<void> _onCallStarted(
@@ -480,6 +492,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     Emitter<CallState> emit,
   ) async {
     final connectivityResult = event.result;
+    _logger.info('_onConnectivityResultChanged: $connectivityResult');
+    if (connectivityResult == ConnectivityResult.none) {
+      _disconnectInitiated();
+    } else {
+      _reconnectInitiated();
+    }
   }
 
   Future<MediaStream> _getUserMedia({required bool video}) async {
