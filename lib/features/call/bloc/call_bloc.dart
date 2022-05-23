@@ -604,7 +604,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
 
   void _onSignalingError(error, [StackTrace? stackTrace]) {
     // TODO: add necessary logic
-    _logger.severe('_onErrorCallback { error: $error, stackTrace: $stackTrace } / not implemented');
+    _logger.severe('_onErrorCallback / not implemented', error, stackTrace);
   }
 
   void _onSignalingDisconnect(int? code, String? reason) {
