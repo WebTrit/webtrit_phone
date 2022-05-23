@@ -216,10 +216,7 @@ class WebtritSignalingClient {
   }
 
   void _stopKeepaliveTimer() {
-    final keepaliveTimer = _keepaliveTimer;
-    if (keepaliveTimer != null && keepaliveTimer.isActive) {
-      keepaliveTimer.cancel();
-    }
+    _keepaliveTimer?.cancel();
   }
 
   void _restartKeepaliveTimer() {
