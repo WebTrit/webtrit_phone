@@ -66,10 +66,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
       _onSignalingClientDisconnectInitiated,
       transformer: droppable(),
     );
-    on<_SignalingClientDisconnected>(
-      _onSignalingClientDisconnected,
-      transformer: sequential(),
-    );
     on<CallIncomingReceived>(
       _onIncomingReceived,
       transformer: sequential(),
@@ -230,15 +226,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     } finally {
       emit(const CallState.initial());
     }
-  }
-
-  Future<void> _onSignalingClientDisconnected(
-    _SignalingClientDisconnected event,
-    Emitter<CallState> emit,
-  ) async {
-    emit(const CallState.initial());
-
-    _reconnectInitiated();
   }
 
   Future<void> _onIncomingReceived(
@@ -629,6 +616,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
 
   void _onSignalingDisconnect(int? code, String? reason) {
     _logger.info('_onSignalingDisconnect code: $code reason: $reason');
-    add(_SignalingClientDisconnected(code, reason));
+
+    _reconnectInitiated();
   }
 }

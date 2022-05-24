@@ -19,13 +19,6 @@ class _SignalingClientDisconnectInitiated extends CallEvent {
   const _SignalingClientDisconnectInitiated();
 }
 
-class _SignalingClientDisconnected extends CallEvent {
-  const _SignalingClientDisconnected(this.code, this.reason);
-
-  final int? code;
-  final String? reason;
-}
-
 class CallIncomingReceived extends CallEvent {
   final String callId;
   final String username;
