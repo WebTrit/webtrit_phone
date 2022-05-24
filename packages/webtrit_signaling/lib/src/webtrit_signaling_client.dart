@@ -10,6 +10,10 @@ import 'exceptions.dart';
 import 'requests/requests.dart';
 import 'transaction.dart';
 
+typedef EventHandler = void Function(Event event);
+typedef ErrorHandler = void Function(Object error, StackTrace? stackTrace);
+typedef DisconnectHandler = void Function(int? code, String? reason);
+
 class WebtritSignalingClient {
   static final _callIdRandom = Random();
   static const _callIdChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -24,102 +28,101 @@ class WebtritSignalingClient {
 
   static int _createCounter = 0;
 
-  WebtritSignalingClient(
-    this.url, {
-    HttpClient? customHttpClient,
-    required this.onEvent,
-    required this.onError,
-    required this.onDisconnect,
-  })  : _logger = Logger('$WebtritSignalingClient-$_createCounter'),
-        _httpClient = customHttpClient ?? HttpClient() {
+  WebtritSignalingClient._(
+    this._ws,
+  ) : _logger = Logger('$WebtritSignalingClient-$_createCounter') {
     _createCounter++;
+
+    _logger.fine('connected');
   }
 
   final Logger _logger;
 
-  final String url;
-  final HttpClient _httpClient;
+  final WebSocket _ws;
+  StreamSubscription? _wsSubscription;
 
-  final void Function(Event event) onEvent;
-  final void Function(Object error, StackTrace? stackTrace) onError;
-  final void Function(int? code, String? reason) onDisconnect;
+  late final EventHandler _onEvent;
+  late final ErrorHandler _onError;
+  late final DisconnectHandler _onDisconnect;
 
-  WebSocket? _ws;
   Duration? _keepaliveInterval;
-
   Timer? _keepaliveTimer;
 
   final _transactions = <String, Transaction>{};
 
-  void close() {
-    _httpClient.close();
+  static Future<WebtritSignalingClient> connect(String url, String token, bool force,
+      {HttpClient? customHttpClient}) async {
+    final signalingUrl = Uri.parse(url).replace(
+      pathSegments: ['signaling', 'websocket'],
+      queryParameters: {
+        'token': token,
+        'force': force.toString(),
+      },
+    ).toString();
+    final ws = await WebSocket.connect(
+      signalingUrl,
+      protocols: [subprotocol],
+      customClient: customHttpClient,
+    );
+    return WebtritSignalingClient._(ws);
   }
 
-  String _signalingUrl(String token, bool force) => Uri.parse(url).replace(
-        pathSegments: ['signaling', 'websocket'],
-        queryParameters: {
-          'token': token,
-          'force': force.toString(),
-        },
-      ).toString();
+  void listen({
+    required EventHandler onEvent,
+    required ErrorHandler onError,
+    required DisconnectHandler onDisconnect,
+  }) {
+    _logger.fine('listen');
 
-  Future<void> connect(String token, bool force) async {
-    if (_ws != null) {
-      throw WebtritSignalingAlreadyConnectException();
-    } else {
-      final ws = await WebSocket.connect(
-        _signalingUrl(token, force),
-        protocols: [subprotocol],
-        customClient: _httpClient,
-      );
-      ws.listen(
-        _wsOnData,
-        onError: _wsOnError,
-        onDone: () => _wsOnDone(ws.closeCode, ws.closeReason),
-      );
-      _ws = ws;
-    }
+    // listen call first to prevent calling this method more then one time
+    _wsSubscription = _ws.listen(
+      _wsOnData,
+      onError: _wsOnError,
+      onDone: () => _wsOnDone(_ws.closeCode, _ws.closeReason),
+    );
+    _onEvent = onEvent;
+    _onError = onError;
+    _onDisconnect = onDisconnect;
   }
-
-  //
 
   Future<void> disconnect([int? code, String? reason]) {
+    _logger.fine('disconnect code: $code reason: $reason');
+
     _stopKeepaliveTimer();
 
-    final ws = _ws;
-    _ws = null;
-    if (ws != null) {
-      return ws.close(code, reason);
-    } else {
-      return Future.value();
-    }
+    // to prevent call disconnect handler if websocket closed this call
+    _wsSubscription?.onDone(null);
+
+    return _ws.close(code, reason);
   }
 
   //
 
   void _wsOnData(dynamic data) {
     _logger.finer('_wsOnData: $data');
+
     final Map<String, dynamic> messageJson = jsonDecode(data);
     _onMessage(messageJson);
   }
 
   void _wsOnError(dynamic error, StackTrace stackTrace) {
     _logger.warning('_wsOnError', error, stackTrace);
+
     _stopKeepaliveTimer();
-    onError(error, stackTrace);
+
+    _onError(error, stackTrace);
   }
 
   void _wsOnDone(int? closeCode, String? closeReason) {
     _logger.fine('_wsOnDone code: $closeCode reason: $closeReason');
+
     _stopKeepaliveTimer();
+
     for (final transaction in _transactions.values) {
       transaction.terminate(closeCode, closeReason);
     }
-    final ws = _ws;
-    _ws = null;
-    if (ws != null) {
-      onDisconnect(closeCode, closeReason);
-    }
+
+    _onDisconnect(closeCode, closeReason);
   }
 
   //
@@ -156,19 +159,19 @@ class WebtritSignalingClient {
       if (transaction != null) {
         transaction.handleResponse(responseJson);
       } else {
-        onError(WebtritSignalingTransactionUnavailableException(transactionId), StackTrace.current);
+        _onError(WebtritSignalingTransactionUnavailableException(transactionId), StackTrace.current);
       }
     } else if (messageJson.containsKey('event')) {
       final eventJson = messageJson;
 
       try {
         final event = _toEvent(eventJson);
-        onEvent(event);
+        _onEvent(event);
       } catch (error, stackTrace) {
-        onError(error, stackTrace);
+        _onError(error, stackTrace);
       }
     } else {
-      onError(WebtritSignalingUnknownMessageException(messageJson), StackTrace.current);
+      _onError(WebtritSignalingUnknownMessageException(messageJson), StackTrace.current);
     }
   }
 
@@ -230,9 +233,9 @@ class WebtritSignalingClient {
         'request': 'keepalive',
       }, defaultExecuteRequestTimeoutDuration);
     } on WebtritSignalingTimeoutException {
-      onError(WebtritSignalingKeepaliveTimeoutException(), StackTrace.current);
+      _onError(WebtritSignalingKeepaliveTimeoutException(), StackTrace.current);
     } catch (error, stackTrace) {
-      onError(error, stackTrace);
+      _onError(error, stackTrace);
     }
   }
 

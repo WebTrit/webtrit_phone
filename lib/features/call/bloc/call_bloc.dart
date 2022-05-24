@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 
@@ -38,7 +39,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
   ConnectivityResult?
       _previousConnectivityResult; // necessary because of issue on iOS with doubling the same connectivity result
 
-  late final WebtritSignalingClient _signalingClient;
+  WebtritSignalingClient? _signalingClient;
   Timer? _signalingClientReconnectTimer;
 
   int _signalingClientConnectInSequanceErrorCount = 0; // TODO: reorganise this logic somehow
@@ -141,13 +142,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
         _previousConnectivityResult = result;
       }
     });
-
-    _signalingClient = WebtritSignalingClient(
-      EnvironmentConfig.SIGNALING_URL,
-      onEvent: _onSignalingEvent,
-      onError: _onSignalingError,
-      onDisconnect: _onSignalingDisconnect,
-    );
   }
 
   @override
@@ -156,7 +150,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
 
     WidgetsBinding.instance.removeObserver(this);
 
-    await _signalingClient.disconnect();
+    await _signalingClient?.disconnect();
+
     await _audioPlayer.dispose();
     await super.close();
   }
@@ -194,7 +189,26 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     emit(const CallState.signalingInProgress());
     try {
       final token = await SecureStorage().readToken();
-      await _signalingClient.connect(token!, true);
+
+      await _signalingClient?.disconnect();
+      _signalingClient = null;
+
+      final httpClient = HttpClient();
+      httpClient.connectionTimeout = const Duration(seconds: 10);
+      final signalingClient = await WebtritSignalingClient.connect(
+        EnvironmentConfig.SIGNALING_URL,
+        token!,
+        true,
+        customHttpClient: httpClient,
+      );
+
+      signalingClient.listen(
+        onEvent: _onSignalingEvent,
+        onError: _onSignalingError,
+        onDisconnect: _onSignalingDisconnect,
+      );
+
+      _signalingClient = signalingClient;
       _signalingClientConnectInSequanceErrorCount = 0;
 
       emit(const CallState.idle());
@@ -218,7 +232,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
   ) async {
     emit(const CallState.signalingInProgress());
     try {
-      await _signalingClient.disconnect();
+      final signalingClient = _signalingClient;
+      if (signalingClient != null) {
+        _signalingClient = null;
+        await signalingClient.disconnect();
+      }
     } catch (e) {
       emit(CallState.signalingFailure(
         reason: e.toString(),
@@ -276,7 +294,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
       active: (state) => state.callId,
       orElse: () => throw StateError('Incorrect state: $state'),
     );
-    await _signalingClient.execute(AcceptRequest(
+    await _signalingClient?.execute(AcceptRequest(
       callId: callId,
       jsep: localDescription.toMap(),
     ));
@@ -317,7 +335,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
       orElse: () => throw StateError('Incorrect state: $state'),
     );
     try {
-      await _signalingClient.execute(OutgoingCallRequest(
+      await _signalingClient?.execute(OutgoingCallRequest(
         callId: callId,
         number: event.number,
         jsep: localDescription.toMap(),
@@ -404,11 +422,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     emit(currentState.copyWith(hungUpTime: DateTime.now()));
 
     if (currentState.isIncoming && !currentState.wasAccepted) {
-      await _signalingClient.execute(DeclineRequest(
+      await _signalingClient?.execute(DeclineRequest(
         callId: currentState.callId,
       ));
     } else {
-      await _signalingClient.execute(HangupRequest(
+      await _signalingClient?.execute(HangupRequest(
         callId: currentState.callId,
       ));
     }
@@ -536,7 +554,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
             active: (state) => state.callId,
             orElse: () => throw StateError('Incorrect state: $state'),
           );
-          _signalingClient.execute(TrickleRequest(
+          _signalingClient?.execute(TrickleRequest(
             callId: callId,
             candidate: null,
           ));
@@ -552,7 +570,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
           active: (state) => state.callId,
           orElse: () => throw StateError('Incorrect state: $state'),
         );
-        _signalingClient.execute(TrickleRequest(
+        _signalingClient?.execute(TrickleRequest(
           callId: callId,
           candidate: candidate.toMap(),
         ));

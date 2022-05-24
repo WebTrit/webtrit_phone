@@ -16,11 +16,13 @@ void main(List<String> arguments) async {
   final url = arguments[0];
   final token = arguments[1];
 
+  print('Connect');
   final httpClient = HttpClient();
   httpClient.connectionTimeout = Duration(seconds: 5);
-  final client = WebtritSignalingClient(
-    url,
-    customHttpClient: httpClient,
+  final client = await WebtritSignalingClient.connect(url, token, false, customHttpClient: httpClient);
+
+  print('Listen');
+  client.listen(
     onEvent: (event) {
       print('>> event: $event');
     },
@@ -32,14 +34,9 @@ void main(List<String> arguments) async {
     },
   );
 
-  print('Connect');
-  await client.connect(token, false);
-
   print('Wait StateEvent');
   await Future.delayed(Duration(seconds: 5));
 
   print('Disconnect');
   await client.disconnect();
-
-  client.close();
 }
