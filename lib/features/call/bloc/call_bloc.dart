@@ -59,13 +59,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
       _onCallStarted,
       transformer: sequential(),
     );
-    on<_SignalingClientConnectInitiated>(
-      _onSignalingClientConnectInitiated,
-      transformer: droppable(),
-    );
-    on<_SignalingClientDisconnectInitiated>(
-      _onSignalingClientDisconnectInitiated,
-      transformer: droppable(),
+    on<_SignalingClientEvent>(
+      _onSignalingClientEvent,
+      transformer: restartable(),
     );
     on<CallIncomingReceived>(
       _onIncomingReceived,
@@ -182,17 +178,36 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     add(const _SignalingClientConnectInitiated());
   }
 
-  Future<void> _onSignalingClientConnectInitiated(
+  Future<void> _onSignalingClientEvent(
+    _SignalingClientEvent event,
+    Emitter<CallState> emit,
+  ) {
+    if (event is _SignalingClientConnectInitiated) {
+      return __onSignalingClientConnectInitiated(event, emit);
+    } else if (event is _SignalingClientDisconnectInitiated) {
+      return __onSignalingClientDisconnectInitiated(event, emit);
+    } else {
+      throw UnimplementedError();
+    }
+  }
+
+  Future<void> __onSignalingClientConnectInitiated(
     _SignalingClientConnectInitiated event,
     Emitter<CallState> emit,
   ) async {
     emit(const CallState.signalingInProgress());
     try {
+      {
+        final signalingClient = _signalingClient;
+        if (signalingClient != null) {
+          _signalingClient = null;
+          await signalingClient.disconnect();
+        }
+      }
+
+      if (emit.isDone) return;
+
       final token = await SecureStorage().readToken();
-
-      await _signalingClient?.disconnect();
-      _signalingClient = null;
-
       final httpClient = HttpClient();
       httpClient.connectionTimeout = const Duration(seconds: 10);
       final signalingClient = await WebtritSignalingClient.connect(
@@ -201,6 +216,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
         true,
         customHttpClient: httpClient,
       );
+
+      if (emit.isDone) return;
 
       signalingClient.listen(
         onEvent: _onSignalingEvent,
@@ -213,6 +230,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
 
       emit(const CallState.idle());
     } catch (e) {
+      if (emit.isDone) return;
+
       if (_signalingClientConnectInSequanceErrorCount <= 0) {
         notificationsBloc.add(const NotificationsIssued(CallConnectErrorNotification()));
         _signalingClientConnectInSequanceErrorCount++;
@@ -226,7 +245,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     }
   }
 
-  Future<void> _onSignalingClientDisconnectInitiated(
+  Future<void> __onSignalingClientDisconnectInitiated(
     _SignalingClientDisconnectInitiated event,
     Emitter<CallState> emit,
   ) async {
@@ -237,11 +256,17 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
         _signalingClient = null;
         await signalingClient.disconnect();
       }
+
+      if (emit.isDone) return;
+
+      emit(const CallState.initial());
     } catch (e) {
+      if (emit.isDone) return;
+
       emit(CallState.signalingFailure(
         reason: e.toString(),
       ));
-    } finally {
+
       emit(const CallState.initial());
     }
   }

@@ -11,11 +11,15 @@ class CallStarted extends CallEvent {
   const CallStarted();
 }
 
-class _SignalingClientConnectInitiated extends CallEvent {
+abstract class _SignalingClientEvent extends CallEvent {
+  const _SignalingClientEvent();
+}
+
+class _SignalingClientConnectInitiated extends _SignalingClientEvent {
   const _SignalingClientConnectInitiated();
 }
 
-class _SignalingClientDisconnectInitiated extends CallEvent {
+class _SignalingClientDisconnectInitiated extends _SignalingClientEvent {
   const _SignalingClientDisconnectInitiated();
 }
 
