@@ -153,7 +153,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async {
+  void didChangeAppLifecycleState(AppLifecycleState state) {
     add(_AppLifecycleStateChanged(state));
   }
 
@@ -515,6 +515,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
     Emitter<CallState> emit,
   ) async {
     final appLifecycleState = event.state;
+    if (appLifecycleState == AppLifecycleState.paused || appLifecycleState == AppLifecycleState.detached) {
+      if (_signalingClient != null) {
+        _disconnectInitiated();
+      }
+    } else {
+      if (_signalingClient == null) {
+        _reconnectInitiated();
+      }
+    }
   }
 
   Future<void> _onConnectivityResultChanged(
