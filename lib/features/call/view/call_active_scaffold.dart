@@ -63,6 +63,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     final themeData = Theme.of(context);
     final Gradients? gradients = themeData.extension<Gradients>();
     final onTabGradient = themeData.colorScheme.background;
+    final textTheme = themeData.textTheme;
     return Scaffold(
       body: OrientationBuilder(
         builder: (context, orientation) {
@@ -106,7 +107,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                             bottom: 1,
                             child: Icon(
                               Icons.switch_camera,
-                              size: Theme.of(context).textTheme.subtitle1!.fontSize,
+                              size: textTheme.titleMedium!.fontSize,
                               color: onTabGradient,
                             ),
                           ),
@@ -122,24 +123,21 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       children: [
                         Text(
                           direction,
-                          style: TextStyle(color: onTabGradient),
-                          textAlign: TextAlign.center,
+                          style: textTheme.bodyLarge!.copyWith(color: onTabGradient),
                         ),
                         Text(
                           username,
-                          style: Theme.of(context).textTheme.headline3!.copyWith(color: onTabGradient),
-                          textAlign: TextAlign.center,
+                          style: textTheme.displaySmall!.copyWith(color: onTabGradient),
                         ),
                         if (duration != null)
                           Text(
                             duration.format(),
-                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            style: textTheme.bodyMedium!.copyWith(
                               color: onTabGradient,
                               fontFeatures: [
                                 const FontFeature.tabularFigures(),
                               ],
                             ),
-                            textAlign: TextAlign.center,
                           ),
                       ],
                     ),
