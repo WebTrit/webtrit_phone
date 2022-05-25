@@ -1,8 +1,12 @@
+import 'dart:async';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 import '../call.dart';
@@ -25,12 +29,36 @@ class CallActiveScaffold extends StatefulWidget {
 
 class CallActiveScaffoldState extends State<CallActiveScaffold> {
   bool frontCamera = true;
+  Timer? durationTimer;
+  Duration? duration;
+
+  @override
+  void initState() {
+    super.initState();
+    durationTimer = Timer.periodic(const Duration(seconds: 1), _onDurationTimer);
+  }
+
+  @override
+  void dispose() {
+    durationTimer?.cancel();
+    super.dispose();
+  }
+
+  void _onDurationTimer(Timer timer) {
+    final acceptedTime = widget.state.acceptedTime;
+    if (acceptedTime != null) {
+      setState(() {
+        duration = DateTime.now().difference(acceptedTime);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final acceptActionEnabled = widget.state.isIncoming && widget.state.wasAccepted != true;
     final direction = widget.state.isIncoming ? 'Incoming call from' : 'Outgoing call to';
     final username = widget.state.number;
+    final duration = this.duration;
 
     final themeData = Theme.of(context);
     final Gradients? gradients = themeData.extension<Gradients>();
@@ -102,6 +130,17 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                           style: Theme.of(context).textTheme.headline3!.copyWith(color: onTabGradient),
                           textAlign: TextAlign.center,
                         ),
+                        if (duration != null)
+                          Text(
+                            duration.format(),
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: onTabGradient,
+                              fontFeatures: [
+                                const FontFeature.tabularFigures(),
+                              ],
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                       ],
                     ),
                   ),
