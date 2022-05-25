@@ -64,6 +64,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     final Gradients? gradients = themeData.extension<Gradients>();
     final onTabGradient = themeData.colorScheme.background;
     final textTheme = themeData.textTheme;
+    final MediaQueryData mediaQueryData = MediaQuery.of(context);
+    EdgeInsets padding = mediaQueryData.padding;
     return Scaffold(
       body: OrientationBuilder(
         builder: (context, orientation) {
@@ -71,92 +73,90 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
             decoration: BoxDecoration(
               gradient: gradients?.tab,
             ),
-            child: SafeArea(
-              child: Stack(
-                children: [
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
-                      child: RTCVideoView(widget.remoteRenderer),
-                    ),
+            child: Stack(
+              children: [
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  child: SizedBox(
+                    width: mediaQueryData.size.width,
+                    height: mediaQueryData.size.height,
+                    child: RTCVideoView(widget.remoteRenderer),
                   ),
-                  Positioned(
-                    right: 20,
-                    top: 20,
-                    child: GestureDetector(
-                      onTap: _cameraSwitched,
-                      child: Stack(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(color: onTabGradient.withOpacity(0.3)),
-                            width: orientation == Orientation.portrait ? 90.0 : 120.0,
-                            height: orientation == Orientation.portrait ? 120.0 : 90.0,
-                            child: RTCVideoView(
-                              widget.localRenderer,
-                              mirror: true,
-                            ),
-                          ),
-                          Positioned(
-                            left: 0,
-                            right: 0,
-                            bottom: 1,
-                            child: Icon(
-                              Icons.switch_camera,
-                              size: textTheme.titleMedium!.fontSize,
-                              color: onTabGradient,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    top: 30,
-                    child: Column(
+                ),
+                Positioned(
+                  right: 20 + mediaQueryData.padding.right,
+                  top: 20 + mediaQueryData.padding.top,
+                  child: GestureDetector(
+                    onTap: _cameraSwitched,
+                    child: Stack(
                       children: [
-                        Text(
-                          direction,
-                          style: textTheme.bodyLarge!.copyWith(color: onTabGradient),
-                        ),
-                        Text(
-                          username,
-                          style: textTheme.displaySmall!.copyWith(color: onTabGradient),
-                        ),
-                        if (duration != null)
-                          Text(
-                            duration.format(),
-                            style: textTheme.bodyMedium!.copyWith(
-                              color: onTabGradient,
-                              fontFeatures: [
-                                const FontFeature.tabularFigures(),
-                              ],
-                            ),
+                        Container(
+                          decoration: BoxDecoration(color: onTabGradient.withOpacity(0.3)),
+                          width: orientation == Orientation.portrait ? 90.0 : 120.0,
+                          height: orientation == Orientation.portrait ? 120.0 : 90.0,
+                          child: RTCVideoView(
+                            widget.localRenderer,
+                            mirror: true,
                           ),
+                        ),
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          bottom: 1,
+                          child: Icon(
+                            Icons.switch_camera,
+                            size: textTheme.titleMedium!.fontSize,
+                            color: onTabGradient,
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 20,
-                    child: CallActions(
-                      onCameraPressed: _cameraPressed,
-                      onMicrophonePressed: _microphonePressed,
-                      speakerphoneEnabledByDefault: widget.state.video,
-                      onSpeakerphonePressed: _speakerphonePressed,
-                      onHangupPressed: _hangup,
-                      onAcceptPressed: acceptActionEnabled ? _accept : null,
-                    ),
+                ),
+                Positioned(
+                  left: 0 + mediaQueryData.padding.left,
+                  right: 0 + mediaQueryData.padding.right,
+                  top: 30 + mediaQueryData.padding.top,
+                  child: Column(
+                    children: [
+                      Text(
+                        direction,
+                        style: textTheme.bodyLarge!.copyWith(color: onTabGradient),
+                      ),
+                      Text(
+                        username,
+                        style: textTheme.displaySmall!.copyWith(color: onTabGradient),
+                      ),
+                      if (duration != null)
+                        Text(
+                          duration.format(),
+                          style: textTheme.bodyMedium!.copyWith(
+                            color: onTabGradient,
+                            fontFeatures: [
+                              const FontFeature.tabularFigures(),
+                            ],
+                          ),
+                        ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                Positioned(
+                  left: 0 + mediaQueryData.padding.left,
+                  right: 0 + mediaQueryData.padding.right,
+                  bottom: 20 + mediaQueryData.padding.bottom,
+                  child: CallActions(
+                    onCameraPressed: _cameraPressed,
+                    onMicrophonePressed: _microphonePressed,
+                    speakerphoneEnabledByDefault: widget.state.video,
+                    onSpeakerphonePressed: _speakerphonePressed,
+                    onHangupPressed: _hangup,
+                    onAcceptPressed: acceptActionEnabled ? _accept : null,
+                  ),
+                ),
+              ],
             ),
           );
         },
