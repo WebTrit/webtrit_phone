@@ -136,18 +136,36 @@ class CallCameraEnabled extends CallEvent {
   final bool mode;
 
   const CallCameraEnabled(this.mode);
+
+  @override
+  List<Object?> get props => [mode];
+
+  @override
+  String toString() => '$runtimeType($mode)';
 }
 
 class CallMicrophoneEnabled extends CallEvent {
   final bool mode;
 
   const CallMicrophoneEnabled(this.mode);
+
+  @override
+  List<Object?> get props => [mode];
+
+  @override
+  String toString() => '$runtimeType($mode)';
 }
 
 class CallSpeakerphoneEnabled extends CallEvent {
   final bool mode;
 
   const CallSpeakerphoneEnabled(this.mode);
+
+  @override
+  List<Object?> get props => [mode];
+
+  @override
+  String toString() => '$runtimeType($mode)';
 }
 
 class CallFailureApproved extends CallEvent {
@@ -158,10 +176,22 @@ class _AppLifecycleStateChanged extends CallEvent {
   const _AppLifecycleStateChanged(this.state);
 
   final AppLifecycleState state;
+
+  @override
+  List<Object?> get props => [state];
+
+  @override
+  String toString() => '$runtimeType(${state.name})';
 }
 
 class _ConnectivityResultChanged extends CallEvent {
   const _ConnectivityResultChanged(this.result);
 
   final ConnectivityResult result;
+
+  @override
+  List<Object?> get props => [result];
+
+  @override
+  String toString() => '$runtimeType(${result.name})';
 }
