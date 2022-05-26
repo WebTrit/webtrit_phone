@@ -31,7 +31,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.webtrit.callkeep.webtrit_callkeep
+        package: com.webtrit.callkeep
         pluginClass: WebtritCallkeepPlugin
       ios:
         pluginClass: WebtritCallkeepPlugin

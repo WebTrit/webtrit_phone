@@ -1,4 +1,4 @@
-group 'com.webtrit.callkeep.webtrit_callkeep'
+group 'com.webtrit.callkeep'
 version '1.0'
 
 buildscript {

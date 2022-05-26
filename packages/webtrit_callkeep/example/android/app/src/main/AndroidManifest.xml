@@ -1,11 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.webtrit.callkeep.webtrit_callkeep_example">
+    package="com.webtrit.callkeep_example">
    <application
         android:label="webtrit_callkeep_example"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
-            android:name=".MainActivity"
+            android:name="com.webtrit.callkeep_example.MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"

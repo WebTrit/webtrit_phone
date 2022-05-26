@@ -1,4 +1,4 @@
-package com.webtrit.callkeep.webtrit_callkeep_example;
+package com.webtrit.callkeep_example;
 
 import io.flutter.embedding.android.FlutterActivity;
 

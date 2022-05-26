@@ -1,4 +1,4 @@
-package com.webtrit.callkeep.webtrit_callkeep;
+package com.webtrit.callkeep;
 
 import androidx.annotation.NonNull;
 
