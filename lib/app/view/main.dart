@@ -31,7 +31,7 @@ class _MainState extends State<Main> {
     callkeep = FlutterCallkeep();
     callkeep.setup(null, <String, dynamic>{
       'ios': {
-        'appName': 'WebTrit',
+        'appName': PackageInfo().appName,
       },
       'android': {
         'alertTitle': 'Permissions required',
