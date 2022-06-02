@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:callkeep/callkeep.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
+import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -13,7 +13,7 @@ part 'push_tokens_event.dart';
 
 part 'push_tokens_state.dart';
 
-class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> {
+class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements PushRegistryDelegate {
   PushTokensBloc({
     required this.pushTokensRepository,
     required this.firebaseMessaging,
@@ -22,8 +22,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> {
     _onTokenRefreshSubscription = firebaseMessaging.onTokenRefresh.listen((fcmToken) {
       add(PushTokensInsertedOrUpdated(PushTokenType.fcm, fcmToken));
     });
-
-    callkeep.on(CallKeepPushKitToken(), _onCallKeepPushKitToken);
+    callkeep.setPushRegistryDelegate(this);
 
     on<PushTokensStarted>(_onStarted);
     on<PushTokensInsertedOrUpdated>(_onInsertedOrUpdated);
@@ -31,13 +30,13 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> {
 
   final PushTokensRepository pushTokensRepository;
   final FirebaseMessaging firebaseMessaging;
-  final FlutterCallkeep callkeep;
+  final Callkeep callkeep;
 
   late StreamSubscription _onTokenRefreshSubscription;
 
   @override
   Future<void> close() async {
-    callkeep.remove(CallKeepPushKitToken(), _onCallKeepPushKitToken);
+    callkeep.setPushRegistryDelegate(null);
     _onTokenRefreshSubscription.cancel();
     await super.close();
   }
@@ -60,10 +59,12 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> {
     pushTokensRepository.insertOrUpdatePushToken(event.type, event.value);
   }
 
-  void _onCallKeepPushKitToken(CallKeepPushKitToken event) {
-    final apkvoipToken = event.token;
-    if (apkvoipToken != null) {
-      add(PushTokensInsertedOrUpdated(PushTokenType.apkvoip, apkvoipToken));
+  @override
+  void didUpdatePushTokenForPushTypeVoIP(String? token) {
+    if (token != null) {
+      add(PushTokensInsertedOrUpdated(PushTokenType.apkvoip, token));
+    } else {
+      // TODO: null mean that the system invalidated the push token for VoIP type
     }
   }
 }

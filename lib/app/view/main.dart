@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:callkeep/callkeep.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
+import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
@@ -23,36 +23,25 @@ class Main extends StatefulWidget {
 }
 
 class _MainState extends State<Main> {
-  late final FlutterCallkeep callkeep;
+  late final Callkeep callkeep;
 
   @override
   void initState() {
     super.initState();
-    callkeep = FlutterCallkeep();
-    callkeep.setup(null, <String, dynamic>{
-      'ios': {
-        'appName': PackageInfo().appName,
-      },
-      'android': {
-        'alertTitle': 'Permissions required',
-        'alertDescription': 'This application needs to access your phone accounts',
-        'cancelButton': 'Cancel',
-        'okButton': 'ok',
-        'foregroundService': {
-          'channelId': 'com.webtrit.phone',
-          'channelName': 'Foreground service for WebTrit app',
-          'notificationTitle': 'WebTrit app is running on background',
-          'notificationIcon': 'Path to the resource icon of the notification',
-        },
-        'additionalPermissions': [],
-        // TODO remove after https://github.com/flutter-webrtc/callkeep/pull/127 merged and released
-      },
-    });
+    callkeep = Callkeep();
+    callkeep.setUp(CallkeepOptions(
+      ios: CallkeepIOSOptions(
+        localizedName: PackageInfo().appName,
+        maximumCallGroups: 2,
+        maximumCallsPerCallGroup: 1,
+        supportedHandleTypes: const {CallkeepHandleType.number},
+      ),
+    ));
   }
 
   @override
   void dispose() {
-    // TODO add callkeep unsetup
+    callkeep.tearDown();
     super.dispose();
   }
 
@@ -157,18 +146,22 @@ class _MainState extends State<Main> {
         name: 'main',
         path: '/',
         builder: (context, state) => BlocListener<CallBloc, CallState>(
-          listenWhen: (previous, current) => previous.runtimeType != current.runtimeType,
+          listenWhen: (previous, current) => previous.activeCalls.length != current.activeCalls.length,
           listener: (context, state) {
             // TODO push/pop of call screen mechanism must be remake
-            if (state is ActiveCallState) {
-              setCallOrientations().then((_) {
-                context.pushNamed('call');
-              });
-            }
-            if (state is IdleCallState && GoRouter.of(context).location == '/call') {
-              setDefaultOrientations().then((_) {
-                context.pop();
-              });
+            final isCallLocation = GoRouter.of(context).location == '/call';
+            if (state.isActive) {
+              if (!isCallLocation) {
+                setCallOrientations().then((_) {
+                  context.pushNamed('call');
+                });
+              }
+            } else {
+              if (isCallLocation) {
+                setDefaultOrientations().then((_) {
+                  context.pop();
+                });
+              }
             }
           },
           child: const MainScreen(),

@@ -5,7 +5,6 @@ import 'package:flutter/widgets.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:callkeep/callkeep.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
@@ -13,6 +12,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 import 'package:webtrit_phone/app/assets.gen.dart';
@@ -31,7 +31,7 @@ part 'call_state.dart';
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
   final RecentsRepository recentsRepository;
   final NotificationsBloc notificationsBloc;
-  final FlutterCallkeep callkeep;
+  final Callkeep callkeep;
 
   final _logger = Logger('$CallBloc');
 
