@@ -1,15 +1,17 @@
 # webtrit_callkeep
 
-A new flutter plugin project.
+A Flutter plugin that provide integration native call frameworks
+(**CallKit** & **PushKit** for iOS and **ConnectionService** for Android).
 
-## Getting Started
+|             | Android |  iOS  |
+|-------------|---------|-------|
+| **Support** | SDK 23+ | 10.0+ |
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+## Contributing
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This package uses [pigeon][1] to generate the communication layer between Flutter and the host
+platforms. The communication interface is defined in the `pigeons/callkeep.messages.dart`
+file. After editing the communication interface regenerate the communication layer by running
+`flutter pub run pigeon --input pigeons/callkeep.messages.dart`.
 
+[1]: https://pub.dev/packages/pigeon

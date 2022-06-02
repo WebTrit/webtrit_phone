@@ -225,7 +225,7 @@ SPEC CHECKSUMS:
   sqlite3_flutter_libs: 98c5c7c59b1ecfd0530a03412015d22db89ea261
   url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
   WebRTC-SDK: dda4e50186f9eed672dc6bcf4faafb30c6ce48e3
-  webtrit_callkeep: 4f0437b91a9efdaf054306fc302c85877aaec80f
+  webtrit_callkeep: bd0c4e7b220df37d3f3c43b1cbafa1953edc8627
   webview_flutter_wkwebview: 005fbd90c888a42c5690919a1527ecc6649e1162
 
 PODFILE CHECKSUM: b313f8976fcf3db4c7d2e3d4cc8da152e84127d4

@@ -1,0 +1,22 @@
+PODS:
+  - Flutter (1.0.0)
+  - webtrit_callkeep (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - webtrit_callkeep (from `.symlinks/plugins/webtrit_callkeep/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  webtrit_callkeep:
+    :path: ".symlinks/plugins/webtrit_callkeep/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  webtrit_callkeep: 4f0437b91a9efdaf054306fc302c85877aaec80f
+
+PODFILE CHECKSUM: 8e679eca47255a8ca8067c4c67aab20e64cb974d
+
+COCOAPODS: 1.11.3

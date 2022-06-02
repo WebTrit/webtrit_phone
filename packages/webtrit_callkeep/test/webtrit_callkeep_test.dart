@@ -1,23 +1,26 @@
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 void main() {
-  const MethodChannel channel = MethodChannel('webtrit_callkeep');
+  final callkeep = Callkeep();
 
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUp(() {
-    channel.setMockMethodCallHandler((MethodCall methodCall) async {
-      return '42';
-    });
+    callkeep.setUp(const CallkeepOptions(
+      ios: CallkeepIOSOptions(localizedName: 'Test',
+        maximumCallGroups: 1,
+        maximumCallsPerCallGroup: 1,
+        supportedHandleTypes: {CallkeepHandleType.number},
+      ),
+    ));
   });
 
   tearDown(() {
-    channel.setMockMethodCallHandler(null);
+    callkeep.tearDown();
   });
 
-  test('getPlatformVersion', () async {
-    expect(await WebtritCallkeep.platformVersion, '42');
+  test('isSetUp', () async {
+    expect(await callkeep.isSetUp(), true);
   });
 }
