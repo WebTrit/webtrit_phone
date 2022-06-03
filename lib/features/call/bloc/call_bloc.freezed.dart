@@ -127,21 +127,22 @@ class _$CallStateCopyWithImpl<$Res> implements $CallStateCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class $InitialCallStateCopyWith<$Res> {
-  factory $InitialCallStateCopyWith(
-          InitialCallState value, $Res Function(InitialCallState) then) =
-      _$InitialCallStateCopyWithImpl<$Res>;
+abstract class _$$InitialCallStateCopyWith<$Res> {
+  factory _$$InitialCallStateCopyWith(
+          _$InitialCallState value, $Res Function(_$InitialCallState) then) =
+      __$$InitialCallStateCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$InitialCallStateCopyWithImpl<$Res> extends _$CallStateCopyWithImpl<$Res>
-    implements $InitialCallStateCopyWith<$Res> {
-  _$InitialCallStateCopyWithImpl(
-      InitialCallState _value, $Res Function(InitialCallState) _then)
-      : super(_value, (v) => _then(v as InitialCallState));
+class __$$InitialCallStateCopyWithImpl<$Res>
+    extends _$CallStateCopyWithImpl<$Res>
+    implements _$$InitialCallStateCopyWith<$Res> {
+  __$$InitialCallStateCopyWithImpl(
+      _$InitialCallState _value, $Res Function(_$InitialCallState) _then)
+      : super(_value, (v) => _then(v as _$InitialCallState));
 
   @override
-  InitialCallState get _value => super._value as InitialCallState;
+  _$InitialCallState get _value => super._value as _$InitialCallState;
 }
 
 /// @nodoc
@@ -157,7 +158,7 @@ class _$InitialCallState implements InitialCallState {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is InitialCallState);
+        (other.runtimeType == runtimeType && other is _$InitialCallState);
   }
 
   @override
@@ -286,25 +287,25 @@ abstract class InitialCallState implements CallState {
 }
 
 /// @nodoc
-abstract class $SignalingInProgressCallStateCopyWith<$Res> {
-  factory $SignalingInProgressCallStateCopyWith(
-          SignalingInProgressCallState value,
-          $Res Function(SignalingInProgressCallState) then) =
-      _$SignalingInProgressCallStateCopyWithImpl<$Res>;
+abstract class _$$SignalingInProgressCallStateCopyWith<$Res> {
+  factory _$$SignalingInProgressCallStateCopyWith(
+          _$SignalingInProgressCallState value,
+          $Res Function(_$SignalingInProgressCallState) then) =
+      __$$SignalingInProgressCallStateCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$SignalingInProgressCallStateCopyWithImpl<$Res>
+class __$$SignalingInProgressCallStateCopyWithImpl<$Res>
     extends _$CallStateCopyWithImpl<$Res>
-    implements $SignalingInProgressCallStateCopyWith<$Res> {
-  _$SignalingInProgressCallStateCopyWithImpl(
-      SignalingInProgressCallState _value,
-      $Res Function(SignalingInProgressCallState) _then)
-      : super(_value, (v) => _then(v as SignalingInProgressCallState));
+    implements _$$SignalingInProgressCallStateCopyWith<$Res> {
+  __$$SignalingInProgressCallStateCopyWithImpl(
+      _$SignalingInProgressCallState _value,
+      $Res Function(_$SignalingInProgressCallState) _then)
+      : super(_value, (v) => _then(v as _$SignalingInProgressCallState));
 
   @override
-  SignalingInProgressCallState get _value =>
-      super._value as SignalingInProgressCallState;
+  _$SignalingInProgressCallState get _value =>
+      super._value as _$SignalingInProgressCallState;
 }
 
 /// @nodoc
@@ -321,7 +322,7 @@ class _$SignalingInProgressCallState implements SignalingInProgressCallState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is SignalingInProgressCallState);
+            other is _$SignalingInProgressCallState);
   }
 
   @override
@@ -450,30 +451,31 @@ abstract class SignalingInProgressCallState implements CallState {
 }
 
 /// @nodoc
-abstract class $SignalingFailureCallStateCopyWith<$Res> {
-  factory $SignalingFailureCallStateCopyWith(SignalingFailureCallState value,
-          $Res Function(SignalingFailureCallState) then) =
-      _$SignalingFailureCallStateCopyWithImpl<$Res>;
+abstract class _$$SignalingFailureCallStateCopyWith<$Res> {
+  factory _$$SignalingFailureCallStateCopyWith(
+          _$SignalingFailureCallState value,
+          $Res Function(_$SignalingFailureCallState) then) =
+      __$$SignalingFailureCallStateCopyWithImpl<$Res>;
   $Res call({String reason});
 }
 
 /// @nodoc
-class _$SignalingFailureCallStateCopyWithImpl<$Res>
+class __$$SignalingFailureCallStateCopyWithImpl<$Res>
     extends _$CallStateCopyWithImpl<$Res>
-    implements $SignalingFailureCallStateCopyWith<$Res> {
-  _$SignalingFailureCallStateCopyWithImpl(SignalingFailureCallState _value,
-      $Res Function(SignalingFailureCallState) _then)
-      : super(_value, (v) => _then(v as SignalingFailureCallState));
+    implements _$$SignalingFailureCallStateCopyWith<$Res> {
+  __$$SignalingFailureCallStateCopyWithImpl(_$SignalingFailureCallState _value,
+      $Res Function(_$SignalingFailureCallState) _then)
+      : super(_value, (v) => _then(v as _$SignalingFailureCallState));
 
   @override
-  SignalingFailureCallState get _value =>
-      super._value as SignalingFailureCallState;
+  _$SignalingFailureCallState get _value =>
+      super._value as _$SignalingFailureCallState;
 
   @override
   $Res call({
     Object? reason = freezed,
   }) {
-    return _then(SignalingFailureCallState(
+    return _then(_$SignalingFailureCallState(
       reason: reason == freezed
           ? _value.reason
           : reason // ignore: cast_nullable_to_non_nullable
@@ -499,7 +501,7 @@ class _$SignalingFailureCallState implements SignalingFailureCallState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is SignalingFailureCallState &&
+            other is _$SignalingFailureCallState &&
             const DeepCollectionEquality().equals(other.reason, reason));
   }
 
@@ -509,9 +511,9 @@ class _$SignalingFailureCallState implements SignalingFailureCallState {
 
   @JsonKey(ignore: true)
   @override
-  $SignalingFailureCallStateCopyWith<SignalingFailureCallState> get copyWith =>
-      _$SignalingFailureCallStateCopyWithImpl<SignalingFailureCallState>(
-          this, _$identity);
+  _$$SignalingFailureCallStateCopyWith<_$SignalingFailureCallState>
+      get copyWith => __$$SignalingFailureCallStateCopyWithImpl<
+          _$SignalingFailureCallState>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -637,26 +639,26 @@ abstract class SignalingFailureCallState implements CallState {
 
   String get reason => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $SignalingFailureCallStateCopyWith<SignalingFailureCallState> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$SignalingFailureCallStateCopyWith<_$SignalingFailureCallState>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $IdleCallStateCopyWith<$Res> {
-  factory $IdleCallStateCopyWith(
-          IdleCallState value, $Res Function(IdleCallState) then) =
-      _$IdleCallStateCopyWithImpl<$Res>;
+abstract class _$$IdleCallStateCopyWith<$Res> {
+  factory _$$IdleCallStateCopyWith(
+          _$IdleCallState value, $Res Function(_$IdleCallState) then) =
+      __$$IdleCallStateCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$IdleCallStateCopyWithImpl<$Res> extends _$CallStateCopyWithImpl<$Res>
-    implements $IdleCallStateCopyWith<$Res> {
-  _$IdleCallStateCopyWithImpl(
-      IdleCallState _value, $Res Function(IdleCallState) _then)
-      : super(_value, (v) => _then(v as IdleCallState));
+class __$$IdleCallStateCopyWithImpl<$Res> extends _$CallStateCopyWithImpl<$Res>
+    implements _$$IdleCallStateCopyWith<$Res> {
+  __$$IdleCallStateCopyWithImpl(
+      _$IdleCallState _value, $Res Function(_$IdleCallState) _then)
+      : super(_value, (v) => _then(v as _$IdleCallState));
 
   @override
-  IdleCallState get _value => super._value as IdleCallState;
+  _$IdleCallState get _value => super._value as _$IdleCallState;
 }
 
 /// @nodoc
@@ -672,7 +674,7 @@ class _$IdleCallState with ReadyCallStateMixin implements IdleCallState {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is IdleCallState);
+        (other.runtimeType == runtimeType && other is _$IdleCallState);
   }
 
   @override
@@ -801,10 +803,10 @@ abstract class IdleCallState implements CallState, ReadyCallStateMixin {
 }
 
 /// @nodoc
-abstract class $ActiveCallStateCopyWith<$Res> {
-  factory $ActiveCallStateCopyWith(
-          ActiveCallState value, $Res Function(ActiveCallState) then) =
-      _$ActiveCallStateCopyWithImpl<$Res>;
+abstract class _$$ActiveCallStateCopyWith<$Res> {
+  factory _$$ActiveCallStateCopyWith(
+          _$ActiveCallState value, $Res Function(_$ActiveCallState) then) =
+      __$$ActiveCallStateCopyWithImpl<$Res>;
   $Res call(
       {Direction direction,
       String callId,
@@ -818,14 +820,15 @@ abstract class $ActiveCallStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ActiveCallStateCopyWithImpl<$Res> extends _$CallStateCopyWithImpl<$Res>
-    implements $ActiveCallStateCopyWith<$Res> {
-  _$ActiveCallStateCopyWithImpl(
-      ActiveCallState _value, $Res Function(ActiveCallState) _then)
-      : super(_value, (v) => _then(v as ActiveCallState));
+class __$$ActiveCallStateCopyWithImpl<$Res>
+    extends _$CallStateCopyWithImpl<$Res>
+    implements _$$ActiveCallStateCopyWith<$Res> {
+  __$$ActiveCallStateCopyWithImpl(
+      _$ActiveCallState _value, $Res Function(_$ActiveCallState) _then)
+      : super(_value, (v) => _then(v as _$ActiveCallState));
 
   @override
-  ActiveCallState get _value => super._value as ActiveCallState;
+  _$ActiveCallState get _value => super._value as _$ActiveCallState;
 
   @override
   $Res call({
@@ -839,7 +842,7 @@ class _$ActiveCallStateCopyWithImpl<$Res> extends _$CallStateCopyWithImpl<$Res>
     Object? localStream = freezed,
     Object? remoteStream = freezed,
   }) {
-    return _then(ActiveCallState(
+    return _then(_$ActiveCallState(
       direction: direction == freezed
           ? _value.direction
           : direction // ignore: cast_nullable_to_non_nullable
@@ -924,7 +927,7 @@ class _$ActiveCallState
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is ActiveCallState &&
+            other is _$ActiveCallState &&
             const DeepCollectionEquality().equals(other.direction, direction) &&
             const DeepCollectionEquality().equals(other.callId, callId) &&
             const DeepCollectionEquality().equals(other.number, number) &&
@@ -956,8 +959,8 @@ class _$ActiveCallState
 
   @JsonKey(ignore: true)
   @override
-  $ActiveCallStateCopyWith<ActiveCallState> get copyWith =>
-      _$ActiveCallStateCopyWithImpl<ActiveCallState>(this, _$identity);
+  _$$ActiveCallStateCopyWith<_$ActiveCallState> get copyWith =>
+      __$$ActiveCallStateCopyWithImpl<_$ActiveCallState>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1103,33 +1106,34 @@ abstract class ActiveCallState
   MediaStream? get localStream => throw _privateConstructorUsedError;
   MediaStream? get remoteStream => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $ActiveCallStateCopyWith<ActiveCallState> get copyWith =>
+  _$$ActiveCallStateCopyWith<_$ActiveCallState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $FailureCallStateCopyWith<$Res> {
-  factory $FailureCallStateCopyWith(
-          FailureCallState value, $Res Function(FailureCallState) then) =
-      _$FailureCallStateCopyWithImpl<$Res>;
+abstract class _$$FailureCallStateCopyWith<$Res> {
+  factory _$$FailureCallStateCopyWith(
+          _$FailureCallState value, $Res Function(_$FailureCallState) then) =
+      __$$FailureCallStateCopyWithImpl<$Res>;
   $Res call({String reason});
 }
 
 /// @nodoc
-class _$FailureCallStateCopyWithImpl<$Res> extends _$CallStateCopyWithImpl<$Res>
-    implements $FailureCallStateCopyWith<$Res> {
-  _$FailureCallStateCopyWithImpl(
-      FailureCallState _value, $Res Function(FailureCallState) _then)
-      : super(_value, (v) => _then(v as FailureCallState));
+class __$$FailureCallStateCopyWithImpl<$Res>
+    extends _$CallStateCopyWithImpl<$Res>
+    implements _$$FailureCallStateCopyWith<$Res> {
+  __$$FailureCallStateCopyWithImpl(
+      _$FailureCallState _value, $Res Function(_$FailureCallState) _then)
+      : super(_value, (v) => _then(v as _$FailureCallState));
 
   @override
-  FailureCallState get _value => super._value as FailureCallState;
+  _$FailureCallState get _value => super._value as _$FailureCallState;
 
   @override
   $Res call({
     Object? reason = freezed,
   }) {
-    return _then(FailureCallState(
+    return _then(_$FailureCallState(
       reason: reason == freezed
           ? _value.reason
           : reason // ignore: cast_nullable_to_non_nullable
@@ -1155,7 +1159,7 @@ class _$FailureCallState with ReadyCallStateMixin implements FailureCallState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is FailureCallState &&
+            other is _$FailureCallState &&
             const DeepCollectionEquality().equals(other.reason, reason));
   }
 
@@ -1165,8 +1169,8 @@ class _$FailureCallState with ReadyCallStateMixin implements FailureCallState {
 
   @JsonKey(ignore: true)
   @override
-  $FailureCallStateCopyWith<FailureCallState> get copyWith =>
-      _$FailureCallStateCopyWithImpl<FailureCallState>(this, _$identity);
+  _$$FailureCallStateCopyWith<_$FailureCallState> get copyWith =>
+      __$$FailureCallStateCopyWithImpl<_$FailureCallState>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1292,6 +1296,6 @@ abstract class FailureCallState implements CallState, ReadyCallStateMixin {
 
   String get reason => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $FailureCallStateCopyWith<FailureCallState> get copyWith =>
+  _$$FailureCallStateCopyWith<_$FailureCallState> get copyWith =>
       throw _privateConstructorUsedError;
 }

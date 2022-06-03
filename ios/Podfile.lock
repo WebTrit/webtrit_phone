@@ -11,10 +11,10 @@ PODS:
   - Firebase/Messaging (8.15.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 8.15.0)
-  - firebase_core (1.17.0):
+  - firebase_core (1.17.1):
     - Firebase/CoreOnly (= 8.15.0)
     - Flutter
-  - firebase_messaging (11.4.0):
+  - firebase_messaging (11.4.1):
     - Firebase/Messaging (= 8.15.0)
     - firebase_core
     - Flutter
@@ -48,11 +48,10 @@ PODS:
     - Flutter
   - flutter_webrtc (0.7.1):
     - Flutter
-    - Libyuv (= 1703)
-    - WebRTC-SDK (= 97.4692.02)
-  - GoogleDataTransport (9.1.2):
-    - GoogleUtilities/Environment (~> 7.2)
-    - nanopb (~> 2.30908.0)
+    - WebRTC-SDK (= 97.4692.05)
+  - GoogleDataTransport (9.1.4):
+    - GoogleUtilities/Environment (~> 7.7)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
   - GoogleUtilities/AppDelegateSwizzler (7.7.0):
     - GoogleUtilities/Environment
@@ -73,7 +72,6 @@ PODS:
     - GoogleUtilities/Logger
   - just_audio (0.0.1):
     - Flutter
-  - Libyuv (1703)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
@@ -89,27 +87,27 @@ PODS:
   - ReachabilitySwift (5.0.0)
   - share_plus (0.0.1):
     - Flutter
-  - sqlite3 (3.38.3):
-    - sqlite3/common (= 3.38.3)
-  - sqlite3/common (3.38.3)
-  - sqlite3/fts5 (3.38.3):
+  - sqlite3 (3.38.5):
+    - sqlite3/common (= 3.38.5)
+  - sqlite3/common (3.38.5)
+  - sqlite3/fts5 (3.38.5):
     - sqlite3/common
-  - sqlite3/json1 (3.38.3):
+  - sqlite3/json1 (3.38.5):
     - sqlite3/common
-  - sqlite3/perf-threadsafe (3.38.3):
+  - sqlite3/perf-threadsafe (3.38.5):
     - sqlite3/common
-  - sqlite3/rtree (3.38.3):
+  - sqlite3/rtree (3.38.5):
     - sqlite3/common
   - sqlite3_flutter_libs (0.0.1):
     - Flutter
-    - sqlite3 (~> 3.38.3)
+    - sqlite3 (~> 3.38.5)
     - sqlite3/fts5
     - sqlite3/json1
     - sqlite3/perf-threadsafe
     - sqlite3/rtree
   - url_launcher_ios (0.0.1):
     - Flutter
-  - WebRTC-SDK (97.4692.02)
+  - WebRTC-SDK (97.4692.05)
   - webtrit_callkeep (0.0.1):
     - Flutter
   - webview_flutter_wkwebview (0.0.1):
@@ -144,7 +142,6 @@ SPEC REPOS:
     - FirebaseMessaging
     - GoogleDataTransport
     - GoogleUtilities
-    - Libyuv
     - nanopb
     - PromisesObjC
     - ReachabilitySwift
@@ -194,8 +191,8 @@ SPEC CHECKSUMS:
   connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Firebase: 5f8193dff4b5b7c5d5ef72ae54bb76c08e2b841d
-  firebase_core: aa1b92020533f5c23955e388c347c58fd64f8627
-  firebase_messaging: 8957bf304b47daf8bf12d0b111fdecc5b33e77a3
+  firebase_core: 318de541b0e61d3f24262982a3f0b54afe72439b
+  firebase_messaging: 943cfe65e0b3f457240489ce67655e40da1d270c
   FirebaseCore: 5743c5785c074a794d35f2fff7ecc254a91e08b1
   FirebaseCoreDiagnostics: 92e07a649aeb66352b319d43bdd2ee3942af84cb
   FirebaseInstallations: 40bd9054049b2eae9a2c38ef1c3dd213df3605cd
@@ -203,11 +200,10 @@ SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_contacts: edb1c5ce76aa433e20e6cb14c615f4c0b66e0983
   flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
-  flutter_webrtc: 3fd57d5bd9b6ce85d12d37f6f68d97be3b80509f
-  GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
+  flutter_webrtc: c4d09b864e7a8e93ad931bb84eed0ceb1ed51444
+  GoogleDataTransport: 5fffe35792f8b96ec8d6775f5eccd83c998d5a3b
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
-  Libyuv: 5f79ced0ee66e60a612ca97de1e6ccacd187a437
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
@@ -215,10 +211,10 @@ SPEC CHECKSUMS:
   PromisesObjC: 99b6f43f9e1044bd87a95a60beff28c2c44ddb72
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
-  sqlite3: 3315c18c19fd107a68bf466f9f0adce934b03eaa
-  sqlite3_flutter_libs: 98c5c7c59b1ecfd0530a03412015d22db89ea261
+  sqlite3: 93442daab2ab1825bc9c05faa85814a1996f5b65
+  sqlite3_flutter_libs: 92ed62fa0dcbfe2e37d5e2b60d00820672b71ffb
   url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
-  WebRTC-SDK: dda4e50186f9eed672dc6bcf4faafb30c6ce48e3
+  WebRTC-SDK: a6ee40bda0e3f7dba057907c3897374005c5715b
   webtrit_callkeep: bd0c4e7b220df37d3f3c43b1cbafa1953edc8627
   webview_flutter_wkwebview: 005fbd90c888a42c5690919a1527ecc6649e1162
 

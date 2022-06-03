@@ -54,31 +54,31 @@ class _$NotificationsStateCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$NotificationsStateCopyWith<$Res>
+abstract class _$$_NotificationsStateCopyWith<$Res>
     implements $NotificationsStateCopyWith<$Res> {
-  factory _$NotificationsStateCopyWith(
-          _NotificationsState value, $Res Function(_NotificationsState) then) =
-      __$NotificationsStateCopyWithImpl<$Res>;
+  factory _$$_NotificationsStateCopyWith(_$_NotificationsState value,
+          $Res Function(_$_NotificationsState) then) =
+      __$$_NotificationsStateCopyWithImpl<$Res>;
   @override
   $Res call({Notification? lastNotification});
 }
 
 /// @nodoc
-class __$NotificationsStateCopyWithImpl<$Res>
+class __$$_NotificationsStateCopyWithImpl<$Res>
     extends _$NotificationsStateCopyWithImpl<$Res>
-    implements _$NotificationsStateCopyWith<$Res> {
-  __$NotificationsStateCopyWithImpl(
-      _NotificationsState _value, $Res Function(_NotificationsState) _then)
-      : super(_value, (v) => _then(v as _NotificationsState));
+    implements _$$_NotificationsStateCopyWith<$Res> {
+  __$$_NotificationsStateCopyWithImpl(
+      _$_NotificationsState _value, $Res Function(_$_NotificationsState) _then)
+      : super(_value, (v) => _then(v as _$_NotificationsState));
 
   @override
-  _NotificationsState get _value => super._value as _NotificationsState;
+  _$_NotificationsState get _value => super._value as _$_NotificationsState;
 
   @override
   $Res call({
     Object? lastNotification = freezed,
   }) {
-    return _then(_NotificationsState(
+    return _then(_$_NotificationsState(
       lastNotification == freezed
           ? _value.lastNotification
           : lastNotification // ignore: cast_nullable_to_non_nullable
@@ -104,7 +104,7 @@ class _$_NotificationsState implements _NotificationsState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _NotificationsState &&
+            other is _$_NotificationsState &&
             const DeepCollectionEquality()
                 .equals(other.lastNotification, lastNotification));
   }
@@ -115,8 +115,9 @@ class _$_NotificationsState implements _NotificationsState {
 
   @JsonKey(ignore: true)
   @override
-  _$NotificationsStateCopyWith<_NotificationsState> get copyWith =>
-      __$NotificationsStateCopyWithImpl<_NotificationsState>(this, _$identity);
+  _$$_NotificationsStateCopyWith<_$_NotificationsState> get copyWith =>
+      __$$_NotificationsStateCopyWithImpl<_$_NotificationsState>(
+          this, _$identity);
 }
 
 abstract class _NotificationsState implements NotificationsState {
@@ -127,6 +128,6 @@ abstract class _NotificationsState implements NotificationsState {
   Notification? get lastNotification => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
-  _$NotificationsStateCopyWith<_NotificationsState> get copyWith =>
+  _$$_NotificationsStateCopyWith<_$_NotificationsState> get copyWith =>
       throw _privateConstructorUsedError;
 }
