@@ -73,6 +73,7 @@ flutter:
 
   assets:
     - assets/logo.svg
+    - assets/logoIconTemplateImage.png
     - assets/login/
     - assets/ringtones/
 

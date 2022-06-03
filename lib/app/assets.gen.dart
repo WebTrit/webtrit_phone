@@ -32,6 +32,8 @@ class Assets {
 
   static const $AssetsLoginGen login = $AssetsLoginGen();
   static const SvgGenImage logo = SvgGenImage('assets/logo.svg');
+  static const AssetGenImage logoIconTemplateImage =
+      AssetGenImage('assets/logoIconTemplateImage.png');
   static const $AssetsRingtonesGen ringtones = $AssetsRingtonesGen();
 }
 

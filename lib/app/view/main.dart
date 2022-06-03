@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
+import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
@@ -32,6 +33,7 @@ class _MainState extends State<Main> {
     callkeep.setUp(CallkeepOptions(
       ios: CallkeepIOSOptions(
         localizedName: PackageInfo().appName,
+        iconTemplateImageAssetName: Assets.logoIconTemplateImage.path,
         maximumCallGroups: 2,
         maximumCallsPerCallGroup: 1,
         supportedHandleTypes: const {CallkeepHandleType.number},
