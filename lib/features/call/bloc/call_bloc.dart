@@ -28,6 +28,9 @@ part 'call_event.dart';
 
 part 'call_state.dart';
 
+const kSignalingClientConnectionTimeout = Duration(seconds: 10);
+const kSignalingClientReconnectInitiated = Duration(seconds: 3);
+
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
   final RecentsRepository recentsRepository;
   final NotificationsBloc notificationsBloc;
@@ -209,7 +212,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
 
       final token = await SecureStorage().readToken();
       final httpClient = HttpClient();
-      httpClient.connectionTimeout = const Duration(seconds: 10);
+      httpClient.connectionTimeout = kSignalingClientConnectionTimeout;
       final signalingClient = await WebtritSignalingClient.connect(
         EnvironmentConfig.SIGNALING_URL,
         token!,
@@ -244,7 +247,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
         reason: e.toString(),
       ));
 
-      _reconnectInitiated(const Duration(seconds: 3));
+      _reconnectInitiated(kSignalingClientReconnectInitiated);
     }
   }
 
