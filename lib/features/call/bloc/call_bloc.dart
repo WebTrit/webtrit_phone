@@ -217,7 +217,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver {
         customHttpClient: httpClient,
       );
 
-      if (emit.isDone) return;
+      if (emit.isDone) {
+        await signalingClient.disconnect(WebSocketStatus.goingAway);
+        return;
+      }
 
       signalingClient.listen(
         onEvent: _onSignalingEvent,
