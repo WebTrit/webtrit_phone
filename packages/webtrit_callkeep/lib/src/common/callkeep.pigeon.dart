@@ -31,6 +31,15 @@ enum PIncomingCallErrorEnum {
   filteredByBlockList,
 }
 
+enum PCallRequestErrorEnum {
+  unknown,
+  unentitled,
+  unknownCallUuid,
+  callUuidAlreadyExists,
+  maximumCallGroupsReached,
+  internal,
+}
+
 class PIOSOptions {
   PIOSOptions({
     required this.localizedName,
@@ -180,15 +189,37 @@ class PIncomingCallError {
   }
 }
 
+class PCallRequestError {
+  PCallRequestError({
+    required this.value,
+  });
+
+  PCallRequestErrorEnum value;
+
+  Object encode() {
+    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
+    pigeonMap['value'] = value.index;
+    return pigeonMap;
+  }
+
+  static PCallRequestError decode(Object message) {
+    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+    return PCallRequestError(
+      value: PCallRequestErrorEnum.values[pigeonMap['value']! as int]
+,
+    );
+  }
+}
+
 class _PHostApiCodec extends StandardMessageCodec {
   const _PHostApiCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
-    if (value is PEndCallReason) {
+    if (value is PCallRequestError) {
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
     } else 
-    if (value is PHandle) {
+    if (value is PEndCallReason) {
       buffer.putUint8(129);
       writeValue(buffer, value.encode());
     } else 
@@ -196,16 +227,20 @@ class _PHostApiCodec extends StandardMessageCodec {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
     } else 
-    if (value is PIOSOptions) {
+    if (value is PHandle) {
       buffer.putUint8(131);
       writeValue(buffer, value.encode());
     } else 
-    if (value is PIncomingCallError) {
+    if (value is PIOSOptions) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
     } else 
-    if (value is POptions) {
+    if (value is PIncomingCallError) {
       buffer.putUint8(133);
+      writeValue(buffer, value.encode());
+    } else 
+    if (value is POptions) {
+      buffer.putUint8(134);
       writeValue(buffer, value.encode());
     } else 
 {
@@ -216,21 +251,24 @@ class _PHostApiCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 128:       
-        return PEndCallReason.decode(readValue(buffer)!);
+        return PCallRequestError.decode(readValue(buffer)!);
       
       case 129:       
-        return PHandle.decode(readValue(buffer)!);
+        return PEndCallReason.decode(readValue(buffer)!);
       
       case 130:       
         return PHandle.decode(readValue(buffer)!);
       
       case 131:       
-        return PIOSOptions.decode(readValue(buffer)!);
+        return PHandle.decode(readValue(buffer)!);
       
       case 132:       
-        return PIncomingCallError.decode(readValue(buffer)!);
+        return PIOSOptions.decode(readValue(buffer)!);
       
       case 133:       
+        return PIncomingCallError.decode(readValue(buffer)!);
+      
+      case 134:       
         return POptions.decode(readValue(buffer)!);
       
       default:      
@@ -431,7 +469,7 @@ class PHostApi {
     }
   }
 
-  Future<void> startCall(String arg_uuidString, PHandle arg_handle, String? arg_displayNameOrContactIdentifier, bool arg_video) async {
+  Future<PCallRequestError?> startCall(String arg_uuidString, PHandle arg_handle, String? arg_displayNameOrContactIdentifier, bool arg_video) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.PHostApi.startCall', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
@@ -449,11 +487,11 @@ class PHostApi {
         details: error['details'],
       );
     } else {
-      return;
+      return (replyMap['result'] as PCallRequestError?);
     }
   }
 
-  Future<void> answerCall(String arg_uuidString) async {
+  Future<PCallRequestError?> answerCall(String arg_uuidString) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.PHostApi.answerCall', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
@@ -471,11 +509,11 @@ class PHostApi {
         details: error['details'],
       );
     } else {
-      return;
+      return (replyMap['result'] as PCallRequestError?);
     }
   }
 
-  Future<void> endCall(String arg_uuidString) async {
+  Future<PCallRequestError?> endCall(String arg_uuidString) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.PHostApi.endCall', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
@@ -493,11 +531,11 @@ class PHostApi {
         details: error['details'],
       );
     } else {
-      return;
+      return (replyMap['result'] as PCallRequestError?);
     }
   }
 
-  Future<void> setHeld(String arg_uuidString, bool arg_onHold) async {
+  Future<PCallRequestError?> setHeld(String arg_uuidString, bool arg_onHold) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.PHostApi.setHeld', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
@@ -515,11 +553,11 @@ class PHostApi {
         details: error['details'],
       );
     } else {
-      return;
+      return (replyMap['result'] as PCallRequestError?);
     }
   }
 
-  Future<void> setMuted(String arg_uuidString, bool arg_muted) async {
+  Future<PCallRequestError?> setMuted(String arg_uuidString, bool arg_muted) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.PHostApi.setMuted', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
@@ -537,11 +575,11 @@ class PHostApi {
         details: error['details'],
       );
     } else {
-      return;
+      return (replyMap['result'] as PCallRequestError?);
     }
   }
 
-  Future<void> sendDTMF(String arg_uuidString, String arg_key) async {
+  Future<PCallRequestError?> sendDTMF(String arg_uuidString, String arg_key) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.PHostApi.sendDTMF', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
@@ -559,7 +597,7 @@ class PHostApi {
         details: error['details'],
       );
     } else {
-      return;
+      return (replyMap['result'] as PCallRequestError?);
     }
   }
 }

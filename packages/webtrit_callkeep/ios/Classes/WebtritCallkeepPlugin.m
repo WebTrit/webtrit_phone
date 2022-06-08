@@ -259,7 +259,7 @@ static NSString *const OptionsKey = @"WebtritCallkeepPluginOptions";
                         handle:(WTPHandle *)handle
 displayNameOrContactIdentifier:(NSString *)displayNameOrContactIdentifier
                          video:(NSNumber *)video
-                    completion:(void (^)(FlutterError *))completion {
+                    completion:(void (^)(WTPCallRequestError *, FlutterError *))completion {
 #ifdef DEBUG
   NSLog(@"[Callkeep][startCall] uuidString = %@", uuidString);
 #endif
@@ -273,8 +273,8 @@ displayNameOrContactIdentifier:(NSString *)displayNameOrContactIdentifier
   action.video = [video boolValue];
   CXTransaction *transaction = [[CXTransaction alloc] initWithAction:action];
 
-  [self requestTransaction:transaction completion:^(FlutterError *error) {
-    if (error == nil) {
+  [self requestTransaction:transaction completion:^(WTPCallRequestError *pigeonError, FlutterError *flutterError) {
+    if (pigeonError == nil && flutterError == nil) {
       CXCallUpdate *callUpdate = [[CXCallUpdate alloc] init];
       callUpdate.remoteHandle = action.handle;
       callUpdate.localizedCallerName = action.contactIdentifier;
@@ -286,15 +286,15 @@ displayNameOrContactIdentifier:(NSString *)displayNameOrContactIdentifier
       [self->_provider reportCallWithUUID:uuid
                                   updated:callUpdate];
 
-      completion(nil);
+      completion(nil, nil);
     } else {
-      completion(error);
+      completion(pigeonError, flutterError);
     }
   }];
 }
 
 - (void)answerCall:(NSString *)uuidString
-        completion:(void (^)(FlutterError *))completion {
+        completion:(void (^)(WTPCallRequestError *, FlutterError *))completion {
 #ifdef DEBUG
   NSLog(@"[Callkeep][answerCall] uuidString = %@", uuidString);
 #endif
@@ -305,7 +305,7 @@ displayNameOrContactIdentifier:(NSString *)displayNameOrContactIdentifier
 }
 
 - (void)endCall:(NSString *)uuidString
-     completion:(void (^)(FlutterError *))completion {
+     completion:(void (^)(WTPCallRequestError *, FlutterError *))completion {
 #ifdef DEBUG
   NSLog(@"[Callkeep][endCall] uuidString = %@", uuidString);
 #endif
@@ -317,7 +317,7 @@ displayNameOrContactIdentifier:(NSString *)displayNameOrContactIdentifier
 
 - (void)setHeld:(NSString *)uuidString
          onHold:(NSNumber *)onHold
-     completion:(void (^)(FlutterError *))completion {
+     completion:(void (^)(WTPCallRequestError *, FlutterError *))completion {
 #ifdef DEBUG
   NSLog(@"[Callkeep][setHeld] uuidString = %@ held = %@", uuidString, onHold);
 #endif
@@ -330,7 +330,7 @@ displayNameOrContactIdentifier:(NSString *)displayNameOrContactIdentifier
 
 - (void)setMuted:(NSString *)uuidString
            muted:(NSNumber *)muted
-      completion:(void (^)(FlutterError *))completion {
+      completion:(void (^)(WTPCallRequestError *, FlutterError *))completion {
 #ifdef DEBUG
   NSLog(@"[Callkeep][setMuted] uuidString = %@ muted = %@", uuidString, muted);
 #endif
@@ -343,7 +343,7 @@ displayNameOrContactIdentifier:(NSString *)displayNameOrContactIdentifier
 
 - (void)sendDTMF:(NSString *)uuidString
              key:(NSString *)key
-      completion:(void (^)(FlutterError *))completion {
+      completion:(void (^)(WTPCallRequestError *, FlutterError *))completion {
 #ifdef DEBUG
   NSLog(@"[Callkeep][sendDTMF] uuidString = %@ key = %@", uuidString, key);
 #endif
@@ -357,14 +357,16 @@ displayNameOrContactIdentifier:(NSString *)displayNameOrContactIdentifier
 
 #pragma mark - WTPHostApi - helpers
 
-- (void)requestTransaction:(CXTransaction *)transaction completion:(void (^)(FlutterError *))completion {
+- (void)requestTransaction:(CXTransaction *)transaction completion:(void (^)(WTPCallRequestError *, FlutterError *))completion {
   [_callController requestTransaction:transaction completion:^(NSError *error) {
     if (error == nil) {
-      completion(nil);
+      completion(nil, nil);
+    } else if ([error.domain isEqualToString:CXErrorDomainRequestTransaction]) {
+      completion([WTPCallRequestError makeWithValue:CXErrorCodeRequestTransactionErrorToPigeon((CXErrorCodeRequestTransactionError) error.code)], nil);
     } else {
-      completion([FlutterError errorWithCode:@"CallAction"
-                                     message:[error description]
-                                     details:nil]);
+      completion(nil, [FlutterError errorWithCode:error.domain
+                                          message:[error description]
+                                          details:nil]);
     }
   }];
 }

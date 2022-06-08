@@ -73,6 +73,20 @@ class PIncomingCallError {
   late PIncomingCallErrorEnum value;
 }
 
+enum PCallRequestErrorEnum {
+  unknown,
+  unentitled,
+  unknownCallUuid,
+  callUuidAlreadyExists,
+  maximumCallGroupsReached,
+  internal,
+}
+
+// TODO: See https://github.com/flutter/flutter/issues/87307
+class PCallRequestError {
+  late PCallRequestErrorEnum value;
+}
+
 @HostApi()
 abstract class PHostApi {
   @ObjCSelector('isSetUp')
@@ -118,7 +132,7 @@ abstract class PHostApi {
 
   @ObjCSelector('startCall:handle:displayNameOrContactIdentifier:video:')
   @async
-  void startCall(
+  PCallRequestError? startCall(
     String uuidString,
     PHandle handle,
     String? displayNameOrContactIdentifier,
@@ -127,23 +141,23 @@ abstract class PHostApi {
 
   @ObjCSelector('answerCall:')
   @async
-  void answerCall(String uuidString);
+  PCallRequestError? answerCall(String uuidString);
 
   @ObjCSelector('endCall:')
   @async
-  void endCall(String uuidString);
+  PCallRequestError? endCall(String uuidString);
 
   @ObjCSelector('setHeld:onHold:')
   @async
-  void setHeld(String uuidString, bool onHold);
+  PCallRequestError? setHeld(String uuidString, bool onHold);
 
   @ObjCSelector('setMuted:muted:')
   @async
-  void setMuted(String uuidString, bool muted);
+  PCallRequestError? setMuted(String uuidString, bool muted);
 
   @ObjCSelector('sendDTMF:key:')
   @async
-  void sendDTMF(String uuidString, String key);
+  PCallRequestError? sendDTMF(String uuidString, String key);
 }
 
 @FlutterApi()

@@ -60,6 +60,20 @@ public class Generated {
     }
   }
 
+  public enum PCallRequestErrorEnum {
+    unknown(0),
+    unentitled(1),
+    unknownCallUuid(2),
+    callUuidAlreadyExists(3),
+    maximumCallGroupsReached(4),
+    internal(5);
+
+    private int index;
+    private PCallRequestErrorEnum(final int index) {
+      this.index = index;
+    }
+  }
+
   /** Generated class from Pigeon that represents data sent in messages. */
   public static class PIOSOptions {
     private @NonNull String localizedName;
@@ -415,6 +429,44 @@ public class Generated {
     }
   }
 
+  /** Generated class from Pigeon that represents data sent in messages. */
+  public static class PCallRequestError {
+    private @NonNull PCallRequestErrorEnum value;
+    public @NonNull PCallRequestErrorEnum getValue() { return value; }
+    public void setValue(@NonNull PCallRequestErrorEnum setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"value\" is null.");
+      }
+      this.value = setterArg;
+    }
+
+    /** Constructor is private to enforce null safety; use Builder. */
+    private PCallRequestError() {}
+    public static final class Builder {
+      private @Nullable PCallRequestErrorEnum value;
+      public @NonNull Builder setValue(@NonNull PCallRequestErrorEnum setterArg) {
+        this.value = setterArg;
+        return this;
+      }
+      public @NonNull PCallRequestError build() {
+        PCallRequestError pigeonReturn = new PCallRequestError();
+        pigeonReturn.setValue(value);
+        return pigeonReturn;
+      }
+    }
+    @NonNull Map<String, Object> toMap() {
+      Map<String, Object> toMapResult = new HashMap<>();
+      toMapResult.put("value", value == null ? null : value.index);
+      return toMapResult;
+    }
+    static @NonNull PCallRequestError fromMap(@NonNull Map<String, Object> map) {
+      PCallRequestError pigeonResult = new PCallRequestError();
+      Object value = map.get("value");
+      pigeonResult.setValue(value == null ? null : PCallRequestErrorEnum.values()[(int)value]);
+      return pigeonResult;
+    }
+  }
+
   public interface Result<T> {
     void success(T result);
     void error(Throwable error);
@@ -426,21 +478,24 @@ public class Generated {
     protected Object readValueOfType(byte type, ByteBuffer buffer) {
       switch (type) {
         case (byte)128:         
-          return PEndCallReason.fromMap((Map<String, Object>) readValue(buffer));
+          return PCallRequestError.fromMap((Map<String, Object>) readValue(buffer));
         
         case (byte)129:         
-          return PHandle.fromMap((Map<String, Object>) readValue(buffer));
+          return PEndCallReason.fromMap((Map<String, Object>) readValue(buffer));
         
         case (byte)130:         
           return PHandle.fromMap((Map<String, Object>) readValue(buffer));
         
         case (byte)131:         
-          return PIOSOptions.fromMap((Map<String, Object>) readValue(buffer));
+          return PHandle.fromMap((Map<String, Object>) readValue(buffer));
         
         case (byte)132:         
-          return PIncomingCallError.fromMap((Map<String, Object>) readValue(buffer));
+          return PIOSOptions.fromMap((Map<String, Object>) readValue(buffer));
         
         case (byte)133:         
+          return PIncomingCallError.fromMap((Map<String, Object>) readValue(buffer));
+        
+        case (byte)134:         
           return POptions.fromMap((Map<String, Object>) readValue(buffer));
         
         default:        
@@ -450,28 +505,32 @@ public class Generated {
     }
     @Override
     protected void writeValue(ByteArrayOutputStream stream, Object value)     {
-      if (value instanceof PEndCallReason) {
+      if (value instanceof PCallRequestError) {
         stream.write(128);
-        writeValue(stream, ((PEndCallReason) value).toMap());
+        writeValue(stream, ((PCallRequestError) value).toMap());
       } else 
-      if (value instanceof PHandle) {
+      if (value instanceof PEndCallReason) {
         stream.write(129);
-        writeValue(stream, ((PHandle) value).toMap());
+        writeValue(stream, ((PEndCallReason) value).toMap());
       } else 
       if (value instanceof PHandle) {
         stream.write(130);
         writeValue(stream, ((PHandle) value).toMap());
       } else 
-      if (value instanceof PIOSOptions) {
+      if (value instanceof PHandle) {
         stream.write(131);
+        writeValue(stream, ((PHandle) value).toMap());
+      } else 
+      if (value instanceof PIOSOptions) {
+        stream.write(132);
         writeValue(stream, ((PIOSOptions) value).toMap());
       } else 
       if (value instanceof PIncomingCallError) {
-        stream.write(132);
+        stream.write(133);
         writeValue(stream, ((PIncomingCallError) value).toMap());
       } else 
       if (value instanceof POptions) {
-        stream.write(133);
+        stream.write(134);
         writeValue(stream, ((POptions) value).toMap());
       } else 
 {
@@ -490,12 +549,12 @@ public class Generated {
     void reportConnectedOutgoingCall(@NonNull String uuidString, Result<Void> result);
     void reportUpdateCall(@NonNull String uuidString, @Nullable PHandle handle, @Nullable String displayName, @Nullable Boolean hasVideo, Result<Void> result);
     void reportEndCall(@NonNull String uuidString, @NonNull PEndCallReason reason, Result<Void> result);
-    void startCall(@NonNull String uuidString, @NonNull PHandle handle, @Nullable String displayNameOrContactIdentifier, @NonNull Boolean video, Result<Void> result);
-    void answerCall(@NonNull String uuidString, Result<Void> result);
-    void endCall(@NonNull String uuidString, Result<Void> result);
-    void setHeld(@NonNull String uuidString, @NonNull Boolean onHold, Result<Void> result);
-    void setMuted(@NonNull String uuidString, @NonNull Boolean muted, Result<Void> result);
-    void sendDTMF(@NonNull String uuidString, @NonNull String key, Result<Void> result);
+    void startCall(@NonNull String uuidString, @NonNull PHandle handle, @Nullable String displayNameOrContactIdentifier, @NonNull Boolean video, Result<PCallRequestError> result);
+    void answerCall(@NonNull String uuidString, Result<PCallRequestError> result);
+    void endCall(@NonNull String uuidString, Result<PCallRequestError> result);
+    void setHeld(@NonNull String uuidString, @NonNull Boolean onHold, Result<PCallRequestError> result);
+    void setMuted(@NonNull String uuidString, @NonNull Boolean muted, Result<PCallRequestError> result);
+    void sendDTMF(@NonNull String uuidString, @NonNull String key, Result<PCallRequestError> result);
 
     /** The codec used by PHostApi. */
     static MessageCodec<Object> getCodec() {
@@ -793,9 +852,9 @@ public class Generated {
               if (videoArg == null) {
                 throw new NullPointerException("videoArg unexpectedly null.");
               }
-              Result<Void> resultCallback = new Result<Void>() {
-                public void success(Void result) {
-                  wrapped.put("result", null);
+              Result<PCallRequestError> resultCallback = new Result<PCallRequestError>() {
+                public void success(PCallRequestError result) {
+                  wrapped.put("result", result);
                   reply.reply(wrapped);
                 }
                 public void error(Throwable error) {
@@ -827,9 +886,9 @@ public class Generated {
               if (uuidStringArg == null) {
                 throw new NullPointerException("uuidStringArg unexpectedly null.");
               }
-              Result<Void> resultCallback = new Result<Void>() {
-                public void success(Void result) {
-                  wrapped.put("result", null);
+              Result<PCallRequestError> resultCallback = new Result<PCallRequestError>() {
+                public void success(PCallRequestError result) {
+                  wrapped.put("result", result);
                   reply.reply(wrapped);
                 }
                 public void error(Throwable error) {
@@ -861,9 +920,9 @@ public class Generated {
               if (uuidStringArg == null) {
                 throw new NullPointerException("uuidStringArg unexpectedly null.");
               }
-              Result<Void> resultCallback = new Result<Void>() {
-                public void success(Void result) {
-                  wrapped.put("result", null);
+              Result<PCallRequestError> resultCallback = new Result<PCallRequestError>() {
+                public void success(PCallRequestError result) {
+                  wrapped.put("result", result);
                   reply.reply(wrapped);
                 }
                 public void error(Throwable error) {
@@ -899,9 +958,9 @@ public class Generated {
               if (onHoldArg == null) {
                 throw new NullPointerException("onHoldArg unexpectedly null.");
               }
-              Result<Void> resultCallback = new Result<Void>() {
-                public void success(Void result) {
-                  wrapped.put("result", null);
+              Result<PCallRequestError> resultCallback = new Result<PCallRequestError>() {
+                public void success(PCallRequestError result) {
+                  wrapped.put("result", result);
                   reply.reply(wrapped);
                 }
                 public void error(Throwable error) {
@@ -937,9 +996,9 @@ public class Generated {
               if (mutedArg == null) {
                 throw new NullPointerException("mutedArg unexpectedly null.");
               }
-              Result<Void> resultCallback = new Result<Void>() {
-                public void success(Void result) {
-                  wrapped.put("result", null);
+              Result<PCallRequestError> resultCallback = new Result<PCallRequestError>() {
+                public void success(PCallRequestError result) {
+                  wrapped.put("result", result);
                   reply.reply(wrapped);
                 }
                 public void error(Throwable error) {
@@ -975,9 +1034,9 @@ public class Generated {
               if (keyArg == null) {
                 throw new NullPointerException("keyArg unexpectedly null.");
               }
-              Result<Void> resultCallback = new Result<Void>() {
-                public void success(Void result) {
-                  wrapped.put("result", null);
+              Result<PCallRequestError> resultCallback = new Result<PCallRequestError>() {
+                public void success(PCallRequestError result) {
+                  wrapped.put("result", result);
                   reply.reply(wrapped);
                 }
                 public void error(Throwable error) {

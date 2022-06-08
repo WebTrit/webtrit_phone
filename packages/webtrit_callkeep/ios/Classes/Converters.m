@@ -53,6 +53,29 @@ WTPIncomingCallErrorEnum CXErrorCodeIncomingCallErrorToPigeon(CXErrorCodeIncomin
   }
 }
 
+extern WTPCallRequestErrorEnum CXErrorCodeRequestTransactionErrorToPigeon(CXErrorCodeRequestTransactionError value) {
+  switch (value) {
+    case CXErrorCodeRequestTransactionErrorUnknown:
+      return WTPCallRequestErrorEnumUnknown;
+    case CXErrorCodeRequestTransactionErrorUnentitled:
+      return WTPCallRequestErrorEnumUnentitled;
+    case CXErrorCodeRequestTransactionErrorUnknownCallProvider:
+      return WTPCallRequestErrorEnumInternal;
+    case CXErrorCodeRequestTransactionErrorEmptyTransaction:
+      return WTPCallRequestErrorEnumInternal;
+    case CXErrorCodeRequestTransactionErrorUnknownCallUUID:
+      return WTPCallRequestErrorEnumUnknownCallUuid;
+    case CXErrorCodeRequestTransactionErrorCallUUIDAlreadyExists:
+      return WTPCallRequestErrorEnumCallUuidAlreadyExists;
+    case CXErrorCodeRequestTransactionErrorInvalidAction:
+      return WTPCallRequestErrorEnumInternal;
+    case CXErrorCodeRequestTransactionErrorMaximumCallGroupsReached:
+      return WTPCallRequestErrorEnumMaximumCallGroupsReached;
+    default:
+      return WTPCallRequestErrorEnumInternal;
+  }
+}
+
 CXHandleType CXHandleTypeFromString(NSString *value) {
   if ([value isEqualToString:@"generic"]) {
     return CXHandleTypeGeneric;

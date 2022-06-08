@@ -51,6 +51,10 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
 + (WTPIncomingCallError *)fromMap:(NSDictionary *)dict;
 - (NSDictionary *)toMap;
 @end
+@interface WTPCallRequestError ()
++ (WTPCallRequestError *)fromMap:(NSDictionary *)dict;
+- (NSDictionary *)toMap;
+@end
 
 @implementation WTPIOSOptions
 + (instancetype)makeWithLocalizedName:(NSString *)localizedName
@@ -189,6 +193,24 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
 }
 @end
 
+@implementation WTPCallRequestError
++ (instancetype)makeWithValue:(WTPCallRequestErrorEnum)value {
+  WTPCallRequestError* pigeonResult = [[WTPCallRequestError alloc] init];
+  pigeonResult.value = value;
+  return pigeonResult;
+}
++ (WTPCallRequestError *)fromMap:(NSDictionary *)dict {
+  WTPCallRequestError *pigeonResult = [[WTPCallRequestError alloc] init];
+  pigeonResult.value = [GetNullableObject(dict, @"value") integerValue];
+  return pigeonResult;
+}
+- (NSDictionary *)toMap {
+  return @{
+    @"value" : @(self.value),
+  };
+}
+@end
+
 @interface WTPHostApiCodecReader : FlutterStandardReader
 @end
 @implementation WTPHostApiCodecReader
@@ -196,21 +218,24 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
 {
   switch (type) {
     case 128:     
-      return [WTPEndCallReason fromMap:[self readValue]];
+      return [WTPCallRequestError fromMap:[self readValue]];
     
     case 129:     
-      return [WTPHandle fromMap:[self readValue]];
+      return [WTPEndCallReason fromMap:[self readValue]];
     
     case 130:     
       return [WTPHandle fromMap:[self readValue]];
     
     case 131:     
-      return [WTPIOSOptions fromMap:[self readValue]];
+      return [WTPHandle fromMap:[self readValue]];
     
     case 132:     
-      return [WTPIncomingCallError fromMap:[self readValue]];
+      return [WTPIOSOptions fromMap:[self readValue]];
     
     case 133:     
+      return [WTPIncomingCallError fromMap:[self readValue]];
+    
+    case 134:     
       return [WTPOptions fromMap:[self readValue]];
     
     default:    
@@ -225,11 +250,11 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
 @implementation WTPHostApiCodecWriter
 - (void)writeValue:(id)value 
 {
-  if ([value isKindOfClass:[WTPEndCallReason class]]) {
+  if ([value isKindOfClass:[WTPCallRequestError class]]) {
     [self writeByte:128];
     [self writeValue:[value toMap]];
   } else 
-  if ([value isKindOfClass:[WTPHandle class]]) {
+  if ([value isKindOfClass:[WTPEndCallReason class]]) {
     [self writeByte:129];
     [self writeValue:[value toMap]];
   } else 
@@ -237,16 +262,20 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
     [self writeByte:130];
     [self writeValue:[value toMap]];
   } else 
-  if ([value isKindOfClass:[WTPIOSOptions class]]) {
+  if ([value isKindOfClass:[WTPHandle class]]) {
     [self writeByte:131];
     [self writeValue:[value toMap]];
   } else 
-  if ([value isKindOfClass:[WTPIncomingCallError class]]) {
+  if ([value isKindOfClass:[WTPIOSOptions class]]) {
     [self writeByte:132];
     [self writeValue:[value toMap]];
   } else 
-  if ([value isKindOfClass:[WTPOptions class]]) {
+  if ([value isKindOfClass:[WTPIncomingCallError class]]) {
     [self writeByte:133];
+    [self writeValue:[value toMap]];
+  } else 
+  if ([value isKindOfClass:[WTPOptions class]]) {
+    [self writeByte:134];
     [self writeValue:[value toMap]];
   } else 
 {
@@ -455,8 +484,8 @@ void WTPHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<WTPHos
         WTPHandle *arg_handle = GetNullableObjectAtIndex(args, 1);
         NSString *arg_displayNameOrContactIdentifier = GetNullableObjectAtIndex(args, 2);
         NSNumber *arg_video = GetNullableObjectAtIndex(args, 3);
-        [api startCall:arg_uuidString handle:arg_handle displayNameOrContactIdentifier:arg_displayNameOrContactIdentifier video:arg_video completion:^(FlutterError *_Nullable error) {
-          callback(wrapResult(nil, error));
+        [api startCall:arg_uuidString handle:arg_handle displayNameOrContactIdentifier:arg_displayNameOrContactIdentifier video:arg_video completion:^(WTPCallRequestError *_Nullable output, FlutterError *_Nullable error) {
+          callback(wrapResult(output, error));
         }];
       }];
     }
@@ -475,8 +504,8 @@ void WTPHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<WTPHos
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_uuidString = GetNullableObjectAtIndex(args, 0);
-        [api answerCall:arg_uuidString completion:^(FlutterError *_Nullable error) {
-          callback(wrapResult(nil, error));
+        [api answerCall:arg_uuidString completion:^(WTPCallRequestError *_Nullable output, FlutterError *_Nullable error) {
+          callback(wrapResult(output, error));
         }];
       }];
     }
@@ -495,8 +524,8 @@ void WTPHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<WTPHos
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_uuidString = GetNullableObjectAtIndex(args, 0);
-        [api endCall:arg_uuidString completion:^(FlutterError *_Nullable error) {
-          callback(wrapResult(nil, error));
+        [api endCall:arg_uuidString completion:^(WTPCallRequestError *_Nullable output, FlutterError *_Nullable error) {
+          callback(wrapResult(output, error));
         }];
       }];
     }
@@ -516,8 +545,8 @@ void WTPHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<WTPHos
         NSArray *args = message;
         NSString *arg_uuidString = GetNullableObjectAtIndex(args, 0);
         NSNumber *arg_onHold = GetNullableObjectAtIndex(args, 1);
-        [api setHeld:arg_uuidString onHold:arg_onHold completion:^(FlutterError *_Nullable error) {
-          callback(wrapResult(nil, error));
+        [api setHeld:arg_uuidString onHold:arg_onHold completion:^(WTPCallRequestError *_Nullable output, FlutterError *_Nullable error) {
+          callback(wrapResult(output, error));
         }];
       }];
     }
@@ -537,8 +566,8 @@ void WTPHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<WTPHos
         NSArray *args = message;
         NSString *arg_uuidString = GetNullableObjectAtIndex(args, 0);
         NSNumber *arg_muted = GetNullableObjectAtIndex(args, 1);
-        [api setMuted:arg_uuidString muted:arg_muted completion:^(FlutterError *_Nullable error) {
-          callback(wrapResult(nil, error));
+        [api setMuted:arg_uuidString muted:arg_muted completion:^(WTPCallRequestError *_Nullable output, FlutterError *_Nullable error) {
+          callback(wrapResult(output, error));
         }];
       }];
     }
@@ -558,8 +587,8 @@ void WTPHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<WTPHos
         NSArray *args = message;
         NSString *arg_uuidString = GetNullableObjectAtIndex(args, 0);
         NSString *arg_key = GetNullableObjectAtIndex(args, 1);
-        [api sendDTMF:arg_uuidString key:arg_key completion:^(FlutterError *_Nullable error) {
-          callback(wrapResult(nil, error));
+        [api sendDTMF:arg_uuidString key:arg_key completion:^(WTPCallRequestError *_Nullable output, FlutterError *_Nullable error) {
+          callback(wrapResult(output, error));
         }];
       }];
     }

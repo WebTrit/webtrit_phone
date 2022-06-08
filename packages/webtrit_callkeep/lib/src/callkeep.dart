@@ -26,6 +26,15 @@ enum CallkeepIncomingCallError {
   filteredByBlockList,
 }
 
+enum CallkeepCallRequestError {
+  unknown,
+  unentitled,
+  unknownCallUuid,
+  callUuidAlreadyExists,
+  maximumCallGroupsReached,
+  internal,
+}
+
 class Callkeep {
   static final _instance = Callkeep._();
 
@@ -93,28 +102,31 @@ class Callkeep {
     return _api.reportEndCall(uuid.toString(), PEndCallReason(value: reason.toPigeon()));
   }
 
-  Future<void> startCall(UuidValue uuid, CallkeepHandle handle, String? displayNameOrContactIdentifier, bool video) {
-    return _api.startCall(uuid.toString(), handle.toPigeon(), displayNameOrContactIdentifier, video);
+  Future<CallkeepCallRequestError?> startCall(
+      UuidValue uuid, CallkeepHandle handle, String? displayNameOrContactIdentifier, bool video) {
+    return _api
+        .startCall(uuid.toString(), handle.toPigeon(), displayNameOrContactIdentifier, video)
+        .then((value) => value?.value.toCallkeep());
   }
 
-  Future<void> answerCall(UuidValue uuid) {
-    return _api.answerCall(uuid.toString());
+  Future<CallkeepCallRequestError?> answerCall(UuidValue uuid) {
+    return _api.answerCall(uuid.toString()).then((value) => value?.value.toCallkeep());
   }
 
-  Future<void> endCall(UuidValue uuid) {
-    return _api.endCall(uuid.toString());
+  Future<CallkeepCallRequestError?> endCall(UuidValue uuid) {
+    return _api.endCall(uuid.toString()).then((value) => value?.value.toCallkeep());
   }
 
-  Future<void> setHeld(UuidValue uuid, bool onHold) {
-    return _api.setHeld(uuid.toString(), onHold);
+  Future<CallkeepCallRequestError?> setHeld(UuidValue uuid, bool onHold) {
+    return _api.setHeld(uuid.toString(), onHold).then((value) => value?.value.toCallkeep());
   }
 
-  Future<void> setMuted(UuidValue uuid, bool muted) {
-    return _api.setMuted(uuid.toString(), muted);
+  Future<CallkeepCallRequestError?> setMuted(UuidValue uuid, bool muted) {
+    return _api.setMuted(uuid.toString(), muted).then((value) => value?.value.toCallkeep());
   }
 
-  Future<void> sendDTMF(UuidValue uuid, String key) {
-    return _api.sendDTMF(uuid.toString(), key);
+  Future<CallkeepCallRequestError?> sendDTMF(UuidValue uuid, String key) {
+    return _api.sendDTMF(uuid.toString(), key).then((value) => value?.value.toCallkeep());
   }
 }
 

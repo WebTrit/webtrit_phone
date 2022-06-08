@@ -17,6 +17,8 @@ extern WTPHandleTypeEnum INPersonHandleTypeToPigeon(INPersonHandleType value);
 
 extern WTPIncomingCallErrorEnum CXErrorCodeIncomingCallErrorToPigeon(CXErrorCodeIncomingCallError value);
 
+extern WTPCallRequestErrorEnum CXErrorCodeRequestTransactionErrorToPigeon(CXErrorCodeRequestTransactionError value);
+
 extern CXHandleType CXHandleTypeFromString(NSString *value);
 
 extern WTPHandleTypeEnum CXHandleTypeToPigeon(CXHandleType value);

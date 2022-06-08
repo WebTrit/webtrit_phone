@@ -42,6 +42,25 @@ extension PIncomingCallErrorEnumConverter on PIncomingCallErrorEnum {
   }
 }
 
+extension PCallRequestErrorEnumConverter on PCallRequestErrorEnum {
+  CallkeepCallRequestError toCallkeep() {
+    switch (this) {
+      case PCallRequestErrorEnum.unknown:
+        return CallkeepCallRequestError.unknown;
+      case PCallRequestErrorEnum.unentitled:
+        return CallkeepCallRequestError.unentitled;
+      case PCallRequestErrorEnum.unknownCallUuid:
+        return CallkeepCallRequestError.unknownCallUuid;
+      case PCallRequestErrorEnum.callUuidAlreadyExists:
+        return CallkeepCallRequestError.callUuidAlreadyExists;
+      case PCallRequestErrorEnum.maximumCallGroupsReached:
+        return CallkeepCallRequestError.maximumCallGroupsReached;
+      case PCallRequestErrorEnum.internal:
+        return CallkeepCallRequestError.internal;
+    }
+  }
+}
+
 extension CallkeepHandleTypeConverter on CallkeepHandleType {
   PHandleTypeEnum toPigeon() {
     switch (this) {

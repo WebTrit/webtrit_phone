@@ -31,11 +31,21 @@ typedef NS_ENUM(NSUInteger, WTPIncomingCallErrorEnum) {
   WTPIncomingCallErrorEnumFilteredByBlockList = 4,
 };
 
+typedef NS_ENUM(NSUInteger, WTPCallRequestErrorEnum) {
+  WTPCallRequestErrorEnumUnknown = 0,
+  WTPCallRequestErrorEnumUnentitled = 1,
+  WTPCallRequestErrorEnumUnknownCallUuid = 2,
+  WTPCallRequestErrorEnumCallUuidAlreadyExists = 3,
+  WTPCallRequestErrorEnumMaximumCallGroupsReached = 4,
+  WTPCallRequestErrorEnumInternal = 5,
+};
+
 @class WTPIOSOptions;
 @class WTPOptions;
 @class WTPHandle;
 @class WTPEndCallReason;
 @class WTPIncomingCallError;
+@class WTPCallRequestError;
 
 @interface WTPIOSOptions : NSObject
 /// `init` unavailable to enforce nonnull fields, see the `make` class method.
@@ -92,6 +102,13 @@ typedef NS_ENUM(NSUInteger, WTPIncomingCallErrorEnum) {
 @property(nonatomic, assign) WTPIncomingCallErrorEnum value;
 @end
 
+@interface WTPCallRequestError : NSObject
+/// `init` unavailable to enforce nonnull fields, see the `make` class method.
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)makeWithValue:(WTPCallRequestErrorEnum)value;
+@property(nonatomic, assign) WTPCallRequestErrorEnum value;
+@end
+
 /// The codec used by WTPHostApi.
 NSObject<FlutterMessageCodec> *WTPHostApiGetCodec(void);
 
@@ -105,12 +122,12 @@ NSObject<FlutterMessageCodec> *WTPHostApiGetCodec(void);
 - (void)reportConnectedOutgoingCall:(NSString *)uuidString completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)reportUpdateCall:(NSString *)uuidString handle:(nullable WTPHandle *)handle displayName:(nullable NSString *)displayName hasVideo:(nullable NSNumber *)hasVideo completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)reportEndCall:(NSString *)uuidString reason:(WTPEndCallReason *)reason completion:(void(^)(FlutterError *_Nullable))completion;
-- (void)startCall:(NSString *)uuidString handle:(WTPHandle *)handle displayNameOrContactIdentifier:(nullable NSString *)displayNameOrContactIdentifier video:(NSNumber *)video completion:(void(^)(FlutterError *_Nullable))completion;
-- (void)answerCall:(NSString *)uuidString completion:(void(^)(FlutterError *_Nullable))completion;
-- (void)endCall:(NSString *)uuidString completion:(void(^)(FlutterError *_Nullable))completion;
-- (void)setHeld:(NSString *)uuidString onHold:(NSNumber *)onHold completion:(void(^)(FlutterError *_Nullable))completion;
-- (void)setMuted:(NSString *)uuidString muted:(NSNumber *)muted completion:(void(^)(FlutterError *_Nullable))completion;
-- (void)sendDTMF:(NSString *)uuidString key:(NSString *)key completion:(void(^)(FlutterError *_Nullable))completion;
+- (void)startCall:(NSString *)uuidString handle:(WTPHandle *)handle displayNameOrContactIdentifier:(nullable NSString *)displayNameOrContactIdentifier video:(NSNumber *)video completion:(void(^)(WTPCallRequestError *_Nullable, FlutterError *_Nullable))completion;
+- (void)answerCall:(NSString *)uuidString completion:(void(^)(WTPCallRequestError *_Nullable, FlutterError *_Nullable))completion;
+- (void)endCall:(NSString *)uuidString completion:(void(^)(WTPCallRequestError *_Nullable, FlutterError *_Nullable))completion;
+- (void)setHeld:(NSString *)uuidString onHold:(NSNumber *)onHold completion:(void(^)(WTPCallRequestError *_Nullable, FlutterError *_Nullable))completion;
+- (void)setMuted:(NSString *)uuidString muted:(NSNumber *)muted completion:(void(^)(WTPCallRequestError *_Nullable, FlutterError *_Nullable))completion;
+- (void)sendDTMF:(NSString *)uuidString key:(NSString *)key completion:(void(^)(WTPCallRequestError *_Nullable, FlutterError *_Nullable))completion;
 @end
 
 extern void WTPHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<WTPHostApi> *_Nullable api);
