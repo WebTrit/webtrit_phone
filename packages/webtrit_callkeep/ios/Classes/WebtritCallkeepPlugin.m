@@ -7,6 +7,7 @@
 
 #import "Generated.h"
 #import "Converters.h"
+#import "NSUUID+v5.h"
 
 static NSString *const OptionsKey = @"WebtritCallkeepPluginOptions";
 
@@ -466,6 +467,10 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
     return;
   }
 
+  // It is crucial to use UUID version 5 (namespace name-based) based on callId to get the call UUID for reportNewIncomingCallWithUUID.
+  // Such UUID allows overcoming possible races between VoIP push and relevant signaling events.
+  NSUUID *uuid = [NSUUID makeWithName:callId namespace:[[NSUUID alloc] initWithUUIDString:NAMESPACE_OID]];
+
   CXCallUpdate *callUpdate = [[CXCallUpdate alloc] init];
   callUpdate.remoteHandle = [[CXHandle alloc] initWithType:CXHandleTypeFromString(handleType)
                                                      value:handleValue];
@@ -479,7 +484,6 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
   callUpdate.supportsUngrouping = NO;
   callUpdate.supportsHolding = YES;
   callUpdate.supportsDTMF = YES;
-  NSUUID *uuid = [NSUUID UUID];
   [_provider reportNewIncomingCallWithUUID:uuid
                                     update:callUpdate
                                 completion:^(NSError *error) {
