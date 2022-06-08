@@ -90,6 +90,11 @@ class WebtritSignalingClient {
 
     _stopKeepaliveTimer();
 
+    for (final transaction in _transactions.values) {
+      transaction.terminateByDisconnect(code, reason);
+    }
+    _transactions.clear();
+
     // to prevent call disconnect handler if websocket closed this call
     _wsSubscription?.onDone(null);
 
@@ -119,8 +124,9 @@ class WebtritSignalingClient {
     _stopKeepaliveTimer();
 
     for (final transaction in _transactions.values) {
-      transaction.terminate(closeCode, closeReason);
+      transaction.terminateByDisconnect(closeCode, closeReason);
     }
+    _transactions.clear();
 
     _onDisconnect(closeCode, closeReason);
   }

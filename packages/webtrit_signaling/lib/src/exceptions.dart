@@ -1,4 +1,4 @@
-class WebtritSignalingException implements Exception {}
+abstract class WebtritSignalingException implements Exception {}
 
 class WebtritSignalingAlreadyConnectException implements Exception {
   const WebtritSignalingAlreadyConnectException();
@@ -34,11 +34,22 @@ class WebtritSignalingTransactionUnavailableException implements WebtritSignalin
   String toString() => '$WebtritSignalingTransactionUnavailableException transactionId: $transactionId';
 }
 
-class WebtritSignalingTerminateException implements WebtritSignalingException {
-  const WebtritSignalingTerminateException([this.closeCode, this.closeReason]);
+abstract class WebtritSignalingTerminateException implements WebtritSignalingException {
+  const WebtritSignalingTerminateException();
+}
+
+class WebtritSignalingTerminateByDisconnectException implements WebtritSignalingTerminateException {
+  const WebtritSignalingTerminateByDisconnectException(this.closeCode, this.closeReason);
 
   final int? closeCode;
   final String? closeReason;
+}
+
+class WebtritSignalingTerminateByErrorException implements WebtritSignalingTerminateException {
+  const WebtritSignalingTerminateByErrorException(this.error, this.stackTrace);
+
+  final dynamic error;
+  final StackTrace stackTrace;
 }
 
 class WebtritSignalingTimeoutException implements WebtritSignalingException {}

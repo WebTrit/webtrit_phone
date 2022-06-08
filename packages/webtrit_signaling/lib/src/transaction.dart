@@ -26,9 +26,14 @@ class Transaction {
     _completer.complete(responseMessage);
   }
 
-  void terminate([int? closeCode, String? closeReason]) {
+  void terminateByDisconnect([int? closeCode, String? closeReason]) {
     _timer.cancel();
-    _completer.completeError(WebtritSignalingTerminateException());
+    _completer.completeError(WebtritSignalingTerminateByDisconnectException(closeCode, closeReason));
+  }
+
+  void terminateByError(dynamic error, StackTrace stackTrace) {
+    _timer.cancel();
+    _completer.completeError(WebtritSignalingTerminateByErrorException(error, stackTrace));
   }
 
   void _onTimeout() {
