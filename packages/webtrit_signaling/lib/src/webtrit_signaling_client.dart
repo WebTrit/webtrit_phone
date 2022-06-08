@@ -86,6 +86,10 @@ class WebtritSignalingClient {
   }
 
   Future<void> disconnect([int? code, String? reason]) {
+    if (_ws.closeCode != null) {
+      _logger.fine('already disconnected code: ${_ws.closeCode} reason: ${_ws.closeReason}');
+      return Future.value();
+    }
     _logger.fine('disconnect code: $code reason: $reason');
 
     _stopKeepaliveTimer();
