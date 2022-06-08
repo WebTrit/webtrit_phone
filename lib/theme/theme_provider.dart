@@ -261,6 +261,7 @@ class ThemeProvider extends InheritedWidget {
   }
 
   ThemeData? dark([Color? targetColor]) {
+    // ignore: unused_local_variable
     final colorScheme = colors(Brightness.dark, targetColor);
     // TODO: Not implemented yet
     return null;
