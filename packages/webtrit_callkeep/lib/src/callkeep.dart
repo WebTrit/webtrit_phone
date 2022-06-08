@@ -24,6 +24,7 @@ enum CallkeepIncomingCallError {
   callUuidAlreadyExists,
   filteredByDoNotDisturb,
   filteredByBlockList,
+  internal,
 }
 
 enum CallkeepCallRequestError {

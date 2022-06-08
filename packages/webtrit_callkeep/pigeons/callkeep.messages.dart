@@ -66,6 +66,7 @@ enum PIncomingCallErrorEnum {
   callUuidAlreadyExists,
   filteredByDoNotDisturb,
   filteredByBlockList,
+  internal,
 }
 
 // TODO: See https://github.com/flutter/flutter/issues/87307

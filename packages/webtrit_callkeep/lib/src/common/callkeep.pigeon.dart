@@ -29,6 +29,7 @@ enum PIncomingCallErrorEnum {
   callUuidAlreadyExists,
   filteredByDoNotDisturb,
   filteredByBlockList,
+  internal,
 }
 
 enum PCallRequestErrorEnum {

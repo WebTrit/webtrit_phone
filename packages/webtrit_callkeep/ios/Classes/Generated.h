@@ -29,6 +29,7 @@ typedef NS_ENUM(NSUInteger, WTPIncomingCallErrorEnum) {
   WTPIncomingCallErrorEnumCallUuidAlreadyExists = 2,
   WTPIncomingCallErrorEnumFilteredByDoNotDisturb = 3,
   WTPIncomingCallErrorEnumFilteredByBlockList = 4,
+  WTPIncomingCallErrorEnumInternal = 5,
 };
 
 typedef NS_ENUM(NSUInteger, WTPCallRequestErrorEnum) {

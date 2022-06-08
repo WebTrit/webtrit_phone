@@ -52,7 +52,8 @@ public class Generated {
     unentitled(1),
     callUuidAlreadyExists(2),
     filteredByDoNotDisturb(3),
-    filteredByBlockList(4);
+    filteredByBlockList(4),
+    internal(5);
 
     private int index;
     private PIncomingCallErrorEnum(final int index) {

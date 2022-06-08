@@ -38,6 +38,8 @@ extension PIncomingCallErrorEnumConverter on PIncomingCallErrorEnum {
         return CallkeepIncomingCallError.filteredByDoNotDisturb;
       case PIncomingCallErrorEnum.filteredByBlockList:
         return CallkeepIncomingCallError.filteredByBlockList;
+      case PIncomingCallErrorEnum.internal:
+        return CallkeepIncomingCallError.internal;
     }
   }
 }

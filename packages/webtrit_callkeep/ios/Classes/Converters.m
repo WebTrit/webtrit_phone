@@ -49,7 +49,7 @@ WTPIncomingCallErrorEnum CXErrorCodeIncomingCallErrorToPigeon(CXErrorCodeIncomin
     case CXErrorCodeIncomingCallErrorFilteredByBlockList:
       return WTPIncomingCallErrorEnumFilteredByBlockList;
     default:
-      return WTPIncomingCallErrorEnumUnknown;
+      return WTPIncomingCallErrorEnumInternal;
   }
 }
 

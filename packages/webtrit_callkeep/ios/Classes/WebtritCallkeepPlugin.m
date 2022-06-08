@@ -194,8 +194,12 @@ static NSString *const OptionsKey = @"WebtritCallkeepPluginOptions";
                                 completion:^(NSError *error) {
                                   if (error == nil) {
                                     completion(nil, nil);
-                                  } else {
+                                  } else if ([error.domain isEqualToString:CXErrorDomainIncomingCall]) {
                                     completion([WTPIncomingCallError makeWithValue:CXErrorCodeIncomingCallErrorToPigeon((CXErrorCodeIncomingCallError) error.code)], nil);
+                                  } else {
+                                    completion(nil, [FlutterError errorWithCode:error.domain
+                                                                        message:[error description]
+                                                                        details:nil]);
                                   }
                                 }];
 }
@@ -491,7 +495,12 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
                                 completion:^(NSError *error) {
                                   WTPIncomingCallError *incomingCallError = nil;
                                   if (error != nil) {
-                                    incomingCallError = [WTPIncomingCallError makeWithValue:CXErrorCodeIncomingCallErrorToPigeon((CXErrorCodeIncomingCallError) error.code)];
+                                    if ([error.domain isEqualToString:CXErrorDomainIncomingCall]) {
+                                      incomingCallError = [WTPIncomingCallError makeWithValue:CXErrorCodeIncomingCallErrorToPigeon((CXErrorCodeIncomingCallError) error.code)];
+                                    } else {
+                                      NSLog(@"[Callkeep][didReceiveIncomingPushWithPayloadForPushTypeVoIP:withCompletionHandler:][reportNewIncomingCallWithUUID] error = %@", error);
+                                      incomingCallError = [WTPIncomingCallError makeWithValue:WTPIncomingCallErrorEnumInternal];
+                                    }
                                   }
 
                                   [self->_delegateFlutterApi didPushIncomingCallHandle:[callUpdate.remoteHandle toPigeon]
