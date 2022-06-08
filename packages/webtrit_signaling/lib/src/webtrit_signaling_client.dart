@@ -200,13 +200,9 @@ class WebtritSignalingClient {
   }
 
   void _addData(dynamic data) {
-    final ws = _ws;
-    if (ws != null) {
-      ws.add(data);
-      _logger.finer(() => '_addData add: $data');
-    } else {
-      _logger.finer(() => '_addData skip: $data');
-    }
+    _logger.finer(() => '_addData add: $data');
+
+    _ws.add(data);
   }
 
   //
