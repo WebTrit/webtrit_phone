@@ -32,20 +32,16 @@ class ContactsRepository {
 
   Future<List<ContactPhone>> getContactPhones(Contact contact) {
     final contactId = contact.id;
-    if (contactId == null) {
-      return Future.value(const []); // TODO maybe error
-    } else {
-      return appDatabase.contactPhonesDao
-          .getContactPhonesExtByContactId(contactId)
-          .then((contactPhoneDatas) => contactPhoneDatas
-              .map((contactPhoneDataWithFavoriteData) => ContactPhone(
-                    id: contactPhoneDataWithFavoriteData.contactPhoneData.id,
-                    number: contactPhoneDataWithFavoriteData.contactPhoneData.number,
-                    label: contactPhoneDataWithFavoriteData.contactPhoneData.label,
-                    favorite: contactPhoneDataWithFavoriteData.favoriteData != null,
-                  ))
-              .toList());
-    }
+    return appDatabase.contactPhonesDao
+        .getContactPhonesExtByContactId(contactId)
+        .then((contactPhoneDatas) => contactPhoneDatas
+            .map((contactPhoneDataWithFavoriteData) => ContactPhone(
+                  id: contactPhoneDataWithFavoriteData.contactPhoneData.id,
+                  number: contactPhoneDataWithFavoriteData.contactPhoneData.number,
+                  label: contactPhoneDataWithFavoriteData.contactPhoneData.label,
+                  favorite: contactPhoneDataWithFavoriteData.favoriteData != null,
+                ))
+            .toList());
   }
 
   Future<int> addContactPhoneToFavorites(ContactPhone contactPhone) {
