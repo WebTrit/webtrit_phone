@@ -57,7 +57,7 @@ class RecentsScaffoldState extends State<RecentsScaffold> with SingleTickerProvi
     return Scaffold(
       appBar: MainAppBar(
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(_tabHeight),
+          preferredSize: const Size.fromHeight(_tabHeight),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, _paddingGap),
             child: ExtTabBar(
