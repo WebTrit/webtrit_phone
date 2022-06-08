@@ -1,13 +1,13 @@
 abstract class WebtritSignalingException implements Exception {}
 
-class WebtritSignalingAlreadyConnectException implements Exception {
+class WebtritSignalingAlreadyConnectException implements WebtritSignalingException {
   const WebtritSignalingAlreadyConnectException();
 
   @override
   String toString() => '$WebtritSignalingAlreadyConnectException';
 }
 
-class WebtritSignalingUnknownMessageException implements Exception {
+class WebtritSignalingUnknownMessageException implements WebtritSignalingException {
   const WebtritSignalingUnknownMessageException(this.message);
 
   final Map<String, dynamic> message;
@@ -16,7 +16,7 @@ class WebtritSignalingUnknownMessageException implements Exception {
   String toString() => '$WebtritSignalingUnknownMessageException message: $message';
 }
 
-class WebtritSignalingResponseException implements Exception {
+class WebtritSignalingResponseException implements WebtritSignalingException {
   const WebtritSignalingResponseException(this.response);
 
   final Map<String, dynamic> response;
