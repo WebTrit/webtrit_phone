@@ -105,10 +105,20 @@ class RecentsScaffoldState extends State<RecentsScaffold> with SingleTickerProvi
                     context.goNamed('recent', extra: recent);
                   },
                   onTap: () {
-                    context.read<CallBloc>().add(CallOutgoingStarted(number: recent.number, video: recent.video));
+                    final callBloc = context.read<CallBloc>();
+                    callBloc.add(CallControlEvent.started(
+                      number: recent.number,
+                      displayName: recent.name,
+                      video: recent.video,
+                    ));
                   },
                   onLongPress: () {
-                    context.read<CallBloc>().add(CallOutgoingStarted(number: recent.number, video: !recent.video));
+                    final callBloc = context.read<CallBloc>();
+                    callBloc.add(CallControlEvent.started(
+                      number: recent.number,
+                      displayName: recent.name,
+                      video: !recent.video,
+                    ));
                   },
                   onDeleted: (recent) {
                     context.showSnackBar(context.l10n.recents_snackBar_deleted(recent.name));

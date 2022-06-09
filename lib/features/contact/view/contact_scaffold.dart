@@ -54,11 +54,21 @@ class ContactScaffold extends StatelessWidget {
                       }
                     },
                     onAudioPressed: () {
-                      context.read<CallBloc>().add(CallOutgoingStarted(number: phone.number, video: false));
+                      final callBloc = context.read<CallBloc>();
+                      callBloc.add(CallControlEvent.started(
+                        number: phone.number,
+                        displayName: contact.name,
+                        video: false,
+                      ));
                       context.pop();
                     },
                     onVideoPressed: () {
-                      context.read<CallBloc>().add(CallOutgoingStarted(number: phone.number, video: true));
+                      final callBloc = context.read<CallBloc>();
+                      callBloc.add(CallControlEvent.started(
+                        number: phone.number,
+                        displayName: contact.name,
+                        video: true,
+                      ));
                       context.pop();
                     },
                   )

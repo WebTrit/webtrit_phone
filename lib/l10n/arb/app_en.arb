@@ -7,6 +7,9 @@
   "alertDialogActions_yes": "Yes",
   "@alertDialogActions_yes": {
   },
+  "alertDialogActions_ok": "Ok",
+  "@alertDialogActions_ok": {
+  },
 
   "notifications_errorSnackBar_callNotIdle": "You are offline – please try to re-register",
   "@notifications_errorSnackBar_callNotIdle": {
@@ -14,6 +17,10 @@
 
   "notifications_errorSnackBar_callConnect": "Connect to core is invalid – tring to re-connect",
   "@notifications_errorSnackBar_callConnect": {
+  },
+
+  "call_FailureAcknowledgeDialog_title": "Failure",
+  "@call_FailureAcknowledgeDialog_title": {
   },
 
   "favorites_BodyCenter_failure": "Failure to get favorites",

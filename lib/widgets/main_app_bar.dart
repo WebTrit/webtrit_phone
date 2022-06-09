@@ -23,7 +23,7 @@ class MainAppBar extends AppBar {
                   decoration: ShapeDecoration(
                     shape: CircleBorder(
                       side: BorderSide(
-                        color: state is ReadyCallStateMixin ? colorScheme.tertiary : colorScheme.error,
+                        color: state.signalingClientStatus.isReady ? colorScheme.tertiary : colorScheme.error,
                       ),
                     ),
                   ),

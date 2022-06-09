@@ -14,12 +14,12 @@ import '../call.dart';
 class CallActiveScaffold extends StatefulWidget {
   const CallActiveScaffold({
     Key? key,
-    required this.state,
+    required this.activeCall,
     required this.localRenderer,
     required this.remoteRenderer,
   }) : super(key: key);
 
-  final ActiveCallState state;
+  final ActiveCall activeCall;
   final RTCVideoRenderer localRenderer;
   final RTCVideoRenderer remoteRenderer;
 
@@ -45,7 +45,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   }
 
   void _onDurationTimer(Timer timer) {
-    final acceptedTime = widget.state.acceptedTime;
+    final acceptedTime = widget.activeCall.acceptedTime;
     if (acceptedTime != null) {
       setState(() {
         duration = DateTime.now().difference(acceptedTime);
@@ -55,9 +55,9 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    final acceptActionEnabled = widget.state.isIncoming && widget.state.wasAccepted != true;
-    final direction = widget.state.isIncoming ? 'Incoming call from' : 'Outgoing call to';
-    final username = widget.state.number;
+    final acceptActionEnabled = widget.activeCall.isIncoming && widget.activeCall.wasAccepted != true;
+    final direction = widget.activeCall.isIncoming ? 'Incoming call from' : 'Outgoing call to';
+    final username = widget.activeCall.displayName ?? widget.activeCall.handle.value;
     final duration = this.duration;
 
     final themeData = Theme.of(context);
@@ -65,7 +65,6 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     final onTabGradient = themeData.colorScheme.background;
     final textTheme = themeData.textTheme;
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
-    EdgeInsets padding = mediaQueryData.padding;
     return Scaffold(
       body: OrientationBuilder(
         builder: (context, orientation) {
@@ -150,7 +149,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                   child: CallActions(
                     onCameraPressed: _cameraPressed,
                     onMicrophonePressed: _microphonePressed,
-                    speakerphoneEnabledByDefault: widget.state.video,
+                    speakerphoneEnabledByDefault: widget.activeCall.video,
                     onSpeakerphonePressed: _speakerphonePressed,
                     onHangupPressed: _hangup,
                     onAcceptPressed: acceptActionEnabled ? _accept : null,
@@ -169,26 +168,26 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
       frontCamera = !frontCamera;
     });
 
-    context.read<CallBloc>().add(const CallCameraSwitched());
+    context.read<CallBloc>().add(CallControlEvent.cameraSwitched(widget.activeCall.callId.uuid));
   }
 
   void _cameraPressed(enabled) {
-    context.read<CallBloc>().add(CallCameraEnabled(enabled));
+    context.read<CallBloc>().add(CallControlEvent.cameraEnabled(widget.activeCall.callId.uuid, enabled));
   }
 
   void _microphonePressed(enabled) {
-    context.read<CallBloc>().add(CallMicrophoneEnabled(enabled));
+    context.read<CallBloc>().add(CallControlEvent.setMuted(widget.activeCall.callId.uuid, !enabled));
   }
 
   void _speakerphonePressed(enabled) {
-    context.read<CallBloc>().add(CallSpeakerphoneEnabled(enabled));
+    context.read<CallBloc>().add(CallControlEvent.speakerphoneEnabled(widget.activeCall.callId.uuid, enabled));
   }
 
   void _hangup() {
-    context.read<CallBloc>().add(const CallLocalHungUp(reason: 'some local reason'));
+    context.read<CallBloc>().add(CallControlEvent.ended(widget.activeCall.callId.uuid));
   }
 
   void _accept() {
-    context.read<CallBloc>().add(const CallIncomingAccepted());
+    context.read<CallBloc>().add(CallControlEvent.answered(widget.activeCall.callId.uuid));
   }
 }

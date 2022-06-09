@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
+
+import '/widgets/widgets.dart';
 
 import '../call.dart';
 
@@ -50,44 +53,55 @@ class _CallScreenState extends State<CallScreen> {
     return FutureBuilder(
       future: _renderersInitialized,
       builder: (context, AsyncSnapshot<List<void>> snapshot) {
-        return snapshot.connectionState == ConnectionState.done
-            ? BlocBuilder<CallBloc, CallState>(
-                // ignore: missing_return
-                builder: (context, state) {
-                  if (state is IdleCallState) {
-                    _localRenderer.srcObject = null;
-                    _remoteRenderer.srcObject = null;
+        if (snapshot.connectionState == ConnectionState.done) {
+          final callBloc = context.read<CallBloc>();
+          // assign streams of active call to handle the case
+          // when they are created before renderers finish the initialization
+          if (callBloc.state.isActive) {
+            final activeCall = callBloc.state.activeCall;
+            _localRenderer.srcObject = activeCall.localStream;
+            _remoteRenderer.srcObject = activeCall.remoteStream;
+          }
+          return BlocConsumer<CallBloc, CallState>(
+            bloc: callBloc,
+            listener: (context, state) async {
+              if (state.isActive) {
+                final activeCall = state.activeCall;
+                _localRenderer.srcObject = activeCall.localStream;
+                _remoteRenderer.srcObject = activeCall.remoteStream;
 
-                    return Scaffold(
-                      body: Container(
-                        color: Colors.black,
-                      ),
-                    );
-                  }
-                  if (state is ActiveCallState) {
-                    _localRenderer.srcObject = state.localStream;
-                    _remoteRenderer.srcObject = state.remoteStream;
-
-                    return CallActiveScaffold(
-                      state: state,
-                      localRenderer: _localRenderer,
-                      remoteRenderer: _remoteRenderer,
-                    );
-                  }
-                  if (state is FailureCallState) {
-                    return CallFailureScaffold(state: state);
-                  }
-                  throw StateError(''); // TODO fix if logic
-                },
-              )
-            : Scaffold(
-                body: Container(
-                  color: Colors.black,
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
-              );
+                final activeCallFailure = activeCall.failure;
+                if (activeCallFailure != null) {
+                  context.read<CallBloc>().add(CallControlEvent.failureApproved(activeCall.callId.uuid));
+                  AcknowledgeDialog.show(
+                    context,
+                    title: context.l10n.call_FailureAcknowledgeDialog_title,
+                    content: activeCallFailure.toString(),
+                  );
+                }
+              } else {
+                _localRenderer.srcObject = null;
+                _remoteRenderer.srcObject = null;
+              }
+            },
+            builder: (context, state) {
+              if (state.isActive) {
+                final activeCall = state.activeCall;
+                return CallActiveScaffold(
+                  activeCall: activeCall,
+                  localRenderer: _localRenderer,
+                  remoteRenderer: _remoteRenderer,
+                );
+              } else {
+                return const CallInitScaffold();
+              }
+            },
+          );
+        } else {
+          return const CallInitScaffold(
+            showProgressIndicator: true,
+          );
+        }
       },
     );
   }

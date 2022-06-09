@@ -1,197 +1,174 @@
 part of 'call_bloc.dart';
 
-abstract class CallEvent extends Equatable {
+abstract class CallEvent {
   const CallEvent();
-
-  @override
-  List<Object?> get props => [];
 }
 
 class CallStarted extends CallEvent {
   const CallStarted();
 }
 
-abstract class _SignalingClientEvent extends CallEvent {
-  const _SignalingClientEvent();
+@Freezed(copyWith: false)
+class _AppLifecycleStateChanged with _$_AppLifecycleStateChanged implements CallEvent {
+  const factory _AppLifecycleStateChanged(AppLifecycleState state) = __AppLifecycleStateChanged;
 }
 
-class _SignalingClientConnectInitiated extends _SignalingClientEvent {
-  const _SignalingClientConnectInitiated();
+@Freezed(copyWith: false)
+class _ConnectivityResultChanged with _$_ConnectivityResultChanged implements CallEvent {
+  const factory _ConnectivityResultChanged(ConnectivityResult result) = __ConnectivityResultChanged;
 }
 
-class _SignalingClientDisconnectInitiated extends _SignalingClientEvent {
-  const _SignalingClientDisconnectInitiated();
+// signaling client events
+
+@Freezed(copyWith: false)
+class _SignalingClientEvent with _$_SignalingClientEvent implements CallEvent {
+  const factory _SignalingClientEvent.connectInitiated() = _SignalingClientEventConnectInitiated;
+
+  const factory _SignalingClientEvent.disconnectInitiated() = _SignalingClientEventDisconnectInitiated;
 }
 
-class CallIncomingReceived extends CallEvent {
-  final String callId;
-  final String username;
-  final Map<String, dynamic>? jsepData;
+// call signaling events
 
-  const CallIncomingReceived({
-    required this.callId,
-    required this.username,
-    this.jsepData,
-  });
+@Freezed(copyWith: false)
+class _CallSignalingEvent with _$_CallSignalingEvent implements CallEvent {
+  const factory _CallSignalingEvent.incoming({
+    required CallIdValue callId,
+    required String callee,
+    required String caller,
+    String? callerDisplayName,
+    JsepValue? jsep,
+  }) = _CallSignalingEventIncoming;
 
-  @override
-  List<Object?> get props => [callId, username, jsepData];
+  const factory _CallSignalingEvent.answered({
+    required CallIdValue callId,
+    required String callee,
+    JsepValue? jsep,
+  }) = _CallSignalingEventAnswered;
 
-  @override
-  String toString() => '$runtimeType { callId: $callId, username: $username, with jsep: ${jsepData != null} }';
-}
-
-class CallIncomingAccepted extends CallEvent {
-  const CallIncomingAccepted();
-}
-
-class CallOutgoingStarted extends CallEvent {
-  const CallOutgoingStarted({
-    required this.number,
-    required this.video,
-  });
-
-  final String number;
-  final bool video;
-
-  @override
-  List<Object?> get props => [
-        number,
-        video,
-      ];
-
-  @override
-  String toString() => '$runtimeType { number: $number, video: $video }';
-}
-
-class CallOutgoingAccepted extends CallEvent {
-  final String username;
-  final Map<String, dynamic>? jsepData;
-
-  const CallOutgoingAccepted({
-    required this.username,
-    this.jsepData,
-  });
-
-  @override
-  List<Object?> get props => [username, jsepData];
-
-  @override
-  String toString() => '$runtimeType { username: $username, with jsep: ${jsepData != null} }';
-}
-
-abstract class CallHungUp extends CallEvent {
-  final String? reason;
-
-  const CallHungUp({
-    required this.reason,
-  });
-
-  @override
-  List<Object?> get props => [reason];
-
-  @override
-  String toString() => '$runtimeType { reason: $reason }';
-}
-
-class CallRemoteHungUp extends CallHungUp {
-  const CallRemoteHungUp({
-    required String? reason,
-  }) : super(reason: reason);
-}
-
-class CallLocalHungUp extends CallHungUp {
-  const CallLocalHungUp({
+  const factory _CallSignalingEvent.hangup({
+    required CallIdValue callId,
+    required int code,
     required String reason,
-  }) : super(reason: reason);
+  }) = _CallSignalingEventHangup;
 }
 
-class _RemoteStreamAdded extends CallEvent {
-  final MediaStream stream;
+// call push events
 
-  const _RemoteStreamAdded({
-    required this.stream,
-  });
-
-  @override
-  List<Object?> get props => [stream];
+@Freezed(copyWith: false)
+class _CallPushEvent with _$_CallPushEvent implements CallEvent {
+  const factory _CallPushEvent.incoming({
+    required CallIdValue callId,
+    required CallkeepHandle handle,
+    String? displayName,
+    required bool video,
+    CallkeepIncomingCallError? error,
+  }) = _CallPushEventIncoming;
 }
 
-class _RemoteStreamRemoved extends CallEvent {
-  final MediaStream stream;
+// call control events
 
-  const _RemoteStreamRemoved({
-    required this.stream,
-  });
+@Freezed(copyWith: false)
+class CallControlEvent with _$CallControlEvent implements CallEvent {
+  @Assert('!(generic == null && number == null && email == null)',
+      'one of generic, number or email parameters must be assign')
+  @Assert(
+      '(generic != null && number == null && email == null) ||'
+          '(generic == null && number != null && email == null) ||'
+          '(generic == null && number == null && email != null)',
+      'only one of generic, number or email parameters must be assign')
+  @With<CallControlEventStartedMixin>()
+  const factory CallControlEvent.started({
+    String? generic,
+    String? number,
+    String? email,
+    String? displayName,
+    required bool video,
+  }) = _CallControlEventStarted;
 
-  @override
-  List<Object?> get props => [stream];
+  const factory CallControlEvent.answered(UuidValue uuid) = _CallControlEventAnswered;
+
+  const factory CallControlEvent.ended(UuidValue uuid) = _CallControlEventEnded;
+
+  const factory CallControlEvent.setHeld(UuidValue uuid, bool onHold) = _CallControlEventSetHeld;
+
+  const factory CallControlEvent.setMuted(UuidValue uuid, bool muted) = _CallControlEventSetMuted;
+
+  const factory CallControlEvent.sentDTMF(UuidValue uuid, String key) = _CallControlEventSentDTMF;
+
+  const factory CallControlEvent.cameraSwitched(UuidValue uuid) = _CallControlEventCameraSwitched;
+
+  const factory CallControlEvent.cameraEnabled(UuidValue uuid, bool enabled) = _CallControlEventCameraEnabled;
+
+  const factory CallControlEvent.speakerphoneEnabled(UuidValue uuid, bool enabled) =
+      _CallControlEventSpeakerphoneEnabled;
+
+  const factory CallControlEvent.failureApproved(UuidValue uuid) = _CallControlEventFailureApproved;
 }
 
-class CallCameraSwitched extends CallEvent {
-  const CallCameraSwitched();
+mixin CallControlEventStartedMixin {
+  String? get generic;
+
+  String? get number;
+
+  String? get email;
+
+  CallkeepHandle get handle {
+    if (generic != null) {
+      return CallkeepHandle.generic(generic!);
+    } else if (number != null) {
+      return CallkeepHandle.number(number!);
+    } else if (email != null) {
+      return CallkeepHandle.email(email!);
+    } else {
+      throw StateError('one of generic, number or email parameters must be assign');
+    }
+  }
 }
 
-class CallCameraEnabled extends CallEvent {
-  final bool mode;
+// call perform events
 
-  const CallCameraEnabled(this.mode);
+@Freezed(copyWith: false)
+class _CallPerformEvent with _$_CallPerformEvent implements CallEvent {
+  _CallPerformEvent._();
 
-  @override
-  List<Object?> get props => [mode];
+  factory _CallPerformEvent.started(
+    UuidValue uuid, {
+    required CallkeepHandle handle,
+    String? displayName,
+    required bool video,
+  }) = _CallPerformEventStarted;
 
-  @override
-  String toString() => '$runtimeType($mode)';
+  factory _CallPerformEvent.answered(UuidValue uuid) = _CallPerformEventAnswered;
+
+  factory _CallPerformEvent.ended(UuidValue uuid) = _CallPerformEventEnded;
+
+  factory _CallPerformEvent.setHeld(UuidValue uuid, bool onHold) = _CallPerformEventSetHeld;
+
+  factory _CallPerformEvent.setMuted(UuidValue uuid, bool muted) = _CallPerformEventSetMuted;
+
+  factory _CallPerformEvent.sentDTMF(UuidValue uuid, String key) = _CallPerformEventSentDTMF;
+
+  final _performCompleter = Completer<bool>();
+
+  Future<bool> get future => _performCompleter.future;
+
+  void fulfill() => _performCompleter.complete(true);
+
+  void fail() => _performCompleter.complete(false);
 }
 
-class CallMicrophoneEnabled extends CallEvent {
-  final bool mode;
+// peer connection events
 
-  const CallMicrophoneEnabled(this.mode);
+@Freezed(copyWith: false)
+class _PeerConnectionEvent with _$_PeerConnectionEvent implements CallEvent {
+  const factory _PeerConnectionEvent.iceGatheringStateChanged(UuidValue uuid, RTCIceGatheringState state) =
+      _PeerConnectionEventIceGatheringStateChanged;
 
-  @override
-  List<Object?> get props => [mode];
+  const factory _PeerConnectionEvent.iceCandidateIdentified(UuidValue uuid, RTCIceCandidate candidate) =
+      _PeerConnectionEventIceCandidateIdentified;
 
-  @override
-  String toString() => '$runtimeType($mode)';
-}
+  const factory _PeerConnectionEvent.streamAdded(UuidValue uuid, MediaStream stream) = _PeerConnectionEventStreamAdded;
 
-class CallSpeakerphoneEnabled extends CallEvent {
-  final bool mode;
-
-  const CallSpeakerphoneEnabled(this.mode);
-
-  @override
-  List<Object?> get props => [mode];
-
-  @override
-  String toString() => '$runtimeType($mode)';
-}
-
-class CallFailureApproved extends CallEvent {
-  const CallFailureApproved();
-}
-
-class _AppLifecycleStateChanged extends CallEvent {
-  const _AppLifecycleStateChanged(this.state);
-
-  final AppLifecycleState state;
-
-  @override
-  List<Object?> get props => [state];
-
-  @override
-  String toString() => '$runtimeType(${state.name})';
-}
-
-class _ConnectivityResultChanged extends CallEvent {
-  const _ConnectivityResultChanged(this.result);
-
-  final ConnectivityResult result;
-
-  @override
-  List<Object?> get props => [result];
-
-  @override
-  String toString() => '$runtimeType(${result.name})';
+  const factory _PeerConnectionEvent.streamRemoved(UuidValue uuid, MediaStream stream) =
+      _PeerConnectionEventStreamRemoved;
 }

@@ -32,10 +32,20 @@ class FavoritesScaffold extends StatelessWidget {
                 return FavoriteTile(
                   favorite: favorite,
                   onTap: () {
-                    context.read<CallBloc>().add(CallOutgoingStarted(number: favorite.number, video: false));
+                    final callBloc = context.read<CallBloc>();
+                    callBloc.add(CallControlEvent.started(
+                      number: favorite.number,
+                      displayName: favorite.name,
+                      video: false,
+                    ));
                   },
                   onLongPress: () {
-                    context.read<CallBloc>().add(CallOutgoingStarted(number: favorite.number, video: true));
+                    final callBloc = context.read<CallBloc>();
+                    callBloc.add(CallControlEvent.started(
+                      number: favorite.number,
+                      displayName: favorite.name,
+                      video: true,
+                    ));
                   },
                   onInfoPressed: () {
                     context.pushNamed('contact', extra: favorite.contact);

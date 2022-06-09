@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:logging/logging.dart';
 
 import '../../call/call.dart';
 
@@ -13,11 +12,11 @@ class KeypadCubit extends Cubit<KeypadState> {
 
   final CallBloc callBloc;
 
-  final _logger = Logger('$KeypadCubit');
-
   void call(String number) {
-    _logger.info('${state.video ? 'video' : 'audio'} call to [$number]');
-    callBloc.add(CallOutgoingStarted(number: number, video: state.video));
+    callBloc.add(CallControlEvent.started(
+      number: number,
+      video: state.video,
+    ));
   }
 
   void callTypeSiwtch() {
