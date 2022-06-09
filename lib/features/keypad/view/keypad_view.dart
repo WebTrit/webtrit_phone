@@ -95,7 +95,7 @@ class KeypadViewState extends State<KeypadView> {
   }
 
   void _onCallLongPress() {
-    context.read<KeypadCubit>().callTypeSiwtch();
+    context.read<KeypadCubit>().callTypeSwitch();
   }
 
   void _onKeypadPressed(keyText) {

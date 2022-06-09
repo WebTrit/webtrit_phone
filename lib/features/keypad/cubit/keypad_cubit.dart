@@ -19,7 +19,7 @@ class KeypadCubit extends Cubit<KeypadState> {
     ));
   }
 
-  void callTypeSiwtch() {
+  void callTypeSwitch() {
     emit(KeypadState(video: !state.video));
   }
 }
