@@ -118,6 +118,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     WidgetsBinding.instance.removeObserver(this);
 
+    _signalingClientReconnectTimer?.cancel();
     await _signalingClient?.disconnect();
 
     await _audioPlayer.dispose();
