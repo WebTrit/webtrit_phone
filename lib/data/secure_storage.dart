@@ -4,7 +4,11 @@ class SecureStorage {
   static const _kTokenKey = 'token';
   static const _kWebRegistrationInitialUrl = 'initial-url';
 
-  static const _storage = FlutterSecureStorage();
+  static const _storage = FlutterSecureStorage(
+    iOptions: IOSOptions(
+      accessibility: IOSAccessibility.first_unlock,
+    ),
+  );
 
   static final SecureStorage _instance = SecureStorage._();
 
