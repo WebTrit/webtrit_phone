@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -48,7 +49,7 @@ class FavoritesScaffold extends StatelessWidget {
                     ));
                   },
                   onInfoPressed: () {
-                    context.pushNamed('contact', extra: favorite.contact);
+                    context.pushNamed(MainRoute.contact, extra: favorite.contact);
                   },
                   onDeleted: (favorite) {
                     context.showSnackBar(context.l10n.favorites_SnackBar_deleted(favorite.name));

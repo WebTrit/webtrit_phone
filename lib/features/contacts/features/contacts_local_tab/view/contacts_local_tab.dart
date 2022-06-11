@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -52,7 +53,7 @@ class _ContactsLocal extends StatelessWidget {
                 displayName: contact.name,
                 thumbnail: contact.thumbnail,
                 onTap: () async {
-                  context.goNamed('contact', extra: contact);
+                  context.goNamed(MainRoute.contact, extra: contact);
                 },
               );
             },

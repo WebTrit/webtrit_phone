@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 
@@ -36,7 +37,7 @@ class MainAppBar extends AppBar {
                       Icons.person,
                     ),
                     onPressed: () {
-                      context.goNamed('settings');
+                      context.goNamed(MainRoute.settings);
                     },
                   ),
                 );

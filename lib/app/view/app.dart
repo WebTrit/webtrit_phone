@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
+import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
@@ -112,19 +113,19 @@ class _AppState extends State<App> {
     initialLocation: _initialRoute(widget.webRegistrationInitialUrl, widget.isRegistered),
     routes: [
       GoRoute(
-        name: 'login',
+        name: AppRoute.login,
         path: '/login',
         builder: (context, state) => const LoginPage(),
       ),
       GoRoute(
-        name: 'web-registration',
+        name: AppRoute.webRegistration,
         path: '/web-registration',
         builder: (context, state) => WebRegistrationPage(
           initialUrl: state.extra != null ? state.extra! as String : widget.webRegistrationInitialUrl!,
         ),
       ),
       GoRoute(
-        name: 'main',
+        name: AppRoute.main,
         path: '/main',
         builder: (context, state) => const Main(),
       ),

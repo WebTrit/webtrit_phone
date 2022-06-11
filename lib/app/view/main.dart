@@ -8,6 +8,7 @@ import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/app/assets.gen.dart';
+import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
@@ -145,7 +146,7 @@ class _MainState extends State<Main> {
   late final _router = GoRouter(
     routes: [
       GoRoute(
-        name: 'main',
+        name: MainRoute.main,
         path: '/',
         builder: (context, state) => BlocListener<CallBloc, CallState>(
           listenWhen: (previous, current) => previous.activeCalls.length != current.activeCalls.length,
@@ -155,7 +156,7 @@ class _MainState extends State<Main> {
             if (state.isActive) {
               if (!isCallLocation) {
                 setCallOrientations().then((_) {
-                  context.pushNamed('call');
+                  context.pushNamed(MainRoute.call);
                 });
               }
             } else {
@@ -170,7 +171,7 @@ class _MainState extends State<Main> {
         ),
         routes: [
           GoRoute(
-            name: 'call',
+            name: MainRoute.call,
             path: 'call',
             pageBuilder: (context, state) => CustomTransitionPage(
               key: state.pageKey,
@@ -184,7 +185,7 @@ class _MainState extends State<Main> {
             ),
           ),
           GoRoute(
-            name: 'settings',
+            name: MainRoute.settings,
             path: 'settings',
             pageBuilder: (context, state) => MaterialPage(
               key: state.pageKey,
@@ -193,39 +194,39 @@ class _MainState extends State<Main> {
             ),
             routes: [
               GoRoute(
-                name: 'network-settings-tab',
+                name: MainRoute.networkSettingsTab,
                 path: 'network-settings-tab',
                 builder: (context, state) => const NetworkSettingsTabScreen(),
               ),
               GoRoute(
-                name: 'about-app-tab',
+                name: MainRoute.aboutAppTab,
                 path: 'about-app-tab',
                 builder: (context, state) => const AboutAppTabScreen(),
               ),
               GoRoute(
-                name: 'help-tab',
+                name: MainRoute.helpTab,
                 path: 'help-tab',
                 builder: (context, state) => const HelpTabScreen(),
               ),
               GoRoute(
-                name: 'language-tab',
+                name: MainRoute.languageTab,
                 path: 'language-tab',
                 builder: (context, state) => const LanguageTabScreen(),
               ),
               GoRoute(
-                name: 'terms-conditions-tab',
+                name: MainRoute.termsConditionsTab,
                 path: 'terms-conditions-tab',
                 builder: (context, state) => const TermsConditionsTabScreen(),
               ),
               GoRoute(
-                name: 'log-records-console',
+                name: MainRoute.logRecordsConsole,
                 path: 'log-records-console',
                 builder: (context, state) => const LogRecordsConsoleScreen(),
               ),
             ],
           ),
           GoRoute(
-            name: 'contact',
+            name: MainRoute.contact,
             path: 'contact',
             pageBuilder: (context, state) => MaterialPage(
               key: state.pageKey,
@@ -234,7 +235,7 @@ class _MainState extends State<Main> {
             ),
           ),
           GoRoute(
-            name: 'recent',
+            name: MainRoute.recent,
             path: 'recent',
             pageBuilder: (context, state) => MaterialPage(
               key: state.pageKey,

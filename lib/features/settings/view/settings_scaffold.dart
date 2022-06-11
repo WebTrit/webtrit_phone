@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:go_router/go_router.dart';
 
+import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -77,7 +78,7 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
             title: Text(context.l10n.settings_ListViewTileTitle_networkSettings),
             trailing: const Icon(Icons.navigate_next),
             onTap: () {
-              context.goNamed('network-settings-tab');
+              context.goNamed(MainRoute.networkSettingsTab);
             },
           ),
           const ListTileSeparator(),
@@ -86,7 +87,7 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
             title: Text(context.l10n.settings_ListViewTileTitle_help),
             trailing: const Icon(Icons.navigate_next),
             onTap: () {
-              context.goNamed('help-tab');
+              context.goNamed(MainRoute.helpTab);
             },
           ),
           const ListTileSeparator(),
@@ -101,7 +102,7 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
               ],
             ),
             onTap: () {
-              context.goNamed('language-tab');
+              context.goNamed(MainRoute.languageTab);
             },
           ),
           const ListTileSeparator(),
@@ -110,7 +111,7 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
             title: Text(context.l10n.settings_ListViewTileTitle_termsAndConditions),
             trailing: const Icon(Icons.navigate_next),
             onTap: () {
-              context.goNamed('terms-conditions-tab');
+              context.goNamed(MainRoute.termsConditionsTab);
             },
           ),
           const ListTileSeparator(),
@@ -119,7 +120,7 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
             title: Text(context.l10n.settings_ListViewTileTitle_aboutApplication),
             trailing: const Icon(Icons.navigate_next),
             onTap: () {
-              context.goNamed('about-app-tab');
+              context.goNamed(MainRoute.aboutAppTab);
             },
           ),
           const ListTileSeparator(),
@@ -141,7 +142,7 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
             title: Text(context.l10n.settings_ListViewTileTitle_logRecordsConsole),
             trailing: const Icon(Icons.navigate_next),
             onTap: () {
-              context.goNamed('log-records-console');
+              context.goNamed(MainRoute.logRecordsConsole);
             },
           ),
           const ListTileSeparator(),
