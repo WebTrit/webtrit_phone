@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 import '../call.dart';
@@ -56,7 +57,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   @override
   Widget build(BuildContext context) {
     final acceptActionEnabled = widget.activeCall.isIncoming && widget.activeCall.wasAccepted != true;
-    final direction = widget.activeCall.isIncoming ? 'Incoming call from' : 'Outgoing call to';
+    final direction =
+        widget.activeCall.isIncoming ? context.l10n.call_description_incoming : context.l10n.call_description_outgoing;
     final username = widget.activeCall.displayName ?? widget.activeCall.handle.value;
     final duration = this.duration;
 

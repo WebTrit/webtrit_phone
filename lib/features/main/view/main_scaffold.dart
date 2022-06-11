@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 
 class Tab {
   Tab({
+    required String debugLabelPrefix,
     required this.icon,
-    required this.title,
-    required create,
+    required this.label,
+    required Widget Function(Key key) create,
   })  : _create = create,
-        _globalKey = LabeledGlobalKey('${title}TabGlobalKey');
+        _globalKey = LabeledGlobalKey('${debugLabelPrefix}TabGlobalKey');
 
   final IconData icon;
-  final String title;
+  final String Function(BuildContext context) label;
   final Widget Function(Key key) _create;
   final GlobalKey _globalKey;
 
@@ -31,24 +33,28 @@ class Tab {
 
 final List<Tab> tabs = <Tab>[
   Tab(
+    debugLabelPrefix: 'Favorites',
     icon: Icons.star_outline,
-    title: 'Favorites',
-    create: (Key key) => FavoritesPage(key: key),
+    label: (context) => context.l10n.main_BottomNavigationBarItemLabel_favorites,
+    create: (key) => FavoritesPage(key: key),
   ),
   Tab(
+    debugLabelPrefix: 'Recents',
     icon: Icons.access_time,
-    title: 'Recents',
-    create: (Key key) => RecentsPage(key: key),
+    label: (context) => context.l10n.main_BottomNavigationBarItemLabel_recents,
+    create: (key) => RecentsPage(key: key),
   ),
   Tab(
+    debugLabelPrefix: 'Contacts',
     icon: Icons.account_circle_outlined,
-    title: 'Contacts',
-    create: (Key key) => ContactsPage(key: key),
+    label: (context) => context.l10n.main_BottomNavigationBarItemLabel_contacts,
+    create: (key) => ContactsPage(key: key),
   ),
   Tab(
+    debugLabelPrefix: 'Keypad',
     icon: Icons.dialpad,
-    title: 'Keypad',
-    create: (Key key) => KeypadPage(key: key),
+    label: (context) => context.l10n.main_BottomNavigationBarItemLabel_keypad,
+    create: (key) => KeypadPage(key: key),
   ),
 ];
 
@@ -105,7 +111,7 @@ class MainScaffoldState extends State<MainScaffold> with RestorationMixin {
         items: tabs.map((Tab tab) {
           return BottomNavigationBarItem(
             icon: Icon(tab.icon),
-            label: tab.title,
+            label: tab.label(context),
           );
         }).toList(),
       ),

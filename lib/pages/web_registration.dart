@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 
 const String kDemoPage = '''
 <!DOCTYPE html>
@@ -95,30 +96,22 @@ class WebRegistrationPageState extends State<WebRegistrationPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           scrollable: true,
-          title: const Text(
-            'WebResourceError',
-          ),
+          title: Text(context.l10n.webRegistration_ErrorAcknowledgeDialog_title),
           content: Text(
             error.description,
           ),
           actions: [
             TextButton(
-              child: Text("Demo".toUpperCase()),
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
+              child: Text(context.l10n.webRegistration_ErrorAcknowledgeDialogActions_demo),
+              onPressed: () => Navigator.of(context).pop(false),
             ),
             TextButton(
-              child: Text("Skip".toUpperCase()),
-              onPressed: () {
-                Navigator.of(context).pop(null);
-              },
+              child: Text(context.l10n.webRegistration_ErrorAcknowledgeDialogActions_skip),
+              onPressed: () => Navigator.of(context).pop(null),
             ),
             TextButton(
-              child: Text("Retry".toUpperCase()),
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
+              child: Text(context.l10n.webRegistration_ErrorAcknowledgeDialogActions_retry),
+              onPressed: () => Navigator.of(context).pop(true),
             ),
           ],
         );

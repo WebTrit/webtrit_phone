@@ -19,8 +19,27 @@
   "@notifications_errorSnackBar_callConnect": {
   },
 
+  "main_BottomNavigationBarItemLabel_favorites": "Favorites",
+  "@main_BottomNavigationBarItemLabel_favorites": {
+  },
+  "main_BottomNavigationBarItemLabel_recents": "Recents",
+  "@main_BottomNavigationBarItemLabel_recents": {
+  },
+  "main_BottomNavigationBarItemLabel_contacts": "Contacts",
+  "@main_BottomNavigationBarItemLabel_contacts": {
+  },
+  "main_BottomNavigationBarItemLabel_keypad": "Keypad",
+  "@main_BottomNavigationBarItemLabel_keypad": {
+  },
+
   "call_FailureAcknowledgeDialog_title": "Failure",
   "@call_FailureAcknowledgeDialog_title": {
+  },
+  "call_description_incoming": "Incoming call from",
+  "@call_description_incoming": {
+  },
+  "call_description_outgoing": "Outgoing call to",
+  "@call_description_outgoing": {
   },
 
   "favorites_BodyCenter_failure": "Failure to get favorites",
@@ -170,6 +189,19 @@
   },
   "settings_LogoutConfirmDialog_content": "Are you sure you want to logout?",
   "@settings_LogoutConfirmDialog_content": {
+  },
+
+  "webRegistration_ErrorAcknowledgeDialog_title": "Web resource error",
+  "@webRegistration_ErrorAcknowledgeDialog_title": {
+  },
+  "webRegistration_ErrorAcknowledgeDialogActions_demo": "Demo",
+  "@webRegistration_ErrorAcknowledgeDialogActions_demo": {
+  },
+  "webRegistration_ErrorAcknowledgeDialogActions_skip": "Skip",
+  "@webRegistration_ErrorAcknowledgeDialogActions_skip": {
+  },
+  "webRegistration_ErrorAcknowledgeDialogActions_retry": "Retry",
+  "@webRegistration_ErrorAcknowledgeDialogActions_retry": {
   },
 
   "underDevelopment": "This page is under development.",
