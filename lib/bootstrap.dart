@@ -13,6 +13,8 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 
+import 'firebase_options.dart';
+
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   final logger = Logger('bootstrap');
 
@@ -52,7 +54,9 @@ Future<void> _precacheSvgPicture() async {
 }
 
 Future<void> _initFirebase() async {
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
 
 Future<void> _initFirebaseMessaging() async {

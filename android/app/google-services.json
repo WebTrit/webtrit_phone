@@ -37,6 +37,13 @@
             {
               "client_id": "524910534863-lhoi358q61equvea5g61mpalo9nfafkl.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "524910534863-f5jtl2mf63udj0pvetqpustgcamni2j3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.webtrit.phone"
+              }
             }
           ]
         }
