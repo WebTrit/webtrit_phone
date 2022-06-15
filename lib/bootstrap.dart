@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:logging/logging.dart';
@@ -18,27 +20,36 @@ import 'firebase_options.dart';
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   final logger = Logger('bootstrap');
 
-  FlutterError.onError = (details) {
-    logger.severe('FlutterError', details.exception, details.stack);
-  };
-
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await AppPath.init();
-  await DeviceInfo.init();
-  await PackageInfo.init();
-
-  await _precacheSvgPicture(); // TODO check this functionality
-
-  await _initFirebase();
-  await _initFirebaseMessaging();
-
   await runZonedGuarded(
-    () async => BlocOverrides.runZoned(
-      () async => runApp(await builder()),
-      blocObserver: _AppBlocObserver(),
-    ),
-    (error, stackTrace) => logger.severe('runZonedGuarded', error, stackTrace),
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
+
+      await _initFirebase();
+      await _initFirebaseMessaging();
+      if (kDebugMode) {
+        FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
+        await FirebaseCrashlytics.instance.deleteUnsentReports();
+      }
+      FlutterError.onError = (details) {
+        logger.severe('FlutterError', details.exception, details.stack);
+        FirebaseCrashlytics.instance.recordFlutterFatalError(details);
+      };
+
+      await AppPath.init();
+      await DeviceInfo.init();
+      await PackageInfo.init();
+
+      await _precacheSvgPicture(); // TODO check this functionality
+
+      return BlocOverrides.runZoned(
+        () async => runApp(await builder()),
+        blocObserver: _AppBlocObserver(),
+      );
+    },
+    (error, stackTrace) {
+      logger.severe('runZonedGuarded', error, stackTrace);
+      FirebaseCrashlytics.instance.recordError(error, stackTrace, fatal: true);
+    },
   );
 }
 
