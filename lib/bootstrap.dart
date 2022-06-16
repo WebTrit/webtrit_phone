@@ -13,7 +13,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/extensions/extensions.dart';
 
 import 'firebase_options.dart';
 
@@ -76,14 +75,14 @@ Future<void> _initFirebaseMessaging() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    logger.info('onMessage: ${message.toS()}');
+    logger.info('onMessage: ${message.toMap()}');
   });
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    logger.info('onMessageOpenedApp: ${message.toS()}');
+    logger.info('onMessageOpenedApp: ${message.toMap()}');
   });
   final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
   if (initialMessage != null) {
-    logger.info('initialMessage: ${initialMessage.toS()}');
+    logger.info('initialMessage: ${initialMessage.toMap()}');
   }
 
   final notificationSettings = await FirebaseMessaging.instance.requestPermission();
@@ -101,7 +100,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   await Firebase.initializeApp();
 
-  logger.info('onBackgroundMessage: ${message.toS()}');
+  logger.info('onBackgroundMessage: ${message.toMap()}');
 }
 
 class _AppBlocObserver extends BlocObserver {
