@@ -88,6 +88,18 @@ class WebtritApiClient {
     return _httpClientExecute('delete', url, token, null);
   }
 
+  Future<Info> info() async {
+    final url = baseUrl.replace(
+      pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['info'],
+    );
+
+    final responseJson = await _httpClientExecuteGet(url, null);
+
+    final response = Info.fromJson(responseJson);
+
+    return response;
+  }
+
   Future<String> sessionOtpRequest(AppType type, String identifier, String phone) async {
     final url = baseUrl.replace(
       pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['session', 'otp-request'],

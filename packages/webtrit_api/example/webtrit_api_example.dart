@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:webtrit_api/webtrit_api.dart';
@@ -15,11 +16,14 @@ void main(List<String> arguments) async {
   httpClient.connectionTimeout = Duration(seconds: 5);
   final client = WebtritApiClient(Uri.parse(url), customHttpClient: httpClient);
 
-  final info = await client.accountInfo(token);
-  print(info.toJson());
+  final info = await client.info();
+  print(jsonEncode(info.toJson()));
+
+  final accountInfo = await client.accountInfo(token);
+  print(jsonEncode(accountInfo.toJson()));
 
   final status = await client.appStatus(token);
-  print(status.toJson());
+  print(jsonEncode(status.toJson()));
 
   client.close();
 }
