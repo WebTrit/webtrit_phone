@@ -30,7 +30,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
           context.hideCurrentSnackBar();
           context.read<LoginCubit>().back();
         } else {
-          if (state.error != LoginState.noError) {
+          if (state.error != null) {
             context.showErrorSnackBar(state.error.toString());
             context.read<LoginCubit>().dismissError();
           }

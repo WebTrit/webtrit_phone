@@ -1,12 +1,14 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_phone/data/data.dart';
 
 import '../login.dart';
+
+part 'login_cubit.freezed.dart';
 
 part 'login_state.dart';
 
@@ -41,7 +43,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   void dismissError() {
     emit(state.copyWith(
-      error: LoginState.noError,
+      error: null,
     ));
   }
 
