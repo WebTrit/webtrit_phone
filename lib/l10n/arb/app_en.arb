@@ -160,8 +160,8 @@
   "settings_ListViewTileTitle_settings": "SETTINGS",
   "@settings_ListViewTileTitle_settings": {
   },
-  "settings_ListViewTileTitle_networkSettings": "Network settings",
-  "@settings_ListViewTileTitle_networkSettings": {
+  "settings_ListViewTileTitle_network": "Network settings",
+  "@settings_ListViewTileTitle_network": {
   },
   "settings_ListViewTileTitle_help": "Help",
   "@settings_ListViewTileTitle_help": {
@@ -169,11 +169,11 @@
   "settings_ListViewTileTitle_language": "Language",
   "@settings_ListViewTileTitle_language": {
   },
-  "settings_ListViewTileTitle_termsAndConditions": "Terms and conditions",
-  "@settings_ListViewTileTitle_termsAndConditions": {
+  "settings_ListViewTileTitle_termsConditions": "Terms and conditions",
+  "@settings_ListViewTileTitle_termsConditions": {
   },
-  "settings_ListViewTileTitle_aboutApplication": "About application",
-  "@settings_ListViewTileTitle_aboutApplication": {
+  "settings_ListViewTileTitle_about": "About application",
+  "@settings_ListViewTileTitle_about": {
   },
   "settings_ListViewTileTitle_darkMode": "Dark mode",
   "@settings_ListViewTileTitle_darkMode": {

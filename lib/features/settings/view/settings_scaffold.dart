@@ -75,10 +75,10 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
           ),
           ListTile(
             leading: const Icon(Icons.network_check),
-            title: Text(context.l10n.settings_ListViewTileTitle_networkSettings),
+            title: Text(context.l10n.settings_ListViewTileTitle_network),
             trailing: const Icon(Icons.navigate_next),
             onTap: () {
-              context.goNamed(MainRoute.networkSettingsTab);
+              context.goNamed(MainRoute.settingsNetwork);
             },
           ),
           const ListTileSeparator(),
@@ -87,7 +87,7 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
             title: Text(context.l10n.settings_ListViewTileTitle_help),
             trailing: const Icon(Icons.navigate_next),
             onTap: () {
-              context.goNamed(MainRoute.helpTab);
+              context.goNamed(MainRoute.settingsHelp);
             },
           ),
           const ListTileSeparator(),
@@ -102,25 +102,25 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
               ],
             ),
             onTap: () {
-              context.goNamed(MainRoute.languageTab);
+              context.goNamed(MainRoute.settingsLanguage);
             },
           ),
           const ListTileSeparator(),
           ListTile(
             leading: const Icon(Icons.book_outlined),
-            title: Text(context.l10n.settings_ListViewTileTitle_termsAndConditions),
+            title: Text(context.l10n.settings_ListViewTileTitle_termsConditions),
             trailing: const Icon(Icons.navigate_next),
             onTap: () {
-              context.goNamed(MainRoute.termsConditionsTab);
+              context.goNamed(MainRoute.settingsTermsConditions);
             },
           ),
           const ListTileSeparator(),
           ListTile(
             leading: const Icon(Icons.card_travel),
-            title: Text(context.l10n.settings_ListViewTileTitle_aboutApplication),
+            title: Text(context.l10n.settings_ListViewTileTitle_about),
             trailing: const Icon(Icons.navigate_next),
             onTap: () {
-              context.goNamed(MainRoute.aboutAppTab);
+              context.goNamed(MainRoute.settingsAbout);
             },
           ),
           const ListTileSeparator(),

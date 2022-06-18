@@ -3,19 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-class LanguageTabScaffold extends StatefulWidget {
-  const LanguageTabScaffold({Key? key}) : super(key: key);
+class AboutScreen extends StatelessWidget {
+  const AboutScreen({Key? key}) : super(key: key);
 
-  @override
-  LanguageTabScaffoldState createState() => LanguageTabScaffoldState();
-}
-
-class LanguageTabScaffoldState extends State<LanguageTabScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.settings_ListViewTileTitle_language),
+        title: Text(context.l10n.settings_ListViewTileTitle_about),
         leading: const ExtBackButton(),
       ),
       body: Text(context.l10n.underDevelopment),
