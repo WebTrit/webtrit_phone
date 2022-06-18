@@ -36,4 +36,16 @@ class EnvironmentConfig {
     'WEBTRIT_PHONE_APP_NAME',
     defaultValue: 'WebTrit',
   );
+
+  static const APP_HELP_URL = String.fromEnvironment(
+    'WEBTRIT_PHONE_APP_HELP_URL',
+  );
+
+  static const APP_ABOUT_URL = String.fromEnvironment(
+    'WEBTRIT_PHONE_APP_ABOUT_URL',
+  );
+
+  static const APP_TERMS_AND_CONDITIONS_URL = String.fromEnvironment(
+    'WEBTRIT_PHONE_APP_TERMS_AND_CONDITIONS_URL',
+  );
 }

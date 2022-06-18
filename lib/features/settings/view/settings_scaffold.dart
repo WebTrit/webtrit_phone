@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -81,15 +82,17 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
               context.goNamed(MainRoute.settingsNetwork);
             },
           ),
-          const ListTileSeparator(),
-          ListTile(
-            leading: const Icon(Icons.help_outline),
-            title: Text(context.l10n.settings_ListViewTileTitle_help),
-            trailing: const Icon(Icons.navigate_next),
-            onTap: () {
-              context.goNamed(MainRoute.settingsHelp);
-            },
-          ),
+          if (EnvironmentConfig.APP_HELP_URL.isNotEmpty) ...[
+            const ListTileSeparator(),
+            ListTile(
+              leading: const Icon(Icons.help_outline),
+              title: Text(context.l10n.settings_ListViewTileTitle_help),
+              trailing: const Icon(Icons.navigate_next),
+              onTap: () {
+                context.goNamed(MainRoute.settingsHelp);
+              },
+            ),
+          ],
           const ListTileSeparator(),
           ListTile(
             leading: const Icon(Icons.language),
@@ -105,24 +108,28 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
               context.goNamed(MainRoute.settingsLanguage);
             },
           ),
-          const ListTileSeparator(),
-          ListTile(
-            leading: const Icon(Icons.book_outlined),
-            title: Text(context.l10n.settings_ListViewTileTitle_termsConditions),
-            trailing: const Icon(Icons.navigate_next),
-            onTap: () {
-              context.goNamed(MainRoute.settingsTermsConditions);
-            },
-          ),
-          const ListTileSeparator(),
-          ListTile(
-            leading: const Icon(Icons.card_travel),
-            title: Text(context.l10n.settings_ListViewTileTitle_about),
-            trailing: const Icon(Icons.navigate_next),
-            onTap: () {
-              context.goNamed(MainRoute.settingsAbout);
-            },
-          ),
+          if (EnvironmentConfig.APP_TERMS_AND_CONDITIONS_URL.isNotEmpty) ...[
+            const ListTileSeparator(),
+            ListTile(
+              leading: const Icon(Icons.book_outlined),
+              title: Text(context.l10n.settings_ListViewTileTitle_termsConditions),
+              trailing: const Icon(Icons.navigate_next),
+              onTap: () {
+                context.goNamed(MainRoute.settingsTermsConditions);
+              },
+            ),
+          ],
+          if (EnvironmentConfig.APP_ABOUT_URL.isNotEmpty) ...[
+            const ListTileSeparator(),
+            ListTile(
+              leading: const Icon(Icons.card_travel),
+              title: Text(context.l10n.settings_ListViewTileTitle_about),
+              trailing: const Icon(Icons.navigate_next),
+              onTap: () {
+                context.goNamed(MainRoute.settingsAbout);
+              },
+            ),
+          ],
           const ListTileSeparator(),
           SwitchListTile(
             title: Text(context.l10n.settings_ListViewTileTitle_darkMode),

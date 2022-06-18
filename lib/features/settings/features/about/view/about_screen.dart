@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/widgets/widgets.dart';
+
+import '../../../widgets/widgets.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.settings_ListViewTileTitle_about),
-        leading: const ExtBackButton(),
-      ),
-      body: Text(context.l10n.underDevelopment),
+    return WebViewScaffold(
+      title: Text(context.l10n.settings_ListViewTileTitle_about),
+      initialUri: Uri.parse(EnvironmentConfig.APP_ABOUT_URL),
     );
   }
 }
