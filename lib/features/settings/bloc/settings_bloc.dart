@@ -14,14 +14,14 @@ part 'settings_state.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   SettingsBloc({
-    required this.accountInfoRepository,
+    required this.accountRepository,
   }) : super(const SettingsState()) {
     on<SettingsStarted>(_onStarted, transformer: restartable());
   }
 
-  final AccountInfoRepository accountInfoRepository;
+  final AccountRepository accountRepository;
 
   void _onStarted(SettingsStarted event, Emitter<SettingsState> emit) async {
-    await emit.forEach(accountInfoRepository.info(), onData: (AccountInfo info) => SettingsState(info: info));
+    await emit.forEach(accountRepository.info(), onData: (AccountInfo info) => SettingsState(info: info));
   }
 }

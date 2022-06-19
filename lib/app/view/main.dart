@@ -82,8 +82,8 @@ class _MainState extends State<Main> {
             periodicPolling: EnvironmentConfig.PERIODIC_POLLING,
           ),
         ),
-        RepositoryProvider<AccountInfoRepository>(
-          create: (context) => AccountInfoRepository(
+        RepositoryProvider<AccountRepository>(
+          create: (context) => AccountRepository(
             webtritApiClient: context.read<WebtritApiClient>(),
             periodicPolling: EnvironmentConfig.PERIODIC_POLLING,
           ),

@@ -4,8 +4,8 @@ import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/data/secure_storage.dart';
 
-class AccountInfoRepository {
-  AccountInfoRepository({
+class AccountRepository {
+  AccountRepository({
     required this.webtritApiClient,
     this.periodicPolling = true,
   }) {

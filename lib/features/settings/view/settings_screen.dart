@@ -15,7 +15,7 @@ class SettingsScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         return SettingsBloc(
-          accountInfoRepository: context.read<AccountInfoRepository>(),
+          accountRepository: context.read<AccountRepository>(),
         )..add(const SettingsStarted());
       },
       child: const SettingsScaffold(),
