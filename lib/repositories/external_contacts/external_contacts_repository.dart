@@ -1,11 +1,14 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
+import 'package:logging/logging.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/data/secure_storage.dart';
 import 'package:webtrit_phone/models/models.dart';
+
+final _logger = Logger('$ExternalContactsRepository');
 
 class ExternalContactsRepository {
   final WebtritApiClient webtritApiClient;
@@ -15,7 +18,7 @@ class ExternalContactsRepository {
   late int _listenedCounter;
   Timer? _periodicTimer;
 
-  List<ExternalContact> _contacts = [];
+  List<ExternalContact>? _cacheContacts;
 
   ExternalContactsRepository({
     required this.webtritApiClient,
@@ -33,19 +36,14 @@ class ExternalContactsRepository {
   }
 
   Future<void> load() async {
-    _contacts = await _listContacts();
-    _controller.add(_contacts);
+    final contacts = await _listContacts();
+    _cacheContacts = contacts;
+    _controller.add(contacts);
   }
 
   void _onListenCallback() {
     if (periodicPolling && _listenedCounter++ == 0) {
-      _periodicTimer = Timer.periodic(const Duration(seconds: 60), (timer) async {
-        final newContacts = await _listContacts();
-        if (!(const ListEquality<ExternalContact>()).equals(newContacts, _contacts)) {
-          _contacts = newContacts;
-          _controller.add(_contacts);
-        }
-      });
+      _periodicTimer = Timer.periodic(const Duration(seconds: 60), (timer) => _gatherListContacts());
     }
   }
 
@@ -53,6 +51,18 @@ class ExternalContactsRepository {
     if (periodicPolling && --_listenedCounter == 0) {
       _periodicTimer?.cancel();
       _periodicTimer = null;
+    }
+  }
+
+  void _gatherListContacts() async {
+    try {
+      final contacts = await _listContacts();
+      if (!(const ListEquality<ExternalContact>()).equals(contacts, _cacheContacts)) {
+        _cacheContacts = contacts;
+        _controller.add(contacts);
+      }
+    } catch (e, stackTrace) {
+      _logger.warning('_gatherListContacts', e, stackTrace);
     }
   }
 

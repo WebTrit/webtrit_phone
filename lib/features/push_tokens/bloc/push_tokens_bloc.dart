@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:logging/logging.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -12,6 +13,8 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 part 'push_tokens_event.dart';
 
 part 'push_tokens_state.dart';
+
+final _logger = Logger('$PushTokensBloc');
 
 class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements PushRegistryDelegate {
   PushTokensBloc({
@@ -56,7 +59,11 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
   }
 
   void _onInsertedOrUpdated(PushTokensInsertedOrUpdated event, Emitter<PushTokensState> emit) async {
-    pushTokensRepository.insertOrUpdatePushToken(event.type, event.value);
+    try {
+      await pushTokensRepository.insertOrUpdatePushToken(event.type, event.value);
+    } catch (e, stackTrace) {
+      _logger.warning('_onInsertedOrUpdated', e, stackTrace);
+    }
   }
 
   @override

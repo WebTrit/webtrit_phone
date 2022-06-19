@@ -1,8 +1,12 @@
 import 'dart:async';
 
+import 'package:logging/logging.dart';
+
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/data/secure_storage.dart';
+
+final _logger = Logger('$AccountRepository');
 
 class AccountRepository {
   AccountRepository({
@@ -31,15 +35,8 @@ class AccountRepository {
 
   void _onListenCallback() async {
     if (periodicPolling && _listenedCounter++ == 0) {
-      _periodicTimer = Timer.periodic(const Duration(seconds: 10), (timer) async {
-        final newInfo = await _listInfo();
-        if (newInfo != _info) {
-          _info = newInfo;
-          _controller.add(_info!);
-        }
-      });
-      _info = await _listInfo();
-      _controller.add(_info!);
+      _periodicTimer = Timer.periodic(const Duration(seconds: 10), (timer) => _gatherAccountInfo());
+      _gatherAccountInfo();
     }
   }
 
@@ -50,7 +47,19 @@ class AccountRepository {
     }
   }
 
-  Future<AccountInfo> _listInfo() async {
+  void _gatherAccountInfo() async {
+    try {
+      final newInfo = await _accountInfo();
+      if (newInfo != _info) {
+        _info = newInfo;
+        _controller.add(_info!);
+      }
+    } catch (e, stackTrace) {
+      _logger.warning('_gatherAccountInfo', e, stackTrace);
+    }
+  }
+
+  Future<AccountInfo> _accountInfo() async {
     final token = await SecureStorage().readToken();
     return await webtritApiClient.accountInfo(token!);
   }
