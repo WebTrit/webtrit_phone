@@ -7,3 +7,11 @@ abstract class SettingsEvent {
 class SettingsStarted extends SettingsEvent {
   const SettingsStarted();
 }
+
+class SettingsErrorDismissed extends SettingsEvent {
+  const SettingsErrorDismissed();
+}
+
+class SettingsLogouted extends SettingsEvent {
+  const SettingsLogouted();
+}

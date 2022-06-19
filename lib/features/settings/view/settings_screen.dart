@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 import '../settings.dart';
@@ -15,6 +16,7 @@ class SettingsScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         return SettingsBloc(
+          appBloc: context.read<AppBloc>(),
           accountRepository: context.read<AccountRepository>(),
         )..add(const SettingsStarted());
       },

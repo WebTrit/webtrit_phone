@@ -98,7 +98,6 @@ class _AppState extends State<App> {
           ),
           BlocProvider<AppBloc>(
             create: (context) => AppBloc(
-              webtritApiClient: context.read<WebtritApiClient>(),
               secureStorage: SecureStorage(),
               appDatabase: context.read<AppDatabase>(),
             ),

@@ -2,8 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 
-import 'package:webtrit_api/webtrit_api.dart';
-
 import 'package:webtrit_phone/data/data.dart';
 
 part 'app_event.dart';
@@ -12,7 +10,6 @@ part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc({
-    required this.webtritApiClient,
     required this.secureStorage,
     required this.appDatabase,
   }) : super(const AppLogout()) {
@@ -20,7 +17,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppLogouted>(_onLogouted, transformer: sequential());
   }
 
-  final WebtritApiClient webtritApiClient;
   final SecureStorage secureStorage;
   final AppDatabase appDatabase;
 
@@ -31,11 +27,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onLogouted(AppLogouted event, Emitter<AppState> emit) async {
-    final token = await secureStorage.readToken();
-    if (token != null) {
-      await secureStorage.deleteToken();
-      await webtritApiClient.sessionLogout(token);
-    }
+    await secureStorage.deleteToken();
     appDatabase.deleteEverything();
 
     emit(const AppLogout());

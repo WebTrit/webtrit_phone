@@ -16,7 +16,9 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$SettingsState {
+  bool get progress => throw _privateConstructorUsedError;
   AccountInfo? get info => throw _privateConstructorUsedError;
+  Object? get error => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $SettingsStateCopyWith<SettingsState> get copyWith =>
@@ -28,7 +30,7 @@ abstract class $SettingsStateCopyWith<$Res> {
   factory $SettingsStateCopyWith(
           SettingsState value, $Res Function(SettingsState) then) =
       _$SettingsStateCopyWithImpl<$Res>;
-  $Res call({AccountInfo? info});
+  $Res call({bool progress, AccountInfo? info, Object? error});
 }
 
 /// @nodoc
@@ -42,13 +44,20 @@ class _$SettingsStateCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? progress = freezed,
     Object? info = freezed,
+    Object? error = freezed,
   }) {
     return _then(_value.copyWith(
+      progress: progress == freezed
+          ? _value.progress
+          : progress // ignore: cast_nullable_to_non_nullable
+              as bool,
       info: info == freezed
           ? _value.info
           : info // ignore: cast_nullable_to_non_nullable
               as AccountInfo?,
+      error: error == freezed ? _value.error : error,
     ));
   }
 }
@@ -60,7 +69,7 @@ abstract class _$$_SettingsStateCopyWith<$Res>
           _$_SettingsState value, $Res Function(_$_SettingsState) then) =
       __$$_SettingsStateCopyWithImpl<$Res>;
   @override
-  $Res call({AccountInfo? info});
+  $Res call({bool progress, AccountInfo? info, Object? error});
 }
 
 /// @nodoc
@@ -76,13 +85,20 @@ class __$$_SettingsStateCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? progress = freezed,
     Object? info = freezed,
+    Object? error = freezed,
   }) {
     return _then(_$_SettingsState(
+      progress: progress == freezed
+          ? _value.progress
+          : progress // ignore: cast_nullable_to_non_nullable
+              as bool,
       info: info == freezed
           ? _value.info
           : info // ignore: cast_nullable_to_non_nullable
               as AccountInfo?,
+      error: error == freezed ? _value.error : error,
     ));
   }
 }
@@ -90,14 +106,19 @@ class __$$_SettingsStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_SettingsState implements _SettingsState {
-  const _$_SettingsState({this.info});
+  const _$_SettingsState({this.progress = false, this.info, this.error});
 
   @override
+  @JsonKey()
+  final bool progress;
+  @override
   final AccountInfo? info;
+  @override
+  final Object? error;
 
   @override
   String toString() {
-    return 'SettingsState(info: $info)';
+    return 'SettingsState(progress: $progress, info: $info, error: $error)';
   }
 
   @override
@@ -105,12 +126,17 @@ class _$_SettingsState implements _SettingsState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_SettingsState &&
-            const DeepCollectionEquality().equals(other.info, info));
+            const DeepCollectionEquality().equals(other.progress, progress) &&
+            const DeepCollectionEquality().equals(other.info, info) &&
+            const DeepCollectionEquality().equals(other.error, error));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(info));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(progress),
+      const DeepCollectionEquality().hash(info),
+      const DeepCollectionEquality().hash(error));
 
   @JsonKey(ignore: true)
   @override
@@ -119,10 +145,17 @@ class _$_SettingsState implements _SettingsState {
 }
 
 abstract class _SettingsState implements SettingsState {
-  const factory _SettingsState({final AccountInfo? info}) = _$_SettingsState;
+  const factory _SettingsState(
+      {final bool progress,
+      final AccountInfo? info,
+      final Object? error}) = _$_SettingsState;
 
   @override
+  bool get progress => throw _privateConstructorUsedError;
+  @override
   AccountInfo? get info => throw _privateConstructorUsedError;
+  @override
+  Object? get error => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$$_SettingsStateCopyWith<_$_SettingsState> get copyWith =>

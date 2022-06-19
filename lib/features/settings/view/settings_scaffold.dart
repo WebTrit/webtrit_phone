@@ -4,11 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/app/routes.dart';
-import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+import '../settings.dart';
 import '../widgets/widgets.dart';
 
 class SettingsScaffold extends StatefulWidget {
@@ -25,7 +26,7 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final scaffold = Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.settings_AppBarTitle_myAccount),
       ),
@@ -67,7 +68,7 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
               );
               if (logout == true) {
                 if (!mounted) return;
-                context.read<AppBloc>().add(const AppLogouted());
+                context.read<SettingsBloc>().add(const SettingsLogouted());
               }
             },
           ),
@@ -155,6 +156,21 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
           const ListTileSeparator(),
         ],
       ),
+    );
+
+    return BlocListener<SettingsBloc, SettingsState>(
+      listener: (context, state) {
+        if (state.progress) {
+          ProgressOverlay.insert(context, context.read<SettingsBloc>().stream.firstWhere((state) => !state.progress));
+        }
+
+        final error = state.error;
+        if (error != null) {
+          context.showErrorSnackBar(error.toString());
+          context.read<SettingsBloc>().add(const SettingsErrorDismissed());
+        }
+      },
+      child: scaffold,
     );
   }
 }

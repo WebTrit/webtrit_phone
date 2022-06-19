@@ -54,4 +54,9 @@ class AccountRepository {
     final token = await SecureStorage().readToken();
     return await webtritApiClient.accountInfo(token!);
   }
+
+  Future<void> logout() async {
+    final token = await SecureStorage().readToken();
+    await webtritApiClient.sessionLogout(token!);
+  }
 }
