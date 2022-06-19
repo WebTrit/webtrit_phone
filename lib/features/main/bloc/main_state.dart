@@ -1,12 +1,8 @@
 part of 'main_bloc.dart';
 
 class MainState extends Equatable {
-  const MainState({this.info});
-
-  final AccountInfo? info;
+  const MainState();
 
   @override
-  List<Object?> get props => [
-        info,
-      ];
+  List<Object?> get props => [];
 }
