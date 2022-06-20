@@ -120,17 +120,15 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
               },
             ),
           ],
-          if (EnvironmentConfig.APP_ABOUT_URL.isNotEmpty) ...[
-            const ListTileSeparator(),
-            ListTile(
-              leading: const Icon(Icons.card_travel),
-              title: Text(context.l10n.settings_ListViewTileTitle_about),
-              trailing: const Icon(Icons.navigate_next),
-              onTap: () {
-                context.goNamed(MainRoute.settingsAbout);
-              },
-            ),
-          ],
+          const ListTileSeparator(),
+          ListTile(
+            leading: const Icon(Icons.card_travel),
+            title: Text(context.l10n.settings_ListViewTileTitle_about),
+            trailing: const Icon(Icons.navigate_next),
+            onTap: () {
+              context.goNamed(MainRoute.settingsAbout);
+            },
+          ),
           const ListTileSeparator(),
           SwitchListTile(
             title: Text(context.l10n.settings_ListViewTileTitle_darkMode),
