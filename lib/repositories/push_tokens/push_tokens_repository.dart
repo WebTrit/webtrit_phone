@@ -2,19 +2,16 @@ import 'dart:async';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
-import 'package:webtrit_phone/data/secure_storage.dart';
-
 class PushTokensRepository {
   PushTokensRepository({
     required this.webtritApiClient,
-    required this.secureStorage,
+    required this.token,
   });
 
   final WebtritApiClient webtritApiClient;
-  final SecureStorage secureStorage;
+  final String token;
 
   Future<void> insertOrUpdatePushToken(PushTokenType type, String value) async {
-    final token = await secureStorage.readToken();
-    return await webtritApiClient.appCreatePushToken(token!, type, value);
+    return await webtritApiClient.appCreatePushToken(token, type, value);
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,8 +31,9 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
           context.hideCurrentSnackBar();
           context.read<LoginCubit>().back();
         } else {
-          if (state.error != null) {
-            context.showErrorSnackBar(state.error.toString());
+          final errorText = _stateErrorText(context, state.error);
+          if (errorText != null) {
+            context.showErrorSnackBar(errorText);
             context.read<LoginCubit>().dismissError();
           }
         }
@@ -124,7 +127,25 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
       switch (coreUrlInput.error!) {
         case UrlValidationError.blank:
           return context.l10n.validationBlankError;
+        case UrlValidationError.format:
+          return context.l10n.login_validationCoreUrlError;
       }
+    }
+  }
+
+  String? _stateErrorText(BuildContext context, Object? error) {
+    if (error != null) {
+      if (error is LoginIncompatibleCoreVersionException) {
+        return context.l10n.login_LoginIncompatibleCoreVersionExceptionError;
+      } else if (error is FormatException) {
+        return context.l10n.login_FormatExceptionError;
+      } else if (error is SocketException) {
+        return context.l10n.login_SocketExceptionError;
+      } else {
+        return error.toString();
+      }
+    } else {
+      return null;
     }
   }
 }

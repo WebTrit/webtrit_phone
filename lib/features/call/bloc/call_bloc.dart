@@ -15,8 +15,7 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 import 'package:webtrit_phone/app/assets.gen.dart';
-import 'package:webtrit_phone/data/secure_storage.dart';
-import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/features/notifications/notifications.dart';
 import 'package:webtrit_phone/models/recent.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -35,6 +34,7 @@ const kSignalingClientReconnectInitiated = Duration(seconds: 3);
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
   final RecentsRepository recentsRepository;
   final NotificationsBloc notificationsBloc;
+  final AppBloc appBloc;
   final Callkeep callkeep;
 
   final _logger = Logger('$CallBloc');
@@ -53,6 +53,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   CallBloc({
     required this.recentsRepository,
     required this.notificationsBloc,
+    required this.appBloc,
     required this.callkeep,
   }) : super(const CallState()) {
     on<CallStarted>(
@@ -241,12 +242,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       if (emit.isDone) return;
 
-      final token = await SecureStorage().readToken();
+      final signalingUrl = _coreUrlToSignalingUrl(appBloc.state.coreUrl!);
+      final token = appBloc.state.token!;
       final httpClient = HttpClient();
       httpClient.connectionTimeout = kSignalingClientConnectionTimeout;
       final signalingClient = await WebtritSignalingClient.connect(
-        EnvironmentConfig.SIGNALING_URL,
-        token!,
+        signalingUrl,
+        token,
         true,
         customHttpClient: httpClient,
       );
@@ -1085,5 +1087,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   Future<void> _ringtoneStop() async {
     await _audioPlayer.stop();
+  }
+
+  String _coreUrlToSignalingUrl(String coreUrl) {
+    final uri = Uri.parse(coreUrl);
+    if (uri.scheme.endsWith('s')) {
+      return uri.replace(scheme: 'wss').toString();
+    } else {
+      return uri.replace(scheme: 'ws').toString();
+    }
   }
 }

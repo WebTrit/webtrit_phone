@@ -25,7 +25,10 @@ class LoginOtpVerifyTab extends StatelessWidget {
       listener: (context, state) {
         if (state.status == LoginStatus.ok) {
           context.hideCurrentSnackBar();
-          context.read<AppBloc>().add(AppLogined(token: state.token!));
+          context.read<AppBloc>().add(AppLogined(
+                coreUrl: state.coreUrl!,
+                token: state.token!,
+              ));
         } else if (state.status == LoginStatus.back) {
           context.hideCurrentSnackBar();
           context.read<LoginCubit>().back();
@@ -75,8 +78,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
                     buildWhen: (previous, current) => previous.status != current.status,
                     builder: (context, state) {
                       return OutlinedButton(
-                        onPressed:
-                            state.status.isProcessing ? null : () => _onOtpVerifyBack(context),
+                        onPressed: state.status.isProcessing ? null : () => _onOtpVerifyBack(context),
                         style: outlinedButtonStyles?.neutral,
                         child: Text(context.l10n.login_Button_back),
                       );

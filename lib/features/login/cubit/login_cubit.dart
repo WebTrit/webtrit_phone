@@ -5,6 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/environment_config.dart';
 
 import '../login.dart';
 
@@ -14,14 +15,14 @@ part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit({
-    required this.webtritApiClient,
+    this.httpClient,
   }) : super(const LoginState());
 
-  final WebtritApiClient webtritApiClient;
+  final HttpClient? httpClient;
 
   void next() {
     var nextTabIndex = state.tabIndex + 1;
-    if (nextTabIndex == 1 && state.demo == true) {
+    if (nextTabIndex == 1 && state.coreUrl != null) {
       nextTabIndex++;
     }
     emit(state.copyWith(
@@ -32,7 +33,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   void back() {
     var prevTabIndex = state.tabIndex - 1;
-    if (prevTabIndex == 1 && state.demo == true) {
+    if (prevTabIndex == 1 && state.coreUrlInput.value.isEmpty) {
       prevTabIndex--;
     }
     emit(state.copyWith(
@@ -50,9 +51,15 @@ class LoginCubit extends Cubit<LoginState> {
   // LoginModeSelectTab
 
   void loginModeSelectSubmitter(bool demo) {
+    final coreUrl = demo
+        ? EnvironmentConfig.DEMO_CORE_URL
+        : EnvironmentConfig.CORE_URL.isEmpty
+            ? null
+            : EnvironmentConfig.CORE_URL;
+
     emit(LoginState(
       status: LoginStatus.ok,
-      demo: demo,
+      coreUrl: coreUrl,
     ));
   }
 
@@ -65,10 +72,39 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void loginCoreUrlAssignSubmitted() async {
-    // TODO: implement correct behaviour
+    if (!state.status.isInput || !state.coreUrlInput.valid) {
+      return;
+    }
+
     emit(state.copyWith(
-      error: 'Sorry, not implemented yet',
+      status: LoginStatus.processing,
     ));
+
+    var coreUrlInputValue = state.coreUrlInput.value;
+    if (!coreUrlInputValue.startsWith('https://')) {
+      coreUrlInputValue = 'https://$coreUrlInputValue';
+    }
+    final coreUrl = Uri.parse(coreUrlInputValue);
+    final webtritApiClient = WebtritApiClient(coreUrl, customHttpClient: httpClient);
+    try {
+      final info = await webtritApiClient.info();
+      if (info.core.version > Version(0, 3, 0)) {
+        emit(state.copyWith(
+          status: LoginStatus.ok,
+          coreUrl: coreUrl.toString(),
+        ));
+      } else {
+        emit(state.copyWith(
+          status: LoginStatus.input,
+          error: const LoginIncompatibleCoreVersionException(),
+        ));
+      }
+    } catch (e) {
+      emit(state.copyWith(
+        status: LoginStatus.input,
+        error: e,
+      ));
+    }
   }
 
   void loginCoreUrlAssignBack() async {
@@ -78,6 +114,7 @@ class LoginCubit extends Cubit<LoginState> {
 
     emit(state.copyWith(
       status: LoginStatus.back,
+      coreUrl: null,
       coreUrlInput: const UrlInput.pure(),
     ));
   }
@@ -99,6 +136,8 @@ class LoginCubit extends Cubit<LoginState> {
       status: LoginStatus.processing,
     ));
 
+    final coreUrl = Uri.parse(state.coreUrl!);
+    final webtritApiClient = WebtritApiClient(coreUrl, customHttpClient: httpClient);
     final type = _appType;
     final identifier = DeviceInfo().identifierForVendor;
     final phone = state.phoneInput.value;
@@ -144,6 +183,8 @@ class LoginCubit extends Cubit<LoginState> {
       status: LoginStatus.processing,
     ));
 
+    final coreUrl = Uri.parse(state.coreUrl!);
+    final webtritApiClient = WebtritApiClient(coreUrl, customHttpClient: httpClient);
     final otpId = state.otpId!;
     final code = state.codeInput.value;
     try {
@@ -182,4 +223,8 @@ class LoginCubit extends Cubit<LoginState> {
       throw UnsupportedError('platform not supported');
     }
   }
+}
+
+class LoginIncompatibleCoreVersionException implements Exception {
+  const LoginIncompatibleCoreVersionException();
 }

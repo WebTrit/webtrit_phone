@@ -37,6 +37,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       await AppPath.init();
       await DeviceInfo.init();
       await PackageInfo.init();
+      await SecureStorage.init();
 
       await _precacheSvgPicture(); // TODO check this functionality
 

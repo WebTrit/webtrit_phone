@@ -1,44 +1,79 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SecureStorage {
+  static const _kCoreUrlKey = 'core-url';
   static const _kTokenKey = 'token';
-  static const _kWebRegistrationInitialUrl = 'initial-url';
+  static const _kWebRegistrationInitialUrlKey = 'initial-url';
 
-  static const _storage = FlutterSecureStorage(
-    iOptions: IOSOptions(
-      accessibility: IOSAccessibility.first_unlock,
-    ),
-  );
+  static late SecureStorage _instance;
 
-  static final SecureStorage _instance = SecureStorage._();
+  static Future<void> init() async {
+    const storage = FlutterSecureStorage(
+      iOptions: IOSOptions(
+        accessibility: IOSAccessibility.first_unlock,
+      ),
+    );
+    final cache = await storage.readAll();
+
+    _instance = SecureStorage._(storage, cache);
+  }
 
   factory SecureStorage() {
     return _instance;
   }
 
-  SecureStorage._();
+  SecureStorage._(this._storage, [this._cache = const {}]);
 
-  Future<String?> readToken() {
-    return _storage.read(key: _kTokenKey);
+  final FlutterSecureStorage _storage;
+  final Map<String, dynamic> _cache;
+
+  String? _read(String key) {
+    return _cache[key];
+  }
+
+  Future<void> _write(String key, String value) async {
+    await _storage.write(key: key, value: value);
+    _cache[key] = value;
+  }
+
+  Future<void> _delete(String key) async {
+    await _storage.delete(key: key);
+    _cache.remove(key);
+  }
+
+  String? readCoreUrl() {
+    return _read(_kCoreUrlKey);
+  }
+
+  Future<void> writeCoreUrl(String coreUrl) {
+    return _write(_kCoreUrlKey, coreUrl);
+  }
+
+  Future<void> deleteCoreUrl() {
+    return _delete(_kCoreUrlKey);
+  }
+
+  String? readToken() {
+    return _read(_kTokenKey);
   }
 
   Future<void> writeToken(String token) {
-    return _storage.write(key: _kTokenKey, value: token);
+    return _write(_kTokenKey, token);
   }
 
   Future<void> deleteToken() {
-    return _storage.delete(key: _kTokenKey);
+    return _delete(_kTokenKey);
   }
 
-  Future<String?> readWebRegistrationInitialUrl() {
-    return _storage.read(key: _kWebRegistrationInitialUrl);
+  String? readWebRegistrationInitialUrl() {
+    return _read(_kWebRegistrationInitialUrlKey);
   }
 
   Future<void> writeWebRegistrationInitialUrl(String url) {
-    return _storage.write(key: _kWebRegistrationInitialUrl, value: url);
+    return _write(_kWebRegistrationInitialUrlKey, url);
   }
 
   Future<void> deleteWebRegistrationInitialUrl() {
-    return _storage.delete(key: _kWebRegistrationInitialUrl);
+    return _delete(_kWebRegistrationInitialUrlKey);
   }
 }

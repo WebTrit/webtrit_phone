@@ -52,6 +52,9 @@ class _MainState extends State<Main> {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
+        RepositoryProvider<WebtritApiClient>(
+          create: (context) => WebtritApiClient(Uri.parse(context.read<AppBloc>().state.coreUrl!)),
+        ),
         RepositoryProvider<FavoritesRepository>(
           create: (context) => FavoritesRepository(
             appDatabase: context.read<AppDatabase>(),
@@ -73,18 +76,20 @@ class _MainState extends State<Main> {
         RepositoryProvider<PushTokensRepository>(
           create: (context) => PushTokensRepository(
             webtritApiClient: context.read<WebtritApiClient>(),
-            secureStorage: SecureStorage(),
+            token: context.read<AppBloc>().state.token!,
           ),
         ),
         RepositoryProvider<ExternalContactsRepository>(
           create: (context) => ExternalContactsRepository(
             webtritApiClient: context.read<WebtritApiClient>(),
+            token: context.read<AppBloc>().state.token!,
             periodicPolling: EnvironmentConfig.PERIODIC_POLLING,
           ),
         ),
         RepositoryProvider<AccountRepository>(
           create: (context) => AccountRepository(
             webtritApiClient: context.read<WebtritApiClient>(),
+            token: context.read<AppBloc>().state.token!,
             periodicPolling: EnvironmentConfig.PERIODIC_POLLING,
           ),
         ),
@@ -131,6 +136,7 @@ class _MainState extends State<Main> {
               return CallBloc(
                 recentsRepository: context.read<RecentsRepository>(),
                 notificationsBloc: context.read<NotificationsBloc>(),
+                appBloc: context.read<AppBloc>(),
                 callkeep: callkeep,
               )..add(const CallStarted());
             },

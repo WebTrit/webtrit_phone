@@ -66,7 +66,7 @@
   "login_Button_back": "Back",
   "@login_Button_back": {
   },
-  "login_TextFieldLabelText_coreUrl": "Enter your WebTrit Core url",
+  "login_TextFieldLabelText_coreUrl": "Enter your Core URL",
   "@login_TextFieldLabelText_coreUrl": {
   },
   "login_Button_coreUrlAssign": "Assign",
@@ -83,6 +83,18 @@
   },
   "loginOtpRequestTabVerifyButtonLabel": "Verify",
   "@loginOtpRequestTabVerifyButtonLabel": {
+  },
+  "login_validationCoreUrlError": "Please enter correct URL",
+  "@login_validationCoreUrlError": {
+  },
+  "login_LoginIncompatibleCoreVersionExceptionError": "Incompatible version of provided Core",
+  "@login_LoginIncompatibleCoreVersionExceptionError": {
+  },
+  "login_FormatExceptionError": "Response issue occur",
+  "@login_FormatExceptionError": {
+  },
+  "login_SocketExceptionError": "Network issue occur",
+  "@login_SocketExceptionError": {
   },
 
   "validationBlankError": "Please enter a value",

@@ -5,13 +5,13 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
-import 'package:webtrit_phone/data/secure_storage.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 final _logger = Logger('$ExternalContactsRepository');
 
 class ExternalContactsRepository {
   final WebtritApiClient webtritApiClient;
+  final String token;
   final bool periodicPolling;
 
   late StreamController<List<ExternalContact>> _controller;
@@ -22,6 +22,7 @@ class ExternalContactsRepository {
 
   ExternalContactsRepository({
     required this.webtritApiClient,
+    required this.token,
     this.periodicPolling = true,
   }) {
     _controller = StreamController<List<ExternalContact>>.broadcast(
@@ -67,8 +68,7 @@ class ExternalContactsRepository {
   }
 
   Future<List<ExternalContact>> _listContacts() async {
-    final token = await SecureStorage().readToken();
-    final contacts = await webtritApiClient.accountContacts(token!);
+    final contacts = await webtritApiClient.accountContacts(token);
 
     return contacts
         .map((contact) => ExternalContact(

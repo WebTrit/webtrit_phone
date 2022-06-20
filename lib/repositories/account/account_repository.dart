@@ -4,13 +4,12 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
-import 'package:webtrit_phone/data/secure_storage.dart';
-
 final _logger = Logger('$AccountRepository');
 
 class AccountRepository {
   AccountRepository({
     required this.webtritApiClient,
+    required this.token,
     this.periodicPolling = true,
   }) {
     _controller = StreamController<AccountInfo>.broadcast(
@@ -21,6 +20,7 @@ class AccountRepository {
   }
 
   final WebtritApiClient webtritApiClient;
+  final String token;
   final bool periodicPolling;
 
   late StreamController<AccountInfo> _controller;
@@ -60,12 +60,10 @@ class AccountRepository {
   }
 
   Future<AccountInfo> _accountInfo() async {
-    final token = await SecureStorage().readToken();
-    return await webtritApiClient.accountInfo(token!);
+    return await webtritApiClient.accountInfo(token);
   }
 
   Future<void> logout() async {
-    final token = await SecureStorage().readToken();
-    await webtritApiClient.sessionLogout(token!);
+    await webtritApiClient.sessionLogout(token);
   }
 }

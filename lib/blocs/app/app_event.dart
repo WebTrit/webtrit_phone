@@ -1,23 +1,18 @@
 part of 'app_bloc.dart';
 
-abstract class AppEvent extends Equatable {
+abstract class AppEvent {
   const AppEvent();
-
-  @override
-  List<Object> get props => [];
 }
 
-class AppLogined extends AppEvent {
-  const AppLogined({
-    required this.token,
-  });
-
-  final String token;
-
-  @override
-  List<Object> get props => [token];
+@Freezed(copyWith: false)
+class AppLogined with _$AppLogined implements AppEvent {
+  const factory AppLogined({
+    required String coreUrl,
+    required String token,
+  }) = _AppLogined;
 }
 
-class AppLogouted extends AppEvent {
-  const AppLogouted();
+@Freezed(copyWith: false)
+class AppLogouted with _$AppLogouted implements AppEvent {
+  const factory AppLogouted() = _AppLogouted;
 }

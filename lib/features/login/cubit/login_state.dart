@@ -23,7 +23,7 @@ class LoginState with _$LoginState {
     @Default(0) int tabIndex,
     @Default(LoginStatus.input) LoginStatus status,
     Object? error,
-    @Default(false) bool demo,
+    String? coreUrl,
     String? otpId,
     String? token,
     @Default(UrlInput.pure()) UrlInput coreUrlInput,

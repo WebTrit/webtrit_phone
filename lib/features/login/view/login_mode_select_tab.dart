@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webtrit_phone/environment_config.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
@@ -43,12 +44,14 @@ class LoginModeSelectTab extends StatelessWidget {
                 style: elevatedButtonStyles?.primary,
                 child: Text(context.l10n.loginModeSelectionTabSignInButtonLabel),
               ),
-              const SizedBox(height: kToolbarHeight / 4),
-              ElevatedButton(
-                onPressed: () => context.read<LoginCubit>().loginModeSelectSubmitter(true),
-                style: elevatedButtonStyles?.neutral,
-                child: Text(context.l10n.loginModeSelectionTabDemoButtonLabel),
-              ),
+              if (EnvironmentConfig.CORE_URL.isEmpty) ...[
+                const SizedBox(height: kToolbarHeight / 4),
+                ElevatedButton(
+                  onPressed: () => context.read<LoginCubit>().loginModeSelectSubmitter(true),
+                  style: elevatedButtonStyles?.neutral,
+                  child: Text(context.l10n.loginModeSelectionTabDemoButtonLabel),
+                ),
+              ],
               const SizedBox(height: kToolbarHeight / 2),
             ],
           ),

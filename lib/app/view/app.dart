@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:webtrit_api/webtrit_api.dart';
-
 import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
@@ -21,35 +19,33 @@ import 'main.dart';
 class App extends StatefulWidget {
   const App({
     Key? key,
-    required this.webRegistrationInitialUrl,
-    required this.isRegistered,
+    required this.appDatabase,
   }) : super(key: key);
 
-  final String? webRegistrationInitialUrl;
-  final bool isRegistered;
+  final AppDatabase appDatabase;
 
   @override
   State<App> createState() => _AppState();
 }
 
 class _AppState extends State<App> {
-  String _initialRoute(String? webRegistrationInitialUrl, bool isRegistered) => isRegistered
-      ? '/main'
-      : webRegistrationInitialUrl == null
-          ? '/login'
-          : '/web-registration';
-
   late final ValueNotifier<ThemeSettings> themeSettings;
+  late final AppBloc appBloc;
 
   @override
   void initState() {
     super.initState();
     setDefaultOrientations();
     themeSettings = ValueNotifier(portaoneThemeSettings);
+    appBloc = AppBloc(
+      secureStorage: SecureStorage(),
+      appDatabase: widget.appDatabase,
+    );
   }
 
   @override
-  void dispose() {
+  void dispose() async {
+    await appBloc.close();
     themeSettings.dispose();
     super.dispose();
   }
@@ -85,31 +81,20 @@ class _AppState extends State<App> {
       ),
     );
 
-    return MultiRepositoryProvider(
+    return MultiBlocProvider(
       providers: [
-        RepositoryProvider<WebtritApiClient>(
-          create: (context) => WebtritApiClient(Uri.parse(EnvironmentConfig.CORE_URL)),
+        BlocProvider<NotificationsBloc>(
+          create: (context) => NotificationsBloc(),
+        ),
+        BlocProvider<AppBloc>.value(
+          value: appBloc,
         ),
       ],
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider<NotificationsBloc>(
-            create: (context) => NotificationsBloc(),
-          ),
-          BlocProvider<AppBloc>(
-            create: (context) => AppBloc(
-              secureStorage: SecureStorage(),
-              appDatabase: context.read<AppDatabase>(),
-            ),
-          ),
-        ],
-        child: materialApp,
-      ),
+      child: materialApp,
     );
   }
 
   late final _router = GoRouter(
-    initialLocation: _initialRoute(widget.webRegistrationInitialUrl, widget.isRegistered),
     routes: [
       GoRoute(
         name: AppRoute.login,
@@ -120,7 +105,7 @@ class _AppState extends State<App> {
         name: AppRoute.webRegistration,
         path: '/web-registration',
         builder: (context, state) => WebRegistrationPage(
-          initialUrl: state.extra != null ? state.extra! as String : widget.webRegistrationInitialUrl!,
+          initialUrl: state.queryParams['initialUrl'] ?? '',
         ),
       ),
       GoRoute(
@@ -129,6 +114,9 @@ class _AppState extends State<App> {
         builder: (context, state) => const Main(),
       ),
     ],
+    redirect: _redirect,
+    refreshListenable: GoRouterRefreshStream(appBloc.stream),
+    initialLocation: '/main',
     navigatorBuilder: (context, state, child) => MultiBlocListener(
       listeners: [
         BlocListener<NotificationsBloc, NotificationsState>(
@@ -144,18 +132,29 @@ class _AppState extends State<App> {
             }
           },
         ),
-        BlocListener<AppBloc, AppState>(
-          listener: (context, state) async {
-            // TODO: move this awaits to bloc - this will prevent next context warning
-            final webRegistrationInitialUrl = await SecureStorage().readWebRegistrationInitialUrl();
-            final isRegistered = await SecureStorage().readToken() != null;
-
-            // ignore: use_build_context_synchronously
-            context.go(_initialRoute(webRegistrationInitialUrl, isRegistered), extra: webRegistrationInitialUrl);
-          },
-        ),
       ],
       child: child,
     ),
   );
+
+  String? _redirect(GoRouterState state) {
+    final coreUrl = appBloc.state.coreUrl;
+    final token = appBloc.state.token;
+    final webRegistrationInitialUrl = appBloc.state.webRegistrationInitialUrl;
+
+    final isLoginPath = state.subloc == '/login';
+    final isWebRegistrationPath = state.subloc == '/web-registration';
+
+    if (coreUrl != null && token != null) {
+      if (isLoginPath || isWebRegistrationPath) {
+        return '/main';
+      }
+    } else if (webRegistrationInitialUrl != null && !isWebRegistrationPath) {
+      return '/web-registration?initialUrl=$webRegistrationInitialUrl';
+    } else if (!isLoginPath) {
+      return '/login';
+    }
+
+    return null;
+  }
 }

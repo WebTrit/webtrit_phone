@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
@@ -22,9 +24,12 @@ void main() {
       dispose: (context, value) => value.close(),
       child: RepositoryProvider.value(
         value: logRecordsRepository,
-        child: App(
-          webRegistrationInitialUrl: await SecureStorage().readWebRegistrationInitialUrl(),
-          isRegistered: await SecureStorage().readToken() != null,
+        child: Builder(
+          builder: (context) {
+            return App(
+              appDatabase: context.read<AppDatabase>(),
+            );
+          },
         ),
       ),
     );

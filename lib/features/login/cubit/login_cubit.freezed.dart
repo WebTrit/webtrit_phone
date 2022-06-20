@@ -19,7 +19,7 @@ mixin _$LoginState {
   int get tabIndex => throw _privateConstructorUsedError;
   LoginStatus get status => throw _privateConstructorUsedError;
   Object? get error => throw _privateConstructorUsedError;
-  bool get demo => throw _privateConstructorUsedError;
+  String? get coreUrl => throw _privateConstructorUsedError;
   String? get otpId => throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
   UrlInput get coreUrlInput => throw _privateConstructorUsedError;
@@ -40,7 +40,7 @@ abstract class $LoginStateCopyWith<$Res> {
       {int tabIndex,
       LoginStatus status,
       Object? error,
-      bool demo,
+      String? coreUrl,
       String? otpId,
       String? token,
       UrlInput coreUrlInput,
@@ -61,7 +61,7 @@ class _$LoginStateCopyWithImpl<$Res> implements $LoginStateCopyWith<$Res> {
     Object? tabIndex = freezed,
     Object? status = freezed,
     Object? error = freezed,
-    Object? demo = freezed,
+    Object? coreUrl = freezed,
     Object? otpId = freezed,
     Object? token = freezed,
     Object? coreUrlInput = freezed,
@@ -78,10 +78,10 @@ class _$LoginStateCopyWithImpl<$Res> implements $LoginStateCopyWith<$Res> {
           : status // ignore: cast_nullable_to_non_nullable
               as LoginStatus,
       error: error == freezed ? _value.error : error,
-      demo: demo == freezed
-          ? _value.demo
-          : demo // ignore: cast_nullable_to_non_nullable
-              as bool,
+      coreUrl: coreUrl == freezed
+          ? _value.coreUrl
+          : coreUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
       otpId: otpId == freezed
           ? _value.otpId
           : otpId // ignore: cast_nullable_to_non_nullable
@@ -117,7 +117,7 @@ abstract class _$$_LoginStateCopyWith<$Res>
       {int tabIndex,
       LoginStatus status,
       Object? error,
-      bool demo,
+      String? coreUrl,
       String? otpId,
       String? token,
       UrlInput coreUrlInput,
@@ -140,7 +140,7 @@ class __$$_LoginStateCopyWithImpl<$Res> extends _$LoginStateCopyWithImpl<$Res>
     Object? tabIndex = freezed,
     Object? status = freezed,
     Object? error = freezed,
-    Object? demo = freezed,
+    Object? coreUrl = freezed,
     Object? otpId = freezed,
     Object? token = freezed,
     Object? coreUrlInput = freezed,
@@ -157,10 +157,10 @@ class __$$_LoginStateCopyWithImpl<$Res> extends _$LoginStateCopyWithImpl<$Res>
           : status // ignore: cast_nullable_to_non_nullable
               as LoginStatus,
       error: error == freezed ? _value.error : error,
-      demo: demo == freezed
-          ? _value.demo
-          : demo // ignore: cast_nullable_to_non_nullable
-              as bool,
+      coreUrl: coreUrl == freezed
+          ? _value.coreUrl
+          : coreUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
       otpId: otpId == freezed
           ? _value.otpId
           : otpId // ignore: cast_nullable_to_non_nullable
@@ -192,7 +192,7 @@ class _$_LoginState implements _LoginState {
       {this.tabIndex = 0,
       this.status = LoginStatus.input,
       this.error,
-      this.demo = false,
+      this.coreUrl,
       this.otpId,
       this.token,
       this.coreUrlInput = const UrlInput.pure(),
@@ -208,8 +208,7 @@ class _$_LoginState implements _LoginState {
   @override
   final Object? error;
   @override
-  @JsonKey()
-  final bool demo;
+  final String? coreUrl;
   @override
   final String? otpId;
   @override
@@ -226,7 +225,7 @@ class _$_LoginState implements _LoginState {
 
   @override
   String toString() {
-    return 'LoginState(tabIndex: $tabIndex, status: $status, error: $error, demo: $demo, otpId: $otpId, token: $token, coreUrlInput: $coreUrlInput, phoneInput: $phoneInput, codeInput: $codeInput)';
+    return 'LoginState(tabIndex: $tabIndex, status: $status, error: $error, coreUrl: $coreUrl, otpId: $otpId, token: $token, coreUrlInput: $coreUrlInput, phoneInput: $phoneInput, codeInput: $codeInput)';
   }
 
   @override
@@ -237,7 +236,7 @@ class _$_LoginState implements _LoginState {
             const DeepCollectionEquality().equals(other.tabIndex, tabIndex) &&
             const DeepCollectionEquality().equals(other.status, status) &&
             const DeepCollectionEquality().equals(other.error, error) &&
-            const DeepCollectionEquality().equals(other.demo, demo) &&
+            const DeepCollectionEquality().equals(other.coreUrl, coreUrl) &&
             const DeepCollectionEquality().equals(other.otpId, otpId) &&
             const DeepCollectionEquality().equals(other.token, token) &&
             const DeepCollectionEquality()
@@ -253,7 +252,7 @@ class _$_LoginState implements _LoginState {
       const DeepCollectionEquality().hash(tabIndex),
       const DeepCollectionEquality().hash(status),
       const DeepCollectionEquality().hash(error),
-      const DeepCollectionEquality().hash(demo),
+      const DeepCollectionEquality().hash(coreUrl),
       const DeepCollectionEquality().hash(otpId),
       const DeepCollectionEquality().hash(token),
       const DeepCollectionEquality().hash(coreUrlInput),
@@ -271,7 +270,7 @@ abstract class _LoginState implements LoginState {
       {final int tabIndex,
       final LoginStatus status,
       final Object? error,
-      final bool demo,
+      final String? coreUrl,
       final String? otpId,
       final String? token,
       final UrlInput coreUrlInput,
@@ -285,7 +284,7 @@ abstract class _LoginState implements LoginState {
   @override
   Object? get error => throw _privateConstructorUsedError;
   @override
-  bool get demo => throw _privateConstructorUsedError;
+  String? get coreUrl => throw _privateConstructorUsedError;
   @override
   String? get otpId => throw _privateConstructorUsedError;
   @override

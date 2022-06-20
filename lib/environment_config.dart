@@ -20,17 +20,12 @@ class EnvironmentConfig {
 
   static const CORE_URL = String.fromEnvironment(
     'WEBTRIT_PHONE_WEBTRIT_CORE_URL',
-    defaultValue: 'http://localhost:4000',
   );
 
-  static String get SIGNALING_URL {
-    final uri = Uri.parse(CORE_URL);
-    if (uri.scheme.endsWith('s')) {
-      return uri.replace(scheme: 'wss').toString();
-    } else {
-      return uri.replace(scheme: 'ws').toString();
-    }
-  }
+  static const DEMO_CORE_URL = String.fromEnvironment(
+    'WEBTRIT_PHONE_DEMO_WEBTRIT_CORE_URL',
+    defaultValue: 'http://localhost:4000',
+  );
 
   static const APP_NAME = String.fromEnvironment(
     'WEBTRIT_PHONE_APP_NAME',

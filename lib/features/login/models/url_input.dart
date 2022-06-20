@@ -1,7 +1,9 @@
 import 'package:formz/formz.dart';
+import 'package:validators/validators.dart';
 
 enum UrlValidationError {
   blank,
+  format,
 }
 
 class UrlInput extends FormzInput<String, UrlValidationError> {
@@ -13,6 +15,12 @@ class UrlInput extends FormzInput<String, UrlValidationError> {
   UrlValidationError? validator(String value) {
     if (value.isEmpty) {
       return UrlValidationError.blank;
+    } else if (!isURL(
+      value,
+      protocols: ['https'],
+      requireProtocol: false,
+    )) {
+      return UrlValidationError.format;
     } else {
       return null;
     }
