@@ -75,7 +75,7 @@ class MainScaffoldState extends State<MainScaffold> with RestorationMixin {
   }
 
   @override
-  String get restorationId => 'MainPage';
+  String get restorationId => 'Main';
 
   @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
