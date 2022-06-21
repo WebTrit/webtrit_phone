@@ -10,7 +10,6 @@ import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/pages/web_registration.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
@@ -99,12 +98,12 @@ class _AppState extends State<App> {
       GoRoute(
         name: AppRoute.login,
         path: '/login',
-        builder: (context, state) => const LoginPage(),
+        builder: (context, state) => const LoginScreen(),
       ),
       GoRoute(
         name: AppRoute.webRegistration,
         path: '/web-registration',
-        builder: (context, state) => WebRegistrationPage(
+        builder: (context, state) => WebRegistrationScreen(
           initialUrl: state.queryParams['initialUrl'] ?? '',
         ),
       ),

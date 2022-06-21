@@ -37,8 +37,8 @@ const String kDemoPage = '''
 </html>
 ''';
 
-class WebRegistrationPage extends StatefulWidget {
-  const WebRegistrationPage({
+class WebRegistrationScreen extends StatefulWidget {
+  const WebRegistrationScreen({
     Key? key,
     required this.initialUrl,
   }) : super(key: key);
@@ -46,10 +46,10 @@ class WebRegistrationPage extends StatefulWidget {
   final String initialUrl;
 
   @override
-  WebRegistrationPageState createState() => WebRegistrationPageState();
+  WebRegistrationScreenState createState() => WebRegistrationScreenState();
 }
 
-class WebRegistrationPageState extends State<WebRegistrationPage> {
+class WebRegistrationScreenState extends State<WebRegistrationScreen> {
   late final WebViewController _controller;
 
   @override
