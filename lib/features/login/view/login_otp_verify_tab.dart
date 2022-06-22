@@ -124,7 +124,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
   void _onOtpVerifyBack(BuildContext context) {
     primaryFocus?.unfocus();
 
-    context.read<LoginCubit>().loginCoreUrlAssignBack();
+    context.read<LoginCubit>().loginOptVerifyBack();
   }
 
   String? _codeTextFieldErrorText(BuildContext context, CodeInput codeInput) {
