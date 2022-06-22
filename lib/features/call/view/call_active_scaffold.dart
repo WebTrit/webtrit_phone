@@ -1,13 +1,8 @@
-import 'dart:async';
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
-import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 import '../call.dart';
@@ -31,37 +26,10 @@ class CallActiveScaffold extends StatefulWidget {
 class CallActiveScaffoldState extends State<CallActiveScaffold> {
   bool compact = false;
   bool frontCamera = true;
-  Timer? durationTimer;
-  Duration? duration;
-
-  @override
-  void initState() {
-    super.initState();
-    durationTimer = Timer.periodic(const Duration(seconds: 1), _onDurationTimer);
-  }
-
-  @override
-  void dispose() {
-    durationTimer?.cancel();
-    super.dispose();
-  }
-
-  void _onDurationTimer(Timer timer) {
-    final acceptedTime = widget.activeCall.acceptedTime;
-    if (acceptedTime != null) {
-      setState(() {
-        duration = DateTime.now().difference(acceptedTime);
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    final acceptActionEnabled = widget.activeCall.isIncoming && widget.activeCall.wasAccepted != true;
-    final direction =
-        widget.activeCall.isIncoming ? context.l10n.call_description_incoming : context.l10n.call_description_outgoing;
-    final username = widget.activeCall.displayName ?? widget.activeCall.handle.value;
-    final duration = this.duration;
+    final video = widget.activeCall.video;
 
     final themeData = Theme.of(context);
     final Gradients? gradients = themeData.extension<Gradients>();
@@ -77,78 +45,64 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
             ),
             child: Stack(
               children: [
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  top: 0,
-                  bottom: 0,
-                  child: GestureDetector(
-                    onTap: _compactSwitched,
-                    behavior: HitTestBehavior.translucent,
-                    child: SizedBox(
-                      width: mediaQueryData.size.width,
-                      height: mediaQueryData.size.height,
-                      child: RTCVideoView(widget.remoteRenderer),
+                if (video)
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    child: GestureDetector(
+                      onTap: widget.activeCall.wasAccepted ? _compactSwitched : null,
+                      behavior: HitTestBehavior.translucent,
+                      child: SizedBox(
+                        width: mediaQueryData.size.width,
+                        height: mediaQueryData.size.height,
+                        child: RTCVideoView(widget.remoteRenderer),
+                      ),
                     ),
                   ),
-                ),
-                AnimatedPositioned(
-                  right: 10 + mediaQueryData.padding.right,
-                  top: 10 + mediaQueryData.padding.top + (compact ? 0 : 100),
-                  duration: kThemeChangeDuration,
-                  child: GestureDetector(
-                    onTap: _cameraSwitched,
-                    child: Stack(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(color: onTabGradient.withOpacity(0.3)),
-                          width: orientation == Orientation.portrait ? 90.0 : 120.0,
-                          height: orientation == Orientation.portrait ? 120.0 : 90.0,
-                          child: RTCVideoView(
-                            widget.localRenderer,
-                            mirror: true,
+                if (video)
+                  AnimatedPositioned(
+                    right: 10 + mediaQueryData.padding.right,
+                    top: 10 + mediaQueryData.padding.top + (compact ? 0 : 100),
+                    duration: kThemeChangeDuration,
+                    child: GestureDetector(
+                      onTap: _cameraSwitched,
+                      child: Stack(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(color: onTabGradient.withOpacity(0.3)),
+                            width: orientation == Orientation.portrait ? 90.0 : 120.0,
+                            height: orientation == Orientation.portrait ? 120.0 : 90.0,
+                            child: RTCVideoView(
+                              widget.localRenderer,
+                              mirror: true,
+                            ),
                           ),
-                        ),
-                        Positioned(
-                          left: 0,
-                          right: 0,
-                          bottom: 1,
-                          child: Icon(
-                            Icons.switch_camera,
-                            size: textTheme.titleMedium!.fontSize,
-                            color: onTabGradient,
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            bottom: 1,
+                            child: Icon(
+                              Icons.switch_camera,
+                              size: textTheme.titleMedium!.fontSize,
+                              color: onTabGradient,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
                 if (!compact)
                   Positioned(
                     left: 0 + mediaQueryData.padding.left,
                     right: 0 + mediaQueryData.padding.right,
                     top: 10 + mediaQueryData.padding.top,
-                    child: Column(
-                      children: [
-                        Text(
-                          direction,
-                          style: textTheme.bodyLarge!.copyWith(color: onTabGradient),
-                        ),
-                        Text(
-                          username,
-                          style: textTheme.displaySmall!.copyWith(color: onTabGradient),
-                        ),
-                        if (duration != null)
-                          Text(
-                            duration.format(),
-                            style: textTheme.bodyMedium!.copyWith(
-                              color: onTabGradient,
-                              fontFeatures: [
-                                const FontFeature.tabularFigures(),
-                              ],
-                            ),
-                          ),
-                      ],
+                    child: CallInfo(
+                      isIncoming: widget.activeCall.isIncoming,
+                      username: widget.activeCall.displayName ?? widget.activeCall.handle.value,
+                      acceptedTime: widget.activeCall.acceptedTime,
+                      color: onTabGradient,
                     ),
                   ),
                 if (!compact)
@@ -157,12 +111,16 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                     right: 0 + mediaQueryData.padding.right,
                     bottom: 20 + mediaQueryData.padding.bottom,
                     child: CallActions(
+                      isIncoming: widget.activeCall.isIncoming,
+                      video: widget.activeCall.video,
+                      wasAccepted: widget.activeCall.wasAccepted,
+                      wasHungUp: widget.activeCall.wasHungUp,
                       onCameraPressed: _cameraPressed,
                       onMicrophonePressed: _microphonePressed,
                       speakerphoneEnabledByDefault: widget.activeCall.video,
                       onSpeakerphonePressed: _speakerphonePressed,
                       onHangupPressed: _hangup,
-                      onAcceptPressed: acceptActionEnabled ? _accept : null,
+                      onAcceptPressed: _accept,
                     ),
                   ),
               ],
