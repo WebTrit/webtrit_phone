@@ -828,6 +828,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   void _onSignalingEvent(Event event) {
     if (event is StateEvent) {
+      final activeCallIds = Set.from(state.activeCalls.map((activeCall) => activeCall.callId.callId));
+      final signalingStateCallIds = Set.from(event.calls.keys);
+      for (final callId in activeCallIds.difference(signalingStateCallIds)) {
+        add(_CallSignalingEvent.hangup(
+          callId: CallIdValue(callId),
+          code: 487,
+          reason: 'Request Terminated',
+        ));
+      }
+
       event.calls.forEach((callIdString, callLogs) {
         // TODO: extend logic of call logs analysis for such case as signaling reconnect
         for (var callLog in callLogs) {
