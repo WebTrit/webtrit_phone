@@ -27,7 +27,7 @@ class Actionpad extends StatelessWidget {
     return TextButtonsTable(
       minimumSize: Size.square(MediaQuery.of(context).size.width / 5),
       children: [
-        Container(),
+        const SizedBox(),
         TextButton(
           onPressed: onCallPressed,
           onLongPress: onCallLongPress,
