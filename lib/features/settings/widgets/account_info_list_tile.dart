@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../bloc/settings_bloc.dart';
@@ -34,10 +36,13 @@ class AccountInfoListTile extends StatelessWidget {
           ),
           trailing: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const <Widget>[
+            children: <Widget>[
               IconButton(
-                icon: Icon(Icons.edit_outlined),
-                onPressed: null, // TODO implement edit account page
+                icon: const Icon(Icons.edit_outlined),
+                onPressed: () {
+                  // TODO: implement edit account page
+                  context.showErrorSnackBar(context.l10n.notImplemented);
+                },
               ),
             ],
           ),

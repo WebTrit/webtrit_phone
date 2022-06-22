@@ -20,10 +20,6 @@ class SettingsScaffold extends StatefulWidget {
 }
 
 class SettingsScaffoldState extends State<SettingsScaffold> {
-  bool _dndSelected = false;
-  bool _registeredSelected = false;
-  bool _darkModeSelected = false;
-
   @override
   Widget build(BuildContext context) {
     final scaffold = Scaffold(
@@ -36,25 +32,22 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
           const ListTileSeparator(),
           SwitchListTile(
             title: Text(context.l10n.settings_ListViewTileTitle_doNotDisturb),
-            value: _dndSelected,
-            onChanged: (bool value) {
-              setState(() {
-                _dndSelected = value;
-              });
+            value: false,
+            onChanged: (value) {
+              // TODO: implement Do not Disturb functionality
+              context.showErrorSnackBar(context.l10n.notImplemented);
             },
-            secondary: const Icon(Icons.block), // TODO implement Do not Disturb functionality
+            secondary: const Icon(Icons.block),
           ),
           const ListTileSeparator(),
           SwitchListTile(
             title: Text(context.l10n.settings_ListViewTileTitle_registered),
-            value: _registeredSelected,
-            onChanged: (bool value) {
-              setState(() {
-                _registeredSelected = value;
-              });
+            value: true,
+            onChanged: (value) {
+              // TODO: implement Registered/Unregistered functionality
+              context.showErrorSnackBar(context.l10n.notImplemented);
             },
-            secondary:
-                const Icon(Icons.account_circle_outlined), // TODO implement Registered/Unregistered functionality
+            secondary: const Icon(Icons.account_circle_outlined),
           ),
           const ListTileSeparator(),
           ListTile(
@@ -132,13 +125,9 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
           const ListTileSeparator(),
           SwitchListTile(
             title: Text(context.l10n.settings_ListViewTileTitle_darkMode),
-            value: _darkModeSelected,
-            onChanged: (bool value) {
-              setState(() {
-                _darkModeSelected = value;
-              });
-            },
-            secondary: const Icon(Icons.nights_stay_outlined), // TODO implement Dark Theme
+            value: false,
+            onChanged: null, // TODO: implement Dark Theme
+            secondary: const Icon(Icons.nights_stay_outlined),
           ),
           GroupTitleListTile(
             titleData: context.l10n.settings_ListViewTileTitle_toolbox,
