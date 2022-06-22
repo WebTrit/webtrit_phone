@@ -86,8 +86,8 @@ class WebtritSignalingClient {
   }
 
   Future<void> disconnect([int? code, String? reason]) {
-    if (_ws.closeCode != null) {
-      _logger.fine('already disconnected code: ${_ws.closeCode} reason: ${_ws.closeReason}');
+    if (_ws.readyState != WebSocket.open) {
+      _logger.fine('already disconnected state: ${_ws.readyState} code: ${_ws.closeCode} reason: ${_ws.closeReason}');
       return Future.value();
     }
     _logger.fine('disconnect code: $code reason: $reason');
@@ -143,6 +143,10 @@ class WebtritSignalingClient {
   }
 
   Future<void> _execute(Map<String, dynamic> requestJson, Duration timeoutDuration) async {
+    if (_ws.readyState != WebSocket.open) {
+      throw WebtritSignalingDisconnectedException();
+    }
+
     _restartKeepaliveTimer();
 
     final responseJson = await _executeRequest(requestJson, timeoutDuration);

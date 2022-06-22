@@ -1,10 +1,10 @@
 abstract class WebtritSignalingException implements Exception {}
 
-class WebtritSignalingAlreadyConnectException implements WebtritSignalingException {
-  const WebtritSignalingAlreadyConnectException();
+class WebtritSignalingDisconnectedException implements WebtritSignalingException {
+  const WebtritSignalingDisconnectedException();
 
   @override
-  String toString() => '$WebtritSignalingAlreadyConnectException';
+  String toString() => '$WebtritSignalingDisconnectedException';
 }
 
 class WebtritSignalingUnknownMessageException implements WebtritSignalingException {
