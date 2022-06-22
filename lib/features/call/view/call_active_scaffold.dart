@@ -29,6 +29,7 @@ class CallActiveScaffold extends StatefulWidget {
 }
 
 class CallActiveScaffoldState extends State<CallActiveScaffold> {
+  bool compact = false;
   bool frontCamera = true;
   Timer? durationTimer;
   Duration? duration;
@@ -81,15 +82,20 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                   right: 0,
                   top: 0,
                   bottom: 0,
-                  child: SizedBox(
-                    width: mediaQueryData.size.width,
-                    height: mediaQueryData.size.height,
-                    child: RTCVideoView(widget.remoteRenderer),
+                  child: GestureDetector(
+                    onTap: _compactSwitched,
+                    behavior: HitTestBehavior.translucent,
+                    child: SizedBox(
+                      width: mediaQueryData.size.width,
+                      height: mediaQueryData.size.height,
+                      child: RTCVideoView(widget.remoteRenderer),
+                    ),
                   ),
                 ),
-                Positioned(
-                  right: 20 + mediaQueryData.padding.right,
-                  top: 20 + mediaQueryData.padding.top,
+                AnimatedPositioned(
+                  right: 10 + mediaQueryData.padding.right,
+                  top: 10 + mediaQueryData.padding.top + (compact ? 0 : 100),
+                  duration: kThemeChangeDuration,
                   child: GestureDetector(
                     onTap: _cameraSwitched,
                     child: Stack(
@@ -117,52 +123,60 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                     ),
                   ),
                 ),
-                Positioned(
-                  left: 0 + mediaQueryData.padding.left,
-                  right: 0 + mediaQueryData.padding.right,
-                  top: 30 + mediaQueryData.padding.top,
-                  child: Column(
-                    children: [
-                      Text(
-                        direction,
-                        style: textTheme.bodyLarge!.copyWith(color: onTabGradient),
-                      ),
-                      Text(
-                        username,
-                        style: textTheme.displaySmall!.copyWith(color: onTabGradient),
-                      ),
-                      if (duration != null)
+                if (!compact)
+                  Positioned(
+                    left: 0 + mediaQueryData.padding.left,
+                    right: 0 + mediaQueryData.padding.right,
+                    top: 10 + mediaQueryData.padding.top,
+                    child: Column(
+                      children: [
                         Text(
-                          duration.format(),
-                          style: textTheme.bodyMedium!.copyWith(
-                            color: onTabGradient,
-                            fontFeatures: [
-                              const FontFeature.tabularFigures(),
-                            ],
-                          ),
+                          direction,
+                          style: textTheme.bodyLarge!.copyWith(color: onTabGradient),
                         ),
-                    ],
+                        Text(
+                          username,
+                          style: textTheme.displaySmall!.copyWith(color: onTabGradient),
+                        ),
+                        if (duration != null)
+                          Text(
+                            duration.format(),
+                            style: textTheme.bodyMedium!.copyWith(
+                              color: onTabGradient,
+                              fontFeatures: [
+                                const FontFeature.tabularFigures(),
+                              ],
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
-                ),
-                Positioned(
-                  left: 0 + mediaQueryData.padding.left,
-                  right: 0 + mediaQueryData.padding.right,
-                  bottom: 20 + mediaQueryData.padding.bottom,
-                  child: CallActions(
-                    onCameraPressed: _cameraPressed,
-                    onMicrophonePressed: _microphonePressed,
-                    speakerphoneEnabledByDefault: widget.activeCall.video,
-                    onSpeakerphonePressed: _speakerphonePressed,
-                    onHangupPressed: _hangup,
-                    onAcceptPressed: acceptActionEnabled ? _accept : null,
+                if (!compact)
+                  Positioned(
+                    left: 0 + mediaQueryData.padding.left,
+                    right: 0 + mediaQueryData.padding.right,
+                    bottom: 20 + mediaQueryData.padding.bottom,
+                    child: CallActions(
+                      onCameraPressed: _cameraPressed,
+                      onMicrophonePressed: _microphonePressed,
+                      speakerphoneEnabledByDefault: widget.activeCall.video,
+                      onSpeakerphonePressed: _speakerphonePressed,
+                      onHangupPressed: _hangup,
+                      onAcceptPressed: acceptActionEnabled ? _accept : null,
+                    ),
                   ),
-                ),
               ],
             ),
           );
         },
       ),
     );
+  }
+
+  void _compactSwitched() {
+    setState(() {
+      compact = !compact;
+    });
   }
 
   void _cameraSwitched() {
