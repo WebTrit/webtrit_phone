@@ -17,5 +17,14 @@ void main() {
       expect(' Aaa '.initialism, 'A');
       expect('   '.initialism, '');
     });
+
+    test('emoji', () {
+      expect('⭐️'.initialism, '⭐️');
+      expect('❤️'.initialism, '❤️');
+      expect('  ⭐  '.initialism, '⭐');
+      expect('  ❤️  '.initialism, '❤️');
+      expect('  ⭐  ❤️ '.initialism, '⭐❤️');
+      expect('  ⭐️❤️ '.initialism, '⭐️');
+    });
   });
 }
