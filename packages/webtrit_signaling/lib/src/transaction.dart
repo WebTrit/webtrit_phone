@@ -5,12 +5,13 @@ import 'exceptions.dart';
 class Transaction {
   static int _createCounter = 0;
 
+  final int signalingClient;
   final String id;
   final _completer = Completer<Map<String, dynamic>>();
 
   late Timer _timer;
 
-  Transaction(Duration timeoutDuration) : id = 'transaction-$_createCounter' {
+  Transaction(this.signalingClient, Duration timeoutDuration) : id = 'transaction-$_createCounter' {
     _createCounter++;
 
     _timer = Timer(
@@ -28,18 +29,14 @@ class Transaction {
 
   void terminateByDisconnect([int? closeCode, String? closeReason]) {
     _timer.cancel();
-    _completer.completeError(WebtritSignalingTerminateByDisconnectException(closeCode, closeReason));
-  }
-
-  void terminateByError(dynamic error, StackTrace stackTrace) {
-    _timer.cancel();
-    _completer.completeError(WebtritSignalingTerminateByErrorException(error, stackTrace));
+    _completer
+        .completeError(WebtritSignalingTerminateByDisconnectException(signalingClient, id, closeCode, closeReason));
   }
 
   void _onTimeout() {
     if (_completer.isCompleted) {
       return;
     }
-    _completer.completeError(WebtritSignalingTimeoutException(), StackTrace.current);
+    _completer.completeError(WebtritSignalingTransactionTimeoutException(signalingClient, id), StackTrace.current);
   }
 }

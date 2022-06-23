@@ -30,12 +30,14 @@ class WebtritSignalingClient {
 
   WebtritSignalingClient._(
     this._ws,
-  ) : _logger = Logger('$WebtritSignalingClient-$_createCounter') {
+  )   : _id = _createCounter,
+        _logger = Logger('$WebtritSignalingClient-$_createCounter') {
     _createCounter++;
 
     _logger.fine('connected');
   }
 
+  final int _id;
   final Logger _logger;
 
   final WebSocket _ws;
@@ -144,7 +146,7 @@ class WebtritSignalingClient {
 
   Future<void> _execute(Map<String, dynamic> requestJson, Duration timeoutDuration) async {
     if (_ws.readyState != WebSocket.open) {
-      throw WebtritSignalingDisconnectedException();
+      throw WebtritSignalingDisconnectedException(_id);
     }
 
     _restartKeepaliveTimer();
@@ -155,9 +157,9 @@ class WebtritSignalingClient {
       return;
     } else if (type == 'error') {
       final Map<String, dynamic> responseErrorJson = responseJson['error'];
-      throw WebtritSignalingErrorException(responseErrorJson['code'], responseErrorJson['reason']);
+      throw WebtritSignalingErrorException(_id, responseErrorJson['code'], responseErrorJson['reason']);
     } else {
-      throw WebtritSignalingResponseException(responseJson);
+      throw WebtritSignalingUnknownResponseException(_id, responseJson);
     }
   }
 
@@ -173,7 +175,7 @@ class WebtritSignalingClient {
       if (transaction != null) {
         transaction.handleResponse(responseJson);
       } else {
-        _onError(WebtritSignalingTransactionUnavailableException(transactionId), StackTrace.current);
+        _onError(WebtritSignalingTransactionUnavailableException(_id, transactionId), StackTrace.current);
       }
     } else if (messageJson.containsKey('event')) {
       final eventJson = messageJson;
@@ -185,12 +187,12 @@ class WebtritSignalingClient {
         _onError(error, stackTrace);
       }
     } else {
-      _onError(WebtritSignalingUnknownMessageException(messageJson), StackTrace.current);
+      _onError(WebtritSignalingUnknownMessageException(_id, messageJson), StackTrace.current);
     }
   }
 
   Future<Map<String, dynamic>> _executeRequest(Map<String, dynamic> requestJson, Duration timeoutDuration) async {
-    final transaction = Transaction(timeoutDuration);
+    final transaction = Transaction(_id, timeoutDuration);
 
     _transactions[transaction.id] = transaction;
     requestJson['transaction'] = transaction.id;
@@ -242,8 +244,8 @@ class WebtritSignalingClient {
       await _execute(<String, dynamic>{
         'request': 'keepalive',
       }, defaultExecuteRequestTimeoutDuration);
-    } on WebtritSignalingTimeoutException {
-      _onError(WebtritSignalingKeepaliveTimeoutException(), StackTrace.current);
+    } on WebtritSignalingTransactionTimeoutException catch (error) {
+      _onError(WebtritSignalingKeepaliveTimeoutException(error.id, error.transactionId), StackTrace.current);
     } catch (error, stackTrace) {
       _onError(error, stackTrace);
     }
