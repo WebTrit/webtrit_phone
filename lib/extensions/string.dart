@@ -12,7 +12,7 @@ extension StringExtension on String {
     if (trimmed.isEmpty) {
       return '';
     } else {
-      return trimmed.split(' ').map((v) => v[0]).take(3).join();
+      return trimmed.split(' ').where((v) => v.isNotEmpty).map((v) => v[0]).take(3).join();
     }
   }
 }
