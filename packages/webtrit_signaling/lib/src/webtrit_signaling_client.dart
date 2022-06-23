@@ -119,8 +119,6 @@ class WebtritSignalingClient {
   void _wsOnError(dynamic error, StackTrace stackTrace) {
     _logger.warning('_wsOnError', error, stackTrace);
 
-    _stopKeepaliveTimer();
-
     _onError(error, stackTrace);
   }
 
