@@ -26,7 +26,11 @@ class LeadingAvatar extends StatelessWidget {
       maxRadius: maxRadius,
       backgroundColor: themeData.colorScheme.secondaryContainer,
       foregroundColor: themeData.colorScheme.onSecondaryContainer,
-      child: Text(username.initialism),
+      child: Text(
+        username.initialism,
+        softWrap: false,
+        overflow: TextOverflow.fade,
+      ),
     );
   }
 }
