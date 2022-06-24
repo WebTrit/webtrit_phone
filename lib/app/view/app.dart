@@ -11,7 +11,6 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 
 import 'main.dart';
 
@@ -34,7 +33,6 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
-    setDefaultOrientations();
     themeSettings = ValueNotifier(portaoneThemeSettings);
     appBloc = AppBloc(
       secureStorage: SecureStorage(),
@@ -82,6 +80,10 @@ class _AppState extends State<App> {
 
     return MultiBlocProvider(
       providers: [
+        BlocProvider<OrientationsBloc>(
+          lazy: false,
+          create: (context) => OrientationsBloc()..add(const OrientationsChanged(PreferredOrientation.regular)),
+        ),
         BlocProvider<NotificationsBloc>(
           create: (context) => NotificationsBloc(),
         ),

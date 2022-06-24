@@ -7,6 +7,7 @@ export 'log_records_console/log_records_console.dart';
 export 'login/login.dart';
 export 'main/main.dart';
 export 'notifications/notifications.dart';
+export 'orientations/orientations.dart';
 export 'push_tokens/push_token.dart';
 export 'recent/recent.dart';
 export 'recents/recents.dart';

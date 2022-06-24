@@ -15,7 +15,6 @@ import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 
 class Main extends StatefulWidget {
   const Main({Key? key}) : super(key: key);
@@ -161,15 +160,13 @@ class _MainState extends State<Main> {
             final isCallLocation = GoRouter.of(context).location == '/call';
             if (state.isActive) {
               if (!isCallLocation) {
-                setCallOrientations().then((_) {
-                  context.pushNamed(MainRoute.call);
-                });
+                context.pushNamed(MainRoute.call);
+                context.read<OrientationsBloc>().add(const OrientationsChanged(PreferredOrientation.call));
               }
             } else {
               if (isCallLocation) {
-                setDefaultOrientations().then((_) {
-                  context.pop();
-                });
+                context.pop();
+                context.read<OrientationsBloc>().add(const OrientationsChanged(PreferredOrientation.regular));
               }
             }
           },
