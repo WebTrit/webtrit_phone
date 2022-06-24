@@ -164,6 +164,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     _connectivityChangedSubscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      _logger.finer('onConnectivityChanged: $result');
       if (_currentConnectivityResult != result) {
         _currentConnectivityResult = result;
         add(_ConnectivityResultChanged(result));
@@ -882,6 +883,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    _logger.finer('didChangeAppLifecycleState: $state');
     add(_AppLifecycleStateChanged(state));
   }
 
