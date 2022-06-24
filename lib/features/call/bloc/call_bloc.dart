@@ -39,9 +39,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   final _logger = Logger('$CallBloc');
 
-  late final StreamSubscription<ConnectivityResult> _connectivityChangedSubscription;
+  StreamSubscription<ConnectivityResult>? _connectivityChangedSubscription;
   ConnectivityResult?
-      _previousConnectivityResult; // necessary because of issue on iOS with doubling the same connectivity result
+      _currentConnectivityResult; // necessary because of issue on iOS with doubling the same connectivity result
 
   WebtritSignalingClient? _signalingClient;
   Timer? _signalingClientReconnectTimer;
@@ -95,19 +95,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     WidgetsBinding.instance.addObserver(this);
 
-    _connectivityChangedSubscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      if (_previousConnectivityResult != result) {
-        // Skip initial ConnectivityResult change if it is not none
-        // necessary to overcome double _SignalingClientEventConnectInitiated even add by:
-        // - processing CallStarted event
-        // - processing initial _ConnectivityResultChanged event
-        if (_previousConnectivityResult != null || result == ConnectivityResult.none) {
-          add(_ConnectivityResultChanged(result));
-        }
-        _previousConnectivityResult = result;
-      }
-    });
-
     callkeep.setDelegate(this);
   }
 
@@ -115,9 +102,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Future<void> close() async {
     callkeep.setDelegate(null);
 
-    _connectivityChangedSubscription.cancel();
-
     WidgetsBinding.instance.removeObserver(this);
+
+    await _connectivityChangedSubscription?.cancel();
 
     _signalingClientReconnectTimer?.cancel();
     await _signalingClient?.disconnect();
@@ -176,7 +163,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     CallStarted event,
     Emitter<CallState> emit,
   ) async {
-    add(const _SignalingClientEvent.connectInitiated());
+    _connectivityChangedSubscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      if (_currentConnectivityResult != result) {
+        _currentConnectivityResult = result;
+        add(_ConnectivityResultChanged(result));
+      }
+    });
   }
 
   Future<void> _onAppLifecycleStateChanged(
