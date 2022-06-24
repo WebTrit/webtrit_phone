@@ -14,14 +14,14 @@ PODS:
   - Firebase/Messaging (8.15.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 8.15.0)
-  - firebase_core (1.17.1):
+  - firebase_core (1.18.0):
     - Firebase/CoreOnly (= 8.15.0)
     - Flutter
-  - firebase_crashlytics (2.8.1):
+  - firebase_crashlytics (2.8.2):
     - Firebase/Crashlytics (= 8.15.0)
     - firebase_core
     - Flutter
-  - firebase_messaging (11.4.1):
+  - firebase_messaging (11.4.2):
     - Firebase/Messaging (= 8.15.0)
     - firebase_core
     - Flutter
@@ -95,9 +95,9 @@ PODS:
     - Flutter
   - path_provider_ios (0.0.1):
     - Flutter
-  - permission_handler_apple (9.0.2):
+  - permission_handler_apple (9.0.4):
     - Flutter
-  - PromisesObjC (2.1.0)
+  - PromisesObjC (2.1.1)
   - ReachabilitySwift (5.0.0)
   - share_plus (0.0.1):
     - Flutter
@@ -209,9 +209,9 @@ SPEC CHECKSUMS:
   connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Firebase: 5f8193dff4b5b7c5d5ef72ae54bb76c08e2b841d
-  firebase_core: 318de541b0e61d3f24262982a3f0b54afe72439b
-  firebase_crashlytics: 3ccd7b4f26a7fc546774b1074d2d10b0c6f92ab6
-  firebase_messaging: 943cfe65e0b3f457240489ce67655e40da1d270c
+  firebase_core: b14c1cfa29b9eb316345f74d1489328283825d6d
+  firebase_crashlytics: 248f810b9b21421d3e4d102cc1871ca4296e6753
+  firebase_messaging: 5374d57b2ca7a5efe1a150500b9a2451ca9ff5af
   FirebaseCore: 5743c5785c074a794d35f2fff7ecc254a91e08b1
   FirebaseCoreDiagnostics: 92e07a649aeb66352b319d43bdd2ee3942af84cb
   FirebaseCrashlytics: feb07e4e9187be3c23c6a846cce4824e5ce2dd0b
@@ -227,8 +227,8 @@ SPEC CHECKSUMS:
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
-  permission_handler_apple: d21b38e1a4b2e041c63af9568f9165e114e507a6
-  PromisesObjC: 99b6f43f9e1044bd87a95a60beff28c2c44ddb72
+  permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
+  PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
   sqlite3: 93442daab2ab1825bc9c05faa85814a1996f5b65
@@ -236,7 +236,7 @@ SPEC CHECKSUMS:
   url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
   WebRTC-SDK: a6ee40bda0e3f7dba057907c3897374005c5715b
   webtrit_callkeep: bd0c4e7b220df37d3f3c43b1cbafa1953edc8627
-  webview_flutter_wkwebview: 005fbd90c888a42c5690919a1527ecc6649e1162
+  webview_flutter_wkwebview: b7e70ef1ddded7e69c796c7390ee74180182971f
 
 PODFILE CHECKSUM: b313f8976fcf3db4c7d2e3d4cc8da152e84127d4
 

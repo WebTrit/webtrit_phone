@@ -142,6 +142,8 @@ class _MainState extends State<Main> {
           ),
         ],
         child: Router(
+          routeInformationProvider: _router.routeInformationProvider,
+          routeInformationParser: _router.routeInformationParser,
           routerDelegate: _router.routerDelegate,
         ),
       ),
