@@ -389,6 +389,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     final peerConnection = await _createPeerConnection(event.callId.uuid);
     await peerConnection.addStream(localStream);
+
     final remoteDescription = jsep.toDescription();
     await peerConnection.setRemoteDescription(remoteDescription);
 
@@ -623,15 +624,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     final peerConnection = await _createPeerConnection(event.uuid);
     await peerConnection.addStream(localStream);
+
     final localDescription = await peerConnection.createOffer({});
-    peerConnection.setLocalDescription(localDescription);
-
-    emit(state.copyWithMappedActiveCall(event.uuid, (activeCall) {
-      return activeCall.copyWith(peerConnection: peerConnection);
-    }));
-
-    await callkeep.reportConnectingOutgoingCall(event.uuid);
-
+    // Need to initiate outgoing call before set localDescription to avoid races
+    // between [OutgoingCallRequest] and [TrickleRequest]s.
     await state.performOnActiveCall(event.uuid, (activeCall) async {
       await _signalingClient?.execute(OutgoingCallRequest(
         callId: activeCall.callId.toString(),
@@ -639,6 +635,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         jsep: localDescription.toMap(),
       ));
     });
+    peerConnection.setLocalDescription(localDescription);
+
+    emit(state.copyWithMappedActiveCall(event.uuid, (activeCall) {
+      return activeCall.copyWith(peerConnection: peerConnection);
+    }));
+
+    await callkeep.reportConnectingOutgoingCall(event.uuid);
 
     await _ringtoneOutgoingPlay();
   }
@@ -657,13 +660,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     await state.performOnActiveCall(event.uuid, (activeCall) async {
       final peerConnection = activeCall.peerConnection!;
-      final localDescription = await peerConnection.createAnswer({});
-      peerConnection.setLocalDescription(localDescription);
 
+      final localDescription = await peerConnection.createAnswer({});
       await _signalingClient?.execute(AcceptRequest(
         callId: activeCall.callId.toString(),
         jsep: localDescription.toMap(),
       ));
+      peerConnection.setLocalDescription(localDescription);
     });
   }
 
