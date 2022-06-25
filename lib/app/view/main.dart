@@ -163,7 +163,9 @@ class _MainState extends State<Main> {
             if (state.isActive) {
               if (!isCallLocation) {
                 context.pushNamed(MainRoute.call);
-                context.read<OrientationsBloc>().add(const OrientationsChanged(PreferredOrientation.call));
+                if (state.activeCall.video) {
+                  context.read<OrientationsBloc>().add(const OrientationsChanged(PreferredOrientation.call));
+                }
               }
             } else {
               if (isCallLocation) {
