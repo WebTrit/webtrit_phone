@@ -379,8 +379,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       )));
     }
 
-    await _ringtoneIncomingPlay();
-
     final localStream = await _getUserMedia(video: video);
 
     emit(state.copyWithMappedActiveCall(event.callId.uuid, (activeCall) {
@@ -1079,12 +1077,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       acceptedTime: activeCall.acceptedTime,
       hungUpTime: activeCall.hungUpTime,
     ));
-  }
-
-  Future<void> _ringtoneIncomingPlay() async {
-    await _audioPlayer.setAsset(Assets.ringtones.incomingCall1);
-    await _audioPlayer.setLoopMode(LoopMode.one);
-    _audioPlayer.play();
   }
 
   Future<void> _ringtoneOutgoingPlay() async {

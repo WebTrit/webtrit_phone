@@ -33,6 +33,7 @@ class _MainState extends State<Main> {
     callkeep.setUp(CallkeepOptions(
       ios: CallkeepIOSOptions(
         localizedName: PackageInfo().appName,
+        ringtoneSound: Assets.ringtones.incomingCall1,
         iconTemplateImageAssetName: Assets.logoIconTemplateImage.path,
         maximumCallGroups: 2,
         maximumCallsPerCallGroup: 1,
