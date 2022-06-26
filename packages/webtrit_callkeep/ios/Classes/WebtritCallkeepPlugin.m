@@ -47,11 +47,6 @@ static NSString *const OptionsKey = @"WebtritCallkeepPluginOptions";
     WTPPushRegistryHostApiSetup(binaryMessenger, self);
     _delegateFlutterApi = [[WTPDelegateFlutterApi alloc] initWithBinaryMessenger:binaryMessenger];
     WTPHostApiSetup(binaryMessenger, self);
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(onAVAudioSessionRouteChange:)
-                                                 name:AVAudioSessionRouteChangeNotification
-                                               object:nil];
   }
   return self;
 }
@@ -60,8 +55,6 @@ static NSString *const OptionsKey = @"WebtritCallkeepPluginOptions";
 #ifdef DEBUG
   NSLog(@"[Callkeep][dealloc]");
 #endif
-  [[NSNotificationCenter defaultCenter] removeObserver:self];
-
   NSObject<FlutterBinaryMessenger> *binaryMessenger = [_registrar messenger];
   WTPHostApiSetup(binaryMessenger, nil);
   WTPPushRegistryHostApiSetup(binaryMessenger, nil);
@@ -528,7 +521,6 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
 #ifdef DEBUG
   NSLog(@"[Callkeep][CXProviderDelegate][provider:performStartCallAction:]");
 #endif
-  [self configureAudioSession];
   [_delegateFlutterApi performStartCall:action.callUUID.UUIDString
                                  handle:[action.handle toPigeon]
          displayNameOrContactIdentifier:action.contactIdentifier
@@ -546,7 +538,6 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
 #ifdef DEBUG
   NSLog(@"[Callkeep][CXProviderDelegate][provider:performAnswerCallAction:]");
 #endif
-  [self configureAudioSession];
   [_delegateFlutterApi performAnswerCall:action.callUUID.UUIDString
                               completion:^(NSNumber *fulfill, NSError *error) {
                                 if (error != nil || [fulfill boolValue] != YES) {
@@ -637,16 +628,6 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
 #ifdef DEBUG
   NSLog(@"[CallKeep][CXProviderDelegate][provider:didActivateAudioSession:]");
 #endif
-
-  NSDictionary *userInfo = @{
-    AVAudioSessionInterruptionTypeKey: [NSNumber numberWithInt:AVAudioSessionInterruptionTypeEnded],
-    AVAudioSessionInterruptionOptionKey: [NSNumber numberWithInt:AVAudioSessionInterruptionOptionShouldResume],
-  };
-  [[NSNotificationCenter defaultCenter] postNotificationName:AVAudioSessionInterruptionNotification
-                                                      object:nil
-                                                    userInfo:userInfo];
-
-  [self configureAudioSession];
   [_delegateFlutterApi didActivateAudioSession:^(NSError *error) {}];
 }
 
@@ -655,17 +636,6 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
   NSLog(@"[CallKeep][CXProviderDelegate][provider:didDeactivateAudioSession:]");
 #endif
   [_delegateFlutterApi didDeactivateAudioSession:^(NSError *error) {}];
-}
-
-#pragma mark - NSNotificationCenter
-
-- (void)onAVAudioSessionRouteChange:(NSNotification *)notification {
-  NSDictionary *userInfo = notification.userInfo;
-  NSInteger routeChangeReason = [[userInfo valueForKey:AVAudioSessionRouteChangeReasonKey] integerValue];
-
-#ifdef DEBUG
-  NSLog(@"[Callkeep][NSNotificationCenter][onAVAudioSessionRouteChange] reason = %tu", routeChangeReason);
-#endif
 }
 
 #pragma mark - helpers
@@ -697,24 +667,6 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
 
 - (void)removeUserDefaultsIosOptions {
   [[NSUserDefaults standardUserDefaults] removeObjectForKey:OptionsKey];
-}
-
-- (void)configureAudioSession {
-#ifdef DEBUG
-  NSLog(@"[Callkeep][configureAudioSession] Activating audio session");
-#endif
-
-  AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-  [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionAllowBluetooth error:nil];
-
-  [audioSession setMode:AVAudioSessionModeDefault error:nil];
-
-  double sampleRate = 44100.0;
-  [audioSession setPreferredSampleRate:sampleRate error:nil];
-
-  NSTimeInterval bufferDuration = .005;
-  [audioSession setPreferredIOBufferDuration:bufferDuration error:nil];
-  [audioSession setActive:TRUE error:nil];
 }
 
 @end
