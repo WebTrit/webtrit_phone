@@ -15,7 +15,7 @@
   "@notifications_errorSnackBar_callSignalingClientNotReady": {
   },
 
-  "notifications_errorSnackBar_callConnect": "Connect to core is invalid – tring to re-connect",
+  "notifications_errorSnackBar_callConnect": "Connect to core is invalid – trying to re-connect",
   "@notifications_errorSnackBar_callConnect": {
   },
 
