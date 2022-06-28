@@ -41,6 +41,39 @@
   "call_description_outgoing": "Outgoing call to",
   "@call_description_outgoing": {
   },
+  "call_CallActionsTooltip_muteMicrophone": "Mute microphone",
+  "@call_CallActionsTooltip_muteMicrophone": {
+  },
+  "call_CallActionsTooltip_unmuteMicrophone": "Unmute microphone",
+  "@call_CallActionsTooltip_unmuteMicrophone": {
+  },
+  "call_CallActionsTooltip_disableCamera": "Disable camera",
+  "@call_CallActionsTooltip_disableCamera": {
+  },
+  "call_CallActionsTooltip_enableCamera": "Enable camera",
+  "@call_CallActionsTooltip_enableCamera": {
+  },
+  "call_CallActionsTooltip_disableSpeakerphone": "Disable speakerphone",
+  "@call_CallActionsTooltip_disableSpeakerphone": {
+  },
+  "call_CallActionsTooltip_enableSpeakerphone": "Enable speakerphone",
+  "@call_CallActionsTooltip_enableSpeakerphone": {
+  },
+  "call_CallActionsTooltip_transfer": "Transfer",
+  "@call_CallActionsTooltip_transfer": {
+  },
+  "call_CallActionsTooltip_hold": "Hold",
+  "@call_CallActionsTooltip_hold": {
+  },
+  "call_CallActionsTooltip_showKeypad": "Show keypad",
+  "@call_CallActionsTooltip_showKeypad": {
+  },
+  "call_CallActionsTooltip_hideKeypad": "Hide keypad",
+  "@call_CallActionsTooltip_hideKeypad": {
+  },
+  "call_CallActionsTooltip_hangup": "Hangup",
+  "@call_CallActionsTooltip_hangup": {
+  },
 
   "favorites_BodyCenter_failure": "Failure to get favorites",
   "@favorites_BodyCenter_failure": {

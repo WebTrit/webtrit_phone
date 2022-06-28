@@ -136,7 +136,9 @@ class _CallActionsState extends State<CallActions> {
         actions = [
           // row
           Tooltip(
-            message: _microphoneEnabled ? 'Mute microphone' : 'Unmute microphone',
+            message: _microphoneEnabled
+                ? context.l10n.call_CallActionsTooltip_muteMicrophone
+                : context.l10n.call_CallActionsTooltip_unmuteMicrophone,
             child: TextButton(
               onPressed: () {
                 setState(() {
@@ -149,7 +151,9 @@ class _CallActionsState extends State<CallActions> {
             ),
           ),
           Tooltip(
-            message: _cameraEnabled ? 'Disable camera' : 'Enable camera',
+            message: _cameraEnabled
+                ? context.l10n.call_CallActionsTooltip_disableCamera
+                : context.l10n.call_CallActionsTooltip_enableCamera,
             child: TextButton(
               onPressed: !widget.video
                   ? null
@@ -164,7 +168,9 @@ class _CallActionsState extends State<CallActions> {
             ),
           ),
           Tooltip(
-            message: _speakerphoneEnabled ? 'Disable speakerphone' : 'Enable speakerphone',
+            message: _speakerphoneEnabled
+                ? context.l10n.call_CallActionsTooltip_disableSpeakerphone
+                : context.l10n.call_CallActionsTooltip_enableSpeakerphone,
             child: TextButton(
               onPressed: () {
                 setState(() {
@@ -182,7 +188,7 @@ class _CallActionsState extends State<CallActions> {
           const SizedBox(),
           // row
           Tooltip(
-            message: 'Transfer',
+            message: context.l10n.call_CallActionsTooltip_transfer,
             child: TextButton(
               onPressed: () {
                 context.showErrorSnackBar(context.l10n.notImplemented);
@@ -192,7 +198,7 @@ class _CallActionsState extends State<CallActions> {
             ),
           ),
           Tooltip(
-            message: 'Hold',
+            message: context.l10n.call_CallActionsTooltip_hold,
             child: TextButton(
               onPressed: () {
                 context.showErrorSnackBar(context.l10n.notImplemented);
@@ -202,7 +208,7 @@ class _CallActionsState extends State<CallActions> {
             ),
           ),
           Tooltip(
-            message: 'Show Keypad',
+            message: context.l10n.call_CallActionsTooltip_showKeypad,
             child: TextButton(
               onPressed: widget.onKeyPressed == null || !isOrientationPortrait
                   ? null
@@ -231,7 +237,7 @@ class _CallActionsState extends State<CallActions> {
           // hangup row
           const SizedBox(),
           Tooltip(
-            message: 'Hangup',
+            message: context.l10n.call_CallActionsTooltip_hangup,
             child: TextButton(
               onPressed: widget.onHangupPressed,
               style: textButtonStyles?.callHangup,
@@ -240,7 +246,7 @@ class _CallActionsState extends State<CallActions> {
           ),
           _keypadShow
               ? Tooltip(
-                  message: 'Hide Keypad',
+                  message: context.l10n.call_CallActionsTooltip_hideKeypad,
                   child: TextButton(
                     onPressed: () {
                       setState(() {
