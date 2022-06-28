@@ -1,9 +1,11 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -22,6 +24,7 @@ class CallActions extends StatefulWidget {
     this.onSpeakerphonePressed,
     this.onHangupPressed,
     this.onAcceptPressed,
+    this.onKeyPressed,
   }) : super(key: key);
 
   final bool isIncoming;
@@ -36,6 +39,7 @@ class CallActions extends StatefulWidget {
   final void Function(bool enabled)? onSpeakerphonePressed;
   final void Function()? onHangupPressed;
   final void Function()? onAcceptPressed;
+  final void Function(String value)? onKeyPressed;
 
   @override
   State<CallActions> createState() => _CallActionsState();
@@ -45,6 +49,7 @@ class _CallActionsState extends State<CallActions> {
   late bool _cameraEnabled;
   late bool _microphoneEnabled;
   late bool _speakerphoneEnabled;
+  bool _keypadShow = false;
 
   @override
   void initState() {
@@ -60,19 +65,29 @@ class _CallActionsState extends State<CallActions> {
     final TextButtonStyles? textButtonStyles = themeData.extension<TextButtonStyles>();
 
     final mediaQueryData = MediaQuery.of(context);
+    final isOrientationPortrait = mediaQueryData.orientation == Orientation.portrait;
     final dimension = min(mediaQueryData.size.width, mediaQueryData.size.height) / 5;
 
     late final double actionsDelimiterDimension;
     late final double hangupDelimiterDimension;
     late final double horizontalPadding;
-    if (mediaQueryData.orientation == Orientation.portrait) {
+    if (isOrientationPortrait) {
       actionsDelimiterDimension = dimension / 3;
-      hangupDelimiterDimension = widget.video ? actionsDelimiterDimension : dimension * 3;
+      if (widget.video) {
+        hangupDelimiterDimension = actionsDelimiterDimension;
+      } else {
+        hangupDelimiterDimension = actionsDelimiterDimension * 3 + dimension * 2;
+      }
       horizontalPadding = dimension / 2;
     } else {
       actionsDelimiterDimension = dimension / 9;
       hangupDelimiterDimension = actionsDelimiterDimension;
       horizontalPadding = dimension * 3;
+      if (_keypadShow) {
+        setState(() {
+          _keypadShow = false;
+        });
+      }
     }
 
     late final TextButtonsTable buttonsTable;
@@ -100,10 +115,26 @@ class _CallActionsState extends State<CallActions> {
         ],
       );
     } else {
-      buttonsTable = TextButtonsTable(
-        minimumSize: Size.square(dimension),
-        children: [
-          // row 1
+      late List<Widget> actions;
+      if (_keypadShow) {
+        actions = KeypadKey.numbers.expandIndexed((i, k) {
+          return [
+            KeypadKeyButton(
+              text: k.text,
+              subtext: k.subtext,
+              onKeyPressed: widget.onKeyPressed!,
+              style: textButtonStyles?.callAction,
+            ),
+            if ((i + 1) % 3 == 0) ...[
+              const SizedBox(),
+              SizedBox.square(dimension: actionsDelimiterDimension),
+              const SizedBox(),
+            ],
+          ];
+        }).toList(growable: false);
+      } else {
+        actions = [
+          // row
           Tooltip(
             message: _microphoneEnabled ? 'Mute microphone' : 'Unmute microphone',
             child: TextButton(
@@ -145,11 +176,11 @@ class _CallActionsState extends State<CallActions> {
               child: _speakerphoneEnabled ? const Icon(Icons.volume_up) : const Icon(Icons.volume_off),
             ),
           ),
-          //
+          // delimiter
           const SizedBox(),
           SizedBox.square(dimension: actionsDelimiterDimension),
           const SizedBox(),
-          //
+          // row
           Tooltip(
             message: 'Transfer',
             child: TextButton(
@@ -171,20 +202,33 @@ class _CallActionsState extends State<CallActions> {
             ),
           ),
           Tooltip(
-            message: 'Keypad',
+            message: 'Show Keypad',
             child: TextButton(
-              onPressed: () {
-                context.showErrorSnackBar(context.l10n.notImplemented);
-              },
+              onPressed: widget.onKeyPressed == null || !isOrientationPortrait
+                  ? null
+                  : () {
+                      setState(() {
+                        _keypadShow = true;
+                      });
+                    },
               style: textButtonStyles?.callAction,
               child: const Icon(Icons.dialpad),
             ),
           ),
-          //
+          // hangup delimiter
           const SizedBox(),
           SizedBox.square(dimension: hangupDelimiterDimension),
           const SizedBox(),
           //
+        ];
+      }
+
+      buttonsTable = TextButtonsTable(
+        minimumSize: Size.square(dimension),
+        children: [
+          // actions rows
+          ...actions,
+          // hangup row
           const SizedBox(),
           Tooltip(
             message: 'Hangup',
@@ -194,7 +238,20 @@ class _CallActionsState extends State<CallActions> {
               child: const Icon(Icons.call_end),
             ),
           ),
-          const SizedBox(),
+          _keypadShow
+              ? Tooltip(
+                  message: 'Hide Keypad',
+                  child: TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _keypadShow = false;
+                      });
+                    },
+                    style: textButtonStyles?.callAction,
+                    child: const Icon(Icons.dialpad),
+                  ),
+                )
+              : const SizedBox(),
         ],
       );
     }

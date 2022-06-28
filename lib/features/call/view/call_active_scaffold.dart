@@ -121,6 +121,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       onSpeakerphonePressed: _speakerphonePressed,
                       onHangupPressed: _hangup,
                       onAcceptPressed: _accept,
+                      onKeyPressed: _keyPressed,
                     ),
                   ),
               ],
@@ -163,5 +164,9 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
 
   void _accept() {
     context.read<CallBloc>().add(CallControlEvent.answered(widget.activeCall.callId.uuid));
+  }
+
+  void _keyPressed(String value) {
+    context.read<CallBloc>().add(CallControlEvent.sentDTMF(widget.activeCall.callId.uuid, value));
   }
 }
