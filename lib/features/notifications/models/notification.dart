@@ -26,3 +26,12 @@ class CallConnectErrorNotification extends Notification {
     return context.l10n.notifications_errorSnackBar_callConnect;
   }
 }
+
+class CallUserMediaErrorNotification extends Notification {
+  const CallUserMediaErrorNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.notifications_errorSnackBar_callUserMedia;
+  }
+}

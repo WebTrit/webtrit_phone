@@ -379,7 +379,31 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       )));
     }
 
-    final localStream = await _getUserMedia(video: video);
+    late final MediaStream localStream;
+    try {
+      localStream = await _getUserMedia(video: video);
+    } catch (e, stackTrace) {
+      _logger.warning('__onCallSignalingEventIncoming _getUserMedia', e, stackTrace);
+
+      await callkeep.reportEndCall(event.callId.uuid, CallkeepEndCallReason.failed);
+
+      emit(state.copyWithMappedActiveCall(event.callId.uuid, (activeCall) {
+        final activeCallUpdated = activeCall.copyWith(hungUpTime: DateTime.now());
+        _addToRecents(activeCallUpdated);
+        return activeCallUpdated;
+      }));
+
+      await state.performOnActiveCall(event.callId.uuid, (activeCall) async {
+        await _signalingClient?.execute(DeclineRequest(
+          callId: activeCall.callId.toString(),
+        ));
+      });
+
+      emit(state.copyWithPopActiveCall(event.callId.uuid));
+
+      notificationsBloc.add(const NotificationsIssued(CallUserMediaErrorNotification()));
+      return;
+    }
 
     emit(state.copyWithMappedActiveCall(event.callId.uuid, (activeCall) {
       return activeCall.copyWith(localStream: localStream);
@@ -612,9 +636,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       notificationsBloc.add(const NotificationsIssued(CallSignalingClientNotReadyErrorNotification()));
       return;
     }
-    event.fulfill();
+    late final MediaStream localStream;
+    try {
+      localStream = await _getUserMedia(video: event.video);
+    } catch (e, stackTrace) {
+      _logger.warning('__onCallPerformEventStarted _getUserMedia', e, stackTrace);
 
-    final localStream = await _getUserMedia(video: event.video);
+      event.fail();
+
+      emit(state.copyWithPopActiveCall(event.uuid));
+
+      notificationsBloc.add(const NotificationsIssued(CallUserMediaErrorNotification()));
+      return;
+    }
+    event.fulfill();
 
     emit(state.copyWithMappedActiveCall(event.uuid, (activeCall) {
       return activeCall.copyWith(localStream: localStream);

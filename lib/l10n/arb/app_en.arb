@@ -14,9 +14,11 @@
   "notifications_errorSnackBar_callSignalingClientNotReady": "You are offline – please try to re-register",
   "@notifications_errorSnackBar_callSignalingClientNotReady": {
   },
-
   "notifications_errorSnackBar_callConnect": "Connect to core is invalid – trying to re-connect",
   "@notifications_errorSnackBar_callConnect": {
+  },
+  "notifications_errorSnackBar_callUserMedia": "Access to media input is invalid – please check app permissions",
+  "@notifications_errorSnackBar_callUserMedia": {
   },
 
   "main_BottomNavigationBarItemLabel_favorites": "Favorites",
