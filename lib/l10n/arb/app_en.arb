@@ -11,8 +11,8 @@
   "@alertDialogActions_ok": {
   },
 
-  "notifications_errorSnackBar_callNotIdle": "You are offline – please try to re-register",
-  "@notifications_errorSnackBar_callNotIdle": {
+  "notifications_errorSnackBar_callSignalingClientNotReady": "You are offline – please try to re-register",
+  "@notifications_errorSnackBar_callSignalingClientNotReady": {
   },
 
   "notifications_errorSnackBar_callConnect": "Connect to core is invalid – tring to re-connect",

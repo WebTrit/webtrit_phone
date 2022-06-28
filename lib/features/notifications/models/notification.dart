@@ -5,8 +5,8 @@ abstract class Notification {
   const Notification();
 }
 
-class CallNotIdleErrorNotification extends Notification {
-  const CallNotIdleErrorNotification();
+class CallSignalingClientNotReadyErrorNotification extends Notification {
+  const CallSignalingClientNotReadyErrorNotification();
 }
 
 class CallConnectErrorNotification extends Notification {

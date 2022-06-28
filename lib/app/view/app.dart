@@ -125,8 +125,8 @@ class _AppState extends State<App> {
           listener: (context, state) {
             final lastNotification = state.lastNotification;
             if (lastNotification != null) {
-              if (lastNotification is CallNotIdleErrorNotification) {
-                context.showErrorSnackBar(context.l10n.notifications_errorSnackBar_callNotIdle);
+              if (lastNotification is CallSignalingClientNotReadyErrorNotification) {
+                context.showErrorSnackBar(context.l10n.notifications_errorSnackBar_callSignalingClientNotReady);
               } else if (lastNotification is CallConnectErrorNotification) {
                 context.showErrorSnackBar(context.l10n.notifications_errorSnackBar_callConnect);
               }

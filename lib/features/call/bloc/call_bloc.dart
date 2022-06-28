@@ -609,7 +609,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       emit(state.copyWithPopActiveCall(event.uuid));
 
-      notificationsBloc.add(const NotificationsIssued(CallNotIdleErrorNotification()));
+      notificationsBloc.add(const NotificationsIssued(CallSignalingClientNotReadyErrorNotification()));
       return;
     }
     event.fulfill();
