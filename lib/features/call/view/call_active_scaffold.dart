@@ -146,15 +146,15 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     context.read<CallBloc>().add(CallControlEvent.cameraSwitched(widget.activeCall.callId.uuid));
   }
 
-  void _cameraPressed(enabled) {
+  void _cameraPressed(bool enabled) {
     context.read<CallBloc>().add(CallControlEvent.cameraEnabled(widget.activeCall.callId.uuid, enabled));
   }
 
-  void _microphonePressed(enabled) {
+  void _microphonePressed(bool enabled) {
     context.read<CallBloc>().add(CallControlEvent.setMuted(widget.activeCall.callId.uuid, !enabled));
   }
 
-  void _speakerphonePressed(enabled) {
+  void _speakerphonePressed(bool enabled) {
     context.read<CallBloc>().add(CallControlEvent.speakerphoneEnabled(widget.activeCall.callId.uuid, enabled));
   }
 
