@@ -31,16 +31,6 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
           const AccountInfoListTile(),
           const ListTileSeparator(),
           SwitchListTile(
-            title: Text(context.l10n.settings_ListViewTileTitle_doNotDisturb),
-            value: false,
-            onChanged: (value) {
-              // TODO: implement Do not Disturb functionality
-              context.showErrorSnackBar(context.l10n.notImplemented);
-            },
-            secondary: const Icon(Icons.block),
-          ),
-          const ListTileSeparator(),
-          SwitchListTile(
             title: Text(context.l10n.settings_ListViewTileTitle_registered),
             value: true,
             onChanged: (value) {
