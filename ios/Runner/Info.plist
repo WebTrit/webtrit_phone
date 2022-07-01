@@ -29,11 +29,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>A message that tells the user why the app is requesting access to the device’s camera.</string>
+	<string>This app requires permission to access the camera to make video calls</string>
 	<key>NSContactsUsageDescription</key>
-	<string>contacts</string>
+	<string>This app requires permission to access contacts to make calls within your address book</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>A message that tells the user why the app is requesting access to the device’s microphone.</string>
+	<string>This app requires permission to access the microphone to make audio calls</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
