@@ -195,6 +195,9 @@
   "contacts_LocalTabText_permissionFailure": "There are no permissions to get local contacts",
   "@contacts_LocalTabText_permissionFailure": {
   },
+  "contacts_LocalTabButton_openAppSettings": "Grant an access to the contacts",
+  "@contacts_LocalTabButton_openAppSettings": {
+  },
   "contacts_LocalTabText_failure": "Failure to get local contacts",
   "@contacts_LocalTabText_failure": {
   },

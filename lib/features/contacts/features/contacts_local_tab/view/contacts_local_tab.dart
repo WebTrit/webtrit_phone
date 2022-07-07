@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
@@ -42,8 +43,15 @@ class _ContactsLocal extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         } else if (state.status == ContactsLocalTabStatus.permissionFailure) {
-          return Center(
-            child: Text(context.l10n.contacts_LocalTabText_permissionFailure),
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(context.l10n.contacts_LocalTabText_permissionFailure),
+              TextButton(
+                onPressed: () => openAppSettings(),
+                child: Text(context.l10n.contacts_LocalTabButton_openAppSettings),
+              ),
+            ],
           );
         } else if (state.contacts.isNotEmpty) {
           return ListView.builder(
