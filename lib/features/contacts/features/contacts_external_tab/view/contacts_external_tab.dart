@@ -68,7 +68,7 @@ class _ContactsExternal extends StatelessWidget {
             } else {
               children = [
                 Text(context.l10n.contacts_ExternalTabText_empty),
-                OutlinedButton(
+                TextButton(
                   onPressed: () => context.read<ContactsExternalTabBloc>().add(const ContactsExternalTabRefreshed()),
                   child: Text(context.l10n.contacts_ExternalTabButton_refresh),
                 ),

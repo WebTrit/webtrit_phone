@@ -81,7 +81,7 @@ class _ContactsLocal extends StatelessWidget {
             } else {
               children = [
                 Text(context.l10n.contacts_LocalTabText_empty),
-                OutlinedButton(
+                TextButton(
                   onPressed: () => context.read<ContactsLocalTabBloc>().add(const ContactsLocalTabRefreshed()),
                   child: Text(context.l10n.contacts_LocalTabButton_refresh),
                 ),
