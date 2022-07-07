@@ -75,11 +75,9 @@ class _ContactsExternal extends StatelessWidget {
               ];
             }
           }
-          return Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: children,
-            ),
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: children,
           );
         }
       },
