@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 import '../../../contacts.dart';
@@ -57,19 +58,19 @@ class _ContactsExternal extends StatelessWidget {
           late final List<Widget> children;
           if (state.status == ContactsExternalTabStatus.failure) {
             children = [
-              const Text('Failure to get external contacts'),
+              Text(context.l10n.contacts_ExternalTabText_failure),
             ];
           } else {
             if (state.searching) {
               children = [
-                const Text('No external contacts found'),
+                Text(context.l10n.contacts_ExternalTabText_emptyOnSearching),
               ];
             } else {
               children = [
-                const Text('No external contacts'),
+                Text(context.l10n.contacts_ExternalTabText_empty),
                 OutlinedButton(
                   onPressed: () => context.read<ContactsExternalTabBloc>().add(const ContactsExternalTabRefreshed()),
-                  child: const Text('Refresh'),
+                  child: Text(context.l10n.contacts_ExternalTabButton_refresh),
                 ),
               ];
             }

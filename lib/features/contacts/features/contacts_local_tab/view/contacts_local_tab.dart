@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 import '../../../contacts.dart';
@@ -41,8 +42,8 @@ class _ContactsLocal extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         } else if (state.status == ContactsLocalTabStatus.permissionFailure) {
-          return const Center(
-            child: Text('Permission failure to get local contacts'),
+          return Center(
+            child: Text(context.l10n.contacts_LocalTabText_permissionFailure),
           );
         } else if (state.contacts.isNotEmpty) {
           return ListView.builder(
@@ -62,19 +63,19 @@ class _ContactsLocal extends StatelessWidget {
           late final List<Widget> children;
           if (state.status == ContactsLocalTabStatus.failure) {
             children = [
-              const Text('Failure to get local contacts'),
+              Text(context.l10n.contacts_LocalTabText_failure),
             ];
           } else {
             if (state.searching) {
               children = [
-                const Text('No local contacts found'),
+                Text(context.l10n.contacts_LocalTabText_emptyOnSearching),
               ];
             } else {
               children = [
-                const Text('No local contacts'),
+                Text(context.l10n.contacts_LocalTabText_empty),
                 OutlinedButton(
                   onPressed: () => context.read<ContactsLocalTabBloc>().add(const ContactsLocalTabRefreshed()),
-                  child: const Text('Refresh'),
+                  child: Text(context.l10n.contacts_LocalTabButton_refresh),
                 ),
               ];
             }

@@ -192,6 +192,35 @@
   "@contactsSourceExternal": {
   },
 
+  "contacts_LocalTabText_permissionFailure": "There are no permissions to get local contacts",
+  "@contacts_LocalTabText_permissionFailure": {
+  },
+  "contacts_LocalTabText_failure": "Failure to get local contacts",
+  "@contacts_LocalTabText_failure": {
+  },
+  "contacts_LocalTabText_emptyOnSearching": "No local contacts found",
+  "@contacts_LocalTabText_emptyOnSearching": {
+  },
+  "contacts_LocalTabText_empty": "No local contacts",
+  "@contacts_LocalTabText_empty": {
+  },
+  "contacts_LocalTabButton_refresh": "Refresh",
+  "@contacts_LocalTabButton_refresh": {
+  },
+
+  "contacts_ExternalTabText_failure": "Failure to get external contacts",
+  "@contacts_ExternalTabText_failure": {
+  },
+  "contacts_ExternalTabText_emptyOnSearching": "No external contacts found",
+  "@contacts_ExternalTabText_emptyOnSearching": {
+  },
+  "contacts_ExternalTabText_empty": "No local contacts",
+  "@contacts_ExternalTabText_empty": {
+  },
+  "contacts_ExternalTabButton_refresh": "Refresh",
+  "@contacts_ExternalTabButton_refresh": {
+  },
+
   "settings_AppBarTitle_myAccount": "My account",
   "@settings_AppBarTitle_myAccount": {
   },
