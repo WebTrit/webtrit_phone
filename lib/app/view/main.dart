@@ -93,6 +93,12 @@ class _MainState extends State<Main> {
             periodicPolling: EnvironmentConfig.PERIODIC_POLLING,
           ),
         ),
+        RepositoryProvider<AppRepository>(
+          create: (context) => AppRepository(
+            webtritApiClient: context.read<WebtritApiClient>(),
+            token: context.read<AppBloc>().state.token!,
+          ),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
