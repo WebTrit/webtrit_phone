@@ -6,6 +6,7 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 part 'settings_bloc.freezed.dart';
@@ -21,7 +22,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     required this.appBloc,
     required this.accountRepository,
     required this.appRepository,
-  }) : super(const SettingsState(registerStatus: true)) {
+    required this.appPreferences,
+  }) : super(SettingsState(registerStatus: appPreferences.getRegisterStatus())) {
     on<SettingsStarted>(_onStarted, transformer: restartable());
     on<SettingsErrorDismissed>(_onErrorDismissed, transformer: droppable());
     on<SettingsLogouted>(_onLogouted, transformer: droppable());
@@ -31,6 +33,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final AppBloc appBloc;
   final AccountRepository accountRepository;
   final AppRepository appRepository;
+  final AppPreferences appPreferences;
 
   void _onStarted(SettingsStarted event, Emitter<SettingsState> emit) async {
     emit(state.copyWith(progress: true));
@@ -70,6 +73,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     emit(state.copyWith(progress: true, registerStatus: event.value));
     try {
       await appRepository.setRegisterStatus(event.value);
+      await appPreferences.setRegisterStatus(event.value);
       emit(state.copyWith(progress: false));
     } catch (e) {
       emit(state.copyWith(error: e, progress: false, registerStatus: previousRegisterStatus));
