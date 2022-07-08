@@ -38,7 +38,13 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
       ),
       body: ListView(
         children: [
-          const AccountInfoListTile(),
+          BlocBuilder<SettingsBloc, SettingsState>(
+            builder: (context, state) {
+              return AccountInfoListTile(
+                info: state.info,
+              );
+            },
+          ),
           const ListTileSeparator(),
           BlocBuilder<SettingsBloc, SettingsState>(
             builder: (context, state) {
