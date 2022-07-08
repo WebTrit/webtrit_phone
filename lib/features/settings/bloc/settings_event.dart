@@ -4,8 +4,8 @@ abstract class SettingsEvent {
   const SettingsEvent();
 }
 
-class SettingsStarted extends SettingsEvent {
-  const SettingsStarted();
+class SettingsRefreshed extends SettingsEvent {
+  const SettingsRefreshed();
 }
 
 class SettingsErrorDismissed extends SettingsEvent {

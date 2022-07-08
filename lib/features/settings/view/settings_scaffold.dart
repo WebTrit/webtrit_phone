@@ -25,6 +25,16 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
     final scaffold = Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.settings_AppBarTitle_myAccount),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.refresh,
+            ),
+            onPressed: () {
+              context.read<SettingsBloc>().add(const SettingsRefreshed());
+            },
+          ),
+        ],
       ),
       body: ListView(
         children: [

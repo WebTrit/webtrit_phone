@@ -29,6 +29,10 @@ class AccountRepository {
 
   AccountInfo? _info;
 
+  Future<AccountInfo> getInfo() {
+    return webtritApiClient.accountInfo(token);
+  }
+
   Stream<AccountInfo> info() {
     return _controller.stream;
   }
@@ -49,7 +53,7 @@ class AccountRepository {
 
   void _gatherAccountInfo() async {
     try {
-      final newInfo = await _accountInfo();
+      final newInfo = await getInfo();
       if (newInfo != _info) {
         _info = newInfo;
         _controller.add(_info!);
@@ -57,10 +61,6 @@ class AccountRepository {
     } catch (e, stackTrace) {
       _logger.warning('_gatherAccountInfo', e, stackTrace);
     }
-  }
-
-  Future<AccountInfo> _accountInfo() async {
-    return await webtritApiClient.accountInfo(token);
   }
 
   Future<void> logout() async {

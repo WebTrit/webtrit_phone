@@ -24,7 +24,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     required this.appRepository,
     required this.appPreferences,
   }) : super(SettingsState(registerStatus: appPreferences.getRegisterStatus())) {
-    on<SettingsStarted>(_onStarted, transformer: restartable());
+    on<SettingsRefreshed>(_onRefreshed, transformer: restartable());
     on<SettingsErrorDismissed>(_onErrorDismissed, transformer: droppable());
     on<SettingsLogouted>(_onLogouted, transformer: droppable());
     on<SettingsRegisterStatusChanged>(_onRegisterStatusChanged, transformer: sequential());
@@ -35,17 +35,30 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final AppRepository appRepository;
   final AppPreferences appPreferences;
 
-  void _onStarted(SettingsStarted event, Emitter<SettingsState> emit) async {
+  void _onRefreshed(SettingsRefreshed event, Emitter<SettingsState> emit) async {
     emit(state.copyWith(progress: true));
     try {
-      final registerStatus = await appRepository.getRegisterStatus();
-      emit(state.copyWith(progress: false, registerStatus: registerStatus));
+      final infoFuture = accountRepository.getInfo();
+      final registerStatusFuture = appRepository.getRegisterStatus();
+
+      final r = await Future.wait([infoFuture, registerStatusFuture]);
+
+      if (emit.isDone) return;
+
+      final info = r[0] as AccountInfo;
+      final registerStatus = r[1] as bool;
+
+      emit(state.copyWith(
+        progress: false,
+        info: info,
+        registerStatus: registerStatus,
+      ));
     } catch (e, stackTrace) {
+      if (emit.isDone) return;
+
       emit(state.copyWith(error: e, progress: false));
       _logger.warning('_onStarted', e, stackTrace);
     }
-
-    await emit.forEach(accountRepository.info(), onData: (AccountInfo info) => state.copyWith(info: info));
   }
 
   void _onErrorDismissed(SettingsErrorDismissed event, Emitter<SettingsState> emit) async {

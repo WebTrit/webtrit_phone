@@ -21,7 +21,7 @@ class SettingsScreen extends StatelessWidget {
           accountRepository: context.read<AccountRepository>(),
           appRepository: context.read<AppRepository>(),
           appPreferences: AppPreferences(),
-        )..add(const SettingsStarted());
+        )..add(const SettingsRefreshed());
       },
       child: const SettingsScaffold(),
     );
