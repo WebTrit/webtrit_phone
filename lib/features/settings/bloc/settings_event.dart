@@ -15,3 +15,9 @@ class SettingsErrorDismissed extends SettingsEvent {
 class SettingsLogouted extends SettingsEvent {
   const SettingsLogouted();
 }
+
+class SettingsRegisterStatusChanged extends SettingsEvent {
+  const SettingsRegisterStatusChanged(this.value);
+
+  final bool value;
+}

@@ -30,14 +30,17 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
         children: [
           const AccountInfoListTile(),
           const ListTileSeparator(),
-          SwitchListTile(
-            title: Text(context.l10n.settings_ListViewTileTitle_registered),
-            value: true,
-            onChanged: (value) {
-              // TODO: implement Registered/Unregistered functionality
-              context.showErrorSnackBar(context.l10n.notImplemented);
+          BlocBuilder<SettingsBloc, SettingsState>(
+            builder: (context, state) {
+              return SwitchListTile(
+                title: Text(context.l10n.settings_ListViewTileTitle_registered),
+                value: state.registerStatus,
+                onChanged: (value) {
+                  context.read<SettingsBloc>().add(SettingsRegisterStatusChanged(value));
+                },
+                secondary: const Icon(Icons.account_circle_outlined),
+              );
             },
-            secondary: const Icon(Icons.account_circle_outlined),
           ),
           const ListTileSeparator(),
           ListTile(

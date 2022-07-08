@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$SettingsState {
   bool get progress => throw _privateConstructorUsedError;
+  bool get registerStatus => throw _privateConstructorUsedError;
   AccountInfo? get info => throw _privateConstructorUsedError;
   Object? get error => throw _privateConstructorUsedError;
 
@@ -30,7 +31,8 @@ abstract class $SettingsStateCopyWith<$Res> {
   factory $SettingsStateCopyWith(
           SettingsState value, $Res Function(SettingsState) then) =
       _$SettingsStateCopyWithImpl<$Res>;
-  $Res call({bool progress, AccountInfo? info, Object? error});
+  $Res call(
+      {bool progress, bool registerStatus, AccountInfo? info, Object? error});
 }
 
 /// @nodoc
@@ -45,6 +47,7 @@ class _$SettingsStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? progress = freezed,
+    Object? registerStatus = freezed,
     Object? info = freezed,
     Object? error = freezed,
   }) {
@@ -52,6 +55,10 @@ class _$SettingsStateCopyWithImpl<$Res>
       progress: progress == freezed
           ? _value.progress
           : progress // ignore: cast_nullable_to_non_nullable
+              as bool,
+      registerStatus: registerStatus == freezed
+          ? _value.registerStatus
+          : registerStatus // ignore: cast_nullable_to_non_nullable
               as bool,
       info: info == freezed
           ? _value.info
@@ -69,7 +76,8 @@ abstract class _$$_SettingsStateCopyWith<$Res>
           _$_SettingsState value, $Res Function(_$_SettingsState) then) =
       __$$_SettingsStateCopyWithImpl<$Res>;
   @override
-  $Res call({bool progress, AccountInfo? info, Object? error});
+  $Res call(
+      {bool progress, bool registerStatus, AccountInfo? info, Object? error});
 }
 
 /// @nodoc
@@ -86,6 +94,7 @@ class __$$_SettingsStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? progress = freezed,
+    Object? registerStatus = freezed,
     Object? info = freezed,
     Object? error = freezed,
   }) {
@@ -93,6 +102,10 @@ class __$$_SettingsStateCopyWithImpl<$Res>
       progress: progress == freezed
           ? _value.progress
           : progress // ignore: cast_nullable_to_non_nullable
+              as bool,
+      registerStatus: registerStatus == freezed
+          ? _value.registerStatus
+          : registerStatus // ignore: cast_nullable_to_non_nullable
               as bool,
       info: info == freezed
           ? _value.info
@@ -106,11 +119,17 @@ class __$$_SettingsStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_SettingsState implements _SettingsState {
-  const _$_SettingsState({this.progress = false, this.info, this.error});
+  const _$_SettingsState(
+      {this.progress = false,
+      required this.registerStatus,
+      this.info,
+      this.error});
 
   @override
   @JsonKey()
   final bool progress;
+  @override
+  final bool registerStatus;
   @override
   final AccountInfo? info;
   @override
@@ -118,7 +137,7 @@ class _$_SettingsState implements _SettingsState {
 
   @override
   String toString() {
-    return 'SettingsState(progress: $progress, info: $info, error: $error)';
+    return 'SettingsState(progress: $progress, registerStatus: $registerStatus, info: $info, error: $error)';
   }
 
   @override
@@ -127,6 +146,8 @@ class _$_SettingsState implements _SettingsState {
         (other.runtimeType == runtimeType &&
             other is _$_SettingsState &&
             const DeepCollectionEquality().equals(other.progress, progress) &&
+            const DeepCollectionEquality()
+                .equals(other.registerStatus, registerStatus) &&
             const DeepCollectionEquality().equals(other.info, info) &&
             const DeepCollectionEquality().equals(other.error, error));
   }
@@ -135,6 +156,7 @@ class _$_SettingsState implements _SettingsState {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(progress),
+      const DeepCollectionEquality().hash(registerStatus),
       const DeepCollectionEquality().hash(info),
       const DeepCollectionEquality().hash(error));
 
@@ -147,11 +169,14 @@ class _$_SettingsState implements _SettingsState {
 abstract class _SettingsState implements SettingsState {
   const factory _SettingsState(
       {final bool progress,
+      required final bool registerStatus,
       final AccountInfo? info,
       final Object? error}) = _$_SettingsState;
 
   @override
   bool get progress => throw _privateConstructorUsedError;
+  @override
+  bool get registerStatus => throw _privateConstructorUsedError;
   @override
   AccountInfo? get info => throw _privateConstructorUsedError;
   @override
