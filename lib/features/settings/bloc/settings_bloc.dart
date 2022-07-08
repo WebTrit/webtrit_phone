@@ -48,6 +48,10 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       final info = r[0] as AccountInfo;
       final registerStatus = r[1] as bool;
 
+      if (registerStatus != state.registerStatus) {
+        await appPreferences.setRegisterStatus(registerStatus);
+      }
+
       emit(state.copyWith(
         progress: false,
         info: info,
