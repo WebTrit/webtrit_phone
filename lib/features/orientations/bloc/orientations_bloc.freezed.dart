@@ -51,7 +51,7 @@ abstract class _OrientationsChanged implements OrientationsChanged {
       _$_OrientationsChanged;
 
   @override
-  PreferredOrientation get orientation => throw _privateConstructorUsedError;
+  PreferredOrientation get orientation;
 }
 
 /// @nodoc
@@ -166,8 +166,7 @@ abstract class _OrientationsState implements OrientationsState {
       [final PreferredOrientation? lastOrientation]) = _$_OrientationsState;
 
   @override
-  PreferredOrientation? get lastOrientation =>
-      throw _privateConstructorUsedError;
+  PreferredOrientation? get lastOrientation;
   @override
   @JsonKey(ignore: true)
   _$$_OrientationsStateCopyWith<_$_OrientationsState> get copyWith =>

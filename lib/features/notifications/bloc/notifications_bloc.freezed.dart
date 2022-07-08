@@ -125,7 +125,7 @@ abstract class _NotificationsState implements NotificationsState {
       _$_NotificationsState;
 
   @override
-  Notification? get lastNotification => throw _privateConstructorUsedError;
+  Notification? get lastNotification;
   @override
   @JsonKey(ignore: true)
   _$$_NotificationsStateCopyWith<_$_NotificationsState> get copyWith =>

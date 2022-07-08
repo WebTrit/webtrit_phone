@@ -9,7 +9,7 @@ part of 'session_otp_request.dart';
 Map<String, dynamic> _$SessionOtpRequestRequestToJson(
         SessionOtpRequestRequest instance) =>
     <String, dynamic>{
-      'type': _$AppTypeEnumMap[instance.type],
+      'type': _$AppTypeEnumMap[instance.type]!,
       'identifier': instance.identifier,
       'phone': instance.phone,
     };

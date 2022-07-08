@@ -50,7 +50,7 @@ abstract class __AppLifecycleStateChanged implements _AppLifecycleStateChanged {
       _$__AppLifecycleStateChanged;
 
   @override
-  AppLifecycleState get state => throw _privateConstructorUsedError;
+  AppLifecycleState get state;
 }
 
 /// @nodoc
@@ -90,7 +90,7 @@ abstract class __ConnectivityResultChanged
       _$__ConnectivityResultChanged;
 
   @override
-  ConnectivityResult get result => throw _privateConstructorUsedError;
+  ConnectivityResult get result;
 }
 
 /// @nodoc
@@ -530,11 +530,11 @@ abstract class _CallSignalingEventIncoming implements _CallSignalingEvent {
       final JsepValue? jsep}) = _$_CallSignalingEventIncoming;
 
   @override
-  CallIdValue get callId => throw _privateConstructorUsedError;
-  String get callee => throw _privateConstructorUsedError;
-  String get caller => throw _privateConstructorUsedError;
-  String? get callerDisplayName => throw _privateConstructorUsedError;
-  JsepValue? get jsep => throw _privateConstructorUsedError;
+  CallIdValue get callId;
+  String get callee;
+  String get caller;
+  String? get callerDisplayName;
+  JsepValue? get jsep;
 }
 
 /// @nodoc
@@ -659,9 +659,9 @@ abstract class _CallSignalingEventAnswered implements _CallSignalingEvent {
       final JsepValue? jsep}) = _$_CallSignalingEventAnswered;
 
   @override
-  CallIdValue get callId => throw _privateConstructorUsedError;
-  String get callee => throw _privateConstructorUsedError;
-  JsepValue? get jsep => throw _privateConstructorUsedError;
+  CallIdValue get callId;
+  String get callee;
+  JsepValue? get jsep;
 }
 
 /// @nodoc
@@ -786,9 +786,9 @@ abstract class _CallSignalingEventHangup implements _CallSignalingEvent {
       required final String reason}) = _$_CallSignalingEventHangup;
 
   @override
-  CallIdValue get callId => throw _privateConstructorUsedError;
-  int get code => throw _privateConstructorUsedError;
-  String get reason => throw _privateConstructorUsedError;
+  CallIdValue get callId;
+  int get code;
+  String get reason;
 }
 
 /// @nodoc
@@ -958,15 +958,15 @@ abstract class _CallPushEventIncoming implements _CallPushEvent {
       final CallkeepIncomingCallError? error}) = _$_CallPushEventIncoming;
 
   @override
-  CallIdValue get callId => throw _privateConstructorUsedError;
+  CallIdValue get callId;
   @override
-  CallkeepHandle get handle => throw _privateConstructorUsedError;
+  CallkeepHandle get handle;
   @override
-  String? get displayName => throw _privateConstructorUsedError;
+  String? get displayName;
   @override
-  bool get video => throw _privateConstructorUsedError;
+  bool get video;
   @override
-  CallkeepIncomingCallError? get error => throw _privateConstructorUsedError;
+  CallkeepIncomingCallError? get error;
 }
 
 /// @nodoc
@@ -1260,11 +1260,11 @@ abstract class _CallControlEventStarted
       final String? displayName,
       required final bool video}) = _$_CallControlEventStarted;
 
-  String? get generic => throw _privateConstructorUsedError;
-  String? get number => throw _privateConstructorUsedError;
-  String? get email => throw _privateConstructorUsedError;
-  String? get displayName => throw _privateConstructorUsedError;
-  bool get video => throw _privateConstructorUsedError;
+  String? get generic;
+  String? get number;
+  String? get email;
+  String? get displayName;
+  bool get video;
 }
 
 /// @nodoc
@@ -1419,7 +1419,7 @@ abstract class _CallControlEventAnswered implements CallControlEvent {
   const factory _CallControlEventAnswered(final UuidValue uuid) =
       _$_CallControlEventAnswered;
 
-  UuidValue get uuid => throw _privateConstructorUsedError;
+  UuidValue get uuid;
 }
 
 /// @nodoc
@@ -1574,7 +1574,7 @@ abstract class _CallControlEventEnded implements CallControlEvent {
   const factory _CallControlEventEnded(final UuidValue uuid) =
       _$_CallControlEventEnded;
 
-  UuidValue get uuid => throw _privateConstructorUsedError;
+  UuidValue get uuid;
 }
 
 /// @nodoc
@@ -1734,8 +1734,8 @@ abstract class _CallControlEventSetHeld implements CallControlEvent {
   const factory _CallControlEventSetHeld(
       final UuidValue uuid, final bool onHold) = _$_CallControlEventSetHeld;
 
-  UuidValue get uuid => throw _privateConstructorUsedError;
-  bool get onHold => throw _privateConstructorUsedError;
+  UuidValue get uuid;
+  bool get onHold;
 }
 
 /// @nodoc
@@ -1895,8 +1895,8 @@ abstract class _CallControlEventSetMuted implements CallControlEvent {
   const factory _CallControlEventSetMuted(
       final UuidValue uuid, final bool muted) = _$_CallControlEventSetMuted;
 
-  UuidValue get uuid => throw _privateConstructorUsedError;
-  bool get muted => throw _privateConstructorUsedError;
+  UuidValue get uuid;
+  bool get muted;
 }
 
 /// @nodoc
@@ -2056,8 +2056,8 @@ abstract class _CallControlEventSentDTMF implements CallControlEvent {
   const factory _CallControlEventSentDTMF(
       final UuidValue uuid, final String key) = _$_CallControlEventSentDTMF;
 
-  UuidValue get uuid => throw _privateConstructorUsedError;
-  String get key => throw _privateConstructorUsedError;
+  UuidValue get uuid;
+  String get key;
 }
 
 /// @nodoc
@@ -2213,7 +2213,7 @@ abstract class _CallControlEventCameraSwitched implements CallControlEvent {
   const factory _CallControlEventCameraSwitched(final UuidValue uuid) =
       _$_CallControlEventCameraSwitched;
 
-  UuidValue get uuid => throw _privateConstructorUsedError;
+  UuidValue get uuid;
 }
 
 /// @nodoc
@@ -2375,8 +2375,8 @@ abstract class _CallControlEventCameraEnabled implements CallControlEvent {
           final UuidValue uuid, final bool enabled) =
       _$_CallControlEventCameraEnabled;
 
-  UuidValue get uuid => throw _privateConstructorUsedError;
-  bool get enabled => throw _privateConstructorUsedError;
+  UuidValue get uuid;
+  bool get enabled;
 }
 
 /// @nodoc
@@ -2539,8 +2539,8 @@ abstract class _CallControlEventSpeakerphoneEnabled
           final UuidValue uuid, final bool enabled) =
       _$_CallControlEventSpeakerphoneEnabled;
 
-  UuidValue get uuid => throw _privateConstructorUsedError;
-  bool get enabled => throw _privateConstructorUsedError;
+  UuidValue get uuid;
+  bool get enabled;
 }
 
 /// @nodoc
@@ -2696,7 +2696,7 @@ abstract class _CallControlEventFailureApproved implements CallControlEvent {
   const factory _CallControlEventFailureApproved(final UuidValue uuid) =
       _$_CallControlEventFailureApproved;
 
-  UuidValue get uuid => throw _privateConstructorUsedError;
+  UuidValue get uuid;
 }
 
 /// @nodoc
@@ -2914,10 +2914,10 @@ abstract class _CallPerformEventStarted extends _CallPerformEvent {
   _CallPerformEventStarted._() : super._();
 
   @override
-  UuidValue get uuid => throw _privateConstructorUsedError;
-  CallkeepHandle get handle => throw _privateConstructorUsedError;
-  String? get displayName => throw _privateConstructorUsedError;
-  bool get video => throw _privateConstructorUsedError;
+  UuidValue get uuid;
+  CallkeepHandle get handle;
+  String? get displayName;
+  bool get video;
 }
 
 /// @nodoc
@@ -3044,7 +3044,7 @@ abstract class _CallPerformEventAnswered extends _CallPerformEvent {
   _CallPerformEventAnswered._() : super._();
 
   @override
-  UuidValue get uuid => throw _privateConstructorUsedError;
+  UuidValue get uuid;
 }
 
 /// @nodoc
@@ -3171,7 +3171,7 @@ abstract class _CallPerformEventEnded extends _CallPerformEvent {
   _CallPerformEventEnded._() : super._();
 
   @override
-  UuidValue get uuid => throw _privateConstructorUsedError;
+  UuidValue get uuid;
 }
 
 /// @nodoc
@@ -3303,8 +3303,8 @@ abstract class _CallPerformEventSetHeld extends _CallPerformEvent {
   _CallPerformEventSetHeld._() : super._();
 
   @override
-  UuidValue get uuid => throw _privateConstructorUsedError;
-  bool get onHold => throw _privateConstructorUsedError;
+  UuidValue get uuid;
+  bool get onHold;
 }
 
 /// @nodoc
@@ -3436,8 +3436,8 @@ abstract class _CallPerformEventSetMuted extends _CallPerformEvent {
   _CallPerformEventSetMuted._() : super._();
 
   @override
-  UuidValue get uuid => throw _privateConstructorUsedError;
-  bool get muted => throw _privateConstructorUsedError;
+  UuidValue get uuid;
+  bool get muted;
 }
 
 /// @nodoc
@@ -3569,8 +3569,8 @@ abstract class _CallPerformEventSentDTMF extends _CallPerformEvent {
   _CallPerformEventSentDTMF._() : super._();
 
   @override
-  UuidValue get uuid => throw _privateConstructorUsedError;
-  String get key => throw _privateConstructorUsedError;
+  UuidValue get uuid;
+  String get key;
 }
 
 /// @nodoc
@@ -3771,8 +3771,8 @@ abstract class _PeerConnectionEventIceGatheringStateChanged
       _$_PeerConnectionEventIceGatheringStateChanged;
 
   @override
-  UuidValue get uuid => throw _privateConstructorUsedError;
-  RTCIceGatheringState get state => throw _privateConstructorUsedError;
+  UuidValue get uuid;
+  RTCIceGatheringState get state;
 }
 
 /// @nodoc
@@ -3903,8 +3903,8 @@ abstract class _PeerConnectionEventIceCandidateIdentified
       _$_PeerConnectionEventIceCandidateIdentified;
 
   @override
-  UuidValue get uuid => throw _privateConstructorUsedError;
-  RTCIceCandidate get candidate => throw _privateConstructorUsedError;
+  UuidValue get uuid;
+  RTCIceCandidate get candidate;
 }
 
 /// @nodoc
@@ -4034,8 +4034,8 @@ abstract class _PeerConnectionEventStreamAdded implements _PeerConnectionEvent {
       _$_PeerConnectionEventStreamAdded;
 
   @override
-  UuidValue get uuid => throw _privateConstructorUsedError;
-  MediaStream get stream => throw _privateConstructorUsedError;
+  UuidValue get uuid;
+  MediaStream get stream;
 }
 
 /// @nodoc
@@ -4166,8 +4166,8 @@ abstract class _PeerConnectionEventStreamRemoved
       _$_PeerConnectionEventStreamRemoved;
 
   @override
-  UuidValue get uuid => throw _privateConstructorUsedError;
-  MediaStream get stream => throw _privateConstructorUsedError;
+  UuidValue get uuid;
+  MediaStream get stream;
 }
 
 /// @nodoc
@@ -4328,12 +4328,11 @@ abstract class _CallState extends CallState {
   const _CallState._() : super._();
 
   @override
-  SignalingClientStatus get signalingClientStatus =>
-      throw _privateConstructorUsedError;
+  SignalingClientStatus get signalingClientStatus;
   @override
-  Object? get signalingFailure => throw _privateConstructorUsedError;
+  Object? get signalingFailure;
   @override
-  List<ActiveCall> get activeCalls => throw _privateConstructorUsedError;
+  List<ActiveCall> get activeCalls;
   @override
   @JsonKey(ignore: true)
   _$$_CallStateCopyWith<_$_CallState> get copyWith =>
@@ -4663,29 +4662,29 @@ abstract class _ActiveCall extends ActiveCall {
   const _ActiveCall._() : super._();
 
   @override
-  Direction get direction => throw _privateConstructorUsedError;
+  Direction get direction;
   @override
-  CallIdValue get callId => throw _privateConstructorUsedError;
+  CallIdValue get callId;
   @override
-  CallkeepHandle get handle => throw _privateConstructorUsedError;
+  CallkeepHandle get handle;
   @override
-  String? get displayName => throw _privateConstructorUsedError;
+  String? get displayName;
   @override
-  bool get video => throw _privateConstructorUsedError;
+  bool get video;
   @override
-  DateTime get createdTime => throw _privateConstructorUsedError;
+  DateTime get createdTime;
   @override
-  DateTime? get acceptedTime => throw _privateConstructorUsedError;
+  DateTime? get acceptedTime;
   @override
-  DateTime? get hungUpTime => throw _privateConstructorUsedError;
+  DateTime? get hungUpTime;
   @override
-  Object? get failure => throw _privateConstructorUsedError;
+  Object? get failure;
   @override
-  MediaStream? get localStream => throw _privateConstructorUsedError;
+  MediaStream? get localStream;
   @override
-  MediaStream? get remoteStream => throw _privateConstructorUsedError;
+  MediaStream? get remoteStream;
   @override
-  RTCPeerConnection? get peerConnection => throw _privateConstructorUsedError;
+  RTCPeerConnection? get peerConnection;
   @override
   @JsonKey(ignore: true)
   _$$_ActiveCallCopyWith<_$_ActiveCall> get copyWith =>

@@ -57,9 +57,9 @@ abstract class _AppLogined implements AppLogined {
       required final String token}) = _$_AppLogined;
 
   @override
-  String get coreUrl => throw _privateConstructorUsedError;
+  String get coreUrl;
   @override
-  String get token => throw _privateConstructorUsedError;
+  String get token;
 }
 
 /// @nodoc
@@ -230,11 +230,11 @@ abstract class _AppState implements AppState {
       final String? webRegistrationInitialUrl}) = _$_AppState;
 
   @override
-  String? get coreUrl => throw _privateConstructorUsedError;
+  String? get coreUrl;
   @override
-  String? get token => throw _privateConstructorUsedError;
+  String? get token;
   @override
-  String? get webRegistrationInitialUrl => throw _privateConstructorUsedError;
+  String? get webRegistrationInitialUrl;
   @override
   @JsonKey(ignore: true)
   _$$_AppStateCopyWith<_$_AppState> get copyWith =>

@@ -9,7 +9,7 @@ part of 'app_push_tokens.dart';
 Map<String, dynamic> _$AppCreatePushTokenRequestToJson(
         AppCreatePushTokenRequest instance) =>
     <String, dynamic>{
-      'type': _$PushTokenTypeEnumMap[instance.type],
+      'type': _$PushTokenTypeEnumMap[instance.type]!,
       'value': instance.value,
     };
 

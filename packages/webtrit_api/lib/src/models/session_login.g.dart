@@ -9,7 +9,7 @@ part of 'session_login.dart';
 Map<String, dynamic> _$SessionLoginRequestToJson(
         SessionLoginRequest instance) =>
     <String, dynamic>{
-      'type': _$AppTypeEnumMap[instance.type],
+      'type': _$AppTypeEnumMap[instance.type]!,
       'identifier': instance.identifier,
       'login': instance.login,
       'password': instance.password,

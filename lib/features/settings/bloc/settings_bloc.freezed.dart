@@ -174,13 +174,13 @@ abstract class _SettingsState implements SettingsState {
       final Object? error}) = _$_SettingsState;
 
   @override
-  bool get progress => throw _privateConstructorUsedError;
+  bool get progress;
   @override
-  bool get registerStatus => throw _privateConstructorUsedError;
+  bool get registerStatus;
   @override
-  AccountInfo? get info => throw _privateConstructorUsedError;
+  AccountInfo? get info;
   @override
-  Object? get error => throw _privateConstructorUsedError;
+  Object? get error;
   @override
   @JsonKey(ignore: true)
   _$$_SettingsStateCopyWith<_$_SettingsState> get copyWith =>

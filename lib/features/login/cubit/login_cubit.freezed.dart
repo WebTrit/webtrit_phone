@@ -278,23 +278,23 @@ abstract class _LoginState implements LoginState {
       final CodeInput codeInput}) = _$_LoginState;
 
   @override
-  int get tabIndex => throw _privateConstructorUsedError;
+  int get tabIndex;
   @override
-  LoginStatus get status => throw _privateConstructorUsedError;
+  LoginStatus get status;
   @override
-  Object? get error => throw _privateConstructorUsedError;
+  Object? get error;
   @override
-  String? get coreUrl => throw _privateConstructorUsedError;
+  String? get coreUrl;
   @override
-  String? get otpId => throw _privateConstructorUsedError;
+  String? get otpId;
   @override
-  String? get token => throw _privateConstructorUsedError;
+  String? get token;
   @override
-  UrlInput get coreUrlInput => throw _privateConstructorUsedError;
+  UrlInput get coreUrlInput;
   @override
-  PhoneInput get phoneInput => throw _privateConstructorUsedError;
+  PhoneInput get phoneInput;
   @override
-  CodeInput get codeInput => throw _privateConstructorUsedError;
+  CodeInput get codeInput;
   @override
   @JsonKey(ignore: true)
   _$$_LoginStateCopyWith<_$_LoginState> get copyWith =>
