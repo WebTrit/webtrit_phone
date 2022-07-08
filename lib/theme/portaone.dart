@@ -4,7 +4,6 @@ import 'theme.dart';
 
 const _seedColor = Color(0xFFF5841F);
 const _darkBlue = Color(0xFF3D5B68);
-const _darkBlue60 = Color(0xFF8B9DA4);
 const _darkBlue30 = Color(0xFFC5CED2);
 const _green = Color(0xFF75B943);
 const _light = Color(0xFFF3F5F6);
