@@ -815,7 +815,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     if (event.state == RTCIceGatheringState.RTCIceGatheringStateComplete) {
       await state.performOnActiveCall(event.uuid, (activeCall) {
-        return _signalingClient?.execute(TrickleRequest(
+        return _signalingClient?.execute(IceTrickleRequest(
           callId: activeCall.callId.toString(),
           candidate: null,
         ));
@@ -828,7 +828,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     await state.performOnActiveCall(event.uuid, (activeCall) {
-      return _signalingClient?.execute(TrickleRequest(
+      return _signalingClient?.execute(IceTrickleRequest(
         callId: activeCall.callId.toString(),
         candidate: event.candidate.toMap(),
       ));

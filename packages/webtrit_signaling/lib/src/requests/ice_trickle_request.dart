@@ -1,7 +1,7 @@
 import 'call_request.dart';
 
-class TrickleRequest extends CallRequest {
-  const TrickleRequest({
+class IceTrickleRequest extends CallRequest {
+  const IceTrickleRequest({
     required String callId,
     this.candidate,
   }) : super(callId: callId);
@@ -14,15 +14,15 @@ class TrickleRequest extends CallRequest {
         candidate,
       ];
 
-  static const request = 'trickle';
+  static const request = 'ice_trickle';
 
-  factory TrickleRequest.fromJson(Map<String, dynamic> json) {
+  factory IceTrickleRequest.fromJson(Map<String, dynamic> json) {
     final requestValue = json['request'];
     if (requestValue != request) {
       throw ArgumentError.value(requestValue, "request", "Not equal $request");
     }
 
-    return TrickleRequest(
+    return IceTrickleRequest(
       callId: json['call_id'],
       candidate: json['candidate'],
     );
