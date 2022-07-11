@@ -722,6 +722,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }));
 
     await state.performOnActiveCall(event.uuid, (activeCall) async {
+      // Need to close peer connection before executing [HangupRequest]
+      // to avoid races when while hangup is still in process, several [IceTrickleRequest]s
+      // could be sent, so some of these requests are getting incorrect call id error.
+      await activeCall.peerConnection?.close();
+      await activeCall.localStream?.dispose();
+
       if (activeCall.isIncoming && !activeCall.wasAccepted) {
         await _signalingClient?.execute(DeclineRequest(
           callId: activeCall.callId.toString(),
@@ -731,9 +737,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           callId: activeCall.callId.toString(),
         ));
       }
-
-      await activeCall.peerConnection?.close();
-      await activeCall.localStream?.dispose();
     });
 
     emit(state.copyWithPopActiveCall(event.uuid));
