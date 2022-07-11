@@ -660,7 +660,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     final localDescription = await peerConnection.createOffer({});
     // Need to initiate outgoing call before set localDescription to avoid races
-    // between [OutgoingCallRequest] and [TrickleRequest]s.
+    // between [OutgoingCallRequest] and [IceTrickleRequest]s.
     await state.performOnActiveCall(event.uuid, (activeCall) async {
       await _signalingClient?.execute(OutgoingCallRequest(
         callId: activeCall.callId.toString(),
