@@ -26,11 +26,13 @@ class CallActiveScaffold extends StatefulWidget {
 class CallActiveScaffoldState extends State<CallActiveScaffold> {
   bool compact = false;
   bool frontCamera = true;
+  late bool cameraEnabled;
   late bool speakerEnabled;
 
   @override
   void initState() {
     super.initState();
+    cameraEnabled = widget.activeCall.video;
     speakerEnabled = widget.activeCall.video;
   }
 
@@ -122,7 +124,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       video: widget.activeCall.video,
                       wasAccepted: widget.activeCall.wasAccepted,
                       wasHungUp: widget.activeCall.wasHungUp,
-                      onCameraPressed: _cameraPressed,
+                      cameraValue: cameraEnabled,
+                      onCameraChanged: onCameraChanged,
                       mutedValue: widget.activeCall.muted,
                       onMutedChanged: _onMutedChanged,
                       speakerValue: speakerEnabled,
@@ -156,8 +159,12 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     context.read<CallBloc>().add(CallControlEvent.cameraSwitched(widget.activeCall.callId.uuid));
   }
 
-  void _cameraPressed(bool enabled) {
-    context.read<CallBloc>().add(CallControlEvent.cameraEnabled(widget.activeCall.callId.uuid, enabled));
+  void onCameraChanged(bool value) {
+    setState(() {
+      cameraEnabled = value;
+    });
+
+    context.read<CallBloc>().add(CallControlEvent.cameraEnabled(widget.activeCall.callId.uuid, value));
   }
 
   void _onMutedChanged(bool value) {

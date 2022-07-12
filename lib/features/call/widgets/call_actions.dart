@@ -15,8 +15,8 @@ class CallActions extends StatefulWidget {
     required this.video,
     required this.wasAccepted,
     required this.wasHungUp,
-    this.cameraEnabledByDefault = true,
-    this.onCameraPressed,
+    required this.cameraValue,
+    this.onCameraChanged,
     required this.mutedValue,
     this.onMutedChanged,
     required this.speakerValue,
@@ -33,8 +33,8 @@ class CallActions extends StatefulWidget {
   final bool video;
   final bool wasAccepted;
   final bool wasHungUp;
-  final bool cameraEnabledByDefault;
-  final void Function(bool enabled)? onCameraPressed;
+  final bool cameraValue;
+  final ValueChanged<bool>? onCameraChanged;
   final bool mutedValue;
   final ValueChanged<bool>? onMutedChanged;
   final bool speakerValue;
@@ -51,14 +51,7 @@ class CallActions extends StatefulWidget {
 }
 
 class _CallActionsState extends State<CallActions> {
-  late bool _cameraEnabled;
   bool _keypadShow = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _cameraEnabled = widget.cameraEnabledByDefault;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +84,7 @@ class _CallActionsState extends State<CallActions> {
       }
     }
 
+    final onCameraChanged = widget.onCameraChanged;
     final onMutedChanged = widget.onMutedChanged;
     final onSpeakerChanged = widget.onSpeakerChanged;
     final onTransferPressed = widget.onTransferPressed;
@@ -152,19 +146,16 @@ class _CallActionsState extends State<CallActions> {
             ),
           ),
           Tooltip(
-            message: _cameraEnabled
+            message: widget.cameraValue
                 ? context.l10n.call_CallActionsTooltip_disableCamera
                 : context.l10n.call_CallActionsTooltip_enableCamera,
             child: TextButton(
               onPressed: !widget.video
                   ? null
-                  : () {
-                      setState(() {
-                        _cameraEnabled = !_cameraEnabled;
-                      });
-                      widget.onCameraPressed?.call(_cameraEnabled);
-                    },
-              style: !_cameraEnabled ? textButtonStyles?.callActiveAction : textButtonStyles?.callAction,
+                  : onCameraChanged == null
+                      ? null
+                      : () => onCameraChanged(!widget.cameraValue),
+              style: !widget.cameraValue ? textButtonStyles?.callActiveAction : textButtonStyles?.callAction,
               child: const Icon(Icons.videocam_off),
             ),
           ),
