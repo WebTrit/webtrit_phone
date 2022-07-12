@@ -755,6 +755,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         return _signalingClient?.execute(UnholdRequest(callId: activeCall.callId.toString()));
       }
     });
+
+    emit(state.copyWithMappedActiveCall(event.uuid, (activeCall) {
+      return activeCall.copyWith(held: event.onHold);
+    }));
   }
 
   Future<void> __onCallPerformEventSetMuted(

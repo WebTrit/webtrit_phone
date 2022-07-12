@@ -78,6 +78,7 @@ class ActiveCall with _$ActiveCall {
     required CallkeepHandle handle,
     String? displayName,
     required bool video,
+    @Default(false) bool held,
     required DateTime createdTime,
     DateTime? acceptedTime,
     DateTime? hungUpTime,

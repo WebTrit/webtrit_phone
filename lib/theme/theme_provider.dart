@@ -141,8 +141,12 @@ class ThemeProvider extends InheritedWidget {
         backgroundColor: colors.error,
       ),
       callAction: TextButton.styleFrom(
-        primary: colors.background,
-        backgroundColor: colors.background.withOpacity(0.3),
+        primary: colors.surface,
+        backgroundColor: colors.surface.withOpacity(0.3),
+      ),
+      callActiveAction: TextButton.styleFrom(
+        primary: colors.onSurface,
+        backgroundColor: colors.surface,
       ),
     );
   }

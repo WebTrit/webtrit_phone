@@ -119,6 +119,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       onMicrophonePressed: _microphonePressed,
                       speakerphoneEnabledByDefault: widget.activeCall.video,
                       onSpeakerphonePressed: _speakerphonePressed,
+                      heldValue: widget.activeCall.held,
+                      onHeldChanged: _onHeldChanged,
                       onHangupPressed: _hangup,
                       onAcceptPressed: _accept,
                       onKeyPressed: _keyPressed,
@@ -156,6 +158,10 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
 
   void _speakerphonePressed(bool enabled) {
     context.read<CallBloc>().add(CallControlEvent.speakerphoneEnabled(widget.activeCall.callId.uuid, enabled));
+  }
+
+  void _onHeldChanged(bool value) {
+    context.read<CallBloc>().add(CallControlEvent.setHeld(widget.activeCall.callId.uuid, value));
   }
 
   void _hangup() {

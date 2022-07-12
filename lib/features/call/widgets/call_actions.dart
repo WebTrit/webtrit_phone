@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
@@ -22,6 +21,8 @@ class CallActions extends StatefulWidget {
     this.onMicrophonePressed,
     this.speakerphoneEnabledByDefault = true,
     this.onSpeakerphonePressed,
+    required this.heldValue,
+    this.onHeldChanged,
     this.onHangupPressed,
     this.onAcceptPressed,
     this.onKeyPressed,
@@ -37,6 +38,8 @@ class CallActions extends StatefulWidget {
   final void Function(bool enabled)? onMicrophonePressed;
   final bool speakerphoneEnabledByDefault;
   final void Function(bool enabled)? onSpeakerphonePressed;
+  final bool heldValue;
+  final ValueChanged<bool>? onHeldChanged;
   final void Function()? onHangupPressed;
   final void Function()? onAcceptPressed;
   final void Function(String value)? onKeyPressed;
@@ -89,6 +92,8 @@ class _CallActionsState extends State<CallActions> {
         });
       }
     }
+
+    final onHeldChanged = widget.onHeldChanged;
 
     late final TextButtonsTable buttonsTable;
     if (widget.isIncoming && !widget.wasAccepted) {
@@ -198,12 +203,12 @@ class _CallActionsState extends State<CallActions> {
             ),
           ),
           Tooltip(
-            message: context.l10n.call_CallActionsTooltip_hold,
+            message: widget.heldValue
+                ? context.l10n.call_CallActionsTooltip_unhold
+                : context.l10n.call_CallActionsTooltip_hold,
             child: TextButton(
-              onPressed: () {
-                context.showErrorSnackBar(context.l10n.notImplemented);
-              },
-              style: textButtonStyles?.callAction,
+              onPressed: onHeldChanged == null ? null : () => onHeldChanged(!widget.heldValue),
+              style: widget.heldValue ? textButtonStyles?.callActiveAction : textButtonStyles?.callAction,
               child: const Icon(Icons.pause),
             ),
           ),

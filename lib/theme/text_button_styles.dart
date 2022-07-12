@@ -7,6 +7,7 @@ class TextButtonStyles extends ThemeExtension<TextButtonStyles> {
     required this.callStart,
     required this.callHangup,
     required this.callAction,
+    required this.callActiveAction,
   });
 
   final ButtonStyle? neutral;
@@ -14,6 +15,7 @@ class TextButtonStyles extends ThemeExtension<TextButtonStyles> {
   final ButtonStyle? callStart;
   final ButtonStyle? callHangup;
   final ButtonStyle? callAction;
+  final ButtonStyle? callActiveAction;
 
   @override
   ThemeExtension<TextButtonStyles> copyWith({
@@ -22,6 +24,7 @@ class TextButtonStyles extends ThemeExtension<TextButtonStyles> {
     ButtonStyle? callStart,
     ButtonStyle? callHangup,
     ButtonStyle? callAction,
+    ButtonStyle? callActiveAction,
   }) {
     return TextButtonStyles(
       neutral: neutral ?? this.neutral,
@@ -29,6 +32,7 @@ class TextButtonStyles extends ThemeExtension<TextButtonStyles> {
       callStart: callStart ?? this.callStart,
       callHangup: callHangup ?? this.callHangup,
       callAction: callAction ?? this.callAction,
+      callActiveAction: callActiveAction ?? this.callActiveAction,
     );
   }
 
@@ -43,6 +47,7 @@ class TextButtonStyles extends ThemeExtension<TextButtonStyles> {
       callStart: ButtonStyle.lerp(callStart, other.callStart, t),
       callHangup: ButtonStyle.lerp(callHangup, other.callHangup, t),
       callAction: ButtonStyle.lerp(callAction, other.callAction, t),
+      callActiveAction: ButtonStyle.lerp(callActiveAction, other.callActiveAction, t),
     );
   }
 }

@@ -64,8 +64,11 @@
   "call_CallActionsTooltip_transfer": "Transfer",
   "@call_CallActionsTooltip_transfer": {
   },
-  "call_CallActionsTooltip_hold": "Hold",
+  "call_CallActionsTooltip_hold": "Hold call",
   "@call_CallActionsTooltip_hold": {
+  },
+  "call_CallActionsTooltip_unhold": "Unhold call",
+  "@call_CallActionsTooltip_unhold": {
   },
   "call_CallActionsTooltip_showKeypad": "Show keypad",
   "@call_CallActionsTooltip_showKeypad": {
