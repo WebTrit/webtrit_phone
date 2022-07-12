@@ -7,6 +7,6 @@ extension AccountInfoFormatting on AccountInfo {
   }
 
   String get balanceWithCurrency {
-    return '${balance.toStringAsFixed(2)} ${currency}';
+    return '${balance.toStringAsFixed(2)} $currency';
   }
 }
