@@ -40,8 +40,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final _logger = Logger('$CallBloc');
 
   StreamSubscription<ConnectivityResult>? _connectivityChangedSubscription;
-  ConnectivityResult?
-      _currentConnectivityResult; // necessary because of issue on iOS with doubling the same connectivity result
 
   WebtritSignalingClient? _signalingClient;
   Timer? _signalingClientReconnectTimer;
@@ -163,8 +161,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     _connectivityChangedSubscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       _logger.finer('onConnectivityChanged: $result');
-      if (_currentConnectivityResult != result) {
-        _currentConnectivityResult = result;
+      // this check is necessary because of issue on iOS with doubling the same connectivity result
+      if (state.currentConnectivityResult != result) {
         add(_ConnectivityResultChanged(result));
       }
     });
@@ -203,6 +201,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } else {
       _reconnectInitiated();
     }
+    emit(state.copyWith(currentConnectivityResult: connectivityResult));
   }
 
   // processing signaling client events

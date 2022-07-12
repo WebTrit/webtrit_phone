@@ -4287,6 +4287,8 @@ abstract class _PeerConnectionEventStreamRemoved
 
 /// @nodoc
 mixin _$CallState {
+  ConnectivityResult? get currentConnectivityResult =>
+      throw _privateConstructorUsedError;
   SignalingClientStatus get signalingClientStatus =>
       throw _privateConstructorUsedError;
   Object? get lastSignalingClientConnectError =>
@@ -4306,7 +4308,8 @@ abstract class $CallStateCopyWith<$Res> {
   factory $CallStateCopyWith(CallState value, $Res Function(CallState) then) =
       _$CallStateCopyWithImpl<$Res>;
   $Res call(
-      {SignalingClientStatus signalingClientStatus,
+      {ConnectivityResult? currentConnectivityResult,
+      SignalingClientStatus signalingClientStatus,
       Object? lastSignalingClientConnectError,
       Object? lastSignalingClientDisconnectError,
       int? lastSignalingDisconnectCode,
@@ -4323,6 +4326,7 @@ class _$CallStateCopyWithImpl<$Res> implements $CallStateCopyWith<$Res> {
 
   @override
   $Res call({
+    Object? currentConnectivityResult = freezed,
     Object? signalingClientStatus = freezed,
     Object? lastSignalingClientConnectError = freezed,
     Object? lastSignalingClientDisconnectError = freezed,
@@ -4330,6 +4334,10 @@ class _$CallStateCopyWithImpl<$Res> implements $CallStateCopyWith<$Res> {
     Object? activeCalls = freezed,
   }) {
     return _then(_value.copyWith(
+      currentConnectivityResult: currentConnectivityResult == freezed
+          ? _value.currentConnectivityResult
+          : currentConnectivityResult // ignore: cast_nullable_to_non_nullable
+              as ConnectivityResult?,
       signalingClientStatus: signalingClientStatus == freezed
           ? _value.signalingClientStatus
           : signalingClientStatus // ignore: cast_nullable_to_non_nullable
@@ -4361,7 +4369,8 @@ abstract class _$$_CallStateCopyWith<$Res> implements $CallStateCopyWith<$Res> {
       __$$_CallStateCopyWithImpl<$Res>;
   @override
   $Res call(
-      {SignalingClientStatus signalingClientStatus,
+      {ConnectivityResult? currentConnectivityResult,
+      SignalingClientStatus signalingClientStatus,
       Object? lastSignalingClientConnectError,
       Object? lastSignalingClientDisconnectError,
       int? lastSignalingDisconnectCode,
@@ -4380,6 +4389,7 @@ class __$$_CallStateCopyWithImpl<$Res> extends _$CallStateCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? currentConnectivityResult = freezed,
     Object? signalingClientStatus = freezed,
     Object? lastSignalingClientConnectError = freezed,
     Object? lastSignalingClientDisconnectError = freezed,
@@ -4387,6 +4397,10 @@ class __$$_CallStateCopyWithImpl<$Res> extends _$CallStateCopyWithImpl<$Res>
     Object? activeCalls = freezed,
   }) {
     return _then(_$_CallState(
+      currentConnectivityResult: currentConnectivityResult == freezed
+          ? _value.currentConnectivityResult
+          : currentConnectivityResult // ignore: cast_nullable_to_non_nullable
+              as ConnectivityResult?,
       signalingClientStatus: signalingClientStatus == freezed
           ? _value.signalingClientStatus
           : signalingClientStatus // ignore: cast_nullable_to_non_nullable
@@ -4415,7 +4429,8 @@ class __$$_CallStateCopyWithImpl<$Res> extends _$CallStateCopyWithImpl<$Res>
 
 class _$_CallState extends _CallState {
   const _$_CallState(
-      {this.signalingClientStatus = SignalingClientStatus.disconnect,
+      {this.currentConnectivityResult,
+      this.signalingClientStatus = SignalingClientStatus.disconnect,
       this.lastSignalingClientConnectError,
       this.lastSignalingClientDisconnectError,
       this.lastSignalingDisconnectCode,
@@ -4423,6 +4438,8 @@ class _$_CallState extends _CallState {
       : _activeCalls = activeCalls,
         super._();
 
+  @override
+  final ConnectivityResult? currentConnectivityResult;
   @override
   @JsonKey()
   final SignalingClientStatus signalingClientStatus;
@@ -4442,7 +4459,7 @@ class _$_CallState extends _CallState {
 
   @override
   String toString() {
-    return 'CallState(signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, activeCalls: $activeCalls)';
+    return 'CallState(currentConnectivityResult: $currentConnectivityResult, signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, activeCalls: $activeCalls)';
   }
 
   @override
@@ -4450,6 +4467,8 @@ class _$_CallState extends _CallState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallState &&
+            const DeepCollectionEquality().equals(
+                other.currentConnectivityResult, currentConnectivityResult) &&
             const DeepCollectionEquality()
                 .equals(other.signalingClientStatus, signalingClientStatus) &&
             const DeepCollectionEquality().equals(
@@ -4468,6 +4487,7 @@ class _$_CallState extends _CallState {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(currentConnectivityResult),
       const DeepCollectionEquality().hash(signalingClientStatus),
       const DeepCollectionEquality().hash(lastSignalingClientConnectError),
       const DeepCollectionEquality().hash(lastSignalingClientDisconnectError),
@@ -4482,13 +4502,16 @@ class _$_CallState extends _CallState {
 
 abstract class _CallState extends CallState {
   const factory _CallState(
-      {final SignalingClientStatus signalingClientStatus,
+      {final ConnectivityResult? currentConnectivityResult,
+      final SignalingClientStatus signalingClientStatus,
       final Object? lastSignalingClientConnectError,
       final Object? lastSignalingClientDisconnectError,
       final int? lastSignalingDisconnectCode,
       final List<ActiveCall> activeCalls}) = _$_CallState;
   const _CallState._() : super._();
 
+  @override
+  ConnectivityResult? get currentConnectivityResult;
   @override
   SignalingClientStatus get signalingClientStatus;
   @override
