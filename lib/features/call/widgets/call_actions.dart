@@ -154,8 +154,8 @@ class _CallActionsState extends State<CallActions> {
                 });
                 widget.onMicrophonePressed?.call(_microphoneEnabled);
               },
-              style: textButtonStyles?.callAction,
-              child: _microphoneEnabled ? const Icon(Icons.mic) : const Icon(Icons.mic_off),
+              style: _microphoneEnabled ? textButtonStyles?.callActiveAction : textButtonStyles?.callAction,
+              child: const Icon(Icons.mic_off),
             ),
           ),
           Tooltip(
@@ -171,8 +171,8 @@ class _CallActionsState extends State<CallActions> {
                       });
                       widget.onCameraPressed?.call(_cameraEnabled);
                     },
-              style: textButtonStyles?.callAction,
-              child: _cameraEnabled ? const Icon(Icons.videocam) : const Icon(Icons.videocam_off),
+              style: !_cameraEnabled ? textButtonStyles?.callActiveAction : textButtonStyles?.callAction,
+              child: const Icon(Icons.videocam_off),
             ),
           ),
           Tooltip(
@@ -186,8 +186,8 @@ class _CallActionsState extends State<CallActions> {
                 });
                 widget.onSpeakerphonePressed?.call(_speakerphoneEnabled);
               },
-              style: textButtonStyles?.callAction,
-              child: _speakerphoneEnabled ? const Icon(Icons.volume_up) : const Icon(Icons.volume_off),
+              style: _speakerphoneEnabled ? textButtonStyles?.callActiveAction : textButtonStyles?.callAction,
+              child: const Icon(Icons.volume_up),
             ),
           ),
           // delimiter
@@ -259,7 +259,7 @@ class _CallActionsState extends State<CallActions> {
                         _keypadShow = false;
                       });
                     },
-                    style: textButtonStyles?.callAction,
+                    style: textButtonStyles?.callActiveAction,
                     child: const Icon(Icons.dialpad),
                   ),
                 )
