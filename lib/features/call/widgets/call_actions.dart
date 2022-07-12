@@ -21,6 +21,7 @@ class CallActions extends StatefulWidget {
     this.onMicrophonePressed,
     this.speakerphoneEnabledByDefault = true,
     this.onSpeakerphonePressed,
+    this.onTransferPressed,
     required this.heldValue,
     this.onHeldChanged,
     this.onHangupPressed,
@@ -38,6 +39,7 @@ class CallActions extends StatefulWidget {
   final void Function(bool enabled)? onMicrophonePressed;
   final bool speakerphoneEnabledByDefault;
   final void Function(bool enabled)? onSpeakerphonePressed;
+  final VoidCallback? onTransferPressed;
   final bool heldValue;
   final ValueChanged<bool>? onHeldChanged;
   final void Function()? onHangupPressed;
@@ -93,6 +95,7 @@ class _CallActionsState extends State<CallActions> {
       }
     }
 
+    final onTransferPressed = widget.onTransferPressed;
     final onHeldChanged = widget.onHeldChanged;
 
     late final TextButtonsTable buttonsTable;
@@ -195,9 +198,7 @@ class _CallActionsState extends State<CallActions> {
           Tooltip(
             message: context.l10n.call_CallActionsTooltip_transfer,
             child: TextButton(
-              onPressed: () {
-                context.showErrorSnackBar(context.l10n.notImplemented);
-              },
+              onPressed: onTransferPressed,
               style: textButtonStyles?.callAction,
               child: const Icon(Icons.phone_forwarded),
             ),
