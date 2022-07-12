@@ -76,6 +76,9 @@
   "call_CallActionsTooltip_hangup": "Hangup",
   "@call_CallActionsTooltip_hangup": {
   },
+  "call_CallActionsTooltip_accept": "Accept",
+  "@call_CallActionsTooltip_accept": {
+  },
 
   "favorites_BodyCenter_failure": "Failure to get favorites",
   "@favorites_BodyCenter_failure": {

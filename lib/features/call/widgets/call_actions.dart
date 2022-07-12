@@ -96,7 +96,7 @@ class _CallActionsState extends State<CallActions> {
         minimumSize: Size.square(dimension),
         children: [
           Tooltip(
-            message: 'Hangup',
+            message: context.l10n.call_CallActionsTooltip_hangup,
             child: TextButton(
               onPressed: widget.onHangupPressed,
               style: textButtonStyles?.callHangup,
@@ -105,7 +105,7 @@ class _CallActionsState extends State<CallActions> {
           ),
           const SizedBox(),
           Tooltip(
-            message: 'Accept',
+            message: context.l10n.call_CallActionsTooltip_accept,
             child: TextButton(
               onPressed: widget.onAcceptPressed,
               style: textButtonStyles?.callStart,
