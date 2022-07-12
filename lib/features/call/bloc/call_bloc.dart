@@ -29,7 +29,7 @@ part 'call_event.dart';
 part 'call_state.dart';
 
 const kSignalingClientConnectionTimeout = Duration(seconds: 10);
-const kSignalingClientReconnectInitiated = Duration(seconds: 3);
+const kSignalingClientReconnectDelay = Duration(seconds: 3);
 
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
   final RecentsRepository recentsRepository;
@@ -143,10 +143,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   //
 
-  void _reconnectInitiated([Duration duration = Duration.zero]) {
+  void _reconnectInitiated([Duration delay = Duration.zero]) {
     _signalingClientReconnectTimer?.cancel();
-    _signalingClientReconnectTimer = Timer(duration, () {
-      _logger.info('_reconnectInitiated Timer callback after $duration');
+    _signalingClientReconnectTimer = Timer(delay, () {
+      _logger.info('_reconnectInitiated Timer callback after $delay');
       add(const _SignalingClientEvent.connectInitiated());
     });
   }
@@ -271,7 +271,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       emit(state.copyWith(signalingClientStatus: SignalingClientStatus.failure, signalingFailure: e));
 
-      _reconnectInitiated(kSignalingClientReconnectInitiated);
+      _reconnectInitiated(kSignalingClientReconnectDelay);
     }
   }
 
@@ -923,7 +923,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   void _onSignalingDisconnect(int? code, String? reason) {
     _logger.info('_onSignalingDisconnect code: $code reason: $reason');
 
-    _reconnectInitiated();
+    _reconnectInitiated(kSignalingClientReconnectDelay);
   }
 
   // WidgetsBindingObserver
