@@ -43,11 +43,11 @@
   "call_description_outgoing": "Outgoing call to",
   "@call_description_outgoing": {
   },
-  "call_CallActionsTooltip_muteMicrophone": "Mute microphone",
-  "@call_CallActionsTooltip_muteMicrophone": {
+  "call_CallActionsTooltip_mute": "Mute microphone",
+  "@call_CallActionsTooltip_mute": {
   },
-  "call_CallActionsTooltip_unmuteMicrophone": "Unmute microphone",
-  "@call_CallActionsTooltip_unmuteMicrophone": {
+  "call_CallActionsTooltip_unmute": "Unmute microphone",
+  "@call_CallActionsTooltip_unmute": {
   },
   "call_CallActionsTooltip_disableCamera": "Disable camera",
   "@call_CallActionsTooltip_disableCamera": {

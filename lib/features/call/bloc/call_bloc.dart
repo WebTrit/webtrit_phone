@@ -774,6 +774,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
       return null;
     });
+
+    emit(state.copyWithMappedActiveCall(event.uuid, (activeCall) {
+      return activeCall.copyWith(muted: event.muted);
+    }));
   }
 
   Future<void> __onCallPerformEventSentDTMF(

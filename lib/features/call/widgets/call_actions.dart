@@ -17,8 +17,8 @@ class CallActions extends StatefulWidget {
     required this.wasHungUp,
     this.cameraEnabledByDefault = true,
     this.onCameraPressed,
-    this.microphoneEnabledByDefault = true,
-    this.onMicrophonePressed,
+    required this.mutedValue,
+    this.onMutedChanged,
     this.speakerphoneEnabledByDefault = true,
     this.onSpeakerphonePressed,
     this.onTransferPressed,
@@ -35,8 +35,8 @@ class CallActions extends StatefulWidget {
   final bool wasHungUp;
   final bool cameraEnabledByDefault;
   final void Function(bool enabled)? onCameraPressed;
-  final bool microphoneEnabledByDefault;
-  final void Function(bool enabled)? onMicrophonePressed;
+  final bool mutedValue;
+  final ValueChanged<bool>? onMutedChanged;
   final bool speakerphoneEnabledByDefault;
   final void Function(bool enabled)? onSpeakerphonePressed;
   final VoidCallback? onTransferPressed;
@@ -52,7 +52,6 @@ class CallActions extends StatefulWidget {
 
 class _CallActionsState extends State<CallActions> {
   late bool _cameraEnabled;
-  late bool _microphoneEnabled;
   late bool _speakerphoneEnabled;
   bool _keypadShow = false;
 
@@ -60,7 +59,6 @@ class _CallActionsState extends State<CallActions> {
   void initState() {
     super.initState();
     _cameraEnabled = widget.cameraEnabledByDefault;
-    _microphoneEnabled = widget.microphoneEnabledByDefault;
     _speakerphoneEnabled = widget.speakerphoneEnabledByDefault;
   }
 
@@ -95,6 +93,7 @@ class _CallActionsState extends State<CallActions> {
       }
     }
 
+    final onMutedChanged = widget.onMutedChanged;
     final onTransferPressed = widget.onTransferPressed;
     final onHeldChanged = widget.onHeldChanged;
 
@@ -144,17 +143,12 @@ class _CallActionsState extends State<CallActions> {
         actions = [
           // row
           Tooltip(
-            message: _microphoneEnabled
-                ? context.l10n.call_CallActionsTooltip_muteMicrophone
-                : context.l10n.call_CallActionsTooltip_unmuteMicrophone,
+            message: widget.mutedValue
+                ? context.l10n.call_CallActionsTooltip_unmute
+                : context.l10n.call_CallActionsTooltip_mute,
             child: TextButton(
-              onPressed: () {
-                setState(() {
-                  _microphoneEnabled = !_microphoneEnabled;
-                });
-                widget.onMicrophonePressed?.call(_microphoneEnabled);
-              },
-              style: _microphoneEnabled ? textButtonStyles?.callActiveAction : textButtonStyles?.callAction,
+              onPressed: onMutedChanged == null ? null : () => onMutedChanged(!widget.mutedValue),
+              style: widget.mutedValue ? textButtonStyles?.callActiveAction : textButtonStyles?.callAction,
               child: const Icon(Icons.mic_off),
             ),
           ),

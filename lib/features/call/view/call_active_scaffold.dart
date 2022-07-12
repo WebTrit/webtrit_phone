@@ -116,7 +116,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       wasAccepted: widget.activeCall.wasAccepted,
                       wasHungUp: widget.activeCall.wasHungUp,
                       onCameraPressed: _cameraPressed,
-                      onMicrophonePressed: _microphonePressed,
+                      mutedValue: widget.activeCall.muted,
+                      onMutedChanged: _onMutedChanged,
                       speakerphoneEnabledByDefault: widget.activeCall.video,
                       onSpeakerphonePressed: _speakerphonePressed,
                       heldValue: widget.activeCall.held,
@@ -152,8 +153,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     context.read<CallBloc>().add(CallControlEvent.cameraEnabled(widget.activeCall.callId.uuid, enabled));
   }
 
-  void _microphonePressed(bool enabled) {
-    context.read<CallBloc>().add(CallControlEvent.setMuted(widget.activeCall.callId.uuid, !enabled));
+  void _onMutedChanged(bool value) {
+    context.read<CallBloc>().add(CallControlEvent.setMuted(widget.activeCall.callId.uuid, value));
   }
 
   void _speakerphonePressed(bool enabled) {
