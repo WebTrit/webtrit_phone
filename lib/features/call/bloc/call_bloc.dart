@@ -665,7 +665,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         jsep: localDescription.toMap(),
       ));
     });
-    peerConnection.setLocalDescription(localDescription);
+    await peerConnection.setLocalDescription(localDescription);
 
     emit(state.copyWithMappedActiveCall(event.uuid, (activeCall) {
       return activeCall.copyWith(peerConnection: peerConnection);
@@ -696,7 +696,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         callId: activeCall.callId.toString(),
         jsep: localDescription.toMap(),
       ));
-      peerConnection.setLocalDescription(localDescription);
+      await peerConnection.setLocalDescription(localDescription);
     });
   }
 
