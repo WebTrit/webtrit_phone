@@ -1,5 +1,4 @@
 import 'call_event.dart';
-import 'ice_media_type.dart';
 
 class IceTrickleEvent extends CallEvent {
   const IceTrickleEvent({
