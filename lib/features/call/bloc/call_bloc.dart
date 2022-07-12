@@ -393,8 +393,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         return activeCallUpdated;
       }));
 
-      await state.performOnActiveCall(event.callId.uuid, (activeCall) async {
-        await _signalingClient?.execute(DeclineRequest(
+      await state.performOnActiveCall(event.callId.uuid, (activeCall) {
+        return _signalingClient?.execute(DeclineRequest(
           callId: activeCall.callId.toString(),
         ));
       });
@@ -567,9 +567,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     await state.performOnActiveCall(event.uuid, (activeCall) {
       final videoTrack = activeCall.localStream?.getVideoTracks()[0];
       if (videoTrack != null) {
-        return Helper.switchCamera(videoTrack);
+        Helper.switchCamera(videoTrack);
       }
-      return null;
     });
   }
 
@@ -582,7 +581,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       if (videoTrack != null) {
         videoTrack.enabled = event.enabled;
       }
-      return null;
     });
   }
 
@@ -595,7 +593,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       if (audioTrack != null) {
         audioTrack.enableSpeakerphone(event.enabled);
       }
-      return null;
     });
   }
 
@@ -661,8 +658,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final localDescription = await peerConnection.createOffer({});
     // Need to initiate outgoing call before set localDescription to avoid races
     // between [OutgoingCallRequest] and [IceTrickleRequest]s.
-    await state.performOnActiveCall(event.uuid, (activeCall) async {
-      await _signalingClient?.execute(OutgoingCallRequest(
+    await state.performOnActiveCall(event.uuid, (activeCall) {
+      return _signalingClient?.execute(OutgoingCallRequest(
         callId: activeCall.callId.toString(),
         number: activeCall.handle.value,
         jsep: localDescription.toMap(),
@@ -772,7 +769,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       if (audioTrack != null) {
         Helper.setMicrophoneMute(event.muted, audioTrack);
       }
-      return null;
     });
 
     emit(state.copyWithMappedActiveCall(event.uuid, (activeCall) {
@@ -826,9 +822,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     if (event.state == RTCIceGatheringState.RTCIceGatheringStateComplete) {
       await state.performOnActiveCall(event.uuid, (activeCall) {
-        if (activeCall.wasHungUp) {
-          return null;
-        } else {
+        if (!activeCall.wasHungUp) {
           return _signalingClient?.execute(IceTrickleRequest(
             callId: activeCall.callId.toString(),
             candidate: null,
@@ -843,9 +837,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     await state.performOnActiveCall(event.uuid, (activeCall) {
-      if (activeCall.wasHungUp) {
-        return null;
-      } else {
+      if (!activeCall.wasHungUp) {
         return _signalingClient?.execute(IceTrickleRequest(
           callId: activeCall.callId.toString(),
           candidate: event.candidate.toMap(),

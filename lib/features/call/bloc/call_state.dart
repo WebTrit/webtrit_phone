@@ -35,13 +35,12 @@ class CallState with _$CallState {
     return null;
   }
 
-  Future<void>? performOnActiveCall(UuidValue uuid, Future<void>? Function(ActiveCall element) perform) {
+  FutureOr<void>? performOnActiveCall(UuidValue uuid, FutureOr<void>? Function(ActiveCall element) perform) {
     for (var activeCall in activeCalls) {
       if (activeCall.callId.uuid == uuid) {
         return perform(activeCall);
       }
     }
-    return null;
   }
 
   CallState copyWithMappedActiveCall(UuidValue uuid, ActiveCall Function(ActiveCall element) map) {
