@@ -722,12 +722,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }));
 
     await state.performOnActiveCall(event.uuid, (activeCall) async {
-      // Need to close peer connection before executing [HangupRequest]
-      // to avoid races when while hangup is still in process, several [IceTrickleRequest]s
-      // could be sent, so some of these requests are getting incorrect call id error.
-      await activeCall.peerConnection?.close();
-      await activeCall.localStream?.dispose();
-
       if (activeCall.isIncoming && !activeCall.wasAccepted) {
         await _signalingClient?.execute(DeclineRequest(
           callId: activeCall.callId.toString(),
@@ -737,6 +731,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           callId: activeCall.callId.toString(),
         ));
       }
+
+      // Need to close peer connection after executing [HangupRequest]
+      // to prevent "Simulate a "hangup" coming from the application"
+      // because of "No WebRTC media anymore".
+      await activeCall.peerConnection?.close();
+      await activeCall.localStream?.dispose();
     });
 
     emit(state.copyWithPopActiveCall(event.uuid));
@@ -826,10 +826,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     if (event.state == RTCIceGatheringState.RTCIceGatheringStateComplete) {
       await state.performOnActiveCall(event.uuid, (activeCall) {
-        return _signalingClient?.execute(IceTrickleRequest(
-          callId: activeCall.callId.toString(),
-          candidate: null,
-        ));
+        if (activeCall.wasHungUp) {
+          return null;
+        } else {
+          return _signalingClient?.execute(IceTrickleRequest(
+            callId: activeCall.callId.toString(),
+            candidate: null,
+          ));
+        }
       });
     }
   }
@@ -839,10 +843,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     await state.performOnActiveCall(event.uuid, (activeCall) {
-      return _signalingClient?.execute(IceTrickleRequest(
-        callId: activeCall.callId.toString(),
-        candidate: event.candidate.toMap(),
-      ));
+      if (activeCall.wasHungUp) {
+        return null;
+      } else {
+        return _signalingClient?.execute(IceTrickleRequest(
+          callId: activeCall.callId.toString(),
+          candidate: event.candidate.toMap(),
+        ));
+      }
     });
   }
 
