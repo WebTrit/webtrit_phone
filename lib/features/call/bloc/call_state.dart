@@ -20,6 +20,7 @@ class CallState with _$CallState {
     @Default(SignalingClientStatus.disconnect) SignalingClientStatus signalingClientStatus,
     Object? lastSignalingClientConnectError,
     Object? lastSignalingClientDisconnectError,
+    int? lastSignalingDisconnectCode,
     @Default([]) List<ActiveCall> activeCalls,
   }) = _CallState;
 

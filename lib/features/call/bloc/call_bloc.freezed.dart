@@ -99,18 +99,21 @@ mixin _$_SignalingClientEvent {
   TResult when<TResult extends Object?>({
     required TResult Function() connectInitiated,
     required TResult Function() disconnectInitiated,
+    required TResult Function(int? code, String? reason) disconnected,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? connectInitiated,
     TResult Function()? disconnectInitiated,
+    TResult Function(int? code, String? reason)? disconnected,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? connectInitiated,
     TResult Function()? disconnectInitiated,
+    TResult Function(int? code, String? reason)? disconnected,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -120,6 +123,8 @@ mixin _$_SignalingClientEvent {
         connectInitiated,
     required TResult Function(_SignalingClientEventDisconnectInitiated value)
         disconnectInitiated,
+    required TResult Function(_SignalingClientEventDisconnected value)
+        disconnected,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -128,6 +133,7 @@ mixin _$_SignalingClientEvent {
         connectInitiated,
     TResult Function(_SignalingClientEventDisconnectInitiated value)?
         disconnectInitiated,
+    TResult Function(_SignalingClientEventDisconnected value)? disconnected,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -136,6 +142,7 @@ mixin _$_SignalingClientEvent {
         connectInitiated,
     TResult Function(_SignalingClientEventDisconnectInitiated value)?
         disconnectInitiated,
+    TResult Function(_SignalingClientEventDisconnected value)? disconnected,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -167,6 +174,7 @@ class _$_SignalingClientEventConnectInitiated
   TResult when<TResult extends Object?>({
     required TResult Function() connectInitiated,
     required TResult Function() disconnectInitiated,
+    required TResult Function(int? code, String? reason) disconnected,
   }) {
     return connectInitiated();
   }
@@ -176,6 +184,7 @@ class _$_SignalingClientEventConnectInitiated
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? connectInitiated,
     TResult Function()? disconnectInitiated,
+    TResult Function(int? code, String? reason)? disconnected,
   }) {
     return connectInitiated?.call();
   }
@@ -185,6 +194,7 @@ class _$_SignalingClientEventConnectInitiated
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? connectInitiated,
     TResult Function()? disconnectInitiated,
+    TResult Function(int? code, String? reason)? disconnected,
     required TResult orElse(),
   }) {
     if (connectInitiated != null) {
@@ -200,6 +210,8 @@ class _$_SignalingClientEventConnectInitiated
         connectInitiated,
     required TResult Function(_SignalingClientEventDisconnectInitiated value)
         disconnectInitiated,
+    required TResult Function(_SignalingClientEventDisconnected value)
+        disconnected,
   }) {
     return connectInitiated(this);
   }
@@ -211,6 +223,7 @@ class _$_SignalingClientEventConnectInitiated
         connectInitiated,
     TResult Function(_SignalingClientEventDisconnectInitiated value)?
         disconnectInitiated,
+    TResult Function(_SignalingClientEventDisconnected value)? disconnected,
   }) {
     return connectInitiated?.call(this);
   }
@@ -222,6 +235,7 @@ class _$_SignalingClientEventConnectInitiated
         connectInitiated,
     TResult Function(_SignalingClientEventDisconnectInitiated value)?
         disconnectInitiated,
+    TResult Function(_SignalingClientEventDisconnected value)? disconnected,
     required TResult orElse(),
   }) {
     if (connectInitiated != null) {
@@ -263,6 +277,7 @@ class _$_SignalingClientEventDisconnectInitiated
   TResult when<TResult extends Object?>({
     required TResult Function() connectInitiated,
     required TResult Function() disconnectInitiated,
+    required TResult Function(int? code, String? reason) disconnected,
   }) {
     return disconnectInitiated();
   }
@@ -272,6 +287,7 @@ class _$_SignalingClientEventDisconnectInitiated
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? connectInitiated,
     TResult Function()? disconnectInitiated,
+    TResult Function(int? code, String? reason)? disconnected,
   }) {
     return disconnectInitiated?.call();
   }
@@ -281,6 +297,7 @@ class _$_SignalingClientEventDisconnectInitiated
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? connectInitiated,
     TResult Function()? disconnectInitiated,
+    TResult Function(int? code, String? reason)? disconnected,
     required TResult orElse(),
   }) {
     if (disconnectInitiated != null) {
@@ -296,6 +313,8 @@ class _$_SignalingClientEventDisconnectInitiated
         connectInitiated,
     required TResult Function(_SignalingClientEventDisconnectInitiated value)
         disconnectInitiated,
+    required TResult Function(_SignalingClientEventDisconnected value)
+        disconnected,
   }) {
     return disconnectInitiated(this);
   }
@@ -307,6 +326,7 @@ class _$_SignalingClientEventDisconnectInitiated
         connectInitiated,
     TResult Function(_SignalingClientEventDisconnectInitiated value)?
         disconnectInitiated,
+    TResult Function(_SignalingClientEventDisconnected value)? disconnected,
   }) {
     return disconnectInitiated?.call(this);
   }
@@ -318,6 +338,7 @@ class _$_SignalingClientEventDisconnectInitiated
         connectInitiated,
     TResult Function(_SignalingClientEventDisconnectInitiated value)?
         disconnectInitiated,
+    TResult Function(_SignalingClientEventDisconnected value)? disconnected,
     required TResult orElse(),
   }) {
     if (disconnectInitiated != null) {
@@ -331,6 +352,123 @@ abstract class _SignalingClientEventDisconnectInitiated
     implements _SignalingClientEvent {
   const factory _SignalingClientEventDisconnectInitiated() =
       _$_SignalingClientEventDisconnectInitiated;
+}
+
+/// @nodoc
+
+class _$_SignalingClientEventDisconnected
+    implements _SignalingClientEventDisconnected {
+  const _$_SignalingClientEventDisconnected(this.code, this.reason);
+
+  @override
+  final int? code;
+  @override
+  final String? reason;
+
+  @override
+  String toString() {
+    return '_SignalingClientEvent.disconnected(code: $code, reason: $reason)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_SignalingClientEventDisconnected &&
+            const DeepCollectionEquality().equals(other.code, code) &&
+            const DeepCollectionEquality().equals(other.reason, reason));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(code),
+      const DeepCollectionEquality().hash(reason));
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() connectInitiated,
+    required TResult Function() disconnectInitiated,
+    required TResult Function(int? code, String? reason) disconnected,
+  }) {
+    return disconnected(code, reason);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? connectInitiated,
+    TResult Function()? disconnectInitiated,
+    TResult Function(int? code, String? reason)? disconnected,
+  }) {
+    return disconnected?.call(code, reason);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? connectInitiated,
+    TResult Function()? disconnectInitiated,
+    TResult Function(int? code, String? reason)? disconnected,
+    required TResult orElse(),
+  }) {
+    if (disconnected != null) {
+      return disconnected(code, reason);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_SignalingClientEventConnectInitiated value)
+        connectInitiated,
+    required TResult Function(_SignalingClientEventDisconnectInitiated value)
+        disconnectInitiated,
+    required TResult Function(_SignalingClientEventDisconnected value)
+        disconnected,
+  }) {
+    return disconnected(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_SignalingClientEventConnectInitiated value)?
+        connectInitiated,
+    TResult Function(_SignalingClientEventDisconnectInitiated value)?
+        disconnectInitiated,
+    TResult Function(_SignalingClientEventDisconnected value)? disconnected,
+  }) {
+    return disconnected?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_SignalingClientEventConnectInitiated value)?
+        connectInitiated,
+    TResult Function(_SignalingClientEventDisconnectInitiated value)?
+        disconnectInitiated,
+    TResult Function(_SignalingClientEventDisconnected value)? disconnected,
+    required TResult orElse(),
+  }) {
+    if (disconnected != null) {
+      return disconnected(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _SignalingClientEventDisconnected
+    implements _SignalingClientEvent {
+  const factory _SignalingClientEventDisconnected(
+          final int? code, final String? reason) =
+      _$_SignalingClientEventDisconnected;
+
+  int? get code;
+  String? get reason;
 }
 
 /// @nodoc
@@ -4155,6 +4293,7 @@ mixin _$CallState {
       throw _privateConstructorUsedError;
   Object? get lastSignalingClientDisconnectError =>
       throw _privateConstructorUsedError;
+  int? get lastSignalingDisconnectCode => throw _privateConstructorUsedError;
   List<ActiveCall> get activeCalls => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -4170,6 +4309,7 @@ abstract class $CallStateCopyWith<$Res> {
       {SignalingClientStatus signalingClientStatus,
       Object? lastSignalingClientConnectError,
       Object? lastSignalingClientDisconnectError,
+      int? lastSignalingDisconnectCode,
       List<ActiveCall> activeCalls});
 }
 
@@ -4186,6 +4326,7 @@ class _$CallStateCopyWithImpl<$Res> implements $CallStateCopyWith<$Res> {
     Object? signalingClientStatus = freezed,
     Object? lastSignalingClientConnectError = freezed,
     Object? lastSignalingClientDisconnectError = freezed,
+    Object? lastSignalingDisconnectCode = freezed,
     Object? activeCalls = freezed,
   }) {
     return _then(_value.copyWith(
@@ -4201,6 +4342,10 @@ class _$CallStateCopyWithImpl<$Res> implements $CallStateCopyWith<$Res> {
           lastSignalingClientDisconnectError == freezed
               ? _value.lastSignalingClientDisconnectError
               : lastSignalingClientDisconnectError,
+      lastSignalingDisconnectCode: lastSignalingDisconnectCode == freezed
+          ? _value.lastSignalingDisconnectCode
+          : lastSignalingDisconnectCode // ignore: cast_nullable_to_non_nullable
+              as int?,
       activeCalls: activeCalls == freezed
           ? _value.activeCalls
           : activeCalls // ignore: cast_nullable_to_non_nullable
@@ -4219,6 +4364,7 @@ abstract class _$$_CallStateCopyWith<$Res> implements $CallStateCopyWith<$Res> {
       {SignalingClientStatus signalingClientStatus,
       Object? lastSignalingClientConnectError,
       Object? lastSignalingClientDisconnectError,
+      int? lastSignalingDisconnectCode,
       List<ActiveCall> activeCalls});
 }
 
@@ -4237,6 +4383,7 @@ class __$$_CallStateCopyWithImpl<$Res> extends _$CallStateCopyWithImpl<$Res>
     Object? signalingClientStatus = freezed,
     Object? lastSignalingClientConnectError = freezed,
     Object? lastSignalingClientDisconnectError = freezed,
+    Object? lastSignalingDisconnectCode = freezed,
     Object? activeCalls = freezed,
   }) {
     return _then(_$_CallState(
@@ -4252,6 +4399,10 @@ class __$$_CallStateCopyWithImpl<$Res> extends _$CallStateCopyWithImpl<$Res>
           lastSignalingClientDisconnectError == freezed
               ? _value.lastSignalingClientDisconnectError
               : lastSignalingClientDisconnectError,
+      lastSignalingDisconnectCode: lastSignalingDisconnectCode == freezed
+          ? _value.lastSignalingDisconnectCode
+          : lastSignalingDisconnectCode // ignore: cast_nullable_to_non_nullable
+              as int?,
       activeCalls: activeCalls == freezed
           ? _value._activeCalls
           : activeCalls // ignore: cast_nullable_to_non_nullable
@@ -4267,6 +4418,7 @@ class _$_CallState extends _CallState {
       {this.signalingClientStatus = SignalingClientStatus.disconnect,
       this.lastSignalingClientConnectError,
       this.lastSignalingClientDisconnectError,
+      this.lastSignalingDisconnectCode,
       final List<ActiveCall> activeCalls = const []})
       : _activeCalls = activeCalls,
         super._();
@@ -4278,6 +4430,8 @@ class _$_CallState extends _CallState {
   final Object? lastSignalingClientConnectError;
   @override
   final Object? lastSignalingClientDisconnectError;
+  @override
+  final int? lastSignalingDisconnectCode;
   final List<ActiveCall> _activeCalls;
   @override
   @JsonKey()
@@ -4288,7 +4442,7 @@ class _$_CallState extends _CallState {
 
   @override
   String toString() {
-    return 'CallState(signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, activeCalls: $activeCalls)';
+    return 'CallState(signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, activeCalls: $activeCalls)';
   }
 
   @override
@@ -4304,6 +4458,9 @@ class _$_CallState extends _CallState {
             const DeepCollectionEquality().equals(
                 other.lastSignalingClientDisconnectError,
                 lastSignalingClientDisconnectError) &&
+            const DeepCollectionEquality().equals(
+                other.lastSignalingDisconnectCode,
+                lastSignalingDisconnectCode) &&
             const DeepCollectionEquality()
                 .equals(other._activeCalls, _activeCalls));
   }
@@ -4314,6 +4471,7 @@ class _$_CallState extends _CallState {
       const DeepCollectionEquality().hash(signalingClientStatus),
       const DeepCollectionEquality().hash(lastSignalingClientConnectError),
       const DeepCollectionEquality().hash(lastSignalingClientDisconnectError),
+      const DeepCollectionEquality().hash(lastSignalingDisconnectCode),
       const DeepCollectionEquality().hash(_activeCalls));
 
   @JsonKey(ignore: true)
@@ -4327,6 +4485,7 @@ abstract class _CallState extends CallState {
       {final SignalingClientStatus signalingClientStatus,
       final Object? lastSignalingClientConnectError,
       final Object? lastSignalingClientDisconnectError,
+      final int? lastSignalingDisconnectCode,
       final List<ActiveCall> activeCalls}) = _$_CallState;
   const _CallState._() : super._();
 
@@ -4336,6 +4495,8 @@ abstract class _CallState extends CallState {
   Object? get lastSignalingClientConnectError;
   @override
   Object? get lastSignalingClientDisconnectError;
+  @override
+  int? get lastSignalingDisconnectCode;
   @override
   List<ActiveCall> get activeCalls;
   @override

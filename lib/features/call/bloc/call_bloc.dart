@@ -46,7 +46,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   WebtritSignalingClient? _signalingClient;
   Timer? _signalingClientReconnectTimer;
 
-
   final _audioPlayer = AudioPlayer();
 
   CallBloc({
@@ -215,6 +214,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     return event.map(
       connectInitiated: (event) => __onSignalingClientEventConnectInitiated(event, emit),
       disconnectInitiated: (event) => __onSignalingClientEventDisconnectInitiated(event, emit),
+      disconnected: (event) => __onSignalingClientEventDisconnected(event, emit),
     );
   }
 
@@ -263,6 +263,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       emit(state.copyWith(
         signalingClientStatus: SignalingClientStatus.connect,
         lastSignalingClientConnectError: null,
+        lastSignalingDisconnectCode: null,
       ));
     } catch (e) {
       if (emit.isDone) return;
@@ -300,6 +301,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       emit(state.copyWith(
         signalingClientStatus: SignalingClientStatus.disconnect,
         lastSignalingClientDisconnectError: null,
+        lastSignalingDisconnectCode: null,
       ));
     } catch (e) {
       if (emit.isDone) return;
@@ -309,6 +311,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         lastSignalingClientDisconnectError: e,
       ));
     }
+  }
+
+  Future<void> __onSignalingClientEventDisconnected(
+    _SignalingClientEventDisconnected event,
+    Emitter<CallState> emit,
+  ) async {
+    emit(state.copyWith(
+      signalingClientStatus: SignalingClientStatus.disconnect,
+      lastSignalingDisconnectCode: event.code,
+    ));
+
+    _reconnectInitiated(kSignalingClientReconnectDelay);
   }
 
   // processing call push events
@@ -935,9 +949,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   void _onSignalingDisconnect(int? code, String? reason) {
-    _logger.info('_onSignalingDisconnect code: $code reason: $reason');
-
-    _reconnectInitiated(kSignalingClientReconnectDelay);
+    add(_SignalingClientEvent.disconnected(code, reason));
   }
 
   // WidgetsBindingObserver

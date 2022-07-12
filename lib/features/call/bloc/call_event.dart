@@ -25,6 +25,8 @@ class _SignalingClientEvent with _$_SignalingClientEvent implements CallEvent {
   const factory _SignalingClientEvent.connectInitiated() = _SignalingClientEventConnectInitiated;
 
   const factory _SignalingClientEvent.disconnectInitiated() = _SignalingClientEventDisconnectInitiated;
+
+  const factory _SignalingClientEvent.disconnected(int? code, String? reason) = _SignalingClientEventDisconnected;
 }
 
 // call signaling events
