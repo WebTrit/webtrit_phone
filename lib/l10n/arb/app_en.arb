@@ -55,11 +55,11 @@
   "call_CallActionsTooltip_enableCamera": "Enable camera",
   "@call_CallActionsTooltip_enableCamera": {
   },
-  "call_CallActionsTooltip_disableSpeakerphone": "Disable speakerphone",
-  "@call_CallActionsTooltip_disableSpeakerphone": {
+  "call_CallActionsTooltip_disableSpeaker": "Disable speakerphone",
+  "@call_CallActionsTooltip_disableSpeaker": {
   },
-  "call_CallActionsTooltip_enableSpeakerphone": "Enable speakerphone",
-  "@call_CallActionsTooltip_enableSpeakerphone": {
+  "call_CallActionsTooltip_enableSpeaker": "Enable speakerphone",
+  "@call_CallActionsTooltip_enableSpeaker": {
   },
   "call_CallActionsTooltip_transfer": "Transfer",
   "@call_CallActionsTooltip_transfer": {

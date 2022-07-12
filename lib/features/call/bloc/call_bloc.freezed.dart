@@ -983,7 +983,7 @@ mixin _$CallControlEvent {
     required TResult Function(UuidValue uuid, String key) sentDTMF,
     required TResult Function(UuidValue uuid) cameraSwitched,
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
-    required TResult Function(UuidValue uuid, bool enabled) speakerphoneEnabled,
+    required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
   }) =>
       throw _privateConstructorUsedError;
@@ -999,7 +999,7 @@ mixin _$CallControlEvent {
     TResult Function(UuidValue uuid, String key)? sentDTMF,
     TResult Function(UuidValue uuid)? cameraSwitched,
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerphoneEnabled,
+    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
   }) =>
       throw _privateConstructorUsedError;
@@ -1015,7 +1015,7 @@ mixin _$CallControlEvent {
     TResult Function(UuidValue uuid, String key)? sentDTMF,
     TResult Function(UuidValue uuid)? cameraSwitched,
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerphoneEnabled,
+    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
     required TResult orElse(),
   }) =>
@@ -1032,8 +1032,8 @@ mixin _$CallControlEvent {
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerphoneEnabled value)
-        speakerphoneEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value)
+        speakerEnabled,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
   }) =>
@@ -1048,8 +1048,7 @@ mixin _$CallControlEvent {
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerphoneEnabled value)?
-        speakerphoneEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
   }) =>
       throw _privateConstructorUsedError;
@@ -1063,8 +1062,7 @@ mixin _$CallControlEvent {
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerphoneEnabled value)?
-        speakerphoneEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     required TResult orElse(),
   }) =>
@@ -1141,7 +1139,7 @@ class _$_CallControlEventStarted
     required TResult Function(UuidValue uuid, String key) sentDTMF,
     required TResult Function(UuidValue uuid) cameraSwitched,
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
-    required TResult Function(UuidValue uuid, bool enabled) speakerphoneEnabled,
+    required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
   }) {
     return started(generic, number, email, displayName, video);
@@ -1160,7 +1158,7 @@ class _$_CallControlEventStarted
     TResult Function(UuidValue uuid, String key)? sentDTMF,
     TResult Function(UuidValue uuid)? cameraSwitched,
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerphoneEnabled,
+    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
   }) {
     return started?.call(generic, number, email, displayName, video);
@@ -1179,7 +1177,7 @@ class _$_CallControlEventStarted
     TResult Function(UuidValue uuid, String key)? sentDTMF,
     TResult Function(UuidValue uuid)? cameraSwitched,
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerphoneEnabled,
+    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
     required TResult orElse(),
   }) {
@@ -1202,8 +1200,8 @@ class _$_CallControlEventStarted
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerphoneEnabled value)
-        speakerphoneEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value)
+        speakerEnabled,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
   }) {
@@ -1221,8 +1219,7 @@ class _$_CallControlEventStarted
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerphoneEnabled value)?
-        speakerphoneEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
   }) {
     return started?.call(this);
@@ -1239,8 +1236,7 @@ class _$_CallControlEventStarted
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerphoneEnabled value)?
-        speakerphoneEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     required TResult orElse(),
   }) {
@@ -1305,7 +1301,7 @@ class _$_CallControlEventAnswered implements _CallControlEventAnswered {
     required TResult Function(UuidValue uuid, String key) sentDTMF,
     required TResult Function(UuidValue uuid) cameraSwitched,
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
-    required TResult Function(UuidValue uuid, bool enabled) speakerphoneEnabled,
+    required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
   }) {
     return answered(uuid);
@@ -1324,7 +1320,7 @@ class _$_CallControlEventAnswered implements _CallControlEventAnswered {
     TResult Function(UuidValue uuid, String key)? sentDTMF,
     TResult Function(UuidValue uuid)? cameraSwitched,
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerphoneEnabled,
+    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
   }) {
     return answered?.call(uuid);
@@ -1343,7 +1339,7 @@ class _$_CallControlEventAnswered implements _CallControlEventAnswered {
     TResult Function(UuidValue uuid, String key)? sentDTMF,
     TResult Function(UuidValue uuid)? cameraSwitched,
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerphoneEnabled,
+    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
     required TResult orElse(),
   }) {
@@ -1366,8 +1362,8 @@ class _$_CallControlEventAnswered implements _CallControlEventAnswered {
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerphoneEnabled value)
-        speakerphoneEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value)
+        speakerEnabled,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
   }) {
@@ -1385,8 +1381,7 @@ class _$_CallControlEventAnswered implements _CallControlEventAnswered {
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerphoneEnabled value)?
-        speakerphoneEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
   }) {
     return answered?.call(this);
@@ -1403,8 +1398,7 @@ class _$_CallControlEventAnswered implements _CallControlEventAnswered {
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerphoneEnabled value)?
-        speakerphoneEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     required TResult orElse(),
   }) {
@@ -1460,7 +1454,7 @@ class _$_CallControlEventEnded implements _CallControlEventEnded {
     required TResult Function(UuidValue uuid, String key) sentDTMF,
     required TResult Function(UuidValue uuid) cameraSwitched,
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
-    required TResult Function(UuidValue uuid, bool enabled) speakerphoneEnabled,
+    required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
   }) {
     return ended(uuid);
@@ -1479,7 +1473,7 @@ class _$_CallControlEventEnded implements _CallControlEventEnded {
     TResult Function(UuidValue uuid, String key)? sentDTMF,
     TResult Function(UuidValue uuid)? cameraSwitched,
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerphoneEnabled,
+    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
   }) {
     return ended?.call(uuid);
@@ -1498,7 +1492,7 @@ class _$_CallControlEventEnded implements _CallControlEventEnded {
     TResult Function(UuidValue uuid, String key)? sentDTMF,
     TResult Function(UuidValue uuid)? cameraSwitched,
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerphoneEnabled,
+    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
     required TResult orElse(),
   }) {
@@ -1521,8 +1515,8 @@ class _$_CallControlEventEnded implements _CallControlEventEnded {
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerphoneEnabled value)
-        speakerphoneEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value)
+        speakerEnabled,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
   }) {
@@ -1540,8 +1534,7 @@ class _$_CallControlEventEnded implements _CallControlEventEnded {
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerphoneEnabled value)?
-        speakerphoneEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
   }) {
     return ended?.call(this);
@@ -1558,8 +1551,7 @@ class _$_CallControlEventEnded implements _CallControlEventEnded {
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerphoneEnabled value)?
-        speakerphoneEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     required TResult orElse(),
   }) {
@@ -1620,7 +1612,7 @@ class _$_CallControlEventSetHeld implements _CallControlEventSetHeld {
     required TResult Function(UuidValue uuid, String key) sentDTMF,
     required TResult Function(UuidValue uuid) cameraSwitched,
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
-    required TResult Function(UuidValue uuid, bool enabled) speakerphoneEnabled,
+    required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
   }) {
     return setHeld(uuid, onHold);
@@ -1639,7 +1631,7 @@ class _$_CallControlEventSetHeld implements _CallControlEventSetHeld {
     TResult Function(UuidValue uuid, String key)? sentDTMF,
     TResult Function(UuidValue uuid)? cameraSwitched,
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerphoneEnabled,
+    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
   }) {
     return setHeld?.call(uuid, onHold);
@@ -1658,7 +1650,7 @@ class _$_CallControlEventSetHeld implements _CallControlEventSetHeld {
     TResult Function(UuidValue uuid, String key)? sentDTMF,
     TResult Function(UuidValue uuid)? cameraSwitched,
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerphoneEnabled,
+    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
     required TResult orElse(),
   }) {
@@ -1681,8 +1673,8 @@ class _$_CallControlEventSetHeld implements _CallControlEventSetHeld {
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerphoneEnabled value)
-        speakerphoneEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value)
+        speakerEnabled,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
   }) {
@@ -1700,8 +1692,7 @@ class _$_CallControlEventSetHeld implements _CallControlEventSetHeld {
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerphoneEnabled value)?
-        speakerphoneEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
   }) {
     return setHeld?.call(this);
@@ -1718,8 +1709,7 @@ class _$_CallControlEventSetHeld implements _CallControlEventSetHeld {
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerphoneEnabled value)?
-        speakerphoneEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     required TResult orElse(),
   }) {
@@ -1781,7 +1771,7 @@ class _$_CallControlEventSetMuted implements _CallControlEventSetMuted {
     required TResult Function(UuidValue uuid, String key) sentDTMF,
     required TResult Function(UuidValue uuid) cameraSwitched,
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
-    required TResult Function(UuidValue uuid, bool enabled) speakerphoneEnabled,
+    required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
   }) {
     return setMuted(uuid, muted);
@@ -1800,7 +1790,7 @@ class _$_CallControlEventSetMuted implements _CallControlEventSetMuted {
     TResult Function(UuidValue uuid, String key)? sentDTMF,
     TResult Function(UuidValue uuid)? cameraSwitched,
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerphoneEnabled,
+    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
   }) {
     return setMuted?.call(uuid, muted);
@@ -1819,7 +1809,7 @@ class _$_CallControlEventSetMuted implements _CallControlEventSetMuted {
     TResult Function(UuidValue uuid, String key)? sentDTMF,
     TResult Function(UuidValue uuid)? cameraSwitched,
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerphoneEnabled,
+    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
     required TResult orElse(),
   }) {
@@ -1842,8 +1832,8 @@ class _$_CallControlEventSetMuted implements _CallControlEventSetMuted {
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerphoneEnabled value)
-        speakerphoneEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value)
+        speakerEnabled,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
   }) {
@@ -1861,8 +1851,7 @@ class _$_CallControlEventSetMuted implements _CallControlEventSetMuted {
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerphoneEnabled value)?
-        speakerphoneEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
   }) {
     return setMuted?.call(this);
@@ -1879,8 +1868,7 @@ class _$_CallControlEventSetMuted implements _CallControlEventSetMuted {
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerphoneEnabled value)?
-        speakerphoneEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     required TResult orElse(),
   }) {
@@ -1942,7 +1930,7 @@ class _$_CallControlEventSentDTMF implements _CallControlEventSentDTMF {
     required TResult Function(UuidValue uuid, String key) sentDTMF,
     required TResult Function(UuidValue uuid) cameraSwitched,
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
-    required TResult Function(UuidValue uuid, bool enabled) speakerphoneEnabled,
+    required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
   }) {
     return sentDTMF(uuid, key);
@@ -1961,7 +1949,7 @@ class _$_CallControlEventSentDTMF implements _CallControlEventSentDTMF {
     TResult Function(UuidValue uuid, String key)? sentDTMF,
     TResult Function(UuidValue uuid)? cameraSwitched,
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerphoneEnabled,
+    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
   }) {
     return sentDTMF?.call(uuid, key);
@@ -1980,7 +1968,7 @@ class _$_CallControlEventSentDTMF implements _CallControlEventSentDTMF {
     TResult Function(UuidValue uuid, String key)? sentDTMF,
     TResult Function(UuidValue uuid)? cameraSwitched,
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerphoneEnabled,
+    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
     required TResult orElse(),
   }) {
@@ -2003,8 +1991,8 @@ class _$_CallControlEventSentDTMF implements _CallControlEventSentDTMF {
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerphoneEnabled value)
-        speakerphoneEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value)
+        speakerEnabled,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
   }) {
@@ -2022,8 +2010,7 @@ class _$_CallControlEventSentDTMF implements _CallControlEventSentDTMF {
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerphoneEnabled value)?
-        speakerphoneEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
   }) {
     return sentDTMF?.call(this);
@@ -2040,8 +2027,7 @@ class _$_CallControlEventSentDTMF implements _CallControlEventSentDTMF {
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerphoneEnabled value)?
-        speakerphoneEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     required TResult orElse(),
   }) {
@@ -2099,7 +2085,7 @@ class _$_CallControlEventCameraSwitched
     required TResult Function(UuidValue uuid, String key) sentDTMF,
     required TResult Function(UuidValue uuid) cameraSwitched,
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
-    required TResult Function(UuidValue uuid, bool enabled) speakerphoneEnabled,
+    required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
   }) {
     return cameraSwitched(uuid);
@@ -2118,7 +2104,7 @@ class _$_CallControlEventCameraSwitched
     TResult Function(UuidValue uuid, String key)? sentDTMF,
     TResult Function(UuidValue uuid)? cameraSwitched,
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerphoneEnabled,
+    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
   }) {
     return cameraSwitched?.call(uuid);
@@ -2137,7 +2123,7 @@ class _$_CallControlEventCameraSwitched
     TResult Function(UuidValue uuid, String key)? sentDTMF,
     TResult Function(UuidValue uuid)? cameraSwitched,
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerphoneEnabled,
+    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
     required TResult orElse(),
   }) {
@@ -2160,8 +2146,8 @@ class _$_CallControlEventCameraSwitched
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerphoneEnabled value)
-        speakerphoneEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value)
+        speakerEnabled,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
   }) {
@@ -2179,8 +2165,7 @@ class _$_CallControlEventCameraSwitched
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerphoneEnabled value)?
-        speakerphoneEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
   }) {
     return cameraSwitched?.call(this);
@@ -2197,8 +2182,7 @@ class _$_CallControlEventCameraSwitched
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerphoneEnabled value)?
-        speakerphoneEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     required TResult orElse(),
   }) {
@@ -2260,7 +2244,7 @@ class _$_CallControlEventCameraEnabled
     required TResult Function(UuidValue uuid, String key) sentDTMF,
     required TResult Function(UuidValue uuid) cameraSwitched,
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
-    required TResult Function(UuidValue uuid, bool enabled) speakerphoneEnabled,
+    required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
   }) {
     return cameraEnabled(uuid, enabled);
@@ -2279,7 +2263,7 @@ class _$_CallControlEventCameraEnabled
     TResult Function(UuidValue uuid, String key)? sentDTMF,
     TResult Function(UuidValue uuid)? cameraSwitched,
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerphoneEnabled,
+    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
   }) {
     return cameraEnabled?.call(uuid, enabled);
@@ -2298,7 +2282,7 @@ class _$_CallControlEventCameraEnabled
     TResult Function(UuidValue uuid, String key)? sentDTMF,
     TResult Function(UuidValue uuid)? cameraSwitched,
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerphoneEnabled,
+    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
     required TResult orElse(),
   }) {
@@ -2321,8 +2305,8 @@ class _$_CallControlEventCameraEnabled
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerphoneEnabled value)
-        speakerphoneEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value)
+        speakerEnabled,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
   }) {
@@ -2340,8 +2324,7 @@ class _$_CallControlEventCameraEnabled
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerphoneEnabled value)?
-        speakerphoneEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
   }) {
     return cameraEnabled?.call(this);
@@ -2358,8 +2341,7 @@ class _$_CallControlEventCameraEnabled
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerphoneEnabled value)?
-        speakerphoneEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     required TResult orElse(),
   }) {
@@ -2381,9 +2363,9 @@ abstract class _CallControlEventCameraEnabled implements CallControlEvent {
 
 /// @nodoc
 
-class _$_CallControlEventSpeakerphoneEnabled
-    implements _CallControlEventSpeakerphoneEnabled {
-  const _$_CallControlEventSpeakerphoneEnabled(this.uuid, this.enabled);
+class _$_CallControlEventSpeakerEnabled
+    implements _CallControlEventSpeakerEnabled {
+  const _$_CallControlEventSpeakerEnabled(this.uuid, this.enabled);
 
   @override
   final UuidValue uuid;
@@ -2392,14 +2374,14 @@ class _$_CallControlEventSpeakerphoneEnabled
 
   @override
   String toString() {
-    return 'CallControlEvent.speakerphoneEnabled(uuid: $uuid, enabled: $enabled)';
+    return 'CallControlEvent.speakerEnabled(uuid: $uuid, enabled: $enabled)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallControlEventSpeakerphoneEnabled &&
+            other is _$_CallControlEventSpeakerEnabled &&
             const DeepCollectionEquality().equals(other.uuid, uuid) &&
             const DeepCollectionEquality().equals(other.enabled, enabled));
   }
@@ -2423,10 +2405,10 @@ class _$_CallControlEventSpeakerphoneEnabled
     required TResult Function(UuidValue uuid, String key) sentDTMF,
     required TResult Function(UuidValue uuid) cameraSwitched,
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
-    required TResult Function(UuidValue uuid, bool enabled) speakerphoneEnabled,
+    required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
   }) {
-    return speakerphoneEnabled(uuid, enabled);
+    return speakerEnabled(uuid, enabled);
   }
 
   @override
@@ -2442,10 +2424,10 @@ class _$_CallControlEventSpeakerphoneEnabled
     TResult Function(UuidValue uuid, String key)? sentDTMF,
     TResult Function(UuidValue uuid)? cameraSwitched,
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerphoneEnabled,
+    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
   }) {
-    return speakerphoneEnabled?.call(uuid, enabled);
+    return speakerEnabled?.call(uuid, enabled);
   }
 
   @override
@@ -2461,12 +2443,12 @@ class _$_CallControlEventSpeakerphoneEnabled
     TResult Function(UuidValue uuid, String key)? sentDTMF,
     TResult Function(UuidValue uuid)? cameraSwitched,
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerphoneEnabled,
+    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
     required TResult orElse(),
   }) {
-    if (speakerphoneEnabled != null) {
-      return speakerphoneEnabled(uuid, enabled);
+    if (speakerEnabled != null) {
+      return speakerEnabled(uuid, enabled);
     }
     return orElse();
   }
@@ -2484,12 +2466,12 @@ class _$_CallControlEventSpeakerphoneEnabled
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerphoneEnabled value)
-        speakerphoneEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value)
+        speakerEnabled,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
   }) {
-    return speakerphoneEnabled(this);
+    return speakerEnabled(this);
   }
 
   @override
@@ -2503,11 +2485,10 @@ class _$_CallControlEventSpeakerphoneEnabled
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerphoneEnabled value)?
-        speakerphoneEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
   }) {
-    return speakerphoneEnabled?.call(this);
+    return speakerEnabled?.call(this);
   }
 
   @override
@@ -2521,23 +2502,21 @@ class _$_CallControlEventSpeakerphoneEnabled
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerphoneEnabled value)?
-        speakerphoneEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     required TResult orElse(),
   }) {
-    if (speakerphoneEnabled != null) {
-      return speakerphoneEnabled(this);
+    if (speakerEnabled != null) {
+      return speakerEnabled(this);
     }
     return orElse();
   }
 }
 
-abstract class _CallControlEventSpeakerphoneEnabled
-    implements CallControlEvent {
-  const factory _CallControlEventSpeakerphoneEnabled(
+abstract class _CallControlEventSpeakerEnabled implements CallControlEvent {
+  const factory _CallControlEventSpeakerEnabled(
           final UuidValue uuid, final bool enabled) =
-      _$_CallControlEventSpeakerphoneEnabled;
+      _$_CallControlEventSpeakerEnabled;
 
   UuidValue get uuid;
   bool get enabled;
@@ -2582,7 +2561,7 @@ class _$_CallControlEventFailureApproved
     required TResult Function(UuidValue uuid, String key) sentDTMF,
     required TResult Function(UuidValue uuid) cameraSwitched,
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
-    required TResult Function(UuidValue uuid, bool enabled) speakerphoneEnabled,
+    required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
   }) {
     return failureApproved(uuid);
@@ -2601,7 +2580,7 @@ class _$_CallControlEventFailureApproved
     TResult Function(UuidValue uuid, String key)? sentDTMF,
     TResult Function(UuidValue uuid)? cameraSwitched,
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerphoneEnabled,
+    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
   }) {
     return failureApproved?.call(uuid);
@@ -2620,7 +2599,7 @@ class _$_CallControlEventFailureApproved
     TResult Function(UuidValue uuid, String key)? sentDTMF,
     TResult Function(UuidValue uuid)? cameraSwitched,
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerphoneEnabled,
+    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
     required TResult orElse(),
   }) {
@@ -2643,8 +2622,8 @@ class _$_CallControlEventFailureApproved
         cameraSwitched,
     required TResult Function(_CallControlEventCameraEnabled value)
         cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerphoneEnabled value)
-        speakerphoneEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value)
+        speakerEnabled,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
   }) {
@@ -2662,8 +2641,7 @@ class _$_CallControlEventFailureApproved
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerphoneEnabled value)?
-        speakerphoneEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
   }) {
     return failureApproved?.call(this);
@@ -2680,8 +2658,7 @@ class _$_CallControlEventFailureApproved
     TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
     TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerphoneEnabled value)?
-        speakerphoneEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     required TResult orElse(),
   }) {

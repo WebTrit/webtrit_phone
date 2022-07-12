@@ -19,8 +19,8 @@ class CallActions extends StatefulWidget {
     this.onCameraPressed,
     required this.mutedValue,
     this.onMutedChanged,
-    this.speakerphoneEnabledByDefault = true,
-    this.onSpeakerphonePressed,
+    required this.speakerValue,
+    this.onSpeakerChanged,
     this.onTransferPressed,
     required this.heldValue,
     this.onHeldChanged,
@@ -37,8 +37,8 @@ class CallActions extends StatefulWidget {
   final void Function(bool enabled)? onCameraPressed;
   final bool mutedValue;
   final ValueChanged<bool>? onMutedChanged;
-  final bool speakerphoneEnabledByDefault;
-  final void Function(bool enabled)? onSpeakerphonePressed;
+  final bool speakerValue;
+  final ValueChanged<bool>? onSpeakerChanged;
   final VoidCallback? onTransferPressed;
   final bool heldValue;
   final ValueChanged<bool>? onHeldChanged;
@@ -52,14 +52,12 @@ class CallActions extends StatefulWidget {
 
 class _CallActionsState extends State<CallActions> {
   late bool _cameraEnabled;
-  late bool _speakerphoneEnabled;
   bool _keypadShow = false;
 
   @override
   void initState() {
     super.initState();
     _cameraEnabled = widget.cameraEnabledByDefault;
-    _speakerphoneEnabled = widget.speakerphoneEnabledByDefault;
   }
 
   @override
@@ -94,6 +92,7 @@ class _CallActionsState extends State<CallActions> {
     }
 
     final onMutedChanged = widget.onMutedChanged;
+    final onSpeakerChanged = widget.onSpeakerChanged;
     final onTransferPressed = widget.onTransferPressed;
     final onHeldChanged = widget.onHeldChanged;
 
@@ -170,17 +169,12 @@ class _CallActionsState extends State<CallActions> {
             ),
           ),
           Tooltip(
-            message: _speakerphoneEnabled
-                ? context.l10n.call_CallActionsTooltip_disableSpeakerphone
-                : context.l10n.call_CallActionsTooltip_enableSpeakerphone,
+            message: widget.speakerValue
+                ? context.l10n.call_CallActionsTooltip_disableSpeaker
+                : context.l10n.call_CallActionsTooltip_enableSpeaker,
             child: TextButton(
-              onPressed: () {
-                setState(() {
-                  _speakerphoneEnabled = !_speakerphoneEnabled;
-                });
-                widget.onSpeakerphonePressed?.call(_speakerphoneEnabled);
-              },
-              style: _speakerphoneEnabled ? textButtonStyles?.callActiveAction : textButtonStyles?.callAction,
+              onPressed: onSpeakerChanged == null ? null : () => onSpeakerChanged(!widget.speakerValue),
+              style: widget.speakerValue ? textButtonStyles?.callActiveAction : textButtonStyles?.callAction,
               child: const Icon(Icons.volume_up),
             ),
           ),

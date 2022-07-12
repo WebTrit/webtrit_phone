@@ -99,8 +99,7 @@ class CallControlEvent with _$CallControlEvent implements CallEvent {
 
   const factory CallControlEvent.cameraEnabled(UuidValue uuid, bool enabled) = _CallControlEventCameraEnabled;
 
-  const factory CallControlEvent.speakerphoneEnabled(UuidValue uuid, bool enabled) =
-      _CallControlEventSpeakerphoneEnabled;
+  const factory CallControlEvent.speakerEnabled(UuidValue uuid, bool enabled) = _CallControlEventSpeakerEnabled;
 
   const factory CallControlEvent.failureApproved(UuidValue uuid) = _CallControlEventFailureApproved;
 }

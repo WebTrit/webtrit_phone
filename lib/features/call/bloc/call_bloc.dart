@@ -479,7 +479,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       sentDTMF: (event) => __onCallControlEventSentDTMF(event, emit),
       cameraSwitched: (event) => _onCallControlEventCameraSwitched(event, emit),
       cameraEnabled: (event) => _onCallControlEventCameraEnabled(event, emit),
-      speakerphoneEnabled: (event) => _onCallControlEventSpeakerphoneEnabled(event, emit),
+      speakerEnabled: (event) => _onCallControlEventSpeakerEnabled(event, emit),
       failureApproved: (event) => _onCallControlEventFailureApproved(event, emit),
     );
   }
@@ -586,8 +586,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     });
   }
 
-  Future<void> _onCallControlEventSpeakerphoneEnabled(
-    _CallControlEventSpeakerphoneEnabled event,
+  Future<void> _onCallControlEventSpeakerEnabled(
+    _CallControlEventSpeakerEnabled event,
     Emitter<CallState> emit,
   ) async {
     await state.performOnActiveCall(event.uuid, (activeCall) {
