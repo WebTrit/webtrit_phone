@@ -18,7 +18,8 @@ class CallState with _$CallState {
 
   const factory CallState({
     @Default(SignalingClientStatus.disconnect) SignalingClientStatus signalingClientStatus,
-    Object? signalingFailure,
+    Object? lastSignalingClientConnectError,
+    Object? lastSignalingClientDisconnectError,
     @Default([]) List<ActiveCall> activeCalls,
   }) = _CallState;
 

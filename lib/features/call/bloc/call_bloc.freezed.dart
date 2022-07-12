@@ -4151,7 +4151,10 @@ abstract class _PeerConnectionEventStreamRemoved
 mixin _$CallState {
   SignalingClientStatus get signalingClientStatus =>
       throw _privateConstructorUsedError;
-  Object? get signalingFailure => throw _privateConstructorUsedError;
+  Object? get lastSignalingClientConnectError =>
+      throw _privateConstructorUsedError;
+  Object? get lastSignalingClientDisconnectError =>
+      throw _privateConstructorUsedError;
   List<ActiveCall> get activeCalls => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -4165,7 +4168,8 @@ abstract class $CallStateCopyWith<$Res> {
       _$CallStateCopyWithImpl<$Res>;
   $Res call(
       {SignalingClientStatus signalingClientStatus,
-      Object? signalingFailure,
+      Object? lastSignalingClientConnectError,
+      Object? lastSignalingClientDisconnectError,
       List<ActiveCall> activeCalls});
 }
 
@@ -4180,7 +4184,8 @@ class _$CallStateCopyWithImpl<$Res> implements $CallStateCopyWith<$Res> {
   @override
   $Res call({
     Object? signalingClientStatus = freezed,
-    Object? signalingFailure = freezed,
+    Object? lastSignalingClientConnectError = freezed,
+    Object? lastSignalingClientDisconnectError = freezed,
     Object? activeCalls = freezed,
   }) {
     return _then(_value.copyWith(
@@ -4188,9 +4193,14 @@ class _$CallStateCopyWithImpl<$Res> implements $CallStateCopyWith<$Res> {
           ? _value.signalingClientStatus
           : signalingClientStatus // ignore: cast_nullable_to_non_nullable
               as SignalingClientStatus,
-      signalingFailure: signalingFailure == freezed
-          ? _value.signalingFailure
-          : signalingFailure,
+      lastSignalingClientConnectError:
+          lastSignalingClientConnectError == freezed
+              ? _value.lastSignalingClientConnectError
+              : lastSignalingClientConnectError,
+      lastSignalingClientDisconnectError:
+          lastSignalingClientDisconnectError == freezed
+              ? _value.lastSignalingClientDisconnectError
+              : lastSignalingClientDisconnectError,
       activeCalls: activeCalls == freezed
           ? _value.activeCalls
           : activeCalls // ignore: cast_nullable_to_non_nullable
@@ -4207,7 +4217,8 @@ abstract class _$$_CallStateCopyWith<$Res> implements $CallStateCopyWith<$Res> {
   @override
   $Res call(
       {SignalingClientStatus signalingClientStatus,
-      Object? signalingFailure,
+      Object? lastSignalingClientConnectError,
+      Object? lastSignalingClientDisconnectError,
       List<ActiveCall> activeCalls});
 }
 
@@ -4224,7 +4235,8 @@ class __$$_CallStateCopyWithImpl<$Res> extends _$CallStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? signalingClientStatus = freezed,
-    Object? signalingFailure = freezed,
+    Object? lastSignalingClientConnectError = freezed,
+    Object? lastSignalingClientDisconnectError = freezed,
     Object? activeCalls = freezed,
   }) {
     return _then(_$_CallState(
@@ -4232,9 +4244,14 @@ class __$$_CallStateCopyWithImpl<$Res> extends _$CallStateCopyWithImpl<$Res>
           ? _value.signalingClientStatus
           : signalingClientStatus // ignore: cast_nullable_to_non_nullable
               as SignalingClientStatus,
-      signalingFailure: signalingFailure == freezed
-          ? _value.signalingFailure
-          : signalingFailure,
+      lastSignalingClientConnectError:
+          lastSignalingClientConnectError == freezed
+              ? _value.lastSignalingClientConnectError
+              : lastSignalingClientConnectError,
+      lastSignalingClientDisconnectError:
+          lastSignalingClientDisconnectError == freezed
+              ? _value.lastSignalingClientDisconnectError
+              : lastSignalingClientDisconnectError,
       activeCalls: activeCalls == freezed
           ? _value._activeCalls
           : activeCalls // ignore: cast_nullable_to_non_nullable
@@ -4248,7 +4265,8 @@ class __$$_CallStateCopyWithImpl<$Res> extends _$CallStateCopyWithImpl<$Res>
 class _$_CallState extends _CallState {
   const _$_CallState(
       {this.signalingClientStatus = SignalingClientStatus.disconnect,
-      this.signalingFailure,
+      this.lastSignalingClientConnectError,
+      this.lastSignalingClientDisconnectError,
       final List<ActiveCall> activeCalls = const []})
       : _activeCalls = activeCalls,
         super._();
@@ -4257,7 +4275,9 @@ class _$_CallState extends _CallState {
   @JsonKey()
   final SignalingClientStatus signalingClientStatus;
   @override
-  final Object? signalingFailure;
+  final Object? lastSignalingClientConnectError;
+  @override
+  final Object? lastSignalingClientDisconnectError;
   final List<ActiveCall> _activeCalls;
   @override
   @JsonKey()
@@ -4268,7 +4288,7 @@ class _$_CallState extends _CallState {
 
   @override
   String toString() {
-    return 'CallState(signalingClientStatus: $signalingClientStatus, signalingFailure: $signalingFailure, activeCalls: $activeCalls)';
+    return 'CallState(signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, activeCalls: $activeCalls)';
   }
 
   @override
@@ -4278,8 +4298,12 @@ class _$_CallState extends _CallState {
             other is _$_CallState &&
             const DeepCollectionEquality()
                 .equals(other.signalingClientStatus, signalingClientStatus) &&
-            const DeepCollectionEquality()
-                .equals(other.signalingFailure, signalingFailure) &&
+            const DeepCollectionEquality().equals(
+                other.lastSignalingClientConnectError,
+                lastSignalingClientConnectError) &&
+            const DeepCollectionEquality().equals(
+                other.lastSignalingClientDisconnectError,
+                lastSignalingClientDisconnectError) &&
             const DeepCollectionEquality()
                 .equals(other._activeCalls, _activeCalls));
   }
@@ -4288,7 +4312,8 @@ class _$_CallState extends _CallState {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(signalingClientStatus),
-      const DeepCollectionEquality().hash(signalingFailure),
+      const DeepCollectionEquality().hash(lastSignalingClientConnectError),
+      const DeepCollectionEquality().hash(lastSignalingClientDisconnectError),
       const DeepCollectionEquality().hash(_activeCalls));
 
   @JsonKey(ignore: true)
@@ -4300,14 +4325,17 @@ class _$_CallState extends _CallState {
 abstract class _CallState extends CallState {
   const factory _CallState(
       {final SignalingClientStatus signalingClientStatus,
-      final Object? signalingFailure,
+      final Object? lastSignalingClientConnectError,
+      final Object? lastSignalingClientDisconnectError,
       final List<ActiveCall> activeCalls}) = _$_CallState;
   const _CallState._() : super._();
 
   @override
   SignalingClientStatus get signalingClientStatus;
   @override
-  Object? get signalingFailure;
+  Object? get lastSignalingClientConnectError;
+  @override
+  Object? get lastSignalingClientDisconnectError;
   @override
   List<ActiveCall> get activeCalls;
   @override

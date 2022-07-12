@@ -46,7 +46,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   WebtritSignalingClient? _signalingClient;
   Timer? _signalingClientReconnectTimer;
 
-  int _signalingClientConnectInSequanceErrorCount = 0; // TODO: reorganise this logic somehow
 
   final _audioPlayer = AudioPlayer();
 
@@ -223,7 +222,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _SignalingClientEventConnectInitiated event,
     Emitter<CallState> emit,
   ) async {
-    emit(state.copyWith(signalingClientStatus: SignalingClientStatus.connecting, signalingFailure: null));
+    emit(state.copyWith(
+      signalingClientStatus: SignalingClientStatus.connecting,
+      lastSignalingClientDisconnectError: null,
+    ));
     try {
       {
         final signalingClient = _signalingClient;
@@ -256,20 +258,23 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         onError: _onSignalingError,
         onDisconnect: _onSignalingDisconnect,
       );
-
       _signalingClient = signalingClient;
-      _signalingClientConnectInSequanceErrorCount = 0;
 
-      emit(state.copyWith(signalingClientStatus: SignalingClientStatus.connect));
+      emit(state.copyWith(
+        signalingClientStatus: SignalingClientStatus.connect,
+        lastSignalingClientConnectError: null,
+      ));
     } catch (e) {
       if (emit.isDone) return;
 
-      if (_signalingClientConnectInSequanceErrorCount <= 0) {
+      if (state.lastSignalingClientConnectError == null) {
         notificationsBloc.add(const NotificationsIssued(CallConnectErrorNotification()));
-        _signalingClientConnectInSequanceErrorCount++;
       }
 
-      emit(state.copyWith(signalingClientStatus: SignalingClientStatus.failure, signalingFailure: e));
+      emit(state.copyWith(
+        signalingClientStatus: SignalingClientStatus.failure,
+        lastSignalingClientConnectError: e,
+      ));
 
       _reconnectInitiated(kSignalingClientReconnectDelay);
     }
@@ -279,7 +284,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _SignalingClientEventDisconnectInitiated event,
     Emitter<CallState> emit,
   ) async {
-    emit(state.copyWith(signalingClientStatus: SignalingClientStatus.disconnecting, signalingFailure: null));
+    emit(state.copyWith(
+      signalingClientStatus: SignalingClientStatus.disconnecting,
+      lastSignalingClientConnectError: null,
+    ));
     try {
       final signalingClient = _signalingClient;
       if (signalingClient != null) {
@@ -289,11 +297,17 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       if (emit.isDone) return;
 
-      emit(state.copyWith(signalingClientStatus: SignalingClientStatus.disconnect));
+      emit(state.copyWith(
+        signalingClientStatus: SignalingClientStatus.disconnect,
+        lastSignalingClientDisconnectError: null,
+      ));
     } catch (e) {
       if (emit.isDone) return;
 
-      emit(state.copyWith(signalingClientStatus: SignalingClientStatus.failure, signalingFailure: e));
+      emit(state.copyWith(
+        signalingClientStatus: SignalingClientStatus.failure,
+        lastSignalingClientDisconnectError: e,
+      ));
     }
   }
 
