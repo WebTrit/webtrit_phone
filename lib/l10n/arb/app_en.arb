@@ -156,6 +156,24 @@
   "login_SocketExceptionError": "Network issue occur",
   "@login_SocketExceptionError": {
   },
+  "login_TypeErrorError": "Response issue occur",
+  "@login_TypeErrorError": {
+  },
+  "login_RequestFailureError": "Server failure occur",
+  "@login_RequestFailureError": {
+  },
+  "login_RequestFailureEmptyEmailError": "Cannot send verification code",
+  "@login_RequestFailureEmptyEmailError": {
+  },
+  "login_RequestFailurePhoneNotFoundError": "Phone number not found",
+  "@login_RequestFailurePhoneNotFoundError": {
+  },
+  "login_RequestFailureCodeIncorrectError": "Verification code incorrect",
+  "@login_RequestFailureCodeIncorrectError": {
+  },
+  "login_RequestFailureOtpIdVerifyAttemptsExceededError": "Verification attempts exceeded",
+  "@login_RequestFailureOtpIdVerifyAttemptsExceededError": {
+  },
 
   "validationBlankError": "Please enter a value",
   "@validationBlankError": {
@@ -290,6 +308,18 @@
   },
   "settings_LogoutConfirmDialog_content": "Are you sure you want to logout?",
   "@settings_LogoutConfirmDialog_content": {
+  },
+  "settings_FormatExceptionError": "Response issue occur",
+  "@settings_FormatExceptionError": {
+  },
+  "settings_SocketExceptionError": "Network issue occur",
+  "@settings_SocketExceptionError": {
+  },
+  "settings_TypeErrorError": "Response issue occur",
+  "@settings_TypeErrorError": {
+  },
+  "settings_RequestFailureError": "Server failure occur",
+  "@settings_RequestFailureError": {
   },
 
   "webRegistration_ErrorAcknowledgeDialog_title": "Web resource error",

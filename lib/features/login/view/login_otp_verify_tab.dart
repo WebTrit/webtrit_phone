@@ -33,8 +33,9 @@ class LoginOtpVerifyTab extends StatelessWidget {
           context.hideCurrentSnackBar();
           context.read<LoginCubit>().back();
         } else {
-          if (state.error != null) {
-            context.showErrorSnackBar(state.error.toString());
+          final errorL10n = state.errorL10n(context);
+          if (errorL10n != null) {
+            context.showErrorSnackBar(errorL10n);
             context.read<LoginCubit>().dismissError();
           }
         }
@@ -55,7 +56,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
                   decoration: InputDecoration(
                     labelText: context.l10n.loginOtpRequestTabCodeTextFieldLabel,
                     helperText: '', // reserve space for validator message
-                    errorText: _codeTextFieldErrorL10n(context, state.codeInput),
+                    errorText: state.codeInput.errorL10n(context),
                     errorMaxLines: 3,
                   ),
                   keyboardType: TextInputType.number,
@@ -125,16 +126,5 @@ class LoginOtpVerifyTab extends StatelessWidget {
     primaryFocus?.unfocus();
 
     context.read<LoginCubit>().loginOptVerifyBack();
-  }
-
-  String? _codeTextFieldErrorL10n(BuildContext context, CodeInput codeInput) {
-    if (!codeInput.invalid) {
-      return null;
-    } else {
-      switch (codeInput.error!) {
-        case CodeValidationError.blank:
-          return context.l10n.validationBlankError;
-      }
-    }
   }
 }

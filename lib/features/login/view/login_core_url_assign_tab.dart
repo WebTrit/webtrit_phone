@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,7 +29,7 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
           context.hideCurrentSnackBar();
           context.read<LoginCubit>().back();
         } else {
-          final errorL10n = _stateErrorL10n(context, state.error);
+          final errorL10n = state.errorL10n(context);
           if (errorL10n != null) {
             context.showErrorSnackBar(errorL10n);
             context.read<LoginCubit>().dismissError();
@@ -54,7 +52,7 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
                   decoration: InputDecoration(
                     labelText: context.l10n.login_TextFieldLabelText_coreUrl,
                     helperText: '', // reserve space for validator message
-                    errorText: _coreUrlTextFieldErrorL10n(context, state.coreUrlInput),
+                    errorText: state.coreUrlInput.errorL10n(context),
                     errorMaxLines: 3,
                   ),
                   keyboardType: TextInputType.url,
@@ -118,34 +116,5 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
     primaryFocus?.unfocus();
 
     context.read<LoginCubit>().loginCoreUrlAssignBack();
-  }
-
-  String? _coreUrlTextFieldErrorL10n(BuildContext context, UrlInput coreUrlInput) {
-    if (!coreUrlInput.invalid) {
-      return null;
-    } else {
-      switch (coreUrlInput.error!) {
-        case UrlValidationError.blank:
-          return context.l10n.validationBlankError;
-        case UrlValidationError.format:
-          return context.l10n.login_validationCoreUrlError;
-      }
-    }
-  }
-
-  String? _stateErrorL10n(BuildContext context, Object? error) {
-    if (error != null) {
-      if (error is LoginIncompatibleCoreVersionException) {
-        return context.l10n.login_LoginIncompatibleCoreVersionExceptionError;
-      } else if (error is FormatException) {
-        return context.l10n.login_FormatExceptionError;
-      } else if (error is SocketException) {
-        return context.l10n.login_SocketExceptionError;
-      } else {
-        return error.toString();
-      }
-    } else {
-      return null;
-    }
   }
 }

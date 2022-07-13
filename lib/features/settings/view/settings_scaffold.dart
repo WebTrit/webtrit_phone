@@ -166,9 +166,9 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
           ProgressOverlay.insert(context, context.read<SettingsBloc>().stream.firstWhere((state) => !state.progress));
         }
 
-        final error = state.error;
-        if (error != null) {
-          context.showErrorSnackBar(error.toString());
+        final errorL10n = state.errorL10n(context);
+        if (errorL10n != null) {
+          context.showErrorSnackBar(errorL10n);
           context.read<SettingsBloc>().add(const SettingsErrorDismissed());
         }
       },
