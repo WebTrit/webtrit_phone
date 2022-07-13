@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 
 class MainAppBar extends AppBar {
@@ -18,13 +19,11 @@ class MainAppBar extends AppBar {
           actions: [
             BlocBuilder<CallBloc, CallState>(
               builder: (context, state) {
-                final themeData = Theme.of(context);
-                final colorScheme = themeData.colorScheme;
                 return Ink(
                   decoration: ShapeDecoration(
                     shape: CircleBorder(
                       side: BorderSide(
-                        color: state.signalingClientStatus.isReady ? colorScheme.tertiary : colorScheme.error,
+                        color: state.status.color(context),
                       ),
                     ),
                   ),

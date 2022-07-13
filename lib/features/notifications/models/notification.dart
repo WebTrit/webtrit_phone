@@ -9,12 +9,12 @@ abstract class Notification {
   String l10n(BuildContext context);
 }
 
-class CallSignalingClientNotReadyErrorNotification extends Notification {
-  const CallSignalingClientNotReadyErrorNotification();
+class CallSignalingClientNotConnectErrorNotification extends Notification {
+  const CallSignalingClientNotConnectErrorNotification();
 
   @override
   String l10n(BuildContext context) {
-    return context.l10n.notifications_errorSnackBar_callSignalingClientNotReady;
+    return context.l10n.notifications_errorSnackBar_callSignalingClientNotConnect;
   }
 }
 

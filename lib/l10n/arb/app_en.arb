@@ -11,8 +11,27 @@
   "@alertDialogActions_ok": {
   },
 
-  "notifications_errorSnackBar_callSignalingClientNotReady": "You are offline – please try to re-register",
-  "@notifications_errorSnackBar_callSignalingClientNotReady": {
+  "callStatus_connectivityNone": "No internet connection",
+  "@callStatus_connectivityNone": {
+  },
+  "callStatus_connectError": "Connection error",
+  "@callStatus_connectError": {
+  },
+  "callStatus_appUnregistered": "Unregistered",
+  "@callStatus_appUnregistered": {
+  },
+  "callStatus_connectIssue": "Connection issue",
+  "@callStatus_connectIssue": {
+  },
+  "callStatus_inProgress": "Connection in progress",
+  "@callStatus_inProgress": {
+  },
+  "callStatus_ready": "Connection successful",
+  "@callStatus_ready": {
+  },
+
+  "notifications_errorSnackBar_callSignalingClientNotConnect": "Cannot initiate the call – please check the connection status",
+  "@notifications_errorSnackBar_callSignalingClientNotConnect": {
   },
   "notifications_errorSnackBar_callConnect": "Connect to core is invalid – trying to re-connect",
   "@notifications_errorSnackBar_callConnect": {

@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
-import 'package:webtrit_phone/extensions/extensions.dart';
 
+import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class AccountInfoListTile extends StatelessWidget {
   const AccountInfoListTile({
     Key? key,
+    required this.callStatus,
     this.info,
     this.onEditPressed,
     this.contentPadding,
   }) : super(key: key);
 
+  final CallStatus callStatus;
   final AccountInfo? info;
   final VoidCallback? onEditPressed;
 
@@ -51,6 +54,25 @@ class AccountInfoListTile extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        WidgetSpan(
+                          child: Container(
+                            width: radius / 3,
+                            height: radius / 3,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: callStatus.color(context),
+                            ),
+                          ),
+                          alignment: PlaceholderAlignment.middle,
+                        ),
+                        const TextSpan(text: ' '),
+                        TextSpan(text: callStatus.l10n(context)),
+                      ],
+                    ),
+                  ),
                   Text(
                     info?.name ?? '',
                     style: themeData.textTheme.bodyLarge!.copyWith(

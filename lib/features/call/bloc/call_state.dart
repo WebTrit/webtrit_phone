@@ -1,15 +1,20 @@
 part of 'call_bloc.dart';
 
+enum CallStatus {
+  connectivityNone,
+  connectError,
+  appUnregistered,
+  connectIssue,
+  inProgress,
+  ready,
+}
+
 enum SignalingClientStatus {
   disconnecting,
   disconnect,
   connecting,
   connect,
   failure,
-}
-
-extension SignalingClientStatusX on SignalingClientStatus {
-  bool get isReady => this == SignalingClientStatus.connect;
 }
 
 @freezed
@@ -24,6 +29,28 @@ class CallState with _$CallState {
     int? lastSignalingDisconnectCode,
     @Default([]) List<ActiveCall> activeCalls,
   }) = _CallState;
+
+  CallStatus get status {
+    final lastSignalingDisconnectCode = this.lastSignalingDisconnectCode;
+
+    if (currentConnectivityResult == ConnectivityResult.none) {
+      return CallStatus.connectivityNone;
+    } else if (lastSignalingClientConnectError != null) {
+      return CallStatus.connectError;
+    } else if (lastSignalingDisconnectCode != null) {
+      final code = SignalingDisconnectCode.values.byCode(lastSignalingDisconnectCode);
+      switch (code) {
+        case SignalingDisconnectCode.appUnregisteredError:
+          return CallStatus.appUnregistered;
+        default:
+          return CallStatus.connectIssue;
+      }
+    } else if (signalingClientStatus == SignalingClientStatus.connect) {
+      return CallStatus.ready;
+    } else {
+      return CallStatus.inProgress;
+    }
+  }
 
   bool get isActive => activeCalls.isNotEmpty;
 

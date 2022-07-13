@@ -652,12 +652,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallPerformEventStarted event,
     Emitter<CallState> emit,
   ) async {
-    if (!state.signalingClientStatus.isReady) {
+    if (state.signalingClientStatus != SignalingClientStatus.connect) {
       event.fail();
 
       emit(state.copyWithPopActiveCall(event.uuid));
 
-      notificationsBloc.add(const NotificationsIssued(CallSignalingClientNotReadyErrorNotification()));
+      notificationsBloc.add(const NotificationsIssued(CallSignalingClientNotConnectErrorNotification()));
       return;
     }
     late final MediaStream localStream;

@@ -9,6 +9,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+import '../../call/call.dart';
 import '../settings.dart';
 import '../widgets/widgets.dart';
 
@@ -39,9 +40,14 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
       body: ListView(
         children: [
           BlocBuilder<SettingsBloc, SettingsState>(
-            builder: (context, state) {
-              return AccountInfoListTile(
-                info: state.info,
+            builder: (context, settingsState) {
+              return BlocBuilder<CallBloc, CallState>(
+                builder: (context, callState) {
+                  return AccountInfoListTile(
+                    callStatus: callState.status,
+                    info: settingsState.info,
+                  );
+                },
               );
             },
           ),
