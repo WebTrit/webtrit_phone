@@ -30,13 +30,13 @@
   "@callStatus_ready": {
   },
 
-  "notifications_errorSnackBar_callSignalingClientNotConnect": "Cannot initiate the call – please check the connection status",
+  "notifications_errorSnackBar_callSignalingClientNotConnect": "Cannot initiate the call, please check the connection status",
   "@notifications_errorSnackBar_callSignalingClientNotConnect": {
   },
-  "notifications_errorSnackBar_callConnect": "Connect to core is invalid – trying to re-connect",
+  "notifications_errorSnackBar_callConnect": "Connect to core is invalid, trying to re-connect",
   "@notifications_errorSnackBar_callConnect": {
   },
-  "notifications_errorSnackBar_callUserMedia": "Access to media input is invalid – please check app permissions",
+  "notifications_errorSnackBar_callUserMedia": "Access to media input is invalid, please check app permissions",
   "@notifications_errorSnackBar_callUserMedia": {
   },
 
