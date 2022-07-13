@@ -55,7 +55,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
                   decoration: InputDecoration(
                     labelText: context.l10n.loginOtpRequestTabCodeTextFieldLabel,
                     helperText: '', // reserve space for validator message
-                    errorText: _codeTextFieldErrorText(context, state.codeInput),
+                    errorText: _codeTextFieldErrorL10n(context, state.codeInput),
                     errorMaxLines: 3,
                   ),
                   keyboardType: TextInputType.number,
@@ -127,7 +127,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
     context.read<LoginCubit>().loginOptVerifyBack();
   }
 
-  String? _codeTextFieldErrorText(BuildContext context, CodeInput codeInput) {
+  String? _codeTextFieldErrorL10n(BuildContext context, CodeInput codeInput) {
     if (!codeInput.invalid) {
       return null;
     } else {

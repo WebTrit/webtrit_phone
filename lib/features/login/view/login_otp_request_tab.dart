@@ -51,7 +51,7 @@ class LoginOtpRequestTab extends StatelessWidget {
                   decoration: InputDecoration(
                     labelText: context.l10n.loginOtpRequestTabPhoneTextFieldLabel,
                     helperText: '', // reserve space for validator message
-                    errorText: _phoneTextFieldErrorText(context, state.phoneInput),
+                    errorText: _phoneTextFieldErrorL10n(context, state.phoneInput),
                     errorMaxLines: 3,
                   ),
                   keyboardType: TextInputType.phone,
@@ -117,7 +117,7 @@ class LoginOtpRequestTab extends StatelessWidget {
     context.read<LoginCubit>().loginOptRequestBack();
   }
 
-  String? _phoneTextFieldErrorText(BuildContext context, PhoneInput phoneInput) {
+  String? _phoneTextFieldErrorL10n(BuildContext context, PhoneInput phoneInput) {
     if (!phoneInput.invalid) {
       return null;
     } else {

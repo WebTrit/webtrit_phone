@@ -31,9 +31,9 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
           context.hideCurrentSnackBar();
           context.read<LoginCubit>().back();
         } else {
-          final errorText = _stateErrorText(context, state.error);
-          if (errorText != null) {
-            context.showErrorSnackBar(errorText);
+          final errorL10n = _stateErrorL10n(context, state.error);
+          if (errorL10n != null) {
+            context.showErrorSnackBar(errorL10n);
             context.read<LoginCubit>().dismissError();
           }
         }
@@ -54,7 +54,7 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
                   decoration: InputDecoration(
                     labelText: context.l10n.login_TextFieldLabelText_coreUrl,
                     helperText: '', // reserve space for validator message
-                    errorText: _coreUrlTextFieldErrorText(context, state.coreUrlInput),
+                    errorText: _coreUrlTextFieldErrorL10n(context, state.coreUrlInput),
                     errorMaxLines: 3,
                   ),
                   keyboardType: TextInputType.url,
@@ -120,7 +120,7 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
     context.read<LoginCubit>().loginCoreUrlAssignBack();
   }
 
-  String? _coreUrlTextFieldErrorText(BuildContext context, UrlInput coreUrlInput) {
+  String? _coreUrlTextFieldErrorL10n(BuildContext context, UrlInput coreUrlInput) {
     if (!coreUrlInput.invalid) {
       return null;
     } else {
@@ -133,7 +133,7 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
     }
   }
 
-  String? _stateErrorText(BuildContext context, Object? error) {
+  String? _stateErrorL10n(BuildContext context, Object? error) {
     if (error != null) {
       if (error is LoginIncompatibleCoreVersionException) {
         return context.l10n.login_LoginIncompatibleCoreVersionExceptionError;
