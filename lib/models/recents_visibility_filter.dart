@@ -20,8 +20,6 @@ extension RecentsVisibilityFilterI10nExtension on RecentsVisibilityFilter {
         return context.l10n.recentsVisibilityFilter_incoming;
       case RecentsVisibilityFilter.outgoing:
         return context.l10n.recentsVisibilityFilter_outgoing;
-      default:
-        throw ArgumentError();
     }
   }
 }
