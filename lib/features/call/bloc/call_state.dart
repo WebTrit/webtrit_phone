@@ -1,22 +1,5 @@
 part of 'call_bloc.dart';
 
-enum CallStatus {
-  connectivityNone,
-  connectError,
-  appUnregistered,
-  connectIssue,
-  inProgress,
-  ready,
-}
-
-enum SignalingClientStatus {
-  disconnecting,
-  disconnect,
-  connecting,
-  connect,
-  failure,
-}
-
 @freezed
 class CallState with _$CallState {
   const CallState._();
