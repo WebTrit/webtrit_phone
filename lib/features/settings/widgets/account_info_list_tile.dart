@@ -6,6 +6,8 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+const _kHoldSpaceData = ' ';
+
 class AccountInfoListTile extends StatelessWidget {
   const AccountInfoListTile({
     Key? key,
@@ -74,13 +76,13 @@ class AccountInfoListTile extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    info?.name ?? '',
+                    info?.name ?? _kHoldSpaceData,
                     style: themeData.textTheme.bodyLarge!.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
-                    info?.balanceWithCurrency ?? '',
+                    info?.balanceWithCurrency ?? _kHoldSpaceData,
                     style: themeData.textTheme.labelLarge,
                   ),
                 ],
