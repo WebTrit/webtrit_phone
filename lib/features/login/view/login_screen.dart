@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/app/consts.dart';
+
 import './login_scaffold.dart';
 
 import '../login.dart';
-
-const kApiClientConnectionTimeout = Duration(seconds: 5);
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
