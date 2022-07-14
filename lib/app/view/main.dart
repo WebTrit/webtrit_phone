@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -8,6 +10,7 @@ import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/app/assets.gen.dart';
+import 'package:webtrit_phone/app/consts.dart';
 import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
@@ -53,7 +56,14 @@ class _MainState extends State<Main> {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<WebtritApiClient>(
-          create: (context) => WebtritApiClient(Uri.parse(context.read<AppBloc>().state.coreUrl!)),
+          create: (context) {
+            final httpClient = HttpClient();
+            httpClient.connectionTimeout = kApiClientConnectionTimeout;
+            return WebtritApiClient(
+              Uri.parse(context.read<AppBloc>().state.coreUrl!),
+              customHttpClient: httpClient,
+            );
+          },
         ),
         RepositoryProvider<FavoritesRepository>(
           create: (context) => FavoritesRepository(
