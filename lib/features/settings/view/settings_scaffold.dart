@@ -85,6 +85,7 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
             titleData: context.l10n.settings_ListViewTileTitle_settings,
           ),
           ListTile(
+            enabled: false,
             leading: const Icon(Icons.network_check),
             title: Text(context.l10n.settings_ListViewTileTitle_network),
             trailing: const Icon(Icons.navigate_next),
