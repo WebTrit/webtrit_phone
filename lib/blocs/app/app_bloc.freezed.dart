@@ -90,10 +90,50 @@ abstract class _AppLogouted implements AppLogouted {
 }
 
 /// @nodoc
+mixin _$AppThemeSettingsChanged {
+  ThemeSettings get value => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+
+class _$_AppThemeSettingsChanged implements _AppThemeSettingsChanged {
+  const _$_AppThemeSettingsChanged(this.value);
+
+  @override
+  final ThemeSettings value;
+
+  @override
+  String toString() {
+    return 'AppThemeSettingsChanged(value: $value)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_AppThemeSettingsChanged &&
+            const DeepCollectionEquality().equals(other.value, value));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(value));
+}
+
+abstract class _AppThemeSettingsChanged implements AppThemeSettingsChanged {
+  const factory _AppThemeSettingsChanged(final ThemeSettings value) =
+      _$_AppThemeSettingsChanged;
+
+  @override
+  ThemeSettings get value;
+}
+
+/// @nodoc
 mixin _$AppState {
   String? get coreUrl => throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
   String? get webRegistrationInitialUrl => throw _privateConstructorUsedError;
+  ThemeSettings get themeSettings => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AppStateCopyWith<AppState> get copyWith =>
@@ -105,7 +145,10 @@ abstract class $AppStateCopyWith<$Res> {
   factory $AppStateCopyWith(AppState value, $Res Function(AppState) then) =
       _$AppStateCopyWithImpl<$Res>;
   $Res call(
-      {String? coreUrl, String? token, String? webRegistrationInitialUrl});
+      {String? coreUrl,
+      String? token,
+      String? webRegistrationInitialUrl,
+      ThemeSettings themeSettings});
 }
 
 /// @nodoc
@@ -121,6 +164,7 @@ class _$AppStateCopyWithImpl<$Res> implements $AppStateCopyWith<$Res> {
     Object? coreUrl = freezed,
     Object? token = freezed,
     Object? webRegistrationInitialUrl = freezed,
+    Object? themeSettings = freezed,
   }) {
     return _then(_value.copyWith(
       coreUrl: coreUrl == freezed
@@ -135,6 +179,10 @@ class _$AppStateCopyWithImpl<$Res> implements $AppStateCopyWith<$Res> {
           ? _value.webRegistrationInitialUrl
           : webRegistrationInitialUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      themeSettings: themeSettings == freezed
+          ? _value.themeSettings
+          : themeSettings // ignore: cast_nullable_to_non_nullable
+              as ThemeSettings,
     ));
   }
 }
@@ -146,7 +194,10 @@ abstract class _$$_AppStateCopyWith<$Res> implements $AppStateCopyWith<$Res> {
       __$$_AppStateCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String? coreUrl, String? token, String? webRegistrationInitialUrl});
+      {String? coreUrl,
+      String? token,
+      String? webRegistrationInitialUrl,
+      ThemeSettings themeSettings});
 }
 
 /// @nodoc
@@ -164,6 +215,7 @@ class __$$_AppStateCopyWithImpl<$Res> extends _$AppStateCopyWithImpl<$Res>
     Object? coreUrl = freezed,
     Object? token = freezed,
     Object? webRegistrationInitialUrl = freezed,
+    Object? themeSettings = freezed,
   }) {
     return _then(_$_AppState(
       coreUrl: coreUrl == freezed
@@ -178,6 +230,10 @@ class __$$_AppStateCopyWithImpl<$Res> extends _$AppStateCopyWithImpl<$Res>
           ? _value.webRegistrationInitialUrl
           : webRegistrationInitialUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      themeSettings: themeSettings == freezed
+          ? _value.themeSettings
+          : themeSettings // ignore: cast_nullable_to_non_nullable
+              as ThemeSettings,
     ));
   }
 }
@@ -185,7 +241,11 @@ class __$$_AppStateCopyWithImpl<$Res> extends _$AppStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_AppState implements _AppState {
-  const _$_AppState({this.coreUrl, this.token, this.webRegistrationInitialUrl});
+  const _$_AppState(
+      {this.coreUrl,
+      this.token,
+      this.webRegistrationInitialUrl,
+      required this.themeSettings});
 
   @override
   final String? coreUrl;
@@ -193,10 +253,12 @@ class _$_AppState implements _AppState {
   final String? token;
   @override
   final String? webRegistrationInitialUrl;
+  @override
+  final ThemeSettings themeSettings;
 
   @override
   String toString() {
-    return 'AppState(coreUrl: $coreUrl, token: $token, webRegistrationInitialUrl: $webRegistrationInitialUrl)';
+    return 'AppState(coreUrl: $coreUrl, token: $token, webRegistrationInitialUrl: $webRegistrationInitialUrl, themeSettings: $themeSettings)';
   }
 
   @override
@@ -207,7 +269,9 @@ class _$_AppState implements _AppState {
             const DeepCollectionEquality().equals(other.coreUrl, coreUrl) &&
             const DeepCollectionEquality().equals(other.token, token) &&
             const DeepCollectionEquality().equals(
-                other.webRegistrationInitialUrl, webRegistrationInitialUrl));
+                other.webRegistrationInitialUrl, webRegistrationInitialUrl) &&
+            const DeepCollectionEquality()
+                .equals(other.themeSettings, themeSettings));
   }
 
   @override
@@ -215,7 +279,8 @@ class _$_AppState implements _AppState {
       runtimeType,
       const DeepCollectionEquality().hash(coreUrl),
       const DeepCollectionEquality().hash(token),
-      const DeepCollectionEquality().hash(webRegistrationInitialUrl));
+      const DeepCollectionEquality().hash(webRegistrationInitialUrl),
+      const DeepCollectionEquality().hash(themeSettings));
 
   @JsonKey(ignore: true)
   @override
@@ -227,7 +292,8 @@ abstract class _AppState implements AppState {
   const factory _AppState(
       {final String? coreUrl,
       final String? token,
-      final String? webRegistrationInitialUrl}) = _$_AppState;
+      final String? webRegistrationInitialUrl,
+      required final ThemeSettings themeSettings}) = _$_AppState;
 
   @override
   String? get coreUrl;
@@ -235,6 +301,8 @@ abstract class _AppState implements AppState {
   String? get token;
   @override
   String? get webRegistrationInitialUrl;
+  @override
+  ThemeSettings get themeSettings;
   @override
   @JsonKey(ignore: true)
   _$$_AppStateCopyWith<_$_AppState> get copyWith =>

@@ -3,6 +3,7 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 
 part 'app_bloc.freezed.dart';
 
@@ -18,9 +19,11 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           coreUrl: secureStorage.readCoreUrl(),
           token: secureStorage.readToken(),
           webRegistrationInitialUrl: secureStorage.readWebRegistrationInitialUrl(),
+          themeSettings: portaoneThemeSettings,
         )) {
     on<AppLogined>(_onLogined, transformer: sequential());
     on<AppLogouted>(_onLogouted, transformer: sequential());
+    on<AppThemeSettingsChanged>(_onThemeSettingsChanged, transformer: droppable());
   }
 
   final SecureStorage secureStorage;
@@ -46,5 +49,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       coreUrl: null,
       token: null,
     ));
+  }
+
+  void _onThemeSettingsChanged(AppThemeSettingsChanged event, Emitter<AppState> emit) {
+    emit(state.copyWith(themeSettings: event.value));
   }
 }

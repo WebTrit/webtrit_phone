@@ -15,7 +15,7 @@ class ThemeProvider extends InheritedWidget {
     required super.child,
   }) : super();
 
-  final ValueNotifier<ThemeSettings> settings;
+  final ThemeSettings settings;
   final ColorScheme? lightDynamic;
   final ColorScheme? darkDynamic;
 
@@ -28,11 +28,11 @@ class ThemeProvider extends InheritedWidget {
   }
 
   Color blend(Color targetColor) {
-    return Color(Blend.harmonize(targetColor.value, settings.value.seedColor.value));
+    return Color(Blend.harmonize(targetColor.value, settings.seedColor.value));
   }
 
   Color source(Color? target) {
-    Color source = settings.value.seedColor;
+    Color source = settings.seedColor;
     if (target != null) {
       source = blend(target);
     }
@@ -42,8 +42,8 @@ class ThemeProvider extends InheritedWidget {
   ColorScheme colors(Brightness brightness, Color? targetColor) {
     final dynamicPrimary = brightness == Brightness.light ? lightDynamic?.primary : darkDynamic?.primary;
     final colorSchemeOverride = brightness == Brightness.light
-        ? settings.value.lightColorSchemeOverride
-        : settings.value.darkColorSchemeOverride;
+        ? settings.lightColorSchemeOverride
+        : settings.darkColorSchemeOverride;
     return ColorScheme.fromSeed(
       seedColor: dynamicPrimary ?? source(targetColor),
       brightness: brightness,
@@ -152,7 +152,7 @@ class ThemeProvider extends InheritedWidget {
   }
 
   Gradients gradients(ColorScheme colors) {
-    final customColors = settings.value.primaryGradientColors;
+    final customColors = settings.primaryGradientColors;
     return Gradients(
       tab: LinearGradient(
         begin: Alignment.topCenter,
@@ -272,7 +272,7 @@ class ThemeProvider extends InheritedWidget {
   }
 
   ThemeMode themeMode() {
-    return settings.value.themeMode;
+    return settings.themeMode;
   }
 
   static ThemeProvider of(BuildContext context) {

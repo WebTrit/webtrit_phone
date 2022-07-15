@@ -27,13 +27,11 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  late final ValueNotifier<ThemeSettings> themeSettings;
   late final AppBloc appBloc;
 
   @override
   void initState() {
     super.initState();
-    themeSettings = ValueNotifier(portaoneThemeSettings);
     appBloc = AppBloc(
       secureStorage: SecureStorage(),
       appDatabase: widget.appDatabase,
@@ -43,40 +41,37 @@ class _AppState extends State<App> {
   @override
   void dispose() async {
     await appBloc.close();
-    themeSettings.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final materialApp = ThemeProvider(
-      settings: themeSettings,
-      lightDynamic: null,
-      darkDynamic: null,
-      child: NotificationListener<ThemeSettingsChangedNotification>(
-        onNotification: (notification) {
-          themeSettings.value = notification.settings;
-          return true;
-        },
-        child: ValueListenableBuilder<ThemeSettings>(
-          valueListenable: themeSettings,
-          builder: (context, value, _) {
-            final themeProvider = ThemeProvider.of(context);
-            return MaterialApp.router(
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              supportedLocales: AppLocalizations.supportedLocales,
-              restorationScopeId: 'App',
-              title: EnvironmentConfig.APP_NAME,
-              theme: themeProvider.light(),
-              darkTheme: themeProvider.dark(),
-              themeMode: themeProvider.themeMode(),
-              routeInformationProvider: _router.routeInformationProvider,
-              routeInformationParser: _router.routeInformationParser,
-              routerDelegate: _router.routerDelegate,
-            );
-          },
-        ),
-      ),
+    final materialApp = BlocBuilder<AppBloc, AppState>(
+      buildWhen: (previous, current) => previous.themeSettings != current.themeSettings,
+      builder: (context, state) {
+        return ThemeProvider(
+          settings: state.themeSettings,
+          lightDynamic: null,
+          darkDynamic: null,
+          child: Builder(
+            builder: (context) {
+              final themeProvider = ThemeProvider.of(context);
+              return MaterialApp.router(
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                supportedLocales: AppLocalizations.supportedLocales,
+                restorationScopeId: 'App',
+                title: EnvironmentConfig.APP_NAME,
+                theme: themeProvider.light(),
+                darkTheme: themeProvider.dark(),
+                themeMode: themeProvider.themeMode(),
+                routeInformationProvider: _router.routeInformationProvider,
+                routeInformationParser: _router.routeInformationParser,
+                routerDelegate: _router.routerDelegate,
+              );
+            },
+          ),
+        );
+      },
     );
 
     return MultiBlocProvider(

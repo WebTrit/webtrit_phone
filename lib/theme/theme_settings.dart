@@ -18,14 +18,6 @@ class ThemeSettings {
   final List<CustomColor> primaryGradientColors;
 }
 
-class ThemeSettingsChangedNotification extends Notification {
-  ThemeSettingsChangedNotification({
-    required this.settings,
-  });
-
-  final ThemeSettings settings;
-}
-
 class ColorSchemeOverride {
   const ColorSchemeOverride({
     this.primary,

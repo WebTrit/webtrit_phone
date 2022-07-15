@@ -6,5 +6,6 @@ class AppState with _$AppState {
     String? coreUrl,
     String? token,
     String? webRegistrationInitialUrl,
+    required ThemeSettings themeSettings,
   }) = _AppState;
 }
