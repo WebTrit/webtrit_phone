@@ -129,6 +129,45 @@ abstract class _AppThemeSettingsChanged implements AppThemeSettingsChanged {
 }
 
 /// @nodoc
+mixin _$AppThemeModeChanged {
+  ThemeMode get value => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+
+class _$_AppThemeModeChanged implements _AppThemeModeChanged {
+  const _$_AppThemeModeChanged(this.value);
+
+  @override
+  final ThemeMode value;
+
+  @override
+  String toString() {
+    return 'AppThemeModeChanged(value: $value)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_AppThemeModeChanged &&
+            const DeepCollectionEquality().equals(other.value, value));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(value));
+}
+
+abstract class _AppThemeModeChanged implements AppThemeModeChanged {
+  const factory _AppThemeModeChanged(final ThemeMode value) =
+      _$_AppThemeModeChanged;
+
+  @override
+  ThemeMode get value;
+}
+
+/// @nodoc
 mixin _$AppLocaleChanged {
   Locale get value => throw _privateConstructorUsedError;
 }
@@ -172,6 +211,7 @@ mixin _$AppState {
   String? get token => throw _privateConstructorUsedError;
   String? get webRegistrationInitialUrl => throw _privateConstructorUsedError;
   ThemeSettings get themeSettings => throw _privateConstructorUsedError;
+  ThemeMode get themeMode => throw _privateConstructorUsedError;
   Locale get locale => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -188,6 +228,7 @@ abstract class $AppStateCopyWith<$Res> {
       String? token,
       String? webRegistrationInitialUrl,
       ThemeSettings themeSettings,
+      ThemeMode themeMode,
       Locale locale});
 }
 
@@ -205,6 +246,7 @@ class _$AppStateCopyWithImpl<$Res> implements $AppStateCopyWith<$Res> {
     Object? token = freezed,
     Object? webRegistrationInitialUrl = freezed,
     Object? themeSettings = freezed,
+    Object? themeMode = freezed,
     Object? locale = freezed,
   }) {
     return _then(_value.copyWith(
@@ -224,6 +266,10 @@ class _$AppStateCopyWithImpl<$Res> implements $AppStateCopyWith<$Res> {
           ? _value.themeSettings
           : themeSettings // ignore: cast_nullable_to_non_nullable
               as ThemeSettings,
+      themeMode: themeMode == freezed
+          ? _value.themeMode
+          : themeMode // ignore: cast_nullable_to_non_nullable
+              as ThemeMode,
       locale: locale == freezed
           ? _value.locale
           : locale // ignore: cast_nullable_to_non_nullable
@@ -243,6 +289,7 @@ abstract class _$$_AppStateCopyWith<$Res> implements $AppStateCopyWith<$Res> {
       String? token,
       String? webRegistrationInitialUrl,
       ThemeSettings themeSettings,
+      ThemeMode themeMode,
       Locale locale});
 }
 
@@ -262,6 +309,7 @@ class __$$_AppStateCopyWithImpl<$Res> extends _$AppStateCopyWithImpl<$Res>
     Object? token = freezed,
     Object? webRegistrationInitialUrl = freezed,
     Object? themeSettings = freezed,
+    Object? themeMode = freezed,
     Object? locale = freezed,
   }) {
     return _then(_$_AppState(
@@ -281,6 +329,10 @@ class __$$_AppStateCopyWithImpl<$Res> extends _$AppStateCopyWithImpl<$Res>
           ? _value.themeSettings
           : themeSettings // ignore: cast_nullable_to_non_nullable
               as ThemeSettings,
+      themeMode: themeMode == freezed
+          ? _value.themeMode
+          : themeMode // ignore: cast_nullable_to_non_nullable
+              as ThemeMode,
       locale: locale == freezed
           ? _value.locale
           : locale // ignore: cast_nullable_to_non_nullable
@@ -297,6 +349,7 @@ class _$_AppState extends _AppState {
       this.token,
       this.webRegistrationInitialUrl,
       required this.themeSettings,
+      required this.themeMode,
       required this.locale})
       : super._();
 
@@ -309,11 +362,13 @@ class _$_AppState extends _AppState {
   @override
   final ThemeSettings themeSettings;
   @override
+  final ThemeMode themeMode;
+  @override
   final Locale locale;
 
   @override
   String toString() {
-    return 'AppState(coreUrl: $coreUrl, token: $token, webRegistrationInitialUrl: $webRegistrationInitialUrl, themeSettings: $themeSettings, locale: $locale)';
+    return 'AppState(coreUrl: $coreUrl, token: $token, webRegistrationInitialUrl: $webRegistrationInitialUrl, themeSettings: $themeSettings, themeMode: $themeMode, locale: $locale)';
   }
 
   @override
@@ -327,6 +382,7 @@ class _$_AppState extends _AppState {
                 other.webRegistrationInitialUrl, webRegistrationInitialUrl) &&
             const DeepCollectionEquality()
                 .equals(other.themeSettings, themeSettings) &&
+            const DeepCollectionEquality().equals(other.themeMode, themeMode) &&
             const DeepCollectionEquality().equals(other.locale, locale));
   }
 
@@ -337,6 +393,7 @@ class _$_AppState extends _AppState {
       const DeepCollectionEquality().hash(token),
       const DeepCollectionEquality().hash(webRegistrationInitialUrl),
       const DeepCollectionEquality().hash(themeSettings),
+      const DeepCollectionEquality().hash(themeMode),
       const DeepCollectionEquality().hash(locale));
 
   @JsonKey(ignore: true)
@@ -351,6 +408,7 @@ abstract class _AppState extends AppState {
       final String? token,
       final String? webRegistrationInitialUrl,
       required final ThemeSettings themeSettings,
+      required final ThemeMode themeMode,
       required final Locale locale}) = _$_AppState;
   const _AppState._() : super._();
 
@@ -362,6 +420,8 @@ abstract class _AppState extends AppState {
   String? get webRegistrationInitialUrl;
   @override
   ThemeSettings get themeSettings;
+  @override
+  ThemeMode get themeMode;
   @override
   Locale get locale;
   @override

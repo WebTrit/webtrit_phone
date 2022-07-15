@@ -5,14 +5,12 @@ import 'custom_color.dart';
 class ThemeSettings {
   const ThemeSettings({
     required this.seedColor,
-    required this.themeMode,
     this.lightColorSchemeOverride,
     this.darkColorSchemeOverride,
     required this.primaryGradientColors,
   });
 
   final Color seedColor;
-  final ThemeMode themeMode;
   final ColorSchemeOverride? lightColorSchemeOverride;
   final ColorSchemeOverride? darkColorSchemeOverride;
   final List<CustomColor> primaryGradientColors;

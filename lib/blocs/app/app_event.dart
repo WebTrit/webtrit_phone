@@ -23,6 +23,11 @@ class AppThemeSettingsChanged with _$AppThemeSettingsChanged implements AppEvent
 }
 
 @Freezed(copyWith: false)
+class AppThemeModeChanged with _$AppThemeModeChanged implements AppEvent {
+  const factory AppThemeModeChanged(ThemeMode value) = _AppThemeModeChanged;
+}
+
+@Freezed(copyWith: false)
 class AppLocaleChanged with _$AppLocaleChanged implements AppEvent {
   const factory AppLocaleChanged(Locale value) = _AppLocaleChanged;
 }

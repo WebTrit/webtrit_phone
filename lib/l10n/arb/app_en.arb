@@ -8,6 +8,16 @@
   "@locale_en": {
   },
 
+  "themeMode_system": "System",
+  "@themeMode_system": {
+  },
+  "themeMode_light": "Light",
+  "@themeMode_light": {
+  },
+  "themeMode_dark": "Dark",
+  "@themeMode_dark": {
+  },
+
   "alertDialogActions_no": "No",
   "@alertDialogActions_no": {
   },
@@ -301,8 +311,8 @@
   "settings_ListViewTileTitle_about": "About application",
   "@settings_ListViewTileTitle_about": {
   },
-  "settings_ListViewTileTitle_darkMode": "Dark mode",
-  "@settings_ListViewTileTitle_darkMode": {
+  "settings_ListViewTileTitle_themeMode": "Theme mode",
+  "@settings_ListViewTileTitle_themeMode": {
   },
   "settings_ListViewTileTitle_toolbox": "TOOLBOX",
   "@settings_ListViewTileTitle_toolbox": {

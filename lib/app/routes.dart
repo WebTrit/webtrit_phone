@@ -19,6 +19,7 @@ class MainRoute {
   static const settingsHelp = 'help';
   static const settingsLanguage = 'language';
   static const settingsTermsConditions = 'terms-conditions';
+  static const settingsThemeMode = 'theme-mode';
   static const logRecordsConsole = 'log-records-console';
 
   static const contact = 'contact';

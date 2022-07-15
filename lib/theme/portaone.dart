@@ -23,7 +23,6 @@ const _gradientBottom = CustomColor(
 
 const portaoneThemeSettings = ThemeSettings(
   seedColor: _seedColor,
-  themeMode: ThemeMode.system,
   lightColorSchemeOverride: ColorSchemeOverride(
     primary: _seedColor,
     secondary: _darkBlue,

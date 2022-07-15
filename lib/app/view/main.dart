@@ -243,6 +243,11 @@ class _MainState extends State<Main> {
                 builder: (context, state) => const TermsConditionsScreen(),
               ),
               GoRoute(
+                name: MainRoute.settingsThemeMode,
+                path: 'theme-mode',
+                builder: (context, state) => const ThemeModeScreen(),
+              ),
+              GoRoute(
                 name: MainRoute.logRecordsConsole,
                 path: 'log-records-console',
                 builder: (context, state) => const LogRecordsConsoleScreen(),

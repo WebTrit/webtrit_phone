@@ -1,10 +1,11 @@
-import 'dart:ui';
+import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 
 class AppPreferences {
   static const _kRegisterStatusKey = 'register-status';
+  static const _kThemeModeKey = 'theme-mode';
   static const _kLocaleLanguageTagKey = 'locale-language-tag';
 
   static late AppPreferences _instance;
@@ -28,6 +29,23 @@ class AppPreferences {
   Future<bool> setRegisterStatus(bool value) => _sharedPreferences.setBool(_kRegisterStatusKey, value);
 
   Future<bool> removeRegisterStatus() => _sharedPreferences.remove(_kRegisterStatusKey);
+
+  ThemeMode getThemeMode() {
+    final themeModeString = _sharedPreferences.getString(_kThemeModeKey);
+    if (themeModeString != null) {
+      try {
+        return ThemeMode.values.byName(themeModeString);
+      } catch (_) {
+        return ThemeMode.system;
+      }
+    } else {
+      return ThemeMode.system;
+    }
+  }
+
+  Future<bool> setThemeMode(ThemeMode value) => _sharedPreferences.setString(_kThemeModeKey, value.name);
+
+  Future<bool> removeThemeMode() => _sharedPreferences.remove(_kThemeModeKey);
 
   Locale getLocale() {
     final localeLanguageTag = _sharedPreferences.getString(_kLocaleLanguageTagKey);

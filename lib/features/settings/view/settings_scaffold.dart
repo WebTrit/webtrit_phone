@@ -143,11 +143,23 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
             },
           ),
           const ListTileSeparator(),
-          SwitchListTile(
-            title: Text(context.l10n.settings_ListViewTileTitle_darkMode),
-            value: false,
-            onChanged: null, // TODO: implement Dark Theme
-            secondary: const Icon(Icons.nights_stay_outlined),
+          ListTile(
+            leading: const Icon(Icons.nights_stay_outlined),
+            title: Text(context.l10n.settings_ListViewTileTitle_themeMode),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                BlocBuilder<AppBloc, AppState>(
+                  builder: (context, state) {
+                    return Text(state.themeMode.l10n(context));
+                  },
+                ),
+                const Icon(Icons.navigate_next),
+              ],
+            ),
+            onTap: () {
+              context.goNamed(MainRoute.settingsThemeMode);
+            },
           ),
           GroupTitleListTile(
             titleData: context.l10n.settings_ListViewTileTitle_toolbox,

@@ -9,6 +9,7 @@ class AppState with _$AppState {
     String? token,
     String? webRegistrationInitialUrl,
     required ThemeSettings themeSettings,
+    required ThemeMode themeMode,
     required Locale locale,
   }) = _AppState;
 

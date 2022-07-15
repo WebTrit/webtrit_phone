@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'package:flutter/material.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
@@ -24,11 +24,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           token: secureStorage.readToken(),
           webRegistrationInitialUrl: secureStorage.readWebRegistrationInitialUrl(),
           themeSettings: portaoneThemeSettings,
+          themeMode: appPreferences.getThemeMode(),
           locale: appPreferences.getLocale(),
         )) {
     on<AppLogined>(_onLogined, transformer: sequential());
     on<AppLogouted>(_onLogouted, transformer: sequential());
     on<AppThemeSettingsChanged>(_onThemeSettingsChanged, transformer: droppable());
+    on<AppThemeModeChanged>(_onThemeModeChanged, transformer: droppable());
     on<AppLocaleChanged>(_onLocaleChanged, transformer: droppable());
   }
 
@@ -60,6 +62,16 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   void _onThemeSettingsChanged(AppThemeSettingsChanged event, Emitter<AppState> emit) {
     emit(state.copyWith(themeSettings: event.value));
+  }
+
+  void _onThemeModeChanged(AppThemeModeChanged event, Emitter<AppState> emit) async {
+    final themeMode = event.value;
+    if (themeMode == ThemeMode.system) {
+      await appPreferences.removeLocale();
+    } else {
+      await appPreferences.setThemeMode(themeMode);
+    }
+    emit(state.copyWith(themeMode: themeMode));
   }
 
   void _onLocaleChanged(AppLocaleChanged event, Emitter<AppState> emit) async {

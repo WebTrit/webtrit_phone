@@ -271,10 +271,6 @@ class ThemeProvider extends InheritedWidget {
     return null;
   }
 
-  ThemeMode themeMode() {
-    return settings.themeMode;
-  }
-
   static ThemeProvider of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<ThemeProvider>()!;
   }
