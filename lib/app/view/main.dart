@@ -218,11 +218,6 @@ class _MainState extends State<Main> {
             ),
             routes: [
               GoRoute(
-                name: MainRoute.settingsNetwork,
-                path: 'network',
-                builder: (context, state) => const NetworkScreen(),
-              ),
-              GoRoute(
                 name: MainRoute.settingsAbout,
                 path: 'about',
                 builder: (context, state) => const AboutScreen(),
@@ -236,6 +231,11 @@ class _MainState extends State<Main> {
                 name: MainRoute.settingsLanguage,
                 path: 'language',
                 builder: (context, state) => const LanguageScreen(),
+              ),
+              GoRoute(
+                name: MainRoute.settingsNetwork,
+                path: 'network',
+                builder: (context, state) => const NetworkScreen(),
               ),
               GoRoute(
                 name: MainRoute.settingsTermsConditions,
