@@ -56,7 +56,8 @@ class _AppState extends State<App> {
           darkDynamic: null,
           child: BlocBuilder<AppBloc, AppState>(
             buildWhen: (previous, current) =>
-                previous.effectiveLocale != current.effectiveLocale || previous.themeMode != current.themeMode,
+                previous.effectiveLocale != current.effectiveLocale ||
+                previous.effectiveThemeMode != current.effectiveThemeMode,
             builder: (context, state) {
               final themeProvider = ThemeProvider.of(context);
               return MaterialApp.router(
@@ -65,7 +66,7 @@ class _AppState extends State<App> {
                 supportedLocales: AppLocalizations.supportedLocales,
                 restorationScopeId: 'App',
                 title: EnvironmentConfig.APP_NAME,
-                themeMode: state.themeMode,
+                themeMode: state.effectiveThemeMode,
                 theme: themeProvider.light(),
                 darkTheme: themeProvider.dark(),
                 routeInformationProvider: _router.routeInformationProvider,

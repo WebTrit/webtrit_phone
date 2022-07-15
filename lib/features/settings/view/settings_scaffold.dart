@@ -151,7 +151,7 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
               children: [
                 BlocBuilder<AppBloc, AppState>(
                   builder: (context, state) {
-                    return Text(state.themeMode.l10n(context));
+                    return Text(state.effectiveThemeMode.l10n(context));
                   },
                 ),
                 const Icon(Icons.navigate_next),

@@ -27,8 +27,10 @@ class ThemeModeScreen extends StatelessWidget {
               final themeMode = themeModes[index];
               return RadioListTile<ThemeMode>(
                 value: themeMode,
-                groupValue: state.themeMode,
-                onChanged: (value) => context.read<AppBloc>().add(AppThemeModeChanged(value!)),
+                groupValue: state.effectiveThemeMode,
+                onChanged: !state.isThemeModeSupported
+                    ? null
+                    : (value) => context.read<AppBloc>().add(AppThemeModeChanged(value!)),
                 title: Text(themeMode.l10n(context)),
               );
             },

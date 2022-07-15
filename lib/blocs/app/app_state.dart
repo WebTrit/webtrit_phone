@@ -13,5 +13,9 @@ class AppState with _$AppState {
     required Locale locale,
   }) = _AppState;
 
+  bool get isThemeModeSupported => themeSettings.darkColorSchemeOverride != null;
+
+  ThemeMode get effectiveThemeMode => isThemeModeSupported ? themeMode : ThemeMode.light;
+
   Locale? get effectiveLocale => locale == LocaleExtension.defaultNull ? null : locale;
 }
