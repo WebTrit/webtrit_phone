@@ -129,11 +129,50 @@ abstract class _AppThemeSettingsChanged implements AppThemeSettingsChanged {
 }
 
 /// @nodoc
+mixin _$AppLocaleChanged {
+  Locale get value => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+
+class _$_AppLocaleChanged implements _AppLocaleChanged {
+  const _$_AppLocaleChanged(this.value);
+
+  @override
+  final Locale value;
+
+  @override
+  String toString() {
+    return 'AppLocaleChanged(value: $value)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_AppLocaleChanged &&
+            const DeepCollectionEquality().equals(other.value, value));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(value));
+}
+
+abstract class _AppLocaleChanged implements AppLocaleChanged {
+  const factory _AppLocaleChanged(final Locale value) = _$_AppLocaleChanged;
+
+  @override
+  Locale get value;
+}
+
+/// @nodoc
 mixin _$AppState {
   String? get coreUrl => throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
   String? get webRegistrationInitialUrl => throw _privateConstructorUsedError;
   ThemeSettings get themeSettings => throw _privateConstructorUsedError;
+  Locale get locale => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AppStateCopyWith<AppState> get copyWith =>
@@ -148,7 +187,8 @@ abstract class $AppStateCopyWith<$Res> {
       {String? coreUrl,
       String? token,
       String? webRegistrationInitialUrl,
-      ThemeSettings themeSettings});
+      ThemeSettings themeSettings,
+      Locale locale});
 }
 
 /// @nodoc
@@ -165,6 +205,7 @@ class _$AppStateCopyWithImpl<$Res> implements $AppStateCopyWith<$Res> {
     Object? token = freezed,
     Object? webRegistrationInitialUrl = freezed,
     Object? themeSettings = freezed,
+    Object? locale = freezed,
   }) {
     return _then(_value.copyWith(
       coreUrl: coreUrl == freezed
@@ -183,6 +224,10 @@ class _$AppStateCopyWithImpl<$Res> implements $AppStateCopyWith<$Res> {
           ? _value.themeSettings
           : themeSettings // ignore: cast_nullable_to_non_nullable
               as ThemeSettings,
+      locale: locale == freezed
+          ? _value.locale
+          : locale // ignore: cast_nullable_to_non_nullable
+              as Locale,
     ));
   }
 }
@@ -197,7 +242,8 @@ abstract class _$$_AppStateCopyWith<$Res> implements $AppStateCopyWith<$Res> {
       {String? coreUrl,
       String? token,
       String? webRegistrationInitialUrl,
-      ThemeSettings themeSettings});
+      ThemeSettings themeSettings,
+      Locale locale});
 }
 
 /// @nodoc
@@ -216,6 +262,7 @@ class __$$_AppStateCopyWithImpl<$Res> extends _$AppStateCopyWithImpl<$Res>
     Object? token = freezed,
     Object? webRegistrationInitialUrl = freezed,
     Object? themeSettings = freezed,
+    Object? locale = freezed,
   }) {
     return _then(_$_AppState(
       coreUrl: coreUrl == freezed
@@ -234,18 +281,24 @@ class __$$_AppStateCopyWithImpl<$Res> extends _$AppStateCopyWithImpl<$Res>
           ? _value.themeSettings
           : themeSettings // ignore: cast_nullable_to_non_nullable
               as ThemeSettings,
+      locale: locale == freezed
+          ? _value.locale
+          : locale // ignore: cast_nullable_to_non_nullable
+              as Locale,
     ));
   }
 }
 
 /// @nodoc
 
-class _$_AppState implements _AppState {
+class _$_AppState extends _AppState {
   const _$_AppState(
       {this.coreUrl,
       this.token,
       this.webRegistrationInitialUrl,
-      required this.themeSettings});
+      required this.themeSettings,
+      required this.locale})
+      : super._();
 
   @override
   final String? coreUrl;
@@ -255,10 +308,12 @@ class _$_AppState implements _AppState {
   final String? webRegistrationInitialUrl;
   @override
   final ThemeSettings themeSettings;
+  @override
+  final Locale locale;
 
   @override
   String toString() {
-    return 'AppState(coreUrl: $coreUrl, token: $token, webRegistrationInitialUrl: $webRegistrationInitialUrl, themeSettings: $themeSettings)';
+    return 'AppState(coreUrl: $coreUrl, token: $token, webRegistrationInitialUrl: $webRegistrationInitialUrl, themeSettings: $themeSettings, locale: $locale)';
   }
 
   @override
@@ -271,7 +326,8 @@ class _$_AppState implements _AppState {
             const DeepCollectionEquality().equals(
                 other.webRegistrationInitialUrl, webRegistrationInitialUrl) &&
             const DeepCollectionEquality()
-                .equals(other.themeSettings, themeSettings));
+                .equals(other.themeSettings, themeSettings) &&
+            const DeepCollectionEquality().equals(other.locale, locale));
   }
 
   @override
@@ -280,7 +336,8 @@ class _$_AppState implements _AppState {
       const DeepCollectionEquality().hash(coreUrl),
       const DeepCollectionEquality().hash(token),
       const DeepCollectionEquality().hash(webRegistrationInitialUrl),
-      const DeepCollectionEquality().hash(themeSettings));
+      const DeepCollectionEquality().hash(themeSettings),
+      const DeepCollectionEquality().hash(locale));
 
   @JsonKey(ignore: true)
   @override
@@ -288,12 +345,14 @@ class _$_AppState implements _AppState {
       __$$_AppStateCopyWithImpl<_$_AppState>(this, _$identity);
 }
 
-abstract class _AppState implements AppState {
+abstract class _AppState extends AppState {
   const factory _AppState(
       {final String? coreUrl,
       final String? token,
       final String? webRegistrationInitialUrl,
-      required final ThemeSettings themeSettings}) = _$_AppState;
+      required final ThemeSettings themeSettings,
+      required final Locale locale}) = _$_AppState;
+  const _AppState._() : super._();
 
   @override
   String? get coreUrl;
@@ -303,6 +362,8 @@ abstract class _AppState implements AppState {
   String? get webRegistrationInitialUrl;
   @override
   ThemeSettings get themeSettings;
+  @override
+  Locale get locale;
   @override
   @JsonKey(ignore: true)
   _$$_AppStateCopyWith<_$_AppState> get copyWith =>

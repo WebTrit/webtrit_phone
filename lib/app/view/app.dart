@@ -33,6 +33,7 @@ class _AppState extends State<App> {
   void initState() {
     super.initState();
     appBloc = AppBloc(
+      appPreferences: AppPreferences(),
       secureStorage: SecureStorage(),
       appDatabase: widget.appDatabase,
     );
@@ -53,10 +54,12 @@ class _AppState extends State<App> {
           settings: state.themeSettings,
           lightDynamic: null,
           darkDynamic: null,
-          child: Builder(
-            builder: (context) {
+          child: BlocBuilder<AppBloc, AppState>(
+            buildWhen: (previous, current) => previous.effectiveLocale != current.effectiveLocale,
+            builder: (context, state) {
               final themeProvider = ThemeProvider.of(context);
               return MaterialApp.router(
+                locale: state.effectiveLocale,
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
                 restorationScopeId: 'App',

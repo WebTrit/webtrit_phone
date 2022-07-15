@@ -21,3 +21,8 @@ class AppLogouted with _$AppLogouted implements AppEvent {
 class AppThemeSettingsChanged with _$AppThemeSettingsChanged implements AppEvent {
   const factory AppThemeSettingsChanged(ThemeSettings value) = _AppThemeSettingsChanged;
 }
+
+@Freezed(copyWith: false)
+class AppLocaleChanged with _$AppLocaleChanged implements AppEvent {
+  const factory AppLocaleChanged(Locale value) = _AppLocaleChanged;
+}

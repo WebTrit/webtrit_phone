@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/app/routes.dart';
+import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -108,9 +109,13 @@ class SettingsScaffoldState extends State<SettingsScaffold> {
             title: Text(context.l10n.settings_ListViewTileTitle_language),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
-              children: const <Widget>[
-                Text('English'), // TODO implement language selection
-                Icon(Icons.navigate_next),
+              children: [
+                BlocBuilder<AppBloc, AppState>(
+                  builder: (context, state) {
+                    return Text(state.locale.l10n(context));
+                  },
+                ),
+                const Icon(Icons.navigate_next),
               ],
             ),
             onTap: () {

@@ -1,6 +1,13 @@
 {
   "@@locale": "en",
 
+  "locale_default": "Default",
+  "@locale_default": {
+  },
+  "locale_en": "English",
+  "@locale_en": {
+  },
+
   "alertDialogActions_no": "No",
   "@alertDialogActions_no": {
   },
