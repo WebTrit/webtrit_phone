@@ -41,6 +41,16 @@ class _CallSignalingEvent with _$_CallSignalingEvent implements CallEvent {
     JsepValue? jsep,
   }) = _CallSignalingEventIncoming;
 
+  const factory _CallSignalingEvent.ringing({
+    required CallIdValue callId,
+  }) = _CallSignalingEventRinging;
+
+  const factory _CallSignalingEvent.progress({
+    required CallIdValue callId,
+    required String callee,
+    JsepValue? jsep,
+  }) = _CallSignalingEventProgress;
+
   const factory _CallSignalingEvent.answered({
     required CallIdValue callId,
     required String callee,

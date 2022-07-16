@@ -364,6 +364,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) {
     return event.map(
       incoming: (event) => __onCallSignalingEventIncoming(event, emit),
+      ringing: (event) => __onCallSignalingEventRinging(event, emit),
+      progress: (event) => __onCallSignalingEventProgress(event, emit),
       answered: (event) => __onCallSignalingEventAnswered(event, emit),
       hangup: (event) => __onCallSignalingEventHangup(event, emit),
     );
@@ -445,13 +447,35 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }));
   }
 
+  // no early media - play ringtone
+  Future<void> __onCallSignalingEventRinging(
+    _CallSignalingEventRinging event,
+    Emitter<CallState> emit,
+  ) async {
+    await _ringtoneOutgoingPlay();
+  }
+
+  // early media - set specified session description
+  Future<void> __onCallSignalingEventProgress(
+    _CallSignalingEventProgress event,
+    Emitter<CallState> emit,
+  ) async {
+    final jsep = event.jsep;
+    if (jsep != null) {
+      await state.performOnActiveCall(event.callId.uuid, (activeCall) {
+        final remoteDescription = jsep.toDescription();
+        return activeCall.peerConnection!.setRemoteDescription(remoteDescription);
+      });
+    } else {
+      _logger.warning('__onCallSignalingEventProgress: jsep must not be null');
+    }
+  }
+
   Future<void> __onCallSignalingEventAnswered(
     _CallSignalingEventAnswered event,
     Emitter<CallState> emit,
   ) async {
     await _ringtoneStop();
-
-    final jsep = event.jsep!;
 
     await callkeep.reportConnectedOutgoingCall(event.callId.uuid);
 
@@ -459,10 +483,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return activeCall.copyWith(acceptedTime: DateTime.now());
     }));
 
-    await state.performOnActiveCall(event.callId.uuid, (activeCall) {
-      final remoteDescription = jsep.toDescription();
-      return activeCall.peerConnection!.setRemoteDescription(remoteDescription);
-    });
+    final jsep = event.jsep;
+    if (jsep != null) {
+      await state.performOnActiveCall(event.callId.uuid, (activeCall) {
+        final remoteDescription = jsep.toDescription();
+        return activeCall.peerConnection!.setRemoteDescription(remoteDescription);
+      });
+    }
   }
 
   Future<void> __onCallSignalingEventHangup(
@@ -697,8 +724,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }));
 
     await callkeep.reportConnectingOutgoingCall(event.uuid);
-
-    await _ringtoneOutgoingPlay();
   }
 
   Future<void> __onCallPerformEventAnswered(
@@ -920,13 +945,23 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         callee: event.callee,
         caller: event.caller,
         callerDisplayName: event.callerDisplayName,
-        jsep: JsepValue.fromMap(event.jsep),
+        jsep: JsepValue.fromOptional(event.jsep),
+      ));
+    } else if (event is RingingEvent) {
+      add(_CallSignalingEvent.ringing(
+        callId: CallIdValue(event.callId),
+      ));
+    } else if (event is ProgressEvent) {
+      add(_CallSignalingEvent.progress(
+        callId: CallIdValue(event.callId),
+        callee: event.callee,
+        jsep: JsepValue.fromOptional(event.jsep),
       ));
     } else if (event is AnsweredEvent) {
       add(_CallSignalingEvent.answered(
         callId: CallIdValue(event.callId),
         callee: event.callee,
-        jsep: JsepValue.fromMap(event.jsep),
+        jsep: JsepValue.fromOptional(event.jsep),
       ));
     } else if (event is HangupEvent) {
       add(_CallSignalingEvent.hangup(

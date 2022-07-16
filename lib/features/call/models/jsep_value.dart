@@ -1,7 +1,7 @@
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 class JsepValue {
-  static JsepValue? fromMap(Map<String, dynamic>? jsep) {
+  static JsepValue? fromOptional(Map<String, dynamic>? jsep) {
     return jsep == null ? null : JsepValue(jsep);
   }
 
