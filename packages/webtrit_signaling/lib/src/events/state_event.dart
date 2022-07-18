@@ -165,12 +165,10 @@ class StateEvent extends Event {
         return ProceedingEvent.fromJson(eventJson);
       case ProgressEvent.event:
         return ProgressEvent.fromJson(eventJson);
-      case AnsweredEvent.event:
-        return AnsweredEvent.fromJson(eventJson);
-      case AcceptingEvent.event:
-        return AcceptingEvent.fromJson(eventJson);
       case AcceptedEvent.event:
         return AcceptedEvent.fromJson(eventJson);
+      case AcceptingEvent.event:
+        return AcceptingEvent.fromJson(eventJson);
       case IncomingCallEvent.event:
         return IncomingCallEvent.fromJson(eventJson);
       case UpdatingCallEvent.event:

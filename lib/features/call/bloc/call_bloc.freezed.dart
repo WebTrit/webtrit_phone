@@ -484,8 +484,8 @@ mixin _$_CallSignalingEvent {
             CallIdValue callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            CallIdValue callId, String callee, JsepValue? jsep)
-        answered,
+            CallIdValue callId, String? callee, JsepValue? jsep)
+        accepted,
     required TResult Function(CallIdValue callId, int code, String reason)
         hangup,
   }) =>
@@ -498,8 +498,8 @@ mixin _$_CallSignalingEvent {
     TResult Function(CallIdValue callId)? ringing,
     TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
-        answered,
+    TResult Function(CallIdValue callId, String? callee, JsepValue? jsep)?
+        accepted,
     TResult Function(CallIdValue callId, int code, String reason)? hangup,
   }) =>
       throw _privateConstructorUsedError;
@@ -511,8 +511,8 @@ mixin _$_CallSignalingEvent {
     TResult Function(CallIdValue callId)? ringing,
     TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
-        answered,
+    TResult Function(CallIdValue callId, String? callee, JsepValue? jsep)?
+        accepted,
     TResult Function(CallIdValue callId, int code, String reason)? hangup,
     required TResult orElse(),
   }) =>
@@ -522,7 +522,7 @@ mixin _$_CallSignalingEvent {
     required TResult Function(_CallSignalingEventIncoming value) incoming,
     required TResult Function(_CallSignalingEventRinging value) ringing,
     required TResult Function(_CallSignalingEventProgress value) progress,
-    required TResult Function(_CallSignalingEventAnswered value) answered,
+    required TResult Function(_CallSignalingEventAccepted value) accepted,
     required TResult Function(_CallSignalingEventHangup value) hangup,
   }) =>
       throw _privateConstructorUsedError;
@@ -531,7 +531,7 @@ mixin _$_CallSignalingEvent {
     TResult Function(_CallSignalingEventIncoming value)? incoming,
     TResult Function(_CallSignalingEventRinging value)? ringing,
     TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAnswered value)? answered,
+    TResult Function(_CallSignalingEventAccepted value)? accepted,
     TResult Function(_CallSignalingEventHangup value)? hangup,
   }) =>
       throw _privateConstructorUsedError;
@@ -540,7 +540,7 @@ mixin _$_CallSignalingEvent {
     TResult Function(_CallSignalingEventIncoming value)? incoming,
     TResult Function(_CallSignalingEventRinging value)? ringing,
     TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAnswered value)? answered,
+    TResult Function(_CallSignalingEventAccepted value)? accepted,
     TResult Function(_CallSignalingEventHangup value)? hangup,
     required TResult orElse(),
   }) =>
@@ -606,8 +606,8 @@ class _$_CallSignalingEventIncoming implements _CallSignalingEventIncoming {
             CallIdValue callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            CallIdValue callId, String callee, JsepValue? jsep)
-        answered,
+            CallIdValue callId, String? callee, JsepValue? jsep)
+        accepted,
     required TResult Function(CallIdValue callId, int code, String reason)
         hangup,
   }) {
@@ -623,8 +623,8 @@ class _$_CallSignalingEventIncoming implements _CallSignalingEventIncoming {
     TResult Function(CallIdValue callId)? ringing,
     TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
-        answered,
+    TResult Function(CallIdValue callId, String? callee, JsepValue? jsep)?
+        accepted,
     TResult Function(CallIdValue callId, int code, String reason)? hangup,
   }) {
     return incoming?.call(callId, callee, caller, callerDisplayName, jsep);
@@ -639,8 +639,8 @@ class _$_CallSignalingEventIncoming implements _CallSignalingEventIncoming {
     TResult Function(CallIdValue callId)? ringing,
     TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
-        answered,
+    TResult Function(CallIdValue callId, String? callee, JsepValue? jsep)?
+        accepted,
     TResult Function(CallIdValue callId, int code, String reason)? hangup,
     required TResult orElse(),
   }) {
@@ -656,7 +656,7 @@ class _$_CallSignalingEventIncoming implements _CallSignalingEventIncoming {
     required TResult Function(_CallSignalingEventIncoming value) incoming,
     required TResult Function(_CallSignalingEventRinging value) ringing,
     required TResult Function(_CallSignalingEventProgress value) progress,
-    required TResult Function(_CallSignalingEventAnswered value) answered,
+    required TResult Function(_CallSignalingEventAccepted value) accepted,
     required TResult Function(_CallSignalingEventHangup value) hangup,
   }) {
     return incoming(this);
@@ -668,7 +668,7 @@ class _$_CallSignalingEventIncoming implements _CallSignalingEventIncoming {
     TResult Function(_CallSignalingEventIncoming value)? incoming,
     TResult Function(_CallSignalingEventRinging value)? ringing,
     TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAnswered value)? answered,
+    TResult Function(_CallSignalingEventAccepted value)? accepted,
     TResult Function(_CallSignalingEventHangup value)? hangup,
   }) {
     return incoming?.call(this);
@@ -680,7 +680,7 @@ class _$_CallSignalingEventIncoming implements _CallSignalingEventIncoming {
     TResult Function(_CallSignalingEventIncoming value)? incoming,
     TResult Function(_CallSignalingEventRinging value)? ringing,
     TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAnswered value)? answered,
+    TResult Function(_CallSignalingEventAccepted value)? accepted,
     TResult Function(_CallSignalingEventHangup value)? hangup,
     required TResult orElse(),
   }) {
@@ -743,8 +743,8 @@ class _$_CallSignalingEventRinging implements _CallSignalingEventRinging {
             CallIdValue callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            CallIdValue callId, String callee, JsepValue? jsep)
-        answered,
+            CallIdValue callId, String? callee, JsepValue? jsep)
+        accepted,
     required TResult Function(CallIdValue callId, int code, String reason)
         hangup,
   }) {
@@ -760,8 +760,8 @@ class _$_CallSignalingEventRinging implements _CallSignalingEventRinging {
     TResult Function(CallIdValue callId)? ringing,
     TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
-        answered,
+    TResult Function(CallIdValue callId, String? callee, JsepValue? jsep)?
+        accepted,
     TResult Function(CallIdValue callId, int code, String reason)? hangup,
   }) {
     return ringing?.call(callId);
@@ -776,8 +776,8 @@ class _$_CallSignalingEventRinging implements _CallSignalingEventRinging {
     TResult Function(CallIdValue callId)? ringing,
     TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
-        answered,
+    TResult Function(CallIdValue callId, String? callee, JsepValue? jsep)?
+        accepted,
     TResult Function(CallIdValue callId, int code, String reason)? hangup,
     required TResult orElse(),
   }) {
@@ -793,7 +793,7 @@ class _$_CallSignalingEventRinging implements _CallSignalingEventRinging {
     required TResult Function(_CallSignalingEventIncoming value) incoming,
     required TResult Function(_CallSignalingEventRinging value) ringing,
     required TResult Function(_CallSignalingEventProgress value) progress,
-    required TResult Function(_CallSignalingEventAnswered value) answered,
+    required TResult Function(_CallSignalingEventAccepted value) accepted,
     required TResult Function(_CallSignalingEventHangup value) hangup,
   }) {
     return ringing(this);
@@ -805,7 +805,7 @@ class _$_CallSignalingEventRinging implements _CallSignalingEventRinging {
     TResult Function(_CallSignalingEventIncoming value)? incoming,
     TResult Function(_CallSignalingEventRinging value)? ringing,
     TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAnswered value)? answered,
+    TResult Function(_CallSignalingEventAccepted value)? accepted,
     TResult Function(_CallSignalingEventHangup value)? hangup,
   }) {
     return ringing?.call(this);
@@ -817,7 +817,7 @@ class _$_CallSignalingEventRinging implements _CallSignalingEventRinging {
     TResult Function(_CallSignalingEventIncoming value)? incoming,
     TResult Function(_CallSignalingEventRinging value)? ringing,
     TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAnswered value)? answered,
+    TResult Function(_CallSignalingEventAccepted value)? accepted,
     TResult Function(_CallSignalingEventHangup value)? hangup,
     required TResult orElse(),
   }) {
@@ -882,8 +882,8 @@ class _$_CallSignalingEventProgress implements _CallSignalingEventProgress {
             CallIdValue callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            CallIdValue callId, String callee, JsepValue? jsep)
-        answered,
+            CallIdValue callId, String? callee, JsepValue? jsep)
+        accepted,
     required TResult Function(CallIdValue callId, int code, String reason)
         hangup,
   }) {
@@ -899,8 +899,8 @@ class _$_CallSignalingEventProgress implements _CallSignalingEventProgress {
     TResult Function(CallIdValue callId)? ringing,
     TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
-        answered,
+    TResult Function(CallIdValue callId, String? callee, JsepValue? jsep)?
+        accepted,
     TResult Function(CallIdValue callId, int code, String reason)? hangup,
   }) {
     return progress?.call(callId, callee, jsep);
@@ -915,8 +915,8 @@ class _$_CallSignalingEventProgress implements _CallSignalingEventProgress {
     TResult Function(CallIdValue callId)? ringing,
     TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
-        answered,
+    TResult Function(CallIdValue callId, String? callee, JsepValue? jsep)?
+        accepted,
     TResult Function(CallIdValue callId, int code, String reason)? hangup,
     required TResult orElse(),
   }) {
@@ -932,7 +932,7 @@ class _$_CallSignalingEventProgress implements _CallSignalingEventProgress {
     required TResult Function(_CallSignalingEventIncoming value) incoming,
     required TResult Function(_CallSignalingEventRinging value) ringing,
     required TResult Function(_CallSignalingEventProgress value) progress,
-    required TResult Function(_CallSignalingEventAnswered value) answered,
+    required TResult Function(_CallSignalingEventAccepted value) accepted,
     required TResult Function(_CallSignalingEventHangup value) hangup,
   }) {
     return progress(this);
@@ -944,7 +944,7 @@ class _$_CallSignalingEventProgress implements _CallSignalingEventProgress {
     TResult Function(_CallSignalingEventIncoming value)? incoming,
     TResult Function(_CallSignalingEventRinging value)? ringing,
     TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAnswered value)? answered,
+    TResult Function(_CallSignalingEventAccepted value)? accepted,
     TResult Function(_CallSignalingEventHangup value)? hangup,
   }) {
     return progress?.call(this);
@@ -956,7 +956,7 @@ class _$_CallSignalingEventProgress implements _CallSignalingEventProgress {
     TResult Function(_CallSignalingEventIncoming value)? incoming,
     TResult Function(_CallSignalingEventRinging value)? ringing,
     TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAnswered value)? answered,
+    TResult Function(_CallSignalingEventAccepted value)? accepted,
     TResult Function(_CallSignalingEventHangup value)? hangup,
     required TResult orElse(),
   }) {
@@ -981,27 +981,27 @@ abstract class _CallSignalingEventProgress implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$_CallSignalingEventAnswered implements _CallSignalingEventAnswered {
-  const _$_CallSignalingEventAnswered(
-      {required this.callId, required this.callee, this.jsep});
+class _$_CallSignalingEventAccepted implements _CallSignalingEventAccepted {
+  const _$_CallSignalingEventAccepted(
+      {required this.callId, this.callee, this.jsep});
 
   @override
   final CallIdValue callId;
   @override
-  final String callee;
+  final String? callee;
   @override
   final JsepValue? jsep;
 
   @override
   String toString() {
-    return '_CallSignalingEvent.answered(callId: $callId, callee: $callee, jsep: $jsep)';
+    return '_CallSignalingEvent.accepted(callId: $callId, callee: $callee, jsep: $jsep)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallSignalingEventAnswered &&
+            other is _$_CallSignalingEventAccepted &&
             const DeepCollectionEquality().equals(other.callId, callId) &&
             const DeepCollectionEquality().equals(other.callee, callee) &&
             const DeepCollectionEquality().equals(other.jsep, jsep));
@@ -1025,12 +1025,12 @@ class _$_CallSignalingEventAnswered implements _CallSignalingEventAnswered {
             CallIdValue callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            CallIdValue callId, String callee, JsepValue? jsep)
-        answered,
+            CallIdValue callId, String? callee, JsepValue? jsep)
+        accepted,
     required TResult Function(CallIdValue callId, int code, String reason)
         hangup,
   }) {
-    return answered(callId, callee, jsep);
+    return accepted(callId, callee, jsep);
   }
 
   @override
@@ -1042,11 +1042,11 @@ class _$_CallSignalingEventAnswered implements _CallSignalingEventAnswered {
     TResult Function(CallIdValue callId)? ringing,
     TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
-        answered,
+    TResult Function(CallIdValue callId, String? callee, JsepValue? jsep)?
+        accepted,
     TResult Function(CallIdValue callId, int code, String reason)? hangup,
   }) {
-    return answered?.call(callId, callee, jsep);
+    return accepted?.call(callId, callee, jsep);
   }
 
   @override
@@ -1058,13 +1058,13 @@ class _$_CallSignalingEventAnswered implements _CallSignalingEventAnswered {
     TResult Function(CallIdValue callId)? ringing,
     TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
-        answered,
+    TResult Function(CallIdValue callId, String? callee, JsepValue? jsep)?
+        accepted,
     TResult Function(CallIdValue callId, int code, String reason)? hangup,
     required TResult orElse(),
   }) {
-    if (answered != null) {
-      return answered(callId, callee, jsep);
+    if (accepted != null) {
+      return accepted(callId, callee, jsep);
     }
     return orElse();
   }
@@ -1075,10 +1075,10 @@ class _$_CallSignalingEventAnswered implements _CallSignalingEventAnswered {
     required TResult Function(_CallSignalingEventIncoming value) incoming,
     required TResult Function(_CallSignalingEventRinging value) ringing,
     required TResult Function(_CallSignalingEventProgress value) progress,
-    required TResult Function(_CallSignalingEventAnswered value) answered,
+    required TResult Function(_CallSignalingEventAccepted value) accepted,
     required TResult Function(_CallSignalingEventHangup value) hangup,
   }) {
-    return answered(this);
+    return accepted(this);
   }
 
   @override
@@ -1087,10 +1087,10 @@ class _$_CallSignalingEventAnswered implements _CallSignalingEventAnswered {
     TResult Function(_CallSignalingEventIncoming value)? incoming,
     TResult Function(_CallSignalingEventRinging value)? ringing,
     TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAnswered value)? answered,
+    TResult Function(_CallSignalingEventAccepted value)? accepted,
     TResult Function(_CallSignalingEventHangup value)? hangup,
   }) {
-    return answered?.call(this);
+    return accepted?.call(this);
   }
 
   @override
@@ -1099,26 +1099,26 @@ class _$_CallSignalingEventAnswered implements _CallSignalingEventAnswered {
     TResult Function(_CallSignalingEventIncoming value)? incoming,
     TResult Function(_CallSignalingEventRinging value)? ringing,
     TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAnswered value)? answered,
+    TResult Function(_CallSignalingEventAccepted value)? accepted,
     TResult Function(_CallSignalingEventHangup value)? hangup,
     required TResult orElse(),
   }) {
-    if (answered != null) {
-      return answered(this);
+    if (accepted != null) {
+      return accepted(this);
     }
     return orElse();
   }
 }
 
-abstract class _CallSignalingEventAnswered implements _CallSignalingEvent {
-  const factory _CallSignalingEventAnswered(
+abstract class _CallSignalingEventAccepted implements _CallSignalingEvent {
+  const factory _CallSignalingEventAccepted(
       {required final CallIdValue callId,
-      required final String callee,
-      final JsepValue? jsep}) = _$_CallSignalingEventAnswered;
+      final String? callee,
+      final JsepValue? jsep}) = _$_CallSignalingEventAccepted;
 
   @override
   CallIdValue get callId;
-  String get callee;
+  String? get callee;
   JsepValue? get jsep;
 }
 
@@ -1168,8 +1168,8 @@ class _$_CallSignalingEventHangup implements _CallSignalingEventHangup {
             CallIdValue callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            CallIdValue callId, String callee, JsepValue? jsep)
-        answered,
+            CallIdValue callId, String? callee, JsepValue? jsep)
+        accepted,
     required TResult Function(CallIdValue callId, int code, String reason)
         hangup,
   }) {
@@ -1185,8 +1185,8 @@ class _$_CallSignalingEventHangup implements _CallSignalingEventHangup {
     TResult Function(CallIdValue callId)? ringing,
     TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
-        answered,
+    TResult Function(CallIdValue callId, String? callee, JsepValue? jsep)?
+        accepted,
     TResult Function(CallIdValue callId, int code, String reason)? hangup,
   }) {
     return hangup?.call(callId, code, reason);
@@ -1201,8 +1201,8 @@ class _$_CallSignalingEventHangup implements _CallSignalingEventHangup {
     TResult Function(CallIdValue callId)? ringing,
     TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
-        answered,
+    TResult Function(CallIdValue callId, String? callee, JsepValue? jsep)?
+        accepted,
     TResult Function(CallIdValue callId, int code, String reason)? hangup,
     required TResult orElse(),
   }) {
@@ -1218,7 +1218,7 @@ class _$_CallSignalingEventHangup implements _CallSignalingEventHangup {
     required TResult Function(_CallSignalingEventIncoming value) incoming,
     required TResult Function(_CallSignalingEventRinging value) ringing,
     required TResult Function(_CallSignalingEventProgress value) progress,
-    required TResult Function(_CallSignalingEventAnswered value) answered,
+    required TResult Function(_CallSignalingEventAccepted value) accepted,
     required TResult Function(_CallSignalingEventHangup value) hangup,
   }) {
     return hangup(this);
@@ -1230,7 +1230,7 @@ class _$_CallSignalingEventHangup implements _CallSignalingEventHangup {
     TResult Function(_CallSignalingEventIncoming value)? incoming,
     TResult Function(_CallSignalingEventRinging value)? ringing,
     TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAnswered value)? answered,
+    TResult Function(_CallSignalingEventAccepted value)? accepted,
     TResult Function(_CallSignalingEventHangup value)? hangup,
   }) {
     return hangup?.call(this);
@@ -1242,7 +1242,7 @@ class _$_CallSignalingEventHangup implements _CallSignalingEventHangup {
     TResult Function(_CallSignalingEventIncoming value)? incoming,
     TResult Function(_CallSignalingEventRinging value)? ringing,
     TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAnswered value)? answered,
+    TResult Function(_CallSignalingEventAccepted value)? accepted,
     TResult Function(_CallSignalingEventHangup value)? hangup,
     required TResult orElse(),
   }) {

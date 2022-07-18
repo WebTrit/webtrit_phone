@@ -51,11 +51,11 @@ class _CallSignalingEvent with _$_CallSignalingEvent implements CallEvent {
     JsepValue? jsep,
   }) = _CallSignalingEventProgress;
 
-  const factory _CallSignalingEvent.answered({
+  const factory _CallSignalingEvent.accepted({
     required CallIdValue callId,
-    required String callee,
+    String? callee,
     JsepValue? jsep,
-  }) = _CallSignalingEventAnswered;
+  }) = _CallSignalingEventAccepted;
 
   const factory _CallSignalingEvent.hangup({
     required CallIdValue callId,

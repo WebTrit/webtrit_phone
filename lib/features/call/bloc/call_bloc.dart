@@ -366,7 +366,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       incoming: (event) => __onCallSignalingEventIncoming(event, emit),
       ringing: (event) => __onCallSignalingEventRinging(event, emit),
       progress: (event) => __onCallSignalingEventProgress(event, emit),
-      answered: (event) => __onCallSignalingEventAnswered(event, emit),
+      accepted: (event) => __onCallSignalingEventAccepted(event, emit),
       hangup: (event) => __onCallSignalingEventHangup(event, emit),
     );
   }
@@ -473,8 +473,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
   }
 
-  Future<void> __onCallSignalingEventAnswered(
-    _CallSignalingEventAnswered event,
+  Future<void> __onCallSignalingEventAccepted(
+      _CallSignalingEventAccepted event,
     Emitter<CallState> emit,
   ) async {
     await _ringtoneStop();
@@ -961,8 +961,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         callee: event.callee,
         jsep: JsepValue.fromOptional(event.jsep),
       ));
-    } else if (event is AnsweredEvent) {
-      add(_CallSignalingEvent.answered(
+    } else if (event is AcceptedEvent) {
+      add(_CallSignalingEvent.accepted(
         callId: CallIdValue(event.callId),
         callee: event.callee,
         jsep: JsepValue.fromOptional(event.jsep),
