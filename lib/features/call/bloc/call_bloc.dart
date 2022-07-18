@@ -375,8 +375,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallSignalingEventIncoming event,
     Emitter<CallState> emit,
   ) async {
-    final jsep = event.jsep!; // TODO: implement correct processing of possible null jsep
-    final video = jsep.hasVideo;
+    final video = event.jsep?.hasVideo ?? false;
 
     final handle = CallkeepHandle.number(event.caller);
 
@@ -439,8 +438,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final peerConnection = await _createPeerConnection(event.callId.uuid);
     await peerConnection.addStream(localStream);
 
-    final remoteDescription = jsep.toDescription();
-    await peerConnection.setRemoteDescription(remoteDescription);
+    final jsep = event.jsep;
+    if (jsep != null) {
+      final remoteDescription = jsep.toDescription();
+      await peerConnection.setRemoteDescription(remoteDescription);
+    }
 
     emit(state.copyWithMappedActiveCall(event.callId.uuid, (activeCall) {
       return activeCall.copyWith(peerConnection: peerConnection);
@@ -741,7 +743,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     await state.performOnActiveCall(event.uuid, (activeCall) async {
       final peerConnection = activeCall.peerConnection!;
 
-      final localDescription = await peerConnection.createAnswer({});
+      final localDescription = peerConnection.signalingState == RTCSignalingState.RTCSignalingStateHaveRemoteOffer
+          ? await peerConnection.createAnswer({})
+          : await peerConnection.createOffer({});
       await _signalingClient?.execute(AcceptRequest(
         callId: activeCall.callId.toString(),
         jsep: localDescription.toMap(),
