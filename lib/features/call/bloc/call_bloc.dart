@@ -462,6 +462,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallSignalingEventProgress event,
     Emitter<CallState> emit,
   ) async {
+    await _ringtoneStop();
+
     final jsep = event.jsep;
     if (jsep != null) {
       await state.performOnActiveCall(event.callId.uuid, (activeCall) {
