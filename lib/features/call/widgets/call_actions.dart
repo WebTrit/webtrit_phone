@@ -66,7 +66,7 @@ class _CallActionsState extends State<CallActions> {
     late final double hangupDelimiterDimension;
     late final double horizontalPadding;
     if (isOrientationPortrait) {
-      actionsDelimiterDimension = dimension / 3;
+      actionsDelimiterDimension = dimension / 5;
       if (widget.video) {
         hangupDelimiterDimension = actionsDelimiterDimension;
       } else {
