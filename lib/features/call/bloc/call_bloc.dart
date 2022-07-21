@@ -803,9 +803,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     await state.performOnActiveCall(event.uuid, (activeCall) {
       if (event.onHold) {
-        return _signalingClient?.execute(HoldRequest(callId: activeCall.callId.toString()));
+        return _signalingClient?.execute(HoldRequest(
+          callId: activeCall.callId.toString(),
+          direction: HoldDirection.inactive,
+        ));
       } else {
-        return _signalingClient?.execute(UnholdRequest(callId: activeCall.callId.toString()));
+        return _signalingClient?.execute(UnholdRequest(
+          callId: activeCall.callId.toString(),
+        ));
       }
     });
 
