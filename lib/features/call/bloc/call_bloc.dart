@@ -157,7 +157,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     CallStarted event,
     Emitter<CallState> emit,
   ) async {
-    _connectivityChangedSubscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+    _connectivityChangedSubscription = Connectivity().onConnectivityChanged.listen((result) {
       _logger.finer('onConnectivityChanged: $result');
       // this check is necessary because of issue on iOS with doubling the same connectivity result
       if (state.currentConnectivityResult != result) {
