@@ -4,18 +4,20 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 class ContactsRepository {
-  ContactsRepository({required this.appDatabase});
+  ContactsRepository({
+    required AppDatabase appDatabase,
+  }) : _appDatabase = appDatabase;
 
-  final AppDatabase appDatabase;
+  final AppDatabase _appDatabase;
 
   Stream<List<Contact>> watchContacts(String search, [ContactSourceType? sourceType]) {
     final searchBits = search.split(' ').where((value) => value.isNotEmpty);
     if (searchBits.isEmpty) {
-      return appDatabase.contactsDao
+      return _appDatabase.contactsDao
           .watchAllNotEmptyContacts(sourceType)
           .map(((contactDatas) => contactDatas.map(_mapContactDataToContact).toList()));
     } else {
-      return appDatabase.contactsDao
+      return _appDatabase.contactsDao
           .watchAllLikeContacts(searchBits, sourceType)
           .map(((contactDatas) => contactDatas.map(_mapContactDataToContact).toList()));
     }
@@ -32,7 +34,7 @@ class ContactsRepository {
 
   Future<List<ContactPhone>> getContactPhones(Contact contact) {
     final contactId = contact.id;
-    return appDatabase.contactPhonesDao
+    return _appDatabase.contactPhonesDao
         .getContactPhonesExtByContactId(contactId)
         .then((contactPhoneDatas) => contactPhoneDatas
             .map((contactPhoneDataWithFavoriteData) => ContactPhone(
@@ -45,10 +47,10 @@ class ContactsRepository {
   }
 
   Future<int> addContactPhoneToFavorites(ContactPhone contactPhone) {
-    return appDatabase.favoritesDao.insertFavoriteByContactPhoneId(contactPhone.id);
+    return _appDatabase.favoritesDao.insertFavoriteByContactPhoneId(contactPhone.id);
   }
 
   Future<int> removeContactPhoneFromFavorites(ContactPhone contactPhone) {
-    return appDatabase.favoritesDao.deleteByContactPhoneId(contactPhone.id);
+    return _appDatabase.favoritesDao.deleteByContactPhoneId(contactPhone.id);
   }
 }

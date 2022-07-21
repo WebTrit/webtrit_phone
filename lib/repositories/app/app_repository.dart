@@ -4,19 +4,20 @@ import 'package:webtrit_api/webtrit_api.dart';
 
 class AppRepository {
   AppRepository({
-    required this.webtritApiClient,
-    required this.token,
-  });
+    required WebtritApiClient webtritApiClient,
+    required String token,
+  })  : _webtritApiClient = webtritApiClient,
+        _token = token;
 
-  final WebtritApiClient webtritApiClient;
-  final String token;
+  final WebtritApiClient _webtritApiClient;
+  final String _token;
 
   Future<bool> getRegisterStatus() async {
-    final appStatus = await webtritApiClient.appStatus(token);
+    final appStatus = await _webtritApiClient.appStatus(_token);
     return appStatus.register;
   }
 
   Future<void> setRegisterStatus(bool value) async {
-    await webtritApiClient.appStatusUpdate(token, AppStatus(register: value));
+    await _webtritApiClient.appStatusUpdate(_token, AppStatus(register: value));
   }
 }

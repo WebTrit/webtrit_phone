@@ -10,27 +10,29 @@ import 'package:webtrit_phone/models/models.dart';
 final _logger = Logger('$ExternalContactsRepository');
 
 class ExternalContactsRepository {
-  final WebtritApiClient webtritApiClient;
-  final String token;
-  final bool periodicPolling;
-
-  late StreamController<List<ExternalContact>> _controller;
-  late int _listenedCounter;
-  Timer? _periodicTimer;
-
-  List<ExternalContact>? _cacheContacts;
-
   ExternalContactsRepository({
-    required this.webtritApiClient,
-    required this.token,
-    this.periodicPolling = true,
-  }) {
+    required WebtritApiClient webtritApiClient,
+    required String token,
+    bool periodicPolling = true,
+  })  : _webtritApiClient = webtritApiClient,
+        _token = token,
+        _periodicPolling = periodicPolling {
     _controller = StreamController<List<ExternalContact>>.broadcast(
       onListen: _onListenCallback,
       onCancel: _onCancelCallback,
     );
     _listenedCounter = 0;
   }
+
+  final WebtritApiClient _webtritApiClient;
+  final String _token;
+  final bool _periodicPolling;
+
+  late StreamController<List<ExternalContact>> _controller;
+  late int _listenedCounter;
+  Timer? _periodicTimer;
+
+  List<ExternalContact>? _cacheContacts;
 
   Stream<List<ExternalContact>> contacts() {
     return _controller.stream;
@@ -43,13 +45,13 @@ class ExternalContactsRepository {
   }
 
   void _onListenCallback() {
-    if (periodicPolling && _listenedCounter++ == 0) {
+    if (_periodicPolling && _listenedCounter++ == 0) {
       _periodicTimer = Timer.periodic(const Duration(seconds: 60), (timer) => _gatherListContacts());
     }
   }
 
   void _onCancelCallback() {
-    if (periodicPolling && --_listenedCounter == 0) {
+    if (_periodicPolling && --_listenedCounter == 0) {
       _periodicTimer?.cancel();
       _periodicTimer = null;
     }
@@ -68,7 +70,7 @@ class ExternalContactsRepository {
   }
 
   Future<List<ExternalContact>> _listContacts() async {
-    final contacts = await webtritApiClient.accountContacts(token);
+    final contacts = await _webtritApiClient.accountContacts(_token);
 
     return contacts
         .map((contact) => ExternalContact(

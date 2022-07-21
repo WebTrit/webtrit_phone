@@ -6,12 +6,14 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 class RecentsRepository {
-  RecentsRepository({required this.appDatabase});
+  RecentsRepository({
+    required AppDatabase appDatabase,
+  }) : _appDatabase = appDatabase;
 
-  final AppDatabase appDatabase;
+  final AppDatabase _appDatabase;
 
   Stream<List<Recent>> recents() {
-    return appDatabase.callLogsDao.watchLastCallLogsExt().map((callLogsExt) => callLogsExt.map((callLogExt) {
+    return _appDatabase.callLogsDao.watchLastCallLogsExt().map((callLogsExt) => callLogsExt.map((callLogExt) {
           final callLog = callLogExt.callLog;
           final contactData = callLogExt.contactData;
           return Recent(
@@ -30,7 +32,7 @@ class RecentsRepository {
   }
 
   Future<List<Recent>> history(Recent recent) {
-    return appDatabase.callLogsDao.getLastCallLogsByNumber(recent.number).then((callLogs) => callLogs
+    return _appDatabase.callLogsDao.getLastCallLogsByNumber(recent.number).then((callLogs) => callLogs
         .map((callLog) => Recent(
               direction: callLog.direction,
               number: callLog.number,
@@ -44,7 +46,7 @@ class RecentsRepository {
   }
 
   Future<void> add(Recent recent) async {
-    await appDatabase.callLogsDao.insertCallLog(CallLogDataCompanion(
+    await _appDatabase.callLogsDao.insertCallLog(CallLogDataCompanion(
       direction: Value(recent.direction),
       number: Value(recent.number),
       video: Value(recent.video),
@@ -57,7 +59,7 @@ class RecentsRepository {
   Future<void> delete(Recent recent) async {
     final id = recent.id;
     if (id != null) {
-      await appDatabase.callLogsDao.deleteCallLog(CallLogDataCompanion(
+      await _appDatabase.callLogsDao.deleteCallLog(CallLogDataCompanion(
         id: Value(id),
       ));
     }

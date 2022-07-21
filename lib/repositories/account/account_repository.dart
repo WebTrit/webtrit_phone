@@ -8,10 +8,12 @@ final _logger = Logger('$AccountRepository');
 
 class AccountRepository {
   AccountRepository({
-    required this.webtritApiClient,
-    required this.token,
-    this.periodicPolling = true,
-  }) {
+    required WebtritApiClient webtritApiClient,
+    required String token,
+    bool periodicPolling = true,
+  })  : _webtritApiClient = webtritApiClient,
+        _token = token,
+        _periodicPolling = periodicPolling {
     _controller = StreamController<AccountInfo>.broadcast(
       onListen: _onListenCallback,
       onCancel: _onCancelCallback,
@@ -19,9 +21,9 @@ class AccountRepository {
     _listenedCounter = 0;
   }
 
-  final WebtritApiClient webtritApiClient;
-  final String token;
-  final bool periodicPolling;
+  final WebtritApiClient _webtritApiClient;
+  final String _token;
+  final bool _periodicPolling;
 
   late StreamController<AccountInfo> _controller;
   late int _listenedCounter;
@@ -30,7 +32,7 @@ class AccountRepository {
   AccountInfo? _info;
 
   Future<AccountInfo> getInfo() {
-    return webtritApiClient.accountInfo(token);
+    return _webtritApiClient.accountInfo(_token);
   }
 
   Stream<AccountInfo> info() {
@@ -38,14 +40,14 @@ class AccountRepository {
   }
 
   void _onListenCallback() async {
-    if (periodicPolling && _listenedCounter++ == 0) {
+    if (_periodicPolling && _listenedCounter++ == 0) {
       _periodicTimer = Timer.periodic(const Duration(seconds: 10), (timer) => _gatherAccountInfo());
       _gatherAccountInfo();
     }
   }
 
   void _onCancelCallback() {
-    if (periodicPolling && --_listenedCounter == 0) {
+    if (_periodicPolling && --_listenedCounter == 0) {
       _periodicTimer?.cancel();
       _periodicTimer = null;
     }
@@ -64,6 +66,6 @@ class AccountRepository {
   }
 
   Future<void> logout() async {
-    await webtritApiClient.sessionLogout(token);
+    await _webtritApiClient.sessionLogout(_token);
   }
 }

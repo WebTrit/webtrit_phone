@@ -6,12 +6,14 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 class FavoritesRepository {
-  FavoritesRepository({required this.appDatabase});
+  FavoritesRepository({
+    required AppDatabase appDatabase,
+  }) : _appDatabase = appDatabase;
 
-  final AppDatabase appDatabase;
+  final AppDatabase _appDatabase;
 
   Stream<List<Favorite>> favorites() {
-    return appDatabase.favoritesDao.watchFavoritesExt().map((favoritesExt) => favoritesExt.map((favoriteExt) {
+    return _appDatabase.favoritesDao.watchFavoritesExt().map((favoritesExt) => favoritesExt.map((favoriteExt) {
           final favoriteData = favoriteExt.favoriteData;
           final contactPhoneData = favoriteExt.contactPhoneData;
           final contactData = favoriteExt.contactData;
@@ -32,7 +34,7 @@ class FavoritesRepository {
   }
 
   Future<void> remove(Favorite favorite) async {
-    appDatabase.favoritesDao.deleteFavorite(FavoriteDataCompanion(
+    _appDatabase.favoritesDao.deleteFavorite(FavoriteDataCompanion(
       id: Value(favorite.id),
     ));
   }
