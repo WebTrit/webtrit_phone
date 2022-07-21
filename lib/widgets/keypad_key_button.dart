@@ -37,6 +37,7 @@ class KeypadKeyButton extends StatelessWidget {
             text,
             style: TextStyle(
               fontSize: textFontSize ?? themeData.textTheme.headlineLarge?.fontSize,
+              height: 1.0,
             ),
           ),
           Builder(builder: (context) {
@@ -54,6 +55,7 @@ class KeypadKeyButton extends StatelessWidget {
               style: TextStyle(
                 fontSize: themeData.textTheme.bodyMedium?.fontSize,
                 color: color,
+                height: 1.0,
               ),
             );
           }),
