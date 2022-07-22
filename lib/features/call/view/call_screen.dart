@@ -88,6 +88,7 @@ class _CallScreenState extends State<CallScreen> {
               if (state.isActive) {
                 final activeCall = state.activeCall;
                 return CallActiveScaffold(
+                  speaker: state.speaker,
                   activeCall: activeCall,
                   localRenderer: _localRenderer,
                   remoteRenderer: _remoteRenderer,

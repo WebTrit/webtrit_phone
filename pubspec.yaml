@@ -13,6 +13,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+  audio_session: ^0.1.10
   bloc: ^8.0.3
   bloc_concurrency: ^0.2.0
   characters: ^1.2.0

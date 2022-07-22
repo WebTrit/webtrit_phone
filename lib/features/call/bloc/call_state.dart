@@ -11,6 +11,7 @@ class CallState with _$CallState {
     Object? lastSignalingClientDisconnectError,
     int? lastSignalingDisconnectCode,
     @Default([]) List<ActiveCall> activeCalls,
+    bool? speaker,
   }) = _CallState;
 
   CallStatus get status {

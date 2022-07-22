@@ -19,7 +19,7 @@ class CallActions extends StatefulWidget {
     this.onCameraChanged,
     required this.mutedValue,
     this.onMutedChanged,
-    required this.speakerValue,
+    this.speakerValue,
     this.onSpeakerChanged,
     this.onTransferPressed,
     required this.heldValue,
@@ -37,7 +37,7 @@ class CallActions extends StatefulWidget {
   final ValueChanged<bool>? onCameraChanged;
   final bool mutedValue;
   final ValueChanged<bool>? onMutedChanged;
-  final bool speakerValue;
+  final bool? speakerValue;
   final ValueChanged<bool>? onSpeakerChanged;
   final VoidCallback? onTransferPressed;
   final bool heldValue;
@@ -86,6 +86,7 @@ class _CallActionsState extends State<CallActions> {
 
     final onCameraChanged = widget.onCameraChanged;
     final onMutedChanged = widget.onMutedChanged;
+    final speakerValue = widget.speakerValue;
     final onSpeakerChanged = widget.onSpeakerChanged;
     final onTransferPressed = widget.onTransferPressed;
     final onHeldChanged = widget.onHeldChanged;
@@ -160,12 +161,13 @@ class _CallActionsState extends State<CallActions> {
             ),
           ),
           Tooltip(
-            message: widget.speakerValue
+            message: speakerValue == true
                 ? context.l10n.call_CallActionsTooltip_disableSpeaker
                 : context.l10n.call_CallActionsTooltip_enableSpeaker,
             child: TextButton(
-              onPressed: onSpeakerChanged == null ? null : () => onSpeakerChanged(!widget.speakerValue),
-              style: widget.speakerValue ? textButtonStyles?.callActiveAction : textButtonStyles?.callAction,
+              onPressed:
+                  speakerValue == null || onSpeakerChanged == null ? null : () => onSpeakerChanged(!speakerValue),
+              style: speakerValue == true ? textButtonStyles?.callActiveAction : textButtonStyles?.callAction,
               child: const Icon(Icons.volume_up),
             ),
           ),

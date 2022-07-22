@@ -10,11 +10,13 @@ import '../call.dart';
 class CallActiveScaffold extends StatefulWidget {
   const CallActiveScaffold({
     Key? key,
+    required this.speaker,
     required this.activeCall,
     required this.localRenderer,
     required this.remoteRenderer,
   }) : super(key: key);
 
+  final bool? speaker;
   final ActiveCall activeCall;
   final RTCVideoRenderer localRenderer;
   final RTCVideoRenderer remoteRenderer;
@@ -27,13 +29,11 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   bool compact = false;
   bool frontCamera = true;
   late bool cameraEnabled;
-  late bool speakerEnabled;
 
   @override
   void initState() {
     super.initState();
     cameraEnabled = widget.activeCall.video;
-    speakerEnabled = widget.activeCall.video;
   }
 
   @override
@@ -128,7 +128,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       onCameraChanged: onCameraChanged,
                       mutedValue: widget.activeCall.muted,
                       onMutedChanged: _onMutedChanged,
-                      speakerValue: speakerEnabled,
+                      speakerValue: widget.speaker,
                       onSpeakerChanged: _onSpeakerChanged,
                       heldValue: widget.activeCall.held,
                       onHeldChanged: _onHeldChanged,
@@ -172,10 +172,6 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   }
 
   void _onSpeakerChanged(bool value) {
-    setState(() {
-      speakerEnabled = value;
-    });
-
     context.read<CallBloc>().add(CallControlEvent.speakerEnabled(widget.activeCall.callId.uuid, value));
   }
 

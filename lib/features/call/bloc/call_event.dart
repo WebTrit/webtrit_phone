@@ -18,6 +18,11 @@ class _ConnectivityResultChanged with _$_ConnectivityResultChanged implements Ca
   const factory _ConnectivityResultChanged(ConnectivityResult result) = __ConnectivityResultChanged;
 }
 
+@Freezed(copyWith: false)
+class _AudioSessionRouteChanged with _$_AudioSessionRouteChanged implements CallEvent {
+  const factory _AudioSessionRouteChanged() = __AudioSessionRouteChanged;
+}
+
 // signaling client events
 
 @Freezed(copyWith: false)

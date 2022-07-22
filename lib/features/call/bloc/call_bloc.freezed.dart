@@ -94,6 +94,34 @@ abstract class __ConnectivityResultChanged
 }
 
 /// @nodoc
+mixin _$_AudioSessionRouteChanged {}
+
+/// @nodoc
+
+class _$__AudioSessionRouteChanged implements __AudioSessionRouteChanged {
+  const _$__AudioSessionRouteChanged();
+
+  @override
+  String toString() {
+    return '_AudioSessionRouteChanged()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$__AudioSessionRouteChanged);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+}
+
+abstract class __AudioSessionRouteChanged implements _AudioSessionRouteChanged {
+  const factory __AudioSessionRouteChanged() = _$__AudioSessionRouteChanged;
+}
+
+/// @nodoc
 mixin _$_SignalingClientEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
@@ -4633,6 +4661,7 @@ mixin _$CallState {
       throw _privateConstructorUsedError;
   int? get lastSignalingDisconnectCode => throw _privateConstructorUsedError;
   List<ActiveCall> get activeCalls => throw _privateConstructorUsedError;
+  bool? get speaker => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $CallStateCopyWith<CallState> get copyWith =>
@@ -4649,7 +4678,8 @@ abstract class $CallStateCopyWith<$Res> {
       Object? lastSignalingClientConnectError,
       Object? lastSignalingClientDisconnectError,
       int? lastSignalingDisconnectCode,
-      List<ActiveCall> activeCalls});
+      List<ActiveCall> activeCalls,
+      bool? speaker});
 }
 
 /// @nodoc
@@ -4668,6 +4698,7 @@ class _$CallStateCopyWithImpl<$Res> implements $CallStateCopyWith<$Res> {
     Object? lastSignalingClientDisconnectError = freezed,
     Object? lastSignalingDisconnectCode = freezed,
     Object? activeCalls = freezed,
+    Object? speaker = freezed,
   }) {
     return _then(_value.copyWith(
       currentConnectivityResult: currentConnectivityResult == freezed
@@ -4694,6 +4725,10 @@ class _$CallStateCopyWithImpl<$Res> implements $CallStateCopyWith<$Res> {
           ? _value.activeCalls
           : activeCalls // ignore: cast_nullable_to_non_nullable
               as List<ActiveCall>,
+      speaker: speaker == freezed
+          ? _value.speaker
+          : speaker // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -4710,7 +4745,8 @@ abstract class _$$_CallStateCopyWith<$Res> implements $CallStateCopyWith<$Res> {
       Object? lastSignalingClientConnectError,
       Object? lastSignalingClientDisconnectError,
       int? lastSignalingDisconnectCode,
-      List<ActiveCall> activeCalls});
+      List<ActiveCall> activeCalls,
+      bool? speaker});
 }
 
 /// @nodoc
@@ -4731,6 +4767,7 @@ class __$$_CallStateCopyWithImpl<$Res> extends _$CallStateCopyWithImpl<$Res>
     Object? lastSignalingClientDisconnectError = freezed,
     Object? lastSignalingDisconnectCode = freezed,
     Object? activeCalls = freezed,
+    Object? speaker = freezed,
   }) {
     return _then(_$_CallState(
       currentConnectivityResult: currentConnectivityResult == freezed
@@ -4757,6 +4794,10 @@ class __$$_CallStateCopyWithImpl<$Res> extends _$CallStateCopyWithImpl<$Res>
           ? _value._activeCalls
           : activeCalls // ignore: cast_nullable_to_non_nullable
               as List<ActiveCall>,
+      speaker: speaker == freezed
+          ? _value.speaker
+          : speaker // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -4770,7 +4811,8 @@ class _$_CallState extends _CallState {
       this.lastSignalingClientConnectError,
       this.lastSignalingClientDisconnectError,
       this.lastSignalingDisconnectCode,
-      final List<ActiveCall> activeCalls = const []})
+      final List<ActiveCall> activeCalls = const [],
+      this.speaker})
       : _activeCalls = activeCalls,
         super._();
 
@@ -4794,8 +4836,11 @@ class _$_CallState extends _CallState {
   }
 
   @override
+  final bool? speaker;
+
+  @override
   String toString() {
-    return 'CallState(currentConnectivityResult: $currentConnectivityResult, signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, activeCalls: $activeCalls)';
+    return 'CallState(currentConnectivityResult: $currentConnectivityResult, signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, activeCalls: $activeCalls, speaker: $speaker)';
   }
 
   @override
@@ -4817,7 +4862,8 @@ class _$_CallState extends _CallState {
                 other.lastSignalingDisconnectCode,
                 lastSignalingDisconnectCode) &&
             const DeepCollectionEquality()
-                .equals(other._activeCalls, _activeCalls));
+                .equals(other._activeCalls, _activeCalls) &&
+            const DeepCollectionEquality().equals(other.speaker, speaker));
   }
 
   @override
@@ -4828,7 +4874,8 @@ class _$_CallState extends _CallState {
       const DeepCollectionEquality().hash(lastSignalingClientConnectError),
       const DeepCollectionEquality().hash(lastSignalingClientDisconnectError),
       const DeepCollectionEquality().hash(lastSignalingDisconnectCode),
-      const DeepCollectionEquality().hash(_activeCalls));
+      const DeepCollectionEquality().hash(_activeCalls),
+      const DeepCollectionEquality().hash(speaker));
 
   @JsonKey(ignore: true)
   @override
@@ -4843,7 +4890,8 @@ abstract class _CallState extends CallState {
       final Object? lastSignalingClientConnectError,
       final Object? lastSignalingClientDisconnectError,
       final int? lastSignalingDisconnectCode,
-      final List<ActiveCall> activeCalls}) = _$_CallState;
+      final List<ActiveCall> activeCalls,
+      final bool? speaker}) = _$_CallState;
   const _CallState._() : super._();
 
   @override
@@ -4858,6 +4906,8 @@ abstract class _CallState extends CallState {
   int? get lastSignalingDisconnectCode;
   @override
   List<ActiveCall> get activeCalls;
+  @override
+  bool? get speaker;
   @override
   @JsonKey(ignore: true)
   _$$_CallStateCopyWith<_$_CallState> get copyWith =>

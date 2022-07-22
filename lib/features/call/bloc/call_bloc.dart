@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 
+import 'package:audio_session/audio_session.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -38,6 +39,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final _logger = Logger('$CallBloc');
 
   StreamSubscription<ConnectivityResult>? _connectivityChangedSubscription;
+  StreamSubscription<AVAudioSessionRouteChange>? _routeChangeSubscription;
 
   WebtritSignalingClient? _signalingClient;
   Timer? _signalingClientReconnectTimer;
@@ -61,6 +63,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     on<_ConnectivityResultChanged>(
       _onConnectivityResultChanged,
       transformer: sequential(),
+    );
+    on<_AudioSessionRouteChanged>(
+      _onAudioSessionRouteChanged,
+      transformer: droppable(),
     );
     on<_SignalingClientEvent>(
       _onSignalingClientEvent,
@@ -99,6 +105,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     WidgetsBinding.instance.removeObserver(this);
 
     await _connectivityChangedSubscription?.cancel();
+    await _routeChangeSubscription?.cancel();
 
     _signalingClientReconnectTimer?.cancel();
     await _signalingClient?.disconnect();
@@ -164,6 +171,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         add(_ConnectivityResultChanged(result));
       }
     });
+
+    if (Platform.isIOS) {
+      _routeChangeSubscription = AVAudioSession().routeChangeStream.listen((event) {
+        add(const _AudioSessionRouteChanged());
+      });
+      _routeChangeSubscription?.pause();
+    }
   }
 
   Future<void> _onAppLifecycleStateChanged(
@@ -200,6 +214,17 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _reconnectInitiated();
     }
     emit(state.copyWith(currentConnectivityResult: connectivityResult));
+  }
+
+  Future<void> _onAudioSessionRouteChanged(
+    _AudioSessionRouteChanged event,
+    Emitter<CallState> emit,
+  ) async {
+    final currentRoute = await AVAudioSession().currentRoute;
+    final outputs = currentRoute.outputs;
+    if (outputs.isNotEmpty) {
+      emit(state.copyWith(speaker: outputs.first.portType == AVAudioSessionPort.builtInSpeaker));
+    }
   }
 
   // processing signaling client events
@@ -1086,11 +1111,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   @override
   void didActivateAudioSession() {
     _logger.fine('didActivateAudioSession');
+    _routeChangeSubscription?.resume();
   }
 
   @override
   void didDeactivateAudioSession() {
     _logger.fine('didDeactivateAudioSession');
+    _routeChangeSubscription?.pause();
   }
 
   @override
