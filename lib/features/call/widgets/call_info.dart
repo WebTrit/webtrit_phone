@@ -3,6 +3,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+import 'package:clock/clock.dart';
+
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
@@ -57,18 +59,20 @@ class _CallInfoState extends State<CallInfo> {
 
   void _durationTimerInit(DateTime acceptedTime) {
     durationTimer = Timer.periodic(const Duration(seconds: 1), (_) {
-      setState(() {
-        duration = DateTime.now().difference(acceptedTime);
-      });
+      _durationTic(acceptedTime);
     });
-    setState(() {
-      duration = DateTime.now().difference(acceptedTime);
-    });
+    _durationTic(acceptedTime);
   }
 
   void _durationTimerCancel() {
     durationTimer?.cancel();
     durationTimer = null;
+  }
+
+  void _durationTic(DateTime acceptedTime) {
+    setState(() {
+      duration = clock.now().difference(acceptedTime);
+    });
   }
 
   @override

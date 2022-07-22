@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:clock/clock.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -375,7 +376,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       handle: event.handle,
       displayName: event.displayName,
       video: event.video,
-      createdTime: DateTime.now(),
+      createdTime: clock.now(),
     )));
 
     // the rest logic implemented within _CallSignalingEventState processing
@@ -426,7 +427,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         handle: handle,
         displayName: event.callerDisplayName,
         video: video,
-        createdTime: DateTime.now(),
+        createdTime: clock.now(),
       )));
     }
 
@@ -439,7 +440,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       await callkeep.reportEndCall(event.callId.uuid, CallkeepEndCallReason.failed);
 
       emit(state.copyWithMappedActiveCall(event.callId.uuid, (activeCall) {
-        final activeCallUpdated = activeCall.copyWith(hungUpTime: DateTime.now());
+        final activeCallUpdated = activeCall.copyWith(hungUpTime: clock.now());
         _addToRecents(activeCallUpdated);
         return activeCallUpdated;
       }));
@@ -509,7 +510,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     await callkeep.reportConnectedOutgoingCall(event.callId.uuid);
 
     emit(state.copyWithMappedActiveCall(event.callId.uuid, (activeCall) {
-      return activeCall.copyWith(acceptedTime: DateTime.now());
+      return activeCall.copyWith(acceptedTime: clock.now());
     }));
 
     final jsep = event.jsep;
@@ -530,7 +531,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     await _ringtoneStop();
 
     emit(state.copyWithMappedActiveCall(event.callId.uuid, (activeCall) {
-      final activeCallUpdated = activeCall.copyWith(hungUpTime: DateTime.now());
+      final activeCallUpdated = activeCall.copyWith(hungUpTime: clock.now());
       _addToRecents(activeCallUpdated);
       return activeCallUpdated;
     }));
@@ -586,7 +587,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         handle: event.handle,
         displayName: event.displayName,
         video: event.video,
-        createdTime: DateTime.now(),
+        createdTime: clock.now(),
       )));
     }
   }
@@ -764,7 +765,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     await _ringtoneStop();
 
     emit(state.copyWithMappedActiveCall(event.uuid, (activeCall) {
-      return activeCall.copyWith(acceptedTime: DateTime.now());
+      return activeCall.copyWith(acceptedTime: clock.now());
     }));
 
     await state.performOnActiveCall(event.uuid, (activeCall) async {
@@ -794,7 +795,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     await _ringtoneStop();
 
     emit(state.copyWithMappedActiveCall(event.uuid, (activeCall) {
-      final activeCallUpdated = activeCall.copyWith(hungUpTime: DateTime.now());
+      final activeCallUpdated = activeCall.copyWith(hungUpTime: clock.now());
       _addToRecents(activeCallUpdated);
       return activeCallUpdated;
     }));

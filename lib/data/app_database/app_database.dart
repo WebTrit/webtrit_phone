@@ -1,7 +1,8 @@
 import 'dart:io';
-import 'package:drift/isolate.dart';
 
+import 'package:clock/clock.dart';
 import 'package:drift/drift.dart';
+import 'package:drift/isolate.dart';
 import 'package:drift/native.dart';
 
 import 'package:webtrit_phone/environment_config.dart';
@@ -316,7 +317,7 @@ class CallLogsDao extends DatabaseAccessor<AppDatabase> with _$CallLogsDaoMixin 
   CallLogsDao(AppDatabase db) : super(db);
 
   SimpleSelectStatement<$CallLogsTableTable, CallLogData> _selectLastCallLogs(Duration period) => (select(callLogsTable)
-    ..where((t) => t.createdAt.isBiggerOrEqualValue(DateTime.now().subtract(period)))
+    ..where((t) => t.createdAt.isBiggerOrEqualValue(clock.agoBy(period)))
     ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]));
 
   SimpleSelectStatement<$CallLogsTableTable, CallLogData> _selectLastCallLogsByNumber(String number, Duration period) =>
