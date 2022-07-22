@@ -72,7 +72,8 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
     supportsHandleTypePhoneNumber:(nullable NSNumber *)supportsHandleTypePhoneNumber
     supportsHandleTypeEmailAddress:(nullable NSNumber *)supportsHandleTypeEmailAddress
     supportsVideo:(NSNumber *)supportsVideo
-    includesCallsInRecents:(NSNumber *)includesCallsInRecents {
+    includesCallsInRecents:(NSNumber *)includesCallsInRecents
+    driveIdleTimerDisabled:(NSNumber *)driveIdleTimerDisabled {
   WTPIOSOptions* pigeonResult = [[WTPIOSOptions alloc] init];
   pigeonResult.localizedName = localizedName;
   pigeonResult.ringtoneSound = ringtoneSound;
@@ -84,6 +85,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
   pigeonResult.supportsHandleTypeEmailAddress = supportsHandleTypeEmailAddress;
   pigeonResult.supportsVideo = supportsVideo;
   pigeonResult.includesCallsInRecents = includesCallsInRecents;
+  pigeonResult.driveIdleTimerDisabled = driveIdleTimerDisabled;
   return pigeonResult;
 }
 + (WTPIOSOptions *)fromMap:(NSDictionary *)dict {
@@ -103,6 +105,8 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
   NSAssert(pigeonResult.supportsVideo != nil, @"");
   pigeonResult.includesCallsInRecents = GetNullableObject(dict, @"includesCallsInRecents");
   NSAssert(pigeonResult.includesCallsInRecents != nil, @"");
+  pigeonResult.driveIdleTimerDisabled = GetNullableObject(dict, @"driveIdleTimerDisabled");
+  NSAssert(pigeonResult.driveIdleTimerDisabled != nil, @"");
   return pigeonResult;
 }
 + (nullable WTPIOSOptions *)nullableFromMap:(NSDictionary *)dict { return (dict) ? [WTPIOSOptions fromMap:dict] : nil; }
@@ -118,6 +122,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
     @"supportsHandleTypeEmailAddress" : (self.supportsHandleTypeEmailAddress ?: [NSNull null]),
     @"supportsVideo" : (self.supportsVideo ?: [NSNull null]),
     @"includesCallsInRecents" : (self.includesCallsInRecents ?: [NSNull null]),
+    @"driveIdleTimerDisabled" : (self.driveIdleTimerDisabled ?: [NSNull null]),
   };
 }
 @end

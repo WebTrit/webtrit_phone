@@ -29,6 +29,7 @@ class PIOSOptions {
   late bool? supportsHandleTypeEmailAddress;
   late bool supportsVideo;
   late bool includesCallsInRecents;
+  late bool driveIdleTimerDisabled;
 }
 
 class POptions {

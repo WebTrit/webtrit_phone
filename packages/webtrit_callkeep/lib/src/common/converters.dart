@@ -125,6 +125,7 @@ extension CallkeepIOSOptionsConverter on CallkeepIOSOptions {
       supportsHandleTypeEmailAddress: supportedHandleTypes.contains(CallkeepHandleType.email),
       supportsVideo: supportsVideo,
       includesCallsInRecents: includesCallsInRecents,
+      driveIdleTimerDisabled: driveIdleTimerDisabled,
     );
   }
 }

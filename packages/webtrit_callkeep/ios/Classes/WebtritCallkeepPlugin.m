@@ -26,6 +26,7 @@ static NSString *const OptionsKey = @"WebtritCallkeepPluginOptions";
   WTPDelegateFlutterApi *_delegateFlutterApi;
   CXProvider *_provider;
   CXCallController *_callController;
+  BOOL _driveIdleTimerDisabled;
 }
 
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar> *)registrar {
@@ -88,6 +89,8 @@ static NSString *const OptionsKey = @"WebtritCallkeepPluginOptions";
     [_provider setDelegate:self queue:nil];
 
     _callController = [[CXCallController alloc] init];
+
+    _driveIdleTimerDisabled = iosOptions.driveIdleTimerDisabled.boolValue;
   } else {
 #ifdef DEBUG
     NSLog(@"[Callkeep][restoreSetUp] skipped");
@@ -139,6 +142,7 @@ static NSString *const OptionsKey = @"WebtritCallkeepPluginOptions";
     if (_callController == nil) {
       _callController = [[CXCallController alloc] init];
     }
+    _driveIdleTimerDisabled = iosOptions.driveIdleTimerDisabled.boolValue;
   } else {
 #ifdef DEBUG
     NSLog(@"[Callkeep][setUp] skipped");
@@ -186,6 +190,7 @@ static NSString *const OptionsKey = @"WebtritCallkeepPluginOptions";
                                     update:callUpdate
                                 completion:^(NSError *error) {
                                   if (error == nil) {
+                                    [self assignIdleTimerDisabled:callUpdate.hasVideo];
                                     completion(nil, nil);
                                   } else if ([error.domain isEqualToString:CXErrorDomainIncomingCall]) {
                                     completion([WTPIncomingCallError makeWithValue:CXErrorCodeIncomingCallErrorToPigeon((CXErrorCodeIncomingCallError) error.code)], nil);
@@ -237,6 +242,7 @@ static NSString *const OptionsKey = @"WebtritCallkeepPluginOptions";
   }
   [_provider reportCallWithUUID:[[NSUUID alloc] initWithUUIDString:uuidString]
                         updated:callUpdate];
+  [self assignIdleTimerDisabled:callUpdate.hasVideo];
   completion(nil);
 }
 
@@ -249,6 +255,7 @@ static NSString *const OptionsKey = @"WebtritCallkeepPluginOptions";
   [_provider reportCallWithUUID:[[NSUUID alloc] initWithUUIDString:uuidString]
                     endedAtDate:nil
                          reason:[reason toCallKit]];
+  [self assignIdleTimerDisabled:NO];
   completion(nil);
 }
 
@@ -503,6 +510,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
                                                                                   uuid:[uuid UUIDString]
                                                                                  error:incomingCallError
                                                                             completion:^(NSError *error) {
+                                                                              [self assignIdleTimerDisabled:callUpdate.hasVideo];
                                                                               completion();
                                                                             }];
                                 }];
@@ -530,6 +538,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
                                  [action fail];
                                } else {
                                  [action fulfill];
+                                 [self assignIdleTimerDisabled:action.video];
                                }
                              }];
 }
@@ -558,6 +567,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
                                [action fail];
                              } else {
                                [action fulfill];
+                               [self assignIdleTimerDisabled:NO];
                              }
                            }];
 }
@@ -646,7 +656,15 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
     NSError *error;
     NSDictionary *iosOptionsMap = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
     if (iosOptionsMap != nil) {
-      return [WTPIOSOptions fromMap:iosOptionsMap];
+      // Currently is necessary to overcome possible inconsistence with the options dictionary because of add/remove/rename properties of WTPIOSOptions class.
+      // This logic could be refactored when the following limitation is eliminated - Initialization isn't supported for fields in Pigeon data classes.
+      NSDictionary *iosOptionsMapDefault = @{
+        @"driveIdleTimerDisabled": @YES,
+      };
+      NSMutableDictionary *iosOptionsMapMerged = [[NSMutableDictionary alloc] init];
+      [iosOptionsMapMerged addEntriesFromDictionary: iosOptionsMapDefault];
+      [iosOptionsMapMerged addEntriesFromDictionary: iosOptionsMap];
+      return [WTPIOSOptions fromMap:iosOptionsMapMerged];
     }
   }
   return nil;
@@ -667,6 +685,12 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
 
 - (void)removeUserDefaultsIosOptions {
   [[NSUserDefaults standardUserDefaults] removeObjectForKey:OptionsKey];
+}
+
+- (void)assignIdleTimerDisabled:(BOOL)value {
+  if (_driveIdleTimerDisabled) {
+    [UIApplication sharedApplication].idleTimerDisabled = value;
+  }
 }
 
 @end

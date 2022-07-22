@@ -60,7 +60,8 @@ typedef NS_ENUM(NSUInteger, WTPCallRequestErrorEnum) {
     supportsHandleTypePhoneNumber:(nullable NSNumber *)supportsHandleTypePhoneNumber
     supportsHandleTypeEmailAddress:(nullable NSNumber *)supportsHandleTypeEmailAddress
     supportsVideo:(NSNumber *)supportsVideo
-    includesCallsInRecents:(NSNumber *)includesCallsInRecents;
+    includesCallsInRecents:(NSNumber *)includesCallsInRecents
+    driveIdleTimerDisabled:(NSNumber *)driveIdleTimerDisabled;
 @property(nonatomic, copy) NSString * localizedName;
 @property(nonatomic, copy, nullable) NSString * ringtoneSound;
 @property(nonatomic, copy, nullable) NSString * iconTemplateImageAssetName;
@@ -71,6 +72,7 @@ typedef NS_ENUM(NSUInteger, WTPCallRequestErrorEnum) {
 @property(nonatomic, strong, nullable) NSNumber * supportsHandleTypeEmailAddress;
 @property(nonatomic, strong) NSNumber * supportsVideo;
 @property(nonatomic, strong) NSNumber * includesCallsInRecents;
+@property(nonatomic, strong) NSNumber * driveIdleTimerDisabled;
 @end
 
 @interface WTPOptions : NSObject

@@ -52,6 +52,7 @@ class PIOSOptions {
     this.supportsHandleTypeEmailAddress,
     required this.supportsVideo,
     required this.includesCallsInRecents,
+    required this.driveIdleTimerDisabled,
   });
 
   String localizedName;
@@ -64,6 +65,7 @@ class PIOSOptions {
   bool? supportsHandleTypeEmailAddress;
   bool supportsVideo;
   bool includesCallsInRecents;
+  bool driveIdleTimerDisabled;
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
@@ -77,6 +79,7 @@ class PIOSOptions {
     pigeonMap['supportsHandleTypeEmailAddress'] = supportsHandleTypeEmailAddress;
     pigeonMap['supportsVideo'] = supportsVideo;
     pigeonMap['includesCallsInRecents'] = includesCallsInRecents;
+    pigeonMap['driveIdleTimerDisabled'] = driveIdleTimerDisabled;
     return pigeonMap;
   }
 
@@ -93,6 +96,7 @@ class PIOSOptions {
       supportsHandleTypeEmailAddress: pigeonMap['supportsHandleTypeEmailAddress'] as bool?,
       supportsVideo: pigeonMap['supportsVideo']! as bool,
       includesCallsInRecents: pigeonMap['includesCallsInRecents']! as bool,
+      driveIdleTimerDisabled: pigeonMap['driveIdleTimerDisabled']! as bool,
     );
   }
 }

@@ -25,6 +25,7 @@ class CallkeepIOSOptions extends Equatable {
     required this.supportedHandleTypes,
     this.supportsVideo = false,
     this.includesCallsInRecents = true,
+    this.driveIdleTimerDisabled = true,
   });
 
   final String localizedName;
@@ -35,6 +36,7 @@ class CallkeepIOSOptions extends Equatable {
   final Set<CallkeepHandleType> supportedHandleTypes;
   final bool supportsVideo;
   final bool includesCallsInRecents;
+  final bool driveIdleTimerDisabled;
 
   @override
   List<Object?> get props => [
@@ -46,5 +48,6 @@ class CallkeepIOSOptions extends Equatable {
         supportedHandleTypes,
         supportsVideo,
         includesCallsInRecents,
+        driveIdleTimerDisabled,
       ];
 }

@@ -152,6 +152,15 @@ public class Generated {
       this.includesCallsInRecents = setterArg;
     }
 
+    private @NonNull Boolean driveIdleTimerDisabled;
+    public @NonNull Boolean getDriveIdleTimerDisabled() { return driveIdleTimerDisabled; }
+    public void setDriveIdleTimerDisabled(@NonNull Boolean setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"driveIdleTimerDisabled\" is null.");
+      }
+      this.driveIdleTimerDisabled = setterArg;
+    }
+
     /** Constructor is private to enforce null safety; use Builder. */
     private PIOSOptions() {}
     public static final class Builder {
@@ -205,6 +214,11 @@ public class Generated {
         this.includesCallsInRecents = setterArg;
         return this;
       }
+      private @Nullable Boolean driveIdleTimerDisabled;
+      public @NonNull Builder setDriveIdleTimerDisabled(@NonNull Boolean setterArg) {
+        this.driveIdleTimerDisabled = setterArg;
+        return this;
+      }
       public @NonNull PIOSOptions build() {
         PIOSOptions pigeonReturn = new PIOSOptions();
         pigeonReturn.setLocalizedName(localizedName);
@@ -217,6 +231,7 @@ public class Generated {
         pigeonReturn.setSupportsHandleTypeEmailAddress(supportsHandleTypeEmailAddress);
         pigeonReturn.setSupportsVideo(supportsVideo);
         pigeonReturn.setIncludesCallsInRecents(includesCallsInRecents);
+        pigeonReturn.setDriveIdleTimerDisabled(driveIdleTimerDisabled);
         return pigeonReturn;
       }
     }
@@ -232,6 +247,7 @@ public class Generated {
       toMapResult.put("supportsHandleTypeEmailAddress", supportsHandleTypeEmailAddress);
       toMapResult.put("supportsVideo", supportsVideo);
       toMapResult.put("includesCallsInRecents", includesCallsInRecents);
+      toMapResult.put("driveIdleTimerDisabled", driveIdleTimerDisabled);
       return toMapResult;
     }
     static @NonNull PIOSOptions fromMap(@NonNull Map<String, Object> map) {
@@ -256,6 +272,8 @@ public class Generated {
       pigeonResult.setSupportsVideo((Boolean)supportsVideo);
       Object includesCallsInRecents = map.get("includesCallsInRecents");
       pigeonResult.setIncludesCallsInRecents((Boolean)includesCallsInRecents);
+      Object driveIdleTimerDisabled = map.get("driveIdleTimerDisabled");
+      pigeonResult.setDriveIdleTimerDisabled((Boolean)driveIdleTimerDisabled);
       return pigeonResult;
     }
   }
