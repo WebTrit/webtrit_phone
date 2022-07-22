@@ -501,7 +501,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> __onCallSignalingEventAccepted(
-      _CallSignalingEventAccepted event,
+    _CallSignalingEventAccepted event,
     Emitter<CallState> emit,
   ) async {
     await _ringtoneStop();
