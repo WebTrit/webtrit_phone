@@ -21,6 +21,7 @@ enum SignalingDisconnectCode {
   controllerExitError(SignalingDisconnectCodeType.controller, 4402),
   controllerBillingError(SignalingDisconnectCodeType.controller, 4410),
   controllerBillingAccountMissedError(SignalingDisconnectCodeType.controller, 4411),
+  controllerBillingAccountCredentialsMissedError(SignalingDisconnectCodeType.controller, 4412),
   controllerWebrtcError(SignalingDisconnectCodeType.controller, 4420),
   controllerAttachedError(SignalingDisconnectCodeType.controller, 4431),
   controllerNotAttachedError(SignalingDisconnectCodeType.controller, 4432),
