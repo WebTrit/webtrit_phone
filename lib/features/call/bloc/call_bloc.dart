@@ -345,6 +345,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       lastSignalingDisconnectCode: event.code,
     ));
 
+    _signalingClient = null;
+
     _reconnectInitiated(kSignalingClientReconnectDelay);
   }
 
