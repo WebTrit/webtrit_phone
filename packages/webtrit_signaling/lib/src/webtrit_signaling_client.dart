@@ -55,7 +55,7 @@ class WebtritSignalingClient {
   static Future<WebtritSignalingClient> connect(String url, String token, bool force,
       {HttpClient? customHttpClient}) async {
     final signalingUrl = Uri.parse(url).replace(
-      pathSegments: ['signaling', 'websocket'],
+      pathSegments: ['signaling', 'v1'],
       queryParameters: {
         'token': token,
         'force': force.toString(),
