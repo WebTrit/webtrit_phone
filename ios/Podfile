@@ -38,6 +38,12 @@ post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
 
+    if target.name == "WebRTC-SDK"
+      target.build_configurations.each do |build_configuration|
+        build_configuration.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = '$(inherited) i386'
+      end
+    end
+
     if target.name.start_with?("permission_handler")
       target.build_configurations.each do |build_configuration|
         # You can remove unused permissions here
