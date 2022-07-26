@@ -19,34 +19,34 @@ dependencies:
   characters: ^1.2.0
   clock: ^1.1.0
   collection: ^1.16.0
-  connectivity_plus: ^2.3.5
+  connectivity_plus: ^2.3.6
   device_info: ^2.0.3
   dio: ^4.0.6
   drift: ^1.7.1
   equatable: ^2.0.3
-  firebase_core: ^1.19.1
-  firebase_crashlytics: ^2.8.4
-  firebase_messaging: ^11.4.4
+  firebase_core: ^1.20.0
+  firebase_crashlytics: ^2.8.6
+  firebase_messaging: ^12.0.1
   flutter_bloc: ^8.0.1
   flutter_contacts: ^1.1.5
   flutter_secure_storage: ^5.0.2
   flutter_svg: ^1.1.1
   flutter_webrtc: ^0.8.10
   formz: ^0.4.1
-  freezed_annotation: ^2.0.3
-  go_router: ^4.1.0
+  freezed_annotation: ^2.1.0
+  go_router: ^4.2.0
   google_fonts: ^3.0.1
   intl: ^0.17.0
-  just_audio: ^0.9.27
+  just_audio: ^0.9.28
   logging: ^1.0.2
   logging_appenders: ^1.0.0
   meta: ^1.7.0
-  package_info_plus: ^1.4.2
+  package_info_plus: ^1.4.3
   path: ^1.8.1
   path_provider: ^2.0.11
   permission_handler: ^10.0.0
   provider: ^6.0.3
-  rxdart: ^0.27.4
+  rxdart: ^0.27.5
   share_plus: ^4.0.10
   shared_preferences: ^2.0.15
   sqlite3_flutter_libs: ^0.5.8
@@ -66,12 +66,12 @@ dev_dependencies:
     sdk: flutter
 
   bloc_test: ^9.0.3
-  build_runner: ^2.1.11
+  build_runner: ^2.2.0
   drift_dev: ^1.7.0
   flutter_gen_runner: ^4.3.0
   flutter_launcher_icons: ^0.9.3
   flutter_lints: ^2.0.1
-  freezed: ^2.0.4
+  freezed: ^2.1.0
 
 flutter:
   generate: true
