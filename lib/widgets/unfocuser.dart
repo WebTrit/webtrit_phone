@@ -42,10 +42,7 @@ class UnfocuserState extends State<Unfocuser> {
           return;
         }
 
-        var currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
+        primaryFocus?.unfocus();
       },
       child: widget.child,
     );
