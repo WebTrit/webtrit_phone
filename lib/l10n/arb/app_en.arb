@@ -43,17 +43,17 @@
   "callStatus_inProgress": "Connection in progress",
   "@callStatus_inProgress": {
   },
-  "callStatus_ready": "Connection successful",
+  "callStatus_ready": "Connection established",
   "@callStatus_ready": {
   },
 
   "notifications_errorSnackBar_callSignalingClientNotConnect": "Cannot initiate the call, please check the connection status",
   "@notifications_errorSnackBar_callSignalingClientNotConnect": {
   },
-  "notifications_errorSnackBar_callConnect": "Connect to core is invalid, trying to re-connect",
+  "notifications_errorSnackBar_callConnect": "Connecting to the core failed, trying to reconnect",
   "@notifications_errorSnackBar_callConnect": {
   },
-  "notifications_errorSnackBar_callUserMedia": "Access to media input is invalid, please check app permissions",
+  "notifications_errorSnackBar_callUserMedia": "No access to media input, please check app permissions",
   "@notifications_errorSnackBar_callUserMedia": {
   },
 
@@ -119,7 +119,7 @@
   "@call_CallActionsTooltip_accept": {
   },
 
-  "favorites_BodyCenter_failure": "Failure to get favorites",
+  "favorites_BodyCenter_failure": "Failed to get favorites",
   "@favorites_BodyCenter_failure": {
   },
   "favorites_BodyCenter_empty": "There are no favorite numbers",
@@ -133,10 +133,10 @@
       }
     }
   },
-  "favorites_DeleteConfirmDialog_title": "Confirm delete",
+  "favorites_DeleteConfirmDialog_title": "Confirm deleting",
   "@favorites_DeleteConfirmDialog_title": {
   },
-  "favorites_DeleteConfirmDialog_content": "Are you sure you want to delete current favorite?",
+  "favorites_DeleteConfirmDialog_content": "Are you sure you want to delete the current favorite?",
   "@favorites_DeleteConfirmDialog_content": {
   },
 
@@ -161,31 +161,31 @@
   "loginOtpRequestTabVerifyButtonLabel": "Verify",
   "@loginOtpRequestTabVerifyButtonLabel": {
   },
-  "login_validationCoreUrlError": "Please enter correct URL",
+  "login_validationCoreUrlError": "Please enter a correct URL",
   "@login_validationCoreUrlError": {
   },
-  "login_LoginIncompatibleCoreVersionExceptionError": "Incompatible version of provided Core",
+  "login_LoginIncompatibleCoreVersionExceptionError": "Incompatible Core version provided",
   "@login_LoginIncompatibleCoreVersionExceptionError": {
   },
-  "login_FormatExceptionError": "Response issue occur",
+  "login_FormatExceptionError": "A response issue occurred",
   "@login_FormatExceptionError": {
   },
-  "login_SocketExceptionError": "Network issue occur",
+  "login_SocketExceptionError": "A network issue occurred",
   "@login_SocketExceptionError": {
   },
-  "login_TypeErrorError": "Response issue occur",
+  "login_TypeErrorError": "A response issue occurred",
   "@login_TypeErrorError": {
   },
-  "login_RequestFailureError": "Server failure occur",
+  "login_RequestFailureError": "A server failure occurred",
   "@login_RequestFailureError": {
   },
-  "login_RequestFailureEmptyEmailError": "Cannot send verification code",
+  "login_RequestFailureEmptyEmailError": "Cannot send the verification code",
   "@login_RequestFailureEmptyEmailError": {
   },
   "login_RequestFailurePhoneNotFoundError": "Phone number not found",
   "@login_RequestFailurePhoneNotFoundError": {
   },
-  "login_RequestFailureCodeIncorrectError": "Verification code incorrect",
+  "login_RequestFailureCodeIncorrectError": "Incorrect verification code",
   "@login_RequestFailureCodeIncorrectError": {
   },
   "login_RequestFailureOtpIdVerifyAttemptsExceededError": "Verification attempts exceeded",
@@ -227,7 +227,7 @@
   "recentsVisibilityFilter_outgoing": "Outgoing",
   "@recentsVisibilityFilter_outgoing": {
   },
-  "recents_errorSnackBar_loadFailure": "Ups error happened ☹️",
+  "recents_errorSnackBar_loadFailure": "Oops... an error happened ☹️",
   "@recents_errorSnackBar_loadFailure": {
   },
   "recents_snackBar_deleted": "{name} deleted",
@@ -238,10 +238,10 @@
       }
     }
   },
-  "recents_DeleteConfirmDialog_title": "Confirm delete",
+  "recents_DeleteConfirmDialog_title": "Confirm deleting",
   "@recents_DeleteConfirmDialog_title": {
   },
-  "recents_DeleteConfirmDialog_content": "Are you sure you want to delete current call log?",
+  "recents_DeleteConfirmDialog_content": "Are you sure you want to delete the current call log?",
   "@recents_DeleteConfirmDialog_content": {
   },
 
@@ -255,10 +255,10 @@
   "contacts_LocalTabText_permissionFailure": "There are no permissions to get local contacts",
   "@contacts_LocalTabText_permissionFailure": {
   },
-  "contacts_LocalTabButton_openAppSettings": "Grant an access to the contacts",
+  "contacts_LocalTabButton_openAppSettings": "Grant access to your contacts",
   "@contacts_LocalTabButton_openAppSettings": {
   },
-  "contacts_LocalTabText_failure": "Failure to get local contacts",
+  "contacts_LocalTabText_failure": "Failed to get local contacts",
   "@contacts_LocalTabText_failure": {
   },
   "contacts_LocalTabText_emptyOnSearching": "No local contacts found",
@@ -271,7 +271,7 @@
   "@contacts_LocalTabButton_refresh": {
   },
 
-  "contacts_ExternalTabText_failure": "Failure to get external contacts",
+  "contacts_ExternalTabText_failure": "Failed to get external contacts",
   "@contacts_ExternalTabText_failure": {
   },
   "contacts_ExternalTabText_emptyOnSearching": "No external contacts found",
@@ -308,7 +308,7 @@
   "settings_ListViewTileTitle_termsConditions": "Terms and conditions",
   "@settings_ListViewTileTitle_termsConditions": {
   },
-  "settings_ListViewTileTitle_about": "About application",
+  "settings_ListViewTileTitle_about": "About",
   "@settings_ListViewTileTitle_about": {
   },
   "settings_ListViewTileTitle_themeMode": "Theme mode",
@@ -326,16 +326,16 @@
   "settings_LogoutConfirmDialog_content": "Are you sure you want to logout?",
   "@settings_LogoutConfirmDialog_content": {
   },
-  "settings_FormatExceptionError": "Response issue occur",
+  "settings_FormatExceptionError": "A response issue occurred",
   "@settings_FormatExceptionError": {
   },
-  "settings_SocketExceptionError": "Network issue occur",
+  "settings_SocketExceptionError": "A network issue occurred",
   "@settings_SocketExceptionError": {
   },
-  "settings_TypeErrorError": "Response issue occur",
+  "settings_TypeErrorError": "A response issue occurred",
   "@settings_TypeErrorError": {
   },
-  "settings_RequestFailureError": "Server failure occur",
+  "settings_RequestFailureError": "A server failure occurred",
   "@settings_RequestFailureError": {
   },
 
