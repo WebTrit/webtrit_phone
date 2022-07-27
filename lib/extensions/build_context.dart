@@ -21,7 +21,7 @@ extension BuildContextSnackBar on BuildContext {
 
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showErrorSnackBar(String data) {
     return (ScaffoldMessenger.of(this)..removeCurrentSnackBar()).showSnackBar(SnackBar(
-      backgroundColor: Colors.red[900],
+      backgroundColor: Theme.of(this).colorScheme.error,
       content: Text(data),
     ));
   }
