@@ -62,6 +62,10 @@ dependencies:
     path: ./packages/webtrit_callkeep
 
 dev_dependencies:
+  integration_test:
+    sdk: flutter
+  flutter_driver:
+    sdk: flutter
   flutter_test:
     sdk: flutter
 
