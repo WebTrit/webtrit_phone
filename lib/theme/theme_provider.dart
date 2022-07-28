@@ -230,6 +230,12 @@ class ThemeProvider extends InheritedWidget {
     );
   }
 
+  SnackBarThemeData snackBarTheme(ColorScheme colors) {
+    return SnackBarThemeData(
+      actionTextColor: colors.surface,
+    );
+  }
+
   ThemeData? light([Color? targetColor]) {
     final colorScheme = colors(Brightness.light, targetColor);
     return ThemeData.from(
@@ -261,6 +267,7 @@ class ThemeProvider extends InheritedWidget {
       outlinedButtonTheme: outlinedButtonTheme(colorScheme),
       textButtonTheme: textButtonTheme(colorScheme),
       listTileTheme: listTileTheme(colorScheme),
+      snackBarTheme: snackBarTheme(colorScheme),
     );
   }
 

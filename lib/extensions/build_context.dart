@@ -11,18 +11,25 @@ extension BuildContextSnackBar on BuildContext {
 
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnackBar(
     String data, {
+    SnackBarAction? action,
     Duration duration = const Duration(seconds: 3),
   }) {
     return (ScaffoldMessenger.of(this)..removeCurrentSnackBar()).showSnackBar(SnackBar(
-      duration: duration,
       content: Text(data),
+      action: action,
+      duration: duration,
     ));
   }
 
-  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showErrorSnackBar(String data) {
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showErrorSnackBar(
+    String data, {
+    SnackBarAction? action,
+    Duration duration = const Duration(seconds: 5),
+  }) {
     return (ScaffoldMessenger.of(this)..removeCurrentSnackBar()).showSnackBar(SnackBar(
-      backgroundColor: Theme.of(this).colorScheme.error,
       content: Text(data),
+      action: action,
+      backgroundColor: Theme.of(this).colorScheme.error,
     ));
   }
 }
