@@ -478,7 +478,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     late final MediaStream localStream;
     try {
-      localStream = await _getUserMedia(video: video);
+      localStream = await _getUserMedia(
+        video: video,
+        frontCamera: state.retrieveActiveCall(event.callId.uuid)?.frontCamera,
+      );
     } catch (e, stackTrace) {
       _logger.warning('__onCallSignalingEventIncoming _getUserMedia', e, stackTrace);
 
@@ -697,12 +700,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallControlEventCameraSwitched event,
     Emitter<CallState> emit,
   ) async {
-    await state.performOnActiveCall(event.uuid, (activeCall) {
+    emit(state.copyWithMappedActiveCall(event.uuid, (activeCall) {
+      return activeCall.copyWith(frontCamera: null);
+    }));
+    final frontCamera = await state.performOnActiveCall(event.uuid, (activeCall) {
       final videoTrack = activeCall.localStream?.getVideoTracks()[0];
       if (videoTrack != null) {
-        Helper.switchCamera(videoTrack);
+        return Helper.switchCamera(videoTrack);
       }
     });
+    emit(state.copyWithMappedActiveCall(event.uuid, (activeCall) {
+      return activeCall.copyWith(frontCamera: frontCamera);
+    }));
   }
 
   Future<void> _onCallControlEventCameraEnabled(
@@ -768,7 +777,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
     late final MediaStream localStream;
     try {
-      localStream = await _getUserMedia(video: event.video);
+      localStream = await _getUserMedia(
+        video: event.video,
+        frontCamera: state.retrieveActiveCall(event.uuid)?.frontCamera,
+      );
     } catch (e, stackTrace) {
       _logger.warning('__onCallPerformEventStarted _getUserMedia', e, stackTrace);
 
@@ -1190,7 +1202,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     return callPerformEvent.future;
   }
 
-  Future<MediaStream> _getUserMedia({required bool video}) async {
+  Future<MediaStream> _getUserMedia({
+    required bool video,
+    bool? frontCamera,
+  }) async {
     final Map<String, dynamic> mediaConstraints = {
       'audio': true,
       'video': video
@@ -1200,7 +1215,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
                 'minHeight': '480',
                 'minFrameRate': '30',
               },
-              'facingMode': 'user',
+              if (frontCamera != null) 'facingMode': frontCamera ? 'user' : 'environment',
               'optional': [],
             }
           : false,

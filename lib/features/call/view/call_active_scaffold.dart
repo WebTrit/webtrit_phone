@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../call.dart';
 
@@ -27,7 +28,6 @@ class CallActiveScaffold extends StatefulWidget {
 
 class CallActiveScaffoldState extends State<CallActiveScaffold> {
   bool compact = false;
-  bool frontCamera = true;
   late bool cameraEnabled;
 
   @override
@@ -44,6 +44,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     final Gradients? gradients = themeData.extension<Gradients>();
     final onTabGradient = themeData.colorScheme.background;
     final textTheme = themeData.textTheme;
+    final switchCameraIconSize = textTheme.titleMedium!.fontSize!;
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
     return Scaffold(
       body: OrientationBuilder(
@@ -76,27 +77,36 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                     top: 10 + mediaQueryData.padding.top + (compact ? 0 : 100),
                     duration: kThemeChangeDuration,
                     child: GestureDetector(
-                      onTap: _cameraSwitched,
+                      onTap: widget.activeCall.frontCamera == null ? null : _cameraSwitched,
                       child: Stack(
                         children: [
                           Container(
                             decoration: BoxDecoration(color: onTabGradient.withOpacity(0.3)),
                             width: orientation == Orientation.portrait ? 90.0 : 120.0,
                             height: orientation == Orientation.portrait ? 120.0 : 90.0,
-                            child: RTCVideoView(
-                              widget.localRenderer,
-                              mirror: true,
-                            ),
+                            child: widget.activeCall.frontCamera == null
+                                ? null
+                                : RTCVideoView(
+                                    widget.localRenderer,
+                                    mirror: widget.activeCall.frontCamera!,
+                                  ),
                           ),
                           Positioned(
                             left: 0,
                             right: 0,
                             bottom: 1,
-                            child: Icon(
-                              Icons.switch_camera,
-                              size: textTheme.titleMedium!.fontSize,
-                              color: onTabGradient,
-                            ),
+                            child: widget.activeCall.frontCamera == null
+                                ? SizedCircularProgressIndicator(
+                                    size: switchCameraIconSize - 2.0,
+                                    outerSize: switchCameraIconSize,
+                                    color: onTabGradient,
+                                    strokeWidth: 2.0,
+                                  )
+                                : Icon(
+                                    Icons.switch_camera,
+                                    size: switchCameraIconSize,
+                                    color: onTabGradient,
+                                  ),
                           ),
                         ],
                       ),
@@ -152,10 +162,6 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   }
 
   void _cameraSwitched() {
-    setState(() {
-      frontCamera = !frontCamera;
-    });
-
     context.read<CallBloc>().add(CallControlEvent.cameraSwitched(widget.activeCall.callId.uuid));
   }
 

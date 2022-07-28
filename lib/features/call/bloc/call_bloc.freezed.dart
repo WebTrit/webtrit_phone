@@ -4921,6 +4921,7 @@ mixin _$ActiveCall {
   CallkeepHandle get handle => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
   bool get video => throw _privateConstructorUsedError;
+  bool? get frontCamera => throw _privateConstructorUsedError;
   bool get held => throw _privateConstructorUsedError;
   bool get muted => throw _privateConstructorUsedError;
   DateTime get createdTime => throw _privateConstructorUsedError;
@@ -4946,6 +4947,7 @@ abstract class $ActiveCallCopyWith<$Res> {
       CallkeepHandle handle,
       String? displayName,
       bool video,
+      bool? frontCamera,
       bool held,
       bool muted,
       DateTime createdTime,
@@ -4971,6 +4973,7 @@ class _$ActiveCallCopyWithImpl<$Res> implements $ActiveCallCopyWith<$Res> {
     Object? handle = freezed,
     Object? displayName = freezed,
     Object? video = freezed,
+    Object? frontCamera = freezed,
     Object? held = freezed,
     Object? muted = freezed,
     Object? createdTime = freezed,
@@ -5001,6 +5004,10 @@ class _$ActiveCallCopyWithImpl<$Res> implements $ActiveCallCopyWith<$Res> {
           ? _value.video
           : video // ignore: cast_nullable_to_non_nullable
               as bool,
+      frontCamera: frontCamera == freezed
+          ? _value.frontCamera
+          : frontCamera // ignore: cast_nullable_to_non_nullable
+              as bool?,
       held: held == freezed
           ? _value.held
           : held // ignore: cast_nullable_to_non_nullable
@@ -5047,6 +5054,7 @@ abstract class _$$_ActiveCallCopyWith<$Res>
       CallkeepHandle handle,
       String? displayName,
       bool video,
+      bool? frontCamera,
       bool held,
       bool muted,
       DateTime createdTime,
@@ -5074,6 +5082,7 @@ class __$$_ActiveCallCopyWithImpl<$Res> extends _$ActiveCallCopyWithImpl<$Res>
     Object? handle = freezed,
     Object? displayName = freezed,
     Object? video = freezed,
+    Object? frontCamera = freezed,
     Object? held = freezed,
     Object? muted = freezed,
     Object? createdTime = freezed,
@@ -5104,6 +5113,10 @@ class __$$_ActiveCallCopyWithImpl<$Res> extends _$ActiveCallCopyWithImpl<$Res>
           ? _value.video
           : video // ignore: cast_nullable_to_non_nullable
               as bool,
+      frontCamera: frontCamera == freezed
+          ? _value.frontCamera
+          : frontCamera // ignore: cast_nullable_to_non_nullable
+              as bool?,
       held: held == freezed
           ? _value.held
           : held // ignore: cast_nullable_to_non_nullable
@@ -5146,6 +5159,7 @@ class _$_ActiveCall extends _ActiveCall {
       required this.handle,
       this.displayName,
       required this.video,
+      this.frontCamera = true,
       this.held = false,
       this.muted = false,
       required this.createdTime,
@@ -5168,6 +5182,9 @@ class _$_ActiveCall extends _ActiveCall {
   final bool video;
   @override
   @JsonKey()
+  final bool? frontCamera;
+  @override
+  @JsonKey()
   final bool held;
   @override
   @JsonKey()
@@ -5187,7 +5204,7 @@ class _$_ActiveCall extends _ActiveCall {
 
   @override
   String toString() {
-    return 'ActiveCall(direction: $direction, callId: $callId, handle: $handle, displayName: $displayName, video: $video, held: $held, muted: $muted, createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
+    return 'ActiveCall(direction: $direction, callId: $callId, handle: $handle, displayName: $displayName, video: $video, frontCamera: $frontCamera, held: $held, muted: $muted, createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
   }
 
   @override
@@ -5201,6 +5218,8 @@ class _$_ActiveCall extends _ActiveCall {
             const DeepCollectionEquality()
                 .equals(other.displayName, displayName) &&
             const DeepCollectionEquality().equals(other.video, video) &&
+            const DeepCollectionEquality()
+                .equals(other.frontCamera, frontCamera) &&
             const DeepCollectionEquality().equals(other.held, held) &&
             const DeepCollectionEquality().equals(other.muted, muted) &&
             const DeepCollectionEquality()
@@ -5224,6 +5243,7 @@ class _$_ActiveCall extends _ActiveCall {
       const DeepCollectionEquality().hash(handle),
       const DeepCollectionEquality().hash(displayName),
       const DeepCollectionEquality().hash(video),
+      const DeepCollectionEquality().hash(frontCamera),
       const DeepCollectionEquality().hash(held),
       const DeepCollectionEquality().hash(muted),
       const DeepCollectionEquality().hash(createdTime),
@@ -5246,6 +5266,7 @@ abstract class _ActiveCall extends ActiveCall {
       required final CallkeepHandle handle,
       final String? displayName,
       required final bool video,
+      final bool? frontCamera,
       final bool held,
       final bool muted,
       required final DateTime createdTime,
@@ -5266,6 +5287,8 @@ abstract class _ActiveCall extends ActiveCall {
   String? get displayName;
   @override
   bool get video;
+  @override
+  bool? get frontCamera;
   @override
   bool get held;
   @override

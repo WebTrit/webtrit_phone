@@ -49,12 +49,13 @@ class CallState with _$CallState {
     return null;
   }
 
-  FutureOr<void>? performOnActiveCall(UuidValue uuid, FutureOr<void>? Function(ActiveCall element) perform) {
+  FutureOr<T>? performOnActiveCall<T>(UuidValue uuid, FutureOr<T>? Function(ActiveCall element) perform) {
     for (var activeCall in activeCalls) {
       if (activeCall.callId.uuid == uuid) {
         return perform(activeCall);
       }
     }
+    return null;
   }
 
   CallState copyWithMappedActiveCall(UuidValue uuid, ActiveCall Function(ActiveCall element) map) {
@@ -91,6 +92,7 @@ class ActiveCall with _$ActiveCall {
     required CallkeepHandle handle,
     String? displayName,
     required bool video,
+    @Default(true) bool? frontCamera,
     @Default(false) bool held,
     @Default(false) bool muted,
     required DateTime createdTime,
