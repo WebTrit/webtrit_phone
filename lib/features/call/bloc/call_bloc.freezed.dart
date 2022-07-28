@@ -4929,7 +4929,6 @@ mixin _$ActiveCall {
   Object? get failure => throw _privateConstructorUsedError;
   MediaStream? get localStream => throw _privateConstructorUsedError;
   MediaStream? get remoteStream => throw _privateConstructorUsedError;
-  RTCPeerConnection? get peerConnection => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ActiveCallCopyWith<ActiveCall> get copyWith =>
@@ -4954,8 +4953,7 @@ abstract class $ActiveCallCopyWith<$Res> {
       DateTime? hungUpTime,
       Object? failure,
       MediaStream? localStream,
-      MediaStream? remoteStream,
-      RTCPeerConnection? peerConnection});
+      MediaStream? remoteStream});
 }
 
 /// @nodoc
@@ -4981,7 +4979,6 @@ class _$ActiveCallCopyWithImpl<$Res> implements $ActiveCallCopyWith<$Res> {
     Object? failure = freezed,
     Object? localStream = freezed,
     Object? remoteStream = freezed,
-    Object? peerConnection = freezed,
   }) {
     return _then(_value.copyWith(
       direction: direction == freezed
@@ -5033,10 +5030,6 @@ class _$ActiveCallCopyWithImpl<$Res> implements $ActiveCallCopyWith<$Res> {
           ? _value.remoteStream
           : remoteStream // ignore: cast_nullable_to_non_nullable
               as MediaStream?,
-      peerConnection: peerConnection == freezed
-          ? _value.peerConnection
-          : peerConnection // ignore: cast_nullable_to_non_nullable
-              as RTCPeerConnection?,
     ));
   }
 }
@@ -5061,8 +5054,7 @@ abstract class _$$_ActiveCallCopyWith<$Res>
       DateTime? hungUpTime,
       Object? failure,
       MediaStream? localStream,
-      MediaStream? remoteStream,
-      RTCPeerConnection? peerConnection});
+      MediaStream? remoteStream});
 }
 
 /// @nodoc
@@ -5090,7 +5082,6 @@ class __$$_ActiveCallCopyWithImpl<$Res> extends _$ActiveCallCopyWithImpl<$Res>
     Object? failure = freezed,
     Object? localStream = freezed,
     Object? remoteStream = freezed,
-    Object? peerConnection = freezed,
   }) {
     return _then(_$_ActiveCall(
       direction: direction == freezed
@@ -5142,10 +5133,6 @@ class __$$_ActiveCallCopyWithImpl<$Res> extends _$ActiveCallCopyWithImpl<$Res>
           ? _value.remoteStream
           : remoteStream // ignore: cast_nullable_to_non_nullable
               as MediaStream?,
-      peerConnection: peerConnection == freezed
-          ? _value.peerConnection
-          : peerConnection // ignore: cast_nullable_to_non_nullable
-              as RTCPeerConnection?,
     ));
   }
 }
@@ -5166,8 +5153,7 @@ class _$_ActiveCall extends _ActiveCall {
       this.hungUpTime,
       this.failure,
       this.localStream,
-      this.remoteStream,
-      this.peerConnection})
+      this.remoteStream})
       : super._();
 
   @override
@@ -5198,12 +5184,10 @@ class _$_ActiveCall extends _ActiveCall {
   final MediaStream? localStream;
   @override
   final MediaStream? remoteStream;
-  @override
-  final RTCPeerConnection? peerConnection;
 
   @override
   String toString() {
-    return 'ActiveCall(direction: $direction, callId: $callId, handle: $handle, displayName: $displayName, video: $video, held: $held, muted: $muted, createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, failure: $failure, localStream: $localStream, remoteStream: $remoteStream, peerConnection: $peerConnection)';
+    return 'ActiveCall(direction: $direction, callId: $callId, handle: $handle, displayName: $displayName, video: $video, held: $held, muted: $muted, createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
   }
 
   @override
@@ -5229,9 +5213,7 @@ class _$_ActiveCall extends _ActiveCall {
             const DeepCollectionEquality()
                 .equals(other.localStream, localStream) &&
             const DeepCollectionEquality()
-                .equals(other.remoteStream, remoteStream) &&
-            const DeepCollectionEquality()
-                .equals(other.peerConnection, peerConnection));
+                .equals(other.remoteStream, remoteStream));
   }
 
   @override
@@ -5249,8 +5231,7 @@ class _$_ActiveCall extends _ActiveCall {
       const DeepCollectionEquality().hash(hungUpTime),
       const DeepCollectionEquality().hash(failure),
       const DeepCollectionEquality().hash(localStream),
-      const DeepCollectionEquality().hash(remoteStream),
-      const DeepCollectionEquality().hash(peerConnection));
+      const DeepCollectionEquality().hash(remoteStream));
 
   @JsonKey(ignore: true)
   @override
@@ -5272,8 +5253,7 @@ abstract class _ActiveCall extends ActiveCall {
       final DateTime? hungUpTime,
       final Object? failure,
       final MediaStream? localStream,
-      final MediaStream? remoteStream,
-      final RTCPeerConnection? peerConnection}) = _$_ActiveCall;
+      final MediaStream? remoteStream}) = _$_ActiveCall;
   const _ActiveCall._() : super._();
 
   @override
@@ -5302,8 +5282,6 @@ abstract class _ActiveCall extends ActiveCall {
   MediaStream? get localStream;
   @override
   MediaStream? get remoteStream;
-  @override
-  RTCPeerConnection? get peerConnection;
   @override
   @JsonKey(ignore: true)
   _$$_ActiveCallCopyWith<_$_ActiveCall> get copyWith =>

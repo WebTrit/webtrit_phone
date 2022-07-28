@@ -99,7 +99,6 @@ class ActiveCall with _$ActiveCall {
     Object? failure,
     MediaStream? localStream,
     MediaStream? remoteStream,
-    RTCPeerConnection? peerConnection,
   }) = _ActiveCall;
 
   bool get isIncoming => direction == Direction.incoming;

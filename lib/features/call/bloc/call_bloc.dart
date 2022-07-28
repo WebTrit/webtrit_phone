@@ -45,6 +45,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   WebtritSignalingClient? _signalingClient;
   Timer? _signalingClientReconnectTimer;
 
+  final _peerConnectionCompleters = <UuidValue, Completer<RTCPeerConnection>>{};
+
   final _audioPlayer = AudioPlayer();
 
   CallBloc({
@@ -139,6 +141,47 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             _disconnectInitiated();
           }
         }
+      }
+    }
+
+    final currentActiveCallUuids = Set.from(change.currentState.activeCalls.map((e) => e.callId.uuid));
+    final nextActiveCallUuids = Set.from(change.nextState.activeCalls.map((e) => e.callId.uuid));
+    for (final removeUuid in currentActiveCallUuids.difference(nextActiveCallUuids)) {
+      assert(_peerConnectionCompleters.containsKey(removeUuid) == true);
+      _logger.finer(() => 'Remove peerConnection completer with uuid: $removeUuid');
+      _peerConnectionCompleters.remove(removeUuid);
+    }
+    for (final addUuid in nextActiveCallUuids.difference(currentActiveCallUuids)) {
+      assert(_peerConnectionCompleters.containsKey(addUuid) == false);
+      _logger.finer(() => 'Add peerConnection completer with uuid: $addUuid');
+      final completer = Completer<RTCPeerConnection>();
+      completer.future.ignore(); // prevent escalating possible error that was not awaited to the error zone level
+      _peerConnectionCompleters[addUuid] = completer;
+    }
+  }
+
+  //
+
+  void _peerConnectionComplete(UuidValue uuid, RTCPeerConnection peerConnection) {
+    _logger.finer(() => 'Complete peerConnection completer with uuid: $uuid');
+    _peerConnectionCompleters[uuid]!.complete(peerConnection);
+  }
+
+  void _peerConnectionCompleteError(UuidValue uuid, Object error, [StackTrace? stackTrace]) {
+    _logger.finer(() => 'CompleteError peerConnection completer with uuid: $uuid');
+    _peerConnectionCompleters[uuid]!.completeError(error, stackTrace);
+  }
+
+  Future<RTCPeerConnection?> _peerConnectionRetrieve(UuidValue uuid) async {
+    _logger.finer(() => 'Retrieve peerConnection completer with uuid: $uuid');
+    final peerConnectionCompleter = _peerConnectionCompleters[uuid];
+    if (peerConnectionCompleter == null) {
+      return null;
+    } else {
+      try {
+        return await peerConnectionCompleter.future;
+      } catch (_) {
+        return null;
       }
     }
   }
@@ -453,6 +496,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         ));
       });
 
+      _peerConnectionCompleteError(event.callId.uuid, e, stackTrace);
+
       emit(state.copyWithPopActiveCall(event.callId.uuid));
 
       notificationsBloc.add(const NotificationsIssued(CallUserMediaErrorNotification()));
@@ -472,9 +517,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       await peerConnection.setRemoteDescription(remoteDescription);
     }
 
-    emit(state.copyWithMappedActiveCall(event.callId.uuid, (activeCall) {
-      return activeCall.copyWith(peerConnection: peerConnection);
-    }));
+    _peerConnectionComplete(event.callId.uuid, peerConnection);
   }
 
   // no early media - play ringtone
@@ -494,10 +537,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     final jsep = event.jsep;
     if (jsep != null) {
-      await state.performOnActiveCall(event.callId.uuid, (activeCall) {
+      final peerConnection = await _peerConnectionRetrieve(event.callId.uuid);
+      if (peerConnection == null) {
+        _logger.warning('__onCallSignalingEventProgress: peerConnection is null - most likely some permissions issue');
+      } else {
         final remoteDescription = jsep.toDescription();
-        return activeCall.peerConnection!.setRemoteDescription(remoteDescription);
-      });
+        peerConnection.setRemoteDescription(remoteDescription);
+      }
     } else {
       _logger.warning('__onCallSignalingEventProgress: jsep must not be null');
     }
@@ -517,10 +563,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     final jsep = event.jsep;
     if (jsep != null) {
-      await state.performOnActiveCall(event.callId.uuid, (activeCall) {
+      final peerConnection = await _peerConnectionRetrieve(event.callId.uuid);
+      if (peerConnection == null) {
+        _logger.warning('__onCallSignalingEventAccepted: peerConnection is null - most likely some permissions issue');
+      } else {
         final remoteDescription = jsep.toDescription();
-        return activeCall.peerConnection!.setRemoteDescription(remoteDescription);
-      });
+        peerConnection.setRemoteDescription(remoteDescription);
+      }
     }
   }
 
@@ -539,7 +588,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }));
 
     await state.performOnActiveCall(event.callId.uuid, (activeCall) async {
-      await activeCall.peerConnection?.close();
+      await (await _peerConnectionRetrieve(activeCall.callId.uuid))?.close();
       await activeCall.localStream?.dispose();
     });
 
@@ -725,6 +774,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       event.fail();
 
+      _peerConnectionCompleteError(event.uuid, e, stackTrace);
+
       emit(state.copyWithPopActiveCall(event.uuid));
 
       notificationsBloc.add(const NotificationsIssued(CallUserMediaErrorNotification()));
@@ -751,9 +802,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     });
     await peerConnection.setLocalDescription(localDescription);
 
-    emit(state.copyWithMappedActiveCall(event.uuid, (activeCall) {
-      return activeCall.copyWith(peerConnection: peerConnection);
-    }));
+    _peerConnectionComplete(event.uuid, peerConnection);
 
     await callkeep.reportConnectingOutgoingCall(event.uuid);
   }
@@ -771,16 +820,19 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }));
 
     await state.performOnActiveCall(event.uuid, (activeCall) async {
-      final peerConnection = activeCall.peerConnection!;
-
-      final localDescription = peerConnection.signalingState == RTCSignalingState.RTCSignalingStateHaveRemoteOffer
-          ? await peerConnection.createAnswer({})
-          : await peerConnection.createOffer({});
-      await _signalingClient?.execute(AcceptRequest(
-        callId: activeCall.callId.toString(),
-        jsep: localDescription.toMap(),
-      ));
-      await peerConnection.setLocalDescription(localDescription);
+      final peerConnection = await _peerConnectionRetrieve(activeCall.callId.uuid);
+      if (peerConnection == null) {
+        _logger.warning('__onCallPerformEventAnswered: peerConnection is null - most likely some permissions issue');
+      } else {
+        final localDescription = peerConnection.signalingState == RTCSignalingState.RTCSignalingStateHaveRemoteOffer
+            ? await peerConnection.createAnswer({})
+            : await peerConnection.createOffer({});
+        await _signalingClient?.execute(AcceptRequest(
+          callId: activeCall.callId.toString(),
+          jsep: localDescription.toMap(),
+        ));
+        await peerConnection.setLocalDescription(localDescription);
+      }
     });
   }
 
@@ -816,7 +868,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // Need to close peer connection after executing [HangupRequest]
       // to prevent "Simulate a "hangup" coming from the application"
       // because of "No WebRTC media anymore".
-      await activeCall.peerConnection?.close();
+      await (await _peerConnectionRetrieve(activeCall.callId.uuid))?.close();
       await activeCall.localStream?.dispose();
     });
 
@@ -872,8 +924,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     event.fulfill();
 
     await state.performOnActiveCall(event.uuid, (activeCall) async {
-      final senders = await activeCall.peerConnection?.senders;
-      if (senders != null) {
+      final peerConnection = await _peerConnectionRetrieve(activeCall.callId.uuid);
+      if (peerConnection == null) {
+        _logger.warning('__onCallPerformEventSentDTMF: peerConnection is null - most likely some permissions issue');
+      } else {
+        final senders = await peerConnection.senders;
         try {
           final audioSender = senders.firstWhere((sender) {
             final track = sender.track;
