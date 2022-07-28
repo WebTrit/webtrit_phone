@@ -56,6 +56,9 @@
   "notifications_errorSnackBar_callUserMedia": "No access to media input, please check app permissions",
   "@notifications_errorSnackBar_callUserMedia": {
   },
+  "notifications_errorSnackBarAction_callUserMedia": "Check",
+  "@notifications_errorSnackBarAction_callUserMedia": {
+  },
 
   "main_BottomNavigationBarItemLabel_favorites": "Favorites",
   "@main_BottomNavigationBarItemLabel_favorites": {

@@ -125,7 +125,10 @@ class _AppState extends State<App> {
           listener: (context, state) {
             final lastNotification = state.lastNotification;
             if (lastNotification != null) {
-              context.showErrorSnackBar(lastNotification.l10n(context));
+              context.showErrorSnackBar(
+                lastNotification.l10n(context),
+                action: lastNotification.action(context),
+              );
               context.read<NotificationsBloc>().add(const NotificationsCleared());
             }
           },

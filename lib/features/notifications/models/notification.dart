@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:permission_handler/permission_handler.dart';
+
 import 'package:webtrit_phone/l10n/l10n.dart';
 
 @immutable
@@ -7,6 +9,8 @@ abstract class Notification {
   const Notification();
 
   String l10n(BuildContext context);
+
+  SnackBarAction? action(BuildContext context) => null;
 }
 
 class CallSignalingClientNotConnectErrorNotification extends Notification {
@@ -33,5 +37,13 @@ class CallUserMediaErrorNotification extends Notification {
   @override
   String l10n(BuildContext context) {
     return context.l10n.notifications_errorSnackBar_callUserMedia;
+  }
+
+  @override
+  SnackBarAction? action(BuildContext context) {
+    return SnackBarAction(
+      label: context.l10n.notifications_errorSnackBarAction_callUserMedia,
+      onPressed: () => openAppSettings(),
+    );
   }
 }
