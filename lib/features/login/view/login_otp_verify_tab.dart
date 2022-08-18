@@ -40,76 +40,82 @@ class LoginOtpVerifyTab extends StatelessWidget {
           }
         }
       },
-      child: Padding(
-        padding: kTabLabelPadding * 2,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const OnboardingLogo(),
-            BlocBuilder<LoginCubit, LoginState>(
-              buildWhen: (previous, current) =>
-                  previous.status != current.status || previous.codeInput != current.codeInput,
-              builder: (context, state) {
-                return TextFormField(
-                  enabled: !state.status.isProcessing,
-                  initialValue: state.codeInput.value,
-                  decoration: InputDecoration(
-                    labelText: context.l10n.loginOtpRequestTabCodeTextFieldLabel,
-                    helperText: '', // reserve space for validator message
-                    errorText: state.codeInput.errorL10n(context),
-                    errorMaxLines: 3,
+      child: WillPopScope(
+        onWillPop: () async {
+          _onOtpVerifyBack(context);
+          return false;
+        },
+        child: Padding(
+          padding: kTabLabelPadding * 2,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const OnboardingLogo(),
+              BlocBuilder<LoginCubit, LoginState>(
+                buildWhen: (previous, current) =>
+                    previous.status != current.status || previous.codeInput != current.codeInput,
+                builder: (context, state) {
+                  return TextFormField(
+                    enabled: !state.status.isProcessing,
+                    initialValue: state.codeInput.value,
+                    decoration: InputDecoration(
+                      labelText: context.l10n.loginOtpRequestTabCodeTextFieldLabel,
+                      helperText: '', // reserve space for validator message
+                      errorText: state.codeInput.errorL10n(context),
+                      errorMaxLines: 3,
+                    ),
+                    keyboardType: TextInputType.number,
+                    autofillHints: state.status.isProcessing
+                        ? null
+                        : const [
+                            AutofillHints.oneTimeCode,
+                            AutofillHints.password,
+                          ],
+                    onChanged: (value) => context.read<LoginCubit>().loginOptVerifyCodeInputChanged(value),
+                    onFieldSubmitted: !state.codeInput.valid ? null : (_) => _onOtpVerifySubmitted(context),
+                  );
+                },
+              ),
+              const Spacer(),
+              Row(
+                children: [
+                  Expanded(
+                    child: BlocBuilder<LoginCubit, LoginState>(
+                      buildWhen: (previous, current) => previous.status != current.status,
+                      builder: (context, state) {
+                        return OutlinedButton(
+                          onPressed: state.status.isProcessing ? null : () => _onOtpVerifyBack(context),
+                          style: outlinedButtonStyles?.neutral,
+                          child: Text(context.l10n.login_Button_back),
+                        );
+                      },
+                    ),
                   ),
-                  keyboardType: TextInputType.number,
-                  autofillHints: state.status.isProcessing
-                      ? null
-                      : const [
-                          AutofillHints.oneTimeCode,
-                          AutofillHints.password,
-                        ],
-                  onChanged: (value) => context.read<LoginCubit>().loginOptVerifyCodeInputChanged(value),
-                  onFieldSubmitted: !state.codeInput.valid ? null : (_) => _onOtpVerifySubmitted(context),
-                );
-              },
-            ),
-            const Spacer(),
-            Row(
-              children: [
-                Expanded(
-                  child: BlocBuilder<LoginCubit, LoginState>(
-                    buildWhen: (previous, current) => previous.status != current.status,
-                    builder: (context, state) {
-                      return OutlinedButton(
-                        onPressed: state.status.isProcessing ? null : () => _onOtpVerifyBack(context),
-                        style: outlinedButtonStyles?.neutral,
-                        child: Text(context.l10n.login_Button_back),
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: BlocBuilder<LoginCubit, LoginState>(
-                    buildWhen: (previous, current) =>
-                        previous.status != current.status || previous.codeInput != current.codeInput,
-                    builder: (context, state) {
-                      return ElevatedButton(
-                        onPressed: !state.codeInput.valid ? null : () => _onOtpVerifySubmitted(context),
-                        style: elevatedButtonStyles?.primary,
-                        child: !state.status.isProcessing
-                            ? Text(context.l10n.loginOtpRequestTabVerifyButtonLabel)
-                            : SizedCircularProgressIndicator(
-                                size: 16,
-                                strokeWidth: 2,
-                                color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
-                              ),
-                      );
-                    },
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(height: kToolbarHeight / 2),
-          ],
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: BlocBuilder<LoginCubit, LoginState>(
+                      buildWhen: (previous, current) =>
+                          previous.status != current.status || previous.codeInput != current.codeInput,
+                      builder: (context, state) {
+                        return ElevatedButton(
+                          onPressed: !state.codeInput.valid ? null : () => _onOtpVerifySubmitted(context),
+                          style: elevatedButtonStyles?.primary,
+                          child: !state.status.isProcessing
+                              ? Text(context.l10n.loginOtpRequestTabVerifyButtonLabel)
+                              : SizedCircularProgressIndicator(
+                                  size: 16,
+                                  strokeWidth: 2,
+                                  color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
+                                ),
+                        );
+                      },
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(height: kToolbarHeight / 2),
+            ],
+          ),
         ),
       ),
     );

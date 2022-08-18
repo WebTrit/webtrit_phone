@@ -162,6 +162,8 @@ class _MainState extends State<Main> {
           routeInformationProvider: _router.routeInformationProvider,
           routeInformationParser: _router.routeInformationParser,
           routerDelegate: _router.routerDelegate,
+          backButtonDispatcher: Router.of(context).backButtonDispatcher!.createChildBackButtonDispatcher()
+            ..takePriority(),
         ),
       ),
     );

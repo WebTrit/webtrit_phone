@@ -36,70 +36,76 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
           }
         }
       },
-      child: Padding(
-        padding: kTabLabelPadding * 2,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const OnboardingLogo(),
-            BlocBuilder<LoginCubit, LoginState>(
-              buildWhen: (previous, current) =>
-                  previous.status != current.status || previous.coreUrlInput != current.coreUrlInput,
-              builder: (context, state) {
-                return TextFormField(
-                  enabled: !state.status.isProcessing,
-                  initialValue: state.coreUrlInput.value,
-                  decoration: InputDecoration(
-                    labelText: context.l10n.login_TextFieldLabelText_coreUrl,
-                    helperText: '', // reserve space for validator message
-                    errorText: state.coreUrlInput.errorL10n(context),
-                    errorMaxLines: 3,
+      child: WillPopScope(
+        onWillPop: () async {
+          _onCoreUrlAssignBack(context);
+          return false;
+        },
+        child: Padding(
+          padding: kTabLabelPadding * 2,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const OnboardingLogo(),
+              BlocBuilder<LoginCubit, LoginState>(
+                buildWhen: (previous, current) =>
+                    previous.status != current.status || previous.coreUrlInput != current.coreUrlInput,
+                builder: (context, state) {
+                  return TextFormField(
+                    enabled: !state.status.isProcessing,
+                    initialValue: state.coreUrlInput.value,
+                    decoration: InputDecoration(
+                      labelText: context.l10n.login_TextFieldLabelText_coreUrl,
+                      helperText: '', // reserve space for validator message
+                      errorText: state.coreUrlInput.errorL10n(context),
+                      errorMaxLines: 3,
+                    ),
+                    keyboardType: TextInputType.url,
+                    onChanged: (value) => context.read<LoginCubit>().loginCoreUrlAssignCoreUrlInputChanged(value),
+                    onFieldSubmitted: !state.coreUrlInput.valid ? null : (_) => _onCoreUrlAssignSubmitted(context),
+                  );
+                },
+              ),
+              const Spacer(),
+              Row(
+                children: [
+                  Expanded(
+                    child: BlocBuilder<LoginCubit, LoginState>(
+                      buildWhen: (previous, current) => previous.status != current.status,
+                      builder: (context, state) {
+                        return OutlinedButton(
+                          onPressed: state.status.isProcessing ? null : () => _onCoreUrlAssignBack(context),
+                          style: outlinedButtonStyles?.neutral,
+                          child: Text(context.l10n.login_Button_back),
+                        );
+                      },
+                    ),
                   ),
-                  keyboardType: TextInputType.url,
-                  onChanged: (value) => context.read<LoginCubit>().loginCoreUrlAssignCoreUrlInputChanged(value),
-                  onFieldSubmitted: !state.coreUrlInput.valid ? null : (_) => _onCoreUrlAssignSubmitted(context),
-                );
-              },
-            ),
-            const Spacer(),
-            Row(
-              children: [
-                Expanded(
-                  child: BlocBuilder<LoginCubit, LoginState>(
-                    buildWhen: (previous, current) => previous.status != current.status,
-                    builder: (context, state) {
-                      return OutlinedButton(
-                        onPressed: state.status.isProcessing ? null : () => _onCoreUrlAssignBack(context),
-                        style: outlinedButtonStyles?.neutral,
-                        child: Text(context.l10n.login_Button_back),
-                      );
-                    },
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: BlocBuilder<LoginCubit, LoginState>(
+                      buildWhen: (previous, current) =>
+                          previous.status != current.status || previous.coreUrlInput != current.coreUrlInput,
+                      builder: (context, state) {
+                        return ElevatedButton(
+                          onPressed: !state.coreUrlInput.valid ? null : () => _onCoreUrlAssignSubmitted(context),
+                          style: elevatedButtonStyles?.primary,
+                          child: !state.status.isProcessing
+                              ? Text(context.l10n.login_Button_coreUrlAssign)
+                              : SizedCircularProgressIndicator(
+                                  size: 16,
+                                  strokeWidth: 2,
+                                  color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
+                                ),
+                        );
+                      },
+                    ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: BlocBuilder<LoginCubit, LoginState>(
-                    buildWhen: (previous, current) =>
-                        previous.status != current.status || previous.coreUrlInput != current.coreUrlInput,
-                    builder: (context, state) {
-                      return ElevatedButton(
-                        onPressed: !state.coreUrlInput.valid ? null : () => _onCoreUrlAssignSubmitted(context),
-                        style: elevatedButtonStyles?.primary,
-                        child: !state.status.isProcessing
-                            ? Text(context.l10n.login_Button_coreUrlAssign)
-                            : SizedCircularProgressIndicator(
-                                size: 16,
-                                strokeWidth: 2,
-                                color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
-                              ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: kToolbarHeight / 2),
-          ],
+                ],
+              ),
+              const SizedBox(height: kToolbarHeight / 2),
+            ],
+          ),
         ),
       ),
     );

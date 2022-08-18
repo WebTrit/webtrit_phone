@@ -36,70 +36,76 @@ class LoginOtpRequestTab extends StatelessWidget {
           }
         }
       },
-      child: Padding(
-        padding: kTabLabelPadding * 2,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const OnboardingLogo(),
-            BlocBuilder<LoginCubit, LoginState>(
-              buildWhen: (previous, current) =>
-                  previous.status != current.status || previous.phoneInput != current.phoneInput,
-              builder: (context, state) {
-                return TextFormField(
-                  enabled: !state.status.isProcessing,
-                  initialValue: state.phoneInput.value,
-                  decoration: InputDecoration(
-                    labelText: context.l10n.loginOtpRequestTabPhoneTextFieldLabel,
-                    helperText: '', // reserve space for validator message
-                    errorText: state.phoneInput.errorL10n(context),
-                    errorMaxLines: 3,
+      child: WillPopScope(
+        onWillPop: () async {
+          _onOtpRequestBack(context);
+          return false;
+        },
+        child: Padding(
+          padding: kTabLabelPadding * 2,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const OnboardingLogo(),
+              BlocBuilder<LoginCubit, LoginState>(
+                buildWhen: (previous, current) =>
+                    previous.status != current.status || previous.phoneInput != current.phoneInput,
+                builder: (context, state) {
+                  return TextFormField(
+                    enabled: !state.status.isProcessing,
+                    initialValue: state.phoneInput.value,
+                    decoration: InputDecoration(
+                      labelText: context.l10n.loginOtpRequestTabPhoneTextFieldLabel,
+                      helperText: '', // reserve space for validator message
+                      errorText: state.phoneInput.errorL10n(context),
+                      errorMaxLines: 3,
+                    ),
+                    keyboardType: TextInputType.phone,
+                    onChanged: (value) => context.read<LoginCubit>().loginOptRequestPhoneInputChanged(value),
+                    onFieldSubmitted: !state.phoneInput.valid ? null : (_) => _onOtpRequestSubmitted(context),
+                  );
+                },
+              ),
+              const Spacer(),
+              Row(
+                children: [
+                  Expanded(
+                    child: BlocBuilder<LoginCubit, LoginState>(
+                      buildWhen: (previous, current) => previous.status != current.status,
+                      builder: (context, state) {
+                        return OutlinedButton(
+                          onPressed: state.status.isProcessing ? null : () => _onOtpRequestBack(context),
+                          style: outlinedButtonStyles?.neutral,
+                          child: Text(context.l10n.login_Button_back),
+                        );
+                      },
+                    ),
                   ),
-                  keyboardType: TextInputType.phone,
-                  onChanged: (value) => context.read<LoginCubit>().loginOptRequestPhoneInputChanged(value),
-                  onFieldSubmitted: !state.phoneInput.valid ? null : (_) => _onOtpRequestSubmitted(context),
-                );
-              },
-            ),
-            const Spacer(),
-            Row(
-              children: [
-                Expanded(
-                  child: BlocBuilder<LoginCubit, LoginState>(
-                    buildWhen: (previous, current) => previous.status != current.status,
-                    builder: (context, state) {
-                      return OutlinedButton(
-                        onPressed: state.status.isProcessing ? null : () => _onOtpRequestBack(context),
-                        style: outlinedButtonStyles?.neutral,
-                        child: Text(context.l10n.login_Button_back),
-                      );
-                    },
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: BlocBuilder<LoginCubit, LoginState>(
+                      buildWhen: (previous, current) =>
+                          previous.status != current.status || previous.phoneInput != current.phoneInput,
+                      builder: (context, state) {
+                        return ElevatedButton(
+                          onPressed: !state.phoneInput.valid ? null : () => _onOtpRequestSubmitted(context),
+                          style: elevatedButtonStyles?.primary,
+                          child: !state.status.isProcessing
+                              ? Text(context.l10n.loginOtpRequestTabProceedButtonLabel)
+                              : SizedCircularProgressIndicator(
+                                  size: 16,
+                                  strokeWidth: 2,
+                                  color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
+                                ),
+                        );
+                      },
+                    ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: BlocBuilder<LoginCubit, LoginState>(
-                    buildWhen: (previous, current) =>
-                        previous.status != current.status || previous.phoneInput != current.phoneInput,
-                    builder: (context, state) {
-                      return ElevatedButton(
-                        onPressed: !state.phoneInput.valid ? null : () => _onOtpRequestSubmitted(context),
-                        style: elevatedButtonStyles?.primary,
-                        child: !state.status.isProcessing
-                            ? Text(context.l10n.loginOtpRequestTabProceedButtonLabel)
-                            : SizedCircularProgressIndicator(
-                                size: 16,
-                                strokeWidth: 2,
-                                color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
-                              ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: kToolbarHeight / 2),
-          ],
+                ],
+              ),
+              const SizedBox(height: kToolbarHeight / 2),
+            ],
+          ),
         ),
       ),
     );
