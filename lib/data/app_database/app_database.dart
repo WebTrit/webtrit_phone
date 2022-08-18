@@ -213,9 +213,9 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
           }
         })
         ..orderBy([
-          (t) => OrderingTerm.asc(t.displayName),
           (t) => OrderingTerm.asc(t.lastName),
           (t) => OrderingTerm.asc(t.firstName),
+          (t) => OrderingTerm.asc(t.displayName),
         ]);
 
   Stream<List<ContactData>> watchAllContacts([ContactSourceType? sourceType]) => _selectAllContacts(sourceType).watch();
