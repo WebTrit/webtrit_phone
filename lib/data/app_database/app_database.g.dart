@@ -1359,6 +1359,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
 
 mixin _$ContactsDaoMixin on DatabaseAccessor<AppDatabase> {
   $ContactsTableTable get contactsTable => attachedDatabase.contactsTable;
+  $ContactPhonesTableTable get contactPhonesTable =>
+      attachedDatabase.contactPhonesTable;
 }
 mixin _$ContactPhonesDaoMixin on DatabaseAccessor<AppDatabase> {
   $ContactPhonesTableTable get contactPhonesTable =>

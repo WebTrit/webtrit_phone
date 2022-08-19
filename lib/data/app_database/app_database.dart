@@ -199,6 +199,7 @@ class FavoritesTable extends Table {
 
 @DriftAccessor(tables: [
   ContactsTable,
+  ContactPhonesTable,
 ])
 class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin {
   ContactsDao(AppDatabase db) : super(db);
@@ -222,31 +223,35 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
 
   Future<List<ContactData>> getAllContacts([ContactSourceType? sourceType]) => _selectAllContacts(sourceType).get();
 
-  SimpleSelectStatement<$ContactsTableTable, ContactData> _selectAllNotEmptyContacts([ContactSourceType? sourceType]) =>
-      _selectAllContacts(sourceType)
-        ..where(
-          (t) =>
-              t.displayName.isNotNull() & t.displayName.equalsExp(const Constant('')).not() |
-              t.firstName.isNotNull() & t.firstName.equalsExp(const Constant('')).not() |
-              t.lastName.isNotNull() & t.lastName.equalsExp(const Constant('')).not(),
-        );
-
-  Stream<List<ContactData>> watchAllNotEmptyContacts([ContactSourceType? sourceType]) =>
-      _selectAllNotEmptyContacts(sourceType).watch();
-
-  SimpleSelectStatement<$ContactsTableTable, ContactData> _selectAllLikeContacts(Iterable<String> searchBits,
-      [ContactSourceType? sourceType]) {
+  Stream<List<ContactData>> watchAllNotEmptyContacts([ContactSourceType? sourceType]) {
     final q = _selectAllContacts(sourceType);
-    for (final searchBit in searchBits) {
-      q.where(
-        (t) => t.displayName.like('%$searchBit%') | t.firstName.like('%$searchBit%') | t.lastName.like('%$searchBit%'),
-      );
-    }
-    return q;
+    q.where(
+      (t) => [
+        t.lastName,
+        t.firstName,
+        t.displayName,
+      ].map((c) => c.isNotNull() & c.equalsExp(const Constant('')).not()).reduce((v, e) => v | e),
+    );
+    return q.watch();
   }
 
-  Stream<List<ContactData>> watchAllLikeContacts(Iterable<String> searchBits, [ContactSourceType? sourceType]) =>
-      _selectAllLikeContacts(searchBits, sourceType).watch();
+  Stream<List<ContactData>> watchAllLikeContacts(Iterable<String> searchBits, [ContactSourceType? sourceType]) {
+    final q = _selectAllContacts(sourceType).join([
+      leftOuterJoin(contactPhonesTable, contactPhonesTable.contactId.equalsExp(contactsTable.id)),
+    ]);
+    for (final searchBit in searchBits) {
+      q.where(
+        [
+          contactsTable.lastName,
+          contactsTable.firstName,
+          contactsTable.displayName,
+          contactPhonesTable.number,
+        ].map((c) => c.like('%$searchBit%')).reduce((v, e) => v | e),
+      );
+    }
+    q.groupBy([contactPhonesTable.contactId]);
+    return q.watch().map((rows) => rows.map((row) => row.readTable(contactsTable)).toList());
+  }
 
   Future<ContactData> insertOnUniqueConflictUpdateContact(Insertable<ContactData> contact) =>
       into(contactsTable).insertReturning(contact,
