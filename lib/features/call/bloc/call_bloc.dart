@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:audio_session/audio_session.dart';
@@ -216,7 +217,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
     });
 
-    if (Platform.isIOS) {
+    if (!kIsWeb && Platform.isIOS) {
       _routeChangeSubscription = AVAudioSession().routeChangeStream.listen((event) {
         add(const _AudioSessionRouteChanged());
       });
