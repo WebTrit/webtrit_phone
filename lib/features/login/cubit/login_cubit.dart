@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
+
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 
@@ -138,7 +139,7 @@ class LoginCubit extends Cubit<LoginState> {
 
     final coreUrl = Uri.parse(state.coreUrl!);
     final webtritApiClient = WebtritApiClient(coreUrl, customHttpClient: httpClient);
-    final type = _appType;
+    final type = PlatformInfo().appType;
     final identifier = DeviceInfo().identifierForVendor;
     final phone = state.phoneInput.value;
     try {
@@ -210,18 +211,6 @@ class LoginCubit extends Cubit<LoginState> {
       status: LoginStatus.back,
       codeInput: const CodeInput.pure(),
     ));
-  }
-
-  //
-
-  AppType get _appType {
-    if (Platform.isAndroid) {
-      return AppType.android;
-    } else if (Platform.isIOS) {
-      return AppType.ios;
-    } else {
-      throw UnsupportedError('platform not supported');
-    }
   }
 }
 
