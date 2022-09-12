@@ -1,14 +1,11 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
-
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/app/consts.dart';
 import 'package:webtrit_phone/app/routes.dart';
