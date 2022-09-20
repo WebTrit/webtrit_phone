@@ -321,6 +321,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
 
       signalingClient.listen(
+        onHandshakeState: _onSignalingHandshakeState,
         onEvent: _onSignalingEvent,
         onError: _onSignalingError,
         onDisconnect: _onSignalingDisconnect,
@@ -1023,30 +1024,34 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   // WebtritSignalingClient listen handlers
 
-  void _onSignalingEvent(Event event) {
-    if (event is StateEvent) {
-      final activeCallIds = Set.from(state.activeCalls.map((activeCall) => activeCall.callId.callId));
-      final signalingStateCallIds = Set.from(event.calls.keys);
-      for (final callId in activeCallIds.difference(signalingStateCallIds)) {
-        add(_CallSignalingEvent.hangup(
-          callId: CallIdValue(callId),
-          code: 487,
-          reason: 'Request Terminated',
-        ));
-      }
+  void _onSignalingHandshakeState(HandshakeState handshakeState) {
+    final activeLines = handshakeState.lines.whereType<Line>();
 
-      event.calls.forEach((callIdString, callLogs) {
-        // TODO: extend logic of call logs analysis for such case as signaling reconnect
-        for (var callLog in callLogs) {
-          if (callLog is CallEventLog) {
-            final event = callLog.callEvent;
-            if (event is IncomingCallEvent) {
-              _onSignalingEvent(event);
-            }
+    final activeCallIds = Set.from(state.activeCalls.map((activeCall) => activeCall.callId.callId));
+    final handshakeStateCallIds = Set.from(activeLines.map((line) => line.callId));
+    for (final callId in activeCallIds.difference(handshakeStateCallIds)) {
+      add(_CallSignalingEvent.hangup(
+        callId: CallIdValue(callId),
+        code: 487,
+        reason: 'Request Terminated',
+      ));
+    }
+
+    for (final activeLine in activeLines) {
+      // TODO: extend logic of call logs analysis for such case as signaling reconnect
+      for (final callLog in activeLine.callLogs) {
+        if (callLog is CallEventLog) {
+          final event = callLog.callEvent;
+          if (event is IncomingCallEvent) {
+            _onSignalingEvent(event);
           }
         }
-      });
-    } else if (event is IncomingCallEvent) {
+      }
+    }
+  }
+
+  void _onSignalingEvent(Event event) {
+    if (event is IncomingCallEvent) {
       add(_CallSignalingEvent.incoming(
         callId: CallIdValue(event.callId),
         callee: event.callee,

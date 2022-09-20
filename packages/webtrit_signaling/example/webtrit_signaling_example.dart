@@ -23,6 +23,9 @@ void main(List<String> arguments) async {
 
   print('Listen');
   client.listen(
+    onHandshakeState: (handshakeState) {
+      print('>> handshakeState: $handshakeState');
+    },
     onEvent: (event) {
       print('>> event: $event');
     },
@@ -30,7 +33,7 @@ void main(List<String> arguments) async {
       print('>> error: $error\n$stackTrace');
     },
     onDisconnect: (code, reason) {
-      print('>> onDone with code: $code and reason: $reason');
+      print('>> onDisconnect with code: $code and reason: $reason');
     },
   );
 

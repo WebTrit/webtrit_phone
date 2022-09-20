@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
 
 import '../requests/requests.dart';
-import 'events.dart';
+import '../events/events.dart';
+import 'handshake.dart';
 
 enum RegistrationStatus {
   registering,
@@ -12,8 +13,12 @@ enum RegistrationStatus {
   unregistered,
 }
 
-class RegistrationState extends Equatable {
-  const RegistrationState({required this.status, this.code, this.reason});
+class Registration extends Equatable {
+  const Registration({
+    required this.status,
+    this.code,
+    this.reason,
+  });
 
   final RegistrationStatus status;
   final int? code;
@@ -24,6 +29,22 @@ class RegistrationState extends Equatable {
         status,
         code,
         reason,
+      ];
+}
+
+class Line extends Equatable {
+  Line({
+    required this.callId,
+    required this.callLogs,
+  });
+
+  final String callId;
+  final List<CallLog> callLogs;
+
+  @override
+  List<Object?> get props => [
+        callId,
+        callLogs,
       ];
 }
 
@@ -70,45 +91,53 @@ class CallEventLog extends CallLog {
       ];
 }
 
-class StateEvent extends Event {
-  const StateEvent({
+class HandshakeState extends Handshake {
+  const HandshakeState({
+    required this.keepaliveInterval,
     required this.timestamp,
-    required this.registrationState,
-    required this.maxActiveCallCount,
-    required this.calls,
+    required this.registration,
+    required this.lines,
   }) : super();
 
+  final Duration keepaliveInterval;
   final int timestamp;
-  final RegistrationState registrationState;
-  final int maxActiveCallCount;
-  final Map<String, List<CallLog>> calls;
+  final Registration registration;
+  final List<Line?> lines;
 
   @override
   List<Object?> get props => [
+        keepaliveInterval,
         timestamp,
-        registrationState,
-        maxActiveCallCount,
-        calls,
+        registration,
+        lines,
       ];
 
-  static const event = 'state';
+  static const type = 'state';
 
-  factory StateEvent.fromJson(Map<String, dynamic> json) {
-    final eventValue = json['event'];
-    if (eventValue != event) {
-      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+  factory HandshakeState.fromJson(Map<String, dynamic> json) {
+    final handshakeValue = json['handshake'];
+    if (handshakeValue != type) {
+      throw ArgumentError.value(handshakeValue, "handshake", "Not equal $type");
     }
 
-    final registrationStateMessage = json['registration_state'];
-    final registrationState = RegistrationState(
-      status: RegistrationStatus.values.byName(registrationStateMessage['status']),
-      code: registrationStateMessage['code'],
-      reason: registrationStateMessage['reason'],
+    final keepaliveInterval = Duration(milliseconds: json['keepalive_interval'] as int);
+
+    final timestamp = json['timestamp'] as int;
+
+    final registrationMessage = json['registration'];
+    final registration = Registration(
+      status: RegistrationStatus.values.byName(registrationMessage['status']),
+      code: registrationMessage['code'],
+      reason: registrationMessage['reason'],
     );
-    final maxActiveCallCount = json['max_active_call_count'];
-    final callsJson = json['calls'] as Map<String, dynamic>;
-    final calls = callsJson.map((callId, callLogsJson) {
-      final callLogs = (callLogsJson as List<dynamic>).map<CallLog>((callLogJson) {
+    final linesJson = json['lines'] as List<dynamic>;
+    final lines = linesJson.map((lineJson) {
+      if (lineJson == null) {
+        return null;
+      }
+
+      final callId = lineJson['call_id'] as String;
+      final callLogs = (lineJson['call_logs'] as List<dynamic>).map<CallLog>((callLogJson) {
         final timestamp = callLogJson[0] as int;
         final requestOrEventJson = callLogJson[1];
         requestOrEventJson['call_id'] = callId; // inject call_id to apply universal fromJson methods
@@ -117,18 +146,21 @@ class StateEvent extends Event {
         } else if (requestOrEventJson.containsKey('event')) {
           return CallEventLog(timestamp: timestamp, callEvent: _toEvent(requestOrEventJson));
         } else {
-          throw ArgumentError.value(callsJson, "callsJson", "Active calls' logs incorrect");
+          throw ArgumentError.value(requestOrEventJson, "requestOrEventJson", "Active call's logs incorrect");
         }
-      }).toList();
+      }).toList(growable: false);
 
-      return MapEntry(callId, callLogs);
-    });
+      return Line(
+        callId: callId,
+        callLogs: callLogs,
+      );
+    }).toList(growable: false);
 
-    return StateEvent(
-      timestamp: json['timestamp'],
-      registrationState: registrationState,
-      maxActiveCallCount: maxActiveCallCount,
-      calls: calls,
+    return HandshakeState(
+      keepaliveInterval: keepaliveInterval,
+      timestamp: timestamp,
+      registration: registration,
+      lines: lines,
     );
   }
 

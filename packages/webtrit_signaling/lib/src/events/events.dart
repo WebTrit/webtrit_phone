@@ -24,7 +24,6 @@ export 'registering_event.dart';
 export 'registration_failed.dart';
 export 'resuming_event.dart';
 export 'ringing_event.dart';
-export 'state_event.dart';
 export 'transfer_event.dart';
 export 'transferring_event.dart';
 export 'unregistered_event.dart';
