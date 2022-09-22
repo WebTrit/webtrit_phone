@@ -1,11 +1,12 @@
-import 'event.dart';
+import 'line_event.dart';
 
-class ErrorEvent extends Event {
-  const ErrorEvent({
+class ErrorLineEvent extends LineEvent {
+  const ErrorLineEvent({
+    required int line,
     required this.code,
     required this.description,
     this.callId,
-  }) : super();
+  }) : super(line: line);
 
   final int code;
   final String description;
@@ -20,13 +21,14 @@ class ErrorEvent extends Event {
 
   static const event = 'error';
 
-  factory ErrorEvent.fromJson(Map<String, dynamic> json) {
+  factory ErrorLineEvent.fromJson(Map<String, dynamic> json) {
     final eventValue = json['event'];
     if (eventValue != event) {
       throw ArgumentError.value(eventValue, "event", "Not equal $event");
     }
 
-    return ErrorEvent(
+    return ErrorLineEvent(
+      line: json['line'],
       code: json['code'],
       description: json['description'],
       callId: json['call_id'],

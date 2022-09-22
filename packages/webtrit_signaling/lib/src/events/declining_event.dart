@@ -2,10 +2,11 @@ import 'call_event.dart';
 
 class DecliningEvent extends CallEvent {
   const DecliningEvent({
+    required int line,
     required String callId,
     required this.code,
     this.referId,
-  }) : super(callId: callId);
+  }) : super(line: line, callId: callId);
 
   final int code;
   final int? referId;
@@ -26,6 +27,7 @@ class DecliningEvent extends CallEvent {
     }
 
     return DecliningEvent(
+      line: json['line'],
       callId: json['call_id'],
       code: json['code'],
       referId: json['refer_id'],

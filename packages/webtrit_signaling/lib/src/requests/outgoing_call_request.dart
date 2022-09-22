@@ -2,10 +2,11 @@ import 'call_request.dart';
 
 class OutgoingCallRequest extends CallRequest {
   const OutgoingCallRequest({
+    required int line,
     required String callId,
     required this.number,
     required this.jsep,
-  }) : super(callId: callId);
+  }) : super(line: line, callId: callId);
 
   final String number;
   final Map<String, dynamic> jsep;
@@ -26,6 +27,7 @@ class OutgoingCallRequest extends CallRequest {
     }
 
     return OutgoingCallRequest(
+      line: json['line'],
       callId: json['call_id'],
       number: json['number'],
       jsep: json['jsep'],
@@ -36,6 +38,7 @@ class OutgoingCallRequest extends CallRequest {
   Map<String, dynamic> toJson() {
     return {
       'request': request,
+      'line': line,
       'call_id': callId,
       'number': number,
       'jsep': jsep,

@@ -34,11 +34,21 @@ class _SignalingClientEvent with _$_SignalingClientEvent implements CallEvent {
   const factory _SignalingClientEvent.disconnected(int? code, String? reason) = _SignalingClientEventDisconnected;
 }
 
+// handshake signaling events
+
+@Freezed(copyWith: false)
+class _HandshakeSignalingEvent with _$_HandshakeSignalingEvent implements CallEvent {
+  const factory _HandshakeSignalingEvent.state({
+    required int linesCount,
+  }) = _HandshakeSignalingEventState;
+}
+
 // call signaling events
 
 @Freezed(copyWith: false)
 class _CallSignalingEvent with _$_CallSignalingEvent implements CallEvent {
   const factory _CallSignalingEvent.incoming({
+    required int line,
     required CallIdValue callId,
     required String callee,
     required String caller,
@@ -47,22 +57,26 @@ class _CallSignalingEvent with _$_CallSignalingEvent implements CallEvent {
   }) = _CallSignalingEventIncoming;
 
   const factory _CallSignalingEvent.ringing({
+    required int line,
     required CallIdValue callId,
   }) = _CallSignalingEventRinging;
 
   const factory _CallSignalingEvent.progress({
+    required int line,
     required CallIdValue callId,
     required String callee,
     JsepValue? jsep,
   }) = _CallSignalingEventProgress;
 
   const factory _CallSignalingEvent.accepted({
+    required int line,
     required CallIdValue callId,
     String? callee,
     JsepValue? jsep,
   }) = _CallSignalingEventAccepted;
 
   const factory _CallSignalingEvent.hangup({
+    required int line,
     required CallIdValue callId,
     required int code,
     required String reason,
@@ -95,6 +109,7 @@ class CallControlEvent with _$CallControlEvent implements CallEvent {
       'only one of generic, number or email parameters must be assign')
   @With<CallControlEventStartedMixin>()
   const factory CallControlEvent.started({
+    int? line,
     String? generic,
     String? number,
     String? email,

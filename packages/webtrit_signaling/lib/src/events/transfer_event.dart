@@ -1,12 +1,13 @@
-import 'event.dart';
+import 'line_event.dart';
 
-class TransferEvent extends Event {
+class TransferEvent extends LineEvent {
   const TransferEvent({
+    required int line,
     required this.referId,
     required this.referTo,
     required this.referredBy,
     required this.replaceCallId,
-  }) : super();
+  }) : super(line: line);
 
   final String referId;
   final String referTo;
@@ -30,6 +31,7 @@ class TransferEvent extends Event {
     }
 
     return TransferEvent(
+      line: json['line'],
       referId: json['refer_id'],
       referTo: json['refer_to'],
       referredBy: json['referred_by'],

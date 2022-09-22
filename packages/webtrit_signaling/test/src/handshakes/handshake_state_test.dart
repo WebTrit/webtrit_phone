@@ -47,6 +47,7 @@ void main() {
           CallEventLog(
             timestamp: 1662114479751,
             callEvent: IncomingCallEvent(
+              line: 0,
               callId: 'qwertyuiopasdfghjklzxcvbnm',
               callee: '123',
               caller: '456',

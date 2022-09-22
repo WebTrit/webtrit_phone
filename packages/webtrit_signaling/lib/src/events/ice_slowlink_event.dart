@@ -1,13 +1,13 @@
-import 'call_event.dart';
 import 'ice_media_type.dart';
+import 'line_event.dart';
 
-class IceSlowLinkEvent extends CallEvent {
+class IceSlowLinkEvent extends LineEvent {
   const IceSlowLinkEvent({
-    required String callId,
+    required int line,
     required this.media,
     required this.uplink,
     required this.lost,
-  }) : super(callId: callId);
+  }) : super(line: line);
 
   final IceMediaType media;
   final bool uplink;
@@ -30,7 +30,7 @@ class IceSlowLinkEvent extends CallEvent {
     }
 
     return IceSlowLinkEvent(
-      callId: json['call_id'],
+      line: json['line'],
       media: IceMediaType.values.byName(json['media']),
       uplink: json['uplink'],
       lost: json['lost'],

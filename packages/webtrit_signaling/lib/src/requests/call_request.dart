@@ -1,14 +1,16 @@
-import 'request.dart';
+import 'line_request.dart';
 
-abstract class CallRequest extends Request {
+abstract class CallRequest extends LineRequest {
   const CallRequest({
+    required int line,
     required this.callId,
-  }) : super();
+  }) : super(line: line);
 
   final String callId;
 
   @override
   List<Object?> get props => [
+        ...super.props,
         callId,
       ];
 }

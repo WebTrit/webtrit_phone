@@ -2,8 +2,9 @@ import 'call_request.dart';
 
 class HangupRequest extends CallRequest {
   const HangupRequest({
+    required int line,
     required String callId,
-  }) : super(callId: callId);
+  }) : super(line: line, callId: callId);
 
   static const request = 'hangup';
 
@@ -14,6 +15,7 @@ class HangupRequest extends CallRequest {
     }
 
     return HangupRequest(
+      line: json['line'],
       callId: json['call_id'],
     );
   }
@@ -22,6 +24,7 @@ class HangupRequest extends CallRequest {
   Map<String, dynamic> toJson() {
     return {
       'request': request,
+      'line': line,
       'call_id': callId,
     };
   }

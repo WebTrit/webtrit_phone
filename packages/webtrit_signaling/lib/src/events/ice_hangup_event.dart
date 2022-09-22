@@ -1,10 +1,10 @@
-import 'call_event.dart';
+import 'line_event.dart';
 
-class IceHangupEvent extends CallEvent {
+class IceHangupEvent extends LineEvent {
   const IceHangupEvent({
-    required String callId,
+    required int line,
     this.reason,
-  }) : super(callId: callId);
+  }) : super(line: line);
 
   final String? reason;
 
@@ -23,7 +23,7 @@ class IceHangupEvent extends CallEvent {
     }
 
     return IceHangupEvent(
-      callId: json['call_id'],
+      line: json['line'],
       reason: json['reason'],
     );
   }

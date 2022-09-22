@@ -13,6 +13,15 @@ abstract class Notification {
   SnackBarAction? action(BuildContext context) => null;
 }
 
+class CallUndefinedLineErrorNotification extends Notification {
+  const CallUndefinedLineErrorNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.notifications_errorSnackBar_callUndefinedLine;
+  }
+}
+
 class CallSignalingClientNotConnectErrorNotification extends Notification {
   const CallSignalingClientNotConnectErrorNotification();
 

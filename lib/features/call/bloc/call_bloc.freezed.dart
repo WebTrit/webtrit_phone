@@ -500,48 +500,185 @@ abstract class _SignalingClientEventDisconnected
 }
 
 /// @nodoc
+mixin _$_HandshakeSignalingEvent {
+  int get linesCount => throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(int linesCount) state,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(int linesCount)? state,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(int linesCount)? state,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_HandshakeSignalingEventState value) state,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_HandshakeSignalingEventState value)? state,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_HandshakeSignalingEventState value)? state,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+
+class _$_HandshakeSignalingEventState implements _HandshakeSignalingEventState {
+  const _$_HandshakeSignalingEventState({required this.linesCount});
+
+  @override
+  final int linesCount;
+
+  @override
+  String toString() {
+    return '_HandshakeSignalingEvent.state(linesCount: $linesCount)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_HandshakeSignalingEventState &&
+            const DeepCollectionEquality()
+                .equals(other.linesCount, linesCount));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(linesCount));
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(int linesCount) state,
+  }) {
+    return state(linesCount);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(int linesCount)? state,
+  }) {
+    return state?.call(linesCount);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(int linesCount)? state,
+    required TResult orElse(),
+  }) {
+    if (state != null) {
+      return state(linesCount);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_HandshakeSignalingEventState value) state,
+  }) {
+    return state(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_HandshakeSignalingEventState value)? state,
+  }) {
+    return state?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_HandshakeSignalingEventState value)? state,
+    required TResult orElse(),
+  }) {
+    if (state != null) {
+      return state(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _HandshakeSignalingEventState
+    implements _HandshakeSignalingEvent {
+  const factory _HandshakeSignalingEventState({required final int linesCount}) =
+      _$_HandshakeSignalingEventState;
+
+  @override
+  int get linesCount;
+}
+
+/// @nodoc
 mixin _$_CallSignalingEvent {
+  int get line => throw _privateConstructorUsedError;
   CallIdValue get callId => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(CallIdValue callId, String callee, String caller,
-            String? callerDisplayName, JsepValue? jsep)
+    required TResult Function(int line, CallIdValue callId, String callee,
+            String caller, String? callerDisplayName, JsepValue? jsep)
         incoming,
-    required TResult Function(CallIdValue callId) ringing,
+    required TResult Function(int line, CallIdValue callId) ringing,
     required TResult Function(
-            CallIdValue callId, String callee, JsepValue? jsep)
+            int line, CallIdValue callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            CallIdValue callId, String? callee, JsepValue? jsep)
+            int line, CallIdValue callId, String? callee, JsepValue? jsep)
         accepted,
-    required TResult Function(CallIdValue callId, int code, String reason)
+    required TResult Function(
+            int line, CallIdValue callId, int code, String reason)
         hangup,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(CallIdValue callId, String callee, String caller,
+    TResult Function(int line, CallIdValue callId, String callee, String caller,
             String? callerDisplayName, JsepValue? jsep)?
         incoming,
-    TResult Function(CallIdValue callId)? ringing,
-    TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
+    TResult Function(int line, CallIdValue callId)? ringing,
+    TResult Function(
+            int line, CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(CallIdValue callId, String? callee, JsepValue? jsep)?
+    TResult Function(
+            int line, CallIdValue callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(CallIdValue callId, int code, String reason)? hangup,
+    TResult Function(int line, CallIdValue callId, int code, String reason)?
+        hangup,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(CallIdValue callId, String callee, String caller,
+    TResult Function(int line, CallIdValue callId, String callee, String caller,
             String? callerDisplayName, JsepValue? jsep)?
         incoming,
-    TResult Function(CallIdValue callId)? ringing,
-    TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
+    TResult Function(int line, CallIdValue callId)? ringing,
+    TResult Function(
+            int line, CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(CallIdValue callId, String? callee, JsepValue? jsep)?
+    TResult Function(
+            int line, CallIdValue callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(CallIdValue callId, int code, String reason)? hangup,
+    TResult Function(int line, CallIdValue callId, int code, String reason)?
+        hangup,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -579,12 +716,15 @@ mixin _$_CallSignalingEvent {
 
 class _$_CallSignalingEventIncoming implements _CallSignalingEventIncoming {
   const _$_CallSignalingEventIncoming(
-      {required this.callId,
+      {required this.line,
+      required this.callId,
       required this.callee,
       required this.caller,
       this.callerDisplayName,
       this.jsep});
 
+  @override
+  final int line;
   @override
   final CallIdValue callId;
   @override
@@ -598,7 +738,7 @@ class _$_CallSignalingEventIncoming implements _CallSignalingEventIncoming {
 
   @override
   String toString() {
-    return '_CallSignalingEvent.incoming(callId: $callId, callee: $callee, caller: $caller, callerDisplayName: $callerDisplayName, jsep: $jsep)';
+    return '_CallSignalingEvent.incoming(line: $line, callId: $callId, callee: $callee, caller: $caller, callerDisplayName: $callerDisplayName, jsep: $jsep)';
   }
 
   @override
@@ -606,6 +746,7 @@ class _$_CallSignalingEventIncoming implements _CallSignalingEventIncoming {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallSignalingEventIncoming &&
+            const DeepCollectionEquality().equals(other.line, line) &&
             const DeepCollectionEquality().equals(other.callId, callId) &&
             const DeepCollectionEquality().equals(other.callee, callee) &&
             const DeepCollectionEquality().equals(other.caller, caller) &&
@@ -617,6 +758,7 @@ class _$_CallSignalingEventIncoming implements _CallSignalingEventIncoming {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(line),
       const DeepCollectionEquality().hash(callId),
       const DeepCollectionEquality().hash(callee),
       const DeepCollectionEquality().hash(caller),
@@ -626,54 +768,62 @@ class _$_CallSignalingEventIncoming implements _CallSignalingEventIncoming {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(CallIdValue callId, String callee, String caller,
-            String? callerDisplayName, JsepValue? jsep)
+    required TResult Function(int line, CallIdValue callId, String callee,
+            String caller, String? callerDisplayName, JsepValue? jsep)
         incoming,
-    required TResult Function(CallIdValue callId) ringing,
+    required TResult Function(int line, CallIdValue callId) ringing,
     required TResult Function(
-            CallIdValue callId, String callee, JsepValue? jsep)
+            int line, CallIdValue callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            CallIdValue callId, String? callee, JsepValue? jsep)
+            int line, CallIdValue callId, String? callee, JsepValue? jsep)
         accepted,
-    required TResult Function(CallIdValue callId, int code, String reason)
+    required TResult Function(
+            int line, CallIdValue callId, int code, String reason)
         hangup,
   }) {
-    return incoming(callId, callee, caller, callerDisplayName, jsep);
+    return incoming(line, callId, callee, caller, callerDisplayName, jsep);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(CallIdValue callId, String callee, String caller,
+    TResult Function(int line, CallIdValue callId, String callee, String caller,
             String? callerDisplayName, JsepValue? jsep)?
         incoming,
-    TResult Function(CallIdValue callId)? ringing,
-    TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
+    TResult Function(int line, CallIdValue callId)? ringing,
+    TResult Function(
+            int line, CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(CallIdValue callId, String? callee, JsepValue? jsep)?
+    TResult Function(
+            int line, CallIdValue callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(CallIdValue callId, int code, String reason)? hangup,
+    TResult Function(int line, CallIdValue callId, int code, String reason)?
+        hangup,
   }) {
-    return incoming?.call(callId, callee, caller, callerDisplayName, jsep);
+    return incoming?.call(
+        line, callId, callee, caller, callerDisplayName, jsep);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(CallIdValue callId, String callee, String caller,
+    TResult Function(int line, CallIdValue callId, String callee, String caller,
             String? callerDisplayName, JsepValue? jsep)?
         incoming,
-    TResult Function(CallIdValue callId)? ringing,
-    TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
+    TResult Function(int line, CallIdValue callId)? ringing,
+    TResult Function(
+            int line, CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(CallIdValue callId, String? callee, JsepValue? jsep)?
+    TResult Function(
+            int line, CallIdValue callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(CallIdValue callId, int code, String reason)? hangup,
+    TResult Function(int line, CallIdValue callId, int code, String reason)?
+        hangup,
     required TResult orElse(),
   }) {
     if (incoming != null) {
-      return incoming(callId, callee, caller, callerDisplayName, jsep);
+      return incoming(line, callId, callee, caller, callerDisplayName, jsep);
     }
     return orElse();
   }
@@ -721,12 +871,15 @@ class _$_CallSignalingEventIncoming implements _CallSignalingEventIncoming {
 
 abstract class _CallSignalingEventIncoming implements _CallSignalingEvent {
   const factory _CallSignalingEventIncoming(
-      {required final CallIdValue callId,
+      {required final int line,
+      required final CallIdValue callId,
       required final String callee,
       required final String caller,
       final String? callerDisplayName,
       final JsepValue? jsep}) = _$_CallSignalingEventIncoming;
 
+  @override
+  int get line;
   @override
   CallIdValue get callId;
   String get callee;
@@ -738,14 +891,17 @@ abstract class _CallSignalingEventIncoming implements _CallSignalingEvent {
 /// @nodoc
 
 class _$_CallSignalingEventRinging implements _CallSignalingEventRinging {
-  const _$_CallSignalingEventRinging({required this.callId});
+  const _$_CallSignalingEventRinging(
+      {required this.line, required this.callId});
 
+  @override
+  final int line;
   @override
   final CallIdValue callId;
 
   @override
   String toString() {
-    return '_CallSignalingEvent.ringing(callId: $callId)';
+    return '_CallSignalingEvent.ringing(line: $line, callId: $callId)';
   }
 
   @override
@@ -753,64 +909,74 @@ class _$_CallSignalingEventRinging implements _CallSignalingEventRinging {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallSignalingEventRinging &&
+            const DeepCollectionEquality().equals(other.line, line) &&
             const DeepCollectionEquality().equals(other.callId, callId));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(callId));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(line),
+      const DeepCollectionEquality().hash(callId));
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(CallIdValue callId, String callee, String caller,
-            String? callerDisplayName, JsepValue? jsep)
+    required TResult Function(int line, CallIdValue callId, String callee,
+            String caller, String? callerDisplayName, JsepValue? jsep)
         incoming,
-    required TResult Function(CallIdValue callId) ringing,
+    required TResult Function(int line, CallIdValue callId) ringing,
     required TResult Function(
-            CallIdValue callId, String callee, JsepValue? jsep)
+            int line, CallIdValue callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            CallIdValue callId, String? callee, JsepValue? jsep)
+            int line, CallIdValue callId, String? callee, JsepValue? jsep)
         accepted,
-    required TResult Function(CallIdValue callId, int code, String reason)
+    required TResult Function(
+            int line, CallIdValue callId, int code, String reason)
         hangup,
   }) {
-    return ringing(callId);
+    return ringing(line, callId);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(CallIdValue callId, String callee, String caller,
+    TResult Function(int line, CallIdValue callId, String callee, String caller,
             String? callerDisplayName, JsepValue? jsep)?
         incoming,
-    TResult Function(CallIdValue callId)? ringing,
-    TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
+    TResult Function(int line, CallIdValue callId)? ringing,
+    TResult Function(
+            int line, CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(CallIdValue callId, String? callee, JsepValue? jsep)?
+    TResult Function(
+            int line, CallIdValue callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(CallIdValue callId, int code, String reason)? hangup,
+    TResult Function(int line, CallIdValue callId, int code, String reason)?
+        hangup,
   }) {
-    return ringing?.call(callId);
+    return ringing?.call(line, callId);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(CallIdValue callId, String callee, String caller,
+    TResult Function(int line, CallIdValue callId, String callee, String caller,
             String? callerDisplayName, JsepValue? jsep)?
         incoming,
-    TResult Function(CallIdValue callId)? ringing,
-    TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
+    TResult Function(int line, CallIdValue callId)? ringing,
+    TResult Function(
+            int line, CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(CallIdValue callId, String? callee, JsepValue? jsep)?
+    TResult Function(
+            int line, CallIdValue callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(CallIdValue callId, int code, String reason)? hangup,
+    TResult Function(int line, CallIdValue callId, int code, String reason)?
+        hangup,
     required TResult orElse(),
   }) {
     if (ringing != null) {
-      return ringing(callId);
+      return ringing(line, callId);
     }
     return orElse();
   }
@@ -858,8 +1024,11 @@ class _$_CallSignalingEventRinging implements _CallSignalingEventRinging {
 
 abstract class _CallSignalingEventRinging implements _CallSignalingEvent {
   const factory _CallSignalingEventRinging(
-      {required final CallIdValue callId}) = _$_CallSignalingEventRinging;
+      {required final int line,
+      required final CallIdValue callId}) = _$_CallSignalingEventRinging;
 
+  @override
+  int get line;
   @override
   CallIdValue get callId;
 }
@@ -868,8 +1037,13 @@ abstract class _CallSignalingEventRinging implements _CallSignalingEvent {
 
 class _$_CallSignalingEventProgress implements _CallSignalingEventProgress {
   const _$_CallSignalingEventProgress(
-      {required this.callId, required this.callee, this.jsep});
+      {required this.line,
+      required this.callId,
+      required this.callee,
+      this.jsep});
 
+  @override
+  final int line;
   @override
   final CallIdValue callId;
   @override
@@ -879,7 +1053,7 @@ class _$_CallSignalingEventProgress implements _CallSignalingEventProgress {
 
   @override
   String toString() {
-    return '_CallSignalingEvent.progress(callId: $callId, callee: $callee, jsep: $jsep)';
+    return '_CallSignalingEvent.progress(line: $line, callId: $callId, callee: $callee, jsep: $jsep)';
   }
 
   @override
@@ -887,6 +1061,7 @@ class _$_CallSignalingEventProgress implements _CallSignalingEventProgress {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallSignalingEventProgress &&
+            const DeepCollectionEquality().equals(other.line, line) &&
             const DeepCollectionEquality().equals(other.callId, callId) &&
             const DeepCollectionEquality().equals(other.callee, callee) &&
             const DeepCollectionEquality().equals(other.jsep, jsep));
@@ -895,6 +1070,7 @@ class _$_CallSignalingEventProgress implements _CallSignalingEventProgress {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(line),
       const DeepCollectionEquality().hash(callId),
       const DeepCollectionEquality().hash(callee),
       const DeepCollectionEquality().hash(jsep));
@@ -902,54 +1078,61 @@ class _$_CallSignalingEventProgress implements _CallSignalingEventProgress {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(CallIdValue callId, String callee, String caller,
-            String? callerDisplayName, JsepValue? jsep)
+    required TResult Function(int line, CallIdValue callId, String callee,
+            String caller, String? callerDisplayName, JsepValue? jsep)
         incoming,
-    required TResult Function(CallIdValue callId) ringing,
+    required TResult Function(int line, CallIdValue callId) ringing,
     required TResult Function(
-            CallIdValue callId, String callee, JsepValue? jsep)
+            int line, CallIdValue callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            CallIdValue callId, String? callee, JsepValue? jsep)
+            int line, CallIdValue callId, String? callee, JsepValue? jsep)
         accepted,
-    required TResult Function(CallIdValue callId, int code, String reason)
+    required TResult Function(
+            int line, CallIdValue callId, int code, String reason)
         hangup,
   }) {
-    return progress(callId, callee, jsep);
+    return progress(line, callId, callee, jsep);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(CallIdValue callId, String callee, String caller,
+    TResult Function(int line, CallIdValue callId, String callee, String caller,
             String? callerDisplayName, JsepValue? jsep)?
         incoming,
-    TResult Function(CallIdValue callId)? ringing,
-    TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
+    TResult Function(int line, CallIdValue callId)? ringing,
+    TResult Function(
+            int line, CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(CallIdValue callId, String? callee, JsepValue? jsep)?
+    TResult Function(
+            int line, CallIdValue callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(CallIdValue callId, int code, String reason)? hangup,
+    TResult Function(int line, CallIdValue callId, int code, String reason)?
+        hangup,
   }) {
-    return progress?.call(callId, callee, jsep);
+    return progress?.call(line, callId, callee, jsep);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(CallIdValue callId, String callee, String caller,
+    TResult Function(int line, CallIdValue callId, String callee, String caller,
             String? callerDisplayName, JsepValue? jsep)?
         incoming,
-    TResult Function(CallIdValue callId)? ringing,
-    TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
+    TResult Function(int line, CallIdValue callId)? ringing,
+    TResult Function(
+            int line, CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(CallIdValue callId, String? callee, JsepValue? jsep)?
+    TResult Function(
+            int line, CallIdValue callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(CallIdValue callId, int code, String reason)? hangup,
+    TResult Function(int line, CallIdValue callId, int code, String reason)?
+        hangup,
     required TResult orElse(),
   }) {
     if (progress != null) {
-      return progress(callId, callee, jsep);
+      return progress(line, callId, callee, jsep);
     }
     return orElse();
   }
@@ -997,10 +1180,13 @@ class _$_CallSignalingEventProgress implements _CallSignalingEventProgress {
 
 abstract class _CallSignalingEventProgress implements _CallSignalingEvent {
   const factory _CallSignalingEventProgress(
-      {required final CallIdValue callId,
+      {required final int line,
+      required final CallIdValue callId,
       required final String callee,
       final JsepValue? jsep}) = _$_CallSignalingEventProgress;
 
+  @override
+  int get line;
   @override
   CallIdValue get callId;
   String get callee;
@@ -1011,8 +1197,10 @@ abstract class _CallSignalingEventProgress implements _CallSignalingEvent {
 
 class _$_CallSignalingEventAccepted implements _CallSignalingEventAccepted {
   const _$_CallSignalingEventAccepted(
-      {required this.callId, this.callee, this.jsep});
+      {required this.line, required this.callId, this.callee, this.jsep});
 
+  @override
+  final int line;
   @override
   final CallIdValue callId;
   @override
@@ -1022,7 +1210,7 @@ class _$_CallSignalingEventAccepted implements _CallSignalingEventAccepted {
 
   @override
   String toString() {
-    return '_CallSignalingEvent.accepted(callId: $callId, callee: $callee, jsep: $jsep)';
+    return '_CallSignalingEvent.accepted(line: $line, callId: $callId, callee: $callee, jsep: $jsep)';
   }
 
   @override
@@ -1030,6 +1218,7 @@ class _$_CallSignalingEventAccepted implements _CallSignalingEventAccepted {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallSignalingEventAccepted &&
+            const DeepCollectionEquality().equals(other.line, line) &&
             const DeepCollectionEquality().equals(other.callId, callId) &&
             const DeepCollectionEquality().equals(other.callee, callee) &&
             const DeepCollectionEquality().equals(other.jsep, jsep));
@@ -1038,6 +1227,7 @@ class _$_CallSignalingEventAccepted implements _CallSignalingEventAccepted {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(line),
       const DeepCollectionEquality().hash(callId),
       const DeepCollectionEquality().hash(callee),
       const DeepCollectionEquality().hash(jsep));
@@ -1045,54 +1235,61 @@ class _$_CallSignalingEventAccepted implements _CallSignalingEventAccepted {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(CallIdValue callId, String callee, String caller,
-            String? callerDisplayName, JsepValue? jsep)
+    required TResult Function(int line, CallIdValue callId, String callee,
+            String caller, String? callerDisplayName, JsepValue? jsep)
         incoming,
-    required TResult Function(CallIdValue callId) ringing,
+    required TResult Function(int line, CallIdValue callId) ringing,
     required TResult Function(
-            CallIdValue callId, String callee, JsepValue? jsep)
+            int line, CallIdValue callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            CallIdValue callId, String? callee, JsepValue? jsep)
+            int line, CallIdValue callId, String? callee, JsepValue? jsep)
         accepted,
-    required TResult Function(CallIdValue callId, int code, String reason)
+    required TResult Function(
+            int line, CallIdValue callId, int code, String reason)
         hangup,
   }) {
-    return accepted(callId, callee, jsep);
+    return accepted(line, callId, callee, jsep);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(CallIdValue callId, String callee, String caller,
+    TResult Function(int line, CallIdValue callId, String callee, String caller,
             String? callerDisplayName, JsepValue? jsep)?
         incoming,
-    TResult Function(CallIdValue callId)? ringing,
-    TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
+    TResult Function(int line, CallIdValue callId)? ringing,
+    TResult Function(
+            int line, CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(CallIdValue callId, String? callee, JsepValue? jsep)?
+    TResult Function(
+            int line, CallIdValue callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(CallIdValue callId, int code, String reason)? hangup,
+    TResult Function(int line, CallIdValue callId, int code, String reason)?
+        hangup,
   }) {
-    return accepted?.call(callId, callee, jsep);
+    return accepted?.call(line, callId, callee, jsep);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(CallIdValue callId, String callee, String caller,
+    TResult Function(int line, CallIdValue callId, String callee, String caller,
             String? callerDisplayName, JsepValue? jsep)?
         incoming,
-    TResult Function(CallIdValue callId)? ringing,
-    TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
+    TResult Function(int line, CallIdValue callId)? ringing,
+    TResult Function(
+            int line, CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(CallIdValue callId, String? callee, JsepValue? jsep)?
+    TResult Function(
+            int line, CallIdValue callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(CallIdValue callId, int code, String reason)? hangup,
+    TResult Function(int line, CallIdValue callId, int code, String reason)?
+        hangup,
     required TResult orElse(),
   }) {
     if (accepted != null) {
-      return accepted(callId, callee, jsep);
+      return accepted(line, callId, callee, jsep);
     }
     return orElse();
   }
@@ -1140,10 +1337,13 @@ class _$_CallSignalingEventAccepted implements _CallSignalingEventAccepted {
 
 abstract class _CallSignalingEventAccepted implements _CallSignalingEvent {
   const factory _CallSignalingEventAccepted(
-      {required final CallIdValue callId,
+      {required final int line,
+      required final CallIdValue callId,
       final String? callee,
       final JsepValue? jsep}) = _$_CallSignalingEventAccepted;
 
+  @override
+  int get line;
   @override
   CallIdValue get callId;
   String? get callee;
@@ -1154,8 +1354,13 @@ abstract class _CallSignalingEventAccepted implements _CallSignalingEvent {
 
 class _$_CallSignalingEventHangup implements _CallSignalingEventHangup {
   const _$_CallSignalingEventHangup(
-      {required this.callId, required this.code, required this.reason});
+      {required this.line,
+      required this.callId,
+      required this.code,
+      required this.reason});
 
+  @override
+  final int line;
   @override
   final CallIdValue callId;
   @override
@@ -1165,7 +1370,7 @@ class _$_CallSignalingEventHangup implements _CallSignalingEventHangup {
 
   @override
   String toString() {
-    return '_CallSignalingEvent.hangup(callId: $callId, code: $code, reason: $reason)';
+    return '_CallSignalingEvent.hangup(line: $line, callId: $callId, code: $code, reason: $reason)';
   }
 
   @override
@@ -1173,6 +1378,7 @@ class _$_CallSignalingEventHangup implements _CallSignalingEventHangup {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallSignalingEventHangup &&
+            const DeepCollectionEquality().equals(other.line, line) &&
             const DeepCollectionEquality().equals(other.callId, callId) &&
             const DeepCollectionEquality().equals(other.code, code) &&
             const DeepCollectionEquality().equals(other.reason, reason));
@@ -1181,6 +1387,7 @@ class _$_CallSignalingEventHangup implements _CallSignalingEventHangup {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(line),
       const DeepCollectionEquality().hash(callId),
       const DeepCollectionEquality().hash(code),
       const DeepCollectionEquality().hash(reason));
@@ -1188,54 +1395,61 @@ class _$_CallSignalingEventHangup implements _CallSignalingEventHangup {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(CallIdValue callId, String callee, String caller,
-            String? callerDisplayName, JsepValue? jsep)
+    required TResult Function(int line, CallIdValue callId, String callee,
+            String caller, String? callerDisplayName, JsepValue? jsep)
         incoming,
-    required TResult Function(CallIdValue callId) ringing,
+    required TResult Function(int line, CallIdValue callId) ringing,
     required TResult Function(
-            CallIdValue callId, String callee, JsepValue? jsep)
+            int line, CallIdValue callId, String callee, JsepValue? jsep)
         progress,
     required TResult Function(
-            CallIdValue callId, String? callee, JsepValue? jsep)
+            int line, CallIdValue callId, String? callee, JsepValue? jsep)
         accepted,
-    required TResult Function(CallIdValue callId, int code, String reason)
+    required TResult Function(
+            int line, CallIdValue callId, int code, String reason)
         hangup,
   }) {
-    return hangup(callId, code, reason);
+    return hangup(line, callId, code, reason);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(CallIdValue callId, String callee, String caller,
+    TResult Function(int line, CallIdValue callId, String callee, String caller,
             String? callerDisplayName, JsepValue? jsep)?
         incoming,
-    TResult Function(CallIdValue callId)? ringing,
-    TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
+    TResult Function(int line, CallIdValue callId)? ringing,
+    TResult Function(
+            int line, CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(CallIdValue callId, String? callee, JsepValue? jsep)?
+    TResult Function(
+            int line, CallIdValue callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(CallIdValue callId, int code, String reason)? hangup,
+    TResult Function(int line, CallIdValue callId, int code, String reason)?
+        hangup,
   }) {
-    return hangup?.call(callId, code, reason);
+    return hangup?.call(line, callId, code, reason);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(CallIdValue callId, String callee, String caller,
+    TResult Function(int line, CallIdValue callId, String callee, String caller,
             String? callerDisplayName, JsepValue? jsep)?
         incoming,
-    TResult Function(CallIdValue callId)? ringing,
-    TResult Function(CallIdValue callId, String callee, JsepValue? jsep)?
+    TResult Function(int line, CallIdValue callId)? ringing,
+    TResult Function(
+            int line, CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(CallIdValue callId, String? callee, JsepValue? jsep)?
+    TResult Function(
+            int line, CallIdValue callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(CallIdValue callId, int code, String reason)? hangup,
+    TResult Function(int line, CallIdValue callId, int code, String reason)?
+        hangup,
     required TResult orElse(),
   }) {
     if (hangup != null) {
-      return hangup(callId, code, reason);
+      return hangup(line, callId, code, reason);
     }
     return orElse();
   }
@@ -1283,10 +1497,13 @@ class _$_CallSignalingEventHangup implements _CallSignalingEventHangup {
 
 abstract class _CallSignalingEventHangup implements _CallSignalingEvent {
   const factory _CallSignalingEventHangup(
-      {required final CallIdValue callId,
+      {required final int line,
+      required final CallIdValue callId,
       required final int code,
       required final String reason}) = _$_CallSignalingEventHangup;
 
+  @override
+  int get line;
   @override
   CallIdValue get callId;
   int get code;
@@ -1475,8 +1692,8 @@ abstract class _CallPushEventIncoming implements _CallPushEvent {
 mixin _$CallControlEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String? generic, String? number, String? email,
-            String? displayName, bool video)
+    required TResult Function(int? line, String? generic, String? number,
+            String? email, String? displayName, bool video)
         started,
     required TResult Function(UuidValue uuid) answered,
     required TResult Function(UuidValue uuid) ended,
@@ -1491,7 +1708,7 @@ mixin _$CallControlEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String? generic, String? number, String? email,
+    TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
     TResult Function(UuidValue uuid)? answered,
@@ -1507,7 +1724,7 @@ mixin _$CallControlEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String? generic, String? number, String? email,
+    TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
     TResult Function(UuidValue uuid)? answered,
@@ -1577,7 +1794,8 @@ class _$_CallControlEventStarted
     with CallControlEventStartedMixin
     implements _CallControlEventStarted {
   const _$_CallControlEventStarted(
-      {this.generic,
+      {this.line,
+      this.generic,
       this.number,
       this.email,
       this.displayName,
@@ -1591,6 +1809,8 @@ class _$_CallControlEventStarted
             'only one of generic, number or email parameters must be assign');
 
   @override
+  final int? line;
+  @override
   final String? generic;
   @override
   final String? number;
@@ -1603,7 +1823,7 @@ class _$_CallControlEventStarted
 
   @override
   String toString() {
-    return 'CallControlEvent.started(generic: $generic, number: $number, email: $email, displayName: $displayName, video: $video)';
+    return 'CallControlEvent.started(line: $line, generic: $generic, number: $number, email: $email, displayName: $displayName, video: $video)';
   }
 
   @override
@@ -1611,6 +1831,7 @@ class _$_CallControlEventStarted
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallControlEventStarted &&
+            const DeepCollectionEquality().equals(other.line, line) &&
             const DeepCollectionEquality().equals(other.generic, generic) &&
             const DeepCollectionEquality().equals(other.number, number) &&
             const DeepCollectionEquality().equals(other.email, email) &&
@@ -1622,6 +1843,7 @@ class _$_CallControlEventStarted
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(line),
       const DeepCollectionEquality().hash(generic),
       const DeepCollectionEquality().hash(number),
       const DeepCollectionEquality().hash(email),
@@ -1631,8 +1853,8 @@ class _$_CallControlEventStarted
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String? generic, String? number, String? email,
-            String? displayName, bool video)
+    required TResult Function(int? line, String? generic, String? number,
+            String? email, String? displayName, bool video)
         started,
     required TResult Function(UuidValue uuid) answered,
     required TResult Function(UuidValue uuid) ended,
@@ -1644,13 +1866,13 @@ class _$_CallControlEventStarted
     required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
   }) {
-    return started(generic, number, email, displayName, video);
+    return started(line, generic, number, email, displayName, video);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String? generic, String? number, String? email,
+    TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
     TResult Function(UuidValue uuid)? answered,
@@ -1663,13 +1885,13 @@ class _$_CallControlEventStarted
     TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
   }) {
-    return started?.call(generic, number, email, displayName, video);
+    return started?.call(line, generic, number, email, displayName, video);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String? generic, String? number, String? email,
+    TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
     TResult Function(UuidValue uuid)? answered,
@@ -1684,7 +1906,7 @@ class _$_CallControlEventStarted
     required TResult orElse(),
   }) {
     if (started != null) {
-      return started(generic, number, email, displayName, video);
+      return started(line, generic, number, email, displayName, video);
     }
     return orElse();
   }
@@ -1752,12 +1974,14 @@ class _$_CallControlEventStarted
 abstract class _CallControlEventStarted
     implements CallControlEvent, CallControlEventStartedMixin {
   const factory _CallControlEventStarted(
-      {final String? generic,
+      {final int? line,
+      final String? generic,
       final String? number,
       final String? email,
       final String? displayName,
       required final bool video}) = _$_CallControlEventStarted;
 
+  int? get line;
   String? get generic;
   String? get number;
   String? get email;
@@ -1793,8 +2017,8 @@ class _$_CallControlEventAnswered implements _CallControlEventAnswered {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String? generic, String? number, String? email,
-            String? displayName, bool video)
+    required TResult Function(int? line, String? generic, String? number,
+            String? email, String? displayName, bool video)
         started,
     required TResult Function(UuidValue uuid) answered,
     required TResult Function(UuidValue uuid) ended,
@@ -1812,7 +2036,7 @@ class _$_CallControlEventAnswered implements _CallControlEventAnswered {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String? generic, String? number, String? email,
+    TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
     TResult Function(UuidValue uuid)? answered,
@@ -1831,7 +2055,7 @@ class _$_CallControlEventAnswered implements _CallControlEventAnswered {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String? generic, String? number, String? email,
+    TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
     TResult Function(UuidValue uuid)? answered,
@@ -1946,8 +2170,8 @@ class _$_CallControlEventEnded implements _CallControlEventEnded {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String? generic, String? number, String? email,
-            String? displayName, bool video)
+    required TResult Function(int? line, String? generic, String? number,
+            String? email, String? displayName, bool video)
         started,
     required TResult Function(UuidValue uuid) answered,
     required TResult Function(UuidValue uuid) ended,
@@ -1965,7 +2189,7 @@ class _$_CallControlEventEnded implements _CallControlEventEnded {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String? generic, String? number, String? email,
+    TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
     TResult Function(UuidValue uuid)? answered,
@@ -1984,7 +2208,7 @@ class _$_CallControlEventEnded implements _CallControlEventEnded {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String? generic, String? number, String? email,
+    TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
     TResult Function(UuidValue uuid)? answered,
@@ -2104,8 +2328,8 @@ class _$_CallControlEventSetHeld implements _CallControlEventSetHeld {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String? generic, String? number, String? email,
-            String? displayName, bool video)
+    required TResult Function(int? line, String? generic, String? number,
+            String? email, String? displayName, bool video)
         started,
     required TResult Function(UuidValue uuid) answered,
     required TResult Function(UuidValue uuid) ended,
@@ -2123,7 +2347,7 @@ class _$_CallControlEventSetHeld implements _CallControlEventSetHeld {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String? generic, String? number, String? email,
+    TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
     TResult Function(UuidValue uuid)? answered,
@@ -2142,7 +2366,7 @@ class _$_CallControlEventSetHeld implements _CallControlEventSetHeld {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String? generic, String? number, String? email,
+    TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
     TResult Function(UuidValue uuid)? answered,
@@ -2263,8 +2487,8 @@ class _$_CallControlEventSetMuted implements _CallControlEventSetMuted {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String? generic, String? number, String? email,
-            String? displayName, bool video)
+    required TResult Function(int? line, String? generic, String? number,
+            String? email, String? displayName, bool video)
         started,
     required TResult Function(UuidValue uuid) answered,
     required TResult Function(UuidValue uuid) ended,
@@ -2282,7 +2506,7 @@ class _$_CallControlEventSetMuted implements _CallControlEventSetMuted {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String? generic, String? number, String? email,
+    TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
     TResult Function(UuidValue uuid)? answered,
@@ -2301,7 +2525,7 @@ class _$_CallControlEventSetMuted implements _CallControlEventSetMuted {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String? generic, String? number, String? email,
+    TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
     TResult Function(UuidValue uuid)? answered,
@@ -2422,8 +2646,8 @@ class _$_CallControlEventSentDTMF implements _CallControlEventSentDTMF {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String? generic, String? number, String? email,
-            String? displayName, bool video)
+    required TResult Function(int? line, String? generic, String? number,
+            String? email, String? displayName, bool video)
         started,
     required TResult Function(UuidValue uuid) answered,
     required TResult Function(UuidValue uuid) ended,
@@ -2441,7 +2665,7 @@ class _$_CallControlEventSentDTMF implements _CallControlEventSentDTMF {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String? generic, String? number, String? email,
+    TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
     TResult Function(UuidValue uuid)? answered,
@@ -2460,7 +2684,7 @@ class _$_CallControlEventSentDTMF implements _CallControlEventSentDTMF {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String? generic, String? number, String? email,
+    TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
     TResult Function(UuidValue uuid)? answered,
@@ -2577,8 +2801,8 @@ class _$_CallControlEventCameraSwitched
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String? generic, String? number, String? email,
-            String? displayName, bool video)
+    required TResult Function(int? line, String? generic, String? number,
+            String? email, String? displayName, bool video)
         started,
     required TResult Function(UuidValue uuid) answered,
     required TResult Function(UuidValue uuid) ended,
@@ -2596,7 +2820,7 @@ class _$_CallControlEventCameraSwitched
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String? generic, String? number, String? email,
+    TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
     TResult Function(UuidValue uuid)? answered,
@@ -2615,7 +2839,7 @@ class _$_CallControlEventCameraSwitched
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String? generic, String? number, String? email,
+    TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
     TResult Function(UuidValue uuid)? answered,
@@ -2736,8 +2960,8 @@ class _$_CallControlEventCameraEnabled
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String? generic, String? number, String? email,
-            String? displayName, bool video)
+    required TResult Function(int? line, String? generic, String? number,
+            String? email, String? displayName, bool video)
         started,
     required TResult Function(UuidValue uuid) answered,
     required TResult Function(UuidValue uuid) ended,
@@ -2755,7 +2979,7 @@ class _$_CallControlEventCameraEnabled
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String? generic, String? number, String? email,
+    TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
     TResult Function(UuidValue uuid)? answered,
@@ -2774,7 +2998,7 @@ class _$_CallControlEventCameraEnabled
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String? generic, String? number, String? email,
+    TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
     TResult Function(UuidValue uuid)? answered,
@@ -2897,8 +3121,8 @@ class _$_CallControlEventSpeakerEnabled
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String? generic, String? number, String? email,
-            String? displayName, bool video)
+    required TResult Function(int? line, String? generic, String? number,
+            String? email, String? displayName, bool video)
         started,
     required TResult Function(UuidValue uuid) answered,
     required TResult Function(UuidValue uuid) ended,
@@ -2916,7 +3140,7 @@ class _$_CallControlEventSpeakerEnabled
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String? generic, String? number, String? email,
+    TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
     TResult Function(UuidValue uuid)? answered,
@@ -2935,7 +3159,7 @@ class _$_CallControlEventSpeakerEnabled
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String? generic, String? number, String? email,
+    TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
     TResult Function(UuidValue uuid)? answered,
@@ -3053,8 +3277,8 @@ class _$_CallControlEventFailureApproved
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String? generic, String? number, String? email,
-            String? displayName, bool video)
+    required TResult Function(int? line, String? generic, String? number,
+            String? email, String? displayName, bool video)
         started,
     required TResult Function(UuidValue uuid) answered,
     required TResult Function(UuidValue uuid) ended,
@@ -3072,7 +3296,7 @@ class _$_CallControlEventFailureApproved
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String? generic, String? number, String? email,
+    TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
     TResult Function(UuidValue uuid)? answered,
@@ -3091,7 +3315,7 @@ class _$_CallControlEventFailureApproved
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String? generic, String? number, String? email,
+    TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
     TResult Function(UuidValue uuid)? answered,
@@ -4660,6 +4884,7 @@ mixin _$CallState {
   Object? get lastSignalingClientDisconnectError =>
       throw _privateConstructorUsedError;
   int? get lastSignalingDisconnectCode => throw _privateConstructorUsedError;
+  int get linesCount => throw _privateConstructorUsedError;
   List<ActiveCall> get activeCalls => throw _privateConstructorUsedError;
   bool? get speaker => throw _privateConstructorUsedError;
 
@@ -4678,6 +4903,7 @@ abstract class $CallStateCopyWith<$Res> {
       Object? lastSignalingClientConnectError,
       Object? lastSignalingClientDisconnectError,
       int? lastSignalingDisconnectCode,
+      int linesCount,
       List<ActiveCall> activeCalls,
       bool? speaker});
 }
@@ -4697,6 +4923,7 @@ class _$CallStateCopyWithImpl<$Res> implements $CallStateCopyWith<$Res> {
     Object? lastSignalingClientConnectError = freezed,
     Object? lastSignalingClientDisconnectError = freezed,
     Object? lastSignalingDisconnectCode = freezed,
+    Object? linesCount = freezed,
     Object? activeCalls = freezed,
     Object? speaker = freezed,
   }) {
@@ -4721,6 +4948,10 @@ class _$CallStateCopyWithImpl<$Res> implements $CallStateCopyWith<$Res> {
           ? _value.lastSignalingDisconnectCode
           : lastSignalingDisconnectCode // ignore: cast_nullable_to_non_nullable
               as int?,
+      linesCount: linesCount == freezed
+          ? _value.linesCount
+          : linesCount // ignore: cast_nullable_to_non_nullable
+              as int,
       activeCalls: activeCalls == freezed
           ? _value.activeCalls
           : activeCalls // ignore: cast_nullable_to_non_nullable
@@ -4745,6 +4976,7 @@ abstract class _$$_CallStateCopyWith<$Res> implements $CallStateCopyWith<$Res> {
       Object? lastSignalingClientConnectError,
       Object? lastSignalingClientDisconnectError,
       int? lastSignalingDisconnectCode,
+      int linesCount,
       List<ActiveCall> activeCalls,
       bool? speaker});
 }
@@ -4766,6 +4998,7 @@ class __$$_CallStateCopyWithImpl<$Res> extends _$CallStateCopyWithImpl<$Res>
     Object? lastSignalingClientConnectError = freezed,
     Object? lastSignalingClientDisconnectError = freezed,
     Object? lastSignalingDisconnectCode = freezed,
+    Object? linesCount = freezed,
     Object? activeCalls = freezed,
     Object? speaker = freezed,
   }) {
@@ -4790,6 +5023,10 @@ class __$$_CallStateCopyWithImpl<$Res> extends _$CallStateCopyWithImpl<$Res>
           ? _value.lastSignalingDisconnectCode
           : lastSignalingDisconnectCode // ignore: cast_nullable_to_non_nullable
               as int?,
+      linesCount: linesCount == freezed
+          ? _value.linesCount
+          : linesCount // ignore: cast_nullable_to_non_nullable
+              as int,
       activeCalls: activeCalls == freezed
           ? _value._activeCalls
           : activeCalls // ignore: cast_nullable_to_non_nullable
@@ -4811,6 +5048,7 @@ class _$_CallState extends _CallState {
       this.lastSignalingClientConnectError,
       this.lastSignalingClientDisconnectError,
       this.lastSignalingDisconnectCode,
+      this.linesCount = 0,
       final List<ActiveCall> activeCalls = const [],
       this.speaker})
       : _activeCalls = activeCalls,
@@ -4827,6 +5065,9 @@ class _$_CallState extends _CallState {
   final Object? lastSignalingClientDisconnectError;
   @override
   final int? lastSignalingDisconnectCode;
+  @override
+  @JsonKey()
+  final int linesCount;
   final List<ActiveCall> _activeCalls;
   @override
   @JsonKey()
@@ -4840,7 +5081,7 @@ class _$_CallState extends _CallState {
 
   @override
   String toString() {
-    return 'CallState(currentConnectivityResult: $currentConnectivityResult, signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, activeCalls: $activeCalls, speaker: $speaker)';
+    return 'CallState(currentConnectivityResult: $currentConnectivityResult, signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, linesCount: $linesCount, activeCalls: $activeCalls, speaker: $speaker)';
   }
 
   @override
@@ -4862,6 +5103,8 @@ class _$_CallState extends _CallState {
                 other.lastSignalingDisconnectCode,
                 lastSignalingDisconnectCode) &&
             const DeepCollectionEquality()
+                .equals(other.linesCount, linesCount) &&
+            const DeepCollectionEquality()
                 .equals(other._activeCalls, _activeCalls) &&
             const DeepCollectionEquality().equals(other.speaker, speaker));
   }
@@ -4874,6 +5117,7 @@ class _$_CallState extends _CallState {
       const DeepCollectionEquality().hash(lastSignalingClientConnectError),
       const DeepCollectionEquality().hash(lastSignalingClientDisconnectError),
       const DeepCollectionEquality().hash(lastSignalingDisconnectCode),
+      const DeepCollectionEquality().hash(linesCount),
       const DeepCollectionEquality().hash(_activeCalls),
       const DeepCollectionEquality().hash(speaker));
 
@@ -4890,6 +5134,7 @@ abstract class _CallState extends CallState {
       final Object? lastSignalingClientConnectError,
       final Object? lastSignalingClientDisconnectError,
       final int? lastSignalingDisconnectCode,
+      final int linesCount,
       final List<ActiveCall> activeCalls,
       final bool? speaker}) = _$_CallState;
   const _CallState._() : super._();
@@ -4905,6 +5150,8 @@ abstract class _CallState extends CallState {
   @override
   int? get lastSignalingDisconnectCode;
   @override
+  int get linesCount;
+  @override
   List<ActiveCall> get activeCalls;
   @override
   bool? get speaker;
@@ -4917,6 +5164,7 @@ abstract class _CallState extends CallState {
 /// @nodoc
 mixin _$ActiveCall {
   Direction get direction => throw _privateConstructorUsedError;
+  int get line => throw _privateConstructorUsedError;
   CallIdValue get callId => throw _privateConstructorUsedError;
   CallkeepHandle get handle => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
@@ -4943,6 +5191,7 @@ abstract class $ActiveCallCopyWith<$Res> {
       _$ActiveCallCopyWithImpl<$Res>;
   $Res call(
       {Direction direction,
+      int line,
       CallIdValue callId,
       CallkeepHandle handle,
       String? displayName,
@@ -4969,6 +5218,7 @@ class _$ActiveCallCopyWithImpl<$Res> implements $ActiveCallCopyWith<$Res> {
   @override
   $Res call({
     Object? direction = freezed,
+    Object? line = freezed,
     Object? callId = freezed,
     Object? handle = freezed,
     Object? displayName = freezed,
@@ -4988,6 +5238,10 @@ class _$ActiveCallCopyWithImpl<$Res> implements $ActiveCallCopyWith<$Res> {
           ? _value.direction
           : direction // ignore: cast_nullable_to_non_nullable
               as Direction,
+      line: line == freezed
+          ? _value.line
+          : line // ignore: cast_nullable_to_non_nullable
+              as int,
       callId: callId == freezed
           ? _value.callId
           : callId // ignore: cast_nullable_to_non_nullable
@@ -5050,6 +5304,7 @@ abstract class _$$_ActiveCallCopyWith<$Res>
   @override
   $Res call(
       {Direction direction,
+      int line,
       CallIdValue callId,
       CallkeepHandle handle,
       String? displayName,
@@ -5078,6 +5333,7 @@ class __$$_ActiveCallCopyWithImpl<$Res> extends _$ActiveCallCopyWithImpl<$Res>
   @override
   $Res call({
     Object? direction = freezed,
+    Object? line = freezed,
     Object? callId = freezed,
     Object? handle = freezed,
     Object? displayName = freezed,
@@ -5097,6 +5353,10 @@ class __$$_ActiveCallCopyWithImpl<$Res> extends _$ActiveCallCopyWithImpl<$Res>
           ? _value.direction
           : direction // ignore: cast_nullable_to_non_nullable
               as Direction,
+      line: line == freezed
+          ? _value.line
+          : line // ignore: cast_nullable_to_non_nullable
+              as int,
       callId: callId == freezed
           ? _value.callId
           : callId // ignore: cast_nullable_to_non_nullable
@@ -5155,6 +5415,7 @@ class __$$_ActiveCallCopyWithImpl<$Res> extends _$ActiveCallCopyWithImpl<$Res>
 class _$_ActiveCall extends _ActiveCall {
   const _$_ActiveCall(
       {required this.direction,
+      required this.line,
       required this.callId,
       required this.handle,
       this.displayName,
@@ -5172,6 +5433,8 @@ class _$_ActiveCall extends _ActiveCall {
 
   @override
   final Direction direction;
+  @override
+  final int line;
   @override
   final CallIdValue callId;
   @override
@@ -5204,7 +5467,7 @@ class _$_ActiveCall extends _ActiveCall {
 
   @override
   String toString() {
-    return 'ActiveCall(direction: $direction, callId: $callId, handle: $handle, displayName: $displayName, video: $video, frontCamera: $frontCamera, held: $held, muted: $muted, createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
+    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, displayName: $displayName, video: $video, frontCamera: $frontCamera, held: $held, muted: $muted, createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
   }
 
   @override
@@ -5213,6 +5476,7 @@ class _$_ActiveCall extends _ActiveCall {
         (other.runtimeType == runtimeType &&
             other is _$_ActiveCall &&
             const DeepCollectionEquality().equals(other.direction, direction) &&
+            const DeepCollectionEquality().equals(other.line, line) &&
             const DeepCollectionEquality().equals(other.callId, callId) &&
             const DeepCollectionEquality().equals(other.handle, handle) &&
             const DeepCollectionEquality()
@@ -5239,6 +5503,7 @@ class _$_ActiveCall extends _ActiveCall {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(direction),
+      const DeepCollectionEquality().hash(line),
       const DeepCollectionEquality().hash(callId),
       const DeepCollectionEquality().hash(handle),
       const DeepCollectionEquality().hash(displayName),
@@ -5262,6 +5527,7 @@ class _$_ActiveCall extends _ActiveCall {
 abstract class _ActiveCall extends ActiveCall {
   const factory _ActiveCall(
       {required final Direction direction,
+      required final int line,
       required final CallIdValue callId,
       required final CallkeepHandle handle,
       final String? displayName,
@@ -5279,6 +5545,8 @@ abstract class _ActiveCall extends ActiveCall {
 
   @override
   Direction get direction;
+  @override
+  int get line;
   @override
   CallIdValue get callId;
   @override

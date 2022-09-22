@@ -1,9 +1,9 @@
-import 'call_event.dart';
+import 'line_event.dart';
 
-class IceWebrtcUpEvent extends CallEvent {
+class IceWebrtcUpEvent extends LineEvent {
   const IceWebrtcUpEvent({
-    required String callId,
-  }) : super(callId: callId);
+    required int line,
+  }) : super(line: line);
 
   static const event = 'ice_webrtcup';
 
@@ -14,7 +14,7 @@ class IceWebrtcUpEvent extends CallEvent {
     }
 
     return IceWebrtcUpEvent(
-      callId: json['call_id'],
+      line: json['line'],
     );
   }
 }

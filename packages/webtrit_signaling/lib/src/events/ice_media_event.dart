@@ -1,12 +1,12 @@
-import 'call_event.dart';
 import 'ice_media_type.dart';
+import 'line_event.dart';
 
-class IceMediaEvent extends CallEvent {
+class IceMediaEvent extends LineEvent {
   const IceMediaEvent({
-    required String callId,
+    required int line,
     required this.type,
     required this.receiving,
-  }) : super(callId: callId);
+  }) : super(line: line);
 
   final IceMediaType type;
   final bool receiving;
@@ -27,7 +27,7 @@ class IceMediaEvent extends CallEvent {
     }
 
     return IceMediaEvent(
-      callId: json['call_id'],
+      line: json['line'],
       type: IceMediaType.values.byName(json['type']),
       receiving: json['receiving'],
     );

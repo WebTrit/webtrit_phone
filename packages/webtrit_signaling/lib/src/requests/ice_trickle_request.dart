@@ -1,10 +1,10 @@
-import 'call_request.dart';
+import 'line_request.dart';
 
-class IceTrickleRequest extends CallRequest {
+class IceTrickleRequest extends LineRequest {
   const IceTrickleRequest({
-    required String callId,
+    required int line,
     this.candidate,
-  }) : super(callId: callId);
+  }) : super(line: line);
 
   final Map<String, dynamic>? candidate;
 
@@ -23,7 +23,7 @@ class IceTrickleRequest extends CallRequest {
     }
 
     return IceTrickleRequest(
-      callId: json['call_id'],
+      line: json['line'],
       candidate: json['candidate'],
     );
   }
@@ -32,7 +32,7 @@ class IceTrickleRequest extends CallRequest {
   Map<String, dynamic> toJson() {
     return {
       'request': request,
-      'call_id': callId,
+      'line': line,
       'candidate': candidate,
     };
   }

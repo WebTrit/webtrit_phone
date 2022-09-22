@@ -2,10 +2,11 @@ import 'call_request.dart';
 
 class TransferRequest extends CallRequest {
   const TransferRequest({
+    required int line,
     required String callId,
     required this.number,
     this.replaceCallId,
-  }) : super(callId: callId);
+  }) : super(line: line, callId: callId);
 
   final String number;
   final String? replaceCallId;
@@ -26,6 +27,7 @@ class TransferRequest extends CallRequest {
     }
 
     return TransferRequest(
+      line: json['line'],
       callId: json['call_id'],
       number: json['number'],
       replaceCallId: json['replace_call_id'],
@@ -37,6 +39,7 @@ class TransferRequest extends CallRequest {
     final replaceCallId = this.replaceCallId;
     return {
       'request': request,
+      'line': line,
       'call_id': callId,
       'number': number,
       if (replaceCallId != null) 'replace_call_id': replaceCallId,

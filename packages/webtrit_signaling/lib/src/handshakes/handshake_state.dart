@@ -131,7 +131,9 @@ class HandshakeState extends Handshake {
       reason: registrationMessage['reason'],
     );
     final linesJson = json['lines'] as List<dynamic>;
-    final lines = linesJson.map((lineJson) {
+    final lines = linesJson.asMap().entries.map((e) {
+      final lineIndex = e.key;
+      final lineJson = e.value;
       if (lineJson == null) {
         return null;
       }
@@ -140,6 +142,7 @@ class HandshakeState extends Handshake {
       final callLogs = (lineJson['call_logs'] as List<dynamic>).map<CallLog>((callLogJson) {
         final timestamp = callLogJson[0] as int;
         final requestOrEventJson = callLogJson[1];
+        requestOrEventJson['line'] = lineIndex; // inject line to apply universal fromJson methods
         requestOrEventJson['call_id'] = callId; // inject call_id to apply universal fromJson methods
         if (requestOrEventJson.containsKey('request')) {
           return CallRequestLog(timestamp: timestamp, callRequest: _toRequest(requestOrEventJson));
@@ -223,16 +226,8 @@ class HandshakeState extends Handshake {
         return HoldingEvent.fromJson(eventJson);
       case ResumingEvent.event:
         return ResumingEvent.fromJson(eventJson);
-      case IceWebrtcUpEvent.event:
-        return IceWebrtcUpEvent.fromJson(eventJson);
-      case IceMediaEvent.event:
-        return IceMediaEvent.fromJson(eventJson);
-      case IceSlowLinkEvent.event:
-        return IceSlowLinkEvent.fromJson(eventJson);
-      case IceHangupEvent.event:
-        return IceHangupEvent.fromJson(eventJson);
-      case CallErrorEvent.event:
-        return CallErrorEvent.fromJson(eventJson);
+      case ErrorCallEvent.event:
+        return ErrorCallEvent.fromJson(eventJson);
       default:
         throw ArgumentError.value(eventType, "eventType", "Unknown event type");
     }

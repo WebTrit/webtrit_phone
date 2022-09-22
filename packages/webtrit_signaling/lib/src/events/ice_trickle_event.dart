@@ -1,10 +1,10 @@
-import 'call_event.dart';
+import 'line_event.dart';
 
-class IceTrickleEvent extends CallEvent {
+class IceTrickleEvent extends LineEvent {
   const IceTrickleEvent({
-    required String callId,
+    required int line,
     required this.candidate,
-  }) : super(callId: callId);
+  }) : super(line: line);
 
   final Map<String, dynamic>? candidate;
 
@@ -25,12 +25,12 @@ class IceTrickleEvent extends CallEvent {
     final candidateJson = json['candidate'] as Map<String, dynamic>;
     if (candidateJson['completed'] == true) {
       return IceTrickleEvent(
-        callId: json['call_id'],
+        line: json['line'],
         candidate: null,
       );
     } else {
       return IceTrickleEvent(
-        callId: json['call_id'],
+        line: json['line'],
         candidate: candidateJson,
       );
     }

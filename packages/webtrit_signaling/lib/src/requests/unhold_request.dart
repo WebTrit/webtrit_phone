@@ -2,8 +2,9 @@ import 'call_request.dart';
 
 class UnholdRequest extends CallRequest {
   const UnholdRequest({
+    required int line,
     required String callId,
-  }) : super(callId: callId);
+  }) : super(line: line, callId: callId);
 
   static const request = 'unhold';
 
@@ -14,6 +15,7 @@ class UnholdRequest extends CallRequest {
     }
 
     return UnholdRequest(
+      line: json['line'],
       callId: json['call_id'],
     );
   }
@@ -22,6 +24,7 @@ class UnholdRequest extends CallRequest {
   Map<String, dynamic> toJson() {
     return {
       'request': request,
+      'line': line,
       'call_id': callId,
     };
   }

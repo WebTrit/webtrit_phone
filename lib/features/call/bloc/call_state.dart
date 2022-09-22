@@ -10,6 +10,7 @@ class CallState with _$CallState {
     Object? lastSignalingClientConnectError,
     Object? lastSignalingClientDisconnectError,
     int? lastSignalingDisconnectCode,
+    @Default(0) int linesCount,
     @Default([]) List<ActiveCall> activeCalls,
     bool? speaker,
   }) = _CallState;
@@ -34,6 +35,15 @@ class CallState with _$CallState {
     } else {
       return CallStatus.inProgress;
     }
+  }
+
+  int? retrieveIdleLine() {
+    for (var line = 0; line < linesCount; line++) {
+      if (activeCalls.firstWhereOrNull((activeCall) => activeCall.line == line) == null) {
+        return line;
+      }
+    }
+    return null;
   }
 
   bool get isActive => activeCalls.isNotEmpty;
@@ -88,6 +98,7 @@ class ActiveCall with _$ActiveCall {
 
   const factory ActiveCall({
     required Direction direction,
+    required int line,
     required CallIdValue callId,
     required CallkeepHandle handle,
     String? displayName,

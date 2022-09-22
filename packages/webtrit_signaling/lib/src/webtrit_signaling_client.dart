@@ -323,10 +323,10 @@ class WebtritSignalingClient {
         return IceSlowLinkEvent.fromJson(eventJson);
       case IceHangupEvent.event:
         return IceHangupEvent.fromJson(eventJson);
-      case CallErrorEvent.event:
-        return CallErrorEvent.fromJson(eventJson);
-      case ErrorEvent.event:
-        return ErrorEvent.fromJson(eventJson);
+      case ErrorCallEvent.event:
+        return ErrorCallEvent.fromJson(eventJson);
+      case ErrorLineEvent.event:
+        return ErrorLineEvent.fromJson(eventJson);
       default:
         throw ArgumentError.value(eventType, "eventType", "Unknown event type");
     }
