@@ -1,6 +1,6 @@
-import 'event.dart';
+import 'session_event.dart';
 
-class RegistrationFailedEvent extends Event {
+class RegistrationFailedEvent extends SessionEvent {
   const RegistrationFailedEvent({
     required this.code,
     required this.reason,

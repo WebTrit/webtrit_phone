@@ -1,6 +1,6 @@
-import 'event.dart';
+import 'session_event.dart';
 
-class UnregisteringEvent extends Event {
+class UnregisteringEvent extends SessionEvent {
   UnregisteringEvent() : super();
 
   @override

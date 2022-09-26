@@ -1,6 +1,6 @@
-import 'request.dart';
+import 'session_request.dart';
 
-abstract class LineRequest extends Request {
+abstract class LineRequest extends SessionRequest {
   const LineRequest({
     required this.line,
   }) : super();
@@ -11,6 +11,4 @@ abstract class LineRequest extends Request {
   List<Object?> get props => [
         line,
       ];
-
-  Map<String, dynamic> toJson();
 }

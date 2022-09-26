@@ -1,6 +1,6 @@
-import 'event.dart';
+import 'session_event.dart';
 
-abstract class LineEvent extends Event {
+abstract class LineEvent extends SessionEvent {
   const LineEvent({
     required this.line,
   }) : super();
