@@ -6,7 +6,7 @@ import 'package:webtrit_signaling/src/events/events.dart';
 import 'package:webtrit_signaling/src/handshakes/handshakes.dart';
 
 void main() {
-  final handshakeStateJson = '''
+  final stateHandshakeJson = '''
   {
     "handshake": "state",
     "keepalive_interval": 30000,
@@ -34,7 +34,7 @@ void main() {
   }
   ''';
 
-  final handshakeState = HandshakeState(
+  final stateHandshake = StateHandshake(
     keepaliveInterval: Duration(seconds: 30),
     timestamp: 1662114679648,
     registration: Registration(
@@ -60,10 +60,10 @@ void main() {
     ],
   );
 
-  test('$HandshakeState fromJson', () {
+  test('$StateHandshake fromJson', () {
     expect(
-      HandshakeState.fromJson(json.decode(handshakeStateJson) as Map<String, dynamic>),
-      equals(handshakeState),
+      StateHandshake.fromJson(json.decode(stateHandshakeJson) as Map<String, dynamic>),
+      equals(stateHandshake),
     );
   });
 }

@@ -91,8 +91,8 @@ class CallEventLog extends CallLog {
       ];
 }
 
-class HandshakeState extends Handshake {
-  const HandshakeState({
+class StateHandshake extends Handshake {
+  const StateHandshake({
     required this.keepaliveInterval,
     required this.timestamp,
     required this.registration,
@@ -114,7 +114,7 @@ class HandshakeState extends Handshake {
 
   static const type = 'state';
 
-  factory HandshakeState.fromJson(Map<String, dynamic> json) {
+  factory StateHandshake.fromJson(Map<String, dynamic> json) {
     final handshakeValue = json['handshake'];
     if (handshakeValue != type) {
       throw ArgumentError.value(handshakeValue, "handshake", "Not equal $type");
@@ -159,7 +159,7 @@ class HandshakeState extends Handshake {
       );
     }).toList(growable: false);
 
-    return HandshakeState(
+    return StateHandshake(
       keepaliveInterval: keepaliveInterval,
       timestamp: timestamp,
       registration: registration,

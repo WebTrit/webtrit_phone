@@ -5,19 +5,19 @@ import 'package:test/test.dart';
 import 'package:webtrit_signaling/src/handshakes/handshakes.dart';
 
 void main() {
-  final handshakeKeepaliveJson = '''
+  final keepaliveHandshakeJson = '''
   {
     "handshake": "keepalive",
     "some property": "some value"
   }
   ''';
 
-  final handshakeKeepalive = HandshakeKeepalive();
+  final keepaliveHandshake = KeepaliveHandshake();
 
-  test('$HandshakeState fromJson', () {
+  test('$KeepaliveHandshake fromJson', () {
     expect(
-      HandshakeKeepalive.fromJson(json.decode(handshakeKeepaliveJson) as Map<String, dynamic>),
-      equals(handshakeKeepalive),
+      KeepaliveHandshake.fromJson(json.decode(keepaliveHandshakeJson) as Map<String, dynamic>),
+      equals(keepaliveHandshake),
     );
   });
 }

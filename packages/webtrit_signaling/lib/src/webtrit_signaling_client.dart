@@ -11,7 +11,7 @@ import 'handshakes/handshakes.dart';
 import 'requests/requests.dart';
 import 'transaction.dart';
 
-typedef HandshakeStateHandler = void Function(HandshakeState handshakeState);
+typedef StateHandshakeHandler = void Function(StateHandshake stateHandshake);
 typedef EventHandler = void Function(Event event);
 typedef ErrorHandler = void Function(Object error, StackTrace? stackTrace);
 typedef DisconnectHandler = void Function(int? code, String? reason);
@@ -45,7 +45,7 @@ class WebtritSignalingClient {
   final WebSocket _ws;
   StreamSubscription? _wsSubscription;
 
-  late final HandshakeStateHandler _onHandshakeState;
+  late final StateHandshakeHandler _onStateHandshake;
   late final EventHandler _onEvent;
   late final ErrorHandler _onError;
   late final DisconnectHandler _onDisconnect;
@@ -73,7 +73,7 @@ class WebtritSignalingClient {
   }
 
   void listen({
-    required HandshakeStateHandler onHandshakeState,
+    required StateHandshakeHandler onStateHandshake,
     required EventHandler onEvent,
     required ErrorHandler onError,
     required DisconnectHandler onDisconnect,
@@ -86,7 +86,7 @@ class WebtritSignalingClient {
       onError: _wsOnError,
       onDone: () => _wsOnDone(_ws.closeCode, _ws.closeReason),
     );
-    _onHandshakeState = onHandshakeState;
+    _onStateHandshake = onStateHandshake;
     _onEvent = onEvent;
     _onError = onError;
     _onDisconnect = onDisconnect;
@@ -184,14 +184,14 @@ class WebtritSignalingClient {
       } catch (error, stackTrace) {
         _onError(error, stackTrace);
       }
-    } else if (messageJson['handshake'] == HandshakeState.type) {
-      final handshakeStateJson = messageJson;
+    } else if (messageJson['handshake'] == StateHandshake.type) {
+      final stateHandshakeJson = messageJson;
 
       try {
-        final handshakeState = HandshakeState.fromJson(handshakeStateJson);
-        _onHandshakeState(handshakeState);
+        final stateHandshake = StateHandshake.fromJson(stateHandshakeJson);
+        _onStateHandshake(stateHandshake);
 
-        _keepaliveInterval = handshakeState.keepaliveInterval;
+        _keepaliveInterval = stateHandshake.keepaliveInterval;
         _startKeepaliveTimer();
       } catch (error, stackTrace) {
         _onError(error, stackTrace);
@@ -249,11 +249,11 @@ class WebtritSignalingClient {
   void _onKeepalive() async {
     final stopwatch = Stopwatch();
     try {
-      final requestJson = HandshakeKeepalive().toJson();
+      final requestJson = KeepaliveHandshake().toJson();
       stopwatch.start();
       final responseJson = await _executeTransaction(requestJson, defaultExecuteTransactionTimeoutDuration);
       stopwatch.stop();
-      HandshakeKeepalive.fromJson(responseJson);
+      KeepaliveHandshake.fromJson(responseJson);
       _logger.finest('handshake keepalive latency: ${stopwatch.elapsed}');
     } on WebtritSignalingTransactionTimeoutException catch (error) {
       _onError(WebtritSignalingKeepaliveTimeoutException(error.id, error.transactionId), StackTrace.current);

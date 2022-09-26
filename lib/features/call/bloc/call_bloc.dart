@@ -328,7 +328,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
 
       signalingClient.listen(
-        onHandshakeState: _onSignalingHandshakeState,
+        onStateHandshake: _onSignalingStateHandshake,
         onEvent: _onSignalingEvent,
         onError: _onSignalingError,
         onDisconnect: _onSignalingDisconnect,
@@ -434,7 +434,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       createdTime: clock.now(),
     )));
 
-    // the rest logic implemented within _onSignalingHandshakeState on IncomingCallEvent from call logs processing
+    // the rest logic implemented within _onSignalingStateHandshake on IncomingCallEvent from call logs processing
   }
 
   // processing handshake signaling events
@@ -1070,14 +1070,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   // WebtritSignalingClient listen handlers
 
-  void _onSignalingHandshakeState(HandshakeState handshakeState) {
+  void _onSignalingStateHandshake(StateHandshake stateHandshake) {
     add(_HandshakeSignalingEvent.state(
-      linesCount: handshakeState.lines.length,
+      linesCount: stateHandshake.lines.length,
     ));
 
     for (final activeCall in state.activeCalls) {
-      if (handshakeState.lines.length > activeCall.line) {
-        final line = handshakeState.lines[activeCall.line];
+      if (stateHandshake.lines.length > activeCall.line) {
+        final line = stateHandshake.lines[activeCall.line];
         if (line != null && line.callId == activeCall.callId.callId) {
           continue;
         }
@@ -1090,7 +1090,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       ));
     }
 
-    for (final activeLine in handshakeState.lines.whereType<Line>()) {
+    for (final activeLine in stateHandshake.lines.whereType<Line>()) {
       // TODO: extend logic of call logs analysis for such case as signaling reconnect
       for (final callLog in activeLine.callLogs) {
         if (callLog is CallEventLog) {
