@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
 
-import '../requests/requests.dart';
 import '../events/events.dart';
+import '../requests/requests.dart';
+import '../responses/responses.dart';
 import 'handshake.dart';
 
 enum RegistrationStatus {
@@ -76,6 +77,21 @@ class CallRequestLog extends CallLog {
       ];
 }
 
+class ResponseLog extends CallLog {
+  const ResponseLog({
+    required int timestamp,
+    required this.response,
+  }) : super(timestamp: timestamp);
+
+  final Response response;
+
+  @override
+  List<Object?> get props => [
+        ...super.props,
+        response,
+      ];
+}
+
 class CallEventLog extends CallLog {
   const CallEventLog({
     required int timestamp,
@@ -141,15 +157,18 @@ class StateHandshake extends Handshake {
       final callId = lineJson['call_id'] as String;
       final callLogs = (lineJson['call_logs'] as List<dynamic>).map<CallLog>((callLogJson) {
         final timestamp = callLogJson[0] as int;
-        final requestOrEventJson = callLogJson[1];
-        requestOrEventJson['line'] = lineIndex; // inject line to apply universal fromJson methods
-        requestOrEventJson['call_id'] = callId; // inject call_id to apply universal fromJson methods
-        if (requestOrEventJson.containsKey('request')) {
-          return CallRequestLog(timestamp: timestamp, callRequest: _toRequest(requestOrEventJson));
-        } else if (requestOrEventJson.containsKey('event')) {
-          return CallEventLog(timestamp: timestamp, callEvent: _toEvent(requestOrEventJson));
+        final requestOrResponseOrEventJson = callLogJson[1];
+        requestOrResponseOrEventJson['line'] = lineIndex; // inject line to apply universal fromJson methods
+        requestOrResponseOrEventJson['call_id'] = callId; // inject call_id to apply universal fromJson methods
+        if (requestOrResponseOrEventJson.containsKey('request')) {
+          return CallRequestLog(timestamp: timestamp, callRequest: _toRequest(requestOrResponseOrEventJson));
+        } else if (requestOrResponseOrEventJson.containsKey(Response.typeKey)) {
+          return ResponseLog(timestamp: timestamp, response: Response.fromJson(requestOrResponseOrEventJson));
+        } else if (requestOrResponseOrEventJson.containsKey('event')) {
+          return CallEventLog(timestamp: timestamp, callEvent: _toEvent(requestOrResponseOrEventJson));
         } else {
-          throw ArgumentError.value(requestOrEventJson, "requestOrEventJson", "Active call's logs incorrect");
+          throw ArgumentError.value(
+              requestOrResponseOrEventJson, "requestOrResponseOrEventJson", "Active call's logs incorrect");
         }
       }).toList(growable: false);
 

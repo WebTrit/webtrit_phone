@@ -9,6 +9,7 @@ import 'events/events.dart';
 import 'exceptions.dart';
 import 'handshakes/handshakes.dart';
 import 'requests/requests.dart';
+import 'responses/responses.dart';
 import 'transaction.dart';
 
 typedef StateHandshakeHandler = void Function(StateHandshake stateHandshake);
@@ -150,12 +151,11 @@ class WebtritSignalingClient {
 
     final requestJson = request.toJson();
     final responseJson = await _executeTransaction(requestJson, timeoutDuration);
-    final type = responseJson['response'];
-    if (type == 'ack') {
+    final response = Response.fromJson(responseJson);
+    if (response is AckResponse) {
       return;
-    } else if (type == 'error') {
-      final Map<String, dynamic> responseErrorJson = responseJson['error'];
-      throw WebtritSignalingErrorException(_id, responseErrorJson['code'], responseErrorJson['reason']);
+    } else if (response is ErrorResponse) {
+      throw WebtritSignalingErrorException(_id, response.code, response.reason);
     } else {
       throw WebtritSignalingUnknownResponseException(_id, responseJson);
     }
