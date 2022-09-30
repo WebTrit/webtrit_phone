@@ -31,7 +31,7 @@ class AccountInfo {
     this.email,
     this.mobile,
     this.companyName,
-    required this.ext,
+    this.ext,
   });
 
   factory AccountInfo.fromJson(Map<String, dynamic> json) => _$AccountInfoFromJson(json);
@@ -55,5 +55,5 @@ class AccountInfo {
   final String? mobile;
   @JsonKey(name: 'company_name')
   final String? companyName;
-  final String ext;
+  final String? ext;
 }

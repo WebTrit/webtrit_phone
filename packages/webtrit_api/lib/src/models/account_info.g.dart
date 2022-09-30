@@ -25,7 +25,7 @@ AccountInfo _$AccountInfoFromJson(Map<String, dynamic> json) => AccountInfo(
       email: json['email'] as String?,
       mobile: json['mobile'] as String?,
       companyName: json['company_name'] as String?,
-      ext: json['ext'] as String,
+      ext: json['ext'] as String?,
     );
 
 Map<String, dynamic> _$AccountInfoToJson(AccountInfo instance) =>
