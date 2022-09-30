@@ -164,11 +164,11 @@ class StateHandshake extends Handshake {
           return CallRequestLog(timestamp: timestamp, callRequest: CallRequest.fromJson(requestOrResponseOrEventJson));
         } else if (requestOrResponseOrEventJson.containsKey(Response.typeKey)) {
           return ResponseLog(timestamp: timestamp, response: Response.fromJson(requestOrResponseOrEventJson));
-        } else if (requestOrResponseOrEventJson.containsKey('event')) {
-          return CallEventLog(timestamp: timestamp, callEvent: _toEvent(requestOrResponseOrEventJson));
+        } else if (requestOrResponseOrEventJson.containsKey(Event.typeKey)) {
+          return CallEventLog(timestamp: timestamp, callEvent: CallEvent.fromJson(requestOrResponseOrEventJson));
         } else {
           throw ArgumentError.value(
-              requestOrResponseOrEventJson, "requestOrResponseOrEventJson", "Active call's logs incorrect");
+              requestOrResponseOrEventJson, 'requestOrResponseOrEventJson', 'Active call\'s logs incorrect');
         }
       }).toList(growable: false);
 
@@ -184,49 +184,5 @@ class StateHandshake extends Handshake {
       registration: registration,
       lines: lines,
     );
-  }
-
-  static CallEvent _toEvent(Map<String, dynamic> eventJson) {
-    final eventType = eventJson['event'];
-    switch (eventType) {
-      case CallingEvent.event:
-        return CallingEvent.fromJson(eventJson);
-      case RingingEvent.event:
-        return RingingEvent.fromJson(eventJson);
-      case ProceedingEvent.event:
-        return ProceedingEvent.fromJson(eventJson);
-      case ProgressEvent.event:
-        return ProgressEvent.fromJson(eventJson);
-      case AcceptedEvent.event:
-        return AcceptedEvent.fromJson(eventJson);
-      case AcceptingEvent.event:
-        return AcceptingEvent.fromJson(eventJson);
-      case IncomingCallEvent.event:
-        return IncomingCallEvent.fromJson(eventJson);
-      case UpdatingCallEvent.event:
-        return UpdatingCallEvent.fromJson(eventJson);
-      case MissedCallEvent.event:
-        return MissedCallEvent.fromJson(eventJson);
-      case HangingupEvent.event:
-        return HangingupEvent.fromJson(eventJson);
-      case HangupEvent.event:
-        return HangupEvent.fromJson(eventJson);
-      case DecliningEvent.event:
-        return DecliningEvent.fromJson(eventJson);
-      case UpdatingEvent.event:
-        return UpdatingEvent.fromJson(eventJson);
-      case UpdatedEvent.event:
-        return UpdatedEvent.fromJson(eventJson);
-      case TransferringEvent.event:
-        return TransferringEvent.fromJson(eventJson);
-      case HoldingEvent.event:
-        return HoldingEvent.fromJson(eventJson);
-      case ResumingEvent.event:
-        return ResumingEvent.fromJson(eventJson);
-      case ErrorCallEvent.event:
-        return ErrorCallEvent.fromJson(eventJson);
-      default:
-        throw ArgumentError.value(eventType, "eventType", "Unknown event type");
-    }
   }
 }

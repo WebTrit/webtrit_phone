@@ -1,3 +1,4 @@
+import 'event.dart';
 import 'line_event.dart';
 
 class IceTrickleEvent extends LineEvent {
@@ -15,12 +16,12 @@ class IceTrickleEvent extends LineEvent {
         candidate,
       ];
 
-  static const event = 'ice_trickle';
+  static const typeValue = 'ice_trickle';
 
   factory IceTrickleEvent.fromJson(Map<String, dynamic> json) {
-    final eventValue = json['event'];
-    if (eventValue != event) {
-      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    final eventTypeValue = json[Event.typeKey];
+    if (eventTypeValue != typeValue) {
+      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     final candidateJson = json['candidate'] as Map<String, dynamic>;

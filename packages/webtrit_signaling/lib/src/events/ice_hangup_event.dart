@@ -1,3 +1,4 @@
+import 'event.dart';
 import 'line_event.dart';
 
 class IceHangupEvent extends LineEvent {
@@ -15,12 +16,12 @@ class IceHangupEvent extends LineEvent {
         reason,
       ];
 
-  static const event = 'ice_hangup';
+  static const typeValue = 'ice_hangup';
 
   factory IceHangupEvent.fromJson(Map<String, dynamic> json) {
-    final eventValue = json['event'];
-    if (eventValue != event) {
-      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    final eventTypeValue = json[Event.typeKey];
+    if (eventTypeValue != typeValue) {
+      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     return IceHangupEvent(

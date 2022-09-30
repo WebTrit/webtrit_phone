@@ -1,4 +1,5 @@
 import 'call_event.dart';
+import 'event.dart';
 
 class DecliningEvent extends CallEvent {
   const DecliningEvent({
@@ -19,12 +20,12 @@ class DecliningEvent extends CallEvent {
         referId,
       ];
 
-  static const event = 'declining';
+  static const typeValue = 'declining';
 
   factory DecliningEvent.fromJson(Map<String, dynamic> json) {
-    final eventValue = json['event'];
-    if (eventValue != event) {
-      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    final eventTypeValue = json[Event.typeKey];
+    if (eventTypeValue != typeValue) {
+      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     return DecliningEvent(

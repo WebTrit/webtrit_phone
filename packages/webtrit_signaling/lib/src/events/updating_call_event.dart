@@ -1,4 +1,5 @@
 import 'call_event.dart';
+import 'event.dart';
 
 class UpdatingCallEvent extends CallEvent {
   const UpdatingCallEvent({
@@ -31,12 +32,12 @@ class UpdatingCallEvent extends CallEvent {
         jsep,
       ];
 
-  static const event = 'updating_call';
+  static const typeValue = 'updating_call';
 
   factory UpdatingCallEvent.fromJson(Map<String, dynamic> json) {
-    final eventValue = json['event'];
-    if (eventValue != event) {
-      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    final eventTypeValue = json[Event.typeKey];
+    if (eventTypeValue != typeValue) {
+      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     return UpdatingCallEvent(

@@ -179,11 +179,11 @@ class WebtritSignalingClient {
       } else {
         _onError(WebtritSignalingTransactionUnavailableException(_id, transactionId), StackTrace.current);
       }
-    } else if (messageJson.containsKey('event')) {
+    } else if (messageJson.containsKey(Event.typeKey)) {
       final eventJson = messageJson;
 
       try {
-        final event = _toEvent(eventJson);
+        final event = Event.fromJson(eventJson);
         _onEvent(event);
       } catch (error, stackTrace) {
         _onError(error, stackTrace);
@@ -274,73 +274,5 @@ class WebtritSignalingClient {
     }
 
     _startKeepaliveTimer();
-  }
-
-  //
-
-  Event _toEvent(Map<String, dynamic> eventJson) {
-    final eventType = eventJson['event'];
-    switch (eventJson['event']) {
-      case RegisteringEvent.event:
-        return RegisteringEvent.fromJson(eventJson);
-      case RegisteredEvent.event:
-        return RegisteredEvent.fromJson(eventJson);
-      case RegistrationFailedEvent.event:
-        return RegistrationFailedEvent.fromJson(eventJson);
-      case UnregisteringEvent.event:
-        return UnregisteringEvent.fromJson(eventJson);
-      case UnregisteredEvent.event:
-        return UnregisteredEvent.fromJson(eventJson);
-      case CallingEvent.event:
-        return CallingEvent.fromJson(eventJson);
-      case RingingEvent.event:
-        return RingingEvent.fromJson(eventJson);
-      case ProceedingEvent.event:
-        return ProceedingEvent.fromJson(eventJson);
-      case ProgressEvent.event:
-        return ProgressEvent.fromJson(eventJson);
-      case AcceptedEvent.event:
-        return AcceptedEvent.fromJson(eventJson);
-      case AcceptingEvent.event:
-        return AcceptingEvent.fromJson(eventJson);
-      case IncomingCallEvent.event:
-        return IncomingCallEvent.fromJson(eventJson);
-      case UpdatingCallEvent.event:
-        return UpdatingCallEvent.fromJson(eventJson);
-      case MissedCallEvent.event:
-        return MissedCallEvent.fromJson(eventJson);
-      case HangingupEvent.event:
-        return HangingupEvent.fromJson(eventJson);
-      case HangupEvent.event:
-        return HangupEvent.fromJson(eventJson);
-      case DecliningEvent.event:
-        return DecliningEvent.fromJson(eventJson);
-      case UpdatingEvent.event:
-        return UpdatingEvent.fromJson(eventJson);
-      case UpdatedEvent.event:
-        return UpdatedEvent.fromJson(eventJson);
-      case TransferringEvent.event:
-        return TransferringEvent.fromJson(eventJson);
-      case TransferEvent.event:
-        return TransferEvent.fromJson(eventJson);
-      case HoldingEvent.event:
-        return HoldingEvent.fromJson(eventJson);
-      case ResumingEvent.event:
-        return ResumingEvent.fromJson(eventJson);
-      case IceWebrtcUpEvent.event:
-        return IceWebrtcUpEvent.fromJson(eventJson);
-      case IceMediaEvent.event:
-        return IceMediaEvent.fromJson(eventJson);
-      case IceSlowLinkEvent.event:
-        return IceSlowLinkEvent.fromJson(eventJson);
-      case IceHangupEvent.event:
-        return IceHangupEvent.fromJson(eventJson);
-      case ErrorCallEvent.event:
-        return ErrorCallEvent.fromJson(eventJson);
-      case ErrorLineEvent.event:
-        return ErrorLineEvent.fromJson(eventJson);
-      default:
-        throw ArgumentError.value(eventType, "eventType", "Unknown event type");
-    }
   }
 }

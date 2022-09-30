@@ -1,3 +1,4 @@
+import 'event.dart';
 import 'line_event.dart';
 
 class TransferEvent extends LineEvent {
@@ -24,12 +25,12 @@ class TransferEvent extends LineEvent {
         replaceCallId,
       ];
 
-  static const event = 'transfer';
+  static const typeValue = 'transfer';
 
   factory TransferEvent.fromJson(Map<String, dynamic> json) {
-    final eventValue = json['event'];
-    if (eventValue != event) {
-      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    final eventTypeValue = json[Event.typeKey];
+    if (eventTypeValue != typeValue) {
+      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     return TransferEvent(

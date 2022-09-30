@@ -1,3 +1,4 @@
+import 'event.dart';
 import 'session_event.dart';
 
 class RegistrationFailedEvent extends SessionEvent {
@@ -17,12 +18,12 @@ class RegistrationFailedEvent extends SessionEvent {
         reason,
       ];
 
-  static const event = 'registration_failed';
+  static const typeValue = 'registration_failed';
 
   factory RegistrationFailedEvent.fromJson(Map<String, dynamic> json) {
-    final eventValue = json['event'];
-    if (eventValue != event) {
-      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    final eventTypeValue = json[Event.typeKey];
+    if (eventTypeValue != typeValue) {
+      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     return RegistrationFailedEvent(

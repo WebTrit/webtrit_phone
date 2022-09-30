@@ -1,4 +1,5 @@
 import 'call_event.dart';
+import 'event.dart';
 
 class ProgressEvent extends CallEvent {
   const ProgressEvent({
@@ -22,12 +23,12 @@ class ProgressEvent extends CallEvent {
         jsep,
       ];
 
-  static const event = 'progress';
+  static const typeValue = 'progress';
 
   factory ProgressEvent.fromJson(Map<String, dynamic> json) {
-    final eventValue = json['event'];
-    if (eventValue != event) {
-      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    final eventTypeValue = json[Event.typeKey];
+    if (eventTypeValue != typeValue) {
+      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     return ProgressEvent(

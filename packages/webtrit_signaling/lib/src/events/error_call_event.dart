@@ -1,4 +1,5 @@
 import 'call_event.dart';
+import 'event.dart';
 
 class ErrorCallEvent extends CallEvent {
   const ErrorCallEvent({
@@ -19,12 +20,12 @@ class ErrorCallEvent extends CallEvent {
         description,
       ];
 
-  static const event = 'call_error';
+  static const typeValue = 'call_error';
 
   factory ErrorCallEvent.fromJson(Map<String, dynamic> json) {
-    final eventValue = json['event'];
-    if (eventValue != event) {
-      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    final eventTypeValue = json[Event.typeKey];
+    if (eventTypeValue != typeValue) {
+      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     return ErrorCallEvent(

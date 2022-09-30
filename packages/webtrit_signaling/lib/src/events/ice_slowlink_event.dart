@@ -1,3 +1,4 @@
+import 'event.dart';
 import 'ice_media_type.dart';
 import 'line_event.dart';
 
@@ -22,12 +23,12 @@ class IceSlowLinkEvent extends LineEvent {
         lost,
       ];
 
-  static const event = 'ice_slowlink';
+  static const typeValue = 'ice_slowlink';
 
   factory IceSlowLinkEvent.fromJson(Map<String, dynamic> json) {
-    final eventValue = json['event'];
-    if (eventValue != event) {
-      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    final eventTypeValue = json[Event.typeKey];
+    if (eventTypeValue != typeValue) {
+      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     return IceSlowLinkEvent(

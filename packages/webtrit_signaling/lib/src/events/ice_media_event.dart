@@ -1,3 +1,4 @@
+import 'event.dart';
 import 'ice_media_type.dart';
 import 'line_event.dart';
 
@@ -19,12 +20,12 @@ class IceMediaEvent extends LineEvent {
         receiving,
       ];
 
-  static const event = 'ice_media';
+  static const typeValue = 'ice_media';
 
   factory IceMediaEvent.fromJson(Map<String, dynamic> json) {
-    final eventValue = json['event'];
-    if (eventValue != event) {
-      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    final eventTypeValue = json[Event.typeKey];
+    if (eventTypeValue != typeValue) {
+      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     return IceMediaEvent(
