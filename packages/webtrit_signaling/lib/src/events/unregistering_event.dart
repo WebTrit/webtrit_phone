@@ -1,10 +1,9 @@
 import 'session_event.dart';
 
 class UnregisteringEvent extends SessionEvent {
-  UnregisteringEvent() : super();
-
-  @override
-  List<Object?> get props => [];
+  UnregisteringEvent({
+    required String transaction,
+  }) : super(transaction: transaction);
 
   static const event = 'unregistering';
 
@@ -14,6 +13,8 @@ class UnregisteringEvent extends SessionEvent {
       throw ArgumentError.value(eventValue, "event", "Not equal $event");
     }
 
-    return UnregisteringEvent();
+    return UnregisteringEvent(
+      transaction: json['transaction'],
+    );
   }
 }

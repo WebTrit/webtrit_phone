@@ -2,11 +2,12 @@ import 'response.dart';
 
 class ErrorResponse extends Response {
   const ErrorResponse({
+    String? transaction,
     int? line,
     String? callId,
     required this.code,
     required this.reason,
-  }) : super(line: line, callId: callId);
+  }) : super(transaction: transaction, line: line, callId: callId);
 
   final int code;
   final String reason;
@@ -29,6 +30,7 @@ class ErrorResponse extends Response {
     final errorValue = json['error'];
     if (errorValue is Map<String, dynamic>) {
       return ErrorResponse(
+        transaction: json['transaction'],
         line: json['line'],
         callId: json['call_id'],
         code: errorValue['code'],
@@ -36,6 +38,7 @@ class ErrorResponse extends Response {
       );
     } else {
       return ErrorResponse(
+        transaction: json['transaction'],
         line: json['line'],
         callId: json['call_id'],
         code: -1,

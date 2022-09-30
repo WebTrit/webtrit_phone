@@ -22,6 +22,7 @@ void main() {
             1662114479751,
             {
               "event": "incoming_call",
+              "transaction": "transaction-1",
               "callee": "123",
               "caller": "456"
             }
@@ -47,6 +48,7 @@ void main() {
           CallEventLog(
             timestamp: 1662114479751,
             callEvent: IncomingCallEvent(
+              transaction: 'transaction-1',
               line: 0,
               callId: 'qwertyuiopasdfghjklzxcvbnm',
               callee: '123',

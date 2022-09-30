@@ -2,9 +2,10 @@ import 'line_event.dart';
 
 class IceHangupEvent extends LineEvent {
   const IceHangupEvent({
+    required String transaction,
     required int line,
     this.reason,
-  }) : super(line: line);
+  }) : super(transaction: transaction, line: line);
 
   final String? reason;
 
@@ -23,6 +24,7 @@ class IceHangupEvent extends LineEvent {
     }
 
     return IceHangupEvent(
+      transaction: json['transaction'],
       line: json['line'],
       reason: json['reason'],
     );

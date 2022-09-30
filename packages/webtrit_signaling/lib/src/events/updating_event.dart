@@ -2,9 +2,10 @@ import 'call_event.dart';
 
 class UpdatingEvent extends CallEvent {
   const UpdatingEvent({
+    required String transaction,
     required int line,
     required String callId,
-  }) : super(line: line, callId: callId);
+  }) : super(transaction: transaction, line: line, callId: callId);
 
   static const event = 'updating';
 
@@ -15,6 +16,7 @@ class UpdatingEvent extends CallEvent {
     }
 
     return UpdatingEvent(
+      transaction: json['transaction'],
       line: json['line'],
       callId: json['call_id'],
     );

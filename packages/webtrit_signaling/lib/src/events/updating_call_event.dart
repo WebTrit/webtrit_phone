@@ -2,6 +2,7 @@ import 'call_event.dart';
 
 class UpdatingCallEvent extends CallEvent {
   const UpdatingCallEvent({
+    required String transaction,
     required int line,
     required String callId,
     required this.callee,
@@ -10,7 +11,7 @@ class UpdatingCallEvent extends CallEvent {
     this.replaceCallId,
     this.isFocus,
     this.jsep,
-  }) : super(line: line, callId: callId);
+  }) : super(transaction: transaction, line: line, callId: callId);
 
   final String callee;
   final String caller;
@@ -39,6 +40,7 @@ class UpdatingCallEvent extends CallEvent {
     }
 
     return UpdatingCallEvent(
+      transaction: json['transaction'],
       line: json['line'],
       callId: json['call_id'],
       callee: json['callee'],

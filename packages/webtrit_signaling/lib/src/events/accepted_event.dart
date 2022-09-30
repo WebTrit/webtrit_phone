@@ -2,12 +2,13 @@ import 'call_event.dart';
 
 class AcceptedEvent extends CallEvent {
   const AcceptedEvent({
+    required String transaction,
     required int line,
     required String callId,
     this.callee,
     this.isFocus,
     this.jsep,
-  }) : super(line: line, callId: callId);
+  }) : super(transaction: transaction, line: line, callId: callId);
 
   final String? callee;
   final bool? isFocus;
@@ -30,6 +31,7 @@ class AcceptedEvent extends CallEvent {
     }
 
     return AcceptedEvent(
+      transaction: json['transaction'],
       line: json['line'],
       callId: json['call_id'],
       callee: json['callee'],

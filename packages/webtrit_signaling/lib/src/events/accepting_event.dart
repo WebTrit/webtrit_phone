@@ -2,9 +2,10 @@ import 'call_event.dart';
 
 class AcceptingEvent extends CallEvent {
   const AcceptingEvent({
+    required String transaction,
     required int line,
     required String callId,
-  }) : super(line: line, callId: callId);
+  }) : super(transaction: transaction, line: line, callId: callId);
 
   static const event = 'accepting';
 
@@ -15,6 +16,7 @@ class AcceptingEvent extends CallEvent {
     }
 
     return AcceptingEvent(
+      transaction: json['transaction'],
       line: json['line'],
       callId: json['call_id'],
     );

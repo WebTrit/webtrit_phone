@@ -2,9 +2,10 @@ import 'call_request.dart';
 
 class DeclineRequest extends CallRequest {
   const DeclineRequest({
+    required String transaction,
     required int line,
     required String callId,
-  }) : super(line: line, callId: callId);
+  }) : super(transaction: transaction, line: line, callId: callId);
 
   static const request = 'decline';
 
@@ -15,6 +16,7 @@ class DeclineRequest extends CallRequest {
     }
 
     return DeclineRequest(
+      transaction: json['transaction'],
       line: json['line'],
       callId: json['call_id'],
     );
@@ -24,6 +26,7 @@ class DeclineRequest extends CallRequest {
   Map<String, dynamic> toJson() {
     return {
       'request': request,
+      'transaction': transaction,
       'line': line,
       'call_id': callId,
     };

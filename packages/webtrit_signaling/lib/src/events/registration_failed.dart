@@ -2,15 +2,17 @@ import 'session_event.dart';
 
 class RegistrationFailedEvent extends SessionEvent {
   const RegistrationFailedEvent({
+    required String transaction,
     required this.code,
     required this.reason,
-  }) : super();
+  }) : super(transaction: transaction);
 
   final int code;
   final String reason;
 
   @override
   List<Object?> get props => [
+        ...super.props,
         code,
         reason,
       ];
@@ -24,6 +26,7 @@ class RegistrationFailedEvent extends SessionEvent {
     }
 
     return RegistrationFailedEvent(
+      transaction: json['transaction'],
       code: json['code'],
       reason: json['reason'],
     );

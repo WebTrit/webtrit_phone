@@ -8,10 +8,11 @@ enum HoldDirection {
 
 class HoldRequest extends CallRequest {
   const HoldRequest({
+    required String transaction,
     required int line,
     required String callId,
     this.direction,
-  }) : super(line: line, callId: callId);
+  }) : super(transaction: transaction, line: line, callId: callId);
 
   final HoldDirection? direction;
 
@@ -36,6 +37,7 @@ class HoldRequest extends CallRequest {
     }
 
     return HoldRequest(
+      transaction: json['transaction'],
       line: json['line'],
       callId: json['call_id'],
       direction: direction,
@@ -47,6 +49,7 @@ class HoldRequest extends CallRequest {
     final direction = this.direction;
     return {
       'request': request,
+      'transaction': transaction,
       'line': line,
       'call_id': callId,
       if (direction != null) 'direction': direction.name,

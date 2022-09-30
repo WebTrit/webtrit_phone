@@ -2,8 +2,9 @@ import 'line_event.dart';
 
 class IceWebrtcUpEvent extends LineEvent {
   const IceWebrtcUpEvent({
+    required String transaction,
     required int line,
-  }) : super(line: line);
+  }) : super(transaction: transaction, line: line);
 
   static const event = 'ice_webrtcup';
 
@@ -14,6 +15,7 @@ class IceWebrtcUpEvent extends LineEvent {
     }
 
     return IceWebrtcUpEvent(
+      transaction: json['transaction'],
       line: json['line'],
     );
   }

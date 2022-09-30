@@ -1,10 +1,9 @@
 import 'session_event.dart';
 
 class RegisteringEvent extends SessionEvent {
-  RegisteringEvent() : super();
-
-  @override
-  List<Object?> get props => [];
+  RegisteringEvent({
+    required String transaction,
+  }) : super(transaction: transaction);
 
   static const event = 'registering';
 
@@ -14,6 +13,8 @@ class RegisteringEvent extends SessionEvent {
       throw ArgumentError.value(eventValue, "event", "Not equal $event");
     }
 
-    return RegisteringEvent();
+    return RegisteringEvent(
+      transaction: json['transaction'],
+    );
   }
 }

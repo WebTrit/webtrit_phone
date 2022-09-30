@@ -3,11 +3,12 @@ import 'line_event.dart';
 
 class IceSlowLinkEvent extends LineEvent {
   const IceSlowLinkEvent({
+    required String transaction,
     required int line,
     required this.media,
     required this.uplink,
     required this.lost,
-  }) : super(line: line);
+  }) : super(transaction: transaction, line: line);
 
   final IceMediaType media;
   final bool uplink;
@@ -30,6 +31,7 @@ class IceSlowLinkEvent extends LineEvent {
     }
 
     return IceSlowLinkEvent(
+      transaction: json['transaction'],
       line: json['line'],
       media: IceMediaType.values.byName(json['media']),
       uplink: json['uplink'],

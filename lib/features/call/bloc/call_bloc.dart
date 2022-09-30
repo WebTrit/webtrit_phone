@@ -527,6 +527,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       await state.performOnActiveCall(event.callId.uuid, (activeCall) {
         return _signalingClient?.execute(DeclineRequest(
+          transaction: WebtritSignalingClient.generateTransactionId(),
           line: activeCall.line,
           callId: activeCall.callId.toString(),
         ));
@@ -849,6 +850,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // between [OutgoingCallRequest] and [IceTrickleRequest]s.
     await state.performOnActiveCall(event.uuid, (activeCall) {
       return _signalingClient?.execute(OutgoingCallRequest(
+        transaction: WebtritSignalingClient.generateTransactionId(),
         line: activeCall.line,
         callId: activeCall.callId.toString(),
         number: activeCall.handle.value,
@@ -883,6 +885,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             ? await peerConnection.createAnswer({})
             : await peerConnection.createOffer({});
         await _signalingClient?.execute(AcceptRequest(
+          transaction: WebtritSignalingClient.generateTransactionId(),
           line: activeCall.line,
           callId: activeCall.callId.toString(),
           jsep: localDescription.toMap(),
@@ -913,11 +916,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     await state.performOnActiveCall(event.uuid, (activeCall) async {
       if (activeCall.isIncoming && !activeCall.wasAccepted) {
         await _signalingClient?.execute(DeclineRequest(
+          transaction: WebtritSignalingClient.generateTransactionId(),
           line: activeCall.line,
           callId: activeCall.callId.toString(),
         ));
       } else {
         await _signalingClient?.execute(HangupRequest(
+          transaction: WebtritSignalingClient.generateTransactionId(),
           line: activeCall.line,
           callId: activeCall.callId.toString(),
         ));
@@ -942,12 +947,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     await state.performOnActiveCall(event.uuid, (activeCall) {
       if (event.onHold) {
         return _signalingClient?.execute(HoldRequest(
+          transaction: WebtritSignalingClient.generateTransactionId(),
           line: activeCall.line,
           callId: activeCall.callId.toString(),
           direction: HoldDirection.inactive,
         ));
       } else {
         return _signalingClient?.execute(UnholdRequest(
+          transaction: WebtritSignalingClient.generateTransactionId(),
           line: activeCall.line,
           callId: activeCall.callId.toString(),
         ));
@@ -1028,6 +1035,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       await state.performOnActiveCall(event.uuid, (activeCall) {
         if (!activeCall.wasHungUp) {
           return _signalingClient?.execute(IceTrickleRequest(
+            transaction: WebtritSignalingClient.generateTransactionId(),
             line: activeCall.line,
             candidate: null,
           ));
@@ -1043,6 +1051,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     await state.performOnActiveCall(event.uuid, (activeCall) {
       if (!activeCall.wasHungUp) {
         return _signalingClient?.execute(IceTrickleRequest(
+          transaction: WebtritSignalingClient.generateTransactionId(),
           line: activeCall.line,
           candidate: event.candidate.toMap(),
         ));

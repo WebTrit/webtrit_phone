@@ -2,9 +2,10 @@ import 'response.dart';
 
 class AckResponse extends Response {
   const AckResponse({
+    String? transaction,
     int? line,
     String? callId,
-  }) : super(line: line, callId: callId);
+  }) : super(transaction: transaction, line: line, callId: callId);
 
   static const typeValue = 'ack';
 
@@ -15,6 +16,7 @@ class AckResponse extends Response {
     }
 
     return AckResponse(
+      transaction: json['transaction'],
       line: json['line'],
       callId: json['call_id'],
     );

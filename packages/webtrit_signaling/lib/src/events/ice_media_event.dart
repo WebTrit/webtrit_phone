@@ -3,10 +3,11 @@ import 'line_event.dart';
 
 class IceMediaEvent extends LineEvent {
   const IceMediaEvent({
+    required String transaction,
     required int line,
     required this.type,
     required this.receiving,
-  }) : super(line: line);
+  }) : super(transaction: transaction, line: line);
 
   final IceMediaType type;
   final bool receiving;
@@ -27,6 +28,7 @@ class IceMediaEvent extends LineEvent {
     }
 
     return IceMediaEvent(
+      transaction: json['transaction'],
       line: json['line'],
       type: IceMediaType.values.byName(json['type']),
       receiving: json['receiving'],

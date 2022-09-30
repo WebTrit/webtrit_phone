@@ -5,14 +5,27 @@ import 'exceptions.dart';
 class Transaction {
   static int _createCounter = 0;
 
-  final int signalingClient;
-  final String id;
+  static String generateId() => 'transaction-${_createCounter++}';
+
+  final int signalingClientId;
+  late final String id;
+  late final bool isIdGenerate;
+
   final _completer = Completer<Map<String, dynamic>>();
+  late final Timer _timer;
 
-  late Timer _timer;
-
-  Transaction(this.signalingClient, Duration timeoutDuration) : id = 'transaction-$_createCounter' {
-    _createCounter++;
+  Transaction({
+    required this.signalingClientId,
+    String? id,
+    required Duration timeoutDuration,
+  }) {
+    if (id != null) {
+      this.id = id;
+      isIdGenerate = false;
+    } else {
+      this.id = generateId();
+      isIdGenerate = true;
+    }
 
     _timer = Timer(
       timeoutDuration,
@@ -30,13 +43,13 @@ class Transaction {
   void terminateByDisconnect([int? closeCode, String? closeReason]) {
     _timer.cancel();
     _completer
-        .completeError(WebtritSignalingTerminateByDisconnectException(signalingClient, id, closeCode, closeReason));
+        .completeError(WebtritSignalingTerminateByDisconnectException(signalingClientId, id, closeCode, closeReason));
   }
 
   void _onTimeout() {
     if (_completer.isCompleted) {
       return;
     }
-    _completer.completeError(WebtritSignalingTransactionTimeoutException(signalingClient, id), StackTrace.current);
+    _completer.completeError(WebtritSignalingTransactionTimeoutException(signalingClientId, id), StackTrace.current);
   }
 }

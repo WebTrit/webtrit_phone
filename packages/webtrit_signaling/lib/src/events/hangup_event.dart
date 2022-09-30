@@ -2,11 +2,12 @@ import 'call_event.dart';
 
 class HangupEvent extends CallEvent {
   const HangupEvent({
+    required String transaction,
     required int line,
     required String callId,
     required this.code,
     required this.reason,
-  }) : super(line: line, callId: callId);
+  }) : super(transaction: transaction, line: line, callId: callId);
 
   final int code;
   final String reason;
@@ -27,6 +28,7 @@ class HangupEvent extends CallEvent {
     }
 
     return HangupEvent(
+      transaction: json['transaction'],
       line: json['line'],
       callId: json['call_id'],
       code: json['code'],

@@ -2,9 +2,10 @@ import 'line_event.dart';
 
 abstract class CallEvent extends LineEvent {
   const CallEvent({
+    required String transaction,
     required int line,
     required this.callId,
-  }) : super(line: line);
+  }) : super(transaction: transaction, line: line);
 
   final String callId;
 

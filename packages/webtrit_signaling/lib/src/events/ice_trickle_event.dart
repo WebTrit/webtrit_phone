@@ -2,9 +2,10 @@ import 'line_event.dart';
 
 class IceTrickleEvent extends LineEvent {
   const IceTrickleEvent({
+    required String transaction,
     required int line,
     required this.candidate,
-  }) : super(line: line);
+  }) : super(transaction: transaction, line: line);
 
   final Map<String, dynamic>? candidate;
 
@@ -25,11 +26,13 @@ class IceTrickleEvent extends LineEvent {
     final candidateJson = json['candidate'] as Map<String, dynamic>;
     if (candidateJson['completed'] == true) {
       return IceTrickleEvent(
+        transaction: json['transaction'],
         line: json['line'],
         candidate: null,
       );
     } else {
       return IceTrickleEvent(
+        transaction: json['transaction'],
         line: json['line'],
         candidate: candidateJson,
       );

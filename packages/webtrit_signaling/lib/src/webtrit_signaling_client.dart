@@ -21,6 +21,10 @@ class WebtritSignalingClient {
   static final _callIdRandom = Random();
   static const _callIdChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
+  static String generateTransactionId() {
+    return Transaction.generateId();
+  }
+
   static String generateCallId([int length = 24]) {
     return List.generate(length, (index) => _callIdChars[_callIdRandom.nextInt(_callIdChars.length)]).join();
   }
@@ -164,7 +168,7 @@ class WebtritSignalingClient {
   //
 
   void _onMessage(Map<String, dynamic> messageJson) {
-    if (messageJson.containsKey('transaction')) {
+    if (messageJson.containsKey(Response.typeKey) || messageJson['handshake'] == KeepaliveHandshake.type) {
       final responseJson = messageJson;
 
       final transactionId = responseJson['transaction'];
@@ -202,16 +206,24 @@ class WebtritSignalingClient {
   }
 
   Future<Map<String, dynamic>> _executeTransaction(Map<String, dynamic> requestJson, Duration timeoutDuration) async {
-    final transaction = Transaction(_id, timeoutDuration);
+    final transaction = Transaction(
+      signalingClientId: _id,
+      id: requestJson['transaction'],
+      timeoutDuration: timeoutDuration,
+    );
 
     _transactions[transaction.id] = transaction;
-    requestJson['transaction'] = transaction.id;
+    if (transaction.isIdGenerate) {
+      requestJson['transaction'] = transaction.id;
+    }
 
     _addMessage(requestJson);
 
     try {
       final responseJson = await transaction.future;
-      responseJson.remove('transaction');
+      if (transaction.isIdGenerate) {
+        responseJson.remove('transaction');
+      }
 
       return responseJson;
     } catch (e) {

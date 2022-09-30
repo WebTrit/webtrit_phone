@@ -2,9 +2,10 @@ import 'line_request.dart';
 
 class IceTrickleRequest extends LineRequest {
   const IceTrickleRequest({
+    required String transaction,
     required int line,
     this.candidate,
-  }) : super(line: line);
+  }) : super(transaction: transaction, line: line);
 
   final Map<String, dynamic>? candidate;
 
@@ -23,6 +24,7 @@ class IceTrickleRequest extends LineRequest {
     }
 
     return IceTrickleRequest(
+      transaction: json['transaction'],
       line: json['line'],
       candidate: json['candidate'],
     );
@@ -32,6 +34,7 @@ class IceTrickleRequest extends LineRequest {
   Map<String, dynamic> toJson() {
     return {
       'request': request,
+      'transaction': transaction,
       'line': line,
       'candidate': candidate,
     };
