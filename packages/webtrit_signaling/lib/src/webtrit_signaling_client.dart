@@ -168,7 +168,7 @@ class WebtritSignalingClient {
   //
 
   void _onMessage(Map<String, dynamic> messageJson) {
-    if (messageJson.containsKey(Response.typeKey) || messageJson['handshake'] == KeepaliveHandshake.type) {
+    if (messageJson.containsKey(Response.typeKey) || messageJson[Handshake.typeKey] == KeepaliveHandshake.typeValue) {
       final responseJson = messageJson;
 
       final transactionId = responseJson['transaction'];
@@ -188,7 +188,7 @@ class WebtritSignalingClient {
       } catch (error, stackTrace) {
         _onError(error, stackTrace);
       }
-    } else if (messageJson['handshake'] == StateHandshake.type) {
+    } else if (messageJson[Handshake.typeKey] == StateHandshake.typeValue) {
       final stateHandshakeJson = messageJson;
 
       try {

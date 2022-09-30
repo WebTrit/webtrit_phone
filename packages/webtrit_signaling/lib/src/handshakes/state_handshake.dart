@@ -128,12 +128,12 @@ class StateHandshake extends Handshake {
         lines,
       ];
 
-  static const type = 'state';
+  static const typeValue = 'state';
 
   factory StateHandshake.fromJson(Map<String, dynamic> json) {
-    final handshakeValue = json['handshake'];
-    if (handshakeValue != type) {
-      throw ArgumentError.value(handshakeValue, "handshake", "Not equal $type");
+    final handshakeTypeValue = json[Handshake.typeKey];
+    if (handshakeTypeValue != typeValue) {
+      throw ArgumentError.value(handshakeTypeValue, Handshake.typeKey, 'Not equal $typeValue');
     }
 
     final keepaliveInterval = Duration(milliseconds: json['keepalive_interval'] as int);

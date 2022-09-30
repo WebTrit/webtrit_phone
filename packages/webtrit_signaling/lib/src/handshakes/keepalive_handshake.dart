@@ -6,12 +6,12 @@ class KeepaliveHandshake extends Handshake {
   @override
   List<Object?> get props => [];
 
-  static const type = 'keepalive';
+  static const typeValue = 'keepalive';
 
   factory KeepaliveHandshake.fromJson(Map<String, dynamic> json) {
-    final handshakeValue = json['handshake'];
-    if (handshakeValue != type) {
-      throw ArgumentError.value(handshakeValue, "handshake", "Not equal $type");
+    final handshakeTypeValue = json[Handshake.typeKey];
+    if (handshakeTypeValue != typeValue) {
+      throw ArgumentError.value(handshakeTypeValue, Handshake.typeKey, 'Not equal $typeValue');
     }
 
     return KeepaliveHandshake();
@@ -19,7 +19,7 @@ class KeepaliveHandshake extends Handshake {
 
   Map<String, dynamic> toJson() {
     return {
-      'handshake': type,
+      Handshake.typeKey: typeValue,
     };
   }
 }
