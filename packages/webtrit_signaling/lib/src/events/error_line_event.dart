@@ -15,6 +15,7 @@ class ErrorLineEvent extends LineEvent {
 
   @override
   List<Object?> get props => [
+        ...super.props,
         code,
         description,
         callId,

@@ -17,6 +17,7 @@ class TransferEvent extends LineEvent {
 
   @override
   List<Object?> get props => [
+        ...super.props,
         referId,
         referTo,
         referredBy,
