@@ -3,7 +3,7 @@ import 'session_event.dart';
 
 class RegisteredEvent extends SessionEvent {
   RegisteredEvent({
-    required String transaction,
+    String? transaction,
   }) : super(transaction: transaction);
 
   static const typeValue = 'registered';

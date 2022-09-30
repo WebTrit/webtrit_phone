@@ -3,7 +3,7 @@ import 'line_event.dart';
 
 class TransferEvent extends LineEvent {
   const TransferEvent({
-    required String transaction,
+    String? transaction,
     required int line,
     required this.referId,
     required this.referTo,

@@ -3,7 +3,7 @@ import 'event.dart';
 
 class ResumingEvent extends CallEvent {
   const ResumingEvent({
-    required String transaction,
+    String? transaction,
     required int line,
     required String callId,
   }) : super(transaction: transaction, line: line, callId: callId);

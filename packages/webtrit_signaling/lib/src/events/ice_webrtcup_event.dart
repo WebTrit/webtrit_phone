@@ -3,7 +3,7 @@ import 'line_event.dart';
 
 class IceWebrtcUpEvent extends LineEvent {
   const IceWebrtcUpEvent({
-    required String transaction,
+    String? transaction,
     required int line,
   }) : super(transaction: transaction, line: line);
 

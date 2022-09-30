@@ -3,7 +3,7 @@ import 'session_event.dart';
 
 class RegistrationFailedEvent extends SessionEvent {
   const RegistrationFailedEvent({
-    required String transaction,
+    String? transaction,
     required this.code,
     required this.reason,
   }) : super(transaction: transaction);

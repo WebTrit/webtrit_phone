@@ -3,7 +3,7 @@ import 'session_event.dart';
 
 class UnregisteredEvent extends SessionEvent {
   UnregisteredEvent({
-    required String transaction,
+    String? transaction,
   }) : super(transaction: transaction);
 
   static const typeValue = 'unregistered';

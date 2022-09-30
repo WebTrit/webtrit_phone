@@ -3,7 +3,7 @@ import 'event.dart';
 
 class ErrorCallEvent extends CallEvent {
   const ErrorCallEvent({
-    required String transaction,
+    String? transaction,
     required int line,
     required String callId,
     required this.code,

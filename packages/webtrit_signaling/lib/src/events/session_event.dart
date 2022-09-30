@@ -2,10 +2,10 @@ import 'events.dart';
 
 abstract class SessionEvent extends Event {
   const SessionEvent({
-    required this.transaction,
+    this.transaction,
   }) : super();
 
-  final String transaction;
+  final String? transaction;
 
   @override
   List<Object?> get props => [

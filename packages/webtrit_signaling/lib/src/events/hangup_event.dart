@@ -3,7 +3,7 @@ import 'event.dart';
 
 class HangupEvent extends CallEvent {
   const HangupEvent({
-    required String transaction,
+    String? transaction,
     required int line,
     required String callId,
     required this.code,

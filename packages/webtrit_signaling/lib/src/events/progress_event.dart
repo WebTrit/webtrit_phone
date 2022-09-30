@@ -3,7 +3,7 @@ import 'event.dart';
 
 class ProgressEvent extends CallEvent {
   const ProgressEvent({
-    required String transaction,
+    String? transaction,
     required int line,
     required String callId,
     required this.callee,

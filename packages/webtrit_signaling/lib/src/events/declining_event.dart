@@ -3,7 +3,7 @@ import 'event.dart';
 
 class DecliningEvent extends CallEvent {
   const DecliningEvent({
-    required String transaction,
+    String? transaction,
     required int line,
     required String callId,
     required this.code,

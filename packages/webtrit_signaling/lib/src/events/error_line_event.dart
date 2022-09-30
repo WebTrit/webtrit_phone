@@ -3,7 +3,7 @@ import 'line_event.dart';
 
 class ErrorLineEvent extends LineEvent {
   const ErrorLineEvent({
-    required String transaction,
+    String? transaction,
     required int line,
     required this.code,
     required this.description,

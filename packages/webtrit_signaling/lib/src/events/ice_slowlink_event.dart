@@ -4,7 +4,7 @@ import 'line_event.dart';
 
 class IceSlowLinkEvent extends LineEvent {
   const IceSlowLinkEvent({
-    required String transaction,
+    String? transaction,
     required int line,
     required this.media,
     required this.uplink,

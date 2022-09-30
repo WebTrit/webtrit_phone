@@ -3,7 +3,7 @@ import 'event.dart';
 
 class UpdatedEvent extends CallEvent {
   const UpdatedEvent({
-    required String transaction,
+    String? transaction,
     required int line,
     required String callId,
   }) : super(transaction: transaction, line: line, callId: callId);

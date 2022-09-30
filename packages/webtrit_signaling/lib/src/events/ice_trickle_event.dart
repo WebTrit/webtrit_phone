@@ -3,7 +3,7 @@ import 'line_event.dart';
 
 class IceTrickleEvent extends LineEvent {
   const IceTrickleEvent({
-    required String transaction,
+    String? transaction,
     required int line,
     required this.candidate,
   }) : super(transaction: transaction, line: line);

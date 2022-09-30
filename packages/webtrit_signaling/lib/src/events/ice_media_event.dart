@@ -4,7 +4,7 @@ import 'line_event.dart';
 
 class IceMediaEvent extends LineEvent {
   const IceMediaEvent({
-    required String transaction,
+    String? transaction,
     required int line,
     required this.type,
     required this.receiving,

@@ -3,7 +3,7 @@ import 'event.dart';
 
 class UpdatingCallEvent extends CallEvent {
   const UpdatingCallEvent({
-    required String transaction,
+    String? transaction,
     required int line,
     required String callId,
     required this.callee,
