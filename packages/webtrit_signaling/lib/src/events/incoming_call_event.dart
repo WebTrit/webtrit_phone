@@ -1,7 +1,10 @@
 import 'call_event.dart';
+import 'event.dart';
 
 class IncomingCallEvent extends CallEvent {
   const IncomingCallEvent({
+    String? transaction,
+    required int line,
     required String callId,
     required this.callee,
     required this.caller,
@@ -9,7 +12,7 @@ class IncomingCallEvent extends CallEvent {
     this.replaceCallId,
     this.isFocus,
     this.jsep,
-  }) : super(callId: callId);
+  }) : super(transaction: transaction, line: line, callId: callId);
 
   final String callee;
   final String caller;
@@ -29,16 +32,18 @@ class IncomingCallEvent extends CallEvent {
         jsep,
       ];
 
-  static const event = 'incoming_call';
+  static const typeValue = 'incoming_call';
 
   factory IncomingCallEvent.fromJson(Map<String, dynamic> json) {
-    final eventValue = json['event'];
-    if (eventValue != event) {
-      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    final eventTypeValue = json[Event.typeKey];
+    if (eventTypeValue != typeValue) {
+      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     return IncomingCallEvent(
-      callId: json['call_id'] as String,
+      transaction: json['transaction'],
+      line: json['line'],
+      callId: json['call_id'],
       callee: json['callee'],
       caller: json['caller'],
       callerDisplayName: json['caller_display_name'],

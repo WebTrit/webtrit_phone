@@ -1,19 +1,24 @@
 import 'call_request.dart';
+import 'request.dart';
 
 class HangupRequest extends CallRequest {
   const HangupRequest({
+    required String transaction,
+    required int line,
     required String callId,
-  }) : super(callId: callId);
+  }) : super(transaction: transaction, line: line, callId: callId);
 
-  static const request = 'hangup';
+  static const typeValue = 'hangup';
 
   factory HangupRequest.fromJson(Map<String, dynamic> json) {
-    final requestValue = json['request'];
-    if (requestValue != request) {
-      throw ArgumentError.value(requestValue, "request", "Not equal $request");
+    final requestTypeValue = json[Request.typeKey];
+    if (requestTypeValue != typeValue) {
+      throw ArgumentError.value(requestTypeValue, Request.typeKey, 'Not equal $typeValue');
     }
 
     return HangupRequest(
+      transaction: json['transaction'],
+      line: json['line'],
       callId: json['call_id'],
     );
   }
@@ -21,7 +26,9 @@ class HangupRequest extends CallRequest {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'request': request,
+      Request.typeKey: typeValue,
+      'transaction': transaction,
+      'line': line,
       'call_id': callId,
     };
   }

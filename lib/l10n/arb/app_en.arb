@@ -47,6 +47,9 @@
   "@callStatus_ready": {
   },
 
+  "notifications_errorSnackBar_callUndefinedLine": "No idle lines to initiate the call",
+  "@notifications_errorSnackBar_callUndefinedLine": {
+  },
   "notifications_errorSnackBar_callSignalingClientNotConnect": "Cannot initiate the call, please check the connection status",
   "@notifications_errorSnackBar_callSignalingClientNotConnect": {
   },

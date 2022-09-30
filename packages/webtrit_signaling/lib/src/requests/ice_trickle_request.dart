@@ -1,10 +1,12 @@
-import 'call_request.dart';
+import 'line_request.dart';
+import 'request.dart';
 
-class IceTrickleRequest extends CallRequest {
+class IceTrickleRequest extends LineRequest {
   const IceTrickleRequest({
-    required String callId,
+    required String transaction,
+    required int line,
     this.candidate,
-  }) : super(callId: callId);
+  }) : super(transaction: transaction, line: line);
 
   final Map<String, dynamic>? candidate;
 
@@ -14,16 +16,17 @@ class IceTrickleRequest extends CallRequest {
         candidate,
       ];
 
-  static const request = 'ice_trickle';
+  static const typeValue = 'ice_trickle';
 
   factory IceTrickleRequest.fromJson(Map<String, dynamic> json) {
-    final requestValue = json['request'];
-    if (requestValue != request) {
-      throw ArgumentError.value(requestValue, "request", "Not equal $request");
+    final requestTypeValue = json[Request.typeKey];
+    if (requestTypeValue != typeValue) {
+      throw ArgumentError.value(requestTypeValue, Request.typeKey, 'Not equal $typeValue');
     }
 
     return IceTrickleRequest(
-      callId: json['call_id'],
+      transaction: json['transaction'],
+      line: json['line'],
       candidate: json['candidate'],
     );
   }
@@ -31,8 +34,9 @@ class IceTrickleRequest extends CallRequest {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'request': request,
-      'call_id': callId,
+      Request.typeKey: typeValue,
+      'transaction': transaction,
+      'line': line,
       'candidate': candidate,
     };
   }

@@ -1,10 +1,12 @@
-import 'call_event.dart';
+import 'event.dart';
+import 'line_event.dart';
 
-class IceTrickleEvent extends CallEvent {
+class IceTrickleEvent extends LineEvent {
   const IceTrickleEvent({
-    required String callId,
+    String? transaction,
+    required int line,
     required this.candidate,
-  }) : super(callId: callId);
+  }) : super(transaction: transaction, line: line);
 
   final Map<String, dynamic>? candidate;
 
@@ -14,23 +16,25 @@ class IceTrickleEvent extends CallEvent {
         candidate,
       ];
 
-  static const event = 'ice_trickle';
+  static const typeValue = 'ice_trickle';
 
   factory IceTrickleEvent.fromJson(Map<String, dynamic> json) {
-    final eventValue = json['event'];
-    if (eventValue != event) {
-      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    final eventTypeValue = json[Event.typeKey];
+    if (eventTypeValue != typeValue) {
+      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     final candidateJson = json['candidate'] as Map<String, dynamic>;
     if (candidateJson['completed'] == true) {
       return IceTrickleEvent(
-        callId: json['call_id'],
+        transaction: json['transaction'],
+        line: json['line'],
         candidate: null,
       );
     } else {
       return IceTrickleEvent(
-        callId: json['call_id'],
+        transaction: json['transaction'],
+        line: json['line'],
         candidate: candidateJson,
       );
     }

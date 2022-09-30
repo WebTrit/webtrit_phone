@@ -1,19 +1,21 @@
 import 'event.dart';
+import 'session_event.dart';
 
-class RegisteredEvent extends Event {
-  RegisteredEvent() : super();
+class RegisteredEvent extends SessionEvent {
+  RegisteredEvent({
+    String? transaction,
+  }) : super(transaction: transaction);
 
-  @override
-  List<Object?> get props => [];
-
-  static const event = 'registered';
+  static const typeValue = 'registered';
 
   factory RegisteredEvent.fromJson(Map<String, dynamic> json) {
-    final eventValue = json['event'];
-    if (eventValue != event) {
-      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    final eventTypeValue = json[Event.typeKey];
+    if (eventTypeValue != typeValue) {
+      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
-    return RegisteredEvent();
+    return RegisteredEvent(
+      transaction: json['transaction'],
+    );
   }
 }

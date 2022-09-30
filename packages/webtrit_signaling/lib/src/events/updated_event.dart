@@ -1,19 +1,24 @@
 import 'call_event.dart';
+import 'event.dart';
 
 class UpdatedEvent extends CallEvent {
   const UpdatedEvent({
+    String? transaction,
+    required int line,
     required String callId,
-  }) : super(callId: callId);
+  }) : super(transaction: transaction, line: line, callId: callId);
 
-  static const event = 'updated';
+  static const typeValue = 'updated';
 
   factory UpdatedEvent.fromJson(Map<String, dynamic> json) {
-    final eventValue = json['event'];
-    if (eventValue != event) {
-      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    final eventTypeValue = json[Event.typeKey];
+    if (eventTypeValue != typeValue) {
+      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     return UpdatedEvent(
+      transaction: json['transaction'],
+      line: json['line'],
       callId: json['call_id'],
     );
   }

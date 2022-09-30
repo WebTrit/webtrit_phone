@@ -8,6 +8,7 @@ import 'package:audio_session/audio_session.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:clock/clock.dart';
+import 'package:collection/collection.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -31,6 +32,8 @@ part 'call_bloc.freezed.dart';
 part 'call_event.dart';
 
 part 'call_state.dart';
+
+const int _kUndefinedLine = -1;
 
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
   final RecentsRepository recentsRepository;
@@ -75,6 +78,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     on<_SignalingClientEvent>(
       _onSignalingClientEvent,
       transformer: restartable(),
+    );
+    on<_HandshakeSignalingEvent>(
+      _onHandshakeSignalingEvent,
+      transformer: sequential(),
     );
     on<_CallSignalingEvent>(
       _onCallSignalingEvent,
@@ -321,6 +328,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
 
       signalingClient.listen(
+        onStateHandshake: _onSignalingStateHandshake,
         onEvent: _onSignalingEvent,
         onError: _onSignalingError,
         onDisconnect: _onSignalingDisconnect,
@@ -418,6 +426,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     emit(state.copyWithPushActiveCall(ActiveCall(
       direction: Direction.incoming,
+      line: _kUndefinedLine,
       callId: event.callId,
       handle: event.handle,
       displayName: event.displayName,
@@ -425,7 +434,25 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       createdTime: clock.now(),
     )));
 
-    // the rest logic implemented within _CallSignalingEventState processing
+    // the rest logic implemented within _onSignalingStateHandshake on IncomingCallEvent from call logs processing
+  }
+
+  // processing handshake signaling events
+
+  Future<void> _onHandshakeSignalingEvent(
+    _HandshakeSignalingEvent event,
+    Emitter<CallState> emit,
+  ) {
+    return event.map(
+      state: (event) => __onHandshakeSignalingEventState(event, emit),
+    );
+  }
+
+  Future<void> __onHandshakeSignalingEventState(
+    _HandshakeSignalingEventState event,
+    Emitter<CallState> emit,
+  ) async {
+    emit(state.copyWith(linesCount: event.linesCount));
   }
 
   // processing call signaling events
@@ -461,6 +488,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (error != null) {
       if (error == CallkeepIncomingCallError.callUuidAlreadyExists) {
         _logger.info('__onCallSignalingEventIncoming reportNewIncomingCall with already existed call uuid');
+        emit(state.copyWithMappedActiveCall(event.callId.uuid, (activeCall) {
+          return activeCall.copyWith(line: event.line);
+        }));
       } else {
         _logger.warning('__onCallSignalingEventIncoming reportNewIncomingCall error: $error');
         // TODO: implement correct incoming call hangup (take into account that _signalingClient could be disconnected)
@@ -469,6 +499,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } else {
       emit(state.copyWithPushActiveCall(ActiveCall(
         direction: Direction.incoming,
+        line: event.line,
         callId: event.callId,
         handle: handle,
         displayName: event.callerDisplayName,
@@ -496,6 +527,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       await state.performOnActiveCall(event.callId.uuid, (activeCall) {
         return _signalingClient?.execute(DeclineRequest(
+          transaction: WebtritSignalingClient.generateTransactionId(),
+          line: activeCall.line,
           callId: activeCall.callId.toString(),
         ));
       });
@@ -638,6 +671,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } else {
       emit(state.copyWithPushActiveCall(ActiveCall(
         direction: Direction.outgoing,
+        line: event.line ?? state.retrieveIdleLine() ?? _kUndefinedLine,
         callId: callId,
         handle: event.handle,
         displayName: event.displayName,
@@ -768,6 +802,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallPerformEventStarted event,
     Emitter<CallState> emit,
   ) async {
+    if (await state.performOnActiveCall(event.uuid, (activeCall) => activeCall.line != _kUndefinedLine) != true) {
+      event.fail();
+
+      emit(state.copyWithPopActiveCall(event.uuid));
+
+      notificationsBloc.add(const NotificationsIssued(CallSignalingClientNotConnectErrorNotification()));
+      return;
+    }
     if (state.signalingClientStatus != SignalingClientStatus.connect) {
       event.fail();
 
@@ -808,6 +850,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // between [OutgoingCallRequest] and [IceTrickleRequest]s.
     await state.performOnActiveCall(event.uuid, (activeCall) {
       return _signalingClient?.execute(OutgoingCallRequest(
+        transaction: WebtritSignalingClient.generateTransactionId(),
+        line: activeCall.line,
         callId: activeCall.callId.toString(),
         number: activeCall.handle.value,
         jsep: localDescription.toMap(),
@@ -841,6 +885,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             ? await peerConnection.createAnswer({})
             : await peerConnection.createOffer({});
         await _signalingClient?.execute(AcceptRequest(
+          transaction: WebtritSignalingClient.generateTransactionId(),
+          line: activeCall.line,
           callId: activeCall.callId.toString(),
           jsep: localDescription.toMap(),
         ));
@@ -870,10 +916,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     await state.performOnActiveCall(event.uuid, (activeCall) async {
       if (activeCall.isIncoming && !activeCall.wasAccepted) {
         await _signalingClient?.execute(DeclineRequest(
+          transaction: WebtritSignalingClient.generateTransactionId(),
+          line: activeCall.line,
           callId: activeCall.callId.toString(),
         ));
       } else {
         await _signalingClient?.execute(HangupRequest(
+          transaction: WebtritSignalingClient.generateTransactionId(),
+          line: activeCall.line,
           callId: activeCall.callId.toString(),
         ));
       }
@@ -897,11 +947,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     await state.performOnActiveCall(event.uuid, (activeCall) {
       if (event.onHold) {
         return _signalingClient?.execute(HoldRequest(
+          transaction: WebtritSignalingClient.generateTransactionId(),
+          line: activeCall.line,
           callId: activeCall.callId.toString(),
           direction: HoldDirection.inactive,
         ));
       } else {
         return _signalingClient?.execute(UnholdRequest(
+          transaction: WebtritSignalingClient.generateTransactionId(),
+          line: activeCall.line,
           callId: activeCall.callId.toString(),
         ));
       }
@@ -981,7 +1035,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       await state.performOnActiveCall(event.uuid, (activeCall) {
         if (!activeCall.wasHungUp) {
           return _signalingClient?.execute(IceTrickleRequest(
-            callId: activeCall.callId.toString(),
+            transaction: WebtritSignalingClient.generateTransactionId(),
+            line: activeCall.line,
             candidate: null,
           ));
         }
@@ -996,7 +1051,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     await state.performOnActiveCall(event.uuid, (activeCall) {
       if (!activeCall.wasHungUp) {
         return _signalingClient?.execute(IceTrickleRequest(
-          callId: activeCall.callId.toString(),
+          transaction: WebtritSignalingClient.generateTransactionId(),
+          line: activeCall.line,
           candidate: event.candidate.toMap(),
         ));
       }
@@ -1023,31 +1079,43 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   // WebtritSignalingClient listen handlers
 
-  void _onSignalingEvent(Event event) {
-    if (event is StateEvent) {
-      final activeCallIds = Set.from(state.activeCalls.map((activeCall) => activeCall.callId.callId));
-      final signalingStateCallIds = Set.from(event.calls.keys);
-      for (final callId in activeCallIds.difference(signalingStateCallIds)) {
-        add(_CallSignalingEvent.hangup(
-          callId: CallIdValue(callId),
-          code: 487,
-          reason: 'Request Terminated',
-        ));
-      }
+  void _onSignalingStateHandshake(StateHandshake stateHandshake) {
+    add(_HandshakeSignalingEvent.state(
+      linesCount: stateHandshake.lines.length,
+    ));
 
-      event.calls.forEach((callIdString, callLogs) {
-        // TODO: extend logic of call logs analysis for such case as signaling reconnect
-        for (var callLog in callLogs) {
-          if (callLog is CallEventLog) {
-            final event = callLog.callEvent;
-            if (event is IncomingCallEvent) {
-              _onSignalingEvent(event);
-            }
+    for (final activeCall in state.activeCalls) {
+      if (stateHandshake.lines.length > activeCall.line) {
+        final line = stateHandshake.lines[activeCall.line];
+        if (line != null && line.callId == activeCall.callId.callId) {
+          continue;
+        }
+      }
+      add(_CallSignalingEvent.hangup(
+        line: activeCall.line,
+        callId: activeCall.callId,
+        code: 487,
+        reason: 'Request Terminated',
+      ));
+    }
+
+    for (final activeLine in stateHandshake.lines.whereType<Line>()) {
+      // TODO: extend logic of call logs analysis for such case as signaling reconnect
+      for (final callLog in activeLine.callLogs) {
+        if (callLog is CallEventLog) {
+          final event = callLog.callEvent;
+          if (event is IncomingCallEvent) {
+            _onSignalingEvent(event);
           }
         }
-      });
-    } else if (event is IncomingCallEvent) {
+      }
+    }
+  }
+
+  void _onSignalingEvent(Event event) {
+    if (event is IncomingCallEvent) {
       add(_CallSignalingEvent.incoming(
+        line: event.line,
         callId: CallIdValue(event.callId),
         callee: event.callee,
         caller: event.caller,
@@ -1056,22 +1124,26 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       ));
     } else if (event is RingingEvent) {
       add(_CallSignalingEvent.ringing(
+        line: event.line,
         callId: CallIdValue(event.callId),
       ));
     } else if (event is ProgressEvent) {
       add(_CallSignalingEvent.progress(
+        line: event.line,
         callId: CallIdValue(event.callId),
         callee: event.callee,
         jsep: JsepValue.fromOptional(event.jsep),
       ));
     } else if (event is AcceptedEvent) {
       add(_CallSignalingEvent.accepted(
+        line: event.line,
         callId: CallIdValue(event.callId),
         callee: event.callee,
         jsep: JsepValue.fromOptional(event.jsep),
       ));
     } else if (event is HangupEvent) {
       add(_CallSignalingEvent.hangup(
+        line: event.line,
         callId: CallIdValue(event.callId),
         code: event.code,
         reason: event.reason,

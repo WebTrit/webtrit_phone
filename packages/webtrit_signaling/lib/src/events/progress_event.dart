@@ -1,12 +1,15 @@
 import 'call_event.dart';
+import 'event.dart';
 
 class ProgressEvent extends CallEvent {
   const ProgressEvent({
+    String? transaction,
+    required int line,
     required String callId,
     required this.callee,
     this.isFocus,
     this.jsep,
-  }) : super(callId: callId);
+  }) : super(transaction: transaction, line: line, callId: callId);
 
   final String callee;
   final bool? isFocus;
@@ -20,15 +23,17 @@ class ProgressEvent extends CallEvent {
         jsep,
       ];
 
-  static const event = 'progress';
+  static const typeValue = 'progress';
 
   factory ProgressEvent.fromJson(Map<String, dynamic> json) {
-    final eventValue = json['event'];
-    if (eventValue != event) {
-      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    final eventTypeValue = json[Event.typeKey];
+    if (eventTypeValue != typeValue) {
+      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     return ProgressEvent(
+      transaction: json['transaction'],
+      line: json['line'],
       callId: json['call_id'],
       callee: json['callee'],
       isFocus: json['is_focus'],

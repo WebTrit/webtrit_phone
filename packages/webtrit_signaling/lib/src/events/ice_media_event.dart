@@ -1,12 +1,14 @@
-import 'call_event.dart';
+import 'event.dart';
 import 'ice_media_type.dart';
+import 'line_event.dart';
 
-class IceMediaEvent extends CallEvent {
+class IceMediaEvent extends LineEvent {
   const IceMediaEvent({
-    required String callId,
+    String? transaction,
+    required int line,
     required this.type,
     required this.receiving,
-  }) : super(callId: callId);
+  }) : super(transaction: transaction, line: line);
 
   final IceMediaType type;
   final bool receiving;
@@ -18,16 +20,17 @@ class IceMediaEvent extends CallEvent {
         receiving,
       ];
 
-  static const event = 'ice_media';
+  static const typeValue = 'ice_media';
 
   factory IceMediaEvent.fromJson(Map<String, dynamic> json) {
-    final eventValue = json['event'];
-    if (eventValue != event) {
-      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    final eventTypeValue = json[Event.typeKey];
+    if (eventTypeValue != typeValue) {
+      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     return IceMediaEvent(
-      callId: json['call_id'],
+      transaction: json['transaction'],
+      line: json['line'],
       type: IceMediaType.values.byName(json['type']),
       receiving: json['receiving'],
     );

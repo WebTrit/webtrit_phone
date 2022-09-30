@@ -7,9 +7,12 @@ import 'package:logging/logging.dart';
 
 import 'events/events.dart';
 import 'exceptions.dart';
+import 'handshakes/handshakes.dart';
 import 'requests/requests.dart';
+import 'responses/responses.dart';
 import 'transaction.dart';
 
+typedef StateHandshakeHandler = void Function(StateHandshake stateHandshake);
 typedef EventHandler = void Function(Event event);
 typedef ErrorHandler = void Function(Object error, StackTrace? stackTrace);
 typedef DisconnectHandler = void Function(int? code, String? reason);
@@ -18,13 +21,17 @@ class WebtritSignalingClient {
   static final _callIdRandom = Random();
   static const _callIdChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
+  static String generateTransactionId() {
+    return Transaction.generateId();
+  }
+
   static String generateCallId([int length = 24]) {
     return List.generate(length, (index) => _callIdChars[_callIdRandom.nextInt(_callIdChars.length)]).join();
   }
 
   static const subprotocol = 'webtrit-protocol';
 
-  static const defaultExecuteRequestTimeoutDuration = Duration(milliseconds: 5000);
+  static const defaultExecuteTransactionTimeoutDuration = Duration(milliseconds: 5000);
 
   static int _createCounter = 0;
 
@@ -43,11 +50,12 @@ class WebtritSignalingClient {
   final WebSocket _ws;
   StreamSubscription? _wsSubscription;
 
+  late final StateHandshakeHandler _onStateHandshake;
   late final EventHandler _onEvent;
   late final ErrorHandler _onError;
   late final DisconnectHandler _onDisconnect;
 
-  Duration? _keepaliveInterval;
+  late final Duration _keepaliveInterval;
   Timer? _keepaliveTimer;
 
   final _transactions = <String, Transaction>{};
@@ -70,6 +78,7 @@ class WebtritSignalingClient {
   }
 
   void listen({
+    required StateHandshakeHandler onStateHandshake,
     required EventHandler onEvent,
     required ErrorHandler onError,
     required DisconnectHandler onDisconnect,
@@ -82,6 +91,7 @@ class WebtritSignalingClient {
       onError: _wsOnError,
       onDone: () => _wsOnDone(_ws.closeCode, _ws.closeReason),
     );
+    _onStateHandshake = onStateHandshake;
     _onEvent = onEvent;
     _onError = onError;
     _onDisconnect = onDisconnect;
@@ -137,25 +147,19 @@ class WebtritSignalingClient {
 
   //
 
-  Future<void> execute(Request request, [Duration timeoutDuration = defaultExecuteRequestTimeoutDuration]) async {
-    final requestJson = request.toJson();
-    await _execute(requestJson, timeoutDuration);
-  }
-
-  Future<void> _execute(Map<String, dynamic> requestJson, Duration timeoutDuration) async {
+  Future<void> execute(Request request, [Duration timeoutDuration = defaultExecuteTransactionTimeoutDuration]) async {
     if (_ws.readyState != WebSocket.open) {
       throw WebtritSignalingDisconnectedException(_id);
     }
-
     _restartKeepaliveTimer();
 
-    final responseJson = await _executeRequest(requestJson, timeoutDuration);
-    final type = responseJson['response'];
-    if (type == 'ack') {
+    final requestJson = request.toJson();
+    final responseJson = await _executeTransaction(requestJson, timeoutDuration);
+    final response = Response.fromJson(responseJson);
+    if (response is AckResponse) {
       return;
-    } else if (type == 'error') {
-      final Map<String, dynamic> responseErrorJson = responseJson['error'];
-      throw WebtritSignalingErrorException(_id, responseErrorJson['code'], responseErrorJson['reason']);
+    } else if (response is ErrorResponse) {
+      throw WebtritSignalingErrorException(_id, response.code, response.reason);
     } else {
       throw WebtritSignalingUnknownResponseException(_id, responseJson);
     }
@@ -164,10 +168,10 @@ class WebtritSignalingClient {
   //
 
   void _onMessage(Map<String, dynamic> messageJson) {
-    if (messageJson.containsKey('transaction')) {
+    if (messageJson.containsKey(Response.typeKey) || messageJson[Handshake.typeKey] == KeepaliveHandshake.typeValue) {
       final responseJson = messageJson;
 
-      final String transactionId = responseJson['transaction'];
+      final transactionId = responseJson['transaction'];
       final transaction = _transactions.remove(transactionId);
 
       if (transaction != null) {
@@ -175,12 +179,24 @@ class WebtritSignalingClient {
       } else {
         _onError(WebtritSignalingTransactionUnavailableException(_id, transactionId), StackTrace.current);
       }
-    } else if (messageJson.containsKey('event')) {
+    } else if (messageJson.containsKey(Event.typeKey)) {
       final eventJson = messageJson;
 
       try {
-        final event = _toEvent(eventJson);
+        final event = Event.fromJson(eventJson);
         _onEvent(event);
+      } catch (error, stackTrace) {
+        _onError(error, stackTrace);
+      }
+    } else if (messageJson[Handshake.typeKey] == StateHandshake.typeValue) {
+      final stateHandshakeJson = messageJson;
+
+      try {
+        final stateHandshake = StateHandshake.fromJson(stateHandshakeJson);
+        _onStateHandshake(stateHandshake);
+
+        _keepaliveInterval = stateHandshake.keepaliveInterval;
+        _startKeepaliveTimer();
       } catch (error, stackTrace) {
         _onError(error, stackTrace);
       }
@@ -189,17 +205,25 @@ class WebtritSignalingClient {
     }
   }
 
-  Future<Map<String, dynamic>> _executeRequest(Map<String, dynamic> requestJson, Duration timeoutDuration) async {
-    final transaction = Transaction(_id, timeoutDuration);
+  Future<Map<String, dynamic>> _executeTransaction(Map<String, dynamic> requestJson, Duration timeoutDuration) async {
+    final transaction = Transaction(
+      signalingClientId: _id,
+      id: requestJson['transaction'],
+      timeoutDuration: timeoutDuration,
+    );
 
     _transactions[transaction.id] = transaction;
-    requestJson['transaction'] = transaction.id;
+    if (transaction.isIdGenerate) {
+      requestJson['transaction'] = transaction.id;
+    }
 
     _addMessage(requestJson);
 
     try {
       final responseJson = await transaction.future;
-      responseJson.remove('transaction');
+      if (transaction.isIdGenerate) {
+        responseJson.remove('transaction');
+      }
 
       return responseJson;
     } catch (e) {
@@ -222,10 +246,7 @@ class WebtritSignalingClient {
   //
 
   void _startKeepaliveTimer() {
-    final keepaliveInterval = _keepaliveInterval;
-    if (keepaliveInterval != null) {
-      _keepaliveTimer = Timer(keepaliveInterval, _onKeepalive);
-    }
+    _keepaliveTimer = Timer(_keepaliveInterval, _onKeepalive);
   }
 
   void _stopKeepaliveTimer() {
@@ -238,89 +259,20 @@ class WebtritSignalingClient {
   }
 
   void _onKeepalive() async {
+    final stopwatch = Stopwatch();
     try {
-      await _execute(<String, dynamic>{
-        'request': 'keepalive',
-      }, defaultExecuteRequestTimeoutDuration);
+      final requestJson = KeepaliveHandshake().toJson();
+      stopwatch.start();
+      final responseJson = await _executeTransaction(requestJson, defaultExecuteTransactionTimeoutDuration);
+      stopwatch.stop();
+      KeepaliveHandshake.fromJson(responseJson);
+      _logger.finest('handshake keepalive latency: ${stopwatch.elapsed}');
     } on WebtritSignalingTransactionTimeoutException catch (error) {
       _onError(WebtritSignalingKeepaliveTimeoutException(error.id, error.transactionId), StackTrace.current);
     } catch (error, stackTrace) {
       _onError(error, stackTrace);
     }
-  }
 
-  //
-
-  Event _toEvent(Map<String, dynamic> eventJson) {
-    final eventType = eventJson['event'];
-    switch (eventJson['event']) {
-      case StateEvent.event:
-        final keepaliveInterval = Duration(milliseconds: eventJson['keepalive_interval'] as int);
-        _keepaliveInterval = keepaliveInterval;
-
-        _restartKeepaliveTimer();
-
-        return StateEvent.fromJson(eventJson);
-      case RegisteringEvent.event:
-        return RegisteringEvent.fromJson(eventJson);
-      case RegisteredEvent.event:
-        return RegisteredEvent.fromJson(eventJson);
-      case RegistrationFailedEvent.event:
-        return RegistrationFailedEvent.fromJson(eventJson);
-      case UnregisteringEvent.event:
-        return UnregisteringEvent.fromJson(eventJson);
-      case UnregisteredEvent.event:
-        return UnregisteredEvent.fromJson(eventJson);
-      case CallingEvent.event:
-        return CallingEvent.fromJson(eventJson);
-      case RingingEvent.event:
-        return RingingEvent.fromJson(eventJson);
-      case ProceedingEvent.event:
-        return ProceedingEvent.fromJson(eventJson);
-      case ProgressEvent.event:
-        return ProgressEvent.fromJson(eventJson);
-      case AcceptedEvent.event:
-        return AcceptedEvent.fromJson(eventJson);
-      case AcceptingEvent.event:
-        return AcceptingEvent.fromJson(eventJson);
-      case IncomingCallEvent.event:
-        return IncomingCallEvent.fromJson(eventJson);
-      case UpdatingCallEvent.event:
-        return UpdatingCallEvent.fromJson(eventJson);
-      case MissedCallEvent.event:
-        return MissedCallEvent.fromJson(eventJson);
-      case HangingupEvent.event:
-        return HangingupEvent.fromJson(eventJson);
-      case HangupEvent.event:
-        return HangupEvent.fromJson(eventJson);
-      case DecliningEvent.event:
-        return DecliningEvent.fromJson(eventJson);
-      case UpdatingEvent.event:
-        return UpdatingEvent.fromJson(eventJson);
-      case UpdatedEvent.event:
-        return UpdatedEvent.fromJson(eventJson);
-      case TransferringEvent.event:
-        return TransferringEvent.fromJson(eventJson);
-      case TransferEvent.event:
-        return TransferEvent.fromJson(eventJson);
-      case HoldingEvent.event:
-        return HoldingEvent.fromJson(eventJson);
-      case ResumingEvent.event:
-        return ResumingEvent.fromJson(eventJson);
-      case IceWebrtcUpEvent.event:
-        return IceWebrtcUpEvent.fromJson(eventJson);
-      case IceMediaEvent.event:
-        return IceMediaEvent.fromJson(eventJson);
-      case IceSlowLinkEvent.event:
-        return IceSlowLinkEvent.fromJson(eventJson);
-      case IceHangupEvent.event:
-        return IceHangupEvent.fromJson(eventJson);
-      case CallErrorEvent.event:
-        return CallErrorEvent.fromJson(eventJson);
-      case ErrorEvent.event:
-        return ErrorEvent.fromJson(eventJson);
-      default:
-        throw ArgumentError.value(eventType, "eventType", "Unknown event type");
-    }
+    _startKeepaliveTimer();
   }
 }

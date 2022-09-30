@@ -23,14 +23,17 @@ void main(List<String> arguments) async {
 
   print('Listen');
   client.listen(
+    onStateHandshake: (stateHandshake) {
+      print('>> onStateHandshake: $stateHandshake');
+    },
     onEvent: (event) {
-      print('>> event: $event');
+      print('>> onEvent: $event');
     },
     onError: (error, stackTrace) {
-      print('>> error: $error\n$stackTrace');
+      print('>> onError: $error\n$stackTrace');
     },
     onDisconnect: (code, reason) {
-      print('>> onDone with code: $code and reason: $reason');
+      print('>> onDisconnect with code: $code and reason: $reason');
     },
   );
 

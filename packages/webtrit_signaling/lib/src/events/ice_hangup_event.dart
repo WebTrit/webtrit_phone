@@ -1,10 +1,12 @@
-import 'call_event.dart';
+import 'event.dart';
+import 'line_event.dart';
 
-class IceHangupEvent extends CallEvent {
+class IceHangupEvent extends LineEvent {
   const IceHangupEvent({
-    required String callId,
+    String? transaction,
+    required int line,
     this.reason,
-  }) : super(callId: callId);
+  }) : super(transaction: transaction, line: line);
 
   final String? reason;
 
@@ -14,16 +16,17 @@ class IceHangupEvent extends CallEvent {
         reason,
       ];
 
-  static const event = 'ice_hangup';
+  static const typeValue = 'ice_hangup';
 
   factory IceHangupEvent.fromJson(Map<String, dynamic> json) {
-    final eventValue = json['event'];
-    if (eventValue != event) {
-      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    final eventTypeValue = json[Event.typeKey];
+    if (eventTypeValue != typeValue) {
+      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     return IceHangupEvent(
-      callId: json['call_id'],
+      transaction: json['transaction'],
+      line: json['line'],
       reason: json['reason'],
     );
   }

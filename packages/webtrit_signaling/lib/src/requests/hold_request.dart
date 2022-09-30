@@ -1,4 +1,5 @@
 import 'call_request.dart';
+import 'request.dart';
 
 enum HoldDirection {
   sendonly,
@@ -8,9 +9,11 @@ enum HoldDirection {
 
 class HoldRequest extends CallRequest {
   const HoldRequest({
+    required String transaction,
+    required int line,
     required String callId,
     this.direction,
-  }) : super(callId: callId);
+  }) : super(transaction: transaction, line: line, callId: callId);
 
   final HoldDirection? direction;
 
@@ -20,12 +23,12 @@ class HoldRequest extends CallRequest {
         direction,
       ];
 
-  static const request = 'hold';
+  static const typeValue = 'hold';
 
   factory HoldRequest.fromJson(Map<String, dynamic> json) {
-    final requestValue = json['request'];
-    if (requestValue != request) {
-      throw ArgumentError.value(requestValue, "request", "Not equal $request");
+    final requestTypeValue = json[Request.typeKey];
+    if (requestTypeValue != typeValue) {
+      throw ArgumentError.value(requestTypeValue, Request.typeKey, 'Not equal $typeValue');
     }
 
     HoldDirection? direction;
@@ -35,6 +38,8 @@ class HoldRequest extends CallRequest {
     }
 
     return HoldRequest(
+      transaction: json['transaction'],
+      line: json['line'],
       callId: json['call_id'],
       direction: direction,
     );
@@ -44,7 +49,9 @@ class HoldRequest extends CallRequest {
   Map<String, dynamic> toJson() {
     final direction = this.direction;
     return {
-      'request': request,
+      Request.typeKey: typeValue,
+      'transaction': transaction,
+      'line': line,
       'call_id': callId,
       if (direction != null) 'direction': direction.name,
     };

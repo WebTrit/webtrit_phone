@@ -1,19 +1,21 @@
 import 'event.dart';
+import 'session_event.dart';
 
-class UnregisteringEvent extends Event {
-  UnregisteringEvent() : super();
+class UnregisteringEvent extends SessionEvent {
+  UnregisteringEvent({
+    String? transaction,
+  }) : super(transaction: transaction);
 
-  @override
-  List<Object?> get props => [];
-
-  static const event = 'unregistering';
+  static const typeValue = 'unregistering';
 
   factory UnregisteringEvent.fromJson(Map<String, dynamic> json) {
-    final eventValue = json['event'];
-    if (eventValue != event) {
-      throw ArgumentError.value(eventValue, "event", "Not equal $event");
+    final eventTypeValue = json[Event.typeKey];
+    if (eventTypeValue != typeValue) {
+      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
-    return UnregisteringEvent();
+    return UnregisteringEvent(
+      transaction: json['transaction'],
+    );
   }
 }
