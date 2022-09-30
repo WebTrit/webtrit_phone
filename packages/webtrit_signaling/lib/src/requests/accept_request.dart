@@ -1,4 +1,5 @@
 import 'call_request.dart';
+import 'request.dart';
 
 class AcceptRequest extends CallRequest {
   const AcceptRequest({
@@ -16,12 +17,12 @@ class AcceptRequest extends CallRequest {
         jsep,
       ];
 
-  static const request = 'accept';
+  static const typeValue = 'accept';
 
   factory AcceptRequest.fromJson(Map<String, dynamic> json) {
-    final requestValue = json['request'];
-    if (requestValue != request) {
-      throw ArgumentError.value(requestValue, "request", "Not equal $request");
+    final requestTypeValue = json[Request.typeKey];
+    if (requestTypeValue != typeValue) {
+      throw ArgumentError.value(requestTypeValue, Request.typeKey, 'Not equal $typeValue');
     }
 
     return AcceptRequest(
@@ -35,7 +36,7 @@ class AcceptRequest extends CallRequest {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'request': request,
+      Request.typeKey: typeValue,
       'transaction': transaction,
       'line': line,
       'call_id': callId,

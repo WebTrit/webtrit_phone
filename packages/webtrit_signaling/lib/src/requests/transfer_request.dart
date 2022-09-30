@@ -1,4 +1,5 @@
 import 'call_request.dart';
+import 'request.dart';
 
 class TransferRequest extends CallRequest {
   const TransferRequest({
@@ -19,12 +20,12 @@ class TransferRequest extends CallRequest {
         replaceCallId,
       ];
 
-  static const request = 'transfer';
+  static const typeValue = 'transfer';
 
   factory TransferRequest.fromJson(Map<String, dynamic> json) {
-    final requestValue = json['request'];
-    if (requestValue != request) {
-      throw ArgumentError.value(requestValue, "request", "Not equal $request");
+    final requestTypeValue = json[Request.typeKey];
+    if (requestTypeValue != typeValue) {
+      throw ArgumentError.value(requestTypeValue, Request.typeKey, 'Not equal $typeValue');
     }
 
     return TransferRequest(
@@ -40,7 +41,7 @@ class TransferRequest extends CallRequest {
   Map<String, dynamic> toJson() {
     final replaceCallId = this.replaceCallId;
     return {
-      'request': request,
+      Request.typeKey: typeValue,
       'transaction': transaction,
       'line': line,
       'call_id': callId,

@@ -160,8 +160,8 @@ class StateHandshake extends Handshake {
         final requestOrResponseOrEventJson = callLogJson[1];
         requestOrResponseOrEventJson['line'] = lineIndex; // inject line to apply universal fromJson methods
         requestOrResponseOrEventJson['call_id'] = callId; // inject call_id to apply universal fromJson methods
-        if (requestOrResponseOrEventJson.containsKey('request')) {
-          return CallRequestLog(timestamp: timestamp, callRequest: _toRequest(requestOrResponseOrEventJson));
+        if (requestOrResponseOrEventJson.containsKey(Request.typeKey)) {
+          return CallRequestLog(timestamp: timestamp, callRequest: CallRequest.fromJson(requestOrResponseOrEventJson));
         } else if (requestOrResponseOrEventJson.containsKey(Response.typeKey)) {
           return ResponseLog(timestamp: timestamp, response: Response.fromJson(requestOrResponseOrEventJson));
         } else if (requestOrResponseOrEventJson.containsKey('event')) {
@@ -184,28 +184,6 @@ class StateHandshake extends Handshake {
       registration: registration,
       lines: lines,
     );
-  }
-
-  static CallRequest _toRequest(Map<String, dynamic> requestJson) {
-    final requestType = requestJson['request'];
-    switch (requestType) {
-      case AcceptRequest.request:
-        return AcceptRequest.fromJson(requestJson);
-      case DeclineRequest.request:
-        return DeclineRequest.fromJson(requestJson);
-      case HangupRequest.request:
-        return HangupRequest.fromJson(requestJson);
-      case HoldRequest.request:
-        return HangupRequest.fromJson(requestJson);
-      case OutgoingCallRequest.request:
-        return OutgoingCallRequest.fromJson(requestJson);
-      case UnholdRequest.request:
-        return UnholdRequest.fromJson(requestJson);
-      case UpdateRequest.request:
-        return UpdateRequest.fromJson(requestJson);
-      default:
-        throw ArgumentError.value(requestType, "requestType", "Unknown request type");
-    }
   }
 
   static CallEvent _toEvent(Map<String, dynamic> eventJson) {

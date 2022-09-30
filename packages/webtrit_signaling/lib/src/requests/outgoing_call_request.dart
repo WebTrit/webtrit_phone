@@ -1,4 +1,5 @@
 import 'call_request.dart';
+import 'request.dart';
 
 class OutgoingCallRequest extends CallRequest {
   const OutgoingCallRequest({
@@ -19,12 +20,12 @@ class OutgoingCallRequest extends CallRequest {
         jsep,
       ];
 
-  static const request = 'outgoing_call';
+  static const typeValue = 'outgoing_call';
 
   factory OutgoingCallRequest.fromJson(Map<String, dynamic> json) {
-    final requestValue = json['request'];
-    if (requestValue != request) {
-      throw ArgumentError.value(requestValue, "request", "Not equal $request");
+    final requestTypeValue = json[Request.typeKey];
+    if (requestTypeValue != typeValue) {
+      throw ArgumentError.value(requestTypeValue, Request.typeKey, 'Not equal $typeValue');
     }
 
     return OutgoingCallRequest(
@@ -39,7 +40,7 @@ class OutgoingCallRequest extends CallRequest {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'request': request,
+      Request.typeKey: typeValue,
       'transaction': transaction,
       'line': line,
       'call_id': callId,

@@ -1,4 +1,5 @@
 import 'line_request.dart';
+import 'request.dart';
 
 class IceTrickleRequest extends LineRequest {
   const IceTrickleRequest({
@@ -15,12 +16,12 @@ class IceTrickleRequest extends LineRequest {
         candidate,
       ];
 
-  static const request = 'ice_trickle';
+  static const typeValue = 'ice_trickle';
 
   factory IceTrickleRequest.fromJson(Map<String, dynamic> json) {
-    final requestValue = json['request'];
-    if (requestValue != request) {
-      throw ArgumentError.value(requestValue, "request", "Not equal $request");
+    final requestTypeValue = json[Request.typeKey];
+    if (requestTypeValue != typeValue) {
+      throw ArgumentError.value(requestTypeValue, Request.typeKey, 'Not equal $typeValue');
     }
 
     return IceTrickleRequest(
@@ -33,7 +34,7 @@ class IceTrickleRequest extends LineRequest {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'request': request,
+      Request.typeKey: typeValue,
       'transaction': transaction,
       'line': line,
       'candidate': candidate,
