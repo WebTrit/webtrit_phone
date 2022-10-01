@@ -82,6 +82,10 @@ class AccountInfoListTile extends StatelessWidget {
                     ),
                   ),
                   Text(
+                    info?.numberWithExtension ?? _kHoldSpaceData,
+                    style: themeData.textTheme.bodyLarge,
+                  ),
+                  Text(
                     info?.balanceWithCurrency ?? _kHoldSpaceData,
                     style: themeData.textTheme.labelLarge,
                   ),

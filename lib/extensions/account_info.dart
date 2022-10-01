@@ -9,4 +9,12 @@ extension AccountInfoFormatting on AccountInfo {
   String get balanceWithCurrency {
     return '${balance.toStringAsFixed(2)} $currency';
   }
+
+  String get numberWithExtension {
+    if (ext != null) {
+      return '$login (ext: $ext)';
+    } else {
+      return login;
+    }
+  }
 }
