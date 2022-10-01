@@ -6,8 +6,20 @@ extension AccountInfoFormatting on AccountInfo {
     return names.join(' ').trim();
   }
 
-  String get balanceWithCurrency {
-    return '${balance.toStringAsFixed(2)} $currency';
+  String? get balanceWithCurrency {
+    final creditLimit = this.creditLimit;
+    switch (billingModel) {
+      case BillingModel.debit:
+        return '${balance.toStringAsFixed(2)} $currency';
+      case BillingModel.credit:
+        if (creditLimit != null) {
+          return '${creditLimit.toStringAsFixed(2)} $currency';
+        } else {
+          return null;
+        }
+      default:
+        return null;
+    }
   }
 
   String get numberWithExtension {
