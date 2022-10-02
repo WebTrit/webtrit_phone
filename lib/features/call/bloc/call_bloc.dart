@@ -181,14 +181,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<RTCPeerConnection?> _peerConnectionRetrieve(UuidValue uuid) async {
-    _logger.finer(() => 'Retrieve peerConnection completer with uuid: $uuid');
     final peerConnectionCompleter = _peerConnectionCompleters[uuid];
     if (peerConnectionCompleter == null) {
+      _logger.finer(() => 'Retrieve peerConnection completer with uuid: $uuid - null');
       return null;
     } else {
       try {
-        return await peerConnectionCompleter.future;
-      } catch (_) {
+        _logger.finer(() => 'Retrieve peerConnection completer with uuid: $uuid - await');
+        final peerConnection = await peerConnectionCompleter.future;
+        _logger.finer(() => 'Retrieve peerConnection completer with uuid: $uuid - value');
+        return peerConnection;
+      } catch (e, stackTrace) {
+        _logger.finer(() => 'Retrieve peerConnection completer with uuid: $uuid - error', e, stackTrace);
         return null;
       }
     }
@@ -1098,6 +1102,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           continue activeCallsLoop;
         }
       }
+
+      _peerConnectionCompleteError(activeCall.callId.uuid, 'Active call Request Terminated');
+
       add(_CallSignalingEvent.hangup(
         line: activeCall.line,
         callId: activeCall.callId,
