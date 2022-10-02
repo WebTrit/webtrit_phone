@@ -807,7 +807,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       emit(state.copyWithPopActiveCall(event.uuid));
 
-      notificationsBloc.add(const NotificationsIssued(CallSignalingClientNotConnectErrorNotification()));
+      notificationsBloc.add(const NotificationsIssued(CallUndefinedLineErrorNotification()));
       return;
     }
     if (state.signalingClientStatus != SignalingClientStatus.connect) {
