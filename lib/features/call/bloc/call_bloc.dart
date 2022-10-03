@@ -403,6 +403,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     _signalingClient = null;
 
+    final signalingDisconnectCode = event.code;
+    if (signalingDisconnectCode != null) {
+      final code = SignalingDisconnectCode.values.byCode(signalingDisconnectCode);
+      if (code == SignalingDisconnectCode.sessionMissedError) {
+        notificationsBloc.add(const NotificationsIssued(CallSignalingClientSessionMissedErrorNotification()));
+        appBloc.add(const AppLogouted());
+      }
+    }
+
     _reconnectInitiated(kSignalingClientReconnectDelay);
   }
 

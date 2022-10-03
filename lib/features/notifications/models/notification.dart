@@ -31,6 +31,15 @@ class CallSignalingClientNotConnectErrorNotification extends Notification {
   }
 }
 
+class CallSignalingClientSessionMissedErrorNotification extends Notification {
+  const CallSignalingClientSessionMissedErrorNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.notifications_errorSnackBar_callSignalingClientSessionMissed;
+  }
+}
+
 class CallConnectErrorNotification extends Notification {
   const CallConnectErrorNotification();
 

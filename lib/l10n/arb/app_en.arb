@@ -53,6 +53,9 @@
   "notifications_errorSnackBar_callSignalingClientNotConnect": "Cannot initiate the call, please check the connection status",
   "@notifications_errorSnackBar_callSignalingClientNotConnect": {
   },
+  "notifications_errorSnackBar_callSignalingClientSessionMissed": "The current connection session is invalid, please sign in again",
+  "@notifications_errorSnackBar_callSignalingClientSessionMissed": {
+  },
   "notifications_errorSnackBar_callConnect": "Connecting to the core failed, trying to reconnect",
   "@notifications_errorSnackBar_callConnect": {
   },
