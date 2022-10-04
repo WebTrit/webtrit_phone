@@ -21,7 +21,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
     final themeData = Theme.of(context);
     final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
     return BlocListener<LoginCubit, LoginState>(
-      listenWhen: (previous, current) => previous.status != current.status,
+      listenWhen: (previous, current) => previous.status != current.status || previous.error != current.error,
       listener: (context, state) {
         if (state.status == LoginStatus.ok) {
           context.hideCurrentSnackBar();
