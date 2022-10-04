@@ -51,6 +51,7 @@ dependencies:
   share_plus: ^4.0.10
   shared_preferences: ^2.0.15
   sqlite3_flutter_libs: ^0.5.8
+  url_launcher: ^6.1.6
   uuid: ^3.0.6
   validators: ^3.0.0
   webview_flutter: ^3.0.4
