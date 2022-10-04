@@ -16,6 +16,8 @@ extension LoginStateErrorL10n on LoginState {
         return context.l10n.login_LoginIncompatibleCoreVersionExceptionError;
       } else if (error is FormatException) {
         return context.l10n.login_FormatExceptionError;
+      } else if (error is TlsException) {
+        return context.l10n.login_TlsExceptionError;
       } else if (error is SocketException) {
         return context.l10n.login_SocketExceptionError;
       } else if (error is TypeError) {

@@ -179,6 +179,9 @@
   "login_FormatExceptionError": "A response issue occurred",
   "@login_FormatExceptionError": {
   },
+  "login_TlsExceptionError": "A secure networking issue occurred",
+  "@login_TlsExceptionError": {
+  },
   "login_SocketExceptionError": "A network issue occurred",
   "@login_SocketExceptionError": {
   },
