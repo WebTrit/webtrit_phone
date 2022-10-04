@@ -8,6 +8,7 @@ import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../login.dart';
+import 'constants.dart';
 
 class LoginCoreUrlAssignTab extends StatelessWidget {
   const LoginCoreUrlAssignTab({
@@ -18,7 +19,6 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
-    final OutlinedButtonStyles? outlinedButtonStyles = themeData.extension<OutlinedButtonStyles>();
     return BlocListener<LoginCubit, LoginState>(
       listenWhen: (previous, current) => previous.status != current.status || previous.error != current.error,
       listener: (context, state) {
@@ -41,13 +41,25 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
           _onCoreUrlAssignBack(context);
           return false;
         },
-        child: Padding(
-          padding: kTabLabelPadding * 2,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const OnboardingLogo(),
-              BlocBuilder<LoginCubit, LoginState>(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            BlocBuilder<LoginCubit, LoginState>(
+              buildWhen: (previous, current) => previous.status != current.status,
+              builder: (context, state) {
+                return AppBar(
+                  title: Text(context.l10n.login_AppBarTitle_coreUrlAssign),
+                  leading: ExtBackButton(
+                    disabled: state.status.isProcessing,
+                  ),
+                  backgroundColor: Colors.transparent,
+                );
+              },
+            ),
+            const OnboardingLogo(),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(kInset, kInset, kInset, 0),
+              child: BlocBuilder<LoginCubit, LoginState>(
                 buildWhen: (previous, current) =>
                     previous.status != current.status || previous.coreUrlInput != current.coreUrlInput,
                 builder: (context, state) {
@@ -55,7 +67,7 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
                     enabled: !state.status.isProcessing,
                     initialValue: state.coreUrlInput.value,
                     decoration: InputDecoration(
-                      labelText: context.l10n.login_TextFieldLabelText_coreUrl,
+                      labelText: context.l10n.login_TextFieldLabelText_coreUrlAssign,
                       helperText: '', // reserve space for validator message
                       errorText: state.coreUrlInput.errorL10n(context),
                       errorMaxLines: 3,
@@ -66,46 +78,29 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
                   );
                 },
               ),
-              const Spacer(),
-              Row(
-                children: [
-                  Expanded(
-                    child: BlocBuilder<LoginCubit, LoginState>(
-                      buildWhen: (previous, current) => previous.status != current.status,
-                      builder: (context, state) {
-                        return OutlinedButton(
-                          onPressed: state.status.isProcessing ? null : () => _onCoreUrlAssignBack(context),
-                          style: outlinedButtonStyles?.neutral,
-                          child: Text(context.l10n.login_Button_back),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: BlocBuilder<LoginCubit, LoginState>(
-                      buildWhen: (previous, current) =>
-                          previous.status != current.status || previous.coreUrlInput != current.coreUrlInput,
-                      builder: (context, state) {
-                        return ElevatedButton(
-                          onPressed: !state.coreUrlInput.valid ? null : () => _onCoreUrlAssignSubmitted(context),
-                          style: elevatedButtonStyles?.primary,
-                          child: !state.status.isProcessing
-                              ? Text(context.l10n.login_Button_coreUrlAssign)
-                              : SizedCircularProgressIndicator(
-                                  size: 16,
-                                  strokeWidth: 2,
-                                  color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
-                                ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
+            ),
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(kInset, 0, kInset, kInset),
+              child: BlocBuilder<LoginCubit, LoginState>(
+                buildWhen: (previous, current) =>
+                    previous.status != current.status || previous.coreUrlInput != current.coreUrlInput,
+                builder: (context, state) {
+                  return ElevatedButton(
+                    onPressed: !state.coreUrlInput.valid ? null : () => _onCoreUrlAssignSubmitted(context),
+                    style: elevatedButtonStyles?.primary,
+                    child: !state.status.isProcessing
+                        ? Text(context.l10n.login_Button_coreUrlAssignProceed)
+                        : SizedCircularProgressIndicator(
+                            size: 16,
+                            strokeWidth: 2,
+                            color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
+                          ),
+                  );
+                },
               ),
-              const SizedBox(height: kToolbarHeight / 2),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

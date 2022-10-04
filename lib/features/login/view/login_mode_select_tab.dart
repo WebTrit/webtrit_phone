@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:webtrit_phone/environment_config.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 import '../login.dart';
+import 'constants.dart';
 
 class LoginModeSelectTab extends StatelessWidget {
   const LoginModeSelectTab({
@@ -29,32 +29,48 @@ class LoginModeSelectTab extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: gradients?.tab,
         ),
-        child: Padding(
-          padding: kTabLabelPadding * 2,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              OnboardingLogo(
-                color: themeData.colorScheme.onPrimary,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            AppBar(
+              backgroundColor: Colors.transparent,
+            ),
+            OnboardingLogo(
+              color: themeData.colorScheme.onPrimary,
+            ),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(kInset, kInset, kInset, 0),
+              child: OnboardingPicture(),
+            ),
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(kInset, 0, kInset, kInset),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: context.read<LoginCubit>().isDemoModeEnabled
+                    ? [
+                        ElevatedButton(
+                          onPressed: () => context.read<LoginCubit>().loginModeSelectSubmitter(true),
+                          style: elevatedButtonStyles?.primary,
+                          child: Text(context.l10n.login_Button_signUpToDemoInstance),
+                        ),
+                        const SizedBox(height: kInset / 4),
+                        ElevatedButton(
+                          onPressed: () => context.read<LoginCubit>().loginModeSelectSubmitter(false),
+                          style: elevatedButtonStyles?.neutral,
+                          child: Text(context.l10n.login_Button_signInToYourInstance),
+                        ),
+                      ]
+                    : [
+                        ElevatedButton(
+                          onPressed: () => context.read<LoginCubit>().loginModeSelectSubmitter(false),
+                          style: elevatedButtonStyles?.primary,
+                          child: Text(context.l10n.login_Button_signIn),
+                        ),
+                      ],
               ),
-              const OnboardingPicture(),
-              const Expanded(child: SizedBox()),
-              ElevatedButton(
-                onPressed: () => context.read<LoginCubit>().loginModeSelectSubmitter(false),
-                style: elevatedButtonStyles?.primary,
-                child: Text(context.l10n.loginModeSelectionTabSignInButtonLabel),
-              ),
-              if (EnvironmentConfig.CORE_URL.isEmpty) ...[
-                const SizedBox(height: kToolbarHeight / 4),
-                ElevatedButton(
-                  onPressed: () => context.read<LoginCubit>().loginModeSelectSubmitter(true),
-                  style: elevatedButtonStyles?.neutral,
-                  child: Text(context.l10n.loginModeSelectionTabDemoButtonLabel),
-                ),
-              ],
-              const SizedBox(height: kToolbarHeight / 2),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ExtBackButton extends StatelessWidget {
-  const ExtBackButton({Key? key}) : super(key: key);
+  const ExtBackButton({
+    Key? key,
+    this.disabled = false,
+  }) : super(key: key);
+
+  final bool disabled;
 
   @override
   Widget build(BuildContext context) {
@@ -9,9 +14,8 @@ class ExtBackButton extends StatelessWidget {
       icon: const Icon(
         Icons.arrow_back,
       ),
-      onPressed: () {
-        Navigator.maybePop(context);
-      },
+      tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+      onPressed: disabled ? null : () => Navigator.maybePop(context),
     );
   }
 }

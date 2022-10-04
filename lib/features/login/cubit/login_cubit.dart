@@ -21,6 +21,10 @@ class LoginCubit extends Cubit<LoginState> {
 
   final HttpClient? httpClient;
 
+  bool get isCoreUrlProvided => EnvironmentConfig.CORE_URL.isNotEmpty;
+  bool get isDemoCoreUrlProvided => EnvironmentConfig.DEMO_CORE_URL.isNotEmpty;
+  bool get isDemoModeEnabled => !isCoreUrlProvided;
+
   void next() {
     var nextTabIndex = state.tabIndex + 1;
     if (nextTabIndex == 1 && state.coreUrl != null) {
@@ -54,7 +58,7 @@ class LoginCubit extends Cubit<LoginState> {
   void loginModeSelectSubmitter(bool demo) {
     final coreUrl = demo
         ? EnvironmentConfig.DEMO_CORE_URL
-        : EnvironmentConfig.CORE_URL.isEmpty
+        : isDemoModeEnabled
             ? null
             : EnvironmentConfig.CORE_URL;
 

@@ -149,31 +149,46 @@
   "@favorites_DeleteConfirmDialog_content": {
   },
 
-  "login_Button_back": "Back",
-  "@login_Button_back": {
+  "login_Button_signUpToDemoInstance": "Sign up to demo instance",
+  "@login_Button_signUpToDemoInstance": {
   },
-  "login_TextFieldLabelText_coreUrl": "Enter your Core URL",
-  "@login_TextFieldLabelText_coreUrl": {
+  "login_Button_signInToYourInstance": "Sign in to your instance",
+  "@login_Button_signInToYourInstance": {
   },
-  "login_Button_coreUrlAssign": "Assign",
-  "@login_Button_coreUrlAssign": {
+  "login_Button_signIn": "Sign in",
+  "@login_Button_signIn": {
   },
-  "loginOtpRequestTabPhoneTextFieldLabel": "Enter your phone number",
-  "@loginOtpRequestTabPhoneTextFieldLabel": {
+  "login_AppBarTitle_coreUrlAssign": "Instance URL assign",
+  "@login_AppBarTitle_coreUrlAssign": {
   },
-  "loginOtpRequestTabProceedButtonLabel": "Proceed",
-  "@loginOtpRequestTabProceedButtonLabel": {
+  "login_TextFieldLabelText_coreUrlAssign": "Enter your instance URL",
+  "@login_TextFieldLabelText_coreUrlAssign": {
   },
-  "loginOtpRequestTabCodeTextFieldLabel": "Enter the verification code",
-  "@loginOtpRequestTabCodeTextFieldLabel": {
+  "login_Button_coreUrlAssignProceed": "Proceed",
+  "@login_Button_coreUrlAssignProceed": {
   },
-  "loginOtpRequestTabVerifyButtonLabel": "Verify",
-  "@loginOtpRequestTabVerifyButtonLabel": {
+  "login_AppBarTitle_otpRequest": "OTP Request",
+  "@login_AppBarTitle_otpRequest": {
+  },
+  "login_TextFieldLabelText_otpRequestPhone": "Enter your phone number",
+  "@login_TextFieldLabelText_otpRequestPhone": {
+  },
+  "login_Button_otpRequestProceed": "Proceed",
+  "@login_Button_otpRequestProceed": {
+  },
+  "login_AppBarTitle_otpVerify": "OTP Verify",
+  "@login_AppBarTitle_otpVerify": {
+  },
+  "login_TextFieldLabelText_otpVerifyCode": "Enter the verification code",
+  "@login_TextFieldLabelText_otpVerifyCode": {
+  },
+  "login_Button_otpVerifyProceed": "Verify",
+  "@login_Button_otpVerifyProceed": {
   },
   "login_validationCoreUrlError": "Please enter a correct URL",
   "@login_validationCoreUrlError": {
   },
-  "login_LoginIncompatibleCoreVersionExceptionError": "Incompatible Core version provided",
+  "login_LoginIncompatibleCoreVersionExceptionError": "Incompatible instance version provided",
   "@login_LoginIncompatibleCoreVersionExceptionError": {
   },
   "login_FormatExceptionError": "A response issue occurred",
@@ -369,12 +384,5 @@
   },
   "notImplemented": "Sorry, not implemented yet",
   "@notImplemented": {
-  },
-
-  "loginModeSelectionTabDemoButtonLabel": "Demo",
-  "@loginModeSelectionTabDemoButtonLabel": {
-  },
-  "loginModeSelectionTabSignInButtonLabel": "Sign in",
-  "@loginModeSelectionTabSignInButtonLabel": {
   }
 }
