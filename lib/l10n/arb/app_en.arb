@@ -188,8 +188,16 @@
   "login_validationCoreUrlError": "Please enter a correct URL",
   "@login_validationCoreUrlError": {
   },
-  "login_LoginIncompatibleCoreVersionExceptionError": "Incompatible instance version provided",
+  "login_LoginIncompatibleCoreVersionExceptionError": "An incompatible instance version provided, please contact the administrator of your system (actual: {actual}, expected: {expected})",
   "@login_LoginIncompatibleCoreVersionExceptionError": {
+    "placeholders": {
+      "actual": {
+        "type": "String"
+      },
+      "expected": {
+        "type": "String"
+      }
+    }
   },
   "login_FormatExceptionError": "A response issue occurred",
   "@login_FormatExceptionError": {

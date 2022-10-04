@@ -234,11 +234,14 @@ class LoginCubit extends Cubit<LoginState> {
     if (actualVersion >= expectVersion) {
       return;
     } else {
-      throw const LoginIncompatibleCoreVersionException();
+      throw LoginIncompatibleCoreVersionException(actualVersion, expectVersion);
     }
   }
 }
 
 class LoginIncompatibleCoreVersionException implements Exception {
-  const LoginIncompatibleCoreVersionException();
+  const LoginIncompatibleCoreVersionException(this.actual, this.expected);
+
+  final Version actual;
+  final Version expected;
 }

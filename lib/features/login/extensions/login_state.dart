@@ -13,7 +13,8 @@ extension LoginStateErrorL10n on LoginState {
     final error = this.error;
     if (error != null) {
       if (error is LoginIncompatibleCoreVersionException) {
-        return context.l10n.login_LoginIncompatibleCoreVersionExceptionError;
+        return context.l10n
+            .login_LoginIncompatibleCoreVersionExceptionError(error.actual.toString(), error.expected.toString());
       } else if (error is FormatException) {
         return context.l10n.login_FormatExceptionError;
       } else if (error is TlsException) {
