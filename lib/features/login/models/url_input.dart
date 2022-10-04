@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'package:formz/formz.dart';
 import 'package:validators/validators.dart';
 
@@ -17,7 +19,10 @@ class UrlInput extends FormzInput<String, UrlValidationError> {
       return UrlValidationError.blank;
     } else if (!isURL(
       value,
-      protocols: ['https'],
+      protocols: [
+        'https',
+        if (kDebugMode) 'http',
+      ],
       requireProtocol: false,
     )) {
       return UrlValidationError.format;

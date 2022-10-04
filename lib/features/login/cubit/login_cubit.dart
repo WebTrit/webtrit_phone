@@ -82,7 +82,7 @@ class LoginCubit extends Cubit<LoginState> {
     ));
 
     var coreUrlInputValue = state.coreUrlInput.value;
-    if (!coreUrlInputValue.startsWith('https://')) {
+    if (!coreUrlInputValue.startsWith(RegExp(r'(https|http)://'))) {
       coreUrlInputValue = 'https://$coreUrlInputValue';
     }
     final coreUrl = Uri.parse(coreUrlInputValue);
