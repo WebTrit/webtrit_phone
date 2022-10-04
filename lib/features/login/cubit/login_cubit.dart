@@ -55,17 +55,35 @@ class LoginCubit extends Cubit<LoginState> {
 
   // LoginModeSelectTab
 
-  void loginModeSelectSubmitter(bool demo) {
-    final coreUrl = demo
+  void loginModeSelectSubmitter(bool demo) async {
+    final coreUrlValue = demo
         ? EnvironmentConfig.DEMO_CORE_URL
         : isDemoModeEnabled
             ? null
             : EnvironmentConfig.CORE_URL;
 
-    emit(LoginState(
-      status: LoginStatus.ok,
-      coreUrl: coreUrl,
-    ));
+    if (coreUrlValue != null) {
+      final coreUrl = Uri.parse(coreUrlValue);
+      emit(state.copyWith(
+        status: LoginStatus.processing,
+      ));
+      try {
+        await _verifyCoreVersion(coreUrl);
+        emit(state.copyWith(
+          status: LoginStatus.ok,
+          coreUrl: coreUrl.toString(),
+        ));
+      } catch (e) {
+        emit(state.copyWith(
+          status: LoginStatus.input,
+          error: e,
+        ));
+      }
+    } else {
+      emit(state.copyWith(
+        status: LoginStatus.ok,
+      ));
+    }
   }
 
   // LoginCoreUrlAssignTab
@@ -90,20 +108,12 @@ class LoginCubit extends Cubit<LoginState> {
       coreUrlInputValue = 'https://$coreUrlInputValue';
     }
     final coreUrl = Uri.parse(coreUrlInputValue);
-    final webtritApiClient = WebtritApiClient(coreUrl, customHttpClient: httpClient);
     try {
-      final info = await webtritApiClient.info();
-      if (info.core.version > Version(0, 3, 0)) {
-        emit(state.copyWith(
-          status: LoginStatus.ok,
-          coreUrl: coreUrl.toString(),
-        ));
-      } else {
-        emit(state.copyWith(
-          status: LoginStatus.input,
-          error: const LoginIncompatibleCoreVersionException(),
-        ));
-      }
+      await _verifyCoreVersion(coreUrl);
+      emit(state.copyWith(
+        status: LoginStatus.ok,
+        coreUrl: coreUrl.toString(),
+      ));
     } catch (e) {
       emit(state.copyWith(
         status: LoginStatus.input,
@@ -215,6 +225,17 @@ class LoginCubit extends Cubit<LoginState> {
       status: LoginStatus.back,
       codeInput: const CodeInput.pure(),
     ));
+  }
+
+  Future<void> _verifyCoreVersion(Uri coreUrl) async {
+    final webtritApiClient = WebtritApiClient(coreUrl, customHttpClient: httpClient);
+    final actualVersion = (await webtritApiClient.info()).core.version;
+    final expectVersion = Version(0, 4, 0);
+    if (actualVersion >= expectVersion) {
+      return;
+    } else {
+      throw const LoginIncompatibleCoreVersionException();
+    }
   }
 }
 
