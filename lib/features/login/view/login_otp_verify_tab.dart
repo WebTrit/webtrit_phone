@@ -94,12 +94,14 @@ class LoginOtpVerifyTab extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(kInset, 0, kInset, kInset),
               child: BlocBuilder<LoginCubit, LoginState>(
                 buildWhen: (previous, current) =>
-                    previous.status != current.status || previous.codeInput != current.codeInput,
+                    previous.status != current.status ||
+                    previous.token != current.token ||
+                    previous.codeInput != current.codeInput,
                 builder: (context, state) {
                   return ElevatedButton(
                     onPressed: !state.codeInput.valid ? null : () => _onOtpVerifySubmitted(context),
                     style: elevatedButtonStyles?.primary,
-                    child: !state.status.isProcessing
+                    child: !state.status.isProcessing && state.token == null
                         ? Text(context.l10n.login_Button_otpVerifyProceed)
                         : SizedCircularProgressIndicator(
                             size: 16,
