@@ -11,5 +11,6 @@ export 'error.dart';
 export 'info.dart';
 export 'push_token_type.dart';
 export 'session_login.dart';
+export 'session_otp_request_demo.dart';
 export 'session_otp_request.dart';
 export 'session_otp_verify.dart';
