@@ -170,6 +170,9 @@
   "login_AppBarTitle_otpRequest": "OTP Request",
   "@login_AppBarTitle_otpRequest": {
   },
+  "login_TextFieldLabelText_otpRequestEmail": "Enter a valid email",
+  "@login_TextFieldLabelText_otpRequestEmail": {
+  },
   "login_TextFieldLabelText_otpRequestPhone": "Enter your phone number",
   "@login_TextFieldLabelText_otpRequestPhone": {
   },
@@ -184,6 +187,9 @@
   },
   "login_Button_otpVerifyProceed": "Verify",
   "@login_Button_otpVerifyProceed": {
+  },
+  "login_validationEmailError": "Please enter a correct email",
+  "@login_validationEmailError": {
   },
   "login_validationCoreUrlError": "Please enter a correct URL",
   "@login_validationCoreUrlError": {

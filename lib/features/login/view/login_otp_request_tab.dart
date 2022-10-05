@@ -61,21 +61,40 @@ class LoginOtpRequestTab extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(kInset, kInset, kInset, 0),
               child: BlocBuilder<LoginCubit, LoginState>(
                 buildWhen: (previous, current) =>
-                    previous.status != current.status || previous.phoneInput != current.phoneInput,
+                    previous.status != current.status ||
+                    previous.demo != current.demo ||
+                    previous.emailInput != current.emailInput ||
+                    previous.phoneInput != current.phoneInput,
                 builder: (context, state) {
-                  return TextFormField(
-                    enabled: !state.status.isProcessing,
-                    initialValue: state.phoneInput.value,
-                    decoration: InputDecoration(
-                      labelText: context.l10n.login_TextFieldLabelText_otpRequestPhone,
-                      helperText: '', // reserve space for validator message
-                      errorText: state.phoneInput.errorL10n(context),
-                      errorMaxLines: 3,
-                    ),
-                    keyboardType: TextInputType.phone,
-                    onChanged: (value) => context.read<LoginCubit>().loginOptRequestPhoneInputChanged(value),
-                    onFieldSubmitted: !state.phoneInput.valid ? null : (_) => _onOtpRequestSubmitted(context),
-                  );
+                  if (state.demo) {
+                    return TextFormField(
+                      enabled: !state.status.isProcessing,
+                      initialValue: state.emailInput.value,
+                      decoration: InputDecoration(
+                        labelText: context.l10n.login_TextFieldLabelText_otpRequestEmail,
+                        helperText: '', // reserve space for validator message
+                        errorText: state.emailInput.errorL10n(context),
+                        errorMaxLines: 3,
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      onChanged: (value) => context.read<LoginCubit>().loginOptRequestEmailInputChanged(value),
+                      onFieldSubmitted: !state.emailInput.valid ? null : (_) => _onOtpRequestSubmitted(context),
+                    );
+                  } else {
+                    return TextFormField(
+                      enabled: !state.status.isProcessing,
+                      initialValue: state.phoneInput.value,
+                      decoration: InputDecoration(
+                        labelText: context.l10n.login_TextFieldLabelText_otpRequestPhone,
+                        helperText: '', // reserve space for validator message
+                        errorText: state.phoneInput.errorL10n(context),
+                        errorMaxLines: 3,
+                      ),
+                      keyboardType: TextInputType.phone,
+                      onChanged: (value) => context.read<LoginCubit>().loginOptRequestPhoneInputChanged(value),
+                      onFieldSubmitted: !state.phoneInput.valid ? null : (_) => _onOtpRequestSubmitted(context),
+                    );
+                  }
                 },
               ),
             ),
@@ -84,10 +103,15 @@ class LoginOtpRequestTab extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(kInset, 0, kInset, kInset),
               child: BlocBuilder<LoginCubit, LoginState>(
                 buildWhen: (previous, current) =>
-                    previous.status != current.status || previous.phoneInput != current.phoneInput,
+                    previous.status != current.status ||
+                    previous.demo != current.demo ||
+                    previous.emailInput != current.emailInput ||
+                    previous.phoneInput != current.phoneInput,
                 builder: (context, state) {
                   return ElevatedButton(
-                    onPressed: !state.phoneInput.valid ? null : () => _onOtpRequestSubmitted(context),
+                    onPressed: !(state.demo ? state.emailInput.valid : state.phoneInput.valid)
+                        ? null
+                        : () => _onOtpRequestSubmitted(context),
                     style: elevatedButtonStyles?.primary,
                     child: !state.status.isProcessing
                         ? Text(context.l10n.login_Button_otpRequestProceed)

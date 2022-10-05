@@ -21,9 +21,15 @@ class LoginCubit extends Cubit<LoginState> {
 
   final HttpClient? httpClient;
 
-  bool get isCoreUrlProvided => EnvironmentConfig.CORE_URL.isNotEmpty;
-  bool get isDemoCoreUrlProvided => EnvironmentConfig.DEMO_CORE_URL.isNotEmpty;
-  bool get isDemoModeEnabled => !isCoreUrlProvided;
+  String? get coreUrlFromEnvironment {
+    return EnvironmentConfig.CORE_URL.isEmpty ? null : EnvironmentConfig.CORE_URL;
+  }
+
+  String? get demoCoreUrlFromEnvironment {
+    return EnvironmentConfig.DEMO_CORE_URL.isEmpty ? null : EnvironmentConfig.DEMO_CORE_URL;
+  }
+
+  bool get isDemoModeEnabled => coreUrlFromEnvironment == null;
 
   void next() {
     var nextTabIndex = state.tabIndex + 1;
@@ -56,22 +62,21 @@ class LoginCubit extends Cubit<LoginState> {
   // LoginModeSelectTab
 
   void loginModeSelectSubmitter(bool demo) async {
-    final coreUrlValue = demo
-        ? EnvironmentConfig.DEMO_CORE_URL
-        : isDemoModeEnabled
-            ? null
-            : EnvironmentConfig.CORE_URL;
+    emit(state.copyWith(
+      demo: demo,
+    ));
 
-    if (coreUrlValue != null) {
-      final coreUrl = Uri.parse(coreUrlValue);
+    final coreUrl = demo ? demoCoreUrlFromEnvironment : coreUrlFromEnvironment;
+
+    if (coreUrl != null) {
       emit(state.copyWith(
         status: LoginStatus.processing,
       ));
       try {
-        await _verifyCoreVersion(coreUrl);
+        await _verifyCoreVersion(Uri.parse(coreUrl));
         emit(state.copyWith(
           status: LoginStatus.ok,
-          coreUrl: coreUrl.toString(),
+          coreUrl: coreUrl,
         ));
       } catch (e) {
         emit(state.copyWith(
@@ -107,12 +112,11 @@ class LoginCubit extends Cubit<LoginState> {
     if (!coreUrlInputValue.startsWith(RegExp(r'(https|http)://'))) {
       coreUrlInputValue = 'https://$coreUrlInputValue';
     }
-    final coreUrl = Uri.parse(coreUrlInputValue);
     try {
-      await _verifyCoreVersion(coreUrl);
+      await _verifyCoreVersion(Uri.parse(coreUrlInputValue));
       emit(state.copyWith(
         status: LoginStatus.ok,
-        coreUrl: coreUrl.toString(),
+        coreUrl: coreUrlInputValue,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -135,6 +139,12 @@ class LoginCubit extends Cubit<LoginState> {
 
   // LoginOtpRequestTab
 
+  void loginOptRequestEmailInputChanged(String value) {
+    emit(state.copyWith(
+      emailInput: EmailInput.dirty(value),
+    ));
+  }
+
   void loginOptRequestPhoneInputChanged(String value) {
     emit(state.copyWith(
       phoneInput: PhoneInput.dirty(value),
@@ -142,7 +152,7 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void loginOptRequestSubmitted() async {
-    if (!state.status.isInput || !state.phoneInput.valid) {
+    if (!state.status.isInput || !(state.demo ? state.emailInput.valid : state.phoneInput.valid)) {
       return;
     }
 
@@ -150,13 +160,18 @@ class LoginCubit extends Cubit<LoginState> {
       status: LoginStatus.processing,
     ));
 
-    final coreUrl = Uri.parse(state.coreUrl!);
-    final webtritApiClient = WebtritApiClient(coreUrl, customHttpClient: httpClient);
+    final webtritApiClient = WebtritApiClient(Uri.parse(state.coreUrl!), customHttpClient: httpClient);
     final type = PlatformInfo().appType;
     final identifier = DeviceInfo().identifierForVendor;
-    final phone = state.phoneInput.value;
     try {
-      final otpId = await webtritApiClient.sessionOtpRequest(type, identifier, phone);
+      late final otpId;
+      if (state.demo) {
+        final email = state.emailInput.value;
+        otpId = await webtritApiClient.sessionOtpRequestDemo(type, identifier, email);
+      } else {
+        final phone = state.phoneInput.value;
+        otpId = await webtritApiClient.sessionOtpRequest(type, identifier, phone);
+      }
       emit(state.copyWith(
         status: LoginStatus.ok,
         otpId: otpId,
@@ -177,6 +192,7 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(
       status: LoginStatus.back,
       coreUrl: null,
+      emailInput: const EmailInput.pure(),
       phoneInput: const PhoneInput.pure(),
     ));
   }
@@ -198,8 +214,7 @@ class LoginCubit extends Cubit<LoginState> {
       status: LoginStatus.processing,
     ));
 
-    final coreUrl = Uri.parse(state.coreUrl!);
-    final webtritApiClient = WebtritApiClient(coreUrl, customHttpClient: httpClient);
+    final webtritApiClient = WebtritApiClient(Uri.parse(state.coreUrl!), customHttpClient: httpClient);
     final otpId = state.otpId!;
     final code = state.codeInput.value;
     try {
