@@ -129,7 +129,6 @@ class LoginCubit extends Cubit<LoginState> {
 
     emit(state.copyWith(
       status: LoginStatus.back,
-      coreUrl: null,
       coreUrlInput: const UrlInput.pure(),
     ));
   }
@@ -177,6 +176,7 @@ class LoginCubit extends Cubit<LoginState> {
 
     emit(state.copyWith(
       status: LoginStatus.back,
+      coreUrl: null,
       phoneInput: const PhoneInput.pure(),
     ));
   }
