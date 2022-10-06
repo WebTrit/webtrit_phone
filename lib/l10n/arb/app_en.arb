@@ -213,6 +213,17 @@
   "login_Text_otpVerifyCheckSpam": "If you do not see an email from support@portaone.com in your inbox, please check your spam folder.",
   "@login_Text_otpVerifyCheckSpam": {
   },
+  "login_Button_otpVerifyRepeatInterval": "Resend the code ({seconds} s)",
+  "@login_Button_otpVerifyRepeatInterval": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "login_Button_otpVerifyRepeat": "Resend the code",
+  "@login_Button_otpVerifyRepeat": {
+  },
   "login_Button_otpVerifyProceed": "Verify",
   "@login_Button_otpVerifyProceed": {
   },

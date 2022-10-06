@@ -245,6 +245,33 @@ class LoginCubit extends Cubit<LoginState> {
       codeInput: const CodeInput.pure(),
     ));
   }
+
+  void loginOptVerifyRepeat() async {
+    if (state.status != LoginStatus.input) {
+      return;
+    }
+
+    emit(state.copyWith(
+      status: LoginStatus.processing,
+    ));
+    try {
+      late final String otpId;
+      if (state.demo) {
+        otpId = await _sessionOtpRequestDemo(state.coreUrl!, state.emailInput.value, customHttpClient: httpClient);
+      } else {
+        otpId = await _sessionOtpRequest(state.coreUrl!, state.phoneInput.value, customHttpClient: httpClient);
+      }
+      emit(state.copyWith(
+        status: LoginStatus.input,
+        otpId: otpId,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: LoginStatus.input,
+        error: e,
+      ));
+    }
+  }
 }
 
 class LoginIncompatibleCoreVersionException implements Exception {

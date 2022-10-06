@@ -20,6 +20,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
+    final OutlinedButtonStyles? outlinedButtonStyles = themeData.extension<OutlinedButtonStyles>();
     return BlocConsumer<LoginCubit, LoginState>(
       listenWhen: (previous, current) => previous.status != current.status || previous.error != current.error,
       listener: (context, state) {
@@ -100,17 +101,42 @@ class LoginOtpVerifyTab extends StatelessWidget {
                         ),
                       ),
                       const Spacer(),
-                      ElevatedButton(
-                        onPressed: !state.codeInput.valid ? null : () => _onOtpVerifySubmitted(context),
-                        style: elevatedButtonStyles?.primary,
-                        child: !state.status.isProcessing && state.token == null
-                            ? Text(context.l10n.login_Button_otpVerifyProceed)
-                            : SizedCircularProgressIndicator(
-                                size: 16,
-                                strokeWidth: 2,
-                                color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
-                              ),
-                      )
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          CountDownBuilder(
+                            key: ObjectKey(state.otpId),
+                            interval: const Duration(seconds: 30),
+                            builder: (context, seconds) {
+                              if (seconds == 0) {
+                                return OutlinedButton(
+                                  onPressed: state.status.isProcessing ? null : () => _onOtpVerifyRepeat(context),
+                                  style: outlinedButtonStyles?.neutral,
+                                  child: Text(context.l10n.login_Button_otpVerifyRepeat),
+                                );
+                              } else {
+                                return OutlinedButton(
+                                  onPressed: null,
+                                  style: outlinedButtonStyles?.neutral,
+                                  child: Text(context.l10n.login_Button_otpVerifyRepeatInterval(seconds)),
+                                );
+                              }
+                            },
+                          ),
+                          const SizedBox(height: kInset / 4),
+                          ElevatedButton(
+                            onPressed: !state.codeInput.valid ? null : () => _onOtpVerifySubmitted(context),
+                            style: elevatedButtonStyles?.primary,
+                            child: !state.status.isProcessing && state.token == null
+                                ? Text(context.l10n.login_Button_otpVerifyProceed)
+                                : SizedCircularProgressIndicator(
+                                    size: 16,
+                                    strokeWidth: 2,
+                                    color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
+                                  ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -120,6 +146,10 @@ class LoginOtpVerifyTab extends StatelessWidget {
         );
       },
     );
+  }
+
+  void _onOtpVerifyRepeat(BuildContext context) {
+    context.read<LoginCubit>().loginOptVerifyRepeat();
   }
 
   void _onOtpVerifySubmitted(BuildContext context) {
