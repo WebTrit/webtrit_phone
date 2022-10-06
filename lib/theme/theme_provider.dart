@@ -108,6 +108,18 @@ class ThemeProvider extends InheritedWidget {
         foregroundColor: colors.onBackground,
         backgroundColor: colors.background,
       ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
+      primaryOnDark: ElevatedButton.styleFrom(
+        foregroundColor: colors.onPrimary,
+        backgroundColor: colors.primary,
+        disabledForegroundColor: colors.onPrimary.withOpacity(0.5),
+        disabledBackgroundColor: colors.primary.withOpacity(0.5),
+      ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
+      neutralOnDark: ElevatedButton.styleFrom(
+        foregroundColor: colors.onBackground,
+        backgroundColor: colors.background,
+        disabledForegroundColor: colors.onBackground.withOpacity(0.5),
+        disabledBackgroundColor: colors.background.withOpacity(0.5),
+      ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
     );
   }
 

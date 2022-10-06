@@ -63,13 +63,13 @@ class LoginModeSelectTab extends StatelessWidget {
                                   onPressed: state.status.isProcessing
                                       ? null
                                       : () => context.read<LoginCubit>().loginModeSelectSubmitter(true),
-                                  style: elevatedButtonStyles?.primary,
+                                  style: elevatedButtonStyles?.primaryOnDark,
                                   child: !state.status.isProcessing
                                       ? Text(context.l10n.login_Button_signUpToDemoInstance)
                                       : SizedCircularProgressIndicator(
                                           size: 16,
                                           strokeWidth: 2,
-                                          color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
+                                          color: elevatedButtonStyles?.primaryOnDark?.foregroundColor?.resolve({}),
                                         ),
                                 ),
                                 const SizedBox(height: kInset / 4),
@@ -77,7 +77,7 @@ class LoginModeSelectTab extends StatelessWidget {
                                   onPressed: state.status.isProcessing
                                       ? null
                                       : () => context.read<LoginCubit>().loginModeSelectSubmitter(false),
-                                  style: elevatedButtonStyles?.neutral,
+                                  style: elevatedButtonStyles?.neutralOnDark,
                                   child: Text(context.l10n.login_Button_signInToYourInstance),
                                 ),
                               ]
