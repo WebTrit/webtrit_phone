@@ -28,9 +28,9 @@ class MainAppBar extends AppBar {
                     ),
                   ),
                   child: IconButton(
-                    constraints: const BoxConstraints(
-                      maxWidth: kMinInteractiveDimension,
-                      maxHeight: kMinInteractiveDimension,
+                    constraints: const BoxConstraints.tightFor(
+                      width: kMinInteractiveDimension,
+                      height: kMinInteractiveDimension,
                     ),
                     icon: const Icon(
                       Icons.person,
