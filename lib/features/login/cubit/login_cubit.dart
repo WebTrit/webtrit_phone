@@ -82,7 +82,7 @@ class LoginCubit extends Cubit<LoginState> {
         status: LoginStatus.processing,
       ));
       try {
-        await _verifyCoreVersion(Uri.parse(coreUrl));
+        await _verifyCoreVersion(coreUrl, customHttpClient: httpClient);
         emit(state.copyWith(
           status: LoginStatus.ok,
           coreUrl: coreUrl,
@@ -122,7 +122,7 @@ class LoginCubit extends Cubit<LoginState> {
       coreUrlInputValue = 'https://$coreUrlInputValue';
     }
     try {
-      await _verifyCoreVersion(Uri.parse(coreUrlInputValue));
+      await _verifyCoreVersion(coreUrlInputValue, customHttpClient: httpClient);
       emit(state.copyWith(
         status: LoginStatus.ok,
         coreUrl: coreUrlInputValue,
@@ -168,18 +168,12 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(
       status: LoginStatus.processing,
     ));
-
-    final webtritApiClient = WebtritApiClient(Uri.parse(state.coreUrl!), customHttpClient: httpClient);
-    final type = PlatformInfo().appType;
-    final identifier = DeviceInfo().identifierForVendor;
     try {
-      late final otpId;
+      late final String otpId;
       if (state.demo) {
-        final email = state.emailInput.value;
-        otpId = await webtritApiClient.sessionOtpRequestDemo(type, identifier, email);
+        otpId = await _sessionOtpRequestDemo(state.coreUrl!, state.emailInput.value, customHttpClient: httpClient);
       } else {
-        final phone = state.phoneInput.value;
-        otpId = await webtritApiClient.sessionOtpRequest(type, identifier, phone);
+        otpId = await _sessionOtpRequest(state.coreUrl!, state.phoneInput.value, customHttpClient: httpClient);
       }
       emit(state.copyWith(
         status: LoginStatus.ok,
@@ -222,12 +216,13 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(
       status: LoginStatus.processing,
     ));
-
-    final webtritApiClient = WebtritApiClient(Uri.parse(state.coreUrl!), customHttpClient: httpClient);
-    final otpId = state.otpId!;
-    final code = state.codeInput.value;
     try {
-      final token = await webtritApiClient.sessionOtpVerify(otpId, code);
+      final token = await _sessionOtpVerify(
+        state.coreUrl!,
+        state.otpId!,
+        state.codeInput.value,
+        customHttpClient: httpClient,
+      );
       emit(state.copyWith(
         status: LoginStatus.ok,
         token: token,
@@ -250,17 +245,6 @@ class LoginCubit extends Cubit<LoginState> {
       codeInput: const CodeInput.pure(),
     ));
   }
-
-  Future<void> _verifyCoreVersion(Uri coreUrl) async {
-    final webtritApiClient = WebtritApiClient(coreUrl, customHttpClient: httpClient);
-    final actualVersion = (await webtritApiClient.info()).core.version;
-    final expectVersion = Version(0, 4, 0);
-    if (actualVersion >= expectVersion) {
-      return;
-    } else {
-      throw LoginIncompatibleCoreVersionException(actualVersion, expectVersion);
-    }
-  }
 }
 
 class LoginIncompatibleCoreVersionException implements Exception {
@@ -268,4 +252,50 @@ class LoginIncompatibleCoreVersionException implements Exception {
 
   final Version actual;
   final Version expected;
+}
+
+Future<void> _verifyCoreVersion(
+  String coreUrl, {
+  HttpClient? customHttpClient,
+}) async {
+  final webtritApiClient = WebtritApiClient(Uri.parse(coreUrl), customHttpClient: customHttpClient);
+  final actualVersion = (await webtritApiClient.info()).core.version;
+  final expectedVersion = Version(0, 4, 0);
+  if (actualVersion >= expectedVersion) {
+    return;
+  } else {
+    throw LoginIncompatibleCoreVersionException(actualVersion, expectedVersion);
+  }
+}
+
+Future<String> _sessionOtpRequestDemo(
+  String coreUrl,
+  String email, {
+  HttpClient? customHttpClient,
+}) async {
+  final webtritApiClient = WebtritApiClient(Uri.parse(coreUrl), customHttpClient: customHttpClient);
+  final type = PlatformInfo().appType;
+  final identifier = DeviceInfo().identifierForVendor;
+  return await webtritApiClient.sessionOtpRequestDemo(type, identifier, email);
+}
+
+Future<String> _sessionOtpRequest(
+  String coreUrl,
+  String phone, {
+  HttpClient? customHttpClient,
+}) async {
+  final webtritApiClient = WebtritApiClient(Uri.parse(coreUrl), customHttpClient: customHttpClient);
+  final type = PlatformInfo().appType;
+  final identifier = DeviceInfo().identifierForVendor;
+  return await webtritApiClient.sessionOtpRequest(type, identifier, phone);
+}
+
+Future<String> _sessionOtpVerify(
+  String coreUrl,
+  String otpId,
+  String code, {
+  HttpClient? customHttpClient,
+}) async {
+  final webtritApiClient = WebtritApiClient(Uri.parse(coreUrl), customHttpClient: customHttpClient);
+  return await webtritApiClient.sessionOtpVerify(otpId, code);
 }
