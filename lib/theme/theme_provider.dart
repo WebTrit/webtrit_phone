@@ -99,13 +99,14 @@ class ThemeProvider extends InheritedWidget {
   ElevatedButtonStyles elevatedButtonStyles(ColorScheme colors) {
     return ElevatedButtonStyles(
       primary: ElevatedButton.styleFrom(
-        primary: colors.primary,
-        onPrimary: colors.onPrimary,
-        onSurface: colors.onPrimaryContainer,
+        foregroundColor: colors.onPrimary,
+        backgroundColor: colors.primary,
+        disabledForegroundColor: colors.onPrimaryContainer.withOpacity(0.38),
+        disabledBackgroundColor: colors.onPrimaryContainer.withOpacity(0.12),
       ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
       neutral: ElevatedButton.styleFrom(
-        primary: colors.background,
-        onPrimary: colors.onBackground,
+        foregroundColor: colors.onBackground,
+        backgroundColor: colors.background,
       ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
     );
   }
@@ -113,7 +114,7 @@ class ThemeProvider extends InheritedWidget {
   OutlinedButtonStyles outlinedButtonStyles(ColorScheme colors) {
     return OutlinedButtonStyles(
       neutral: OutlinedButton.styleFrom(
-        primary: colors.onBackground,
+        foregroundColor: colors.onBackground,
         side: BorderSide(
           color: colors.onBackground.withOpacity(0.2),
         ),
@@ -124,27 +125,27 @@ class ThemeProvider extends InheritedWidget {
   TextButtonStyles textButtonStyles(ColorScheme colors) {
     return TextButtonStyles(
       neutral: TextButton.styleFrom(
-        primary: colors.secondary,
+        foregroundColor: colors.secondary,
       ),
       dangerous: TextButton.styleFrom(
-        primary: colors.error,
+        foregroundColor: colors.error,
       ),
       callStart: TextButton.styleFrom(
-        primary: colors.onTertiary,
-        onSurface: colors.onTertiary,
+        foregroundColor: colors.onTertiary,
         backgroundColor: colors.tertiary,
+        disabledForegroundColor: colors.onTertiary.withOpacity(0.38),
       ),
       callHangup: TextButton.styleFrom(
-        primary: colors.onError,
-        onSurface: colors.onError,
+        foregroundColor: colors.onError,
         backgroundColor: colors.error,
+        disabledForegroundColor: colors.onError.withOpacity(0.38),
       ),
       callAction: TextButton.styleFrom(
-        primary: colors.surface,
+        foregroundColor: colors.surface,
         backgroundColor: colors.surface.withOpacity(0.3),
       ),
       callActiveAction: TextButton.styleFrom(
-        primary: colors.onSurface,
+        foregroundColor: colors.onSurface,
         backgroundColor: colors.surface,
       ),
     );
