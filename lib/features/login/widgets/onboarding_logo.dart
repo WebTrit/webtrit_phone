@@ -14,7 +14,7 @@ class OnboardingLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQueryData = MediaQuery.of(context);
     return SizedBox(
-      height: mediaQueryData.size.height / 6,
+      height: mediaQueryData.size.height / 7,
       child: Align(
         alignment: Alignment.bottomCenter,
         child: WebTritPhonePictureLogo(

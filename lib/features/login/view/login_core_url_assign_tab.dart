@@ -70,6 +70,16 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
                         onChanged: (value) => context.read<LoginCubit>().loginCoreUrlAssignCoreUrlInputChanged(value),
                         onFieldSubmitted: !state.coreUrlInput.valid ? null : (_) => _onCoreUrlAssignSubmitted(context),
                       ),
+                      const SizedBox(height: kInset / 8),
+                      Linkify(
+                        text: context.l10n.login_Text_coreUrlAssignDescription,
+                        onOpen: (link) => context.read<LoginCubit>().launchLinkableElement(link),
+                        style: themeData.textTheme.bodyMedium,
+                        linkStyle: TextStyle(
+                          color: themeData.colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       const Spacer(),
                       ElevatedButton(
                         onPressed: !state.coreUrlInput.valid ? null : () => _onCoreUrlAssignSubmitted(context),

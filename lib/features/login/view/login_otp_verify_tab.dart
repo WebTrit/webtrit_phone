@@ -62,6 +62,16 @@ class LoginOtpVerifyTab extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      Linkify(
+                        text: state.demo
+                            ? context.l10n.login_Text_otpVerifySentToEmail(state.emailInput.value)
+                            : context.l10n.login_Text_otpVerifySentToEmailAssignedWithPhone(state.phoneInput.value),
+                        style: themeData.textTheme.bodyMedium,
+                        linkStyle: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: kInset / 2),
                       TextFormField(
                         enabled: !state.status.isProcessing,
                         initialValue: state.codeInput.value,
@@ -80,6 +90,14 @@ class LoginOtpVerifyTab extends StatelessWidget {
                               ],
                         onChanged: (value) => context.read<LoginCubit>().loginOptVerifyCodeInputChanged(value),
                         onFieldSubmitted: !state.codeInput.valid ? null : (_) => _onOtpVerifySubmitted(context),
+                      ),
+                      const SizedBox(height: kInset / 8),
+                      Linkify(
+                        text: context.l10n.login_Text_otpVerifyCheckSpam,
+                        style: themeData.textTheme.bodyMedium,
+                        linkStyle: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const Spacer(),
                       ElevatedButton(

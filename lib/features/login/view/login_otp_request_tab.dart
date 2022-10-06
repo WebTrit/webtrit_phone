@@ -85,6 +85,17 @@ class LoginOtpRequestTab extends StatelessWidget {
                           onChanged: (value) => context.read<LoginCubit>().loginOptRequestPhoneInputChanged(value),
                           onFieldSubmitted: !state.phoneInput.valid ? null : (_) => _onOtpRequestSubmitted(context),
                         ),
+                      const SizedBox(height: kInset / 8),
+                      Linkify(
+                        text: state.demo
+                            ? context.l10n.login_Text_otpRequestDemoDescription
+                            : context.l10n.login_Text_otpRequestDescription,
+                        style: themeData.textTheme.bodyMedium,
+                        linkStyle: TextStyle(
+                          color: themeData.colorScheme.primary,
+                          decoration: TextDecoration.none,
+                        ),
+                      ),
                       const Spacer(),
                       ElevatedButton(
                         onPressed: !(state.demo ? state.emailInput.valid : state.phoneInput.valid)

@@ -158,16 +158,19 @@
   "login_Button_signIn": "Sign in",
   "@login_Button_signIn": {
   },
-  "login_AppBarTitle_coreUrlAssign": "Instance URL assign",
+  "login_AppBarTitle_coreUrlAssign": "Assigning the instance",
   "@login_AppBarTitle_coreUrlAssign": {
   },
   "login_TextFieldLabelText_coreUrlAssign": "Enter your instance URL",
   "@login_TextFieldLabelText_coreUrlAssign": {
   },
+  "login_Text_coreUrlAssignDescription": "If you would like to make and receive calls through your PortaSwitch, contact your PortaOne account manager at sales@porta.one to obtain a dedicated instance.",
+  "@login_Text_coreUrlAssignDescription": {
+  },
   "login_Button_coreUrlAssignProceed": "Proceed",
   "@login_Button_coreUrlAssignProceed": {
   },
-  "login_AppBarTitle_otpRequest": "OTP Request",
+  "login_AppBarTitle_otpRequest": "OTP request",
   "@login_AppBarTitle_otpRequest": {
   },
   "login_TextFieldLabelText_otpRequestEmail": "Enter a valid email",
@@ -176,22 +179,47 @@
   "login_TextFieldLabelText_otpRequestPhone": "Enter your phone number",
   "@login_TextFieldLabelText_otpRequestPhone": {
   },
+  "login_Text_otpRequestDemoDescription": "If you do not have an account yet, it will be automatically created for you.",
+  "@login_Text_otpRequestDemoDescription": {
+  },
+  "login_Text_otpRequestDescription": "",
+  "@login_Text_otpRequestDescription": {
+  },
   "login_Button_otpRequestProceed": "Proceed",
   "@login_Button_otpRequestProceed": {
   },
-  "login_AppBarTitle_otpVerify": "OTP Verify",
+  "login_AppBarTitle_otpVerify": "OTP verification",
   "@login_AppBarTitle_otpVerify": {
+  },
+  "login_Text_otpVerifySentToEmail": "A one-time verification code was sent to {email}.",
+  "@login_Text_otpVerifySentToEmail": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "login_Text_otpVerifySentToEmailAssignedWithPhone": "A one-time verification code was sent to the email assigned to the tel:{phone} phone number.",
+  "@login_Text_otpVerifySentToEmailAssignedWithPhone": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
   },
   "login_TextFieldLabelText_otpVerifyCode": "Enter the verification code",
   "@login_TextFieldLabelText_otpVerifyCode": {
   },
+  "login_Text_otpVerifyCheckSpam": "If you do not see an email from support@portaone.com in your inbox, please check your spam folder.",
+  "@login_Text_otpVerifyCheckSpam": {
+  },
   "login_Button_otpVerifyProceed": "Verify",
   "@login_Button_otpVerifyProceed": {
   },
-  "login_validationEmailError": "Please enter a correct email",
+  "login_validationEmailError": "Please enter a valid email",
   "@login_validationEmailError": {
   },
-  "login_validationCoreUrlError": "Please enter a correct URL",
+  "login_validationCoreUrlError": "Please enter a valid URL",
   "@login_validationCoreUrlError": {
   },
   "login_LoginIncompatibleCoreVersionExceptionError": "An incompatible instance version provided, please contact the administrator of your system (actual: {actual}, expected: {expected})",

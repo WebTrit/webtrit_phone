@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:linkify/linkify.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
@@ -57,6 +59,13 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(
       error: null,
     ));
+  }
+
+  void launchLinkableElement(LinkableElement link) async {
+    final url = Uri.parse(link.url);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    }
   }
 
   // LoginModeSelectTab
