@@ -68,6 +68,9 @@ class LoginOtpRequestTab extends StatelessWidget {
                             errorMaxLines: 3,
                           ),
                           keyboardType: TextInputType.emailAddress,
+                          autofillHints: const [
+                            AutofillHints.email,
+                          ],
                           onChanged: (value) => context.read<LoginCubit>().loginOptRequestEmailInputChanged(value),
                           onFieldSubmitted: !state.emailInput.valid ? null : (_) => _onOtpRequestSubmitted(context),
                         )
@@ -82,6 +85,9 @@ class LoginOtpRequestTab extends StatelessWidget {
                             errorMaxLines: 3,
                           ),
                           keyboardType: TextInputType.phone,
+                          autofillHints: const [
+                            AutofillHints.telephoneNumber,
+                          ],
                           onChanged: (value) => context.read<LoginCubit>().loginOptRequestPhoneInputChanged(value),
                           onFieldSubmitted: !state.phoneInput.valid ? null : (_) => _onOtpRequestSubmitted(context),
                         ),
