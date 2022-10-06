@@ -52,7 +52,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
               AppBar(
                 title: Text(context.l10n.login_AppBarTitle_otpVerify),
                 leading: ExtBackButton(
-                  disabled: state.status.isProcessing,
+                  disabled: !state.status.isInput,
                 ),
                 backgroundColor: Colors.transparent,
               ),
@@ -74,7 +74,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
                       ),
                       const SizedBox(height: kInset / 2),
                       TextFormField(
-                        enabled: !state.status.isProcessing,
+                        enabled: state.status.isInput,
                         initialValue: state.codeInput.value,
                         decoration: InputDecoration(
                           labelText: context.l10n.login_TextFieldLabelText_otpVerifyCode,
@@ -83,12 +83,10 @@ class LoginOtpVerifyTab extends StatelessWidget {
                           errorMaxLines: 3,
                         ),
                         keyboardType: TextInputType.number,
-                        autofillHints: state.status.isProcessing
-                            ? null
-                            : const [
-                                AutofillHints.oneTimeCode,
-                                AutofillHints.password,
-                              ],
+                        autofillHints: const [
+                          AutofillHints.oneTimeCode,
+                          AutofillHints.password,
+                        ],
                         onChanged: (value) => context.read<LoginCubit>().loginOptVerifyCodeInputChanged(value),
                         onFieldSubmitted: !state.codeInput.valid ? null : (_) => _onOtpVerifySubmitted(context),
                       ),
@@ -110,7 +108,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
                             builder: (context, seconds) {
                               if (seconds == 0) {
                                 return OutlinedButton(
-                                  onPressed: state.status.isProcessing ? null : () => _onOtpVerifyRepeat(context),
+                                  onPressed: !state.status.isInput ? null : () => _onOtpVerifyRepeat(context),
                                   style: outlinedButtonStyles?.neutral,
                                   child: Text(context.l10n.login_Button_otpVerifyRepeat),
                                 );
@@ -125,9 +123,11 @@ class LoginOtpVerifyTab extends StatelessWidget {
                           ),
                           const SizedBox(height: kInset / 4),
                           ElevatedButton(
-                            onPressed: !state.codeInput.valid ? null : () => _onOtpVerifySubmitted(context),
+                            onPressed: !state.status.isInput || !state.codeInput.valid
+                                ? null
+                                : () => _onOtpVerifySubmitted(context),
                             style: elevatedButtonStyles?.primary,
-                            child: !state.status.isProcessing && state.token == null
+                            child: state.status.isInput
                                 ? Text(context.l10n.login_Button_otpVerifyProceed)
                                 : SizedCircularProgressIndicator(
                                     size: 16,

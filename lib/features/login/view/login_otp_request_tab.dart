@@ -46,7 +46,7 @@ class LoginOtpRequestTab extends StatelessWidget {
               AppBar(
                 title: Text(context.l10n.login_AppBarTitle_otpRequest),
                 leading: ExtBackButton(
-                  disabled: state.status.isProcessing,
+                  disabled: !state.status.isInput,
                 ),
                 backgroundColor: Colors.transparent,
               ),
@@ -59,7 +59,7 @@ class LoginOtpRequestTab extends StatelessWidget {
                     children: [
                       if (state.demo)
                         TextFormField(
-                          enabled: !state.status.isProcessing,
+                          enabled: state.status.isInput,
                           initialValue: state.emailInput.value,
                           decoration: InputDecoration(
                             labelText: context.l10n.login_TextFieldLabelText_otpRequestEmail,
@@ -73,7 +73,7 @@ class LoginOtpRequestTab extends StatelessWidget {
                         )
                       else
                         TextFormField(
-                          enabled: !state.status.isProcessing,
+                          enabled: state.status.isInput,
                           initialValue: state.phoneInput.value,
                           decoration: InputDecoration(
                             labelText: context.l10n.login_TextFieldLabelText_otpRequestPhone,
@@ -98,11 +98,12 @@ class LoginOtpRequestTab extends StatelessWidget {
                       ),
                       const Spacer(),
                       ElevatedButton(
-                        onPressed: !(state.demo ? state.emailInput.valid : state.phoneInput.valid)
-                            ? null
-                            : () => _onOtpRequestSubmitted(context),
+                        onPressed:
+                            !state.status.isInput || !(state.demo ? state.emailInput.valid : state.phoneInput.valid)
+                                ? null
+                                : () => _onOtpRequestSubmitted(context),
                         style: elevatedButtonStyles?.primary,
-                        child: !state.status.isProcessing
+                        child: state.status.isInput
                             ? Text(context.l10n.login_Button_otpRequestProceed)
                             : SizedCircularProgressIndicator(
                                 size: 16,

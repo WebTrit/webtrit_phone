@@ -60,11 +60,11 @@ class LoginModeSelectTab extends StatelessWidget {
                         children: isDemoModeEnabled
                             ? [
                                 ElevatedButton(
-                                  onPressed: state.status.isProcessing
+                                  onPressed: !state.status.isInput
                                       ? null
                                       : () => context.read<LoginCubit>().loginModeSelectSubmitter(true),
                                   style: elevatedButtonStyles?.primaryOnDark,
-                                  child: !state.status.isProcessing
+                                  child: state.status.isInput
                                       ? Text(context.l10n.login_Button_signUpToDemoInstance)
                                       : SizedCircularProgressIndicator(
                                           size: 16,
@@ -74,7 +74,7 @@ class LoginModeSelectTab extends StatelessWidget {
                                 ),
                                 const SizedBox(height: kInset / 4),
                                 ElevatedButton(
-                                  onPressed: state.status.isProcessing
+                                  onPressed: !state.status.isInput
                                       ? null
                                       : () => context.read<LoginCubit>().loginModeSelectSubmitter(false),
                                   style: elevatedButtonStyles?.neutralOnDark,
@@ -83,11 +83,11 @@ class LoginModeSelectTab extends StatelessWidget {
                               ]
                             : [
                                 ElevatedButton(
-                                  onPressed: state.status.isProcessing
+                                  onPressed: !state.status.isInput
                                       ? null
                                       : () => context.read<LoginCubit>().loginModeSelectSubmitter(false),
                                   style: elevatedButtonStyles?.primary,
-                                  child: !state.status.isProcessing
+                                  child: state.status.isInput
                                       ? Text(context.l10n.login_Button_signIn)
                                       : SizedCircularProgressIndicator(
                                           size: 16,

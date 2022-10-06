@@ -46,7 +46,7 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
               AppBar(
                 title: Text(context.l10n.login_AppBarTitle_coreUrlAssign),
                 leading: ExtBackButton(
-                  disabled: state.status.isProcessing,
+                  disabled: !state.status.isInput,
                 ),
                 backgroundColor: Colors.transparent,
               ),
@@ -58,7 +58,7 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       TextFormField(
-                        enabled: !state.status.isProcessing,
+                        enabled: state.status.isInput,
                         initialValue: state.coreUrlInput.value,
                         decoration: InputDecoration(
                           labelText: context.l10n.login_TextFieldLabelText_coreUrlAssign,
@@ -82,9 +82,11 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
                       ),
                       const Spacer(),
                       ElevatedButton(
-                        onPressed: !state.coreUrlInput.valid ? null : () => _onCoreUrlAssignSubmitted(context),
+                        onPressed: !state.status.isInput || !state.coreUrlInput.valid
+                            ? null
+                            : () => _onCoreUrlAssignSubmitted(context),
                         style: elevatedButtonStyles?.primary,
-                        child: !state.status.isProcessing
+                        child: state.status.isInput
                             ? Text(context.l10n.login_Button_coreUrlAssignProceed)
                             : SizedCircularProgressIndicator(
                                 size: 16,
