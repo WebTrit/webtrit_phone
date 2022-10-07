@@ -57,6 +57,16 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      Linkify(
+                        text: context.l10n.login_Text_coreUrlAssignPreDescription,
+                        onOpen: (link) => context.read<LoginCubit>().launchLinkableElement(link),
+                        style: themeData.textTheme.bodyMedium,
+                        linkStyle: TextStyle(
+                          color: themeData.colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: kInset / 2),
                       TextFormField(
                         enabled: state.status.isInput,
                         initialValue: state.coreUrlInput.value,
@@ -72,7 +82,7 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
                       ),
                       const SizedBox(height: kInset / 8),
                       Linkify(
-                        text: context.l10n.login_Text_coreUrlAssignDescription,
+                        text: context.l10n.login_Text_coreUrlAssignPostDescription,
                         onOpen: (link) => context.read<LoginCubit>().launchLinkableElement(link),
                         style: themeData.textTheme.bodyMedium,
                         linkStyle: TextStyle(

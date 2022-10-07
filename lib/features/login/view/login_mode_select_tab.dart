@@ -43,6 +43,20 @@ class LoginModeSelectTab extends StatelessWidget {
             children: [
               AppBar(
                 backgroundColor: Colors.transparent,
+                actions: isDemoModeEnabled
+                    ? [
+                        IconButton(
+                          icon: Icon(
+                            Icons.link,
+                            color: themeData.colorScheme.onPrimary,
+                          ),
+                          tooltip: context.l10n.login_ButtonTooltip_signInToYourInstance,
+                          onPressed: !state.status.isInput
+                              ? null
+                              : () => context.read<LoginCubit>().loginModeSelectSubmitter(false),
+                        ),
+                      ]
+                    : null,
               ),
               OnboardingLogo(
                 color: themeData.colorScheme.onPrimary,
@@ -55,48 +69,34 @@ class LoginModeSelectTab extends StatelessWidget {
                     children: [
                       const OnboardingPicture(),
                       const Spacer(),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: isDemoModeEnabled
-                            ? [
-                                ElevatedButton(
-                                  onPressed: !state.status.isInput
-                                      ? null
-                                      : () => context.read<LoginCubit>().loginModeSelectSubmitter(true),
-                                  style: elevatedButtonStyles?.primaryOnDark,
-                                  child: state.status.isInput
-                                      ? Text(context.l10n.login_Button_signUpToDemoInstance)
-                                      : SizedCircularProgressIndicator(
-                                          size: 16,
-                                          strokeWidth: 2,
-                                          color: elevatedButtonStyles?.primaryOnDark?.foregroundColor?.resolve({}),
-                                        ),
+                      if (isDemoModeEnabled)
+                        ElevatedButton(
+                          onPressed: !state.status.isInput
+                              ? null
+                              : () => context.read<LoginCubit>().loginModeSelectSubmitter(true),
+                          style: elevatedButtonStyles?.primaryOnDark,
+                          child: state.status.isInput
+                              ? Text(context.l10n.login_Button_signUpToDemoInstance)
+                              : SizedCircularProgressIndicator(
+                                  size: 16,
+                                  strokeWidth: 2,
+                                  color: elevatedButtonStyles?.primaryOnDark?.foregroundColor?.resolve({}),
                                 ),
-                                const SizedBox(height: kInset / 4),
-                                ElevatedButton(
-                                  onPressed: !state.status.isInput
-                                      ? null
-                                      : () => context.read<LoginCubit>().loginModeSelectSubmitter(false),
-                                  style: elevatedButtonStyles?.neutralOnDark,
-                                  child: Text(context.l10n.login_Button_signInToYourInstance),
+                        )
+                      else
+                        ElevatedButton(
+                          onPressed: !state.status.isInput
+                              ? null
+                              : () => context.read<LoginCubit>().loginModeSelectSubmitter(false),
+                          style: elevatedButtonStyles?.primary,
+                          child: state.status.isInput
+                              ? Text(context.l10n.login_Button_signIn)
+                              : SizedCircularProgressIndicator(
+                                  size: 16,
+                                  strokeWidth: 2,
+                                  color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
                                 ),
-                              ]
-                            : [
-                                ElevatedButton(
-                                  onPressed: !state.status.isInput
-                                      ? null
-                                      : () => context.read<LoginCubit>().loginModeSelectSubmitter(false),
-                                  style: elevatedButtonStyles?.primary,
-                                  child: state.status.isInput
-                                      ? Text(context.l10n.login_Button_signIn)
-                                      : SizedCircularProgressIndicator(
-                                          size: 16,
-                                          strokeWidth: 2,
-                                          color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
-                                        ),
-                                ),
-                              ],
-                      ),
+                        ),
                     ],
                   ),
                 ),
