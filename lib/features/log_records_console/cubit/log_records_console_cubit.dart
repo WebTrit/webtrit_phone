@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:cross_file/cross_file.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
@@ -63,7 +64,11 @@ class LogRecordsConsoleCubit extends Cubit<LogRecordsConsoleState> {
     }
     await logRecordsSink.close();
 
-    await Share.shareFiles([logRecordsPath]);
+    final logRecordsXFile = XFile(
+      logRecordsPath,
+      name: name,
+    );
+    await Share.shareXFiles([logRecordsXFile]);
   }
 
   // Can't delete right after actual sharing because of https://github.com/fluttercommunity/plus_plugins/issues/263

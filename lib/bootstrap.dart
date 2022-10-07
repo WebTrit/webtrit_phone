@@ -42,10 +42,9 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
       await _precacheSvgPicture(); // TODO check this functionality
 
-      return BlocOverrides.runZoned(
-        () async => runApp(await builder()),
-        blocObserver: _AppBlocObserver(),
-      );
+      Bloc.observer = _AppBlocObserver();
+
+      runApp(await builder());
     },
     (error, stackTrace) {
       logger.severe('runZonedGuarded', error, stackTrace);

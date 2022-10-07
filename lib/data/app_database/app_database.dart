@@ -29,7 +29,7 @@ part 'app_database.g.dart';
 class AppDatabase extends _$AppDatabase {
   static Future<DriftIsolate> spawn(String databasePath) {
     return DriftIsolate.spawn(
-      () => DatabaseConnection.fromExecutor(
+      () => DatabaseConnection(
         NativeDatabase(
           File(databasePath),
           logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,

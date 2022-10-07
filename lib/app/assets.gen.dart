@@ -5,7 +5,7 @@
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
-// ignore_for_file: directives_ordering,unnecessary_import
+// ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,6 +17,9 @@ class $AssetsLoginGen {
   /// File path: assets/login/onboarding-1.svg
   SvgGenImage get onboarding1 =>
       const SvgGenImage('assets/login/onboarding-1.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [onboarding1];
 }
 
 class $AssetsRingtonesGen {
@@ -27,6 +30,9 @@ class $AssetsRingtonesGen {
 
   /// File path: assets/ringtones/outgoing-call-1.mp3
   String get outgoingCall1 => 'assets/ringtones/outgoing-call-1.mp3';
+
+  /// List of all assets
+  List<String> get values => [incomingCall1, outgoingCall1];
 }
 
 class Assets {
@@ -37,6 +43,9 @@ class Assets {
   static const AssetGenImage logoIconTemplateImage =
       AssetGenImage('assets/logoIconTemplateImage.png');
   static const $AssetsRingtonesGen ringtones = $AssetsRingtonesGen();
+
+  /// List of all assets
+  List<dynamic> get values => [logo, logoIconTemplateImage];
 }
 
 class AssetGenImage {
@@ -96,6 +105,8 @@ class AssetGenImage {
       cacheHeight: cacheHeight,
     );
   }
+
+  ImageProvider provider() => AssetImage(_assetName);
 
   String get path => _assetName;
 

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -72,6 +74,23 @@ class _AppState extends State<App> {
                 routeInformationProvider: _router.routeInformationProvider,
                 routeInformationParser: _router.routeInformationParser,
                 routerDelegate: _router.routerDelegate,
+                builder: (context, child) => MultiBlocListener(
+                  listeners: [
+                    BlocListener<NotificationsBloc, NotificationsState>(
+                      listener: (context, state) {
+                        final lastNotification = state.lastNotification;
+                        if (lastNotification != null) {
+                          context.showErrorSnackBar(
+                            lastNotification.l10n(context),
+                            action: lastNotification.action(context),
+                          );
+                          context.read<NotificationsBloc>().add(const NotificationsCleared());
+                        }
+                      },
+                    ),
+                  ],
+                  child: child!, // TODO check this !
+                ),
               );
             },
           ),
@@ -117,28 +136,11 @@ class _AppState extends State<App> {
       ),
     ],
     redirect: _redirect,
-    refreshListenable: GoRouterRefreshStream(appBloc.stream),
+    refreshListenable: GoRouterRefreshBloc(appBloc),
     initialLocation: '/main',
-    navigatorBuilder: (context, state, child) => MultiBlocListener(
-      listeners: [
-        BlocListener<NotificationsBloc, NotificationsState>(
-          listener: (context, state) {
-            final lastNotification = state.lastNotification;
-            if (lastNotification != null) {
-              context.showErrorSnackBar(
-                lastNotification.l10n(context),
-                action: lastNotification.action(context),
-              );
-              context.read<NotificationsBloc>().add(const NotificationsCleared());
-            }
-          },
-        ),
-      ],
-      child: child,
-    ),
   );
 
-  String? _redirect(GoRouterState state) {
+  String? _redirect(BuildContext context, GoRouterState state) {
     final coreUrl = appBloc.state.coreUrl;
     final token = appBloc.state.token;
     final webRegistrationInitialUrl = appBloc.state.webRegistrationInitialUrl;
@@ -157,5 +159,22 @@ class _AppState extends State<App> {
     }
 
     return null;
+  }
+}
+
+class GoRouterRefreshBloc extends ChangeNotifier {
+  GoRouterRefreshBloc(BlocBase<dynamic> bloc) {
+    notifyListeners();
+    _subscription = bloc.stream.asBroadcastStream().listen(
+          (dynamic _) => notifyListeners(),
+        );
+  }
+
+  late final StreamSubscription<dynamic> _subscription;
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
   }
 }

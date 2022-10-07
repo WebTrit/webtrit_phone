@@ -10,7 +10,7 @@ class SecureStorage {
   static Future<void> init() async {
     const storage = FlutterSecureStorage(
       iOptions: IOSOptions(
-        accessibility: IOSAccessibility.first_unlock,
+        accessibility: KeychainAccessibility.first_unlock,
       ),
     );
     final cache = await storage.readAll();
