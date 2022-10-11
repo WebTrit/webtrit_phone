@@ -9,16 +9,16 @@ import './login_otp_verify_tab.dart';
 
 import '../login.dart';
 
-class LockScaffold extends StatefulWidget {
-  const LockScaffold({
+class LockTabs extends StatefulWidget {
+  const LockTabs({
     Key? key,
   }) : super(key: key);
 
   @override
-  LockScaffoldState createState() => LockScaffoldState();
+  State<LockTabs> createState() => _LockTabsState();
 }
 
-class LockScaffoldState extends State<LockScaffold> with SingleTickerProviderStateMixin {
+class _LockTabsState extends State<LockTabs> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -40,17 +40,15 @@ class LockScaffoldState extends State<LockScaffold> with SingleTickerProviderSta
       listener: (context, state) {
         _tabController.animateTo(state.tabIndex);
       },
-      child: Scaffold(
-        body: TabBarView(
-          controller: _tabController,
-          physics: const NeverScrollableScrollPhysics(),
-          children: const [
-            LoginModeSelectTab(),
-            LoginCoreUrlAssignTab(),
-            LoginOtpRequestTab(),
-            LoginOtpVerifyTab(),
-          ],
-        ),
+      child: TabBarView(
+        controller: _tabController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: const [
+          LoginModeSelectTab(),
+          LoginCoreUrlAssignTab(),
+          LoginOtpRequestTab(),
+          LoginOtpVerifyTab(),
+        ],
       ),
     );
   }

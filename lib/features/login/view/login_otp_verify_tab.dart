@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -47,101 +48,105 @@ class LoginOtpVerifyTab extends StatelessWidget {
             _onOtpVerifyBack(context);
             return false;
           },
-          child: Column(
-            children: [
-              AppBar(
-                title: Text(context.l10n.login_AppBarTitle_otpVerify),
-                leading: ExtBackButton(
-                  disabled: !state.status.isInput,
-                ),
-                backgroundColor: Colors.transparent,
+          child: LoginScaffold(
+            appBar: AppBar(
+              title: Text(context.l10n.login_AppBarTitle_otpVerify),
+              leading: ExtBackButton(
+                disabled: !state.status.isInput,
               ),
-              const OnboardingLogo(),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Linkify(
-                        text: state.demo
-                            ? context.l10n.login_Text_otpVerifySentToEmail(state.emailInput.value)
-                            : context.l10n.login_Text_otpVerifySentToEmailAssignedWithPhone(state.phoneInput.value),
-                        style: themeData.textTheme.bodyMedium,
-                        linkStyle: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: kInset / 2),
-                      TextFormField(
-                        enabled: state.status.isInput,
-                        initialValue: state.codeInput.value,
-                        decoration: InputDecoration(
-                          labelText: context.l10n.login_TextFieldLabelText_otpVerifyCode,
-                          helperText: '', // reserve space for validator message
-                          errorText: state.codeInput.errorL10n(context),
-                          errorMaxLines: 3,
-                        ),
-                        keyboardType: TextInputType.number,
-                        autofillHints: const [
-                          AutofillHints.oneTimeCode,
-                          AutofillHints.password,
-                        ],
-                        onChanged: (value) => context.read<LoginCubit>().loginOptVerifyCodeInputChanged(value),
-                        onFieldSubmitted: !state.codeInput.valid ? null : (_) => _onOtpVerifySubmitted(context),
-                      ),
-                      const SizedBox(height: kInset / 8),
-                      Linkify(
-                        text: context.l10n.login_Text_otpVerifyCheckSpam,
-                        style: themeData.textTheme.bodyMedium,
-                        linkStyle: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const Spacer(),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          CountDownBuilder(
-                            key: ObjectKey(state.otpId),
-                            interval: const Duration(seconds: 30),
-                            builder: (context, seconds) {
-                              if (seconds == 0) {
-                                return OutlinedButton(
-                                  onPressed: !state.status.isInput ? null : () => _onOtpVerifyRepeat(context),
-                                  style: outlinedButtonStyles?.neutral,
-                                  child: Text(context.l10n.login_Button_otpVerifyRepeat),
-                                );
-                              } else {
-                                return OutlinedButton(
-                                  onPressed: null,
-                                  style: outlinedButtonStyles?.neutral,
-                                  child: Text(context.l10n.login_Button_otpVerifyRepeatInterval(seconds)),
-                                );
-                              }
-                            },
+              backgroundColor: Colors.transparent,
+              systemOverlayStyle: SystemUiOverlayStyle.dark,
+            ),
+            body: Column(
+              children: [
+                const OnboardingLogo(),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Linkify(
+                          text: state.demo
+                              ? context.l10n.login_Text_otpVerifySentToEmail(state.emailInput.value)
+                              : context.l10n.login_Text_otpVerifySentToEmailAssignedWithPhone(state.phoneInput.value),
+                          style: themeData.textTheme.bodyMedium,
+                          linkStyle: const TextStyle(
+                            fontWeight: FontWeight.bold,
                           ),
-                          const SizedBox(height: kInset / 4),
-                          ElevatedButton(
-                            onPressed: !state.status.isInput || !state.codeInput.valid
-                                ? null
-                                : () => _onOtpVerifySubmitted(context),
-                            style: elevatedButtonStyles?.primary,
-                            child: state.status.isInput
-                                ? Text(context.l10n.login_Button_otpVerifyProceed)
-                                : SizedCircularProgressIndicator(
-                                    size: 16,
-                                    strokeWidth: 2,
-                                    color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
-                                  ),
+                        ),
+                        const SizedBox(height: kInset / 2),
+                        TextFormField(
+                          enabled: state.status.isInput,
+                          initialValue: state.codeInput.value,
+                          decoration: InputDecoration(
+                            labelText: context.l10n.login_TextFieldLabelText_otpVerifyCode,
+                            helperText: '', // reserve space for validator message
+                            errorText: state.codeInput.errorL10n(context),
+                            errorMaxLines: 3,
                           ),
-                        ],
-                      ),
-                    ],
+                          keyboardType: TextInputType.number,
+                          autofillHints: const [
+                            AutofillHints.oneTimeCode,
+                            AutofillHints.password,
+                          ],
+                          onChanged: (value) => context.read<LoginCubit>().loginOptVerifyCodeInputChanged(value),
+                          onFieldSubmitted: !state.codeInput.valid ? null : (_) => _onOtpVerifySubmitted(context),
+                        ),
+                        const SizedBox(height: kInset / 8),
+                        Linkify(
+                          text: context.l10n.login_Text_otpVerifyCheckSpam,
+                          style: themeData.textTheme.bodyMedium,
+                          linkStyle: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const Spacer(),
+                        const SizedBox(height: kInset),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            CountDownBuilder(
+                              key: ObjectKey(state.otpId),
+                              interval: const Duration(seconds: 30),
+                              builder: (context, seconds) {
+                                if (seconds == 0) {
+                                  return OutlinedButton(
+                                    onPressed: !state.status.isInput ? null : () => _onOtpVerifyRepeat(context),
+                                    style: outlinedButtonStyles?.neutral,
+                                    child: Text(context.l10n.login_Button_otpVerifyRepeat),
+                                  );
+                                } else {
+                                  return OutlinedButton(
+                                    onPressed: null,
+                                    style: outlinedButtonStyles?.neutral,
+                                    child: Text(context.l10n.login_Button_otpVerifyRepeatInterval(seconds)),
+                                  );
+                                }
+                              },
+                            ),
+                            const SizedBox(height: kInset / 4),
+                            ElevatedButton(
+                              onPressed: !state.status.isInput || !state.codeInput.valid
+                                  ? null
+                                  : () => _onOtpVerifySubmitted(context),
+                              style: elevatedButtonStyles?.primary,
+                              child: state.status.isInput
+                                  ? Text(context.l10n.login_Button_otpVerifyProceed)
+                                  : SizedCircularProgressIndicator(
+                                      size: 16,
+                                      strokeWidth: 2,
+                                      color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
+                                    ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },

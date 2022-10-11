@@ -6,9 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/consts.dart';
 
-import './login_scaffold.dart';
-
 import '../login.dart';
+import './login_tabs.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -21,7 +20,7 @@ class LoginScreen extends StatelessWidget {
       create: (context) => LoginCubit(
         httpClient: httpClient,
       ),
-      child: const LockScaffold(),
+      child: const LockTabs(),
     );
   }
 }

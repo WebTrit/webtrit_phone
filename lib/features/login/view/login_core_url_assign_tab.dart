@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -41,74 +42,79 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
             _onCoreUrlAssignBack(context);
             return false;
           },
-          child: Column(
-            children: [
-              AppBar(
-                title: Text(context.l10n.login_AppBarTitle_coreUrlAssign),
-                leading: ExtBackButton(
-                  disabled: !state.status.isInput,
-                ),
-                backgroundColor: Colors.transparent,
+          child: LoginScaffold(
+            appBar: AppBar(
+              title: Text(context.l10n.login_AppBarTitle_coreUrlAssign),
+              leading: ExtBackButton(
+                disabled: !state.status.isInput,
               ),
-              const OnboardingLogo(),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Linkify(
-                        text: context.l10n.login_Text_coreUrlAssignPreDescription,
-                        onOpen: (link) => context.read<LoginCubit>().launchLinkableElement(link),
-                        style: themeData.textTheme.bodyMedium,
-                        linkStyle: TextStyle(
-                          color: themeData.colorScheme.primary,
-                          fontWeight: FontWeight.bold,
+              backgroundColor: Colors.transparent,
+              systemOverlayStyle: SystemUiOverlayStyle.dark,
+            ),
+            body: Column(
+              children: [
+                const OnboardingLogo(),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Linkify(
+                          text: context.l10n.login_Text_coreUrlAssignPreDescription,
+                          onOpen: (link) => context.read<LoginCubit>().launchLinkableElement(link),
+                          style: themeData.textTheme.bodyMedium,
+                          linkStyle: TextStyle(
+                            color: themeData.colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: kInset / 2),
-                      TextFormField(
-                        enabled: state.status.isInput,
-                        initialValue: state.coreUrlInput.value,
-                        decoration: InputDecoration(
-                          labelText: context.l10n.login_TextFieldLabelText_coreUrlAssign,
-                          helperText: '', // reserve space for validator message
-                          errorText: state.coreUrlInput.errorL10n(context),
-                          errorMaxLines: 3,
+                        const SizedBox(height: kInset / 2),
+                        TextFormField(
+                          enabled: state.status.isInput,
+                          initialValue: state.coreUrlInput.value,
+                          decoration: InputDecoration(
+                            labelText: context.l10n.login_TextFieldLabelText_coreUrlAssign,
+                            helperText: '', // reserve space for validator message
+                            errorText: state.coreUrlInput.errorL10n(context),
+                            errorMaxLines: 3,
+                          ),
+                          keyboardType: TextInputType.url,
+                          onChanged: (value) => context.read<LoginCubit>().loginCoreUrlAssignCoreUrlInputChanged(value),
+                          onFieldSubmitted:
+                              !state.coreUrlInput.valid ? null : (_) => _onCoreUrlAssignSubmitted(context),
                         ),
-                        keyboardType: TextInputType.url,
-                        onChanged: (value) => context.read<LoginCubit>().loginCoreUrlAssignCoreUrlInputChanged(value),
-                        onFieldSubmitted: !state.coreUrlInput.valid ? null : (_) => _onCoreUrlAssignSubmitted(context),
-                      ),
-                      const SizedBox(height: kInset / 8),
-                      Linkify(
-                        text: context.l10n.login_Text_coreUrlAssignPostDescription,
-                        onOpen: (link) => context.read<LoginCubit>().launchLinkableElement(link),
-                        style: themeData.textTheme.bodyMedium,
-                        linkStyle: TextStyle(
-                          color: themeData.colorScheme.primary,
-                          fontWeight: FontWeight.bold,
+                        const SizedBox(height: kInset / 8),
+                        Linkify(
+                          text: context.l10n.login_Text_coreUrlAssignPostDescription,
+                          onOpen: (link) => context.read<LoginCubit>().launchLinkableElement(link),
+                          style: themeData.textTheme.bodyMedium,
+                          linkStyle: TextStyle(
+                            color: themeData.colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const Spacer(),
-                      ElevatedButton(
-                        onPressed: !state.status.isInput || !state.coreUrlInput.valid
-                            ? null
-                            : () => _onCoreUrlAssignSubmitted(context),
-                        style: elevatedButtonStyles?.primary,
-                        child: state.status.isInput
-                            ? Text(context.l10n.login_Button_coreUrlAssignProceed)
-                            : SizedCircularProgressIndicator(
-                                size: 16,
-                                strokeWidth: 2,
-                                color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
-                              ),
-                      ),
-                    ],
+                        const Spacer(),
+                        const SizedBox(height: kInset),
+                        ElevatedButton(
+                          onPressed: !state.status.isInput || !state.coreUrlInput.valid
+                              ? null
+                              : () => _onCoreUrlAssignSubmitted(context),
+                          style: elevatedButtonStyles?.primary,
+                          child: state.status.isInput
+                              ? Text(context.l10n.login_Button_coreUrlAssignProceed)
+                              : SizedCircularProgressIndicator(
+                                  size: 16,
+                                  strokeWidth: 2,
+                                  color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
+                                ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },

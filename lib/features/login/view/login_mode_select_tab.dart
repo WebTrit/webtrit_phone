@@ -35,73 +35,77 @@ class LoginModeSelectTab extends StatelessWidget {
       },
       builder: (context, state) {
         final isDemoModeEnabled = context.read<LoginCubit>().isDemoModeEnabled;
-        return Container(
-          decoration: BoxDecoration(
-            gradient: gradients?.tab,
+        return Scaffold(
+          extendBodyBehindAppBar: true,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            actions: isDemoModeEnabled
+                ? [
+                    IconButton(
+                      icon: Icon(
+                        Icons.link,
+                        // color set here because of https://github.com/flutter/flutter/issues/110878
+                        color: themeData.colorScheme.onPrimary,
+                      ),
+                      tooltip: context.l10n.login_ButtonTooltip_signInToYourInstance,
+                      onPressed: !state.status.isInput
+                          ? null
+                          : () => context.read<LoginCubit>().loginModeSelectSubmitter(false),
+                    ),
+                  ]
+                : null,
           ),
-          child: Column(
-            children: [
-              AppBar(
-                backgroundColor: Colors.transparent,
-                actions: isDemoModeEnabled
-                    ? [
-                        IconButton(
-                          icon: Icon(
-                            Icons.link,
-                            color: themeData.colorScheme.onPrimary,
+          body: Container(
+            decoration: BoxDecoration(
+              gradient: gradients?.tab,
+            ),
+            child: Column(
+              children: [
+                OnboardingLogo(
+                  color: themeData.colorScheme.onPrimary,
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const OnboardingPicture(),
+                        const Spacer(),
+                        if (isDemoModeEnabled)
+                          ElevatedButton(
+                            onPressed: !state.status.isInput
+                                ? null
+                                : () => context.read<LoginCubit>().loginModeSelectSubmitter(true),
+                            style: elevatedButtonStyles?.primaryOnDark,
+                            child: state.status.isInput
+                                ? Text(context.l10n.login_Button_signUpToDemoInstance)
+                                : SizedCircularProgressIndicator(
+                                    size: 16,
+                                    strokeWidth: 2,
+                                    color: elevatedButtonStyles?.primaryOnDark?.foregroundColor?.resolve({}),
+                                  ),
+                          )
+                        else
+                          ElevatedButton(
+                            onPressed: !state.status.isInput
+                                ? null
+                                : () => context.read<LoginCubit>().loginModeSelectSubmitter(false),
+                            style: elevatedButtonStyles?.primary,
+                            child: state.status.isInput
+                                ? Text(context.l10n.login_Button_signIn)
+                                : SizedCircularProgressIndicator(
+                                    size: 16,
+                                    strokeWidth: 2,
+                                    color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
+                                  ),
                           ),
-                          tooltip: context.l10n.login_ButtonTooltip_signInToYourInstance,
-                          onPressed: !state.status.isInput
-                              ? null
-                              : () => context.read<LoginCubit>().loginModeSelectSubmitter(false),
-                        ),
-                      ]
-                    : null,
-              ),
-              OnboardingLogo(
-                color: themeData.colorScheme.onPrimary,
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const OnboardingPicture(),
-                      const Spacer(),
-                      if (isDemoModeEnabled)
-                        ElevatedButton(
-                          onPressed: !state.status.isInput
-                              ? null
-                              : () => context.read<LoginCubit>().loginModeSelectSubmitter(true),
-                          style: elevatedButtonStyles?.primaryOnDark,
-                          child: state.status.isInput
-                              ? Text(context.l10n.login_Button_signUpToDemoInstance)
-                              : SizedCircularProgressIndicator(
-                                  size: 16,
-                                  strokeWidth: 2,
-                                  color: elevatedButtonStyles?.primaryOnDark?.foregroundColor?.resolve({}),
-                                ),
-                        )
-                      else
-                        ElevatedButton(
-                          onPressed: !state.status.isInput
-                              ? null
-                              : () => context.read<LoginCubit>().loginModeSelectSubmitter(false),
-                          style: elevatedButtonStyles?.primary,
-                          child: state.status.isInput
-                              ? Text(context.l10n.login_Button_signIn)
-                              : SizedCircularProgressIndicator(
-                                  size: 16,
-                                  strokeWidth: 2,
-                                  color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
-                                ),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
