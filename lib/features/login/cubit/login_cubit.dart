@@ -169,15 +169,17 @@ class LoginCubit extends Cubit<LoginState> {
       status: LoginStatus.processing,
     ));
     try {
-      late final String otpId;
+      late final SessionOtpRequestResult otpRequestResult;
       if (state.demo) {
-        otpId = await _sessionOtpRequestDemo(state.coreUrl!, state.emailInput.value, customHttpClient: httpClient);
+        otpRequestResult =
+            await _sessionOtpRequestDemo(state.coreUrl!, state.emailInput.value, customHttpClient: httpClient);
       } else {
-        otpId = await _sessionOtpRequest(state.coreUrl!, state.phoneInput.value, customHttpClient: httpClient);
+        otpRequestResult =
+            await _sessionOtpRequest(state.coreUrl!, state.phoneInput.value, customHttpClient: httpClient);
       }
       emit(state.copyWith(
         status: LoginStatus.ok,
-        otpId: otpId,
+        otpId: otpRequestResult.otpId,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -255,15 +257,17 @@ class LoginCubit extends Cubit<LoginState> {
       status: LoginStatus.processing,
     ));
     try {
-      late final String otpId;
+      late final SessionOtpRequestResult otpRequestResult;
       if (state.demo) {
-        otpId = await _sessionOtpRequestDemo(state.coreUrl!, state.emailInput.value, customHttpClient: httpClient);
+        otpRequestResult =
+            await _sessionOtpRequestDemo(state.coreUrl!, state.emailInput.value, customHttpClient: httpClient);
       } else {
-        otpId = await _sessionOtpRequest(state.coreUrl!, state.phoneInput.value, customHttpClient: httpClient);
+        otpRequestResult =
+            await _sessionOtpRequest(state.coreUrl!, state.phoneInput.value, customHttpClient: httpClient);
       }
       emit(state.copyWith(
         status: LoginStatus.input,
-        otpId: otpId,
+        otpId: otpRequestResult.otpId,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -295,7 +299,7 @@ Future<void> _verifyCoreVersion(
   }
 }
 
-Future<String> _sessionOtpRequestDemo(
+Future<SessionOtpRequestResult> _sessionOtpRequestDemo(
   String coreUrl,
   String email, {
   HttpClient? customHttpClient,
@@ -306,7 +310,7 @@ Future<String> _sessionOtpRequestDemo(
   return await webtritApiClient.sessionOtpRequestDemo(type, identifier, email);
 }
 
-Future<String> _sessionOtpRequest(
+Future<SessionOtpRequestResult> _sessionOtpRequest(
   String coreUrl,
   String phone, {
   HttpClient? customHttpClient,

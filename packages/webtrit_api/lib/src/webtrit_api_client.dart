@@ -100,7 +100,7 @@ class WebtritApiClient {
     return response;
   }
 
-  Future<String> sessionOtpRequestDemo(AppType type, String identifier, String email) async {
+  Future<SessionOtpRequestResult> sessionOtpRequestDemo(AppType type, String identifier, String email) async {
     final url = baseUrl.replace(
       pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['session', 'otp-request-demo'],
     );
@@ -115,10 +115,10 @@ class WebtritApiClient {
 
     final response = SessionOtpRequestDemoResponse.fromJson(responseJson);
 
-    return response.otpId;
+    return response;
   }
 
-  Future<String> sessionOtpRequest(AppType type, String identifier, String phone) async {
+  Future<SessionOtpRequestResult> sessionOtpRequest(AppType type, String identifier, String phone) async {
     final url = baseUrl.replace(
       pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['session', 'otp-request'],
     );
@@ -133,7 +133,7 @@ class WebtritApiClient {
 
     final response = SessionOtpRequestResponse.fromJson(responseJson);
 
-    return response.otpId;
+    return response;
   }
 
   Future<String> sessionOtpVerify(String otpId, String code) async {
