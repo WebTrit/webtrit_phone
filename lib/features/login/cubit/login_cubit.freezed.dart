@@ -22,6 +22,9 @@ mixin _$LoginState {
   bool get demo => throw _privateConstructorUsedError;
   String? get coreUrl => throw _privateConstructorUsedError;
   String? get otpId => throw _privateConstructorUsedError;
+  OtpNotificationType? get otpNotificationType =>
+      throw _privateConstructorUsedError;
+  String? get otpFromEmail => throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
   UrlInput get coreUrlInput => throw _privateConstructorUsedError;
   EmailInput get emailInput => throw _privateConstructorUsedError;
@@ -45,6 +48,8 @@ abstract class $LoginStateCopyWith<$Res> {
       bool demo,
       String? coreUrl,
       String? otpId,
+      OtpNotificationType? otpNotificationType,
+      String? otpFromEmail,
       String? token,
       UrlInput coreUrlInput,
       EmailInput emailInput,
@@ -68,6 +73,8 @@ class _$LoginStateCopyWithImpl<$Res> implements $LoginStateCopyWith<$Res> {
     Object? demo = freezed,
     Object? coreUrl = freezed,
     Object? otpId = freezed,
+    Object? otpNotificationType = freezed,
+    Object? otpFromEmail = freezed,
     Object? token = freezed,
     Object? coreUrlInput = freezed,
     Object? emailInput = freezed,
@@ -95,6 +102,14 @@ class _$LoginStateCopyWithImpl<$Res> implements $LoginStateCopyWith<$Res> {
       otpId: otpId == freezed
           ? _value.otpId
           : otpId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      otpNotificationType: otpNotificationType == freezed
+          ? _value.otpNotificationType
+          : otpNotificationType // ignore: cast_nullable_to_non_nullable
+              as OtpNotificationType?,
+      otpFromEmail: otpFromEmail == freezed
+          ? _value.otpFromEmail
+          : otpFromEmail // ignore: cast_nullable_to_non_nullable
               as String?,
       token: token == freezed
           ? _value.token
@@ -134,6 +149,8 @@ abstract class _$$_LoginStateCopyWith<$Res>
       bool demo,
       String? coreUrl,
       String? otpId,
+      OtpNotificationType? otpNotificationType,
+      String? otpFromEmail,
       String? token,
       UrlInput coreUrlInput,
       EmailInput emailInput,
@@ -159,6 +176,8 @@ class __$$_LoginStateCopyWithImpl<$Res> extends _$LoginStateCopyWithImpl<$Res>
     Object? demo = freezed,
     Object? coreUrl = freezed,
     Object? otpId = freezed,
+    Object? otpNotificationType = freezed,
+    Object? otpFromEmail = freezed,
     Object? token = freezed,
     Object? coreUrlInput = freezed,
     Object? emailInput = freezed,
@@ -186,6 +205,14 @@ class __$$_LoginStateCopyWithImpl<$Res> extends _$LoginStateCopyWithImpl<$Res>
       otpId: otpId == freezed
           ? _value.otpId
           : otpId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      otpNotificationType: otpNotificationType == freezed
+          ? _value.otpNotificationType
+          : otpNotificationType // ignore: cast_nullable_to_non_nullable
+              as OtpNotificationType?,
+      otpFromEmail: otpFromEmail == freezed
+          ? _value.otpFromEmail
+          : otpFromEmail // ignore: cast_nullable_to_non_nullable
               as String?,
       token: token == freezed
           ? _value.token
@@ -221,6 +248,8 @@ class _$_LoginState implements _LoginState {
       this.demo = false,
       this.coreUrl,
       this.otpId,
+      this.otpNotificationType,
+      this.otpFromEmail,
       this.token,
       this.coreUrlInput = const UrlInput.pure(),
       this.emailInput = const EmailInput.pure(),
@@ -243,6 +272,10 @@ class _$_LoginState implements _LoginState {
   @override
   final String? otpId;
   @override
+  final OtpNotificationType? otpNotificationType;
+  @override
+  final String? otpFromEmail;
+  @override
   final String? token;
   @override
   @JsonKey()
@@ -259,7 +292,7 @@ class _$_LoginState implements _LoginState {
 
   @override
   String toString() {
-    return 'LoginState(tabIndex: $tabIndex, status: $status, error: $error, demo: $demo, coreUrl: $coreUrl, otpId: $otpId, token: $token, coreUrlInput: $coreUrlInput, emailInput: $emailInput, phoneInput: $phoneInput, codeInput: $codeInput)';
+    return 'LoginState(tabIndex: $tabIndex, status: $status, error: $error, demo: $demo, coreUrl: $coreUrl, otpId: $otpId, otpNotificationType: $otpNotificationType, otpFromEmail: $otpFromEmail, token: $token, coreUrlInput: $coreUrlInput, emailInput: $emailInput, phoneInput: $phoneInput, codeInput: $codeInput)';
   }
 
   @override
@@ -273,6 +306,10 @@ class _$_LoginState implements _LoginState {
             const DeepCollectionEquality().equals(other.demo, demo) &&
             const DeepCollectionEquality().equals(other.coreUrl, coreUrl) &&
             const DeepCollectionEquality().equals(other.otpId, otpId) &&
+            const DeepCollectionEquality()
+                .equals(other.otpNotificationType, otpNotificationType) &&
+            const DeepCollectionEquality()
+                .equals(other.otpFromEmail, otpFromEmail) &&
             const DeepCollectionEquality().equals(other.token, token) &&
             const DeepCollectionEquality()
                 .equals(other.coreUrlInput, coreUrlInput) &&
@@ -292,6 +329,8 @@ class _$_LoginState implements _LoginState {
       const DeepCollectionEquality().hash(demo),
       const DeepCollectionEquality().hash(coreUrl),
       const DeepCollectionEquality().hash(otpId),
+      const DeepCollectionEquality().hash(otpNotificationType),
+      const DeepCollectionEquality().hash(otpFromEmail),
       const DeepCollectionEquality().hash(token),
       const DeepCollectionEquality().hash(coreUrlInput),
       const DeepCollectionEquality().hash(emailInput),
@@ -312,6 +351,8 @@ abstract class _LoginState implements LoginState {
       final bool demo,
       final String? coreUrl,
       final String? otpId,
+      final OtpNotificationType? otpNotificationType,
+      final String? otpFromEmail,
       final String? token,
       final UrlInput coreUrlInput,
       final EmailInput emailInput,
@@ -330,6 +371,10 @@ abstract class _LoginState implements LoginState {
   String? get coreUrl;
   @override
   String? get otpId;
+  @override
+  OtpNotificationType? get otpNotificationType;
+  @override
+  String? get otpFromEmail;
   @override
   String? get token;
   @override

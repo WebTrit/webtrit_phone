@@ -26,6 +26,8 @@ class LoginState with _$LoginState {
     @Default(false) bool demo,
     String? coreUrl,
     String? otpId,
+    OtpNotificationType? otpNotificationType,
+    String? otpFromEmail,
     String? token,
     @Default(UrlInput.pure()) UrlInput coreUrlInput,
     @Default(EmailInput.pure()) EmailInput emailInput,

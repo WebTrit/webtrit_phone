@@ -180,6 +180,8 @@ class LoginCubit extends Cubit<LoginState> {
       emit(state.copyWith(
         status: LoginStatus.ok,
         otpId: otpRequestResult.otpId,
+        otpNotificationType: otpRequestResult.notificationType,
+        otpFromEmail: otpRequestResult.fromEmail,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -244,6 +246,9 @@ class LoginCubit extends Cubit<LoginState> {
 
     emit(state.copyWith(
       status: LoginStatus.back,
+      otpId: null,
+      otpNotificationType: null,
+      otpFromEmail: null,
       codeInput: const CodeInput.pure(),
     ));
   }
@@ -268,6 +273,8 @@ class LoginCubit extends Cubit<LoginState> {
       emit(state.copyWith(
         status: LoginStatus.input,
         otpId: otpRequestResult.otpId,
+        otpNotificationType: otpRequestResult.notificationType,
+        otpFromEmail: otpRequestResult.fromEmail,
       ));
     } catch (e) {
       emit(state.copyWith(

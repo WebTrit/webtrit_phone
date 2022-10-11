@@ -43,6 +43,8 @@ class LoginOtpVerifyTab extends StatelessWidget {
         }
       },
       builder: (context, state) {
+        final isOtpNotificationEmail = state.otpNotificationType?.isEmail ?? false;
+        final otpFromEmail = state.otpFromEmail;
         return WillPopScope(
           onWillPop: () async {
             _onOtpVerifyBack(context);
@@ -94,13 +96,16 @@ class LoginOtpVerifyTab extends StatelessWidget {
                           onFieldSubmitted: !state.codeInput.valid ? null : (_) => _onOtpVerifySubmitted(context),
                         ),
                         const SizedBox(height: kInset / 8),
-                        Linkify(
-                          text: context.l10n.login_Text_otpVerifyCheckSpam,
-                          style: themeData.textTheme.bodyMedium,
-                          linkStyle: const TextStyle(
-                            fontWeight: FontWeight.bold,
+                        if (isOtpNotificationEmail)
+                          Linkify(
+                            text: otpFromEmail == null
+                                ? context.l10n.login_Text_otpVerifyCheckSpamGeneral
+                                : context.l10n.login_Text_otpVerifyCheckSpamFrom(otpFromEmail),
+                            style: themeData.textTheme.bodyMedium,
+                            linkStyle: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
                         const Spacer(),
                         const SizedBox(height: kInset),
                         Column(
