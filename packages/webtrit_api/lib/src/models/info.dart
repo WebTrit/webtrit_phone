@@ -5,7 +5,9 @@ import 'converters/converters.dart';
 
 part 'info.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(
+  fieldRename: FieldRename.snake,
+)
 class Info {
   const Info({
     required this.core,
@@ -18,7 +20,9 @@ class Info {
   final CoreInfo core;
 }
 
-@JsonSerializable()
+@JsonSerializable(
+  fieldRename: FieldRename.snake,
+)
 class CoreInfo {
   const CoreInfo({
     required this.version,

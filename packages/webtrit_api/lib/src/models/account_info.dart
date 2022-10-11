@@ -5,7 +5,10 @@ import 'billing_model.dart';
 
 part 'account_info.g.dart';
 
-@JsonSerializable(createToJson: false)
+@JsonSerializable(
+  createToJson: false,
+  fieldRename: FieldRename.snake,
+)
 class AccountInfoResponse {
   const AccountInfoResponse({
     required this.data,
@@ -16,7 +19,9 @@ class AccountInfoResponse {
   final AccountInfo data;
 }
 
-@JsonSerializable()
+@JsonSerializable(
+  fieldRename: FieldRename.snake,
+)
 class AccountInfo {
   const AccountInfo({
     required this.login,
@@ -39,21 +44,16 @@ class AccountInfo {
   Map<String, dynamic> toJson() => _$AccountInfoToJson(this);
 
   final String login;
-  @JsonKey(name: 'billing_model')
   final BillingModel billingModel;
-  @JsonKey(name: 'balance_control_type')
   final BalanceControlType? balanceControlType;
   final double balance;
-  @JsonKey(name: 'credit_limit')
   final double? creditLimit;
   final String currency;
-  @JsonKey(name: 'extension_name')
   final String? extensionName;
   final String? firstname;
   final String? lastname;
   final String? email;
   final String? mobile;
-  @JsonKey(name: 'company_name')
   final String? companyName;
   final String? ext;
 }

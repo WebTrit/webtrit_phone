@@ -16,7 +16,9 @@ class AppSmartContactsResponse {
   final List<AppSmartContact> data;
 }
 
-@JsonSerializable()
+@JsonSerializable(
+  fieldRename: FieldRename.snake,
+)
 class AppSmartContact {
   const AppSmartContact({
     required this.identifier,

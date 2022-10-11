@@ -4,7 +4,10 @@ import 'app_type.dart';
 
 part 'session_login.g.dart';
 
-@JsonSerializable(createFactory: false)
+@JsonSerializable(
+  createFactory: false,
+  fieldRename: FieldRename.snake,
+)
 class SessionLoginRequest {
   const SessionLoginRequest({
     required this.type,
@@ -21,7 +24,10 @@ class SessionLoginRequest {
   final String password;
 }
 
-@JsonSerializable(createToJson: false)
+@JsonSerializable(
+  createToJson: false,
+  fieldRename: FieldRename.snake,
+)
 class SessionLoginResponse {
   const SessionLoginResponse({
     required this.token,

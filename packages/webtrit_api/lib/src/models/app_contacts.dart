@@ -12,7 +12,9 @@ class AppCreateContactsRequest {
   final List<AppContact> data;
 }
 
-@JsonSerializable()
+@JsonSerializable(
+  fieldRename: FieldRename.snake,
+)
 class AppContact {
   const AppContact({
     required this.identifier,

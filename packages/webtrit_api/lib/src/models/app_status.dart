@@ -8,8 +8,8 @@ class AppStatusResponse {
   });
 
   factory AppStatusResponse.fromJson(Map<String, dynamic> json) => AppStatusResponse(
-    data: AppStatus.fromJson(json),
-  );
+        data: AppStatus.fromJson(json),
+      );
 
   final AppStatus data;
 }
@@ -24,7 +24,9 @@ class AppStatusUpdateRequest {
   final AppStatus data;
 }
 
-@JsonSerializable()
+@JsonSerializable(
+  fieldRename: FieldRename.snake,
+)
 class AppStatus {
   const AppStatus({
     required this.register,

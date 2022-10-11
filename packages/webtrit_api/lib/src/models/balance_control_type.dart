@@ -1,8 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
 
+@JsonEnum(
+  fieldRename: FieldRename.snake,
+)
 enum BalanceControlType {
   undefined,
-  @JsonValue('individual_credit_limit')
   individualCreditLimit,
   subordinate,
   unknown,

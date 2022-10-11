@@ -4,7 +4,10 @@ import 'push_token_type.dart';
 
 part 'app_push_tokens.g.dart';
 
-@JsonSerializable(createFactory: false)
+@JsonSerializable(
+  createFactory: false,
+  fieldRename: FieldRename.snake,
+)
 class AppCreatePushTokenRequest {
   const AppCreatePushTokenRequest({
     required this.type,

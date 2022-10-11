@@ -2,7 +2,10 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'error.g.dart';
 
-@JsonSerializable(createToJson: false)
+@JsonSerializable(
+  createToJson: false,
+  fieldRename: FieldRename.snake,
+)
 class ErrorResponse {
   const ErrorResponse({
     required this.code,
@@ -15,7 +18,10 @@ class ErrorResponse {
   final List<ErrorRefining>? refining;
 }
 
-@JsonSerializable(createToJson: false)
+@JsonSerializable(
+  createToJson: false,
+  fieldRename: FieldRename.snake,
+)
 class ErrorRefining {
   const ErrorRefining({
     required this.path,

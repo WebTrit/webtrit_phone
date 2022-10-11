@@ -9,7 +9,7 @@ part of 'session_otp_verify.dart';
 Map<String, dynamic> _$SessionOtpVerifyRequestToJson(
         SessionOtpVerifyRequest instance) =>
     <String, dynamic>{
-      'otpId': instance.otpId,
+      'otp_id': instance.otpId,
       'code': instance.code,
     };
 

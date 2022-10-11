@@ -1,8 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
 
+@JsonEnum(
+  fieldRename: FieldRename.snake,
+)
 enum BillingModel {
   debit,
-  @JsonValue('recharge_voucher')
   rechargeVoucher,
   credit,
   alias,

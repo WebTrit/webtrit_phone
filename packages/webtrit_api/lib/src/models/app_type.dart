@@ -1,5 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 
+@JsonEnum(
+  fieldRename: FieldRename.snake,
+)
 enum AppType {
   smart,
   web,
@@ -7,7 +10,6 @@ enum AppType {
   macos,
   windows,
   android,
-  @JsonValue('android_hms')
   androidHms,
   ios,
 }

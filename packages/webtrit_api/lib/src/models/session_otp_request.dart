@@ -17,7 +17,10 @@ class SessionOtpRequestResult {
   final String? fromEmail;
 }
 
-@JsonSerializable(createFactory: false)
+@JsonSerializable(
+  createFactory: false,
+  fieldRename: FieldRename.snake,
+)
 class SessionOtpRequestRequest {
   const SessionOtpRequestRequest({
     required this.type,
@@ -52,6 +55,7 @@ class SessionOtpRequestResponse extends SessionOtpRequestResult {
 
 @JsonSerializable(
   createFactory: false,
+  fieldRename: FieldRename.snake,
 )
 class SessionOtpRequestDemoRequest {
   const SessionOtpRequestDemoRequest({

@@ -2,7 +2,10 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'session_otp_verify.g.dart';
 
-@JsonSerializable(createFactory: false)
+@JsonSerializable(
+  createFactory: false,
+  fieldRename: FieldRename.snake,
+)
 class SessionOtpVerifyRequest {
   const SessionOtpVerifyRequest({
     required this.otpId,
@@ -15,7 +18,10 @@ class SessionOtpVerifyRequest {
   final String code;
 }
 
-@JsonSerializable(createToJson: false)
+@JsonSerializable(
+  createToJson: false,
+  fieldRename: FieldRename.snake,
+)
 class SessionOtpVerifyResponse {
   const SessionOtpVerifyResponse({
     required this.token,
