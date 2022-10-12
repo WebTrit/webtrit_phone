@@ -1101,13 +1101,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     for (final activeCall in state.activeCalls) {
       if (activeCall.line == _kUndefinedLine) {
         for (final line in stateHandshake.lines) {
-          if (line != null && line.callId == activeCall.callId.callId) {
+          if (line != null && line.callId == activeCall.callId.value) {
             continue activeCallsLoop;
           }
         }
       } else if (activeCall.line < stateHandshake.lines.length) {
         final line = stateHandshake.lines[activeCall.line];
-        if (line != null && line.callId == activeCall.callId.callId) {
+        if (line != null && line.callId == activeCall.callId.value) {
           continue activeCallsLoop;
         }
       }
