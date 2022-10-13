@@ -22,7 +22,7 @@ export 'proceeding_event.dart';
 export 'progress_event.dart';
 export 'registered_event.dart';
 export 'registering_event.dart';
-export 'registration_failed.dart';
+export 'registration_failed_event.dart';
 export 'resuming_event.dart';
 export 'ringing_event.dart';
 export 'session_event.dart';
