@@ -780,11 +780,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallControlEventSpeakerEnabled event,
     Emitter<CallState> emit,
   ) async {
-    await state.performOnActiveCall(event.uuid, (activeCall) {
-      final audioTrack = activeCall.localStream?.getAudioTracks()[0];
-      if (audioTrack != null) {
-        audioTrack.enableSpeakerphone(event.enabled);
-      }
+    await state.performOnActiveCall(event.uuid, (activeCall) async {
+      await Helper.setSpeakerphoneOn(event.enabled);
     });
   }
 
@@ -1321,7 +1318,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           : false,
     };
     final localStream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
-    localStream.getAudioTracks()[0].enableSpeakerphone(video);
+    await Helper.setSpeakerphoneOn(video);
 
     return localStream;
   }
