@@ -559,7 +559,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }));
 
     final peerConnection = await _createPeerConnection(event.callId.uuid);
-    await peerConnection.addStream(localStream);
+    localStream.getTracks().forEach((track) async {
+      await peerConnection.addTrack(track, localStream);
+    });
 
     final jsep = event.jsep;
     if (jsep != null) {
@@ -856,7 +858,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }));
 
     final peerConnection = await _createPeerConnection(event.uuid);
-    await peerConnection.addStream(localStream);
+    localStream.getTracks().forEach((track) async {
+      await peerConnection.addTrack(track, localStream);
+    });
 
     final localDescription = await peerConnection.createOffer({});
     // Need to initiate outgoing call before set localDescription to avoid races
