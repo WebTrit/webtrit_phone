@@ -80,6 +80,7 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
                             errorMaxLines: 3,
                           ),
                           keyboardType: TextInputType.url,
+                          autocorrect: false,
                           onChanged: (value) => context.read<LoginCubit>().loginCoreUrlAssignCoreUrlInputChanged(value),
                           onFieldSubmitted:
                               !state.coreUrlInput.valid ? null : (_) => _onCoreUrlAssignSubmitted(context),
