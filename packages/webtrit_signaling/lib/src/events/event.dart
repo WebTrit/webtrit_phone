@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import 'events.dart';
+import 'abstract_events.dart';
 
 abstract class Event extends Equatable {
   const Event();

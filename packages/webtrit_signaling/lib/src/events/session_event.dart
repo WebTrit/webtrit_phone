@@ -1,4 +1,5 @@
-import 'events.dart';
+import 'abstract_events.dart';
+import 'session/session_events.dart';
 
 abstract class SessionEvent extends Event {
   const SessionEvent({

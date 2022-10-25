@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import 'requests.dart';
+import 'abstract_requests.dart';
 
 abstract class Request extends Equatable {
   const Request();

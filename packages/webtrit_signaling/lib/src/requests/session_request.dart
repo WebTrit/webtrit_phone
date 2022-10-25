@@ -1,4 +1,4 @@
-import 'requests.dart';
+import 'abstract_requests.dart';
 
 abstract class SessionRequest extends Request {
   const SessionRequest({

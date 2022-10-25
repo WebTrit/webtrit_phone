@@ -1,4 +1,5 @@
-import 'events.dart';
+import 'abstract_events.dart';
+import 'line/line_events.dart';
 
 abstract class LineEvent extends SessionEvent {
   const LineEvent({

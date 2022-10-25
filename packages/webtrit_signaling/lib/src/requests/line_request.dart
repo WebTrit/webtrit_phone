@@ -1,4 +1,5 @@
-import 'requests.dart';
+import 'abstract_requests.dart';
+import 'line/line_requests.dart';
 
 abstract class LineRequest extends SessionRequest {
   const LineRequest({
