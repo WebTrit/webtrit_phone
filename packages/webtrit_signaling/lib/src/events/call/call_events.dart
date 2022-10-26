@@ -1,8 +1,8 @@
 export 'accepted_event.dart';
 export 'accepting_event.dart';
+export 'call_error_event.dart';
 export 'calling_event.dart';
 export 'declining_event.dart';
-export 'error_call_event.dart';
 export 'hangingup_event.dart';
 export 'hangup_event.dart';
 export 'holding_event.dart';

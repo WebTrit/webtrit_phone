@@ -11,7 +11,11 @@ abstract class Event extends Equatable {
     final event = tryFromJson(json);
     if (event == null) {
       final eventTypeValue = json[Event.typeKey];
-      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Unknown event type');
+      if (eventTypeValue == ErrorEvent.typeValue) {
+        throw ArgumentError('Incorrect error event');
+      } else {
+        throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Unknown event type');
+      }
     } else {
       return event;
     }

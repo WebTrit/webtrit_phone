@@ -17,7 +17,11 @@ abstract class SessionEvent extends Event {
     final sessionEvent = tryFromJson(json);
     if (sessionEvent == null) {
       final eventTypeValue = json[Event.typeKey];
-      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Unknown session event type');
+      if (eventTypeValue == ErrorEvent.typeValue) {
+        throw ArgumentError('Incorrect error event');
+      } else {
+        throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Unknown session event type');
+      }
     } else {
       return sessionEvent;
     }
@@ -25,7 +29,9 @@ abstract class SessionEvent extends Event {
 
   static SessionEvent? tryFromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
-    return _sessionEventFromJsonDecoders[eventTypeValue]?.call(json) ?? LineEvent.tryFromJson(json);
+    return _sessionEventFromJsonDecoders[eventTypeValue]?.call(json) ??
+        LineEvent.tryFromJson(json) ??
+        SessionErrorEvent.tryFromJson(json);
   }
 
   static final Map<String, SessionEvent Function(Map<String, dynamic>)> _sessionEventFromJsonDecoders = {

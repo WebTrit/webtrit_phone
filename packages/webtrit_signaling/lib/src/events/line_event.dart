@@ -19,7 +19,11 @@ abstract class LineEvent extends SessionEvent {
     final lineRequest = tryFromJson(json);
     if (lineRequest == null) {
       final eventTypeValue = json[Event.typeKey];
-      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Unknown line event type');
+      if (eventTypeValue == ErrorEvent.typeValue) {
+        throw ArgumentError('Incorrect error event');
+      } else {
+        throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Unknown line event type');
+      }
     } else {
       return lineRequest;
     }
@@ -27,12 +31,13 @@ abstract class LineEvent extends SessionEvent {
 
   static LineEvent? tryFromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
-    return _lineEventFromJsonDecoders[eventTypeValue]?.call(json) ?? CallEvent.tryFromJson(json);
+    return _lineEventFromJsonDecoders[eventTypeValue]?.call(json) ??
+        CallEvent.tryFromJson(json) ??
+        LineErrorEvent.tryFromJson(json);
   }
 
   static final Map<String, LineEvent Function(Map<String, dynamic>)> _lineEventFromJsonDecoders = {
     IceHangupEvent.typeValue: IceHangupEvent.fromJson,
-    ErrorLineEvent.typeValue: ErrorLineEvent.fromJson,
     IceMediaEvent.typeValue: IceMediaEvent.fromJson,
     IceSlowLinkEvent.typeValue: IceSlowLinkEvent.fromJson,
     IceTrickleEvent.typeValue: IceTrickleEvent.fromJson,
