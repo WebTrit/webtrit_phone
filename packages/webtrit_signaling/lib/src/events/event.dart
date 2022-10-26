@@ -22,9 +22,6 @@ abstract class Event extends Equatable {
   }
 
   static Event? tryFromJson(Map<String, dynamic> json) {
-    final eventTypeValue = json[Event.typeKey];
-    return _eventFromJsonDecoders[eventTypeValue]?.call(json) ?? SessionEvent.tryFromJson(json);
+    return SessionEvent.tryFromJson(json);
   }
-
-  static final Map<String, Event Function(Map<String, dynamic>)> _eventFromJsonDecoders = {};
 }

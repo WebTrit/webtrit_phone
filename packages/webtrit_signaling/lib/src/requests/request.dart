@@ -20,9 +20,6 @@ abstract class Request extends Equatable {
   }
 
   static Request? tryFromJson(Map<String, dynamic> json) {
-    final requestTypeValue = json[Request.typeKey];
-    return _requestFromJsonDecoders[requestTypeValue]?.call(json) ?? SessionRequest.tryFromJson(json);
+    return SessionRequest.tryFromJson(json);
   }
-
-  static final Map<String, Request Function(Map<String, dynamic>)> _requestFromJsonDecoders = {};
 }
