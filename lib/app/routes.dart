@@ -11,8 +11,8 @@ class AppRoute {
 class MainRoute {
   MainRoute._();
 
-  static const main = 'main';
   static const call = 'call';
+
   static const settings = 'settings';
   static const settingsAbout = 'about';
   static const settingsHelp = 'help';
