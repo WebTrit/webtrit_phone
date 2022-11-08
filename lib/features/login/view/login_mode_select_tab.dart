@@ -56,54 +56,44 @@ class LoginModeSelectTab extends StatelessWidget {
                 : null,
           ),
           body: Container(
+            padding: const EdgeInsets.fromLTRB(kInset, 0, kInset, kInset),
             decoration: BoxDecoration(
               gradient: gradients?.tab,
             ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                OnboardingLogo(
+                const Spacer(),
+                OnboardingPictureLogo(
                   color: themeData.colorScheme.onPrimary,
                 ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const OnboardingPicture(),
-                        const Spacer(),
-                        if (isDemoModeEnabled)
-                          ElevatedButton(
-                            onPressed: !state.status.isInput
-                                ? null
-                                : () => context.read<LoginCubit>().loginModeSelectSubmitter(true),
-                            style: elevatedButtonStyles?.primaryOnDark,
-                            child: state.status.isInput
-                                ? Text(context.l10n.login_Button_signUpToDemoInstance)
-                                : SizedCircularProgressIndicator(
-                                    size: 16,
-                                    strokeWidth: 2,
-                                    color: elevatedButtonStyles?.primaryOnDark?.foregroundColor?.resolve({}),
-                                  ),
-                          )
-                        else
-                          ElevatedButton(
-                            onPressed: !state.status.isInput
-                                ? null
-                                : () => context.read<LoginCubit>().loginModeSelectSubmitter(false),
-                            style: elevatedButtonStyles?.primary,
-                            child: state.status.isInput
-                                ? Text(context.l10n.login_Button_signIn)
-                                : SizedCircularProgressIndicator(
-                                    size: 16,
-                                    strokeWidth: 2,
-                                    color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
-                                  ),
+                const Spacer(),
+                if (isDemoModeEnabled)
+                  ElevatedButton(
+                    onPressed:
+                        !state.status.isInput ? null : () => context.read<LoginCubit>().loginModeSelectSubmitter(true),
+                    style: elevatedButtonStyles?.primaryOnDark,
+                    child: state.status.isInput
+                        ? Text(context.l10n.login_Button_signUpToDemoInstance)
+                        : SizedCircularProgressIndicator(
+                            size: 16,
+                            strokeWidth: 2,
+                            color: elevatedButtonStyles?.primaryOnDark?.foregroundColor?.resolve({}),
                           ),
-                      ],
-                    ),
+                  )
+                else
+                  ElevatedButton(
+                    onPressed:
+                        !state.status.isInput ? null : () => context.read<LoginCubit>().loginModeSelectSubmitter(false),
+                    style: elevatedButtonStyles?.primary,
+                    child: state.status.isInput
+                        ? Text(context.l10n.login_Button_signIn)
+                        : SizedCircularProgressIndicator(
+                            size: 16,
+                            strokeWidth: 2,
+                            color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
+                          ),
                   ),
-                ),
               ],
             ),
           ),

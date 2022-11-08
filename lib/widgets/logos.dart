@@ -5,27 +5,41 @@ import 'package:webtrit_phone/app/assets.gen.dart';
 
 class WebTritPhonePictureLogo extends StatelessWidget {
   const WebTritPhonePictureLogo({
-    Key? key,
-    this.color,
-  }) : super(key: key);
+    super.key,
+    this.logoWidth,
+    this.logoHeight,
+    this.logoFit = BoxFit.contain,
+    this.logoAlignment = Alignment.center,
+    this.dividerHeight,
+    required this.titleStyle,
+  });
 
-  final Color? color;
+  final double? logoWidth;
+  final double? logoHeight;
+  final BoxFit logoFit;
+  final AlignmentGeometry logoAlignment;
+  final double? dividerHeight;
+  final TextStyle titleStyle;
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
+    final fontSize = titleStyle.fontSize!;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Assets.logo.svg(
-          height: themeData.textTheme.headline5!.fontSize! * 2.2,
+          width: logoWidth,
+          height: logoHeight ?? (logoWidth == null ? fontSize * 2.2 : null),
+          fit: logoFit,
+          alignment: logoAlignment,
         ),
-        const SizedBox(
-          height: 8,
+        SizedBox(
+          height: dividerHeight ?? fontSize / 3,
         ),
         Text(
           EnvironmentConfig.APP_NAME,
-          style: themeData.textTheme.headline5!.copyWith(color: color),
+          style: titleStyle,
         ),
       ],
     );
@@ -33,7 +47,9 @@ class WebTritPhonePictureLogo extends StatelessWidget {
 }
 
 class WebTritPhoneTextLogo extends StatelessWidget {
-  const WebTritPhoneTextLogo({Key? key}) : super(key: key);
+  const WebTritPhoneTextLogo({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

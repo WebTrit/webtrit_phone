@@ -13,12 +13,16 @@ class OnboardingLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQueryData = MediaQuery.of(context);
+    final themeData = Theme.of(context);
+    final titleStyle = themeData.textTheme.headlineSmall!.copyWith(
+      color: color,
+    );
     return SizedBox(
       height: mediaQueryData.size.height / 4,
       child: Align(
         alignment: Alignment.bottomCenter,
         child: WebTritPhonePictureLogo(
-          color: color,
+          titleStyle: titleStyle,
         ),
       ),
     );
