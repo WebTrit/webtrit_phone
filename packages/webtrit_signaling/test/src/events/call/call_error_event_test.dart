@@ -12,7 +12,7 @@ void main() {
     final callErrorEvent = CallErrorEvent(
       transaction: 'transaction 1',
       line: 0,
-      callId: "qwerty",
+      callId: 'qwerty',
       code: 123,
       reason: 'some error message 1',
     );
@@ -26,7 +26,7 @@ void main() {
   test('$CallErrorEvent tryFromJson', () {
     final callErrorEvent = CallErrorEvent(
       line: 0,
-      callId: "qwerty",
+      callId: 'qwerty',
       code: 123,
       reason: 'some error message 1',
     );
