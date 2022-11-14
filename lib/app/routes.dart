@@ -6,6 +6,8 @@ class AppRoute {
   static const webRegistration = 'web-registration';
 
   static const main = 'main';
+
+  static const permissions = 'permissions';
 }
 
 class MainRoute {

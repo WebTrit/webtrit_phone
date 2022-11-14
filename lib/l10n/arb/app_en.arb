@@ -283,6 +283,13 @@
   "@login_RequestFailureOtpIdVerifyAttemptsExceededError": {
   },
 
+  "permission_Text_description": "To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.",
+  "@permission_Text_description": {
+  },
+  "permission_Button_request": "Continue",
+  "@permission_Button_request": {
+  },
+
   "validationBlankError": "Please enter a value",
   "@validationBlankError": {
   },

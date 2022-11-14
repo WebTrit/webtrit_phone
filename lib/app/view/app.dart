@@ -21,9 +21,11 @@ class App extends StatefulWidget {
   const App({
     Key? key,
     required this.appDatabase,
+    required this.appPermissions,
   }) : super(key: key);
 
   final AppDatabase appDatabase;
+  final AppPermissions appPermissions;
 
   @override
   State<App> createState() => _AppState();
@@ -118,6 +120,13 @@ class _AppState extends State<App> {
             path: '/web-registration',
             builder: (context, state) => WebRegistrationScreen(
               initialUrl: state.queryParams['initialUrl'] ?? '',
+            ),
+          ),
+          GoRoute(
+            name: AppRoute.permissions,
+            path: '/permissions',
+            builder: (context, state) => PermissionsScreen(
+              appPermissions: widget.appPermissions,
             ),
           ),
           ShellRoute(
@@ -247,13 +256,19 @@ class _AppState extends State<App> {
     final coreUrl = appBloc.state.coreUrl;
     final token = appBloc.state.token;
     final webRegistrationInitialUrl = appBloc.state.webRegistrationInitialUrl;
+    final appPermissionsDenied = widget.appPermissions.isDenied;
 
     final isLoginPath = state.subloc == '/login';
     final isWebRegistrationPath = state.subloc == '/web-registration';
+    final isMainPath = state.location == '/main';
 
     if (coreUrl != null && token != null) {
       if (isLoginPath || isWebRegistrationPath) {
         return '/main';
+      } else if (isMainPath) {
+        if (appPermissionsDenied) {
+          return '/permissions';
+        }
       }
     } else if (webRegistrationInitialUrl != null && !isWebRegistrationPath) {
       return '/web-registration?initialUrl=$webRegistrationInitialUrl';

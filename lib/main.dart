@@ -29,6 +29,7 @@ void main() {
           builder: (context) {
             return App(
               appDatabase: context.read<AppDatabase>(),
+              appPermissions: AppPermissions(),
             );
           },
         ),

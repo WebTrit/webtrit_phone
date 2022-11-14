@@ -8,6 +8,7 @@ export 'login/login.dart';
 export 'main/main.dart';
 export 'notifications/notifications.dart';
 export 'orientations/orientations.dart';
+export 'permissions/permissions.dart';
 export 'push_tokens/push_token.dart';
 export 'recent/recent.dart';
 export 'recents/recents.dart';
