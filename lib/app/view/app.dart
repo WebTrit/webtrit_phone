@@ -237,7 +237,7 @@ class _AppState extends State<App> {
                     pageBuilder: (context, state) => MaterialPage(
                       key: state.pageKey,
                       fullscreenDialog: true,
-                      child: RecentScreen(state.extra! as Recent),
+                      child: RecentScreen(state.extra as Recent),
                     ),
                   ),
                 ],
