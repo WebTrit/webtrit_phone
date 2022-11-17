@@ -450,6 +450,16 @@
   "@webRegistration_ErrorAcknowledgeDialogActions_retry": {
   },
 
+  "logRecordsConsole_AppBarTitle": "Log Console",
+  "@logRecordsConsole_AppBarTitle": {
+  },
+  "logRecordsConsole_Text_failure": "Ups error happened ☹️",
+  "@logRecordsConsole_Text_failure": {
+  },
+  "logRecordsConsole_Button_failureRefresh": "Refresh",
+  "@logRecordsConsole_Button_failureRefresh": {
+  },
+
   "underDevelopment": "This page is under development.",
   "@underDevelopment": {
   },

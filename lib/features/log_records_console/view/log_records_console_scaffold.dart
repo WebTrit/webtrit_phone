@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 
 class LogRecordsConsoleScaffold extends StatelessWidget {
   const LogRecordsConsoleScaffold({Key? key}) : super(key: key);
@@ -11,7 +12,7 @@ class LogRecordsConsoleScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Log Console'),
+        title: Text(context.l10n.logRecordsConsole_AppBarTitle),
         actions: [
           BlocBuilder<LogRecordsConsoleCubit, LogRecordsConsoleState>(
             builder: (context, state) {
@@ -22,8 +23,8 @@ class LogRecordsConsoleScaffold extends StatelessWidget {
                 onPressed: !state.status.isSuccess
                     ? null
                     : () async {
-                  context.read<LogRecordsConsoleCubit>().clear();
-                },
+                        context.read<LogRecordsConsoleCubit>().clear();
+                      },
               );
             },
           ),
@@ -69,10 +70,10 @@ class LogRecordsConsoleScaffold extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text('Ups error happened ☹️'),
+                    Text(context.l10n.logRecordsConsole_Text_failure),
                     OutlinedButton(
                       onPressed: () => context.read<LogRecordsConsoleCubit>().load(),
-                      child: const Text('Refresh'),
+                      child: Text(context.l10n.logRecordsConsole_Button_failureRefresh),
                     )
                   ],
                 ),
