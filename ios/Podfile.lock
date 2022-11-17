@@ -11,9 +11,16 @@ PODS:
   - Firebase/Crashlytics (10.2.0):
     - Firebase/CoreOnly
     - FirebaseCrashlytics (~> 10.2.0)
+  - Firebase/Installations (10.2.0):
+    - Firebase/CoreOnly
+    - FirebaseInstallations (~> 10.2.0)
   - Firebase/Messaging (10.2.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 10.2.0)
+  - firebase_app_installations (0.2.1-5):
+    - Firebase/Installations (= 10.2.0)
+    - firebase_core
+    - Flutter
   - firebase_core (2.3.0):
     - Firebase/CoreOnly (= 10.2.0)
     - Flutter
@@ -129,6 +136,7 @@ DEPENDENCIES:
   - audio_session (from `.symlinks/plugins/audio_session/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - device_info (from `.symlinks/plugins/device_info/ios`)
+  - firebase_app_installations (from `.symlinks/plugins/firebase_app_installations/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
@@ -171,6 +179,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/connectivity_plus/ios"
   device_info:
     :path: ".symlinks/plugins/device_info/ios"
+  firebase_app_installations:
+    :path: ".symlinks/plugins/firebase_app_installations/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_crashlytics:
@@ -213,6 +223,7 @@ SPEC CHECKSUMS:
   connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Firebase: a3ea7eba4382afd83808376edb99acdaff078dcf
+  firebase_app_installations: 7632cad7d621ea58dcf371076b54f6e3f35cdae9
   firebase_core: db1432de826785171029b7c1a26e5b22ce1dd477
   firebase_crashlytics: 70150805355d1e11e2fbbfa379fc9e776d05e5ad
   firebase_messaging: 5babce6fa9ce1e0c63a854dabba227f23dc68b1b

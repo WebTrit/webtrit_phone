@@ -313,7 +313,7 @@ Future<SessionOtpRequestResult> _sessionOtpRequestDemo(
 }) async {
   final webtritApiClient = WebtritApiClient(Uri.parse(coreUrl), customHttpClient: customHttpClient);
   final type = PlatformInfo().appType;
-  final identifier = DeviceInfo().identifierForVendor;
+  final identifier = AppInfo().identifier;
   return await webtritApiClient.sessionOtpRequestDemo(type, identifier, email);
 }
 
@@ -324,7 +324,7 @@ Future<SessionOtpRequestResult> _sessionOtpRequest(
 }) async {
   final webtritApiClient = WebtritApiClient(Uri.parse(coreUrl), customHttpClient: customHttpClient);
   final type = PlatformInfo().appType;
-  final identifier = DeviceInfo().identifierForVendor;
+  final identifier = AppInfo().identifier;
   return await webtritApiClient.sessionOtpRequest(type, identifier, phone);
 }
 

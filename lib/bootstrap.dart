@@ -34,6 +34,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
         FirebaseCrashlytics.instance.recordFlutterFatalError(details);
       };
 
+      await AppInfo.init();
       await AppPath.init();
       await AppPermissions.init();
       await AppPreferences.init();

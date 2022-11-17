@@ -43,7 +43,7 @@ class LogRecordsConsoleCubit extends Cubit<LogRecordsConsoleState> {
     emit(const LogRecordsConsoleState.success([]));
   }
 
-  String get _namePrefix => '${PackageInfo().appName}_${DeviceInfo().identifierForVendor}_';
+  String get _namePrefix => '${PackageInfo().appName}_${AppInfo().identifier}_';
 
   String _timeSlug(DateTime time) =>
       '${time.year.toString()}${time.month.toString().padLeft(2, '0')}${time.day.toString().padLeft(2, '0')}'

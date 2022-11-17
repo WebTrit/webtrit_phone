@@ -1,4 +1,5 @@
 export 'app_database/app_database.dart';
+export 'app_info.dart';
 export 'app_path.dart';
 export 'app_permissions.dart';
 export 'app_preferences.dart';

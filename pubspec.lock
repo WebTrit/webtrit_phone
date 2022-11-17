@@ -351,6 +351,27 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.2"
+  firebase_app_installations:
+    dependency: "direct main"
+    description:
+      name: firebase_app_installations
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.1+5"
+  firebase_app_installations_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_app_installations_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.1+26"
+  firebase_app_installations_web:
+    dependency: transitive
+    description:
+      name: firebase_app_installations_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.1+15"
   firebase_core:
     dependency: "direct main"
     description:
