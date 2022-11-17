@@ -12,6 +12,7 @@ import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 import 'app_shell.dart';
@@ -260,13 +261,24 @@ class _AppState extends State<App> {
                 ],
               ),
             ],
+            // TODO: uncomment on https://github.com/flutter/packages/pull/2664 merged
+            // observers: [
+            //   context.read<AppAnalyticsRepository>().createObserver(),
+            // ],
           ),
         ],
+        // TODO: uncomment on https://github.com/flutter/packages/pull/2664 merged
+        // observers: [
+        //   context.read<AppAnalyticsRepository>().createObserver(),
+        // ],
       ),
     ],
     redirect: _redirect,
     refreshListenable: GoRouterRefreshBloc(appBloc),
     initialLocation: '/main',
+    observers: [
+      context.read<AppAnalyticsRepository>().createObserver(),
+    ],
   );
 
   String? _redirect(BuildContext context, GoRouterState state) {

@@ -1,5 +1,6 @@
 export 'account/account_repository.dart';
 export 'app/app_repository.dart';
+export 'app_analytics/app_analytics_repository.dart';
 export 'contacts/contacts_repository.dart';
 export 'external_contacts/external_contacts_repository.dart';
 export 'favorites/favorites_repository.dart';
