@@ -53,7 +53,8 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 33 // flutter.compileSdkVersion
+    ndkVersion flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -68,17 +69,13 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
-    lintOptions {
-        disable 'InvalidPackage'
-    }
-
     defaultConfig {
         // Details about Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.webtrit.phone"
         // Must use suffix to customize application id because of [issue 211768](https://code.google.com/p/android/issues/detail?id=211768).
         applicationIdSuffix dartEnvironments.WEBTRIT_PHONE_APP_ID_SUFFIX
-        minSdkVersion 23
-        targetSdkVersion 30
+        minSdkVersion 23 // flutter.minSdkVersion
+        targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
 
@@ -105,5 +102,5 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
