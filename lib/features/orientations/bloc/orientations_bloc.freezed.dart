@@ -37,13 +37,12 @@ class _$_OrientationsChanged implements _OrientationsChanged {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_OrientationsChanged &&
-            const DeepCollectionEquality()
-                .equals(other.orientation, orientation));
+            (identical(other.orientation, orientation) ||
+                other.orientation == orientation));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(orientation));
+  int get hashCode => Object.hash(runtimeType, orientation);
 }
 
 abstract class _OrientationsChanged implements OrientationsChanged {
@@ -68,29 +67,32 @@ mixin _$OrientationsState {
 abstract class $OrientationsStateCopyWith<$Res> {
   factory $OrientationsStateCopyWith(
           OrientationsState value, $Res Function(OrientationsState) then) =
-      _$OrientationsStateCopyWithImpl<$Res>;
+      _$OrientationsStateCopyWithImpl<$Res, OrientationsState>;
+  @useResult
   $Res call({PreferredOrientation? lastOrientation});
 }
 
 /// @nodoc
-class _$OrientationsStateCopyWithImpl<$Res>
+class _$OrientationsStateCopyWithImpl<$Res, $Val extends OrientationsState>
     implements $OrientationsStateCopyWith<$Res> {
   _$OrientationsStateCopyWithImpl(this._value, this._then);
 
-  final OrientationsState _value;
   // ignore: unused_field
-  final $Res Function(OrientationsState) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? lastOrientation = freezed,
   }) {
     return _then(_value.copyWith(
-      lastOrientation: lastOrientation == freezed
+      lastOrientation: freezed == lastOrientation
           ? _value.lastOrientation
           : lastOrientation // ignore: cast_nullable_to_non_nullable
               as PreferredOrientation?,
-    ));
+    ) as $Val);
   }
 }
 
@@ -101,26 +103,25 @@ abstract class _$$_OrientationsStateCopyWith<$Res>
           $Res Function(_$_OrientationsState) then) =
       __$$_OrientationsStateCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({PreferredOrientation? lastOrientation});
 }
 
 /// @nodoc
 class __$$_OrientationsStateCopyWithImpl<$Res>
-    extends _$OrientationsStateCopyWithImpl<$Res>
+    extends _$OrientationsStateCopyWithImpl<$Res, _$_OrientationsState>
     implements _$$_OrientationsStateCopyWith<$Res> {
   __$$_OrientationsStateCopyWithImpl(
       _$_OrientationsState _value, $Res Function(_$_OrientationsState) _then)
-      : super(_value, (v) => _then(v as _$_OrientationsState));
+      : super(_value, _then);
 
-  @override
-  _$_OrientationsState get _value => super._value as _$_OrientationsState;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? lastOrientation = freezed,
   }) {
     return _then(_$_OrientationsState(
-      lastOrientation == freezed
+      freezed == lastOrientation
           ? _value.lastOrientation
           : lastOrientation // ignore: cast_nullable_to_non_nullable
               as PreferredOrientation?,
@@ -146,16 +147,16 @@ class _$_OrientationsState implements _OrientationsState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_OrientationsState &&
-            const DeepCollectionEquality()
-                .equals(other.lastOrientation, lastOrientation));
+            (identical(other.lastOrientation, lastOrientation) ||
+                other.lastOrientation == lastOrientation));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(lastOrientation));
+  int get hashCode => Object.hash(runtimeType, lastOrientation);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_OrientationsStateCopyWith<_$_OrientationsState> get copyWith =>
       __$$_OrientationsStateCopyWithImpl<_$_OrientationsState>(
           this, _$identity);

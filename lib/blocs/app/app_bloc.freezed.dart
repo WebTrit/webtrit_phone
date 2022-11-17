@@ -40,15 +40,12 @@ class _$_AppLogined implements _AppLogined {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_AppLogined &&
-            const DeepCollectionEquality().equals(other.coreUrl, coreUrl) &&
-            const DeepCollectionEquality().equals(other.token, token));
+            (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
+            (identical(other.token, token) || other.token == token));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(coreUrl),
-      const DeepCollectionEquality().hash(token));
+  int get hashCode => Object.hash(runtimeType, coreUrl, token);
 }
 
 abstract class _AppLogined implements AppLogined {
@@ -112,12 +109,11 @@ class _$_AppThemeSettingsChanged implements _AppThemeSettingsChanged {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_AppThemeSettingsChanged &&
-            const DeepCollectionEquality().equals(other.value, value));
+            (identical(other.value, value) || other.value == value));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(value));
+  int get hashCode => Object.hash(runtimeType, value);
 }
 
 abstract class _AppThemeSettingsChanged implements AppThemeSettingsChanged {
@@ -151,12 +147,11 @@ class _$_AppThemeModeChanged implements _AppThemeModeChanged {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_AppThemeModeChanged &&
-            const DeepCollectionEquality().equals(other.value, value));
+            (identical(other.value, value) || other.value == value));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(value));
+  int get hashCode => Object.hash(runtimeType, value);
 }
 
 abstract class _AppThemeModeChanged implements AppThemeModeChanged {
@@ -190,12 +185,11 @@ class _$_AppLocaleChanged implements _AppLocaleChanged {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_AppLocaleChanged &&
-            const DeepCollectionEquality().equals(other.value, value));
+            (identical(other.value, value) || other.value == value));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(value));
+  int get hashCode => Object.hash(runtimeType, value);
 }
 
 abstract class _AppLocaleChanged implements AppLocaleChanged {
@@ -222,7 +216,8 @@ mixin _$AppState {
 /// @nodoc
 abstract class $AppStateCopyWith<$Res> {
   factory $AppStateCopyWith(AppState value, $Res Function(AppState) then) =
-      _$AppStateCopyWithImpl<$Res>;
+      _$AppStateCopyWithImpl<$Res, AppState>;
+  @useResult
   $Res call(
       {String? coreUrl,
       String? token,
@@ -233,48 +228,51 @@ abstract class $AppStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$AppStateCopyWithImpl<$Res> implements $AppStateCopyWith<$Res> {
+class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
+    implements $AppStateCopyWith<$Res> {
   _$AppStateCopyWithImpl(this._value, this._then);
 
-  final AppState _value;
   // ignore: unused_field
-  final $Res Function(AppState) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? coreUrl = freezed,
     Object? token = freezed,
     Object? webRegistrationInitialUrl = freezed,
-    Object? themeSettings = freezed,
-    Object? themeMode = freezed,
-    Object? locale = freezed,
+    Object? themeSettings = null,
+    Object? themeMode = null,
+    Object? locale = null,
   }) {
     return _then(_value.copyWith(
-      coreUrl: coreUrl == freezed
+      coreUrl: freezed == coreUrl
           ? _value.coreUrl
           : coreUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      token: token == freezed
+      token: freezed == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
-      webRegistrationInitialUrl: webRegistrationInitialUrl == freezed
+      webRegistrationInitialUrl: freezed == webRegistrationInitialUrl
           ? _value.webRegistrationInitialUrl
           : webRegistrationInitialUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      themeSettings: themeSettings == freezed
+      themeSettings: null == themeSettings
           ? _value.themeSettings
           : themeSettings // ignore: cast_nullable_to_non_nullable
               as ThemeSettings,
-      themeMode: themeMode == freezed
+      themeMode: null == themeMode
           ? _value.themeMode
           : themeMode // ignore: cast_nullable_to_non_nullable
               as ThemeMode,
-      locale: locale == freezed
+      locale: null == locale
           ? _value.locale
           : locale // ignore: cast_nullable_to_non_nullable
               as Locale,
-    ));
+    ) as $Val);
   }
 }
 
@@ -284,6 +282,7 @@ abstract class _$$_AppStateCopyWith<$Res> implements $AppStateCopyWith<$Res> {
           _$_AppState value, $Res Function(_$_AppState) then) =
       __$$_AppStateCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {String? coreUrl,
       String? token,
@@ -294,46 +293,45 @@ abstract class _$$_AppStateCopyWith<$Res> implements $AppStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_AppStateCopyWithImpl<$Res> extends _$AppStateCopyWithImpl<$Res>
+class __$$_AppStateCopyWithImpl<$Res>
+    extends _$AppStateCopyWithImpl<$Res, _$_AppState>
     implements _$$_AppStateCopyWith<$Res> {
   __$$_AppStateCopyWithImpl(
       _$_AppState _value, $Res Function(_$_AppState) _then)
-      : super(_value, (v) => _then(v as _$_AppState));
+      : super(_value, _then);
 
-  @override
-  _$_AppState get _value => super._value as _$_AppState;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? coreUrl = freezed,
     Object? token = freezed,
     Object? webRegistrationInitialUrl = freezed,
-    Object? themeSettings = freezed,
-    Object? themeMode = freezed,
-    Object? locale = freezed,
+    Object? themeSettings = null,
+    Object? themeMode = null,
+    Object? locale = null,
   }) {
     return _then(_$_AppState(
-      coreUrl: coreUrl == freezed
+      coreUrl: freezed == coreUrl
           ? _value.coreUrl
           : coreUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      token: token == freezed
+      token: freezed == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
-      webRegistrationInitialUrl: webRegistrationInitialUrl == freezed
+      webRegistrationInitialUrl: freezed == webRegistrationInitialUrl
           ? _value.webRegistrationInitialUrl
           : webRegistrationInitialUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      themeSettings: themeSettings == freezed
+      themeSettings: null == themeSettings
           ? _value.themeSettings
           : themeSettings // ignore: cast_nullable_to_non_nullable
               as ThemeSettings,
-      themeMode: themeMode == freezed
+      themeMode: null == themeMode
           ? _value.themeMode
           : themeMode // ignore: cast_nullable_to_non_nullable
               as ThemeMode,
-      locale: locale == freezed
+      locale: null == locale
           ? _value.locale
           : locale // ignore: cast_nullable_to_non_nullable
               as Locale,
@@ -376,28 +374,25 @@ class _$_AppState extends _AppState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_AppState &&
-            const DeepCollectionEquality().equals(other.coreUrl, coreUrl) &&
-            const DeepCollectionEquality().equals(other.token, token) &&
-            const DeepCollectionEquality().equals(
-                other.webRegistrationInitialUrl, webRegistrationInitialUrl) &&
-            const DeepCollectionEquality()
-                .equals(other.themeSettings, themeSettings) &&
-            const DeepCollectionEquality().equals(other.themeMode, themeMode) &&
-            const DeepCollectionEquality().equals(other.locale, locale));
+            (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
+            (identical(other.token, token) || other.token == token) &&
+            (identical(other.webRegistrationInitialUrl,
+                    webRegistrationInitialUrl) ||
+                other.webRegistrationInitialUrl == webRegistrationInitialUrl) &&
+            (identical(other.themeSettings, themeSettings) ||
+                other.themeSettings == themeSettings) &&
+            (identical(other.themeMode, themeMode) ||
+                other.themeMode == themeMode) &&
+            (identical(other.locale, locale) || other.locale == locale));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(coreUrl),
-      const DeepCollectionEquality().hash(token),
-      const DeepCollectionEquality().hash(webRegistrationInitialUrl),
-      const DeepCollectionEquality().hash(themeSettings),
-      const DeepCollectionEquality().hash(themeMode),
-      const DeepCollectionEquality().hash(locale));
+  int get hashCode => Object.hash(runtimeType, coreUrl, token,
+      webRegistrationInitialUrl, themeSettings, themeMode, locale);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_AppStateCopyWith<_$_AppState> get copyWith =>
       __$$_AppStateCopyWithImpl<_$_AppState>(this, _$identity);
 }

@@ -97,6 +97,7 @@ Future<void> _initFirebaseMessaging() async {
   }
 }
 
+@pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final logger = Logger('main');
 

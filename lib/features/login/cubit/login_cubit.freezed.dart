@@ -40,7 +40,8 @@ mixin _$LoginState {
 abstract class $LoginStateCopyWith<$Res> {
   factory $LoginStateCopyWith(
           LoginState value, $Res Function(LoginState) then) =
-      _$LoginStateCopyWithImpl<$Res>;
+      _$LoginStateCopyWithImpl<$Res, LoginState>;
+  @useResult
   $Res call(
       {int tabIndex,
       LoginStatus status,
@@ -58,80 +59,83 @@ abstract class $LoginStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$LoginStateCopyWithImpl<$Res> implements $LoginStateCopyWith<$Res> {
+class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
+    implements $LoginStateCopyWith<$Res> {
   _$LoginStateCopyWithImpl(this._value, this._then);
 
-  final LoginState _value;
   // ignore: unused_field
-  final $Res Function(LoginState) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? tabIndex = freezed,
-    Object? status = freezed,
+    Object? tabIndex = null,
+    Object? status = null,
     Object? error = freezed,
-    Object? demo = freezed,
+    Object? demo = null,
     Object? coreUrl = freezed,
     Object? otpId = freezed,
     Object? otpNotificationType = freezed,
     Object? otpFromEmail = freezed,
     Object? token = freezed,
-    Object? coreUrlInput = freezed,
-    Object? emailInput = freezed,
-    Object? phoneInput = freezed,
-    Object? codeInput = freezed,
+    Object? coreUrlInput = null,
+    Object? emailInput = null,
+    Object? phoneInput = null,
+    Object? codeInput = null,
   }) {
     return _then(_value.copyWith(
-      tabIndex: tabIndex == freezed
+      tabIndex: null == tabIndex
           ? _value.tabIndex
           : tabIndex // ignore: cast_nullable_to_non_nullable
               as int,
-      status: status == freezed
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as LoginStatus,
-      error: error == freezed ? _value.error : error,
-      demo: demo == freezed
+      error: freezed == error ? _value.error : error,
+      demo: null == demo
           ? _value.demo
           : demo // ignore: cast_nullable_to_non_nullable
               as bool,
-      coreUrl: coreUrl == freezed
+      coreUrl: freezed == coreUrl
           ? _value.coreUrl
           : coreUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      otpId: otpId == freezed
+      otpId: freezed == otpId
           ? _value.otpId
           : otpId // ignore: cast_nullable_to_non_nullable
               as String?,
-      otpNotificationType: otpNotificationType == freezed
+      otpNotificationType: freezed == otpNotificationType
           ? _value.otpNotificationType
           : otpNotificationType // ignore: cast_nullable_to_non_nullable
               as OtpNotificationType?,
-      otpFromEmail: otpFromEmail == freezed
+      otpFromEmail: freezed == otpFromEmail
           ? _value.otpFromEmail
           : otpFromEmail // ignore: cast_nullable_to_non_nullable
               as String?,
-      token: token == freezed
+      token: freezed == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
-      coreUrlInput: coreUrlInput == freezed
+      coreUrlInput: null == coreUrlInput
           ? _value.coreUrlInput
           : coreUrlInput // ignore: cast_nullable_to_non_nullable
               as UrlInput,
-      emailInput: emailInput == freezed
+      emailInput: null == emailInput
           ? _value.emailInput
           : emailInput // ignore: cast_nullable_to_non_nullable
               as EmailInput,
-      phoneInput: phoneInput == freezed
+      phoneInput: null == phoneInput
           ? _value.phoneInput
           : phoneInput // ignore: cast_nullable_to_non_nullable
               as PhoneInput,
-      codeInput: codeInput == freezed
+      codeInput: null == codeInput
           ? _value.codeInput
           : codeInput // ignore: cast_nullable_to_non_nullable
               as CodeInput,
-    ));
+    ) as $Val);
   }
 }
 
@@ -142,6 +146,7 @@ abstract class _$$_LoginStateCopyWith<$Res>
           _$_LoginState value, $Res Function(_$_LoginState) then) =
       __$$_LoginStateCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {int tabIndex,
       LoginStatus status,
@@ -159,78 +164,77 @@ abstract class _$$_LoginStateCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_LoginStateCopyWithImpl<$Res> extends _$LoginStateCopyWithImpl<$Res>
+class __$$_LoginStateCopyWithImpl<$Res>
+    extends _$LoginStateCopyWithImpl<$Res, _$_LoginState>
     implements _$$_LoginStateCopyWith<$Res> {
   __$$_LoginStateCopyWithImpl(
       _$_LoginState _value, $Res Function(_$_LoginState) _then)
-      : super(_value, (v) => _then(v as _$_LoginState));
+      : super(_value, _then);
 
-  @override
-  _$_LoginState get _value => super._value as _$_LoginState;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? tabIndex = freezed,
-    Object? status = freezed,
+    Object? tabIndex = null,
+    Object? status = null,
     Object? error = freezed,
-    Object? demo = freezed,
+    Object? demo = null,
     Object? coreUrl = freezed,
     Object? otpId = freezed,
     Object? otpNotificationType = freezed,
     Object? otpFromEmail = freezed,
     Object? token = freezed,
-    Object? coreUrlInput = freezed,
-    Object? emailInput = freezed,
-    Object? phoneInput = freezed,
-    Object? codeInput = freezed,
+    Object? coreUrlInput = null,
+    Object? emailInput = null,
+    Object? phoneInput = null,
+    Object? codeInput = null,
   }) {
     return _then(_$_LoginState(
-      tabIndex: tabIndex == freezed
+      tabIndex: null == tabIndex
           ? _value.tabIndex
           : tabIndex // ignore: cast_nullable_to_non_nullable
               as int,
-      status: status == freezed
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as LoginStatus,
-      error: error == freezed ? _value.error : error,
-      demo: demo == freezed
+      error: freezed == error ? _value.error : error,
+      demo: null == demo
           ? _value.demo
           : demo // ignore: cast_nullable_to_non_nullable
               as bool,
-      coreUrl: coreUrl == freezed
+      coreUrl: freezed == coreUrl
           ? _value.coreUrl
           : coreUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      otpId: otpId == freezed
+      otpId: freezed == otpId
           ? _value.otpId
           : otpId // ignore: cast_nullable_to_non_nullable
               as String?,
-      otpNotificationType: otpNotificationType == freezed
+      otpNotificationType: freezed == otpNotificationType
           ? _value.otpNotificationType
           : otpNotificationType // ignore: cast_nullable_to_non_nullable
               as OtpNotificationType?,
-      otpFromEmail: otpFromEmail == freezed
+      otpFromEmail: freezed == otpFromEmail
           ? _value.otpFromEmail
           : otpFromEmail // ignore: cast_nullable_to_non_nullable
               as String?,
-      token: token == freezed
+      token: freezed == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
-      coreUrlInput: coreUrlInput == freezed
+      coreUrlInput: null == coreUrlInput
           ? _value.coreUrlInput
           : coreUrlInput // ignore: cast_nullable_to_non_nullable
               as UrlInput,
-      emailInput: emailInput == freezed
+      emailInput: null == emailInput
           ? _value.emailInput
           : emailInput // ignore: cast_nullable_to_non_nullable
               as EmailInput,
-      phoneInput: phoneInput == freezed
+      phoneInput: null == phoneInput
           ? _value.phoneInput
           : phoneInput // ignore: cast_nullable_to_non_nullable
               as PhoneInput,
-      codeInput: codeInput == freezed
+      codeInput: null == codeInput
           ? _value.codeInput
           : codeInput // ignore: cast_nullable_to_non_nullable
               as CodeInput,
@@ -300,45 +304,48 @@ class _$_LoginState implements _LoginState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_LoginState &&
-            const DeepCollectionEquality().equals(other.tabIndex, tabIndex) &&
-            const DeepCollectionEquality().equals(other.status, status) &&
+            (identical(other.tabIndex, tabIndex) ||
+                other.tabIndex == tabIndex) &&
+            (identical(other.status, status) || other.status == status) &&
             const DeepCollectionEquality().equals(other.error, error) &&
-            const DeepCollectionEquality().equals(other.demo, demo) &&
-            const DeepCollectionEquality().equals(other.coreUrl, coreUrl) &&
-            const DeepCollectionEquality().equals(other.otpId, otpId) &&
-            const DeepCollectionEquality()
-                .equals(other.otpNotificationType, otpNotificationType) &&
-            const DeepCollectionEquality()
-                .equals(other.otpFromEmail, otpFromEmail) &&
-            const DeepCollectionEquality().equals(other.token, token) &&
-            const DeepCollectionEquality()
-                .equals(other.coreUrlInput, coreUrlInput) &&
-            const DeepCollectionEquality()
-                .equals(other.emailInput, emailInput) &&
-            const DeepCollectionEquality()
-                .equals(other.phoneInput, phoneInput) &&
-            const DeepCollectionEquality().equals(other.codeInput, codeInput));
+            (identical(other.demo, demo) || other.demo == demo) &&
+            (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
+            (identical(other.otpId, otpId) || other.otpId == otpId) &&
+            (identical(other.otpNotificationType, otpNotificationType) ||
+                other.otpNotificationType == otpNotificationType) &&
+            (identical(other.otpFromEmail, otpFromEmail) ||
+                other.otpFromEmail == otpFromEmail) &&
+            (identical(other.token, token) || other.token == token) &&
+            (identical(other.coreUrlInput, coreUrlInput) ||
+                other.coreUrlInput == coreUrlInput) &&
+            (identical(other.emailInput, emailInput) ||
+                other.emailInput == emailInput) &&
+            (identical(other.phoneInput, phoneInput) ||
+                other.phoneInput == phoneInput) &&
+            (identical(other.codeInput, codeInput) ||
+                other.codeInput == codeInput));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(tabIndex),
-      const DeepCollectionEquality().hash(status),
+      tabIndex,
+      status,
       const DeepCollectionEquality().hash(error),
-      const DeepCollectionEquality().hash(demo),
-      const DeepCollectionEquality().hash(coreUrl),
-      const DeepCollectionEquality().hash(otpId),
-      const DeepCollectionEquality().hash(otpNotificationType),
-      const DeepCollectionEquality().hash(otpFromEmail),
-      const DeepCollectionEquality().hash(token),
-      const DeepCollectionEquality().hash(coreUrlInput),
-      const DeepCollectionEquality().hash(emailInput),
-      const DeepCollectionEquality().hash(phoneInput),
-      const DeepCollectionEquality().hash(codeInput));
+      demo,
+      coreUrl,
+      otpId,
+      otpNotificationType,
+      otpFromEmail,
+      token,
+      coreUrlInput,
+      emailInput,
+      phoneInput,
+      codeInput);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_LoginStateCopyWith<_$_LoginState> get copyWith =>
       __$$_LoginStateCopyWithImpl<_$_LoginState>(this, _$identity);
 }

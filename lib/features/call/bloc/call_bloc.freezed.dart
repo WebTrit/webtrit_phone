@@ -47,12 +47,11 @@ class _$__AppLifecycleStateChanged
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$__AppLifecycleStateChanged &&
-            const DeepCollectionEquality().equals(other.state, state));
+            (identical(other.state, state) || other.state == state));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(state));
+  int get hashCode => Object.hash(runtimeType, state);
 }
 
 abstract class __AppLifecycleStateChanged implements _AppLifecycleStateChanged {
@@ -96,12 +95,11 @@ class _$__ConnectivityResultChanged
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$__ConnectivityResultChanged &&
-            const DeepCollectionEquality().equals(other.result, result));
+            (identical(other.result, result) || other.result == result));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(result));
+  int get hashCode => Object.hash(runtimeType, result);
 }
 
 abstract class __ConnectivityResultChanged
@@ -160,9 +158,9 @@ mixin _$_SignalingClientEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? connectInitiated,
-    TResult Function()? disconnectInitiated,
-    TResult Function(int? code, String? reason)? disconnected,
+    TResult? Function()? connectInitiated,
+    TResult? Function()? disconnectInitiated,
+    TResult? Function(int? code, String? reason)? disconnected,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -185,11 +183,11 @@ mixin _$_SignalingClientEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_SignalingClientEventConnectInitiated value)?
+    TResult? Function(_SignalingClientEventConnectInitiated value)?
         connectInitiated,
-    TResult Function(_SignalingClientEventDisconnectInitiated value)?
+    TResult? Function(_SignalingClientEventDisconnectInitiated value)?
         disconnectInitiated,
-    TResult Function(_SignalingClientEventDisconnected value)? disconnected,
+    TResult? Function(_SignalingClientEventDisconnected value)? disconnected,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -246,9 +244,9 @@ class _$_SignalingClientEventConnectInitiated
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? connectInitiated,
-    TResult Function()? disconnectInitiated,
-    TResult Function(int? code, String? reason)? disconnected,
+    TResult? Function()? connectInitiated,
+    TResult? Function()? disconnectInitiated,
+    TResult? Function(int? code, String? reason)? disconnected,
   }) {
     return connectInitiated?.call();
   }
@@ -283,11 +281,11 @@ class _$_SignalingClientEventConnectInitiated
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_SignalingClientEventConnectInitiated value)?
+    TResult? Function(_SignalingClientEventConnectInitiated value)?
         connectInitiated,
-    TResult Function(_SignalingClientEventDisconnectInitiated value)?
+    TResult? Function(_SignalingClientEventDisconnectInitiated value)?
         disconnectInitiated,
-    TResult Function(_SignalingClientEventDisconnected value)? disconnected,
+    TResult? Function(_SignalingClientEventDisconnected value)? disconnected,
   }) {
     return connectInitiated?.call(this);
   }
@@ -357,9 +355,9 @@ class _$_SignalingClientEventDisconnectInitiated
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? connectInitiated,
-    TResult Function()? disconnectInitiated,
-    TResult Function(int? code, String? reason)? disconnected,
+    TResult? Function()? connectInitiated,
+    TResult? Function()? disconnectInitiated,
+    TResult? Function(int? code, String? reason)? disconnected,
   }) {
     return disconnectInitiated?.call();
   }
@@ -394,11 +392,11 @@ class _$_SignalingClientEventDisconnectInitiated
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_SignalingClientEventConnectInitiated value)?
+    TResult? Function(_SignalingClientEventConnectInitiated value)?
         connectInitiated,
-    TResult Function(_SignalingClientEventDisconnectInitiated value)?
+    TResult? Function(_SignalingClientEventDisconnectInitiated value)?
         disconnectInitiated,
-    TResult Function(_SignalingClientEventDisconnected value)? disconnected,
+    TResult? Function(_SignalingClientEventDisconnected value)? disconnected,
   }) {
     return disconnectInitiated?.call(this);
   }
@@ -457,15 +455,12 @@ class _$_SignalingClientEventDisconnected
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_SignalingClientEventDisconnected &&
-            const DeepCollectionEquality().equals(other.code, code) &&
-            const DeepCollectionEquality().equals(other.reason, reason));
+            (identical(other.code, code) || other.code == code) &&
+            (identical(other.reason, reason) || other.reason == reason));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(code),
-      const DeepCollectionEquality().hash(reason));
+  int get hashCode => Object.hash(runtimeType, code, reason);
 
   @override
   @optionalTypeArgs
@@ -480,9 +475,9 @@ class _$_SignalingClientEventDisconnected
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? connectInitiated,
-    TResult Function()? disconnectInitiated,
-    TResult Function(int? code, String? reason)? disconnected,
+    TResult? Function()? connectInitiated,
+    TResult? Function()? disconnectInitiated,
+    TResult? Function(int? code, String? reason)? disconnected,
   }) {
     return disconnected?.call(code, reason);
   }
@@ -517,11 +512,11 @@ class _$_SignalingClientEventDisconnected
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_SignalingClientEventConnectInitiated value)?
+    TResult? Function(_SignalingClientEventConnectInitiated value)?
         connectInitiated,
-    TResult Function(_SignalingClientEventDisconnectInitiated value)?
+    TResult? Function(_SignalingClientEventDisconnectInitiated value)?
         disconnectInitiated,
-    TResult Function(_SignalingClientEventDisconnected value)? disconnected,
+    TResult? Function(_SignalingClientEventDisconnected value)? disconnected,
   }) {
     return disconnected?.call(this);
   }
@@ -563,7 +558,7 @@ mixin _$_HandshakeSignalingEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(int linesCount)? state,
+    TResult? Function(int linesCount)? state,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -579,7 +574,7 @@ mixin _$_HandshakeSignalingEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_HandshakeSignalingEventState value)? state,
+    TResult? Function(_HandshakeSignalingEventState value)? state,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -618,13 +613,12 @@ class _$_HandshakeSignalingEventState
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_HandshakeSignalingEventState &&
-            const DeepCollectionEquality()
-                .equals(other.linesCount, linesCount));
+            (identical(other.linesCount, linesCount) ||
+                other.linesCount == linesCount));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(linesCount));
+  int get hashCode => Object.hash(runtimeType, linesCount);
 
   @override
   @optionalTypeArgs
@@ -637,7 +631,7 @@ class _$_HandshakeSignalingEventState
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(int linesCount)? state,
+    TResult? Function(int linesCount)? state,
   }) {
     return state?.call(linesCount);
   }
@@ -665,7 +659,7 @@ class _$_HandshakeSignalingEventState
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_HandshakeSignalingEventState value)? state,
+    TResult? Function(_HandshakeSignalingEventState value)? state,
   }) {
     return state?.call(this);
   }
@@ -715,17 +709,17 @@ mixin _$_CallSignalingEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(int line, CallIdValue callId, String callee, String caller,
-            String? callerDisplayName, JsepValue? jsep)?
+    TResult? Function(int line, CallIdValue callId, String callee,
+            String caller, String? callerDisplayName, JsepValue? jsep)?
         incoming,
-    TResult Function(int line, CallIdValue callId)? ringing,
-    TResult Function(
+    TResult? Function(int line, CallIdValue callId)? ringing,
+    TResult? Function(
             int line, CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(
+    TResult? Function(
             int line, CallIdValue callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(int line, CallIdValue callId, int code, String reason)?
+    TResult? Function(int line, CallIdValue callId, int code, String reason)?
         hangup,
   }) =>
       throw _privateConstructorUsedError;
@@ -757,11 +751,11 @@ mixin _$_CallSignalingEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallSignalingEventIncoming value)? incoming,
-    TResult Function(_CallSignalingEventRinging value)? ringing,
-    TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAccepted value)? accepted,
-    TResult Function(_CallSignalingEventHangup value)? hangup,
+    TResult? Function(_CallSignalingEventIncoming value)? incoming,
+    TResult? Function(_CallSignalingEventRinging value)? ringing,
+    TResult? Function(_CallSignalingEventProgress value)? progress,
+    TResult? Function(_CallSignalingEventAccepted value)? accepted,
+    TResult? Function(_CallSignalingEventHangup value)? hangup,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -825,24 +819,18 @@ class _$_CallSignalingEventIncoming
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallSignalingEventIncoming &&
-            const DeepCollectionEquality().equals(other.line, line) &&
-            const DeepCollectionEquality().equals(other.callId, callId) &&
-            const DeepCollectionEquality().equals(other.callee, callee) &&
-            const DeepCollectionEquality().equals(other.caller, caller) &&
-            const DeepCollectionEquality()
-                .equals(other.callerDisplayName, callerDisplayName) &&
-            const DeepCollectionEquality().equals(other.jsep, jsep));
+            (identical(other.line, line) || other.line == line) &&
+            (identical(other.callId, callId) || other.callId == callId) &&
+            (identical(other.callee, callee) || other.callee == callee) &&
+            (identical(other.caller, caller) || other.caller == caller) &&
+            (identical(other.callerDisplayName, callerDisplayName) ||
+                other.callerDisplayName == callerDisplayName) &&
+            (identical(other.jsep, jsep) || other.jsep == jsep));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(line),
-      const DeepCollectionEquality().hash(callId),
-      const DeepCollectionEquality().hash(callee),
-      const DeepCollectionEquality().hash(caller),
-      const DeepCollectionEquality().hash(callerDisplayName),
-      const DeepCollectionEquality().hash(jsep));
+      runtimeType, line, callId, callee, caller, callerDisplayName, jsep);
 
   @override
   @optionalTypeArgs
@@ -867,17 +855,17 @@ class _$_CallSignalingEventIncoming
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(int line, CallIdValue callId, String callee, String caller,
-            String? callerDisplayName, JsepValue? jsep)?
+    TResult? Function(int line, CallIdValue callId, String callee,
+            String caller, String? callerDisplayName, JsepValue? jsep)?
         incoming,
-    TResult Function(int line, CallIdValue callId)? ringing,
-    TResult Function(
+    TResult? Function(int line, CallIdValue callId)? ringing,
+    TResult? Function(
             int line, CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(
+    TResult? Function(
             int line, CallIdValue callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(int line, CallIdValue callId, int code, String reason)?
+    TResult? Function(int line, CallIdValue callId, int code, String reason)?
         hangup,
   }) {
     return incoming?.call(
@@ -922,11 +910,11 @@ class _$_CallSignalingEventIncoming
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallSignalingEventIncoming value)? incoming,
-    TResult Function(_CallSignalingEventRinging value)? ringing,
-    TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAccepted value)? accepted,
-    TResult Function(_CallSignalingEventHangup value)? hangup,
+    TResult? Function(_CallSignalingEventIncoming value)? incoming,
+    TResult? Function(_CallSignalingEventRinging value)? ringing,
+    TResult? Function(_CallSignalingEventProgress value)? progress,
+    TResult? Function(_CallSignalingEventAccepted value)? accepted,
+    TResult? Function(_CallSignalingEventHangup value)? hangup,
   }) {
     return incoming?.call(this);
   }
@@ -999,15 +987,12 @@ class _$_CallSignalingEventRinging
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallSignalingEventRinging &&
-            const DeepCollectionEquality().equals(other.line, line) &&
-            const DeepCollectionEquality().equals(other.callId, callId));
+            (identical(other.line, line) || other.line == line) &&
+            (identical(other.callId, callId) || other.callId == callId));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(line),
-      const DeepCollectionEquality().hash(callId));
+  int get hashCode => Object.hash(runtimeType, line, callId);
 
   @override
   @optionalTypeArgs
@@ -1032,17 +1017,17 @@ class _$_CallSignalingEventRinging
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(int line, CallIdValue callId, String callee, String caller,
-            String? callerDisplayName, JsepValue? jsep)?
+    TResult? Function(int line, CallIdValue callId, String callee,
+            String caller, String? callerDisplayName, JsepValue? jsep)?
         incoming,
-    TResult Function(int line, CallIdValue callId)? ringing,
-    TResult Function(
+    TResult? Function(int line, CallIdValue callId)? ringing,
+    TResult? Function(
             int line, CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(
+    TResult? Function(
             int line, CallIdValue callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(int line, CallIdValue callId, int code, String reason)?
+    TResult? Function(int line, CallIdValue callId, int code, String reason)?
         hangup,
   }) {
     return ringing?.call(line, callId);
@@ -1086,11 +1071,11 @@ class _$_CallSignalingEventRinging
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallSignalingEventIncoming value)? incoming,
-    TResult Function(_CallSignalingEventRinging value)? ringing,
-    TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAccepted value)? accepted,
-    TResult Function(_CallSignalingEventHangup value)? hangup,
+    TResult? Function(_CallSignalingEventIncoming value)? incoming,
+    TResult? Function(_CallSignalingEventRinging value)? ringing,
+    TResult? Function(_CallSignalingEventProgress value)? progress,
+    TResult? Function(_CallSignalingEventAccepted value)? accepted,
+    TResult? Function(_CallSignalingEventHangup value)? hangup,
   }) {
     return ringing?.call(this);
   }
@@ -1164,19 +1149,14 @@ class _$_CallSignalingEventProgress
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallSignalingEventProgress &&
-            const DeepCollectionEquality().equals(other.line, line) &&
-            const DeepCollectionEquality().equals(other.callId, callId) &&
-            const DeepCollectionEquality().equals(other.callee, callee) &&
-            const DeepCollectionEquality().equals(other.jsep, jsep));
+            (identical(other.line, line) || other.line == line) &&
+            (identical(other.callId, callId) || other.callId == callId) &&
+            (identical(other.callee, callee) || other.callee == callee) &&
+            (identical(other.jsep, jsep) || other.jsep == jsep));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(line),
-      const DeepCollectionEquality().hash(callId),
-      const DeepCollectionEquality().hash(callee),
-      const DeepCollectionEquality().hash(jsep));
+  int get hashCode => Object.hash(runtimeType, line, callId, callee, jsep);
 
   @override
   @optionalTypeArgs
@@ -1201,17 +1181,17 @@ class _$_CallSignalingEventProgress
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(int line, CallIdValue callId, String callee, String caller,
-            String? callerDisplayName, JsepValue? jsep)?
+    TResult? Function(int line, CallIdValue callId, String callee,
+            String caller, String? callerDisplayName, JsepValue? jsep)?
         incoming,
-    TResult Function(int line, CallIdValue callId)? ringing,
-    TResult Function(
+    TResult? Function(int line, CallIdValue callId)? ringing,
+    TResult? Function(
             int line, CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(
+    TResult? Function(
             int line, CallIdValue callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(int line, CallIdValue callId, int code, String reason)?
+    TResult? Function(int line, CallIdValue callId, int code, String reason)?
         hangup,
   }) {
     return progress?.call(line, callId, callee, jsep);
@@ -1255,11 +1235,11 @@ class _$_CallSignalingEventProgress
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallSignalingEventIncoming value)? incoming,
-    TResult Function(_CallSignalingEventRinging value)? ringing,
-    TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAccepted value)? accepted,
-    TResult Function(_CallSignalingEventHangup value)? hangup,
+    TResult? Function(_CallSignalingEventIncoming value)? incoming,
+    TResult? Function(_CallSignalingEventRinging value)? ringing,
+    TResult? Function(_CallSignalingEventProgress value)? progress,
+    TResult? Function(_CallSignalingEventAccepted value)? accepted,
+    TResult? Function(_CallSignalingEventHangup value)? hangup,
   }) {
     return progress?.call(this);
   }
@@ -1334,19 +1314,14 @@ class _$_CallSignalingEventAccepted
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallSignalingEventAccepted &&
-            const DeepCollectionEquality().equals(other.line, line) &&
-            const DeepCollectionEquality().equals(other.callId, callId) &&
-            const DeepCollectionEquality().equals(other.callee, callee) &&
-            const DeepCollectionEquality().equals(other.jsep, jsep));
+            (identical(other.line, line) || other.line == line) &&
+            (identical(other.callId, callId) || other.callId == callId) &&
+            (identical(other.callee, callee) || other.callee == callee) &&
+            (identical(other.jsep, jsep) || other.jsep == jsep));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(line),
-      const DeepCollectionEquality().hash(callId),
-      const DeepCollectionEquality().hash(callee),
-      const DeepCollectionEquality().hash(jsep));
+  int get hashCode => Object.hash(runtimeType, line, callId, callee, jsep);
 
   @override
   @optionalTypeArgs
@@ -1371,17 +1346,17 @@ class _$_CallSignalingEventAccepted
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(int line, CallIdValue callId, String callee, String caller,
-            String? callerDisplayName, JsepValue? jsep)?
+    TResult? Function(int line, CallIdValue callId, String callee,
+            String caller, String? callerDisplayName, JsepValue? jsep)?
         incoming,
-    TResult Function(int line, CallIdValue callId)? ringing,
-    TResult Function(
+    TResult? Function(int line, CallIdValue callId)? ringing,
+    TResult? Function(
             int line, CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(
+    TResult? Function(
             int line, CallIdValue callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(int line, CallIdValue callId, int code, String reason)?
+    TResult? Function(int line, CallIdValue callId, int code, String reason)?
         hangup,
   }) {
     return accepted?.call(line, callId, callee, jsep);
@@ -1425,11 +1400,11 @@ class _$_CallSignalingEventAccepted
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallSignalingEventIncoming value)? incoming,
-    TResult Function(_CallSignalingEventRinging value)? ringing,
-    TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAccepted value)? accepted,
-    TResult Function(_CallSignalingEventHangup value)? hangup,
+    TResult? Function(_CallSignalingEventIncoming value)? incoming,
+    TResult? Function(_CallSignalingEventRinging value)? ringing,
+    TResult? Function(_CallSignalingEventProgress value)? progress,
+    TResult? Function(_CallSignalingEventAccepted value)? accepted,
+    TResult? Function(_CallSignalingEventHangup value)? hangup,
   }) {
     return accepted?.call(this);
   }
@@ -1507,19 +1482,14 @@ class _$_CallSignalingEventHangup
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallSignalingEventHangup &&
-            const DeepCollectionEquality().equals(other.line, line) &&
-            const DeepCollectionEquality().equals(other.callId, callId) &&
-            const DeepCollectionEquality().equals(other.code, code) &&
-            const DeepCollectionEquality().equals(other.reason, reason));
+            (identical(other.line, line) || other.line == line) &&
+            (identical(other.callId, callId) || other.callId == callId) &&
+            (identical(other.code, code) || other.code == code) &&
+            (identical(other.reason, reason) || other.reason == reason));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(line),
-      const DeepCollectionEquality().hash(callId),
-      const DeepCollectionEquality().hash(code),
-      const DeepCollectionEquality().hash(reason));
+  int get hashCode => Object.hash(runtimeType, line, callId, code, reason);
 
   @override
   @optionalTypeArgs
@@ -1544,17 +1514,17 @@ class _$_CallSignalingEventHangup
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(int line, CallIdValue callId, String callee, String caller,
-            String? callerDisplayName, JsepValue? jsep)?
+    TResult? Function(int line, CallIdValue callId, String callee,
+            String caller, String? callerDisplayName, JsepValue? jsep)?
         incoming,
-    TResult Function(int line, CallIdValue callId)? ringing,
-    TResult Function(
+    TResult? Function(int line, CallIdValue callId)? ringing,
+    TResult? Function(
             int line, CallIdValue callId, String callee, JsepValue? jsep)?
         progress,
-    TResult Function(
+    TResult? Function(
             int line, CallIdValue callId, String? callee, JsepValue? jsep)?
         accepted,
-    TResult Function(int line, CallIdValue callId, int code, String reason)?
+    TResult? Function(int line, CallIdValue callId, int code, String reason)?
         hangup,
   }) {
     return hangup?.call(line, callId, code, reason);
@@ -1598,11 +1568,11 @@ class _$_CallSignalingEventHangup
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallSignalingEventIncoming value)? incoming,
-    TResult Function(_CallSignalingEventRinging value)? ringing,
-    TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAccepted value)? accepted,
-    TResult Function(_CallSignalingEventHangup value)? hangup,
+    TResult? Function(_CallSignalingEventIncoming value)? incoming,
+    TResult? Function(_CallSignalingEventRinging value)? ringing,
+    TResult? Function(_CallSignalingEventProgress value)? progress,
+    TResult? Function(_CallSignalingEventAccepted value)? accepted,
+    TResult? Function(_CallSignalingEventHangup value)? hangup,
   }) {
     return hangup?.call(this);
   }
@@ -1655,7 +1625,7 @@ mixin _$_CallPushEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(CallIdValue callId, CallkeepHandle handle,
+    TResult? Function(CallIdValue callId, CallkeepHandle handle,
             String? displayName, bool video, CallkeepIncomingCallError? error)?
         incoming,
   }) =>
@@ -1675,7 +1645,7 @@ mixin _$_CallPushEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallPushEventIncoming value)? incoming,
+    TResult? Function(_CallPushEventIncoming value)? incoming,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -1731,22 +1701,17 @@ class _$_CallPushEventIncoming
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallPushEventIncoming &&
-            const DeepCollectionEquality().equals(other.callId, callId) &&
-            const DeepCollectionEquality().equals(other.handle, handle) &&
-            const DeepCollectionEquality()
-                .equals(other.displayName, displayName) &&
-            const DeepCollectionEquality().equals(other.video, video) &&
-            const DeepCollectionEquality().equals(other.error, error));
+            (identical(other.callId, callId) || other.callId == callId) &&
+            (identical(other.handle, handle) || other.handle == handle) &&
+            (identical(other.displayName, displayName) ||
+                other.displayName == displayName) &&
+            (identical(other.video, video) || other.video == video) &&
+            (identical(other.error, error) || other.error == error));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(callId),
-      const DeepCollectionEquality().hash(handle),
-      const DeepCollectionEquality().hash(displayName),
-      const DeepCollectionEquality().hash(video),
-      const DeepCollectionEquality().hash(error));
+  int get hashCode =>
+      Object.hash(runtimeType, callId, handle, displayName, video, error);
 
   @override
   @optionalTypeArgs
@@ -1761,7 +1726,7 @@ class _$_CallPushEventIncoming
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(CallIdValue callId, CallkeepHandle handle,
+    TResult? Function(CallIdValue callId, CallkeepHandle handle,
             String? displayName, bool video, CallkeepIncomingCallError? error)?
         incoming,
   }) {
@@ -1793,7 +1758,7 @@ class _$_CallPushEventIncoming
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallPushEventIncoming value)? incoming,
+    TResult? Function(_CallPushEventIncoming value)? incoming,
   }) {
     return incoming?.call(this);
   }
@@ -1851,18 +1816,18 @@ mixin _$CallControlEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
+    TResult? Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
-    TResult Function(UuidValue uuid)? cameraSwitched,
-    TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult Function(UuidValue uuid)? failureApproved,
+    TResult? Function(UuidValue uuid)? answered,
+    TResult? Function(UuidValue uuid)? ended,
+    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
+    TResult? Function(UuidValue uuid, bool muted)? setMuted,
+    TResult? Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(UuidValue uuid)? cameraSwitched,
+    TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
+    TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
+    TResult? Function(UuidValue uuid)? failureApproved,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -1902,16 +1867,16 @@ mixin _$CallControlEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventStarted value)? started,
+    TResult? Function(_CallControlEventAnswered value)? answered,
+    TResult? Function(_CallControlEventEnded value)? ended,
+    TResult? Function(_CallControlEventSetHeld value)? setHeld,
+    TResult? Function(_CallControlEventSetMuted value)? setMuted,
+    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
+    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
+    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -1987,24 +1952,18 @@ class _$_CallControlEventStarted
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallControlEventStarted &&
-            const DeepCollectionEquality().equals(other.line, line) &&
-            const DeepCollectionEquality().equals(other.generic, generic) &&
-            const DeepCollectionEquality().equals(other.number, number) &&
-            const DeepCollectionEquality().equals(other.email, email) &&
-            const DeepCollectionEquality()
-                .equals(other.displayName, displayName) &&
-            const DeepCollectionEquality().equals(other.video, video));
+            (identical(other.line, line) || other.line == line) &&
+            (identical(other.generic, generic) || other.generic == generic) &&
+            (identical(other.number, number) || other.number == number) &&
+            (identical(other.email, email) || other.email == email) &&
+            (identical(other.displayName, displayName) ||
+                other.displayName == displayName) &&
+            (identical(other.video, video) || other.video == video));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(line),
-      const DeepCollectionEquality().hash(generic),
-      const DeepCollectionEquality().hash(number),
-      const DeepCollectionEquality().hash(email),
-      const DeepCollectionEquality().hash(displayName),
-      const DeepCollectionEquality().hash(video));
+      runtimeType, line, generic, number, email, displayName, video);
 
   @override
   @optionalTypeArgs
@@ -2028,18 +1987,18 @@ class _$_CallControlEventStarted
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
+    TResult? Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
-    TResult Function(UuidValue uuid)? cameraSwitched,
-    TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult Function(UuidValue uuid)? failureApproved,
+    TResult? Function(UuidValue uuid)? answered,
+    TResult? Function(UuidValue uuid)? ended,
+    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
+    TResult? Function(UuidValue uuid, bool muted)? setMuted,
+    TResult? Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(UuidValue uuid)? cameraSwitched,
+    TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
+    TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
+    TResult? Function(UuidValue uuid)? failureApproved,
   }) {
     return started?.call(line, generic, number, email, displayName, video);
   }
@@ -2091,16 +2050,16 @@ class _$_CallControlEventStarted
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventStarted value)? started,
+    TResult? Function(_CallControlEventAnswered value)? answered,
+    TResult? Function(_CallControlEventEnded value)? ended,
+    TResult? Function(_CallControlEventSetHeld value)? setHeld,
+    TResult? Function(_CallControlEventSetMuted value)? setMuted,
+    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
+    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
+    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
   }) {
     return started?.call(this);
   }
@@ -2173,12 +2132,11 @@ class _$_CallControlEventAnswered
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallControlEventAnswered &&
-            const DeepCollectionEquality().equals(other.uuid, uuid));
+            (identical(other.uuid, uuid) || other.uuid == uuid));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(uuid));
+  int get hashCode => Object.hash(runtimeType, uuid);
 
   @override
   @optionalTypeArgs
@@ -2202,18 +2160,18 @@ class _$_CallControlEventAnswered
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
+    TResult? Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
-    TResult Function(UuidValue uuid)? cameraSwitched,
-    TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult Function(UuidValue uuid)? failureApproved,
+    TResult? Function(UuidValue uuid)? answered,
+    TResult? Function(UuidValue uuid)? ended,
+    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
+    TResult? Function(UuidValue uuid, bool muted)? setMuted,
+    TResult? Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(UuidValue uuid)? cameraSwitched,
+    TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
+    TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
+    TResult? Function(UuidValue uuid)? failureApproved,
   }) {
     return answered?.call(uuid);
   }
@@ -2265,16 +2223,16 @@ class _$_CallControlEventAnswered
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventStarted value)? started,
+    TResult? Function(_CallControlEventAnswered value)? answered,
+    TResult? Function(_CallControlEventEnded value)? ended,
+    TResult? Function(_CallControlEventSetHeld value)? setHeld,
+    TResult? Function(_CallControlEventSetMuted value)? setMuted,
+    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
+    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
+    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
   }) {
     return answered?.call(this);
   }
@@ -2336,12 +2294,11 @@ class _$_CallControlEventEnded
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallControlEventEnded &&
-            const DeepCollectionEquality().equals(other.uuid, uuid));
+            (identical(other.uuid, uuid) || other.uuid == uuid));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(uuid));
+  int get hashCode => Object.hash(runtimeType, uuid);
 
   @override
   @optionalTypeArgs
@@ -2365,18 +2322,18 @@ class _$_CallControlEventEnded
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
+    TResult? Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
-    TResult Function(UuidValue uuid)? cameraSwitched,
-    TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult Function(UuidValue uuid)? failureApproved,
+    TResult? Function(UuidValue uuid)? answered,
+    TResult? Function(UuidValue uuid)? ended,
+    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
+    TResult? Function(UuidValue uuid, bool muted)? setMuted,
+    TResult? Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(UuidValue uuid)? cameraSwitched,
+    TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
+    TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
+    TResult? Function(UuidValue uuid)? failureApproved,
   }) {
     return ended?.call(uuid);
   }
@@ -2428,16 +2385,16 @@ class _$_CallControlEventEnded
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventStarted value)? started,
+    TResult? Function(_CallControlEventAnswered value)? answered,
+    TResult? Function(_CallControlEventEnded value)? ended,
+    TResult? Function(_CallControlEventSetHeld value)? setHeld,
+    TResult? Function(_CallControlEventSetMuted value)? setMuted,
+    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
+    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
+    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
   }) {
     return ended?.call(this);
   }
@@ -2502,15 +2459,12 @@ class _$_CallControlEventSetHeld
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallControlEventSetHeld &&
-            const DeepCollectionEquality().equals(other.uuid, uuid) &&
-            const DeepCollectionEquality().equals(other.onHold, onHold));
+            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.onHold, onHold) || other.onHold == onHold));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(uuid),
-      const DeepCollectionEquality().hash(onHold));
+  int get hashCode => Object.hash(runtimeType, uuid, onHold);
 
   @override
   @optionalTypeArgs
@@ -2534,18 +2488,18 @@ class _$_CallControlEventSetHeld
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
+    TResult? Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
-    TResult Function(UuidValue uuid)? cameraSwitched,
-    TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult Function(UuidValue uuid)? failureApproved,
+    TResult? Function(UuidValue uuid)? answered,
+    TResult? Function(UuidValue uuid)? ended,
+    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
+    TResult? Function(UuidValue uuid, bool muted)? setMuted,
+    TResult? Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(UuidValue uuid)? cameraSwitched,
+    TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
+    TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
+    TResult? Function(UuidValue uuid)? failureApproved,
   }) {
     return setHeld?.call(uuid, onHold);
   }
@@ -2597,16 +2551,16 @@ class _$_CallControlEventSetHeld
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventStarted value)? started,
+    TResult? Function(_CallControlEventAnswered value)? answered,
+    TResult? Function(_CallControlEventEnded value)? ended,
+    TResult? Function(_CallControlEventSetHeld value)? setHeld,
+    TResult? Function(_CallControlEventSetMuted value)? setMuted,
+    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
+    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
+    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
   }) {
     return setHeld?.call(this);
   }
@@ -2672,15 +2626,12 @@ class _$_CallControlEventSetMuted
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallControlEventSetMuted &&
-            const DeepCollectionEquality().equals(other.uuid, uuid) &&
-            const DeepCollectionEquality().equals(other.muted, muted));
+            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.muted, muted) || other.muted == muted));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(uuid),
-      const DeepCollectionEquality().hash(muted));
+  int get hashCode => Object.hash(runtimeType, uuid, muted);
 
   @override
   @optionalTypeArgs
@@ -2704,18 +2655,18 @@ class _$_CallControlEventSetMuted
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
+    TResult? Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
-    TResult Function(UuidValue uuid)? cameraSwitched,
-    TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult Function(UuidValue uuid)? failureApproved,
+    TResult? Function(UuidValue uuid)? answered,
+    TResult? Function(UuidValue uuid)? ended,
+    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
+    TResult? Function(UuidValue uuid, bool muted)? setMuted,
+    TResult? Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(UuidValue uuid)? cameraSwitched,
+    TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
+    TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
+    TResult? Function(UuidValue uuid)? failureApproved,
   }) {
     return setMuted?.call(uuid, muted);
   }
@@ -2767,16 +2718,16 @@ class _$_CallControlEventSetMuted
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventStarted value)? started,
+    TResult? Function(_CallControlEventAnswered value)? answered,
+    TResult? Function(_CallControlEventEnded value)? ended,
+    TResult? Function(_CallControlEventSetHeld value)? setHeld,
+    TResult? Function(_CallControlEventSetMuted value)? setMuted,
+    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
+    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
+    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
   }) {
     return setMuted?.call(this);
   }
@@ -2842,15 +2793,12 @@ class _$_CallControlEventSentDTMF
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallControlEventSentDTMF &&
-            const DeepCollectionEquality().equals(other.uuid, uuid) &&
-            const DeepCollectionEquality().equals(other.key, key));
+            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.key, key) || other.key == key));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(uuid),
-      const DeepCollectionEquality().hash(key));
+  int get hashCode => Object.hash(runtimeType, uuid, key);
 
   @override
   @optionalTypeArgs
@@ -2874,18 +2822,18 @@ class _$_CallControlEventSentDTMF
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
+    TResult? Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
-    TResult Function(UuidValue uuid)? cameraSwitched,
-    TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult Function(UuidValue uuid)? failureApproved,
+    TResult? Function(UuidValue uuid)? answered,
+    TResult? Function(UuidValue uuid)? ended,
+    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
+    TResult? Function(UuidValue uuid, bool muted)? setMuted,
+    TResult? Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(UuidValue uuid)? cameraSwitched,
+    TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
+    TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
+    TResult? Function(UuidValue uuid)? failureApproved,
   }) {
     return sentDTMF?.call(uuid, key);
   }
@@ -2937,16 +2885,16 @@ class _$_CallControlEventSentDTMF
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventStarted value)? started,
+    TResult? Function(_CallControlEventAnswered value)? answered,
+    TResult? Function(_CallControlEventEnded value)? ended,
+    TResult? Function(_CallControlEventSetHeld value)? setHeld,
+    TResult? Function(_CallControlEventSetMuted value)? setMuted,
+    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
+    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
+    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
   }) {
     return sentDTMF?.call(this);
   }
@@ -3009,12 +2957,11 @@ class _$_CallControlEventCameraSwitched
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallControlEventCameraSwitched &&
-            const DeepCollectionEquality().equals(other.uuid, uuid));
+            (identical(other.uuid, uuid) || other.uuid == uuid));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(uuid));
+  int get hashCode => Object.hash(runtimeType, uuid);
 
   @override
   @optionalTypeArgs
@@ -3038,18 +2985,18 @@ class _$_CallControlEventCameraSwitched
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
+    TResult? Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
-    TResult Function(UuidValue uuid)? cameraSwitched,
-    TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult Function(UuidValue uuid)? failureApproved,
+    TResult? Function(UuidValue uuid)? answered,
+    TResult? Function(UuidValue uuid)? ended,
+    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
+    TResult? Function(UuidValue uuid, bool muted)? setMuted,
+    TResult? Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(UuidValue uuid)? cameraSwitched,
+    TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
+    TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
+    TResult? Function(UuidValue uuid)? failureApproved,
   }) {
     return cameraSwitched?.call(uuid);
   }
@@ -3101,16 +3048,16 @@ class _$_CallControlEventCameraSwitched
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventStarted value)? started,
+    TResult? Function(_CallControlEventAnswered value)? answered,
+    TResult? Function(_CallControlEventEnded value)? ended,
+    TResult? Function(_CallControlEventSetHeld value)? setHeld,
+    TResult? Function(_CallControlEventSetMuted value)? setMuted,
+    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
+    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
+    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
   }) {
     return cameraSwitched?.call(this);
   }
@@ -3175,15 +3122,12 @@ class _$_CallControlEventCameraEnabled
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallControlEventCameraEnabled &&
-            const DeepCollectionEquality().equals(other.uuid, uuid) &&
-            const DeepCollectionEquality().equals(other.enabled, enabled));
+            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.enabled, enabled) || other.enabled == enabled));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(uuid),
-      const DeepCollectionEquality().hash(enabled));
+  int get hashCode => Object.hash(runtimeType, uuid, enabled);
 
   @override
   @optionalTypeArgs
@@ -3207,18 +3151,18 @@ class _$_CallControlEventCameraEnabled
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
+    TResult? Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
-    TResult Function(UuidValue uuid)? cameraSwitched,
-    TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult Function(UuidValue uuid)? failureApproved,
+    TResult? Function(UuidValue uuid)? answered,
+    TResult? Function(UuidValue uuid)? ended,
+    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
+    TResult? Function(UuidValue uuid, bool muted)? setMuted,
+    TResult? Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(UuidValue uuid)? cameraSwitched,
+    TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
+    TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
+    TResult? Function(UuidValue uuid)? failureApproved,
   }) {
     return cameraEnabled?.call(uuid, enabled);
   }
@@ -3270,16 +3214,16 @@ class _$_CallControlEventCameraEnabled
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventStarted value)? started,
+    TResult? Function(_CallControlEventAnswered value)? answered,
+    TResult? Function(_CallControlEventEnded value)? ended,
+    TResult? Function(_CallControlEventSetHeld value)? setHeld,
+    TResult? Function(_CallControlEventSetMuted value)? setMuted,
+    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
+    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
+    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
   }) {
     return cameraEnabled?.call(this);
   }
@@ -3346,15 +3290,12 @@ class _$_CallControlEventSpeakerEnabled
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallControlEventSpeakerEnabled &&
-            const DeepCollectionEquality().equals(other.uuid, uuid) &&
-            const DeepCollectionEquality().equals(other.enabled, enabled));
+            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.enabled, enabled) || other.enabled == enabled));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(uuid),
-      const DeepCollectionEquality().hash(enabled));
+  int get hashCode => Object.hash(runtimeType, uuid, enabled);
 
   @override
   @optionalTypeArgs
@@ -3378,18 +3319,18 @@ class _$_CallControlEventSpeakerEnabled
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
+    TResult? Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
-    TResult Function(UuidValue uuid)? cameraSwitched,
-    TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult Function(UuidValue uuid)? failureApproved,
+    TResult? Function(UuidValue uuid)? answered,
+    TResult? Function(UuidValue uuid)? ended,
+    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
+    TResult? Function(UuidValue uuid, bool muted)? setMuted,
+    TResult? Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(UuidValue uuid)? cameraSwitched,
+    TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
+    TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
+    TResult? Function(UuidValue uuid)? failureApproved,
   }) {
     return speakerEnabled?.call(uuid, enabled);
   }
@@ -3441,16 +3382,16 @@ class _$_CallControlEventSpeakerEnabled
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventStarted value)? started,
+    TResult? Function(_CallControlEventAnswered value)? answered,
+    TResult? Function(_CallControlEventEnded value)? ended,
+    TResult? Function(_CallControlEventSetHeld value)? setHeld,
+    TResult? Function(_CallControlEventSetMuted value)? setMuted,
+    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
+    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
+    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
   }) {
     return speakerEnabled?.call(this);
   }
@@ -3514,12 +3455,11 @@ class _$_CallControlEventFailureApproved
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallControlEventFailureApproved &&
-            const DeepCollectionEquality().equals(other.uuid, uuid));
+            (identical(other.uuid, uuid) || other.uuid == uuid));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(uuid));
+  int get hashCode => Object.hash(runtimeType, uuid);
 
   @override
   @optionalTypeArgs
@@ -3543,18 +3483,18 @@ class _$_CallControlEventFailureApproved
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
+    TResult? Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
-    TResult Function(UuidValue uuid)? cameraSwitched,
-    TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult Function(UuidValue uuid)? failureApproved,
+    TResult? Function(UuidValue uuid)? answered,
+    TResult? Function(UuidValue uuid)? ended,
+    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
+    TResult? Function(UuidValue uuid, bool muted)? setMuted,
+    TResult? Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(UuidValue uuid)? cameraSwitched,
+    TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
+    TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
+    TResult? Function(UuidValue uuid)? failureApproved,
   }) {
     return failureApproved?.call(uuid);
   }
@@ -3606,16 +3546,16 @@ class _$_CallControlEventFailureApproved
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventStarted value)? started,
+    TResult? Function(_CallControlEventAnswered value)? answered,
+    TResult? Function(_CallControlEventEnded value)? ended,
+    TResult? Function(_CallControlEventSetHeld value)? setHeld,
+    TResult? Function(_CallControlEventSetMuted value)? setMuted,
+    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
+    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
+    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
   }) {
     return failureApproved?.call(this);
   }
@@ -3666,14 +3606,14 @@ mixin _$_CallPerformEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(UuidValue uuid, CallkeepHandle handle, String? displayName,
-            bool video)?
+    TResult? Function(UuidValue uuid, CallkeepHandle handle,
+            String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(UuidValue uuid)? answered,
+    TResult? Function(UuidValue uuid)? ended,
+    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
+    TResult? Function(UuidValue uuid, bool muted)? setMuted,
+    TResult? Function(UuidValue uuid, String key)? sentDTMF,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -3701,12 +3641,12 @@ mixin _$_CallPerformEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallPerformEventStarted value)? started,
-    TResult Function(_CallPerformEventAnswered value)? answered,
-    TResult Function(_CallPerformEventEnded value)? ended,
-    TResult Function(_CallPerformEventSetHeld value)? setHeld,
-    TResult Function(_CallPerformEventSetMuted value)? setMuted,
-    TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallPerformEventStarted value)? started,
+    TResult? Function(_CallPerformEventAnswered value)? answered,
+    TResult? Function(_CallPerformEventEnded value)? ended,
+    TResult? Function(_CallPerformEventSetHeld value)? setHeld,
+    TResult? Function(_CallPerformEventSetMuted value)? setMuted,
+    TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -3760,20 +3700,16 @@ class _$_CallPerformEventStarted extends _CallPerformEventStarted
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallPerformEventStarted &&
-            const DeepCollectionEquality().equals(other.uuid, uuid) &&
-            const DeepCollectionEquality().equals(other.handle, handle) &&
-            const DeepCollectionEquality()
-                .equals(other.displayName, displayName) &&
-            const DeepCollectionEquality().equals(other.video, video));
+            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.handle, handle) || other.handle == handle) &&
+            (identical(other.displayName, displayName) ||
+                other.displayName == displayName) &&
+            (identical(other.video, video) || other.video == video));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(uuid),
-      const DeepCollectionEquality().hash(handle),
-      const DeepCollectionEquality().hash(displayName),
-      const DeepCollectionEquality().hash(video));
+  int get hashCode =>
+      Object.hash(runtimeType, uuid, handle, displayName, video);
 
   @override
   @optionalTypeArgs
@@ -3793,14 +3729,14 @@ class _$_CallPerformEventStarted extends _CallPerformEventStarted
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(UuidValue uuid, CallkeepHandle handle, String? displayName,
-            bool video)?
+    TResult? Function(UuidValue uuid, CallkeepHandle handle,
+            String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(UuidValue uuid)? answered,
+    TResult? Function(UuidValue uuid)? ended,
+    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
+    TResult? Function(UuidValue uuid, bool muted)? setMuted,
+    TResult? Function(UuidValue uuid, String key)? sentDTMF,
   }) {
     return started?.call(uuid, handle, displayName, video);
   }
@@ -3840,12 +3776,12 @@ class _$_CallPerformEventStarted extends _CallPerformEventStarted
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallPerformEventStarted value)? started,
-    TResult Function(_CallPerformEventAnswered value)? answered,
-    TResult Function(_CallPerformEventEnded value)? ended,
-    TResult Function(_CallPerformEventSetHeld value)? setHeld,
-    TResult Function(_CallPerformEventSetMuted value)? setMuted,
-    TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallPerformEventStarted value)? started,
+    TResult? Function(_CallPerformEventAnswered value)? answered,
+    TResult? Function(_CallPerformEventEnded value)? ended,
+    TResult? Function(_CallPerformEventSetHeld value)? setHeld,
+    TResult? Function(_CallPerformEventSetMuted value)? setMuted,
+    TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
   }) {
     return started?.call(this);
   }
@@ -3909,12 +3845,11 @@ class _$_CallPerformEventAnswered extends _CallPerformEventAnswered
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallPerformEventAnswered &&
-            const DeepCollectionEquality().equals(other.uuid, uuid));
+            (identical(other.uuid, uuid) || other.uuid == uuid));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(uuid));
+  int get hashCode => Object.hash(runtimeType, uuid);
 
   @override
   @optionalTypeArgs
@@ -3934,14 +3869,14 @@ class _$_CallPerformEventAnswered extends _CallPerformEventAnswered
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(UuidValue uuid, CallkeepHandle handle, String? displayName,
-            bool video)?
+    TResult? Function(UuidValue uuid, CallkeepHandle handle,
+            String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(UuidValue uuid)? answered,
+    TResult? Function(UuidValue uuid)? ended,
+    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
+    TResult? Function(UuidValue uuid, bool muted)? setMuted,
+    TResult? Function(UuidValue uuid, String key)? sentDTMF,
   }) {
     return answered?.call(uuid);
   }
@@ -3981,12 +3916,12 @@ class _$_CallPerformEventAnswered extends _CallPerformEventAnswered
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallPerformEventStarted value)? started,
-    TResult Function(_CallPerformEventAnswered value)? answered,
-    TResult Function(_CallPerformEventEnded value)? ended,
-    TResult Function(_CallPerformEventSetHeld value)? setHeld,
-    TResult Function(_CallPerformEventSetMuted value)? setMuted,
-    TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallPerformEventStarted value)? started,
+    TResult? Function(_CallPerformEventAnswered value)? answered,
+    TResult? Function(_CallPerformEventEnded value)? ended,
+    TResult? Function(_CallPerformEventSetHeld value)? setHeld,
+    TResult? Function(_CallPerformEventSetMuted value)? setMuted,
+    TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
   }) {
     return answered?.call(this);
   }
@@ -4045,12 +3980,11 @@ class _$_CallPerformEventEnded extends _CallPerformEventEnded
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallPerformEventEnded &&
-            const DeepCollectionEquality().equals(other.uuid, uuid));
+            (identical(other.uuid, uuid) || other.uuid == uuid));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(uuid));
+  int get hashCode => Object.hash(runtimeType, uuid);
 
   @override
   @optionalTypeArgs
@@ -4070,14 +4004,14 @@ class _$_CallPerformEventEnded extends _CallPerformEventEnded
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(UuidValue uuid, CallkeepHandle handle, String? displayName,
-            bool video)?
+    TResult? Function(UuidValue uuid, CallkeepHandle handle,
+            String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(UuidValue uuid)? answered,
+    TResult? Function(UuidValue uuid)? ended,
+    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
+    TResult? Function(UuidValue uuid, bool muted)? setMuted,
+    TResult? Function(UuidValue uuid, String key)? sentDTMF,
   }) {
     return ended?.call(uuid);
   }
@@ -4117,12 +4051,12 @@ class _$_CallPerformEventEnded extends _CallPerformEventEnded
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallPerformEventStarted value)? started,
-    TResult Function(_CallPerformEventAnswered value)? answered,
-    TResult Function(_CallPerformEventEnded value)? ended,
-    TResult Function(_CallPerformEventSetHeld value)? setHeld,
-    TResult Function(_CallPerformEventSetMuted value)? setMuted,
-    TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallPerformEventStarted value)? started,
+    TResult? Function(_CallPerformEventAnswered value)? answered,
+    TResult? Function(_CallPerformEventEnded value)? ended,
+    TResult? Function(_CallPerformEventSetHeld value)? setHeld,
+    TResult? Function(_CallPerformEventSetMuted value)? setMuted,
+    TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
   }) {
     return ended?.call(this);
   }
@@ -4184,15 +4118,12 @@ class _$_CallPerformEventSetHeld extends _CallPerformEventSetHeld
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallPerformEventSetHeld &&
-            const DeepCollectionEquality().equals(other.uuid, uuid) &&
-            const DeepCollectionEquality().equals(other.onHold, onHold));
+            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.onHold, onHold) || other.onHold == onHold));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(uuid),
-      const DeepCollectionEquality().hash(onHold));
+  int get hashCode => Object.hash(runtimeType, uuid, onHold);
 
   @override
   @optionalTypeArgs
@@ -4212,14 +4143,14 @@ class _$_CallPerformEventSetHeld extends _CallPerformEventSetHeld
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(UuidValue uuid, CallkeepHandle handle, String? displayName,
-            bool video)?
+    TResult? Function(UuidValue uuid, CallkeepHandle handle,
+            String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(UuidValue uuid)? answered,
+    TResult? Function(UuidValue uuid)? ended,
+    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
+    TResult? Function(UuidValue uuid, bool muted)? setMuted,
+    TResult? Function(UuidValue uuid, String key)? sentDTMF,
   }) {
     return setHeld?.call(uuid, onHold);
   }
@@ -4259,12 +4190,12 @@ class _$_CallPerformEventSetHeld extends _CallPerformEventSetHeld
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallPerformEventStarted value)? started,
-    TResult Function(_CallPerformEventAnswered value)? answered,
-    TResult Function(_CallPerformEventEnded value)? ended,
-    TResult Function(_CallPerformEventSetHeld value)? setHeld,
-    TResult Function(_CallPerformEventSetMuted value)? setMuted,
-    TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallPerformEventStarted value)? started,
+    TResult? Function(_CallPerformEventAnswered value)? answered,
+    TResult? Function(_CallPerformEventEnded value)? ended,
+    TResult? Function(_CallPerformEventSetHeld value)? setHeld,
+    TResult? Function(_CallPerformEventSetMuted value)? setMuted,
+    TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
   }) {
     return setHeld?.call(this);
   }
@@ -4327,15 +4258,12 @@ class _$_CallPerformEventSetMuted extends _CallPerformEventSetMuted
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallPerformEventSetMuted &&
-            const DeepCollectionEquality().equals(other.uuid, uuid) &&
-            const DeepCollectionEquality().equals(other.muted, muted));
+            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.muted, muted) || other.muted == muted));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(uuid),
-      const DeepCollectionEquality().hash(muted));
+  int get hashCode => Object.hash(runtimeType, uuid, muted);
 
   @override
   @optionalTypeArgs
@@ -4355,14 +4283,14 @@ class _$_CallPerformEventSetMuted extends _CallPerformEventSetMuted
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(UuidValue uuid, CallkeepHandle handle, String? displayName,
-            bool video)?
+    TResult? Function(UuidValue uuid, CallkeepHandle handle,
+            String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(UuidValue uuid)? answered,
+    TResult? Function(UuidValue uuid)? ended,
+    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
+    TResult? Function(UuidValue uuid, bool muted)? setMuted,
+    TResult? Function(UuidValue uuid, String key)? sentDTMF,
   }) {
     return setMuted?.call(uuid, muted);
   }
@@ -4402,12 +4330,12 @@ class _$_CallPerformEventSetMuted extends _CallPerformEventSetMuted
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallPerformEventStarted value)? started,
-    TResult Function(_CallPerformEventAnswered value)? answered,
-    TResult Function(_CallPerformEventEnded value)? ended,
-    TResult Function(_CallPerformEventSetHeld value)? setHeld,
-    TResult Function(_CallPerformEventSetMuted value)? setMuted,
-    TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallPerformEventStarted value)? started,
+    TResult? Function(_CallPerformEventAnswered value)? answered,
+    TResult? Function(_CallPerformEventEnded value)? ended,
+    TResult? Function(_CallPerformEventSetHeld value)? setHeld,
+    TResult? Function(_CallPerformEventSetMuted value)? setMuted,
+    TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
   }) {
     return setMuted?.call(this);
   }
@@ -4470,15 +4398,12 @@ class _$_CallPerformEventSentDTMF extends _CallPerformEventSentDTMF
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallPerformEventSentDTMF &&
-            const DeepCollectionEquality().equals(other.uuid, uuid) &&
-            const DeepCollectionEquality().equals(other.key, key));
+            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.key, key) || other.key == key));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(uuid),
-      const DeepCollectionEquality().hash(key));
+  int get hashCode => Object.hash(runtimeType, uuid, key);
 
   @override
   @optionalTypeArgs
@@ -4498,14 +4423,14 @@ class _$_CallPerformEventSentDTMF extends _CallPerformEventSentDTMF
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(UuidValue uuid, CallkeepHandle handle, String? displayName,
-            bool video)?
+    TResult? Function(UuidValue uuid, CallkeepHandle handle,
+            String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(UuidValue uuid)? answered,
+    TResult? Function(UuidValue uuid)? ended,
+    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
+    TResult? Function(UuidValue uuid, bool muted)? setMuted,
+    TResult? Function(UuidValue uuid, String key)? sentDTMF,
   }) {
     return sentDTMF?.call(uuid, key);
   }
@@ -4545,12 +4470,12 @@ class _$_CallPerformEventSentDTMF extends _CallPerformEventSentDTMF
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_CallPerformEventStarted value)? started,
-    TResult Function(_CallPerformEventAnswered value)? answered,
-    TResult Function(_CallPerformEventEnded value)? ended,
-    TResult Function(_CallPerformEventSetHeld value)? setHeld,
-    TResult Function(_CallPerformEventSetMuted value)? setMuted,
-    TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallPerformEventStarted value)? started,
+    TResult? Function(_CallPerformEventAnswered value)? answered,
+    TResult? Function(_CallPerformEventEnded value)? ended,
+    TResult? Function(_CallPerformEventSetHeld value)? setHeld,
+    TResult? Function(_CallPerformEventSetMuted value)? setMuted,
+    TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
   }) {
     return sentDTMF?.call(this);
   }
@@ -4598,12 +4523,12 @@ mixin _$_PeerConnectionEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(UuidValue uuid, RTCIceGatheringState state)?
+    TResult? Function(UuidValue uuid, RTCIceGatheringState state)?
         iceGatheringStateChanged,
-    TResult Function(UuidValue uuid, RTCIceCandidate candidate)?
+    TResult? Function(UuidValue uuid, RTCIceCandidate candidate)?
         iceCandidateIdentified,
-    TResult Function(UuidValue uuid, MediaStream stream)? streamAdded,
-    TResult Function(UuidValue uuid, MediaStream stream)? streamRemoved,
+    TResult? Function(UuidValue uuid, MediaStream stream)? streamAdded,
+    TResult? Function(UuidValue uuid, MediaStream stream)? streamRemoved,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -4632,12 +4557,12 @@ mixin _$_PeerConnectionEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
+    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
         iceGatheringStateChanged,
-    TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
+    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
         iceCandidateIdentified,
-    TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
-    TResult Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
+    TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
+    TResult? Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -4685,15 +4610,12 @@ class _$_PeerConnectionEventIceGatheringStateChanged
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_PeerConnectionEventIceGatheringStateChanged &&
-            const DeepCollectionEquality().equals(other.uuid, uuid) &&
-            const DeepCollectionEquality().equals(other.state, state));
+            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.state, state) || other.state == state));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(uuid),
-      const DeepCollectionEquality().hash(state));
+  int get hashCode => Object.hash(runtimeType, uuid, state);
 
   @override
   @optionalTypeArgs
@@ -4711,12 +4633,12 @@ class _$_PeerConnectionEventIceGatheringStateChanged
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(UuidValue uuid, RTCIceGatheringState state)?
+    TResult? Function(UuidValue uuid, RTCIceGatheringState state)?
         iceGatheringStateChanged,
-    TResult Function(UuidValue uuid, RTCIceCandidate candidate)?
+    TResult? Function(UuidValue uuid, RTCIceCandidate candidate)?
         iceCandidateIdentified,
-    TResult Function(UuidValue uuid, MediaStream stream)? streamAdded,
-    TResult Function(UuidValue uuid, MediaStream stream)? streamRemoved,
+    TResult? Function(UuidValue uuid, MediaStream stream)? streamAdded,
+    TResult? Function(UuidValue uuid, MediaStream stream)? streamRemoved,
   }) {
     return iceGatheringStateChanged?.call(uuid, state);
   }
@@ -4757,12 +4679,12 @@ class _$_PeerConnectionEventIceGatheringStateChanged
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
+    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
         iceGatheringStateChanged,
-    TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
+    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
         iceCandidateIdentified,
-    TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
-    TResult Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
+    TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
+    TResult? Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
   }) {
     return iceGatheringStateChanged?.call(this);
   }
@@ -4828,15 +4750,13 @@ class _$_PeerConnectionEventIceCandidateIdentified
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_PeerConnectionEventIceCandidateIdentified &&
-            const DeepCollectionEquality().equals(other.uuid, uuid) &&
-            const DeepCollectionEquality().equals(other.candidate, candidate));
+            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.candidate, candidate) ||
+                other.candidate == candidate));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(uuid),
-      const DeepCollectionEquality().hash(candidate));
+  int get hashCode => Object.hash(runtimeType, uuid, candidate);
 
   @override
   @optionalTypeArgs
@@ -4854,12 +4774,12 @@ class _$_PeerConnectionEventIceCandidateIdentified
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(UuidValue uuid, RTCIceGatheringState state)?
+    TResult? Function(UuidValue uuid, RTCIceGatheringState state)?
         iceGatheringStateChanged,
-    TResult Function(UuidValue uuid, RTCIceCandidate candidate)?
+    TResult? Function(UuidValue uuid, RTCIceCandidate candidate)?
         iceCandidateIdentified,
-    TResult Function(UuidValue uuid, MediaStream stream)? streamAdded,
-    TResult Function(UuidValue uuid, MediaStream stream)? streamRemoved,
+    TResult? Function(UuidValue uuid, MediaStream stream)? streamAdded,
+    TResult? Function(UuidValue uuid, MediaStream stream)? streamRemoved,
   }) {
     return iceCandidateIdentified?.call(uuid, candidate);
   }
@@ -4900,12 +4820,12 @@ class _$_PeerConnectionEventIceCandidateIdentified
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
+    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
         iceGatheringStateChanged,
-    TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
+    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
         iceCandidateIdentified,
-    TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
-    TResult Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
+    TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
+    TResult? Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
   }) {
     return iceCandidateIdentified?.call(this);
   }
@@ -4970,15 +4890,12 @@ class _$_PeerConnectionEventStreamAdded
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_PeerConnectionEventStreamAdded &&
-            const DeepCollectionEquality().equals(other.uuid, uuid) &&
-            const DeepCollectionEquality().equals(other.stream, stream));
+            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.stream, stream) || other.stream == stream));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(uuid),
-      const DeepCollectionEquality().hash(stream));
+  int get hashCode => Object.hash(runtimeType, uuid, stream);
 
   @override
   @optionalTypeArgs
@@ -4996,12 +4913,12 @@ class _$_PeerConnectionEventStreamAdded
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(UuidValue uuid, RTCIceGatheringState state)?
+    TResult? Function(UuidValue uuid, RTCIceGatheringState state)?
         iceGatheringStateChanged,
-    TResult Function(UuidValue uuid, RTCIceCandidate candidate)?
+    TResult? Function(UuidValue uuid, RTCIceCandidate candidate)?
         iceCandidateIdentified,
-    TResult Function(UuidValue uuid, MediaStream stream)? streamAdded,
-    TResult Function(UuidValue uuid, MediaStream stream)? streamRemoved,
+    TResult? Function(UuidValue uuid, MediaStream stream)? streamAdded,
+    TResult? Function(UuidValue uuid, MediaStream stream)? streamRemoved,
   }) {
     return streamAdded?.call(uuid, stream);
   }
@@ -5042,12 +4959,12 @@ class _$_PeerConnectionEventStreamAdded
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
+    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
         iceGatheringStateChanged,
-    TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
+    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
         iceCandidateIdentified,
-    TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
-    TResult Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
+    TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
+    TResult? Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
   }) {
     return streamAdded?.call(this);
   }
@@ -5111,15 +5028,12 @@ class _$_PeerConnectionEventStreamRemoved
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_PeerConnectionEventStreamRemoved &&
-            const DeepCollectionEquality().equals(other.uuid, uuid) &&
-            const DeepCollectionEquality().equals(other.stream, stream));
+            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.stream, stream) || other.stream == stream));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(uuid),
-      const DeepCollectionEquality().hash(stream));
+  int get hashCode => Object.hash(runtimeType, uuid, stream);
 
   @override
   @optionalTypeArgs
@@ -5137,12 +5051,12 @@ class _$_PeerConnectionEventStreamRemoved
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(UuidValue uuid, RTCIceGatheringState state)?
+    TResult? Function(UuidValue uuid, RTCIceGatheringState state)?
         iceGatheringStateChanged,
-    TResult Function(UuidValue uuid, RTCIceCandidate candidate)?
+    TResult? Function(UuidValue uuid, RTCIceCandidate candidate)?
         iceCandidateIdentified,
-    TResult Function(UuidValue uuid, MediaStream stream)? streamAdded,
-    TResult Function(UuidValue uuid, MediaStream stream)? streamRemoved,
+    TResult? Function(UuidValue uuid, MediaStream stream)? streamAdded,
+    TResult? Function(UuidValue uuid, MediaStream stream)? streamRemoved,
   }) {
     return streamRemoved?.call(uuid, stream);
   }
@@ -5183,12 +5097,12 @@ class _$_PeerConnectionEventStreamRemoved
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
+    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
         iceGatheringStateChanged,
-    TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
+    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
         iceCandidateIdentified,
-    TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
-    TResult Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
+    TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
+    TResult? Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
   }) {
     return streamRemoved?.call(this);
   }
@@ -5245,7 +5159,8 @@ mixin _$CallState {
 /// @nodoc
 abstract class $CallStateCopyWith<$Res> {
   factory $CallStateCopyWith(CallState value, $Res Function(CallState) then) =
-      _$CallStateCopyWithImpl<$Res>;
+      _$CallStateCopyWithImpl<$Res, CallState>;
+  @useResult
   $Res call(
       {ConnectivityResult? currentConnectivityResult,
       SignalingClientStatus signalingClientStatus,
@@ -5258,58 +5173,61 @@ abstract class $CallStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$CallStateCopyWithImpl<$Res> implements $CallStateCopyWith<$Res> {
+class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
+    implements $CallStateCopyWith<$Res> {
   _$CallStateCopyWithImpl(this._value, this._then);
 
-  final CallState _value;
   // ignore: unused_field
-  final $Res Function(CallState) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? currentConnectivityResult = freezed,
-    Object? signalingClientStatus = freezed,
+    Object? signalingClientStatus = null,
     Object? lastSignalingClientConnectError = freezed,
     Object? lastSignalingClientDisconnectError = freezed,
     Object? lastSignalingDisconnectCode = freezed,
-    Object? linesCount = freezed,
-    Object? activeCalls = freezed,
+    Object? linesCount = null,
+    Object? activeCalls = null,
     Object? speaker = freezed,
   }) {
     return _then(_value.copyWith(
-      currentConnectivityResult: currentConnectivityResult == freezed
+      currentConnectivityResult: freezed == currentConnectivityResult
           ? _value.currentConnectivityResult
           : currentConnectivityResult // ignore: cast_nullable_to_non_nullable
               as ConnectivityResult?,
-      signalingClientStatus: signalingClientStatus == freezed
+      signalingClientStatus: null == signalingClientStatus
           ? _value.signalingClientStatus
           : signalingClientStatus // ignore: cast_nullable_to_non_nullable
               as SignalingClientStatus,
       lastSignalingClientConnectError:
-          lastSignalingClientConnectError == freezed
+          freezed == lastSignalingClientConnectError
               ? _value.lastSignalingClientConnectError
               : lastSignalingClientConnectError,
       lastSignalingClientDisconnectError:
-          lastSignalingClientDisconnectError == freezed
+          freezed == lastSignalingClientDisconnectError
               ? _value.lastSignalingClientDisconnectError
               : lastSignalingClientDisconnectError,
-      lastSignalingDisconnectCode: lastSignalingDisconnectCode == freezed
+      lastSignalingDisconnectCode: freezed == lastSignalingDisconnectCode
           ? _value.lastSignalingDisconnectCode
           : lastSignalingDisconnectCode // ignore: cast_nullable_to_non_nullable
               as int?,
-      linesCount: linesCount == freezed
+      linesCount: null == linesCount
           ? _value.linesCount
           : linesCount // ignore: cast_nullable_to_non_nullable
               as int,
-      activeCalls: activeCalls == freezed
+      activeCalls: null == activeCalls
           ? _value.activeCalls
           : activeCalls // ignore: cast_nullable_to_non_nullable
               as List<ActiveCall>,
-      speaker: speaker == freezed
+      speaker: freezed == speaker
           ? _value.speaker
           : speaker // ignore: cast_nullable_to_non_nullable
               as bool?,
-    ));
+    ) as $Val);
   }
 }
 
@@ -5319,6 +5237,7 @@ abstract class _$$_CallStateCopyWith<$Res> implements $CallStateCopyWith<$Res> {
           _$_CallState value, $Res Function(_$_CallState) then) =
       __$$_CallStateCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {ConnectivityResult? currentConnectivityResult,
       SignalingClientStatus signalingClientStatus,
@@ -5331,56 +5250,55 @@ abstract class _$$_CallStateCopyWith<$Res> implements $CallStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_CallStateCopyWithImpl<$Res> extends _$CallStateCopyWithImpl<$Res>
+class __$$_CallStateCopyWithImpl<$Res>
+    extends _$CallStateCopyWithImpl<$Res, _$_CallState>
     implements _$$_CallStateCopyWith<$Res> {
   __$$_CallStateCopyWithImpl(
       _$_CallState _value, $Res Function(_$_CallState) _then)
-      : super(_value, (v) => _then(v as _$_CallState));
+      : super(_value, _then);
 
-  @override
-  _$_CallState get _value => super._value as _$_CallState;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? currentConnectivityResult = freezed,
-    Object? signalingClientStatus = freezed,
+    Object? signalingClientStatus = null,
     Object? lastSignalingClientConnectError = freezed,
     Object? lastSignalingClientDisconnectError = freezed,
     Object? lastSignalingDisconnectCode = freezed,
-    Object? linesCount = freezed,
-    Object? activeCalls = freezed,
+    Object? linesCount = null,
+    Object? activeCalls = null,
     Object? speaker = freezed,
   }) {
     return _then(_$_CallState(
-      currentConnectivityResult: currentConnectivityResult == freezed
+      currentConnectivityResult: freezed == currentConnectivityResult
           ? _value.currentConnectivityResult
           : currentConnectivityResult // ignore: cast_nullable_to_non_nullable
               as ConnectivityResult?,
-      signalingClientStatus: signalingClientStatus == freezed
+      signalingClientStatus: null == signalingClientStatus
           ? _value.signalingClientStatus
           : signalingClientStatus // ignore: cast_nullable_to_non_nullable
               as SignalingClientStatus,
       lastSignalingClientConnectError:
-          lastSignalingClientConnectError == freezed
+          freezed == lastSignalingClientConnectError
               ? _value.lastSignalingClientConnectError
               : lastSignalingClientConnectError,
       lastSignalingClientDisconnectError:
-          lastSignalingClientDisconnectError == freezed
+          freezed == lastSignalingClientDisconnectError
               ? _value.lastSignalingClientDisconnectError
               : lastSignalingClientDisconnectError,
-      lastSignalingDisconnectCode: lastSignalingDisconnectCode == freezed
+      lastSignalingDisconnectCode: freezed == lastSignalingDisconnectCode
           ? _value.lastSignalingDisconnectCode
           : lastSignalingDisconnectCode // ignore: cast_nullable_to_non_nullable
               as int?,
-      linesCount: linesCount == freezed
+      linesCount: null == linesCount
           ? _value.linesCount
           : linesCount // ignore: cast_nullable_to_non_nullable
               as int,
-      activeCalls: activeCalls == freezed
+      activeCalls: null == activeCalls
           ? _value._activeCalls
           : activeCalls // ignore: cast_nullable_to_non_nullable
               as List<ActiveCall>,
-      speaker: speaker == freezed
+      speaker: freezed == speaker
           ? _value.speaker
           : speaker // ignore: cast_nullable_to_non_nullable
               as bool?,
@@ -5457,40 +5375,43 @@ class _$_CallState extends _CallState with DiagnosticableTreeMixin {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallState &&
-            const DeepCollectionEquality().equals(
-                other.currentConnectivityResult, currentConnectivityResult) &&
-            const DeepCollectionEquality()
-                .equals(other.signalingClientStatus, signalingClientStatus) &&
+            (identical(other.currentConnectivityResult,
+                    currentConnectivityResult) ||
+                other.currentConnectivityResult == currentConnectivityResult) &&
+            (identical(other.signalingClientStatus, signalingClientStatus) ||
+                other.signalingClientStatus == signalingClientStatus) &&
             const DeepCollectionEquality().equals(
                 other.lastSignalingClientConnectError,
                 lastSignalingClientConnectError) &&
             const DeepCollectionEquality().equals(
                 other.lastSignalingClientDisconnectError,
                 lastSignalingClientDisconnectError) &&
-            const DeepCollectionEquality().equals(
-                other.lastSignalingDisconnectCode,
-                lastSignalingDisconnectCode) &&
-            const DeepCollectionEquality()
-                .equals(other.linesCount, linesCount) &&
+            (identical(other.lastSignalingDisconnectCode,
+                    lastSignalingDisconnectCode) ||
+                other.lastSignalingDisconnectCode ==
+                    lastSignalingDisconnectCode) &&
+            (identical(other.linesCount, linesCount) ||
+                other.linesCount == linesCount) &&
             const DeepCollectionEquality()
                 .equals(other._activeCalls, _activeCalls) &&
-            const DeepCollectionEquality().equals(other.speaker, speaker));
+            (identical(other.speaker, speaker) || other.speaker == speaker));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(currentConnectivityResult),
-      const DeepCollectionEquality().hash(signalingClientStatus),
+      currentConnectivityResult,
+      signalingClientStatus,
       const DeepCollectionEquality().hash(lastSignalingClientConnectError),
       const DeepCollectionEquality().hash(lastSignalingClientDisconnectError),
-      const DeepCollectionEquality().hash(lastSignalingDisconnectCode),
-      const DeepCollectionEquality().hash(linesCount),
+      lastSignalingDisconnectCode,
+      linesCount,
       const DeepCollectionEquality().hash(_activeCalls),
-      const DeepCollectionEquality().hash(speaker));
+      speaker);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_CallStateCopyWith<_$_CallState> get copyWith =>
       __$$_CallStateCopyWithImpl<_$_CallState>(this, _$identity);
 }
@@ -5556,7 +5477,8 @@ mixin _$ActiveCall {
 abstract class $ActiveCallCopyWith<$Res> {
   factory $ActiveCallCopyWith(
           ActiveCall value, $Res Function(ActiveCall) then) =
-      _$ActiveCallCopyWithImpl<$Res>;
+      _$ActiveCallCopyWithImpl<$Res, ActiveCall>;
+  @useResult
   $Res call(
       {Direction direction,
       int line,
@@ -5576,25 +5498,28 @@ abstract class $ActiveCallCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ActiveCallCopyWithImpl<$Res> implements $ActiveCallCopyWith<$Res> {
+class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
+    implements $ActiveCallCopyWith<$Res> {
   _$ActiveCallCopyWithImpl(this._value, this._then);
 
-  final ActiveCall _value;
   // ignore: unused_field
-  final $Res Function(ActiveCall) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? direction = freezed,
-    Object? line = freezed,
-    Object? callId = freezed,
-    Object? handle = freezed,
+    Object? direction = null,
+    Object? line = null,
+    Object? callId = null,
+    Object? handle = null,
     Object? displayName = freezed,
-    Object? video = freezed,
+    Object? video = null,
     Object? frontCamera = freezed,
-    Object? held = freezed,
-    Object? muted = freezed,
-    Object? createdTime = freezed,
+    Object? held = null,
+    Object? muted = null,
+    Object? createdTime = null,
     Object? acceptedTime = freezed,
     Object? hungUpTime = freezed,
     Object? failure = freezed,
@@ -5602,64 +5527,64 @@ class _$ActiveCallCopyWithImpl<$Res> implements $ActiveCallCopyWith<$Res> {
     Object? remoteStream = freezed,
   }) {
     return _then(_value.copyWith(
-      direction: direction == freezed
+      direction: null == direction
           ? _value.direction
           : direction // ignore: cast_nullable_to_non_nullable
               as Direction,
-      line: line == freezed
+      line: null == line
           ? _value.line
           : line // ignore: cast_nullable_to_non_nullable
               as int,
-      callId: callId == freezed
+      callId: null == callId
           ? _value.callId
           : callId // ignore: cast_nullable_to_non_nullable
               as CallIdValue,
-      handle: handle == freezed
+      handle: null == handle
           ? _value.handle
           : handle // ignore: cast_nullable_to_non_nullable
               as CallkeepHandle,
-      displayName: displayName == freezed
+      displayName: freezed == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
               as String?,
-      video: video == freezed
+      video: null == video
           ? _value.video
           : video // ignore: cast_nullable_to_non_nullable
               as bool,
-      frontCamera: frontCamera == freezed
+      frontCamera: freezed == frontCamera
           ? _value.frontCamera
           : frontCamera // ignore: cast_nullable_to_non_nullable
               as bool?,
-      held: held == freezed
+      held: null == held
           ? _value.held
           : held // ignore: cast_nullable_to_non_nullable
               as bool,
-      muted: muted == freezed
+      muted: null == muted
           ? _value.muted
           : muted // ignore: cast_nullable_to_non_nullable
               as bool,
-      createdTime: createdTime == freezed
+      createdTime: null == createdTime
           ? _value.createdTime
           : createdTime // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      acceptedTime: acceptedTime == freezed
+      acceptedTime: freezed == acceptedTime
           ? _value.acceptedTime
           : acceptedTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      hungUpTime: hungUpTime == freezed
+      hungUpTime: freezed == hungUpTime
           ? _value.hungUpTime
           : hungUpTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      failure: failure == freezed ? _value.failure : failure,
-      localStream: localStream == freezed
+      failure: freezed == failure ? _value.failure : failure,
+      localStream: freezed == localStream
           ? _value.localStream
           : localStream // ignore: cast_nullable_to_non_nullable
               as MediaStream?,
-      remoteStream: remoteStream == freezed
+      remoteStream: freezed == remoteStream
           ? _value.remoteStream
           : remoteStream // ignore: cast_nullable_to_non_nullable
               as MediaStream?,
-    ));
+    ) as $Val);
   }
 }
 
@@ -5670,6 +5595,7 @@ abstract class _$$_ActiveCallCopyWith<$Res>
           _$_ActiveCall value, $Res Function(_$_ActiveCall) then) =
       __$$_ActiveCallCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {Direction direction,
       int line,
@@ -5689,27 +5615,26 @@ abstract class _$$_ActiveCallCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ActiveCallCopyWithImpl<$Res> extends _$ActiveCallCopyWithImpl<$Res>
+class __$$_ActiveCallCopyWithImpl<$Res>
+    extends _$ActiveCallCopyWithImpl<$Res, _$_ActiveCall>
     implements _$$_ActiveCallCopyWith<$Res> {
   __$$_ActiveCallCopyWithImpl(
       _$_ActiveCall _value, $Res Function(_$_ActiveCall) _then)
-      : super(_value, (v) => _then(v as _$_ActiveCall));
+      : super(_value, _then);
 
-  @override
-  _$_ActiveCall get _value => super._value as _$_ActiveCall;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? direction = freezed,
-    Object? line = freezed,
-    Object? callId = freezed,
-    Object? handle = freezed,
+    Object? direction = null,
+    Object? line = null,
+    Object? callId = null,
+    Object? handle = null,
     Object? displayName = freezed,
-    Object? video = freezed,
+    Object? video = null,
     Object? frontCamera = freezed,
-    Object? held = freezed,
-    Object? muted = freezed,
-    Object? createdTime = freezed,
+    Object? held = null,
+    Object? muted = null,
+    Object? createdTime = null,
     Object? acceptedTime = freezed,
     Object? hungUpTime = freezed,
     Object? failure = freezed,
@@ -5717,60 +5642,60 @@ class __$$_ActiveCallCopyWithImpl<$Res> extends _$ActiveCallCopyWithImpl<$Res>
     Object? remoteStream = freezed,
   }) {
     return _then(_$_ActiveCall(
-      direction: direction == freezed
+      direction: null == direction
           ? _value.direction
           : direction // ignore: cast_nullable_to_non_nullable
               as Direction,
-      line: line == freezed
+      line: null == line
           ? _value.line
           : line // ignore: cast_nullable_to_non_nullable
               as int,
-      callId: callId == freezed
+      callId: null == callId
           ? _value.callId
           : callId // ignore: cast_nullable_to_non_nullable
               as CallIdValue,
-      handle: handle == freezed
+      handle: null == handle
           ? _value.handle
           : handle // ignore: cast_nullable_to_non_nullable
               as CallkeepHandle,
-      displayName: displayName == freezed
+      displayName: freezed == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
               as String?,
-      video: video == freezed
+      video: null == video
           ? _value.video
           : video // ignore: cast_nullable_to_non_nullable
               as bool,
-      frontCamera: frontCamera == freezed
+      frontCamera: freezed == frontCamera
           ? _value.frontCamera
           : frontCamera // ignore: cast_nullable_to_non_nullable
               as bool?,
-      held: held == freezed
+      held: null == held
           ? _value.held
           : held // ignore: cast_nullable_to_non_nullable
               as bool,
-      muted: muted == freezed
+      muted: null == muted
           ? _value.muted
           : muted // ignore: cast_nullable_to_non_nullable
               as bool,
-      createdTime: createdTime == freezed
+      createdTime: null == createdTime
           ? _value.createdTime
           : createdTime // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      acceptedTime: acceptedTime == freezed
+      acceptedTime: freezed == acceptedTime
           ? _value.acceptedTime
           : acceptedTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      hungUpTime: hungUpTime == freezed
+      hungUpTime: freezed == hungUpTime
           ? _value.hungUpTime
           : hungUpTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      failure: failure == freezed ? _value.failure : failure,
-      localStream: localStream == freezed
+      failure: freezed == failure ? _value.failure : failure,
+      localStream: freezed == localStream
           ? _value.localStream
           : localStream // ignore: cast_nullable_to_non_nullable
               as MediaStream?,
-      remoteStream: remoteStream == freezed
+      remoteStream: freezed == remoteStream
           ? _value.remoteStream
           : remoteStream // ignore: cast_nullable_to_non_nullable
               as MediaStream?,
@@ -5865,51 +5790,53 @@ class _$_ActiveCall extends _ActiveCall with DiagnosticableTreeMixin {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_ActiveCall &&
-            const DeepCollectionEquality().equals(other.direction, direction) &&
-            const DeepCollectionEquality().equals(other.line, line) &&
-            const DeepCollectionEquality().equals(other.callId, callId) &&
-            const DeepCollectionEquality().equals(other.handle, handle) &&
-            const DeepCollectionEquality()
-                .equals(other.displayName, displayName) &&
-            const DeepCollectionEquality().equals(other.video, video) &&
-            const DeepCollectionEquality()
-                .equals(other.frontCamera, frontCamera) &&
-            const DeepCollectionEquality().equals(other.held, held) &&
-            const DeepCollectionEquality().equals(other.muted, muted) &&
-            const DeepCollectionEquality()
-                .equals(other.createdTime, createdTime) &&
-            const DeepCollectionEquality()
-                .equals(other.acceptedTime, acceptedTime) &&
-            const DeepCollectionEquality()
-                .equals(other.hungUpTime, hungUpTime) &&
+            (identical(other.direction, direction) ||
+                other.direction == direction) &&
+            (identical(other.line, line) || other.line == line) &&
+            (identical(other.callId, callId) || other.callId == callId) &&
+            (identical(other.handle, handle) || other.handle == handle) &&
+            (identical(other.displayName, displayName) ||
+                other.displayName == displayName) &&
+            (identical(other.video, video) || other.video == video) &&
+            (identical(other.frontCamera, frontCamera) ||
+                other.frontCamera == frontCamera) &&
+            (identical(other.held, held) || other.held == held) &&
+            (identical(other.muted, muted) || other.muted == muted) &&
+            (identical(other.createdTime, createdTime) ||
+                other.createdTime == createdTime) &&
+            (identical(other.acceptedTime, acceptedTime) ||
+                other.acceptedTime == acceptedTime) &&
+            (identical(other.hungUpTime, hungUpTime) ||
+                other.hungUpTime == hungUpTime) &&
             const DeepCollectionEquality().equals(other.failure, failure) &&
-            const DeepCollectionEquality()
-                .equals(other.localStream, localStream) &&
-            const DeepCollectionEquality()
-                .equals(other.remoteStream, remoteStream));
+            (identical(other.localStream, localStream) ||
+                other.localStream == localStream) &&
+            (identical(other.remoteStream, remoteStream) ||
+                other.remoteStream == remoteStream));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(direction),
-      const DeepCollectionEquality().hash(line),
-      const DeepCollectionEquality().hash(callId),
-      const DeepCollectionEquality().hash(handle),
-      const DeepCollectionEquality().hash(displayName),
-      const DeepCollectionEquality().hash(video),
-      const DeepCollectionEquality().hash(frontCamera),
-      const DeepCollectionEquality().hash(held),
-      const DeepCollectionEquality().hash(muted),
-      const DeepCollectionEquality().hash(createdTime),
-      const DeepCollectionEquality().hash(acceptedTime),
-      const DeepCollectionEquality().hash(hungUpTime),
+      direction,
+      line,
+      callId,
+      handle,
+      displayName,
+      video,
+      frontCamera,
+      held,
+      muted,
+      createdTime,
+      acceptedTime,
+      hungUpTime,
       const DeepCollectionEquality().hash(failure),
-      const DeepCollectionEquality().hash(localStream),
-      const DeepCollectionEquality().hash(remoteStream));
+      localStream,
+      remoteStream);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_ActiveCallCopyWith<_$_ActiveCall> get copyWith =>
       __$$_ActiveCallCopyWithImpl<_$_ActiveCall>(this, _$identity);
 }

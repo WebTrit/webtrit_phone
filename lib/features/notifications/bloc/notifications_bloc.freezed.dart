@@ -27,29 +27,32 @@ mixin _$NotificationsState {
 abstract class $NotificationsStateCopyWith<$Res> {
   factory $NotificationsStateCopyWith(
           NotificationsState value, $Res Function(NotificationsState) then) =
-      _$NotificationsStateCopyWithImpl<$Res>;
+      _$NotificationsStateCopyWithImpl<$Res, NotificationsState>;
+  @useResult
   $Res call({Notification? lastNotification});
 }
 
 /// @nodoc
-class _$NotificationsStateCopyWithImpl<$Res>
+class _$NotificationsStateCopyWithImpl<$Res, $Val extends NotificationsState>
     implements $NotificationsStateCopyWith<$Res> {
   _$NotificationsStateCopyWithImpl(this._value, this._then);
 
-  final NotificationsState _value;
   // ignore: unused_field
-  final $Res Function(NotificationsState) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? lastNotification = freezed,
   }) {
     return _then(_value.copyWith(
-      lastNotification: lastNotification == freezed
+      lastNotification: freezed == lastNotification
           ? _value.lastNotification
           : lastNotification // ignore: cast_nullable_to_non_nullable
               as Notification?,
-    ));
+    ) as $Val);
   }
 }
 
@@ -60,26 +63,25 @@ abstract class _$$_NotificationsStateCopyWith<$Res>
           $Res Function(_$_NotificationsState) then) =
       __$$_NotificationsStateCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({Notification? lastNotification});
 }
 
 /// @nodoc
 class __$$_NotificationsStateCopyWithImpl<$Res>
-    extends _$NotificationsStateCopyWithImpl<$Res>
+    extends _$NotificationsStateCopyWithImpl<$Res, _$_NotificationsState>
     implements _$$_NotificationsStateCopyWith<$Res> {
   __$$_NotificationsStateCopyWithImpl(
       _$_NotificationsState _value, $Res Function(_$_NotificationsState) _then)
-      : super(_value, (v) => _then(v as _$_NotificationsState));
+      : super(_value, _then);
 
-  @override
-  _$_NotificationsState get _value => super._value as _$_NotificationsState;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? lastNotification = freezed,
   }) {
     return _then(_$_NotificationsState(
-      lastNotification == freezed
+      freezed == lastNotification
           ? _value.lastNotification
           : lastNotification // ignore: cast_nullable_to_non_nullable
               as Notification?,
@@ -105,16 +107,16 @@ class _$_NotificationsState implements _NotificationsState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_NotificationsState &&
-            const DeepCollectionEquality()
-                .equals(other.lastNotification, lastNotification));
+            (identical(other.lastNotification, lastNotification) ||
+                other.lastNotification == lastNotification));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(lastNotification));
+  int get hashCode => Object.hash(runtimeType, lastNotification);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_NotificationsStateCopyWith<_$_NotificationsState> get copyWith =>
       __$$_NotificationsStateCopyWithImpl<_$_NotificationsState>(
           this, _$identity);

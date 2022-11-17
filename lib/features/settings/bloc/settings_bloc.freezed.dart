@@ -30,42 +30,45 @@ mixin _$SettingsState {
 abstract class $SettingsStateCopyWith<$Res> {
   factory $SettingsStateCopyWith(
           SettingsState value, $Res Function(SettingsState) then) =
-      _$SettingsStateCopyWithImpl<$Res>;
+      _$SettingsStateCopyWithImpl<$Res, SettingsState>;
+  @useResult
   $Res call(
       {bool progress, bool registerStatus, AccountInfo? info, Object? error});
 }
 
 /// @nodoc
-class _$SettingsStateCopyWithImpl<$Res>
+class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
     implements $SettingsStateCopyWith<$Res> {
   _$SettingsStateCopyWithImpl(this._value, this._then);
 
-  final SettingsState _value;
   // ignore: unused_field
-  final $Res Function(SettingsState) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? progress = freezed,
-    Object? registerStatus = freezed,
+    Object? progress = null,
+    Object? registerStatus = null,
     Object? info = freezed,
     Object? error = freezed,
   }) {
     return _then(_value.copyWith(
-      progress: progress == freezed
+      progress: null == progress
           ? _value.progress
           : progress // ignore: cast_nullable_to_non_nullable
               as bool,
-      registerStatus: registerStatus == freezed
+      registerStatus: null == registerStatus
           ? _value.registerStatus
           : registerStatus // ignore: cast_nullable_to_non_nullable
               as bool,
-      info: info == freezed
+      info: freezed == info
           ? _value.info
           : info // ignore: cast_nullable_to_non_nullable
               as AccountInfo?,
-      error: error == freezed ? _value.error : error,
-    ));
+      error: freezed == error ? _value.error : error,
+    ) as $Val);
   }
 }
 
@@ -76,42 +79,41 @@ abstract class _$$_SettingsStateCopyWith<$Res>
           _$_SettingsState value, $Res Function(_$_SettingsState) then) =
       __$$_SettingsStateCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {bool progress, bool registerStatus, AccountInfo? info, Object? error});
 }
 
 /// @nodoc
 class __$$_SettingsStateCopyWithImpl<$Res>
-    extends _$SettingsStateCopyWithImpl<$Res>
+    extends _$SettingsStateCopyWithImpl<$Res, _$_SettingsState>
     implements _$$_SettingsStateCopyWith<$Res> {
   __$$_SettingsStateCopyWithImpl(
       _$_SettingsState _value, $Res Function(_$_SettingsState) _then)
-      : super(_value, (v) => _then(v as _$_SettingsState));
+      : super(_value, _then);
 
-  @override
-  _$_SettingsState get _value => super._value as _$_SettingsState;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? progress = freezed,
-    Object? registerStatus = freezed,
+    Object? progress = null,
+    Object? registerStatus = null,
     Object? info = freezed,
     Object? error = freezed,
   }) {
     return _then(_$_SettingsState(
-      progress: progress == freezed
+      progress: null == progress
           ? _value.progress
           : progress // ignore: cast_nullable_to_non_nullable
               as bool,
-      registerStatus: registerStatus == freezed
+      registerStatus: null == registerStatus
           ? _value.registerStatus
           : registerStatus // ignore: cast_nullable_to_non_nullable
               as bool,
-      info: info == freezed
+      info: freezed == info
           ? _value.info
           : info // ignore: cast_nullable_to_non_nullable
               as AccountInfo?,
-      error: error == freezed ? _value.error : error,
+      error: freezed == error ? _value.error : error,
     ));
   }
 }
@@ -145,23 +147,21 @@ class _$_SettingsState implements _SettingsState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_SettingsState &&
-            const DeepCollectionEquality().equals(other.progress, progress) &&
-            const DeepCollectionEquality()
-                .equals(other.registerStatus, registerStatus) &&
-            const DeepCollectionEquality().equals(other.info, info) &&
+            (identical(other.progress, progress) ||
+                other.progress == progress) &&
+            (identical(other.registerStatus, registerStatus) ||
+                other.registerStatus == registerStatus) &&
+            (identical(other.info, info) || other.info == info) &&
             const DeepCollectionEquality().equals(other.error, error));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(progress),
-      const DeepCollectionEquality().hash(registerStatus),
-      const DeepCollectionEquality().hash(info),
+  int get hashCode => Object.hash(runtimeType, progress, registerStatus, info,
       const DeepCollectionEquality().hash(error));
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_SettingsStateCopyWith<_$_SettingsState> get copyWith =>
       __$$_SettingsStateCopyWithImpl<_$_SettingsState>(this, _$identity);
 }

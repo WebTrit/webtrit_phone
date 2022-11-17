@@ -27,29 +27,32 @@ mixin _$PermissionsState {
 abstract class $PermissionsStateCopyWith<$Res> {
   factory $PermissionsStateCopyWith(
           PermissionsState value, $Res Function(PermissionsState) then) =
-      _$PermissionsStateCopyWithImpl<$Res>;
+      _$PermissionsStateCopyWithImpl<$Res, PermissionsState>;
+  @useResult
   $Res call({PermissionsStatus status});
 }
 
 /// @nodoc
-class _$PermissionsStateCopyWithImpl<$Res>
+class _$PermissionsStateCopyWithImpl<$Res, $Val extends PermissionsState>
     implements $PermissionsStateCopyWith<$Res> {
   _$PermissionsStateCopyWithImpl(this._value, this._then);
 
-  final PermissionsState _value;
   // ignore: unused_field
-  final $Res Function(PermissionsState) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? status = freezed,
+    Object? status = null,
   }) {
     return _then(_value.copyWith(
-      status: status == freezed
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as PermissionsStatus,
-    ));
+    ) as $Val);
   }
 }
 
@@ -60,26 +63,25 @@ abstract class _$$_PermissionsStateCopyWith<$Res>
           _$_PermissionsState value, $Res Function(_$_PermissionsState) then) =
       __$$_PermissionsStateCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({PermissionsStatus status});
 }
 
 /// @nodoc
 class __$$_PermissionsStateCopyWithImpl<$Res>
-    extends _$PermissionsStateCopyWithImpl<$Res>
+    extends _$PermissionsStateCopyWithImpl<$Res, _$_PermissionsState>
     implements _$$_PermissionsStateCopyWith<$Res> {
   __$$_PermissionsStateCopyWithImpl(
       _$_PermissionsState _value, $Res Function(_$_PermissionsState) _then)
-      : super(_value, (v) => _then(v as _$_PermissionsState));
+      : super(_value, _then);
 
-  @override
-  _$_PermissionsState get _value => super._value as _$_PermissionsState;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? status = freezed,
+    Object? status = null,
   }) {
     return _then(_$_PermissionsState(
-      status: status == freezed
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as PermissionsStatus,
@@ -106,15 +108,15 @@ class _$_PermissionsState implements _PermissionsState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_PermissionsState &&
-            const DeepCollectionEquality().equals(other.status, status));
+            (identical(other.status, status) || other.status == status));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(status));
+  int get hashCode => Object.hash(runtimeType, status);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_PermissionsStateCopyWith<_$_PermissionsState> get copyWith =>
       __$$_PermissionsStateCopyWithImpl<_$_PermissionsState>(this, _$identity);
 }

@@ -13,47 +13,47 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  audio_session: ^0.1.10
+  audio_session: ^0.1.11
   bloc: ^8.1.0
   bloc_concurrency: ^0.2.0
   characters: ^1.2.0
   clock: ^1.1.0
   collection: ^1.16.0
-  connectivity_plus: ^2.3.8
+  connectivity_plus: ^3.0.2
   cross_file: ^0.3.3
   device_info: ^2.0.3
   dio: ^4.0.6
   drift: ^2.2.0
   equatable: ^2.0.5
-  firebase_core: ^1.24.0
-  firebase_crashlytics: ^2.8.13
-  firebase_messaging: ^13.1.0
+  firebase_core: ^2.2.0
+  firebase_crashlytics: ^3.0.5
+  firebase_messaging: ^14.1.0
   flutter_bloc: ^8.1.1
   flutter_contacts: ^1.1.5
   flutter_secure_storage: ^6.0.0
-  flutter_svg: ^1.1.5
-  flutter_webrtc: ^0.9.8
+  flutter_svg: ^1.1.6
+  flutter_webrtc: ^0.9.16
   formz: ^0.4.1
-  freezed_annotation: ^2.1.0
-  go_router: ^5.0.5
+  freezed_annotation: ^2.2.0
+  go_router: ^5.1.9
   google_fonts: ^3.0.1
   intl: ^0.17.0
-  just_audio: ^0.9.29
+  just_audio: ^0.9.30
   linkify: ^4.1.0
   logging: ^1.1.0
   logging_appenders: ^1.0.0
   meta: ^1.7.0
-  package_info_plus: ^1.4.3
+  package_info_plus: ^3.0.2
   path: ^1.8.1
   path_provider: ^2.0.11
-  permission_handler: ^10.1.0
-  provider: ^6.0.3
-  rxdart: ^0.27.5
-  share_plus: ^4.5.2
+  permission_handler: ^10.2.0
+  provider: ^6.0.4
+  rxdart: ^0.27.7
+  share_plus: ^6.3.0
   shared_preferences: ^2.0.15
-  sqlite3_flutter_libs: ^0.5.10
+  sqlite3_flutter_libs: ^0.5.11
   url_launcher: ^6.1.6
-  uuid: ^3.0.6
+  uuid: ^3.0.7
   validators: ^3.0.0
   webview_flutter: ^3.0.4
 
@@ -73,16 +73,16 @@ dev_dependencies:
     sdk: flutter
 
   bloc_test: ^9.1.0
-  build_runner: ^2.2.1
+  build_runner: ^2.3.2
   drift_dev: ^2.2.0
-  flutter_gen_runner: ^5.0.1
-  flutter_launcher_icons: ^0.10.0
+  flutter_gen_runner: ^5.1.0
+  flutter_launcher_icons: ^0.11.0
   flutter_lints: ^2.0.1
-  freezed: ^2.1.1
+  freezed: ^2.2.1
 
 # temporary solution to resole version solving failure
 dependency_overrides:
-  test_api: ^0.4.14
+  test_api: ^0.4.16
 
 flutter:
   generate: true
