@@ -50,14 +50,5 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        <!-- callkeep -->
-        <service android:name="io.wazo.callkeep.VoiceConnectionService"
-            android:label="Wazo"
-            android:foregroundServiceType="camera|microphone"
-            android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE">
-            <intent-filter>
-                <action android:name="android.telecom.ConnectionService" />
-            </intent-filter>
-        </service>
     </application>
 </manifest>
