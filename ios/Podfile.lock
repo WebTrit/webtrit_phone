@@ -4,7 +4,7 @@ PODS:
   - connectivity_plus (0.0.1):
     - Flutter
     - ReachabilitySwift
-  - device_info (0.0.1):
+  - device_info_plus (0.0.1):
     - Flutter
   - Firebase/CoreOnly (10.2.0):
     - FirebaseCore (= 10.2.0)
@@ -135,7 +135,7 @@ PODS:
 DEPENDENCIES:
   - audio_session (from `.symlinks/plugins/audio_session/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
-  - device_info (from `.symlinks/plugins/device_info/ios`)
+  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - firebase_app_installations (from `.symlinks/plugins/firebase_app_installations/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
@@ -177,8 +177,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/audio_session/ios"
   connectivity_plus:
     :path: ".symlinks/plugins/connectivity_plus/ios"
-  device_info:
-    :path: ".symlinks/plugins/device_info/ios"
+  device_info_plus:
+    :path: ".symlinks/plugins/device_info_plus/ios"
   firebase_app_installations:
     :path: ".symlinks/plugins/firebase_app_installations/ios"
   firebase_core:
@@ -221,7 +221,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   audio_session: 4f3e461722055d21515cf3261b64c973c062f345
   connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
-  device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
+  device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   Firebase: a3ea7eba4382afd83808376edb99acdaff078dcf
   firebase_app_installations: 7632cad7d621ea58dcf371076b54f6e3f35cdae9
   firebase_core: db1432de826785171029b7c1a26e5b22ce1dd477

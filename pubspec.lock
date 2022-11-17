@@ -281,20 +281,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.7.8"
-  device_info:
+  device_info_plus:
     dependency: "direct main"
     description:
-      name: device_info
+      name: device_info_plus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.3"
-  device_info_platform_interface:
+    version: "8.0.0"
+  device_info_plus_platform_interface:
     dependency: transitive
     description:
-      name: device_info_platform_interface
+      name: device_info_plus_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.1"
+    version: "7.0.0"
   diff_match_patch:
     dependency: transitive
     description:
