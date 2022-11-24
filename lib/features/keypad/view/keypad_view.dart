@@ -26,7 +26,7 @@ class KeypadViewState extends State<KeypadView> {
   void initState() {
     super.initState();
     _controller = TextEditingController();
-    _focusNode = _PreventKeyboardFocusNode();
+    _focusNode = FocusNode();
   }
 
   @override
@@ -52,6 +52,7 @@ class KeypadViewState extends State<KeypadView> {
                 controller: _controller,
                 focusNode: _focusNode,
                 decoration: inputDecorations?.keypad,
+                keyboardType: TextInputType.none,
                 style: themeData.textTheme.headlineLarge,
                 textAlign: TextAlign.center,
                 showCursor: true,
@@ -169,20 +170,5 @@ class KeypadViewState extends State<KeypadView> {
     _keypadTextFieldEditableTextState?.userUpdateTextEditingValue(value, SelectionChangedCause.keyboard);
 
     _keypadTextFieldEditableTextState?.hideToolbar();
-  }
-}
-
-// Hack (because of StackTrace analysis) way to prevent keyboard from showing
-class _PreventKeyboardFocusNode extends FocusNode {
-  @override
-  bool consumeKeyboardToken() {
-    // prevent keyboard from showing on focus
-    return false;
-  }
-
-  @override
-  bool get hasFocus {
-    // prevent keyboard from showing on tap
-    return super.hasFocus && !StackTrace.current.toString().contains('EditableTextState.requestKeyboard');
   }
 }
