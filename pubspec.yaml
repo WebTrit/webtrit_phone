@@ -60,6 +60,8 @@ dependencies:
 
   webtrit_api:
     path: ./packages/webtrit_api
+  webtrit_phone_number:
+    path: ./packages/webtrit_phone_number
   webtrit_signaling:
     path: ./packages/webtrit_signaling
   webtrit_callkeep:

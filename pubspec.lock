@@ -1357,6 +1357,13 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
+  webtrit_phone_number:
+    dependency: "direct main"
+    description:
+      path: "packages/webtrit_phone_number"
+      relative: true
+    source: path
+    version: "0.0.1"
   webtrit_signaling:
     dependency: "direct main"
     description:
@@ -1421,5 +1428,5 @@ packages:
     source: hosted
     version: "3.1.1"
 sdks:
-  dart: ">=2.18.0 <3.0.0"
+  dart: ">=2.18.5 <3.0.0"
   flutter: ">=3.3.0"
