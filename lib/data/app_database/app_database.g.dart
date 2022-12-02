@@ -2,10 +2,6 @@
 
 part of 'app_database.dart';
 
-// **************************************************************************
-// DriftDatabaseGenerator
-// **************************************************************************
-
 // ignore_for_file: type=lint
 class ContactData extends DataClass implements Insertable<ContactData> {
   final int id;
@@ -30,7 +26,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     {
-      final converter = $ContactsTableTable.$converter0;
+      final converter = $ContactsTableTable.$convertersourceType;
       map['source_type'] = Variable<int>(converter.toSql(sourceType));
     }
     map['source_id'] = Variable<String>(sourceId);
@@ -235,7 +231,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
       map['id'] = Variable<int>(id.value);
     }
     if (sourceType.present) {
-      final converter = $ContactsTableTable.$converter0;
+      final converter = $ContactsTableTable.$convertersourceType;
       map['source_type'] = Variable<int>(converter.toSql(sourceType.value));
     }
     if (sourceId.present) {
@@ -281,46 +277,55 @@ class $ContactsTableTable extends ContactsTable
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $ContactsTableTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
+      hasAutoIncrement: true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _sourceTypeMeta = const VerificationMeta('sourceType');
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _sourceTypeMeta =
+      const VerificationMeta('sourceType');
   @override
   late final GeneratedColumnWithTypeConverter<ContactSourceType, int>
       sourceType = GeneratedColumn<int>('source_type', aliasedName, false,
               type: DriftSqlType.int, requiredDuringInsert: true)
-          .withConverter<ContactSourceType>($ContactsTableTable.$converter0);
-  final VerificationMeta _sourceIdMeta = const VerificationMeta('sourceId');
+          .withConverter<ContactSourceType>(
+              $ContactsTableTable.$convertersourceType);
+  static const VerificationMeta _sourceIdMeta =
+      const VerificationMeta('sourceId');
   @override
   late final GeneratedColumn<String> sourceId = GeneratedColumn<String>(
       'source_id', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  final VerificationMeta _displayNameMeta =
+  static const VerificationMeta _displayNameMeta =
       const VerificationMeta('displayName');
   @override
   late final GeneratedColumn<String> displayName = GeneratedColumn<String>(
       'display_name', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
-  final VerificationMeta _firstNameMeta = const VerificationMeta('firstName');
+  static const VerificationMeta _firstNameMeta =
+      const VerificationMeta('firstName');
   @override
   late final GeneratedColumn<String> firstName = GeneratedColumn<String>(
       'first_name', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
-  final VerificationMeta _lastNameMeta = const VerificationMeta('lastName');
+  static const VerificationMeta _lastNameMeta =
+      const VerificationMeta('lastName');
   @override
   late final GeneratedColumn<String> lastName = GeneratedColumn<String>(
       'last_name', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
-  final VerificationMeta _insertedAtMeta = const VerificationMeta('insertedAt');
+  static const VerificationMeta _insertedAtMeta =
+      const VerificationMeta('insertedAt');
   @override
   late final GeneratedColumn<DateTime> insertedAt = GeneratedColumn<DateTime>(
       'inserted_at', aliasedName, true,
       type: DriftSqlType.dateTime, requiredDuringInsert: false);
-  final VerificationMeta _updatedAtMeta = const VerificationMeta('updatedAt');
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
   @override
   late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
       'updated_at', aliasedName, true,
@@ -388,22 +393,22 @@ class $ContactsTableTable extends ContactsTable
   ContactData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ContactData(
-      id: attachedDatabase.options.types
+      id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      sourceType: $ContactsTableTable.$converter0.fromSql(attachedDatabase
-          .options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}source_type'])!),
-      sourceId: attachedDatabase.options.types
+      sourceType: $ContactsTableTable.$convertersourceType.fromSql(
+          attachedDatabase.typeMapping
+              .read(DriftSqlType.int, data['${effectivePrefix}source_type'])!),
+      sourceId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}source_id'])!,
-      displayName: attachedDatabase.options.types
+      displayName: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}display_name']),
-      firstName: attachedDatabase.options.types
+      firstName: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}first_name']),
-      lastName: attachedDatabase.options.types
+      lastName: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}last_name']),
-      insertedAt: attachedDatabase.options.types
+      insertedAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}inserted_at']),
-      updatedAt: attachedDatabase.options.types
+      updatedAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at']),
     );
   }
@@ -413,7 +418,7 @@ class $ContactsTableTable extends ContactsTable
     return $ContactsTableTable(attachedDatabase, alias);
   }
 
-  static TypeConverter<ContactSourceType, int> $converter0 =
+  static TypeConverter<ContactSourceType, int> $convertersourceType =
       const EnumIndexConverter<ContactSourceType>(ContactSourceType.values);
 }
 
@@ -635,36 +640,41 @@ class $ContactPhonesTableTable extends ContactPhonesTable
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $ContactPhonesTableTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
+      hasAutoIncrement: true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _numberMeta = const VerificationMeta('number');
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _numberMeta = const VerificationMeta('number');
   @override
   late final GeneratedColumn<String> number = GeneratedColumn<String>(
       'number', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  final VerificationMeta _labelMeta = const VerificationMeta('label');
+  static const VerificationMeta _labelMeta = const VerificationMeta('label');
   @override
   late final GeneratedColumn<String> label = GeneratedColumn<String>(
       'label', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  final VerificationMeta _contactIdMeta = const VerificationMeta('contactId');
+  static const VerificationMeta _contactIdMeta =
+      const VerificationMeta('contactId');
   @override
   late final GeneratedColumn<int> contactId = GeneratedColumn<int>(
       'contact_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL REFERENCES contacts(id) ON DELETE CASCADE');
-  final VerificationMeta _insertedAtMeta = const VerificationMeta('insertedAt');
+  static const VerificationMeta _insertedAtMeta =
+      const VerificationMeta('insertedAt');
   @override
   late final GeneratedColumn<DateTime> insertedAt = GeneratedColumn<DateTime>(
       'inserted_at', aliasedName, true,
       type: DriftSqlType.dateTime, requiredDuringInsert: false);
-  final VerificationMeta _updatedAtMeta = const VerificationMeta('updatedAt');
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
   @override
   late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
       'updated_at', aliasedName, true,
@@ -721,17 +731,17 @@ class $ContactPhonesTableTable extends ContactPhonesTable
   ContactPhoneData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ContactPhoneData(
-      id: attachedDatabase.options.types
+      id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      number: attachedDatabase.options.types
+      number: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}number'])!,
-      label: attachedDatabase.options.types
+      label: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}label'])!,
-      contactId: attachedDatabase.options.types
+      contactId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}contact_id'])!,
-      insertedAt: attachedDatabase.options.types
+      insertedAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}inserted_at']),
-      updatedAt: attachedDatabase.options.types
+      updatedAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at']),
     );
   }
@@ -763,7 +773,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     {
-      final converter = $CallLogsTableTable.$converter0;
+      final converter = $CallLogsTableTable.$converterdirection;
       map['direction'] = Variable<int>(converter.toSql(direction));
     }
     map['number'] = Variable<String>(number);
@@ -943,7 +953,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
       map['id'] = Variable<int>(id.value);
     }
     if (direction.present) {
-      final converter = $CallLogsTableTable.$converter0;
+      final converter = $CallLogsTableTable.$converterdirection;
       map['direction'] = Variable<int>(converter.toSql(direction.value));
     }
     if (number.present) {
@@ -985,20 +995,23 @@ class $CallLogsTableTable extends CallLogsTable
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $CallLogsTableTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
+      hasAutoIncrement: true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _directionMeta = const VerificationMeta('direction');
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _directionMeta =
+      const VerificationMeta('direction');
   @override
   late final GeneratedColumnWithTypeConverter<Direction, int> direction =
       GeneratedColumn<int>('direction', aliasedName, false,
               type: DriftSqlType.int, requiredDuringInsert: true)
-          .withConverter<Direction>($CallLogsTableTable.$converter0);
-  final VerificationMeta _numberMeta = const VerificationMeta('number');
+          .withConverter<Direction>($CallLogsTableTable.$converterdirection);
+  static const VerificationMeta _numberMeta = const VerificationMeta('number');
   @override
   late final GeneratedColumn<String> number = GeneratedColumn<String>(
       'number', aliasedName, false,
@@ -1006,24 +1019,31 @@ class $CallLogsTableTable extends CallLogsTable
       requiredDuringInsert: true,
       $customConstraints:
           'NOT NULL CONSTRAINT "call_logs.number not_empty" CHECK (length(number) > 0)');
-  final VerificationMeta _videoMeta = const VerificationMeta('video');
+  static const VerificationMeta _videoMeta = const VerificationMeta('video');
   @override
-  late final GeneratedColumn<bool> video = GeneratedColumn<bool>(
-      'video', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: true,
-      defaultConstraints: 'CHECK ("video" IN (0, 1))');
-  final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
+  late final GeneratedColumn<bool> video =
+      GeneratedColumn<bool>('video', aliasedName, false,
+          type: DriftSqlType.bool,
+          requiredDuringInsert: true,
+          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
+            SqlDialect.sqlite: 'CHECK ("video" IN (0, 1))',
+            SqlDialect.mysql: '',
+            SqlDialect.postgres: '',
+          }));
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
   @override
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
       'created_at', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  final VerificationMeta _acceptedAtMeta = const VerificationMeta('acceptedAt');
+  static const VerificationMeta _acceptedAtMeta =
+      const VerificationMeta('acceptedAt');
   @override
   late final GeneratedColumn<DateTime> acceptedAt = GeneratedColumn<DateTime>(
       'accepted_at', aliasedName, true,
       type: DriftSqlType.dateTime, requiredDuringInsert: false);
-  final VerificationMeta _hungUpAtMeta = const VerificationMeta('hungUpAt');
+  static const VerificationMeta _hungUpAtMeta =
+      const VerificationMeta('hungUpAt');
   @override
   late final GeneratedColumn<DateTime> hungUpAt = GeneratedColumn<DateTime>(
       'hung_up_at', aliasedName, true,
@@ -1081,20 +1101,20 @@ class $CallLogsTableTable extends CallLogsTable
   CallLogData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return CallLogData(
-      id: attachedDatabase.options.types
+      id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      direction: $CallLogsTableTable.$converter0.fromSql(attachedDatabase
-          .options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}direction'])!),
-      number: attachedDatabase.options.types
+      direction: $CallLogsTableTable.$converterdirection.fromSql(
+          attachedDatabase.typeMapping
+              .read(DriftSqlType.int, data['${effectivePrefix}direction'])!),
+      number: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}number'])!,
-      video: attachedDatabase.options.types
+      video: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}video'])!,
-      createdAt: attachedDatabase.options.types
+      createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
-      acceptedAt: attachedDatabase.options.types
+      acceptedAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}accepted_at']),
-      hungUpAt: attachedDatabase.options.types
+      hungUpAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}hung_up_at']),
     );
   }
@@ -1104,7 +1124,7 @@ class $CallLogsTableTable extends CallLogsTable
     return $CallLogsTableTable(attachedDatabase, alias);
   }
 
-  static TypeConverter<Direction, int> $converter0 =
+  static TypeConverter<Direction, int> $converterdirection =
       const EnumIndexConverter<Direction>(Direction.values);
 }
 
@@ -1245,14 +1265,16 @@ class $FavoritesTableTable extends FavoritesTable
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $FavoritesTableTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
+      hasAutoIncrement: true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _contactPhoneIdMeta =
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _contactPhoneIdMeta =
       const VerificationMeta('contactPhoneId');
   @override
   late final GeneratedColumn<int> contactPhoneId = GeneratedColumn<int>(
@@ -1261,7 +1283,8 @@ class $FavoritesTableTable extends FavoritesTable
       requiredDuringInsert: true,
       $customConstraints:
           'NOT NULL REFERENCES contact_phones(id) ON DELETE CASCADE');
-  final VerificationMeta _positionMeta = const VerificationMeta('position');
+  static const VerificationMeta _positionMeta =
+      const VerificationMeta('position');
   @override
   late final GeneratedColumn<int> position = GeneratedColumn<int>(
       'position', aliasedName, false,
@@ -1303,11 +1326,11 @@ class $FavoritesTableTable extends FavoritesTable
   FavoriteData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return FavoriteData(
-      id: attachedDatabase.options.types
+      id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      contactPhoneId: attachedDatabase.options.types
+      contactPhoneId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}contact_phone_id'])!,
-      position: attachedDatabase.options.types
+      position: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}position'])!,
     );
   }
@@ -1332,16 +1355,12 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final CallLogsDao callLogsDao = CallLogsDao(this as AppDatabase);
   late final FavoritesDao favoritesDao = FavoritesDao(this as AppDatabase);
   @override
-  Iterable<TableInfo<Table, dynamic>> get allTables =>
+  Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
       [contactsTable, contactPhonesTable, callLogsTable, favoritesTable];
 }
-
-// **************************************************************************
-// DaoGenerator
-// **************************************************************************
 
 mixin _$ContactsDaoMixin on DatabaseAccessor<AppDatabase> {
   $ContactsTableTable get contactsTable => attachedDatabase.contactsTable;
