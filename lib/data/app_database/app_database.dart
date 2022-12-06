@@ -44,6 +44,7 @@ class AppDatabase extends _$AppDatabase {
     return AppDatabase._connect(
       DatabaseConnection.delayed(isolate.connect(
         isolateDebugLog: isolateDebugLog,
+        singleClientMode: true,
       )),
     );
   }
