@@ -9,16 +9,16 @@ import './login_otp_verify_tab.dart';
 
 import '../login.dart';
 
-class LockTabs extends StatefulWidget {
-  const LockTabs({
+class LoginTabs extends StatefulWidget {
+  const LoginTabs({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<LockTabs> createState() => _LockTabsState();
+  State<LoginTabs> createState() => _LoginTabsState();
 }
 
-class _LockTabsState extends State<LockTabs> with SingleTickerProviderStateMixin {
+class _LoginTabsState extends State<LoginTabs> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override

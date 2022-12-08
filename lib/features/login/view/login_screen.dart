@@ -20,7 +20,7 @@ class LoginScreen extends StatelessWidget {
       create: (context) => LoginCubit(
         httpClient: httpClient,
       ),
-      child: const LockTabs(),
+      child: const LoginTabs(),
     );
   }
 }
