@@ -74,9 +74,7 @@ class _AppState extends State<App> {
                 themeMode: state.effectiveThemeMode,
                 theme: themeProvider.light(),
                 darkTheme: themeProvider.dark(),
-                routeInformationProvider: _router.routeInformationProvider,
-                routeInformationParser: _router.routeInformationParser,
-                routerDelegate: _router.routerDelegate,
+                routerConfig: _router,
               );
             },
           ),
