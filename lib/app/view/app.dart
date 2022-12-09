@@ -111,7 +111,12 @@ class _AppState extends State<App> {
           GoRoute(
             name: AppRoute.login,
             path: '/login',
-            builder: (context, state) => const LoginScreen(),
+            redirect: (context, state) => '/login/${LoginStep.modeSelect.name}',
+          ),
+          GoRoute(
+            name: AppRoute.loginStep,
+            path: '/login/:$LoginStep(${LoginStep.values.map((e) => e.name).join('|')})',
+            builder: (context, state) => LoginScreen(LoginStep.values.byName(state.params['$LoginStep']!)),
           ),
           GoRoute(
             name: AppRoute.webRegistration,
@@ -256,7 +261,7 @@ class _AppState extends State<App> {
     final webRegistrationInitialUrl = appBloc.state.webRegistrationInitialUrl;
     final appPermissionsDenied = widget.appPermissions.isDenied;
 
-    final isLoginPath = state.subloc == '/login';
+    final isLoginPath = state.subloc.startsWith('/login');
     final isWebRegistrationPath = state.subloc == '/web-registration';
     final isMainPath = state.location == '/main';
 

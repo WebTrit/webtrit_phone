@@ -17,9 +17,10 @@ part 'login_cubit.freezed.dart';
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  LoginCubit({
+  LoginCubit(
+    LoginStep step, {
     this.httpClient,
-  }) : super(const LoginState());
+  }) : super(LoginState(step: step));
 
   final HttpClient? httpClient;
 
@@ -34,23 +35,23 @@ class LoginCubit extends Cubit<LoginState> {
   bool get isDemoModeEnabled => coreUrlFromEnvironment == null;
 
   void next() {
-    var nextTabIndex = state.tabIndex + 1;
-    if (nextTabIndex == 1 && state.coreUrl != null) {
-      nextTabIndex++;
+    var nextStepIndex = state.step.index + 1;
+    if (nextStepIndex == 1 && state.coreUrl != null) {
+      nextStepIndex++;
     }
     emit(state.copyWith(
-      tabIndex: nextTabIndex,
+      step: LoginStep.values[nextStepIndex],
       status: LoginStatus.input,
     ));
   }
 
   void back() {
-    var prevTabIndex = state.tabIndex - 1;
-    if (prevTabIndex == 1 && state.coreUrlInput.value.isEmpty) {
-      prevTabIndex--;
+    var prevStepIndex = state.step.index - 1;
+    if (prevStepIndex == 1 && state.coreUrlInput.value.isEmpty) {
+      prevStepIndex--;
     }
     emit(state.copyWith(
-      tabIndex: prevTabIndex,
+      step: LoginStep.values[prevStepIndex],
       status: LoginStatus.input,
     ));
   }

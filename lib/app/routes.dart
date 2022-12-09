@@ -2,6 +2,7 @@ class AppRoute {
   AppRoute._();
 
   static const login = 'login';
+  static const loginStep = 'login/step';
 
   static const webRegistration = 'web-registration';
 

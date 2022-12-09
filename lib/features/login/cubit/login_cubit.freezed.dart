@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$LoginState {
-  int get tabIndex => throw _privateConstructorUsedError;
+  LoginStep get step => throw _privateConstructorUsedError;
   LoginStatus get status => throw _privateConstructorUsedError;
   Object? get error => throw _privateConstructorUsedError;
   bool get demo => throw _privateConstructorUsedError;
@@ -43,7 +43,7 @@ abstract class $LoginStateCopyWith<$Res> {
       _$LoginStateCopyWithImpl<$Res, LoginState>;
   @useResult
   $Res call(
-      {int tabIndex,
+      {LoginStep step,
       LoginStatus status,
       Object? error,
       bool demo,
@@ -71,7 +71,7 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? tabIndex = null,
+    Object? step = null,
     Object? status = null,
     Object? error = freezed,
     Object? demo = null,
@@ -86,10 +86,10 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
     Object? codeInput = null,
   }) {
     return _then(_value.copyWith(
-      tabIndex: null == tabIndex
-          ? _value.tabIndex
-          : tabIndex // ignore: cast_nullable_to_non_nullable
-              as int,
+      step: null == step
+          ? _value.step
+          : step // ignore: cast_nullable_to_non_nullable
+              as LoginStep,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -148,7 +148,7 @@ abstract class _$$_LoginStateCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int tabIndex,
+      {LoginStep step,
       LoginStatus status,
       Object? error,
       bool demo,
@@ -174,7 +174,7 @@ class __$$_LoginStateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? tabIndex = null,
+    Object? step = null,
     Object? status = null,
     Object? error = freezed,
     Object? demo = null,
@@ -189,10 +189,10 @@ class __$$_LoginStateCopyWithImpl<$Res>
     Object? codeInput = null,
   }) {
     return _then(_$_LoginState(
-      tabIndex: null == tabIndex
-          ? _value.tabIndex
-          : tabIndex // ignore: cast_nullable_to_non_nullable
-              as int,
+      step: null == step
+          ? _value.step
+          : step // ignore: cast_nullable_to_non_nullable
+              as LoginStep,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -246,7 +246,7 @@ class __$$_LoginStateCopyWithImpl<$Res>
 
 class _$_LoginState implements _LoginState {
   const _$_LoginState(
-      {this.tabIndex = 0,
+      {required this.step,
       this.status = LoginStatus.input,
       this.error,
       this.demo = false,
@@ -261,8 +261,7 @@ class _$_LoginState implements _LoginState {
       this.codeInput = const CodeInput.pure()});
 
   @override
-  @JsonKey()
-  final int tabIndex;
+  final LoginStep step;
   @override
   @JsonKey()
   final LoginStatus status;
@@ -296,7 +295,7 @@ class _$_LoginState implements _LoginState {
 
   @override
   String toString() {
-    return 'LoginState(tabIndex: $tabIndex, status: $status, error: $error, demo: $demo, coreUrl: $coreUrl, otpId: $otpId, otpNotificationType: $otpNotificationType, otpFromEmail: $otpFromEmail, token: $token, coreUrlInput: $coreUrlInput, emailInput: $emailInput, phoneInput: $phoneInput, codeInput: $codeInput)';
+    return 'LoginState(step: $step, status: $status, error: $error, demo: $demo, coreUrl: $coreUrl, otpId: $otpId, otpNotificationType: $otpNotificationType, otpFromEmail: $otpFromEmail, token: $token, coreUrlInput: $coreUrlInput, emailInput: $emailInput, phoneInput: $phoneInput, codeInput: $codeInput)';
   }
 
   @override
@@ -304,8 +303,7 @@ class _$_LoginState implements _LoginState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_LoginState &&
-            (identical(other.tabIndex, tabIndex) ||
-                other.tabIndex == tabIndex) &&
+            (identical(other.step, step) || other.step == step) &&
             (identical(other.status, status) || other.status == status) &&
             const DeepCollectionEquality().equals(other.error, error) &&
             (identical(other.demo, demo) || other.demo == demo) &&
@@ -329,7 +327,7 @@ class _$_LoginState implements _LoginState {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      tabIndex,
+      step,
       status,
       const DeepCollectionEquality().hash(error),
       demo,
@@ -352,7 +350,7 @@ class _$_LoginState implements _LoginState {
 
 abstract class _LoginState implements LoginState {
   const factory _LoginState(
-      {final int tabIndex,
+      {required final LoginStep step,
       final LoginStatus status,
       final Object? error,
       final bool demo,
@@ -367,7 +365,7 @@ abstract class _LoginState implements LoginState {
       final CodeInput codeInput}) = _$_LoginState;
 
   @override
-  int get tabIndex;
+  LoginStep get step;
   @override
   LoginStatus get status;
   @override

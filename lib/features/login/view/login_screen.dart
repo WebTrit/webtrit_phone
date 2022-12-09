@@ -10,7 +10,12 @@ import '../login.dart';
 import './login_tabs.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen(
+    this.step, {
+    super.key,
+  });
+
+  final LoginStep step;
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +23,10 @@ class LoginScreen extends StatelessWidget {
     httpClient.connectionTimeout = kApiClientConnectionTimeout;
     return BlocProvider(
       create: (context) => LoginCubit(
+        step,
         httpClient: httpClient,
       ),
-      child: const LoginTabs(),
+      child: LoginTabs(step),
     );
   }
 }

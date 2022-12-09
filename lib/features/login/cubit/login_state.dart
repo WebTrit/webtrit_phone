@@ -20,7 +20,7 @@ extension LoginStatusX on LoginStatus {
 @freezed
 class LoginState with _$LoginState {
   const factory LoginState({
-    @Default(0) int tabIndex,
+    required LoginStep step,
     @Default(LoginStatus.input) LoginStatus status,
     Object? error,
     @Default(false) bool demo,
