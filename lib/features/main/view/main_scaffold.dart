@@ -5,56 +5,49 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 
 class Tab {
   Tab({
-    required String debugLabelPrefix,
     required this.icon,
     required this.label,
-    required Widget Function(Key key) create,
-  })  : _create = create,
-        _globalKey = LabeledGlobalKey('${debugLabelPrefix}TabGlobalKey');
+    required Widget Function() create,
+  }) : _create = create;
 
   final IconData icon;
   final String Function(BuildContext context) label;
-  final Widget Function(Key key) _create;
-  final GlobalKey _globalKey;
+  final Widget Function() _create;
 
   bool _wasActive = false;
 
-  Widget createWithGlobalKey(bool active) {
+  Widget create(bool active) {
     if (_wasActive) {
-      return _create(_globalKey);
+      return _create();
     } else if (active) {
       _wasActive = active;
-      return _create(_globalKey);
+      return _create();
     } else {
-      return Container();
+      return const SizedBox();
     }
   }
 }
 
 final List<Tab> tabs = <Tab>[
   Tab(
-    debugLabelPrefix: 'Favorites',
     icon: Icons.star_outline,
     label: (context) => context.l10n.main_BottomNavigationBarItemLabel_favorites,
-    create: (key) => FavoritesPage(key: key),
+    create: () => const FavoritesPage(),
   ),
   Tab(
-    debugLabelPrefix: 'Recents',
     icon: Icons.access_time,
     label: (context) => context.l10n.main_BottomNavigationBarItemLabel_recents,
-    create: (key) => RecentsPage(key: key),
+    create: () => const RecentsPage(),
   ),
   Tab(
-    debugLabelPrefix: 'Contacts',
     icon: Icons.account_circle_outlined,
     label: (context) => context.l10n.main_BottomNavigationBarItemLabel_contacts,
-    create: (key) => ContactsPage(key: key),
+    create: () => const ContactsPage(),
   ),
   Tab(
-    debugLabelPrefix: 'Keypad',
     icon: Icons.dialpad,
     label: (context) => context.l10n.main_BottomNavigationBarItemLabel_keypad,
-    create: (key) => KeypadPage(key: key),
+    create: () => const KeypadPage(),
   ),
 ];
 
@@ -97,7 +90,7 @@ class MainScaffoldState extends State<MainScaffold> with RestorationMixin {
             final active = index == _restorableSelectedIndex.value;
             return TabPage(
               active: active,
-              child: tab.createWithGlobalKey(active),
+              child: tab.create(active),
             );
           }).toList(),
         ),
@@ -164,24 +157,35 @@ class TabPageState extends State<TabPage> with SingleTickerProviderStateMixin<Ta
 
   @override
   Widget build(BuildContext context) {
-    final Widget view = FadeTransition(
-      opacity: _fader.drive(CurveTween(curve: Curves.fastOutSlowIn)),
-      child: widget.child,
-    );
+    final bool offstage;
+    final bool ignoring;
     if (widget.active) {
       if (_fader.status != AnimationStatus.completed) {
         _fader.forward();
       }
-      return view;
+      offstage = false;
+      ignoring = false;
     } else {
       if (_fader.status != AnimationStatus.dismissed) {
         _fader.reverse().whenComplete(() {
           setState(() {}); // need to replace IgnorePointer by Offstage
         });
-        return IgnorePointer(child: view);
+        offstage = false;
+        ignoring = true;
       } else {
-        return Offstage(child: view);
+        offstage = true;
+        ignoring = false;
       }
     }
+    return Offstage(
+      offstage: offstage,
+      child: IgnorePointer(
+        ignoring: ignoring,
+        child: FadeTransition(
+          opacity: _fader.drive(CurveTween(curve: Curves.fastOutSlowIn)),
+          child: widget.child,
+        ),
+      ),
+    );
   }
 }
