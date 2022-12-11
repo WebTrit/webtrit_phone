@@ -6,7 +6,12 @@ import '../main.dart';
 import 'main_scaffold.dart';
 
 class MainScreen extends StatelessWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  const MainScreen(
+    this.flavor, {
+    super.key,
+  });
+
+  final MainFlavor flavor;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +19,7 @@ class MainScreen extends StatelessWidget {
       create: (context) {
         return MainBloc()..add(const MainStarted());
       },
-      child: const MainScaffold(),
+      child: MainScaffold(flavor),
     );
   }
 }
