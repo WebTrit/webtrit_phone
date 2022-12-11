@@ -40,25 +40,27 @@ class KeypadKeyButton extends StatelessWidget {
               height: 1.0,
             ),
           ),
-          Builder(builder: (context) {
-            final defaultTextStyle = DefaultTextStyle.of(context);
-            var color = textColor ?? defaultTextStyle.style.color;
-            if (color != null) {
-              var opacity = color.opacity - 0.3;
-              if (opacity < 0.2) {
-                opacity = 0.2;
+          Builder(
+            builder: (context) {
+              final defaultTextStyle = DefaultTextStyle.of(context);
+              var color = textColor ?? defaultTextStyle.style.color;
+              if (color != null) {
+                var opacity = color.opacity - 0.3;
+                if (opacity < 0.2) {
+                  opacity = 0.2;
+                }
+                color = color.withOpacity(opacity);
               }
-              color = color.withOpacity(opacity);
-            }
-            return Text(
-              subtext,
-              style: TextStyle(
-                fontSize: themeData.textTheme.bodyMedium?.fontSize,
-                color: color,
-                height: 1.0,
-              ),
-            );
-          }),
+              return Text(
+                subtext,
+                style: TextStyle(
+                  fontSize: themeData.textTheme.bodyMedium?.fontSize,
+                  color: color,
+                  height: 1.0,
+                ),
+              );
+            },
+          ),
         ],
       ),
     );
