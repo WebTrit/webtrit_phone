@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 
-import '../../contacts/view/contacts_page.dart';
-import '../../favorites/view/favorites_page.dart';
-import '../../keypad/view/keypad_page.dart';
-import '../../recents/view/recents_page.dart';
+import '../../contacts/view/contacts_screen.dart';
+import '../../favorites/view/favorites_screen.dart';
+import '../../keypad/view/keypad_screen.dart';
+import '../../recents/view/recents_screen.dart';
 import '../models/main_flavor.dart';
 
 extension MainFlavorLabelL10n on MainFlavor {
@@ -42,13 +42,13 @@ extension MainFlavorBuilder on MainFlavor {
   Widget builder(BuildContext context) {
     switch (this) {
       case MainFlavor.favorites:
-        return const FavoritesPage();
+        return const FavoritesScreen();
       case MainFlavor.recents:
-        return const RecentsPage();
+        return const RecentsScreen();
       case MainFlavor.contacts:
-        return const ContactsPage();
+        return const ContactsScreen();
       case MainFlavor.keypad:
-        return const KeypadPage();
+        return const KeypadScreen();
     }
   }
 }

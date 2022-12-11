@@ -6,8 +6,8 @@ import '../../call/call.dart';
 import '../keypad.dart';
 import './keypad_scaffold.dart';
 
-class KeypadPage extends StatelessWidget {
-  const KeypadPage({Key? key}) : super(key: key);
+class KeypadScreen extends StatelessWidget {
+  const KeypadScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
