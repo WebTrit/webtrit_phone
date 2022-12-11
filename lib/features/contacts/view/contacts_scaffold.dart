@@ -42,9 +42,9 @@ class ContactsScaffold extends StatelessWidget {
               initialValue: state,
               onChanged: (value) => contactsSearchBloc.add(ContactsSearchChanged(value)),
               onSubmitted: (value) => contactsSearchBloc.add(ContactsSearchSubmitted(value)),
-              iconConstraints: const BoxConstraints(
-                minWidth: _searchHeight,
-                minHeight: _searchHeight - _paddingGap,
+              iconConstraints: const BoxConstraints.expand(
+                width: _searchHeight - _paddingGap,
+                height: _searchHeight - _paddingGap,
               ),
             );
           },
