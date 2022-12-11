@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -23,9 +24,6 @@ class RecentsScaffoldState extends State<RecentsScaffold> with SingleTickerProvi
   late TabController _tabController;
 
   static final _recentsFilters = [RecentsVisibilityFilter.all, RecentsVisibilityFilter.missed];
-
-  static const _tabHeight = 42.0;
-  static const _paddingGap = 6.0;
 
   @override
   void initState() {
@@ -58,12 +56,14 @@ class RecentsScaffoldState extends State<RecentsScaffold> with SingleTickerProvi
     return Scaffold(
       appBar: MainAppBar(
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(_tabHeight),
+          preferredSize: const Size.fromHeight(kMainAppBarBottomTabHeight),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, _paddingGap),
+            padding: const EdgeInsets.only(
+              bottom: kMainAppBarBottomPaddingGap,
+            ),
             child: ExtTabBar(
               width: mediaQueryData.size.width * 0.6,
-              height: _tabHeight - _paddingGap,
+              height: kMainAppBarBottomTabHeight - kMainAppBarBottomPaddingGap,
               tabs: _recentsFilters.map((value) => Tab(child: Text(value.l10n(context), softWrap: false))).toList(),
               controller: _tabController,
             ),

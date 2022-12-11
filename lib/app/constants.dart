@@ -6,3 +6,7 @@ const kSignalingClientConnectionTimeout = Duration(seconds: 10);
 const kSignalingClientReconnectDelay = Duration(seconds: 3);
 
 const kInset = kMinInteractiveDimension / 2;
+
+const kMainAppBarBottomTabHeight = 42.0;
+const kMainAppBarBottomSearchHeight = kMinInteractiveDimension;
+const kMainAppBarBottomPaddingGap = 6.0;
