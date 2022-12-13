@@ -2,6 +2,8 @@ import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
 
+import 'package:webtrit_phone/extensions/iterable.dart';
+
 enum Direction {
   incoming,
   outgoing,
@@ -54,9 +56,9 @@ class Recent extends Equatable {
     if (displayName != null) {
       return displayName;
     } else {
-      final names = [firstName, lastName].where((name) => name != null);
-      if (names.isNotEmpty) {
-        return names.join(' ');
+      final name = [firstName, lastName].readableJoin();
+      if (name.isNotEmpty) {
+        return name;
       } else {
         return number;
       }

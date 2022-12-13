@@ -2,6 +2,8 @@ import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
 
+import 'package:webtrit_phone/extensions/iterable.dart';
+
 import 'contact_source_type.dart';
 
 typedef ContactId = int;
@@ -30,8 +32,7 @@ class Contact extends Equatable {
     if (displayName != null) {
       return displayName;
     } else {
-      final names = [firstName, lastName].where((name) => name != null);
-      return names.join(' ').trim();
+      return [firstName, lastName].readableJoin();
     }
   }
 

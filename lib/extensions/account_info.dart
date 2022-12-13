@@ -1,9 +1,10 @@
 import 'package:webtrit_api/webtrit_api.dart';
 
+import 'iterable.dart';
+
 extension AccountInfoFormatting on AccountInfo {
   String get name {
-    final names = [firstname, lastname].where((name) => name != null);
-    return names.join(' ').trim();
+    return [firstname, lastname].readableJoin();
   }
 
   String? get balanceWithCurrency {
