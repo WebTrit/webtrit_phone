@@ -352,18 +352,23 @@ class ContactPhoneDataWithFavoriteData {
 class CallLogsDao extends DatabaseAccessor<AppDatabase> with _$CallLogsDaoMixin {
   CallLogsDao(AppDatabase db) : super(db);
 
-  SimpleSelectStatement<$CallLogsTableTable, CallLogData> _selectLastCallLogs(Duration period) => (select(callLogsTable)
-    ..where((t) => t.createdAt.isBiggerOrEqualValue(clock.agoBy(period)))
-    ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]));
+  SimpleSelectStatement<$CallLogsTableTable, CallLogData> _selectLastCallLogs(Duration period) {
+    return select(callLogsTable)
+      ..where((t) => t.createdAt.isBiggerOrEqualValue(clock.agoBy(period)))
+      ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]);
+  }
 
-  SimpleSelectStatement<$CallLogsTableTable, CallLogData> _selectLastCallLogsByNumber(String number, Duration period) =>
-      _selectLastCallLogs(period)..where((t) => t.number.equals(number));
+  SimpleSelectStatement<$CallLogsTableTable, CallLogData> _selectLastCallLogsByNumber(String number, Duration period) {
+    return _selectLastCallLogs(period)..where((t) => t.number.equals(number));
+  }
 
-  Future<List<CallLogData>> getLastCallLogsByNumber(String number, [Duration period = const Duration(days: 14)]) =>
-      _selectLastCallLogsByNumber(number, period).get();
+  Future<List<CallLogData>> getLastCallLogsByNumber(String number, [Duration period = const Duration(days: 14)]) {
+    return _selectLastCallLogsByNumber(number, period).get();
+  }
 
-  Stream<List<CallLogData>> watchLastCallLogsByNumber(String number, [Duration period = const Duration(days: 14)]) =>
-      _selectLastCallLogsByNumber(number, period).watch();
+  Stream<List<CallLogData>> watchLastCallLogsByNumber(String number, [Duration period = const Duration(days: 14)]) {
+    return _selectLastCallLogsByNumber(number, period).watch();
+  }
 
   Stream<List<CallLogDataWithContactPhoneDataAndContactData>> watchLastCallLogsExt(
       [Duration period = const Duration(days: 14)]) {
@@ -372,18 +377,34 @@ class CallLogsDao extends DatabaseAccessor<AppDatabase> with _$CallLogsDaoMixin 
       leftOuterJoin(contactsTable, contactsTable.id.equalsExp(contactPhonesTable.contactId)),
     ]);
     q.groupBy([callLogsTable.id]);
-    return q.watch().map((rows) => rows
-        .map((row) => CallLogDataWithContactPhoneDataAndContactData(
-              row.readTable(callLogsTable),
-              row.readTableOrNull(contactPhonesTable),
-              row.readTableOrNull(contactsTable),
-            ))
-        .toList());
+    return q.watch().map((rows) => rows.map(_toCallLogDataWithContactPhoneDataAndContactData).toList());
   }
 
-  Future<int> insertCallLog(Insertable<CallLogData> callLogData) => into(callLogsTable).insert(callLogData);
+  Future<CallLogDataWithContactPhoneDataAndContactData> getCallLogExt(Insertable<CallLogData> callLogData) {
+    return (select(callLogsTable)..whereSamePrimaryKey(callLogData))
+        .join([
+          leftOuterJoin(contactPhonesTable, contactPhonesTable.number.equalsExp(callLogsTable.number)),
+          leftOuterJoin(contactsTable, contactsTable.id.equalsExp(contactPhonesTable.contactId)),
+        ])
+        .getSingle()
+        .then(_toCallLogDataWithContactPhoneDataAndContactData);
+  }
 
-  Future<int> deleteCallLog(Insertable<CallLogData> callLogData) => delete(callLogsTable).delete(callLogData);
+  Future<int> insertCallLog(Insertable<CallLogData> callLogData) {
+    return into(callLogsTable).insert(callLogData);
+  }
+
+  Future<int> deleteCallLog(Insertable<CallLogData> callLogData) {
+    return delete(callLogsTable).delete(callLogData);
+  }
+
+  CallLogDataWithContactPhoneDataAndContactData _toCallLogDataWithContactPhoneDataAndContactData(TypedResult row) {
+    return CallLogDataWithContactPhoneDataAndContactData(
+      row.readTable(callLogsTable),
+      row.readTableOrNull(contactPhonesTable),
+      row.readTableOrNull(contactsTable),
+    );
+  }
 }
 
 class CallLogDataWithContactPhoneDataAndContactData {

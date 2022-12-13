@@ -8,18 +8,21 @@ import '../recent.dart';
 import 'recent_scaffold.dart';
 
 class RecentScreen extends StatelessWidget {
-  const RecentScreen(this.recent, {Key? key}) : super(key: key);
+  const RecentScreen(
+    this.recentId, {
+    super.key,
+  });
 
-  final Recent recent;
+  final RecentId recentId;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        return RecentCubit(
-          recent,
+        return RecentBloc(
+          recentId,
           recentsRepository: context.read<RecentsRepository>(),
-        )..getRecentHistory();
+        )..add(const RecentStarted());
       },
       child: const RecentScaffold(),
     );

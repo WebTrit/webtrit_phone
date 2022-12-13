@@ -12,37 +12,24 @@ class RecentsRepository {
 
   final AppDatabase _appDatabase;
 
-  Stream<List<Recent>> recents() {
-    return _appDatabase.callLogsDao.watchLastCallLogsExt().map((callLogsExt) => callLogsExt.map((callLogExt) {
-          final callLog = callLogExt.callLog;
-          final contactData = callLogExt.contactData;
-          return Recent(
-            direction: callLog.direction,
-            number: callLog.number,
-            video: callLog.video,
-            createdTime: callLog.createdAt,
-            acceptedTime: callLog.acceptedAt,
-            hungUpTime: callLog.hungUpAt,
-            id: callLog.id,
-            displayName: contactData?.displayName,
-            firstName: contactData?.firstName,
-            lastName: contactData?.lastName,
-          );
-        }).toList(growable: false));
+  Stream<List<Recent>> watchRecents() {
+    return _appDatabase.callLogsDao
+        .watchLastCallLogsExt()
+        .map((callLogsExt) => callLogsExt.map(_toRecentExt).toList(growable: false));
   }
 
-  Future<List<Recent>> history(Recent recent) {
-    return _appDatabase.callLogsDao.getLastCallLogsByNumber(recent.number).then((callLogs) => callLogs
-        .map((callLog) => Recent(
-              direction: callLog.direction,
-              number: callLog.number,
-              video: callLog.video,
-              createdTime: callLog.createdAt,
-              acceptedTime: callLog.acceptedAt,
-              hungUpTime: callLog.hungUpAt,
-              id: callLog.id,
-            ))
-        .toList(growable: false));
+  Future<Recent> getRecent(RecentId recentId) {
+    return _appDatabase.callLogsDao
+        .getCallLogExt(CallLogDataCompanion(
+          id: Value(recentId),
+        ))
+        .then(_toRecentExt);
+  }
+
+  Stream<List<Recent>> watchHistory(Recent recent) {
+    return _appDatabase.callLogsDao
+        .watchLastCallLogsByNumber(recent.number)
+        .map((callLogs) => callLogs.map(_toRecent).toList(growable: false));
   }
 
   Future<void> add(Recent recent) async {
@@ -63,5 +50,34 @@ class RecentsRepository {
         id: Value(id),
       ));
     }
+  }
+
+  Recent _toRecentExt(CallLogDataWithContactPhoneDataAndContactData callLogExt) {
+    final callLog = callLogExt.callLog;
+    final contactData = callLogExt.contactData;
+    return Recent(
+      direction: callLog.direction,
+      number: callLog.number,
+      video: callLog.video,
+      createdTime: callLog.createdAt,
+      acceptedTime: callLog.acceptedAt,
+      hungUpTime: callLog.hungUpAt,
+      id: callLog.id,
+      displayName: contactData?.displayName,
+      firstName: contactData?.firstName,
+      lastName: contactData?.lastName,
+    );
+  }
+
+  Recent _toRecent(CallLogData callLogData) {
+    return Recent(
+      direction: callLogData.direction,
+      number: callLogData.number,
+      video: callLogData.video,
+      createdTime: callLogData.createdAt,
+      acceptedTime: callLogData.acceptedAt,
+      hungUpTime: callLogData.hungUpAt,
+      id: callLogData.id,
+    );
   }
 }

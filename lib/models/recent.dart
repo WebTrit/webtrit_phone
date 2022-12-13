@@ -7,6 +7,8 @@ enum Direction {
   outgoing,
 }
 
+typedef RecentId = int;
+
 // TODO: could be spit in two classes Recent and RecentExt which extend Recent
 class Recent extends Equatable {
   final Direction direction;
@@ -15,7 +17,7 @@ class Recent extends Equatable {
   final DateTime createdTime;
   final DateTime? acceptedTime;
   final DateTime? hungUpTime;
-  final int? id;
+  final RecentId? id;
   final String? displayName;
   final String? firstName;
   final String? lastName;

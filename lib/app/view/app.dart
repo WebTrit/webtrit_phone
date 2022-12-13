@@ -251,11 +251,11 @@ class _AppState extends State<App> {
                   ),
                   GoRoute(
                     name: MainRoute.recent,
-                    path: 'recent',
+                    path: 'recent/:$RecentId',
                     pageBuilder: (context, state) => MaterialPage(
                       key: state.pageKey,
                       fullscreenDialog: true,
-                      child: RecentScreen(state.extra as Recent),
+                      child: RecentScreen(int.parse(state.params['$RecentId']!)),
                     ),
                   ),
                 ],

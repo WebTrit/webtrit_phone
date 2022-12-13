@@ -103,7 +103,7 @@ class RecentsScaffoldState extends State<RecentsScaffold> with SingleTickerProvi
                 return RecentTile(
                   recent: recent,
                   onInfoPressed: () {
-                    context.goNamed(MainRoute.recent, extra: recent);
+                    context.goNamed(MainRoute.recent, params: {'$RecentId': recent.id.toString()});
                   },
                   onTap: () {
                     final callBloc = context.read<CallBloc>();

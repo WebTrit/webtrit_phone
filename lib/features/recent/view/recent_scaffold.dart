@@ -10,49 +10,56 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../recent.dart';
 
 class RecentScaffold extends StatelessWidget {
-  const RecentScaffold({Key? key}) : super(key: key);
+  const RecentScaffold({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: BlocBuilder<RecentCubit, RecentState>(
+      body: BlocBuilder<RecentBloc, RecentState>(
         builder: (context, state) {
-          final themeData = Theme.of(context);
           final recent = state.recent;
-          return ListView(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: LeadingAvatar(
-                  username: recent.name,
-                  radius: 50,
+          final recents = state.recents;
+          if (recent == null) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            final themeData = Theme.of(context);
+            return ListView(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: LeadingAvatar(
+                    username: recent.name,
+                    radius: 50,
+                  ),
                 ),
-              ),
-              Text(
-                recent.name,
-                style: themeData.textTheme.headline4,
-                textAlign: TextAlign.center,
-              ),
-              const Divider(
-                height: 16,
-              ),
-              if (state is! RecentSuccess)
-                const Center(
-                  child: CircularProgressIndicator(),
-                )
-              else
-                for (final recent in state.recents)
-                  RecentHistoryTile(
-                    recent: recent,
-                    onDeleted: (recent) {
-                      context.showSnackBar(context.l10n.recents_snackBar_deleted(recent.name));
-
-                      context.read<RecentCubit>().delete(recent);
-                    },
+                Text(
+                  recent.name,
+                  style: themeData.textTheme.headline4,
+                  textAlign: TextAlign.center,
+                ),
+                const Divider(
+                  height: 16,
+                ),
+                if (recents == null)
+                  const Center(
+                    child: CircularProgressIndicator(),
                   )
-            ],
-          );
+                else
+                  for (final recent in recents)
+                    RecentHistoryTile(
+                      recent: recent,
+                      onDeleted: (recent) {
+                        context.showSnackBar(context.l10n.recents_snackBar_deleted(recent.name));
+
+                        context.read<RecentBloc>().add(RecentDeleted(recent));
+                      },
+                    )
+              ],
+            );
+          }
         },
       ),
     );

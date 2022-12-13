@@ -23,7 +23,7 @@ class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
 
   Future<void> _handleRecentsInitialLoaded(RecentsInitialLoaded event, Emitter<RecentsState> emit) async {
     await emit.forEach(
-      recentsRepository.recents(),
+      recentsRepository.watchRecents(),
       onData: (List<Recent> recents) => RecentsLoadSuccess(recents: recents),
     );
   }
