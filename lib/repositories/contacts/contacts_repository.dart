@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:drift/drift.dart';
+
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 
@@ -15,35 +17,26 @@ class ContactsRepository {
     if (searchBits.isEmpty) {
       return _appDatabase.contactsDao
           .watchAllNotEmptyContacts(sourceType)
-          .map(((contactDatas) => contactDatas.map(_mapContactDataToContact).toList()));
+          .map(((contactDatas) => contactDatas.map(_toContact).toList()));
     } else {
       return _appDatabase.contactsDao
           .watchAllLikeContacts(searchBits, sourceType)
-          .map(((contactDatas) => contactDatas.map(_mapContactDataToContact).toList()));
+          .map(((contactDatas) => contactDatas.map(_toContact).toList()));
     }
   }
 
-  Contact _mapContactDataToContact(ContactData contactData) => Contact(
-        id: contactData.id,
-        sourceType: contactData.sourceType,
-        sourceId: contactData.sourceId,
-        displayName: contactData.displayName,
-        firstName: contactData.firstName,
-        lastName: contactData.lastName,
-      );
+  Stream<Contact> watchContact(ContactId contactId) {
+    return _appDatabase.contactsDao
+        .watchContact(ContactDataCompanion(
+          id: Value(contactId),
+        ))
+        .map(_toContact);
+  }
 
-  Future<List<ContactPhone>> getContactPhones(Contact contact) {
-    final contactId = contact.id;
+  Stream<List<ContactPhone>> watchContactPhones(ContactId contactId) {
     return _appDatabase.contactPhonesDao
-        .getContactPhonesExtByContactId(contactId)
-        .then((contactPhoneDatas) => contactPhoneDatas
-            .map((contactPhoneDataWithFavoriteData) => ContactPhone(
-                  id: contactPhoneDataWithFavoriteData.contactPhoneData.id,
-                  number: contactPhoneDataWithFavoriteData.contactPhoneData.number,
-                  label: contactPhoneDataWithFavoriteData.contactPhoneData.label,
-                  favorite: contactPhoneDataWithFavoriteData.favoriteData != null,
-                ))
-            .toList());
+        .watchContactPhonesExtByContactId(contactId)
+        .map((contactPhoneDatas) => contactPhoneDatas.map(_toContactPhone).toList());
   }
 
   Future<int> addContactPhoneToFavorites(ContactPhone contactPhone) {
@@ -52,5 +45,25 @@ class ContactsRepository {
 
   Future<int> removeContactPhoneFromFavorites(ContactPhone contactPhone) {
     return _appDatabase.favoritesDao.deleteByContactPhoneId(contactPhone.id);
+  }
+
+  Contact _toContact(ContactData data) {
+    return Contact(
+      id: data.id,
+      sourceType: data.sourceType,
+      sourceId: data.sourceId,
+      displayName: data.displayName,
+      firstName: data.firstName,
+      lastName: data.lastName,
+    );
+  }
+
+  ContactPhone _toContactPhone(ContactPhoneDataWithFavoriteData data) {
+    return ContactPhone(
+      id: data.contactPhoneData.id,
+      number: data.contactPhoneData.number,
+      label: data.contactPhoneData.label,
+      favorite: data.favoriteData != null,
+    );
   }
 }

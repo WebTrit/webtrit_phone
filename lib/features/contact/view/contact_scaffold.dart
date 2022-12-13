@@ -9,54 +9,55 @@ import '../../call/call.dart';
 import '../contact.dart';
 
 class ContactScaffold extends StatelessWidget {
-  const ContactScaffold({Key? key}) : super(key: key);
+  const ContactScaffold({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: BlocBuilder<ContactCubit, ContactState>(
+      body: BlocBuilder<ContactBloc, ContactState>(
         builder: (context, state) {
-          final themeData = Theme.of(context);
           final contact = state.contact;
-          return ListView(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: LeadingAvatar(
-                  username: contact.name,
-                  radius: 50,
+          final contactPhones = state.contactPhones;
+          if (contact == null || contactPhones == null) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            final themeData = Theme.of(context);
+            return ListView(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: LeadingAvatar(
+                    username: contact.name,
+                    radius: 50,
+                  ),
                 ),
-              ),
-              Text(
-                contact.name,
-                style: themeData.textTheme.headline4,
-                textAlign: TextAlign.center,
-              ),
-              const Divider(
-                height: 16,
-              ),
-              if (state is! ContactSuccess)
-                const Center(
-                  child: CircularProgressIndicator(),
-                )
-              else
-                for (final phone in state.phones)
+                Text(
+                  contact.name,
+                  style: themeData.textTheme.headline4,
+                  textAlign: TextAlign.center,
+                ),
+                const Divider(
+                  height: 16,
+                ),
+                for (final contactPhone in contactPhones)
                   ContactPhoneTile(
-                    number: phone.number,
-                    label: phone.label,
-                    favorite: phone.favorite,
+                    number: contactPhone.number,
+                    label: contactPhone.label,
+                    favorite: contactPhone.favorite,
                     onFavoriteChanged: (favorite) {
                       if (favorite) {
-                        context.read<ContactCubit>().addToFavorites(phone);
+                        context.read<ContactBloc>().add(ContactAddedByToFavorites(contactPhone));
                       } else {
-                        context.read<ContactCubit>().removeFromFavorites(phone);
+                        context.read<ContactBloc>().add(ContactRemovedFromFavorites(contactPhone));
                       }
                     },
                     onAudioPressed: () {
                       final callBloc = context.read<CallBloc>();
                       callBloc.add(CallControlEvent.started(
-                        number: phone.number,
+                        number: contactPhone.number,
                         displayName: contact.name,
                         video: false,
                       ));
@@ -65,15 +66,16 @@ class ContactScaffold extends StatelessWidget {
                     onVideoPressed: () {
                       final callBloc = context.read<CallBloc>();
                       callBloc.add(CallControlEvent.started(
-                        number: phone.number,
+                        number: contactPhone.number,
                         displayName: contact.name,
                         video: true,
                       ));
                       context.pop();
                     },
                   )
-            ],
-          );
+              ],
+            );
+          }
         },
       ),
     );

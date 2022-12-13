@@ -242,11 +242,11 @@ class _AppState extends State<App> {
                   ),
                   GoRoute(
                     name: MainRoute.contact,
-                    path: 'contact',
+                    path: 'contact/:$ContactId',
                     pageBuilder: (context, state) => MaterialPage(
                       key: state.pageKey,
                       fullscreenDialog: true,
-                      child: ContactScreen(state.extra as Contact),
+                      child: ContactScreen(int.parse(state.params['$ContactId']!)),
                     ),
                   ),
                   GoRoute(

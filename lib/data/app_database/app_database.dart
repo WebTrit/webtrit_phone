@@ -257,6 +257,10 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
     return q.watch().map((rows) => rows.map((row) => row.readTable(contactsTable)).toList());
   }
 
+  Stream<ContactData> watchContact(Insertable<ContactData> contact) {
+    return (select(contactsTable)..whereSamePrimaryKey(contact)).watchSingle();
+  }
+
   Future<ContactData> insertOnUniqueConflictUpdateContact(Insertable<ContactData> contact) =>
       into(contactsTable).insertReturning(contact,
           onConflict: DoUpdate((_) => contact, target: [contactsTable.sourceType, contactsTable.sourceId]));
@@ -274,37 +278,60 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
 class ContactPhonesDao extends DatabaseAccessor<AppDatabase> with _$ContactPhonesDaoMixin {
   ContactPhonesDao(AppDatabase db) : super(db);
 
-  Future<List<ContactPhoneData>> getContactPhonesByContactId(int id) => (select(contactPhonesTable)
-        ..where((t) => t.contactId.equals(id))
-        ..orderBy([
-          (t) => OrderingTerm.asc(t.insertedAt),
-        ]))
-      .get();
+  SimpleSelectStatement<$ContactPhonesTableTable, ContactPhoneData> _selectContactPhonesByContactId(int contactId) {
+    return select(contactPhonesTable)
+      ..where((t) => t.contactId.equals(contactId))
+      ..orderBy([
+        (t) => OrderingTerm.asc(t.insertedAt),
+      ]);
+  }
 
-  Future<List<ContactPhoneDataWithFavoriteData>> getContactPhonesExtByContactId(int id) => (select(contactPhonesTable)
-        ..where((t) => t.contactId.equals(id))
-        ..orderBy([
-          (t) => OrderingTerm.asc(t.insertedAt),
-        ]))
-      .join([
-        leftOuterJoin(favoritesTable, favoritesTable.contactPhoneId.equalsExp(contactPhonesTable.id)),
-      ])
-      .get()
-      .then((rows) => rows
-          .map((row) => ContactPhoneDataWithFavoriteData(
-                row.readTable(contactPhonesTable),
-                row.readTableOrNull(favoritesTable),
-              ))
-          .toList());
+  Stream<List<ContactPhoneData>> watchContactPhonesByContactId(int contactId) {
+    return _selectContactPhonesByContactId(contactId).watch();
+  }
 
-  Future<int> insertOnUniqueConflictUpdateContactPhone(Insertable<ContactPhoneData> contactPhone) =>
-      into(contactPhonesTable).insert(contactPhone,
-          onConflict: DoUpdate((_) => contactPhone, target: [contactPhonesTable.number, contactPhonesTable.contactId]));
+  Future<List<ContactPhoneData>> getContactPhonesByContactId(int contactId) {
+    return _selectContactPhonesByContactId(contactId).get();
+  }
 
-  Future<int> deleteOtherContactPhonesOfContactId(int id, Iterable<String> numbers) => (delete(contactPhonesTable)
-        ..where((t) => t.contactId.equals(id))
-        ..where((t) => t.number.isNotIn(numbers)))
-      .go();
+  JoinedSelectStatement _selectContactPhonesByContactIdJoinFavorites(int contactId) {
+    return _selectContactPhonesByContactId(contactId).join([
+      leftOuterJoin(favoritesTable, favoritesTable.contactPhoneId.equalsExp(contactPhonesTable.id)),
+    ]);
+  }
+
+  ContactPhoneDataWithFavoriteData _mapContactPhoneDataWithFavoriteData(TypedResult row) {
+    return ContactPhoneDataWithFavoriteData(
+      row.readTable(contactPhonesTable),
+      row.readTableOrNull(favoritesTable),
+    );
+  }
+
+  Stream<List<ContactPhoneDataWithFavoriteData>> watchContactPhonesExtByContactId(int contactId) {
+    return _selectContactPhonesByContactIdJoinFavorites(contactId)
+        .watch()
+        .map((rows) => rows.map(_mapContactPhoneDataWithFavoriteData).toList());
+  }
+
+  Future<List<ContactPhoneDataWithFavoriteData>> getContactPhonesExtByContactId(int contactId) {
+    return _selectContactPhonesByContactIdJoinFavorites(contactId)
+        .get()
+        .then((rows) => rows.map(_mapContactPhoneDataWithFavoriteData).toList());
+  }
+
+  Future<int> insertOnUniqueConflictUpdateContactPhone(Insertable<ContactPhoneData> contactPhone) {
+    return into(contactPhonesTable).insert(
+      contactPhone,
+      onConflict: DoUpdate((_) => contactPhone, target: [contactPhonesTable.number, contactPhonesTable.contactId]),
+    );
+  }
+
+  Future<int> deleteOtherContactPhonesOfContactId(int id, Iterable<String> numbers) {
+    return (delete(contactPhonesTable)
+          ..where((t) => t.contactId.equals(id))
+          ..where((t) => t.number.isNotIn(numbers)))
+        .go();
+  }
 }
 
 class ContactPhoneDataWithFavoriteData {

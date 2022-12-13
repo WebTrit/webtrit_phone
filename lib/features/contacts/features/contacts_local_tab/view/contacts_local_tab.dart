@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 import '../../../contacts.dart';
@@ -62,7 +63,7 @@ class _ContactsLocal extends StatelessWidget {
                 displayName: contact.name,
                 thumbnail: contact.thumbnail,
                 onTap: () async {
-                  context.goNamed(MainRoute.contact, extra: contact);
+                  context.goNamed(MainRoute.contact, params: {'$ContactId': contact.id.toString()});
                 },
               );
             },

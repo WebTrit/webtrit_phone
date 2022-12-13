@@ -1,3 +1,3 @@
-export 'cubit/contact_cubit.dart';
+export 'bloc/contact_bloc.dart';
 export 'view/view.dart';
 export 'widgets/widgets.dart';
