@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:clock/clock.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/isolate.dart';
@@ -7,6 +9,8 @@ import 'package:drift/native.dart';
 
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/models/models.dart';
+
+import 'migrations/migrations.dart';
 
 export 'package:drift/isolate.dart';
 
@@ -38,10 +42,10 @@ class AppDatabase extends _$AppDatabase {
     );
   }
 
-  AppDatabase._connect(DatabaseConnection connection) : super.connect(connection);
+  AppDatabase.connect(DatabaseConnection connection) : super.connect(connection);
 
   factory AppDatabase.fromIsolate(DriftIsolate isolate, {bool isolateDebugLog = false}) {
-    return AppDatabase._connect(
+    return AppDatabase.connect(
       DatabaseConnection.delayed(isolate.connect(
         isolateDebugLog: isolateDebugLog,
         singleClientMode: true,
@@ -63,14 +67,27 @@ class AppDatabase extends _$AppDatabase {
   }
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => migrations.schemaVersion;
 
   @override
-  MigrationStrategy get migration => MigrationStrategy(
-        beforeOpen: (details) async {
-          await customStatement('PRAGMA foreign_keys = ON;');
-        },
-      );
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      onUpgrade: (m, from, to) async {
+        for (var version = from; version < to; version++) {
+          await migrations[version - 1].execute(this, m);
+        }
+
+        // Assert that the schema is valid after migrations
+        if (kDebugMode) {
+          final wrongForeignKeys = await customSelect('PRAGMA foreign_key_check').get();
+          assert(wrongForeignKeys.isEmpty, '${wrongForeignKeys.map((e) => e.data)}');
+        }
+      },
+      beforeOpen: (details) async {
+        await customStatement('PRAGMA foreign_keys = ON;');
+      },
+    );
+  }
 
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities {
