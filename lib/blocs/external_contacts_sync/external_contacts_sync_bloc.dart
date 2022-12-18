@@ -75,14 +75,14 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
       final externalContactExt = externalContact.ext;
       final externalContactMobile = externalContact.mobile;
 
-      final localContactNumbers = [
+      final externalContactNumbers = [
         if (externalContactNumber != null) externalContactNumber,
         if (externalContactExt != null) externalContactExt,
         if (externalContactMobile != null) externalContactMobile,
       ];
 
       await appDatabase.contactPhonesDao
-          .deleteOtherContactPhonesOfContactId(insertOrUpdateContactData.id, localContactNumbers);
+          .deleteOtherContactPhonesOfContactId(insertOrUpdateContactData.id, externalContactNumbers);
 
       if (externalContactNumber != null) {
         await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(ContactPhoneDataCompanion(
