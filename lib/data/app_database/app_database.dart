@@ -20,12 +20,14 @@ part 'app_database.g.dart';
   tables: [
     ContactsTable,
     ContactPhonesTable,
+    ContactEmailsTable,
     CallLogsTable,
     FavoritesTable,
   ],
   daos: [
     ContactsDao,
     ContactPhonesDao,
+    ContactEmailsDao,
     CallLogsDao,
     FavoritesDao,
   ],
@@ -204,6 +206,29 @@ class ContactPhonesTable extends Table {
       ];
 }
 
+@DataClassName('ContactEmailData')
+class ContactEmailsTable extends Table {
+  @override
+  String get tableName => 'contact_emails';
+
+  IntColumn get id => integer().autoIncrement()();
+
+  TextColumn get address => text()();
+
+  TextColumn get label => text()();
+
+  IntColumn get contactId => integer().customConstraint('NOT NULL REFERENCES contacts(id) ON DELETE CASCADE')();
+
+  DateTimeColumn get insertedAt => dateTime().nullable()();
+
+  DateTimeColumn get updatedAt => dateTime().nullable()();
+
+  @override
+  List<String> get customConstraints => [
+        'UNIQUE(address, contact_id)',
+      ];
+}
+
 @DataClassName('CallLogData')
 class CallLogsTable extends Table {
   @override
@@ -367,6 +392,43 @@ class ContactPhonesDao extends DatabaseAccessor<AppDatabase> with _$ContactPhone
     return (delete(contactPhonesTable)
           ..where((t) => t.contactId.equals(id))
           ..where((t) => t.number.isNotIn(numbers)))
+        .go();
+  }
+}
+
+@DriftAccessor(tables: [
+  ContactEmailsTable,
+])
+class ContactEmailsDao extends DatabaseAccessor<AppDatabase> with _$ContactEmailsDaoMixin {
+  ContactEmailsDao(AppDatabase db) : super(db);
+
+  SimpleSelectStatement<$ContactEmailsTableTable, ContactEmailData> _selectContactEmailsByContactId(int contactId) {
+    return select(contactEmailsTable)
+      ..where((t) => t.contactId.equals(contactId))
+      ..orderBy([
+        (t) => OrderingTerm.asc(t.insertedAt),
+      ]);
+  }
+
+  Stream<List<ContactEmailData>> watchContactEmailsByContactId(int contactId) {
+    return _selectContactEmailsByContactId(contactId).watch();
+  }
+
+  Future<List<ContactEmailData>> getContactEmailsByContactId(int contactId) {
+    return _selectContactEmailsByContactId(contactId).get();
+  }
+
+  Future<int> insertOnUniqueConflictUpdateContactEmail(Insertable<ContactEmailData> entity) {
+    return into(contactEmailsTable).insert(
+      entity,
+      onConflict: DoUpdate((_) => entity, target: [contactEmailsTable.address, contactEmailsTable.contactId]),
+    );
+  }
+
+  Future<int> deleteOtherContactEmailsOfContactId(int contactId, Iterable<String> addresses) {
+    return (delete(contactEmailsTable)
+          ..where((t) => t.contactId.equals(contactId))
+          ..where((t) => t.address.isNotIn(addresses)))
         .go();
   }
 }

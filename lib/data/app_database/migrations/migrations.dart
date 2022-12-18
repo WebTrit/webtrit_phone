@@ -1,5 +1,7 @@
 import '../migration.dart';
 
+import 'migration_v2.dart';
+
 extension MigrationsSchemaVersion<T extends Migration> on Iterable<T> {
   int get schemaVersion => length + 1;
 }
@@ -10,4 +12,6 @@ extension MigrationsSchemaVersion<T extends Migration> on Iterable<T> {
 // 2. generate migration schemas for test:
 //    $ flutter pub run drift_dev schema generate lib/data/app_database/drift_schemas/ test/data/app_database/generated_migrations/
 // 3. add necessary tests
-const migrations = <Migration>[];
+const migrations = <Migration>[
+  MigrationV2(),
+];

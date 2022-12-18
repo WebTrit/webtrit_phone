@@ -752,6 +752,337 @@ class $ContactPhonesTableTable extends ContactPhonesTable
   }
 }
 
+class ContactEmailData extends DataClass
+    implements Insertable<ContactEmailData> {
+  final int id;
+  final String address;
+  final String label;
+  final int contactId;
+  final DateTime? insertedAt;
+  final DateTime? updatedAt;
+  const ContactEmailData(
+      {required this.id,
+      required this.address,
+      required this.label,
+      required this.contactId,
+      this.insertedAt,
+      this.updatedAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['address'] = Variable<String>(address);
+    map['label'] = Variable<String>(label);
+    map['contact_id'] = Variable<int>(contactId);
+    if (!nullToAbsent || insertedAt != null) {
+      map['inserted_at'] = Variable<DateTime>(insertedAt);
+    }
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<DateTime>(updatedAt);
+    }
+    return map;
+  }
+
+  ContactEmailDataCompanion toCompanion(bool nullToAbsent) {
+    return ContactEmailDataCompanion(
+      id: Value(id),
+      address: Value(address),
+      label: Value(label),
+      contactId: Value(contactId),
+      insertedAt: insertedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(insertedAt),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
+    );
+  }
+
+  factory ContactEmailData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ContactEmailData(
+      id: serializer.fromJson<int>(json['id']),
+      address: serializer.fromJson<String>(json['address']),
+      label: serializer.fromJson<String>(json['label']),
+      contactId: serializer.fromJson<int>(json['contactId']),
+      insertedAt: serializer.fromJson<DateTime?>(json['insertedAt']),
+      updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'address': serializer.toJson<String>(address),
+      'label': serializer.toJson<String>(label),
+      'contactId': serializer.toJson<int>(contactId),
+      'insertedAt': serializer.toJson<DateTime?>(insertedAt),
+      'updatedAt': serializer.toJson<DateTime?>(updatedAt),
+    };
+  }
+
+  ContactEmailData copyWith(
+          {int? id,
+          String? address,
+          String? label,
+          int? contactId,
+          Value<DateTime?> insertedAt = const Value.absent(),
+          Value<DateTime?> updatedAt = const Value.absent()}) =>
+      ContactEmailData(
+        id: id ?? this.id,
+        address: address ?? this.address,
+        label: label ?? this.label,
+        contactId: contactId ?? this.contactId,
+        insertedAt: insertedAt.present ? insertedAt.value : this.insertedAt,
+        updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('ContactEmailData(')
+          ..write('id: $id, ')
+          ..write('address: $address, ')
+          ..write('label: $label, ')
+          ..write('contactId: $contactId, ')
+          ..write('insertedAt: $insertedAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, address, label, contactId, insertedAt, updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ContactEmailData &&
+          other.id == this.id &&
+          other.address == this.address &&
+          other.label == this.label &&
+          other.contactId == this.contactId &&
+          other.insertedAt == this.insertedAt &&
+          other.updatedAt == this.updatedAt);
+}
+
+class ContactEmailDataCompanion extends UpdateCompanion<ContactEmailData> {
+  final Value<int> id;
+  final Value<String> address;
+  final Value<String> label;
+  final Value<int> contactId;
+  final Value<DateTime?> insertedAt;
+  final Value<DateTime?> updatedAt;
+  const ContactEmailDataCompanion({
+    this.id = const Value.absent(),
+    this.address = const Value.absent(),
+    this.label = const Value.absent(),
+    this.contactId = const Value.absent(),
+    this.insertedAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  });
+  ContactEmailDataCompanion.insert({
+    this.id = const Value.absent(),
+    required String address,
+    required String label,
+    required int contactId,
+    this.insertedAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  })  : address = Value(address),
+        label = Value(label),
+        contactId = Value(contactId);
+  static Insertable<ContactEmailData> custom({
+    Expression<int>? id,
+    Expression<String>? address,
+    Expression<String>? label,
+    Expression<int>? contactId,
+    Expression<DateTime>? insertedAt,
+    Expression<DateTime>? updatedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (address != null) 'address': address,
+      if (label != null) 'label': label,
+      if (contactId != null) 'contact_id': contactId,
+      if (insertedAt != null) 'inserted_at': insertedAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+    });
+  }
+
+  ContactEmailDataCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? address,
+      Value<String>? label,
+      Value<int>? contactId,
+      Value<DateTime?>? insertedAt,
+      Value<DateTime?>? updatedAt}) {
+    return ContactEmailDataCompanion(
+      id: id ?? this.id,
+      address: address ?? this.address,
+      label: label ?? this.label,
+      contactId: contactId ?? this.contactId,
+      insertedAt: insertedAt ?? this.insertedAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (address.present) {
+      map['address'] = Variable<String>(address.value);
+    }
+    if (label.present) {
+      map['label'] = Variable<String>(label.value);
+    }
+    if (contactId.present) {
+      map['contact_id'] = Variable<int>(contactId.value);
+    }
+    if (insertedAt.present) {
+      map['inserted_at'] = Variable<DateTime>(insertedAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ContactEmailDataCompanion(')
+          ..write('id: $id, ')
+          ..write('address: $address, ')
+          ..write('label: $label, ')
+          ..write('contactId: $contactId, ')
+          ..write('insertedAt: $insertedAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ContactEmailsTableTable extends ContactEmailsTable
+    with TableInfo<$ContactEmailsTableTable, ContactEmailData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ContactEmailsTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _addressMeta =
+      const VerificationMeta('address');
+  @override
+  late final GeneratedColumn<String> address = GeneratedColumn<String>(
+      'address', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _labelMeta = const VerificationMeta('label');
+  @override
+  late final GeneratedColumn<String> label = GeneratedColumn<String>(
+      'label', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _contactIdMeta =
+      const VerificationMeta('contactId');
+  @override
+  late final GeneratedColumn<int> contactId = GeneratedColumn<int>(
+      'contact_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL REFERENCES contacts(id) ON DELETE CASCADE');
+  static const VerificationMeta _insertedAtMeta =
+      const VerificationMeta('insertedAt');
+  @override
+  late final GeneratedColumn<DateTime> insertedAt = GeneratedColumn<DateTime>(
+      'inserted_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, address, label, contactId, insertedAt, updatedAt];
+  @override
+  String get aliasedName => _alias ?? 'contact_emails';
+  @override
+  String get actualTableName => 'contact_emails';
+  @override
+  VerificationContext validateIntegrity(Insertable<ContactEmailData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('address')) {
+      context.handle(_addressMeta,
+          address.isAcceptableOrUnknown(data['address']!, _addressMeta));
+    } else if (isInserting) {
+      context.missing(_addressMeta);
+    }
+    if (data.containsKey('label')) {
+      context.handle(
+          _labelMeta, label.isAcceptableOrUnknown(data['label']!, _labelMeta));
+    } else if (isInserting) {
+      context.missing(_labelMeta);
+    }
+    if (data.containsKey('contact_id')) {
+      context.handle(_contactIdMeta,
+          contactId.isAcceptableOrUnknown(data['contact_id']!, _contactIdMeta));
+    } else if (isInserting) {
+      context.missing(_contactIdMeta);
+    }
+    if (data.containsKey('inserted_at')) {
+      context.handle(
+          _insertedAtMeta,
+          insertedAt.isAcceptableOrUnknown(
+              data['inserted_at']!, _insertedAtMeta));
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ContactEmailData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ContactEmailData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      address: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}address'])!,
+      label: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}label'])!,
+      contactId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}contact_id'])!,
+      insertedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}inserted_at']),
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at']),
+    );
+  }
+
+  @override
+  $ContactEmailsTableTable createAlias(String alias) {
+    return $ContactEmailsTableTable(attachedDatabase, alias);
+  }
+}
+
 class CallLogData extends DataClass implements Insertable<CallLogData> {
   final int id;
   final Direction direction;
@@ -1347,19 +1678,28 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $ContactsTableTable contactsTable = $ContactsTableTable(this);
   late final $ContactPhonesTableTable contactPhonesTable =
       $ContactPhonesTableTable(this);
+  late final $ContactEmailsTableTable contactEmailsTable =
+      $ContactEmailsTableTable(this);
   late final $CallLogsTableTable callLogsTable = $CallLogsTableTable(this);
   late final $FavoritesTableTable favoritesTable = $FavoritesTableTable(this);
   late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
   late final ContactPhonesDao contactPhonesDao =
       ContactPhonesDao(this as AppDatabase);
+  late final ContactEmailsDao contactEmailsDao =
+      ContactEmailsDao(this as AppDatabase);
   late final CallLogsDao callLogsDao = CallLogsDao(this as AppDatabase);
   late final FavoritesDao favoritesDao = FavoritesDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [contactsTable, contactPhonesTable, callLogsTable, favoritesTable];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+        contactsTable,
+        contactPhonesTable,
+        contactEmailsTable,
+        callLogsTable,
+        favoritesTable
+      ];
 }
 
 mixin _$ContactsDaoMixin on DatabaseAccessor<AppDatabase> {
@@ -1371,6 +1711,10 @@ mixin _$ContactPhonesDaoMixin on DatabaseAccessor<AppDatabase> {
   $ContactPhonesTableTable get contactPhonesTable =>
       attachedDatabase.contactPhonesTable;
   $FavoritesTableTable get favoritesTable => attachedDatabase.favoritesTable;
+}
+mixin _$ContactEmailsDaoMixin on DatabaseAccessor<AppDatabase> {
+  $ContactEmailsTableTable get contactEmailsTable =>
+      attachedDatabase.contactEmailsTable;
 }
 mixin _$CallLogsDaoMixin on DatabaseAccessor<AppDatabase> {
   $CallLogsTableTable get callLogsTable => attachedDatabase.callLogsTable;
