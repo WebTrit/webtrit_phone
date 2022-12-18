@@ -68,6 +68,9 @@ dependencies:
   webtrit_callkeep:
     path: ./packages/webtrit_callkeep
 
+  app_database:
+    path: ./packages/data/app_database
+
 dev_dependencies:
   integration_test:
     sdk: flutter

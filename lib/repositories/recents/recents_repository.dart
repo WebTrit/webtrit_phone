@@ -1,8 +1,7 @@
 import 'dart:async';
 
-import 'package:drift/drift.dart';
-
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 class RecentsRepository {
@@ -34,7 +33,7 @@ class RecentsRepository {
 
   Future<void> add(Recent recent) async {
     await _appDatabase.callLogsDao.insertCallLog(CallLogDataCompanion(
-      direction: Value(recent.direction),
+      direction: Value(recent.direction.toData()),
       number: Value(recent.number),
       video: Value(recent.video),
       createdAt: Value(recent.createdTime),
@@ -56,7 +55,7 @@ class RecentsRepository {
     final callLog = callLogExt.callLog;
     final contactData = callLogExt.contactData;
     return Recent(
-      direction: callLog.direction,
+      direction: callLog.direction.toModel(),
       number: callLog.number,
       video: callLog.video,
       createdTime: callLog.createdAt,
@@ -71,7 +70,7 @@ class RecentsRepository {
 
   Recent _toRecent(CallLogData callLogData) {
     return Recent(
-      direction: callLogData.direction,
+      direction: callLogData.direction.toModel(),
       number: callLogData.number,
       video: callLogData.video,
       createdTime: callLogData.createdAt,

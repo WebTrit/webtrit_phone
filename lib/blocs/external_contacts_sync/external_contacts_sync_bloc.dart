@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -48,7 +47,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
   void _onUpdated(_ExternalContactsSyncUpdated event, Emitter<ExternalContactsSyncState> emit) async {
     final externalContacts = event.contacts;
 
-    final contactDatas = await appDatabase.contactsDao.getAllContacts(ContactSourceType.external);
+    final contactDatas = await appDatabase.contactsDao.getAllContacts(ContactSourceTypeEnum.external);
 
     final syncedExternalContactsIds = contactDatas.map((contactData) => contactData.sourceId).toSet();
     final updatedExternalContactsIds = externalContacts.map((externalContact) => externalContact.id).toSet();
@@ -57,14 +56,14 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
 
     // to del
     for (final externalContactsId in delExternalContactsIds) {
-      await appDatabase.contactsDao.deleteContactBySource(ContactSourceType.external, externalContactsId);
+      await appDatabase.contactsDao.deleteContactBySource(ContactSourceTypeEnum.external, externalContactsId);
     }
 
     // to add or update
     for (final externalContact in externalContacts) {
       final insertOrUpdateContactData =
           await appDatabase.contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
-        sourceType: const Value(ContactSourceType.external),
+        sourceType: const Value(ContactSourceTypeEnum.external),
         sourceId: Value(externalContact.id),
         displayName: Value(externalContact.displayName),
         firstName: Value(externalContact.firstName),

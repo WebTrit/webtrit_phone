@@ -1,14 +1,11 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
-
 import 'package:clock/clock.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/isolate.dart';
 import 'package:drift/native.dart';
 
-import 'package:webtrit_phone/environment_config.dart';
-import 'package:webtrit_phone/models/models.dart';
+import 'package:app_database/app_database_environment_config.dart';
 
 import 'migrations/migrations.dart';
 
@@ -38,7 +35,7 @@ class AppDatabase extends _$AppDatabase {
       () => DatabaseConnection(
         NativeDatabase(
           File(databasePath),
-          logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
+          logStatements: AppDatabaseEnvironmentConfig.LOG_STATEMENTS,
         ),
       ),
     );
@@ -80,10 +77,13 @@ class AppDatabase extends _$AppDatabase {
         }
 
         // Assert that the schema is valid after migrations
-        if (kDebugMode) {
-          final wrongForeignKeys = await customSelect('PRAGMA foreign_key_check').get();
-          assert(wrongForeignKeys.isEmpty, '${wrongForeignKeys.map((e) => e.data)}');
-        }
+        assert(() {
+          () async {
+            final wrongForeignKeys = await customSelect('PRAGMA foreign_key_check').get();
+            assert(wrongForeignKeys.isEmpty, '${wrongForeignKeys.map((e) => e.data)}');
+          }();
+          return true;
+        }());
       },
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON;');
@@ -156,6 +156,11 @@ class AppDatabase extends _$AppDatabase {
   }
 }
 
+enum ContactSourceTypeEnum {
+  local,
+  external,
+}
+
 @DataClassName('ContactData')
 class ContactsTable extends Table {
   @override
@@ -163,7 +168,7 @@ class ContactsTable extends Table {
 
   IntColumn get id => integer().autoIncrement()();
 
-  IntColumn get sourceType => intEnum<ContactSourceType>()();
+  IntColumn get sourceType => intEnum<ContactSourceTypeEnum>()();
 
   TextColumn get sourceId => text()();
 
@@ -229,6 +234,11 @@ class ContactEmailsTable extends Table {
       ];
 }
 
+enum CallLogDirectionEnum {
+  incoming,
+  outgoing,
+}
+
 @DataClassName('CallLogData')
 class CallLogsTable extends Table {
   @override
@@ -236,7 +246,7 @@ class CallLogsTable extends Table {
 
   IntColumn get id => integer().autoIncrement()();
 
-  IntColumn get direction => intEnum<Direction>()();
+  IntColumn get direction => intEnum<CallLogDirectionEnum>()();
 
   TextColumn get number =>
       text().customConstraint('NOT NULL CONSTRAINT "call_logs.number not_empty" CHECK (length(number) > 0)')();
@@ -270,7 +280,7 @@ class FavoritesTable extends Table {
 class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin {
   ContactsDao(AppDatabase db) : super(db);
 
-  SimpleSelectStatement<$ContactsTableTable, ContactData> _selectAllContacts([ContactSourceType? sourceType]) =>
+  SimpleSelectStatement<$ContactsTableTable, ContactData> _selectAllContacts([ContactSourceTypeEnum? sourceType]) =>
       select(contactsTable)
         ..where((t) {
           if (sourceType == null) {
@@ -285,11 +295,12 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
           (t) => OrderingTerm.asc(t.displayName),
         ]);
 
-  Stream<List<ContactData>> watchAllContacts([ContactSourceType? sourceType]) => _selectAllContacts(sourceType).watch();
+  Stream<List<ContactData>> watchAllContacts([ContactSourceTypeEnum? sourceType]) =>
+      _selectAllContacts(sourceType).watch();
 
-  Future<List<ContactData>> getAllContacts([ContactSourceType? sourceType]) => _selectAllContacts(sourceType).get();
+  Future<List<ContactData>> getAllContacts([ContactSourceTypeEnum? sourceType]) => _selectAllContacts(sourceType).get();
 
-  Stream<List<ContactData>> watchAllNotEmptyContacts([ContactSourceType? sourceType]) {
+  Stream<List<ContactData>> watchAllNotEmptyContacts([ContactSourceTypeEnum? sourceType]) {
     final q = _selectAllContacts(sourceType);
     q.where(
       (t) => [
@@ -301,7 +312,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
     return q.watch();
   }
 
-  Stream<List<ContactData>> watchAllLikeContacts(Iterable<String> searchBits, [ContactSourceType? sourceType]) {
+  Stream<List<ContactData>> watchAllLikeContacts(Iterable<String> searchBits, [ContactSourceTypeEnum? sourceType]) {
     final q = _selectAllContacts(sourceType).join([
       leftOuterJoin(contactPhonesTable, contactPhonesTable.contactId.equalsExp(contactsTable.id)),
     ]);
@@ -329,7 +340,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
 
   Future<int> deleteContact(Insertable<ContactData> contact) => delete(contactsTable).delete(contact);
 
-  Future<int> deleteContactBySource(ContactSourceType sourceType, String sourceId) =>
+  Future<int> deleteContactBySource(ContactSourceTypeEnum sourceType, String sourceId) =>
       (delete(contactsTable)..where((t) => t.sourceType.equalsValue(sourceType) & t.sourceId.equals(sourceId))).go();
 }
 

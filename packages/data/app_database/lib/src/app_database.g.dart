@@ -5,7 +5,7 @@ part of 'app_database.dart';
 // ignore_for_file: type=lint
 class ContactData extends DataClass implements Insertable<ContactData> {
   final int id;
-  final ContactSourceType sourceType;
+  final ContactSourceTypeEnum sourceType;
   final String sourceId;
   final String? displayName;
   final String? firstName;
@@ -76,7 +76,8 @@ class ContactData extends DataClass implements Insertable<ContactData> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ContactData(
       id: serializer.fromJson<int>(json['id']),
-      sourceType: serializer.fromJson<ContactSourceType>(json['sourceType']),
+      sourceType:
+          serializer.fromJson<ContactSourceTypeEnum>(json['sourceType']),
       sourceId: serializer.fromJson<String>(json['sourceId']),
       displayName: serializer.fromJson<String?>(json['displayName']),
       firstName: serializer.fromJson<String?>(json['firstName']),
@@ -90,7 +91,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'sourceType': serializer.toJson<ContactSourceType>(sourceType),
+      'sourceType': serializer.toJson<ContactSourceTypeEnum>(sourceType),
       'sourceId': serializer.toJson<String>(sourceId),
       'displayName': serializer.toJson<String?>(displayName),
       'firstName': serializer.toJson<String?>(firstName),
@@ -102,7 +103,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
 
   ContactData copyWith(
           {int? id,
-          ContactSourceType? sourceType,
+          ContactSourceTypeEnum? sourceType,
           String? sourceId,
           Value<String?> displayName = const Value.absent(),
           Value<String?> firstName = const Value.absent(),
@@ -153,7 +154,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
 
 class ContactDataCompanion extends UpdateCompanion<ContactData> {
   final Value<int> id;
-  final Value<ContactSourceType> sourceType;
+  final Value<ContactSourceTypeEnum> sourceType;
   final Value<String> sourceId;
   final Value<String?> displayName;
   final Value<String?> firstName;
@@ -172,7 +173,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
   });
   ContactDataCompanion.insert({
     this.id = const Value.absent(),
-    required ContactSourceType sourceType,
+    required ContactSourceTypeEnum sourceType,
     required String sourceId,
     this.displayName = const Value.absent(),
     this.firstName = const Value.absent(),
@@ -205,7 +206,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
 
   ContactDataCompanion copyWith(
       {Value<int>? id,
-      Value<ContactSourceType>? sourceType,
+      Value<ContactSourceTypeEnum>? sourceType,
       Value<String>? sourceId,
       Value<String?>? displayName,
       Value<String?>? firstName,
@@ -289,10 +290,10 @@ class $ContactsTableTable extends ContactsTable
   static const VerificationMeta _sourceTypeMeta =
       const VerificationMeta('sourceType');
   @override
-  late final GeneratedColumnWithTypeConverter<ContactSourceType, int>
+  late final GeneratedColumnWithTypeConverter<ContactSourceTypeEnum, int>
       sourceType = GeneratedColumn<int>('source_type', aliasedName, false,
               type: DriftSqlType.int, requiredDuringInsert: true)
-          .withConverter<ContactSourceType>(
+          .withConverter<ContactSourceTypeEnum>(
               $ContactsTableTable.$convertersourceType);
   static const VerificationMeta _sourceIdMeta =
       const VerificationMeta('sourceId');
@@ -418,8 +419,9 @@ class $ContactsTableTable extends ContactsTable
     return $ContactsTableTable(attachedDatabase, alias);
   }
 
-  static TypeConverter<ContactSourceType, int> $convertersourceType =
-      const EnumIndexConverter<ContactSourceType>(ContactSourceType.values);
+  static TypeConverter<ContactSourceTypeEnum, int> $convertersourceType =
+      const EnumIndexConverter<ContactSourceTypeEnum>(
+          ContactSourceTypeEnum.values);
 }
 
 class ContactPhoneData extends DataClass
@@ -1085,7 +1087,7 @@ class $ContactEmailsTableTable extends ContactEmailsTable
 
 class CallLogData extends DataClass implements Insertable<CallLogData> {
   final int id;
-  final Direction direction;
+  final CallLogDirectionEnum direction;
   final String number;
   final bool video;
   final DateTime createdAt;
@@ -1140,7 +1142,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return CallLogData(
       id: serializer.fromJson<int>(json['id']),
-      direction: serializer.fromJson<Direction>(json['direction']),
+      direction: serializer.fromJson<CallLogDirectionEnum>(json['direction']),
       number: serializer.fromJson<String>(json['number']),
       video: serializer.fromJson<bool>(json['video']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
@@ -1153,7 +1155,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'direction': serializer.toJson<Direction>(direction),
+      'direction': serializer.toJson<CallLogDirectionEnum>(direction),
       'number': serializer.toJson<String>(number),
       'video': serializer.toJson<bool>(video),
       'createdAt': serializer.toJson<DateTime>(createdAt),
@@ -1164,7 +1166,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
 
   CallLogData copyWith(
           {int? id,
-          Direction? direction,
+          CallLogDirectionEnum? direction,
           String? number,
           bool? video,
           DateTime? createdAt,
@@ -1211,7 +1213,7 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
 
 class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
   final Value<int> id;
-  final Value<Direction> direction;
+  final Value<CallLogDirectionEnum> direction;
   final Value<String> number;
   final Value<bool> video;
   final Value<DateTime> createdAt;
@@ -1228,7 +1230,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
   });
   CallLogDataCompanion.insert({
     this.id = const Value.absent(),
-    required Direction direction,
+    required CallLogDirectionEnum direction,
     required String number,
     required bool video,
     required DateTime createdAt,
@@ -1260,7 +1262,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
 
   CallLogDataCompanion copyWith(
       {Value<int>? id,
-      Value<Direction>? direction,
+      Value<CallLogDirectionEnum>? direction,
       Value<String>? number,
       Value<bool>? video,
       Value<DateTime>? createdAt,
@@ -1338,10 +1340,11 @@ class $CallLogsTableTable extends CallLogsTable
   static const VerificationMeta _directionMeta =
       const VerificationMeta('direction');
   @override
-  late final GeneratedColumnWithTypeConverter<Direction, int> direction =
-      GeneratedColumn<int>('direction', aliasedName, false,
+  late final GeneratedColumnWithTypeConverter<CallLogDirectionEnum, int>
+      direction = GeneratedColumn<int>('direction', aliasedName, false,
               type: DriftSqlType.int, requiredDuringInsert: true)
-          .withConverter<Direction>($CallLogsTableTable.$converterdirection);
+          .withConverter<CallLogDirectionEnum>(
+              $CallLogsTableTable.$converterdirection);
   static const VerificationMeta _numberMeta = const VerificationMeta('number');
   @override
   late final GeneratedColumn<String> number = GeneratedColumn<String>(
@@ -1455,8 +1458,9 @@ class $CallLogsTableTable extends CallLogsTable
     return $CallLogsTableTable(attachedDatabase, alias);
   }
 
-  static TypeConverter<Direction, int> $converterdirection =
-      const EnumIndexConverter<Direction>(Direction.values);
+  static TypeConverter<CallLogDirectionEnum, int> $converterdirection =
+      const EnumIndexConverter<CallLogDirectionEnum>(
+          CallLogDirectionEnum.values);
 }
 
 class FavoriteData extends DataClass implements Insertable<FavoriteData> {

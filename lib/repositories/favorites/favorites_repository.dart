@@ -1,8 +1,7 @@
 import 'dart:async';
 
-import 'package:drift/drift.dart';
-
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 class FavoritesRepository {
@@ -23,7 +22,7 @@ class FavoritesRepository {
             label: contactPhoneData.label,
             contact: Contact(
               id: contactData.id,
-              sourceType: contactData.sourceType,
+              sourceType: contactData.sourceType.toModel(),
               sourceId: contactData.sourceId,
               displayName: contactData.displayName,
               firstName: contactData.firstName,

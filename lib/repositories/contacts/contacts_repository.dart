@@ -1,8 +1,7 @@
 import 'dart:async';
 
-import 'package:drift/drift.dart';
-
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 class ContactsRepository {
@@ -16,11 +15,11 @@ class ContactsRepository {
     final searchBits = search.split(' ').where((value) => value.isNotEmpty);
     if (searchBits.isEmpty) {
       return _appDatabase.contactsDao
-          .watchAllNotEmptyContacts(sourceType)
+          .watchAllNotEmptyContacts(sourceType?.toData())
           .map(((contactDatas) => contactDatas.map(_toContact).toList()));
     } else {
       return _appDatabase.contactsDao
-          .watchAllLikeContacts(searchBits, sourceType)
+          .watchAllLikeContacts(searchBits, sourceType?.toData())
           .map(((contactDatas) => contactDatas.map(_toContact).toList()));
     }
   }
@@ -56,7 +55,7 @@ class ContactsRepository {
   Contact _toContact(ContactData data) {
     return Contact(
       id: data.id,
-      sourceType: data.sourceType,
+      sourceType: data.sourceType.toModel(),
       sourceId: data.sourceId,
       displayName: data.displayName,
       firstName: data.firstName,

@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -51,7 +50,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
   void _onUpdated(_LocalContactsSyncUpdated event, Emitter<LocalContactsSyncState> emit) async {
     final localContacts = event.contacts;
 
-    final contactDatas = await appDatabase.contactsDao.getAllContacts(ContactSourceType.local);
+    final contactDatas = await appDatabase.contactsDao.getAllContacts(ContactSourceTypeEnum.local);
 
     final syncedLocalContactsIds = contactDatas.map((contactData) => contactData.sourceId).toSet();
 
@@ -61,14 +60,14 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
 
     // to del
     for (final localContactsId in delLocalContactsIds) {
-      await appDatabase.contactsDao.deleteContactBySource(ContactSourceType.local, localContactsId);
+      await appDatabase.contactsDao.deleteContactBySource(ContactSourceTypeEnum.local, localContactsId);
     }
 
     // to add or update
     for (final localContact in localContacts) {
       final insertOrUpdateContactData =
           await appDatabase.contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
-        sourceType: const Value(ContactSourceType.local),
+        sourceType: const Value(ContactSourceTypeEnum.local),
         sourceId: Value(localContact.id),
         displayName: Value(localContact.displayName),
         firstName: Value(localContact.firstName),

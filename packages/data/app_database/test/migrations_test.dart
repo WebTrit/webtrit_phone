@@ -1,12 +1,12 @@
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 
 import 'package:drift/drift.dart';
 import 'package:drift_dev/api/migrations.dart';
 
-import 'package:webtrit_phone/data/app_database/app_database.dart';
-import 'package:webtrit_phone/data/app_database/migrations/migrations.dart';
+import 'package:app_database/app_database.dart';
+import 'package:app_database/src/migrations/migrations.dart';
 // Import the generated schema helper to instantiate databases at old versions.
-import 'package:webtrit_phone/data/app_database/migrations/generated/schema.dart';
+import 'package:app_database/src/migrations/generated/schema.dart';
 
 void main() {
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
