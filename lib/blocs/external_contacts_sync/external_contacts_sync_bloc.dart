@@ -105,6 +105,23 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
           contactId: Value(insertOrUpdateContactData.id),
         ));
       }
+
+      final externalContactEmail = externalContact.email;
+
+      final externalContactEmails = [
+        if (externalContactEmail != null) externalContactEmail,
+      ];
+
+      await appDatabase.contactEmailsDao
+          .deleteOtherContactEmailsOfContactId(insertOrUpdateContactData.id, externalContactEmails);
+
+      if (externalContactEmail != null) {
+        await appDatabase.contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(ContactEmailDataCompanion(
+          address: Value(externalContactEmail),
+          label: const Value(''),
+          contactId: Value(insertOrUpdateContactData.id),
+        ));
+      }
     }
 
     emit(const ExternalContactsSyncSuccess());

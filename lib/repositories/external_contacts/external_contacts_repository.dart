@@ -81,6 +81,7 @@ class ExternalContactsRepository {
               number: contact.number,
               ext: contact.extensionId,
               mobile: contact.mobile,
+              email: contact.email,
             ))
         .toList();
   }

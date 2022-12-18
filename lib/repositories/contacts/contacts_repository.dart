@@ -39,6 +39,12 @@ class ContactsRepository {
         .map((contactPhoneDatas) => contactPhoneDatas.map(_toContactPhone).toList());
   }
 
+  Stream<List<ContactEmail>> watchContactEmails(ContactId contactId) {
+    return _appDatabase.contactEmailsDao
+        .watchContactEmailsByContactId(contactId)
+        .map((contactEmailDatas) => contactEmailDatas.map(_toContactEmail).toList());
+  }
+
   Future<int> addContactPhoneToFavorites(ContactPhone contactPhone) {
     return _appDatabase.favoritesDao.insertFavoriteByContactPhoneId(contactPhone.id);
   }
@@ -64,6 +70,14 @@ class ContactsRepository {
       number: data.contactPhoneData.number,
       label: data.contactPhoneData.label,
       favorite: data.favoriteData != null,
+    );
+  }
+
+  ContactEmail _toContactEmail(ContactEmailData data) {
+    return ContactEmail(
+      id: data.id,
+      address: data.address,
+      label: data.label,
     );
   }
 }

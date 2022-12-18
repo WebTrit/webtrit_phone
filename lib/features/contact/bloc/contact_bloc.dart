@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -21,6 +22,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
     on<ContactStarted>(_onStarted, transformer: restartable());
     on<ContactAddedByToFavorites>(_onAddedByToFavorites);
     on<ContactRemovedFromFavorites>(_onRemovedFromFavorites);
+    on<ContactEmailSend>(_onEmailSend);
   }
 
   final ContactId contactId;
@@ -41,9 +43,17 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
       ),
     );
 
+    final watchContactEmailsForEachFuture = emit.forEach(
+      contactsRepository.watchContactEmails(contactId),
+      onData: (contactEmails) => state.copyWith(
+        contactEmails: contactEmails,
+      ),
+    );
+
     await Future.wait([
       watchContactForEachFuture,
       watchContactPhonesForEachFuture,
+      watchContactEmailsForEachFuture,
     ]);
   }
 
@@ -53,5 +63,15 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
 
   FutureOr<void> _onRemovedFromFavorites(ContactRemovedFromFavorites event, Emitter<ContactState> emit) async {
     await contactsRepository.removeContactPhoneFromFavorites(event.contactPhone);
+  }
+
+  FutureOr<void> _onEmailSend(ContactEmailSend event, Emitter<ContactState> emit) async {
+    final emailLaunchUri = Uri(
+      scheme: 'mailto',
+      path: event.contactEmail.address,
+    );
+    if (await canLaunchUrl(emailLaunchUri)) {
+      await launchUrl(emailLaunchUri);
+    }
   }
 }

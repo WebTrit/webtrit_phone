@@ -17,3 +17,8 @@ class ContactAddedByToFavorites with _$ContactAddedByToFavorites implements Cont
 class ContactRemovedFromFavorites with _$ContactRemovedFromFavorites implements ContactEvent {
   const factory ContactRemovedFromFavorites(ContactPhone contactPhone) = _ContactRemovedFromFavorites;
 }
+
+@Freezed(copyWith: false)
+class ContactEmailSend with _$ContactEmailSend implements ContactEvent {
+  const factory ContactEmailSend(ContactEmail contactEmail) = _ContactEmailSend;
+}

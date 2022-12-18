@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
+import 'package:webtrit_phone/models/local_contact_email.dart';
 
 import 'package:webtrit_phone/utils/utils.dart';
 
@@ -14,6 +15,7 @@ class LocalContact extends Equatable {
     this.lastName,
     this.thumbnail,
     this.phones = const [],
+    this.emails = const [],
   });
 
   final String id;
@@ -22,6 +24,7 @@ class LocalContact extends Equatable {
   final String? lastName;
   final Uint8List? thumbnail;
   final List<LocalContactPhone> phones;
+  final List<LocalContactEmail> emails;
 
   @override
   List<Object?> get props => [
@@ -31,5 +34,6 @@ class LocalContact extends Equatable {
         lastName,
         EquatablePropToString(thumbnail, (p) => p != null ? 'present' : 'absent'),
         phones,
+        emails,
       ];
 }

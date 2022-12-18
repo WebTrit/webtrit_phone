@@ -85,6 +85,17 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
           contactId: Value(insertOrUpdateContactData.id),
         ));
       }
+
+      await appDatabase.contactEmailsDao.deleteOtherContactEmailsOfContactId(
+          insertOrUpdateContactData.id, localContact.emails.map((email) => email.address));
+
+      for (final localContactEmail in localContact.emails) {
+        await appDatabase.contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(ContactEmailDataCompanion(
+          address: Value(localContactEmail.address),
+          label: Value(localContactEmail.label),
+          contactId: Value(insertOrUpdateContactData.id),
+        ));
+      }
     }
 
     emit(const LocalContactsSyncSuccess());

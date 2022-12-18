@@ -82,6 +82,12 @@ class LocalContactsRepository implements ILocalContactsRepository {
                         label: phone.label == PhoneLabel.custom ? phone.customLabel : phone.label.name,
                       ))
                   .toList(),
+              emails: contact.emails
+                  .map((email) => LocalContactEmail(
+                        address: email.address,
+                        label: email.label == EmailLabel.custom ? email.customLabel : email.label.name,
+                      ))
+                  .toList(),
             ))
         .toList();
   }

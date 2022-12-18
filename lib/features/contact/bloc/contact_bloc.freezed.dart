@@ -94,9 +94,49 @@ abstract class _ContactRemovedFromFavorites
 }
 
 /// @nodoc
+mixin _$ContactEmailSend {
+  ContactEmail get contactEmail => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+
+class _$_ContactEmailSend implements _ContactEmailSend {
+  const _$_ContactEmailSend(this.contactEmail);
+
+  @override
+  final ContactEmail contactEmail;
+
+  @override
+  String toString() {
+    return 'ContactEmailSend(contactEmail: $contactEmail)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_ContactEmailSend &&
+            (identical(other.contactEmail, contactEmail) ||
+                other.contactEmail == contactEmail));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, contactEmail);
+}
+
+abstract class _ContactEmailSend implements ContactEmailSend {
+  const factory _ContactEmailSend(final ContactEmail contactEmail) =
+      _$_ContactEmailSend;
+
+  @override
+  ContactEmail get contactEmail;
+}
+
+/// @nodoc
 mixin _$ContactState {
   Contact? get contact => throw _privateConstructorUsedError;
   List<ContactPhone>? get contactPhones => throw _privateConstructorUsedError;
+  List<ContactEmail>? get contactEmails => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ContactStateCopyWith<ContactState> get copyWith =>
@@ -109,7 +149,10 @@ abstract class $ContactStateCopyWith<$Res> {
           ContactState value, $Res Function(ContactState) then) =
       _$ContactStateCopyWithImpl<$Res, ContactState>;
   @useResult
-  $Res call({Contact? contact, List<ContactPhone>? contactPhones});
+  $Res call(
+      {Contact? contact,
+      List<ContactPhone>? contactPhones,
+      List<ContactEmail>? contactEmails});
 }
 
 /// @nodoc
@@ -127,6 +170,7 @@ class _$ContactStateCopyWithImpl<$Res, $Val extends ContactState>
   $Res call({
     Object? contact = freezed,
     Object? contactPhones = freezed,
+    Object? contactEmails = freezed,
   }) {
     return _then(_value.copyWith(
       contact: freezed == contact
@@ -137,6 +181,10 @@ class _$ContactStateCopyWithImpl<$Res, $Val extends ContactState>
           ? _value.contactPhones
           : contactPhones // ignore: cast_nullable_to_non_nullable
               as List<ContactPhone>?,
+      contactEmails: freezed == contactEmails
+          ? _value.contactEmails
+          : contactEmails // ignore: cast_nullable_to_non_nullable
+              as List<ContactEmail>?,
     ) as $Val);
   }
 }
@@ -149,7 +197,10 @@ abstract class _$$_ContactStateCopyWith<$Res>
       __$$_ContactStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Contact? contact, List<ContactPhone>? contactPhones});
+  $Res call(
+      {Contact? contact,
+      List<ContactPhone>? contactPhones,
+      List<ContactEmail>? contactEmails});
 }
 
 /// @nodoc
@@ -165,6 +216,7 @@ class __$$_ContactStateCopyWithImpl<$Res>
   $Res call({
     Object? contact = freezed,
     Object? contactPhones = freezed,
+    Object? contactEmails = freezed,
   }) {
     return _then(_$_ContactState(
       contact: freezed == contact
@@ -175,6 +227,10 @@ class __$$_ContactStateCopyWithImpl<$Res>
           ? _value._contactPhones
           : contactPhones // ignore: cast_nullable_to_non_nullable
               as List<ContactPhone>?,
+      contactEmails: freezed == contactEmails
+          ? _value._contactEmails
+          : contactEmails // ignore: cast_nullable_to_non_nullable
+              as List<ContactEmail>?,
     ));
   }
 }
@@ -182,8 +238,12 @@ class __$$_ContactStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_ContactState implements _ContactState {
-  const _$_ContactState({this.contact, final List<ContactPhone>? contactPhones})
-      : _contactPhones = contactPhones;
+  const _$_ContactState(
+      {this.contact,
+      final List<ContactPhone>? contactPhones,
+      final List<ContactEmail>? contactEmails})
+      : _contactPhones = contactPhones,
+        _contactEmails = contactEmails;
 
   @override
   final Contact? contact;
@@ -197,9 +257,19 @@ class _$_ContactState implements _ContactState {
     return EqualUnmodifiableListView(value);
   }
 
+  final List<ContactEmail>? _contactEmails;
+  @override
+  List<ContactEmail>? get contactEmails {
+    final value = _contactEmails;
+    if (value == null) return null;
+    if (_contactEmails is EqualUnmodifiableListView) return _contactEmails;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   String toString() {
-    return 'ContactState(contact: $contact, contactPhones: $contactPhones)';
+    return 'ContactState(contact: $contact, contactPhones: $contactPhones, contactEmails: $contactEmails)';
   }
 
   @override
@@ -209,12 +279,17 @@ class _$_ContactState implements _ContactState {
             other is _$_ContactState &&
             (identical(other.contact, contact) || other.contact == contact) &&
             const DeepCollectionEquality()
-                .equals(other._contactPhones, _contactPhones));
+                .equals(other._contactPhones, _contactPhones) &&
+            const DeepCollectionEquality()
+                .equals(other._contactEmails, _contactEmails));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, contact,
-      const DeepCollectionEquality().hash(_contactPhones));
+  int get hashCode => Object.hash(
+      runtimeType,
+      contact,
+      const DeepCollectionEquality().hash(_contactPhones),
+      const DeepCollectionEquality().hash(_contactEmails));
 
   @JsonKey(ignore: true)
   @override
@@ -226,12 +301,15 @@ class _$_ContactState implements _ContactState {
 abstract class _ContactState implements ContactState {
   const factory _ContactState(
       {final Contact? contact,
-      final List<ContactPhone>? contactPhones}) = _$_ContactState;
+      final List<ContactPhone>? contactPhones,
+      final List<ContactEmail>? contactEmails}) = _$_ContactState;
 
   @override
   Contact? get contact;
   @override
   List<ContactPhone>? get contactPhones;
+  @override
+  List<ContactEmail>? get contactEmails;
   @override
   @JsonKey(ignore: true)
   _$$_ContactStateCopyWith<_$_ContactState> get copyWith =>

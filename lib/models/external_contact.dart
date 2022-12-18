@@ -9,6 +9,7 @@ class ExternalContact extends Equatable {
     this.number,
     this.ext,
     this.mobile,
+    this.email,
   });
 
   final String id;
@@ -18,6 +19,7 @@ class ExternalContact extends Equatable {
   final String? number;
   final String? ext;
   final String? mobile;
+  final String? email;
 
   @override
   List<Object?> get props => [
@@ -28,5 +30,6 @@ class ExternalContact extends Equatable {
         number,
         ext,
         mobile,
+        email,
       ];
 }

@@ -19,7 +19,8 @@ class ContactScaffold extends StatelessWidget {
         builder: (context, state) {
           final contact = state.contact;
           final contactPhones = state.contactPhones;
-          if (contact == null || contactPhones == null) {
+          final contactEmails = state.contactEmails;
+          if (contact == null || contactPhones == null || contactEmails == null) {
             return const Center(
               child: CircularProgressIndicator(),
             );
@@ -71,6 +72,14 @@ class ContactScaffold extends StatelessWidget {
                         video: true,
                       ));
                       context.pop();
+                    },
+                  ),
+                for (final contactEmail in contactEmails)
+                  ContactEmailTile(
+                    address: contactEmail.address,
+                    label: contactEmail.label,
+                    onEmailPressed: () {
+                      context.read<ContactBloc>().add(ContactEmailSend(contactEmail));
                     },
                   )
               ],

@@ -5,5 +5,6 @@ class ContactState with _$ContactState {
   const factory ContactState({
     Contact? contact,
     List<ContactPhone>? contactPhones,
+    List<ContactEmail>? contactEmails,
   }) = _ContactState;
 }
