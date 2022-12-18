@@ -79,41 +79,61 @@ class AppDatabase extends _$AppDatabase {
       ...super
           .allSchemaEntities
           .whereType<TableInfo>()
-          .map((t) => [
-                if (t.columnsByName.containsKey('inserted_at')) _afterInsertTrigger(t.actualTableName),
-                if (t.columnsByName.containsKey('updated_at')) _afterUpdateTrigger(t.actualTableName),
-              ])
+          .map((tableInfo) => generateTableCompanionEntities(tableInfo))
           .expand((e) => e),
     ];
   }
 
-  Trigger _afterInsertTrigger(String tableName) {
-    final triggerName = '${tableName}_after_insert_trigger';
-    return Trigger(
-      '''
-      CREATE TRIGGER $triggerName
-        AFTER INSERT ON $tableName
-      BEGIN
-        UPDATE $tableName SET inserted_at = STRFTIME('%s', 'NOW') WHERE id = NEW.id AND inserted_at IS NULL;
-        UPDATE $tableName SET updated_at = STRFTIME('%s', 'NOW') WHERE id = NEW.id;
-      END;
-      ''',
-      triggerName,
-    );
+  Iterable<DatabaseSchemaEntity> generateTableCompanionEntities(TableInfo tableInfo) sync* {
+    {
+      final afterInsertTrigger = _generateTableAfterInsertTrigger(tableInfo);
+      if (afterInsertTrigger != null) yield afterInsertTrigger;
+    }
+    {
+      final afterUpdateTrigger = _generateTableAfterUpdateTrigger(tableInfo);
+      if (afterUpdateTrigger != null) yield afterUpdateTrigger;
+    }
   }
 
-  Trigger _afterUpdateTrigger(String tableName) {
-    final triggerName = '${tableName}_after_update_trigger';
-    return Trigger(
-      '''
-      CREATE TRIGGER $triggerName
-        AFTER UPDATE ON $tableName
-      BEGIN
-        UPDATE $tableName SET updated_at = STRFTIME('%s', 'NOW') WHERE id = NEW.id;
-      END;
-      ''',
-      triggerName,
-    );
+  static const _insertedAtColumnName = 'inserted_at';
+  static const _updatedAtColumnName = 'updated_at';
+
+  Trigger? _generateTableAfterInsertTrigger(TableInfo tableInfo) {
+    final isInsertedAtColumnExist = tableInfo.columnsByName.containsKey(_insertedAtColumnName);
+    final isUpdatedAtColumnExist = tableInfo.columnsByName.containsKey(_updatedAtColumnName);
+    if (!isInsertedAtColumnExist && !isUpdatedAtColumnExist) {
+      return null;
+    } else {
+      final tableName = tableInfo.actualTableName;
+      final triggerName = '${tableName}_after_insert_trigger';
+      final triggerSql = '''
+        CREATE TRIGGER $triggerName
+          AFTER INSERT ON $tableName
+        BEGIN
+          ${isInsertedAtColumnExist ? '' : '--'}UPDATE $tableName SET $_insertedAtColumnName = STRFTIME('%s', 'NOW') WHERE id = NEW.id AND $_insertedAtColumnName IS NULL;
+          ${isUpdatedAtColumnExist ? '' : '--'}UPDATE $tableName SET $_updatedAtColumnName = STRFTIME('%s', 'NOW') WHERE id = NEW.id;
+        END;
+        ''';
+      return Trigger(triggerSql, triggerName);
+    }
+  }
+
+  Trigger? _generateTableAfterUpdateTrigger(TableInfo tableInfo) {
+    final isUpdatedAtColumnExist = tableInfo.columnsByName.containsKey(_updatedAtColumnName);
+    if (!isUpdatedAtColumnExist) {
+      return null;
+    } else {
+      final tableName = tableInfo.actualTableName;
+      final triggerName = '${tableName}_after_update_trigger';
+      final triggerSql = '''
+        CREATE TRIGGER $triggerName
+          AFTER UPDATE ON $tableName
+        BEGIN
+          UPDATE $tableName SET $_updatedAtColumnName = STRFTIME('%s', 'NOW') WHERE id = NEW.id;
+        END;
+        ''';
+      return Trigger(triggerSql, triggerName);
+    }
   }
 }
 
