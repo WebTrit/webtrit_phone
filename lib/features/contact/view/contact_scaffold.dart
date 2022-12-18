@@ -50,7 +50,7 @@ class ContactScaffold extends StatelessWidget {
                     favorite: contactPhone.favorite,
                     onFavoriteChanged: (favorite) {
                       if (favorite) {
-                        context.read<ContactBloc>().add(ContactAddedByToFavorites(contactPhone));
+                        context.read<ContactBloc>().add(ContactAddedToFavorites(contactPhone));
                       } else {
                         context.read<ContactBloc>().add(ContactRemovedFromFavorites(contactPhone));
                       }

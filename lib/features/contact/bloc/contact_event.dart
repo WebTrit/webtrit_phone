@@ -9,8 +9,8 @@ class ContactStarted extends ContactEvent {
 }
 
 @Freezed(copyWith: false)
-class ContactAddedByToFavorites with _$ContactAddedByToFavorites implements ContactEvent {
-  const factory ContactAddedByToFavorites(ContactPhone contactPhone) = _ContactAddedByToFavorites;
+class ContactAddedToFavorites with _$ContactAddedToFavorites implements ContactEvent {
+  const factory ContactAddedToFavorites(ContactPhone contactPhone) = _ContactAddedToFavorites;
 }
 
 @Freezed(copyWith: false)

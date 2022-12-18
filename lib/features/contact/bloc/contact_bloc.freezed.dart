@@ -15,28 +15,28 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$ContactAddedByToFavorites {
+mixin _$ContactAddedToFavorites {
   ContactPhone get contactPhone => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 
-class _$_ContactAddedByToFavorites implements _ContactAddedByToFavorites {
-  const _$_ContactAddedByToFavorites(this.contactPhone);
+class _$_ContactAddedToFavorites implements _ContactAddedToFavorites {
+  const _$_ContactAddedToFavorites(this.contactPhone);
 
   @override
   final ContactPhone contactPhone;
 
   @override
   String toString() {
-    return 'ContactAddedByToFavorites(contactPhone: $contactPhone)';
+    return 'ContactAddedToFavorites(contactPhone: $contactPhone)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ContactAddedByToFavorites &&
+            other is _$_ContactAddedToFavorites &&
             (identical(other.contactPhone, contactPhone) ||
                 other.contactPhone == contactPhone));
   }
@@ -45,9 +45,9 @@ class _$_ContactAddedByToFavorites implements _ContactAddedByToFavorites {
   int get hashCode => Object.hash(runtimeType, contactPhone);
 }
 
-abstract class _ContactAddedByToFavorites implements ContactAddedByToFavorites {
-  const factory _ContactAddedByToFavorites(final ContactPhone contactPhone) =
-      _$_ContactAddedByToFavorites;
+abstract class _ContactAddedToFavorites implements ContactAddedToFavorites {
+  const factory _ContactAddedToFavorites(final ContactPhone contactPhone) =
+      _$_ContactAddedToFavorites;
 
   @override
   ContactPhone get contactPhone;

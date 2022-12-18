@@ -20,7 +20,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
     required this.contactsRepository,
   }) : super(const ContactState()) {
     on<ContactStarted>(_onStarted, transformer: restartable());
-    on<ContactAddedByToFavorites>(_onAddedByToFavorites);
+    on<ContactAddedToFavorites>(_onAddedToFavorites);
     on<ContactRemovedFromFavorites>(_onRemovedFromFavorites);
     on<ContactEmailSend>(_onEmailSend);
   }
@@ -57,7 +57,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
     ]);
   }
 
-  FutureOr<void> _onAddedByToFavorites(ContactAddedByToFavorites event, Emitter<ContactState> emit) async {
+  FutureOr<void> _onAddedToFavorites(ContactAddedToFavorites event, Emitter<ContactState> emit) async {
     await contactsRepository.addContactPhoneToFavorites(event.contactPhone);
   }
 
