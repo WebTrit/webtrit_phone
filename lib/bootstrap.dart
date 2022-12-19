@@ -25,13 +25,16 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
       await _initFirebase();
       await _initFirebaseMessaging();
-      if (kDebugMode) {
+
+      if (!kIsWeb && kDebugMode) {
         FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
         await FirebaseCrashlytics.instance.deleteUnsentReports();
       }
       FlutterError.onError = (details) {
         logger.severe('FlutterError', details.exception, details.stack);
-        FirebaseCrashlytics.instance.recordFlutterFatalError(details);
+        if (!kIsWeb) {
+          FirebaseCrashlytics.instance.recordFlutterFatalError(details);
+        }
       };
 
       await AppInfo.init();
@@ -49,7 +52,9 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
     },
     (error, stackTrace) {
       logger.severe('runZonedGuarded', error, stackTrace);
-      FirebaseCrashlytics.instance.recordError(error, stackTrace, fatal: true);
+      if (!kIsWeb) {
+        FirebaseCrashlytics.instance.recordError(error, stackTrace, fatal: true);
+      }
     },
   );
 }
