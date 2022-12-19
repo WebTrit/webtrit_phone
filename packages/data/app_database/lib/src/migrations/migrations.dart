@@ -7,11 +7,9 @@ extension MigrationsSchemaVersion<T extends Migration> on Iterable<T> {
 }
 
 // Steps that must proceed after each migration add:
-// 1. dump a new schema (where <N> must be replaced with the version number of added migration):
-//    $ flutter pub run drift_dev schema dump lib/data/app_database/app_database.dart lib/data/app_database/drift_schemas/drift_schema_v<N>.json
-// 2. generate migration schemas for test:
-//    $ flutter pub run drift_dev schema generate lib/data/app_database/drift_schemas/ test/data/app_database/generated_migrations/
-// 3. add necessary tests
+// 1. Create a new schema dump and test migration based on the current application database:
+//    $ dart run bin/create_new_schema_dump_and_test_migration.dart
+// 2. Add necessary tests
 const migrations = <Migration>[
   MigrationV2(),
 ];
