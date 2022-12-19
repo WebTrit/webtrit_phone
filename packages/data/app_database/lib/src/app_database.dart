@@ -1,12 +1,7 @@
-import 'dart:io';
-
 import 'package:clock/clock.dart';
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
 
 import 'migrations/migrations.dart';
-
-export 'package:drift/isolate.dart';
 
 part 'app_database.g.dart';
 
@@ -28,17 +23,6 @@ part 'app_database.g.dart';
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase.connect(DatabaseConnection connection) : super.connect(connection);
-
-  factory AppDatabase.createInBackground(String databasePath, {bool logStatements = false}) {
-    return AppDatabase.connect(
-      DatabaseConnection(
-        NativeDatabase.createInBackground(
-          File(databasePath),
-          logStatements: logStatements,
-        ),
-      ),
-    );
-  }
 
   Future<void> deleteEverything() async {
     await customStatement('PRAGMA foreign_keys = OFF');

@@ -21,9 +21,11 @@ void main() {
     final appAnalyticsRepository = AppAnalyticsRepository(instance: FirebaseAnalytics.instance);
 
     return Provider<AppDatabase>(
-      create: (context) => AppDatabase.createInBackground(
-        AppPath().databasePath,
-        logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
+      create: (context) => AppDatabase.connect(
+        createAppDatabaseConnection(
+          AppPath().databasePath,
+          logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
+        ),
       ),
       dispose: (context, value) => value.close(),
       child: MultiRepositoryProvider(
