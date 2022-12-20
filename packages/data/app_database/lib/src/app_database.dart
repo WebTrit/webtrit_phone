@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:clock/clock.dart';
 import 'package:drift/drift.dart';
-import 'package:drift/isolate.dart';
 import 'package:drift/native.dart';
 
 import 'migrations/migrations.dart';
@@ -28,25 +27,16 @@ part 'app_database.g.dart';
   ],
 )
 class AppDatabase extends _$AppDatabase {
-  static Future<DriftIsolate> spawn(String databasePath, {bool logStatements = false}) {
-    return DriftIsolate.spawn(
-      () => DatabaseConnection(
-        NativeDatabase(
+  AppDatabase.connect(DatabaseConnection connection) : super.connect(connection);
+
+  factory AppDatabase.createInBackground(String databasePath, {bool logStatements = false}) {
+    return AppDatabase.connect(
+      DatabaseConnection(
+        NativeDatabase.createInBackground(
           File(databasePath),
           logStatements: logStatements,
         ),
       ),
-    );
-  }
-
-  AppDatabase.connect(DatabaseConnection connection) : super.connect(connection);
-
-  factory AppDatabase.fromIsolate(DriftIsolate isolate, {bool isolateDebugLog = false}) {
-    return AppDatabase.connect(
-      DatabaseConnection.delayed(isolate.connect(
-        isolateDebugLog: isolateDebugLog,
-        singleClientMode: true,
-      )),
     );
   }
 
