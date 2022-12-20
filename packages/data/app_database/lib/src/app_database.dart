@@ -5,8 +5,6 @@ import 'package:drift/drift.dart';
 import 'package:drift/isolate.dart';
 import 'package:drift/native.dart';
 
-import 'package:app_database/app_database_environment_config.dart';
-
 import 'migrations/migrations.dart';
 
 export 'package:drift/isolate.dart';
@@ -30,12 +28,12 @@ part 'app_database.g.dart';
   ],
 )
 class AppDatabase extends _$AppDatabase {
-  static Future<DriftIsolate> spawn(String databasePath) {
+  static Future<DriftIsolate> spawn(String databasePath, {bool logStatements = false}) {
     return DriftIsolate.spawn(
       () => DatabaseConnection(
         NativeDatabase(
           File(databasePath),
-          logStatements: AppDatabaseEnvironmentConfig.LOG_STATEMENTS,
+          logStatements: logStatements,
         ),
       ),
     );

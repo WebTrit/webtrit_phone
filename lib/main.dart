@@ -20,7 +20,10 @@ void main() {
     final logRecordsRepository = LogRecordsRepository()..attachToLogger(Logger.root);
     final appAnalyticsRepository = AppAnalyticsRepository(instance: FirebaseAnalytics.instance);
 
-    DriftIsolate isolate = await AppDatabase.spawn(AppPath().databasePath);
+    DriftIsolate isolate = await AppDatabase.spawn(
+      AppPath().databasePath,
+      logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
+    );
 
     return Provider<AppDatabase>(
       create: (context) => AppDatabase.fromIsolate(isolate),
