@@ -932,6 +932,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.9.0"
+  permission_handler_web:
+    dependency: "direct main"
+    description:
+      name: permission_handler_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2"
   permission_handler_windows:
     dependency: transitive
     description:

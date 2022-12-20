@@ -49,6 +49,7 @@ dependencies:
   path: ^1.8.2
   path_provider: ^2.0.11
   permission_handler: ^10.2.0
+  permission_handler_web: ^0.0.2
   provider: ^6.0.4
   rxdart: ^0.27.7
   share_plus: ^6.3.0
