@@ -162,7 +162,7 @@ class _AppState extends State<App> {
                   listener: (context, state) {
                     // TODO push/pop of call screen mechanism must be remake
                     final router = GoRouter.of(context);
-                    final isCallLocation = router.location == router.namedLocation(MainRoute.call);
+                    final isCallLocation = router.location.startsWith(router.namedLocation(MainRoute.call));
                     if (state.isActive) {
                       if (!isCallLocation) {
                         context.pushNamed(MainRoute.call);
@@ -287,9 +287,9 @@ class _AppState extends State<App> {
     final webRegistrationInitialUrl = appBloc.state.webRegistrationInitialUrl;
     final appPermissionsDenied = widget.appPermissions.isDenied;
 
-    final isLoginPath = state.subloc.startsWith('/login');
-    final isWebRegistrationPath = state.subloc == '/web-registration';
-    final isMainPath = state.location == '/main';
+    final isLoginPath = state.location.startsWith('/login');
+    final isWebRegistrationPath = state.location.startsWith('/web-registration');
+    final isMainPath = state.location.startsWith('/main');
 
     if (coreUrl != null && token != null) {
       if (isLoginPath || isWebRegistrationPath) {
