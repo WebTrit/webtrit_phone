@@ -173,12 +173,24 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   void _peerConnectionComplete(UuidValue uuid, RTCPeerConnection peerConnection) {
     _logger.finer(() => 'Complete peerConnection completer with uuid: $uuid');
-    _peerConnectionCompleters[uuid]!.complete(peerConnection);
+    final peerConnectionCompleter = _peerConnectionCompleters[uuid]!;
+    peerConnectionCompleter.complete(peerConnection);
   }
 
   void _peerConnectionCompleteError(UuidValue uuid, Object error, [StackTrace? stackTrace]) {
     _logger.finer(() => 'CompleteError peerConnection completer with uuid: $uuid');
-    _peerConnectionCompleters[uuid]!.completeError(error, stackTrace);
+    final peerConnectionCompleter = _peerConnectionCompleters[uuid]!;
+    peerConnectionCompleter.completeError(error, stackTrace);
+  }
+
+  void _peerConnectionConditionalCompleteError(UuidValue uuid, Object error, [StackTrace? stackTrace]) {
+    final peerConnectionCompleter = _peerConnectionCompleters[uuid]!;
+    if (peerConnectionCompleter.isCompleted) {
+      _logger.finer(() => 'ConditionalCompleteError peerConnection completer with uuid: $uuid - already completed');
+    } else {
+      _logger.finer(() => 'ConditionalCompleteError peerConnection completer with uuid: $uuid');
+      peerConnectionCompleter.completeError(error, stackTrace);
+    }
   }
 
   Future<RTCPeerConnection?> _peerConnectionRetrieve(UuidValue uuid) async {
@@ -1114,7 +1126,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         }
       }
 
-      _peerConnectionCompleteError(activeCall.callId.uuid, 'Active call Request Terminated');
+      _peerConnectionConditionalCompleteError(activeCall.callId.uuid, 'Active call Request Terminated');
 
       add(_CallSignalingEvent.hangup(
         line: activeCall.line,
