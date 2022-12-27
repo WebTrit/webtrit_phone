@@ -1,14 +1,13 @@
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
 import 'package:meta/meta.dart';
-import 'package:share_plus/share_plus.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+
+import '../utils/utils.dart';
 
 part 'log_records_console_state.dart';
 
@@ -20,12 +19,6 @@ class LogRecordsConsoleCubit extends Cubit<LogRecordsConsoleState> {
 
   final LogRecordsRepository logRecordsRepository;
   final LogRecordFormatter logRecordsFormatter;
-
-  @override
-  Future<void> close() async {
-    await super.close();
-    await deleteShareFiles();
-  }
 
   void load() async {
     emit(const LogRecordsConsoleState.loading());
@@ -50,33 +43,19 @@ class LogRecordsConsoleCubit extends Cubit<LogRecordsConsoleState> {
       '${time.hour.toString()}${time.minute.toString().padLeft(2, '0')}${time.second.toString().padLeft(2, '0')}';
 
   Future<void> share() async {
-    final logRecords = state.logRecords;
+    if (PlatformInfo().isWeb) {
+      throw UnsupportedError('Method share not available on the web platform');
+    } else {
+      final logRecords = state.logRecords;
 
-    final time = logRecords[0].time;
-    final name = '$_namePrefix${_timeSlug(time)}';
+      final time = logRecords[0].time;
+      final name = '$_namePrefix${_timeSlug(time)}.log';
 
-    final logRecordsPath = AppPath().logRecordsPath(name);
-    final logRecordsFile = File(logRecordsPath);
-    final logRecordsSink = logRecordsFile.openWrite();
-    for (final logRecord in logRecords) {
-      logRecordsSink.writeln(logRecordsFormatter.format(logRecord));
-    }
-    await logRecordsSink.close();
-
-    final logRecordsXFile = XFile(
-      logRecordsPath,
-      name: name,
-    );
-    await Share.shareXFiles([logRecordsXFile]);
-  }
-
-  // Can't delete right after actual sharing because of https://github.com/fluttercommunity/plus_plugins/issues/263
-  Future<void> deleteShareFiles() async {
-    final nameRegExp = RegExp('$_namePrefix.+${AppPath().logRecordsExt}\$');
-    await for (final fileSystemEntity in Directory(AppPath().temporaryPath).list()) {
-      if (fileSystemEntity is File && nameRegExp.hasMatch(fileSystemEntity.path)) {
-        fileSystemEntity.delete();
-      }
+      await shareLogRecords(
+        logRecords,
+        logRecordsFormatter: logRecordsFormatter,
+        name: name,
+      );
     }
   }
 }

@@ -23,7 +23,7 @@ void main() {
     return Provider<AppDatabase>(
       create: (context) => AppDatabase.connect(
         createAppDatabaseConnection(
-          AppPath().databasePath,
+          'db.sqlite',
           logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
         ),
       ),

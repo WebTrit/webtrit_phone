@@ -35,7 +35,6 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       };
 
       await AppInfo.init();
-      await AppPath.init();
       await AppPermissions.init();
       await AppPreferences.init();
       await DeviceInfo.init();
