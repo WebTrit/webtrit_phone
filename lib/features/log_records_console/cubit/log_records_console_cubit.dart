@@ -43,19 +43,15 @@ class LogRecordsConsoleCubit extends Cubit<LogRecordsConsoleState> {
       '${time.hour.toString()}${time.minute.toString().padLeft(2, '0')}${time.second.toString().padLeft(2, '0')}';
 
   Future<void> share() async {
-    if (PlatformInfo().isWeb) {
-      throw UnsupportedError('Method share not available on the web platform');
-    } else {
-      final logRecords = state.logRecords;
+    final logRecords = state.logRecords;
 
-      final time = logRecords[0].time;
-      final name = '$_namePrefix${_timeSlug(time)}.log';
+    final time = logRecords[0].time;
+    final name = '$_namePrefix${_timeSlug(time)}.log';
 
-      await shareLogRecords(
-        logRecords,
-        logRecordsFormatter: logRecordsFormatter,
-        name: name,
-      );
-    }
+    await shareLogRecords(
+      logRecords,
+      logRecordsFormatter: logRecordsFormatter,
+      name: name,
+    );
   }
 }
