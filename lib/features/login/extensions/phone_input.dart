@@ -12,6 +12,8 @@ extension PhoneInputErrorL10n on PhoneInput {
       switch (error!) {
         case PhoneValidationError.blank:
           return context.l10n.validationBlankError;
+        case PhoneValidationError.format:
+          return context.l10n.login_validationPhoneError;
       }
     }
   }

@@ -241,6 +241,9 @@
   "login_validationEmailError": "Please enter a valid email",
   "@login_validationEmailError": {
   },
+  "login_validationPhoneError": "Please enter a valid phone number",
+  "@login_validationPhoneError": {
+  },
   "login_validationCoreUrlError": "Please enter a valid URL",
   "@login_validationCoreUrlError": {
   },

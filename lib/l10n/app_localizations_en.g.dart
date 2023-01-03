@@ -224,6 +224,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_validationEmailError => 'Please enter a valid email';
 
   @override
+  String get login_validationPhoneError => 'Please enter a valid phone number';
+
+  @override
   String get login_validationCoreUrlError => 'Please enter a valid URL';
 
   @override

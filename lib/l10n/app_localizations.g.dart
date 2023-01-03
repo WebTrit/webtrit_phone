@@ -505,6 +505,12 @@ abstract class AppLocalizations {
   /// **'Please enter a valid email'**
   String get login_validationEmailError;
 
+  /// No description provided for @login_validationPhoneError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid phone number'**
+  String get login_validationPhoneError;
+
   /// No description provided for @login_validationCoreUrlError.
   ///
   /// In en, this message translates to:
