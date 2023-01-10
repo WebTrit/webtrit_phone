@@ -17,9 +17,12 @@ void main(List<String> arguments) async {
   final token = arguments[1];
 
   print('Connect');
-  final httpClient = HttpClient();
-  httpClient.connectionTimeout = Duration(seconds: 5);
-  final client = await WebtritSignalingClient.connect(url, token, false, customHttpClient: httpClient);
+  final client = await WebtritSignalingClient.connect(
+    url,
+    token,
+    false,
+    connectionTimeout: Duration(seconds: 5),
+  );
 
   print('Listen');
   client.listen(

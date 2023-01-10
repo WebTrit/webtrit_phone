@@ -330,17 +330,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       final signalingUrl = _coreUrlToSignalingUrl(appBloc.state.coreUrl!);
       final token = appBloc.state.token!;
-      final httpClient = HttpClient();
-      httpClient.connectionTimeout = kSignalingClientConnectionTimeout;
       final signalingClient = await WebtritSignalingClient.connect(
         signalingUrl,
         token,
         true,
-        customHttpClient: httpClient,
+        connectionTimeout: kSignalingClientConnectionTimeout,
       );
 
       if (emit.isDone) {
-        await signalingClient.disconnect(WebSocketStatus.goingAway);
+        await signalingClient.disconnect(SignalingDisconnectCode.goingAway.code);
         return;
       }
 
