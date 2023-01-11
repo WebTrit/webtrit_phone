@@ -3,14 +3,15 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:logging/logging.dart';
+import 'package:meta/meta.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '_web_socket_channel/_web_socket_channel.dart'
-    if (dart.library.io) '_web_socket_channel/_web_socket_channel_io.dart'
-    if (dart.library.html) '_web_socket_channel/_web_socket_channel_html.dart' as platform;
+    if (dart.library.html) '_web_socket_channel/_web_socket_channel_html.dart'
+    if (dart.library.io) '_web_socket_channel/_web_socket_channel_io.dart' as platform;
 import '_web_socket_connect/_web_socket_connect.dart'
-    if (dart.library.io) '_web_socket_connect/_web_socket_connect_io.dart'
-    if (dart.library.html) '_web_socket_connect/_web_socket_connect_html.dart' as platform;
+    if (dart.library.html) '_web_socket_connect/_web_socket_connect_html.dart'
+    if (dart.library.io) '_web_socket_connect/_web_socket_connect_io.dart' as platform;
 import 'events/events.dart';
 import 'exceptions.dart';
 import 'handshakes/handshakes.dart';
@@ -41,7 +42,8 @@ class WebtritSignalingClient {
 
   static int _createCounter = 0;
 
-  WebtritSignalingClient._(this._wsc)
+  @visibleForTesting
+  WebtritSignalingClient.inner(this._wsc)
       : _id = _createCounter,
         _logger = Logger('$WebtritSignalingClient-$_createCounter') {
     _createCounter++;
@@ -85,7 +87,7 @@ class WebtritSignalingClient {
       connectionTimeout: connectionTimeout,
     );
     final wsc = platform.createWebSocketChannel(ws);
-    return WebtritSignalingClient._(wsc);
+    return WebtritSignalingClient.inner(wsc);
   }
 
   void listen({

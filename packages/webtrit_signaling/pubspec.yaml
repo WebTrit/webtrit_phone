@@ -9,6 +9,7 @@ dependencies:
   equatable: ^2.0.5
   logging: ^1.1.0
   logging_appenders: ^1.0.0
+  meta: ^1.8.0
   web_socket_channel: ^2.2.0
 
 dev_dependencies:
