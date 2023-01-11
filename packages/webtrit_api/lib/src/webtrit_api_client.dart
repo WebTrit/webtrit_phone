@@ -1,64 +1,54 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:webtrit_api/webtrit_api.dart';
+import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
 
-class RequestFailure implements Exception {
-  RequestFailure({
-    required this.statusCode,
-    this.error,
-  });
-
-  final int statusCode;
-  final ErrorResponse? error;
-
-  @override
-  String toString() {
-    final error = this.error;
-    if (error != null) {
-      final refining = error.refining;
-      if (refining != null) {
-        final s = refining.map((r) => '${r.path}: ${r.reason}').join(', ');
-        return '$RequestFailure($statusCode, ${error.code}, [$s])';
-      } else {
-        return '$RequestFailure($statusCode, ${error.code})';
-      }
-    } else {
-      return '$RequestFailure($statusCode)';
-    }
-  }
-}
+import '_http_client/_http_client.dart'
+    if (dart.library.html) '_http_client/_http_client_html.dart'
+    if (dart.library.io) '_http_client/_http_client_io.dart' as platform;
+import 'exceptions.dart';
+import 'models/models.dart';
 
 class WebtritApiClient {
   WebtritApiClient(
+    Uri baseUrl, {
+    Duration? connectionTimeout,
+  }) : this.inner(
+          baseUrl,
+          httpClient: platform.createHttpClient(
+            connectionTimeout: connectionTimeout,
+          ),
+        );
+
+  @visibleForTesting
+  WebtritApiClient.inner(
     this.baseUrl, {
-    HttpClient? customHttpClient,
-  }) : _httpClient = customHttpClient ?? HttpClient();
+    required http.Client httpClient,
+  }) : _httpClient = httpClient;
 
   static const _apiVersionPathSegments = ['api', 'v1'];
 
   final Uri baseUrl;
-  final HttpClient _httpClient;
+  final http.Client _httpClient;
 
   void close() {
     _httpClient.close();
   }
 
   Future<dynamic> _httpClientExecute(String method, Uri url, String? token, Object? requestDataJson) async {
-    final httpRequest = await _httpClient.openUrl(method, url);
-    httpRequest.headers.set(HttpHeaders.contentTypeHeader, 'application/json');
-    httpRequest.headers.set(HttpHeaders.acceptHeader, 'application/json');
-    if (token != null) {
-      httpRequest.headers.set(HttpHeaders.authorizationHeader, 'Bearer $token');
-    }
+    final httpRequest = http.Request(method, url);
+    httpRequest.headers.addAll({
+      'content-type': 'application/json; charset=utf-8',
+      'accept': 'application/json',
+      if (token != null) 'authorization': 'Bearer $token',
+    });
     if (requestDataJson != null) {
-      final requestData = jsonEncode(requestDataJson);
-      httpRequest.add(utf8.encoder.convert(requestData));
+      httpRequest.body = jsonEncode(requestDataJson);
     }
-    final httpResponse = await httpRequest.close();
+    final httpResponse = await http.Response.fromStream(await _httpClient.send(httpRequest));
 
-    final responseData = await httpResponse.transform(utf8.decoder).join();
+    final responseData = httpResponse.body;
     final responseDataJson = responseData.isEmpty ? {} : jsonDecode(responseData);
 
     if (httpResponse.statusCode == 200 || httpResponse.statusCode == 204) {

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:linkify/linkify.dart';
@@ -7,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 
@@ -16,13 +15,19 @@ part 'login_cubit.freezed.dart';
 
 part 'login_state.dart';
 
+typedef WebtritApiClientFactory = WebtritApiClient Function(String coreUrl);
+
+WebtritApiClient defaultCreateWebtritApiClient(String coreUrl) {
+  return WebtritApiClient(Uri.parse(coreUrl), connectionTimeout: kApiClientConnectionTimeout);
+}
+
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit(
     LoginStep step, {
-    this.httpClient,
+    @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
   }) : super(LoginState(step: step));
 
-  final HttpClient? httpClient;
+  final WebtritApiClientFactory createWebtritApiClient;
 
   String? get coreUrlFromEnvironment {
     return EnvironmentConfig.CORE_URL.isEmpty ? null : EnvironmentConfig.CORE_URL;
@@ -83,7 +88,7 @@ class LoginCubit extends Cubit<LoginState> {
         status: LoginStatus.processing,
       ));
       try {
-        await _verifyCoreVersion(coreUrl, customHttpClient: httpClient);
+        await _verifyCoreVersion(createWebtritApiClient(coreUrl));
         emit(state.copyWith(
           status: LoginStatus.ok,
           coreUrl: coreUrl,
@@ -123,7 +128,7 @@ class LoginCubit extends Cubit<LoginState> {
       coreUrlInputValue = 'https://$coreUrlInputValue';
     }
     try {
-      await _verifyCoreVersion(coreUrlInputValue, customHttpClient: httpClient);
+      await _verifyCoreVersion(createWebtritApiClient(coreUrlInputValue));
       emit(state.copyWith(
         status: LoginStatus.ok,
         coreUrl: coreUrlInputValue,
@@ -172,11 +177,9 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       late final SessionOtpRequestResult otpRequestResult;
       if (state.demo) {
-        otpRequestResult =
-            await _sessionOtpRequestDemo(state.coreUrl!, state.emailInput.value, customHttpClient: httpClient);
+        otpRequestResult = await _sessionOtpRequestDemo(createWebtritApiClient(state.coreUrl!), state.emailInput.value);
       } else {
-        otpRequestResult =
-            await _sessionOtpRequest(state.coreUrl!, state.phoneInput.value, customHttpClient: httpClient);
+        otpRequestResult = await _sessionOtpRequest(createWebtritApiClient(state.coreUrl!), state.phoneInput.value);
       }
       emit(state.copyWith(
         status: LoginStatus.ok,
@@ -223,10 +226,9 @@ class LoginCubit extends Cubit<LoginState> {
     ));
     try {
       final token = await _sessionOtpVerify(
-        state.coreUrl!,
+        createWebtritApiClient(state.coreUrl!),
         state.otpId!,
         state.codeInput.value,
-        customHttpClient: httpClient,
       );
       emit(state.copyWith(
         status: LoginStatus.ok,
@@ -265,11 +267,9 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       late final SessionOtpRequestResult otpRequestResult;
       if (state.demo) {
-        otpRequestResult =
-            await _sessionOtpRequestDemo(state.coreUrl!, state.emailInput.value, customHttpClient: httpClient);
+        otpRequestResult = await _sessionOtpRequestDemo(createWebtritApiClient(state.coreUrl!), state.emailInput.value);
       } else {
-        otpRequestResult =
-            await _sessionOtpRequest(state.coreUrl!, state.phoneInput.value, customHttpClient: httpClient);
+        otpRequestResult = await _sessionOtpRequest(createWebtritApiClient(state.coreUrl!), state.phoneInput.value);
       }
       emit(state.copyWith(
         status: LoginStatus.input,
@@ -294,10 +294,8 @@ class LoginIncompatibleCoreVersionException implements Exception {
 }
 
 Future<void> _verifyCoreVersion(
-  String coreUrl, {
-  HttpClient? customHttpClient,
-}) async {
-  final webtritApiClient = WebtritApiClient(Uri.parse(coreUrl), customHttpClient: customHttpClient);
+  WebtritApiClient webtritApiClient,
+) async {
   final actualVersion = (await webtritApiClient.info()).core.version;
   final expectedVersion = Version(0, 4, 0);
   if (actualVersion >= expectedVersion) {
@@ -308,33 +306,27 @@ Future<void> _verifyCoreVersion(
 }
 
 Future<SessionOtpRequestResult> _sessionOtpRequestDemo(
-  String coreUrl,
-  String email, {
-  HttpClient? customHttpClient,
-}) async {
-  final webtritApiClient = WebtritApiClient(Uri.parse(coreUrl), customHttpClient: customHttpClient);
+  WebtritApiClient webtritApiClient,
+  String email,
+) async {
   final type = PlatformInfo().appType;
   final identifier = AppInfo().identifier;
   return await webtritApiClient.sessionOtpRequestDemo(type, identifier, email);
 }
 
 Future<SessionOtpRequestResult> _sessionOtpRequest(
-  String coreUrl,
-  String phone, {
-  HttpClient? customHttpClient,
-}) async {
-  final webtritApiClient = WebtritApiClient(Uri.parse(coreUrl), customHttpClient: customHttpClient);
+  WebtritApiClient webtritApiClient,
+  String phone,
+) async {
   final type = PlatformInfo().appType;
   final identifier = AppInfo().identifier;
   return await webtritApiClient.sessionOtpRequest(type, identifier, phone);
 }
 
 Future<String> _sessionOtpVerify(
-  String coreUrl,
+  WebtritApiClient webtritApiClient,
   String otpId,
-  String code, {
-  HttpClient? customHttpClient,
-}) async {
-  final webtritApiClient = WebtritApiClient(Uri.parse(coreUrl), customHttpClient: customHttpClient);
+  String code,
+) async {
   return await webtritApiClient.sessionOtpVerify(otpId, code);
 }

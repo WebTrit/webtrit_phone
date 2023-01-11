@@ -12,9 +12,10 @@ void main(List<String> arguments) async {
   final url = arguments[0];
   final token = arguments[1];
 
-  final httpClient = HttpClient();
-  httpClient.connectionTimeout = Duration(seconds: 5);
-  final client = WebtritApiClient(Uri.parse(url), customHttpClient: httpClient);
+  final client = WebtritApiClient(
+    Uri.parse(url),
+    connectionTimeout: Duration(seconds: 5),
+  );
 
   final info = await client.info();
   print(jsonEncode(info.toJson()));

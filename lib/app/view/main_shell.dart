@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -56,11 +54,9 @@ class _MainShellState extends State<MainShell> {
       providers: [
         RepositoryProvider<WebtritApiClient>(
           create: (context) {
-            final httpClient = HttpClient();
-            httpClient.connectionTimeout = kApiClientConnectionTimeout;
             return WebtritApiClient(
               Uri.parse(context.read<AppBloc>().state.coreUrl!),
-              customHttpClient: httpClient,
+              connectionTimeout: kApiClientConnectionTimeout,
             );
           },
         ),
