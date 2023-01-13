@@ -42,17 +42,95 @@
   <script src="flutter.js" defer></script>
 </head>
 <body>
+  <div id="loading">
+    <style>
+      /* Update styles from main.dart.js
+         (generated within https://github.com/flutter/flutter/blob/master/packages/flutter_tools/lib/src/web/bootstrap.dart) */
+      .flutter-loader {
+        height: 4px;
+        background-color: #F5841F;
+        z-index: 2;
+      }
+
+      .indeterminate:before {
+        background-color: #3D5B68;
+      }
+
+      .indeterminate:after {
+        background-color: #C5CED2;
+      }
+    </style>
+    <style>
+      body {
+        background-color: #4C6988;
+      }
+
+      #loading {
+        position: absolute;
+        inset: 0;
+        background-color: inherit;
+        transition: opacity 1s;
+        z-index: 1;
+      }
+
+      #loading.init_done {
+        opacity: 0;
+      }
+
+      #loading img {
+        position: relative;
+        width: 128px;
+        height: 128px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      #loading.main_done img {
+        animation: 0.2s ease-in-out 0s 2 alternate breathe;
+      }
+
+      #loading.init_done img {
+        animation: 1s ease-in-out 0s 1 normal growth;
+      }
+
+      @keyframes breathe {
+        from {
+          transform: translate(-50%, -50%) scale(1);
+        }
+        to {
+          transform: translate(-50%, -50%) scale(0.95);
+        }
+      }
+
+      @keyframes growth {
+        from {
+          transform: translate(-50%, -50%) scale(1);
+        }
+        to {
+          transform: translate(-50%, -50%) scale(5);
+        }
+      }
+    </style>
+    <img src="assets/logo.svg"/>
+  </div>
   <script>
-    window.addEventListener('load', function(ev) {
-      // Download main.dart.js
+    window.addEventListener('load', function () {
+      var loadingElement = document.querySelector('#loading');
       _flutter.loader.loadEntrypoint({
         serviceWorker: {
           serviceWorkerVersion: serviceWorkerVersion,
         }
-      }).then(function(engineInitializer) {
+      }).then(function (engineInitializer) {
+        loadingElement.classList.add('main_done');
         return engineInitializer.initializeEngine();
-      }).then(function(appRunner) {
+      }).then(function (appRunner) {
         return appRunner.runApp();
+      }).then(function (app) {
+        loadingElement.classList.add('init_done');
+        loadingElement.addEventListener("transitionend", function () {
+          loadingElement.remove();
+        });
       });
     });
   </script>
