@@ -4,5 +4,5 @@ enum LoginStep {
   otpRequest,
   otpVerify;
 
-  static const queryParameterName = 'step';
+  static const pathParameterName = 'step';
 }

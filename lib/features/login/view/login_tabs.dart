@@ -54,7 +54,7 @@ class _LoginTabsState extends State<LoginTabs> with SingleTickerProviderStateMix
     return BlocListener<LoginCubit, LoginState>(
       listenWhen: (previous, current) => previous.step != current.step,
       listener: (context, state) {
-        context.goNamed(AppRoute.loginStep, params: {LoginStep.queryParameterName: state.step.name});
+        context.goNamed(AppRoute.loginStep, params: {LoginStep.pathParameterName: state.step.name});
       },
       child: TabBarView(
         controller: _tabController,
