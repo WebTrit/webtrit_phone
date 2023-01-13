@@ -2,5 +2,7 @@ enum LoginStep {
   modeSelect,
   coreUrlAssign,
   otpRequest,
-  otpVerify,
+  otpVerify;
+
+  static const queryParameterName = 'step';
 }

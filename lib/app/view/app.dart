@@ -116,8 +116,8 @@ class _AppState extends State<App> {
           ),
           GoRoute(
             name: AppRoute.loginStep,
-            path: '/login/:$LoginStep(${LoginStep.values.map((e) => e.name).join('|')})',
-            builder: (context, state) => LoginScreen(LoginStep.values.byName(state.params['$LoginStep']!)),
+            path: '/login/:${LoginStep.queryParameterName}(${LoginStep.values.map((e) => e.name).join('|')})',
+            builder: (context, state) => LoginScreen(LoginStep.values.byName(state.params[LoginStep.queryParameterName]!)),
           ),
           GoRoute(
             name: AppRoute.webRegistration,
