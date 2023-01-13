@@ -5,4 +5,6 @@ enum MainFlavor {
   keypad;
 
   static MainFlavor get defaultValue => favorites;
+
+  static const queryParameterName = 'flavor';
 }

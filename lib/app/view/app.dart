@@ -147,15 +147,16 @@ class _AppState extends State<App> {
                 path: '/main',
                 redirect: (context, state) {
                   // propagate MainFlavor query parameter from the current router location to the new one if needed
-                  if (state.queryParams.containsKey('$MainFlavor')) {
+                  if (state.queryParams.containsKey(MainFlavor.queryParameterName)) {
                     return null;
                   } else {
                     final routerLocation = Uri.parse(_router.location);
-                    final flavor = routerLocation.queryParameters['$MainFlavor'] ?? MainFlavor.defaultValue.name;
+                    final flavor =
+                        routerLocation.queryParameters[MainFlavor.queryParameterName] ?? MainFlavor.defaultValue.name;
                     final stateLocation = Uri.parse(state.location);
                     return stateLocation.replace(queryParameters: {
                       ...stateLocation.queryParameters,
-                      '$MainFlavor': flavor,
+                      MainFlavor.queryParameterName: flavor,
                     }).toString();
                   }
                 },
@@ -179,7 +180,9 @@ class _AppState extends State<App> {
                       }
                     }
                   },
-                  child: MainScreen(MainFlavor.values.byName(state.queryParams['$MainFlavor']!)),
+                  child: MainScreen(
+                    MainFlavor.values.byName(state.queryParams[MainFlavor.queryParameterName]!),
+                  ),
                 ),
                 routes: [
                   GoRoute(

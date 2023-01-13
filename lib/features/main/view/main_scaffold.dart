@@ -39,7 +39,7 @@ class MainScaffoldState extends State<MainScaffold> {
         unselectedLabelStyle: themeData.textTheme.caption,
         currentIndex: widget.flavor.index,
         onTap: (index) {
-          context.goNamed(AppRoute.main, queryParams: {'$MainFlavor': MainFlavor.values[index].name});
+          context.goNamed(AppRoute.main, queryParams: {MainFlavor.queryParameterName: MainFlavor.values[index].name});
         },
         items: MainFlavor.values.map((flavor) {
           return BottomNavigationBarItem(
