@@ -22,7 +22,7 @@ SessionOtpProvisional _$SessionOtpProvisionalFromJson(
 /// @nodoc
 mixin _$SessionOtpProvisional {
   String get otpId => throw _privateConstructorUsedError;
-  OtpNotificationType get notificationType =>
+  OtpNotificationType? get notificationType =>
       throw _privateConstructorUsedError;
   String? get fromEmail => throw _privateConstructorUsedError;
 
@@ -39,7 +39,7 @@ abstract class $SessionOtpProvisionalCopyWith<$Res> {
       _$SessionOtpProvisionalCopyWithImpl<$Res, SessionOtpProvisional>;
   @useResult
   $Res call(
-      {String otpId, OtpNotificationType notificationType, String? fromEmail});
+      {String otpId, OtpNotificationType? notificationType, String? fromEmail});
 }
 
 /// @nodoc
@@ -57,7 +57,7 @@ class _$SessionOtpProvisionalCopyWithImpl<$Res,
   @override
   $Res call({
     Object? otpId = null,
-    Object? notificationType = null,
+    Object? notificationType = freezed,
     Object? fromEmail = freezed,
   }) {
     return _then(_value.copyWith(
@@ -65,10 +65,10 @@ class _$SessionOtpProvisionalCopyWithImpl<$Res,
           ? _value.otpId
           : otpId // ignore: cast_nullable_to_non_nullable
               as String,
-      notificationType: null == notificationType
+      notificationType: freezed == notificationType
           ? _value.notificationType
           : notificationType // ignore: cast_nullable_to_non_nullable
-              as OtpNotificationType,
+              as OtpNotificationType?,
       fromEmail: freezed == fromEmail
           ? _value.fromEmail
           : fromEmail // ignore: cast_nullable_to_non_nullable
@@ -86,7 +86,7 @@ abstract class _$$_SessionOtpProvisionalCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String otpId, OtpNotificationType notificationType, String? fromEmail});
+      {String otpId, OtpNotificationType? notificationType, String? fromEmail});
 }
 
 /// @nodoc
@@ -101,7 +101,7 @@ class __$$_SessionOtpProvisionalCopyWithImpl<$Res>
   @override
   $Res call({
     Object? otpId = null,
-    Object? notificationType = null,
+    Object? notificationType = freezed,
     Object? fromEmail = freezed,
   }) {
     return _then(_$_SessionOtpProvisional(
@@ -109,10 +109,10 @@ class __$$_SessionOtpProvisionalCopyWithImpl<$Res>
           ? _value.otpId
           : otpId // ignore: cast_nullable_to_non_nullable
               as String,
-      notificationType: null == notificationType
+      notificationType: freezed == notificationType
           ? _value.notificationType
           : notificationType // ignore: cast_nullable_to_non_nullable
-              as OtpNotificationType,
+              as OtpNotificationType?,
       fromEmail: freezed == fromEmail
           ? _value.fromEmail
           : fromEmail // ignore: cast_nullable_to_non_nullable
@@ -126,7 +126,7 @@ class __$$_SessionOtpProvisionalCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$_SessionOtpProvisional implements _SessionOtpProvisional {
   const _$_SessionOtpProvisional(
-      {required this.otpId, required this.notificationType, this.fromEmail});
+      {required this.otpId, this.notificationType, this.fromEmail});
 
   factory _$_SessionOtpProvisional.fromJson(Map<String, dynamic> json) =>
       _$$_SessionOtpProvisionalFromJson(json);
@@ -134,7 +134,7 @@ class _$_SessionOtpProvisional implements _SessionOtpProvisional {
   @override
   final String otpId;
   @override
-  final OtpNotificationType notificationType;
+  final OtpNotificationType? notificationType;
   @override
   final String? fromEmail;
 
@@ -178,7 +178,7 @@ class _$_SessionOtpProvisional implements _SessionOtpProvisional {
 abstract class _SessionOtpProvisional implements SessionOtpProvisional {
   const factory _SessionOtpProvisional(
       {required final String otpId,
-      required final OtpNotificationType notificationType,
+      final OtpNotificationType? notificationType,
       final String? fromEmail}) = _$_SessionOtpProvisional;
 
   factory _SessionOtpProvisional.fromJson(Map<String, dynamic> json) =
@@ -187,7 +187,7 @@ abstract class _SessionOtpProvisional implements SessionOtpProvisional {
   @override
   String get otpId;
   @override
-  OtpNotificationType get notificationType;
+  OtpNotificationType? get notificationType;
   @override
   String? get fromEmail;
   @override

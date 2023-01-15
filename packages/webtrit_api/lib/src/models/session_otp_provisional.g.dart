@@ -10,8 +10,8 @@ _$_SessionOtpProvisional _$$_SessionOtpProvisionalFromJson(
         Map<String, dynamic> json) =>
     _$_SessionOtpProvisional(
       otpId: json['otp_id'] as String,
-      notificationType:
-          $enumDecode(_$OtpNotificationTypeEnumMap, json['notification_type']),
+      notificationType: $enumDecodeNullable(
+          _$OtpNotificationTypeEnumMap, json['notification_type']),
       fromEmail: json['from_email'] as String?,
     );
 
@@ -20,7 +20,7 @@ Map<String, dynamic> _$$_SessionOtpProvisionalToJson(
     <String, dynamic>{
       'otp_id': instance.otpId,
       'notification_type':
-          _$OtpNotificationTypeEnumMap[instance.notificationType]!,
+          _$OtpNotificationTypeEnumMap[instance.notificationType],
       'from_email': instance.fromEmail,
     };
 

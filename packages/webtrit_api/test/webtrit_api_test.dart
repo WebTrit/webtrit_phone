@@ -162,10 +162,7 @@ void main() {
 
       expect(
         apiClient.sessionOtpVerify(
-          SessionOtpProvisional(
-            otpId: 'otp_id_1',
-            notificationType: OtpNotificationType.email, // TODO: make property optional
-          ),
+          SessionOtpProvisional(otpId: 'otp_id_1'),
           'code_1',
         ),
         completion(equals(token)),

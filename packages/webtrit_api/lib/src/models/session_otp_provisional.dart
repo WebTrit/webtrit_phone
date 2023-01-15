@@ -13,7 +13,7 @@ class SessionOtpProvisional with _$SessionOtpProvisional {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory SessionOtpProvisional({
     required String otpId,
-    required OtpNotificationType notificationType,
+    OtpNotificationType? notificationType,
     String? fromEmail,
   }) = _SessionOtpProvisional;
 
