@@ -1,9 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
-@JsonEnum(
-  fieldRename: FieldRename.snake,
-)
-enum PushTokenType {
+@JsonEnum(fieldRename: FieldRename.snake)
+enum AppPushTokenType {
   fcm,
   hms,
   apns,

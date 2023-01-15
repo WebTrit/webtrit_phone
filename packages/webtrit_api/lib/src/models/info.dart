@@ -1,37 +1,30 @@
-import 'package:json_annotation/json_annotation.dart';
+// ignore_for_file: invalid_annotation_target
+
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:version/version.dart';
 
 import 'converters/converters.dart';
 
+part 'info.freezed.dart';
+
 part 'info.g.dart';
 
-@JsonSerializable(
-  fieldRename: FieldRename.snake,
-)
-class Info {
-  const Info({
-    required this.core,
-  });
+@freezed
+class Info with _$Info {
+  @JsonSerializable(fieldRename: FieldRename.snake)
+  const factory Info({
+    required CoreInfo core,
+  }) = _Info;
 
   factory Info.fromJson(Map<String, dynamic> json) => _$InfoFromJson(json);
-
-  Map<String, dynamic> toJson() => _$InfoToJson(this);
-
-  final CoreInfo core;
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.snake,
-)
-class CoreInfo {
-  const CoreInfo({
-    required this.version,
-  });
+@freezed
+class CoreInfo with _$CoreInfo {
+  @JsonSerializable(fieldRename: FieldRename.snake)
+  const factory CoreInfo({
+    @VersionConverter() required Version version,
+  }) = _CoreInfo;
 
   factory CoreInfo.fromJson(Map<String, dynamic> json) => _$CoreInfoFromJson(json);
-
-  Map<String, dynamic> toJson() => _$CoreInfoToJson(this);
-
-  @VersionConverter()
-  final Version version;
 }

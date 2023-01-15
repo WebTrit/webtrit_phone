@@ -1,21 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'account_contacts.dart';
+part of 'account_contact.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-AccountContactsResponse _$AccountContactsResponseFromJson(
-        Map<String, dynamic> json) =>
-    AccountContactsResponse(
-      data: (json['data'] as List<dynamic>)
-          .map((e) => AccountContact.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
-
-AccountContact _$AccountContactFromJson(Map<String, dynamic> json) =>
-    AccountContact(
+_$_AccountContact _$$_AccountContactFromJson(Map<String, dynamic> json) =>
+    _$_AccountContact(
       number: json['number'] as String,
       extensionId: json['extension_id'] as String,
       extensionName: json['extension_name'] as String?,
@@ -27,7 +19,7 @@ AccountContact _$AccountContactFromJson(Map<String, dynamic> json) =>
       sipStatus: json['sip_status'] as int,
     );
 
-Map<String, dynamic> _$AccountContactToJson(AccountContact instance) =>
+Map<String, dynamic> _$$_AccountContactToJson(_$_AccountContact instance) =>
     <String, dynamic>{
       'number': instance.number,
       'extension_id': instance.extensionId,

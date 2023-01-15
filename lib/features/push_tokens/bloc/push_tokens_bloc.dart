@@ -23,7 +23,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
     required this.callkeep,
   }) : super(const PushTokensInitial()) {
     _onTokenRefreshSubscription = firebaseMessaging.onTokenRefresh.listen((fcmToken) {
-      add(PushTokensInsertedOrUpdated(PushTokenType.fcm, fcmToken));
+      add(PushTokensInsertedOrUpdated(AppPushTokenType.fcm, fcmToken));
     });
     callkeep.setPushRegistryDelegate(this);
 
@@ -47,12 +47,12 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
   void _onStarted(PushTokensEvent event, Emitter<PushTokensState> emit) async {
     final fcmToken = await firebaseMessaging.getToken();
     if (fcmToken != null) {
-      add(PushTokensInsertedOrUpdated(PushTokenType.fcm, fcmToken));
+      add(PushTokensInsertedOrUpdated(AppPushTokenType.fcm, fcmToken));
     }
 
     final apnsToken = await firebaseMessaging.getAPNSToken();
     if (apnsToken != null) {
-      add(PushTokensInsertedOrUpdated(PushTokenType.apns, apnsToken));
+      add(PushTokensInsertedOrUpdated(AppPushTokenType.apns, apnsToken));
     }
 
     emit(const PushTokensUploadSuccess());
@@ -69,7 +69,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
   @override
   void didUpdatePushTokenForPushTypeVoIP(String? token) {
     if (token != null) {
-      add(PushTokensInsertedOrUpdated(PushTokenType.apkvoip, token));
+      add(PushTokensInsertedOrUpdated(AppPushTokenType.apkvoip, token));
     } else {
       // TODO: null mean that the system invalidated the push token for VoIP type
     }

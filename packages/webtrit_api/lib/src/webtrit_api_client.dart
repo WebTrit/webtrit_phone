@@ -36,7 +36,15 @@ class WebtritApiClient {
     _httpClient.close();
   }
 
-  Future<dynamic> _httpClientExecute(String method, Uri url, String? token, Object? requestDataJson) async {
+  Future<dynamic> _httpClientExecute(
+    String method,
+    List<String> pathSegments,
+    String? token,
+    Object? requestDataJson,
+  ) async {
+    final url = baseUrl.replace(
+      pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + pathSegments,
+    );
     final httpRequest = http.Request(method, url);
     httpRequest.headers.addAll({
       'content-type': 'application/json; charset=utf-8',
@@ -62,194 +70,108 @@ class WebtritApiClient {
     }
   }
 
-  Future<dynamic> _httpClientExecuteGet(Uri url, String? token) {
-    return _httpClientExecute('get', url, token, null);
+  Future<dynamic> _httpClientExecuteGet(List<String> pathSegments, String? token) {
+    return _httpClientExecute('get', pathSegments, token, null);
   }
 
-  Future<dynamic> _httpClientExecutePost(Uri url, String? token, Object? requestDataJson) {
-    return _httpClientExecute('post', url, token, requestDataJson);
+  Future<dynamic> _httpClientExecutePost(List<String> pathSegments, String? token, Object? requestDataJson) {
+    return _httpClientExecute('post', pathSegments, token, requestDataJson);
   }
 
-  Future<dynamic> _httpClientExecutePatch(Uri url, String? token, Object? requestDataJson) {
-    return _httpClientExecute('patch', url, token, requestDataJson);
+  Future<dynamic> _httpClientExecutePatch(List<String> pathSegments, String? token, Object? requestDataJson) {
+    return _httpClientExecute('patch', pathSegments, token, requestDataJson);
   }
 
-  Future<dynamic> _httpClientExecuteDelete(Uri url, String? token) {
-    return _httpClientExecute('delete', url, token, null);
+  Future<dynamic> _httpClientExecuteDelete(List<String> pathSegments, String? token) {
+    return _httpClientExecute('delete', pathSegments, token, null);
   }
 
   Future<Info> info() async {
-    final url = baseUrl.replace(
-      pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['info'],
-    );
+    final responseJson = await _httpClientExecuteGet(['info'], null);
 
-    final responseJson = await _httpClientExecuteGet(url, null);
-
-    final response = Info.fromJson(responseJson);
-
-    return response;
+    return Info.fromJson(responseJson);
   }
 
-  Future<SessionOtpRequestResult> sessionOtpRequestDemo(AppType type, String identifier, String email) async {
-    final url = baseUrl.replace(
-      pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['session', 'otp-request-demo'],
-    );
+  Future<SessionOtpProvisional> sessionOtpRequestDemo(SessionOtpCredentialDemo sessionOtpCredentialDemo) async {
+    final requestJson = sessionOtpCredentialDemo.toJson();
 
-    final requestJson = SessionOtpRequestDemoRequest(
-      type: type,
-      identifier: identifier,
-      email: email,
-    ).toJson();
+    final responseJson = await _httpClientExecutePost(['session', 'otp-request-demo'], null, requestJson);
 
-    final responseJson = await _httpClientExecutePost(url, null, requestJson);
-
-    final response = SessionOtpRequestDemoResponse.fromJson(responseJson);
-
-    return response;
+    return SessionOtpProvisional.fromJson(responseJson);
   }
 
-  Future<SessionOtpRequestResult> sessionOtpRequest(AppType type, String identifier, String phone) async {
-    final url = baseUrl.replace(
-      pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['session', 'otp-request'],
-    );
+  Future<SessionOtpProvisional> sessionOtpRequest(SessionOtpCredential sessionOtpCredential) async {
+    final requestJson = sessionOtpCredential.toJson();
 
-    final requestJson = SessionOtpRequestRequest(
-      type: type,
-      identifier: identifier,
-      phone: phone,
-    ).toJson();
+    final responseJson = await _httpClientExecutePost(['session', 'otp-request'], null, requestJson);
 
-    final responseJson = await _httpClientExecutePost(url, null, requestJson);
-
-    final response = SessionOtpRequestResponse.fromJson(responseJson);
-
-    return response;
+    return SessionOtpProvisional.fromJson(responseJson);
   }
 
-  Future<String> sessionOtpVerify(String otpId, String code) async {
-    final url = baseUrl.replace(
-      pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['session', 'otp-verify'],
-    );
+  Future<String> sessionOtpVerify(SessionOtpProvisional sessionOtpProvisional, String code) async {
+    final requestJson = {
+      'otp_id': sessionOtpProvisional.otpId,
+      'code': code,
+    };
 
-    final requestJson = SessionOtpVerifyRequest(
-      otpId: otpId,
-      code: code,
-    ).toJson();
+    final responseJson = await _httpClientExecutePost(['session', 'otp-verify'], null, requestJson);
 
-    final responseJson = await _httpClientExecutePost(url, null, requestJson);
-
-    final response = SessionOtpVerifyResponse.fromJson(responseJson);
-
-    return response.token;
+    return responseJson['token'];
   }
 
-  Future<String> sessionLogin(AppType type, String identifier, String login, String password) async {
-    final url = baseUrl.replace(
-      pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['session'],
-    );
+  Future<String> sessionLogin(SessionLoginCredential sessionLoginCredential) async {
+    final requestJson = sessionLoginCredential.toJson();
 
-    final requestJson = SessionLoginRequest(
-      type: type,
-      identifier: identifier,
-      login: login,
-      password: password,
-    ).toJson();
+    final responseJson = await _httpClientExecutePost(['session'], null, requestJson);
 
-    final responseJson = await _httpClientExecutePost(url, null, requestJson);
-
-    final response = SessionLoginResponse.fromJson(responseJson);
-
-    return response.token;
+    return responseJson['token'];
   }
 
   Future<void> sessionLogout(String token) async {
-    final url = baseUrl.replace(
-      pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['session'],
-    );
-
-    await _httpClientExecuteDelete(url, token);
+    await _httpClientExecuteDelete(['session'], token);
   }
 
   Future<AccountInfo> accountInfo(String token) async {
-    final url = baseUrl.replace(
-      pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['account', 'info'],
-    );
+    final responseJson = await _httpClientExecuteGet(['account', 'info'], token);
 
-    final responseJson = await _httpClientExecuteGet(url, token);
-
-    final response = AccountInfoResponse.fromJson(responseJson);
-
-    return response.data;
+    return AccountInfo.fromJson(responseJson['data']);
   }
 
   Future<List<AccountContact>> accountContacts(String token) async {
-    final url = baseUrl.replace(
-      pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['account', 'contacts'],
-    );
+    final responseJson = await _httpClientExecuteGet(['account', 'contacts'], token);
 
-    final responseJson = await _httpClientExecuteGet(url, token);
-
-    final response = AccountContactsResponse.fromJson(responseJson);
-
-    return response.data;
+    return (responseJson['data'] as List<dynamic>)
+        .map((e) => AccountContact.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   Future<AppStatus> appStatus(String token) async {
-    final url = baseUrl.replace(
-      pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['app', 'status'],
-    );
+    final responseJson = await _httpClientExecuteGet(['app', 'status'], token);
 
-    final responseJson = await _httpClientExecuteGet(url, token);
-
-    final response = AppStatusResponse.fromJson(responseJson);
-
-    return response.data;
+    return AppStatus.fromJson(responseJson);
   }
 
   Future<void> appStatusUpdate(String token, AppStatus appStatus) async {
-    final url = baseUrl.replace(
-      pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['app', 'status'],
-    );
+    final requestJson = appStatus.toJson();
 
-    final requestJson = AppStatusUpdateRequest(
-      data: appStatus,
-    ).toJson();
-
-    await _httpClientExecutePatch(url, token, requestJson);
+    await _httpClientExecutePatch(['app', 'status'], token, requestJson);
   }
 
   Future<void> appCreateContacts(String token, List<AppContact> appContacts) async {
-    final url = baseUrl.replace(
-      pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['app', 'contacts'],
-    );
+    final requestJson = appContacts.map((e) => e.toJson()).toList();
 
-    final requestJson = AppCreateContactsRequest(data: appContacts).toJson();
-
-    await _httpClientExecutePost(url, token, requestJson);
+    await _httpClientExecutePost(['app', 'contacts'], token, requestJson);
   }
 
   Future<List<AppSmartContact>> appSmartContacts(String token) async {
-    final url = baseUrl.replace(
-      pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['app', 'contacts', 'smart'],
-    );
+    final responseJson = await _httpClientExecuteGet(['app', 'contacts', 'smart'], token);
 
-    final responseJson = await _httpClientExecuteGet(url, token);
-
-    final response = AppSmartContactsResponse.fromJson(responseJson);
-
-    return response.data;
+    return (responseJson as List<dynamic>).map((e) => AppSmartContact.fromJson(e as Map<String, dynamic>)).toList();
   }
 
-  Future<void> appCreatePushToken(String token, PushTokenType type, String value) async {
-    final url = baseUrl.replace(
-      pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + ['app', 'push-tokens'],
-    );
+  Future<void> appCreatePushToken(String token, AppPushToken appPushToken) async {
+    final requestJson = appPushToken.toJson();
 
-    final requestJson = AppCreatePushTokenRequest(
-      type: type,
-      value: value,
-    ).toJson();
-
-    await _httpClientExecutePost(url, token, requestJson);
+    await _httpClientExecutePost(['app', 'push-tokens'], token, requestJson);
   }
 }

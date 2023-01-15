@@ -34,6 +34,8 @@ abstract class $SettingsStateCopyWith<$Res> {
   @useResult
   $Res call(
       {bool progress, bool registerStatus, AccountInfo? info, Object? error});
+
+  $AccountInfoCopyWith<$Res>? get info;
 }
 
 /// @nodoc
@@ -70,6 +72,18 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
       error: freezed == error ? _value.error : error,
     ) as $Val);
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $AccountInfoCopyWith<$Res>? get info {
+    if (_value.info == null) {
+      return null;
+    }
+
+    return $AccountInfoCopyWith<$Res>(_value.info!, (value) {
+      return _then(_value.copyWith(info: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -82,6 +96,9 @@ abstract class _$$_SettingsStateCopyWith<$Res>
   @useResult
   $Res call(
       {bool progress, bool registerStatus, AccountInfo? info, Object? error});
+
+  @override
+  $AccountInfoCopyWith<$Res>? get info;
 }
 
 /// @nodoc

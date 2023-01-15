@@ -14,7 +14,7 @@ class PushTokensStarted extends PushTokensEvent {
 class PushTokensInsertedOrUpdated extends PushTokensEvent {
   const PushTokensInsertedOrUpdated(this.type, this.value);
 
-  final PushTokenType type;
+  final AppPushTokenType type;
   final String value;
 
   @override

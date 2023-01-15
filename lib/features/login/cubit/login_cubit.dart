@@ -175,17 +175,15 @@ class LoginCubit extends Cubit<LoginState> {
       status: LoginStatus.processing,
     ));
     try {
-      late final SessionOtpRequestResult otpRequestResult;
+      late final SessionOtpProvisional otpProvisional;
       if (state.demo) {
-        otpRequestResult = await _sessionOtpRequestDemo(createWebtritApiClient(state.coreUrl!), state.emailInput.value);
+        otpProvisional = await _sessionOtpRequestDemo(createWebtritApiClient(state.coreUrl!), state.emailInput.value);
       } else {
-        otpRequestResult = await _sessionOtpRequest(createWebtritApiClient(state.coreUrl!), state.phoneInput.value);
+        otpProvisional = await _sessionOtpRequest(createWebtritApiClient(state.coreUrl!), state.phoneInput.value);
       }
       emit(state.copyWith(
         status: LoginStatus.ok,
-        otpId: otpRequestResult.otpId,
-        otpNotificationType: otpRequestResult.notificationType,
-        otpFromEmail: otpRequestResult.fromEmail,
+        otpProvisional: otpProvisional,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -227,7 +225,7 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       final token = await _sessionOtpVerify(
         createWebtritApiClient(state.coreUrl!),
-        state.otpId!,
+        state.otpProvisional!,
         state.codeInput.value,
       );
       emit(state.copyWith(
@@ -249,9 +247,7 @@ class LoginCubit extends Cubit<LoginState> {
 
     emit(state.copyWith(
       status: LoginStatus.back,
-      otpId: null,
-      otpNotificationType: null,
-      otpFromEmail: null,
+      otpProvisional: null,
       codeInput: const CodeInput.pure(),
     ));
   }
@@ -265,17 +261,15 @@ class LoginCubit extends Cubit<LoginState> {
       status: LoginStatus.processing,
     ));
     try {
-      late final SessionOtpRequestResult otpRequestResult;
+      late final SessionOtpProvisional otpProvisional;
       if (state.demo) {
-        otpRequestResult = await _sessionOtpRequestDemo(createWebtritApiClient(state.coreUrl!), state.emailInput.value);
+        otpProvisional = await _sessionOtpRequestDemo(createWebtritApiClient(state.coreUrl!), state.emailInput.value);
       } else {
-        otpRequestResult = await _sessionOtpRequest(createWebtritApiClient(state.coreUrl!), state.phoneInput.value);
+        otpProvisional = await _sessionOtpRequest(createWebtritApiClient(state.coreUrl!), state.phoneInput.value);
       }
       emit(state.copyWith(
         status: LoginStatus.input,
-        otpId: otpRequestResult.otpId,
-        otpNotificationType: otpRequestResult.notificationType,
-        otpFromEmail: otpRequestResult.fromEmail,
+        otpProvisional: otpProvisional,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -305,28 +299,32 @@ Future<void> _verifyCoreVersion(
   }
 }
 
-Future<SessionOtpRequestResult> _sessionOtpRequestDemo(
+Future<SessionOtpProvisional> _sessionOtpRequestDemo(
   WebtritApiClient webtritApiClient,
   String email,
 ) async {
-  final type = PlatformInfo().appType;
-  final identifier = AppInfo().identifier;
-  return await webtritApiClient.sessionOtpRequestDemo(type, identifier, email);
+  return await webtritApiClient.sessionOtpRequestDemo(SessionOtpCredentialDemo(
+    type: PlatformInfo().appType,
+    identifier: AppInfo().identifier,
+    email: email,
+  ));
 }
 
-Future<SessionOtpRequestResult> _sessionOtpRequest(
+Future<SessionOtpProvisional> _sessionOtpRequest(
   WebtritApiClient webtritApiClient,
   String phone,
 ) async {
-  final type = PlatformInfo().appType;
-  final identifier = AppInfo().identifier;
-  return await webtritApiClient.sessionOtpRequest(type, identifier, phone);
+  return await webtritApiClient.sessionOtpRequest(SessionOtpCredential(
+    type: PlatformInfo().appType,
+    identifier: AppInfo().identifier,
+    phone: phone,
+  ));
 }
 
 Future<String> _sessionOtpVerify(
   WebtritApiClient webtritApiClient,
-  String otpId,
+  SessionOtpProvisional sessionOtpId,
   String code,
 ) async {
-  return await webtritApiClient.sessionOtpVerify(otpId, code);
+  return await webtritApiClient.sessionOtpVerify(sessionOtpId, code);
 }

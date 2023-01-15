@@ -43,8 +43,8 @@ class LoginOtpVerifyTab extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        final isOtpNotificationEmail = state.otpNotificationType?.isEmail ?? false;
-        final otpFromEmail = state.otpFromEmail;
+        final isOtpNotificationEmail = state.otpProvisional?.notificationType.isEmail ?? false;
+        final otpFromEmail = state.otpProvisional?.fromEmail;
         return WillPopScope(
           onWillPop: () async {
             _onOtpVerifyBack(context);
@@ -112,7 +112,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             CountDownBuilder(
-                              key: ObjectKey(state.otpId),
+                              key: ObjectKey(state.otpProvisional),
                               interval: const Duration(seconds: 30),
                               builder: (context, seconds) {
                                 if (seconds == 0) {

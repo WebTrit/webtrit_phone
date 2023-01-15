@@ -6,12 +6,8 @@ part of 'account_info.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-AccountInfoResponse _$AccountInfoResponseFromJson(Map<String, dynamic> json) =>
-    AccountInfoResponse(
-      data: AccountInfo.fromJson(json['data'] as Map<String, dynamic>),
-    );
-
-AccountInfo _$AccountInfoFromJson(Map<String, dynamic> json) => AccountInfo(
+_$_AccountInfo _$$_AccountInfoFromJson(Map<String, dynamic> json) =>
+    _$_AccountInfo(
       login: json['login'] as String,
       billingModel: $enumDecode(_$BillingModelEnumMap, json['billing_model']),
       balanceControlType: $enumDecodeNullable(
@@ -28,7 +24,7 @@ AccountInfo _$AccountInfoFromJson(Map<String, dynamic> json) => AccountInfo(
       ext: json['ext'] as String?,
     );
 
-Map<String, dynamic> _$AccountInfoToJson(AccountInfo instance) =>
+Map<String, dynamic> _$$_AccountInfoToJson(_$_AccountInfo instance) =>
     <String, dynamic>{
       'login': instance.login,
       'billing_model': _$BillingModelEnumMap[instance.billingModel]!,
