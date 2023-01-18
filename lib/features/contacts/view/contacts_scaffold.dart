@@ -3,33 +3,38 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../contacts.dart';
-import '../features/contacts_local_tab/view/contacts_local_tab.dart';
-import '../features/contacts_external_tab/view/contacts_external_tab.dart';
 
 class ContactsScaffold extends StatelessWidget {
-  const ContactsScaffold({Key? key}) : super(key: key);
+  const ContactsScaffold({
+    super.key,
+    required this.sourceTypes,
+  });
+
+  final List<ContactSourceType> sourceTypes;
 
   @override
   Widget build(BuildContext context) {
     final mediaQueryData = MediaQuery.of(context);
 
-    final tabBar = Padding(
-      padding: const EdgeInsets.only(
-        bottom: kMainAppBarBottomPaddingGap,
-      ),
-      child: ExtTabBar(
-        width: mediaQueryData.size.width * 0.6,
-        height: kMainAppBarBottomTabHeight - kMainAppBarBottomPaddingGap,
-        tabs: [
-          context.l10n.contactsSourceLocal,
-          context.l10n.contactsSourceExternal,
-        ].map((value) => Tab(text: value)).toList(),
-      ),
-    );
+    final tabBar = sourceTypes.length <= 1
+        ? null
+        : Padding(
+            padding: const EdgeInsets.only(
+              bottom: kMainAppBarBottomPaddingGap,
+            ),
+            child: ExtTabBar(
+              width: mediaQueryData.size.width * 0.6,
+              height: kMainAppBarBottomTabHeight - kMainAppBarBottomPaddingGap,
+              tabs: [
+                for (final sourceType in sourceTypes) Tab(text: sourceType.l10n(context)),
+              ],
+            ),
+          );
 
     final search = Padding(
       padding: const EdgeInsets.only(
@@ -57,23 +62,26 @@ class ContactsScaffold extends StatelessWidget {
 
     return Unfocuser(
       child: DefaultTabController(
-        length: 2,
+        length: sourceTypes.length,
         child: Scaffold(
           appBar: MainAppBar(
             bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(kMainAppBarBottomTabHeight + kMainAppBarBottomSearchHeight),
+              preferredSize: Size.fromHeight(
+                (tabBar != null ? kMainAppBarBottomTabHeight : 0) + kMainAppBarBottomSearchHeight,
+              ),
               child: Column(
                 children: [
-                  tabBar,
+                  if (tabBar != null) tabBar,
                   search,
                 ],
               ),
             ),
           ),
-          body: const TabBarView(children: [
-            ContactsLocalTab(),
-            ContactsExternalTab(),
-          ]),
+          body: TabBarView(
+            children: [
+              for (final sourceType in sourceTypes) sourceType.builder(context),
+            ],
+          ),
         ),
       ),
     );

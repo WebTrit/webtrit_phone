@@ -4,6 +4,7 @@ export 'build_context.dart';
 export 'call_status.dart';
 export 'callkeep_handle.dart';
 export 'clock.dart';
+export 'contact_source_type.dart';
 export 'duration.dart';
 export 'iterable.dart';
 export 'locale.dart';

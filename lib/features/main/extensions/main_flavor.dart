@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/contact_source_type.dart';
 
 import '../../contacts/view/contacts_screen.dart';
 import '../../favorites/view/favorites_screen.dart';
@@ -46,7 +47,12 @@ extension MainFlavorBuilder on MainFlavor {
       case MainFlavor.recents:
         return const RecentsScreen();
       case MainFlavor.contacts:
-        return const ContactsScreen();
+        return const ContactsScreen(
+          sourceTypes: [
+            ContactSourceType.local,
+            ContactSourceType.external,
+          ],
+        );
       case MainFlavor.keypad:
         return const KeypadScreen();
     }
