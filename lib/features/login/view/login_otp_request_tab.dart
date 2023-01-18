@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
@@ -87,10 +88,13 @@ class LoginOtpRequestTab extends StatelessWidget {
                               errorText: state.phoneInput.errorL10n(context),
                               errorMaxLines: 3,
                             ),
-                            keyboardType: TextInputType.phone,
-                            autofillHints: const [
-                              AutofillHints.telephoneNumber,
-                            ],
+                            keyboardType: PlatformInfo().isIOS
+                                ? const TextInputType.numberWithOptions(
+                                    signed: true,
+                                  ) // show regular text keyboard (without emoji) but in number mode by default
+                                : TextInputType.text,
+                            autocorrect: false,
+                            enableSuggestions: false,
                             onChanged: (value) => context.read<LoginCubit>().loginOptRequestPhoneInputChanged(value),
                             onFieldSubmitted: !state.phoneInput.valid ? null : (_) => _onOtpRequestSubmitted(context),
                           ),
