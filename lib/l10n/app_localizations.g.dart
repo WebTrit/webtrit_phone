@@ -658,43 +658,43 @@ abstract class AppLocalizations {
   /// No description provided for @contactsSourceLocal.
   ///
   /// In en, this message translates to:
-  /// **'Local'**
+  /// **'Your phone'**
   String get contactsSourceLocal;
 
   /// No description provided for @contactsSourceExternal.
   ///
   /// In en, this message translates to:
-  /// **'Internal'**
+  /// **'Cloud PBX'**
   String get contactsSourceExternal;
 
   /// No description provided for @contacts_LocalTabText_permissionFailure.
   ///
   /// In en, this message translates to:
-  /// **'There are no permissions to get local contacts'**
+  /// **'There are no permissions to get your phone contacts'**
   String get contacts_LocalTabText_permissionFailure;
 
   /// No description provided for @contacts_LocalTabButton_openAppSettings.
   ///
   /// In en, this message translates to:
-  /// **'Grant access to your contacts'**
+  /// **'Grant access to your phone contacts'**
   String get contacts_LocalTabButton_openAppSettings;
 
   /// No description provided for @contacts_LocalTabText_failure.
   ///
   /// In en, this message translates to:
-  /// **'Failed to get local contacts'**
+  /// **'Failed to get your phone contacts'**
   String get contacts_LocalTabText_failure;
 
   /// No description provided for @contacts_LocalTabText_emptyOnSearching.
   ///
   /// In en, this message translates to:
-  /// **'No local contacts found'**
+  /// **'No contacts found'**
   String get contacts_LocalTabText_emptyOnSearching;
 
   /// No description provided for @contacts_LocalTabText_empty.
   ///
   /// In en, this message translates to:
-  /// **'No local contacts'**
+  /// **'No contacts'**
   String get contacts_LocalTabText_empty;
 
   /// No description provided for @contacts_LocalTabButton_refresh.
@@ -706,19 +706,19 @@ abstract class AppLocalizations {
   /// No description provided for @contacts_ExternalTabText_failure.
   ///
   /// In en, this message translates to:
-  /// **'Failed to get external contacts'**
+  /// **'Failed to get cloud PBX contacts'**
   String get contacts_ExternalTabText_failure;
 
   /// No description provided for @contacts_ExternalTabText_emptyOnSearching.
   ///
   /// In en, this message translates to:
-  /// **'No external contacts found'**
+  /// **'No contacts found'**
   String get contacts_ExternalTabText_emptyOnSearching;
 
   /// No description provided for @contacts_ExternalTabText_empty.
   ///
   /// In en, this message translates to:
-  /// **'No local contacts'**
+  /// **'No contacts'**
   String get contacts_ExternalTabText_empty;
 
   /// No description provided for @contacts_ExternalTabButton_refresh.

@@ -313,37 +313,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recents_DeleteConfirmDialog_content => 'Are you sure you want to delete the current call log?';
 
   @override
-  String get contactsSourceLocal => 'Local';
+  String get contactsSourceLocal => 'Your phone';
 
   @override
-  String get contactsSourceExternal => 'Internal';
+  String get contactsSourceExternal => 'Cloud PBX';
 
   @override
-  String get contacts_LocalTabText_permissionFailure => 'There are no permissions to get local contacts';
+  String get contacts_LocalTabText_permissionFailure => 'There are no permissions to get your phone contacts';
 
   @override
-  String get contacts_LocalTabButton_openAppSettings => 'Grant access to your contacts';
+  String get contacts_LocalTabButton_openAppSettings => 'Grant access to your phone contacts';
 
   @override
-  String get contacts_LocalTabText_failure => 'Failed to get local contacts';
+  String get contacts_LocalTabText_failure => 'Failed to get your phone contacts';
 
   @override
-  String get contacts_LocalTabText_emptyOnSearching => 'No local contacts found';
+  String get contacts_LocalTabText_emptyOnSearching => 'No contacts found';
 
   @override
-  String get contacts_LocalTabText_empty => 'No local contacts';
+  String get contacts_LocalTabText_empty => 'No contacts';
 
   @override
   String get contacts_LocalTabButton_refresh => 'Refresh';
 
   @override
-  String get contacts_ExternalTabText_failure => 'Failed to get external contacts';
+  String get contacts_ExternalTabText_failure => 'Failed to get cloud PBX contacts';
 
   @override
-  String get contacts_ExternalTabText_emptyOnSearching => 'No external contacts found';
+  String get contacts_ExternalTabText_emptyOnSearching => 'No contacts found';
 
   @override
-  String get contacts_ExternalTabText_empty => 'No local contacts';
+  String get contacts_ExternalTabText_empty => 'No contacts';
 
   @override
   String get contacts_ExternalTabButton_refresh => 'Refresh';

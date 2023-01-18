@@ -346,39 +346,39 @@
   "@recents_DeleteConfirmDialog_content": {
   },
 
-  "contactsSourceLocal": "Local",
+  "contactsSourceLocal": "Your phone",
   "@contactsSourceLocal": {
   },
-  "contactsSourceExternal": "Internal",
+  "contactsSourceExternal": "Cloud PBX",
   "@contactsSourceExternal": {
   },
 
-  "contacts_LocalTabText_permissionFailure": "There are no permissions to get local contacts",
+  "contacts_LocalTabText_permissionFailure": "There are no permissions to get your phone contacts",
   "@contacts_LocalTabText_permissionFailure": {
   },
-  "contacts_LocalTabButton_openAppSettings": "Grant access to your contacts",
+  "contacts_LocalTabButton_openAppSettings": "Grant access to your phone contacts",
   "@contacts_LocalTabButton_openAppSettings": {
   },
-  "contacts_LocalTabText_failure": "Failed to get local contacts",
+  "contacts_LocalTabText_failure": "Failed to get your phone contacts",
   "@contacts_LocalTabText_failure": {
   },
-  "contacts_LocalTabText_emptyOnSearching": "No local contacts found",
+  "contacts_LocalTabText_emptyOnSearching": "No contacts found",
   "@contacts_LocalTabText_emptyOnSearching": {
   },
-  "contacts_LocalTabText_empty": "No local contacts",
+  "contacts_LocalTabText_empty": "No contacts",
   "@contacts_LocalTabText_empty": {
   },
   "contacts_LocalTabButton_refresh": "Refresh",
   "@contacts_LocalTabButton_refresh": {
   },
 
-  "contacts_ExternalTabText_failure": "Failed to get external contacts",
+  "contacts_ExternalTabText_failure": "Failed to get cloud PBX contacts",
   "@contacts_ExternalTabText_failure": {
   },
-  "contacts_ExternalTabText_emptyOnSearching": "No external contacts found",
+  "contacts_ExternalTabText_emptyOnSearching": "No contacts found",
   "@contacts_ExternalTabText_emptyOnSearching": {
   },
-  "contacts_ExternalTabText_empty": "No local contacts",
+  "contacts_ExternalTabText_empty": "No contacts",
   "@contacts_ExternalTabText_empty": {
   },
   "contacts_ExternalTabButton_refresh": "Refresh",
