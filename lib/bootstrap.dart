@@ -92,14 +92,7 @@ Future<void> _initFirebaseMessaging() async {
     logger.info('initialMessage: ${initialMessage.toMap()}');
   }
 
-  final notificationSettings = await FirebaseMessaging.instance.requestPermission();
-  if (notificationSettings.authorizationStatus == AuthorizationStatus.authorized) {
-    logger.info('User granted permission');
-  } else if (notificationSettings.authorizationStatus == AuthorizationStatus.provisional) {
-    logger.info('User granted provisional permission');
-  } else {
-    logger.info('User declined or has not accepted permission');
-  }
+  // actual FirebaseMessaging permission request executed in [PermissionsCubit]
 }
 
 @pragma('vm:entry-point')
