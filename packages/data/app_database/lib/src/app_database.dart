@@ -458,18 +458,17 @@ class CallLogsDao extends DatabaseAccessor<AppDatabase> with _$CallLogsDaoMixin 
       leftOuterJoin(contactPhonesTable, contactPhonesTable.number.equalsExp(callLogsTable.number)),
       leftOuterJoin(contactsTable, contactsTable.id.equalsExp(contactPhonesTable.contactId)),
     ]);
-    q.groupBy([callLogsTable.id]);
+    _groupByCallLogsTableId(q);
     return q.watch().map((rows) => rows.map(_toCallLogDataWithContactPhoneDataAndContactData).toList());
   }
 
   Future<CallLogDataWithContactPhoneDataAndContactData> getCallLogExt(Insertable<CallLogData> callLogData) {
-    return (select(callLogsTable)..whereSamePrimaryKey(callLogData))
-        .join([
-          leftOuterJoin(contactPhonesTable, contactPhonesTable.number.equalsExp(callLogsTable.number)),
-          leftOuterJoin(contactsTable, contactsTable.id.equalsExp(contactPhonesTable.contactId)),
-        ])
-        .getSingle()
-        .then(_toCallLogDataWithContactPhoneDataAndContactData);
+    final q = (select(callLogsTable)..whereSamePrimaryKey(callLogData)).join([
+      leftOuterJoin(contactPhonesTable, contactPhonesTable.number.equalsExp(callLogsTable.number)),
+      leftOuterJoin(contactsTable, contactsTable.id.equalsExp(contactPhonesTable.contactId)),
+    ]);
+    _groupByCallLogsTableId(q);
+    return q.getSingle().then(_toCallLogDataWithContactPhoneDataAndContactData);
   }
 
   Future<int> insertCallLog(Insertable<CallLogData> callLogData) {
@@ -478,6 +477,11 @@ class CallLogsDao extends DatabaseAccessor<AppDatabase> with _$CallLogsDaoMixin 
 
   Future<int> deleteCallLog(Insertable<CallLogData> callLogData) {
     return delete(callLogsTable).delete(callLogData);
+  }
+
+  // necessary to overcome the possibility that one particular number be assigned to more than one contact
+  void _groupByCallLogsTableId(JoinedSelectStatement statement) {
+    statement.groupBy([callLogsTable.id]);
   }
 
   CallLogDataWithContactPhoneDataAndContactData _toCallLogDataWithContactPhoneDataAndContactData(TypedResult row) {
