@@ -127,9 +127,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_CallActionsTooltip_accept => 'Accept';
 
   @override
-  String get favorites_BodyCenter_failure => 'Failed to get favorites';
-
-  @override
   String get favorites_BodyCenter_empty => 'There are no favorite numbers';
 
   @override

@@ -1,51 +1,30 @@
 part of 'favorites_bloc.dart';
 
-abstract class FavoritesEvent extends Equatable {
+abstract class FavoritesEvent {
   const FavoritesEvent();
-
-  @override
-  List<Object> get props => [];
 }
 
 class FavoritesStarted extends FavoritesEvent {
   const FavoritesStarted();
 }
 
-class FavoritesAddedByContactPhoneId extends FavoritesEvent {
-  const FavoritesAddedByContactPhoneId({
-    required this.contactPhoneId,
-  });
-
-  final int contactPhoneId;
-
-  @override
-  List<Object> get props => [
-    contactPhoneId,
-  ];
+@Freezed(copyWith: false)
+class FavoritesAddedByContactPhoneId with _$FavoritesAddedByContactPhoneId implements FavoritesEvent {
+  const factory FavoritesAddedByContactPhoneId({
+    required int contactPhoneId,
+  }) = _FavoritesAddedByContactPhoneId;
 }
 
-class FavoritesRemovedByContactPhoneId extends FavoritesEvent {
-  const FavoritesRemovedByContactPhoneId({
-    required this.contactPhoneId,
-  });
-
-  final int contactPhoneId;
-
-  @override
-  List<Object> get props => [
-    contactPhoneId,
-  ];
+@Freezed(copyWith: false)
+class FavoritesRemovedByContactPhoneId with _$FavoritesRemovedByContactPhoneId implements FavoritesEvent {
+  const factory FavoritesRemovedByContactPhoneId({
+    required int contactPhoneId,
+  }) = _FavoritesRemovedByContactPhoneId;
 }
 
-class FavoritesRemoved extends FavoritesEvent {
-  const FavoritesRemoved({
-    required this.favorite,
-  });
-
-  final Favorite favorite;
-
-  @override
-  List<Object> get props => [
-        favorite,
-      ];
+@Freezed(copyWith: false)
+class FavoritesRemoved with _$FavoritesRemoved implements FavoritesEvent {
+  const factory FavoritesRemoved({
+    required Favorite favorite,
+  }) = _FavoritesRemoved;
 }

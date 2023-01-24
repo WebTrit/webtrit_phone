@@ -22,70 +22,65 @@ class FavoritesScaffold extends StatelessWidget {
       appBar: MainAppBar(),
       body: BlocBuilder<FavoritesBloc, FavoritesState>(
         builder: (context, state) {
-          if (state.status == FavoritesStatus.initial || state.status == FavoritesStatus.inProgress) {
+          final favorites = state.favorites;
+          if (favorites == null) {
             return const Center(
               child: CircularProgressIndicator(),
             );
-          } else if (state.favorites.isNotEmpty) {
-            return ListView.builder(
-              itemCount: state.favorites.length,
-              itemBuilder: (context, index) {
-                final favorite = state.favorites[index];
-                return FavoriteTile(
-                  favorite: favorite,
-                  onTap: () {
-                    final callBloc = context.read<CallBloc>();
-                    callBloc.add(CallControlEvent.started(
-                      number: favorite.number,
-                      displayName: favorite.name,
-                      video: false,
-                    ));
-                  },
-                  onLongPress: () {
-                    final callBloc = context.read<CallBloc>();
-                    callBloc.add(CallControlEvent.started(
-                      number: favorite.number,
-                      displayName: favorite.name,
-                      video: true,
-                    ));
-                  },
-                  onInfoPressed: () {
-                    context.pushNamed(MainRoute.contact, params: {'$ContactId': favorite.contact.id.toString()});
-                  },
-                  onDeleted: (favorite) {
-                    context.showSnackBar(context.l10n.favorites_SnackBar_deleted(favorite.name));
-
-                    context.read<FavoritesBloc>().add(FavoritesRemoved(favorite: favorite));
-                  },
-                );
-              },
-            );
           } else {
-            late final List<Widget> children;
-            if (state.status == FavoritesStatus.failure) {
-              children = [
-                Text(context.l10n.favorites_BodyCenter_failure),
-              ];
+            if (favorites.isEmpty) {
+              return Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.star_outline,
+                      size: 80,
+                      color: themeData.textTheme.caption!.color,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      context.l10n.favorites_BodyCenter_empty,
+                      style: themeData.textTheme.subtitle1,
+                    ),
+                  ],
+                ),
+              );
             } else {
-              children = [
-                Icon(
-                  Icons.star_outline,
-                  size: 80,
-                  color: themeData.textTheme.caption!.color,
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  context.l10n.favorites_BodyCenter_empty,
-                  style: themeData.textTheme.subtitle1,
-                ),
-              ];
+              return ListView.builder(
+                itemCount: favorites.length,
+                itemBuilder: (context, index) {
+                  final favorite = favorites[index];
+                  return FavoriteTile(
+                    favorite: favorite,
+                    onTap: () {
+                      final callBloc = context.read<CallBloc>();
+                      callBloc.add(CallControlEvent.started(
+                        number: favorite.number,
+                        displayName: favorite.name,
+                        video: false,
+                      ));
+                    },
+                    onLongPress: () {
+                      final callBloc = context.read<CallBloc>();
+                      callBloc.add(CallControlEvent.started(
+                        number: favorite.number,
+                        displayName: favorite.name,
+                        video: true,
+                      ));
+                    },
+                    onInfoPressed: () {
+                      context.pushNamed(MainRoute.contact, params: {'$ContactId': favorite.contact.id.toString()});
+                    },
+                    onDeleted: (favorite) {
+                      context.showSnackBar(context.l10n.favorites_SnackBar_deleted(favorite.name));
+
+                      context.read<FavoritesBloc>().add(FavoritesRemoved(favorite: favorite));
+                    },
+                  );
+                },
+              );
             }
-            return Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: children,
-              ),
-            );
           }
         },
       ),

@@ -331,12 +331,6 @@ abstract class AppLocalizations {
   /// **'Accept'**
   String get call_CallActionsTooltip_accept;
 
-  /// No description provided for @favorites_BodyCenter_failure.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to get favorites'**
-  String get favorites_BodyCenter_failure;
-
   /// No description provided for @favorites_BodyCenter_empty.
   ///
   /// In en, this message translates to:
