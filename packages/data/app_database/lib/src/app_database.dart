@@ -27,7 +27,7 @@ class AppDatabase extends _$AppDatabase {
   Future<void> deleteEverything() async {
     await customStatement('PRAGMA foreign_keys = OFF');
     try {
-      transaction(() async {
+      await transaction(() async {
         for (final table in allTables) {
           await delete(table).go();
         }
