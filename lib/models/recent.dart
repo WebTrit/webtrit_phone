@@ -11,6 +11,8 @@ enum Direction {
 
 typedef RecentId = int;
 
+const recentIdPathParameterName = 'recentId';
+
 // TODO: could be spit in two classes Recent and RecentExt which extend Recent
 class Recent extends Equatable {
   final Direction direction;

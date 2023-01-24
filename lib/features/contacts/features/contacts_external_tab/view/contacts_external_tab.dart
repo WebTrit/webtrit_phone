@@ -50,7 +50,7 @@ class _ContactsExternal extends StatelessWidget {
               return ContactTile(
                 displayName: contact.name,
                 onTap: () async {
-                  context.goNamed(MainRoute.contact, params: {'$ContactId': contact.id.toString()});
+                  context.goNamed(MainRoute.contact, params: {contactIdPathParameterName: contact.id.toString()});
                 },
               );
             },

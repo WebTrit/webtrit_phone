@@ -247,20 +247,20 @@ class _AppState extends State<App> {
                   ),
                   GoRoute(
                     name: MainRoute.contact,
-                    path: 'contact/:$ContactId',
+                    path: 'contact/:$contactIdPathParameterName',
                     pageBuilder: (context, state) => MaterialPage(
                       key: state.pageKey,
                       fullscreenDialog: true,
-                      child: ContactScreen(int.parse(state.params['$ContactId']!)),
+                      child: ContactScreen(int.parse(state.params[contactIdPathParameterName]!)),
                     ),
                   ),
                   GoRoute(
                     name: MainRoute.recent,
-                    path: 'recent/:$RecentId',
+                    path: 'recent/:$recentIdPathParameterName',
                     pageBuilder: (context, state) => MaterialPage(
                       key: state.pageKey,
                       fullscreenDialog: true,
-                      child: RecentScreen(int.parse(state.params['$RecentId']!)),
+                      child: RecentScreen(int.parse(state.params[recentIdPathParameterName]!)),
                     ),
                   ),
                 ],

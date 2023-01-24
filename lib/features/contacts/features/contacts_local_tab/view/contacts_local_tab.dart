@@ -63,7 +63,7 @@ class _ContactsLocal extends StatelessWidget {
                 displayName: contact.name,
                 thumbnail: contact.thumbnail,
                 onTap: () async {
-                  context.goNamed(MainRoute.contact, params: {'$ContactId': contact.id.toString()});
+                  context.goNamed(MainRoute.contact, params: {contactIdPathParameterName: contact.id.toString()});
                 },
               );
             },

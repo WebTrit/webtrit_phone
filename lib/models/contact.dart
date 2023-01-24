@@ -8,6 +8,8 @@ import 'contact_source_type.dart';
 
 typedef ContactId = int;
 
+const contactIdPathParameterName = 'contactId';
+
 class Contact extends Equatable {
   const Contact({
     required this.id,
