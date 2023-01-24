@@ -15,6 +15,44 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
+mixin _$RecentsFiltered {
+  RecentsVisibilityFilter get filter => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+
+class _$_RecentsFiltered implements _RecentsFiltered {
+  const _$_RecentsFiltered(this.filter);
+
+  @override
+  final RecentsVisibilityFilter filter;
+
+  @override
+  String toString() {
+    return 'RecentsFiltered(filter: $filter)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_RecentsFiltered &&
+            (identical(other.filter, filter) || other.filter == filter));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, filter);
+}
+
+abstract class _RecentsFiltered implements RecentsFiltered {
+  const factory _RecentsFiltered(final RecentsVisibilityFilter filter) =
+      _$_RecentsFiltered;
+
+  @override
+  RecentsVisibilityFilter get filter;
+}
+
+/// @nodoc
 mixin _$RecentsDeleted {
   Recent get recent => throw _privateConstructorUsedError;
 }
@@ -54,6 +92,7 @@ abstract class _RecentsDeleted implements RecentsDeleted {
 /// @nodoc
 mixin _$RecentsState {
   List<Recent>? get recents => throw _privateConstructorUsedError;
+  RecentsVisibilityFilter get filter => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $RecentsStateCopyWith<RecentsState> get copyWith =>
@@ -66,7 +105,7 @@ abstract class $RecentsStateCopyWith<$Res> {
           RecentsState value, $Res Function(RecentsState) then) =
       _$RecentsStateCopyWithImpl<$Res, RecentsState>;
   @useResult
-  $Res call({List<Recent>? recents});
+  $Res call({List<Recent>? recents, RecentsVisibilityFilter filter});
 }
 
 /// @nodoc
@@ -83,12 +122,17 @@ class _$RecentsStateCopyWithImpl<$Res, $Val extends RecentsState>
   @override
   $Res call({
     Object? recents = freezed,
+    Object? filter = null,
   }) {
     return _then(_value.copyWith(
       recents: freezed == recents
           ? _value.recents
           : recents // ignore: cast_nullable_to_non_nullable
               as List<Recent>?,
+      filter: null == filter
+          ? _value.filter
+          : filter // ignore: cast_nullable_to_non_nullable
+              as RecentsVisibilityFilter,
     ) as $Val);
   }
 }
@@ -101,7 +145,7 @@ abstract class _$$_RecentsStateCopyWith<$Res>
       __$$_RecentsStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<Recent>? recents});
+  $Res call({List<Recent>? recents, RecentsVisibilityFilter filter});
 }
 
 /// @nodoc
@@ -116,20 +160,28 @@ class __$$_RecentsStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? recents = freezed,
+    Object? filter = null,
   }) {
     return _then(_$_RecentsState(
       recents: freezed == recents
           ? _value._recents
           : recents // ignore: cast_nullable_to_non_nullable
               as List<Recent>?,
+      filter: null == filter
+          ? _value.filter
+          : filter // ignore: cast_nullable_to_non_nullable
+              as RecentsVisibilityFilter,
     ));
   }
 }
 
 /// @nodoc
 
-class _$_RecentsState implements _RecentsState {
-  const _$_RecentsState({final List<Recent>? recents}) : _recents = recents;
+class _$_RecentsState extends _RecentsState {
+  const _$_RecentsState(
+      {final List<Recent>? recents, this.filter = RecentsVisibilityFilter.all})
+      : _recents = recents,
+        super._();
 
   final List<Recent>? _recents;
   @override
@@ -142,8 +194,12 @@ class _$_RecentsState implements _RecentsState {
   }
 
   @override
+  @JsonKey()
+  final RecentsVisibilityFilter filter;
+
+  @override
   String toString() {
-    return 'RecentsState(recents: $recents)';
+    return 'RecentsState(recents: $recents, filter: $filter)';
   }
 
   @override
@@ -151,12 +207,13 @@ class _$_RecentsState implements _RecentsState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_RecentsState &&
-            const DeepCollectionEquality().equals(other._recents, _recents));
+            const DeepCollectionEquality().equals(other._recents, _recents) &&
+            (identical(other.filter, filter) || other.filter == filter));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_recents));
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(_recents), filter);
 
   @JsonKey(ignore: true)
   @override
@@ -165,11 +222,16 @@ class _$_RecentsState implements _RecentsState {
       __$$_RecentsStateCopyWithImpl<_$_RecentsState>(this, _$identity);
 }
 
-abstract class _RecentsState implements RecentsState {
-  const factory _RecentsState({final List<Recent>? recents}) = _$_RecentsState;
+abstract class _RecentsState extends RecentsState {
+  const factory _RecentsState(
+      {final List<Recent>? recents,
+      final RecentsVisibilityFilter filter}) = _$_RecentsState;
+  const _RecentsState._() : super._();
 
   @override
   List<Recent>? get recents;
+  @override
+  RecentsVisibilityFilter get filter;
   @override
   @JsonKey(ignore: true)
   _$$_RecentsStateCopyWith<_$_RecentsState> get copyWith =>

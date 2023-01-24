@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../recents.dart';
 import 'recents_scaffold.dart';
 
 class RecentsScreen extends StatelessWidget {
@@ -7,6 +10,9 @@ class RecentsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const RecentsScaffold();
+    final filter = context.read<RecentsBloc>().state.filter;
+    return RecentsScaffold(
+      initialFilter: filter,
+    );
   }
 }

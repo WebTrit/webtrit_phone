@@ -14,7 +14,12 @@ import '../../call/call.dart';
 import '../recents.dart';
 
 class RecentsScaffold extends StatefulWidget {
-  const RecentsScaffold({Key? key}) : super(key: key);
+  const RecentsScaffold({
+    super.key,
+    required this.initialFilter,
+  });
+
+  final RecentsVisibilityFilter initialFilter;
 
   @override
   RecentsScaffoldState createState() => RecentsScaffoldState();
@@ -29,6 +34,7 @@ class RecentsScaffoldState extends State<RecentsScaffold> with SingleTickerProvi
   void initState() {
     super.initState();
     _tabController = TabController(
+      initialIndex: _recentsFilters.indexOf(widget.initialFilter),
       length: _recentsFilters.length,
       vsync: this,
     );
@@ -44,8 +50,8 @@ class RecentsScaffoldState extends State<RecentsScaffold> with SingleTickerProvi
 
   void _tabControllerListener() {
     if (!_tabController.indexIsChanging) {
-      // TODO introduce FilteredRecentsBloc
-      setState(() {});
+      final filter = _recentsFilters[_tabController.index];
+      context.read<RecentsBloc>().add(RecentsFiltered(filter));
     }
   }
 
@@ -78,19 +84,7 @@ class RecentsScaffoldState extends State<RecentsScaffold> with SingleTickerProvi
               child: CircularProgressIndicator(),
             );
           } else {
-            RecentsVisibilityFilter filter = RecentsVisibilityFilter.values[_tabController.index];
-            final recentsFiltered = recents.where((recent) {
-              if (filter == RecentsVisibilityFilter.missed) {
-                return !recent.isComplete && recent.direction == Direction.incoming;
-              } else if (filter == RecentsVisibilityFilter.incoming) {
-                return recent.direction == Direction.incoming;
-              } else if (filter == RecentsVisibilityFilter.outgoing) {
-                return recent.direction == Direction.outgoing;
-              } else {
-                return true;
-              }
-            }).toList();
-
+            final recentsFiltered = state.recentsFiltered!; // can not be null if state.recents is not null
             return ListView.builder(
               itemCount: recentsFiltered.length,
               itemBuilder: (context, index) {
