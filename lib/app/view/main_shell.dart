@@ -121,7 +121,7 @@ class _MainShellState extends State<MainShell> {
             create: (context) {
               return RecentsBloc(
                 recentsRepository: context.read<RecentsRepository>(),
-              )..add(const RecentsInitialLoaded());
+              )..add(const RecentsStarted());
             },
           ),
           BlocProvider<LocalContactsSyncBloc>(

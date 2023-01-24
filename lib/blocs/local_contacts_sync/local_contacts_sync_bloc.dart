@@ -48,54 +48,56 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
   }
 
   void _onUpdated(_LocalContactsSyncUpdated event, Emitter<LocalContactsSyncState> emit) async {
-    final localContacts = event.contacts;
+    await appDatabase.transaction(() async {
+      final localContacts = event.contacts;
 
-    final contactDatas = await appDatabase.contactsDao.getAllContacts(ContactSourceTypeEnum.local);
+      final contactDatas = await appDatabase.contactsDao.getAllContacts(ContactSourceTypeEnum.local);
 
-    final syncedLocalContactsIds = contactDatas.map((contactData) => contactData.sourceId).toSet();
+      final syncedLocalContactsIds = contactDatas.map((contactData) => contactData.sourceId).toSet();
 
-    final updatedLocalContactsIds = localContacts.map((localContact) => localContact.id).toSet();
+      final updatedLocalContactsIds = localContacts.map((localContact) => localContact.id).toSet();
 
-    final delLocalContactsIds = syncedLocalContactsIds.difference(updatedLocalContactsIds);
+      final delLocalContactsIds = syncedLocalContactsIds.difference(updatedLocalContactsIds);
 
-    // to del
-    for (final localContactsId in delLocalContactsIds) {
-      await appDatabase.contactsDao.deleteContactBySource(ContactSourceTypeEnum.local, localContactsId);
-    }
-
-    // to add or update
-    for (final localContact in localContacts) {
-      final insertOrUpdateContactData =
-          await appDatabase.contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
-        sourceType: const Value(ContactSourceTypeEnum.local),
-        sourceId: Value(localContact.id),
-        displayName: Value(localContact.displayName),
-        firstName: Value(localContact.firstName),
-        lastName: Value(localContact.lastName),
-      ));
-
-      await appDatabase.contactPhonesDao.deleteOtherContactPhonesOfContactId(
-          insertOrUpdateContactData.id, localContact.phones.map((phone) => phone.number));
-
-      for (final localContactPhone in localContact.phones) {
-        await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(ContactPhoneDataCompanion(
-          number: Value(localContactPhone.number),
-          label: Value(localContactPhone.label),
-          contactId: Value(insertOrUpdateContactData.id),
-        ));
+      // to del
+      for (final localContactsId in delLocalContactsIds) {
+        await appDatabase.contactsDao.deleteContactBySource(ContactSourceTypeEnum.local, localContactsId);
       }
 
-      await appDatabase.contactEmailsDao.deleteOtherContactEmailsOfContactId(
-          insertOrUpdateContactData.id, localContact.emails.map((email) => email.address));
-
-      for (final localContactEmail in localContact.emails) {
-        await appDatabase.contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(ContactEmailDataCompanion(
-          address: Value(localContactEmail.address),
-          label: Value(localContactEmail.label),
-          contactId: Value(insertOrUpdateContactData.id),
+      // to add or update
+      for (final localContact in localContacts) {
+        final insertOrUpdateContactData =
+            await appDatabase.contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
+          sourceType: const Value(ContactSourceTypeEnum.local),
+          sourceId: Value(localContact.id),
+          displayName: Value(localContact.displayName),
+          firstName: Value(localContact.firstName),
+          lastName: Value(localContact.lastName),
         ));
+
+        await appDatabase.contactPhonesDao.deleteOtherContactPhonesOfContactId(
+            insertOrUpdateContactData.id, localContact.phones.map((phone) => phone.number));
+
+        for (final localContactPhone in localContact.phones) {
+          await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(ContactPhoneDataCompanion(
+            number: Value(localContactPhone.number),
+            label: Value(localContactPhone.label),
+            contactId: Value(insertOrUpdateContactData.id),
+          ));
+        }
+
+        await appDatabase.contactEmailsDao.deleteOtherContactEmailsOfContactId(
+            insertOrUpdateContactData.id, localContact.emails.map((email) => email.address));
+
+        for (final localContactEmail in localContact.emails) {
+          await appDatabase.contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(ContactEmailDataCompanion(
+            address: Value(localContactEmail.address),
+            label: Value(localContactEmail.label),
+            contactId: Value(insertOrUpdateContactData.id),
+          ));
+        }
       }
-    }
+    });
 
     emit(const LocalContactsSyncSuccess());
   }

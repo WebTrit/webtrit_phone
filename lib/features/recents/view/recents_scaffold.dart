@@ -70,21 +70,16 @@ class RecentsScaffoldState extends State<RecentsScaffold> with SingleTickerProvi
           ),
         ),
       ),
-      body: BlocConsumer<RecentsBloc, RecentsState>(
-        listener: (context, state) {
-          if (state is RecentsLoadFailure) {
-            context.showErrorSnackBar(context.l10n.recents_errorSnackBar_loadFailure);
-          }
-        },
+      body: BlocBuilder<RecentsBloc, RecentsState>(
         builder: (context, state) {
-          if (state is RecentsInitial) {
+          final recents = state.recents;
+          if (recents == null) {
             return const Center(
               child: CircularProgressIndicator(),
             );
-          }
-          if (state is RecentsLoadSuccess) {
+          } else {
             RecentsVisibilityFilter filter = RecentsVisibilityFilter.values[_tabController.index];
-            final recentsFiltered = state.recents.where((recent) {
+            final recentsFiltered = recents.where((recent) {
               if (filter == RecentsVisibilityFilter.missed) {
                 return !recent.isComplete && recent.direction == Direction.incoming;
               } else if (filter == RecentsVisibilityFilter.incoming) {
@@ -123,14 +118,12 @@ class RecentsScaffoldState extends State<RecentsScaffold> with SingleTickerProvi
                   },
                   onDeleted: (recent) {
                     context.showSnackBar(context.l10n.recents_snackBar_deleted(recent.name));
-
-                    context.read<RecentsBloc>().add(RecentsDelete(recent: recent));
+                    context.read<RecentsBloc>().add(RecentsDeleted(recent));
                   },
                 );
               },
             );
           }
-          throw StateError(''); // TODO fix if logic
         },
       ),
     );
