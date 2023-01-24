@@ -7,9 +7,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-part 'recents_event.dart';
-
 part 'recents_bloc.freezed.dart';
+
+part 'recents_event.dart';
 
 part 'recents_state.dart';
 
