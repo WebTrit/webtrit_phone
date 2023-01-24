@@ -25,6 +25,6 @@ class _ExternalContactsSyncUpdated extends ExternalContactsSyncEvent {
 
   @override
   List<Object> get props => [
-        contacts,
+        EquatablePropToString(contacts, listPropToString),
       ];
 }

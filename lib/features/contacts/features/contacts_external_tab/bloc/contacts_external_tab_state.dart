@@ -21,7 +21,7 @@ class ContactsExternalTabState extends Equatable {
   @override
   List<Object> get props => [
         status,
-        contacts,
+        EquatablePropToString(contacts, listPropToString),
         searching,
       ];
 

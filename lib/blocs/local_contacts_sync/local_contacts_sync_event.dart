@@ -25,6 +25,6 @@ class _LocalContactsSyncUpdated extends LocalContactsSyncEvent {
 
   @override
   List<Object> get props => [
-        contacts,
+        EquatablePropToString(contacts, listPropToString),
       ];
 }
