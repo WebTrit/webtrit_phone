@@ -11,11 +11,6 @@
 
 static NSString *const OptionsKey = @"WebtritCallkeepPluginOptions";
 
-@interface WTPIOSOptions ()
-+ (WTPIOSOptions *)fromMap:(NSDictionary *)dict;
-- (NSDictionary *)toMap;
-@end
-
 @interface WebtritCallkeepPlugin ()<PKPushRegistryDelegate, CXProviderDelegate, WTPPushRegistryHostApi, WTPHostApi>
 @end
 

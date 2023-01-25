@@ -38,6 +38,8 @@ extern CXHandleType WTPHandleTypeEnumToCallKit(WTPHandleTypeEnum value);
 @end
 
 @interface WTPIOSOptions (WTPIOSOptions_Converters)
++ (WTPIOSOptions *)fromMap:(NSDictionary *)dict;
+- (NSDictionary *)toMap;
 - (CXProviderConfiguration *)toCallKitWithRegistrar:(NSObject<FlutterPluginRegistrar> *)registrar;
 @end
 

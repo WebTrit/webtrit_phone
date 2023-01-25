@@ -149,6 +149,47 @@ extern CXHandleType WTPHandleTypeEnumToCallKit(WTPHandleTypeEnum value) {
 @end
 
 @implementation WTPIOSOptions (WTPIOSOptions_Converters)
++ (WTPIOSOptions *)fromMap:(NSDictionary *)dict {
+  WTPIOSOptions *pigeonResult = [[WTPIOSOptions alloc] init];
+  id localizedName = dict[@"localizedName"];
+  pigeonResult.localizedName = (localizedName == [NSNull null]) ? nil : localizedName;
+  id ringtoneSound = dict[@"ringtoneSound"];
+  pigeonResult.localizedName = (ringtoneSound == [NSNull null]) ? nil : ringtoneSound;
+  id iconTemplateImageAssetName = dict[@"iconTemplateImageAssetName"];
+  pigeonResult.localizedName = (iconTemplateImageAssetName == [NSNull null]) ? nil : iconTemplateImageAssetName;
+  id maximumCallGroups = dict[@"maximumCallGroups"];
+  pigeonResult.localizedName = (maximumCallGroups == [NSNull null]) ? nil : maximumCallGroups;
+  id maximumCallsPerCallGroup = dict[@"maximumCallsPerCallGroup"];
+  pigeonResult.localizedName = (maximumCallsPerCallGroup == [NSNull null]) ? nil : maximumCallsPerCallGroup;
+  id supportsHandleTypeGeneric = dict[@"supportsHandleTypeGeneric"];
+  pigeonResult.localizedName = (supportsHandleTypeGeneric == [NSNull null]) ? nil : supportsHandleTypeGeneric;
+  id supportsHandleTypePhoneNumber = dict[@"supportsHandleTypePhoneNumber"];
+  pigeonResult.localizedName = (supportsHandleTypePhoneNumber == [NSNull null]) ? nil : supportsHandleTypePhoneNumber;
+  id supportsHandleTypeEmailAddress = dict[@"supportsHandleTypeEmailAddress"];
+  pigeonResult.localizedName = (supportsHandleTypeEmailAddress == [NSNull null]) ? nil : supportsHandleTypeEmailAddress;
+  id supportsVideo = dict[@"supportsVideo"];
+  pigeonResult.localizedName = (supportsVideo == [NSNull null]) ? nil : supportsVideo;
+  id includesCallsInRecents = dict[@"includesCallsInRecents"];
+  pigeonResult.localizedName = (includesCallsInRecents == [NSNull null]) ? nil : includesCallsInRecents;
+  id driveIdleTimerDisabled = dict[@"driveIdleTimerDisabled"];
+  pigeonResult.localizedName = (driveIdleTimerDisabled == [NSNull null]) ? nil : driveIdleTimerDisabled;
+  return pigeonResult;
+}
+- (NSDictionary *)toMap {
+  return @{
+    @"localizedName": (self.localizedName ?: [NSNull null]),
+    @"ringtoneSound": (self.ringtoneSound ?: [NSNull null]),
+    @"iconTemplateImageAssetName": (self.iconTemplateImageAssetName ?: [NSNull null]),
+    @"maximumCallGroups": (self.maximumCallGroups ?: [NSNull null]),
+    @"maximumCallsPerCallGroup": (self.maximumCallsPerCallGroup ?: [NSNull null]),
+    @"supportsHandleTypeGeneric": (self.supportsHandleTypeGeneric ?: [NSNull null]),
+    @"supportsHandleTypePhoneNumber": (self.supportsHandleTypePhoneNumber ?: [NSNull null]),
+    @"supportsHandleTypeEmailAddress": (self.supportsHandleTypeEmailAddress ?: [NSNull null]),
+    @"supportsVideo": (self.supportsVideo ?: [NSNull null]),
+    @"includesCallsInRecents": (self.includesCallsInRecents ?: [NSNull null]),
+    @"driveIdleTimerDisabled": (self.driveIdleTimerDisabled ?: [NSNull null]),
+  };
+}
 - (CXProviderConfiguration *)toCallKitWithRegistrar:(NSObject<FlutterPluginRegistrar> *)registrar {
   CXProviderConfiguration *providerConfiguration = [[CXProviderConfiguration alloc] initWithLocalizedName:self.localizedName];
   if (self.ringtoneSound != nil) {
