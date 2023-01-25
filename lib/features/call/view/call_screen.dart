@@ -9,7 +9,14 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../call.dart';
 
 class CallScreen extends StatefulWidget {
-  const CallScreen({Key? key}) : super(key: key);
+  const CallScreen({
+    super.key,
+    this.localePlaceholderBuilder,
+    this.remotePlaceholderBuilder,
+  });
+
+  final WidgetBuilder? localePlaceholderBuilder;
+  final WidgetBuilder? remotePlaceholderBuilder;
 
   @override
   State<CallScreen> createState() => _CallScreenState();
@@ -92,6 +99,8 @@ class _CallScreenState extends State<CallScreen> {
                   activeCall: activeCall,
                   localRenderer: _localRenderer,
                   remoteRenderer: _remoteRenderer,
+                  localePlaceholderBuilder: widget.localePlaceholderBuilder,
+                  remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
                 );
               } else {
                 return const CallInitScaffold();

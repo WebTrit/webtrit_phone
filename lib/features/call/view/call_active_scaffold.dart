@@ -10,17 +10,21 @@ import '../call.dart';
 
 class CallActiveScaffold extends StatefulWidget {
   const CallActiveScaffold({
-    Key? key,
+    super.key,
     required this.speaker,
     required this.activeCall,
     required this.localRenderer,
     required this.remoteRenderer,
-  }) : super(key: key);
+    required this.localePlaceholderBuilder,
+    required this.remotePlaceholderBuilder,
+  });
 
   final bool? speaker;
   final ActiveCall activeCall;
   final RTCVideoRenderer localRenderer;
   final RTCVideoRenderer remoteRenderer;
+  final WidgetBuilder? localePlaceholderBuilder;
+  final WidgetBuilder? remotePlaceholderBuilder;
 
   @override
   CallActiveScaffoldState createState() => CallActiveScaffoldState();
@@ -67,7 +71,10 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       child: SizedBox(
                         width: mediaQueryData.size.width,
                         height: mediaQueryData.size.height,
-                        child: RTCVideoView(widget.remoteRenderer),
+                        child: RTCVideoView(
+                          widget.remoteRenderer,
+                          placeholderBuilder: widget.remotePlaceholderBuilder,
+                        ),
                       ),
                     ),
                   ),
@@ -89,6 +96,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                 : RTCVideoView(
                                     widget.localRenderer,
                                     mirror: widget.activeCall.frontCamera!,
+                                    placeholderBuilder: widget.localePlaceholderBuilder,
                                   ),
                           ),
                           Positioned(
