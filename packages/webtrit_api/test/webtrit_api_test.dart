@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
+import 'package:version/version.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
