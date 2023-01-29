@@ -34,7 +34,7 @@ class Actionpad extends StatelessWidget {
           style: textButtonStyles?.callStart,
           child: Icon(
             video ? Icons.videocam : Icons.call,
-            size: Theme.of(context).textTheme.headline2!.fontSize,
+            size: Theme.of(context).textTheme.displayMedium!.fontSize,
           ),
         ),
         TextButton(

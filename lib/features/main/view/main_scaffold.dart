@@ -35,8 +35,8 @@ class MainScaffoldState extends State<MainScaffold> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        selectedLabelStyle: themeData.textTheme.caption,
-        unselectedLabelStyle: themeData.textTheme.caption,
+        selectedLabelStyle: themeData.textTheme.bodySmall,
+        unselectedLabelStyle: themeData.textTheme.bodySmall,
         currentIndex: widget.flavor.index,
         onTap: (index) {
           context.goNamed(AppRoute.main, queryParams: {MainFlavor.queryParameterName: MainFlavor.values[index].name});

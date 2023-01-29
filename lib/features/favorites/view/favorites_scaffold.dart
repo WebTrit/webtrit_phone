@@ -36,12 +36,12 @@ class FavoritesScaffold extends StatelessWidget {
                     Icon(
                       Icons.star_outline,
                       size: 80,
-                      color: themeData.textTheme.caption!.color,
+                      color: themeData.textTheme.bodySmall!.color,
                     ),
                     const SizedBox(height: 10),
                     Text(
                       context.l10n.favorites_BodyCenter_empty,
-                      style: themeData.textTheme.subtitle1,
+                      style: themeData.textTheme.titleMedium,
                     ),
                   ],
                 ),

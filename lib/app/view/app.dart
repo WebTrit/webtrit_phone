@@ -100,7 +100,7 @@ class _AppState extends State<App> {
     );
   }
 
-  late final _router = GoRouter(
+  late final GoRouter _router = GoRouter(
     routes: [
       ShellRoute(
         builder: (context, state, child) {

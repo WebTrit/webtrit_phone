@@ -14,7 +14,7 @@ class GroupTitleListTile extends StatelessWidget {
     return ListTile(
       title: Text(
         titleData,
-        style: themeData.textTheme.bodyText2,
+        style: themeData.textTheme.bodyMedium,
       ),
       tileColor: themeData.colorScheme.surface,
     );

@@ -19,7 +19,7 @@ class OnboardingPicture extends StatelessWidget {
       ),
       child: Center(
         child: Assets.login.onboarding1.svg(
-          height: themeData.textTheme.headline5!.fontSize! * 10,
+          height: themeData.textTheme.headlineSmall!.fontSize! * 10,
         ),
       ),
     );

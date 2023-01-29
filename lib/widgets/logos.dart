@@ -59,11 +59,11 @@ class WebTritPhoneTextLogo extends StatelessWidget {
       children: [
         Text(
           EnvironmentConfig.APP_NAME,
-          style: themeData.textTheme.headline2,
+          style: themeData.textTheme.displayMedium,
         ),
         Text(
           'Phone',
-          style: themeData.textTheme.headline4,
+          style: themeData.textTheme.headlineMedium,
         ),
       ],
     );

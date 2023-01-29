@@ -270,7 +270,6 @@ class ThemeProvider extends InheritedWidget {
       dividerColor: colorScheme.outline,
       unselectedWidgetColor: colorScheme.onSurface,
       indicatorColor: colorScheme.primary,
-      toggleableActiveColor: colorScheme.primary,
       // TYPOGRAPHY & ICONOGRAPHY
       // COMPONENT THEMES
       appBarTheme: appBarTheme(colorScheme),

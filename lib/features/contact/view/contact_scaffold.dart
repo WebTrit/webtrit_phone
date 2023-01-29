@@ -37,7 +37,7 @@ class ContactScaffold extends StatelessWidget {
                 ),
                 Text(
                   contact.name,
-                  style: themeData.textTheme.headline4,
+                  style: themeData.textTheme.headlineMedium,
                   textAlign: TextAlign.center,
                 ),
                 const Divider(
