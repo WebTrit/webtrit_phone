@@ -227,8 +227,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_validationCoreUrlError => 'Please enter a valid URL';
 
   @override
-  String login_LoginIncompatibleCoreVersionExceptionError(String actual, String expected) {
-    return 'An incompatible instance version provided, please contact the administrator of your system (actual: $actual, expected: $expected)';
+  String login_IncompatibleCoreVersionExceptionError(String actual, String expectedGreaterThanOrEqual, String expectedLessThan) {
+    return 'An incompatible instance version provided, please contact the administrator of your system (actual: $actual, expected: >=$expectedGreaterThanOrEqual <$expectedLessThan)';
   }
 
   @override

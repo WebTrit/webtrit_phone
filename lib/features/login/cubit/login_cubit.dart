@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/core_version.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 
@@ -280,23 +281,12 @@ class LoginCubit extends Cubit<LoginState> {
   }
 }
 
-class LoginIncompatibleCoreVersionException implements Exception {
-  const LoginIncompatibleCoreVersionException(this.actual, this.expected);
-
-  final Version actual;
-  final Version expected;
-}
 
 Future<void> _verifyCoreVersion(
   WebtritApiClient webtritApiClient,
 ) async {
-  final actualVersion = (await webtritApiClient.info()).core.version;
-  final expectedVersion = Version(0, 4, 0);
-  if (actualVersion >= expectedVersion) {
-    return;
-  } else {
-    throw LoginIncompatibleCoreVersionException(actualVersion, expectedVersion);
-  }
+  final actualCoreVersion = (await webtritApiClient.info()).core.version;
+  CoreVersion.expected().verifyCompatibility(actualCoreVersion);
 }
 
 Future<SessionOtpProvisional> _sessionOtpRequestDemo(

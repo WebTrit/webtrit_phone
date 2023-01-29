@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
+import 'package:webtrit_phone/app/core_version.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
 import '../cubit/login_cubit.dart';
@@ -12,9 +13,12 @@ extension LoginStateErrorL10n on LoginState {
   String? errorL10n(BuildContext context) {
     final error = this.error;
     if (error != null) {
-      if (error is LoginIncompatibleCoreVersionException) {
-        return context.l10n
-            .login_LoginIncompatibleCoreVersionExceptionError(error.actual.toString(), error.expected.toString());
+      if (error is IncompatibleCoreVersionException) {
+        return context.l10n.login_IncompatibleCoreVersionExceptionError(
+          error.actual.toString(),
+          error.expectedGreaterThanOrEqual.toString(),
+          error.expectedLessThan.toString(),
+        );
       } else if (error is FormatException) {
         return context.l10n.login_FormatExceptionError;
       } else if (error is TlsException) {
