@@ -514,8 +514,8 @@ abstract class AppLocalizations {
   /// No description provided for @login_IncompatibleCoreVersionExceptionError.
   ///
   /// In en, this message translates to:
-  /// **'An incompatible instance version provided, please contact the administrator of your system (actual: {actual}, expected: >={expectedGreaterThanOrEqual} <{expectedLessThan})'**
-  String login_IncompatibleCoreVersionExceptionError(String actual, String expectedGreaterThanOrEqual, String expectedLessThan);
+  /// **'An incompatible instance version provided, please contact the administrator of your system (actual: {actual}, supported: {supportedConstraint})'**
+  String login_IncompatibleCoreVersionExceptionError(String actual, String supportedConstraint);
 
   /// No description provided for @login_FormatExceptionError.
   ///

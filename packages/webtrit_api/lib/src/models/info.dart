@@ -1,7 +1,7 @@
 // ignore_for_file: invalid_annotation_target
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:version/version.dart';
+import 'package:pub_semver/pub_semver.dart';
 
 import 'converters/converters.dart';
 

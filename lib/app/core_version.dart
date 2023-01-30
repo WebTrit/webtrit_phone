@@ -1,37 +1,48 @@
-import 'package:version/version.dart';
+import 'package:pub_semver/pub_semver.dart';
 
 class CoreVersion {
-  static final expectedGreaterThanOrEqual = Version(0, 4, 0);
-  static final expectedLessThan = Version(0, 5, 0);
+  static final supportedConstraint = VersionConstraint.parse('>=0.4.0 <0.5.0');
 
-  const CoreVersion(this.greaterThanOrEqual, this.lessThan);
+  const CoreVersion(this.constraint);
 
-  CoreVersion.expected() : this(expectedGreaterThanOrEqual, expectedLessThan);
+  CoreVersion.supported() : this(supportedConstraint);
 
-  final Version greaterThanOrEqual; // Allows the given version or any greater one
-  final Version lessThan; // Allows any version lower than the specified one but not that version itself
+  final VersionConstraint constraint;
 
-  void verifyCompatibility(Version actual) {
-    if (actual >= greaterThanOrEqual && actual < lessThan) {
+  void verify(Version actualVersion) {
+    if (constraint.allows(actualVersion)) {
       return;
     } else {
       throw IncompatibleCoreVersionException(
-        actual,
-        greaterThanOrEqual,
-        lessThan,
+        actualVersion,
+        constraint,
       );
     }
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        other is CoreVersion && runtimeType == other.runtimeType && constraint == other.constraint;
+  }
+
+  @override
+  int get hashCode {
+    return runtimeType.hashCode ^ constraint.hashCode;
+  }
+
+  @override
+  String toString() {
+    return constraint.toString();
   }
 }
 
 class IncompatibleCoreVersionException implements Exception {
   const IncompatibleCoreVersionException(
     this.actual,
-    this.expectedGreaterThanOrEqual,
-    this.expectedLessThan,
+    this.supportedConstraint,
   );
 
   final Version actual;
-  final Version expectedGreaterThanOrEqual;
-  final Version expectedLessThan;
+  final VersionConstraint supportedConstraint;
 }

@@ -286,7 +286,7 @@ Future<void> _verifyCoreVersion(
   WebtritApiClient webtritApiClient,
 ) async {
   final actualCoreVersion = (await webtritApiClient.info()).core.version;
-  CoreVersion.expected().verifyCompatibility(actualCoreVersion);
+  CoreVersion.supported().verify(actualCoreVersion);
 }
 
 Future<SessionOtpProvisional> _sessionOtpRequestDemo(

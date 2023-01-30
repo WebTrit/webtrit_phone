@@ -16,8 +16,7 @@ extension LoginStateErrorL10n on LoginState {
       if (error is IncompatibleCoreVersionException) {
         return context.l10n.login_IncompatibleCoreVersionExceptionError(
           error.actual.toString(),
-          error.expectedGreaterThanOrEqual.toString(),
-          error.expectedLessThan.toString(),
+          error.supportedConstraint.toString(),
         );
       } else if (error is FormatException) {
         return context.l10n.login_FormatExceptionError;
