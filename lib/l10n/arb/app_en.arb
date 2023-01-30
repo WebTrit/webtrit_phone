@@ -244,8 +244,8 @@
   "login_validationCoreUrlError": "Please enter a valid URL",
   "@login_validationCoreUrlError": {
   },
-  "login_IncompatibleCoreVersionExceptionError": "An incompatible instance version provided, please contact the administrator of your system (actual: {actual}, supported: {supportedConstraint})",
-  "@login_IncompatibleCoreVersionExceptionError": {
+  "login_CoreVersionUnsupportedExceptionError": "An incompatible instance version provided, please contact the administrator of your system (actual: {actual}, supported: {supportedConstraint})",
+  "@login_CoreVersionUnsupportedExceptionError": {
     "placeholders": {
       "actual": {
         "type": "String"

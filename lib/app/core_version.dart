@@ -13,7 +13,7 @@ class CoreVersion {
     if (constraint.allows(actualVersion)) {
       return;
     } else {
-      throw IncompatibleCoreVersionException(
+      throw CoreVersionUnsupportedException(
         actualVersion,
         constraint,
       );
@@ -37,8 +37,8 @@ class CoreVersion {
   }
 }
 
-class IncompatibleCoreVersionException implements Exception {
-  const IncompatibleCoreVersionException(
+class CoreVersionUnsupportedException implements Exception {
+  const CoreVersionUnsupportedException(
     this.actual,
     this.supportedConstraint,
   );

@@ -511,11 +511,11 @@ abstract class AppLocalizations {
   /// **'Please enter a valid URL'**
   String get login_validationCoreUrlError;
 
-  /// No description provided for @login_IncompatibleCoreVersionExceptionError.
+  /// No description provided for @login_CoreVersionUnsupportedExceptionError.
   ///
   /// In en, this message translates to:
   /// **'An incompatible instance version provided, please contact the administrator of your system (actual: {actual}, supported: {supportedConstraint})'**
-  String login_IncompatibleCoreVersionExceptionError(String actual, String supportedConstraint);
+  String login_CoreVersionUnsupportedExceptionError(String actual, String supportedConstraint);
 
   /// No description provided for @login_FormatExceptionError.
   ///

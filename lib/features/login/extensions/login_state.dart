@@ -13,8 +13,8 @@ extension LoginStateErrorL10n on LoginState {
   String? errorL10n(BuildContext context) {
     final error = this.error;
     if (error != null) {
-      if (error is IncompatibleCoreVersionException) {
-        return context.l10n.login_IncompatibleCoreVersionExceptionError(
+      if (error is CoreVersionUnsupportedException) {
+        return context.l10n.login_CoreVersionUnsupportedExceptionError(
           error.actual.toString(),
           error.supportedConstraint.toString(),
         );

@@ -18,9 +18,9 @@ void main() {
     expect(() => coreVersion.verify(Version(0, 1, 0, pre: 'alpha.1')), returnsNormally);
     expect(() => coreVersion.verify(Version(0, 1, 0, pre: 'beta.1')), returnsNormally);
     expect(() => coreVersion.verify(Version(0, 1, 5)), returnsNormally);
-    expect(() => coreVersion.verify(Version(0, 0, 0)), throwsA(isA<IncompatibleCoreVersionException>()));
-    expect(() => coreVersion.verify(Version(0, 2, 0, pre: 'alpha')), throwsA(isA<IncompatibleCoreVersionException>()));
-    expect(() => coreVersion.verify(Version(0, 2, 0)), throwsA(isA<IncompatibleCoreVersionException>()));
+    expect(() => coreVersion.verify(Version(0, 0, 0)), throwsA(isA<CoreVersionUnsupportedException>()));
+    expect(() => coreVersion.verify(Version(0, 2, 0, pre: 'alpha')), throwsA(isA<CoreVersionUnsupportedException>()));
+    expect(() => coreVersion.verify(Version(0, 2, 0)), throwsA(isA<CoreVersionUnsupportedException>()));
   });
 
   test('==', () {
