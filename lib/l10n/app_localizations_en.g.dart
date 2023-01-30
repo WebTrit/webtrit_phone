@@ -79,6 +79,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get main_BottomNavigationBarItemLabel_keypad => 'Keypad';
 
   @override
+  String get main_CompatibilityIssueDialog_title => 'Compatibility issue';
+
+  @override
+  String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(String actual, String supportedConstraint) {
+    return 'Incompatible PortaPhone instance version, please contact the administrator of your system (actual: $actual, supported: $supportedConstraint)';
+  }
+
+  @override
+  String get main_CompatibilityIssueDialogActions_logout => 'Logout';
+
+  @override
+  String get main_CompatibilityIssueDialogActions_verify => 'Check again';
+
+  @override
   String get call_FailureAcknowledgeDialog_title => 'Failure';
 
   @override

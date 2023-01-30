@@ -235,6 +235,30 @@ abstract class AppLocalizations {
   /// **'Keypad'**
   String get main_BottomNavigationBarItemLabel_keypad;
 
+  /// No description provided for @main_CompatibilityIssueDialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Compatibility issue'**
+  String get main_CompatibilityIssueDialog_title;
+
+  /// No description provided for @main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError.
+  ///
+  /// In en, this message translates to:
+  /// **'Incompatible PortaPhone instance version, please contact the administrator of your system (actual: {actual}, supported: {supportedConstraint})'**
+  String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(String actual, String supportedConstraint);
+
+  /// No description provided for @main_CompatibilityIssueDialogActions_logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get main_CompatibilityIssueDialogActions_logout;
+
+  /// No description provided for @main_CompatibilityIssueDialogActions_verify.
+  ///
+  /// In en, this message translates to:
+  /// **'Check again'**
+  String get main_CompatibilityIssueDialogActions_verify;
+
   /// No description provided for @call_FailureAcknowledgeDialog_title.
   ///
   /// In en, this message translates to:

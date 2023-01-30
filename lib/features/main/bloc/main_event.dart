@@ -1,12 +1,13 @@
 part of 'main_bloc.dart';
 
-abstract class MainEvent extends Equatable {
+abstract class MainEvent {
   const MainEvent();
 }
 
 class MainStarted extends MainEvent {
   const MainStarted();
+}
 
-  @override
-  List<Object?> get props => [];
+class MainCompatibilityVerified extends MainEvent {
+  const MainCompatibilityVerified();
 }

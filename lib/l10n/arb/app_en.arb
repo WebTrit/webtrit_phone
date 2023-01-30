@@ -78,6 +78,28 @@
   "main_BottomNavigationBarItemLabel_keypad": "Keypad",
   "@main_BottomNavigationBarItemLabel_keypad": {
   },
+  "main_CompatibilityIssueDialog_title": "Compatibility issue",
+  "@main_CompatibilityIssueDialog_title": {
+  },
+  "main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError": "Incompatible PortaPhone instance version, please contact the administrator of your system (actual: {actual}, supported: {supportedConstraint})",
+  "@main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError": {
+    "placeholders": {
+      "actual": {
+        "type": "String"
+      },
+      "supportedConstraint": {
+        "type": "String"
+      }
+    }
+  },
+  "main_CompatibilityIssueDialogActions_logout": "Logout",
+  "@main_CompatibilityIssueDialogActions_logout": {
+  },
+  "main_CompatibilityIssueDialogActions_verify": "Check again",
+  "@main_CompatibilityIssueDialogActions_verify": {
+  },
+
+
 
   "call_FailureAcknowledgeDialog_title": "Failure",
   "@call_FailureAcknowledgeDialog_title": {

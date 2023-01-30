@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/app/routes.dart';
-import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/blocs/blocs.dart';
+
+import '../main.dart';
 
 class MainScaffold extends StatefulWidget {
   const MainScaffold(
@@ -20,7 +23,7 @@ class MainScaffoldState extends State<MainScaffold> {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    return Scaffold(
+    final scaffold = Scaffold(
       body: SafeArea(
         top: false,
         child: Stack(
@@ -48,6 +51,28 @@ class MainScaffoldState extends State<MainScaffold> {
           );
         }).toList(),
       ),
+    );
+
+    return BlocListener<MainBloc, MainState>(
+      listener: (context, state) async {
+        final error = state.error;
+        if (error != null) {
+          final result = await CompatibilityIssueDialog.show(
+            context,
+            error: error,
+          );
+          if (!mounted) return;
+          switch (result) {
+            case CompatibilityIssueDialogResult.logout:
+              context.read<AppBloc>().add(const AppLogouted());
+              break;
+            default:
+              context.read<MainBloc>().add(const MainCompatibilityVerified());
+              break;
+          }
+        }
+      },
+      child: scaffold,
     );
   }
 }

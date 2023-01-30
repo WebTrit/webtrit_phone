@@ -1,8 +1,8 @@
 part of 'main_bloc.dart';
 
-class MainState extends Equatable {
-  const MainState();
-
-  @override
-  List<Object?> get props => [];
+@freezed
+class MainState with _$MainState {
+  const factory MainState({
+    Object? error,
+  }) = _MainState;
 }
