@@ -104,6 +104,11 @@ class _MainShellState extends State<MainShell> {
             token: context.read<AppBloc>().state.token!,
           ),
         ),
+        RepositoryProvider<InfoRepository>(
+          create: (context) => InfoRepository(
+            webtritApiClient: context.read<WebtritApiClient>(),
+          ),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
