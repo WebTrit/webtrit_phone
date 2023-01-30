@@ -391,6 +391,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_FormatExceptionError => 'A response issue occurred';
 
   @override
+  String get settings_TlsExceptionError => 'A secure networking issue occurred';
+
+  @override
   String get settings_SocketExceptionError => 'A network issue occurred';
 
   @override

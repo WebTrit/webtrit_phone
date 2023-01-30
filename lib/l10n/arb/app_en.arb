@@ -430,6 +430,9 @@
   "settings_FormatExceptionError": "A response issue occurred",
   "@settings_FormatExceptionError": {
   },
+  "settings_TlsExceptionError": "A secure networking issue occurred",
+  "@settings_TlsExceptionError": {
+  },
   "settings_SocketExceptionError": "A network issue occurred",
   "@settings_SocketExceptionError": {
   },

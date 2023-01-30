@@ -811,6 +811,12 @@ abstract class AppLocalizations {
   /// **'A response issue occurred'**
   String get settings_FormatExceptionError;
 
+  /// No description provided for @settings_TlsExceptionError.
+  ///
+  /// In en, this message translates to:
+  /// **'A secure networking issue occurred'**
+  String get settings_TlsExceptionError;
+
   /// No description provided for @settings_SocketExceptionError.
   ///
   /// In en, this message translates to:

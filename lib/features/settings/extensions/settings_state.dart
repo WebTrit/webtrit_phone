@@ -13,6 +13,8 @@ extension SettingsStateErrorL10n on SettingsState {
     if (error != null) {
       if (error is FormatException) {
         return context.l10n.settings_FormatExceptionError;
+      } else if (error is TlsException) {
+        return context.l10n.settings_TlsExceptionError;
       } else if (error is SocketException) {
         return context.l10n.settings_SocketExceptionError;
       } else if (error is TypeError) {
