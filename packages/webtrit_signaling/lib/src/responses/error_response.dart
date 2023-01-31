@@ -27,23 +27,12 @@ class ErrorResponse extends Response {
       throw ArgumentError.value(responseTypeValue, Response.typeKey, 'Not equal $typeValue');
     }
 
-    final errorValue = json['error'];
-    if (errorValue is Map<String, dynamic>) {
-      return ErrorResponse(
-        transaction: json['transaction'],
-        line: json['line'],
-        callId: json['call_id'],
-        code: errorValue['code'],
-        reason: errorValue['reason'],
-      );
-    } else {
-      return ErrorResponse(
-        transaction: json['transaction'],
-        line: json['line'],
-        callId: json['call_id'],
-        code: -1,
-        reason: errorValue.toString(),
-      );
-    }
+    return ErrorResponse(
+      transaction: json['transaction'],
+      line: json['line'],
+      callId: json['call_id'],
+      code: json['code'],
+      reason: json['reason'],
+    );
   }
 }

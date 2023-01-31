@@ -9,7 +9,8 @@ void main() {
     final errorResponseJson = '''
     {
       "response": "error",
-      "error": "some error message 1"
+      "code": -1,
+      "reason": "some error message 1"
     }
     ''';
 
@@ -29,13 +30,14 @@ void main() {
     {
       "response": "error",
       "line": 0,
-      "error": "some error message 2"
+      "code": -2,
+      "reason": "some error message 2"
     }
     ''';
 
     final errorResponse = ErrorResponse(
       line: 0,
-      code: -1,
+      code: -2,
       reason: 'some error message 2',
     );
 
@@ -49,16 +51,14 @@ void main() {
     final errorResponseJson = '''
     {
       "response": "error",
-      "error": {
-        "code": 123,
-        "reason": "some error reason 1"
-      }
+      "code": 123,
+      "reason": "some error reason 3"
     }
     ''';
 
     final errorResponse = ErrorResponse(
       code: 123,
-      reason: 'some error reason 1',
+      reason: 'some error reason 3',
     );
 
     expect(
@@ -73,10 +73,8 @@ void main() {
       "response": "error",
       "line": 1,
       "call_id": "qwerty",
-      "error": {
-        "code": 456,
-        "reason": "some error reason 2"
-      }
+      "code": 456,
+      "reason": "some error reason 4"
     }
     ''';
 
@@ -84,7 +82,7 @@ void main() {
       line: 1,
       callId: 'qwerty',
       code: 456,
-      reason: 'some error reason 2',
+      reason: 'some error reason 4',
     );
 
     expect(
