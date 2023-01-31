@@ -269,7 +269,6 @@ class ThemeProvider extends InheritedWidget {
       // COLOR
       primaryColorLight: colorScheme.secondaryContainer,
       primaryColorDark: colorScheme.onSecondaryContainer,
-      dividerColor: colorScheme.outline,
       unselectedWidgetColor: colorScheme.onSurface,
       indicatorColor: colorScheme.primary,
       // TYPOGRAPHY & ICONOGRAPHY

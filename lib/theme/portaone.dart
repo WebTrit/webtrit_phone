@@ -31,6 +31,7 @@ const portaoneThemeSettings = ThemeSettings(
     tertiary: _green,
     error: _red,
     outline: _light,
+    outlineVariant: _light,
     background: _white,
     surface: _light,
     onSurface: _darkBlue,
