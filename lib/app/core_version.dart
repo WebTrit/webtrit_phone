@@ -1,7 +1,7 @@
 import 'package:pub_semver/pub_semver.dart';
 
 class CoreVersion {
-  static final supportedConstraint = VersionConstraint.parse('>=0.4.0 <0.5.0');
+  static final supportedConstraint = VersionConstraint.parse('>=0.5.0-alpha <0.6.0');
 
   const CoreVersion(this.constraint);
 
