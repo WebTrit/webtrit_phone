@@ -35,6 +35,7 @@ class ColorSchemeOverride {
     this.errorContainer,
     this.onErrorContainer,
     this.outline,
+    this.outlineVariant,
     this.background,
     this.onBackground,
     this.surface,
@@ -45,6 +46,7 @@ class ColorSchemeOverride {
     this.onInverseSurface,
     this.inversePrimary,
     this.shadow,
+    this.scrim,
     this.surfaceTint,
   });
 
@@ -65,6 +67,7 @@ class ColorSchemeOverride {
   final Color? errorContainer;
   final Color? onErrorContainer;
   final Color? outline;
+  final Color? outlineVariant;
   final Color? background;
   final Color? onBackground;
   final Color? surface;
@@ -75,5 +78,6 @@ class ColorSchemeOverride {
   final Color? onInverseSurface;
   final Color? inversePrimary;
   final Color? shadow;
+  final Color? scrim;
   final Color? surfaceTint;
 }

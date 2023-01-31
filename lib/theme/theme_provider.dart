@@ -63,6 +63,7 @@ class ThemeProvider extends InheritedWidget {
       errorContainer: colorSchemeOverride?.errorContainer,
       onErrorContainer: colorSchemeOverride?.onErrorContainer,
       outline: colorSchemeOverride?.outline,
+      outlineVariant: colorSchemeOverride?.outlineVariant,
       background: colorSchemeOverride?.background,
       onBackground: colorSchemeOverride?.onBackground,
       surface: colorSchemeOverride?.surface,
@@ -73,6 +74,7 @@ class ThemeProvider extends InheritedWidget {
       onInverseSurface: colorSchemeOverride?.onInverseSurface,
       inversePrimary: colorSchemeOverride?.inversePrimary,
       shadow: colorSchemeOverride?.shadow,
+      scrim: colorSchemeOverride?.scrim,
       surfaceTint: colorSchemeOverride?.surfaceTint,
     );
   }
