@@ -70,7 +70,9 @@ class RecentsScaffoldState extends State<RecentsScaffold> with SingleTickerProvi
             child: ExtTabBar(
               width: mediaQueryData.size.width * 0.6,
               height: kMainAppBarBottomTabHeight - kMainAppBarBottomPaddingGap,
-              tabs: _recentsFilters.map((value) => Tab(child: Text(value.l10n(context), softWrap: false))).toList(),
+              tabs: [
+                for (final recentsFilter in _recentsFilters) Tab(text: recentsFilter.l10n(context)),
+              ],
               controller: _tabController,
             ),
           ),
