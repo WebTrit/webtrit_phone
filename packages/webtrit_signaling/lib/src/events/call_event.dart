@@ -45,6 +45,7 @@ abstract class CallEvent extends LineEvent {
     HoldingEvent.typeValue: HoldingEvent.fromJson,
     IncomingCallEvent.typeValue: IncomingCallEvent.fromJson,
     MissedCallEvent.typeValue: MissedCallEvent.fromJson,
+    NotifyEvent.typeValue: NotifyEvent.fromJson,
     ProceedingEvent.typeValue: ProceedingEvent.fromJson,
     ProgressEvent.typeValue: ProgressEvent.fromJson,
     ResumingEvent.typeValue: ResumingEvent.fromJson,
