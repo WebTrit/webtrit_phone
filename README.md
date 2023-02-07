@@ -22,3 +22,7 @@ Contributions are always welcome!
 ## License
 
 [MIT LICENSE](LICENSE)
+
+## Acknowledgments
+
+This project is tested with [BrowserStack](https://www.browserstack.com/).
