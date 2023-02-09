@@ -1,5 +1,7 @@
 abstract class Constants {
   static Map<String, String> allNormalizationMappings = {
+    '*': '*',
+    '#': '#',
     '+': '+',
     '＋': '+',
     '0': '0',
