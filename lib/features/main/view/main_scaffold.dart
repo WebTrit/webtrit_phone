@@ -56,10 +56,16 @@ class MainScaffoldState extends State<MainScaffold> {
     return BlocListener<MainBloc, MainState>(
       listener: (context, state) async {
         final error = state.error;
+        final updateStoreViewUrl = state.updateStoreViewUrl;
         if (error != null) {
           final result = await CompatibilityIssueDialog.show(
             context,
             error: error,
+            onUpdatePressed: updateStoreViewUrl == null
+                ? null
+                : () {
+                    context.read<MainBloc>().add(MainAppUpdated(updateStoreViewUrl));
+                  },
           );
           if (!mounted) return;
           switch (result) {

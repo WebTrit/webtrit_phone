@@ -4,20 +4,22 @@ import 'package:webtrit_phone/app/core_version.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
 enum CompatibilityIssueDialogResult {
-  logout,
   verify,
+  logout,
 }
 
 class CompatibilityIssueDialog extends StatelessWidget {
   static Future<CompatibilityIssueDialogResult?> show(
     BuildContext context, {
     required Object error,
+    VoidCallback? onUpdatePressed,
   }) {
     return showDialog<CompatibilityIssueDialogResult>(
       context: context,
       builder: (context) {
         return CompatibilityIssueDialog._(
           error: error,
+          onUpdatePressed: onUpdatePressed,
         );
       },
       barrierDismissible: false,
@@ -27,9 +29,11 @@ class CompatibilityIssueDialog extends StatelessWidget {
   const CompatibilityIssueDialog._({
     Key? key,
     required this.error,
+    this.onUpdatePressed,
   }) : super(key: key);
 
   final Object error;
+  final VoidCallback? onUpdatePressed;
 
   @override
   Widget build(BuildContext context) {
@@ -42,16 +46,21 @@ class CompatibilityIssueDialog extends StatelessWidget {
         _errorL10n(context),
       ),
       actions: [
-        TextButton(
-          child: Text(context.l10n.main_CompatibilityIssueDialogActions_logout),
-          onPressed: () {
-            Navigator.of(context).pop(CompatibilityIssueDialogResult.logout);
-          },
-        ),
+        if (onUpdatePressed != null)
+          TextButton(
+            onPressed: onUpdatePressed,
+            child: Text(context.l10n.main_CompatibilityIssueDialogActions_update),
+          ),
         TextButton(
           child: Text(context.l10n.main_CompatibilityIssueDialogActions_verify),
           onPressed: () {
             Navigator.of(context).pop(CompatibilityIssueDialogResult.verify);
+          },
+        ),
+        TextButton(
+          child: Text(context.l10n.main_CompatibilityIssueDialogActions_logout),
+          onPressed: () {
+            Navigator.of(context).pop(CompatibilityIssueDialogResult.logout);
           },
         ),
       ],

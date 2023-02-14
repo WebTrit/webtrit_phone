@@ -8,6 +8,12 @@ class MainStarted extends MainEvent {
   const MainStarted();
 }
 
-class MainCompatibilityVerified extends MainEvent {
-  const MainCompatibilityVerified();
+@Freezed(copyWith: false)
+class MainCompatibilityVerified with _$MainCompatibilityVerified implements MainEvent {
+  const factory MainCompatibilityVerified() = _MainCompatibilityVerified;
+}
+
+@Freezed(copyWith: false)
+class MainAppUpdated with _$MainAppUpdated implements MainEvent {
+  const factory MainAppUpdated(Uri storeViewUrl) = _MainAppUpdated;
 }

@@ -87,10 +87,13 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get main_CompatibilityIssueDialogActions_logout => 'Logout';
+  String get main_CompatibilityIssueDialogActions_update => 'Update';
 
   @override
   String get main_CompatibilityIssueDialogActions_verify => 'Check again';
+
+  @override
+  String get main_CompatibilityIssueDialogActions_logout => 'Logout';
 
   @override
   String get call_FailureAcknowledgeDialog_title => 'Failure';

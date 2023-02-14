@@ -92,14 +92,15 @@
       }
     }
   },
-  "main_CompatibilityIssueDialogActions_logout": "Logout",
-  "@main_CompatibilityIssueDialogActions_logout": {
+  "main_CompatibilityIssueDialogActions_update": "Update",
+  "@main_CompatibilityIssueDialogActions_update": {
   },
   "main_CompatibilityIssueDialogActions_verify": "Check again",
   "@main_CompatibilityIssueDialogActions_verify": {
   },
-
-
+  "main_CompatibilityIssueDialogActions_logout": "Logout",
+  "@main_CompatibilityIssueDialogActions_logout": {
+  },
 
   "call_FailureAcknowledgeDialog_title": "Failure",
   "@call_FailureAcknowledgeDialog_title": {

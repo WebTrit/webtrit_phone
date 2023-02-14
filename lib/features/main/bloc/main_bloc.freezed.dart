@@ -15,8 +15,75 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
+mixin _$MainCompatibilityVerified {}
+
+/// @nodoc
+
+class _$_MainCompatibilityVerified implements _MainCompatibilityVerified {
+  const _$_MainCompatibilityVerified();
+
+  @override
+  String toString() {
+    return 'MainCompatibilityVerified()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_MainCompatibilityVerified);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+}
+
+abstract class _MainCompatibilityVerified implements MainCompatibilityVerified {
+  const factory _MainCompatibilityVerified() = _$_MainCompatibilityVerified;
+}
+
+/// @nodoc
+mixin _$MainAppUpdated {
+  Uri get storeViewUrl => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+
+class _$_MainAppUpdated implements _MainAppUpdated {
+  const _$_MainAppUpdated(this.storeViewUrl);
+
+  @override
+  final Uri storeViewUrl;
+
+  @override
+  String toString() {
+    return 'MainAppUpdated(storeViewUrl: $storeViewUrl)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_MainAppUpdated &&
+            (identical(other.storeViewUrl, storeViewUrl) ||
+                other.storeViewUrl == storeViewUrl));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, storeViewUrl);
+}
+
+abstract class _MainAppUpdated implements MainAppUpdated {
+  const factory _MainAppUpdated(final Uri storeViewUrl) = _$_MainAppUpdated;
+
+  @override
+  Uri get storeViewUrl;
+}
+
+/// @nodoc
 mixin _$MainState {
   Object? get error => throw _privateConstructorUsedError;
+  Uri? get updateStoreViewUrl => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $MainStateCopyWith<MainState> get copyWith =>
@@ -28,7 +95,7 @@ abstract class $MainStateCopyWith<$Res> {
   factory $MainStateCopyWith(MainState value, $Res Function(MainState) then) =
       _$MainStateCopyWithImpl<$Res, MainState>;
   @useResult
-  $Res call({Object? error});
+  $Res call({Object? error, Uri? updateStoreViewUrl});
 }
 
 /// @nodoc
@@ -45,9 +112,14 @@ class _$MainStateCopyWithImpl<$Res, $Val extends MainState>
   @override
   $Res call({
     Object? error = freezed,
+    Object? updateStoreViewUrl = freezed,
   }) {
     return _then(_value.copyWith(
       error: freezed == error ? _value.error : error,
+      updateStoreViewUrl: freezed == updateStoreViewUrl
+          ? _value.updateStoreViewUrl
+          : updateStoreViewUrl // ignore: cast_nullable_to_non_nullable
+              as Uri?,
     ) as $Val);
   }
 }
@@ -59,7 +131,7 @@ abstract class _$$_MainStateCopyWith<$Res> implements $MainStateCopyWith<$Res> {
       __$$_MainStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Object? error});
+  $Res call({Object? error, Uri? updateStoreViewUrl});
 }
 
 /// @nodoc
@@ -74,9 +146,14 @@ class __$$_MainStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? error = freezed,
+    Object? updateStoreViewUrl = freezed,
   }) {
     return _then(_$_MainState(
       error: freezed == error ? _value.error : error,
+      updateStoreViewUrl: freezed == updateStoreViewUrl
+          ? _value.updateStoreViewUrl
+          : updateStoreViewUrl // ignore: cast_nullable_to_non_nullable
+              as Uri?,
     ));
   }
 }
@@ -84,14 +161,16 @@ class __$$_MainStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_MainState implements _MainState {
-  const _$_MainState({this.error});
+  const _$_MainState({this.error, this.updateStoreViewUrl});
 
   @override
   final Object? error;
+  @override
+  final Uri? updateStoreViewUrl;
 
   @override
   String toString() {
-    return 'MainState(error: $error)';
+    return 'MainState(error: $error, updateStoreViewUrl: $updateStoreViewUrl)';
   }
 
   @override
@@ -99,12 +178,14 @@ class _$_MainState implements _MainState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_MainState &&
-            const DeepCollectionEquality().equals(other.error, error));
+            const DeepCollectionEquality().equals(other.error, error) &&
+            (identical(other.updateStoreViewUrl, updateStoreViewUrl) ||
+                other.updateStoreViewUrl == updateStoreViewUrl));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(error));
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(error), updateStoreViewUrl);
 
   @JsonKey(ignore: true)
   @override
@@ -114,10 +195,13 @@ class _$_MainState implements _MainState {
 }
 
 abstract class _MainState implements MainState {
-  const factory _MainState({final Object? error}) = _$_MainState;
+  const factory _MainState(
+      {final Object? error, final Uri? updateStoreViewUrl}) = _$_MainState;
 
   @override
   Object? get error;
+  @override
+  Uri? get updateStoreViewUrl;
   @override
   @JsonKey(ignore: true)
   _$$_MainStateCopyWith<_$_MainState> get copyWith =>
