@@ -12,3 +12,5 @@ const kInset = kMinInteractiveDimension / 2;
 const kMainAppBarBottomTabHeight = 42.0;
 const kMainAppBarBottomSearchHeight = kMinInteractiveDimension;
 const kMainAppBarBottomPaddingGap = 6.0;
+
+const kBlankUri = 'about:blank';

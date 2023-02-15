@@ -57,7 +57,8 @@ dependencies:
   url_launcher: ^6.1.8
   uuid: ^3.0.7
   validators: ^3.0.0
-  webview_flutter: ^3.0.4
+  webview_flutter: ^4.0.5
+  webview_flutter_web: ^0.2.2+1
 
   webtrit_api:
     path: ./packages/webtrit_api

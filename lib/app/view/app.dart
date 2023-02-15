@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
@@ -125,7 +126,7 @@ class _AppState extends State<App> {
             name: AppRoute.webRegistration,
             path: '/web-registration',
             builder: (context, state) => WebRegistrationScreen(
-              initialUrl: state.queryParams['initialUrl'] ?? '',
+              initialUri: Uri.parse(state.queryParams['initialUrl'] ?? kBlankUri),
             ),
           ),
           GoRoute(

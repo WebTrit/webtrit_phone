@@ -8,6 +8,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
 const String kDemoPage = '''
@@ -40,54 +41,89 @@ const String kDemoPage = '''
 class WebRegistrationScreen extends StatefulWidget {
   const WebRegistrationScreen({
     Key? key,
-    required this.initialUrl,
+    required this.initialUri,
   }) : super(key: key);
 
-  final String initialUrl;
+  final Uri initialUri;
 
   @override
   WebRegistrationScreenState createState() => WebRegistrationScreenState();
 }
 
 class WebRegistrationScreenState extends State<WebRegistrationScreen> {
-  late final WebViewController _controller;
+  final WebViewController _webViewController = WebViewController();
+
+  Color? _backgroundColorCache;
 
   @override
-  Widget build(BuildContext context) {
-    return WebView(
-      initialUrl: widget.initialUrl,
-      javascriptMode: JavascriptMode.unrestricted,
-      javascriptChannels: {
-        JavascriptChannel(
-            name: 'WebTritTokenChannel',
-            onMessageReceived: (JavascriptMessage message) async {
-              final token = message.message;
-              await SecureStorage().writeToken(token);
+  void initState() {
+    super.initState();
+
+    () async {
+      await Future.wait([
+        _webViewController.enableZoom(false),
+        _webViewController.setJavaScriptMode(JavaScriptMode.unrestricted),
+        _webViewController.addJavaScriptChannel(
+          'WebTritTokenChannel',
+          onMessageReceived: (JavaScriptMessage message) async {
+            final token = message.message;
+            await SecureStorage().writeToken(token);
+
+            if (!mounted) return;
+            context.goNamed(AppRoute.main);
+          },
+        ),
+        _webViewController.setNavigationDelegate(
+          NavigationDelegate(
+            onPageFinished: (url) {
+              _webViewController.runJavaScript(_definesCssVariablesJavascript(context));
+            },
+            onWebResourceError: (error) async {
+              final result = await _showWebResourceErrorDialog(context, error);
 
               if (!mounted) return;
-              context.goNamed(AppRoute.main);
-            }),
-      },
-      onWebViewCreated: (WebViewController controller) {
-        _controller = controller;
-      },
-      onPageStarted: (url) async {
-        //
-      },
-      onPageFinished: (url) async {
-        _controller.runJavascript(_definesCssVariablesJavascript(context));
-      },
-      onWebResourceError: (WebResourceError error) async {
-        final result = await _showWebResourceErrorDialog(context, error);
-        if (result == null) {
-          if (!mounted) return;
-          context.goNamed(AppRoute.login);
-        } else {
-          _controller.loadUrl(result ? widget.initialUrl : _demoInitialUrl());
-        }
-      },
-      initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
-    );
+              if (result == null) {
+                context.goNamed(AppRoute.login);
+              } else {
+                _webViewController.loadRequest(result ? widget.initialUri : _demoInitialUri());
+              }
+            },
+          ),
+        ),
+      ]);
+      await _webViewController.loadRequest(widget.initialUri);
+    }();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final themeData = Theme.of(context);
+    final backgroundColor = themeData.colorScheme.background;
+    if (_backgroundColorCache != backgroundColor) {
+      _backgroundColorCache = backgroundColor;
+      _webViewController.setBackgroundColor(backgroundColor);
+    }
+  }
+
+  @override
+  void didUpdateWidget(WebRegistrationScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.initialUri != oldWidget.initialUri) {
+      _webViewController.loadRequest(widget.initialUri);
+    }
+  }
+
+  @override
+  void dispose() {
+    () async {
+      await _webViewController.setNavigationDelegate(NavigationDelegate());
+      await _webViewController.loadBlank();
+    }();
+
+    super.dispose();
   }
 
   Future<bool?> _showWebResourceErrorDialog(BuildContext context, WebResourceError error) {
@@ -120,8 +156,13 @@ class WebRegistrationScreenState extends State<WebRegistrationScreen> {
     );
   }
 
-  String _demoInitialUrl() {
-    return 'data:text/html;base64,${base64Encode(const Utf8Encoder().convert(kDemoPage))}';
+  @override
+  Widget build(BuildContext context) {
+    return WebViewWidget(controller: _webViewController);
+  }
+
+  Uri _demoInitialUri() {
+    return Uri.parse('data:text/html;base64,${base64Encode(const Utf8Encoder().convert(kDemoPage))}');
   }
 
   String _definesCssVariablesJavascript(BuildContext context) {

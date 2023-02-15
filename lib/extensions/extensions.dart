@@ -10,3 +10,4 @@ export 'iterable.dart';
 export 'locale.dart';
 export 'string.dart';
 export 'theme_mode.dart';
+export 'web_view_controller.dart';
