@@ -32,24 +32,25 @@ class PermissionsScaffold extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           } else {
-            return Padding(
+            final body = Padding(
               padding: const EdgeInsets.all(kInset),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const SizedBox(height: kInset * 5),
+                  const SizedBox(height: kInset * 2),
                   Icon(
                     Icons.settings_suggest,
                     color: Theme.of(context).colorScheme.primary,
                     size: kInset * 6,
                   ),
-                  const SizedBox(height: kInset * 3),
+                  const SizedBox(height: kInset * 2),
                   Text(
                     context.l10n.permission_Text_description,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                   const Spacer(),
+                  const SizedBox(height: kInset),
                   OutlinedButton(
                     onPressed:
                         !state.status.isInitial ? null : () => context.read<PermissionsCubit>().requestPermissions(),
@@ -58,6 +59,20 @@ class PermissionsScaffold extends StatelessWidget {
                   ),
                 ],
               ),
+            );
+            return LayoutBuilder(
+              builder: (context, viewportConstraints) {
+                return SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: viewportConstraints.maxHeight,
+                    ),
+                    child: IntrinsicHeight(
+                      child: body,
+                    ),
+                  ),
+                );
+              },
             );
           }
         },
