@@ -835,6 +835,12 @@ abstract class AppLocalizations {
   /// **'Are you sure you want to logout?'**
   String get settings_LogoutConfirmDialog_content;
 
+  /// No description provided for @settings_AboutText_CoreVersionUndefined.
+  ///
+  /// In en, this message translates to:
+  /// **'?.?.?'**
+  String get settings_AboutText_CoreVersionUndefined;
+
   /// No description provided for @settings_FormatExceptionError.
   ///
   /// In en, this message translates to:

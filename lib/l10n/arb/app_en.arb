@@ -447,6 +447,9 @@
   "settings_LogoutConfirmDialog_content": "Are you sure you want to logout?",
   "@settings_LogoutConfirmDialog_content": {
   },
+  "settings_AboutText_CoreVersionUndefined": "?.?.?",
+  "@settings_AboutText_CoreVersionUndefined": {
+  },
   "settings_FormatExceptionError": "A response issue occurred",
   "@settings_FormatExceptionError": {
   },

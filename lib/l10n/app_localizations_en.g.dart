@@ -405,6 +405,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_LogoutConfirmDialog_content => 'Are you sure you want to logout?';
 
   @override
+  String get settings_AboutText_CoreVersionUndefined => '?.?.?';
+
+  @override
   String get settings_FormatExceptionError => 'A response issue occurred';
 
   @override

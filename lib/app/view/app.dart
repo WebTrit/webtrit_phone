@@ -211,7 +211,25 @@ class _AppState extends State<App> {
                       GoRoute(
                         name: MainRoute.settingsAbout,
                         path: 'about',
-                        builder: (context, state) => const AboutScreen(),
+                        builder: (context, state) {
+                          if (EnvironmentConfig.APP_ABOUT_URL.isNotEmpty) {
+                            return WebAboutScreen(
+                              baseAppAboutUrl: Uri.parse(EnvironmentConfig.APP_ABOUT_URL),
+                              packageInfo: PackageInfo(),
+                              infoRepository: context.read<InfoRepository>(),
+                            );
+                          } else {
+                            return BlocProvider(
+                              create: (context) {
+                                return AboutBloc(
+                                  packageInfo: PackageInfo(),
+                                  infoRepository: context.read<InfoRepository>(),
+                                )..add(const AboutStarted());
+                              },
+                              child: const AboutScreen(),
+                            );
+                          }
+                        },
                       ),
                       GoRoute(
                         name: MainRoute.settingsHelp,
