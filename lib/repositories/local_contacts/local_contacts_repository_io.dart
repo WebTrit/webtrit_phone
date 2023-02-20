@@ -18,7 +18,10 @@ class LocalContactsRepository implements ILocalContactsRepository {
   late StreamController<List<LocalContact>> _controller;
   late int _listenedCounter;
 
-  List<LocalContact> _localContacts = [];
+  @override
+  Future<bool> requestPermission() {
+    return FlutterContacts.requestPermission();
+  }
 
   @override
   Stream<List<LocalContact>> contacts() {
@@ -27,8 +30,8 @@ class LocalContactsRepository implements ILocalContactsRepository {
 
   @override
   Future<void> load() async {
-    _localContacts = await _listContacts();
-    _controller.add(_localContacts);
+    final contacts = await _listContacts();
+    _controller.add(contacts);
   }
 
   void _onListenCallback() {
@@ -48,10 +51,6 @@ class LocalContactsRepository implements ILocalContactsRepository {
   }
 
   Future<List<LocalContact>> _listContacts() async {
-    if (!await FlutterContacts.requestPermission()) {
-      throw LocalContactsRepositoryPermissionException();
-    }
-
     final contacts = await FlutterContacts.getContacts(
       withProperties: true,
       withThumbnail: true,

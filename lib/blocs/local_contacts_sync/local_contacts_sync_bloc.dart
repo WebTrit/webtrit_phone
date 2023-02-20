@@ -1,3 +1,5 @@
+import 'package:flutter/widgets.dart';
+
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
@@ -12,7 +14,7 @@ part 'local_contacts_sync_event.dart';
 
 part 'local_contacts_sync_state.dart';
 
-class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSyncState> {
+class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSyncState> with WidgetsBindingObserver {
   LocalContactsSyncBloc({
     required this.localContactsRepository,
     required this.appDatabase,
@@ -20,29 +22,48 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
     on<LocalContactsSyncStarted>(_onStarted, transformer: restartable());
     on<LocalContactsSyncRefreshed>(_onRefreshed, transformer: droppable());
     on<_LocalContactsSyncUpdated>(_onUpdated, transformer: droppable());
+
+    WidgetsBinding.instance.addObserver(this);
   }
 
   final LocalContactsRepository localContactsRepository;
   final AppDatabase appDatabase;
 
+  @override
+  Future<void> close() async {
+    WidgetsBinding.instance.removeObserver(this);
+    await super.close();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState lifecycleState) {
+    if (PlatformInfo().isAndroid) {
+      if (lifecycleState == AppLifecycleState.resumed && state is LocalContactsSyncPermissionFailure) {
+        add(const LocalContactsSyncStarted());
+      }
+    }
+  }
+
   void _onStarted(LocalContactsSyncStarted event, Emitter<LocalContactsSyncState> emit) async {
-    final localContactsForEachFuture = emit.onEach<List<LocalContact>>(
-      localContactsRepository.contacts(),
-      onData: (contacts) => add(_LocalContactsSyncUpdated(contacts: contacts)),
-      onError: (error, stackTrace) => add(const _LocalContactsSyncUpdated(contacts: [])),
-    );
+    if (!await localContactsRepository.requestPermission()) {
+      emit(const LocalContactsSyncPermissionFailure());
+    } else {
+      final localContactsForEachFuture = emit.onEach<List<LocalContact>>(
+        localContactsRepository.contacts(),
+        onData: (contacts) => add(_LocalContactsSyncUpdated(contacts: contacts)),
+        onError: (error, stackTrace) => add(const _LocalContactsSyncUpdated(contacts: [])),
+      );
 
-    add(const LocalContactsSyncRefreshed());
+      add(const LocalContactsSyncRefreshed());
 
-    await localContactsForEachFuture;
+      await localContactsForEachFuture;
+    }
   }
 
   void _onRefreshed(LocalContactsSyncRefreshed event, Emitter<LocalContactsSyncState> emit) async {
     emit(const LocalContactsSyncRefreshInProgress());
     try {
       await localContactsRepository.load();
-    } on LocalContactsRepositoryPermissionException {
-      emit(const LocalContactsSyncPermissionFailure());
     } catch (error) {
       emit(const LocalContactsSyncRefreshFailure());
     }
