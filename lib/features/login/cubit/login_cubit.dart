@@ -56,8 +56,9 @@ class LoginCubit extends Cubit<LoginState> {
     if (prevStepIndex == 1 && state.coreUrlInput.value.isEmpty) {
       prevStepIndex--;
     }
+    final effectivePrevStep = prevStepIndex >= 0 ? LoginStep.values[prevStepIndex] : state.step;
     emit(state.copyWith(
-      step: LoginStep.values[prevStepIndex],
+      step: effectivePrevStep,
       status: LoginStatus.input,
     ));
   }
