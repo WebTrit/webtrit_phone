@@ -282,7 +282,6 @@ class LoginCubit extends Cubit<LoginState> {
   }
 }
 
-
 Future<void> _verifyCoreVersion(
   WebtritApiClient webtritApiClient,
 ) async {
