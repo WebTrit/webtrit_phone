@@ -21,13 +21,21 @@ void main() {
     final appAnalyticsRepository = AppAnalyticsRepository(instance: FirebaseAnalytics.instance);
 
     return Provider<AppDatabase>(
-      create: (context) => AppDatabase.connect(
-        createAppDatabaseConnection(
-          'db.sqlite',
-          logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
-        ),
-      ),
-      dispose: (context, value) => value.close(),
+      create: (context) {
+        final appDatabase = _AppDatabaseWithAppLifecycleStateObserver.connect(
+          createAppDatabaseConnection(
+            'db.sqlite',
+            logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
+          ),
+        );
+        WidgetsBinding.instance.addObserver(appDatabase);
+        return appDatabase;
+      },
+      dispose: (context, value) {
+        final appDatabase = value as _AppDatabaseWithAppLifecycleStateObserver;
+        WidgetsBinding.instance.removeObserver(appDatabase);
+        appDatabase.close();
+      },
       child: MultiRepositoryProvider(
         providers: [
           RepositoryProvider.value(value: logRecordsRepository),
@@ -44,4 +52,15 @@ void main() {
       ),
     );
   });
+}
+
+class _AppDatabaseWithAppLifecycleStateObserver extends AppDatabase with WidgetsBindingObserver {
+  _AppDatabaseWithAppLifecycleStateObserver.connect(connection) : super.connect(connection);
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.detached) {
+      close();
+    }
+  }
 }
