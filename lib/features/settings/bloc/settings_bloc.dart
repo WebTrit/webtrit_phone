@@ -60,8 +60,13 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     } catch (e, stackTrace) {
       if (emit.isDone) return;
 
-      emit(state.copyWith(error: e, progress: false));
-      _logger.warning('_onStarted', e, stackTrace);
+      emit(state.copyWith(
+        progress: false,
+        info: null,
+        registerStatus: appPreferences.getRegisterStatus(),
+        error: e,
+      ));
+      _logger.warning('_onRefreshed', e, stackTrace);
     }
   }
 
