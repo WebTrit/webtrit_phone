@@ -22,8 +22,8 @@ class ContactsLocalTabBloc extends Bloc<ContactsLocalTabEvent, ContactsLocalTabS
     required this.contactsSearchBloc,
     required this.localContactsSyncBloc,
   }) : super(const ContactsLocalTabState()) {
-    on<ContactsLocalTabStarted>(_handleContactsLocalTabStarted, transformer: restartable());
-    on<ContactsLocalTabRefreshed>(_handleContactsLocalTabRefreshed, transformer: droppable());
+    on<ContactsLocalTabStarted>(_onStarted, transformer: restartable());
+    on<ContactsLocalTabRefreshed>(_onRefreshed, transformer: droppable());
 
     WidgetsBinding.instance.addObserver(this);
   }
@@ -47,7 +47,7 @@ class ContactsLocalTabBloc extends Bloc<ContactsLocalTabEvent, ContactsLocalTabS
     }
   }
 
-  Future<void> _handleContactsLocalTabStarted(
+  Future<void> _onStarted(
       ContactsLocalTabStarted event, Emitter<ContactsLocalTabState> emit) async {
     final watchContactsForEachFuture = emit.forEach(
       contactsRepository.watchContacts(event.search, ContactSourceType.local),
@@ -76,7 +76,7 @@ class ContactsLocalTabBloc extends Bloc<ContactsLocalTabEvent, ContactsLocalTabS
     ]);
   }
 
-  Future<void> _handleContactsLocalTabRefreshed(
+  Future<void> _onRefreshed(
       ContactsLocalTabRefreshed event, Emitter<ContactsLocalTabState> emit) async {
     localContactsSyncBloc.add(const LocalContactsSyncRefreshed());
   }

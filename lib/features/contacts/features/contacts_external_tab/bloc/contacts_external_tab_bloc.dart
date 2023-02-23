@@ -22,15 +22,15 @@ class ContactsExternalTabBloc extends Bloc<ContactsExternalTabEvent, ContactsExt
     required this.contactsSearchBloc,
     required this.externalContactsSyncBloc,
   }) : super(const ContactsExternalTabState()) {
-    on<ContactsExternalTabStarted>(_handleContactsExternalTabStarted, transformer: restartable());
-    on<ContactsExternalTabRefreshed>(_handleContactsExternalTabRefreshed, transformer: droppable());
+    on<ContactsExternalTabStarted>(_onStarted, transformer: restartable());
+    on<ContactsExternalTabRefreshed>(_onRefreshed, transformer: droppable());
   }
 
   final ContactsRepository contactsRepository;
   final ContactsSearchBloc contactsSearchBloc;
   final ExternalContactsSyncBloc externalContactsSyncBloc;
 
-  Future<void> _handleContactsExternalTabStarted(
+  Future<void> _onStarted(
       ContactsExternalTabStarted event, Emitter<ContactsExternalTabState> emit) async {
     final watchContactsForEachFuture = emit.forEach(
       contactsRepository.watchContacts(event.search, ContactSourceType.external),
@@ -59,7 +59,7 @@ class ContactsExternalTabBloc extends Bloc<ContactsExternalTabEvent, ContactsExt
     ]);
   }
 
-  Future<void> _handleContactsExternalTabRefreshed(
+  Future<void> _onRefreshed(
       ContactsExternalTabRefreshed event, Emitter<ContactsExternalTabState> emit) async {
     externalContactsSyncBloc.add(const ExternalContactsSyncRefreshed());
   }
