@@ -1,11 +1,9 @@
-import 'package:flutter/widgets.dart';
-
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
-import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';
@@ -16,7 +14,7 @@ part 'contacts_local_tab_event.dart';
 
 part 'contacts_local_tab_state.dart';
 
-class ContactsLocalTabBloc extends Bloc<ContactsLocalTabEvent, ContactsLocalTabState> with WidgetsBindingObserver {
+class ContactsLocalTabBloc extends Bloc<ContactsLocalTabEvent, ContactsLocalTabState> {
   ContactsLocalTabBloc({
     required this.contactsRepository,
     required this.contactsSearchBloc,
@@ -24,28 +22,11 @@ class ContactsLocalTabBloc extends Bloc<ContactsLocalTabEvent, ContactsLocalTabS
   }) : super(const ContactsLocalTabState()) {
     on<ContactsLocalTabStarted>(_onStarted, transformer: restartable());
     on<ContactsLocalTabRefreshed>(_onRefreshed, transformer: droppable());
-
-    WidgetsBinding.instance.addObserver(this);
   }
 
   final ContactsRepository contactsRepository;
   final ContactsSearchBloc contactsSearchBloc;
   final LocalContactsSyncBloc localContactsSyncBloc;
-
-  @override
-  Future<void> close() async {
-    WidgetsBinding.instance.removeObserver(this);
-    await super.close();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState lifecycleState) {
-    if (PlatformInfo().isAndroid) {
-      if (lifecycleState == AppLifecycleState.resumed && state.status == ContactsLocalTabStatus.permissionFailure) {
-        localContactsSyncBloc.add(const LocalContactsSyncRefreshed());
-      }
-    }
-  }
 
   Future<void> _onStarted(
       ContactsLocalTabStarted event, Emitter<ContactsLocalTabState> emit) async {
