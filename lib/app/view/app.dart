@@ -47,8 +47,8 @@ class _AppState extends State<App> {
   }
 
   @override
-  void dispose() async {
-    await appBloc.close();
+  void dispose() {
+    appBloc.close();
     super.dispose();
   }
 
