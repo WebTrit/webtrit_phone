@@ -11,8 +11,6 @@ WebTrit Phone application.
 * `WEBTRIT_PHONE_DEBUG_LEVEL` (_default **INFO**_)
 * `WEBTRIT_PHONE_DATABASE_LOG_STATEMENTS` (_default **false**_)
 
-### Build iOS app
-
 ### Build Android app
 
 Command line example:
@@ -25,6 +23,8 @@ flutter build appbundle
   --dart-define=WEBTRIT_PHONE_PERIODIC_POLLING=true
   --dart-define=WEBTRIT_PHONE_APP_TERMS_AND_CONDITIONS_URL=https://www.portaone.com/portaphone/installation
 ```
+
+### Build iOS app
 
 Command line example: 
 ```bash
