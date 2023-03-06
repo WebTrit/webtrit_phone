@@ -10,7 +10,7 @@ import 'package:webtrit_phone/app/app.dart';
 import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
-import 'package:webtrit_phone/pre_bootstrap.dart';
+import 'package:webtrit_phone/pre_bootstrap/pre_bootstrap.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 void main() {
