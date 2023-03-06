@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/app/assets.gen.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 
 class OnboardingPicture extends StatelessWidget {
   const OnboardingPicture({Key? key}) : super(key: key);
@@ -9,6 +9,9 @@ class OnboardingPicture extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQueryData = MediaQuery.of(context);
     final themeData = Theme.of(context);
+    final loginOnboarding = themeData.extension<GenImages>()?.loginOnboarding;
+    final loginOnboardingHeight = themeData.textTheme.headlineSmall!.fontSize! * 10;
+
     return Container(
       height: mediaQueryData.size.height / 2.5,
       decoration: BoxDecoration(
@@ -18,9 +21,12 @@ class OnboardingPicture extends StatelessWidget {
         ),
       ),
       child: Center(
-        child: Assets.login.onboarding1.svg(
-          height: themeData.textTheme.headlineSmall!.fontSize! * 10,
-        ),
+        child: loginOnboarding?.svg(
+              height: loginOnboardingHeight,
+            ) ??
+            SizedBox(
+              height: loginOnboardingHeight,
+            ),
       ),
     );
   }

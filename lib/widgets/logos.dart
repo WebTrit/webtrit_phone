@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/environment_config.dart';
-import 'package:webtrit_phone/app/assets.gen.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 
 class WebTritPhonePictureLogo extends StatelessWidget {
   const WebTritPhonePictureLogo({
@@ -24,16 +24,23 @@ class WebTritPhonePictureLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fontSize = titleStyle.fontSize!;
+    final themeData = Theme.of(context);
+    final logo = themeData.extension<GenImages>()?.logo;
+    final logoHeight = this.logoHeight ?? (logoWidth == null ? fontSize * 2.2 : null);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Assets.logo.svg(
-          width: logoWidth,
-          height: logoHeight ?? (logoWidth == null ? fontSize * 2.2 : null),
-          fit: logoFit,
-          alignment: logoAlignment,
-        ),
+        logo?.svg(
+              width: logoWidth,
+              height: logoHeight,
+              fit: logoFit,
+              alignment: logoAlignment,
+            ) ??
+            SizedBox(
+              width: logoWidth,
+              height: logoHeight,
+            ),
         SizedBox(
           height: dividerHeight ?? fontSize / 3,
         ),

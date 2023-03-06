@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../about.dart';
@@ -26,6 +26,7 @@ class AboutScreen extends StatelessWidget {
       },
       builder: (context, state) {
         final themeData = Theme.of(context);
+        final logo = themeData.extension<GenImages>()?.logo;
         final logoHeight = themeData.textTheme.displayLarge!.fontSize! * 1.5;
         final delimiterHeight = themeData.textTheme.titleLarge!.fontSize!;
         return Scaffold(
@@ -36,9 +37,10 @@ class AboutScreen extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Assets.logo.svg(
-                  height: logoHeight,
-                ),
+                if (logo != null)
+                  logo.svg(
+                    height: logoHeight,
+                  ),
                 Text(
                   state.appName,
                   style: themeData.textTheme.displaySmall,
