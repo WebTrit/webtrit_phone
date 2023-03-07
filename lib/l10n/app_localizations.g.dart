@@ -244,7 +244,7 @@ abstract class AppLocalizations {
   /// No description provided for @main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError.
   ///
   /// In en, this message translates to:
-  /// **'Incompatible PortaPhone instance version, please contact the administrator of your system (actual: {actual}, supported: {supportedConstraint})'**
+  /// **'Incompatible PortaPhone instance version, please contact the administrator of your system.\n\nInstance version:\n{actual}\n\nSupported version:\n{supportedConstraint}'**
   String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(String actual, String supportedConstraint);
 
   /// No description provided for @main_CompatibilityIssueDialogActions_update.

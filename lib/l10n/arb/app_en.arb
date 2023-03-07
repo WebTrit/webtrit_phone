@@ -81,7 +81,7 @@
   "main_CompatibilityIssueDialog_title": "Compatibility issue",
   "@main_CompatibilityIssueDialog_title": {
   },
-  "main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError": "Incompatible PortaPhone instance version, please contact the administrator of your system (actual: {actual}, supported: {supportedConstraint})",
+  "main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError": "Incompatible PortaPhone instance version, please contact the administrator of your system.\n\nInstance version:\n{actual}\n\nSupported version:\n{supportedConstraint}",
   "@main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError": {
     "placeholders": {
       "actual": {

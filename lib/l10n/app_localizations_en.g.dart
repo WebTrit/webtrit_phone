@@ -83,7 +83,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(String actual, String supportedConstraint) {
-    return 'Incompatible PortaPhone instance version, please contact the administrator of your system (actual: $actual, supported: $supportedConstraint)';
+    return 'Incompatible PortaPhone instance version, please contact the administrator of your system.\n\nInstance version:\n$actual\n\nSupported version:\n$supportedConstraint';
   }
 
   @override
