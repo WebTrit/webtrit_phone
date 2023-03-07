@@ -83,7 +83,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(String actual, String supportedConstraint) {
-    return 'Incompatible PortaPhone instance version, please contact the administrator of your system.\n\nInstance version:\n$actual\n\nSupported version:\n$supportedConstraint';
+    return 'Incompatible Cloud backend instance version, please contact the administrator of your system.\n\nInstance version:\n$actual\n\nSupported version:\n$supportedConstraint';
   }
 
   @override
@@ -158,7 +158,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get favorites_DeleteConfirmDialog_content => 'Are you sure you want to delete the current favorite?';
 
   @override
-  String get login_ButtonTooltip_signInToYourInstance => 'Sign in to your PortaPhone instance';
+  String get login_ButtonTooltip_signInToYourInstance => 'Sign in to your Cloud backend instance';
 
   @override
   String get login_Button_signUpToDemoInstance => 'Sign up';
@@ -170,13 +170,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_AppBarTitle_coreUrlAssign => '';
 
   @override
-  String get login_TextFieldLabelText_coreUrlAssign => 'Enter your PortaPhone instance URL';
+  String get login_TextFieldLabelText_coreUrlAssign => 'Enter your Cloud backend instance URL';
 
   @override
-  String get login_Text_coreUrlAssignPreDescription => 'In order to make calls via your own PortaPhone instance and your own PortaSwitch please enter the server\'s URL (as it was provided to you by your account manager) below.';
+  String get login_Text_coreUrlAssignPreDescription => 'In order to make calls via your own Cloud backend instance and your own PortaSwitch please enter the server\'s URL (as it was provided to you by your account manager) below.';
 
   @override
-  String get login_Text_coreUrlAssignPostDescription => 'If you do not yet have your own PortaPhone instance - contact sales team sales@portaone.com.';
+  String get login_Text_coreUrlAssignPostDescription => 'If you do not yet have your own Cloud backend instance - contact sales team sales@portaone.com.';
 
   @override
   String get login_Button_coreUrlAssignProceed => 'Proceed';
