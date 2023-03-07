@@ -90,6 +90,7 @@ class _CallInfoState extends State<CallInfo> {
         Text(
           widget.username,
           style: textTheme.displaySmall!.copyWith(color: widget.color),
+          textAlign: TextAlign.center,
         ),
         if (duration != null)
           Text(
