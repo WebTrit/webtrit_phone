@@ -117,7 +117,7 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void loginCoreUrlAssignSubmitted() async {
-    if (!state.status.isInput || !state.coreUrlInput.valid) {
+    if (!state.status.isInput || !state.coreUrlInput.isValid) {
       return;
     }
 
@@ -169,7 +169,7 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void loginOptRequestSubmitted() async {
-    if (!state.status.isInput || !(state.demo ? state.emailInput.valid : state.phoneInput.valid)) {
+    if (!state.status.isInput || !(state.demo ? state.emailInput.isValid : state.phoneInput.isValid)) {
       return;
     }
 
@@ -217,7 +217,7 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void loginOptVerifySubmitted() async {
-    if (state.status != LoginStatus.input || !state.codeInput.valid) {
+    if (state.status != LoginStatus.input || !state.codeInput.isValid) {
       return;
     }
 

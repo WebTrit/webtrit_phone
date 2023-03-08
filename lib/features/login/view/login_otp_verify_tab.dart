@@ -84,7 +84,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
                           decoration: InputDecoration(
                             labelText: context.l10n.login_TextFieldLabelText_otpVerifyCode,
                             helperText: '', // reserve space for validator message
-                            errorText: state.codeInput.errorL10n(context),
+                            errorText: state.codeInput.displayError?.l10n(context),
                             errorMaxLines: 3,
                           ),
                           keyboardType: TextInputType.number,
@@ -93,7 +93,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
                             AutofillHints.password,
                           ],
                           onChanged: (value) => context.read<LoginCubit>().loginOptVerifyCodeInputChanged(value),
-                          onFieldSubmitted: !state.codeInput.valid ? null : (_) => _onOtpVerifySubmitted(context),
+                          onFieldSubmitted: !state.codeInput.isValid ? null : (_) => _onOtpVerifySubmitted(context),
                         ),
                         const SizedBox(height: kInset / 8),
                         if (isOtpNotificationEmail)
@@ -132,7 +132,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
                             ),
                             const SizedBox(height: kInset / 4),
                             ElevatedButton(
-                              onPressed: !state.status.isInput || !state.codeInput.valid
+                              onPressed: !state.status.isInput || !state.codeInput.isValid
                                   ? null
                                   : () => _onOtpVerifySubmitted(context),
                               style: elevatedButtonStyles?.primary,

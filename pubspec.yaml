@@ -14,49 +14,49 @@ dependencies:
     sdk: flutter
 
   audio_session: ^0.1.13
-  bloc: ^8.1.0
-  bloc_concurrency: ^0.2.0
+  bloc: ^8.1.1
+  bloc_concurrency: ^0.2.1
   characters: ^1.2.0
   clock: ^1.1.0
   collection: ^1.16.0
-  connectivity_plus: ^3.0.2
+  connectivity_plus: ^3.0.3
   cross_file: ^0.3.3
-  device_info_plus: ^8.0.0
+  device_info_plus: ^8.1.0
   equatable: ^2.0.5
-  firebase_analytics: ^10.1.0
+  firebase_analytics: ^10.1.5
   firebase_app_installations: ^0.2.1
-  firebase_core: ^2.4.1
-  firebase_crashlytics: ^3.0.11
-  firebase_messaging: ^14.2.1
-  flutter_bloc: ^8.1.1
-  flutter_contacts: ^1.1.5
-  flutter_secure_storage: ^7.0.1
-  flutter_svg: ^1.1.6
-  flutter_webrtc: ^0.9.19
-  formz: ^0.4.1
+  firebase_core: ^2.7.1
+  firebase_crashlytics: ^3.0.16
+  firebase_messaging: ^14.2.6
+  flutter_bloc: ^8.1.2
+  flutter_contacts: ^1.1.6
+  flutter_secure_storage: ^8.0.0
+  flutter_svg: ^2.0.2
+  flutter_webrtc: ^0.9.24
+  formz: ^0.5.0
   freezed_annotation: ^2.2.0
-  go_router: ^6.0.1
-  google_fonts: ^3.0.1
+  go_router: ^6.2.0
+  google_fonts: ^4.0.3
   intl: ^0.17.0
   just_audio: ^0.9.31
   linkify: ^4.1.0
   logging: ^1.1.0
-  logging_appenders: ^1.0.0
+  logging_appenders: ^1.0.1
   meta: ^1.7.0
-  package_info_plus: ^3.0.2
+  package_info_plus: ^3.0.3
   path: ^1.8.2
-  path_provider: ^2.0.11
+  path_provider: ^2.0.13
   permission_handler: ^10.2.0
   permission_handler_web: ^0.0.2
   provider: ^6.0.5
   pub_semver: ^2.1.3
   rxdart: ^0.27.7
-  share_plus: ^6.3.0
-  shared_preferences: ^2.0.17
-  url_launcher: ^6.1.8
+  share_plus: ^6.3.1
+  shared_preferences: ^2.0.18
+  url_launcher: ^6.1.10
   uuid: ^3.0.7
   validators: ^3.0.0
-  webview_flutter: ^4.0.5
+  webview_flutter: ^4.0.6
   webview_flutter_web: ^0.2.2+1
 
   webtrit_api:
@@ -81,16 +81,12 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  bloc_test: ^9.1.0
+  bloc_test: ^9.1.1
   build_runner: ^2.3.3
-  flutter_gen_runner: ^5.1.0
-  flutter_launcher_icons: ^0.11.0
+  flutter_gen_runner: ^5.2.0
+  flutter_launcher_icons: ^0.12.0
   flutter_lints: ^2.0.1
   freezed: ^2.3.2
-
-# temporary solution to resole version solving failure
-dependency_overrides:
-  test_api: ^0.4.16
 
 flutter:
   generate: true

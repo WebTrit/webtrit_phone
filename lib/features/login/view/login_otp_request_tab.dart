@@ -68,7 +68,7 @@ class LoginOtpRequestTab extends StatelessWidget {
                             decoration: InputDecoration(
                               labelText: context.l10n.login_TextFieldLabelText_otpRequestEmail,
                               helperText: '', // reserve space for validator message
-                              errorText: state.emailInput.errorL10n(context),
+                              errorText: state.emailInput.displayError?.l10n(context),
                               errorMaxLines: 3,
                             ),
                             keyboardType: TextInputType.emailAddress,
@@ -76,7 +76,7 @@ class LoginOtpRequestTab extends StatelessWidget {
                               AutofillHints.email,
                             ],
                             onChanged: (value) => context.read<LoginCubit>().loginOptRequestEmailInputChanged(value),
-                            onFieldSubmitted: !state.emailInput.valid ? null : (_) => _onOtpRequestSubmitted(context),
+                            onFieldSubmitted: !state.emailInput.isValid ? null : (_) => _onOtpRequestSubmitted(context),
                           )
                         else
                           TextFormField(
@@ -85,7 +85,7 @@ class LoginOtpRequestTab extends StatelessWidget {
                             decoration: InputDecoration(
                               labelText: context.l10n.login_TextFieldLabelText_otpRequestPhone,
                               helperText: '', // reserve space for validator message
-                              errorText: state.phoneInput.errorL10n(context),
+                              errorText: state.phoneInput.displayError?.l10n(context),
                               errorMaxLines: 3,
                             ),
                             keyboardType: PlatformInfo().isIOS
@@ -96,7 +96,7 @@ class LoginOtpRequestTab extends StatelessWidget {
                             autocorrect: false,
                             enableSuggestions: false,
                             onChanged: (value) => context.read<LoginCubit>().loginOptRequestPhoneInputChanged(value),
-                            onFieldSubmitted: !state.phoneInput.valid ? null : (_) => _onOtpRequestSubmitted(context),
+                            onFieldSubmitted: !state.phoneInput.isValid ? null : (_) => _onOtpRequestSubmitted(context),
                           ),
                         const SizedBox(height: kInset / 8),
                         Linkify(
@@ -112,10 +112,10 @@ class LoginOtpRequestTab extends StatelessWidget {
                         const Spacer(),
                         const SizedBox(height: kInset),
                         ElevatedButton(
-                          onPressed:
-                              !state.status.isInput || !(state.demo ? state.emailInput.valid : state.phoneInput.valid)
-                                  ? null
-                                  : () => _onOtpRequestSubmitted(context),
+                          onPressed: !state.status.isInput ||
+                                  !(state.demo ? state.emailInput.isValid : state.phoneInput.isValid)
+                              ? null
+                              : () => _onOtpRequestSubmitted(context),
                           style: elevatedButtonStyles?.primary,
                           child: state.status.isInput
                               ? Text(context.l10n.login_Button_otpRequestProceed)

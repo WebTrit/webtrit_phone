@@ -76,14 +76,14 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
                           decoration: InputDecoration(
                             labelText: context.l10n.login_TextFieldLabelText_coreUrlAssign,
                             helperText: '', // reserve space for validator message
-                            errorText: state.coreUrlInput.errorL10n(context),
+                            errorText: state.coreUrlInput.displayError?.l10n(context),
                             errorMaxLines: 3,
                           ),
                           keyboardType: TextInputType.url,
                           autocorrect: false,
                           onChanged: (value) => context.read<LoginCubit>().loginCoreUrlAssignCoreUrlInputChanged(value),
                           onFieldSubmitted:
-                              !state.coreUrlInput.valid ? null : (_) => _onCoreUrlAssignSubmitted(context),
+                              !state.coreUrlInput.isValid ? null : (_) => _onCoreUrlAssignSubmitted(context),
                         ),
                         const SizedBox(height: kInset / 8),
                         Linkify(
@@ -98,7 +98,7 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
                         const Spacer(),
                         const SizedBox(height: kInset),
                         ElevatedButton(
-                          onPressed: !state.status.isInput || !state.coreUrlInput.valid
+                          onPressed: !state.status.isInput || !state.coreUrlInput.isValid
                               ? null
                               : () => _onCoreUrlAssignSubmitted(context),
                           style: elevatedButtonStyles?.primary,

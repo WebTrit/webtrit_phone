@@ -1,15 +1,12 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/data/data.dart';
@@ -44,8 +41,6 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       await PackageInfo.init();
       await SecureStorage.init();
 
-      await _precacheSvgPicture(); // TODO check this functionality
-
       Bloc.observer = _AppBlocObserver();
 
       runApp(await builder());
@@ -57,17 +52,6 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       }
     },
   );
-}
-
-Future<void> _precacheSvgPicture() async {
-  final assetManifestJson = await rootBundle.loadString('AssetManifest.json');
-  final assetManifest = jsonDecode(assetManifestJson) as Map<String, dynamic>;
-  await Future.wait(assetManifest.keys.where((String key) => key.endsWith('.svg')).map(
-        (assetName) => precachePicture(
-          ExactAssetPicture(SvgPicture.svgStringDecoderBuilder, assetName),
-          null,
-        ),
-      ));
 }
 
 Future<void> _initFirebase() async {
