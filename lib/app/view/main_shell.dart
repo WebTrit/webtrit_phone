@@ -142,6 +142,7 @@ class _MainShellState extends State<MainShell> {
             lazy: false,
             create: (context) {
               return ExternalContactsSyncBloc(
+                accountRepository: context.read<AccountRepository>(),
                 externalContactsRepository: context.read<ExternalContactsRepository>(),
                 appDatabase: context.read<AppDatabase>(),
               )..add(const ExternalContactsSyncStarted());
