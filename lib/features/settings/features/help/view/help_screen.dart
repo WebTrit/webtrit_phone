@@ -6,7 +6,9 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import '../../../widgets/widgets.dart';
 
 class HelpScreen extends StatelessWidget {
-  const HelpScreen({Key? key}) : super(key: key);
+  const HelpScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

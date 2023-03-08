@@ -10,7 +10,9 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../../../widgets/widgets.dart';
 
 class LanguageScreen extends StatelessWidget {
-  const LanguageScreen({Key? key}) : super(key: key);
+  const LanguageScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

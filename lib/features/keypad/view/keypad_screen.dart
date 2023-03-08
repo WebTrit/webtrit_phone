@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
-import '../../call/call.dart';
-import '../keypad.dart';
-import './keypad_scaffold.dart';
+import './keypad_view.dart';
 
 class KeypadScreen extends StatelessWidget {
-  const KeypadScreen({Key? key}) : super(key: key);
+  const KeypadScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => KeypadCubit(
-        callBloc: context.read<CallBloc>(),
-      ),
-      child: const KeypadScaffold(),
+    return Scaffold(
+      appBar: MainAppBar(),
+      body: const KeypadView(),
     );
   }
 }

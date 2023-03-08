@@ -4,7 +4,9 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class NetworkScreen extends StatelessWidget {
-  const NetworkScreen({Key? key}) : super(key: key);
+  const NetworkScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

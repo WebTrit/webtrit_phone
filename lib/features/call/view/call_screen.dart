@@ -7,6 +7,8 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../call.dart';
+import 'call_active_scaffold.dart';
+import 'call_init_scaffold.dart';
 
 class CallScreen extends StatefulWidget {
   const CallScreen({

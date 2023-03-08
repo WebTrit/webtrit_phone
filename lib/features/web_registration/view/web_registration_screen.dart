@@ -47,10 +47,10 @@ class WebRegistrationScreen extends StatefulWidget {
   final Uri initialUri;
 
   @override
-  WebRegistrationScreenState createState() => WebRegistrationScreenState();
+  State<WebRegistrationScreen> createState() => _WebRegistrationScreenState();
 }
 
-class WebRegistrationScreenState extends State<WebRegistrationScreen> {
+class _WebRegistrationScreenState extends State<WebRegistrationScreen> {
   final WebViewController _webViewController = WebViewController();
 
   Color? _backgroundColorCache;

@@ -10,7 +10,9 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../../../widgets/widgets.dart';
 
 class ThemeModeScreen extends StatelessWidget {
-  const ThemeModeScreen({Key? key}) : super(key: key);
+  const ThemeModeScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
