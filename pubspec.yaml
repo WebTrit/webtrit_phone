@@ -22,7 +22,6 @@ dependencies:
   connectivity_plus: ^3.0.2
   cross_file: ^0.3.3
   device_info_plus: ^8.0.0
-  dio: ^4.0.6
   equatable: ^2.0.5
   firebase_analytics: ^10.1.0
   firebase_app_installations: ^0.2.1
