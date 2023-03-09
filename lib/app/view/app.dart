@@ -384,16 +384,14 @@ class _AppState extends State<App> {
                 ],
               ),
             ],
-            // TODO: uncomment on https://github.com/flutter/packages/pull/2664 merged
-            // observers: [
-            //   context.read<AppAnalyticsRepository>().createObserver(),
-            // ],
+            observers: [
+              context.read<AppAnalyticsRepository>().createObserver(),
+            ],
           ),
         ],
-        // TODO: uncomment on https://github.com/flutter/packages/pull/2664 merged
-        // observers: [
-        //   context.read<AppAnalyticsRepository>().createObserver(),
-        // ],
+        observers: [
+          context.read<AppAnalyticsRepository>().createObserver(),
+        ],
       ),
     ],
     redirect: _redirect,
