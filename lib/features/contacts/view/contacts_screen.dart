@@ -9,13 +9,17 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../contacts.dart';
 
+typedef ContactSourceTypeWidgetBuilder = Widget Function(BuildContext context, ContactSourceType sourceType);
+
 class ContactsScreen extends StatelessWidget {
   const ContactsScreen({
     super.key,
     required this.sourceTypes,
+    required this.sourceTypeWidgetBuilder,
   });
 
   final List<ContactSourceType> sourceTypes;
+  final ContactSourceTypeWidgetBuilder sourceTypeWidgetBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +83,7 @@ class ContactsScreen extends StatelessWidget {
           ),
           body: TabBarView(
             children: [
-              for (final sourceType in sourceTypes) sourceType.builder(context),
+              for (final sourceType in sourceTypes) sourceTypeWidgetBuilder(context, sourceType),
             ],
           ),
         ),

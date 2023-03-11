@@ -9,7 +9,6 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 import '../../../contacts.dart';
-import '../contacts_local_tab.dart';
 
 class ContactsLocalTab extends StatelessWidget {
   const ContactsLocalTab({

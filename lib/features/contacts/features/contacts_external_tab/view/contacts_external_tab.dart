@@ -8,7 +8,6 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 import '../../../contacts.dart';
-import '../contacts_external_tab.dart';
 
 class ContactsExternalTab extends StatelessWidget {
   const ContactsExternalTab({

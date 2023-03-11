@@ -183,7 +183,10 @@ class _AppState extends State<App> {
                 },
                 builder: (context, state) {
                   final flavor = MainFlavor.values.byName(state.queryParams[MainFlavor.queryParameterName]!);
-                  final widget = MainScreen(flavor);
+                  final widget = MainScreen(
+                    flavor,
+                    flavorWidgetBuilder: _flavorWidgetBuilder,
+                  );
                   final provider = BlocProvider(
                     create: (context) {
                       return MainBloc(
@@ -427,6 +430,80 @@ class _AppState extends State<App> {
     }
 
     return null;
+  }
+
+  Widget _flavorWidgetBuilder(BuildContext context, MainFlavor flavor) {
+    switch (flavor) {
+      case MainFlavor.favorites:
+        const widget = FavoritesScreen();
+        final provider = BlocProvider(
+          create: (context) => FavoritesBloc(
+            favoritesRepository: context.read<FavoritesRepository>(),
+          )..add(const FavoritesStarted()),
+          child: widget,
+        );
+        return provider;
+      case MainFlavor.recents:
+        final widget = RecentsScreen(
+          initialFilter: context.read<RecentsBloc>().state.filter,
+        );
+        return widget;
+      case MainFlavor.contacts:
+        final widget = ContactsScreen(
+          sourceTypes: const [
+            ContactSourceType.local,
+            ContactSourceType.external,
+          ],
+          sourceTypeWidgetBuilder: _contactSourceTypeWidgetBuilder,
+        );
+        final provider = BlocProvider(
+          create: (context) => ContactsSearchBloc(),
+          child: widget,
+        );
+        return provider;
+      case MainFlavor.keypad:
+        const widget = KeypadScreen();
+        final provider = BlocProvider(
+          create: (context) => KeypadCubit(
+            callBloc: context.read<CallBloc>(),
+          ),
+          child: widget,
+        );
+        return provider;
+    }
+  }
+
+  Widget _contactSourceTypeWidgetBuilder(BuildContext context, ContactSourceType sourceType) {
+    switch (sourceType) {
+      case ContactSourceType.local:
+        const widget = ContactsLocalTab();
+        final provider = BlocProvider(
+          create: (context) {
+            final contactsSearchBloc = context.read<ContactsSearchBloc>();
+            return ContactsLocalTabBloc(
+              contactsRepository: context.read<ContactsRepository>(),
+              contactsSearchBloc: contactsSearchBloc,
+              localContactsSyncBloc: context.read<LocalContactsSyncBloc>(),
+            )..add(ContactsLocalTabStarted(search: contactsSearchBloc.state));
+          },
+          child: widget,
+        );
+        return provider;
+      case ContactSourceType.external:
+        const widget = ContactsExternalTab();
+        final provider = BlocProvider(
+          create: (context) {
+            final contactsSearchBloc = context.read<ContactsSearchBloc>();
+            return ContactsExternalTabBloc(
+              contactsRepository: context.read<ContactsRepository>(),
+              contactsSearchBloc: contactsSearchBloc,
+              externalContactsSyncBloc: context.read<ExternalContactsSyncBloc>(),
+            )..add(ContactsExternalTabStarted(search: contactsSearchBloc.state));
+          },
+          child: widget,
+        );
+        return provider;
+    }
   }
 }
 

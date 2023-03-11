@@ -7,13 +7,17 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 
 import '../main.dart';
 
+typedef MainFlavorWidgetBuilder = Widget Function(BuildContext context, MainFlavor flavor);
+
 class MainScreen extends StatelessWidget {
   const MainScreen(
     this.flavor, {
     super.key,
+    required this.flavorWidgetBuilder,
   });
 
   final MainFlavor flavor;
+  final MainFlavorWidgetBuilder flavorWidgetBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +27,13 @@ class MainScreen extends StatelessWidget {
         top: false,
         child: Stack(
           fit: StackFit.expand,
-          children: MainFlavor.values.map((flavor) {
-            return FlavorScreenHolder(
-              active: flavor == this.flavor,
-              builder: flavor.builder,
-            );
-          }).toList(),
+          children: [
+            for (final flavor in MainFlavor.values)
+              FlavorScreenHolder(
+                active: flavor == this.flavor,
+                builder: (context) => flavorWidgetBuilder(context, flavor),
+              )
+          ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
