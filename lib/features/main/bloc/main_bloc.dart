@@ -23,7 +23,7 @@ part 'main_state.dart';
 class MainBloc extends Bloc<MainEvent, MainState> {
   MainBloc({
     required this.infoRepository,
-    required this.storeInfoExtractor,
+    this.storeInfoExtractor,
   }) : super(const MainState()) {
     on<MainStarted>(_onStarted, transformer: restartable());
     on<MainCompatibilityVerified>(_onCompatibilityVerified, transformer: sequential());
@@ -31,7 +31,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   }
 
   final InfoRepository infoRepository;
-  final StoreInfoExtractor storeInfoExtractor;
+  final StoreInfoExtractor? storeInfoExtractor;
 
   final _logger = Logger('$MainBloc');
 
@@ -61,7 +61,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
       final appVersion = Version.parse(PackageInfo().version);
       StoreInfo? storeInfo;
       try {
-        storeInfo = await storeInfoExtractor.getStoreInfo(appPackageName);
+        storeInfo = await storeInfoExtractor?.getStoreInfo(appPackageName);
       } catch (e, stackTrace) {
         // this error can be ignored because, technically, this functionality is optional
         _logger.warning('storeInfoExtractor.getStoreInfo for $appPackageName error - ignore', e, stackTrace);
