@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
@@ -59,7 +60,7 @@ class _CallScreenState extends State<CallScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    final scaffold = FutureBuilder(
       future: _renderersInitialized,
       builder: (context, AsyncSnapshot<List<void>> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
@@ -115,6 +116,11 @@ class _CallScreenState extends State<CallScreen> {
           );
         }
       },
+    );
+
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: scaffold,
     );
   }
 }
