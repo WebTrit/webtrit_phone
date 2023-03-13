@@ -28,6 +28,8 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 
 import '../models/models.dart';
 
+export 'package:webtrit_callkeep/webtrit_callkeep.dart' show CallkeepHandle, CallkeepHandleType;
+
 part 'call_bloc.freezed.dart';
 
 part 'call_event.dart';
