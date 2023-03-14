@@ -28,8 +28,8 @@ class _SettingScreenScreenshotState extends State<SettingScreenScreenshot> {
 
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) {
+        PageRouteBuilder(
+          pageBuilder: (context, _, __) {
             return MultiBlocProvider(
               providers: [
                 BlocProvider<CallBloc>(
@@ -42,6 +42,8 @@ class _SettingScreenScreenshotState extends State<SettingScreenScreenshot> {
               child: const SettingsScreen(),
             );
           },
+          transitionDuration: Duration.zero,
+          reverseTransitionDuration: Duration.zero,
           fullscreenDialog: true,
         ),
       );

@@ -31,8 +31,8 @@ class _CallScreenScreenshotState extends State<CallScreenScreenshot> {
 
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) {
+        PageRouteBuilder(
+          pageBuilder: (context, _, __) {
             return MultiBlocProvider(
               providers: [
                 BlocProvider<CallBloc>(
@@ -51,6 +51,8 @@ class _CallScreenScreenshotState extends State<CallScreenScreenshot> {
               ),
             );
           },
+          transitionDuration: Duration.zero,
+          reverseTransitionDuration: Duration.zero,
           fullscreenDialog: true,
         ),
       );
