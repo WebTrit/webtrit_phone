@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:google_fonts/google_fonts.dart';
-
 import 'theme.dart';
 
 const _seedColor = Color(0xFFF5841F);
@@ -23,9 +21,9 @@ const _gradientBottom = CustomColor(
   blend: false,
 );
 
-final portaoneThemeSettings = ThemeSettings(
+const portaoneThemeSettings = ThemeSettings(
   seedColor: _seedColor,
-  lightColorSchemeOverride: const ColorSchemeOverride(
+  lightColorSchemeOverride: ColorSchemeOverride(
     primary: _seedColor,
     secondary: _darkBlue,
     secondaryContainer: _darkBlue30,
@@ -39,5 +37,5 @@ final portaoneThemeSettings = ThemeSettings(
     onSurface: _darkBlue,
   ),
   primaryGradientColors: [_gradientTop, _gradientBottom],
-  textTheme: GoogleFonts.montserratTextTheme(),
+  fontFamily: 'Montserrat',
 );
