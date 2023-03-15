@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
-// ignore: depend_on_referenced_packages
 import 'package:material_color_utilities/material_color_utilities.dart';
 
 import 'package:webtrit_phone/app/assets.gen.dart';
