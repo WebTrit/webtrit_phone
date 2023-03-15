@@ -90,10 +90,6 @@ class ThemeProvider extends InheritedWidget {
     }
   }
 
-  ShapeBorder get shapeMedium => RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      );
-
   InputDecorations inputDecorations(ColorScheme colors) {
     return const InputDecorations(
       search: InputDecoration(
