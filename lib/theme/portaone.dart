@@ -37,4 +37,5 @@ const portaoneThemeSettings = ThemeSettings(
     onSurface: _darkBlue,
   ),
   primaryGradientColors: [_gradientTop, _gradientBottom],
+  fontFamily: 'Montserrat',
 );

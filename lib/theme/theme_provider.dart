@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:google_fonts/google_fonts.dart';
 // ignore: depend_on_referenced_packages
 import 'package:material_color_utilities/material_color_utilities.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'package:webtrit_phone/app/assets.gen.dart';
 
@@ -79,6 +79,16 @@ class ThemeProvider extends InheritedWidget {
       scrim: colorSchemeOverride?.scrim,
       surfaceTint: colorSchemeOverride?.surfaceTint,
     );
+  }
+
+  TextTheme? textTheme(Brightness brightness) {
+    final fontFamily = settings.fontFamily;
+    if (fontFamily == null) {
+      return null;
+    } else {
+      final textTheme = brightness == Brightness.light ? ThemeData.light().textTheme : ThemeData.dark().textTheme;
+      return GoogleFonts.getTextTheme(fontFamily, textTheme);
+    }
   }
 
   ShapeBorder get shapeMedium => RoundedRectangleBorder(
@@ -263,10 +273,11 @@ class ThemeProvider extends InheritedWidget {
   }
 
   ThemeData? light([Color? targetColor]) {
-    final colorScheme = colors(Brightness.light, targetColor);
+    const brightness = Brightness.light;
+    final colorScheme = colors(brightness, targetColor);
     return ThemeData.from(
       colorScheme: colorScheme,
-      textTheme: GoogleFonts.montserratTextTheme(),
+      textTheme: textTheme(brightness),
       useMaterial3: true,
     ).copyWith(
       // GENERAL CONFIGURATIONValueNotifier
@@ -300,8 +311,9 @@ class ThemeProvider extends InheritedWidget {
   }
 
   ThemeData? dark([Color? targetColor]) {
+    const brightness = Brightness.dark;
     // ignore: unused_local_variable
-    final colorScheme = colors(Brightness.dark, targetColor);
+    final colorScheme = colors(brightness, targetColor);
     // TODO: Not implemented yet
     return null;
   }
