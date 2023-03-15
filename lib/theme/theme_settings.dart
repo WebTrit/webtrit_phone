@@ -8,12 +8,14 @@ class ThemeSettings {
     this.lightColorSchemeOverride,
     this.darkColorSchemeOverride,
     required this.primaryGradientColors,
+    required this.textTheme,
   });
 
   final Color seedColor;
   final ColorSchemeOverride? lightColorSchemeOverride;
   final ColorSchemeOverride? darkColorSchemeOverride;
   final List<CustomColor> primaryGradientColors;
+  final TextTheme textTheme;
 }
 
 class ColorSchemeOverride {

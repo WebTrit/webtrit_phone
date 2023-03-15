@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 // ignore: depend_on_referenced_packages
 import 'package:material_color_utilities/material_color_utilities.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'package:webtrit_phone/app/assets.gen.dart';
 
@@ -266,7 +265,7 @@ class ThemeProvider extends InheritedWidget {
     final colorScheme = colors(Brightness.light, targetColor);
     return ThemeData.from(
       colorScheme: colorScheme,
-      textTheme: GoogleFonts.montserratTextTheme(),
+      textTheme: settings.textTheme,
       useMaterial3: true,
     ).copyWith(
       // GENERAL CONFIGURATIONValueNotifier
