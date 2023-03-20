@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
-class ScreenshotApp extends StatelessWidget {
+class ScreenshotApp extends StatefulWidget {
   const ScreenshotApp({
     super.key,
     required this.appBloc,
@@ -16,6 +17,21 @@ class ScreenshotApp extends StatelessWidget {
 
   final AppBloc appBloc;
   final Widget child;
+
+  @override
+  State<ScreenshotApp> createState() => _ScreenshotAppState();
+}
+
+class _ScreenshotAppState extends State<ScreenshotApp> {
+  late final GoRouter _router = GoRouter(
+    initialLocation: '/',
+    routes: [
+      GoRoute(
+        path: '/',
+        builder: (context, state) => widget.child,
+      ),
+    ],
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +48,7 @@ class ScreenshotApp extends StatelessWidget {
                 previous.effectiveThemeMode != current.effectiveThemeMode,
             builder: (context, state) {
               final themeProvider = ThemeProvider.of(context);
-              return MaterialApp(
+              return MaterialApp.router(
                 locale: state.effectiveLocale,
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
@@ -40,8 +56,10 @@ class ScreenshotApp extends StatelessWidget {
                 themeMode: state.effectiveThemeMode,
                 theme: themeProvider.light(),
                 darkTheme: themeProvider.dark(),
-                home: child,
                 debugShowCheckedModeBanner: false,
+                routeInformationParser: _router.routeInformationParser,
+                routerDelegate: _router.routerDelegate,
+                backButtonDispatcher: _router.backButtonDispatcher,
               );
             },
           ),
@@ -56,7 +74,7 @@ class ScreenshotApp extends StatelessWidget {
     final provider = MultiBlocProvider(
       providers: [
         BlocProvider<AppBloc>.value(
-          value: appBloc,
+          value: widget.appBloc,
         ),
       ],
       child: materialApp,
