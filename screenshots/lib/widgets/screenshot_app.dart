@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 
+import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
-class ScreenshotApp extends StatefulWidget {
+class ScreenshotApp extends StatelessWidget {
   const ScreenshotApp({
     super.key,
     required this.appBloc,
@@ -17,21 +16,6 @@ class ScreenshotApp extends StatefulWidget {
 
   final AppBloc appBloc;
   final Widget child;
-
-  @override
-  State<ScreenshotApp> createState() => _ScreenshotAppState();
-}
-
-class _ScreenshotAppState extends State<ScreenshotApp> {
-  late final GoRouter _router = GoRouter(
-    initialLocation: '/',
-    routes: [
-      GoRoute(
-        path: '/',
-        builder: (context, state) => widget.child,
-      ),
-    ],
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -57,9 +41,7 @@ class _ScreenshotAppState extends State<ScreenshotApp> {
                 theme: themeProvider.light(),
                 darkTheme: themeProvider.dark(),
                 debugShowCheckedModeBanner: false,
-                routeInformationParser: _router.routeInformationParser,
-                routerDelegate: _router.routerDelegate,
-                backButtonDispatcher: _router.backButtonDispatcher,
+                routerDelegate: ScreenshotRouterDelegate(child),
               );
             },
           ),
@@ -74,12 +56,42 @@ class _ScreenshotAppState extends State<ScreenshotApp> {
     final provider = MultiBlocProvider(
       providers: [
         BlocProvider<AppBloc>.value(
-          value: widget.appBloc,
+          value: appBloc,
         ),
       ],
       child: materialApp,
     );
 
     return provider;
+  }
+}
+
+class ScreenshotRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
+  ScreenshotRouterDelegate(this.child);
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Navigator(
+      pages: [
+        MaterialPage(
+          child: child,
+        ),
+      ],
+      onPopPage: (route, result) {
+        return false;
+      },
+    );
+  }
+
+  @override
+  Future<void> setNewRoutePath(Object configuration) async {
+    return;
+  }
+
+  @override
+  Future<bool> popRoute() async {
+    return false;
   }
 }
