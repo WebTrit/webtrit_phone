@@ -591,13 +591,13 @@ packages:
     source: hosted
     version: "2.1.1"
   go_router:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: go_router
-      sha256: b4bb06205ec607278b6fc23db238278417bca84a3905779cc68d1eb7afae37e2
+      sha256: e2a90e1d4eed378ea12e0771be9e32766a2f8d2de3064e42f3a55f1b04fb8af8
       url: "https://pub.dev"
     source: hosted
-    version: "6.2.0"
+    version: "6.4.1"
   google_fonts:
     dependency: transitive
     description:

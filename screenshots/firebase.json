@@ -1,0 +1,10 @@
+{
+  "hosting": {
+    "public": "site_association",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

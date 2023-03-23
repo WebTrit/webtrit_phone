@@ -43,5 +43,9 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# Firebase
+.firebase/
+firebase-debug.log
+
 # Screenshots output
 /output
