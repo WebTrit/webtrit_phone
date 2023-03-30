@@ -26,10 +26,12 @@ class App extends StatefulWidget {
     Key? key,
     required this.appDatabase,
     required this.appPermissions,
+    required this.themeSettings,
   }) : super(key: key);
 
   final AppDatabase appDatabase;
   final AppPermissions appPermissions;
+  final ThemeSettings themeSettings;
 
   @override
   State<App> createState() => _AppState();
@@ -45,6 +47,7 @@ class _AppState extends State<App> {
       appPreferences: AppPreferences(),
       secureStorage: SecureStorage(),
       appDatabase: widget.appDatabase,
+      themeSettings: widget.themeSettings,
     );
   }
 
@@ -74,7 +77,7 @@ class _AppState extends State<App> {
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
                 restorationScopeId: 'App',
-                title: EnvironmentConfig.APP_NAME,
+                title: widget.themeSettings.appName ?? EnvironmentConfig.APP_NAME,
                 themeMode: state.effectiveThemeMode,
                 theme: themeProvider.light(),
                 darkTheme: themeProvider.dark(),

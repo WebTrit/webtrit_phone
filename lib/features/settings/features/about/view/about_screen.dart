@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -38,8 +39,38 @@ class AboutScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (logo != null)
-                  logo.svg(
-                    height: logoHeight,
+                  StreamBuilder<SvgLoader?>(
+                    stream: logo,
+                    builder: (BuildContext context, AsyncSnapshot<SvgLoader?> snapshot) {
+                      if (snapshot.hasError) {
+                        return SizedBox(
+                          height: logoHeight,
+                        );
+                      }
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.none:
+                          return SizedBox(
+                            height: logoHeight,
+                          );
+                        case ConnectionState.waiting:
+                          return SizedCircularProgressIndicator(
+                            size: themeData.textTheme.bodyMedium!.fontSize!,
+                            strokeWidth: 2,
+                          );
+                        case ConnectionState.active:
+                        case ConnectionState.done:
+                          if (snapshot.data != null) {
+                            return SvgPicture(
+                              snapshot.data!,
+                              height: logoHeight,
+                            );
+                          } else {
+                            return SizedBox(
+                              height: logoHeight,
+                            );
+                          }
+                      }
+                    },
                   ),
                 Text(
                   state.appName,

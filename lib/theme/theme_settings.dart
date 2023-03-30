@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_svg/svg.dart';
+
 import 'custom_color.dart';
 
 class ThemeSettings {
@@ -9,13 +11,17 @@ class ThemeSettings {
     this.darkColorSchemeOverride,
     required this.primaryGradientColors,
     this.fontFamily,
+    this.imagesScheme,
+    this.appName,
   });
 
   final Color seedColor;
   final ColorSchemeOverride? lightColorSchemeOverride;
   final ColorSchemeOverride? darkColorSchemeOverride;
   final List<CustomColor> primaryGradientColors;
+  final ImagesScheme? imagesScheme;
   final String? fontFamily;
+  final String? appName;
 }
 
 class ColorSchemeOverride {
@@ -82,4 +88,14 @@ class ColorSchemeOverride {
   final Color? shadow;
   final Color? scrim;
   final Color? surfaceTint;
+}
+
+class ImagesScheme {
+  ImagesScheme({
+    this.onboarding,
+    this.applicationLogo,
+  });
+
+  final Stream<SvgLoader>? onboarding;
+  final Stream<SvgLoader?>? applicationLogo;
 }

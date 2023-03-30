@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_svg/svg.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
-
-import 'package:webtrit_phone/app/assets.gen.dart';
 
 import 'theme.dart';
 
@@ -106,8 +106,8 @@ class ThemeProvider extends InheritedWidget {
   }
 
   GenImages genImages({
-    SvgGenImage? logo,
-    SvgGenImage? loginOnboarding,
+    Stream<SvgLoader?>? logo,
+    Stream<SvgLoader?>? loginOnboarding,
   }) {
     return GenImages(
       logo: logo,
@@ -284,8 +284,8 @@ class ThemeProvider extends InheritedWidget {
         textButtonStyles(colorScheme),
         gradients(colorScheme),
         genImages(
-          logo: Assets.logo,
-          loginOnboarding: Assets.login.onboarding1,
+          logo: settings.imagesScheme?.applicationLogo,
+          loginOnboarding: settings.imagesScheme?.onboarding,
         ),
       ],
       // COLOR
