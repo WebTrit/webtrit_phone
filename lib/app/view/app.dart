@@ -37,6 +37,7 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   late final AppBloc appBloc;
+  final OverlayNavigatorObserver _callObserver = OverlayNavigatorObserver();
 
   @override
   void initState() {
@@ -227,6 +228,7 @@ class _AppState extends State<App> {
                       const widget = CallScreen();
                       return CustomTransitionPage(
                         key: state.pageKey,
+                        name: MainRoute.call,
                         fullscreenDialog: true,
                         child: widget,
                         transitionsBuilder: (BuildContext context, Animation<double> animation,
@@ -389,6 +391,7 @@ class _AppState extends State<App> {
             ],
             observers: [
               context.read<AppAnalyticsRepository>().createObserver(),
+              _callObserver,
             ],
           ),
         ],
