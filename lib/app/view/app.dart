@@ -37,6 +37,7 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   late final AppBloc appBloc;
+  final OverlayNavigatorObserver _callObserver = OverlayNavigatorObserver();
 
   @override
   void initState() {
@@ -480,6 +481,7 @@ class _AppState extends State<App> {
             ],
             observers: [
               context.read<AppAnalyticsRepository>().createObserver(),
+              _callObserver,
             ],
           ),
         ],
