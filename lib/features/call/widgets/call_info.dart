@@ -90,9 +90,11 @@ class _CallInfoState extends State<CallInfo> {
         ),
         Row(
           children: [
-            const Expanded(
+            Expanded(
               flex: 1,
-              child: ExtBackButton(),
+              child: ExtBackButton(
+                color: Theme.of(context).colorScheme.surface,
+              ),
             ),
             Expanded(
               flex: 6,
