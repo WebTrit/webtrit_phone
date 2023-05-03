@@ -1,0 +1,11 @@
+name: webtrit_phone_publisher
+version: 1.0.0
+
+credential:
+  themeId: "JkSSeTGANPsX29XMJM5W"
+  applicationId: "M5LuhXDmqdxQOBy3x00V"
+
+hosts:
+  configurator:
+    stage: "http://us-central1-webtrit-configurator-stage.cloudfunctions.net/api/v1"
+    prod: "http://us-central1-webtrit-configurator.cloudfunctions.net/api/v1"

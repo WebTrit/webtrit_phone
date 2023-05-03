@@ -1,6 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:webtrit_phone/app/assets.gen.dart';
 
 import 'custom_color.dart';
 
@@ -91,11 +95,62 @@ class ColorSchemeOverride {
 }
 
 class ImagesScheme {
-  ImagesScheme({
-    this.onboarding,
-    this.applicationLogo,
-  });
+  final onboardingStream = ReplaySubject<SvgLoader?>(maxSize: 1);
+  final applicationLogoStream = ReplaySubject<SvgLoader?>(maxSize: 1);
 
-  final Stream<SvgLoader>? onboarding;
-  final Stream<SvgLoader?>? applicationLogo;
+  Stream<SvgLoader?> get onboarding => onboardingStream.stream;
+
+  Stream<SvgLoader?> get applicationLogo => applicationLogoStream.stream;
+
+  void clearOnboarding() {
+    onboardingStream.add(null);
+  }
+
+  void clearApplicationLogo() {
+    applicationLogoStream.add(null);
+  }
+
+  void setOnboardingByUrl(
+    String? image, {
+    SvgGenImage svgGenImage = Assets.logo,
+  }) {
+    _updateStreamByNetworkSvg(onboardingStream, image, svgGenImage);
+  }
+
+  void setOnboardingByBytes(
+    Uint8List? image, {
+    SvgGenImage svgGenImage = Assets.logo,
+  }) {
+    _updateStreamByBytesSvg(onboardingStream, image, svgGenImage);
+  }
+
+  void setApplicationLogoByUrl(
+    String? image, {
+    SvgGenImage svgGenImage = Assets.logo,
+  }) {
+    _updateStreamByNetworkSvg(applicationLogoStream, image, svgGenImage);
+  }
+
+  void setApplicationByBytes(
+    Uint8List? image, {
+    SvgGenImage svgGenImage = Assets.logo,
+  }) {
+    _updateStreamByBytesSvg(applicationLogoStream, image, svgGenImage);
+  }
+
+  void _updateStreamByNetworkSvg(ReplaySubject stream, String? image, SvgGenImage defaultImage) async {
+    if (image == null) {
+      stream.add(SvgAssetLoader(defaultImage.path));
+    } else {
+      stream.add((SvgNetworkLoader(image)));
+    }
+  }
+
+  void _updateStreamByBytesSvg(ReplaySubject stream, Uint8List? image, SvgGenImage defaultImage) async {
+    if (image == null) {
+      stream.add(SvgAssetLoader(defaultImage.path));
+    } else {
+      stream.add((SvgBytesLoader(image)));
+    }
+  }
 }

@@ -12,7 +12,8 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/pre_bootstrap/pre_bootstrap.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/theme/theme.dart';
+
+import 'package:style/style.dart';
 
 void main() {
   hierarchicalLoggingEnabled = true;
@@ -23,15 +24,8 @@ void main() {
   bootstrap(() async {
     final logRecordsRepository = LogRecordsRepository()..attachToLogger(Logger.root);
     final appAnalyticsRepository = AppAnalyticsRepository(instance: FirebaseAnalytics.instance);
-    final styleModel = await StyleModel.readStyleFromAssets();
 
-    final theme = ThemeSettings(
-      seedColor: styleModel.colors!.colorSchemeOverride.primary!,
-      imagesScheme: styleModel.images!.imagesScheme,
-      lightColorSchemeOverride: styleModel.colors!.colorSchemeOverride,
-      primaryGradientColors: styleModel.colors!.gradientTabColorOverride,
-      fontFamily: styleModel.fontFamily ?? 'Montserrat',
-    );
+    final theme = AppTheme().theme;
 
     return Provider<AppDatabase>(
       create: (context) {

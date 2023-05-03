@@ -59,6 +59,7 @@ dependencies:
   validators: ^3.0.0
   webview_flutter: ^4.0.6
   webview_flutter_web: ^0.2.2+1
+  yaml: ^3.1.1
 
   webtrit_api:
     path: ./packages/webtrit_api
@@ -73,6 +74,9 @@ dependencies:
 
   app_database:
     path: ./packages/data/app_database
+
+  style:
+    path: ./packages/style
 
 dev_dependencies:
   integration_test:
@@ -98,6 +102,7 @@ flutter:
     - assets/login/
     - assets/ringtones/
     - assets/style/
+    - publisher.yaml
 
 flutter_gen:
   output: lib/app/
