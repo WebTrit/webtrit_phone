@@ -81,9 +81,19 @@ class AccountInfoListTile extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(
-                    info?.numberWithExtension ?? _kHoldSpaceData,
-                    style: themeData.textTheme.bodyLarge,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          info?.numberWithExtension ?? _kHoldSpaceData,
+                          style: themeData.textTheme.bodyLarge,
+                        ),
+                      ),
+                      const Icon(
+                        Icons.copy,
+                        color: Colors.grey,
+                      )
+                    ],
                   ),
                   Text(
                     info?.balanceWithCurrency ?? _kHoldSpaceData,
