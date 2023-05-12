@@ -42,6 +42,7 @@ class ScreenshotApp extends StatelessWidget {
                 darkTheme: themeProvider.dark(),
                 debugShowCheckedModeBanner: false,
                 routerDelegate: ScreenshotRouterDelegate(child),
+                useInheritedMediaQuery: true,
               );
             },
           ),
