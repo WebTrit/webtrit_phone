@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
@@ -9,6 +11,8 @@ class Actionpad extends StatelessWidget {
   final VoidCallback? onCallLongPress;
   final VoidCallback? onBackspacePressed;
   final VoidCallback? onBackspaceLongPress;
+
+  final double _maxSizeLimit = 136;
 
   const Actionpad({
     Key? key,
@@ -25,7 +29,7 @@ class Actionpad extends StatelessWidget {
     final TextButtonStyles? textButtonStyles = themeData.extension<TextButtonStyles>();
 
     return TextButtonsTable(
-      minimumSize: Size.square(MediaQuery.of(context).size.width / 5),
+      minimumSize: Size.square(min(MediaQuery.of(context).size.width / 5, _maxSizeLimit)),
       children: [
         const SizedBox(),
         TextButton(
