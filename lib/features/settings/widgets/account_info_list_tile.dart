@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
@@ -81,19 +82,24 @@ class AccountInfoListTile extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          info?.numberWithExtension ?? _kHoldSpaceData,
-                          style: themeData.textTheme.bodyLarge,
+                  InkWell(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            info?.numberWithExtension ?? _kHoldSpaceData,
+                            style: themeData.textTheme.bodyLarge,
+                          ),
                         ),
-                      ),
-                      const Icon(
-                        Icons.copy,
-                        color: Colors.grey,
-                      )
-                    ],
+                        Icon(
+                          Icons.copy,
+                          color: themeData.colorScheme.secondaryContainer,
+                        )
+                      ],
+                    ),
+                    onTap: () {
+                      Clipboard.setData(ClipboardData(text: info?.numberWithExtension ?? _kHoldSpaceData));
+                    },
                   ),
                   Text(
                     info?.balanceWithCurrency ?? _kHoldSpaceData,
