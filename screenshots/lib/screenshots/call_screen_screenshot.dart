@@ -11,9 +11,13 @@ class CallScreenScreenshot extends StatefulWidget {
   const CallScreenScreenshot({
     super.key,
     required this.video,
+    this.localePlaceholderUrl = 'https://dummyimage.com/600x800/00e326/fff.jpg&text=locale',
+    this.remotePlaceholderUrl = 'https://dummyimage.com/600x800/0048e3/fff.jpg&text=remote',
   });
 
   final bool video;
+  final String localePlaceholderUrl;
+  final String remotePlaceholderUrl;
 
   @override
   State<CallScreenScreenshot> createState() => _CallScreenScreenshotState();
@@ -41,11 +45,11 @@ class _CallScreenScreenshotState extends State<CallScreenScreenshot> {
               ],
               child: CallScreen(
                 localePlaceholderBuilder: (context) => Image.network(
-                  'https://dummyimage.com/600x800/00e326/fff.jpg&text=locale',
+                  widget.localePlaceholderUrl,
                   fit: BoxFit.fitHeight,
                 ),
                 remotePlaceholderBuilder: (context) => Image.network(
-                  'https://dummyimage.com/600x800/0048e3/fff.jpg&text=remote',
+                  widget.remotePlaceholderUrl,
                   fit: BoxFit.cover,
                 ),
               ),
