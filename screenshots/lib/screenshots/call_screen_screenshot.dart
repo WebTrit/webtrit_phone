@@ -8,9 +8,9 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:screenshots/mocks/mocks.dart';
 
 class CallScreenScreenshot extends StatefulWidget {
-  const CallScreenScreenshot(
-    this.video, {
+  const CallScreenScreenshot({
     super.key,
+    required this.video,
   });
 
   final bool video;
