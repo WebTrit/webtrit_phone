@@ -8,6 +8,7 @@ import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../../call/call.dart';
@@ -58,9 +59,12 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     final mediaQueryData = MediaQuery.of(context);
+    final themeData = Theme.of(context);
+    final appName = themeData.extension<ConstTexts>()?.appName;
 
     return Scaffold(
       appBar: MainAppBar(
+        name: appName,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kMainAppBarBottomTabHeight),
           child: Padding(

@@ -1,3 +1,4 @@
+export 'const_texts.dart';
 export 'custom_color.dart';
 export 'elevated_button_styles.dart';
 export 'gen_images.dart';

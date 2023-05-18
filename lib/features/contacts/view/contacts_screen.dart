@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../contacts.dart';
@@ -24,6 +25,8 @@ class ContactsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQueryData = MediaQuery.of(context);
+    final themeData = Theme.of(context);
+    final appName = themeData.extension<ConstTexts>()?.appName;
 
     final tabBar = sourceTypes.length <= 1
         ? null
@@ -69,6 +72,7 @@ class ContactsScreen extends StatelessWidget {
         length: sourceTypes.length,
         child: Scaffold(
           appBar: MainAppBar(
+            name: appName,
             bottom: PreferredSize(
               preferredSize: Size.fromHeight(
                 (tabBar != null ? kMainAppBarBottomTabHeight : 0) + kMainAppBarBottomSearchHeight,
