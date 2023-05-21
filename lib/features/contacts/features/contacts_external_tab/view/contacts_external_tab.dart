@@ -30,7 +30,9 @@ class ContactsExternalTab extends StatelessWidget {
               return ContactTile(
                 displayName: contact.name,
                 onTap: () async {
-                  context.goNamed(MainRoute.contact, params: {contactIdPathParameterName: contact.id.toString()});
+                  context.goNamed(MainRoute.contact, pathParameters: {
+                    contactIdPathParameterName: contact.id.toString(),
+                  });
                 },
               );
             },

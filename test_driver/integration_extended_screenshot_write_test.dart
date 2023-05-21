@@ -7,7 +7,7 @@ Future<void> main() async {
   final FlutterDriver driver = await FlutterDriver.connect();
   await integrationDriver(
     driver: driver,
-    onScreenshot: (String screenshotName, List<int> screenshotBytes) async {
+    onScreenshot: (String screenshotName, List<int> screenshotBytes, [args]) async {
       final File image = File('$screenshotName.png');
       image.writeAsBytesSync(screenshotBytes);
       return true;

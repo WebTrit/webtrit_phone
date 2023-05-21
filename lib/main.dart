@@ -25,7 +25,7 @@ void main() {
 
     return Provider<AppDatabase>(
       create: (context) {
-        final appDatabase = _AppDatabaseWithAppLifecycleStateObserver.connect(
+        final appDatabase = _AppDatabaseWithAppLifecycleStateObserver(
           createAppDatabaseConnection(
             'db.sqlite',
             logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
@@ -58,7 +58,7 @@ void main() {
 }
 
 class _AppDatabaseWithAppLifecycleStateObserver extends AppDatabase with WidgetsBindingObserver {
-  _AppDatabaseWithAppLifecycleStateObserver.connect(connection) : super.connect(connection);
+  _AppDatabaseWithAppLifecycleStateObserver(e) : super(e);
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {

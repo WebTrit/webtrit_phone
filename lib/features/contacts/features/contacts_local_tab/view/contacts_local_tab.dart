@@ -43,7 +43,9 @@ class ContactsLocalTab extends StatelessWidget {
                 displayName: contact.name,
                 thumbnail: contact.thumbnail,
                 onTap: () async {
-                  context.goNamed(MainRoute.contact, params: {contactIdPathParameterName: contact.id.toString()});
+                  context.goNamed(MainRoute.contact, pathParameters: {
+                    contactIdPathParameterName: contact.id.toString(),
+                  });
                 },
               );
             },
