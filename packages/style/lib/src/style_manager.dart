@@ -1,7 +1,7 @@
 import 'package:style/src/service/theme_service.dart';
 import 'package:style/src/style_config.dart';
 
-import 'model/models.dart';
+import 'dto/dto.dart';
 
 class StyleManager {
   static late StyleManager _instance;
@@ -36,7 +36,7 @@ class StyleManager {
 
   final _themeService = ThemeService();
 
-  Future<ThemeModel> get() async {
+  Future<ThemeDTO> get() async {
     return _themeService.readTheme(applicationId: _applicationId, themeId: _themeId, staticTheme: _defaultTheme);
   }
 }

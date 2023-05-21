@@ -1,3 +1,5 @@
+import 'package:flutter/painting.dart';
+
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
@@ -25,25 +27,28 @@ class AppTheme {
       ..setOnboardingByUrl(styleModel.images!.onboarding);
 
     final colorScheme = ColorSchemeOverride(
-      primary: styleModel.colors?.primaryColor,
-      onPrimary: styleModel.colors?.onPrimaryColor,
-      onSurface: styleModel.colors?.onSurfaceColor,
-      surface: styleModel.colors?.surfaceColor,
-      onSecondaryContainer: styleModel.colors?.onSecondaryContainerColor,
-      secondaryContainer: styleModel.colors?.secondaryContainerColor,
-      tertiary: styleModel.colors?.tertiaryColor,
-      error: styleModel.colors?.errorColor,
-      secondary: styleModel.colors?.secondaryColor,
-      outline: styleModel.colors?.outlineColor,
-      background: styleModel.colors?.backgroundColor,
-      onBackground: styleModel.colors?.onBackgroundColor,
+      primary: _toColor(styleModel.colors?.primary),
+      onPrimary: _toColor(styleModel.colors?.onPrimary),
+      onSurface: _toColor(styleModel.colors?.onSurface),
+      surface: _toColor(styleModel.colors?.surface),
+      onSecondaryContainer: _toColor(styleModel.colors?.onSecondaryContainer),
+      secondaryContainer: _toColor(styleModel.colors?.secondaryContainer),
+      tertiary: _toColor(styleModel.colors?.tertiary),
+      error: _toColor(styleModel.colors?.error),
+      secondary: _toColor(styleModel.colors?.secondary),
+      outline: _toColor(styleModel.colors?.outline),
+      background: _toColor(styleModel.colors?.background),
+      onBackground: _toColor(styleModel.colors?.onBackground),
     );
 
-    final gradientTabColor =
-        (styleModel.colors?.gradientTabColor ?? []).map((color) => CustomColor(color: color, blend: false)).toList();
+    final gradientTabColor = (styleModel.colors?.gradientTabColor ?? [])
+        .map(
+          (hex) => CustomColor(color: _toColor(hex)!, blend: false),
+        )
+        .toList();
 
     final theme = ThemeSettings(
-      seedColor: styleModel.colors!.primaryColor!,
+      seedColor: _toColor(styleModel.colors!.primary)!,
       imagesScheme: imageScheme,
       lightColorSchemeOverride: colorScheme,
       primaryGradientColors: gradientTabColor,
@@ -51,6 +56,10 @@ class AppTheme {
     );
 
     _instance = AppTheme._(theme);
+  }
+
+  static Color? _toColor(String? hex) {
+    return _toColor(hex);
   }
 
   factory AppTheme() {

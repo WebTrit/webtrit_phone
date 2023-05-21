@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../model/models.dart';
+import '../dto/dto.dart';
 
 class Store {
   static const String _appThemeData = 'WEBTRIT_THEME_DATA';
@@ -20,14 +20,14 @@ class Store {
     preferences.setInt(_appThemeVersion, version);
   }
 
-  static Future<ThemeModel?> getTheme() async {
+  static Future<ThemeDTO?> getTheme() async {
     final preferences = await SharedPreferences.getInstance();
     final jsonString = preferences.getString(_appThemeData);
     Map<String, dynamic> map = jsonDecode(jsonString!) as Map<String, dynamic>;
-    return ThemeModel.fromJson(map);
+    return ThemeDTO.fromJson(map);
   }
 
-  static Future<void> persistLocalTheme(ThemeModel theme) async {
+  static Future<void> persistLocalTheme(ThemeDTO theme) async {
     final preferences = await SharedPreferences.getInstance();
     final map = theme.toJson();
     final jsonString = jsonEncode(map);

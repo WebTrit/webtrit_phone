@@ -4,7 +4,7 @@ import '../_http_client/_http_client.dart'
     if (dart.library.html) '../_http_client/_http_client_html.dart'
     if (dart.library.io) '../_http_client/_http_client_io.dart' as platform;
 
-import 'package:style/src/model/models.dart';
+import 'package:style/src/dto/dto.dart';
 import 'package:style/src/style_config.dart';
 
 import 'api_exception.dart';
@@ -14,7 +14,7 @@ class Api {
 
   Api._();
 
-  static Future<ApplicationModel> getApplication({
+  static Future<ApplicationDTO> getApplication({
     required String applicationId,
   }) async {
     var uri = '$_baseUrl/applications/$applicationId';
@@ -30,10 +30,10 @@ class Api {
 
     var jsonResponse = convert.jsonDecode(response.body);
 
-    return ApplicationModel.fromJson(jsonResponse);
+    return ApplicationDTO.fromJson(jsonResponse);
   }
 
-  static Future<ThemeModel> getTheme({
+  static Future<ThemeDTO> getTheme({
     required String themeId,
     required String applicationId,
   }) async {
@@ -46,6 +46,6 @@ class Api {
 
     var jsonResponse = convert.jsonDecode(response.body);
 
-    return ThemeModel.fromJson(jsonResponse);
+    return ThemeDTO.fromJson(jsonResponse);
   }
 }

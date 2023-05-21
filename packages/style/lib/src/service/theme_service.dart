@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 
 import '../api/api.dart';
-import '../model/models.dart';
+import '../dto/dto.dart';
 import '../storage/store.dart';
 
 class ThemeService {
@@ -24,7 +24,7 @@ class ThemeService {
     return serverVersion;
   }
 
-  Future<ThemeModel> readTheme({
+  Future<ThemeDTO> readTheme({
     required String applicationId,
     required String themeId,
     required String staticTheme,
@@ -35,7 +35,7 @@ class ThemeService {
       return persistTheme!;
     } catch (e) {
       final String response = await rootBundle.loadString(staticTheme);
-      return ThemeModel.fromJson(jsonDecode(response));
+      return ThemeDTO.fromJson(jsonDecode(response));
     }
   }
 }
