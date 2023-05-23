@@ -12,6 +12,7 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/pre_bootstrap/pre_bootstrap.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 void main() {
   hierarchicalLoggingEnabled = true;
@@ -23,10 +24,13 @@ void main() {
     final logRecordsRepository = LogRecordsRepository()..attachToLogger(Logger.root);
     final appAnalyticsRepository = AppAnalyticsRepository(instance: FirebaseAnalytics.instance);
 
+    final applicationDocumentsPath = await getApplicationDocumentsPath();
+
     return Provider<AppDatabase>(
       create: (context) {
         final appDatabase = _AppDatabaseWithAppLifecycleStateObserver(
           createAppDatabaseConnection(
+            applicationDocumentsPath,
             'db.sqlite',
             logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
           ),
