@@ -27,17 +27,14 @@ class CallOverlay extends StatefulWidget {
 
 class _CallOverlayState extends State<CallOverlay> {
   late Offset _callOverlayEntityPositionDefault;
-  late Offset _callOverlayEntityPosition;
 
-  final _callOverlayEntityConstraints = const BoxConstraints(maxHeight: 148, maxWidth: 148);
-
-  OverlayEntry? _overlayEntry;
+  final _overlayEntries = <String, OverlayEntryData>{};
 
   @override
   void initState() {
     super.initState();
-    widget.observer.setPopListener(_callScreenPopped);
-    widget.observer.setPushListener(_hideOverlay);
+    widget.observer.setPopListener(_showCallOverlay);
+    widget.observer.setPushListener(_disposeAllOverlay);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final appBarTheme = AppBarTheme.of(context);
@@ -49,14 +46,14 @@ class _CallOverlayState extends State<CallOverlay> {
       final dialogPositionY = appBarTheme.toolbarHeight! + screenInfo.padding.top + callOverlayEntityMargin.dy;
 
       _callOverlayEntityPositionDefault = Offset(dialogPositionX, dialogPositionY);
-      _callOverlayEntityPosition = _callOverlayEntityPositionDefault;
     });
   }
 
   @override
   void dispose() {
     widget.observer.dispose();
-    _overlayEntry?.dispose();
+    _overlayEntries.clear();
+    _disposeAllOverlay();
     super.dispose();
   }
 
@@ -64,70 +61,114 @@ class _CallOverlayState extends State<CallOverlay> {
   Widget build(BuildContext context) {
     return BlocListener<CallBloc, CallState>(
       child: widget.child,
-      listenWhen: (previous, current) => current.isActive,
       listener: (context, state) {
-        if (state.activeCall.isIncoming) {
-          _hideOverlay();
-          _callOverlayEntityPosition = _callOverlayEntityPositionDefault;
+        if (!state.isActive) {
+          _disposeAllOverlay();
         }
       },
     );
   }
 
-  void _callScreenPopped() {
+  void _showCallOverlay() {
     var callState = BlocProvider.of<CallBloc>(context).state;
     if (callState.isActive) {
-      _showOverlay();
+      _addOverlayCall(callState.activeCall.callId.value);
     }
+  }
+
+  void _removeOverlay(String id) {
+    setState(() {
+      if (_overlayEntries.containsKey(id)) {
+        OverlayEntryData overlayData = _overlayEntries[id]!;
+        overlayData.entry?.remove();
+        _overlayEntries.remove(id);
+      }
+    });
+  }
+
+  void _disposeAllOverlay() {
+    _overlayEntries.forEach((key, value) {
+      value.removeOverlayIfExit();
+    });
   }
 
   void _endCall(CallIdValue callId) {
     BlocProvider.of<CallBloc>(context).add(CallControlEvent.ended(callId.uuid));
-    _hideOverlay();
+    _removeOverlay(callId.value);
   }
 
-  void _showOverlay() {
-    _hideOverlay();
-    _overlayEntry = OverlayEntry(
+  void _addOverlayCall(String id) {
+    OverlayEntryData overlayData;
+
+    setState(() {
+      if (_overlayEntries.containsKey(id)) {
+        overlayData = _overlayEntries[id]!;
+      } else {
+        overlayData = OverlayEntryData(position: _callOverlayEntityPositionDefault);
+        _overlayEntries[id] = overlayData;
+      }
+      overlayData.attachOverlayEntry(
+        child: BlocBuilder<CallBloc, CallState>(
+          buildWhen: (previous, current) => current.isActive,
+          builder: (context, state) => CallOverlayDialog(
+            createdTime: state.activeCall.createdTime,
+            name: state.activeCall.displayName ?? state.activeCall.handle.value,
+            remoteStream: state.activeCall.remoteStream,
+            isVideoCall: state.activeCall.video,
+            onEndCall: () => _endCall(state.activeCall.callId),
+          ),
+        ),
+      );
+
+      Overlay.of(context).insert(overlayData.entry!);
+    });
+  }
+}
+
+class OverlayEntryData {
+  Widget? widget;
+  Offset position;
+  OverlayEntry? entry;
+
+  OverlayEntryData({
+    required this.position,
+  });
+
+  void removeOverlayIfExit() {
+    entry?.remove();
+    entry?.dispose();
+    entry = null;
+  }
+
+  final _callOverlayEntityConstraints = const BoxConstraints(maxHeight: 148, maxWidth: 148);
+
+  void attachOverlayEntry({
+    required Widget child,
+  }) {
+    entry = OverlayEntry(
       builder: (context) => Positioned(
-        left: _callOverlayEntityPosition.dx,
-        top: _callOverlayEntityPosition.dy,
+        top: position.dy,
+        left: position.dx,
         child: GestureDetector(
           behavior: HitTestBehavior.translucent,
-          onPanUpdate: (details) => _updateDialogPosition(details, context),
-          child: BlocBuilder<CallBloc, CallState>(
-            buildWhen: (previous, current) => current.isActive,
-            builder: (context, state) => CallOverlayDialog(
-              createdTime: state.activeCall.createdTime,
-              name: state.activeCall.displayName ?? state.activeCall.handle.value,
-              remoteStream: state.activeCall.remoteStream,
-              constraints: _callOverlayEntityConstraints,
-              isVideoCall: state.activeCall.video,
-              onEndCall: () => _endCall(state.activeCall.callId),
-            ),
-          ),
+          onPanUpdate: (details) => _updateOverlayPosition(entry!, details, context),
           onTap: () => GoRouter.of(context).pushNamed(MainRoute.call),
+          child: ConstrainedBox(constraints: _callOverlayEntityConstraints, child: child),
         ),
       ),
     );
-    Overlay.of(context).insert(_overlayEntry!);
   }
 
-  void _updateDialogPosition(DragUpdateDetails details, BuildContext context) {
-    final overlayCenterTempPosition = _callOverlayEntityPosition + details.delta;
+  void _updateOverlayPosition(OverlayEntry overlayEntry, DragUpdateDetails details, BuildContext context) {
+    final overlayCenterTempPosition = position + details.delta;
     final overlayCenterPosition = Offset(
       overlayCenterTempPosition.dx + _callOverlayEntityConstraints.maxWidth / 2,
       overlayCenterTempPosition.dy + _callOverlayEntityConstraints.maxHeight / 2,
     );
 
     if (MediaQuery.of(context).size.contains(overlayCenterPosition)) {
-      _callOverlayEntityPosition = overlayCenterTempPosition;
-      _overlayEntry?.markNeedsBuild();
+      position = overlayCenterTempPosition;
+      overlayEntry.markNeedsBuild();
     }
-  }
-
-  void _hideOverlay() {
-    _overlayEntry?.remove();
-    _overlayEntry = null;
   }
 }

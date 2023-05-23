@@ -184,9 +184,12 @@ class _AppState extends State<App> {
                 },
                 builder: (context, state) {
                   final flavor = MainFlavor.values.byName(state.queryParameters[MainFlavor.queryParameterName]!);
-                  final widget = MainScreen(
-                    flavor,
-                    flavorWidgetBuilder: _flavorWidgetBuilder,
+                  final widget = CallOverlay(
+                    observer: _callObserver,
+                    child: MainScreen(
+                      flavor,
+                      flavorWidgetBuilder: _flavorWidgetBuilder,
+                    ),
                   );
                   final provider = BlocProvider(
                     create: (context) {
