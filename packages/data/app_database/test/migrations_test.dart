@@ -27,7 +27,7 @@ void main() {
         for (var targetVersion = oldVersion + 1; targetVersion <= currentSchema; targetVersion++) {
           test('to v$targetVersion', () async {
             final connection = await verifier.startAt(oldVersion);
-            final appDatabase = AppDatabase.connect(connection);
+            final appDatabase = AppDatabase(connection);
             try {
               await verifier.migrateAndValidate(appDatabase, targetVersion);
             } finally {

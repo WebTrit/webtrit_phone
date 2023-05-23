@@ -122,7 +122,7 @@ class _AppState extends State<App> {
             name: AppRoute.loginStep,
             path: '/login/:${LoginStep.pathParameterName}(${LoginStep.values.map((e) => e.name).join('|')})',
             builder: (context, state) {
-              final step = LoginStep.values.byName(state.params[LoginStep.pathParameterName]!);
+              final step = LoginStep.values.byName(state.pathParameters[LoginStep.pathParameterName]!);
               final widget = LoginScreen(step);
               final provider = BlocProvider(
                 create: (context) => LoginCubit(
@@ -138,7 +138,7 @@ class _AppState extends State<App> {
             path: '/web-registration',
             builder: (context, state) {
               final widget = WebRegistrationScreen(
-                initialUri: Uri.parse(state.queryParams['initialUrl'] ?? kBlankUri),
+                initialUri: Uri.parse(state.queryParameters['initialUrl'] ?? kBlankUri),
               );
               return widget;
             },
@@ -169,7 +169,7 @@ class _AppState extends State<App> {
                 path: '/main',
                 redirect: (context, state) {
                   // propagate MainFlavor query parameter from the current router location to the new one if needed
-                  if (state.queryParams.containsKey(MainFlavor.queryParameterName)) {
+                  if (state.queryParameters.containsKey(MainFlavor.queryParameterName)) {
                     return null;
                   } else {
                     final routerLocation = Uri.parse(_router.location);
@@ -183,13 +183,10 @@ class _AppState extends State<App> {
                   }
                 },
                 builder: (context, state) {
-                  final flavor = MainFlavor.values.byName(state.queryParams[MainFlavor.queryParameterName]!);
-                  final widget = CallOverlay(
-                    observer: _callObserver,
-                    child: MainScreen(
-                      flavor,
-                      flavorWidgetBuilder: _flavorWidgetBuilder,
-                    ),
+                  final flavor = MainFlavor.values.byName(state.queryParameters[MainFlavor.queryParameterName]!);
+                  final widget = MainScreen(
+                    flavor,
+                    flavorWidgetBuilder: _flavorWidgetBuilder,
                   );
                   final provider = BlocProvider(
                     create: (context) {
@@ -355,7 +352,7 @@ class _AppState extends State<App> {
                       final provider = BlocProvider(
                         create: (context) {
                           return ContactBloc(
-                            int.parse(state.params[contactIdPathParameterName]!),
+                            int.parse(state.pathParameters[contactIdPathParameterName]!),
                             contactsRepository: context.read<ContactsRepository>(),
                           )..add(const ContactStarted());
                         },
@@ -376,7 +373,7 @@ class _AppState extends State<App> {
                       var provider = BlocProvider(
                         create: (context) {
                           return RecentBloc(
-                            int.parse(state.params[recentIdPathParameterName]!),
+                            int.parse(state.pathParameters[recentIdPathParameterName]!),
                             recentsRepository: context.read<RecentsRepository>(),
                           )..add(const RecentStarted());
                         },

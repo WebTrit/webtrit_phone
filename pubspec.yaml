@@ -4,8 +4,8 @@ publish_to: 'none'
 version: 1.1.0+1
 
 environment:
-  sdk: ">=2.19.0 <3.0.0"
-  flutter: ^3.7.0
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ^3.10.0
 
 dependencies:
   flutter:
@@ -13,51 +13,51 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  audio_session: ^0.1.13
-  bloc: ^8.1.1
-  bloc_concurrency: ^0.2.1
-  characters: ^1.2.0
+  audio_session: ^0.1.14
+  bloc: ^8.1.2
+  bloc_concurrency: ^0.2.2
+  characters: ^1.3.0
   clock: ^1.1.0
-  collection: ^1.16.0
-  connectivity_plus: ^3.0.3
+  collection: ^1.17.1
+  connectivity_plus: ^4.0.1
   cross_file: ^0.3.3
-  device_info_plus: ^8.1.0
+  device_info_plus: ^9.0.1
   equatable: ^2.0.5
-  firebase_analytics: ^10.1.5
-  firebase_app_installations: ^0.2.1
-  firebase_core: ^2.7.1
-  firebase_crashlytics: ^3.0.16
-  firebase_messaging: ^14.2.6
-  flutter_bloc: ^8.1.2
+  firebase_analytics: ^10.4.1
+  firebase_app_installations: ^0.2.3
+  firebase_core: ^2.13.0
+  firebase_crashlytics: ^3.3.1
+  firebase_messaging: ^14.6.1
+  flutter_bloc: ^8.1.3
   flutter_contacts: ^1.1.6
   flutter_secure_storage: ^8.0.0
-  flutter_svg: ^2.0.2
-  flutter_webrtc: ^0.9.24
-  formz: ^0.5.0
+  flutter_svg: ^2.0.6
+  flutter_webrtc: ^0.9.30
+  formz: ^0.6.0
   freezed_annotation: ^2.2.0
-  go_router: ^6.2.0
-  google_fonts: ^4.0.3
-  intl: ^0.17.0
-  just_audio: ^0.9.31
-  linkify: ^4.1.0
+  go_router: ^7.0.2
+  google_fonts: ^4.0.4
+  intl: ^0.18.0
+  just_audio: ^0.9.33
+  linkify: ^5.0.0
   logging: ^1.1.0
-  logging_appenders: ^1.0.1
+  logging_appenders: ^1.0.2
   material_color_utilities: ^0.2.0
-  meta: ^1.7.0
-  package_info_plus: ^3.0.3
-  path: ^1.8.2
-  path_provider: ^2.0.13
+  meta: ^1.9.1
+  package_info_plus: ^4.0.1
+  path: ^1.8.3
+  path_provider: ^2.0.15
   permission_handler: ^10.2.0
   permission_handler_web: ^0.0.2
   provider: ^6.0.5
-  pub_semver: ^2.1.3
+  pub_semver: ^2.1.4
   rxdart: ^0.27.7
-  share_plus: ^6.3.1
-  shared_preferences: ^2.0.18
-  url_launcher: ^6.1.10
+  share_plus: ^7.0.1
+  shared_preferences: ^2.1.1
+  url_launcher: ^6.1.11
   uuid: ^3.0.7
   validators: ^3.0.0
-  webview_flutter: ^4.0.6
+  webview_flutter: ^4.2.0
   webview_flutter_web: ^0.2.2+1
 
   webtrit_api:
@@ -82,12 +82,12 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  bloc_test: ^9.1.1
-  build_runner: ^2.3.3
-  flutter_gen_runner: ^5.2.0
-  flutter_launcher_icons: ^0.12.0
+  bloc_test: ^9.1.2
+  build_runner: ^2.4.4
+  flutter_gen_runner: ^5.3.1
+  flutter_launcher_icons: ^0.13.1
   flutter_lints: ^2.0.1
-  freezed: ^2.3.2
+  freezed: ^2.3.4
 
 flutter:
   generate: true

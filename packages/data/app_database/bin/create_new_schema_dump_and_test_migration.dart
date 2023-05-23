@@ -9,16 +9,12 @@ import 'package:app_database/app_database.dart';
 import 'package:app_database/src/migrations/migrations.dart';
 
 Future<void> main(List<String> args) async {
-  // TODO: remove this notice output after drift_dev package update
-  stdout.write(wrapWith('NOTICE: ', [styleBold, red]));
-  stdout.writeln(wrapWith('Currently, work only with drift_dev from master', [red]));
-
   final timestamp = DateTime.now().millisecondsSinceEpoch;
   final version = migrations.schemaVersion;
   final appDatabasePath = '${Directory.systemTemp.path}/$timestamp-db_stub_v$version.sqlite';
 
   await _executeStep(1, 3, 'Creating reference application database', () async {
-    final appDatabase = AppDatabase.connect(DatabaseConnection(
+    final appDatabase = AppDatabase(DatabaseConnection(
       NativeDatabase(
         File(appDatabasePath),
       ),

@@ -72,8 +72,9 @@ class FavoritesScreen extends StatelessWidget {
                       ));
                     },
                     onInfoPressed: () {
-                      context.pushNamed(MainRoute.contact,
-                          params: {contactIdPathParameterName: favorite.contact.id.toString()});
+                      context.pushNamed(MainRoute.contact, pathParameters: {
+                        contactIdPathParameterName: favorite.contact.id.toString(),
+                      });
                     },
                     onDeleted: (favorite) {
                       context.showSnackBar(context.l10n.favorites_SnackBar_deleted(favorite.name));

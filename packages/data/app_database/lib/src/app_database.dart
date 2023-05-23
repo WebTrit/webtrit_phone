@@ -22,7 +22,7 @@ part 'app_database.g.dart';
   ],
 )
 class AppDatabase extends _$AppDatabase {
-  AppDatabase.connect(DatabaseConnection connection) : super.connect(connection);
+  AppDatabase(QueryExecutor e) : super(e);
 
   Future<void> deleteEverything() async {
     await customStatement('PRAGMA foreign_keys = OFF');

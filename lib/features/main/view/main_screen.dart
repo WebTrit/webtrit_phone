@@ -42,7 +42,9 @@ class MainScreen extends StatelessWidget {
         unselectedLabelStyle: themeData.textTheme.bodySmall,
         currentIndex: flavor.index,
         onTap: (index) {
-          context.goNamed(AppRoute.main, queryParams: {MainFlavor.queryParameterName: MainFlavor.values[index].name});
+          context.goNamed(AppRoute.main, queryParameters: {
+            MainFlavor.queryParameterName: MainFlavor.values[index].name,
+          });
         },
         items: MainFlavor.values.map((flavor) {
           return BottomNavigationBarItem(
