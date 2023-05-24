@@ -106,6 +106,7 @@ class ActiveCall with _$ActiveCall {
     @Default(true) bool? frontCamera,
     @Default(false) bool held,
     @Default(false) bool muted,
+    @Default(false) bool transferring,
     required DateTime createdTime,
     DateTime? acceptedTime,
     DateTime? hungUpTime,

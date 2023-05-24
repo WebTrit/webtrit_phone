@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -150,6 +151,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       onSpeakerChanged: _onSpeakerChanged,
                       heldValue: widget.activeCall.held,
                       onHeldChanged: _onHeldChanged,
+                      onTransferPressed: _onTransferPressed,
                       onHangupPressed: _hangup,
                       onAcceptPressed: _accept,
                       onKeyPressed: _keyPressed,
@@ -167,6 +169,11 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     setState(() {
       compact = !compact;
     });
+  }
+
+  void _onTransferPressed() async {
+    context.read<CallBloc>().add(CallControlEvent.transferring(widget.activeCall.callId.uuid));
+    GoRouter.of(context).pop();
   }
 
   void _cameraSwitched() {

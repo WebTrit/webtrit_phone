@@ -115,6 +115,7 @@ class _CallOverlayState extends State<CallOverlay> {
             name: state.activeCall.displayName ?? state.activeCall.handle.value,
             remoteStream: state.activeCall.remoteStream,
             isVideoCall: state.activeCall.video,
+            transferring: state.activeCall.transferring,
             onEndCall: () => _endCall(state.activeCall.callId),
           ),
         ),

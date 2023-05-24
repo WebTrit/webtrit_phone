@@ -493,6 +493,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       progress: (event) => __onCallSignalingEventProgress(event, emit),
       accepted: (event) => __onCallSignalingEventAccepted(event, emit),
       hangup: (event) => __onCallSignalingEventHangup(event, emit),
+      transferringCanceled: (event) => __onCallControlEventTransferringCanceled(event, emit),
     );
   }
 
@@ -679,6 +680,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       cameraEnabled: (event) => _onCallControlEventCameraEnabled(event, emit),
       speakerEnabled: (event) => _onCallControlEventSpeakerEnabled(event, emit),
       failureApproved: (event) => _onCallControlEventFailureApproved(event, emit),
+      transferring: (event) => __onCallControlEventTransferring(event, emit),
     );
   }
 
@@ -686,26 +688,36 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallControlEventStarted event,
     Emitter<CallState> emit,
   ) async {
-    final callId = CallIdValue(WebtritSignalingClient.generateCallId());
-
-    final error = await callkeep.startCall(
-      callId.uuid,
-      event.handle,
-      event.displayName,
-      event.video,
-    );
-    if (error != null) {
-      _logger.warning('__onCallControlEventStarted error: $error');
+    if (state.isActive) {
+      if (state.activeCall.transferring) {
+        await _signalingClient?.execute(TransferRequest(
+            transaction: WebtritSignalingClient.generateTransactionId(),
+            line: state.activeCall.line,
+            callId: state.activeCall.callId.value,
+            number: event.number!));
+      }
     } else {
-      emit(state.copyWithPushActiveCall(ActiveCall(
-        direction: Direction.outgoing,
-        line: event.line ?? state.retrieveIdleLine() ?? _kUndefinedLine,
-        callId: callId,
-        handle: event.handle,
-        displayName: event.displayName,
-        video: event.video,
-        createdTime: clock.now(),
-      )));
+      final callId = CallIdValue(WebtritSignalingClient.generateCallId());
+
+      final error = await callkeep.startCall(
+        callId.uuid,
+        event.handle,
+        event.displayName,
+        event.video,
+      );
+      if (error != null) {
+        _logger.warning('__onCallControlEventStarted error: $error');
+      } else {
+        emit(state.copyWithPushActiveCall(ActiveCall(
+          direction: Direction.outgoing,
+          line: event.line ?? state.retrieveIdleLine() ?? _kUndefinedLine,
+          callId: callId,
+          handle: event.handle,
+          displayName: event.displayName,
+          video: event.video,
+          createdTime: clock.now(),
+        )));
+      }
     }
   }
 
@@ -804,6 +816,26 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     emit(state.copyWithMappedActiveCall(event.uuid, (activeCall) {
       return activeCall.copyWith(failure: null);
+    }));
+  }
+
+  Future<void> __onCallControlEventTransferring(
+    _CallControlEventTransferring event,
+    Emitter<CallState> emit,
+  ) async {
+    add(CallControlEvent.setHeld(event.uuid, true));
+    emit(state.copyWithMappedActiveCall(event.uuid, (activeCall) {
+      return activeCall.copyWith(transferring: true);
+    }));
+  }
+
+  Future<void> __onCallControlEventTransferringCanceled(
+    _CallSignalingEventTransferringCanceled event,
+    Emitter<CallState> emit,
+  ) async {
+    add(CallControlEvent.setHeld(event.callId.uuid, false));
+    emit(state.copyWithMappedActiveCall(event.callId.uuid, (activeCall) {
+      return activeCall.copyWith(transferring: false);
     }));
   }
 
@@ -1185,6 +1217,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         code: event.code,
         reason: event.reason,
       ));
+    } else if (event is NotifyEvent) {
+      if (event.content.contains('Busy Here')) {
+        add(
+          _CallSignalingEvent.transferringCanceled(
+            callId: CallIdValue(event.callId),
+          ),
+        );
+      }
+      _logger.warning('notify event $event');
     } else {
       _logger.warning('unhandled signaling event $event');
     }

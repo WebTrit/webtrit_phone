@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -14,12 +15,14 @@ class CallOverlayDialog extends StatefulWidget {
     required this.remoteStream,
     required this.isVideoCall,
     required this.onEndCall,
+    required this.transferring,
   });
 
   final DateTime createdTime;
   final MediaStream? remoteStream;
   final String name;
   final bool isVideoCall;
+  final bool transferring;
   final Function onEndCall;
 
   @override
@@ -104,9 +107,12 @@ class _CallOverlayDialogState extends State<CallOverlayDialog> {
                     const SizedBox(
                       height: 8,
                     ),
-                    DurationTimer(
-                      createdTime: widget.createdTime,
-                    ),
+                    // TODO: should we pause the timer?
+                    widget.transferring
+                        ? Text(context.l10n.call_CallActionsTooltip_transfer)
+                        : DurationTimer(
+                            createdTime: widget.createdTime,
+                          ),
                     Text(
                       widget.name,
                       textAlign: TextAlign.center,
@@ -138,9 +144,9 @@ class _CallOverlayDialogState extends State<CallOverlayDialog> {
                     ),
                   ),
                   color: Theme.of(context).colorScheme.error,
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Icon(
                         Icons.call_end_rounded,
                         color: Colors.white,

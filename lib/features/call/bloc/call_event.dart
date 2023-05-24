@@ -81,6 +81,10 @@ class _CallSignalingEvent with _$_CallSignalingEvent implements CallEvent {
     required int code,
     required String reason,
   }) = _CallSignalingEventHangup;
+
+  const factory _CallSignalingEvent.transferringCanceled({
+    required CallIdValue callId,
+  }) = _CallSignalingEventTransferringCanceled;
 }
 
 // call push events
@@ -134,6 +138,8 @@ class CallControlEvent with _$CallControlEvent implements CallEvent {
   const factory CallControlEvent.speakerEnabled(UuidValue uuid, bool enabled) = _CallControlEventSpeakerEnabled;
 
   const factory CallControlEvent.failureApproved(UuidValue uuid) = _CallControlEventFailureApproved;
+
+  const factory CallControlEvent.transferring(UuidValue uuid) = _CallControlEventTransferring;
 }
 
 mixin CallControlEventStartedMixin {
