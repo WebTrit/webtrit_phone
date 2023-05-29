@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-import 'package:webtrit_phone/l10n/l10n.dart';
 
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -14,16 +12,14 @@ class CallOverlayDialog extends StatefulWidget {
     required this.name,
     required this.remoteStream,
     required this.isVideoCall,
-    required this.onEndCall,
-    required this.transferring,
+    required this.onTap,
   });
 
   final DateTime createdTime;
   final MediaStream? remoteStream;
   final String name;
   final bool isVideoCall;
-  final bool transferring;
-  final Function onEndCall;
+  final Function() onTap;
 
   @override
   State<CallOverlayDialog> createState() => _CallOverlayDialogState();
@@ -65,97 +61,58 @@ class _CallOverlayDialogState extends State<CallOverlayDialog> {
       builder: (context, AsyncSnapshot<List<void>> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           _remoteRenderer.srcObject = widget.remoteStream;
-          return Wrap(
-            children: [
-              Card(
-                color: Theme.of(context).colorScheme.primary,
-                margin: EdgeInsets.zero,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(8),
-                    topRight: Radius.circular(8),
+          return Card(
+            color: Colors.blue,
+            margin: EdgeInsets.zero,
+            child: InkWell(
+              onTap: widget.onTap,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 8,
                   ),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    widget.isVideoCall
-                        ? Container(
-                            padding: const EdgeInsets.all(2),
-                            decoration: BoxDecoration(
-                              color: theme.colorScheme.background,
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(90),
-                              ),
+                  widget.isVideoCall
+                      ? Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.background,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(90),
                             ),
-                            width: 64,
-                            height: 64,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(90.0),
-                              child: RTCVideoView(
-                                _remoteRenderer,
-                                objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
-                              ),
+                          ),
+                          width: 64,
+                          height: 64,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(90.0),
+                            child: RTCVideoView(
+                              _remoteRenderer,
+                              objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
                             ),
-                          )
-                        : LeadingAvatar(
-                            username: widget.name,
                           ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    // TODO: should we pause the timer?
-                    widget.transferring
-                        ? Text(context.l10n.call_CallActionsTooltip_transfer)
-                        : DurationTimer(
-                            createdTime: widget.createdTime,
-                          ),
-                    Text(
-                      widget.name,
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.bodyMedium!.copyWith(
-                        fontFeatures: [
-                          const FontFeature.tabularFigures(),
-                        ],
-                        color: Theme.of(context).colorScheme.background,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 4,
-                    ),
-                    const Divider(
-                      color: Colors.white54,
-                      height: 0,
-                    ),
-                  ],
-                ),
+                        )
+                      : LeadingAvatar(
+                          maxRadius: 24,
+                          username: widget.name,
+                        ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  const Spacer(),
+                  DurationTimer(
+                    createdTime: widget.createdTime,
+                  ),
+                  const Divider(),
+                  const Icon(
+                    Icons.phone,
+                    color: Colors.white,
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                ],
               ),
-              GestureDetector(
-                onTap: () => widget.onEndCall.call(),
-                child: Card(
-                  margin: EdgeInsets.zero,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(8),
-                      bottomRight: Radius.circular(8),
-                    ),
-                  ),
-                  color: Theme.of(context).colorScheme.error,
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.call_end_rounded,
-                        color: Colors.white,
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            ],
+            ),
           );
         } else {
           return const CircularProgressIndicator();
