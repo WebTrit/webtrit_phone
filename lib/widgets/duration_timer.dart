@@ -49,7 +49,9 @@ class _DurationTimerState extends State<DurationTimer> {
     return Text(
       duration!.format(),
       maxLines: 2,
-      style: widget.textStyle ??
+      style: widget.textStyle?.copyWith(fontFeatures: [
+            const FontFeature.tabularFigures(),
+          ], color: theme.colorScheme.background) ??
           theme.textTheme.bodySmall!.copyWith(fontFeatures: [
             const FontFeature.tabularFigures(),
           ], color: theme.colorScheme.background),
