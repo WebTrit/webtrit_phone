@@ -70,6 +70,8 @@ dependencies:
     path: ./packages/webtrit_callkeep
   store_info_extractor:
     path: ./packages/store_info_extractor
+  webtrit_overlay_floating:
+    path: ./packages/webtrit_overlay_floating
 
   app_database:
     path: ./packages/data/app_database
