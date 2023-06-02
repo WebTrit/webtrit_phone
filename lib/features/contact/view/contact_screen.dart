@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/widgets/widgets.dart';
+import 'package:webtrit_phone_number/webtrit_phone_number.dart';
 
 import '../../call/call.dart';
 import '../contact.dart';
@@ -47,7 +48,7 @@ class ContactScreen extends StatelessWidget {
                 ),
                 for (final contactPhone in contactPhones)
                   ContactPhoneTile(
-                    number: contactPhone.number,
+                    number: PhoneParser.normalize(contactPhone.number),
                     label: contactPhone.label,
                     favorite: contactPhone.favorite,
                     onFavoriteChanged: (favorite) {
