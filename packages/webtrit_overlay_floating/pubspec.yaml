@@ -19,8 +19,3 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
-  module:
-    androidX: true
-    androidPackage: com.webtrit.phone.webtrit_overlay_floating
-    iosBundleIdentifier: com.webtrit.phone.webtritOverlayFloating
