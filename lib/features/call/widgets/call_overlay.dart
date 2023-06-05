@@ -69,6 +69,10 @@ class _CallOverlayState extends State<CallOverlay> {
     if (state.isActive) {
       final overlayData = OverlayEntryData(
         offset: _callOverlayEntityPositionDefault,
+        config: const OverlayConfig(
+          overlayEntityConstraints: BoxConstraints(maxHeight: 148, maxWidth: 148),
+          overlayEntityConstraintsMinimized: BoxConstraints(maxHeight: 148, maxWidth: 40),
+        ),
         child: CallOverlayDialog(
           createdTime: state.activeCall.createdTime,
           name: state.activeCall.displayName ?? state.activeCall.handle.value,
