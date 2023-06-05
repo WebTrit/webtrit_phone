@@ -1,0 +1,22 @@
+name: webtrit_overlay_floating_example
+
+environment:
+  sdk: '>=3.0.1 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.5
+  gravatar_utils: ^1.0.0
+
+  webtrit_overlay_floating:
+    path: ../../webtrit_overlay_floating
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.1
+
+flutter:
+  uses-material-design: true
