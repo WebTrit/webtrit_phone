@@ -54,6 +54,8 @@ class _AppState extends State<App> {
     super.dispose();
   }
 
+  final GlobalKey<NavigatorState> _mainNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'main');
+
   @override
   Widget build(BuildContext context) {
     final materialApp = BlocBuilder<AppBloc, AppState>(
@@ -157,36 +159,15 @@ class _AppState extends State<App> {
             },
           ),
           ShellRoute(
+            navigatorKey: _mainNavigatorKey,
             builder: (context, state, child) {
               return MainShell(
                 child: child,
               );
             },
             routes: [
-              GoRoute(
-                name: AppRoute.main,
-                path: '/main',
-                redirect: (context, state) {
-                  // propagate MainFlavor query parameter from the current router location to the new one if needed
-                  if (state.queryParameters.containsKey(MainFlavor.queryParameterName)) {
-                    return null;
-                  } else {
-                    final routerLocation = Uri.parse(_router.location);
-                    final flavor =
-                        routerLocation.queryParameters[MainFlavor.queryParameterName] ?? MainFlavor.defaultValue.name;
-                    final stateLocation = Uri.parse(state.location);
-                    return stateLocation.replace(queryParameters: {
-                      ...stateLocation.queryParameters,
-                      MainFlavor.queryParameterName: flavor,
-                    }).toString();
-                  }
-                },
-                builder: (context, state) {
-                  final flavor = MainFlavor.values.byName(state.queryParameters[MainFlavor.queryParameterName]!);
-                  final widget = MainScreen(
-                    flavor,
-                    flavorWidgetBuilder: _flavorWidgetBuilder,
-                  );
+              StatefulShellRoute.indexedStack(
+                builder: (BuildContext context, GoRouterState state, StatefulNavigationShell navigationShell) {
                   final provider = BlocProvider(
                     create: (context) {
                       return MainBloc(
@@ -194,7 +175,9 @@ class _AppState extends State<App> {
                         storeInfoExtractor: StoreInfoExtractor(),
                       )..add(const MainStarted());
                     },
-                    child: widget,
+                    child: MainScreen(
+                      navigationShell: navigationShell,
+                    ),
                   );
                   return BlocListener<CallBloc, CallState>(
                     listenWhen: (previous, current) => previous.activeCalls.length != current.activeCalls.length,
@@ -219,122 +202,18 @@ class _AppState extends State<App> {
                     child: provider,
                   );
                 },
-                routes: [
-                  GoRoute(
-                    name: MainRoute.call,
-                    path: 'call',
-                    pageBuilder: (context, state) {
-                      const widget = CallScreen();
-                      return CustomTransitionPage(
-                        key: state.pageKey,
-                        fullscreenDialog: true,
-                        child: widget,
-                        transitionsBuilder: (BuildContext context, Animation<double> animation,
-                            Animation<double> secondaryAnimation, Widget child) {
-                          const builder = ZoomPageTransitionsBuilder();
-                          return builder.buildTransitions(null, context, animation, secondaryAnimation, child);
-                        },
-                      );
-                    },
-                  ),
-                  GoRoute(
-                    name: MainRoute.settings,
-                    path: 'settings',
-                    pageBuilder: (context, state) {
-                      const widget = SettingsScreen();
-                      final provider = BlocProvider(
-                        create: (context) {
-                          return SettingsBloc(
-                            appBloc: context.read<AppBloc>(),
-                            accountRepository: context.read<AccountRepository>(),
-                            appRepository: context.read<AppRepository>(),
-                            appPreferences: AppPreferences(),
-                          )..add(const SettingsRefreshed());
-                        },
-                        child: widget,
-                      );
-                      return MaterialPage(
-                        key: state.pageKey,
-                        fullscreenDialog: true,
-                        child: provider,
-                      );
-                    },
-                    routes: [
+                branches: [
+                  StatefulShellBranch(
+                    routes: <RouteBase>[
                       GoRoute(
-                        name: MainRoute.settingsAbout,
-                        path: 'about',
-                        builder: (context, state) {
-                          if (EnvironmentConfig.APP_ABOUT_URL.isNotEmpty) {
-                            final widget = WebAboutScreen(
-                              baseAppAboutUrl: Uri.parse(EnvironmentConfig.APP_ABOUT_URL),
-                              packageInfo: PackageInfo(),
-                              infoRepository: context.read<InfoRepository>(),
-                            );
-                            return widget;
-                          } else {
-                            const widget = AboutScreen();
-                            final provider = BlocProvider(
-                              create: (context) {
-                                return AboutBloc(
-                                  packageInfo: PackageInfo(),
-                                  infoRepository: context.read<InfoRepository>(),
-                                )..add(const AboutStarted());
-                              },
-                              child: widget,
-                            );
-                            return provider;
-                          }
-                        },
-                      ),
-                      GoRoute(
-                        name: MainRoute.settingsHelp,
-                        path: 'help',
-                        builder: (context, state) {
-                          const widget = HelpScreen();
-                          return widget;
-                        },
-                      ),
-                      GoRoute(
-                        name: MainRoute.settingsLanguage,
-                        path: 'language',
-                        builder: (context, state) {
-                          const widget = LanguageScreen();
-                          return widget;
-                        },
-                      ),
-                      GoRoute(
-                        name: MainRoute.settingsNetwork,
-                        path: 'network',
-                        builder: (context, state) {
-                          const widget = NetworkScreen();
-                          return widget;
-                        },
-                      ),
-                      GoRoute(
-                        name: MainRoute.settingsTermsConditions,
-                        path: 'terms-conditions',
-                        builder: (context, state) {
-                          const widget = TermsConditionsScreen();
-                          return widget;
-                        },
-                      ),
-                      GoRoute(
-                        name: MainRoute.settingsThemeMode,
-                        path: 'theme-mode',
-                        builder: (context, state) {
-                          const widget = ThemeModeScreen();
-                          return widget;
-                        },
-                      ),
-                      GoRoute(
-                        name: MainRoute.logRecordsConsole,
-                        path: 'log-records-console',
-                        builder: (context, state) {
-                          const widget = LogRecordsConsoleScreen();
+                        name: MainRoute.favorites,
+                        path: '/favorites',
+                        builder: (BuildContext context, GoRouterState state) {
+                          const widget = FavoritesScreen();
                           final provider = BlocProvider(
-                            create: (context) => LogRecordsConsoleCubit(
-                              logRecordsRepository: context.read<LogRecordsRepository>(),
-                            )..load(),
+                            create: (context) => FavoritesBloc(
+                              favoritesRepository: context.read<FavoritesRepository>(),
+                            )..add(const FavoritesStarted()),
                             child: widget,
                           );
                           return provider;
@@ -342,53 +221,240 @@ class _AppState extends State<App> {
                       ),
                     ],
                   ),
-                  GoRoute(
-                    name: MainRoute.contact,
-                    path: 'contact/:$contactIdPathParameterName',
-                    pageBuilder: (context, state) {
-                      const widget = ContactScreen();
-                      final provider = BlocProvider(
-                        create: (context) {
-                          return ContactBloc(
-                            int.parse(state.pathParameters[contactIdPathParameterName]!),
-                            contactsRepository: context.read<ContactsRepository>(),
-                          )..add(const ContactStarted());
+                  StatefulShellBranch(
+                    routes: <RouteBase>[
+                      GoRoute(
+                          name: MainRoute.recents,
+                          path: '/recents',
+                          builder: (BuildContext context, GoRouterState state) {
+                            final widget = RecentsScreen(
+                              initialFilter: context.read<RecentsBloc>().state.filter,
+                            );
+                            return widget;
+                          },
+                          routes: [
+                            GoRoute(
+                              name: MainRoute.recent,
+                              parentNavigatorKey: _mainNavigatorKey,
+                              path: ':$recentIdPathParameterName',
+                              pageBuilder: (context, state) {
+                                const widget = RecentScreen();
+                                var provider = BlocProvider(
+                                  create: (context) {
+                                    return RecentBloc(
+                                      int.parse(state.pathParameters[recentIdPathParameterName]!),
+                                      recentsRepository: context.read<RecentsRepository>(),
+                                    )..add(const RecentStarted());
+                                  },
+                                  child: widget,
+                                );
+                                return MaterialPage(
+                                  key: state.pageKey,
+                                  fullscreenDialog: true,
+                                  child: provider,
+                                );
+                              },
+                            ),
+                          ])
+                    ],
+                  ),
+                  StatefulShellBranch(
+                    routes: <RouteBase>[
+                      GoRoute(
+                        name: MainRoute.contacts,
+                        path: '/contacts',
+                        builder: (BuildContext context, GoRouterState state) {
+                          final widget = ContactsScreen(
+                            sourceTypes: const [
+                              ContactSourceType.local,
+                              ContactSourceType.external,
+                            ],
+                            sourceTypeWidgetBuilder: _contactSourceTypeWidgetBuilder,
+                          );
+                          final provider = BlocProvider(
+                            create: (context) => ContactsSearchBloc(),
+                            child: widget,
+                          );
+                          return provider;
                         },
-                        child: widget,
-                      );
-                      return MaterialPage(
-                        key: state.pageKey,
-                        fullscreenDialog: true,
-                        child: provider,
-                      );
+                        routes: [
+                          GoRoute(
+                            name: MainRoute.contact,
+                            parentNavigatorKey: _mainNavigatorKey,
+                            path: ':$contactIdPathParameterName',
+                            pageBuilder: (context, state) {
+                              const widget = ContactScreen();
+                              final provider = BlocProvider(
+                                create: (context) {
+                                  return ContactBloc(
+                                    int.parse(state.pathParameters[contactIdPathParameterName]!),
+                                    contactsRepository: context.read<ContactsRepository>(),
+                                  )..add(const ContactStarted());
+                                },
+                                child: widget,
+                              );
+                              return MaterialPage(
+                                key: state.pageKey,
+                                fullscreenDialog: true,
+                                child: provider,
+                              );
+                            },
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                  StatefulShellBranch(
+                    routes: <RouteBase>[
+                      GoRoute(
+                        name: MainRoute.keypad,
+                        path: '/keypad',
+                        builder: (BuildContext context, GoRouterState state) {
+                          const widget = KeypadScreen();
+                          final provider = BlocProvider(
+                            create: (context) => KeypadCubit(
+                              callBloc: context.read<CallBloc>(),
+                            ),
+                            child: widget,
+                          );
+                          return provider;
+                        },
+                      )
+                    ],
+                  ),
+                ],
+              ),
+              GoRoute(
+                parentNavigatorKey: _mainNavigatorKey,
+                name: MainRoute.call,
+                path: '/call',
+                pageBuilder: (context, state) {
+                  const widget = CallScreen();
+                  return CustomTransitionPage(
+                    key: state.pageKey,
+                    fullscreenDialog: true,
+                    child: widget,
+                    transitionsBuilder: (BuildContext context, Animation<double> animation,
+                        Animation<double> secondaryAnimation, Widget child) {
+                      const builder = ZoomPageTransitionsBuilder();
+                      return builder.buildTransitions(null, context, animation, secondaryAnimation, child);
+                    },
+                  );
+                },
+              ),
+              GoRoute(
+                parentNavigatorKey: _mainNavigatorKey,
+                name: MainRoute.settings,
+                path: '/settings',
+                pageBuilder: (context, state) {
+                  const widget = SettingsScreen();
+                  final provider = BlocProvider(
+                    create: (context) {
+                      return SettingsBloc(
+                        appBloc: context.read<AppBloc>(),
+                        accountRepository: context.read<AccountRepository>(),
+                        appRepository: context.read<AppRepository>(),
+                        appPreferences: AppPreferences(),
+                      )..add(const SettingsRefreshed());
+                    },
+                    child: widget,
+                  );
+                  return MaterialPage(
+                    key: state.pageKey,
+                    fullscreenDialog: true,
+                    child: provider,
+                  );
+                },
+                routes: [
+                  GoRoute(
+                    name: MainRoute.settingsAbout,
+                    parentNavigatorKey: _mainNavigatorKey,
+                    path: 'about',
+                    builder: (context, state) {
+                      if (EnvironmentConfig.APP_ABOUT_URL.isNotEmpty) {
+                        final widget = WebAboutScreen(
+                          baseAppAboutUrl: Uri.parse(EnvironmentConfig.APP_ABOUT_URL),
+                          packageInfo: PackageInfo(),
+                          infoRepository: context.read<InfoRepository>(),
+                        );
+                        return widget;
+                      } else {
+                        const widget = AboutScreen();
+                        final provider = BlocProvider(
+                          create: (context) {
+                            return AboutBloc(
+                              packageInfo: PackageInfo(),
+                              infoRepository: context.read<InfoRepository>(),
+                            )..add(const AboutStarted());
+                          },
+                          child: widget,
+                        );
+                        return provider;
+                      }
                     },
                   ),
                   GoRoute(
-                    name: MainRoute.recent,
-                    path: 'recent/:$recentIdPathParameterName',
-                    pageBuilder: (context, state) {
-                      const widget = RecentScreen();
-                      var provider = BlocProvider(
-                        create: (context) {
-                          return RecentBloc(
-                            int.parse(state.pathParameters[recentIdPathParameterName]!),
-                            recentsRepository: context.read<RecentsRepository>(),
-                          )..add(const RecentStarted());
-                        },
+                    name: MainRoute.settingsHelp,
+                    parentNavigatorKey: _mainNavigatorKey,
+                    path: 'help',
+                    builder: (context, state) {
+                      const widget = HelpScreen();
+                      return widget;
+                    },
+                  ),
+                  GoRoute(
+                    name: MainRoute.settingsLanguage,
+                    parentNavigatorKey: _mainNavigatorKey,
+                    path: 'language',
+                    builder: (context, state) {
+                      const widget = LanguageScreen();
+                      return widget;
+                    },
+                  ),
+                  GoRoute(
+                    name: MainRoute.settingsNetwork,
+                    parentNavigatorKey: _mainNavigatorKey,
+                    path: 'network',
+                    builder: (context, state) {
+                      const widget = NetworkScreen();
+                      return widget;
+                    },
+                  ),
+                  GoRoute(
+                    name: MainRoute.settingsTermsConditions,
+                    parentNavigatorKey: _mainNavigatorKey,
+                    path: 'terms-conditions',
+                    builder: (context, state) {
+                      const widget = TermsConditionsScreen();
+                      return widget;
+                    },
+                  ),
+                  GoRoute(
+                    name: MainRoute.settingsThemeMode,
+                    parentNavigatorKey: _mainNavigatorKey,
+                    path: 'theme-mode',
+                    builder: (context, state) {
+                      const widget = ThemeModeScreen();
+                      return widget;
+                    },
+                  ),
+                  GoRoute(
+                    name: MainRoute.logRecordsConsole,
+                    parentNavigatorKey: _mainNavigatorKey,
+                    path: 'log-records-console',
+                    builder: (context, state) {
+                      const widget = LogRecordsConsoleScreen();
+                      final provider = BlocProvider(
+                        create: (context) => LogRecordsConsoleCubit(
+                          logRecordsRepository: context.read<LogRecordsRepository>(),
+                        )..load(),
                         child: widget,
                       );
-                      return MaterialPage(
-                        key: state.pageKey,
-                        fullscreenDialog: true,
-                        child: provider,
-                      );
+                      return provider;
                     },
                   ),
                 ],
               ),
-            ],
-            observers: [
-              context.read<AppAnalyticsRepository>().createObserver(),
             ],
           ),
         ],
@@ -399,7 +465,7 @@ class _AppState extends State<App> {
     ],
     redirect: _redirect,
     refreshListenable: GoRouterRefreshBloc(appBloc),
-    initialLocation: '/main',
+    initialLocation: '/favorites',
     observers: [
       context.read<AppAnalyticsRepository>().createObserver(),
     ],
@@ -413,11 +479,11 @@ class _AppState extends State<App> {
 
     final isLoginPath = state.location.startsWith('/login');
     final isWebRegistrationPath = state.location.startsWith('/web-registration');
-    final isMainPath = state.location.startsWith('/main');
+    final isMainPath = state.location.startsWith('/favorites');
 
     if (coreUrl != null && token != null) {
       if (isLoginPath || isWebRegistrationPath) {
-        return '/main';
+        return '/favorites';
       } else if (isMainPath) {
         if (appPermissionsDenied) {
           return '/permissions';
@@ -430,47 +496,6 @@ class _AppState extends State<App> {
     }
 
     return null;
-  }
-
-  Widget _flavorWidgetBuilder(BuildContext context, MainFlavor flavor) {
-    switch (flavor) {
-      case MainFlavor.favorites:
-        const widget = FavoritesScreen();
-        final provider = BlocProvider(
-          create: (context) => FavoritesBloc(
-            favoritesRepository: context.read<FavoritesRepository>(),
-          )..add(const FavoritesStarted()),
-          child: widget,
-        );
-        return provider;
-      case MainFlavor.recents:
-        final widget = RecentsScreen(
-          initialFilter: context.read<RecentsBloc>().state.filter,
-        );
-        return widget;
-      case MainFlavor.contacts:
-        final widget = ContactsScreen(
-          sourceTypes: const [
-            ContactSourceType.local,
-            ContactSourceType.external,
-          ],
-          sourceTypeWidgetBuilder: _contactSourceTypeWidgetBuilder,
-        );
-        final provider = BlocProvider(
-          create: (context) => ContactsSearchBloc(),
-          child: widget,
-        );
-        return provider;
-      case MainFlavor.keypad:
-        const widget = KeypadScreen();
-        final provider = BlocProvider(
-          create: (context) => KeypadCubit(
-            callBloc: context.read<CallBloc>(),
-          ),
-          child: widget,
-        );
-        return provider;
-    }
   }
 
   Widget _contactSourceTypeWidgetBuilder(BuildContext context, ContactSourceType sourceType) {

@@ -6,8 +6,6 @@ class AppRoute {
 
   static const webRegistration = 'web-registration';
 
-  static const main = 'main';
-
   static const permissions = 'permissions';
 }
 
@@ -24,6 +22,11 @@ class MainRoute {
   static const settingsTermsConditions = 'terms-conditions';
   static const settingsThemeMode = 'theme-mode';
   static const logRecordsConsole = 'log-records-console';
+
+  static const favorites = 'favorites';
+  static const recents = 'recents';
+  static const contacts = 'contacts';
+  static const keypad = 'keypad';
 
   static const contact = 'contact';
 

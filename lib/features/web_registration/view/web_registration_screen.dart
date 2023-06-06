@@ -70,7 +70,7 @@ class _WebRegistrationScreenState extends State<WebRegistrationScreen> {
             await SecureStorage().writeToken(token);
 
             if (!mounted) return;
-            context.goNamed(AppRoute.main);
+            context.goNamed(MainRoute.favorites);
           },
         ),
         _webViewController.setNavigationDelegate(

@@ -87,7 +87,7 @@ class SettingsScreen extends StatelessWidget {
             title: Text(context.l10n.settings_ListViewTileTitle_network),
             trailing: const Icon(Icons.navigate_next),
             onTap: () {
-              context.goNamed(MainRoute.settingsNetwork);
+              context.pushNamed(MainRoute.settingsNetwork);
             },
           ),
           if (EnvironmentConfig.APP_HELP_URL.isNotEmpty) ...[
@@ -97,7 +97,7 @@ class SettingsScreen extends StatelessWidget {
               title: Text(context.l10n.settings_ListViewTileTitle_help),
               trailing: const Icon(Icons.navigate_next),
               onTap: () {
-                context.goNamed(MainRoute.settingsHelp);
+                context.pushNamed(MainRoute.settingsHelp);
               },
             ),
           ],
@@ -117,7 +117,7 @@ class SettingsScreen extends StatelessWidget {
               ],
             ),
             onTap: () {
-              context.goNamed(MainRoute.settingsLanguage);
+              context.pushNamed(MainRoute.settingsLanguage);
             },
           ),
           if (EnvironmentConfig.APP_TERMS_AND_CONDITIONS_URL.isNotEmpty) ...[
@@ -127,7 +127,7 @@ class SettingsScreen extends StatelessWidget {
               title: Text(context.l10n.settings_ListViewTileTitle_termsConditions),
               trailing: const Icon(Icons.navigate_next),
               onTap: () {
-                context.goNamed(MainRoute.settingsTermsConditions);
+                context.pushNamed(MainRoute.settingsTermsConditions);
               },
             ),
           ],
@@ -137,7 +137,7 @@ class SettingsScreen extends StatelessWidget {
             title: Text(context.l10n.settings_ListViewTileTitle_about),
             trailing: const Icon(Icons.navigate_next),
             onTap: () {
-              context.goNamed(MainRoute.settingsAbout);
+              context.pushNamed(MainRoute.settingsAbout);
             },
           ),
           const ListTileSeparator(),
@@ -156,7 +156,7 @@ class SettingsScreen extends StatelessWidget {
               ],
             ),
             onTap: () {
-              context.goNamed(MainRoute.settingsThemeMode);
+              context.pushNamed(MainRoute.settingsThemeMode);
             },
           ),
           GroupTitleListTile(
@@ -167,7 +167,7 @@ class SettingsScreen extends StatelessWidget {
             title: Text(context.l10n.settings_ListViewTileTitle_logRecordsConsole),
             trailing: const Icon(Icons.navigate_next),
             onTap: () {
-              context.goNamed(MainRoute.logRecordsConsole);
+              context.pushNamed(MainRoute.logRecordsConsole);
             },
           ),
           const ListTileSeparator(),
