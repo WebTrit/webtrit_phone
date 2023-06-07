@@ -57,7 +57,7 @@ void main() {
     if (deviceInfo is AndroidDeviceInfo) {
       screenshotNamePrefix = deviceInfo.model;
     } else if (deviceInfo is IosDeviceInfo) {
-      screenshotNamePrefix = deviceInfo.name!;
+      screenshotNamePrefix = deviceInfo.name;
     } else if (deviceInfo is WebBrowserInfo) {
       screenshotNamePrefix = 'web';
     } else {

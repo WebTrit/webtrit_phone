@@ -103,5 +103,5 @@ class ScreenshotsApp extends StatelessWidget {
 const _kInitialIndexParameterName = 'initialIndex';
 
 extension _GoRouterStateParams on GoRouterState {
-  int get initialIndexParameter => int.parse(params[_kInitialIndexParameterName]!);
+  int get initialIndexParameter => int.parse(pathParameters[_kInitialIndexParameterName]!);
 }
