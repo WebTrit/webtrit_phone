@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 
@@ -9,26 +7,27 @@ import '../main.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({
-    super.key,
-    required this.navigationShell,
-  });
+    Key? key,
+    required this.body,
+    required this.navigationBarFlavor,
+    this.onNavigationBarTap,
+  }) : super(key: key ?? const ValueKey<String>('MainScreen'));
 
-  final StatefulNavigationShell navigationShell;
+  final Widget body;
+  final MainFlavor navigationBarFlavor;
+  final ValueChanged<int>? onNavigationBarTap;
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final scaffold = Scaffold(
-      body: SafeArea(
-        top: false,
-        child: navigationShell,
-      ),
+      body: body,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         selectedLabelStyle: themeData.textTheme.bodySmall,
         unselectedLabelStyle: themeData.textTheme.bodySmall,
-        currentIndex: navigationShell.currentIndex,
-        onTap: (int index) => _onTap(context, index),
+        currentIndex: navigationBarFlavor.index,
+        onTap: onNavigationBarTap,
         items: MainFlavor.values.map((flavor) {
           return BottomNavigationBarItem(
             icon: Icon(flavor.icon),
@@ -65,13 +64,6 @@ class MainScreen extends StatelessWidget {
         }
       },
       child: scaffold,
-    );
-  }
-
-  void _onTap(BuildContext context, int index) {
-    navigationShell.goBranch(
-      index,
-      initialLocation: index == navigationShell.currentIndex,
     );
   }
 }
