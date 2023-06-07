@@ -36,7 +36,7 @@ class MainAppBar extends AppBar {
                       Icons.person,
                     ),
                     onPressed: () {
-                      context.goNamed(MainRoute.settings);
+                      context.pushNamed(MainRoute.settings);
                     },
                   ),
                 );

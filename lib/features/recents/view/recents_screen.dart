@@ -94,7 +94,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                 return RecentTile(
                   recent: recent,
                   onInfoPressed: () {
-                    context.goNamed(MainRoute.recent, pathParameters: {
+                    context.pushNamed(MainRoute.recent, pathParameters: {
                       recentIdPathParameterName: recent.id.toString(),
                     });
                   },
