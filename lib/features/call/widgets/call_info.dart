@@ -84,30 +84,19 @@ class _CallInfoState extends State<CallInfo> {
     final textTheme = themeData.textTheme;
     return Column(
       children: [
-        Text(
-          widget.isIncoming ? context.l10n.call_description_incoming : context.l10n.call_description_outgoing,
-          style: textTheme.bodyLarge!.copyWith(color: widget.color),
+        AppBar(
+          leading: const ExtBackButton(),
+          title: Text(
+            widget.isIncoming ? context.l10n.call_description_incoming : context.l10n.call_description_outgoing,
+          ),
+          backgroundColor: Colors.transparent,
+          foregroundColor: widget.color,
+          primary: false,
         ),
-        Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: ExtBackButton(
-                color: Theme.of(context).colorScheme.surface,
-              ),
-            ),
-            Expanded(
-              flex: 6,
-              child: Text(
-                widget.username,
-                style: textTheme.displaySmall!.copyWith(color: widget.color),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            const Spacer(
-              flex: 1,
-            )
-          ],
+        Text(
+          widget.username,
+          style: textTheme.displaySmall!.copyWith(color: widget.color),
+          textAlign: TextAlign.center,
         ),
         if (duration != null)
           Text(
