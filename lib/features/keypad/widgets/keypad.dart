@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/models/models.dart';
@@ -15,10 +17,13 @@ class Keypad extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    final TextButtonStyles? textButtonStyles = themeData.extension<TextButtonStyles>();
+    final textButtonStyles = themeData.extension<TextButtonStyles>();
+
+    final mediaQueryData = MediaQuery.of(context);
+    final minimumDimension = min(mediaQueryData.size.width / 5, mediaQueryData.size.height / 7);
 
     return TextButtonsTable(
-      minimumSize: Size.square(MediaQuery.of(context).size.width / 5),
+      minimumSize: Size.square(minimumDimension),
       children: [
         for (final k in KeypadKey.numbers)
           KeypadKeyButton(
