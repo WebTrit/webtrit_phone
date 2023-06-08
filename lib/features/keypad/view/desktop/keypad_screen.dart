@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-import 'mobile/keypad_screen.dart' as mobile;
-import 'web/keypad_screen.dart' as desktop;
+import 'keypad_view.dart';
 
 class KeypadScreen extends StatelessWidget {
   const KeypadScreen({
@@ -11,9 +11,8 @@ class KeypadScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ResponsiveWidget(
-      mobileScreen: mobile.KeypadScreen(),
-      desktopScreen: desktop.KeypadScreen(),
+    return const Scaffold(
+      body: KeypadView(),
     );
   }
 }

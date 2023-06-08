@@ -144,6 +144,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_CallActionsTooltip_accept => 'Accept';
 
   @override
+  String get keypad_Label_phoneNumber => 'Phone number';
+
+  @override
   String get favorites_BodyCenter_empty => 'There are no favorite numbers';
 
   @override

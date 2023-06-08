@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
 
-import '../keypad.dart';
+import '../../keypad.dart';
 
 class KeypadView extends StatefulWidget {
   const KeypadView({Key? key}) : super(key: key);

@@ -22,4 +22,12 @@ class KeypadCubit extends Cubit<KeypadState> {
   void callTypeSwitch() {
     emit(KeypadState(video: !state.video));
   }
+
+  void callTypeAudio() {
+    emit(const KeypadState(video: false));
+  }
+
+  void callTypeVideo() {
+    emit(const KeypadState(video: true));
+  }
 }

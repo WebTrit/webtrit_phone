@@ -361,6 +361,12 @@ abstract class AppLocalizations {
   /// **'Accept'**
   String get call_CallActionsTooltip_accept;
 
+  /// No description provided for @keypad_Label_phoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number'**
+  String get keypad_Label_phoneNumber;
+
   /// No description provided for @favorites_BodyCenter_empty.
   ///
   /// In en, this message translates to:

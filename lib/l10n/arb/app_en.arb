@@ -151,6 +151,10 @@
   "@call_CallActionsTooltip_accept": {
   },
 
+  "keypad_Label_phoneNumber": "Phone number",
+  "@keypad_Label_phoneNumber": {
+  },
+
   "favorites_BodyCenter_empty": "There are no favorite numbers",
   "@favorites_BodyCenter_empty": {
   },
