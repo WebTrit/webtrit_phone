@@ -7,14 +7,14 @@ import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class Keypad extends StatelessWidget {
-  final void Function(String) onKeypadPressed;
-
-  final double _maxSizeLimit = 136;
-
   const Keypad({
     Key? key,
     required this.onKeypadPressed,
   }) : super(key: key);
+
+  final void Function(String) onKeypadPressed;
+
+  final double _maxSizeLimit = 136;
 
   @override
   Widget build(BuildContext context) {

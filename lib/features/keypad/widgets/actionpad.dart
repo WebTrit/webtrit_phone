@@ -6,14 +6,6 @@ import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class Actionpad extends StatelessWidget {
-  final bool video;
-  final VoidCallback? onCallPressed;
-  final VoidCallback? onCallLongPress;
-  final VoidCallback? onBackspacePressed;
-  final VoidCallback? onBackspaceLongPress;
-
-  final double _maxSizeLimit = 136;
-
   const Actionpad({
     Key? key,
     this.video = false,
@@ -22,6 +14,14 @@ class Actionpad extends StatelessWidget {
     this.onBackspacePressed,
     this.onBackspaceLongPress,
   }) : super(key: key);
+
+  final bool video;
+  final VoidCallback? onCallPressed;
+  final VoidCallback? onCallLongPress;
+  final VoidCallback? onBackspacePressed;
+  final VoidCallback? onBackspaceLongPress;
+
+  final double _maxSizeLimit = 136;
 
   @override
   Widget build(BuildContext context) {
