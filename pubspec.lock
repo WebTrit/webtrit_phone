@@ -1099,6 +1099,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.3"
+  responsive_framework:
+    dependency: "direct main"
+    description:
+      name: responsive_framework
+      sha256: "07bbe163bd67708160f3d11abaf6b34ae5b718e4250d83aa9a8a9496325f6b8a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   rxdart:
     dependency: "direct main"
     description:

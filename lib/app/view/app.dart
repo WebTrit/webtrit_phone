@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 import 'package:store_info_extractor/store_info_extractor.dart';
 
@@ -70,6 +71,20 @@ class _AppState extends State<App> {
             builder: (context, state) {
               final themeProvider = ThemeProvider.of(context);
               return MaterialApp.router(
+                builder: (context, child) => ResponsiveBreakpoints.builder(
+                  child: MaxWidthBox(
+                    background: Container(
+                      color: Colors.black.withOpacity(0.1),
+                    ),
+                    maxWidth: 1920,
+                    child: ClipRect(child: child!),
+                  ),
+                  breakpoints: [
+                    const Breakpoint(start: 0, end: 450, name: MOBILE),
+                    const Breakpoint(start: 451, end: 800, name: TABLET),
+                    const Breakpoint(start: 801, end: 1920, name: DESKTOP),
+                  ],
+                ),
                 locale: state.effectiveLocale,
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
