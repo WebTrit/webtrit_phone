@@ -1331,7 +1331,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           : false,
     };
     final localStream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
-    await Helper.setSpeakerphoneOn(video);
+    if (!kIsWeb) {
+      await Helper.setSpeakerphoneOn(video);
+    }
 
     return localStream;
   }
