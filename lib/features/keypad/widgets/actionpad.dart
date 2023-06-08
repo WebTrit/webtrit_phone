@@ -26,9 +26,10 @@ class Actionpad extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final TextButtonStyles? textButtonStyles = themeData.extension<TextButtonStyles>();
+    final buttonDimension = min(MediaQuery.of(context).size.width / 5, kMaxKeyPadHeight);
 
     return TextButtonsTable(
-      minimumSize: Size.square(min(MediaQuery.of(context).size.width / 5, kMaxKeyPadHeight)),
+      minimumSize: Size.square(buttonDimension),
       children: [
         const SizedBox(),
         TextButton(
