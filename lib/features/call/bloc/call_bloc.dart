@@ -25,7 +25,6 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/notifications/notifications.dart';
 import 'package:webtrit_phone/models/recent.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/data/data.dart';
 
 import '../models/models.dart';
 
@@ -1332,9 +1331,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           : false,
     };
     final localStream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
-    if (PlatformInfo().isMobile) {
+    if (!kIsWeb) {
       await Helper.setSpeakerphoneOn(video);
     }
+
     return localStream;
   }
 
