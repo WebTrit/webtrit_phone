@@ -75,15 +75,21 @@ class AccountInfoListTile extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Text(
-                    info?.name ?? _kHoldSpaceData,
-                    style: themeData.textTheme.bodyLarge!.copyWith(
-                      fontWeight: FontWeight.bold,
+                  CopyToClipboard(
+                    data: info?.name,
+                    child: Text(
+                      info?.name ?? _kHoldSpaceData,
+                      style: themeData.textTheme.bodyLarge!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                  Text(
-                    info?.numberWithExtension ?? _kHoldSpaceData,
-                    style: themeData.textTheme.bodyLarge,
+                  CopyToClipboard(
+                    data: info?.login,
+                    child: Text(
+                      info?.numberWithExtension ?? _kHoldSpaceData,
+                      style: themeData.textTheme.bodyLarge,
+                    ),
                   ),
                   Text(
                     info?.balanceWithCurrency ?? _kHoldSpaceData,

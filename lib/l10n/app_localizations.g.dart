@@ -139,6 +139,18 @@ abstract class AppLocalizations {
   /// **'Ok'**
   String get alertDialogActions_ok;
 
+  /// No description provided for @copyToClipboard_popupMenuItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy to clipboard'**
+  String get copyToClipboard_popupMenuItem;
+
+  /// No description provided for @copyToClipboard_floatingSnackBar.
+  ///
+  /// In en, this message translates to:
+  /// **'Text copied'**
+  String get copyToClipboard_floatingSnackBar;
+
   /// No description provided for @callStatus_connectivityNone.
   ///
   /// In en, this message translates to:
