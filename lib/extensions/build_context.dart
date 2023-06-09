@@ -32,4 +32,17 @@ extension BuildContextSnackBar on BuildContext {
       backgroundColor: Theme.of(this).colorScheme.error,
     ));
   }
+
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showFloatingSnackBar(
+    String data, {
+    SnackBarAction? action,
+    Duration duration = const Duration(seconds: 1),
+  }) {
+    return (ScaffoldMessenger.of(this)..removeCurrentSnackBar()).showSnackBar(SnackBar(
+      content: Text(data),
+      behavior: SnackBarBehavior.floating,
+      action: action,
+      duration: duration,
+    ));
+  }
 }

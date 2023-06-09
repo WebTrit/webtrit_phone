@@ -76,30 +76,21 @@ class AccountInfoListTile extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Text(
-                    info?.name ?? _kHoldSpaceData,
-                    style: themeData.textTheme.bodyLarge!.copyWith(
-                      fontWeight: FontWeight.bold,
+                  CopyToClipboard(
+                    data: info?.name,
+                    child: Text(
+                      info?.name ?? _kHoldSpaceData,
+                      style: themeData.textTheme.bodyLarge!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                  InkWell(
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            info?.numberWithExtension ?? _kHoldSpaceData,
-                            style: themeData.textTheme.bodyLarge,
-                          ),
-                        ),
-                        Icon(
-                          Icons.copy,
-                          color: themeData.colorScheme.secondaryContainer,
-                        )
-                      ],
+                  CopyToClipboard(
+                    data: info?.login,
+                    child: Text(
+                      info?.numberWithExtension ?? _kHoldSpaceData,
+                      style: themeData.textTheme.bodyLarge,
                     ),
-                    onTap: () {
-                      Clipboard.setData(ClipboardData(text: info?.numberWithExtension ?? _kHoldSpaceData));
-                    },
                   ),
                   Text(
                     info?.balanceWithCurrency ?? _kHoldSpaceData,
