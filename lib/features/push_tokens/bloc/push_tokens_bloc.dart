@@ -8,6 +8,7 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 part 'push_tokens_event.dart';
@@ -45,7 +46,8 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
   }
 
   void _onStarted(PushTokensEvent event, Emitter<PushTokensState> emit) async {
-    final fcmToken = await firebaseMessaging.getToken();
+    final vapidKey = EnvironmentConfig.FCM_VAPID_KEY.isEmpty ? null : EnvironmentConfig.FCM_VAPID_KEY;
+    final fcmToken = await firebaseMessaging.getToken(vapidKey: vapidKey);
     if (fcmToken != null) {
       add(PushTokensInsertedOrUpdated(AppPushTokenType.fcm, fcmToken));
     }
