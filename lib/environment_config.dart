@@ -48,4 +48,8 @@ class EnvironmentConfig {
   static const APP_TERMS_AND_CONDITIONS_URL = String.fromEnvironment(
     'WEBTRIT_PHONE_APP_TERMS_AND_CONDITIONS_URL',
   );
+
+  static const FCM_VAPID_KEY = String.fromEnvironment(
+    'WEBTRIT_PHONE_FCM_VAPID_KEY',
+  );
 }
