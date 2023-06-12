@@ -242,6 +242,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         add(_ConnectivityResultChanged(result));
       }
     });
+    if (state.currentConnectivityResult == null) {
+      final result = await Connectivity().checkConnectivity();
+      _logger.finer('checkConnectivity: $result');
+      add(_ConnectivityResultChanged(result));
+    }
 
     if (!kIsWeb && Platform.isIOS) {
       _routeChangeSubscription = AVAudioSession().routeChangeStream.listen((event) {
