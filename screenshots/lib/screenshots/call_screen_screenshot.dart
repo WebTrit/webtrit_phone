@@ -8,9 +8,9 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:screenshots/mocks/mocks.dart';
 
 class CallScreenScreenshot extends StatefulWidget {
-  const CallScreenScreenshot({
+  const CallScreenScreenshot(
+    this.video, {
     super.key,
-    required this.video,
     this.localePlaceholderUrl = 'https://dummyimage.com/600x800/00e326/fff.jpg&text=locale',
     this.remotePlaceholderUrl = 'https://dummyimage.com/600x800/0048e3/fff.jpg&text=remote',
   });

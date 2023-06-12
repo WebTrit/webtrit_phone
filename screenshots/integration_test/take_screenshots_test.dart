@@ -114,13 +114,13 @@ void main() {
     takeScreenshotTestWidgets('call_screen__audio', () {
       return ScreenshotApp(
         appBloc: appBloc,
-        child: const CallScreenScreenshot(video: false),
+        child: const CallScreenScreenshot(false),
       );
     });
     takeScreenshotTestWidgets('call_screen__video', () {
       return ScreenshotApp(
         appBloc: appBloc,
-        child: const CallScreenScreenshot(video: true),
+        child: const CallScreenScreenshot(true),
       );
     });
   });
