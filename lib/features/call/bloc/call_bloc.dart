@@ -25,7 +25,6 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/notifications/notifications.dart';
 import 'package:webtrit_phone/models/recent.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/data/data.dart';
 
 import '../models/models.dart';
 
@@ -109,12 +108,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
 
     WidgetsBinding.instance.addObserver(this);
-
-    // Method didChangeAppLifecycleState of WidgetsBindingObserver not calling on web
-    // so we force add event when a block was created
-    if (WidgetsBinding.instance.lifecycleState != null && PlatformInfo().isWeb) {
-      add(_AppLifecycleStateChanged(WidgetsBinding.instance.lifecycleState!));
-    }
 
     callkeep.setDelegate(this);
   }
@@ -249,6 +242,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         add(_ConnectivityResultChanged(result));
       }
     });
+    if (state.currentConnectivityResult == null) {
+      final result = await Connectivity().checkConnectivity();
+      _logger.finer('checkConnectivity: $result');
+      add(_ConnectivityResultChanged(result));
+    }
 
     if (!kIsWeb && Platform.isIOS) {
       _routeChangeSubscription = AVAudioSession().routeChangeStream.listen((event) {
