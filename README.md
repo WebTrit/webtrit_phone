@@ -4,6 +4,7 @@ WebTrit Phone application.
 
 ## Build variables
 
+* `WEBTRIT_PHONE_APP_ID_SUFFIX` - suffix added to `applicationId` (_with value `com.webtrit.phone`_) on Android and to `CFBundleIdentifier` (_with value `com.webtrit.phone`_) on iOS (_default is empty_)
 * `WEBTRIT_PHONE_APP_NAME` (_default **WebTrit**_)
 * `WEBTRIT_PHONE_APP_DESCRIPTION` (_default **<WEBTRIT_PHONE_APP_NAME> application**_)
 * `WEBTRIT_PHONE_WEBTRIT_CORE_URL` (_default **http://localhost:4000**_)

@@ -1,4 +1,5 @@
 // GENERATED CODE, DO NOT EDIT BY HAND.
+// ignore_for_file: type=lint
 //@dart=2.12
 import 'package:drift/drift.dart';
 
@@ -213,8 +214,6 @@ class CallLogs extends Table with TableInfo {
   }
 
   @override
-  List<String> get customConstraints => const [];
-  @override
   bool get dontWriteConstraints => true;
 }
 
@@ -259,14 +258,11 @@ class Favorites extends Table with TableInfo {
   }
 
   @override
-  List<String> get customConstraints => const [];
-  @override
   bool get dontWriteConstraints => true;
 }
 
 class DatabaseAtV1 extends GeneratedDatabase {
   DatabaseAtV1(QueryExecutor e) : super(e);
-  DatabaseAtV1.connect(DatabaseConnection c) : super.connect(c);
   late final Contacts contacts = Contacts(this);
   late final ContactPhones contactPhones = ContactPhones(this);
   late final CallLogs callLogs = CallLogs(this);

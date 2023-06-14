@@ -27,8 +27,8 @@ class MainScreenScreenshot extends StatelessWidget {
         ),
       ],
       child: MainScreen(
-        flavor,
-        flavorWidgetBuilder: _flavorWidgetBuilder,
+        body: _flavorWidgetBuilder(context, flavor),
+        navigationBarFlavor: flavor,
       ),
     );
   }

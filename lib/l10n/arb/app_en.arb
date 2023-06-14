@@ -28,6 +28,13 @@
   "@alertDialogActions_ok": {
   },
 
+  "copyToClipboard_popupMenuItem": "Copy to clipboard",
+  "@copyToClipboard_popupMenuItem": {
+  },
+  "copyToClipboard_floatingSnackBar": "Text copied",
+  "@copyToClipboard_floatingSnackBar": {
+  },
+
   "callStatus_connectivityNone": "No internet connection",
   "@callStatus_connectivityNone": {
   },

@@ -1,5 +1,6 @@
 import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/features/features.dart';
@@ -28,7 +29,7 @@ void main() {
 }
 
 class ScreenshotsApp extends StatelessWidget {
-  const ScreenshotsApp({
+  ScreenshotsApp({
     super.key,
     required this.appBloc,
   });
@@ -37,45 +38,70 @@ class ScreenshotsApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenshots = [
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const LoginScreenScreenshot(LoginStep.modeSelect),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const MainScreenScreenshot(MainFlavor.favorites),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const MainScreenScreenshot(MainFlavor.recents),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const MainScreenScreenshot(MainFlavor.keypad),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const SettingScreenScreenshot(),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const CallScreenScreenshot(false),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const CallScreenScreenshot(true),
-      ),
-    ];
-
-    return MaterialApp(
-      home: DefaultTabController(
-        length: screenshots.length,
-        child: TabBarView(
-          children: screenshots,
-        ),
-      ),
+    return MaterialApp.router(
+      routerConfig: _router,
       debugShowCheckedModeBanner: false,
     );
   }
+
+  late final _screenshots = [
+    ScreenshotApp(
+      appBloc: appBloc,
+      child: const LoginScreenScreenshot(LoginStep.modeSelect),
+    ),
+    ScreenshotApp(
+      appBloc: appBloc,
+      child: const MainScreenScreenshot(MainFlavor.favorites),
+    ),
+    ScreenshotApp(
+      appBloc: appBloc,
+      child: const MainScreenScreenshot(MainFlavor.recents),
+    ),
+    ScreenshotApp(
+      appBloc: appBloc,
+      child: const MainScreenScreenshot(MainFlavor.keypad),
+    ),
+    ScreenshotApp(
+      appBloc: appBloc,
+      child: const SettingScreenScreenshot(),
+    ),
+    ScreenshotApp(
+      appBloc: appBloc,
+      child: const CallScreenScreenshot(false),
+    ),
+    ScreenshotApp(
+      appBloc: appBloc,
+      child: const CallScreenScreenshot(true),
+    ),
+  ];
+
+  late final _router = GoRouter(
+    routes: [
+      GoRoute(
+        path: '/',
+        redirect: (context, state) {
+          return '/0';
+        },
+      ),
+      GoRoute(
+        path: '/:$_kInitialIndexParameterName',
+        builder: (context, state) {
+          return DefaultTabController(
+            key: ValueKey(state.initialIndexParameter),
+            length: _screenshots.length,
+            initialIndex: state.initialIndexParameter,
+            child: TabBarView(
+              children: _screenshots,
+            ),
+          );
+        },
+      ),
+    ],
+  );
+}
+
+const _kInitialIndexParameterName = 'initialIndex';
+
+extension _GoRouterStateParams on GoRouterState {
+  int get initialIndexParameter => int.parse(pathParameters[_kInitialIndexParameterName]!);
 }

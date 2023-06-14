@@ -7,6 +7,7 @@ import 'package:clock/clock.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class CallInfo extends StatefulWidget {
   const CallInfo({
@@ -83,9 +84,14 @@ class _CallInfoState extends State<CallInfo> {
     final textTheme = themeData.textTheme;
     return Column(
       children: [
-        Text(
-          widget.isIncoming ? context.l10n.call_description_incoming : context.l10n.call_description_outgoing,
-          style: textTheme.bodyLarge!.copyWith(color: widget.color),
+        AppBar(
+          leading: const ExtBackButton(),
+          title: Text(
+            widget.isIncoming ? context.l10n.call_description_incoming : context.l10n.call_description_outgoing,
+          ),
+          backgroundColor: Colors.transparent,
+          foregroundColor: widget.color,
+          primary: false,
         ),
         Text(
           widget.username,

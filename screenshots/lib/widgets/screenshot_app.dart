@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 
+import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
@@ -32,7 +32,7 @@ class ScreenshotApp extends StatelessWidget {
                 previous.effectiveThemeMode != current.effectiveThemeMode,
             builder: (context, state) {
               final themeProvider = ThemeProvider.of(context);
-              return MaterialApp(
+              return MaterialApp.router(
                 locale: state.effectiveLocale,
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
@@ -40,8 +40,8 @@ class ScreenshotApp extends StatelessWidget {
                 themeMode: state.effectiveThemeMode,
                 theme: themeProvider.light(),
                 darkTheme: themeProvider.dark(),
-                home: child,
                 debugShowCheckedModeBanner: false,
+                routerDelegate: ScreenshotRouterDelegate(child),
               );
             },
           ),
@@ -63,5 +63,35 @@ class ScreenshotApp extends StatelessWidget {
     );
 
     return provider;
+  }
+}
+
+class ScreenshotRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
+  ScreenshotRouterDelegate(this.child);
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Navigator(
+      pages: [
+        MaterialPage(
+          child: child,
+        ),
+      ],
+      onPopPage: (route, result) {
+        return false;
+      },
+    );
+  }
+
+  @override
+  Future<void> setNewRoutePath(Object configuration) async {
+    return;
+  }
+
+  @override
+  Future<bool> popRoute() async {
+    return false;
   }
 }

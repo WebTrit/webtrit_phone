@@ -1,49 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
-import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 
 import '../main.dart';
 
-typedef MainFlavorWidgetBuilder = Widget Function(BuildContext context, MainFlavor flavor);
-
 class MainScreen extends StatelessWidget {
-  const MainScreen(
-    this.flavor, {
-    super.key,
-    required this.flavorWidgetBuilder,
-  });
+  const MainScreen({
+    Key? key,
+    required this.body,
+    required this.navigationBarFlavor,
+    this.onNavigationBarTap,
+  }) : super(key: key ?? const ValueKey<String>('MainScreen'));
 
-  final MainFlavor flavor;
-  final MainFlavorWidgetBuilder flavorWidgetBuilder;
+  final Widget body;
+  final MainFlavor navigationBarFlavor;
+  final ValueChanged<int>? onNavigationBarTap;
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final scaffold = Scaffold(
-      body: SafeArea(
-        top: false,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            for (final flavor in MainFlavor.values)
-              FlavorScreenHolder(
-                active: flavor == this.flavor,
-                builder: (context) => flavorWidgetBuilder(context, flavor),
-              )
-          ],
-        ),
-      ),
+      body: body,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         selectedLabelStyle: themeData.textTheme.bodySmall,
         unselectedLabelStyle: themeData.textTheme.bodySmall,
-        currentIndex: flavor.index,
-        onTap: (index) {
-          context.goNamed(AppRoute.main, queryParams: {MainFlavor.queryParameterName: MainFlavor.values[index].name});
-        },
+        currentIndex: navigationBarFlavor.index,
+        onTap: onNavigationBarTap,
         items: MainFlavor.values.map((flavor) {
           return BottomNavigationBarItem(
             icon: Icon(flavor.icon),

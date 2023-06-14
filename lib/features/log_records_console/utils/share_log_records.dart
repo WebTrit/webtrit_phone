@@ -2,17 +2,18 @@ import 'dart:io';
 
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
-import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' show join;
 import 'package:share_plus/share_plus.dart';
+
+import 'package:webtrit_phone/utils/utils.dart';
 
 Future<ShareResult> shareLogRecords(
   List<LogRecord> logRecords, {
   required LogRecordFormatter logRecordsFormatter,
   required String name,
 }) async {
-  final temporaryPath = (await getTemporaryDirectory()).path;
-  final logRecordsPath = path.join(temporaryPath, name);
+  final temporaryPath = await getTemporaryPath();
+  final logRecordsPath = join(temporaryPath, name);
   final logRecordsFile = File(logRecordsPath);
 
   final logRecordsSink = logRecordsFile.openWrite();

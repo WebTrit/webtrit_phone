@@ -5,16 +5,18 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.19.3 <3.0.0'
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ^3.10.0
 
 dependencies:
   flutter:
     sdk: flutter
 
-  bloc_test: ^9.1.1
+  bloc_test: ^9.1.3
   clock: ^1.1.1
-  device_info_plus: ^8.1.0
+  device_info_plus: ^9.0.1
   flutter_bloc: ^8.1.2
+  go_router: ^7.1.1
   mocktail: ^0.3.0
 
   webtrit_phone:

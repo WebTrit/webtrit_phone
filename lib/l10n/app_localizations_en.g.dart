@@ -31,6 +31,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get alertDialogActions_ok => 'Ok';
 
   @override
+  String get copyToClipboard_popupMenuItem => 'Copy to clipboard';
+
+  @override
+  String get copyToClipboard_floatingSnackBar => 'Text copied';
+
+  @override
   String get callStatus_connectivityNone => 'No internet connection';
 
   @override

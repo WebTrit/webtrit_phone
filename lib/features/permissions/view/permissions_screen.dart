@@ -23,7 +23,7 @@ class PermissionsScreen extends StatelessWidget {
       body: BlocConsumer<PermissionsCubit, PermissionsState>(
         listener: (context, state) {
           if (state.status.isSuccess || state.status.isFailure) {
-            context.goNamed(AppRoute.main);
+            context.goNamed(MainRoute.favorites);
           }
         },
         builder: (context, state) {

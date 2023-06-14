@@ -16,6 +16,17 @@ class MainRoute {
 
   static const call = 'call';
 
+  static const favorites = 'favorites';
+  static const favoritesDetails = 'favorite';
+
+  static const contacts = 'contacts';
+  static const contactsDetails = 'contact';
+
+  static const recents = 'recents';
+  static const recentsDetails = 'recent';
+
+  static const keypad = 'keypad';
+
   static const settings = 'settings';
   static const settingsAbout = 'about';
   static const settingsHelp = 'help';
@@ -24,8 +35,4 @@ class MainRoute {
   static const settingsTermsConditions = 'terms-conditions';
   static const settingsThemeMode = 'theme-mode';
   static const logRecordsConsole = 'log-records-console';
-
-  static const contact = 'contact';
-
-  static const recent = 'recent';
 }
