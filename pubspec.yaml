@@ -102,7 +102,7 @@ flutter:
     - assets/login/
     - assets/ringtones/
     - assets/style/
-    - publisher.yaml
+    - publisher.json
 
 flutter_gen:
   output: lib/app/
