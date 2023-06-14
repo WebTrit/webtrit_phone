@@ -14,8 +14,6 @@ import 'package:webtrit_phone/pre_bootstrap/pre_bootstrap.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
-import 'package:style/style.dart';
-
 void main() {
   hierarchicalLoggingEnabled = true;
   PrintAppender.setupLogging(level: Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.DEBUG_LEVEL));
