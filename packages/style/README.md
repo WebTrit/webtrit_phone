@@ -1,4 +1,4 @@
-A library for Dart developers.
+The package is designed to update the theme of the application. Also, this package is the source of models for other modules of the system, such as configurator, publisher or phone.
 
 ## Usage
 
