@@ -2,9 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
-
-class AppYaml {
-  static late AppYaml _instance;
+class AppStyleConfig {
+  static late AppStyleConfig _instance;
 
   static Future<void> init() async {
     final yamlString = await rootBundle.loadString('publisher.json');
@@ -17,20 +16,21 @@ class AppYaml {
       host: yamlMap['hosts']['configurator']['stage'],
     );
 
-    _instance = AppYaml._(publisherConfig);
+    _instance = AppStyleConfig._(publisherConfig);
   }
 
-  factory AppYaml() {
+  factory AppStyleConfig() {
     return _instance;
   }
 
-  AppYaml._(this._publisherConfig);
+  AppStyleConfig._(this._publisherConfig);
 
   PublisherConfig _publisherConfig;
 
   PublisherConfig get publisherConfig => _publisherConfig;
 }
 
+//TODO: After adding dependency for publisher it will be moved there
 class PublisherConfig {
   final String themeId;
   final String applicationId;

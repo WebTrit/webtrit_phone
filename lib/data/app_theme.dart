@@ -12,12 +12,12 @@ class AppTheme {
 
   static Future<void> init() async {
     StyleManager.setting(
-      host: AppYaml().publisherConfig.host,
+      host: AppStyleConfig().publisherConfig.host,
     );
 
     StyleManager.init(
-        applicationId: AppYaml().publisherConfig.applicationId,
-        themeId: AppYaml().publisherConfig.themeId,
+        applicationId: AppStyleConfig().publisherConfig.applicationId,
+        themeId: AppStyleConfig().publisherConfig.themeId,
         defaultTheme: Assets.style.webtrit);
 
     final styleModel = await StyleManager().get();
