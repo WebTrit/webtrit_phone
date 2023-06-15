@@ -21,7 +21,7 @@ TextsDTO _$TextsDTOFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$TextsDTO {
   String? get greeting => throw _privateConstructorUsedError;
-  String? get contact_email => throw _privateConstructorUsedError;
+  String? get contactEmail => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,7 +34,7 @@ abstract class $TextsDTOCopyWith<$Res> {
   factory $TextsDTOCopyWith(TextsDTO value, $Res Function(TextsDTO) then) =
       _$TextsDTOCopyWithImpl<$Res, TextsDTO>;
   @useResult
-  $Res call({String? greeting, String? contact_email});
+  $Res call({String? greeting, String? contactEmail});
 }
 
 /// @nodoc
@@ -51,16 +51,16 @@ class _$TextsDTOCopyWithImpl<$Res, $Val extends TextsDTO>
   @override
   $Res call({
     Object? greeting = freezed,
-    Object? contact_email = freezed,
+    Object? contactEmail = freezed,
   }) {
     return _then(_value.copyWith(
       greeting: freezed == greeting
           ? _value.greeting
           : greeting // ignore: cast_nullable_to_non_nullable
               as String?,
-      contact_email: freezed == contact_email
-          ? _value.contact_email
-          : contact_email // ignore: cast_nullable_to_non_nullable
+      contactEmail: freezed == contactEmail
+          ? _value.contactEmail
+          : contactEmail // ignore: cast_nullable_to_non_nullable
               as String?,
     ) as $Val);
   }
@@ -73,7 +73,7 @@ abstract class _$$_TextsDTOCopyWith<$Res> implements $TextsDTOCopyWith<$Res> {
       __$$_TextsDTOCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? greeting, String? contact_email});
+  $Res call({String? greeting, String? contactEmail});
 }
 
 /// @nodoc
@@ -88,16 +88,16 @@ class __$$_TextsDTOCopyWithImpl<$Res>
   @override
   $Res call({
     Object? greeting = freezed,
-    Object? contact_email = freezed,
+    Object? contactEmail = freezed,
   }) {
     return _then(_$_TextsDTO(
       greeting: freezed == greeting
           ? _value.greeting
           : greeting // ignore: cast_nullable_to_non_nullable
               as String?,
-      contact_email: freezed == contact_email
-          ? _value.contact_email
-          : contact_email // ignore: cast_nullable_to_non_nullable
+      contactEmail: freezed == contactEmail
+          ? _value.contactEmail
+          : contactEmail // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -106,7 +106,7 @@ class __$$_TextsDTOCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_TextsDTO implements _TextsDTO {
-  const _$_TextsDTO({this.greeting, this.contact_email});
+  const _$_TextsDTO({this.greeting, this.contactEmail});
 
   factory _$_TextsDTO.fromJson(Map<String, dynamic> json) =>
       _$$_TextsDTOFromJson(json);
@@ -114,11 +114,11 @@ class _$_TextsDTO implements _TextsDTO {
   @override
   final String? greeting;
   @override
-  final String? contact_email;
+  final String? contactEmail;
 
   @override
   String toString() {
-    return 'TextsDTO(greeting: $greeting, contact_email: $contact_email)';
+    return 'TextsDTO(greeting: $greeting, contactEmail: $contactEmail)';
   }
 
   @override
@@ -128,13 +128,13 @@ class _$_TextsDTO implements _TextsDTO {
             other is _$_TextsDTO &&
             (identical(other.greeting, greeting) ||
                 other.greeting == greeting) &&
-            (identical(other.contact_email, contact_email) ||
-                other.contact_email == contact_email));
+            (identical(other.contactEmail, contactEmail) ||
+                other.contactEmail == contactEmail));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, greeting, contact_email);
+  int get hashCode => Object.hash(runtimeType, greeting, contactEmail);
 
   @JsonKey(ignore: true)
   @override
@@ -152,14 +152,14 @@ class _$_TextsDTO implements _TextsDTO {
 
 abstract class _TextsDTO implements TextsDTO {
   const factory _TextsDTO(
-      {final String? greeting, final String? contact_email}) = _$_TextsDTO;
+      {final String? greeting, final String? contactEmail}) = _$_TextsDTO;
 
   factory _TextsDTO.fromJson(Map<String, dynamic> json) = _$_TextsDTO.fromJson;
 
   @override
   String? get greeting;
   @override
-  String? get contact_email;
+  String? get contactEmail;
   @override
   @JsonKey(ignore: true)
   _$$_TextsDTOCopyWith<_$_TextsDTO> get copyWith =>

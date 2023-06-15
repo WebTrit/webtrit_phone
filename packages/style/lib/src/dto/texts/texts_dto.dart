@@ -8,7 +8,7 @@ part 'texts_dto.g.dart';
 class TextsDTO with _$TextsDTO {
   const factory TextsDTO({
     String? greeting,
-    String? contact_email,
+    String? contactEmail,
   }) = _TextsDTO;
 
   factory TextsDTO.fromJson(Map<String, Object?> json) => _$TextsDTOFromJson(json);
