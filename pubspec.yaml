@@ -59,7 +59,6 @@ dependencies:
   validators: ^3.0.0
   webview_flutter: ^4.2.0
   webview_flutter_web: ^0.2.2+1
-  yaml: ^3.1.1
 
   webtrit_api:
     path: ./packages/webtrit_api

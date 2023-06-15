@@ -1,17 +1,14 @@
-import 'package:firebase_app_installations/firebase_app_installations.dart';
-import 'package:flutter/services.dart';
-import 'package:style/style.dart';
-import 'package:webtrit_phone/theme/theme.dart';
-import 'package:yaml/yaml.dart';
+import 'dart:convert';
 
-import '../app/assets.gen.dart';
+import 'package:flutter/services.dart';
+
 
 class AppYaml {
   static late AppYaml _instance;
 
   static Future<void> init() async {
-    final yamlString = await rootBundle.loadString('publisher.yaml');
-    final yamlMap = loadYaml(yamlString);
+    final yamlString = await rootBundle.loadString('publisher.json');
+    final yamlMap = json.decode(yamlString);
 
     final publisherConfig = PublisherConfig(
       themeId: yamlMap['credential']['themeId'],
