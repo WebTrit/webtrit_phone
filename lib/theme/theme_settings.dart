@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
 import 'package:rxdart/rxdart.dart';
+
 import 'package:webtrit_phone/app/assets.gen.dart';
 
 import 'custom_color.dart';
