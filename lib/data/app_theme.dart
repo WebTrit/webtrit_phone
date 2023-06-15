@@ -59,7 +59,7 @@ class AppTheme {
   }
 
   static Color? _toColor(String? hex) {
-    return _toColor(hex);
+    return UtilityColor.tryParseColorFromHex(hex);
   }
 
   factory AppTheme() {
