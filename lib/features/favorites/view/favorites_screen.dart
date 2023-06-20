@@ -7,6 +7,7 @@ import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../../call/call.dart';
@@ -20,8 +21,12 @@ class FavoritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    final appName = themeData.extension<ConstTexts>()?.appName;
+
     return Scaffold(
-      appBar: MainAppBar(),
+      appBar: MainAppBar(
+        name: appName,
+      ),
       body: BlocBuilder<FavoritesBloc, FavoritesState>(
         builder: (context, state) {
           final favorites = state.favorites;

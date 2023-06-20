@@ -53,6 +53,7 @@ class AppTheme {
       lightColorSchemeOverride: colorScheme,
       primaryGradientColors: gradientTabColor,
       fontFamily: styleModel.fontFamily ?? 'Montserrat',
+      appName: styleModel.name,
     );
 
     _instance = AppTheme._(theme);

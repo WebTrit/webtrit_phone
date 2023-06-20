@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/theme/const_texts.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 import 'sized_circular_progress_indicator.dart';
@@ -31,6 +32,7 @@ class WebTritPhonePictureLogo extends StatelessWidget {
     final themeData = Theme.of(context);
     final logo = themeData.extension<GenImages>()?.logo;
     final logoHeight = this.logoHeight ?? (logoWidth == null ? fontSize * 2.2 : null);
+    final appName = themeData.extension<ConstTexts>()?.appName;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -75,7 +77,7 @@ class WebTritPhonePictureLogo extends StatelessWidget {
           height: dividerHeight ?? fontSize / 3,
         ),
         Text(
-          EnvironmentConfig.APP_NAME,
+          appName ?? EnvironmentConfig.APP_NAME,
           style: titleStyle,
         ),
       ],
@@ -91,11 +93,13 @@ class WebTritPhoneTextLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    final appName = themeData.extension<ConstTexts>()?.appName;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Text(
-          EnvironmentConfig.APP_NAME,
+          appName ?? EnvironmentConfig.APP_NAME,
           style: themeData.textTheme.displayMedium,
         ),
         Text(

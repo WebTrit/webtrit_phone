@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 
+import 'const_texts.dart';
 import 'theme.dart';
 
 class ThemeProvider extends InheritedWidget {
@@ -112,6 +113,14 @@ class ThemeProvider extends InheritedWidget {
     return GenImages(
       logo: logo,
       loginOnboarding: loginOnboarding,
+    );
+  }
+
+  ConstTexts getConstText({
+    String? appName,
+  }) {
+    return ConstTexts(
+      appName: appName,
     );
   }
 
@@ -287,6 +296,9 @@ class ThemeProvider extends InheritedWidget {
           logo: settings.imagesScheme?.applicationLogo,
           loginOnboarding: settings.imagesScheme?.onboarding,
         ),
+        getConstText(
+          appName: settings.appName,
+        )
       ],
       // COLOR
       primaryColorLight: colorScheme.secondaryContainer,
