@@ -21,9 +21,10 @@ mixin _$LoginState {
   Object? get error => throw _privateConstructorUsedError;
   bool get demo => throw _privateConstructorUsedError;
   String? get coreUrl => throw _privateConstructorUsedError;
-  SessionOtpProvisional? get otpProvisional =>
+  SessionOtpResponse? get sessionOtpResponse =>
       throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
+  String? get tenantId => throw _privateConstructorUsedError;
   UrlInput get coreUrlInput => throw _privateConstructorUsedError;
   EmailInput get emailInput => throw _privateConstructorUsedError;
   PhoneInput get phoneInput => throw _privateConstructorUsedError;
@@ -46,14 +47,15 @@ abstract class $LoginStateCopyWith<$Res> {
       Object? error,
       bool demo,
       String? coreUrl,
-      SessionOtpProvisional? otpProvisional,
+      SessionOtpResponse? sessionOtpResponse,
       String? token,
+      String? tenantId,
       UrlInput coreUrlInput,
       EmailInput emailInput,
       PhoneInput phoneInput,
       CodeInput codeInput});
 
-  $SessionOtpProvisionalCopyWith<$Res>? get otpProvisional;
+  $SessionOtpResponseCopyWith<$Res>? get sessionOtpResponse;
 }
 
 /// @nodoc
@@ -74,8 +76,9 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
     Object? error = freezed,
     Object? demo = null,
     Object? coreUrl = freezed,
-    Object? otpProvisional = freezed,
+    Object? sessionOtpResponse = freezed,
     Object? token = freezed,
+    Object? tenantId = freezed,
     Object? coreUrlInput = null,
     Object? emailInput = null,
     Object? phoneInput = null,
@@ -99,13 +102,17 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
           ? _value.coreUrl
           : coreUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      otpProvisional: freezed == otpProvisional
-          ? _value.otpProvisional
-          : otpProvisional // ignore: cast_nullable_to_non_nullable
-              as SessionOtpProvisional?,
+      sessionOtpResponse: freezed == sessionOtpResponse
+          ? _value.sessionOtpResponse
+          : sessionOtpResponse // ignore: cast_nullable_to_non_nullable
+              as SessionOtpResponse?,
       token: freezed == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tenantId: freezed == tenantId
+          ? _value.tenantId
+          : tenantId // ignore: cast_nullable_to_non_nullable
               as String?,
       coreUrlInput: null == coreUrlInput
           ? _value.coreUrlInput
@@ -128,14 +135,14 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
 
   @override
   @pragma('vm:prefer-inline')
-  $SessionOtpProvisionalCopyWith<$Res>? get otpProvisional {
-    if (_value.otpProvisional == null) {
+  $SessionOtpResponseCopyWith<$Res>? get sessionOtpResponse {
+    if (_value.sessionOtpResponse == null) {
       return null;
     }
 
-    return $SessionOtpProvisionalCopyWith<$Res>(_value.otpProvisional!,
+    return $SessionOtpResponseCopyWith<$Res>(_value.sessionOtpResponse!,
         (value) {
-      return _then(_value.copyWith(otpProvisional: value) as $Val);
+      return _then(_value.copyWith(sessionOtpResponse: value) as $Val);
     });
   }
 }
@@ -154,15 +161,16 @@ abstract class _$$_LoginStateCopyWith<$Res>
       Object? error,
       bool demo,
       String? coreUrl,
-      SessionOtpProvisional? otpProvisional,
+      SessionOtpResponse? sessionOtpResponse,
       String? token,
+      String? tenantId,
       UrlInput coreUrlInput,
       EmailInput emailInput,
       PhoneInput phoneInput,
       CodeInput codeInput});
 
   @override
-  $SessionOtpProvisionalCopyWith<$Res>? get otpProvisional;
+  $SessionOtpResponseCopyWith<$Res>? get sessionOtpResponse;
 }
 
 /// @nodoc
@@ -181,8 +189,9 @@ class __$$_LoginStateCopyWithImpl<$Res>
     Object? error = freezed,
     Object? demo = null,
     Object? coreUrl = freezed,
-    Object? otpProvisional = freezed,
+    Object? sessionOtpResponse = freezed,
     Object? token = freezed,
+    Object? tenantId = freezed,
     Object? coreUrlInput = null,
     Object? emailInput = null,
     Object? phoneInput = null,
@@ -206,13 +215,17 @@ class __$$_LoginStateCopyWithImpl<$Res>
           ? _value.coreUrl
           : coreUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      otpProvisional: freezed == otpProvisional
-          ? _value.otpProvisional
-          : otpProvisional // ignore: cast_nullable_to_non_nullable
-              as SessionOtpProvisional?,
+      sessionOtpResponse: freezed == sessionOtpResponse
+          ? _value.sessionOtpResponse
+          : sessionOtpResponse // ignore: cast_nullable_to_non_nullable
+              as SessionOtpResponse?,
       token: freezed == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tenantId: freezed == tenantId
+          ? _value.tenantId
+          : tenantId // ignore: cast_nullable_to_non_nullable
               as String?,
       coreUrlInput: null == coreUrlInput
           ? _value.coreUrlInput
@@ -243,8 +256,9 @@ class _$_LoginState implements _LoginState {
       this.error,
       this.demo = false,
       this.coreUrl,
-      this.otpProvisional,
+      this.sessionOtpResponse,
       this.token,
+      this.tenantId,
       this.coreUrlInput = const UrlInput.pure(),
       this.emailInput = const EmailInput.pure(),
       this.phoneInput = const PhoneInput.pure(),
@@ -263,9 +277,11 @@ class _$_LoginState implements _LoginState {
   @override
   final String? coreUrl;
   @override
-  final SessionOtpProvisional? otpProvisional;
+  final SessionOtpResponse? sessionOtpResponse;
   @override
   final String? token;
+  @override
+  final String? tenantId;
   @override
   @JsonKey()
   final UrlInput coreUrlInput;
@@ -281,7 +297,7 @@ class _$_LoginState implements _LoginState {
 
   @override
   String toString() {
-    return 'LoginState(step: $step, status: $status, error: $error, demo: $demo, coreUrl: $coreUrl, otpProvisional: $otpProvisional, token: $token, coreUrlInput: $coreUrlInput, emailInput: $emailInput, phoneInput: $phoneInput, codeInput: $codeInput)';
+    return 'LoginState(step: $step, status: $status, error: $error, demo: $demo, coreUrl: $coreUrl, sessionOtpResponse: $sessionOtpResponse, token: $token, tenantId: $tenantId, coreUrlInput: $coreUrlInput, emailInput: $emailInput, phoneInput: $phoneInput, codeInput: $codeInput)';
   }
 
   @override
@@ -294,9 +310,11 @@ class _$_LoginState implements _LoginState {
             const DeepCollectionEquality().equals(other.error, error) &&
             (identical(other.demo, demo) || other.demo == demo) &&
             (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
-            (identical(other.otpProvisional, otpProvisional) ||
-                other.otpProvisional == otpProvisional) &&
+            (identical(other.sessionOtpResponse, sessionOtpResponse) ||
+                other.sessionOtpResponse == sessionOtpResponse) &&
             (identical(other.token, token) || other.token == token) &&
+            (identical(other.tenantId, tenantId) ||
+                other.tenantId == tenantId) &&
             (identical(other.coreUrlInput, coreUrlInput) ||
                 other.coreUrlInput == coreUrlInput) &&
             (identical(other.emailInput, emailInput) ||
@@ -315,8 +333,9 @@ class _$_LoginState implements _LoginState {
       const DeepCollectionEquality().hash(error),
       demo,
       coreUrl,
-      otpProvisional,
+      sessionOtpResponse,
       token,
+      tenantId,
       coreUrlInput,
       emailInput,
       phoneInput,
@@ -336,8 +355,9 @@ abstract class _LoginState implements LoginState {
       final Object? error,
       final bool demo,
       final String? coreUrl,
-      final SessionOtpProvisional? otpProvisional,
+      final SessionOtpResponse? sessionOtpResponse,
       final String? token,
+      final String? tenantId,
       final UrlInput coreUrlInput,
       final EmailInput emailInput,
       final PhoneInput phoneInput,
@@ -354,9 +374,11 @@ abstract class _LoginState implements LoginState {
   @override
   String? get coreUrl;
   @override
-  SessionOtpProvisional? get otpProvisional;
+  SessionOtpResponse? get sessionOtpResponse;
   @override
   String? get token;
+  @override
+  String? get tenantId;
   @override
   UrlInput get coreUrlInput;
   @override
