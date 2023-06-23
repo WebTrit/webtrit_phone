@@ -26,6 +26,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           themeSettings: portaoneThemeSettings,
           themeMode: appPreferences.getThemeMode(),
           locale: appPreferences.getLocale(),
+          tenantId: secureStorage.readTenantId() ?? '',
         )) {
     on<AppLogined>(_onLogined, transformer: sequential());
     on<AppLogouted>(_onLogouted, transformer: sequential());
@@ -41,16 +42,19 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   void _onLogined(AppLogined event, Emitter<AppState> emit) async {
     await secureStorage.writeCoreUrl(event.coreUrl);
     await secureStorage.writeToken(event.token);
+    await secureStorage.writeTenantId(event.tenantId);
 
     emit(state.copyWith(
       coreUrl: event.coreUrl,
       token: event.token,
+      tenantId: event.tenantId,
     ));
   }
 
   void _onLogouted(AppLogouted event, Emitter<AppState> emit) async {
     await secureStorage.deleteCoreUrl();
     await secureStorage.deleteToken();
+    await secureStorage.deleteTenantId();
 
     await appDatabase.deleteEverything();
 

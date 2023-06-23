@@ -9,6 +9,7 @@ class AppLogined with _$AppLogined implements AppEvent {
   const factory AppLogined({
     required String coreUrl,
     required String token,
+    @Default('') String tenantId,
   }) = _AppLogined;
 }
 
