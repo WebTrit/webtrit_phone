@@ -67,14 +67,17 @@ class WebtritSignalingClient {
 
   final _transactions = <String, Transaction>{};
 
+  static const defaultApiVersionPathSegments = ['signaling', 'v1'];
+
   static Future<WebtritSignalingClient> connect(
     String url,
     String token,
     bool force, {
     Duration? connectionTimeout,
+    List<String>? customSegments,
   }) async {
     final signalingUrl = Uri.parse(url).replace(
-      pathSegments: ['signaling', 'v1'],
+      pathSegments: customSegments ?? defaultApiVersionPathSegments,
       queryParameters: {
         'token': token,
         'force': force.toString(),
