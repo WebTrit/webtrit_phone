@@ -14,20 +14,23 @@ class WebtritApiClient {
   WebtritApiClient(
     Uri baseUrl, {
     Duration? connectionTimeout,
-  }) : this.inner(
-          baseUrl,
-          httpClient: platform.createHttpClient(
-            connectionTimeout: connectionTimeout,
-          ),
-        );
+    List<String>? customSegments,
+  }) : this.inner(baseUrl,
+            httpClient: platform.createHttpClient(
+              connectionTimeout: connectionTimeout,
+            ),
+            customSegments: customSegments);
 
   @visibleForTesting
   WebtritApiClient.inner(
     this.baseUrl, {
     required http.Client httpClient,
-  }) : _httpClient = httpClient;
+    required List<String>? customSegments,
+  })  : _httpClient = httpClient,
+        _apiVersionPathSegments = customSegments ?? defaultApiVersionPathSegments;
 
-  static const _apiVersionPathSegments = ['api', 'v1'];
+  static const defaultApiVersionPathSegments = ['api', 'v1'];
+  List<String> _apiVersionPathSegments;
 
   final Uri baseUrl;
   final http.Client _httpClient;
