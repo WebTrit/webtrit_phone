@@ -99,31 +99,30 @@ class WebtritApiClient {
     return Info.fromJson(responseJson);
   }
 
-  Future<SessionOtpProvisional> sessionOtpRequestDemo(SessionOtpCredentialDemo sessionOtpCredentialDemo) async {
-    final requestJson = sessionOtpCredentialDemo.toJson();
+  Future<BaseSessionResponse> createUser(UserSignupCredentials sessionLoginCreateUser) async {
+    final requestJson = sessionLoginCreateUser.toJson();
 
-    final responseJson = await _httpClientExecutePost(['session', 'otp-request-demo'], null, requestJson);
+    final responseJson = await _httpClientExecutePost(['user'], null, requestJson);
 
-    return SessionOtpProvisional.fromJson(responseJson);
+    return BaseSessionResponse.fromJson(responseJson);
   }
 
-  Future<SessionOtpProvisional> sessionOtpRequest(SessionOtpCredential sessionOtpCredential) async {
+  Future<SessionOtpResponse> sessionOtpRequest(SessionOtpCredential sessionOtpCredential) async {
     final requestJson = sessionOtpCredential.toJson();
 
     final responseJson = await _httpClientExecutePost(['session', 'otp-request'], null, requestJson);
 
-    return SessionOtpProvisional.fromJson(responseJson);
+    return SessionOtpResponse.fromJson(responseJson);
   }
 
-  Future<String> sessionOtpVerify(SessionOtpProvisional sessionOtpProvisional, String code) async {
+  Future<SessionAuthorizedResponse> sessionOtpVerify(String otpId, String code) async {
     final requestJson = {
-      'otp_id': sessionOtpProvisional.otpId,
+      'otp_id': otpId,
       'code': code,
     };
 
     final responseJson = await _httpClientExecutePost(['session', 'otp-verify'], null, requestJson);
-
-    return responseJson['token'];
+    return SessionAuthorizedResponse.fromJson(responseJson);
   }
 
   Future<String> sessionLogin(SessionLoginCredential sessionLoginCredential) async {

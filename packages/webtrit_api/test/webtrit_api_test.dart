@@ -29,7 +29,11 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsync1(handler));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(
+        Uri.https(authority),
+        httpClient: httpClient,
+        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
+      );
 
       expect(
         apiClient.info(),
@@ -48,7 +52,7 @@ void main() {
     test('otp request demo', () {
       Future<Response> handler(Request request) async {
         expect(request.method, equalsIgnoringCase('post'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/session/otp-request-demo'));
+        expect(request.url.toString(), equals('https://$authority/api/v1/user'));
         expect(request.headers['authorization'], isNull);
         expect(
           jsonDecode(request.body),
@@ -72,16 +76,20 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsync1(handler));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(
+        Uri.https(authority),
+        httpClient: httpClient,
+        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
+      );
 
       expect(
-        apiClient.sessionOtpRequestDemo(SessionOtpCredentialDemo(
+        apiClient.createUser(UserSignupCredentials(
           type: AppType.web,
           identifier: 'identifier_1',
           email: 'email_1',
         )),
         completion(equals(
-          SessionOtpProvisional(
+          SessionOtpResponse(
             otpId: 'otp_id_1',
             notificationType: OtpNotificationType.email,
             fromEmail: 'from_email_1',
@@ -117,7 +125,11 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsync1(handler));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(
+        Uri.https(authority),
+        httpClient: httpClient,
+        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
+      );
 
       expect(
         apiClient.sessionOtpRequest(SessionOtpCredential(
@@ -126,7 +138,7 @@ void main() {
           phone: 'phone_1',
         )),
         completion(equals(
-          SessionOtpProvisional(
+          SessionOtpResponse(
             otpId: 'otp_id_1',
             notificationType: OtpNotificationType.email,
             fromEmail: 'from_email_1',
@@ -159,11 +171,15 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsync1(handler));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(
+        Uri.https(authority),
+        httpClient: httpClient,
+        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
+      );
 
       expect(
         apiClient.sessionOtpVerify(
-          SessionOtpProvisional(otpId: 'otp_id_1'),
+          'otp_id_1',
           'code_1',
         ),
         completion(equals(token)),
@@ -196,7 +212,11 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsync1(handler));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(
+        Uri.https(authority),
+        httpClient: httpClient,
+        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
+      );
 
       expect(
         apiClient.sessionLogin(SessionLoginCredential(
@@ -222,7 +242,11 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsync1(handler));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(
+        Uri.https(authority),
+        httpClient: httpClient,
+        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
+      );
 
       expect(
         apiClient.sessionLogout(token),
@@ -258,7 +282,11 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsync1(handler));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(
+        Uri.https(authority),
+        httpClient: httpClient,
+        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
+      );
 
       expect(
         apiClient.accountInfo(token),
@@ -311,7 +339,11 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsync1(handler));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(
+        Uri.https(authority),
+        httpClient: httpClient,
+        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
+      );
 
       expect(
         apiClient.accountContacts(token),
@@ -355,7 +387,11 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsync1(handler));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(
+        Uri.https(authority),
+        httpClient: httpClient,
+        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
+      );
 
       expect(
         apiClient.appStatus(token),
@@ -386,7 +422,11 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsync1(handler));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(
+        Uri.https(authority),
+        httpClient: httpClient,
+        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
+      );
 
       expect(
         apiClient.appStatusUpdate(token, AppStatus(register: false)),
@@ -427,7 +467,11 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsync1(handler));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(
+        Uri.https(authority),
+        httpClient: httpClient,
+        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
+      );
 
       expect(
         apiClient.appCreateContacts(
@@ -478,7 +522,11 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsync1(handler));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(
+        Uri.https(authority),
+        httpClient: httpClient,
+        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
+      );
 
       expect(
         apiClient.appSmartContacts(token),
@@ -521,7 +569,11 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsync1(handler));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(
+        Uri.https(authority),
+        httpClient: httpClient,
+        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
+      );
 
       expect(
         apiClient.appCreatePushToken(token, AppPushToken(type: AppPushTokenType.fcm, value: 'push_token_value')),
