@@ -50,6 +50,7 @@ class _MainShellState extends State<MainShell> {
 
   @override
   Widget build(BuildContext context) {
+    final appBloc = context.read<AppBloc>();
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<WebtritApiClient>(
@@ -57,6 +58,7 @@ class _MainShellState extends State<MainShell> {
             return WebtritApiClient(
               Uri.parse(context.read<AppBloc>().state.coreUrl!),
               connectionTimeout: kApiClientConnectionTimeout,
+              customSegments: WebtritApiClient.generateTenantApiVersionPathSegments(appBloc.state.tenantId),
             );
           },
         ),
