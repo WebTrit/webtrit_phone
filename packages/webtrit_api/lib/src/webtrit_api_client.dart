@@ -11,6 +11,10 @@ import 'exceptions.dart';
 import 'models/models.dart';
 
 class WebtritApiClient {
+  static generateTenantApiVersionPathSegments(String id) {
+    return id.isEmpty ? defaultApiVersionPathSegments : ['tenant', id, ...defaultApiVersionPathSegments];
+  }
+
   WebtritApiClient(
     Uri baseUrl, {
     Duration? connectionTimeout,
