@@ -336,12 +336,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       if (emit.isDone) return;
 
       final signalingUrl = _coreUrlToSignalingUrl(appBloc.state.coreUrl!);
+      final tenantId = appBloc.state.tenantId;
       final token = appBloc.state.token!;
       final signalingClient = await WebtritSignalingClient.connect(
         signalingUrl,
         token,
         true,
         connectionTimeout: kSignalingClientConnectionTimeout,
+        customSegments: WebtritSignalingClient.generateTenantApiVersionPathSegments(tenantId),
       );
 
       if (emit.isDone) {
