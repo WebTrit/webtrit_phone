@@ -36,6 +36,10 @@ class WebtritSignalingClient {
     return List.generate(length, (index) => _callIdChars[_callIdRandom.nextInt(_callIdChars.length)]).join();
   }
 
+  static generateTenantApiVersionPathSegments(String id) {
+    return id.isEmpty ? defaultApiVersionPathSegments : ['tenant', id, ...defaultApiVersionPathSegments];
+  }
+
   static const subprotocol = 'webtrit-protocol';
 
   static const defaultExecuteTransactionTimeoutDuration = Duration(milliseconds: 5000);
