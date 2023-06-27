@@ -233,7 +233,7 @@ class LoginCubit extends Cubit<LoginState> {
       status: LoginStatus.processing,
     ));
     try {
-      final verifyData = await _sessionOtpVerify(
+      final sessionToken = await _sessionOtpVerify(
         createWebtritApiClient(state.coreUrl!),
         state.sessionOtpProvisional!,
         state.codeInput.value,
@@ -241,8 +241,8 @@ class LoginCubit extends Cubit<LoginState> {
 
       emit(state.copyWith(
         status: LoginStatus.ok,
-        token: verifyData.token,
-        tenantId: verifyData.tenantId,
+        token: sessionToken.token,
+        tenantId: sessionToken.tenantId,
       ));
     } catch (e) {
       emit(state.copyWith(
