@@ -177,24 +177,23 @@ class LoginCubit extends Cubit<LoginState> {
       status: LoginStatus.processing,
     ));
     try {
+      final SessionResult result;
       if (state.demo) {
-        final result = await _createUserRequest(createWebtritApiClient(state.coreUrl!), state.emailInput.value);
-        if (result is SessionOtpProvisional) {
-          emit(state.copyWith(
-            status: LoginStatus.ok,
-            sessionOtpProvisional: result,
-          ));
-        } else if (result is SessionToken) {
-          // TODO: Add logic for navigate authorized user
-        } else {
-          // TODO: Add logic for navigate to undefine page
-        }
+        result = await _createUserRequest(createWebtritApiClient(state.coreUrl!), state.emailInput.value);
       } else {
-        final result = await _sessionOtpRequest(createWebtritApiClient(state.coreUrl!), state.phoneInput.value);
+        result = await _sessionOtpRequest(createWebtritApiClient(state.coreUrl!), state.phoneInput.value);
+      }
+      if (result is SessionOtpProvisional) {
         emit(state.copyWith(
           status: LoginStatus.ok,
           sessionOtpProvisional: result,
         ));
+      } else if (result is SessionToken) {
+        // TODO: Add logic for navigate authorized user
+        throw UnimplementedError();
+      } else {
+        // TODO: Add logic for navigate to undefine page
+        throw UnimplementedError();
       }
     } catch (e) {
       emit(state.copyWith(
@@ -276,24 +275,23 @@ class LoginCubit extends Cubit<LoginState> {
 
     // TODO: Part of duplicate code with method loginOptRequestSubmitted
     try {
+      final SessionResult result;
       if (state.demo) {
-        final result = await _createUserRequest(createWebtritApiClient(state.coreUrl!), state.emailInput.value);
-        if (result is SessionOtpProvisional) {
-          emit(state.copyWith(
-            status: LoginStatus.ok,
-            sessionOtpProvisional: result,
-          ));
-        } else if (result is SessionToken) {
-          // TODO: Add logic for navigate authorized user
-        } else {
-          // TODO: Add logic for navigate to undefine page
-        }
+        result = await _createUserRequest(createWebtritApiClient(state.coreUrl!), state.emailInput.value);
       } else {
-        final result = await _sessionOtpRequest(createWebtritApiClient(state.coreUrl!), state.phoneInput.value);
+        result = await _sessionOtpRequest(createWebtritApiClient(state.coreUrl!), state.phoneInput.value);
+      }
+      if (result is SessionOtpProvisional) {
         emit(state.copyWith(
           status: LoginStatus.ok,
           sessionOtpProvisional: result,
         ));
+      } else if (result is SessionToken) {
+        // TODO: Add logic for navigate authorized user
+        throw UnimplementedError();
+      } else {
+        // TODO: Add logic for navigate to undefine page
+        throw UnimplementedError();
       }
     } catch (e) {
       emit(state.copyWith(
