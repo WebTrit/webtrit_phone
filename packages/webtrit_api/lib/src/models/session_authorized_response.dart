@@ -3,7 +3,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'session_response.dart';
-import 'otp_notification_type.dart';
 
 part 'session_authorized_response.freezed.dart';
 
