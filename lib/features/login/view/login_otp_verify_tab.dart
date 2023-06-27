@@ -29,8 +29,8 @@ class LoginOtpVerifyTab extends StatelessWidget {
           context.hideCurrentSnackBar();
           context.read<AppBloc>().add(AppLogined(
                 coreUrl: state.coreUrl!,
+                tenantId: state.tenantId!,
                 token: state.token!,
-                tenantId: state.tenantId ?? '',
               ));
         } else if (state.status == LoginStatus.back) {
           context.hideCurrentSnackBar();

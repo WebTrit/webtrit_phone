@@ -343,7 +343,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         token,
         true,
         connectionTimeout: kSignalingClientConnectionTimeout,
-        customSegments: WebtritSignalingClient.generateTenantApiVersionPathSegments(tenantId),
+        customSegments: WebtritSignalingClient.generateTenantApiVersionPathSegments(tenantId!),
       );
 
       if (emit.isDone) {

@@ -6,9 +6,9 @@ class AppState with _$AppState {
 
   const factory AppState({
     String? coreUrl,
+    String? tenantId,
     String? token,
     String? webRegistrationInitialUrl,
-    @Default('') String tenantId,
     required ThemeSettings themeSettings,
     required ThemeMode themeMode,
     required Locale locale,

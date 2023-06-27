@@ -58,7 +58,7 @@ class _MainShellState extends State<MainShell> {
             return WebtritApiClient(
               Uri.parse(appBloc.state.coreUrl!),
               connectionTimeout: kApiClientConnectionTimeout,
-              customSegments: WebtritApiClient.generateTenantApiVersionPathSegments(appBloc.state.tenantId),
+              customSegments: WebtritApiClient.generateTenantApiVersionPathSegments(appBloc.state.tenantId!),
             );
           },
         ),
