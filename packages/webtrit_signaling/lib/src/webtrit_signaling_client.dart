@@ -36,10 +36,6 @@ class WebtritSignalingClient {
     return List.generate(length, (index) => _callIdChars[_callIdRandom.nextInt(_callIdChars.length)]).join();
   }
 
-  static generateTenantApiVersionPathSegments(String id) {
-    return id.isEmpty ? defaultApiVersionPathSegments : ['tenant', id, ...defaultApiVersionPathSegments];
-  }
-
   static const subprotocol = 'webtrit-protocol';
 
   static const defaultExecuteTransactionTimeoutDuration = Duration(milliseconds: 5000);
@@ -71,17 +67,19 @@ class WebtritSignalingClient {
 
   final _transactions = <String, Transaction>{};
 
-  static const defaultApiVersionPathSegments = ['signaling', 'v1'];
-
   static Future<WebtritSignalingClient> connect(
     String url,
+    String tenantId,
     String token,
     bool force, {
     Duration? connectionTimeout,
-    List<String>? customSegments,
   }) async {
     final signalingUrl = Uri.parse(url).replace(
-      pathSegments: customSegments ?? defaultApiVersionPathSegments,
+      pathSegments: [
+        if (tenantId.isNotEmpty) ...['tenant', tenantId],
+        'signaling',
+        'v1'
+      ],
       queryParameters: {
         'token': token,
         'force': force.toString(),
