@@ -2,8 +2,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SecureStorage {
   static const _kCoreUrlKey = 'core-url';
+  static const _kTenantIdKey = 'tenant-id';
   static const _kTokenKey = 'token';
-  static const _kTenantId = 'tenant-id';
   static const _kWebRegistrationInitialUrlKey = 'initial-url';
 
   static late SecureStorage _instance;
@@ -50,20 +50,20 @@ class SecureStorage {
     return _write(_kCoreUrlKey, coreUrl);
   }
 
-  Future<void> writeTenantId(String tenantId) {
-    return _write(_kTenantId, tenantId);
+  Future<void> deleteCoreUrl() {
+    return _delete(_kCoreUrlKey);
   }
 
   String? readTenantId() {
-    return _read(_kTenantId);
+    return _read(_kTenantIdKey);
+  }
+
+  Future<void> writeTenantId(String tenantId) {
+    return _write(_kTenantIdKey, tenantId);
   }
 
   Future<void> deleteTenantId() {
-    return _delete(_kTenantId);
-  }
-
-  Future<void> deleteCoreUrl() {
-    return _delete(_kCoreUrlKey);
+    return _delete(_kTenantIdKey);
   }
 
   String? readToken() {
