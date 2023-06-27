@@ -15,7 +15,6 @@ class WebtritApiClient {
     Uri baseUrl,
     String tenantId, {
     Duration? connectionTimeout,
-    List<String>? customSegments,
   }) : this.inner(
           baseUrl,
           tenantId,
