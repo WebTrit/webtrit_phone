@@ -46,8 +46,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
     emit(state.copyWith(
       coreUrl: event.coreUrl,
-      token: event.token,
       tenantId: event.tenantId,
+      token: event.token,
     ));
   }
 
@@ -60,6 +60,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
     emit(state.copyWith(
       coreUrl: null,
+      tenantId: null,
       token: null,
     ));
   }
