@@ -13,5 +13,5 @@ export 'info.dart';
 export 'otp_notification_type.dart';
 export 'session_login_credential.dart';
 export 'session_otp_credential.dart';
-export 'session_otp_credential_demo.dart';
-export 'session_otp_provisional.dart';
+export 'session_result.dart';
+export 'session_user_credential.dart';

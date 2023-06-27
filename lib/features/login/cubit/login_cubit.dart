@@ -19,7 +19,7 @@ part 'login_state.dart';
 typedef WebtritApiClientFactory = WebtritApiClient Function(String coreUrl);
 
 WebtritApiClient defaultCreateWebtritApiClient(String coreUrl) {
-  return WebtritApiClient(Uri.parse(coreUrl), connectionTimeout: kApiClientConnectionTimeout);
+  return WebtritApiClient(Uri.parse(coreUrl), '', connectionTimeout: kApiClientConnectionTimeout);
 }
 
 class LoginCubit extends Cubit<LoginState> {
@@ -177,16 +177,24 @@ class LoginCubit extends Cubit<LoginState> {
       status: LoginStatus.processing,
     ));
     try {
-      late final SessionOtpProvisional otpProvisional;
+      final SessionResult result;
       if (state.demo) {
-        otpProvisional = await _sessionOtpRequestDemo(createWebtritApiClient(state.coreUrl!), state.emailInput.value);
+        result = await _createUserRequest(createWebtritApiClient(state.coreUrl!), state.emailInput.value);
       } else {
-        otpProvisional = await _sessionOtpRequest(createWebtritApiClient(state.coreUrl!), state.phoneInput.value);
+        result = await _sessionOtpRequest(createWebtritApiClient(state.coreUrl!), state.phoneInput.value);
       }
-      emit(state.copyWith(
-        status: LoginStatus.ok,
-        otpProvisional: otpProvisional,
-      ));
+      if (result is SessionOtpProvisional) {
+        emit(state.copyWith(
+          status: LoginStatus.ok,
+          sessionOtpProvisional: result,
+        ));
+      } else if (result is SessionToken) {
+        // TODO: Add logic for navigate authorized user
+        throw UnimplementedError();
+      } else {
+        // TODO: Add logic for navigate to undefine page
+        throw UnimplementedError();
+      }
     } catch (e) {
       emit(state.copyWith(
         status: LoginStatus.input,
@@ -225,14 +233,16 @@ class LoginCubit extends Cubit<LoginState> {
       status: LoginStatus.processing,
     ));
     try {
-      final token = await _sessionOtpVerify(
+      final sessionToken = await _sessionOtpVerify(
         createWebtritApiClient(state.coreUrl!),
-        state.otpProvisional!,
+        state.sessionOtpProvisional!,
         state.codeInput.value,
       );
+
       emit(state.copyWith(
         status: LoginStatus.ok,
-        token: token,
+        token: sessionToken.token,
+        tenantId: sessionToken.tenantId,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -249,7 +259,7 @@ class LoginCubit extends Cubit<LoginState> {
 
     emit(state.copyWith(
       status: LoginStatus.back,
-      otpProvisional: null,
+      sessionOtpProvisional: null,
       codeInput: const CodeInput.pure(),
     ));
   }
@@ -262,17 +272,27 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(
       status: LoginStatus.processing,
     ));
+
+    // TODO: Part of duplicate code with method loginOptRequestSubmitted
     try {
-      late final SessionOtpProvisional otpProvisional;
+      final SessionResult result;
       if (state.demo) {
-        otpProvisional = await _sessionOtpRequestDemo(createWebtritApiClient(state.coreUrl!), state.emailInput.value);
+        result = await _createUserRequest(createWebtritApiClient(state.coreUrl!), state.emailInput.value);
       } else {
-        otpProvisional = await _sessionOtpRequest(createWebtritApiClient(state.coreUrl!), state.phoneInput.value);
+        result = await _sessionOtpRequest(createWebtritApiClient(state.coreUrl!), state.phoneInput.value);
       }
-      emit(state.copyWith(
-        status: LoginStatus.input,
-        otpProvisional: otpProvisional,
-      ));
+      if (result is SessionOtpProvisional) {
+        emit(state.copyWith(
+          status: LoginStatus.ok,
+          sessionOtpProvisional: result,
+        ));
+      } else if (result is SessionToken) {
+        // TODO: Add logic for navigate authorized user
+        throw UnimplementedError();
+      } else {
+        // TODO: Add logic for navigate to undefine page
+        throw UnimplementedError();
+      }
     } catch (e) {
       emit(state.copyWith(
         status: LoginStatus.input,
@@ -289,11 +309,11 @@ Future<void> _verifyCoreVersion(
   CoreVersion.supported().verify(actualCoreVersion);
 }
 
-Future<SessionOtpProvisional> _sessionOtpRequestDemo(
+Future<SessionResult> _createUserRequest(
   WebtritApiClient webtritApiClient,
   String email,
 ) async {
-  return await webtritApiClient.sessionOtpRequestDemo(SessionOtpCredentialDemo(
+  return await webtritApiClient.createUser(SessionUserCredential(
     type: PlatformInfo().appType,
     identifier: AppInfo().identifier,
     email: email,
@@ -311,10 +331,10 @@ Future<SessionOtpProvisional> _sessionOtpRequest(
   ));
 }
 
-Future<String> _sessionOtpVerify(
+Future<SessionToken> _sessionOtpVerify(
   WebtritApiClient webtritApiClient,
-  SessionOtpProvisional sessionOtpId,
+  SessionOtpProvisional sessionOtpProvisional,
   String code,
 ) async {
-  return await webtritApiClient.sessionOtpVerify(sessionOtpId, code);
+  return await webtritApiClient.sessionOtpVerify(sessionOtpProvisional, code);
 }

@@ -68,13 +68,19 @@ class WebtritSignalingClient {
   final _transactions = <String, Transaction>{};
 
   static Future<WebtritSignalingClient> connect(
-    String url,
+    Uri baseUrl,
+    String tenantId,
     String token,
     bool force, {
     Duration? connectionTimeout,
   }) async {
-    final signalingUrl = Uri.parse(url).replace(
-      pathSegments: ['signaling', 'v1'],
+    final signalingUrl = baseUrl.replace(
+      pathSegments: [
+        ...baseUrl.pathSegments,
+        if (tenantId.isNotEmpty) ...['tenant', tenantId],
+        'signaling',
+        'v1'
+      ],
       queryParameters: {
         'token': token,
         'force': force.toString(),

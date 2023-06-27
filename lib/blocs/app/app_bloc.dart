@@ -21,6 +21,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     required this.appDatabase,
   }) : super(AppState(
           coreUrl: secureStorage.readCoreUrl(),
+          tenantId: secureStorage.readTenantId(),
           token: secureStorage.readToken(),
           webRegistrationInitialUrl: secureStorage.readWebRegistrationInitialUrl(),
           themeSettings: portaoneThemeSettings,
@@ -40,22 +41,26 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   void _onLogined(AppLogined event, Emitter<AppState> emit) async {
     await secureStorage.writeCoreUrl(event.coreUrl);
+    await secureStorage.writeTenantId(event.tenantId);
     await secureStorage.writeToken(event.token);
 
     emit(state.copyWith(
       coreUrl: event.coreUrl,
+      tenantId: event.tenantId,
       token: event.token,
     ));
   }
 
   void _onLogouted(AppLogouted event, Emitter<AppState> emit) async {
     await secureStorage.deleteCoreUrl();
+    await secureStorage.deleteTenantId();
     await secureStorage.deleteToken();
 
     await appDatabase.deleteEverything();
 
     emit(state.copyWith(
       coreUrl: null,
+      tenantId: null,
       token: null,
     ));
   }

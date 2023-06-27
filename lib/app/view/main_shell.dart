@@ -54,8 +54,10 @@ class _MainShellState extends State<MainShell> {
       providers: [
         RepositoryProvider<WebtritApiClient>(
           create: (context) {
+            final appBloc = context.read<AppBloc>();
             return WebtritApiClient(
-              Uri.parse(context.read<AppBloc>().state.coreUrl!),
+              Uri.parse(appBloc.state.coreUrl!),
+              appBloc.state.tenantId!,
               connectionTimeout: kApiClientConnectionTimeout,
             );
           },
