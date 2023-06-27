@@ -31,8 +31,8 @@ void main() {
       final httpClient = MockClient(expectAsync1(handler));
       final apiClient = WebtritApiClient.inner(
         Uri.https(authority),
+        '',
         httpClient: httpClient,
-        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
       );
 
       expect(
@@ -78,8 +78,8 @@ void main() {
       final httpClient = MockClient(expectAsync1(handler));
       final apiClient = WebtritApiClient.inner(
         Uri.https(authority),
+        '',
         httpClient: httpClient,
-        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
       );
 
       expect(
@@ -127,8 +127,8 @@ void main() {
       final httpClient = MockClient(expectAsync1(handler));
       final apiClient = WebtritApiClient.inner(
         Uri.https(authority),
+        '',
         httpClient: httpClient,
-        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
       );
 
       expect(
@@ -173,8 +173,8 @@ void main() {
       final httpClient = MockClient(expectAsync1(handler));
       final apiClient = WebtritApiClient.inner(
         Uri.https(authority),
+        '',
         httpClient: httpClient,
-        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
       );
 
       expect(
@@ -214,8 +214,8 @@ void main() {
       final httpClient = MockClient(expectAsync1(handler));
       final apiClient = WebtritApiClient.inner(
         Uri.https(authority),
+        '',
         httpClient: httpClient,
-        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
       );
 
       expect(
@@ -244,8 +244,8 @@ void main() {
       final httpClient = MockClient(expectAsync1(handler));
       final apiClient = WebtritApiClient.inner(
         Uri.https(authority),
+        '',
         httpClient: httpClient,
-        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
       );
 
       expect(
@@ -284,8 +284,8 @@ void main() {
       final httpClient = MockClient(expectAsync1(handler));
       final apiClient = WebtritApiClient.inner(
         Uri.https(authority),
+        '',
         httpClient: httpClient,
-        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
       );
 
       expect(
@@ -341,8 +341,8 @@ void main() {
       final httpClient = MockClient(expectAsync1(handler));
       final apiClient = WebtritApiClient.inner(
         Uri.https(authority),
+        '',
         httpClient: httpClient,
-        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
       );
 
       expect(
@@ -389,8 +389,8 @@ void main() {
       final httpClient = MockClient(expectAsync1(handler));
       final apiClient = WebtritApiClient.inner(
         Uri.https(authority),
+        '',
         httpClient: httpClient,
-        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
       );
 
       expect(
@@ -424,8 +424,8 @@ void main() {
       final httpClient = MockClient(expectAsync1(handler));
       final apiClient = WebtritApiClient.inner(
         Uri.https(authority),
+        '',
         httpClient: httpClient,
-        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
       );
 
       expect(
@@ -469,8 +469,8 @@ void main() {
       final httpClient = MockClient(expectAsync1(handler));
       final apiClient = WebtritApiClient.inner(
         Uri.https(authority),
+        '',
         httpClient: httpClient,
-        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
       );
 
       expect(
@@ -524,8 +524,8 @@ void main() {
       final httpClient = MockClient(expectAsync1(handler));
       final apiClient = WebtritApiClient.inner(
         Uri.https(authority),
+        '',
         httpClient: httpClient,
-        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
       );
 
       expect(
@@ -571,8 +571,8 @@ void main() {
       final httpClient = MockClient(expectAsync1(handler));
       final apiClient = WebtritApiClient.inner(
         Uri.https(authority),
+        '',
         httpClient: httpClient,
-        customSegments: WebtritApiClient.defaultApiVersionPathSegments,
       );
 
       expect(

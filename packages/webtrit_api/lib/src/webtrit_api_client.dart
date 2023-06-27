@@ -11,32 +11,28 @@ import 'exceptions.dart';
 import 'models/models.dart';
 
 class WebtritApiClient {
-  static generateTenantApiVersionPathSegments(String id) {
-    return id.isEmpty ? defaultApiVersionPathSegments : ['tenant', id, ...defaultApiVersionPathSegments];
-  }
-
   WebtritApiClient(
-    Uri baseUrl, {
+    Uri baseUrl,
+    String tenantId, {
     Duration? connectionTimeout,
     List<String>? customSegments,
-  }) : this.inner(baseUrl,
-            httpClient: platform.createHttpClient(
-              connectionTimeout: connectionTimeout,
-            ),
-            customSegments: customSegments);
+  }) : this.inner(
+          baseUrl,
+          tenantId,
+          httpClient: platform.createHttpClient(
+            connectionTimeout: connectionTimeout,
+          ),
+        );
 
   @visibleForTesting
   WebtritApiClient.inner(
-    this.baseUrl, {
+    this.baseUrl,
+    this.tenantId, {
     required http.Client httpClient,
-    required List<String>? customSegments,
-  })  : _httpClient = httpClient,
-        _apiVersionPathSegments = customSegments ?? defaultApiVersionPathSegments;
-
-  static const defaultApiVersionPathSegments = ['api', 'v1'];
-  List<String> _apiVersionPathSegments;
+  }) : _httpClient = httpClient;
 
   final Uri baseUrl;
+  final String tenantId;
   final http.Client _httpClient;
 
   void close() {
@@ -50,7 +46,13 @@ class WebtritApiClient {
     Object? requestDataJson,
   ) async {
     final url = baseUrl.replace(
-      pathSegments: baseUrl.pathSegments + _apiVersionPathSegments + pathSegments,
+      pathSegments: [
+        ...baseUrl.pathSegments,
+        if (tenantId.isNotEmpty) ...['tenant', tenantId],
+        'api',
+        'v1',
+        ...pathSegments,
+      ],
     );
     final httpRequest = http.Request(method, url);
     httpRequest.headers.addAll({

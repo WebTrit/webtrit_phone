@@ -19,7 +19,7 @@ part 'login_state.dart';
 typedef WebtritApiClientFactory = WebtritApiClient Function(String coreUrl);
 
 WebtritApiClient defaultCreateWebtritApiClient(String coreUrl) {
-  return WebtritApiClient(Uri.parse(coreUrl), connectionTimeout: kApiClientConnectionTimeout);
+  return WebtritApiClient(Uri.parse(coreUrl), '', connectionTimeout: kApiClientConnectionTimeout);
 }
 
 class LoginCubit extends Cubit<LoginState> {

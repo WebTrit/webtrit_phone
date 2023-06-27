@@ -4,16 +4,25 @@ import 'dart:io';
 import 'package:webtrit_api/webtrit_api.dart';
 
 void main(List<String> arguments) async {
-  if (arguments.length != 2) {
-    stderr.writeln('Incorrect arguments count, must be: <url> <token>');
+  final String url;
+  final String tenantId;
+  final String token;
+  if (arguments.length == 2) {
+    url = arguments[0];
+    tenantId = '';
+    token = arguments[1];
+  } else if (arguments.length == 3) {
+    url = arguments[0];
+    tenantId = arguments[1];
+    token = arguments[2];
+  } else {
+    stderr.writeln('Incorrect arguments count, must be: <url> [<tenantId>] <token>');
     exit(1);
   }
 
-  final url = arguments[0];
-  final token = arguments[1];
-
   final client = WebtritApiClient(
     Uri.parse(url),
+    tenantId,
     connectionTimeout: Duration(seconds: 5),
   );
 
