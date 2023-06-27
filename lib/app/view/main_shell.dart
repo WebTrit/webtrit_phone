@@ -50,11 +50,11 @@ class _MainShellState extends State<MainShell> {
 
   @override
   Widget build(BuildContext context) {
-    final appBloc = context.read<AppBloc>();
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<WebtritApiClient>(
           create: (context) {
+            final appBloc = context.read<AppBloc>();
             return WebtritApiClient(
               Uri.parse(context.read<AppBloc>().state.coreUrl!),
               connectionTimeout: kApiClientConnectionTimeout,
