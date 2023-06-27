@@ -25,7 +25,7 @@ class LoginState with _$LoginState {
     Object? error,
     @Default(false) bool demo,
     String? coreUrl,
-    SessionOtpResponse? sessionOtpResponse,
+    SessionOtpProvisional? sessionOtpProvisional,
     String? token,
     String? tenantId,
     @Default(UrlInput.pure()) UrlInput coreUrlInput,

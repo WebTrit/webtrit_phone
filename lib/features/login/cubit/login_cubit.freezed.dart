@@ -21,7 +21,7 @@ mixin _$LoginState {
   Object? get error => throw _privateConstructorUsedError;
   bool get demo => throw _privateConstructorUsedError;
   String? get coreUrl => throw _privateConstructorUsedError;
-  SessionOtpResponse? get sessionOtpResponse =>
+  SessionOtpProvisional? get sessionOtpProvisional =>
       throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
   String? get tenantId => throw _privateConstructorUsedError;
@@ -47,15 +47,13 @@ abstract class $LoginStateCopyWith<$Res> {
       Object? error,
       bool demo,
       String? coreUrl,
-      SessionOtpResponse? sessionOtpResponse,
+      SessionOtpProvisional? sessionOtpProvisional,
       String? token,
       String? tenantId,
       UrlInput coreUrlInput,
       EmailInput emailInput,
       PhoneInput phoneInput,
       CodeInput codeInput});
-
-  $SessionOtpResponseCopyWith<$Res>? get sessionOtpResponse;
 }
 
 /// @nodoc
@@ -76,7 +74,7 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
     Object? error = freezed,
     Object? demo = null,
     Object? coreUrl = freezed,
-    Object? sessionOtpResponse = freezed,
+    Object? sessionOtpProvisional = freezed,
     Object? token = freezed,
     Object? tenantId = freezed,
     Object? coreUrlInput = null,
@@ -102,10 +100,10 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
           ? _value.coreUrl
           : coreUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      sessionOtpResponse: freezed == sessionOtpResponse
-          ? _value.sessionOtpResponse
-          : sessionOtpResponse // ignore: cast_nullable_to_non_nullable
-              as SessionOtpResponse?,
+      sessionOtpProvisional: freezed == sessionOtpProvisional
+          ? _value.sessionOtpProvisional
+          : sessionOtpProvisional // ignore: cast_nullable_to_non_nullable
+              as SessionOtpProvisional?,
       token: freezed == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
@@ -132,19 +130,6 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
               as CodeInput,
     ) as $Val);
   }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $SessionOtpResponseCopyWith<$Res>? get sessionOtpResponse {
-    if (_value.sessionOtpResponse == null) {
-      return null;
-    }
-
-    return $SessionOtpResponseCopyWith<$Res>(_value.sessionOtpResponse!,
-        (value) {
-      return _then(_value.copyWith(sessionOtpResponse: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
@@ -161,16 +146,13 @@ abstract class _$$_LoginStateCopyWith<$Res>
       Object? error,
       bool demo,
       String? coreUrl,
-      SessionOtpResponse? sessionOtpResponse,
+      SessionOtpProvisional? sessionOtpProvisional,
       String? token,
       String? tenantId,
       UrlInput coreUrlInput,
       EmailInput emailInput,
       PhoneInput phoneInput,
       CodeInput codeInput});
-
-  @override
-  $SessionOtpResponseCopyWith<$Res>? get sessionOtpResponse;
 }
 
 /// @nodoc
@@ -189,7 +171,7 @@ class __$$_LoginStateCopyWithImpl<$Res>
     Object? error = freezed,
     Object? demo = null,
     Object? coreUrl = freezed,
-    Object? sessionOtpResponse = freezed,
+    Object? sessionOtpProvisional = freezed,
     Object? token = freezed,
     Object? tenantId = freezed,
     Object? coreUrlInput = null,
@@ -215,10 +197,10 @@ class __$$_LoginStateCopyWithImpl<$Res>
           ? _value.coreUrl
           : coreUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      sessionOtpResponse: freezed == sessionOtpResponse
-          ? _value.sessionOtpResponse
-          : sessionOtpResponse // ignore: cast_nullable_to_non_nullable
-              as SessionOtpResponse?,
+      sessionOtpProvisional: freezed == sessionOtpProvisional
+          ? _value.sessionOtpProvisional
+          : sessionOtpProvisional // ignore: cast_nullable_to_non_nullable
+              as SessionOtpProvisional?,
       token: freezed == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
@@ -256,7 +238,7 @@ class _$_LoginState implements _LoginState {
       this.error,
       this.demo = false,
       this.coreUrl,
-      this.sessionOtpResponse,
+      this.sessionOtpProvisional,
       this.token,
       this.tenantId,
       this.coreUrlInput = const UrlInput.pure(),
@@ -277,7 +259,7 @@ class _$_LoginState implements _LoginState {
   @override
   final String? coreUrl;
   @override
-  final SessionOtpResponse? sessionOtpResponse;
+  final SessionOtpProvisional? sessionOtpProvisional;
   @override
   final String? token;
   @override
@@ -297,7 +279,7 @@ class _$_LoginState implements _LoginState {
 
   @override
   String toString() {
-    return 'LoginState(step: $step, status: $status, error: $error, demo: $demo, coreUrl: $coreUrl, sessionOtpResponse: $sessionOtpResponse, token: $token, tenantId: $tenantId, coreUrlInput: $coreUrlInput, emailInput: $emailInput, phoneInput: $phoneInput, codeInput: $codeInput)';
+    return 'LoginState(step: $step, status: $status, error: $error, demo: $demo, coreUrl: $coreUrl, sessionOtpProvisional: $sessionOtpProvisional, token: $token, tenantId: $tenantId, coreUrlInput: $coreUrlInput, emailInput: $emailInput, phoneInput: $phoneInput, codeInput: $codeInput)';
   }
 
   @override
@@ -310,8 +292,8 @@ class _$_LoginState implements _LoginState {
             const DeepCollectionEquality().equals(other.error, error) &&
             (identical(other.demo, demo) || other.demo == demo) &&
             (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
-            (identical(other.sessionOtpResponse, sessionOtpResponse) ||
-                other.sessionOtpResponse == sessionOtpResponse) &&
+            (identical(other.sessionOtpProvisional, sessionOtpProvisional) ||
+                other.sessionOtpProvisional == sessionOtpProvisional) &&
             (identical(other.token, token) || other.token == token) &&
             (identical(other.tenantId, tenantId) ||
                 other.tenantId == tenantId) &&
@@ -333,7 +315,7 @@ class _$_LoginState implements _LoginState {
       const DeepCollectionEquality().hash(error),
       demo,
       coreUrl,
-      sessionOtpResponse,
+      sessionOtpProvisional,
       token,
       tenantId,
       coreUrlInput,
@@ -355,7 +337,7 @@ abstract class _LoginState implements LoginState {
       final Object? error,
       final bool demo,
       final String? coreUrl,
-      final SessionOtpResponse? sessionOtpResponse,
+      final SessionOtpProvisional? sessionOtpProvisional,
       final String? token,
       final String? tenantId,
       final UrlInput coreUrlInput,
@@ -374,7 +356,7 @@ abstract class _LoginState implements LoginState {
   @override
   String? get coreUrl;
   @override
-  SessionOtpResponse? get sessionOtpResponse;
+  SessionOtpProvisional? get sessionOtpProvisional;
   @override
   String? get token;
   @override

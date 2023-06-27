@@ -1,21 +1,21 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user_signup_credentials.dart';
+part of 'session_user_credential.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_UserSignupCredentials _$$_UserSignupCredentialsFromJson(
+_$_SessionUserCredential _$$_SessionUserCredentialFromJson(
         Map<String, dynamic> json) =>
-    _$_UserSignupCredentials(
+    _$_SessionUserCredential(
       type: $enumDecode(_$AppTypeEnumMap, json['type']),
       identifier: json['identifier'] as String,
       email: json['email'] as String,
     );
 
-Map<String, dynamic> _$$_UserSignupCredentialsToJson(
-        _$_UserSignupCredentials instance) =>
+Map<String, dynamic> _$$_SessionUserCredentialToJson(
+        _$_SessionUserCredential instance) =>
     <String, dynamic>{
       'type': _$AppTypeEnumMap[instance.type]!,
       'identifier': instance.identifier,

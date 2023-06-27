@@ -101,38 +101,38 @@ class WebtritApiClient {
     return Info.fromJson(responseJson);
   }
 
-  Future<BaseSessionResponse> createUser(UserSignupCredentials sessionLoginCreateUser) async {
-    final requestJson = sessionLoginCreateUser.toJson();
+  Future<SessionResult> createUser(SessionUserCredential sessionUserCredential) async {
+    final requestJson = sessionUserCredential.toJson();
 
     final responseJson = await _httpClientExecutePost(['user'], null, requestJson);
 
-    return BaseSessionResponse.fromJson(responseJson);
+    return SessionResult.fromJson(responseJson);
   }
 
-  Future<SessionOtpResponse> sessionOtpRequest(SessionOtpCredential sessionOtpCredential) async {
+  Future<SessionOtpProvisional> sessionOtpRequest(SessionOtpCredential sessionOtpCredential) async {
     final requestJson = sessionOtpCredential.toJson();
 
     final responseJson = await _httpClientExecutePost(['session', 'otp-request'], null, requestJson);
 
-    return SessionOtpResponse.fromJson(responseJson);
+    return SessionOtpProvisional.fromJson(responseJson);
   }
 
-  Future<SessionAuthorizedResponse> sessionOtpVerify(String otpId, String code) async {
+  Future<SessionToken> sessionOtpVerify(SessionOtpProvisional sessionOtpProvisional, String code) async {
     final requestJson = {
-      'otp_id': otpId,
+      'otp_id': sessionOtpProvisional.otpId,
       'code': code,
     };
 
     final responseJson = await _httpClientExecutePost(['session', 'otp-verify'], null, requestJson);
-    return SessionAuthorizedResponse.fromJson(responseJson);
+    return SessionToken.fromJson(responseJson);
   }
 
-  Future<String> sessionLogin(SessionLoginCredential sessionLoginCredential) async {
+  Future<SessionToken> sessionLogin(SessionLoginCredential sessionLoginCredential) async {
     final requestJson = sessionLoginCredential.toJson();
 
     final responseJson = await _httpClientExecutePost(['session'], null, requestJson);
 
-    return responseJson['token'];
+    return SessionToken.fromJson(responseJson);
   }
 
   Future<void> sessionLogout(String token) async {
