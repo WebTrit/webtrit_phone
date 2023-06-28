@@ -7,7 +7,7 @@ import 'package:webtrit_overlay_floating/webtrit_overlay_floating.dart';
 import 'package:webtrit_phone/app/routes.dart';
 
 import '../bloc/call_bloc.dart';
-import '../observers/overlay_navigator_observer.dart';
+import '../observers/overlay_route_observer.dart';
 
 import 'call_overlay_dialog.dart';
 import 'call_overlay_dialog_minimized.dart';
@@ -20,7 +20,7 @@ class CallOverlay extends StatefulWidget {
   });
 
   final Widget child;
-  final OverlayNavigatorObserver observer;
+  final OverlayRouteObserver observer;
 
   @override
   State<CallOverlay> createState() => _CallOverlayState();

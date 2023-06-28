@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/app/routes.dart';
 
-class OverlayNavigatorObserver extends RouteObserver {
-  OverlayNavigatorObserver();
+class OverlayRouteObserver extends RouteObserver {
+  OverlayRouteObserver();
 
   Function()? _popCallback;
   Function()? _pushCallback;
@@ -30,8 +30,10 @@ class OverlayNavigatorObserver extends RouteObserver {
     }
   }
 
-  void dispose() {
+  @override
+  void unsubscribe(RouteAware routeAware) {
     _popCallback = null;
     _pushCallback = null;
+    super.unsubscribe(routeAware);
   }
 }
