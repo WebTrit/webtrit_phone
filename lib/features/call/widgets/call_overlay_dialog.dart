@@ -19,7 +19,7 @@ class CallOverlayDialog extends StatefulWidget {
   final MediaStream? remoteStream;
   final String name;
   final bool isVideoCall;
-  final Function() onTap;
+  final GestureTapCallback onTap;
 
   @override
   State<CallOverlayDialog> createState() => _CallOverlayDialogState();
