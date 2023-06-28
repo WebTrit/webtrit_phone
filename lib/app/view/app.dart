@@ -162,28 +162,31 @@ class _AppState extends State<App> {
           ShellRoute(
             navigatorKey: _mainNavigatorKey,
             builder: (context, state, child) {
-              return MainShell(
-                child: BlocListener<CallBloc, CallState>(
-                  listenWhen: (previous, current) => previous.activeCalls.length != current.activeCalls.length,
-                  listener: (context, state) {
-                    // TODO push/pop of call screen mechanism must be remake
-                    final router = GoRouter.of(context);
-                    final isCallLocation = router.location.startsWith(router.namedLocation(MainRoute.call));
-                    if (state.isActive) {
-                      if (!isCallLocation) {
-                        context.pushNamed(MainRoute.call);
-                        if (state.activeCall.video) {
-                          context.read<OrientationsBloc>().add(const OrientationsChanged(PreferredOrientation.call));
+              return CallOverlay(
+                observer: _callObserver,
+                child: MainShell(
+                  child: BlocListener<CallBloc, CallState>(
+                    listenWhen: (previous, current) => previous.activeCalls.length != current.activeCalls.length,
+                    listener: (context, state) {
+                      // TODO push/pop of call screen mechanism must be remake
+                      final router = GoRouter.of(context);
+                      final isCallLocation = router.location.startsWith(router.namedLocation(MainRoute.call));
+                      if (state.isActive) {
+                        if (!isCallLocation) {
+                          context.pushNamed(MainRoute.call);
+                          if (state.activeCall.video) {
+                            context.read<OrientationsBloc>().add(const OrientationsChanged(PreferredOrientation.call));
+                          }
+                        }
+                      } else {
+                        if (isCallLocation) {
+                          context.pop();
+                          context.read<OrientationsBloc>().add(const OrientationsChanged(PreferredOrientation.regular));
                         }
                       }
-                    } else {
-                      if (isCallLocation) {
-                        context.pop();
-                        context.read<OrientationsBloc>().add(const OrientationsChanged(PreferredOrientation.regular));
-                      }
-                    }
-                  },
-                  child: child,
+                    },
+                    child: child,
+                  ),
                 ),
               );
             },
@@ -354,6 +357,7 @@ class _AppState extends State<App> {
                 pageBuilder: (context, state) {
                   const widget = CallScreen();
                   return CustomTransitionPage(
+                    name: MainRoute.call,
                     key: state.pageKey,
                     fullscreenDialog: true,
                     child: widget,
