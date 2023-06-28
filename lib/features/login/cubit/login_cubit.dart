@@ -248,8 +248,8 @@ class LoginCubit extends Cubit<LoginState> {
 
       emit(state.copyWith(
         status: LoginStatus.ok,
+        tenantId: sessionToken.tenantId ?? state.tenantId!,
         token: sessionToken.token,
-        tenantId: sessionToken.tenantId,
       ));
     } catch (e) {
       emit(state.copyWith(
