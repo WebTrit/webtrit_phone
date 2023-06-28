@@ -2,22 +2,26 @@ import 'package:flutter/widgets.dart';
 
 import 'overlay_entry_data.dart';
 
+typedef OverlayAddCallback = void Function(String id, OverlayEntryData overlayEntryData);
+typedef OverlayRemoveCallback = void Function(String id);
+typedef OverlayDisposeAllCallback = void Function();
+
 class OverlayController {
-  Function(String id, OverlayEntryData overlayEntryData)? overlayAddCallback;
-  Function(String id)? overlayRemoveCallback;
-  Function()? overlayDisposeAllCallback;
+  OverlayAddCallback? _overlayAddCallback;
+  OverlayRemoveCallback? _overlayRemoveCallback;
+  OverlayDisposeAllCallback? _overlayDisposeAllCallback;
 
-  void add(String id, OverlayEntryData overlayEntryData) {
-    overlayAddCallback?.call(id, overlayEntryData);
-  }
+  set setOverlayAddCallback(OverlayAddCallback? value) => _overlayAddCallback = value;
 
-  void remove(String id) {
-    overlayRemoveCallback?.call(id);
-  }
+  set setOverlayRemoveCallback(OverlayRemoveCallback? value) => _overlayRemoveCallback = value;
 
-  void disposeAll() {
-    overlayDisposeAllCallback?.call();
-  }
+  set setOverlayDisposeAllCallback(OverlayDisposeAllCallback? value) => _overlayDisposeAllCallback = value;
+
+  void add(String id, OverlayEntryData overlayEntryData) => _overlayAddCallback?.call(id, overlayEntryData);
+
+  void remove(String id) => _overlayRemoveCallback?.call(id);
+
+  void disposeAll() => _overlayDisposeAllCallback?.call();
 }
 
 class OverlayWidget extends StatefulWidget {
@@ -39,9 +43,9 @@ class _OverlayWidgetState extends State<OverlayWidget> {
 
   @override
   void initState() {
-    widget.controller.overlayAddCallback = _addOverlayCall;
-    widget.controller.overlayRemoveCallback = _removeOverlay;
-    widget.controller.overlayDisposeAllCallback = _disposeAllOverlay;
+    widget.controller.setOverlayAddCallback = _addOverlayCall;
+    widget.controller.setOverlayRemoveCallback = _removeOverlay;
+    widget.controller.setOverlayDisposeAllCallback = _disposeAllOverlay;
     super.initState();
   }
 
