@@ -37,7 +37,7 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   late final AppBloc appBloc;
-  final OverlayNavigatorObserver _callObserver = OverlayNavigatorObserver();
+  final _callObserver = OverlayRouteObserver();
 
   @override
   void initState() {
