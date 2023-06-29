@@ -20,13 +20,13 @@ AccountInfo _$AccountInfoFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AccountInfo {
-  String get login => throw _privateConstructorUsedError;
-  BillingModel get billingModel => throw _privateConstructorUsedError;
+  String? get login => throw _privateConstructorUsedError;
+  BillingModel? get billingModel => throw _privateConstructorUsedError;
   BalanceControlType? get balanceControlType =>
       throw _privateConstructorUsedError;
-  double get balance => throw _privateConstructorUsedError;
+  double? get balance => throw _privateConstructorUsedError;
   double? get creditLimit => throw _privateConstructorUsedError;
-  String get currency => throw _privateConstructorUsedError;
+  String? get currency => throw _privateConstructorUsedError;
   String? get extensionName => throw _privateConstructorUsedError;
   String? get firstname => throw _privateConstructorUsedError;
   String? get lastname => throw _privateConstructorUsedError;
@@ -48,12 +48,12 @@ abstract class $AccountInfoCopyWith<$Res> {
       _$AccountInfoCopyWithImpl<$Res, AccountInfo>;
   @useResult
   $Res call(
-      {String login,
-      BillingModel billingModel,
+      {String? login,
+      BillingModel? billingModel,
       BalanceControlType? balanceControlType,
-      double balance,
+      double? balance,
       double? creditLimit,
-      String currency,
+      String? currency,
       String? extensionName,
       String? firstname,
       String? lastname,
@@ -76,12 +76,12 @@ class _$AccountInfoCopyWithImpl<$Res, $Val extends AccountInfo>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? login = null,
-    Object? billingModel = null,
+    Object? login = freezed,
+    Object? billingModel = freezed,
     Object? balanceControlType = freezed,
-    Object? balance = null,
+    Object? balance = freezed,
     Object? creditLimit = freezed,
-    Object? currency = null,
+    Object? currency = freezed,
     Object? extensionName = freezed,
     Object? firstname = freezed,
     Object? lastname = freezed,
@@ -91,30 +91,30 @@ class _$AccountInfoCopyWithImpl<$Res, $Val extends AccountInfo>
     Object? ext = freezed,
   }) {
     return _then(_value.copyWith(
-      login: null == login
+      login: freezed == login
           ? _value.login
           : login // ignore: cast_nullable_to_non_nullable
-              as String,
-      billingModel: null == billingModel
+              as String?,
+      billingModel: freezed == billingModel
           ? _value.billingModel
           : billingModel // ignore: cast_nullable_to_non_nullable
-              as BillingModel,
+              as BillingModel?,
       balanceControlType: freezed == balanceControlType
           ? _value.balanceControlType
           : balanceControlType // ignore: cast_nullable_to_non_nullable
               as BalanceControlType?,
-      balance: null == balance
+      balance: freezed == balance
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
-              as double,
+              as double?,
       creditLimit: freezed == creditLimit
           ? _value.creditLimit
           : creditLimit // ignore: cast_nullable_to_non_nullable
               as double?,
-      currency: null == currency
+      currency: freezed == currency
           ? _value.currency
           : currency // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       extensionName: freezed == extensionName
           ? _value.extensionName
           : extensionName // ignore: cast_nullable_to_non_nullable
@@ -156,12 +156,12 @@ abstract class _$$_AccountInfoCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String login,
-      BillingModel billingModel,
+      {String? login,
+      BillingModel? billingModel,
       BalanceControlType? balanceControlType,
-      double balance,
+      double? balance,
       double? creditLimit,
-      String currency,
+      String? currency,
       String? extensionName,
       String? firstname,
       String? lastname,
@@ -182,12 +182,12 @@ class __$$_AccountInfoCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? login = null,
-    Object? billingModel = null,
+    Object? login = freezed,
+    Object? billingModel = freezed,
     Object? balanceControlType = freezed,
-    Object? balance = null,
+    Object? balance = freezed,
     Object? creditLimit = freezed,
-    Object? currency = null,
+    Object? currency = freezed,
     Object? extensionName = freezed,
     Object? firstname = freezed,
     Object? lastname = freezed,
@@ -197,30 +197,30 @@ class __$$_AccountInfoCopyWithImpl<$Res>
     Object? ext = freezed,
   }) {
     return _then(_$_AccountInfo(
-      login: null == login
+      login: freezed == login
           ? _value.login
           : login // ignore: cast_nullable_to_non_nullable
-              as String,
-      billingModel: null == billingModel
+              as String?,
+      billingModel: freezed == billingModel
           ? _value.billingModel
           : billingModel // ignore: cast_nullable_to_non_nullable
-              as BillingModel,
+              as BillingModel?,
       balanceControlType: freezed == balanceControlType
           ? _value.balanceControlType
           : balanceControlType // ignore: cast_nullable_to_non_nullable
               as BalanceControlType?,
-      balance: null == balance
+      balance: freezed == balance
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
-              as double,
+              as double?,
       creditLimit: freezed == creditLimit
           ? _value.creditLimit
           : creditLimit // ignore: cast_nullable_to_non_nullable
               as double?,
-      currency: null == currency
+      currency: freezed == currency
           ? _value.currency
           : currency // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       extensionName: freezed == extensionName
           ? _value.extensionName
           : extensionName // ignore: cast_nullable_to_non_nullable
@@ -276,17 +276,17 @@ class _$_AccountInfo implements _AccountInfo {
       _$$_AccountInfoFromJson(json);
 
   @override
-  final String login;
+  final String? login;
   @override
-  final BillingModel billingModel;
+  final BillingModel? billingModel;
   @override
   final BalanceControlType? balanceControlType;
   @override
-  final double balance;
+  final double? balance;
   @override
   final double? creditLimit;
   @override
-  final String currency;
+  final String? currency;
   @override
   final String? extensionName;
   @override
@@ -369,12 +369,12 @@ class _$_AccountInfo implements _AccountInfo {
 
 abstract class _AccountInfo implements AccountInfo {
   const factory _AccountInfo(
-      {required final String login,
-      required final BillingModel billingModel,
+      {required final String? login,
+      required final BillingModel? billingModel,
       final BalanceControlType? balanceControlType,
-      required final double balance,
+      required final double? balance,
       final double? creditLimit,
-      required final String currency,
+      required final String? currency,
       required final String? extensionName,
       required final String? firstname,
       required final String? lastname,
@@ -387,17 +387,17 @@ abstract class _AccountInfo implements AccountInfo {
       _$_AccountInfo.fromJson;
 
   @override
-  String get login;
+  String? get login;
   @override
-  BillingModel get billingModel;
+  BillingModel? get billingModel;
   @override
   BalanceControlType? get balanceControlType;
   @override
-  double get balance;
+  double? get balance;
   @override
   double? get creditLimit;
   @override
-  String get currency;
+  String? get currency;
   @override
   String? get extensionName;
   @override
