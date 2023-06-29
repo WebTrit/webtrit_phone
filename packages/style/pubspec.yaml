@@ -1,0 +1,15 @@
+name: style
+description: Style synchronization module
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  http: ^0.13.6
+  shared_preferences: ^2.0.18
+  freezed: ^2.3.4
+  build_runner: ^2.4.4
+  json_serializable: ^6.7.0
+  freezed_annotation: ^2.2.0

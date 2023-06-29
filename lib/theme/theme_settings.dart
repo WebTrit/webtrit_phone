@@ -1,4 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+
+import 'package:flutter_svg/svg.dart';
+import 'package:rxdart/rxdart.dart';
+
+import 'package:webtrit_phone/app/assets.gen.dart';
 
 import 'custom_color.dart';
 
@@ -9,13 +16,17 @@ class ThemeSettings {
     this.darkColorSchemeOverride,
     required this.primaryGradientColors,
     this.fontFamily,
+    this.imagesScheme,
+    this.appName,
   });
 
   final Color seedColor;
   final ColorSchemeOverride? lightColorSchemeOverride;
   final ColorSchemeOverride? darkColorSchemeOverride;
   final List<CustomColor> primaryGradientColors;
+  final ImagesScheme? imagesScheme;
   final String? fontFamily;
+  final String? appName;
 }
 
 class ColorSchemeOverride {
@@ -82,4 +93,65 @@ class ColorSchemeOverride {
   final Color? shadow;
   final Color? scrim;
   final Color? surfaceTint;
+}
+
+class ImagesScheme {
+  final onboardingStream = ReplaySubject<SvgLoader?>(maxSize: 1);
+  final applicationLogoStream = ReplaySubject<SvgLoader?>(maxSize: 1);
+
+  Stream<SvgLoader?> get onboarding => onboardingStream.stream;
+
+  Stream<SvgLoader?> get applicationLogo => applicationLogoStream.stream;
+
+  void clearOnboarding() {
+    onboardingStream.add(null);
+  }
+
+  void clearApplicationLogo() {
+    applicationLogoStream.add(null);
+  }
+
+  void setOnboardingByUrl(
+    String? image, {
+    SvgGenImage svgGenImage = Assets.logo,
+  }) {
+    _updateStreamByNetworkSvg(onboardingStream, image, svgGenImage);
+  }
+
+  void setOnboardingByBytes(
+    Uint8List? image, {
+    SvgGenImage svgGenImage = Assets.logo,
+  }) {
+    _updateStreamByBytesSvg(onboardingStream, image, svgGenImage);
+  }
+
+  void setApplicationLogoByUrl(
+    String? image, {
+    SvgGenImage svgGenImage = Assets.logo,
+  }) {
+    _updateStreamByNetworkSvg(applicationLogoStream, image, svgGenImage);
+  }
+
+  void setApplicationByBytes(
+    Uint8List? image, {
+    SvgGenImage svgGenImage = Assets.logo,
+  }) {
+    _updateStreamByBytesSvg(applicationLogoStream, image, svgGenImage);
+  }
+
+  void _updateStreamByNetworkSvg(ReplaySubject stream, String? image, SvgGenImage defaultImage) async {
+    if (image == null) {
+      stream.add(SvgAssetLoader(defaultImage.path));
+    } else {
+      stream.add((SvgNetworkLoader(image)));
+    }
+  }
+
+  void _updateStreamByBytesSvg(ReplaySubject stream, Uint8List? image, SvgGenImage defaultImage) async {
+    if (image == null) {
+      stream.add(SvgAssetLoader(defaultImage.path));
+    } else {
+      stream.add((SvgBytesLoader(image)));
+    }
+  }
 }

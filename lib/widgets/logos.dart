@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_svg/svg.dart';
+
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/theme/const_texts.dart';
 import 'package:webtrit_phone/theme/theme.dart';
+
+import 'sized_circular_progress_indicator.dart';
 
 class WebTritPhonePictureLogo extends StatelessWidget {
   const WebTritPhonePictureLogo({
@@ -27,25 +32,52 @@ class WebTritPhonePictureLogo extends StatelessWidget {
     final themeData = Theme.of(context);
     final logo = themeData.extension<GenImages>()?.logo;
     final logoHeight = this.logoHeight ?? (logoWidth == null ? fontSize * 2.2 : null);
+    final appName = themeData.extension<ConstTexts>()?.appName;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        logo?.svg(
-              width: logoWidth,
-              height: logoHeight,
-              fit: logoFit,
-              alignment: logoAlignment,
-            ) ??
-            SizedBox(
-              width: logoWidth,
-              height: logoHeight,
-            ),
+        StreamBuilder<SvgLoader?>(
+          stream: logo,
+          builder: (BuildContext context, AsyncSnapshot<SvgLoader?> snapshot) {
+            if (snapshot.hasError) {
+              return SizedBox(
+                height: logoHeight,
+              );
+            }
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+                return SizedBox(
+                  height: logoHeight,
+                );
+              case ConnectionState.waiting:
+                return SizedCircularProgressIndicator(
+                  size: themeData.textTheme.bodyMedium!.fontSize!,
+                  strokeWidth: 2,
+                );
+
+              case ConnectionState.active:
+              case ConnectionState.done:
+                if (snapshot.data != null) {
+                  final svg = snapshot.data as BytesLoader;
+                  return SvgPicture(
+                    svg,
+                    height: logoHeight,
+                    width: logoWidth,
+                  );
+                } else {
+                  return SizedBox(
+                    height: logoHeight,
+                  );
+                }
+            }
+          },
+        ),
         SizedBox(
           height: dividerHeight ?? fontSize / 3,
         ),
         Text(
-          EnvironmentConfig.APP_NAME,
+          appName ?? EnvironmentConfig.APP_NAME,
           style: titleStyle,
         ),
       ],
@@ -61,11 +93,13 @@ class WebTritPhoneTextLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    final appName = themeData.extension<ConstTexts>()?.appName;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Text(
-          EnvironmentConfig.APP_NAME,
+          appName ?? EnvironmentConfig.APP_NAME,
           style: themeData.textTheme.displayMedium,
         ),
         Text(

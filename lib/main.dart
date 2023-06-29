@@ -26,6 +26,8 @@ void main() {
 
     final applicationDocumentsPath = await getApplicationDocumentsPath();
 
+    final theme = AppTheme().theme;
+
     return Provider<AppDatabase>(
       create: (context) {
         final appDatabase = _AppDatabaseWithAppLifecycleStateObserver(
@@ -53,6 +55,7 @@ void main() {
             return App(
               appDatabase: context.read<AppDatabase>(),
               appPermissions: AppPermissions(),
+              themeSettings: theme,
             );
           },
         ),

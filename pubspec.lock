@@ -1311,6 +1311,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  style:
+    dependency: "direct main"
+    description:
+      path: "packages/style"
+      relative: true
+    source: path
+    version: "1.0.0+1"
   sync_http:
     dependency: transitive
     description:

@@ -35,6 +35,16 @@ class $AssetsRingtonesGen {
   List<String> get values => [incomingCall1, outgoingCall1];
 }
 
+class $AssetsStyleGen {
+  const $AssetsStyleGen();
+
+  /// File path: assets/style/webtrit.json
+  String get webtrit => 'assets/style/webtrit.json';
+
+  /// List of all assets
+  List<String> get values => [webtrit];
+}
+
 class Assets {
   Assets._();
 
@@ -43,6 +53,7 @@ class Assets {
   static const AssetGenImage logoIconTemplateImage =
       AssetGenImage('assets/logoIconTemplateImage.png');
   static const $AssetsRingtonesGen ringtones = $AssetsRingtonesGen();
+  static const $AssetsStyleGen style = $AssetsStyleGen();
 
   /// List of all assets
   List<dynamic> get values => [logo, logoIconTemplateImage];

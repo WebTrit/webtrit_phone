@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'package:webtrit_phone/app/assets.gen.dart';
+import 'package:flutter_svg/svg.dart';
 
 class GenImages extends ThemeExtension<GenImages> {
   const GenImages({
@@ -8,13 +7,13 @@ class GenImages extends ThemeExtension<GenImages> {
     this.loginOnboarding,
   });
 
-  final SvgGenImage? logo;
-  final SvgGenImage? loginOnboarding;
+  final Stream<SvgLoader?>? logo;
+  final Stream<SvgLoader?>? loginOnboarding;
 
   @override
   ThemeExtension<GenImages> copyWith({
-    SvgGenImage? logo,
-    SvgGenImage? loginOnboarding,
+    Stream<SvgLoader?>? logo,
+    Stream<SvgLoader?>? loginOnboarding,
   }) {
     return GenImages(
       logo: logo ?? this.logo,

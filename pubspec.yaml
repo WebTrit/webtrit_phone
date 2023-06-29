@@ -76,6 +76,9 @@ dependencies:
   app_database:
     path: ./packages/data/app_database
 
+  style:
+    path: ./packages/style
+
 dev_dependencies:
   integration_test:
     sdk: flutter
@@ -96,10 +99,11 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/logo.svg
-    - assets/logoIconTemplateImage.png
+    - assets/
     - assets/login/
     - assets/ringtones/
+    - assets/style/
+    - publisher.json
 
 flutter_gen:
   output: lib/app/
