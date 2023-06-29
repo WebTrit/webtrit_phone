@@ -182,7 +182,7 @@ class _AppState extends State<App> {
                       }
                     }
                   },
-                  child: child,
+                  child: EnvironmentConfig.CORE_URL.isNotEmpty ? child : CountDownInviteFriendsScreen(child: child),
                 ),
               );
             },
@@ -473,6 +473,15 @@ class _AppState extends State<App> {
                         child: widget,
                       );
                       return provider;
+                    },
+                  ),
+                  GoRoute(
+                    path: 'invite',
+                    name: MainRoute.inviteFriends,
+                    builder: (context, state) {
+                      final url = Uri.parse(state.queryParameters['invite-url']!);
+                      final widget = WebInviteFriendsScreen(initialUri: url);
+                      return widget;
                     },
                   ),
                 ],

@@ -13,12 +13,12 @@ part 'account_info.g.dart';
 class AccountInfo with _$AccountInfo {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory AccountInfo({
-    required String login,
-    required BillingModel billingModel,
+    required String? login,
+    required BillingModel? billingModel,
     BalanceControlType? balanceControlType,
-    required double balance,
+    required double? balance,
     double? creditLimit,
-    required String currency,
+    required String? currency,
     required String? extensionName,
     required String? firstname,
     required String? lastname,

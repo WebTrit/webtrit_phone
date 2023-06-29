@@ -8,13 +8,14 @@ part of 'account_info.dart';
 
 _$_AccountInfo _$$_AccountInfoFromJson(Map<String, dynamic> json) =>
     _$_AccountInfo(
-      login: json['login'] as String,
-      billingModel: $enumDecode(_$BillingModelEnumMap, json['billing_model']),
+      login: json['login'] as String?,
+      billingModel:
+          $enumDecodeNullable(_$BillingModelEnumMap, json['billing_model']),
       balanceControlType: $enumDecodeNullable(
           _$BalanceControlTypeEnumMap, json['balance_control_type']),
-      balance: (json['balance'] as num).toDouble(),
+      balance: (json['balance'] as num?)?.toDouble(),
       creditLimit: (json['credit_limit'] as num?)?.toDouble(),
-      currency: json['currency'] as String,
+      currency: json['currency'] as String?,
       extensionName: json['extension_name'] as String?,
       firstname: json['firstname'] as String?,
       lastname: json['lastname'] as String?,
@@ -27,7 +28,7 @@ _$_AccountInfo _$$_AccountInfoFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$_AccountInfoToJson(_$_AccountInfo instance) =>
     <String, dynamic>{
       'login': instance.login,
-      'billing_model': _$BillingModelEnumMap[instance.billingModel]!,
+      'billing_model': _$BillingModelEnumMap[instance.billingModel],
       'balance_control_type':
           _$BalanceControlTypeEnumMap[instance.balanceControlType],
       'balance': instance.balance,

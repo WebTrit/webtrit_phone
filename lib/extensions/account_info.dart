@@ -11,7 +11,7 @@ extension AccountInfoFormatting on AccountInfo {
     final creditLimit = this.creditLimit;
     switch (billingModel) {
       case BillingModel.debit:
-        return '${balance.toStringAsFixed(2)} $currency';
+        return '${balance?.toStringAsFixed(2)} $currency';
       case BillingModel.credit:
         if (creditLimit != null) {
           return '${creditLimit.toStringAsFixed(2)} $currency';
@@ -27,7 +27,7 @@ extension AccountInfoFormatting on AccountInfo {
     if (ext != null) {
       return '$login (ext: $ext)';
     } else {
-      return login;
+      return login??'';
     }
   }
 }

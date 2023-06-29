@@ -15,3 +15,5 @@ export 'session_login_credential.dart';
 export 'session_otp_credential.dart';
 export 'session_result.dart';
 export 'session_user_credential.dart';
+export 'user_invite_credential.dart';
+export 'user_invite_data.dart';
