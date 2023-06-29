@@ -1,0 +1,9 @@
+include: package:lints/recommended.yaml
+
+linter:
+  rules:
+    prefer_single_quotes: true
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"

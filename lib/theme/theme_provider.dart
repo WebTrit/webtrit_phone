@@ -221,6 +221,7 @@ class ThemeProvider extends InheritedWidget {
   AppBarTheme appBarTheme(ColorScheme colors) {
     return const AppBarTheme(
       scrolledUnderElevation: 0,
+      toolbarHeight: kToolbarHeight,
       centerTitle: true,
     );
   }
