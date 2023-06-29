@@ -100,6 +100,14 @@ class WebtritApiClient {
     return Info.fromJson(responseJson);
   }
 
+  Future<UserInviteData> createUserInviteUrl(UserInviteCredential sessionUserInvite) async {
+    final requestJson = sessionUserInvite.toJson();
+
+    final responseJson = await _httpClientExecutePost(['user'], null, requestJson);
+
+    return UserInviteData.fromJson(responseJson);
+  }
+
   Future<SessionResult> createUser(SessionUserCredential sessionUserCredential) async {
     final requestJson = sessionUserCredential.toJson();
 
