@@ -29,6 +29,8 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^2.0.0
+  auto_screenshot:
+    path: ../../../../home/auto_screenshot
 
 flutter:
   uses-material-design: true
@@ -38,3 +40,21 @@ flutter:
     - assets/logoIconTemplateImage.png
     - assets/login/
     - assets/ringtones/
+
+auto_screenshot:
+  options:
+    time: "1200"
+  bundle_id:
+    android: com.webtrit.phone.screenshots
+    ios: com.webtrit.phone.screenshots
+  devices:
+    - Pixel_4_API_32
+  base_url:
+    android: http://webtrit-phone-screenshots.firebaseapp.com
+    ios: customschema://https://webtrit-phone-screenshots.firebaseapp.com
+  screenshot:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
