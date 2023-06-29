@@ -162,9 +162,9 @@ class _AppState extends State<App> {
           ShellRoute(
             navigatorKey: _mainNavigatorKey,
             builder: (context, state, child) {
-              return CallOverlay(
-                observer: _callObserver,
-                child: MainShell(
+              return MainShell(
+                child: CallOverlay(
+                  observer: _callObserver,
                   child: BlocListener<CallBloc, CallState>(
                     listenWhen: (previous, current) => previous.activeCalls.length != current.activeCalls.length,
                     listener: (context, state) {
