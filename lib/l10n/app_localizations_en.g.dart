@@ -339,6 +339,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contactsSourceExternal => 'Cloud PBX';
 
   @override
+  String get inviteFriends_Dialog_title => 'Invite your friends \nto try webtrit';
+
+  @override
+  String get inviteFriends_Dialog_close => 'Hide this message';
+
+  @override
+  String get inviteFriends_Dialog_invite => 'Invite';
+
+  @override
   String get contacts_LocalTabText_permissionFailure => 'There are no permissions to get your phone contacts';
 
   @override

@@ -703,6 +703,24 @@ abstract class AppLocalizations {
   /// **'Cloud PBX'**
   String get contactsSourceExternal;
 
+  /// No description provided for @inviteFriends_Dialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite your friends \nto try webtrit'**
+  String get inviteFriends_Dialog_title;
+
+  /// No description provided for @inviteFriends_Dialog_close.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide this message'**
+  String get inviteFriends_Dialog_close;
+
+  /// No description provided for @inviteFriends_Dialog_invite.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite'**
+  String get inviteFriends_Dialog_invite;
+
   /// No description provided for @contacts_LocalTabText_permissionFailure.
   ///
   /// In en, this message translates to:

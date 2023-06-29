@@ -18,6 +18,7 @@ class MainRoute {
 
   static const favorites = 'favorites';
   static const favoritesDetails = 'favorite';
+  static const inviteFriends = 'invite';
 
   static const contacts = 'contacts';
   static const contactsDetails = 'contact';

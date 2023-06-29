@@ -380,6 +380,16 @@
   "@contactsSourceExternal": {
   },
 
+  "inviteFriends_Dialog_title": "Invite your friends \nto try webtrit",
+  "@inviteFriends_Dialog_title": {
+  },
+  "inviteFriends_Dialog_close": "Hide this message",
+  "@inviteFriends_Dialog_close": {
+  },
+  "inviteFriends_Dialog_invite": "Invite",
+  "@inviteFriends_Dialog_invite": {
+  },
+
   "contacts_LocalTabText_permissionFailure": "There are no permissions to get your phone contacts",
   "@contacts_LocalTabText_permissionFailure": {
   },
