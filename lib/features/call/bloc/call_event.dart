@@ -179,6 +179,8 @@ class _CallPerformEvent with _$_CallPerformEvent implements CallEvent {
 
   factory _CallPerformEvent.sentDTMF(UuidValue uuid, String key) = _CallPerformEventSentDTMF;
 
+  factory _CallPerformEvent.setSpeaker(UuidValue uuid, bool enabled) = _CallPerformEventSetSpeaker;
+
   final _performCompleter = Completer<bool>();
 
   Future<bool> get future => _performCompleter.future;
