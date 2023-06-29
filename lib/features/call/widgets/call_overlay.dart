@@ -17,10 +17,12 @@ class CallOverlay extends StatefulWidget {
     super.key,
     required this.child,
     required this.observer,
+    this.callOverlayEntityMargin = const Offset(8, 8),
   });
 
   final Widget child;
   final OverlayRouteObserver observer;
+  final Offset callOverlayEntityMargin;
 
   @override
   State<CallOverlay> createState() => _CallOverlayState();
@@ -40,10 +42,8 @@ class _CallOverlayState extends State<CallOverlay> {
       final appBarTheme = AppBarTheme.of(context);
       final screenInfo = MediaQuery.of(context);
 
-      const callOverlayEntityMargin = Offset(8, 8);
-
-      final dialogPositionX = callOverlayEntityMargin.dx;
-      final dialogPositionY = appBarTheme.toolbarHeight! + screenInfo.padding.top + callOverlayEntityMargin.dy;
+      final dialogPositionX = widget.callOverlayEntityMargin.dx;
+      final dialogPositionY = appBarTheme.toolbarHeight! + screenInfo.padding.top + widget.callOverlayEntityMargin.dy;
 
       _callOverlayEntityPositionDefault = Offset(dialogPositionX, dialogPositionY);
     });
