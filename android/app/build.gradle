@@ -74,7 +74,7 @@ android {
         applicationId "com.webtrit.phone"
         // Must use suffix to customize application id because of [issue 211768](https://code.google.com/p/android/issues/detail?id=211768).
         applicationIdSuffix dartEnvironments.WEBTRIT_PHONE_APP_ID_SUFFIX
-        minSdkVersion 23 // flutter.minSdkVersion
+        minSdkVersion 26 // flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

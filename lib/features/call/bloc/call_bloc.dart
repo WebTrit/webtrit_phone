@@ -821,13 +821,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) {
     return event.map(
-      started: (event) => __onCallPerformEventStarted(event, emit),
-      answered: (event) => __onCallPerformEventAnswered(event, emit),
-      ended: (event) => __onCallPerformEventEnded(event, emit),
-      setHeld: (event) => __onCallPerformEventSetHeld(event, emit),
-      setMuted: (event) => __onCallPerformEventSetMuted(event, emit),
-      sentDTMF: (event) => __onCallPerformEventSentDTMF(event, emit),
-    );
+        started: (event) => __onCallPerformEventStarted(event, emit),
+        answered: (event) => __onCallPerformEventAnswered(event, emit),
+        ended: (event) => __onCallPerformEventEnded(event, emit),
+        setHeld: (event) => __onCallPerformEventSetHeld(event, emit),
+        setMuted: (event) => __onCallPerformEventSetMuted(event, emit),
+        sentDTMF: (event) => __onCallPerformEventSentDTMF(event, emit),
+        setSpeaker: (event) => __onCallPerformEventSetSpeaker(event, emit));
   }
 
   Future<void> __onCallPerformEventStarted(
@@ -1413,6 +1413,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     ));
   }
 
+  Future<void> __onCallPerformEventSetSpeaker(
+    _CallPerformEventSetSpeaker event,
+    Emitter<CallState> emit,
+  ) async {
+    event.fulfill();
+    emit(state.copyWith(speaker: event.enabled));
+  }
+
   Future<void> _ringtoneOutgoingPlay() async {
     await _audioPlayer.setAsset(Assets.ringtones.outgoingCall1);
     await _audioPlayer.setLoopMode(LoopMode.one);
@@ -1430,5 +1438,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } else {
       return uri.replace(scheme: 'ws');
     }
+  }
+
+  @override
+  Future<bool> performSetSpeaker(UuidValue uuid, bool enabled) {
+    return _perform(_CallPerformEvent.setSpeaker(uuid, enabled));
   }
 }

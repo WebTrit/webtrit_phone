@@ -14,3 +14,6 @@ const kMainAppBarBottomSearchHeight = kMinInteractiveDimension;
 const kMainAppBarBottomPaddingGap = 6.0;
 
 const kBlankUri = 'about:blank';
+
+const initialMainRout = '/main';
+const initialCallRout = '/main/call';
