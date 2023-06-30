@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
+//TODO: Rename file
 class AppStyleConfig {
   static late AppStyleConfig _instance;
 
@@ -13,7 +14,7 @@ class AppStyleConfig {
       themeId: yamlMap['credential']['themeId'],
       applicationId: yamlMap['credential']['applicationId'],
       // TODO: Handle prod and stage env
-      host: yamlMap['hosts']['configurator']['stage'],
+      host: yamlMap['hosts']['configurator']['prod'],
     );
 
     _instance = AppStyleConfig._(publisherConfig);

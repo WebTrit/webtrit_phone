@@ -1,30 +1,38 @@
 {
-  "name": "WebTrit",
-  "fontFamily": "Montserrat",
-  "images": {
-    "adaptiveIconBackground": null,
-    "iosLauncherIcon": null,
-    "onboarding": null,
-    "androidLauncherIcon": null,
-    "notificationLogo": null,
-    "applicationLogo": null,
-    "adaptiveIconForeground": null,
-    "webLauncherIcon": null
+  "id": "9qvgHSNQSWva7ZXlECvn",
+  "applicationId": "Ykmloac96mzI4EniOJEx",
+  "name": "",
+  "fontFamily": "Inter",
+  "texts": {
+    "contactEmail": null,
+    "greeting": ""
   },
   "colors": {
-    "primary": "#FFF5841F",
-    "onSurface": "#FF3D5B68",
-    "surface": "#FFF3F5F6",
-    "onSecondaryContainer": "#FF3D5B68",
-    "secondaryContainer": "#FFC5CED2",
-    "tertiary": "#FF75B943",
-    "error": "#FFE74C3C",
-    "secondary": "#FF3D5B68",
-    "outline": "#FFF3F5F6",
-    "background": "#FFFFFFFF",
+    "onPrimary": "#ffffffff",
+    "onSurface": "#ff30302f",
+    "surface": "#ffeef3f6",
+    "onSecondaryContainer": "#ff1f618f",
+    "secondaryContainer": "#ffeef3f6",
+    "tertiary": "#ff75b943",
+    "error": "#ffe74c3c",
+    "secondary": "#ff123752",
+    "outline": "#ffffffff",
+    "background": "#ffffffff",
+    "onBackground": "#ff30302f",
     "gradientTabColor": [
-      "#FF58A1A4",
-      "#FF343D77"
-    ]
+      "#ff5cace3",
+      "#ff123752"
+    ],
+    "primary": "#fff95a14"
+  },
+  "images": {
+    "adaptiveIconBackground": null,
+    "iosLauncherIcon": "https://firebasestorage.googleapis.com/v0/b/webtrit-configurator.appspot.com/o/theme%2FWebTrit-App-Icon.png?alt=media&token=6ef83a52-8f98-4547-a5af-ab0eab833a73",
+    "onboarding": "https://firebasestorage.googleapis.com/v0/b/webtrit-configurator.appspot.com/o/theme%2FWebTrit-icon--Logo%2BType%20(1).svg?alt=media&token=e7047ee3-9988-47bb-a439-0a6288b2f013",
+    "androidLauncherIcon": null,
+    "notificationLogo": null,
+    "applicationLogo": "https://firebasestorage.googleapis.com/v0/b/webtrit-configurator.appspot.com/o/theme%2FWebTrit-logo-vert-white-back%20(111).svg?alt=media&token=9d55f94a-5a79-4e81-b7fe-cebbefcd8e82",
+    "adaptiveIconForeground": null,
+    "webLauncherIcon": "https://firebasestorage.googleapis.com/v0/b/webtrit-configurator.appspot.com/o/theme%2FWebTrit-App-Icon.png?alt=media&token=e0a53241-702d-40cc-a6a9-3bd63d1ed34f"
   }
 }
