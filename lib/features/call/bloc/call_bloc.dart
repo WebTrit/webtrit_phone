@@ -16,6 +16,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+import 'package:webtrit_phone/data/platform_info.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 import 'package:webtrit_phone/app/assets.gen.dart';
@@ -457,6 +458,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
+    // TODO: Get speaker value from callkeep,add param to didPushIncomingCall
+    if (PlatformInfo().isAndroid) {
+      emit(state.copyWith(speaker: false));
+    }
+
     emit(state.copyWithPushActiveCall(ActiveCall(
       direction: Direction.incoming,
       line: _kUndefinedLine,
@@ -801,7 +807,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     await state.performOnActiveCall(event.uuid, (activeCall) async {
-      await Helper.setSpeakerphoneOn(event.enabled);
+      if (Platform.isIOS) {
+        await Helper.setSpeakerphoneOn(event.enabled);
+      } else {
+        callkeep.setSpeaker(activeCall.callId.uuid, event.enabled);
+      }
     });
   }
 
@@ -1296,6 +1306,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   @override
+  Future<bool> performSetSpeaker(UuidValue uuid, bool enabled) {
+    return _perform(_CallPerformEvent.setSpeaker(uuid, enabled));
+  }
+
+  @override
   void didActivateAudioSession() {
     _logger.fine('didActivateAudioSession');
     _routeChangeSubscription?.resume();
@@ -1438,10 +1453,5 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } else {
       return uri.replace(scheme: 'ws');
     }
-  }
-
-  @override
-  Future<bool> performSetSpeaker(UuidValue uuid, bool enabled) {
-    return _perform(_CallPerformEvent.setSpeaker(uuid, enabled));
   }
 }
