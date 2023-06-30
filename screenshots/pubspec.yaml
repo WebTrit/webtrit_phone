@@ -40,10 +40,12 @@ flutter:
     - assets/logoIconTemplateImage.png
     - assets/login/
     - assets/ringtones/
+    - publisher.json
+    - assets/style/
 
 auto_screenshot:
   options:
-    time: "1200"
+    time: "0941"
   bundle_id:
     android: com.webtrit.phone.screenshots
     ios: com.webtrit.phone.screenshots
@@ -53,8 +55,11 @@ auto_screenshot:
     android: http://webtrit-phone-screenshots.firebaseapp.com
     ios: customschema://https://webtrit-phone-screenshots.firebaseapp.com
   screenshot:
+    - '0'
     - '1'
     - '2'
     - '3'
     - '4'
     - '5'
+    - '6'
+    - '7'

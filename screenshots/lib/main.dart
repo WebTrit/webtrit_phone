@@ -2,18 +2,27 @@ import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
 import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/theme/theme.dart';
 
 import 'package:screenshots/data/data.dart';
 import 'package:screenshots/mocks/mocks.dart';
 import 'package:screenshots/screenshots/screenshots.dart';
 import 'package:screenshots/widgets/widgets.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await AppStyleConfig.init();
+  await AppTheme.init();
+  final theme = AppTheme().theme;
+
   final appBloc = MockAppBloc.allScreen(
-    themeSettings: portaoneThemeSettings,
+    themeSettings: theme,
     themeMode: ThemeMode.light,
     locale: const Locale('en'),
   );
@@ -71,7 +80,13 @@ class ScreenshotsApp extends StatelessWidget {
     ),
     ScreenshotApp(
       appBloc: appBloc,
-      child: const CallScreenScreenshot(true),
+      child: const CallScreenScreenshot(
+        true,
+        localePlaceholderImageUrl:
+            'https://firebasestorage.googleapis.com/v0/b/webtrit-configurator-stage.appspot.com/o/screenshots%20_video_call%2Fref1.png?alt=media&token=692ccd4f-d43d-48b0-8e1d-9fd7b2f90220',
+        remotePlaceholderImageUrl:
+            'https://firebasestorage.googleapis.com/v0/b/webtrit-configurator-stage.appspot.com/o/screenshots%20_video_call%2Fref2.png?alt=media&token=3d469e82-9a64-4852-b593-9133f304bbef',
+      ),
     ),
   ];
 
