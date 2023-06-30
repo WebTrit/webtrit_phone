@@ -1,7 +1,7 @@
 name: webtrit_phone
 description: WebTrit Phone application.
 publish_to: 'none'
-version: 1.1.0+1
+version: 1.2.0-alpha.1+1020000
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
