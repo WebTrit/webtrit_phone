@@ -166,29 +166,36 @@ class _AppState extends State<App> {
             navigatorKey: _mainNavigatorKey,
             builder: (context, state, child) {
               return MainShell(
-                child: CallOverlay(
-                  observer: _callObserver,
-                  child: BlocListener<CallBloc, CallState>(
-                    listenWhen: (previous, current) => previous.activeCalls.length != current.activeCalls.length,
-                    listener: (context, state) {
-                      // TODO push/pop of call screen mechanism must be remake
-                      final router = GoRouter.of(context);
-                      final isCallLocation = router.location.startsWith(router.namedLocation(MainRoute.call));
-                      if (state.isActive) {
-                        if (!isCallLocation) {
-                          context.pushNamed(MainRoute.call);
-                          if (state.activeCall.video) {
-                            context.read<OrientationsBloc>().add(const OrientationsChanged(PreferredOrientation.call));
+                child: CountDownInviteFriendsScreen(
+                  isStart: (appBloc.state.tenantId ?? '').isNotEmpty,
+                  child: CallOverlay(
+                    observer: _callObserver,
+                    child: BlocListener<CallBloc, CallState>(
+                      listenWhen: (previous, current) => previous.activeCalls.length != current.activeCalls.length,
+                      listener: (context, state) {
+                        // TODO push/pop of call screen mechanism must be remake
+                        final router = GoRouter.of(context);
+                        final isCallLocation = router.location.startsWith(router.namedLocation(MainRoute.call));
+                        if (state.isActive) {
+                          if (!isCallLocation) {
+                            context.pushNamed(MainRoute.call);
+                            if (state.activeCall.video) {
+                              context
+                                  .read<OrientationsBloc>()
+                                  .add(const OrientationsChanged(PreferredOrientation.call));
+                            }
+                          }
+                        } else {
+                          if (isCallLocation) {
+                            context.pop();
+                            context
+                                .read<OrientationsBloc>()
+                                .add(const OrientationsChanged(PreferredOrientation.regular));
                           }
                         }
-                      } else {
-                        if (isCallLocation) {
-                          context.pop();
-                          context.read<OrientationsBloc>().add(const OrientationsChanged(PreferredOrientation.regular));
-                        }
-                      }
-                    },
-                    child: child,
+                      },
+                      child: child,
+                    ),
                   ),
                 ),
               );
