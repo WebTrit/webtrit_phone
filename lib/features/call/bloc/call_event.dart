@@ -163,11 +163,11 @@ class _CallPerformEvent with _$_CallPerformEvent implements CallEvent {
   _CallPerformEvent._();
 
   factory _CallPerformEvent.started(
-    UuidValue uuid, {
-    required CallkeepHandle handle,
-    String? displayName,
-    required bool video,
-  }) = _CallPerformEventStarted;
+      UuidValue uuid, {
+        required CallkeepHandle handle,
+        String? displayName,
+        required bool video,
+      }) = _CallPerformEventStarted;
 
   factory _CallPerformEvent.answered(UuidValue uuid) = _CallPerformEventAnswered;
 
@@ -178,6 +178,8 @@ class _CallPerformEvent with _$_CallPerformEvent implements CallEvent {
   factory _CallPerformEvent.setMuted(UuidValue uuid, bool muted) = _CallPerformEventSetMuted;
 
   factory _CallPerformEvent.sentDTMF(UuidValue uuid, String key) = _CallPerformEventSentDTMF;
+
+  factory _CallPerformEvent.setSpeaker(UuidValue uuid, bool enabled) = _CallPerformEventSetSpeaker;
 
   final _performCompleter = Completer<bool>();
 
@@ -193,13 +195,13 @@ class _CallPerformEvent with _$_CallPerformEvent implements CallEvent {
 @Freezed(copyWith: false)
 class _PeerConnectionEvent with _$_PeerConnectionEvent implements CallEvent {
   const factory _PeerConnectionEvent.iceGatheringStateChanged(UuidValue uuid, RTCIceGatheringState state) =
-      _PeerConnectionEventIceGatheringStateChanged;
+  _PeerConnectionEventIceGatheringStateChanged;
 
   const factory _PeerConnectionEvent.iceCandidateIdentified(UuidValue uuid, RTCIceCandidate candidate) =
-      _PeerConnectionEventIceCandidateIdentified;
+  _PeerConnectionEventIceCandidateIdentified;
 
   const factory _PeerConnectionEvent.streamAdded(UuidValue uuid, MediaStream stream) = _PeerConnectionEventStreamAdded;
 
   const factory _PeerConnectionEvent.streamRemoved(UuidValue uuid, MediaStream stream) =
-      _PeerConnectionEventStreamRemoved;
+  _PeerConnectionEventStreamRemoved;
 }
