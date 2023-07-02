@@ -191,7 +191,7 @@ PODS:
   - url_launcher_ios (0.0.1):
     - Flutter
   - WebRTC-SDK (104.5112.16)
-  - webtrit_callkeep (0.0.1):
+  - webtrit_callkeep_ios (0.0.1):
     - Flutter
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
@@ -218,7 +218,7 @@ DEPENDENCIES:
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqlite3_flutter_libs (from `.symlinks/plugins/sqlite3_flutter_libs/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
-  - webtrit_callkeep (from `.symlinks/plugins/webtrit_callkeep/ios`)
+  - webtrit_callkeep_ios (from `.symlinks/plugins/webtrit_callkeep_ios/ios`)
   - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
 
 SPEC REPOS:
@@ -285,8 +285,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqlite3_flutter_libs/ios"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
-  webtrit_callkeep:
-    :path: ".symlinks/plugins/webtrit_callkeep/ios"
+  webtrit_callkeep_ios:
+    :path: ".symlinks/plugins/webtrit_callkeep_ios/ios"
   webview_flutter_wkwebview:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
@@ -330,7 +330,7 @@ SPEC CHECKSUMS:
   sqlite3_flutter_libs: 04ba0d14a04335a2fbf9a331e8664f401fbccdd5
   url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
   WebRTC-SDK: 566e58d2916cb79d770350169a449ea523f5db7c
-  webtrit_callkeep: bd0c4e7b220df37d3f3c43b1cbafa1953edc8627
+  webtrit_callkeep_ios: 2f4975de04cbcdb1ed49b170396ae52aa75e6d1c
   webview_flutter_wkwebview: 2e2d318f21a5e036e2c3f26171342e95908bd60a
 
 PODFILE CHECKSUM: 329f74e56f6a2d951a3640f8cad2d85d7d99061d

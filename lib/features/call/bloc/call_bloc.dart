@@ -1296,6 +1296,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   @override
+  Future<bool> performSetSpeaker(UuidValue uuid, bool enabled) {
+    // TODO: implement performSetSpeaker
+    throw UnimplementedError();
+  }
+
+  @override
   void didActivateAudioSession() {
     _logger.fine('didActivateAudioSession');
     _routeChangeSubscription?.resume();
