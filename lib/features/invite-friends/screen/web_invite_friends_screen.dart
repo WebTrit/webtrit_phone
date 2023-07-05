@@ -31,14 +31,13 @@ class _WebInviteFriendsScreenState extends State<WebInviteFriendsScreen> {
 
     () async {
       await Future.wait([
-        _webViewController.addJavaScriptChannel(
-          'WebTritInviteFriendsChannel',
-          onMessageReceived: (JavaScriptMessage message) async {
-            context.pop();
-          },
-        ),
         _webViewController.setNavigationDelegate(
           NavigationDelegate(
+            onUrlChange: (UrlChange change) {
+              if (Uri.parse(change.url!).queryParameters['status'] == 'completed') {
+                context.pop();
+              }
+            },
             onPageFinished: (url) {
               _webViewController.runJavaScript(_definesCssVariablesJavascript(context));
             },
@@ -56,13 +55,6 @@ class _WebInviteFriendsScreenState extends State<WebInviteFriendsScreen> {
         ),
         _webViewController.enableZoom(false),
         _webViewController.setJavaScriptMode(JavaScriptMode.unrestricted),
-        _webViewController.setNavigationDelegate(
-          NavigationDelegate(
-            onPageFinished: (url) {
-              _webViewController.runJavaScript(_definesCssVariablesJavascript(context));
-            },
-          ),
-        ),
       ]);
       await _webViewController.loadRequest(widget.initialUri);
     }();
