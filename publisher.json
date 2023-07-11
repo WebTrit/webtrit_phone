@@ -1,9 +1,9 @@
 {
   "name": "webtrit_phone_publisher",
   "version": "1.0.0",
-  "credential": {
-    "applicationId": "Ykmloac96mzI4EniOJEx",
-    "themeId": "9qvgHSNQSWva7ZXlECvn"
+  "mapping": {
+    "applicationId": "l38Isc75aisSB5OX8YWc",
+    "themeId": "GGubd3YNN27Bp4ZdL1oH"
   },
   "hosts": {
     "configurator": {
@@ -12,37 +12,37 @@
     }
   },
   "output": {
-    "path": {
-      "theme": {
-        "path": "/assets/style",
-        "name": "webtrit.json"
-      },
-      "images": {
-        "push_notification_icon": {
-          "path": "/assets/",
-          "name": "logoIconTemplateImage.png"
-        },
-        "adaptive_icon_background": {
-          "path": "/assets/launcher_icons",
-          "name": "ic_background.png"
-        },
-        "adaptive_icon_foreground": {
-          "path": "/assets/launcher_icons",
-          "name": "ic_foreground.png"
-        },
-        "android_launcher_icon": {
-          "path": "/assets/launcher_icons",
-          "name": "android.png"
-        },
-        "ios_launcher_icon": {
-          "path": "/assets/launcher_icons",
-          "name": "ios.png"
-        },
-        "web_launcher_icon": {
-          "path": "/assets/launcher_icons",
-          "name": "web.png"
-        }
-      }
+    "theme": {
+      "path": "/assets/style",
+      "name": "branding.json"
+    },
+    "logo": {
+      "path": "/assets/",
+      "name": "logo.svg"
+    },
+    "pushNotificationIcon": {
+      "path": "/assets/",
+      "name": "logoIconTemplateImage.png"
+    },
+    "adaptiveIconBackground": {
+      "path": "/assets/launcher_icons",
+      "name": "ic_background.png"
+    },
+    "adaptiveIconForeground": {
+      "path": "/assets/launcher_icons",
+      "name": "ic_foreground.png"
+    },
+    "androidLauncherIcon": {
+      "path": "/assets/launcher_icons",
+      "name": "android.png"
+    },
+    "iosLauncherIcon": {
+      "path": "/assets/launcher_icons",
+      "name": "ios.png"
+    },
+    "webLauncherIcon": {
+      "path": "/assets/launcher_icons",
+      "name": "web.png"
     }
   }
 }

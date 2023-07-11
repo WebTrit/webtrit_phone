@@ -78,6 +78,8 @@ dependencies:
 
   style:
     path: ./packages/style
+  webtrit_phone_publisher:
+    path: ../webtrit_phone_publisher
 
 dev_dependencies:
   integration_test:
