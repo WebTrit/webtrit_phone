@@ -11,3 +11,13 @@ GeneratedPluginRegistrant.java
 key.properties
 **/*.keystore
 **/*.jks
+
+# Env generated style files
+/app/src/main/res/
+
+# Env generated config files
+/app/google-services.json
+/app/src/debug/AndroidManifest.xml
+/app/src/main/AndroidManifest.xml
+/app/src/main/kotlin/com/webtrit/app/MainActivity.kt
+/app/src/profile/AndroidManifest.xml

@@ -33,3 +33,16 @@ Runner/GeneratedPluginRegistrant.*
 !default.mode2v3
 !default.pbxuser
 !default.perspectivev3
+
+# Env generated style files
+/Runner/Assets.xcassets/AppIcon.appiconset/
+/Runner/Assets.xcassets/LaunchImage.imageset/
+/Runner/Assets.xcassets/LaunchBackground.imageset/
+/Runner/Base.lproj/LaunchScreen.storyboard
+
+# Env generated config files
+/firebase_app_id_file.json
+/Runner/Info.plist
+/Runner.xcodeproj/project.pbxproj
+/Runner/GoogleService-Info.plist
+

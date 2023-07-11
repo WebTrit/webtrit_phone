@@ -43,3 +43,15 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Env generated style files
+/assets/logo.svg
+/assets/launcher_icons/android.png
+/assets/launcher_icons/ic_foreground.png
+/assets/launcher_icons/ios.png
+/assets/launcher_icons/web.png
+/assets/style/application.json
+/assets/style/branding.json
+
+# Env generated config files
+firebase_options.dart
