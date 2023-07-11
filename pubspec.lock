@@ -939,6 +939,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  package_rename:
+    dependency: "direct dev"
+    description:
+      name: package_rename
+      sha256: "9af59d761bfa48a6a5d90fd285622d8d3893ed1a3d428f47305520b0b888abf1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.3"
   path:
     dependency: "direct main"
     description:

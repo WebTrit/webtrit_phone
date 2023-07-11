@@ -1,0 +1,14 @@
+package_rename_config:
+  android:
+    app_name: PortaPhone 2
+    package_name: com.webtrit.phone
+    override_old_package: com.webtrit.phone
+    lang: kotlin
+  ios:
+    app_name: PortaPhone 2
+    bundle_name: com.webtrit.phone
+    package_name: com.webtrit.app
+  web:
+    app_name: com.webtrit.phone
+    description: Package to change project configurations.
+    bundle_name: com.webtrit.phone
