@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/painting.dart';
+import 'package:flutter/services.dart';
 
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/theme/theme.dart';
@@ -15,12 +18,15 @@ class AppTheme {
       host: AppStyleConfig().publisherConfig.host,
     );
 
-    StyleManager.init(
-        applicationId: AppStyleConfig().publisherConfig.applicationId,
-        themeId: AppStyleConfig().publisherConfig.themeId,
-        defaultTheme: Assets.style.webtrit);
+    // TODO: Enable auto update system in future
+    // StyleManager.init(
+    //     applicationId: AppStyleConfig().publisherConfig.applicationId,
+    //     themeId: AppStyleConfig().publisherConfig.themeId,
+    //     defaultTheme: Assets.style.webtrit);
 
-    final styleModel = await StyleManager().get();
+    // final styleModel = await StyleManager().get();
+
+    final styleModel = ThemeDTO.fromJson(jsonDecode(await rootBundle.loadString(Assets.style.branding)));
 
     final imageScheme = ImagesScheme()
       ..setApplicationLogoByUrl(styleModel.images!.applicationLogo)
