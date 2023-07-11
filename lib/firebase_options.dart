@@ -47,30 +47,31 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBcL0PtdiRbbWrAji5K_IbV71hpO_wocUQ',
-    appId: '1:567844538132:web:7aa39595ef4d1a18162401',
-    messagingSenderId: '567844538132',
-    projectId: 'webtrit-voip-softphone',
-    authDomain: 'webtrit-voip-softphone.firebaseapp.com',
-    storageBucket: 'webtrit-voip-softphone.appspot.com',
-    measurementId: 'G-JH0F7266BG',
+    apiKey: 'AIzaSyDdWVaDGe0mPRkngXQEUsS1_EQiFyXdoxE',
+    appId: '1:524910534863:web:8ee29ada8594349e4ad7ba',
+    messagingSenderId: '524910534863',
+    projectId: 'webtrit-69559',
+    authDomain: 'webtrit-69559.firebaseapp.com',
+    storageBucket: 'webtrit-69559.appspot.com',
+    measurementId: 'G-2EWYFX6650',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAJDMbIDIEVP7GXTXF9bqTkLbyxICG6WiQ',
-    appId: '1:567844538132:android:6c34223f0e1a9c5c162401',
-    messagingSenderId: '567844538132',
-    projectId: 'webtrit-voip-softphone',
-    storageBucket: 'webtrit-voip-softphone.appspot.com',
+    apiKey: 'AIzaSyBiHZTx8_6-kdgVXwKoIxgfPAXL7ug6tVQ',
+    appId: '1:524910534863:android:8035f3b2f5b319c14ad7ba',
+    messagingSenderId: '524910534863',
+    projectId: 'webtrit-69559',
+    storageBucket: 'webtrit-69559.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyB6MTtyeYb1XZPU_QMBKJ2YtAWWbLT4we8',
-    appId: '1:567844538132:ios:26faa97ce9115a16162401',
-    messagingSenderId: '567844538132',
-    projectId: 'webtrit-voip-softphone',
-    storageBucket: 'webtrit-voip-softphone.appspot.com',
-    iosClientId: '567844538132-h0i62s0ficqfi6mrdkfbhk6r1hs9f0f4.apps.googleusercontent.com',
-    iosBundleId: 'com.webtrit.phone',
+    apiKey: 'AIzaSyADReAZ-JT7QMiTtfhR-oVGfv42lqQwFEM',
+    appId: '1:524910534863:ios:d79dab9a014fb1c74ad7ba',
+    messagingSenderId: '524910534863',
+    projectId: 'webtrit-69559',
+    storageBucket: 'webtrit-69559.appspot.com',
+    androidClientId: '524910534863-bckq0st7scsum4b2lau3jjb07jmvbtm2.apps.googleusercontent.com',
+    iosClientId: '524910534863-anv6orn4s7f5lu1ndg53en90v9hd9j8a.apps.googleusercontent.com',
+    iosBundleId: 'com.webtrit.app',
   );
 }
