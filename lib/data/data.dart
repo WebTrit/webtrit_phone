@@ -4,7 +4,7 @@ export 'app_info.dart';
 export 'app_permissions.dart';
 export 'app_preferences.dart';
 export 'app_theme.dart';
-export 'app_yaml.dart';
+export 'app_style_config.dart';
 export 'device_info.dart';
 export 'package_info.dart';
 export 'platform_info.dart';

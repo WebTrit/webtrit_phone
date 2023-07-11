@@ -2,19 +2,19 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
-//TODO: Rename file
+//TODO: Merge with app theme
 class AppStyleConfig {
   static late AppStyleConfig _instance;
 
   static Future<void> init() async {
-    final yamlString = await rootBundle.loadString('publisher.json');
-    final yamlMap = json.decode(yamlString);
+    final jsonString = await rootBundle.loadString('publisher.json');
+    final map = json.decode(jsonString);
 
     final publisherConfig = PublisherConfig(
-      themeId: yamlMap['credential']['themeId'],
-      applicationId: yamlMap['credential']['applicationId'],
+      themeId: map['mapping']['themeId'],
+      applicationId: map['mapping']['applicationId'],
       // TODO: Handle prod and stage env
-      host: yamlMap['hosts']['configurator']['prod'],
+      host: map['hosts']['configurator']['prod'],
     );
 
     _instance = AppStyleConfig._(publisherConfig);
@@ -33,8 +33,8 @@ class AppStyleConfig {
 
 //TODO: After adding dependency for publisher it will be moved there
 class PublisherConfig {
-  final String themeId;
-  final String applicationId;
+  final String? themeId;
+  final String? applicationId;
   final String host;
 
   PublisherConfig({

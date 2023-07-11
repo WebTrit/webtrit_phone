@@ -5,7 +5,7 @@ import 'package:webtrit_phone/theme/theme.dart';
 
 import 'package:style/style.dart';
 
-import 'app_yaml.dart';
+import 'app_style_config.dart';
 
 class AppTheme {
   static late AppTheme _instance;
