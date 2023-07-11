@@ -38,11 +38,14 @@ class $AssetsRingtonesGen {
 class $AssetsStyleGen {
   const $AssetsStyleGen();
 
-  /// File path: assets/style/webtrit.json
-  String get webtrit => 'assets/style/webtrit.json';
+  /// File path: assets/style/application.json
+  String get application => 'assets/style/application.json';
+
+  /// File path: assets/style/branding.json
+  String get branding => 'assets/style/branding.json';
 
   /// List of all assets
-  List<String> get values => [webtrit];
+  List<String> get values => [application, branding];
 }
 
 class Assets {
