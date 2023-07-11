@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>567844538132-h0i62s0ficqfi6mrdkfbhk6r1hs9f0f4.apps.googleusercontent.com</string>
+	<string>567844538132-l2b2bhalkj8r85pn7ge2a9kq6f30uu7g.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.567844538132-h0i62s0ficqfi6mrdkfbhk6r1hs9f0f4</string>
+	<string>com.googleusercontent.apps.567844538132-l2b2bhalkj8r85pn7ge2a9kq6f30uu7g</string>
 	<key>API_KEY</key>
 	<string>AIzaSyB6MTtyeYb1XZPU_QMBKJ2YtAWWbLT4we8</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.webtrit.phone</string>
+	<string>com.webtrit.app</string>
 	<key>PROJECT_ID</key>
 	<string>webtrit-voip-softphone</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:567844538132:ios:26faa97ce9115a16162401</string>
+	<string>1:567844538132:ios:2b49981b575ee389162401</string>
 </dict>
 </plist>
