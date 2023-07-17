@@ -230,6 +230,9 @@ class _AppState extends State<App> {
                         ],
                       ),
                     ],
+                    observers: [
+                      context.read<AppAnalyticsRepository>().createObserver(),
+                    ],
                   ),
                   StatefulShellBranch(
                     routes: [
@@ -262,6 +265,9 @@ class _AppState extends State<App> {
                           ),
                         ],
                       ),
+                    ],
+                    observers: [
+                      context.read<AppAnalyticsRepository>().createObserver(),
                     ],
                   ),
                   StatefulShellBranch(
@@ -304,6 +310,9 @@ class _AppState extends State<App> {
                         ],
                       ),
                     ],
+                    observers: [
+                      context.read<AppAnalyticsRepository>().createObserver(),
+                    ],
                   ),
                   StatefulShellBranch(
                     routes: [
@@ -321,6 +330,9 @@ class _AppState extends State<App> {
                           return provider;
                         },
                       ),
+                    ],
+                    observers: [
+                      context.read<AppAnalyticsRepository>().createObserver(),
                     ],
                   ),
                 ],
