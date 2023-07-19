@@ -291,7 +291,7 @@ class LoginCubit extends Cubit<LoginState> {
       }
       if (result is SessionOtpProvisional) {
         emit(state.copyWith(
-          status: LoginStatus.ok,
+          status: LoginStatus.input,
           sessionOtpProvisional: result,
         ));
       } else if (result is SessionToken) {
