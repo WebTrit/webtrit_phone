@@ -18,7 +18,7 @@ class AccountInfoListTile extends StatelessWidget {
   }) : super(key: key);
 
   final CallStatus callStatus;
-  final AccountInfo? info;
+  final User? info;
   final VoidCallback? onEditPressed;
 
   final EdgeInsetsGeometry? contentPadding;
@@ -85,7 +85,7 @@ class AccountInfoListTile extends StatelessWidget {
                     ),
                   ),
                   CopyToClipboard(
-                    data: info?.login,
+                    data: info?.sip?.login,
                     child: Text(
                       info?.numberWithExtension ?? _kHoldSpaceData,
                       style: themeData.textTheme.bodyLarge,

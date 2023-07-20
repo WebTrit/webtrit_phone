@@ -4,7 +4,7 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
-export 'package:webtrit_api/webtrit_api.dart' show AccountInfo, BillingModel, BalanceControlType;
+export 'package:webtrit_api/webtrit_api.dart' show User, Balance, SipData, BillingModel, BalanceType;
 
 final _logger = Logger('$AccountRepository');
 
@@ -16,7 +16,7 @@ class AccountRepository {
   })  : _webtritApiClient = webtritApiClient,
         _token = token,
         _periodicPolling = periodicPolling {
-    _controller = StreamController<AccountInfo>.broadcast(
+    _controller = StreamController<User>.broadcast(
       onListen: _onListenCallback,
       onCancel: _onCancelCallback,
     );
@@ -27,17 +27,17 @@ class AccountRepository {
   final String _token;
   final bool _periodicPolling;
 
-  late StreamController<AccountInfo> _controller;
+  late StreamController<User> _controller;
   late int _listenedCounter;
   Timer? _periodicTimer;
 
-  AccountInfo? _info;
+  User? _info;
 
-  Future<AccountInfo> getInfo() {
-    return _webtritApiClient.accountInfo(_token);
+  Future<User> getInfo() {
+    return _webtritApiClient.userInfo(_token);
   }
 
-  Stream<AccountInfo> info() {
+  Stream<User> info() {
     return _controller.stream;
   }
 

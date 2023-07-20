@@ -2,19 +2,20 @@ import 'package:webtrit_api/webtrit_api.dart';
 
 import 'iterable.dart';
 
-extension AccountInfoFormatting on AccountInfo {
+extension AccountInfoFormatting on User {
   String get name {
-    return [firstname, lastname].readableJoin();
+    return [firstName, lastName].readableJoin();
   }
 
   String? get balanceWithCurrency {
-    final creditLimit = this.creditLimit;
-    switch (billingModel) {
-      case BillingModel.debit:
-        return '${balance.toStringAsFixed(2)} $currency';
-      case BillingModel.credit:
+    // TODO: Implement all enums
+    final creditLimit = balance?.creditLimit;
+    switch (balance?.balanceType) {
+      case BalanceType.prepaid:
+        return '${balance?.amount?.toStringAsFixed(2)} ${balance?.currency}';
+      case BalanceType.postpaid:
         if (creditLimit != null) {
-          return '${creditLimit.toStringAsFixed(2)} $currency';
+          return '${creditLimit.toStringAsFixed(2)} ${balance?.currency}';
         } else {
           return null;
         }
@@ -24,10 +25,10 @@ extension AccountInfoFormatting on AccountInfo {
   }
 
   String get numberWithExtension {
-    if (ext != null) {
-      return '$login (ext: $ext)';
+    if (numbers?.ext != null) {
+      return '${sip?.login} (ext: ${numbers?.ext})';
     } else {
-      return login;
+      return sip?.login ?? '';
     }
   }
 }

@@ -45,7 +45,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
       if (emit.isDone) return;
 
-      final info = r[0] as AccountInfo;
+      final info = r[0] as User;
       final registerStatus = r[1] as bool;
 
       if (registerStatus != state.registerStatus) {

@@ -32,10 +32,10 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.info(),
+        apiClient.systemInfo(),
         completion(equals(
-          Info(
-            core: CoreInfo(
+          SystemInfo(
+            core: Core(
               version: Version(1, 0, 0),
             ),
           ),
@@ -208,10 +208,10 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.sessionOtpRequest(SessionOtpCredential(
+        apiClient.sessionOtpCreate(SessionOtpCredential(
           type: AppType.web,
           identifier: 'identifier_1',
-          phone: 'phone_1',
+          userRef: 'phone_1',
         )),
         completion(equals(
           SessionOtpProvisional(
@@ -349,19 +349,14 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.accountInfo(token),
+        apiClient.userInfo(token),
         completion(equals(
-          AccountInfo(
-            login: 'login_1',
-            billingModel: BillingModel.rechargeVoucher,
-            balanceControlType: BalanceControlType.individualCreditLimit,
-            balance: 111.1,
-            currency: 'UAH',
-            extensionName: 'extension_name_1',
-            firstname: 'first_name_1',
-            lastname: 'last_name_1',
+          User(
+            balance: Balance(amount: 111.1, currency: 'UAH', balanceType: BalanceType.prepaid),
+            sip: SipData(login: 'login_1'),
+            firstName: 'first_name_1',
+            lastName: 'last_name_1',
             companyName: 'company_name_1',
-            ext: 'ext_1',
           ),
         )),
       );
@@ -374,7 +369,7 @@ void main() {
         expect(request.headers['authorization'], endsWith(token));
         return Response(
           jsonEncode({
-            'data': [
+            'items': [
               {
                 'number': 'number_1',
                 'extension_id': 'extension_id_1',
@@ -402,24 +397,22 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.accountContacts(token),
+        apiClient.userContacts(token),
         completion(equals(
           [
-            AccountContact(
-              number: 'number_1',
-              extensionId: 'extension_id_1',
-              extensionName: 'extension_name_1',
+            UserContact(
+              numbers: Numbers(main: 'number_1'),
               firstName: 'first_name_1',
               lastName: 'last_name_1',
               email: 'email_1',
-              mobile: 'mobile_1',
               companyName: 'company_name_1',
-              sipStatus: 1,
+              sip: Sip(displayName: 'number_1', status: '0'),
             ),
-            AccountContact(
-              number: 'number_2',
-              extensionId: 'extension_id_2',
-              sipStatus: 0,
+            UserContact(
+              numbers: Numbers(main: 'number_2'),
+              firstName: 'first_name_2',
+              lastName: 'last_name_2',
+              email: 'email_2',
             ),
           ],
         )),

@@ -313,7 +313,7 @@ class LoginCubit extends Cubit<LoginState> {
 Future<void> _verifyCoreVersion(
   WebtritApiClient webtritApiClient,
 ) async {
-  final actualCoreVersion = (await webtritApiClient.info()).core.version;
+  final actualCoreVersion = (await webtritApiClient.systemInfo()).core!.version;
   CoreVersion.supported().verify(actualCoreVersion);
 }
 
@@ -332,10 +332,10 @@ Future<SessionOtpProvisional> _sessionOtpRequest(
   WebtritApiClient webtritApiClient,
   String phone,
 ) async {
-  return await webtritApiClient.sessionOtpRequest(SessionOtpCredential(
+  return await webtritApiClient.sessionOtpCreate(SessionOtpCredential(
     type: PlatformInfo().appType,
     identifier: AppInfo().identifier,
-    phone: phone,
+    userRef: phone,
   ));
 }
 

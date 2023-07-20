@@ -49,7 +49,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
   }
 
   void _onUpdated(_ExternalContactsSyncUpdated event, Emitter<ExternalContactsSyncState> emit) async {
-    final AccountInfo accountInfo;
+    final User accountInfo;
     try {
       accountInfo = await accountRepository.getInfo();
     } catch (error) {
@@ -59,7 +59,8 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
 
     await appDatabase.transaction(() async {
       // skip external contact that represents own account
-      final externalContacts = event.contacts.whereNot((externalContact) => externalContact.id == accountInfo.login);
+      final externalContacts =
+          event.contacts.whereNot((externalContact) => externalContact.id == accountInfo.sip?.login);
 
       final contactDatas = await appDatabase.contactsDao.getAllContacts(ContactSourceTypeEnum.external);
 

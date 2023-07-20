@@ -94,10 +94,10 @@ class WebtritApiClient {
     return _httpClientExecute('delete', pathSegments, token, null);
   }
 
-  Future<Info> info() async {
-    final responseJson = await _httpClientExecuteGet(['info'], null);
+  Future<SystemInfo> systemInfo() async {
+    final responseJson = await _httpClientExecuteGet(['system-info'], null);
 
-    return Info.fromJson(responseJson);
+    return SystemInfo.fromJson(responseJson);
   }
 
   Future<SessionResult> createUser(SessionUserCredential sessionUserCredential) async {
@@ -108,10 +108,10 @@ class WebtritApiClient {
     return SessionResult.fromJson(responseJson);
   }
 
-  Future<SessionOtpProvisional> sessionOtpRequest(SessionOtpCredential sessionOtpCredential) async {
+  Future<SessionOtpProvisional> sessionOtpCreate(SessionOtpCredential sessionOtpCredential) async {
     final requestJson = sessionOtpCredential.toJson();
 
-    final responseJson = await _httpClientExecutePost(['session', 'otp-request'], null, requestJson);
+    final responseJson = await _httpClientExecutePost(['session', 'otp-create'], null, requestJson);
 
     return SessionOtpProvisional.fromJson(responseJson);
   }
@@ -138,17 +138,17 @@ class WebtritApiClient {
     await _httpClientExecuteDelete(['session'], token);
   }
 
-  Future<AccountInfo> accountInfo(String token) async {
-    final responseJson = await _httpClientExecuteGet(['account', 'info'], token);
+  Future<User> userInfo(String token) async {
+    final responseJson = await _httpClientExecuteGet(['user'], token);
 
-    return AccountInfo.fromJson(responseJson['data']);
+    return User.fromJson(responseJson);
   }
 
-  Future<List<AccountContact>> accountContacts(String token) async {
-    final responseJson = await _httpClientExecuteGet(['account', 'contacts'], token);
+  Future<List<UserContact>> userContacts(String token) async {
+    final responseJson = await _httpClientExecuteGet(['user', 'contacts'], token);
 
-    return (responseJson['data'] as List<dynamic>)
-        .map((e) => AccountContact.fromJson(e as Map<String, dynamic>))
+    return (responseJson['items'] as List<dynamic>)
+        .map((e) => UserContact.fromJson(e as Map<String, dynamic>))
         .toList();
   }
 
