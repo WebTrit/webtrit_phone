@@ -54,8 +54,23 @@ class SecureStorage {
     return _delete(_kCoreUrlKey);
   }
 
-  String? readTenantId() {
+  String? _readTenantId() {
     return _read(_kTenantIdKey);
+  }
+
+  // TODO: this can be replaces by _readTenantId once all users have migrated to the new version of the app
+  // Backwards compatible functionality that if necessary return empty Tenant ID for not null Core URL
+  String? readTenantId() {
+    final tenantId = _readTenantId();
+    if (tenantId != null) {
+      return tenantId;
+    } else {
+      if (readCoreUrl() != null) {
+        return '';
+      } else {
+        return null;
+      }
+    }
   }
 
   Future<void> writeTenantId(String tenantId) {
