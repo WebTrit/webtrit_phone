@@ -3,8 +3,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'balance_type.dart';
 import 'numbers.dart';
 
-
-
 part 'user.freezed.dart';
 
 part 'user.g.dart';
@@ -64,7 +62,6 @@ class RegistrationServer with _$RegistrationServer {
 
   factory RegistrationServer.fromJson(Map<String, Object?> json) => _$RegistrationServerFromJson(json);
 }
-
 
 @freezed
 class Balance with _$Balance {
