@@ -89,7 +89,8 @@ Map<String, dynamic> _$$_RegistrationServerToJson(
 
 _$_Balance _$$_BalanceFromJson(Map<String, dynamic> json) => _$_Balance(
       amount: (json['amount'] as num?)?.toDouble(),
-      balanceType: $enumDecode(_$BalanceTypeEnumMap, json['balance_type']),
+      balanceType:
+          $enumDecodeNullable(_$BalanceTypeEnumMap, json['balance_type']),
       creditLimit: json['credit_limit'] as int?,
       currency: json['currency'] as String?,
     );
@@ -97,7 +98,7 @@ _$_Balance _$$_BalanceFromJson(Map<String, dynamic> json) => _$_Balance(
 Map<String, dynamic> _$$_BalanceToJson(_$_Balance instance) =>
     <String, dynamic>{
       'amount': instance.amount,
-      'balance_type': _$BalanceTypeEnumMap[instance.balanceType]!,
+      'balance_type': _$BalanceTypeEnumMap[instance.balanceType],
       'credit_limit': instance.creditLimit,
       'currency': instance.currency,
     };

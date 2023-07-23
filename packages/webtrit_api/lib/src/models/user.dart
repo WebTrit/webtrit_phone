@@ -68,7 +68,7 @@ class Balance with _$Balance {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory Balance({
     double? amount,
-    required BalanceType balanceType,
+    BalanceType? balanceType,
     int? creditLimit,
     String? currency,
   }) = _Balance;

@@ -965,7 +965,7 @@ Balance _$BalanceFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Balance {
   double? get amount => throw _privateConstructorUsedError;
-  BalanceType get balanceType => throw _privateConstructorUsedError;
+  BalanceType? get balanceType => throw _privateConstructorUsedError;
   int? get creditLimit => throw _privateConstructorUsedError;
   String? get currency => throw _privateConstructorUsedError;
 
@@ -981,7 +981,7 @@ abstract class $BalanceCopyWith<$Res> {
   @useResult
   $Res call(
       {double? amount,
-      BalanceType balanceType,
+      BalanceType? balanceType,
       int? creditLimit,
       String? currency});
 }
@@ -1000,7 +1000,7 @@ class _$BalanceCopyWithImpl<$Res, $Val extends Balance>
   @override
   $Res call({
     Object? amount = freezed,
-    Object? balanceType = null,
+    Object? balanceType = freezed,
     Object? creditLimit = freezed,
     Object? currency = freezed,
   }) {
@@ -1009,10 +1009,10 @@ class _$BalanceCopyWithImpl<$Res, $Val extends Balance>
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
               as double?,
-      balanceType: null == balanceType
+      balanceType: freezed == balanceType
           ? _value.balanceType
           : balanceType // ignore: cast_nullable_to_non_nullable
-              as BalanceType,
+              as BalanceType?,
       creditLimit: freezed == creditLimit
           ? _value.creditLimit
           : creditLimit // ignore: cast_nullable_to_non_nullable
@@ -1034,7 +1034,7 @@ abstract class _$$_BalanceCopyWith<$Res> implements $BalanceCopyWith<$Res> {
   @useResult
   $Res call(
       {double? amount,
-      BalanceType balanceType,
+      BalanceType? balanceType,
       int? creditLimit,
       String? currency});
 }
@@ -1050,7 +1050,7 @@ class __$$_BalanceCopyWithImpl<$Res>
   @override
   $Res call({
     Object? amount = freezed,
-    Object? balanceType = null,
+    Object? balanceType = freezed,
     Object? creditLimit = freezed,
     Object? currency = freezed,
   }) {
@@ -1059,10 +1059,10 @@ class __$$_BalanceCopyWithImpl<$Res>
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
               as double?,
-      balanceType: null == balanceType
+      balanceType: freezed == balanceType
           ? _value.balanceType
           : balanceType // ignore: cast_nullable_to_non_nullable
-              as BalanceType,
+              as BalanceType?,
       creditLimit: freezed == creditLimit
           ? _value.creditLimit
           : creditLimit // ignore: cast_nullable_to_non_nullable
@@ -1080,10 +1080,7 @@ class __$$_BalanceCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$_Balance implements _Balance {
   const _$_Balance(
-      {this.amount,
-      required this.balanceType,
-      this.creditLimit,
-      this.currency});
+      {this.amount, this.balanceType, this.creditLimit, this.currency});
 
   factory _$_Balance.fromJson(Map<String, dynamic> json) =>
       _$$_BalanceFromJson(json);
@@ -1091,7 +1088,7 @@ class _$_Balance implements _Balance {
   @override
   final double? amount;
   @override
-  final BalanceType balanceType;
+  final BalanceType? balanceType;
   @override
   final int? creditLimit;
   @override
@@ -1138,7 +1135,7 @@ class _$_Balance implements _Balance {
 abstract class _Balance implements Balance {
   const factory _Balance(
       {final double? amount,
-      required final BalanceType balanceType,
+      final BalanceType? balanceType,
       final int? creditLimit,
       final String? currency}) = _$_Balance;
 
@@ -1147,7 +1144,7 @@ abstract class _Balance implements Balance {
   @override
   double? get amount;
   @override
-  BalanceType get balanceType;
+  BalanceType? get balanceType;
   @override
   int? get creditLimit;
   @override
