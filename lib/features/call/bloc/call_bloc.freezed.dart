@@ -5137,6 +5137,237 @@ abstract class _PeerConnectionEventStreamRemoved
 }
 
 /// @nodoc
+mixin _$CallScreenEvent {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() didPush,
+    required TResult Function() didPop,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? didPush,
+    TResult? Function()? didPop,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? didPush,
+    TResult Function()? didPop,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CallScreenEventDidPush value) didPush,
+    required TResult Function(_CallScreenEventDidPop value) didPop,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CallScreenEventDidPush value)? didPush,
+    TResult? Function(_CallScreenEventDidPop value)? didPop,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CallScreenEventDidPush value)? didPush,
+    TResult Function(_CallScreenEventDidPop value)? didPop,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+
+class _$_CallScreenEventDidPush
+    with DiagnosticableTreeMixin
+    implements _CallScreenEventDidPush {
+  _$_CallScreenEventDidPush();
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallScreenEvent.didPush()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty('type', 'CallScreenEvent.didPush'));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_CallScreenEventDidPush);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() didPush,
+    required TResult Function() didPop,
+  }) {
+    return didPush();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? didPush,
+    TResult? Function()? didPop,
+  }) {
+    return didPush?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? didPush,
+    TResult Function()? didPop,
+    required TResult orElse(),
+  }) {
+    if (didPush != null) {
+      return didPush();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CallScreenEventDidPush value) didPush,
+    required TResult Function(_CallScreenEventDidPop value) didPop,
+  }) {
+    return didPush(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CallScreenEventDidPush value)? didPush,
+    TResult? Function(_CallScreenEventDidPop value)? didPop,
+  }) {
+    return didPush?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CallScreenEventDidPush value)? didPush,
+    TResult Function(_CallScreenEventDidPop value)? didPop,
+    required TResult orElse(),
+  }) {
+    if (didPush != null) {
+      return didPush(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _CallScreenEventDidPush implements CallScreenEvent {
+  factory _CallScreenEventDidPush() = _$_CallScreenEventDidPush;
+}
+
+/// @nodoc
+
+class _$_CallScreenEventDidPop
+    with DiagnosticableTreeMixin
+    implements _CallScreenEventDidPop {
+  _$_CallScreenEventDidPop();
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallScreenEvent.didPop()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty('type', 'CallScreenEvent.didPop'));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$_CallScreenEventDidPop);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() didPush,
+    required TResult Function() didPop,
+  }) {
+    return didPop();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? didPush,
+    TResult? Function()? didPop,
+  }) {
+    return didPop?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? didPush,
+    TResult Function()? didPop,
+    required TResult orElse(),
+  }) {
+    if (didPop != null) {
+      return didPop();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CallScreenEventDidPush value) didPush,
+    required TResult Function(_CallScreenEventDidPop value) didPop,
+  }) {
+    return didPop(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CallScreenEventDidPush value)? didPush,
+    TResult? Function(_CallScreenEventDidPop value)? didPop,
+  }) {
+    return didPop?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CallScreenEventDidPush value)? didPush,
+    TResult Function(_CallScreenEventDidPop value)? didPop,
+    required TResult orElse(),
+  }) {
+    if (didPop != null) {
+      return didPop(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _CallScreenEventDidPop implements CallScreenEvent {
+  factory _CallScreenEventDidPop() = _$_CallScreenEventDidPop;
+}
+
+/// @nodoc
 mixin _$CallState {
   ConnectivityResult? get currentConnectivityResult =>
       throw _privateConstructorUsedError;
@@ -5149,6 +5380,7 @@ mixin _$CallState {
   int? get lastSignalingDisconnectCode => throw _privateConstructorUsedError;
   int get linesCount => throw _privateConstructorUsedError;
   List<ActiveCall> get activeCalls => throw _privateConstructorUsedError;
+  bool? get minimized => throw _privateConstructorUsedError;
   bool? get speaker => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -5169,6 +5401,7 @@ abstract class $CallStateCopyWith<$Res> {
       int? lastSignalingDisconnectCode,
       int linesCount,
       List<ActiveCall> activeCalls,
+      bool? minimized,
       bool? speaker});
 }
 
@@ -5192,6 +5425,7 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
     Object? lastSignalingDisconnectCode = freezed,
     Object? linesCount = null,
     Object? activeCalls = null,
+    Object? minimized = freezed,
     Object? speaker = freezed,
   }) {
     return _then(_value.copyWith(
@@ -5223,6 +5457,10 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
           ? _value.activeCalls
           : activeCalls // ignore: cast_nullable_to_non_nullable
               as List<ActiveCall>,
+      minimized: freezed == minimized
+          ? _value.minimized
+          : minimized // ignore: cast_nullable_to_non_nullable
+              as bool?,
       speaker: freezed == speaker
           ? _value.speaker
           : speaker // ignore: cast_nullable_to_non_nullable
@@ -5246,6 +5484,7 @@ abstract class _$$_CallStateCopyWith<$Res> implements $CallStateCopyWith<$Res> {
       int? lastSignalingDisconnectCode,
       int linesCount,
       List<ActiveCall> activeCalls,
+      bool? minimized,
       bool? speaker});
 }
 
@@ -5267,6 +5506,7 @@ class __$$_CallStateCopyWithImpl<$Res>
     Object? lastSignalingDisconnectCode = freezed,
     Object? linesCount = null,
     Object? activeCalls = null,
+    Object? minimized = freezed,
     Object? speaker = freezed,
   }) {
     return _then(_$_CallState(
@@ -5298,6 +5538,10 @@ class __$$_CallStateCopyWithImpl<$Res>
           ? _value._activeCalls
           : activeCalls // ignore: cast_nullable_to_non_nullable
               as List<ActiveCall>,
+      minimized: freezed == minimized
+          ? _value.minimized
+          : minimized // ignore: cast_nullable_to_non_nullable
+              as bool?,
       speaker: freezed == speaker
           ? _value.speaker
           : speaker // ignore: cast_nullable_to_non_nullable
@@ -5317,6 +5561,7 @@ class _$_CallState extends _CallState with DiagnosticableTreeMixin {
       this.lastSignalingDisconnectCode,
       this.linesCount = 0,
       final List<ActiveCall> activeCalls = const [],
+      this.minimized,
       this.speaker})
       : _activeCalls = activeCalls,
         super._();
@@ -5345,11 +5590,13 @@ class _$_CallState extends _CallState with DiagnosticableTreeMixin {
   }
 
   @override
+  final bool? minimized;
+  @override
   final bool? speaker;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallState(currentConnectivityResult: $currentConnectivityResult, signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, linesCount: $linesCount, activeCalls: $activeCalls, speaker: $speaker)';
+    return 'CallState(currentConnectivityResult: $currentConnectivityResult, signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, linesCount: $linesCount, activeCalls: $activeCalls, minimized: $minimized, speaker: $speaker)';
   }
 
   @override
@@ -5368,6 +5615,7 @@ class _$_CallState extends _CallState with DiagnosticableTreeMixin {
           'lastSignalingDisconnectCode', lastSignalingDisconnectCode))
       ..add(DiagnosticsProperty('linesCount', linesCount))
       ..add(DiagnosticsProperty('activeCalls', activeCalls))
+      ..add(DiagnosticsProperty('minimized', minimized))
       ..add(DiagnosticsProperty('speaker', speaker));
   }
 
@@ -5395,6 +5643,8 @@ class _$_CallState extends _CallState with DiagnosticableTreeMixin {
                 other.linesCount == linesCount) &&
             const DeepCollectionEquality()
                 .equals(other._activeCalls, _activeCalls) &&
+            (identical(other.minimized, minimized) ||
+                other.minimized == minimized) &&
             (identical(other.speaker, speaker) || other.speaker == speaker));
   }
 
@@ -5408,6 +5658,7 @@ class _$_CallState extends _CallState with DiagnosticableTreeMixin {
       lastSignalingDisconnectCode,
       linesCount,
       const DeepCollectionEquality().hash(_activeCalls),
+      minimized,
       speaker);
 
   @JsonKey(ignore: true)
@@ -5426,6 +5677,7 @@ abstract class _CallState extends CallState {
       final int? lastSignalingDisconnectCode,
       final int linesCount,
       final List<ActiveCall> activeCalls,
+      final bool? minimized,
       final bool? speaker}) = _$_CallState;
   const _CallState._() : super._();
 
@@ -5443,6 +5695,8 @@ abstract class _CallState extends CallState {
   int get linesCount;
   @override
   List<ActiveCall> get activeCalls;
+  @override
+  bool? get minimized;
   @override
   bool? get speaker;
   @override

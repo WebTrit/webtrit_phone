@@ -12,6 +12,7 @@ class CallState with _$CallState {
     int? lastSignalingDisconnectCode,
     @Default(0) int linesCount,
     @Default([]) List<ActiveCall> activeCalls,
+    bool? minimized,
     bool? speaker,
   }) = _CallState;
 
@@ -44,6 +45,18 @@ class CallState with _$CallState {
       }
     }
     return null;
+  }
+
+  CallDisplay get display {
+    if (activeCalls.isEmpty) {
+      return CallDisplay.none;
+    } else {
+      if (minimized == true) {
+        return CallDisplay.overlay;
+      } else {
+        return CallDisplay.screen;
+      }
+    }
   }
 
   bool get isActive => activeCalls.isNotEmpty;
@@ -88,7 +101,7 @@ class CallState with _$CallState {
     final activeCalls = this.activeCalls.where((activeCall) {
       return activeCall.callId.uuid != uuid;
     }).toList();
-    return copyWith(activeCalls: activeCalls);
+    return copyWith(activeCalls: activeCalls, minimized: activeCalls.isEmpty ? null : minimized);
   }
 }
 

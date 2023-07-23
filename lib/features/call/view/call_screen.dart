@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
+import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -25,7 +26,7 @@ class CallScreen extends StatefulWidget {
   State<CallScreen> createState() => _CallScreenState();
 }
 
-class _CallScreenState extends State<CallScreen> {
+class _CallScreenState extends State<CallScreen> with RouteAware {
   final RTCVideoRenderer _localRenderer = RTCVideoRenderer();
   final RTCVideoRenderer _remoteRenderer = RTCVideoRenderer();
   late Future<List<void>> _renderersInitialized;
@@ -38,10 +39,29 @@ class _CallScreenState extends State<CallScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    MainRoute.observer.subscribe(this, ModalRoute.of(context)!);
+  }
+
+  @override
   void dispose() {
+    MainRoute.observer.unsubscribe(this);
+
     _renderersDispose();
 
     super.dispose();
+  }
+
+  @override
+  void didPush() {
+    context.read<CallBloc>().add(CallScreenEvent.didPush());
+  }
+
+  @override
+  void didPop() {
+    context.read<CallBloc>().add(CallScreenEvent.didPop());
   }
 
   Future<List<void>> _renderersInitialize() {

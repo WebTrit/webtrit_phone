@@ -106,6 +106,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _onPeerConnectionEvent,
       transformer: sequential(),
     );
+    on<CallScreenEvent>(
+      _onCallScreenEvent,
+      transformer: sequential(),
+    );
 
     WidgetsBinding.instance.addObserver(this);
 
@@ -1109,6 +1113,32 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     emit(state.copyWithMappedActiveCall(event.uuid, (activeCall) {
       return activeCall.copyWith(remoteStream: null);
     }));
+  }
+
+  // procession call screen events
+
+  Future<void> _onCallScreenEvent(
+    CallScreenEvent event,
+    Emitter<CallState> emit,
+  ) {
+    return event.map(
+      didPush: (event) => __onCallScreenEventDidPush(event, emit),
+      didPop: (event) => __onCallScreenEventDidPop(event, emit),
+    );
+  }
+
+  Future<void> __onCallScreenEventDidPush(
+    _CallScreenEventDidPush event,
+    Emitter<CallState> emit,
+  ) async {
+    emit(state.copyWith(minimized: false));
+  }
+
+  Future<void> __onCallScreenEventDidPop(
+    _CallScreenEventDidPop event,
+    Emitter<CallState> emit,
+  ) async {
+    emit(state.copyWith(minimized: state.activeCalls.isEmpty ? null : true));
   }
 
   // WebtritSignalingClient listen handlers
