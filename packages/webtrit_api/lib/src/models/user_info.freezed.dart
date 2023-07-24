@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'user.dart';
+part of 'user_info.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,31 +14,32 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-User _$UserFromJson(Map<String, dynamic> json) {
-  return _User.fromJson(json);
+UserInfo _$UserInfoFromJson(Map<String, dynamic> json) {
+  return _UserInfo.fromJson(json);
 }
 
 /// @nodoc
-mixin _$User {
+mixin _$UserInfo {
   Balance? get balance => throw _privateConstructorUsedError;
   String? get companyName => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
   String? get firstName => throw _privateConstructorUsedError;
   String? get lastName => throw _privateConstructorUsedError;
-  Numbers? get numbers => throw _privateConstructorUsedError;
+  ContactNumbers? get numbers => throw _privateConstructorUsedError;
   SipData? get sip => throw _privateConstructorUsedError;
   String? get status => throw _privateConstructorUsedError;
   String? get timeZone => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $UserCopyWith<User> get copyWith => throw _privateConstructorUsedError;
+  $UserInfoCopyWith<UserInfo> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $UserCopyWith<$Res> {
-  factory $UserCopyWith(User value, $Res Function(User) then) =
-      _$UserCopyWithImpl<$Res, User>;
+abstract class $UserInfoCopyWith<$Res> {
+  factory $UserInfoCopyWith(UserInfo value, $Res Function(UserInfo) then) =
+      _$UserInfoCopyWithImpl<$Res, UserInfo>;
   @useResult
   $Res call(
       {Balance? balance,
@@ -46,20 +47,20 @@ abstract class $UserCopyWith<$Res> {
       String? email,
       String? firstName,
       String? lastName,
-      Numbers? numbers,
+      ContactNumbers? numbers,
       SipData? sip,
       String? status,
       String? timeZone});
 
   $BalanceCopyWith<$Res>? get balance;
-  $NumbersCopyWith<$Res>? get numbers;
+  $ContactNumbersCopyWith<$Res>? get numbers;
   $SipDataCopyWith<$Res>? get sip;
 }
 
 /// @nodoc
-class _$UserCopyWithImpl<$Res, $Val extends User>
-    implements $UserCopyWith<$Res> {
-  _$UserCopyWithImpl(this._value, this._then);
+class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
+    implements $UserInfoCopyWith<$Res> {
+  _$UserInfoCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -103,7 +104,7 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
       numbers: freezed == numbers
           ? _value.numbers
           : numbers // ignore: cast_nullable_to_non_nullable
-              as Numbers?,
+              as ContactNumbers?,
       sip: freezed == sip
           ? _value.sip
           : sip // ignore: cast_nullable_to_non_nullable
@@ -133,12 +134,12 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
 
   @override
   @pragma('vm:prefer-inline')
-  $NumbersCopyWith<$Res>? get numbers {
+  $ContactNumbersCopyWith<$Res>? get numbers {
     if (_value.numbers == null) {
       return null;
     }
 
-    return $NumbersCopyWith<$Res>(_value.numbers!, (value) {
+    return $ContactNumbersCopyWith<$Res>(_value.numbers!, (value) {
       return _then(_value.copyWith(numbers: value) as $Val);
     });
   }
@@ -157,9 +158,10 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
 }
 
 /// @nodoc
-abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
-  factory _$$_UserCopyWith(_$_User value, $Res Function(_$_User) then) =
-      __$$_UserCopyWithImpl<$Res>;
+abstract class _$$_UserInfoCopyWith<$Res> implements $UserInfoCopyWith<$Res> {
+  factory _$$_UserInfoCopyWith(
+          _$_UserInfo value, $Res Function(_$_UserInfo) then) =
+      __$$_UserInfoCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -168,7 +170,7 @@ abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
       String? email,
       String? firstName,
       String? lastName,
-      Numbers? numbers,
+      ContactNumbers? numbers,
       SipData? sip,
       String? status,
       String? timeZone});
@@ -176,15 +178,17 @@ abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
   @override
   $BalanceCopyWith<$Res>? get balance;
   @override
-  $NumbersCopyWith<$Res>? get numbers;
+  $ContactNumbersCopyWith<$Res>? get numbers;
   @override
   $SipDataCopyWith<$Res>? get sip;
 }
 
 /// @nodoc
-class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
-    implements _$$_UserCopyWith<$Res> {
-  __$$_UserCopyWithImpl(_$_User _value, $Res Function(_$_User) _then)
+class __$$_UserInfoCopyWithImpl<$Res>
+    extends _$UserInfoCopyWithImpl<$Res, _$_UserInfo>
+    implements _$$_UserInfoCopyWith<$Res> {
+  __$$_UserInfoCopyWithImpl(
+      _$_UserInfo _value, $Res Function(_$_UserInfo) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -200,7 +204,7 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
     Object? status = freezed,
     Object? timeZone = freezed,
   }) {
-    return _then(_$_User(
+    return _then(_$_UserInfo(
       balance: freezed == balance
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
@@ -224,7 +228,7 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
       numbers: freezed == numbers
           ? _value.numbers
           : numbers // ignore: cast_nullable_to_non_nullable
-              as Numbers?,
+              as ContactNumbers?,
       sip: freezed == sip
           ? _value.sip
           : sip // ignore: cast_nullable_to_non_nullable
@@ -244,8 +248,8 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
 /// @nodoc
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class _$_User implements _User {
-  const _$_User(
+class _$_UserInfo implements _UserInfo {
+  const _$_UserInfo(
       {this.balance,
       this.companyName,
       this.email,
@@ -256,7 +260,8 @@ class _$_User implements _User {
       this.status,
       this.timeZone});
 
-  factory _$_User.fromJson(Map<String, dynamic> json) => _$$_UserFromJson(json);
+  factory _$_UserInfo.fromJson(Map<String, dynamic> json) =>
+      _$$_UserInfoFromJson(json);
 
   @override
   final Balance? balance;
@@ -269,7 +274,7 @@ class _$_User implements _User {
   @override
   final String? lastName;
   @override
-  final Numbers? numbers;
+  final ContactNumbers? numbers;
   @override
   final SipData? sip;
   @override
@@ -279,14 +284,14 @@ class _$_User implements _User {
 
   @override
   String toString() {
-    return 'User(balance: $balance, companyName: $companyName, email: $email, firstName: $firstName, lastName: $lastName, numbers: $numbers, sip: $sip, status: $status, timeZone: $timeZone)';
+    return 'UserInfo(balance: $balance, companyName: $companyName, email: $email, firstName: $firstName, lastName: $lastName, numbers: $numbers, sip: $sip, status: $status, timeZone: $timeZone)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_User &&
+            other is _$_UserInfo &&
             (identical(other.balance, balance) || other.balance == balance) &&
             (identical(other.companyName, companyName) ||
                 other.companyName == companyName) &&
@@ -310,30 +315,30 @@ class _$_User implements _User {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_UserCopyWith<_$_User> get copyWith =>
-      __$$_UserCopyWithImpl<_$_User>(this, _$identity);
+  _$$_UserInfoCopyWith<_$_UserInfo> get copyWith =>
+      __$$_UserInfoCopyWithImpl<_$_UserInfo>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_UserToJson(
+    return _$$_UserInfoToJson(
       this,
     );
   }
 }
 
-abstract class _User implements User {
-  const factory _User(
+abstract class _UserInfo implements UserInfo {
+  const factory _UserInfo(
       {final Balance? balance,
       final String? companyName,
       final String? email,
       final String? firstName,
       final String? lastName,
-      final Numbers? numbers,
+      final ContactNumbers? numbers,
       final SipData? sip,
       final String? status,
-      final String? timeZone}) = _$_User;
+      final String? timeZone}) = _$_UserInfo;
 
-  factory _User.fromJson(Map<String, dynamic> json) = _$_User.fromJson;
+  factory _UserInfo.fromJson(Map<String, dynamic> json) = _$_UserInfo.fromJson;
 
   @override
   Balance? get balance;
@@ -346,7 +351,7 @@ abstract class _User implements User {
   @override
   String? get lastName;
   @override
-  Numbers? get numbers;
+  ContactNumbers? get numbers;
   @override
   SipData? get sip;
   @override
@@ -355,7 +360,8 @@ abstract class _User implements User {
   String? get timeZone;
   @override
   @JsonKey(ignore: true)
-  _$$_UserCopyWith<_$_User> get copyWith => throw _privateConstructorUsedError;
+  _$$_UserInfoCopyWith<_$_UserInfo> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 SipData _$SipDataFromJson(Map<String, dynamic> json) {

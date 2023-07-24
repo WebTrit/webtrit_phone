@@ -2,7 +2,7 @@ import 'package:webtrit_api/webtrit_api.dart';
 
 import 'iterable.dart';
 
-extension AccountInfoFormatting on User {
+extension UserInfoFormatting on UserInfo {
   String get name {
     return [firstName, lastName].readableJoin();
   }

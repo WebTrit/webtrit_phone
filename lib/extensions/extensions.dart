@@ -1,4 +1,4 @@
-export 'account_info.dart';
+export 'user_info.dart';
 export 'app_database.dart';
 export 'build_context.dart';
 export 'call_status.dart';

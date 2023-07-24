@@ -32,10 +32,10 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.systemInfo(),
+        apiClient.getSystemInfo(),
         completion(equals(
           SystemInfo(
-            core: Core(
+            core: CoreInfo(
               version: Version(1, 0, 0),
             ),
           ),
@@ -208,7 +208,7 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.sessionOtpCreate(SessionOtpCredential(
+        apiClient.createSessionOtp(SessionOtpCredential(
           type: AppType.web,
           identifier: 'identifier_1',
           userRef: 'phone_1',
@@ -250,7 +250,7 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.sessionOtpVerify(
+        apiClient.verifySessionOtp(
           SessionOtpProvisional(otpId: 'otp_id_1'),
           'code_1',
         ),
@@ -287,7 +287,7 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.sessionLogin(SessionLoginCredential(
+        apiClient.createSession(SessionLoginCredential(
           type: AppType.web,
           identifier: 'identifier_1',
           login: 'login_1',
@@ -313,7 +313,7 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.sessionLogout(token),
+        apiClient.deleteSession(token),
         completion(anything),
       );
     });
@@ -349,9 +349,9 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.userInfo(token),
+        apiClient.getUserInfo(token),
         completion(equals(
-          User(
+          UserInfo(
             balance: Balance(amount: 111.1, currency: 'UAH', balanceType: BalanceType.prepaid),
             sip: SipData(login: 'login_1'),
             firstName: 'first_name_1',
@@ -397,11 +397,11 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.userContacts(token),
+        apiClient.getUserContactList(token),
         completion(equals(
           [
             UserContact(
-              numbers: Numbers(main: 'number_1'),
+              numbers: ContactNumbers(main: 'number_1'),
               firstName: 'first_name_1',
               lastName: 'last_name_1',
               email: 'email_1',
@@ -409,7 +409,7 @@ void main() {
               sip: Sip(displayName: 'number_1', status: '0'),
             ),
             UserContact(
-              numbers: Numbers(main: 'number_2'),
+              numbers: ContactNumbers(main: 'number_2'),
               firstName: 'first_name_2',
               lastName: 'last_name_2',
               email: 'email_2',
@@ -439,7 +439,7 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.appStatus(token),
+        apiClient.getAppStatus(token),
         completion(equals(
           AppStatus(
             register: true,
@@ -470,7 +470,7 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.appStatusUpdate(token, AppStatus(register: false)),
+        apiClient.updateAppStatus(token, AppStatus(register: false)),
         completion(anything),
       );
     });
@@ -511,7 +511,7 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.appCreateContacts(
+        apiClient.createAppContact(
           token,
           [
             AppContact(
@@ -562,7 +562,7 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.appSmartContacts(token),
+        apiClient.getAppSmartContactList(token),
         completion(equals(
           [
             AppSmartContact(
@@ -605,7 +605,7 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.appCreatePushToken(token, AppPushToken(type: AppPushTokenType.fcm, value: 'push_token_value')),
+        apiClient.createAppPushToken(token, AppPushToken(type: AppPushTokenType.fcm, value: 'push_token_value')),
         completion(anything),
       );
     });

@@ -1,6 +1,6 @@
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-const dAccountInfo = User(
+const userInfo = UserInfo(
   balance: Balance(amount: 100, currency: 'USD', balanceType: BalanceType.prepaid),
   sip: SipData(login: '1234567890'),
   firstName: 'Agent',

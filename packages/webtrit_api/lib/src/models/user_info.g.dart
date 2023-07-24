@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user.dart';
+part of 'user_info.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_User _$$_UserFromJson(Map<String, dynamic> json) => _$_User(
+_$_UserInfo _$$_UserInfoFromJson(Map<String, dynamic> json) => _$_UserInfo(
       balance: json['balance'] == null
           ? null
           : Balance.fromJson(json['balance'] as Map<String, dynamic>),
@@ -16,7 +16,7 @@ _$_User _$$_UserFromJson(Map<String, dynamic> json) => _$_User(
       lastName: json['last_name'] as String?,
       numbers: json['numbers'] == null
           ? null
-          : Numbers.fromJson(json['numbers'] as Map<String, dynamic>),
+          : ContactNumbers.fromJson(json['numbers'] as Map<String, dynamic>),
       sip: json['sip'] == null
           ? null
           : SipData.fromJson(json['sip'] as Map<String, dynamic>),
@@ -24,7 +24,8 @@ _$_User _$$_UserFromJson(Map<String, dynamic> json) => _$_User(
       timeZone: json['time_zone'] as String?,
     );
 
-Map<String, dynamic> _$$_UserToJson(_$_User instance) => <String, dynamic>{
+Map<String, dynamic> _$$_UserInfoToJson(_$_UserInfo instance) =>
+    <String, dynamic>{
       'balance': instance.balance,
       'company_name': instance.companyName,
       'email': instance.email,

@@ -41,7 +41,7 @@ class SettingsScreen extends StatelessWidget {
             builder: (context, settingsState) {
               return BlocBuilder<CallBloc, CallState>(
                 builder: (context, callState) {
-                  return AccountInfoListTile(
+                  return UserInfoListTile(
                     callStatus: callState.status,
                     info: settingsState.info,
                   );

@@ -10,19 +10,19 @@ _$_SystemInfo _$$_SystemInfoFromJson(Map<String, dynamic> json) =>
     _$_SystemInfo(
       adapter: json['adapter'] == null
           ? null
-          : Adapter.fromJson(json['adapter'] as Map<String, dynamic>),
+          : AdapterInfo.fromJson(json['adapter'] as Map<String, dynamic>),
       core: json['core'] == null
           ? null
-          : Core.fromJson(json['core'] as Map<String, dynamic>),
+          : CoreInfo.fromJson(json['core'] as Map<String, dynamic>),
       gorush: json['gorush'] == null
           ? null
-          : Gorush.fromJson(json['gorush'] as Map<String, dynamic>),
+          : GorushInfo.fromJson(json['gorush'] as Map<String, dynamic>),
       janus: json['janus'] == null
           ? null
-          : Janus.fromJson(json['janus'] as Map<String, dynamic>),
+          : JanusInfo.fromJson(json['janus'] as Map<String, dynamic>),
       postgres: json['postgres'] == null
           ? null
-          : Postgres.fromJson(json['postgres'] as Map<String, dynamic>),
+          : PostgresInfo.fromJson(json['postgres'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_SystemInfoToJson(_$_SystemInfo instance) =>
@@ -34,16 +34,17 @@ Map<String, dynamic> _$$_SystemInfoToJson(_$_SystemInfo instance) =>
       'postgres': instance.postgres,
     };
 
-_$_Postgres _$$_PostgresFromJson(Map<String, dynamic> json) => _$_Postgres(
+_$_PostgresInfo _$$_PostgresInfoFromJson(Map<String, dynamic> json) =>
+    _$_PostgresInfo(
       version: json['version'] as String?,
     );
 
-Map<String, dynamic> _$$_PostgresToJson(_$_Postgres instance) =>
+Map<String, dynamic> _$$_PostgresInfoToJson(_$_PostgresInfo instance) =>
     <String, dynamic>{
       'version': instance.version,
     };
 
-_$_Janus _$$_JanusFromJson(Map<String, dynamic> json) => _$_Janus(
+_$_JanusInfo _$$_JanusInfoFromJson(Map<String, dynamic> json) => _$_JanusInfo(
       plugins: json['plugins'] == null
           ? null
           : Plugins.fromJson(json['plugins'] as Map<String, dynamic>),
@@ -53,7 +54,8 @@ _$_Janus _$$_JanusFromJson(Map<String, dynamic> json) => _$_Janus(
       version: json['version'] as String?,
     );
 
-Map<String, dynamic> _$$_JanusToJson(_$_Janus instance) => <String, dynamic>{
+Map<String, dynamic> _$$_JanusInfoToJson(_$_JanusInfo instance) =>
+    <String, dynamic>{
       'plugins': instance.plugins,
       'transports': instance.transports,
       'version': instance.version,
@@ -101,23 +103,27 @@ Map<String, dynamic> _$$_SipVersionToJson(_$_SipVersion instance) =>
       'version': instance.version,
     };
 
-_$_Gorush _$$_GorushFromJson(Map<String, dynamic> json) => _$_Gorush(
+_$_GorushInfo _$$_GorushInfoFromJson(Map<String, dynamic> json) =>
+    _$_GorushInfo(
       version: json['version'] as String?,
     );
 
-Map<String, dynamic> _$$_GorushToJson(_$_Gorush instance) => <String, dynamic>{
+Map<String, dynamic> _$$_GorushInfoToJson(_$_GorushInfo instance) =>
+    <String, dynamic>{
       'version': instance.version,
     };
 
-_$_Core _$$_CoreFromJson(Map<String, dynamic> json) => _$_Core(
+_$_CoreInfo _$$_CoreInfoFromJson(Map<String, dynamic> json) => _$_CoreInfo(
       version: const VersionConverter().fromJson(json['version'] as String),
     );
 
-Map<String, dynamic> _$$_CoreToJson(_$_Core instance) => <String, dynamic>{
+Map<String, dynamic> _$$_CoreInfoToJson(_$_CoreInfo instance) =>
+    <String, dynamic>{
       'version': const VersionConverter().toJson(instance.version),
     };
 
-_$_Adapter _$$_AdapterFromJson(Map<String, dynamic> json) => _$_Adapter(
+_$_AdapterInfo _$$_AdapterInfoFromJson(Map<String, dynamic> json) =>
+    _$_AdapterInfo(
       custom: json['custom'] == null
           ? null
           : Custom.fromJson(json['custom'] as Map<String, dynamic>),
@@ -128,7 +134,7 @@ _$_Adapter _$$_AdapterFromJson(Map<String, dynamic> json) => _$_Adapter(
       version: json['version'] as String?,
     );
 
-Map<String, dynamic> _$$_AdapterToJson(_$_Adapter instance) =>
+Map<String, dynamic> _$$_AdapterInfoToJson(_$_AdapterInfo instance) =>
     <String, dynamic>{
       'custom': instance.custom,
       'name': instance.name,

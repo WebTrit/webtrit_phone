@@ -1,28 +1,28 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'balance_type.dart';
-import 'numbers.dart';
+import 'contact_numbers.dart';
 
-part 'user.freezed.dart';
+part 'user_info.freezed.dart';
 
-part 'user.g.dart';
+part 'user_info.g.dart';
 
 @freezed
-class User with _$User {
+class UserInfo with _$UserInfo {
   @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory User({
+  const factory UserInfo({
     Balance? balance,
     String? companyName,
     String? email,
     String? firstName,
     String? lastName,
-    Numbers? numbers,
+    ContactNumbers? numbers,
     SipData? sip,
     String? status,
     String? timeZone,
-  }) = _User;
+  }) = _UserInfo;
 
-  factory User.fromJson(Map<String, Object?> json) => _$UserFromJson(json);
+  factory UserInfo.fromJson(Map<String, Object?> json) => _$UserInfoFromJson(json);
 }
 
 @freezed

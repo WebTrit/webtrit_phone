@@ -70,7 +70,7 @@ class ExternalContactsRepository {
   }
 
   Future<List<ExternalContact>> _listContacts() async {
-    final contacts = await _webtritApiClient.userContacts(_token);
+    final contacts = await _webtritApiClient.getUserContactList(_token);
 
     return contacts
         .map((contact) => ExternalContact(

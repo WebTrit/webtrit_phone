@@ -26,13 +26,13 @@ void main(List<String> arguments) async {
     connectionTimeout: Duration(seconds: 5),
   );
 
-  final info = await client.systemInfo();
+  final info = await client.getSystemInfo();
   print(jsonEncode(info.toJson()));
 
-  final accountInfo = await client.userInfo(token);
-  print(jsonEncode(accountInfo.toJson()));
+  final userInfo = await client.getUserInfo(token);
+  print(jsonEncode(userInfo.toJson()));
 
-  final status = await client.appStatus(token);
+  final status = await client.getAppStatus(token);
   print(jsonEncode(status.toJson()));
 
   client.close();

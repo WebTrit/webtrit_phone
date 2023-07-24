@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$SettingsState {
   bool get progress => throw _privateConstructorUsedError;
   bool get registerStatus => throw _privateConstructorUsedError;
-  User? get info => throw _privateConstructorUsedError;
+  UserInfo? get info => throw _privateConstructorUsedError;
   Object? get error => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -32,9 +32,10 @@ abstract class $SettingsStateCopyWith<$Res> {
           SettingsState value, $Res Function(SettingsState) then) =
       _$SettingsStateCopyWithImpl<$Res, SettingsState>;
   @useResult
-  $Res call({bool progress, bool registerStatus, User? info, Object? error});
+  $Res call(
+      {bool progress, bool registerStatus, UserInfo? info, Object? error});
 
-  $UserCopyWith<$Res>? get info;
+  $UserInfoCopyWith<$Res>? get info;
 }
 
 /// @nodoc
@@ -67,19 +68,19 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
       info: freezed == info
           ? _value.info
           : info // ignore: cast_nullable_to_non_nullable
-              as User?,
+              as UserInfo?,
       error: freezed == error ? _value.error : error,
     ) as $Val);
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $UserCopyWith<$Res>? get info {
+  $UserInfoCopyWith<$Res>? get info {
     if (_value.info == null) {
       return null;
     }
 
-    return $UserCopyWith<$Res>(_value.info!, (value) {
+    return $UserInfoCopyWith<$Res>(_value.info!, (value) {
       return _then(_value.copyWith(info: value) as $Val);
     });
   }
@@ -93,10 +94,11 @@ abstract class _$$_SettingsStateCopyWith<$Res>
       __$$_SettingsStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool progress, bool registerStatus, User? info, Object? error});
+  $Res call(
+      {bool progress, bool registerStatus, UserInfo? info, Object? error});
 
   @override
-  $UserCopyWith<$Res>? get info;
+  $UserInfoCopyWith<$Res>? get info;
 }
 
 /// @nodoc
@@ -127,7 +129,7 @@ class __$$_SettingsStateCopyWithImpl<$Res>
       info: freezed == info
           ? _value.info
           : info // ignore: cast_nullable_to_non_nullable
-              as User?,
+              as UserInfo?,
       error: freezed == error ? _value.error : error,
     ));
   }
@@ -148,7 +150,7 @@ class _$_SettingsState implements _SettingsState {
   @override
   final bool registerStatus;
   @override
-  final User? info;
+  final UserInfo? info;
   @override
   final Object? error;
 
@@ -185,7 +187,7 @@ abstract class _SettingsState implements SettingsState {
   const factory _SettingsState(
       {final bool progress,
       required final bool registerStatus,
-      final User? info,
+      final UserInfo? info,
       final Object? error}) = _$_SettingsState;
 
   @override
@@ -193,7 +195,7 @@ abstract class _SettingsState implements SettingsState {
   @override
   bool get registerStatus;
   @override
-  User? get info;
+  UserInfo? get info;
   @override
   Object? get error;
   @override

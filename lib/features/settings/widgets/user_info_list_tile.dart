@@ -8,8 +8,8 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 const _kHoldSpaceData = ' ';
 
-class AccountInfoListTile extends StatelessWidget {
-  const AccountInfoListTile({
+class UserInfoListTile extends StatelessWidget {
+  const UserInfoListTile({
     Key? key,
     required this.callStatus,
     this.info,
@@ -18,7 +18,7 @@ class AccountInfoListTile extends StatelessWidget {
   }) : super(key: key);
 
   final CallStatus callStatus;
-  final User? info;
+  final UserInfo? info;
   final VoidCallback? onEditPressed;
 
   final EdgeInsetsGeometry? contentPadding;

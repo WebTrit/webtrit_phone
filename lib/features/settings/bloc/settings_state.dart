@@ -5,7 +5,7 @@ class SettingsState with _$SettingsState {
   const factory SettingsState({
     @Default(false) bool progress,
     required bool registerStatus,
-    User? info,
+    UserInfo? info,
     Object? error,
   }) = _SettingsState;
 }

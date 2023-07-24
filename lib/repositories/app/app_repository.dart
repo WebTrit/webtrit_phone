@@ -13,11 +13,11 @@ class AppRepository {
   final String _token;
 
   Future<bool> getRegisterStatus() async {
-    final appStatus = await _webtritApiClient.appStatus(_token);
+    final appStatus = await _webtritApiClient.getAppStatus(_token);
     return appStatus.register;
   }
 
   Future<void> setRegisterStatus(bool value) async {
-    await _webtritApiClient.appStatusUpdate(_token, AppStatus(register: value));
+    await _webtritApiClient.updateAppStatus(_token, AppStatus(register: value));
   }
 }

@@ -20,7 +20,7 @@ final _logger = Logger('$SettingsBloc');
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   SettingsBloc({
     required this.appBloc,
-    required this.accountRepository,
+    required this.userRepository,
     required this.appRepository,
     required this.appPreferences,
   }) : super(SettingsState(registerStatus: appPreferences.getRegisterStatus())) {
@@ -31,21 +31,21 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   }
 
   final AppBloc appBloc;
-  final AccountRepository accountRepository;
+  final UserRepository userRepository;
   final AppRepository appRepository;
   final AppPreferences appPreferences;
 
   void _onRefreshed(SettingsRefreshed event, Emitter<SettingsState> emit) async {
     emit(state.copyWith(progress: true));
     try {
-      final infoFuture = accountRepository.getInfo();
+      final infoFuture = userRepository.getInfo();
       final registerStatusFuture = appRepository.getRegisterStatus();
 
       final r = await Future.wait([infoFuture, registerStatusFuture]);
 
       if (emit.isDone) return;
 
-      final info = r[0] as User;
+      final info = r[0] as UserInfo;
       final registerStatus = r[1] as bool;
 
       if (registerStatus != state.registerStatus) {
@@ -79,7 +79,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
     emit(state.copyWith(progress: true));
     try {
-      await accountRepository.logout();
+      await userRepository.logout();
       appBloc.add(const AppLogouted());
       emit(state.copyWith(progress: false));
     } catch (e) {

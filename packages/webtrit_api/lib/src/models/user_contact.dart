@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:webtrit_api/src/models/numbers.dart';
+import 'package:webtrit_api/src/models/contact_numbers.dart';
 
 part 'user_contact.freezed.dart';
 
@@ -13,7 +13,7 @@ class UserContact with _$UserContact {
     String? email,
     String? firstName,
     String? lastName,
-    Numbers? numbers,
+    ContactNumbers? numbers,
     Sip? sip,
   }) = _UserContact;
 
