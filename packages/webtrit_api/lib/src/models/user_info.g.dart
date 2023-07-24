@@ -16,10 +16,10 @@ _$_UserInfo _$$_UserInfoFromJson(Map<String, dynamic> json) => _$_UserInfo(
       lastName: json['last_name'] as String?,
       numbers: json['numbers'] == null
           ? null
-          : ContactNumbers.fromJson(json['numbers'] as Map<String, dynamic>),
+          : Numbers.fromJson(json['numbers'] as Map<String, dynamic>),
       sip: json['sip'] == null
           ? null
-          : SipData.fromJson(json['sip'] as Map<String, dynamic>),
+          : UserSipInfo.fromJson(json['sip'] as Map<String, dynamic>),
       status: json['status'] as String?,
       timeZone: json['time_zone'] as String?,
     );
@@ -37,7 +37,8 @@ Map<String, dynamic> _$$_UserInfoToJson(_$_UserInfo instance) =>
       'time_zone': instance.timeZone,
     };
 
-_$_SipData _$$_SipDataFromJson(Map<String, dynamic> json) => _$_SipData(
+_$_UserSipInfo _$$_UserSipInfoFromJson(Map<String, dynamic> json) =>
+    _$_UserSipInfo(
       displayName: json['display_name'] as String?,
       login: json['login'] as String?,
       password: json['password'] as String?,
@@ -50,7 +51,7 @@ _$_SipData _$$_SipDataFromJson(Map<String, dynamic> json) => _$_SipData(
           : SipServer.fromJson(json['sip_server'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$_SipDataToJson(_$_SipData instance) =>
+Map<String, dynamic> _$$_UserSipInfoToJson(_$_UserSipInfo instance) =>
     <String, dynamic>{
       'display_name': instance.displayName,
       'login': instance.login,

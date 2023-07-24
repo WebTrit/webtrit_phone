@@ -20,11 +20,11 @@ SystemInfo _$SystemInfoFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SystemInfo {
-  AdapterInfo? get adapter => throw _privateConstructorUsedError;
-  CoreInfo? get core => throw _privateConstructorUsedError;
-  GorushInfo? get gorush => throw _privateConstructorUsedError;
+  CoreInfo get core => throw _privateConstructorUsedError;
+  PostgresInfo get postgres => throw _privateConstructorUsedError;
   JanusInfo? get janus => throw _privateConstructorUsedError;
-  PostgresInfo? get postgres => throw _privateConstructorUsedError;
+  GorushInfo? get gorush => throw _privateConstructorUsedError;
+  AdapterInfo? get adapter => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -39,17 +39,17 @@ abstract class $SystemInfoCopyWith<$Res> {
       _$SystemInfoCopyWithImpl<$Res, SystemInfo>;
   @useResult
   $Res call(
-      {AdapterInfo? adapter,
-      CoreInfo? core,
-      GorushInfo? gorush,
+      {CoreInfo core,
+      PostgresInfo postgres,
       JanusInfo? janus,
-      PostgresInfo? postgres});
+      GorushInfo? gorush,
+      AdapterInfo? adapter});
 
-  $AdapterInfoCopyWith<$Res>? get adapter;
-  $CoreInfoCopyWith<$Res>? get core;
-  $GorushInfoCopyWith<$Res>? get gorush;
+  $CoreInfoCopyWith<$Res> get core;
+  $PostgresInfoCopyWith<$Res> get postgres;
   $JanusInfoCopyWith<$Res>? get janus;
-  $PostgresInfoCopyWith<$Res>? get postgres;
+  $GorushInfoCopyWith<$Res>? get gorush;
+  $AdapterInfoCopyWith<$Res>? get adapter;
 }
 
 /// @nodoc
@@ -65,69 +65,49 @@ class _$SystemInfoCopyWithImpl<$Res, $Val extends SystemInfo>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? adapter = freezed,
-    Object? core = freezed,
-    Object? gorush = freezed,
+    Object? core = null,
+    Object? postgres = null,
     Object? janus = freezed,
-    Object? postgres = freezed,
+    Object? gorush = freezed,
+    Object? adapter = freezed,
   }) {
     return _then(_value.copyWith(
-      adapter: freezed == adapter
-          ? _value.adapter
-          : adapter // ignore: cast_nullable_to_non_nullable
-              as AdapterInfo?,
-      core: freezed == core
+      core: null == core
           ? _value.core
           : core // ignore: cast_nullable_to_non_nullable
-              as CoreInfo?,
-      gorush: freezed == gorush
-          ? _value.gorush
-          : gorush // ignore: cast_nullable_to_non_nullable
-              as GorushInfo?,
+              as CoreInfo,
+      postgres: null == postgres
+          ? _value.postgres
+          : postgres // ignore: cast_nullable_to_non_nullable
+              as PostgresInfo,
       janus: freezed == janus
           ? _value.janus
           : janus // ignore: cast_nullable_to_non_nullable
               as JanusInfo?,
-      postgres: freezed == postgres
-          ? _value.postgres
-          : postgres // ignore: cast_nullable_to_non_nullable
-              as PostgresInfo?,
+      gorush: freezed == gorush
+          ? _value.gorush
+          : gorush // ignore: cast_nullable_to_non_nullable
+              as GorushInfo?,
+      adapter: freezed == adapter
+          ? _value.adapter
+          : adapter // ignore: cast_nullable_to_non_nullable
+              as AdapterInfo?,
     ) as $Val);
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $AdapterInfoCopyWith<$Res>? get adapter {
-    if (_value.adapter == null) {
-      return null;
-    }
-
-    return $AdapterInfoCopyWith<$Res>(_value.adapter!, (value) {
-      return _then(_value.copyWith(adapter: value) as $Val);
-    });
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $CoreInfoCopyWith<$Res>? get core {
-    if (_value.core == null) {
-      return null;
-    }
-
-    return $CoreInfoCopyWith<$Res>(_value.core!, (value) {
+  $CoreInfoCopyWith<$Res> get core {
+    return $CoreInfoCopyWith<$Res>(_value.core, (value) {
       return _then(_value.copyWith(core: value) as $Val);
     });
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $GorushInfoCopyWith<$Res>? get gorush {
-    if (_value.gorush == null) {
-      return null;
-    }
-
-    return $GorushInfoCopyWith<$Res>(_value.gorush!, (value) {
-      return _then(_value.copyWith(gorush: value) as $Val);
+  $PostgresInfoCopyWith<$Res> get postgres {
+    return $PostgresInfoCopyWith<$Res>(_value.postgres, (value) {
+      return _then(_value.copyWith(postgres: value) as $Val);
     });
   }
 
@@ -145,13 +125,25 @@ class _$SystemInfoCopyWithImpl<$Res, $Val extends SystemInfo>
 
   @override
   @pragma('vm:prefer-inline')
-  $PostgresInfoCopyWith<$Res>? get postgres {
-    if (_value.postgres == null) {
+  $GorushInfoCopyWith<$Res>? get gorush {
+    if (_value.gorush == null) {
       return null;
     }
 
-    return $PostgresInfoCopyWith<$Res>(_value.postgres!, (value) {
-      return _then(_value.copyWith(postgres: value) as $Val);
+    return $GorushInfoCopyWith<$Res>(_value.gorush!, (value) {
+      return _then(_value.copyWith(gorush: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $AdapterInfoCopyWith<$Res>? get adapter {
+    if (_value.adapter == null) {
+      return null;
+    }
+
+    return $AdapterInfoCopyWith<$Res>(_value.adapter!, (value) {
+      return _then(_value.copyWith(adapter: value) as $Val);
     });
   }
 }
@@ -165,22 +157,22 @@ abstract class _$$_SystemInfoCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {AdapterInfo? adapter,
-      CoreInfo? core,
-      GorushInfo? gorush,
+      {CoreInfo core,
+      PostgresInfo postgres,
       JanusInfo? janus,
-      PostgresInfo? postgres});
+      GorushInfo? gorush,
+      AdapterInfo? adapter});
 
   @override
-  $AdapterInfoCopyWith<$Res>? get adapter;
+  $CoreInfoCopyWith<$Res> get core;
   @override
-  $CoreInfoCopyWith<$Res>? get core;
-  @override
-  $GorushInfoCopyWith<$Res>? get gorush;
+  $PostgresInfoCopyWith<$Res> get postgres;
   @override
   $JanusInfoCopyWith<$Res>? get janus;
   @override
-  $PostgresInfoCopyWith<$Res>? get postgres;
+  $GorushInfoCopyWith<$Res>? get gorush;
+  @override
+  $AdapterInfoCopyWith<$Res>? get adapter;
 }
 
 /// @nodoc
@@ -194,33 +186,33 @@ class __$$_SystemInfoCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? adapter = freezed,
-    Object? core = freezed,
-    Object? gorush = freezed,
+    Object? core = null,
+    Object? postgres = null,
     Object? janus = freezed,
-    Object? postgres = freezed,
+    Object? gorush = freezed,
+    Object? adapter = freezed,
   }) {
     return _then(_$_SystemInfo(
-      adapter: freezed == adapter
-          ? _value.adapter
-          : adapter // ignore: cast_nullable_to_non_nullable
-              as AdapterInfo?,
-      core: freezed == core
+      core: null == core
           ? _value.core
           : core // ignore: cast_nullable_to_non_nullable
-              as CoreInfo?,
-      gorush: freezed == gorush
-          ? _value.gorush
-          : gorush // ignore: cast_nullable_to_non_nullable
-              as GorushInfo?,
+              as CoreInfo,
+      postgres: null == postgres
+          ? _value.postgres
+          : postgres // ignore: cast_nullable_to_non_nullable
+              as PostgresInfo,
       janus: freezed == janus
           ? _value.janus
           : janus // ignore: cast_nullable_to_non_nullable
               as JanusInfo?,
-      postgres: freezed == postgres
-          ? _value.postgres
-          : postgres // ignore: cast_nullable_to_non_nullable
-              as PostgresInfo?,
+      gorush: freezed == gorush
+          ? _value.gorush
+          : gorush // ignore: cast_nullable_to_non_nullable
+              as GorushInfo?,
+      adapter: freezed == adapter
+          ? _value.adapter
+          : adapter // ignore: cast_nullable_to_non_nullable
+              as AdapterInfo?,
     ));
   }
 }
@@ -230,25 +222,29 @@ class __$$_SystemInfoCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$_SystemInfo implements _SystemInfo {
   const _$_SystemInfo(
-      {this.adapter, this.core, this.gorush, this.janus, this.postgres});
+      {required this.core,
+      required this.postgres,
+      this.janus,
+      this.gorush,
+      this.adapter});
 
   factory _$_SystemInfo.fromJson(Map<String, dynamic> json) =>
       _$$_SystemInfoFromJson(json);
 
   @override
-  final AdapterInfo? adapter;
+  final CoreInfo core;
   @override
-  final CoreInfo? core;
-  @override
-  final GorushInfo? gorush;
+  final PostgresInfo postgres;
   @override
   final JanusInfo? janus;
   @override
-  final PostgresInfo? postgres;
+  final GorushInfo? gorush;
+  @override
+  final AdapterInfo? adapter;
 
   @override
   String toString() {
-    return 'SystemInfo(adapter: $adapter, core: $core, gorush: $gorush, janus: $janus, postgres: $postgres)';
+    return 'SystemInfo(core: $core, postgres: $postgres, janus: $janus, gorush: $gorush, adapter: $adapter)';
   }
 
   @override
@@ -256,18 +252,18 @@ class _$_SystemInfo implements _SystemInfo {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_SystemInfo &&
-            (identical(other.adapter, adapter) || other.adapter == adapter) &&
             (identical(other.core, core) || other.core == core) &&
-            (identical(other.gorush, gorush) || other.gorush == gorush) &&
-            (identical(other.janus, janus) || other.janus == janus) &&
             (identical(other.postgres, postgres) ||
-                other.postgres == postgres));
+                other.postgres == postgres) &&
+            (identical(other.janus, janus) || other.janus == janus) &&
+            (identical(other.gorush, gorush) || other.gorush == gorush) &&
+            (identical(other.adapter, adapter) || other.adapter == adapter));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, adapter, core, gorush, janus, postgres);
+      Object.hash(runtimeType, core, postgres, janus, gorush, adapter);
 
   @JsonKey(ignore: true)
   @override
@@ -285,25 +281,25 @@ class _$_SystemInfo implements _SystemInfo {
 
 abstract class _SystemInfo implements SystemInfo {
   const factory _SystemInfo(
-      {final AdapterInfo? adapter,
-      final CoreInfo? core,
-      final GorushInfo? gorush,
+      {required final CoreInfo core,
+      required final PostgresInfo postgres,
       final JanusInfo? janus,
-      final PostgresInfo? postgres}) = _$_SystemInfo;
+      final GorushInfo? gorush,
+      final AdapterInfo? adapter}) = _$_SystemInfo;
 
   factory _SystemInfo.fromJson(Map<String, dynamic> json) =
       _$_SystemInfo.fromJson;
 
   @override
-  AdapterInfo? get adapter;
+  CoreInfo get core;
   @override
-  CoreInfo? get core;
-  @override
-  GorushInfo? get gorush;
+  PostgresInfo get postgres;
   @override
   JanusInfo? get janus;
   @override
-  PostgresInfo? get postgres;
+  GorushInfo? get gorush;
+  @override
+  AdapterInfo? get adapter;
   @override
   @JsonKey(ignore: true)
   _$$_SystemInfoCopyWith<_$_SystemInfo> get copyWith =>
@@ -316,7 +312,8 @@ PostgresInfo _$PostgresInfoFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$PostgresInfo {
-  String? get version => throw _privateConstructorUsedError;
+  @VersionConverter()
+  Version? get version => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -330,7 +327,7 @@ abstract class $PostgresInfoCopyWith<$Res> {
           PostgresInfo value, $Res Function(PostgresInfo) then) =
       _$PostgresInfoCopyWithImpl<$Res, PostgresInfo>;
   @useResult
-  $Res call({String? version});
+  $Res call({@VersionConverter() Version? version});
 }
 
 /// @nodoc
@@ -352,7 +349,7 @@ class _$PostgresInfoCopyWithImpl<$Res, $Val extends PostgresInfo>
       version: freezed == version
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as Version?,
     ) as $Val);
   }
 }
@@ -365,7 +362,7 @@ abstract class _$$_PostgresInfoCopyWith<$Res>
       __$$_PostgresInfoCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? version});
+  $Res call({@VersionConverter() Version? version});
 }
 
 /// @nodoc
@@ -385,7 +382,7 @@ class __$$_PostgresInfoCopyWithImpl<$Res>
       version: freezed == version
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as Version?,
     ));
   }
 }
@@ -394,13 +391,14 @@ class __$$_PostgresInfoCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$_PostgresInfo implements _PostgresInfo {
-  const _$_PostgresInfo({this.version});
+  const _$_PostgresInfo({@VersionConverter() this.version});
 
   factory _$_PostgresInfo.fromJson(Map<String, dynamic> json) =>
       _$$_PostgresInfoFromJson(json);
 
   @override
-  final String? version;
+  @VersionConverter()
+  final Version? version;
 
   @override
   String toString() {
@@ -434,13 +432,15 @@ class _$_PostgresInfo implements _PostgresInfo {
 }
 
 abstract class _PostgresInfo implements PostgresInfo {
-  const factory _PostgresInfo({final String? version}) = _$_PostgresInfo;
+  const factory _PostgresInfo({@VersionConverter() final Version? version}) =
+      _$_PostgresInfo;
 
   factory _PostgresInfo.fromJson(Map<String, dynamic> json) =
       _$_PostgresInfo.fromJson;
 
   @override
-  String? get version;
+  @VersionConverter()
+  Version? get version;
   @override
   @JsonKey(ignore: true)
   _$$_PostgresInfoCopyWith<_$_PostgresInfo> get copyWith =>
@@ -455,7 +455,8 @@ JanusInfo _$JanusInfoFromJson(Map<String, dynamic> json) {
 mixin _$JanusInfo {
   Plugins? get plugins => throw _privateConstructorUsedError;
   Transports? get transports => throw _privateConstructorUsedError;
-  String? get version => throw _privateConstructorUsedError;
+  @VersionConverter()
+  Version? get version => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -468,7 +469,10 @@ abstract class $JanusInfoCopyWith<$Res> {
   factory $JanusInfoCopyWith(JanusInfo value, $Res Function(JanusInfo) then) =
       _$JanusInfoCopyWithImpl<$Res, JanusInfo>;
   @useResult
-  $Res call({Plugins? plugins, Transports? transports, String? version});
+  $Res call(
+      {Plugins? plugins,
+      Transports? transports,
+      @VersionConverter() Version? version});
 
   $PluginsCopyWith<$Res>? get plugins;
   $TransportsCopyWith<$Res>? get transports;
@@ -503,7 +507,7 @@ class _$JanusInfoCopyWithImpl<$Res, $Val extends JanusInfo>
       version: freezed == version
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as Version?,
     ) as $Val);
   }
 
@@ -539,7 +543,10 @@ abstract class _$$_JanusInfoCopyWith<$Res> implements $JanusInfoCopyWith<$Res> {
       __$$_JanusInfoCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Plugins? plugins, Transports? transports, String? version});
+  $Res call(
+      {Plugins? plugins,
+      Transports? transports,
+      @VersionConverter() Version? version});
 
   @override
   $PluginsCopyWith<$Res>? get plugins;
@@ -574,7 +581,7 @@ class __$$_JanusInfoCopyWithImpl<$Res>
       version: freezed == version
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as Version?,
     ));
   }
 }
@@ -583,7 +590,8 @@ class __$$_JanusInfoCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$_JanusInfo implements _JanusInfo {
-  const _$_JanusInfo({this.plugins, this.transports, this.version});
+  const _$_JanusInfo(
+      {this.plugins, this.transports, @VersionConverter() this.version});
 
   factory _$_JanusInfo.fromJson(Map<String, dynamic> json) =>
       _$$_JanusInfoFromJson(json);
@@ -593,7 +601,8 @@ class _$_JanusInfo implements _JanusInfo {
   @override
   final Transports? transports;
   @override
-  final String? version;
+  @VersionConverter()
+  final Version? version;
 
   @override
   String toString() {
@@ -633,7 +642,7 @@ abstract class _JanusInfo implements JanusInfo {
   const factory _JanusInfo(
       {final Plugins? plugins,
       final Transports? transports,
-      final String? version}) = _$_JanusInfo;
+      @VersionConverter() final Version? version}) = _$_JanusInfo;
 
   factory _JanusInfo.fromJson(Map<String, dynamic> json) =
       _$_JanusInfo.fromJson;
@@ -643,7 +652,8 @@ abstract class _JanusInfo implements JanusInfo {
   @override
   Transports? get transports;
   @override
-  String? get version;
+  @VersionConverter()
+  Version? get version;
   @override
   @JsonKey(ignore: true)
   _$$_JanusInfoCopyWith<_$_JanusInfo> get copyWith =>
@@ -811,7 +821,8 @@ Websocket _$WebsocketFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Websocket {
-  String? get version => throw _privateConstructorUsedError;
+  @VersionConverter()
+  Version? get version => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -824,7 +835,7 @@ abstract class $WebsocketCopyWith<$Res> {
   factory $WebsocketCopyWith(Websocket value, $Res Function(Websocket) then) =
       _$WebsocketCopyWithImpl<$Res, Websocket>;
   @useResult
-  $Res call({String? version});
+  $Res call({@VersionConverter() Version? version});
 }
 
 /// @nodoc
@@ -846,7 +857,7 @@ class _$WebsocketCopyWithImpl<$Res, $Val extends Websocket>
       version: freezed == version
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as Version?,
     ) as $Val);
   }
 }
@@ -858,7 +869,7 @@ abstract class _$$_WebsocketCopyWith<$Res> implements $WebsocketCopyWith<$Res> {
       __$$_WebsocketCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? version});
+  $Res call({@VersionConverter() Version? version});
 }
 
 /// @nodoc
@@ -878,7 +889,7 @@ class __$$_WebsocketCopyWithImpl<$Res>
       version: freezed == version
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as Version?,
     ));
   }
 }
@@ -887,13 +898,14 @@ class __$$_WebsocketCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$_Websocket implements _Websocket {
-  const _$_Websocket({this.version});
+  const _$_Websocket({@VersionConverter() this.version});
 
   factory _$_Websocket.fromJson(Map<String, dynamic> json) =>
       _$$_WebsocketFromJson(json);
 
   @override
-  final String? version;
+  @VersionConverter()
+  final Version? version;
 
   @override
   String toString() {
@@ -927,13 +939,15 @@ class _$_Websocket implements _Websocket {
 }
 
 abstract class _Websocket implements Websocket {
-  const factory _Websocket({final String? version}) = _$_Websocket;
+  const factory _Websocket({@VersionConverter() final Version? version}) =
+      _$_Websocket;
 
   factory _Websocket.fromJson(Map<String, dynamic> json) =
       _$_Websocket.fromJson;
 
   @override
-  String? get version;
+  @VersionConverter()
+  Version? get version;
   @override
   @JsonKey(ignore: true)
   _$$_WebsocketCopyWith<_$_Websocket> get copyWith =>
@@ -1095,7 +1109,8 @@ SipVersion _$SipVersionFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SipVersion {
-  String? get version => throw _privateConstructorUsedError;
+  @VersionConverter()
+  Version? get version => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -1109,7 +1124,7 @@ abstract class $SipVersionCopyWith<$Res> {
           SipVersion value, $Res Function(SipVersion) then) =
       _$SipVersionCopyWithImpl<$Res, SipVersion>;
   @useResult
-  $Res call({String? version});
+  $Res call({@VersionConverter() Version? version});
 }
 
 /// @nodoc
@@ -1131,7 +1146,7 @@ class _$SipVersionCopyWithImpl<$Res, $Val extends SipVersion>
       version: freezed == version
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as Version?,
     ) as $Val);
   }
 }
@@ -1144,7 +1159,7 @@ abstract class _$$_SipVersionCopyWith<$Res>
       __$$_SipVersionCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? version});
+  $Res call({@VersionConverter() Version? version});
 }
 
 /// @nodoc
@@ -1164,7 +1179,7 @@ class __$$_SipVersionCopyWithImpl<$Res>
       version: freezed == version
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as Version?,
     ));
   }
 }
@@ -1173,13 +1188,14 @@ class __$$_SipVersionCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$_SipVersion implements _SipVersion {
-  const _$_SipVersion({this.version});
+  const _$_SipVersion({@VersionConverter() this.version});
 
   factory _$_SipVersion.fromJson(Map<String, dynamic> json) =>
       _$$_SipVersionFromJson(json);
 
   @override
-  final String? version;
+  @VersionConverter()
+  final Version? version;
 
   @override
   String toString() {
@@ -1213,13 +1229,15 @@ class _$_SipVersion implements _SipVersion {
 }
 
 abstract class _SipVersion implements SipVersion {
-  const factory _SipVersion({final String? version}) = _$_SipVersion;
+  const factory _SipVersion({@VersionConverter() final Version? version}) =
+      _$_SipVersion;
 
   factory _SipVersion.fromJson(Map<String, dynamic> json) =
       _$_SipVersion.fromJson;
 
   @override
-  String? get version;
+  @VersionConverter()
+  Version? get version;
   @override
   @JsonKey(ignore: true)
   _$$_SipVersionCopyWith<_$_SipVersion> get copyWith =>
@@ -1232,7 +1250,8 @@ GorushInfo _$GorushInfoFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$GorushInfo {
-  String? get version => throw _privateConstructorUsedError;
+  @VersionConverter()
+  Version? get version => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -1246,7 +1265,7 @@ abstract class $GorushInfoCopyWith<$Res> {
           GorushInfo value, $Res Function(GorushInfo) then) =
       _$GorushInfoCopyWithImpl<$Res, GorushInfo>;
   @useResult
-  $Res call({String? version});
+  $Res call({@VersionConverter() Version? version});
 }
 
 /// @nodoc
@@ -1268,7 +1287,7 @@ class _$GorushInfoCopyWithImpl<$Res, $Val extends GorushInfo>
       version: freezed == version
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as Version?,
     ) as $Val);
   }
 }
@@ -1281,7 +1300,7 @@ abstract class _$$_GorushInfoCopyWith<$Res>
       __$$_GorushInfoCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? version});
+  $Res call({@VersionConverter() Version? version});
 }
 
 /// @nodoc
@@ -1301,7 +1320,7 @@ class __$$_GorushInfoCopyWithImpl<$Res>
       version: freezed == version
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as Version?,
     ));
   }
 }
@@ -1310,13 +1329,14 @@ class __$$_GorushInfoCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$_GorushInfo implements _GorushInfo {
-  const _$_GorushInfo({this.version});
+  const _$_GorushInfo({@VersionConverter() this.version});
 
   factory _$_GorushInfo.fromJson(Map<String, dynamic> json) =>
       _$$_GorushInfoFromJson(json);
 
   @override
-  final String? version;
+  @VersionConverter()
+  final Version? version;
 
   @override
   String toString() {
@@ -1350,13 +1370,15 @@ class _$_GorushInfo implements _GorushInfo {
 }
 
 abstract class _GorushInfo implements GorushInfo {
-  const factory _GorushInfo({final String? version}) = _$_GorushInfo;
+  const factory _GorushInfo({@VersionConverter() final Version? version}) =
+      _$_GorushInfo;
 
   factory _GorushInfo.fromJson(Map<String, dynamic> json) =
       _$_GorushInfo.fromJson;
 
   @override
-  String? get version;
+  @VersionConverter()
+  Version? get version;
   @override
   @JsonKey(ignore: true)
   _$$_GorushInfoCopyWith<_$_GorushInfo> get copyWith =>
@@ -1507,10 +1529,11 @@ AdapterInfo _$AdapterInfoFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AdapterInfo {
-  Custom? get custom => throw _privateConstructorUsedError;
+  Map<String, dynamic>? get custom => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   List<String>? get supported => throw _privateConstructorUsedError;
-  String? get version => throw _privateConstructorUsedError;
+  @VersionConverter()
+  Version? get version => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -1525,9 +1548,10 @@ abstract class $AdapterInfoCopyWith<$Res> {
       _$AdapterInfoCopyWithImpl<$Res, AdapterInfo>;
   @useResult
   $Res call(
-      {Custom? custom, String? name, List<String>? supported, String? version});
-
-  $CustomCopyWith<$Res>? get custom;
+      {Map<String, dynamic>? custom,
+      String? name,
+      List<String>? supported,
+      @VersionConverter() Version? version});
 }
 
 /// @nodoc
@@ -1552,7 +1576,7 @@ class _$AdapterInfoCopyWithImpl<$Res, $Val extends AdapterInfo>
       custom: freezed == custom
           ? _value.custom
           : custom // ignore: cast_nullable_to_non_nullable
-              as Custom?,
+              as Map<String, dynamic>?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -1564,20 +1588,8 @@ class _$AdapterInfoCopyWithImpl<$Res, $Val extends AdapterInfo>
       version: freezed == version
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as Version?,
     ) as $Val);
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $CustomCopyWith<$Res>? get custom {
-    if (_value.custom == null) {
-      return null;
-    }
-
-    return $CustomCopyWith<$Res>(_value.custom!, (value) {
-      return _then(_value.copyWith(custom: value) as $Val);
-    });
   }
 }
 
@@ -1590,10 +1602,10 @@ abstract class _$$_AdapterInfoCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {Custom? custom, String? name, List<String>? supported, String? version});
-
-  @override
-  $CustomCopyWith<$Res>? get custom;
+      {Map<String, dynamic>? custom,
+      String? name,
+      List<String>? supported,
+      @VersionConverter() Version? version});
 }
 
 /// @nodoc
@@ -1614,9 +1626,9 @@ class __$$_AdapterInfoCopyWithImpl<$Res>
   }) {
     return _then(_$_AdapterInfo(
       custom: freezed == custom
-          ? _value.custom
+          ? _value._custom
           : custom // ignore: cast_nullable_to_non_nullable
-              as Custom?,
+              as Map<String, dynamic>?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -1628,7 +1640,7 @@ class __$$_AdapterInfoCopyWithImpl<$Res>
       version: freezed == version
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as Version?,
     ));
   }
 }
@@ -1638,14 +1650,26 @@ class __$$_AdapterInfoCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$_AdapterInfo implements _AdapterInfo {
   const _$_AdapterInfo(
-      {this.custom, this.name, final List<String>? supported, this.version})
-      : _supported = supported;
+      {final Map<String, dynamic>? custom,
+      this.name,
+      final List<String>? supported,
+      @VersionConverter() this.version})
+      : _custom = custom,
+        _supported = supported;
 
   factory _$_AdapterInfo.fromJson(Map<String, dynamic> json) =>
       _$$_AdapterInfoFromJson(json);
 
+  final Map<String, dynamic>? _custom;
   @override
-  final Custom? custom;
+  Map<String, dynamic>? get custom {
+    final value = _custom;
+    if (value == null) return null;
+    if (_custom is EqualUnmodifiableMapView) return _custom;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
+  }
+
   @override
   final String? name;
   final List<String>? _supported;
@@ -1659,7 +1683,8 @@ class _$_AdapterInfo implements _AdapterInfo {
   }
 
   @override
-  final String? version;
+  @VersionConverter()
+  final Version? version;
 
   @override
   String toString() {
@@ -1671,7 +1696,7 @@ class _$_AdapterInfo implements _AdapterInfo {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_AdapterInfo &&
-            (identical(other.custom, custom) || other.custom == custom) &&
+            const DeepCollectionEquality().equals(other._custom, _custom) &&
             (identical(other.name, name) || other.name == name) &&
             const DeepCollectionEquality()
                 .equals(other._supported, _supported) &&
@@ -1680,8 +1705,12 @@ class _$_AdapterInfo implements _AdapterInfo {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, custom, name,
-      const DeepCollectionEquality().hash(_supported), version);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_custom),
+      name,
+      const DeepCollectionEquality().hash(_supported),
+      version);
 
   @JsonKey(ignore: true)
   @override
@@ -1699,201 +1728,25 @@ class _$_AdapterInfo implements _AdapterInfo {
 
 abstract class _AdapterInfo implements AdapterInfo {
   const factory _AdapterInfo(
-      {final Custom? custom,
+      {final Map<String, dynamic>? custom,
       final String? name,
       final List<String>? supported,
-      final String? version}) = _$_AdapterInfo;
+      @VersionConverter() final Version? version}) = _$_AdapterInfo;
 
   factory _AdapterInfo.fromJson(Map<String, dynamic> json) =
       _$_AdapterInfo.fromJson;
 
   @override
-  Custom? get custom;
+  Map<String, dynamic>? get custom;
   @override
   String? get name;
   @override
   List<String>? get supported;
   @override
-  String? get version;
+  @VersionConverter()
+  Version? get version;
   @override
   @JsonKey(ignore: true)
   _$$_AdapterInfoCopyWith<_$_AdapterInfo> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-Custom _$CustomFromJson(Map<String, dynamic> json) {
-  return _Custom.fromJson(json);
-}
-
-/// @nodoc
-mixin _$Custom {
-  String? get additionalProp1 => throw _privateConstructorUsedError;
-  String? get additionalProp2 => throw _privateConstructorUsedError;
-  String? get additionalProp3 => throw _privateConstructorUsedError;
-
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $CustomCopyWith<Custom> get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $CustomCopyWith<$Res> {
-  factory $CustomCopyWith(Custom value, $Res Function(Custom) then) =
-      _$CustomCopyWithImpl<$Res, Custom>;
-  @useResult
-  $Res call(
-      {String? additionalProp1,
-      String? additionalProp2,
-      String? additionalProp3});
-}
-
-/// @nodoc
-class _$CustomCopyWithImpl<$Res, $Val extends Custom>
-    implements $CustomCopyWith<$Res> {
-  _$CustomCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? additionalProp1 = freezed,
-    Object? additionalProp2 = freezed,
-    Object? additionalProp3 = freezed,
-  }) {
-    return _then(_value.copyWith(
-      additionalProp1: freezed == additionalProp1
-          ? _value.additionalProp1
-          : additionalProp1 // ignore: cast_nullable_to_non_nullable
-              as String?,
-      additionalProp2: freezed == additionalProp2
-          ? _value.additionalProp2
-          : additionalProp2 // ignore: cast_nullable_to_non_nullable
-              as String?,
-      additionalProp3: freezed == additionalProp3
-          ? _value.additionalProp3
-          : additionalProp3 // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
-  }
-}
-
-/// @nodoc
-abstract class _$$_CustomCopyWith<$Res> implements $CustomCopyWith<$Res> {
-  factory _$$_CustomCopyWith(_$_Custom value, $Res Function(_$_Custom) then) =
-      __$$_CustomCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {String? additionalProp1,
-      String? additionalProp2,
-      String? additionalProp3});
-}
-
-/// @nodoc
-class __$$_CustomCopyWithImpl<$Res>
-    extends _$CustomCopyWithImpl<$Res, _$_Custom>
-    implements _$$_CustomCopyWith<$Res> {
-  __$$_CustomCopyWithImpl(_$_Custom _value, $Res Function(_$_Custom) _then)
-      : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? additionalProp1 = freezed,
-    Object? additionalProp2 = freezed,
-    Object? additionalProp3 = freezed,
-  }) {
-    return _then(_$_Custom(
-      additionalProp1: freezed == additionalProp1
-          ? _value.additionalProp1
-          : additionalProp1 // ignore: cast_nullable_to_non_nullable
-              as String?,
-      additionalProp2: freezed == additionalProp2
-          ? _value.additionalProp2
-          : additionalProp2 // ignore: cast_nullable_to_non_nullable
-              as String?,
-      additionalProp3: freezed == additionalProp3
-          ? _value.additionalProp3
-          : additionalProp3 // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
-}
-
-/// @nodoc
-
-@JsonSerializable(fieldRename: FieldRename.snake)
-class _$_Custom implements _Custom {
-  const _$_Custom(
-      {this.additionalProp1, this.additionalProp2, this.additionalProp3});
-
-  factory _$_Custom.fromJson(Map<String, dynamic> json) =>
-      _$$_CustomFromJson(json);
-
-  @override
-  final String? additionalProp1;
-  @override
-  final String? additionalProp2;
-  @override
-  final String? additionalProp3;
-
-  @override
-  String toString() {
-    return 'Custom(additionalProp1: $additionalProp1, additionalProp2: $additionalProp2, additionalProp3: $additionalProp3)';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_Custom &&
-            (identical(other.additionalProp1, additionalProp1) ||
-                other.additionalProp1 == additionalProp1) &&
-            (identical(other.additionalProp2, additionalProp2) ||
-                other.additionalProp2 == additionalProp2) &&
-            (identical(other.additionalProp3, additionalProp3) ||
-                other.additionalProp3 == additionalProp3));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(
-      runtimeType, additionalProp1, additionalProp2, additionalProp3);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$_CustomCopyWith<_$_Custom> get copyWith =>
-      __$$_CustomCopyWithImpl<_$_Custom>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$_CustomToJson(
-      this,
-    );
-  }
-}
-
-abstract class _Custom implements Custom {
-  const factory _Custom(
-      {final String? additionalProp1,
-      final String? additionalProp2,
-      final String? additionalProp3}) = _$_Custom;
-
-  factory _Custom.fromJson(Map<String, dynamic> json) = _$_Custom.fromJson;
-
-  @override
-  String? get additionalProp1;
-  @override
-  String? get additionalProp2;
-  @override
-  String? get additionalProp3;
-  @override
-  @JsonKey(ignore: true)
-  _$$_CustomCopyWith<_$_Custom> get copyWith =>
       throw _privateConstructorUsedError;
 }

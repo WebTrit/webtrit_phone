@@ -8,41 +8,51 @@ part of 'system_info.dart';
 
 _$_SystemInfo _$$_SystemInfoFromJson(Map<String, dynamic> json) =>
     _$_SystemInfo(
-      adapter: json['adapter'] == null
-          ? null
-          : AdapterInfo.fromJson(json['adapter'] as Map<String, dynamic>),
-      core: json['core'] == null
-          ? null
-          : CoreInfo.fromJson(json['core'] as Map<String, dynamic>),
-      gorush: json['gorush'] == null
-          ? null
-          : GorushInfo.fromJson(json['gorush'] as Map<String, dynamic>),
+      core: CoreInfo.fromJson(json['core'] as Map<String, dynamic>),
+      postgres: PostgresInfo.fromJson(json['postgres'] as Map<String, dynamic>),
       janus: json['janus'] == null
           ? null
           : JanusInfo.fromJson(json['janus'] as Map<String, dynamic>),
-      postgres: json['postgres'] == null
+      gorush: json['gorush'] == null
           ? null
-          : PostgresInfo.fromJson(json['postgres'] as Map<String, dynamic>),
+          : GorushInfo.fromJson(json['gorush'] as Map<String, dynamic>),
+      adapter: json['adapter'] == null
+          ? null
+          : AdapterInfo.fromJson(json['adapter'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_SystemInfoToJson(_$_SystemInfo instance) =>
     <String, dynamic>{
-      'adapter': instance.adapter,
       'core': instance.core,
-      'gorush': instance.gorush,
-      'janus': instance.janus,
       'postgres': instance.postgres,
+      'janus': instance.janus,
+      'gorush': instance.gorush,
+      'adapter': instance.adapter,
     };
 
 _$_PostgresInfo _$$_PostgresInfoFromJson(Map<String, dynamic> json) =>
     _$_PostgresInfo(
-      version: json['version'] as String?,
+      version: _$JsonConverterFromJson<String, Version>(
+          json['version'], const VersionConverter().fromJson),
     );
 
 Map<String, dynamic> _$$_PostgresInfoToJson(_$_PostgresInfo instance) =>
     <String, dynamic>{
-      'version': instance.version,
+      'version': _$JsonConverterToJson<String, Version>(
+          instance.version, const VersionConverter().toJson),
     };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);
 
 _$_JanusInfo _$$_JanusInfoFromJson(Map<String, dynamic> json) => _$_JanusInfo(
       plugins: json['plugins'] == null
@@ -51,14 +61,16 @@ _$_JanusInfo _$$_JanusInfoFromJson(Map<String, dynamic> json) => _$_JanusInfo(
       transports: json['transports'] == null
           ? null
           : Transports.fromJson(json['transports'] as Map<String, dynamic>),
-      version: json['version'] as String?,
+      version: _$JsonConverterFromJson<String, Version>(
+          json['version'], const VersionConverter().fromJson),
     );
 
 Map<String, dynamic> _$$_JanusInfoToJson(_$_JanusInfo instance) =>
     <String, dynamic>{
       'plugins': instance.plugins,
       'transports': instance.transports,
-      'version': instance.version,
+      'version': _$JsonConverterToJson<String, Version>(
+          instance.version, const VersionConverter().toJson),
     };
 
 _$_Transports _$$_TransportsFromJson(Map<String, dynamic> json) =>
@@ -74,12 +86,14 @@ Map<String, dynamic> _$$_TransportsToJson(_$_Transports instance) =>
     };
 
 _$_Websocket _$$_WebsocketFromJson(Map<String, dynamic> json) => _$_Websocket(
-      version: json['version'] as String?,
+      version: _$JsonConverterFromJson<String, Version>(
+          json['version'], const VersionConverter().fromJson),
     );
 
 Map<String, dynamic> _$$_WebsocketToJson(_$_Websocket instance) =>
     <String, dynamic>{
-      'version': instance.version,
+      'version': _$JsonConverterToJson<String, Version>(
+          instance.version, const VersionConverter().toJson),
     };
 
 _$_Plugins _$$_PluginsFromJson(Map<String, dynamic> json) => _$_Plugins(
@@ -95,22 +109,26 @@ Map<String, dynamic> _$$_PluginsToJson(_$_Plugins instance) =>
 
 _$_SipVersion _$$_SipVersionFromJson(Map<String, dynamic> json) =>
     _$_SipVersion(
-      version: json['version'] as String?,
+      version: _$JsonConverterFromJson<String, Version>(
+          json['version'], const VersionConverter().fromJson),
     );
 
 Map<String, dynamic> _$$_SipVersionToJson(_$_SipVersion instance) =>
     <String, dynamic>{
-      'version': instance.version,
+      'version': _$JsonConverterToJson<String, Version>(
+          instance.version, const VersionConverter().toJson),
     };
 
 _$_GorushInfo _$$_GorushInfoFromJson(Map<String, dynamic> json) =>
     _$_GorushInfo(
-      version: json['version'] as String?,
+      version: _$JsonConverterFromJson<String, Version>(
+          json['version'], const VersionConverter().fromJson),
     );
 
 Map<String, dynamic> _$$_GorushInfoToJson(_$_GorushInfo instance) =>
     <String, dynamic>{
-      'version': instance.version,
+      'version': _$JsonConverterToJson<String, Version>(
+          instance.version, const VersionConverter().toJson),
     };
 
 _$_CoreInfo _$$_CoreInfoFromJson(Map<String, dynamic> json) => _$_CoreInfo(
@@ -124,14 +142,13 @@ Map<String, dynamic> _$$_CoreInfoToJson(_$_CoreInfo instance) =>
 
 _$_AdapterInfo _$$_AdapterInfoFromJson(Map<String, dynamic> json) =>
     _$_AdapterInfo(
-      custom: json['custom'] == null
-          ? null
-          : Custom.fromJson(json['custom'] as Map<String, dynamic>),
+      custom: json['custom'] as Map<String, dynamic>?,
       name: json['name'] as String?,
       supported: (json['supported'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
-      version: json['version'] as String?,
+      version: _$JsonConverterFromJson<String, Version>(
+          json['version'], const VersionConverter().fromJson),
     );
 
 Map<String, dynamic> _$$_AdapterInfoToJson(_$_AdapterInfo instance) =>
@@ -139,17 +156,6 @@ Map<String, dynamic> _$$_AdapterInfoToJson(_$_AdapterInfo instance) =>
       'custom': instance.custom,
       'name': instance.name,
       'supported': instance.supported,
-      'version': instance.version,
-    };
-
-_$_Custom _$$_CustomFromJson(Map<String, dynamic> json) => _$_Custom(
-      additionalProp1: json['additional_prop1'] as String?,
-      additionalProp2: json['additional_prop2'] as String?,
-      additionalProp3: json['additional_prop3'] as String?,
-    );
-
-Map<String, dynamic> _$$_CustomToJson(_$_Custom instance) => <String, dynamic>{
-      'additional_prop1': instance.additionalProp1,
-      'additional_prop2': instance.additionalProp2,
-      'additional_prop3': instance.additionalProp3,
+      'version': _$JsonConverterToJson<String, Version>(
+          instance.version, const VersionConverter().toJson),
     };

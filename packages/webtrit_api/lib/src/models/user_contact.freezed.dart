@@ -24,7 +24,7 @@ mixin _$UserContact {
   String? get email => throw _privateConstructorUsedError;
   String? get firstName => throw _privateConstructorUsedError;
   String? get lastName => throw _privateConstructorUsedError;
-  ContactNumbers? get numbers => throw _privateConstructorUsedError;
+  Numbers? get numbers => throw _privateConstructorUsedError;
   Sip? get sip => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -44,10 +44,10 @@ abstract class $UserContactCopyWith<$Res> {
       String? email,
       String? firstName,
       String? lastName,
-      ContactNumbers? numbers,
+      Numbers? numbers,
       Sip? sip});
 
-  $ContactNumbersCopyWith<$Res>? get numbers;
+  $NumbersCopyWith<$Res>? get numbers;
   $SipCopyWith<$Res>? get sip;
 }
 
@@ -91,7 +91,7 @@ class _$UserContactCopyWithImpl<$Res, $Val extends UserContact>
       numbers: freezed == numbers
           ? _value.numbers
           : numbers // ignore: cast_nullable_to_non_nullable
-              as ContactNumbers?,
+              as Numbers?,
       sip: freezed == sip
           ? _value.sip
           : sip // ignore: cast_nullable_to_non_nullable
@@ -101,12 +101,12 @@ class _$UserContactCopyWithImpl<$Res, $Val extends UserContact>
 
   @override
   @pragma('vm:prefer-inline')
-  $ContactNumbersCopyWith<$Res>? get numbers {
+  $NumbersCopyWith<$Res>? get numbers {
     if (_value.numbers == null) {
       return null;
     }
 
-    return $ContactNumbersCopyWith<$Res>(_value.numbers!, (value) {
+    return $NumbersCopyWith<$Res>(_value.numbers!, (value) {
       return _then(_value.copyWith(numbers: value) as $Val);
     });
   }
@@ -137,11 +137,11 @@ abstract class _$$_UserContactCopyWith<$Res>
       String? email,
       String? firstName,
       String? lastName,
-      ContactNumbers? numbers,
+      Numbers? numbers,
       Sip? sip});
 
   @override
-  $ContactNumbersCopyWith<$Res>? get numbers;
+  $NumbersCopyWith<$Res>? get numbers;
   @override
   $SipCopyWith<$Res>? get sip;
 }
@@ -184,7 +184,7 @@ class __$$_UserContactCopyWithImpl<$Res>
       numbers: freezed == numbers
           ? _value.numbers
           : numbers // ignore: cast_nullable_to_non_nullable
-              as ContactNumbers?,
+              as Numbers?,
       sip: freezed == sip
           ? _value.sip
           : sip // ignore: cast_nullable_to_non_nullable
@@ -217,7 +217,7 @@ class _$_UserContact implements _UserContact {
   @override
   final String? lastName;
   @override
-  final ContactNumbers? numbers;
+  final Numbers? numbers;
   @override
   final Sip? sip;
 
@@ -267,7 +267,7 @@ abstract class _UserContact implements UserContact {
       final String? email,
       final String? firstName,
       final String? lastName,
-      final ContactNumbers? numbers,
+      final Numbers? numbers,
       final Sip? sip}) = _$_UserContact;
 
   factory _UserContact.fromJson(Map<String, dynamic> json) =
@@ -282,7 +282,7 @@ abstract class _UserContact implements UserContact {
   @override
   String? get lastName;
   @override
-  ContactNumbers? get numbers;
+  Numbers? get numbers;
   @override
   Sip? get sip;
   @override

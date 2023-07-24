@@ -1,23 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'contact_numbers.dart';
+part of 'numbers.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_ContactNumbers _$$_ContactNumbersFromJson(Map<String, dynamic> json) =>
-    _$_ContactNumbers(
+_$_Numbers _$$_NumbersFromJson(Map<String, dynamic> json) => _$_Numbers(
+      main: json['main'] as String,
       additional: (json['additional'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
       ext: json['ext'] as String?,
-      main: json['main'] as String?,
     );
 
-Map<String, dynamic> _$$_ContactNumbersToJson(_$_ContactNumbers instance) =>
+Map<String, dynamic> _$$_NumbersToJson(_$_Numbers instance) =>
     <String, dynamic>{
+      'main': instance.main,
       'additional': instance.additional,
       'ext': instance.ext,
-      'main': instance.main,
     };

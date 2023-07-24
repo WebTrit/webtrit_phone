@@ -14,7 +14,7 @@ _$_UserContact _$$_UserContactFromJson(Map<String, dynamic> json) =>
       lastName: json['last_name'] as String?,
       numbers: json['numbers'] == null
           ? null
-          : ContactNumbers.fromJson(json['numbers'] as Map<String, dynamic>),
+          : Numbers.fromJson(json['numbers'] as Map<String, dynamic>),
       sip: json['sip'] == null
           ? null
           : Sip.fromJson(json['sip'] as Map<String, dynamic>),

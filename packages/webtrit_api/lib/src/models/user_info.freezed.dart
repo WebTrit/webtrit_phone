@@ -25,8 +25,8 @@ mixin _$UserInfo {
   String? get email => throw _privateConstructorUsedError;
   String? get firstName => throw _privateConstructorUsedError;
   String? get lastName => throw _privateConstructorUsedError;
-  ContactNumbers? get numbers => throw _privateConstructorUsedError;
-  SipData? get sip => throw _privateConstructorUsedError;
+  Numbers? get numbers => throw _privateConstructorUsedError;
+  UserSipInfo? get sip => throw _privateConstructorUsedError;
   String? get status => throw _privateConstructorUsedError;
   String? get timeZone => throw _privateConstructorUsedError;
 
@@ -47,14 +47,14 @@ abstract class $UserInfoCopyWith<$Res> {
       String? email,
       String? firstName,
       String? lastName,
-      ContactNumbers? numbers,
-      SipData? sip,
+      Numbers? numbers,
+      UserSipInfo? sip,
       String? status,
       String? timeZone});
 
   $BalanceCopyWith<$Res>? get balance;
-  $ContactNumbersCopyWith<$Res>? get numbers;
-  $SipDataCopyWith<$Res>? get sip;
+  $NumbersCopyWith<$Res>? get numbers;
+  $UserSipInfoCopyWith<$Res>? get sip;
 }
 
 /// @nodoc
@@ -104,11 +104,11 @@ class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
       numbers: freezed == numbers
           ? _value.numbers
           : numbers // ignore: cast_nullable_to_non_nullable
-              as ContactNumbers?,
+              as Numbers?,
       sip: freezed == sip
           ? _value.sip
           : sip // ignore: cast_nullable_to_non_nullable
-              as SipData?,
+              as UserSipInfo?,
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -134,24 +134,24 @@ class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
 
   @override
   @pragma('vm:prefer-inline')
-  $ContactNumbersCopyWith<$Res>? get numbers {
+  $NumbersCopyWith<$Res>? get numbers {
     if (_value.numbers == null) {
       return null;
     }
 
-    return $ContactNumbersCopyWith<$Res>(_value.numbers!, (value) {
+    return $NumbersCopyWith<$Res>(_value.numbers!, (value) {
       return _then(_value.copyWith(numbers: value) as $Val);
     });
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $SipDataCopyWith<$Res>? get sip {
+  $UserSipInfoCopyWith<$Res>? get sip {
     if (_value.sip == null) {
       return null;
     }
 
-    return $SipDataCopyWith<$Res>(_value.sip!, (value) {
+    return $UserSipInfoCopyWith<$Res>(_value.sip!, (value) {
       return _then(_value.copyWith(sip: value) as $Val);
     });
   }
@@ -170,17 +170,17 @@ abstract class _$$_UserInfoCopyWith<$Res> implements $UserInfoCopyWith<$Res> {
       String? email,
       String? firstName,
       String? lastName,
-      ContactNumbers? numbers,
-      SipData? sip,
+      Numbers? numbers,
+      UserSipInfo? sip,
       String? status,
       String? timeZone});
 
   @override
   $BalanceCopyWith<$Res>? get balance;
   @override
-  $ContactNumbersCopyWith<$Res>? get numbers;
+  $NumbersCopyWith<$Res>? get numbers;
   @override
-  $SipDataCopyWith<$Res>? get sip;
+  $UserSipInfoCopyWith<$Res>? get sip;
 }
 
 /// @nodoc
@@ -228,11 +228,11 @@ class __$$_UserInfoCopyWithImpl<$Res>
       numbers: freezed == numbers
           ? _value.numbers
           : numbers // ignore: cast_nullable_to_non_nullable
-              as ContactNumbers?,
+              as Numbers?,
       sip: freezed == sip
           ? _value.sip
           : sip // ignore: cast_nullable_to_non_nullable
-              as SipData?,
+              as UserSipInfo?,
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -274,9 +274,9 @@ class _$_UserInfo implements _UserInfo {
   @override
   final String? lastName;
   @override
-  final ContactNumbers? numbers;
+  final Numbers? numbers;
   @override
-  final SipData? sip;
+  final UserSipInfo? sip;
   @override
   final String? status;
   @override
@@ -333,8 +333,8 @@ abstract class _UserInfo implements UserInfo {
       final String? email,
       final String? firstName,
       final String? lastName,
-      final ContactNumbers? numbers,
-      final SipData? sip,
+      final Numbers? numbers,
+      final UserSipInfo? sip,
       final String? status,
       final String? timeZone}) = _$_UserInfo;
 
@@ -351,9 +351,9 @@ abstract class _UserInfo implements UserInfo {
   @override
   String? get lastName;
   @override
-  ContactNumbers? get numbers;
+  Numbers? get numbers;
   @override
-  SipData? get sip;
+  UserSipInfo? get sip;
   @override
   String? get status;
   @override
@@ -364,12 +364,12 @@ abstract class _UserInfo implements UserInfo {
       throw _privateConstructorUsedError;
 }
 
-SipData _$SipDataFromJson(Map<String, dynamic> json) {
-  return _SipData.fromJson(json);
+UserSipInfo _$UserSipInfoFromJson(Map<String, dynamic> json) {
+  return _UserSipInfo.fromJson(json);
 }
 
 /// @nodoc
-mixin _$SipData {
+mixin _$UserSipInfo {
   String? get displayName => throw _privateConstructorUsedError;
   String? get login => throw _privateConstructorUsedError;
   String? get password => throw _privateConstructorUsedError;
@@ -379,13 +379,15 @@ mixin _$SipData {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $SipDataCopyWith<SipData> get copyWith => throw _privateConstructorUsedError;
+  $UserSipInfoCopyWith<UserSipInfo> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $SipDataCopyWith<$Res> {
-  factory $SipDataCopyWith(SipData value, $Res Function(SipData) then) =
-      _$SipDataCopyWithImpl<$Res, SipData>;
+abstract class $UserSipInfoCopyWith<$Res> {
+  factory $UserSipInfoCopyWith(
+          UserSipInfo value, $Res Function(UserSipInfo) then) =
+      _$UserSipInfoCopyWithImpl<$Res, UserSipInfo>;
   @useResult
   $Res call(
       {String? displayName,
@@ -399,9 +401,9 @@ abstract class $SipDataCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$SipDataCopyWithImpl<$Res, $Val extends SipData>
-    implements $SipDataCopyWith<$Res> {
-  _$SipDataCopyWithImpl(this._value, this._then);
+class _$UserSipInfoCopyWithImpl<$Res, $Val extends UserSipInfo>
+    implements $UserSipInfoCopyWith<$Res> {
+  _$UserSipInfoCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -468,10 +470,11 @@ class _$SipDataCopyWithImpl<$Res, $Val extends SipData>
 }
 
 /// @nodoc
-abstract class _$$_SipDataCopyWith<$Res> implements $SipDataCopyWith<$Res> {
-  factory _$$_SipDataCopyWith(
-          _$_SipData value, $Res Function(_$_SipData) then) =
-      __$$_SipDataCopyWithImpl<$Res>;
+abstract class _$$_UserSipInfoCopyWith<$Res>
+    implements $UserSipInfoCopyWith<$Res> {
+  factory _$$_UserSipInfoCopyWith(
+          _$_UserSipInfo value, $Res Function(_$_UserSipInfo) then) =
+      __$$_UserSipInfoCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -488,10 +491,11 @@ abstract class _$$_SipDataCopyWith<$Res> implements $SipDataCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_SipDataCopyWithImpl<$Res>
-    extends _$SipDataCopyWithImpl<$Res, _$_SipData>
-    implements _$$_SipDataCopyWith<$Res> {
-  __$$_SipDataCopyWithImpl(_$_SipData _value, $Res Function(_$_SipData) _then)
+class __$$_UserSipInfoCopyWithImpl<$Res>
+    extends _$UserSipInfoCopyWithImpl<$Res, _$_UserSipInfo>
+    implements _$$_UserSipInfoCopyWith<$Res> {
+  __$$_UserSipInfoCopyWithImpl(
+      _$_UserSipInfo _value, $Res Function(_$_UserSipInfo) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -503,7 +507,7 @@ class __$$_SipDataCopyWithImpl<$Res>
     Object? registrationServer = freezed,
     Object? sipServer = freezed,
   }) {
-    return _then(_$_SipData(
+    return _then(_$_UserSipInfo(
       displayName: freezed == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
@@ -531,16 +535,16 @@ class __$$_SipDataCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class _$_SipData implements _SipData {
-  const _$_SipData(
+class _$_UserSipInfo implements _UserSipInfo {
+  const _$_UserSipInfo(
       {this.displayName,
       this.login,
       this.password,
       this.registrationServer,
       this.sipServer});
 
-  factory _$_SipData.fromJson(Map<String, dynamic> json) =>
-      _$$_SipDataFromJson(json);
+  factory _$_UserSipInfo.fromJson(Map<String, dynamic> json) =>
+      _$$_UserSipInfoFromJson(json);
 
   @override
   final String? displayName;
@@ -555,14 +559,14 @@ class _$_SipData implements _SipData {
 
   @override
   String toString() {
-    return 'SipData(displayName: $displayName, login: $login, password: $password, registrationServer: $registrationServer, sipServer: $sipServer)';
+    return 'UserSipInfo(displayName: $displayName, login: $login, password: $password, registrationServer: $registrationServer, sipServer: $sipServer)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SipData &&
+            other is _$_UserSipInfo &&
             (identical(other.displayName, displayName) ||
                 other.displayName == displayName) &&
             (identical(other.login, login) || other.login == login) &&
@@ -582,26 +586,27 @@ class _$_SipData implements _SipData {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SipDataCopyWith<_$_SipData> get copyWith =>
-      __$$_SipDataCopyWithImpl<_$_SipData>(this, _$identity);
+  _$$_UserSipInfoCopyWith<_$_UserSipInfo> get copyWith =>
+      __$$_UserSipInfoCopyWithImpl<_$_UserSipInfo>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_SipDataToJson(
+    return _$$_UserSipInfoToJson(
       this,
     );
   }
 }
 
-abstract class _SipData implements SipData {
-  const factory _SipData(
+abstract class _UserSipInfo implements UserSipInfo {
+  const factory _UserSipInfo(
       {final String? displayName,
       final String? login,
       final String? password,
       final RegistrationServer? registrationServer,
-      final SipServer? sipServer}) = _$_SipData;
+      final SipServer? sipServer}) = _$_UserSipInfo;
 
-  factory _SipData.fromJson(Map<String, dynamic> json) = _$_SipData.fromJson;
+  factory _UserSipInfo.fromJson(Map<String, dynamic> json) =
+      _$_UserSipInfo.fromJson;
 
   @override
   String? get displayName;
@@ -615,7 +620,7 @@ abstract class _SipData implements SipData {
   SipServer? get sipServer;
   @override
   @JsonKey(ignore: true)
-  _$$_SipDataCopyWith<_$_SipData> get copyWith =>
+  _$$_UserSipInfoCopyWith<_$_UserSipInfo> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

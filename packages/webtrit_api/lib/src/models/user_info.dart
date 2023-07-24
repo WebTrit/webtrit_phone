@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'balance_type.dart';
-import 'contact_numbers.dart';
+import 'numbers.dart';
 
 part 'user_info.freezed.dart';
 
@@ -16,8 +16,8 @@ class UserInfo with _$UserInfo {
     String? email,
     String? firstName,
     String? lastName,
-    ContactNumbers? numbers,
-    SipData? sip,
+    Numbers? numbers,
+    UserSipInfo? sip,
     String? status,
     String? timeZone,
   }) = _UserInfo;
@@ -26,17 +26,17 @@ class UserInfo with _$UserInfo {
 }
 
 @freezed
-class SipData with _$SipData {
+class UserSipInfo with _$UserSipInfo {
   @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory SipData({
+  const factory UserSipInfo({
     String? displayName,
     String? login,
     String? password,
     RegistrationServer? registrationServer,
     SipServer? sipServer,
-  }) = _SipData;
+  }) = _UserSipInfo;
 
-  factory SipData.fromJson(Map<String, Object?> json) => _$SipDataFromJson(json);
+  factory UserSipInfo.fromJson(Map<String, Object?> json) => _$UserSipInfoFromJson(json);
 }
 
 @freezed

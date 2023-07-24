@@ -11,11 +11,11 @@ part 'system_info.g.dart';
 class SystemInfo with _$SystemInfo {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory SystemInfo({
-    AdapterInfo? adapter,
-    CoreInfo? core,
-    GorushInfo? gorush,
+    required CoreInfo core,
+    required PostgresInfo postgres,
     JanusInfo? janus,
-    PostgresInfo? postgres,
+    GorushInfo? gorush,
+    AdapterInfo? adapter,
   }) = _SystemInfo;
 
   factory SystemInfo.fromJson(Map<String, Object?> json) => _$SystemInfoFromJson(json);
@@ -25,7 +25,7 @@ class SystemInfo with _$SystemInfo {
 class PostgresInfo with _$PostgresInfo {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory PostgresInfo({
-    String? version,
+    @VersionConverter() Version? version,
   }) = _PostgresInfo;
 
   factory PostgresInfo.fromJson(Map<String, Object?> json) => _$PostgresInfoFromJson(json);
@@ -37,7 +37,7 @@ class JanusInfo with _$JanusInfo {
   const factory JanusInfo({
     Plugins? plugins,
     Transports? transports,
-    String? version,
+    @VersionConverter() Version? version,
   }) = _JanusInfo;
 
   factory JanusInfo.fromJson(Map<String, Object?> json) => _$JanusInfoFromJson(json);
@@ -57,7 +57,7 @@ class Transports with _$Transports {
 class Websocket with _$Websocket {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory Websocket({
-    String? version,
+    @VersionConverter() Version? version,
   }) = _Websocket;
 
   factory Websocket.fromJson(Map<String, Object?> json) => _$WebsocketFromJson(json);
@@ -77,17 +77,17 @@ class Plugins with _$Plugins {
 class SipVersion with _$SipVersion {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory SipVersion({
-    String? version,
+    @VersionConverter() Version? version,
   }) = _SipVersion;
 
   factory SipVersion.fromJson(Map<String, Object?> json) => _$SipVersionFromJson(json);
 }
 
 @freezed
-class GorushInfo with _$GorushInfo{
+class GorushInfo with _$GorushInfo {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory GorushInfo({
-    String? version,
+    @VersionConverter() Version? version,
   }) = _GorushInfo;
 
   factory GorushInfo.fromJson(Map<String, Object?> json) => _$GorushInfoFromJson(json);
@@ -107,23 +107,11 @@ class CoreInfo with _$CoreInfo {
 class AdapterInfo with _$AdapterInfo {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory AdapterInfo({
-    Custom? custom,
+    Map<String, dynamic>? custom,
     String? name,
     List<String>? supported,
-    String? version,
+    @VersionConverter() Version? version,
   }) = _AdapterInfo;
 
   factory AdapterInfo.fromJson(Map<String, Object?> json) => _$AdapterInfoFromJson(json);
-}
-
-@freezed
-class Custom with _$Custom {
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory Custom({
-    String? additionalProp1,
-    String? additionalProp2,
-    String? additionalProp3,
-  }) = _Custom;
-
-  factory Custom.fromJson(Map<String, Object?> json) => _$CustomFromJson(json);
 }

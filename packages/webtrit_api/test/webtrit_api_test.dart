@@ -38,6 +38,9 @@ void main() {
             core: CoreInfo(
               version: Version(1, 0, 0),
             ),
+            postgres: PostgresInfo(
+              version: Version(1, 0, 0),
+            ),
           ),
         )),
       );
@@ -353,7 +356,7 @@ void main() {
         completion(equals(
           UserInfo(
             balance: Balance(amount: 111.1, currency: 'UAH', balanceType: BalanceType.prepaid),
-            sip: SipData(login: 'login_1'),
+            sip: UserSipInfo(login: 'login_1'),
             firstName: 'first_name_1',
             lastName: 'last_name_1',
             companyName: 'company_name_1',
@@ -401,7 +404,7 @@ void main() {
         completion(equals(
           [
             UserContact(
-              numbers: ContactNumbers(main: 'number_1'),
+              numbers: Numbers(main: 'number_1'),
               firstName: 'first_name_1',
               lastName: 'last_name_1',
               email: 'email_1',
@@ -409,7 +412,7 @@ void main() {
               sip: Sip(displayName: 'number_1', status: '0'),
             ),
             UserContact(
-              numbers: ContactNumbers(main: 'number_2'),
+              numbers: Numbers(main: 'number_2'),
               firstName: 'first_name_2',
               lastName: 'last_name_2',
               email: 'email_2',
