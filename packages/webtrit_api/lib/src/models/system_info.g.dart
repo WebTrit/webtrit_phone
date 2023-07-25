@@ -32,27 +32,13 @@ Map<String, dynamic> _$$_SystemInfoToJson(_$_SystemInfo instance) =>
 
 _$_PostgresInfo _$$_PostgresInfoFromJson(Map<String, dynamic> json) =>
     _$_PostgresInfo(
-      version: _$JsonConverterFromJson<String, Version>(
-          json['version'], const VersionConverter().fromJson),
+      version: json['version'] as String?,
     );
 
 Map<String, dynamic> _$$_PostgresInfoToJson(_$_PostgresInfo instance) =>
     <String, dynamic>{
-      'version': _$JsonConverterToJson<String, Version>(
-          instance.version, const VersionConverter().toJson),
+      'version': instance.version,
     };
-
-Value? _$JsonConverterFromJson<Json, Value>(
-  Object? json,
-  Value? Function(Json json) fromJson,
-) =>
-    json == null ? null : fromJson(json as Json);
-
-Json? _$JsonConverterToJson<Json, Value>(
-  Value? value,
-  Json? Function(Value value) toJson,
-) =>
-    value == null ? null : toJson(value);
 
 _$_JanusInfo _$$_JanusInfoFromJson(Map<String, dynamic> json) => _$_JanusInfo(
       plugins: json['plugins'] == null
@@ -61,16 +47,14 @@ _$_JanusInfo _$$_JanusInfoFromJson(Map<String, dynamic> json) => _$_JanusInfo(
       transports: json['transports'] == null
           ? null
           : Transports.fromJson(json['transports'] as Map<String, dynamic>),
-      version: _$JsonConverterFromJson<String, Version>(
-          json['version'], const VersionConverter().fromJson),
+      version: json['version'] as String?,
     );
 
 Map<String, dynamic> _$$_JanusInfoToJson(_$_JanusInfo instance) =>
     <String, dynamic>{
       'plugins': instance.plugins,
       'transports': instance.transports,
-      'version': _$JsonConverterToJson<String, Version>(
-          instance.version, const VersionConverter().toJson),
+      'version': instance.version,
     };
 
 _$_Transports _$$_TransportsFromJson(Map<String, dynamic> json) =>
@@ -86,14 +70,12 @@ Map<String, dynamic> _$$_TransportsToJson(_$_Transports instance) =>
     };
 
 _$_Websocket _$$_WebsocketFromJson(Map<String, dynamic> json) => _$_Websocket(
-      version: _$JsonConverterFromJson<String, Version>(
-          json['version'], const VersionConverter().fromJson),
+      version: json['version'] as String?,
     );
 
 Map<String, dynamic> _$$_WebsocketToJson(_$_Websocket instance) =>
     <String, dynamic>{
-      'version': _$JsonConverterToJson<String, Version>(
-          instance.version, const VersionConverter().toJson),
+      'version': instance.version,
     };
 
 _$_Plugins _$$_PluginsFromJson(Map<String, dynamic> json) => _$_Plugins(
@@ -109,26 +91,22 @@ Map<String, dynamic> _$$_PluginsToJson(_$_Plugins instance) =>
 
 _$_SipVersion _$$_SipVersionFromJson(Map<String, dynamic> json) =>
     _$_SipVersion(
-      version: _$JsonConverterFromJson<String, Version>(
-          json['version'], const VersionConverter().fromJson),
+      version: json['version'] as String?,
     );
 
 Map<String, dynamic> _$$_SipVersionToJson(_$_SipVersion instance) =>
     <String, dynamic>{
-      'version': _$JsonConverterToJson<String, Version>(
-          instance.version, const VersionConverter().toJson),
+      'version': instance.version,
     };
 
 _$_GorushInfo _$$_GorushInfoFromJson(Map<String, dynamic> json) =>
     _$_GorushInfo(
-      version: _$JsonConverterFromJson<String, Version>(
-          json['version'], const VersionConverter().fromJson),
+      version: json['version'] as String?,
     );
 
 Map<String, dynamic> _$$_GorushInfoToJson(_$_GorushInfo instance) =>
     <String, dynamic>{
-      'version': _$JsonConverterToJson<String, Version>(
-          instance.version, const VersionConverter().toJson),
+      'version': instance.version,
     };
 
 _$_CoreInfo _$$_CoreInfoFromJson(Map<String, dynamic> json) => _$_CoreInfo(
@@ -147,8 +125,7 @@ _$_AdapterInfo _$$_AdapterInfoFromJson(Map<String, dynamic> json) =>
       supported: (json['supported'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
-      version: _$JsonConverterFromJson<String, Version>(
-          json['version'], const VersionConverter().fromJson),
+      version: json['version'] as String?,
     );
 
 Map<String, dynamic> _$$_AdapterInfoToJson(_$_AdapterInfo instance) =>
@@ -156,6 +133,5 @@ Map<String, dynamic> _$$_AdapterInfoToJson(_$_AdapterInfo instance) =>
       'custom': instance.custom,
       'name': instance.name,
       'supported': instance.supported,
-      'version': _$JsonConverterToJson<String, Version>(
-          instance.version, const VersionConverter().toJson),
+      'version': instance.version,
     };

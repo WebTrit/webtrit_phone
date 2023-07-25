@@ -27,7 +27,7 @@ class PostgresInfo with _$PostgresInfo {
   // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory PostgresInfo({
-    @VersionConverter() Version? version,
+    String? version,
   }) = _PostgresInfo;
 
   factory PostgresInfo.fromJson(Map<String, Object?> json) => _$PostgresInfoFromJson(json);
@@ -40,7 +40,7 @@ class JanusInfo with _$JanusInfo {
   const factory JanusInfo({
     Plugins? plugins,
     Transports? transports,
-    @VersionConverter() Version? version,
+    String? version,
   }) = _JanusInfo;
 
   factory JanusInfo.fromJson(Map<String, Object?> json) => _$JanusInfoFromJson(json);
@@ -62,7 +62,7 @@ class Websocket with _$Websocket {
   // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory Websocket({
-    @VersionConverter() Version? version,
+    String? version,
   }) = _Websocket;
 
   factory Websocket.fromJson(Map<String, Object?> json) => _$WebsocketFromJson(json);
@@ -84,7 +84,7 @@ class SipVersion with _$SipVersion {
   // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory SipVersion({
-    @VersionConverter() Version? version,
+    String? version,
   }) = _SipVersion;
 
   factory SipVersion.fromJson(Map<String, Object?> json) => _$SipVersionFromJson(json);
@@ -95,7 +95,7 @@ class GorushInfo with _$GorushInfo {
   // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory GorushInfo({
-    @VersionConverter() Version? version,
+    String? version,
   }) = _GorushInfo;
 
   factory GorushInfo.fromJson(Map<String, Object?> json) => _$GorushInfoFromJson(json);
@@ -120,7 +120,7 @@ class AdapterInfo with _$AdapterInfo {
     Map<String, dynamic>? custom,
     String? name,
     List<String>? supported,
-    @VersionConverter() Version? version,
+    String? version,
   }) = _AdapterInfo;
 
   factory AdapterInfo.fromJson(Map<String, Object?> json) => _$AdapterInfoFromJson(json);

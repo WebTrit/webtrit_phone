@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:webtrit_api/src/models/numbers.dart';
+
+import 'common.dart';
 
 part 'user_contact.freezed.dart';
 
@@ -10,25 +11,13 @@ class UserContact with _$UserContact {
   // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory UserContact({
-    String? companyName,
-    String? email,
+    SipStatus? sip,
+    required Numbers numbers,
     String? firstName,
     String? lastName,
-    Numbers? numbers,
-    UserContactSip? sip,
+    String? email,
+    String? companyName,
   }) = _UserContact;
 
   factory UserContact.fromJson(Map<String, Object?> json) => _$UserContactFromJson(json);
-}
-
-@freezed
-class UserContactSip with _$UserContactSip {
-  // ignore: invalid_annotation_target
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory UserContactSip({
-    String? displayName,
-    String? status,
-  }) = _UserContactSip;
-
-  factory UserContactSip.fromJson(Map<String, Object?> json) => _$UserContactSipFromJson(json);
 }

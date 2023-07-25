@@ -39,7 +39,7 @@ void main() {
               version: Version(1, 0, 0),
             ),
             postgres: PostgresInfo(
-              version: Version(1, 0, 0),
+              version: '0.0',
             ),
           ),
         )),
@@ -356,10 +356,11 @@ void main() {
         completion(equals(
           UserInfo(
             balance: Balance(amount: 111.1, currency: 'UAH', balanceType: BalanceType.prepaid),
-            sip: UserSipInfo(login: 'login_1'),
+            sip: SipInfo(login: 'login_1'),
             firstName: 'first_name_1',
             lastName: 'last_name_1',
             companyName: 'company_name_1',
+            numbers: Numbers(main: '999'),
           ),
         )),
       );
@@ -409,7 +410,7 @@ void main() {
               lastName: 'last_name_1',
               email: 'email_1',
               companyName: 'company_name_1',
-              sip: UserContactSip(displayName: 'number_1', status: '0'),
+              sip: SipStatus(displayName: 'number_1', status: '0'),
             ),
             UserContact(
               numbers: Numbers(main: 'number_2'),

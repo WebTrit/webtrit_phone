@@ -20,12 +20,12 @@ UserContact _$UserContactFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$UserContact {
-  String? get companyName => throw _privateConstructorUsedError;
-  String? get email => throw _privateConstructorUsedError;
+  SipStatus? get sip => throw _privateConstructorUsedError;
+  Numbers get numbers => throw _privateConstructorUsedError;
   String? get firstName => throw _privateConstructorUsedError;
   String? get lastName => throw _privateConstructorUsedError;
-  Numbers? get numbers => throw _privateConstructorUsedError;
-  UserContactSip? get sip => throw _privateConstructorUsedError;
+  String? get email => throw _privateConstructorUsedError;
+  String? get companyName => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -40,15 +40,15 @@ abstract class $UserContactCopyWith<$Res> {
       _$UserContactCopyWithImpl<$Res, UserContact>;
   @useResult
   $Res call(
-      {String? companyName,
-      String? email,
+      {SipStatus? sip,
+      Numbers numbers,
       String? firstName,
       String? lastName,
-      Numbers? numbers,
-      UserContactSip? sip});
+      String? email,
+      String? companyName});
 
-  $NumbersCopyWith<$Res>? get numbers;
-  $UserContactSipCopyWith<$Res>? get sip;
+  $SipStatusCopyWith<$Res>? get sip;
+  $NumbersCopyWith<$Res> get numbers;
 }
 
 /// @nodoc
@@ -64,22 +64,22 @@ class _$UserContactCopyWithImpl<$Res, $Val extends UserContact>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? companyName = freezed,
-    Object? email = freezed,
+    Object? sip = freezed,
+    Object? numbers = null,
     Object? firstName = freezed,
     Object? lastName = freezed,
-    Object? numbers = freezed,
-    Object? sip = freezed,
+    Object? email = freezed,
+    Object? companyName = freezed,
   }) {
     return _then(_value.copyWith(
-      companyName: freezed == companyName
-          ? _value.companyName
-          : companyName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      email: freezed == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String?,
+      sip: freezed == sip
+          ? _value.sip
+          : sip // ignore: cast_nullable_to_non_nullable
+              as SipStatus?,
+      numbers: null == numbers
+          ? _value.numbers
+          : numbers // ignore: cast_nullable_to_non_nullable
+              as Numbers,
       firstName: freezed == firstName
           ? _value.firstName
           : firstName // ignore: cast_nullable_to_non_nullable
@@ -88,38 +88,34 @@ class _$UserContactCopyWithImpl<$Res, $Val extends UserContact>
           ? _value.lastName
           : lastName // ignore: cast_nullable_to_non_nullable
               as String?,
-      numbers: freezed == numbers
-          ? _value.numbers
-          : numbers // ignore: cast_nullable_to_non_nullable
-              as Numbers?,
-      sip: freezed == sip
-          ? _value.sip
-          : sip // ignore: cast_nullable_to_non_nullable
-              as UserContactSip?,
+      email: freezed == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String?,
+      companyName: freezed == companyName
+          ? _value.companyName
+          : companyName // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $NumbersCopyWith<$Res>? get numbers {
-    if (_value.numbers == null) {
+  $SipStatusCopyWith<$Res>? get sip {
+    if (_value.sip == null) {
       return null;
     }
 
-    return $NumbersCopyWith<$Res>(_value.numbers!, (value) {
-      return _then(_value.copyWith(numbers: value) as $Val);
+    return $SipStatusCopyWith<$Res>(_value.sip!, (value) {
+      return _then(_value.copyWith(sip: value) as $Val);
     });
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $UserContactSipCopyWith<$Res>? get sip {
-    if (_value.sip == null) {
-      return null;
-    }
-
-    return $UserContactSipCopyWith<$Res>(_value.sip!, (value) {
-      return _then(_value.copyWith(sip: value) as $Val);
+  $NumbersCopyWith<$Res> get numbers {
+    return $NumbersCopyWith<$Res>(_value.numbers, (value) {
+      return _then(_value.copyWith(numbers: value) as $Val);
     });
   }
 }
@@ -133,17 +129,17 @@ abstract class _$$_UserContactCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? companyName,
-      String? email,
+      {SipStatus? sip,
+      Numbers numbers,
       String? firstName,
       String? lastName,
-      Numbers? numbers,
-      UserContactSip? sip});
+      String? email,
+      String? companyName});
 
   @override
-  $NumbersCopyWith<$Res>? get numbers;
+  $SipStatusCopyWith<$Res>? get sip;
   @override
-  $UserContactSipCopyWith<$Res>? get sip;
+  $NumbersCopyWith<$Res> get numbers;
 }
 
 /// @nodoc
@@ -157,22 +153,22 @@ class __$$_UserContactCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? companyName = freezed,
-    Object? email = freezed,
+    Object? sip = freezed,
+    Object? numbers = null,
     Object? firstName = freezed,
     Object? lastName = freezed,
-    Object? numbers = freezed,
-    Object? sip = freezed,
+    Object? email = freezed,
+    Object? companyName = freezed,
   }) {
     return _then(_$_UserContact(
-      companyName: freezed == companyName
-          ? _value.companyName
-          : companyName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      email: freezed == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String?,
+      sip: freezed == sip
+          ? _value.sip
+          : sip // ignore: cast_nullable_to_non_nullable
+              as SipStatus?,
+      numbers: null == numbers
+          ? _value.numbers
+          : numbers // ignore: cast_nullable_to_non_nullable
+              as Numbers,
       firstName: freezed == firstName
           ? _value.firstName
           : firstName // ignore: cast_nullable_to_non_nullable
@@ -181,14 +177,14 @@ class __$$_UserContactCopyWithImpl<$Res>
           ? _value.lastName
           : lastName // ignore: cast_nullable_to_non_nullable
               as String?,
-      numbers: freezed == numbers
-          ? _value.numbers
-          : numbers // ignore: cast_nullable_to_non_nullable
-              as Numbers?,
-      sip: freezed == sip
-          ? _value.sip
-          : sip // ignore: cast_nullable_to_non_nullable
-              as UserContactSip?,
+      email: freezed == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String?,
+      companyName: freezed == companyName
+          ? _value.companyName
+          : companyName // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -198,32 +194,32 @@ class __$$_UserContactCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$_UserContact implements _UserContact {
   const _$_UserContact(
-      {this.companyName,
-      this.email,
+      {this.sip,
+      required this.numbers,
       this.firstName,
       this.lastName,
-      this.numbers,
-      this.sip});
+      this.email,
+      this.companyName});
 
   factory _$_UserContact.fromJson(Map<String, dynamic> json) =>
       _$$_UserContactFromJson(json);
 
   @override
-  final String? companyName;
+  final SipStatus? sip;
   @override
-  final String? email;
+  final Numbers numbers;
   @override
   final String? firstName;
   @override
   final String? lastName;
   @override
-  final Numbers? numbers;
+  final String? email;
   @override
-  final UserContactSip? sip;
+  final String? companyName;
 
   @override
   String toString() {
-    return 'UserContact(companyName: $companyName, email: $email, firstName: $firstName, lastName: $lastName, numbers: $numbers, sip: $sip)';
+    return 'UserContact(sip: $sip, numbers: $numbers, firstName: $firstName, lastName: $lastName, email: $email, companyName: $companyName)';
   }
 
   @override
@@ -231,21 +227,21 @@ class _$_UserContact implements _UserContact {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_UserContact &&
-            (identical(other.companyName, companyName) ||
-                other.companyName == companyName) &&
-            (identical(other.email, email) || other.email == email) &&
+            (identical(other.sip, sip) || other.sip == sip) &&
+            (identical(other.numbers, numbers) || other.numbers == numbers) &&
             (identical(other.firstName, firstName) ||
                 other.firstName == firstName) &&
             (identical(other.lastName, lastName) ||
                 other.lastName == lastName) &&
-            (identical(other.numbers, numbers) || other.numbers == numbers) &&
-            (identical(other.sip, sip) || other.sip == sip));
+            (identical(other.email, email) || other.email == email) &&
+            (identical(other.companyName, companyName) ||
+                other.companyName == companyName));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, companyName, email, firstName, lastName, numbers, sip);
+      runtimeType, sip, numbers, firstName, lastName, email, companyName);
 
   @JsonKey(ignore: true)
   @override
@@ -263,185 +259,30 @@ class _$_UserContact implements _UserContact {
 
 abstract class _UserContact implements UserContact {
   const factory _UserContact(
-      {final String? companyName,
-      final String? email,
+      {final SipStatus? sip,
+      required final Numbers numbers,
       final String? firstName,
       final String? lastName,
-      final Numbers? numbers,
-      final UserContactSip? sip}) = _$_UserContact;
+      final String? email,
+      final String? companyName}) = _$_UserContact;
 
   factory _UserContact.fromJson(Map<String, dynamic> json) =
       _$_UserContact.fromJson;
 
   @override
-  String? get companyName;
+  SipStatus? get sip;
   @override
-  String? get email;
+  Numbers get numbers;
   @override
   String? get firstName;
   @override
   String? get lastName;
   @override
-  Numbers? get numbers;
+  String? get email;
   @override
-  UserContactSip? get sip;
+  String? get companyName;
   @override
   @JsonKey(ignore: true)
   _$$_UserContactCopyWith<_$_UserContact> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-UserContactSip _$UserContactSipFromJson(Map<String, dynamic> json) {
-  return _UserContactSip.fromJson(json);
-}
-
-/// @nodoc
-mixin _$UserContactSip {
-  String? get displayName => throw _privateConstructorUsedError;
-  String? get status => throw _privateConstructorUsedError;
-
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $UserContactSipCopyWith<UserContactSip> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $UserContactSipCopyWith<$Res> {
-  factory $UserContactSipCopyWith(
-          UserContactSip value, $Res Function(UserContactSip) then) =
-      _$UserContactSipCopyWithImpl<$Res, UserContactSip>;
-  @useResult
-  $Res call({String? displayName, String? status});
-}
-
-/// @nodoc
-class _$UserContactSipCopyWithImpl<$Res, $Val extends UserContactSip>
-    implements $UserContactSipCopyWith<$Res> {
-  _$UserContactSipCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? displayName = freezed,
-    Object? status = freezed,
-  }) {
-    return _then(_value.copyWith(
-      displayName: freezed == displayName
-          ? _value.displayName
-          : displayName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      status: freezed == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
-  }
-}
-
-/// @nodoc
-abstract class _$$_UserContactSipCopyWith<$Res>
-    implements $UserContactSipCopyWith<$Res> {
-  factory _$$_UserContactSipCopyWith(
-          _$_UserContactSip value, $Res Function(_$_UserContactSip) then) =
-      __$$_UserContactSipCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String? displayName, String? status});
-}
-
-/// @nodoc
-class __$$_UserContactSipCopyWithImpl<$Res>
-    extends _$UserContactSipCopyWithImpl<$Res, _$_UserContactSip>
-    implements _$$_UserContactSipCopyWith<$Res> {
-  __$$_UserContactSipCopyWithImpl(
-      _$_UserContactSip _value, $Res Function(_$_UserContactSip) _then)
-      : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? displayName = freezed,
-    Object? status = freezed,
-  }) {
-    return _then(_$_UserContactSip(
-      displayName: freezed == displayName
-          ? _value.displayName
-          : displayName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      status: freezed == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
-}
-
-/// @nodoc
-
-@JsonSerializable(fieldRename: FieldRename.snake)
-class _$_UserContactSip implements _UserContactSip {
-  const _$_UserContactSip({this.displayName, this.status});
-
-  factory _$_UserContactSip.fromJson(Map<String, dynamic> json) =>
-      _$$_UserContactSipFromJson(json);
-
-  @override
-  final String? displayName;
-  @override
-  final String? status;
-
-  @override
-  String toString() {
-    return 'UserContactSip(displayName: $displayName, status: $status)';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_UserContactSip &&
-            (identical(other.displayName, displayName) ||
-                other.displayName == displayName) &&
-            (identical(other.status, status) || other.status == status));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(runtimeType, displayName, status);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$_UserContactSipCopyWith<_$_UserContactSip> get copyWith =>
-      __$$_UserContactSipCopyWithImpl<_$_UserContactSip>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$_UserContactSipToJson(
-      this,
-    );
-  }
-}
-
-abstract class _UserContactSip implements UserContactSip {
-  const factory _UserContactSip(
-      {final String? displayName, final String? status}) = _$_UserContactSip;
-
-  factory _UserContactSip.fromJson(Map<String, dynamic> json) =
-      _$_UserContactSip.fromJson;
-
-  @override
-  String? get displayName;
-  @override
-  String? get status;
-  @override
-  @JsonKey(ignore: true)
-  _$$_UserContactSipCopyWith<_$_UserContactSip> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -73,7 +73,7 @@ class ExternalContactsRepository {
     final contacts = await _webtritApiClient.getUserContactList(_token);
 
     return contacts.map((contact) {
-      final numbers = contact.numbers!;
+      final numbers = contact.numbers;
       return ExternalContact(
         id: numbers.main,
         displayName: contact.sip?.displayName,
