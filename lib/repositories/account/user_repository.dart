@@ -4,19 +4,19 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
-export 'package:webtrit_api/webtrit_api.dart' show AccountInfo, BillingModel, BalanceControlType;
+export 'package:webtrit_api/webtrit_api.dart' show Balance, BalanceType, BillingModel, Numbers, SipInfo, UserInfo;
 
-final _logger = Logger('$AccountRepository');
+final _logger = Logger('$UserRepository');
 
-class AccountRepository {
-  AccountRepository({
+class UserRepository {
+  UserRepository({
     required WebtritApiClient webtritApiClient,
     required String token,
     bool periodicPolling = true,
   })  : _webtritApiClient = webtritApiClient,
         _token = token,
         _periodicPolling = periodicPolling {
-    _controller = StreamController<AccountInfo>.broadcast(
+    _controller = StreamController<UserInfo>.broadcast(
       onListen: _onListenCallback,
       onCancel: _onCancelCallback,
     );
@@ -27,24 +27,24 @@ class AccountRepository {
   final String _token;
   final bool _periodicPolling;
 
-  late StreamController<AccountInfo> _controller;
+  late StreamController<UserInfo> _controller;
   late int _listenedCounter;
   Timer? _periodicTimer;
 
-  AccountInfo? _info;
+  UserInfo? _info;
 
-  Future<AccountInfo> getInfo() {
-    return _webtritApiClient.accountInfo(_token);
+  Future<UserInfo> getInfo() {
+    return _webtritApiClient.getUserInfo(_token);
   }
 
-  Stream<AccountInfo> info() {
+  Stream<UserInfo> info() {
     return _controller.stream;
   }
 
   void _onListenCallback() async {
     if (_periodicPolling && _listenedCounter++ == 0) {
-      _periodicTimer = Timer.periodic(const Duration(seconds: 10), (timer) => _gatherAccountInfo());
-      _gatherAccountInfo();
+      _periodicTimer = Timer.periodic(const Duration(seconds: 10), (timer) => _gatherUserInfo());
+      _gatherUserInfo();
     }
   }
 
@@ -55,7 +55,7 @@ class AccountRepository {
     }
   }
 
-  void _gatherAccountInfo() async {
+  void _gatherUserInfo() async {
     try {
       final newInfo = await getInfo();
       if (newInfo != _info) {
@@ -63,11 +63,11 @@ class AccountRepository {
         _controller.add(_info!);
       }
     } catch (e, stackTrace) {
-      _logger.warning('_gatherAccountInfo', e, stackTrace);
+      _logger.warning('_gatherUserInfo', e, stackTrace);
     }
   }
 
   Future<void> logout() async {
-    await _webtritApiClient.sessionLogout(_token);
+    await _webtritApiClient.deleteSession(_token);
   }
 }

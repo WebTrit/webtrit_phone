@@ -1,4 +1,4 @@
-export 'account/account_repository.dart';
+export 'account/user_repository.dart';
 export 'app/app_repository.dart';
 export 'app_analytics/app_analytics_repository.dart';
 export 'contacts/contacts_repository.dart';

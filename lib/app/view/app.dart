@@ -386,7 +386,7 @@ class _AppState extends State<App> {
                     create: (context) {
                       return SettingsBloc(
                         appBloc: context.read<AppBloc>(),
-                        accountRepository: context.read<AccountRepository>(),
+                        userRepository: context.read<UserRepository>(),
                         appRepository: context.read<AppRepository>(),
                         appPreferences: AppPreferences(),
                       )..add(const SettingsRefreshed());

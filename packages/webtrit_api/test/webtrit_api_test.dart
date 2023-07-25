@@ -15,13 +15,12 @@ void main() {
     test('get info', () {
       Future<Response> handler(Request request) async {
         expect(request.method, equalsIgnoringCase('get'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/info'));
+        expect(request.url.toString(), equals('https://$authority/api/v1/system-info'));
         expect(request.headers['authorization'], isNull);
         return Response(
           jsonEncode({
-            'core': {
-              'version': '1.0.0',
-            },
+            'core': {'version': '1.0.0'},
+            'postgres': {'version': '1.0.0'}
           }),
           200,
           request: request,
@@ -32,11 +31,14 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.info(),
+        apiClient.getSystemInfo(),
         completion(equals(
-          Info(
+          SystemInfo(
             core: CoreInfo(
               version: Version(1, 0, 0),
+            ),
+            postgres: PostgresInfo(
+              version: '1.0.0',
             ),
           ),
         )),
@@ -181,7 +183,7 @@ void main() {
     test('otp request', () {
       Future<Response> handler(Request request) async {
         expect(request.method, equalsIgnoringCase('post'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/session/otp-request'));
+        expect(request.url.toString(), equals('https://$authority/api/v1/session/otp-create'));
         expect(request.headers['authorization'], isNull);
         expect(
           jsonDecode(request.body),
@@ -189,7 +191,7 @@ void main() {
             {
               'type': 'web',
               'identifier': 'identifier_1',
-              'phone': 'phone_1',
+              'user_ref': 'phone_1',
             },
           ),
         );
@@ -208,10 +210,10 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.sessionOtpRequest(SessionOtpCredential(
+        apiClient.createSessionOtp(SessionOtpCredential(
           type: AppType.web,
           identifier: 'identifier_1',
-          phone: 'phone_1',
+          userRef: 'phone_1',
         )),
         completion(equals(
           SessionOtpProvisional(
@@ -250,7 +252,7 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.sessionOtpVerify(
+        apiClient.verifySessionOtp(
           SessionOtpProvisional(otpId: 'otp_id_1'),
           'code_1',
         ),
@@ -287,7 +289,7 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.sessionLogin(SessionLoginCredential(
+        apiClient.createSession(SessionLoginCredential(
           type: AppType.web,
           identifier: 'identifier_1',
           login: 'login_1',
@@ -313,7 +315,7 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.sessionLogout(token),
+        apiClient.deleteSession(token),
         completion(anything),
       );
     });
@@ -323,22 +325,29 @@ void main() {
     test('get info', () {
       Future<Response> handler(Request request) async {
         expect(request.method, equalsIgnoringCase('get'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/account/info'));
+        expect(request.url.toString(), equals('https://$authority/api/v1/user'));
         expect(request.headers['authorization'], endsWith(token));
         return Response(
           jsonEncode({
-            'data': {
+            'sip': {
+              'display_name': 'display_name_1',
               'login': 'login_1',
-              'billing_model': 'recharge_voucher',
-              'balance_control_type': 'individual_credit_limit',
-              'balance': 111.1,
-              'currency': 'UAH',
-              'extension_name': 'extension_name_1',
-              'firstname': 'first_name_1',
-              'lastname': 'last_name_1',
-              'company_name': 'company_name_1',
-              'ext': 'ext_1',
+              'password': 'strong_password',
             },
+            'balance': {
+              'amount': 111.1,
+              'balance_type': 'unknown',
+              'currency': 'UAH',
+            },
+            'numbers': {
+              'main': '14155551234',
+              'ext': '0001',
+              'additional': ['380441234567', '34911234567'],
+            },
+            'first_name': 'first_name_1',
+            'last_name': 'last_name_1',
+            'email': 'email_1',
+            'company_name': 'company_name_1',
           }),
           200,
           request: request,
@@ -349,19 +358,31 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.accountInfo(token),
+        apiClient.getUserInfo(token),
         completion(equals(
-          AccountInfo(
-            login: 'login_1',
-            billingModel: BillingModel.rechargeVoucher,
-            balanceControlType: BalanceControlType.individualCreditLimit,
-            balance: 111.1,
-            currency: 'UAH',
-            extensionName: 'extension_name_1',
-            firstname: 'first_name_1',
-            lastname: 'last_name_1',
+          UserInfo(
+            sip: SipInfo(
+              displayName: 'display_name_1',
+              login: 'login_1',
+              password: 'strong_password',
+            ),
+            balance: Balance(
+              amount: 111.1,
+              balanceType: BalanceType.unknown,
+              currency: 'UAH',
+            ),
+            numbers: Numbers(
+              main: '14155551234',
+              ext: '0001',
+              additional: [
+                '380441234567',
+                '34911234567',
+              ],
+            ),
+            firstName: 'first_name_1',
+            lastName: 'last_name_1',
+            email: 'email_1',
             companyName: 'company_name_1',
-            ext: 'ext_1',
           ),
         )),
       );
@@ -370,28 +391,32 @@ void main() {
     test('get contacts', () {
       Future<Response> handler(Request request) async {
         expect(request.method, equalsIgnoringCase('get'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/account/contacts'));
+        expect(request.url.toString(), equals('https://$authority/api/v1/user/contacts'));
         expect(request.headers['authorization'], endsWith(token));
         return Response(
           jsonEncode({
-            'data': [
+            'items': [
               {
-                'number': 'number_1',
-                'extension_id': 'extension_id_1',
-                'extension_name': 'extension_name_1',
-                'firstname': 'first_name_1',
-                'lastname': 'last_name_1',
+                'sip': {'display_name': 'display_name_1', 'status': 'unknown'},
+                'numbers': {
+                  'main': '14155551234',
+                  'ext': '0001',
+                  'additional': ['380441234567', '34911234567'],
+                },
+                'first_name': 'first_name_1',
+                'last_name': 'last_name_1',
                 'email': 'email_1',
-                'mobile': 'mobile_1',
-                'company_name': 'company_name_1',
-                'sip_status': 1,
+                'company_name': 'company_name',
               },
               {
-                'number': 'number_2',
-                'extension_id': 'extension_id_2',
-                'sip_status': 0,
-              },
-            ],
+                'numbers': {
+                  'main': 'number_2',
+                },
+                'first_name': 'first_name_2',
+                'last_name': 'last_name_2',
+                'email': 'email_2',
+              }
+            ]
           }),
           200,
           request: request,
@@ -402,24 +427,32 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.accountContacts(token),
+        apiClient.getUserContactList(token),
         completion(equals(
           [
-            AccountContact(
-              number: 'number_1',
-              extensionId: 'extension_id_1',
-              extensionName: 'extension_name_1',
+            UserContact(
+              sip: SipStatus(
+                displayName: 'display_name_1',
+                status: 'unknown',
+              ),
+              numbers: Numbers(
+                main: '14155551234',
+                ext: '0001',
+                additional: [
+                  '380441234567',
+                  '34911234567',
+                ],
+              ),
               firstName: 'first_name_1',
               lastName: 'last_name_1',
               email: 'email_1',
-              mobile: 'mobile_1',
-              companyName: 'company_name_1',
-              sipStatus: 1,
+              companyName: 'company_name',
             ),
-            AccountContact(
-              number: 'number_2',
-              extensionId: 'extension_id_2',
-              sipStatus: 0,
+            UserContact(
+              numbers: Numbers(main: 'number_2'),
+              firstName: 'first_name_2',
+              lastName: 'last_name_2',
+              email: 'email_2',
             ),
           ],
         )),
@@ -446,7 +479,7 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.appStatus(token),
+        apiClient.getAppStatus(token),
         completion(equals(
           AppStatus(
             register: true,
@@ -477,7 +510,7 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.appStatusUpdate(token, AppStatus(register: false)),
+        apiClient.updateAppStatus(token, AppStatus(register: false)),
         completion(anything),
       );
     });
@@ -518,7 +551,7 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.appCreateContacts(
+        apiClient.createAppContact(
           token,
           [
             AppContact(
@@ -569,7 +602,7 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.appSmartContacts(token),
+        apiClient.getAppSmartContactList(token),
         completion(equals(
           [
             AppSmartContact(
@@ -612,7 +645,7 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(
-        apiClient.appCreatePushToken(token, AppPushToken(type: AppPushTokenType.fcm, value: 'push_token_value')),
+        apiClient.createAppPushToken(token, AppPushToken(type: AppPushTokenType.fcm, value: 'push_token_value')),
         completion(anything),
       );
     });

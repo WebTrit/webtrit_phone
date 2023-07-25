@@ -15,7 +15,7 @@ part 'external_contacts_sync_state.dart';
 
 class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalContactsSyncState> {
   ExternalContactsSyncBloc({
-    required this.accountRepository,
+    required this.userRepository,
     required this.externalContactsRepository,
     required this.appDatabase,
   }) : super(const ExternalContactsSyncInitial()) {
@@ -24,7 +24,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
     on<_ExternalContactsSyncUpdated>(_onUpdated, transformer: droppable());
   }
 
-  final AccountRepository accountRepository;
+  final UserRepository userRepository;
   final ExternalContactsRepository externalContactsRepository;
   final AppDatabase appDatabase;
 
@@ -49,9 +49,9 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
   }
 
   void _onUpdated(_ExternalContactsSyncUpdated event, Emitter<ExternalContactsSyncState> emit) async {
-    final AccountInfo accountInfo;
+    final UserInfo userInfo;
     try {
-      accountInfo = await accountRepository.getInfo();
+      userInfo = await userRepository.getInfo();
     } catch (error) {
       emit(const ExternalContactsSyncRefreshFailure());
       return;
@@ -59,7 +59,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
 
     await appDatabase.transaction(() async {
       // skip external contact that represents own account
-      final externalContacts = event.contacts.whereNot((externalContact) => externalContact.id == accountInfo.login);
+      final externalContacts = event.contacts.whereNot((externalContact) => externalContact.id == userInfo.sip.login);
 
       final contactDatas = await appDatabase.contactsDao.getAllContacts(ContactSourceTypeEnum.external);
 

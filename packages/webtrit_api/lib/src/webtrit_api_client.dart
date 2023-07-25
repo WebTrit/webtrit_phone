@@ -94,10 +94,10 @@ class WebtritApiClient {
     return _httpClientExecute('delete', pathSegments, token, null);
   }
 
-  Future<Info> info() async {
-    final responseJson = await _httpClientExecuteGet(['info'], null);
+  Future<SystemInfo> getSystemInfo() async {
+    final responseJson = await _httpClientExecuteGet(['system-info'], null);
 
-    return Info.fromJson(responseJson);
+    return SystemInfo.fromJson(responseJson);
   }
 
   Future<SessionResult> createUser(SessionUserCredential sessionUserCredential) async {
@@ -108,15 +108,15 @@ class WebtritApiClient {
     return SessionResult.fromJson(responseJson);
   }
 
-  Future<SessionOtpProvisional> sessionOtpRequest(SessionOtpCredential sessionOtpCredential) async {
+  Future<SessionOtpProvisional> createSessionOtp(SessionOtpCredential sessionOtpCredential) async {
     final requestJson = sessionOtpCredential.toJson();
 
-    final responseJson = await _httpClientExecutePost(['session', 'otp-request'], null, requestJson);
+    final responseJson = await _httpClientExecutePost(['session', 'otp-create'], null, requestJson);
 
     return SessionOtpProvisional.fromJson(responseJson);
   }
 
-  Future<SessionToken> sessionOtpVerify(SessionOtpProvisional sessionOtpProvisional, String code) async {
+  Future<SessionToken> verifySessionOtp(SessionOtpProvisional sessionOtpProvisional, String code) async {
     final requestJson = {
       'otp_id': sessionOtpProvisional.otpId,
       'code': code,
@@ -126,7 +126,7 @@ class WebtritApiClient {
     return SessionToken.fromJson(responseJson);
   }
 
-  Future<SessionToken> sessionLogin(SessionLoginCredential sessionLoginCredential) async {
+  Future<SessionToken> createSession(SessionLoginCredential sessionLoginCredential) async {
     final requestJson = sessionLoginCredential.toJson();
 
     final responseJson = await _httpClientExecutePost(['session'], null, requestJson);
@@ -134,49 +134,49 @@ class WebtritApiClient {
     return SessionToken.fromJson(responseJson);
   }
 
-  Future<void> sessionLogout(String token) async {
+  Future<void> deleteSession(String token) async {
     await _httpClientExecuteDelete(['session'], token);
   }
 
-  Future<AccountInfo> accountInfo(String token) async {
-    final responseJson = await _httpClientExecuteGet(['account', 'info'], token);
+  Future<UserInfo> getUserInfo(String token) async {
+    final responseJson = await _httpClientExecuteGet(['user'], token);
 
-    return AccountInfo.fromJson(responseJson['data']);
+    return UserInfo.fromJson(responseJson);
   }
 
-  Future<List<AccountContact>> accountContacts(String token) async {
-    final responseJson = await _httpClientExecuteGet(['account', 'contacts'], token);
+  Future<List<UserContact>> getUserContactList(String token) async {
+    final responseJson = await _httpClientExecuteGet(['user', 'contacts'], token);
 
-    return (responseJson['data'] as List<dynamic>)
-        .map((e) => AccountContact.fromJson(e as Map<String, dynamic>))
+    return (responseJson['items'] as List<dynamic>)
+        .map((e) => UserContact.fromJson(e as Map<String, dynamic>))
         .toList();
   }
 
-  Future<AppStatus> appStatus(String token) async {
+  Future<AppStatus> getAppStatus(String token) async {
     final responseJson = await _httpClientExecuteGet(['app', 'status'], token);
 
     return AppStatus.fromJson(responseJson);
   }
 
-  Future<void> appStatusUpdate(String token, AppStatus appStatus) async {
+  Future<void> updateAppStatus(String token, AppStatus appStatus) async {
     final requestJson = appStatus.toJson();
 
     await _httpClientExecutePatch(['app', 'status'], token, requestJson);
   }
 
-  Future<void> appCreateContacts(String token, List<AppContact> appContacts) async {
+  Future<void> createAppContact(String token, List<AppContact> appContacts) async {
     final requestJson = appContacts.map((e) => e.toJson()).toList();
 
     await _httpClientExecutePost(['app', 'contacts'], token, requestJson);
   }
 
-  Future<List<AppSmartContact>> appSmartContacts(String token) async {
+  Future<List<AppSmartContact>> getAppSmartContactList(String token) async {
     final responseJson = await _httpClientExecuteGet(['app', 'contacts', 'smart'], token);
 
     return (responseJson as List<dynamic>).map((e) => AppSmartContact.fromJson(e as Map<String, dynamic>)).toList();
   }
 
-  Future<void> appCreatePushToken(String token, AppPushToken appPushToken) async {
+  Future<void> createAppPushToken(String token, AppPushToken appPushToken) async {
     final requestJson = appPushToken.toJson();
 
     await _httpClientExecutePost(['app', 'push-tokens'], token, requestJson);

@@ -14,7 +14,7 @@ class SessionOtpCredential with _$SessionOtpCredential {
   const factory SessionOtpCredential({
     required AppType type,
     required String identifier,
-    required String phone,
+    required String userRef,
   }) = _SessionOtpCredential;
 
   factory SessionOtpCredential.fromJson(Map<String, dynamic> json) => _$SessionOtpCredentialFromJson(json);
