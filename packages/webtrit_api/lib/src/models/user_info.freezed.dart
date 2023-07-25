@@ -373,8 +373,7 @@ mixin _$UserSipInfo {
   String? get displayName => throw _privateConstructorUsedError;
   String? get login => throw _privateConstructorUsedError;
   String? get password => throw _privateConstructorUsedError;
-  RegistrationServer? get registrationServer =>
-      throw _privateConstructorUsedError;
+  SipServer? get registrationServer => throw _privateConstructorUsedError;
   SipServer? get sipServer => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -393,10 +392,10 @@ abstract class $UserSipInfoCopyWith<$Res> {
       {String? displayName,
       String? login,
       String? password,
-      RegistrationServer? registrationServer,
+      SipServer? registrationServer,
       SipServer? sipServer});
 
-  $RegistrationServerCopyWith<$Res>? get registrationServer;
+  $SipServerCopyWith<$Res>? get registrationServer;
   $SipServerCopyWith<$Res>? get sipServer;
 }
 
@@ -435,7 +434,7 @@ class _$UserSipInfoCopyWithImpl<$Res, $Val extends UserSipInfo>
       registrationServer: freezed == registrationServer
           ? _value.registrationServer
           : registrationServer // ignore: cast_nullable_to_non_nullable
-              as RegistrationServer?,
+              as SipServer?,
       sipServer: freezed == sipServer
           ? _value.sipServer
           : sipServer // ignore: cast_nullable_to_non_nullable
@@ -445,13 +444,12 @@ class _$UserSipInfoCopyWithImpl<$Res, $Val extends UserSipInfo>
 
   @override
   @pragma('vm:prefer-inline')
-  $RegistrationServerCopyWith<$Res>? get registrationServer {
+  $SipServerCopyWith<$Res>? get registrationServer {
     if (_value.registrationServer == null) {
       return null;
     }
 
-    return $RegistrationServerCopyWith<$Res>(_value.registrationServer!,
-        (value) {
+    return $SipServerCopyWith<$Res>(_value.registrationServer!, (value) {
       return _then(_value.copyWith(registrationServer: value) as $Val);
     });
   }
@@ -481,11 +479,11 @@ abstract class _$$_UserSipInfoCopyWith<$Res>
       {String? displayName,
       String? login,
       String? password,
-      RegistrationServer? registrationServer,
+      SipServer? registrationServer,
       SipServer? sipServer});
 
   @override
-  $RegistrationServerCopyWith<$Res>? get registrationServer;
+  $SipServerCopyWith<$Res>? get registrationServer;
   @override
   $SipServerCopyWith<$Res>? get sipServer;
 }
@@ -523,7 +521,7 @@ class __$$_UserSipInfoCopyWithImpl<$Res>
       registrationServer: freezed == registrationServer
           ? _value.registrationServer
           : registrationServer // ignore: cast_nullable_to_non_nullable
-              as RegistrationServer?,
+              as SipServer?,
       sipServer: freezed == sipServer
           ? _value.sipServer
           : sipServer // ignore: cast_nullable_to_non_nullable
@@ -553,7 +551,7 @@ class _$_UserSipInfo implements _UserSipInfo {
   @override
   final String? password;
   @override
-  final RegistrationServer? registrationServer;
+  final SipServer? registrationServer;
   @override
   final SipServer? sipServer;
 
@@ -602,7 +600,7 @@ abstract class _UserSipInfo implements UserSipInfo {
       {final String? displayName,
       final String? login,
       final String? password,
-      final RegistrationServer? registrationServer,
+      final SipServer? registrationServer,
       final SipServer? sipServer}) = _$_UserSipInfo;
 
   factory _UserSipInfo.fromJson(Map<String, dynamic> json) =
@@ -615,7 +613,7 @@ abstract class _UserSipInfo implements UserSipInfo {
   @override
   String? get password;
   @override
-  RegistrationServer? get registrationServer;
+  SipServer? get registrationServer;
   @override
   SipServer? get sipServer;
   @override
@@ -792,180 +790,6 @@ abstract class _SipServer implements SipServer {
   @override
   @JsonKey(ignore: true)
   _$$_SipServerCopyWith<_$_SipServer> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-RegistrationServer _$RegistrationServerFromJson(Map<String, dynamic> json) {
-  return _RegistrationServer.fromJson(json);
-}
-
-/// @nodoc
-mixin _$RegistrationServer {
-  bool? get forceTcp => throw _privateConstructorUsedError;
-  String? get host => throw _privateConstructorUsedError;
-  int? get port => throw _privateConstructorUsedError;
-
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $RegistrationServerCopyWith<RegistrationServer> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $RegistrationServerCopyWith<$Res> {
-  factory $RegistrationServerCopyWith(
-          RegistrationServer value, $Res Function(RegistrationServer) then) =
-      _$RegistrationServerCopyWithImpl<$Res, RegistrationServer>;
-  @useResult
-  $Res call({bool? forceTcp, String? host, int? port});
-}
-
-/// @nodoc
-class _$RegistrationServerCopyWithImpl<$Res, $Val extends RegistrationServer>
-    implements $RegistrationServerCopyWith<$Res> {
-  _$RegistrationServerCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? forceTcp = freezed,
-    Object? host = freezed,
-    Object? port = freezed,
-  }) {
-    return _then(_value.copyWith(
-      forceTcp: freezed == forceTcp
-          ? _value.forceTcp
-          : forceTcp // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      host: freezed == host
-          ? _value.host
-          : host // ignore: cast_nullable_to_non_nullable
-              as String?,
-      port: freezed == port
-          ? _value.port
-          : port // ignore: cast_nullable_to_non_nullable
-              as int?,
-    ) as $Val);
-  }
-}
-
-/// @nodoc
-abstract class _$$_RegistrationServerCopyWith<$Res>
-    implements $RegistrationServerCopyWith<$Res> {
-  factory _$$_RegistrationServerCopyWith(_$_RegistrationServer value,
-          $Res Function(_$_RegistrationServer) then) =
-      __$$_RegistrationServerCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({bool? forceTcp, String? host, int? port});
-}
-
-/// @nodoc
-class __$$_RegistrationServerCopyWithImpl<$Res>
-    extends _$RegistrationServerCopyWithImpl<$Res, _$_RegistrationServer>
-    implements _$$_RegistrationServerCopyWith<$Res> {
-  __$$_RegistrationServerCopyWithImpl(
-      _$_RegistrationServer _value, $Res Function(_$_RegistrationServer) _then)
-      : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? forceTcp = freezed,
-    Object? host = freezed,
-    Object? port = freezed,
-  }) {
-    return _then(_$_RegistrationServer(
-      forceTcp: freezed == forceTcp
-          ? _value.forceTcp
-          : forceTcp // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      host: freezed == host
-          ? _value.host
-          : host // ignore: cast_nullable_to_non_nullable
-              as String?,
-      port: freezed == port
-          ? _value.port
-          : port // ignore: cast_nullable_to_non_nullable
-              as int?,
-    ));
-  }
-}
-
-/// @nodoc
-
-@JsonSerializable(fieldRename: FieldRename.snake)
-class _$_RegistrationServer implements _RegistrationServer {
-  const _$_RegistrationServer({this.forceTcp, this.host, this.port});
-
-  factory _$_RegistrationServer.fromJson(Map<String, dynamic> json) =>
-      _$$_RegistrationServerFromJson(json);
-
-  @override
-  final bool? forceTcp;
-  @override
-  final String? host;
-  @override
-  final int? port;
-
-  @override
-  String toString() {
-    return 'RegistrationServer(forceTcp: $forceTcp, host: $host, port: $port)';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_RegistrationServer &&
-            (identical(other.forceTcp, forceTcp) ||
-                other.forceTcp == forceTcp) &&
-            (identical(other.host, host) || other.host == host) &&
-            (identical(other.port, port) || other.port == port));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(runtimeType, forceTcp, host, port);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$_RegistrationServerCopyWith<_$_RegistrationServer> get copyWith =>
-      __$$_RegistrationServerCopyWithImpl<_$_RegistrationServer>(
-          this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$_RegistrationServerToJson(
-      this,
-    );
-  }
-}
-
-abstract class _RegistrationServer implements RegistrationServer {
-  const factory _RegistrationServer(
-      {final bool? forceTcp,
-      final String? host,
-      final int? port}) = _$_RegistrationServer;
-
-  factory _RegistrationServer.fromJson(Map<String, dynamic> json) =
-      _$_RegistrationServer.fromJson;
-
-  @override
-  bool? get forceTcp;
-  @override
-  String? get host;
-  @override
-  int? get port;
-  @override
-  @JsonKey(ignore: true)
-  _$$_RegistrationServerCopyWith<_$_RegistrationServer> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

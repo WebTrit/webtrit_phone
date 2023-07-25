@@ -25,7 +25,7 @@ mixin _$UserContact {
   String? get firstName => throw _privateConstructorUsedError;
   String? get lastName => throw _privateConstructorUsedError;
   Numbers? get numbers => throw _privateConstructorUsedError;
-  Sip? get sip => throw _privateConstructorUsedError;
+  UserContactSip? get sip => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -45,10 +45,10 @@ abstract class $UserContactCopyWith<$Res> {
       String? firstName,
       String? lastName,
       Numbers? numbers,
-      Sip? sip});
+      UserContactSip? sip});
 
   $NumbersCopyWith<$Res>? get numbers;
-  $SipCopyWith<$Res>? get sip;
+  $UserContactSipCopyWith<$Res>? get sip;
 }
 
 /// @nodoc
@@ -95,7 +95,7 @@ class _$UserContactCopyWithImpl<$Res, $Val extends UserContact>
       sip: freezed == sip
           ? _value.sip
           : sip // ignore: cast_nullable_to_non_nullable
-              as Sip?,
+              as UserContactSip?,
     ) as $Val);
   }
 
@@ -113,12 +113,12 @@ class _$UserContactCopyWithImpl<$Res, $Val extends UserContact>
 
   @override
   @pragma('vm:prefer-inline')
-  $SipCopyWith<$Res>? get sip {
+  $UserContactSipCopyWith<$Res>? get sip {
     if (_value.sip == null) {
       return null;
     }
 
-    return $SipCopyWith<$Res>(_value.sip!, (value) {
+    return $UserContactSipCopyWith<$Res>(_value.sip!, (value) {
       return _then(_value.copyWith(sip: value) as $Val);
     });
   }
@@ -138,12 +138,12 @@ abstract class _$$_UserContactCopyWith<$Res>
       String? firstName,
       String? lastName,
       Numbers? numbers,
-      Sip? sip});
+      UserContactSip? sip});
 
   @override
   $NumbersCopyWith<$Res>? get numbers;
   @override
-  $SipCopyWith<$Res>? get sip;
+  $UserContactSipCopyWith<$Res>? get sip;
 }
 
 /// @nodoc
@@ -188,7 +188,7 @@ class __$$_UserContactCopyWithImpl<$Res>
       sip: freezed == sip
           ? _value.sip
           : sip // ignore: cast_nullable_to_non_nullable
-              as Sip?,
+              as UserContactSip?,
     ));
   }
 }
@@ -219,7 +219,7 @@ class _$_UserContact implements _UserContact {
   @override
   final Numbers? numbers;
   @override
-  final Sip? sip;
+  final UserContactSip? sip;
 
   @override
   String toString() {
@@ -268,7 +268,7 @@ abstract class _UserContact implements UserContact {
       final String? firstName,
       final String? lastName,
       final Numbers? numbers,
-      final Sip? sip}) = _$_UserContact;
+      final UserContactSip? sip}) = _$_UserContact;
 
   factory _UserContact.fromJson(Map<String, dynamic> json) =
       _$_UserContact.fromJson;
@@ -284,38 +284,41 @@ abstract class _UserContact implements UserContact {
   @override
   Numbers? get numbers;
   @override
-  Sip? get sip;
+  UserContactSip? get sip;
   @override
   @JsonKey(ignore: true)
   _$$_UserContactCopyWith<_$_UserContact> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
-Sip _$SipFromJson(Map<String, dynamic> json) {
-  return _Sip.fromJson(json);
+UserContactSip _$UserContactSipFromJson(Map<String, dynamic> json) {
+  return _UserContactSip.fromJson(json);
 }
 
 /// @nodoc
-mixin _$Sip {
+mixin _$UserContactSip {
   String? get displayName => throw _privateConstructorUsedError;
   String? get status => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $SipCopyWith<Sip> get copyWith => throw _privateConstructorUsedError;
+  $UserContactSipCopyWith<UserContactSip> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $SipCopyWith<$Res> {
-  factory $SipCopyWith(Sip value, $Res Function(Sip) then) =
-      _$SipCopyWithImpl<$Res, Sip>;
+abstract class $UserContactSipCopyWith<$Res> {
+  factory $UserContactSipCopyWith(
+          UserContactSip value, $Res Function(UserContactSip) then) =
+      _$UserContactSipCopyWithImpl<$Res, UserContactSip>;
   @useResult
   $Res call({String? displayName, String? status});
 }
 
 /// @nodoc
-class _$SipCopyWithImpl<$Res, $Val extends Sip> implements $SipCopyWith<$Res> {
-  _$SipCopyWithImpl(this._value, this._then);
+class _$UserContactSipCopyWithImpl<$Res, $Val extends UserContactSip>
+    implements $UserContactSipCopyWith<$Res> {
+  _$UserContactSipCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -342,18 +345,22 @@ class _$SipCopyWithImpl<$Res, $Val extends Sip> implements $SipCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$$_SipCopyWith<$Res> implements $SipCopyWith<$Res> {
-  factory _$$_SipCopyWith(_$_Sip value, $Res Function(_$_Sip) then) =
-      __$$_SipCopyWithImpl<$Res>;
+abstract class _$$_UserContactSipCopyWith<$Res>
+    implements $UserContactSipCopyWith<$Res> {
+  factory _$$_UserContactSipCopyWith(
+          _$_UserContactSip value, $Res Function(_$_UserContactSip) then) =
+      __$$_UserContactSipCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String? displayName, String? status});
 }
 
 /// @nodoc
-class __$$_SipCopyWithImpl<$Res> extends _$SipCopyWithImpl<$Res, _$_Sip>
-    implements _$$_SipCopyWith<$Res> {
-  __$$_SipCopyWithImpl(_$_Sip _value, $Res Function(_$_Sip) _then)
+class __$$_UserContactSipCopyWithImpl<$Res>
+    extends _$UserContactSipCopyWithImpl<$Res, _$_UserContactSip>
+    implements _$$_UserContactSipCopyWith<$Res> {
+  __$$_UserContactSipCopyWithImpl(
+      _$_UserContactSip _value, $Res Function(_$_UserContactSip) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -362,7 +369,7 @@ class __$$_SipCopyWithImpl<$Res> extends _$SipCopyWithImpl<$Res, _$_Sip>
     Object? displayName = freezed,
     Object? status = freezed,
   }) {
-    return _then(_$_Sip(
+    return _then(_$_UserContactSip(
       displayName: freezed == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
@@ -378,10 +385,11 @@ class __$$_SipCopyWithImpl<$Res> extends _$SipCopyWithImpl<$Res, _$_Sip>
 /// @nodoc
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class _$_Sip implements _Sip {
-  const _$_Sip({this.displayName, this.status});
+class _$_UserContactSip implements _UserContactSip {
+  const _$_UserContactSip({this.displayName, this.status});
 
-  factory _$_Sip.fromJson(Map<String, dynamic> json) => _$$_SipFromJson(json);
+  factory _$_UserContactSip.fromJson(Map<String, dynamic> json) =>
+      _$$_UserContactSipFromJson(json);
 
   @override
   final String? displayName;
@@ -390,14 +398,14 @@ class _$_Sip implements _Sip {
 
   @override
   String toString() {
-    return 'Sip(displayName: $displayName, status: $status)';
+    return 'UserContactSip(displayName: $displayName, status: $status)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Sip &&
+            other is _$_UserContactSip &&
             (identical(other.displayName, displayName) ||
                 other.displayName == displayName) &&
             (identical(other.status, status) || other.status == status));
@@ -410,22 +418,23 @@ class _$_Sip implements _Sip {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SipCopyWith<_$_Sip> get copyWith =>
-      __$$_SipCopyWithImpl<_$_Sip>(this, _$identity);
+  _$$_UserContactSipCopyWith<_$_UserContactSip> get copyWith =>
+      __$$_UserContactSipCopyWithImpl<_$_UserContactSip>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_SipToJson(
+    return _$$_UserContactSipToJson(
       this,
     );
   }
 }
 
-abstract class _Sip implements Sip {
-  const factory _Sip({final String? displayName, final String? status}) =
-      _$_Sip;
+abstract class _UserContactSip implements UserContactSip {
+  const factory _UserContactSip(
+      {final String? displayName, final String? status}) = _$_UserContactSip;
 
-  factory _Sip.fromJson(Map<String, dynamic> json) = _$_Sip.fromJson;
+  factory _UserContactSip.fromJson(Map<String, dynamic> json) =
+      _$_UserContactSip.fromJson;
 
   @override
   String? get displayName;
@@ -433,5 +442,6 @@ abstract class _Sip implements Sip {
   String? get status;
   @override
   @JsonKey(ignore: true)
-  _$$_SipCopyWith<_$_Sip> get copyWith => throw _privateConstructorUsedError;
+  _$$_UserContactSipCopyWith<_$_UserContactSip> get copyWith =>
+      throw _privateConstructorUsedError;
 }

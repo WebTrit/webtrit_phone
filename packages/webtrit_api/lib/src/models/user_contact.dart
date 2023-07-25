@@ -14,20 +14,19 @@ class UserContact with _$UserContact {
     String? firstName,
     String? lastName,
     Numbers? numbers,
-    Sip? sip,
+    UserContactSip? sip,
   }) = _UserContact;
 
   factory UserContact.fromJson(Map<String, Object?> json) => _$UserContactFromJson(json);
 }
 
 @freezed
-class Sip with _$Sip {
+class UserContactSip with _$UserContactSip {
   @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory Sip({
+  const factory UserContactSip({
     String? displayName,
     String? status,
-  }) = _Sip;
+  }) = _UserContactSip;
 
-  factory Sip.fromJson(Map<String, Object?> json) => _$SipFromJson(json);
+  factory UserContactSip.fromJson(Map<String, Object?> json) => _$UserContactSipFromJson(json);
 }
-

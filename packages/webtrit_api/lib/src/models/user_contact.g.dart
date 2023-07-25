@@ -17,7 +17,7 @@ _$_UserContact _$$_UserContactFromJson(Map<String, dynamic> json) =>
           : Numbers.fromJson(json['numbers'] as Map<String, dynamic>),
       sip: json['sip'] == null
           ? null
-          : Sip.fromJson(json['sip'] as Map<String, dynamic>),
+          : UserContactSip.fromJson(json['sip'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_UserContactToJson(_$_UserContact instance) =>
@@ -30,12 +30,14 @@ Map<String, dynamic> _$$_UserContactToJson(_$_UserContact instance) =>
       'sip': instance.sip,
     };
 
-_$_Sip _$$_SipFromJson(Map<String, dynamic> json) => _$_Sip(
+_$_UserContactSip _$$_UserContactSipFromJson(Map<String, dynamic> json) =>
+    _$_UserContactSip(
       displayName: json['display_name'] as String?,
       status: json['status'] as String?,
     );
 
-Map<String, dynamic> _$$_SipToJson(_$_Sip instance) => <String, dynamic>{
+Map<String, dynamic> _$$_UserContactSipToJson(_$_UserContactSip instance) =>
+    <String, dynamic>{
       'display_name': instance.displayName,
       'status': instance.status,
     };

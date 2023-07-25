@@ -44,7 +44,7 @@ _$_UserSipInfo _$$_UserSipInfoFromJson(Map<String, dynamic> json) =>
       password: json['password'] as String?,
       registrationServer: json['registration_server'] == null
           ? null
-          : RegistrationServer.fromJson(
+          : SipServer.fromJson(
               json['registration_server'] as Map<String, dynamic>),
       sipServer: json['sip_server'] == null
           ? null
@@ -67,22 +67,6 @@ _$_SipServer _$$_SipServerFromJson(Map<String, dynamic> json) => _$_SipServer(
     );
 
 Map<String, dynamic> _$$_SipServerToJson(_$_SipServer instance) =>
-    <String, dynamic>{
-      'force_tcp': instance.forceTcp,
-      'host': instance.host,
-      'port': instance.port,
-    };
-
-_$_RegistrationServer _$$_RegistrationServerFromJson(
-        Map<String, dynamic> json) =>
-    _$_RegistrationServer(
-      forceTcp: json['force_tcp'] as bool?,
-      host: json['host'] as String?,
-      port: json['port'] as int?,
-    );
-
-Map<String, dynamic> _$$_RegistrationServerToJson(
-        _$_RegistrationServer instance) =>
     <String, dynamic>{
       'force_tcp': instance.forceTcp,
       'host': instance.host,

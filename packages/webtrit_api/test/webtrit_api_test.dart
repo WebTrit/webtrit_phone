@@ -409,7 +409,7 @@ void main() {
               lastName: 'last_name_1',
               email: 'email_1',
               companyName: 'company_name_1',
-              sip: Sip(displayName: 'number_1', status: '0'),
+              sip: UserContactSip(displayName: 'number_1', status: '0'),
             ),
             UserContact(
               numbers: Numbers(main: 'number_2'),

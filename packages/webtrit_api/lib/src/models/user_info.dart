@@ -32,7 +32,7 @@ class UserSipInfo with _$UserSipInfo {
     String? displayName,
     String? login,
     String? password,
-    RegistrationServer? registrationServer,
+    SipServer? registrationServer,
     SipServer? sipServer,
   }) = _UserSipInfo;
 
@@ -49,18 +49,6 @@ class SipServer with _$SipServer {
   }) = _SipServer;
 
   factory SipServer.fromJson(Map<String, Object?> json) => _$SipServerFromJson(json);
-}
-
-@freezed
-class RegistrationServer with _$RegistrationServer {
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory RegistrationServer({
-    bool? forceTcp,
-    String? host,
-    int? port,
-  }) = _RegistrationServer;
-
-  factory RegistrationServer.fromJson(Map<String, Object?> json) => _$RegistrationServerFromJson(json);
 }
 
 @freezed

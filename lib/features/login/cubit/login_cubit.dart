@@ -313,7 +313,7 @@ class LoginCubit extends Cubit<LoginState> {
 Future<void> _verifyCoreVersion(
   WebtritApiClient webtritApiClient,
 ) async {
-  final actualCoreVersion = (await webtritApiClient.getSystemInfo()).core!.version;
+  final actualCoreVersion = (await webtritApiClient.getSystemInfo()).core.version;
   CoreVersion.supported().verify(actualCoreVersion);
 }
 
