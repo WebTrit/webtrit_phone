@@ -117,10 +117,10 @@ class AdapterInfo with _$AdapterInfo {
   // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory AdapterInfo({
-    Map<String, dynamic>? custom,
     String? name,
-    List<String>? supported,
     String? version,
+    List<String>? supported,
+    Map<String, dynamic>? custom,
   }) = _AdapterInfo;
 
   factory AdapterInfo.fromJson(Map<String, Object?> json) => _$AdapterInfoFromJson(json);

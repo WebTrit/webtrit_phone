@@ -79,7 +79,7 @@ Map<String, dynamic> _$$_SipInfoToJson(_$_SipInfo instance) =>
 
 _$_SipServer _$$_SipServerFromJson(Map<String, dynamic> json) => _$_SipServer(
       forceTcp: json['force_tcp'] as bool?,
-      host: json['host'] as String?,
+      host: json['host'] as String,
       port: json['port'] as int?,
     );
 

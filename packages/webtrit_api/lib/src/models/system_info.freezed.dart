@@ -1503,10 +1503,10 @@ AdapterInfo _$AdapterInfoFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AdapterInfo {
-  Map<String, dynamic>? get custom => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
-  List<String>? get supported => throw _privateConstructorUsedError;
   String? get version => throw _privateConstructorUsedError;
+  List<String>? get supported => throw _privateConstructorUsedError;
+  Map<String, dynamic>? get custom => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -1521,10 +1521,10 @@ abstract class $AdapterInfoCopyWith<$Res> {
       _$AdapterInfoCopyWithImpl<$Res, AdapterInfo>;
   @useResult
   $Res call(
-      {Map<String, dynamic>? custom,
-      String? name,
+      {String? name,
+      String? version,
       List<String>? supported,
-      String? version});
+      Map<String, dynamic>? custom});
 }
 
 /// @nodoc
@@ -1540,28 +1540,28 @@ class _$AdapterInfoCopyWithImpl<$Res, $Val extends AdapterInfo>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? custom = freezed,
     Object? name = freezed,
-    Object? supported = freezed,
     Object? version = freezed,
+    Object? supported = freezed,
+    Object? custom = freezed,
   }) {
     return _then(_value.copyWith(
-      custom: freezed == custom
-          ? _value.custom
-          : custom // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String?,
+      version: freezed == version
+          ? _value.version
+          : version // ignore: cast_nullable_to_non_nullable
               as String?,
       supported: freezed == supported
           ? _value.supported
           : supported // ignore: cast_nullable_to_non_nullable
               as List<String>?,
-      version: freezed == version
-          ? _value.version
-          : version // ignore: cast_nullable_to_non_nullable
-              as String?,
+      custom: freezed == custom
+          ? _value.custom
+          : custom // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
     ) as $Val);
   }
 }
@@ -1575,10 +1575,10 @@ abstract class _$$_AdapterInfoCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {Map<String, dynamic>? custom,
-      String? name,
+      {String? name,
+      String? version,
       List<String>? supported,
-      String? version});
+      Map<String, dynamic>? custom});
 }
 
 /// @nodoc
@@ -1592,28 +1592,28 @@ class __$$_AdapterInfoCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? custom = freezed,
     Object? name = freezed,
-    Object? supported = freezed,
     Object? version = freezed,
+    Object? supported = freezed,
+    Object? custom = freezed,
   }) {
     return _then(_$_AdapterInfo(
-      custom: freezed == custom
-          ? _value._custom
-          : custom // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String?,
+      version: freezed == version
+          ? _value.version
+          : version // ignore: cast_nullable_to_non_nullable
               as String?,
       supported: freezed == supported
           ? _value._supported
           : supported // ignore: cast_nullable_to_non_nullable
               as List<String>?,
-      version: freezed == version
-          ? _value.version
-          : version // ignore: cast_nullable_to_non_nullable
-              as String?,
+      custom: freezed == custom
+          ? _value._custom
+          : custom // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
     ));
   }
 }
@@ -1623,15 +1623,29 @@ class __$$_AdapterInfoCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$_AdapterInfo implements _AdapterInfo {
   const _$_AdapterInfo(
-      {final Map<String, dynamic>? custom,
-      this.name,
+      {this.name,
+      this.version,
       final List<String>? supported,
-      this.version})
-      : _custom = custom,
-        _supported = supported;
+      final Map<String, dynamic>? custom})
+      : _supported = supported,
+        _custom = custom;
 
   factory _$_AdapterInfo.fromJson(Map<String, dynamic> json) =>
       _$$_AdapterInfoFromJson(json);
+
+  @override
+  final String? name;
+  @override
+  final String? version;
+  final List<String>? _supported;
+  @override
+  List<String>? get supported {
+    final value = _supported;
+    if (value == null) return null;
+    if (_supported is EqualUnmodifiableListView) return _supported;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   final Map<String, dynamic>? _custom;
   @override
@@ -1644,23 +1658,8 @@ class _$_AdapterInfo implements _AdapterInfo {
   }
 
   @override
-  final String? name;
-  final List<String>? _supported;
-  @override
-  List<String>? get supported {
-    final value = _supported;
-    if (value == null) return null;
-    if (_supported is EqualUnmodifiableListView) return _supported;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
-  @override
-  final String? version;
-
-  @override
   String toString() {
-    return 'AdapterInfo(custom: $custom, name: $name, supported: $supported, version: $version)';
+    return 'AdapterInfo(name: $name, version: $version, supported: $supported, custom: $custom)';
   }
 
   @override
@@ -1668,21 +1667,21 @@ class _$_AdapterInfo implements _AdapterInfo {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_AdapterInfo &&
-            const DeepCollectionEquality().equals(other._custom, _custom) &&
             (identical(other.name, name) || other.name == name) &&
+            (identical(other.version, version) || other.version == version) &&
             const DeepCollectionEquality()
                 .equals(other._supported, _supported) &&
-            (identical(other.version, version) || other.version == version));
+            const DeepCollectionEquality().equals(other._custom, _custom));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(_custom),
       name,
+      version,
       const DeepCollectionEquality().hash(_supported),
-      version);
+      const DeepCollectionEquality().hash(_custom));
 
   @JsonKey(ignore: true)
   @override
@@ -1700,22 +1699,22 @@ class _$_AdapterInfo implements _AdapterInfo {
 
 abstract class _AdapterInfo implements AdapterInfo {
   const factory _AdapterInfo(
-      {final Map<String, dynamic>? custom,
-      final String? name,
+      {final String? name,
+      final String? version,
       final List<String>? supported,
-      final String? version}) = _$_AdapterInfo;
+      final Map<String, dynamic>? custom}) = _$_AdapterInfo;
 
   factory _AdapterInfo.fromJson(Map<String, dynamic> json) =
       _$_AdapterInfo.fromJson;
 
   @override
-  Map<String, dynamic>? get custom;
-  @override
   String? get name;
+  @override
+  String? get version;
   @override
   List<String>? get supported;
   @override
-  String? get version;
+  Map<String, dynamic>? get custom;
   @override
   @JsonKey(ignore: true)
   _$$_AdapterInfoCopyWith<_$_AdapterInfo> get copyWith =>

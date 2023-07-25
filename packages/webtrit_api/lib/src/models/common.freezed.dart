@@ -802,7 +802,7 @@ SipServer _$SipServerFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$SipServer {
   bool? get forceTcp => throw _privateConstructorUsedError;
-  String? get host => throw _privateConstructorUsedError;
+  String get host => throw _privateConstructorUsedError;
   int? get port => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -816,7 +816,7 @@ abstract class $SipServerCopyWith<$Res> {
   factory $SipServerCopyWith(SipServer value, $Res Function(SipServer) then) =
       _$SipServerCopyWithImpl<$Res, SipServer>;
   @useResult
-  $Res call({bool? forceTcp, String? host, int? port});
+  $Res call({bool? forceTcp, String host, int? port});
 }
 
 /// @nodoc
@@ -833,7 +833,7 @@ class _$SipServerCopyWithImpl<$Res, $Val extends SipServer>
   @override
   $Res call({
     Object? forceTcp = freezed,
-    Object? host = freezed,
+    Object? host = null,
     Object? port = freezed,
   }) {
     return _then(_value.copyWith(
@@ -841,10 +841,10 @@ class _$SipServerCopyWithImpl<$Res, $Val extends SipServer>
           ? _value.forceTcp
           : forceTcp // ignore: cast_nullable_to_non_nullable
               as bool?,
-      host: freezed == host
+      host: null == host
           ? _value.host
           : host // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       port: freezed == port
           ? _value.port
           : port // ignore: cast_nullable_to_non_nullable
@@ -860,7 +860,7 @@ abstract class _$$_SipServerCopyWith<$Res> implements $SipServerCopyWith<$Res> {
       __$$_SipServerCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool? forceTcp, String? host, int? port});
+  $Res call({bool? forceTcp, String host, int? port});
 }
 
 /// @nodoc
@@ -875,7 +875,7 @@ class __$$_SipServerCopyWithImpl<$Res>
   @override
   $Res call({
     Object? forceTcp = freezed,
-    Object? host = freezed,
+    Object? host = null,
     Object? port = freezed,
   }) {
     return _then(_$_SipServer(
@@ -883,10 +883,10 @@ class __$$_SipServerCopyWithImpl<$Res>
           ? _value.forceTcp
           : forceTcp // ignore: cast_nullable_to_non_nullable
               as bool?,
-      host: freezed == host
+      host: null == host
           ? _value.host
           : host // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       port: freezed == port
           ? _value.port
           : port // ignore: cast_nullable_to_non_nullable
@@ -899,7 +899,7 @@ class __$$_SipServerCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$_SipServer implements _SipServer {
-  const _$_SipServer({this.forceTcp, this.host, this.port});
+  const _$_SipServer({this.forceTcp, required this.host, this.port});
 
   factory _$_SipServer.fromJson(Map<String, dynamic> json) =>
       _$$_SipServerFromJson(json);
@@ -907,7 +907,7 @@ class _$_SipServer implements _SipServer {
   @override
   final bool? forceTcp;
   @override
-  final String? host;
+  final String host;
   @override
   final int? port;
 
@@ -948,7 +948,7 @@ class _$_SipServer implements _SipServer {
 abstract class _SipServer implements SipServer {
   const factory _SipServer(
       {final bool? forceTcp,
-      final String? host,
+      required final String host,
       final int? port}) = _$_SipServer;
 
   factory _SipServer.fromJson(Map<String, dynamic> json) =
@@ -957,7 +957,7 @@ abstract class _SipServer implements SipServer {
   @override
   bool? get forceTcp;
   @override
-  String? get host;
+  String get host;
   @override
   int? get port;
   @override

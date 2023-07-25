@@ -120,18 +120,18 @@ Map<String, dynamic> _$$_CoreInfoToJson(_$_CoreInfo instance) =>
 
 _$_AdapterInfo _$$_AdapterInfoFromJson(Map<String, dynamic> json) =>
     _$_AdapterInfo(
-      custom: json['custom'] as Map<String, dynamic>?,
       name: json['name'] as String?,
+      version: json['version'] as String?,
       supported: (json['supported'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
-      version: json['version'] as String?,
+      custom: json['custom'] as Map<String, dynamic>?,
     );
 
 Map<String, dynamic> _$$_AdapterInfoToJson(_$_AdapterInfo instance) =>
     <String, dynamic>{
-      'custom': instance.custom,
       'name': instance.name,
-      'supported': instance.supported,
       'version': instance.version,
+      'supported': instance.supported,
+      'custom': instance.custom,
     };

@@ -66,10 +66,9 @@ class SipServer with _$SipServer {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory SipServer({
     bool? forceTcp,
-    String? host,
+    required String host,
     int? port,
   }) = _SipServer;
 
   factory SipServer.fromJson(Map<String, Object?> json) => _$SipServerFromJson(json);
 }
-
