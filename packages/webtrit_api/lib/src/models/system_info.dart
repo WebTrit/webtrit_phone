@@ -9,6 +9,7 @@ part 'system_info.g.dart';
 
 @freezed
 class SystemInfo with _$SystemInfo {
+  // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory SystemInfo({
     required CoreInfo core,
@@ -23,6 +24,7 @@ class SystemInfo with _$SystemInfo {
 
 @freezed
 class PostgresInfo with _$PostgresInfo {
+  // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory PostgresInfo({
     @VersionConverter() Version? version,
@@ -33,6 +35,7 @@ class PostgresInfo with _$PostgresInfo {
 
 @freezed
 class JanusInfo with _$JanusInfo {
+  // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory JanusInfo({
     Plugins? plugins,
@@ -45,6 +48,7 @@ class JanusInfo with _$JanusInfo {
 
 @freezed
 class Transports with _$Transports {
+  // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory Transports({
     Websocket? websocket,
@@ -55,6 +59,7 @@ class Transports with _$Transports {
 
 @freezed
 class Websocket with _$Websocket {
+  // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory Websocket({
     @VersionConverter() Version? version,
@@ -65,6 +70,7 @@ class Websocket with _$Websocket {
 
 @freezed
 class Plugins with _$Plugins {
+  // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory Plugins({
     SipVersion? sip,
@@ -75,6 +81,7 @@ class Plugins with _$Plugins {
 
 @freezed
 class SipVersion with _$SipVersion {
+  // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory SipVersion({
     @VersionConverter() Version? version,
@@ -85,6 +92,7 @@ class SipVersion with _$SipVersion {
 
 @freezed
 class GorushInfo with _$GorushInfo {
+  // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory GorushInfo({
     @VersionConverter() Version? version,
@@ -95,6 +103,7 @@ class GorushInfo with _$GorushInfo {
 
 @freezed
 class CoreInfo with _$CoreInfo {
+  // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory CoreInfo({
     @VersionConverter() required Version version,
@@ -105,6 +114,7 @@ class CoreInfo with _$CoreInfo {
 
 @freezed
 class AdapterInfo with _$AdapterInfo {
+  // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory AdapterInfo({
     Map<String, dynamic>? custom,

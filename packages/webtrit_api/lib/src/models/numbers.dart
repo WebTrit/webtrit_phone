@@ -6,6 +6,7 @@ part 'numbers.g.dart';
 
 @freezed
 class Numbers with _$Numbers {
+  // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory Numbers({
     required String main,

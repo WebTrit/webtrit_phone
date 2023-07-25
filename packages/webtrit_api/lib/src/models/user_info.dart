@@ -9,6 +9,7 @@ part 'user_info.g.dart';
 
 @freezed
 class UserInfo with _$UserInfo {
+  // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory UserInfo({
     Balance? balance,
@@ -27,6 +28,7 @@ class UserInfo with _$UserInfo {
 
 @freezed
 class UserSipInfo with _$UserSipInfo {
+  // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory UserSipInfo({
     String? displayName,
@@ -41,6 +43,7 @@ class UserSipInfo with _$UserSipInfo {
 
 @freezed
 class SipServer with _$SipServer {
+  // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory SipServer({
     bool? forceTcp,
@@ -53,6 +56,7 @@ class SipServer with _$SipServer {
 
 @freezed
 class Balance with _$Balance {
+  // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory Balance({
     double? amount,

@@ -7,6 +7,7 @@ part 'user_contact.g.dart';
 
 @freezed
 class UserContact with _$UserContact {
+  // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory UserContact({
     String? companyName,
@@ -22,6 +23,7 @@ class UserContact with _$UserContact {
 
 @freezed
 class UserContactSip with _$UserContactSip {
+  // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory UserContactSip({
     String? displayName,
