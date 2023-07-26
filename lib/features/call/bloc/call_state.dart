@@ -125,6 +125,8 @@ class ActiveCall with _$ActiveCall {
     Object? failure,
     MediaStream? localStream,
     MediaStream? remoteStream,
+    required RTCVideoRenderer localVideoRenderer,
+    required RTCVideoRenderer remoteVideoRenderer,
   }) = _ActiveCall;
 
   bool get isIncoming => direction == Direction.incoming;
@@ -134,4 +136,27 @@ class ActiveCall with _$ActiveCall {
   bool get wasAccepted => acceptedTime != null;
 
   bool get wasHungUp => hungUpTime != null;
+
+  RTCVideoRenderer get getLocalVideoRenderer {
+    localVideoRenderer.initialize().then((value) {
+      if (localStream != null && video) {
+        localVideoRenderer.srcObject = localStream;
+      } else {
+        remoteVideoRenderer.srcObject = null;
+      }
+    });
+    return localVideoRenderer;
+  }
+
+  RTCVideoRenderer get getRemoteVideoRenderer {
+    remoteVideoRenderer.initialize().then((value) {
+      if (remoteStream != null && video) {
+        remoteVideoRenderer.srcObject = remoteStream;
+      } else {
+        remoteVideoRenderer.srcObject = null;
+      }
+    });
+
+    return remoteVideoRenderer;
+  }
 }

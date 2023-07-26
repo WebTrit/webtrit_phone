@@ -14,6 +14,8 @@ final dAudioActiveCall = ActiveCall(
   video: false,
   createdTime: clock.ago(minutes: 10),
   acceptedTime: clock.ago(minutes: 9, seconds: 41),
+  localVideoRenderer: RTCVideoRenderer(),
+  remoteVideoRenderer: RTCVideoRenderer(),
 );
 
 final dVideoActiveCall = ActiveCall(
@@ -27,4 +29,6 @@ final dVideoActiveCall = ActiveCall(
   video: true,
   createdTime: clock.ago(minutes: 10),
   acceptedTime: clock.ago(minutes: 9, seconds: 41),
+  localVideoRenderer: RTCVideoRenderer(),
+  remoteVideoRenderer: RTCVideoRenderer(),
 );
