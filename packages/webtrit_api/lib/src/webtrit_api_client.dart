@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
@@ -11,6 +12,8 @@ import 'exceptions.dart';
 import 'models/models.dart';
 
 class WebtritApiClient {
+  static final _requestIdRandom = Random();
+
   WebtritApiClient(
     Uri baseUrl,
     String tenantId, {
@@ -42,8 +45,9 @@ class WebtritApiClient {
     String method,
     List<String> pathSegments,
     String? token,
-    Object? requestDataJson,
-  ) async {
+    Object? requestDataJson, {
+    String? requestId,
+  }) async {
     final url = baseUrl.replace(
       pathSegments: [
         ...baseUrl.pathSegments,
@@ -54,9 +58,11 @@ class WebtritApiClient {
       ],
     );
     final httpRequest = http.Request(method, url);
+
     httpRequest.headers.addAll({
       'content-type': 'application/json; charset=utf-8',
       'accept': 'application/json',
+      'x-request-id': requestId ?? _generateRequestId(),
       if (token != null) 'authorization': 'Bearer $token',
     });
     if (requestDataJson != null) {
@@ -76,6 +82,10 @@ class WebtritApiClient {
         error: error,
       );
     }
+  }
+
+  String _generateRequestId([int length = 32]) {
+    return String.fromCharCodes(List.generate(length, (index) => _requestIdRandom.nextInt(26) + 97));
   }
 
   Future<dynamic> _httpClientExecuteGet(List<String> pathSegments, String? token) {
