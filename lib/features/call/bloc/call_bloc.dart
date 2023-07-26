@@ -469,6 +469,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       displayName: event.displayName,
       video: event.video,
       createdTime: clock.now(),
+      localVideoRenderer: RTCVideoRenderer(),
+      remoteVideoRenderer: RTCVideoRenderer(),
     )));
 
     // the rest logic implemented within _onSignalingStateHandshake on IncomingCallEvent from call logs processing
@@ -542,6 +544,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         displayName: event.callerDisplayName,
         video: video,
         createdTime: clock.now(),
+        localVideoRenderer: RTCVideoRenderer(),
+        remoteVideoRenderer: RTCVideoRenderer(),
       )));
     }
 
@@ -665,6 +669,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     await state.performOnActiveCall(event.callId.uuid, (activeCall) async {
       await (await _peerConnectionRetrieve(activeCall.callId.uuid))?.close();
+      await activeCall.remoteVideoRenderer.dispose();
+      await activeCall.localVideoRenderer.dispose();
       await activeCall.localStream?.dispose();
     });
 
@@ -716,6 +722,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         displayName: event.displayName,
         video: event.video,
         createdTime: clock.now(),
+        localVideoRenderer: RTCVideoRenderer(),
+        remoteVideoRenderer: RTCVideoRenderer(),
       )));
     }
   }
@@ -970,6 +978,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // to prevent "Simulate a "hangup" coming from the application"
       // because of "No WebRTC media anymore".
       await (await _peerConnectionRetrieve(activeCall.callId.uuid))?.close();
+      await activeCall.remoteVideoRenderer.dispose();
+      await activeCall.localVideoRenderer.dispose();
       await activeCall.localStream?.dispose();
     });
 

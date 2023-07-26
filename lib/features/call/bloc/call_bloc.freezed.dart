@@ -5722,6 +5722,9 @@ mixin _$ActiveCall {
   Object? get failure => throw _privateConstructorUsedError;
   MediaStream? get localStream => throw _privateConstructorUsedError;
   MediaStream? get remoteStream => throw _privateConstructorUsedError;
+  RTCVideoRenderer get localVideoRenderer => throw _privateConstructorUsedError;
+  RTCVideoRenderer get remoteVideoRenderer =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ActiveCallCopyWith<ActiveCall> get copyWith =>
@@ -5749,7 +5752,9 @@ abstract class $ActiveCallCopyWith<$Res> {
       DateTime? hungUpTime,
       Object? failure,
       MediaStream? localStream,
-      MediaStream? remoteStream});
+      MediaStream? remoteStream,
+      RTCVideoRenderer localVideoRenderer,
+      RTCVideoRenderer remoteVideoRenderer});
 }
 
 /// @nodoc
@@ -5780,6 +5785,8 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
     Object? failure = freezed,
     Object? localStream = freezed,
     Object? remoteStream = freezed,
+    Object? localVideoRenderer = null,
+    Object? remoteVideoRenderer = null,
   }) {
     return _then(_value.copyWith(
       direction: null == direction
@@ -5839,6 +5846,14 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
           ? _value.remoteStream
           : remoteStream // ignore: cast_nullable_to_non_nullable
               as MediaStream?,
+      localVideoRenderer: null == localVideoRenderer
+          ? _value.localVideoRenderer
+          : localVideoRenderer // ignore: cast_nullable_to_non_nullable
+              as RTCVideoRenderer,
+      remoteVideoRenderer: null == remoteVideoRenderer
+          ? _value.remoteVideoRenderer
+          : remoteVideoRenderer // ignore: cast_nullable_to_non_nullable
+              as RTCVideoRenderer,
     ) as $Val);
   }
 }
@@ -5866,7 +5881,9 @@ abstract class _$$_ActiveCallCopyWith<$Res>
       DateTime? hungUpTime,
       Object? failure,
       MediaStream? localStream,
-      MediaStream? remoteStream});
+      MediaStream? remoteStream,
+      RTCVideoRenderer localVideoRenderer,
+      RTCVideoRenderer remoteVideoRenderer});
 }
 
 /// @nodoc
@@ -5895,6 +5912,8 @@ class __$$_ActiveCallCopyWithImpl<$Res>
     Object? failure = freezed,
     Object? localStream = freezed,
     Object? remoteStream = freezed,
+    Object? localVideoRenderer = null,
+    Object? remoteVideoRenderer = null,
   }) {
     return _then(_$_ActiveCall(
       direction: null == direction
@@ -5954,6 +5973,14 @@ class __$$_ActiveCallCopyWithImpl<$Res>
           ? _value.remoteStream
           : remoteStream // ignore: cast_nullable_to_non_nullable
               as MediaStream?,
+      localVideoRenderer: null == localVideoRenderer
+          ? _value.localVideoRenderer
+          : localVideoRenderer // ignore: cast_nullable_to_non_nullable
+              as RTCVideoRenderer,
+      remoteVideoRenderer: null == remoteVideoRenderer
+          ? _value.remoteVideoRenderer
+          : remoteVideoRenderer // ignore: cast_nullable_to_non_nullable
+              as RTCVideoRenderer,
     ));
   }
 }
@@ -5976,7 +6003,9 @@ class _$_ActiveCall extends _ActiveCall with DiagnosticableTreeMixin {
       this.hungUpTime,
       this.failure,
       this.localStream,
-      this.remoteStream})
+      this.remoteStream,
+      required this.localVideoRenderer,
+      required this.remoteVideoRenderer})
       : super._();
 
   @override
@@ -6012,10 +6041,14 @@ class _$_ActiveCall extends _ActiveCall with DiagnosticableTreeMixin {
   final MediaStream? localStream;
   @override
   final MediaStream? remoteStream;
+  @override
+  final RTCVideoRenderer localVideoRenderer;
+  @override
+  final RTCVideoRenderer remoteVideoRenderer;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, displayName: $displayName, video: $video, frontCamera: $frontCamera, held: $held, muted: $muted, createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
+    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, displayName: $displayName, video: $video, frontCamera: $frontCamera, held: $held, muted: $muted, createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, failure: $failure, localStream: $localStream, remoteStream: $remoteStream, localVideoRenderer: $localVideoRenderer, remoteVideoRenderer: $remoteVideoRenderer)';
   }
 
   @override
@@ -6037,7 +6070,9 @@ class _$_ActiveCall extends _ActiveCall with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('hungUpTime', hungUpTime))
       ..add(DiagnosticsProperty('failure', failure))
       ..add(DiagnosticsProperty('localStream', localStream))
-      ..add(DiagnosticsProperty('remoteStream', remoteStream));
+      ..add(DiagnosticsProperty('remoteStream', remoteStream))
+      ..add(DiagnosticsProperty('localVideoRenderer', localVideoRenderer))
+      ..add(DiagnosticsProperty('remoteVideoRenderer', remoteVideoRenderer));
   }
 
   @override
@@ -6067,7 +6102,11 @@ class _$_ActiveCall extends _ActiveCall with DiagnosticableTreeMixin {
             (identical(other.localStream, localStream) ||
                 other.localStream == localStream) &&
             (identical(other.remoteStream, remoteStream) ||
-                other.remoteStream == remoteStream));
+                other.remoteStream == remoteStream) &&
+            (identical(other.localVideoRenderer, localVideoRenderer) ||
+                other.localVideoRenderer == localVideoRenderer) &&
+            (identical(other.remoteVideoRenderer, remoteVideoRenderer) ||
+                other.remoteVideoRenderer == remoteVideoRenderer));
   }
 
   @override
@@ -6087,7 +6126,9 @@ class _$_ActiveCall extends _ActiveCall with DiagnosticableTreeMixin {
       hungUpTime,
       const DeepCollectionEquality().hash(failure),
       localStream,
-      remoteStream);
+      remoteStream,
+      localVideoRenderer,
+      remoteVideoRenderer);
 
   @JsonKey(ignore: true)
   @override
@@ -6112,7 +6153,9 @@ abstract class _ActiveCall extends ActiveCall {
       final DateTime? hungUpTime,
       final Object? failure,
       final MediaStream? localStream,
-      final MediaStream? remoteStream}) = _$_ActiveCall;
+      final MediaStream? remoteStream,
+      required final RTCVideoRenderer localVideoRenderer,
+      required final RTCVideoRenderer remoteVideoRenderer}) = _$_ActiveCall;
   const _ActiveCall._() : super._();
 
   @override
@@ -6145,6 +6188,10 @@ abstract class _ActiveCall extends ActiveCall {
   MediaStream? get localStream;
   @override
   MediaStream? get remoteStream;
+  @override
+  RTCVideoRenderer get localVideoRenderer;
+  @override
+  RTCVideoRenderer get remoteVideoRenderer;
   @override
   @JsonKey(ignore: true)
   _$$_ActiveCallCopyWith<_$_ActiveCall> get copyWith =>

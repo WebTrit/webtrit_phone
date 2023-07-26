@@ -113,6 +113,7 @@ class CallThumbnailAvatar {
           },
           onTap: onTap,
           child: CallCard(
+            videoRenderer: state.activeCall.getRemoteVideoRenderer,
             handle: activeCall.handle,
             displayName: activeCall.displayName,
           ),
