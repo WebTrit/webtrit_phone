@@ -56,6 +56,7 @@ void main() {
           jsonDecode(request.body),
           equals(
             {
+              'bundle_id': 'bundle_id_1',
               'type': 'web',
               'identifier': 'identifier_1',
               'email': 'email_1',
@@ -78,6 +79,7 @@ void main() {
 
       expect(
         apiClient.createUser(SessionUserCredential(
+          bundleId: 'bundle_id_1',
           type: AppType.web,
           identifier: 'identifier_1',
           email: 'email_1',
@@ -101,6 +103,7 @@ void main() {
           jsonDecode(request.body),
           equals(
             {
+              'bundle_id': 'bundle_id_1',
               'type': 'web',
               'identifier': 'identifier_1',
               'email': 'email_1',
@@ -121,6 +124,7 @@ void main() {
 
       expect(
         apiClient.createUser(SessionUserCredential(
+          bundleId: 'bundle_id_1',
           type: AppType.web,
           identifier: 'identifier_1',
           email: 'email_1',
@@ -142,6 +146,7 @@ void main() {
           jsonDecode(request.body),
           equals(
             {
+              'bundle_id': 'bundle_id_1',
               'type': 'web',
               'identifier': 'identifier_1',
               'email': 'email_1',
@@ -164,6 +169,7 @@ void main() {
 
       expect(
         apiClient.createUser(SessionUserCredential(
+          bundleId: 'bundle_id_1',
           type: AppType.web,
           identifier: 'identifier_1',
           email: 'email_1',
@@ -189,6 +195,7 @@ void main() {
           jsonDecode(request.body),
           equals(
             {
+              'bundle_id': 'bundle_id_1',
               'type': 'web',
               'identifier': 'identifier_1',
               'user_ref': 'phone_1',
@@ -211,6 +218,7 @@ void main() {
 
       expect(
         apiClient.createSessionOtp(SessionOtpCredential(
+          bundleId: 'bundle_id_1',
           type: AppType.web,
           identifier: 'identifier_1',
           userRef: 'phone_1',
@@ -269,6 +277,7 @@ void main() {
           jsonDecode(request.body),
           equals(
             {
+              'bundle_id': 'bundle_id_1',
               'type': 'web',
               'identifier': 'identifier_1',
               'login': 'login_1',
@@ -290,6 +299,7 @@ void main() {
 
       expect(
         apiClient.createSession(SessionLoginCredential(
+          bundleId: 'bundle_id_1',
           type: AppType.web,
           identifier: 'identifier_1',
           login: 'login_1',

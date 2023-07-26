@@ -12,6 +12,7 @@ part 'session_otp_credential.g.dart';
 class SessionOtpCredential with _$SessionOtpCredential {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory SessionOtpCredential({
+    required String bundleId,
     required AppType type,
     required String identifier,
     required String userRef,
