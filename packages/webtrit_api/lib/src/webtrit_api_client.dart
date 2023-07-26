@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
-import 'package:uuid/uuid.dart';
 
 import '_http_client/_http_client.dart'
     if (dart.library.html) '_http_client/_http_client_html.dart'
@@ -43,8 +42,9 @@ class WebtritApiClient {
     String method,
     List<String> pathSegments,
     String? token,
-    Object? requestDataJson,
-  ) async {
+    Object? requestDataJson, {
+    String? requestId,
+  }) async {
     final url = baseUrl.replace(
       pathSegments: [
         ...baseUrl.pathSegments,
@@ -55,12 +55,11 @@ class WebtritApiClient {
       ],
     );
     final httpRequest = http.Request(method, url);
-    final requestId = Uuid().v4();
 
     httpRequest.headers.addAll({
       'content-type': 'application/json; charset=utf-8',
       'accept': 'application/json',
-      'X-request-id': requestId,
+      'x-request-id': requestId ?? _generateRequestId(),
       if (token != null) 'authorization': 'Bearer $token',
     });
     if (requestDataJson != null) {
@@ -80,6 +79,12 @@ class WebtritApiClient {
         error: error,
       );
     }
+  }
+
+  String _generateRequestId() {
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final hexTimestamp = timestamp.toRadixString(16);
+    return hexTimestamp;
   }
 
   Future<dynamic> _httpClientExecuteGet(List<String> pathSegments, String? token) {
