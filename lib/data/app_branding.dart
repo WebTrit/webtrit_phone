@@ -14,8 +14,10 @@ class AppBranding {
     final config = await _initStyleManager();
     final styleModel = await _getStyleModel(config);
 
+    //TODO: Need logic for resource choice
     final imageScheme = ImagesScheme()
       ..setApplicationLogoByUrl(styleModel.images!.applicationLogo)
+      ..setApplicationLogoV2ByUrl(styleModel.images!.applicationLogoV2 ?? styleModel.images!.applicationLogo)
       ..setOnboardingByUrl(styleModel.images!.onboarding);
 
     final colorScheme = ColorSchemeOverride(
