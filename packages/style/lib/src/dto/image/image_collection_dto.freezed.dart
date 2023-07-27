@@ -22,6 +22,7 @@ ImageCollectionDTO _$ImageCollectionDTOFromJson(Map<String, dynamic> json) {
 mixin _$ImageCollectionDTO {
   String? get onboarding => throw _privateConstructorUsedError;
   String? get applicationLogo => throw _privateConstructorUsedError;
+  String? get applicationLogoV2 => throw _privateConstructorUsedError;
   String? get notificationLogo => throw _privateConstructorUsedError;
   String? get adaptiveIconBackground => throw _privateConstructorUsedError;
   String? get adaptiveIconForeground => throw _privateConstructorUsedError;
@@ -44,6 +45,7 @@ abstract class $ImageCollectionDTOCopyWith<$Res> {
   $Res call(
       {String? onboarding,
       String? applicationLogo,
+      String? applicationLogoV2,
       String? notificationLogo,
       String? adaptiveIconBackground,
       String? adaptiveIconForeground,
@@ -67,6 +69,7 @@ class _$ImageCollectionDTOCopyWithImpl<$Res, $Val extends ImageCollectionDTO>
   $Res call({
     Object? onboarding = freezed,
     Object? applicationLogo = freezed,
+    Object? applicationLogoV2 = freezed,
     Object? notificationLogo = freezed,
     Object? adaptiveIconBackground = freezed,
     Object? adaptiveIconForeground = freezed,
@@ -82,6 +85,10 @@ class _$ImageCollectionDTOCopyWithImpl<$Res, $Val extends ImageCollectionDTO>
       applicationLogo: freezed == applicationLogo
           ? _value.applicationLogo
           : applicationLogo // ignore: cast_nullable_to_non_nullable
+              as String?,
+      applicationLogoV2: freezed == applicationLogoV2
+          ? _value.applicationLogoV2
+          : applicationLogoV2 // ignore: cast_nullable_to_non_nullable
               as String?,
       notificationLogo: freezed == notificationLogo
           ? _value.notificationLogo
@@ -122,6 +129,7 @@ abstract class _$$_ImageCollectionDTOCopyWith<$Res>
   $Res call(
       {String? onboarding,
       String? applicationLogo,
+      String? applicationLogoV2,
       String? notificationLogo,
       String? adaptiveIconBackground,
       String? adaptiveIconForeground,
@@ -143,6 +151,7 @@ class __$$_ImageCollectionDTOCopyWithImpl<$Res>
   $Res call({
     Object? onboarding = freezed,
     Object? applicationLogo = freezed,
+    Object? applicationLogoV2 = freezed,
     Object? notificationLogo = freezed,
     Object? adaptiveIconBackground = freezed,
     Object? adaptiveIconForeground = freezed,
@@ -158,6 +167,10 @@ class __$$_ImageCollectionDTOCopyWithImpl<$Res>
       applicationLogo: freezed == applicationLogo
           ? _value.applicationLogo
           : applicationLogo // ignore: cast_nullable_to_non_nullable
+              as String?,
+      applicationLogoV2: freezed == applicationLogoV2
+          ? _value.applicationLogoV2
+          : applicationLogoV2 // ignore: cast_nullable_to_non_nullable
               as String?,
       notificationLogo: freezed == notificationLogo
           ? _value.notificationLogo
@@ -193,6 +206,7 @@ class _$_ImageCollectionDTO implements _ImageCollectionDTO {
   const _$_ImageCollectionDTO(
       {this.onboarding,
       this.applicationLogo,
+      this.applicationLogoV2,
       this.notificationLogo,
       this.adaptiveIconBackground,
       this.adaptiveIconForeground,
@@ -208,6 +222,8 @@ class _$_ImageCollectionDTO implements _ImageCollectionDTO {
   @override
   final String? applicationLogo;
   @override
+  final String? applicationLogoV2;
+  @override
   final String? notificationLogo;
   @override
   final String? adaptiveIconBackground;
@@ -222,7 +238,7 @@ class _$_ImageCollectionDTO implements _ImageCollectionDTO {
 
   @override
   String toString() {
-    return 'ImageCollectionDTO(onboarding: $onboarding, applicationLogo: $applicationLogo, notificationLogo: $notificationLogo, adaptiveIconBackground: $adaptiveIconBackground, adaptiveIconForeground: $adaptiveIconForeground, androidLauncherIcon: $androidLauncherIcon, iosLauncherIcon: $iosLauncherIcon, webLauncherIcon: $webLauncherIcon)';
+    return 'ImageCollectionDTO(onboarding: $onboarding, applicationLogo: $applicationLogo, applicationLogoV2: $applicationLogoV2, notificationLogo: $notificationLogo, adaptiveIconBackground: $adaptiveIconBackground, adaptiveIconForeground: $adaptiveIconForeground, androidLauncherIcon: $androidLauncherIcon, iosLauncherIcon: $iosLauncherIcon, webLauncherIcon: $webLauncherIcon)';
   }
 
   @override
@@ -234,6 +250,8 @@ class _$_ImageCollectionDTO implements _ImageCollectionDTO {
                 other.onboarding == onboarding) &&
             (identical(other.applicationLogo, applicationLogo) ||
                 other.applicationLogo == applicationLogo) &&
+            (identical(other.applicationLogoV2, applicationLogoV2) ||
+                other.applicationLogoV2 == applicationLogoV2) &&
             (identical(other.notificationLogo, notificationLogo) ||
                 other.notificationLogo == notificationLogo) &&
             (identical(other.adaptiveIconBackground, adaptiveIconBackground) ||
@@ -254,6 +272,7 @@ class _$_ImageCollectionDTO implements _ImageCollectionDTO {
       runtimeType,
       onboarding,
       applicationLogo,
+      applicationLogoV2,
       notificationLogo,
       adaptiveIconBackground,
       adaptiveIconForeground,
@@ -280,6 +299,7 @@ abstract class _ImageCollectionDTO implements ImageCollectionDTO {
   const factory _ImageCollectionDTO(
       {final String? onboarding,
       final String? applicationLogo,
+      final String? applicationLogoV2,
       final String? notificationLogo,
       final String? adaptiveIconBackground,
       final String? adaptiveIconForeground,
@@ -294,6 +314,8 @@ abstract class _ImageCollectionDTO implements ImageCollectionDTO {
   String? get onboarding;
   @override
   String? get applicationLogo;
+  @override
+  String? get applicationLogoV2;
   @override
   String? get notificationLogo;
   @override

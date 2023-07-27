@@ -9,6 +9,7 @@ class ImageCollectionDTO with _$ImageCollectionDTO {
   const factory ImageCollectionDTO({
     String? onboarding,
     String? applicationLogo,
+    String? applicationLogoV2,
     String? notificationLogo,
     String? adaptiveIconBackground,
     String? adaptiveIconForeground,

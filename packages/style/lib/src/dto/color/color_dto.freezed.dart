@@ -33,6 +33,7 @@ mixin _$ColorDTO {
   String? get surface => throw _privateConstructorUsedError;
   String? get onSurface => throw _privateConstructorUsedError;
   List<String>? get gradientTabColor => throw _privateConstructorUsedError;
+  LaunchDTO? get launch => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -58,7 +59,10 @@ abstract class $ColorDTOCopyWith<$Res> {
       String? onBackground,
       String? surface,
       String? onSurface,
-      List<String>? gradientTabColor});
+      List<String>? gradientTabColor,
+      LaunchDTO? launch});
+
+  $LaunchDTOCopyWith<$Res>? get launch;
 }
 
 /// @nodoc
@@ -87,6 +91,7 @@ class _$ColorDTOCopyWithImpl<$Res, $Val extends ColorDTO>
     Object? surface = freezed,
     Object? onSurface = freezed,
     Object? gradientTabColor = freezed,
+    Object? launch = freezed,
   }) {
     return _then(_value.copyWith(
       primary: freezed == primary
@@ -141,7 +146,23 @@ class _$ColorDTOCopyWithImpl<$Res, $Val extends ColorDTO>
           ? _value.gradientTabColor
           : gradientTabColor // ignore: cast_nullable_to_non_nullable
               as List<String>?,
+      launch: freezed == launch
+          ? _value.launch
+          : launch // ignore: cast_nullable_to_non_nullable
+              as LaunchDTO?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $LaunchDTOCopyWith<$Res>? get launch {
+    if (_value.launch == null) {
+      return null;
+    }
+
+    return $LaunchDTOCopyWith<$Res>(_value.launch!, (value) {
+      return _then(_value.copyWith(launch: value) as $Val);
+    });
   }
 }
 
@@ -165,7 +186,11 @@ abstract class _$$_ColorDTOCopyWith<$Res> implements $ColorDTOCopyWith<$Res> {
       String? onBackground,
       String? surface,
       String? onSurface,
-      List<String>? gradientTabColor});
+      List<String>? gradientTabColor,
+      LaunchDTO? launch});
+
+  @override
+  $LaunchDTOCopyWith<$Res>? get launch;
 }
 
 /// @nodoc
@@ -192,6 +217,7 @@ class __$$_ColorDTOCopyWithImpl<$Res>
     Object? surface = freezed,
     Object? onSurface = freezed,
     Object? gradientTabColor = freezed,
+    Object? launch = freezed,
   }) {
     return _then(_$_ColorDTO(
       primary: freezed == primary
@@ -246,6 +272,10 @@ class __$$_ColorDTOCopyWithImpl<$Res>
           ? _value.gradientTabColor
           : gradientTabColor // ignore: cast_nullable_to_non_nullable
               as List<String>?,
+      launch: freezed == launch
+          ? _value.launch
+          : launch // ignore: cast_nullable_to_non_nullable
+              as LaunchDTO?,
     ));
   }
 }
@@ -266,7 +296,8 @@ class _$_ColorDTO implements _ColorDTO {
       this.onBackground,
       this.surface,
       this.onSurface,
-      this.gradientTabColor});
+      this.gradientTabColor,
+      this.launch});
 
   factory _$_ColorDTO.fromJson(Map<String, dynamic> json) =>
       _$$_ColorDTOFromJson(json);
@@ -297,10 +328,12 @@ class _$_ColorDTO implements _ColorDTO {
   final String? onSurface;
   @override
   final List<String>? gradientTabColor;
+  @override
+  final LaunchDTO? launch;
 
   @override
   String toString() {
-    return 'ColorDTO(primary: $primary, onPrimary: $onPrimary, secondary: $secondary, secondaryContainer: $secondaryContainer, onSecondaryContainer: $onSecondaryContainer, tertiary: $tertiary, error: $error, outline: $outline, background: $background, onBackground: $onBackground, surface: $surface, onSurface: $onSurface, gradientTabColor: $gradientTabColor)';
+    return 'ColorDTO(primary: $primary, onPrimary: $onPrimary, secondary: $secondary, secondaryContainer: $secondaryContainer, onSecondaryContainer: $onSecondaryContainer, tertiary: $tertiary, error: $error, outline: $outline, background: $background, onBackground: $onBackground, surface: $surface, onSurface: $onSurface, gradientTabColor: $gradientTabColor, launch: $launch)';
   }
 
   @override
@@ -329,7 +362,8 @@ class _$_ColorDTO implements _ColorDTO {
             (identical(other.onSurface, onSurface) ||
                 other.onSurface == onSurface) &&
             const DeepCollectionEquality()
-                .equals(other.gradientTabColor, gradientTabColor));
+                .equals(other.gradientTabColor, gradientTabColor) &&
+            (identical(other.launch, launch) || other.launch == launch));
   }
 
   @JsonKey(ignore: true)
@@ -348,7 +382,8 @@ class _$_ColorDTO implements _ColorDTO {
       onBackground,
       surface,
       onSurface,
-      const DeepCollectionEquality().hash(gradientTabColor));
+      const DeepCollectionEquality().hash(gradientTabColor),
+      launch);
 
   @JsonKey(ignore: true)
   @override
@@ -378,7 +413,8 @@ abstract class _ColorDTO implements ColorDTO {
       final String? onBackground,
       final String? surface,
       final String? onSurface,
-      final List<String>? gradientTabColor}) = _$_ColorDTO;
+      final List<String>? gradientTabColor,
+      final LaunchDTO? launch}) = _$_ColorDTO;
 
   factory _ColorDTO.fromJson(Map<String, dynamic> json) = _$_ColorDTO.fromJson;
 
@@ -409,7 +445,165 @@ abstract class _ColorDTO implements ColorDTO {
   @override
   List<String>? get gradientTabColor;
   @override
+  LaunchDTO? get launch;
+  @override
   @JsonKey(ignore: true)
   _$$_ColorDTOCopyWith<_$_ColorDTO> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+LaunchDTO _$LaunchDTOFromJson(Map<String, dynamic> json) {
+  return _LaunchDTO.fromJson(json);
+}
+
+/// @nodoc
+mixin _$LaunchDTO {
+  String? get adaptiveIconBackground => throw _privateConstructorUsedError;
+  String? get splashBackground => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $LaunchDTOCopyWith<LaunchDTO> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $LaunchDTOCopyWith<$Res> {
+  factory $LaunchDTOCopyWith(LaunchDTO value, $Res Function(LaunchDTO) then) =
+      _$LaunchDTOCopyWithImpl<$Res, LaunchDTO>;
+  @useResult
+  $Res call({String? adaptiveIconBackground, String? splashBackground});
+}
+
+/// @nodoc
+class _$LaunchDTOCopyWithImpl<$Res, $Val extends LaunchDTO>
+    implements $LaunchDTOCopyWith<$Res> {
+  _$LaunchDTOCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? adaptiveIconBackground = freezed,
+    Object? splashBackground = freezed,
+  }) {
+    return _then(_value.copyWith(
+      adaptiveIconBackground: freezed == adaptiveIconBackground
+          ? _value.adaptiveIconBackground
+          : adaptiveIconBackground // ignore: cast_nullable_to_non_nullable
+              as String?,
+      splashBackground: freezed == splashBackground
+          ? _value.splashBackground
+          : splashBackground // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$_LaunchDTOCopyWith<$Res> implements $LaunchDTOCopyWith<$Res> {
+  factory _$$_LaunchDTOCopyWith(
+          _$_LaunchDTO value, $Res Function(_$_LaunchDTO) then) =
+      __$$_LaunchDTOCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String? adaptiveIconBackground, String? splashBackground});
+}
+
+/// @nodoc
+class __$$_LaunchDTOCopyWithImpl<$Res>
+    extends _$LaunchDTOCopyWithImpl<$Res, _$_LaunchDTO>
+    implements _$$_LaunchDTOCopyWith<$Res> {
+  __$$_LaunchDTOCopyWithImpl(
+      _$_LaunchDTO _value, $Res Function(_$_LaunchDTO) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? adaptiveIconBackground = freezed,
+    Object? splashBackground = freezed,
+  }) {
+    return _then(_$_LaunchDTO(
+      adaptiveIconBackground: freezed == adaptiveIconBackground
+          ? _value.adaptiveIconBackground
+          : adaptiveIconBackground // ignore: cast_nullable_to_non_nullable
+              as String?,
+      splashBackground: freezed == splashBackground
+          ? _value.splashBackground
+          : splashBackground // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(includeIfNull: false)
+class _$_LaunchDTO implements _LaunchDTO {
+  const _$_LaunchDTO({this.adaptiveIconBackground, this.splashBackground});
+
+  factory _$_LaunchDTO.fromJson(Map<String, dynamic> json) =>
+      _$$_LaunchDTOFromJson(json);
+
+  @override
+  final String? adaptiveIconBackground;
+  @override
+  final String? splashBackground;
+
+  @override
+  String toString() {
+    return 'LaunchDTO(adaptiveIconBackground: $adaptiveIconBackground, splashBackground: $splashBackground)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_LaunchDTO &&
+            (identical(other.adaptiveIconBackground, adaptiveIconBackground) ||
+                other.adaptiveIconBackground == adaptiveIconBackground) &&
+            (identical(other.splashBackground, splashBackground) ||
+                other.splashBackground == splashBackground));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, adaptiveIconBackground, splashBackground);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_LaunchDTOCopyWith<_$_LaunchDTO> get copyWith =>
+      __$$_LaunchDTOCopyWithImpl<_$_LaunchDTO>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_LaunchDTOToJson(
+      this,
+    );
+  }
+}
+
+abstract class _LaunchDTO implements LaunchDTO {
+  const factory _LaunchDTO(
+      {final String? adaptiveIconBackground,
+      final String? splashBackground}) = _$_LaunchDTO;
+
+  factory _LaunchDTO.fromJson(Map<String, dynamic> json) =
+      _$_LaunchDTO.fromJson;
+
+  @override
+  String? get adaptiveIconBackground;
+  @override
+  String? get splashBackground;
+  @override
+  @JsonKey(ignore: true)
+  _$$_LaunchDTOCopyWith<_$_LaunchDTO> get copyWith =>
       throw _privateConstructorUsedError;
 }

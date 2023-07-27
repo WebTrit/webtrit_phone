@@ -11,6 +11,7 @@ _$_ImageCollectionDTO _$$_ImageCollectionDTOFromJson(
     _$_ImageCollectionDTO(
       onboarding: json['onboarding'] as String?,
       applicationLogo: json['applicationLogo'] as String?,
+      applicationLogoV2: json['applicationLogoV2'] as String?,
       notificationLogo: json['notificationLogo'] as String?,
       adaptiveIconBackground: json['adaptiveIconBackground'] as String?,
       adaptiveIconForeground: json['adaptiveIconForeground'] as String?,
@@ -24,6 +25,7 @@ Map<String, dynamic> _$$_ImageCollectionDTOToJson(
     <String, dynamic>{
       'onboarding': instance.onboarding,
       'applicationLogo': instance.applicationLogo,
+      'applicationLogoV2': instance.applicationLogoV2,
       'notificationLogo': instance.notificationLogo,
       'adaptiveIconBackground': instance.adaptiveIconBackground,
       'adaptiveIconForeground': instance.adaptiveIconForeground,

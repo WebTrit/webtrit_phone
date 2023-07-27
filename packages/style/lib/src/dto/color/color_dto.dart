@@ -20,7 +20,20 @@ class ColorDTO with _$ColorDTO {
     String? surface,
     String? onSurface,
     List<String>? gradientTabColor,
+    LaunchDTO? launch,
   }) = _ColorDTO;
 
   factory ColorDTO.fromJson(Map<String, Object?> json) => _$ColorDTOFromJson(json);
+}
+
+@freezed
+class LaunchDTO with _$LaunchDTO {
+  // ignore: invalid_annotation_target
+  @JsonSerializable(includeIfNull: false)
+  const factory LaunchDTO({
+    String? adaptiveIconBackground,
+    String? splashBackground,
+  }) = _LaunchDTO;
+
+  factory LaunchDTO.fromJson(Map<String, dynamic> json) => _$LaunchDTOFromJson(json);
 }

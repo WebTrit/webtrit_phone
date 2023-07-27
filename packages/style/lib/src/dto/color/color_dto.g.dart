@@ -22,6 +22,9 @@ _$_ColorDTO _$$_ColorDTOFromJson(Map<String, dynamic> json) => _$_ColorDTO(
       gradientTabColor: (json['gradientTabColor'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
+      launch: json['launch'] == null
+          ? null
+          : LaunchDTO.fromJson(json['launch'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_ColorDTOToJson(_$_ColorDTO instance) =>
@@ -39,4 +42,24 @@ Map<String, dynamic> _$$_ColorDTOToJson(_$_ColorDTO instance) =>
       'surface': instance.surface,
       'onSurface': instance.onSurface,
       'gradientTabColor': instance.gradientTabColor,
+      'launch': instance.launch,
     };
+
+_$_LaunchDTO _$$_LaunchDTOFromJson(Map<String, dynamic> json) => _$_LaunchDTO(
+      adaptiveIconBackground: json['adaptiveIconBackground'] as String?,
+      splashBackground: json['splashBackground'] as String?,
+    );
+
+Map<String, dynamic> _$$_LaunchDTOToJson(_$_LaunchDTO instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('adaptiveIconBackground', instance.adaptiveIconBackground);
+  writeNotNull('splashBackground', instance.splashBackground);
+  return val;
+}
