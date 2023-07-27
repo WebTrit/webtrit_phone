@@ -59,6 +59,14 @@ dart run \
   tool/extenvsubst.dart build/web/index.html
 ```
 
+### Change branding style
+
+Command line example:
+
+```bash
+ dart run webtrit_phone_publisher --config "publisher.json"
+```
+
 ## Contributing
 
 Contributions are always welcome!
