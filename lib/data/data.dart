@@ -1,10 +1,9 @@
-export 'package:app_database/app_database.dart';
-
+export 'app_branding.dart';
 export 'app_info.dart';
 export 'app_permissions.dart';
 export 'app_preferences.dart';
-export 'app_theme.dart';
 export 'device_info.dart';
+export 'package:app_database/app_database.dart';
 export 'package_info.dart';
 export 'platform_info.dart';
 export 'secure_storage.dart';

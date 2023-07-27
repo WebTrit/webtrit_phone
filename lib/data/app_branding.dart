@@ -1,26 +1,18 @@
-import 'package:flutter/painting.dart';
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
 
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 import 'package:style/style.dart';
 
-import 'app_yaml.dart';
-
-class AppTheme {
-  static late AppTheme _instance;
+class AppBranding {
+  static late AppBranding _instance;
 
   static Future<void> init() async {
-    StyleManager.setting(
-      host: AppStyleConfig().publisherConfig.host,
-    );
-
-    StyleManager.init(
-        applicationId: AppStyleConfig().publisherConfig.applicationId,
-        themeId: AppStyleConfig().publisherConfig.themeId,
-        defaultTheme: Assets.style.branding);
-
-    final styleModel = await StyleManager().get();
+    final config = await _initStyleManager();
+    final styleModel = await _getStyleModel(config);
 
     final imageScheme = ImagesScheme()
       ..setApplicationLogoByUrl(styleModel.images!.applicationLogo)
@@ -42,9 +34,7 @@ class AppTheme {
     );
 
     final gradientTabColor = (styleModel.colors?.gradientTabColor ?? [])
-        .map(
-          (hex) => CustomColor(color: _toColor(hex)!, blend: false),
-        )
+        .map((hex) => CustomColor(color: _toColor(hex)!, blend: false))
         .toList();
 
     final theme = ThemeSettings(
@@ -56,18 +46,35 @@ class AppTheme {
       appName: styleModel.name,
     );
 
-    _instance = AppTheme._(theme);
+    _instance = AppBranding._(theme);
+  }
+
+  static Future<Config> _initStyleManager() async {
+    final jsonString = await rootBundle.loadString('publisher.json');
+    final config = Config.fromJson(json.decode(jsonString));
+
+    StyleManager.init(defaultTheme: Assets.style.branding, url: config.hosts.prod);
+
+    return config;
+  }
+
+  static Future<ThemeDTO> _getStyleModel(Config config) async {
+    if (config.autoUpdate) {
+      return await StyleManager().getById(config.mapping.getApplicationId, config.mapping.getThemeId);
+    } else {
+      return await StyleManager().getDefault();
+    }
   }
 
   static Color? _toColor(String? hex) {
     return UtilityColor.tryParseColorFromHex(hex);
   }
 
-  factory AppTheme() {
+  factory AppBranding() {
     return _instance;
   }
 
-  AppTheme._(this._theme);
+  AppBranding._(this._theme);
 
   ThemeSettings _theme;
 

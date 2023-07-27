@@ -26,7 +26,7 @@ void main() {
 
     final applicationDocumentsPath = await getApplicationDocumentsPath();
 
-    final theme = AppTheme().theme;
+    final theme = AppBranding().theme;
 
     return Provider<AppDatabase>(
       create: (context) {

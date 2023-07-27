@@ -40,7 +40,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       await DeviceInfo.init();
       await PackageInfo.init();
       await SecureStorage.init();
-      await AppTheme.init();
+      await AppBranding.init();
 
       Bloc.observer = _AppBlocObserver();
 
