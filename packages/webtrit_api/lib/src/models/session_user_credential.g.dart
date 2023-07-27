@@ -1,21 +1,21 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'session_otp_credential_demo.dart';
+part of 'session_user_credential.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_SessionOtpCredentialDemo _$$_SessionOtpCredentialDemoFromJson(
+_$_SessionUserCredential _$$_SessionUserCredentialFromJson(
         Map<String, dynamic> json) =>
-    _$_SessionOtpCredentialDemo(
+    _$_SessionUserCredential(
       type: $enumDecode(_$AppTypeEnumMap, json['type']),
       identifier: json['identifier'] as String,
       email: json['email'] as String,
     );
 
-Map<String, dynamic> _$$_SessionOtpCredentialDemoToJson(
-        _$_SessionOtpCredentialDemo instance) =>
+Map<String, dynamic> _$$_SessionUserCredentialToJson(
+        _$_SessionUserCredential instance) =>
     <String, dynamic>{
       'type': _$AppTypeEnumMap[instance.type]!,
       'identifier': instance.identifier,

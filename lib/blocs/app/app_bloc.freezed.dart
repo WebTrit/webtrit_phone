@@ -17,22 +17,26 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$AppLogined {
   String get coreUrl => throw _privateConstructorUsedError;
+  String get tenantId => throw _privateConstructorUsedError;
   String get token => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 
 class _$_AppLogined implements _AppLogined {
-  const _$_AppLogined({required this.coreUrl, required this.token});
+  const _$_AppLogined(
+      {required this.coreUrl, required this.tenantId, required this.token});
 
   @override
   final String coreUrl;
+  @override
+  final String tenantId;
   @override
   final String token;
 
   @override
   String toString() {
-    return 'AppLogined(coreUrl: $coreUrl, token: $token)';
+    return 'AppLogined(coreUrl: $coreUrl, tenantId: $tenantId, token: $token)';
   }
 
   @override
@@ -41,20 +45,25 @@ class _$_AppLogined implements _AppLogined {
         (other.runtimeType == runtimeType &&
             other is _$_AppLogined &&
             (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
+            (identical(other.tenantId, tenantId) ||
+                other.tenantId == tenantId) &&
             (identical(other.token, token) || other.token == token));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, coreUrl, token);
+  int get hashCode => Object.hash(runtimeType, coreUrl, tenantId, token);
 }
 
 abstract class _AppLogined implements AppLogined {
   const factory _AppLogined(
       {required final String coreUrl,
+      required final String tenantId,
       required final String token}) = _$_AppLogined;
 
   @override
   String get coreUrl;
+  @override
+  String get tenantId;
   @override
   String get token;
 }
@@ -202,6 +211,7 @@ abstract class _AppLocaleChanged implements AppLocaleChanged {
 /// @nodoc
 mixin _$AppState {
   String? get coreUrl => throw _privateConstructorUsedError;
+  String? get tenantId => throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
   String? get webRegistrationInitialUrl => throw _privateConstructorUsedError;
   ThemeSettings get themeSettings => throw _privateConstructorUsedError;
@@ -220,6 +230,7 @@ abstract class $AppStateCopyWith<$Res> {
   @useResult
   $Res call(
       {String? coreUrl,
+      String? tenantId,
       String? token,
       String? webRegistrationInitialUrl,
       ThemeSettings themeSettings,
@@ -241,6 +252,7 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
   @override
   $Res call({
     Object? coreUrl = freezed,
+    Object? tenantId = freezed,
     Object? token = freezed,
     Object? webRegistrationInitialUrl = freezed,
     Object? themeSettings = null,
@@ -251,6 +263,10 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
       coreUrl: freezed == coreUrl
           ? _value.coreUrl
           : coreUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tenantId: freezed == tenantId
+          ? _value.tenantId
+          : tenantId // ignore: cast_nullable_to_non_nullable
               as String?,
       token: freezed == token
           ? _value.token
@@ -285,6 +301,7 @@ abstract class _$$_AppStateCopyWith<$Res> implements $AppStateCopyWith<$Res> {
   @useResult
   $Res call(
       {String? coreUrl,
+      String? tenantId,
       String? token,
       String? webRegistrationInitialUrl,
       ThemeSettings themeSettings,
@@ -304,6 +321,7 @@ class __$$_AppStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? coreUrl = freezed,
+    Object? tenantId = freezed,
     Object? token = freezed,
     Object? webRegistrationInitialUrl = freezed,
     Object? themeSettings = null,
@@ -314,6 +332,10 @@ class __$$_AppStateCopyWithImpl<$Res>
       coreUrl: freezed == coreUrl
           ? _value.coreUrl
           : coreUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tenantId: freezed == tenantId
+          ? _value.tenantId
+          : tenantId // ignore: cast_nullable_to_non_nullable
               as String?,
       token: freezed == token
           ? _value.token
@@ -344,6 +366,7 @@ class __$$_AppStateCopyWithImpl<$Res>
 class _$_AppState extends _AppState {
   const _$_AppState(
       {this.coreUrl,
+      this.tenantId,
       this.token,
       this.webRegistrationInitialUrl,
       required this.themeSettings,
@@ -353,6 +376,8 @@ class _$_AppState extends _AppState {
 
   @override
   final String? coreUrl;
+  @override
+  final String? tenantId;
   @override
   final String? token;
   @override
@@ -366,7 +391,7 @@ class _$_AppState extends _AppState {
 
   @override
   String toString() {
-    return 'AppState(coreUrl: $coreUrl, token: $token, webRegistrationInitialUrl: $webRegistrationInitialUrl, themeSettings: $themeSettings, themeMode: $themeMode, locale: $locale)';
+    return 'AppState(coreUrl: $coreUrl, tenantId: $tenantId, token: $token, webRegistrationInitialUrl: $webRegistrationInitialUrl, themeSettings: $themeSettings, themeMode: $themeMode, locale: $locale)';
   }
 
   @override
@@ -375,6 +400,8 @@ class _$_AppState extends _AppState {
         (other.runtimeType == runtimeType &&
             other is _$_AppState &&
             (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
+            (identical(other.tenantId, tenantId) ||
+                other.tenantId == tenantId) &&
             (identical(other.token, token) || other.token == token) &&
             (identical(other.webRegistrationInitialUrl,
                     webRegistrationInitialUrl) ||
@@ -387,7 +414,7 @@ class _$_AppState extends _AppState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, coreUrl, token,
+  int get hashCode => Object.hash(runtimeType, coreUrl, tenantId, token,
       webRegistrationInitialUrl, themeSettings, themeMode, locale);
 
   @JsonKey(ignore: true)
@@ -400,6 +427,7 @@ class _$_AppState extends _AppState {
 abstract class _AppState extends AppState {
   const factory _AppState(
       {final String? coreUrl,
+      final String? tenantId,
       final String? token,
       final String? webRegistrationInitialUrl,
       required final ThemeSettings themeSettings,
@@ -409,6 +437,8 @@ abstract class _AppState extends AppState {
 
   @override
   String? get coreUrl;
+  @override
+  String? get tenantId;
   @override
   String? get token;
   @override

@@ -22,7 +22,7 @@ SessionOtpCredential _$SessionOtpCredentialFromJson(Map<String, dynamic> json) {
 mixin _$SessionOtpCredential {
   AppType get type => throw _privateConstructorUsedError;
   String get identifier => throw _privateConstructorUsedError;
-  String get phone => throw _privateConstructorUsedError;
+  String get userRef => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,7 +36,7 @@ abstract class $SessionOtpCredentialCopyWith<$Res> {
           $Res Function(SessionOtpCredential) then) =
       _$SessionOtpCredentialCopyWithImpl<$Res, SessionOtpCredential>;
   @useResult
-  $Res call({AppType type, String identifier, String phone});
+  $Res call({AppType type, String identifier, String userRef});
 }
 
 /// @nodoc
@@ -55,7 +55,7 @@ class _$SessionOtpCredentialCopyWithImpl<$Res,
   $Res call({
     Object? type = null,
     Object? identifier = null,
-    Object? phone = null,
+    Object? userRef = null,
   }) {
     return _then(_value.copyWith(
       type: null == type
@@ -66,9 +66,9 @@ class _$SessionOtpCredentialCopyWithImpl<$Res,
           ? _value.identifier
           : identifier // ignore: cast_nullable_to_non_nullable
               as String,
-      phone: null == phone
-          ? _value.phone
-          : phone // ignore: cast_nullable_to_non_nullable
+      userRef: null == userRef
+          ? _value.userRef
+          : userRef // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -82,7 +82,7 @@ abstract class _$$_SessionOtpCredentialCopyWith<$Res>
       __$$_SessionOtpCredentialCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({AppType type, String identifier, String phone});
+  $Res call({AppType type, String identifier, String userRef});
 }
 
 /// @nodoc
@@ -98,7 +98,7 @@ class __$$_SessionOtpCredentialCopyWithImpl<$Res>
   $Res call({
     Object? type = null,
     Object? identifier = null,
-    Object? phone = null,
+    Object? userRef = null,
   }) {
     return _then(_$_SessionOtpCredential(
       type: null == type
@@ -109,9 +109,9 @@ class __$$_SessionOtpCredentialCopyWithImpl<$Res>
           ? _value.identifier
           : identifier // ignore: cast_nullable_to_non_nullable
               as String,
-      phone: null == phone
-          ? _value.phone
-          : phone // ignore: cast_nullable_to_non_nullable
+      userRef: null == userRef
+          ? _value.userRef
+          : userRef // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -122,7 +122,7 @@ class __$$_SessionOtpCredentialCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$_SessionOtpCredential implements _SessionOtpCredential {
   const _$_SessionOtpCredential(
-      {required this.type, required this.identifier, required this.phone});
+      {required this.type, required this.identifier, required this.userRef});
 
   factory _$_SessionOtpCredential.fromJson(Map<String, dynamic> json) =>
       _$$_SessionOtpCredentialFromJson(json);
@@ -132,11 +132,11 @@ class _$_SessionOtpCredential implements _SessionOtpCredential {
   @override
   final String identifier;
   @override
-  final String phone;
+  final String userRef;
 
   @override
   String toString() {
-    return 'SessionOtpCredential(type: $type, identifier: $identifier, phone: $phone)';
+    return 'SessionOtpCredential(type: $type, identifier: $identifier, userRef: $userRef)';
   }
 
   @override
@@ -147,12 +147,12 @@ class _$_SessionOtpCredential implements _SessionOtpCredential {
             (identical(other.type, type) || other.type == type) &&
             (identical(other.identifier, identifier) ||
                 other.identifier == identifier) &&
-            (identical(other.phone, phone) || other.phone == phone));
+            (identical(other.userRef, userRef) || other.userRef == userRef));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, type, identifier, phone);
+  int get hashCode => Object.hash(runtimeType, type, identifier, userRef);
 
   @JsonKey(ignore: true)
   @override
@@ -173,7 +173,7 @@ abstract class _SessionOtpCredential implements SessionOtpCredential {
   const factory _SessionOtpCredential(
       {required final AppType type,
       required final String identifier,
-      required final String phone}) = _$_SessionOtpCredential;
+      required final String userRef}) = _$_SessionOtpCredential;
 
   factory _SessionOtpCredential.fromJson(Map<String, dynamic> json) =
       _$_SessionOtpCredential.fromJson;
@@ -183,7 +183,7 @@ abstract class _SessionOtpCredential implements SessionOtpCredential {
   @override
   String get identifier;
   @override
-  String get phone;
+  String get userRef;
   @override
   @JsonKey(ignore: true)
   _$$_SessionOtpCredentialCopyWith<_$_SessionOtpCredential> get copyWith =>

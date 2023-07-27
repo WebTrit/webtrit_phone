@@ -11,7 +11,7 @@ _$_SessionOtpCredential _$$_SessionOtpCredentialFromJson(
     _$_SessionOtpCredential(
       type: $enumDecode(_$AppTypeEnumMap, json['type']),
       identifier: json['identifier'] as String,
-      phone: json['phone'] as String,
+      userRef: json['user_ref'] as String,
     );
 
 Map<String, dynamic> _$$_SessionOtpCredentialToJson(
@@ -19,7 +19,7 @@ Map<String, dynamic> _$$_SessionOtpCredentialToJson(
     <String, dynamic>{
       'type': _$AppTypeEnumMap[instance.type]!,
       'identifier': instance.identifier,
-      'phone': instance.phone,
+      'user_ref': instance.userRef,
     };
 
 const _$AppTypeEnumMap = {

@@ -1,7 +1,14 @@
 name: webtrit_phone
 description: WebTrit Phone application.
 publish_to: 'none'
-version: 1.1.0+1
+# Version format: <Major>.<Minor>.<Patch>[-<Pre-release>]+<Build>
+# Where:
+#   - <Major>, <Minor>, <Patch>: non-negative integers, decided by the developer
+#   - <Pre-release>: optional, series of dot-separated identifiers, decided by the developer
+#   - <Build>: non-negative integer computed as follows:
+#       <Major> * 1000000 + <Minor> * 10000 + <Patch> * 100 + <published build iteration for Major.Minor.Patch combination>
+# Note: <Minor>, <Patch>, and <Build> should be within the range of 0 to 99.
+version: 1.1.0+1010000
 
 environment:
   sdk: ">=3.0.0 <4.0.0"

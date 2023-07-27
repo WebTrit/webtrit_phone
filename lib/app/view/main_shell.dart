@@ -54,8 +54,10 @@ class _MainShellState extends State<MainShell> {
       providers: [
         RepositoryProvider<WebtritApiClient>(
           create: (context) {
+            final appBloc = context.read<AppBloc>();
             return WebtritApiClient(
-              Uri.parse(context.read<AppBloc>().state.coreUrl!),
+              Uri.parse(appBloc.state.coreUrl!),
+              appBloc.state.tenantId!,
               connectionTimeout: kApiClientConnectionTimeout,
             );
           },
@@ -91,8 +93,8 @@ class _MainShellState extends State<MainShell> {
             periodicPolling: EnvironmentConfig.PERIODIC_POLLING,
           ),
         ),
-        RepositoryProvider<AccountRepository>(
-          create: (context) => AccountRepository(
+        RepositoryProvider<UserRepository>(
+          create: (context) => UserRepository(
             webtritApiClient: context.read<WebtritApiClient>(),
             token: context.read<AppBloc>().state.token!,
             periodicPolling: EnvironmentConfig.PERIODIC_POLLING,
@@ -142,7 +144,7 @@ class _MainShellState extends State<MainShell> {
             lazy: false,
             create: (context) {
               return ExternalContactsSyncBloc(
-                accountRepository: context.read<AccountRepository>(),
+                userRepository: context.read<UserRepository>(),
                 externalContactsRepository: context.read<ExternalContactsRepository>(),
                 appDatabase: context.read<AppDatabase>(),
               )..add(const ExternalContactsSyncStarted());

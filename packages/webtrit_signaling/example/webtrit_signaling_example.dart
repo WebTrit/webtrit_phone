@@ -18,7 +18,8 @@ void main(List<String> arguments) async {
 
   print('Connect');
   final client = await WebtritSignalingClient.connect(
-    url,
+    Uri.parse(url),
+    '',
     token,
     false,
     connectionTimeout: Duration(seconds: 5),

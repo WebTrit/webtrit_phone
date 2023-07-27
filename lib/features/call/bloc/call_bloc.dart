@@ -335,10 +335,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       if (emit.isDone) return;
 
-      final signalingUrl = _coreUrlToSignalingUrl(appBloc.state.coreUrl!);
+      final signalingUrl = _parseCoreUrlToSignalingUrl(appBloc.state.coreUrl!);
+      final tenantId = appBloc.state.tenantId!;
       final token = appBloc.state.token!;
       final signalingClient = await WebtritSignalingClient.connect(
         signalingUrl,
+        tenantId,
         token,
         true,
         connectionTimeout: kSignalingClientConnectionTimeout,
@@ -1421,12 +1423,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     await _audioPlayer.stop();
   }
 
-  String _coreUrlToSignalingUrl(String coreUrl) {
+  Uri _parseCoreUrlToSignalingUrl(String coreUrl) {
     final uri = Uri.parse(coreUrl);
     if (uri.scheme.endsWith('s')) {
-      return uri.replace(scheme: 'wss').toString();
+      return uri.replace(scheme: 'wss');
     } else {
-      return uri.replace(scheme: 'ws').toString();
+      return uri.replace(scheme: 'ws');
     }
   }
 }

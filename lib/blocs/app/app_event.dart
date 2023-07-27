@@ -8,6 +8,7 @@ abstract class AppEvent {
 class AppLogined with _$AppLogined implements AppEvent {
   const factory AppLogined({
     required String coreUrl,
+    required String tenantId,
     required String token,
   }) = _AppLogined;
 }

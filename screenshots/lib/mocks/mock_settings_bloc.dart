@@ -14,7 +14,7 @@ class MockSettingsBloc extends MockBloc<SettingsEvent, SettingsState> implements
       const Stream<SettingsState>.empty(),
       initialState: const SettingsState(
         registerStatus: true,
-        info: dAccountInfo,
+        info: userInfo,
       ),
     );
     return mock;

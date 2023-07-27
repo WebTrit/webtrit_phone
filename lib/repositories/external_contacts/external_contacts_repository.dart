@@ -70,19 +70,20 @@ class ExternalContactsRepository {
   }
 
   Future<List<ExternalContact>> _listContacts() async {
-    final contacts = await _webtritApiClient.accountContacts(_token);
+    final contacts = await _webtritApiClient.getUserContactList(_token);
 
-    return contacts
-        .map((contact) => ExternalContact(
-              id: contact.number,
-              displayName: contact.extensionName,
-              firstName: contact.firstName,
-              lastName: contact.lastName,
-              number: contact.number,
-              ext: contact.extensionId,
-              mobile: contact.mobile,
-              email: contact.email,
-            ))
-        .toList();
+    return contacts.map((contact) {
+      final numbers = contact.numbers;
+      return ExternalContact(
+        id: numbers.main,
+        displayName: contact.sip?.displayName,
+        firstName: contact.firstName,
+        lastName: contact.lastName,
+        number: numbers.main,
+        ext: numbers.ext,
+        mobile: numbers.main,
+        email: contact.email,
+      );
+    }).toList();
   }
 }

@@ -14,6 +14,6 @@ class PushTokensRepository {
 
   Future<void> insertOrUpdatePushToken(AppPushTokenType type, String value) async {
     var appPushToken = AppPushToken(type: type, value: value);
-    return await _webtritApiClient.appCreatePushToken(_token, appPushToken);
+    return await _webtritApiClient.createAppPushToken(_token, appPushToken);
   }
 }

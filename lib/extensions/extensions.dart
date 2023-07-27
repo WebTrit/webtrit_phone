@@ -1,4 +1,3 @@
-export 'account_info.dart';
 export 'app_database.dart';
 export 'build_context.dart';
 export 'call_status.dart';
@@ -10,4 +9,5 @@ export 'iterable.dart';
 export 'locale.dart';
 export 'string.dart';
 export 'theme_mode.dart';
+export 'user_info.dart';
 export 'web_view_controller.dart';

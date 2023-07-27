@@ -29,6 +29,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
           context.hideCurrentSnackBar();
           context.read<AppBloc>().add(AppLogined(
                 coreUrl: state.coreUrl!,
+                tenantId: state.tenantId!,
                 token: state.token!,
               ));
         } else if (state.status == LoginStatus.back) {
@@ -43,8 +44,8 @@ class LoginOtpVerifyTab extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        final isOtpNotificationEmail = state.otpProvisional?.notificationType?.isEmail ?? false;
-        final otpFromEmail = state.otpProvisional?.fromEmail;
+        final isOtpNotificationEmail = state.sessionOtpProvisional?.notificationType?.isEmail ?? false;
+        final otpFromEmail = state.sessionOtpProvisional?.fromEmail;
         return WillPopScope(
           onWillPop: () async {
             _onOtpVerifyBack(context);
@@ -112,7 +113,7 @@ class LoginOtpVerifyTab extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             CountDownBuilder(
-                              key: ObjectKey(state.otpProvisional),
+                              key: ObjectKey(state.sessionOtpProvisional),
                               interval: const Duration(seconds: 30),
                               builder: (context, seconds) {
                                 if (seconds == 0) {
