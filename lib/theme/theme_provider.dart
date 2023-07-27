@@ -5,7 +5,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 
-import 'const_texts.dart';
 import 'theme.dart';
 
 class ThemeProvider extends InheritedWidget {
@@ -108,10 +107,12 @@ class ThemeProvider extends InheritedWidget {
 
   GenImages genImages({
     Stream<SvgLoader?>? logo,
+    Stream<SvgLoader?>? logoV2,
     Stream<SvgLoader?>? loginOnboarding,
   }) {
     return GenImages(
       logo: logo,
+      logoV2: logoV2,
       loginOnboarding: loginOnboarding,
     );
   }
@@ -294,6 +295,7 @@ class ThemeProvider extends InheritedWidget {
         gradients(colorScheme),
         genImages(
           logo: settings.imagesScheme?.applicationLogo,
+          logoV2: settings.imagesScheme?.applicationLogoV2Stream,
           loginOnboarding: settings.imagesScheme?.onboarding,
         ),
         getConstText(

@@ -98,10 +98,13 @@ class ColorSchemeOverride {
 class ImagesScheme {
   final onboardingStream = ReplaySubject<SvgLoader?>(maxSize: 1);
   final applicationLogoStream = ReplaySubject<SvgLoader?>(maxSize: 1);
+  final applicationLogoV2Stream = ReplaySubject<SvgLoader?>(maxSize: 1);
 
   Stream<SvgLoader?> get onboarding => onboardingStream.stream;
 
   Stream<SvgLoader?> get applicationLogo => applicationLogoStream.stream;
+
+  Stream<SvgLoader?> get applicationV2Logo => applicationLogoStream.stream;
 
   void clearOnboarding() {
     onboardingStream.add(null);
@@ -132,11 +135,25 @@ class ImagesScheme {
     _updateStreamByNetworkSvg(applicationLogoStream, image, svgGenImage);
   }
 
-  void setApplicationByBytes(
+  void setApplicationLogoV2ByUrl(
+    String? image, {
+    SvgGenImage svgGenImage = Assets.logo,
+  }) {
+    _updateStreamByNetworkSvg(applicationLogoV2Stream, image, svgGenImage);
+  }
+
+  void setApplicationLogoByBytes(
     Uint8List? image, {
     SvgGenImage svgGenImage = Assets.logo,
   }) {
     _updateStreamByBytesSvg(applicationLogoStream, image, svgGenImage);
+  }
+
+  void setApplicationLogoV2ByBytes(
+    Uint8List? image, {
+    SvgGenImage svgGenImage = Assets.logo,
+  }) {
+    _updateStreamByBytesSvg(applicationLogoV2Stream, image, svgGenImage);
   }
 
   void _updateStreamByNetworkSvg(ReplaySubject stream, String? image, SvgGenImage defaultImage) async {
