@@ -1,7 +1,7 @@
 {
   "file_generated_by": "FlutterFire CLI",
   "purpose": "FirebaseAppID & ProjectID for this Firebase app in this directory",
-  "GOOGLE_APP_ID": "1:524910534863:ios:ecdcf7348f2d1d914ad7ba",
-  "FIREBASE_PROJECT_ID": "webtrit-69559",
-  "GCM_SENDER_ID": "524910534863"
+  "GOOGLE_APP_ID": "1:567844538132:ios:2b49981b575ee389162401",
+  "FIREBASE_PROJECT_ID": "webtrit-voip-softphone",
+  "GCM_SENDER_ID": "567844538132"
 }

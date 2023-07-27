@@ -47,31 +47,30 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDdWVaDGe0mPRkngXQEUsS1_EQiFyXdoxE',
-    appId: '1:524910534863:web:8ee29ada8594349e4ad7ba',
-    messagingSenderId: '524910534863',
-    projectId: 'webtrit-69559',
-    authDomain: 'webtrit-69559.firebaseapp.com',
-    storageBucket: 'webtrit-69559.appspot.com',
-    measurementId: 'G-2EWYFX6650',
+    apiKey: 'AIzaSyBcL0PtdiRbbWrAji5K_IbV71hpO_wocUQ',
+    appId: '1:567844538132:web:7aa39595ef4d1a18162401',
+    messagingSenderId: '567844538132',
+    projectId: 'webtrit-voip-softphone',
+    authDomain: 'webtrit-voip-softphone.firebaseapp.com',
+    storageBucket: 'webtrit-voip-softphone.appspot.com',
+    measurementId: 'G-JH0F7266BG',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBiHZTx8_6-kdgVXwKoIxgfPAXL7ug6tVQ',
-    appId: '1:524910534863:android:8035f3b2f5b319c14ad7ba',
-    messagingSenderId: '524910534863',
-    projectId: 'webtrit-69559',
-    storageBucket: 'webtrit-69559.appspot.com',
+    apiKey: 'AIzaSyAJDMbIDIEVP7GXTXF9bqTkLbyxICG6WiQ',
+    appId: '1:567844538132:android:6c34223f0e1a9c5c162401',
+    messagingSenderId: '567844538132',
+    projectId: 'webtrit-voip-softphone',
+    storageBucket: 'webtrit-voip-softphone.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyADReAZ-JT7QMiTtfhR-oVGfv42lqQwFEM',
-    appId: '1:524910534863:ios:ecdcf7348f2d1d914ad7ba',
-    messagingSenderId: '524910534863',
-    projectId: 'webtrit-69559',
-    storageBucket: 'webtrit-69559.appspot.com',
-    androidClientId: '524910534863-bckq0st7scsum4b2lau3jjb07jmvbtm2.apps.googleusercontent.com',
-    iosClientId: '524910534863-f5jtl2mf63udj0pvetqpustgcamni2j3.apps.googleusercontent.com',
-    iosBundleId: 'com.webtrit.phone',
+    apiKey: 'AIzaSyB6MTtyeYb1XZPU_QMBKJ2YtAWWbLT4we8',
+    appId: '1:567844538132:ios:2b49981b575ee389162401',
+    messagingSenderId: '567844538132',
+    projectId: 'webtrit-voip-softphone',
+    storageBucket: 'webtrit-voip-softphone.appspot.com',
+    iosClientId: '567844538132-l2b2bhalkj8r85pn7ge2a9kq6f30uu7g.apps.googleusercontent.com',
+    iosBundleId: 'com.webtrit.app',
   );
 }

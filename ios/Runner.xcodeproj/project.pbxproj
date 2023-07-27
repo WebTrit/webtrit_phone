@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03FA555E2287724AA5761E6E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D4DF1C3420CDEF6A8D9448A7 /* GoogleService-Info.plist */; };
 		0F9E50FFE6C5EDB0EC5DDE91 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6E04FA0DE4C95110663E768 /* Pods_Runner.framework */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
@@ -50,6 +51,7 @@
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A6E04FA0DE4C95110663E768 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4DF1C3420CDEF6A8D9448A7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Runner/GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 				97C146EF1CF9000F007C117D /* Products */,
 				42BA722D402112D09B6D0196 /* Pods */,
 				188609388BB13AD2DD179774 /* Frameworks */,
+				D4DF1C3420CDEF6A8D9448A7 /* GoogleService-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -207,6 +210,7 @@
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 				448A2BA0286F1B6A000468C3 /* InfoPlist.strings in Resources */,
+				03FA555E2287724AA5761E6E /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
