@@ -1,0 +1,14 @@
+package_rename_config:
+  android:
+    app_name: WebTrit
+    package_name: com.webtrit.app
+    override_old_package: com.webtrit.app
+    lang: kotlin
+  ios:
+    app_name: WebTrit
+    bundle_name: com.webtrit.app
+    package_name: com.webtrit.app
+  web:
+    app_name: com.webtrit.app
+    description: WebTrit VoIP Softphone.
+    bundle_name: com.webtrit.app

@@ -1,11 +1,11 @@
 {
-    "name": "webtrit_phone",
-    "short_name": "webtrit_phone",
+    "name": "com.webtrit.app",
+    "short_name": "com.webtrit.app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#FFFFFF",
     "theme_color": "#F3F5F6",
-    "description": "A new Flutter project.",
+    "description": "WebTrit VoIP Softphone.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

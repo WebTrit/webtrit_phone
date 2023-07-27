@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.webtrit.phone">
+    package="com.webtrit.app">
     <uses-permission android:name="android.permission.INTERNET"/>
     <!-- Permissions options for the `webrtc` group -->
     <uses-feature android:name="android.hardware.camera" />
@@ -23,11 +23,11 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:allowBackup="false"
-        android:label="@string/APP_NAME"
+        android:label="WebTrit"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
-            android:name=".MainActivity"
+            android:name="com.webtrit.phone.MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
