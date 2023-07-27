@@ -18,7 +18,7 @@ class AppTheme {
     StyleManager.init(
         applicationId: AppStyleConfig().publisherConfig.applicationId,
         themeId: AppStyleConfig().publisherConfig.themeId,
-        defaultTheme: Assets.style.webtrit);
+        defaultTheme: Assets.style.branding);
 
     final styleModel = await StyleManager().get();
 
