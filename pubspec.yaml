@@ -81,6 +81,9 @@ dependencies:
   app_database:
     path: ./packages/data/app_database
 
+  webtrit_phone_publisher:
+    path: ../webtrit_phone_publisher
+
   style:
     path: ./packages/style
 
