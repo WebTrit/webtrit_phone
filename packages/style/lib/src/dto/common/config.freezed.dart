@@ -297,8 +297,8 @@ Output _$OutputFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Output {
   Path? get theme => throw _privateConstructorUsedError;
-  Path? get onboarding => throw _privateConstructorUsedError;
-  Path? get logo => throw _privateConstructorUsedError;
+  Path? get primaryOnboardingLogo => throw _privateConstructorUsedError;
+  Path? get secondaryOnboardingLogo => throw _privateConstructorUsedError;
   Path? get pushNotificationIcon => throw _privateConstructorUsedError;
   Path? get adaptiveIconBackground => throw _privateConstructorUsedError;
   Path? get adaptiveIconForeground => throw _privateConstructorUsedError;
@@ -318,8 +318,8 @@ abstract class $OutputCopyWith<$Res> {
   @useResult
   $Res call(
       {Path? theme,
-      Path? onboarding,
-      Path? logo,
+      Path? primaryOnboardingLogo,
+      Path? secondaryOnboardingLogo,
       Path? pushNotificationIcon,
       Path? adaptiveIconBackground,
       Path? adaptiveIconForeground,
@@ -328,8 +328,8 @@ abstract class $OutputCopyWith<$Res> {
       Path? webLauncherIcon});
 
   $PathCopyWith<$Res>? get theme;
-  $PathCopyWith<$Res>? get onboarding;
-  $PathCopyWith<$Res>? get logo;
+  $PathCopyWith<$Res>? get primaryOnboardingLogo;
+  $PathCopyWith<$Res>? get secondaryOnboardingLogo;
   $PathCopyWith<$Res>? get pushNotificationIcon;
   $PathCopyWith<$Res>? get adaptiveIconBackground;
   $PathCopyWith<$Res>? get adaptiveIconForeground;
@@ -352,8 +352,8 @@ class _$OutputCopyWithImpl<$Res, $Val extends Output>
   @override
   $Res call({
     Object? theme = freezed,
-    Object? onboarding = freezed,
-    Object? logo = freezed,
+    Object? primaryOnboardingLogo = freezed,
+    Object? secondaryOnboardingLogo = freezed,
     Object? pushNotificationIcon = freezed,
     Object? adaptiveIconBackground = freezed,
     Object? adaptiveIconForeground = freezed,
@@ -366,13 +366,13 @@ class _$OutputCopyWithImpl<$Res, $Val extends Output>
           ? _value.theme
           : theme // ignore: cast_nullable_to_non_nullable
               as Path?,
-      onboarding: freezed == onboarding
-          ? _value.onboarding
-          : onboarding // ignore: cast_nullable_to_non_nullable
+      primaryOnboardingLogo: freezed == primaryOnboardingLogo
+          ? _value.primaryOnboardingLogo
+          : primaryOnboardingLogo // ignore: cast_nullable_to_non_nullable
               as Path?,
-      logo: freezed == logo
-          ? _value.logo
-          : logo // ignore: cast_nullable_to_non_nullable
+      secondaryOnboardingLogo: freezed == secondaryOnboardingLogo
+          ? _value.secondaryOnboardingLogo
+          : secondaryOnboardingLogo // ignore: cast_nullable_to_non_nullable
               as Path?,
       pushNotificationIcon: freezed == pushNotificationIcon
           ? _value.pushNotificationIcon
@@ -415,25 +415,25 @@ class _$OutputCopyWithImpl<$Res, $Val extends Output>
 
   @override
   @pragma('vm:prefer-inline')
-  $PathCopyWith<$Res>? get onboarding {
-    if (_value.onboarding == null) {
+  $PathCopyWith<$Res>? get primaryOnboardingLogo {
+    if (_value.primaryOnboardingLogo == null) {
       return null;
     }
 
-    return $PathCopyWith<$Res>(_value.onboarding!, (value) {
-      return _then(_value.copyWith(onboarding: value) as $Val);
+    return $PathCopyWith<$Res>(_value.primaryOnboardingLogo!, (value) {
+      return _then(_value.copyWith(primaryOnboardingLogo: value) as $Val);
     });
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $PathCopyWith<$Res>? get logo {
-    if (_value.logo == null) {
+  $PathCopyWith<$Res>? get secondaryOnboardingLogo {
+    if (_value.secondaryOnboardingLogo == null) {
       return null;
     }
 
-    return $PathCopyWith<$Res>(_value.logo!, (value) {
-      return _then(_value.copyWith(logo: value) as $Val);
+    return $PathCopyWith<$Res>(_value.secondaryOnboardingLogo!, (value) {
+      return _then(_value.copyWith(secondaryOnboardingLogo: value) as $Val);
     });
   }
 
@@ -518,8 +518,8 @@ abstract class _$$_OutputCopyWith<$Res> implements $OutputCopyWith<$Res> {
   @useResult
   $Res call(
       {Path? theme,
-      Path? onboarding,
-      Path? logo,
+      Path? primaryOnboardingLogo,
+      Path? secondaryOnboardingLogo,
       Path? pushNotificationIcon,
       Path? adaptiveIconBackground,
       Path? adaptiveIconForeground,
@@ -530,9 +530,9 @@ abstract class _$$_OutputCopyWith<$Res> implements $OutputCopyWith<$Res> {
   @override
   $PathCopyWith<$Res>? get theme;
   @override
-  $PathCopyWith<$Res>? get onboarding;
+  $PathCopyWith<$Res>? get primaryOnboardingLogo;
   @override
-  $PathCopyWith<$Res>? get logo;
+  $PathCopyWith<$Res>? get secondaryOnboardingLogo;
   @override
   $PathCopyWith<$Res>? get pushNotificationIcon;
   @override
@@ -558,8 +558,8 @@ class __$$_OutputCopyWithImpl<$Res>
   @override
   $Res call({
     Object? theme = freezed,
-    Object? onboarding = freezed,
-    Object? logo = freezed,
+    Object? primaryOnboardingLogo = freezed,
+    Object? secondaryOnboardingLogo = freezed,
     Object? pushNotificationIcon = freezed,
     Object? adaptiveIconBackground = freezed,
     Object? adaptiveIconForeground = freezed,
@@ -572,13 +572,13 @@ class __$$_OutputCopyWithImpl<$Res>
           ? _value.theme
           : theme // ignore: cast_nullable_to_non_nullable
               as Path?,
-      onboarding: freezed == onboarding
-          ? _value.onboarding
-          : onboarding // ignore: cast_nullable_to_non_nullable
+      primaryOnboardingLogo: freezed == primaryOnboardingLogo
+          ? _value.primaryOnboardingLogo
+          : primaryOnboardingLogo // ignore: cast_nullable_to_non_nullable
               as Path?,
-      logo: freezed == logo
-          ? _value.logo
-          : logo // ignore: cast_nullable_to_non_nullable
+      secondaryOnboardingLogo: freezed == secondaryOnboardingLogo
+          ? _value.secondaryOnboardingLogo
+          : secondaryOnboardingLogo // ignore: cast_nullable_to_non_nullable
               as Path?,
       pushNotificationIcon: freezed == pushNotificationIcon
           ? _value.pushNotificationIcon
@@ -613,8 +613,8 @@ class __$$_OutputCopyWithImpl<$Res>
 class _$_Output implements _Output {
   const _$_Output(
       {this.theme,
-      this.onboarding,
-      this.logo,
+      this.primaryOnboardingLogo,
+      this.secondaryOnboardingLogo,
       this.pushNotificationIcon,
       this.adaptiveIconBackground,
       this.adaptiveIconForeground,
@@ -628,9 +628,9 @@ class _$_Output implements _Output {
   @override
   final Path? theme;
   @override
-  final Path? onboarding;
+  final Path? primaryOnboardingLogo;
   @override
-  final Path? logo;
+  final Path? secondaryOnboardingLogo;
   @override
   final Path? pushNotificationIcon;
   @override
@@ -646,7 +646,7 @@ class _$_Output implements _Output {
 
   @override
   String toString() {
-    return 'Output(theme: $theme, onboarding: $onboarding, logo: $logo, pushNotificationIcon: $pushNotificationIcon, adaptiveIconBackground: $adaptiveIconBackground, adaptiveIconForeground: $adaptiveIconForeground, androidLauncherIcon: $androidLauncherIcon, iosLauncherIcon: $iosLauncherIcon, webLauncherIcon: $webLauncherIcon)';
+    return 'Output(theme: $theme, primaryOnboardingLogo: $primaryOnboardingLogo, secondaryOnboardingLogo: $secondaryOnboardingLogo, pushNotificationIcon: $pushNotificationIcon, adaptiveIconBackground: $adaptiveIconBackground, adaptiveIconForeground: $adaptiveIconForeground, androidLauncherIcon: $androidLauncherIcon, iosLauncherIcon: $iosLauncherIcon, webLauncherIcon: $webLauncherIcon)';
   }
 
   @override
@@ -655,9 +655,11 @@ class _$_Output implements _Output {
         (other.runtimeType == runtimeType &&
             other is _$_Output &&
             (identical(other.theme, theme) || other.theme == theme) &&
-            (identical(other.onboarding, onboarding) ||
-                other.onboarding == onboarding) &&
-            (identical(other.logo, logo) || other.logo == logo) &&
+            (identical(other.primaryOnboardingLogo, primaryOnboardingLogo) ||
+                other.primaryOnboardingLogo == primaryOnboardingLogo) &&
+            (identical(
+                    other.secondaryOnboardingLogo, secondaryOnboardingLogo) ||
+                other.secondaryOnboardingLogo == secondaryOnboardingLogo) &&
             (identical(other.pushNotificationIcon, pushNotificationIcon) ||
                 other.pushNotificationIcon == pushNotificationIcon) &&
             (identical(other.adaptiveIconBackground, adaptiveIconBackground) ||
@@ -677,8 +679,8 @@ class _$_Output implements _Output {
   int get hashCode => Object.hash(
       runtimeType,
       theme,
-      onboarding,
-      logo,
+      primaryOnboardingLogo,
+      secondaryOnboardingLogo,
       pushNotificationIcon,
       adaptiveIconBackground,
       adaptiveIconForeground,
@@ -703,8 +705,8 @@ class _$_Output implements _Output {
 abstract class _Output implements Output {
   const factory _Output(
       {final Path? theme,
-      final Path? onboarding,
-      final Path? logo,
+      final Path? primaryOnboardingLogo,
+      final Path? secondaryOnboardingLogo,
       final Path? pushNotificationIcon,
       final Path? adaptiveIconBackground,
       final Path? adaptiveIconForeground,
@@ -717,9 +719,9 @@ abstract class _Output implements Output {
   @override
   Path? get theme;
   @override
-  Path? get onboarding;
+  Path? get primaryOnboardingLogo;
   @override
-  Path? get logo;
+  Path? get secondaryOnboardingLogo;
   @override
   Path? get pushNotificationIcon;
   @override

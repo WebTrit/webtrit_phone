@@ -7,9 +7,8 @@ part 'image_collection_dto.g.dart';
 @Freezed(makeCollectionsUnmodifiable: false)
 class ImageCollectionDTO with _$ImageCollectionDTO {
   const factory ImageCollectionDTO({
-    String? onboarding,
-    String? applicationLogo,
-    String? applicationLogoV2,
+    String? primaryOnboardingLogo,
+    String? secondaryOnboardingLogo,
     String? notificationLogo,
     String? adaptiveIconBackground,
     String? adaptiveIconForeground,

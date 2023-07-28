@@ -22,8 +22,8 @@ class Config with _$Config {
 class Output with _$Output {
   const factory Output({
     Path? theme,
-    Path? onboarding,
-    Path? logo,
+    Path? primaryOnboardingLogo,
+    Path? secondaryOnboardingLogo,
     Path? pushNotificationIcon,
     Path? adaptiveIconBackground,
     Path? adaptiveIconForeground,

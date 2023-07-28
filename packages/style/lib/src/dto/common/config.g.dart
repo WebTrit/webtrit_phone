@@ -30,12 +30,14 @@ _$_Output _$$_OutputFromJson(Map<String, dynamic> json) => _$_Output(
       theme: json['theme'] == null
           ? null
           : Path.fromJson(json['theme'] as Map<String, dynamic>),
-      onboarding: json['onboarding'] == null
+      primaryOnboardingLogo: json['primaryOnboardingLogo'] == null
           ? null
-          : Path.fromJson(json['onboarding'] as Map<String, dynamic>),
-      logo: json['logo'] == null
+          : Path.fromJson(
+              json['primaryOnboardingLogo'] as Map<String, dynamic>),
+      secondaryOnboardingLogo: json['secondaryOnboardingLogo'] == null
           ? null
-          : Path.fromJson(json['logo'] as Map<String, dynamic>),
+          : Path.fromJson(
+              json['secondaryOnboardingLogo'] as Map<String, dynamic>),
       pushNotificationIcon: json['pushNotificationIcon'] == null
           ? null
           : Path.fromJson(json['pushNotificationIcon'] as Map<String, dynamic>),
@@ -60,8 +62,8 @@ _$_Output _$$_OutputFromJson(Map<String, dynamic> json) => _$_Output(
 
 Map<String, dynamic> _$$_OutputToJson(_$_Output instance) => <String, dynamic>{
       'theme': instance.theme,
-      'onboarding': instance.onboarding,
-      'logo': instance.logo,
+      'primaryOnboardingLogo': instance.primaryOnboardingLogo,
+      'secondaryOnboardingLogo': instance.secondaryOnboardingLogo,
       'pushNotificationIcon': instance.pushNotificationIcon,
       'adaptiveIconBackground': instance.adaptiveIconBackground,
       'adaptiveIconForeground': instance.adaptiveIconForeground,

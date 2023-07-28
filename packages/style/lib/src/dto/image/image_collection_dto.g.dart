@@ -9,9 +9,8 @@ part of 'image_collection_dto.dart';
 _$_ImageCollectionDTO _$$_ImageCollectionDTOFromJson(
         Map<String, dynamic> json) =>
     _$_ImageCollectionDTO(
-      onboarding: json['onboarding'] as String?,
-      applicationLogo: json['applicationLogo'] as String?,
-      applicationLogoV2: json['applicationLogoV2'] as String?,
+      primaryOnboardingLogo: json['primaryOnboardingLogo'] as String?,
+      secondaryOnboardingLogo: json['secondaryOnboardingLogo'] as String?,
       notificationLogo: json['notificationLogo'] as String?,
       adaptiveIconBackground: json['adaptiveIconBackground'] as String?,
       adaptiveIconForeground: json['adaptiveIconForeground'] as String?,
@@ -23,9 +22,8 @@ _$_ImageCollectionDTO _$$_ImageCollectionDTOFromJson(
 Map<String, dynamic> _$$_ImageCollectionDTOToJson(
         _$_ImageCollectionDTO instance) =>
     <String, dynamic>{
-      'onboarding': instance.onboarding,
-      'applicationLogo': instance.applicationLogo,
-      'applicationLogoV2': instance.applicationLogoV2,
+      'primaryOnboardingLogo': instance.primaryOnboardingLogo,
+      'secondaryOnboardingLogo': instance.secondaryOnboardingLogo,
       'notificationLogo': instance.notificationLogo,
       'adaptiveIconBackground': instance.adaptiveIconBackground,
       'adaptiveIconForeground': instance.adaptiveIconForeground,
