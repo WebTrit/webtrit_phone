@@ -106,14 +106,12 @@ class ThemeProvider extends InheritedWidget {
   }
 
   GenImages genImages({
-    Stream<SvgLoader?>? logo,
-    Stream<SvgLoader?>? logoV2,
-    Stream<SvgLoader?>? loginOnboarding,
+    Stream<SvgLoader?>? primaryOnboardinLogo,
+    Stream<SvgLoader?>? secondaryOnboardinLogo,
   }) {
     return GenImages(
-      logo: logo,
-      logoV2: logoV2,
-      loginOnboarding: loginOnboarding,
+      primaryOnboardinLogo: primaryOnboardinLogo,
+      secondaryOnboardinLogo: secondaryOnboardinLogo,
     );
   }
 
@@ -294,9 +292,8 @@ class ThemeProvider extends InheritedWidget {
         textButtonStyles(colorScheme),
         gradients(colorScheme),
         genImages(
-          logo: settings.imagesScheme?.applicationLogo,
-          logoV2: settings.imagesScheme?.applicationLogoV2Stream,
-          loginOnboarding: settings.imagesScheme?.onboarding,
+          primaryOnboardinLogo: settings.imagesScheme?.primaryOnboardingLogo,
+          secondaryOnboardinLogo: settings.imagesScheme?.secondaryOnboardingLogo,
         ),
         getConstText(
           appName: settings.appName,

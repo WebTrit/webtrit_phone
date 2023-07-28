@@ -27,7 +27,7 @@ class AboutScreen extends StatelessWidget {
       },
       builder: (context, state) {
         final themeData = Theme.of(context);
-        final logo = themeData.extension<GenImages>()?.logo;
+        final logo = themeData.extension<GenImages>()?.primaryOnboardinLogo;
         final logoHeight = themeData.textTheme.displayLarge!.fontSize! * 1.5;
         final delimiterHeight = themeData.textTheme.titleLarge!.fontSize!;
         return Scaffold(

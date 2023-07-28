@@ -15,7 +15,7 @@ class OnboardingLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQueryData = MediaQuery.of(context);
     final themeData = Theme.of(context);
-    final logo = themeData.extension<GenImages>()?.logoV2;
+    final logo = themeData.extension<GenImages>()?.secondaryOnboardinLogo;
 
     return SizedBox(
       height: mediaQueryData.size.height / 4,

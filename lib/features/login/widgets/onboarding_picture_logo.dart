@@ -15,7 +15,7 @@ class OnboardingPictureLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQueryData = MediaQuery.of(context);
     final themeData = Theme.of(context);
-    final logo = themeData.extension<GenImages>()?.logo;
+    final logo = themeData.extension<GenImages>()?.primaryOnboardinLogo;
     final titleStyle = themeData.textTheme.displayMedium!.copyWith(
       color: color,
       fontWeight: FontWeight.w600,

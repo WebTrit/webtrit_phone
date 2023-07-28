@@ -16,9 +16,8 @@ class AppBranding {
 
     //TODO: Need logic for resource choice
     final imageScheme = ImagesScheme()
-      ..setApplicationLogoByUrl(styleModel.images!.applicationLogo)
-      ..setApplicationLogoV2ByUrl(styleModel.images!.applicationLogoV2 ?? styleModel.images!.applicationLogo)
-      ..setOnboardingByUrl(styleModel.images!.onboarding);
+      ..setPrimaryOnboardingLogo(url: styleModel.images!.primaryOnboardingLogo)
+      ..setSecondaryOnboardingLogo(url: styleModel.images!.secondaryOnboardingLogo);
 
     final colorScheme = ColorSchemeOverride(
       primary: _toColor(styleModel.colors?.primary),

@@ -52,14 +52,18 @@ class Assets {
   Assets._();
 
   static const $AssetsLoginGen login = $AssetsLoginGen();
-  static const SvgGenImage logo = SvgGenImage('assets/logo.svg');
   static const AssetGenImage logoIconTemplateImage =
       AssetGenImage('assets/logoIconTemplateImage.png');
+  static const SvgGenImage primaryOnboardinLogo =
+      SvgGenImage('assets/primary_onboardin_logo.svg');
   static const $AssetsRingtonesGen ringtones = $AssetsRingtonesGen();
+  static const SvgGenImage secondaryOnboardinLogo =
+      SvgGenImage('assets/secondary_onboardin_logo.svg');
   static const $AssetsStyleGen style = $AssetsStyleGen();
 
   /// List of all assets
-  List<dynamic> get values => [logo, logoIconTemplateImage];
+  List<dynamic> get values =>
+      [logoIconTemplateImage, primaryOnboardinLogo, secondaryOnboardinLogo];
 }
 
 class AssetGenImage {

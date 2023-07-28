@@ -12,7 +12,7 @@ class OnboardingPicture extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQueryData = MediaQuery.of(context);
     final themeData = Theme.of(context);
-    final loginOnboarding = themeData.extension<GenImages>()?.loginOnboarding;
+    final loginOnboarding = themeData.extension<GenImages>()?.secondaryOnboardinLogo;
     final loginOnboardingHeight = themeData.textTheme.headlineSmall!.fontSize! * 10;
 
     return Container(

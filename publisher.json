@@ -15,9 +15,13 @@
       "path": "/assets/style",
       "name": "branding.json"
     },
-    "logo": {
+    "primaryOnboardingLogo": {
       "path": "/assets/",
-      "name": "logo.svg"
+      "name": "primary_onboardin_logo.svg"
+    },
+    "secondaryOnboardingLogo": {
+      "path": "/assets/",
+      "name": "secondary_onboardin_logo.svg"
     },
     "pushNotificationIcon": {
       "path": "/assets/",

@@ -96,64 +96,43 @@ class ColorSchemeOverride {
 }
 
 class ImagesScheme {
-  final onboardingStream = ReplaySubject<SvgLoader?>(maxSize: 1);
-  final applicationLogoStream = ReplaySubject<SvgLoader?>(maxSize: 1);
-  final applicationLogoV2Stream = ReplaySubject<SvgLoader?>(maxSize: 1);
+  final _primaryOnboardingLogoStream = ReplaySubject<SvgLoader?>(maxSize: 1);
+  final _secondaryOnboardingLogoStream = ReplaySubject<SvgLoader?>(maxSize: 1);
 
-  Stream<SvgLoader?> get onboarding => onboardingStream.stream;
+  Stream<SvgLoader?> get primaryOnboardingLogo => _primaryOnboardingLogoStream.stream;
 
-  Stream<SvgLoader?> get applicationLogo => applicationLogoStream.stream;
+  Stream<SvgLoader?> get secondaryOnboardingLogo => _secondaryOnboardingLogoStream.stream;
 
-  Stream<SvgLoader?> get applicationV2Logo => applicationLogoStream.stream;
-
-  void clearOnboarding() {
-    onboardingStream.add(null);
+  void clearPrimaryOnboardingLogoStream() {
+    _primaryOnboardingLogoStream.add(null);
   }
 
-  void clearApplicationLogo() {
-    applicationLogoStream.add(null);
+  void clearSecondaryOnboardingLogoStream() {
+    _secondaryOnboardingLogoStream.add(null);
   }
 
-  void setOnboardingByUrl(
-    String? image, {
-    SvgGenImage svgGenImage = Assets.logo,
+  void setPrimaryOnboardingLogo({
+    String? url,
+    Uint8List? bytes,
+    SvgGenImage svgGenImage = Assets.primaryOnboardinLogo,
   }) {
-    _updateStreamByNetworkSvg(onboardingStream, image, svgGenImage);
+    if (url != null) {
+      return _updateStreamByNetworkSvg(_primaryOnboardingLogoStream, url, svgGenImage);
+    } else if (bytes != null) {
+      return _updateStreamByBytesSvg(_primaryOnboardingLogoStream, bytes, svgGenImage);
+    }
   }
 
-  void setOnboardingByBytes(
-    Uint8List? image, {
-    SvgGenImage svgGenImage = Assets.logo,
+  void setSecondaryOnboardingLogo({
+    String? url,
+    Uint8List? bytes,
+    SvgGenImage svgGenImage = Assets.primaryOnboardinLogo,
   }) {
-    _updateStreamByBytesSvg(onboardingStream, image, svgGenImage);
-  }
-
-  void setApplicationLogoByUrl(
-    String? image, {
-    SvgGenImage svgGenImage = Assets.logo,
-  }) {
-    _updateStreamByNetworkSvg(applicationLogoStream, image, svgGenImage);
-  }
-
-  void setApplicationLogoV2ByUrl(
-    String? image, {
-    SvgGenImage svgGenImage = Assets.logo,
-  }) {
-    _updateStreamByNetworkSvg(applicationLogoV2Stream, image, svgGenImage);
-  }
-
-  void setApplicationLogoByBytes(
-    Uint8List? image, {
-    SvgGenImage svgGenImage = Assets.logo,
-  }) {
-    _updateStreamByBytesSvg(applicationLogoStream, image, svgGenImage);
-  }
-
-  void setApplicationLogoV2ByBytes(
-    Uint8List? image, {
-    SvgGenImage svgGenImage = Assets.logo,
-  }) {
-    _updateStreamByBytesSvg(applicationLogoV2Stream, image, svgGenImage);
+    if (url != null) {
+      return _updateStreamByNetworkSvg(_secondaryOnboardingLogoStream, url, svgGenImage);
+    } else if (bytes != null) {
+      return _updateStreamByBytesSvg(_secondaryOnboardingLogoStream, bytes, svgGenImage);
+    }
   }
 
   void _updateStreamByNetworkSvg(ReplaySubject stream, String? image, SvgGenImage defaultImage) async {

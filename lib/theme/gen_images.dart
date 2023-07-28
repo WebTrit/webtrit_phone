@@ -3,25 +3,21 @@ import 'package:flutter_svg/svg.dart';
 
 class GenImages extends ThemeExtension<GenImages> {
   const GenImages({
-    this.logo,
-    this.logoV2,
-    this.loginOnboarding,
+    this.primaryOnboardinLogo,
+    this.secondaryOnboardinLogo,
   });
 
-  final Stream<SvgLoader?>? logo;
-  final Stream<SvgLoader?>? logoV2;
-  final Stream<SvgLoader?>? loginOnboarding;
+  final Stream<SvgLoader?>? primaryOnboardinLogo;
+  final Stream<SvgLoader?>? secondaryOnboardinLogo;
 
   @override
   ThemeExtension<GenImages> copyWith({
-    Stream<SvgLoader?>? logo,
-    Stream<SvgLoader?>? logoV2,
-    Stream<SvgLoader?>? loginOnboarding,
+    Stream<SvgLoader?>? primaryOnboardinLogo,
+    Stream<SvgLoader?>? secondaryOnboardinLogo,
   }) {
     return GenImages(
-      logo: logo ?? this.logo,
-      logoV2: logoV2 ?? this.logoV2,
-      loginOnboarding: loginOnboarding ?? this.loginOnboarding,
+      primaryOnboardinLogo: primaryOnboardinLogo ?? this.primaryOnboardinLogo,
+      secondaryOnboardinLogo: secondaryOnboardinLogo ?? this.secondaryOnboardinLogo,
     );
   }
 
