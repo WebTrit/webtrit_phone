@@ -21,7 +21,7 @@ SessionUserCredential _$SessionUserCredentialFromJson(
 
 /// @nodoc
 mixin _$SessionUserCredential {
-  String get bundleId => throw _privateConstructorUsedError;
+  String? get bundleId => throw _privateConstructorUsedError;
   AppType get type => throw _privateConstructorUsedError;
   String get identifier => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
@@ -38,7 +38,7 @@ abstract class $SessionUserCredentialCopyWith<$Res> {
           $Res Function(SessionUserCredential) then) =
       _$SessionUserCredentialCopyWithImpl<$Res, SessionUserCredential>;
   @useResult
-  $Res call({String bundleId, AppType type, String identifier, String email});
+  $Res call({String? bundleId, AppType type, String identifier, String email});
 }
 
 /// @nodoc
@@ -55,16 +55,16 @@ class _$SessionUserCredentialCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? bundleId = null,
+    Object? bundleId = freezed,
     Object? type = null,
     Object? identifier = null,
     Object? email = null,
   }) {
     return _then(_value.copyWith(
-      bundleId: null == bundleId
+      bundleId: freezed == bundleId
           ? _value.bundleId
           : bundleId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -89,7 +89,7 @@ abstract class _$$_SessionUserCredentialCopyWith<$Res>
       __$$_SessionUserCredentialCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String bundleId, AppType type, String identifier, String email});
+  $Res call({String? bundleId, AppType type, String identifier, String email});
 }
 
 /// @nodoc
@@ -103,16 +103,16 @@ class __$$_SessionUserCredentialCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? bundleId = null,
+    Object? bundleId = freezed,
     Object? type = null,
     Object? identifier = null,
     Object? email = null,
   }) {
     return _then(_$_SessionUserCredential(
-      bundleId: null == bundleId
+      bundleId: freezed == bundleId
           ? _value.bundleId
           : bundleId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -134,7 +134,7 @@ class __$$_SessionUserCredentialCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$_SessionUserCredential implements _SessionUserCredential {
   const _$_SessionUserCredential(
-      {required this.bundleId,
+      {this.bundleId,
       required this.type,
       required this.identifier,
       required this.email});
@@ -143,7 +143,7 @@ class _$_SessionUserCredential implements _SessionUserCredential {
       _$$_SessionUserCredentialFromJson(json);
 
   @override
-  final String bundleId;
+  final String? bundleId;
   @override
   final AppType type;
   @override
@@ -191,7 +191,7 @@ class _$_SessionUserCredential implements _SessionUserCredential {
 
 abstract class _SessionUserCredential implements SessionUserCredential {
   const factory _SessionUserCredential(
-      {required final String bundleId,
+      {final String? bundleId,
       required final AppType type,
       required final String identifier,
       required final String email}) = _$_SessionUserCredential;
@@ -200,7 +200,7 @@ abstract class _SessionUserCredential implements SessionUserCredential {
       _$_SessionUserCredential.fromJson;
 
   @override
-  String get bundleId;
+  String? get bundleId;
   @override
   AppType get type;
   @override

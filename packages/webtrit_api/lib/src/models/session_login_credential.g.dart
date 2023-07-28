@@ -9,7 +9,7 @@ part of 'session_login_credential.dart';
 _$_SessionLoginCredential _$$_SessionLoginCredentialFromJson(
         Map<String, dynamic> json) =>
     _$_SessionLoginCredential(
-      bundleId: json['bundle_id'] as String,
+      bundleId: json['bundle_id'] as String?,
       type: $enumDecode(_$AppTypeEnumMap, json['type']),
       identifier: json['identifier'] as String,
       login: json['login'] as String,

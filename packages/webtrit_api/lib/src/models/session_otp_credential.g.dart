@@ -9,7 +9,7 @@ part of 'session_otp_credential.dart';
 _$_SessionOtpCredential _$$_SessionOtpCredentialFromJson(
         Map<String, dynamic> json) =>
     _$_SessionOtpCredential(
-      bundleId: json['bundle_id'] as String,
+      bundleId: json['bundle_id'] as String?,
       type: $enumDecode(_$AppTypeEnumMap, json['type']),
       identifier: json['identifier'] as String,
       userRef: json['user_ref'] as String,

@@ -20,7 +20,7 @@ SessionOtpCredential _$SessionOtpCredentialFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SessionOtpCredential {
-  String get bundleId => throw _privateConstructorUsedError;
+  String? get bundleId => throw _privateConstructorUsedError;
   AppType get type => throw _privateConstructorUsedError;
   String get identifier => throw _privateConstructorUsedError;
   String get userRef => throw _privateConstructorUsedError;
@@ -37,7 +37,8 @@ abstract class $SessionOtpCredentialCopyWith<$Res> {
           $Res Function(SessionOtpCredential) then) =
       _$SessionOtpCredentialCopyWithImpl<$Res, SessionOtpCredential>;
   @useResult
-  $Res call({String bundleId, AppType type, String identifier, String userRef});
+  $Res call(
+      {String? bundleId, AppType type, String identifier, String userRef});
 }
 
 /// @nodoc
@@ -54,16 +55,16 @@ class _$SessionOtpCredentialCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? bundleId = null,
+    Object? bundleId = freezed,
     Object? type = null,
     Object? identifier = null,
     Object? userRef = null,
   }) {
     return _then(_value.copyWith(
-      bundleId: null == bundleId
+      bundleId: freezed == bundleId
           ? _value.bundleId
           : bundleId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -88,7 +89,8 @@ abstract class _$$_SessionOtpCredentialCopyWith<$Res>
       __$$_SessionOtpCredentialCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String bundleId, AppType type, String identifier, String userRef});
+  $Res call(
+      {String? bundleId, AppType type, String identifier, String userRef});
 }
 
 /// @nodoc
@@ -102,16 +104,16 @@ class __$$_SessionOtpCredentialCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? bundleId = null,
+    Object? bundleId = freezed,
     Object? type = null,
     Object? identifier = null,
     Object? userRef = null,
   }) {
     return _then(_$_SessionOtpCredential(
-      bundleId: null == bundleId
+      bundleId: freezed == bundleId
           ? _value.bundleId
           : bundleId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -133,7 +135,7 @@ class __$$_SessionOtpCredentialCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$_SessionOtpCredential implements _SessionOtpCredential {
   const _$_SessionOtpCredential(
-      {required this.bundleId,
+      {this.bundleId,
       required this.type,
       required this.identifier,
       required this.userRef});
@@ -142,7 +144,7 @@ class _$_SessionOtpCredential implements _SessionOtpCredential {
       _$$_SessionOtpCredentialFromJson(json);
 
   @override
-  final String bundleId;
+  final String? bundleId;
   @override
   final AppType type;
   @override
@@ -190,7 +192,7 @@ class _$_SessionOtpCredential implements _SessionOtpCredential {
 
 abstract class _SessionOtpCredential implements SessionOtpCredential {
   const factory _SessionOtpCredential(
-      {required final String bundleId,
+      {final String? bundleId,
       required final AppType type,
       required final String identifier,
       required final String userRef}) = _$_SessionOtpCredential;
@@ -199,7 +201,7 @@ abstract class _SessionOtpCredential implements SessionOtpCredential {
       _$_SessionOtpCredential.fromJson;
 
   @override
-  String get bundleId;
+  String? get bundleId;
   @override
   AppType get type;
   @override

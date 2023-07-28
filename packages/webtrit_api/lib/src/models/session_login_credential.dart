@@ -12,7 +12,7 @@ part 'session_login_credential.g.dart';
 class SessionLoginCredential with _$SessionLoginCredential {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory SessionLoginCredential({
-    required String bundleId,
+    String? bundleId,
     required AppType type,
     required String identifier,
     required String login,
