@@ -334,7 +334,6 @@ class _AppState extends State<App> {
                 pageBuilder: (context, state) {
                   const widget = CallScreen();
                   return CustomTransitionPage(
-                    name: MainRoute.call,
                     key: state.pageKey,
                     fullscreenDialog: true,
                     child: widget,
