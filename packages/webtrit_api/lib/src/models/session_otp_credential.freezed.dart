@@ -20,6 +20,7 @@ SessionOtpCredential _$SessionOtpCredentialFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SessionOtpCredential {
+  String? get bundleId => throw _privateConstructorUsedError;
   AppType get type => throw _privateConstructorUsedError;
   String get identifier => throw _privateConstructorUsedError;
   String get userRef => throw _privateConstructorUsedError;
@@ -36,7 +37,8 @@ abstract class $SessionOtpCredentialCopyWith<$Res> {
           $Res Function(SessionOtpCredential) then) =
       _$SessionOtpCredentialCopyWithImpl<$Res, SessionOtpCredential>;
   @useResult
-  $Res call({AppType type, String identifier, String userRef});
+  $Res call(
+      {String? bundleId, AppType type, String identifier, String userRef});
 }
 
 /// @nodoc
@@ -53,11 +55,16 @@ class _$SessionOtpCredentialCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? bundleId = freezed,
     Object? type = null,
     Object? identifier = null,
     Object? userRef = null,
   }) {
     return _then(_value.copyWith(
+      bundleId: freezed == bundleId
+          ? _value.bundleId
+          : bundleId // ignore: cast_nullable_to_non_nullable
+              as String?,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -82,7 +89,8 @@ abstract class _$$_SessionOtpCredentialCopyWith<$Res>
       __$$_SessionOtpCredentialCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({AppType type, String identifier, String userRef});
+  $Res call(
+      {String? bundleId, AppType type, String identifier, String userRef});
 }
 
 /// @nodoc
@@ -96,11 +104,16 @@ class __$$_SessionOtpCredentialCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? bundleId = freezed,
     Object? type = null,
     Object? identifier = null,
     Object? userRef = null,
   }) {
     return _then(_$_SessionOtpCredential(
+      bundleId: freezed == bundleId
+          ? _value.bundleId
+          : bundleId // ignore: cast_nullable_to_non_nullable
+              as String?,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -122,11 +135,16 @@ class __$$_SessionOtpCredentialCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$_SessionOtpCredential implements _SessionOtpCredential {
   const _$_SessionOtpCredential(
-      {required this.type, required this.identifier, required this.userRef});
+      {this.bundleId,
+      required this.type,
+      required this.identifier,
+      required this.userRef});
 
   factory _$_SessionOtpCredential.fromJson(Map<String, dynamic> json) =>
       _$$_SessionOtpCredentialFromJson(json);
 
+  @override
+  final String? bundleId;
   @override
   final AppType type;
   @override
@@ -136,7 +154,7 @@ class _$_SessionOtpCredential implements _SessionOtpCredential {
 
   @override
   String toString() {
-    return 'SessionOtpCredential(type: $type, identifier: $identifier, userRef: $userRef)';
+    return 'SessionOtpCredential(bundleId: $bundleId, type: $type, identifier: $identifier, userRef: $userRef)';
   }
 
   @override
@@ -144,6 +162,8 @@ class _$_SessionOtpCredential implements _SessionOtpCredential {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_SessionOtpCredential &&
+            (identical(other.bundleId, bundleId) ||
+                other.bundleId == bundleId) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.identifier, identifier) ||
                 other.identifier == identifier) &&
@@ -152,7 +172,8 @@ class _$_SessionOtpCredential implements _SessionOtpCredential {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, type, identifier, userRef);
+  int get hashCode =>
+      Object.hash(runtimeType, bundleId, type, identifier, userRef);
 
   @JsonKey(ignore: true)
   @override
@@ -171,13 +192,16 @@ class _$_SessionOtpCredential implements _SessionOtpCredential {
 
 abstract class _SessionOtpCredential implements SessionOtpCredential {
   const factory _SessionOtpCredential(
-      {required final AppType type,
+      {final String? bundleId,
+      required final AppType type,
       required final String identifier,
       required final String userRef}) = _$_SessionOtpCredential;
 
   factory _SessionOtpCredential.fromJson(Map<String, dynamic> json) =
       _$_SessionOtpCredential.fromJson;
 
+  @override
+  String? get bundleId;
   @override
   AppType get type;
   @override

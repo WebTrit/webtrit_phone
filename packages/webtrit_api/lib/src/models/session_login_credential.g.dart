@@ -9,6 +9,7 @@ part of 'session_login_credential.dart';
 _$_SessionLoginCredential _$$_SessionLoginCredentialFromJson(
         Map<String, dynamic> json) =>
     _$_SessionLoginCredential(
+      bundleId: json['bundle_id'] as String?,
       type: $enumDecode(_$AppTypeEnumMap, json['type']),
       identifier: json['identifier'] as String,
       login: json['login'] as String,
@@ -18,6 +19,7 @@ _$_SessionLoginCredential _$$_SessionLoginCredentialFromJson(
 Map<String, dynamic> _$$_SessionLoginCredentialToJson(
         _$_SessionLoginCredential instance) =>
     <String, dynamic>{
+      'bundle_id': instance.bundleId,
       'type': _$AppTypeEnumMap[instance.type]!,
       'identifier': instance.identifier,
       'login': instance.login,
