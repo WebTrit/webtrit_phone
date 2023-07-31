@@ -78,6 +78,7 @@ class ExternalContactsRepository {
         id: numbers.main,
         firstName: contact.firstName,
         lastName: contact.lastName,
+        aliasName: contact.aliasName,
         number: numbers.main,
         ext: numbers.ext,
         mobile: numbers.main,

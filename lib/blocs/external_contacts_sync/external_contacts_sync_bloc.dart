@@ -79,9 +79,9 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
             await appDatabase.contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
           sourceType: const Value(ContactSourceTypeEnum.external),
           sourceId: Value(externalContact.id),
-          displayName: Value(externalContact.displayName),
           firstName: Value(externalContact.firstName),
           lastName: Value(externalContact.lastName),
+          aliasName: Value(externalContact.aliasName),
         ));
 
         final externalContactNumber = externalContact.number;

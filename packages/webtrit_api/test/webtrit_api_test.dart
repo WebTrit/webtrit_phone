@@ -532,6 +532,7 @@ void main() {
                 'host': 'sip.webtrit.com',
                 'port': 5060,
               },
+              'display_name': 'display_name_1'
             },
             'balance': {
               'amount': 111.1,
@@ -546,6 +547,7 @@ void main() {
             'email': 'email_1',
             'first_name': 'first_name_1',
             'last_name': 'last_name_1',
+            'alias_name': 'alias_name_1',
             'company_name': 'company_name_1',
           }),
           200,
@@ -567,6 +569,7 @@ void main() {
                 host: 'sip.webtrit.com',
                 port: 5060,
               ),
+              displayName: 'display_name_1',
             ),
             balance: Balance(
               amount: 111.1,
@@ -581,9 +584,10 @@ void main() {
                 '34911234567',
               ],
             ),
+            email: 'email_1',
             firstName: 'first_name_1',
             lastName: 'last_name_1',
-            email: 'email_1',
+            aliasName: 'alias_name_1',
             companyName: 'company_name_1',
           ),
         )),
@@ -608,6 +612,7 @@ void main() {
                 'first_name': 'first_name_1',
                 'last_name': 'last_name_1',
                 'email': 'email_1',
+                'alias_name': 'alias_name_1',
                 'company_name': 'company_name',
               },
               {
@@ -645,6 +650,7 @@ void main() {
               firstName: 'first_name_1',
               lastName: 'last_name_1',
               email: 'email_1',
+              aliasName: 'alias_name_1',
               companyName: 'company_name',
             ),
             UserContact(

@@ -144,11 +144,11 @@ class ContactsTable extends Table {
 
   TextColumn get sourceId => text()();
 
-  TextColumn get displayName => text().nullable()();
-
   TextColumn get firstName => text().nullable()();
 
   TextColumn get lastName => text().nullable()();
+
+  TextColumn get aliasName => text().nullable()();
 
   DateTimeColumn get insertedAt => dateTime().nullable()();
 
@@ -264,7 +264,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
         ..orderBy([
           (t) => OrderingTerm.asc(t.lastName),
           (t) => OrderingTerm.asc(t.firstName),
-          (t) => OrderingTerm.asc(t.displayName),
+          (t) => OrderingTerm.asc(t.aliasName),
         ]);
 
   Stream<List<ContactData>> watchAllContacts([ContactSourceTypeEnum? sourceType]) =>
@@ -278,7 +278,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
       (t) => [
         t.lastName,
         t.firstName,
-        t.displayName,
+        t.aliasName,
       ].map((c) => c.isNotNull() & c.equalsExp(const Constant('')).not()).reduce((v, e) => v | e),
     );
     return q.watch();
@@ -293,7 +293,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
         [
           contactsTable.lastName,
           contactsTable.firstName,
-          contactsTable.displayName,
+          contactsTable.aliasName,
           contactPhonesTable.number,
         ].map((c) => c.like('%$searchBit%')).reduce((v, e) => v | e),
       );

@@ -62,9 +62,9 @@ class RecentsRepository {
       acceptedTime: callLog.acceptedAt,
       hungUpTime: callLog.hungUpAt,
       id: callLog.id,
-      displayName: contactData?.displayName,
       firstName: contactData?.firstName,
       lastName: contactData?.lastName,
+      aliasName: contactData?.aliasName,
     );
   }
 
