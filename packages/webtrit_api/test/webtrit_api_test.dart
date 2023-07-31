@@ -526,9 +526,12 @@ void main() {
         return Response(
           jsonEncode({
             'sip': {
-              'display_name': 'display_name_1',
               'login': 'login_1',
               'password': 'strong_password',
+              'sip_server': {
+                'host': 'sip.webtrit.com',
+                'port': 5060,
+              },
             },
             'balance': {
               'amount': 111.1,
@@ -540,9 +543,9 @@ void main() {
               'ext': '0001',
               'additional': ['380441234567', '34911234567'],
             },
+            'email': 'email_1',
             'first_name': 'first_name_1',
             'last_name': 'last_name_1',
-            'email': 'email_1',
             'company_name': 'company_name_1',
           }),
           200,
@@ -558,9 +561,12 @@ void main() {
         completion(equals(
           UserInfo(
             sip: SipInfo(
-              displayName: 'display_name_1',
               login: 'login_1',
               password: 'strong_password',
+              sipServer: SipServer(
+                host: 'sip.webtrit.com',
+                port: 5060,
+              ),
             ),
             balance: Balance(
               amount: 111.1,
@@ -593,7 +599,7 @@ void main() {
           jsonEncode({
             'items': [
               {
-                'sip': {'display_name': 'display_name_1', 'status': 'unknown'},
+                'sip_status': 'registered',
                 'numbers': {
                   'main': '14155551234',
                   'ext': '0001',
@@ -627,10 +633,7 @@ void main() {
         completion(equals(
           [
             UserContact(
-              sip: SipStatus(
-                displayName: 'display_name_1',
-                status: 'unknown',
-              ),
+              sipStatus: SipStatus.registered,
               numbers: Numbers(
                 main: '14155551234',
                 ext: '0001',

@@ -76,7 +76,6 @@ class ExternalContactsRepository {
       final numbers = contact.numbers;
       return ExternalContact(
         id: numbers.main,
-        displayName: contact.sip?.displayName,
         firstName: contact.firstName,
         lastName: contact.lastName,
         number: numbers.main,

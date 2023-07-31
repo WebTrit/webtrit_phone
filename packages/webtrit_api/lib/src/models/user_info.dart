@@ -15,9 +15,10 @@ class UserInfo with _$UserInfo {
     required SipInfo sip,
     Balance? balance,
     required Numbers numbers,
+    String? email,
     String? firstName,
     String? lastName,
-    String? email,
+    String? aliasName,
     String? companyName,
     String? timeZone,
   }) = _UserInfo;

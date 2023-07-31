@@ -7,18 +7,6 @@ part 'common.freezed.dart';
 part 'common.g.dart';
 
 @freezed
-class SipStatus with _$SipStatus {
-  // ignore: invalid_annotation_target
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory SipStatus({
-    String? displayName,
-    required String status,
-  }) = _SipStatus;
-
-  factory SipStatus.fromJson(Map<String, Object?> json) => _$SipStatusFromJson(json);
-}
-
-@freezed
 class Numbers with _$Numbers {
   // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
@@ -50,11 +38,11 @@ class SipInfo with _$SipInfo {
   // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory SipInfo({
-    String? displayName,
-    String? login,
-    String? password,
+    required String login,
+    required String password,
+    required SipServer sipServer,
     SipServer? registrationServer,
-    SipServer? sipServer,
+    String? displayName,
   }) = _SipInfo;
 
   factory SipInfo.fromJson(Map<String, Object?> json) => _$SipInfoFromJson(json);
