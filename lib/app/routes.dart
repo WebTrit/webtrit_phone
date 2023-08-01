@@ -1,3 +1,5 @@
+import 'package:flutter/widgets.dart';
+
 class AppRoute {
   AppRoute._();
 
@@ -13,6 +15,8 @@ class AppRoute {
 
 class MainRoute {
   MainRoute._();
+
+  static final observer = RouteObserver<ModalRoute<dynamic>>();
 
   static const call = 'call';
 

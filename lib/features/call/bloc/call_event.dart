@@ -203,3 +203,12 @@ class _PeerConnectionEvent with _$_PeerConnectionEvent implements CallEvent {
   const factory _PeerConnectionEvent.streamRemoved(UuidValue uuid, MediaStream stream) =
       _PeerConnectionEventStreamRemoved;
 }
+
+// call screen events
+
+@Freezed(copyWith: false)
+class CallScreenEvent with _$CallScreenEvent implements CallEvent {
+  factory CallScreenEvent.didPush() = _CallScreenEventDidPush;
+
+  factory CallScreenEvent.didPop() = _CallScreenEventDidPop;
+}

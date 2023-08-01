@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_webrtc/flutter_webrtc.dart';
 
+import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -25,95 +25,59 @@ class CallScreen extends StatefulWidget {
   State<CallScreen> createState() => _CallScreenState();
 }
 
-class _CallScreenState extends State<CallScreen> {
-  final RTCVideoRenderer _localRenderer = RTCVideoRenderer();
-  final RTCVideoRenderer _remoteRenderer = RTCVideoRenderer();
-  late Future<List<void>> _renderersInitialized;
-
+class _CallScreenState extends State<CallScreen> with RouteAware {
   @override
-  void initState() {
-    super.initState();
-
-    _renderersInitialized = _renderersInitialize();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    MainRoute.observer.subscribe(this, ModalRoute.of(context)!);
   }
 
   @override
   void dispose() {
-    _renderersDispose();
-
+    MainRoute.observer.unsubscribe(this);
     super.dispose();
   }
 
-  Future<List<void>> _renderersInitialize() {
-    return Future.wait([
-      _localRenderer.initialize(),
-      _remoteRenderer.initialize(),
-    ]);
+  @override
+  void didPush() {
+    context.read<CallBloc>().add(CallScreenEvent.didPush());
   }
 
-  Future<List<void>> _renderersDispose() {
-    return Future.wait([
-      _localRenderer.dispose(),
-      _remoteRenderer.dispose(),
-    ]);
+  @override
+  void didPop() {
+    context.read<CallBloc>().add(CallScreenEvent.didPop());
   }
 
   @override
   Widget build(BuildContext context) {
-    final scaffold = FutureBuilder(
-      future: _renderersInitialized,
-      builder: (context, AsyncSnapshot<List<void>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          final callBloc = context.read<CallBloc>();
-          // assign streams of active call to handle the case
-          // when they are created before renderers finish the initialization
-          if (callBloc.state.isActive) {
-            final activeCall = callBloc.state.activeCall;
-            _localRenderer.srcObject = activeCall.localStream;
-            _remoteRenderer.srcObject = activeCall.remoteStream;
-          }
-          return BlocConsumer<CallBloc, CallState>(
-            bloc: callBloc,
-            listener: (context, state) async {
-              if (state.isActive) {
-                final activeCall = state.activeCall;
-                _localRenderer.srcObject = activeCall.localStream;
-                _remoteRenderer.srcObject = activeCall.remoteStream;
+    final callBloc = context.read<CallBloc>();
 
-                final activeCallFailure = activeCall.failure;
-                if (activeCallFailure != null) {
-                  context.read<CallBloc>().add(CallControlEvent.failureApproved(activeCall.callId.uuid));
-                  AcknowledgeDialog.show(
-                    context,
-                    title: context.l10n.call_FailureAcknowledgeDialog_title,
-                    content: activeCallFailure.toString(),
-                  );
-                }
-              } else {
-                _localRenderer.srcObject = null;
-                _remoteRenderer.srcObject = null;
-              }
-            },
-            builder: (context, state) {
-              if (state.isActive) {
-                final activeCall = state.activeCall;
-                return CallActiveScaffold(
-                  speaker: state.speaker,
-                  activeCall: activeCall,
-                  localRenderer: _localRenderer,
-                  remoteRenderer: _remoteRenderer,
-                  localePlaceholderBuilder: widget.localePlaceholderBuilder,
-                  remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
-                );
-              } else {
-                return const CallInitScaffold();
-              }
-            },
+    final scaffold = BlocConsumer<CallBloc, CallState>(
+      bloc: callBloc,
+      listener: (context, state) async {
+        if (state.isActive) {
+          final activeCall = state.activeCall;
+          final activeCallFailure = activeCall.failure;
+          if (activeCallFailure != null) {
+            context.read<CallBloc>().add(CallControlEvent.failureApproved(activeCall.callId.uuid));
+            AcknowledgeDialog.show(
+              context,
+              title: context.l10n.call_FailureAcknowledgeDialog_title,
+              content: activeCallFailure.toString(),
+            );
+          }
+        }
+      },
+      builder: (context, state) {
+        if (state.isActive) {
+          return CallActiveScaffold(
+            speaker: state.speaker,
+            activeCall: state.activeCall,
+            localePlaceholderBuilder: widget.localePlaceholderBuilder,
+            remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
           );
         } else {
-          return const CallInitScaffold(
-            showProgressIndicator: true,
-          );
+          return const CallInitScaffold();
         }
       },
     );
