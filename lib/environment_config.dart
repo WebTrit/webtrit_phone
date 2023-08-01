@@ -32,6 +32,11 @@ class EnvironmentConfig {
     defaultValue: 'WebTrit',
   );
 
+  static const SALES_EMAIL = String.fromEnvironment(
+    'WEBTRIT_PHONE_SALES_EMAIL',
+    defaultValue: 'sales@webtrit.com',
+  );
+
   static const APP_DESCRIPTION = String.fromEnvironment(
     'WEBTRIT_PHONE_APP_DESCRIPTION',
     defaultValue: '$APP_NAME application',
