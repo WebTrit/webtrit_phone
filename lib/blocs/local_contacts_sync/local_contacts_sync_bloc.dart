@@ -91,9 +91,9 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
             await appDatabase.contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
           sourceType: const Value(ContactSourceTypeEnum.local),
           sourceId: Value(localContact.id),
-          displayName: Value(localContact.displayName),
           firstName: Value(localContact.firstName),
           lastName: Value(localContact.lastName),
+          aliasName: Value(localContact.displayName),
         ));
 
         await appDatabase.contactPhonesDao.deleteOtherContactPhonesOfContactId(

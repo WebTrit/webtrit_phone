@@ -9,7 +9,7 @@ const dFavorites = [
       id: 0,
       sourceType: ContactSourceType.external,
       sourceId: '',
-      displayName: 'Thomas Anderson',
+      aliasName: 'Thomas Anderson',
     ),
   ),
   Favorite(
@@ -20,7 +20,7 @@ const dFavorites = [
       id: 0,
       sourceType: ContactSourceType.external,
       sourceId: '',
-      displayName: 'Anna Collins',
+      aliasName: 'Anna Collins',
     ),
   ),
   Favorite(
@@ -31,7 +31,7 @@ const dFavorites = [
       id: 0,
       sourceType: ContactSourceType.external,
       sourceId: '',
-      displayName: 'Lawrence Brown',
+      aliasName: 'Lawrence Brown',
     ),
   ),
   Favorite(
@@ -42,7 +42,7 @@ const dFavorites = [
       id: 0,
       sourceType: ContactSourceType.external,
       sourceId: '',
-      displayName: 'Ruth Jenkins',
+      aliasName: 'Ruth Jenkins',
     ),
   ),
   Favorite(
@@ -53,7 +53,7 @@ const dFavorites = [
       id: 0,
       sourceType: ContactSourceType.external,
       sourceId: '',
-      displayName: 'Beverly Nelson',
+      aliasName: 'Beverly Nelson',
     ),
   ),
   Favorite(
@@ -64,7 +64,7 @@ const dFavorites = [
       id: 0,
       sourceType: ContactSourceType.external,
       sourceId: '',
-      displayName: 'Randy Jones',
+      aliasName: 'Randy Jones',
     ),
   ),
 ];

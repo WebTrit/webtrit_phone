@@ -13,9 +13,10 @@ _$_UserInfo _$$_UserInfoFromJson(Map<String, dynamic> json) => _$_UserInfo(
           ? null
           : Balance.fromJson(json['balance'] as Map<String, dynamic>),
       numbers: Numbers.fromJson(json['numbers'] as Map<String, dynamic>),
+      email: json['email'] as String?,
       firstName: json['first_name'] as String?,
       lastName: json['last_name'] as String?,
-      email: json['email'] as String?,
+      aliasName: json['alias_name'] as String?,
       companyName: json['company_name'] as String?,
       timeZone: json['time_zone'] as String?,
     );
@@ -26,9 +27,10 @@ Map<String, dynamic> _$$_UserInfoToJson(_$_UserInfo instance) =>
       'sip': instance.sip,
       'balance': instance.balance,
       'numbers': instance.numbers,
+      'email': instance.email,
       'first_name': instance.firstName,
       'last_name': instance.lastName,
-      'email': instance.email,
+      'alias_name': instance.aliasName,
       'company_name': instance.companyName,
       'time_zone': instance.timeZone,
     };

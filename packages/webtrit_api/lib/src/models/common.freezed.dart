@@ -14,159 +14,6 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-SipStatus _$SipStatusFromJson(Map<String, dynamic> json) {
-  return _SipStatus.fromJson(json);
-}
-
-/// @nodoc
-mixin _$SipStatus {
-  String? get displayName => throw _privateConstructorUsedError;
-  String get status => throw _privateConstructorUsedError;
-
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $SipStatusCopyWith<SipStatus> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $SipStatusCopyWith<$Res> {
-  factory $SipStatusCopyWith(SipStatus value, $Res Function(SipStatus) then) =
-      _$SipStatusCopyWithImpl<$Res, SipStatus>;
-  @useResult
-  $Res call({String? displayName, String status});
-}
-
-/// @nodoc
-class _$SipStatusCopyWithImpl<$Res, $Val extends SipStatus>
-    implements $SipStatusCopyWith<$Res> {
-  _$SipStatusCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? displayName = freezed,
-    Object? status = null,
-  }) {
-    return _then(_value.copyWith(
-      displayName: freezed == displayName
-          ? _value.displayName
-          : displayName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
-  }
-}
-
-/// @nodoc
-abstract class _$$_SipStatusCopyWith<$Res> implements $SipStatusCopyWith<$Res> {
-  factory _$$_SipStatusCopyWith(
-          _$_SipStatus value, $Res Function(_$_SipStatus) then) =
-      __$$_SipStatusCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String? displayName, String status});
-}
-
-/// @nodoc
-class __$$_SipStatusCopyWithImpl<$Res>
-    extends _$SipStatusCopyWithImpl<$Res, _$_SipStatus>
-    implements _$$_SipStatusCopyWith<$Res> {
-  __$$_SipStatusCopyWithImpl(
-      _$_SipStatus _value, $Res Function(_$_SipStatus) _then)
-      : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? displayName = freezed,
-    Object? status = null,
-  }) {
-    return _then(_$_SipStatus(
-      displayName: freezed == displayName
-          ? _value.displayName
-          : displayName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
-
-/// @nodoc
-
-@JsonSerializable(fieldRename: FieldRename.snake)
-class _$_SipStatus implements _SipStatus {
-  const _$_SipStatus({this.displayName, required this.status});
-
-  factory _$_SipStatus.fromJson(Map<String, dynamic> json) =>
-      _$$_SipStatusFromJson(json);
-
-  @override
-  final String? displayName;
-  @override
-  final String status;
-
-  @override
-  String toString() {
-    return 'SipStatus(displayName: $displayName, status: $status)';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_SipStatus &&
-            (identical(other.displayName, displayName) ||
-                other.displayName == displayName) &&
-            (identical(other.status, status) || other.status == status));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(runtimeType, displayName, status);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$_SipStatusCopyWith<_$_SipStatus> get copyWith =>
-      __$$_SipStatusCopyWithImpl<_$_SipStatus>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$_SipStatusToJson(
-      this,
-    );
-  }
-}
-
-abstract class _SipStatus implements SipStatus {
-  const factory _SipStatus(
-      {final String? displayName, required final String status}) = _$_SipStatus;
-
-  factory _SipStatus.fromJson(Map<String, dynamic> json) =
-      _$_SipStatus.fromJson;
-
-  @override
-  String? get displayName;
-  @override
-  String get status;
-  @override
-  @JsonKey(ignore: true)
-  _$$_SipStatusCopyWith<_$_SipStatus> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
 Numbers _$NumbersFromJson(Map<String, dynamic> json) {
   return _Numbers.fromJson(json);
 }
@@ -548,11 +395,11 @@ SipInfo _$SipInfoFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SipInfo {
-  String? get displayName => throw _privateConstructorUsedError;
-  String? get login => throw _privateConstructorUsedError;
-  String? get password => throw _privateConstructorUsedError;
+  String get login => throw _privateConstructorUsedError;
+  String get password => throw _privateConstructorUsedError;
+  SipServer get sipServer => throw _privateConstructorUsedError;
   SipServer? get registrationServer => throw _privateConstructorUsedError;
-  SipServer? get sipServer => throw _privateConstructorUsedError;
+  String? get displayName => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -565,14 +412,14 @@ abstract class $SipInfoCopyWith<$Res> {
       _$SipInfoCopyWithImpl<$Res, SipInfo>;
   @useResult
   $Res call(
-      {String? displayName,
-      String? login,
-      String? password,
+      {String login,
+      String password,
+      SipServer sipServer,
       SipServer? registrationServer,
-      SipServer? sipServer});
+      String? displayName});
 
+  $SipServerCopyWith<$Res> get sipServer;
   $SipServerCopyWith<$Res>? get registrationServer;
-  $SipServerCopyWith<$Res>? get sipServer;
 }
 
 /// @nodoc
@@ -588,34 +435,42 @@ class _$SipInfoCopyWithImpl<$Res, $Val extends SipInfo>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? displayName = freezed,
-    Object? login = freezed,
-    Object? password = freezed,
+    Object? login = null,
+    Object? password = null,
+    Object? sipServer = null,
     Object? registrationServer = freezed,
-    Object? sipServer = freezed,
+    Object? displayName = freezed,
   }) {
     return _then(_value.copyWith(
-      displayName: freezed == displayName
-          ? _value.displayName
-          : displayName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      login: freezed == login
+      login: null == login
           ? _value.login
           : login // ignore: cast_nullable_to_non_nullable
-              as String?,
-      password: freezed == password
+              as String,
+      password: null == password
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
+      sipServer: null == sipServer
+          ? _value.sipServer
+          : sipServer // ignore: cast_nullable_to_non_nullable
+              as SipServer,
       registrationServer: freezed == registrationServer
           ? _value.registrationServer
           : registrationServer // ignore: cast_nullable_to_non_nullable
               as SipServer?,
-      sipServer: freezed == sipServer
-          ? _value.sipServer
-          : sipServer // ignore: cast_nullable_to_non_nullable
-              as SipServer?,
+      displayName: freezed == displayName
+          ? _value.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $SipServerCopyWith<$Res> get sipServer {
+    return $SipServerCopyWith<$Res>(_value.sipServer, (value) {
+      return _then(_value.copyWith(sipServer: value) as $Val);
+    });
   }
 
   @override
@@ -629,18 +484,6 @@ class _$SipInfoCopyWithImpl<$Res, $Val extends SipInfo>
       return _then(_value.copyWith(registrationServer: value) as $Val);
     });
   }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $SipServerCopyWith<$Res>? get sipServer {
-    if (_value.sipServer == null) {
-      return null;
-    }
-
-    return $SipServerCopyWith<$Res>(_value.sipServer!, (value) {
-      return _then(_value.copyWith(sipServer: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
@@ -651,16 +494,16 @@ abstract class _$$_SipInfoCopyWith<$Res> implements $SipInfoCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String? displayName,
-      String? login,
-      String? password,
+      {String login,
+      String password,
+      SipServer sipServer,
       SipServer? registrationServer,
-      SipServer? sipServer});
+      String? displayName});
 
   @override
-  $SipServerCopyWith<$Res>? get registrationServer;
+  $SipServerCopyWith<$Res> get sipServer;
   @override
-  $SipServerCopyWith<$Res>? get sipServer;
+  $SipServerCopyWith<$Res>? get registrationServer;
 }
 
 /// @nodoc
@@ -673,33 +516,33 @@ class __$$_SipInfoCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? displayName = freezed,
-    Object? login = freezed,
-    Object? password = freezed,
+    Object? login = null,
+    Object? password = null,
+    Object? sipServer = null,
     Object? registrationServer = freezed,
-    Object? sipServer = freezed,
+    Object? displayName = freezed,
   }) {
     return _then(_$_SipInfo(
-      displayName: freezed == displayName
-          ? _value.displayName
-          : displayName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      login: freezed == login
+      login: null == login
           ? _value.login
           : login // ignore: cast_nullable_to_non_nullable
-              as String?,
-      password: freezed == password
+              as String,
+      password: null == password
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
+      sipServer: null == sipServer
+          ? _value.sipServer
+          : sipServer // ignore: cast_nullable_to_non_nullable
+              as SipServer,
       registrationServer: freezed == registrationServer
           ? _value.registrationServer
           : registrationServer // ignore: cast_nullable_to_non_nullable
               as SipServer?,
-      sipServer: freezed == sipServer
-          ? _value.sipServer
-          : sipServer // ignore: cast_nullable_to_non_nullable
-              as SipServer?,
+      displayName: freezed == displayName
+          ? _value.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -709,29 +552,29 @@ class __$$_SipInfoCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$_SipInfo implements _SipInfo {
   const _$_SipInfo(
-      {this.displayName,
-      this.login,
-      this.password,
+      {required this.login,
+      required this.password,
+      required this.sipServer,
       this.registrationServer,
-      this.sipServer});
+      this.displayName});
 
   factory _$_SipInfo.fromJson(Map<String, dynamic> json) =>
       _$$_SipInfoFromJson(json);
 
   @override
-  final String? displayName;
+  final String login;
   @override
-  final String? login;
+  final String password;
   @override
-  final String? password;
+  final SipServer sipServer;
   @override
   final SipServer? registrationServer;
   @override
-  final SipServer? sipServer;
+  final String? displayName;
 
   @override
   String toString() {
-    return 'SipInfo(displayName: $displayName, login: $login, password: $password, registrationServer: $registrationServer, sipServer: $sipServer)';
+    return 'SipInfo(login: $login, password: $password, sipServer: $sipServer, registrationServer: $registrationServer, displayName: $displayName)';
   }
 
   @override
@@ -739,21 +582,21 @@ class _$_SipInfo implements _SipInfo {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_SipInfo &&
-            (identical(other.displayName, displayName) ||
-                other.displayName == displayName) &&
             (identical(other.login, login) || other.login == login) &&
             (identical(other.password, password) ||
                 other.password == password) &&
+            (identical(other.sipServer, sipServer) ||
+                other.sipServer == sipServer) &&
             (identical(other.registrationServer, registrationServer) ||
                 other.registrationServer == registrationServer) &&
-            (identical(other.sipServer, sipServer) ||
-                other.sipServer == sipServer));
+            (identical(other.displayName, displayName) ||
+                other.displayName == displayName));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, displayName, login, password, registrationServer, sipServer);
+      runtimeType, login, password, sipServer, registrationServer, displayName);
 
   @JsonKey(ignore: true)
   @override
@@ -771,24 +614,24 @@ class _$_SipInfo implements _SipInfo {
 
 abstract class _SipInfo implements SipInfo {
   const factory _SipInfo(
-      {final String? displayName,
-      final String? login,
-      final String? password,
+      {required final String login,
+      required final String password,
+      required final SipServer sipServer,
       final SipServer? registrationServer,
-      final SipServer? sipServer}) = _$_SipInfo;
+      final String? displayName}) = _$_SipInfo;
 
   factory _SipInfo.fromJson(Map<String, dynamic> json) = _$_SipInfo.fromJson;
 
   @override
-  String? get displayName;
+  String get login;
   @override
-  String? get login;
+  String get password;
   @override
-  String? get password;
+  SipServer get sipServer;
   @override
   SipServer? get registrationServer;
   @override
-  SipServer? get sipServer;
+  String? get displayName;
   @override
   @JsonKey(ignore: true)
   _$$_SipInfoCopyWith<_$_SipInfo> get copyWith =>

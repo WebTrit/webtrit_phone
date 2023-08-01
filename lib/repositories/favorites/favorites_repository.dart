@@ -24,9 +24,9 @@ class FavoritesRepository {
               id: contactData.id,
               sourceType: contactData.sourceType.toModel(),
               sourceId: contactData.sourceId,
-              displayName: contactData.displayName,
               firstName: contactData.firstName,
               lastName: contactData.lastName,
+              aliasName: contactData.aliasName,
             ),
           );
         }).toList(growable: false));

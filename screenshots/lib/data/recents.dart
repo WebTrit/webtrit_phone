@@ -9,7 +9,7 @@ final dRecents = [
     number: '1234',
     video: false,
     createdTime: clock.nowBased(hour: 9, minute: 30),
-    displayName: 'Thomas Anderson',
+    aliasName: 'Thomas Anderson',
   ),
   Recent(
     direction: Direction.incoming,
@@ -18,7 +18,7 @@ final dRecents = [
     createdTime: clock.nowBased(hour: 9, minute: 00),
     acceptedTime: clock.nowBased(hour: 9, minute: 01),
     hungUpTime: clock.nowBased(hour: 9, minute: 10),
-    displayName: 'Thomas Anderson',
+    aliasName: 'Thomas Anderson',
   ),
   Recent(
     direction: Direction.outgoing,
@@ -27,6 +27,6 @@ final dRecents = [
     createdTime: clock.nowBased(hour: 8, minute: 41),
     acceptedTime: clock.nowBased(hour: 12, minute: 01),
     hungUpTime: clock.nowBased(hour: 12, minute: 10),
-    displayName: 'Dion Dames',
+    aliasName: 'Dion Dames',
   ),
 ];

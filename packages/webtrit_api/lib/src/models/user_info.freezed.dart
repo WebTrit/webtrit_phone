@@ -24,9 +24,10 @@ mixin _$UserInfo {
   SipInfo get sip => throw _privateConstructorUsedError;
   Balance? get balance => throw _privateConstructorUsedError;
   Numbers get numbers => throw _privateConstructorUsedError;
+  String? get email => throw _privateConstructorUsedError;
   String? get firstName => throw _privateConstructorUsedError;
   String? get lastName => throw _privateConstructorUsedError;
-  String? get email => throw _privateConstructorUsedError;
+  String? get aliasName => throw _privateConstructorUsedError;
   String? get companyName => throw _privateConstructorUsedError;
   String? get timeZone => throw _privateConstructorUsedError;
 
@@ -46,9 +47,10 @@ abstract class $UserInfoCopyWith<$Res> {
       SipInfo sip,
       Balance? balance,
       Numbers numbers,
+      String? email,
       String? firstName,
       String? lastName,
-      String? email,
+      String? aliasName,
       String? companyName,
       String? timeZone});
 
@@ -74,9 +76,10 @@ class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
     Object? sip = null,
     Object? balance = freezed,
     Object? numbers = null,
+    Object? email = freezed,
     Object? firstName = freezed,
     Object? lastName = freezed,
-    Object? email = freezed,
+    Object? aliasName = freezed,
     Object? companyName = freezed,
     Object? timeZone = freezed,
   }) {
@@ -97,6 +100,10 @@ class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
           ? _value.numbers
           : numbers // ignore: cast_nullable_to_non_nullable
               as Numbers,
+      email: freezed == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String?,
       firstName: freezed == firstName
           ? _value.firstName
           : firstName // ignore: cast_nullable_to_non_nullable
@@ -105,9 +112,9 @@ class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
           ? _value.lastName
           : lastName // ignore: cast_nullable_to_non_nullable
               as String?,
-      email: freezed == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
+      aliasName: freezed == aliasName
+          ? _value.aliasName
+          : aliasName // ignore: cast_nullable_to_non_nullable
               as String?,
       companyName: freezed == companyName
           ? _value.companyName
@@ -161,9 +168,10 @@ abstract class _$$_UserInfoCopyWith<$Res> implements $UserInfoCopyWith<$Res> {
       SipInfo sip,
       Balance? balance,
       Numbers numbers,
+      String? email,
       String? firstName,
       String? lastName,
-      String? email,
+      String? aliasName,
       String? companyName,
       String? timeZone});
 
@@ -190,9 +198,10 @@ class __$$_UserInfoCopyWithImpl<$Res>
     Object? sip = null,
     Object? balance = freezed,
     Object? numbers = null,
+    Object? email = freezed,
     Object? firstName = freezed,
     Object? lastName = freezed,
-    Object? email = freezed,
+    Object? aliasName = freezed,
     Object? companyName = freezed,
     Object? timeZone = freezed,
   }) {
@@ -213,6 +222,10 @@ class __$$_UserInfoCopyWithImpl<$Res>
           ? _value.numbers
           : numbers // ignore: cast_nullable_to_non_nullable
               as Numbers,
+      email: freezed == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String?,
       firstName: freezed == firstName
           ? _value.firstName
           : firstName // ignore: cast_nullable_to_non_nullable
@@ -221,9 +234,9 @@ class __$$_UserInfoCopyWithImpl<$Res>
           ? _value.lastName
           : lastName // ignore: cast_nullable_to_non_nullable
               as String?,
-      email: freezed == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
+      aliasName: freezed == aliasName
+          ? _value.aliasName
+          : aliasName // ignore: cast_nullable_to_non_nullable
               as String?,
       companyName: freezed == companyName
           ? _value.companyName
@@ -246,9 +259,10 @@ class _$_UserInfo implements _UserInfo {
       required this.sip,
       this.balance,
       required this.numbers,
+      this.email,
       this.firstName,
       this.lastName,
-      this.email,
+      this.aliasName,
       this.companyName,
       this.timeZone});
 
@@ -264,11 +278,13 @@ class _$_UserInfo implements _UserInfo {
   @override
   final Numbers numbers;
   @override
+  final String? email;
+  @override
   final String? firstName;
   @override
   final String? lastName;
   @override
-  final String? email;
+  final String? aliasName;
   @override
   final String? companyName;
   @override
@@ -276,7 +292,7 @@ class _$_UserInfo implements _UserInfo {
 
   @override
   String toString() {
-    return 'UserInfo(status: $status, sip: $sip, balance: $balance, numbers: $numbers, firstName: $firstName, lastName: $lastName, email: $email, companyName: $companyName, timeZone: $timeZone)';
+    return 'UserInfo(status: $status, sip: $sip, balance: $balance, numbers: $numbers, email: $email, firstName: $firstName, lastName: $lastName, aliasName: $aliasName, companyName: $companyName, timeZone: $timeZone)';
   }
 
   @override
@@ -288,11 +304,13 @@ class _$_UserInfo implements _UserInfo {
             (identical(other.sip, sip) || other.sip == sip) &&
             (identical(other.balance, balance) || other.balance == balance) &&
             (identical(other.numbers, numbers) || other.numbers == numbers) &&
+            (identical(other.email, email) || other.email == email) &&
             (identical(other.firstName, firstName) ||
                 other.firstName == firstName) &&
             (identical(other.lastName, lastName) ||
                 other.lastName == lastName) &&
-            (identical(other.email, email) || other.email == email) &&
+            (identical(other.aliasName, aliasName) ||
+                other.aliasName == aliasName) &&
             (identical(other.companyName, companyName) ||
                 other.companyName == companyName) &&
             (identical(other.timeZone, timeZone) ||
@@ -302,7 +320,7 @@ class _$_UserInfo implements _UserInfo {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, status, sip, balance, numbers,
-      firstName, lastName, email, companyName, timeZone);
+      email, firstName, lastName, aliasName, companyName, timeZone);
 
   @JsonKey(ignore: true)
   @override
@@ -324,9 +342,10 @@ abstract class _UserInfo implements UserInfo {
       required final SipInfo sip,
       final Balance? balance,
       required final Numbers numbers,
+      final String? email,
       final String? firstName,
       final String? lastName,
-      final String? email,
+      final String? aliasName,
       final String? companyName,
       final String? timeZone}) = _$_UserInfo;
 
@@ -341,11 +360,13 @@ abstract class _UserInfo implements UserInfo {
   @override
   Numbers get numbers;
   @override
+  String? get email;
+  @override
   String? get firstName;
   @override
   String? get lastName;
   @override
-  String? get email;
+  String? get aliasName;
   @override
   String? get companyName;
   @override
