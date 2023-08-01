@@ -107,9 +107,9 @@ class CallState with _$CallState {
 
 @freezed
 class ActiveCall with _$ActiveCall {
-  const ActiveCall._();
+  ActiveCall._();
 
-  const factory ActiveCall({
+  factory ActiveCall({
     required Direction direction,
     required int line,
     required CallIdValue callId,
@@ -123,10 +123,7 @@ class ActiveCall with _$ActiveCall {
     DateTime? acceptedTime,
     DateTime? hungUpTime,
     Object? failure,
-    MediaStream? localStream,
-    MediaStream? remoteStream,
-    required RTCVideoRenderer localVideoRenderer,
-    required RTCVideoRenderer remoteVideoRenderer,
+    required RTCVideoRenderers renderers,
   }) = _ActiveCall;
 
   bool get isIncoming => direction == Direction.incoming;
@@ -136,27 +133,27 @@ class ActiveCall with _$ActiveCall {
   bool get wasAccepted => acceptedTime != null;
 
   bool get wasHungUp => hungUpTime != null;
+}
 
-  RTCVideoRenderer get getLocalVideoRenderer {
-    localVideoRenderer.initialize().then((value) {
-      if (localStream != null && video) {
-        localVideoRenderer.srcObject = localStream;
-      } else {
-        remoteVideoRenderer.srcObject = null;
-      }
-    });
-    return localVideoRenderer;
+class RTCVideoRenderers {
+  RTCVideoRenderers()
+      : local = RTCVideoRenderer(),
+        remote = RTCVideoRenderer();
+
+  final RTCVideoRenderer local;
+  final RTCVideoRenderer remote;
+
+  Future<void> initialize() {
+    return Future.wait([
+      local.initialize(),
+      remote.initialize(),
+    ]);
   }
 
-  RTCVideoRenderer get getRemoteVideoRenderer {
-    remoteVideoRenderer.initialize().then((value) {
-      if (remoteStream != null && video) {
-        remoteVideoRenderer.srcObject = remoteStream;
-      } else {
-        remoteVideoRenderer.srcObject = null;
-      }
-    });
-
-    return remoteVideoRenderer;
+  Future<void> dispose() {
+    return Future.wait([
+      local.dispose(),
+      remote.dispose(),
+    ]);
   }
 }

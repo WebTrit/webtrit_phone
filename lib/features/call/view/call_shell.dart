@@ -7,6 +7,7 @@ import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/features/orientations/orientations.dart';
 
 import '../call.dart';
+import 'call_active_thumbnail.dart';
 
 class CallShell extends StatefulWidget {
   const CallShell({
@@ -23,7 +24,7 @@ class CallShell extends StatefulWidget {
 }
 
 class _CallShellState extends State<CallShell> {
-  CallThumbnailAvatar? _avatar;
+  ThumbnailAvatar? _avatar;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +59,7 @@ class _CallShellState extends State<CallShell> {
               avatar.insert(context, state);
             }
           } else {
-            final avatar = CallThumbnailAvatar(
+            final avatar = ThumbnailAvatar(
               stickyPadding: widget.stickyPadding,
               onTap: () {
                 context.pushNamed(MainRoute.call);
@@ -85,8 +86,8 @@ class _CallShellState extends State<CallShell> {
   }
 }
 
-class CallThumbnailAvatar {
-  CallThumbnailAvatar({
+class ThumbnailAvatar {
+  ThumbnailAvatar({
     required this.stickyPadding,
     this.onTap,
   });
@@ -105,17 +106,15 @@ class CallThumbnailAvatar {
 
     final entry = OverlayEntry(
       builder: (context) {
-        return DraggableCallThumbnail(
+        return DraggableThumbnail(
           stickyPadding: stickyPadding,
           initialOffset: _offset,
           onOffsetUpdate: (offset) {
             _offset = offset;
           },
           onTap: onTap,
-          child: CallCard(
-            videoRenderer: state.activeCall.getRemoteVideoRenderer,
-            handle: activeCall.handle,
-            displayName: activeCall.displayName,
+          child: CallActiveThumbnail(
+            activeCall: activeCall,
           ),
         );
       },
@@ -134,8 +133,8 @@ class CallThumbnailAvatar {
 
 enum StickySide { left, right }
 
-class DraggableCallThumbnail extends StatefulWidget {
-  const DraggableCallThumbnail({
+class DraggableThumbnail extends StatefulWidget {
+  const DraggableThumbnail({
     super.key,
     required this.child,
     required this.stickyPadding,
@@ -153,10 +152,10 @@ class DraggableCallThumbnail extends StatefulWidget {
   final GestureTapCallback? onTap;
 
   @override
-  State<DraggableCallThumbnail> createState() => _DraggableCallThumbnailState();
+  State<DraggableThumbnail> createState() => _DraggableThumbnailState();
 }
 
-class _DraggableCallThumbnailState extends State<DraggableCallThumbnail> {
+class _DraggableThumbnailState extends State<DraggableThumbnail> {
   final _callCardKey = GlobalKey();
   bool _callCardPanning = false;
 

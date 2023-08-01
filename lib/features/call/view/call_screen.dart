@@ -70,12 +70,9 @@ class _CallScreenState extends State<CallScreen> with RouteAware {
       },
       builder: (context, state) {
         if (state.isActive) {
-          final activeCall = state.activeCall;
           return CallActiveScaffold(
             speaker: state.speaker,
-            activeCall: activeCall,
-            localRenderer: state.activeCall.getLocalVideoRenderer,
-            remoteRenderer: state.activeCall.getRemoteVideoRenderer,
+            activeCall: state.activeCall,
             localePlaceholderBuilder: widget.localePlaceholderBuilder,
             remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
           );

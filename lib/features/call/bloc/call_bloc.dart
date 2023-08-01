@@ -461,6 +461,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
+    final renderers = RTCVideoRenderers();
+    await renderers.initialize();
+
     emit(state.copyWithPushActiveCall(ActiveCall(
       direction: Direction.incoming,
       line: _kUndefinedLine,
@@ -469,8 +472,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       displayName: event.displayName,
       video: event.video,
       createdTime: clock.now(),
-      localVideoRenderer: RTCVideoRenderer(),
-      remoteVideoRenderer: RTCVideoRenderer(),
+      renderers: renderers,
     )));
 
     // the rest logic implemented within _onSignalingStateHandshake on IncomingCallEvent from call logs processing
@@ -536,6 +538,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         return;
       }
     } else {
+      final renderers = RTCVideoRenderers();
+      await renderers.initialize();
+
       emit(state.copyWithPushActiveCall(ActiveCall(
         direction: Direction.incoming,
         line: event.line,
@@ -544,8 +549,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         displayName: event.callerDisplayName,
         video: video,
         createdTime: clock.now(),
-        localVideoRenderer: RTCVideoRenderer(),
-        remoteVideoRenderer: RTCVideoRenderer(),
+        renderers: renderers,
       )));
     }
 
@@ -582,9 +586,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
-    emit(state.copyWithMappedActiveCall(event.callId.uuid, (activeCall) {
-      return activeCall.copyWith(localStream: localStream);
-    }));
+    await state.performOnActiveCall(event.callId.uuid, (activeCall) {
+      activeCall.renderers.local.srcObject = localStream;
+    });
 
     final peerConnection = await _createPeerConnection(event.callId.uuid);
     localStream.getTracks().forEach((track) async {
@@ -669,9 +673,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     await state.performOnActiveCall(event.callId.uuid, (activeCall) async {
       await (await _peerConnectionRetrieve(activeCall.callId.uuid))?.close();
-      await activeCall.remoteVideoRenderer.dispose();
-      await activeCall.localVideoRenderer.dispose();
-      await activeCall.localStream?.dispose();
+      await activeCall.renderers.dispose();
+      await activeCall.renderers.local.srcObject?.dispose();
     });
 
     emit(state.copyWithPopActiveCall(event.callId.uuid));
@@ -714,6 +717,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (error != null) {
       _logger.warning('__onCallControlEventStarted error: $error');
     } else {
+      final renderers = RTCVideoRenderers();
+      await renderers.initialize();
+
       emit(state.copyWithPushActiveCall(ActiveCall(
         direction: Direction.outgoing,
         line: event.line ?? state.retrieveIdleLine() ?? _kUndefinedLine,
@@ -722,8 +728,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         displayName: event.displayName,
         video: event.video,
         createdTime: clock.now(),
-        localVideoRenderer: RTCVideoRenderer(),
-        remoteVideoRenderer: RTCVideoRenderer(),
+        renderers: renderers,
       )));
     }
   }
@@ -786,7 +791,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return activeCall.copyWith(frontCamera: null);
     }));
     final frontCamera = await state.performOnActiveCall(event.uuid, (activeCall) {
-      final videoTrack = activeCall.localStream?.getVideoTracks()[0];
+      final videoTrack = activeCall.renderers.local.srcObject?.getVideoTracks()[0];
       if (videoTrack != null) {
         return Helper.switchCamera(videoTrack);
       }
@@ -801,7 +806,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     await state.performOnActiveCall(event.uuid, (activeCall) {
-      final videoTrack = activeCall.localStream?.getVideoTracks()[0];
+      final videoTrack = activeCall.renderers.local.srcObject?.getVideoTracks()[0];
       if (videoTrack != null) {
         videoTrack.enabled = event.enabled;
       }
@@ -882,9 +887,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
     event.fulfill();
 
-    emit(state.copyWithMappedActiveCall(event.uuid, (activeCall) {
-      return activeCall.copyWith(localStream: localStream);
-    }));
+    await state.performOnActiveCall(event.uuid, (activeCall) {
+      activeCall.renderers.local.srcObject = localStream;
+    });
 
     final peerConnection = await _createPeerConnection(event.uuid);
     localStream.getTracks().forEach((track) async {
@@ -978,9 +983,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // to prevent "Simulate a "hangup" coming from the application"
       // because of "No WebRTC media anymore".
       await (await _peerConnectionRetrieve(activeCall.callId.uuid))?.close();
-      await activeCall.remoteVideoRenderer.dispose();
-      await activeCall.localVideoRenderer.dispose();
-      await activeCall.localStream?.dispose();
+      await activeCall.renderers.dispose();
+      await activeCall.renderers.local.srcObject?.dispose();
     });
 
     emit(state.copyWithPopActiveCall(event.uuid));
@@ -1021,7 +1025,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     event.fulfill();
 
     await state.performOnActiveCall(event.uuid, (activeCall) {
-      final audioTrack = activeCall.localStream?.getAudioTracks()[0];
+      final audioTrack = activeCall.renderers.local.srcObject?.getAudioTracks()[0];
       if (audioTrack != null) {
         Helper.setMicrophoneMute(event.muted, audioTrack);
       }
@@ -1111,18 +1115,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _PeerConnectionEventStreamAdded event,
     Emitter<CallState> emit,
   ) async {
-    emit(state.copyWithMappedActiveCall(event.uuid, (activeCall) {
-      return activeCall.copyWith(remoteStream: event.stream);
-    }));
+    await state.performOnActiveCall(event.uuid, (activeCall) {
+      activeCall.renderers.remote.srcObject = event.stream;
+    });
   }
 
   Future<void> __onPeerConnectionEventStreamRemoved(
     _PeerConnectionEventStreamRemoved event,
     Emitter<CallState> emit,
   ) async {
-    emit(state.copyWithMappedActiveCall(event.uuid, (activeCall) {
-      return activeCall.copyWith(remoteStream: null);
-    }));
+    await state.performOnActiveCall(event.uuid, (activeCall) {
+      activeCall.renderers.remote.srcObject = null;
+    });
   }
 
   // procession call screen events
