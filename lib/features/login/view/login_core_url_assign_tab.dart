@@ -62,7 +62,7 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Linkify(
-                          text: context.l10n.login_Text_coreUrlAssignPreDescription(EnvironmentConfig.VOIP_SYSTEM_NAME),
+                          text: context.l10n.login_Text_coreUrlAssignPreDescription,
                           onOpen: (link) => context.read<LoginCubit>().launchLinkableElement(link),
                           style: themeData.textTheme.bodyMedium,
                           linkStyle: TextStyle(

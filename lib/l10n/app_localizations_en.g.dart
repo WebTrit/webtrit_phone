@@ -89,7 +89,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(String actual, String supportedConstraint) {
-    return 'Incompatible Cloud Back-end version, please contact the administrator of your system.\n\nInstance version:\n$actual\n\nSupported version:\n$supportedConstraint';
+    return 'Incompatible WebTrit Cloud Backend version, please contact the administrator of your system.\n\nInstance version:\n$actual\n\nSupported version:\n$supportedConstraint';
   }
 
   @override
@@ -164,7 +164,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get favorites_DeleteConfirmDialog_content => 'Are you sure you want to delete the current favorite?';
 
   @override
-  String get login_ButtonTooltip_signInToYourInstance => 'Sign in to your Cloud Back-end';
+  String get login_ButtonTooltip_signInToYourInstance => 'Sign in to your WebTrit Cloud Backend';
 
   @override
   String get login_Button_signUpToDemoInstance => 'Sign up';
@@ -176,16 +176,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_AppBarTitle_coreUrlAssign => '';
 
   @override
-  String get login_TextFieldLabelText_coreUrlAssign => 'Enter your Cloud Back-end URL';
+  String get login_TextFieldLabelText_coreUrlAssign => 'Enter your WebTrit Cloud Backend URL';
 
   @override
-  String login_Text_coreUrlAssignPreDescription(Object system) {
-    return 'In order to make calls via your own Cloud Back-end and your own $system please enter the server\'s URL (as it was provided to you by your account manager) below.';
-  }
+  String get login_Text_coreUrlAssignPreDescription => 'In order to make calls via your own VoIP system please enter the URL of WebTrit Cloud Backend (as it was provided to you by your account manager) below.';
 
   @override
-  String login_Text_coreUrlAssignPostDescription(Object email) {
-    return 'If you do not yet have your own Cloud Back-end - contact sales team $email.';
+  String login_Text_coreUrlAssignPostDescription(String email) {
+    return 'If you do not yet have your own WebTrit Cloud Backend - contact sales team $email.';
   }
 
   @override

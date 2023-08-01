@@ -256,7 +256,7 @@ abstract class AppLocalizations {
   /// No description provided for @main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError.
   ///
   /// In en, this message translates to:
-  /// **'Incompatible Cloud Back-end version, please contact the administrator of your system.\n\nInstance version:\n{actual}\n\nSupported version:\n{supportedConstraint}'**
+  /// **'Incompatible WebTrit Cloud Backend version, please contact the administrator of your system.\n\nInstance version:\n{actual}\n\nSupported version:\n{supportedConstraint}'**
   String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(String actual, String supportedConstraint);
 
   /// No description provided for @main_CompatibilityIssueDialogActions_update.
@@ -400,7 +400,7 @@ abstract class AppLocalizations {
   /// No description provided for @login_ButtonTooltip_signInToYourInstance.
   ///
   /// In en, this message translates to:
-  /// **'Sign in to your Cloud Back-end'**
+  /// **'Sign in to your WebTrit Cloud Backend'**
   String get login_ButtonTooltip_signInToYourInstance;
 
   /// No description provided for @login_Button_signUpToDemoInstance.
@@ -424,20 +424,20 @@ abstract class AppLocalizations {
   /// No description provided for @login_TextFieldLabelText_coreUrlAssign.
   ///
   /// In en, this message translates to:
-  /// **'Enter your Cloud Back-end URL'**
+  /// **'Enter your WebTrit Cloud Backend URL'**
   String get login_TextFieldLabelText_coreUrlAssign;
 
   /// No description provided for @login_Text_coreUrlAssignPreDescription.
   ///
   /// In en, this message translates to:
-  /// **'In order to make calls via your own Cloud Back-end and your own {system} please enter the server\'s URL (as it was provided to you by your account manager) below.'**
-  String login_Text_coreUrlAssignPreDescription(Object system);
+  /// **'In order to make calls via your own VoIP system please enter the URL of WebTrit Cloud Backend (as it was provided to you by your account manager) below.'**
+  String get login_Text_coreUrlAssignPreDescription;
 
   /// No description provided for @login_Text_coreUrlAssignPostDescription.
   ///
   /// In en, this message translates to:
-  /// **'If you do not yet have your own Cloud Back-end - contact sales team {email}.'**
-  String login_Text_coreUrlAssignPostDescription(Object email);
+  /// **'If you do not yet have your own WebTrit Cloud Backend - contact sales team {email}.'**
+  String login_Text_coreUrlAssignPostDescription(String email);
 
   /// No description provided for @login_Button_coreUrlAssignProceed.
   ///

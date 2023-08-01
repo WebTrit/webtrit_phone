@@ -88,7 +88,7 @@
   "main_CompatibilityIssueDialog_title": "Compatibility issue",
   "@main_CompatibilityIssueDialog_title": {
   },
-  "main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError": "Incompatible Cloud Back-end version, please contact the administrator of your system.\n\nInstance version:\n{actual}\n\nSupported version:\n{supportedConstraint}",
+  "main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError": "Incompatible WebTrit Cloud Backend version, please contact the administrator of your system.\n\nInstance version:\n{actual}\n\nSupported version:\n{supportedConstraint}",
   "@main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError": {
     "placeholders": {
       "actual": {
@@ -176,7 +176,7 @@
   "@favorites_DeleteConfirmDialog_content": {
   },
 
-  "login_ButtonTooltip_signInToYourInstance": "Sign in to your Cloud Back-end",
+  "login_ButtonTooltip_signInToYourInstance": "Sign in to your WebTrit Cloud Backend",
   "@login_ButtonTooltip_signInToYourInstance": {
   },
   "login_Button_signUpToDemoInstance": "Sign up",
@@ -188,14 +188,19 @@
   "login_AppBarTitle_coreUrlAssign": "",
   "@login_AppBarTitle_coreUrlAssign": {
   },
-  "login_TextFieldLabelText_coreUrlAssign": "Enter your Cloud Back-end URL",
+  "login_TextFieldLabelText_coreUrlAssign": "Enter your WebTrit Cloud Backend URL",
   "@login_TextFieldLabelText_coreUrlAssign": {
   },
-  "login_Text_coreUrlAssignPreDescription": "In order to make calls via your own Cloud Back-end and your own {system} please enter the server's URL (as it was provided to you by your account manager) below.",
+  "login_Text_coreUrlAssignPreDescription": "In order to make calls via your own VoIP system please enter the URL of WebTrit Cloud Backend (as it was provided to you by your account manager) below.",
   "@login_Text_coreUrlAssignPreDescription": {
   },
-  "login_Text_coreUrlAssignPostDescription": "If you do not yet have your own Cloud Back-end - contact sales team {email}.",
+  "login_Text_coreUrlAssignPostDescription": "If you do not yet have your own WebTrit Cloud Backend - contact sales team {email}.",
   "@login_Text_coreUrlAssignPostDescription": {
+      "placeholders": {
+        "email": {
+          "type": "String"
+        }
+      }
   },
   "login_Button_coreUrlAssignProceed": "Proceed",
   "@login_Button_coreUrlAssignProceed": {
