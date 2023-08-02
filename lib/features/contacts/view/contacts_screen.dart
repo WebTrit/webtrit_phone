@@ -32,7 +32,7 @@ class ContactsScreen extends StatelessWidget {
               bottom: kMainAppBarBottomPaddingGap,
             ),
             child: ExtTabBar(
-              width: mediaQueryData.size.width * 0.6,
+              width: mediaQueryData.size.width * 0.75,
               height: kMainAppBarBottomTabHeight - kMainAppBarBottomPaddingGap,
               tabs: [
                 for (final sourceType in sourceTypes) Tab(text: sourceType.l10n(context)),
