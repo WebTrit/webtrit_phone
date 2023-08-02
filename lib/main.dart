@@ -54,6 +54,7 @@ void main() {
               appDatabase: context.read<AppDatabase>(),
               appPermissions: AppPermissions(),
               appPreferences: AppPreferences(),
+              secureStorage: SecureStorage(),
             );
           },
         ),

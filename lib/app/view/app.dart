@@ -27,11 +27,13 @@ class App extends StatefulWidget {
     required this.appDatabase,
     required this.appPermissions,
     required this.appPreferences,
+    required this.secureStorage,
   }) : super(key: key);
 
   final AppDatabase appDatabase;
   final AppPermissions appPermissions;
   final AppPreferences appPreferences;
+  final SecureStorage secureStorage;
 
   @override
   State<App> createState() => _AppState();
@@ -45,7 +47,7 @@ class _AppState extends State<App> {
     super.initState();
     appBloc = AppBloc(
       appPreferences: widget.appPreferences,
-      secureStorage: SecureStorage(),
+      secureStorage: widget.secureStorage,
       appDatabase: widget.appDatabase,
     );
   }
