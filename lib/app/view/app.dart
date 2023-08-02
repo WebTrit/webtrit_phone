@@ -258,9 +258,13 @@ class _AppState extends State<App> {
                         name: MainRoute.contacts,
                         builder: (context, state) {
                           final widget = ContactsScreen(
-                            sourceTypes: const [
-                              ContactSourceType.local,
-                              ContactSourceType.external,
+                            sourceTypes: [
+                              EnvironmentConfig.DEMO_CORE_URL.isEmpty
+                                  ? ContactSourceType.local
+                                  : ContactSourceType.external,
+                              EnvironmentConfig.DEMO_CORE_URL.isEmpty
+                                  ? ContactSourceType.external
+                                  : ContactSourceType.local,
                             ],
                             sourceTypeWidgetBuilder: _contactSourceTypeWidgetBuilder,
                           );
