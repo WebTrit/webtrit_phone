@@ -5,5 +5,16 @@ linter:
     prefer_single_quotes: true
 
 analyzer:
+  errors:
+    depend_on_referenced_packages: error
+    duplicate_import: error
+    invalid_use_of_protected_member: error
+    missing_required_param: error
+    path_pubspec_does_not_exist: error
+    prefer_const_constructors: error
+    prefer_single_quotes: error
+    unchecked_use_of_nullable_value: error
+    unnecessary_non_null_assertion: error
+    unused_import: error
   exclude:
     - "**/*.g.dart"
