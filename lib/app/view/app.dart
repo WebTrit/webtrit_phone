@@ -26,10 +26,12 @@ class App extends StatefulWidget {
     Key? key,
     required this.appDatabase,
     required this.appPermissions,
+    required this.appPreferences,
   }) : super(key: key);
 
   final AppDatabase appDatabase;
   final AppPermissions appPermissions;
+  final AppPreferences appPreferences;
 
   @override
   State<App> createState() => _AppState();
@@ -42,7 +44,7 @@ class _AppState extends State<App> {
   void initState() {
     super.initState();
     appBloc = AppBloc(
-      appPreferences: AppPreferences(),
+      appPreferences: widget.appPreferences,
       secureStorage: SecureStorage(),
       appDatabase: widget.appDatabase,
     );
@@ -171,7 +173,10 @@ class _AppState extends State<App> {
               GoRoute(
                 name: AppRoute.main,
                 path: '/main',
-                redirect: (context, state) => '/main/${MainFlavor.defaultValue.name}',
+                redirect: (context, state) {
+                  final lastTabIndex = widget.appPreferences.getActiveIndex(AppRoute.main);
+                  return '/main/${MainFlavor.values[lastTabIndex].name}';
+                },
               ),
               StatefulShellRoute.indexedStack(
                 branches: [
@@ -223,6 +228,7 @@ class _AppState extends State<App> {
                         builder: (context, state) {
                           final widget = RecentsScreen(
                             initialFilter: context.read<RecentsBloc>().state.filter,
+                            appPreferences: this.widget.appPreferences,
                           );
                           return widget;
                         },
@@ -263,6 +269,7 @@ class _AppState extends State<App> {
                               ContactSourceType.external,
                             ],
                             sourceTypeWidgetBuilder: _contactSourceTypeWidgetBuilder,
+                            appPreferences: this.widget.appPreferences,
                           );
                           final provider = BlocProvider(
                             create: (context) => ContactsSearchBloc(),
@@ -326,8 +333,10 @@ class _AppState extends State<App> {
                         index,
                         initialLocation: index == navigationShell.currentIndex,
                       );
+                      this.widget.appPreferences.setActiveIndex(AppRoute.main, index);
                     },
                   );
+
                   return BlocProvider(
                     create: (context) {
                       return MainBloc(
@@ -369,7 +378,7 @@ class _AppState extends State<App> {
                         appBloc: context.read<AppBloc>(),
                         userRepository: context.read<UserRepository>(),
                         appRepository: context.read<AppRepository>(),
-                        appPreferences: AppPreferences(),
+                        appPreferences: this.widget.appPreferences,
                       )..add(const SettingsRefreshed());
                     },
                     child: widget,

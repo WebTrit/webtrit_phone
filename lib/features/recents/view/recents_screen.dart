@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/routes.dart';
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -17,9 +18,11 @@ class RecentsScreen extends StatefulWidget {
   const RecentsScreen({
     super.key,
     required this.initialFilter,
+    required this.appPreferences,
   });
 
   final RecentsVisibilityFilter initialFilter;
+  final AppPreferences appPreferences;
 
   @override
   State<RecentsScreen> createState() => _RecentsScreenState();
@@ -33,8 +36,11 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
   @override
   void initState() {
     super.initState();
+    final filtersIndex = _recentsFilters.indexOf(widget.initialFilter);
+    final defaultTabIndex = widget.appPreferences.getActiveIndex(MainRoute.recents, defaultValue: filtersIndex);
+
     _tabController = TabController(
-      initialIndex: _recentsFilters.indexOf(widget.initialFilter),
+      initialIndex: defaultTabIndex,
       length: _recentsFilters.length,
       vsync: this,
     );
@@ -52,6 +58,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
     if (!_tabController.indexIsChanging) {
       final filter = _recentsFilters[_tabController.index];
       context.read<RecentsBloc>().add(RecentsFiltered(filter));
+      widget.appPreferences.setActiveIndex(MainRoute.recents, _tabController.index);
     }
   }
 

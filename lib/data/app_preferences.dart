@@ -63,4 +63,15 @@ class AppPreferences {
   Future<bool> setLocale(Locale value) => _sharedPreferences.setString(_kLocaleLanguageTagKey, value.toLanguageTag());
 
   Future<bool> removeLocale() => _sharedPreferences.remove(_kLocaleLanguageTagKey);
+
+  int getActiveIndex(
+    String indexKey, {
+    int defaultValue = 0,
+  }) =>
+      _sharedPreferences.getInt(_activeIndexKey(indexKey)) ?? defaultValue;
+
+  Future<bool> setActiveIndex(String indexKey, int index) =>
+      _sharedPreferences.setInt(_activeIndexKey(indexKey), index);
+
+  String _activeIndexKey(String indexKey) => 'index-key-$indexKey';
 }
