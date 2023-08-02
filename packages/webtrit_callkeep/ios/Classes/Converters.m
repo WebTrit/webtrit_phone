@@ -154,25 +154,25 @@ extern CXHandleType WTPHandleTypeEnumToCallKit(WTPHandleTypeEnum value) {
   id localizedName = dict[@"localizedName"];
   pigeonResult.localizedName = (localizedName == [NSNull null]) ? nil : localizedName;
   id ringtoneSound = dict[@"ringtoneSound"];
-  pigeonResult.localizedName = (ringtoneSound == [NSNull null]) ? nil : ringtoneSound;
+  pigeonResult.ringtoneSound = (ringtoneSound == [NSNull null]) ? nil : ringtoneSound;
   id iconTemplateImageAssetName = dict[@"iconTemplateImageAssetName"];
-  pigeonResult.localizedName = (iconTemplateImageAssetName == [NSNull null]) ? nil : iconTemplateImageAssetName;
+  pigeonResult.iconTemplateImageAssetName = (iconTemplateImageAssetName == [NSNull null]) ? nil : iconTemplateImageAssetName;
   id maximumCallGroups = dict[@"maximumCallGroups"];
-  pigeonResult.localizedName = (maximumCallGroups == [NSNull null]) ? nil : maximumCallGroups;
+  pigeonResult.maximumCallGroups = (maximumCallGroups == [NSNull null]) ? nil : maximumCallGroups;
   id maximumCallsPerCallGroup = dict[@"maximumCallsPerCallGroup"];
-  pigeonResult.localizedName = (maximumCallsPerCallGroup == [NSNull null]) ? nil : maximumCallsPerCallGroup;
+  pigeonResult.maximumCallsPerCallGroup = (maximumCallsPerCallGroup == [NSNull null]) ? nil : maximumCallsPerCallGroup;
   id supportsHandleTypeGeneric = dict[@"supportsHandleTypeGeneric"];
-  pigeonResult.localizedName = (supportsHandleTypeGeneric == [NSNull null]) ? nil : supportsHandleTypeGeneric;
+  pigeonResult.supportsHandleTypeGeneric = (supportsHandleTypeGeneric == [NSNull null]) ? nil : supportsHandleTypeGeneric;
   id supportsHandleTypePhoneNumber = dict[@"supportsHandleTypePhoneNumber"];
-  pigeonResult.localizedName = (supportsHandleTypePhoneNumber == [NSNull null]) ? nil : supportsHandleTypePhoneNumber;
+  pigeonResult.supportsHandleTypePhoneNumber = (supportsHandleTypePhoneNumber == [NSNull null]) ? nil : supportsHandleTypePhoneNumber;
   id supportsHandleTypeEmailAddress = dict[@"supportsHandleTypeEmailAddress"];
-  pigeonResult.localizedName = (supportsHandleTypeEmailAddress == [NSNull null]) ? nil : supportsHandleTypeEmailAddress;
+  pigeonResult.supportsHandleTypeEmailAddress = (supportsHandleTypeEmailAddress == [NSNull null]) ? nil : supportsHandleTypeEmailAddress;
   id supportsVideo = dict[@"supportsVideo"];
-  pigeonResult.localizedName = (supportsVideo == [NSNull null]) ? nil : supportsVideo;
+  pigeonResult.supportsVideo = (supportsVideo == [NSNull null]) ? nil : supportsVideo;
   id includesCallsInRecents = dict[@"includesCallsInRecents"];
-  pigeonResult.localizedName = (includesCallsInRecents == [NSNull null]) ? nil : includesCallsInRecents;
+  pigeonResult.includesCallsInRecents = (includesCallsInRecents == [NSNull null]) ? nil : includesCallsInRecents;
   id driveIdleTimerDisabled = dict[@"driveIdleTimerDisabled"];
-  pigeonResult.localizedName = (driveIdleTimerDisabled == [NSNull null]) ? nil : driveIdleTimerDisabled;
+  pigeonResult.driveIdleTimerDisabled = (driveIdleTimerDisabled == [NSNull null]) ? nil : driveIdleTimerDisabled;
   return pigeonResult;
 }
 - (NSDictionary *)toMap {
