@@ -8,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:logging/logging.dart';
+import 'package:provider/provider.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 
@@ -15,6 +16,7 @@ import 'firebase_options.dart';
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   final logger = Logger('bootstrap');
+  final exceptionHandler = ExceptionHandler();
 
   await runZonedGuarded(
     () async {
@@ -34,6 +36,14 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
         }
       };
 
+      exceptionHandler.addListener(() {
+        final exception = exceptionHandler.exceptionModel!;
+        logger.severe('runZonedGuarded', exception.error, exception.stackTrace);
+        if (!kIsWeb) {
+          FirebaseCrashlytics.instance.recordError(exception.error, exception.stackTrace, fatal: true);
+        }
+      });
+
       await AppInfo.init();
       await AppPermissions.init();
       await AppPreferences.init();
@@ -43,13 +53,15 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
       Bloc.observer = _AppBlocObserver();
 
-      runApp(await builder());
+      runApp(
+        ChangeNotifierProvider(
+          child: await builder(),
+          create: (BuildContext context) => exceptionHandler,
+        ),
+      );
     },
     (error, stackTrace) {
-      logger.severe('runZonedGuarded', error, stackTrace);
-      if (!kIsWeb) {
-        FirebaseCrashlytics.instance.recordError(error, stackTrace, fatal: true);
-      }
+      exceptionHandler.emitError(ExceptionModel(error: error, stackTrace: stackTrace));
     },
   );
 }
