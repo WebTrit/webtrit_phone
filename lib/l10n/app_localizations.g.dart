@@ -763,6 +763,24 @@ abstract class AppLocalizations {
   /// **'Refresh'**
   String get contacts_ExternalTabButton_refresh;
 
+  /// No description provided for @inviteFriends_Dialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite your friends \nto try webtrit'**
+  String get inviteFriends_Dialog_title;
+
+  /// No description provided for @inviteFriends_Dialog_close.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide this message'**
+  String get inviteFriends_Dialog_close;
+
+  /// No description provided for @inviteFriends_Dialog_invite.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite'**
+  String get inviteFriends_Dialog_invite;
+
   /// No description provided for @settings_AppBarTitle_myAccount.
   ///
   /// In en, this message translates to:

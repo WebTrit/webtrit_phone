@@ -160,6 +160,15 @@ class _MainShellState extends State<MainShell> {
               )..add(const CallStarted());
             },
           ),
+          BlocProvider<InviteFriendsBlocCubit>(
+            create: (context) {
+              return InviteFriendsBlocCubit(
+                webtritApiClient: context.read<WebtritApiClient>(),
+                token: context.read<AppBloc>().state.token!,
+                tenantId: context.read<AppBloc>().state.tenantId!,
+              );
+            },
+          ),
         ],
         child: widget.child,
       ),
