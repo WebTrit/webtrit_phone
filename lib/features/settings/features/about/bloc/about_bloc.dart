@@ -51,6 +51,8 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
         error: e,
       ));
       _logger.warning('_onStarted', e, stackTrace);
+
+      rethrow;
     }
   }
 

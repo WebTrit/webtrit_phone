@@ -65,6 +65,8 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
       await pushTokensRepository.insertOrUpdatePushToken(event.type, event.value);
     } catch (e, stackTrace) {
       _logger.warning('_onInsertedOrUpdated', e, stackTrace);
+
+      rethrow;
     }
   }
 

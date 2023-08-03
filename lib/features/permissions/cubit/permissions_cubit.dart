@@ -24,6 +24,8 @@ class PermissionsCubit extends Cubit<PermissionsState> {
       emit(state.copyWith(status: PermissionsStatus.success));
     } catch (e) {
       emit(state.copyWith(status: PermissionsStatus.failure));
+
+      rethrow;
     }
   }
 

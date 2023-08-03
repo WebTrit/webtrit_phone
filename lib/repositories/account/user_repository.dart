@@ -65,6 +65,8 @@ class UserRepository {
       }
     } catch (e, stackTrace) {
       _logger.warning('_gatherUserInfo', e, stackTrace);
+
+      rethrow;
     }
   }
 

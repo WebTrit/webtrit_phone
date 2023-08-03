@@ -45,6 +45,8 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
       await externalContactsRepository.load();
     } catch (error) {
       emit(const ExternalContactsSyncRefreshFailure());
+
+      rethrow;
     }
   }
 
@@ -54,6 +56,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
       userInfo = await userRepository.getInfo();
     } catch (error) {
       emit(const ExternalContactsSyncRefreshFailure());
+
       return;
     }
 

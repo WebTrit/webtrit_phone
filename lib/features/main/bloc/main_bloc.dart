@@ -65,6 +65,8 @@ class MainBloc extends Bloc<MainEvent, MainState> {
       } catch (e, stackTrace) {
         // this error can be ignored because, technically, this functionality is optional
         _logger.warning('storeInfoExtractor.getStoreInfo for $appPackageName error - ignore', e, stackTrace);
+
+        rethrow;
       }
       Uri? storeViewUrl;
       if (storeInfo != null && storeInfo.version > appVersion) {
@@ -82,6 +84,8 @@ class MainBloc extends Bloc<MainEvent, MainState> {
         _logger.info('Timer callback - repeat after $delay');
         add(const MainCompatibilityVerified());
       });
+
+      rethrow;
     }
   }
 

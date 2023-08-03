@@ -66,6 +66,8 @@ class ExternalContactsRepository {
       }
     } catch (e, stackTrace) {
       _logger.warning('_gatherListContacts', e, stackTrace);
+
+      rethrow;
     }
   }
 

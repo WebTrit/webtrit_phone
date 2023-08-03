@@ -27,6 +27,8 @@ class LogRecordsConsoleCubit extends Cubit<LogRecordsConsoleState> {
       emit(LogRecordsConsoleState.success(logRecords));
     } catch (error) {
       emit(LogRecordsConsoleState.failure(error));
+
+      rethrow;
     }
   }
 

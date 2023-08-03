@@ -65,6 +65,8 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
       await localContactsRepository.load();
     } catch (error) {
       emit(const LocalContactsSyncRefreshFailure());
+
+      rethrow;
     }
   }
 

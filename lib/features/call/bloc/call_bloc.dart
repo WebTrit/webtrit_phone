@@ -381,6 +381,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       ));
 
       _reconnectInitiated(kSignalingClientReconnectDelay);
+
+      rethrow;
     }
   }
 
@@ -413,6 +415,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         signalingClientStatus: SignalingClientStatus.failure,
         lastSignalingClientDisconnectError: e,
       ));
+
+      rethrow;
     }
   }
 
@@ -1060,6 +1064,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           await audioSender.dtmfSender.insertDTMF(event.key);
         } on StateError catch (_) {
           _logger.warning('__onCallPerformEventSentDTMF can\'t send DTMF');
+
+          rethrow;
         }
       }
     });

@@ -67,6 +67,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         error: e,
       ));
       _logger.warning('_onRefreshed', e, stackTrace);
+
+      rethrow;
     }
   }
 
@@ -84,6 +86,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       emit(state.copyWith(progress: false));
     } catch (e) {
       emit(state.copyWith(error: e, progress: false));
+
+      rethrow;
     }
   }
 
@@ -99,6 +103,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       emit(state.copyWith(progress: false));
     } catch (e) {
       emit(state.copyWith(error: e, progress: false, registerStatus: previousRegisterStatus));
+
+      rethrow;
     }
   }
 }

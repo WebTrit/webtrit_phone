@@ -105,6 +105,8 @@ class LoginCubit extends Cubit<LoginState> {
           status: LoginStatus.input,
           error: e,
         ));
+
+        rethrow;
       }
     } else {
       emit(state.copyWith(
@@ -148,6 +150,8 @@ class LoginCubit extends Cubit<LoginState> {
         status: LoginStatus.input,
         error: e,
       ));
+
+      rethrow;
     }
   }
 
@@ -209,6 +213,8 @@ class LoginCubit extends Cubit<LoginState> {
         status: LoginStatus.input,
         error: e,
       ));
+
+      rethrow;
     }
   }
 
@@ -256,6 +262,8 @@ class LoginCubit extends Cubit<LoginState> {
         status: LoginStatus.input,
         error: e,
       ));
+
+      rethrow;
     }
   }
 
@@ -306,6 +314,8 @@ class LoginCubit extends Cubit<LoginState> {
         status: LoginStatus.input,
         error: e,
       ));
+
+      rethrow;
     }
   }
 }
