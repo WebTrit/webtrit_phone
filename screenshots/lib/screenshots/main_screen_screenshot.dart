@@ -43,9 +43,7 @@ class MainScreenScreenshot extends StatelessWidget {
         );
         return provider;
       case MainFlavor.recents:
-        const widget = RecentsScreen(
-          initialFilter: RecentsVisibilityFilter.all,
-        );
+        const widget = RecentsScreen();
         final provider = BlocProvider<RecentsBloc>(
           create: (context) => MockRecentsBloc.mainScreen(),
           child: widget,
@@ -59,7 +57,7 @@ class MainScreenScreenshot extends StatelessWidget {
           ],
           sourceTypeWidgetBuilder: _contactSourceTypeWidgetBuilder,
         );
-        final provider = BlocProvider<ContactsSearchBloc>(
+        final provider = BlocProvider<ContactsBloc>(
           create: (context) => MockContactsSearchBloc.mainScreen(),
           child: widget,
         );

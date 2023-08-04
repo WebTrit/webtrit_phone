@@ -25,11 +25,10 @@ class ContactsLocalTabBloc extends Bloc<ContactsLocalTabEvent, ContactsLocalTabS
   }
 
   final ContactsRepository contactsRepository;
-  final ContactsSearchBloc contactsSearchBloc;
+  final ContactsBloc contactsSearchBloc;
   final LocalContactsSyncBloc localContactsSyncBloc;
 
-  Future<void> _onStarted(
-      ContactsLocalTabStarted event, Emitter<ContactsLocalTabState> emit) async {
+  Future<void> _onStarted(ContactsLocalTabStarted event, Emitter<ContactsLocalTabState> emit) async {
     final watchContactsForEachFuture = emit.forEach(
       contactsRepository.watchContacts(event.search, ContactSourceType.local),
       onData: (List<Contact> contacts) => ContactsLocalTabState(
@@ -39,8 +38,8 @@ class ContactsLocalTabBloc extends Bloc<ContactsLocalTabEvent, ContactsLocalTabS
       ),
     );
 
-    final contactsSearchSateOnEachFuture = emit.onEach(contactsSearchBloc.stream, onData: (String value) {
-      add(ContactsLocalTabStarted(search: value));
+    final contactsSearchSateOnEachFuture = emit.onEach(contactsSearchBloc.stream, onData: (state) {
+      add(ContactsLocalTabStarted(search: state.search));
     });
 
     final localContactsSyncStateForEachFuture = emit.forEach(
@@ -57,8 +56,7 @@ class ContactsLocalTabBloc extends Bloc<ContactsLocalTabEvent, ContactsLocalTabS
     ]);
   }
 
-  Future<void> _onRefreshed(
-      ContactsLocalTabRefreshed event, Emitter<ContactsLocalTabState> emit) async {
+  Future<void> _onRefreshed(ContactsLocalTabRefreshed event, Emitter<ContactsLocalTabState> emit) async {
     localContactsSyncBloc.add(const LocalContactsSyncRefreshed());
   }
 

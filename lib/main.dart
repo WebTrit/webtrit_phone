@@ -53,6 +53,8 @@ void main() {
             return App(
               appDatabase: context.read<AppDatabase>(),
               appPermissions: AppPermissions(),
+              appPreferences: AppPreferences(),
+              secureStorage: SecureStorage(),
             );
           },
         ),
