@@ -42,13 +42,25 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   late final AppBloc appBloc;
 
+  get appPreferences => widget.appPreferences;
+
+  get secureStorage => widget.secureStorage;
+
+  get appPermissions => widget.appPermissions;
+
+  get appDatabase => widget.appDatabase;
+
+  get activeTabIndex => appPreferences.getActiveIndex(AppRoute.main);
+
+  set activeTabIndex(index) => appPreferences.setActiveIndex(AppRoute.main, index);
+
   @override
   void initState() {
     super.initState();
     appBloc = AppBloc(
-      appPreferences: widget.appPreferences,
-      secureStorage: widget.secureStorage,
-      appDatabase: widget.appDatabase,
+      appPreferences: appPreferences,
+      secureStorage: secureStorage,
+      appDatabase: appDatabase,
     );
   }
 
@@ -155,7 +167,7 @@ class _AppState extends State<App> {
               const widget = PermissionsScreen();
               final provider = BlocProvider(
                 create: (context) => PermissionsCubit(
-                  appPermissions: this.widget.appPermissions,
+                  appPermissions: appPermissions,
                 ),
                 child: widget,
               );
@@ -175,10 +187,7 @@ class _AppState extends State<App> {
               GoRoute(
                 name: AppRoute.main,
                 path: '/main',
-                redirect: (context, state) {
-                  final lastTabIndex = widget.appPreferences.getActiveIndex(AppRoute.main);
-                  return '/main/${MainFlavor.values[lastTabIndex].name}';
-                },
+                redirect: (context, state) => '/main/${MainFlavor.values[activeTabIndex].name}',
               ),
               StatefulShellRoute.indexedStack(
                 branches: [
@@ -230,7 +239,7 @@ class _AppState extends State<App> {
                         builder: (context, state) {
                           final widget = RecentsScreen(
                             initialFilter: context.read<RecentsBloc>().state.filter,
-                            appPreferences: this.widget.appPreferences,
+                            appPreferences: appPreferences,
                           );
                           return widget;
                         },
@@ -271,7 +280,7 @@ class _AppState extends State<App> {
                               ContactSourceType.external,
                             ],
                             sourceTypeWidgetBuilder: _contactSourceTypeWidgetBuilder,
-                            appPreferences: this.widget.appPreferences,
+                            appPreferences: appPreferences,
                           );
                           final provider = BlocProvider(
                             create: (context) => ContactsSearchBloc(),
@@ -335,7 +344,7 @@ class _AppState extends State<App> {
                         index,
                         initialLocation: index == navigationShell.currentIndex,
                       );
-                      this.widget.appPreferences.setActiveIndex(AppRoute.main, index);
+                      activeTabIndex = index;
                     },
                   );
 
@@ -380,7 +389,7 @@ class _AppState extends State<App> {
                         appBloc: context.read<AppBloc>(),
                         userRepository: context.read<UserRepository>(),
                         appRepository: context.read<AppRepository>(),
-                        appPreferences: this.widget.appPreferences,
+                        appPreferences: appPreferences,
                       )..add(const SettingsRefreshed());
                     },
                     child: widget,
@@ -505,7 +514,7 @@ class _AppState extends State<App> {
     final coreUrl = appBloc.state.coreUrl;
     final token = appBloc.state.token;
     final webRegistrationInitialUrl = appBloc.state.webRegistrationInitialUrl;
-    final appPermissionsDenied = widget.appPermissions.isDenied;
+    final appPermissionsDenied = appPermissions.isDenied;
 
     final isLoginPath = state.location.startsWith('/login');
     final isWebRegistrationPath = state.location.startsWith('/web-registration');
