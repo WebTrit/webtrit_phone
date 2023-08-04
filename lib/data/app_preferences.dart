@@ -102,11 +102,11 @@ class AppPreferences {
   Future<bool> setActiveRecentsVisibilityFilter(RecentsVisibilityFilter value) =>
       _sharedPreferences.setString(_kActiveRecentsVisibilityFilterKey, value.name);
 
-  ContactSourceType getActiveContactsSourceType({ContactSourceType defaultValue = ContactSourceType.external}) {
-    final contactSourceTypeString = _sharedPreferences.getString(_kActiveContactSourceTypeKey);
-    if (contactSourceTypeString != null) {
+  ContactSourceType getActiveContactSourceType({ContactSourceType defaultValue = ContactSourceType.external}) {
+    final activeContactSourceTypeString = _sharedPreferences.getString(_kActiveContactSourceTypeKey);
+    if (activeContactSourceTypeString != null) {
       try {
-        return ContactSourceType.values.byName(contactSourceTypeString);
+        return ContactSourceType.values.byName(activeContactSourceTypeString);
       } catch (_) {
         return defaultValue;
       }
@@ -115,6 +115,6 @@ class AppPreferences {
     }
   }
 
-  Future<bool> setActiveContactsSourceType(ContactSourceType value) =>
+  Future<bool> setActiveContactSourceType(ContactSourceType value) =>
       _sharedPreferences.setString(_kActiveContactSourceTypeKey, value.name);
 }

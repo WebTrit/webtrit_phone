@@ -15,7 +15,7 @@ part 'contacts_state.dart';
 class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   ContactsBloc({
     required this.appPreferences,
-  }) : super(ContactsState(sourceType: appPreferences.getActiveContactsSourceType())) {
+  }) : super(ContactsState(sourceType: appPreferences.getActiveContactSourceType())) {
     on<ContactsSourceTypeChanged>(_onSourceTypeChanged, transformer: debounceRestartable(debounceSearchDuration));
     on<ContactsSearchChanged>(_onSearchChanged, transformer: debounceRestartable(debounceSearchDuration));
     on<ContactsSearchSubmitted>(_onSearchSubmitted, transformer: sequential());
@@ -30,7 +30,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   }
 
   Future<void> _onSourceTypeChanged(ContactsSourceTypeChanged event, Emitter<ContactsState> emit) async {
-    await appPreferences.setActiveContactsSourceType(event.sourceType);
+    await appPreferences.setActiveContactSourceType(event.sourceType);
 
     emit(state.copyWith(sourceType: event.sourceType));
   }
