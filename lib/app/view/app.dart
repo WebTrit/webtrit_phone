@@ -24,16 +24,16 @@ import 'main_shell.dart';
 class App extends StatefulWidget {
   const App({
     Key? key,
-    required this.appDatabase,
-    required this.appPermissions,
     required this.appPreferences,
     required this.secureStorage,
+    required this.appDatabase,
+    required this.appPermissions,
   }) : super(key: key);
 
-  final AppDatabase appDatabase;
-  final AppPermissions appPermissions;
   final AppPreferences appPreferences;
   final SecureStorage secureStorage;
+  final AppDatabase appDatabase;
+  final AppPermissions appPermissions;
 
   @override
   State<App> createState() => _AppState();
@@ -42,25 +42,29 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   late final AppBloc appBloc;
 
-  get appPreferences => widget.appPreferences;
+  AppPreferences get _appPreferences => widget.appPreferences;
 
-  get secureStorage => widget.secureStorage;
+  SecureStorage get _secureStorage => widget.secureStorage;
 
-  get appPermissions => widget.appPermissions;
+  AppDatabase get _appDatabase => widget.appDatabase;
 
-  get appDatabase => widget.appDatabase;
+  AppPermissions get _appPermissions => widget.appPermissions;
 
-  get activeTabIndex => appPreferences.getActiveIndex(AppRoute.main);
+  int _getMainActiveIndex() {
+    return _appPreferences.getActiveIndex(AppRoute.main, defaultValue: MainFlavor.defaultValue.index);
+  }
 
-  set activeTabIndex(index) => appPreferences.setActiveIndex(AppRoute.main, index);
+  Future<bool> _setMainActiveIndex(int index) {
+    return _appPreferences.setActiveIndex(AppRoute.main, index);
+  }
 
   @override
   void initState() {
     super.initState();
     appBloc = AppBloc(
-      appPreferences: appPreferences,
-      secureStorage: secureStorage,
-      appDatabase: appDatabase,
+      appPreferences: _appPreferences,
+      secureStorage: _secureStorage,
+      appDatabase: _appDatabase,
     );
   }
 
@@ -167,7 +171,7 @@ class _AppState extends State<App> {
               const widget = PermissionsScreen();
               final provider = BlocProvider(
                 create: (context) => PermissionsCubit(
-                  appPermissions: appPermissions,
+                  appPermissions: _appPermissions,
                 ),
                 child: widget,
               );
@@ -187,7 +191,7 @@ class _AppState extends State<App> {
               GoRoute(
                 name: AppRoute.main,
                 path: '/main',
-                redirect: (context, state) => '/main/${MainFlavor.values[activeTabIndex].name}',
+                redirect: (context, state) => '/main/${MainFlavor.values[_getMainActiveIndex()].name}',
               ),
               StatefulShellRoute.indexedStack(
                 branches: [
@@ -239,7 +243,7 @@ class _AppState extends State<App> {
                         builder: (context, state) {
                           final widget = RecentsScreen(
                             initialFilter: context.read<RecentsBloc>().state.filter,
-                            appPreferences: appPreferences,
+                            appPreferences: _appPreferences,
                           );
                           return widget;
                         },
@@ -280,7 +284,7 @@ class _AppState extends State<App> {
                               ContactSourceType.external,
                             ],
                             sourceTypeWidgetBuilder: _contactSourceTypeWidgetBuilder,
-                            appPreferences: appPreferences,
+                            appPreferences: _appPreferences,
                           );
                           final provider = BlocProvider(
                             create: (context) => ContactsSearchBloc(),
@@ -339,12 +343,12 @@ class _AppState extends State<App> {
                   final widget = MainScreen(
                     navigationBarFlavor: MainFlavor.values[navigationShell.currentIndex],
                     body: navigationShell,
-                    onNavigationBarTap: (index) {
+                    onNavigationBarTap: (index) async {
+                      await _setMainActiveIndex(index);
                       navigationShell.goBranch(
                         index,
                         initialLocation: index == navigationShell.currentIndex,
                       );
-                      activeTabIndex = index;
                     },
                   );
 
@@ -389,7 +393,7 @@ class _AppState extends State<App> {
                         appBloc: context.read<AppBloc>(),
                         userRepository: context.read<UserRepository>(),
                         appRepository: context.read<AppRepository>(),
-                        appPreferences: appPreferences,
+                        appPreferences: _appPreferences,
                       )..add(const SettingsRefreshed());
                     },
                     child: widget,
@@ -514,7 +518,7 @@ class _AppState extends State<App> {
     final coreUrl = appBloc.state.coreUrl;
     final token = appBloc.state.token;
     final webRegistrationInitialUrl = appBloc.state.webRegistrationInitialUrl;
-    final appPermissionsDenied = appPermissions.isDenied;
+    final appPermissionsDenied = _appPermissions.isDenied;
 
     final isLoginPath = state.location.startsWith('/login');
     final isWebRegistrationPath = state.location.startsWith('/web-registration');
