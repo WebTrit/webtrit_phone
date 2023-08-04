@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:webtrit_phone/data/data.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -44,10 +43,7 @@ class MainScreenScreenshot extends StatelessWidget {
         );
         return provider;
       case MainFlavor.recents:
-        final widget = RecentsScreen(
-          initialFilter: RecentsVisibilityFilter.all,
-          appPreferences: AppPreferences(),
-        );
+        const widget = RecentsScreen();
         final provider = BlocProvider<RecentsBloc>(
           create: (context) => MockRecentsBloc.mainScreen(),
           child: widget,
@@ -60,9 +56,8 @@ class MainScreenScreenshot extends StatelessWidget {
             ContactSourceType.external,
           ],
           sourceTypeWidgetBuilder: _contactSourceTypeWidgetBuilder,
-          appPreferences: AppPreferences(),
         );
-        final provider = BlocProvider<ContactsSearchBloc>(
+        final provider = BlocProvider<ContactsBloc>(
           create: (context) => MockContactsSearchBloc.mainScreen(),
           child: widget,
         );

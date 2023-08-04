@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/routes.dart';
-import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -17,12 +16,10 @@ import '../recents.dart';
 class RecentsScreen extends StatefulWidget {
   const RecentsScreen({
     super.key,
-    required this.initialFilter,
-    required this.appPreferences,
+    this.recentsFilters = const [RecentsVisibilityFilter.all, RecentsVisibilityFilter.missed],
   });
 
-  final RecentsVisibilityFilter initialFilter;
-  final AppPreferences appPreferences;
+  final List<RecentsVisibilityFilter> recentsFilters;
 
   @override
   State<RecentsScreen> createState() => _RecentsScreenState();
@@ -31,17 +28,16 @@ class RecentsScreen extends StatefulWidget {
 class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  static final _recentsFilters = [RecentsVisibilityFilter.all, RecentsVisibilityFilter.missed];
-
   @override
   void initState() {
     super.initState();
-    final filtersIndex = _recentsFilters.indexOf(widget.initialFilter);
-    final defaultTabIndex = widget.appPreferences.getActiveIndex(MainRoute.recents, defaultValue: filtersIndex);
+
+    final activeFilter = context.read<RecentsBloc>().state.filter;
+    final initialRecentsFiltersIndex = widget.recentsFilters.indexOf(activeFilter);
 
     _tabController = TabController(
-      initialIndex: defaultTabIndex,
-      length: _recentsFilters.length,
+      initialIndex: initialRecentsFiltersIndex == -1 ? 0 : initialRecentsFiltersIndex,
+      length: widget.recentsFilters.length,
       vsync: this,
     );
     _tabController.addListener(_tabControllerListener);
@@ -56,9 +52,8 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
 
   void _tabControllerListener() {
     if (!_tabController.indexIsChanging) {
-      final filter = _recentsFilters[_tabController.index];
+      final filter = widget.recentsFilters[_tabController.index];
       context.read<RecentsBloc>().add(RecentsFiltered(filter));
-      widget.appPreferences.setActiveIndex(MainRoute.recents, _tabController.index);
     }
   }
 
@@ -78,7 +73,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
               width: mediaQueryData.size.width * 0.6,
               height: kMainAppBarBottomTabHeight - kMainAppBarBottomPaddingGap,
               tabs: [
-                for (final recentsFilter in _recentsFilters) Tab(text: recentsFilter.l10n(context)),
+                for (final recentsFilter in widget.recentsFilters) Tab(text: recentsFilter.l10n(context)),
               ],
               controller: _tabController,
             ),

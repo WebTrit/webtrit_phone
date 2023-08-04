@@ -3,6 +3,4 @@ enum MainFlavor {
   recents,
   contacts,
   keypad;
-
-  static MainFlavor get defaultValue => favorites;
 }

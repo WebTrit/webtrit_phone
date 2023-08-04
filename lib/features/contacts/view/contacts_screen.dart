@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/app/routes.dart';
-import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -18,12 +16,10 @@ class ContactsScreen extends StatefulWidget {
     super.key,
     required this.sourceTypes,
     required this.sourceTypeWidgetBuilder,
-    required this.appPreferences,
   });
 
   final List<ContactSourceType> sourceTypes;
   final ContactSourceTypeWidgetBuilder sourceTypeWidgetBuilder;
-  final AppPreferences appPreferences;
 
   @override
   State<ContactsScreen> createState() => _ContactsScreenState();
@@ -35,20 +31,16 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
   @override
   void initState() {
     super.initState();
-    final defaultTabIndex = widget.appPreferences.getActiveIndex(MainRoute.contacts, defaultValue: 1);
+
+    final activeSourceType = context.read<ContactsBloc>().state.sourceType;
+    final initialSourceTypesIndex = widget.sourceTypes.indexOf(activeSourceType);
 
     _tabController = TabController(
-      initialIndex: defaultTabIndex,
+      initialIndex: initialSourceTypesIndex == -1 ? 0 : initialSourceTypesIndex,
       length: widget.sourceTypes.length,
       vsync: this,
     );
     _tabController.addListener(_tabControllerListener);
-  }
-
-  void _tabControllerListener() {
-    if (!_tabController.indexIsChanging) {
-      widget.appPreferences.setActiveIndex(MainRoute.contacts, _tabController.index);
-    }
   }
 
   @override
@@ -56,6 +48,13 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
     _tabController.removeListener(_tabControllerListener);
     _tabController.dispose();
     super.dispose();
+  }
+
+  void _tabControllerListener() {
+    if (!_tabController.indexIsChanging) {
+      final sourceType = widget.sourceTypes[_tabController.index];
+      context.read<ContactsBloc>().add(ContactsSourceTypeChanged(sourceType));
+    }
   }
 
   @override
@@ -85,11 +84,11 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
         bottom: kMainAppBarBottomPaddingGap,
       ),
       child: IgnoreUnfocuser(
-        child: BlocBuilder<ContactsSearchBloc, String>(
+        child: BlocBuilder<ContactsBloc, ContactsState>(
           builder: (context, state) {
-            final contactsSearchBloc = context.read<ContactsSearchBloc>();
+            final contactsSearchBloc = context.read<ContactsBloc>();
             return ClearedTextField(
-              initialValue: state,
+              initialValue: state.search,
               onChanged: (value) => contactsSearchBloc.add(ContactsSearchChanged(value)),
               onSubmitted: (value) => contactsSearchBloc.add(ContactsSearchSubmitted(value)),
               iconConstraints: const BoxConstraints.expand(

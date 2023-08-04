@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/features/main/models/models.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 class AppPreferences {
   static const _kRegisterStatusKey = 'register-status';
   static const _kThemeModeKey = 'theme-mode';
   static const _kLocaleLanguageTagKey = 'locale-language-tag';
+  static const _kActiveMainFlavorKey = 'active-main-flavor';
+  static const _kActiveRecentsVisibilityFilterKey = 'active-recents-visibility-filter';
+  static const _kActiveContactSourceTypeKey = 'active-contact-source-type';
 
   static late AppPreferences _instance;
 
@@ -64,11 +70,51 @@ class AppPreferences {
 
   Future<bool> removeLocale() => _sharedPreferences.remove(_kLocaleLanguageTagKey);
 
-  int getActiveIndex(String indexKey, {required int defaultValue}) =>
-      _sharedPreferences.getInt(_activeIndexKey(indexKey)) ?? defaultValue;
+  MainFlavor getActiveMainFlavor({MainFlavor defaultValue = MainFlavor.favorites}) {
+    final activeMainFlavorString = _sharedPreferences.getString(_kActiveMainFlavorKey);
+    if (activeMainFlavorString != null) {
+      try {
+        return MainFlavor.values.byName(activeMainFlavorString);
+      } catch (_) {
+        return defaultValue;
+      }
+    } else {
+      return defaultValue;
+    }
+  }
 
-  Future<bool> setActiveIndex(String indexKey, int index) =>
-      _sharedPreferences.setInt(_activeIndexKey(indexKey), index);
+  Future<bool> setActiveMainFlavor(MainFlavor value) => _sharedPreferences.setString(_kActiveMainFlavorKey, value.name);
 
-  String _activeIndexKey(String indexKey) => 'index-key-$indexKey';
+  RecentsVisibilityFilter getActiveRecentsVisibilityFilter(
+      {RecentsVisibilityFilter defaultValue = RecentsVisibilityFilter.all}) {
+    final activeRecentsVisibilityFilterString = _sharedPreferences.getString(_kActiveRecentsVisibilityFilterKey);
+    if (activeRecentsVisibilityFilterString != null) {
+      try {
+        return RecentsVisibilityFilter.values.byName(activeRecentsVisibilityFilterString);
+      } catch (_) {
+        return defaultValue;
+      }
+    } else {
+      return defaultValue;
+    }
+  }
+
+  Future<bool> setActiveRecentsVisibilityFilter(RecentsVisibilityFilter value) =>
+      _sharedPreferences.setString(_kActiveRecentsVisibilityFilterKey, value.name);
+
+  ContactSourceType getActiveContactsSourceType({ContactSourceType defaultValue = ContactSourceType.external}) {
+    final contactSourceTypeString = _sharedPreferences.getString(_kActiveContactSourceTypeKey);
+    if (contactSourceTypeString != null) {
+      try {
+        return ContactSourceType.values.byName(contactSourceTypeString);
+      } catch (_) {
+        return defaultValue;
+      }
+    } else {
+      return defaultValue;
+    }
+  }
+
+  Future<bool> setActiveContactsSourceType(ContactSourceType value) =>
+      _sharedPreferences.setString(_kActiveContactSourceTypeKey, value.name);
 }

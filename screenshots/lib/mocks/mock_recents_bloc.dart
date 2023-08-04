@@ -1,6 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 import 'package:screenshots/data/data.dart';
 
@@ -14,6 +15,7 @@ class MockRecentsBloc extends MockBloc<RecentsEvent, RecentsState> implements Re
       const Stream<RecentsState>.empty(),
       initialState: RecentsState(
         recents: dRecents,
+        filter: RecentsVisibilityFilter.all,
       ),
     );
     return mock;

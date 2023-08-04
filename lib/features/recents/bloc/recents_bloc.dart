@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -16,13 +17,15 @@ part 'recents_state.dart';
 class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
   RecentsBloc({
     required this.recentsRepository,
-  }) : super(const RecentsState()) {
+    required this.appPreferences,
+  }) : super(RecentsState(filter: appPreferences.getActiveRecentsVisibilityFilter())) {
     on<RecentsStarted>(_onStarted, transformer: restartable());
     on<RecentsFiltered>(_onFiltered);
     on<RecentsDeleted>(_onDeleted);
   }
 
   final RecentsRepository recentsRepository;
+  final AppPreferences appPreferences;
 
   Future<void> _onStarted(RecentsStarted event, Emitter<RecentsState> emit) async {
     await emit.forEach(
@@ -36,6 +39,8 @@ class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
   }
 
   Future<void> _onFiltered(RecentsFiltered event, Emitter<RecentsState> emit) async {
+    await appPreferences.setActiveRecentsVisibilityFilter(event.filter);
+
     emit(state.copyWith(filter: event.filter));
   }
 }
