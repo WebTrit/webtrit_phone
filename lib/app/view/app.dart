@@ -151,7 +151,7 @@ class _AppState extends State<App> {
             path: '/web-registration',
             builder: (context, state) {
               final widget = WebRegistrationScreen(
-                initialUri: Uri.parse(state.queryParameters['initialUrl'] ?? kBlankUri),
+                initialUri: Uri.parse(state.uri.queryParameters['initialUrl'] ?? kBlankUri),
               );
               return widget;
             },
@@ -512,9 +512,9 @@ class _AppState extends State<App> {
     final webRegistrationInitialUrl = appBloc.state.webRegistrationInitialUrl;
     final appPermissionsDenied = _appPermissions.isDenied;
 
-    final isLoginPath = state.location.startsWith('/login');
-    final isWebRegistrationPath = state.location.startsWith('/web-registration');
-    final isMainPath = state.location.startsWith('/main');
+    final isLoginPath = state.uri.toString().startsWith('/login');
+    final isWebRegistrationPath = state.uri.toString().startsWith('/web-registration');
+    final isMainPath = state.uri.toString().startsWith('/main');
 
     if (coreUrl != null && token != null) {
       if (isLoginPath || isWebRegistrationPath) {

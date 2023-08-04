@@ -69,7 +69,7 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
             ),
             child: ExtTabBar(
               controller: _tabController,
-              width: mediaQueryData.size.width * 0.6,
+              width: mediaQueryData.size.width * 0.75,
               height: kMainAppBarBottomTabHeight - kMainAppBarBottomPaddingGap,
               tabs: [
                 for (final sourceType in widget.sourceTypes) Tab(text: sourceType.l10n(context)),

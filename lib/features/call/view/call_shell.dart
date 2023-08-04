@@ -26,6 +26,11 @@ class CallShell extends StatefulWidget {
 class _CallShellState extends State<CallShell> {
   ThumbnailAvatar? _avatar;
 
+  bool _isCallRouterLocation(BuildContext context) {
+    final router = GoRouter.of(context);
+    return router.routerDelegate.currentConfiguration.last.matchedLocation == router.namedLocation(MainRoute.call);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<CallBloc, CallState>(
@@ -40,14 +45,12 @@ class _CallShellState extends State<CallShell> {
           }
         }
 
-        final router = GoRouter.of(context);
-        final isCallRouterLocation = router.location == router.namedLocation(MainRoute.call);
         if (state.display == CallDisplay.screen) {
-          if (!isCallRouterLocation) {
+          if (!_isCallRouterLocation(context)) {
             context.pushNamed(MainRoute.call);
           }
         } else {
-          if (isCallRouterLocation) {
+          if (_isCallRouterLocation(context)) {
             context.pop();
           }
         }
