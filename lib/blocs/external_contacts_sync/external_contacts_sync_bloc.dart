@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -59,7 +58,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
 
     await appDatabase.transaction(() async {
       // skip external contact that represents own account
-      final externalContacts = event.contacts.whereNot((externalContact) => externalContact.id == userInfo.sip.login);
+      final externalContacts = event.contacts.where((externalContact) => externalContact.id != userInfo.sip.login);
 
       final contactDatas = await appDatabase.contactsDao.getAllContacts(ContactSourceTypeEnum.external);
 

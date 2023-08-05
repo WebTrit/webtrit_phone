@@ -40,7 +40,7 @@ class CallState with _$CallState {
 
   int? retrieveIdleLine() {
     for (var line = 0; line < linesCount; line++) {
-      if (activeCalls.firstWhereOrNull((activeCall) => activeCall.line == line) == null) {
+      if (!activeCalls.any((activeCall) => activeCall.line == line)) {
         return line;
       }
     }
