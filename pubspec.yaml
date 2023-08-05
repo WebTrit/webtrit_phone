@@ -43,12 +43,12 @@ dependencies:
   freezed_annotation: ^2.4.1
   go_router: ^10.0.0
   google_fonts: ^5.1.0
-  intl: ^0.18.0
+  intl: any
   just_audio: ^0.9.33
   linkify: ^5.0.0
   logging: ^1.2.0
   logging_appenders: ^1.1.0
-  material_color_utilities: ^0.2.0
+  material_color_utilities: any
   meta: ^1.9.1
   package_info_plus: ^4.1.0
   path: ^1.8.3
