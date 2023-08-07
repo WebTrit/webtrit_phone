@@ -1,16 +1,19 @@
 import 'dart:async';
-import 'dart:html';
+import 'dart:html' as html;
 
-Future<WebSocket> connect(
+import 'package:web_socket_channel/html.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+
+Future<html.WebSocket> connect(
   String url, {
   Iterable<String>? protocols,
   Duration? connectionTimeout,
   Duration? pingInterval,
 }) async {
-  final webSocket = WebSocket(url, protocols);
+  final webSocket = html.WebSocket(url, protocols);
   if (webSocket.readyState == 1) return webSocket;
 
-  final completer = Completer<WebSocket>();
+  final completer = Completer<html.WebSocket>();
 
   unawaited(
     webSocket.onOpen.first.then((_) {
@@ -20,7 +23,7 @@ Future<WebSocket> connect(
 
   unawaited(
     webSocket.onError.first.then((event) {
-      final error = event is ErrorEvent ? event.error : null;
+      final error = event is html.ErrorEvent ? event.error : null;
       completer.completeError(error ?? 'unknown error');
     }),
   );
@@ -30,4 +33,9 @@ Future<WebSocket> connect(
   } else {
     return completer.future;
   }
+}
+
+/// Creates a [HtmlWebSocketChannel] for the provided [socket].
+WebSocketChannel createWebSocketChannel(html.WebSocket socket) {
+  return HtmlWebSocketChannel(socket);
 }

@@ -6,12 +6,8 @@ import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import '_web_socket_channel/_web_socket_channel.dart'
-    if (dart.library.html) '_web_socket_channel/_web_socket_channel_html.dart'
-    if (dart.library.io) '_web_socket_channel/_web_socket_channel_io.dart' as platform;
-import '_web_socket_connect/_web_socket_connect.dart'
-    if (dart.library.html) '_web_socket_connect/_web_socket_connect_html.dart'
-    if (dart.library.io) '_web_socket_connect/_web_socket_connect_io.dart' as platform;
+import 'package:_web_socket_channel/_web_socket_channel.dart';
+
 import 'events/events.dart';
 import 'exceptions.dart';
 import 'handshakes/handshakes.dart';
@@ -87,12 +83,12 @@ class WebtritSignalingClient {
       },
     ).toString();
 
-    final ws = await platform.connect(
+    final ws = await connectWebSocket(
       signalingUrl,
       protocols: [subprotocol],
       connectionTimeout: connectionTimeout,
     );
-    final wsc = platform.createWebSocketChannel(ws);
+    final wsc = createWebSocketChannel(ws);
     return WebtritSignalingClient.inner(wsc);
   }
 
