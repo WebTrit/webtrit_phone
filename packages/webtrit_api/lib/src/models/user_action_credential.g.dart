@@ -1,14 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user_invite_credential.dart';
+part of 'user_action_credential.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_UserInviteCredential _$$_UserInviteCredentialFromJson(
+_$_UserActionCredential _$$_UserActionCredentialFromJson(
         Map<String, dynamic> json) =>
-    _$_UserInviteCredential(
+    _$_UserActionCredential(
       type: $enumDecode(_$AppTypeEnumMap, json['type']),
       identifier: json['identifier'] as String,
       email: json['email'] as String,
@@ -16,8 +16,8 @@ _$_UserInviteCredential _$$_UserInviteCredentialFromJson(
       action: json['action'] as String,
     );
 
-Map<String, dynamic> _$$_UserInviteCredentialToJson(
-        _$_UserInviteCredential instance) =>
+Map<String, dynamic> _$$_UserActionCredentialToJson(
+        _$_UserActionCredential instance) =>
     <String, dynamic>{
       'type': _$AppTypeEnumMap[instance.type]!,
       'identifier': instance.identifier,
