@@ -15,24 +15,24 @@ class Contact extends Equatable {
     required this.id,
     required this.sourceType,
     required this.sourceId,
-    this.displayName,
     this.firstName,
     this.lastName,
+    this.aliasName,
     this.thumbnail,
   });
 
   final ContactId id;
   final ContactSourceType sourceType;
   final String sourceId;
-  final String? displayName;
   final String? firstName;
   final String? lastName;
+  final String? aliasName;
   final Uint8List? thumbnail;
 
   String get name {
-    final displayName = this.displayName;
-    if (displayName != null) {
-      return displayName;
+    final aliasName = this.aliasName;
+    if (aliasName != null) {
+      return aliasName;
     } else {
       return [firstName, lastName].readableJoin();
     }
@@ -43,9 +43,9 @@ class Contact extends Equatable {
         id,
         sourceType,
         sourceId,
-        displayName,
         firstName,
         lastName,
+        aliasName,
         thumbnail,
       ];
 }

@@ -7,6 +7,8 @@ const kSignalingClientReconnectDelay = Duration(seconds: 3);
 
 const kCompatibilityVerifyRepeatDelay = Duration(seconds: 2);
 
+const kDebounceDuration = Duration(milliseconds: 275);
+
 const kInset = kMinInteractiveDimension / 2;
 
 const kMainAppBarBottomTabHeight = 42.0;

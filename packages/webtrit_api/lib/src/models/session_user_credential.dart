@@ -12,6 +12,7 @@ part 'session_user_credential.g.dart';
 class SessionUserCredential with _$SessionUserCredential {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory SessionUserCredential({
+    String? bundleId,
     required AppType type,
     required String identifier,
     required String email,

@@ -6,17 +6,6 @@ part of 'common.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_SipStatus _$$_SipStatusFromJson(Map<String, dynamic> json) => _$_SipStatus(
-      displayName: json['display_name'] as String?,
-      status: json['status'] as String,
-    );
-
-Map<String, dynamic> _$$_SipStatusToJson(_$_SipStatus instance) =>
-    <String, dynamic>{
-      'display_name': instance.displayName,
-      'status': instance.status,
-    };
-
 _$_Numbers _$$_NumbersFromJson(Map<String, dynamic> json) => _$_Numbers(
       main: json['main'] as String,
       ext: json['ext'] as String?,
@@ -49,32 +38,30 @@ Map<String, dynamic> _$$_BalanceToJson(_$_Balance instance) =>
     };
 
 const _$BalanceTypeEnumMap = {
-  BalanceType.postpaid: 'postpaid',
-  BalanceType.prepaid: 'prepaid',
-  BalanceType.inapplicable: 'inapplicable',
   BalanceType.unknown: 'unknown',
+  BalanceType.inapplicable: 'inapplicable',
+  BalanceType.prepaid: 'prepaid',
+  BalanceType.postpaid: 'postpaid',
 };
 
 _$_SipInfo _$$_SipInfoFromJson(Map<String, dynamic> json) => _$_SipInfo(
-      displayName: json['display_name'] as String?,
-      login: json['login'] as String?,
-      password: json['password'] as String?,
+      login: json['login'] as String,
+      password: json['password'] as String,
+      sipServer: SipServer.fromJson(json['sip_server'] as Map<String, dynamic>),
       registrationServer: json['registration_server'] == null
           ? null
           : SipServer.fromJson(
               json['registration_server'] as Map<String, dynamic>),
-      sipServer: json['sip_server'] == null
-          ? null
-          : SipServer.fromJson(json['sip_server'] as Map<String, dynamic>),
+      displayName: json['display_name'] as String?,
     );
 
 Map<String, dynamic> _$$_SipInfoToJson(_$_SipInfo instance) =>
     <String, dynamic>{
-      'display_name': instance.displayName,
       'login': instance.login,
       'password': instance.password,
-      'registration_server': instance.registrationServer,
       'sip_server': instance.sipServer,
+      'registration_server': instance.registrationServer,
+      'display_name': instance.displayName,
     };
 
 _$_SipServer _$$_SipServerFromJson(Map<String, dynamic> json) => _$_SipServer(

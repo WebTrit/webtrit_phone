@@ -13,9 +13,9 @@ class RequestFailure implements Exception {
   String toString() {
     final error = this.error;
     if (error != null) {
-      final refining = error.refining;
-      if (refining != null) {
-        final s = refining.map((r) => '${r.path}: ${r.reason}').join(', ');
+      final errorDetails = error.details;
+      if (errorDetails != null) {
+        final s = errorDetails.map((d) => '${d.path}: ${d.reason}').join(', ');
         return '$RequestFailure($statusCode, ${error.code}, [$s])';
       } else {
         return '$RequestFailure($statusCode, ${error.code})';

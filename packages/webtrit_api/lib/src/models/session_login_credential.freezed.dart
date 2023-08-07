@@ -21,6 +21,7 @@ SessionLoginCredential _$SessionLoginCredentialFromJson(
 
 /// @nodoc
 mixin _$SessionLoginCredential {
+  String? get bundleId => throw _privateConstructorUsedError;
   AppType get type => throw _privateConstructorUsedError;
   String get identifier => throw _privateConstructorUsedError;
   String get login => throw _privateConstructorUsedError;
@@ -38,7 +39,12 @@ abstract class $SessionLoginCredentialCopyWith<$Res> {
           $Res Function(SessionLoginCredential) then) =
       _$SessionLoginCredentialCopyWithImpl<$Res, SessionLoginCredential>;
   @useResult
-  $Res call({AppType type, String identifier, String login, String password});
+  $Res call(
+      {String? bundleId,
+      AppType type,
+      String identifier,
+      String login,
+      String password});
 }
 
 /// @nodoc
@@ -55,12 +61,17 @@ class _$SessionLoginCredentialCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? bundleId = freezed,
     Object? type = null,
     Object? identifier = null,
     Object? login = null,
     Object? password = null,
   }) {
     return _then(_value.copyWith(
+      bundleId: freezed == bundleId
+          ? _value.bundleId
+          : bundleId // ignore: cast_nullable_to_non_nullable
+              as String?,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -89,7 +100,12 @@ abstract class _$$_SessionLoginCredentialCopyWith<$Res>
       __$$_SessionLoginCredentialCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({AppType type, String identifier, String login, String password});
+  $Res call(
+      {String? bundleId,
+      AppType type,
+      String identifier,
+      String login,
+      String password});
 }
 
 /// @nodoc
@@ -104,12 +120,17 @@ class __$$_SessionLoginCredentialCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? bundleId = freezed,
     Object? type = null,
     Object? identifier = null,
     Object? login = null,
     Object? password = null,
   }) {
     return _then(_$_SessionLoginCredential(
+      bundleId: freezed == bundleId
+          ? _value.bundleId
+          : bundleId // ignore: cast_nullable_to_non_nullable
+              as String?,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -135,7 +156,8 @@ class __$$_SessionLoginCredentialCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$_SessionLoginCredential implements _SessionLoginCredential {
   const _$_SessionLoginCredential(
-      {required this.type,
+      {this.bundleId,
+      required this.type,
       required this.identifier,
       required this.login,
       required this.password});
@@ -143,6 +165,8 @@ class _$_SessionLoginCredential implements _SessionLoginCredential {
   factory _$_SessionLoginCredential.fromJson(Map<String, dynamic> json) =>
       _$$_SessionLoginCredentialFromJson(json);
 
+  @override
+  final String? bundleId;
   @override
   final AppType type;
   @override
@@ -154,7 +178,7 @@ class _$_SessionLoginCredential implements _SessionLoginCredential {
 
   @override
   String toString() {
-    return 'SessionLoginCredential(type: $type, identifier: $identifier, login: $login, password: $password)';
+    return 'SessionLoginCredential(bundleId: $bundleId, type: $type, identifier: $identifier, login: $login, password: $password)';
   }
 
   @override
@@ -162,6 +186,8 @@ class _$_SessionLoginCredential implements _SessionLoginCredential {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_SessionLoginCredential &&
+            (identical(other.bundleId, bundleId) ||
+                other.bundleId == bundleId) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.identifier, identifier) ||
                 other.identifier == identifier) &&
@@ -173,7 +199,7 @@ class _$_SessionLoginCredential implements _SessionLoginCredential {
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, type, identifier, login, password);
+      Object.hash(runtimeType, bundleId, type, identifier, login, password);
 
   @JsonKey(ignore: true)
   @override
@@ -192,7 +218,8 @@ class _$_SessionLoginCredential implements _SessionLoginCredential {
 
 abstract class _SessionLoginCredential implements SessionLoginCredential {
   const factory _SessionLoginCredential(
-      {required final AppType type,
+      {final String? bundleId,
+      required final AppType type,
       required final String identifier,
       required final String login,
       required final String password}) = _$_SessionLoginCredential;
@@ -200,6 +227,8 @@ abstract class _SessionLoginCredential implements SessionLoginCredential {
   factory _SessionLoginCredential.fromJson(Map<String, dynamic> json) =
       _$_SessionLoginCredential.fromJson;
 
+  @override
+  String? get bundleId;
   @override
   AppType get type;
   @override

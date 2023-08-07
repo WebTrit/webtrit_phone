@@ -24,11 +24,15 @@ import 'main_shell.dart';
 class App extends StatefulWidget {
   const App({
     Key? key,
+    required this.appPreferences,
+    required this.secureStorage,
     required this.appDatabase,
     required this.appPermissions,
     required this.themeSettings,
   }) : super(key: key);
 
+  final AppPreferences appPreferences;
+  final SecureStorage secureStorage;
   final AppDatabase appDatabase;
   final AppPermissions appPermissions;
   final ThemeSettings themeSettings;
@@ -40,13 +44,21 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   late final AppBloc appBloc;
 
+  AppPreferences get _appPreferences => widget.appPreferences;
+
+  SecureStorage get _secureStorage => widget.secureStorage;
+
+  AppDatabase get _appDatabase => widget.appDatabase;
+
+  AppPermissions get _appPermissions => widget.appPermissions;
+
   @override
   void initState() {
     super.initState();
     appBloc = AppBloc(
-      appPreferences: AppPreferences(),
-      secureStorage: SecureStorage(),
-      appDatabase: widget.appDatabase,
+      appPreferences: _appPreferences,
+      secureStorage: _secureStorage,
+      appDatabase: _appDatabase,
       themeSettings: widget.themeSettings,
     );
   }
@@ -77,7 +89,7 @@ class _AppState extends State<App> {
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
                 restorationScopeId: 'App',
-                title: widget.themeSettings.appName ?? EnvironmentConfig.APP_NAME,
+                title: EnvironmentConfig.APP_NAME,
                 themeMode: state.effectiveThemeMode,
                 theme: themeProvider.light(),
                 darkTheme: themeProvider.dark(),
@@ -142,7 +154,7 @@ class _AppState extends State<App> {
             path: '/web-registration',
             builder: (context, state) {
               final widget = WebRegistrationScreen(
-                initialUri: Uri.parse(state.queryParameters['initialUrl'] ?? kBlankUri),
+                initialUri: Uri.parse(state.uri.queryParameters['initialUrl'] ?? kBlankUri),
               );
               return widget;
             },
@@ -154,7 +166,7 @@ class _AppState extends State<App> {
               const widget = PermissionsScreen();
               final provider = BlocProvider(
                 create: (context) => PermissionsCubit(
-                  appPermissions: this.widget.appPermissions,
+                  appPermissions: _appPermissions,
                 ),
                 child: widget,
               );
@@ -165,26 +177,8 @@ class _AppState extends State<App> {
             navigatorKey: _mainNavigatorKey,
             builder: (context, state, child) {
               return MainShell(
-                child: BlocListener<CallBloc, CallState>(
-                  listenWhen: (previous, current) => previous.activeCalls.length != current.activeCalls.length,
-                  listener: (context, state) {
-                    // TODO push/pop of call screen mechanism must be remake
-                    final router = GoRouter.of(context);
-                    final isCallLocation = router.location.startsWith(router.namedLocation(MainRoute.call));
-                    if (state.isActive) {
-                      if (!isCallLocation) {
-                        context.pushNamed(MainRoute.call);
-                        if (state.activeCall.video) {
-                          context.read<OrientationsBloc>().add(const OrientationsChanged(PreferredOrientation.call));
-                        }
-                      }
-                    } else {
-                      if (isCallLocation) {
-                        context.pop();
-                        context.read<OrientationsBloc>().add(const OrientationsChanged(PreferredOrientation.regular));
-                      }
-                    }
-                  },
+                appPreferences: _appPreferences,
+                child: CallShell(
                   child: child,
                 ),
               );
@@ -193,7 +187,7 @@ class _AppState extends State<App> {
               GoRoute(
                 name: AppRoute.main,
                 path: '/main',
-                redirect: (context, state) => '/main/${MainFlavor.defaultValue.name}',
+                redirect: (context, state) => '/main/${_appPreferences.getActiveMainFlavor().name}',
               ),
               StatefulShellRoute.indexedStack(
                 branches: [
@@ -243,9 +237,7 @@ class _AppState extends State<App> {
                         path: '/main/${MainFlavor.recents.name}',
                         name: MainRoute.recents,
                         builder: (context, state) {
-                          final widget = RecentsScreen(
-                            initialFilter: context.read<RecentsBloc>().state.filter,
-                          );
+                          const widget = RecentsScreen();
                           return widget;
                         },
                         routes: [
@@ -287,7 +279,9 @@ class _AppState extends State<App> {
                             sourceTypeWidgetBuilder: _contactSourceTypeWidgetBuilder,
                           );
                           final provider = BlocProvider(
-                            create: (context) => ContactsSearchBloc(),
+                            create: (context) => ContactsBloc(
+                              appPreferences: _appPreferences,
+                            ),
                             child: widget,
                           );
                           return provider;
@@ -343,13 +337,16 @@ class _AppState extends State<App> {
                   final widget = MainScreen(
                     navigationBarFlavor: MainFlavor.values[navigationShell.currentIndex],
                     body: navigationShell,
-                    onNavigationBarTap: (index) {
+                    onNavigationBarTap: (index) async {
+                      await _appPreferences.setActiveMainFlavor(MainFlavor.values[index]);
+
                       navigationShell.goBranch(
                         index,
                         initialLocation: index == navigationShell.currentIndex,
                       );
                     },
                   );
+
                   return BlocProvider(
                     create: (context) {
                       return MainBloc(
@@ -391,7 +388,7 @@ class _AppState extends State<App> {
                         appBloc: context.read<AppBloc>(),
                         userRepository: context.read<UserRepository>(),
                         appRepository: context.read<AppRepository>(),
-                        appPreferences: AppPreferences(),
+                        appPreferences: _appPreferences,
                       )..add(const SettingsRefreshed());
                     },
                     child: widget,
@@ -494,6 +491,7 @@ class _AppState extends State<App> {
               ),
             ],
             observers: [
+              MainRoute.observer,
               context.read<AppAnalyticsRepository>().createObserver(),
             ],
           ),
@@ -515,11 +513,11 @@ class _AppState extends State<App> {
     final coreUrl = appBloc.state.coreUrl;
     final token = appBloc.state.token;
     final webRegistrationInitialUrl = appBloc.state.webRegistrationInitialUrl;
-    final appPermissionsDenied = widget.appPermissions.isDenied;
+    final appPermissionsDenied = _appPermissions.isDenied;
 
-    final isLoginPath = state.location.startsWith('/login');
-    final isWebRegistrationPath = state.location.startsWith('/web-registration');
-    final isMainPath = state.location.startsWith('/main');
+    final isLoginPath = state.uri.toString().startsWith('/login');
+    final isWebRegistrationPath = state.uri.toString().startsWith('/web-registration');
+    final isMainPath = state.uri.toString().startsWith('/main');
 
     if (coreUrl != null && token != null) {
       if (isLoginPath || isWebRegistrationPath) {
@@ -544,12 +542,12 @@ class _AppState extends State<App> {
         const widget = ContactsLocalTab();
         final provider = BlocProvider(
           create: (context) {
-            final contactsSearchBloc = context.read<ContactsSearchBloc>();
+            final contactsSearchBloc = context.read<ContactsBloc>();
             return ContactsLocalTabBloc(
               contactsRepository: context.read<ContactsRepository>(),
               contactsSearchBloc: contactsSearchBloc,
               localContactsSyncBloc: context.read<LocalContactsSyncBloc>(),
-            )..add(ContactsLocalTabStarted(search: contactsSearchBloc.state));
+            )..add(ContactsLocalTabStarted(search: contactsSearchBloc.state.search));
           },
           child: widget,
         );
@@ -558,12 +556,12 @@ class _AppState extends State<App> {
         const widget = ContactsExternalTab();
         final provider = BlocProvider(
           create: (context) {
-            final contactsSearchBloc = context.read<ContactsSearchBloc>();
+            final contactsSearchBloc = context.read<ContactsBloc>();
             return ContactsExternalTabBloc(
               contactsRepository: context.read<ContactsRepository>(),
               contactsSearchBloc: contactsSearchBloc,
               externalContactsSyncBloc: context.read<ExternalContactsSyncBloc>(),
-            )..add(ContactsExternalTabStarted(search: contactsSearchBloc.state));
+            )..add(ContactsExternalTabStarted(search: contactsSearchBloc.state.search));
           },
           child: widget,
         );
@@ -578,6 +576,7 @@ class GoRouterRefreshBloc extends ChangeNotifier {
     _subscription = bloc.stream.asBroadcastStream().listen(
           (dynamic _) => notifyListeners(),
         );
+                title: widget.themeSettings.appName ?? EnvironmentConfig.APP_NAME,
   }
 
   late final StreamSubscription<dynamic> _subscription;

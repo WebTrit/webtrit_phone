@@ -25,10 +25,11 @@ extension UserInfoFormatting on UserInfo {
   }
 
   String get numberWithExtension {
-    if (numbers.ext != null) {
-      return '${sip.login} (ext: ${numbers.ext})';
-    } else {
-      return sip.login ?? '';
+    final sb = StringBuffer(sip.login);
+    final numbersExt = numbers.ext;
+    if (numbersExt != null) {
+      sb.write(' (ext: $numbersExt)');
     }
+    return sb.toString();
   }
 }

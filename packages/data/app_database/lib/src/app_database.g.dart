@@ -32,12 +32,6 @@ class $ContactsTableTable extends ContactsTable
   late final GeneratedColumn<String> sourceId = GeneratedColumn<String>(
       'source_id', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _displayNameMeta =
-      const VerificationMeta('displayName');
-  @override
-  late final GeneratedColumn<String> displayName = GeneratedColumn<String>(
-      'display_name', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _firstNameMeta =
       const VerificationMeta('firstName');
   @override
@@ -49,6 +43,12 @@ class $ContactsTableTable extends ContactsTable
   @override
   late final GeneratedColumn<String> lastName = GeneratedColumn<String>(
       'last_name', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _aliasNameMeta =
+      const VerificationMeta('aliasName');
+  @override
+  late final GeneratedColumn<String> aliasName = GeneratedColumn<String>(
+      'alias_name', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _insertedAtMeta =
       const VerificationMeta('insertedAt');
@@ -67,9 +67,9 @@ class $ContactsTableTable extends ContactsTable
         id,
         sourceType,
         sourceId,
-        displayName,
         firstName,
         lastName,
+        aliasName,
         insertedAt,
         updatedAt
       ];
@@ -92,12 +92,6 @@ class $ContactsTableTable extends ContactsTable
     } else if (isInserting) {
       context.missing(_sourceIdMeta);
     }
-    if (data.containsKey('display_name')) {
-      context.handle(
-          _displayNameMeta,
-          displayName.isAcceptableOrUnknown(
-              data['display_name']!, _displayNameMeta));
-    }
     if (data.containsKey('first_name')) {
       context.handle(_firstNameMeta,
           firstName.isAcceptableOrUnknown(data['first_name']!, _firstNameMeta));
@@ -105,6 +99,10 @@ class $ContactsTableTable extends ContactsTable
     if (data.containsKey('last_name')) {
       context.handle(_lastNameMeta,
           lastName.isAcceptableOrUnknown(data['last_name']!, _lastNameMeta));
+    }
+    if (data.containsKey('alias_name')) {
+      context.handle(_aliasNameMeta,
+          aliasName.isAcceptableOrUnknown(data['alias_name']!, _aliasNameMeta));
     }
     if (data.containsKey('inserted_at')) {
       context.handle(
@@ -132,12 +130,12 @@ class $ContactsTableTable extends ContactsTable
               .read(DriftSqlType.int, data['${effectivePrefix}source_type'])!),
       sourceId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}source_id'])!,
-      displayName: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}display_name']),
       firstName: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}first_name']),
       lastName: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}last_name']),
+      aliasName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}alias_name']),
       insertedAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}inserted_at']),
       updatedAt: attachedDatabase.typeMapping
@@ -159,18 +157,18 @@ class ContactData extends DataClass implements Insertable<ContactData> {
   final int id;
   final ContactSourceTypeEnum sourceType;
   final String sourceId;
-  final String? displayName;
   final String? firstName;
   final String? lastName;
+  final String? aliasName;
   final DateTime? insertedAt;
   final DateTime? updatedAt;
   const ContactData(
       {required this.id,
       required this.sourceType,
       required this.sourceId,
-      this.displayName,
       this.firstName,
       this.lastName,
+      this.aliasName,
       this.insertedAt,
       this.updatedAt});
   @override
@@ -182,14 +180,14 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       map['source_type'] = Variable<int>(converter.toSql(sourceType));
     }
     map['source_id'] = Variable<String>(sourceId);
-    if (!nullToAbsent || displayName != null) {
-      map['display_name'] = Variable<String>(displayName);
-    }
     if (!nullToAbsent || firstName != null) {
       map['first_name'] = Variable<String>(firstName);
     }
     if (!nullToAbsent || lastName != null) {
       map['last_name'] = Variable<String>(lastName);
+    }
+    if (!nullToAbsent || aliasName != null) {
+      map['alias_name'] = Variable<String>(aliasName);
     }
     if (!nullToAbsent || insertedAt != null) {
       map['inserted_at'] = Variable<DateTime>(insertedAt);
@@ -205,15 +203,15 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       id: Value(id),
       sourceType: Value(sourceType),
       sourceId: Value(sourceId),
-      displayName: displayName == null && nullToAbsent
-          ? const Value.absent()
-          : Value(displayName),
       firstName: firstName == null && nullToAbsent
           ? const Value.absent()
           : Value(firstName),
       lastName: lastName == null && nullToAbsent
           ? const Value.absent()
           : Value(lastName),
+      aliasName: aliasName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(aliasName),
       insertedAt: insertedAt == null && nullToAbsent
           ? const Value.absent()
           : Value(insertedAt),
@@ -231,9 +229,9 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       sourceType: $ContactsTableTable.$convertersourceType
           .fromJson(serializer.fromJson<int>(json['sourceType'])),
       sourceId: serializer.fromJson<String>(json['sourceId']),
-      displayName: serializer.fromJson<String?>(json['displayName']),
       firstName: serializer.fromJson<String?>(json['firstName']),
       lastName: serializer.fromJson<String?>(json['lastName']),
+      aliasName: serializer.fromJson<String?>(json['aliasName']),
       insertedAt: serializer.fromJson<DateTime?>(json['insertedAt']),
       updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
     );
@@ -246,9 +244,9 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       'sourceType': serializer.toJson<int>(
           $ContactsTableTable.$convertersourceType.toJson(sourceType)),
       'sourceId': serializer.toJson<String>(sourceId),
-      'displayName': serializer.toJson<String?>(displayName),
       'firstName': serializer.toJson<String?>(firstName),
       'lastName': serializer.toJson<String?>(lastName),
+      'aliasName': serializer.toJson<String?>(aliasName),
       'insertedAt': serializer.toJson<DateTime?>(insertedAt),
       'updatedAt': serializer.toJson<DateTime?>(updatedAt),
     };
@@ -258,18 +256,18 @@ class ContactData extends DataClass implements Insertable<ContactData> {
           {int? id,
           ContactSourceTypeEnum? sourceType,
           String? sourceId,
-          Value<String?> displayName = const Value.absent(),
           Value<String?> firstName = const Value.absent(),
           Value<String?> lastName = const Value.absent(),
+          Value<String?> aliasName = const Value.absent(),
           Value<DateTime?> insertedAt = const Value.absent(),
           Value<DateTime?> updatedAt = const Value.absent()}) =>
       ContactData(
         id: id ?? this.id,
         sourceType: sourceType ?? this.sourceType,
         sourceId: sourceId ?? this.sourceId,
-        displayName: displayName.present ? displayName.value : this.displayName,
         firstName: firstName.present ? firstName.value : this.firstName,
         lastName: lastName.present ? lastName.value : this.lastName,
+        aliasName: aliasName.present ? aliasName.value : this.aliasName,
         insertedAt: insertedAt.present ? insertedAt.value : this.insertedAt,
         updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
       );
@@ -279,9 +277,9 @@ class ContactData extends DataClass implements Insertable<ContactData> {
           ..write('id: $id, ')
           ..write('sourceType: $sourceType, ')
           ..write('sourceId: $sourceId, ')
-          ..write('displayName: $displayName, ')
           ..write('firstName: $firstName, ')
           ..write('lastName: $lastName, ')
+          ..write('aliasName: $aliasName, ')
           ..write('insertedAt: $insertedAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
@@ -289,8 +287,8 @@ class ContactData extends DataClass implements Insertable<ContactData> {
   }
 
   @override
-  int get hashCode => Object.hash(id, sourceType, sourceId, displayName,
-      firstName, lastName, insertedAt, updatedAt);
+  int get hashCode => Object.hash(id, sourceType, sourceId, firstName, lastName,
+      aliasName, insertedAt, updatedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -298,9 +296,9 @@ class ContactData extends DataClass implements Insertable<ContactData> {
           other.id == this.id &&
           other.sourceType == this.sourceType &&
           other.sourceId == this.sourceId &&
-          other.displayName == this.displayName &&
           other.firstName == this.firstName &&
           other.lastName == this.lastName &&
+          other.aliasName == this.aliasName &&
           other.insertedAt == this.insertedAt &&
           other.updatedAt == this.updatedAt);
 }
@@ -309,18 +307,18 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
   final Value<int> id;
   final Value<ContactSourceTypeEnum> sourceType;
   final Value<String> sourceId;
-  final Value<String?> displayName;
   final Value<String?> firstName;
   final Value<String?> lastName;
+  final Value<String?> aliasName;
   final Value<DateTime?> insertedAt;
   final Value<DateTime?> updatedAt;
   const ContactDataCompanion({
     this.id = const Value.absent(),
     this.sourceType = const Value.absent(),
     this.sourceId = const Value.absent(),
-    this.displayName = const Value.absent(),
     this.firstName = const Value.absent(),
     this.lastName = const Value.absent(),
+    this.aliasName = const Value.absent(),
     this.insertedAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   });
@@ -328,9 +326,9 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
     this.id = const Value.absent(),
     required ContactSourceTypeEnum sourceType,
     required String sourceId,
-    this.displayName = const Value.absent(),
     this.firstName = const Value.absent(),
     this.lastName = const Value.absent(),
+    this.aliasName = const Value.absent(),
     this.insertedAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   })  : sourceType = Value(sourceType),
@@ -339,9 +337,9 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
     Expression<int>? id,
     Expression<int>? sourceType,
     Expression<String>? sourceId,
-    Expression<String>? displayName,
     Expression<String>? firstName,
     Expression<String>? lastName,
+    Expression<String>? aliasName,
     Expression<DateTime>? insertedAt,
     Expression<DateTime>? updatedAt,
   }) {
@@ -349,9 +347,9 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
       if (id != null) 'id': id,
       if (sourceType != null) 'source_type': sourceType,
       if (sourceId != null) 'source_id': sourceId,
-      if (displayName != null) 'display_name': displayName,
       if (firstName != null) 'first_name': firstName,
       if (lastName != null) 'last_name': lastName,
+      if (aliasName != null) 'alias_name': aliasName,
       if (insertedAt != null) 'inserted_at': insertedAt,
       if (updatedAt != null) 'updated_at': updatedAt,
     });
@@ -361,18 +359,18 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
       {Value<int>? id,
       Value<ContactSourceTypeEnum>? sourceType,
       Value<String>? sourceId,
-      Value<String?>? displayName,
       Value<String?>? firstName,
       Value<String?>? lastName,
+      Value<String?>? aliasName,
       Value<DateTime?>? insertedAt,
       Value<DateTime?>? updatedAt}) {
     return ContactDataCompanion(
       id: id ?? this.id,
       sourceType: sourceType ?? this.sourceType,
       sourceId: sourceId ?? this.sourceId,
-      displayName: displayName ?? this.displayName,
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
+      aliasName: aliasName ?? this.aliasName,
       insertedAt: insertedAt ?? this.insertedAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -391,14 +389,14 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
     if (sourceId.present) {
       map['source_id'] = Variable<String>(sourceId.value);
     }
-    if (displayName.present) {
-      map['display_name'] = Variable<String>(displayName.value);
-    }
     if (firstName.present) {
       map['first_name'] = Variable<String>(firstName.value);
     }
     if (lastName.present) {
       map['last_name'] = Variable<String>(lastName.value);
+    }
+    if (aliasName.present) {
+      map['alias_name'] = Variable<String>(aliasName.value);
     }
     if (insertedAt.present) {
       map['inserted_at'] = Variable<DateTime>(insertedAt.value);
@@ -415,9 +413,9 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
           ..write('id: $id, ')
           ..write('sourceType: $sourceType, ')
           ..write('sourceId: $sourceId, ')
-          ..write('displayName: $displayName, ')
           ..write('firstName: $firstName, ')
           ..write('lastName: $lastName, ')
+          ..write('aliasName: $aliasName, ')
           ..write('insertedAt: $insertedAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))

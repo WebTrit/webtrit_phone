@@ -12,6 +12,7 @@ class CallState with _$CallState {
     int? lastSignalingDisconnectCode,
     @Default(0) int linesCount,
     @Default([]) List<ActiveCall> activeCalls,
+    bool? minimized,
     bool? speaker,
   }) = _CallState;
 
@@ -39,11 +40,23 @@ class CallState with _$CallState {
 
   int? retrieveIdleLine() {
     for (var line = 0; line < linesCount; line++) {
-      if (activeCalls.firstWhereOrNull((activeCall) => activeCall.line == line) == null) {
+      if (!activeCalls.any((activeCall) => activeCall.line == line)) {
         return line;
       }
     }
     return null;
+  }
+
+  CallDisplay get display {
+    if (activeCalls.isEmpty) {
+      return CallDisplay.none;
+    } else {
+      if (minimized == true) {
+        return CallDisplay.overlay;
+      } else {
+        return CallDisplay.screen;
+      }
+    }
   }
 
   bool get isActive => activeCalls.isNotEmpty;
@@ -88,15 +101,15 @@ class CallState with _$CallState {
     final activeCalls = this.activeCalls.where((activeCall) {
       return activeCall.callId.uuid != uuid;
     }).toList();
-    return copyWith(activeCalls: activeCalls);
+    return copyWith(activeCalls: activeCalls, minimized: activeCalls.isEmpty ? null : minimized);
   }
 }
 
 @freezed
 class ActiveCall with _$ActiveCall {
-  const ActiveCall._();
+  ActiveCall._();
 
-  const factory ActiveCall({
+  factory ActiveCall({
     required Direction direction,
     required int line,
     required CallIdValue callId,
@@ -110,8 +123,7 @@ class ActiveCall with _$ActiveCall {
     DateTime? acceptedTime,
     DateTime? hungUpTime,
     Object? failure,
-    MediaStream? localStream,
-    MediaStream? remoteStream,
+    required RTCVideoRenderers renderers,
   }) = _ActiveCall;
 
   bool get isIncoming => direction == Direction.incoming;
@@ -121,4 +133,27 @@ class ActiveCall with _$ActiveCall {
   bool get wasAccepted => acceptedTime != null;
 
   bool get wasHungUp => hungUpTime != null;
+}
+
+class RTCVideoRenderers {
+  RTCVideoRenderers()
+      : local = RTCVideoRenderer(),
+        remote = RTCVideoRenderer();
+
+  final RTCVideoRenderer local;
+  final RTCVideoRenderer remote;
+
+  Future<void> initialize() {
+    return Future.wait([
+      local.initialize(),
+      remote.initialize(),
+    ]);
+  }
+
+  Future<void> dispose() {
+    return Future.wait([
+      local.dispose(),
+      remote.dispose(),
+    ]);
+  }
 }

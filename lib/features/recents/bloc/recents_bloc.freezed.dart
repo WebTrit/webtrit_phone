@@ -178,8 +178,7 @@ class __$$_RecentsStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_RecentsState extends _RecentsState {
-  const _$_RecentsState(
-      {final List<Recent>? recents, this.filter = RecentsVisibilityFilter.all})
+  const _$_RecentsState({final List<Recent>? recents, required this.filter})
       : _recents = recents,
         super._();
 
@@ -194,7 +193,6 @@ class _$_RecentsState extends _RecentsState {
   }
 
   @override
-  @JsonKey()
   final RecentsVisibilityFilter filter;
 
   @override
@@ -225,7 +223,7 @@ class _$_RecentsState extends _RecentsState {
 abstract class _RecentsState extends RecentsState {
   const factory _RecentsState(
       {final List<Recent>? recents,
-      final RecentsVisibilityFilter filter}) = _$_RecentsState;
+      required final RecentsVisibilityFilter filter}) = _$_RecentsState;
   const _RecentsState._() : super._();
 
   @override

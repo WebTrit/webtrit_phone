@@ -21,7 +21,7 @@ ErrorResponse _$ErrorResponseFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ErrorResponse {
   String get code => throw _privateConstructorUsedError;
-  List<ErrorRefining>? get refining => throw _privateConstructorUsedError;
+  List<ErrorDetail>? get details => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +35,7 @@ abstract class $ErrorResponseCopyWith<$Res> {
           ErrorResponse value, $Res Function(ErrorResponse) then) =
       _$ErrorResponseCopyWithImpl<$Res, ErrorResponse>;
   @useResult
-  $Res call({String code, List<ErrorRefining>? refining});
+  $Res call({String code, List<ErrorDetail>? details});
 }
 
 /// @nodoc
@@ -52,17 +52,17 @@ class _$ErrorResponseCopyWithImpl<$Res, $Val extends ErrorResponse>
   @override
   $Res call({
     Object? code = null,
-    Object? refining = freezed,
+    Object? details = freezed,
   }) {
     return _then(_value.copyWith(
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
               as String,
-      refining: freezed == refining
-          ? _value.refining
-          : refining // ignore: cast_nullable_to_non_nullable
-              as List<ErrorRefining>?,
+      details: freezed == details
+          ? _value.details
+          : details // ignore: cast_nullable_to_non_nullable
+              as List<ErrorDetail>?,
     ) as $Val);
   }
 }
@@ -75,7 +75,7 @@ abstract class _$$_ErrorResponseCopyWith<$Res>
       __$$_ErrorResponseCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String code, List<ErrorRefining>? refining});
+  $Res call({String code, List<ErrorDetail>? details});
 }
 
 /// @nodoc
@@ -90,17 +90,17 @@ class __$$_ErrorResponseCopyWithImpl<$Res>
   @override
   $Res call({
     Object? code = null,
-    Object? refining = freezed,
+    Object? details = freezed,
   }) {
     return _then(_$_ErrorResponse(
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
               as String,
-      refining: freezed == refining
-          ? _value._refining
-          : refining // ignore: cast_nullable_to_non_nullable
-              as List<ErrorRefining>?,
+      details: freezed == details
+          ? _value._details
+          : details // ignore: cast_nullable_to_non_nullable
+              as List<ErrorDetail>?,
     ));
   }
 }
@@ -109,28 +109,27 @@ class __$$_ErrorResponseCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$_ErrorResponse implements _ErrorResponse {
-  const _$_ErrorResponse(
-      {required this.code, final List<ErrorRefining>? refining})
-      : _refining = refining;
+  const _$_ErrorResponse({required this.code, final List<ErrorDetail>? details})
+      : _details = details;
 
   factory _$_ErrorResponse.fromJson(Map<String, dynamic> json) =>
       _$$_ErrorResponseFromJson(json);
 
   @override
   final String code;
-  final List<ErrorRefining>? _refining;
+  final List<ErrorDetail>? _details;
   @override
-  List<ErrorRefining>? get refining {
-    final value = _refining;
+  List<ErrorDetail>? get details {
+    final value = _details;
     if (value == null) return null;
-    if (_refining is EqualUnmodifiableListView) return _refining;
+    if (_details is EqualUnmodifiableListView) return _details;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
 
   @override
   String toString() {
-    return 'ErrorResponse(code: $code, refining: $refining)';
+    return 'ErrorResponse(code: $code, details: $details)';
   }
 
   @override
@@ -139,13 +138,13 @@ class _$_ErrorResponse implements _ErrorResponse {
         (other.runtimeType == runtimeType &&
             other is _$_ErrorResponse &&
             (identical(other.code, code) || other.code == code) &&
-            const DeepCollectionEquality().equals(other._refining, _refining));
+            const DeepCollectionEquality().equals(other._details, _details));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, code, const DeepCollectionEquality().hash(_refining));
+      runtimeType, code, const DeepCollectionEquality().hash(_details));
 
   @JsonKey(ignore: true)
   @override
@@ -164,7 +163,7 @@ class _$_ErrorResponse implements _ErrorResponse {
 abstract class _ErrorResponse implements ErrorResponse {
   const factory _ErrorResponse(
       {required final String code,
-      final List<ErrorRefining>? refining}) = _$_ErrorResponse;
+      final List<ErrorDetail>? details}) = _$_ErrorResponse;
 
   factory _ErrorResponse.fromJson(Map<String, dynamic> json) =
       _$_ErrorResponse.fromJson;
@@ -172,41 +171,41 @@ abstract class _ErrorResponse implements ErrorResponse {
   @override
   String get code;
   @override
-  List<ErrorRefining>? get refining;
+  List<ErrorDetail>? get details;
   @override
   @JsonKey(ignore: true)
   _$$_ErrorResponseCopyWith<_$_ErrorResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
-ErrorRefining _$ErrorRefiningFromJson(Map<String, dynamic> json) {
-  return _ErrorRefining.fromJson(json);
+ErrorDetail _$ErrorDetailFromJson(Map<String, dynamic> json) {
+  return _ErrorDetail.fromJson(json);
 }
 
 /// @nodoc
-mixin _$ErrorRefining {
+mixin _$ErrorDetail {
   String get path => throw _privateConstructorUsedError;
   String get reason => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $ErrorRefiningCopyWith<ErrorRefining> get copyWith =>
+  $ErrorDetailCopyWith<ErrorDetail> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ErrorRefiningCopyWith<$Res> {
-  factory $ErrorRefiningCopyWith(
-          ErrorRefining value, $Res Function(ErrorRefining) then) =
-      _$ErrorRefiningCopyWithImpl<$Res, ErrorRefining>;
+abstract class $ErrorDetailCopyWith<$Res> {
+  factory $ErrorDetailCopyWith(
+          ErrorDetail value, $Res Function(ErrorDetail) then) =
+      _$ErrorDetailCopyWithImpl<$Res, ErrorDetail>;
   @useResult
   $Res call({String path, String reason});
 }
 
 /// @nodoc
-class _$ErrorRefiningCopyWithImpl<$Res, $Val extends ErrorRefining>
-    implements $ErrorRefiningCopyWith<$Res> {
-  _$ErrorRefiningCopyWithImpl(this._value, this._then);
+class _$ErrorDetailCopyWithImpl<$Res, $Val extends ErrorDetail>
+    implements $ErrorDetailCopyWith<$Res> {
+  _$ErrorDetailCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -233,22 +232,22 @@ class _$ErrorRefiningCopyWithImpl<$Res, $Val extends ErrorRefining>
 }
 
 /// @nodoc
-abstract class _$$_ErrorRefiningCopyWith<$Res>
-    implements $ErrorRefiningCopyWith<$Res> {
-  factory _$$_ErrorRefiningCopyWith(
-          _$_ErrorRefining value, $Res Function(_$_ErrorRefining) then) =
-      __$$_ErrorRefiningCopyWithImpl<$Res>;
+abstract class _$$_ErrorDetailCopyWith<$Res>
+    implements $ErrorDetailCopyWith<$Res> {
+  factory _$$_ErrorDetailCopyWith(
+          _$_ErrorDetail value, $Res Function(_$_ErrorDetail) then) =
+      __$$_ErrorDetailCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String path, String reason});
 }
 
 /// @nodoc
-class __$$_ErrorRefiningCopyWithImpl<$Res>
-    extends _$ErrorRefiningCopyWithImpl<$Res, _$_ErrorRefining>
-    implements _$$_ErrorRefiningCopyWith<$Res> {
-  __$$_ErrorRefiningCopyWithImpl(
-      _$_ErrorRefining _value, $Res Function(_$_ErrorRefining) _then)
+class __$$_ErrorDetailCopyWithImpl<$Res>
+    extends _$ErrorDetailCopyWithImpl<$Res, _$_ErrorDetail>
+    implements _$$_ErrorDetailCopyWith<$Res> {
+  __$$_ErrorDetailCopyWithImpl(
+      _$_ErrorDetail _value, $Res Function(_$_ErrorDetail) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -257,7 +256,7 @@ class __$$_ErrorRefiningCopyWithImpl<$Res>
     Object? path = null,
     Object? reason = null,
   }) {
-    return _then(_$_ErrorRefining(
+    return _then(_$_ErrorDetail(
       path: null == path
           ? _value.path
           : path // ignore: cast_nullable_to_non_nullable
@@ -273,11 +272,11 @@ class __$$_ErrorRefiningCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class _$_ErrorRefining implements _ErrorRefining {
-  const _$_ErrorRefining({required this.path, required this.reason});
+class _$_ErrorDetail implements _ErrorDetail {
+  const _$_ErrorDetail({required this.path, required this.reason});
 
-  factory _$_ErrorRefining.fromJson(Map<String, dynamic> json) =>
-      _$$_ErrorRefiningFromJson(json);
+  factory _$_ErrorDetail.fromJson(Map<String, dynamic> json) =>
+      _$$_ErrorDetailFromJson(json);
 
   @override
   final String path;
@@ -286,14 +285,14 @@ class _$_ErrorRefining implements _ErrorRefining {
 
   @override
   String toString() {
-    return 'ErrorRefining(path: $path, reason: $reason)';
+    return 'ErrorDetail(path: $path, reason: $reason)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ErrorRefining &&
+            other is _$_ErrorDetail &&
             (identical(other.path, path) || other.path == path) &&
             (identical(other.reason, reason) || other.reason == reason));
   }
@@ -305,24 +304,24 @@ class _$_ErrorRefining implements _ErrorRefining {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ErrorRefiningCopyWith<_$_ErrorRefining> get copyWith =>
-      __$$_ErrorRefiningCopyWithImpl<_$_ErrorRefining>(this, _$identity);
+  _$$_ErrorDetailCopyWith<_$_ErrorDetail> get copyWith =>
+      __$$_ErrorDetailCopyWithImpl<_$_ErrorDetail>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ErrorRefiningToJson(
+    return _$$_ErrorDetailToJson(
       this,
     );
   }
 }
 
-abstract class _ErrorRefining implements ErrorRefining {
-  const factory _ErrorRefining(
+abstract class _ErrorDetail implements ErrorDetail {
+  const factory _ErrorDetail(
       {required final String path,
-      required final String reason}) = _$_ErrorRefining;
+      required final String reason}) = _$_ErrorDetail;
 
-  factory _ErrorRefining.fromJson(Map<String, dynamic> json) =
-      _$_ErrorRefining.fromJson;
+  factory _ErrorDetail.fromJson(Map<String, dynamic> json) =
+      _$_ErrorDetail.fromJson;
 
   @override
   String get path;
@@ -330,6 +329,6 @@ abstract class _ErrorRefining implements ErrorRefining {
   String get reason;
   @override
   @JsonKey(ignore: true)
-  _$$_ErrorRefiningCopyWith<_$_ErrorRefining> get copyWith =>
+  _$$_ErrorDetailCopyWith<_$_ErrorDetail> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -322,6 +322,7 @@ Future<SessionResult> _createUserRequest(
   String email,
 ) async {
   return await webtritApiClient.createUser(SessionUserCredential(
+    bundleId: PackageInfo().packageName,
     type: PlatformInfo().appType,
     identifier: AppInfo().identifier,
     email: email,
@@ -333,6 +334,7 @@ Future<SessionOtpProvisional> _sessionOtpRequest(
   String phone,
 ) async {
   return await webtritApiClient.createSessionOtp(SessionOtpCredential(
+    bundleId: PackageInfo().packageName,
     type: PlatformInfo().appType,
     identifier: AppInfo().identifier,
     userRef: phone,

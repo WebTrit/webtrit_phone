@@ -13,16 +13,12 @@ class CallActiveScaffold extends StatefulWidget {
     super.key,
     required this.speaker,
     required this.activeCall,
-    required this.localRenderer,
-    required this.remoteRenderer,
     required this.localePlaceholderBuilder,
     required this.remotePlaceholderBuilder,
   });
 
   final bool? speaker;
   final ActiveCall activeCall;
-  final RTCVideoRenderer localRenderer;
-  final RTCVideoRenderer remoteRenderer;
   final WidgetBuilder? localePlaceholderBuilder;
   final WidgetBuilder? remotePlaceholderBuilder;
 
@@ -72,7 +68,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                         width: mediaQueryData.size.width,
                         height: mediaQueryData.size.height,
                         child: RTCVideoView(
-                          widget.remoteRenderer,
+                          widget.activeCall.renderers.remote,
                           placeholderBuilder: widget.remotePlaceholderBuilder,
                         ),
                       ),
@@ -94,7 +90,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                             child: widget.activeCall.frontCamera == null
                                 ? null
                                 : RTCVideoView(
-                                    widget.localRenderer,
+                                    widget.activeCall.renderers.local,
                                     mirror: widget.activeCall.frontCamera!,
                                     placeholderBuilder: widget.localePlaceholderBuilder,
                                   ),

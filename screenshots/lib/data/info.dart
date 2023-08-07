@@ -2,7 +2,14 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 
 const userInfo = UserInfo(
   balance: Balance(amount: 100, currency: 'USD', balanceType: BalanceType.prepaid),
-  sip: SipInfo(login: '1234567890'),
+  sip: SipInfo(
+    login: '1234567890',
+    password: 'strong_password',
+    sipServer: SipServer(
+      host: 'sip.webtrit.com',
+      port: 5060,
+    ),
+  ),
   firstName: 'Agent',
   lastName: 'Smith',
   companyName: 'WebTrit',

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
@@ -87,7 +88,7 @@ class LoginCoreUrlAssignTab extends StatelessWidget {
                         ),
                         const SizedBox(height: kInset / 8),
                         Linkify(
-                          text: context.l10n.login_Text_coreUrlAssignPostDescription,
+                          text: context.l10n.login_Text_coreUrlAssignPostDescription(EnvironmentConfig.SALES_EMAIL),
                           onOpen: (link) => context.read<LoginCubit>().launchLinkableElement(link),
                           style: themeData.textTheme.bodyMedium,
                           linkStyle: TextStyle(

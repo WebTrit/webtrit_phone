@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:rxdart/rxdart.dart';
-
 class CountDownBuilder extends StatefulWidget {
   const CountDownBuilder({
     Key? key,
@@ -22,12 +20,9 @@ class _CountDownBuilderState extends State<CountDownBuilder> {
   @override
   void initState() {
     super.initState();
-    intervalStream = Stream.fromIterable(
-      Iterable<int>.generate(
-        widget.interval.inSeconds,
-        (i) => widget.interval.inSeconds - i - 1,
-      ),
-    ).interval(const Duration(seconds: 1));
+
+    intervalStream = Stream.periodic(const Duration(seconds: 1), (i) => widget.interval.inSeconds - i - 1)
+        .take(widget.interval.inSeconds);
   }
 
   @override
