@@ -380,6 +380,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get inviteFriends_Dialog_invite => 'Invite';
 
   @override
+  String get connectToYourOwnVoIPSystem_Button_Action => 'Connect to your own VoIP system';
+
+  @override
   String get settings_AppBarTitle_myAccount => 'My account';
 
   @override

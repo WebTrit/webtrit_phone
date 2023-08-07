@@ -426,6 +426,9 @@
   "inviteFriends_Dialog_invite": "Invite",
   "@inviteFriends_Dialog_invite": {
   },
+  "connectToYourOwnVoIPSystem_Button_Action": "Connect to your own VoIP system",
+  "@connectToYourOwnVoIPSystem_Button_Action": {
+  },
 
   "settings_AppBarTitle_myAccount": "My account",
   "@settings_AppBarTitle_myAccount": {

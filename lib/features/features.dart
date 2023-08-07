@@ -2,7 +2,7 @@ export 'call/call.dart';
 export 'contact/contact.dart';
 export 'contacts/contacts.dart';
 export 'favorites/favorites.dart';
-export 'invite-friends/invite-friends.dart';
+export 'user_action/user_action.dart';
 export 'keypad/keypad.dart';
 export 'log_records_console/log_records_console.dart';
 export 'login/login.dart';

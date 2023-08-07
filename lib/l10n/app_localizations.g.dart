@@ -781,6 +781,12 @@ abstract class AppLocalizations {
   /// **'Invite'**
   String get inviteFriends_Dialog_invite;
 
+  /// No description provided for @connectToYourOwnVoIPSystem_Button_Action.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect to your own VoIP system'**
+  String get connectToYourOwnVoIPSystem_Button_Action;
+
   /// No description provided for @settings_AppBarTitle_myAccount.
   ///
   /// In en, this message translates to:

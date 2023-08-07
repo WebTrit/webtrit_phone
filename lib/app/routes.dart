@@ -31,7 +31,7 @@ class MainRoute {
 
   static const keypad = 'keypad';
 
-  static const inviteFriends = 'invite-friends';
+  static const userAction = 'user-action';
 
   static const settings = 'settings';
   static const settingsAbout = 'about';

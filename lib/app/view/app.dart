@@ -163,7 +163,7 @@ class _AppState extends State<App> {
             builder: (context, state, child) {
               return MainShell(
                 child: CallShell(
-                  child: EnvironmentConfig.CORE_URL.isNotEmpty ? child : CountDownInviteFriendsScreen(child: child),
+                  child: EnvironmentConfig.CORE_URL.isNotEmpty ? child : UserActionScreen(child: child),
                 ),
               );
             },
@@ -469,10 +469,11 @@ class _AppState extends State<App> {
                     },
                   ),
                   GoRoute(
-                    name: MainRoute.inviteFriends,
-                    path: 'invite',
+                    parentNavigatorKey: _mainNavigatorKey,
+                    name: MainRoute.userAction,
+                    path: 'user-action',
                     builder: (context, state) {
-                      final url = Uri.parse(state.queryParameters['invite-url']!);
+                      final url = Uri.parse(state.queryParameters['url']!);
                       final widget = WebInviteFriendsScreen(initialUri: url);
                       return widget;
                     },
