@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../contacts.dart';
@@ -65,18 +64,18 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
     final tabBar = widget.sourceTypes.length <= 1
         ? null
         : Padding(
-            padding: const EdgeInsets.only(
-              bottom: kMainAppBarBottomPaddingGap,
-            ),
-            child: ExtTabBar(
-              controller: _tabController,
-              width: mediaQueryData.size.width * 0.75,
-              height: kMainAppBarBottomTabHeight - kMainAppBarBottomPaddingGap,
-              tabs: [
-                for (final sourceType in widget.sourceTypes) Tab(text: sourceType.l10n(context)),
-              ],
-            ),
-          );
+      padding: const EdgeInsets.only(
+        bottom: kMainAppBarBottomPaddingGap,
+      ),
+      child: ExtTabBar(
+        controller: _tabController,
+        width: mediaQueryData.size.width * 0.75,
+        height: kMainAppBarBottomTabHeight - kMainAppBarBottomPaddingGap,
+        tabs: [
+          for (final sourceType in widget.sourceTypes) Tab(text: sourceType.l10n(context)),
+        ],
+      ),
+    );
 
     final search = Padding(
       padding: const EdgeInsets.only(

@@ -16,9 +16,7 @@ class KeypadScreen extends StatelessWidget {
     final appName = themeData.extension<ConstTexts>()?.appName;
 
     return Scaffold(
-      appBar: MainAppBar(
-        name: appName,
-      ),
+      appBar: MainAppBar(),
       body: const KeypadView(),
     );
   }

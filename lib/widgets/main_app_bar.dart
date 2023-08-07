@@ -12,41 +12,40 @@ class MainAppBar extends AppBar {
   MainAppBar({
     Key? key,
     PreferredSizeWidget? bottom,
-    required String? name,
   }) : super(
-          key: key,
-          title: Text(name ?? EnvironmentConfig.APP_NAME),
-          centerTitle: false,
-          actions: [
-            BlocBuilder<CallBloc, CallState>(
-              builder: (context, state) {
-                return Ink(
-                  decoration: ShapeDecoration(
-                    shape: CircleBorder(
-                      side: BorderSide(
-                        color: state.status.color(context),
-                      ),
-                    ),
-                  ),
-                  child: IconButton(
-                    constraints: const BoxConstraints.tightFor(
-                      width: kMinInteractiveDimension,
-                      height: kMinInteractiveDimension,
-                    ),
-                    icon: const Icon(
-                      Icons.person,
-                    ),
-                    onPressed: () {
-                      context.pushNamed(MainRoute.settings);
-                    },
-                  ),
-                );
+    key: key,
+    title: const Text(EnvironmentConfig.APP_NAME),
+    centerTitle: false,
+    actions: [
+      BlocBuilder<CallBloc, CallState>(
+        builder: (context, state) {
+          return Ink(
+            decoration: ShapeDecoration(
+              shape: CircleBorder(
+                side: BorderSide(
+                  color: state.status.color(context),
+                ),
+              ),
+            ),
+            child: IconButton(
+              constraints: const BoxConstraints.tightFor(
+                width: kMinInteractiveDimension,
+                height: kMinInteractiveDimension,
+              ),
+              icon: const Icon(
+                Icons.person,
+              ),
+              onPressed: () {
+                context.pushNamed(MainRoute.settings);
               },
             ),
-            const SizedBox(
-              width: NavigationToolbar.kMiddleSpacing,
-            ),
-          ],
-          bottom: bottom,
-        );
+          );
+        },
+      ),
+      const SizedBox(
+        width: NavigationToolbar.kMiddleSpacing,
+      ),
+    ],
+    bottom: bottom,
+  );
 }

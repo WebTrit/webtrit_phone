@@ -66,7 +66,6 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
 
     return Scaffold(
       appBar: MainAppBar(
-        name: appName,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kMainAppBarBottomTabHeight),
           child: Padding(

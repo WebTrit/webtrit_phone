@@ -24,9 +24,7 @@ class FavoritesScreen extends StatelessWidget {
     final appName = themeData.extension<ConstTexts>()?.appName;
 
     return Scaffold(
-      appBar: MainAppBar(
-        name: appName,
-      ),
+      appBar: MainAppBar(),
       body: BlocBuilder<FavoritesBloc, FavoritesState>(
         builder: (context, state) {
           final favorites = state.favorites;

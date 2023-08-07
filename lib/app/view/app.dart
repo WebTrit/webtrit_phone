@@ -575,8 +575,7 @@ class GoRouterRefreshBloc extends ChangeNotifier {
     notifyListeners();
     _subscription = bloc.stream.asBroadcastStream().listen(
           (dynamic _) => notifyListeners(),
-        );
-                title: widget.themeSettings.appName ?? EnvironmentConfig.APP_NAME,
+    );
   }
 
   late final StreamSubscription<dynamic> _subscription;
