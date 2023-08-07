@@ -52,6 +52,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onLogouted(AppLogouted event, Emitter<AppState> emit) async {
+    await appPreferences.clear();
+
     await secureStorage.deleteCoreUrl();
     await secureStorage.deleteTenantId();
     await secureStorage.deleteToken();
