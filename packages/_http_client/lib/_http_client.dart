@@ -1,8 +1,13 @@
-/// Support for doing something awesome.
-///
-/// More dartdocs go here.
 library;
 
-export 'src/_http_client_base.dart';
+import 'package:http/http.dart' as http;
 
-// TODO: Export any libraries intended for clients of this package.
+import 'src/_http_client_stub.dart'
+    if (dart.library.html) 'src/_http_client_html.dart'
+    if (dart.library.io) 'src/_http_client_io.dart' as platform;
+
+http.Client createHttpClient({
+  Duration? connectionTimeout,
+}) {
+  return platform.createHttpClient(connectionTimeout: connectionTimeout);
+}
