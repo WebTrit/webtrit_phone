@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
@@ -18,7 +19,7 @@ class AboutScreen extends StatelessWidget {
     return BlocBuilder<AboutBloc, AboutState>(
       builder: (context, state) {
         final themeData = Theme.of(context);
-        final logo = themeData.extension<GenImages>()?.logo;
+        final logo = themeData.extension<StreamImages>()?.primaryOnboardinLogo;
         final logoHeight = themeData.textTheme.displayLarge!.fontSize! * 1.5;
         final delimiterHeight = themeData.textTheme.titleLarge!.fontSize!;
         return Scaffold(
@@ -30,7 +31,8 @@ class AboutScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (logo != null)
-                  logo.svg(
+                  StreamImage(
+                    stream: logo,
                     height: logoHeight,
                   ),
                 Text(

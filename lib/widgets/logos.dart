@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
+import 'stream_image.dart';
+
 class WebTritPhonePictureLogo extends StatelessWidget {
   const WebTritPhonePictureLogo({
     super.key,
@@ -25,22 +27,17 @@ class WebTritPhonePictureLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     final fontSize = titleStyle.fontSize!;
     final themeData = Theme.of(context);
-    final logo = themeData.extension<GenImages>()?.logo;
+    final logo = themeData.extension<StreamImages>()?.primaryOnboardinLogo;
     final logoHeight = this.logoHeight ?? (logoWidth == null ? fontSize * 2.2 : null);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        logo?.svg(
-              width: logoWidth,
-              height: logoHeight,
-              fit: logoFit,
-              alignment: logoAlignment,
-            ) ??
-            SizedBox(
-              width: logoWidth,
-              height: logoHeight,
-            ),
+        StreamImage(
+          stream: logo,
+          height: logoHeight,
+          width: logoWidth,
+        ),
         SizedBox(
           height: dividerHeight ?? fontSize / 3,
         ),
