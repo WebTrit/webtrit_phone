@@ -12,7 +12,6 @@ class UserInfo with _$UserInfo {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory UserInfo({
     UserInfoStatus? status,
-    required SipInfo sip,
     Balance? balance,
     required Numbers numbers,
     String? email,

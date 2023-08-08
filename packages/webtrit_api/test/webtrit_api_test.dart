@@ -525,15 +525,6 @@ void main() {
         expect(request.headers['authorization'], endsWith(token));
         return Response(
           jsonEncode({
-            'sip': {
-              'login': 'login_1',
-              'password': 'strong_password',
-              'sip_server': {
-                'host': 'sip.webtrit.com',
-                'port': 5060,
-              },
-              'display_name': 'display_name_1'
-            },
             'balance': {
               'amount': 111.1,
               'balance_type': 'unknown',
@@ -562,15 +553,6 @@ void main() {
         apiClient.getUserInfo(token),
         completion(equals(
           UserInfo(
-            sip: SipInfo(
-              login: 'login_1',
-              password: 'strong_password',
-              sipServer: SipServer(
-                host: 'sip.webtrit.com',
-                port: 5060,
-              ),
-              displayName: 'display_name_1',
-            ),
             balance: Balance(
               amount: 111.1,
               balanceType: BalanceType.unknown,

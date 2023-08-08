@@ -8,7 +8,6 @@ part of 'user_info.dart';
 
 _$_UserInfo _$$_UserInfoFromJson(Map<String, dynamic> json) => _$_UserInfo(
       status: $enumDecodeNullable(_$UserInfoStatusEnumMap, json['status']),
-      sip: SipInfo.fromJson(json['sip'] as Map<String, dynamic>),
       balance: json['balance'] == null
           ? null
           : Balance.fromJson(json['balance'] as Map<String, dynamic>),
@@ -24,7 +23,6 @@ _$_UserInfo _$$_UserInfoFromJson(Map<String, dynamic> json) => _$_UserInfo(
 Map<String, dynamic> _$$_UserInfoToJson(_$_UserInfo instance) =>
     <String, dynamic>{
       'status': _$UserInfoStatusEnumMap[instance.status],
-      'sip': instance.sip,
       'balance': instance.balance,
       'numbers': instance.numbers,
       'email': instance.email,

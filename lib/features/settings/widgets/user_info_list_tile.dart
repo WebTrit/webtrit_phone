@@ -85,7 +85,7 @@ class UserInfoListTile extends StatelessWidget {
                     ),
                   ),
                   CopyToClipboard(
-                    data: info?.sip.login,
+                    data: info?.numbers.main,
                     child: Text(
                       info?.numberWithExtension ?? _kHoldSpaceData,
                       style: themeData.textTheme.bodyLarge,
