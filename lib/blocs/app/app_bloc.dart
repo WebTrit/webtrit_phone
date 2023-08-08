@@ -53,6 +53,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onLogouted(AppLogouted event, Emitter<AppState> emit) async {
+    await appPreferences.clear();
+
     await secureStorage.deleteCoreUrl();
     await secureStorage.deleteTenantId();
     await secureStorage.deleteToken();
@@ -73,7 +75,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   void _onThemeModeChanged(AppThemeModeChanged event, Emitter<AppState> emit) async {
     final themeMode = event.value;
     if (themeMode == ThemeMode.system) {
-      await appPreferences.removeLocale();
+      await appPreferences.removeThemeMode();
     } else {
       await appPreferences.setThemeMode(themeMode);
     }

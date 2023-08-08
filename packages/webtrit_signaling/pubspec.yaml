@@ -1,5 +1,6 @@
 name: webtrit_signaling
 description: Dart library for WebTrit Core Signalling.
+publish_to: none
 version: 1.0.0
 
 environment:
@@ -11,6 +12,9 @@ dependencies:
   logging_appenders: ^1.1.0
   meta: ^1.9.1
   web_socket_channel: ^2.4.0
+
+  _web_socket_channel:
+    path: ../_web_socket_channel
 
 dev_dependencies:
   lints: ^2.1.1
