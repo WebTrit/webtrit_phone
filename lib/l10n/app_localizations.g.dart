@@ -601,17 +601,35 @@ abstract class AppLocalizations {
   /// **'Phone number not found'**
   String get login_RequestFailurePhoneNotFoundError;
 
-  /// No description provided for @login_RequestFailureCodeIncorrectError.
+  /// No description provided for @login_RequestFailureOtpAlreadyVerifiedError.
   ///
   /// In en, this message translates to:
-  /// **'Incorrect verification code'**
-  String get login_RequestFailureCodeIncorrectError;
+  /// **'Verification already verified'**
+  String get login_RequestFailureOtpAlreadyVerifiedError;
 
-  /// No description provided for @login_RequestFailureOtpIdVerifyAttemptsExceededError.
+  /// No description provided for @login_RequestFailureOtpVerificationAttemptsExceededError.
   ///
   /// In en, this message translates to:
   /// **'Verification attempts exceeded'**
-  String get login_RequestFailureOtpIdVerifyAttemptsExceededError;
+  String get login_RequestFailureOtpVerificationAttemptsExceededError;
+
+  /// No description provided for @login_RequestFailureOtpExpiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification expired'**
+  String get login_RequestFailureOtpExpiredError;
+
+  /// No description provided for @login_RequestFailureIncorrectOtpCodeError.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect verification code'**
+  String get login_RequestFailureIncorrectOtpCodeError;
+
+  /// No description provided for @login_RequestFailureOtpNotFoundError.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification not found'**
+  String get login_RequestFailureOtpNotFoundError;
 
   /// No description provided for @permission_Text_description.
   ///

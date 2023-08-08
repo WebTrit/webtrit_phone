@@ -311,11 +311,20 @@
   "login_RequestFailurePhoneNotFoundError": "Phone number not found",
   "@login_RequestFailurePhoneNotFoundError": {
   },
-  "login_RequestFailureCodeIncorrectError": "Incorrect verification code",
-  "@login_RequestFailureCodeIncorrectError": {
+  "login_RequestFailureOtpAlreadyVerifiedError": "Verification already verified",
+  "@login_RequestFailureOtpAlreadyVerifiedError": {
   },
-  "login_RequestFailureOtpIdVerifyAttemptsExceededError": "Verification attempts exceeded",
-  "@login_RequestFailureOtpIdVerifyAttemptsExceededError": {
+  "login_RequestFailureOtpVerificationAttemptsExceededError": "Verification attempts exceeded",
+  "@login_RequestFailureOtpVerificationAttemptsExceededError": {
+  },
+  "login_RequestFailureOtpExpiredError": "Verification expired",
+  "@login_RequestFailureOtpExpiredError": {
+  },
+  "login_RequestFailureIncorrectOtpCodeError": "Incorrect verification code",
+  "@login_RequestFailureIncorrectOtpCodeError": {
+  },
+  "login_RequestFailureOtpNotFoundError": "Verification not found",
+  "@login_RequestFailureOtpNotFoundError": {
   },
 
   "permission_Text_description": "To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.",

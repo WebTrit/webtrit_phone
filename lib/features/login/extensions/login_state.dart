@@ -34,10 +34,16 @@ extension LoginStateErrorL10n on LoginState {
           case 'empty_email':
             return context.l10n.login_RequestFailureEmptyEmailError;
           // sessionOtpVerify
-          case 'code_incorrect':
-            return context.l10n.login_RequestFailureCodeIncorrectError;
-          case 'otp_id_verify_attempts_exceeded':
-            return context.l10n.login_RequestFailureOtpIdVerifyAttemptsExceededError;
+          case 'otp_already_verified':
+            return context.l10n.login_RequestFailureOtpAlreadyVerifiedError;
+          case 'otp_verification_attempts_exceeded':
+            return context.l10n.login_RequestFailureOtpVerificationAttemptsExceededError;
+          case 'otp_expired':
+            return context.l10n.login_RequestFailureOtpExpiredError;
+          case 'incorrect_otp_code':
+            return context.l10n.login_RequestFailureIncorrectOtpCodeError;
+          case 'otp_not_found':
+            return context.l10n.login_RequestFailureOtpNotFoundError;
           //
           default:
             return context.l10n.login_RequestFailureError;

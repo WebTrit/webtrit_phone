@@ -278,10 +278,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_RequestFailurePhoneNotFoundError => 'Phone number not found';
 
   @override
-  String get login_RequestFailureCodeIncorrectError => 'Incorrect verification code';
+  String get login_RequestFailureOtpAlreadyVerifiedError => 'Verification already verified';
 
   @override
-  String get login_RequestFailureOtpIdVerifyAttemptsExceededError => 'Verification attempts exceeded';
+  String get login_RequestFailureOtpVerificationAttemptsExceededError => 'Verification attempts exceeded';
+
+  @override
+  String get login_RequestFailureOtpExpiredError => 'Verification expired';
+
+  @override
+  String get login_RequestFailureIncorrectOtpCodeError => 'Incorrect verification code';
+
+  @override
+  String get login_RequestFailureOtpNotFoundError => 'Verification not found';
 
   @override
   String get permission_Text_description => 'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.';
