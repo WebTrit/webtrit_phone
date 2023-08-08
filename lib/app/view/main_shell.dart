@@ -36,7 +36,7 @@ class _MainShellState extends State<MainShell> {
       ios: CallkeepIOSOptions(
         localizedName: PackageInfo().appName,
         ringtoneSound: Assets.ringtones.incomingCall1,
-        iconTemplateImageAssetName: Assets.logoIconTemplateImage.path,
+        iconTemplateImageAssetName: Assets.system.logoIconTempateImage.path,
         maximumCallGroups: 2,
         maximumCallsPerCallGroup: 1,
         supportedHandleTypes: const {CallkeepHandleType.number},

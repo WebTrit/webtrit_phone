@@ -100,10 +100,10 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/logo.svg
-    - assets/logoIconTemplateImage.png
+    - assets/
     - assets/login/
     - assets/ringtones/
+    - assets/system/
 
 flutter_gen:
   output: lib/app/
