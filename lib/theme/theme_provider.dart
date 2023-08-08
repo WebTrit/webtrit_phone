@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_svg/svg.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
-
-import 'package:webtrit_phone/app/assets.gen.dart';
 
 import 'theme.dart';
 
@@ -105,13 +105,13 @@ class ThemeProvider extends InheritedWidget {
     );
   }
 
-  GenImages genImages({
-    SvgGenImage? logo,
-    SvgGenImage? loginOnboarding,
+  StreamImages streamImages({
+    Stream<SvgLoader?>? primaryOnboardinLogo,
+    Stream<SvgLoader?>? secondaryOnboardinLogo,
   }) {
-    return GenImages(
-      logo: logo,
-      loginOnboarding: loginOnboarding,
+    return StreamImages(
+      primaryOnboardinLogo: primaryOnboardinLogo,
+      secondaryOnboardinLogo: secondaryOnboardinLogo,
     );
   }
 
@@ -283,9 +283,9 @@ class ThemeProvider extends InheritedWidget {
         outlinedButtonStyles(colorScheme),
         textButtonStyles(colorScheme),
         gradients(colorScheme),
-        genImages(
-          logo: Assets.primaryOnboardinLogo,
-          loginOnboarding: Assets.login.onboarding1,
+        streamImages(
+          primaryOnboardinLogo: settings.imagesScheme?.primaryOnboardingLogo,
+          secondaryOnboardinLogo: settings.imagesScheme?.secondaryOnboardingLogo,
         ),
       ],
       // COLOR

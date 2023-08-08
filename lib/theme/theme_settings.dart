@@ -1,4 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+
+import 'package:flutter_svg/svg.dart';
+import 'package:rxdart/rxdart.dart';
+
+import 'package:webtrit_phone/app/assets.gen.dart';
 
 import 'custom_color.dart';
 
@@ -9,12 +16,14 @@ class ThemeSettings {
     this.darkColorSchemeOverride,
     required this.primaryGradientColors,
     this.fontFamily,
+    this.imagesScheme,
   });
 
   final Color seedColor;
   final ColorSchemeOverride? lightColorSchemeOverride;
   final ColorSchemeOverride? darkColorSchemeOverride;
   final List<CustomColor> primaryGradientColors;
+  final ImagesScheme? imagesScheme;
   final String? fontFamily;
 }
 
@@ -82,4 +91,61 @@ class ColorSchemeOverride {
   final Color? shadow;
   final Color? scrim;
   final Color? surfaceTint;
+}
+
+class ImagesScheme {
+  ImagesScheme({
+    ReplaySubject<SvgLoader?>? primaryOnboardingLogoStream,
+    ReplaySubject<SvgLoader?>? secondaryOnboardingLogoStream,
+  })  : _primaryOnboardingLogoStream = primaryOnboardingLogoStream ?? ReplaySubject<SvgLoader?>(maxSize: 1),
+        _secondaryOnboardingLogoStream = secondaryOnboardingLogoStream ?? ReplaySubject<SvgLoader?>(maxSize: 1);
+
+  final ReplaySubject<SvgLoader?> _primaryOnboardingLogoStream;
+  final ReplaySubject<SvgLoader?> _secondaryOnboardingLogoStream;
+
+  Stream<SvgLoader?> get primaryOnboardingLogo => _primaryOnboardingLogoStream.stream;
+
+  Stream<SvgLoader?> get secondaryOnboardingLogo => _secondaryOnboardingLogoStream.stream;
+
+  void setPrimaryOnboardingLogo({
+    String? url,
+    Uint8List? bytes,
+    SvgGenImage? asset,
+    SvgGenImage svgGenImage = Assets.logo,
+  }) async {
+    if (url != null) {
+      return _primaryOnboardingLogoStream.add(SvgNetworkLoader(url));
+    } else if (bytes != null) {
+      return _primaryOnboardingLogoStream.add(SvgBytesLoader(bytes));
+    } else if (asset != null) {
+      return _primaryOnboardingLogoStream.add(SvgAssetLoader(asset.path));
+    } else {
+      return _primaryOnboardingLogoStream.add(SvgAssetLoader(svgGenImage.path));
+    }
+  }
+
+  void setSecondaryOnboardingLogo({
+    String? url,
+    Uint8List? bytes,
+    SvgGenImage? asset,
+    SvgGenImage svgGenImage = Assets.logo,
+  }) {
+    if (url != null) {
+      return _secondaryOnboardingLogoStream.add(SvgNetworkLoader(url));
+    } else if (bytes != null) {
+      return _secondaryOnboardingLogoStream.add(SvgBytesLoader(bytes));
+    } else if (asset != null) {
+      return _secondaryOnboardingLogoStream.add(SvgAssetLoader(asset.path));
+    } else {
+      return _primaryOnboardingLogoStream.add(SvgAssetLoader(svgGenImage.path));
+    }
+  }
+
+  void clearPrimaryOnboardingLogoStream() {
+    _primaryOnboardingLogoStream.add(null);
+  }
+
+  void clearSecondaryOnboardingLogoStream() {
+    _secondaryOnboardingLogoStream.add(null);
+  }
 }
