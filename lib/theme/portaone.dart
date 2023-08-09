@@ -22,9 +22,10 @@ const _gradientBottom = CustomColor(
   blend: false,
 );
 
-final imageScheme = ImagesScheme()
-  ..setPrimaryOnboardingLogo(asset: Assets.logo)
-  ..setSecondaryOnboardingLogo(asset: Assets.logo);
+final imageScheme = ImagesScheme(
+  primaryOnboardingLogoNotifier: SvgNotifier(asset: Assets.logo),
+  secondaryOnboardingLogoNotifier: SvgNotifier(asset: Assets.logo),
+);
 
 final portaoneThemeSettings = ThemeSettings(
   seedColor: _seedColor,
