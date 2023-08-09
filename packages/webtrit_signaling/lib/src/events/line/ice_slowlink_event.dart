@@ -5,11 +5,13 @@ class IceSlowLinkEvent extends LineEvent {
   const IceSlowLinkEvent({
     String? transaction,
     required int line,
+    required this.mid,
     required this.media,
     required this.uplink,
     required this.lost,
   }) : super(transaction: transaction, line: line);
 
+  final String mid;
   final IceMediaType media;
   final bool uplink;
   final int lost;
@@ -17,6 +19,7 @@ class IceSlowLinkEvent extends LineEvent {
   @override
   List<Object?> get props => [
         ...super.props,
+        mid,
         media,
         uplink,
         lost,
@@ -32,6 +35,7 @@ class IceSlowLinkEvent extends LineEvent {
 
     return IceSlowLinkEvent(
       transaction: json['transaction'],
+      mid: json['mid'],
       line: json['line'],
       media: IceMediaType.values.byName(json['media']),
       uplink: json['uplink'],
