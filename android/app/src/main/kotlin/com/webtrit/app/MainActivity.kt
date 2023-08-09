@@ -1,4 +1,4 @@
-package com.webtrit.phone
+package com.webtrit.app
 
 import io.flutter.embedding.android.FlutterActivity
 
