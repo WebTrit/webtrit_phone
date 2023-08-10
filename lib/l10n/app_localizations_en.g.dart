@@ -150,7 +150,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_CallActionsTooltip_accept => 'Accept';
 
   @override
-  String get favorites_BodyCenter_empty => 'There are no favorite numbers';
+  String get favorites_BodyCenter_empty => 'Currently you have no favorite numbers.\nAdd favorites from Contacts using the star icon.';
 
   @override
   String favorites_SnackBar_deleted(String name) {

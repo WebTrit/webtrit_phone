@@ -19,7 +19,6 @@ class FavoritesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
     return Scaffold(
       appBar: MainAppBar(),
       body: BlocBuilder<FavoritesBloc, FavoritesState>(
@@ -31,6 +30,7 @@ class FavoritesScreen extends StatelessWidget {
             );
           } else {
             if (favorites.isEmpty) {
+              final themeData = Theme.of(context);
               return Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -40,10 +40,13 @@ class FavoritesScreen extends StatelessWidget {
                       size: 80,
                       color: themeData.textTheme.bodySmall!.color,
                     ),
-                    const SizedBox(height: 10),
-                    Text(
-                      context.l10n.favorites_BodyCenter_empty,
-                      style: themeData.textTheme.titleMedium,
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        context.l10n.favorites_BodyCenter_empty,
+                        style: themeData.textTheme.titleMedium,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ],
                 ),

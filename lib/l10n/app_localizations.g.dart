@@ -376,7 +376,7 @@ abstract class AppLocalizations {
   /// No description provided for @favorites_BodyCenter_empty.
   ///
   /// In en, this message translates to:
-  /// **'There are no favorite numbers'**
+  /// **'Currently you have no favorite numbers.\nAdd favorites from Contacts using the star icon.'**
   String get favorites_BodyCenter_empty;
 
   /// No description provided for @favorites_SnackBar_deleted.

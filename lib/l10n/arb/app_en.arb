@@ -158,7 +158,7 @@
   "@call_CallActionsTooltip_accept": {
   },
 
-  "favorites_BodyCenter_empty": "There are no favorite numbers",
+  "favorites_BodyCenter_empty": "Currently you have no favorite numbers.\nAdd favorites from Contacts using the star icon.",
   "@favorites_BodyCenter_empty": {
   },
   "favorites_SnackBar_deleted": "{name} deleted",
