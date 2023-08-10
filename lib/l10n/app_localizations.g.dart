@@ -685,6 +685,12 @@ abstract class AppLocalizations {
   /// **'Outgoing'**
   String get recentsVisibilityFilter_outgoing;
 
+  /// No description provided for @recents_BodyCenter_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Currently you have no {filter} recent calls.'**
+  String recents_BodyCenter_empty(String filter);
+
   /// No description provided for @recents_errorSnackBar_loadFailure.
   ///
   /// In en, this message translates to:

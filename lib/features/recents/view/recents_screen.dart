@@ -89,40 +89,65 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
             );
           } else {
             final recentsFiltered = state.recentsFiltered!; // can not be null if state.recents is not null
-            return ListView.builder(
-              itemCount: recentsFiltered.length,
-              itemBuilder: (context, index) {
-                final recent = recentsFiltered[index];
-                return RecentTile(
-                  recent: recent,
-                  onInfoPressed: () {
-                    context.goNamed(MainRoute.recentsDetails, pathParameters: {
-                      recentIdPathParameterName: recent.id.toString(),
-                    });
-                  },
-                  onTap: () {
-                    final callBloc = context.read<CallBloc>();
-                    callBloc.add(CallControlEvent.started(
-                      number: recent.number,
-                      displayName: recent.name,
-                      video: recent.video,
-                    ));
-                  },
-                  onLongPress: () {
-                    final callBloc = context.read<CallBloc>();
-                    callBloc.add(CallControlEvent.started(
-                      number: recent.number,
-                      displayName: recent.name,
-                      video: !recent.video,
-                    ));
-                  },
-                  onDeleted: (recent) {
-                    context.showSnackBar(context.l10n.recents_snackBar_deleted(recent.name));
-                    context.read<RecentsBloc>().add(RecentsDeleted(recent));
-                  },
-                );
-              },
-            );
+            if (recentsFiltered.isEmpty) {
+              final themeData = Theme.of(context);
+              final filterL10n = state.filter == RecentsVisibilityFilter.all ? '' : state.filter.l10n(context);
+              return Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.access_time,
+                      size: 80,
+                      color: themeData.textTheme.bodySmall!.color,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        context.l10n.recents_BodyCenter_empty(filterL10n),
+                        style: themeData.textTheme.titleMedium,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              return ListView.builder(
+                itemCount: recentsFiltered.length,
+                itemBuilder: (context, index) {
+                  final recent = recentsFiltered[index];
+                  return RecentTile(
+                    recent: recent,
+                    onInfoPressed: () {
+                      context.goNamed(MainRoute.recentsDetails, pathParameters: {
+                        recentIdPathParameterName: recent.id.toString(),
+                      });
+                    },
+                    onTap: () {
+                      final callBloc = context.read<CallBloc>();
+                      callBloc.add(CallControlEvent.started(
+                        number: recent.number,
+                        displayName: recent.name,
+                        video: recent.video,
+                      ));
+                    },
+                    onLongPress: () {
+                      final callBloc = context.read<CallBloc>();
+                      callBloc.add(CallControlEvent.started(
+                        number: recent.number,
+                        displayName: recent.name,
+                        video: !recent.video,
+                      ));
+                    },
+                    onDeleted: (recent) {
+                      context.showSnackBar(context.l10n.recents_snackBar_deleted(recent.name));
+                      context.read<RecentsBloc>().add(RecentsDeleted(recent));
+                    },
+                  );
+                },
+              );
+            }
           }
         },
       ),

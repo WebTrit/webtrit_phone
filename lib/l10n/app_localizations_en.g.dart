@@ -330,6 +330,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recentsVisibilityFilter_outgoing => 'Outgoing';
 
   @override
+  String recents_BodyCenter_empty(String filter) {
+    return 'Currently you have no $filter recent calls.';
+  }
+
+  @override
   String get recents_errorSnackBar_loadFailure => 'Oops... an error happened ☹️';
 
   @override

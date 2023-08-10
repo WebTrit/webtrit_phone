@@ -369,6 +369,14 @@
   "recentsVisibilityFilter_outgoing": "Outgoing",
   "@recentsVisibilityFilter_outgoing": {
   },
+  "recents_BodyCenter_empty": "Currently you have no {filter} recent calls.",
+  "@recents_BodyCenter_empty": {
+    "placeholders": {
+      "filter": {
+        "type": "String"
+      }
+    }
+  },
   "recents_errorSnackBar_loadFailure": "Oops... an error happened ☹️",
   "@recents_errorSnackBar_loadFailure": {
   },
