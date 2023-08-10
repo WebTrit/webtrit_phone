@@ -102,7 +102,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                       color: themeData.textTheme.bodySmall!.color,
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: kAllPadding16,
                       child: Text(
                         context.l10n.recents_BodyCenter_empty(filterL10n),
                         style: themeData.textTheme.titleMedium,

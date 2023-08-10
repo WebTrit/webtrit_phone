@@ -15,4 +15,6 @@ const kMainAppBarBottomTabHeight = 42.0;
 const kMainAppBarBottomSearchHeight = kMinInteractiveDimension;
 const kMainAppBarBottomPaddingGap = 6.0;
 
+const kAllPadding16 = EdgeInsets.all(16.0);
+
 const kBlankUri = 'about:blank';
