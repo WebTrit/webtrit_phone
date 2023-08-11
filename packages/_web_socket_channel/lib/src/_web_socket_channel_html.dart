@@ -4,7 +4,7 @@ import 'dart:html' as html;
 import 'package:web_socket_channel/html.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-Future<html.WebSocket> connect(
+Future<html.WebSocket> connectWebSocket(
   String url, {
   Iterable<String>? protocols,
   Duration? connectionTimeout,
