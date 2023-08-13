@@ -43,7 +43,7 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
         progress: false,
         coreVersion: coreVersion,
       ));
-    } on Exception catch (e, stackTrace) {
+    } catch (e, stackTrace) {
       if (emit.isDone) return;
 
       emit(state.copyWith(
