@@ -43,14 +43,14 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
       final r = await Future.wait([infoFuture, registerStatusFuture]);
 
-      if (emit.isDone) return;
-
       final info = r[0] as UserInfo;
       final registerStatus = r[1] as bool;
 
       if (registerStatus != state.registerStatus) {
         await appPreferences.setRegisterStatus(registerStatus);
       }
+
+      if (emit.isDone) return;
 
       emit(state.copyWith(
         progress: false,
@@ -80,9 +80,14 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     emit(state.copyWith(progress: true));
     try {
       await userRepository.logout();
-      appBloc.add(const AppLogouted());
+
+      if (emit.isDone) return;
+
       emit(state.copyWith(progress: false));
+      appBloc.add(const AppLogouted());
     } catch (e) {
+      if (emit.isDone) return;
+
       emit(state.copyWith(error: e, progress: false));
     }
   }
@@ -96,8 +101,13 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     try {
       await appRepository.setRegisterStatus(event.value);
       await appPreferences.setRegisterStatus(event.value);
+
+      if (emit.isDone) return;
+
       emit(state.copyWith(progress: false));
     } catch (e) {
+      if (emit.isDone) return;
+
       emit(state.copyWith(error: e, progress: false, registerStatus: previousRegisterStatus));
     }
   }
