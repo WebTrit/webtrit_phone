@@ -559,36 +559,6 @@ abstract class AppLocalizations {
   /// **'An incompatible instance version provided, please contact the administrator of your system (actual: {actual}, supported: {supportedConstraint})'**
   String login_CoreVersionUnsupportedExceptionError(String actual, String supportedConstraint);
 
-  /// No description provided for @login_FormatExceptionError.
-  ///
-  /// In en, this message translates to:
-  /// **'A response issue occurred'**
-  String get login_FormatExceptionError;
-
-  /// No description provided for @login_TlsExceptionError.
-  ///
-  /// In en, this message translates to:
-  /// **'A secure networking issue occurred'**
-  String get login_TlsExceptionError;
-
-  /// No description provided for @login_SocketExceptionError.
-  ///
-  /// In en, this message translates to:
-  /// **'A network issue occurred'**
-  String get login_SocketExceptionError;
-
-  /// No description provided for @login_TypeErrorError.
-  ///
-  /// In en, this message translates to:
-  /// **'A response issue occurred'**
-  String get login_TypeErrorError;
-
-  /// No description provided for @login_RequestFailureError.
-  ///
-  /// In en, this message translates to:
-  /// **'A server failure occurred'**
-  String get login_RequestFailureError;
-
   /// No description provided for @login_RequestFailureEmptyEmailError.
   ///
   /// In en, this message translates to:
@@ -877,36 +847,6 @@ abstract class AppLocalizations {
   /// **'?.?.?'**
   String get settings_AboutText_CoreVersionUndefined;
 
-  /// No description provided for @settings_FormatExceptionError.
-  ///
-  /// In en, this message translates to:
-  /// **'A response issue occurred'**
-  String get settings_FormatExceptionError;
-
-  /// No description provided for @settings_TlsExceptionError.
-  ///
-  /// In en, this message translates to:
-  /// **'A secure networking issue occurred'**
-  String get settings_TlsExceptionError;
-
-  /// No description provided for @settings_SocketExceptionError.
-  ///
-  /// In en, this message translates to:
-  /// **'A network issue occurred'**
-  String get settings_SocketExceptionError;
-
-  /// No description provided for @settings_TypeErrorError.
-  ///
-  /// In en, this message translates to:
-  /// **'A response issue occurred'**
-  String get settings_TypeErrorError;
-
-  /// No description provided for @settings_RequestFailureError.
-  ///
-  /// In en, this message translates to:
-  /// **'A server failure occurred'**
-  String get settings_RequestFailureError;
-
   /// No description provided for @webRegistration_ErrorAcknowledgeDialog_title.
   ///
   /// In en, this message translates to:
@@ -948,6 +888,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Refresh'**
   String get logRecordsConsole_Button_failureRefresh;
+
+  /// No description provided for @default_FormatExceptionError.
+  ///
+  /// In en, this message translates to:
+  /// **'A response issue occurred'**
+  String get default_FormatExceptionError;
+
+  /// No description provided for @default_TlsExceptionError.
+  ///
+  /// In en, this message translates to:
+  /// **'A secure networking issue occurred'**
+  String get default_TlsExceptionError;
+
+  /// No description provided for @default_SocketExceptionError.
+  ///
+  /// In en, this message translates to:
+  /// **'A network issue occurred'**
+  String get default_SocketExceptionError;
+
+  /// No description provided for @default_TypeErrorError.
+  ///
+  /// In en, this message translates to:
+  /// **'A response issue occurred'**
+  String get default_TypeErrorError;
+
+  /// No description provided for @default_RequestFailureError.
+  ///
+  /// In en, this message translates to:
+  /// **'A server failure occurred'**
+  String get default_RequestFailureError;
 
   /// No description provided for @underDevelopment.
   ///

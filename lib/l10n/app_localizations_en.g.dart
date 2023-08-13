@@ -257,21 +257,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get login_FormatExceptionError => 'A response issue occurred';
-
-  @override
-  String get login_TlsExceptionError => 'A secure networking issue occurred';
-
-  @override
-  String get login_SocketExceptionError => 'A network issue occurred';
-
-  @override
-  String get login_TypeErrorError => 'A response issue occurred';
-
-  @override
-  String get login_RequestFailureError => 'A server failure occurred';
-
-  @override
   String get login_RequestFailureEmptyEmailError => 'Cannot send the verification code';
 
   @override
@@ -430,21 +415,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_AboutText_CoreVersionUndefined => '?.?.?';
 
   @override
-  String get settings_FormatExceptionError => 'A response issue occurred';
-
-  @override
-  String get settings_TlsExceptionError => 'A secure networking issue occurred';
-
-  @override
-  String get settings_SocketExceptionError => 'A network issue occurred';
-
-  @override
-  String get settings_TypeErrorError => 'A response issue occurred';
-
-  @override
-  String get settings_RequestFailureError => 'A server failure occurred';
-
-  @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
 
   @override
@@ -464,6 +434,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get logRecordsConsole_Button_failureRefresh => 'Refresh';
+
+  @override
+  String get default_FormatExceptionError => 'A response issue occurred';
+
+  @override
+  String get default_TlsExceptionError => 'A secure networking issue occurred';
+
+  @override
+  String get default_SocketExceptionError => 'A network issue occurred';
+
+  @override
+  String get default_TypeErrorError => 'A response issue occurred';
+
+  @override
+  String get default_RequestFailureError => 'A server failure occurred';
 
   @override
   String get underDevelopment => 'This page is under development.';

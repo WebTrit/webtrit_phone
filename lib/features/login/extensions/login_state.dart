@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
@@ -12,20 +10,14 @@ import '../cubit/login_cubit.dart';
 extension LoginStateErrorL10n on LoginState {
   String? errorL10n(BuildContext context) {
     final error = this.error;
-    if (error != null) {
+    if (error == null) {
+      return null;
+    } else {
       if (error is CoreVersionUnsupportedException) {
         return context.l10n.login_CoreVersionUnsupportedExceptionError(
           error.actual.toString(),
           error.supportedConstraint.toString(),
         );
-      } else if (error is FormatException) {
-        return context.l10n.login_FormatExceptionError;
-      } else if (error is TlsException) {
-        return context.l10n.login_TlsExceptionError;
-      } else if (error is SocketException) {
-        return context.l10n.login_SocketExceptionError;
-      } else if (error is TypeError) {
-        return context.l10n.login_TypeErrorError;
       } else if (error is RequestFailure) {
         switch (error.error?.code) {
           // sessionOtpRequest
@@ -44,15 +36,10 @@ extension LoginStateErrorL10n on LoginState {
             return context.l10n.login_RequestFailureIncorrectOtpCodeError;
           case 'otp_not_found':
             return context.l10n.login_RequestFailureOtpNotFoundError;
-          //
-          default:
-            return context.l10n.login_RequestFailureError;
         }
-      } else {
-        return error.toString();
       }
-    } else {
-      return null;
+
+      return defaultErrorL10n(context, error);
     }
   }
 }

@@ -290,21 +290,6 @@
       }
     }
   },
-  "login_FormatExceptionError": "A response issue occurred",
-  "@login_FormatExceptionError": {
-  },
-  "login_TlsExceptionError": "A secure networking issue occurred",
-  "@login_TlsExceptionError": {
-  },
-  "login_SocketExceptionError": "A network issue occurred",
-  "@login_SocketExceptionError": {
-  },
-  "login_TypeErrorError": "A response issue occurred",
-  "@login_TypeErrorError": {
-  },
-  "login_RequestFailureError": "A server failure occurred",
-  "@login_RequestFailureError": {
-  },
   "login_RequestFailureEmptyEmailError": "Cannot send the verification code",
   "@login_RequestFailureEmptyEmailError": {
   },
@@ -479,21 +464,6 @@
   "settings_AboutText_CoreVersionUndefined": "?.?.?",
   "@settings_AboutText_CoreVersionUndefined": {
   },
-  "settings_FormatExceptionError": "A response issue occurred",
-  "@settings_FormatExceptionError": {
-  },
-  "settings_TlsExceptionError": "A secure networking issue occurred",
-  "@settings_TlsExceptionError": {
-  },
-  "settings_SocketExceptionError": "A network issue occurred",
-  "@settings_SocketExceptionError": {
-  },
-  "settings_TypeErrorError": "A response issue occurred",
-  "@settings_TypeErrorError": {
-  },
-  "settings_RequestFailureError": "A server failure occurred",
-  "@settings_RequestFailureError": {
-  },
 
   "webRegistration_ErrorAcknowledgeDialog_title": "Web resource error",
   "@webRegistration_ErrorAcknowledgeDialog_title": {
@@ -516,6 +486,22 @@
   },
   "logRecordsConsole_Button_failureRefresh": "Refresh",
   "@logRecordsConsole_Button_failureRefresh": {
+  },
+
+  "default_FormatExceptionError": "A response issue occurred",
+  "@default_FormatExceptionError": {
+  },
+  "default_TlsExceptionError": "A secure networking issue occurred",
+  "@default_TlsExceptionError": {
+  },
+  "default_SocketExceptionError": "A network issue occurred",
+  "@default_SocketExceptionError": {
+  },
+  "default_TypeErrorError": "A response issue occurred",
+  "@default_TypeErrorError": {
+  },
+  "default_RequestFailureError": "A server failure occurred",
+  "@default_RequestFailureError": {
   },
 
   "underDevelopment": "This page is under development.",
