@@ -58,6 +58,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         registerStatus: registerStatus,
       ));
     } catch (e, stackTrace) {
+      _logger.warning('_onRefreshed', e, stackTrace);
+
       if (emit.isDone) return;
 
       emit(state.copyWith(
@@ -66,7 +68,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         registerStatus: appPreferences.getRegisterStatus(),
         error: e,
       ));
-      _logger.warning('_onRefreshed', e, stackTrace);
     }
   }
 
@@ -85,7 +86,9 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
       emit(state.copyWith(progress: false));
       appBloc.add(const AppLogouted());
-    } catch (e) {
+    } catch (e, stackTrace) {
+      _logger.warning('_onLogouted', e, stackTrace);
+
       if (emit.isDone) return;
 
       emit(state.copyWith(error: e, progress: false));
@@ -105,7 +108,9 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       if (emit.isDone) return;
 
       emit(state.copyWith(progress: false));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      _logger.warning('_onRegisterStatusChanged', e, stackTrace);
+
       if (emit.isDone) return;
 
       emit(state.copyWith(error: e, progress: false, registerStatus: previousRegisterStatus));

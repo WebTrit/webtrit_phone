@@ -44,13 +44,14 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
         coreVersion: coreVersion,
       ));
     } catch (e, stackTrace) {
+      _logger.warning('_onStarted', e, stackTrace);
+
       if (emit.isDone) return;
 
       emit(state.copyWith(
         progress: false,
         error: e,
       ));
-      _logger.warning('_onStarted', e, stackTrace);
     }
   }
 
