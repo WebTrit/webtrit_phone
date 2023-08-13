@@ -497,11 +497,17 @@
   "default_SocketExceptionError": "A network issue occurred",
   "@default_SocketExceptionError": {
   },
+  "default_ClientExceptionError": "A HTTP client issue occurred",
+  "@default_ClientExceptionError": {
+  },
   "default_TypeErrorError": "A response issue occurred",
   "@default_TypeErrorError": {
   },
   "default_RequestFailureError": "A server failure occurred",
   "@default_RequestFailureError": {
+  },
+  "default_UnauthorizedRequestFailureError": "An unauthorized request failure occurred",
+  "@default_UnauthorizedRequestFailureError": {
   },
 
   "underDevelopment": "This page is under development.",

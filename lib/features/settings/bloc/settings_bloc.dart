@@ -68,6 +68,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         registerStatus: appPreferences.getRegisterStatus(),
         error: e,
       ));
+      appBloc.maybeHandleError(e);
     }
   }
 
@@ -91,7 +92,11 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
       if (emit.isDone) return;
 
-      emit(state.copyWith(error: e, progress: false));
+      emit(state.copyWith(
+        progress: false,
+        error: e,
+      ));
+      appBloc.maybeHandleError(e);
     }
   }
 
@@ -100,7 +105,10 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
     final previousRegisterStatus = state.registerStatus;
 
-    emit(state.copyWith(progress: true, registerStatus: event.value));
+    emit(state.copyWith(
+      progress: true,
+      registerStatus: event.value,
+    ));
     try {
       await appRepository.setRegisterStatus(event.value);
       await appPreferences.setRegisterStatus(event.value);
@@ -113,7 +121,12 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
       if (emit.isDone) return;
 
-      emit(state.copyWith(error: e, progress: false, registerStatus: previousRegisterStatus));
+      emit(state.copyWith(
+        progress: false,
+        registerStatus: previousRegisterStatus,
+        error: e,
+      ));
+      appBloc.maybeHandleError(e);
     }
   }
 }

@@ -907,6 +907,12 @@ abstract class AppLocalizations {
   /// **'A network issue occurred'**
   String get default_SocketExceptionError;
 
+  /// No description provided for @default_ClientExceptionError.
+  ///
+  /// In en, this message translates to:
+  /// **'A HTTP client issue occurred'**
+  String get default_ClientExceptionError;
+
   /// No description provided for @default_TypeErrorError.
   ///
   /// In en, this message translates to:
@@ -918,6 +924,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'A server failure occurred'**
   String get default_RequestFailureError;
+
+  /// No description provided for @default_UnauthorizedRequestFailureError.
+  ///
+  /// In en, this message translates to:
+  /// **'An unauthorized request failure occurred'**
+  String get default_UnauthorizedRequestFailureError;
 
   /// No description provided for @underDevelopment.
   ///

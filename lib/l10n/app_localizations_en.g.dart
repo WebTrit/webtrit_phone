@@ -445,10 +445,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get default_SocketExceptionError => 'A network issue occurred';
 
   @override
+  String get default_ClientExceptionError => 'A HTTP client issue occurred';
+
+  @override
   String get default_TypeErrorError => 'A response issue occurred';
 
   @override
   String get default_RequestFailureError => 'A server failure occurred';
+
+  @override
+  String get default_UnauthorizedRequestFailureError => 'An unauthorized request failure occurred';
 
   @override
   String get underDevelopment => 'This page is under development.';
