@@ -43,8 +43,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
       final r = await Future.wait([infoFuture, registerStatusFuture]);
 
-      if (emit.isDone) return;
-
       final info = r[0] as UserInfo;
       final registerStatus = r[1] as bool;
 
@@ -52,12 +50,16 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         await appPreferences.setRegisterStatus(registerStatus);
       }
 
+      if (emit.isDone) return;
+
       emit(state.copyWith(
         progress: false,
         info: info,
         registerStatus: registerStatus,
       ));
     } catch (e, stackTrace) {
+      _logger.warning('_onRefreshed', e, stackTrace);
+
       if (emit.isDone) return;
 
       emit(state.copyWith(
@@ -66,7 +68,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         registerStatus: appPreferences.getRegisterStatus(),
         error: e,
       ));
-      _logger.warning('_onRefreshed', e, stackTrace);
+      appBloc.maybeHandleError(e);
     }
   }
 
@@ -80,10 +82,21 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     emit(state.copyWith(progress: true));
     try {
       await userRepository.logout();
-      appBloc.add(const AppLogouted());
+
+      if (emit.isDone) return;
+
       emit(state.copyWith(progress: false));
-    } catch (e) {
-      emit(state.copyWith(error: e, progress: false));
+      appBloc.add(const AppLogouted());
+    } catch (e, stackTrace) {
+      _logger.warning('_onLogouted', e, stackTrace);
+
+      if (emit.isDone) return;
+
+      emit(state.copyWith(
+        progress: false,
+        error: e,
+      ));
+      appBloc.maybeHandleError(e);
     }
   }
 
@@ -92,13 +105,28 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
     final previousRegisterStatus = state.registerStatus;
 
-    emit(state.copyWith(progress: true, registerStatus: event.value));
+    emit(state.copyWith(
+      progress: true,
+      registerStatus: event.value,
+    ));
     try {
       await appRepository.setRegisterStatus(event.value);
       await appPreferences.setRegisterStatus(event.value);
+
+      if (emit.isDone) return;
+
       emit(state.copyWith(progress: false));
-    } catch (e) {
-      emit(state.copyWith(error: e, progress: false, registerStatus: previousRegisterStatus));
+    } catch (e, stackTrace) {
+      _logger.warning('_onRegisterStatusChanged', e, stackTrace);
+
+      if (emit.isDone) return;
+
+      emit(state.copyWith(
+        progress: false,
+        registerStatus: previousRegisterStatus,
+        error: e,
+      ));
+      appBloc.maybeHandleError(e);
     }
   }
 }

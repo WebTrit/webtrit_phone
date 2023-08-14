@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
+import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 
 import 'package:webtrit_phone/data/data.dart';
@@ -11,6 +12,8 @@ import 'package:webtrit_phone/utils/utils.dart';
 part 'external_contacts_sync_event.dart';
 
 part 'external_contacts_sync_state.dart';
+
+final _logger = Logger('$ExternalContactsSyncBloc');
 
 class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalContactsSyncState> {
   ExternalContactsSyncBloc({
@@ -31,6 +34,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
     final externalContactsForEachFuture = emit.onEach<List<ExternalContact>>(
       externalContactsRepository.contacts(),
       onData: (contacts) => add(_ExternalContactsSyncUpdated(contacts: contacts)),
+      onError: (e, stackTrace) => _logger.warning('_onStarted', e, stackTrace),
     );
 
     add(const ExternalContactsSyncRefreshed());
