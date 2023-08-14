@@ -115,21 +115,23 @@ class WebtritSignalingClient {
     );
   }
 
-  Future<void> disconnect([int? code, String? reason]) {
-    if (_wscStreamSubscription == null) {
+  Future<void> disconnect([int? code, String? reason]) async {
+    final wscStreamSubscription = _wscStreamSubscription;
+    if (wscStreamSubscription == null) {
       _logger.fine('already disconnected with code: ${_wsc.closeCode} reason: ${_wsc.closeReason}');
-      return Future.value();
+    } else {
+      _logger.fine('disconnect code: $code reason: $reason');
+
+      _stopKeepaliveTimer();
+
+      _cleanupTransactions(code, reason);
+
+      _wscStreamSubscription = null;
+
+      await wscStreamSubscription.cancel(); // to prevent onDisconnect and other handlers call
+
+      await _wsc.sink.close(code, reason);
     }
-    _logger.fine('disconnect code: $code reason: $reason');
-
-    _stopKeepaliveTimer();
-
-    _cleanupTransactions(code, reason);
-
-    _wscStreamSubscription!.onDone(null); // to prevent onDisconnect handler call
-    _wscStreamSubscription = null;
-
-    return _wsc.sink.close(code, reason);
   }
 
   //
