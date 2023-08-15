@@ -12,7 +12,6 @@ class AboutState with _$AboutState {
     required String buildNumber,
     required Uri coreUrl,
     Version? coreVersion,
-    Object? error,
   }) = _AboutState;
 
   String get appVersion => '$version-$buildNumber';

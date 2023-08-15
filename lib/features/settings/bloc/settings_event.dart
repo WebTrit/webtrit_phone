@@ -4,20 +4,17 @@ abstract class SettingsEvent {
   const SettingsEvent();
 }
 
-class SettingsRefreshed extends SettingsEvent {
-  const SettingsRefreshed();
+@Freezed(copyWith: false)
+class SettingsRefreshed with _$SettingsRefreshed implements SettingsEvent {
+  const factory SettingsRefreshed() = _SettingsRefreshed;
 }
 
-class SettingsErrorDismissed extends SettingsEvent {
-  const SettingsErrorDismissed();
+@Freezed(copyWith: false)
+class SettingsLogouted with _$SettingsLogouted implements SettingsEvent {
+  const factory SettingsLogouted() = _SettingsLogouted;
 }
 
-class SettingsLogouted extends SettingsEvent {
-  const SettingsLogouted();
-}
-
-class SettingsRegisterStatusChanged extends SettingsEvent {
-  const SettingsRegisterStatusChanged(this.value);
-
-  final bool value;
+@Freezed(copyWith: false)
+class SettingsRegisterStatusChanged with _$SettingsRegisterStatusChanged implements SettingsEvent {
+  const factory SettingsRegisterStatusChanged(bool value) = _SettingsRegisterStatusChanged;
 }

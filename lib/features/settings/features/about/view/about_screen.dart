@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -16,14 +15,7 @@ class AboutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AboutBloc, AboutState>(
-      listener: (context, state) {
-        final errorL10n = state.errorL10n(context);
-        if (errorL10n != null) {
-          context.showErrorSnackBar(errorL10n);
-          context.read<AboutBloc>().add(const AboutErrorDismissed());
-        }
-      },
+    return BlocBuilder<AboutBloc, AboutState>(
       builder: (context, state) {
         final themeData = Theme.of(context);
         final logo = themeData.extension<GenImages>()?.logo;

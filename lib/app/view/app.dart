@@ -382,6 +382,7 @@ class _AppState extends State<App> {
                   final provider = BlocProvider(
                     create: (context) {
                       return SettingsBloc(
+                        notificationsBloc: context.read<NotificationsBloc>(),
                         appBloc: context.read<AppBloc>(),
                         userRepository: context.read<UserRepository>(),
                         appRepository: context.read<AppRepository>(),
@@ -414,6 +415,7 @@ class _AppState extends State<App> {
                         final provider = BlocProvider(
                           create: (context) {
                             return AboutBloc(
+                              notificationsBloc: context.read<NotificationsBloc>(),
                               packageInfo: PackageInfo(),
                               infoRepository: context.read<InfoRepository>(),
                             )..add(const AboutStarted());

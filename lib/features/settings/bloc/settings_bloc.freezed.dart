@@ -15,11 +15,104 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
+mixin _$SettingsRefreshed {}
+
+/// @nodoc
+
+class _$_SettingsRefreshed implements _SettingsRefreshed {
+  const _$_SettingsRefreshed();
+
+  @override
+  String toString() {
+    return 'SettingsRefreshed()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$_SettingsRefreshed);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+}
+
+abstract class _SettingsRefreshed implements SettingsRefreshed {
+  const factory _SettingsRefreshed() = _$_SettingsRefreshed;
+}
+
+/// @nodoc
+mixin _$SettingsLogouted {}
+
+/// @nodoc
+
+class _$_SettingsLogouted implements _SettingsLogouted {
+  const _$_SettingsLogouted();
+
+  @override
+  String toString() {
+    return 'SettingsLogouted()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$_SettingsLogouted);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+}
+
+abstract class _SettingsLogouted implements SettingsLogouted {
+  const factory _SettingsLogouted() = _$_SettingsLogouted;
+}
+
+/// @nodoc
+mixin _$SettingsRegisterStatusChanged {
+  bool get value => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+
+class _$_SettingsRegisterStatusChanged
+    implements _SettingsRegisterStatusChanged {
+  const _$_SettingsRegisterStatusChanged(this.value);
+
+  @override
+  final bool value;
+
+  @override
+  String toString() {
+    return 'SettingsRegisterStatusChanged(value: $value)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_SettingsRegisterStatusChanged &&
+            (identical(other.value, value) || other.value == value));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, value);
+}
+
+abstract class _SettingsRegisterStatusChanged
+    implements SettingsRegisterStatusChanged {
+  const factory _SettingsRegisterStatusChanged(final bool value) =
+      _$_SettingsRegisterStatusChanged;
+
+  @override
+  bool get value;
+}
+
+/// @nodoc
 mixin _$SettingsState {
   bool get progress => throw _privateConstructorUsedError;
   bool get registerStatus => throw _privateConstructorUsedError;
   UserInfo? get info => throw _privateConstructorUsedError;
-  Object? get error => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $SettingsStateCopyWith<SettingsState> get copyWith =>
@@ -32,8 +125,7 @@ abstract class $SettingsStateCopyWith<$Res> {
           SettingsState value, $Res Function(SettingsState) then) =
       _$SettingsStateCopyWithImpl<$Res, SettingsState>;
   @useResult
-  $Res call(
-      {bool progress, bool registerStatus, UserInfo? info, Object? error});
+  $Res call({bool progress, bool registerStatus, UserInfo? info});
 
   $UserInfoCopyWith<$Res>? get info;
 }
@@ -54,7 +146,6 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
     Object? progress = null,
     Object? registerStatus = null,
     Object? info = freezed,
-    Object? error = freezed,
   }) {
     return _then(_value.copyWith(
       progress: null == progress
@@ -69,7 +160,6 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
           ? _value.info
           : info // ignore: cast_nullable_to_non_nullable
               as UserInfo?,
-      error: freezed == error ? _value.error : error,
     ) as $Val);
   }
 
@@ -94,8 +184,7 @@ abstract class _$$_SettingsStateCopyWith<$Res>
       __$$_SettingsStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {bool progress, bool registerStatus, UserInfo? info, Object? error});
+  $Res call({bool progress, bool registerStatus, UserInfo? info});
 
   @override
   $UserInfoCopyWith<$Res>? get info;
@@ -115,7 +204,6 @@ class __$$_SettingsStateCopyWithImpl<$Res>
     Object? progress = null,
     Object? registerStatus = null,
     Object? info = freezed,
-    Object? error = freezed,
   }) {
     return _then(_$_SettingsState(
       progress: null == progress
@@ -130,7 +218,6 @@ class __$$_SettingsStateCopyWithImpl<$Res>
           ? _value.info
           : info // ignore: cast_nullable_to_non_nullable
               as UserInfo?,
-      error: freezed == error ? _value.error : error,
     ));
   }
 }
@@ -139,10 +226,7 @@ class __$$_SettingsStateCopyWithImpl<$Res>
 
 class _$_SettingsState implements _SettingsState {
   const _$_SettingsState(
-      {this.progress = false,
-      required this.registerStatus,
-      this.info,
-      this.error});
+      {this.progress = false, required this.registerStatus, this.info});
 
   @override
   @JsonKey()
@@ -151,12 +235,10 @@ class _$_SettingsState implements _SettingsState {
   final bool registerStatus;
   @override
   final UserInfo? info;
-  @override
-  final Object? error;
 
   @override
   String toString() {
-    return 'SettingsState(progress: $progress, registerStatus: $registerStatus, info: $info, error: $error)';
+    return 'SettingsState(progress: $progress, registerStatus: $registerStatus, info: $info)';
   }
 
   @override
@@ -168,13 +250,11 @@ class _$_SettingsState implements _SettingsState {
                 other.progress == progress) &&
             (identical(other.registerStatus, registerStatus) ||
                 other.registerStatus == registerStatus) &&
-            (identical(other.info, info) || other.info == info) &&
-            const DeepCollectionEquality().equals(other.error, error));
+            (identical(other.info, info) || other.info == info));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, progress, registerStatus, info,
-      const DeepCollectionEquality().hash(error));
+  int get hashCode => Object.hash(runtimeType, progress, registerStatus, info);
 
   @JsonKey(ignore: true)
   @override
@@ -187,8 +267,7 @@ abstract class _SettingsState implements SettingsState {
   const factory _SettingsState(
       {final bool progress,
       required final bool registerStatus,
-      final UserInfo? info,
-      final Object? error}) = _$_SettingsState;
+      final UserInfo? info}) = _$_SettingsState;
 
   @override
   bool get progress;
@@ -196,8 +275,6 @@ abstract class _SettingsState implements SettingsState {
   bool get registerStatus;
   @override
   UserInfo? get info;
-  @override
-  Object? get error;
   @override
   @JsonKey(ignore: true)
   _$$_SettingsStateCopyWith<_$_SettingsState> get copyWith =>

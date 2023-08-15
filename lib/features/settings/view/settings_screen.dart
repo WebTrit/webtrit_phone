@@ -180,12 +180,6 @@ class SettingsScreen extends StatelessWidget {
         if (state.progress) {
           ProgressOverlay.insert(context, context.read<SettingsBloc>().stream.firstWhere((state) => !state.progress));
         }
-
-        final errorL10n = state.errorL10n(context);
-        if (errorL10n != null) {
-          context.showErrorSnackBar(errorL10n);
-          context.read<SettingsBloc>().add(const SettingsErrorDismissed());
-        }
       },
       child: scaffold,
     );

@@ -5,6 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:pub_semver/pub_semver.dart';
 
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 part 'about_bloc.freezed.dart';
@@ -17,6 +18,7 @@ final _logger = Logger('$AboutBloc');
 
 class AboutBloc extends Bloc<AboutEvent, AboutState> {
   AboutBloc({
+    required this.notificationsBloc,
     required PackageInfo packageInfo,
     required this.infoRepository,
   }) : super(AboutState(
@@ -27,9 +29,9 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
           coreUrl: infoRepository.coreUrl,
         )) {
     on<AboutStarted>(_onStarted, transformer: restartable());
-    on<AboutErrorDismissed>(_onErrorDismissed, transformer: droppable());
   }
 
+  final NotificationsBloc notificationsBloc;
   final InfoRepository infoRepository;
 
   void _onStarted(AboutStarted event, Emitter<AboutState> emit) async {
@@ -46,16 +48,13 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
     } catch (e, stackTrace) {
       _logger.warning('_onStarted', e, stackTrace);
 
+      notificationsBloc.add(NotificationsIssued(DefaultErrorNotification(e)));
+
       if (emit.isDone) return;
 
       emit(state.copyWith(
         progress: false,
-        error: e,
       ));
     }
-  }
-
-  void _onErrorDismissed(AboutErrorDismissed event, Emitter<AboutState> emit) async {
-    emit(state.copyWith(error: null));
   }
 }
