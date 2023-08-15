@@ -11,7 +11,7 @@ class SettingsRefreshed with _$SettingsRefreshed implements SettingsEvent {
 
 @Freezed(copyWith: false)
 class SettingsLogouted with _$SettingsLogouted implements SettingsEvent {
-  const factory SettingsLogouted() = _SettingsLogouted;
+  const factory SettingsLogouted({@Default(false) bool force}) = _SettingsLogouted;
 }
 
 @Freezed(copyWith: false)

@@ -841,6 +841,18 @@ abstract class AppLocalizations {
   /// **'Are you sure you want to logout?'**
   String get settings_LogoutConfirmDialog_content;
 
+  /// No description provided for @settings_ForceLogoutConfirmDialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm force logout'**
+  String get settings_ForceLogoutConfirmDialog_title;
+
+  /// No description provided for @settings_ForceLogoutConfirmDialog_content.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to force logout?'**
+  String get settings_ForceLogoutConfirmDialog_content;
+
   /// No description provided for @settings_AboutText_CoreVersionUndefined.
   ///
   /// In en, this message translates to:

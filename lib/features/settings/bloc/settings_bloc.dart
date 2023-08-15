@@ -90,8 +90,12 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     } catch (e, stackTrace) {
       _logger.warning('_onLogouted', e, stackTrace);
 
-      notificationsBloc.add(NotificationsIssued(DefaultErrorNotification(e)));
-      appBloc.maybeHandleError(e);
+      if (event.force) {
+        appBloc.add(const AppLogouted());
+      } else {
+        notificationsBloc.add(NotificationsIssued(DefaultErrorNotification(e)));
+        appBloc.maybeHandleError(e);
+      }
 
       if (emit.isDone) return;
 

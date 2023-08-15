@@ -412,6 +412,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_LogoutConfirmDialog_content => 'Are you sure you want to logout?';
 
   @override
+  String get settings_ForceLogoutConfirmDialog_title => 'Confirm force logout';
+
+  @override
+  String get settings_ForceLogoutConfirmDialog_content => 'Are you sure you want to force logout?';
+
+  @override
   String get settings_AboutText_CoreVersionUndefined => '?.?.?';
 
   @override

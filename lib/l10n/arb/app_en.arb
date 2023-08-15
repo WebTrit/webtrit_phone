@@ -461,6 +461,12 @@
   "settings_LogoutConfirmDialog_content": "Are you sure you want to logout?",
   "@settings_LogoutConfirmDialog_content": {
   },
+  "settings_ForceLogoutConfirmDialog_title": "Confirm force logout",
+  "@settings_ForceLogoutConfirmDialog_title": {
+  },
+  "settings_ForceLogoutConfirmDialog_content": "Are you sure you want to force logout?",
+  "@settings_ForceLogoutConfirmDialog_content": {
+  },
   "settings_AboutText_CoreVersionUndefined": "?.?.?",
   "@settings_AboutText_CoreVersionUndefined": {
   },

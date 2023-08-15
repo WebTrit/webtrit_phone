@@ -42,30 +42,41 @@ abstract class _SettingsRefreshed implements SettingsRefreshed {
 }
 
 /// @nodoc
-mixin _$SettingsLogouted {}
+mixin _$SettingsLogouted {
+  bool get force => throw _privateConstructorUsedError;
+}
 
 /// @nodoc
 
 class _$_SettingsLogouted implements _SettingsLogouted {
-  const _$_SettingsLogouted();
+  const _$_SettingsLogouted({this.force = false});
+
+  @override
+  @JsonKey()
+  final bool force;
 
   @override
   String toString() {
-    return 'SettingsLogouted()';
+    return 'SettingsLogouted(force: $force)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_SettingsLogouted);
+        (other.runtimeType == runtimeType &&
+            other is _$_SettingsLogouted &&
+            (identical(other.force, force) || other.force == force));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, force);
 }
 
 abstract class _SettingsLogouted implements SettingsLogouted {
-  const factory _SettingsLogouted() = _$_SettingsLogouted;
+  const factory _SettingsLogouted({final bool force}) = _$_SettingsLogouted;
+
+  @override
+  bool get force;
 }
 
 /// @nodoc
