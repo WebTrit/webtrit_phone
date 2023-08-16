@@ -504,6 +504,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       progress: (event) => __onCallSignalingEventProgress(event, emit),
       accepted: (event) => __onCallSignalingEventAccepted(event, emit),
       hangup: (event) => __onCallSignalingEventHangup(event, emit),
+      updating: (event) => __onCallSignalingEventUpdating(event, emit),
+      updated: (event) => __onCallSignalingEventUpdated(event, emit),
     );
   }
 
@@ -673,6 +675,63 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     emit(state.copyWithPopActiveCall(event.callId.uuid));
 
     await callkeep.reportEndCall(event.callId.uuid, CallkeepEndCallReason.remoteEnded);
+  }
+
+  Future<void> __onCallSignalingEventUpdating(
+    _CallSignalingEventUpdating event,
+    Emitter<CallState> emit,
+  ) async {
+    final video = event.jsep?.hasVideo ?? false;
+
+    final handle = CallkeepHandle.number(event.caller);
+
+    await callkeep.reportUpdateCall(
+      event.callId.uuid,
+      handle,
+      event.callerDisplayName,
+      video,
+    );
+
+    emit(state.copyWithMappedActiveCall(event.callId.uuid, (activeCall) {
+      return activeCall.copyWith(
+        handle: handle,
+        displayName: event.callerDisplayName,
+        video: video,
+        updating: true,
+      );
+    }));
+
+    final jsep = event.jsep;
+    if (jsep != null) {
+      final remoteDescription = jsep.toDescription();
+      await state.performOnActiveCall(event.callId.uuid, (activeCall) async {
+        final peerConnection = await _peerConnectionRetrieve(activeCall.callId.uuid);
+        if (peerConnection == null) {
+          _logger.warning('__onCallSignalingEventUpdating: peerConnection is null - most likely some state issue');
+        } else {
+          await peerConnection.setRemoteDescription(remoteDescription);
+          final localDescription = await peerConnection.createAnswer({});
+          await _signalingClient?.execute(UpdateRequest(
+            transaction: WebtritSignalingClient.generateTransactionId(),
+            line: activeCall.line,
+            callId: activeCall.callId.toString(),
+            jsep: localDescription.toMap(),
+          ));
+          await peerConnection.setLocalDescription(localDescription);
+        }
+      });
+    }
+  }
+
+  Future<void> __onCallSignalingEventUpdated(
+    _CallSignalingEventUpdated event,
+    Emitter<CallState> emit,
+  ) async {
+    emit(state.copyWithMappedActiveCall(event.callId.uuid, (activeCall) {
+      return activeCall.copyWith(
+        updating: false,
+      );
+    }));
   }
 
   // processing call control events
@@ -1198,6 +1257,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         callee: event.callee,
         caller: event.caller,
         callerDisplayName: event.callerDisplayName,
+        referredBy: event.referredBy,
+        replaceCallId: event.replaceCallId,
+        isFocus: event.isFocus,
         jsep: JsepValue.fromOptional(event.jsep),
       ));
     } else if (event is RingingEvent) {
@@ -1225,6 +1287,23 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         callId: CallIdValue(event.callId),
         code: event.code,
         reason: event.reason,
+      ));
+    } else if (event is UpdatingCallEvent) {
+      add(_CallSignalingEvent.updating(
+        line: event.line,
+        callId: CallIdValue(event.callId),
+        callee: event.callee,
+        caller: event.caller,
+        callerDisplayName: event.callerDisplayName,
+        referredBy: event.referredBy,
+        replaceCallId: event.replaceCallId,
+        isFocus: event.isFocus,
+        jsep: JsepValue.fromOptional(event.jsep),
+      ));
+    } else if (event is UpdatedEvent) {
+      add(_CallSignalingEvent.updated(
+        line: event.line,
+        callId: CallIdValue(event.callId),
       ));
     } else {
       _logger.warning('unhandled signaling event $event');
