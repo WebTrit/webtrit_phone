@@ -460,9 +460,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
-    final renderers = RTCVideoRenderers();
-    await renderers.initialize();
-
     emit(state.copyWithPushActiveCall(ActiveCall(
       direction: Direction.incoming,
       line: _kUndefinedLine,
@@ -471,7 +468,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       displayName: event.displayName,
       video: event.video,
       createdTime: clock.now(),
-      renderers: renderers,
+      renderers: RTCVideoRenderers()..initialize(),
     )));
 
     // the rest logic implemented within _onSignalingStateHandshake on IncomingCallEvent from call logs processing
@@ -537,9 +534,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         return;
       }
     } else {
-      final renderers = RTCVideoRenderers();
-      await renderers.initialize();
-
       emit(state.copyWithPushActiveCall(ActiveCall(
         direction: Direction.incoming,
         line: event.line,
@@ -548,7 +542,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         displayName: event.callerDisplayName,
         video: video,
         createdTime: clock.now(),
-        renderers: renderers,
+        renderers: RTCVideoRenderers()..initialize(),
       )));
     }
 
@@ -716,9 +710,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (error != null) {
       _logger.warning('__onCallControlEventStarted error: $error');
     } else {
-      final renderers = RTCVideoRenderers();
-      await renderers.initialize();
-
       emit(state.copyWithPushActiveCall(ActiveCall(
         direction: Direction.outgoing,
         line: event.line ?? state.retrieveIdleLine() ?? _kUndefinedLine,
@@ -727,7 +718,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         displayName: event.displayName,
         video: event.video,
         createdTime: clock.now(),
-        renderers: renderers,
+        renderers: RTCVideoRenderers()..initialize(),
       )));
     }
   }
