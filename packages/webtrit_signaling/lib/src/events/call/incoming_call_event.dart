@@ -8,6 +8,7 @@ class IncomingCallEvent extends CallEvent {
     required this.callee,
     required this.caller,
     this.callerDisplayName,
+    this.referredBy,
     this.replaceCallId,
     this.isFocus,
     this.jsep,
@@ -16,6 +17,7 @@ class IncomingCallEvent extends CallEvent {
   final String callee;
   final String caller;
   final String? callerDisplayName;
+  final String? referredBy;
   final String? replaceCallId;
   final bool? isFocus;
   final Map<String, dynamic>? jsep;
@@ -26,6 +28,7 @@ class IncomingCallEvent extends CallEvent {
         callee,
         caller,
         callerDisplayName,
+        referredBy,
         replaceCallId,
         isFocus,
         jsep,
@@ -46,6 +49,7 @@ class IncomingCallEvent extends CallEvent {
       callee: json['callee'],
       caller: json['caller'],
       callerDisplayName: json['caller_display_name'],
+      referredBy: json['referred_by'],
       replaceCallId: json['replace_call_id'],
       isFocus: json['is_focus'],
       jsep: json['jsep'],
