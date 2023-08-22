@@ -12,7 +12,7 @@ version: 1.1.0+1010000
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
-  flutter: ^3.10.0
+  flutter: ^3.13.0
 
 dependencies:
   flutter:
@@ -29,30 +29,30 @@ dependencies:
   cross_file: ^0.3.3
   device_info_plus: ^9.0.1
   equatable: ^2.0.5
-  firebase_analytics: ^10.4.4
+  firebase_analytics: ^10.4.5
   firebase_app_installations: ^0.2.3
-  firebase_core: ^2.15.0
-  firebase_crashlytics: ^3.3.4
-  firebase_messaging: ^14.6.5
+  firebase_core: ^2.15.1
+  firebase_crashlytics: ^3.3.5
+  firebase_messaging: ^14.6.6
   flutter_bloc: ^8.1.3
   flutter_contacts: ^1.1.7
   flutter_secure_storage: ^8.0.0
   flutter_svg: ^2.0.7
-  flutter_webrtc: ^0.9.36
+  flutter_webrtc: ^0.9.40
   formz: ^0.6.0
   freezed_annotation: ^2.4.1
-  go_router: ^10.0.0
+  go_router: ^10.1.0
   google_fonts: ^5.1.0
   intl: any
   just_audio: ^0.9.33
   linkify: ^5.0.0
   logging: ^1.2.0
-  logging_appenders: ^1.1.0
+  logging_appenders: ^1.2.0
   material_color_utilities: any
   meta: ^1.9.1
   package_info_plus: ^4.1.0
   path: ^1.8.3
-  path_provider: ^2.0.15
+  path_provider: ^2.1.0
   permission_handler: ^10.4.3
   permission_handler_web: ^0.0.2
   provider: ^6.0.5
