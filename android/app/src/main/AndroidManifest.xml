@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <application
-        android:label="WebTrit"
+        android:label="@string/APP_NAME"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:allowBackup="false">
