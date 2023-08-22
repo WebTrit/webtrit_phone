@@ -11,6 +11,17 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/services.dart';
 
+class $AssetsCallkeepGen {
+  const $AssetsCallkeepGen();
+
+  /// File path: assets/callkeep/ios_icon_tempate_image.png
+  AssetGenImage get iosIconTempateImage =>
+      const AssetGenImage('assets/callkeep/ios_icon_tempate_image.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [iosIconTempateImage];
+}
+
 class $AssetsLoginGen {
   const $AssetsLoginGen();
 
@@ -35,27 +46,16 @@ class $AssetsRingtonesGen {
   List<String> get values => [incomingCall1, outgoingCall1];
 }
 
-class $AssetsSystemGen {
-  const $AssetsSystemGen();
-
-  /// File path: assets/system/logo_icon_tempate_image.png
-  AssetGenImage get logoIconTempateImage =>
-      const AssetGenImage('assets/system/logo_icon_tempate_image.png');
-
-  /// List of all assets
-  List<AssetGenImage> get values => [logoIconTempateImage];
-}
-
 class Assets {
   Assets._();
 
+  static const $AssetsCallkeepGen callkeep = $AssetsCallkeepGen();
   static const $AssetsLoginGen login = $AssetsLoginGen();
   static const SvgGenImage primaryOnboardinLogo =
       SvgGenImage('assets/primary_onboardin_logo.svg');
   static const $AssetsRingtonesGen ringtones = $AssetsRingtonesGen();
   static const SvgGenImage secondaryOnboardinLogo =
       SvgGenImage('assets/secondary_onboardin_logo.svg');
-  static const $AssetsSystemGen system = $AssetsSystemGen();
 
   /// List of all assets
   List<SvgGenImage> get values =>

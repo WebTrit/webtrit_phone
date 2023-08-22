@@ -34,7 +34,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/logo.svg
-    - assets/logoIconTemplateImage.png
+    - assets/
+    - assets/callkeep/
     - assets/login/
     - assets/ringtones/
