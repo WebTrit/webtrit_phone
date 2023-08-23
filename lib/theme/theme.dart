@@ -4,7 +4,6 @@ export 'gradients.dart';
 export 'input_decorations.dart';
 export 'logo_assets.dart';
 export 'outlined_button_styles.dart';
-export 'portaone.dart';
 export 'text_button_styles.dart';
 export 'theme_asset.dart';
 export 'theme_provider.dart';
