@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/utils/utils.dart';
+
 import 'custom_color.dart';
-import 'svg_notifier.dart';
 
 class ThemeSettings {
   const ThemeSettings({
@@ -10,15 +11,17 @@ class ThemeSettings {
     this.darkColorSchemeOverride,
     required this.primaryGradientColors,
     this.fontFamily,
-    this.imagesScheme,
+    required this.primaryOnboardingLogo,
+    required this.secondaryOnboardingLogo,
   });
 
   final Color seedColor;
   final ColorSchemeOverride? lightColorSchemeOverride;
   final ColorSchemeOverride? darkColorSchemeOverride;
   final List<CustomColor> primaryGradientColors;
-  final ImagesScheme? imagesScheme;
   final String? fontFamily;
+  final SvgAssetImg? primaryOnboardingLogo;
+  final SvgAssetImg? secondaryOnboardingLogo;
 }
 
 class ColorSchemeOverride {
@@ -85,20 +88,4 @@ class ColorSchemeOverride {
   final Color? shadow;
   final Color? scrim;
   final Color? surfaceTint;
-}
-
-class ImagesScheme {
-  ImagesScheme({
-    SvgNotifier? primaryOnboardingLogoNotifier,
-    SvgNotifier? secondaryOnboardingLogoNotifier,
-  })  : _primaryOnboardingLogoNotifier = primaryOnboardingLogoNotifier ?? SvgNotifier(),
-        _secondaryOnboardingLogoNotifier = secondaryOnboardingLogoNotifier ?? SvgNotifier();
-
-  final SvgNotifier _primaryOnboardingLogoNotifier;
-
-  final SvgNotifier _secondaryOnboardingLogoNotifier;
-
-  SvgNotifier get primaryOnboardingLogo => _primaryOnboardingLogoNotifier;
-
-  SvgNotifier get secondaryOnboardingLogo => _secondaryOnboardingLogoNotifier;
 }

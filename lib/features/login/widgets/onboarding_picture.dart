@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
-import 'package:webtrit_phone/widgets/widgets.dart';
 
 class OnboardingPicture extends StatelessWidget {
   const OnboardingPicture({Key? key}) : super(key: key);
@@ -10,7 +9,7 @@ class OnboardingPicture extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQueryData = MediaQuery.of(context);
     final themeData = Theme.of(context);
-    final loginOnboarding = themeData.extension<SvgNotifierImages>()?.primaryOnboardinLogo;
+    final loginOnboarding = themeData.extension<SvgAssets>()?.primaryOnboardingLogo;
     final loginOnboardingHeight = themeData.textTheme.headlineSmall!.fontSize! * 10;
 
     return Container(
@@ -21,9 +20,13 @@ class OnboardingPicture extends StatelessWidget {
           Radius.circular(20.0),
         ),
       ),
-      child: StreamImage(
-        stream: loginOnboarding,
-        height: loginOnboardingHeight,
+      child: Center(
+        child: loginOnboarding?.svg(
+              height: loginOnboardingHeight,
+            ) ??
+            SizedBox(
+              height: loginOnboardingHeight,
+            ),
       ),
     );
   }

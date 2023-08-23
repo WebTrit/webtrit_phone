@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 import 'theme.dart';
 
@@ -103,13 +104,13 @@ class ThemeProvider extends InheritedWidget {
     );
   }
 
-  SvgNotifierImages svgNotifierImages({
-    SvgNotifier? primaryOnboardinLogo,
-    SvgNotifier? secondaryOnboardinLogo,
+  SvgAssets svgAssets({
+    required SvgAssetImg? primaryOnboardinLogo,
+    required SvgAssetImg? secondaryOnboardinLogo,
   }) {
-    return SvgNotifierImages(
-      primaryOnboardinLogo: primaryOnboardinLogo,
-      secondaryOnboardinLogo: secondaryOnboardinLogo,
+    return SvgAssets(
+      primaryOnboardingLogo: primaryOnboardinLogo,
+      secondaryOnboardingLogo: secondaryOnboardinLogo,
     );
   }
 
@@ -281,9 +282,9 @@ class ThemeProvider extends InheritedWidget {
         outlinedButtonStyles(colorScheme),
         textButtonStyles(colorScheme),
         gradients(colorScheme),
-        svgNotifierImages(
-          primaryOnboardinLogo: settings.imagesScheme?.primaryOnboardingLogo,
-          secondaryOnboardinLogo: settings.imagesScheme?.secondaryOnboardingLogo,
+        svgAssets(
+          primaryOnboardinLogo: settings.primaryOnboardingLogo,
+          secondaryOnboardinLogo: settings.secondaryOnboardingLogo,
         ),
       ],
       // COLOR

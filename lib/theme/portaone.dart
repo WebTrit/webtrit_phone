@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:webtrit_phone/app/assets.gen.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 import 'theme.dart';
 
@@ -22,11 +23,6 @@ const _gradientBottom = CustomColor(
   blend: false,
 );
 
-final imageScheme = ImagesScheme(
-  primaryOnboardingLogoNotifier: SvgNotifier(asset: Assets.logo),
-  secondaryOnboardingLogoNotifier: SvgNotifier(asset: Assets.logo),
-);
-
 final portaoneThemeSettings = ThemeSettings(
   seedColor: _seedColor,
   lightColorSchemeOverride: const ColorSchemeOverride(
@@ -43,6 +39,7 @@ final portaoneThemeSettings = ThemeSettings(
     onSurface: _darkBlue,
   ),
   primaryGradientColors: [_gradientTop, _gradientBottom],
-  imagesScheme: imageScheme,
   fontFamily: 'Montserrat',
+  primaryOnboardingLogo: SvgAssetImg.asset(Assets.logo.path),
+  secondaryOnboardingLogo: SvgAssetImg.asset(Assets.logo.path),
 );

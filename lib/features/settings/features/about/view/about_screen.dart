@@ -19,7 +19,7 @@ class AboutScreen extends StatelessWidget {
     return BlocBuilder<AboutBloc, AboutState>(
       builder: (context, state) {
         final themeData = Theme.of(context);
-        final logo = themeData.extension<SvgNotifierImages>()?.primaryOnboardinLogo;
+        final logo = themeData.extension<SvgAssets>()?.primaryOnboardingLogo;
         final logoHeight = themeData.textTheme.displayLarge!.fontSize! * 1.5;
         final delimiterHeight = themeData.textTheme.titleLarge!.fontSize!;
         return Scaffold(
@@ -31,8 +31,7 @@ class AboutScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (logo != null)
-                  StreamImage(
-                    stream: logo,
+                  logo.svg(
                     height: logoHeight,
                   ),
                 Text(

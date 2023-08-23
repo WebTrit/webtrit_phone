@@ -9,7 +9,6 @@ export 'logos.dart';
 export 'main_app_bar.dart';
 export 'progress_overlay.dart';
 export 'sized_circular_progress_indicator.dart';
-export 'stream_image.dart';
 export 'tab_bar.dart';
 export 'text_buttons_table.dart';
 export 'unfocuser.dart';
