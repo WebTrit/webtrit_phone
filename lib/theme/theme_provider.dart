@@ -284,7 +284,7 @@ class ThemeProvider extends InheritedWidget {
         textButtonStyles(colorScheme),
         gradients(colorScheme),
         genImages(
-          logo: Assets.logo,
+          logo: Assets.primaryOnboardinLogo,
           loginOnboarding: Assets.login.onboarding1,
         ),
       ],
