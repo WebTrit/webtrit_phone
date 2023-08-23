@@ -40,6 +40,6 @@ final portaoneThemeSettings = ThemeSettings(
   ),
   primaryGradientColors: [_gradientTop, _gradientBottom],
   fontFamily: 'Montserrat',
-  primaryOnboardingLogo: SvgAssetImg.asset(Assets.logo.path),
-  secondaryOnboardingLogo: SvgAssetImg.asset(Assets.logo.path),
+  primaryOnboardingLogo: SvgAssetImg.asset(Assets.primaryOnboardinLogo.path),
+  secondaryOnboardingLogo: SvgAssetImg.asset(Assets.secondaryOnboardinLogo.path),
 );
