@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'custom_color.dart';
+import 'theme_asset.dart';
 
 class ThemeSettings {
   const ThemeSettings({
@@ -9,6 +10,8 @@ class ThemeSettings {
     this.darkColorSchemeOverride,
     required this.primaryGradientColors,
     this.fontFamily,
+    required this.primaryOnboardingLogo,
+    required this.secondaryOnboardingLogo,
   });
 
   final Color seedColor;
@@ -16,6 +19,8 @@ class ThemeSettings {
   final ColorSchemeOverride? darkColorSchemeOverride;
   final List<CustomColor> primaryGradientColors;
   final String? fontFamily;
+  final ThemeSvgAsset primaryOnboardingLogo;
+  final ThemeSvgAsset secondaryOnboardingLogo;
 }
 
 class ColorSchemeOverride {

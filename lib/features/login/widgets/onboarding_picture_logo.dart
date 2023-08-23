@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class OnboardingPictureLogo extends StatelessWidget {
@@ -18,7 +19,9 @@ class OnboardingPictureLogo extends StatelessWidget {
       color: color,
       fontWeight: FontWeight.w600,
     );
+    final logo = themeData.extension<LogoAssets>()!.primaryOnboarding;
     return WebTritPhonePictureLogo(
+      asset: logo,
       logoWidth: mediaQueryData.size.width * 0.42,
       dividerHeight: titleStyle.fontSize,
       titleStyle: titleStyle,
