@@ -108,6 +108,7 @@ flutter:
     - assets/callkeep/
     - assets/login/
     - assets/ringtones/
+    - assets/style/
 
 flutter_gen:
   output: lib/app/
