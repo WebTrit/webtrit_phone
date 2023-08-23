@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+
 import 'package:flutter_svg/svg.dart';
 
 abstract class SvgAssetImg {
@@ -8,6 +10,10 @@ abstract class SvgAssetImg {
 
   static asset(String path) {
     return AssetSvg(path);
+  }
+
+  static memory(Uint8List bytes) {
+    return MemorySvg(bytes);
   }
 
   Widget svg({
@@ -100,6 +106,48 @@ class AssetSvg extends SvgAssetImg {
       matchTextDirection: matchTextDirection,
       bundle: bundle,
       package: package,
+      width: width,
+      height: height,
+      fit: fit,
+      alignment: alignment,
+      allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
+      placeholderBuilder: placeholderBuilder,
+      semanticsLabel: semanticsLabel,
+      excludeFromSemantics: excludeFromSemantics,
+      theme: theme,
+      colorFilter: colorFilter,
+      clipBehavior: clipBehavior,
+    );
+  }
+}
+
+class MemorySvg extends SvgAssetImg {
+  MemorySvg(this._bytes);
+
+  final Uint8List _bytes;
+
+  @override
+  Widget svg({
+    Key? key,
+    bool matchTextDirection = false,
+    AssetBundle? bundle,
+    String? package,
+    double? width,
+    double? height,
+    BoxFit fit = BoxFit.contain,
+    AlignmentGeometry alignment = Alignment.center,
+    bool allowDrawingOutsideViewBox = false,
+    WidgetBuilder? placeholderBuilder,
+    String? semanticsLabel,
+    bool excludeFromSemantics = false,
+    SvgTheme theme = const SvgTheme(),
+    ColorFilter? colorFilter,
+    Clip clipBehavior = Clip.hardEdge,
+  }) {
+    return SvgPicture.memory(
+      _bytes,
+      key: key,
+      matchTextDirection: matchTextDirection,
       width: width,
       height: height,
       fit: fit,
