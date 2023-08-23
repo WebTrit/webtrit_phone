@@ -104,8 +104,8 @@ class ThemeProvider extends InheritedWidget {
   }
 
   LogoAssets logoAssets({
-    required ThemeSvgAsset? primaryOnboardin,
-    required ThemeSvgAsset? secondaryOnboardin,
+    required ThemeSvgAsset primaryOnboardin,
+    required ThemeSvgAsset secondaryOnboardin,
   }) {
     return LogoAssets(
       primaryOnboarding: primaryOnboardin,

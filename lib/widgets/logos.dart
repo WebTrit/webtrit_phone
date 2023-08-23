@@ -31,16 +31,12 @@ class WebTritPhonePictureLogo extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        logo?.svg(
-              width: logoWidth,
-              height: logoHeight,
-              fit: logoFit,
-              alignment: logoAlignment,
-            ) ??
-            SizedBox(
-              width: logoWidth,
-              height: logoHeight,
-            ),
+        logo.svg(
+          width: logoWidth,
+          height: logoHeight,
+          fit: logoFit,
+          alignment: logoAlignment,
+        ),
         SizedBox(
           height: dividerHeight ?? fontSize / 3,
         ),

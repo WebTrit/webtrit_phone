@@ -8,8 +8,8 @@ class LogoAssets extends ThemeExtension<LogoAssets> {
     required this.secondaryOnboarding,
   });
 
-  final ThemeSvgAsset? primaryOnboarding;
-  final ThemeSvgAsset? secondaryOnboarding;
+  final ThemeSvgAsset primaryOnboarding;
+  final ThemeSvgAsset secondaryOnboarding;
 
   @override
   ThemeExtension<LogoAssets> copyWith({

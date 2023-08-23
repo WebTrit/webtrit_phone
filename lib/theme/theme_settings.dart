@@ -19,8 +19,8 @@ class ThemeSettings {
   final ColorSchemeOverride? darkColorSchemeOverride;
   final List<CustomColor> primaryGradientColors;
   final String? fontFamily;
-  final ThemeSvgAsset? primaryOnboardingLogo;
-  final ThemeSvgAsset? secondaryOnboardingLogo;
+  final ThemeSvgAsset primaryOnboardingLogo;
+  final ThemeSvgAsset secondaryOnboardingLogo;
 }
 
 class ColorSchemeOverride {
