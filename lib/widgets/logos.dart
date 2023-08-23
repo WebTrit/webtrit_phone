@@ -6,6 +6,7 @@ import 'package:webtrit_phone/theme/theme.dart';
 class WebTritPhonePictureLogo extends StatelessWidget {
   const WebTritPhonePictureLogo({
     super.key,
+    required this.asset,
     this.logoWidth,
     this.logoHeight,
     this.logoFit = BoxFit.contain,
@@ -14,6 +15,7 @@ class WebTritPhonePictureLogo extends StatelessWidget {
     required this.titleStyle,
   });
 
+  final ThemeSvgAsset asset;
   final double? logoWidth;
   final double? logoHeight;
   final BoxFit logoFit;
@@ -24,14 +26,12 @@ class WebTritPhonePictureLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fontSize = titleStyle.fontSize!;
-    final themeData = Theme.of(context);
-    final logo = themeData.extension<LogoAssets>()!.primaryOnboarding;
     final logoHeight = this.logoHeight ?? (logoWidth == null ? fontSize * 2.2 : null);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        logo.svg(
+        asset.svg(
           width: logoWidth,
           height: logoHeight,
           fit: logoFit,
