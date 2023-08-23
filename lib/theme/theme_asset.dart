@@ -3,19 +3,9 @@ import 'package:flutter/foundation.dart';
 
 import 'package:flutter_svg/svg.dart';
 
-abstract class SvgAssetImg {
-  static network(String url) {
-    return NetworkSvg(url);
-  }
+abstract class ThemeAsset {}
 
-  static asset(String path) {
-    return AssetSvg(path);
-  }
-
-  static memory(Uint8List bytes) {
-    return MemorySvg(bytes);
-  }
-
+abstract class ThemeSvgAsset extends ThemeAsset {
   Widget svg({
     Key? key,
     bool matchTextDirection = false,
@@ -35,8 +25,8 @@ abstract class SvgAssetImg {
   });
 }
 
-class NetworkSvg extends SvgAssetImg {
-  NetworkSvg(this._url);
+class ThemeNetworkSvgAsset extends ThemeSvgAsset {
+  ThemeNetworkSvgAsset(this._url);
 
   final String _url;
 
@@ -77,8 +67,8 @@ class NetworkSvg extends SvgAssetImg {
   }
 }
 
-class AssetSvg extends SvgAssetImg {
-  AssetSvg(this._assetName);
+class ThemeAssetSvgAsset extends ThemeSvgAsset {
+  ThemeAssetSvgAsset(this._assetName);
 
   final String _assetName;
 
@@ -121,8 +111,8 @@ class AssetSvg extends SvgAssetImg {
   }
 }
 
-class MemorySvg extends SvgAssetImg {
-  MemorySvg(this._bytes);
+class ThemeMemorySvgAsset extends ThemeSvgAsset {
+  ThemeMemorySvgAsset(this._bytes);
 
   final Uint8List _bytes;
 

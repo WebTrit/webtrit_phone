@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 
 import 'theme.dart';
 
@@ -105,8 +104,8 @@ class ThemeProvider extends InheritedWidget {
   }
 
   SvgAssets svgAssets({
-    required SvgAssetImg? primaryOnboardinLogo,
-    required SvgAssetImg? secondaryOnboardinLogo,
+    required ThemeSvgAsset? primaryOnboardinLogo,
+    required ThemeSvgAsset? secondaryOnboardinLogo,
   }) {
     return SvgAssets(
       primaryOnboardingLogo: primaryOnboardinLogo,

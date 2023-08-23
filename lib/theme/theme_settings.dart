@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/utils/utils.dart';
-
 import 'custom_color.dart';
+import 'theme_asset.dart';
 
 class ThemeSettings {
   const ThemeSettings({
@@ -20,8 +19,8 @@ class ThemeSettings {
   final ColorSchemeOverride? darkColorSchemeOverride;
   final List<CustomColor> primaryGradientColors;
   final String? fontFamily;
-  final SvgAssetImg? primaryOnboardingLogo;
-  final SvgAssetImg? secondaryOnboardingLogo;
+  final ThemeSvgAsset? primaryOnboardingLogo;
+  final ThemeSvgAsset? secondaryOnboardingLogo;
 }
 
 class ColorSchemeOverride {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:webtrit_phone/app/assets.gen.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 
 import 'theme.dart';
 
@@ -40,6 +39,6 @@ final portaoneThemeSettings = ThemeSettings(
   ),
   primaryGradientColors: [_gradientTop, _gradientBottom],
   fontFamily: 'Montserrat',
-  primaryOnboardingLogo: SvgAssetImg.asset(Assets.primaryOnboardinLogo.path),
-  secondaryOnboardingLogo: SvgAssetImg.asset(Assets.secondaryOnboardinLogo.path),
+  primaryOnboardingLogo: ThemeAssetSvgAsset(Assets.primaryOnboardinLogo.path),
+  secondaryOnboardingLogo: ThemeAssetSvgAsset(Assets.secondaryOnboardinLogo.path),
 );

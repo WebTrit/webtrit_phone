@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:webtrit_phone/utils/utils.dart';
+
+import 'theme_asset.dart';
 
 class SvgAssets extends ThemeExtension<SvgAssets> {
   const SvgAssets({
@@ -7,13 +8,13 @@ class SvgAssets extends ThemeExtension<SvgAssets> {
     required this.secondaryOnboardingLogo,
   });
 
-  final SvgAssetImg? primaryOnboardingLogo;
-  final SvgAssetImg? secondaryOnboardingLogo;
+  final ThemeSvgAsset? primaryOnboardingLogo;
+  final ThemeSvgAsset? secondaryOnboardingLogo;
 
   @override
   ThemeExtension<SvgAssets> copyWith({
-    SvgAssetImg? primaryOnboardingLogo,
-    SvgAssetImg? secondaryOnboardingLogo,
+    ThemeSvgAsset? primaryOnboardingLogo,
+    ThemeSvgAsset? secondaryOnboardingLogo,
   }) {
     return SvgAssets(
       primaryOnboardingLogo: primaryOnboardingLogo ?? this.primaryOnboardingLogo,

@@ -6,5 +6,6 @@ export 'outlined_button_styles.dart';
 export 'portaone.dart';
 export 'svg_assets.dart';
 export 'text_button_styles.dart';
+export 'theme_asset.dart';
 export 'theme_provider.dart';
 export 'theme_settings.dart';
