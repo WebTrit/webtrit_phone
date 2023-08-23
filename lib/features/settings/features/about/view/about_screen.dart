@@ -18,7 +18,7 @@ class AboutScreen extends StatelessWidget {
     return BlocBuilder<AboutBloc, AboutState>(
       builder: (context, state) {
         final themeData = Theme.of(context);
-        final logo = themeData.extension<SvgAssets>()?.primaryOnboardingLogo;
+        final logo = themeData.extension<LogoAssets>()?.primaryOnboarding;
         final logoHeight = themeData.textTheme.displayLarge!.fontSize! * 1.5;
         final delimiterHeight = themeData.textTheme.titleLarge!.fontSize!;
         return Scaffold(

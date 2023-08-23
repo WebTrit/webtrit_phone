@@ -25,7 +25,7 @@ class WebTritPhonePictureLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     final fontSize = titleStyle.fontSize!;
     final themeData = Theme.of(context);
-    final logo = themeData.extension<SvgAssets>()!.primaryOnboardingLogo;
+    final logo = themeData.extension<LogoAssets>()!.primaryOnboarding;
     final logoHeight = this.logoHeight ?? (logoWidth == null ? fontSize * 2.2 : null);
 
     return Column(

@@ -103,13 +103,13 @@ class ThemeProvider extends InheritedWidget {
     );
   }
 
-  SvgAssets svgAssets({
-    required ThemeSvgAsset? primaryOnboardinLogo,
-    required ThemeSvgAsset? secondaryOnboardinLogo,
+  LogoAssets logoAssets({
+    required ThemeSvgAsset? primaryOnboardin,
+    required ThemeSvgAsset? secondaryOnboardin,
   }) {
-    return SvgAssets(
-      primaryOnboardingLogo: primaryOnboardinLogo,
-      secondaryOnboardingLogo: secondaryOnboardinLogo,
+    return LogoAssets(
+      primaryOnboarding: primaryOnboardin,
+      secondaryOnboarding: secondaryOnboardin,
     );
   }
 
@@ -281,9 +281,9 @@ class ThemeProvider extends InheritedWidget {
         outlinedButtonStyles(colorScheme),
         textButtonStyles(colorScheme),
         gradients(colorScheme),
-        svgAssets(
-          primaryOnboardinLogo: settings.primaryOnboardingLogo,
-          secondaryOnboardinLogo: settings.secondaryOnboardingLogo,
+        logoAssets(
+          primaryOnboardin: settings.primaryOnboardingLogo,
+          secondaryOnboardin: settings.secondaryOnboardingLogo,
         ),
       ],
       // COLOR
