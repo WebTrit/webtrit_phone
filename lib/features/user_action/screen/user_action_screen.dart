@@ -86,7 +86,9 @@ class _UserActionScreenState extends State<UserActionScreen> {
 
   bool _isAvailableToShowing() {
     final router = GoRouter.of(context);
-    return _availability.map((e) => router.namedLocation(e)).contains(router.location);
+    final location = router.routerDelegate.currentConfiguration.last.matchedLocation;
+
+    return _availability.map((e) => router.namedLocation(e)).contains(location);
   }
 
   void _showConverterButton(BuildContext context) {

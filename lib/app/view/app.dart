@@ -491,7 +491,7 @@ class _AppState extends State<App> {
                     name: MainRoute.userAction,
                     path: 'user-action',
                     builder: (context, state) {
-                      final url = Uri.parse(state.queryParameters['url']!);
+                      final url = Uri.parse(state.uri.queryParameters['url']!);
                       final widget = WebInviteFriendsScreen(initialUri: url);
                       return widget;
                     },
