@@ -6,12 +6,8 @@ import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import '_web_socket_channel/_web_socket_channel.dart'
-    if (dart.library.html) '_web_socket_channel/_web_socket_channel_html.dart'
-    if (dart.library.io) '_web_socket_channel/_web_socket_channel_io.dart' as platform;
-import '_web_socket_connect/_web_socket_connect.dart'
-    if (dart.library.html) '_web_socket_connect/_web_socket_connect_html.dart'
-    if (dart.library.io) '_web_socket_connect/_web_socket_connect_io.dart' as platform;
+import 'package:_web_socket_channel/_web_socket_channel.dart';
+
 import 'events/events.dart';
 import 'exceptions.dart';
 import 'handshakes/handshakes.dart';
@@ -87,12 +83,12 @@ class WebtritSignalingClient {
       },
     ).toString();
 
-    final ws = await platform.connect(
+    final ws = await connectWebSocket(
       signalingUrl,
       protocols: [subprotocol],
       connectionTimeout: connectionTimeout,
     );
-    final wsc = platform.createWebSocketChannel(ws);
+    final wsc = createWebSocketChannel(ws);
     return WebtritSignalingClient.inner(wsc);
   }
 
@@ -119,21 +115,23 @@ class WebtritSignalingClient {
     );
   }
 
-  Future<void> disconnect([int? code, String? reason]) {
-    if (_wscStreamSubscription == null) {
+  Future<void> disconnect([int? code, String? reason]) async {
+    final wscStreamSubscription = _wscStreamSubscription;
+    if (wscStreamSubscription == null) {
       _logger.fine('already disconnected with code: ${_wsc.closeCode} reason: ${_wsc.closeReason}');
-      return Future.value();
+    } else {
+      _logger.fine('disconnect code: $code reason: $reason');
+
+      _stopKeepaliveTimer();
+
+      _cleanupTransactions(code, reason);
+
+      _wscStreamSubscription = null;
+
+      await wscStreamSubscription.cancel(); // to prevent onDisconnect and other handlers call
+
+      await _wsc.sink.close(code, reason);
     }
-    _logger.fine('disconnect code: $code reason: $reason');
-
-    _stopKeepaliveTimer();
-
-    _cleanupTransactions(code, reason);
-
-    _wscStreamSubscription!.onDone(null); // to prevent onDisconnect handler call
-    _wscStreamSubscription = null;
-
-    return _wsc.sink.close(code, reason);
   }
 
   //

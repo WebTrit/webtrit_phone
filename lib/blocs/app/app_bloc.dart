@@ -4,6 +4,8 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:webtrit_api/webtrit_api.dart';
+
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/theme/theme.dart';
@@ -52,6 +54,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onLogouted(AppLogouted event, Emitter<AppState> emit) async {
+    await appPreferences.clear();
+
     await secureStorage.deleteCoreUrl();
     await secureStorage.deleteTenantId();
     await secureStorage.deleteToken();
@@ -72,7 +76,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   void _onThemeModeChanged(AppThemeModeChanged event, Emitter<AppState> emit) async {
     final themeMode = event.value;
     if (themeMode == ThemeMode.system) {
-      await appPreferences.removeLocale();
+      await appPreferences.removeThemeMode();
     } else {
       await appPreferences.setThemeMode(themeMode);
     }
@@ -87,5 +91,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       await appPreferences.setLocale(locale);
     }
     emit(state.copyWith(locale: locale));
+  }
+
+  void maybeHandleError(Object error) {
+    if (error is RequestFailure) {
+      if (error.statusCode == HttpStatus.unauthorized) {
+        add(const AppLogouted());
+      }
+    }
   }
 }

@@ -150,7 +150,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_CallActionsTooltip_accept => 'Accept';
 
   @override
-  String get favorites_BodyCenter_empty => 'There are no favorite numbers';
+  String get favorites_BodyCenter_empty => 'Currently you have no favorite numbers.\nAdd favorites from Contacts using the star icon.';
 
   @override
   String favorites_SnackBar_deleted(String name) {
@@ -257,31 +257,25 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get login_FormatExceptionError => 'A response issue occurred';
-
-  @override
-  String get login_TlsExceptionError => 'A secure networking issue occurred';
-
-  @override
-  String get login_SocketExceptionError => 'A network issue occurred';
-
-  @override
-  String get login_TypeErrorError => 'A response issue occurred';
-
-  @override
-  String get login_RequestFailureError => 'A server failure occurred';
-
-  @override
   String get login_RequestFailureEmptyEmailError => 'Cannot send the verification code';
 
   @override
   String get login_RequestFailurePhoneNotFoundError => 'Phone number not found';
 
   @override
-  String get login_RequestFailureCodeIncorrectError => 'Incorrect verification code';
+  String get login_RequestFailureOtpAlreadyVerifiedError => 'Verification already verified';
 
   @override
-  String get login_RequestFailureOtpIdVerifyAttemptsExceededError => 'Verification attempts exceeded';
+  String get login_RequestFailureOtpVerificationAttemptsExceededError => 'Verification attempts exceeded';
+
+  @override
+  String get login_RequestFailureOtpExpiredError => 'Verification expired';
+
+  @override
+  String get login_RequestFailureIncorrectOtpCodeError => 'Incorrect verification code';
+
+  @override
+  String get login_RequestFailureOtpNotFoundError => 'Verification not found';
 
   @override
   String get permission_Text_description => 'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.';
@@ -319,6 +313,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recentsVisibilityFilter_outgoing => 'Outgoing';
+
+  @override
+  String recents_BodyCenter_empty(String filter) {
+    return 'Currently you have no $filter recent calls.';
+  }
 
   @override
   String get recents_errorSnackBar_loadFailure => 'Oops... an error happened ☹️';
@@ -425,22 +424,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_LogoutConfirmDialog_content => 'Are you sure you want to logout?';
 
   @override
+  String get settings_ForceLogoutConfirmDialog_title => 'Confirm force logout';
+
+  @override
+  String get settings_ForceLogoutConfirmDialog_content => 'Are you sure you want to force logout?';
+
+  @override
   String get settings_AboutText_CoreVersionUndefined => '?.?.?';
-
-  @override
-  String get settings_FormatExceptionError => 'A response issue occurred';
-
-  @override
-  String get settings_TlsExceptionError => 'A secure networking issue occurred';
-
-  @override
-  String get settings_SocketExceptionError => 'A network issue occurred';
-
-  @override
-  String get settings_TypeErrorError => 'A response issue occurred';
-
-  @override
-  String get settings_RequestFailureError => 'A server failure occurred';
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
@@ -462,6 +452,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get logRecordsConsole_Button_failureRefresh => 'Refresh';
+
+  @override
+  String get default_FormatExceptionError => 'A response issue occurred';
+
+  @override
+  String get default_TlsExceptionError => 'A secure networking issue occurred';
+
+  @override
+  String get default_SocketExceptionError => 'A network issue occurred';
+
+  @override
+  String get default_ClientExceptionError => 'A HTTP client issue occurred';
+
+  @override
+  String get default_TypeErrorError => 'A response issue occurred';
+
+  @override
+  String get default_RequestFailureError => 'A server failure occurred';
+
+  @override
+  String get default_UnauthorizedRequestFailureError => 'An unauthorized request failure occurred';
 
   @override
   String get underDevelopment => 'This page is under development.';

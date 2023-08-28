@@ -1,4 +1,3 @@
 #include "Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
+#include "Defaults.xcconfig"
 #include "Generated.xcconfig"
-#include "webtrit_phone-defaults.xcconfig"
-#include "webtrit_phone-generated.xcconfig"

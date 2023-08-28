@@ -27,11 +27,10 @@ class ContactsExternalTabBloc extends Bloc<ContactsExternalTabEvent, ContactsExt
   }
 
   final ContactsRepository contactsRepository;
-  final ContactsSearchBloc contactsSearchBloc;
+  final ContactsBloc contactsSearchBloc;
   final ExternalContactsSyncBloc externalContactsSyncBloc;
 
-  Future<void> _onStarted(
-      ContactsExternalTabStarted event, Emitter<ContactsExternalTabState> emit) async {
+  Future<void> _onStarted(ContactsExternalTabStarted event, Emitter<ContactsExternalTabState> emit) async {
     final watchContactsForEachFuture = emit.forEach(
       contactsRepository.watchContacts(event.search, ContactSourceType.external),
       onData: (List<Contact> contacts) => state.copyWith(
@@ -41,8 +40,8 @@ class ContactsExternalTabBloc extends Bloc<ContactsExternalTabEvent, ContactsExt
       ),
     );
 
-    final contactsSearchSateOnEachFuture = emit.onEach(contactsSearchBloc.stream, onData: (String value) {
-      add(ContactsExternalTabStarted(search: value));
+    final contactsSearchSateOnEachFuture = emit.onEach(contactsSearchBloc.stream, onData: (state) {
+      add(ContactsExternalTabStarted(search: state.search));
     });
 
     final externalContactsSyncStateForEachFuture = emit.forEach(
@@ -59,8 +58,7 @@ class ContactsExternalTabBloc extends Bloc<ContactsExternalTabEvent, ContactsExt
     ]);
   }
 
-  Future<void> _onRefreshed(
-      ContactsExternalTabRefreshed event, Emitter<ContactsExternalTabState> emit) async {
+  Future<void> _onRefreshed(ContactsExternalTabRefreshed event, Emitter<ContactsExternalTabState> emit) async {
     externalContactsSyncBloc.add(const ExternalContactsSyncRefreshed());
   }
 

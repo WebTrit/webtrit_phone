@@ -11,19 +11,19 @@ class ErrorResponse with _$ErrorResponse {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory ErrorResponse({
     required String code,
-    List<ErrorRefining>? refining,
+    List<ErrorDetail>? details,
   }) = _ErrorResponse;
 
   factory ErrorResponse.fromJson(Map<String, dynamic> json) => _$ErrorResponseFromJson(json);
 }
 
 @freezed
-class ErrorRefining with _$ErrorRefining {
+class ErrorDetail with _$ErrorDetail {
   @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory ErrorRefining({
+  const factory ErrorDetail({
     required String path,
     required String reason,
-  }) = _ErrorRefining;
+  }) = _ErrorDetail;
 
-  factory ErrorRefining.fromJson(Map<String, dynamic> json) => _$ErrorRefiningFromJson(json);
+  factory ErrorDetail.fromJson(Map<String, dynamic> json) => _$ErrorDetailFromJson(json);
 }

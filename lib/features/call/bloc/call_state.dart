@@ -40,7 +40,7 @@ class CallState with _$CallState {
 
   int? retrieveIdleLine() {
     for (var line = 0; line < linesCount; line++) {
-      if (activeCalls.firstWhereOrNull((activeCall) => activeCall.line == line) == null) {
+      if (!activeCalls.any((activeCall) => activeCall.line == line)) {
         return line;
       }
     }
@@ -119,6 +119,7 @@ class ActiveCall with _$ActiveCall {
     @Default(true) bool? frontCamera,
     @Default(false) bool held,
     @Default(false) bool muted,
+    @Default(false) bool updating,
     required DateTime createdTime,
     DateTime? acceptedTime,
     DateTime? hungUpTime,

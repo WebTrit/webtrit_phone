@@ -376,7 +376,7 @@ abstract class AppLocalizations {
   /// No description provided for @favorites_BodyCenter_empty.
   ///
   /// In en, this message translates to:
-  /// **'There are no favorite numbers'**
+  /// **'Currently you have no favorite numbers.\nAdd favorites from Contacts using the star icon.'**
   String get favorites_BodyCenter_empty;
 
   /// No description provided for @favorites_SnackBar_deleted.
@@ -559,36 +559,6 @@ abstract class AppLocalizations {
   /// **'An incompatible instance version provided, please contact the administrator of your system (actual: {actual}, supported: {supportedConstraint})'**
   String login_CoreVersionUnsupportedExceptionError(String actual, String supportedConstraint);
 
-  /// No description provided for @login_FormatExceptionError.
-  ///
-  /// In en, this message translates to:
-  /// **'A response issue occurred'**
-  String get login_FormatExceptionError;
-
-  /// No description provided for @login_TlsExceptionError.
-  ///
-  /// In en, this message translates to:
-  /// **'A secure networking issue occurred'**
-  String get login_TlsExceptionError;
-
-  /// No description provided for @login_SocketExceptionError.
-  ///
-  /// In en, this message translates to:
-  /// **'A network issue occurred'**
-  String get login_SocketExceptionError;
-
-  /// No description provided for @login_TypeErrorError.
-  ///
-  /// In en, this message translates to:
-  /// **'A response issue occurred'**
-  String get login_TypeErrorError;
-
-  /// No description provided for @login_RequestFailureError.
-  ///
-  /// In en, this message translates to:
-  /// **'A server failure occurred'**
-  String get login_RequestFailureError;
-
   /// No description provided for @login_RequestFailureEmptyEmailError.
   ///
   /// In en, this message translates to:
@@ -601,17 +571,35 @@ abstract class AppLocalizations {
   /// **'Phone number not found'**
   String get login_RequestFailurePhoneNotFoundError;
 
-  /// No description provided for @login_RequestFailureCodeIncorrectError.
+  /// No description provided for @login_RequestFailureOtpAlreadyVerifiedError.
   ///
   /// In en, this message translates to:
-  /// **'Incorrect verification code'**
-  String get login_RequestFailureCodeIncorrectError;
+  /// **'Verification already verified'**
+  String get login_RequestFailureOtpAlreadyVerifiedError;
 
-  /// No description provided for @login_RequestFailureOtpIdVerifyAttemptsExceededError.
+  /// No description provided for @login_RequestFailureOtpVerificationAttemptsExceededError.
   ///
   /// In en, this message translates to:
   /// **'Verification attempts exceeded'**
-  String get login_RequestFailureOtpIdVerifyAttemptsExceededError;
+  String get login_RequestFailureOtpVerificationAttemptsExceededError;
+
+  /// No description provided for @login_RequestFailureOtpExpiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification expired'**
+  String get login_RequestFailureOtpExpiredError;
+
+  /// No description provided for @login_RequestFailureIncorrectOtpCodeError.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect verification code'**
+  String get login_RequestFailureIncorrectOtpCodeError;
+
+  /// No description provided for @login_RequestFailureOtpNotFoundError.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification not found'**
+  String get login_RequestFailureOtpNotFoundError;
 
   /// No description provided for @permission_Text_description.
   ///
@@ -666,6 +654,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Outgoing'**
   String get recentsVisibilityFilter_outgoing;
+
+  /// No description provided for @recents_BodyCenter_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Currently you have no {filter} recent calls.'**
+  String recents_BodyCenter_empty(String filter);
 
   /// No description provided for @recents_errorSnackBar_loadFailure.
   ///
@@ -871,41 +865,23 @@ abstract class AppLocalizations {
   /// **'Are you sure you want to logout?'**
   String get settings_LogoutConfirmDialog_content;
 
+  /// No description provided for @settings_ForceLogoutConfirmDialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm force logout'**
+  String get settings_ForceLogoutConfirmDialog_title;
+
+  /// No description provided for @settings_ForceLogoutConfirmDialog_content.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to force logout?'**
+  String get settings_ForceLogoutConfirmDialog_content;
+
   /// No description provided for @settings_AboutText_CoreVersionUndefined.
   ///
   /// In en, this message translates to:
   /// **'?.?.?'**
   String get settings_AboutText_CoreVersionUndefined;
-
-  /// No description provided for @settings_FormatExceptionError.
-  ///
-  /// In en, this message translates to:
-  /// **'A response issue occurred'**
-  String get settings_FormatExceptionError;
-
-  /// No description provided for @settings_TlsExceptionError.
-  ///
-  /// In en, this message translates to:
-  /// **'A secure networking issue occurred'**
-  String get settings_TlsExceptionError;
-
-  /// No description provided for @settings_SocketExceptionError.
-  ///
-  /// In en, this message translates to:
-  /// **'A network issue occurred'**
-  String get settings_SocketExceptionError;
-
-  /// No description provided for @settings_TypeErrorError.
-  ///
-  /// In en, this message translates to:
-  /// **'A response issue occurred'**
-  String get settings_TypeErrorError;
-
-  /// No description provided for @settings_RequestFailureError.
-  ///
-  /// In en, this message translates to:
-  /// **'A server failure occurred'**
-  String get settings_RequestFailureError;
 
   /// No description provided for @webRegistration_ErrorAcknowledgeDialog_title.
   ///
@@ -948,6 +924,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Refresh'**
   String get logRecordsConsole_Button_failureRefresh;
+
+  /// No description provided for @default_FormatExceptionError.
+  ///
+  /// In en, this message translates to:
+  /// **'A response issue occurred'**
+  String get default_FormatExceptionError;
+
+  /// No description provided for @default_TlsExceptionError.
+  ///
+  /// In en, this message translates to:
+  /// **'A secure networking issue occurred'**
+  String get default_TlsExceptionError;
+
+  /// No description provided for @default_SocketExceptionError.
+  ///
+  /// In en, this message translates to:
+  /// **'A network issue occurred'**
+  String get default_SocketExceptionError;
+
+  /// No description provided for @default_ClientExceptionError.
+  ///
+  /// In en, this message translates to:
+  /// **'A HTTP client issue occurred'**
+  String get default_ClientExceptionError;
+
+  /// No description provided for @default_TypeErrorError.
+  ///
+  /// In en, this message translates to:
+  /// **'A response issue occurred'**
+  String get default_TypeErrorError;
+
+  /// No description provided for @default_RequestFailureError.
+  ///
+  /// In en, this message translates to:
+  /// **'A server failure occurred'**
+  String get default_RequestFailureError;
+
+  /// No description provided for @default_UnauthorizedRequestFailureError.
+  ///
+  /// In en, this message translates to:
+  /// **'An unauthorized request failure occurred'**
+  String get default_UnauthorizedRequestFailureError;
 
   /// No description provided for @underDevelopment.
   ///

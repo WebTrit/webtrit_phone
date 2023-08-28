@@ -14,9 +14,11 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 class MainShell extends StatefulWidget {
   const MainShell({
     super.key,
+    required this.appPreferences,
     required this.child,
   });
 
+  final AppPreferences appPreferences;
   final Widget child;
 
   @override
@@ -34,7 +36,7 @@ class _MainShellState extends State<MainShell> {
       ios: CallkeepIOSOptions(
         localizedName: PackageInfo().appName,
         ringtoneSound: Assets.ringtones.incomingCall1,
-        iconTemplateImageAssetName: Assets.logoIconTemplateImage.path,
+        iconTemplateImageAssetName: Assets.callkeep.iosIconTempateImage.path,
         maximumCallGroups: 2,
         maximumCallsPerCallGroup: 1,
         supportedHandleTypes: const {CallkeepHandleType.number},
@@ -128,6 +130,7 @@ class _MainShellState extends State<MainShell> {
             create: (context) {
               return RecentsBloc(
                 recentsRepository: context.read<RecentsRepository>(),
+                appPreferences: widget.appPreferences,
               )..add(const RecentsStarted());
             },
           ),

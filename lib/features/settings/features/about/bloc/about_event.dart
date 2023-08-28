@@ -4,10 +4,7 @@ abstract class AboutEvent {
   const AboutEvent();
 }
 
-class AboutStarted extends AboutEvent {
-  const AboutStarted();
-}
-
-class AboutErrorDismissed extends AboutEvent {
-  const AboutErrorDismissed();
+@Freezed(copyWith: false)
+class AboutStarted with _$AboutStarted implements AboutEvent {
+  const factory AboutStarted() = _AboutStarted;
 }

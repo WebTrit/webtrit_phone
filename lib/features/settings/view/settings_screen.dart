@@ -77,6 +77,17 @@ class SettingsScreen extends StatelessWidget {
                 settingsBloc.add(const SettingsLogouted());
               }
             },
+            onLongPress: () async {
+              final settingsBloc = context.read<SettingsBloc>();
+              final logout = await ConfirmDialog.show(
+                context,
+                title: context.l10n.settings_ForceLogoutConfirmDialog_title,
+                content: context.l10n.settings_ForceLogoutConfirmDialog_content,
+              );
+              if (logout == true) {
+                settingsBloc.add(const SettingsLogouted(force: true));
+              }
+            },
           ),
           GroupTitleListTile(
             titleData: context.l10n.settings_ListViewTileTitle_settings,
@@ -179,12 +190,6 @@ class SettingsScreen extends StatelessWidget {
       listener: (context, state) {
         if (state.progress) {
           ProgressOverlay.insert(context, context.read<SettingsBloc>().stream.firstWhere((state) => !state.progress));
-        }
-
-        final errorL10n = state.errorL10n(context);
-        if (errorL10n != null) {
-          context.showErrorSnackBar(errorL10n);
-          context.read<SettingsBloc>().add(const SettingsErrorDismissed());
         }
       },
       child: scaffold,

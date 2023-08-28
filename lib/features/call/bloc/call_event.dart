@@ -53,6 +53,9 @@ class _CallSignalingEvent with _$_CallSignalingEvent implements CallEvent {
     required String callee,
     required String caller,
     String? callerDisplayName,
+    String? referredBy,
+    String? replaceCallId,
+    bool? isFocus,
     JsepValue? jsep,
   }) = _CallSignalingEventIncoming;
 
@@ -81,6 +84,23 @@ class _CallSignalingEvent with _$_CallSignalingEvent implements CallEvent {
     required int code,
     required String reason,
   }) = _CallSignalingEventHangup;
+
+  const factory _CallSignalingEvent.updating({
+    required int line,
+    required CallIdValue callId,
+    required String callee,
+    required String caller,
+    String? callerDisplayName,
+    String? referredBy,
+    String? replaceCallId,
+    bool? isFocus,
+    JsepValue? jsep,
+  }) = _CallSignalingEventUpdating;
+
+  const factory _CallSignalingEvent.updated({
+    required int line,
+    required CallIdValue callId,
+  }) = _CallSignalingEventUpdated;
 }
 
 // call push events

@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
+
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
@@ -60,12 +61,13 @@ class ExternalContactsRepository {
   void _gatherListContacts() async {
     try {
       final contacts = await _listContacts();
-      if (!(const ListEquality<ExternalContact>()).equals(contacts, _cacheContacts)) {
+      if (!listEquals(contacts, _cacheContacts)) {
         _cacheContacts = contacts;
         _controller.add(contacts);
       }
     } catch (e, stackTrace) {
       _logger.warning('_gatherListContacts', e, stackTrace);
+      _controller.addError(e, stackTrace);
     }
   }
 

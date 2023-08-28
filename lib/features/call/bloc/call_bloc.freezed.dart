@@ -692,8 +692,16 @@ mixin _$_CallSignalingEvent {
   CallIdValue get callId => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int line, CallIdValue callId, String callee,
-            String caller, String? callerDisplayName, JsepValue? jsep)
+    required TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
         incoming,
     required TResult Function(int line, CallIdValue callId) ringing,
     required TResult Function(
@@ -705,12 +713,32 @@ mixin _$_CallSignalingEvent {
     required TResult Function(
             int line, CallIdValue callId, int code, String reason)
         hangup,
+    required TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
+        updating,
+    required TResult Function(int line, CallIdValue callId) updated,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int line, CallIdValue callId, String callee,
-            String caller, String? callerDisplayName, JsepValue? jsep)?
+    TResult? Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
         incoming,
     TResult? Function(int line, CallIdValue callId)? ringing,
     TResult? Function(
@@ -721,12 +749,32 @@ mixin _$_CallSignalingEvent {
         accepted,
     TResult? Function(int line, CallIdValue callId, int code, String reason)?
         hangup,
+    TResult? Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult? Function(int line, CallIdValue callId)? updated,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int line, CallIdValue callId, String callee, String caller,
-            String? callerDisplayName, JsepValue? jsep)?
+    TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
         incoming,
     TResult Function(int line, CallIdValue callId)? ringing,
     TResult Function(
@@ -737,6 +785,18 @@ mixin _$_CallSignalingEvent {
         accepted,
     TResult Function(int line, CallIdValue callId, int code, String reason)?
         hangup,
+    TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult Function(int line, CallIdValue callId)? updated,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -747,6 +807,8 @@ mixin _$_CallSignalingEvent {
     required TResult Function(_CallSignalingEventProgress value) progress,
     required TResult Function(_CallSignalingEventAccepted value) accepted,
     required TResult Function(_CallSignalingEventHangup value) hangup,
+    required TResult Function(_CallSignalingEventUpdating value) updating,
+    required TResult Function(_CallSignalingEventUpdated value) updated,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -756,6 +818,8 @@ mixin _$_CallSignalingEvent {
     TResult? Function(_CallSignalingEventProgress value)? progress,
     TResult? Function(_CallSignalingEventAccepted value)? accepted,
     TResult? Function(_CallSignalingEventHangup value)? hangup,
+    TResult? Function(_CallSignalingEventUpdating value)? updating,
+    TResult? Function(_CallSignalingEventUpdated value)? updated,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -765,6 +829,8 @@ mixin _$_CallSignalingEvent {
     TResult Function(_CallSignalingEventProgress value)? progress,
     TResult Function(_CallSignalingEventAccepted value)? accepted,
     TResult Function(_CallSignalingEventHangup value)? hangup,
+    TResult Function(_CallSignalingEventUpdating value)? updating,
+    TResult Function(_CallSignalingEventUpdated value)? updated,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -781,6 +847,9 @@ class _$_CallSignalingEventIncoming
       required this.callee,
       required this.caller,
       this.callerDisplayName,
+      this.referredBy,
+      this.replaceCallId,
+      this.isFocus,
       this.jsep});
 
   @override
@@ -794,11 +863,17 @@ class _$_CallSignalingEventIncoming
   @override
   final String? callerDisplayName;
   @override
+  final String? referredBy;
+  @override
+  final String? replaceCallId;
+  @override
+  final bool? isFocus;
+  @override
   final JsepValue? jsep;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallSignalingEvent.incoming(line: $line, callId: $callId, callee: $callee, caller: $caller, callerDisplayName: $callerDisplayName, jsep: $jsep)';
+    return '_CallSignalingEvent.incoming(line: $line, callId: $callId, callee: $callee, caller: $caller, callerDisplayName: $callerDisplayName, referredBy: $referredBy, replaceCallId: $replaceCallId, isFocus: $isFocus, jsep: $jsep)';
   }
 
   @override
@@ -811,6 +886,9 @@ class _$_CallSignalingEventIncoming
       ..add(DiagnosticsProperty('callee', callee))
       ..add(DiagnosticsProperty('caller', caller))
       ..add(DiagnosticsProperty('callerDisplayName', callerDisplayName))
+      ..add(DiagnosticsProperty('referredBy', referredBy))
+      ..add(DiagnosticsProperty('replaceCallId', replaceCallId))
+      ..add(DiagnosticsProperty('isFocus', isFocus))
       ..add(DiagnosticsProperty('jsep', jsep));
   }
 
@@ -825,18 +903,31 @@ class _$_CallSignalingEventIncoming
             (identical(other.caller, caller) || other.caller == caller) &&
             (identical(other.callerDisplayName, callerDisplayName) ||
                 other.callerDisplayName == callerDisplayName) &&
+            (identical(other.referredBy, referredBy) ||
+                other.referredBy == referredBy) &&
+            (identical(other.replaceCallId, replaceCallId) ||
+                other.replaceCallId == replaceCallId) &&
+            (identical(other.isFocus, isFocus) || other.isFocus == isFocus) &&
             (identical(other.jsep, jsep) || other.jsep == jsep));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, line, callId, callee, caller, callerDisplayName, jsep);
+  int get hashCode => Object.hash(runtimeType, line, callId, callee, caller,
+      callerDisplayName, referredBy, replaceCallId, isFocus, jsep);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int line, CallIdValue callId, String callee,
-            String caller, String? callerDisplayName, JsepValue? jsep)
+    required TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
         incoming,
     required TResult Function(int line, CallIdValue callId) ringing,
     required TResult Function(
@@ -848,15 +939,36 @@ class _$_CallSignalingEventIncoming
     required TResult Function(
             int line, CallIdValue callId, int code, String reason)
         hangup,
+    required TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
+        updating,
+    required TResult Function(int line, CallIdValue callId) updated,
   }) {
-    return incoming(line, callId, callee, caller, callerDisplayName, jsep);
+    return incoming(line, callId, callee, caller, callerDisplayName, referredBy,
+        replaceCallId, isFocus, jsep);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int line, CallIdValue callId, String callee,
-            String caller, String? callerDisplayName, JsepValue? jsep)?
+    TResult? Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
         incoming,
     TResult? Function(int line, CallIdValue callId)? ringing,
     TResult? Function(
@@ -867,16 +979,36 @@ class _$_CallSignalingEventIncoming
         accepted,
     TResult? Function(int line, CallIdValue callId, int code, String reason)?
         hangup,
+    TResult? Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult? Function(int line, CallIdValue callId)? updated,
   }) {
-    return incoming?.call(
-        line, callId, callee, caller, callerDisplayName, jsep);
+    return incoming?.call(line, callId, callee, caller, callerDisplayName,
+        referredBy, replaceCallId, isFocus, jsep);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int line, CallIdValue callId, String callee, String caller,
-            String? callerDisplayName, JsepValue? jsep)?
+    TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
         incoming,
     TResult Function(int line, CallIdValue callId)? ringing,
     TResult Function(
@@ -887,10 +1019,23 @@ class _$_CallSignalingEventIncoming
         accepted,
     TResult Function(int line, CallIdValue callId, int code, String reason)?
         hangup,
+    TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult Function(int line, CallIdValue callId)? updated,
     required TResult orElse(),
   }) {
     if (incoming != null) {
-      return incoming(line, callId, callee, caller, callerDisplayName, jsep);
+      return incoming(line, callId, callee, caller, callerDisplayName,
+          referredBy, replaceCallId, isFocus, jsep);
     }
     return orElse();
   }
@@ -903,6 +1048,8 @@ class _$_CallSignalingEventIncoming
     required TResult Function(_CallSignalingEventProgress value) progress,
     required TResult Function(_CallSignalingEventAccepted value) accepted,
     required TResult Function(_CallSignalingEventHangup value) hangup,
+    required TResult Function(_CallSignalingEventUpdating value) updating,
+    required TResult Function(_CallSignalingEventUpdated value) updated,
   }) {
     return incoming(this);
   }
@@ -915,6 +1062,8 @@ class _$_CallSignalingEventIncoming
     TResult? Function(_CallSignalingEventProgress value)? progress,
     TResult? Function(_CallSignalingEventAccepted value)? accepted,
     TResult? Function(_CallSignalingEventHangup value)? hangup,
+    TResult? Function(_CallSignalingEventUpdating value)? updating,
+    TResult? Function(_CallSignalingEventUpdated value)? updated,
   }) {
     return incoming?.call(this);
   }
@@ -927,6 +1076,8 @@ class _$_CallSignalingEventIncoming
     TResult Function(_CallSignalingEventProgress value)? progress,
     TResult Function(_CallSignalingEventAccepted value)? accepted,
     TResult Function(_CallSignalingEventHangup value)? hangup,
+    TResult Function(_CallSignalingEventUpdating value)? updating,
+    TResult Function(_CallSignalingEventUpdated value)? updated,
     required TResult orElse(),
   }) {
     if (incoming != null) {
@@ -943,6 +1094,9 @@ abstract class _CallSignalingEventIncoming implements _CallSignalingEvent {
       required final String callee,
       required final String caller,
       final String? callerDisplayName,
+      final String? referredBy,
+      final String? replaceCallId,
+      final bool? isFocus,
       final JsepValue? jsep}) = _$_CallSignalingEventIncoming;
 
   @override
@@ -952,6 +1106,9 @@ abstract class _CallSignalingEventIncoming implements _CallSignalingEvent {
   String get callee;
   String get caller;
   String? get callerDisplayName;
+  String? get referredBy;
+  String? get replaceCallId;
+  bool? get isFocus;
   JsepValue? get jsep;
 }
 
@@ -997,8 +1154,16 @@ class _$_CallSignalingEventRinging
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int line, CallIdValue callId, String callee,
-            String caller, String? callerDisplayName, JsepValue? jsep)
+    required TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
         incoming,
     required TResult Function(int line, CallIdValue callId) ringing,
     required TResult Function(
@@ -1010,6 +1175,18 @@ class _$_CallSignalingEventRinging
     required TResult Function(
             int line, CallIdValue callId, int code, String reason)
         hangup,
+    required TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
+        updating,
+    required TResult Function(int line, CallIdValue callId) updated,
   }) {
     return ringing(line, callId);
   }
@@ -1017,8 +1194,16 @@ class _$_CallSignalingEventRinging
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int line, CallIdValue callId, String callee,
-            String caller, String? callerDisplayName, JsepValue? jsep)?
+    TResult? Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
         incoming,
     TResult? Function(int line, CallIdValue callId)? ringing,
     TResult? Function(
@@ -1029,6 +1214,18 @@ class _$_CallSignalingEventRinging
         accepted,
     TResult? Function(int line, CallIdValue callId, int code, String reason)?
         hangup,
+    TResult? Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult? Function(int line, CallIdValue callId)? updated,
   }) {
     return ringing?.call(line, callId);
   }
@@ -1036,8 +1233,16 @@ class _$_CallSignalingEventRinging
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int line, CallIdValue callId, String callee, String caller,
-            String? callerDisplayName, JsepValue? jsep)?
+    TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
         incoming,
     TResult Function(int line, CallIdValue callId)? ringing,
     TResult Function(
@@ -1048,6 +1253,18 @@ class _$_CallSignalingEventRinging
         accepted,
     TResult Function(int line, CallIdValue callId, int code, String reason)?
         hangup,
+    TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult Function(int line, CallIdValue callId)? updated,
     required TResult orElse(),
   }) {
     if (ringing != null) {
@@ -1064,6 +1281,8 @@ class _$_CallSignalingEventRinging
     required TResult Function(_CallSignalingEventProgress value) progress,
     required TResult Function(_CallSignalingEventAccepted value) accepted,
     required TResult Function(_CallSignalingEventHangup value) hangup,
+    required TResult Function(_CallSignalingEventUpdating value) updating,
+    required TResult Function(_CallSignalingEventUpdated value) updated,
   }) {
     return ringing(this);
   }
@@ -1076,6 +1295,8 @@ class _$_CallSignalingEventRinging
     TResult? Function(_CallSignalingEventProgress value)? progress,
     TResult? Function(_CallSignalingEventAccepted value)? accepted,
     TResult? Function(_CallSignalingEventHangup value)? hangup,
+    TResult? Function(_CallSignalingEventUpdating value)? updating,
+    TResult? Function(_CallSignalingEventUpdated value)? updated,
   }) {
     return ringing?.call(this);
   }
@@ -1088,6 +1309,8 @@ class _$_CallSignalingEventRinging
     TResult Function(_CallSignalingEventProgress value)? progress,
     TResult Function(_CallSignalingEventAccepted value)? accepted,
     TResult Function(_CallSignalingEventHangup value)? hangup,
+    TResult Function(_CallSignalingEventUpdating value)? updating,
+    TResult Function(_CallSignalingEventUpdated value)? updated,
     required TResult orElse(),
   }) {
     if (ringing != null) {
@@ -1161,8 +1384,16 @@ class _$_CallSignalingEventProgress
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int line, CallIdValue callId, String callee,
-            String caller, String? callerDisplayName, JsepValue? jsep)
+    required TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
         incoming,
     required TResult Function(int line, CallIdValue callId) ringing,
     required TResult Function(
@@ -1174,6 +1405,18 @@ class _$_CallSignalingEventProgress
     required TResult Function(
             int line, CallIdValue callId, int code, String reason)
         hangup,
+    required TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
+        updating,
+    required TResult Function(int line, CallIdValue callId) updated,
   }) {
     return progress(line, callId, callee, jsep);
   }
@@ -1181,8 +1424,16 @@ class _$_CallSignalingEventProgress
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int line, CallIdValue callId, String callee,
-            String caller, String? callerDisplayName, JsepValue? jsep)?
+    TResult? Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
         incoming,
     TResult? Function(int line, CallIdValue callId)? ringing,
     TResult? Function(
@@ -1193,6 +1444,18 @@ class _$_CallSignalingEventProgress
         accepted,
     TResult? Function(int line, CallIdValue callId, int code, String reason)?
         hangup,
+    TResult? Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult? Function(int line, CallIdValue callId)? updated,
   }) {
     return progress?.call(line, callId, callee, jsep);
   }
@@ -1200,8 +1463,16 @@ class _$_CallSignalingEventProgress
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int line, CallIdValue callId, String callee, String caller,
-            String? callerDisplayName, JsepValue? jsep)?
+    TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
         incoming,
     TResult Function(int line, CallIdValue callId)? ringing,
     TResult Function(
@@ -1212,6 +1483,18 @@ class _$_CallSignalingEventProgress
         accepted,
     TResult Function(int line, CallIdValue callId, int code, String reason)?
         hangup,
+    TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult Function(int line, CallIdValue callId)? updated,
     required TResult orElse(),
   }) {
     if (progress != null) {
@@ -1228,6 +1511,8 @@ class _$_CallSignalingEventProgress
     required TResult Function(_CallSignalingEventProgress value) progress,
     required TResult Function(_CallSignalingEventAccepted value) accepted,
     required TResult Function(_CallSignalingEventHangup value) hangup,
+    required TResult Function(_CallSignalingEventUpdating value) updating,
+    required TResult Function(_CallSignalingEventUpdated value) updated,
   }) {
     return progress(this);
   }
@@ -1240,6 +1525,8 @@ class _$_CallSignalingEventProgress
     TResult? Function(_CallSignalingEventProgress value)? progress,
     TResult? Function(_CallSignalingEventAccepted value)? accepted,
     TResult? Function(_CallSignalingEventHangup value)? hangup,
+    TResult? Function(_CallSignalingEventUpdating value)? updating,
+    TResult? Function(_CallSignalingEventUpdated value)? updated,
   }) {
     return progress?.call(this);
   }
@@ -1252,6 +1539,8 @@ class _$_CallSignalingEventProgress
     TResult Function(_CallSignalingEventProgress value)? progress,
     TResult Function(_CallSignalingEventAccepted value)? accepted,
     TResult Function(_CallSignalingEventHangup value)? hangup,
+    TResult Function(_CallSignalingEventUpdating value)? updating,
+    TResult Function(_CallSignalingEventUpdated value)? updated,
     required TResult orElse(),
   }) {
     if (progress != null) {
@@ -1326,8 +1615,16 @@ class _$_CallSignalingEventAccepted
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int line, CallIdValue callId, String callee,
-            String caller, String? callerDisplayName, JsepValue? jsep)
+    required TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
         incoming,
     required TResult Function(int line, CallIdValue callId) ringing,
     required TResult Function(
@@ -1339,6 +1636,18 @@ class _$_CallSignalingEventAccepted
     required TResult Function(
             int line, CallIdValue callId, int code, String reason)
         hangup,
+    required TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
+        updating,
+    required TResult Function(int line, CallIdValue callId) updated,
   }) {
     return accepted(line, callId, callee, jsep);
   }
@@ -1346,8 +1655,16 @@ class _$_CallSignalingEventAccepted
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int line, CallIdValue callId, String callee,
-            String caller, String? callerDisplayName, JsepValue? jsep)?
+    TResult? Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
         incoming,
     TResult? Function(int line, CallIdValue callId)? ringing,
     TResult? Function(
@@ -1358,6 +1675,18 @@ class _$_CallSignalingEventAccepted
         accepted,
     TResult? Function(int line, CallIdValue callId, int code, String reason)?
         hangup,
+    TResult? Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult? Function(int line, CallIdValue callId)? updated,
   }) {
     return accepted?.call(line, callId, callee, jsep);
   }
@@ -1365,8 +1694,16 @@ class _$_CallSignalingEventAccepted
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int line, CallIdValue callId, String callee, String caller,
-            String? callerDisplayName, JsepValue? jsep)?
+    TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
         incoming,
     TResult Function(int line, CallIdValue callId)? ringing,
     TResult Function(
@@ -1377,6 +1714,18 @@ class _$_CallSignalingEventAccepted
         accepted,
     TResult Function(int line, CallIdValue callId, int code, String reason)?
         hangup,
+    TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult Function(int line, CallIdValue callId)? updated,
     required TResult orElse(),
   }) {
     if (accepted != null) {
@@ -1393,6 +1742,8 @@ class _$_CallSignalingEventAccepted
     required TResult Function(_CallSignalingEventProgress value) progress,
     required TResult Function(_CallSignalingEventAccepted value) accepted,
     required TResult Function(_CallSignalingEventHangup value) hangup,
+    required TResult Function(_CallSignalingEventUpdating value) updating,
+    required TResult Function(_CallSignalingEventUpdated value) updated,
   }) {
     return accepted(this);
   }
@@ -1405,6 +1756,8 @@ class _$_CallSignalingEventAccepted
     TResult? Function(_CallSignalingEventProgress value)? progress,
     TResult? Function(_CallSignalingEventAccepted value)? accepted,
     TResult? Function(_CallSignalingEventHangup value)? hangup,
+    TResult? Function(_CallSignalingEventUpdating value)? updating,
+    TResult? Function(_CallSignalingEventUpdated value)? updated,
   }) {
     return accepted?.call(this);
   }
@@ -1417,6 +1770,8 @@ class _$_CallSignalingEventAccepted
     TResult Function(_CallSignalingEventProgress value)? progress,
     TResult Function(_CallSignalingEventAccepted value)? accepted,
     TResult Function(_CallSignalingEventHangup value)? hangup,
+    TResult Function(_CallSignalingEventUpdating value)? updating,
+    TResult Function(_CallSignalingEventUpdated value)? updated,
     required TResult orElse(),
   }) {
     if (accepted != null) {
@@ -1494,8 +1849,16 @@ class _$_CallSignalingEventHangup
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int line, CallIdValue callId, String callee,
-            String caller, String? callerDisplayName, JsepValue? jsep)
+    required TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
         incoming,
     required TResult Function(int line, CallIdValue callId) ringing,
     required TResult Function(
@@ -1507,6 +1870,18 @@ class _$_CallSignalingEventHangup
     required TResult Function(
             int line, CallIdValue callId, int code, String reason)
         hangup,
+    required TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
+        updating,
+    required TResult Function(int line, CallIdValue callId) updated,
   }) {
     return hangup(line, callId, code, reason);
   }
@@ -1514,8 +1889,16 @@ class _$_CallSignalingEventHangup
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int line, CallIdValue callId, String callee,
-            String caller, String? callerDisplayName, JsepValue? jsep)?
+    TResult? Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
         incoming,
     TResult? Function(int line, CallIdValue callId)? ringing,
     TResult? Function(
@@ -1526,6 +1909,18 @@ class _$_CallSignalingEventHangup
         accepted,
     TResult? Function(int line, CallIdValue callId, int code, String reason)?
         hangup,
+    TResult? Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult? Function(int line, CallIdValue callId)? updated,
   }) {
     return hangup?.call(line, callId, code, reason);
   }
@@ -1533,8 +1928,16 @@ class _$_CallSignalingEventHangup
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int line, CallIdValue callId, String callee, String caller,
-            String? callerDisplayName, JsepValue? jsep)?
+    TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
         incoming,
     TResult Function(int line, CallIdValue callId)? ringing,
     TResult Function(
@@ -1545,6 +1948,18 @@ class _$_CallSignalingEventHangup
         accepted,
     TResult Function(int line, CallIdValue callId, int code, String reason)?
         hangup,
+    TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult Function(int line, CallIdValue callId)? updated,
     required TResult orElse(),
   }) {
     if (hangup != null) {
@@ -1561,6 +1976,8 @@ class _$_CallSignalingEventHangup
     required TResult Function(_CallSignalingEventProgress value) progress,
     required TResult Function(_CallSignalingEventAccepted value) accepted,
     required TResult Function(_CallSignalingEventHangup value) hangup,
+    required TResult Function(_CallSignalingEventUpdating value) updating,
+    required TResult Function(_CallSignalingEventUpdated value) updated,
   }) {
     return hangup(this);
   }
@@ -1573,6 +1990,8 @@ class _$_CallSignalingEventHangup
     TResult? Function(_CallSignalingEventProgress value)? progress,
     TResult? Function(_CallSignalingEventAccepted value)? accepted,
     TResult? Function(_CallSignalingEventHangup value)? hangup,
+    TResult? Function(_CallSignalingEventUpdating value)? updating,
+    TResult? Function(_CallSignalingEventUpdated value)? updated,
   }) {
     return hangup?.call(this);
   }
@@ -1585,6 +2004,8 @@ class _$_CallSignalingEventHangup
     TResult Function(_CallSignalingEventProgress value)? progress,
     TResult Function(_CallSignalingEventAccepted value)? accepted,
     TResult Function(_CallSignalingEventHangup value)? hangup,
+    TResult Function(_CallSignalingEventUpdating value)? updating,
+    TResult Function(_CallSignalingEventUpdated value)? updated,
     required TResult orElse(),
   }) {
     if (hangup != null) {
@@ -1607,6 +2028,501 @@ abstract class _CallSignalingEventHangup implements _CallSignalingEvent {
   CallIdValue get callId;
   int get code;
   String get reason;
+}
+
+/// @nodoc
+
+class _$_CallSignalingEventUpdating
+    with DiagnosticableTreeMixin
+    implements _CallSignalingEventUpdating {
+  const _$_CallSignalingEventUpdating(
+      {required this.line,
+      required this.callId,
+      required this.callee,
+      required this.caller,
+      this.callerDisplayName,
+      this.referredBy,
+      this.replaceCallId,
+      this.isFocus,
+      this.jsep});
+
+  @override
+  final int line;
+  @override
+  final CallIdValue callId;
+  @override
+  final String callee;
+  @override
+  final String caller;
+  @override
+  final String? callerDisplayName;
+  @override
+  final String? referredBy;
+  @override
+  final String? replaceCallId;
+  @override
+  final bool? isFocus;
+  @override
+  final JsepValue? jsep;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallSignalingEvent.updating(line: $line, callId: $callId, callee: $callee, caller: $caller, callerDisplayName: $callerDisplayName, referredBy: $referredBy, replaceCallId: $replaceCallId, isFocus: $isFocus, jsep: $jsep)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', '_CallSignalingEvent.updating'))
+      ..add(DiagnosticsProperty('line', line))
+      ..add(DiagnosticsProperty('callId', callId))
+      ..add(DiagnosticsProperty('callee', callee))
+      ..add(DiagnosticsProperty('caller', caller))
+      ..add(DiagnosticsProperty('callerDisplayName', callerDisplayName))
+      ..add(DiagnosticsProperty('referredBy', referredBy))
+      ..add(DiagnosticsProperty('replaceCallId', replaceCallId))
+      ..add(DiagnosticsProperty('isFocus', isFocus))
+      ..add(DiagnosticsProperty('jsep', jsep));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_CallSignalingEventUpdating &&
+            (identical(other.line, line) || other.line == line) &&
+            (identical(other.callId, callId) || other.callId == callId) &&
+            (identical(other.callee, callee) || other.callee == callee) &&
+            (identical(other.caller, caller) || other.caller == caller) &&
+            (identical(other.callerDisplayName, callerDisplayName) ||
+                other.callerDisplayName == callerDisplayName) &&
+            (identical(other.referredBy, referredBy) ||
+                other.referredBy == referredBy) &&
+            (identical(other.replaceCallId, replaceCallId) ||
+                other.replaceCallId == replaceCallId) &&
+            (identical(other.isFocus, isFocus) || other.isFocus == isFocus) &&
+            (identical(other.jsep, jsep) || other.jsep == jsep));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, line, callId, callee, caller,
+      callerDisplayName, referredBy, replaceCallId, isFocus, jsep);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
+        incoming,
+    required TResult Function(int line, CallIdValue callId) ringing,
+    required TResult Function(
+            int line, CallIdValue callId, String callee, JsepValue? jsep)
+        progress,
+    required TResult Function(
+            int line, CallIdValue callId, String? callee, JsepValue? jsep)
+        accepted,
+    required TResult Function(
+            int line, CallIdValue callId, int code, String reason)
+        hangup,
+    required TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
+        updating,
+    required TResult Function(int line, CallIdValue callId) updated,
+  }) {
+    return updating(line, callId, callee, caller, callerDisplayName, referredBy,
+        replaceCallId, isFocus, jsep);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        incoming,
+    TResult? Function(int line, CallIdValue callId)? ringing,
+    TResult? Function(
+            int line, CallIdValue callId, String callee, JsepValue? jsep)?
+        progress,
+    TResult? Function(
+            int line, CallIdValue callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult? Function(int line, CallIdValue callId, int code, String reason)?
+        hangup,
+    TResult? Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult? Function(int line, CallIdValue callId)? updated,
+  }) {
+    return updating?.call(line, callId, callee, caller, callerDisplayName,
+        referredBy, replaceCallId, isFocus, jsep);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        incoming,
+    TResult Function(int line, CallIdValue callId)? ringing,
+    TResult Function(
+            int line, CallIdValue callId, String callee, JsepValue? jsep)?
+        progress,
+    TResult Function(
+            int line, CallIdValue callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult Function(int line, CallIdValue callId, int code, String reason)?
+        hangup,
+    TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult Function(int line, CallIdValue callId)? updated,
+    required TResult orElse(),
+  }) {
+    if (updating != null) {
+      return updating(line, callId, callee, caller, callerDisplayName,
+          referredBy, replaceCallId, isFocus, jsep);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CallSignalingEventIncoming value) incoming,
+    required TResult Function(_CallSignalingEventRinging value) ringing,
+    required TResult Function(_CallSignalingEventProgress value) progress,
+    required TResult Function(_CallSignalingEventAccepted value) accepted,
+    required TResult Function(_CallSignalingEventHangup value) hangup,
+    required TResult Function(_CallSignalingEventUpdating value) updating,
+    required TResult Function(_CallSignalingEventUpdated value) updated,
+  }) {
+    return updating(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CallSignalingEventIncoming value)? incoming,
+    TResult? Function(_CallSignalingEventRinging value)? ringing,
+    TResult? Function(_CallSignalingEventProgress value)? progress,
+    TResult? Function(_CallSignalingEventAccepted value)? accepted,
+    TResult? Function(_CallSignalingEventHangup value)? hangup,
+    TResult? Function(_CallSignalingEventUpdating value)? updating,
+    TResult? Function(_CallSignalingEventUpdated value)? updated,
+  }) {
+    return updating?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CallSignalingEventIncoming value)? incoming,
+    TResult Function(_CallSignalingEventRinging value)? ringing,
+    TResult Function(_CallSignalingEventProgress value)? progress,
+    TResult Function(_CallSignalingEventAccepted value)? accepted,
+    TResult Function(_CallSignalingEventHangup value)? hangup,
+    TResult Function(_CallSignalingEventUpdating value)? updating,
+    TResult Function(_CallSignalingEventUpdated value)? updated,
+    required TResult orElse(),
+  }) {
+    if (updating != null) {
+      return updating(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _CallSignalingEventUpdating implements _CallSignalingEvent {
+  const factory _CallSignalingEventUpdating(
+      {required final int line,
+      required final CallIdValue callId,
+      required final String callee,
+      required final String caller,
+      final String? callerDisplayName,
+      final String? referredBy,
+      final String? replaceCallId,
+      final bool? isFocus,
+      final JsepValue? jsep}) = _$_CallSignalingEventUpdating;
+
+  @override
+  int get line;
+  @override
+  CallIdValue get callId;
+  String get callee;
+  String get caller;
+  String? get callerDisplayName;
+  String? get referredBy;
+  String? get replaceCallId;
+  bool? get isFocus;
+  JsepValue? get jsep;
+}
+
+/// @nodoc
+
+class _$_CallSignalingEventUpdated
+    with DiagnosticableTreeMixin
+    implements _CallSignalingEventUpdated {
+  const _$_CallSignalingEventUpdated(
+      {required this.line, required this.callId});
+
+  @override
+  final int line;
+  @override
+  final CallIdValue callId;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallSignalingEvent.updated(line: $line, callId: $callId)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', '_CallSignalingEvent.updated'))
+      ..add(DiagnosticsProperty('line', line))
+      ..add(DiagnosticsProperty('callId', callId));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_CallSignalingEventUpdated &&
+            (identical(other.line, line) || other.line == line) &&
+            (identical(other.callId, callId) || other.callId == callId));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, line, callId);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
+        incoming,
+    required TResult Function(int line, CallIdValue callId) ringing,
+    required TResult Function(
+            int line, CallIdValue callId, String callee, JsepValue? jsep)
+        progress,
+    required TResult Function(
+            int line, CallIdValue callId, String? callee, JsepValue? jsep)
+        accepted,
+    required TResult Function(
+            int line, CallIdValue callId, int code, String reason)
+        hangup,
+    required TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
+        updating,
+    required TResult Function(int line, CallIdValue callId) updated,
+  }) {
+    return updated(line, callId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        incoming,
+    TResult? Function(int line, CallIdValue callId)? ringing,
+    TResult? Function(
+            int line, CallIdValue callId, String callee, JsepValue? jsep)?
+        progress,
+    TResult? Function(
+            int line, CallIdValue callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult? Function(int line, CallIdValue callId, int code, String reason)?
+        hangup,
+    TResult? Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult? Function(int line, CallIdValue callId)? updated,
+  }) {
+    return updated?.call(line, callId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        incoming,
+    TResult Function(int line, CallIdValue callId)? ringing,
+    TResult Function(
+            int line, CallIdValue callId, String callee, JsepValue? jsep)?
+        progress,
+    TResult Function(
+            int line, CallIdValue callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult Function(int line, CallIdValue callId, int code, String reason)?
+        hangup,
+    TResult Function(
+            int line,
+            CallIdValue callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult Function(int line, CallIdValue callId)? updated,
+    required TResult orElse(),
+  }) {
+    if (updated != null) {
+      return updated(line, callId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CallSignalingEventIncoming value) incoming,
+    required TResult Function(_CallSignalingEventRinging value) ringing,
+    required TResult Function(_CallSignalingEventProgress value) progress,
+    required TResult Function(_CallSignalingEventAccepted value) accepted,
+    required TResult Function(_CallSignalingEventHangup value) hangup,
+    required TResult Function(_CallSignalingEventUpdating value) updating,
+    required TResult Function(_CallSignalingEventUpdated value) updated,
+  }) {
+    return updated(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CallSignalingEventIncoming value)? incoming,
+    TResult? Function(_CallSignalingEventRinging value)? ringing,
+    TResult? Function(_CallSignalingEventProgress value)? progress,
+    TResult? Function(_CallSignalingEventAccepted value)? accepted,
+    TResult? Function(_CallSignalingEventHangup value)? hangup,
+    TResult? Function(_CallSignalingEventUpdating value)? updating,
+    TResult? Function(_CallSignalingEventUpdated value)? updated,
+  }) {
+    return updated?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CallSignalingEventIncoming value)? incoming,
+    TResult Function(_CallSignalingEventRinging value)? ringing,
+    TResult Function(_CallSignalingEventProgress value)? progress,
+    TResult Function(_CallSignalingEventAccepted value)? accepted,
+    TResult Function(_CallSignalingEventHangup value)? hangup,
+    TResult Function(_CallSignalingEventUpdating value)? updating,
+    TResult Function(_CallSignalingEventUpdated value)? updated,
+    required TResult orElse(),
+  }) {
+    if (updated != null) {
+      return updated(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _CallSignalingEventUpdated implements _CallSignalingEvent {
+  const factory _CallSignalingEventUpdated(
+      {required final int line,
+      required final CallIdValue callId}) = _$_CallSignalingEventUpdated;
+
+  @override
+  int get line;
+  @override
+  CallIdValue get callId;
 }
 
 /// @nodoc
@@ -5716,6 +6632,7 @@ mixin _$ActiveCall {
   bool? get frontCamera => throw _privateConstructorUsedError;
   bool get held => throw _privateConstructorUsedError;
   bool get muted => throw _privateConstructorUsedError;
+  bool get updating => throw _privateConstructorUsedError;
   DateTime get createdTime => throw _privateConstructorUsedError;
   DateTime? get acceptedTime => throw _privateConstructorUsedError;
   DateTime? get hungUpTime => throw _privateConstructorUsedError;
@@ -5743,6 +6660,7 @@ abstract class $ActiveCallCopyWith<$Res> {
       bool? frontCamera,
       bool held,
       bool muted,
+      bool updating,
       DateTime createdTime,
       DateTime? acceptedTime,
       DateTime? hungUpTime,
@@ -5772,6 +6690,7 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
     Object? frontCamera = freezed,
     Object? held = null,
     Object? muted = null,
+    Object? updating = null,
     Object? createdTime = null,
     Object? acceptedTime = freezed,
     Object? hungUpTime = freezed,
@@ -5815,6 +6734,10 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
           ? _value.muted
           : muted // ignore: cast_nullable_to_non_nullable
               as bool,
+      updating: null == updating
+          ? _value.updating
+          : updating // ignore: cast_nullable_to_non_nullable
+              as bool,
       createdTime: null == createdTime
           ? _value.createdTime
           : createdTime // ignore: cast_nullable_to_non_nullable
@@ -5854,6 +6777,7 @@ abstract class _$$_ActiveCallCopyWith<$Res>
       bool? frontCamera,
       bool held,
       bool muted,
+      bool updating,
       DateTime createdTime,
       DateTime? acceptedTime,
       DateTime? hungUpTime,
@@ -5881,6 +6805,7 @@ class __$$_ActiveCallCopyWithImpl<$Res>
     Object? frontCamera = freezed,
     Object? held = null,
     Object? muted = null,
+    Object? updating = null,
     Object? createdTime = null,
     Object? acceptedTime = freezed,
     Object? hungUpTime = freezed,
@@ -5924,6 +6849,10 @@ class __$$_ActiveCallCopyWithImpl<$Res>
           ? _value.muted
           : muted // ignore: cast_nullable_to_non_nullable
               as bool,
+      updating: null == updating
+          ? _value.updating
+          : updating // ignore: cast_nullable_to_non_nullable
+              as bool,
       createdTime: null == createdTime
           ? _value.createdTime
           : createdTime // ignore: cast_nullable_to_non_nullable
@@ -5958,6 +6887,7 @@ class _$_ActiveCall extends _ActiveCall with DiagnosticableTreeMixin {
       this.frontCamera = true,
       this.held = false,
       this.muted = false,
+      this.updating = false,
       required this.createdTime,
       this.acceptedTime,
       this.hungUpTime,
@@ -5987,6 +6917,9 @@ class _$_ActiveCall extends _ActiveCall with DiagnosticableTreeMixin {
   @JsonKey()
   final bool muted;
   @override
+  @JsonKey()
+  final bool updating;
+  @override
   final DateTime createdTime;
   @override
   final DateTime? acceptedTime;
@@ -5999,7 +6932,7 @@ class _$_ActiveCall extends _ActiveCall with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, displayName: $displayName, video: $video, frontCamera: $frontCamera, held: $held, muted: $muted, createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, failure: $failure, renderers: $renderers)';
+    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, displayName: $displayName, video: $video, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, failure: $failure, renderers: $renderers)';
   }
 
   @override
@@ -6016,6 +6949,7 @@ class _$_ActiveCall extends _ActiveCall with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('frontCamera', frontCamera))
       ..add(DiagnosticsProperty('held', held))
       ..add(DiagnosticsProperty('muted', muted))
+      ..add(DiagnosticsProperty('updating', updating))
       ..add(DiagnosticsProperty('createdTime', createdTime))
       ..add(DiagnosticsProperty('acceptedTime', acceptedTime))
       ..add(DiagnosticsProperty('hungUpTime', hungUpTime))
@@ -6040,6 +6974,8 @@ class _$_ActiveCall extends _ActiveCall with DiagnosticableTreeMixin {
                 other.frontCamera == frontCamera) &&
             (identical(other.held, held) || other.held == held) &&
             (identical(other.muted, muted) || other.muted == muted) &&
+            (identical(other.updating, updating) ||
+                other.updating == updating) &&
             (identical(other.createdTime, createdTime) ||
                 other.createdTime == createdTime) &&
             (identical(other.acceptedTime, acceptedTime) ||
@@ -6063,6 +6999,7 @@ class _$_ActiveCall extends _ActiveCall with DiagnosticableTreeMixin {
       frontCamera,
       held,
       muted,
+      updating,
       createdTime,
       acceptedTime,
       hungUpTime,
@@ -6087,6 +7024,7 @@ abstract class _ActiveCall extends ActiveCall {
       final bool? frontCamera,
       final bool held,
       final bool muted,
+      final bool updating,
       required final DateTime createdTime,
       final DateTime? acceptedTime,
       final DateTime? hungUpTime,
@@ -6112,6 +7050,8 @@ abstract class _ActiveCall extends ActiveCall {
   bool get held;
   @override
   bool get muted;
+  @override
+  bool get updating;
   @override
   DateTime get createdTime;
   @override

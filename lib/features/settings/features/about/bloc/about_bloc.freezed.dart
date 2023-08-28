@@ -15,6 +15,33 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
+mixin _$AboutStarted {}
+
+/// @nodoc
+
+class _$_AboutStarted implements _AboutStarted {
+  const _$_AboutStarted();
+
+  @override
+  String toString() {
+    return 'AboutStarted()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$_AboutStarted);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+}
+
+abstract class _AboutStarted implements AboutStarted {
+  const factory _AboutStarted() = _$_AboutStarted;
+}
+
+/// @nodoc
 mixin _$AboutState {
   bool get progress => throw _privateConstructorUsedError;
   String get appName => throw _privateConstructorUsedError;
@@ -23,7 +50,6 @@ mixin _$AboutState {
   String get buildNumber => throw _privateConstructorUsedError;
   Uri get coreUrl => throw _privateConstructorUsedError;
   Version? get coreVersion => throw _privateConstructorUsedError;
-  Object? get error => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AboutStateCopyWith<AboutState> get copyWith =>
@@ -43,8 +69,7 @@ abstract class $AboutStateCopyWith<$Res> {
       String version,
       String buildNumber,
       Uri coreUrl,
-      Version? coreVersion,
-      Object? error});
+      Version? coreVersion});
 }
 
 /// @nodoc
@@ -67,7 +92,6 @@ class _$AboutStateCopyWithImpl<$Res, $Val extends AboutState>
     Object? buildNumber = null,
     Object? coreUrl = null,
     Object? coreVersion = freezed,
-    Object? error = freezed,
   }) {
     return _then(_value.copyWith(
       progress: null == progress
@@ -98,7 +122,6 @@ class _$AboutStateCopyWithImpl<$Res, $Val extends AboutState>
           ? _value.coreVersion
           : coreVersion // ignore: cast_nullable_to_non_nullable
               as Version?,
-      error: freezed == error ? _value.error : error,
     ) as $Val);
   }
 }
@@ -118,8 +141,7 @@ abstract class _$$_AboutStateCopyWith<$Res>
       String version,
       String buildNumber,
       Uri coreUrl,
-      Version? coreVersion,
-      Object? error});
+      Version? coreVersion});
 }
 
 /// @nodoc
@@ -140,7 +162,6 @@ class __$$_AboutStateCopyWithImpl<$Res>
     Object? buildNumber = null,
     Object? coreUrl = null,
     Object? coreVersion = freezed,
-    Object? error = freezed,
   }) {
     return _then(_$_AboutState(
       progress: null == progress
@@ -171,7 +192,6 @@ class __$$_AboutStateCopyWithImpl<$Res>
           ? _value.coreVersion
           : coreVersion // ignore: cast_nullable_to_non_nullable
               as Version?,
-      error: freezed == error ? _value.error : error,
     ));
   }
 }
@@ -186,8 +206,7 @@ class _$_AboutState extends _AboutState {
       required this.version,
       required this.buildNumber,
       required this.coreUrl,
-      this.coreVersion,
-      this.error})
+      this.coreVersion})
       : super._();
 
   @override
@@ -205,12 +224,10 @@ class _$_AboutState extends _AboutState {
   final Uri coreUrl;
   @override
   final Version? coreVersion;
-  @override
-  final Object? error;
 
   @override
   String toString() {
-    return 'AboutState(progress: $progress, appName: $appName, packageName: $packageName, version: $version, buildNumber: $buildNumber, coreUrl: $coreUrl, coreVersion: $coreVersion, error: $error)';
+    return 'AboutState(progress: $progress, appName: $appName, packageName: $packageName, version: $version, buildNumber: $buildNumber, coreUrl: $coreUrl, coreVersion: $coreVersion)';
   }
 
   @override
@@ -228,21 +245,12 @@ class _$_AboutState extends _AboutState {
                 other.buildNumber == buildNumber) &&
             (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
             (identical(other.coreVersion, coreVersion) ||
-                other.coreVersion == coreVersion) &&
-            const DeepCollectionEquality().equals(other.error, error));
+                other.coreVersion == coreVersion));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      progress,
-      appName,
-      packageName,
-      version,
-      buildNumber,
-      coreUrl,
-      coreVersion,
-      const DeepCollectionEquality().hash(error));
+  int get hashCode => Object.hash(runtimeType, progress, appName, packageName,
+      version, buildNumber, coreUrl, coreVersion);
 
   @JsonKey(ignore: true)
   @override
@@ -259,8 +267,7 @@ abstract class _AboutState extends AboutState {
       required final String version,
       required final String buildNumber,
       required final Uri coreUrl,
-      final Version? coreVersion,
-      final Object? error}) = _$_AboutState;
+      final Version? coreVersion}) = _$_AboutState;
   const _AboutState._() : super._();
 
   @override
@@ -277,8 +284,6 @@ abstract class _AboutState extends AboutState {
   Uri get coreUrl;
   @override
   Version? get coreVersion;
-  @override
-  Object? get error;
   @override
   @JsonKey(ignore: true)
   _$$_AboutStateCopyWith<_$_AboutState> get copyWith =>

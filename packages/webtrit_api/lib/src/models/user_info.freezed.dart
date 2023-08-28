@@ -21,7 +21,6 @@ UserInfo _$UserInfoFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$UserInfo {
   UserInfoStatus? get status => throw _privateConstructorUsedError;
-  SipInfo get sip => throw _privateConstructorUsedError;
   Balance? get balance => throw _privateConstructorUsedError;
   Numbers get numbers => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
@@ -44,7 +43,6 @@ abstract class $UserInfoCopyWith<$Res> {
   @useResult
   $Res call(
       {UserInfoStatus? status,
-      SipInfo sip,
       Balance? balance,
       Numbers numbers,
       String? email,
@@ -54,7 +52,6 @@ abstract class $UserInfoCopyWith<$Res> {
       String? companyName,
       String? timeZone});
 
-  $SipInfoCopyWith<$Res> get sip;
   $BalanceCopyWith<$Res>? get balance;
   $NumbersCopyWith<$Res> get numbers;
 }
@@ -73,7 +70,6 @@ class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
   @override
   $Res call({
     Object? status = freezed,
-    Object? sip = null,
     Object? balance = freezed,
     Object? numbers = null,
     Object? email = freezed,
@@ -88,10 +84,6 @@ class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as UserInfoStatus?,
-      sip: null == sip
-          ? _value.sip
-          : sip // ignore: cast_nullable_to_non_nullable
-              as SipInfo,
       balance: freezed == balance
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
@@ -129,14 +121,6 @@ class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
 
   @override
   @pragma('vm:prefer-inline')
-  $SipInfoCopyWith<$Res> get sip {
-    return $SipInfoCopyWith<$Res>(_value.sip, (value) {
-      return _then(_value.copyWith(sip: value) as $Val);
-    });
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
   $BalanceCopyWith<$Res>? get balance {
     if (_value.balance == null) {
       return null;
@@ -165,7 +149,6 @@ abstract class _$$_UserInfoCopyWith<$Res> implements $UserInfoCopyWith<$Res> {
   @useResult
   $Res call(
       {UserInfoStatus? status,
-      SipInfo sip,
       Balance? balance,
       Numbers numbers,
       String? email,
@@ -175,8 +158,6 @@ abstract class _$$_UserInfoCopyWith<$Res> implements $UserInfoCopyWith<$Res> {
       String? companyName,
       String? timeZone});
 
-  @override
-  $SipInfoCopyWith<$Res> get sip;
   @override
   $BalanceCopyWith<$Res>? get balance;
   @override
@@ -195,7 +176,6 @@ class __$$_UserInfoCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = freezed,
-    Object? sip = null,
     Object? balance = freezed,
     Object? numbers = null,
     Object? email = freezed,
@@ -210,10 +190,6 @@ class __$$_UserInfoCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as UserInfoStatus?,
-      sip: null == sip
-          ? _value.sip
-          : sip // ignore: cast_nullable_to_non_nullable
-              as SipInfo,
       balance: freezed == balance
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
@@ -256,7 +232,6 @@ class __$$_UserInfoCopyWithImpl<$Res>
 class _$_UserInfo implements _UserInfo {
   const _$_UserInfo(
       {this.status,
-      required this.sip,
       this.balance,
       required this.numbers,
       this.email,
@@ -271,8 +246,6 @@ class _$_UserInfo implements _UserInfo {
 
   @override
   final UserInfoStatus? status;
-  @override
-  final SipInfo sip;
   @override
   final Balance? balance;
   @override
@@ -292,7 +265,7 @@ class _$_UserInfo implements _UserInfo {
 
   @override
   String toString() {
-    return 'UserInfo(status: $status, sip: $sip, balance: $balance, numbers: $numbers, email: $email, firstName: $firstName, lastName: $lastName, aliasName: $aliasName, companyName: $companyName, timeZone: $timeZone)';
+    return 'UserInfo(status: $status, balance: $balance, numbers: $numbers, email: $email, firstName: $firstName, lastName: $lastName, aliasName: $aliasName, companyName: $companyName, timeZone: $timeZone)';
   }
 
   @override
@@ -301,7 +274,6 @@ class _$_UserInfo implements _UserInfo {
         (other.runtimeType == runtimeType &&
             other is _$_UserInfo &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.sip, sip) || other.sip == sip) &&
             (identical(other.balance, balance) || other.balance == balance) &&
             (identical(other.numbers, numbers) || other.numbers == numbers) &&
             (identical(other.email, email) || other.email == email) &&
@@ -319,8 +291,8 @@ class _$_UserInfo implements _UserInfo {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, status, sip, balance, numbers,
-      email, firstName, lastName, aliasName, companyName, timeZone);
+  int get hashCode => Object.hash(runtimeType, status, balance, numbers, email,
+      firstName, lastName, aliasName, companyName, timeZone);
 
   @JsonKey(ignore: true)
   @override
@@ -339,7 +311,6 @@ class _$_UserInfo implements _UserInfo {
 abstract class _UserInfo implements UserInfo {
   const factory _UserInfo(
       {final UserInfoStatus? status,
-      required final SipInfo sip,
       final Balance? balance,
       required final Numbers numbers,
       final String? email,
@@ -353,8 +324,6 @@ abstract class _UserInfo implements UserInfo {
 
   @override
   UserInfoStatus? get status;
-  @override
-  SipInfo get sip;
   @override
   Balance? get balance;
   @override

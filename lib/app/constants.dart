@@ -7,10 +7,14 @@ const kSignalingClientReconnectDelay = Duration(seconds: 3);
 
 const kCompatibilityVerifyRepeatDelay = Duration(seconds: 2);
 
+const kDebounceDuration = Duration(milliseconds: 275);
+
 const kInset = kMinInteractiveDimension / 2;
 
 const kMainAppBarBottomTabHeight = 42.0;
 const kMainAppBarBottomSearchHeight = kMinInteractiveDimension;
 const kMainAppBarBottomPaddingGap = 6.0;
+
+const kAllPadding16 = EdgeInsets.all(16.0);
 
 const kBlankUri = 'about:blank';

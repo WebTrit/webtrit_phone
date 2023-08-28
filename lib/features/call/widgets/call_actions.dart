@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -129,21 +128,25 @@ class _CallActionsState extends State<CallActions> {
     } else {
       late List<Widget> actions;
       if (_keypadShow) {
-        actions = KeypadKey.numbers.expandIndexed((i, k) {
-          return [
-            KeypadKeyButton(
-              text: k.text,
-              subtext: k.subtext,
-              onKeyPressed: widget.onKeyPressed!,
-              style: _textButtonStyles?.callAction,
-            ),
-            if ((i + 1) % 3 == 0) ...[
-              const SizedBox(),
-              SizedBox.square(dimension: _actionsDelimiterDimension),
-              const SizedBox(),
-            ],
-          ];
-        }).toList(growable: false);
+        actions = KeypadKey.numbers.indexed
+            .map((e) {
+              final (i, k) = e;
+              return [
+                KeypadKeyButton(
+                  text: k.text,
+                  subtext: k.subtext,
+                  onKeyPressed: widget.onKeyPressed!,
+                  style: _textButtonStyles?.callAction,
+                ),
+                if ((i + 1) % 3 == 0) ...[
+                  const SizedBox(),
+                  SizedBox.square(dimension: _actionsDelimiterDimension),
+                  const SizedBox(),
+                ],
+              ];
+            })
+            .expand((e) => e)
+            .toList(growable: false);
       } else {
         actions = [
           // row

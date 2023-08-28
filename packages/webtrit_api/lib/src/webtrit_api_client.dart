@@ -5,9 +5,8 @@ import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
-import '_http_client/_http_client.dart'
-    if (dart.library.html) '_http_client/_http_client_html.dart'
-    if (dart.library.io) '_http_client/_http_client_io.dart' as platform;
+import 'package:_http_client/_http_client.dart';
+
 import 'exceptions.dart';
 import 'models/models.dart';
 
@@ -21,7 +20,7 @@ class WebtritApiClient {
   }) : this.inner(
           baseUrl,
           tenantId,
-          httpClient: platform.createHttpClient(
+          httpClient: createHttpClient(
             connectionTimeout: connectionTimeout,
           ),
         );

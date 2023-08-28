@@ -406,7 +406,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
     [_delegateFlutterApi continueStartCallIntentHandle:[person.personHandle toPigeon]
                                            displayName:[person displayName]
                                                  video:[NSNumber numberWithBool:isVideoCall]
-                                            completion:^(NSError *error) {}];
+                                            completion:^(FlutterError *error) {}];
 
     return YES;
   } else {
@@ -422,7 +422,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
 #endif
   if (type == PKPushTypeVoIP) {
     [_pushRegistryDelegateFlutterApi didUpdatePushTokenForPushTypeVoIP:[pushCredentials.token toHexString]
-                                                            completion:^(NSError *error) {}];
+                                                            completion:^(FlutterError *error) {}];
   }
 }
 
@@ -431,7 +431,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
   NSLog(@"[Callkeep][PKPushRegistryDelegate][pushRegistry:didInvalidatePushTokenForType:] type = %@", type);
 #endif
   if (type == PKPushTypeVoIP) {
-    [_pushRegistryDelegateFlutterApi didUpdatePushTokenForPushTypeVoIP:nil completion:^(NSError *error) {}];
+    [_pushRegistryDelegateFlutterApi didUpdatePushTokenForPushTypeVoIP:nil completion:^(FlutterError *error) {}];
   }
 }
 
@@ -504,7 +504,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
                                                                                 callId:callId
                                                                                   uuid:[uuid UUIDString]
                                                                                  error:incomingCallError
-                                                                            completion:^(NSError *error) {
+                                                                            completion:^(FlutterError *error) {
                                                                               [self assignIdleTimerDisabled:callUpdate.hasVideo];
                                                                               completion();
                                                                             }];
@@ -517,7 +517,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
 #ifdef DEBUG
   NSLog(@"[Callkeep][CXProviderDelegate][providerDidReset:]");
 #endif
-  [_delegateFlutterApi didReset:^(NSError *error) {}];
+  [_delegateFlutterApi didReset:^(FlutterError *error) {}];
 }
 
 - (void)provider:(CXProvider *)provider performStartCallAction:(CXStartCallAction *)action {
@@ -528,7 +528,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
                                  handle:[action.handle toPigeon]
          displayNameOrContactIdentifier:action.contactIdentifier
                                   video:[NSNumber numberWithBool:action.video]
-                             completion:^(NSNumber *fulfill, NSError *error) {
+                             completion:^(NSNumber *fulfill, FlutterError *error) {
                                if (error != nil || [fulfill boolValue] != YES) {
                                  [action fail];
                                } else {
@@ -543,7 +543,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
   NSLog(@"[Callkeep][CXProviderDelegate][provider:performAnswerCallAction:]");
 #endif
   [_delegateFlutterApi performAnswerCall:action.callUUID.UUIDString
-                              completion:^(NSNumber *fulfill, NSError *error) {
+                              completion:^(NSNumber *fulfill, FlutterError *error) {
                                 if (error != nil || [fulfill boolValue] != YES) {
                                   [action fail];
                                 } else {
@@ -557,7 +557,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
   NSLog(@"[Callkeep][CXProviderDelegate][provider:performEndCallAction:]");
 #endif
   [_delegateFlutterApi performEndCall:action.callUUID.UUIDString
-                           completion:^(NSNumber *fulfill, NSError *error) {
+                           completion:^(NSNumber *fulfill, FlutterError *error) {
                              if (error != nil || [fulfill boolValue] != YES) {
                                [action fail];
                              } else {
@@ -573,7 +573,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
 #endif
   [_delegateFlutterApi performSetHeld:action.callUUID.UUIDString
                                onHold:[NSNumber numberWithBool:action.onHold]
-                           completion:^(NSNumber *fulfill, NSError *error) {
+                           completion:^(NSNumber *fulfill, FlutterError *error) {
                              if (error != nil || [fulfill boolValue] != YES) {
                                [action fail];
                              } else {
@@ -588,7 +588,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
 #endif
   [_delegateFlutterApi performSetMuted:action.callUUID.UUIDString
                                  muted:[NSNumber numberWithBool:action.muted]
-                            completion:^(NSNumber *fulfill, NSError *error) {
+                            completion:^(NSNumber *fulfill, FlutterError *error) {
                               if (error != nil || [fulfill boolValue] != YES) {
                                 [action fail];
                               } else {
@@ -614,7 +614,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
   }
   [_delegateFlutterApi performSendDTMF:action.callUUID.UUIDString
                                    key:action.digits
-                            completion:^(NSNumber *fulfill, NSError *error) {
+                            completion:^(NSNumber *fulfill, FlutterError *error) {
                               if (error != nil || [fulfill boolValue] != YES) {
                                 [action fail];
                               } else {
@@ -633,14 +633,14 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
 #ifdef DEBUG
   NSLog(@"[CallKeep][CXProviderDelegate][provider:didActivateAudioSession:]");
 #endif
-  [_delegateFlutterApi didActivateAudioSession:^(NSError *error) {}];
+  [_delegateFlutterApi didActivateAudioSession:^(FlutterError *error) {}];
 }
 
 - (void)provider:(CXProvider *)provider didDeactivateAudioSession:(AVAudioSession *)audioSession {
 #ifdef DEBUG
   NSLog(@"[CallKeep][CXProviderDelegate][provider:didDeactivateAudioSession:]");
 #endif
-  [_delegateFlutterApi didDeactivateAudioSession:^(NSError *error) {}];
+  [_delegateFlutterApi didDeactivateAudioSession:^(FlutterError *error) {}];
 }
 
 #pragma mark - helpers
