@@ -65,7 +65,9 @@ class _UserActionScreenState extends State<UserActionScreen> {
         if (state.uiAction != null) {
           switch (state.uiAction!) {
             case UiAction.showConvertedButton:
-              _showConverterButton(context);
+              if (_isAvailableToShowing()) {
+                _showConverterButton(context);
+              }
               break;
             case UiAction.showInviteDialog:
               if (_isAvailableToShowing()) {
