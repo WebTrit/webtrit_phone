@@ -18,10 +18,7 @@ class UserActionBlocCubit extends Cubit<UserActionBlocState> {
     required String token,
   })  : _webtritApiClient = webtritApiClient,
         _token = token,
-        super(const UserActionBlocState()) {
-    _initializeInviteCountdownDialog(_startupDurationToInvite);
-    _initializeConvertPbxUrl();
-  }
+        super(const UserActionBlocState());
 
   final Duration _startupDurationToInvite = const Duration(seconds: 15);
   final Duration _durationDurationToInvite = const Duration(seconds: 60);
@@ -34,6 +31,10 @@ class UserActionBlocCubit extends Cubit<UserActionBlocState> {
 
   Timer? _timer;
   final String tenantId;
+
+  void enableInviteFriendFlow() => _initializeInviteCountdownDialog(_startupDurationToInvite);
+
+  void enableConnectVoIP() => _initializeConvertPbxUrl();
 
   void postponeDialogCountdown() {
     _initializeInviteCountdownDialog(_durationDurationToInvite);

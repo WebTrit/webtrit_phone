@@ -9,12 +9,16 @@ import '../bloc/user_action_bloc_cubit.dart';
 import '../widgets/widgets.dart';
 
 class UserActionScreen extends StatefulWidget {
-  final Widget child;
-
   const UserActionScreen({
     super.key,
     required this.child,
+    required this.isConnectVoIOPFlow,
+    required this.isInviteFriends,
   });
+
+  final Widget child;
+  final bool isConnectVoIOPFlow;
+  final bool isInviteFriends;
 
   @override
   State<UserActionScreen> createState() => _UserActionScreenState();
@@ -44,6 +48,13 @@ class _UserActionScreenState extends State<UserActionScreen> {
     MainRoute.contacts,
     MainRoute.keypad,
   ];
+
+  @override
+  void initState() {
+    if (widget.isConnectVoIOPFlow) context.read<UserActionBlocCubit>().enableConnectVoIP();
+    if (widget.isInviteFriends) context.read<UserActionBlocCubit>().enableInviteFriendFlow();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

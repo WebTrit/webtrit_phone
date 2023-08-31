@@ -176,7 +176,13 @@ class _AppState extends State<App> {
               return MainShell(
                 appPreferences: _appPreferences,
                 child: CallShell(
-                  child: EnvironmentConfig.CORE_URL.isNotEmpty ? child : UserActionScreen(child: child),
+                  child: EnvironmentConfig.CORE_URL.isNotEmpty
+                      ? child
+                      : UserActionScreen(
+                          isConnectVoIOPFlow: true,
+                          isInviteFriends: true,
+                          child: child,
+                        ),
                 ),
               );
             },
