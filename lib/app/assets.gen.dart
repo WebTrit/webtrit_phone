@@ -46,14 +46,14 @@ class $AssetsRingtonesGen {
   List<String> get values => [incomingCall1, outgoingCall1];
 }
 
-class $AssetsStyleGen {
-  const $AssetsStyleGen();
+class $AssetsThemesGen {
+  const $AssetsThemesGen();
 
-  /// File path: assets/style/branding.json
-  String get branding => 'assets/style/branding.json';
+  /// File path: assets/themes/original.json
+  String get original => 'assets/themes/original.json';
 
   /// List of all assets
-  List<String> get values => [branding];
+  List<String> get values => [original];
 }
 
 class Assets {
@@ -66,7 +66,7 @@ class Assets {
   static const $AssetsRingtonesGen ringtones = $AssetsRingtonesGen();
   static const SvgGenImage secondaryOnboardinLogo =
       SvgGenImage('assets/secondary_onboardin_logo.svg');
-  static const $AssetsStyleGen style = $AssetsStyleGen();
+  static const $AssetsThemesGen themes = $AssetsThemesGen();
 
   /// List of all assets
   List<SvgGenImage> get values =>

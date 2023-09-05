@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
+import 'theme_json_serializable.dart';
 import 'custom_color.dart';
 import 'theme_asset.dart';
 
+part 'theme_settings.g.dart';
+
+@themeJsonSerializable
 class ThemeSettings {
   const ThemeSettings({
     required this.seedColor,
@@ -21,8 +25,13 @@ class ThemeSettings {
   final String? fontFamily;
   final ThemeSvgAsset primaryOnboardingLogo;
   final ThemeSvgAsset secondaryOnboardingLogo;
+
+  factory ThemeSettings.fromJson(Map<String, dynamic> json) => _$ThemeSettingsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ThemeSettingsToJson(this);
 }
 
+@themeJsonSerializable
 class ColorSchemeOverride {
   const ColorSchemeOverride({
     this.primary,
@@ -87,4 +96,8 @@ class ColorSchemeOverride {
   final Color? shadow;
   final Color? scrim;
   final Color? surfaceTint;
+
+  factory ColorSchemeOverride.fromJson(Map<String, dynamic> json) => _$ColorSchemeOverrideFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ColorSchemeOverrideToJson(this);
 }

@@ -1,0 +1,30 @@
+{
+  "seedColor": "#F95A14",
+  "lightColorSchemeOverride": {
+    "primary": "#F95A14",
+    "onPrimary": "#FFFFFF",
+    "secondary": "#123752",
+    "secondaryContainer": "#EEF3F6",
+    "onSecondaryContainer": "#1F618F",
+    "tertiary": "#75B943",
+    "error": "#E74C3C",
+    "outline": "#FFFFFF",
+    "background": "#FFFFFF",
+    "onBackground": "#30302F",
+    "surface": "#EEF3F6",
+    "onSurface": "#30302F"
+  },
+  "primaryGradientColors": [
+    {
+      "color": "#5CACE3",
+      "blend": false
+    },
+    {
+      "color": "#123752",
+      "blend": false
+    }
+  ],
+  "fontFamily": "Montserrat",
+  "primaryOnboardingLogo": "asset://assets/primary_onboardin_logo.svg",
+  "secondaryOnboardingLogo": "asset://assets/secondary_onboardin_logo.svg"
+}
