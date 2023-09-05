@@ -37,25 +37,25 @@ class AppTheme {
 
     // TODO: Used until a dependency is added to import model
     final colorScheme = ColorSchemeOverride(
-      primary: colorSchemeMap['primary']?.toColor,
-      onPrimary: colorSchemeMap['on_primary']?.toColor,
-      onSurface: colorSchemeMap['on_surface']?.toColor,
-      surface: colorSchemeMap['surface']?.toColor,
-      onSecondaryContainer: colorSchemeMap['on_secondary_container']?.toColor,
-      secondaryContainer: colorSchemeMap['secondary_container']?.toColor,
-      tertiary: colorSchemeMap['tertiary']?.toColor,
-      error: colorSchemeMap['error']?.toColor,
-      secondary: colorSchemeMap['secondary']?.toColor,
-      outline: colorSchemeMap['outline']?.toColor,
-      background: colorSchemeMap['background']?.toColor,
-      onBackground: colorSchemeMap['on_background']?.toColor,
+      primary: colorSchemeMap['primary']?.toColor(),
+      onPrimary: colorSchemeMap['on_primary']?.toColor(),
+      onSurface: colorSchemeMap['on_surface']?.toColor(),
+      surface: colorSchemeMap['surface']?.toColor(),
+      onSecondaryContainer: colorSchemeMap['on_secondary_container']?.toColor(),
+      secondaryContainer: colorSchemeMap['secondary_container']?.toColor(),
+      tertiary: colorSchemeMap['tertiary']?.toColor(),
+      error: colorSchemeMap['error']?.toColor(),
+      secondary: colorSchemeMap['secondary']?.toColor(),
+      outline: colorSchemeMap['outline']?.toColor(),
+      background: colorSchemeMap['background']?.toColor(),
+      onBackground: colorSchemeMap['on_background']?.toColor(),
     );
 
     final gradientTabColor =
-        List<String>.from(gradientSchemeList).map((hex) => CustomColor(color: hex.toColor!, blend: false)).toList();
+        List<String>.from(gradientSchemeList).map((hex) => CustomColor(color: hex.toColor()!, blend: false)).toList();
 
     final theme = ThemeSettings(
-      seedColor: (colorSchemeMap['primary'] as String).toColor!,
+      seedColor: (colorSchemeMap['primary'] as String).toColor()!,
       lightColorSchemeOverride: colorScheme,
       primaryGradientColors: gradientTabColor,
       fontFamily: 'Montserrat',
