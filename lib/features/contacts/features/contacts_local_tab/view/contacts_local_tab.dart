@@ -27,7 +27,10 @@ class ContactsLocalTab extends StatelessWidget {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(context.l10n.contacts_LocalTabText_permissionFailure),
+              Text(
+                context.l10n.contacts_LocalTabText_permissionFailure,
+                textAlign: TextAlign.center,
+              ),
               TextButton(
                 onPressed: () => openAppSettings(),
                 child: Text(context.l10n.contacts_LocalTabButton_openAppSettings),
