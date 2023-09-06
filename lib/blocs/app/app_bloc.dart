@@ -21,13 +21,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     required this.appPreferences,
     required this.secureStorage,
     required this.appDatabase,
-    required ThemeSettings themeSettings,
+    required AppThemes appThemes,
   }) : super(AppState(
           coreUrl: secureStorage.readCoreUrl(),
           tenantId: secureStorage.readTenantId(),
           token: secureStorage.readToken(),
           webRegistrationInitialUrl: secureStorage.readWebRegistrationInitialUrl(),
-          themeSettings: themeSettings,
+          themeSettings: appThemes.values.first.settings,
           themeMode: appPreferences.getThemeMode(),
           locale: appPreferences.getLocale(),
         )) {

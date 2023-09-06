@@ -14,8 +14,8 @@ import 'package:screenshots/widgets/widgets.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await AppTheme.init();
-  final themeSettings = AppTheme().settings;
+  await AppThemes.init();
+  final themeSettings = AppThemes().values.first.settings;
 
   final appBloc = MockAppBloc.allScreen(
     themeSettings: themeSettings,

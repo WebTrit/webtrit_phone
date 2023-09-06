@@ -20,8 +20,8 @@ import 'package:screenshots/widgets/widgets.dart';
 void main() async {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  await AppTheme.init();
-  final themeSettings = AppTheme().settings;
+  await AppThemes.init();
+  final themeSettings = AppThemes().values.first.settings;
 
   late final String screenshotNamePrefix;
   late final AppBloc appBloc;

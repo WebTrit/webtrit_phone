@@ -25,7 +25,6 @@ void main() {
     final appAnalyticsRepository = AppAnalyticsRepository(instance: FirebaseAnalytics.instance);
 
     final applicationDocumentsPath = await getApplicationDocumentsPath();
-    final themeSettings = AppTheme().settings;
 
     return Provider<AppDatabase>(
       create: (context) {
@@ -56,7 +55,7 @@ void main() {
               appPermissions: AppPermissions(),
               appPreferences: AppPreferences(),
               secureStorage: SecureStorage(),
-              themeSettings: themeSettings,
+              appThemes: AppThemes(),
             );
           },
         ),
