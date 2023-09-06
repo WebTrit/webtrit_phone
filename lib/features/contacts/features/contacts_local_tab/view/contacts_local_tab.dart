@@ -24,18 +24,21 @@ class ContactsLocalTab extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         } else if (state.status == ContactsLocalTabStatus.permissionFailure) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                context.l10n.contacts_LocalTabText_permissionFailure,
-                textAlign: TextAlign.center,
-              ),
-              TextButton(
-                onPressed: () => openAppSettings(),
-                child: Text(context.l10n.contacts_LocalTabButton_openAppSettings),
-              ),
-            ],
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  context.l10n.contacts_LocalTabText_permissionFailure,
+                  textAlign: TextAlign.center,
+                ),
+                TextButton(
+                  onPressed: () => openAppSettings(),
+                  child: Text(context.l10n.contacts_LocalTabButton_openAppSettings),
+                ),
+              ],
+            ),
           );
         } else if (state.contacts.isNotEmpty) {
           return ListView.builder(
