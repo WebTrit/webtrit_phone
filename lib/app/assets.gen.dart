@@ -46,6 +46,16 @@ class $AssetsRingtonesGen {
   List<String> get values => [incomingCall1, outgoingCall1];
 }
 
+class $AssetsThemesGen {
+  const $AssetsThemesGen();
+
+  /// File path: assets/themes/original.json
+  String get original => 'assets/themes/original.json';
+
+  /// List of all assets
+  List<String> get values => [original];
+}
+
 class Assets {
   Assets._();
 
@@ -56,6 +66,7 @@ class Assets {
   static const $AssetsRingtonesGen ringtones = $AssetsRingtonesGen();
   static const SvgGenImage secondaryOnboardinLogo =
       SvgGenImage('assets/secondary_onboardin_logo.svg');
+  static const $AssetsThemesGen themes = $AssetsThemesGen();
 
   /// List of all assets
   List<SvgGenImage> get values =>

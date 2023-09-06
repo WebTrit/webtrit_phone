@@ -11,14 +11,17 @@ import 'package:screenshots/data/data.dart';
 import 'package:screenshots/screenshots/screenshots.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/theme/portaone.dart';
 
 import 'package:screenshots/mocks/mocks.dart';
 import 'package:screenshots/widgets/widgets.dart';
 
-void main() {
+void main() async {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  await AppThemes.init();
+  final themeSettings = AppThemes().values.first.settings;
 
   late final String screenshotNamePrefix;
   late final AppBloc appBloc;
@@ -65,7 +68,7 @@ void main() {
     }
 
     appBloc = MockAppBloc.allScreen(
-      themeSettings: portaoneThemeSettings,
+      themeSettings: themeSettings,
       themeMode: ThemeMode.light,
       locale: const Locale('en'),
     );

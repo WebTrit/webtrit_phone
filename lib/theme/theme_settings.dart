@@ -1,90 +1,68 @@
 import 'package:flutter/material.dart';
 
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+import 'theme_json_serializable.dart';
 import 'custom_color.dart';
 import 'theme_asset.dart';
 
-class ThemeSettings {
-  const ThemeSettings({
-    required this.seedColor,
-    this.lightColorSchemeOverride,
-    this.darkColorSchemeOverride,
-    required this.primaryGradientColors,
-    this.fontFamily,
-    required this.primaryOnboardingLogo,
-    required this.secondaryOnboardingLogo,
-  });
+part 'theme_settings.freezed.dart';
 
-  final Color seedColor;
-  final ColorSchemeOverride? lightColorSchemeOverride;
-  final ColorSchemeOverride? darkColorSchemeOverride;
-  final List<CustomColor> primaryGradientColors;
-  final String? fontFamily;
-  final ThemeSvgAsset primaryOnboardingLogo;
-  final ThemeSvgAsset secondaryOnboardingLogo;
+part 'theme_settings.g.dart';
+
+@freezed
+class ThemeSettings with _$ThemeSettings {
+  // ignore: invalid_annotation_target
+  @themeJsonSerializable
+  const factory ThemeSettings({
+    required Color seedColor,
+    ColorSchemeOverride? lightColorSchemeOverride,
+    ColorSchemeOverride? darkColorSchemeOverride,
+    required List<CustomColor> primaryGradientColors,
+    String? fontFamily,
+    required ThemeSvgAsset primaryOnboardingLogo,
+    required ThemeSvgAsset secondaryOnboardingLogo,
+  }) = _ThemeSettings;
+
+  factory ThemeSettings.fromJson(Map<String, dynamic> json) => _$ThemeSettingsFromJson(json);
 }
 
-class ColorSchemeOverride {
-  const ColorSchemeOverride({
-    this.primary,
-    this.onPrimary,
-    this.primaryContainer,
-    this.onPrimaryContainer,
-    this.secondary,
-    this.onSecondary,
-    this.secondaryContainer,
-    this.onSecondaryContainer,
-    this.tertiary,
-    this.onTertiary,
-    this.tertiaryContainer,
-    this.onTertiaryContainer,
-    this.error,
-    this.onError,
-    this.errorContainer,
-    this.onErrorContainer,
-    this.outline,
-    this.outlineVariant,
-    this.background,
-    this.onBackground,
-    this.surface,
-    this.onSurface,
-    this.surfaceVariant,
-    this.onSurfaceVariant,
-    this.inverseSurface,
-    this.onInverseSurface,
-    this.inversePrimary,
-    this.shadow,
-    this.scrim,
-    this.surfaceTint,
-  });
+@freezed
+class ColorSchemeOverride with _$ColorSchemeOverride {
+  // ignore: invalid_annotation_target
+  @themeJsonSerializable
+  const factory ColorSchemeOverride({
+    Color? primary,
+    Color? onPrimary,
+    Color? primaryContainer,
+    Color? onPrimaryContainer,
+    Color? secondary,
+    Color? onSecondary,
+    Color? secondaryContainer,
+    Color? onSecondaryContainer,
+    Color? tertiary,
+    Color? onTertiary,
+    Color? tertiaryContainer,
+    Color? onTertiaryContainer,
+    Color? error,
+    Color? onError,
+    Color? errorContainer,
+    Color? onErrorContainer,
+    Color? outline,
+    Color? outlineVariant,
+    Color? background,
+    Color? onBackground,
+    Color? surface,
+    Color? onSurface,
+    Color? surfaceVariant,
+    Color? onSurfaceVariant,
+    Color? inverseSurface,
+    Color? onInverseSurface,
+    Color? inversePrimary,
+    Color? shadow,
+    Color? scrim,
+    Color? surfaceTint,
+  }) = _ColorSchemeOverride;
 
-  final Color? primary;
-  final Color? onPrimary;
-  final Color? primaryContainer;
-  final Color? onPrimaryContainer;
-  final Color? secondary;
-  final Color? onSecondary;
-  final Color? secondaryContainer;
-  final Color? onSecondaryContainer;
-  final Color? tertiary;
-  final Color? onTertiary;
-  final Color? tertiaryContainer;
-  final Color? onTertiaryContainer;
-  final Color? error;
-  final Color? onError;
-  final Color? errorContainer;
-  final Color? onErrorContainer;
-  final Color? outline;
-  final Color? outlineVariant;
-  final Color? background;
-  final Color? onBackground;
-  final Color? surface;
-  final Color? onSurface;
-  final Color? surfaceVariant;
-  final Color? onSurfaceVariant;
-  final Color? inverseSurface;
-  final Color? onInverseSurface;
-  final Color? inversePrimary;
-  final Color? shadow;
-  final Color? scrim;
-  final Color? surfaceTint;
+  factory ColorSchemeOverride.fromJson(Map<String, dynamic> json) => _$ColorSchemeOverrideFromJson(json);
 }

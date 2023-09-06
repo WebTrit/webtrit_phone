@@ -28,12 +28,14 @@ class App extends StatefulWidget {
     required this.secureStorage,
     required this.appDatabase,
     required this.appPermissions,
+    required this.appThemes,
   }) : super(key: key);
 
   final AppPreferences appPreferences;
   final SecureStorage secureStorage;
   final AppDatabase appDatabase;
   final AppPermissions appPermissions;
+  final AppThemes appThemes;
 
   @override
   State<App> createState() => _AppState();
@@ -57,6 +59,7 @@ class _AppState extends State<App> {
       appPreferences: _appPreferences,
       secureStorage: _secureStorage,
       appDatabase: _appDatabase,
+      appThemes: widget.appThemes,
     );
   }
 

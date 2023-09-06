@@ -55,6 +55,7 @@ void main() {
               appPermissions: AppPermissions(),
               appPreferences: AppPreferences(),
               secureStorage: SecureStorage(),
+              appThemes: AppThemes(),
             );
           },
         ),
