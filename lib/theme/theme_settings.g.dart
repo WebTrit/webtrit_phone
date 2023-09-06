@@ -6,8 +6,8 @@ part of 'theme_settings.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ThemeSettings _$ThemeSettingsFromJson(Map<String, dynamic> json) =>
-    ThemeSettings(
+_$_ThemeSettings _$$_ThemeSettingsFromJson(Map<String, dynamic> json) =>
+    _$_ThemeSettings(
       seedColor:
           const CSSColorConverter().fromJson(json['seedColor'] as String),
       lightColorSchemeOverride: json['lightColorSchemeOverride'] == null
@@ -28,7 +28,7 @@ ThemeSettings _$ThemeSettingsFromJson(Map<String, dynamic> json) =>
           ThemeSvgAsset.fromJson(json['secondaryOnboardingLogo'] as String),
     );
 
-Map<String, dynamic> _$ThemeSettingsToJson(ThemeSettings instance) =>
+Map<String, dynamic> _$$_ThemeSettingsToJson(_$_ThemeSettings instance) =>
     <String, dynamic>{
       'seedColor': const CSSColorConverter().toJson(instance.seedColor),
       'lightColorSchemeOverride': instance.lightColorSchemeOverride,
@@ -39,8 +39,9 @@ Map<String, dynamic> _$ThemeSettingsToJson(ThemeSettings instance) =>
       'secondaryOnboardingLogo': instance.secondaryOnboardingLogo,
     };
 
-ColorSchemeOverride _$ColorSchemeOverrideFromJson(Map<String, dynamic> json) =>
-    ColorSchemeOverride(
+_$_ColorSchemeOverride _$$_ColorSchemeOverrideFromJson(
+        Map<String, dynamic> json) =>
+    _$_ColorSchemeOverride(
       primary: _$JsonConverterFromJson<String, Color>(
           json['primary'], const CSSColorConverter().fromJson),
       onPrimary: _$JsonConverterFromJson<String, Color>(
@@ -103,8 +104,8 @@ ColorSchemeOverride _$ColorSchemeOverrideFromJson(Map<String, dynamic> json) =>
           json['surfaceTint'], const CSSColorConverter().fromJson),
     );
 
-Map<String, dynamic> _$ColorSchemeOverrideToJson(
-        ColorSchemeOverride instance) =>
+Map<String, dynamic> _$$_ColorSchemeOverrideToJson(
+        _$_ColorSchemeOverride instance) =>
     <String, dynamic>{
       'primary': _$JsonConverterToJson<String, Color>(
           instance.primary, const CSSColorConverter().toJson),
