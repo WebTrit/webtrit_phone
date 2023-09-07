@@ -52,6 +52,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   WebtritSignalingClient? _signalingClient;
   Timer? _signalingClientReconnectTimer;
 
+  // TODO: For save answer action if action faster than socket initialization
+  final _cachedAnswerCall = <ActiveCall>[];
+
   final _peerConnectionCompleters = <UuidValue, Completer<RTCPeerConnection>>{};
 
   final _audioPlayer = AudioPlayer();
@@ -228,6 +231,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   void _disconnectInitiated() {
+    // TODO: Change place for clear cache answer
+    _cachedAnswerCall.clear();
+
     _signalingClientReconnectTimer?.cancel();
     _signalingClientReconnectTimer = null;
     add(const _SignalingClientEvent.disconnectInitiated());
@@ -528,9 +534,21 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (error != null) {
       if (error == CallkeepIncomingCallError.callUuidAlreadyExists) {
         _logger.info('__onCallSignalingEventIncoming reportNewIncomingCall with already existed call uuid');
-        emit(state.copyWithMappedActiveCall(event.callId.uuid, (activeCall) {
-          return activeCall.copyWith(line: event.line);
-        }));
+        emit(
+          state.copyWithMappedActiveCall(
+            event.callId.uuid,
+            (activeCall) {
+              var updatedActiveCall = activeCall.copyWith(line: event.line);
+              // TODO: For execute answer action if action faster than socket initialization
+              for (var answer in _cachedAnswerCall) {
+                _perform(_CallPerformEvent.answered(answer.callId.getCallkeepId));
+              }
+              _cachedAnswerCall.clear();
+
+              return updatedActiveCall;
+            },
+          ),
+        );
       } else {
         _logger.warning('__onCallSignalingEventIncoming reportNewIncomingCall error: $error');
         // TODO: implement correct incoming call hangup (take into account that _signalingClient could be disconnected)
@@ -980,20 +998,24 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }));
 
     await state.performOnActiveCall(event.id.uuidValue, (activeCall) async {
-      final peerConnection = await _peerConnectionRetrieve(activeCall.callId.uuid);
-      if (peerConnection == null) {
-        _logger.warning('__onCallPerformEventAnswered: peerConnection is null - most likely some permissions issue');
+      if (activeCall.line != -1) {
+        final peerConnection = await _peerConnectionRetrieve(activeCall.callId.uuid);
+        if (peerConnection == null) {
+          _logger.warning('__onCallPerformEventAnswered: peerConnection is null - most likely some permissions issue');
+        } else {
+          final localDescription = peerConnection.signalingState == RTCSignalingState.RTCSignalingStateHaveRemoteOffer
+              ? await peerConnection.createAnswer({})
+              : await peerConnection.createOffer({});
+          await _signalingClient?.execute(AcceptRequest(
+            transaction: WebtritSignalingClient.generateTransactionId(),
+            line: activeCall.line,
+            callId: activeCall.callId.toString(),
+            jsep: localDescription.toMap(),
+          ));
+          await peerConnection.setLocalDescription(localDescription);
+        }
       } else {
-        final localDescription = peerConnection.signalingState == RTCSignalingState.RTCSignalingStateHaveRemoteOffer
-            ? await peerConnection.createAnswer({})
-            : await peerConnection.createOffer({});
-        await _signalingClient?.execute(AcceptRequest(
-          transaction: WebtritSignalingClient.generateTransactionId(),
-          line: activeCall.line,
-          callId: activeCall.callId.toString(),
-          jsep: localDescription.toMap(),
-        ));
-        await peerConnection.setLocalDescription(localDescription);
+        _cachedAnswerCall.add(activeCall);
       }
     });
   }
