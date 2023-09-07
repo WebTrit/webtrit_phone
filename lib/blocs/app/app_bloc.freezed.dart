@@ -236,6 +236,8 @@ abstract class $AppStateCopyWith<$Res> {
       ThemeSettings themeSettings,
       ThemeMode themeMode,
       Locale locale});
+
+  $ThemeSettingsCopyWith<$Res> get themeSettings;
 }
 
 /// @nodoc
@@ -290,6 +292,14 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
               as Locale,
     ) as $Val);
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ThemeSettingsCopyWith<$Res> get themeSettings {
+    return $ThemeSettingsCopyWith<$Res>(_value.themeSettings, (value) {
+      return _then(_value.copyWith(themeSettings: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -307,6 +317,9 @@ abstract class _$$_AppStateCopyWith<$Res> implements $AppStateCopyWith<$Res> {
       ThemeSettings themeSettings,
       ThemeMode themeMode,
       Locale locale});
+
+  @override
+  $ThemeSettingsCopyWith<$Res> get themeSettings;
 }
 
 /// @nodoc

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
@@ -6,6 +8,8 @@ import 'package:flutter_svg/svg.dart';
 abstract class ThemeAsset {}
 
 abstract class ThemeSvgAsset extends ThemeAsset {
+  ThemeSvgAsset();
+
   Widget svg({
     Key? key,
     bool matchTextDirection = false,
@@ -23,6 +27,18 @@ abstract class ThemeSvgAsset extends ThemeAsset {
     ColorFilter? colorFilter,
     Clip clipBehavior = Clip.hardEdge,
   });
+
+  factory ThemeSvgAsset.fromJson(String value) {
+    if (value.startsWith(ThemeAssetSvgAsset.prefix)) {
+      return ThemeAssetSvgAsset.fromJson(value);
+    } else if (value.startsWith(ThemeMemorySvgAsset.prefix)) {
+      return ThemeMemorySvgAsset.fromJson(value);
+    } else {
+      return ThemeNetworkSvgAsset.fromJson(value);
+    }
+  }
+
+  String toJson();
 }
 
 class ThemeNetworkSvgAsset extends ThemeSvgAsset {
@@ -65,9 +81,16 @@ class ThemeNetworkSvgAsset extends ThemeSvgAsset {
       clipBehavior: clipBehavior,
     );
   }
+
+  factory ThemeNetworkSvgAsset.fromJson(String value) => ThemeNetworkSvgAsset(value);
+
+  @override
+  String toJson() => _url;
 }
 
 class ThemeAssetSvgAsset extends ThemeSvgAsset {
+  static const prefix = 'asset://';
+
   ThemeAssetSvgAsset(this._assetName);
 
   final String _assetName;
@@ -109,9 +132,16 @@ class ThemeAssetSvgAsset extends ThemeSvgAsset {
       clipBehavior: clipBehavior,
     );
   }
+
+  factory ThemeAssetSvgAsset.fromJson(String value) => ThemeAssetSvgAsset(value.substring(prefix.length));
+
+  @override
+  String toJson() => 'asset://$_assetName';
 }
 
 class ThemeMemorySvgAsset extends ThemeSvgAsset {
+  static const prefix = 'memory://';
+
   ThemeMemorySvgAsset(this._bytes);
 
   final Uint8List _bytes;
@@ -151,4 +181,10 @@ class ThemeMemorySvgAsset extends ThemeSvgAsset {
       clipBehavior: clipBehavior,
     );
   }
+
+  factory ThemeMemorySvgAsset.fromJson(String value) =>
+      ThemeMemorySvgAsset(base64Decode(value.substring(prefix.length)));
+
+  @override
+  String toJson() => 'memory://${base64Encode(_bytes)}';
 }
