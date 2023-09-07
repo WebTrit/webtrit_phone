@@ -913,7 +913,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     await state.performOnActiveCall(event.id.uuidValue, (activeCall) async {
-      await Helper.setSpeakerphoneOn(event.enabled);
+      if (Platform.isIOS) {
+        await Helper.setSpeakerphoneOn(event.enabled);
+      } else {
+        callkeep.setSpeaker(activeCall.callId.getCallkeepId, event.enabled);
+      }
     });
   }
 
