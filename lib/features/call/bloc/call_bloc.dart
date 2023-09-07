@@ -84,6 +84,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _onAudioSessionRouteChanged,
       transformer: droppable(),
     );
+    on<_HandlePlatformAudioFlow>(
+      _handlePlatformAudioFlow,
+      transformer: droppable(),
+    );
     on<_SignalingClientEvent>(
       _onSignalingClientEvent,
       transformer: restartable(),
@@ -267,6 +271,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       });
       _routeChangeSubscription?.pause();
     }
+
+    add(const _HandlePlatformAudioFlow());
   }
 
   Future<void> _onAppLifecycleStateChanged(
@@ -303,6 +309,22 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _reconnectInitiated();
     }
     emit(state.copyWith(currentConnectivityResult: connectivityResult));
+  }
+
+  Future<void> _handlePlatformAudioFlow(
+    _HandlePlatformAudioFlow event,
+    Emitter<CallState> emit,
+  ) async {
+    if (!kIsWeb && Platform.isIOS) {
+      _routeChangeSubscription = AVAudioSession().routeChangeStream.listen((event) {
+        add(const _AudioSessionRouteChanged());
+      });
+      _routeChangeSubscription?.pause();
+    }
+
+    if (Platform.isAndroid) {
+      emit(state.copyWith(speaker: false));
+    }
   }
 
   Future<void> _onAudioSessionRouteChanged(
@@ -469,6 +491,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // TODO: implement correct incoming call hangup (take into account that _signalingClient is disconnected)
       return;
     }
+
+    add(const _HandlePlatformAudioFlow());
 
     emit(state.copyWithPushActiveCall(ActiveCall(
       direction: Direction.incoming,
@@ -889,7 +913,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     await state.performOnActiveCall(event.id.uuidValue, (activeCall) async {
-      await Helper.setSpeakerphoneOn(event.enabled);
+      if (Platform.isIOS) {
+        await Helper.setSpeakerphoneOn(event.enabled);
+      } else {
+        callkeep.setSpeaker(activeCall.callId.getCallkeepId, event.enabled);
+      }
     });
   }
 
@@ -1578,13 +1606,23 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> _ringtoneOutgoingPlay() async {
-    await _audioPlayer.setAsset(Assets.ringtones.outgoingCall1);
-    await _audioPlayer.setLoopMode(LoopMode.one);
-    _audioPlayer.play();
+    //TODO: It better do on callkeep side
+    if (Platform.isAndroid) {
+      return;
+    } else {
+      await _audioPlayer.setAsset(Assets.ringtones.outgoingCall1);
+      await _audioPlayer.setLoopMode(LoopMode.one);
+      _audioPlayer.play();
+    }
   }
 
   Future<void> _ringtoneStop() async {
-    await _audioPlayer.stop();
+    //TODO: I noticed that a frequent problem of hanging and not being able to reset the call is the blocking of methods by this function
+    if (Platform.isAndroid) {
+      return;
+    } else {
+      await _audioPlayer.stop();
+    }
   }
 
   Uri _parseCoreUrlToSignalingUrl(String coreUrl) {
