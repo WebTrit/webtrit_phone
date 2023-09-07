@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../../../contacts.dart';
 
@@ -46,15 +47,25 @@ class ContactsExternalTab extends StatelessWidget {
           } else {
             if (state.searching) {
               children = [
-                Text(context.l10n.contacts_ExternalTabText_emptyOnSearching),
+                InfoCard(
+                  text: Text(
+                    context.l10n.contacts_ExternalTabText_emptyOnSearching,
+                    textAlign: TextAlign.center,
+                  ),
+                )
               ];
             } else {
               children = [
-                Text(context.l10n.contacts_ExternalTabText_empty),
-                TextButton(
-                  onPressed: () => context.read<ContactsExternalTabBloc>().add(const ContactsExternalTabRefreshed()),
-                  child: Text(context.l10n.contacts_ExternalTabButton_refresh),
-                ),
+                InfoCard(
+                  text: Text(
+                    context.l10n.contacts_ExternalTabText_empty,
+                    textAlign: TextAlign.center,
+                  ),
+                  button: TextButton(
+                    onPressed: () => context.read<ContactsExternalTabBloc>().add(const ContactsExternalTabRefreshed()),
+                    child: Text(context.l10n.contacts_ExternalTabButton_refresh),
+                  ),
+                )
               ];
             }
           }

@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../../../contacts.dart';
 
@@ -24,15 +25,15 @@ class ContactsLocalTab extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         } else if (state.status == ContactsLocalTabStatus.permissionFailure) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(context.l10n.contacts_LocalTabText_permissionFailure),
-              TextButton(
-                onPressed: () => openAppSettings(),
-                child: Text(context.l10n.contacts_LocalTabButton_openAppSettings),
-              ),
-            ],
+          return InfoCard(
+            text: Text(
+              context.l10n.contacts_LocalTabText_permissionFailure,
+              textAlign: TextAlign.center,
+            ),
+            button: TextButton(
+              onPressed: () => openAppSettings(),
+              child: Text(context.l10n.contacts_LocalTabButton_openAppSettings),
+            ),
           );
         } else if (state.contacts.isNotEmpty) {
           return ListView.builder(
