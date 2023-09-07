@@ -18,3 +18,6 @@ const kMainAppBarBottomPaddingGap = 6.0;
 const kAllPadding16 = EdgeInsets.all(16.0);
 
 const kBlankUri = 'about:blank';
+
+const initialMainRout = '/main';
+const initialCallRout = '/main/call';

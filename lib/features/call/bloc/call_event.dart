@@ -137,23 +137,23 @@ class CallControlEvent with _$CallControlEvent implements CallEvent {
     required bool video,
   }) = _CallControlEventStarted;
 
-  const factory CallControlEvent.answered(UuidValue uuid) = _CallControlEventAnswered;
+  const factory CallControlEvent.answered(CallkeepId id) = _CallControlEventAnswered;
 
-  const factory CallControlEvent.ended(UuidValue uuid) = _CallControlEventEnded;
+  const factory CallControlEvent.ended(CallkeepId id) = _CallControlEventEnded;
 
-  const factory CallControlEvent.setHeld(UuidValue uuid, bool onHold) = _CallControlEventSetHeld;
+  const factory CallControlEvent.setHeld(CallkeepId id, bool onHold) = _CallControlEventSetHeld;
 
-  const factory CallControlEvent.setMuted(UuidValue uuid, bool muted) = _CallControlEventSetMuted;
+  const factory CallControlEvent.setMuted(CallkeepId id, bool muted) = _CallControlEventSetMuted;
 
-  const factory CallControlEvent.sentDTMF(UuidValue uuid, String key) = _CallControlEventSentDTMF;
+  const factory CallControlEvent.sentDTMF(CallkeepId id, String key) = _CallControlEventSentDTMF;
 
-  const factory CallControlEvent.cameraSwitched(UuidValue uuid) = _CallControlEventCameraSwitched;
+  const factory CallControlEvent.cameraSwitched(CallkeepId id) = _CallControlEventCameraSwitched;
 
-  const factory CallControlEvent.cameraEnabled(UuidValue uuid, bool enabled) = _CallControlEventCameraEnabled;
+  const factory CallControlEvent.cameraEnabled(CallkeepId id, bool enabled) = _CallControlEventCameraEnabled;
 
-  const factory CallControlEvent.speakerEnabled(UuidValue uuid, bool enabled) = _CallControlEventSpeakerEnabled;
+  const factory CallControlEvent.speakerEnabled(CallkeepId id, bool enabled) = _CallControlEventSpeakerEnabled;
 
-  const factory CallControlEvent.failureApproved(UuidValue uuid) = _CallControlEventFailureApproved;
+  const factory CallControlEvent.failureApproved(CallkeepId id) = _CallControlEventFailureApproved;
 }
 
 mixin CallControlEventStartedMixin {
@@ -183,21 +183,23 @@ class _CallPerformEvent with _$_CallPerformEvent implements CallEvent {
   _CallPerformEvent._();
 
   factory _CallPerformEvent.started(
-    UuidValue uuid, {
+    CallkeepId id, {
     required CallkeepHandle handle,
     String? displayName,
     required bool video,
   }) = _CallPerformEventStarted;
 
-  factory _CallPerformEvent.answered(UuidValue uuid) = _CallPerformEventAnswered;
+  factory _CallPerformEvent.answered(CallkeepId id) = _CallPerformEventAnswered;
 
-  factory _CallPerformEvent.ended(UuidValue uuid) = _CallPerformEventEnded;
+  factory _CallPerformEvent.ended(CallkeepId id) = _CallPerformEventEnded;
 
-  factory _CallPerformEvent.setHeld(UuidValue uuid, bool onHold) = _CallPerformEventSetHeld;
+  factory _CallPerformEvent.setHeld(CallkeepId id, bool onHold) = _CallPerformEventSetHeld;
 
-  factory _CallPerformEvent.setMuted(UuidValue uuid, bool muted) = _CallPerformEventSetMuted;
+  factory _CallPerformEvent.setMuted(CallkeepId id, bool muted) = _CallPerformEventSetMuted;
 
-  factory _CallPerformEvent.sentDTMF(UuidValue uuid, String key) = _CallPerformEventSentDTMF;
+  factory _CallPerformEvent.sentDTMF(CallkeepId id, String key) = _CallPerformEventSentDTMF;
+
+  factory _CallPerformEvent.setSpeaker(CallkeepId id, bool enabled) = _CallPerformEventSetSpeaker;
 
   final _performCompleter = Completer<bool>();
 

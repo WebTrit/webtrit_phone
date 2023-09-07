@@ -2719,15 +2719,15 @@ mixin _$CallControlEvent {
     required TResult Function(int? line, String? generic, String? number,
             String? email, String? displayName, bool video)
         started,
-    required TResult Function(UuidValue uuid) answered,
-    required TResult Function(UuidValue uuid) ended,
-    required TResult Function(UuidValue uuid, bool onHold) setHeld,
-    required TResult Function(UuidValue uuid, bool muted) setMuted,
-    required TResult Function(UuidValue uuid, String key) sentDTMF,
-    required TResult Function(UuidValue uuid) cameraSwitched,
-    required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
-    required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
-    required TResult Function(UuidValue uuid) failureApproved,
+    required TResult Function(CallkeepId id) answered,
+    required TResult Function(CallkeepId id) ended,
+    required TResult Function(CallkeepId id, bool onHold) setHeld,
+    required TResult Function(CallkeepId id, bool muted) setMuted,
+    required TResult Function(CallkeepId id, String key) sentDTMF,
+    required TResult Function(CallkeepId id) cameraSwitched,
+    required TResult Function(CallkeepId id, bool enabled) cameraEnabled,
+    required TResult Function(CallkeepId id, bool enabled) speakerEnabled,
+    required TResult Function(CallkeepId id) failureApproved,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -2735,15 +2735,15 @@ mixin _$CallControlEvent {
     TResult? Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult? Function(UuidValue uuid)? answered,
-    TResult? Function(UuidValue uuid)? ended,
-    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult? Function(UuidValue uuid, bool muted)? setMuted,
-    TResult? Function(UuidValue uuid, String key)? sentDTMF,
-    TResult? Function(UuidValue uuid)? cameraSwitched,
-    TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult? Function(UuidValue uuid)? failureApproved,
+    TResult? Function(CallkeepId id)? answered,
+    TResult? Function(CallkeepId id)? ended,
+    TResult? Function(CallkeepId id, bool onHold)? setHeld,
+    TResult? Function(CallkeepId id, bool muted)? setMuted,
+    TResult? Function(CallkeepId id, String key)? sentDTMF,
+    TResult? Function(CallkeepId id)? cameraSwitched,
+    TResult? Function(CallkeepId id, bool enabled)? cameraEnabled,
+    TResult? Function(CallkeepId id, bool enabled)? speakerEnabled,
+    TResult? Function(CallkeepId id)? failureApproved,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -2751,15 +2751,15 @@ mixin _$CallControlEvent {
     TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
-    TResult Function(UuidValue uuid)? cameraSwitched,
-    TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult Function(UuidValue uuid)? failureApproved,
+    TResult Function(CallkeepId id)? answered,
+    TResult Function(CallkeepId id)? ended,
+    TResult Function(CallkeepId id, bool onHold)? setHeld,
+    TResult Function(CallkeepId id, bool muted)? setMuted,
+    TResult Function(CallkeepId id, String key)? sentDTMF,
+    TResult Function(CallkeepId id)? cameraSwitched,
+    TResult Function(CallkeepId id, bool enabled)? cameraEnabled,
+    TResult Function(CallkeepId id, bool enabled)? speakerEnabled,
+    TResult Function(CallkeepId id)? failureApproved,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -2887,15 +2887,15 @@ class _$_CallControlEventStarted
     required TResult Function(int? line, String? generic, String? number,
             String? email, String? displayName, bool video)
         started,
-    required TResult Function(UuidValue uuid) answered,
-    required TResult Function(UuidValue uuid) ended,
-    required TResult Function(UuidValue uuid, bool onHold) setHeld,
-    required TResult Function(UuidValue uuid, bool muted) setMuted,
-    required TResult Function(UuidValue uuid, String key) sentDTMF,
-    required TResult Function(UuidValue uuid) cameraSwitched,
-    required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
-    required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
-    required TResult Function(UuidValue uuid) failureApproved,
+    required TResult Function(CallkeepId id) answered,
+    required TResult Function(CallkeepId id) ended,
+    required TResult Function(CallkeepId id, bool onHold) setHeld,
+    required TResult Function(CallkeepId id, bool muted) setMuted,
+    required TResult Function(CallkeepId id, String key) sentDTMF,
+    required TResult Function(CallkeepId id) cameraSwitched,
+    required TResult Function(CallkeepId id, bool enabled) cameraEnabled,
+    required TResult Function(CallkeepId id, bool enabled) speakerEnabled,
+    required TResult Function(CallkeepId id) failureApproved,
   }) {
     return started(line, generic, number, email, displayName, video);
   }
@@ -2906,15 +2906,15 @@ class _$_CallControlEventStarted
     TResult? Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult? Function(UuidValue uuid)? answered,
-    TResult? Function(UuidValue uuid)? ended,
-    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult? Function(UuidValue uuid, bool muted)? setMuted,
-    TResult? Function(UuidValue uuid, String key)? sentDTMF,
-    TResult? Function(UuidValue uuid)? cameraSwitched,
-    TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult? Function(UuidValue uuid)? failureApproved,
+    TResult? Function(CallkeepId id)? answered,
+    TResult? Function(CallkeepId id)? ended,
+    TResult? Function(CallkeepId id, bool onHold)? setHeld,
+    TResult? Function(CallkeepId id, bool muted)? setMuted,
+    TResult? Function(CallkeepId id, String key)? sentDTMF,
+    TResult? Function(CallkeepId id)? cameraSwitched,
+    TResult? Function(CallkeepId id, bool enabled)? cameraEnabled,
+    TResult? Function(CallkeepId id, bool enabled)? speakerEnabled,
+    TResult? Function(CallkeepId id)? failureApproved,
   }) {
     return started?.call(line, generic, number, email, displayName, video);
   }
@@ -2925,15 +2925,15 @@ class _$_CallControlEventStarted
     TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
-    TResult Function(UuidValue uuid)? cameraSwitched,
-    TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult Function(UuidValue uuid)? failureApproved,
+    TResult Function(CallkeepId id)? answered,
+    TResult Function(CallkeepId id)? ended,
+    TResult Function(CallkeepId id, bool onHold)? setHeld,
+    TResult Function(CallkeepId id, bool muted)? setMuted,
+    TResult Function(CallkeepId id, String key)? sentDTMF,
+    TResult Function(CallkeepId id)? cameraSwitched,
+    TResult Function(CallkeepId id, bool enabled)? cameraEnabled,
+    TResult Function(CallkeepId id, bool enabled)? speakerEnabled,
+    TResult Function(CallkeepId id)? failureApproved,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -3025,14 +3025,14 @@ abstract class _CallControlEventStarted
 class _$_CallControlEventAnswered
     with DiagnosticableTreeMixin
     implements _CallControlEventAnswered {
-  const _$_CallControlEventAnswered(this.uuid);
+  const _$_CallControlEventAnswered(this.id);
 
   @override
-  final UuidValue uuid;
+  final CallkeepId id;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.answered(uuid: $uuid)';
+    return 'CallControlEvent.answered(id: $id)';
   }
 
   @override
@@ -3040,7 +3040,7 @@ class _$_CallControlEventAnswered
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CallControlEvent.answered'))
-      ..add(DiagnosticsProperty('uuid', uuid));
+      ..add(DiagnosticsProperty('id', id));
   }
 
   @override
@@ -3048,11 +3048,11 @@ class _$_CallControlEventAnswered
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallControlEventAnswered &&
-            (identical(other.uuid, uuid) || other.uuid == uuid));
+            (identical(other.id, id) || other.id == id));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, uuid);
+  int get hashCode => Object.hash(runtimeType, id);
 
   @override
   @optionalTypeArgs
@@ -3060,17 +3060,17 @@ class _$_CallControlEventAnswered
     required TResult Function(int? line, String? generic, String? number,
             String? email, String? displayName, bool video)
         started,
-    required TResult Function(UuidValue uuid) answered,
-    required TResult Function(UuidValue uuid) ended,
-    required TResult Function(UuidValue uuid, bool onHold) setHeld,
-    required TResult Function(UuidValue uuid, bool muted) setMuted,
-    required TResult Function(UuidValue uuid, String key) sentDTMF,
-    required TResult Function(UuidValue uuid) cameraSwitched,
-    required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
-    required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
-    required TResult Function(UuidValue uuid) failureApproved,
+    required TResult Function(CallkeepId id) answered,
+    required TResult Function(CallkeepId id) ended,
+    required TResult Function(CallkeepId id, bool onHold) setHeld,
+    required TResult Function(CallkeepId id, bool muted) setMuted,
+    required TResult Function(CallkeepId id, String key) sentDTMF,
+    required TResult Function(CallkeepId id) cameraSwitched,
+    required TResult Function(CallkeepId id, bool enabled) cameraEnabled,
+    required TResult Function(CallkeepId id, bool enabled) speakerEnabled,
+    required TResult Function(CallkeepId id) failureApproved,
   }) {
-    return answered(uuid);
+    return answered(id);
   }
 
   @override
@@ -3079,17 +3079,17 @@ class _$_CallControlEventAnswered
     TResult? Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult? Function(UuidValue uuid)? answered,
-    TResult? Function(UuidValue uuid)? ended,
-    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult? Function(UuidValue uuid, bool muted)? setMuted,
-    TResult? Function(UuidValue uuid, String key)? sentDTMF,
-    TResult? Function(UuidValue uuid)? cameraSwitched,
-    TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult? Function(UuidValue uuid)? failureApproved,
+    TResult? Function(CallkeepId id)? answered,
+    TResult? Function(CallkeepId id)? ended,
+    TResult? Function(CallkeepId id, bool onHold)? setHeld,
+    TResult? Function(CallkeepId id, bool muted)? setMuted,
+    TResult? Function(CallkeepId id, String key)? sentDTMF,
+    TResult? Function(CallkeepId id)? cameraSwitched,
+    TResult? Function(CallkeepId id, bool enabled)? cameraEnabled,
+    TResult? Function(CallkeepId id, bool enabled)? speakerEnabled,
+    TResult? Function(CallkeepId id)? failureApproved,
   }) {
-    return answered?.call(uuid);
+    return answered?.call(id);
   }
 
   @override
@@ -3098,19 +3098,19 @@ class _$_CallControlEventAnswered
     TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
-    TResult Function(UuidValue uuid)? cameraSwitched,
-    TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult Function(UuidValue uuid)? failureApproved,
+    TResult Function(CallkeepId id)? answered,
+    TResult Function(CallkeepId id)? ended,
+    TResult Function(CallkeepId id, bool onHold)? setHeld,
+    TResult Function(CallkeepId id, bool muted)? setMuted,
+    TResult Function(CallkeepId id, String key)? sentDTMF,
+    TResult Function(CallkeepId id)? cameraSwitched,
+    TResult Function(CallkeepId id, bool enabled)? cameraEnabled,
+    TResult Function(CallkeepId id, bool enabled)? speakerEnabled,
+    TResult Function(CallkeepId id)? failureApproved,
     required TResult orElse(),
   }) {
     if (answered != null) {
-      return answered(uuid);
+      return answered(id);
     }
     return orElse();
   }
@@ -3176,10 +3176,10 @@ class _$_CallControlEventAnswered
 }
 
 abstract class _CallControlEventAnswered implements CallControlEvent {
-  const factory _CallControlEventAnswered(final UuidValue uuid) =
+  const factory _CallControlEventAnswered(final CallkeepId id) =
       _$_CallControlEventAnswered;
 
-  UuidValue get uuid;
+  CallkeepId get id;
 }
 
 /// @nodoc
@@ -3187,14 +3187,14 @@ abstract class _CallControlEventAnswered implements CallControlEvent {
 class _$_CallControlEventEnded
     with DiagnosticableTreeMixin
     implements _CallControlEventEnded {
-  const _$_CallControlEventEnded(this.uuid);
+  const _$_CallControlEventEnded(this.id);
 
   @override
-  final UuidValue uuid;
+  final CallkeepId id;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.ended(uuid: $uuid)';
+    return 'CallControlEvent.ended(id: $id)';
   }
 
   @override
@@ -3202,7 +3202,7 @@ class _$_CallControlEventEnded
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CallControlEvent.ended'))
-      ..add(DiagnosticsProperty('uuid', uuid));
+      ..add(DiagnosticsProperty('id', id));
   }
 
   @override
@@ -3210,11 +3210,11 @@ class _$_CallControlEventEnded
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallControlEventEnded &&
-            (identical(other.uuid, uuid) || other.uuid == uuid));
+            (identical(other.id, id) || other.id == id));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, uuid);
+  int get hashCode => Object.hash(runtimeType, id);
 
   @override
   @optionalTypeArgs
@@ -3222,17 +3222,17 @@ class _$_CallControlEventEnded
     required TResult Function(int? line, String? generic, String? number,
             String? email, String? displayName, bool video)
         started,
-    required TResult Function(UuidValue uuid) answered,
-    required TResult Function(UuidValue uuid) ended,
-    required TResult Function(UuidValue uuid, bool onHold) setHeld,
-    required TResult Function(UuidValue uuid, bool muted) setMuted,
-    required TResult Function(UuidValue uuid, String key) sentDTMF,
-    required TResult Function(UuidValue uuid) cameraSwitched,
-    required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
-    required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
-    required TResult Function(UuidValue uuid) failureApproved,
+    required TResult Function(CallkeepId id) answered,
+    required TResult Function(CallkeepId id) ended,
+    required TResult Function(CallkeepId id, bool onHold) setHeld,
+    required TResult Function(CallkeepId id, bool muted) setMuted,
+    required TResult Function(CallkeepId id, String key) sentDTMF,
+    required TResult Function(CallkeepId id) cameraSwitched,
+    required TResult Function(CallkeepId id, bool enabled) cameraEnabled,
+    required TResult Function(CallkeepId id, bool enabled) speakerEnabled,
+    required TResult Function(CallkeepId id) failureApproved,
   }) {
-    return ended(uuid);
+    return ended(id);
   }
 
   @override
@@ -3241,17 +3241,17 @@ class _$_CallControlEventEnded
     TResult? Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult? Function(UuidValue uuid)? answered,
-    TResult? Function(UuidValue uuid)? ended,
-    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult? Function(UuidValue uuid, bool muted)? setMuted,
-    TResult? Function(UuidValue uuid, String key)? sentDTMF,
-    TResult? Function(UuidValue uuid)? cameraSwitched,
-    TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult? Function(UuidValue uuid)? failureApproved,
+    TResult? Function(CallkeepId id)? answered,
+    TResult? Function(CallkeepId id)? ended,
+    TResult? Function(CallkeepId id, bool onHold)? setHeld,
+    TResult? Function(CallkeepId id, bool muted)? setMuted,
+    TResult? Function(CallkeepId id, String key)? sentDTMF,
+    TResult? Function(CallkeepId id)? cameraSwitched,
+    TResult? Function(CallkeepId id, bool enabled)? cameraEnabled,
+    TResult? Function(CallkeepId id, bool enabled)? speakerEnabled,
+    TResult? Function(CallkeepId id)? failureApproved,
   }) {
-    return ended?.call(uuid);
+    return ended?.call(id);
   }
 
   @override
@@ -3260,19 +3260,19 @@ class _$_CallControlEventEnded
     TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
-    TResult Function(UuidValue uuid)? cameraSwitched,
-    TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult Function(UuidValue uuid)? failureApproved,
+    TResult Function(CallkeepId id)? answered,
+    TResult Function(CallkeepId id)? ended,
+    TResult Function(CallkeepId id, bool onHold)? setHeld,
+    TResult Function(CallkeepId id, bool muted)? setMuted,
+    TResult Function(CallkeepId id, String key)? sentDTMF,
+    TResult Function(CallkeepId id)? cameraSwitched,
+    TResult Function(CallkeepId id, bool enabled)? cameraEnabled,
+    TResult Function(CallkeepId id, bool enabled)? speakerEnabled,
+    TResult Function(CallkeepId id)? failureApproved,
     required TResult orElse(),
   }) {
     if (ended != null) {
-      return ended(uuid);
+      return ended(id);
     }
     return orElse();
   }
@@ -3338,10 +3338,10 @@ class _$_CallControlEventEnded
 }
 
 abstract class _CallControlEventEnded implements CallControlEvent {
-  const factory _CallControlEventEnded(final UuidValue uuid) =
+  const factory _CallControlEventEnded(final CallkeepId id) =
       _$_CallControlEventEnded;
 
-  UuidValue get uuid;
+  CallkeepId get id;
 }
 
 /// @nodoc
@@ -3349,16 +3349,16 @@ abstract class _CallControlEventEnded implements CallControlEvent {
 class _$_CallControlEventSetHeld
     with DiagnosticableTreeMixin
     implements _CallControlEventSetHeld {
-  const _$_CallControlEventSetHeld(this.uuid, this.onHold);
+  const _$_CallControlEventSetHeld(this.id, this.onHold);
 
   @override
-  final UuidValue uuid;
+  final CallkeepId id;
   @override
   final bool onHold;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.setHeld(uuid: $uuid, onHold: $onHold)';
+    return 'CallControlEvent.setHeld(id: $id, onHold: $onHold)';
   }
 
   @override
@@ -3366,7 +3366,7 @@ class _$_CallControlEventSetHeld
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CallControlEvent.setHeld'))
-      ..add(DiagnosticsProperty('uuid', uuid))
+      ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('onHold', onHold));
   }
 
@@ -3375,12 +3375,12 @@ class _$_CallControlEventSetHeld
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallControlEventSetHeld &&
-            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.onHold, onHold) || other.onHold == onHold));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, uuid, onHold);
+  int get hashCode => Object.hash(runtimeType, id, onHold);
 
   @override
   @optionalTypeArgs
@@ -3388,17 +3388,17 @@ class _$_CallControlEventSetHeld
     required TResult Function(int? line, String? generic, String? number,
             String? email, String? displayName, bool video)
         started,
-    required TResult Function(UuidValue uuid) answered,
-    required TResult Function(UuidValue uuid) ended,
-    required TResult Function(UuidValue uuid, bool onHold) setHeld,
-    required TResult Function(UuidValue uuid, bool muted) setMuted,
-    required TResult Function(UuidValue uuid, String key) sentDTMF,
-    required TResult Function(UuidValue uuid) cameraSwitched,
-    required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
-    required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
-    required TResult Function(UuidValue uuid) failureApproved,
+    required TResult Function(CallkeepId id) answered,
+    required TResult Function(CallkeepId id) ended,
+    required TResult Function(CallkeepId id, bool onHold) setHeld,
+    required TResult Function(CallkeepId id, bool muted) setMuted,
+    required TResult Function(CallkeepId id, String key) sentDTMF,
+    required TResult Function(CallkeepId id) cameraSwitched,
+    required TResult Function(CallkeepId id, bool enabled) cameraEnabled,
+    required TResult Function(CallkeepId id, bool enabled) speakerEnabled,
+    required TResult Function(CallkeepId id) failureApproved,
   }) {
-    return setHeld(uuid, onHold);
+    return setHeld(id, onHold);
   }
 
   @override
@@ -3407,17 +3407,17 @@ class _$_CallControlEventSetHeld
     TResult? Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult? Function(UuidValue uuid)? answered,
-    TResult? Function(UuidValue uuid)? ended,
-    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult? Function(UuidValue uuid, bool muted)? setMuted,
-    TResult? Function(UuidValue uuid, String key)? sentDTMF,
-    TResult? Function(UuidValue uuid)? cameraSwitched,
-    TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult? Function(UuidValue uuid)? failureApproved,
+    TResult? Function(CallkeepId id)? answered,
+    TResult? Function(CallkeepId id)? ended,
+    TResult? Function(CallkeepId id, bool onHold)? setHeld,
+    TResult? Function(CallkeepId id, bool muted)? setMuted,
+    TResult? Function(CallkeepId id, String key)? sentDTMF,
+    TResult? Function(CallkeepId id)? cameraSwitched,
+    TResult? Function(CallkeepId id, bool enabled)? cameraEnabled,
+    TResult? Function(CallkeepId id, bool enabled)? speakerEnabled,
+    TResult? Function(CallkeepId id)? failureApproved,
   }) {
-    return setHeld?.call(uuid, onHold);
+    return setHeld?.call(id, onHold);
   }
 
   @override
@@ -3426,19 +3426,19 @@ class _$_CallControlEventSetHeld
     TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
-    TResult Function(UuidValue uuid)? cameraSwitched,
-    TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult Function(UuidValue uuid)? failureApproved,
+    TResult Function(CallkeepId id)? answered,
+    TResult Function(CallkeepId id)? ended,
+    TResult Function(CallkeepId id, bool onHold)? setHeld,
+    TResult Function(CallkeepId id, bool muted)? setMuted,
+    TResult Function(CallkeepId id, String key)? sentDTMF,
+    TResult Function(CallkeepId id)? cameraSwitched,
+    TResult Function(CallkeepId id, bool enabled)? cameraEnabled,
+    TResult Function(CallkeepId id, bool enabled)? speakerEnabled,
+    TResult Function(CallkeepId id)? failureApproved,
     required TResult orElse(),
   }) {
     if (setHeld != null) {
-      return setHeld(uuid, onHold);
+      return setHeld(id, onHold);
     }
     return orElse();
   }
@@ -3505,9 +3505,9 @@ class _$_CallControlEventSetHeld
 
 abstract class _CallControlEventSetHeld implements CallControlEvent {
   const factory _CallControlEventSetHeld(
-      final UuidValue uuid, final bool onHold) = _$_CallControlEventSetHeld;
+      final CallkeepId id, final bool onHold) = _$_CallControlEventSetHeld;
 
-  UuidValue get uuid;
+  CallkeepId get id;
   bool get onHold;
 }
 
@@ -3516,16 +3516,16 @@ abstract class _CallControlEventSetHeld implements CallControlEvent {
 class _$_CallControlEventSetMuted
     with DiagnosticableTreeMixin
     implements _CallControlEventSetMuted {
-  const _$_CallControlEventSetMuted(this.uuid, this.muted);
+  const _$_CallControlEventSetMuted(this.id, this.muted);
 
   @override
-  final UuidValue uuid;
+  final CallkeepId id;
   @override
   final bool muted;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.setMuted(uuid: $uuid, muted: $muted)';
+    return 'CallControlEvent.setMuted(id: $id, muted: $muted)';
   }
 
   @override
@@ -3533,7 +3533,7 @@ class _$_CallControlEventSetMuted
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CallControlEvent.setMuted'))
-      ..add(DiagnosticsProperty('uuid', uuid))
+      ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('muted', muted));
   }
 
@@ -3542,12 +3542,12 @@ class _$_CallControlEventSetMuted
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallControlEventSetMuted &&
-            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.muted, muted) || other.muted == muted));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, uuid, muted);
+  int get hashCode => Object.hash(runtimeType, id, muted);
 
   @override
   @optionalTypeArgs
@@ -3555,17 +3555,17 @@ class _$_CallControlEventSetMuted
     required TResult Function(int? line, String? generic, String? number,
             String? email, String? displayName, bool video)
         started,
-    required TResult Function(UuidValue uuid) answered,
-    required TResult Function(UuidValue uuid) ended,
-    required TResult Function(UuidValue uuid, bool onHold) setHeld,
-    required TResult Function(UuidValue uuid, bool muted) setMuted,
-    required TResult Function(UuidValue uuid, String key) sentDTMF,
-    required TResult Function(UuidValue uuid) cameraSwitched,
-    required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
-    required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
-    required TResult Function(UuidValue uuid) failureApproved,
+    required TResult Function(CallkeepId id) answered,
+    required TResult Function(CallkeepId id) ended,
+    required TResult Function(CallkeepId id, bool onHold) setHeld,
+    required TResult Function(CallkeepId id, bool muted) setMuted,
+    required TResult Function(CallkeepId id, String key) sentDTMF,
+    required TResult Function(CallkeepId id) cameraSwitched,
+    required TResult Function(CallkeepId id, bool enabled) cameraEnabled,
+    required TResult Function(CallkeepId id, bool enabled) speakerEnabled,
+    required TResult Function(CallkeepId id) failureApproved,
   }) {
-    return setMuted(uuid, muted);
+    return setMuted(id, muted);
   }
 
   @override
@@ -3574,17 +3574,17 @@ class _$_CallControlEventSetMuted
     TResult? Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult? Function(UuidValue uuid)? answered,
-    TResult? Function(UuidValue uuid)? ended,
-    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult? Function(UuidValue uuid, bool muted)? setMuted,
-    TResult? Function(UuidValue uuid, String key)? sentDTMF,
-    TResult? Function(UuidValue uuid)? cameraSwitched,
-    TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult? Function(UuidValue uuid)? failureApproved,
+    TResult? Function(CallkeepId id)? answered,
+    TResult? Function(CallkeepId id)? ended,
+    TResult? Function(CallkeepId id, bool onHold)? setHeld,
+    TResult? Function(CallkeepId id, bool muted)? setMuted,
+    TResult? Function(CallkeepId id, String key)? sentDTMF,
+    TResult? Function(CallkeepId id)? cameraSwitched,
+    TResult? Function(CallkeepId id, bool enabled)? cameraEnabled,
+    TResult? Function(CallkeepId id, bool enabled)? speakerEnabled,
+    TResult? Function(CallkeepId id)? failureApproved,
   }) {
-    return setMuted?.call(uuid, muted);
+    return setMuted?.call(id, muted);
   }
 
   @override
@@ -3593,19 +3593,19 @@ class _$_CallControlEventSetMuted
     TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
-    TResult Function(UuidValue uuid)? cameraSwitched,
-    TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult Function(UuidValue uuid)? failureApproved,
+    TResult Function(CallkeepId id)? answered,
+    TResult Function(CallkeepId id)? ended,
+    TResult Function(CallkeepId id, bool onHold)? setHeld,
+    TResult Function(CallkeepId id, bool muted)? setMuted,
+    TResult Function(CallkeepId id, String key)? sentDTMF,
+    TResult Function(CallkeepId id)? cameraSwitched,
+    TResult Function(CallkeepId id, bool enabled)? cameraEnabled,
+    TResult Function(CallkeepId id, bool enabled)? speakerEnabled,
+    TResult Function(CallkeepId id)? failureApproved,
     required TResult orElse(),
   }) {
     if (setMuted != null) {
-      return setMuted(uuid, muted);
+      return setMuted(id, muted);
     }
     return orElse();
   }
@@ -3672,9 +3672,9 @@ class _$_CallControlEventSetMuted
 
 abstract class _CallControlEventSetMuted implements CallControlEvent {
   const factory _CallControlEventSetMuted(
-      final UuidValue uuid, final bool muted) = _$_CallControlEventSetMuted;
+      final CallkeepId id, final bool muted) = _$_CallControlEventSetMuted;
 
-  UuidValue get uuid;
+  CallkeepId get id;
   bool get muted;
 }
 
@@ -3683,16 +3683,16 @@ abstract class _CallControlEventSetMuted implements CallControlEvent {
 class _$_CallControlEventSentDTMF
     with DiagnosticableTreeMixin
     implements _CallControlEventSentDTMF {
-  const _$_CallControlEventSentDTMF(this.uuid, this.key);
+  const _$_CallControlEventSentDTMF(this.id, this.key);
 
   @override
-  final UuidValue uuid;
+  final CallkeepId id;
   @override
   final String key;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.sentDTMF(uuid: $uuid, key: $key)';
+    return 'CallControlEvent.sentDTMF(id: $id, key: $key)';
   }
 
   @override
@@ -3700,7 +3700,7 @@ class _$_CallControlEventSentDTMF
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CallControlEvent.sentDTMF'))
-      ..add(DiagnosticsProperty('uuid', uuid))
+      ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('key', key));
   }
 
@@ -3709,12 +3709,12 @@ class _$_CallControlEventSentDTMF
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallControlEventSentDTMF &&
-            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.key, key) || other.key == key));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, uuid, key);
+  int get hashCode => Object.hash(runtimeType, id, key);
 
   @override
   @optionalTypeArgs
@@ -3722,17 +3722,17 @@ class _$_CallControlEventSentDTMF
     required TResult Function(int? line, String? generic, String? number,
             String? email, String? displayName, bool video)
         started,
-    required TResult Function(UuidValue uuid) answered,
-    required TResult Function(UuidValue uuid) ended,
-    required TResult Function(UuidValue uuid, bool onHold) setHeld,
-    required TResult Function(UuidValue uuid, bool muted) setMuted,
-    required TResult Function(UuidValue uuid, String key) sentDTMF,
-    required TResult Function(UuidValue uuid) cameraSwitched,
-    required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
-    required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
-    required TResult Function(UuidValue uuid) failureApproved,
+    required TResult Function(CallkeepId id) answered,
+    required TResult Function(CallkeepId id) ended,
+    required TResult Function(CallkeepId id, bool onHold) setHeld,
+    required TResult Function(CallkeepId id, bool muted) setMuted,
+    required TResult Function(CallkeepId id, String key) sentDTMF,
+    required TResult Function(CallkeepId id) cameraSwitched,
+    required TResult Function(CallkeepId id, bool enabled) cameraEnabled,
+    required TResult Function(CallkeepId id, bool enabled) speakerEnabled,
+    required TResult Function(CallkeepId id) failureApproved,
   }) {
-    return sentDTMF(uuid, key);
+    return sentDTMF(id, key);
   }
 
   @override
@@ -3741,17 +3741,17 @@ class _$_CallControlEventSentDTMF
     TResult? Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult? Function(UuidValue uuid)? answered,
-    TResult? Function(UuidValue uuid)? ended,
-    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult? Function(UuidValue uuid, bool muted)? setMuted,
-    TResult? Function(UuidValue uuid, String key)? sentDTMF,
-    TResult? Function(UuidValue uuid)? cameraSwitched,
-    TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult? Function(UuidValue uuid)? failureApproved,
+    TResult? Function(CallkeepId id)? answered,
+    TResult? Function(CallkeepId id)? ended,
+    TResult? Function(CallkeepId id, bool onHold)? setHeld,
+    TResult? Function(CallkeepId id, bool muted)? setMuted,
+    TResult? Function(CallkeepId id, String key)? sentDTMF,
+    TResult? Function(CallkeepId id)? cameraSwitched,
+    TResult? Function(CallkeepId id, bool enabled)? cameraEnabled,
+    TResult? Function(CallkeepId id, bool enabled)? speakerEnabled,
+    TResult? Function(CallkeepId id)? failureApproved,
   }) {
-    return sentDTMF?.call(uuid, key);
+    return sentDTMF?.call(id, key);
   }
 
   @override
@@ -3760,19 +3760,19 @@ class _$_CallControlEventSentDTMF
     TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
-    TResult Function(UuidValue uuid)? cameraSwitched,
-    TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult Function(UuidValue uuid)? failureApproved,
+    TResult Function(CallkeepId id)? answered,
+    TResult Function(CallkeepId id)? ended,
+    TResult Function(CallkeepId id, bool onHold)? setHeld,
+    TResult Function(CallkeepId id, bool muted)? setMuted,
+    TResult Function(CallkeepId id, String key)? sentDTMF,
+    TResult Function(CallkeepId id)? cameraSwitched,
+    TResult Function(CallkeepId id, bool enabled)? cameraEnabled,
+    TResult Function(CallkeepId id, bool enabled)? speakerEnabled,
+    TResult Function(CallkeepId id)? failureApproved,
     required TResult orElse(),
   }) {
     if (sentDTMF != null) {
-      return sentDTMF(uuid, key);
+      return sentDTMF(id, key);
     }
     return orElse();
   }
@@ -3839,9 +3839,9 @@ class _$_CallControlEventSentDTMF
 
 abstract class _CallControlEventSentDTMF implements CallControlEvent {
   const factory _CallControlEventSentDTMF(
-      final UuidValue uuid, final String key) = _$_CallControlEventSentDTMF;
+      final CallkeepId id, final String key) = _$_CallControlEventSentDTMF;
 
-  UuidValue get uuid;
+  CallkeepId get id;
   String get key;
 }
 
@@ -3850,14 +3850,14 @@ abstract class _CallControlEventSentDTMF implements CallControlEvent {
 class _$_CallControlEventCameraSwitched
     with DiagnosticableTreeMixin
     implements _CallControlEventCameraSwitched {
-  const _$_CallControlEventCameraSwitched(this.uuid);
+  const _$_CallControlEventCameraSwitched(this.id);
 
   @override
-  final UuidValue uuid;
+  final CallkeepId id;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.cameraSwitched(uuid: $uuid)';
+    return 'CallControlEvent.cameraSwitched(id: $id)';
   }
 
   @override
@@ -3865,7 +3865,7 @@ class _$_CallControlEventCameraSwitched
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CallControlEvent.cameraSwitched'))
-      ..add(DiagnosticsProperty('uuid', uuid));
+      ..add(DiagnosticsProperty('id', id));
   }
 
   @override
@@ -3873,11 +3873,11 @@ class _$_CallControlEventCameraSwitched
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallControlEventCameraSwitched &&
-            (identical(other.uuid, uuid) || other.uuid == uuid));
+            (identical(other.id, id) || other.id == id));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, uuid);
+  int get hashCode => Object.hash(runtimeType, id);
 
   @override
   @optionalTypeArgs
@@ -3885,17 +3885,17 @@ class _$_CallControlEventCameraSwitched
     required TResult Function(int? line, String? generic, String? number,
             String? email, String? displayName, bool video)
         started,
-    required TResult Function(UuidValue uuid) answered,
-    required TResult Function(UuidValue uuid) ended,
-    required TResult Function(UuidValue uuid, bool onHold) setHeld,
-    required TResult Function(UuidValue uuid, bool muted) setMuted,
-    required TResult Function(UuidValue uuid, String key) sentDTMF,
-    required TResult Function(UuidValue uuid) cameraSwitched,
-    required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
-    required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
-    required TResult Function(UuidValue uuid) failureApproved,
+    required TResult Function(CallkeepId id) answered,
+    required TResult Function(CallkeepId id) ended,
+    required TResult Function(CallkeepId id, bool onHold) setHeld,
+    required TResult Function(CallkeepId id, bool muted) setMuted,
+    required TResult Function(CallkeepId id, String key) sentDTMF,
+    required TResult Function(CallkeepId id) cameraSwitched,
+    required TResult Function(CallkeepId id, bool enabled) cameraEnabled,
+    required TResult Function(CallkeepId id, bool enabled) speakerEnabled,
+    required TResult Function(CallkeepId id) failureApproved,
   }) {
-    return cameraSwitched(uuid);
+    return cameraSwitched(id);
   }
 
   @override
@@ -3904,17 +3904,17 @@ class _$_CallControlEventCameraSwitched
     TResult? Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult? Function(UuidValue uuid)? answered,
-    TResult? Function(UuidValue uuid)? ended,
-    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult? Function(UuidValue uuid, bool muted)? setMuted,
-    TResult? Function(UuidValue uuid, String key)? sentDTMF,
-    TResult? Function(UuidValue uuid)? cameraSwitched,
-    TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult? Function(UuidValue uuid)? failureApproved,
+    TResult? Function(CallkeepId id)? answered,
+    TResult? Function(CallkeepId id)? ended,
+    TResult? Function(CallkeepId id, bool onHold)? setHeld,
+    TResult? Function(CallkeepId id, bool muted)? setMuted,
+    TResult? Function(CallkeepId id, String key)? sentDTMF,
+    TResult? Function(CallkeepId id)? cameraSwitched,
+    TResult? Function(CallkeepId id, bool enabled)? cameraEnabled,
+    TResult? Function(CallkeepId id, bool enabled)? speakerEnabled,
+    TResult? Function(CallkeepId id)? failureApproved,
   }) {
-    return cameraSwitched?.call(uuid);
+    return cameraSwitched?.call(id);
   }
 
   @override
@@ -3923,19 +3923,19 @@ class _$_CallControlEventCameraSwitched
     TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
-    TResult Function(UuidValue uuid)? cameraSwitched,
-    TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult Function(UuidValue uuid)? failureApproved,
+    TResult Function(CallkeepId id)? answered,
+    TResult Function(CallkeepId id)? ended,
+    TResult Function(CallkeepId id, bool onHold)? setHeld,
+    TResult Function(CallkeepId id, bool muted)? setMuted,
+    TResult Function(CallkeepId id, String key)? sentDTMF,
+    TResult Function(CallkeepId id)? cameraSwitched,
+    TResult Function(CallkeepId id, bool enabled)? cameraEnabled,
+    TResult Function(CallkeepId id, bool enabled)? speakerEnabled,
+    TResult Function(CallkeepId id)? failureApproved,
     required TResult orElse(),
   }) {
     if (cameraSwitched != null) {
-      return cameraSwitched(uuid);
+      return cameraSwitched(id);
     }
     return orElse();
   }
@@ -4001,10 +4001,10 @@ class _$_CallControlEventCameraSwitched
 }
 
 abstract class _CallControlEventCameraSwitched implements CallControlEvent {
-  const factory _CallControlEventCameraSwitched(final UuidValue uuid) =
+  const factory _CallControlEventCameraSwitched(final CallkeepId id) =
       _$_CallControlEventCameraSwitched;
 
-  UuidValue get uuid;
+  CallkeepId get id;
 }
 
 /// @nodoc
@@ -4012,16 +4012,16 @@ abstract class _CallControlEventCameraSwitched implements CallControlEvent {
 class _$_CallControlEventCameraEnabled
     with DiagnosticableTreeMixin
     implements _CallControlEventCameraEnabled {
-  const _$_CallControlEventCameraEnabled(this.uuid, this.enabled);
+  const _$_CallControlEventCameraEnabled(this.id, this.enabled);
 
   @override
-  final UuidValue uuid;
+  final CallkeepId id;
   @override
   final bool enabled;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.cameraEnabled(uuid: $uuid, enabled: $enabled)';
+    return 'CallControlEvent.cameraEnabled(id: $id, enabled: $enabled)';
   }
 
   @override
@@ -4029,7 +4029,7 @@ class _$_CallControlEventCameraEnabled
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CallControlEvent.cameraEnabled'))
-      ..add(DiagnosticsProperty('uuid', uuid))
+      ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('enabled', enabled));
   }
 
@@ -4038,12 +4038,12 @@ class _$_CallControlEventCameraEnabled
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallControlEventCameraEnabled &&
-            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.enabled, enabled) || other.enabled == enabled));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, uuid, enabled);
+  int get hashCode => Object.hash(runtimeType, id, enabled);
 
   @override
   @optionalTypeArgs
@@ -4051,17 +4051,17 @@ class _$_CallControlEventCameraEnabled
     required TResult Function(int? line, String? generic, String? number,
             String? email, String? displayName, bool video)
         started,
-    required TResult Function(UuidValue uuid) answered,
-    required TResult Function(UuidValue uuid) ended,
-    required TResult Function(UuidValue uuid, bool onHold) setHeld,
-    required TResult Function(UuidValue uuid, bool muted) setMuted,
-    required TResult Function(UuidValue uuid, String key) sentDTMF,
-    required TResult Function(UuidValue uuid) cameraSwitched,
-    required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
-    required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
-    required TResult Function(UuidValue uuid) failureApproved,
+    required TResult Function(CallkeepId id) answered,
+    required TResult Function(CallkeepId id) ended,
+    required TResult Function(CallkeepId id, bool onHold) setHeld,
+    required TResult Function(CallkeepId id, bool muted) setMuted,
+    required TResult Function(CallkeepId id, String key) sentDTMF,
+    required TResult Function(CallkeepId id) cameraSwitched,
+    required TResult Function(CallkeepId id, bool enabled) cameraEnabled,
+    required TResult Function(CallkeepId id, bool enabled) speakerEnabled,
+    required TResult Function(CallkeepId id) failureApproved,
   }) {
-    return cameraEnabled(uuid, enabled);
+    return cameraEnabled(id, enabled);
   }
 
   @override
@@ -4070,17 +4070,17 @@ class _$_CallControlEventCameraEnabled
     TResult? Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult? Function(UuidValue uuid)? answered,
-    TResult? Function(UuidValue uuid)? ended,
-    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult? Function(UuidValue uuid, bool muted)? setMuted,
-    TResult? Function(UuidValue uuid, String key)? sentDTMF,
-    TResult? Function(UuidValue uuid)? cameraSwitched,
-    TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult? Function(UuidValue uuid)? failureApproved,
+    TResult? Function(CallkeepId id)? answered,
+    TResult? Function(CallkeepId id)? ended,
+    TResult? Function(CallkeepId id, bool onHold)? setHeld,
+    TResult? Function(CallkeepId id, bool muted)? setMuted,
+    TResult? Function(CallkeepId id, String key)? sentDTMF,
+    TResult? Function(CallkeepId id)? cameraSwitched,
+    TResult? Function(CallkeepId id, bool enabled)? cameraEnabled,
+    TResult? Function(CallkeepId id, bool enabled)? speakerEnabled,
+    TResult? Function(CallkeepId id)? failureApproved,
   }) {
-    return cameraEnabled?.call(uuid, enabled);
+    return cameraEnabled?.call(id, enabled);
   }
 
   @override
@@ -4089,19 +4089,19 @@ class _$_CallControlEventCameraEnabled
     TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
-    TResult Function(UuidValue uuid)? cameraSwitched,
-    TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult Function(UuidValue uuid)? failureApproved,
+    TResult Function(CallkeepId id)? answered,
+    TResult Function(CallkeepId id)? ended,
+    TResult Function(CallkeepId id, bool onHold)? setHeld,
+    TResult Function(CallkeepId id, bool muted)? setMuted,
+    TResult Function(CallkeepId id, String key)? sentDTMF,
+    TResult Function(CallkeepId id)? cameraSwitched,
+    TResult Function(CallkeepId id, bool enabled)? cameraEnabled,
+    TResult Function(CallkeepId id, bool enabled)? speakerEnabled,
+    TResult Function(CallkeepId id)? failureApproved,
     required TResult orElse(),
   }) {
     if (cameraEnabled != null) {
-      return cameraEnabled(uuid, enabled);
+      return cameraEnabled(id, enabled);
     }
     return orElse();
   }
@@ -4168,10 +4168,10 @@ class _$_CallControlEventCameraEnabled
 
 abstract class _CallControlEventCameraEnabled implements CallControlEvent {
   const factory _CallControlEventCameraEnabled(
-          final UuidValue uuid, final bool enabled) =
+          final CallkeepId id, final bool enabled) =
       _$_CallControlEventCameraEnabled;
 
-  UuidValue get uuid;
+  CallkeepId get id;
   bool get enabled;
 }
 
@@ -4180,16 +4180,16 @@ abstract class _CallControlEventCameraEnabled implements CallControlEvent {
 class _$_CallControlEventSpeakerEnabled
     with DiagnosticableTreeMixin
     implements _CallControlEventSpeakerEnabled {
-  const _$_CallControlEventSpeakerEnabled(this.uuid, this.enabled);
+  const _$_CallControlEventSpeakerEnabled(this.id, this.enabled);
 
   @override
-  final UuidValue uuid;
+  final CallkeepId id;
   @override
   final bool enabled;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.speakerEnabled(uuid: $uuid, enabled: $enabled)';
+    return 'CallControlEvent.speakerEnabled(id: $id, enabled: $enabled)';
   }
 
   @override
@@ -4197,7 +4197,7 @@ class _$_CallControlEventSpeakerEnabled
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CallControlEvent.speakerEnabled'))
-      ..add(DiagnosticsProperty('uuid', uuid))
+      ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('enabled', enabled));
   }
 
@@ -4206,12 +4206,12 @@ class _$_CallControlEventSpeakerEnabled
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallControlEventSpeakerEnabled &&
-            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.enabled, enabled) || other.enabled == enabled));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, uuid, enabled);
+  int get hashCode => Object.hash(runtimeType, id, enabled);
 
   @override
   @optionalTypeArgs
@@ -4219,17 +4219,17 @@ class _$_CallControlEventSpeakerEnabled
     required TResult Function(int? line, String? generic, String? number,
             String? email, String? displayName, bool video)
         started,
-    required TResult Function(UuidValue uuid) answered,
-    required TResult Function(UuidValue uuid) ended,
-    required TResult Function(UuidValue uuid, bool onHold) setHeld,
-    required TResult Function(UuidValue uuid, bool muted) setMuted,
-    required TResult Function(UuidValue uuid, String key) sentDTMF,
-    required TResult Function(UuidValue uuid) cameraSwitched,
-    required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
-    required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
-    required TResult Function(UuidValue uuid) failureApproved,
+    required TResult Function(CallkeepId id) answered,
+    required TResult Function(CallkeepId id) ended,
+    required TResult Function(CallkeepId id, bool onHold) setHeld,
+    required TResult Function(CallkeepId id, bool muted) setMuted,
+    required TResult Function(CallkeepId id, String key) sentDTMF,
+    required TResult Function(CallkeepId id) cameraSwitched,
+    required TResult Function(CallkeepId id, bool enabled) cameraEnabled,
+    required TResult Function(CallkeepId id, bool enabled) speakerEnabled,
+    required TResult Function(CallkeepId id) failureApproved,
   }) {
-    return speakerEnabled(uuid, enabled);
+    return speakerEnabled(id, enabled);
   }
 
   @override
@@ -4238,17 +4238,17 @@ class _$_CallControlEventSpeakerEnabled
     TResult? Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult? Function(UuidValue uuid)? answered,
-    TResult? Function(UuidValue uuid)? ended,
-    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult? Function(UuidValue uuid, bool muted)? setMuted,
-    TResult? Function(UuidValue uuid, String key)? sentDTMF,
-    TResult? Function(UuidValue uuid)? cameraSwitched,
-    TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult? Function(UuidValue uuid)? failureApproved,
+    TResult? Function(CallkeepId id)? answered,
+    TResult? Function(CallkeepId id)? ended,
+    TResult? Function(CallkeepId id, bool onHold)? setHeld,
+    TResult? Function(CallkeepId id, bool muted)? setMuted,
+    TResult? Function(CallkeepId id, String key)? sentDTMF,
+    TResult? Function(CallkeepId id)? cameraSwitched,
+    TResult? Function(CallkeepId id, bool enabled)? cameraEnabled,
+    TResult? Function(CallkeepId id, bool enabled)? speakerEnabled,
+    TResult? Function(CallkeepId id)? failureApproved,
   }) {
-    return speakerEnabled?.call(uuid, enabled);
+    return speakerEnabled?.call(id, enabled);
   }
 
   @override
@@ -4257,19 +4257,19 @@ class _$_CallControlEventSpeakerEnabled
     TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
-    TResult Function(UuidValue uuid)? cameraSwitched,
-    TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult Function(UuidValue uuid)? failureApproved,
+    TResult Function(CallkeepId id)? answered,
+    TResult Function(CallkeepId id)? ended,
+    TResult Function(CallkeepId id, bool onHold)? setHeld,
+    TResult Function(CallkeepId id, bool muted)? setMuted,
+    TResult Function(CallkeepId id, String key)? sentDTMF,
+    TResult Function(CallkeepId id)? cameraSwitched,
+    TResult Function(CallkeepId id, bool enabled)? cameraEnabled,
+    TResult Function(CallkeepId id, bool enabled)? speakerEnabled,
+    TResult Function(CallkeepId id)? failureApproved,
     required TResult orElse(),
   }) {
     if (speakerEnabled != null) {
-      return speakerEnabled(uuid, enabled);
+      return speakerEnabled(id, enabled);
     }
     return orElse();
   }
@@ -4336,10 +4336,10 @@ class _$_CallControlEventSpeakerEnabled
 
 abstract class _CallControlEventSpeakerEnabled implements CallControlEvent {
   const factory _CallControlEventSpeakerEnabled(
-          final UuidValue uuid, final bool enabled) =
+          final CallkeepId id, final bool enabled) =
       _$_CallControlEventSpeakerEnabled;
 
-  UuidValue get uuid;
+  CallkeepId get id;
   bool get enabled;
 }
 
@@ -4348,14 +4348,14 @@ abstract class _CallControlEventSpeakerEnabled implements CallControlEvent {
 class _$_CallControlEventFailureApproved
     with DiagnosticableTreeMixin
     implements _CallControlEventFailureApproved {
-  const _$_CallControlEventFailureApproved(this.uuid);
+  const _$_CallControlEventFailureApproved(this.id);
 
   @override
-  final UuidValue uuid;
+  final CallkeepId id;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.failureApproved(uuid: $uuid)';
+    return 'CallControlEvent.failureApproved(id: $id)';
   }
 
   @override
@@ -4363,7 +4363,7 @@ class _$_CallControlEventFailureApproved
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CallControlEvent.failureApproved'))
-      ..add(DiagnosticsProperty('uuid', uuid));
+      ..add(DiagnosticsProperty('id', id));
   }
 
   @override
@@ -4371,11 +4371,11 @@ class _$_CallControlEventFailureApproved
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallControlEventFailureApproved &&
-            (identical(other.uuid, uuid) || other.uuid == uuid));
+            (identical(other.id, id) || other.id == id));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, uuid);
+  int get hashCode => Object.hash(runtimeType, id);
 
   @override
   @optionalTypeArgs
@@ -4383,17 +4383,17 @@ class _$_CallControlEventFailureApproved
     required TResult Function(int? line, String? generic, String? number,
             String? email, String? displayName, bool video)
         started,
-    required TResult Function(UuidValue uuid) answered,
-    required TResult Function(UuidValue uuid) ended,
-    required TResult Function(UuidValue uuid, bool onHold) setHeld,
-    required TResult Function(UuidValue uuid, bool muted) setMuted,
-    required TResult Function(UuidValue uuid, String key) sentDTMF,
-    required TResult Function(UuidValue uuid) cameraSwitched,
-    required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
-    required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
-    required TResult Function(UuidValue uuid) failureApproved,
+    required TResult Function(CallkeepId id) answered,
+    required TResult Function(CallkeepId id) ended,
+    required TResult Function(CallkeepId id, bool onHold) setHeld,
+    required TResult Function(CallkeepId id, bool muted) setMuted,
+    required TResult Function(CallkeepId id, String key) sentDTMF,
+    required TResult Function(CallkeepId id) cameraSwitched,
+    required TResult Function(CallkeepId id, bool enabled) cameraEnabled,
+    required TResult Function(CallkeepId id, bool enabled) speakerEnabled,
+    required TResult Function(CallkeepId id) failureApproved,
   }) {
-    return failureApproved(uuid);
+    return failureApproved(id);
   }
 
   @override
@@ -4402,17 +4402,17 @@ class _$_CallControlEventFailureApproved
     TResult? Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult? Function(UuidValue uuid)? answered,
-    TResult? Function(UuidValue uuid)? ended,
-    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult? Function(UuidValue uuid, bool muted)? setMuted,
-    TResult? Function(UuidValue uuid, String key)? sentDTMF,
-    TResult? Function(UuidValue uuid)? cameraSwitched,
-    TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult? Function(UuidValue uuid)? failureApproved,
+    TResult? Function(CallkeepId id)? answered,
+    TResult? Function(CallkeepId id)? ended,
+    TResult? Function(CallkeepId id, bool onHold)? setHeld,
+    TResult? Function(CallkeepId id, bool muted)? setMuted,
+    TResult? Function(CallkeepId id, String key)? sentDTMF,
+    TResult? Function(CallkeepId id)? cameraSwitched,
+    TResult? Function(CallkeepId id, bool enabled)? cameraEnabled,
+    TResult? Function(CallkeepId id, bool enabled)? speakerEnabled,
+    TResult? Function(CallkeepId id)? failureApproved,
   }) {
-    return failureApproved?.call(uuid);
+    return failureApproved?.call(id);
   }
 
   @override
@@ -4421,19 +4421,19 @@ class _$_CallControlEventFailureApproved
     TResult Function(int? line, String? generic, String? number, String? email,
             String? displayName, bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
-    TResult Function(UuidValue uuid)? cameraSwitched,
-    TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
-    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
-    TResult Function(UuidValue uuid)? failureApproved,
+    TResult Function(CallkeepId id)? answered,
+    TResult Function(CallkeepId id)? ended,
+    TResult Function(CallkeepId id, bool onHold)? setHeld,
+    TResult Function(CallkeepId id, bool muted)? setMuted,
+    TResult Function(CallkeepId id, String key)? sentDTMF,
+    TResult Function(CallkeepId id)? cameraSwitched,
+    TResult Function(CallkeepId id, bool enabled)? cameraEnabled,
+    TResult Function(CallkeepId id, bool enabled)? speakerEnabled,
+    TResult Function(CallkeepId id)? failureApproved,
     required TResult orElse(),
   }) {
     if (failureApproved != null) {
-      return failureApproved(uuid);
+      return failureApproved(id);
     }
     return orElse();
   }
@@ -4499,49 +4499,52 @@ class _$_CallControlEventFailureApproved
 }
 
 abstract class _CallControlEventFailureApproved implements CallControlEvent {
-  const factory _CallControlEventFailureApproved(final UuidValue uuid) =
+  const factory _CallControlEventFailureApproved(final CallkeepId id) =
       _$_CallControlEventFailureApproved;
 
-  UuidValue get uuid;
+  CallkeepId get id;
 }
 
 /// @nodoc
 mixin _$_CallPerformEvent {
-  UuidValue get uuid => throw _privateConstructorUsedError;
+  CallkeepId get id => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(UuidValue uuid, CallkeepHandle handle,
+    required TResult Function(CallkeepId id, CallkeepHandle handle,
             String? displayName, bool video)
         started,
-    required TResult Function(UuidValue uuid) answered,
-    required TResult Function(UuidValue uuid) ended,
-    required TResult Function(UuidValue uuid, bool onHold) setHeld,
-    required TResult Function(UuidValue uuid, bool muted) setMuted,
-    required TResult Function(UuidValue uuid, String key) sentDTMF,
+    required TResult Function(CallkeepId id) answered,
+    required TResult Function(CallkeepId id) ended,
+    required TResult Function(CallkeepId id, bool onHold) setHeld,
+    required TResult Function(CallkeepId id, bool muted) setMuted,
+    required TResult Function(CallkeepId id, String key) sentDTMF,
+    required TResult Function(CallkeepId id, bool enabled) setSpeaker,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(UuidValue uuid, CallkeepHandle handle,
-            String? displayName, bool video)?
+    TResult? Function(CallkeepId id, CallkeepHandle handle, String? displayName,
+            bool video)?
         started,
-    TResult? Function(UuidValue uuid)? answered,
-    TResult? Function(UuidValue uuid)? ended,
-    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult? Function(UuidValue uuid, bool muted)? setMuted,
-    TResult? Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(CallkeepId id)? answered,
+    TResult? Function(CallkeepId id)? ended,
+    TResult? Function(CallkeepId id, bool onHold)? setHeld,
+    TResult? Function(CallkeepId id, bool muted)? setMuted,
+    TResult? Function(CallkeepId id, String key)? sentDTMF,
+    TResult? Function(CallkeepId id, bool enabled)? setSpeaker,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(UuidValue uuid, CallkeepHandle handle, String? displayName,
+    TResult Function(CallkeepId id, CallkeepHandle handle, String? displayName,
             bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
+    TResult Function(CallkeepId id)? answered,
+    TResult Function(CallkeepId id)? ended,
+    TResult Function(CallkeepId id, bool onHold)? setHeld,
+    TResult Function(CallkeepId id, bool muted)? setMuted,
+    TResult Function(CallkeepId id, String key)? sentDTMF,
+    TResult Function(CallkeepId id, bool enabled)? setSpeaker,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -4553,6 +4556,7 @@ mixin _$_CallPerformEvent {
     required TResult Function(_CallPerformEventSetHeld value) setHeld,
     required TResult Function(_CallPerformEventSetMuted value) setMuted,
     required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
+    required TResult Function(_CallPerformEventSetSpeaker value) setSpeaker,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -4563,6 +4567,7 @@ mixin _$_CallPerformEvent {
     TResult? Function(_CallPerformEventSetHeld value)? setHeld,
     TResult? Function(_CallPerformEventSetMuted value)? setMuted,
     TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallPerformEventSetSpeaker value)? setSpeaker,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -4573,6 +4578,7 @@ mixin _$_CallPerformEvent {
     TResult Function(_CallPerformEventSetHeld value)? setHeld,
     TResult Function(_CallPerformEventSetMuted value)? setMuted,
     TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult Function(_CallPerformEventSetSpeaker value)? setSpeaker,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -4582,12 +4588,12 @@ mixin _$_CallPerformEvent {
 
 class _$_CallPerformEventStarted extends _CallPerformEventStarted
     with DiagnosticableTreeMixin {
-  _$_CallPerformEventStarted(this.uuid,
+  _$_CallPerformEventStarted(this.id,
       {required this.handle, this.displayName, required this.video})
       : super._();
 
   @override
-  final UuidValue uuid;
+  final CallkeepId id;
   @override
   final CallkeepHandle handle;
   @override
@@ -4597,7 +4603,7 @@ class _$_CallPerformEventStarted extends _CallPerformEventStarted
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallPerformEvent.started(uuid: $uuid, handle: $handle, displayName: $displayName, video: $video)';
+    return '_CallPerformEvent.started(id: $id, handle: $handle, displayName: $displayName, video: $video)';
   }
 
   @override
@@ -4605,7 +4611,7 @@ class _$_CallPerformEventStarted extends _CallPerformEventStarted
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallPerformEvent.started'))
-      ..add(DiagnosticsProperty('uuid', uuid))
+      ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('handle', handle))
       ..add(DiagnosticsProperty('displayName', displayName))
       ..add(DiagnosticsProperty('video', video));
@@ -4616,7 +4622,7 @@ class _$_CallPerformEventStarted extends _CallPerformEventStarted
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallPerformEventStarted &&
-            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.handle, handle) || other.handle == handle) &&
             (identical(other.displayName, displayName) ||
                 other.displayName == displayName) &&
@@ -4624,54 +4630,56 @@ class _$_CallPerformEventStarted extends _CallPerformEventStarted
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, uuid, handle, displayName, video);
+  int get hashCode => Object.hash(runtimeType, id, handle, displayName, video);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(UuidValue uuid, CallkeepHandle handle,
+    required TResult Function(CallkeepId id, CallkeepHandle handle,
             String? displayName, bool video)
         started,
-    required TResult Function(UuidValue uuid) answered,
-    required TResult Function(UuidValue uuid) ended,
-    required TResult Function(UuidValue uuid, bool onHold) setHeld,
-    required TResult Function(UuidValue uuid, bool muted) setMuted,
-    required TResult Function(UuidValue uuid, String key) sentDTMF,
+    required TResult Function(CallkeepId id) answered,
+    required TResult Function(CallkeepId id) ended,
+    required TResult Function(CallkeepId id, bool onHold) setHeld,
+    required TResult Function(CallkeepId id, bool muted) setMuted,
+    required TResult Function(CallkeepId id, String key) sentDTMF,
+    required TResult Function(CallkeepId id, bool enabled) setSpeaker,
   }) {
-    return started(uuid, handle, displayName, video);
+    return started(id, handle, displayName, video);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(UuidValue uuid, CallkeepHandle handle,
-            String? displayName, bool video)?
+    TResult? Function(CallkeepId id, CallkeepHandle handle, String? displayName,
+            bool video)?
         started,
-    TResult? Function(UuidValue uuid)? answered,
-    TResult? Function(UuidValue uuid)? ended,
-    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult? Function(UuidValue uuid, bool muted)? setMuted,
-    TResult? Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(CallkeepId id)? answered,
+    TResult? Function(CallkeepId id)? ended,
+    TResult? Function(CallkeepId id, bool onHold)? setHeld,
+    TResult? Function(CallkeepId id, bool muted)? setMuted,
+    TResult? Function(CallkeepId id, String key)? sentDTMF,
+    TResult? Function(CallkeepId id, bool enabled)? setSpeaker,
   }) {
-    return started?.call(uuid, handle, displayName, video);
+    return started?.call(id, handle, displayName, video);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(UuidValue uuid, CallkeepHandle handle, String? displayName,
+    TResult Function(CallkeepId id, CallkeepHandle handle, String? displayName,
             bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
+    TResult Function(CallkeepId id)? answered,
+    TResult Function(CallkeepId id)? ended,
+    TResult Function(CallkeepId id, bool onHold)? setHeld,
+    TResult Function(CallkeepId id, bool muted)? setMuted,
+    TResult Function(CallkeepId id, String key)? sentDTMF,
+    TResult Function(CallkeepId id, bool enabled)? setSpeaker,
     required TResult orElse(),
   }) {
     if (started != null) {
-      return started(uuid, handle, displayName, video);
+      return started(id, handle, displayName, video);
     }
     return orElse();
   }
@@ -4685,6 +4693,7 @@ class _$_CallPerformEventStarted extends _CallPerformEventStarted
     required TResult Function(_CallPerformEventSetHeld value) setHeld,
     required TResult Function(_CallPerformEventSetMuted value) setMuted,
     required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
+    required TResult Function(_CallPerformEventSetSpeaker value) setSpeaker,
   }) {
     return started(this);
   }
@@ -4698,6 +4707,7 @@ class _$_CallPerformEventStarted extends _CallPerformEventStarted
     TResult? Function(_CallPerformEventSetHeld value)? setHeld,
     TResult? Function(_CallPerformEventSetMuted value)? setMuted,
     TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallPerformEventSetSpeaker value)? setSpeaker,
   }) {
     return started?.call(this);
   }
@@ -4711,6 +4721,7 @@ class _$_CallPerformEventStarted extends _CallPerformEventStarted
     TResult Function(_CallPerformEventSetHeld value)? setHeld,
     TResult Function(_CallPerformEventSetMuted value)? setMuted,
     TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult Function(_CallPerformEventSetSpeaker value)? setSpeaker,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -4721,14 +4732,14 @@ class _$_CallPerformEventStarted extends _CallPerformEventStarted
 }
 
 abstract class _CallPerformEventStarted extends _CallPerformEvent {
-  factory _CallPerformEventStarted(final UuidValue uuid,
+  factory _CallPerformEventStarted(final CallkeepId id,
       {required final CallkeepHandle handle,
       final String? displayName,
       required final bool video}) = _$_CallPerformEventStarted;
   _CallPerformEventStarted._() : super._();
 
   @override
-  UuidValue get uuid;
+  CallkeepId get id;
   CallkeepHandle get handle;
   String? get displayName;
   bool get video;
@@ -4738,14 +4749,14 @@ abstract class _CallPerformEventStarted extends _CallPerformEvent {
 
 class _$_CallPerformEventAnswered extends _CallPerformEventAnswered
     with DiagnosticableTreeMixin {
-  _$_CallPerformEventAnswered(this.uuid) : super._();
+  _$_CallPerformEventAnswered(this.id) : super._();
 
   @override
-  final UuidValue uuid;
+  final CallkeepId id;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallPerformEvent.answered(uuid: $uuid)';
+    return '_CallPerformEvent.answered(id: $id)';
   }
 
   @override
@@ -4753,7 +4764,7 @@ class _$_CallPerformEventAnswered extends _CallPerformEventAnswered
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallPerformEvent.answered'))
-      ..add(DiagnosticsProperty('uuid', uuid));
+      ..add(DiagnosticsProperty('id', id));
   }
 
   @override
@@ -4761,57 +4772,60 @@ class _$_CallPerformEventAnswered extends _CallPerformEventAnswered
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallPerformEventAnswered &&
-            (identical(other.uuid, uuid) || other.uuid == uuid));
+            (identical(other.id, id) || other.id == id));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, uuid);
+  int get hashCode => Object.hash(runtimeType, id);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(UuidValue uuid, CallkeepHandle handle,
+    required TResult Function(CallkeepId id, CallkeepHandle handle,
             String? displayName, bool video)
         started,
-    required TResult Function(UuidValue uuid) answered,
-    required TResult Function(UuidValue uuid) ended,
-    required TResult Function(UuidValue uuid, bool onHold) setHeld,
-    required TResult Function(UuidValue uuid, bool muted) setMuted,
-    required TResult Function(UuidValue uuid, String key) sentDTMF,
+    required TResult Function(CallkeepId id) answered,
+    required TResult Function(CallkeepId id) ended,
+    required TResult Function(CallkeepId id, bool onHold) setHeld,
+    required TResult Function(CallkeepId id, bool muted) setMuted,
+    required TResult Function(CallkeepId id, String key) sentDTMF,
+    required TResult Function(CallkeepId id, bool enabled) setSpeaker,
   }) {
-    return answered(uuid);
+    return answered(id);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(UuidValue uuid, CallkeepHandle handle,
-            String? displayName, bool video)?
+    TResult? Function(CallkeepId id, CallkeepHandle handle, String? displayName,
+            bool video)?
         started,
-    TResult? Function(UuidValue uuid)? answered,
-    TResult? Function(UuidValue uuid)? ended,
-    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult? Function(UuidValue uuid, bool muted)? setMuted,
-    TResult? Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(CallkeepId id)? answered,
+    TResult? Function(CallkeepId id)? ended,
+    TResult? Function(CallkeepId id, bool onHold)? setHeld,
+    TResult? Function(CallkeepId id, bool muted)? setMuted,
+    TResult? Function(CallkeepId id, String key)? sentDTMF,
+    TResult? Function(CallkeepId id, bool enabled)? setSpeaker,
   }) {
-    return answered?.call(uuid);
+    return answered?.call(id);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(UuidValue uuid, CallkeepHandle handle, String? displayName,
+    TResult Function(CallkeepId id, CallkeepHandle handle, String? displayName,
             bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
+    TResult Function(CallkeepId id)? answered,
+    TResult Function(CallkeepId id)? ended,
+    TResult Function(CallkeepId id, bool onHold)? setHeld,
+    TResult Function(CallkeepId id, bool muted)? setMuted,
+    TResult Function(CallkeepId id, String key)? sentDTMF,
+    TResult Function(CallkeepId id, bool enabled)? setSpeaker,
     required TResult orElse(),
   }) {
     if (answered != null) {
-      return answered(uuid);
+      return answered(id);
     }
     return orElse();
   }
@@ -4825,6 +4839,7 @@ class _$_CallPerformEventAnswered extends _CallPerformEventAnswered
     required TResult Function(_CallPerformEventSetHeld value) setHeld,
     required TResult Function(_CallPerformEventSetMuted value) setMuted,
     required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
+    required TResult Function(_CallPerformEventSetSpeaker value) setSpeaker,
   }) {
     return answered(this);
   }
@@ -4838,6 +4853,7 @@ class _$_CallPerformEventAnswered extends _CallPerformEventAnswered
     TResult? Function(_CallPerformEventSetHeld value)? setHeld,
     TResult? Function(_CallPerformEventSetMuted value)? setMuted,
     TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallPerformEventSetSpeaker value)? setSpeaker,
   }) {
     return answered?.call(this);
   }
@@ -4851,6 +4867,7 @@ class _$_CallPerformEventAnswered extends _CallPerformEventAnswered
     TResult Function(_CallPerformEventSetHeld value)? setHeld,
     TResult Function(_CallPerformEventSetMuted value)? setMuted,
     TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult Function(_CallPerformEventSetSpeaker value)? setSpeaker,
     required TResult orElse(),
   }) {
     if (answered != null) {
@@ -4861,26 +4878,26 @@ class _$_CallPerformEventAnswered extends _CallPerformEventAnswered
 }
 
 abstract class _CallPerformEventAnswered extends _CallPerformEvent {
-  factory _CallPerformEventAnswered(final UuidValue uuid) =
+  factory _CallPerformEventAnswered(final CallkeepId id) =
       _$_CallPerformEventAnswered;
   _CallPerformEventAnswered._() : super._();
 
   @override
-  UuidValue get uuid;
+  CallkeepId get id;
 }
 
 /// @nodoc
 
 class _$_CallPerformEventEnded extends _CallPerformEventEnded
     with DiagnosticableTreeMixin {
-  _$_CallPerformEventEnded(this.uuid) : super._();
+  _$_CallPerformEventEnded(this.id) : super._();
 
   @override
-  final UuidValue uuid;
+  final CallkeepId id;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallPerformEvent.ended(uuid: $uuid)';
+    return '_CallPerformEvent.ended(id: $id)';
   }
 
   @override
@@ -4888,7 +4905,7 @@ class _$_CallPerformEventEnded extends _CallPerformEventEnded
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallPerformEvent.ended'))
-      ..add(DiagnosticsProperty('uuid', uuid));
+      ..add(DiagnosticsProperty('id', id));
   }
 
   @override
@@ -4896,57 +4913,60 @@ class _$_CallPerformEventEnded extends _CallPerformEventEnded
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallPerformEventEnded &&
-            (identical(other.uuid, uuid) || other.uuid == uuid));
+            (identical(other.id, id) || other.id == id));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, uuid);
+  int get hashCode => Object.hash(runtimeType, id);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(UuidValue uuid, CallkeepHandle handle,
+    required TResult Function(CallkeepId id, CallkeepHandle handle,
             String? displayName, bool video)
         started,
-    required TResult Function(UuidValue uuid) answered,
-    required TResult Function(UuidValue uuid) ended,
-    required TResult Function(UuidValue uuid, bool onHold) setHeld,
-    required TResult Function(UuidValue uuid, bool muted) setMuted,
-    required TResult Function(UuidValue uuid, String key) sentDTMF,
+    required TResult Function(CallkeepId id) answered,
+    required TResult Function(CallkeepId id) ended,
+    required TResult Function(CallkeepId id, bool onHold) setHeld,
+    required TResult Function(CallkeepId id, bool muted) setMuted,
+    required TResult Function(CallkeepId id, String key) sentDTMF,
+    required TResult Function(CallkeepId id, bool enabled) setSpeaker,
   }) {
-    return ended(uuid);
+    return ended(id);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(UuidValue uuid, CallkeepHandle handle,
-            String? displayName, bool video)?
+    TResult? Function(CallkeepId id, CallkeepHandle handle, String? displayName,
+            bool video)?
         started,
-    TResult? Function(UuidValue uuid)? answered,
-    TResult? Function(UuidValue uuid)? ended,
-    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult? Function(UuidValue uuid, bool muted)? setMuted,
-    TResult? Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(CallkeepId id)? answered,
+    TResult? Function(CallkeepId id)? ended,
+    TResult? Function(CallkeepId id, bool onHold)? setHeld,
+    TResult? Function(CallkeepId id, bool muted)? setMuted,
+    TResult? Function(CallkeepId id, String key)? sentDTMF,
+    TResult? Function(CallkeepId id, bool enabled)? setSpeaker,
   }) {
-    return ended?.call(uuid);
+    return ended?.call(id);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(UuidValue uuid, CallkeepHandle handle, String? displayName,
+    TResult Function(CallkeepId id, CallkeepHandle handle, String? displayName,
             bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
+    TResult Function(CallkeepId id)? answered,
+    TResult Function(CallkeepId id)? ended,
+    TResult Function(CallkeepId id, bool onHold)? setHeld,
+    TResult Function(CallkeepId id, bool muted)? setMuted,
+    TResult Function(CallkeepId id, String key)? sentDTMF,
+    TResult Function(CallkeepId id, bool enabled)? setSpeaker,
     required TResult orElse(),
   }) {
     if (ended != null) {
-      return ended(uuid);
+      return ended(id);
     }
     return orElse();
   }
@@ -4960,6 +4980,7 @@ class _$_CallPerformEventEnded extends _CallPerformEventEnded
     required TResult Function(_CallPerformEventSetHeld value) setHeld,
     required TResult Function(_CallPerformEventSetMuted value) setMuted,
     required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
+    required TResult Function(_CallPerformEventSetSpeaker value) setSpeaker,
   }) {
     return ended(this);
   }
@@ -4973,6 +4994,7 @@ class _$_CallPerformEventEnded extends _CallPerformEventEnded
     TResult? Function(_CallPerformEventSetHeld value)? setHeld,
     TResult? Function(_CallPerformEventSetMuted value)? setMuted,
     TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallPerformEventSetSpeaker value)? setSpeaker,
   }) {
     return ended?.call(this);
   }
@@ -4986,6 +5008,7 @@ class _$_CallPerformEventEnded extends _CallPerformEventEnded
     TResult Function(_CallPerformEventSetHeld value)? setHeld,
     TResult Function(_CallPerformEventSetMuted value)? setMuted,
     TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult Function(_CallPerformEventSetSpeaker value)? setSpeaker,
     required TResult orElse(),
   }) {
     if (ended != null) {
@@ -4996,28 +5019,28 @@ class _$_CallPerformEventEnded extends _CallPerformEventEnded
 }
 
 abstract class _CallPerformEventEnded extends _CallPerformEvent {
-  factory _CallPerformEventEnded(final UuidValue uuid) =
+  factory _CallPerformEventEnded(final CallkeepId id) =
       _$_CallPerformEventEnded;
   _CallPerformEventEnded._() : super._();
 
   @override
-  UuidValue get uuid;
+  CallkeepId get id;
 }
 
 /// @nodoc
 
 class _$_CallPerformEventSetHeld extends _CallPerformEventSetHeld
     with DiagnosticableTreeMixin {
-  _$_CallPerformEventSetHeld(this.uuid, this.onHold) : super._();
+  _$_CallPerformEventSetHeld(this.id, this.onHold) : super._();
 
   @override
-  final UuidValue uuid;
+  final CallkeepId id;
   @override
   final bool onHold;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallPerformEvent.setHeld(uuid: $uuid, onHold: $onHold)';
+    return '_CallPerformEvent.setHeld(id: $id, onHold: $onHold)';
   }
 
   @override
@@ -5025,7 +5048,7 @@ class _$_CallPerformEventSetHeld extends _CallPerformEventSetHeld
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallPerformEvent.setHeld'))
-      ..add(DiagnosticsProperty('uuid', uuid))
+      ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('onHold', onHold));
   }
 
@@ -5034,58 +5057,61 @@ class _$_CallPerformEventSetHeld extends _CallPerformEventSetHeld
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallPerformEventSetHeld &&
-            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.onHold, onHold) || other.onHold == onHold));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, uuid, onHold);
+  int get hashCode => Object.hash(runtimeType, id, onHold);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(UuidValue uuid, CallkeepHandle handle,
+    required TResult Function(CallkeepId id, CallkeepHandle handle,
             String? displayName, bool video)
         started,
-    required TResult Function(UuidValue uuid) answered,
-    required TResult Function(UuidValue uuid) ended,
-    required TResult Function(UuidValue uuid, bool onHold) setHeld,
-    required TResult Function(UuidValue uuid, bool muted) setMuted,
-    required TResult Function(UuidValue uuid, String key) sentDTMF,
+    required TResult Function(CallkeepId id) answered,
+    required TResult Function(CallkeepId id) ended,
+    required TResult Function(CallkeepId id, bool onHold) setHeld,
+    required TResult Function(CallkeepId id, bool muted) setMuted,
+    required TResult Function(CallkeepId id, String key) sentDTMF,
+    required TResult Function(CallkeepId id, bool enabled) setSpeaker,
   }) {
-    return setHeld(uuid, onHold);
+    return setHeld(id, onHold);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(UuidValue uuid, CallkeepHandle handle,
-            String? displayName, bool video)?
+    TResult? Function(CallkeepId id, CallkeepHandle handle, String? displayName,
+            bool video)?
         started,
-    TResult? Function(UuidValue uuid)? answered,
-    TResult? Function(UuidValue uuid)? ended,
-    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult? Function(UuidValue uuid, bool muted)? setMuted,
-    TResult? Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(CallkeepId id)? answered,
+    TResult? Function(CallkeepId id)? ended,
+    TResult? Function(CallkeepId id, bool onHold)? setHeld,
+    TResult? Function(CallkeepId id, bool muted)? setMuted,
+    TResult? Function(CallkeepId id, String key)? sentDTMF,
+    TResult? Function(CallkeepId id, bool enabled)? setSpeaker,
   }) {
-    return setHeld?.call(uuid, onHold);
+    return setHeld?.call(id, onHold);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(UuidValue uuid, CallkeepHandle handle, String? displayName,
+    TResult Function(CallkeepId id, CallkeepHandle handle, String? displayName,
             bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
+    TResult Function(CallkeepId id)? answered,
+    TResult Function(CallkeepId id)? ended,
+    TResult Function(CallkeepId id, bool onHold)? setHeld,
+    TResult Function(CallkeepId id, bool muted)? setMuted,
+    TResult Function(CallkeepId id, String key)? sentDTMF,
+    TResult Function(CallkeepId id, bool enabled)? setSpeaker,
     required TResult orElse(),
   }) {
     if (setHeld != null) {
-      return setHeld(uuid, onHold);
+      return setHeld(id, onHold);
     }
     return orElse();
   }
@@ -5099,6 +5125,7 @@ class _$_CallPerformEventSetHeld extends _CallPerformEventSetHeld
     required TResult Function(_CallPerformEventSetHeld value) setHeld,
     required TResult Function(_CallPerformEventSetMuted value) setMuted,
     required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
+    required TResult Function(_CallPerformEventSetSpeaker value) setSpeaker,
   }) {
     return setHeld(this);
   }
@@ -5112,6 +5139,7 @@ class _$_CallPerformEventSetHeld extends _CallPerformEventSetHeld
     TResult? Function(_CallPerformEventSetHeld value)? setHeld,
     TResult? Function(_CallPerformEventSetMuted value)? setMuted,
     TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallPerformEventSetSpeaker value)? setSpeaker,
   }) {
     return setHeld?.call(this);
   }
@@ -5125,6 +5153,7 @@ class _$_CallPerformEventSetHeld extends _CallPerformEventSetHeld
     TResult Function(_CallPerformEventSetHeld value)? setHeld,
     TResult Function(_CallPerformEventSetMuted value)? setMuted,
     TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult Function(_CallPerformEventSetSpeaker value)? setSpeaker,
     required TResult orElse(),
   }) {
     if (setHeld != null) {
@@ -5135,12 +5164,12 @@ class _$_CallPerformEventSetHeld extends _CallPerformEventSetHeld
 }
 
 abstract class _CallPerformEventSetHeld extends _CallPerformEvent {
-  factory _CallPerformEventSetHeld(final UuidValue uuid, final bool onHold) =
+  factory _CallPerformEventSetHeld(final CallkeepId id, final bool onHold) =
       _$_CallPerformEventSetHeld;
   _CallPerformEventSetHeld._() : super._();
 
   @override
-  UuidValue get uuid;
+  CallkeepId get id;
   bool get onHold;
 }
 
@@ -5148,16 +5177,16 @@ abstract class _CallPerformEventSetHeld extends _CallPerformEvent {
 
 class _$_CallPerformEventSetMuted extends _CallPerformEventSetMuted
     with DiagnosticableTreeMixin {
-  _$_CallPerformEventSetMuted(this.uuid, this.muted) : super._();
+  _$_CallPerformEventSetMuted(this.id, this.muted) : super._();
 
   @override
-  final UuidValue uuid;
+  final CallkeepId id;
   @override
   final bool muted;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallPerformEvent.setMuted(uuid: $uuid, muted: $muted)';
+    return '_CallPerformEvent.setMuted(id: $id, muted: $muted)';
   }
 
   @override
@@ -5165,7 +5194,7 @@ class _$_CallPerformEventSetMuted extends _CallPerformEventSetMuted
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallPerformEvent.setMuted'))
-      ..add(DiagnosticsProperty('uuid', uuid))
+      ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('muted', muted));
   }
 
@@ -5174,58 +5203,61 @@ class _$_CallPerformEventSetMuted extends _CallPerformEventSetMuted
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallPerformEventSetMuted &&
-            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.muted, muted) || other.muted == muted));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, uuid, muted);
+  int get hashCode => Object.hash(runtimeType, id, muted);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(UuidValue uuid, CallkeepHandle handle,
+    required TResult Function(CallkeepId id, CallkeepHandle handle,
             String? displayName, bool video)
         started,
-    required TResult Function(UuidValue uuid) answered,
-    required TResult Function(UuidValue uuid) ended,
-    required TResult Function(UuidValue uuid, bool onHold) setHeld,
-    required TResult Function(UuidValue uuid, bool muted) setMuted,
-    required TResult Function(UuidValue uuid, String key) sentDTMF,
+    required TResult Function(CallkeepId id) answered,
+    required TResult Function(CallkeepId id) ended,
+    required TResult Function(CallkeepId id, bool onHold) setHeld,
+    required TResult Function(CallkeepId id, bool muted) setMuted,
+    required TResult Function(CallkeepId id, String key) sentDTMF,
+    required TResult Function(CallkeepId id, bool enabled) setSpeaker,
   }) {
-    return setMuted(uuid, muted);
+    return setMuted(id, muted);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(UuidValue uuid, CallkeepHandle handle,
-            String? displayName, bool video)?
+    TResult? Function(CallkeepId id, CallkeepHandle handle, String? displayName,
+            bool video)?
         started,
-    TResult? Function(UuidValue uuid)? answered,
-    TResult? Function(UuidValue uuid)? ended,
-    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult? Function(UuidValue uuid, bool muted)? setMuted,
-    TResult? Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(CallkeepId id)? answered,
+    TResult? Function(CallkeepId id)? ended,
+    TResult? Function(CallkeepId id, bool onHold)? setHeld,
+    TResult? Function(CallkeepId id, bool muted)? setMuted,
+    TResult? Function(CallkeepId id, String key)? sentDTMF,
+    TResult? Function(CallkeepId id, bool enabled)? setSpeaker,
   }) {
-    return setMuted?.call(uuid, muted);
+    return setMuted?.call(id, muted);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(UuidValue uuid, CallkeepHandle handle, String? displayName,
+    TResult Function(CallkeepId id, CallkeepHandle handle, String? displayName,
             bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
+    TResult Function(CallkeepId id)? answered,
+    TResult Function(CallkeepId id)? ended,
+    TResult Function(CallkeepId id, bool onHold)? setHeld,
+    TResult Function(CallkeepId id, bool muted)? setMuted,
+    TResult Function(CallkeepId id, String key)? sentDTMF,
+    TResult Function(CallkeepId id, bool enabled)? setSpeaker,
     required TResult orElse(),
   }) {
     if (setMuted != null) {
-      return setMuted(uuid, muted);
+      return setMuted(id, muted);
     }
     return orElse();
   }
@@ -5239,6 +5271,7 @@ class _$_CallPerformEventSetMuted extends _CallPerformEventSetMuted
     required TResult Function(_CallPerformEventSetHeld value) setHeld,
     required TResult Function(_CallPerformEventSetMuted value) setMuted,
     required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
+    required TResult Function(_CallPerformEventSetSpeaker value) setSpeaker,
   }) {
     return setMuted(this);
   }
@@ -5252,6 +5285,7 @@ class _$_CallPerformEventSetMuted extends _CallPerformEventSetMuted
     TResult? Function(_CallPerformEventSetHeld value)? setHeld,
     TResult? Function(_CallPerformEventSetMuted value)? setMuted,
     TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallPerformEventSetSpeaker value)? setSpeaker,
   }) {
     return setMuted?.call(this);
   }
@@ -5265,6 +5299,7 @@ class _$_CallPerformEventSetMuted extends _CallPerformEventSetMuted
     TResult Function(_CallPerformEventSetHeld value)? setHeld,
     TResult Function(_CallPerformEventSetMuted value)? setMuted,
     TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult Function(_CallPerformEventSetSpeaker value)? setSpeaker,
     required TResult orElse(),
   }) {
     if (setMuted != null) {
@@ -5275,12 +5310,12 @@ class _$_CallPerformEventSetMuted extends _CallPerformEventSetMuted
 }
 
 abstract class _CallPerformEventSetMuted extends _CallPerformEvent {
-  factory _CallPerformEventSetMuted(final UuidValue uuid, final bool muted) =
+  factory _CallPerformEventSetMuted(final CallkeepId id, final bool muted) =
       _$_CallPerformEventSetMuted;
   _CallPerformEventSetMuted._() : super._();
 
   @override
-  UuidValue get uuid;
+  CallkeepId get id;
   bool get muted;
 }
 
@@ -5288,16 +5323,16 @@ abstract class _CallPerformEventSetMuted extends _CallPerformEvent {
 
 class _$_CallPerformEventSentDTMF extends _CallPerformEventSentDTMF
     with DiagnosticableTreeMixin {
-  _$_CallPerformEventSentDTMF(this.uuid, this.key) : super._();
+  _$_CallPerformEventSentDTMF(this.id, this.key) : super._();
 
   @override
-  final UuidValue uuid;
+  final CallkeepId id;
   @override
   final String key;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallPerformEvent.sentDTMF(uuid: $uuid, key: $key)';
+    return '_CallPerformEvent.sentDTMF(id: $id, key: $key)';
   }
 
   @override
@@ -5305,7 +5340,7 @@ class _$_CallPerformEventSentDTMF extends _CallPerformEventSentDTMF
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallPerformEvent.sentDTMF'))
-      ..add(DiagnosticsProperty('uuid', uuid))
+      ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('key', key));
   }
 
@@ -5314,58 +5349,61 @@ class _$_CallPerformEventSentDTMF extends _CallPerformEventSentDTMF
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CallPerformEventSentDTMF &&
-            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.key, key) || other.key == key));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, uuid, key);
+  int get hashCode => Object.hash(runtimeType, id, key);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(UuidValue uuid, CallkeepHandle handle,
+    required TResult Function(CallkeepId id, CallkeepHandle handle,
             String? displayName, bool video)
         started,
-    required TResult Function(UuidValue uuid) answered,
-    required TResult Function(UuidValue uuid) ended,
-    required TResult Function(UuidValue uuid, bool onHold) setHeld,
-    required TResult Function(UuidValue uuid, bool muted) setMuted,
-    required TResult Function(UuidValue uuid, String key) sentDTMF,
+    required TResult Function(CallkeepId id) answered,
+    required TResult Function(CallkeepId id) ended,
+    required TResult Function(CallkeepId id, bool onHold) setHeld,
+    required TResult Function(CallkeepId id, bool muted) setMuted,
+    required TResult Function(CallkeepId id, String key) sentDTMF,
+    required TResult Function(CallkeepId id, bool enabled) setSpeaker,
   }) {
-    return sentDTMF(uuid, key);
+    return sentDTMF(id, key);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(UuidValue uuid, CallkeepHandle handle,
-            String? displayName, bool video)?
+    TResult? Function(CallkeepId id, CallkeepHandle handle, String? displayName,
+            bool video)?
         started,
-    TResult? Function(UuidValue uuid)? answered,
-    TResult? Function(UuidValue uuid)? ended,
-    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult? Function(UuidValue uuid, bool muted)? setMuted,
-    TResult? Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(CallkeepId id)? answered,
+    TResult? Function(CallkeepId id)? ended,
+    TResult? Function(CallkeepId id, bool onHold)? setHeld,
+    TResult? Function(CallkeepId id, bool muted)? setMuted,
+    TResult? Function(CallkeepId id, String key)? sentDTMF,
+    TResult? Function(CallkeepId id, bool enabled)? setSpeaker,
   }) {
-    return sentDTMF?.call(uuid, key);
+    return sentDTMF?.call(id, key);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(UuidValue uuid, CallkeepHandle handle, String? displayName,
+    TResult Function(CallkeepId id, CallkeepHandle handle, String? displayName,
             bool video)?
         started,
-    TResult Function(UuidValue uuid)? answered,
-    TResult Function(UuidValue uuid)? ended,
-    TResult Function(UuidValue uuid, bool onHold)? setHeld,
-    TResult Function(UuidValue uuid, bool muted)? setMuted,
-    TResult Function(UuidValue uuid, String key)? sentDTMF,
+    TResult Function(CallkeepId id)? answered,
+    TResult Function(CallkeepId id)? ended,
+    TResult Function(CallkeepId id, bool onHold)? setHeld,
+    TResult Function(CallkeepId id, bool muted)? setMuted,
+    TResult Function(CallkeepId id, String key)? sentDTMF,
+    TResult Function(CallkeepId id, bool enabled)? setSpeaker,
     required TResult orElse(),
   }) {
     if (sentDTMF != null) {
-      return sentDTMF(uuid, key);
+      return sentDTMF(id, key);
     }
     return orElse();
   }
@@ -5379,6 +5417,7 @@ class _$_CallPerformEventSentDTMF extends _CallPerformEventSentDTMF
     required TResult Function(_CallPerformEventSetHeld value) setHeld,
     required TResult Function(_CallPerformEventSetMuted value) setMuted,
     required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
+    required TResult Function(_CallPerformEventSetSpeaker value) setSpeaker,
   }) {
     return sentDTMF(this);
   }
@@ -5392,6 +5431,7 @@ class _$_CallPerformEventSentDTMF extends _CallPerformEventSentDTMF
     TResult? Function(_CallPerformEventSetHeld value)? setHeld,
     TResult? Function(_CallPerformEventSetMuted value)? setMuted,
     TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallPerformEventSetSpeaker value)? setSpeaker,
   }) {
     return sentDTMF?.call(this);
   }
@@ -5405,6 +5445,7 @@ class _$_CallPerformEventSentDTMF extends _CallPerformEventSentDTMF
     TResult Function(_CallPerformEventSetHeld value)? setHeld,
     TResult Function(_CallPerformEventSetMuted value)? setMuted,
     TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult Function(_CallPerformEventSetSpeaker value)? setSpeaker,
     required TResult orElse(),
   }) {
     if (sentDTMF != null) {
@@ -5415,13 +5456,159 @@ class _$_CallPerformEventSentDTMF extends _CallPerformEventSentDTMF
 }
 
 abstract class _CallPerformEventSentDTMF extends _CallPerformEvent {
-  factory _CallPerformEventSentDTMF(final UuidValue uuid, final String key) =
+  factory _CallPerformEventSentDTMF(final CallkeepId id, final String key) =
       _$_CallPerformEventSentDTMF;
   _CallPerformEventSentDTMF._() : super._();
 
   @override
-  UuidValue get uuid;
+  CallkeepId get id;
   String get key;
+}
+
+/// @nodoc
+
+class _$_CallPerformEventSetSpeaker extends _CallPerformEventSetSpeaker
+    with DiagnosticableTreeMixin {
+  _$_CallPerformEventSetSpeaker(this.id, this.enabled) : super._();
+
+  @override
+  final CallkeepId id;
+  @override
+  final bool enabled;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallPerformEvent.setSpeaker(id: $id, enabled: $enabled)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', '_CallPerformEvent.setSpeaker'))
+      ..add(DiagnosticsProperty('id', id))
+      ..add(DiagnosticsProperty('enabled', enabled));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_CallPerformEventSetSpeaker &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.enabled, enabled) || other.enabled == enabled));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, id, enabled);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(CallkeepId id, CallkeepHandle handle,
+            String? displayName, bool video)
+        started,
+    required TResult Function(CallkeepId id) answered,
+    required TResult Function(CallkeepId id) ended,
+    required TResult Function(CallkeepId id, bool onHold) setHeld,
+    required TResult Function(CallkeepId id, bool muted) setMuted,
+    required TResult Function(CallkeepId id, String key) sentDTMF,
+    required TResult Function(CallkeepId id, bool enabled) setSpeaker,
+  }) {
+    return setSpeaker(id, enabled);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(CallkeepId id, CallkeepHandle handle, String? displayName,
+            bool video)?
+        started,
+    TResult? Function(CallkeepId id)? answered,
+    TResult? Function(CallkeepId id)? ended,
+    TResult? Function(CallkeepId id, bool onHold)? setHeld,
+    TResult? Function(CallkeepId id, bool muted)? setMuted,
+    TResult? Function(CallkeepId id, String key)? sentDTMF,
+    TResult? Function(CallkeepId id, bool enabled)? setSpeaker,
+  }) {
+    return setSpeaker?.call(id, enabled);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(CallkeepId id, CallkeepHandle handle, String? displayName,
+            bool video)?
+        started,
+    TResult Function(CallkeepId id)? answered,
+    TResult Function(CallkeepId id)? ended,
+    TResult Function(CallkeepId id, bool onHold)? setHeld,
+    TResult Function(CallkeepId id, bool muted)? setMuted,
+    TResult Function(CallkeepId id, String key)? sentDTMF,
+    TResult Function(CallkeepId id, bool enabled)? setSpeaker,
+    required TResult orElse(),
+  }) {
+    if (setSpeaker != null) {
+      return setSpeaker(id, enabled);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CallPerformEventStarted value) started,
+    required TResult Function(_CallPerformEventAnswered value) answered,
+    required TResult Function(_CallPerformEventEnded value) ended,
+    required TResult Function(_CallPerformEventSetHeld value) setHeld,
+    required TResult Function(_CallPerformEventSetMuted value) setMuted,
+    required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
+    required TResult Function(_CallPerformEventSetSpeaker value) setSpeaker,
+  }) {
+    return setSpeaker(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CallPerformEventStarted value)? started,
+    TResult? Function(_CallPerformEventAnswered value)? answered,
+    TResult? Function(_CallPerformEventEnded value)? ended,
+    TResult? Function(_CallPerformEventSetHeld value)? setHeld,
+    TResult? Function(_CallPerformEventSetMuted value)? setMuted,
+    TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallPerformEventSetSpeaker value)? setSpeaker,
+  }) {
+    return setSpeaker?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CallPerformEventStarted value)? started,
+    TResult Function(_CallPerformEventAnswered value)? answered,
+    TResult Function(_CallPerformEventEnded value)? ended,
+    TResult Function(_CallPerformEventSetHeld value)? setHeld,
+    TResult Function(_CallPerformEventSetMuted value)? setMuted,
+    TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult Function(_CallPerformEventSetSpeaker value)? setSpeaker,
+    required TResult orElse(),
+  }) {
+    if (setSpeaker != null) {
+      return setSpeaker(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _CallPerformEventSetSpeaker extends _CallPerformEvent {
+  factory _CallPerformEventSetSpeaker(final CallkeepId id, final bool enabled) =
+      _$_CallPerformEventSetSpeaker;
+  _CallPerformEventSetSpeaker._() : super._();
+
+  @override
+  CallkeepId get id;
+  bool get enabled;
 }
 
 /// @nodoc

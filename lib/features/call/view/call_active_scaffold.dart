@@ -7,6 +7,7 @@ import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../call.dart';
+import '../extensions/extensions.dart';
 
 class CallActiveScaffold extends StatefulWidget {
   const CallActiveScaffold({
@@ -166,7 +167,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   }
 
   void _cameraSwitched() {
-    context.read<CallBloc>().add(CallControlEvent.cameraSwitched(widget.activeCall.callId.uuid));
+    context.read<CallBloc>().add(CallControlEvent.cameraSwitched(widget.activeCall.callId.getCallkeepId));
   }
 
   void onCameraChanged(bool value) {
@@ -174,30 +175,30 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
       cameraEnabled = value;
     });
 
-    context.read<CallBloc>().add(CallControlEvent.cameraEnabled(widget.activeCall.callId.uuid, value));
+    context.read<CallBloc>().add(CallControlEvent.cameraEnabled(widget.activeCall.callId.getCallkeepId, value));
   }
 
   void _onMutedChanged(bool value) {
-    context.read<CallBloc>().add(CallControlEvent.setMuted(widget.activeCall.callId.uuid, value));
+    context.read<CallBloc>().add(CallControlEvent.setMuted(widget.activeCall.callId.getCallkeepId, value));
   }
 
   void _onSpeakerChanged(bool value) {
-    context.read<CallBloc>().add(CallControlEvent.speakerEnabled(widget.activeCall.callId.uuid, value));
+    context.read<CallBloc>().add(CallControlEvent.speakerEnabled(widget.activeCall.callId.getCallkeepId, value));
   }
 
   void _onHeldChanged(bool value) {
-    context.read<CallBloc>().add(CallControlEvent.setHeld(widget.activeCall.callId.uuid, value));
+    context.read<CallBloc>().add(CallControlEvent.setHeld(widget.activeCall.callId.getCallkeepId, value));
   }
 
   void _hangup() {
-    context.read<CallBloc>().add(CallControlEvent.ended(widget.activeCall.callId.uuid));
+    context.read<CallBloc>().add(CallControlEvent.ended(widget.activeCall.callId.getCallkeepId));
   }
 
   void _accept() {
-    context.read<CallBloc>().add(CallControlEvent.answered(widget.activeCall.callId.uuid));
+    context.read<CallBloc>().add(CallControlEvent.answered(widget.activeCall.callId.getCallkeepId));
   }
 
   void _keyPressed(String value) {
-    context.read<CallBloc>().add(CallControlEvent.sentDTMF(widget.activeCall.callId.uuid, value));
+    context.read<CallBloc>().add(CallControlEvent.sentDTMF(widget.activeCall.callId.getCallkeepId, value));
   }
 }

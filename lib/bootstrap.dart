@@ -10,6 +10,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/fcm_handler.dart';
 
 import 'firebase_options.dart';
 
@@ -83,8 +84,10 @@ Future<void> _initFirebaseMessaging() async {
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final logger = Logger('main');
+  final fcmHandler = FCMHandler(logger: logger);
 
   await Firebase.initializeApp();
+  await fcmHandler.execute(message);
 
   logger.info('onBackgroundMessage: ${message.toMap()}');
 }

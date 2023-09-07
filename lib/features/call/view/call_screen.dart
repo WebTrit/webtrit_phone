@@ -8,6 +8,7 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../call.dart';
+import '../extensions/extensions.dart';
 import 'call_active_scaffold.dart';
 import 'call_init_scaffold.dart';
 
@@ -59,7 +60,7 @@ class _CallScreenState extends State<CallScreen> with RouteAware {
           final activeCall = state.activeCall;
           final activeCallFailure = activeCall.failure;
           if (activeCallFailure != null) {
-            context.read<CallBloc>().add(CallControlEvent.failureApproved(activeCall.callId.uuid));
+            context.read<CallBloc>().add(CallControlEvent.failureApproved(activeCall.callId.getCallkeepId));
             AcknowledgeDialog.show(
               context,
               title: context.l10n.call_FailureAcknowledgeDialog_title,

@@ -32,16 +32,22 @@ class _MainShellState extends State<MainShell> {
   void initState() {
     super.initState();
     callkeep = Callkeep();
-    callkeep.setUp(CallkeepOptions(
-      ios: CallkeepIOSOptions(
-        localizedName: PackageInfo().appName,
-        ringtoneSound: Assets.ringtones.incomingCall1,
-        iconTemplateImageAssetName: Assets.callkeep.iosIconTempateImage.path,
-        maximumCallGroups: 2,
-        maximumCallsPerCallGroup: 1,
-        supportedHandleTypes: const {CallkeepHandleType.number},
+    callkeep.setUp(
+      CallkeepOptions(
+        ios: CallkeepIOSOptions(
+          localizedName: PackageInfo().appName,
+          ringtoneSound: Assets.ringtones.incomingCall1,
+          iconTemplateImageAssetName: Assets.callkeep.iosIconTempateImage.path,
+          maximumCallGroups: 2,
+          maximumCallsPerCallGroup: 1,
+          supportedHandleTypes: const {CallkeepHandleType.number},
+        ),
+        android: const CallkeepAndroidOptions(
+          incomingPath: initialCallRout,
+          rootPath: initialMainRout,
+        ),
       ),
-    ));
+    );
   }
 
   @override
