@@ -32,24 +32,16 @@ class FavoritesScreen extends StatelessWidget {
           } else {
             if (favorites.isEmpty) {
               final themeData = Theme.of(context);
-              return Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.star_outline,
-                      size: 80,
-                      color: themeData.textTheme.bodySmall!.color,
-                    ),
-                    Padding(
-                      padding: kAllPadding16,
-                      child: Text(
-                        context.l10n.favorites_BodyCenter_empty,
-                        style: themeData.textTheme.titleMedium,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ],
+              return InfoCard(
+                icon: Icon(
+                  Icons.star_outline,
+                  size: 80,
+                  color: themeData.textTheme.bodySmall!.color,
+                ),
+                text: Text(
+                  context.l10n.favorites_BodyCenter_empty,
+                  style: themeData.textTheme.titleMedium,
+                  textAlign: TextAlign.center,
                 ),
               );
             } else {
