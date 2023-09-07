@@ -182,7 +182,7 @@ class _AppState extends State<App> {
                   child: EnvironmentConfig.CORE_URL.isNotEmpty
                       ? child
                       : UserActionScreen(
-                          isConnectVoIOPFlow: true,
+                          isConnectVoIOPFlow: false,
                           isInviteFriends: true,
                           child: child,
                         ),
