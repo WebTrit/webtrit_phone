@@ -419,6 +419,19 @@
   "@contacts_ExternalTabButton_refresh": {
   },
 
+  "inviteFriends_Dialog_title": "Invite your friends \nto try webtrit",
+  "@inviteFriends_Dialog_title": {
+  },
+  "inviteFriends_Dialog_close": "Hide this message",
+  "@inviteFriends_Dialog_close": {
+  },
+  "inviteFriends_Dialog_invite": "Invite",
+  "@inviteFriends_Dialog_invite": {
+  },
+  "connectToYourOwnVoIPSystem_Button_Action": "Connect to your own VoIP system",
+  "@connectToYourOwnVoIPSystem_Button_Action": {
+  },
+
   "settings_AppBarTitle_myAccount": "My account",
   "@settings_AppBarTitle_myAccount": {
   },

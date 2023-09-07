@@ -179,7 +179,13 @@ class _AppState extends State<App> {
               return MainShell(
                 appPreferences: _appPreferences,
                 child: CallShell(
-                  child: child,
+                  child: EnvironmentConfig.CORE_URL.isNotEmpty
+                      ? child
+                      : UserActionScreen(
+                          isConnectVoIOPFlow: true,
+                          isInviteFriends: true,
+                          child: child,
+                        ),
                 ),
               );
             },
@@ -487,6 +493,16 @@ class _AppState extends State<App> {
                         child: widget,
                       );
                       return provider;
+                    },
+                  ),
+                  GoRoute(
+                    parentNavigatorKey: _mainNavigatorKey,
+                    name: MainRoute.userAction,
+                    path: 'user-action',
+                    builder: (context, state) {
+                      final url = Uri.parse(state.uri.queryParameters['url']!);
+                      final widget = WebInviteFriendsScreen(initialUri: url);
+                      return widget;
                     },
                   ),
                 ],
