@@ -38,6 +38,10 @@ flutter build web --dart-define-from-file=dart_define.json
 dart run tool/extenvsubst.dart dart_define.json build/web/index.html
 ```
 
+## Renaming
+
+To rename the default fields for each platform project within the WebTrit Phone application, the [`package_rename`](https://pub.dev/packages/package_rename) package can be used.
+
 ## Contributing
 
 Contributions are always welcome!
