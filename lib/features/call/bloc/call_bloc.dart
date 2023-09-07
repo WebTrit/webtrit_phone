@@ -1031,8 +1031,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _cachedEndCalls.add(event.id.callId);
 
     if (state.retrieveActiveCall(event.id.uuidValue)?.wasHungUp == true) {
-      event.fail();
-      return;
+      //TODO: It happens that the user has already ended the call, but he still sees the screen of the active call
+      if (state.isActive) {
+        emit(state.copyWithPopActiveCall(event.id.uuidValue));
+      } else {
+        event.fail();
+        return;
+      }
     }
     event.fulfill();
 
