@@ -112,6 +112,42 @@ abstract class __ConnectivityResultChanged
 }
 
 /// @nodoc
+mixin _$_HandlePlatformAudioFlow {}
+
+/// @nodoc
+
+class _$__HandlePlatformAudioFlow
+    with DiagnosticableTreeMixin
+    implements __HandlePlatformAudioFlow {
+  const _$__HandlePlatformAudioFlow();
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_HandlePlatformAudioFlow()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty('type', '_HandlePlatformAudioFlow'));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$__HandlePlatformAudioFlow);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+}
+
+abstract class __HandlePlatformAudioFlow implements _HandlePlatformAudioFlow {
+  const factory __HandlePlatformAudioFlow() = _$__HandlePlatformAudioFlow;
+}
+
+/// @nodoc
 mixin _$_AudioSessionRouteChanged {}
 
 /// @nodoc

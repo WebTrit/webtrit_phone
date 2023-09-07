@@ -19,6 +19,11 @@ class _ConnectivityResultChanged with _$_ConnectivityResultChanged implements Ca
 }
 
 @Freezed(copyWith: false)
+class _HandlePlatformAudioFlow with _$_HandlePlatformAudioFlow implements CallEvent {
+  const factory _HandlePlatformAudioFlow() = __HandlePlatformAudioFlow;
+}
+
+@Freezed(copyWith: false)
 class _AudioSessionRouteChanged with _$_AudioSessionRouteChanged implements CallEvent {
   const factory _AudioSessionRouteChanged() = __AudioSessionRouteChanged;
 }
