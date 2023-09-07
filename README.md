@@ -4,59 +4,38 @@ WebTrit Phone application.
 
 ## Build variables
 
-* `WEBTRIT_PHONE_APP_ID_SUFFIX` - suffix added to `applicationId` (_with value `com.webtrit.phone`_) on Android and to `CFBundleIdentifier` (_with value `com.webtrit.phone`_) on iOS (_default is empty_)
-* `WEBTRIT_PHONE_APP_NAME` (_default **WebTrit**_)
-* `WEBTRIT_PHONE_APP_DESCRIPTION` (_default **<WEBTRIT_PHONE_APP_NAME> application**_)
-* `WEBTRIT_PHONE_WEBTRIT_CORE_URL` (_default **http://localhost:4000**_)
-* `WEBTRIT_PHONE_PERIODIC_POLLING` (_default **true**_)
-* `WEBTRIT_PHONE_DEBUG_LEVEL` (_default **INFO**_)
-* `WEBTRIT_PHONE_DATABASE_LOG_STATEMENTS` (_default **false**_)
+* `WEBTRIT_APP_ID_SUFFIX` - suffix added to `applicationId` (_with value `com.webtrit.app`_) on Android and to `CFBundleIdentifier` (_with value `com.webtrit.app`_) on iOS (_default is empty_)
+* `WEBTRIT_APP_NAME` (_default **WebTrit**_)
+* `WEBTRIT_APP_DESCRIPTION` (_default is empty_)
+* `WEBTRIT_APP_CORE_URL` (_optional_)
+* `WEBTRIT_APP_DEMO_CORE_URL` (_default **http://localhost:4000**_)
+* `WEBTRIT_APP_PERIODIC_POLLING` (_default **true**_)
+* `WEBTRIT_APP_DEBUG_LEVEL` (_default **INFO**_)
+* `WEBTRIT_APP_DATABASE_LOG_STATEMENTS` (_default **false**_)
+
+Default build variables located in [dart_define.json](dart_define.json) and could be add to `flutter` `run` or `build` with `--dart-define-from-file=dart_define.json` parameter. 
 
 ### Build Android app
 
 Command line example:
 ```bash
-flutter build appbundle
-  --dart-define=WEBTRIT_PHONE_APP_NAME="PortaPhone 2"
-  --dart-define=WEBTRIT_PHONE_APP_DESCRIPTION="PortaPhone 2 Android application"
-  --dart-define=WEBTRIT_PHONE_DEMO_WEBTRIT_CORE_URL=https://core-dev.demo.portaone.com
-  --dart-define=WEBTRIT_PHONE_DEBUG_LEVEL=ALL
-  --dart-define=WEBTRIT_PHONE_PERIODIC_POLLING=true
-  --dart-define=WEBTRIT_PHONE_APP_TERMS_AND_CONDITIONS_URL=https://www.portaone.com/portaphone/installation
+flutter build appbundle --dart-define-from-file=dart_define.json
 ```
 
 ### Build iOS app
 
 Command line example: 
 ```bash
-flutter build ipa \
-  --dart-define=WEBTRIT_PHONE_APP_NAME="PortaPhone 2" \
-  --dart-define=WEBTRIT_PHONE_APP_DESCRIPTION="PortaPhone 2 iOS application" \
-  --dart-define=WEBTRIT_PHONE_WEBTRIT_CORE_URL=https://core.demo.portaone.com \
-  --dart-define=WEBTRIT_PHONE_DEBUG_LEVEL=ALL \
-  --dart-define WEBTRIT_PHONE_PERIODIC_POLLING=true \
-  --dart-define=WEBTRIT_PHONE_APP_TERMS_AND_CONDITIONS_URL=https://www.portaone.com/portaphone/installation
+flutter build ipa --dart-define-from-file=dart_define.json
 ```
 
 ### Build Web app
 
 Command line example:
 ```bash
-export APP_NAME="PortaPhone 2"
-export APP_DESCRIPTION="PortaPhone 2 Web application"
-
-flutter build web \
-  --dart-define=WEBTRIT_PHONE_APP_NAME=$APP_NAME \
-  --dart-define=WEBTRIT_PHONE_APP_DESCRIPTION=$APP_DESCRIPTION \
-  --dart-define=WEBTRIT_PHONE_DEMO_WEBTRIT_CORE_URL=https://core-dev.demo.portaone.com \
-  --dart-define=WEBTRIT_PHONE_DEBUG_LEVEL=ALL \
-  --dart-define=WEBTRIT_PHONE_PERIODIC_POLLING=true \
-  --dart-define=WEBTRIT_PHONE_APP_TERMS_AND_CONDITIONS_URL=https://www.portaone.com/portaphone/installation
+flutter build web --dart-define-from-file=dart_define.json
   
-dart run \
-  --define=WEBTRIT_PHONE_APP_NAME=$APP_NAME \
-  --define=WEBTRIT_PHONE_APP_DESCRIPTION=$APP_DESCRIPTION \
-  tool/extenvsubst.dart build/web/index.html
+dart run tool/extenvsubst.dart dart_define.json build/web/index.html
 ```
 
 ## Contributing

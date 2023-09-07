@@ -1,15 +1,23 @@
+import 'dart:convert';
 import 'dart:io';
 
 Future<void> main(List<String> args) async {
-  if (args.length != 1) {
-    stdout.writeln('Usage: dart run tool/extenvsubst.dart <file_to_subst>');
+  final Map<String, dynamic> dartDefineJson;
+  final File fileToSubst;
+  if (args.length == 1) {
+    dartDefineJson = {};
+    fileToSubst = File(args[0]);
+  } else if (args.length == 2) {
+    dartDefineJson = jsonDecode(await File(args[0]).readAsString());
+    fileToSubst = File(args[1]);
+  } else {
+    stdout.writeln('Usage: dart run tool/extenvsubst.dart [<dart define json file>] <file_to_subst>');
     exit(1);
   }
 
-  final file = File(args.single);
-  var fileData = await file.readAsString();
+  var fileToSubstData = await fileToSubst.readAsString();
 
-  fileData = fileData.replaceAllMapped(
+  fileToSubstData = fileToSubstData.replaceAllMapped(
     RegExp(r'\$\{(\w+)\}'),
     (Match match) {
       final entireMatch = match.group(0)!;
@@ -18,6 +26,10 @@ Future<void> main(List<String> args) async {
       if (bool.hasEnvironment(variableName)) {
         final variableValue = String.fromEnvironment(variableName);
         stdout.writeln('Substitute "$entireMatch" with environment declaration "$variableValue"');
+        return variableValue;
+      } else if (dartDefineJson.containsKey(variableName)) {
+        final variableValue = dartDefineJson[variableName];
+        stdout.writeln('Substitute "$entireMatch" with dart define json declaration "$variableValue"');
         return variableValue;
       } else {
         final variableValue = Platform.environment[variableName];
@@ -32,5 +44,5 @@ Future<void> main(List<String> args) async {
     },
   );
 
-  await file.writeAsString(fileData);
+  await fileToSubst.writeAsString(fileToSubstData);
 }
