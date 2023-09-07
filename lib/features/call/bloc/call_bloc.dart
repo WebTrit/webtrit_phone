@@ -55,6 +55,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   // TODO: For save answer action if action faster than socket initialization
   final _cachedAnswerCall = <ActiveCall>[];
 
+  // TODO: For save hung up action if no internet connection
+  final _cachedEndCalls = <String>[];
+
   final _peerConnectionCompleters = <UuidValue, Completer<RTCPeerConnection>>{};
 
   final _audioPlayer = AudioPlayer();
@@ -1024,6 +1027,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallPerformEventEnded event,
     Emitter<CallState> emit,
   ) async {
+    //TODO: If hang up the phone when there is no Internet, a repeated incoming call appears, this is a deeper problem because you can close the app and then it will not be saved from the closed call.
+    _cachedEndCalls.add(event.id.callId);
+
     if (state.retrieveActiveCall(event.id.uuidValue)?.wasHungUp == true) {
       event.fail();
       return;
@@ -1284,17 +1290,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   void _onSignalingEvent(Event event) {
     if (event is IncomingCallEvent) {
-      add(_CallSignalingEvent.incoming(
-        line: event.line,
-        callId: CallIdValue(event.callId),
-        callee: event.callee,
-        caller: event.caller,
-        callerDisplayName: event.callerDisplayName,
-        referredBy: event.referredBy,
-        replaceCallId: event.replaceCallId,
-        isFocus: event.isFocus,
-        jsep: JsepValue.fromOptional(event.jsep),
-      ));
+      //TODO: If hang up the phone when there is no Internet, a repeated incoming call appears, this is a deeper problem because you can close the app and then it will not be saved from the closed call.
+      if (!_cachedEndCalls.contains(event.callId)) {
+        add(_CallSignalingEvent.incoming(
+          line: event.line,
+          callId: CallIdValue(event.callId),
+          callee: event.callee,
+          caller: event.caller,
+          callerDisplayName: event.callerDisplayName,
+          referredBy: event.referredBy,
+          replaceCallId: event.replaceCallId,
+          isFocus: event.isFocus,
+          jsep: JsepValue.fromOptional(event.jsep),
+        ));
+      }
     } else if (event is RingingEvent) {
       add(_CallSignalingEvent.ringing(
         line: event.line,
