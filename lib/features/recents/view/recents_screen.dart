@@ -90,27 +90,10 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
           } else {
             final recentsFiltered = state.recentsFiltered!; // can not be null if state.recents is not null
             if (recentsFiltered.isEmpty) {
-              final themeData = Theme.of(context);
               final filterL10n = state.filter == RecentsVisibilityFilter.all ? '' : state.filter.l10n(context);
-              return Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.access_time,
-                      size: 80,
-                      color: themeData.textTheme.bodySmall!.color,
-                    ),
-                    Padding(
-                      padding: kAllPadding16,
-                      child: Text(
-                        context.l10n.recents_BodyCenter_empty(filterL10n),
-                        style: themeData.textTheme.titleMedium,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ],
-                ),
+              return NoDataPlaceholder(
+                icon: const Icon(Icons.access_time),
+                content: Text(context.l10n.recents_BodyCenter_empty(filterL10n)),
               );
             } else {
               return ListView.builder(
