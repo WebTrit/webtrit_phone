@@ -296,6 +296,9 @@
   "login_RequestFailurePhoneNotFoundError": "Phone number not found",
   "@login_RequestFailurePhoneNotFoundError": {
   },
+  "login_RequestFailureUnconfiguredBundleIdError": "The app is not supported by your WebTrit Cloud Backend",
+  "@login_RequestFailureUnconfiguredBundleIdError": {
+  },
   "login_RequestFailureOtpAlreadyVerifiedError": "Verification already verified",
   "@login_RequestFailureOtpAlreadyVerifiedError": {
   },

@@ -21,6 +21,8 @@ extension LoginStateErrorL10n on LoginState {
       } else if (error is RequestFailure) {
         switch (error.error?.code) {
           // sessionOtpRequest
+          case 'unconfigured_bundle_id':
+            return context.l10n.login_RequestFailureUnconfiguredBundleIdError;
           case 'phone_not_found':
             return context.l10n.login_RequestFailurePhoneNotFoundError;
           case 'empty_email':

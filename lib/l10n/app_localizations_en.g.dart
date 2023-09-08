@@ -263,6 +263,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_RequestFailurePhoneNotFoundError => 'Phone number not found';
 
   @override
+  String get login_RequestFailureUnconfiguredBundleIdError => 'The app is not supported by your WebTrit Cloud Backend';
+
+  @override
   String get login_RequestFailureOtpAlreadyVerifiedError => 'Verification already verified';
 
   @override
