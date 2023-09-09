@@ -92,7 +92,6 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
             if (recentsFiltered.isEmpty) {
               final filterL10n = state.filter == RecentsVisibilityFilter.all ? '' : state.filter.l10n(context);
               return NoDataPlaceholder(
-                icon: const Icon(Icons.access_time),
                 content: Text(context.l10n.recents_BodyCenter_empty(filterL10n)),
               );
             } else {

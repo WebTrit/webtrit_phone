@@ -31,7 +31,6 @@ class FavoritesScreen extends StatelessWidget {
           } else {
             if (favorites.isEmpty) {
               return NoDataPlaceholder(
-                icon: const Icon(Icons.star_outline),
                 content: Text(context.l10n.favorites_BodyCenter_empty),
               );
             } else {
