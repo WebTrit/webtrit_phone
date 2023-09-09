@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../../../contacts.dart';
 
@@ -38,30 +39,27 @@ class ContactsExternalTab extends StatelessWidget {
             },
           );
         } else {
-          late final List<Widget> children;
           if (state.status == ContactsExternalTabStatus.failure) {
-            children = [
-              Text(context.l10n.contacts_ExternalTabText_failure),
-            ];
+            return NoDataPlaceholder(
+              content: Text(context.l10n.contacts_ExternalTabText_failure),
+            );
           } else {
             if (state.searching) {
-              children = [
-                Text(context.l10n.contacts_ExternalTabText_emptyOnSearching),
-              ];
+              return NoDataPlaceholder(
+                content: Text(context.l10n.contacts_ExternalTabText_emptyOnSearching),
+              );
             } else {
-              children = [
-                Text(context.l10n.contacts_ExternalTabText_empty),
-                TextButton(
-                  onPressed: () => context.read<ContactsExternalTabBloc>().add(const ContactsExternalTabRefreshed()),
-                  child: Text(context.l10n.contacts_ExternalTabButton_refresh),
-                ),
-              ];
+              return NoDataPlaceholder(
+                content: Text(context.l10n.contacts_ExternalTabText_empty),
+                actions: [
+                  TextButton(
+                    onPressed: () => context.read<ContactsExternalTabBloc>().add(const ContactsExternalTabRefreshed()),
+                    child: Text(context.l10n.contacts_ExternalTabButton_refresh),
+                  )
+                ],
+              );
             }
           }
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: children,
-          );
         }
       },
     );

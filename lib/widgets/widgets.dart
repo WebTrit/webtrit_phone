@@ -7,6 +7,7 @@ export 'leading_avatar.dart';
 export 'linkify.dart';
 export 'logos.dart';
 export 'main_app_bar.dart';
+export 'no_data_placeholder.dart';
 export 'progress_overlay.dart';
 export 'sized_circular_progress_indicator.dart';
 export 'tab_bar.dart';
