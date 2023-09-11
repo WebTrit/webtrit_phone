@@ -118,11 +118,12 @@ class _$_AppThemeSettingsChanged implements _AppThemeSettingsChanged {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_AppThemeSettingsChanged &&
-            (identical(other.value, value) || other.value == value));
+            const DeepCollectionEquality().equals(other.value, value));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, value);
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(value));
 }
 
 abstract class _AppThemeSettingsChanged implements AppThemeSettingsChanged {
@@ -236,8 +237,6 @@ abstract class $AppStateCopyWith<$Res> {
       ThemeSettings themeSettings,
       ThemeMode themeMode,
       Locale locale});
-
-  $ThemeSettingsCopyWith<$Res> get themeSettings;
 }
 
 /// @nodoc
@@ -257,7 +256,7 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
     Object? tenantId = freezed,
     Object? token = freezed,
     Object? webRegistrationInitialUrl = freezed,
-    Object? themeSettings = null,
+    Object? themeSettings = freezed,
     Object? themeMode = null,
     Object? locale = null,
   }) {
@@ -278,7 +277,7 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
           ? _value.webRegistrationInitialUrl
           : webRegistrationInitialUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      themeSettings: null == themeSettings
+      themeSettings: freezed == themeSettings
           ? _value.themeSettings
           : themeSettings // ignore: cast_nullable_to_non_nullable
               as ThemeSettings,
@@ -291,14 +290,6 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
           : locale // ignore: cast_nullable_to_non_nullable
               as Locale,
     ) as $Val);
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $ThemeSettingsCopyWith<$Res> get themeSettings {
-    return $ThemeSettingsCopyWith<$Res>(_value.themeSettings, (value) {
-      return _then(_value.copyWith(themeSettings: value) as $Val);
-    });
   }
 }
 
@@ -317,9 +308,6 @@ abstract class _$$_AppStateCopyWith<$Res> implements $AppStateCopyWith<$Res> {
       ThemeSettings themeSettings,
       ThemeMode themeMode,
       Locale locale});
-
-  @override
-  $ThemeSettingsCopyWith<$Res> get themeSettings;
 }
 
 /// @nodoc
@@ -337,7 +325,7 @@ class __$$_AppStateCopyWithImpl<$Res>
     Object? tenantId = freezed,
     Object? token = freezed,
     Object? webRegistrationInitialUrl = freezed,
-    Object? themeSettings = null,
+    Object? themeSettings = freezed,
     Object? themeMode = null,
     Object? locale = null,
   }) {
@@ -358,7 +346,7 @@ class __$$_AppStateCopyWithImpl<$Res>
           ? _value.webRegistrationInitialUrl
           : webRegistrationInitialUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      themeSettings: null == themeSettings
+      themeSettings: freezed == themeSettings
           ? _value.themeSettings
           : themeSettings // ignore: cast_nullable_to_non_nullable
               as ThemeSettings,
@@ -419,16 +407,23 @@ class _$_AppState extends _AppState {
             (identical(other.webRegistrationInitialUrl,
                     webRegistrationInitialUrl) ||
                 other.webRegistrationInitialUrl == webRegistrationInitialUrl) &&
-            (identical(other.themeSettings, themeSettings) ||
-                other.themeSettings == themeSettings) &&
+            const DeepCollectionEquality()
+                .equals(other.themeSettings, themeSettings) &&
             (identical(other.themeMode, themeMode) ||
                 other.themeMode == themeMode) &&
             (identical(other.locale, locale) || other.locale == locale));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, coreUrl, tenantId, token,
-      webRegistrationInitialUrl, themeSettings, themeMode, locale);
+  int get hashCode => Object.hash(
+      runtimeType,
+      coreUrl,
+      tenantId,
+      token,
+      webRegistrationInitialUrl,
+      const DeepCollectionEquality().hash(themeSettings),
+      themeMode,
+      locale);
 
   @JsonKey(ignore: true)
   @override

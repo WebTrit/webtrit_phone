@@ -22,6 +22,9 @@ dependencies:
   webtrit_phone:
     path: ..
 
+  webtrit_theme:
+    path: ../packages/webtrit_theme
+
 dev_dependencies:
   integration_test:
     sdk: flutter

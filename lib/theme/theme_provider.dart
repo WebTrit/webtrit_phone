@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 
+import 'package:webtrit_theme/webtrit_theme.dart';
+
+import 'package:webtrit_phone/extensions/extensions.dart';
+
 import 'theme.dart';
 
 class ThemeProvider extends InheritedWidget {
@@ -20,18 +24,18 @@ class ThemeProvider extends InheritedWidget {
 
   Color custom(CustomColor custom) {
     if (custom.blend) {
-      return blend(custom.color);
+      return blend(custom.color.toColor());
     } else {
-      return custom.color;
+      return custom.color.toColor();
     }
   }
 
   Color blend(Color targetColor) {
-    return Color(Blend.harmonize(targetColor.value, settings.seedColor.value));
+    return Color(Blend.harmonize(targetColor.value, settings.seedColor.toColor().value));
   }
 
   Color source(Color? target) {
-    Color source = settings.seedColor;
+    Color source = settings.seedColor.toColor();
     if (target != null) {
       source = blend(target);
     }
@@ -45,36 +49,36 @@ class ThemeProvider extends InheritedWidget {
     return ColorScheme.fromSeed(
       seedColor: dynamicPrimary ?? source(targetColor),
       brightness: brightness,
-      primary: colorSchemeOverride?.primary,
-      onPrimary: colorSchemeOverride?.onPrimary,
-      primaryContainer: colorSchemeOverride?.primaryContainer,
-      onPrimaryContainer: colorSchemeOverride?.onPrimaryContainer,
-      secondary: colorSchemeOverride?.secondary,
-      onSecondary: colorSchemeOverride?.onSecondary,
-      secondaryContainer: colorSchemeOverride?.secondaryContainer,
-      onSecondaryContainer: colorSchemeOverride?.onSecondaryContainer,
-      tertiary: colorSchemeOverride?.tertiary,
-      onTertiary: colorSchemeOverride?.onTertiary,
-      tertiaryContainer: colorSchemeOverride?.tertiaryContainer,
-      onTertiaryContainer: colorSchemeOverride?.onTertiaryContainer,
-      error: colorSchemeOverride?.error,
-      onError: colorSchemeOverride?.onError,
-      errorContainer: colorSchemeOverride?.errorContainer,
-      onErrorContainer: colorSchemeOverride?.onErrorContainer,
-      outline: colorSchemeOverride?.outline,
-      outlineVariant: colorSchemeOverride?.outlineVariant,
-      background: colorSchemeOverride?.background,
-      onBackground: colorSchemeOverride?.onBackground,
-      surface: colorSchemeOverride?.surface,
-      onSurface: colorSchemeOverride?.onSurface,
-      surfaceVariant: colorSchemeOverride?.surfaceVariant,
-      onSurfaceVariant: colorSchemeOverride?.onSurfaceVariant,
-      inverseSurface: colorSchemeOverride?.inverseSurface,
-      onInverseSurface: colorSchemeOverride?.onInverseSurface,
-      inversePrimary: colorSchemeOverride?.inversePrimary,
-      shadow: colorSchemeOverride?.shadow,
-      scrim: colorSchemeOverride?.scrim,
-      surfaceTint: colorSchemeOverride?.surfaceTint,
+      primary: colorSchemeOverride?.primary?.toColor(),
+      onPrimary: colorSchemeOverride?.onPrimary?.toColor(),
+      primaryContainer: colorSchemeOverride?.primaryContainer?.toColor(),
+      onPrimaryContainer: colorSchemeOverride?.onPrimaryContainer?.toColor(),
+      secondary: colorSchemeOverride?.secondary?.toColor(),
+      onSecondary: colorSchemeOverride?.onSecondary?.toColor(),
+      secondaryContainer: colorSchemeOverride?.secondaryContainer?.toColor(),
+      onSecondaryContainer: colorSchemeOverride?.onSecondaryContainer?.toColor(),
+      tertiary: colorSchemeOverride?.tertiary?.toColor(),
+      onTertiary: colorSchemeOverride?.onTertiary?.toColor(),
+      tertiaryContainer: colorSchemeOverride?.tertiaryContainer?.toColor(),
+      onTertiaryContainer: colorSchemeOverride?.onTertiaryContainer?.toColor(),
+      error: colorSchemeOverride?.error?.toColor(),
+      onError: colorSchemeOverride?.onError?.toColor(),
+      errorContainer: colorSchemeOverride?.errorContainer?.toColor(),
+      onErrorContainer: colorSchemeOverride?.onErrorContainer?.toColor(),
+      outline: colorSchemeOverride?.outline?.toColor(),
+      outlineVariant: colorSchemeOverride?.outlineVariant?.toColor(),
+      background: colorSchemeOverride?.background?.toColor(),
+      onBackground: colorSchemeOverride?.onBackground?.toColor(),
+      surface: colorSchemeOverride?.surface?.toColor(),
+      onSurface: colorSchemeOverride?.onSurface?.toColor(),
+      surfaceVariant: colorSchemeOverride?.surfaceVariant?.toColor(),
+      onSurfaceVariant: colorSchemeOverride?.onSurfaceVariant?.toColor(),
+      inverseSurface: colorSchemeOverride?.inverseSurface?.toColor(),
+      onInverseSurface: colorSchemeOverride?.onInverseSurface?.toColor(),
+      inversePrimary: colorSchemeOverride?.inversePrimary?.toColor(),
+      shadow: colorSchemeOverride?.shadow?.toColor(),
+      scrim: colorSchemeOverride?.scrim?.toColor(),
+      surfaceTint: colorSchemeOverride?.surfaceTint?.toColor(),
     );
   }
 
@@ -282,8 +286,8 @@ class ThemeProvider extends InheritedWidget {
         textButtonStyles(colorScheme),
         gradients(colorScheme),
         logoAssets(
-          primaryOnboardin: settings.primaryOnboardingLogo,
-          secondaryOnboardin: settings.secondaryOnboardingLogo,
+          primaryOnboardin: settings.primaryOnboardingSvgLogo,
+          secondaryOnboardin: settings.secondaryOnboardingSvgLogo,
         ),
       ],
       // COLOR

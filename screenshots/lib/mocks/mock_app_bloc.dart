@@ -4,6 +4,7 @@ import 'package:bloc_test/bloc_test.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/theme/theme.dart';
+import 'package:webtrit_theme/webtrit_theme.dart';
 
 class MockAppBloc extends MockBloc<AppEvent, AppState> implements AppBloc {
   MockAppBloc();
