@@ -9,7 +9,6 @@ import 'package:webtrit_theme/webtrit_theme.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/theme/theme.dart';
 
 part 'app_bloc.freezed.dart';
 
