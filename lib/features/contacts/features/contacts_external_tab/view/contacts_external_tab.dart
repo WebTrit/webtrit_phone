@@ -39,40 +39,27 @@ class ContactsExternalTab extends StatelessWidget {
             },
           );
         } else {
-          late final List<Widget> children;
           if (state.status == ContactsExternalTabStatus.failure) {
-            children = [
-              Text(context.l10n.contacts_ExternalTabText_failure),
-            ];
+            return NoDataPlaceholder(
+              content: Text(context.l10n.contacts_ExternalTabText_failure),
+            );
           } else {
             if (state.searching) {
-              children = [
-                InfoCard(
-                  text: Text(
-                    context.l10n.contacts_ExternalTabText_emptyOnSearching,
-                    textAlign: TextAlign.center,
-                  ),
-                )
-              ];
+              return NoDataPlaceholder(
+                content: Text(context.l10n.contacts_ExternalTabText_emptyOnSearching),
+              );
             } else {
-              children = [
-                InfoCard(
-                  text: Text(
-                    context.l10n.contacts_ExternalTabText_empty,
-                    textAlign: TextAlign.center,
-                  ),
-                  button: TextButton(
+              return NoDataPlaceholder(
+                content: Text(context.l10n.contacts_ExternalTabText_empty),
+                actions: [
+                  TextButton(
                     onPressed: () => context.read<ContactsExternalTabBloc>().add(const ContactsExternalTabRefreshed()),
                     child: Text(context.l10n.contacts_ExternalTabButton_refresh),
-                  ),
-                )
-              ];
+                  )
+                ],
+              );
             }
           }
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: children,
-          );
         }
       },
     );

@@ -25,15 +25,14 @@ class ContactsLocalTab extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         } else if (state.status == ContactsLocalTabStatus.permissionFailure) {
-          return InfoCard(
-            text: Text(
-              context.l10n.contacts_LocalTabText_permissionFailure,
-              textAlign: TextAlign.center,
-            ),
-            button: TextButton(
-              onPressed: () => openAppSettings(),
-              child: Text(context.l10n.contacts_LocalTabButton_openAppSettings),
-            ),
+          return NoDataPlaceholder(
+            content: Text(context.l10n.contacts_LocalTabText_permissionFailure),
+            actions: [
+              TextButton(
+                onPressed: () => openAppSettings(),
+                child: Text(context.l10n.contacts_LocalTabButton_openAppSettings),
+              ),
+            ],
           );
         } else if (state.contacts.isNotEmpty) {
           return ListView.builder(
@@ -52,30 +51,27 @@ class ContactsLocalTab extends StatelessWidget {
             },
           );
         } else {
-          late final List<Widget> children;
           if (state.status == ContactsLocalTabStatus.failure) {
-            children = [
-              Text(context.l10n.contacts_LocalTabText_failure),
-            ];
+            return NoDataPlaceholder(
+              content: Text(context.l10n.contacts_LocalTabText_failure),
+            );
           } else {
             if (state.searching) {
-              children = [
-                Text(context.l10n.contacts_LocalTabText_emptyOnSearching),
-              ];
+              return NoDataPlaceholder(
+                content: Text(context.l10n.contacts_LocalTabText_emptyOnSearching),
+              );
             } else {
-              children = [
-                Text(context.l10n.contacts_LocalTabText_empty),
-                TextButton(
-                  onPressed: () => context.read<ContactsLocalTabBloc>().add(const ContactsLocalTabRefreshed()),
-                  child: Text(context.l10n.contacts_LocalTabButton_refresh),
-                ),
-              ];
+              return NoDataPlaceholder(
+                content: Text(context.l10n.contacts_LocalTabText_empty),
+                actions: [
+                  TextButton(
+                    onPressed: () => context.read<ContactsLocalTabBloc>().add(const ContactsLocalTabRefreshed()),
+                    child: Text(context.l10n.contacts_LocalTabButton_refresh),
+                  ),
+                ],
+              );
             }
           }
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: children,
-          );
         }
       },
     );

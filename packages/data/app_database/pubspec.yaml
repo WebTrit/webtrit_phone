@@ -7,13 +7,13 @@ environment:
 
 dependencies:
   clock: ^1.1.1
-  drift: ^2.11.0
+  drift: ^2.11.1
   io: ^1.0.4
   path: ^1.8.2
-  sqlite3_flutter_libs: ^0.5.15
+  sqlite3_flutter_libs: ^0.5.16
 
 dev_dependencies:
   build_runner: ^2.4.6
-  drift_dev: ^2.11.0
+  drift_dev: ^2.11.2
   lints: ^2.1.1
   test: ^1.24.6
