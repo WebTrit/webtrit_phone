@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:audio_session/audio_session.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:clock/clock.dart';
@@ -46,7 +44,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final _logger = Logger('$CallBloc');
 
   StreamSubscription<ConnectivityResult>? _connectivityChangedSubscription;
-  StreamSubscription<AVAudioSessionRouteChange>? _routeChangeSubscription;
 
   WebtritSignalingClient? _signalingClient;
   Timer? _signalingClientReconnectTimer;
@@ -73,8 +70,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _onConnectivityResultChanged,
       transformer: sequential(),
     );
-    on<_AudioSessionRouteChanged>(
-      _onAudioSessionRouteChanged,
+    on<_NavigatorMediaDevicesChange>(
+      _onNavigatorMediaDevicesChange,
       transformer: droppable(),
     );
     on<_SignalingClientEvent>(
@@ -122,7 +119,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     WidgetsBinding.instance.removeObserver(this);
 
     await _connectivityChangedSubscription?.cancel();
-    await _routeChangeSubscription?.cancel();
 
     _signalingClientReconnectTimer?.cancel();
     await _signalingClient?.disconnect();
@@ -251,12 +247,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       add(_ConnectivityResultChanged(result));
     }
 
-    if (!kIsWeb && Platform.isIOS) {
-      _routeChangeSubscription = AVAudioSession().routeChangeStream.listen((event) {
-        add(const _AudioSessionRouteChanged());
-      });
-      _routeChangeSubscription?.pause();
-    }
+    AppleNativeAudioManagement.setUseManualAudio(true);
   }
 
   Future<void> _onAppLifecycleStateChanged(
@@ -295,14 +286,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     emit(state.copyWith(currentConnectivityResult: connectivityResult));
   }
 
-  Future<void> _onAudioSessionRouteChanged(
-    _AudioSessionRouteChanged event,
+  Future<void> _onNavigatorMediaDevicesChange(
+    _NavigatorMediaDevicesChange event,
     Emitter<CallState> emit,
   ) async {
-    final currentRoute = await AVAudioSession().currentRoute;
-    final outputs = currentRoute.outputs;
-    if (outputs.isNotEmpty) {
-      emit(state.copyWith(speaker: outputs.first.portType == AVAudioSessionPort.builtInSpeaker));
+    final devices = await navigator.mediaDevices.enumerateDevices();
+    final audioOutputDevices = devices.where((d) => d.kind == 'audiooutput').toList();
+    if (audioOutputDevices.isNotEmpty) {
+      emit(state.copyWith(speaker: audioOutputDevices.first.groupId == 'Speaker'));
     }
   }
 
@@ -1411,13 +1402,23 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   @override
   void didActivateAudioSession() {
     _logger.fine('didActivateAudioSession');
-    _routeChangeSubscription?.resume();
+    navigator.mediaDevices.ondevicechange = (event) {
+      add(const _NavigatorMediaDevicesChange());
+    };
+    () async {
+      await AppleNativeAudioManagement.audioSessionDidActivate();
+      await AppleNativeAudioManagement.setIsAudioEnabled(true);
+    }();
   }
 
   @override
   void didDeactivateAudioSession() {
     _logger.fine('didDeactivateAudioSession');
-    _routeChangeSubscription?.pause();
+    () async {
+      await AppleNativeAudioManagement.setIsAudioEnabled(false);
+      await AppleNativeAudioManagement.audioSessionDidDeactivate();
+    }();
+    navigator.mediaDevices.ondevicechange = null;
   }
 
   @override
@@ -1452,6 +1453,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     };
     final localStream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
     if (!kIsWeb) {
+      await Helper.setAppleAudioConfiguration(
+          AppleAudioConfiguration(appleAudioMode: video ? AppleAudioMode.videoChat : AppleAudioMode.voiceChat));
       await Helper.setSpeakerphoneOn(video);
     }
 

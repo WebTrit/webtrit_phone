@@ -71,7 +71,7 @@ packages:
     source: hosted
     version: "2.11.0"
   audio_session:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: audio_session
       sha256: "8a2bc5e30520e18f3fb0e366793d78057fb64cd5287862c76af0c8771f2a52ad"
@@ -652,7 +652,7 @@ packages:
     description:
       path: "."
       ref: main_ext
-      resolved-ref: "621bb43f1e09d742837f1a8a980fa8995e4754ac"
+      resolved-ref: "2270eb14e5df8b62a73658506500cf2cfece1c54"
       url: "https://github.com/WebTrit/flutter-webrtc.git"
     source: git
     version: "0.9.41"

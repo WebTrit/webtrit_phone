@@ -112,39 +112,41 @@ abstract class __ConnectivityResultChanged
 }
 
 /// @nodoc
-mixin _$_AudioSessionRouteChanged {}
+mixin _$_NavigatorMediaDevicesChange {}
 
 /// @nodoc
 
-class _$__AudioSessionRouteChanged
+class _$__NavigatorMediaDevicesChange
     with DiagnosticableTreeMixin
-    implements __AudioSessionRouteChanged {
-  const _$__AudioSessionRouteChanged();
+    implements __NavigatorMediaDevicesChange {
+  const _$__NavigatorMediaDevicesChange();
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_AudioSessionRouteChanged()';
+    return '_NavigatorMediaDevicesChange()';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty('type', '_AudioSessionRouteChanged'));
+    properties.add(DiagnosticsProperty('type', '_NavigatorMediaDevicesChange'));
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$__AudioSessionRouteChanged);
+            other is _$__NavigatorMediaDevicesChange);
   }
 
   @override
   int get hashCode => runtimeType.hashCode;
 }
 
-abstract class __AudioSessionRouteChanged implements _AudioSessionRouteChanged {
-  const factory __AudioSessionRouteChanged() = _$__AudioSessionRouteChanged;
+abstract class __NavigatorMediaDevicesChange
+    implements _NavigatorMediaDevicesChange {
+  const factory __NavigatorMediaDevicesChange() =
+      _$__NavigatorMediaDevicesChange;
 }
 
 /// @nodoc
