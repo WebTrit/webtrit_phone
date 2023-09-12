@@ -112,7 +112,7 @@ static NSString *const OptionsKey = @"WebtritCallkeepPluginOptions";
 #pragma mark - WTPHostApi
 
 - (nullable NSNumber *)isSetUp:(FlutterError **)error {
-  return [NSNumber numberWithBool:[self isSetUp]];
+  return @([self isSetUp]);
 }
 
 - (void)setUp:(WTPOptions *)options
@@ -405,7 +405,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
   if (person != nil && person.personHandle != nil) {
     [_delegateFlutterApi continueStartCallIntentHandle:[person.personHandle toPigeon]
                                            displayName:[person displayName]
-                                                 video:[NSNumber numberWithBool:isVideoCall]
+                                                 video:@(isVideoCall)
                                             completion:^(FlutterError *error) {}];
 
     return YES;
@@ -518,7 +518,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
 
                                   [self->_delegateFlutterApi didPushIncomingCallHandle:[callUpdate.remoteHandle toPigeon]
                                                                            displayName:callUpdate.localizedCallerName
-                                                                                 video:[NSNumber numberWithBool:callUpdate.hasVideo]
+                                                                                 video:@(callUpdate.hasVideo)
                                                                                 callId:callId
                                                                                   uuid:[uuid UUIDString]
                                                                                  error:incomingCallError
@@ -545,7 +545,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
   [_delegateFlutterApi performStartCall:action.callUUID.UUIDString
                                  handle:[action.handle toPigeon]
          displayNameOrContactIdentifier:action.contactIdentifier
-                                  video:[NSNumber numberWithBool:action.video]
+                                  video:@(action.video)
                              completion:^(NSNumber *fulfill, FlutterError *error) {
                                if (error != nil || [fulfill boolValue] != YES) {
                                  [action fail];
@@ -590,7 +590,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
   NSLog(@"[Callkeep][CXProviderDelegate][provider:performSetHeldCallAction:]");
 #endif
   [_delegateFlutterApi performSetHeld:action.callUUID.UUIDString
-                               onHold:[NSNumber numberWithBool:action.onHold]
+                               onHold:@(action.onHold)
                            completion:^(NSNumber *fulfill, FlutterError *error) {
                              if (error != nil || [fulfill boolValue] != YES) {
                                [action fail];
@@ -605,7 +605,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
   NSLog(@"[Callkeep][CXProviderDelegate][provider:performSetMutedCallAction:]");
 #endif
   [_delegateFlutterApi performSetMuted:action.callUUID.UUIDString
-                                 muted:[NSNumber numberWithBool:action.muted]
+                                 muted:@(action.muted)
                             completion:^(NSNumber *fulfill, FlutterError *error) {
                               if (error != nil || [fulfill boolValue] != YES) {
                                 [action fail];
