@@ -466,7 +466,21 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
 #ifdef DEBUG
     NSLog(@"[Callkeep][didReceiveIncomingPushWithPayloadForPushTypeVoIP:withCompletionHandler:] payload wrong format");
 #endif
-    completion();
+    NSUUID *uuid = [[NSUUID alloc] init];
+    CXCallUpdate *callUpdate = [[CXCallUpdate alloc] init];
+
+    [_provider reportNewIncomingCallWithUUID:uuid
+                                      update:callUpdate
+                                  completion:^(NSError *error) {
+                                    if (error != nil) {
+                                      NSLog(@"[Callkeep][didReceiveIncomingPushWithPayloadForPushTypeVoIP:withCompletionHandler:][reportNewIncomingCallWithUUID] payload wrong format error = %@", error);
+                                    } else {
+                                      [_provider reportCallWithUUID:uuid
+                                                        endedAtDate:nil
+                                                             reason:CXCallEndedReasonFailed];
+                                    }
+                                    completion();
+                                  }];
     return;
   }
 
