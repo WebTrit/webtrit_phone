@@ -454,19 +454,27 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
 #ifdef DEBUG
   NSLog(@"[Callkeep][didReceiveIncomingPushWithPayloadForPushTypeVoIP:withCompletionHandler:] payload = %@", dictionaryPayload);
 #endif
-  NSString *handleType = dictionaryPayload[@"handleType"];
-  NSString *handleValue = dictionaryPayload[@"handleValue"];
-  NSString *displayName = dictionaryPayload[@"displayName"];
-  NSNumber *hasVideo = dictionaryPayload[@"hasVideo"];
-  NSString *callId = dictionaryPayload[@"callId"];
+  id handleTypeObject = dictionaryPayload[@"handleType"];
+  id handleValueObject = dictionaryPayload[@"handleValue"];
+  id displayNameObject = dictionaryPayload[@"displayName"];
+  id hasVideoObject = dictionaryPayload[@"hasVideo"];
+  id callIdObject = dictionaryPayload[@"callId"];
 
-  if (handleType == nil || handleValue == nil || callId == nil) {
+  if ([handleTypeObject isKindOfClass:[NSString class]] == NO ||
+      [handleValueObject isKindOfClass:[NSString class]] == NO ||
+      [callIdObject isKindOfClass:[NSString class]] == NO) {
 #ifdef DEBUG
     NSLog(@"[Callkeep][didReceiveIncomingPushWithPayloadForPushTypeVoIP:withCompletionHandler:] payload wrong format");
 #endif
     completion();
     return;
   }
+
+  NSString *handleType = handleTypeObject;
+  NSString *handleValue = handleValueObject;
+  NSString *displayName = [displayNameObject isKindOfClass:[NSString class]] ? displayNameObject : nil;
+  NSNumber *hasVideo = [hasVideoObject isKindOfClass:[NSNumber class]] ? hasVideoObject : @(NO);
+  NSString *callId = callIdObject;
 
   // It is crucial to use UUID version 5 (namespace name-based) based on callId to get the call UUID for reportNewIncomingCallWithUUID.
   // Such UUID allows overcoming possible races between VoIP push and relevant signaling events.
@@ -476,11 +484,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
   callUpdate.remoteHandle = [[CXHandle alloc] initWithType:CXHandleTypeFromString(handleType)
                                                      value:handleValue];
   callUpdate.localizedCallerName = displayName;
-  if (hasVideo != nil) {
-    callUpdate.hasVideo = [hasVideo boolValue];
-  } else {
-    callUpdate.hasVideo = NO;
-  }
+  callUpdate.hasVideo = [hasVideo boolValue];
   callUpdate.supportsGrouping = NO;
   callUpdate.supportsUngrouping = NO;
   callUpdate.supportsHolding = YES;
