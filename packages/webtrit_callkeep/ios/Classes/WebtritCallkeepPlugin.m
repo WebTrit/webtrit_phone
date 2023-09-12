@@ -675,8 +675,8 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
         @"driveIdleTimerDisabled": @YES,
       };
       NSMutableDictionary *iosOptionsMapMerged = [[NSMutableDictionary alloc] init];
-      [iosOptionsMapMerged addEntriesFromDictionary: iosOptionsMapDefault];
-      [iosOptionsMapMerged addEntriesFromDictionary: iosOptionsMap];
+      [iosOptionsMapMerged addEntriesFromDictionary:iosOptionsMapDefault];
+      [iosOptionsMapMerged addEntriesFromDictionary:iosOptionsMap];
       return [WTPIOSOptions fromMap:iosOptionsMapMerged];
     }
   }
