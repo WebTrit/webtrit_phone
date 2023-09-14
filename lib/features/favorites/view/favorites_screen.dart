@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -31,26 +30,8 @@ class FavoritesScreen extends StatelessWidget {
             );
           } else {
             if (favorites.isEmpty) {
-              final themeData = Theme.of(context);
-              return Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.star_outline,
-                      size: 80,
-                      color: themeData.textTheme.bodySmall!.color,
-                    ),
-                    Padding(
-                      padding: kAllPadding16,
-                      child: Text(
-                        context.l10n.favorites_BodyCenter_empty,
-                        style: themeData.textTheme.titleMedium,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ],
-                ),
+              return NoDataPlaceholder(
+                content: Text(context.l10n.favorites_BodyCenter_empty),
               );
             } else {
               return ListView.builder(

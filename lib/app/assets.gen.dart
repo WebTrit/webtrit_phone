@@ -14,12 +14,12 @@ import 'package:flutter/services.dart';
 class $AssetsCallkeepGen {
   const $AssetsCallkeepGen();
 
-  /// File path: assets/callkeep/ios_icon_tempate_image.png
-  AssetGenImage get iosIconTempateImage =>
-      const AssetGenImage('assets/callkeep/ios_icon_tempate_image.png');
+  /// File path: assets/callkeep/ios_icon_template_image.png
+  AssetGenImage get iosIconTemplateImage =>
+      const AssetGenImage('assets/callkeep/ios_icon_template_image.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [iosIconTempateImage];
+  List<AssetGenImage> get values => [iosIconTemplateImage];
 }
 
 class $AssetsLoginGen {

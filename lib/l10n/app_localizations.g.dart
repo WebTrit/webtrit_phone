@@ -571,6 +571,12 @@ abstract class AppLocalizations {
   /// **'Phone number not found'**
   String get login_RequestFailurePhoneNotFoundError;
 
+  /// No description provided for @login_RequestFailureUnconfiguredBundleIdError.
+  ///
+  /// In en, this message translates to:
+  /// **'The app is not supported by your WebTrit Cloud Backend'**
+  String get login_RequestFailureUnconfiguredBundleIdError;
+
   /// No description provided for @login_RequestFailureOtpAlreadyVerifiedError.
   ///
   /// In en, this message translates to:

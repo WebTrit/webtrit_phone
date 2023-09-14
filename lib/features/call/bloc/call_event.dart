@@ -19,8 +19,8 @@ class _ConnectivityResultChanged with _$_ConnectivityResultChanged implements Ca
 }
 
 @Freezed(copyWith: false)
-class _AudioSessionRouteChanged with _$_AudioSessionRouteChanged implements CallEvent {
-  const factory _AudioSessionRouteChanged() = __AudioSessionRouteChanged;
+class _NavigatorMediaDevicesChange with _$_NavigatorMediaDevicesChange implements CallEvent {
+  const factory _NavigatorMediaDevicesChange() = __NavigatorMediaDevicesChange;
 }
 
 // signaling client events
