@@ -25,6 +25,8 @@ class _WebInviteFriendsScreenState extends State<WebInviteFriendsScreen> {
 
   Color? _backgroundColorCache;
 
+  bool isVisibleProgress = true;
+
   @override
   void initState() {
     super.initState();
@@ -40,9 +42,13 @@ class _WebInviteFriendsScreenState extends State<WebInviteFriendsScreen> {
             },
             onPageFinished: (url) {
               _webViewController.runJavaScript(_definesCssVariablesJavascript(context));
+              isVisibleProgress = false;
+              setState(() {});
             },
             onWebResourceError: (error) async {
               final result = await _showWebResourceErrorDialog(context, error);
+              isVisibleProgress = false;
+              setState(() {});
 
               if (!mounted) return;
               if (result == null) {
@@ -121,7 +127,15 @@ class _WebInviteFriendsScreenState extends State<WebInviteFriendsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: WebViewWidget(controller: _webViewController),
+      body: Stack(
+        children: [
+          WebViewWidget(controller: _webViewController),
+          if (isVisibleProgress)
+            const Center(
+              child: CircularProgressIndicator(),
+            ),
+        ],
+      ),
     );
   }
 
