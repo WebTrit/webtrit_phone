@@ -73,10 +73,6 @@ class _WebInviteFriendsScreenState extends State<WebInviteFriendsScreen> {
           ),
           actions: [
             TextButton(
-              child: Text(context.l10n.webRegistration_ErrorAcknowledgeDialogActions_demo),
-              onPressed: () => Navigator.of(context).pop(false),
-            ),
-            TextButton(
               child: Text(context.l10n.webRegistration_ErrorAcknowledgeDialogActions_skip),
               onPressed: () => Navigator.of(context).pop(null),
             ),
