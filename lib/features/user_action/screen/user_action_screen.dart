@@ -81,7 +81,7 @@ class _UserActionScreenState extends State<UserActionScreen> {
               break;
             case UiAction.showInviteDialog:
               if (_isAvailableToShowing()) {
-                _showInviteDialog(context, state.inviteUrl!);
+                if (state.inviteUrl != null) _showInviteDialog(context, state.inviteUrl!);
               } else {
                 context.read<UserActionBlocCubit>().postponeDialogCountdown();
               }
