@@ -42,6 +42,7 @@ class ActionInviteDialog extends StatelessWidget {
               onPressed: onHide,
               child: Text(
                 context.l10n.inviteFriends_Dialog_close,
+                textAlign: TextAlign.center,
                 style: themeData.textTheme.labelMedium?.copyWith(
                   decoration: TextDecoration.underline,
                 ),
