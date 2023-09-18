@@ -20,8 +20,10 @@ class WebInviteFriendsScreen extends StatefulWidget {
   State<WebInviteFriendsScreen> createState() => _WebInviteFriendsScreenState();
 }
 
-class _WebInviteFriendsScreenState extends State<WebInviteFriendsScreen> {
+class _WebInviteFriendsScreenState extends State<WebInviteFriendsScreen> with WidgetsBindingObserver {
   final WebViewController _webViewController = WebViewController();
+
+  WebResourceError? _error;
 
   Color? _backgroundColorCache;
 
@@ -30,6 +32,7 @@ class _WebInviteFriendsScreenState extends State<WebInviteFriendsScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
 
     () async {
       await Future.wait([
@@ -46,15 +49,21 @@ class _WebInviteFriendsScreenState extends State<WebInviteFriendsScreen> {
               setState(() {});
             },
             onWebResourceError: (error) async {
-              final result = await _showWebResourceErrorDialog(context, error);
-              isVisibleProgress = false;
-              setState(() {});
-
-              if (!mounted) return;
-              if (result == null) {
-                context.pop();
+              if (_error == null) {
+                _error = error;
+                _webViewController.reload();
               } else {
-                _webViewController.loadRequest(widget.initialUri);
+                final result = await _showWebResourceErrorDialog(context, error);
+                isVisibleProgress = false;
+                _error = null;
+                setState(() {});
+
+                if (!mounted) return;
+                if (result == null) {
+                  context.pop();
+                } else {
+                  _webViewController.loadRequest(widget.initialUri);
+                }
               }
             },
           ),
@@ -114,7 +123,18 @@ class _WebInviteFriendsScreenState extends State<WebInviteFriendsScreen> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _webViewController.setJavaScriptMode(JavaScriptMode.unrestricted);
+    }
+    if (state == AppLifecycleState.paused) {
+      _webViewController.setJavaScriptMode(JavaScriptMode.disabled);
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     () async {
       await _webViewController.setNavigationDelegate(NavigationDelegate());
       await _webViewController.loadBlank();
