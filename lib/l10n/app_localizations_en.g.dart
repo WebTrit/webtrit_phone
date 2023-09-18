@@ -373,7 +373,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contacts_ExternalTabButton_refresh => 'Refresh';
 
   @override
-  String get inviteFriends_Dialog_title => 'Invite your friends \nto try webtrit';
+  String get inviteFriends_Dialog_title => 'Invite your friends \nto try WebTrit';
 
   @override
   String get inviteFriends_Dialog_close => 'Hide this message';

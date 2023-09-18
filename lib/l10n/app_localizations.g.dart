@@ -766,7 +766,7 @@ abstract class AppLocalizations {
   /// No description provided for @inviteFriends_Dialog_title.
   ///
   /// In en, this message translates to:
-  /// **'Invite your friends \nto try webtrit'**
+  /// **'Invite your friends \nto try WebTrit'**
   String get inviteFriends_Dialog_title;
 
   /// No description provided for @inviteFriends_Dialog_close.
