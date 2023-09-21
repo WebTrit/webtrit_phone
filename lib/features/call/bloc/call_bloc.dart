@@ -1140,7 +1140,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     await state.performOnActiveCall(event.id.uuidValue, (activeCall) {
       final audioTrack = activeCall.renderers.local.srcObject?.getAudioTracks()[0];
       if (audioTrack != null) {
-        Helper.setMicrophoneMute(event.muted, audioTrack);
+        if (!Platform.isAndroid) {
+          Helper.setMicrophoneMute(event.muted, audioTrack);
+        }
       }
     });
 
