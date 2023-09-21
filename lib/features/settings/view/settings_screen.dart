@@ -182,6 +182,21 @@ class SettingsScreen extends StatelessWidget {
             },
           ),
           const ListTileSeparator(),
+          ListTile(
+            leading: const Icon(Icons.delete_outline),
+            title: Text(context.l10n.settings_ListViewTileTitle_accountDelete),
+            onTap: () async {
+              final settingsBloc = context.read<SettingsBloc>();
+              final deleteAccount = await ConfirmDialog.show(
+                context,
+                title: context.l10n.settings_AccountDeleteConfirmDialog_title,
+                content: context.l10n.settings_AccountDeleteConfirmDialog_content,
+              );
+              if (deleteAccount == true) {
+                settingsBloc.add(const SettingsAccountDeleted());
+              }
+            },
+          ),
         ],
       ),
     );
