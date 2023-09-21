@@ -835,6 +835,12 @@ abstract class AppLocalizations {
   /// **'Log records console'**
   String get settings_ListViewTileTitle_logRecordsConsole;
 
+  /// No description provided for @settings_ListViewTileTitle_accountDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get settings_ListViewTileTitle_accountDelete;
+
   /// No description provided for @settings_LogoutConfirmDialog_title.
   ///
   /// In en, this message translates to:
@@ -858,6 +864,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Are you sure you want to force logout?'**
   String get settings_ForceLogoutConfirmDialog_content;
+
+  /// No description provided for @settings_AccountDeleteConfirmDialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm delete account'**
+  String get settings_AccountDeleteConfirmDialog_title;
+
+  /// No description provided for @settings_AccountDeleteConfirmDialog_content.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete account?'**
+  String get settings_AccountDeleteConfirmDialog_content;
 
   /// No description provided for @settings_AboutText_CoreVersionUndefined.
   ///

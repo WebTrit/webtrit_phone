@@ -409,6 +409,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_ListViewTileTitle_logRecordsConsole => 'Log records console';
 
   @override
+  String get settings_ListViewTileTitle_accountDelete => 'Delete account';
+
+  @override
   String get settings_LogoutConfirmDialog_title => 'Confirm logout';
 
   @override
@@ -419,6 +422,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_ForceLogoutConfirmDialog_content => 'Are you sure you want to force logout?';
+
+  @override
+  String get settings_AccountDeleteConfirmDialog_title => 'Confirm delete account';
+
+  @override
+  String get settings_AccountDeleteConfirmDialog_content => 'Are you sure you want to delete account?';
 
   @override
   String get settings_AboutText_CoreVersionUndefined => '?.?.?';

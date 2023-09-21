@@ -458,6 +458,9 @@
   "settings_ListViewTileTitle_logRecordsConsole": "Log records console",
   "@settings_ListViewTileTitle_logRecordsConsole": {
   },
+  "settings_ListViewTileTitle_accountDelete": "Delete account",
+  "@settings_ListViewTileTitle_accountDelete": {
+  },
   "settings_LogoutConfirmDialog_title": "Confirm logout",
   "@settings_LogoutConfirmDialog_title": {
   },
@@ -469,6 +472,12 @@
   },
   "settings_ForceLogoutConfirmDialog_content": "Are you sure you want to force logout?",
   "@settings_ForceLogoutConfirmDialog_content": {
+  },
+  "settings_AccountDeleteConfirmDialog_title": "Confirm delete account",
+  "@settings_AccountDeleteConfirmDialog_title": {
+  },
+  "settings_AccountDeleteConfirmDialog_content": "Are you sure you want to delete account?",
+  "@settings_AccountDeleteConfirmDialog_content": {
   },
   "settings_AboutText_CoreVersionUndefined": "?.?.?",
   "@settings_AboutText_CoreVersionUndefined": {

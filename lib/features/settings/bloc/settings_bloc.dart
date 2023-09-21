@@ -1,9 +1,9 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
-
-import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
@@ -29,6 +29,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<SettingsRefreshed>(_onRefreshed, transformer: restartable());
     on<SettingsLogouted>(_onLogouted, transformer: droppable());
     on<SettingsRegisterStatusChanged>(_onRegisterStatusChanged, transformer: sequential());
+    on<SettingsAccountDeleted>(_onAccountDeleted, transformer: droppable());
   }
 
   final NotificationsBloc notificationsBloc;
@@ -37,7 +38,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final AppRepository appRepository;
   final AppPreferences appPreferences;
 
-  void _onRefreshed(SettingsRefreshed event, Emitter<SettingsState> emit) async {
+  FutureOr<void> _onRefreshed(SettingsRefreshed event, Emitter<SettingsState> emit) async {
     emit(state.copyWith(progress: true));
     try {
       final infoFuture = userRepository.getInfo();
@@ -75,7 +76,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     }
   }
 
-  void _onLogouted(SettingsLogouted event, Emitter<SettingsState> emit) async {
+  FutureOr<void> _onLogouted(SettingsLogouted event, Emitter<SettingsState> emit) async {
     if (state.progress) return;
 
     emit(state.copyWith(progress: true));
@@ -103,7 +104,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     }
   }
 
-  void _onRegisterStatusChanged(SettingsRegisterStatusChanged event, Emitter<SettingsState> emit) async {
+  FutureOr<void> _onRegisterStatusChanged(SettingsRegisterStatusChanged event, Emitter<SettingsState> emit) async {
     if (state.progress) return;
 
     final previousRegisterStatus = state.registerStatus;
@@ -132,5 +133,10 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         registerStatus: previousRegisterStatus,
       ));
     }
+  }
+
+  FutureOr<void> _onAccountDeleted(SettingsAccountDeleted event, Emitter<SettingsState> emit) async {
+    // TODO: implement actual account deletion API call when it is introduced
+    await _onLogouted(const SettingsLogouted(), emit);
   }
 }
