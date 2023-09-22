@@ -15,9 +15,12 @@ class LoginScreen extends StatefulWidget {
   const LoginScreen(
     this.step, {
     super.key,
+    this.appGreeting,
   });
 
   final LoginStep step;
+
+  final String? appGreeting;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -60,11 +63,13 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       child: TabBarView(
         controller: _tabController,
         physics: const NeverScrollableScrollPhysics(),
-        children: const [
-          LoginModeSelectTab(),
-          LoginCoreUrlAssignTab(),
-          LoginOtpRequestTab(),
-          LoginOtpVerifyTab(),
+        children: [
+          LoginModeSelectTab(
+            appGreeting: widget.appGreeting,
+          ),
+          const LoginCoreUrlAssignTab(),
+          const LoginOtpRequestTab(),
+          const LoginOtpVerifyTab(),
         ],
       ),
     );

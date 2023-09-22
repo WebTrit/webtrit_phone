@@ -139,7 +139,10 @@ class _AppState extends State<App> {
             path: '/login/:${LoginStep.pathParameterName}(${LoginStep.values.map((e) => e.name).join('|')})',
             builder: (context, state) {
               final step = LoginStep.values.byName(state.pathParameters[LoginStep.pathParameterName]!);
-              final widget = LoginScreen(step);
+              final widget = LoginScreen(
+                step,
+                appGreeting: EnvironmentConfig.APP_GREETING.isEmpty ? null : EnvironmentConfig.APP_GREETING,
+              );
               final provider = BlocProvider(
                 create: (context) => LoginCubit(
                   step,

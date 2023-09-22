@@ -13,7 +13,10 @@ import '../login.dart';
 class LoginModeSelectTab extends StatelessWidget {
   const LoginModeSelectTab({
     Key? key,
+    this.appGreeting,
   }) : super(key: key);
+
+  final String? appGreeting;
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +69,7 @@ class LoginModeSelectTab extends StatelessWidget {
                 const Spacer(),
                 OnboardingPictureLogo(
                   color: themeData.colorScheme.onPrimary,
+                  text: appGreeting,
                 ),
                 const Spacer(),
                 if (isDemoModeEnabled)

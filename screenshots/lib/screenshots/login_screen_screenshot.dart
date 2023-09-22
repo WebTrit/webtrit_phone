@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 
 import 'package:screenshots/mocks/mocks.dart';
@@ -20,6 +21,7 @@ class LoginScreenScreenshot extends StatelessWidget {
       create: (context) => MockLoginCubit.loginScreen(step),
       child: LoginScreen(
         step,
+        appGreeting: EnvironmentConfig.APP_GREETING.isEmpty ? null : EnvironmentConfig.APP_GREETING,
       ),
     );
   }
