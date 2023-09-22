@@ -8,10 +8,10 @@ import 'package:screenshots/mocks/mocks.dart';
 
 class LoginScreenScreenshot extends StatelessWidget {
   const LoginScreenScreenshot(
-      this.step, {
-        super.key,
-        this.appGreeting,
-      });
+    this.step, {
+    super.key,
+    this.appGreeting,
+  });
 
   final LoginStep step;
 
