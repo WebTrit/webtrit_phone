@@ -1140,7 +1140,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     await state.performOnActiveCall(event.id.uuidValue, (activeCall) {
       final audioTrack = activeCall.renderers.local.srcObject?.getAudioTracks()[0];
       if (audioTrack != null) {
-        Helper.setMicrophoneMute(event.muted, audioTrack);
+        if (!Platform.isAndroid) {
+          Helper.setMicrophoneMute(event.muted, audioTrack);
+        }
       }
     });
 
@@ -1433,13 +1435,19 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _logger.fine(() => 'didPushIncomingCall handle: $handle displayName: $displayName video: $video'
         ' callId: ${id.callId} uuid: ${id.uuid} error: $error');
 
-    add(_CallPushEvent.incoming(
-      callId: CallIdValue(id.callId, UuidValue(id.uuid)),
-      handle: handle,
-      displayName: displayName,
-      video: video,
-      error: error,
-    ));
+    /// Workaround (Android call this method)
+    ///
+    /// The problem is that I receive a notification about an incoming call as a push notification in service. the block knows nothing about this and accordingly _peerConnectionCompleters is empty. (when the application is collapsed, the block exists but is not subscribed to the events)
+    /// To fix this, I call the didPushIncomingCall method, which synchronizes the connectors.
+    if (!_peerConnectionCompleters.containsKey(id.uuidValue)) {
+      add(_CallPushEvent.incoming(
+        callId: CallIdValue(id.callId, UuidValue(id.uuid)),
+        handle: handle,
+        displayName: displayName,
+        video: video,
+        error: error,
+      ));
+    }
   }
 
   @override
