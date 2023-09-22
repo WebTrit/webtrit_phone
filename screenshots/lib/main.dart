@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 
 import 'package:screenshots/data/data.dart';
@@ -52,7 +53,10 @@ class ScreenshotsApp extends StatelessWidget {
   late final _screenshots = [
     ScreenshotApp(
       appBloc: appBloc,
-      child: const LoginScreenScreenshot(LoginStep.modeSelect),
+      child: LoginScreenScreenshot(
+        LoginStep.modeSelect,
+        appGreeting: EnvironmentConfig.APP_GREETING.isEmpty ? null : EnvironmentConfig.APP_GREETING,
+      ),
     ),
     ScreenshotApp(
       appBloc: appBloc,
