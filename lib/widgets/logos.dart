@@ -7,6 +7,7 @@ class WebTritPhonePictureLogo extends StatelessWidget {
   const WebTritPhonePictureLogo({
     super.key,
     required this.asset,
+    this.text,
     this.logoWidth,
     this.logoHeight,
     this.logoFit = BoxFit.contain,
@@ -16,6 +17,7 @@ class WebTritPhonePictureLogo extends StatelessWidget {
   });
 
   final ThemeSvgAsset asset;
+  final String? text;
   final double? logoWidth;
   final double? logoHeight;
   final BoxFit logoFit;
@@ -37,13 +39,15 @@ class WebTritPhonePictureLogo extends StatelessWidget {
           fit: logoFit,
           alignment: logoAlignment,
         ),
-        SizedBox(
-          height: dividerHeight ?? fontSize / 3,
-        ),
-        Text(
-          EnvironmentConfig.APP_NAME,
-          style: titleStyle,
-        ),
+        if (text != null) ...[
+          SizedBox(
+            height: dividerHeight ?? fontSize / 3,
+          ),
+          Text(
+            text!,
+            style: titleStyle,
+          ),
+        ],
       ],
     );
   }

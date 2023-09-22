@@ -7,9 +7,11 @@ class OnboardingPictureLogo extends StatelessWidget {
   const OnboardingPictureLogo({
     super.key,
     this.color,
+    this.text,
   });
 
   final Color? color;
+  final String? text;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +24,7 @@ class OnboardingPictureLogo extends StatelessWidget {
     final logo = themeData.extension<LogoAssets>()!.primaryOnboarding;
     return WebTritPhonePictureLogo(
       asset: logo,
+      text: text,
       logoWidth: mediaQueryData.size.width * 0.42,
       dividerHeight: titleStyle.fontSize,
       titleStyle: titleStyle,
