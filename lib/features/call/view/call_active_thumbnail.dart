@@ -20,27 +20,11 @@ class CallActiveThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget widget;
     final remoteRenderer = activeCall.renderers.remote;
-    if (remoteRenderer.renderVideo) {
-      widget = RTCVideoView(
-        remoteRenderer,
-        objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
-        placeholderBuilder: remotePlaceholderBuilder,
-      );
-    } else {
-      widget = Center(
-        child: LeadingAvatar(
-          maxRadius: 24,
-          username: _username(),
-        ),
-      );
-    }
-
     return ValueListenableBuilder<RTCVideoValue>(
       valueListenable: remoteRenderer,
       builder: (BuildContext context, RTCVideoValue value, Widget? child) {
-        final isPortrait = value.aspectRatio < 1.0;
+        final isPortrait = value.renderVideo == false || value.aspectRatio < 1.0;
         return SizedBox(
           width: isPortrait ? 90.0 : 120.0,
           height: isPortrait ? 120.0 : 90.0,
@@ -49,7 +33,20 @@ class CallActiveThumbnail extends StatelessWidget {
       },
       child: Card(
         clipBehavior: Clip.hardEdge,
-        child: widget,
+        child: Stack(
+          alignment: AlignmentDirectional.center,
+          children: [
+            LeadingAvatar(
+              maxRadius: 24,
+              username: _username(),
+            ),
+            RTCVideoView(
+              remoteRenderer,
+              objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
+              placeholderBuilder: remotePlaceholderBuilder,
+            ),
+          ],
+        ),
       ),
     );
   }
