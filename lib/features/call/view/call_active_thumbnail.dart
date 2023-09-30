@@ -38,7 +38,8 @@ class CallActiveThumbnail extends StatelessWidget {
           children: [
             LeadingAvatar(
               maxRadius: 24,
-              username: _username(),
+              username: activeCall.displayName,
+              placeholderIcon: Icons.phone_in_talk_outlined,
             ),
             RTCVideoView(
               remoteRenderer,
@@ -50,6 +51,4 @@ class CallActiveThumbnail extends StatelessWidget {
       ),
     );
   }
-
-  String _username() => activeCall.displayName ?? activeCall.handle.value;
 }
