@@ -52,6 +52,15 @@ class CallActions extends StatefulWidget {
 class _CallActionsState extends State<CallActions> {
   bool _keypadShow = false;
 
+  final _keypadTextFieldKey = GlobalKey();
+  EditableTextState? get _keypadTextFieldEditableTextState =>
+      (_keypadTextFieldKey.currentState as TextSelectionGestureDetectorBuilderDelegate).editableTextKey.currentState;
+
+  late TextEditingController _keypadTextEditingController;
+
+  late InputDecorations? _inputDecorations;
+  late TextStyle? _textStyle;
+
   TextButtonStyles? _textButtonStyles;
   double? _iconSize;
 
@@ -62,10 +71,28 @@ class _CallActionsState extends State<CallActions> {
   late double _horizontalPadding;
 
   @override
+  void initState() {
+    super.initState();
+    _keypadTextEditingController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _keypadTextEditingController.dispose();
+    super.dispose();
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
     final themeData = Theme.of(context);
+
+    _inputDecorations = themeData.extension<InputDecorations>();
+    _textStyle = themeData.textTheme.displaySmall?.copyWith(
+      color: themeData.colorScheme.background,
+    );
+
     _textButtonStyles = themeData.extension<TextButtonStyles>();
     _iconSize = themeData.textTheme.headlineLarge?.fontSize;
 
@@ -135,7 +162,18 @@ class _CallActionsState extends State<CallActions> {
                 KeypadKeyButton(
                   text: k.text,
                   subtext: k.subtext,
-                  onKeyPressed: widget.onKeyPressed!,
+                  onKeyPressed: (key) {
+                    final newText = _keypadTextEditingController.text + key;
+                    final newSelection = TextSelection.collapsed(offset: newText.length);
+                    final value = _keypadTextEditingController.value.copyWith(
+                      text: newText,
+                      selection: newSelection,
+                    );
+                    _keypadTextFieldEditableTextState?.userUpdateTextEditingValue(
+                        value, SelectionChangedCause.keyboard);
+
+                    widget.onKeyPressed!(key);
+                  },
                   style: _textButtonStyles?.callAction,
                 ),
                 if ((i + 1) % 3 == 0) ...[
@@ -250,6 +288,8 @@ class _CallActionsState extends State<CallActions> {
                   message: context.l10n.call_CallActionsTooltip_hideKeypad,
                   child: TextButton(
                     onPressed: () {
+                      _keypadTextEditingController.clear();
+
                       setState(() {
                         _keypadShow = false;
                       });
@@ -266,7 +306,23 @@ class _CallActionsState extends State<CallActions> {
       padding: EdgeInsets.symmetric(horizontal: _horizontalPadding),
       child: IconTheme(
         data: IconThemeData(size: _iconSize),
-        child: buttonsTable,
+        child: Column(
+          children: [
+            if (_keypadShow) ...[
+              TextField(
+                key: _keypadTextFieldKey,
+                controller: _keypadTextEditingController,
+                decoration: _inputDecorations?.keypad,
+                style: _textStyle,
+                textAlign: TextAlign.center,
+                readOnly: true,
+                canRequestFocus: false,
+              ),
+              SizedBox.square(dimension: _actionsDelimiterDimension),
+            ],
+            buttonsTable,
+          ],
+        ),
       ),
     );
   }
