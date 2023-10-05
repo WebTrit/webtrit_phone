@@ -11,7 +11,10 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/fcm_handler.dart';
+import 'package:webtrit_phone/repositories/recents/recents_repository.dart';
+import 'package:webtrit_phone/utils/path_provider/_native.dart';
 
+import 'environment_config.dart';
 import 'firebase_options.dart';
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
@@ -84,7 +87,22 @@ Future<void> _initFirebaseMessaging() async {
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final logger = Logger('main');
-  final fcmHandler = FCMHandler(logger: logger);
+
+  final applicationDocumentsPath = await getApplicationDocumentsPath();
+
+  final appDatabase = AppDatabase(
+    createAppDatabaseConnection(
+      applicationDocumentsPath,
+      'db.sqlite',
+      logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
+    ),
+  );
+
+  final repository = RecentsRepository(
+    appDatabase: appDatabase,
+  );
+
+  final fcmHandler = FCMHandler(logger, repository);
 
   await Firebase.initializeApp();
   await fcmHandler.execute(message);

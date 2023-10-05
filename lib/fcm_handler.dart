@@ -6,7 +6,8 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_phone/features/call/extensions/callkeep_id.dart';
-import 'package:webtrit_phone/utils/utils.dart';
+import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/recents/recents_repository.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 import 'app/constants.dart';
@@ -15,12 +16,11 @@ import 'data/data.dart';
 const int _kUndefinedLine = -1;
 
 class FCMHandler implements CallkeepAndroidServiceDelegate {
-  FCMHandler({
-    required this.logger,
-  });
+  FCMHandler(this.logger, this.recentsRepository);
 
   final _callNotificationDelegate = CallkeepAndroidService();
   final Logger logger;
+  final RecentsRepository recentsRepository;
 
   late SecureStorage storage;
   late PackageInfo packageInfo;
@@ -167,6 +167,27 @@ class FCMHandler implements CallkeepAndroidServiceDelegate {
   @override
   void performServiceEndCall(CallkeepId id) {
     _declineCall(id.uuidValue);
+  }
+
+  @override
+  void endCallReceived(
+    CallkeepId id,
+    String number,
+    bool video,
+    DateTime createdTime,
+    DateTime? acceptedTime,
+    DateTime? hungUpTime,
+  ) async {
+    final recent = Recent(
+      direction: Direction.incoming,
+      number: number,
+      video: video,
+      createdTime: createdTime,
+      acceptedTime: acceptedTime,
+      hungUpTime: hungUpTime,
+    );
+    await recentsRepository.add(recent);
+    logger.info('endCallReceived: $recent');
   }
 
   static bool parseString(
