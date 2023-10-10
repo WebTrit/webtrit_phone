@@ -60,9 +60,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 }
 
 Future<void> _initFirebase() async {
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp();
 }
 
 Future<void> _initFirebaseMessaging() async {
