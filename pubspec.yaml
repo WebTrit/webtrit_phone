@@ -101,6 +101,9 @@ dev_dependencies:
   freezed: ^2.4.1
   json_serializable: ^6.7.1
 
+  webtrit_phone_publisher:
+    path: /Users/dmitroserdun/Documents/Development/work/webtrit/webtrit_phone_publisher
+
 flutter:
   generate: true
   uses-material-design: true
