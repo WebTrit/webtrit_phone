@@ -56,8 +56,9 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 }
 
 Future<void> _initFirebase() async {
+  // If hosting the google-services.json file in platform-specific folders, there is no need to pass options in this case.
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    options: kIsWeb ? DefaultFirebaseOptions.currentPlatform : null,
   );
 }
 
