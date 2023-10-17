@@ -46,6 +46,7 @@ class WebTritPhonePictureLogo extends StatelessWidget {
           Text(
             text!,
             style: titleStyle,
+            textAlign: TextAlign.center,
           ),
         ],
       ],
