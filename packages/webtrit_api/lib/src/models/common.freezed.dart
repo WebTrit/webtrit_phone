@@ -200,7 +200,7 @@ Balance _$BalanceFromJson(Map<String, dynamic> json) {
 mixin _$Balance {
   BalanceType? get balanceType => throw _privateConstructorUsedError;
   double? get amount => throw _privateConstructorUsedError;
-  int? get creditLimit => throw _privateConstructorUsedError;
+  double? get creditLimit => throw _privateConstructorUsedError;
   String? get currency => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -216,7 +216,7 @@ abstract class $BalanceCopyWith<$Res> {
   $Res call(
       {BalanceType? balanceType,
       double? amount,
-      int? creditLimit,
+      double? creditLimit,
       String? currency});
 }
 
@@ -250,7 +250,7 @@ class _$BalanceCopyWithImpl<$Res, $Val extends Balance>
       creditLimit: freezed == creditLimit
           ? _value.creditLimit
           : creditLimit // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as double?,
       currency: freezed == currency
           ? _value.currency
           : currency // ignore: cast_nullable_to_non_nullable
@@ -269,7 +269,7 @@ abstract class _$$_BalanceCopyWith<$Res> implements $BalanceCopyWith<$Res> {
   $Res call(
       {BalanceType? balanceType,
       double? amount,
-      int? creditLimit,
+      double? creditLimit,
       String? currency});
 }
 
@@ -300,7 +300,7 @@ class __$$_BalanceCopyWithImpl<$Res>
       creditLimit: freezed == creditLimit
           ? _value.creditLimit
           : creditLimit // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as double?,
       currency: freezed == currency
           ? _value.currency
           : currency // ignore: cast_nullable_to_non_nullable
@@ -324,7 +324,7 @@ class _$_Balance implements _Balance {
   @override
   final double? amount;
   @override
-  final int? creditLimit;
+  final double? creditLimit;
   @override
   final String? currency;
 
@@ -370,7 +370,7 @@ abstract class _Balance implements Balance {
   const factory _Balance(
       {final BalanceType? balanceType,
       final double? amount,
-      final int? creditLimit,
+      final double? creditLimit,
       final String? currency}) = _$_Balance;
 
   factory _Balance.fromJson(Map<String, dynamic> json) = _$_Balance.fromJson;
@@ -380,7 +380,7 @@ abstract class _Balance implements Balance {
   @override
   double? get amount;
   @override
-  int? get creditLimit;
+  double? get creditLimit;
   @override
   String? get currency;
   @override

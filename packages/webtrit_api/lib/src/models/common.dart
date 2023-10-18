@@ -26,7 +26,7 @@ class Balance with _$Balance {
   const factory Balance({
     BalanceType? balanceType,
     double? amount,
-    int? creditLimit,
+    double? creditLimit,
     String? currency,
   }) = _Balance;
 
