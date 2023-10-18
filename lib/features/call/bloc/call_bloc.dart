@@ -749,27 +749,33 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallControlEventStarted event,
     Emitter<CallState> emit,
   ) async {
-    final callId = CallIdValue(WebtritSignalingClient.generateCallId());
+    final connectivityResult = await Connectivity().checkConnectivity();
 
-    final error = await callkeep.startCall(
-      callId.uuid,
-      event.handle,
-      event.displayName,
-      event.video,
-    );
-    if (error != null) {
-      _logger.warning('__onCallControlEventStarted error: $error');
+    if (connectivityResult == ConnectivityResult.none) {
+      _logger.warning('__onCallControlEventStarted warning: $connectivityResult');
     } else {
-      emit(state.copyWithPushActiveCall(ActiveCall(
-        direction: Direction.outgoing,
-        line: event.line ?? state.retrieveIdleLine() ?? _kUndefinedLine,
-        callId: callId,
-        handle: event.handle,
-        displayName: event.displayName,
-        video: event.video,
-        createdTime: clock.now(),
-        renderers: RTCVideoRenderers()..initialize(),
-      )));
+      final callId = CallIdValue(WebtritSignalingClient.generateCallId());
+
+      final error = await callkeep.startCall(
+        callId.uuid,
+        event.handle,
+        event.displayName,
+        event.video,
+      );
+      if (error != null) {
+        _logger.warning('__onCallControlEventStarted error: $error');
+      } else {
+        emit(state.copyWithPushActiveCall(ActiveCall(
+          direction: Direction.outgoing,
+          line: event.line ?? state.retrieveIdleLine() ?? _kUndefinedLine,
+          callId: callId,
+          handle: event.handle,
+          displayName: event.displayName,
+          video: event.video,
+          createdTime: clock.now(),
+          renderers: RTCVideoRenderers()..initialize(),
+        )));
+      }
     }
   }
 
