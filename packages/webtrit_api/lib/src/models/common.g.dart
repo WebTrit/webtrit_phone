@@ -25,7 +25,7 @@ _$_Balance _$$_BalanceFromJson(Map<String, dynamic> json) => _$_Balance(
       balanceType:
           $enumDecodeNullable(_$BalanceTypeEnumMap, json['balance_type']),
       amount: (json['amount'] as num?)?.toDouble(),
-      creditLimit: json['credit_limit'] as int?,
+      creditLimit: (json['credit_limit'] as num?)?.toDouble(),
       currency: json['currency'] as String?,
     );
 
