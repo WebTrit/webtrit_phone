@@ -8,7 +8,7 @@ import 'package:webtrit_phone/app/routes.dart';
 import '../login.dart';
 import 'login_mode_select_tab.dart';
 import 'login_core_url_assign_tab.dart';
-import 'login_otp_request_tab.dart';
+import 'login_request_tab.dart';
 import 'login_otp_verify_tab.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -68,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
             appGreeting: widget.appGreeting,
           ),
           const LoginCoreUrlAssignTab(),
-          const LoginOtpRequestTab(),
+          const LoginRequestTab(),
           const LoginOtpVerifyTab(),
         ],
       ),

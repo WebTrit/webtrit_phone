@@ -12,8 +12,8 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../login.dart';
 
-class LoginOtpRequestTab extends StatelessWidget {
-  const LoginOtpRequestTab({
+class LoginRequestTab extends StatelessWidget {
+  const LoginRequestTab({
     Key? key,
   }) : super(key: key);
 
