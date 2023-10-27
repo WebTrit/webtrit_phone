@@ -119,9 +119,21 @@ class AdapterInfo with _$AdapterInfo {
   const factory AdapterInfo({
     String? name,
     String? version,
-    List<String>? supported,
+    @Default([LoginType.otpSignin]) List<LoginType> supported,
     Map<String, dynamic>? custom,
   }) = _AdapterInfo;
 
   factory AdapterInfo.fromJson(Map<String, Object?> json) => _$AdapterInfoFromJson(json);
+}
+
+// TODO: Make sure that the values are normal, if not, then update
+enum LoginType {
+  passwordSignin,
+  recordings,
+  callHistory,
+  otpSignin,
+  extensions,
+  signup,
+  // ignore: constant_identifier_names
+  cta_list;
 }
