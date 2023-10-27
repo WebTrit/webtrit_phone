@@ -1,0 +1,4 @@
+enum SupportedLogin {
+  passwordSignIn,
+  otpSignIn,
+}
