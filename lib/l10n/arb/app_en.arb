@@ -208,6 +208,18 @@
   "login_AppBarTitle_otpRequest": "",
   "@login_AppBarTitle_otpRequest": {
   },
+  "login_SegmentedButton_otpSignIn": "Otp sign in",
+  "@login_SegmentedButton_otpSignIn": {
+  },
+  "login_SegmentedButton_passwordSignIn": "Password sign in",
+  "@login_SegmentedButton_passwordSignIn": {
+  },
+  "login_TextFieldLabelText_passwordSignInRequestLogin": "Enter your login",
+  "@login_TextFieldLabelText_passwordSignInRequestLogin": {
+  },
+  "login_TextFieldLabelText_passwordSignInRequestPassword": "Enter your password",
+  "@login_TextFieldLabelText_passwordSignInRequestPassword": {
+  },
   "login_TextFieldLabelText_otpRequestEmail": "Enter your email",
   "@login_TextFieldLabelText_otpRequestEmail": {
   },

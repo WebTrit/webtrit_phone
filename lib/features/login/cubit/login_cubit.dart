@@ -94,7 +94,7 @@ class LoginCubit extends Cubit<LoginState> {
       ));
       try {
         final client = createWebtritApiClient(coreUrl, tenantId);
-        await _verifyCoreVersion(client);
+        await _checkSystemInfo(client);
         emit(state.copyWith(
           status: LoginStatus.ok,
           coreUrl: coreUrl,
@@ -137,7 +137,7 @@ class LoginCubit extends Cubit<LoginState> {
     final tenantId = defaultTenantId;
     try {
       final client = createWebtritApiClient(coreUrlInputValue, tenantId);
-      await _verifyCoreVersion(client);
+      await _checkSystemInfo(client);
       emit(state.copyWith(
         status: LoginStatus.ok,
         coreUrl: coreUrlInputValue,
@@ -226,6 +226,52 @@ class LoginCubit extends Cubit<LoginState> {
     ));
   }
 
+  // LoginPasswordRequestTab
+
+  void loginCredentialRequestLoginInputChanged(String value) {
+    emit(state.copyWith(
+      loginInput: LoginInput.dirty(value),
+    ));
+  }
+
+  void loginCredentialRequestPasswordInputChanged(String value) {
+    emit(state.copyWith(
+      passwordInput: PasswordInput.dirty(value),
+    ));
+  }
+
+  void loginPasswordRequestSubmitted() async {
+    emit(state.copyWith(
+      status: LoginStatus.processing,
+    ));
+
+    try {
+      var sessionToken = await createWebtritApiClient(
+        demoCoreUrlFromEnvironment!,
+        EnvironmentConfig.DEFAULT_PASSWORD_TYPE_LOGIN_TENANT,
+      ).createSession(
+        SessionLoginCredential(
+          bundleId: PackageInfo().packageName,
+          type: PlatformInfo().appType,
+          identifier: AppInfo().identifier,
+          login: state.loginInput.value,
+          password: state.passwordInput.value,
+        ),
+      );
+
+      emit(state.copyWith(
+        tenantId: EnvironmentConfig.DEFAULT_PASSWORD_TYPE_LOGIN_TENANT,
+        token: sessionToken.token,
+        status: LoginStatus.ok,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: LoginStatus.input,
+        error: e,
+      ));
+    }
+  }
+
   // LoginOtpVerifyTab
 
   void loginOptVerifyCodeInputChanged(String value) {
@@ -308,13 +354,30 @@ class LoginCubit extends Cubit<LoginState> {
       ));
     }
   }
-}
 
-Future<void> _verifyCoreVersion(
-  WebtritApiClient webtritApiClient,
-) async {
-  final actualCoreVersion = (await webtritApiClient.getSystemInfo()).core.version;
-  CoreVersion.supported().verify(actualCoreVersion);
+  Future<void> _checkSystemInfo(
+    WebtritApiClient webtritApiClient,
+  ) async {
+    final systemInfo = await webtritApiClient.getSystemInfo();
+
+    final actualCoreVersion = systemInfo.core.version;
+    CoreVersion.supported().verify(actualCoreVersion);
+
+    final adapterSupportedLogin = systemInfo.adapter!.supported;
+    final phoneSupportedLogin = adapterSupportedLogin
+        .map((type) {
+          if (type == LoginType.otpSignin) {
+            return SupportedLogin.otpSignIn;
+          } else if (type == LoginType.passwordSignin) {
+            return SupportedLogin.passwordSignIn;
+          }
+        })
+        .nonNulls
+        .toList()
+      ..sort((a, b) => a.name.compareTo(b.name));
+
+    emit(state.copyWith(supportedLogin: phoneSupportedLogin));
+  }
 }
 
 Future<SessionResult> _createUserRequest(

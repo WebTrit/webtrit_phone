@@ -28,9 +28,12 @@ class LoginState with _$LoginState {
     String? tenantId,
     SessionOtpProvisional? sessionOtpProvisional,
     String? token,
+    @Default([SupportedLogin.otpSignIn]) List<SupportedLogin> supportedLogin,
     @Default(UrlInput.pure()) UrlInput coreUrlInput,
     @Default(EmailInput.pure()) EmailInput emailInput,
     @Default(PhoneInput.pure()) PhoneInput phoneInput,
     @Default(CodeInput.pure()) CodeInput codeInput,
+    @Default(LoginInput.pure()) LoginInput loginInput,
+    @Default(PasswordInput.pure()) PasswordInput passwordInput,
   }) = _LoginState;
 }

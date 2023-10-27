@@ -25,10 +25,13 @@ mixin _$LoginState {
   SessionOtpProvisional? get sessionOtpProvisional =>
       throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
+  List<SupportedLogin> get supportedLogin => throw _privateConstructorUsedError;
   UrlInput get coreUrlInput => throw _privateConstructorUsedError;
   EmailInput get emailInput => throw _privateConstructorUsedError;
   PhoneInput get phoneInput => throw _privateConstructorUsedError;
   CodeInput get codeInput => throw _privateConstructorUsedError;
+  LoginInput get loginInput => throw _privateConstructorUsedError;
+  PasswordInput get passwordInput => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $LoginStateCopyWith<LoginState> get copyWith =>
@@ -50,10 +53,13 @@ abstract class $LoginStateCopyWith<$Res> {
       String? tenantId,
       SessionOtpProvisional? sessionOtpProvisional,
       String? token,
+      List<SupportedLogin> supportedLogin,
       UrlInput coreUrlInput,
       EmailInput emailInput,
       PhoneInput phoneInput,
-      CodeInput codeInput});
+      CodeInput codeInput,
+      LoginInput loginInput,
+      PasswordInput passwordInput});
 }
 
 /// @nodoc
@@ -77,10 +83,13 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
     Object? tenantId = freezed,
     Object? sessionOtpProvisional = freezed,
     Object? token = freezed,
+    Object? supportedLogin = null,
     Object? coreUrlInput = null,
     Object? emailInput = null,
     Object? phoneInput = null,
     Object? codeInput = null,
+    Object? loginInput = null,
+    Object? passwordInput = null,
   }) {
     return _then(_value.copyWith(
       step: null == step
@@ -112,6 +121,10 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
+      supportedLogin: null == supportedLogin
+          ? _value.supportedLogin
+          : supportedLogin // ignore: cast_nullable_to_non_nullable
+              as List<SupportedLogin>,
       coreUrlInput: null == coreUrlInput
           ? _value.coreUrlInput
           : coreUrlInput // ignore: cast_nullable_to_non_nullable
@@ -128,6 +141,14 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
           ? _value.codeInput
           : codeInput // ignore: cast_nullable_to_non_nullable
               as CodeInput,
+      loginInput: null == loginInput
+          ? _value.loginInput
+          : loginInput // ignore: cast_nullable_to_non_nullable
+              as LoginInput,
+      passwordInput: null == passwordInput
+          ? _value.passwordInput
+          : passwordInput // ignore: cast_nullable_to_non_nullable
+              as PasswordInput,
     ) as $Val);
   }
 }
@@ -149,10 +170,13 @@ abstract class _$$_LoginStateCopyWith<$Res>
       String? tenantId,
       SessionOtpProvisional? sessionOtpProvisional,
       String? token,
+      List<SupportedLogin> supportedLogin,
       UrlInput coreUrlInput,
       EmailInput emailInput,
       PhoneInput phoneInput,
-      CodeInput codeInput});
+      CodeInput codeInput,
+      LoginInput loginInput,
+      PasswordInput passwordInput});
 }
 
 /// @nodoc
@@ -174,10 +198,13 @@ class __$$_LoginStateCopyWithImpl<$Res>
     Object? tenantId = freezed,
     Object? sessionOtpProvisional = freezed,
     Object? token = freezed,
+    Object? supportedLogin = null,
     Object? coreUrlInput = null,
     Object? emailInput = null,
     Object? phoneInput = null,
     Object? codeInput = null,
+    Object? loginInput = null,
+    Object? passwordInput = null,
   }) {
     return _then(_$_LoginState(
       step: null == step
@@ -209,6 +236,10 @@ class __$$_LoginStateCopyWithImpl<$Res>
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
+      supportedLogin: null == supportedLogin
+          ? _value._supportedLogin
+          : supportedLogin // ignore: cast_nullable_to_non_nullable
+              as List<SupportedLogin>,
       coreUrlInput: null == coreUrlInput
           ? _value.coreUrlInput
           : coreUrlInput // ignore: cast_nullable_to_non_nullable
@@ -225,6 +256,14 @@ class __$$_LoginStateCopyWithImpl<$Res>
           ? _value.codeInput
           : codeInput // ignore: cast_nullable_to_non_nullable
               as CodeInput,
+      loginInput: null == loginInput
+          ? _value.loginInput
+          : loginInput // ignore: cast_nullable_to_non_nullable
+              as LoginInput,
+      passwordInput: null == passwordInput
+          ? _value.passwordInput
+          : passwordInput // ignore: cast_nullable_to_non_nullable
+              as PasswordInput,
     ));
   }
 }
@@ -241,10 +280,16 @@ class _$_LoginState implements _LoginState {
       this.tenantId,
       this.sessionOtpProvisional,
       this.token,
+      final List<SupportedLogin> supportedLogin = const [
+        SupportedLogin.otpSignIn
+      ],
       this.coreUrlInput = const UrlInput.pure(),
       this.emailInput = const EmailInput.pure(),
       this.phoneInput = const PhoneInput.pure(),
-      this.codeInput = const CodeInput.pure()});
+      this.codeInput = const CodeInput.pure(),
+      this.loginInput = const LoginInput.pure(),
+      this.passwordInput = const PasswordInput.pure()})
+      : _supportedLogin = supportedLogin;
 
   @override
   final LoginStep step;
@@ -264,6 +309,15 @@ class _$_LoginState implements _LoginState {
   final SessionOtpProvisional? sessionOtpProvisional;
   @override
   final String? token;
+  final List<SupportedLogin> _supportedLogin;
+  @override
+  @JsonKey()
+  List<SupportedLogin> get supportedLogin {
+    if (_supportedLogin is EqualUnmodifiableListView) return _supportedLogin;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_supportedLogin);
+  }
+
   @override
   @JsonKey()
   final UrlInput coreUrlInput;
@@ -276,10 +330,16 @@ class _$_LoginState implements _LoginState {
   @override
   @JsonKey()
   final CodeInput codeInput;
+  @override
+  @JsonKey()
+  final LoginInput loginInput;
+  @override
+  @JsonKey()
+  final PasswordInput passwordInput;
 
   @override
   String toString() {
-    return 'LoginState(step: $step, status: $status, error: $error, demo: $demo, coreUrl: $coreUrl, tenantId: $tenantId, sessionOtpProvisional: $sessionOtpProvisional, token: $token, coreUrlInput: $coreUrlInput, emailInput: $emailInput, phoneInput: $phoneInput, codeInput: $codeInput)';
+    return 'LoginState(step: $step, status: $status, error: $error, demo: $demo, coreUrl: $coreUrl, tenantId: $tenantId, sessionOtpProvisional: $sessionOtpProvisional, token: $token, supportedLogin: $supportedLogin, coreUrlInput: $coreUrlInput, emailInput: $emailInput, phoneInput: $phoneInput, codeInput: $codeInput, loginInput: $loginInput, passwordInput: $passwordInput)';
   }
 
   @override
@@ -297,6 +357,8 @@ class _$_LoginState implements _LoginState {
             (identical(other.sessionOtpProvisional, sessionOtpProvisional) ||
                 other.sessionOtpProvisional == sessionOtpProvisional) &&
             (identical(other.token, token) || other.token == token) &&
+            const DeepCollectionEquality()
+                .equals(other._supportedLogin, _supportedLogin) &&
             (identical(other.coreUrlInput, coreUrlInput) ||
                 other.coreUrlInput == coreUrlInput) &&
             (identical(other.emailInput, emailInput) ||
@@ -304,7 +366,11 @@ class _$_LoginState implements _LoginState {
             (identical(other.phoneInput, phoneInput) ||
                 other.phoneInput == phoneInput) &&
             (identical(other.codeInput, codeInput) ||
-                other.codeInput == codeInput));
+                other.codeInput == codeInput) &&
+            (identical(other.loginInput, loginInput) ||
+                other.loginInput == loginInput) &&
+            (identical(other.passwordInput, passwordInput) ||
+                other.passwordInput == passwordInput));
   }
 
   @override
@@ -318,10 +384,13 @@ class _$_LoginState implements _LoginState {
       tenantId,
       sessionOtpProvisional,
       token,
+      const DeepCollectionEquality().hash(_supportedLogin),
       coreUrlInput,
       emailInput,
       phoneInput,
-      codeInput);
+      codeInput,
+      loginInput,
+      passwordInput);
 
   @JsonKey(ignore: true)
   @override
@@ -340,10 +409,13 @@ abstract class _LoginState implements LoginState {
       final String? tenantId,
       final SessionOtpProvisional? sessionOtpProvisional,
       final String? token,
+      final List<SupportedLogin> supportedLogin,
       final UrlInput coreUrlInput,
       final EmailInput emailInput,
       final PhoneInput phoneInput,
-      final CodeInput codeInput}) = _$_LoginState;
+      final CodeInput codeInput,
+      final LoginInput loginInput,
+      final PasswordInput passwordInput}) = _$_LoginState;
 
   @override
   LoginStep get step;
@@ -362,6 +434,8 @@ abstract class _LoginState implements LoginState {
   @override
   String? get token;
   @override
+  List<SupportedLogin> get supportedLogin;
+  @override
   UrlInput get coreUrlInput;
   @override
   EmailInput get emailInput;
@@ -369,6 +443,10 @@ abstract class _LoginState implements LoginState {
   PhoneInput get phoneInput;
   @override
   CodeInput get codeInput;
+  @override
+  LoginInput get loginInput;
+  @override
+  PasswordInput get passwordInput;
   @override
   @JsonKey(ignore: true)
   _$$_LoginStateCopyWith<_$_LoginState> get copyWith =>

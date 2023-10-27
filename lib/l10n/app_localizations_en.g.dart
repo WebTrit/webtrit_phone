@@ -193,6 +193,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_AppBarTitle_otpRequest => '';
 
   @override
+  String get login_SegmentedButton_otpSignIn => 'Otp sign in';
+
+  @override
+  String get login_SegmentedButton_passwordSignIn => 'Password sign in';
+
+  @override
+  String get login_TextFieldLabelText_passwordSignInRequestLogin => 'Enter your login';
+
+  @override
+  String get login_TextFieldLabelText_passwordSignInRequestPassword => 'Enter your password';
+
+  @override
   String get login_TextFieldLabelText_otpRequestEmail => 'Enter your email';
 
   @override
