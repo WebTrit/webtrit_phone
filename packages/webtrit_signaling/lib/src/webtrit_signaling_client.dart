@@ -286,20 +286,29 @@ class WebtritSignalingClient {
   }
 
   void _onKeepalive() async {
-    final stopwatch = Stopwatch();
     try {
-      final requestJson = KeepaliveHandshake().toJson();
-      stopwatch.start();
-      final responseJson = await _executeTransaction(requestJson, defaultExecuteTransactionTimeoutDuration);
-      stopwatch.stop();
-      KeepaliveHandshake.fromJson(responseJson);
-      _logger.finest('handshake keepalive latency: ${stopwatch.elapsed}');
-    } on WebtritSignalingTransactionTimeoutException catch (error) {
-      _onError(WebtritSignalingKeepaliveTransactionTimeoutException(error.id, error.transactionId), StackTrace.current);
+      final elapsed = await _executeKeepaliveTransaction(defaultExecuteTransactionTimeoutDuration);
+      _logger.finest('handshake keepalive latency: $elapsed');
+    } on WebtritSignalingTransactionTimeoutException catch (e, stackTrace) {
+      _onError(WebtritSignalingKeepaliveTransactionTimeoutException(e.id, e.transactionId), stackTrace);
     } catch (error, stackTrace) {
       _onError(error, stackTrace);
     }
 
     _startKeepaliveTimer();
+  }
+
+  Future<Duration> _executeKeepaliveTransaction(Duration timeoutDuration) async {
+    final stopwatch = Stopwatch();
+
+    final keepaliveHandshakeRequest = KeepaliveHandshake();
+    final requestJson = keepaliveHandshakeRequest.toJson();
+    stopwatch.start();
+    final responseJson = await _executeTransaction(requestJson, timeoutDuration);
+    stopwatch.stop();
+    // ignore: unused_local_variable
+    final keepaliveHandshakeResponse = KeepaliveHandshake.fromJson(responseJson);
+
+    return stopwatch.elapsed;
   }
 }
