@@ -52,8 +52,8 @@ class WebtritSignalingTransactionTimeoutException extends WebtritSignalingTransa
   const WebtritSignalingTransactionTimeoutException(int id, String transactionId) : super(id, transactionId);
 }
 
-class WebtritSignalingKeepaliveTimeoutException extends WebtritSignalingTransactionTimeoutException {
-  const WebtritSignalingKeepaliveTimeoutException(int id, String transactionId) : super(id, transactionId);
+class WebtritSignalingKeepaliveTransactionTimeoutException extends WebtritSignalingTransactionTimeoutException {
+  const WebtritSignalingKeepaliveTransactionTimeoutException(int id, String transactionId) : super(id, transactionId);
 }
 
 class WebtritSignalingTransactionUnavailableException extends WebtritSignalingTransactionException {
@@ -64,8 +64,9 @@ abstract class WebtritSignalingTransactionTerminateException extends WebtritSign
   const WebtritSignalingTransactionTerminateException(int id, String transactionId) : super(id, transactionId);
 }
 
-class WebtritSignalingTerminateByDisconnectException extends WebtritSignalingTransactionTerminateException {
-  const WebtritSignalingTerminateByDisconnectException(int id, String transactionId, this.closeCode, this.closeReason)
+class WebtritSignalingTransactionTerminateByDisconnectException extends WebtritSignalingTransactionTerminateException {
+  const WebtritSignalingTransactionTerminateByDisconnectException(
+      int id, String transactionId, this.closeCode, this.closeReason)
       : super(id, transactionId);
 
   final int? closeCode;

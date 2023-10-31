@@ -295,7 +295,7 @@ class WebtritSignalingClient {
       KeepaliveHandshake.fromJson(responseJson);
       _logger.finest('handshake keepalive latency: ${stopwatch.elapsed}');
     } on WebtritSignalingTransactionTimeoutException catch (error) {
-      _onError(WebtritSignalingKeepaliveTimeoutException(error.id, error.transactionId), StackTrace.current);
+      _onError(WebtritSignalingKeepaliveTransactionTimeoutException(error.id, error.transactionId), StackTrace.current);
     } catch (error, stackTrace) {
       _onError(error, stackTrace);
     }
