@@ -289,13 +289,13 @@ class WebtritSignalingClient {
     try {
       final elapsed = await _executeKeepaliveTransaction(defaultExecuteTransactionTimeoutDuration);
       _logger.finest('handshake keepalive latency: $elapsed');
+
+      _startKeepaliveTimer();
     } on WebtritSignalingTransactionTimeoutException catch (e, stackTrace) {
       _onError(WebtritSignalingKeepaliveTransactionTimeoutException(e.id, e.transactionId), stackTrace);
     } catch (error, stackTrace) {
       _onError(error, stackTrace);
     }
-
-    _startKeepaliveTimer();
   }
 
   Future<Duration> _executeKeepaliveTransaction(Duration timeoutDuration) async {
