@@ -1515,6 +1515,24 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
       ..onRenegotiationNeeded = () {
         logger.fine(() => 'onRenegotiationNeeded');
+      }
+      ..onTrack = (event) {
+        logger.fine(() {
+          final sb = StringBuffer('onTrack');
+          sb.write(' receiver: ${event.receiver}');
+          sb.write(' streams: [');
+          final streamsLength = event.streams.length;
+          for (var i = 0; i < streamsLength; i++) {
+            sb.write('$stream');
+            if (i + 1 < streamsLength) {
+              sb.write(', ');
+            }
+          }
+          sb.write(']');
+          sb.write(' track: ${event.track}');
+          sb.write(' transceiver: ${event.transceiver}');
+          return sb;
+        });
       };
   }
 
