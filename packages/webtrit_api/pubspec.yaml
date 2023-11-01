@@ -10,7 +10,7 @@ dependencies:
   freezed_annotation: ^2.4.1
   http: ^1.1.0
   json_annotation: ^4.8.1
-  meta: ^1.9.1
+  meta: any
   pub_semver: ^2.1.4
 
   _http_client:
@@ -18,7 +18,7 @@ dependencies:
 
 dev_dependencies:
   build_runner: ^2.4.6
-  freezed: ^2.4.1
+  freezed: ^2.4.5
   json_serializable: ^6.7.1
-  lints: ^2.1.1
-  test: ^1.24.6
+  lints: ^3.0.0
+  test: ^1.24.9

@@ -19,8 +19,8 @@ mixin _$MainCompatibilityVerified {}
 
 /// @nodoc
 
-class _$_MainCompatibilityVerified implements _MainCompatibilityVerified {
-  const _$_MainCompatibilityVerified();
+class _$MainCompatibilityVerifiedImpl implements _MainCompatibilityVerified {
+  const _$MainCompatibilityVerifiedImpl();
 
   @override
   String toString() {
@@ -31,7 +31,7 @@ class _$_MainCompatibilityVerified implements _MainCompatibilityVerified {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_MainCompatibilityVerified);
+            other is _$MainCompatibilityVerifiedImpl);
   }
 
   @override
@@ -39,7 +39,7 @@ class _$_MainCompatibilityVerified implements _MainCompatibilityVerified {
 }
 
 abstract class _MainCompatibilityVerified implements MainCompatibilityVerified {
-  const factory _MainCompatibilityVerified() = _$_MainCompatibilityVerified;
+  const factory _MainCompatibilityVerified() = _$MainCompatibilityVerifiedImpl;
 }
 
 /// @nodoc
@@ -49,8 +49,8 @@ mixin _$MainAppUpdated {
 
 /// @nodoc
 
-class _$_MainAppUpdated implements _MainAppUpdated {
-  const _$_MainAppUpdated(this.storeViewUrl);
+class _$MainAppUpdatedImpl implements _MainAppUpdated {
+  const _$MainAppUpdatedImpl(this.storeViewUrl);
 
   @override
   final Uri storeViewUrl;
@@ -64,7 +64,7 @@ class _$_MainAppUpdated implements _MainAppUpdated {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_MainAppUpdated &&
+            other is _$MainAppUpdatedImpl &&
             (identical(other.storeViewUrl, storeViewUrl) ||
                 other.storeViewUrl == storeViewUrl));
   }
@@ -74,7 +74,7 @@ class _$_MainAppUpdated implements _MainAppUpdated {
 }
 
 abstract class _MainAppUpdated implements MainAppUpdated {
-  const factory _MainAppUpdated(final Uri storeViewUrl) = _$_MainAppUpdated;
+  const factory _MainAppUpdated(final Uri storeViewUrl) = _$MainAppUpdatedImpl;
 
   @override
   Uri get storeViewUrl;
@@ -125,21 +125,22 @@ class _$MainStateCopyWithImpl<$Res, $Val extends MainState>
 }
 
 /// @nodoc
-abstract class _$$_MainStateCopyWith<$Res> implements $MainStateCopyWith<$Res> {
-  factory _$$_MainStateCopyWith(
-          _$_MainState value, $Res Function(_$_MainState) then) =
-      __$$_MainStateCopyWithImpl<$Res>;
+abstract class _$$MainStateImplCopyWith<$Res>
+    implements $MainStateCopyWith<$Res> {
+  factory _$$MainStateImplCopyWith(
+          _$MainStateImpl value, $Res Function(_$MainStateImpl) then) =
+      __$$MainStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({Object? error, Uri? updateStoreViewUrl});
 }
 
 /// @nodoc
-class __$$_MainStateCopyWithImpl<$Res>
-    extends _$MainStateCopyWithImpl<$Res, _$_MainState>
-    implements _$$_MainStateCopyWith<$Res> {
-  __$$_MainStateCopyWithImpl(
-      _$_MainState _value, $Res Function(_$_MainState) _then)
+class __$$MainStateImplCopyWithImpl<$Res>
+    extends _$MainStateCopyWithImpl<$Res, _$MainStateImpl>
+    implements _$$MainStateImplCopyWith<$Res> {
+  __$$MainStateImplCopyWithImpl(
+      _$MainStateImpl _value, $Res Function(_$MainStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -148,7 +149,7 @@ class __$$_MainStateCopyWithImpl<$Res>
     Object? error = freezed,
     Object? updateStoreViewUrl = freezed,
   }) {
-    return _then(_$_MainState(
+    return _then(_$MainStateImpl(
       error: freezed == error ? _value.error : error,
       updateStoreViewUrl: freezed == updateStoreViewUrl
           ? _value.updateStoreViewUrl
@@ -160,8 +161,8 @@ class __$$_MainStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_MainState implements _MainState {
-  const _$_MainState({this.error, this.updateStoreViewUrl});
+class _$MainStateImpl implements _MainState {
+  const _$MainStateImpl({this.error, this.updateStoreViewUrl});
 
   @override
   final Object? error;
@@ -177,7 +178,7 @@ class _$_MainState implements _MainState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_MainState &&
+            other is _$MainStateImpl &&
             const DeepCollectionEquality().equals(other.error, error) &&
             (identical(other.updateStoreViewUrl, updateStoreViewUrl) ||
                 other.updateStoreViewUrl == updateStoreViewUrl));
@@ -190,13 +191,13 @@ class _$_MainState implements _MainState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_MainStateCopyWith<_$_MainState> get copyWith =>
-      __$$_MainStateCopyWithImpl<_$_MainState>(this, _$identity);
+  _$$MainStateImplCopyWith<_$MainStateImpl> get copyWith =>
+      __$$MainStateImplCopyWithImpl<_$MainStateImpl>(this, _$identity);
 }
 
 abstract class _MainState implements MainState {
   const factory _MainState(
-      {final Object? error, final Uri? updateStoreViewUrl}) = _$_MainState;
+      {final Object? error, final Uri? updateStoreViewUrl}) = _$MainStateImpl;
 
   @override
   Object? get error;
@@ -204,6 +205,6 @@ abstract class _MainState implements MainState {
   Uri? get updateStoreViewUrl;
   @override
   @JsonKey(ignore: true)
-  _$$_MainStateCopyWith<_$_MainState> get copyWith =>
+  _$$MainStateImplCopyWith<_$MainStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

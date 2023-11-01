@@ -12,10 +12,10 @@ class RecentHistoryTile extends StatelessWidget {
   final void Function(Recent)? onDeleted;
 
   const RecentHistoryTile({
-    Key? key,
+    super.key,
     required this.recent,
     this.onDeleted,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

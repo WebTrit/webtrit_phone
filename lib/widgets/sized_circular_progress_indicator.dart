@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class SizedCircularProgressIndicator extends StatelessWidget {
   const SizedCircularProgressIndicator({
-    Key? key,
+    super.key,
     required this.size,
     this.outerSize,
     this.color,
     this.strokeWidth,
-  }) : super(key: key);
+  });
 
   final double size;
   final double? outerSize;

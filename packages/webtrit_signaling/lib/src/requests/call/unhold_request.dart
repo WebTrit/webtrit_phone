@@ -2,10 +2,10 @@ import '../abstract_requests.dart';
 
 class UnholdRequest extends CallRequest {
   const UnholdRequest({
-    required String transaction,
-    required int line,
-    required String callId,
-  }) : super(transaction: transaction, line: line, callId: callId);
+    required super.transaction,
+    required super.line,
+    required super.callId,
+  });
 
   static const typeValue = 'unhold';
 

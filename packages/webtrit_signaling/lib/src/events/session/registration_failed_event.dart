@@ -2,10 +2,10 @@ import '../abstract_events.dart';
 
 class RegistrationFailedEvent extends SessionEvent {
   const RegistrationFailedEvent({
-    String? transaction,
+    super.transaction,
     required this.code,
     required this.reason,
-  }) : super(transaction: transaction);
+  });
 
   final int code;
   final String reason;

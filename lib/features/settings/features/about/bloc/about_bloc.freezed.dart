@@ -19,8 +19,8 @@ mixin _$AboutStarted {}
 
 /// @nodoc
 
-class _$_AboutStarted implements _AboutStarted {
-  const _$_AboutStarted();
+class _$AboutStartedImpl implements _AboutStarted {
+  const _$AboutStartedImpl();
 
   @override
   String toString() {
@@ -30,7 +30,7 @@ class _$_AboutStarted implements _AboutStarted {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_AboutStarted);
+        (other.runtimeType == runtimeType && other is _$AboutStartedImpl);
   }
 
   @override
@@ -38,7 +38,7 @@ class _$_AboutStarted implements _AboutStarted {
 }
 
 abstract class _AboutStarted implements AboutStarted {
-  const factory _AboutStarted() = _$_AboutStarted;
+  const factory _AboutStarted() = _$AboutStartedImpl;
 }
 
 /// @nodoc
@@ -127,11 +127,11 @@ class _$AboutStateCopyWithImpl<$Res, $Val extends AboutState>
 }
 
 /// @nodoc
-abstract class _$$_AboutStateCopyWith<$Res>
+abstract class _$$AboutStateImplCopyWith<$Res>
     implements $AboutStateCopyWith<$Res> {
-  factory _$$_AboutStateCopyWith(
-          _$_AboutState value, $Res Function(_$_AboutState) then) =
-      __$$_AboutStateCopyWithImpl<$Res>;
+  factory _$$AboutStateImplCopyWith(
+          _$AboutStateImpl value, $Res Function(_$AboutStateImpl) then) =
+      __$$AboutStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -145,11 +145,11 @@ abstract class _$$_AboutStateCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_AboutStateCopyWithImpl<$Res>
-    extends _$AboutStateCopyWithImpl<$Res, _$_AboutState>
-    implements _$$_AboutStateCopyWith<$Res> {
-  __$$_AboutStateCopyWithImpl(
-      _$_AboutState _value, $Res Function(_$_AboutState) _then)
+class __$$AboutStateImplCopyWithImpl<$Res>
+    extends _$AboutStateCopyWithImpl<$Res, _$AboutStateImpl>
+    implements _$$AboutStateImplCopyWith<$Res> {
+  __$$AboutStateImplCopyWithImpl(
+      _$AboutStateImpl _value, $Res Function(_$AboutStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -163,7 +163,7 @@ class __$$_AboutStateCopyWithImpl<$Res>
     Object? coreUrl = null,
     Object? coreVersion = freezed,
   }) {
-    return _then(_$_AboutState(
+    return _then(_$AboutStateImpl(
       progress: null == progress
           ? _value.progress
           : progress // ignore: cast_nullable_to_non_nullable
@@ -198,8 +198,8 @@ class __$$_AboutStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_AboutState extends _AboutState {
-  const _$_AboutState(
+class _$AboutStateImpl extends _AboutState {
+  const _$AboutStateImpl(
       {this.progress = false,
       required this.appName,
       required this.packageName,
@@ -234,7 +234,7 @@ class _$_AboutState extends _AboutState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_AboutState &&
+            other is _$AboutStateImpl &&
             (identical(other.progress, progress) ||
                 other.progress == progress) &&
             (identical(other.appName, appName) || other.appName == appName) &&
@@ -255,8 +255,8 @@ class _$_AboutState extends _AboutState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_AboutStateCopyWith<_$_AboutState> get copyWith =>
-      __$$_AboutStateCopyWithImpl<_$_AboutState>(this, _$identity);
+  _$$AboutStateImplCopyWith<_$AboutStateImpl> get copyWith =>
+      __$$AboutStateImplCopyWithImpl<_$AboutStateImpl>(this, _$identity);
 }
 
 abstract class _AboutState extends AboutState {
@@ -267,7 +267,7 @@ abstract class _AboutState extends AboutState {
       required final String version,
       required final String buildNumber,
       required final Uri coreUrl,
-      final Version? coreVersion}) = _$_AboutState;
+      final Version? coreVersion}) = _$AboutStateImpl;
   const _AboutState._() : super._();
 
   @override
@@ -286,6 +286,6 @@ abstract class _AboutState extends AboutState {
   Version? get coreVersion;
   @override
   @JsonKey(ignore: true)
-  _$$_AboutStateCopyWith<_$_AboutState> get copyWith =>
+  _$$AboutStateImplCopyWith<_$AboutStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

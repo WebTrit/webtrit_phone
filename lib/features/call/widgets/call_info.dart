@@ -11,12 +11,12 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 class CallInfo extends StatefulWidget {
   const CallInfo({
-    Key? key,
+    super.key,
     required this.isIncoming,
     required this.username,
     this.acceptedTime,
     this.color,
-  }) : super(key: key);
+  });
 
   final bool isIncoming;
   final String username;

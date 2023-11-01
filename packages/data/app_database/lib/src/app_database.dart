@@ -22,7 +22,7 @@ part 'app_database.g.dart';
   ],
 )
 class AppDatabase extends _$AppDatabase {
-  AppDatabase(QueryExecutor e) : super(e);
+  AppDatabase(super.e);
 
   Future<void> deleteEverything() async {
     await customStatement('PRAGMA foreign_keys = OFF');
@@ -250,7 +250,7 @@ class FavoritesTable extends Table {
   ContactPhonesTable,
 ])
 class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin {
-  ContactsDao(AppDatabase db) : super(db);
+  ContactsDao(super.db);
 
   SimpleSelectStatement<$ContactsTableTable, ContactData> _selectAllContacts([ContactSourceTypeEnum? sourceType]) =>
       select(contactsTable)
@@ -321,7 +321,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
   FavoritesTable,
 ])
 class ContactPhonesDao extends DatabaseAccessor<AppDatabase> with _$ContactPhonesDaoMixin {
-  ContactPhonesDao(AppDatabase db) : super(db);
+  ContactPhonesDao(super.db);
 
   SimpleSelectStatement<$ContactPhonesTableTable, ContactPhoneData> _selectContactPhonesByContactId(int contactId) {
     return select(contactPhonesTable)
@@ -383,7 +383,7 @@ class ContactPhonesDao extends DatabaseAccessor<AppDatabase> with _$ContactPhone
   ContactEmailsTable,
 ])
 class ContactEmailsDao extends DatabaseAccessor<AppDatabase> with _$ContactEmailsDaoMixin {
-  ContactEmailsDao(AppDatabase db) : super(db);
+  ContactEmailsDao(super.db);
 
   SimpleSelectStatement<$ContactEmailsTableTable, ContactEmailData> _selectContactEmailsByContactId(int contactId) {
     return select(contactEmailsTable)
@@ -432,7 +432,7 @@ class ContactPhoneDataWithFavoriteData {
   ContactsTable,
 ])
 class CallLogsDao extends DatabaseAccessor<AppDatabase> with _$CallLogsDaoMixin {
-  CallLogsDao(AppDatabase db) : super(db);
+  CallLogsDao(super.db);
 
   SimpleSelectStatement<$CallLogsTableTable, CallLogData> _selectLastCallLogs(Duration period) {
     return select(callLogsTable)
@@ -511,7 +511,7 @@ class CallLogDataWithContactPhoneDataAndContactData {
   ContactsTable,
 ])
 class FavoritesDao extends DatabaseAccessor<AppDatabase> with _$FavoritesDaoMixin {
-  FavoritesDao(AppDatabase db) : super(db);
+  FavoritesDao(super.db);
 
   Stream<List<FavoriteDataWithContactPhoneDataAndContactData>> watchFavoritesExt() {
     final q = (select(favoritesTable)..orderBy([(t) => OrderingTerm.asc(t.position)])).join([

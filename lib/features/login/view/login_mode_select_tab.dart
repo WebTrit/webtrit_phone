@@ -12,9 +12,9 @@ import '../login.dart';
 
 class LoginModeSelectTab extends StatelessWidget {
   const LoginModeSelectTab({
-    Key? key,
+    super.key,
     this.appGreeting,
-  }) : super(key: key);
+  });
 
   final String? appGreeting;
 

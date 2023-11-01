@@ -72,20 +72,21 @@ class _$NumbersCopyWithImpl<$Res, $Val extends Numbers>
 }
 
 /// @nodoc
-abstract class _$$_NumbersCopyWith<$Res> implements $NumbersCopyWith<$Res> {
-  factory _$$_NumbersCopyWith(
-          _$_Numbers value, $Res Function(_$_Numbers) then) =
-      __$$_NumbersCopyWithImpl<$Res>;
+abstract class _$$NumbersImplCopyWith<$Res> implements $NumbersCopyWith<$Res> {
+  factory _$$NumbersImplCopyWith(
+          _$NumbersImpl value, $Res Function(_$NumbersImpl) then) =
+      __$$NumbersImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String main, String? ext, List<String>? additional});
 }
 
 /// @nodoc
-class __$$_NumbersCopyWithImpl<$Res>
-    extends _$NumbersCopyWithImpl<$Res, _$_Numbers>
-    implements _$$_NumbersCopyWith<$Res> {
-  __$$_NumbersCopyWithImpl(_$_Numbers _value, $Res Function(_$_Numbers) _then)
+class __$$NumbersImplCopyWithImpl<$Res>
+    extends _$NumbersCopyWithImpl<$Res, _$NumbersImpl>
+    implements _$$NumbersImplCopyWith<$Res> {
+  __$$NumbersImplCopyWithImpl(
+      _$NumbersImpl _value, $Res Function(_$NumbersImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -95,7 +96,7 @@ class __$$_NumbersCopyWithImpl<$Res>
     Object? ext = freezed,
     Object? additional = freezed,
   }) {
-    return _then(_$_Numbers(
+    return _then(_$NumbersImpl(
       main: null == main
           ? _value.main
           : main // ignore: cast_nullable_to_non_nullable
@@ -115,13 +116,13 @@ class __$$_NumbersCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class _$_Numbers implements _Numbers {
-  const _$_Numbers(
+class _$NumbersImpl implements _Numbers {
+  const _$NumbersImpl(
       {required this.main, this.ext, final List<String>? additional})
       : _additional = additional;
 
-  factory _$_Numbers.fromJson(Map<String, dynamic> json) =>
-      _$$_NumbersFromJson(json);
+  factory _$NumbersImpl.fromJson(Map<String, dynamic> json) =>
+      _$$NumbersImplFromJson(json);
 
   @override
   final String main;
@@ -146,7 +147,7 @@ class _$_Numbers implements _Numbers {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Numbers &&
+            other is _$NumbersImpl &&
             (identical(other.main, main) || other.main == main) &&
             (identical(other.ext, ext) || other.ext == ext) &&
             const DeepCollectionEquality()
@@ -161,12 +162,12 @@ class _$_Numbers implements _Numbers {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_NumbersCopyWith<_$_Numbers> get copyWith =>
-      __$$_NumbersCopyWithImpl<_$_Numbers>(this, _$identity);
+  _$$NumbersImplCopyWith<_$NumbersImpl> get copyWith =>
+      __$$NumbersImplCopyWithImpl<_$NumbersImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_NumbersToJson(
+    return _$$NumbersImplToJson(
       this,
     );
   }
@@ -176,9 +177,9 @@ abstract class _Numbers implements Numbers {
   const factory _Numbers(
       {required final String main,
       final String? ext,
-      final List<String>? additional}) = _$_Numbers;
+      final List<String>? additional}) = _$NumbersImpl;
 
-  factory _Numbers.fromJson(Map<String, dynamic> json) = _$_Numbers.fromJson;
+  factory _Numbers.fromJson(Map<String, dynamic> json) = _$NumbersImpl.fromJson;
 
   @override
   String get main;
@@ -188,7 +189,7 @@ abstract class _Numbers implements Numbers {
   List<String>? get additional;
   @override
   @JsonKey(ignore: true)
-  _$$_NumbersCopyWith<_$_Numbers> get copyWith =>
+  _$$NumbersImplCopyWith<_$NumbersImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -260,10 +261,10 @@ class _$BalanceCopyWithImpl<$Res, $Val extends Balance>
 }
 
 /// @nodoc
-abstract class _$$_BalanceCopyWith<$Res> implements $BalanceCopyWith<$Res> {
-  factory _$$_BalanceCopyWith(
-          _$_Balance value, $Res Function(_$_Balance) then) =
-      __$$_BalanceCopyWithImpl<$Res>;
+abstract class _$$BalanceImplCopyWith<$Res> implements $BalanceCopyWith<$Res> {
+  factory _$$BalanceImplCopyWith(
+          _$BalanceImpl value, $Res Function(_$BalanceImpl) then) =
+      __$$BalanceImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -274,10 +275,11 @@ abstract class _$$_BalanceCopyWith<$Res> implements $BalanceCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BalanceCopyWithImpl<$Res>
-    extends _$BalanceCopyWithImpl<$Res, _$_Balance>
-    implements _$$_BalanceCopyWith<$Res> {
-  __$$_BalanceCopyWithImpl(_$_Balance _value, $Res Function(_$_Balance) _then)
+class __$$BalanceImplCopyWithImpl<$Res>
+    extends _$BalanceCopyWithImpl<$Res, _$BalanceImpl>
+    implements _$$BalanceImplCopyWith<$Res> {
+  __$$BalanceImplCopyWithImpl(
+      _$BalanceImpl _value, $Res Function(_$BalanceImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -288,7 +290,7 @@ class __$$_BalanceCopyWithImpl<$Res>
     Object? creditLimit = freezed,
     Object? currency = freezed,
   }) {
-    return _then(_$_Balance(
+    return _then(_$BalanceImpl(
       balanceType: freezed == balanceType
           ? _value.balanceType
           : balanceType // ignore: cast_nullable_to_non_nullable
@@ -312,12 +314,12 @@ class __$$_BalanceCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class _$_Balance implements _Balance {
-  const _$_Balance(
+class _$BalanceImpl implements _Balance {
+  const _$BalanceImpl(
       {this.balanceType, this.amount, this.creditLimit, this.currency});
 
-  factory _$_Balance.fromJson(Map<String, dynamic> json) =>
-      _$$_BalanceFromJson(json);
+  factory _$BalanceImpl.fromJson(Map<String, dynamic> json) =>
+      _$$BalanceImplFromJson(json);
 
   @override
   final BalanceType? balanceType;
@@ -337,7 +339,7 @@ class _$_Balance implements _Balance {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Balance &&
+            other is _$BalanceImpl &&
             (identical(other.balanceType, balanceType) ||
                 other.balanceType == balanceType) &&
             (identical(other.amount, amount) || other.amount == amount) &&
@@ -355,12 +357,12 @@ class _$_Balance implements _Balance {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BalanceCopyWith<_$_Balance> get copyWith =>
-      __$$_BalanceCopyWithImpl<_$_Balance>(this, _$identity);
+  _$$BalanceImplCopyWith<_$BalanceImpl> get copyWith =>
+      __$$BalanceImplCopyWithImpl<_$BalanceImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_BalanceToJson(
+    return _$$BalanceImplToJson(
       this,
     );
   }
@@ -371,9 +373,9 @@ abstract class _Balance implements Balance {
       {final BalanceType? balanceType,
       final double? amount,
       final double? creditLimit,
-      final String? currency}) = _$_Balance;
+      final String? currency}) = _$BalanceImpl;
 
-  factory _Balance.fromJson(Map<String, dynamic> json) = _$_Balance.fromJson;
+  factory _Balance.fromJson(Map<String, dynamic> json) = _$BalanceImpl.fromJson;
 
   @override
   BalanceType? get balanceType;
@@ -385,6 +387,6 @@ abstract class _Balance implements Balance {
   String? get currency;
   @override
   @JsonKey(ignore: true)
-  _$$_BalanceCopyWith<_$_Balance> get copyWith =>
+  _$$BalanceImplCopyWith<_$BalanceImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

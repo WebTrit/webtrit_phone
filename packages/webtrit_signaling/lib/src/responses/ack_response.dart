@@ -2,10 +2,10 @@ import 'response.dart';
 
 class AckResponse extends Response {
   const AckResponse({
-    String? transaction,
-    int? line,
-    String? callId,
-  }) : super(transaction: transaction, line: line, callId: callId);
+    super.transaction,
+    super.line,
+    super.callId,
+  });
 
   static const typeValue = 'ack';
 

@@ -6,13 +6,13 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 class ContactTile extends StatelessWidget {
   const ContactTile({
-    Key? key,
+    super.key,
     required this.displayName,
     this.thumbnail,
     this.smart = false,
     this.onTap,
     this.onLongPress,
-  }) : super(key: key);
+  });
 
   final String displayName;
   final Uint8List? thumbnail;

@@ -4,13 +4,13 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 
 class LeadingAvatar extends StatelessWidget {
   const LeadingAvatar({
-    Key? key,
+    super.key,
     required this.username,
     this.placeholderIcon = Icons.person_outline,
     this.radius,
     this.minRadius,
     this.maxRadius,
-  }) : super(key: key);
+  });
 
   final String? username;
   final IconData placeholderIcon;

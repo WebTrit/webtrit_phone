@@ -3,14 +3,14 @@ import 'subscription_state.dart';
 
 class NotifyEvent extends CallEvent {
   const NotifyEvent({
-    String? transaction,
-    required int line,
-    required String callId,
+    super.transaction,
+    required super.line,
+    required super.callId,
     this.notify,
     this.subscriptionState,
     this.contentType,
     required this.content,
-  }) : super(transaction: transaction, line: line, callId: callId);
+  });
 
   final String? notify;
   final SubscriptionState? subscriptionState;

@@ -2,8 +2,8 @@ import '../abstract_events.dart';
 
 class UnregisteringEvent extends SessionEvent {
   UnregisteringEvent({
-    String? transaction,
-  }) : super(transaction: transaction);
+    super.transaction,
+  });
 
   static const typeValue = 'unregistering';
 

@@ -57,22 +57,22 @@ class _$PermissionsStateCopyWithImpl<$Res, $Val extends PermissionsState>
 }
 
 /// @nodoc
-abstract class _$$_PermissionsStateCopyWith<$Res>
+abstract class _$$PermissionsStateImplCopyWith<$Res>
     implements $PermissionsStateCopyWith<$Res> {
-  factory _$$_PermissionsStateCopyWith(
-          _$_PermissionsState value, $Res Function(_$_PermissionsState) then) =
-      __$$_PermissionsStateCopyWithImpl<$Res>;
+  factory _$$PermissionsStateImplCopyWith(_$PermissionsStateImpl value,
+          $Res Function(_$PermissionsStateImpl) then) =
+      __$$PermissionsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({PermissionsStatus status});
 }
 
 /// @nodoc
-class __$$_PermissionsStateCopyWithImpl<$Res>
-    extends _$PermissionsStateCopyWithImpl<$Res, _$_PermissionsState>
-    implements _$$_PermissionsStateCopyWith<$Res> {
-  __$$_PermissionsStateCopyWithImpl(
-      _$_PermissionsState _value, $Res Function(_$_PermissionsState) _then)
+class __$$PermissionsStateImplCopyWithImpl<$Res>
+    extends _$PermissionsStateCopyWithImpl<$Res, _$PermissionsStateImpl>
+    implements _$$PermissionsStateImplCopyWith<$Res> {
+  __$$PermissionsStateImplCopyWithImpl(_$PermissionsStateImpl _value,
+      $Res Function(_$PermissionsStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -80,7 +80,7 @@ class __$$_PermissionsStateCopyWithImpl<$Res>
   $Res call({
     Object? status = null,
   }) {
-    return _then(_$_PermissionsState(
+    return _then(_$PermissionsStateImpl(
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -91,8 +91,8 @@ class __$$_PermissionsStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_PermissionsState implements _PermissionsState {
-  const _$_PermissionsState({this.status = PermissionsStatus.initial});
+class _$PermissionsStateImpl implements _PermissionsState {
+  const _$PermissionsStateImpl({this.status = PermissionsStatus.initial});
 
   @override
   @JsonKey()
@@ -107,7 +107,7 @@ class _$_PermissionsState implements _PermissionsState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_PermissionsState &&
+            other is _$PermissionsStateImpl &&
             (identical(other.status, status) || other.status == status));
   }
 
@@ -117,18 +117,19 @@ class _$_PermissionsState implements _PermissionsState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_PermissionsStateCopyWith<_$_PermissionsState> get copyWith =>
-      __$$_PermissionsStateCopyWithImpl<_$_PermissionsState>(this, _$identity);
+  _$$PermissionsStateImplCopyWith<_$PermissionsStateImpl> get copyWith =>
+      __$$PermissionsStateImplCopyWithImpl<_$PermissionsStateImpl>(
+          this, _$identity);
 }
 
 abstract class _PermissionsState implements PermissionsState {
   const factory _PermissionsState({final PermissionsStatus status}) =
-      _$_PermissionsState;
+      _$PermissionsStateImpl;
 
   @override
   PermissionsStatus get status;
   @override
   @JsonKey(ignore: true)
-  _$$_PermissionsStateCopyWith<_$_PermissionsState> get copyWith =>
+  _$$PermissionsStateImplCopyWith<_$PermissionsStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

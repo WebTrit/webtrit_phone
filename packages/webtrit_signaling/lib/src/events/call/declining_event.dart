@@ -2,12 +2,12 @@ import '../abstract_events.dart';
 
 class DecliningEvent extends CallEvent {
   const DecliningEvent({
-    String? transaction,
-    required int line,
-    required String callId,
+    super.transaction,
+    required super.line,
+    required super.callId,
     required this.code,
     this.referId,
-  }) : super(transaction: transaction, line: line, callId: callId);
+  });
 
   final int code;
   final int? referId;

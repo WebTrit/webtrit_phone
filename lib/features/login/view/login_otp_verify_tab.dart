@@ -14,8 +14,8 @@ import '../login.dart';
 
 class LoginOtpVerifyTab extends StatelessWidget {
   const LoginOtpVerifyTab({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

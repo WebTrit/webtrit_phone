@@ -2,12 +2,12 @@ import 'response.dart';
 
 class ErrorResponse extends Response {
   const ErrorResponse({
-    String? transaction,
-    int? line,
-    String? callId,
+    super.transaction,
+    super.line,
+    super.callId,
     required this.code,
     required this.reason,
-  }) : super(transaction: transaction, line: line, callId: callId);
+  });
 
   final int code;
   final String reason;

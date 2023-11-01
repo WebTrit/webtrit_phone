@@ -65,7 +65,7 @@ void main() {
 }
 
 class _AppDatabaseWithAppLifecycleStateObserver extends AppDatabase with WidgetsBindingObserver {
-  _AppDatabaseWithAppLifecycleStateObserver(e) : super(e);
+  _AppDatabaseWithAppLifecycleStateObserver(super.e);
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {

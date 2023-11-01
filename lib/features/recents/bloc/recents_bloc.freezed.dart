@@ -21,8 +21,8 @@ mixin _$RecentsFiltered {
 
 /// @nodoc
 
-class _$_RecentsFiltered implements _RecentsFiltered {
-  const _$_RecentsFiltered(this.filter);
+class _$RecentsFilteredImpl implements _RecentsFiltered {
+  const _$RecentsFilteredImpl(this.filter);
 
   @override
   final RecentsVisibilityFilter filter;
@@ -36,7 +36,7 @@ class _$_RecentsFiltered implements _RecentsFiltered {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_RecentsFiltered &&
+            other is _$RecentsFilteredImpl &&
             (identical(other.filter, filter) || other.filter == filter));
   }
 
@@ -46,7 +46,7 @@ class _$_RecentsFiltered implements _RecentsFiltered {
 
 abstract class _RecentsFiltered implements RecentsFiltered {
   const factory _RecentsFiltered(final RecentsVisibilityFilter filter) =
-      _$_RecentsFiltered;
+      _$RecentsFilteredImpl;
 
   @override
   RecentsVisibilityFilter get filter;
@@ -59,8 +59,8 @@ mixin _$RecentsDeleted {
 
 /// @nodoc
 
-class _$_RecentsDeleted implements _RecentsDeleted {
-  const _$_RecentsDeleted(this.recent);
+class _$RecentsDeletedImpl implements _RecentsDeleted {
+  const _$RecentsDeletedImpl(this.recent);
 
   @override
   final Recent recent;
@@ -74,7 +74,7 @@ class _$_RecentsDeleted implements _RecentsDeleted {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_RecentsDeleted &&
+            other is _$RecentsDeletedImpl &&
             (identical(other.recent, recent) || other.recent == recent));
   }
 
@@ -83,7 +83,7 @@ class _$_RecentsDeleted implements _RecentsDeleted {
 }
 
 abstract class _RecentsDeleted implements RecentsDeleted {
-  const factory _RecentsDeleted(final Recent recent) = _$_RecentsDeleted;
+  const factory _RecentsDeleted(final Recent recent) = _$RecentsDeletedImpl;
 
   @override
   Recent get recent;
@@ -138,22 +138,22 @@ class _$RecentsStateCopyWithImpl<$Res, $Val extends RecentsState>
 }
 
 /// @nodoc
-abstract class _$$_RecentsStateCopyWith<$Res>
+abstract class _$$RecentsStateImplCopyWith<$Res>
     implements $RecentsStateCopyWith<$Res> {
-  factory _$$_RecentsStateCopyWith(
-          _$_RecentsState value, $Res Function(_$_RecentsState) then) =
-      __$$_RecentsStateCopyWithImpl<$Res>;
+  factory _$$RecentsStateImplCopyWith(
+          _$RecentsStateImpl value, $Res Function(_$RecentsStateImpl) then) =
+      __$$RecentsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<Recent>? recents, RecentsVisibilityFilter filter});
 }
 
 /// @nodoc
-class __$$_RecentsStateCopyWithImpl<$Res>
-    extends _$RecentsStateCopyWithImpl<$Res, _$_RecentsState>
-    implements _$$_RecentsStateCopyWith<$Res> {
-  __$$_RecentsStateCopyWithImpl(
-      _$_RecentsState _value, $Res Function(_$_RecentsState) _then)
+class __$$RecentsStateImplCopyWithImpl<$Res>
+    extends _$RecentsStateCopyWithImpl<$Res, _$RecentsStateImpl>
+    implements _$$RecentsStateImplCopyWith<$Res> {
+  __$$RecentsStateImplCopyWithImpl(
+      _$RecentsStateImpl _value, $Res Function(_$RecentsStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -162,7 +162,7 @@ class __$$_RecentsStateCopyWithImpl<$Res>
     Object? recents = freezed,
     Object? filter = null,
   }) {
-    return _then(_$_RecentsState(
+    return _then(_$RecentsStateImpl(
       recents: freezed == recents
           ? _value._recents
           : recents // ignore: cast_nullable_to_non_nullable
@@ -177,8 +177,8 @@ class __$$_RecentsStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_RecentsState extends _RecentsState {
-  const _$_RecentsState({final List<Recent>? recents, required this.filter})
+class _$RecentsStateImpl extends _RecentsState {
+  const _$RecentsStateImpl({final List<Recent>? recents, required this.filter})
       : _recents = recents,
         super._();
 
@@ -204,7 +204,7 @@ class _$_RecentsState extends _RecentsState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_RecentsState &&
+            other is _$RecentsStateImpl &&
             const DeepCollectionEquality().equals(other._recents, _recents) &&
             (identical(other.filter, filter) || other.filter == filter));
   }
@@ -216,14 +216,14 @@ class _$_RecentsState extends _RecentsState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_RecentsStateCopyWith<_$_RecentsState> get copyWith =>
-      __$$_RecentsStateCopyWithImpl<_$_RecentsState>(this, _$identity);
+  _$$RecentsStateImplCopyWith<_$RecentsStateImpl> get copyWith =>
+      __$$RecentsStateImplCopyWithImpl<_$RecentsStateImpl>(this, _$identity);
 }
 
 abstract class _RecentsState extends RecentsState {
   const factory _RecentsState(
       {final List<Recent>? recents,
-      required final RecentsVisibilityFilter filter}) = _$_RecentsState;
+      required final RecentsVisibilityFilter filter}) = _$RecentsStateImpl;
   const _RecentsState._() : super._();
 
   @override
@@ -232,6 +232,6 @@ abstract class _RecentsState extends RecentsState {
   RecentsVisibilityFilter get filter;
   @override
   @JsonKey(ignore: true)
-  _$$_RecentsStateCopyWith<_$_RecentsState> get copyWith =>
+  _$$RecentsStateImplCopyWith<_$RecentsStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

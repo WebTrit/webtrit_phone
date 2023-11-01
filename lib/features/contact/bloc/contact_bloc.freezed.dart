@@ -21,8 +21,8 @@ mixin _$ContactAddedToFavorites {
 
 /// @nodoc
 
-class _$_ContactAddedToFavorites implements _ContactAddedToFavorites {
-  const _$_ContactAddedToFavorites(this.contactPhone);
+class _$ContactAddedToFavoritesImpl implements _ContactAddedToFavorites {
+  const _$ContactAddedToFavoritesImpl(this.contactPhone);
 
   @override
   final ContactPhone contactPhone;
@@ -36,7 +36,7 @@ class _$_ContactAddedToFavorites implements _ContactAddedToFavorites {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ContactAddedToFavorites &&
+            other is _$ContactAddedToFavoritesImpl &&
             (identical(other.contactPhone, contactPhone) ||
                 other.contactPhone == contactPhone));
   }
@@ -47,7 +47,7 @@ class _$_ContactAddedToFavorites implements _ContactAddedToFavorites {
 
 abstract class _ContactAddedToFavorites implements ContactAddedToFavorites {
   const factory _ContactAddedToFavorites(final ContactPhone contactPhone) =
-      _$_ContactAddedToFavorites;
+      _$ContactAddedToFavoritesImpl;
 
   @override
   ContactPhone get contactPhone;
@@ -60,8 +60,9 @@ mixin _$ContactRemovedFromFavorites {
 
 /// @nodoc
 
-class _$_ContactRemovedFromFavorites implements _ContactRemovedFromFavorites {
-  const _$_ContactRemovedFromFavorites(this.contactPhone);
+class _$ContactRemovedFromFavoritesImpl
+    implements _ContactRemovedFromFavorites {
+  const _$ContactRemovedFromFavoritesImpl(this.contactPhone);
 
   @override
   final ContactPhone contactPhone;
@@ -75,7 +76,7 @@ class _$_ContactRemovedFromFavorites implements _ContactRemovedFromFavorites {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ContactRemovedFromFavorites &&
+            other is _$ContactRemovedFromFavoritesImpl &&
             (identical(other.contactPhone, contactPhone) ||
                 other.contactPhone == contactPhone));
   }
@@ -87,7 +88,7 @@ class _$_ContactRemovedFromFavorites implements _ContactRemovedFromFavorites {
 abstract class _ContactRemovedFromFavorites
     implements ContactRemovedFromFavorites {
   const factory _ContactRemovedFromFavorites(final ContactPhone contactPhone) =
-      _$_ContactRemovedFromFavorites;
+      _$ContactRemovedFromFavoritesImpl;
 
   @override
   ContactPhone get contactPhone;
@@ -100,8 +101,8 @@ mixin _$ContactEmailSend {
 
 /// @nodoc
 
-class _$_ContactEmailSend implements _ContactEmailSend {
-  const _$_ContactEmailSend(this.contactEmail);
+class _$ContactEmailSendImpl implements _ContactEmailSend {
+  const _$ContactEmailSendImpl(this.contactEmail);
 
   @override
   final ContactEmail contactEmail;
@@ -115,7 +116,7 @@ class _$_ContactEmailSend implements _ContactEmailSend {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ContactEmailSend &&
+            other is _$ContactEmailSendImpl &&
             (identical(other.contactEmail, contactEmail) ||
                 other.contactEmail == contactEmail));
   }
@@ -126,7 +127,7 @@ class _$_ContactEmailSend implements _ContactEmailSend {
 
 abstract class _ContactEmailSend implements ContactEmailSend {
   const factory _ContactEmailSend(final ContactEmail contactEmail) =
-      _$_ContactEmailSend;
+      _$ContactEmailSendImpl;
 
   @override
   ContactEmail get contactEmail;
@@ -190,11 +191,11 @@ class _$ContactStateCopyWithImpl<$Res, $Val extends ContactState>
 }
 
 /// @nodoc
-abstract class _$$_ContactStateCopyWith<$Res>
+abstract class _$$ContactStateImplCopyWith<$Res>
     implements $ContactStateCopyWith<$Res> {
-  factory _$$_ContactStateCopyWith(
-          _$_ContactState value, $Res Function(_$_ContactState) then) =
-      __$$_ContactStateCopyWithImpl<$Res>;
+  factory _$$ContactStateImplCopyWith(
+          _$ContactStateImpl value, $Res Function(_$ContactStateImpl) then) =
+      __$$ContactStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -204,11 +205,11 @@ abstract class _$$_ContactStateCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ContactStateCopyWithImpl<$Res>
-    extends _$ContactStateCopyWithImpl<$Res, _$_ContactState>
-    implements _$$_ContactStateCopyWith<$Res> {
-  __$$_ContactStateCopyWithImpl(
-      _$_ContactState _value, $Res Function(_$_ContactState) _then)
+class __$$ContactStateImplCopyWithImpl<$Res>
+    extends _$ContactStateCopyWithImpl<$Res, _$ContactStateImpl>
+    implements _$$ContactStateImplCopyWith<$Res> {
+  __$$ContactStateImplCopyWithImpl(
+      _$ContactStateImpl _value, $Res Function(_$ContactStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -218,7 +219,7 @@ class __$$_ContactStateCopyWithImpl<$Res>
     Object? contactPhones = freezed,
     Object? contactEmails = freezed,
   }) {
-    return _then(_$_ContactState(
+    return _then(_$ContactStateImpl(
       contact: freezed == contact
           ? _value.contact
           : contact // ignore: cast_nullable_to_non_nullable
@@ -237,8 +238,8 @@ class __$$_ContactStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ContactState implements _ContactState {
-  const _$_ContactState(
+class _$ContactStateImpl implements _ContactState {
+  const _$ContactStateImpl(
       {this.contact,
       final List<ContactPhone>? contactPhones,
       final List<ContactEmail>? contactEmails})
@@ -276,7 +277,7 @@ class _$_ContactState implements _ContactState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ContactState &&
+            other is _$ContactStateImpl &&
             (identical(other.contact, contact) || other.contact == contact) &&
             const DeepCollectionEquality()
                 .equals(other._contactPhones, _contactPhones) &&
@@ -294,15 +295,15 @@ class _$_ContactState implements _ContactState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ContactStateCopyWith<_$_ContactState> get copyWith =>
-      __$$_ContactStateCopyWithImpl<_$_ContactState>(this, _$identity);
+  _$$ContactStateImplCopyWith<_$ContactStateImpl> get copyWith =>
+      __$$ContactStateImplCopyWithImpl<_$ContactStateImpl>(this, _$identity);
 }
 
 abstract class _ContactState implements ContactState {
   const factory _ContactState(
       {final Contact? contact,
       final List<ContactPhone>? contactPhones,
-      final List<ContactEmail>? contactEmails}) = _$_ContactState;
+      final List<ContactEmail>? contactEmails}) = _$ContactStateImpl;
 
   @override
   Contact? get contact;
@@ -312,6 +313,6 @@ abstract class _ContactState implements ContactState {
   List<ContactEmail>? get contactEmails;
   @override
   @JsonKey(ignore: true)
-  _$$_ContactStateCopyWith<_$_ContactState> get copyWith =>
+  _$$ContactStateImplCopyWith<_$ContactStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

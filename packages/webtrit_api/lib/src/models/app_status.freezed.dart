@@ -61,21 +61,22 @@ class _$AppStatusCopyWithImpl<$Res, $Val extends AppStatus>
 }
 
 /// @nodoc
-abstract class _$$_AppStatusCopyWith<$Res> implements $AppStatusCopyWith<$Res> {
-  factory _$$_AppStatusCopyWith(
-          _$_AppStatus value, $Res Function(_$_AppStatus) then) =
-      __$$_AppStatusCopyWithImpl<$Res>;
+abstract class _$$AppStatusImplCopyWith<$Res>
+    implements $AppStatusCopyWith<$Res> {
+  factory _$$AppStatusImplCopyWith(
+          _$AppStatusImpl value, $Res Function(_$AppStatusImpl) then) =
+      __$$AppStatusImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({bool register});
 }
 
 /// @nodoc
-class __$$_AppStatusCopyWithImpl<$Res>
-    extends _$AppStatusCopyWithImpl<$Res, _$_AppStatus>
-    implements _$$_AppStatusCopyWith<$Res> {
-  __$$_AppStatusCopyWithImpl(
-      _$_AppStatus _value, $Res Function(_$_AppStatus) _then)
+class __$$AppStatusImplCopyWithImpl<$Res>
+    extends _$AppStatusCopyWithImpl<$Res, _$AppStatusImpl>
+    implements _$$AppStatusImplCopyWith<$Res> {
+  __$$AppStatusImplCopyWithImpl(
+      _$AppStatusImpl _value, $Res Function(_$AppStatusImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -83,7 +84,7 @@ class __$$_AppStatusCopyWithImpl<$Res>
   $Res call({
     Object? register = null,
   }) {
-    return _then(_$_AppStatus(
+    return _then(_$AppStatusImpl(
       register: null == register
           ? _value.register
           : register // ignore: cast_nullable_to_non_nullable
@@ -95,11 +96,11 @@ class __$$_AppStatusCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class _$_AppStatus implements _AppStatus {
-  const _$_AppStatus({required this.register});
+class _$AppStatusImpl implements _AppStatus {
+  const _$AppStatusImpl({required this.register});
 
-  factory _$_AppStatus.fromJson(Map<String, dynamic> json) =>
-      _$$_AppStatusFromJson(json);
+  factory _$AppStatusImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AppStatusImplFromJson(json);
 
   @override
   final bool register;
@@ -113,7 +114,7 @@ class _$_AppStatus implements _AppStatus {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_AppStatus &&
+            other is _$AppStatusImpl &&
             (identical(other.register, register) ||
                 other.register == register));
   }
@@ -125,27 +126,27 @@ class _$_AppStatus implements _AppStatus {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_AppStatusCopyWith<_$_AppStatus> get copyWith =>
-      __$$_AppStatusCopyWithImpl<_$_AppStatus>(this, _$identity);
+  _$$AppStatusImplCopyWith<_$AppStatusImpl> get copyWith =>
+      __$$AppStatusImplCopyWithImpl<_$AppStatusImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_AppStatusToJson(
+    return _$$AppStatusImplToJson(
       this,
     );
   }
 }
 
 abstract class _AppStatus implements AppStatus {
-  const factory _AppStatus({required final bool register}) = _$_AppStatus;
+  const factory _AppStatus({required final bool register}) = _$AppStatusImpl;
 
   factory _AppStatus.fromJson(Map<String, dynamic> json) =
-      _$_AppStatus.fromJson;
+      _$AppStatusImpl.fromJson;
 
   @override
   bool get register;
   @override
   @JsonKey(ignore: true)
-  _$$_AppStatusCopyWith<_$_AppStatus> get copyWith =>
+  _$$AppStatusImplCopyWith<_$AppStatusImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

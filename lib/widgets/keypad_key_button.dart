@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class KeypadKeyButton extends StatelessWidget {
   const KeypadKeyButton({
-    Key? key,
+    super.key,
     required this.text,
     required this.subtext,
     required this.onKeyPressed,
@@ -10,7 +10,7 @@ class KeypadKeyButton extends StatelessWidget {
     this.textFontSize,
     this.textColor,
     this.subtextFontSize,
-  }) : super(key: key);
+  });
 
   final String text;
   final String subtext;

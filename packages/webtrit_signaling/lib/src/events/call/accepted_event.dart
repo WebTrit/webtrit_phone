@@ -2,13 +2,13 @@ import '../abstract_events.dart';
 
 class AcceptedEvent extends CallEvent {
   const AcceptedEvent({
-    String? transaction,
-    required int line,
-    required String callId,
+    super.transaction,
+    required super.line,
+    required super.callId,
     this.callee,
     this.isFocus,
     this.jsep,
-  }) : super(transaction: transaction, line: line, callId: callId);
+  });
 
   final String? callee;
   final bool? isFocus;

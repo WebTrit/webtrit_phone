@@ -15,11 +15,11 @@ import 'webview_progress_indicator.dart';
 
 class WebViewScaffold extends StatefulWidget {
   const WebViewScaffold({
-    Key? key,
+    super.key,
     this.title,
     required this.initialUri,
     this.addLocaleNameToQueryParameters = true,
-  }) : super(key: key);
+  });
 
   final Widget? title;
   final Uri initialUri;

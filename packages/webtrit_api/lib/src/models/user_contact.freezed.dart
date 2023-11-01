@@ -115,11 +115,11 @@ class _$UserContactCopyWithImpl<$Res, $Val extends UserContact>
 }
 
 /// @nodoc
-abstract class _$$_UserContactCopyWith<$Res>
+abstract class _$$UserContactImplCopyWith<$Res>
     implements $UserContactCopyWith<$Res> {
-  factory _$$_UserContactCopyWith(
-          _$_UserContact value, $Res Function(_$_UserContact) then) =
-      __$$_UserContactCopyWithImpl<$Res>;
+  factory _$$UserContactImplCopyWith(
+          _$UserContactImpl value, $Res Function(_$UserContactImpl) then) =
+      __$$UserContactImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -136,11 +136,11 @@ abstract class _$$_UserContactCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_UserContactCopyWithImpl<$Res>
-    extends _$UserContactCopyWithImpl<$Res, _$_UserContact>
-    implements _$$_UserContactCopyWith<$Res> {
-  __$$_UserContactCopyWithImpl(
-      _$_UserContact _value, $Res Function(_$_UserContact) _then)
+class __$$UserContactImplCopyWithImpl<$Res>
+    extends _$UserContactCopyWithImpl<$Res, _$UserContactImpl>
+    implements _$$UserContactImplCopyWith<$Res> {
+  __$$UserContactImplCopyWithImpl(
+      _$UserContactImpl _value, $Res Function(_$UserContactImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -154,7 +154,7 @@ class __$$_UserContactCopyWithImpl<$Res>
     Object? aliasName = freezed,
     Object? companyName = freezed,
   }) {
-    return _then(_$_UserContact(
+    return _then(_$UserContactImpl(
       sipStatus: freezed == sipStatus
           ? _value.sipStatus
           : sipStatus // ignore: cast_nullable_to_non_nullable
@@ -190,8 +190,8 @@ class __$$_UserContactCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class _$_UserContact implements _UserContact {
-  const _$_UserContact(
+class _$UserContactImpl implements _UserContact {
+  const _$UserContactImpl(
       {this.sipStatus,
       required this.numbers,
       this.email,
@@ -200,8 +200,8 @@ class _$_UserContact implements _UserContact {
       this.aliasName,
       this.companyName});
 
-  factory _$_UserContact.fromJson(Map<String, dynamic> json) =>
-      _$$_UserContactFromJson(json);
+  factory _$UserContactImpl.fromJson(Map<String, dynamic> json) =>
+      _$$UserContactImplFromJson(json);
 
   @override
   final SipStatus? sipStatus;
@@ -227,7 +227,7 @@ class _$_UserContact implements _UserContact {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_UserContact &&
+            other is _$UserContactImpl &&
             (identical(other.sipStatus, sipStatus) ||
                 other.sipStatus == sipStatus) &&
             (identical(other.numbers, numbers) || other.numbers == numbers) &&
@@ -250,12 +250,12 @@ class _$_UserContact implements _UserContact {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_UserContactCopyWith<_$_UserContact> get copyWith =>
-      __$$_UserContactCopyWithImpl<_$_UserContact>(this, _$identity);
+  _$$UserContactImplCopyWith<_$UserContactImpl> get copyWith =>
+      __$$UserContactImplCopyWithImpl<_$UserContactImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_UserContactToJson(
+    return _$$UserContactImplToJson(
       this,
     );
   }
@@ -269,10 +269,10 @@ abstract class _UserContact implements UserContact {
       final String? firstName,
       final String? lastName,
       final String? aliasName,
-      final String? companyName}) = _$_UserContact;
+      final String? companyName}) = _$UserContactImpl;
 
   factory _UserContact.fromJson(Map<String, dynamic> json) =
-      _$_UserContact.fromJson;
+      _$UserContactImpl.fromJson;
 
   @override
   SipStatus? get sipStatus;
@@ -290,6 +290,6 @@ abstract class _UserContact implements UserContact {
   String? get companyName;
   @override
   @JsonKey(ignore: true)
-  _$$_UserContactCopyWith<_$_UserContact> get copyWith =>
+  _$$UserContactImplCopyWith<_$UserContactImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

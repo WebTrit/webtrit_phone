@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class GroupTitleListTile extends StatelessWidget {
   const GroupTitleListTile({
-    Key? key,
+    super.key,
     required this.titleData,
-  }) : super(key: key);
+  });
 
   final String titleData;
 

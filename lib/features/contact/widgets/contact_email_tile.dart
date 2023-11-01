@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class ContactEmailTile extends StatelessWidget {
   const ContactEmailTile({
-    Key? key,
+    super.key,
     required this.address,
     required this.label,
     this.onTap,
     this.onLongPress,
     this.onEmailPressed,
-  }) : super(key: key);
+  });
 
   final String address;
   final String label;

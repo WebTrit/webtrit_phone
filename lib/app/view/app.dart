@@ -23,13 +23,13 @@ import 'main_shell.dart';
 
 class App extends StatefulWidget {
   const App({
-    Key? key,
+    super.key,
     required this.appPreferences,
     required this.secureStorage,
     required this.appDatabase,
     required this.appPermissions,
     required this.appThemes,
-  }) : super(key: key);
+  });
 
   final AppPreferences appPreferences;
   final SecureStorage secureStorage;

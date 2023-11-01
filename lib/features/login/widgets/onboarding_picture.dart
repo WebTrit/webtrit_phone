@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 class OnboardingPicture extends StatelessWidget {
-  const OnboardingPicture({Key? key}) : super(key: key);
+  const OnboardingPicture({super.key});
 
   @override
   Widget build(BuildContext context) {

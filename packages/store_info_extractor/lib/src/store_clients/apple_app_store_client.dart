@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
 import 'package:pub_semver/pub_semver.dart';
 
 import '../exceptions.dart';
@@ -9,8 +8,8 @@ import 'store_client.dart';
 
 class AppleAppStoreClient extends BaseStoreClient {
   AppleAppStoreClient({
-    http.Client? httpClient,
-  }) : super(httpClient: httpClient);
+    super.httpClient,
+  });
 
   @override
   Future<StoreInfo?> getStoreInfo(String appPackageName) async {

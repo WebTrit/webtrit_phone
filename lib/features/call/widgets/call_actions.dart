@@ -9,7 +9,7 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 class CallActions extends StatefulWidget {
   const CallActions({
-    Key? key,
+    super.key,
     required this.isIncoming,
     required this.video,
     required this.wasAccepted,
@@ -26,7 +26,7 @@ class CallActions extends StatefulWidget {
     this.onHangupPressed,
     this.onAcceptPressed,
     this.onKeyPressed,
-  }) : super(key: key);
+  });
 
   final bool isIncoming;
   final bool video;

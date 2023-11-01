@@ -2,11 +2,11 @@ import '../abstract_requests.dart';
 
 class UpdateRequest extends CallRequest {
   const UpdateRequest({
-    required String transaction,
-    required int line,
-    required String callId,
+    required super.transaction,
+    required super.line,
+    required super.callId,
     required this.jsep,
-  }) : super(transaction: transaction, line: line, callId: callId);
+  });
 
   final Map<String, dynamic> jsep;
 

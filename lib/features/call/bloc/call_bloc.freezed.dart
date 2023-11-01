@@ -15,16 +15,16 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$_AppLifecycleStateChanged {
+mixin _$AppLifecycleStateChanged {
   AppLifecycleState get state => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 
-class _$__AppLifecycleStateChanged
+class _$_AppLifecycleStateChangedImpl
     with DiagnosticableTreeMixin
     implements __AppLifecycleStateChanged {
-  const _$__AppLifecycleStateChanged(this.state);
+  const _$_AppLifecycleStateChangedImpl(this.state);
 
   @override
   final AppLifecycleState state;
@@ -46,7 +46,7 @@ class _$__AppLifecycleStateChanged
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$__AppLifecycleStateChanged &&
+            other is _$_AppLifecycleStateChangedImpl &&
             (identical(other.state, state) || other.state == state));
   }
 
@@ -56,23 +56,23 @@ class _$__AppLifecycleStateChanged
 
 abstract class __AppLifecycleStateChanged implements _AppLifecycleStateChanged {
   const factory __AppLifecycleStateChanged(final AppLifecycleState state) =
-      _$__AppLifecycleStateChanged;
+      _$_AppLifecycleStateChangedImpl;
 
   @override
   AppLifecycleState get state;
 }
 
 /// @nodoc
-mixin _$_ConnectivityResultChanged {
+mixin _$ConnectivityResultChanged {
   ConnectivityResult get result => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 
-class _$__ConnectivityResultChanged
+class _$_ConnectivityResultChangedImpl
     with DiagnosticableTreeMixin
     implements __ConnectivityResultChanged {
-  const _$__ConnectivityResultChanged(this.result);
+  const _$_ConnectivityResultChangedImpl(this.result);
 
   @override
   final ConnectivityResult result;
@@ -94,7 +94,7 @@ class _$__ConnectivityResultChanged
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$__ConnectivityResultChanged &&
+            other is _$_ConnectivityResultChangedImpl &&
             (identical(other.result, result) || other.result == result));
   }
 
@@ -105,21 +105,21 @@ class _$__ConnectivityResultChanged
 abstract class __ConnectivityResultChanged
     implements _ConnectivityResultChanged {
   const factory __ConnectivityResultChanged(final ConnectivityResult result) =
-      _$__ConnectivityResultChanged;
+      _$_ConnectivityResultChangedImpl;
 
   @override
   ConnectivityResult get result;
 }
 
 /// @nodoc
-mixin _$_NavigatorMediaDevicesChange {}
+mixin _$NavigatorMediaDevicesChange {}
 
 /// @nodoc
 
-class _$__NavigatorMediaDevicesChange
+class _$_NavigatorMediaDevicesChangeImpl
     with DiagnosticableTreeMixin
     implements __NavigatorMediaDevicesChange {
-  const _$__NavigatorMediaDevicesChange();
+  const _$_NavigatorMediaDevicesChangeImpl();
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -136,7 +136,7 @@ class _$__NavigatorMediaDevicesChange
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$__NavigatorMediaDevicesChange);
+            other is _$_NavigatorMediaDevicesChangeImpl);
   }
 
   @override
@@ -146,11 +146,11 @@ class _$__NavigatorMediaDevicesChange
 abstract class __NavigatorMediaDevicesChange
     implements _NavigatorMediaDevicesChange {
   const factory __NavigatorMediaDevicesChange() =
-      _$__NavigatorMediaDevicesChange;
+      _$_NavigatorMediaDevicesChangeImpl;
 }
 
 /// @nodoc
-mixin _$_SignalingClientEvent {
+mixin _$SignalingClientEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() connectInitiated,
@@ -206,10 +206,10 @@ mixin _$_SignalingClientEvent {
 
 /// @nodoc
 
-class _$_SignalingClientEventConnectInitiated
+class _$SignalingClientEventConnectInitiatedImpl
     with DiagnosticableTreeMixin
     implements _SignalingClientEventConnectInitiated {
-  const _$_SignalingClientEventConnectInitiated();
+  const _$SignalingClientEventConnectInitiatedImpl();
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -227,7 +227,7 @@ class _$_SignalingClientEventConnectInitiated
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SignalingClientEventConnectInitiated);
+            other is _$SignalingClientEventConnectInitiatedImpl);
   }
 
   @override
@@ -312,15 +312,15 @@ class _$_SignalingClientEventConnectInitiated
 abstract class _SignalingClientEventConnectInitiated
     implements _SignalingClientEvent {
   const factory _SignalingClientEventConnectInitiated() =
-      _$_SignalingClientEventConnectInitiated;
+      _$SignalingClientEventConnectInitiatedImpl;
 }
 
 /// @nodoc
 
-class _$_SignalingClientEventDisconnectInitiated
+class _$SignalingClientEventDisconnectInitiatedImpl
     with DiagnosticableTreeMixin
     implements _SignalingClientEventDisconnectInitiated {
-  const _$_SignalingClientEventDisconnectInitiated();
+  const _$SignalingClientEventDisconnectInitiatedImpl();
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -338,7 +338,7 @@ class _$_SignalingClientEventDisconnectInitiated
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SignalingClientEventDisconnectInitiated);
+            other is _$SignalingClientEventDisconnectInitiatedImpl);
   }
 
   @override
@@ -423,15 +423,15 @@ class _$_SignalingClientEventDisconnectInitiated
 abstract class _SignalingClientEventDisconnectInitiated
     implements _SignalingClientEvent {
   const factory _SignalingClientEventDisconnectInitiated() =
-      _$_SignalingClientEventDisconnectInitiated;
+      _$SignalingClientEventDisconnectInitiatedImpl;
 }
 
 /// @nodoc
 
-class _$_SignalingClientEventDisconnected
+class _$SignalingClientEventDisconnectedImpl
     with DiagnosticableTreeMixin
     implements _SignalingClientEventDisconnected {
-  const _$_SignalingClientEventDisconnected(this.code, this.reason);
+  const _$SignalingClientEventDisconnectedImpl(this.code, this.reason);
 
   @override
   final int? code;
@@ -456,7 +456,7 @@ class _$_SignalingClientEventDisconnected
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SignalingClientEventDisconnected &&
+            other is _$SignalingClientEventDisconnectedImpl &&
             (identical(other.code, code) || other.code == code) &&
             (identical(other.reason, reason) || other.reason == reason));
   }
@@ -544,14 +544,14 @@ abstract class _SignalingClientEventDisconnected
     implements _SignalingClientEvent {
   const factory _SignalingClientEventDisconnected(
           final int? code, final String? reason) =
-      _$_SignalingClientEventDisconnected;
+      _$SignalingClientEventDisconnectedImpl;
 
   int? get code;
   String? get reason;
 }
 
 /// @nodoc
-mixin _$_HandshakeSignalingEvent {
+mixin _$HandshakeSignalingEvent {
   int get linesCount => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
@@ -589,10 +589,10 @@ mixin _$_HandshakeSignalingEvent {
 
 /// @nodoc
 
-class _$_HandshakeSignalingEventState
+class _$HandshakeSignalingEventStateImpl
     with DiagnosticableTreeMixin
     implements _HandshakeSignalingEventState {
-  const _$_HandshakeSignalingEventState({required this.linesCount});
+  const _$HandshakeSignalingEventStateImpl({required this.linesCount});
 
   @override
   final int linesCount;
@@ -614,7 +614,7 @@ class _$_HandshakeSignalingEventState
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_HandshakeSignalingEventState &&
+            other is _$HandshakeSignalingEventStateImpl &&
             (identical(other.linesCount, linesCount) ||
                 other.linesCount == linesCount));
   }
@@ -682,14 +682,14 @@ class _$_HandshakeSignalingEventState
 abstract class _HandshakeSignalingEventState
     implements _HandshakeSignalingEvent {
   const factory _HandshakeSignalingEventState({required final int linesCount}) =
-      _$_HandshakeSignalingEventState;
+      _$HandshakeSignalingEventStateImpl;
 
   @override
   int get linesCount;
 }
 
 /// @nodoc
-mixin _$_CallSignalingEvent {
+mixin _$CallSignalingEvent {
   int get line => throw _privateConstructorUsedError;
   CallIdValue get callId => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -840,10 +840,10 @@ mixin _$_CallSignalingEvent {
 
 /// @nodoc
 
-class _$_CallSignalingEventIncoming
+class _$CallSignalingEventIncomingImpl
     with DiagnosticableTreeMixin
     implements _CallSignalingEventIncoming {
-  const _$_CallSignalingEventIncoming(
+  const _$CallSignalingEventIncomingImpl(
       {required this.line,
       required this.callId,
       required this.callee,
@@ -898,7 +898,7 @@ class _$_CallSignalingEventIncoming
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallSignalingEventIncoming &&
+            other is _$CallSignalingEventIncomingImpl &&
             (identical(other.line, line) || other.line == line) &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.callee, callee) || other.callee == callee) &&
@@ -1099,7 +1099,7 @@ abstract class _CallSignalingEventIncoming implements _CallSignalingEvent {
       final String? referredBy,
       final String? replaceCallId,
       final bool? isFocus,
-      final JsepValue? jsep}) = _$_CallSignalingEventIncoming;
+      final JsepValue? jsep}) = _$CallSignalingEventIncomingImpl;
 
   @override
   int get line;
@@ -1116,10 +1116,10 @@ abstract class _CallSignalingEventIncoming implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$_CallSignalingEventRinging
+class _$CallSignalingEventRingingImpl
     with DiagnosticableTreeMixin
     implements _CallSignalingEventRinging {
-  const _$_CallSignalingEventRinging(
+  const _$CallSignalingEventRingingImpl(
       {required this.line, required this.callId});
 
   @override
@@ -1145,7 +1145,7 @@ class _$_CallSignalingEventRinging
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallSignalingEventRinging &&
+            other is _$CallSignalingEventRingingImpl &&
             (identical(other.line, line) || other.line == line) &&
             (identical(other.callId, callId) || other.callId == callId));
   }
@@ -1325,7 +1325,7 @@ class _$_CallSignalingEventRinging
 abstract class _CallSignalingEventRinging implements _CallSignalingEvent {
   const factory _CallSignalingEventRinging(
       {required final int line,
-      required final CallIdValue callId}) = _$_CallSignalingEventRinging;
+      required final CallIdValue callId}) = _$CallSignalingEventRingingImpl;
 
   @override
   int get line;
@@ -1335,10 +1335,10 @@ abstract class _CallSignalingEventRinging implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$_CallSignalingEventProgress
+class _$CallSignalingEventProgressImpl
     with DiagnosticableTreeMixin
     implements _CallSignalingEventProgress {
-  const _$_CallSignalingEventProgress(
+  const _$CallSignalingEventProgressImpl(
       {required this.line,
       required this.callId,
       required this.callee,
@@ -1373,7 +1373,7 @@ class _$_CallSignalingEventProgress
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallSignalingEventProgress &&
+            other is _$CallSignalingEventProgressImpl &&
             (identical(other.line, line) || other.line == line) &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.callee, callee) || other.callee == callee) &&
@@ -1557,7 +1557,7 @@ abstract class _CallSignalingEventProgress implements _CallSignalingEvent {
       {required final int line,
       required final CallIdValue callId,
       required final String callee,
-      final JsepValue? jsep}) = _$_CallSignalingEventProgress;
+      final JsepValue? jsep}) = _$CallSignalingEventProgressImpl;
 
   @override
   int get line;
@@ -1569,10 +1569,10 @@ abstract class _CallSignalingEventProgress implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$_CallSignalingEventAccepted
+class _$CallSignalingEventAcceptedImpl
     with DiagnosticableTreeMixin
     implements _CallSignalingEventAccepted {
-  const _$_CallSignalingEventAccepted(
+  const _$CallSignalingEventAcceptedImpl(
       {required this.line, required this.callId, this.callee, this.jsep});
 
   @override
@@ -1604,7 +1604,7 @@ class _$_CallSignalingEventAccepted
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallSignalingEventAccepted &&
+            other is _$CallSignalingEventAcceptedImpl &&
             (identical(other.line, line) || other.line == line) &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.callee, callee) || other.callee == callee) &&
@@ -1788,7 +1788,7 @@ abstract class _CallSignalingEventAccepted implements _CallSignalingEvent {
       {required final int line,
       required final CallIdValue callId,
       final String? callee,
-      final JsepValue? jsep}) = _$_CallSignalingEventAccepted;
+      final JsepValue? jsep}) = _$CallSignalingEventAcceptedImpl;
 
   @override
   int get line;
@@ -1800,10 +1800,10 @@ abstract class _CallSignalingEventAccepted implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$_CallSignalingEventHangup
+class _$CallSignalingEventHangupImpl
     with DiagnosticableTreeMixin
     implements _CallSignalingEventHangup {
-  const _$_CallSignalingEventHangup(
+  const _$CallSignalingEventHangupImpl(
       {required this.line,
       required this.callId,
       required this.code,
@@ -1838,7 +1838,7 @@ class _$_CallSignalingEventHangup
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallSignalingEventHangup &&
+            other is _$CallSignalingEventHangupImpl &&
             (identical(other.line, line) || other.line == line) &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.code, code) || other.code == code) &&
@@ -2022,7 +2022,7 @@ abstract class _CallSignalingEventHangup implements _CallSignalingEvent {
       {required final int line,
       required final CallIdValue callId,
       required final int code,
-      required final String reason}) = _$_CallSignalingEventHangup;
+      required final String reason}) = _$CallSignalingEventHangupImpl;
 
   @override
   int get line;
@@ -2034,10 +2034,10 @@ abstract class _CallSignalingEventHangup implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$_CallSignalingEventUpdating
+class _$CallSignalingEventUpdatingImpl
     with DiagnosticableTreeMixin
     implements _CallSignalingEventUpdating {
-  const _$_CallSignalingEventUpdating(
+  const _$CallSignalingEventUpdatingImpl(
       {required this.line,
       required this.callId,
       required this.callee,
@@ -2092,7 +2092,7 @@ class _$_CallSignalingEventUpdating
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallSignalingEventUpdating &&
+            other is _$CallSignalingEventUpdatingImpl &&
             (identical(other.line, line) || other.line == line) &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.callee, callee) || other.callee == callee) &&
@@ -2293,7 +2293,7 @@ abstract class _CallSignalingEventUpdating implements _CallSignalingEvent {
       final String? referredBy,
       final String? replaceCallId,
       final bool? isFocus,
-      final JsepValue? jsep}) = _$_CallSignalingEventUpdating;
+      final JsepValue? jsep}) = _$CallSignalingEventUpdatingImpl;
 
   @override
   int get line;
@@ -2310,10 +2310,10 @@ abstract class _CallSignalingEventUpdating implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$_CallSignalingEventUpdated
+class _$CallSignalingEventUpdatedImpl
     with DiagnosticableTreeMixin
     implements _CallSignalingEventUpdated {
-  const _$_CallSignalingEventUpdated(
+  const _$CallSignalingEventUpdatedImpl(
       {required this.line, required this.callId});
 
   @override
@@ -2339,7 +2339,7 @@ class _$_CallSignalingEventUpdated
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallSignalingEventUpdated &&
+            other is _$CallSignalingEventUpdatedImpl &&
             (identical(other.line, line) || other.line == line) &&
             (identical(other.callId, callId) || other.callId == callId));
   }
@@ -2519,7 +2519,7 @@ class _$_CallSignalingEventUpdated
 abstract class _CallSignalingEventUpdated implements _CallSignalingEvent {
   const factory _CallSignalingEventUpdated(
       {required final int line,
-      required final CallIdValue callId}) = _$_CallSignalingEventUpdated;
+      required final CallIdValue callId}) = _$CallSignalingEventUpdatedImpl;
 
   @override
   int get line;
@@ -2528,7 +2528,7 @@ abstract class _CallSignalingEventUpdated implements _CallSignalingEvent {
 }
 
 /// @nodoc
-mixin _$_CallPushEvent {
+mixin _$CallPushEvent {
   CallIdValue get callId => throw _privateConstructorUsedError;
   CallkeepHandle get handle => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
@@ -2576,10 +2576,10 @@ mixin _$_CallPushEvent {
 
 /// @nodoc
 
-class _$_CallPushEventIncoming
+class _$CallPushEventIncomingImpl
     with DiagnosticableTreeMixin
     implements _CallPushEventIncoming {
-  const _$_CallPushEventIncoming(
+  const _$CallPushEventIncomingImpl(
       {required this.callId,
       required this.handle,
       this.displayName,
@@ -2618,7 +2618,7 @@ class _$_CallPushEventIncoming
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallPushEventIncoming &&
+            other is _$CallPushEventIncomingImpl &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.handle, handle) || other.handle == handle) &&
             (identical(other.displayName, displayName) ||
@@ -2700,7 +2700,7 @@ abstract class _CallPushEventIncoming implements _CallPushEvent {
       required final CallkeepHandle handle,
       final String? displayName,
       required final bool video,
-      final CallkeepIncomingCallError? error}) = _$_CallPushEventIncoming;
+      final CallkeepIncomingCallError? error}) = _$CallPushEventIncomingImpl;
 
   @override
   CallIdValue get callId;
@@ -2816,10 +2816,10 @@ mixin _$CallControlEvent {
 
 /// @nodoc
 
-class _$_CallControlEventStarted
+class _$CallControlEventStartedImpl
     with DiagnosticableTreeMixin, CallControlEventStartedMixin
     implements _CallControlEventStarted {
-  const _$_CallControlEventStarted(
+  const _$CallControlEventStartedImpl(
       {this.line,
       this.generic,
       this.number,
@@ -2869,7 +2869,7 @@ class _$_CallControlEventStarted
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallControlEventStarted &&
+            other is _$CallControlEventStartedImpl &&
             (identical(other.line, line) || other.line == line) &&
             (identical(other.generic, generic) || other.generic == generic) &&
             (identical(other.number, number) || other.number == number) &&
@@ -3012,7 +3012,7 @@ abstract class _CallControlEventStarted
       final String? number,
       final String? email,
       final String? displayName,
-      required final bool video}) = _$_CallControlEventStarted;
+      required final bool video}) = _$CallControlEventStartedImpl;
 
   int? get line;
   String? get generic;
@@ -3024,10 +3024,10 @@ abstract class _CallControlEventStarted
 
 /// @nodoc
 
-class _$_CallControlEventAnswered
+class _$CallControlEventAnsweredImpl
     with DiagnosticableTreeMixin
     implements _CallControlEventAnswered {
-  const _$_CallControlEventAnswered(this.uuid);
+  const _$CallControlEventAnsweredImpl(this.uuid);
 
   @override
   final UuidValue uuid;
@@ -3049,7 +3049,7 @@ class _$_CallControlEventAnswered
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallControlEventAnswered &&
+            other is _$CallControlEventAnsweredImpl &&
             (identical(other.uuid, uuid) || other.uuid == uuid));
   }
 
@@ -3179,17 +3179,17 @@ class _$_CallControlEventAnswered
 
 abstract class _CallControlEventAnswered implements CallControlEvent {
   const factory _CallControlEventAnswered(final UuidValue uuid) =
-      _$_CallControlEventAnswered;
+      _$CallControlEventAnsweredImpl;
 
   UuidValue get uuid;
 }
 
 /// @nodoc
 
-class _$_CallControlEventEnded
+class _$CallControlEventEndedImpl
     with DiagnosticableTreeMixin
     implements _CallControlEventEnded {
-  const _$_CallControlEventEnded(this.uuid);
+  const _$CallControlEventEndedImpl(this.uuid);
 
   @override
   final UuidValue uuid;
@@ -3211,7 +3211,7 @@ class _$_CallControlEventEnded
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallControlEventEnded &&
+            other is _$CallControlEventEndedImpl &&
             (identical(other.uuid, uuid) || other.uuid == uuid));
   }
 
@@ -3341,17 +3341,17 @@ class _$_CallControlEventEnded
 
 abstract class _CallControlEventEnded implements CallControlEvent {
   const factory _CallControlEventEnded(final UuidValue uuid) =
-      _$_CallControlEventEnded;
+      _$CallControlEventEndedImpl;
 
   UuidValue get uuid;
 }
 
 /// @nodoc
 
-class _$_CallControlEventSetHeld
+class _$CallControlEventSetHeldImpl
     with DiagnosticableTreeMixin
     implements _CallControlEventSetHeld {
-  const _$_CallControlEventSetHeld(this.uuid, this.onHold);
+  const _$CallControlEventSetHeldImpl(this.uuid, this.onHold);
 
   @override
   final UuidValue uuid;
@@ -3376,7 +3376,7 @@ class _$_CallControlEventSetHeld
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallControlEventSetHeld &&
+            other is _$CallControlEventSetHeldImpl &&
             (identical(other.uuid, uuid) || other.uuid == uuid) &&
             (identical(other.onHold, onHold) || other.onHold == onHold));
   }
@@ -3507,7 +3507,7 @@ class _$_CallControlEventSetHeld
 
 abstract class _CallControlEventSetHeld implements CallControlEvent {
   const factory _CallControlEventSetHeld(
-      final UuidValue uuid, final bool onHold) = _$_CallControlEventSetHeld;
+      final UuidValue uuid, final bool onHold) = _$CallControlEventSetHeldImpl;
 
   UuidValue get uuid;
   bool get onHold;
@@ -3515,10 +3515,10 @@ abstract class _CallControlEventSetHeld implements CallControlEvent {
 
 /// @nodoc
 
-class _$_CallControlEventSetMuted
+class _$CallControlEventSetMutedImpl
     with DiagnosticableTreeMixin
     implements _CallControlEventSetMuted {
-  const _$_CallControlEventSetMuted(this.uuid, this.muted);
+  const _$CallControlEventSetMutedImpl(this.uuid, this.muted);
 
   @override
   final UuidValue uuid;
@@ -3543,7 +3543,7 @@ class _$_CallControlEventSetMuted
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallControlEventSetMuted &&
+            other is _$CallControlEventSetMutedImpl &&
             (identical(other.uuid, uuid) || other.uuid == uuid) &&
             (identical(other.muted, muted) || other.muted == muted));
   }
@@ -3674,7 +3674,7 @@ class _$_CallControlEventSetMuted
 
 abstract class _CallControlEventSetMuted implements CallControlEvent {
   const factory _CallControlEventSetMuted(
-      final UuidValue uuid, final bool muted) = _$_CallControlEventSetMuted;
+      final UuidValue uuid, final bool muted) = _$CallControlEventSetMutedImpl;
 
   UuidValue get uuid;
   bool get muted;
@@ -3682,10 +3682,10 @@ abstract class _CallControlEventSetMuted implements CallControlEvent {
 
 /// @nodoc
 
-class _$_CallControlEventSentDTMF
+class _$CallControlEventSentDTMFImpl
     with DiagnosticableTreeMixin
     implements _CallControlEventSentDTMF {
-  const _$_CallControlEventSentDTMF(this.uuid, this.key);
+  const _$CallControlEventSentDTMFImpl(this.uuid, this.key);
 
   @override
   final UuidValue uuid;
@@ -3710,7 +3710,7 @@ class _$_CallControlEventSentDTMF
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallControlEventSentDTMF &&
+            other is _$CallControlEventSentDTMFImpl &&
             (identical(other.uuid, uuid) || other.uuid == uuid) &&
             (identical(other.key, key) || other.key == key));
   }
@@ -3841,7 +3841,7 @@ class _$_CallControlEventSentDTMF
 
 abstract class _CallControlEventSentDTMF implements CallControlEvent {
   const factory _CallControlEventSentDTMF(
-      final UuidValue uuid, final String key) = _$_CallControlEventSentDTMF;
+      final UuidValue uuid, final String key) = _$CallControlEventSentDTMFImpl;
 
   UuidValue get uuid;
   String get key;
@@ -3849,10 +3849,10 @@ abstract class _CallControlEventSentDTMF implements CallControlEvent {
 
 /// @nodoc
 
-class _$_CallControlEventCameraSwitched
+class _$CallControlEventCameraSwitchedImpl
     with DiagnosticableTreeMixin
     implements _CallControlEventCameraSwitched {
-  const _$_CallControlEventCameraSwitched(this.uuid);
+  const _$CallControlEventCameraSwitchedImpl(this.uuid);
 
   @override
   final UuidValue uuid;
@@ -3874,7 +3874,7 @@ class _$_CallControlEventCameraSwitched
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallControlEventCameraSwitched &&
+            other is _$CallControlEventCameraSwitchedImpl &&
             (identical(other.uuid, uuid) || other.uuid == uuid));
   }
 
@@ -4004,17 +4004,17 @@ class _$_CallControlEventCameraSwitched
 
 abstract class _CallControlEventCameraSwitched implements CallControlEvent {
   const factory _CallControlEventCameraSwitched(final UuidValue uuid) =
-      _$_CallControlEventCameraSwitched;
+      _$CallControlEventCameraSwitchedImpl;
 
   UuidValue get uuid;
 }
 
 /// @nodoc
 
-class _$_CallControlEventCameraEnabled
+class _$CallControlEventCameraEnabledImpl
     with DiagnosticableTreeMixin
     implements _CallControlEventCameraEnabled {
-  const _$_CallControlEventCameraEnabled(this.uuid, this.enabled);
+  const _$CallControlEventCameraEnabledImpl(this.uuid, this.enabled);
 
   @override
   final UuidValue uuid;
@@ -4039,7 +4039,7 @@ class _$_CallControlEventCameraEnabled
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallControlEventCameraEnabled &&
+            other is _$CallControlEventCameraEnabledImpl &&
             (identical(other.uuid, uuid) || other.uuid == uuid) &&
             (identical(other.enabled, enabled) || other.enabled == enabled));
   }
@@ -4171,7 +4171,7 @@ class _$_CallControlEventCameraEnabled
 abstract class _CallControlEventCameraEnabled implements CallControlEvent {
   const factory _CallControlEventCameraEnabled(
           final UuidValue uuid, final bool enabled) =
-      _$_CallControlEventCameraEnabled;
+      _$CallControlEventCameraEnabledImpl;
 
   UuidValue get uuid;
   bool get enabled;
@@ -4179,10 +4179,10 @@ abstract class _CallControlEventCameraEnabled implements CallControlEvent {
 
 /// @nodoc
 
-class _$_CallControlEventSpeakerEnabled
+class _$CallControlEventSpeakerEnabledImpl
     with DiagnosticableTreeMixin
     implements _CallControlEventSpeakerEnabled {
-  const _$_CallControlEventSpeakerEnabled(this.uuid, this.enabled);
+  const _$CallControlEventSpeakerEnabledImpl(this.uuid, this.enabled);
 
   @override
   final UuidValue uuid;
@@ -4207,7 +4207,7 @@ class _$_CallControlEventSpeakerEnabled
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallControlEventSpeakerEnabled &&
+            other is _$CallControlEventSpeakerEnabledImpl &&
             (identical(other.uuid, uuid) || other.uuid == uuid) &&
             (identical(other.enabled, enabled) || other.enabled == enabled));
   }
@@ -4339,7 +4339,7 @@ class _$_CallControlEventSpeakerEnabled
 abstract class _CallControlEventSpeakerEnabled implements CallControlEvent {
   const factory _CallControlEventSpeakerEnabled(
           final UuidValue uuid, final bool enabled) =
-      _$_CallControlEventSpeakerEnabled;
+      _$CallControlEventSpeakerEnabledImpl;
 
   UuidValue get uuid;
   bool get enabled;
@@ -4347,10 +4347,10 @@ abstract class _CallControlEventSpeakerEnabled implements CallControlEvent {
 
 /// @nodoc
 
-class _$_CallControlEventFailureApproved
+class _$CallControlEventFailureApprovedImpl
     with DiagnosticableTreeMixin
     implements _CallControlEventFailureApproved {
-  const _$_CallControlEventFailureApproved(this.uuid);
+  const _$CallControlEventFailureApprovedImpl(this.uuid);
 
   @override
   final UuidValue uuid;
@@ -4372,7 +4372,7 @@ class _$_CallControlEventFailureApproved
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallControlEventFailureApproved &&
+            other is _$CallControlEventFailureApprovedImpl &&
             (identical(other.uuid, uuid) || other.uuid == uuid));
   }
 
@@ -4502,13 +4502,13 @@ class _$_CallControlEventFailureApproved
 
 abstract class _CallControlEventFailureApproved implements CallControlEvent {
   const factory _CallControlEventFailureApproved(final UuidValue uuid) =
-      _$_CallControlEventFailureApproved;
+      _$CallControlEventFailureApprovedImpl;
 
   UuidValue get uuid;
 }
 
 /// @nodoc
-mixin _$_CallPerformEvent {
+mixin _$CallPerformEvent {
   UuidValue get uuid => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
@@ -4582,9 +4582,9 @@ mixin _$_CallPerformEvent {
 
 /// @nodoc
 
-class _$_CallPerformEventStarted extends _CallPerformEventStarted
+class _$CallPerformEventStartedImpl extends _CallPerformEventStarted
     with DiagnosticableTreeMixin {
-  _$_CallPerformEventStarted(this.uuid,
+  _$CallPerformEventStartedImpl(this.uuid,
       {required this.handle, this.displayName, required this.video})
       : super._();
 
@@ -4617,7 +4617,7 @@ class _$_CallPerformEventStarted extends _CallPerformEventStarted
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallPerformEventStarted &&
+            other is _$CallPerformEventStartedImpl &&
             (identical(other.uuid, uuid) || other.uuid == uuid) &&
             (identical(other.handle, handle) || other.handle == handle) &&
             (identical(other.displayName, displayName) ||
@@ -4726,7 +4726,7 @@ abstract class _CallPerformEventStarted extends _CallPerformEvent {
   factory _CallPerformEventStarted(final UuidValue uuid,
       {required final CallkeepHandle handle,
       final String? displayName,
-      required final bool video}) = _$_CallPerformEventStarted;
+      required final bool video}) = _$CallPerformEventStartedImpl;
   _CallPerformEventStarted._() : super._();
 
   @override
@@ -4738,9 +4738,9 @@ abstract class _CallPerformEventStarted extends _CallPerformEvent {
 
 /// @nodoc
 
-class _$_CallPerformEventAnswered extends _CallPerformEventAnswered
+class _$CallPerformEventAnsweredImpl extends _CallPerformEventAnswered
     with DiagnosticableTreeMixin {
-  _$_CallPerformEventAnswered(this.uuid) : super._();
+  _$CallPerformEventAnsweredImpl(this.uuid) : super._();
 
   @override
   final UuidValue uuid;
@@ -4762,7 +4762,7 @@ class _$_CallPerformEventAnswered extends _CallPerformEventAnswered
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallPerformEventAnswered &&
+            other is _$CallPerformEventAnsweredImpl &&
             (identical(other.uuid, uuid) || other.uuid == uuid));
   }
 
@@ -4864,7 +4864,7 @@ class _$_CallPerformEventAnswered extends _CallPerformEventAnswered
 
 abstract class _CallPerformEventAnswered extends _CallPerformEvent {
   factory _CallPerformEventAnswered(final UuidValue uuid) =
-      _$_CallPerformEventAnswered;
+      _$CallPerformEventAnsweredImpl;
   _CallPerformEventAnswered._() : super._();
 
   @override
@@ -4873,9 +4873,9 @@ abstract class _CallPerformEventAnswered extends _CallPerformEvent {
 
 /// @nodoc
 
-class _$_CallPerformEventEnded extends _CallPerformEventEnded
+class _$CallPerformEventEndedImpl extends _CallPerformEventEnded
     with DiagnosticableTreeMixin {
-  _$_CallPerformEventEnded(this.uuid) : super._();
+  _$CallPerformEventEndedImpl(this.uuid) : super._();
 
   @override
   final UuidValue uuid;
@@ -4897,7 +4897,7 @@ class _$_CallPerformEventEnded extends _CallPerformEventEnded
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallPerformEventEnded &&
+            other is _$CallPerformEventEndedImpl &&
             (identical(other.uuid, uuid) || other.uuid == uuid));
   }
 
@@ -4999,7 +4999,7 @@ class _$_CallPerformEventEnded extends _CallPerformEventEnded
 
 abstract class _CallPerformEventEnded extends _CallPerformEvent {
   factory _CallPerformEventEnded(final UuidValue uuid) =
-      _$_CallPerformEventEnded;
+      _$CallPerformEventEndedImpl;
   _CallPerformEventEnded._() : super._();
 
   @override
@@ -5008,9 +5008,9 @@ abstract class _CallPerformEventEnded extends _CallPerformEvent {
 
 /// @nodoc
 
-class _$_CallPerformEventSetHeld extends _CallPerformEventSetHeld
+class _$CallPerformEventSetHeldImpl extends _CallPerformEventSetHeld
     with DiagnosticableTreeMixin {
-  _$_CallPerformEventSetHeld(this.uuid, this.onHold) : super._();
+  _$CallPerformEventSetHeldImpl(this.uuid, this.onHold) : super._();
 
   @override
   final UuidValue uuid;
@@ -5035,7 +5035,7 @@ class _$_CallPerformEventSetHeld extends _CallPerformEventSetHeld
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallPerformEventSetHeld &&
+            other is _$CallPerformEventSetHeldImpl &&
             (identical(other.uuid, uuid) || other.uuid == uuid) &&
             (identical(other.onHold, onHold) || other.onHold == onHold));
   }
@@ -5138,7 +5138,7 @@ class _$_CallPerformEventSetHeld extends _CallPerformEventSetHeld
 
 abstract class _CallPerformEventSetHeld extends _CallPerformEvent {
   factory _CallPerformEventSetHeld(final UuidValue uuid, final bool onHold) =
-      _$_CallPerformEventSetHeld;
+      _$CallPerformEventSetHeldImpl;
   _CallPerformEventSetHeld._() : super._();
 
   @override
@@ -5148,9 +5148,9 @@ abstract class _CallPerformEventSetHeld extends _CallPerformEvent {
 
 /// @nodoc
 
-class _$_CallPerformEventSetMuted extends _CallPerformEventSetMuted
+class _$CallPerformEventSetMutedImpl extends _CallPerformEventSetMuted
     with DiagnosticableTreeMixin {
-  _$_CallPerformEventSetMuted(this.uuid, this.muted) : super._();
+  _$CallPerformEventSetMutedImpl(this.uuid, this.muted) : super._();
 
   @override
   final UuidValue uuid;
@@ -5175,7 +5175,7 @@ class _$_CallPerformEventSetMuted extends _CallPerformEventSetMuted
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallPerformEventSetMuted &&
+            other is _$CallPerformEventSetMutedImpl &&
             (identical(other.uuid, uuid) || other.uuid == uuid) &&
             (identical(other.muted, muted) || other.muted == muted));
   }
@@ -5278,7 +5278,7 @@ class _$_CallPerformEventSetMuted extends _CallPerformEventSetMuted
 
 abstract class _CallPerformEventSetMuted extends _CallPerformEvent {
   factory _CallPerformEventSetMuted(final UuidValue uuid, final bool muted) =
-      _$_CallPerformEventSetMuted;
+      _$CallPerformEventSetMutedImpl;
   _CallPerformEventSetMuted._() : super._();
 
   @override
@@ -5288,9 +5288,9 @@ abstract class _CallPerformEventSetMuted extends _CallPerformEvent {
 
 /// @nodoc
 
-class _$_CallPerformEventSentDTMF extends _CallPerformEventSentDTMF
+class _$CallPerformEventSentDTMFImpl extends _CallPerformEventSentDTMF
     with DiagnosticableTreeMixin {
-  _$_CallPerformEventSentDTMF(this.uuid, this.key) : super._();
+  _$CallPerformEventSentDTMFImpl(this.uuid, this.key) : super._();
 
   @override
   final UuidValue uuid;
@@ -5315,7 +5315,7 @@ class _$_CallPerformEventSentDTMF extends _CallPerformEventSentDTMF
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallPerformEventSentDTMF &&
+            other is _$CallPerformEventSentDTMFImpl &&
             (identical(other.uuid, uuid) || other.uuid == uuid) &&
             (identical(other.key, key) || other.key == key));
   }
@@ -5418,7 +5418,7 @@ class _$_CallPerformEventSentDTMF extends _CallPerformEventSentDTMF
 
 abstract class _CallPerformEventSentDTMF extends _CallPerformEvent {
   factory _CallPerformEventSentDTMF(final UuidValue uuid, final String key) =
-      _$_CallPerformEventSentDTMF;
+      _$CallPerformEventSentDTMFImpl;
   _CallPerformEventSentDTMF._() : super._();
 
   @override
@@ -5427,7 +5427,7 @@ abstract class _CallPerformEventSentDTMF extends _CallPerformEvent {
 }
 
 /// @nodoc
-mixin _$_PeerConnectionEvent {
+mixin _$PeerConnectionEvent {
   UuidValue get uuid => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
@@ -5498,10 +5498,11 @@ mixin _$_PeerConnectionEvent {
 
 /// @nodoc
 
-class _$_PeerConnectionEventIceGatheringStateChanged
+class _$PeerConnectionEventIceGatheringStateChangedImpl
     with DiagnosticableTreeMixin
     implements _PeerConnectionEventIceGatheringStateChanged {
-  const _$_PeerConnectionEventIceGatheringStateChanged(this.uuid, this.state);
+  const _$PeerConnectionEventIceGatheringStateChangedImpl(
+      this.uuid, this.state);
 
   @override
   final UuidValue uuid;
@@ -5527,7 +5528,7 @@ class _$_PeerConnectionEventIceGatheringStateChanged
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_PeerConnectionEventIceGatheringStateChanged &&
+            other is _$PeerConnectionEventIceGatheringStateChangedImpl &&
             (identical(other.uuid, uuid) || other.uuid == uuid) &&
             (identical(other.state, state) || other.state == state));
   }
@@ -5629,7 +5630,7 @@ abstract class _PeerConnectionEventIceGatheringStateChanged
     implements _PeerConnectionEvent {
   const factory _PeerConnectionEventIceGatheringStateChanged(
           final UuidValue uuid, final RTCIceGatheringState state) =
-      _$_PeerConnectionEventIceGatheringStateChanged;
+      _$PeerConnectionEventIceGatheringStateChangedImpl;
 
   @override
   UuidValue get uuid;
@@ -5638,10 +5639,11 @@ abstract class _PeerConnectionEventIceGatheringStateChanged
 
 /// @nodoc
 
-class _$_PeerConnectionEventIceCandidateIdentified
+class _$PeerConnectionEventIceCandidateIdentifiedImpl
     with DiagnosticableTreeMixin
     implements _PeerConnectionEventIceCandidateIdentified {
-  const _$_PeerConnectionEventIceCandidateIdentified(this.uuid, this.candidate);
+  const _$PeerConnectionEventIceCandidateIdentifiedImpl(
+      this.uuid, this.candidate);
 
   @override
   final UuidValue uuid;
@@ -5667,7 +5669,7 @@ class _$_PeerConnectionEventIceCandidateIdentified
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_PeerConnectionEventIceCandidateIdentified &&
+            other is _$PeerConnectionEventIceCandidateIdentifiedImpl &&
             (identical(other.uuid, uuid) || other.uuid == uuid) &&
             (identical(other.candidate, candidate) ||
                 other.candidate == candidate));
@@ -5770,7 +5772,7 @@ abstract class _PeerConnectionEventIceCandidateIdentified
     implements _PeerConnectionEvent {
   const factory _PeerConnectionEventIceCandidateIdentified(
           final UuidValue uuid, final RTCIceCandidate candidate) =
-      _$_PeerConnectionEventIceCandidateIdentified;
+      _$PeerConnectionEventIceCandidateIdentifiedImpl;
 
   @override
   UuidValue get uuid;
@@ -5779,10 +5781,10 @@ abstract class _PeerConnectionEventIceCandidateIdentified
 
 /// @nodoc
 
-class _$_PeerConnectionEventStreamAdded
+class _$PeerConnectionEventStreamAddedImpl
     with DiagnosticableTreeMixin
     implements _PeerConnectionEventStreamAdded {
-  const _$_PeerConnectionEventStreamAdded(this.uuid, this.stream);
+  const _$PeerConnectionEventStreamAddedImpl(this.uuid, this.stream);
 
   @override
   final UuidValue uuid;
@@ -5807,7 +5809,7 @@ class _$_PeerConnectionEventStreamAdded
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_PeerConnectionEventStreamAdded &&
+            other is _$PeerConnectionEventStreamAddedImpl &&
             (identical(other.uuid, uuid) || other.uuid == uuid) &&
             (identical(other.stream, stream) || other.stream == stream));
   }
@@ -5908,7 +5910,7 @@ class _$_PeerConnectionEventStreamAdded
 abstract class _PeerConnectionEventStreamAdded implements _PeerConnectionEvent {
   const factory _PeerConnectionEventStreamAdded(
           final UuidValue uuid, final MediaStream stream) =
-      _$_PeerConnectionEventStreamAdded;
+      _$PeerConnectionEventStreamAddedImpl;
 
   @override
   UuidValue get uuid;
@@ -5917,10 +5919,10 @@ abstract class _PeerConnectionEventStreamAdded implements _PeerConnectionEvent {
 
 /// @nodoc
 
-class _$_PeerConnectionEventStreamRemoved
+class _$PeerConnectionEventStreamRemovedImpl
     with DiagnosticableTreeMixin
     implements _PeerConnectionEventStreamRemoved {
-  const _$_PeerConnectionEventStreamRemoved(this.uuid, this.stream);
+  const _$PeerConnectionEventStreamRemovedImpl(this.uuid, this.stream);
 
   @override
   final UuidValue uuid;
@@ -5945,7 +5947,7 @@ class _$_PeerConnectionEventStreamRemoved
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_PeerConnectionEventStreamRemoved &&
+            other is _$PeerConnectionEventStreamRemovedImpl &&
             (identical(other.uuid, uuid) || other.uuid == uuid) &&
             (identical(other.stream, stream) || other.stream == stream));
   }
@@ -6047,7 +6049,7 @@ abstract class _PeerConnectionEventStreamRemoved
     implements _PeerConnectionEvent {
   const factory _PeerConnectionEventStreamRemoved(
           final UuidValue uuid, final MediaStream stream) =
-      _$_PeerConnectionEventStreamRemoved;
+      _$PeerConnectionEventStreamRemovedImpl;
 
   @override
   UuidValue get uuid;
@@ -6098,10 +6100,10 @@ mixin _$CallScreenEvent {
 
 /// @nodoc
 
-class _$_CallScreenEventDidPush
+class _$CallScreenEventDidPushImpl
     with DiagnosticableTreeMixin
     implements _CallScreenEventDidPush {
-  _$_CallScreenEventDidPush();
+  _$CallScreenEventDidPushImpl();
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -6118,7 +6120,7 @@ class _$_CallScreenEventDidPush
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallScreenEventDidPush);
+            other is _$CallScreenEventDidPushImpl);
   }
 
   @override
@@ -6188,15 +6190,15 @@ class _$_CallScreenEventDidPush
 }
 
 abstract class _CallScreenEventDidPush implements CallScreenEvent {
-  factory _CallScreenEventDidPush() = _$_CallScreenEventDidPush;
+  factory _CallScreenEventDidPush() = _$CallScreenEventDidPushImpl;
 }
 
 /// @nodoc
 
-class _$_CallScreenEventDidPop
+class _$CallScreenEventDidPopImpl
     with DiagnosticableTreeMixin
     implements _CallScreenEventDidPop {
-  _$_CallScreenEventDidPop();
+  _$CallScreenEventDidPopImpl();
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -6212,7 +6214,8 @@ class _$_CallScreenEventDidPop
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_CallScreenEventDidPop);
+        (other.runtimeType == runtimeType &&
+            other is _$CallScreenEventDidPopImpl);
   }
 
   @override
@@ -6282,7 +6285,7 @@ class _$_CallScreenEventDidPop
 }
 
 abstract class _CallScreenEventDidPop implements CallScreenEvent {
-  factory _CallScreenEventDidPop() = _$_CallScreenEventDidPop;
+  factory _CallScreenEventDidPop() = _$CallScreenEventDidPopImpl;
 }
 
 /// @nodoc
@@ -6388,10 +6391,11 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
 }
 
 /// @nodoc
-abstract class _$$_CallStateCopyWith<$Res> implements $CallStateCopyWith<$Res> {
-  factory _$$_CallStateCopyWith(
-          _$_CallState value, $Res Function(_$_CallState) then) =
-      __$$_CallStateCopyWithImpl<$Res>;
+abstract class _$$CallStateImplCopyWith<$Res>
+    implements $CallStateCopyWith<$Res> {
+  factory _$$CallStateImplCopyWith(
+          _$CallStateImpl value, $Res Function(_$CallStateImpl) then) =
+      __$$CallStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -6407,11 +6411,11 @@ abstract class _$$_CallStateCopyWith<$Res> implements $CallStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_CallStateCopyWithImpl<$Res>
-    extends _$CallStateCopyWithImpl<$Res, _$_CallState>
-    implements _$$_CallStateCopyWith<$Res> {
-  __$$_CallStateCopyWithImpl(
-      _$_CallState _value, $Res Function(_$_CallState) _then)
+class __$$CallStateImplCopyWithImpl<$Res>
+    extends _$CallStateCopyWithImpl<$Res, _$CallStateImpl>
+    implements _$$CallStateImplCopyWith<$Res> {
+  __$$CallStateImplCopyWithImpl(
+      _$CallStateImpl _value, $Res Function(_$CallStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -6427,7 +6431,7 @@ class __$$_CallStateCopyWithImpl<$Res>
     Object? minimized = freezed,
     Object? speaker = freezed,
   }) {
-    return _then(_$_CallState(
+    return _then(_$CallStateImpl(
       currentConnectivityResult: freezed == currentConnectivityResult
           ? _value.currentConnectivityResult
           : currentConnectivityResult // ignore: cast_nullable_to_non_nullable
@@ -6470,8 +6474,8 @@ class __$$_CallStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_CallState extends _CallState with DiagnosticableTreeMixin {
-  const _$_CallState(
+class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
+  const _$CallStateImpl(
       {this.currentConnectivityResult,
       this.signalingClientStatus = SignalingClientStatus.disconnect,
       this.lastSignalingClientConnectError,
@@ -6541,7 +6545,7 @@ class _$_CallState extends _CallState with DiagnosticableTreeMixin {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CallState &&
+            other is _$CallStateImpl &&
             (identical(other.currentConnectivityResult,
                     currentConnectivityResult) ||
                 other.currentConnectivityResult == currentConnectivityResult) &&
@@ -6582,8 +6586,8 @@ class _$_CallState extends _CallState with DiagnosticableTreeMixin {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_CallStateCopyWith<_$_CallState> get copyWith =>
-      __$$_CallStateCopyWithImpl<_$_CallState>(this, _$identity);
+  _$$CallStateImplCopyWith<_$CallStateImpl> get copyWith =>
+      __$$CallStateImplCopyWithImpl<_$CallStateImpl>(this, _$identity);
 }
 
 abstract class _CallState extends CallState {
@@ -6596,7 +6600,7 @@ abstract class _CallState extends CallState {
       final int linesCount,
       final List<ActiveCall> activeCalls,
       final bool? minimized,
-      final bool? speaker}) = _$_CallState;
+      final bool? speaker}) = _$CallStateImpl;
   const _CallState._() : super._();
 
   @override
@@ -6619,7 +6623,7 @@ abstract class _CallState extends CallState {
   bool? get speaker;
   @override
   @JsonKey(ignore: true)
-  _$$_CallStateCopyWith<_$_CallState> get copyWith =>
+  _$$CallStateImplCopyWith<_$CallStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -6762,11 +6766,11 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
 }
 
 /// @nodoc
-abstract class _$$_ActiveCallCopyWith<$Res>
+abstract class _$$ActiveCallImplCopyWith<$Res>
     implements $ActiveCallCopyWith<$Res> {
-  factory _$$_ActiveCallCopyWith(
-          _$_ActiveCall value, $Res Function(_$_ActiveCall) then) =
-      __$$_ActiveCallCopyWithImpl<$Res>;
+  factory _$$ActiveCallImplCopyWith(
+          _$ActiveCallImpl value, $Res Function(_$ActiveCallImpl) then) =
+      __$$ActiveCallImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -6788,11 +6792,11 @@ abstract class _$$_ActiveCallCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ActiveCallCopyWithImpl<$Res>
-    extends _$ActiveCallCopyWithImpl<$Res, _$_ActiveCall>
-    implements _$$_ActiveCallCopyWith<$Res> {
-  __$$_ActiveCallCopyWithImpl(
-      _$_ActiveCall _value, $Res Function(_$_ActiveCall) _then)
+class __$$ActiveCallImplCopyWithImpl<$Res>
+    extends _$ActiveCallCopyWithImpl<$Res, _$ActiveCallImpl>
+    implements _$$ActiveCallImplCopyWith<$Res> {
+  __$$ActiveCallImplCopyWithImpl(
+      _$ActiveCallImpl _value, $Res Function(_$ActiveCallImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -6814,7 +6818,7 @@ class __$$_ActiveCallCopyWithImpl<$Res>
     Object? failure = freezed,
     Object? renderers = null,
   }) {
-    return _then(_$_ActiveCall(
+    return _then(_$ActiveCallImpl(
       direction: null == direction
           ? _value.direction
           : direction // ignore: cast_nullable_to_non_nullable
@@ -6878,8 +6882,8 @@ class __$$_ActiveCallCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ActiveCall extends _ActiveCall with DiagnosticableTreeMixin {
-  _$_ActiveCall(
+class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
+  _$ActiveCallImpl(
       {required this.direction,
       required this.line,
       required this.callId,
@@ -6963,7 +6967,7 @@ class _$_ActiveCall extends _ActiveCall with DiagnosticableTreeMixin {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ActiveCall &&
+            other is _$ActiveCallImpl &&
             (identical(other.direction, direction) ||
                 other.direction == direction) &&
             (identical(other.line, line) || other.line == line) &&
@@ -7011,8 +7015,8 @@ class _$_ActiveCall extends _ActiveCall with DiagnosticableTreeMixin {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ActiveCallCopyWith<_$_ActiveCall> get copyWith =>
-      __$$_ActiveCallCopyWithImpl<_$_ActiveCall>(this, _$identity);
+  _$$ActiveCallImplCopyWith<_$ActiveCallImpl> get copyWith =>
+      __$$ActiveCallImplCopyWithImpl<_$ActiveCallImpl>(this, _$identity);
 }
 
 abstract class _ActiveCall extends ActiveCall {
@@ -7031,7 +7035,7 @@ abstract class _ActiveCall extends ActiveCall {
       final DateTime? acceptedTime,
       final DateTime? hungUpTime,
       final Object? failure,
-      required final RTCVideoRenderers renderers}) = _$_ActiveCall;
+      required final RTCVideoRenderers renderers}) = _$ActiveCallImpl;
   _ActiveCall._() : super._();
 
   @override
@@ -7066,6 +7070,6 @@ abstract class _ActiveCall extends ActiveCall {
   RTCVideoRenderers get renderers;
   @override
   @JsonKey(ignore: true)
-  _$$_ActiveCallCopyWith<_$_ActiveCall> get copyWith =>
+  _$$ActiveCallImplCopyWith<_$ActiveCallImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -7,13 +7,13 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 class FavoriteTile extends StatelessWidget {
   const FavoriteTile({
-    Key? key,
+    super.key,
     required this.favorite,
     this.onTap,
     this.onLongPress,
     this.onInfoPressed,
     this.onDeleted,
-  }) : super(key: key);
+  });
 
   final Favorite favorite;
   final GestureTapCallback? onTap;

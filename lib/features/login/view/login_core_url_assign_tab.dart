@@ -14,8 +14,8 @@ import '../login.dart';
 
 class LoginCoreUrlAssignTab extends StatelessWidget {
   const LoginCoreUrlAssignTab({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

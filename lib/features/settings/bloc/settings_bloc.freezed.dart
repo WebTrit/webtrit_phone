@@ -19,8 +19,8 @@ mixin _$SettingsRefreshed {}
 
 /// @nodoc
 
-class _$_SettingsRefreshed implements _SettingsRefreshed {
-  const _$_SettingsRefreshed();
+class _$SettingsRefreshedImpl implements _SettingsRefreshed {
+  const _$SettingsRefreshedImpl();
 
   @override
   String toString() {
@@ -30,7 +30,7 @@ class _$_SettingsRefreshed implements _SettingsRefreshed {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_SettingsRefreshed);
+        (other.runtimeType == runtimeType && other is _$SettingsRefreshedImpl);
   }
 
   @override
@@ -38,7 +38,7 @@ class _$_SettingsRefreshed implements _SettingsRefreshed {
 }
 
 abstract class _SettingsRefreshed implements SettingsRefreshed {
-  const factory _SettingsRefreshed() = _$_SettingsRefreshed;
+  const factory _SettingsRefreshed() = _$SettingsRefreshedImpl;
 }
 
 /// @nodoc
@@ -48,8 +48,8 @@ mixin _$SettingsLogouted {
 
 /// @nodoc
 
-class _$_SettingsLogouted implements _SettingsLogouted {
-  const _$_SettingsLogouted({this.force = false});
+class _$SettingsLogoutedImpl implements _SettingsLogouted {
+  const _$SettingsLogoutedImpl({this.force = false});
 
   @override
   @JsonKey()
@@ -64,7 +64,7 @@ class _$_SettingsLogouted implements _SettingsLogouted {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SettingsLogouted &&
+            other is _$SettingsLogoutedImpl &&
             (identical(other.force, force) || other.force == force));
   }
 
@@ -73,7 +73,7 @@ class _$_SettingsLogouted implements _SettingsLogouted {
 }
 
 abstract class _SettingsLogouted implements SettingsLogouted {
-  const factory _SettingsLogouted({final bool force}) = _$_SettingsLogouted;
+  const factory _SettingsLogouted({final bool force}) = _$SettingsLogoutedImpl;
 
   @override
   bool get force;
@@ -86,9 +86,9 @@ mixin _$SettingsRegisterStatusChanged {
 
 /// @nodoc
 
-class _$_SettingsRegisterStatusChanged
+class _$SettingsRegisterStatusChangedImpl
     implements _SettingsRegisterStatusChanged {
-  const _$_SettingsRegisterStatusChanged(this.value);
+  const _$SettingsRegisterStatusChangedImpl(this.value);
 
   @override
   final bool value;
@@ -102,7 +102,7 @@ class _$_SettingsRegisterStatusChanged
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SettingsRegisterStatusChanged &&
+            other is _$SettingsRegisterStatusChangedImpl &&
             (identical(other.value, value) || other.value == value));
   }
 
@@ -113,7 +113,7 @@ class _$_SettingsRegisterStatusChanged
 abstract class _SettingsRegisterStatusChanged
     implements SettingsRegisterStatusChanged {
   const factory _SettingsRegisterStatusChanged(final bool value) =
-      _$_SettingsRegisterStatusChanged;
+      _$SettingsRegisterStatusChangedImpl;
 
   @override
   bool get value;
@@ -124,8 +124,8 @@ mixin _$SettingsAccountDeleted {}
 
 /// @nodoc
 
-class _$_SettingsAccountDeleted implements _SettingsAccountDeleted {
-  const _$_SettingsAccountDeleted();
+class _$SettingsAccountDeletedImpl implements _SettingsAccountDeleted {
+  const _$SettingsAccountDeletedImpl();
 
   @override
   String toString() {
@@ -136,7 +136,7 @@ class _$_SettingsAccountDeleted implements _SettingsAccountDeleted {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SettingsAccountDeleted);
+            other is _$SettingsAccountDeletedImpl);
   }
 
   @override
@@ -144,7 +144,7 @@ class _$_SettingsAccountDeleted implements _SettingsAccountDeleted {
 }
 
 abstract class _SettingsAccountDeleted implements SettingsAccountDeleted {
-  const factory _SettingsAccountDeleted() = _$_SettingsAccountDeleted;
+  const factory _SettingsAccountDeleted() = _$SettingsAccountDeletedImpl;
 }
 
 /// @nodoc
@@ -202,22 +202,22 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
 }
 
 /// @nodoc
-abstract class _$$_SettingsStateCopyWith<$Res>
+abstract class _$$SettingsStateImplCopyWith<$Res>
     implements $SettingsStateCopyWith<$Res> {
-  factory _$$_SettingsStateCopyWith(
-          _$_SettingsState value, $Res Function(_$_SettingsState) then) =
-      __$$_SettingsStateCopyWithImpl<$Res>;
+  factory _$$SettingsStateImplCopyWith(
+          _$SettingsStateImpl value, $Res Function(_$SettingsStateImpl) then) =
+      __$$SettingsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({bool progress, bool registerStatus, UserInfo? info});
 }
 
 /// @nodoc
-class __$$_SettingsStateCopyWithImpl<$Res>
-    extends _$SettingsStateCopyWithImpl<$Res, _$_SettingsState>
-    implements _$$_SettingsStateCopyWith<$Res> {
-  __$$_SettingsStateCopyWithImpl(
-      _$_SettingsState _value, $Res Function(_$_SettingsState) _then)
+class __$$SettingsStateImplCopyWithImpl<$Res>
+    extends _$SettingsStateCopyWithImpl<$Res, _$SettingsStateImpl>
+    implements _$$SettingsStateImplCopyWith<$Res> {
+  __$$SettingsStateImplCopyWithImpl(
+      _$SettingsStateImpl _value, $Res Function(_$SettingsStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -227,7 +227,7 @@ class __$$_SettingsStateCopyWithImpl<$Res>
     Object? registerStatus = null,
     Object? info = freezed,
   }) {
-    return _then(_$_SettingsState(
+    return _then(_$SettingsStateImpl(
       progress: null == progress
           ? _value.progress
           : progress // ignore: cast_nullable_to_non_nullable
@@ -246,8 +246,8 @@ class __$$_SettingsStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_SettingsState implements _SettingsState {
-  const _$_SettingsState(
+class _$SettingsStateImpl implements _SettingsState {
+  const _$SettingsStateImpl(
       {this.progress = false, required this.registerStatus, this.info});
 
   @override
@@ -267,7 +267,7 @@ class _$_SettingsState implements _SettingsState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SettingsState &&
+            other is _$SettingsStateImpl &&
             (identical(other.progress, progress) ||
                 other.progress == progress) &&
             (identical(other.registerStatus, registerStatus) ||
@@ -282,15 +282,15 @@ class _$_SettingsState implements _SettingsState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SettingsStateCopyWith<_$_SettingsState> get copyWith =>
-      __$$_SettingsStateCopyWithImpl<_$_SettingsState>(this, _$identity);
+  _$$SettingsStateImplCopyWith<_$SettingsStateImpl> get copyWith =>
+      __$$SettingsStateImplCopyWithImpl<_$SettingsStateImpl>(this, _$identity);
 }
 
 abstract class _SettingsState implements SettingsState {
   const factory _SettingsState(
       {final bool progress,
       required final bool registerStatus,
-      final UserInfo? info}) = _$_SettingsState;
+      final UserInfo? info}) = _$SettingsStateImpl;
 
   @override
   bool get progress;
@@ -300,6 +300,6 @@ abstract class _SettingsState implements SettingsState {
   UserInfo? get info;
   @override
   @JsonKey(ignore: true)
-  _$$_SettingsStateCopyWith<_$_SettingsState> get copyWith =>
+  _$$SettingsStateImplCopyWith<_$SettingsStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -141,10 +141,11 @@ class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
 }
 
 /// @nodoc
-abstract class _$$_UserInfoCopyWith<$Res> implements $UserInfoCopyWith<$Res> {
-  factory _$$_UserInfoCopyWith(
-          _$_UserInfo value, $Res Function(_$_UserInfo) then) =
-      __$$_UserInfoCopyWithImpl<$Res>;
+abstract class _$$UserInfoImplCopyWith<$Res>
+    implements $UserInfoCopyWith<$Res> {
+  factory _$$UserInfoImplCopyWith(
+          _$UserInfoImpl value, $Res Function(_$UserInfoImpl) then) =
+      __$$UserInfoImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -165,11 +166,11 @@ abstract class _$$_UserInfoCopyWith<$Res> implements $UserInfoCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_UserInfoCopyWithImpl<$Res>
-    extends _$UserInfoCopyWithImpl<$Res, _$_UserInfo>
-    implements _$$_UserInfoCopyWith<$Res> {
-  __$$_UserInfoCopyWithImpl(
-      _$_UserInfo _value, $Res Function(_$_UserInfo) _then)
+class __$$UserInfoImplCopyWithImpl<$Res>
+    extends _$UserInfoCopyWithImpl<$Res, _$UserInfoImpl>
+    implements _$$UserInfoImplCopyWith<$Res> {
+  __$$UserInfoImplCopyWithImpl(
+      _$UserInfoImpl _value, $Res Function(_$UserInfoImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -185,7 +186,7 @@ class __$$_UserInfoCopyWithImpl<$Res>
     Object? companyName = freezed,
     Object? timeZone = freezed,
   }) {
-    return _then(_$_UserInfo(
+    return _then(_$UserInfoImpl(
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -229,8 +230,8 @@ class __$$_UserInfoCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class _$_UserInfo implements _UserInfo {
-  const _$_UserInfo(
+class _$UserInfoImpl implements _UserInfo {
+  const _$UserInfoImpl(
       {this.status,
       this.balance,
       required this.numbers,
@@ -241,8 +242,8 @@ class _$_UserInfo implements _UserInfo {
       this.companyName,
       this.timeZone});
 
-  factory _$_UserInfo.fromJson(Map<String, dynamic> json) =>
-      _$$_UserInfoFromJson(json);
+  factory _$UserInfoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$UserInfoImplFromJson(json);
 
   @override
   final UserInfoStatus? status;
@@ -272,7 +273,7 @@ class _$_UserInfo implements _UserInfo {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_UserInfo &&
+            other is _$UserInfoImpl &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.balance, balance) || other.balance == balance) &&
             (identical(other.numbers, numbers) || other.numbers == numbers) &&
@@ -297,12 +298,12 @@ class _$_UserInfo implements _UserInfo {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_UserInfoCopyWith<_$_UserInfo> get copyWith =>
-      __$$_UserInfoCopyWithImpl<_$_UserInfo>(this, _$identity);
+  _$$UserInfoImplCopyWith<_$UserInfoImpl> get copyWith =>
+      __$$UserInfoImplCopyWithImpl<_$UserInfoImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_UserInfoToJson(
+    return _$$UserInfoImplToJson(
       this,
     );
   }
@@ -318,9 +319,10 @@ abstract class _UserInfo implements UserInfo {
       final String? lastName,
       final String? aliasName,
       final String? companyName,
-      final String? timeZone}) = _$_UserInfo;
+      final String? timeZone}) = _$UserInfoImpl;
 
-  factory _UserInfo.fromJson(Map<String, dynamic> json) = _$_UserInfo.fromJson;
+  factory _UserInfo.fromJson(Map<String, dynamic> json) =
+      _$UserInfoImpl.fromJson;
 
   @override
   UserInfoStatus? get status;
@@ -342,6 +344,6 @@ abstract class _UserInfo implements UserInfo {
   String? get timeZone;
   @override
   @JsonKey(ignore: true)
-  _$$_UserInfoCopyWith<_$_UserInfo> get copyWith =>
+  _$$UserInfoImplCopyWith<_$UserInfoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

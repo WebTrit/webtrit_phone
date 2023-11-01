@@ -2,12 +2,12 @@ import '../abstract_requests.dart';
 
 class OutgoingCallRequest extends CallRequest {
   const OutgoingCallRequest({
-    required String transaction,
-    required int line,
-    required String callId,
+    required super.transaction,
+    required super.line,
+    required super.callId,
     required this.number,
     required this.jsep,
-  }) : super(transaction: transaction, line: line, callId: callId);
+  });
 
   final String number;
   final Map<String, dynamic> jsep;

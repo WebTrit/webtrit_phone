@@ -2,10 +2,10 @@ import '../abstract_requests.dart';
 
 class IceTrickleRequest extends LineRequest {
   const IceTrickleRequest({
-    required String transaction,
-    required int line,
+    required super.transaction,
+    required super.line,
     this.candidate,
-  }) : super(transaction: transaction, line: line);
+  });
 
   final Map<String, dynamic>? candidate;
 

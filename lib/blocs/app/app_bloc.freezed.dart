@@ -23,8 +23,8 @@ mixin _$AppLogined {
 
 /// @nodoc
 
-class _$_AppLogined implements _AppLogined {
-  const _$_AppLogined(
+class _$AppLoginedImpl implements _AppLogined {
+  const _$AppLoginedImpl(
       {required this.coreUrl, required this.tenantId, required this.token});
 
   @override
@@ -43,7 +43,7 @@ class _$_AppLogined implements _AppLogined {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_AppLogined &&
+            other is _$AppLoginedImpl &&
             (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
             (identical(other.tenantId, tenantId) ||
                 other.tenantId == tenantId) &&
@@ -58,7 +58,7 @@ abstract class _AppLogined implements AppLogined {
   const factory _AppLogined(
       {required final String coreUrl,
       required final String tenantId,
-      required final String token}) = _$_AppLogined;
+      required final String token}) = _$AppLoginedImpl;
 
   @override
   String get coreUrl;
@@ -73,8 +73,8 @@ mixin _$AppLogouted {}
 
 /// @nodoc
 
-class _$_AppLogouted implements _AppLogouted {
-  const _$_AppLogouted();
+class _$AppLogoutedImpl implements _AppLogouted {
+  const _$AppLogoutedImpl();
 
   @override
   String toString() {
@@ -84,7 +84,7 @@ class _$_AppLogouted implements _AppLogouted {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_AppLogouted);
+        (other.runtimeType == runtimeType && other is _$AppLogoutedImpl);
   }
 
   @override
@@ -92,7 +92,7 @@ class _$_AppLogouted implements _AppLogouted {
 }
 
 abstract class _AppLogouted implements AppLogouted {
-  const factory _AppLogouted() = _$_AppLogouted;
+  const factory _AppLogouted() = _$AppLogoutedImpl;
 }
 
 /// @nodoc
@@ -102,8 +102,8 @@ mixin _$AppThemeSettingsChanged {
 
 /// @nodoc
 
-class _$_AppThemeSettingsChanged implements _AppThemeSettingsChanged {
-  const _$_AppThemeSettingsChanged(this.value);
+class _$AppThemeSettingsChangedImpl implements _AppThemeSettingsChanged {
+  const _$AppThemeSettingsChangedImpl(this.value);
 
   @override
   final ThemeSettings value;
@@ -117,7 +117,7 @@ class _$_AppThemeSettingsChanged implements _AppThemeSettingsChanged {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_AppThemeSettingsChanged &&
+            other is _$AppThemeSettingsChangedImpl &&
             (identical(other.value, value) || other.value == value));
   }
 
@@ -127,7 +127,7 @@ class _$_AppThemeSettingsChanged implements _AppThemeSettingsChanged {
 
 abstract class _AppThemeSettingsChanged implements AppThemeSettingsChanged {
   const factory _AppThemeSettingsChanged(final ThemeSettings value) =
-      _$_AppThemeSettingsChanged;
+      _$AppThemeSettingsChangedImpl;
 
   @override
   ThemeSettings get value;
@@ -140,8 +140,8 @@ mixin _$AppThemeModeChanged {
 
 /// @nodoc
 
-class _$_AppThemeModeChanged implements _AppThemeModeChanged {
-  const _$_AppThemeModeChanged(this.value);
+class _$AppThemeModeChangedImpl implements _AppThemeModeChanged {
+  const _$AppThemeModeChangedImpl(this.value);
 
   @override
   final ThemeMode value;
@@ -155,7 +155,7 @@ class _$_AppThemeModeChanged implements _AppThemeModeChanged {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_AppThemeModeChanged &&
+            other is _$AppThemeModeChangedImpl &&
             (identical(other.value, value) || other.value == value));
   }
 
@@ -165,7 +165,7 @@ class _$_AppThemeModeChanged implements _AppThemeModeChanged {
 
 abstract class _AppThemeModeChanged implements AppThemeModeChanged {
   const factory _AppThemeModeChanged(final ThemeMode value) =
-      _$_AppThemeModeChanged;
+      _$AppThemeModeChangedImpl;
 
   @override
   ThemeMode get value;
@@ -178,8 +178,8 @@ mixin _$AppLocaleChanged {
 
 /// @nodoc
 
-class _$_AppLocaleChanged implements _AppLocaleChanged {
-  const _$_AppLocaleChanged(this.value);
+class _$AppLocaleChangedImpl implements _AppLocaleChanged {
+  const _$AppLocaleChangedImpl(this.value);
 
   @override
   final Locale value;
@@ -193,7 +193,7 @@ class _$_AppLocaleChanged implements _AppLocaleChanged {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_AppLocaleChanged &&
+            other is _$AppLocaleChangedImpl &&
             (identical(other.value, value) || other.value == value));
   }
 
@@ -202,7 +202,7 @@ class _$_AppLocaleChanged implements _AppLocaleChanged {
 }
 
 abstract class _AppLocaleChanged implements AppLocaleChanged {
-  const factory _AppLocaleChanged(final Locale value) = _$_AppLocaleChanged;
+  const factory _AppLocaleChanged(final Locale value) = _$AppLocaleChangedImpl;
 
   @override
   Locale get value;
@@ -303,10 +303,11 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
 }
 
 /// @nodoc
-abstract class _$$_AppStateCopyWith<$Res> implements $AppStateCopyWith<$Res> {
-  factory _$$_AppStateCopyWith(
-          _$_AppState value, $Res Function(_$_AppState) then) =
-      __$$_AppStateCopyWithImpl<$Res>;
+abstract class _$$AppStateImplCopyWith<$Res>
+    implements $AppStateCopyWith<$Res> {
+  factory _$$AppStateImplCopyWith(
+          _$AppStateImpl value, $Res Function(_$AppStateImpl) then) =
+      __$$AppStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -323,11 +324,11 @@ abstract class _$$_AppStateCopyWith<$Res> implements $AppStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_AppStateCopyWithImpl<$Res>
-    extends _$AppStateCopyWithImpl<$Res, _$_AppState>
-    implements _$$_AppStateCopyWith<$Res> {
-  __$$_AppStateCopyWithImpl(
-      _$_AppState _value, $Res Function(_$_AppState) _then)
+class __$$AppStateImplCopyWithImpl<$Res>
+    extends _$AppStateCopyWithImpl<$Res, _$AppStateImpl>
+    implements _$$AppStateImplCopyWith<$Res> {
+  __$$AppStateImplCopyWithImpl(
+      _$AppStateImpl _value, $Res Function(_$AppStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -341,7 +342,7 @@ class __$$_AppStateCopyWithImpl<$Res>
     Object? themeMode = null,
     Object? locale = null,
   }) {
-    return _then(_$_AppState(
+    return _then(_$AppStateImpl(
       coreUrl: freezed == coreUrl
           ? _value.coreUrl
           : coreUrl // ignore: cast_nullable_to_non_nullable
@@ -376,8 +377,8 @@ class __$$_AppStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_AppState extends _AppState {
-  const _$_AppState(
+class _$AppStateImpl extends _AppState {
+  const _$AppStateImpl(
       {this.coreUrl,
       this.tenantId,
       this.token,
@@ -411,7 +412,7 @@ class _$_AppState extends _AppState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_AppState &&
+            other is _$AppStateImpl &&
             (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
             (identical(other.tenantId, tenantId) ||
                 other.tenantId == tenantId) &&
@@ -433,8 +434,8 @@ class _$_AppState extends _AppState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_AppStateCopyWith<_$_AppState> get copyWith =>
-      __$$_AppStateCopyWithImpl<_$_AppState>(this, _$identity);
+  _$$AppStateImplCopyWith<_$AppStateImpl> get copyWith =>
+      __$$AppStateImplCopyWithImpl<_$AppStateImpl>(this, _$identity);
 }
 
 abstract class _AppState extends AppState {
@@ -445,7 +446,7 @@ abstract class _AppState extends AppState {
       final String? webRegistrationInitialUrl,
       required final ThemeSettings themeSettings,
       required final ThemeMode themeMode,
-      required final Locale locale}) = _$_AppState;
+      required final Locale locale}) = _$AppStateImpl;
   const _AppState._() : super._();
 
   @override
@@ -464,6 +465,6 @@ abstract class _AppState extends AppState {
   Locale get locale;
   @override
   @JsonKey(ignore: true)
-  _$$_AppStateCopyWith<_$_AppState> get copyWith =>
+  _$$AppStateImplCopyWith<_$AppStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -3,13 +3,13 @@ import '../abstract_events.dart';
 
 class IceSlowLinkEvent extends LineEvent {
   const IceSlowLinkEvent({
-    String? transaction,
-    required int line,
+    super.transaction,
+    required super.line,
     required this.mid,
     required this.media,
     required this.uplink,
     required this.lost,
-  }) : super(transaction: transaction, line: line);
+  });
 
   final String mid;
   final IceMediaType media;

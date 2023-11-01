@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class WebViewProgressIndicator extends StatelessWidget {
   const WebViewProgressIndicator({
-    Key? key,
+    super.key,
     required this.stream,
-  }) : super(key: key);
+  });
 
   final Stream<int> stream;
 

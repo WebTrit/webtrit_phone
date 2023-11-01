@@ -8,13 +8,13 @@ import '../recents.dart';
 
 class RecentTile extends StatelessWidget {
   const RecentTile({
-    Key? key,
+    super.key,
     required this.recent,
     this.onTap,
     this.onLongPress,
     this.onInfoPressed,
     this.onDeleted,
-  }) : super(key: key);
+  });
 
   final Recent recent;
   final GestureTapCallback? onTap;

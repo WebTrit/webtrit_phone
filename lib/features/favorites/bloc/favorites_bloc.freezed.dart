@@ -21,9 +21,9 @@ mixin _$FavoritesAddedByContactPhoneId {
 
 /// @nodoc
 
-class _$_FavoritesAddedByContactPhoneId
+class _$FavoritesAddedByContactPhoneIdImpl
     implements _FavoritesAddedByContactPhoneId {
-  const _$_FavoritesAddedByContactPhoneId({required this.contactPhoneId});
+  const _$FavoritesAddedByContactPhoneIdImpl({required this.contactPhoneId});
 
   @override
   final int contactPhoneId;
@@ -37,7 +37,7 @@ class _$_FavoritesAddedByContactPhoneId
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_FavoritesAddedByContactPhoneId &&
+            other is _$FavoritesAddedByContactPhoneIdImpl &&
             (identical(other.contactPhoneId, contactPhoneId) ||
                 other.contactPhoneId == contactPhoneId));
   }
@@ -49,7 +49,8 @@ class _$_FavoritesAddedByContactPhoneId
 abstract class _FavoritesAddedByContactPhoneId
     implements FavoritesAddedByContactPhoneId {
   const factory _FavoritesAddedByContactPhoneId(
-      {required final int contactPhoneId}) = _$_FavoritesAddedByContactPhoneId;
+          {required final int contactPhoneId}) =
+      _$FavoritesAddedByContactPhoneIdImpl;
 
   @override
   int get contactPhoneId;
@@ -62,9 +63,9 @@ mixin _$FavoritesRemovedByContactPhoneId {
 
 /// @nodoc
 
-class _$_FavoritesRemovedByContactPhoneId
+class _$FavoritesRemovedByContactPhoneIdImpl
     implements _FavoritesRemovedByContactPhoneId {
-  const _$_FavoritesRemovedByContactPhoneId({required this.contactPhoneId});
+  const _$FavoritesRemovedByContactPhoneIdImpl({required this.contactPhoneId});
 
   @override
   final int contactPhoneId;
@@ -78,7 +79,7 @@ class _$_FavoritesRemovedByContactPhoneId
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_FavoritesRemovedByContactPhoneId &&
+            other is _$FavoritesRemovedByContactPhoneIdImpl &&
             (identical(other.contactPhoneId, contactPhoneId) ||
                 other.contactPhoneId == contactPhoneId));
   }
@@ -91,7 +92,7 @@ abstract class _FavoritesRemovedByContactPhoneId
     implements FavoritesRemovedByContactPhoneId {
   const factory _FavoritesRemovedByContactPhoneId(
           {required final int contactPhoneId}) =
-      _$_FavoritesRemovedByContactPhoneId;
+      _$FavoritesRemovedByContactPhoneIdImpl;
 
   @override
   int get contactPhoneId;
@@ -104,8 +105,8 @@ mixin _$FavoritesRemoved {
 
 /// @nodoc
 
-class _$_FavoritesRemoved implements _FavoritesRemoved {
-  const _$_FavoritesRemoved({required this.favorite});
+class _$FavoritesRemovedImpl implements _FavoritesRemoved {
+  const _$FavoritesRemovedImpl({required this.favorite});
 
   @override
   final Favorite favorite;
@@ -119,7 +120,7 @@ class _$_FavoritesRemoved implements _FavoritesRemoved {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_FavoritesRemoved &&
+            other is _$FavoritesRemovedImpl &&
             (identical(other.favorite, favorite) ||
                 other.favorite == favorite));
   }
@@ -130,7 +131,7 @@ class _$_FavoritesRemoved implements _FavoritesRemoved {
 
 abstract class _FavoritesRemoved implements FavoritesRemoved {
   const factory _FavoritesRemoved({required final Favorite favorite}) =
-      _$_FavoritesRemoved;
+      _$FavoritesRemovedImpl;
 
   @override
   Favorite get favorite;
@@ -179,22 +180,22 @@ class _$FavoritesStateCopyWithImpl<$Res, $Val extends FavoritesState>
 }
 
 /// @nodoc
-abstract class _$$_FavoritesStateCopyWith<$Res>
+abstract class _$$FavoritesStateImplCopyWith<$Res>
     implements $FavoritesStateCopyWith<$Res> {
-  factory _$$_FavoritesStateCopyWith(
-          _$_FavoritesState value, $Res Function(_$_FavoritesState) then) =
-      __$$_FavoritesStateCopyWithImpl<$Res>;
+  factory _$$FavoritesStateImplCopyWith(_$FavoritesStateImpl value,
+          $Res Function(_$FavoritesStateImpl) then) =
+      __$$FavoritesStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<Favorite>? favorites});
 }
 
 /// @nodoc
-class __$$_FavoritesStateCopyWithImpl<$Res>
-    extends _$FavoritesStateCopyWithImpl<$Res, _$_FavoritesState>
-    implements _$$_FavoritesStateCopyWith<$Res> {
-  __$$_FavoritesStateCopyWithImpl(
-      _$_FavoritesState _value, $Res Function(_$_FavoritesState) _then)
+class __$$FavoritesStateImplCopyWithImpl<$Res>
+    extends _$FavoritesStateCopyWithImpl<$Res, _$FavoritesStateImpl>
+    implements _$$FavoritesStateImplCopyWith<$Res> {
+  __$$FavoritesStateImplCopyWithImpl(
+      _$FavoritesStateImpl _value, $Res Function(_$FavoritesStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -202,7 +203,7 @@ class __$$_FavoritesStateCopyWithImpl<$Res>
   $Res call({
     Object? favorites = freezed,
   }) {
-    return _then(_$_FavoritesState(
+    return _then(_$FavoritesStateImpl(
       favorites: freezed == favorites
           ? _value._favorites
           : favorites // ignore: cast_nullable_to_non_nullable
@@ -213,8 +214,8 @@ class __$$_FavoritesStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_FavoritesState implements _FavoritesState {
-  const _$_FavoritesState({final List<Favorite>? favorites})
+class _$FavoritesStateImpl implements _FavoritesState {
+  const _$FavoritesStateImpl({final List<Favorite>? favorites})
       : _favorites = favorites;
 
   final List<Favorite>? _favorites;
@@ -236,7 +237,7 @@ class _$_FavoritesState implements _FavoritesState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_FavoritesState &&
+            other is _$FavoritesStateImpl &&
             const DeepCollectionEquality()
                 .equals(other._favorites, _favorites));
   }
@@ -248,18 +249,19 @@ class _$_FavoritesState implements _FavoritesState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_FavoritesStateCopyWith<_$_FavoritesState> get copyWith =>
-      __$$_FavoritesStateCopyWithImpl<_$_FavoritesState>(this, _$identity);
+  _$$FavoritesStateImplCopyWith<_$FavoritesStateImpl> get copyWith =>
+      __$$FavoritesStateImplCopyWithImpl<_$FavoritesStateImpl>(
+          this, _$identity);
 }
 
 abstract class _FavoritesState implements FavoritesState {
   const factory _FavoritesState({final List<Favorite>? favorites}) =
-      _$_FavoritesState;
+      _$FavoritesStateImpl;
 
   @override
   List<Favorite>? get favorites;
   @override
   @JsonKey(ignore: true)
-  _$$_FavoritesStateCopyWith<_$_FavoritesState> get copyWith =>
+  _$$FavoritesStateImplCopyWith<_$FavoritesStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

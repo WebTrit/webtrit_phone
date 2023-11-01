@@ -4,12 +4,12 @@ import 'package:webtrit_phone/theme/theme.dart';
 
 class ClearedTextField extends StatefulWidget {
   const ClearedTextField({
-    Key? key,
+    super.key,
     this.initialValue,
     this.onChanged,
     this.onSubmitted,
     this.iconConstraints,
-  }) : super(key: key);
+  });
 
   final String? initialValue;
   final ValueChanged<String>? onChanged;

@@ -6,17 +6,17 @@ part of 'session_user_credential.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_SessionUserCredential _$$_SessionUserCredentialFromJson(
+_$SessionUserCredentialImpl _$$SessionUserCredentialImplFromJson(
         Map<String, dynamic> json) =>
-    _$_SessionUserCredential(
+    _$SessionUserCredentialImpl(
       bundleId: json['bundle_id'] as String?,
       type: $enumDecode(_$AppTypeEnumMap, json['type']),
       identifier: json['identifier'] as String,
       email: json['email'] as String,
     );
 
-Map<String, dynamic> _$$_SessionUserCredentialToJson(
-        _$_SessionUserCredential instance) =>
+Map<String, dynamic> _$$SessionUserCredentialImplToJson(
+        _$SessionUserCredentialImpl instance) =>
     <String, dynamic>{
       'bundle_id': instance.bundleId,
       'type': _$AppTypeEnumMap[instance.type]!,

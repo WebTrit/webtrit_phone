@@ -2,13 +2,13 @@ import '../abstract_events.dart';
 
 class TransferEvent extends LineEvent {
   const TransferEvent({
-    String? transaction,
-    required int line,
+    super.transaction,
+    required super.line,
     required this.referId,
     required this.referTo,
     required this.referredBy,
     required this.replaceCallId,
-  }) : super(transaction: transaction, line: line);
+  });
 
   final String referId;
   final String referTo;

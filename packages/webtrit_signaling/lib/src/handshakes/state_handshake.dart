@@ -64,9 +64,9 @@ abstract class CallLog extends Equatable {
 
 class CallRequestLog extends CallLog {
   const CallRequestLog({
-    required int timestamp,
+    required super.timestamp,
     required this.callRequest,
-  }) : super(timestamp: timestamp);
+  });
 
   final CallRequest callRequest;
 
@@ -79,9 +79,9 @@ class CallRequestLog extends CallLog {
 
 class ResponseLog extends CallLog {
   const ResponseLog({
-    required int timestamp,
+    required super.timestamp,
     required this.response,
-  }) : super(timestamp: timestamp);
+  });
 
   final Response response;
 
@@ -94,9 +94,9 @@ class ResponseLog extends CallLog {
 
 class CallEventLog extends CallLog {
   const CallEventLog({
-    required int timestamp,
+    required super.timestamp,
     required this.callEvent,
-  }) : super(timestamp: timestamp);
+  });
 
   final CallEvent callEvent;
 

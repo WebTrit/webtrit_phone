@@ -2,11 +2,11 @@ import '../abstract_events.dart';
 
 class LineErrorEvent extends LineEvent implements ErrorEvent {
   const LineErrorEvent({
-    String? transaction,
-    required int line,
+    super.transaction,
+    required super.line,
     required this.code,
     required this.reason,
-  }) : super(transaction: transaction, line: line);
+  });
 
   @override
   final int code;

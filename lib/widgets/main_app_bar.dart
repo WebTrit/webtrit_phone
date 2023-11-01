@@ -10,10 +10,9 @@ import 'package:webtrit_phone/features/features.dart';
 
 class MainAppBar extends AppBar {
   MainAppBar({
-    Key? key,
-    PreferredSizeWidget? bottom,
+    super.key,
+    super.bottom,
   }) : super(
-          key: key,
           title: const Text(EnvironmentConfig.APP_NAME),
           centerTitle: false,
           actions: [
@@ -46,6 +45,5 @@ class MainAppBar extends AppBar {
               width: NavigationToolbar.kMiddleSpacing,
             ),
           ],
-          bottom: bottom,
         );
 }

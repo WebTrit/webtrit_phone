@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class ExtTabBar extends StatelessWidget {
   const ExtTabBar({
-    Key? key,
+    super.key,
     this.width,
     this.height,
     required this.tabs,
     this.controller,
-  }) : super(key: key);
+  });
 
   final double? width;
   final double? height;

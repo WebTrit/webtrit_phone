@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class ExtBackButton extends StatelessWidget {
   const ExtBackButton({
-    Key? key,
+    super.key,
     this.disabled = false,
-  }) : super(key: key);
+  });
 
   final bool disabled;
 

@@ -3,10 +3,10 @@ import 'package:flutter/rendering.dart';
 
 class Unfocuser extends StatefulWidget {
   const Unfocuser({
-    Key? key,
+    super.key,
     this.child,
     this.minScrollDistanceToIgnore = 10.0,
-  }) : super(key: key);
+  });
 
   final Widget? child;
   final double minScrollDistanceToIgnore;
@@ -50,7 +50,7 @@ class UnfocuserState extends State<Unfocuser> {
 }
 
 class IgnoreUnfocuser extends SingleChildRenderObjectWidget {
-  const IgnoreUnfocuser({Key? key, Widget? child}) : super(key: key, child: child);
+  const IgnoreUnfocuser({super.key, super.child});
 
   @override
   IgnoreUnfocuserRenderBox createRenderObject(BuildContext context) {

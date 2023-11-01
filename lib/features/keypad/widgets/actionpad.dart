@@ -7,13 +7,13 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 class Actionpad extends StatelessWidget {
   const Actionpad({
-    Key? key,
+    super.key,
     this.video = false,
     this.onCallPressed,
     this.onCallLongPress,
     this.onBackspacePressed,
     this.onBackspaceLongPress,
-  }) : super(key: key);
+  });
 
   final bool video;
   final VoidCallback? onCallPressed;
