@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:webtrit_api/webtrit_api.dart';
+
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/main/models/models.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -13,6 +15,7 @@ class AppPreferences {
   static const _kActiveMainFlavorKey = 'active-main-flavor';
   static const _kActiveRecentsVisibilityFilterKey = 'active-recents-visibility-filter';
   static const _kActiveContactSourceTypeKey = 'active-contact-source-type';
+  static const _kSupportedLoginType = 'supported-login-type';
 
   static late AppPreferences _instance;
 
@@ -117,4 +120,11 @@ class AppPreferences {
 
   Future<bool> setActiveContactSourceType(ContactSourceType value) =>
       _sharedPreferences.setString(_kActiveContactSourceTypeKey, value.name);
+
+  Future<bool> setSupportedLoginType(List<SupportedLoginType> value) =>
+      _sharedPreferences.setStringList(_kSupportedLoginType, value.map((e) => e.name).toList());
+
+  List<SupportedLoginType> getSupportedLoginType() => (_sharedPreferences.getStringList(_kSupportedLoginType) ?? [])
+      .map((e) => SupportedLoginType.values.byName(e))
+      .toList();
 }
