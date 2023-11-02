@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:go_router/go_router.dart';
+
 class ExtBackButton extends StatelessWidget {
   const ExtBackButton({
     Key? key,
@@ -15,7 +17,7 @@ class ExtBackButton extends StatelessWidget {
         Icons.arrow_back,
       ),
       tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-      onPressed: disabled ? null : () => Navigator.maybePop(context),
+      onPressed: disabled ? null : () => GoRouter.of(context).pop(context),
     );
   }
 }
