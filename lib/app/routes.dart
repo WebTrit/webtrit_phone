@@ -3,8 +3,12 @@ import 'package:flutter/widgets.dart';
 class AppRoute {
   AppRoute._();
 
-  static const login = 'login';
-  static const loginStep = 'login/step';
+  static const loginModeSelect = 'login/mode-select';
+  static const loginCoreUrl = 'login/core-url-assign';
+  static const loginTypes = 'login/types';
+  static const loginTypesOtp = 'login/types/otp';
+  static const loginTypesOtpVerify = 'login/types/otp/verify';
+  static const loginTypesPassword = 'login/types/password';
 
   static const webRegistration = 'web-registration';
 

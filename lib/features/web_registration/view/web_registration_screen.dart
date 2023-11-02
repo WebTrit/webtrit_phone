@@ -83,7 +83,7 @@ class _WebRegistrationScreenState extends State<WebRegistrationScreen> {
 
               if (!mounted) return;
               if (result == null) {
-                context.goNamed(AppRoute.login);
+                context.goNamed(AppRoute.loginModeSelect);
               } else {
                 _webViewController.loadRequest(result ? widget.initialUri : _demoInitialUri());
               }

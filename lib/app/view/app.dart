@@ -7,6 +7,8 @@ import 'package:go_router/go_router.dart';
 
 import 'package:store_info_extractor/store_info_extractor.dart';
 
+import 'package:webtrit_api/webtrit_api.dart';
+
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
@@ -19,6 +21,7 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 import 'app_shell.dart';
+import 'auth_shell.dart';
 import 'main_shell.dart';
 
 class App extends StatefulWidget {
@@ -129,39 +132,132 @@ class _AppState extends State<App> {
           );
         },
         routes: [
-          GoRoute(
-            name: AppRoute.login,
-            path: '/login',
-            redirect: (context, state) => '/login/${LoginStep.modeSelect.name}',
-          ),
-          GoRoute(
-            name: AppRoute.loginStep,
-            path: '/login/:${LoginStep.pathParameterName}(${LoginStep.values.map((e) => e.name).join('|')})',
-            builder: (context, state) {
-              final step = LoginStep.values.byName(state.pathParameters[LoginStep.pathParameterName]!);
-              final widget = LoginScreen(
-                step,
-                appGreeting: EnvironmentConfig.APP_GREETING.isEmpty ? null : EnvironmentConfig.APP_GREETING,
-              );
-              final provider = BlocProvider(
-                create: (context) => LoginCubit(
-                  step,
+          ShellRoute(
+              builder: (context, state, child) {
+                return AuthShell(
+                  appPreferences: _appPreferences,
+                  child: child,
+                );
+              },
+              routes: [
+                GoRoute(
+                  name: AppRoute.webRegistration,
+                  path: '/web-registration',
+                  builder: (context, state) {
+                    final widget = WebRegistrationScreen(
+                      initialUri: Uri.parse(state.uri.queryParameters['initialUrl'] ?? kBlankUri),
+                    );
+                    return widget;
+                  },
                 ),
-                child: widget,
-              );
-              return provider;
-            },
-          ),
-          GoRoute(
-            name: AppRoute.webRegistration,
-            path: '/web-registration',
-            builder: (context, state) {
-              final widget = WebRegistrationScreen(
-                initialUri: Uri.parse(state.uri.queryParameters['initialUrl'] ?? kBlankUri),
-              );
-              return widget;
-            },
-          ),
+                GoRoute(
+                    name: AppRoute.loginModeSelect,
+                    path: '/auth/mode-select',
+                    pageBuilder: (context, state) {
+                      return SlideRoute(
+                        child: MultiBlocProvider(
+                          providers: [
+                            BlocProvider(
+                              create: (context) => ModeSelectCubit(
+                                context.read<AuthCubit>(),
+                              ),
+                            ),
+                            BlocProvider(
+                              create: (context) => context.read<AuthCubit>(),
+                            )
+                          ],
+                          child: const ModeSelectScreen(
+                            appGreeting: EnvironmentConfig.APP_GREETING,
+                          ),
+                        ),
+                      );
+                    },
+                    routes: [
+                      GoRoute(
+                        path: 'core-url-assign',
+                        name: AppRoute.loginCoreUrl,
+                        pageBuilder: (context, state) {
+                          return SlideRoute(
+                            key: const ValueKey(AppRoute.loginCoreUrl),
+                            child: BlocProvider(
+                              create: (context) => LoginCoreUrlAssignCubit(context.read<AuthCubit>()),
+                              child: const LoginCoreUrlAssignScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      GoRoute(
+                          path: 'types',
+                          name: AppRoute.loginTypes,
+                          redirect: (context, state) {
+                            if (state.fullPath == state.matchedLocation) {
+                              final initialiseLoginType = _appPreferences.getSupportedLoginType().first;
+                              final path = state.namedLocation(AppRoute.loginTypes);
+
+                              return '$path/${initialiseLoginType.name}';
+                            }
+                            return null;
+                          },
+                          routes: [
+                            ShellRoute(
+                              pageBuilder: (context, state, widget) {
+                                return SlideRoute(
+                                  child: BlocProvider(
+                                    create: (context) => LoginTypesCubit(_appPreferences),
+                                    child: LoginTypesScreen(
+                                      selected: SupportedLoginType.values
+                                          .firstWhere((element) => state.matchedLocation.contains(element.name)),
+                                      child: widget,
+                                    ),
+                                  ),
+                                );
+                              },
+                              routes: <RouteBase>[
+                                GoRoute(
+                                    path: SupportedLoginType.otpSignIn.name,
+                                    name: AppRoute.loginTypesOtp,
+                                    pageBuilder: (context, state) {
+                                      final provider = BlocProvider(
+                                        create: (context) => OtpRequestCubit(context.read<AuthCubit>()),
+                                        child: const OtpRequestScreen(),
+                                      );
+
+                                      return SlideRoute(child: provider);
+                                    },
+                                    routes: [
+                                      GoRoute(
+                                        path: 'verify',
+                                        name: AppRoute.loginTypesOtpVerify,
+                                        pageBuilder: (context, state) {
+                                          final provider = BlocProvider(
+                                            create: (context) => OtpVerifyCubit(
+                                              state.uri.queryParameters['email']!,
+                                              state.uri.queryParameters['phone']!,
+                                              context.read<AuthCubit>(),
+                                            ),
+                                            child: const OtpVerifyScreen(),
+                                          );
+
+                                          return SlideRoute(child: provider);
+                                        },
+                                      ),
+                                    ]),
+                                GoRoute(
+                                  path: SupportedLoginType.passwordSignIn.name,
+                                  name: AppRoute.loginTypesPassword,
+                                  pageBuilder: (context, state) {
+                                    final provider = BlocProvider(
+                                      create: (context) => PasswordRequestCubit(context.read<AuthCubit>()),
+                                      child: const PasswordRequestScreen(),
+                                    );
+                                    return SlideRoute(child: provider);
+                                  },
+                                ),
+                              ],
+                            )
+                          ]),
+                    ]),
+              ]),
           GoRoute(
             name: AppRoute.permissions,
             path: '/permissions',
@@ -520,7 +616,7 @@ class _AppState extends State<App> {
     final webRegistrationInitialUrl = appBloc.state.webRegistrationInitialUrl;
     final appPermissionsDenied = _appPermissions.isDenied;
 
-    final isLoginPath = state.uri.toString().startsWith('/login');
+    final isLoginPath = state.uri.toString().startsWith('/auth/mode-select');
     final isWebRegistrationPath = state.uri.toString().startsWith('/web-registration');
     final isMainPath = state.uri.toString().startsWith('/main');
 
@@ -535,7 +631,7 @@ class _AppState extends State<App> {
     } else if (webRegistrationInitialUrl != null && !isWebRegistrationPath) {
       return '/web-registration?initialUrl=$webRegistrationInitialUrl';
     } else if (!isLoginPath) {
-      return '/login';
+      return '/auth/mode-select';
     }
 
     return null;
