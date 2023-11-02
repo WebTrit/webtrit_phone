@@ -591,3 +591,30 @@ class GoRouterRefreshBloc extends ChangeNotifier {
     super.dispose();
   }
 }
+
+class SlideRoute<T> extends CustomTransitionPage<T> {
+  const SlideRoute({
+    required super.child,
+    super.name,
+    super.arguments,
+    super.restorationId,
+    super.key,
+  }) : super(transitionsBuilder: _transitionsBuilder);
+
+  static Widget _transitionsBuilder(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) =>
+      SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(1, 0),
+          end: Offset.zero,
+        ).animate(CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeInOutSine,
+        )),
+        child: child,
+      );
+}
