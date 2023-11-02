@@ -451,6 +451,30 @@ abstract class AppLocalizations {
   /// **''**
   String get login_AppBarTitle_otpRequest;
 
+  /// No description provided for @login_SegmentedButton_otpSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Otp sign in'**
+  String get login_SegmentedButton_otpSignIn;
+
+  /// No description provided for @login_SegmentedButton_passwordSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Password sign in'**
+  String get login_SegmentedButton_passwordSignIn;
+
+  /// No description provided for @login_TextFieldLabelText_passwordSignInRequestLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your login'**
+  String get login_TextFieldLabelText_passwordSignInRequestLogin;
+
+  /// No description provided for @login_TextFieldLabelText_passwordSignInRequestPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password'**
+  String get login_TextFieldLabelText_passwordSignInRequestPassword;
+
   /// No description provided for @login_TextFieldLabelText_otpRequestEmail.
   ///
   /// In en, this message translates to:
