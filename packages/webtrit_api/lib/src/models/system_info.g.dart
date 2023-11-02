@@ -123,8 +123,9 @@ _$_AdapterInfo _$$_AdapterInfoFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String?,
       version: json['version'] as String?,
       supported: (json['supported'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
+              ?.map((e) => $enumDecode(_$RawLoginTypeEnumMap, e))
+              .toList() ??
+          const [],
       custom: json['custom'] as Map<String, dynamic>?,
     );
 
@@ -132,6 +133,17 @@ Map<String, dynamic> _$$_AdapterInfoToJson(_$_AdapterInfo instance) =>
     <String, dynamic>{
       'name': instance.name,
       'version': instance.version,
-      'supported': instance.supported,
+      'supported':
+          instance.supported.map((e) => _$RawLoginTypeEnumMap[e]!).toList(),
       'custom': instance.custom,
     };
+
+const _$RawLoginTypeEnumMap = {
+  RawLoginType.passwordSignin: 'passwordSignin',
+  RawLoginType.recordings: 'recordings',
+  RawLoginType.callHistory: 'callHistory',
+  RawLoginType.otpSignin: 'otpSignin',
+  RawLoginType.extensions: 'extensions',
+  RawLoginType.signup: 'signup',
+  RawLoginType.cta_list: 'cta_list',
+};

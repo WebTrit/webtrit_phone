@@ -114,14 +114,50 @@ class CoreInfo with _$CoreInfo {
 
 @freezed
 class AdapterInfo with _$AdapterInfo {
+  const AdapterInfo._();
+
   // ignore: invalid_annotation_target
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory AdapterInfo({
     String? name,
     String? version,
-    List<String>? supported,
+    @Default([]) List<RawLoginType> supported,
     Map<String, dynamic>? custom,
   }) = _AdapterInfo;
 
   factory AdapterInfo.fromJson(Map<String, Object?> json) => _$AdapterInfoFromJson(json);
+
+  List<SupportedLoginType> get commonSupported {
+    final commonSupportedList = supported
+        .map((type) {
+          switch (type) {
+            case RawLoginType.passwordSignin:
+              return SupportedLoginType.passwordSignIn;
+            case RawLoginType.otpSignin:
+              return SupportedLoginType.otpSignIn;
+            default:
+              return null;
+          }
+        })
+        .nonNulls
+        .toList()
+      ..sort((a, b) => a.name.compareTo(b.name));
+    return commonSupportedList;
+  }
+}
+
+enum RawLoginType {
+  passwordSignin,
+  recordings,
+  callHistory,
+  otpSignin,
+  extensions,
+  signup,
+  // ignore: constant_identifier_names
+  cta_list;
+}
+
+enum SupportedLoginType {
+  otpSignIn,
+  passwordSignIn,
 }
