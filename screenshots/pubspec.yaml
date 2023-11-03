@@ -22,6 +22,9 @@ dependencies:
   webtrit_phone:
     path: ..
 
+  webtrit_api:
+    path: ../packages/webtrit_api
+
 dev_dependencies:
   integration_test:
     sdk: flutter
@@ -38,3 +41,4 @@ flutter:
     - assets/callkeep/
     - assets/login/
     - assets/ringtones/
+    - assets/themes/

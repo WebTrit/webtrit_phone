@@ -2,31 +2,34 @@ import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:webtrit_api/webtrit_api.dart';
+
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 
-import 'package:screenshots/data/data.dart';
 import 'package:screenshots/mocks/mocks.dart';
 import 'package:screenshots/screenshots/screenshots.dart';
 import 'package:screenshots/widgets/widgets.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+import 'data/clock.dart';
 
-  await AppThemes.init();
-  final themeSettings = AppThemes().values.first.settings;
-
-  final appBloc = MockAppBloc.allScreen(
-    themeSettings: themeSettings,
-    themeMode: ThemeMode.light,
-    locale: const Locale('en'),
-  );
-
+void main() {
   withClock(
     Clock.fixed(dFixedTime),
-    () {
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
+
+      await AppThemes.init();
+      final themeSettings = AppThemes().values.first.settings;
+
+      final appBloc = MockAppBloc.allScreen(
+        themeSettings: themeSettings,
+        themeMode: ThemeMode.light,
+        locale: const Locale('en'),
+      );
+
       runApp(ScreenshotsApp(
         appBloc: appBloc,
       ));
@@ -53,9 +56,24 @@ class ScreenshotsApp extends StatelessWidget {
   late final _screenshots = [
     ScreenshotApp(
       appBloc: appBloc,
-      child: LoginScreenScreenshot(
-        LoginStep.modeSelect,
+      child: AuthModeSelectScreenScreenshot(
         appGreeting: EnvironmentConfig.APP_GREETING.isEmpty ? null : EnvironmentConfig.APP_GREETING,
+      ),
+    ),
+    ScreenshotApp(
+      appBloc: appBloc,
+      child: const AuthCoreUrlAssignScreenScreenshot(),
+    ),
+    ScreenshotApp(
+      appBloc: appBloc,
+      child: const AuthTypesScreenshot(
+        selected: SupportedLoginType.otpSignIn,
+      ),
+    ),
+    ScreenshotApp(
+      appBloc: appBloc,
+      child: const AuthTypesScreenshot(
+        selected: SupportedLoginType.passwordSignIn,
       ),
     ),
     ScreenshotApp(

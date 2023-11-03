@@ -12,6 +12,7 @@ import 'package:screenshots/screenshots/screenshots.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 
 import 'package:screenshots/mocks/mocks.dart';
@@ -78,7 +79,9 @@ void main() async {
     takeScreenshotTestWidgets('login_screen__modeSelect', () {
       return ScreenshotApp(
         appBloc: appBloc,
-        child: const LoginScreenScreenshot(LoginStep.modeSelect),
+        child: AuthModeSelectScreenScreenshot(
+          appGreeting: EnvironmentConfig.APP_GREETING.isEmpty ? null : EnvironmentConfig.APP_GREETING,
+        ),
       );
     });
   });
