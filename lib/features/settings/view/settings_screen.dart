@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
@@ -138,7 +139,13 @@ class SettingsScreen extends StatelessWidget {
               title: Text(context.l10n.settings_ListViewTileTitle_termsConditions),
               trailing: const Icon(Icons.navigate_next),
               onTap: () {
-                context.pushNamed(MainRoute.settingsTermsConditions);
+                final uri = Uri.parse(EnvironmentConfig.APP_TERMS_AND_CONDITIONS_URL);
+
+                if (uri.path.endsWith('.pdf')) {
+                  _launchUrlWithDefaultPlatformViewer(uri);
+                } else {
+                  context.pushNamed(MainRoute.settingsTermsConditions);
+                }
               },
             ),
           ],
@@ -209,5 +216,11 @@ class SettingsScreen extends StatelessWidget {
       },
       child: scaffold,
     );
+  }
+
+  void _launchUrlWithDefaultPlatformViewer(Uri uri) async {
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    }
   }
 }
