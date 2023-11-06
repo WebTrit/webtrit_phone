@@ -144,7 +144,12 @@ class SettingsScreen extends StatelessWidget {
                 if (uri.path.endsWith('.pdf')) {
                   _launchUrlWithDefaultPlatformViewer(uri);
                 } else {
-                  context.pushNamed(MainRoute.settingsTermsConditions);
+                  context.pushNamed(
+                    MainRoute.settingsTermsConditions,
+                    queryParameters: {
+                      'initialUrl': uri.toString(),
+                    },
+                  );
                 }
               },
             ),

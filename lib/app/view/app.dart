@@ -464,7 +464,9 @@ class _AppState extends State<App> {
                     path: 'terms-conditions',
                     name: MainRoute.settingsTermsConditions,
                     builder: (context, state) {
-                      const widget = TermsConditionsScreen();
+                      final widget = TermsConditionsScreen(
+                        initialUri: Uri.parse(state.uri.queryParameters['initialUrl'] ?? kBlankUri),
+                      );
                       return widget;
                     },
                   ),
