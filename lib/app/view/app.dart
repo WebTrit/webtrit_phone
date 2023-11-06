@@ -157,7 +157,7 @@ class _AppState extends State<App> {
             path: '/web-registration',
             builder: (context, state) {
               final widget = WebRegistrationScreen(
-                initialUri: Uri.parse(state.uri.queryParameters['initialUrl'] ?? kBlankUri),
+                initialUri: Uri.parse(state.uri.queryParameters[AppRoute.queryKeys.initialUrl] ?? kBlankUri),
               );
               return widget;
             },
@@ -465,7 +465,7 @@ class _AppState extends State<App> {
                     name: MainRoute.settingsTermsConditions,
                     builder: (context, state) {
                       final widget = TermsConditionsScreen(
-                        initialUri: Uri.parse(state.uri.queryParameters['initialUrl'] ?? kBlankUri),
+                        initialUri: Uri.parse(state.uri.queryParameters[MainRoute.queryKeys.initialUrl] ?? kBlankUri),
                       );
                       return widget;
                     },

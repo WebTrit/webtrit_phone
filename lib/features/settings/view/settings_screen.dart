@@ -147,7 +147,7 @@ class SettingsScreen extends StatelessWidget {
                   context.pushNamed(
                     MainRoute.settingsTermsConditions,
                     queryParameters: {
-                      'initialUrl': uri.toString(),
+                      MainRoute.queryKeys.initialUrl: uri.toString(),
                     },
                   );
                 }

@@ -3,6 +3,8 @@ import 'package:flutter/widgets.dart';
 class AppRoute {
   AppRoute._();
 
+  static const queryKeys = AppQueries();
+
   static const login = 'login';
   static const loginStep = 'login/step';
 
@@ -17,6 +19,8 @@ class MainRoute {
   MainRoute._();
 
   static final observer = RouteObserver<ModalRoute<dynamic>>();
+
+  static const queryKeys = MainQueries();
 
   static const call = 'call';
 
@@ -39,4 +43,18 @@ class MainRoute {
   static const settingsTermsConditions = 'terms-conditions';
   static const settingsThemeMode = 'theme-mode';
   static const logRecordsConsole = 'log-records-console';
+}
+
+class CommonQueries {
+  const CommonQueries();
+
+  final String initialUrl = 'initialUrl';
+}
+
+class AppQueries extends CommonQueries {
+  const AppQueries();
+}
+
+class MainQueries extends CommonQueries {
+  const MainQueries();
 }
