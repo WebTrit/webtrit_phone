@@ -138,11 +138,12 @@ class SettingsScreen extends StatelessWidget {
               leading: const Icon(Icons.book_outlined),
               title: Text(context.l10n.settings_ListViewTileTitle_termsConditions),
               trailing: const Icon(Icons.navigate_next),
-              onTap: () {
+              onTap: () async {
                 final uri = Uri.parse(EnvironmentConfig.APP_TERMS_AND_CONDITIONS_URL);
-
                 if (uri.path.endsWith('.pdf')) {
-                  _launchUrlWithDefaultPlatformViewer(uri);
+                  if (await canLaunchUrl(uri)) {
+                    await launchUrl(uri);
+                  }
                 } else {
                   context.pushNamed(
                     MainRoute.settingsTermsConditions,
@@ -221,11 +222,5 @@ class SettingsScreen extends StatelessWidget {
       },
       child: scaffold,
     );
-  }
-
-  void _launchUrlWithDefaultPlatformViewer(Uri uri) async {
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    }
   }
 }
