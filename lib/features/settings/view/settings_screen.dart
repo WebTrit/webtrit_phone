@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
@@ -137,8 +138,20 @@ class SettingsScreen extends StatelessWidget {
               leading: const Icon(Icons.book_outlined),
               title: Text(context.l10n.settings_ListViewTileTitle_termsConditions),
               trailing: const Icon(Icons.navigate_next),
-              onTap: () {
-                context.pushNamed(MainRoute.settingsTermsConditions);
+              onTap: () async {
+                final uri = Uri.parse(EnvironmentConfig.APP_TERMS_AND_CONDITIONS_URL);
+                if (uri.path.endsWith('.pdf')) {
+                  if (await canLaunchUrl(uri)) {
+                    await launchUrl(uri);
+                  }
+                } else {
+                  context.pushNamed(
+                    MainRoute.settingsTermsConditions,
+                    queryParameters: {
+                      TermsConditionsScreen.initialUriQueryParameterName: uri.toString(),
+                    },
+                  );
+                }
               },
             ),
           ],

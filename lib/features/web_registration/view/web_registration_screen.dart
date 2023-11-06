@@ -39,6 +39,8 @@ const String kDemoPage = '''
 ''';
 
 class WebRegistrationScreen extends StatefulWidget {
+  static const initialUriQueryParameterName = 'initialUrl';
+
   const WebRegistrationScreen({
     Key? key,
     required this.initialUri,
