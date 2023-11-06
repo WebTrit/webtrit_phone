@@ -5,6 +5,8 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import '../../../widgets/widgets.dart';
 
 class TermsConditionsScreen extends StatelessWidget {
+  static const initialUriQueryParameterName = 'initialUrl';
+
   const TermsConditionsScreen({
     super.key,
     required this.initialUri,
