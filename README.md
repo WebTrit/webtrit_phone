@@ -12,6 +12,7 @@ WebTrit Phone application.
 * `WEBTRIT_APP_PERIODIC_POLLING` (_default **true**_)
 * `WEBTRIT_APP_DEBUG_LEVEL` (_default **INFO**_)
 * `WEBTRIT_APP_DATABASE_LOG_STATEMENTS` (_default **false**_)
+* `WEBTRIT_ANDROID_RELEASE_KEY_PATH` (_default is empty_)
 
 Default build variables located in [dart_define.json](dart_define.json) and could be add to `flutter` `run` or `build` with `--dart-define-from-file=dart_define.json` parameter. 
 
