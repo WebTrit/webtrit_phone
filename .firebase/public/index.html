@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebTrit | WebRTC Softphone for Hosted PBX Providers</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+          integrity="sha512-" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #FFFFFF;
+            color: #30302F;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #EEF3F6;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            /* Add margin here */
+        }
+
+        .title {
+            color: #F95A14;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .description {
+            color: #123752;
+            font-size: 16px;
+            margin-top: 16px;
+            margin-bottom: 24px;
+            margin-left: 24px;
+            margin-right: 24px;
+        }
+
+        .logo {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .logo-img {
+            height: 64px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none;
+            color: #FFFFFF;
+            cursor: pointer;
+        }
+
+        .ios {
+            background-color: #1F618F;
+        }
+
+        .logo img {
+            max-width: 124px;
+        }
+
+        .android {
+            background-color: #75B943;
+        }
+    </style>
+</head>
+
+<body>
+<script>
+        function redirectToPlayMarket() {
+            var currentUrl = window.location.href;
+            var queryParams = window.location.search;
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // Parse the JSON response
+                    var assetLinks = JSON.parse(xhr.responseText);
+
+                    var package_name = assetLinks[0].target.package_name;
+                    window.location.href = `https://play.google.com/store/apps/details?id=${package_name}&${queryParams}`;
+                }
+            };
+
+            xhr.open('GET', '/.well-known/assetlinks.json', true);
+            xhr.send();
+        }
+
+        async function redirectToAppStore() {
+            var currentUrl = window.location.href;
+            var queryParams = window.location.search;
+
+            try {
+                // Make an asynchronous request to fetch the apple-app-site-association.json file
+                const response = await fetch('/.well-known/apple-app-site-association.json');
+
+                // Check if the request was successful (status code 200)
+                if (response.ok) {
+                    // Parse the JSON response
+                    const jsonData = await response.json();
+
+                    // Extract the appID from the parsed JSON
+                    const appIDFull = jsonData.applinks.details[0].appID;
+
+                    // Extract only the numerical part of the appID
+                    const appIDNumerical = appIDFull.match(/\d+/)[0];
+
+                    // Combine the extracted appID with "id" and use it in the new URL
+                    const idAppID = `id${appIDNumerical}`;
+                    window.location.href = `https://apps.apple.com/ua/app/webtrit/${idAppID}?${queryParams}`;
+                } else {
+                    // Handle the case where the request was not successful
+                    console.error('Failed to fetch apple-app-site-association.json');
+                }
+            } catch (error) {
+                // Handle any errors that may occur during the fetch operation
+                console.error('Error fetching apple-app-site-association.json:', error);
+            }
+        }
+
+        function redirectToStore() {
+            if (navigator.userAgent.match(/Android/)) {
+                redirectToPlayMarket();
+            } else if (navigator.userAgent.match(/iPhone|iPad|iPod/)) {
+                redirectToAppStore();
+            }
+        }
+
+        setTimeout(redirectToStore, 0);
+
+    </script>
+<div class="container">
+    <div class="logo">
+        <img class="logo-img" src="https://webtrit.com/wp-content/uploads/2021/03/WebTrit-favicon-1-240x240.png"
+             alt="Shoe App Logo">
+    </div>
+    <div class="title">WebTrit</div>
+    <div class="description">Softphone app for high quality voice and video calls
+    </div>
+    <div class="button-container">
+        <a onclick="redirectToAppStore()" class="button ios">
+            <i class="fab fa-apple"></i> App Store
+        </a>
+        <a onclick="redirectToPlayMarket()" class="button android">
+            <i class="fab fa-google-play"></i> Google Play
+        </a>
+    </div>
+</div>
+</body>
+
+</html>

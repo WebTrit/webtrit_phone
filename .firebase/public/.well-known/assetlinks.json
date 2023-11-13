@@ -1,0 +1,5 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target" : { "namespace": "android_app", "package_name": "com.webtrit.app",
+    "sha256_cert_fingerprints": ["D1:E7:96:55:9C:F1:1A:95:17:2F:D6:A2:E5:DD:4B:2E:74:45:6C:69:3B:FC:80:8E:44:A2:62:01:DF:47:BA:25"] }
+}]
