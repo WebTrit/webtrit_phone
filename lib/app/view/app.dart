@@ -12,6 +12,7 @@ import 'package:webtrit_phone/app/routes.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -44,6 +45,8 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   late final AppBloc appBloc;
 
+  final _appDeepLinks = AppDeepLinks();
+
   AppPreferences get _appPreferences => widget.appPreferences;
 
   SecureStorage get _secureStorage => widget.secureStorage;
@@ -61,11 +64,14 @@ class _AppState extends State<App> {
       appDatabase: _appDatabase,
       appThemes: widget.appThemes,
     );
+
+    _appDeepLinks.addListener(_subscribeDeepLinks);
   }
 
   @override
   void dispose() {
     appBloc.close();
+    _appDeepLinks.removeListener(_subscribeDeepLinks);
     super.dispose();
   }
 
@@ -514,7 +520,7 @@ class _AppState extends State<App> {
     ],
     redirect: _redirect,
     refreshListenable: GoRouterRefreshBloc(appBloc),
-    initialLocation: '/main',
+    initialLocation: AppDeepLinks().initialUrl?.path ?? '/main',
     observers: [
       context.read<AppAnalyticsRepository>().createObserver(),
     ],
@@ -545,6 +551,14 @@ class _AppState extends State<App> {
     }
 
     return null;
+  }
+
+  void _subscribeDeepLinks() {
+    final newLocation = _appDeepLinks.initialUrl?.relativeUrl;
+
+    if (newLocation != null && !_router.isCurrentLocation(newLocation) && _router.isRouteExit(newLocation)) {
+      _router.push(newLocation);
+    }
   }
 
   Widget _contactSourceTypeWidgetBuilder(BuildContext context, ContactSourceType sourceType) {
