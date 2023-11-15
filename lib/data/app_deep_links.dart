@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:android_play_install_referrer/android_play_install_referrer.dart';
@@ -7,18 +9,23 @@ class AppDeepLinks with ChangeNotifier {
   static late AppDeepLinks _instance;
 
   static Future<void> init() async {
+    var refererUrl = '';
+
+    if (Platform.isAndroid) {
+      refererUrl = (await AndroidPlayInstallReferrer.installReferrer).installReferrer ?? '';
+    }
+
     final appLinks = AppLinks();
-    final referrerDetails = await AndroidPlayInstallReferrer.installReferrer;
     final initialLink = await appLinks.getLatestAppLink();
-    _instance = AppDeepLinks._(initialLink, appLinks, referrerDetails);
+    _instance = AppDeepLinks._(initialLink, appLinks, refererUrl);
   }
 
   factory AppDeepLinks() {
     return _instance;
   }
 
-  AppDeepLinks._(Uri? initialUrl, AppLinks appLinks, ReferrerDetails referrerDetails) {
-    final referrerQuery = _parseQueryString(referrerDetails.installReferrer ?? '');
+  AppDeepLinks._(Uri? initialUrl, AppLinks appLinks, String referer) {
+    final referrerQuery = _parseQueryString(referer);
     final referrerPath = Uri.parse(referrerQuery.remove('path') ?? '').replace(queryParameters: referrerQuery);
 
     _initialUrl = initialUrl ?? referrerPath;
