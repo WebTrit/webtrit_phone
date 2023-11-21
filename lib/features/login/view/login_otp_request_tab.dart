@@ -38,10 +38,10 @@ class LoginOtpRequestTab extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return WillPopScope(
-          onWillPop: () async {
+        return PopScope(
+          canPop: false,
+          onPopInvoked: (didPop) {
             _onOtpRequestBack(context);
-            return false;
           },
           child: LoginScaffold(
             appBar: AppBar(

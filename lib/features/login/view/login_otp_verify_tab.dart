@@ -46,10 +46,10 @@ class LoginOtpVerifyTab extends StatelessWidget {
       builder: (context, state) {
         final isOtpNotificationEmail = state.sessionOtpProvisional?.notificationType?.isEmail ?? false;
         final otpFromEmail = state.sessionOtpProvisional?.fromEmail;
-        return WillPopScope(
-          onWillPop: () async {
+        return PopScope(
+          canPop: false,
+          onPopInvoked: (didPop) {
             _onOtpVerifyBack(context);
-            return false;
           },
           child: LoginScaffold(
             appBar: AppBar(

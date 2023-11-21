@@ -145,37 +145,38 @@ class _CallkeepDelegateRelay implements PDelegateFlutterApi {
   void didPushIncomingCall(
       PHandle handle, String? displayName, bool video, String callId, String uuidString, PIncomingCallError? error) {
     delegate.didPushIncomingCall(
-        handle.toCallkeep(), displayName, video, callId, UuidValue(uuidString), error?.value.toCallkeep());
+        handle.toCallkeep(), displayName, video, callId, UuidValue.fromString(uuidString), error?.value.toCallkeep());
   }
 
   @override
   Future<bool> performStartCall(String uuidString, PHandle handle, String? displayNameOrContactIdentifier, bool video) {
-    return delegate.performStartCall(UuidValue(uuidString), handle.toCallkeep(), displayNameOrContactIdentifier, video);
+    return delegate.performStartCall(
+        UuidValue.fromString(uuidString), handle.toCallkeep(), displayNameOrContactIdentifier, video);
   }
 
   @override
   Future<bool> performAnswerCall(String uuidString) {
-    return delegate.performAnswerCall(UuidValue(uuidString));
+    return delegate.performAnswerCall(UuidValue.fromString(uuidString));
   }
 
   @override
   Future<bool> performEndCall(String uuidString) {
-    return delegate.performEndCall(UuidValue(uuidString));
+    return delegate.performEndCall(UuidValue.fromString(uuidString));
   }
 
   @override
   Future<bool> performSetHeld(String uuidString, bool onHold) {
-    return delegate.performSetHeld(UuidValue(uuidString), onHold);
+    return delegate.performSetHeld(UuidValue.fromString(uuidString), onHold);
   }
 
   @override
   Future<bool> performSetMuted(String uuidString, bool muted) {
-    return delegate.performSetMuted(UuidValue(uuidString), muted);
+    return delegate.performSetMuted(UuidValue.fromString(uuidString), muted);
   }
 
   @override
   Future<bool> performSendDTMF(String uuidString, String key) {
-    return delegate.performSendDTMF(UuidValue(uuidString), key);
+    return delegate.performSendDTMF(UuidValue.fromString(uuidString), key);
   }
 
   @override
