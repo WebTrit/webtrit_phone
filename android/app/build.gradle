@@ -1,3 +1,6 @@
+import java.nio.file.Paths
+import groovy.json.JsonSlurper
+
 plugins {
     id "com.android.application"
     id "kotlin-android"
@@ -27,10 +30,35 @@ def dartDefine = [
     WEBTRIT_APP_NAME: project.hasProperty('WEBTRIT_APP_NAME') ? WEBTRIT_APP_NAME : 'WebTrit',
 ]
 
-def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+def envDefine = [
+    WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH: System.env.WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH,
+]
+
+def keystoreMetadata
+def keystoreFile
+if (envDefine.WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH != null) {
+    def keystoreMetadataPath = Paths.get(envDefine.WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH, "upload-keystore-metadata.json")
+    def keystoreMetadataFile = rootProject.file(keystoreMetadataPath)
+    println("Release signing configs retrieved from the metadata file: $keystoreMetadataFile")
+
+    keystoreMetadata = new JsonSlurper().parse(keystoreMetadataFile)
+
+    def keystorePath = Paths.get(envDefine.WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH, keystoreMetadata.storeFile)
+    keystoreFile = rootProject.file(keystorePath)
+} else {
+    def keystorePropertiesFile = rootProject.file('key.properties')
+    if (keystorePropertiesFile.exists()) {
+        println("Release signing configs retrieved from the properties file: $keystorePropertiesFile")
+        def keystoreProperties = new Properties()
+        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+        keystoreMetadata = new ConfigSlurper().parse(keystoreProperties)
+
+        def keystorePath = Paths.get(keystoreMetadata.storeFile)
+        keystoreFile = rootProject.file(keystorePath)
+    } else {
+        println("Release signing configs have not been provided.")
+    }
 }
 
 android {
@@ -64,10 +92,10 @@ android {
 
     signingConfigs {
         release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreMetadata.keyAlias
+            keyPassword keystoreMetadata.keyPassword
+            storeFile keystoreFile
+            storePassword keystoreMetadata.storePassword
         }
     }
     buildTypes {

@@ -2,7 +2,9 @@
 
 WebTrit Phone application.
 
-## Build variables
+## Variables
+
+### Dart define
 
 * `WEBTRIT_APP_ID_SUFFIX` - suffix added to `applicationId` (_with value `com.webtrit.app`_) on Android and to `CFBundleIdentifier` (_with value `com.webtrit.app`_) on iOS (_default is empty_)
 * `WEBTRIT_APP_NAME` (_default **WebTrit**_)
@@ -13,23 +15,30 @@ WebTrit Phone application.
 * `WEBTRIT_APP_DEBUG_LEVEL` (_default **INFO**_)
 * `WEBTRIT_APP_DATABASE_LOG_STATEMENTS` (_default **false**_)
 
-Default build variables located in [dart_define.json](dart_define.json) and could be add to `flutter` `run` or `build` with `--dart-define-from-file=dart_define.json` parameter. 
+Default build variables located in [dart_define.json](dart_define.json) and could be add to `flutter` `run` or `build` with `--dart-define-from-file=dart_define.json` parameter.
 
-### Build Android app
+### Environment
+
+* `WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH` - path to folder structure created by `keystore-generate` command of [webtrit_phone_tools](https://github.com/WebTrit/webtrit_phone_tools) (KeystoreGenerator)
+
+## Build
+
+### Android
 
 Command line example:
 ```bash
+WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH=<path for KeystoreGenerator created folder structure> && \
 flutter build appbundle --dart-define-from-file=dart_define.json
 ```
 
-### Build iOS app
+### iOS
 
 Command line example: 
 ```bash
 flutter build ipa --dart-define-from-file=dart_define.json
 ```
 
-### Build Web app
+### Web
 
 Command line example:
 ```bash
