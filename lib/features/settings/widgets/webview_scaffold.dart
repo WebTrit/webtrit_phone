@@ -8,7 +8,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/l10n/localization.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'webview_progress_indicator.dart';

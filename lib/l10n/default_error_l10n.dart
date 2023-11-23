@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
-import 'l10n.dart';
+import 'localization.dart';
 
 String defaultErrorL10n(BuildContext context, Object error) {
   return switch (error) {

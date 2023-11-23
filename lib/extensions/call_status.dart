@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/features/call/call.dart';
-import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/l10n/localization.dart';
 
 extension CallStatusL10n on CallStatus {
   String l10n(BuildContext context) {

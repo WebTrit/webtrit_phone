@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/l10n/localization.dart';
 
 extension LocaleExtension on Locale {
   static const Locale defaultNull = Locale.fromSubtags(languageCode: 'und', scriptCode: 'und', countryCode: 'und');

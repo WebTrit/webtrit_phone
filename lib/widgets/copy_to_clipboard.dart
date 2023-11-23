@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:webtrit_phone/extensions/build_context.dart';
-import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/l10n/localization.dart';
 
 class CopyToClipboard extends StatelessWidget {
   const CopyToClipboard({
