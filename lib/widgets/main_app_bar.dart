@@ -12,8 +12,9 @@ class MainAppBar extends AppBar {
   MainAppBar({
     super.key,
     super.bottom,
+    required String title,
   }) : super(
-          title: const Text(EnvironmentConfig.APP_NAME),
+          title: Text(title),
           centerTitle: false,
           actions: [
             BlocBuilder<CallBloc, CallState>(

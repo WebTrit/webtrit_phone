@@ -15,12 +15,17 @@ import '../favorites.dart';
 class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({
     super.key,
+    required this.title,
   });
+
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(),
+      appBar: MainAppBar(
+        title: title,
+      ),
       body: BlocBuilder<FavoritesBloc, FavoritesState>(
         builder: (context, state) {
           final favorites = state.favorites;

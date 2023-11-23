@@ -60,15 +60,24 @@ class ScreenshotsApp extends StatelessWidget {
     ),
     ScreenshotApp(
       appBloc: appBloc,
-      child: const MainScreenScreenshot(MainFlavor.favorites),
+      child: const MainScreenScreenshot(
+        MainFlavor.favorites,
+        EnvironmentConfig.APP_NAME,
+      ),
     ),
     ScreenshotApp(
       appBloc: appBloc,
-      child: const MainScreenScreenshot(MainFlavor.recents),
+      child: const MainScreenScreenshot(
+        MainFlavor.recents,
+        EnvironmentConfig.APP_NAME,
+      ),
     ),
     ScreenshotApp(
       appBloc: appBloc,
-      child: const MainScreenScreenshot(MainFlavor.keypad),
+      child: const MainScreenScreenshot(
+        MainFlavor.keypad,
+        EnvironmentConfig.APP_NAME,
+      ),
     ),
     ScreenshotApp(
       appBloc: appBloc,

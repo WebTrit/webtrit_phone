@@ -17,9 +17,12 @@ class RecentsScreen extends StatefulWidget {
   const RecentsScreen({
     super.key,
     this.recentsFilters = const [RecentsVisibilityFilter.all, RecentsVisibilityFilter.missed],
+    required this.title,
   });
 
   final List<RecentsVisibilityFilter> recentsFilters;
+
+  final String title;
 
   @override
   State<RecentsScreen> createState() => _RecentsScreenState();
@@ -63,6 +66,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
 
     return Scaffold(
       appBar: MainAppBar(
+        title: widget.title,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kMainAppBarBottomTabHeight),
           child: Padding(

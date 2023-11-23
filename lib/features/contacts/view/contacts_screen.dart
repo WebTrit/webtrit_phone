@@ -16,10 +16,13 @@ class ContactsScreen extends StatefulWidget {
     super.key,
     required this.sourceTypes,
     required this.sourceTypeWidgetBuilder,
+    required this.title,
   });
 
   final List<ContactSourceType> sourceTypes;
   final ContactSourceTypeWidgetBuilder sourceTypeWidgetBuilder;
+
+  final String title;
 
   @override
   State<ContactsScreen> createState() => _ContactsScreenState();
@@ -103,6 +106,7 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
     return Unfocuser(
       child: Scaffold(
         appBar: MainAppBar(
+          title: widget.title,
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(
               (tabBar != null ? kMainAppBarBottomTabHeight : 0) + kMainAppBarBottomSearchHeight,
