@@ -117,3 +117,11 @@ flutter_gen:
   integrations:
     flutter_svg: true
     flare_flutter: true
+
+flutter_intl:
+  enabled: true
+  arb_dir: lib/l10n/arb
+  output_dir: lib/l10n
+  class_name: AppIntlLocalizations
+  localizely:
+    project_id: a323d0ba-8b03-4ac2-9792-8f1f0aba0b05
