@@ -99,6 +99,7 @@ dev_dependencies:
   flutter_native_splash: ^2.3.6
   freezed: ^2.4.5
   json_serializable: ^6.7.1
+  intl_utils: ^2.8.5
 
 flutter:
   generate: true
