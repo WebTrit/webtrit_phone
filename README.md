@@ -23,6 +23,21 @@ Default build variables located in [dart_define.json](dart_define.json) and coul
 
 ## Build
 
+### Localization
+
+##### Download ARBs
+To manage localization in the WebTrit Phone application, [localizely](https://localizely.com/) is used. To download ARB (Application Resource Bundle) files for translation, use the following command:
+
+```bash
+flutter pub run intl_utils:localizely_download --project-id xxx --api-token xxx --arb-dir lib/l10n/arb
+```
+##### Generate localization
+After obtaining the translated ARB files, you can generate the localization files using the following command:
+
+```bash
+flutter gen-l10n
+```
+
 ### Android
 
 Command line example:
