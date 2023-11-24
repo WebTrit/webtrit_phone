@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 
+import 'package:flutter_localized_locales/flutter_localized_locales.dart';
+
 import 'package:webtrit_phone/l10n/l10n.dart';
 
 extension LocaleExtension on Locale {
@@ -25,10 +27,9 @@ extension LocaleL10n on Locale {
   String l10n(BuildContext context) {
     if (this == LocaleExtension.defaultNull) {
       return context.l10n.locale_default;
-    } else if (this == const Locale('en')) {
-      return context.l10n.locale_en;
     } else {
-      return toString();
+      final locale = LocaleNames.of(context)!.nameOf(languageCode);
+      return locale ?? toString();
     }
   }
 }

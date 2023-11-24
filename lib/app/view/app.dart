@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:store_info_extractor/store_info_extractor.dart';
@@ -86,7 +87,10 @@ class _AppState extends State<App> {
               final themeProvider = ThemeProvider.of(context);
               return MaterialApp.router(
                 locale: state.effectiveLocale,
-                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                localizationsDelegates: const [
+                  LocaleNamesLocalizationsDelegate(),
+                  ...AppLocalizations.localizationsDelegates,
+                ],
                 supportedLocales: AppLocalizations.supportedLocales,
                 restorationScopeId: 'App',
                 title: EnvironmentConfig.APP_NAME,
