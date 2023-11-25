@@ -110,6 +110,8 @@
   "@locale_default": {},
   "locale_en": "English",
   "@locale_en": {},
+  "locale_uk": "Ukrainian",
+  "@locale_uk": {},
   "login_AppBarTitle_coreUrlAssign": "",
   "@login_AppBarTitle_coreUrlAssign": {},
   "login_AppBarTitle_otpRequest": "",

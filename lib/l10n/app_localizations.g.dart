@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_en.g.dart';
+import 'app_localizations_uk.g.dart';
 
 /// Callers can lookup localized strings with an instance of AppLocalizations
 /// returned by `AppLocalizations.of(context)`.
@@ -88,7 +89,8 @@ abstract class AppLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
-    Locale('en')
+    Locale('en'),
+    Locale('uk')
   ];
 
   /// No description provided for @alertDialogActions_no.
@@ -402,6 +404,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'English'**
   String get locale_en;
+
+  /// No description provided for @locale_uk.
+  ///
+  /// In en, this message translates to:
+  /// **'Ukrainian'**
+  String get locale_uk;
 
   /// No description provided for @login_AppBarTitle_coreUrlAssign.
   ///
@@ -989,7 +997,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'uk'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -1001,6 +1009,7 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
     case 'en': return AppLocalizationsEn();
+    case 'uk': return AppLocalizationsUk();
   }
 
   throw FlutterError(

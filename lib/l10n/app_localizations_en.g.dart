@@ -165,6 +165,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get locale_en => 'English';
 
   @override
+  String get locale_uk => 'Ukrainian';
+
+  @override
   String get login_AppBarTitle_coreUrlAssign => '';
 
   @override
