@@ -27,6 +27,7 @@ if (flutterVersionName == null) {
 
 def dartDefine = [
     WEBTRIT_APP_ID_SUFFIX: project.hasProperty('WEBTRIT_APP_ID_SUFFIX') ? WEBTRIT_APP_ID_SUFFIX : '',
+    WEBTRIT_APP_LINK_DOMAIN: project.hasProperty('WEBTRIT_APP_LINK_DOMAIN') ? WEBTRIT_APP_LINK_DOMAIN : 'app.webtrit.com',
     WEBTRIT_APP_NAME: project.hasProperty('WEBTRIT_APP_NAME') ? WEBTRIT_APP_NAME : 'WebTrit',
 ]
 
@@ -87,6 +88,7 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
 
+        resValue "string", "APP_LINK_DOMAIN", dartDefine.WEBTRIT_APP_LINK_DOMAIN
         resValue "string", "APP_NAME", dartDefine.WEBTRIT_APP_NAME
     }
 
