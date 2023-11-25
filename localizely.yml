@@ -1,0 +1,24 @@
+config_version: 1.0
+project_id: a323d0ba-8b03-4ac2-9792-8f1f0aba0b05
+file_type: flutter_arb
+branch: main
+upload:
+  files:
+    - file: lib/l10n/arb/app_en.arb
+      locale_code: en
+  params:
+    overwrite: true
+    reviewed: true
+    tag_added:
+      - added
+    tag_removed:
+      - removed
+    tag_updated:
+      - updated
+download:
+  files:
+    - file: lib/l10n/arb/app_en.arb
+      locale_code: en
+  params:
+    export_empty_as: main
+    java_properties_encoding: utf_8
