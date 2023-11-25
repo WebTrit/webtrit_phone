@@ -202,7 +202,9 @@ class _AppState extends State<App> {
                         path: '/main/${MainFlavor.favorites.name}',
                         name: MainRoute.favorites,
                         builder: (context, state) {
-                          const widget = FavoritesScreen();
+                          const widget = FavoritesScreen(
+                            title: Text(EnvironmentConfig.APP_NAME),
+                          );
                           final provider = BlocProvider(
                             create: (context) => FavoritesBloc(
                               favoritesRepository: context.read<FavoritesRepository>(),
@@ -242,7 +244,9 @@ class _AppState extends State<App> {
                         path: '/main/${MainFlavor.recents.name}',
                         name: MainRoute.recents,
                         builder: (context, state) {
-                          const widget = RecentsScreen();
+                          const widget = RecentsScreen(
+                            title: Text(EnvironmentConfig.APP_NAME),
+                          );
                           return widget;
                         },
                         routes: [
@@ -277,6 +281,7 @@ class _AppState extends State<App> {
                         name: MainRoute.contacts,
                         builder: (context, state) {
                           final widget = ContactsScreen(
+                            title: const Text(EnvironmentConfig.APP_NAME),
                             sourceTypes: const [
                               ContactSourceType.local,
                               ContactSourceType.external,
@@ -322,7 +327,9 @@ class _AppState extends State<App> {
                         path: '/main/${MainFlavor.keypad.name}',
                         name: MainRoute.keypad,
                         builder: (context, state) {
-                          const widget = KeypadScreen();
+                          const widget = KeypadScreen(
+                            title: Text(EnvironmentConfig.APP_NAME),
+                          );
                           final provider = BlocProvider(
                             create: (context) => KeypadCubit(
                               callBloc: context.read<CallBloc>(),

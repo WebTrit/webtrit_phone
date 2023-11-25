@@ -9,11 +9,14 @@ import 'package:screenshots/mocks/mocks.dart';
 
 class MainScreenScreenshot extends StatelessWidget {
   const MainScreenScreenshot(
-    this.flavor, {
+    this.flavor,
+    this.title, {
     super.key,
   });
 
   final MainFlavor flavor;
+
+  final Widget? title;
 
   @override
   Widget build(BuildContext context) {
@@ -36,14 +39,18 @@ class MainScreenScreenshot extends StatelessWidget {
   Widget _flavorWidgetBuilder(BuildContext context, MainFlavor flavor) {
     switch (flavor) {
       case MainFlavor.favorites:
-        const widget = FavoritesScreen();
+        final widget = FavoritesScreen(
+          title: title,
+        );
         final provider = BlocProvider<FavoritesBloc>(
           create: (context) => MockFavoritesBloc.mainScreen(),
           child: widget,
         );
         return provider;
       case MainFlavor.recents:
-        const widget = RecentsScreen();
+        final widget = RecentsScreen(
+          title: title,
+        );
         final provider = BlocProvider<RecentsBloc>(
           create: (context) => MockRecentsBloc.mainScreen(),
           child: widget,
@@ -56,6 +63,7 @@ class MainScreenScreenshot extends StatelessWidget {
             ContactSourceType.external,
           ],
           sourceTypeWidgetBuilder: _contactSourceTypeWidgetBuilder,
+          title: title,
         );
         final provider = BlocProvider<ContactsBloc>(
           create: (context) => MockContactsSearchBloc.mainScreen(),
@@ -63,7 +71,9 @@ class MainScreenScreenshot extends StatelessWidget {
         );
         return provider;
       case MainFlavor.keypad:
-        const widget = KeypadScreen();
+        final widget = KeypadScreen(
+          title: title,
+        );
         final provider = BlocProvider<KeypadCubit>(
           create: (context) => MockKeypadCubit.mainScreen(),
           child: widget,
