@@ -17,12 +17,12 @@ class RecentsScreen extends StatefulWidget {
   const RecentsScreen({
     super.key,
     this.recentsFilters = const [RecentsVisibilityFilter.all, RecentsVisibilityFilter.missed],
-    required this.title,
+    this.title,
   });
 
   final List<RecentsVisibilityFilter> recentsFilters;
 
-  final String title;
+  final Widget? title;
 
   @override
   State<RecentsScreen> createState() => _RecentsScreenState();

@@ -90,7 +90,7 @@ void main() async {
         appBloc: appBloc,
         child: const MainScreenScreenshot(
           MainFlavor.favorites,
-          EnvironmentConfig.APP_NAME,
+          Text(EnvironmentConfig.APP_NAME),
         ),
       );
     });
@@ -99,7 +99,7 @@ void main() async {
         appBloc: appBloc,
         child: const MainScreenScreenshot(
           MainFlavor.recents,
-          EnvironmentConfig.APP_NAME,
+          Text(EnvironmentConfig.APP_NAME),
         ),
       );
     });
@@ -108,7 +108,7 @@ void main() async {
         appBloc: appBloc,
         child: const MainScreenScreenshot(
           MainFlavor.keypad,
-          EnvironmentConfig.APP_NAME,
+          Text(EnvironmentConfig.APP_NAME),
         ),
       );
     });

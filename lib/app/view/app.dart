@@ -203,7 +203,7 @@ class _AppState extends State<App> {
                         name: MainRoute.favorites,
                         builder: (context, state) {
                           const widget = FavoritesScreen(
-                            title: EnvironmentConfig.APP_NAME,
+                            title: Text(EnvironmentConfig.APP_NAME),
                           );
                           final provider = BlocProvider(
                             create: (context) => FavoritesBloc(
@@ -245,7 +245,7 @@ class _AppState extends State<App> {
                         name: MainRoute.recents,
                         builder: (context, state) {
                           const widget = RecentsScreen(
-                            title: EnvironmentConfig.APP_NAME,
+                            title: Text(EnvironmentConfig.APP_NAME),
                           );
                           return widget;
                         },
@@ -281,7 +281,7 @@ class _AppState extends State<App> {
                         name: MainRoute.contacts,
                         builder: (context, state) {
                           final widget = ContactsScreen(
-                            title: EnvironmentConfig.APP_NAME,
+                            title: const Text(EnvironmentConfig.APP_NAME),
                             sourceTypes: const [
                               ContactSourceType.local,
                               ContactSourceType.external,
@@ -328,7 +328,7 @@ class _AppState extends State<App> {
                         name: MainRoute.keypad,
                         builder: (context, state) {
                           const widget = KeypadScreen(
-                            title: EnvironmentConfig.APP_NAME,
+                            title: Text(EnvironmentConfig.APP_NAME),
                           );
                           final provider = BlocProvider(
                             create: (context) => KeypadCubit(

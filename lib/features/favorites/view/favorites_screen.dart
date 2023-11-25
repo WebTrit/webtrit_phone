@@ -15,10 +15,10 @@ import '../favorites.dart';
 class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({
     super.key,
-    required this.title,
+    this.title,
   });
 
-  final String title;
+  final Widget? title;
 
   @override
   Widget build(BuildContext context) {

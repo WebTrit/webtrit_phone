@@ -10,10 +10,9 @@ import 'package:webtrit_phone/features/features.dart';
 class MainAppBar extends AppBar {
   MainAppBar({
     super.key,
+    super.title,
     super.bottom,
-    required String title,
   }) : super(
-          title: Text(title),
           centerTitle: false,
           actions: [
             BlocBuilder<CallBloc, CallState>(

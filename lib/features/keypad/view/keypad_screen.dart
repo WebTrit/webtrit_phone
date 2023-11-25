@@ -7,10 +7,10 @@ import './keypad_view.dart';
 class KeypadScreen extends StatelessWidget {
   const KeypadScreen({
     super.key,
-    required this.title,
+    this.title,
   });
 
-  final String title;
+  final Widget? title;
 
   @override
   Widget build(BuildContext context) {

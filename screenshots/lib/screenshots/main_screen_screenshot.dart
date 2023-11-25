@@ -16,7 +16,7 @@ class MainScreenScreenshot extends StatelessWidget {
 
   final MainFlavor flavor;
 
-  final String title;
+  final Widget? title;
 
   @override
   Widget build(BuildContext context) {

@@ -16,13 +16,13 @@ class ContactsScreen extends StatefulWidget {
     super.key,
     required this.sourceTypes,
     required this.sourceTypeWidgetBuilder,
-    required this.title,
+    this.title,
   });
 
   final List<ContactSourceType> sourceTypes;
   final ContactSourceTypeWidgetBuilder sourceTypeWidgetBuilder;
 
-  final String title;
+  final Widget? title;
 
   @override
   State<ContactsScreen> createState() => _ContactsScreenState();
