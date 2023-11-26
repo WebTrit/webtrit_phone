@@ -7,6 +7,7 @@ WebTrit Phone application.
 ### Dart define
 
 * `WEBTRIT_APP_ID_SUFFIX` - suffix added to `applicationId` (_with value `com.webtrit.app`_) on Android and to `CFBundleIdentifier` (_with value `com.webtrit.app`_) on iOS (_default is empty_)
+* `WEBTRIT_APP_LINK_DOMAIN` - domain used to set up [Android app links](https://docs.flutter.dev/cookbook/navigation/set-up-app-links) and [iOS universal links](https://docs.flutter.dev/cookbook/navigation/set-up-universal-links) (to generate the required `.well-known` files, use the `assetlinks-generate` command from [webtrit_phone_tools](https://github.com/WebTrit/webtrit_phone_tools)
 * `WEBTRIT_APP_NAME` (_default **WebTrit**_)
 * `WEBTRIT_APP_DESCRIPTION` (_default is empty_)
 * `WEBTRIT_APP_CORE_URL` (_optional_)
