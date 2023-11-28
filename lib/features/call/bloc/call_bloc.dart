@@ -612,7 +612,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         _logger.warning('__onCallSignalingEventProgress: peerConnection is null - most likely some permissions issue');
       } else {
         final remoteDescription = jsep.toDescription();
-        peerConnection.setRemoteDescription(remoteDescription);
+        await peerConnection.setRemoteDescription(remoteDescription);
       }
     } else {
       _logger.warning('__onCallSignalingEventProgress: jsep must not be null');
@@ -638,7 +638,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         _logger.warning('__onCallSignalingEventAccepted: peerConnection is null - most likely some permissions issue');
       } else {
         final remoteDescription = jsep.toDescription();
-        peerConnection.setRemoteDescription(remoteDescription);
+        await peerConnection.setRemoteDescription(remoteDescription);
       }
     }
   }
