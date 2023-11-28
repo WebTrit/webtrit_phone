@@ -1274,7 +1274,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       for (final callLog in activeLine.callLogs) {
         if (callLog is CallEventLog) {
           final event = callLog.callEvent;
-          if (event is IncomingCallEvent) {
+          if (event is IncomingCallEvent && activeLine.callLogs.length == 1) {
             _onSignalingEvent(event);
           }
         }
