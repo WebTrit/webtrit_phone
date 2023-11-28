@@ -1112,12 +1112,25 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) {
     return event.map(
+      signalingStateChanged: (event) => __onPeerConnectionEventSignalingStateChanged(event, emit),
+      connectionStateChanged: (event) => __onPeerConnectionEventConnectionStateChanged(event, emit),
       iceGatheringStateChanged: (event) => __onPeerConnectionEventIceGatheringStateChanged(event, emit),
+      iceConnectionStateChanged: (event) => __onPeerConnectionEventIceConnectionStateChanged(event, emit),
       iceCandidateIdentified: (event) => __onPeerConnectionEventIceCandidateIdentified(event, emit),
       streamAdded: (event) => __onPeerConnectionEventStreamAdded(event, emit),
       streamRemoved: (event) => __onPeerConnectionEventStreamRemoved(event, emit),
     );
   }
+
+  Future<void> __onPeerConnectionEventSignalingStateChanged(
+    _PeerConnectionEventSignalingStateChanged event,
+    Emitter<CallState> emit,
+  ) async {}
+
+  Future<void> __onPeerConnectionEventConnectionStateChanged(
+    _PeerConnectionEventConnectionStateChanged event,
+    Emitter<CallState> emit,
+  ) async {}
 
   Future<void> __onPeerConnectionEventIceGatheringStateChanged(
     _PeerConnectionEventIceGatheringStateChanged event,
@@ -1135,6 +1148,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       });
     }
   }
+
+  Future<void> __onPeerConnectionEventIceConnectionStateChanged(
+    _PeerConnectionEventIceConnectionStateChanged event,
+    Emitter<CallState> emit,
+  ) async {}
 
   Future<void> __onPeerConnectionEventIceCandidateIdentified(
     _PeerConnectionEventIceCandidateIdentified event,
@@ -1477,9 +1495,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     return peerConnection
       ..onSignalingState = (signalingState) {
         logger.fine(() => 'onSignalingState state: $signalingState');
+
+        add(_PeerConnectionEvent.signalingStateChanged(uuid, signalingState));
       }
       ..onConnectionState = (connectionState) {
         logger.fine(() => 'onConnectionState state: $connectionState');
+
+        add(_PeerConnectionEvent.connectionStateChanged(uuid, connectionState));
       }
       ..onIceGatheringState = (iceGatheringState) {
         logger.fine(() => 'onIceGatheringState state: $iceGatheringState');
@@ -1488,6 +1510,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
       ..onIceConnectionState = (iceConnectionState) {
         logger.fine(() => 'onIceConnectionState state: $iceConnectionState');
+
+        add(_PeerConnectionEvent.iceConnectionStateChanged(uuid, iceConnectionState));
       }
       ..onIceCandidate = (candidate) {
         logger.fine(() => 'onIceCandidate candidate: $candidate');

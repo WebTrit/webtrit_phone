@@ -212,8 +212,17 @@ class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
 
 @Freezed(copyWith: false)
 class _PeerConnectionEvent with _$PeerConnectionEvent implements CallEvent {
+  const factory _PeerConnectionEvent.signalingStateChanged(UuidValue uuid, RTCSignalingState state) =
+      _PeerConnectionEventSignalingStateChanged;
+
+  const factory _PeerConnectionEvent.connectionStateChanged(UuidValue uuid, RTCPeerConnectionState state) =
+      _PeerConnectionEventConnectionStateChanged;
+
   const factory _PeerConnectionEvent.iceGatheringStateChanged(UuidValue uuid, RTCIceGatheringState state) =
       _PeerConnectionEventIceGatheringStateChanged;
+
+  const factory _PeerConnectionEvent.iceConnectionStateChanged(UuidValue uuid, RTCIceConnectionState state) =
+      _PeerConnectionEventIceConnectionStateChanged;
 
   const factory _PeerConnectionEvent.iceCandidateIdentified(UuidValue uuid, RTCIceCandidate candidate) =
       _PeerConnectionEventIceCandidateIdentified;

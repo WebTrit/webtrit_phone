@@ -5431,8 +5431,14 @@ mixin _$PeerConnectionEvent {
   UuidValue get uuid => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function(UuidValue uuid, RTCSignalingState state)
+        signalingStateChanged,
+    required TResult Function(UuidValue uuid, RTCPeerConnectionState state)
+        connectionStateChanged,
     required TResult Function(UuidValue uuid, RTCIceGatheringState state)
         iceGatheringStateChanged,
+    required TResult Function(UuidValue uuid, RTCIceConnectionState state)
+        iceConnectionStateChanged,
     required TResult Function(UuidValue uuid, RTCIceCandidate candidate)
         iceCandidateIdentified,
     required TResult Function(UuidValue uuid, MediaStream stream) streamAdded,
@@ -5441,8 +5447,14 @@ mixin _$PeerConnectionEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(UuidValue uuid, RTCSignalingState state)?
+        signalingStateChanged,
+    TResult? Function(UuidValue uuid, RTCPeerConnectionState state)?
+        connectionStateChanged,
     TResult? Function(UuidValue uuid, RTCIceGatheringState state)?
         iceGatheringStateChanged,
+    TResult? Function(UuidValue uuid, RTCIceConnectionState state)?
+        iceConnectionStateChanged,
     TResult? Function(UuidValue uuid, RTCIceCandidate candidate)?
         iceCandidateIdentified,
     TResult? Function(UuidValue uuid, MediaStream stream)? streamAdded,
@@ -5451,8 +5463,14 @@ mixin _$PeerConnectionEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function(UuidValue uuid, RTCSignalingState state)?
+        signalingStateChanged,
+    TResult Function(UuidValue uuid, RTCPeerConnectionState state)?
+        connectionStateChanged,
     TResult Function(UuidValue uuid, RTCIceGatheringState state)?
         iceGatheringStateChanged,
+    TResult Function(UuidValue uuid, RTCIceConnectionState state)?
+        iceConnectionStateChanged,
     TResult Function(UuidValue uuid, RTCIceCandidate candidate)?
         iceCandidateIdentified,
     TResult Function(UuidValue uuid, MediaStream stream)? streamAdded,
@@ -5462,9 +5480,16 @@ mixin _$PeerConnectionEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(_PeerConnectionEventSignalingStateChanged value)
+        signalingStateChanged,
+    required TResult Function(_PeerConnectionEventConnectionStateChanged value)
+        connectionStateChanged,
     required TResult Function(
             _PeerConnectionEventIceGatheringStateChanged value)
         iceGatheringStateChanged,
+    required TResult Function(
+            _PeerConnectionEventIceConnectionStateChanged value)
+        iceConnectionStateChanged,
     required TResult Function(_PeerConnectionEventIceCandidateIdentified value)
         iceCandidateIdentified,
     required TResult Function(_PeerConnectionEventStreamAdded value)
@@ -5475,8 +5500,14 @@ mixin _$PeerConnectionEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_PeerConnectionEventSignalingStateChanged value)?
+        signalingStateChanged,
+    TResult? Function(_PeerConnectionEventConnectionStateChanged value)?
+        connectionStateChanged,
     TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
         iceGatheringStateChanged,
+    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)?
+        iceConnectionStateChanged,
     TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
         iceCandidateIdentified,
     TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
@@ -5485,8 +5516,14 @@ mixin _$PeerConnectionEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(_PeerConnectionEventSignalingStateChanged value)?
+        signalingStateChanged,
+    TResult Function(_PeerConnectionEventConnectionStateChanged value)?
+        connectionStateChanged,
     TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
         iceGatheringStateChanged,
+    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)?
+        iceConnectionStateChanged,
     TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
         iceCandidateIdentified,
     TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
@@ -5494,6 +5531,360 @@ mixin _$PeerConnectionEvent {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+
+class _$PeerConnectionEventSignalingStateChangedImpl
+    with DiagnosticableTreeMixin
+    implements _PeerConnectionEventSignalingStateChanged {
+  const _$PeerConnectionEventSignalingStateChangedImpl(this.uuid, this.state);
+
+  @override
+  final UuidValue uuid;
+  @override
+  final RTCSignalingState state;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_PeerConnectionEvent.signalingStateChanged(uuid: $uuid, state: $state)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty(
+          'type', '_PeerConnectionEvent.signalingStateChanged'))
+      ..add(DiagnosticsProperty('uuid', uuid))
+      ..add(DiagnosticsProperty('state', state));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PeerConnectionEventSignalingStateChangedImpl &&
+            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.state, state) || other.state == state));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, uuid, state);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(UuidValue uuid, RTCSignalingState state)
+        signalingStateChanged,
+    required TResult Function(UuidValue uuid, RTCPeerConnectionState state)
+        connectionStateChanged,
+    required TResult Function(UuidValue uuid, RTCIceGatheringState state)
+        iceGatheringStateChanged,
+    required TResult Function(UuidValue uuid, RTCIceConnectionState state)
+        iceConnectionStateChanged,
+    required TResult Function(UuidValue uuid, RTCIceCandidate candidate)
+        iceCandidateIdentified,
+    required TResult Function(UuidValue uuid, MediaStream stream) streamAdded,
+    required TResult Function(UuidValue uuid, MediaStream stream) streamRemoved,
+  }) {
+    return signalingStateChanged(uuid, state);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(UuidValue uuid, RTCSignalingState state)?
+        signalingStateChanged,
+    TResult? Function(UuidValue uuid, RTCPeerConnectionState state)?
+        connectionStateChanged,
+    TResult? Function(UuidValue uuid, RTCIceGatheringState state)?
+        iceGatheringStateChanged,
+    TResult? Function(UuidValue uuid, RTCIceConnectionState state)?
+        iceConnectionStateChanged,
+    TResult? Function(UuidValue uuid, RTCIceCandidate candidate)?
+        iceCandidateIdentified,
+    TResult? Function(UuidValue uuid, MediaStream stream)? streamAdded,
+    TResult? Function(UuidValue uuid, MediaStream stream)? streamRemoved,
+  }) {
+    return signalingStateChanged?.call(uuid, state);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(UuidValue uuid, RTCSignalingState state)?
+        signalingStateChanged,
+    TResult Function(UuidValue uuid, RTCPeerConnectionState state)?
+        connectionStateChanged,
+    TResult Function(UuidValue uuid, RTCIceGatheringState state)?
+        iceGatheringStateChanged,
+    TResult Function(UuidValue uuid, RTCIceConnectionState state)?
+        iceConnectionStateChanged,
+    TResult Function(UuidValue uuid, RTCIceCandidate candidate)?
+        iceCandidateIdentified,
+    TResult Function(UuidValue uuid, MediaStream stream)? streamAdded,
+    TResult Function(UuidValue uuid, MediaStream stream)? streamRemoved,
+    required TResult orElse(),
+  }) {
+    if (signalingStateChanged != null) {
+      return signalingStateChanged(uuid, state);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_PeerConnectionEventSignalingStateChanged value)
+        signalingStateChanged,
+    required TResult Function(_PeerConnectionEventConnectionStateChanged value)
+        connectionStateChanged,
+    required TResult Function(
+            _PeerConnectionEventIceGatheringStateChanged value)
+        iceGatheringStateChanged,
+    required TResult Function(
+            _PeerConnectionEventIceConnectionStateChanged value)
+        iceConnectionStateChanged,
+    required TResult Function(_PeerConnectionEventIceCandidateIdentified value)
+        iceCandidateIdentified,
+    required TResult Function(_PeerConnectionEventStreamAdded value)
+        streamAdded,
+    required TResult Function(_PeerConnectionEventStreamRemoved value)
+        streamRemoved,
+  }) {
+    return signalingStateChanged(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_PeerConnectionEventSignalingStateChanged value)?
+        signalingStateChanged,
+    TResult? Function(_PeerConnectionEventConnectionStateChanged value)?
+        connectionStateChanged,
+    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
+        iceGatheringStateChanged,
+    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)?
+        iceConnectionStateChanged,
+    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
+        iceCandidateIdentified,
+    TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
+    TResult? Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
+  }) {
+    return signalingStateChanged?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_PeerConnectionEventSignalingStateChanged value)?
+        signalingStateChanged,
+    TResult Function(_PeerConnectionEventConnectionStateChanged value)?
+        connectionStateChanged,
+    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
+        iceGatheringStateChanged,
+    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)?
+        iceConnectionStateChanged,
+    TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
+        iceCandidateIdentified,
+    TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
+    TResult Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
+    required TResult orElse(),
+  }) {
+    if (signalingStateChanged != null) {
+      return signalingStateChanged(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _PeerConnectionEventSignalingStateChanged
+    implements _PeerConnectionEvent {
+  const factory _PeerConnectionEventSignalingStateChanged(
+          final UuidValue uuid, final RTCSignalingState state) =
+      _$PeerConnectionEventSignalingStateChangedImpl;
+
+  @override
+  UuidValue get uuid;
+  RTCSignalingState get state;
+}
+
+/// @nodoc
+
+class _$PeerConnectionEventConnectionStateChangedImpl
+    with DiagnosticableTreeMixin
+    implements _PeerConnectionEventConnectionStateChanged {
+  const _$PeerConnectionEventConnectionStateChangedImpl(this.uuid, this.state);
+
+  @override
+  final UuidValue uuid;
+  @override
+  final RTCPeerConnectionState state;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_PeerConnectionEvent.connectionStateChanged(uuid: $uuid, state: $state)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty(
+          'type', '_PeerConnectionEvent.connectionStateChanged'))
+      ..add(DiagnosticsProperty('uuid', uuid))
+      ..add(DiagnosticsProperty('state', state));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PeerConnectionEventConnectionStateChangedImpl &&
+            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.state, state) || other.state == state));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, uuid, state);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(UuidValue uuid, RTCSignalingState state)
+        signalingStateChanged,
+    required TResult Function(UuidValue uuid, RTCPeerConnectionState state)
+        connectionStateChanged,
+    required TResult Function(UuidValue uuid, RTCIceGatheringState state)
+        iceGatheringStateChanged,
+    required TResult Function(UuidValue uuid, RTCIceConnectionState state)
+        iceConnectionStateChanged,
+    required TResult Function(UuidValue uuid, RTCIceCandidate candidate)
+        iceCandidateIdentified,
+    required TResult Function(UuidValue uuid, MediaStream stream) streamAdded,
+    required TResult Function(UuidValue uuid, MediaStream stream) streamRemoved,
+  }) {
+    return connectionStateChanged(uuid, state);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(UuidValue uuid, RTCSignalingState state)?
+        signalingStateChanged,
+    TResult? Function(UuidValue uuid, RTCPeerConnectionState state)?
+        connectionStateChanged,
+    TResult? Function(UuidValue uuid, RTCIceGatheringState state)?
+        iceGatheringStateChanged,
+    TResult? Function(UuidValue uuid, RTCIceConnectionState state)?
+        iceConnectionStateChanged,
+    TResult? Function(UuidValue uuid, RTCIceCandidate candidate)?
+        iceCandidateIdentified,
+    TResult? Function(UuidValue uuid, MediaStream stream)? streamAdded,
+    TResult? Function(UuidValue uuid, MediaStream stream)? streamRemoved,
+  }) {
+    return connectionStateChanged?.call(uuid, state);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(UuidValue uuid, RTCSignalingState state)?
+        signalingStateChanged,
+    TResult Function(UuidValue uuid, RTCPeerConnectionState state)?
+        connectionStateChanged,
+    TResult Function(UuidValue uuid, RTCIceGatheringState state)?
+        iceGatheringStateChanged,
+    TResult Function(UuidValue uuid, RTCIceConnectionState state)?
+        iceConnectionStateChanged,
+    TResult Function(UuidValue uuid, RTCIceCandidate candidate)?
+        iceCandidateIdentified,
+    TResult Function(UuidValue uuid, MediaStream stream)? streamAdded,
+    TResult Function(UuidValue uuid, MediaStream stream)? streamRemoved,
+    required TResult orElse(),
+  }) {
+    if (connectionStateChanged != null) {
+      return connectionStateChanged(uuid, state);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_PeerConnectionEventSignalingStateChanged value)
+        signalingStateChanged,
+    required TResult Function(_PeerConnectionEventConnectionStateChanged value)
+        connectionStateChanged,
+    required TResult Function(
+            _PeerConnectionEventIceGatheringStateChanged value)
+        iceGatheringStateChanged,
+    required TResult Function(
+            _PeerConnectionEventIceConnectionStateChanged value)
+        iceConnectionStateChanged,
+    required TResult Function(_PeerConnectionEventIceCandidateIdentified value)
+        iceCandidateIdentified,
+    required TResult Function(_PeerConnectionEventStreamAdded value)
+        streamAdded,
+    required TResult Function(_PeerConnectionEventStreamRemoved value)
+        streamRemoved,
+  }) {
+    return connectionStateChanged(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_PeerConnectionEventSignalingStateChanged value)?
+        signalingStateChanged,
+    TResult? Function(_PeerConnectionEventConnectionStateChanged value)?
+        connectionStateChanged,
+    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
+        iceGatheringStateChanged,
+    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)?
+        iceConnectionStateChanged,
+    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
+        iceCandidateIdentified,
+    TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
+    TResult? Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
+  }) {
+    return connectionStateChanged?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_PeerConnectionEventSignalingStateChanged value)?
+        signalingStateChanged,
+    TResult Function(_PeerConnectionEventConnectionStateChanged value)?
+        connectionStateChanged,
+    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
+        iceGatheringStateChanged,
+    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)?
+        iceConnectionStateChanged,
+    TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
+        iceCandidateIdentified,
+    TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
+    TResult Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
+    required TResult orElse(),
+  }) {
+    if (connectionStateChanged != null) {
+      return connectionStateChanged(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _PeerConnectionEventConnectionStateChanged
+    implements _PeerConnectionEvent {
+  const factory _PeerConnectionEventConnectionStateChanged(
+          final UuidValue uuid, final RTCPeerConnectionState state) =
+      _$PeerConnectionEventConnectionStateChangedImpl;
+
+  @override
+  UuidValue get uuid;
+  RTCPeerConnectionState get state;
 }
 
 /// @nodoc
@@ -5539,8 +5930,14 @@ class _$PeerConnectionEventIceGatheringStateChangedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function(UuidValue uuid, RTCSignalingState state)
+        signalingStateChanged,
+    required TResult Function(UuidValue uuid, RTCPeerConnectionState state)
+        connectionStateChanged,
     required TResult Function(UuidValue uuid, RTCIceGatheringState state)
         iceGatheringStateChanged,
+    required TResult Function(UuidValue uuid, RTCIceConnectionState state)
+        iceConnectionStateChanged,
     required TResult Function(UuidValue uuid, RTCIceCandidate candidate)
         iceCandidateIdentified,
     required TResult Function(UuidValue uuid, MediaStream stream) streamAdded,
@@ -5552,8 +5949,14 @@ class _$PeerConnectionEventIceGatheringStateChangedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(UuidValue uuid, RTCSignalingState state)?
+        signalingStateChanged,
+    TResult? Function(UuidValue uuid, RTCPeerConnectionState state)?
+        connectionStateChanged,
     TResult? Function(UuidValue uuid, RTCIceGatheringState state)?
         iceGatheringStateChanged,
+    TResult? Function(UuidValue uuid, RTCIceConnectionState state)?
+        iceConnectionStateChanged,
     TResult? Function(UuidValue uuid, RTCIceCandidate candidate)?
         iceCandidateIdentified,
     TResult? Function(UuidValue uuid, MediaStream stream)? streamAdded,
@@ -5565,8 +5968,14 @@ class _$PeerConnectionEventIceGatheringStateChangedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function(UuidValue uuid, RTCSignalingState state)?
+        signalingStateChanged,
+    TResult Function(UuidValue uuid, RTCPeerConnectionState state)?
+        connectionStateChanged,
     TResult Function(UuidValue uuid, RTCIceGatheringState state)?
         iceGatheringStateChanged,
+    TResult Function(UuidValue uuid, RTCIceConnectionState state)?
+        iceConnectionStateChanged,
     TResult Function(UuidValue uuid, RTCIceCandidate candidate)?
         iceCandidateIdentified,
     TResult Function(UuidValue uuid, MediaStream stream)? streamAdded,
@@ -5582,9 +5991,16 @@ class _$PeerConnectionEventIceGatheringStateChangedImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(_PeerConnectionEventSignalingStateChanged value)
+        signalingStateChanged,
+    required TResult Function(_PeerConnectionEventConnectionStateChanged value)
+        connectionStateChanged,
     required TResult Function(
             _PeerConnectionEventIceGatheringStateChanged value)
         iceGatheringStateChanged,
+    required TResult Function(
+            _PeerConnectionEventIceConnectionStateChanged value)
+        iceConnectionStateChanged,
     required TResult Function(_PeerConnectionEventIceCandidateIdentified value)
         iceCandidateIdentified,
     required TResult Function(_PeerConnectionEventStreamAdded value)
@@ -5598,8 +6014,14 @@ class _$PeerConnectionEventIceGatheringStateChangedImpl
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_PeerConnectionEventSignalingStateChanged value)?
+        signalingStateChanged,
+    TResult? Function(_PeerConnectionEventConnectionStateChanged value)?
+        connectionStateChanged,
     TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
         iceGatheringStateChanged,
+    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)?
+        iceConnectionStateChanged,
     TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
         iceCandidateIdentified,
     TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
@@ -5611,8 +6033,14 @@ class _$PeerConnectionEventIceGatheringStateChangedImpl
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(_PeerConnectionEventSignalingStateChanged value)?
+        signalingStateChanged,
+    TResult Function(_PeerConnectionEventConnectionStateChanged value)?
+        connectionStateChanged,
     TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
         iceGatheringStateChanged,
+    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)?
+        iceConnectionStateChanged,
     TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
         iceCandidateIdentified,
     TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
@@ -5635,6 +6063,184 @@ abstract class _PeerConnectionEventIceGatheringStateChanged
   @override
   UuidValue get uuid;
   RTCIceGatheringState get state;
+}
+
+/// @nodoc
+
+class _$PeerConnectionEventIceConnectionStateChangedImpl
+    with DiagnosticableTreeMixin
+    implements _PeerConnectionEventIceConnectionStateChanged {
+  const _$PeerConnectionEventIceConnectionStateChangedImpl(
+      this.uuid, this.state);
+
+  @override
+  final UuidValue uuid;
+  @override
+  final RTCIceConnectionState state;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_PeerConnectionEvent.iceConnectionStateChanged(uuid: $uuid, state: $state)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty(
+          'type', '_PeerConnectionEvent.iceConnectionStateChanged'))
+      ..add(DiagnosticsProperty('uuid', uuid))
+      ..add(DiagnosticsProperty('state', state));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PeerConnectionEventIceConnectionStateChangedImpl &&
+            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.state, state) || other.state == state));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, uuid, state);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(UuidValue uuid, RTCSignalingState state)
+        signalingStateChanged,
+    required TResult Function(UuidValue uuid, RTCPeerConnectionState state)
+        connectionStateChanged,
+    required TResult Function(UuidValue uuid, RTCIceGatheringState state)
+        iceGatheringStateChanged,
+    required TResult Function(UuidValue uuid, RTCIceConnectionState state)
+        iceConnectionStateChanged,
+    required TResult Function(UuidValue uuid, RTCIceCandidate candidate)
+        iceCandidateIdentified,
+    required TResult Function(UuidValue uuid, MediaStream stream) streamAdded,
+    required TResult Function(UuidValue uuid, MediaStream stream) streamRemoved,
+  }) {
+    return iceConnectionStateChanged(uuid, state);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(UuidValue uuid, RTCSignalingState state)?
+        signalingStateChanged,
+    TResult? Function(UuidValue uuid, RTCPeerConnectionState state)?
+        connectionStateChanged,
+    TResult? Function(UuidValue uuid, RTCIceGatheringState state)?
+        iceGatheringStateChanged,
+    TResult? Function(UuidValue uuid, RTCIceConnectionState state)?
+        iceConnectionStateChanged,
+    TResult? Function(UuidValue uuid, RTCIceCandidate candidate)?
+        iceCandidateIdentified,
+    TResult? Function(UuidValue uuid, MediaStream stream)? streamAdded,
+    TResult? Function(UuidValue uuid, MediaStream stream)? streamRemoved,
+  }) {
+    return iceConnectionStateChanged?.call(uuid, state);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(UuidValue uuid, RTCSignalingState state)?
+        signalingStateChanged,
+    TResult Function(UuidValue uuid, RTCPeerConnectionState state)?
+        connectionStateChanged,
+    TResult Function(UuidValue uuid, RTCIceGatheringState state)?
+        iceGatheringStateChanged,
+    TResult Function(UuidValue uuid, RTCIceConnectionState state)?
+        iceConnectionStateChanged,
+    TResult Function(UuidValue uuid, RTCIceCandidate candidate)?
+        iceCandidateIdentified,
+    TResult Function(UuidValue uuid, MediaStream stream)? streamAdded,
+    TResult Function(UuidValue uuid, MediaStream stream)? streamRemoved,
+    required TResult orElse(),
+  }) {
+    if (iceConnectionStateChanged != null) {
+      return iceConnectionStateChanged(uuid, state);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_PeerConnectionEventSignalingStateChanged value)
+        signalingStateChanged,
+    required TResult Function(_PeerConnectionEventConnectionStateChanged value)
+        connectionStateChanged,
+    required TResult Function(
+            _PeerConnectionEventIceGatheringStateChanged value)
+        iceGatheringStateChanged,
+    required TResult Function(
+            _PeerConnectionEventIceConnectionStateChanged value)
+        iceConnectionStateChanged,
+    required TResult Function(_PeerConnectionEventIceCandidateIdentified value)
+        iceCandidateIdentified,
+    required TResult Function(_PeerConnectionEventStreamAdded value)
+        streamAdded,
+    required TResult Function(_PeerConnectionEventStreamRemoved value)
+        streamRemoved,
+  }) {
+    return iceConnectionStateChanged(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_PeerConnectionEventSignalingStateChanged value)?
+        signalingStateChanged,
+    TResult? Function(_PeerConnectionEventConnectionStateChanged value)?
+        connectionStateChanged,
+    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
+        iceGatheringStateChanged,
+    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)?
+        iceConnectionStateChanged,
+    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
+        iceCandidateIdentified,
+    TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
+    TResult? Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
+  }) {
+    return iceConnectionStateChanged?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_PeerConnectionEventSignalingStateChanged value)?
+        signalingStateChanged,
+    TResult Function(_PeerConnectionEventConnectionStateChanged value)?
+        connectionStateChanged,
+    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
+        iceGatheringStateChanged,
+    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)?
+        iceConnectionStateChanged,
+    TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
+        iceCandidateIdentified,
+    TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
+    TResult Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
+    required TResult orElse(),
+  }) {
+    if (iceConnectionStateChanged != null) {
+      return iceConnectionStateChanged(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _PeerConnectionEventIceConnectionStateChanged
+    implements _PeerConnectionEvent {
+  const factory _PeerConnectionEventIceConnectionStateChanged(
+          final UuidValue uuid, final RTCIceConnectionState state) =
+      _$PeerConnectionEventIceConnectionStateChangedImpl;
+
+  @override
+  UuidValue get uuid;
+  RTCIceConnectionState get state;
 }
 
 /// @nodoc
@@ -5681,8 +6287,14 @@ class _$PeerConnectionEventIceCandidateIdentifiedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function(UuidValue uuid, RTCSignalingState state)
+        signalingStateChanged,
+    required TResult Function(UuidValue uuid, RTCPeerConnectionState state)
+        connectionStateChanged,
     required TResult Function(UuidValue uuid, RTCIceGatheringState state)
         iceGatheringStateChanged,
+    required TResult Function(UuidValue uuid, RTCIceConnectionState state)
+        iceConnectionStateChanged,
     required TResult Function(UuidValue uuid, RTCIceCandidate candidate)
         iceCandidateIdentified,
     required TResult Function(UuidValue uuid, MediaStream stream) streamAdded,
@@ -5694,8 +6306,14 @@ class _$PeerConnectionEventIceCandidateIdentifiedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(UuidValue uuid, RTCSignalingState state)?
+        signalingStateChanged,
+    TResult? Function(UuidValue uuid, RTCPeerConnectionState state)?
+        connectionStateChanged,
     TResult? Function(UuidValue uuid, RTCIceGatheringState state)?
         iceGatheringStateChanged,
+    TResult? Function(UuidValue uuid, RTCIceConnectionState state)?
+        iceConnectionStateChanged,
     TResult? Function(UuidValue uuid, RTCIceCandidate candidate)?
         iceCandidateIdentified,
     TResult? Function(UuidValue uuid, MediaStream stream)? streamAdded,
@@ -5707,8 +6325,14 @@ class _$PeerConnectionEventIceCandidateIdentifiedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function(UuidValue uuid, RTCSignalingState state)?
+        signalingStateChanged,
+    TResult Function(UuidValue uuid, RTCPeerConnectionState state)?
+        connectionStateChanged,
     TResult Function(UuidValue uuid, RTCIceGatheringState state)?
         iceGatheringStateChanged,
+    TResult Function(UuidValue uuid, RTCIceConnectionState state)?
+        iceConnectionStateChanged,
     TResult Function(UuidValue uuid, RTCIceCandidate candidate)?
         iceCandidateIdentified,
     TResult Function(UuidValue uuid, MediaStream stream)? streamAdded,
@@ -5724,9 +6348,16 @@ class _$PeerConnectionEventIceCandidateIdentifiedImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(_PeerConnectionEventSignalingStateChanged value)
+        signalingStateChanged,
+    required TResult Function(_PeerConnectionEventConnectionStateChanged value)
+        connectionStateChanged,
     required TResult Function(
             _PeerConnectionEventIceGatheringStateChanged value)
         iceGatheringStateChanged,
+    required TResult Function(
+            _PeerConnectionEventIceConnectionStateChanged value)
+        iceConnectionStateChanged,
     required TResult Function(_PeerConnectionEventIceCandidateIdentified value)
         iceCandidateIdentified,
     required TResult Function(_PeerConnectionEventStreamAdded value)
@@ -5740,8 +6371,14 @@ class _$PeerConnectionEventIceCandidateIdentifiedImpl
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_PeerConnectionEventSignalingStateChanged value)?
+        signalingStateChanged,
+    TResult? Function(_PeerConnectionEventConnectionStateChanged value)?
+        connectionStateChanged,
     TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
         iceGatheringStateChanged,
+    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)?
+        iceConnectionStateChanged,
     TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
         iceCandidateIdentified,
     TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
@@ -5753,8 +6390,14 @@ class _$PeerConnectionEventIceCandidateIdentifiedImpl
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(_PeerConnectionEventSignalingStateChanged value)?
+        signalingStateChanged,
+    TResult Function(_PeerConnectionEventConnectionStateChanged value)?
+        connectionStateChanged,
     TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
         iceGatheringStateChanged,
+    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)?
+        iceConnectionStateChanged,
     TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
         iceCandidateIdentified,
     TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
@@ -5820,8 +6463,14 @@ class _$PeerConnectionEventStreamAddedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function(UuidValue uuid, RTCSignalingState state)
+        signalingStateChanged,
+    required TResult Function(UuidValue uuid, RTCPeerConnectionState state)
+        connectionStateChanged,
     required TResult Function(UuidValue uuid, RTCIceGatheringState state)
         iceGatheringStateChanged,
+    required TResult Function(UuidValue uuid, RTCIceConnectionState state)
+        iceConnectionStateChanged,
     required TResult Function(UuidValue uuid, RTCIceCandidate candidate)
         iceCandidateIdentified,
     required TResult Function(UuidValue uuid, MediaStream stream) streamAdded,
@@ -5833,8 +6482,14 @@ class _$PeerConnectionEventStreamAddedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(UuidValue uuid, RTCSignalingState state)?
+        signalingStateChanged,
+    TResult? Function(UuidValue uuid, RTCPeerConnectionState state)?
+        connectionStateChanged,
     TResult? Function(UuidValue uuid, RTCIceGatheringState state)?
         iceGatheringStateChanged,
+    TResult? Function(UuidValue uuid, RTCIceConnectionState state)?
+        iceConnectionStateChanged,
     TResult? Function(UuidValue uuid, RTCIceCandidate candidate)?
         iceCandidateIdentified,
     TResult? Function(UuidValue uuid, MediaStream stream)? streamAdded,
@@ -5846,8 +6501,14 @@ class _$PeerConnectionEventStreamAddedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function(UuidValue uuid, RTCSignalingState state)?
+        signalingStateChanged,
+    TResult Function(UuidValue uuid, RTCPeerConnectionState state)?
+        connectionStateChanged,
     TResult Function(UuidValue uuid, RTCIceGatheringState state)?
         iceGatheringStateChanged,
+    TResult Function(UuidValue uuid, RTCIceConnectionState state)?
+        iceConnectionStateChanged,
     TResult Function(UuidValue uuid, RTCIceCandidate candidate)?
         iceCandidateIdentified,
     TResult Function(UuidValue uuid, MediaStream stream)? streamAdded,
@@ -5863,9 +6524,16 @@ class _$PeerConnectionEventStreamAddedImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(_PeerConnectionEventSignalingStateChanged value)
+        signalingStateChanged,
+    required TResult Function(_PeerConnectionEventConnectionStateChanged value)
+        connectionStateChanged,
     required TResult Function(
             _PeerConnectionEventIceGatheringStateChanged value)
         iceGatheringStateChanged,
+    required TResult Function(
+            _PeerConnectionEventIceConnectionStateChanged value)
+        iceConnectionStateChanged,
     required TResult Function(_PeerConnectionEventIceCandidateIdentified value)
         iceCandidateIdentified,
     required TResult Function(_PeerConnectionEventStreamAdded value)
@@ -5879,8 +6547,14 @@ class _$PeerConnectionEventStreamAddedImpl
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_PeerConnectionEventSignalingStateChanged value)?
+        signalingStateChanged,
+    TResult? Function(_PeerConnectionEventConnectionStateChanged value)?
+        connectionStateChanged,
     TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
         iceGatheringStateChanged,
+    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)?
+        iceConnectionStateChanged,
     TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
         iceCandidateIdentified,
     TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
@@ -5892,8 +6566,14 @@ class _$PeerConnectionEventStreamAddedImpl
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(_PeerConnectionEventSignalingStateChanged value)?
+        signalingStateChanged,
+    TResult Function(_PeerConnectionEventConnectionStateChanged value)?
+        connectionStateChanged,
     TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
         iceGatheringStateChanged,
+    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)?
+        iceConnectionStateChanged,
     TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
         iceCandidateIdentified,
     TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
@@ -5958,8 +6638,14 @@ class _$PeerConnectionEventStreamRemovedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function(UuidValue uuid, RTCSignalingState state)
+        signalingStateChanged,
+    required TResult Function(UuidValue uuid, RTCPeerConnectionState state)
+        connectionStateChanged,
     required TResult Function(UuidValue uuid, RTCIceGatheringState state)
         iceGatheringStateChanged,
+    required TResult Function(UuidValue uuid, RTCIceConnectionState state)
+        iceConnectionStateChanged,
     required TResult Function(UuidValue uuid, RTCIceCandidate candidate)
         iceCandidateIdentified,
     required TResult Function(UuidValue uuid, MediaStream stream) streamAdded,
@@ -5971,8 +6657,14 @@ class _$PeerConnectionEventStreamRemovedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(UuidValue uuid, RTCSignalingState state)?
+        signalingStateChanged,
+    TResult? Function(UuidValue uuid, RTCPeerConnectionState state)?
+        connectionStateChanged,
     TResult? Function(UuidValue uuid, RTCIceGatheringState state)?
         iceGatheringStateChanged,
+    TResult? Function(UuidValue uuid, RTCIceConnectionState state)?
+        iceConnectionStateChanged,
     TResult? Function(UuidValue uuid, RTCIceCandidate candidate)?
         iceCandidateIdentified,
     TResult? Function(UuidValue uuid, MediaStream stream)? streamAdded,
@@ -5984,8 +6676,14 @@ class _$PeerConnectionEventStreamRemovedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function(UuidValue uuid, RTCSignalingState state)?
+        signalingStateChanged,
+    TResult Function(UuidValue uuid, RTCPeerConnectionState state)?
+        connectionStateChanged,
     TResult Function(UuidValue uuid, RTCIceGatheringState state)?
         iceGatheringStateChanged,
+    TResult Function(UuidValue uuid, RTCIceConnectionState state)?
+        iceConnectionStateChanged,
     TResult Function(UuidValue uuid, RTCIceCandidate candidate)?
         iceCandidateIdentified,
     TResult Function(UuidValue uuid, MediaStream stream)? streamAdded,
@@ -6001,9 +6699,16 @@ class _$PeerConnectionEventStreamRemovedImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(_PeerConnectionEventSignalingStateChanged value)
+        signalingStateChanged,
+    required TResult Function(_PeerConnectionEventConnectionStateChanged value)
+        connectionStateChanged,
     required TResult Function(
             _PeerConnectionEventIceGatheringStateChanged value)
         iceGatheringStateChanged,
+    required TResult Function(
+            _PeerConnectionEventIceConnectionStateChanged value)
+        iceConnectionStateChanged,
     required TResult Function(_PeerConnectionEventIceCandidateIdentified value)
         iceCandidateIdentified,
     required TResult Function(_PeerConnectionEventStreamAdded value)
@@ -6017,8 +6722,14 @@ class _$PeerConnectionEventStreamRemovedImpl
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_PeerConnectionEventSignalingStateChanged value)?
+        signalingStateChanged,
+    TResult? Function(_PeerConnectionEventConnectionStateChanged value)?
+        connectionStateChanged,
     TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
         iceGatheringStateChanged,
+    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)?
+        iceConnectionStateChanged,
     TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
         iceCandidateIdentified,
     TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
@@ -6030,8 +6741,14 @@ class _$PeerConnectionEventStreamRemovedImpl
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(_PeerConnectionEventSignalingStateChanged value)?
+        signalingStateChanged,
+    TResult Function(_PeerConnectionEventConnectionStateChanged value)?
+        connectionStateChanged,
     TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
         iceGatheringStateChanged,
+    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)?
+        iceConnectionStateChanged,
     TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
         iceCandidateIdentified,
     TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
