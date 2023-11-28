@@ -628,7 +628,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     await callkeep.reportConnectedOutgoingCall(event.callId.uuid);
 
     emit(state.copyWithMappedActiveCall(event.callId.uuid, (activeCall) {
-      return activeCall.copyWith(acceptedTime: clock.now());
+      if (activeCall.acceptedTime == null) {
+        return activeCall.copyWith(acceptedTime: clock.now());
+      } else {
+        return activeCall;
+      }
     }));
 
     final jsep = event.jsep;
@@ -1152,7 +1156,27 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Future<void> __onPeerConnectionEventIceConnectionStateChanged(
     _PeerConnectionEventIceConnectionStateChanged event,
     Emitter<CallState> emit,
-  ) async {}
+  ) async {
+    if (event.state == RTCIceConnectionState.RTCIceConnectionStateFailed) {
+      await state.performOnActiveCall(event.uuid, (activeCall) async {
+        final peerConnection = await _peerConnectionRetrieve(activeCall.callId.uuid);
+        if (peerConnection == null) {
+          _logger.warning(
+              '__onPeerConnectionEventIceConnectionStateChanged: peerConnection is null - most likely some state issue');
+        } else {
+          await peerConnection.restartIce();
+          final localDescription = await peerConnection.createOffer({});
+          await _signalingClient?.execute(UpdateRequest(
+            transaction: WebtritSignalingClient.generateTransactionId(),
+            line: activeCall.line,
+            callId: activeCall.callId.toString(),
+            jsep: localDescription.toMap(),
+          ));
+          await peerConnection.setLocalDescription(localDescription);
+        }
+      });
+    }
+  }
 
   Future<void> __onPeerConnectionEventIceCandidateIdentified(
     _PeerConnectionEventIceCandidateIdentified event,
