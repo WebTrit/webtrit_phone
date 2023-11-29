@@ -521,7 +521,7 @@ class _AppState extends State<App> {
     ],
     redirect: _redirect,
     refreshListenable: GoRouterRefreshBloc(appBloc),
-    initialLocation: '/main',
+    initialLocation: AppDeferredDeepLinks().initialUrl?.toString() ?? '/main',
     observers: [
       context.read<AppAnalyticsRepository>().createObserver(),
     ],

@@ -68,6 +68,7 @@ dependencies:
   validators: ^3.0.0
   webview_flutter: ^4.4.2
   webview_flutter_web: ^0.2.2+3
+  android_play_install_referrer: ^0.3.0
 
   webtrit_api:
     path: ./packages/webtrit_api
