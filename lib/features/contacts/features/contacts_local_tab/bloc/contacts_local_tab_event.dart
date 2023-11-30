@@ -1,16 +1,15 @@
 part of 'contacts_local_tab_bloc.dart';
 
-@immutable
 abstract class ContactsLocalTabEvent {
   const ContactsLocalTabEvent();
 }
 
-class ContactsLocalTabStarted extends ContactsLocalTabEvent {
-  const ContactsLocalTabStarted({required this.search});
-
-  final String search;
+@Freezed(copyWith: false)
+class ContactsLocalTabStarted with _$ContactsLocalTabStarted implements ContactsLocalTabEvent {
+  const factory ContactsLocalTabStarted({required String search}) = _ContactsLocalTabStarted;
 }
 
-class ContactsLocalTabRefreshed extends ContactsLocalTabEvent {
-  const ContactsLocalTabRefreshed();
+@Freezed(copyWith: false)
+class ContactsLocalTabRefreshed with _$ContactsLocalTabRefreshed implements ContactsLocalTabEvent {
+  const factory ContactsLocalTabRefreshed() = _ContactsLocalTabRefreshed;
 }

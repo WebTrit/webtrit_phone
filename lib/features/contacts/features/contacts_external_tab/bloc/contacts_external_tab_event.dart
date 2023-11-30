@@ -1,16 +1,15 @@
 part of 'contacts_external_tab_bloc.dart';
 
-@immutable
 abstract class ContactsExternalTabEvent {
   const ContactsExternalTabEvent();
 }
 
-class ContactsExternalTabStarted extends ContactsExternalTabEvent {
-  const ContactsExternalTabStarted({required this.search});
-
-  final String search;
+@Freezed(copyWith: false)
+class ContactsExternalTabStarted with _$ContactsExternalTabStarted implements ContactsExternalTabEvent {
+  const factory ContactsExternalTabStarted({required String search}) = _ContactsExternalTabStarted;
 }
 
-class ContactsExternalTabRefreshed extends ContactsExternalTabEvent {
-  const ContactsExternalTabRefreshed();
+@Freezed(copyWith: false)
+class ContactsExternalTabRefreshed with _$ContactsExternalTabRefreshed implements ContactsExternalTabEvent {
+  const factory ContactsExternalTabRefreshed() = _ContactsExternalTabRefreshed;
 }

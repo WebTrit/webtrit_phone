@@ -1,16 +1,15 @@
 part of 'notifications_bloc.dart';
 
-@immutable
 abstract class NotificationsEvent {
   const NotificationsEvent();
 }
 
-class NotificationsIssued extends NotificationsEvent {
-  const NotificationsIssued(this.notification);
-
-  final Notification notification;
+@Freezed(copyWith: false)
+class NotificationsIssued with _$NotificationsIssued implements NotificationsEvent {
+  const factory NotificationsIssued(Notification notification) = _NotificationsIssued;
 }
 
-class NotificationsCleared extends NotificationsEvent {
-  const NotificationsCleared();
+@Freezed(copyWith: false)
+class NotificationsCleared with _$NotificationsCleared implements NotificationsEvent {
+  const factory NotificationsCleared() = _NotificationsCleared;
 }

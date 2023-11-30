@@ -15,6 +15,73 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
+mixin _$NotificationsIssued {
+  Notification get notification => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+
+class _$NotificationsIssuedImpl implements _NotificationsIssued {
+  const _$NotificationsIssuedImpl(this.notification);
+
+  @override
+  final Notification notification;
+
+  @override
+  String toString() {
+    return 'NotificationsIssued(notification: $notification)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$NotificationsIssuedImpl &&
+            (identical(other.notification, notification) ||
+                other.notification == notification));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, notification);
+}
+
+abstract class _NotificationsIssued implements NotificationsIssued {
+  const factory _NotificationsIssued(final Notification notification) =
+      _$NotificationsIssuedImpl;
+
+  @override
+  Notification get notification;
+}
+
+/// @nodoc
+mixin _$NotificationsCleared {}
+
+/// @nodoc
+
+class _$NotificationsClearedImpl implements _NotificationsCleared {
+  const _$NotificationsClearedImpl();
+
+  @override
+  String toString() {
+    return 'NotificationsCleared()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$NotificationsClearedImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+}
+
+abstract class _NotificationsCleared implements NotificationsCleared {
+  const factory _NotificationsCleared() = _$NotificationsClearedImpl;
+}
+
+/// @nodoc
 mixin _$NotificationsState {
   Notification? get lastNotification => throw _privateConstructorUsedError;
 
