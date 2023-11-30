@@ -1,6 +1,5 @@
 part of 'orientations_bloc.dart';
 
-@immutable
 abstract class OrientationsEvent {
   const OrientationsEvent();
 }
