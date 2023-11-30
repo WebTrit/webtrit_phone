@@ -12,7 +12,6 @@ extension LogRecordsConsoleStatusX on LogRecordsConsoleStatus {
   bool get isFailure => this == LogRecordsConsoleStatus.failure;
 }
 
-@immutable
 class LogRecordsConsoleState extends Equatable {
   const LogRecordsConsoleState._({
     this.status = LogRecordsConsoleStatus.initial,
