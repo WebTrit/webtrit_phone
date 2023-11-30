@@ -1369,7 +1369,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     String? displayName,
     bool video,
   ) {
-    _logger.fine(() => 'didStartCallIntent handle: $handle displayName: $displayName video: $video');
+    _logger.fine(() => 'continueStartCallIntent handle: $handle displayName: $displayName video: $video');
 
     add(CallControlEvent.started(
       generic: handle.isGeneric ? handle.value : null,
