@@ -51,7 +51,9 @@ class _CallShellState extends State<CallShell> {
           }
         } else {
           if (_isCallRouterLocation(context)) {
-            context.pop();
+            if (context.canPop()) {
+              context.pop();
+            }
           }
         }
 

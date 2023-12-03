@@ -49,7 +49,11 @@ class CallState with _$CallState {
 
   CallDisplay get display {
     if (activeCalls.isEmpty) {
-      return CallDisplay.none;
+      if (minimized == false) {
+        return CallDisplay.noneScreen;
+      } else {
+        return CallDisplay.none;
+      }
     } else {
       if (minimized == true) {
         return CallDisplay.overlay;
