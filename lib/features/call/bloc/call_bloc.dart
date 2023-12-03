@@ -903,7 +903,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       notificationsBloc.add(const NotificationsIssued(CallUndefinedLineErrorNotification()));
       return;
     }
-    if (state.signalingClientStatus != SignalingClientStatus.connect) {
+    if (!state.signalingClientStatus.isConnect &&
+        // attempt to wait for the desired signaling client status within the signaling client connection timeout period
+        !(await stream
+                .firstWhere((state) => state.signalingClientStatus.isConnect || state.signalingClientStatus.isFailure,
+                    orElse: () => state)
+                .timeout(kSignalingClientConnectionTimeout, onTimeout: () => state))
+            .signalingClientStatus
+            .isConnect) {
       event.fail();
 
       emit(state.copyWithPopActiveCall(event.uuid));
@@ -1252,11 +1259,21 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             continue activeCallsLoop;
           }
         }
-      } else if (activeCall.line < stateHandshake.lines.length) {
+      }
+      if (activeCall.line < stateHandshake.lines.length) {
         final line = stateHandshake.lines[activeCall.line];
         if (line != null && line.callId == activeCall.callId.value) {
           continue activeCallsLoop;
         }
+      }
+      if (activeCall.direction == Direction.outgoing &&
+          activeCall.acceptedTime == null &&
+          activeCall.hungUpTime == null) {
+        // Handles an outgoing active call that has not yet started, typically initiated
+        // by the `continueStartCallIntent` callback of `CallkeepDelegate`.
+        // TODO: Implement a dedicated flag to confirm successful execution of
+        // OutgoingCallRequest, ensuring reliable outgoing active call state tracking.
+        continue activeCallsLoop;
       }
 
       _peerConnectionConditionalCompleteError(activeCall.callId.uuid, 'Active call Request Terminated');
