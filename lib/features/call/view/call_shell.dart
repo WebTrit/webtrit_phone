@@ -107,7 +107,7 @@ class ThumbnailAvatar {
   void insert(BuildContext context, CallState state) {
     assert(_entry == null);
 
-    final activeCall = state.activeCall;
+    final activeCall = state.activeCalls.current;
 
     final entry = OverlayEntry(
       builder: (context) {

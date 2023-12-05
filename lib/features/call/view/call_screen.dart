@@ -56,7 +56,7 @@ class _CallScreenState extends State<CallScreen> with RouteAware {
       bloc: callBloc,
       listener: (context, state) async {
         if (state.isActive) {
-          final activeCall = state.activeCall;
+          final activeCall = state.activeCalls.current;
           final activeCallFailure = activeCall.failure;
           if (activeCallFailure != null) {
             context.read<CallBloc>().add(CallControlEvent.failureApproved(activeCall.callId.uuid));
@@ -72,7 +72,7 @@ class _CallScreenState extends State<CallScreen> with RouteAware {
         if (state.isActive) {
           return CallActiveScaffold(
             speaker: state.speaker,
-            activeCall: state.activeCall,
+            activeCalls: state.activeCalls,
             localePlaceholderBuilder: widget.localePlaceholderBuilder,
             remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
           );

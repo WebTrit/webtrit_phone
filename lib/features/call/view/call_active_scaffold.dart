@@ -12,13 +12,13 @@ class CallActiveScaffold extends StatefulWidget {
   const CallActiveScaffold({
     super.key,
     required this.speaker,
-    required this.activeCall,
+    required this.activeCalls,
     required this.localePlaceholderBuilder,
     required this.remotePlaceholderBuilder,
   });
 
   final bool? speaker;
-  final ActiveCall activeCall;
+  final List<ActiveCall> activeCalls;
   final WidgetBuilder? localePlaceholderBuilder;
   final WidgetBuilder? remotePlaceholderBuilder;
 
@@ -33,12 +33,12 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   @override
   void initState() {
     super.initState();
-    cameraEnabled = widget.activeCall.video;
+    cameraEnabled = widget.activeCalls.current.video;
   }
 
   @override
   Widget build(BuildContext context) {
-    final activeCall = widget.activeCall;
+    final activeCall = widget.activeCalls.current;
 
     final video = activeCall.video;
 

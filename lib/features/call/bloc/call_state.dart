@@ -65,8 +65,6 @@ class CallState with _$CallState {
 
   bool get isActive => activeCalls.isNotEmpty;
 
-  ActiveCall get activeCall => activeCalls.last;
-
   ActiveCall? retrieveActiveCall(UuidValue uuid) {
     for (var activeCall in activeCalls) {
       if (activeCall.callId.uuid == uuid) {
@@ -138,6 +136,10 @@ class ActiveCall with _$ActiveCall {
   bool get wasAccepted => acceptedTime != null;
 
   bool get wasHungUp => hungUpTime != null;
+}
+
+extension ActiveCallIterableExtension<T extends ActiveCall> on Iterable<T> {
+  T get current => lastWhere((activeCall) => !activeCall.held, orElse: () => last);
 }
 
 class RTCVideoRenderers {
