@@ -38,7 +38,7 @@ class _MainShellState extends State<MainShell> {
         ringtoneSound: Assets.ringtones.incomingCall1,
         iconTemplateImageAssetName: Assets.callkeep.iosIconTemplateImage.path,
         maximumCallGroups: 2,
-        maximumCallsPerCallGroup: 1,
+        maximumCallsPerCallGroup: 5,
         supportedHandleTypes: const {CallkeepHandleType.number},
       ),
     ));
