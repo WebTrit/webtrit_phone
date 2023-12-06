@@ -34,16 +34,25 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_CallActionsTooltip_hangup => 'Завершити';
 
   @override
+  String get call_CallActionsTooltip_hangupAndAccept => 'Завершити та прийняти';
+
+  @override
   String get call_CallActionsTooltip_hideKeypad => 'Приховати клавіатуру';
 
   @override
   String get call_CallActionsTooltip_hold => 'Утримати дзвінок';
 
   @override
+  String get call_CallActionsTooltip_holdAndAccept => 'Утримати та прийняти';
+
+  @override
   String get call_CallActionsTooltip_mute => 'Вимкнути мікрофон';
 
   @override
   String get call_CallActionsTooltip_showKeypad => 'Показати клавіатуру';
+
+  @override
+  String get call_CallActionsTooltip_swap => 'Перемкнути дзвінки';
 
   @override
   String get call_CallActionsTooltip_transfer => 'Передати';
@@ -55,10 +64,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_CallActionsTooltip_unmute => 'Увімкнути мікрофон';
 
   @override
-  String get call_description_incoming => 'Вхідний дзвінок від';
+  String get call_description_held => 'На утриманні';
 
   @override
-  String get call_description_outgoing => 'Вихідний дзвінок до';
+  String get call_description_incoming => 'Вхідний дзвінок';
+
+  @override
+  String get call_description_outgoing => 'Вихідний дзвінок';
 
   @override
   String get call_FailureAcknowledgeDialog_title => 'Помилка';

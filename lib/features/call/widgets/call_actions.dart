@@ -23,7 +23,10 @@ class CallActions extends StatefulWidget {
     this.onTransferPressed,
     required this.heldValue,
     this.onHeldChanged,
+    this.onSwapPressed,
     this.onHangupPressed,
+    this.onHangupAndAcceptPressed,
+    this.onHoldAndAcceptPressed,
     this.onAcceptPressed,
     this.onKeyPressed,
   });
@@ -41,7 +44,10 @@ class CallActions extends StatefulWidget {
   final VoidCallback? onTransferPressed;
   final bool heldValue;
   final ValueChanged<bool>? onHeldChanged;
+  final void Function()? onSwapPressed;
   final void Function()? onHangupPressed;
+  final void Function()? onHangupAndAcceptPressed;
+  final void Function()? onHoldAndAcceptPressed;
   final void Function()? onAcceptPressed;
   final void Function(String value)? onKeyPressed;
 
@@ -127,31 +133,76 @@ class _CallActionsState extends State<CallActions> {
     final onSpeakerChanged = widget.onSpeakerChanged;
     final onTransferPressed = widget.onTransferPressed;
     final onHeldChanged = widget.onHeldChanged;
+    final onSwapPressed = widget.onSwapPressed;
 
-    late final TextButtonsTable buttonsTable;
+    final TextButtonsTable buttonsTable;
     if (widget.isIncoming && !widget.wasAccepted) {
-      buttonsTable = TextButtonsTable(
-        minimumSize: Size.square(_dimension),
-        children: [
-          Tooltip(
-            message: context.l10n.call_CallActionsTooltip_hangup,
-            child: TextButton(
-              onPressed: widget.onHangupPressed,
-              style: _textButtonStyles?.callHangup,
-              child: const Icon(Icons.call_end),
+      if (widget.onHangupAndAcceptPressed == null && widget.onHoldAndAcceptPressed == null) {
+        buttonsTable = TextButtonsTable(
+          minimumSize: Size.square(_dimension),
+          children: [
+            Tooltip(
+              message: context.l10n.call_CallActionsTooltip_hangup,
+              child: TextButton(
+                onPressed: widget.onHangupPressed,
+                style: _textButtonStyles?.callHangup,
+                child: const Icon(Icons.call_end),
+              ),
             ),
-          ),
-          const SizedBox(),
-          Tooltip(
-            message: context.l10n.call_CallActionsTooltip_accept,
-            child: TextButton(
-              onPressed: widget.onAcceptPressed,
-              style: _textButtonStyles?.callStart,
-              child: Icon(widget.video ? Icons.videocam : Icons.call),
+            const SizedBox(),
+            Tooltip(
+              message: context.l10n.call_CallActionsTooltip_accept,
+              child: TextButton(
+                onPressed: widget.onAcceptPressed,
+                style: _textButtonStyles?.callStart,
+                child: Icon(widget.video ? Icons.videocam : Icons.call),
+              ),
             ),
-          ),
-        ],
-      );
+          ],
+        );
+      } else {
+        buttonsTable = TextButtonsTable(
+          minimumSize: Size.square(_dimension),
+          children: [
+            Tooltip(
+              message: context.l10n.call_CallActionsTooltip_hangupAndAccept,
+              child: TextButton(
+                onPressed: widget.onHangupAndAcceptPressed,
+                style: _textButtonStyles?.callStart,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.call_end),
+                    Icon(widget.video ? Icons.videocam : Icons.call),
+                  ],
+                ),
+              ),
+            ),
+            Tooltip(
+              message: context.l10n.call_CallActionsTooltip_hangup,
+              child: TextButton(
+                onPressed: widget.onHangupPressed,
+                style: _textButtonStyles?.callHangup,
+                child: const Icon(Icons.call_end),
+              ),
+            ),
+            Tooltip(
+              message: context.l10n.call_CallActionsTooltip_holdAndAccept,
+              child: TextButton(
+                onPressed: widget.onHoldAndAcceptPressed,
+                style: _textButtonStyles?.callStart,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.pause),
+                    Icon(widget.video ? Icons.videocam : Icons.call),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      }
     } else {
       late List<Widget> actions;
       if (_keypadShow) {
@@ -236,16 +287,26 @@ class _CallActionsState extends State<CallActions> {
               child: const Icon(Icons.phone_forwarded),
             ),
           ),
-          Tooltip(
-            message: widget.heldValue
-                ? context.l10n.call_CallActionsTooltip_unhold
-                : context.l10n.call_CallActionsTooltip_hold,
-            child: TextButton(
-              onPressed: onHeldChanged == null ? null : () => onHeldChanged(!widget.heldValue),
-              style: widget.heldValue ? _textButtonStyles?.callActiveAction : _textButtonStyles?.callAction,
-              child: const Icon(Icons.pause),
+          if (onSwapPressed == null)
+            Tooltip(
+              message: widget.heldValue
+                  ? context.l10n.call_CallActionsTooltip_unhold
+                  : context.l10n.call_CallActionsTooltip_hold,
+              child: TextButton(
+                onPressed: onHeldChanged == null ? null : () => onHeldChanged(!widget.heldValue),
+                style: widget.heldValue ? _textButtonStyles?.callActiveAction : _textButtonStyles?.callAction,
+                child: const Icon(Icons.pause),
+              ),
             ),
-          ),
+          if (onSwapPressed != null)
+            Tooltip(
+              message: context.l10n.call_CallActionsTooltip_swap,
+              child: TextButton(
+                onPressed: onSwapPressed,
+                style: _textButtonStyles?.callAction,
+                child: const Icon(Icons.swap_calls),
+              ),
+            ),
           Tooltip(
             message: context.l10n.call_CallActionsTooltip_showKeypad,
             child: TextButton(

@@ -147,6 +147,12 @@ abstract class AppLocalizations {
   /// **'Hangup'**
   String get call_CallActionsTooltip_hangup;
 
+  /// No description provided for @call_CallActionsTooltip_hangupAndAccept.
+  ///
+  /// In en, this message translates to:
+  /// **'Hangup & Accept'**
+  String get call_CallActionsTooltip_hangupAndAccept;
+
   /// No description provided for @call_CallActionsTooltip_hideKeypad.
   ///
   /// In en, this message translates to:
@@ -159,6 +165,12 @@ abstract class AppLocalizations {
   /// **'Hold call'**
   String get call_CallActionsTooltip_hold;
 
+  /// No description provided for @call_CallActionsTooltip_holdAndAccept.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold & Accept'**
+  String get call_CallActionsTooltip_holdAndAccept;
+
   /// No description provided for @call_CallActionsTooltip_mute.
   ///
   /// In en, this message translates to:
@@ -170,6 +182,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show keypad'**
   String get call_CallActionsTooltip_showKeypad;
+
+  /// No description provided for @call_CallActionsTooltip_swap.
+  ///
+  /// In en, this message translates to:
+  /// **'Swap calls'**
+  String get call_CallActionsTooltip_swap;
 
   /// No description provided for @call_CallActionsTooltip_transfer.
   ///
@@ -189,16 +207,22 @@ abstract class AppLocalizations {
   /// **'Unmute microphone'**
   String get call_CallActionsTooltip_unmute;
 
+  /// No description provided for @call_description_held.
+  ///
+  /// In en, this message translates to:
+  /// **'On hold'**
+  String get call_description_held;
+
   /// No description provided for @call_description_incoming.
   ///
   /// In en, this message translates to:
-  /// **'Incoming call from'**
+  /// **'Incoming call'**
   String get call_description_incoming;
 
   /// No description provided for @call_description_outgoing.
   ///
   /// In en, this message translates to:
-  /// **'Outgoing call to'**
+  /// **'Outgoing call'**
   String get call_description_outgoing;
 
   /// No description provided for @call_FailureAcknowledgeDialog_title.

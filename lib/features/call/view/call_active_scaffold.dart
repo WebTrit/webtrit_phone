@@ -38,7 +38,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    final activeCall = widget.activeCalls.current;
+    final activeCalls = widget.activeCalls;
+    final activeCall = activeCalls.current;
 
     final video = activeCall.video;
 
@@ -127,11 +128,23 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                     left: 0 + mediaQueryData.padding.left,
                     right: 0 + mediaQueryData.padding.right,
                     top: 10 + mediaQueryData.padding.top,
-                    child: CallInfo(
-                      isIncoming: activeCall.isIncoming,
-                      username: activeCall.displayName ?? activeCall.handle.value,
-                      acceptedTime: activeCall.acceptedTime,
-                      color: onTabGradient,
+                    child: Column(
+                      children: [
+                        AppBar(
+                          leading: const ExtBackButton(),
+                          backgroundColor: Colors.transparent,
+                          foregroundColor: onTabGradient,
+                          primary: false,
+                        ),
+                        for (final activeCall in activeCalls)
+                          CallInfo(
+                            isIncoming: activeCall.isIncoming,
+                            held: activeCall.held,
+                            username: activeCall.displayName ?? activeCall.handle.value,
+                            acceptedTime: activeCall.acceptedTime,
+                            color: onTabGradient,
+                          ),
+                      ],
                     ),
                   ),
                 if (!compact)
@@ -163,9 +176,46 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       onHeldChanged: (bool value) {
                         context.read<CallBloc>().add(CallControlEvent.setHeld(activeCall.callId.uuid, value));
                       },
+                      onSwapPressed: activeCalls.length == 2
+                          ? () {
+                              // TODO maybe introduce particular event with particular callkeep method
+                              context.read<CallBloc>().add(CallControlEvent.setHeld(activeCall.callId.uuid, true));
+                              for (final otherActiveCall in activeCalls) {
+                                if (otherActiveCall.callId != activeCall.callId) {
+                                  context
+                                      .read<CallBloc>()
+                                      .add(CallControlEvent.setHeld(otherActiveCall.callId.uuid, false));
+                                }
+                              }
+                            }
+                          : null,
                       onHangupPressed: () {
                         context.read<CallBloc>().add(CallControlEvent.ended(activeCall.callId.uuid));
                       },
+                      onHangupAndAcceptPressed: activeCalls.length > 1
+                          ? () {
+                              // TODO maybe introduce particular event with particular callkeep method
+                              for (final otherActiveCall in activeCalls) {
+                                if (otherActiveCall.callId != activeCall.callId) {
+                                  context.read<CallBloc>().add(CallControlEvent.ended(otherActiveCall.callId.uuid));
+                                }
+                              }
+                              context.read<CallBloc>().add(CallControlEvent.answered(activeCall.callId.uuid));
+                            }
+                          : null,
+                      onHoldAndAcceptPressed: activeCalls.length > 1
+                          ? () {
+                              // TODO maybe introduce particular event with particular callkeep method
+                              for (final otherActiveCall in activeCalls) {
+                                if (otherActiveCall.callId != activeCall.callId) {
+                                  context
+                                      .read<CallBloc>()
+                                      .add(CallControlEvent.setHeld(otherActiveCall.callId.uuid, true));
+                                }
+                              }
+                              context.read<CallBloc>().add(CallControlEvent.answered(activeCall.callId.uuid));
+                            }
+                          : null,
                       onAcceptPressed: () {
                         context.read<CallBloc>().add(CallControlEvent.answered(activeCall.callId.uuid));
                       },
