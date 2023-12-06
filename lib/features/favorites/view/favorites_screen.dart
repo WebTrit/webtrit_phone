@@ -62,7 +62,7 @@ class FavoritesScreen extends StatelessWidget {
                       ));
                     },
                     onInfoPressed: () {
-                      context.pushNamed(MainRoute.favoritesDetails, pathParameters: {
+                      context.goNamed(MainRoute.favoritesDetails, pathParameters: {
                         contactIdPathParameterName: favorite.contact.id.toString(),
                       });
                     },
