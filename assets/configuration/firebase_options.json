@@ -1,0 +1,26 @@
+{
+  "web": {
+    "appId": "1:973049735976:web:8cd789c0e89ea49b547e1d",
+    "messagingSenderId": "973049735976",
+    "projectId": "webtrit-app",
+    "authDomain": "webtrit-app.firebaseapp.com",
+    "storageBucket": "webtrit-app.appspot.com",
+    "measurementId": "G-NNFJ03JQDH"
+  },
+  "android": {
+    "apiKey": "AIzaSyAq1cn3u6oeWVHTdAAhwdsy78tRpb4ab2Y",
+    "appId": "1:973049735976:android:3b8774082803ad8f547e1d",
+    "messagingSenderId": "973049735976",
+    "projectId": "webtrit-app",
+    "storageBucket": "webtrit-app.appspot.com"
+  },
+  "iOS": {
+    "apiKey": "AIzaSyDDRXt-svULnPAy7K_sMgC0tGB3Tj_PNFc",
+    "appId": "1:973049735976:ios:c8fdad3d4a4bc81a547e1d",
+    "messagingSenderId": "973049735976",
+    "projectId": "webtrit-app",
+    "storageBucket": "webtrit-app.appspot.com",
+    "iosClientId": "973049735976-t0te56rlsu1putg89pt2b8c4qq8f80c1.apps.googleusercontent.com",
+    "iosBundleId": "com.webtrit.app"
+  }
+}

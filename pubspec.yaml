@@ -107,6 +107,7 @@ flutter:
   assets:
     - assets/
     - assets/callkeep/
+    - assets/configuration/
     - assets/login/
     - assets/ringtones/
     - assets/themes/

@@ -22,6 +22,16 @@ class $AssetsCallkeepGen {
   List<AssetGenImage> get values => [iosIconTemplateImage];
 }
 
+class $AssetsConfigurationGen {
+  const $AssetsConfigurationGen();
+
+  /// File path: assets/configuration/firebase_options.json
+  String get firebaseOptions => 'assets/configuration/firebase_options.json';
+
+  /// List of all assets
+  List<String> get values => [firebaseOptions];
+}
+
 class $AssetsLoginGen {
   const $AssetsLoginGen();
 
@@ -60,6 +70,8 @@ class Assets {
   Assets._();
 
   static const $AssetsCallkeepGen callkeep = $AssetsCallkeepGen();
+  static const $AssetsConfigurationGen configuration =
+      $AssetsConfigurationGen();
   static const $AssetsLoginGen login = $AssetsLoginGen();
   static const SvgGenImage primaryOnboardinLogo =
       SvgGenImage('assets/primary_onboardin_logo.svg');
