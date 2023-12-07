@@ -9,6 +9,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/data/data.dart';
 
 import 'firebase_options.dart';
@@ -56,9 +57,8 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 }
 
 Future<void> _initFirebase() async {
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  final firebaseOption = await DefaultFirebaseOptions.initialize(Assets.configuration.firebaseOptions);
+  await Firebase.initializeApp(options: firebaseOption.currentPlatform);
 }
 
 Future<void> _initFirebaseMessaging() async {
