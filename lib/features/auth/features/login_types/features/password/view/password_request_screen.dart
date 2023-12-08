@@ -14,8 +14,8 @@ import '../cubit/password_request_cubit.dart';
 
 class PasswordRequestScreen extends StatefulWidget {
   const PasswordRequestScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<PasswordRequestScreen> createState() => _LoginRequestTabState();

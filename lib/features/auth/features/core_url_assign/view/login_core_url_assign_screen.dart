@@ -17,8 +17,8 @@ import '../extensions/extensions.dart';
 
 class LoginCoreUrlAssignScreen extends StatelessWidget {
   const LoginCoreUrlAssignScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

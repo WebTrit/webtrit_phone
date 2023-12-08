@@ -14,8 +14,8 @@ import '../widgets/count_down_builder.dart';
 
 class OtpVerifyScreen extends StatelessWidget {
   const OtpVerifyScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -15,8 +15,8 @@ import '../extensions/extensions.dart';
 
 class OtpRequestScreen extends StatefulWidget {
   const OtpRequestScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<OtpRequestScreen> createState() => _LoginRequestTabState();

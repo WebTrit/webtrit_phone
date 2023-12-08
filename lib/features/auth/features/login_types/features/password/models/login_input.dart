@@ -5,9 +5,9 @@ enum LoginValidationError {
 }
 
 class LoginInput extends FormzInput<String, LoginValidationError> {
-  const LoginInput.pure([String value = '']) : super.pure(value);
+  const LoginInput.pure([super.value = '']) : super.pure();
 
-  const LoginInput.dirty([String value = '']) : super.dirty(value);
+  const LoginInput.dirty([super.value = '']) : super.dirty();
 
   @override
   LoginValidationError? validator(String value) {
