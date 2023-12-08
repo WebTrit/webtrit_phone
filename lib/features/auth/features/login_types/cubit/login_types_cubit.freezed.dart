@@ -58,22 +58,22 @@ class _$LoginTypesStateCopyWithImpl<$Res, $Val extends LoginTypesState>
 }
 
 /// @nodoc
-abstract class _$$_LoginTypesStateCopyWith<$Res>
+abstract class _$$LoginTypesStateImplCopyWith<$Res>
     implements $LoginTypesStateCopyWith<$Res> {
-  factory _$$_LoginTypesStateCopyWith(
-          _$_LoginTypesState value, $Res Function(_$_LoginTypesState) then) =
-      __$$_LoginTypesStateCopyWithImpl<$Res>;
+  factory _$$LoginTypesStateImplCopyWith(_$LoginTypesStateImpl value,
+          $Res Function(_$LoginTypesStateImpl) then) =
+      __$$LoginTypesStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<SupportedLoginType> supportedLogin});
 }
 
 /// @nodoc
-class __$$_LoginTypesStateCopyWithImpl<$Res>
-    extends _$LoginTypesStateCopyWithImpl<$Res, _$_LoginTypesState>
-    implements _$$_LoginTypesStateCopyWith<$Res> {
-  __$$_LoginTypesStateCopyWithImpl(
-      _$_LoginTypesState _value, $Res Function(_$_LoginTypesState) _then)
+class __$$LoginTypesStateImplCopyWithImpl<$Res>
+    extends _$LoginTypesStateCopyWithImpl<$Res, _$LoginTypesStateImpl>
+    implements _$$LoginTypesStateImplCopyWith<$Res> {
+  __$$LoginTypesStateImplCopyWithImpl(
+      _$LoginTypesStateImpl _value, $Res Function(_$LoginTypesStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -81,7 +81,7 @@ class __$$_LoginTypesStateCopyWithImpl<$Res>
   $Res call({
     Object? supportedLogin = null,
   }) {
-    return _then(_$_LoginTypesState(
+    return _then(_$LoginTypesStateImpl(
       supportedLogin: null == supportedLogin
           ? _value._supportedLogin
           : supportedLogin // ignore: cast_nullable_to_non_nullable
@@ -92,8 +92,8 @@ class __$$_LoginTypesStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_LoginTypesState implements _LoginTypesState {
-  const _$_LoginTypesState(
+class _$LoginTypesStateImpl implements _LoginTypesState {
+  const _$LoginTypesStateImpl(
       {final List<SupportedLoginType> supportedLogin = const []})
       : _supportedLogin = supportedLogin;
 
@@ -115,7 +115,7 @@ class _$_LoginTypesState implements _LoginTypesState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_LoginTypesState &&
+            other is _$LoginTypesStateImpl &&
             const DeepCollectionEquality()
                 .equals(other._supportedLogin, _supportedLogin));
   }
@@ -127,18 +127,19 @@ class _$_LoginTypesState implements _LoginTypesState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_LoginTypesStateCopyWith<_$_LoginTypesState> get copyWith =>
-      __$$_LoginTypesStateCopyWithImpl<_$_LoginTypesState>(this, _$identity);
+  _$$LoginTypesStateImplCopyWith<_$LoginTypesStateImpl> get copyWith =>
+      __$$LoginTypesStateImplCopyWithImpl<_$LoginTypesStateImpl>(
+          this, _$identity);
 }
 
 abstract class _LoginTypesState implements LoginTypesState {
   const factory _LoginTypesState(
-      {final List<SupportedLoginType> supportedLogin}) = _$_LoginTypesState;
+      {final List<SupportedLoginType> supportedLogin}) = _$LoginTypesStateImpl;
 
   @override
   List<SupportedLoginType> get supportedLogin;
   @override
   @JsonKey(ignore: true)
-  _$$_LoginTypesStateCopyWith<_$_LoginTypesState> get copyWith =>
+  _$$LoginTypesStateImplCopyWith<_$LoginTypesStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

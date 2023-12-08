@@ -70,23 +70,25 @@ class _$LoginCoreUrlAssignStateCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_LoginCoreUrlAssignStateCopyWith<$Res>
+abstract class _$$LoginCoreUrlAssignStateImplCopyWith<$Res>
     implements $LoginCoreUrlAssignStateCopyWith<$Res> {
-  factory _$$_LoginCoreUrlAssignStateCopyWith(_$_LoginCoreUrlAssignState value,
-          $Res Function(_$_LoginCoreUrlAssignState) then) =
-      __$$_LoginCoreUrlAssignStateCopyWithImpl<$Res>;
+  factory _$$LoginCoreUrlAssignStateImplCopyWith(
+          _$LoginCoreUrlAssignStateImpl value,
+          $Res Function(_$LoginCoreUrlAssignStateImpl) then) =
+      __$$LoginCoreUrlAssignStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({LoginCoreStatus? status, Exception? error, UrlInput coreUrlInput});
 }
 
 /// @nodoc
-class __$$_LoginCoreUrlAssignStateCopyWithImpl<$Res>
+class __$$LoginCoreUrlAssignStateImplCopyWithImpl<$Res>
     extends _$LoginCoreUrlAssignStateCopyWithImpl<$Res,
-        _$_LoginCoreUrlAssignState>
-    implements _$$_LoginCoreUrlAssignStateCopyWith<$Res> {
-  __$$_LoginCoreUrlAssignStateCopyWithImpl(_$_LoginCoreUrlAssignState _value,
-      $Res Function(_$_LoginCoreUrlAssignState) _then)
+        _$LoginCoreUrlAssignStateImpl>
+    implements _$$LoginCoreUrlAssignStateImplCopyWith<$Res> {
+  __$$LoginCoreUrlAssignStateImplCopyWithImpl(
+      _$LoginCoreUrlAssignStateImpl _value,
+      $Res Function(_$LoginCoreUrlAssignStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -96,7 +98,7 @@ class __$$_LoginCoreUrlAssignStateCopyWithImpl<$Res>
     Object? error = freezed,
     Object? coreUrlInput = null,
   }) {
-    return _then(_$_LoginCoreUrlAssignState(
+    return _then(_$LoginCoreUrlAssignStateImpl(
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -115,8 +117,8 @@ class __$$_LoginCoreUrlAssignStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_LoginCoreUrlAssignState extends _LoginCoreUrlAssignState {
-  const _$_LoginCoreUrlAssignState(
+class _$LoginCoreUrlAssignStateImpl extends _LoginCoreUrlAssignState {
+  const _$LoginCoreUrlAssignStateImpl(
       {this.status, this.error, this.coreUrlInput = const UrlInput.pure()})
       : super._();
 
@@ -137,7 +139,7 @@ class _$_LoginCoreUrlAssignState extends _LoginCoreUrlAssignState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_LoginCoreUrlAssignState &&
+            other is _$LoginCoreUrlAssignStateImpl &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.error, error) || other.error == error) &&
             (identical(other.coreUrlInput, coreUrlInput) ||
@@ -150,17 +152,16 @@ class _$_LoginCoreUrlAssignState extends _LoginCoreUrlAssignState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_LoginCoreUrlAssignStateCopyWith<_$_LoginCoreUrlAssignState>
-      get copyWith =>
-          __$$_LoginCoreUrlAssignStateCopyWithImpl<_$_LoginCoreUrlAssignState>(
-              this, _$identity);
+  _$$LoginCoreUrlAssignStateImplCopyWith<_$LoginCoreUrlAssignStateImpl>
+      get copyWith => __$$LoginCoreUrlAssignStateImplCopyWithImpl<
+          _$LoginCoreUrlAssignStateImpl>(this, _$identity);
 }
 
 abstract class _LoginCoreUrlAssignState extends LoginCoreUrlAssignState {
   const factory _LoginCoreUrlAssignState(
       {final LoginCoreStatus? status,
       final Exception? error,
-      final UrlInput coreUrlInput}) = _$_LoginCoreUrlAssignState;
+      final UrlInput coreUrlInput}) = _$LoginCoreUrlAssignStateImpl;
   const _LoginCoreUrlAssignState._() : super._();
 
   @override
@@ -171,6 +172,6 @@ abstract class _LoginCoreUrlAssignState extends LoginCoreUrlAssignState {
   UrlInput get coreUrlInput;
   @override
   @JsonKey(ignore: true)
-  _$$_LoginCoreUrlAssignStateCopyWith<_$_LoginCoreUrlAssignState>
+  _$$LoginCoreUrlAssignStateImplCopyWith<_$LoginCoreUrlAssignStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

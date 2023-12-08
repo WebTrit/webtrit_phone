@@ -115,11 +115,11 @@ class _$OtpVerifyStateCopyWithImpl<$Res, $Val extends OtpVerifyState>
 }
 
 /// @nodoc
-abstract class _$$_OtpVerifyStateCopyWith<$Res>
+abstract class _$$OtpVerifyStateImplCopyWith<$Res>
     implements $OtpVerifyStateCopyWith<$Res> {
-  factory _$$_OtpVerifyStateCopyWith(
-          _$_OtpVerifyState value, $Res Function(_$_OtpVerifyState) then) =
-      __$$_OtpVerifyStateCopyWithImpl<$Res>;
+  factory _$$OtpVerifyStateImplCopyWith(_$OtpVerifyStateImpl value,
+          $Res Function(_$OtpVerifyStateImpl) then) =
+      __$$OtpVerifyStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -135,11 +135,11 @@ abstract class _$$_OtpVerifyStateCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_OtpVerifyStateCopyWithImpl<$Res>
-    extends _$OtpVerifyStateCopyWithImpl<$Res, _$_OtpVerifyState>
-    implements _$$_OtpVerifyStateCopyWith<$Res> {
-  __$$_OtpVerifyStateCopyWithImpl(
-      _$_OtpVerifyState _value, $Res Function(_$_OtpVerifyState) _then)
+class __$$OtpVerifyStateImplCopyWithImpl<$Res>
+    extends _$OtpVerifyStateCopyWithImpl<$Res, _$OtpVerifyStateImpl>
+    implements _$$OtpVerifyStateImplCopyWith<$Res> {
+  __$$OtpVerifyStateImplCopyWithImpl(
+      _$OtpVerifyStateImpl _value, $Res Function(_$OtpVerifyStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -155,7 +155,7 @@ class __$$_OtpVerifyStateCopyWithImpl<$Res>
     Object? token = freezed,
     Object? codeInput = null,
   }) {
-    return _then(_$_OtpVerifyState(
+    return _then(_$OtpVerifyStateImpl(
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -198,8 +198,8 @@ class __$$_OtpVerifyStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_OtpVerifyState extends _OtpVerifyState {
-  const _$_OtpVerifyState(
+class _$OtpVerifyStateImpl extends _OtpVerifyState {
+  const _$OtpVerifyStateImpl(
       {this.status,
       this.error,
       this.coreUrl,
@@ -242,7 +242,7 @@ class _$_OtpVerifyState extends _OtpVerifyState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_OtpVerifyState &&
+            other is _$OtpVerifyStateImpl &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.error, error) || other.error == error) &&
             (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
@@ -264,8 +264,9 @@ class _$_OtpVerifyState extends _OtpVerifyState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_OtpVerifyStateCopyWith<_$_OtpVerifyState> get copyWith =>
-      __$$_OtpVerifyStateCopyWithImpl<_$_OtpVerifyState>(this, _$identity);
+  _$$OtpVerifyStateImplCopyWith<_$OtpVerifyStateImpl> get copyWith =>
+      __$$OtpVerifyStateImplCopyWithImpl<_$OtpVerifyStateImpl>(
+          this, _$identity);
 }
 
 abstract class _OtpVerifyState extends OtpVerifyState {
@@ -278,7 +279,7 @@ abstract class _OtpVerifyState extends OtpVerifyState {
       final String email,
       final SessionOtpProvisional? sessionOtpProvisional,
       final String? token,
-      final CodeInput codeInput}) = _$_OtpVerifyState;
+      final CodeInput codeInput}) = _$OtpVerifyStateImpl;
   const _OtpVerifyState._() : super._();
 
   @override
@@ -301,6 +302,6 @@ abstract class _OtpVerifyState extends OtpVerifyState {
   CodeInput get codeInput;
   @override
   @JsonKey(ignore: true)
-  _$$_OtpVerifyStateCopyWith<_$_OtpVerifyState> get copyWith =>
+  _$$OtpVerifyStateImplCopyWith<_$OtpVerifyStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

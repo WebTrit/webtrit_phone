@@ -101,11 +101,11 @@ class _$PasswordRequestStateCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_PasswordRequestStateCopyWith<$Res>
+abstract class _$$PasswordRequestStateImplCopyWith<$Res>
     implements $PasswordRequestStateCopyWith<$Res> {
-  factory _$$_PasswordRequestStateCopyWith(_$_PasswordRequestState value,
-          $Res Function(_$_PasswordRequestState) then) =
-      __$$_PasswordRequestStateCopyWithImpl<$Res>;
+  factory _$$PasswordRequestStateImplCopyWith(_$PasswordRequestStateImpl value,
+          $Res Function(_$PasswordRequestStateImpl) then) =
+      __$$PasswordRequestStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -119,11 +119,11 @@ abstract class _$$_PasswordRequestStateCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_PasswordRequestStateCopyWithImpl<$Res>
-    extends _$PasswordRequestStateCopyWithImpl<$Res, _$_PasswordRequestState>
-    implements _$$_PasswordRequestStateCopyWith<$Res> {
-  __$$_PasswordRequestStateCopyWithImpl(_$_PasswordRequestState _value,
-      $Res Function(_$_PasswordRequestState) _then)
+class __$$PasswordRequestStateImplCopyWithImpl<$Res>
+    extends _$PasswordRequestStateCopyWithImpl<$Res, _$PasswordRequestStateImpl>
+    implements _$$PasswordRequestStateImplCopyWith<$Res> {
+  __$$PasswordRequestStateImplCopyWithImpl(_$PasswordRequestStateImpl _value,
+      $Res Function(_$PasswordRequestStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -137,7 +137,7 @@ class __$$_PasswordRequestStateCopyWithImpl<$Res>
     Object? loginInput = null,
     Object? passwordInput = null,
   }) {
-    return _then(_$_PasswordRequestState(
+    return _then(_$PasswordRequestStateImpl(
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -172,8 +172,8 @@ class __$$_PasswordRequestStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_PasswordRequestState extends _PasswordRequestState {
-  const _$_PasswordRequestState(
+class _$PasswordRequestStateImpl extends _PasswordRequestState {
+  const _$PasswordRequestStateImpl(
       {this.status,
       this.error,
       required this.coreUrl,
@@ -209,7 +209,7 @@ class _$_PasswordRequestState extends _PasswordRequestState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_PasswordRequestState &&
+            other is _$PasswordRequestStateImpl &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.error, error) || other.error == error) &&
             (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
@@ -229,9 +229,10 @@ class _$_PasswordRequestState extends _PasswordRequestState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_PasswordRequestStateCopyWith<_$_PasswordRequestState> get copyWith =>
-      __$$_PasswordRequestStateCopyWithImpl<_$_PasswordRequestState>(
-          this, _$identity);
+  _$$PasswordRequestStateImplCopyWith<_$PasswordRequestStateImpl>
+      get copyWith =>
+          __$$PasswordRequestStateImplCopyWithImpl<_$PasswordRequestStateImpl>(
+              this, _$identity);
 }
 
 abstract class _PasswordRequestState extends PasswordRequestState {
@@ -242,7 +243,7 @@ abstract class _PasswordRequestState extends PasswordRequestState {
       required final String tenantId,
       final String? token,
       final LoginInput loginInput,
-      final PasswordInput passwordInput}) = _$_PasswordRequestState;
+      final PasswordInput passwordInput}) = _$PasswordRequestStateImpl;
   const _PasswordRequestState._() : super._();
 
   @override
@@ -261,6 +262,6 @@ abstract class _PasswordRequestState extends PasswordRequestState {
   PasswordInput get passwordInput;
   @override
   @JsonKey(ignore: true)
-  _$$_PasswordRequestStateCopyWith<_$_PasswordRequestState> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$PasswordRequestStateImplCopyWith<_$PasswordRequestStateImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

@@ -555,6 +555,18 @@ abstract class AppLocalizations {
   /// **'The app is not supported by your WebTrit Cloud Backend'**
   String get login_RequestFailureUnconfiguredBundleIdError;
 
+  /// No description provided for @login_SegmentedButton_otpSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'OTP sign in'**
+  String get login_SegmentedButton_otpSignIn;
+
+  /// No description provided for @login_SegmentedButton_passwordSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Password sign in'**
+  String get login_SegmentedButton_passwordSignIn;
+
   /// No description provided for @login_Text_coreUrlAssignPostDescription.
   ///
   /// In en, this message translates to:
@@ -590,6 +602,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter the verification code'**
   String get login_TextFieldLabelText_otpVerifyCode;
+
+  /// No description provided for @login_TextFieldLabelText_passwordSignInRequestLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your login'**
+  String get login_TextFieldLabelText_passwordSignInRequestLogin;
+
+  /// No description provided for @login_TextFieldLabelText_passwordSignInRequestPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password'**
+  String get login_TextFieldLabelText_passwordSignInRequestPassword;
 
   /// No description provided for @login_Text_otpRequestDemoDescription.
   ///

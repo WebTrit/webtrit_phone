@@ -79,11 +79,11 @@ class _$OtpRequestStateCopyWithImpl<$Res, $Val extends OtpRequestState>
 }
 
 /// @nodoc
-abstract class _$$_OtpRequestStateCopyWith<$Res>
+abstract class _$$OtpRequestStateImplCopyWith<$Res>
     implements $OtpRequestStateCopyWith<$Res> {
-  factory _$$_OtpRequestStateCopyWith(
-          _$_OtpRequestState value, $Res Function(_$_OtpRequestState) then) =
-      __$$_OtpRequestStateCopyWithImpl<$Res>;
+  factory _$$OtpRequestStateImplCopyWith(_$OtpRequestStateImpl value,
+          $Res Function(_$OtpRequestStateImpl) then) =
+      __$$OtpRequestStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -94,11 +94,11 @@ abstract class _$$_OtpRequestStateCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_OtpRequestStateCopyWithImpl<$Res>
-    extends _$OtpRequestStateCopyWithImpl<$Res, _$_OtpRequestState>
-    implements _$$_OtpRequestStateCopyWith<$Res> {
-  __$$_OtpRequestStateCopyWithImpl(
-      _$_OtpRequestState _value, $Res Function(_$_OtpRequestState) _then)
+class __$$OtpRequestStateImplCopyWithImpl<$Res>
+    extends _$OtpRequestStateCopyWithImpl<$Res, _$OtpRequestStateImpl>
+    implements _$$OtpRequestStateImplCopyWith<$Res> {
+  __$$OtpRequestStateImplCopyWithImpl(
+      _$OtpRequestStateImpl _value, $Res Function(_$OtpRequestStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -109,7 +109,7 @@ class __$$_OtpRequestStateCopyWithImpl<$Res>
     Object? emailInput = null,
     Object? phoneInput = null,
   }) {
-    return _then(_$_OtpRequestState(
+    return _then(_$OtpRequestStateImpl(
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -132,8 +132,8 @@ class __$$_OtpRequestStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_OtpRequestState extends _OtpRequestState {
-  const _$_OtpRequestState(
+class _$OtpRequestStateImpl extends _OtpRequestState {
+  const _$OtpRequestStateImpl(
       {this.status,
       required this.demo,
       this.emailInput = const EmailInput.pure(),
@@ -160,7 +160,7 @@ class _$_OtpRequestState extends _OtpRequestState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_OtpRequestState &&
+            other is _$OtpRequestStateImpl &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.demo, demo) || other.demo == demo) &&
             (identical(other.emailInput, emailInput) ||
@@ -176,8 +176,9 @@ class _$_OtpRequestState extends _OtpRequestState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_OtpRequestStateCopyWith<_$_OtpRequestState> get copyWith =>
-      __$$_OtpRequestStateCopyWithImpl<_$_OtpRequestState>(this, _$identity);
+  _$$OtpRequestStateImplCopyWith<_$OtpRequestStateImpl> get copyWith =>
+      __$$OtpRequestStateImplCopyWithImpl<_$OtpRequestStateImpl>(
+          this, _$identity);
 }
 
 abstract class _OtpRequestState extends OtpRequestState {
@@ -185,7 +186,7 @@ abstract class _OtpRequestState extends OtpRequestState {
       {final OtpRequestStatus? status,
       required final bool demo,
       final EmailInput emailInput,
-      final PhoneInput phoneInput}) = _$_OtpRequestState;
+      final PhoneInput phoneInput}) = _$OtpRequestStateImpl;
   const _OtpRequestState._() : super._();
 
   @override
@@ -198,6 +199,6 @@ abstract class _OtpRequestState extends OtpRequestState {
   PhoneInput get phoneInput;
   @override
   @JsonKey(ignore: true)
-  _$$_OtpRequestStateCopyWith<_$_OtpRequestState> get copyWith =>
+  _$$OtpRequestStateImplCopyWith<_$OtpRequestStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

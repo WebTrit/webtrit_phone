@@ -244,6 +244,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_RequestFailureUnconfiguredBundleIdError => 'The app is not supported by your WebTrit Cloud Backend';
 
   @override
+  String get login_SegmentedButton_otpSignIn => 'OTP sign in';
+
+  @override
+  String get login_SegmentedButton_passwordSignIn => 'Password sign in';
+
+  @override
   String login_Text_coreUrlAssignPostDescription(Object email) {
     return 'If you do not yet have your own WebTrit Cloud Backend - contact sales team $email.';
   }
@@ -255,18 +261,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_TextFieldLabelText_coreUrlAssign => 'Enter your WebTrit Cloud Backend URL';
 
   @override
-  String get login_SegmentedButton_otpSignIn => 'Otp sign in';
-
-  @override
-  String get login_SegmentedButton_passwordSignIn => 'Password sign in';
-
-  @override
-  String get login_TextFieldLabelText_passwordSignInRequestLogin => 'Enter your login';
-
-  @override
-  String get login_TextFieldLabelText_passwordSignInRequestPassword => 'Enter your password';
-
-  @override
   String get login_TextFieldLabelText_otpRequestEmail => 'Enter your email';
 
   @override
@@ -274,6 +268,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get login_TextFieldLabelText_otpVerifyCode => 'Enter the verification code';
+
+  @override
+  String get login_TextFieldLabelText_passwordSignInRequestLogin => 'Enter your login';
+
+  @override
+  String get login_TextFieldLabelText_passwordSignInRequestPassword => 'Enter your password';
 
   @override
   String get login_Text_otpRequestDemoDescription => 'If you do not have an account yet, it will be automatically created for you.';

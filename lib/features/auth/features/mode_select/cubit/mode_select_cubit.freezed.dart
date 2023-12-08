@@ -79,11 +79,11 @@ class _$ModeSelectStateCopyWithImpl<$Res, $Val extends ModeSelectState>
 }
 
 /// @nodoc
-abstract class _$$_ModeSelectStateStateCopyWith<$Res>
+abstract class _$$ModeSelectStateStateImplCopyWith<$Res>
     implements $ModeSelectStateCopyWith<$Res> {
-  factory _$$_ModeSelectStateStateCopyWith(_$_ModeSelectStateState value,
-          $Res Function(_$_ModeSelectStateState) then) =
-      __$$_ModeSelectStateStateCopyWithImpl<$Res>;
+  factory _$$ModeSelectStateStateImplCopyWith(_$ModeSelectStateStateImpl value,
+          $Res Function(_$ModeSelectStateStateImpl) then) =
+      __$$ModeSelectStateStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -94,11 +94,11 @@ abstract class _$$_ModeSelectStateStateCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ModeSelectStateStateCopyWithImpl<$Res>
-    extends _$ModeSelectStateCopyWithImpl<$Res, _$_ModeSelectStateState>
-    implements _$$_ModeSelectStateStateCopyWith<$Res> {
-  __$$_ModeSelectStateStateCopyWithImpl(_$_ModeSelectStateState _value,
-      $Res Function(_$_ModeSelectStateState) _then)
+class __$$ModeSelectStateStateImplCopyWithImpl<$Res>
+    extends _$ModeSelectStateCopyWithImpl<$Res, _$ModeSelectStateStateImpl>
+    implements _$$ModeSelectStateStateImplCopyWith<$Res> {
+  __$$ModeSelectStateStateImplCopyWithImpl(_$ModeSelectStateStateImpl _value,
+      $Res Function(_$ModeSelectStateStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -109,7 +109,7 @@ class __$$_ModeSelectStateStateCopyWithImpl<$Res>
     Object? direction = freezed,
     Object? error = freezed,
   }) {
-    return _then(_$_ModeSelectStateState(
+    return _then(_$ModeSelectStateStateImpl(
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -132,8 +132,8 @@ class __$$_ModeSelectStateStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ModeSelectStateState extends _ModeSelectStateState {
-  const _$_ModeSelectStateState(
+class _$ModeSelectStateStateImpl extends _ModeSelectStateState {
+  const _$ModeSelectStateStateImpl(
       {this.status, required this.demo, this.direction, this.error})
       : super._();
 
@@ -155,7 +155,7 @@ class _$_ModeSelectStateState extends _ModeSelectStateState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ModeSelectStateState &&
+            other is _$ModeSelectStateStateImpl &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.demo, demo) || other.demo == demo) &&
             (identical(other.direction, direction) ||
@@ -169,9 +169,10 @@ class _$_ModeSelectStateState extends _ModeSelectStateState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ModeSelectStateStateCopyWith<_$_ModeSelectStateState> get copyWith =>
-      __$$_ModeSelectStateStateCopyWithImpl<_$_ModeSelectStateState>(
-          this, _$identity);
+  _$$ModeSelectStateStateImplCopyWith<_$ModeSelectStateStateImpl>
+      get copyWith =>
+          __$$ModeSelectStateStateImplCopyWithImpl<_$ModeSelectStateStateImpl>(
+              this, _$identity);
 }
 
 abstract class _ModeSelectStateState extends ModeSelectState {
@@ -179,7 +180,7 @@ abstract class _ModeSelectStateState extends ModeSelectState {
       {final ModeSelectStatus? status,
       required final bool demo,
       final ModeSelectDirection? direction,
-      final Exception? error}) = _$_ModeSelectStateState;
+      final Exception? error}) = _$ModeSelectStateStateImpl;
   const _ModeSelectStateState._() : super._();
 
   @override
@@ -192,6 +193,6 @@ abstract class _ModeSelectStateState extends ModeSelectState {
   Exception? get error;
   @override
   @JsonKey(ignore: true)
-  _$$_ModeSelectStateStateCopyWith<_$_ModeSelectStateState> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$ModeSelectStateStateImplCopyWith<_$ModeSelectStateStateImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

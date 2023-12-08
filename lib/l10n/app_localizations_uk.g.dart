@@ -244,6 +244,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get login_RequestFailureUnconfiguredBundleIdError => 'Помилка конфігурації сервера додатка - сповістіть свого постачальника послуг';
 
   @override
+  String get login_SegmentedButton_otpSignIn => 'Увійти за допомогою OTP';
+
+  @override
+  String get login_SegmentedButton_passwordSignIn => 'Вхід за паролем';
+
+  @override
   String login_Text_coreUrlAssignPostDescription(Object email) {
     return 'Якщо у вас ще немає власного екземпляра WebTrit, зв\'яжіться з командою продажів за адресою $email';
   }
@@ -262,6 +268,12 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get login_TextFieldLabelText_otpVerifyCode => 'Введіть код підтвердження';
+
+  @override
+  String get login_TextFieldLabelText_passwordSignInRequestLogin => 'Введіть ваш логін';
+
+  @override
+  String get login_TextFieldLabelText_passwordSignInRequestPassword => 'Введіть ваш пароль';
 
   @override
   String get login_Text_otpRequestDemoDescription => 'Якщо у вас ще немає облікового запису, він буде автоматично створений для вас.';
