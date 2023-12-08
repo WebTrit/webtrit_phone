@@ -38,11 +38,10 @@ class ConfirmDialog extends StatelessWidget {
   }
 
   const ConfirmDialog._({
-    Key? key,
     this.dangerous = false,
     required this.title,
     required this.content,
-  }) : super(key: key);
+  });
 
   final bool dangerous;
   final String title;

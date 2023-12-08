@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ListTileSeparator extends StatelessWidget {
-  const ListTileSeparator({Key? key}) : super(key: key);
+  const ListTileSeparator({super.key});
 
   @override
   Widget build(BuildContext context) {

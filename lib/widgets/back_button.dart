@@ -4,9 +4,9 @@ import 'package:go_router/go_router.dart';
 
 class ExtBackButton extends StatelessWidget {
   const ExtBackButton({
-    Key? key,
+    super.key,
     this.disabled = false,
-  }) : super(key: key);
+  });
 
   final bool disabled;
 

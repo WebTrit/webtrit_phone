@@ -68,22 +68,22 @@ class _$AppSmartContactCopyWithImpl<$Res, $Val extends AppSmartContact>
 }
 
 /// @nodoc
-abstract class _$$_AppSmartContactCopyWith<$Res>
+abstract class _$$AppSmartContactImplCopyWith<$Res>
     implements $AppSmartContactCopyWith<$Res> {
-  factory _$$_AppSmartContactCopyWith(
-          _$_AppSmartContact value, $Res Function(_$_AppSmartContact) then) =
-      __$$_AppSmartContactCopyWithImpl<$Res>;
+  factory _$$AppSmartContactImplCopyWith(_$AppSmartContactImpl value,
+          $Res Function(_$AppSmartContactImpl) then) =
+      __$$AppSmartContactImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String identifier, List<String> phones});
 }
 
 /// @nodoc
-class __$$_AppSmartContactCopyWithImpl<$Res>
-    extends _$AppSmartContactCopyWithImpl<$Res, _$_AppSmartContact>
-    implements _$$_AppSmartContactCopyWith<$Res> {
-  __$$_AppSmartContactCopyWithImpl(
-      _$_AppSmartContact _value, $Res Function(_$_AppSmartContact) _then)
+class __$$AppSmartContactImplCopyWithImpl<$Res>
+    extends _$AppSmartContactCopyWithImpl<$Res, _$AppSmartContactImpl>
+    implements _$$AppSmartContactImplCopyWith<$Res> {
+  __$$AppSmartContactImplCopyWithImpl(
+      _$AppSmartContactImpl _value, $Res Function(_$AppSmartContactImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -92,7 +92,7 @@ class __$$_AppSmartContactCopyWithImpl<$Res>
     Object? identifier = null,
     Object? phones = null,
   }) {
-    return _then(_$_AppSmartContact(
+    return _then(_$AppSmartContactImpl(
       identifier: null == identifier
           ? _value.identifier
           : identifier // ignore: cast_nullable_to_non_nullable
@@ -108,13 +108,13 @@ class __$$_AppSmartContactCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class _$_AppSmartContact implements _AppSmartContact {
-  const _$_AppSmartContact(
+class _$AppSmartContactImpl implements _AppSmartContact {
+  const _$AppSmartContactImpl(
       {required this.identifier, required final List<String> phones})
       : _phones = phones;
 
-  factory _$_AppSmartContact.fromJson(Map<String, dynamic> json) =>
-      _$$_AppSmartContactFromJson(json);
+  factory _$AppSmartContactImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AppSmartContactImplFromJson(json);
 
   @override
   final String identifier;
@@ -135,7 +135,7 @@ class _$_AppSmartContact implements _AppSmartContact {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_AppSmartContact &&
+            other is _$AppSmartContactImpl &&
             (identical(other.identifier, identifier) ||
                 other.identifier == identifier) &&
             const DeepCollectionEquality().equals(other._phones, _phones));
@@ -149,12 +149,13 @@ class _$_AppSmartContact implements _AppSmartContact {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_AppSmartContactCopyWith<_$_AppSmartContact> get copyWith =>
-      __$$_AppSmartContactCopyWithImpl<_$_AppSmartContact>(this, _$identity);
+  _$$AppSmartContactImplCopyWith<_$AppSmartContactImpl> get copyWith =>
+      __$$AppSmartContactImplCopyWithImpl<_$AppSmartContactImpl>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_AppSmartContactToJson(
+    return _$$AppSmartContactImplToJson(
       this,
     );
   }
@@ -163,10 +164,10 @@ class _$_AppSmartContact implements _AppSmartContact {
 abstract class _AppSmartContact implements AppSmartContact {
   const factory _AppSmartContact(
       {required final String identifier,
-      required final List<String> phones}) = _$_AppSmartContact;
+      required final List<String> phones}) = _$AppSmartContactImpl;
 
   factory _AppSmartContact.fromJson(Map<String, dynamic> json) =
-      _$_AppSmartContact.fromJson;
+      _$AppSmartContactImpl.fromJson;
 
   @override
   String get identifier;
@@ -174,6 +175,6 @@ abstract class _AppSmartContact implements AppSmartContact {
   List<String> get phones;
   @override
   @JsonKey(ignore: true)
-  _$$_AppSmartContactCopyWith<_$_AppSmartContact> get copyWith =>
+  _$$AppSmartContactImplCopyWith<_$AppSmartContactImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -8,9 +8,9 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 class Keypad extends StatelessWidget {
   const Keypad({
-    Key? key,
+    super.key,
     required this.onKeypadPressed,
-  }) : super(key: key);
+  });
 
   final void Function(String) onKeypadPressed;
 

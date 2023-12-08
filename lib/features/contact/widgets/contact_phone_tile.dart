@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ContactPhoneTile extends StatelessWidget {
   const ContactPhoneTile({
-    Key? key,
+    super.key,
     required this.number,
     required this.label,
     required this.favorite,
@@ -11,7 +11,7 @@ class ContactPhoneTile extends StatelessWidget {
     this.onFavoriteChanged,
     this.onAudioPressed,
     this.onVideoPressed,
-  }) : super(key: key);
+  });
 
   final String number;
   final String label;

@@ -3,12 +3,12 @@ import '../abstract_events.dart';
 
 class IceMediaEvent extends LineEvent {
   const IceMediaEvent({
-    String? transaction,
-    required int line,
+    super.transaction,
+    required super.line,
     required this.mid,
     required this.type,
     required this.receiving,
-  }) : super(transaction: transaction, line: line);
+  });
 
   final String mid;
   final IceMediaType type;

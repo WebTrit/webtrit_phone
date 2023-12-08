@@ -93,11 +93,12 @@ class _$SessionLoginCredentialCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_SessionLoginCredentialCopyWith<$Res>
+abstract class _$$SessionLoginCredentialImplCopyWith<$Res>
     implements $SessionLoginCredentialCopyWith<$Res> {
-  factory _$$_SessionLoginCredentialCopyWith(_$_SessionLoginCredential value,
-          $Res Function(_$_SessionLoginCredential) then) =
-      __$$_SessionLoginCredentialCopyWithImpl<$Res>;
+  factory _$$SessionLoginCredentialImplCopyWith(
+          _$SessionLoginCredentialImpl value,
+          $Res Function(_$SessionLoginCredentialImpl) then) =
+      __$$SessionLoginCredentialImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -109,12 +110,13 @@ abstract class _$$_SessionLoginCredentialCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_SessionLoginCredentialCopyWithImpl<$Res>
+class __$$SessionLoginCredentialImplCopyWithImpl<$Res>
     extends _$SessionLoginCredentialCopyWithImpl<$Res,
-        _$_SessionLoginCredential>
-    implements _$$_SessionLoginCredentialCopyWith<$Res> {
-  __$$_SessionLoginCredentialCopyWithImpl(_$_SessionLoginCredential _value,
-      $Res Function(_$_SessionLoginCredential) _then)
+        _$SessionLoginCredentialImpl>
+    implements _$$SessionLoginCredentialImplCopyWith<$Res> {
+  __$$SessionLoginCredentialImplCopyWithImpl(
+      _$SessionLoginCredentialImpl _value,
+      $Res Function(_$SessionLoginCredentialImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -126,7 +128,7 @@ class __$$_SessionLoginCredentialCopyWithImpl<$Res>
     Object? login = null,
     Object? password = null,
   }) {
-    return _then(_$_SessionLoginCredential(
+    return _then(_$SessionLoginCredentialImpl(
       bundleId: freezed == bundleId
           ? _value.bundleId
           : bundleId // ignore: cast_nullable_to_non_nullable
@@ -154,16 +156,16 @@ class __$$_SessionLoginCredentialCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class _$_SessionLoginCredential implements _SessionLoginCredential {
-  const _$_SessionLoginCredential(
+class _$SessionLoginCredentialImpl implements _SessionLoginCredential {
+  const _$SessionLoginCredentialImpl(
       {this.bundleId,
       required this.type,
       required this.identifier,
       required this.login,
       required this.password});
 
-  factory _$_SessionLoginCredential.fromJson(Map<String, dynamic> json) =>
-      _$$_SessionLoginCredentialFromJson(json);
+  factory _$SessionLoginCredentialImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SessionLoginCredentialImplFromJson(json);
 
   @override
   final String? bundleId;
@@ -185,7 +187,7 @@ class _$_SessionLoginCredential implements _SessionLoginCredential {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SessionLoginCredential &&
+            other is _$SessionLoginCredentialImpl &&
             (identical(other.bundleId, bundleId) ||
                 other.bundleId == bundleId) &&
             (identical(other.type, type) || other.type == type) &&
@@ -204,13 +206,13 @@ class _$_SessionLoginCredential implements _SessionLoginCredential {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SessionLoginCredentialCopyWith<_$_SessionLoginCredential> get copyWith =>
-      __$$_SessionLoginCredentialCopyWithImpl<_$_SessionLoginCredential>(
-          this, _$identity);
+  _$$SessionLoginCredentialImplCopyWith<_$SessionLoginCredentialImpl>
+      get copyWith => __$$SessionLoginCredentialImplCopyWithImpl<
+          _$SessionLoginCredentialImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_SessionLoginCredentialToJson(
+    return _$$SessionLoginCredentialImplToJson(
       this,
     );
   }
@@ -222,10 +224,10 @@ abstract class _SessionLoginCredential implements SessionLoginCredential {
       required final AppType type,
       required final String identifier,
       required final String login,
-      required final String password}) = _$_SessionLoginCredential;
+      required final String password}) = _$SessionLoginCredentialImpl;
 
   factory _SessionLoginCredential.fromJson(Map<String, dynamic> json) =
-      _$_SessionLoginCredential.fromJson;
+      _$SessionLoginCredentialImpl.fromJson;
 
   @override
   String? get bundleId;
@@ -239,6 +241,6 @@ abstract class _SessionLoginCredential implements SessionLoginCredential {
   String get password;
   @override
   @JsonKey(ignore: true)
-  _$$_SessionLoginCredentialCopyWith<_$_SessionLoginCredential> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$SessionLoginCredentialImplCopyWith<_$SessionLoginCredentialImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

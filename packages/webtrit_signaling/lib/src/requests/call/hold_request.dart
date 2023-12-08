@@ -8,11 +8,11 @@ enum HoldDirection {
 
 class HoldRequest extends CallRequest {
   const HoldRequest({
-    required String transaction,
-    required int line,
-    required String callId,
+    required super.transaction,
+    required super.line,
+    required super.callId,
     this.direction,
-  }) : super(transaction: transaction, line: line, callId: callId);
+  });
 
   final HoldDirection? direction;
 

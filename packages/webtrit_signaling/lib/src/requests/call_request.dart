@@ -3,10 +3,10 @@ import 'call/call_requests.dart';
 
 abstract class CallRequest extends LineRequest {
   const CallRequest({
-    required String transaction,
-    required int line,
+    required super.transaction,
+    required super.line,
     required this.callId,
-  }) : super(transaction: transaction, line: line);
+  });
 
   final String callId;
 

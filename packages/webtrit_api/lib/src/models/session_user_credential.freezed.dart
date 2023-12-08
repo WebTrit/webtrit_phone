@@ -82,22 +82,24 @@ class _$SessionUserCredentialCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_SessionUserCredentialCopyWith<$Res>
+abstract class _$$SessionUserCredentialImplCopyWith<$Res>
     implements $SessionUserCredentialCopyWith<$Res> {
-  factory _$$_SessionUserCredentialCopyWith(_$_SessionUserCredential value,
-          $Res Function(_$_SessionUserCredential) then) =
-      __$$_SessionUserCredentialCopyWithImpl<$Res>;
+  factory _$$SessionUserCredentialImplCopyWith(
+          _$SessionUserCredentialImpl value,
+          $Res Function(_$SessionUserCredentialImpl) then) =
+      __$$SessionUserCredentialImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String? bundleId, AppType type, String identifier, String email});
 }
 
 /// @nodoc
-class __$$_SessionUserCredentialCopyWithImpl<$Res>
-    extends _$SessionUserCredentialCopyWithImpl<$Res, _$_SessionUserCredential>
-    implements _$$_SessionUserCredentialCopyWith<$Res> {
-  __$$_SessionUserCredentialCopyWithImpl(_$_SessionUserCredential _value,
-      $Res Function(_$_SessionUserCredential) _then)
+class __$$SessionUserCredentialImplCopyWithImpl<$Res>
+    extends _$SessionUserCredentialCopyWithImpl<$Res,
+        _$SessionUserCredentialImpl>
+    implements _$$SessionUserCredentialImplCopyWith<$Res> {
+  __$$SessionUserCredentialImplCopyWithImpl(_$SessionUserCredentialImpl _value,
+      $Res Function(_$SessionUserCredentialImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -108,7 +110,7 @@ class __$$_SessionUserCredentialCopyWithImpl<$Res>
     Object? identifier = null,
     Object? email = null,
   }) {
-    return _then(_$_SessionUserCredential(
+    return _then(_$SessionUserCredentialImpl(
       bundleId: freezed == bundleId
           ? _value.bundleId
           : bundleId // ignore: cast_nullable_to_non_nullable
@@ -132,15 +134,15 @@ class __$$_SessionUserCredentialCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class _$_SessionUserCredential implements _SessionUserCredential {
-  const _$_SessionUserCredential(
+class _$SessionUserCredentialImpl implements _SessionUserCredential {
+  const _$SessionUserCredentialImpl(
       {this.bundleId,
       required this.type,
       required this.identifier,
       required this.email});
 
-  factory _$_SessionUserCredential.fromJson(Map<String, dynamic> json) =>
-      _$$_SessionUserCredentialFromJson(json);
+  factory _$SessionUserCredentialImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SessionUserCredentialImplFromJson(json);
 
   @override
   final String? bundleId;
@@ -160,7 +162,7 @@ class _$_SessionUserCredential implements _SessionUserCredential {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SessionUserCredential &&
+            other is _$SessionUserCredentialImpl &&
             (identical(other.bundleId, bundleId) ||
                 other.bundleId == bundleId) &&
             (identical(other.type, type) || other.type == type) &&
@@ -177,13 +179,13 @@ class _$_SessionUserCredential implements _SessionUserCredential {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SessionUserCredentialCopyWith<_$_SessionUserCredential> get copyWith =>
-      __$$_SessionUserCredentialCopyWithImpl<_$_SessionUserCredential>(
-          this, _$identity);
+  _$$SessionUserCredentialImplCopyWith<_$SessionUserCredentialImpl>
+      get copyWith => __$$SessionUserCredentialImplCopyWithImpl<
+          _$SessionUserCredentialImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_SessionUserCredentialToJson(
+    return _$$SessionUserCredentialImplToJson(
       this,
     );
   }
@@ -194,10 +196,10 @@ abstract class _SessionUserCredential implements SessionUserCredential {
       {final String? bundleId,
       required final AppType type,
       required final String identifier,
-      required final String email}) = _$_SessionUserCredential;
+      required final String email}) = _$SessionUserCredentialImpl;
 
   factory _SessionUserCredential.fromJson(Map<String, dynamic> json) =
-      _$_SessionUserCredential.fromJson;
+      _$SessionUserCredentialImpl.fromJson;
 
   @override
   String? get bundleId;
@@ -209,6 +211,6 @@ abstract class _SessionUserCredential implements SessionUserCredential {
   String get email;
   @override
   @JsonKey(ignore: true)
-  _$$_SessionUserCredentialCopyWith<_$_SessionUserCredential> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$SessionUserCredentialImplCopyWith<_$SessionUserCredentialImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

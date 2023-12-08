@@ -15,6 +15,73 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
+mixin _$NotificationsIssued {
+  Notification get notification => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+
+class _$NotificationsIssuedImpl implements _NotificationsIssued {
+  const _$NotificationsIssuedImpl(this.notification);
+
+  @override
+  final Notification notification;
+
+  @override
+  String toString() {
+    return 'NotificationsIssued(notification: $notification)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$NotificationsIssuedImpl &&
+            (identical(other.notification, notification) ||
+                other.notification == notification));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, notification);
+}
+
+abstract class _NotificationsIssued implements NotificationsIssued {
+  const factory _NotificationsIssued(final Notification notification) =
+      _$NotificationsIssuedImpl;
+
+  @override
+  Notification get notification;
+}
+
+/// @nodoc
+mixin _$NotificationsCleared {}
+
+/// @nodoc
+
+class _$NotificationsClearedImpl implements _NotificationsCleared {
+  const _$NotificationsClearedImpl();
+
+  @override
+  String toString() {
+    return 'NotificationsCleared()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$NotificationsClearedImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+}
+
+abstract class _NotificationsCleared implements NotificationsCleared {
+  const factory _NotificationsCleared() = _$NotificationsClearedImpl;
+}
+
+/// @nodoc
 mixin _$NotificationsState {
   Notification? get lastNotification => throw _privateConstructorUsedError;
 
@@ -57,22 +124,22 @@ class _$NotificationsStateCopyWithImpl<$Res, $Val extends NotificationsState>
 }
 
 /// @nodoc
-abstract class _$$_NotificationsStateCopyWith<$Res>
+abstract class _$$NotificationsStateImplCopyWith<$Res>
     implements $NotificationsStateCopyWith<$Res> {
-  factory _$$_NotificationsStateCopyWith(_$_NotificationsState value,
-          $Res Function(_$_NotificationsState) then) =
-      __$$_NotificationsStateCopyWithImpl<$Res>;
+  factory _$$NotificationsStateImplCopyWith(_$NotificationsStateImpl value,
+          $Res Function(_$NotificationsStateImpl) then) =
+      __$$NotificationsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({Notification? lastNotification});
 }
 
 /// @nodoc
-class __$$_NotificationsStateCopyWithImpl<$Res>
-    extends _$NotificationsStateCopyWithImpl<$Res, _$_NotificationsState>
-    implements _$$_NotificationsStateCopyWith<$Res> {
-  __$$_NotificationsStateCopyWithImpl(
-      _$_NotificationsState _value, $Res Function(_$_NotificationsState) _then)
+class __$$NotificationsStateImplCopyWithImpl<$Res>
+    extends _$NotificationsStateCopyWithImpl<$Res, _$NotificationsStateImpl>
+    implements _$$NotificationsStateImplCopyWith<$Res> {
+  __$$NotificationsStateImplCopyWithImpl(_$NotificationsStateImpl _value,
+      $Res Function(_$NotificationsStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -80,7 +147,7 @@ class __$$_NotificationsStateCopyWithImpl<$Res>
   $Res call({
     Object? lastNotification = freezed,
   }) {
-    return _then(_$_NotificationsState(
+    return _then(_$NotificationsStateImpl(
       freezed == lastNotification
           ? _value.lastNotification
           : lastNotification // ignore: cast_nullable_to_non_nullable
@@ -91,8 +158,8 @@ class __$$_NotificationsStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_NotificationsState implements _NotificationsState {
-  const _$_NotificationsState([this.lastNotification]);
+class _$NotificationsStateImpl implements _NotificationsState {
+  const _$NotificationsStateImpl([this.lastNotification]);
 
   @override
   final Notification? lastNotification;
@@ -106,7 +173,7 @@ class _$_NotificationsState implements _NotificationsState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_NotificationsState &&
+            other is _$NotificationsStateImpl &&
             (identical(other.lastNotification, lastNotification) ||
                 other.lastNotification == lastNotification));
   }
@@ -117,19 +184,19 @@ class _$_NotificationsState implements _NotificationsState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_NotificationsStateCopyWith<_$_NotificationsState> get copyWith =>
-      __$$_NotificationsStateCopyWithImpl<_$_NotificationsState>(
+  _$$NotificationsStateImplCopyWith<_$NotificationsStateImpl> get copyWith =>
+      __$$NotificationsStateImplCopyWithImpl<_$NotificationsStateImpl>(
           this, _$identity);
 }
 
 abstract class _NotificationsState implements NotificationsState {
   const factory _NotificationsState([final Notification? lastNotification]) =
-      _$_NotificationsState;
+      _$NotificationsStateImpl;
 
   @override
   Notification? get lastNotification;
   @override
   @JsonKey(ignore: true)
-  _$$_NotificationsStateCopyWith<_$_NotificationsState> get copyWith =>
+  _$$NotificationsStateImplCopyWith<_$NotificationsStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

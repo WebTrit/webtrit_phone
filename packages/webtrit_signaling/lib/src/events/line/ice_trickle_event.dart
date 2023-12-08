@@ -2,10 +2,10 @@ import '../abstract_events.dart';
 
 class IceTrickleEvent extends LineEvent {
   const IceTrickleEvent({
-    String? transaction,
-    required int line,
+    super.transaction,
+    required super.line,
     required this.candidate,
-  }) : super(transaction: transaction, line: line);
+  });
 
   final Map<String, dynamic>? candidate;
 

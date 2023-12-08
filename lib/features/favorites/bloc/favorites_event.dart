@@ -4,8 +4,9 @@ abstract class FavoritesEvent {
   const FavoritesEvent();
 }
 
-class FavoritesStarted extends FavoritesEvent {
-  const FavoritesStarted();
+@Freezed(copyWith: false)
+class FavoritesStarted with _$FavoritesStarted implements FavoritesEvent {
+  const factory FavoritesStarted() = _FavoritesStarted;
 }
 
 @Freezed(copyWith: false)

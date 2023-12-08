@@ -68,22 +68,22 @@ class _$AppPushTokenCopyWithImpl<$Res, $Val extends AppPushToken>
 }
 
 /// @nodoc
-abstract class _$$_AppPushTokenCopyWith<$Res>
+abstract class _$$AppPushTokenImplCopyWith<$Res>
     implements $AppPushTokenCopyWith<$Res> {
-  factory _$$_AppPushTokenCopyWith(
-          _$_AppPushToken value, $Res Function(_$_AppPushToken) then) =
-      __$$_AppPushTokenCopyWithImpl<$Res>;
+  factory _$$AppPushTokenImplCopyWith(
+          _$AppPushTokenImpl value, $Res Function(_$AppPushTokenImpl) then) =
+      __$$AppPushTokenImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({AppPushTokenType type, String value});
 }
 
 /// @nodoc
-class __$$_AppPushTokenCopyWithImpl<$Res>
-    extends _$AppPushTokenCopyWithImpl<$Res, _$_AppPushToken>
-    implements _$$_AppPushTokenCopyWith<$Res> {
-  __$$_AppPushTokenCopyWithImpl(
-      _$_AppPushToken _value, $Res Function(_$_AppPushToken) _then)
+class __$$AppPushTokenImplCopyWithImpl<$Res>
+    extends _$AppPushTokenCopyWithImpl<$Res, _$AppPushTokenImpl>
+    implements _$$AppPushTokenImplCopyWith<$Res> {
+  __$$AppPushTokenImplCopyWithImpl(
+      _$AppPushTokenImpl _value, $Res Function(_$AppPushTokenImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -92,7 +92,7 @@ class __$$_AppPushTokenCopyWithImpl<$Res>
     Object? type = null,
     Object? value = null,
   }) {
-    return _then(_$_AppPushToken(
+    return _then(_$AppPushTokenImpl(
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -108,11 +108,11 @@ class __$$_AppPushTokenCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class _$_AppPushToken implements _AppPushToken {
-  const _$_AppPushToken({required this.type, required this.value});
+class _$AppPushTokenImpl implements _AppPushToken {
+  const _$AppPushTokenImpl({required this.type, required this.value});
 
-  factory _$_AppPushToken.fromJson(Map<String, dynamic> json) =>
-      _$$_AppPushTokenFromJson(json);
+  factory _$AppPushTokenImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AppPushTokenImplFromJson(json);
 
   @override
   final AppPushTokenType type;
@@ -128,7 +128,7 @@ class _$_AppPushToken implements _AppPushToken {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_AppPushToken &&
+            other is _$AppPushTokenImpl &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.value, value) || other.value == value));
   }
@@ -140,12 +140,12 @@ class _$_AppPushToken implements _AppPushToken {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_AppPushTokenCopyWith<_$_AppPushToken> get copyWith =>
-      __$$_AppPushTokenCopyWithImpl<_$_AppPushToken>(this, _$identity);
+  _$$AppPushTokenImplCopyWith<_$AppPushTokenImpl> get copyWith =>
+      __$$AppPushTokenImplCopyWithImpl<_$AppPushTokenImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_AppPushTokenToJson(
+    return _$$AppPushTokenImplToJson(
       this,
     );
   }
@@ -154,10 +154,10 @@ class _$_AppPushToken implements _AppPushToken {
 abstract class _AppPushToken implements AppPushToken {
   const factory _AppPushToken(
       {required final AppPushTokenType type,
-      required final String value}) = _$_AppPushToken;
+      required final String value}) = _$AppPushTokenImpl;
 
   factory _AppPushToken.fromJson(Map<String, dynamic> json) =
-      _$_AppPushToken.fromJson;
+      _$AppPushTokenImpl.fromJson;
 
   @override
   AppPushTokenType get type;
@@ -165,6 +165,6 @@ abstract class _AppPushToken implements AppPushToken {
   String get value;
   @override
   @JsonKey(ignore: true)
-  _$$_AppPushTokenCopyWith<_$_AppPushToken> get copyWith =>
+  _$$AppPushTokenImplCopyWith<_$AppPushTokenImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

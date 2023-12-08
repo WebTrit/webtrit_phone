@@ -20,7 +20,7 @@ typedef LinkCallback = void Function(LinkableElement link);
 /// Turns URLs into links
 class Linkify extends StatefulWidget {
   const Linkify({
-    Key? key,
+    super.key,
     required this.text,
     this.linkifiers = const [...defaultLinkifiers, TelLinkifier()],
     this.onOpen,
@@ -32,7 +32,7 @@ class Linkify extends StatefulWidget {
     this.maxLines,
     this.overflow = TextOverflow.clip,
     this.strutStyle,
-  }) : super(key: key);
+  });
 
   /// Text to be linkified
   final String text;

@@ -2,12 +2,12 @@ import '../abstract_events.dart';
 
 class CallErrorEvent extends CallEvent implements ErrorEvent {
   const CallErrorEvent({
-    String? transaction,
-    required int line,
-    required String callId,
+    super.transaction,
+    required super.line,
+    required super.callId,
     required this.code,
     required this.reason,
-  }) : super(transaction: transaction, line: line, callId: callId);
+  });
 
   @override
   final int code;

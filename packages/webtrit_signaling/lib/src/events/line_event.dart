@@ -3,9 +3,9 @@ import 'line/line_events.dart';
 
 abstract class LineEvent extends SessionEvent {
   const LineEvent({
-    String? transaction,
+    super.transaction,
     required this.line,
-  }) : super(transaction: transaction);
+  });
 
   final int line;
 

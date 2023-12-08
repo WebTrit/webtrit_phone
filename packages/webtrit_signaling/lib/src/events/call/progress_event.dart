@@ -2,13 +2,13 @@ import '../abstract_events.dart';
 
 class ProgressEvent extends CallEvent {
   const ProgressEvent({
-    String? transaction,
-    required int line,
-    required String callId,
+    super.transaction,
+    required super.line,
+    required super.callId,
     required this.callee,
     this.isFocus,
     required this.jsep,
-  }) : super(transaction: transaction, line: line, callId: callId);
+  });
 
   final String callee;
   final bool? isFocus;

@@ -7,46 +7,85 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get locale_default => 'Default';
-
-  @override
-  String get locale_en => 'English';
-
-  @override
-  String get themeMode_system => 'System';
-
-  @override
-  String get themeMode_light => 'Light';
-
-  @override
-  String get themeMode_dark => 'Dark';
-
-  @override
   String get alertDialogActions_no => 'No';
-
-  @override
-  String get alertDialogActions_yes => 'Yes';
 
   @override
   String get alertDialogActions_ok => 'Ok';
 
   @override
-  String get copyToClipboard_popupMenuItem => 'Copy to clipboard';
+  String get alertDialogActions_yes => 'Yes';
 
   @override
-  String get copyToClipboard_floatingSnackBar => 'Text copied';
+  String get call_CallActionsTooltip_accept => 'Accept';
 
   @override
-  String get callStatus_connectivityNone => 'No internet connection';
+  String get call_CallActionsTooltip_disableCamera => 'Disable camera';
 
   @override
-  String get callStatus_connectError => 'Connection error';
+  String get call_CallActionsTooltip_disableSpeaker => 'Disable speakerphone';
+
+  @override
+  String get call_CallActionsTooltip_enableCamera => 'Enable camera';
+
+  @override
+  String get call_CallActionsTooltip_enableSpeaker => 'Enable speakerphone';
+
+  @override
+  String get call_CallActionsTooltip_hangup => 'Hangup';
+
+  @override
+  String get call_CallActionsTooltip_hangupAndAccept => 'Hangup & Accept';
+
+  @override
+  String get call_CallActionsTooltip_hideKeypad => 'Hide keypad';
+
+  @override
+  String get call_CallActionsTooltip_hold => 'Hold call';
+
+  @override
+  String get call_CallActionsTooltip_holdAndAccept => 'Hold & Accept';
+
+  @override
+  String get call_CallActionsTooltip_mute => 'Mute microphone';
+
+  @override
+  String get call_CallActionsTooltip_showKeypad => 'Show keypad';
+
+  @override
+  String get call_CallActionsTooltip_swap => 'Swap calls';
+
+  @override
+  String get call_CallActionsTooltip_transfer => 'Transfer';
+
+  @override
+  String get call_CallActionsTooltip_unhold => 'Unhold call';
+
+  @override
+  String get call_CallActionsTooltip_unmute => 'Unmute microphone';
+
+  @override
+  String get call_description_held => 'On hold';
+
+  @override
+  String get call_description_incoming => 'Incoming call';
+
+  @override
+  String get call_description_outgoing => 'Outgoing call';
+
+  @override
+  String get call_FailureAcknowledgeDialog_title => 'Failure';
 
   @override
   String get callStatus_appUnregistered => 'Unregistered';
 
   @override
+  String get callStatus_connectError => 'Connection error';
+
+  @override
   String get callStatus_connectIssue => 'Connection issue';
+
+  @override
+  String get callStatus_connectivityNone => 'No internet connection';
 
   @override
   String get callStatus_inProgress => 'Connection in progress';
@@ -55,102 +94,76 @@ class AppLocalizationsEn extends AppLocalizations {
   String get callStatus_ready => 'Connection established';
 
   @override
-  String get notifications_errorSnackBar_callUndefinedLine => 'No idle lines to initiate the call';
+  String get contacts_ExternalTabButton_refresh => 'Refresh';
 
   @override
-  String get notifications_errorSnackBar_callSignalingClientNotConnect => 'Cannot initiate the call, please check the connection status';
+  String get contacts_ExternalTabText_empty => 'No contacts';
 
   @override
-  String get notifications_errorSnackBar_callSignalingClientSessionMissed => 'The current connection session is invalid, please sign in again';
+  String get contacts_ExternalTabText_emptyOnSearching => 'No contacts found';
 
   @override
-  String get notifications_errorSnackBar_callConnect => 'Connecting to the core failed, trying to reconnect';
+  String get contacts_ExternalTabText_failure => 'Failed to get cloud PBX contacts';
 
   @override
-  String get notifications_errorSnackBar_callUserMedia => 'No access to media input, please check app permissions';
+  String get contacts_LocalTabButton_openAppSettings => 'Grant access to your phone contacts';
 
   @override
-  String get notifications_errorSnackBarAction_callUserMedia => 'Check';
+  String get contacts_LocalTabButton_refresh => 'Refresh';
 
   @override
-  String get main_BottomNavigationBarItemLabel_favorites => 'Favorites';
+  String get contacts_LocalTabText_empty => 'No contacts';
 
   @override
-  String get main_BottomNavigationBarItemLabel_recents => 'Recents';
+  String get contacts_LocalTabText_emptyOnSearching => 'No contacts found';
 
   @override
-  String get main_BottomNavigationBarItemLabel_contacts => 'Contacts';
+  String get contacts_LocalTabText_failure => 'Failed to get your phone contacts';
 
   @override
-  String get main_BottomNavigationBarItemLabel_keypad => 'Keypad';
+  String get contacts_LocalTabText_permissionFailure => 'There are no permissions to get your phone contacts';
 
   @override
-  String get main_CompatibilityIssueDialog_title => 'Compatibility issue';
+  String get contactsSourceExternal => 'Cloud PBX';
 
   @override
-  String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(String actual, String supportedConstraint) {
-    return 'Incompatible WebTrit Cloud Backend version, please contact the administrator of your system.\n\nInstance version:\n$actual\n\nSupported version:\n$supportedConstraint';
-  }
+  String get contactsSourceLocal => 'Your phone';
 
   @override
-  String get main_CompatibilityIssueDialogActions_update => 'Update';
+  String get copyToClipboard_floatingSnackBar => 'Text copied';
 
   @override
-  String get main_CompatibilityIssueDialogActions_verify => 'Check again';
+  String get copyToClipboard_popupMenuItem => 'Copy to clipboard';
 
   @override
-  String get main_CompatibilityIssueDialogActions_logout => 'Logout';
+  String get default_ClientExceptionError => 'A HTTP client issue occurred';
 
   @override
-  String get call_FailureAcknowledgeDialog_title => 'Failure';
+  String get default_FormatExceptionError => 'A response format issue occurred';
 
   @override
-  String get call_description_incoming => 'Incoming call from';
+  String get default_RequestFailureError => 'A server failure occurred';
 
   @override
-  String get call_description_outgoing => 'Outgoing call to';
+  String get default_SocketExceptionError => 'A network issue occurred';
 
   @override
-  String get call_CallActionsTooltip_mute => 'Mute microphone';
+  String get default_TlsExceptionError => 'A secure network protocol (TLS/SSL) issue occurred';
 
   @override
-  String get call_CallActionsTooltip_unmute => 'Unmute microphone';
+  String get default_TypeErrorError => 'A response issue occurred';
 
   @override
-  String get call_CallActionsTooltip_disableCamera => 'Disable camera';
+  String get default_UnauthorizedRequestFailureError => 'An unauthorized request failure occurred';
 
   @override
-  String get call_CallActionsTooltip_enableCamera => 'Enable camera';
+  String get favorites_BodyCenter_empty => 'Currently, you have no favorite numbers.\nAdd favorites from Contacts using the star icon.';
 
   @override
-  String get call_CallActionsTooltip_disableSpeaker => 'Disable speakerphone';
+  String get favorites_DeleteConfirmDialog_content => 'Are you sure you want to delete the current favorite number?';
 
   @override
-  String get call_CallActionsTooltip_enableSpeaker => 'Enable speakerphone';
-
-  @override
-  String get call_CallActionsTooltip_transfer => 'Transfer';
-
-  @override
-  String get call_CallActionsTooltip_hold => 'Hold call';
-
-  @override
-  String get call_CallActionsTooltip_unhold => 'Unhold call';
-
-  @override
-  String get call_CallActionsTooltip_showKeypad => 'Show keypad';
-
-  @override
-  String get call_CallActionsTooltip_hideKeypad => 'Hide keypad';
-
-  @override
-  String get call_CallActionsTooltip_hangup => 'Hangup';
-
-  @override
-  String get call_CallActionsTooltip_accept => 'Accept';
-
-  @override
-  String get favorites_BodyCenter_empty => 'Currently you have no favorite numbers.\nAdd favorites from Contacts using the star icon.';
+  String get favorites_DeleteConfirmDialog_title => 'Confirm deleting';
 
   @override
   String favorites_SnackBar_deleted(String name) {
@@ -158,39 +171,88 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get favorites_DeleteConfirmDialog_title => 'Confirm deleting';
+  String get locale_default => 'Default';
 
   @override
-  String get favorites_DeleteConfirmDialog_content => 'Are you sure you want to delete the current favorite?';
+  String get locale_en => 'English';
 
   @override
-  String get login_ButtonTooltip_signInToYourInstance => 'Sign in to your WebTrit Cloud Backend';
-
-  @override
-  String get login_Button_signUpToDemoInstance => 'Sign up';
-
-  @override
-  String get login_Button_signIn => 'Sign in';
+  String get locale_uk => 'Ukrainian';
 
   @override
   String get login_AppBarTitle_coreUrlAssign => '';
 
   @override
-  String get login_TextFieldLabelText_coreUrlAssign => 'Enter your WebTrit Cloud Backend URL';
+  String get login_AppBarTitle_otpRequest => '';
 
   @override
-  String get login_Text_coreUrlAssignPreDescription => 'In order to make calls via your own VoIP system please enter the URL of WebTrit Cloud Backend (as it was provided to you by your account manager) below.';
-
-  @override
-  String login_Text_coreUrlAssignPostDescription(String email) {
-    return 'If you do not yet have your own WebTrit Cloud Backend - contact sales team $email.';
-  }
+  String get login_AppBarTitle_otpVerify => '';
 
   @override
   String get login_Button_coreUrlAssignProceed => 'Proceed';
 
   @override
-  String get login_AppBarTitle_otpRequest => '';
+  String get login_Button_otpRequestProceed => 'Proceed';
+
+  @override
+  String get login_Button_otpVerifyProceed => 'Verify';
+
+  @override
+  String get login_Button_otpVerifyRepeat => 'Resend the code';
+
+  @override
+  String login_Button_otpVerifyRepeatInterval(int seconds) {
+    return 'Resend the code ($seconds s)';
+  }
+
+  @override
+  String get login_Button_signIn => 'Sign in';
+
+  @override
+  String get login_Button_signUpToDemoInstance => 'Sign up';
+
+  @override
+  String get login_ButtonTooltip_signInToYourInstance => 'Sign in to your WebTrit Cloud Backend';
+
+  @override
+  String login_CoreVersionUnsupportedExceptionError(String actual, String supportedConstraint) {
+    return 'An incompatible instance version provided, please contact the administrator of your system (actual: $actual, supported: $supportedConstraint)';
+  }
+
+  @override
+  String get login_RequestFailureEmptyEmailError => 'Cannot send the verification code';
+
+  @override
+  String get login_RequestFailureIncorrectOtpCodeError => 'Incorrect verification code';
+
+  @override
+  String get login_RequestFailureOtpAlreadyVerifiedError => 'Verification already verified';
+
+  @override
+  String get login_RequestFailureOtpExpiredError => 'Verification expired';
+
+  @override
+  String get login_RequestFailureOtpNotFoundError => 'Verification not found';
+
+  @override
+  String get login_RequestFailureOtpVerificationAttemptsExceededError => 'Verification attempts exceeded';
+
+  @override
+  String get login_RequestFailurePhoneNotFoundError => 'Phone number not found';
+
+  @override
+  String get login_RequestFailureUnconfiguredBundleIdError => 'The app is not supported by your WebTrit Cloud Backend';
+
+  @override
+  String login_Text_coreUrlAssignPostDescription(Object email) {
+    return 'If you do not yet have your own WebTrit Cloud Backend - contact sales team $email.';
+  }
+
+  @override
+  String get login_Text_coreUrlAssignPreDescription => 'In order to make calls via your own VoIP system please enter the URL of WebTrit Cloud Backend (as it was provided to you by your account manager) below.';
+
+  @override
+  String get login_TextFieldLabelText_coreUrlAssign => 'Enter your WebTrit Cloud Backend URL';
 
   @override
   String get login_SegmentedButton_otpSignIn => 'Otp sign in';
@@ -211,16 +273,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_TextFieldLabelText_otpRequestPhone => 'Enter your phone number';
 
   @override
+  String get login_TextFieldLabelText_otpVerifyCode => 'Enter the verification code';
+
+  @override
   String get login_Text_otpRequestDemoDescription => 'If you do not have an account yet, it will be automatically created for you.';
 
   @override
   String get login_Text_otpRequestDescription => '';
 
   @override
-  String get login_Button_otpRequestProceed => 'Proceed';
+  String login_Text_otpVerifyCheckSpamFrom(String email) {
+    return 'If you do not see an email with the verification code from $email in your inbox, please check your spam folder.';
+  }
 
   @override
-  String get login_AppBarTitle_otpVerify => '';
+  String get login_Text_otpVerifyCheckSpamGeneral => 'If you do not see an email with the verification code in your inbox, please check your spam folder.';
 
   @override
   String login_Text_otpVerifySentToEmail(String email) {
@@ -233,26 +300,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get login_TextFieldLabelText_otpVerifyCode => 'Enter the verification code';
-
-  @override
-  String get login_Text_otpVerifyCheckSpamGeneral => 'If you do not see an email with the verification code in your inbox, please check your spam folder.';
-
-  @override
-  String login_Text_otpVerifyCheckSpamFrom(String email) {
-    return 'If you do not see an email with the verification code from $email in your inbox, please check your spam folder.';
-  }
-
-  @override
-  String login_Button_otpVerifyRepeatInterval(int seconds) {
-    return 'Resend the code ($seconds s)';
-  }
-
-  @override
-  String get login_Button_otpVerifyRepeat => 'Resend the code';
-
-  @override
-  String get login_Button_otpVerifyProceed => 'Verify';
+  String get login_validationCoreUrlError => 'Please enter a valid URL';
 
   @override
   String get login_validationEmailError => 'Please enter a valid email';
@@ -261,78 +309,80 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_validationPhoneError => 'Please enter a valid phone number';
 
   @override
-  String get login_validationCoreUrlError => 'Please enter a valid URL';
+  String get logRecordsConsole_AppBarTitle => 'Log Console';
 
   @override
-  String login_CoreVersionUnsupportedExceptionError(String actual, String supportedConstraint) {
-    return 'An incompatible instance version provided, please contact the administrator of your system (actual: $actual, supported: $supportedConstraint)';
+  String get logRecordsConsole_Button_failureRefresh => 'Refresh';
+
+  @override
+  String get logRecordsConsole_Text_failure => 'An unexpected error occurred';
+
+  @override
+  String get main_BottomNavigationBarItemLabel_contacts => 'Contacts';
+
+  @override
+  String get main_BottomNavigationBarItemLabel_favorites => 'Favorites';
+
+  @override
+  String get main_BottomNavigationBarItemLabel_keypad => 'Keypad';
+
+  @override
+  String get main_BottomNavigationBarItemLabel_recents => 'Recents';
+
+  @override
+  String get main_CompatibilityIssueDialogActions_logout => 'Logout';
+
+  @override
+  String get main_CompatibilityIssueDialogActions_update => 'Update';
+
+  @override
+  String get main_CompatibilityIssueDialogActions_verify => 'Check again';
+
+  @override
+  String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(String actual, String supportedConstraint) {
+    return 'Incompatible WebTrit Cloud Backend version, please contact the administrator of your system.\n\nInstance version:\n$actual\n\nSupported version:\n$supportedConstraint';
   }
 
   @override
-  String get login_RequestFailureEmptyEmailError => 'Cannot send the verification code';
+  String get main_CompatibilityIssueDialog_title => 'Compatibility issue';
 
   @override
-  String get login_RequestFailurePhoneNotFoundError => 'Phone number not found';
+  String get notifications_errorSnackBarAction_callUserMedia => 'Check';
 
   @override
-  String get login_RequestFailureUnconfiguredBundleIdError => 'The app is not supported by your WebTrit Cloud Backend';
+  String get notifications_errorSnackBar_callConnect => 'Connecting to the core failed, trying to reconnect';
 
   @override
-  String get login_RequestFailureOtpAlreadyVerifiedError => 'Verification already verified';
+  String get notifications_errorSnackBar_callSignalingClientNotConnect => 'Cannot initiate the call, please check the connection status';
 
   @override
-  String get login_RequestFailureOtpVerificationAttemptsExceededError => 'Verification attempts exceeded';
+  String get notifications_errorSnackBar_callSignalingClientSessionMissed => 'The current connection session is invalid, please sign in again';
 
   @override
-  String get login_RequestFailureOtpExpiredError => 'Verification expired';
+  String get notifications_errorSnackBar_callUndefinedLine => 'No idle lines to initiate the call';
 
   @override
-  String get login_RequestFailureIncorrectOtpCodeError => 'Incorrect verification code';
+  String get notifications_errorSnackBar_callUserMedia => 'No access to media input, please check app permissions';
 
   @override
-  String get login_RequestFailureOtpNotFoundError => 'Verification not found';
-
-  @override
-  String get permission_Text_description => 'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.';
+  String get notImplemented => 'Sorry, not implemented yet';
 
   @override
   String get permission_Button_request => 'Continue';
 
   @override
-  String get validationBlankError => 'Please enter a value';
+  String get permission_Text_description => 'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.';
 
   @override
-  String recentTimeBeforeMidnight(DateTime time) {
-    final intl.DateFormat timeDateFormat = intl.DateFormat.Hm(localeName);
-    final String timeString = timeDateFormat.format(time);
-
-    return '$timeString';
-  }
-
-  @override
-  String recentTimeAfterMidnight(DateTime time) {
-    final intl.DateFormat timeDateFormat = intl.DateFormat.yMd(localeName);
-    final String timeString = timeDateFormat.format(time);
-
-    return '$timeString';
-  }
-
-  @override
-  String get recentsVisibilityFilter_all => 'All';
-
-  @override
-  String get recentsVisibilityFilter_missed => 'Missed';
-
-  @override
-  String get recentsVisibilityFilter_incoming => 'Incoming';
-
-  @override
-  String get recentsVisibilityFilter_outgoing => 'Outgoing';
-
-  @override
-  String recents_BodyCenter_empty(String filter) {
+  String recents_BodyCenter_empty(Object filter) {
     return 'Currently you have no $filter recent calls.';
   }
+
+  @override
+  String get recents_DeleteConfirmDialog_content => 'Are you sure you want to delete the current call log?';
+
+  @override
+  String get recents_DeleteConfirmDialog_title => 'Confirm deleting';
 
   @override
   String get recents_errorSnackBar_loadFailure => 'Oops... an error happened ☹️';
@@ -343,61 +393,56 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get recents_DeleteConfirmDialog_title => 'Confirm deleting';
+  String get recentsVisibilityFilter_all => 'All';
 
   @override
-  String get recents_DeleteConfirmDialog_content => 'Are you sure you want to delete the current call log?';
+  String get recentsVisibilityFilter_incoming => 'Incoming';
 
   @override
-  String get contactsSourceLocal => 'Your phone';
+  String get recentsVisibilityFilter_missed => 'Missed';
 
   @override
-  String get contactsSourceExternal => 'Cloud PBX';
+  String get recentsVisibilityFilter_outgoing => 'Outgoing';
 
   @override
-  String get contacts_LocalTabText_permissionFailure => 'There are no permissions to get your phone contacts';
+  String recentTimeAfterMidnight(DateTime time) {
+    final intl.DateFormat timeDateFormat = intl.DateFormat.yMd(localeName);
+    final String timeString = timeDateFormat.format(time);
+
+    return '$timeString';
+  }
 
   @override
-  String get contacts_LocalTabButton_openAppSettings => 'Grant access to your phone contacts';
+  String recentTimeBeforeMidnight(DateTime time) {
+    final intl.DateFormat timeDateFormat = intl.DateFormat.Hm(localeName);
+    final String timeString = timeDateFormat.format(time);
+
+    return '$timeString';
+  }
 
   @override
-  String get contacts_LocalTabText_failure => 'Failed to get your phone contacts';
+  String get settings_AboutText_CoreVersionUndefined => '?.?.?';
 
   @override
-  String get contacts_LocalTabText_emptyOnSearching => 'No contacts found';
+  String get settings_AccountDeleteConfirmDialog_content => 'Are you sure you want to delete account?';
 
   @override
-  String get contacts_LocalTabText_empty => 'No contacts';
-
-  @override
-  String get contacts_LocalTabButton_refresh => 'Refresh';
-
-  @override
-  String get contacts_ExternalTabText_failure => 'Failed to get cloud PBX contacts';
-
-  @override
-  String get contacts_ExternalTabText_emptyOnSearching => 'No contacts found';
-
-  @override
-  String get contacts_ExternalTabText_empty => 'No contacts';
-
-  @override
-  String get contacts_ExternalTabButton_refresh => 'Refresh';
+  String get settings_AccountDeleteConfirmDialog_title => 'Confirm delete account';
 
   @override
   String get settings_AppBarTitle_myAccount => 'My account';
 
   @override
-  String get settings_ListViewTileTitle_registered => 'Registered';
+  String get settings_ForceLogoutConfirmDialog_content => 'Are you sure you want to force logout?';
 
   @override
-  String get settings_ListViewTileTitle_logout => 'Logout';
+  String get settings_ForceLogoutConfirmDialog_title => 'Confirm force logout';
 
   @override
-  String get settings_ListViewTileTitle_settings => 'SETTINGS';
+  String get settings_ListViewTileTitle_about => 'About';
 
   @override
-  String get settings_ListViewTileTitle_network => 'Network settings';
+  String get settings_ListViewTileTitle_accountDelete => 'Delete account';
 
   @override
   String get settings_ListViewTileTitle_help => 'Help';
@@ -406,10 +451,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_ListViewTileTitle_language => 'Language';
 
   @override
-  String get settings_ListViewTileTitle_termsConditions => 'Terms and conditions';
+  String get settings_ListViewTileTitle_logout => 'Logout';
 
   @override
-  String get settings_ListViewTileTitle_about => 'About';
+  String get settings_ListViewTileTitle_logRecordsConsole => 'Log records console';
+
+  @override
+  String get settings_ListViewTileTitle_network => 'Network settings';
+
+  @override
+  String get settings_ListViewTileTitle_registered => 'Registered';
+
+  @override
+  String get settings_ListViewTileTitle_settings => 'SETTINGS';
+
+  @override
+  String get settings_ListViewTileTitle_termsConditions => 'Terms and conditions';
 
   @override
   String get settings_ListViewTileTitle_themeMode => 'Theme mode';
@@ -418,77 +475,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_ListViewTileTitle_toolbox => 'TOOLBOX';
 
   @override
-  String get settings_ListViewTileTitle_logRecordsConsole => 'Log records console';
-
-  @override
-  String get settings_ListViewTileTitle_accountDelete => 'Delete account';
+  String get settings_LogoutConfirmDialog_content => 'Are you sure you want to logout?';
 
   @override
   String get settings_LogoutConfirmDialog_title => 'Confirm logout';
 
   @override
-  String get settings_LogoutConfirmDialog_content => 'Are you sure you want to logout?';
+  String get themeMode_dark => 'Dark';
 
   @override
-  String get settings_ForceLogoutConfirmDialog_title => 'Confirm force logout';
+  String get themeMode_light => 'Light';
 
   @override
-  String get settings_ForceLogoutConfirmDialog_content => 'Are you sure you want to force logout?';
-
-  @override
-  String get settings_AccountDeleteConfirmDialog_title => 'Confirm delete account';
-
-  @override
-  String get settings_AccountDeleteConfirmDialog_content => 'Are you sure you want to delete account?';
-
-  @override
-  String get settings_AboutText_CoreVersionUndefined => '?.?.?';
-
-  @override
-  String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
-
-  @override
-  String get webRegistration_ErrorAcknowledgeDialogActions_demo => 'Demo';
-
-  @override
-  String get webRegistration_ErrorAcknowledgeDialogActions_skip => 'Skip';
-
-  @override
-  String get webRegistration_ErrorAcknowledgeDialogActions_retry => 'Retry';
-
-  @override
-  String get logRecordsConsole_AppBarTitle => 'Log Console';
-
-  @override
-  String get logRecordsConsole_Text_failure => 'Ups error happened ☹️';
-
-  @override
-  String get logRecordsConsole_Button_failureRefresh => 'Refresh';
-
-  @override
-  String get default_FormatExceptionError => 'A response issue occurred';
-
-  @override
-  String get default_TlsExceptionError => 'A secure networking issue occurred';
-
-  @override
-  String get default_SocketExceptionError => 'A network issue occurred';
-
-  @override
-  String get default_ClientExceptionError => 'A HTTP client issue occurred';
-
-  @override
-  String get default_TypeErrorError => 'A response issue occurred';
-
-  @override
-  String get default_RequestFailureError => 'A server failure occurred';
-
-  @override
-  String get default_UnauthorizedRequestFailureError => 'An unauthorized request failure occurred';
+  String get themeMode_system => 'System';
 
   @override
   String get underDevelopment => 'This page is under development.';
 
   @override
-  String get notImplemented => 'Sorry, not implemented yet';
+  String get validationBlankError => 'Please enter a value';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialogActions_demo => 'Demo';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialogActions_retry => 'Retry';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialogActions_skip => 'Skip';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
 }

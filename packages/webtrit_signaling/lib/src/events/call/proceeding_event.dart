@@ -2,11 +2,11 @@ import '../abstract_events.dart';
 
 class ProceedingEvent extends CallEvent {
   const ProceedingEvent({
-    String? transaction,
-    required int line,
-    required String callId,
+    super.transaction,
+    required super.line,
+    required super.callId,
     required this.code,
-  }) : super(transaction: transaction, line: line, callId: callId);
+  });
 
   final int code;
 

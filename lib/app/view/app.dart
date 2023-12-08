@@ -26,13 +26,13 @@ import 'main_shell.dart';
 
 class App extends StatefulWidget {
   const App({
-    Key? key,
+    super.key,
     required this.appPreferences,
     required this.secureStorage,
     required this.appDatabase,
     required this.appPermissions,
     required this.appThemes,
-  }) : super(key: key);
+  });
 
   final AppPreferences appPreferences;
   final SecureStorage secureStorage;
@@ -144,8 +144,10 @@ class _AppState extends State<App> {
                   name: AppRoute.webRegistration,
                   path: '/web-registration',
                   builder: (context, state) {
+                    final initialUriQueryParameter =
+                        state.uri.queryParameters[WebRegistrationScreen.initialUriQueryParameterName];
                     final widget = WebRegistrationScreen(
-                      initialUri: Uri.parse(state.uri.queryParameters['initialUrl'] ?? kBlankUri),
+                      initialUri: Uri.parse(state.uri.queryParameters[initialUriQueryParameter] ?? kBlankUri),
                     );
                     return widget;
                   },
@@ -296,7 +298,9 @@ class _AppState extends State<App> {
                         path: '/main/${MainFlavor.favorites.name}',
                         name: MainRoute.favorites,
                         builder: (context, state) {
-                          const widget = FavoritesScreen();
+                          const widget = FavoritesScreen(
+                            title: Text(EnvironmentConfig.APP_NAME),
+                          );
                           final provider = BlocProvider(
                             create: (context) => FavoritesBloc(
                               favoritesRepository: context.read<FavoritesRepository>(),
@@ -336,7 +340,9 @@ class _AppState extends State<App> {
                         path: '/main/${MainFlavor.recents.name}',
                         name: MainRoute.recents,
                         builder: (context, state) {
-                          const widget = RecentsScreen();
+                          const widget = RecentsScreen(
+                            title: Text(EnvironmentConfig.APP_NAME),
+                          );
                           return widget;
                         },
                         routes: [
@@ -371,6 +377,7 @@ class _AppState extends State<App> {
                         name: MainRoute.contacts,
                         builder: (context, state) {
                           final widget = ContactsScreen(
+                            title: const Text(EnvironmentConfig.APP_NAME),
                             sourceTypes: const [
                               ContactSourceType.local,
                               ContactSourceType.external,
@@ -416,7 +423,9 @@ class _AppState extends State<App> {
                         path: '/main/${MainFlavor.keypad.name}',
                         name: MainRoute.keypad,
                         builder: (context, state) {
-                          const widget = KeypadScreen();
+                          const widget = KeypadScreen(
+                            title: Text(EnvironmentConfig.APP_NAME),
+                          );
                           final provider = BlocProvider(
                             create: (context) => KeypadCubit(
                               callBloc: context.read<CallBloc>(),
@@ -560,7 +569,11 @@ class _AppState extends State<App> {
                     path: 'terms-conditions',
                     name: MainRoute.settingsTermsConditions,
                     builder: (context, state) {
-                      const widget = TermsConditionsScreen();
+                      final initialUriQueryParameter =
+                          state.uri.queryParameters[TermsConditionsScreen.initialUriQueryParameterName];
+                      final widget = TermsConditionsScreen(
+                        initialUri: Uri.parse(initialUriQueryParameter ?? kBlankUri),
+                      );
                       return widget;
                     },
                   ),

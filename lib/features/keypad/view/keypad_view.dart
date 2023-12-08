@@ -7,7 +7,7 @@ import 'package:webtrit_phone/theme/theme.dart';
 import '../keypad.dart';
 
 class KeypadView extends StatefulWidget {
-  const KeypadView({Key? key}) : super(key: key);
+  const KeypadView({super.key});
 
   @override
   KeypadViewState createState() => KeypadViewState();

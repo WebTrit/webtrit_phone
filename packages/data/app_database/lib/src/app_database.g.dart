@@ -74,9 +74,10 @@ class $ContactsTableTable extends ContactsTable
         updatedAt
       ];
   @override
-  String get aliasedName => _alias ?? 'contacts';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'contacts';
+  String get actualTableName => $name;
+  static const String $name = 'contacts';
   @override
   VerificationContext validateIntegrity(Insertable<ContactData> instance,
       {bool isInserting = false}) {
@@ -384,6 +385,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
     }
     if (sourceType.present) {
       final converter = $ContactsTableTable.$convertersourceType;
+
       map['source_type'] = Variable<int>(converter.toSql(sourceType.value));
     }
     if (sourceId.present) {
@@ -472,9 +474,10 @@ class $ContactPhonesTableTable extends ContactPhonesTable
   List<GeneratedColumn> get $columns =>
       [id, number, label, contactId, insertedAt, updatedAt];
   @override
-  String get aliasedName => _alias ?? 'contact_phones';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'contact_phones';
+  String get actualTableName => $name;
+  static const String $name = 'contact_phones';
   @override
   VerificationContext validateIntegrity(Insertable<ContactPhoneData> instance,
       {bool isInserting = false}) {
@@ -803,9 +806,10 @@ class $ContactEmailsTableTable extends ContactEmailsTable
   List<GeneratedColumn> get $columns =>
       [id, address, label, contactId, insertedAt, updatedAt];
   @override
-  String get aliasedName => _alias ?? 'contact_emails';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'contact_emails';
+  String get actualTableName => $name;
+  static const String $name = 'contact_emails';
   @override
   VerificationContext validateIntegrity(Insertable<ContactEmailData> instance,
       {bool isInserting = false}) {
@@ -1117,15 +1121,12 @@ class $CallLogsTableTable extends CallLogsTable
           'NOT NULL CONSTRAINT "call_logs.number not_empty" CHECK (length(number) > 0)');
   static const VerificationMeta _videoMeta = const VerificationMeta('video');
   @override
-  late final GeneratedColumn<bool> video =
-      GeneratedColumn<bool>('video', aliasedName, false,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: true,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("video" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }));
+  late final GeneratedColumn<bool> video = GeneratedColumn<bool>(
+      'video', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("video" IN (0, 1))'));
   static const VerificationMeta _createdAtMeta =
       const VerificationMeta('createdAt');
   @override
@@ -1148,9 +1149,10 @@ class $CallLogsTableTable extends CallLogsTable
   List<GeneratedColumn> get $columns =>
       [id, direction, number, video, createdAt, acceptedAt, hungUpAt];
   @override
-  String get aliasedName => _alias ?? 'call_logs';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'call_logs';
+  String get actualTableName => $name;
+  static const String $name = 'call_logs';
   @override
   VerificationContext validateIntegrity(Insertable<CallLogData> instance,
       {bool isInserting = false}) {
@@ -1429,6 +1431,7 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
     }
     if (direction.present) {
       final converter = $CallLogsTableTable.$converterdirection;
+
       map['direction'] = Variable<int>(converter.toSql(direction.value));
     }
     if (number.present) {
@@ -1497,9 +1500,10 @@ class $FavoritesTableTable extends FavoritesTable
   @override
   List<GeneratedColumn> get $columns => [id, contactPhoneId, position];
   @override
-  String get aliasedName => _alias ?? 'favorites';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'favorites';
+  String get actualTableName => $name;
+  static const String $name = 'favorites';
   @override
   VerificationContext validateIntegrity(Insertable<FavoriteData> instance,
       {bool isInserting = false}) {

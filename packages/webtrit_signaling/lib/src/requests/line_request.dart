@@ -3,9 +3,9 @@ import 'line/line_requests.dart';
 
 abstract class LineRequest extends SessionRequest {
   const LineRequest({
-    required String transaction,
+    required super.transaction,
     required this.line,
-  }) : super(transaction: transaction);
+  });
 
   final int line;
 

@@ -20,10 +20,9 @@ class AcknowledgeDialog extends StatelessWidget {
   }
 
   const AcknowledgeDialog._({
-    Key? key,
     required this.title,
     required this.content,
-  }) : super(key: key);
+  });
 
   final String title;
   final String content;

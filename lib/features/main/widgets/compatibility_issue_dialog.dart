@@ -27,10 +27,9 @@ class CompatibilityIssueDialog extends StatelessWidget {
   }
 
   const CompatibilityIssueDialog._({
-    Key? key,
     required this.error,
     this.onUpdatePressed,
-  }) : super(key: key);
+  });
 
   final Object error;
   final VoidCallback? onUpdatePressed;

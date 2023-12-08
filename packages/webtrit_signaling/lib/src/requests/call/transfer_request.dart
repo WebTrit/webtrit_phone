@@ -2,12 +2,12 @@ import '../abstract_requests.dart';
 
 class TransferRequest extends CallRequest {
   const TransferRequest({
-    required String transaction,
-    required int line,
-    required String callId,
+    required super.transaction,
+    required super.line,
+    required super.callId,
     required this.number,
     this.replaceCallId,
-  }) : super(transaction: transaction, line: line, callId: callId);
+  });
 
   final String number;
   final String? replaceCallId;

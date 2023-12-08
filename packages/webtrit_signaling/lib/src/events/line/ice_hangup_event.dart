@@ -2,10 +2,10 @@ import '../abstract_events.dart';
 
 class IceHangupEvent extends LineEvent {
   const IceHangupEvent({
-    String? transaction,
-    required int line,
+    super.transaction,
+    required super.line,
     this.reason,
-  }) : super(transaction: transaction, line: line);
+  });
 
   final String? reason;
 

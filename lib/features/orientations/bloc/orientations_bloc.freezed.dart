@@ -21,8 +21,8 @@ mixin _$OrientationsChanged {
 
 /// @nodoc
 
-class _$_OrientationsChanged implements _OrientationsChanged {
-  const _$_OrientationsChanged(this.orientation);
+class _$OrientationsChangedImpl implements _OrientationsChanged {
+  const _$OrientationsChangedImpl(this.orientation);
 
   @override
   final PreferredOrientation orientation;
@@ -36,7 +36,7 @@ class _$_OrientationsChanged implements _OrientationsChanged {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_OrientationsChanged &&
+            other is _$OrientationsChangedImpl &&
             (identical(other.orientation, orientation) ||
                 other.orientation == orientation));
   }
@@ -47,7 +47,7 @@ class _$_OrientationsChanged implements _OrientationsChanged {
 
 abstract class _OrientationsChanged implements OrientationsChanged {
   const factory _OrientationsChanged(final PreferredOrientation orientation) =
-      _$_OrientationsChanged;
+      _$OrientationsChangedImpl;
 
   @override
   PreferredOrientation get orientation;
@@ -97,22 +97,22 @@ class _$OrientationsStateCopyWithImpl<$Res, $Val extends OrientationsState>
 }
 
 /// @nodoc
-abstract class _$$_OrientationsStateCopyWith<$Res>
+abstract class _$$OrientationsStateImplCopyWith<$Res>
     implements $OrientationsStateCopyWith<$Res> {
-  factory _$$_OrientationsStateCopyWith(_$_OrientationsState value,
-          $Res Function(_$_OrientationsState) then) =
-      __$$_OrientationsStateCopyWithImpl<$Res>;
+  factory _$$OrientationsStateImplCopyWith(_$OrientationsStateImpl value,
+          $Res Function(_$OrientationsStateImpl) then) =
+      __$$OrientationsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({PreferredOrientation? lastOrientation});
 }
 
 /// @nodoc
-class __$$_OrientationsStateCopyWithImpl<$Res>
-    extends _$OrientationsStateCopyWithImpl<$Res, _$_OrientationsState>
-    implements _$$_OrientationsStateCopyWith<$Res> {
-  __$$_OrientationsStateCopyWithImpl(
-      _$_OrientationsState _value, $Res Function(_$_OrientationsState) _then)
+class __$$OrientationsStateImplCopyWithImpl<$Res>
+    extends _$OrientationsStateCopyWithImpl<$Res, _$OrientationsStateImpl>
+    implements _$$OrientationsStateImplCopyWith<$Res> {
+  __$$OrientationsStateImplCopyWithImpl(_$OrientationsStateImpl _value,
+      $Res Function(_$OrientationsStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -120,7 +120,7 @@ class __$$_OrientationsStateCopyWithImpl<$Res>
   $Res call({
     Object? lastOrientation = freezed,
   }) {
-    return _then(_$_OrientationsState(
+    return _then(_$OrientationsStateImpl(
       freezed == lastOrientation
           ? _value.lastOrientation
           : lastOrientation // ignore: cast_nullable_to_non_nullable
@@ -131,8 +131,8 @@ class __$$_OrientationsStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_OrientationsState implements _OrientationsState {
-  const _$_OrientationsState([this.lastOrientation]);
+class _$OrientationsStateImpl implements _OrientationsState {
+  const _$OrientationsStateImpl([this.lastOrientation]);
 
   @override
   final PreferredOrientation? lastOrientation;
@@ -146,7 +146,7 @@ class _$_OrientationsState implements _OrientationsState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_OrientationsState &&
+            other is _$OrientationsStateImpl &&
             (identical(other.lastOrientation, lastOrientation) ||
                 other.lastOrientation == lastOrientation));
   }
@@ -157,19 +157,19 @@ class _$_OrientationsState implements _OrientationsState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_OrientationsStateCopyWith<_$_OrientationsState> get copyWith =>
-      __$$_OrientationsStateCopyWithImpl<_$_OrientationsState>(
+  _$$OrientationsStateImplCopyWith<_$OrientationsStateImpl> get copyWith =>
+      __$$OrientationsStateImplCopyWithImpl<_$OrientationsStateImpl>(
           this, _$identity);
 }
 
 abstract class _OrientationsState implements OrientationsState {
   const factory _OrientationsState(
-      [final PreferredOrientation? lastOrientation]) = _$_OrientationsState;
+      [final PreferredOrientation? lastOrientation]) = _$OrientationsStateImpl;
 
   @override
   PreferredOrientation? get lastOrientation;
   @override
   @JsonKey(ignore: true)
-  _$$_OrientationsStateCopyWith<_$_OrientationsState> get copyWith =>
+  _$$OrientationsStateImplCopyWith<_$OrientationsStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -11,8 +11,8 @@ publish_to: 'none'
 version: 1.1.0+1010000
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
-  flutter: ^3.13.0
+  sdk: '>=3.2.0 <4.0.0'
+  flutter: ^3.16.0
 
 dependencies:
   flutter:
@@ -23,50 +23,50 @@ dependencies:
   bloc: ^8.1.2
   bloc_concurrency: ^0.2.2
   characters: ^1.3.0
-  clock: ^1.1.0
-  connectivity_plus: ^4.0.2
+  clock: ^1.1.1
+  connectivity_plus: ^5.0.1
   cross_file: ^0.3.3
-  device_info_plus: ^9.0.1
+  device_info_plus: ^9.1.1
   equatable: ^2.0.5
-  firebase_analytics: ^10.4.5
-  firebase_app_installations: ^0.2.3
-  firebase_core: ^2.15.1
-  firebase_crashlytics: ^3.3.5
-  firebase_messaging: ^14.6.7
+  firebase_analytics: ^10.7.0
+  firebase_app_installations: ^0.2.4
+  firebase_core: ^2.22.0
+  firebase_crashlytics: ^3.4.4
+  firebase_messaging: ^14.7.4
   flutter_bloc: ^8.1.3
   flutter_contacts: ^1.1.7
   flutter_secure_storage: ^9.0.0
-  flutter_svg: ^2.0.7
+  flutter_svg: ^2.0.9
   flutter_webrtc:
     git:
       url: https://github.com/WebTrit/flutter-webrtc.git
       ref: main_ext
-  formz: ^0.6.0
+  formz: ^0.6.1
   freezed_annotation: ^2.4.1
-  go_router: ^10.1.2
-  google_fonts: ^5.1.0
+  go_router: ^12.1.1
+  google_fonts: ^6.1.0
   intl: any
   json_annotation: ^4.8.1
-  just_audio: ^0.9.33
+  just_audio: ^0.9.36
   linkify: ^5.0.0
   logging: ^1.2.0
   logging_appenders: ^1.2.0
   material_color_utilities: any
-  meta: ^1.9.1
-  package_info_plus: ^4.1.0
+  meta: any
+  package_info_plus: ^5.0.1
   path: ^1.8.3
   path_provider: ^2.1.1
-  permission_handler: ^10.4.5
+  permission_handler: ^11.0.1
   permission_handler_web: ^0.0.2
-  provider: ^6.0.5
+  provider: ^6.1.1
   pub_semver: ^2.1.4
-  share_plus: ^7.1.0
-  shared_preferences: ^2.2.1
+  share_plus: ^7.2.1
+  shared_preferences: ^2.2.2
   stream_transform: ^2.1.0
-  url_launcher: ^6.1.14
-  uuid: ^3.0.7
+  url_launcher: ^6.2.1
+  uuid: ^4.2.1
   validators: ^3.0.0
-  webview_flutter: ^4.2.4
+  webview_flutter: ^4.4.2
   webview_flutter_web: ^0.2.2+3
 
   webtrit_api:
@@ -91,13 +91,13 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  bloc_test: ^9.1.4
+  bloc_test: ^9.1.5
   build_runner: ^2.4.6
-  flutter_gen_runner: ^5.3.1
+  flutter_gen_runner: ^5.3.2
   flutter_launcher_icons: ^0.13.1
-  flutter_lints: ^2.0.3
-  flutter_native_splash: ^2.3.2
-  freezed: ^2.4.1
+  flutter_lints: ^3.0.1
+  flutter_native_splash: ^2.3.6
+  freezed: ^2.4.5
   json_serializable: ^6.7.1
 
 flutter:

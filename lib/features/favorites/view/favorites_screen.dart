@@ -15,12 +15,17 @@ import '../favorites.dart';
 class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({
     super.key,
+    this.title,
   });
+
+  final Widget? title;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(),
+      appBar: MainAppBar(
+        title: title,
+      ),
       body: BlocBuilder<FavoritesBloc, FavoritesState>(
         builder: (context, state) {
           final favorites = state.favorites;
@@ -57,7 +62,7 @@ class FavoritesScreen extends StatelessWidget {
                       ));
                     },
                     onInfoPressed: () {
-                      context.pushNamed(MainRoute.favoritesDetails, pathParameters: {
+                      context.goNamed(MainRoute.favoritesDetails, pathParameters: {
                         contactIdPathParameterName: favorite.contact.id.toString(),
                       });
                     },

@@ -6,8 +6,8 @@ part of 'system_info.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_SystemInfo _$$_SystemInfoFromJson(Map<String, dynamic> json) =>
-    _$_SystemInfo(
+_$SystemInfoImpl _$$SystemInfoImplFromJson(Map<String, dynamic> json) =>
+    _$SystemInfoImpl(
       core: CoreInfo.fromJson(json['core'] as Map<String, dynamic>),
       postgres: PostgresInfo.fromJson(json['postgres'] as Map<String, dynamic>),
       janus: json['janus'] == null
@@ -21,7 +21,7 @@ _$_SystemInfo _$$_SystemInfoFromJson(Map<String, dynamic> json) =>
           : AdapterInfo.fromJson(json['adapter'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$_SystemInfoToJson(_$_SystemInfo instance) =>
+Map<String, dynamic> _$$SystemInfoImplToJson(_$SystemInfoImpl instance) =>
     <String, dynamic>{
       'core': instance.core,
       'postgres': instance.postgres,
@@ -30,17 +30,18 @@ Map<String, dynamic> _$$_SystemInfoToJson(_$_SystemInfo instance) =>
       'adapter': instance.adapter,
     };
 
-_$_PostgresInfo _$$_PostgresInfoFromJson(Map<String, dynamic> json) =>
-    _$_PostgresInfo(
+_$PostgresInfoImpl _$$PostgresInfoImplFromJson(Map<String, dynamic> json) =>
+    _$PostgresInfoImpl(
       version: json['version'] as String?,
     );
 
-Map<String, dynamic> _$$_PostgresInfoToJson(_$_PostgresInfo instance) =>
+Map<String, dynamic> _$$PostgresInfoImplToJson(_$PostgresInfoImpl instance) =>
     <String, dynamic>{
       'version': instance.version,
     };
 
-_$_JanusInfo _$$_JanusInfoFromJson(Map<String, dynamic> json) => _$_JanusInfo(
+_$JanusInfoImpl _$$JanusInfoImplFromJson(Map<String, dynamic> json) =>
+    _$JanusInfoImpl(
       plugins: json['plugins'] == null
           ? null
           : Plugins.fromJson(json['plugins'] as Map<String, dynamic>),
@@ -50,76 +51,79 @@ _$_JanusInfo _$$_JanusInfoFromJson(Map<String, dynamic> json) => _$_JanusInfo(
       version: json['version'] as String?,
     );
 
-Map<String, dynamic> _$$_JanusInfoToJson(_$_JanusInfo instance) =>
+Map<String, dynamic> _$$JanusInfoImplToJson(_$JanusInfoImpl instance) =>
     <String, dynamic>{
       'plugins': instance.plugins,
       'transports': instance.transports,
       'version': instance.version,
     };
 
-_$_Transports _$$_TransportsFromJson(Map<String, dynamic> json) =>
-    _$_Transports(
+_$TransportsImpl _$$TransportsImplFromJson(Map<String, dynamic> json) =>
+    _$TransportsImpl(
       websocket: json['websocket'] == null
           ? null
           : Websocket.fromJson(json['websocket'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$_TransportsToJson(_$_Transports instance) =>
+Map<String, dynamic> _$$TransportsImplToJson(_$TransportsImpl instance) =>
     <String, dynamic>{
       'websocket': instance.websocket,
     };
 
-_$_Websocket _$$_WebsocketFromJson(Map<String, dynamic> json) => _$_Websocket(
+_$WebsocketImpl _$$WebsocketImplFromJson(Map<String, dynamic> json) =>
+    _$WebsocketImpl(
       version: json['version'] as String?,
     );
 
-Map<String, dynamic> _$$_WebsocketToJson(_$_Websocket instance) =>
+Map<String, dynamic> _$$WebsocketImplToJson(_$WebsocketImpl instance) =>
     <String, dynamic>{
       'version': instance.version,
     };
 
-_$_Plugins _$$_PluginsFromJson(Map<String, dynamic> json) => _$_Plugins(
+_$PluginsImpl _$$PluginsImplFromJson(Map<String, dynamic> json) =>
+    _$PluginsImpl(
       sip: json['sip'] == null
           ? null
           : SipVersion.fromJson(json['sip'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$_PluginsToJson(_$_Plugins instance) =>
+Map<String, dynamic> _$$PluginsImplToJson(_$PluginsImpl instance) =>
     <String, dynamic>{
       'sip': instance.sip,
     };
 
-_$_SipVersion _$$_SipVersionFromJson(Map<String, dynamic> json) =>
-    _$_SipVersion(
+_$SipVersionImpl _$$SipVersionImplFromJson(Map<String, dynamic> json) =>
+    _$SipVersionImpl(
       version: json['version'] as String?,
     );
 
-Map<String, dynamic> _$$_SipVersionToJson(_$_SipVersion instance) =>
+Map<String, dynamic> _$$SipVersionImplToJson(_$SipVersionImpl instance) =>
     <String, dynamic>{
       'version': instance.version,
     };
 
-_$_GorushInfo _$$_GorushInfoFromJson(Map<String, dynamic> json) =>
-    _$_GorushInfo(
+_$GorushInfoImpl _$$GorushInfoImplFromJson(Map<String, dynamic> json) =>
+    _$GorushInfoImpl(
       version: json['version'] as String?,
     );
 
-Map<String, dynamic> _$$_GorushInfoToJson(_$_GorushInfo instance) =>
+Map<String, dynamic> _$$GorushInfoImplToJson(_$GorushInfoImpl instance) =>
     <String, dynamic>{
       'version': instance.version,
     };
 
-_$_CoreInfo _$$_CoreInfoFromJson(Map<String, dynamic> json) => _$_CoreInfo(
+_$CoreInfoImpl _$$CoreInfoImplFromJson(Map<String, dynamic> json) =>
+    _$CoreInfoImpl(
       version: const VersionConverter().fromJson(json['version'] as String),
     );
 
-Map<String, dynamic> _$$_CoreInfoToJson(_$_CoreInfo instance) =>
+Map<String, dynamic> _$$CoreInfoImplToJson(_$CoreInfoImpl instance) =>
     <String, dynamic>{
       'version': const VersionConverter().toJson(instance.version),
     };
 
-_$_AdapterInfo _$$_AdapterInfoFromJson(Map<String, dynamic> json) =>
-    _$_AdapterInfo(
+_$AdapterInfoImpl _$$AdapterInfoImplFromJson(Map<String, dynamic> json) =>
+    _$AdapterInfoImpl(
       name: json['name'] as String?,
       version: json['version'] as String?,
       supported: (json['supported'] as List<dynamic>?)
@@ -129,7 +133,7 @@ _$_AdapterInfo _$$_AdapterInfoFromJson(Map<String, dynamic> json) =>
       custom: json['custom'] as Map<String, dynamic>?,
     );
 
-Map<String, dynamic> _$$_AdapterInfoToJson(_$_AdapterInfo instance) =>
+Map<String, dynamic> _$$AdapterInfoImplToJson(_$AdapterInfoImpl instance) =>
     <String, dynamic>{
       'name': instance.name,
       'version': instance.version,

@@ -10,12 +10,12 @@ const _kHoldSpaceData = ' ';
 
 class UserInfoListTile extends StatelessWidget {
   const UserInfoListTile({
-    Key? key,
+    super.key,
     required this.callStatus,
     this.info,
     this.onEditPressed,
     this.contentPadding,
-  }) : super(key: key);
+  });
 
   final CallStatus callStatus;
   final UserInfo? info;

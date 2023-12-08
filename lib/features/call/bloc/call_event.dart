@@ -9,24 +9,24 @@ class CallStarted extends CallEvent {
 }
 
 @Freezed(copyWith: false)
-class _AppLifecycleStateChanged with _$_AppLifecycleStateChanged implements CallEvent {
+class _AppLifecycleStateChanged with _$AppLifecycleStateChanged implements CallEvent {
   const factory _AppLifecycleStateChanged(AppLifecycleState state) = __AppLifecycleStateChanged;
 }
 
 @Freezed(copyWith: false)
-class _ConnectivityResultChanged with _$_ConnectivityResultChanged implements CallEvent {
+class _ConnectivityResultChanged with _$ConnectivityResultChanged implements CallEvent {
   const factory _ConnectivityResultChanged(ConnectivityResult result) = __ConnectivityResultChanged;
 }
 
 @Freezed(copyWith: false)
-class _NavigatorMediaDevicesChange with _$_NavigatorMediaDevicesChange implements CallEvent {
+class _NavigatorMediaDevicesChange with _$NavigatorMediaDevicesChange implements CallEvent {
   const factory _NavigatorMediaDevicesChange() = __NavigatorMediaDevicesChange;
 }
 
 // signaling client events
 
 @Freezed(copyWith: false)
-class _SignalingClientEvent with _$_SignalingClientEvent implements CallEvent {
+class _SignalingClientEvent with _$SignalingClientEvent implements CallEvent {
   const factory _SignalingClientEvent.connectInitiated() = _SignalingClientEventConnectInitiated;
 
   const factory _SignalingClientEvent.disconnectInitiated() = _SignalingClientEventDisconnectInitiated;
@@ -37,7 +37,7 @@ class _SignalingClientEvent with _$_SignalingClientEvent implements CallEvent {
 // handshake signaling events
 
 @Freezed(copyWith: false)
-class _HandshakeSignalingEvent with _$_HandshakeSignalingEvent implements CallEvent {
+class _HandshakeSignalingEvent with _$HandshakeSignalingEvent implements CallEvent {
   const factory _HandshakeSignalingEvent.state({
     required int linesCount,
   }) = _HandshakeSignalingEventState;
@@ -46,7 +46,7 @@ class _HandshakeSignalingEvent with _$_HandshakeSignalingEvent implements CallEv
 // call signaling events
 
 @Freezed(copyWith: false)
-class _CallSignalingEvent with _$_CallSignalingEvent implements CallEvent {
+class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
   const factory _CallSignalingEvent.incoming({
     required int line,
     required CallIdValue callId,
@@ -106,7 +106,7 @@ class _CallSignalingEvent with _$_CallSignalingEvent implements CallEvent {
 // call push events
 
 @Freezed(copyWith: false)
-class _CallPushEvent with _$_CallPushEvent implements CallEvent {
+class _CallPushEvent with _$CallPushEvent implements CallEvent {
   const factory _CallPushEvent.incoming({
     required CallIdValue callId,
     required CallkeepHandle handle,
@@ -179,7 +179,7 @@ mixin CallControlEventStartedMixin {
 // call perform events
 
 @Freezed(copyWith: false)
-class _CallPerformEvent with _$_CallPerformEvent implements CallEvent {
+class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
   _CallPerformEvent._();
 
   factory _CallPerformEvent.started(
@@ -211,9 +211,18 @@ class _CallPerformEvent with _$_CallPerformEvent implements CallEvent {
 // peer connection events
 
 @Freezed(copyWith: false)
-class _PeerConnectionEvent with _$_PeerConnectionEvent implements CallEvent {
+class _PeerConnectionEvent with _$PeerConnectionEvent implements CallEvent {
+  const factory _PeerConnectionEvent.signalingStateChanged(UuidValue uuid, RTCSignalingState state) =
+      _PeerConnectionEventSignalingStateChanged;
+
+  const factory _PeerConnectionEvent.connectionStateChanged(UuidValue uuid, RTCPeerConnectionState state) =
+      _PeerConnectionEventConnectionStateChanged;
+
   const factory _PeerConnectionEvent.iceGatheringStateChanged(UuidValue uuid, RTCIceGatheringState state) =
       _PeerConnectionEventIceGatheringStateChanged;
+
+  const factory _PeerConnectionEvent.iceConnectionStateChanged(UuidValue uuid, RTCIceConnectionState state) =
+      _PeerConnectionEventIceConnectionStateChanged;
 
   const factory _PeerConnectionEvent.iceCandidateIdentified(UuidValue uuid, RTCIceCandidate candidate) =
       _PeerConnectionEventIceCandidateIdentified;

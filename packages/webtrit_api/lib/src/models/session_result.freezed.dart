@@ -105,10 +105,11 @@ class _$SessionResultCopyWithImpl<$Res, $Val extends SessionResult>
 }
 
 /// @nodoc
-abstract class _$$SessionOtpProvisionalCopyWith<$Res> {
-  factory _$$SessionOtpProvisionalCopyWith(_$SessionOtpProvisional value,
-          $Res Function(_$SessionOtpProvisional) then) =
-      __$$SessionOtpProvisionalCopyWithImpl<$Res>;
+abstract class _$$SessionOtpProvisionalImplCopyWith<$Res> {
+  factory _$$SessionOtpProvisionalImplCopyWith(
+          _$SessionOtpProvisionalImpl value,
+          $Res Function(_$SessionOtpProvisionalImpl) then) =
+      __$$SessionOtpProvisionalImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {String otpId,
@@ -118,11 +119,11 @@ abstract class _$$SessionOtpProvisionalCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$SessionOtpProvisionalCopyWithImpl<$Res>
-    extends _$SessionResultCopyWithImpl<$Res, _$SessionOtpProvisional>
-    implements _$$SessionOtpProvisionalCopyWith<$Res> {
-  __$$SessionOtpProvisionalCopyWithImpl(_$SessionOtpProvisional _value,
-      $Res Function(_$SessionOtpProvisional) _then)
+class __$$SessionOtpProvisionalImplCopyWithImpl<$Res>
+    extends _$SessionResultCopyWithImpl<$Res, _$SessionOtpProvisionalImpl>
+    implements _$$SessionOtpProvisionalImplCopyWith<$Res> {
+  __$$SessionOtpProvisionalImplCopyWithImpl(_$SessionOtpProvisionalImpl _value,
+      $Res Function(_$SessionOtpProvisionalImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -133,7 +134,7 @@ class __$$SessionOtpProvisionalCopyWithImpl<$Res>
     Object? fromEmail = freezed,
     Object? tenantId = freezed,
   }) {
-    return _then(_$SessionOtpProvisional(
+    return _then(_$SessionOtpProvisionalImpl(
       otpId: null == otpId
           ? _value.otpId
           : otpId // ignore: cast_nullable_to_non_nullable
@@ -157,8 +158,8 @@ class __$$SessionOtpProvisionalCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class _$SessionOtpProvisional implements SessionOtpProvisional {
-  const _$SessionOtpProvisional(
+class _$SessionOtpProvisionalImpl implements SessionOtpProvisional {
+  const _$SessionOtpProvisionalImpl(
       {required this.otpId,
       this.notificationType,
       this.fromEmail,
@@ -166,8 +167,8 @@ class _$SessionOtpProvisional implements SessionOtpProvisional {
       final String? $type})
       : $type = $type ?? 'otpProvisional';
 
-  factory _$SessionOtpProvisional.fromJson(Map<String, dynamic> json) =>
-      _$$SessionOtpProvisionalFromJson(json);
+  factory _$SessionOtpProvisionalImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SessionOtpProvisionalImplFromJson(json);
 
   @override
   final String otpId;
@@ -190,7 +191,7 @@ class _$SessionOtpProvisional implements SessionOtpProvisional {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SessionOtpProvisional &&
+            other is _$SessionOtpProvisionalImpl &&
             (identical(other.otpId, otpId) || other.otpId == otpId) &&
             (identical(other.notificationType, notificationType) ||
                 other.notificationType == notificationType) &&
@@ -208,9 +209,9 @@ class _$SessionOtpProvisional implements SessionOtpProvisional {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$SessionOtpProvisionalCopyWith<_$SessionOtpProvisional> get copyWith =>
-      __$$SessionOtpProvisionalCopyWithImpl<_$SessionOtpProvisional>(
-          this, _$identity);
+  _$$SessionOtpProvisionalImplCopyWith<_$SessionOtpProvisionalImpl>
+      get copyWith => __$$SessionOtpProvisionalImplCopyWithImpl<
+          _$SessionOtpProvisionalImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -295,35 +296,35 @@ abstract class SessionOtpProvisional implements SessionResult {
       {required final String otpId,
       final OtpNotificationType? notificationType,
       final String? fromEmail,
-      final String? tenantId}) = _$SessionOtpProvisional;
+      final String? tenantId}) = _$SessionOtpProvisionalImpl;
 
   factory SessionOtpProvisional.fromJson(Map<String, dynamic> json) =
-      _$SessionOtpProvisional.fromJson;
+      _$SessionOtpProvisionalImpl.fromJson;
 
   String get otpId;
   OtpNotificationType? get notificationType;
   String? get fromEmail;
   String? get tenantId;
   @JsonKey(ignore: true)
-  _$$SessionOtpProvisionalCopyWith<_$SessionOtpProvisional> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$SessionOtpProvisionalImplCopyWith<_$SessionOtpProvisionalImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$SessionTokenCopyWith<$Res> {
-  factory _$$SessionTokenCopyWith(
-          _$SessionToken value, $Res Function(_$SessionToken) then) =
-      __$$SessionTokenCopyWithImpl<$Res>;
+abstract class _$$SessionTokenImplCopyWith<$Res> {
+  factory _$$SessionTokenImplCopyWith(
+          _$SessionTokenImpl value, $Res Function(_$SessionTokenImpl) then) =
+      __$$SessionTokenImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String token, String? tenantId});
 }
 
 /// @nodoc
-class __$$SessionTokenCopyWithImpl<$Res>
-    extends _$SessionResultCopyWithImpl<$Res, _$SessionToken>
-    implements _$$SessionTokenCopyWith<$Res> {
-  __$$SessionTokenCopyWithImpl(
-      _$SessionToken _value, $Res Function(_$SessionToken) _then)
+class __$$SessionTokenImplCopyWithImpl<$Res>
+    extends _$SessionResultCopyWithImpl<$Res, _$SessionTokenImpl>
+    implements _$$SessionTokenImplCopyWith<$Res> {
+  __$$SessionTokenImplCopyWithImpl(
+      _$SessionTokenImpl _value, $Res Function(_$SessionTokenImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -332,7 +333,7 @@ class __$$SessionTokenCopyWithImpl<$Res>
     Object? token = null,
     Object? tenantId = freezed,
   }) {
-    return _then(_$SessionToken(
+    return _then(_$SessionTokenImpl(
       token: null == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
@@ -348,13 +349,13 @@ class __$$SessionTokenCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class _$SessionToken implements SessionToken {
-  const _$SessionToken(
+class _$SessionTokenImpl implements SessionToken {
+  const _$SessionTokenImpl(
       {required this.token, this.tenantId, final String? $type})
       : $type = $type ?? 'token';
 
-  factory _$SessionToken.fromJson(Map<String, dynamic> json) =>
-      _$$SessionTokenFromJson(json);
+  factory _$SessionTokenImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SessionTokenImplFromJson(json);
 
   @override
   final String token;
@@ -373,7 +374,7 @@ class _$SessionToken implements SessionToken {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SessionToken &&
+            other is _$SessionTokenImpl &&
             (identical(other.token, token) || other.token == token) &&
             (identical(other.tenantId, tenantId) ||
                 other.tenantId == tenantId));
@@ -386,8 +387,8 @@ class _$SessionToken implements SessionToken {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$SessionTokenCopyWith<_$SessionToken> get copyWith =>
-      __$$SessionTokenCopyWithImpl<_$SessionToken>(this, _$identity);
+  _$$SessionTokenImplCopyWith<_$SessionTokenImpl> get copyWith =>
+      __$$SessionTokenImplCopyWithImpl<_$SessionTokenImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -469,33 +470,34 @@ class _$SessionToken implements SessionToken {
 
 abstract class SessionToken implements SessionResult {
   const factory SessionToken(
-      {required final String token, final String? tenantId}) = _$SessionToken;
+      {required final String token,
+      final String? tenantId}) = _$SessionTokenImpl;
 
   factory SessionToken.fromJson(Map<String, dynamic> json) =
-      _$SessionToken.fromJson;
+      _$SessionTokenImpl.fromJson;
 
   String get token;
   String? get tenantId;
   @JsonKey(ignore: true)
-  _$$SessionTokenCopyWith<_$SessionToken> get copyWith =>
+  _$$SessionTokenImplCopyWith<_$SessionTokenImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$SessionDataCopyWith<$Res> {
-  factory _$$SessionDataCopyWith(
-          _$SessionData value, $Res Function(_$SessionData) then) =
-      __$$SessionDataCopyWithImpl<$Res>;
+abstract class _$$SessionDataImplCopyWith<$Res> {
+  factory _$$SessionDataImplCopyWith(
+          _$SessionDataImpl value, $Res Function(_$SessionDataImpl) then) =
+      __$$SessionDataImplCopyWithImpl<$Res>;
   @useResult
   $Res call({Map<String, dynamic> data});
 }
 
 /// @nodoc
-class __$$SessionDataCopyWithImpl<$Res>
-    extends _$SessionResultCopyWithImpl<$Res, _$SessionData>
-    implements _$$SessionDataCopyWith<$Res> {
-  __$$SessionDataCopyWithImpl(
-      _$SessionData _value, $Res Function(_$SessionData) _then)
+class __$$SessionDataImplCopyWithImpl<$Res>
+    extends _$SessionResultCopyWithImpl<$Res, _$SessionDataImpl>
+    implements _$$SessionDataImplCopyWith<$Res> {
+  __$$SessionDataImplCopyWithImpl(
+      _$SessionDataImpl _value, $Res Function(_$SessionDataImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -503,7 +505,7 @@ class __$$SessionDataCopyWithImpl<$Res>
   $Res call({
     Object? data = null,
   }) {
-    return _then(_$SessionData(
+    return _then(_$SessionDataImpl(
       data: null == data
           ? _value._data
           : data // ignore: cast_nullable_to_non_nullable
@@ -515,14 +517,14 @@ class __$$SessionDataCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class _$SessionData implements SessionData {
-  const _$SessionData(
+class _$SessionDataImpl implements SessionData {
+  const _$SessionDataImpl(
       {required final Map<String, dynamic> data, final String? $type})
       : _data = data,
         $type = $type ?? 'data';
 
-  factory _$SessionData.fromJson(Map<String, dynamic> json) =>
-      _$$SessionDataFromJson(json);
+  factory _$SessionDataImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SessionDataImplFromJson(json);
 
   final Map<String, dynamic> _data;
   @override
@@ -544,7 +546,7 @@ class _$SessionData implements SessionData {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SessionData &&
+            other is _$SessionDataImpl &&
             const DeepCollectionEquality().equals(other._data, _data));
   }
 
@@ -556,8 +558,8 @@ class _$SessionData implements SessionData {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$SessionDataCopyWith<_$SessionData> get copyWith =>
-      __$$SessionDataCopyWithImpl<_$SessionData>(this, _$identity);
+  _$$SessionDataImplCopyWith<_$SessionDataImpl> get copyWith =>
+      __$$SessionDataImplCopyWithImpl<_$SessionDataImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -639,13 +641,13 @@ class _$SessionData implements SessionData {
 
 abstract class SessionData implements SessionResult {
   const factory SessionData({required final Map<String, dynamic> data}) =
-      _$SessionData;
+      _$SessionDataImpl;
 
   factory SessionData.fromJson(Map<String, dynamic> json) =
-      _$SessionData.fromJson;
+      _$SessionDataImpl.fromJson;
 
   Map<String, dynamic> get data;
   @JsonKey(ignore: true)
-  _$$SessionDataCopyWith<_$SessionData> get copyWith =>
+  _$$SessionDataImplCopyWith<_$SessionDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -6,14 +6,14 @@ part of 'app_contact.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_AppContact _$$_AppContactFromJson(Map<String, dynamic> json) =>
-    _$_AppContact(
+_$AppContactImpl _$$AppContactImplFromJson(Map<String, dynamic> json) =>
+    _$AppContactImpl(
       identifier: json['identifier'] as String,
       phones:
           (json['phones'] as List<dynamic>).map((e) => e as String).toList(),
     );
 
-Map<String, dynamic> _$$_AppContactToJson(_$_AppContact instance) =>
+Map<String, dynamic> _$$AppContactImplToJson(_$AppContactImpl instance) =>
     <String, dynamic>{
       'identifier': instance.identifier,
       'phones': instance.phones,

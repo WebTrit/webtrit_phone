@@ -4,17 +4,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/app/routes.dart';
-import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 
 class MainAppBar extends AppBar {
   MainAppBar({
-    Key? key,
-    PreferredSizeWidget? bottom,
+    super.key,
+    super.title,
+    super.bottom,
   }) : super(
-          key: key,
-          title: const Text(EnvironmentConfig.APP_NAME),
           centerTitle: false,
           actions: [
             BlocBuilder<CallBloc, CallState>(
@@ -46,6 +44,5 @@ class MainAppBar extends AppBar {
               width: NavigationToolbar.kMiddleSpacing,
             ),
           ],
-          bottom: bottom,
         );
 }

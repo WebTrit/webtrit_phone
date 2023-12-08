@@ -9,9 +9,7 @@ class ProgressOverlay extends StatelessWidget {
     removeFuture.whenComplete(() => overlayEntry.remove()).ignore();
   }
 
-  const ProgressOverlay._({
-    Key? key,
-  }) : super(key: key);
+  const ProgressOverlay._();
 
   @override
   Widget build(BuildContext context) {

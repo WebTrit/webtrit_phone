@@ -6,7 +6,8 @@ part of 'user_info.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_UserInfo _$$_UserInfoFromJson(Map<String, dynamic> json) => _$_UserInfo(
+_$UserInfoImpl _$$UserInfoImplFromJson(Map<String, dynamic> json) =>
+    _$UserInfoImpl(
       status: $enumDecodeNullable(_$UserInfoStatusEnumMap, json['status']),
       balance: json['balance'] == null
           ? null
@@ -20,7 +21,7 @@ _$_UserInfo _$$_UserInfoFromJson(Map<String, dynamic> json) => _$_UserInfo(
       timeZone: json['time_zone'] as String?,
     );
 
-Map<String, dynamic> _$$_UserInfoToJson(_$_UserInfo instance) =>
+Map<String, dynamic> _$$UserInfoImplToJson(_$UserInfoImpl instance) =>
     <String, dynamic>{
       'status': _$UserInfoStatusEnumMap[instance.status],
       'balance': instance.balance,

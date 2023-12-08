@@ -9,9 +9,9 @@ enum UrlValidationError {
 }
 
 class UrlInput extends FormzInput<String, UrlValidationError> {
-  const UrlInput.pure([String value = '']) : super.pure(value);
+  const UrlInput.pure([super.value = '']) : super.pure();
 
-  const UrlInput.dirty([String value = '']) : super.dirty(value);
+  const UrlInput.dirty([super.value = '']) : super.dirty();
 
   @override
   UrlValidationError? validator(String value) {

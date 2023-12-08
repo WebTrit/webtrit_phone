@@ -12,13 +12,13 @@ class CallActiveScaffold extends StatefulWidget {
   const CallActiveScaffold({
     super.key,
     required this.speaker,
-    required this.activeCall,
+    required this.activeCalls,
     required this.localePlaceholderBuilder,
     required this.remotePlaceholderBuilder,
   });
 
   final bool? speaker;
-  final ActiveCall activeCall;
+  final List<ActiveCall> activeCalls;
   final WidgetBuilder? localePlaceholderBuilder;
   final WidgetBuilder? remotePlaceholderBuilder;
 
@@ -33,12 +33,15 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   @override
   void initState() {
     super.initState();
-    cameraEnabled = widget.activeCall.video;
+    cameraEnabled = widget.activeCalls.current.video;
   }
 
   @override
   Widget build(BuildContext context) {
-    final video = widget.activeCall.video;
+    final activeCalls = widget.activeCalls;
+    final activeCall = activeCalls.current;
+
+    final video = activeCall.video;
 
     final themeData = Theme.of(context);
     final Gradients? gradients = themeData.extension<Gradients>();
@@ -62,13 +65,13 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                     top: 0,
                     bottom: 0,
                     child: GestureDetector(
-                      onTap: widget.activeCall.wasAccepted ? _compactSwitched : null,
+                      onTap: activeCall.wasAccepted ? _compactSwitched : null,
                       behavior: HitTestBehavior.translucent,
                       child: SizedBox(
                         width: mediaQueryData.size.width,
                         height: mediaQueryData.size.height,
                         child: RTCVideoView(
-                          widget.activeCall.renderers.remote,
+                          activeCall.renderers.remote,
                           placeholderBuilder: widget.remotePlaceholderBuilder,
                         ),
                       ),
@@ -80,18 +83,22 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                     top: 10 + mediaQueryData.padding.top + (compact ? 0 : 100),
                     duration: kThemeChangeDuration,
                     child: GestureDetector(
-                      onTap: widget.activeCall.frontCamera == null ? null : _cameraSwitched,
+                      onTap: activeCall.frontCamera == null
+                          ? null
+                          : () {
+                              context.read<CallBloc>().add(CallControlEvent.cameraSwitched(activeCall.callId.uuid));
+                            },
                       child: Stack(
                         children: [
                           Container(
                             decoration: BoxDecoration(color: onTabGradient.withOpacity(0.3)),
                             width: orientation == Orientation.portrait ? 90.0 : 120.0,
                             height: orientation == Orientation.portrait ? 120.0 : 90.0,
-                            child: widget.activeCall.frontCamera == null
+                            child: activeCall.frontCamera == null
                                 ? null
                                 : RTCVideoView(
-                                    widget.activeCall.renderers.local,
-                                    mirror: widget.activeCall.frontCamera!,
+                                    activeCall.renderers.local,
+                                    mirror: activeCall.frontCamera!,
                                     placeholderBuilder: widget.localePlaceholderBuilder,
                                   ),
                           ),
@@ -99,7 +106,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                             left: 0,
                             right: 0,
                             bottom: 1,
-                            child: widget.activeCall.frontCamera == null
+                            child: activeCall.frontCamera == null
                                 ? SizedCircularProgressIndicator(
                                     size: switchCameraIconSize - 2.0,
                                     outerSize: switchCameraIconSize,
@@ -121,11 +128,23 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                     left: 0 + mediaQueryData.padding.left,
                     right: 0 + mediaQueryData.padding.right,
                     top: 10 + mediaQueryData.padding.top,
-                    child: CallInfo(
-                      isIncoming: widget.activeCall.isIncoming,
-                      username: widget.activeCall.displayName ?? widget.activeCall.handle.value,
-                      acceptedTime: widget.activeCall.acceptedTime,
-                      color: onTabGradient,
+                    child: Column(
+                      children: [
+                        AppBar(
+                          leading: const ExtBackButton(),
+                          backgroundColor: Colors.transparent,
+                          foregroundColor: onTabGradient,
+                          primary: false,
+                        ),
+                        for (final activeCall in activeCalls)
+                          CallInfo(
+                            isIncoming: activeCall.isIncoming,
+                            held: activeCall.held,
+                            username: activeCall.displayName ?? activeCall.handle.value,
+                            acceptedTime: activeCall.acceptedTime,
+                            color: onTabGradient,
+                          ),
+                      ],
                     ),
                   ),
                 if (!compact)
@@ -134,21 +153,75 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                     right: 0 + mediaQueryData.padding.right,
                     bottom: 20 + mediaQueryData.padding.bottom,
                     child: CallActions(
-                      isIncoming: widget.activeCall.isIncoming,
-                      video: widget.activeCall.video,
-                      wasAccepted: widget.activeCall.wasAccepted,
-                      wasHungUp: widget.activeCall.wasHungUp,
+                      isIncoming: activeCall.isIncoming,
+                      video: activeCall.video,
+                      wasAccepted: activeCall.wasAccepted,
+                      wasHungUp: activeCall.wasHungUp,
                       cameraValue: cameraEnabled,
-                      onCameraChanged: onCameraChanged,
-                      mutedValue: widget.activeCall.muted,
-                      onMutedChanged: _onMutedChanged,
+                      onCameraChanged: (bool value) {
+                        setState(() {
+                          cameraEnabled = value;
+                        });
+                        context.read<CallBloc>().add(CallControlEvent.cameraEnabled(activeCall.callId.uuid, value));
+                      },
+                      mutedValue: activeCall.muted,
+                      onMutedChanged: (bool value) {
+                        context.read<CallBloc>().add(CallControlEvent.setMuted(activeCall.callId.uuid, value));
+                      },
                       speakerValue: widget.speaker,
-                      onSpeakerChanged: _onSpeakerChanged,
-                      heldValue: widget.activeCall.held,
-                      onHeldChanged: _onHeldChanged,
-                      onHangupPressed: _hangup,
-                      onAcceptPressed: _accept,
-                      onKeyPressed: _keyPressed,
+                      onSpeakerChanged: (bool value) {
+                        context.read<CallBloc>().add(CallControlEvent.speakerEnabled(activeCall.callId.uuid, value));
+                      },
+                      heldValue: activeCall.held,
+                      onHeldChanged: (bool value) {
+                        context.read<CallBloc>().add(CallControlEvent.setHeld(activeCall.callId.uuid, value));
+                      },
+                      onSwapPressed: activeCalls.length == 2
+                          ? () {
+                              // TODO maybe introduce particular event with particular callkeep method
+                              context.read<CallBloc>().add(CallControlEvent.setHeld(activeCall.callId.uuid, true));
+                              for (final otherActiveCall in activeCalls) {
+                                if (otherActiveCall.callId != activeCall.callId) {
+                                  context
+                                      .read<CallBloc>()
+                                      .add(CallControlEvent.setHeld(otherActiveCall.callId.uuid, false));
+                                }
+                              }
+                            }
+                          : null,
+                      onHangupPressed: () {
+                        context.read<CallBloc>().add(CallControlEvent.ended(activeCall.callId.uuid));
+                      },
+                      onHangupAndAcceptPressed: activeCalls.length > 1
+                          ? () {
+                              // TODO maybe introduce particular event with particular callkeep method
+                              for (final otherActiveCall in activeCalls) {
+                                if (otherActiveCall.callId != activeCall.callId) {
+                                  context.read<CallBloc>().add(CallControlEvent.ended(otherActiveCall.callId.uuid));
+                                }
+                              }
+                              context.read<CallBloc>().add(CallControlEvent.answered(activeCall.callId.uuid));
+                            }
+                          : null,
+                      onHoldAndAcceptPressed: activeCalls.length > 1
+                          ? () {
+                              // TODO maybe introduce particular event with particular callkeep method
+                              for (final otherActiveCall in activeCalls) {
+                                if (otherActiveCall.callId != activeCall.callId) {
+                                  context
+                                      .read<CallBloc>()
+                                      .add(CallControlEvent.setHeld(otherActiveCall.callId.uuid, true));
+                                }
+                              }
+                              context.read<CallBloc>().add(CallControlEvent.answered(activeCall.callId.uuid));
+                            }
+                          : null,
+                      onAcceptPressed: () {
+                        context.read<CallBloc>().add(CallControlEvent.answered(activeCall.callId.uuid));
+                      },
+                      onKeyPressed: (value) {
+                        context.read<CallBloc>().add(CallControlEvent.sentDTMF(activeCall.callId.uuid, value));
+                      },
                     ),
                   ),
               ],
@@ -163,41 +236,5 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     setState(() {
       compact = !compact;
     });
-  }
-
-  void _cameraSwitched() {
-    context.read<CallBloc>().add(CallControlEvent.cameraSwitched(widget.activeCall.callId.uuid));
-  }
-
-  void onCameraChanged(bool value) {
-    setState(() {
-      cameraEnabled = value;
-    });
-
-    context.read<CallBloc>().add(CallControlEvent.cameraEnabled(widget.activeCall.callId.uuid, value));
-  }
-
-  void _onMutedChanged(bool value) {
-    context.read<CallBloc>().add(CallControlEvent.setMuted(widget.activeCall.callId.uuid, value));
-  }
-
-  void _onSpeakerChanged(bool value) {
-    context.read<CallBloc>().add(CallControlEvent.speakerEnabled(widget.activeCall.callId.uuid, value));
-  }
-
-  void _onHeldChanged(bool value) {
-    context.read<CallBloc>().add(CallControlEvent.setHeld(widget.activeCall.callId.uuid, value));
-  }
-
-  void _hangup() {
-    context.read<CallBloc>().add(CallControlEvent.ended(widget.activeCall.callId.uuid));
-  }
-
-  void _accept() {
-    context.read<CallBloc>().add(CallControlEvent.answered(widget.activeCall.callId.uuid));
-  }
-
-  void _keyPressed(String value) {
-    context.read<CallBloc>().add(CallControlEvent.sentDTMF(widget.activeCall.callId.uuid, value));
   }
 }

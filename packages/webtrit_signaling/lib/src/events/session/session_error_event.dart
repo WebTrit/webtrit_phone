@@ -2,10 +2,10 @@ import '../abstract_events.dart';
 
 class SessionErrorEvent extends SessionEvent implements ErrorEvent {
   const SessionErrorEvent({
-    String? transaction,
+    super.transaction,
     required this.code,
     required this.reason,
-  }) : super(transaction: transaction);
+  });
 
   @override
   final int code;

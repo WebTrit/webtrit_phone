@@ -8,7 +8,7 @@ abstract class WebtritSignalingException implements Exception {
 }
 
 class WebtritSignalingErrorException extends WebtritSignalingException {
-  const WebtritSignalingErrorException(int id, this.code, this.reason) : super(id);
+  const WebtritSignalingErrorException(super.id, this.code, this.reason);
 
   final int code;
   final String reason;
@@ -18,11 +18,11 @@ class WebtritSignalingErrorException extends WebtritSignalingException {
 }
 
 class WebtritSignalingDisconnectedException extends WebtritSignalingException {
-  const WebtritSignalingDisconnectedException(int id) : super(id);
+  const WebtritSignalingDisconnectedException(super.id);
 }
 
 class WebtritSignalingUnknownMessageException extends WebtritSignalingException {
-  const WebtritSignalingUnknownMessageException(int id, this.message) : super(id);
+  const WebtritSignalingUnknownMessageException(super.id, this.message);
 
   final Map<String, dynamic> message;
 
@@ -31,7 +31,7 @@ class WebtritSignalingUnknownMessageException extends WebtritSignalingException 
 }
 
 class WebtritSignalingUnknownResponseException extends WebtritSignalingException {
-  const WebtritSignalingUnknownResponseException(int id, this.response) : super(id);
+  const WebtritSignalingUnknownResponseException(super.id, this.response);
 
   final Map<String, dynamic> response;
 
@@ -40,7 +40,7 @@ class WebtritSignalingUnknownResponseException extends WebtritSignalingException
 }
 
 abstract class WebtritSignalingTransactionException extends WebtritSignalingException {
-  const WebtritSignalingTransactionException(int id, this.transactionId) : super(id);
+  const WebtritSignalingTransactionException(super.id, this.transactionId);
 
   final String transactionId;
 
@@ -49,25 +49,24 @@ abstract class WebtritSignalingTransactionException extends WebtritSignalingExce
 }
 
 class WebtritSignalingTransactionTimeoutException extends WebtritSignalingTransactionException {
-  const WebtritSignalingTransactionTimeoutException(int id, String transactionId) : super(id, transactionId);
+  const WebtritSignalingTransactionTimeoutException(super.id, super.transactionId);
 }
 
 class WebtritSignalingKeepaliveTransactionTimeoutException extends WebtritSignalingTransactionTimeoutException {
-  const WebtritSignalingKeepaliveTransactionTimeoutException(int id, String transactionId) : super(id, transactionId);
+  const WebtritSignalingKeepaliveTransactionTimeoutException(super.id, super.transactionId);
 }
 
 class WebtritSignalingTransactionUnavailableException extends WebtritSignalingTransactionException {
-  const WebtritSignalingTransactionUnavailableException(int id, String transactionId) : super(id, transactionId);
+  const WebtritSignalingTransactionUnavailableException(super.id, super.transactionId);
 }
 
 abstract class WebtritSignalingTransactionTerminateException extends WebtritSignalingTransactionException {
-  const WebtritSignalingTransactionTerminateException(int id, String transactionId) : super(id, transactionId);
+  const WebtritSignalingTransactionTerminateException(super.id, super.transactionId);
 }
 
 class WebtritSignalingTransactionTerminateByDisconnectException extends WebtritSignalingTransactionTerminateException {
   const WebtritSignalingTransactionTerminateByDisconnectException(
-      int id, String transactionId, this.closeCode, this.closeReason)
-      : super(id, transactionId);
+      super.id, super.transactionId, this.closeCode, this.closeReason);
 
   final int? closeCode;
   final String? closeReason;

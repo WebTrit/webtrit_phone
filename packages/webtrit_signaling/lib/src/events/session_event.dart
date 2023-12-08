@@ -4,7 +4,7 @@ import 'session/session_events.dart';
 abstract class SessionEvent extends Event {
   const SessionEvent({
     this.transaction,
-  }) : super();
+  });
 
   final String? transaction;
 

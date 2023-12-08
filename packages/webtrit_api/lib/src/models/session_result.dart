@@ -29,11 +29,11 @@ class SessionResult with _$SessionResult {
 
   factory SessionResult.fromJson(Map<String, dynamic> json) {
     if (json.containsKey('otp_id')) {
-      return _$$SessionOtpProvisionalFromJson(json);
+      return SessionOtpProvisional.fromJson(json);
     } else if (json.containsKey('token')) {
-      return _$$SessionTokenFromJson(json);
+      return SessionToken.fromJson(json);
     } else {
-      return _$$SessionDataFromJson({'data': json}); // a bit hacky way to wrap response data for proper fromJson call
+      return SessionData.fromJson({'data': json}); // a bit hacky way to wrap response data for proper fromJson call
     }
   }
 }

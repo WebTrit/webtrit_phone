@@ -6,8 +6,8 @@ part of 'user_contact.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_UserContact _$$_UserContactFromJson(Map<String, dynamic> json) =>
-    _$_UserContact(
+_$UserContactImpl _$$UserContactImplFromJson(Map<String, dynamic> json) =>
+    _$UserContactImpl(
       sipStatus: $enumDecodeNullable(_$SipStatusEnumMap, json['sip_status']),
       numbers: Numbers.fromJson(json['numbers'] as Map<String, dynamic>),
       email: json['email'] as String?,
@@ -17,7 +17,7 @@ _$_UserContact _$$_UserContactFromJson(Map<String, dynamic> json) =>
       companyName: json['company_name'] as String?,
     );
 
-Map<String, dynamic> _$$_UserContactToJson(_$_UserContact instance) =>
+Map<String, dynamic> _$$UserContactImplToJson(_$UserContactImpl instance) =>
     <String, dynamic>{
       'sip_status': _$SipStatusEnumMap[instance.sipStatus],
       'numbers': instance.numbers,

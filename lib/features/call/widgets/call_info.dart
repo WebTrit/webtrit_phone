@@ -7,18 +7,19 @@ import 'package:clock/clock.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/widgets/widgets.dart';
 
 class CallInfo extends StatefulWidget {
   const CallInfo({
-    Key? key,
+    super.key,
     required this.isIncoming,
+    required this.held,
     required this.username,
     this.acceptedTime,
     this.color,
-  }) : super(key: key);
+  });
 
   final bool isIncoming;
+  final bool held;
   final String username;
   final DateTime? acceptedTime;
   final Color? color;
@@ -82,32 +83,37 @@ class _CallInfoState extends State<CallInfo> {
 
     final themeData = Theme.of(context);
     final textTheme = themeData.textTheme;
+
+    final String statusMessage;
+    if (duration == null) {
+      if (widget.isIncoming) {
+        statusMessage = context.l10n.call_description_incoming;
+      } else {
+        statusMessage = context.l10n.call_description_outgoing;
+      }
+    } else if (widget.held) {
+      statusMessage = context.l10n.call_description_held;
+    } else {
+      statusMessage = duration.format();
+    }
+
     return Column(
       children: [
-        AppBar(
-          leading: const ExtBackButton(),
-          title: Text(
-            widget.isIncoming ? context.l10n.call_description_incoming : context.l10n.call_description_outgoing,
-          ),
-          backgroundColor: Colors.transparent,
-          foregroundColor: widget.color,
-          primary: false,
-        ),
         Text(
           widget.username,
           style: textTheme.displaySmall!.copyWith(color: widget.color),
           textAlign: TextAlign.center,
         ),
-        if (duration != null)
-          Text(
-            duration.format(),
-            style: textTheme.bodyMedium!.copyWith(
-              color: widget.color,
-              fontFeatures: [
-                const FontFeature.tabularFigures(),
-              ],
-            ),
+        Text(
+          statusMessage,
+          style: textTheme.bodyMedium!.copyWith(
+            color: widget.color,
+            fontFeatures: [
+              const FontFeature.tabularFigures(),
+            ],
           ),
+        ),
+        const SizedBox(height: 10),
       ],
     );
   }

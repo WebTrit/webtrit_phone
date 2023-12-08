@@ -6,17 +6,17 @@ part of 'session_otp_credential.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_SessionOtpCredential _$$_SessionOtpCredentialFromJson(
+_$SessionOtpCredentialImpl _$$SessionOtpCredentialImplFromJson(
         Map<String, dynamic> json) =>
-    _$_SessionOtpCredential(
+    _$SessionOtpCredentialImpl(
       bundleId: json['bundle_id'] as String?,
       type: $enumDecode(_$AppTypeEnumMap, json['type']),
       identifier: json['identifier'] as String,
       userRef: json['user_ref'] as String,
     );
 
-Map<String, dynamic> _$$_SessionOtpCredentialToJson(
-        _$_SessionOtpCredential instance) =>
+Map<String, dynamic> _$$SessionOtpCredentialImplToJson(
+        _$SessionOtpCredentialImpl instance) =>
     <String, dynamic>{
       'bundle_id': instance.bundleId,
       'type': _$AppTypeEnumMap[instance.type]!,

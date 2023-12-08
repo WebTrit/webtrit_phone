@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 
 class TextButtonsTable extends StatelessWidget {
   const TextButtonsTable({
-    Key? key,
+    super.key,
     this.minimumSize,
     this.keyButtonsInTableRowCount = 3,
     required this.children,
-  })  : assert(children.length % keyButtonsInTableRowCount == 0),
-        super(key: key);
+  })  : assert(children.length % keyButtonsInTableRowCount == 0);
 
   final List<Widget> children;
   final Size? minimumSize;

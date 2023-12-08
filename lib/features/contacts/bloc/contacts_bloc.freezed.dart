@@ -21,8 +21,8 @@ mixin _$ContactsSourceTypeChanged {
 
 /// @nodoc
 
-class _$_ContactsSourceTypeChanged implements _ContactsSourceTypeChanged {
-  const _$_ContactsSourceTypeChanged(this.sourceType);
+class _$ContactsSourceTypeChangedImpl implements _ContactsSourceTypeChanged {
+  const _$ContactsSourceTypeChangedImpl(this.sourceType);
 
   @override
   final ContactSourceType sourceType;
@@ -36,7 +36,7 @@ class _$_ContactsSourceTypeChanged implements _ContactsSourceTypeChanged {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ContactsSourceTypeChanged &&
+            other is _$ContactsSourceTypeChangedImpl &&
             (identical(other.sourceType, sourceType) ||
                 other.sourceType == sourceType));
   }
@@ -47,7 +47,7 @@ class _$_ContactsSourceTypeChanged implements _ContactsSourceTypeChanged {
 
 abstract class _ContactsSourceTypeChanged implements ContactsSourceTypeChanged {
   const factory _ContactsSourceTypeChanged(final ContactSourceType sourceType) =
-      _$_ContactsSourceTypeChanged;
+      _$ContactsSourceTypeChangedImpl;
 
   @override
   ContactSourceType get sourceType;
@@ -60,8 +60,8 @@ mixin _$ContactsSearchChanged {
 
 /// @nodoc
 
-class _$_ContactsSearchChanged implements _ContactsSearchChanged {
-  const _$_ContactsSearchChanged(this.search);
+class _$ContactsSearchChangedImpl implements _ContactsSearchChanged {
+  const _$ContactsSearchChangedImpl(this.search);
 
   @override
   final String search;
@@ -75,7 +75,7 @@ class _$_ContactsSearchChanged implements _ContactsSearchChanged {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ContactsSearchChanged &&
+            other is _$ContactsSearchChangedImpl &&
             (identical(other.search, search) || other.search == search));
   }
 
@@ -85,7 +85,7 @@ class _$_ContactsSearchChanged implements _ContactsSearchChanged {
 
 abstract class _ContactsSearchChanged implements ContactsSearchChanged {
   const factory _ContactsSearchChanged(final String search) =
-      _$_ContactsSearchChanged;
+      _$ContactsSearchChangedImpl;
 
   @override
   String get search;
@@ -98,8 +98,8 @@ mixin _$ContactsSearchSubmitted {
 
 /// @nodoc
 
-class _$_ContactsSearchSubmitted implements _ContactsSearchSubmitted {
-  const _$_ContactsSearchSubmitted(this.search);
+class _$ContactsSearchSubmittedImpl implements _ContactsSearchSubmitted {
+  const _$ContactsSearchSubmittedImpl(this.search);
 
   @override
   final String search;
@@ -113,7 +113,7 @@ class _$_ContactsSearchSubmitted implements _ContactsSearchSubmitted {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ContactsSearchSubmitted &&
+            other is _$ContactsSearchSubmittedImpl &&
             (identical(other.search, search) || other.search == search));
   }
 
@@ -123,7 +123,7 @@ class _$_ContactsSearchSubmitted implements _ContactsSearchSubmitted {
 
 abstract class _ContactsSearchSubmitted implements ContactsSearchSubmitted {
   const factory _ContactsSearchSubmitted(final String search) =
-      _$_ContactsSearchSubmitted;
+      _$ContactsSearchSubmittedImpl;
 
   @override
   String get search;
@@ -178,22 +178,22 @@ class _$ContactsStateCopyWithImpl<$Res, $Val extends ContactsState>
 }
 
 /// @nodoc
-abstract class _$$_ContactsStateCopyWith<$Res>
+abstract class _$$ContactsStateImplCopyWith<$Res>
     implements $ContactsStateCopyWith<$Res> {
-  factory _$$_ContactsStateCopyWith(
-          _$_ContactsState value, $Res Function(_$_ContactsState) then) =
-      __$$_ContactsStateCopyWithImpl<$Res>;
+  factory _$$ContactsStateImplCopyWith(
+          _$ContactsStateImpl value, $Res Function(_$ContactsStateImpl) then) =
+      __$$ContactsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String search, ContactSourceType sourceType});
 }
 
 /// @nodoc
-class __$$_ContactsStateCopyWithImpl<$Res>
-    extends _$ContactsStateCopyWithImpl<$Res, _$_ContactsState>
-    implements _$$_ContactsStateCopyWith<$Res> {
-  __$$_ContactsStateCopyWithImpl(
-      _$_ContactsState _value, $Res Function(_$_ContactsState) _then)
+class __$$ContactsStateImplCopyWithImpl<$Res>
+    extends _$ContactsStateCopyWithImpl<$Res, _$ContactsStateImpl>
+    implements _$$ContactsStateImplCopyWith<$Res> {
+  __$$ContactsStateImplCopyWithImpl(
+      _$ContactsStateImpl _value, $Res Function(_$ContactsStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -202,7 +202,7 @@ class __$$_ContactsStateCopyWithImpl<$Res>
     Object? search = null,
     Object? sourceType = null,
   }) {
-    return _then(_$_ContactsState(
+    return _then(_$ContactsStateImpl(
       search: null == search
           ? _value.search
           : search // ignore: cast_nullable_to_non_nullable
@@ -217,8 +217,8 @@ class __$$_ContactsStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ContactsState implements _ContactsState {
-  const _$_ContactsState({this.search = '', required this.sourceType});
+class _$ContactsStateImpl implements _ContactsState {
+  const _$ContactsStateImpl({this.search = '', required this.sourceType});
 
   @override
   @JsonKey()
@@ -235,7 +235,7 @@ class _$_ContactsState implements _ContactsState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ContactsState &&
+            other is _$ContactsStateImpl &&
             (identical(other.search, search) || other.search == search) &&
             (identical(other.sourceType, sourceType) ||
                 other.sourceType == sourceType));
@@ -247,14 +247,14 @@ class _$_ContactsState implements _ContactsState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ContactsStateCopyWith<_$_ContactsState> get copyWith =>
-      __$$_ContactsStateCopyWithImpl<_$_ContactsState>(this, _$identity);
+  _$$ContactsStateImplCopyWith<_$ContactsStateImpl> get copyWith =>
+      __$$ContactsStateImplCopyWithImpl<_$ContactsStateImpl>(this, _$identity);
 }
 
 abstract class _ContactsState implements ContactsState {
   const factory _ContactsState(
       {final String search,
-      required final ContactSourceType sourceType}) = _$_ContactsState;
+      required final ContactSourceType sourceType}) = _$ContactsStateImpl;
 
   @override
   String get search;
@@ -262,6 +262,6 @@ abstract class _ContactsState implements ContactsState {
   ContactSourceType get sourceType;
   @override
   @JsonKey(ignore: true)
-  _$$_ContactsStateCopyWith<_$_ContactsState> get copyWith =>
+  _$$ContactsStateImplCopyWith<_$ContactsStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

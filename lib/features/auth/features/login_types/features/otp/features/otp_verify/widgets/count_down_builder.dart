@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class CountDownBuilder extends StatefulWidget {
   const CountDownBuilder({
-    Key? key,
+    super.key,
     required this.interval,
     required this.builder,
-  }) : super(key: key);
+  });
 
   final Duration interval;
   final Widget Function(BuildContext context, int counter) builder;

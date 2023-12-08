@@ -49,7 +49,11 @@ class CallState with _$CallState {
 
   CallDisplay get display {
     if (activeCalls.isEmpty) {
-      return CallDisplay.none;
+      if (minimized == false) {
+        return CallDisplay.noneScreen;
+      } else {
+        return CallDisplay.none;
+      }
     } else {
       if (minimized == true) {
         return CallDisplay.overlay;
@@ -60,8 +64,6 @@ class CallState with _$CallState {
   }
 
   bool get isActive => activeCalls.isNotEmpty;
-
-  ActiveCall get activeCall => activeCalls.last;
 
   ActiveCall? retrieveActiveCall(UuidValue uuid) {
     for (var activeCall in activeCalls) {
@@ -134,6 +136,10 @@ class ActiveCall with _$ActiveCall {
   bool get wasAccepted => acceptedTime != null;
 
   bool get wasHungUp => hungUpTime != null;
+}
+
+extension ActiveCallIterableExtension<T extends ActiveCall> on Iterable<T> {
+  T get current => lastWhere((activeCall) => !activeCall.held, orElse: () => last);
 }
 
 class RTCVideoRenderers {

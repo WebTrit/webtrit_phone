@@ -6,11 +6,12 @@ part of 'app_status.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_AppStatus _$$_AppStatusFromJson(Map<String, dynamic> json) => _$_AppStatus(
+_$AppStatusImpl _$$AppStatusImplFromJson(Map<String, dynamic> json) =>
+    _$AppStatusImpl(
       register: json['register'] as bool,
     );
 
-Map<String, dynamic> _$$_AppStatusToJson(_$_AppStatus instance) =>
+Map<String, dynamic> _$$AppStatusImplToJson(_$AppStatusImpl instance) =>
     <String, dynamic>{
       'register': instance.register,
     };

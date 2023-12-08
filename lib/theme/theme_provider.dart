@@ -163,19 +163,23 @@ class ThemeProvider extends InheritedWidget {
         foregroundColor: colors.onTertiary,
         backgroundColor: colors.tertiary,
         disabledForegroundColor: colors.onTertiary.withOpacity(0.38),
+        padding: EdgeInsets.zero,
       ),
       callHangup: TextButton.styleFrom(
         foregroundColor: colors.onError,
         backgroundColor: colors.error,
         disabledForegroundColor: colors.onError.withOpacity(0.38),
+        padding: EdgeInsets.zero,
       ),
       callAction: TextButton.styleFrom(
         foregroundColor: colors.surface,
         backgroundColor: colors.surface.withOpacity(0.3),
+        padding: EdgeInsets.zero,
       ),
       callActiveAction: TextButton.styleFrom(
         foregroundColor: colors.onSurface,
         backgroundColor: colors.surface,
+        padding: EdgeInsets.zero,
       ),
     );
   }

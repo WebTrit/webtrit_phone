@@ -5,9 +5,9 @@ enum CodeValidationError {
 }
 
 class CodeInput extends FormzInput<String, CodeValidationError> {
-  const CodeInput.pure([String value = '']) : super.pure(value);
+  const CodeInput.pure([super.value = '']) : super.pure();
 
-  const CodeInput.dirty([String value = '']) : super.dirty(value);
+  const CodeInput.dirty([super.value = '']) : super.dirty();
 
   @override
   CodeValidationError? validator(String value) {

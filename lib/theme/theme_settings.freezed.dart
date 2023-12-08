@@ -138,11 +138,11 @@ class _$ThemeSettingsCopyWithImpl<$Res, $Val extends ThemeSettings>
 }
 
 /// @nodoc
-abstract class _$$_ThemeSettingsCopyWith<$Res>
+abstract class _$$ThemeSettingsImplCopyWith<$Res>
     implements $ThemeSettingsCopyWith<$Res> {
-  factory _$$_ThemeSettingsCopyWith(
-          _$_ThemeSettings value, $Res Function(_$_ThemeSettings) then) =
-      __$$_ThemeSettingsCopyWithImpl<$Res>;
+  factory _$$ThemeSettingsImplCopyWith(
+          _$ThemeSettingsImpl value, $Res Function(_$ThemeSettingsImpl) then) =
+      __$$ThemeSettingsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -161,11 +161,11 @@ abstract class _$$_ThemeSettingsCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ThemeSettingsCopyWithImpl<$Res>
-    extends _$ThemeSettingsCopyWithImpl<$Res, _$_ThemeSettings>
-    implements _$$_ThemeSettingsCopyWith<$Res> {
-  __$$_ThemeSettingsCopyWithImpl(
-      _$_ThemeSettings _value, $Res Function(_$_ThemeSettings) _then)
+class __$$ThemeSettingsImplCopyWithImpl<$Res>
+    extends _$ThemeSettingsCopyWithImpl<$Res, _$ThemeSettingsImpl>
+    implements _$$ThemeSettingsImplCopyWith<$Res> {
+  __$$ThemeSettingsImplCopyWithImpl(
+      _$ThemeSettingsImpl _value, $Res Function(_$ThemeSettingsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -179,7 +179,7 @@ class __$$_ThemeSettingsCopyWithImpl<$Res>
     Object? primaryOnboardingLogo = null,
     Object? secondaryOnboardingLogo = null,
   }) {
-    return _then(_$_ThemeSettings(
+    return _then(_$ThemeSettingsImpl(
       seedColor: null == seedColor
           ? _value.seedColor
           : seedColor // ignore: cast_nullable_to_non_nullable
@@ -215,8 +215,8 @@ class __$$_ThemeSettingsCopyWithImpl<$Res>
 /// @nodoc
 
 @themeJsonSerializable
-class _$_ThemeSettings implements _ThemeSettings {
-  const _$_ThemeSettings(
+class _$ThemeSettingsImpl implements _ThemeSettings {
+  const _$ThemeSettingsImpl(
       {required this.seedColor,
       this.lightColorSchemeOverride,
       this.darkColorSchemeOverride,
@@ -226,8 +226,8 @@ class _$_ThemeSettings implements _ThemeSettings {
       required this.secondaryOnboardingLogo})
       : _primaryGradientColors = primaryGradientColors;
 
-  factory _$_ThemeSettings.fromJson(Map<String, dynamic> json) =>
-      _$$_ThemeSettingsFromJson(json);
+  factory _$ThemeSettingsImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ThemeSettingsImplFromJson(json);
 
   @override
   final Color seedColor;
@@ -260,7 +260,7 @@ class _$_ThemeSettings implements _ThemeSettings {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ThemeSettings &&
+            other is _$ThemeSettingsImpl &&
             (identical(other.seedColor, seedColor) ||
                 other.seedColor == seedColor) &&
             (identical(
@@ -295,12 +295,12 @@ class _$_ThemeSettings implements _ThemeSettings {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ThemeSettingsCopyWith<_$_ThemeSettings> get copyWith =>
-      __$$_ThemeSettingsCopyWithImpl<_$_ThemeSettings>(this, _$identity);
+  _$$ThemeSettingsImplCopyWith<_$ThemeSettingsImpl> get copyWith =>
+      __$$ThemeSettingsImplCopyWithImpl<_$ThemeSettingsImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ThemeSettingsToJson(
+    return _$$ThemeSettingsImplToJson(
       this,
     );
   }
@@ -308,16 +308,17 @@ class _$_ThemeSettings implements _ThemeSettings {
 
 abstract class _ThemeSettings implements ThemeSettings {
   const factory _ThemeSettings(
-      {required final Color seedColor,
-      final ColorSchemeOverride? lightColorSchemeOverride,
-      final ColorSchemeOverride? darkColorSchemeOverride,
-      required final List<CustomColor> primaryGradientColors,
-      final String? fontFamily,
-      required final ThemeSvgAsset primaryOnboardingLogo,
-      required final ThemeSvgAsset secondaryOnboardingLogo}) = _$_ThemeSettings;
+          {required final Color seedColor,
+          final ColorSchemeOverride? lightColorSchemeOverride,
+          final ColorSchemeOverride? darkColorSchemeOverride,
+          required final List<CustomColor> primaryGradientColors,
+          final String? fontFamily,
+          required final ThemeSvgAsset primaryOnboardingLogo,
+          required final ThemeSvgAsset secondaryOnboardingLogo}) =
+      _$ThemeSettingsImpl;
 
   factory _ThemeSettings.fromJson(Map<String, dynamic> json) =
-      _$_ThemeSettings.fromJson;
+      _$ThemeSettingsImpl.fromJson;
 
   @override
   Color get seedColor;
@@ -335,7 +336,7 @@ abstract class _ThemeSettings implements ThemeSettings {
   ThemeSvgAsset get secondaryOnboardingLogo;
   @override
   @JsonKey(ignore: true)
-  _$$_ThemeSettingsCopyWith<_$_ThemeSettings> get copyWith =>
+  _$$ThemeSettingsImplCopyWith<_$ThemeSettingsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -591,11 +592,11 @@ class _$ColorSchemeOverrideCopyWithImpl<$Res, $Val extends ColorSchemeOverride>
 }
 
 /// @nodoc
-abstract class _$$_ColorSchemeOverrideCopyWith<$Res>
+abstract class _$$ColorSchemeOverrideImplCopyWith<$Res>
     implements $ColorSchemeOverrideCopyWith<$Res> {
-  factory _$$_ColorSchemeOverrideCopyWith(_$_ColorSchemeOverride value,
-          $Res Function(_$_ColorSchemeOverride) then) =
-      __$$_ColorSchemeOverrideCopyWithImpl<$Res>;
+  factory _$$ColorSchemeOverrideImplCopyWith(_$ColorSchemeOverrideImpl value,
+          $Res Function(_$ColorSchemeOverrideImpl) then) =
+      __$$ColorSchemeOverrideImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -632,11 +633,11 @@ abstract class _$$_ColorSchemeOverrideCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ColorSchemeOverrideCopyWithImpl<$Res>
-    extends _$ColorSchemeOverrideCopyWithImpl<$Res, _$_ColorSchemeOverride>
-    implements _$$_ColorSchemeOverrideCopyWith<$Res> {
-  __$$_ColorSchemeOverrideCopyWithImpl(_$_ColorSchemeOverride _value,
-      $Res Function(_$_ColorSchemeOverride) _then)
+class __$$ColorSchemeOverrideImplCopyWithImpl<$Res>
+    extends _$ColorSchemeOverrideCopyWithImpl<$Res, _$ColorSchemeOverrideImpl>
+    implements _$$ColorSchemeOverrideImplCopyWith<$Res> {
+  __$$ColorSchemeOverrideImplCopyWithImpl(_$ColorSchemeOverrideImpl _value,
+      $Res Function(_$ColorSchemeOverrideImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -673,7 +674,7 @@ class __$$_ColorSchemeOverrideCopyWithImpl<$Res>
     Object? scrim = freezed,
     Object? surfaceTint = freezed,
   }) {
-    return _then(_$_ColorSchemeOverride(
+    return _then(_$ColorSchemeOverrideImpl(
       primary: freezed == primary
           ? _value.primary
           : primary // ignore: cast_nullable_to_non_nullable
@@ -801,8 +802,8 @@ class __$$_ColorSchemeOverrideCopyWithImpl<$Res>
 /// @nodoc
 
 @themeJsonSerializable
-class _$_ColorSchemeOverride implements _ColorSchemeOverride {
-  const _$_ColorSchemeOverride(
+class _$ColorSchemeOverrideImpl implements _ColorSchemeOverride {
+  const _$ColorSchemeOverrideImpl(
       {this.primary,
       this.onPrimary,
       this.primaryContainer,
@@ -834,8 +835,8 @@ class _$_ColorSchemeOverride implements _ColorSchemeOverride {
       this.scrim,
       this.surfaceTint});
 
-  factory _$_ColorSchemeOverride.fromJson(Map<String, dynamic> json) =>
-      _$$_ColorSchemeOverrideFromJson(json);
+  factory _$ColorSchemeOverrideImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ColorSchemeOverrideImplFromJson(json);
 
   @override
   final Color? primary;
@@ -907,7 +908,7 @@ class _$_ColorSchemeOverride implements _ColorSchemeOverride {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ColorSchemeOverride &&
+            other is _$ColorSchemeOverrideImpl &&
             (identical(other.primary, primary) || other.primary == primary) &&
             (identical(other.onPrimary, onPrimary) ||
                 other.onPrimary == onPrimary) &&
@@ -1002,13 +1003,13 @@ class _$_ColorSchemeOverride implements _ColorSchemeOverride {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ColorSchemeOverrideCopyWith<_$_ColorSchemeOverride> get copyWith =>
-      __$$_ColorSchemeOverrideCopyWithImpl<_$_ColorSchemeOverride>(
+  _$$ColorSchemeOverrideImplCopyWith<_$ColorSchemeOverrideImpl> get copyWith =>
+      __$$ColorSchemeOverrideImplCopyWithImpl<_$ColorSchemeOverrideImpl>(
           this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ColorSchemeOverrideToJson(
+    return _$$ColorSchemeOverrideImplToJson(
       this,
     );
   }
@@ -1045,10 +1046,10 @@ abstract class _ColorSchemeOverride implements ColorSchemeOverride {
       final Color? inversePrimary,
       final Color? shadow,
       final Color? scrim,
-      final Color? surfaceTint}) = _$_ColorSchemeOverride;
+      final Color? surfaceTint}) = _$ColorSchemeOverrideImpl;
 
   factory _ColorSchemeOverride.fromJson(Map<String, dynamic> json) =
-      _$_ColorSchemeOverride.fromJson;
+      _$ColorSchemeOverrideImpl.fromJson;
 
   @override
   Color? get primary;
@@ -1112,6 +1113,6 @@ abstract class _ColorSchemeOverride implements ColorSchemeOverride {
   Color? get surfaceTint;
   @override
   @JsonKey(ignore: true)
-  _$$_ColorSchemeOverrideCopyWith<_$_ColorSchemeOverride> get copyWith =>
+  _$$ColorSchemeOverrideImplCopyWith<_$ColorSchemeOverrideImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

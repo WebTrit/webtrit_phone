@@ -2,10 +2,10 @@ import '../abstract_events.dart';
 
 class TransferringEvent extends CallEvent {
   const TransferringEvent({
-    String? transaction,
-    required int line,
-    required String callId,
-  }) : super(transaction: transaction, line: line, callId: callId);
+    super.transaction,
+    required super.line,
+    required super.callId,
+  });
 
   static const typeValue = 'transferring';
 

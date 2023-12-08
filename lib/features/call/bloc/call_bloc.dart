@@ -612,7 +612,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         _logger.warning('__onCallSignalingEventProgress: peerConnection is null - most likely some permissions issue');
       } else {
         final remoteDescription = jsep.toDescription();
-        peerConnection.setRemoteDescription(remoteDescription);
+        await peerConnection.setRemoteDescription(remoteDescription);
       }
     } else {
       _logger.warning('__onCallSignalingEventProgress: jsep must not be null');
@@ -628,7 +628,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     await callkeep.reportConnectedOutgoingCall(event.callId.uuid);
 
     emit(state.copyWithMappedActiveCall(event.callId.uuid, (activeCall) {
-      return activeCall.copyWith(acceptedTime: clock.now());
+      if (activeCall.acceptedTime == null) {
+        return activeCall.copyWith(acceptedTime: clock.now());
+      } else {
+        return activeCall;
+      }
     }));
 
     final jsep = event.jsep;
@@ -638,7 +642,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         _logger.warning('__onCallSignalingEventAccepted: peerConnection is null - most likely some permissions issue');
       } else {
         final remoteDescription = jsep.toDescription();
-        peerConnection.setRemoteDescription(remoteDescription);
+        await peerConnection.setRemoteDescription(remoteDescription);
       }
     }
   }
@@ -899,7 +903,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       notificationsBloc.add(const NotificationsIssued(CallUndefinedLineErrorNotification()));
       return;
     }
-    if (state.signalingClientStatus != SignalingClientStatus.connect) {
+    if (!state.signalingClientStatus.isConnect &&
+        // attempt to wait for the desired signaling client status within the signaling client connection timeout period
+        !(await stream
+                .firstWhere((state) => state.signalingClientStatus.isConnect || state.signalingClientStatus.isFailure,
+                    orElse: () => state)
+                .timeout(kSignalingClientConnectionTimeout, onTimeout: () => state))
+            .signalingClientStatus
+            .isConnect) {
       event.fail();
 
       emit(state.copyWithPopActiveCall(event.uuid));
@@ -1112,12 +1123,25 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) {
     return event.map(
+      signalingStateChanged: (event) => __onPeerConnectionEventSignalingStateChanged(event, emit),
+      connectionStateChanged: (event) => __onPeerConnectionEventConnectionStateChanged(event, emit),
       iceGatheringStateChanged: (event) => __onPeerConnectionEventIceGatheringStateChanged(event, emit),
+      iceConnectionStateChanged: (event) => __onPeerConnectionEventIceConnectionStateChanged(event, emit),
       iceCandidateIdentified: (event) => __onPeerConnectionEventIceCandidateIdentified(event, emit),
       streamAdded: (event) => __onPeerConnectionEventStreamAdded(event, emit),
       streamRemoved: (event) => __onPeerConnectionEventStreamRemoved(event, emit),
     );
   }
+
+  Future<void> __onPeerConnectionEventSignalingStateChanged(
+    _PeerConnectionEventSignalingStateChanged event,
+    Emitter<CallState> emit,
+  ) async {}
+
+  Future<void> __onPeerConnectionEventConnectionStateChanged(
+    _PeerConnectionEventConnectionStateChanged event,
+    Emitter<CallState> emit,
+  ) async {}
 
   Future<void> __onPeerConnectionEventIceGatheringStateChanged(
     _PeerConnectionEventIceGatheringStateChanged event,
@@ -1131,6 +1155,31 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             line: activeCall.line,
             candidate: null,
           ));
+        }
+      });
+    }
+  }
+
+  Future<void> __onPeerConnectionEventIceConnectionStateChanged(
+    _PeerConnectionEventIceConnectionStateChanged event,
+    Emitter<CallState> emit,
+  ) async {
+    if (event.state == RTCIceConnectionState.RTCIceConnectionStateFailed) {
+      await state.performOnActiveCall(event.uuid, (activeCall) async {
+        final peerConnection = await _peerConnectionRetrieve(activeCall.callId.uuid);
+        if (peerConnection == null) {
+          _logger.warning(
+              '__onPeerConnectionEventIceConnectionStateChanged: peerConnection is null - most likely some state issue');
+        } else {
+          await peerConnection.restartIce();
+          final localDescription = await peerConnection.createOffer({});
+          await _signalingClient?.execute(UpdateRequest(
+            transaction: WebtritSignalingClient.generateTransactionId(),
+            line: activeCall.line,
+            callId: activeCall.callId.toString(),
+            jsep: localDescription.toMap(),
+          ));
+          await peerConnection.setLocalDescription(localDescription);
         }
       });
     }
@@ -1210,11 +1259,21 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             continue activeCallsLoop;
           }
         }
-      } else if (activeCall.line < stateHandshake.lines.length) {
+      }
+      if (activeCall.line < stateHandshake.lines.length) {
         final line = stateHandshake.lines[activeCall.line];
         if (line != null && line.callId == activeCall.callId.value) {
           continue activeCallsLoop;
         }
+      }
+      if (activeCall.direction == Direction.outgoing &&
+          activeCall.acceptedTime == null &&
+          activeCall.hungUpTime == null) {
+        // Handles an outgoing active call that has not yet started, typically initiated
+        // by the `continueStartCallIntent` callback of `CallkeepDelegate`.
+        // TODO: Implement a dedicated flag to confirm successful execution of
+        // OutgoingCallRequest, ensuring reliable outgoing active call state tracking.
+        continue activeCallsLoop;
       }
 
       _peerConnectionConditionalCompleteError(activeCall.callId.uuid, 'Active call Request Terminated');
@@ -1232,7 +1291,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       for (final callLog in activeLine.callLogs) {
         if (callLog is CallEventLog) {
           final event = callLog.callEvent;
-          if (event is IncomingCallEvent) {
+          if (event is IncomingCallEvent && activeLine.callLogs.length == 1) {
             _onSignalingEvent(event);
           }
         }
@@ -1327,7 +1386,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     String? displayName,
     bool video,
   ) {
-    _logger.fine(() => 'didStartCallIntent handle: $handle displayName: $displayName video: $video');
+    _logger.fine(() => 'continueStartCallIntent handle: $handle displayName: $displayName video: $video');
 
     add(CallControlEvent.started(
       generic: handle.isGeneric ? handle.value : null,
@@ -1477,9 +1536,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     return peerConnection
       ..onSignalingState = (signalingState) {
         logger.fine(() => 'onSignalingState state: $signalingState');
+
+        add(_PeerConnectionEvent.signalingStateChanged(uuid, signalingState));
       }
       ..onConnectionState = (connectionState) {
         logger.fine(() => 'onConnectionState state: $connectionState');
+
+        add(_PeerConnectionEvent.connectionStateChanged(uuid, connectionState));
       }
       ..onIceGatheringState = (iceGatheringState) {
         logger.fine(() => 'onIceGatheringState state: $iceGatheringState');
@@ -1488,6 +1551,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
       ..onIceConnectionState = (iceConnectionState) {
         logger.fine(() => 'onIceConnectionState state: $iceConnectionState');
+
+        add(_PeerConnectionEvent.iceConnectionStateChanged(uuid, iceConnectionState));
       }
       ..onIceCandidate = (candidate) {
         logger.fine(() => 'onIceCandidate candidate: $candidate');
@@ -1515,6 +1580,24 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
       ..onRenegotiationNeeded = () {
         logger.fine(() => 'onRenegotiationNeeded');
+      }
+      ..onTrack = (event) {
+        logger.fine(() {
+          final sb = StringBuffer('onTrack');
+          sb.write(' receiver: ${event.receiver}');
+          sb.write(' streams: [');
+          final streamsLength = event.streams.length;
+          for (var i = 0; i < streamsLength; i++) {
+            sb.write('$stream');
+            if (i + 1 < streamsLength) {
+              sb.write(', ');
+            }
+          }
+          sb.write(']');
+          sb.write(' track: ${event.track}');
+          sb.write(' transceiver: ${event.transceiver}');
+          return sb;
+        });
       };
   }
 

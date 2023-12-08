@@ -7,9 +7,9 @@ enum EmailValidationError {
 }
 
 class EmailInput extends FormzInput<String, EmailValidationError> {
-  const EmailInput.pure([String value = '']) : super.pure(value);
+  const EmailInput.pure([super.value = '']) : super.pure();
 
-  const EmailInput.dirty([String value = '']) : super.dirty(value);
+  const EmailInput.dirty([super.value = '']) : super.dirty();
 
   @override
   EmailValidationError? validator(String value) {

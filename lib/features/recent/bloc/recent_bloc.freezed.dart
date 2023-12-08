@@ -21,8 +21,8 @@ mixin _$RecentDeleted {
 
 /// @nodoc
 
-class _$_RecentDeleted implements _RecentDeleted {
-  const _$_RecentDeleted(this.recent);
+class _$RecentDeletedImpl implements _RecentDeleted {
+  const _$RecentDeletedImpl(this.recent);
 
   @override
   final Recent recent;
@@ -36,7 +36,7 @@ class _$_RecentDeleted implements _RecentDeleted {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_RecentDeleted &&
+            other is _$RecentDeletedImpl &&
             (identical(other.recent, recent) || other.recent == recent));
   }
 
@@ -45,7 +45,7 @@ class _$_RecentDeleted implements _RecentDeleted {
 }
 
 abstract class _RecentDeleted implements RecentDeleted {
-  const factory _RecentDeleted(final Recent recent) = _$_RecentDeleted;
+  const factory _RecentDeleted(final Recent recent) = _$RecentDeletedImpl;
 
   @override
   Recent get recent;
@@ -100,22 +100,22 @@ class _$RecentStateCopyWithImpl<$Res, $Val extends RecentState>
 }
 
 /// @nodoc
-abstract class _$$_RecentStateCopyWith<$Res>
+abstract class _$$RecentStateImplCopyWith<$Res>
     implements $RecentStateCopyWith<$Res> {
-  factory _$$_RecentStateCopyWith(
-          _$_RecentState value, $Res Function(_$_RecentState) then) =
-      __$$_RecentStateCopyWithImpl<$Res>;
+  factory _$$RecentStateImplCopyWith(
+          _$RecentStateImpl value, $Res Function(_$RecentStateImpl) then) =
+      __$$RecentStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({Recent? recent, List<Recent>? recents});
 }
 
 /// @nodoc
-class __$$_RecentStateCopyWithImpl<$Res>
-    extends _$RecentStateCopyWithImpl<$Res, _$_RecentState>
-    implements _$$_RecentStateCopyWith<$Res> {
-  __$$_RecentStateCopyWithImpl(
-      _$_RecentState _value, $Res Function(_$_RecentState) _then)
+class __$$RecentStateImplCopyWithImpl<$Res>
+    extends _$RecentStateCopyWithImpl<$Res, _$RecentStateImpl>
+    implements _$$RecentStateImplCopyWith<$Res> {
+  __$$RecentStateImplCopyWithImpl(
+      _$RecentStateImpl _value, $Res Function(_$RecentStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -124,7 +124,7 @@ class __$$_RecentStateCopyWithImpl<$Res>
     Object? recent = freezed,
     Object? recents = freezed,
   }) {
-    return _then(_$_RecentState(
+    return _then(_$RecentStateImpl(
       recent: freezed == recent
           ? _value.recent
           : recent // ignore: cast_nullable_to_non_nullable
@@ -139,8 +139,8 @@ class __$$_RecentStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_RecentState implements _RecentState {
-  const _$_RecentState({this.recent, final List<Recent>? recents})
+class _$RecentStateImpl implements _RecentState {
+  const _$RecentStateImpl({this.recent, final List<Recent>? recents})
       : _recents = recents;
 
   @override
@@ -164,7 +164,7 @@ class _$_RecentState implements _RecentState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_RecentState &&
+            other is _$RecentStateImpl &&
             (identical(other.recent, recent) || other.recent == recent) &&
             const DeepCollectionEquality().equals(other._recents, _recents));
   }
@@ -176,13 +176,13 @@ class _$_RecentState implements _RecentState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_RecentStateCopyWith<_$_RecentState> get copyWith =>
-      __$$_RecentStateCopyWithImpl<_$_RecentState>(this, _$identity);
+  _$$RecentStateImplCopyWith<_$RecentStateImpl> get copyWith =>
+      __$$RecentStateImplCopyWithImpl<_$RecentStateImpl>(this, _$identity);
 }
 
 abstract class _RecentState implements RecentState {
   const factory _RecentState(
-      {final Recent? recent, final List<Recent>? recents}) = _$_RecentState;
+      {final Recent? recent, final List<Recent>? recents}) = _$RecentStateImpl;
 
   @override
   Recent? get recent;
@@ -190,6 +190,6 @@ abstract class _RecentState implements RecentState {
   List<Recent>? get recents;
   @override
   @JsonKey(ignore: true)
-  _$$_RecentStateCopyWith<_$_RecentState> get copyWith =>
+  _$$RecentStateImplCopyWith<_$RecentStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

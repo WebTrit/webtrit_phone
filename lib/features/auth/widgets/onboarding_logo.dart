@@ -5,9 +5,9 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 class OnboardingLogo extends StatelessWidget {
   const OnboardingLogo({
-    Key? key,
+    super.key,
     this.color,
-  }) : super(key: key);
+  });
 
   final Color? color;
 
