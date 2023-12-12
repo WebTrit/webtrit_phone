@@ -746,6 +746,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       cameraEnabled: (event) => _onCallControlEventCameraEnabled(event, emit),
       speakerEnabled: (event) => _onCallControlEventSpeakerEnabled(event, emit),
       failureApproved: (event) => _onCallControlEventFailureApproved(event, emit),
+      transferred: (event) => _onCallControlEventTransferred(event, emit),
     );
   }
 
@@ -873,6 +874,22 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     emit(state.copyWithMappedActiveCall(event.uuid, (activeCall) {
       return activeCall.copyWith(failure: null);
     }));
+  }
+
+  Future<void> _onCallControlEventTransferred(
+    _CallControlEventTransferred event,
+    Emitter<CallState> emit,
+  ) async {
+    final activeCall0 = state.activeCalls[0];
+    final activeCall1 = state.activeCalls[1];
+
+    await _signalingClient?.execute(TransferRequest(
+      transaction: WebtritSignalingClient.generateTransactionId(),
+      line: 1,
+      callId: activeCall1.callId.value,
+      number: activeCall0.handle.value,
+      replaceCallId: activeCall0.callId.value,
+    ));
   }
 
   // processing call perform events

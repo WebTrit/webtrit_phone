@@ -172,6 +172,11 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       onSpeakerChanged: (bool value) {
                         context.read<CallBloc>().add(CallControlEvent.speakerEnabled(activeCall.callId.uuid, value));
                       },
+                      onTransferPressed: activeCalls.length == 2
+                          ? () {
+                              context.read<CallBloc>().add(CallControlEvent.transferred());
+                            }
+                          : null,
                       heldValue: activeCall.held,
                       onHeldChanged: (bool value) {
                         context.read<CallBloc>().add(CallControlEvent.setHeld(activeCall.callId.uuid, value));
