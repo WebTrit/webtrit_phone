@@ -43,6 +43,7 @@ class WebTritPhonePictureLogo extends StatelessWidget {
         Text(
           EnvironmentConfig.APP_NAME,
           style: titleStyle,
+          textAlign: TextAlign.center,
         ),
       ],
     );
