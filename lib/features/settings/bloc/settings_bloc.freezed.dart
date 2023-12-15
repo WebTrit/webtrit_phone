@@ -29,8 +29,7 @@ class _$SettingsRefreshedImpl implements _SettingsRefreshed {
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$SettingsRefreshedImpl);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _$SettingsRefreshedImpl);
   }
 
   @override
@@ -86,8 +85,7 @@ mixin _$SettingsRegisterStatusChanged {
 
 /// @nodoc
 
-class _$SettingsRegisterStatusChangedImpl
-    implements _SettingsRegisterStatusChanged {
+class _$SettingsRegisterStatusChangedImpl implements _SettingsRegisterStatusChanged {
   const _$SettingsRegisterStatusChangedImpl(this.value);
 
   @override
@@ -110,10 +108,8 @@ class _$SettingsRegisterStatusChangedImpl
   int get hashCode => Object.hash(runtimeType, value);
 }
 
-abstract class _SettingsRegisterStatusChanged
-    implements SettingsRegisterStatusChanged {
-  const factory _SettingsRegisterStatusChanged(final bool value) =
-      _$SettingsRegisterStatusChangedImpl;
+abstract class _SettingsRegisterStatusChanged implements SettingsRegisterStatusChanged {
+  const factory _SettingsRegisterStatusChanged(final bool value) = _$SettingsRegisterStatusChangedImpl;
 
   @override
   bool get value;
@@ -134,9 +130,7 @@ class _$SettingsAccountDeletedImpl implements _SettingsAccountDeleted {
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$SettingsAccountDeletedImpl);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _$SettingsAccountDeletedImpl);
   }
 
   @override
@@ -150,30 +144,31 @@ abstract class _SettingsAccountDeleted implements SettingsAccountDeleted {
 /// @nodoc
 mixin _$SettingsState {
   bool get progress => throw _privateConstructorUsedError;
+
   bool get registerStatus => throw _privateConstructorUsedError;
+
   UserInfo? get info => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $SettingsStateCopyWith<SettingsState> get copyWith =>
-      throw _privateConstructorUsedError;
+  $SettingsStateCopyWith<SettingsState> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $SettingsStateCopyWith<$Res> {
-  factory $SettingsStateCopyWith(
-          SettingsState value, $Res Function(SettingsState) then) =
+  factory $SettingsStateCopyWith(SettingsState value, $Res Function(SettingsState) then) =
       _$SettingsStateCopyWithImpl<$Res, SettingsState>;
+
   @useResult
   $Res call({bool progress, bool registerStatus, UserInfo? info});
 }
 
 /// @nodoc
-class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
-    implements $SettingsStateCopyWith<$Res> {
+class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState> implements $SettingsStateCopyWith<$Res> {
   _$SettingsStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
+
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -202,22 +197,19 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
 }
 
 /// @nodoc
-abstract class _$$SettingsStateImplCopyWith<$Res>
-    implements $SettingsStateCopyWith<$Res> {
-  factory _$$SettingsStateImplCopyWith(
-          _$SettingsStateImpl value, $Res Function(_$SettingsStateImpl) then) =
+abstract class _$$SettingsStateImplCopyWith<$Res> implements $SettingsStateCopyWith<$Res> {
+  factory _$$SettingsStateImplCopyWith(_$SettingsStateImpl value, $Res Function(_$SettingsStateImpl) then) =
       __$$SettingsStateImplCopyWithImpl<$Res>;
+
   @override
   @useResult
   $Res call({bool progress, bool registerStatus, UserInfo? info});
 }
 
 /// @nodoc
-class __$$SettingsStateImplCopyWithImpl<$Res>
-    extends _$SettingsStateCopyWithImpl<$Res, _$SettingsStateImpl>
+class __$$SettingsStateImplCopyWithImpl<$Res> extends _$SettingsStateCopyWithImpl<$Res, _$SettingsStateImpl>
     implements _$$SettingsStateImplCopyWith<$Res> {
-  __$$SettingsStateImplCopyWithImpl(
-      _$SettingsStateImpl _value, $Res Function(_$SettingsStateImpl) _then)
+  __$$SettingsStateImplCopyWithImpl(_$SettingsStateImpl _value, $Res Function(_$SettingsStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -247,8 +239,7 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$SettingsStateImpl implements _SettingsState {
-  const _$SettingsStateImpl(
-      {this.progress = false, required this.registerStatus, this.info});
+  const _$SettingsStateImpl({this.progress = false, required this.registerStatus, this.info = null});
 
   @override
   @JsonKey()
@@ -256,6 +247,7 @@ class _$SettingsStateImpl implements _SettingsState {
   @override
   final bool registerStatus;
   @override
+  @JsonKey()
   final UserInfo? info;
 
   @override
@@ -268,16 +260,13 @@ class _$SettingsStateImpl implements _SettingsState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SettingsStateImpl &&
-            (identical(other.progress, progress) ||
-                other.progress == progress) &&
-            (identical(other.registerStatus, registerStatus) ||
-                other.registerStatus == registerStatus) &&
+            (identical(other.progress, progress) || other.progress == progress) &&
+            (identical(other.registerStatus, registerStatus) || other.registerStatus == registerStatus) &&
             const DeepCollectionEquality().equals(other.info, info));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, progress, registerStatus,
-      const DeepCollectionEquality().hash(info));
+  int get hashCode => Object.hash(runtimeType, progress, registerStatus, const DeepCollectionEquality().hash(info));
 
   @JsonKey(ignore: true)
   @override
@@ -287,19 +276,19 @@ class _$SettingsStateImpl implements _SettingsState {
 }
 
 abstract class _SettingsState implements SettingsState {
-  const factory _SettingsState(
-      {final bool progress,
-      required final bool registerStatus,
-      final UserInfo? info}) = _$SettingsStateImpl;
+  const factory _SettingsState({final bool progress, required final bool registerStatus, final UserInfo? info}) =
+      _$SettingsStateImpl;
 
   @override
   bool get progress;
+
   @override
   bool get registerStatus;
+
   @override
   UserInfo? get info;
+
   @override
   @JsonKey(ignore: true)
-  _$$SettingsStateImplCopyWith<_$SettingsStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$SettingsStateImplCopyWith<_$SettingsStateImpl> get copyWith => throw _privateConstructorUsedError;
 }
