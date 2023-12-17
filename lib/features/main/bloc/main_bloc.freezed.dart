@@ -28,7 +28,7 @@ class _$MainCompatibilityVerifiedImpl implements _MainCompatibilityVerified {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$MainCompatibilityVerifiedImpl);
@@ -61,7 +61,7 @@ class _$MainAppUpdatedImpl implements _MainAppUpdated {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$MainAppUpdatedImpl &&
@@ -175,7 +175,7 @@ class _$MainStateImpl implements _MainState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$MainStateImpl &&

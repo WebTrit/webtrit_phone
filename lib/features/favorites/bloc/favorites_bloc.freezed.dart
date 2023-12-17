@@ -28,7 +28,7 @@ class _$FavoritesStartedImpl implements _FavoritesStarted {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType && other is _$FavoritesStartedImpl);
   }
@@ -61,7 +61,7 @@ class _$FavoritesAddedByContactPhoneIdImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FavoritesAddedByContactPhoneIdImpl &&
@@ -103,7 +103,7 @@ class _$FavoritesRemovedByContactPhoneIdImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FavoritesRemovedByContactPhoneIdImpl &&
@@ -144,7 +144,7 @@ class _$FavoritesRemovedImpl implements _FavoritesRemoved {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FavoritesRemovedImpl &&
@@ -261,7 +261,7 @@ class _$FavoritesStateImpl implements _FavoritesState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FavoritesStateImpl &&

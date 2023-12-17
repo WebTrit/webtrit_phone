@@ -40,7 +40,7 @@ class _$AppLoginedImpl implements _AppLogined {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AppLoginedImpl &&
@@ -82,7 +82,7 @@ class _$AppLogoutedImpl implements _AppLogouted {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType && other is _$AppLogoutedImpl);
   }
@@ -114,7 +114,7 @@ class _$AppThemeSettingsChangedImpl implements _AppThemeSettingsChanged {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AppThemeSettingsChangedImpl &&
@@ -152,7 +152,7 @@ class _$AppThemeModeChangedImpl implements _AppThemeModeChanged {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AppThemeModeChangedImpl &&
@@ -190,7 +190,7 @@ class _$AppLocaleChangedImpl implements _AppLocaleChanged {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AppLocaleChangedImpl &&
@@ -409,7 +409,7 @@ class _$AppStateImpl extends _AppState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AppStateImpl &&

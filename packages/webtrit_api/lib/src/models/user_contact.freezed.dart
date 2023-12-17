@@ -224,7 +224,7 @@ class _$UserContactImpl implements _UserContact {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$UserContactImpl &&

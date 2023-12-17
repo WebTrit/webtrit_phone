@@ -33,7 +33,7 @@ class _$ContactAddedToFavoritesImpl implements _ContactAddedToFavorites {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ContactAddedToFavoritesImpl &&
@@ -73,7 +73,7 @@ class _$ContactRemovedFromFavoritesImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ContactRemovedFromFavoritesImpl &&
@@ -113,7 +113,7 @@ class _$ContactEmailSendImpl implements _ContactEmailSend {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ContactEmailSendImpl &&
@@ -274,7 +274,7 @@ class _$ContactStateImpl implements _ContactState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ContactStateImpl &&

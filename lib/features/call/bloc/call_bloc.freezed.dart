@@ -43,7 +43,7 @@ class _$_AppLifecycleStateChangedImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_AppLifecycleStateChangedImpl &&
@@ -91,7 +91,7 @@ class _$_ConnectivityResultChangedImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_ConnectivityResultChangedImpl &&
@@ -133,7 +133,7 @@ class _$_NavigatorMediaDevicesChangeImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_NavigatorMediaDevicesChangeImpl);
@@ -224,7 +224,7 @@ class _$SignalingClientEventConnectInitiatedImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SignalingClientEventConnectInitiatedImpl);
@@ -335,7 +335,7 @@ class _$SignalingClientEventDisconnectInitiatedImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SignalingClientEventDisconnectInitiatedImpl);
@@ -453,7 +453,7 @@ class _$SignalingClientEventDisconnectedImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SignalingClientEventDisconnectedImpl &&
@@ -611,7 +611,7 @@ class _$HandshakeSignalingEventStateImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$HandshakeSignalingEventStateImpl &&
@@ -895,7 +895,7 @@ class _$CallSignalingEventIncomingImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallSignalingEventIncomingImpl &&
@@ -1142,7 +1142,7 @@ class _$CallSignalingEventRingingImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallSignalingEventRingingImpl &&
@@ -1370,7 +1370,7 @@ class _$CallSignalingEventProgressImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallSignalingEventProgressImpl &&
@@ -1601,7 +1601,7 @@ class _$CallSignalingEventAcceptedImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallSignalingEventAcceptedImpl &&
@@ -1835,7 +1835,7 @@ class _$CallSignalingEventHangupImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallSignalingEventHangupImpl &&
@@ -2089,7 +2089,7 @@ class _$CallSignalingEventUpdatingImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallSignalingEventUpdatingImpl &&
@@ -2336,7 +2336,7 @@ class _$CallSignalingEventUpdatedImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallSignalingEventUpdatedImpl &&
@@ -2615,7 +2615,7 @@ class _$CallPushEventIncomingImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallPushEventIncomingImpl &&
@@ -2866,7 +2866,7 @@ class _$CallControlEventStartedImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallControlEventStartedImpl &&
@@ -3046,7 +3046,7 @@ class _$CallControlEventAnsweredImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallControlEventAnsweredImpl &&
@@ -3208,7 +3208,7 @@ class _$CallControlEventEndedImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallControlEventEndedImpl &&
@@ -3373,7 +3373,7 @@ class _$CallControlEventSetHeldImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallControlEventSetHeldImpl &&
@@ -3540,7 +3540,7 @@ class _$CallControlEventSetMutedImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallControlEventSetMutedImpl &&
@@ -3707,7 +3707,7 @@ class _$CallControlEventSentDTMFImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallControlEventSentDTMFImpl &&
@@ -3871,7 +3871,7 @@ class _$CallControlEventCameraSwitchedImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallControlEventCameraSwitchedImpl &&
@@ -4036,7 +4036,7 @@ class _$CallControlEventCameraEnabledImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallControlEventCameraEnabledImpl &&
@@ -4204,7 +4204,7 @@ class _$CallControlEventSpeakerEnabledImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallControlEventSpeakerEnabledImpl &&
@@ -4369,7 +4369,7 @@ class _$CallControlEventFailureApprovedImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallControlEventFailureApprovedImpl &&
@@ -4614,7 +4614,7 @@ class _$CallPerformEventStartedImpl extends _CallPerformEventStarted
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallPerformEventStartedImpl &&
@@ -4759,7 +4759,7 @@ class _$CallPerformEventAnsweredImpl extends _CallPerformEventAnswered
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallPerformEventAnsweredImpl &&
@@ -4894,7 +4894,7 @@ class _$CallPerformEventEndedImpl extends _CallPerformEventEnded
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallPerformEventEndedImpl &&
@@ -5032,7 +5032,7 @@ class _$CallPerformEventSetHeldImpl extends _CallPerformEventSetHeld
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallPerformEventSetHeldImpl &&
@@ -5172,7 +5172,7 @@ class _$CallPerformEventSetMutedImpl extends _CallPerformEventSetMuted
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallPerformEventSetMutedImpl &&
@@ -5312,7 +5312,7 @@ class _$CallPerformEventSentDTMFImpl extends _CallPerformEventSentDTMF
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallPerformEventSentDTMFImpl &&
@@ -5561,7 +5561,7 @@ class _$PeerConnectionEventSignalingStateChangedImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PeerConnectionEventSignalingStateChangedImpl &&
@@ -5738,7 +5738,7 @@ class _$PeerConnectionEventConnectionStateChangedImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PeerConnectionEventConnectionStateChangedImpl &&
@@ -5916,7 +5916,7 @@ class _$PeerConnectionEventIceGatheringStateChangedImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PeerConnectionEventIceGatheringStateChangedImpl &&
@@ -6094,7 +6094,7 @@ class _$PeerConnectionEventIceConnectionStateChangedImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PeerConnectionEventIceConnectionStateChangedImpl &&
@@ -6272,7 +6272,7 @@ class _$PeerConnectionEventIceCandidateIdentifiedImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PeerConnectionEventIceCandidateIdentifiedImpl &&
@@ -6449,7 +6449,7 @@ class _$PeerConnectionEventStreamAddedImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PeerConnectionEventStreamAddedImpl &&
@@ -6624,7 +6624,7 @@ class _$PeerConnectionEventStreamRemovedImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PeerConnectionEventStreamRemovedImpl &&
@@ -6834,7 +6834,7 @@ class _$CallScreenEventDidPushImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallScreenEventDidPushImpl);
@@ -6929,7 +6929,7 @@ class _$CallScreenEventDidPopImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallScreenEventDidPopImpl);
@@ -7259,7 +7259,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallStateImpl &&
@@ -7681,7 +7681,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ActiveCallImpl &&

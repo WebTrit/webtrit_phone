@@ -248,7 +248,7 @@ class _$SystemInfoImpl implements _SystemInfo {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SystemInfoImpl &&
@@ -404,7 +404,7 @@ class _$PostgresInfoImpl implements _PostgresInfo {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PostgresInfoImpl &&
@@ -598,7 +598,7 @@ class _$JanusInfoImpl implements _JanusInfo {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$JanusInfoImpl &&
@@ -762,7 +762,7 @@ class _$TransportsImpl implements _Transports {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$TransportsImpl &&
@@ -899,7 +899,7 @@ class _$WebsocketImpl implements _Websocket {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$WebsocketImpl &&
@@ -1050,7 +1050,7 @@ class _$PluginsImpl implements _Plugins {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PluginsImpl &&
@@ -1186,7 +1186,7 @@ class _$SipVersionImpl implements _SipVersion {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SipVersionImpl &&
@@ -1323,7 +1323,7 @@ class _$GorushInfoImpl implements _GorushInfo {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$GorushInfoImpl &&
@@ -1461,7 +1461,7 @@ class _$CoreInfoImpl implements _CoreInfo {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CoreInfoImpl &&
@@ -1668,7 +1668,7 @@ class _$AdapterInfoImpl implements _AdapterInfo {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AdapterInfoImpl &&

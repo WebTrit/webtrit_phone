@@ -188,7 +188,7 @@ class _$SessionOtpProvisionalImpl implements SessionOtpProvisional {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SessionOtpProvisionalImpl &&
@@ -371,7 +371,7 @@ class _$SessionTokenImpl implements SessionToken {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SessionTokenImpl &&
@@ -543,7 +543,7 @@ class _$SessionDataImpl implements SessionData {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SessionDataImpl &&

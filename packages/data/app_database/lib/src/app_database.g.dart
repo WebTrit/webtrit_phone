@@ -177,8 +177,8 @@ class ContactData extends DataClass implements Insertable<ContactData> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     {
-      final converter = $ContactsTableTable.$convertersourceType;
-      map['source_type'] = Variable<int>(converter.toSql(sourceType));
+      map['source_type'] = Variable<int>(
+          $ContactsTableTable.$convertersourceType.toSql(sourceType));
     }
     map['source_id'] = Variable<String>(sourceId);
     if (!nullToAbsent || firstName != null) {
@@ -384,9 +384,8 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
       map['id'] = Variable<int>(id.value);
     }
     if (sourceType.present) {
-      final converter = $ContactsTableTable.$convertersourceType;
-
-      map['source_type'] = Variable<int>(converter.toSql(sourceType.value));
+      map['source_type'] = Variable<int>(
+          $ContactsTableTable.$convertersourceType.toSql(sourceType.value));
     }
     if (sourceId.present) {
       map['source_id'] = Variable<String>(sourceId.value);
@@ -1248,8 +1247,8 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     {
-      final converter = $CallLogsTableTable.$converterdirection;
-      map['direction'] = Variable<int>(converter.toSql(direction));
+      map['direction'] = Variable<int>(
+          $CallLogsTableTable.$converterdirection.toSql(direction));
     }
     map['number'] = Variable<String>(number);
     map['video'] = Variable<bool>(video);
@@ -1430,9 +1429,8 @@ class CallLogDataCompanion extends UpdateCompanion<CallLogData> {
       map['id'] = Variable<int>(id.value);
     }
     if (direction.present) {
-      final converter = $CallLogsTableTable.$converterdirection;
-
-      map['direction'] = Variable<int>(converter.toSql(direction.value));
+      map['direction'] = Variable<int>(
+          $CallLogsTableTable.$converterdirection.toSql(direction.value));
     }
     if (number.present) {
       map['number'] = Variable<String>(number.value);

@@ -28,7 +28,7 @@ class _$AboutStartedImpl implements _AboutStarted {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType && other is _$AboutStartedImpl);
   }
@@ -231,7 +231,7 @@ class _$AboutStateImpl extends _AboutState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AboutStateImpl &&

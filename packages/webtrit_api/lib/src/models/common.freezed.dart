@@ -144,7 +144,7 @@ class _$NumbersImpl implements _Numbers {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$NumbersImpl &&
@@ -336,7 +336,7 @@ class _$BalanceImpl implements _Balance {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$BalanceImpl &&

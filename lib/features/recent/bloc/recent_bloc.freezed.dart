@@ -33,7 +33,7 @@ class _$RecentDeletedImpl implements _RecentDeleted {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$RecentDeletedImpl &&
@@ -161,7 +161,7 @@ class _$RecentStateImpl implements _RecentState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$RecentStateImpl &&

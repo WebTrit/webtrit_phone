@@ -33,7 +33,7 @@ class _$ContactsLocalTabStartedImpl implements _ContactsLocalTabStarted {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ContactsLocalTabStartedImpl &&
@@ -66,7 +66,7 @@ class _$ContactsLocalTabRefreshedImpl implements _ContactsLocalTabRefreshed {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ContactsLocalTabRefreshedImpl);

@@ -33,7 +33,7 @@ class _$ContactsSourceTypeChangedImpl implements _ContactsSourceTypeChanged {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ContactsSourceTypeChangedImpl &&
@@ -72,7 +72,7 @@ class _$ContactsSearchChangedImpl implements _ContactsSearchChanged {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ContactsSearchChangedImpl &&
@@ -110,7 +110,7 @@ class _$ContactsSearchSubmittedImpl implements _ContactsSearchSubmitted {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ContactsSearchSubmittedImpl &&
@@ -232,7 +232,7 @@ class _$ContactsStateImpl implements _ContactsState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ContactsStateImpl &&

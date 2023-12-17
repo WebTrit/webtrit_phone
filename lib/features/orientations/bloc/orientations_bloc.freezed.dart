@@ -33,7 +33,7 @@ class _$OrientationsChangedImpl implements _OrientationsChanged {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$OrientationsChangedImpl &&
@@ -143,7 +143,7 @@ class _$OrientationsStateImpl implements _OrientationsState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$OrientationsStateImpl &&

@@ -257,7 +257,7 @@ class _$ThemeSettingsImpl implements _ThemeSettings {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ThemeSettingsImpl &&
@@ -905,7 +905,7 @@ class _$ColorSchemeOverrideImpl implements _ColorSchemeOverride {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ColorSchemeOverrideImpl &&
