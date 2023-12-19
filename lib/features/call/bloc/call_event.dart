@@ -155,7 +155,9 @@ class CallControlEvent with _$CallControlEvent implements CallEvent {
 
   const factory CallControlEvent.failureApproved(UuidValue uuid) = _CallControlEventFailureApproved;
 
-  const factory CallControlEvent.transferred() = _CallControlEventTransferred;
+  const factory CallControlEvent.unattendedTransferred() = _CallControlEventUnattendedTransferred;
+
+  const factory CallControlEvent.attendedTransferred() = _CallControlEventAttendedTransferred;
 }
 
 mixin CallControlEventStartedMixin {

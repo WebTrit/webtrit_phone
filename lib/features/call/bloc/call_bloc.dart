@@ -746,7 +746,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       cameraEnabled: (event) => _onCallControlEventCameraEnabled(event, emit),
       speakerEnabled: (event) => _onCallControlEventSpeakerEnabled(event, emit),
       failureApproved: (event) => _onCallControlEventFailureApproved(event, emit),
-      transferred: (event) => _onCallControlEventTransferred(event, emit),
+      unattendedTransferred: (event) => _onCallControlEventUnattendedTransferred(event, emit),
+      attendedTransferred: (event) => _onCallControlEventAttendedTransferred(event, emit),
     );
   }
 
@@ -876,8 +877,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }));
   }
 
-  Future<void> _onCallControlEventTransferred(
-    _CallControlEventTransferred event,
+  Future<void> _onCallControlEventUnattendedTransferred(
+    _CallControlEventUnattendedTransferred event,
+    Emitter<CallState> emit,
+  ) async {}
+
+  Future<void> _onCallControlEventAttendedTransferred(
+    _CallControlEventAttendedTransferred event,
     Emitter<CallState> emit,
   ) async {
     final activeCall0 = state.activeCalls[0];

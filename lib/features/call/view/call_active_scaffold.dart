@@ -174,7 +174,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       },
                       onTransferPressed: activeCalls.length == 2
                           ? () {
-                              context.read<CallBloc>().add(CallControlEvent.transferred());
+                              context.read<CallBloc>().add(const CallControlEvent.attendedTransferred());
                             }
                           : null,
                       heldValue: activeCall.held,
