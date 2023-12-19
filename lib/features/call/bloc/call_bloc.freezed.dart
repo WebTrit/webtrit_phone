@@ -2730,7 +2730,7 @@ mixin _$CallControlEvent {
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
     required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
-    required TResult Function() unattendedTransferred,
+    required TResult Function(String number) unattendedTransferred,
     required TResult Function() attendedTransferred,
   }) =>
       throw _privateConstructorUsedError;
@@ -2748,7 +2748,7 @@ mixin _$CallControlEvent {
     TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult? Function(UuidValue uuid)? failureApproved,
-    TResult? Function()? unattendedTransferred,
+    TResult? Function(String number)? unattendedTransferred,
     TResult? Function()? attendedTransferred,
   }) =>
       throw _privateConstructorUsedError;
@@ -2766,7 +2766,7 @@ mixin _$CallControlEvent {
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
-    TResult Function()? unattendedTransferred,
+    TResult Function(String number)? unattendedTransferred,
     TResult Function()? attendedTransferred,
     required TResult orElse(),
   }) =>
@@ -2916,7 +2916,7 @@ class _$CallControlEventStartedImpl
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
     required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
-    required TResult Function() unattendedTransferred,
+    required TResult Function(String number) unattendedTransferred,
     required TResult Function() attendedTransferred,
   }) {
     return started(line, generic, number, email, displayName, video);
@@ -2937,7 +2937,7 @@ class _$CallControlEventStartedImpl
     TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult? Function(UuidValue uuid)? failureApproved,
-    TResult? Function()? unattendedTransferred,
+    TResult? Function(String number)? unattendedTransferred,
     TResult? Function()? attendedTransferred,
   }) {
     return started?.call(line, generic, number, email, displayName, video);
@@ -2958,7 +2958,7 @@ class _$CallControlEventStartedImpl
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
-    TResult Function()? unattendedTransferred,
+    TResult Function(String number)? unattendedTransferred,
     TResult Function()? attendedTransferred,
     required TResult orElse(),
   }) {
@@ -3107,7 +3107,7 @@ class _$CallControlEventAnsweredImpl
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
     required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
-    required TResult Function() unattendedTransferred,
+    required TResult Function(String number) unattendedTransferred,
     required TResult Function() attendedTransferred,
   }) {
     return answered(uuid);
@@ -3128,7 +3128,7 @@ class _$CallControlEventAnsweredImpl
     TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult? Function(UuidValue uuid)? failureApproved,
-    TResult? Function()? unattendedTransferred,
+    TResult? Function(String number)? unattendedTransferred,
     TResult? Function()? attendedTransferred,
   }) {
     return answered?.call(uuid);
@@ -3149,7 +3149,7 @@ class _$CallControlEventAnsweredImpl
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
-    TResult Function()? unattendedTransferred,
+    TResult Function(String number)? unattendedTransferred,
     TResult Function()? attendedTransferred,
     required TResult orElse(),
   }) {
@@ -3287,7 +3287,7 @@ class _$CallControlEventEndedImpl
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
     required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
-    required TResult Function() unattendedTransferred,
+    required TResult Function(String number) unattendedTransferred,
     required TResult Function() attendedTransferred,
   }) {
     return ended(uuid);
@@ -3308,7 +3308,7 @@ class _$CallControlEventEndedImpl
     TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult? Function(UuidValue uuid)? failureApproved,
-    TResult? Function()? unattendedTransferred,
+    TResult? Function(String number)? unattendedTransferred,
     TResult? Function()? attendedTransferred,
   }) {
     return ended?.call(uuid);
@@ -3329,7 +3329,7 @@ class _$CallControlEventEndedImpl
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
-    TResult Function()? unattendedTransferred,
+    TResult Function(String number)? unattendedTransferred,
     TResult Function()? attendedTransferred,
     required TResult orElse(),
   }) {
@@ -3471,7 +3471,7 @@ class _$CallControlEventSetHeldImpl
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
     required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
-    required TResult Function() unattendedTransferred,
+    required TResult Function(String number) unattendedTransferred,
     required TResult Function() attendedTransferred,
   }) {
     return setHeld(uuid, onHold);
@@ -3492,7 +3492,7 @@ class _$CallControlEventSetHeldImpl
     TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult? Function(UuidValue uuid)? failureApproved,
-    TResult? Function()? unattendedTransferred,
+    TResult? Function(String number)? unattendedTransferred,
     TResult? Function()? attendedTransferred,
   }) {
     return setHeld?.call(uuid, onHold);
@@ -3513,7 +3513,7 @@ class _$CallControlEventSetHeldImpl
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
-    TResult Function()? unattendedTransferred,
+    TResult Function(String number)? unattendedTransferred,
     TResult Function()? attendedTransferred,
     required TResult orElse(),
   }) {
@@ -3656,7 +3656,7 @@ class _$CallControlEventSetMutedImpl
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
     required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
-    required TResult Function() unattendedTransferred,
+    required TResult Function(String number) unattendedTransferred,
     required TResult Function() attendedTransferred,
   }) {
     return setMuted(uuid, muted);
@@ -3677,7 +3677,7 @@ class _$CallControlEventSetMutedImpl
     TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult? Function(UuidValue uuid)? failureApproved,
-    TResult? Function()? unattendedTransferred,
+    TResult? Function(String number)? unattendedTransferred,
     TResult? Function()? attendedTransferred,
   }) {
     return setMuted?.call(uuid, muted);
@@ -3698,7 +3698,7 @@ class _$CallControlEventSetMutedImpl
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
-    TResult Function()? unattendedTransferred,
+    TResult Function(String number)? unattendedTransferred,
     TResult Function()? attendedTransferred,
     required TResult orElse(),
   }) {
@@ -3841,7 +3841,7 @@ class _$CallControlEventSentDTMFImpl
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
     required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
-    required TResult Function() unattendedTransferred,
+    required TResult Function(String number) unattendedTransferred,
     required TResult Function() attendedTransferred,
   }) {
     return sentDTMF(uuid, key);
@@ -3862,7 +3862,7 @@ class _$CallControlEventSentDTMFImpl
     TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult? Function(UuidValue uuid)? failureApproved,
-    TResult? Function()? unattendedTransferred,
+    TResult? Function(String number)? unattendedTransferred,
     TResult? Function()? attendedTransferred,
   }) {
     return sentDTMF?.call(uuid, key);
@@ -3883,7 +3883,7 @@ class _$CallControlEventSentDTMFImpl
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
-    TResult Function()? unattendedTransferred,
+    TResult Function(String number)? unattendedTransferred,
     TResult Function()? attendedTransferred,
     required TResult orElse(),
   }) {
@@ -4022,7 +4022,7 @@ class _$CallControlEventCameraSwitchedImpl
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
     required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
-    required TResult Function() unattendedTransferred,
+    required TResult Function(String number) unattendedTransferred,
     required TResult Function() attendedTransferred,
   }) {
     return cameraSwitched(uuid);
@@ -4043,7 +4043,7 @@ class _$CallControlEventCameraSwitchedImpl
     TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult? Function(UuidValue uuid)? failureApproved,
-    TResult? Function()? unattendedTransferred,
+    TResult? Function(String number)? unattendedTransferred,
     TResult? Function()? attendedTransferred,
   }) {
     return cameraSwitched?.call(uuid);
@@ -4064,7 +4064,7 @@ class _$CallControlEventCameraSwitchedImpl
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
-    TResult Function()? unattendedTransferred,
+    TResult Function(String number)? unattendedTransferred,
     TResult Function()? attendedTransferred,
     required TResult orElse(),
   }) {
@@ -4206,7 +4206,7 @@ class _$CallControlEventCameraEnabledImpl
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
     required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
-    required TResult Function() unattendedTransferred,
+    required TResult Function(String number) unattendedTransferred,
     required TResult Function() attendedTransferred,
   }) {
     return cameraEnabled(uuid, enabled);
@@ -4227,7 +4227,7 @@ class _$CallControlEventCameraEnabledImpl
     TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult? Function(UuidValue uuid)? failureApproved,
-    TResult? Function()? unattendedTransferred,
+    TResult? Function(String number)? unattendedTransferred,
     TResult? Function()? attendedTransferred,
   }) {
     return cameraEnabled?.call(uuid, enabled);
@@ -4248,7 +4248,7 @@ class _$CallControlEventCameraEnabledImpl
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
-    TResult Function()? unattendedTransferred,
+    TResult Function(String number)? unattendedTransferred,
     TResult Function()? attendedTransferred,
     required TResult orElse(),
   }) {
@@ -4392,7 +4392,7 @@ class _$CallControlEventSpeakerEnabledImpl
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
     required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
-    required TResult Function() unattendedTransferred,
+    required TResult Function(String number) unattendedTransferred,
     required TResult Function() attendedTransferred,
   }) {
     return speakerEnabled(uuid, enabled);
@@ -4413,7 +4413,7 @@ class _$CallControlEventSpeakerEnabledImpl
     TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult? Function(UuidValue uuid)? failureApproved,
-    TResult? Function()? unattendedTransferred,
+    TResult? Function(String number)? unattendedTransferred,
     TResult? Function()? attendedTransferred,
   }) {
     return speakerEnabled?.call(uuid, enabled);
@@ -4434,7 +4434,7 @@ class _$CallControlEventSpeakerEnabledImpl
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
-    TResult Function()? unattendedTransferred,
+    TResult Function(String number)? unattendedTransferred,
     TResult Function()? attendedTransferred,
     required TResult orElse(),
   }) {
@@ -4574,7 +4574,7 @@ class _$CallControlEventFailureApprovedImpl
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
     required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
-    required TResult Function() unattendedTransferred,
+    required TResult Function(String number) unattendedTransferred,
     required TResult Function() attendedTransferred,
   }) {
     return failureApproved(uuid);
@@ -4595,7 +4595,7 @@ class _$CallControlEventFailureApprovedImpl
     TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult? Function(UuidValue uuid)? failureApproved,
-    TResult? Function()? unattendedTransferred,
+    TResult? Function(String number)? unattendedTransferred,
     TResult? Function()? attendedTransferred,
   }) {
     return failureApproved?.call(uuid);
@@ -4616,7 +4616,7 @@ class _$CallControlEventFailureApprovedImpl
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
-    TResult Function()? unattendedTransferred,
+    TResult Function(String number)? unattendedTransferred,
     TResult Function()? attendedTransferred,
     required TResult orElse(),
   }) {
@@ -4710,29 +4710,35 @@ abstract class _CallControlEventFailureApproved implements CallControlEvent {
 class _$CallControlEventUnattendedTransferredImpl
     with DiagnosticableTreeMixin
     implements _CallControlEventUnattendedTransferred {
-  const _$CallControlEventUnattendedTransferredImpl();
+  const _$CallControlEventUnattendedTransferredImpl(this.number);
+
+  @override
+  final String number;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.unattendedTransferred()';
+    return 'CallControlEvent.unattendedTransferred(number: $number)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(
-        DiagnosticsProperty('type', 'CallControlEvent.unattendedTransferred'));
+    properties
+      ..add(
+          DiagnosticsProperty('type', 'CallControlEvent.unattendedTransferred'))
+      ..add(DiagnosticsProperty('number', number));
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallControlEventUnattendedTransferredImpl);
+            other is _$CallControlEventUnattendedTransferredImpl &&
+            (identical(other.number, number) || other.number == number));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, number);
 
   @override
   @optionalTypeArgs
@@ -4749,10 +4755,10 @@ class _$CallControlEventUnattendedTransferredImpl
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
     required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
-    required TResult Function() unattendedTransferred,
+    required TResult Function(String number) unattendedTransferred,
     required TResult Function() attendedTransferred,
   }) {
-    return unattendedTransferred();
+    return unattendedTransferred(number);
   }
 
   @override
@@ -4770,10 +4776,10 @@ class _$CallControlEventUnattendedTransferredImpl
     TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult? Function(UuidValue uuid)? failureApproved,
-    TResult? Function()? unattendedTransferred,
+    TResult? Function(String number)? unattendedTransferred,
     TResult? Function()? attendedTransferred,
   }) {
-    return unattendedTransferred?.call();
+    return unattendedTransferred?.call(number);
   }
 
   @override
@@ -4791,12 +4797,12 @@ class _$CallControlEventUnattendedTransferredImpl
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
-    TResult Function()? unattendedTransferred,
+    TResult Function(String number)? unattendedTransferred,
     TResult Function()? attendedTransferred,
     required TResult orElse(),
   }) {
     if (unattendedTransferred != null) {
-      return unattendedTransferred();
+      return unattendedTransferred(number);
     }
     return orElse();
   }
@@ -4875,8 +4881,10 @@ class _$CallControlEventUnattendedTransferredImpl
 
 abstract class _CallControlEventUnattendedTransferred
     implements CallControlEvent {
-  const factory _CallControlEventUnattendedTransferred() =
+  const factory _CallControlEventUnattendedTransferred(final String number) =
       _$CallControlEventUnattendedTransferredImpl;
+
+  String get number;
 }
 
 /// @nodoc
@@ -4923,7 +4931,7 @@ class _$CallControlEventAttendedTransferredImpl
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
     required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
-    required TResult Function() unattendedTransferred,
+    required TResult Function(String number) unattendedTransferred,
     required TResult Function() attendedTransferred,
   }) {
     return attendedTransferred();
@@ -4944,7 +4952,7 @@ class _$CallControlEventAttendedTransferredImpl
     TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult? Function(UuidValue uuid)? failureApproved,
-    TResult? Function()? unattendedTransferred,
+    TResult? Function(String number)? unattendedTransferred,
     TResult? Function()? attendedTransferred,
   }) {
     return attendedTransferred?.call();
@@ -4965,7 +4973,7 @@ class _$CallControlEventAttendedTransferredImpl
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
-    TResult Function()? unattendedTransferred,
+    TResult Function(String number)? unattendedTransferred,
     TResult Function()? attendedTransferred,
     required TResult orElse(),
   }) {

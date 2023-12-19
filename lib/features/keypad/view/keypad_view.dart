@@ -72,6 +72,7 @@ class KeypadViewState extends State<KeypadView> {
             return BlocBuilder<KeypadCubit, KeypadState>(
               builder: (context, state) {
                 return Actionpad(
+                  transfer: state.transfer,
                   video: state.video,
                   onCallPressed: value.text.isEmpty ? null : _onCallPressed,
                   onCallLongPress: _onCallLongPress,

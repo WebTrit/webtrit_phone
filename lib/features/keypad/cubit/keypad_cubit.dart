@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -8,15 +10,35 @@ part 'keypad_state.dart';
 class KeypadCubit extends Cubit<KeypadState> {
   KeypadCubit({
     required this.callBloc,
-  }) : super(const KeypadState());
+  }) : super(const KeypadState()) {
+    callBlocStreamSubscription = callBloc.stream.listen((state) {
+      if (state.activeCalls.length == 1 && !state.activeCalls[0].held) {
+        emit(const KeypadState(transfer: true));
+      } else {
+        emit(const KeypadState(transfer: false));
+      }
+    });
+  }
 
   final CallBloc callBloc;
+  StreamSubscription? callBlocStreamSubscription;
+
+  @override
+  Future<void> close() async {
+    await callBlocStreamSubscription?.cancel();
+
+    await super.close();
+  }
 
   void call(String number) {
-    callBloc.add(CallControlEvent.started(
-      number: number,
-      video: state.video,
-    ));
+    if (state.transfer) {
+      callBloc.add(CallControlEvent.unattendedTransferred(number));
+    } else {
+      callBloc.add(CallControlEvent.started(
+        number: number,
+        video: state.video,
+      ));
+    }
   }
 
   void callTypeSwitch() {

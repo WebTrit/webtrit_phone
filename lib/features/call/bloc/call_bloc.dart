@@ -880,7 +880,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Future<void> _onCallControlEventUnattendedTransferred(
     _CallControlEventUnattendedTransferred event,
     Emitter<CallState> emit,
-  ) async {}
+  ) async {
+    final activeCall = state.activeCalls.current;
+
+    await _signalingClient?.execute(TransferRequest(
+      transaction: WebtritSignalingClient.generateTransactionId(),
+      line: activeCall.line,
+      callId: activeCall.callId.toString(),
+      number: event.number,
+    ));
+  }
 
   Future<void> _onCallControlEventAttendedTransferred(
     _CallControlEventAttendedTransferred event,
