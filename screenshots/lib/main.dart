@@ -85,11 +85,17 @@ class ScreenshotsApp extends StatelessWidget {
     ),
     ScreenshotApp(
       appBloc: appBloc,
-      child: const CallScreenScreenshot(false),
+      child: CallScreenScreenshot(
+        false,
+        appPreferences: AppPreferences(),
+      ),
     ),
     ScreenshotApp(
       appBloc: appBloc,
-      child: const CallScreenScreenshot(true),
+      child: CallScreenScreenshot(
+        true,
+        appPreferences: AppPreferences(),
+      ),
     ),
   ];
 

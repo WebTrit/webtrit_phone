@@ -127,13 +127,13 @@ void main() async {
     takeScreenshotTestWidgets('call_screen__audio', () {
       return ScreenshotApp(
         appBloc: appBloc,
-        child: const CallScreenScreenshot(false),
+        child: CallScreenScreenshot(false, appPreferences: AppPreferences()),
       );
     });
     takeScreenshotTestWidgets('call_screen__video', () {
       return ScreenshotApp(
         appBloc: appBloc,
-        child: const CallScreenScreenshot(true),
+        child: CallScreenScreenshot(true, appPreferences: AppPreferences()),
       );
     });
   });

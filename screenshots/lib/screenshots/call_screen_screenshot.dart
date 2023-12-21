@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webtrit_phone/data/data.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 
@@ -13,11 +14,14 @@ class CallScreenScreenshot extends StatefulWidget {
     super.key,
     this.localePlaceholderImageUrl = 'https://dummyimage.com/600x800/00e326/fff.jpg&text=locale',
     this.remotePlaceholderImageUrl = 'https://dummyimage.com/600x800/0048e3/fff.jpg&text=remote',
+    required this.appPreferences,
   });
 
   final bool video;
   final String localePlaceholderImageUrl;
   final String remotePlaceholderImageUrl;
+
+  final AppPreferences appPreferences;
 
   @override
   State<CallScreenScreenshot> createState() => _CallScreenScreenshotState();
@@ -52,6 +56,7 @@ class _CallScreenScreenshotState extends State<CallScreenScreenshot> {
                   widget.remotePlaceholderImageUrl,
                   fit: BoxFit.cover,
                 ),
+                appPreferences: widget.appPreferences,
               ),
             );
           },
