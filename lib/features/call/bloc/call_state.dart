@@ -74,6 +74,8 @@ class CallState with _$CallState {
     return null;
   }
 
+  bool get hasTransfer => activeCalls.length == 1 && !activeCalls[0].held;
+
   FutureOr<T>? performOnActiveCall<T>(UuidValue uuid, FutureOr<T>? Function(ActiveCall element) perform) {
     for (var activeCall in activeCalls) {
       if (activeCall.callId.uuid == uuid) {

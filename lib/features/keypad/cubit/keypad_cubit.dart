@@ -12,7 +12,7 @@ class KeypadCubit extends Cubit<KeypadState> {
     required this.callBloc,
   }) : super(const KeypadState()) {
     callBlocStreamSubscription = callBloc.stream.listen((state) {
-      if (state.activeCalls.length == 1 && !state.activeCalls[0].held) {
+      if (state.hasTransfer) {
         emit(const KeypadState(transfer: true));
       } else {
         emit(const KeypadState(transfer: false));
