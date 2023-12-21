@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:go_router/go_router.dart';
+
+import 'package:webtrit_phone/app/routes.dart';
+import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/features/main/models/models.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -15,12 +20,14 @@ class CallActiveScaffold extends StatefulWidget {
     required this.activeCalls,
     required this.localePlaceholderBuilder,
     required this.remotePlaceholderBuilder,
+    required this.appPreferences,
   });
 
   final bool? speaker;
   final List<ActiveCall> activeCalls;
   final WidgetBuilder? localePlaceholderBuilder;
   final WidgetBuilder? remotePlaceholderBuilder;
+  final AppPreferences appPreferences;
 
   @override
   CallActiveScaffoldState createState() => CallActiveScaffoldState();
@@ -176,7 +183,10 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                           ? () {
                               context.read<CallBloc>().add(const CallControlEvent.attendedTransferred());
                             }
-                          : null,
+                          : () {
+                              widget.appPreferences.setActiveMainFlavor(MainFlavor.keypad);
+                              GoRouter.of(context).goNamed(AppRoute.main);
+                            },
                       heldValue: activeCall.held,
                       onHeldChanged: (bool value) {
                         context.read<CallBloc>().add(CallControlEvent.setHeld(activeCall.callId.uuid, value));

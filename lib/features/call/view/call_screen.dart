@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/routes.dart';
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -16,10 +17,13 @@ class CallScreen extends StatefulWidget {
     super.key,
     this.localePlaceholderBuilder,
     this.remotePlaceholderBuilder,
+    required this.appPreferences,
   });
 
   final WidgetBuilder? localePlaceholderBuilder;
   final WidgetBuilder? remotePlaceholderBuilder;
+
+  final AppPreferences appPreferences;
 
   @override
   State<CallScreen> createState() => _CallScreenState();
@@ -75,6 +79,7 @@ class _CallScreenState extends State<CallScreen> with RouteAware {
             activeCalls: state.activeCalls,
             localePlaceholderBuilder: widget.localePlaceholderBuilder,
             remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
+            appPreferences: widget.appPreferences,
           );
         } else {
           return const CallInitScaffold();
