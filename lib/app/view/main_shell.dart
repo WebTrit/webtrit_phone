@@ -139,6 +139,7 @@ class _MainShellState extends State<MainShell> {
               create: (context) {
                 return RecentsBloc(
                   recentsRepository: context.read<RecentsRepository>(),
+                  callBloc: context.read<CallBloc>(),
                   appPreferences: widget.appPreferences,
                 )..add(const RecentsStarted());
               },

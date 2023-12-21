@@ -134,10 +134,49 @@ abstract class _ContactEmailSend implements ContactEmailSend {
 }
 
 /// @nodoc
+mixin _$ManageContactTransfer {
+  bool get enabled => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+
+class _$ManageContactTransferImpl implements _ManageContactTransfer {
+  const _$ManageContactTransferImpl(this.enabled);
+
+  @override
+  final bool enabled;
+
+  @override
+  String toString() {
+    return 'ManageContactTransfer(enabled: $enabled)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ManageContactTransferImpl &&
+            (identical(other.enabled, enabled) || other.enabled == enabled));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, enabled);
+}
+
+abstract class _ManageContactTransfer implements ManageContactTransfer {
+  const factory _ManageContactTransfer(final bool enabled) =
+      _$ManageContactTransferImpl;
+
+  @override
+  bool get enabled;
+}
+
+/// @nodoc
 mixin _$ContactState {
   Contact? get contact => throw _privateConstructorUsedError;
   List<ContactPhone>? get contactPhones => throw _privateConstructorUsedError;
   List<ContactEmail>? get contactEmails => throw _privateConstructorUsedError;
+  bool get transfer => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ContactStateCopyWith<ContactState> get copyWith =>
@@ -153,7 +192,8 @@ abstract class $ContactStateCopyWith<$Res> {
   $Res call(
       {Contact? contact,
       List<ContactPhone>? contactPhones,
-      List<ContactEmail>? contactEmails});
+      List<ContactEmail>? contactEmails,
+      bool transfer});
 }
 
 /// @nodoc
@@ -172,6 +212,7 @@ class _$ContactStateCopyWithImpl<$Res, $Val extends ContactState>
     Object? contact = freezed,
     Object? contactPhones = freezed,
     Object? contactEmails = freezed,
+    Object? transfer = null,
   }) {
     return _then(_value.copyWith(
       contact: freezed == contact
@@ -186,6 +227,10 @@ class _$ContactStateCopyWithImpl<$Res, $Val extends ContactState>
           ? _value.contactEmails
           : contactEmails // ignore: cast_nullable_to_non_nullable
               as List<ContactEmail>?,
+      transfer: null == transfer
+          ? _value.transfer
+          : transfer // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -201,7 +246,8 @@ abstract class _$$ContactStateImplCopyWith<$Res>
   $Res call(
       {Contact? contact,
       List<ContactPhone>? contactPhones,
-      List<ContactEmail>? contactEmails});
+      List<ContactEmail>? contactEmails,
+      bool transfer});
 }
 
 /// @nodoc
@@ -218,6 +264,7 @@ class __$$ContactStateImplCopyWithImpl<$Res>
     Object? contact = freezed,
     Object? contactPhones = freezed,
     Object? contactEmails = freezed,
+    Object? transfer = null,
   }) {
     return _then(_$ContactStateImpl(
       contact: freezed == contact
@@ -232,6 +279,10 @@ class __$$ContactStateImplCopyWithImpl<$Res>
           ? _value._contactEmails
           : contactEmails // ignore: cast_nullable_to_non_nullable
               as List<ContactEmail>?,
+      transfer: null == transfer
+          ? _value.transfer
+          : transfer // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -242,7 +293,8 @@ class _$ContactStateImpl implements _ContactState {
   const _$ContactStateImpl(
       {this.contact,
       final List<ContactPhone>? contactPhones,
-      final List<ContactEmail>? contactEmails})
+      final List<ContactEmail>? contactEmails,
+      this.transfer = false})
       : _contactPhones = contactPhones,
         _contactEmails = contactEmails;
 
@@ -269,8 +321,12 @@ class _$ContactStateImpl implements _ContactState {
   }
 
   @override
+  @JsonKey()
+  final bool transfer;
+
+  @override
   String toString() {
-    return 'ContactState(contact: $contact, contactPhones: $contactPhones, contactEmails: $contactEmails)';
+    return 'ContactState(contact: $contact, contactPhones: $contactPhones, contactEmails: $contactEmails, transfer: $transfer)';
   }
 
   @override
@@ -282,7 +338,9 @@ class _$ContactStateImpl implements _ContactState {
             const DeepCollectionEquality()
                 .equals(other._contactPhones, _contactPhones) &&
             const DeepCollectionEquality()
-                .equals(other._contactEmails, _contactEmails));
+                .equals(other._contactEmails, _contactEmails) &&
+            (identical(other.transfer, transfer) ||
+                other.transfer == transfer));
   }
 
   @override
@@ -290,7 +348,8 @@ class _$ContactStateImpl implements _ContactState {
       runtimeType,
       contact,
       const DeepCollectionEquality().hash(_contactPhones),
-      const DeepCollectionEquality().hash(_contactEmails));
+      const DeepCollectionEquality().hash(_contactEmails),
+      transfer);
 
   @JsonKey(ignore: true)
   @override
@@ -303,7 +362,8 @@ abstract class _ContactState implements ContactState {
   const factory _ContactState(
       {final Contact? contact,
       final List<ContactPhone>? contactPhones,
-      final List<ContactEmail>? contactEmails}) = _$ContactStateImpl;
+      final List<ContactEmail>? contactEmails,
+      final bool transfer}) = _$ContactStateImpl;
 
   @override
   Contact? get contact;
@@ -311,6 +371,8 @@ abstract class _ContactState implements ContactState {
   List<ContactPhone>? get contactPhones;
   @override
   List<ContactEmail>? get contactEmails;
+  @override
+  bool get transfer;
   @override
   @JsonKey(ignore: true)
   _$$ContactStateImplCopyWith<_$ContactStateImpl> get copyWith =>

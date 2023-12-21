@@ -111,25 +111,16 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                       });
                     },
                     onTap: () {
-                      final callBloc = context.read<CallBloc>();
-                      callBloc.add(CallControlEvent.started(
-                        number: recent.number,
-                        displayName: recent.name,
-                        video: recent.video,
-                      ));
+                      call(context, recent.number, state.transfer, recent.video);
                     },
                     onLongPress: () {
-                      final callBloc = context.read<CallBloc>();
-                      callBloc.add(CallControlEvent.started(
-                        number: recent.number,
-                        displayName: recent.name,
-                        video: !recent.video,
-                      ));
+                      call(context, recent.number, state.transfer, !recent.video);
                     },
                     onDeleted: (recent) {
                       context.showSnackBar(context.l10n.recents_snackBar_deleted(recent.name));
                       context.read<RecentsBloc>().add(RecentsDeleted(recent));
                     },
+                    transfer: state.transfer,
                   );
                 },
               );
@@ -138,5 +129,18 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
         },
       ),
     );
+  }
+
+  void call(BuildContext context, String number, bool isTransfer, bool isVideo) {
+    final callBloc = context.read<CallBloc>();
+
+    if (isTransfer) {
+      callBloc.add(CallControlEvent.unattendedTransferred(number));
+    } else {
+      callBloc.add(CallControlEvent.started(
+        number: number,
+        video: isVideo,
+      ));
+    }
   }
 }

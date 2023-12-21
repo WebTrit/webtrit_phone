@@ -10,7 +10,7 @@ part 'keypad_state.dart';
 class KeypadCubit extends Cubit<KeypadState> {
   KeypadCubit({
     required this.callBloc,
-  }) : super(const KeypadState()) {
+  }) : super(KeypadState(transfer: callBloc.state.hasTransfer)) {
     callBlocStreamSubscription = callBloc.stream.listen((state) {
       if (state.hasTransfer) {
         emit(const KeypadState(transfer: true));

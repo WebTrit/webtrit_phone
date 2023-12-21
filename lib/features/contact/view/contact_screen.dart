@@ -51,6 +51,7 @@ class ContactScreen extends StatelessWidget {
                     number: contactPhone.number,
                     label: contactPhone.label,
                     favorite: contactPhone.favorite,
+                    transfer: state.transfer,
                     onFavoriteChanged: (favorite) {
                       if (favorite) {
                         context.read<ContactBloc>().add(ContactAddedToFavorites(contactPhone));
@@ -59,21 +60,11 @@ class ContactScreen extends StatelessWidget {
                       }
                     },
                     onAudioPressed: () {
-                      final callBloc = context.read<CallBloc>();
-                      callBloc.add(CallControlEvent.started(
-                        number: contactPhone.number,
-                        displayName: contact.name,
-                        video: false,
-                      ));
+                      call(context, contactPhone.number, state.transfer, false);
                       context.pop();
                     },
                     onVideoPressed: () {
-                      final callBloc = context.read<CallBloc>();
-                      callBloc.add(CallControlEvent.started(
-                        number: contactPhone.number,
-                        displayName: contact.name,
-                        video: true,
-                      ));
+                      call(context, contactPhone.number, state.transfer, true);
                       context.pop();
                     },
                   ),
@@ -91,5 +82,18 @@ class ContactScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  void call(BuildContext context, String number, bool isTransfer, bool isVideo) {
+    final callBloc = context.read<CallBloc>();
+
+    if (isTransfer) {
+      callBloc.add(CallControlEvent.unattendedTransferred(number));
+    } else {
+      callBloc.add(CallControlEvent.started(
+        number: number,
+        video: isVideo,
+      ));
+    }
   }
 }

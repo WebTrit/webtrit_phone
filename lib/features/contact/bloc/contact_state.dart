@@ -6,5 +6,6 @@ class ContactState with _$ContactState {
     Contact? contact,
     List<ContactPhone>? contactPhones,
     List<ContactEmail>? contactEmails,
+    @Default(false) bool transfer,
   }) = _ContactState;
 }

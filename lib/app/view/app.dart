@@ -223,6 +223,7 @@ class _AppState extends State<App> {
                                 create: (context) {
                                   return ContactBloc(
                                     int.parse(state.pathParameters[contactIdPathParameterName]!),
+                                    callBloc: context.read<CallBloc>(),
                                     contactsRepository: context.read<ContactsRepository>(),
                                   )..add(const ContactStarted());
                                 },
@@ -306,6 +307,7 @@ class _AppState extends State<App> {
                                 create: (context) {
                                   return ContactBloc(
                                     int.parse(state.pathParameters[contactIdPathParameterName]!),
+                                    callBloc: context.read<CallBloc>(),
                                     contactsRepository: context.read<ContactsRepository>(),
                                   )..add(const ContactStarted());
                                 },

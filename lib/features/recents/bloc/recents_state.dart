@@ -7,6 +7,7 @@ class RecentsState with _$RecentsState {
   const factory RecentsState({
     List<Recent>? recents,
     required RecentsVisibilityFilter filter,
+    @Default(false) bool transfer,
   }) = _RecentsState;
 
   List<Recent>? get recentsFiltered {

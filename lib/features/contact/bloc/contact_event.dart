@@ -22,3 +22,8 @@ class ContactRemovedFromFavorites with _$ContactRemovedFromFavorites implements 
 class ContactEmailSend with _$ContactEmailSend implements ContactEvent {
   const factory ContactEmailSend(ContactEmail contactEmail) = _ContactEmailSend;
 }
+
+@Freezed(copyWith: false)
+class ManageContactTransfer with _$ManageContactTransfer implements ContactEvent {
+  const factory ManageContactTransfer(bool enabled) = _ManageContactTransfer;
+}

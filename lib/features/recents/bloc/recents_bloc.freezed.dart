@@ -90,9 +90,48 @@ abstract class _RecentsDeleted implements RecentsDeleted {
 }
 
 /// @nodoc
+mixin _$ManageRecentTransfer {
+  bool get enabled => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+
+class _$ManageRecentTransferImpl implements _ManageRecentTransfer {
+  const _$ManageRecentTransferImpl(this.enabled);
+
+  @override
+  final bool enabled;
+
+  @override
+  String toString() {
+    return 'ManageRecentTransfer(enabled: $enabled)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ManageRecentTransferImpl &&
+            (identical(other.enabled, enabled) || other.enabled == enabled));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, enabled);
+}
+
+abstract class _ManageRecentTransfer implements ManageRecentTransfer {
+  const factory _ManageRecentTransfer(final bool enabled) =
+      _$ManageRecentTransferImpl;
+
+  @override
+  bool get enabled;
+}
+
+/// @nodoc
 mixin _$RecentsState {
   List<Recent>? get recents => throw _privateConstructorUsedError;
   RecentsVisibilityFilter get filter => throw _privateConstructorUsedError;
+  bool get transfer => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $RecentsStateCopyWith<RecentsState> get copyWith =>
@@ -105,7 +144,8 @@ abstract class $RecentsStateCopyWith<$Res> {
           RecentsState value, $Res Function(RecentsState) then) =
       _$RecentsStateCopyWithImpl<$Res, RecentsState>;
   @useResult
-  $Res call({List<Recent>? recents, RecentsVisibilityFilter filter});
+  $Res call(
+      {List<Recent>? recents, RecentsVisibilityFilter filter, bool transfer});
 }
 
 /// @nodoc
@@ -123,6 +163,7 @@ class _$RecentsStateCopyWithImpl<$Res, $Val extends RecentsState>
   $Res call({
     Object? recents = freezed,
     Object? filter = null,
+    Object? transfer = null,
   }) {
     return _then(_value.copyWith(
       recents: freezed == recents
@@ -133,6 +174,10 @@ class _$RecentsStateCopyWithImpl<$Res, $Val extends RecentsState>
           ? _value.filter
           : filter // ignore: cast_nullable_to_non_nullable
               as RecentsVisibilityFilter,
+      transfer: null == transfer
+          ? _value.transfer
+          : transfer // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -145,7 +190,8 @@ abstract class _$$RecentsStateImplCopyWith<$Res>
       __$$RecentsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<Recent>? recents, RecentsVisibilityFilter filter});
+  $Res call(
+      {List<Recent>? recents, RecentsVisibilityFilter filter, bool transfer});
 }
 
 /// @nodoc
@@ -161,6 +207,7 @@ class __$$RecentsStateImplCopyWithImpl<$Res>
   $Res call({
     Object? recents = freezed,
     Object? filter = null,
+    Object? transfer = null,
   }) {
     return _then(_$RecentsStateImpl(
       recents: freezed == recents
@@ -171,6 +218,10 @@ class __$$RecentsStateImplCopyWithImpl<$Res>
           ? _value.filter
           : filter // ignore: cast_nullable_to_non_nullable
               as RecentsVisibilityFilter,
+      transfer: null == transfer
+          ? _value.transfer
+          : transfer // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -178,7 +229,10 @@ class __$$RecentsStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$RecentsStateImpl extends _RecentsState {
-  const _$RecentsStateImpl({final List<Recent>? recents, required this.filter})
+  const _$RecentsStateImpl(
+      {final List<Recent>? recents,
+      required this.filter,
+      this.transfer = false})
       : _recents = recents,
         super._();
 
@@ -194,10 +248,13 @@ class _$RecentsStateImpl extends _RecentsState {
 
   @override
   final RecentsVisibilityFilter filter;
+  @override
+  @JsonKey()
+  final bool transfer;
 
   @override
   String toString() {
-    return 'RecentsState(recents: $recents, filter: $filter)';
+    return 'RecentsState(recents: $recents, filter: $filter, transfer: $transfer)';
   }
 
   @override
@@ -206,12 +263,14 @@ class _$RecentsStateImpl extends _RecentsState {
         (other.runtimeType == runtimeType &&
             other is _$RecentsStateImpl &&
             const DeepCollectionEquality().equals(other._recents, _recents) &&
-            (identical(other.filter, filter) || other.filter == filter));
+            (identical(other.filter, filter) || other.filter == filter) &&
+            (identical(other.transfer, transfer) ||
+                other.transfer == transfer));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_recents), filter);
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(_recents), filter, transfer);
 
   @JsonKey(ignore: true)
   @override
@@ -223,13 +282,16 @@ class _$RecentsStateImpl extends _RecentsState {
 abstract class _RecentsState extends RecentsState {
   const factory _RecentsState(
       {final List<Recent>? recents,
-      required final RecentsVisibilityFilter filter}) = _$RecentsStateImpl;
+      required final RecentsVisibilityFilter filter,
+      final bool transfer}) = _$RecentsStateImpl;
   const _RecentsState._() : super._();
 
   @override
   List<Recent>? get recents;
   @override
   RecentsVisibilityFilter get filter;
+  @override
+  bool get transfer;
   @override
   @JsonKey(ignore: true)
   _$$RecentsStateImplCopyWith<_$RecentsStateImpl> get copyWith =>
