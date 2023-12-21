@@ -6,6 +6,7 @@ class ContactPhoneTile extends StatelessWidget {
     required this.number,
     required this.label,
     required this.favorite,
+    this.transfer = false,
     this.onTap,
     this.onLongPress,
     this.onFavoriteChanged,
@@ -16,6 +17,7 @@ class ContactPhoneTile extends StatelessWidget {
   final String number;
   final String label;
   final bool favorite;
+  final bool transfer;
   final GestureTapCallback? onTap;
   final GestureLongPressCallback? onLongPress;
   final ValueChanged<bool>? onFavoriteChanged;
@@ -36,7 +38,7 @@ class ContactPhoneTile extends StatelessWidget {
           ),
           IconButton(
             splashRadius: 24,
-            icon: const Icon(Icons.call),
+            icon: transfer ? const Icon(Icons.phone_forwarded) : const Icon(Icons.call),
             onPressed: onAudioPressed,
           ),
           IconButton(
