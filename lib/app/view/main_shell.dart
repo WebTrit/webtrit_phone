@@ -114,57 +114,57 @@ class _MainShellState extends State<MainShell> {
           ),
         ),
       ],
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider<PushTokensBloc>(
-            lazy: false,
-            create: (context) {
-              return PushTokensBloc(
-                pushTokensRepository: context.read<PushTokensRepository>(),
-                firebaseMessaging: FirebaseMessaging.instance,
-                callkeep: callkeep,
-              )..add(const PushTokensStarted());
-            },
-          ),
-          BlocProvider<RecentsBloc>(
-            create: (context) {
-              return RecentsBloc(
-                recentsRepository: context.read<RecentsRepository>(),
-                appPreferences: widget.appPreferences,
-              )..add(const RecentsStarted());
-            },
-          ),
-          BlocProvider<LocalContactsSyncBloc>(
-            lazy: false,
-            create: (context) {
-              return LocalContactsSyncBloc(
-                localContactsRepository: context.read<LocalContactsRepository>(),
-                appDatabase: context.read<AppDatabase>(),
-              )..add(const LocalContactsSyncStarted());
-            },
-          ),
-          BlocProvider<ExternalContactsSyncBloc>(
-            lazy: false,
-            create: (context) {
-              return ExternalContactsSyncBloc(
-                userRepository: context.read<UserRepository>(),
-                externalContactsRepository: context.read<ExternalContactsRepository>(),
-                appDatabase: context.read<AppDatabase>(),
-              )..add(const ExternalContactsSyncStarted());
-            },
-          ),
-          BlocProvider<CallBloc>(
-            create: (context) {
-              return CallBloc(
-                recentsRepository: context.read<RecentsRepository>(),
-                notificationsBloc: context.read<NotificationsBloc>(),
-                appBloc: context.read<AppBloc>(),
-                callkeep: callkeep,
-              )..add(const CallStarted());
-            },
-          ),
-        ],
-        child: widget.child,
+      child: BlocProvider<CallBloc>(
+        create: (context) {
+          return CallBloc(
+            recentsRepository: context.read<RecentsRepository>(),
+            notificationsBloc: context.read<NotificationsBloc>(),
+            appBloc: context.read<AppBloc>(),
+            callkeep: callkeep,
+          )..add(const CallStarted());
+        },
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<PushTokensBloc>(
+              lazy: false,
+              create: (context) {
+                return PushTokensBloc(
+                  pushTokensRepository: context.read<PushTokensRepository>(),
+                  firebaseMessaging: FirebaseMessaging.instance,
+                  callkeep: callkeep,
+                )..add(const PushTokensStarted());
+              },
+            ),
+            BlocProvider<RecentsBloc>(
+              create: (context) {
+                return RecentsBloc(
+                  recentsRepository: context.read<RecentsRepository>(),
+                  appPreferences: widget.appPreferences,
+                )..add(const RecentsStarted());
+              },
+            ),
+            BlocProvider<LocalContactsSyncBloc>(
+              lazy: false,
+              create: (context) {
+                return LocalContactsSyncBloc(
+                  localContactsRepository: context.read<LocalContactsRepository>(),
+                  appDatabase: context.read<AppDatabase>(),
+                )..add(const LocalContactsSyncStarted());
+              },
+            ),
+            BlocProvider<ExternalContactsSyncBloc>(
+              lazy: false,
+              create: (context) {
+                return ExternalContactsSyncBloc(
+                  userRepository: context.read<UserRepository>(),
+                  externalContactsRepository: context.read<ExternalContactsRepository>(),
+                  appDatabase: context.read<AppDatabase>(),
+                )..add(const ExternalContactsSyncStarted());
+              },
+            ),
+          ],
+          child: widget.child,
+        ),
       ),
     );
   }
