@@ -157,7 +157,7 @@ class _$OtpRequestStateImpl extends _OtpRequestState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$OtpRequestStateImpl &&

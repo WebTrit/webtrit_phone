@@ -41,6 +41,10 @@ class _MainShellState extends State<MainShell> {
         maximumCallsPerCallGroup: 5,
         supportedHandleTypes: const {CallkeepHandleType.number},
       ),
+      android: const CallkeepAndroidOptions(
+        incomingPath: initialCallRout,
+        rootPath: initialMainRout,
+      ),
     ));
   }
 

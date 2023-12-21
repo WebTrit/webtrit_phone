@@ -187,21 +187,23 @@ class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
   _CallPerformEvent._();
 
   factory _CallPerformEvent.started(
-    UuidValue uuid, {
+      CallkeepId id, {
     required CallkeepHandle handle,
     String? displayName,
     required bool video,
   }) = _CallPerformEventStarted;
 
-  factory _CallPerformEvent.answered(UuidValue uuid) = _CallPerformEventAnswered;
+  factory _CallPerformEvent.answered(CallkeepId id) = _CallPerformEventAnswered;
 
-  factory _CallPerformEvent.ended(UuidValue uuid) = _CallPerformEventEnded;
+  factory _CallPerformEvent.ended(CallkeepId id) = _CallPerformEventEnded;
 
-  factory _CallPerformEvent.setHeld(UuidValue uuid, bool onHold) = _CallPerformEventSetHeld;
+  factory _CallPerformEvent.setHeld(CallkeepId id, bool onHold) = _CallPerformEventSetHeld;
 
-  factory _CallPerformEvent.setMuted(UuidValue uuid, bool muted) = _CallPerformEventSetMuted;
+  factory _CallPerformEvent.setMuted(CallkeepId id, bool muted) = _CallPerformEventSetMuted;
 
-  factory _CallPerformEvent.sentDTMF(UuidValue uuid, String key) = _CallPerformEventSentDTMF;
+  factory _CallPerformEvent.sentDTMF(CallkeepId id, String key) = _CallPerformEventSentDTMF;
+
+  factory _CallPerformEvent.setSpeaker(CallkeepId id, bool enabled) = _CallPerformEventSetSpeaker;
 
   final _performCompleter = Completer<bool>();
 
