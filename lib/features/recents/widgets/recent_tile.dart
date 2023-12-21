@@ -10,6 +10,7 @@ class RecentTile extends StatelessWidget {
   const RecentTile({
     super.key,
     required this.recent,
+    this.transfer = false,
     this.onTap,
     this.onLongPress,
     this.onInfoPressed,
@@ -17,6 +18,7 @@ class RecentTile extends StatelessWidget {
   });
 
   final Recent recent;
+  final bool transfer;
   final GestureTapCallback? onTap;
   final GestureLongPressCallback? onLongPress;
   final GestureTapCallback? onInfoPressed;
@@ -77,7 +79,11 @@ class RecentTile extends StatelessWidget {
             ),
             const Text(' '),
             Icon(
-              recent.video ? Icons.videocam : Icons.call,
+              recent.video
+                  ? Icons.videocam
+                  : transfer
+                      ? Icons.phone_forwarded
+                      : Icons.call,
               size: 16,
               color: Colors.grey,
             ),
