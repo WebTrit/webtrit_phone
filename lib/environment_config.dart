@@ -27,6 +27,11 @@ class EnvironmentConfig {
     defaultValue: 'http://localhost:4000',
   );
 
+  static const DEFAULT_PASSWORD_TYPE_LOGIN_TENANT = String.fromEnvironment(
+    'WEBTRIT_DEFAULT_PASSWORD_TYPE_LOGIN_TENANT',
+    defaultValue: '',
+  );
+
   static const APP_NAME = String.fromEnvironment(
     'WEBTRIT_APP_NAME',
     defaultValue: 'WebTrit',

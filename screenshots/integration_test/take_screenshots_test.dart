@@ -79,7 +79,9 @@ void main() async {
     takeScreenshotTestWidgets('login_screen__modeSelect', () {
       return ScreenshotApp(
         appBloc: appBloc,
-        child: const LoginScreenScreenshot(LoginStep.modeSelect),
+        child: AuthModeSelectScreenScreenshot(
+          appGreeting: EnvironmentConfig.APP_GREETING.isEmpty ? null : EnvironmentConfig.APP_GREETING,
+        ),
       );
     });
   });
