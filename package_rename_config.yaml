@@ -1,0 +1,13 @@
+package_rename_config:
+  android:
+    app_name: ECN Softphone
+    package_name: za.co.ecn.app
+    override_old_package: com.webtrit.app
+    lang: kotlin
+  ios:
+    app_name: ECN Softphone
+    package_name: za.co.ecn.app
+  web:
+    app_name: ECN Softphone
+    description: 
+    bundle_name: za.co.ecn.app

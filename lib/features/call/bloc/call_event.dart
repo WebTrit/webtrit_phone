@@ -54,7 +54,7 @@ class _HandshakeSignalingEvent with _$_HandshakeSignalingEvent implements CallEv
 class _CallSignalingEvent with _$_CallSignalingEvent implements CallEvent {
   const factory _CallSignalingEvent.incoming({
     required int line,
-    required CallIdValue callId,
+    required String callId,
     required String callee,
     required String caller,
     String? callerDisplayName,
@@ -66,33 +66,33 @@ class _CallSignalingEvent with _$_CallSignalingEvent implements CallEvent {
 
   const factory _CallSignalingEvent.ringing({
     required int line,
-    required CallIdValue callId,
+    required String callId,
   }) = _CallSignalingEventRinging;
 
   const factory _CallSignalingEvent.progress({
     required int line,
-    required CallIdValue callId,
+    required String callId,
     required String callee,
     JsepValue? jsep,
   }) = _CallSignalingEventProgress;
 
   const factory _CallSignalingEvent.accepted({
     required int line,
-    required CallIdValue callId,
+    required String callId,
     String? callee,
     JsepValue? jsep,
   }) = _CallSignalingEventAccepted;
 
   const factory _CallSignalingEvent.hangup({
     required int line,
-    required CallIdValue callId,
+    required String callId,
     required int code,
     required String reason,
   }) = _CallSignalingEventHangup;
 
   const factory _CallSignalingEvent.updating({
     required int line,
-    required CallIdValue callId,
+    required String callId,
     required String callee,
     required String caller,
     String? callerDisplayName,
@@ -104,7 +104,7 @@ class _CallSignalingEvent with _$_CallSignalingEvent implements CallEvent {
 
   const factory _CallSignalingEvent.updated({
     required int line,
-    required CallIdValue callId,
+    required String callId,
   }) = _CallSignalingEventUpdated;
 }
 
@@ -113,7 +113,7 @@ class _CallSignalingEvent with _$_CallSignalingEvent implements CallEvent {
 @Freezed(copyWith: false)
 class _CallPushEvent with _$_CallPushEvent implements CallEvent {
   const factory _CallPushEvent.incoming({
-    required CallIdValue callId,
+    required String callId,
     required CallkeepHandle handle,
     String? displayName,
     required bool video,
@@ -142,23 +142,23 @@ class CallControlEvent with _$CallControlEvent implements CallEvent {
     required bool video,
   }) = _CallControlEventStarted;
 
-  const factory CallControlEvent.answered(CallkeepId id) = _CallControlEventAnswered;
+  const factory CallControlEvent.answered(String callId) = _CallControlEventAnswered;
 
-  const factory CallControlEvent.ended(CallkeepId id) = _CallControlEventEnded;
+  const factory CallControlEvent.ended(String callId) = _CallControlEventEnded;
 
-  const factory CallControlEvent.setHeld(CallkeepId id, bool onHold) = _CallControlEventSetHeld;
+  const factory CallControlEvent.setHeld(String callId, bool onHold) = _CallControlEventSetHeld;
 
-  const factory CallControlEvent.setMuted(CallkeepId id, bool muted) = _CallControlEventSetMuted;
+  const factory CallControlEvent.setMuted(String callId, bool muted) = _CallControlEventSetMuted;
 
-  const factory CallControlEvent.sentDTMF(CallkeepId id, String key) = _CallControlEventSentDTMF;
+  const factory CallControlEvent.sentDTMF(String callId, String key) = _CallControlEventSentDTMF;
 
-  const factory CallControlEvent.cameraSwitched(CallkeepId id) = _CallControlEventCameraSwitched;
+  const factory CallControlEvent.cameraSwitched(String callId) = _CallControlEventCameraSwitched;
 
-  const factory CallControlEvent.cameraEnabled(CallkeepId id, bool enabled) = _CallControlEventCameraEnabled;
+  const factory CallControlEvent.cameraEnabled(String callId, bool enabled) = _CallControlEventCameraEnabled;
 
-  const factory CallControlEvent.speakerEnabled(CallkeepId id, bool enabled) = _CallControlEventSpeakerEnabled;
+  const factory CallControlEvent.speakerEnabled(String callId, bool enabled) = _CallControlEventSpeakerEnabled;
 
-  const factory CallControlEvent.failureApproved(CallkeepId id) = _CallControlEventFailureApproved;
+  const factory CallControlEvent.failureApproved(String callId) = _CallControlEventFailureApproved;
 }
 
 mixin CallControlEventStartedMixin {
@@ -188,23 +188,23 @@ class _CallPerformEvent with _$_CallPerformEvent implements CallEvent {
   _CallPerformEvent._();
 
   factory _CallPerformEvent.started(
-    CallkeepId id, {
+    String callId, {
     required CallkeepHandle handle,
     String? displayName,
     required bool video,
   }) = _CallPerformEventStarted;
 
-  factory _CallPerformEvent.answered(CallkeepId id) = _CallPerformEventAnswered;
+  factory _CallPerformEvent.answered(String callId) = _CallPerformEventAnswered;
 
-  factory _CallPerformEvent.ended(CallkeepId id) = _CallPerformEventEnded;
+  factory _CallPerformEvent.ended(String callId) = _CallPerformEventEnded;
 
-  factory _CallPerformEvent.setHeld(CallkeepId id, bool onHold) = _CallPerformEventSetHeld;
+  factory _CallPerformEvent.setHeld(String callId, bool onHold) = _CallPerformEventSetHeld;
 
-  factory _CallPerformEvent.setMuted(CallkeepId id, bool muted) = _CallPerformEventSetMuted;
+  factory _CallPerformEvent.setMuted(String callId, bool muted) = _CallPerformEventSetMuted;
 
-  factory _CallPerformEvent.sentDTMF(CallkeepId id, String key) = _CallPerformEventSentDTMF;
+  factory _CallPerformEvent.sentDTMF(String callId, String key) = _CallPerformEventSentDTMF;
 
-  factory _CallPerformEvent.setSpeaker(CallkeepId id, bool enabled) = _CallPerformEventSetSpeaker;
+  factory _CallPerformEvent.setSpeaker(String callId, bool enabled) = _CallPerformEventSetSpeaker;
 
   final _performCompleter = Completer<bool>();
 
@@ -219,16 +219,15 @@ class _CallPerformEvent with _$_CallPerformEvent implements CallEvent {
 
 @Freezed(copyWith: false)
 class _PeerConnectionEvent with _$_PeerConnectionEvent implements CallEvent {
-  const factory _PeerConnectionEvent.iceGatheringStateChanged(UuidValue uuid, RTCIceGatheringState state) =
+  const factory _PeerConnectionEvent.iceGatheringStateChanged(String uuid, RTCIceGatheringState state) =
       _PeerConnectionEventIceGatheringStateChanged;
 
-  const factory _PeerConnectionEvent.iceCandidateIdentified(UuidValue uuid, RTCIceCandidate candidate) =
+  const factory _PeerConnectionEvent.iceCandidateIdentified(String uuid, RTCIceCandidate candidate) =
       _PeerConnectionEventIceCandidateIdentified;
 
-  const factory _PeerConnectionEvent.streamAdded(UuidValue uuid, MediaStream stream) = _PeerConnectionEventStreamAdded;
+  const factory _PeerConnectionEvent.streamAdded(String uuid, MediaStream stream) = _PeerConnectionEventStreamAdded;
 
-  const factory _PeerConnectionEvent.streamRemoved(UuidValue uuid, MediaStream stream) =
-      _PeerConnectionEventStreamRemoved;
+  const factory _PeerConnectionEvent.streamRemoved(String uuid, MediaStream stream) = _PeerConnectionEventStreamRemoved;
 }
 
 // call screen events

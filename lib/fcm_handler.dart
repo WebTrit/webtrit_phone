@@ -1,11 +1,10 @@
 import 'dart:io';
 
-import 'package:collection/collection.dart';
+import "package:collection/collection.dart";
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
-import 'package:webtrit_phone/features/call/extensions/callkeep_id.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/recents/recents_repository.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
@@ -27,7 +26,6 @@ class FCMHandler implements CallkeepAndroidServiceDelegate {
   late WebtritSignalingClient client;
 
   late String callId;
-  late UuidValue uuid;
   late CallkeepHandle handleValue;
   late String displayName;
   late bool hasVideo;
@@ -59,7 +57,7 @@ class FCMHandler implements CallkeepAndroidServiceDelegate {
   Future _initializeIncomingParam(Map<String, dynamic> data) async {
 // TODO: ADD logic for handle different handler types
     callId = data[CallDataConst.callId];
-    uuid = const Uuid().v5obj(Uuid.NAMESPACE_OID, callId);
+    // uuid = const Uuid().v5obj(Uuid.NAMESPACE_OID, callId);
     handleValue = CallkeepHandle.number(data[CallDataConst.handleValue]);
     displayName = data[CallDataConst.displayName];
     hasVideo = parseString(data[CallDataConst.hasVideo]);
@@ -96,9 +94,9 @@ class FCMHandler implements CallkeepAndroidServiceDelegate {
 
   void _signalingEvent(Event event) {
     if (event is HangupEvent) {
-      final id = CallkeepId(callId: event.callId, uuid: const Uuid().v5obj(Uuid.NAMESPACE_OID, event.callId).uuid);
+      // final id = CallkeepId(callId: event.callId, uuid: const Uuid().v5obj(Uuid.NAMESPACE_OID, event.callId).uuid);
 
-      _callNotificationDelegate.hungUp(id);
+      _callNotificationDelegate.hungUp(event.callId);
       _close();
     }
   }
@@ -108,18 +106,18 @@ class FCMHandler implements CallkeepAndroidServiceDelegate {
     _lines.addAll(stateHandshake.lines);
 
     final connections = _lines.where((element) => element?.callId == callId);
-    final id = CallkeepId(callId: callId, uuid: const Uuid().v5obj(Uuid.NAMESPACE_OID, callId).uuid);
+    // final id = CallkeepId(callId: callId, uuid: const Uuid().v5obj(Uuid.NAMESPACE_OID, callId).uuid);
 
     if (connections.isNotEmpty) {
       _callNotificationDelegate.incomingCall(
-        id,
+        callId,
         handleValue,
         displayName,
         hasVideo,
       );
     } else {
       _callNotificationDelegate.hungUp(
-        id,
+        callId,
       );
     }
   }
@@ -135,16 +133,16 @@ class FCMHandler implements CallkeepAndroidServiceDelegate {
   }
 
 // TODO: Duplicate here and call_bloc.dart
-  int? retrieveIdleLine(List<Line?> lines, UuidValue current) {
+  int? retrieveIdleLine(List<Line?> lines, String callId) {
     for (var line = 0; line < lines.length; line++) {
-      if (lines.firstWhereOrNull((line) => line?.callId == current.uuid) == null) {
+      if (lines.firstWhereOrNull((line) => line?.callId == callId) == null) {
         return line;
       }
     }
     return null;
   }
 
-  void _declineCall(UuidValue callId) async {
+  void _declineCall(String callId) async {
     final transaction = WebtritSignalingClient.generateTransactionId();
     var line = retrieveIdleLine(_lines, callId) ?? _kUndefinedLine;
 
@@ -165,13 +163,13 @@ class FCMHandler implements CallkeepAndroidServiceDelegate {
   }
 
   @override
-  void performServiceEndCall(CallkeepId id) {
-    _declineCall(id.uuidValue);
+  void performServiceEndCall(String callId) {
+    _declineCall(callId);
   }
 
   @override
   void endCallReceived(
-    CallkeepId id,
+    String callId,
     String number,
     bool video,
     DateTime createdTime,

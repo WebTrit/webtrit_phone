@@ -38,8 +38,8 @@ class _MainShellState extends State<MainShell> {
           localizedName: PackageInfo().appName,
           ringtoneSound: Assets.ringtones.incomingCall1,
           iconTemplateImageAssetName: Assets.callkeep.iosIconTempateImage.path,
-          maximumCallGroups: 2,
-          maximumCallsPerCallGroup: 1,
+          maximumCallGroups: 13,
+          maximumCallsPerCallGroup: 13,
           supportedHandleTypes: const {CallkeepHandleType.number},
         ),
         android: const CallkeepAndroidOptions(
