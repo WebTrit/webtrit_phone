@@ -75,7 +75,11 @@ class WebtritApiClient {
     if (httpResponse.statusCode == 200 || httpResponse.statusCode == 204) {
       return responseDataJson;
     } else {
-      final error = responseDataJson.isEmpty ? null : ErrorResponse.fromJson(responseDataJson);
+      final error = switch (responseDataJson) {
+        Map(isEmpty: true) => null,
+        {'errors': {'detail': _}} => null,
+        _ => ErrorResponse.fromJson(responseDataJson),
+      };
       throw RequestFailure(
         statusCode: httpResponse.statusCode,
         error: error,
