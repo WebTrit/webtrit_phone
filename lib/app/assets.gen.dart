@@ -69,7 +69,7 @@ class Assets {
   static const $AssetsThemesGen themes = $AssetsThemesGen();
 
   /// List of all assets
-  List<SvgGenImage> get values =>
+  static List<SvgGenImage> get values =>
       [primaryOnboardinLogo, secondaryOnboardinLogo];
 }
 
