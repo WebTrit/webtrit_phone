@@ -6,8 +6,6 @@ class AppRoute {
   static const login = 'login';
   static const loginStep = 'login/step';
 
-  static const webRegistration = 'web-registration';
-
   static const main = 'main';
 
   static const permissions = 'permissions';

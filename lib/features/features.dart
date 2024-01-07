@@ -13,4 +13,3 @@ export 'push_tokens/push_token.dart';
 export 'recent/recent.dart';
 export 'recents/recents.dart';
 export 'settings/settings.dart';
-export 'web_registration/web_registration.dart';

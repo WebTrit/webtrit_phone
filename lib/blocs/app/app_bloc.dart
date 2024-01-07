@@ -26,7 +26,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           coreUrl: secureStorage.readCoreUrl(),
           tenantId: secureStorage.readTenantId(),
           token: secureStorage.readToken(),
-          webRegistrationInitialUrl: secureStorage.readWebRegistrationInitialUrl(),
           themeSettings: appThemes.values.first.settings,
           themeMode: appPreferences.getThemeMode(),
           locale: appPreferences.getLocale(),

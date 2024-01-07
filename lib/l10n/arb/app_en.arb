@@ -365,13 +365,5 @@
   "underDevelopment": "This page is under development.",
   "@underDevelopment": {},
   "validationBlankError": "Please enter a value",
-  "@validationBlankError": {},
-  "webRegistration_ErrorAcknowledgeDialogActions_demo": "Demo",
-  "@webRegistration_ErrorAcknowledgeDialogActions_demo": {},
-  "webRegistration_ErrorAcknowledgeDialogActions_retry": "Retry",
-  "@webRegistration_ErrorAcknowledgeDialogActions_retry": {},
-  "webRegistration_ErrorAcknowledgeDialogActions_skip": "Skip",
-  "@webRegistration_ErrorAcknowledgeDialogActions_skip": {},
-  "webRegistration_ErrorAcknowledgeDialog_title": "Web resource error",
-  "@webRegistration_ErrorAcknowledgeDialog_title": {}
+  "@validationBlankError": {}
 }

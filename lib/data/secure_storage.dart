@@ -4,7 +4,6 @@ class SecureStorage {
   static const _kCoreUrlKey = 'core-url';
   static const _kTenantIdKey = 'tenant-id';
   static const _kTokenKey = 'token';
-  static const _kWebRegistrationInitialUrlKey = 'initial-url';
 
   static late SecureStorage _instance;
 
@@ -91,17 +90,5 @@ class SecureStorage {
 
   Future<void> deleteToken() {
     return _delete(_kTokenKey);
-  }
-
-  String? readWebRegistrationInitialUrl() {
-    return _read(_kWebRegistrationInitialUrlKey);
-  }
-
-  Future<void> writeWebRegistrationInitialUrl(String url) {
-    return _write(_kWebRegistrationInitialUrlKey, url);
-  }
-
-  Future<void> deleteWebRegistrationInitialUrl() {
-    return _delete(_kWebRegistrationInitialUrlKey);
   }
 }

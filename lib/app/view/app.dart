@@ -153,18 +153,6 @@ class _AppState extends State<App> {
             },
           ),
           GoRoute(
-            name: AppRoute.webRegistration,
-            path: '/web-registration',
-            builder: (context, state) {
-              final initialUriQueryParameter =
-                  state.uri.queryParameters[WebRegistrationScreen.initialUriQueryParameterName];
-              final widget = WebRegistrationScreen(
-                initialUri: Uri.parse(state.uri.queryParameters[initialUriQueryParameter] ?? kBlankUri),
-              );
-              return widget;
-            },
-          ),
-          GoRoute(
             name: AppRoute.permissions,
             path: '/permissions',
             builder: (context, state) {
@@ -530,23 +518,19 @@ class _AppState extends State<App> {
   String? _redirect(BuildContext context, GoRouterState state) {
     final coreUrl = appBloc.state.coreUrl;
     final token = appBloc.state.token;
-    final webRegistrationInitialUrl = appBloc.state.webRegistrationInitialUrl;
     final appPermissionsDenied = _appPermissions.isDenied;
 
     final isLoginPath = state.uri.toString().startsWith('/login');
-    final isWebRegistrationPath = state.uri.toString().startsWith('/web-registration');
     final isMainPath = state.uri.toString().startsWith('/main');
 
     if (coreUrl != null && token != null) {
-      if (isLoginPath || isWebRegistrationPath) {
+      if (isLoginPath) {
         return '/main';
       } else if (isMainPath) {
         if (appPermissionsDenied) {
           return '/permissions';
         }
       }
-    } else if (webRegistrationInitialUrl != null && !isWebRegistrationPath) {
-      return '/web-registration?initialUrl=$webRegistrationInitialUrl';
     } else if (!isLoginPath) {
       return '/login';
     }

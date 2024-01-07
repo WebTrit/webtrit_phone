@@ -365,13 +365,5 @@
   "underDevelopment": "Ця сторінка знаходиться в розробці.",
   "@underDevelopment": {},
   "validationBlankError": "Будь ласка, введіть значення",
-  "@validationBlankError": {},
-  "webRegistration_ErrorAcknowledgeDialogActions_demo": "Демо",
-  "@webRegistration_ErrorAcknowledgeDialogActions_demo": {},
-  "webRegistration_ErrorAcknowledgeDialogActions_retry": "Повторити",
-  "@webRegistration_ErrorAcknowledgeDialogActions_retry": {},
-  "webRegistration_ErrorAcknowledgeDialogActions_skip": "Пропустити",
-  "@webRegistration_ErrorAcknowledgeDialogActions_skip": {},
-  "webRegistration_ErrorAcknowledgeDialog_title": "Помилка веб-ресурсу",
-  "@webRegistration_ErrorAcknowledgeDialog_title": {}
+  "@validationBlankError": {}
 }
