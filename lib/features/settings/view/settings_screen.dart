@@ -22,6 +22,9 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const appHelpUrl = EnvironmentConfig.APP_HELP_URL;
+    const appTermsAndConditionsUrl = EnvironmentConfig.APP_TERMS_AND_CONDITIONS_URL;
+
     final scaffold = Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.settings_AppBarTitle_myAccount),
@@ -102,14 +105,19 @@ class SettingsScreen extends StatelessWidget {
               context.pushNamed(MainRoute.settingsNetwork);
             },
           ),
-          if (EnvironmentConfig.APP_HELP_URL.isNotEmpty) ...[
+          if (appHelpUrl != null) ...[
             const ListTileSeparator(),
             ListTile(
               leading: const Icon(Icons.help_outline),
               title: Text(context.l10n.settings_ListViewTileTitle_help),
               trailing: const Icon(Icons.navigate_next),
               onTap: () {
-                context.pushNamed(MainRoute.settingsHelp);
+                context.pushNamed(
+                  MainRoute.settingsHelp,
+                  queryParameters: {
+                    HelpScreen.initialUriQueryParameterName: appHelpUrl,
+                  },
+                );
               },
             ),
           ],
@@ -132,14 +140,14 @@ class SettingsScreen extends StatelessWidget {
               context.pushNamed(MainRoute.settingsLanguage);
             },
           ),
-          if (EnvironmentConfig.APP_TERMS_AND_CONDITIONS_URL.isNotEmpty) ...[
+          if (appTermsAndConditionsUrl != null) ...[
             const ListTileSeparator(),
             ListTile(
               leading: const Icon(Icons.book_outlined),
               title: Text(context.l10n.settings_ListViewTileTitle_termsConditions),
               trailing: const Icon(Icons.navigate_next),
               onTap: () async {
-                final uri = Uri.parse(EnvironmentConfig.APP_TERMS_AND_CONDITIONS_URL);
+                final uri = Uri.parse(appTermsAndConditionsUrl);
                 if (uri.path.endsWith('.pdf')) {
                   if (await canLaunchUrl(uri)) {
                     await launchUrl(uri);

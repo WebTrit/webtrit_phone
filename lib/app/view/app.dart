@@ -406,9 +406,10 @@ class _AppState extends State<App> {
                     path: 'about',
                     name: MainRoute.settingsAbout,
                     builder: (context, state) {
-                      if (EnvironmentConfig.APP_ABOUT_URL.isNotEmpty) {
+                      const appAboutUrl = EnvironmentConfig.APP_ABOUT_URL;
+                      if (appAboutUrl != null) {
                         final widget = WebAboutScreen(
-                          baseAppAboutUrl: Uri.parse(EnvironmentConfig.APP_ABOUT_URL),
+                          baseAppAboutUrl: Uri.parse(appAboutUrl),
                           packageInfo: PackageInfo(),
                           infoRepository: context.read<InfoRepository>(),
                         );
@@ -434,7 +435,11 @@ class _AppState extends State<App> {
                     path: 'help',
                     name: MainRoute.settingsHelp,
                     builder: (context, state) {
-                      const widget = HelpScreen();
+                      final initialUriQueryParameter =
+                          state.uri.queryParameters[HelpScreen.initialUriQueryParameterName];
+                      final widget = HelpScreen(
+                        initialUri: Uri.parse(initialUriQueryParameter ?? kBlankUri),
+                      );
                       return widget;
                     },
                   ),

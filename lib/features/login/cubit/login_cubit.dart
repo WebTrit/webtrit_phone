@@ -30,13 +30,9 @@ class LoginCubit extends Cubit<LoginState> {
 
   final WebtritApiClientFactory createWebtritApiClient;
 
-  String? get coreUrlFromEnvironment {
-    return EnvironmentConfig.CORE_URL.isEmpty ? null : EnvironmentConfig.CORE_URL;
-  }
+  String? get coreUrlFromEnvironment => EnvironmentConfig.CORE_URL;
 
-  String? get demoCoreUrlFromEnvironment {
-    return EnvironmentConfig.DEMO_CORE_URL.isEmpty ? null : EnvironmentConfig.DEMO_CORE_URL;
-  }
+  String? get demoCoreUrlFromEnvironment => EnvironmentConfig.DEMO_CORE_URL;
 
   String get defaultTenantId => '';
 

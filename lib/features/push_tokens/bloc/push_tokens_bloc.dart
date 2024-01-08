@@ -46,7 +46,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
   }
 
   void _onStarted(PushTokensEvent event, Emitter<PushTokensState> emit) async {
-    final vapidKey = EnvironmentConfig.FCM_VAPID_KEY.isEmpty ? null : EnvironmentConfig.FCM_VAPID_KEY;
+    const vapidKey = EnvironmentConfig.FCM_VAPID_KEY;
     final fcmToken = await firebaseMessaging.getToken(vapidKey: vapidKey);
     if (fcmToken != null) {
       add(PushTokensInsertedOrUpdated(AppPushTokenType.fcm, fcmToken));
