@@ -1,0 +1,57 @@
+name: Deploy to iOS
+
+on:
+  push:
+    tags:
+      - deploy-ios
+      - bundleId-*
+
+env:
+  FLUTTER_VERSION: 3.16.3
+  FLUTTER_CHANNEL: 'stable'
+  DART_VERSION: 3.2.3
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Check for deploy-ios tag
+        id: check-deploy-ios-tag
+        run: |
+          if git tag --list 'deploy-ios' | grep -q 'deploy-ios'; then
+            echo "Deploy iOS tag found."
+            echo "DEPLOY_IOS_TAG_FOUND=true" >> $GITHUB_ENV
+          else
+            echo "Deploy iOS tag not found."
+            echo "DEPLOY_IOS_TAG_FOUND=false" >> $GITHUB_ENV
+
+      - name: Check for bundleId tag
+        id: check-bundleId-tag
+        run: |
+          if git tag --list 'bundleId-*' | grep -q 'bundleId-'; then
+            echo "BundleId tag found."
+            echo "BUNDLE_ID_TAG_FOUND=true" >> $GITHUB_ENV
+          else
+            echo "BundleId tag not found."
+            echo "BUNDLE_ID_TAG_FOUND=false" >> $GITHUB_ENV
+
+      - name: Conditional Step
+        if: env.DEPLOY_IOS_TAG_FOUND == 'true' && env.BUNDLE_ID_TAG_FOUND == 'true'
+        run: |
+          echo "Both deploy-ios and bundleId tags are present. Proceeding with build and deploy..."
+          # Add steps for your build and deployment process here
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Parse Tag ID
+        run: |
+          chmod +x ./scripts/parse_tag_id.sh
+          ./scripts/parse_tag_id.sh
+      - name: Use Tag ID
+        run: echo "Tag ID is $TAG_ID"

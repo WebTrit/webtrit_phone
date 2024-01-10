@@ -1,0 +1,14 @@
+name: Deploy to Android
+
+on:
+  push:
+    tags:
+      - deploy-android
+
+env:
+  FLUTTER_VERSION: 3.16.3
+  FLUTTER_CHANNEL: 'stable'
+  DART_VERSION: 3.2.3
+
+jobs:
+# Android specific jobs and steps
