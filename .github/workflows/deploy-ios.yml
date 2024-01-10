@@ -1,0 +1,23 @@
+name: Deploy to iOS
+
+on:
+  push:
+    tags:
+      - deploy-ios
+      - bundleId
+
+env:
+  FLUTTER_VERSION: 3.16.3
+  FLUTTER_CHANNEL: 'stable'
+  DART_VERSION: 3.2.3
+
+jobs:
+  parse-bundle-id:
+    needs: [ build-and-deploy ]
+    runs-on: macos-latest
+    steps:
+      - name: Extract tag ID
+        id: tag_id
+        run: echo "TAG_ID=${GITHUB_REF#refs/tags/bundleId}" >> $GITHUB_ENV
+      - name: Print tag ID
+        run: echo "Tag ID is $TAG_ID"
