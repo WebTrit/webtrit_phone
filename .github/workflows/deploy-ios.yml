@@ -1,0 +1,43 @@
+name: API Triggered Action
+
+on:
+  workflow_dispatch:
+    inputs:
+      bundleId:
+        description: 'Bundle ID'
+        required: true
+        default: 'com.example.app'
+
+env:
+  WORKING_DIRECTORY_KEYSTORE: /Users/runner/work/webtrit_phone/webtrit_phone/keystore
+  WORKING_DIRECTORY_PHONE: /Users/runner/work/webtrit_phone/webtrit_phone/phone
+
+jobs:
+  build:
+    runs-on: macos-latest
+    name: Run Workflow
+    steps:
+      - name: Checkout code keys
+        uses: actions/checkout@v2
+        with:
+          repository: WebTrit/webtrit_phone_keystores
+          token: ${{ secrets.PAT_TOKEN }}
+          path: keystore
+
+      - name: Checkout code phone
+        uses: actions/checkout@v2
+        with:
+          ref: feature/github-actions
+          path: phone
+
+      - name: Run a one-line script
+        run: echo "The bundle ID is ${{ github.event.inputs.bundleId }}"
+
+      - name: List contents of a directory
+        run: ls -la /Users/runner/work/webtrit_phone/webtrit_phone
+
+      - name: List contents of a directory keystores
+        run: ls -la ${{env.WORKING_DIRECTORY_KEYSTORE}}
+
+      - name: List contents of a directory phone
+        run: ls -la ${{env.WORKING_DIRECTORY_PHONE}}
