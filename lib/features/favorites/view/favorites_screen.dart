@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
-import 'package:webtrit_phone/app/routes.dart';
+import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-import '../../call/call.dart';
 import '../favorites.dart';
 
 class FavoritesScreen extends StatelessWidget {
@@ -62,9 +61,9 @@ class FavoritesScreen extends StatelessWidget {
                       ));
                     },
                     onInfoPressed: () {
-                      context.goNamed(MainRoute.favoritesDetails, pathParameters: {
-                        contactIdPathParameterName: favorite.contact.id.toString(),
-                      });
+                      context.router.navigate(ContactScreenPageRoute(
+                        contactId: favorite.contact.id,
+                      ));
                     },
                     onDeleted: (favorite) {
                       context.showSnackBar(context.l10n.favorites_SnackBar_deleted(favorite.name));

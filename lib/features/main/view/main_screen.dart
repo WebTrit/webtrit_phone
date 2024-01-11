@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 
 import '../main.dart';
 
@@ -15,7 +15,7 @@ class MainScreen extends StatelessWidget {
 
   final Widget body;
   final MainFlavor navigationBarFlavor;
-  final ValueChanged<int>? onNavigationBarTap;
+  final ValueChanged<MainFlavor>? onNavigationBarTap;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,12 @@ class MainScreen extends StatelessWidget {
         selectedLabelStyle: themeData.textTheme.bodySmall,
         unselectedLabelStyle: themeData.textTheme.bodySmall,
         currentIndex: navigationBarFlavor.index,
-        onTap: onNavigationBarTap,
+        onTap: (index) {
+          final onNavigationBarTap = this.onNavigationBarTap;
+          if (onNavigationBarTap != null) {
+            onNavigationBarTap(MainFlavor.values[index]);
+          }
+        },
         items: MainFlavor.values.map((flavor) {
           return BottomNavigationBarItem(
             icon: Icon(flavor.icon),

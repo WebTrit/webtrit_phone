@@ -20,6 +20,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+  auto_route: ^7.8.4
   bloc: ^8.1.2
   bloc_concurrency: ^0.2.3
   characters: ^1.3.0
@@ -43,7 +44,6 @@ dependencies:
       ref: main_ext
   formz: ^0.6.1
   freezed_annotation: ^2.4.1
-  go_router: ^13.0.1
   google_fonts: ^6.1.0
   intl: any
   json_annotation: ^4.8.1
@@ -90,6 +90,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  auto_route_generator: ^7.3.2
   bloc_test: ^9.1.5
   build_runner: ^2.4.7
   flutter_gen_runner: ^5.4.0

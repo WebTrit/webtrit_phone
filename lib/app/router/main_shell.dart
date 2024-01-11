@@ -1,8 +1,12 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+
+import 'package:auto_route/auto_route.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
@@ -11,15 +15,11 @@ import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
+@RoutePage()
 class MainShell extends StatefulWidget {
   const MainShell({
     super.key,
-    required this.appPreferences,
-    required this.child,
   });
-
-  final AppPreferences appPreferences;
-  final Widget child;
 
   @override
   State<MainShell> createState() => _MainShellState();
@@ -130,7 +130,7 @@ class _MainShellState extends State<MainShell> {
             create: (context) {
               return RecentsBloc(
                 recentsRepository: context.read<RecentsRepository>(),
-                appPreferences: widget.appPreferences,
+                appPreferences: context.read<AppPreferences>(),
               )..add(const RecentsStarted());
             },
           ),
@@ -164,7 +164,11 @@ class _MainShellState extends State<MainShell> {
             },
           ),
         ],
-        child: widget.child,
+        child: Builder(
+          builder: (context) => const CallShell(
+            child: AutoRouter(),
+          ),
+        ),
       ),
     );
   }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/app/routes.dart';
+import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
@@ -23,7 +23,7 @@ class PermissionsScreen extends StatelessWidget {
       body: BlocConsumer<PermissionsCubit, PermissionsState>(
         listener: (context, state) {
           if (state.status.isSuccess || state.status.isFailure) {
-            context.goNamed(MainRoute.favorites);
+            context.router.replaceAll([const MainShellRoute()]);
           }
         },
         builder: (context, state) {

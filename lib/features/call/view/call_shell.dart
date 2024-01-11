@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:auto_route/auto_route.dart';
 
-import 'package:webtrit_phone/app/routes.dart';
+import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/orientations/orientations.dart';
 
 import '../call.dart';
@@ -26,34 +26,27 @@ class CallShell extends StatefulWidget {
 class _CallShellState extends State<CallShell> {
   ThumbnailAvatar? _avatar;
 
-  bool _isCallRouterLocation(BuildContext context) {
-    final router = GoRouter.of(context);
-    return router.routerDelegate.currentConfiguration.last.matchedLocation == router.namedLocation(MainRoute.call);
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocListener<CallBloc, CallState>(
       listenWhen: (previous, current) => previous.display != current.display,
       listener: (context, state) {
-        {
-          final orientationsBloc = context.read<OrientationsBloc>();
-          if (state.display == CallDisplay.screen) {
-            orientationsBloc.add(const OrientationsChanged(PreferredOrientation.call));
-          } else {
-            orientationsBloc.add(const OrientationsChanged(PreferredOrientation.regular));
-          }
+        final router = context.router;
+
+        final orientationsBloc = context.read<OrientationsBloc>();
+        if (state.display == CallDisplay.screen) {
+          orientationsBloc.add(const OrientationsChanged(PreferredOrientation.call));
+        } else {
+          orientationsBloc.add(const OrientationsChanged(PreferredOrientation.regular));
         }
 
         if (state.display == CallDisplay.screen) {
-          if (!_isCallRouterLocation(context)) {
-            context.pushNamed(MainRoute.call);
+          if (!router.isRouteActive(CallScreenPageRoute.name)) {
+            router.push(const CallScreenPageRoute());
           }
         } else {
-          if (_isCallRouterLocation(context)) {
-            if (context.canPop()) {
-              context.pop();
-            }
+          if (router.isRouteActive(CallScreenPageRoute.name)) {
+            router.back();
           }
         }
 
@@ -66,9 +59,7 @@ class _CallShellState extends State<CallShell> {
           } else {
             final avatar = ThumbnailAvatar(
               stickyPadding: widget.stickyPadding,
-              onTap: () {
-                context.pushNamed(MainRoute.call);
-              },
+              onTap: () => router.push(const CallScreenPageRoute()),
             );
             _avatar = avatar;
             avatar.insert(context, state);

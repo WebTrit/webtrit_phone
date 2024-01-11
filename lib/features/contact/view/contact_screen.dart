@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:auto_route/auto_route.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-import '../../call/call.dart';
 import '../contact.dart';
 
 class ContactScreen extends StatelessWidget {
@@ -65,7 +65,7 @@ class ContactScreen extends StatelessWidget {
                         displayName: contact.name,
                         video: false,
                       ));
-                      context.pop();
+                      context.router.pop();
                     },
                     onVideoPressed: () {
                       final callBloc = context.read<CallBloc>();
@@ -74,7 +74,7 @@ class ContactScreen extends StatelessWidget {
                         displayName: contact.name,
                         video: true,
                       ));
-                      context.pop();
+                      context.router.pop();
                     },
                   ),
                 for (final contactEmail in contactEmails)

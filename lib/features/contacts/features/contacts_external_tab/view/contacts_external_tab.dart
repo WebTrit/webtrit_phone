@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
-import 'package:webtrit_phone/app/routes.dart';
+import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../../../contacts.dart';
@@ -30,10 +29,10 @@ class ContactsExternalTab extends StatelessWidget {
               final contact = state.contacts[index];
               return ContactTile(
                 displayName: contact.name,
-                onTap: () async {
-                  context.goNamed(MainRoute.contactsDetails, pathParameters: {
-                    contactIdPathParameterName: contact.id.toString(),
-                  });
+                onTap: () {
+                  context.router.navigate(ContactScreenPageRoute(
+                    contactId: contact.id,
+                  ));
                 },
               );
             },
