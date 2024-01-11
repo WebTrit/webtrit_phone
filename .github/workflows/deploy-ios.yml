@@ -40,7 +40,7 @@ jobs:
         run: ls -la ${{env.WORKING_DIRECTORY_KEYSTORE}}
 
       - name: List contents of a directory keystores
-        run: ls -la ${{env.WORKING_DIRECTORY_KEYSTORE}}/${{ github.event.inputs.bundleId }}"
+        run: ls -la ${{env.WORKING_DIRECTORY_KEYSTORE}}/${{ github.event.inputs.bundleId }}
 
       - name: List contents of a directory phone
         run: ls -la ${{env.WORKING_DIRECTORY_PHONE}}
