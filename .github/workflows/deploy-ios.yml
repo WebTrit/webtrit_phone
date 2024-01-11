@@ -1,9 +1,6 @@
 name: API Triggered Action
 
 on:
-  push:
-    branches:
-      - feature/github-actions
   workflow_dispatch:
     inputs:
       bundleId:
