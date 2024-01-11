@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
-import 'package:webtrit_phone/app/routes.dart';
+import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 
@@ -34,7 +34,7 @@ class MainAppBar extends AppBar {
                       Icons.person,
                     ),
                     onPressed: () {
-                      context.pushNamed(MainRoute.settings);
+                      context.router.push(const SettingsScreenPageRoute());
                     },
                   ),
                 );

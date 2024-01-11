@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 
+@RoutePage()
 class AppShell extends StatelessWidget {
   const AppShell({
     super.key,
-    required this.child,
   });
-
-  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +29,7 @@ class AppShell extends StatelessWidget {
           },
         ),
       ],
-      child: child,
+      child: const AutoRouter(),
     );
   }
 }

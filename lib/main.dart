@@ -26,23 +26,42 @@ void main() {
 
     final applicationDocumentsPath = await getApplicationDocumentsPath();
 
-    return Provider<AppDatabase>(
-      create: (context) {
-        final appDatabase = _AppDatabaseWithAppLifecycleStateObserver(
-          createAppDatabaseConnection(
-            applicationDocumentsPath,
-            'db.sqlite',
-            logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
-          ),
-        );
-        WidgetsBinding.instance.addObserver(appDatabase);
-        return appDatabase;
-      },
-      dispose: (context, value) {
-        final appDatabase = value as _AppDatabaseWithAppLifecycleStateObserver;
-        WidgetsBinding.instance.removeObserver(appDatabase);
-        appDatabase.close();
-      },
+    return MultiProvider(
+      providers: [
+        Provider<AppPreferences>(
+          create: (context) {
+            return AppPreferences();
+          },
+        ),
+        Provider<SecureStorage>(
+          create: (context) {
+            return SecureStorage();
+          },
+        ),
+        Provider<AppDatabase>(
+          create: (context) {
+            final appDatabase = _AppDatabaseWithAppLifecycleStateObserver(
+              createAppDatabaseConnection(
+                applicationDocumentsPath,
+                'db.sqlite',
+                logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
+              ),
+            );
+            WidgetsBinding.instance.addObserver(appDatabase);
+            return appDatabase;
+          },
+          dispose: (context, value) {
+            final appDatabase = value as _AppDatabaseWithAppLifecycleStateObserver;
+            WidgetsBinding.instance.removeObserver(appDatabase);
+            appDatabase.close();
+          },
+        ),
+        Provider<AppPermissions>(
+          create: (context) {
+            return AppPermissions();
+          },
+        ),
+      ],
       child: MultiRepositoryProvider(
         providers: [
           RepositoryProvider.value(value: logRecordsRepository),
@@ -51,10 +70,10 @@ void main() {
         child: Builder(
           builder: (context) {
             return App(
+              appPreferences: context.read<AppPreferences>(),
+              secureStorage: context.read<SecureStorage>(),
               appDatabase: context.read<AppDatabase>(),
-              appPermissions: AppPermissions(),
-              appPreferences: AppPreferences(),
-              secureStorage: SecureStorage(),
+              appPermissions: context.read<AppPermissions>(),
               appThemes: AppThemes(),
             );
           },

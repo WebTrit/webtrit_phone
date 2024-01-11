@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:go_router/go_router.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:webtrit_phone/app/routes.dart';
+import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
@@ -102,7 +102,7 @@ class SettingsScreen extends StatelessWidget {
             title: Text(context.l10n.settings_ListViewTileTitle_network),
             trailing: const Icon(Icons.navigate_next),
             onTap: () {
-              context.pushNamed(MainRoute.settingsNetwork);
+              context.router.navigate(const NetworkScreenPageRoute());
             },
           ),
           if (appHelpUrl != null) ...[
@@ -112,12 +112,7 @@ class SettingsScreen extends StatelessWidget {
               title: Text(context.l10n.settings_ListViewTileTitle_help),
               trailing: const Icon(Icons.navigate_next),
               onTap: () {
-                context.pushNamed(
-                  MainRoute.settingsHelp,
-                  queryParameters: {
-                    HelpScreen.initialUriQueryParameterName: appHelpUrl,
-                  },
-                );
+                context.router.navigate(HelpScreenPageRoute(initialUriQueryParam: appHelpUrl));
               },
             ),
           ],
@@ -137,7 +132,7 @@ class SettingsScreen extends StatelessWidget {
               ],
             ),
             onTap: () {
-              context.pushNamed(MainRoute.settingsLanguage);
+              context.router.navigate(const LanguageScreenPageRoute());
             },
           ),
           if (appTermsAndConditionsUrl != null) ...[
@@ -153,12 +148,7 @@ class SettingsScreen extends StatelessWidget {
                     await launchUrl(uri);
                   }
                 } else {
-                  context.pushNamed(
-                    MainRoute.settingsTermsConditions,
-                    queryParameters: {
-                      TermsConditionsScreen.initialUriQueryParameterName: uri.toString(),
-                    },
-                  );
+                  context.router.navigate(TermsConditionsScreenPageRoute(initialUriQueryParam: uri.toString()));
                 }
               },
             ),
@@ -169,7 +159,7 @@ class SettingsScreen extends StatelessWidget {
             title: Text(context.l10n.settings_ListViewTileTitle_about),
             trailing: const Icon(Icons.navigate_next),
             onTap: () {
-              context.pushNamed(MainRoute.settingsAbout);
+              context.router.navigate(const AboutScreenPageRoute());
             },
           ),
           const ListTileSeparator(),
@@ -188,7 +178,7 @@ class SettingsScreen extends StatelessWidget {
               ],
             ),
             onTap: () {
-              context.pushNamed(MainRoute.settingsThemeMode);
+              context.router.navigate(const ThemeModeScreenPageRoute());
             },
           ),
           GroupTitleListTile(
@@ -199,7 +189,7 @@ class SettingsScreen extends StatelessWidget {
             title: Text(context.l10n.settings_ListViewTileTitle_logRecordsConsole),
             trailing: const Icon(Icons.navigate_next),
             onTap: () {
-              context.pushNamed(MainRoute.logRecordsConsole);
+              context.router.navigate(const LogRecordsConsoleScreenPageRoute());
             },
           ),
           const ListTileSeparator(),

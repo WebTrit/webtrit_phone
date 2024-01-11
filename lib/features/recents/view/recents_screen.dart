@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/app/routes.dart';
+import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -106,9 +106,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                   return RecentTile(
                     recent: recent,
                     onInfoPressed: () {
-                      context.goNamed(MainRoute.recentsDetails, pathParameters: {
-                        recentIdPathParameterName: recent.id.toString(),
-                      });
+                      context.router.navigate(RecentScreenPageRoute(recentId: recent.id!));
                     },
                     onTap: () {
                       final callBloc = context.read<CallBloc>();
