@@ -246,6 +246,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_RequestFailureOtpVerificationAttemptsExceededError => 'Verification attempts exceeded';
 
   @override
+  String get login_RequestFailureParametersApplyIssueError => 'Provided data can\'t be processed';
+
+  @override
   String get login_RequestFailurePhoneNotFoundError => 'Phone number not found';
 
   @override
