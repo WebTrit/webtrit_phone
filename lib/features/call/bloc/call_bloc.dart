@@ -719,15 +719,19 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         if (peerConnection == null) {
           _logger.warning('__onCallSignalingEventUpdating: peerConnection is null - most likely some state issue');
         } else {
-          await peerConnection.setRemoteDescription(remoteDescription);
-          final localDescription = await peerConnection.createAnswer({});
-          await _signalingClient?.execute(UpdateRequest(
-            transaction: WebtritSignalingClient.generateTransactionId(),
-            line: activeCall.line,
-            callId: activeCall.callId.toString(),
-            jsep: localDescription.toMap(),
-          ));
-          await peerConnection.setLocalDescription(localDescription);
+          //TODO: FIX for work Android
+          if (peerConnection.signalingState == RTCSignalingState.RTCSignalingStateHaveLocalOffer) {
+            final localDescription = await peerConnection.createOffer({});
+            await _signalingClient?.execute(UpdateRequest(
+              transaction: WebtritSignalingClient.generateTransactionId(),
+              line: activeCall.line,
+              callId: activeCall.callId.toString(),
+              jsep: localDescription.toMap(),
+            ));
+            await peerConnection.setLocalDescription(localDescription);
+          } else {
+            await peerConnection.setRemoteDescription(remoteDescription);
+          }
         }
       });
     }
@@ -1729,7 +1733,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     } else {
       await _audioPlayer.stop();
-    }  }
+    }
+  }
 
   Uri _parseCoreUrlToSignalingUrl(String coreUrl) {
     final uri = Uri.parse(coreUrl);
