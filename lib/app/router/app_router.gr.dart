@@ -55,6 +55,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: FavoritesScreenPage(),
       );
     },
+    FavoritesTabPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const FavoritesTabPage(),
+      );
+    },
     HelpScreenPageRoute.name: (routeData) {
       final queryParams = routeData.queryParams;
       final args = routeData.argsAs<HelpScreenPageRouteArgs>(
@@ -261,6 +267,20 @@ class FavoritesScreenPageRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'FavoritesScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [FavoritesTabPage]
+class FavoritesTabPageRoute extends PageRouteInfo<void> {
+  const FavoritesTabPageRoute({List<PageRouteInfo>? children})
+      : super(
+          FavoritesTabPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'FavoritesTabPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
