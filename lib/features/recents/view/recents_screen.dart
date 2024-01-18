@@ -106,7 +106,10 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                   return RecentTile(
                     recent: recent,
                     onInfoPressed: () {
-                      context.router.navigate(RecentScreenPageRoute(recentId: recent.id!));
+                      final autoRouter = AutoRouter.of(context);
+                      autoRouter.push(RecentScreenPageRoute(
+                        recentId: recent.id!,
+                      ));
                     },
                     onTap: () {
                       final callBloc = context.read<CallBloc>();
