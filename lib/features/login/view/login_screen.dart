@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/app/routes.dart';
-
-import '../login.dart';
 import 'login_mode_select_tab.dart';
 import 'login_core_url_assign_tab.dart';
 import 'login_otp_request_tab.dart';
 import 'login_otp_verify_tab.dart';
+
+import '../login.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen(
@@ -55,9 +54,9 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     return BlocListener<LoginCubit, LoginState>(
       listenWhen: (previous, current) => previous.step != current.step,
       listener: (context, state) {
-        context.goNamed(AppRoute.loginStep, pathParameters: {
-          LoginStep.pathParameterName: state.step.name,
-        });
+        if (_tabController.index != state.step.index) {
+          _tabController.animateTo(state.step.index);
+        }
       },
       child: TabBarView(
         controller: _tabController,
