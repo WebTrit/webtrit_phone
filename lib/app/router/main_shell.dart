@@ -164,7 +164,11 @@ class _MainShellState extends State<MainShell> {
             },
           ),
         ],
-        child: const AutoRouter(),
+        child: Builder(
+          builder: (context) => const CallShell(
+            child: AutoRouter(),
+          ),
+        ),
       ),
     );
   }
