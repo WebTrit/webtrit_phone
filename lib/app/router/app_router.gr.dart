@@ -49,6 +49,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: ContactsScreenPage(),
       );
     },
+    ContactsTabPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ContactsTabPage(),
+      );
+    },
     FavoritesScreenPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -253,6 +259,20 @@ class ContactsScreenPageRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'ContactsScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [ContactsTabPage]
+class ContactsTabPageRoute extends PageRouteInfo<void> {
+  const ContactsTabPageRoute({List<PageRouteInfo>? children})
+      : super(
+          ContactsTabPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ContactsTabPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
