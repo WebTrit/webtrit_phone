@@ -8,8 +8,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:logging/logging.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/features/features.dart';
 
 import 'firebase_options.dart';
 
@@ -18,7 +20,8 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
   await runZonedGuarded(
     () async {
-      WidgetsFlutterBinding.ensureInitialized();
+      WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+      FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
       await _initFirebase();
       await _initFirebaseMessaging();
@@ -96,6 +99,17 @@ class _AppBlocObserver extends BlocObserver {
   void onCreate(BlocBase bloc) {
     super.onCreate(bloc);
     _logger.fine('onCreate $bloc');
+    _removeNativeSplash(bloc);
+  }
+
+  // Waiting for the widget tree to be created to remove the splash screen, otherwise, we will have white color flickering.
+  void _removeNativeSplash(BlocBase<dynamic> bloc) {
+    if (bloc is LoginCubit || bloc is CallBloc) {
+      Future.delayed(Duration.zero, () {
+        _logger.info('Remove native splash');
+        FlutterNativeSplash.remove();
+      });
+    }
   }
 
   @override

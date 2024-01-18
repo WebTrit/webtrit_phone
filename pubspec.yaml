@@ -68,6 +68,7 @@ dependencies:
   validators: ^3.0.0
   webview_flutter: ^4.4.3
   webview_flutter_web: ^0.2.2+4
+  flutter_native_splash: ^2.3.9
 
   webtrit_api:
     path: ./packages/webtrit_api
@@ -97,7 +98,6 @@ dev_dependencies:
   flutter_gen_runner: ^5.4.0
   flutter_launcher_icons: ^0.13.1
   flutter_lints: ^3.0.1
-  flutter_native_splash: ^2.3.9
   freezed: ^2.4.6
   json_serializable: ^6.7.1
 
