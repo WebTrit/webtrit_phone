@@ -8,7 +8,7 @@ publish_to: 'none'
 #   - <Build>: non-negative integer computed as follows:
 #       <Major> * 1000000 + <Minor> * 10000 + <Patch> * 100 + <published build iteration for Major.Minor.Patch combination>
 # Note: <Minor>, <Patch>, and <Build> should be within the range of 0 to 99.
-version: 1.1.0+1010000
+version: 1.2.0+1020028
 
 environment:
   sdk: '>=3.2.0 <4.0.0'
@@ -63,7 +63,7 @@ dependencies:
   shared_preferences: ^2.2.2
   stream_transform: ^2.1.0
   url_launcher: ^6.2.2
-  uuid: ^4.2.2
+  uuid: ^3.0.7
   validators: ^3.0.0
   webview_flutter: ^4.4.2
   webview_flutter_web: ^0.2.2+3

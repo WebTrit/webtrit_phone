@@ -14,6 +14,7 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 
 import 'environment_config.dart';
 import 'fcm_handler.dart';
+import 'firebase_options.dart';
 import 'utils/path_provider/_native.dart';
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
@@ -59,7 +60,9 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 }
 
 Future<void> _initFirebase() async {
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
 
 Future<void> _initFirebaseMessaging() async {
@@ -99,9 +102,10 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     appDatabase: appDatabase,
   );
 
+  await Firebase.initializeApp();
+
   final fcmHandler = FCMHandler(logger, repository);
 
-  await Firebase.initializeApp();
   await fcmHandler.execute(message);
 
   logger.info('onBackgroundMessage: ${message.toMap()}');
