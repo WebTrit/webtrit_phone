@@ -150,44 +150,43 @@ extern CXHandleType WTPHandleTypeEnumToCallKit(WTPHandleTypeEnum value) {
 
 @implementation WTPIOSOptions (WTPIOSOptions_Converters)
 + (WTPIOSOptions *)fromMap:(NSDictionary *)dict {
-  WTPIOSOptions *iosOptions = [[WTPIOSOptions alloc] init];
   id localizedName = dict[@"localizedName"];
-  iosOptions.localizedName = (localizedName == [NSNull null]) ? nil : localizedName;
   id ringtoneSound = dict[@"ringtoneSound"];
-  iosOptions.ringtoneSound = (ringtoneSound == [NSNull null]) ? nil : ringtoneSound;
   id iconTemplateImageAssetName = dict[@"iconTemplateImageAssetName"];
-  iosOptions.iconTemplateImageAssetName = (iconTemplateImageAssetName == [NSNull null]) ? nil : iconTemplateImageAssetName;
   id maximumCallGroups = dict[@"maximumCallGroups"];
-  iosOptions.maximumCallGroups = (maximumCallGroups == [NSNull null]) ? nil : maximumCallGroups;
   id maximumCallsPerCallGroup = dict[@"maximumCallsPerCallGroup"];
-  iosOptions.maximumCallsPerCallGroup = (maximumCallsPerCallGroup == [NSNull null]) ? nil : maximumCallsPerCallGroup;
   id supportsHandleTypeGeneric = dict[@"supportsHandleTypeGeneric"];
-  iosOptions.supportsHandleTypeGeneric = (supportsHandleTypeGeneric == [NSNull null]) ? nil : supportsHandleTypeGeneric;
   id supportsHandleTypePhoneNumber = dict[@"supportsHandleTypePhoneNumber"];
-  iosOptions.supportsHandleTypePhoneNumber = (supportsHandleTypePhoneNumber == [NSNull null]) ? nil : supportsHandleTypePhoneNumber;
   id supportsHandleTypeEmailAddress = dict[@"supportsHandleTypeEmailAddress"];
-  iosOptions.supportsHandleTypeEmailAddress = (supportsHandleTypeEmailAddress == [NSNull null]) ? nil : supportsHandleTypeEmailAddress;
   id supportsVideo = dict[@"supportsVideo"];
-  iosOptions.supportsVideo = (supportsVideo == [NSNull null]) ? nil : supportsVideo;
   id includesCallsInRecents = dict[@"includesCallsInRecents"];
-  iosOptions.includesCallsInRecents = (includesCallsInRecents == [NSNull null]) ? nil : includesCallsInRecents;
   id driveIdleTimerDisabled = dict[@"driveIdleTimerDisabled"];
-  iosOptions.driveIdleTimerDisabled = (driveIdleTimerDisabled == [NSNull null]) ? nil : driveIdleTimerDisabled;
-  return iosOptions;
+
+  return [WTPIOSOptions makeWithLocalizedName:localizedName
+                                ringtoneSound:(ringtoneSound == [NSNull null]) ? nil : ringtoneSound
+                   iconTemplateImageAssetName:(iconTemplateImageAssetName == [NSNull null]) ? nil : iconTemplateImageAssetName
+                            maximumCallGroups:[maximumCallGroups integerValue]
+                     maximumCallsPerCallGroup:[maximumCallsPerCallGroup integerValue]
+                    supportsHandleTypeGeneric:(supportsHandleTypeGeneric == [NSNull null]) ? nil : supportsHandleTypeGeneric
+                supportsHandleTypePhoneNumber:(supportsHandleTypePhoneNumber == [NSNull null]) ? nil : supportsHandleTypePhoneNumber
+               supportsHandleTypeEmailAddress:(supportsHandleTypeEmailAddress == [NSNull null]) ? nil : supportsHandleTypeEmailAddress
+                                supportsVideo:[supportsVideo boolValue]
+                       includesCallsInRecents:[includesCallsInRecents boolValue]
+                       driveIdleTimerDisabled:[driveIdleTimerDisabled boolValue]];
 }
 - (NSDictionary *)toMap {
   return @{
-    @"localizedName": (self.localizedName ?: [NSNull null]),
+    @"localizedName": self.localizedName,
     @"ringtoneSound": (self.ringtoneSound ?: [NSNull null]),
     @"iconTemplateImageAssetName": (self.iconTemplateImageAssetName ?: [NSNull null]),
-    @"maximumCallGroups": (self.maximumCallGroups ?: [NSNull null]),
-    @"maximumCallsPerCallGroup": (self.maximumCallsPerCallGroup ?: [NSNull null]),
+    @"maximumCallGroups": @(self.maximumCallGroups),
+    @"maximumCallsPerCallGroup": @(self.maximumCallsPerCallGroup),
     @"supportsHandleTypeGeneric": (self.supportsHandleTypeGeneric ?: [NSNull null]),
     @"supportsHandleTypePhoneNumber": (self.supportsHandleTypePhoneNumber ?: [NSNull null]),
     @"supportsHandleTypeEmailAddress": (self.supportsHandleTypeEmailAddress ?: [NSNull null]),
-    @"supportsVideo": (self.supportsVideo ?: [NSNull null]),
-    @"includesCallsInRecents": (self.includesCallsInRecents ?: [NSNull null]),
-    @"driveIdleTimerDisabled": (self.driveIdleTimerDisabled ?: [NSNull null]),
+    @"supportsVideo": @(self.supportsVideo),
+    @"includesCallsInRecents": @(self.includesCallsInRecents),
+    @"driveIdleTimerDisabled": @(self.driveIdleTimerDisabled),
   };
 }
 - (CXProviderConfiguration *)toCallKitWithRegistrar:(NSObject<FlutterPluginRegistrar> *)registrar {
@@ -200,8 +199,8 @@ extern CXHandleType WTPHandleTypeEnumToCallKit(WTPHandleTypeEnum value) {
     NSString *iconTemplateImageAssetKey = [registrar lookupKeyForAsset:self.iconTemplateImageAssetName];
     providerConfiguration.iconTemplateImageData = UIImagePNGRepresentation([UIImage imageNamed:iconTemplateImageAssetKey]);
   }
-  providerConfiguration.maximumCallGroups = self.maximumCallGroups.unsignedIntValue;
-  providerConfiguration.maximumCallsPerCallGroup = self.maximumCallsPerCallGroup.unsignedIntValue;
+  providerConfiguration.maximumCallGroups = (NSUInteger) self.maximumCallGroups;
+  providerConfiguration.maximumCallsPerCallGroup = (NSUInteger) self.maximumCallsPerCallGroup;
   NSMutableSet<NSNumber *> *supportedHandleTypes = [NSMutableSet set];
   if (self.supportsHandleTypeGeneric != nil && self.supportsHandleTypeGeneric.boolValue == YES) {
     [supportedHandleTypes addObject:[NSNumber numberWithInteger:CXHandleTypeGeneric]];
@@ -213,9 +212,9 @@ extern CXHandleType WTPHandleTypeEnumToCallKit(WTPHandleTypeEnum value) {
     [supportedHandleTypes addObject:[NSNumber numberWithInteger:CXHandleTypeEmailAddress]];
   }
   providerConfiguration.supportedHandleTypes = supportedHandleTypes;
-  providerConfiguration.supportsVideo = self.supportsVideo.boolValue;
+  providerConfiguration.supportsVideo = self.supportsVideo;
   if (@available(iOS 11.0, *)) {
-    providerConfiguration.includesCallsInRecents = self.includesCallsInRecents.boolValue;
+    providerConfiguration.includesCallsInRecents = self.includesCallsInRecents;
   }
   return providerConfiguration;
 }

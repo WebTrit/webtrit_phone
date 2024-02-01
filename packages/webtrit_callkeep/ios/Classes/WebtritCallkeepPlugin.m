@@ -40,9 +40,9 @@ static NSString *const OptionsKey = @"WebtritCallkeepPluginOptions";
     _registrar = registrar;
     NSObject<FlutterBinaryMessenger> *binaryMessenger = [_registrar messenger];
     _pushRegistryDelegateFlutterApi = [[WTPPushRegistryDelegateFlutterApi alloc] initWithBinaryMessenger:binaryMessenger];
-    WTPPushRegistryHostApiSetup(binaryMessenger, self);
+    SetUpWTPPushRegistryHostApi(binaryMessenger, self);
     _delegateFlutterApi = [[WTPDelegateFlutterApi alloc] initWithBinaryMessenger:binaryMessenger];
-    WTPHostApiSetup(binaryMessenger, self);
+    SetUpWTPHostApi(binaryMessenger, self);
   }
   return self;
 }
@@ -52,8 +52,8 @@ static NSString *const OptionsKey = @"WebtritCallkeepPluginOptions";
   NSLog(@"[Callkeep][dealloc]");
 #endif
   NSObject<FlutterBinaryMessenger> *binaryMessenger = [_registrar messenger];
-  WTPHostApiSetup(binaryMessenger, nil);
-  WTPPushRegistryHostApiSetup(binaryMessenger, nil);
+  SetUpWTPHostApi(binaryMessenger, nil);
+  SetUpWTPPushRegistryHostApi(binaryMessenger, nil);
 }
 
 - (BOOL)isSetUp {
@@ -85,7 +85,7 @@ static NSString *const OptionsKey = @"WebtritCallkeepPluginOptions";
 
     _callController = [[CXCallController alloc] init];
 
-    _driveIdleTimerDisabled = iosOptions.driveIdleTimerDisabled.boolValue;
+    _driveIdleTimerDisabled = iosOptions.driveIdleTimerDisabled;
   } else {
 #ifdef DEBUG
     NSLog(@"[Callkeep][restoreSetUp] skipped");
@@ -137,7 +137,7 @@ static NSString *const OptionsKey = @"WebtritCallkeepPluginOptions";
     if (_callController == nil) {
       _callController = [[CXCallController alloc] init];
     }
-    _driveIdleTimerDisabled = iosOptions.driveIdleTimerDisabled.boolValue;
+    _driveIdleTimerDisabled = iosOptions.driveIdleTimerDisabled;
   } else {
 #ifdef DEBUG
     NSLog(@"[Callkeep][setUp] skipped");
@@ -168,7 +168,7 @@ static NSString *const OptionsKey = @"WebtritCallkeepPluginOptions";
 - (void)reportNewIncomingCall:(NSString *)uuidString
                        handle:(WTPHandle *)handle
                   displayName:(NSString *)displayName
-                     hasVideo:(NSNumber *)hasVideo
+                     hasVideo:(BOOL)hasVideo
                    completion:(void (^)(WTPIncomingCallError *, FlutterError *))completion {
 #ifdef DEBUG
   NSLog(@"[Callkeep][reportNewIncomingCall] uuidString = %@", uuidString);
@@ -176,7 +176,7 @@ static NSString *const OptionsKey = @"WebtritCallkeepPluginOptions";
   CXCallUpdate *callUpdate = [[CXCallUpdate alloc] init];
   callUpdate.remoteHandle = [handle toCallKit];
   callUpdate.localizedCallerName = displayName;
-  callUpdate.hasVideo = [hasVideo boolValue];
+  callUpdate.hasVideo = hasVideo;
   callUpdate.supportsGrouping = NO;
   callUpdate.supportsUngrouping = NO;
   callUpdate.supportsHolding = YES;
@@ -257,7 +257,7 @@ static NSString *const OptionsKey = @"WebtritCallkeepPluginOptions";
 - (void)             startCall:(NSString *)uuidString
                         handle:(WTPHandle *)handle
 displayNameOrContactIdentifier:(NSString *)displayNameOrContactIdentifier
-                         video:(NSNumber *)video
+                         video:(BOOL)video
                     completion:(void (^)(WTPCallRequestError *, FlutterError *))completion {
 #ifdef DEBUG
   NSLog(@"[Callkeep][startCall] uuidString = %@", uuidString);
@@ -269,7 +269,7 @@ displayNameOrContactIdentifier:(NSString *)displayNameOrContactIdentifier
   if (displayNameOrContactIdentifier != nil) {
     action.contactIdentifier = displayNameOrContactIdentifier;
   }
-  action.video = [video boolValue];
+  action.video = video;
   CXTransaction *transaction = [[CXTransaction alloc] initWithAction:action];
 
   [self requestTransaction:transaction completion:^(WTPCallRequestError *pigeonError, FlutterError *flutterError) {
@@ -315,26 +315,26 @@ displayNameOrContactIdentifier:(NSString *)displayNameOrContactIdentifier
 }
 
 - (void)setHeld:(NSString *)uuidString
-         onHold:(NSNumber *)onHold
+         onHold:(BOOL)onHold
      completion:(void (^)(WTPCallRequestError *, FlutterError *))completion {
 #ifdef DEBUG
-  NSLog(@"[Callkeep][setHeld] uuidString = %@ held = %@", uuidString, onHold);
+  NSLog(@"[Callkeep][setHeld] uuidString = %@ held = %d", uuidString, onHold);
 #endif
   CXSetHeldCallAction *action = [[CXSetHeldCallAction alloc] initWithCallUUID:[[NSUUID alloc] initWithUUIDString:uuidString]
-                                                                       onHold:onHold.boolValue];
+                                                                       onHold:onHold];
   CXTransaction *transaction = [[CXTransaction alloc] initWithAction:action];
 
   [self requestTransaction:transaction completion:completion];
 }
 
 - (void)setMuted:(NSString *)uuidString
-           muted:(NSNumber *)muted
+           muted:(BOOL)muted
       completion:(void (^)(WTPCallRequestError *, FlutterError *))completion {
 #ifdef DEBUG
-  NSLog(@"[Callkeep][setMuted] uuidString = %@ muted = %@", uuidString, muted);
+  NSLog(@"[Callkeep][setMuted] uuidString = %@ muted = %d", uuidString, muted);
 #endif
   CXSetMutedCallAction *action = [[CXSetMutedCallAction alloc] initWithCallUUID:[[NSUUID alloc] initWithUUIDString:uuidString]
-                                                                          muted:muted.boolValue];
+                                                                          muted:muted];
   CXTransaction *transaction = [[CXTransaction alloc] initWithAction:action];
 
   [self requestTransaction:transaction completion:completion];
@@ -405,7 +405,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
   if (person != nil && person.personHandle != nil) {
     [_delegateFlutterApi continueStartCallIntentHandle:[person.personHandle toPigeon]
                                            displayName:[person displayName]
-                                                 video:@(isVideoCall)
+                                                 video:isVideoCall
                                             completion:^(FlutterError *error) {}];
 
     return YES;
@@ -461,8 +461,8 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
   id callIdObject = dictionaryPayload[@"callId"];
 
   if ([handleTypeObject isKindOfClass:[NSString class]] == NO ||
-      [handleValueObject isKindOfClass:[NSString class]] == NO ||
-      [callIdObject isKindOfClass:[NSString class]] == NO) {
+    [handleValueObject isKindOfClass:[NSString class]] == NO ||
+    [callIdObject isKindOfClass:[NSString class]] == NO) {
 #ifdef DEBUG
     NSLog(@"[Callkeep][didReceiveIncomingPushWithPayloadForPushTypeVoIP:withCompletionHandler:] payload wrong format");
 #endif
@@ -473,7 +473,8 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
                                       update:callUpdate
                                   completion:^(NSError *error) {
                                     if (error != nil) {
-                                      NSLog(@"[Callkeep][didReceiveIncomingPushWithPayloadForPushTypeVoIP:withCompletionHandler:][reportNewIncomingCallWithUUID] payload wrong format error = %@", error);
+                                      NSLog(@"[Callkeep][didReceiveIncomingPushWithPayloadForPushTypeVoIP:withCompletionHandler:][reportNewIncomingCallWithUUID] payload wrong format error = %@",
+                                            error);
                                     } else {
                                       [_provider reportCallWithUUID:uuid
                                                         endedAtDate:nil
@@ -518,7 +519,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
 
                                   [self->_delegateFlutterApi didPushIncomingCallHandle:[callUpdate.remoteHandle toPigeon]
                                                                            displayName:callUpdate.localizedCallerName
-                                                                                 video:@(callUpdate.hasVideo)
+                                                                                 video:callUpdate.hasVideo
                                                                                 callId:callId
                                                                                   uuid:[uuid UUIDString]
                                                                                  error:incomingCallError
@@ -545,7 +546,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
   [_delegateFlutterApi performStartCall:action.callUUID.UUIDString
                                  handle:[action.handle toPigeon]
          displayNameOrContactIdentifier:action.contactIdentifier
-                                  video:@(action.video)
+                                  video:action.video
                              completion:^(NSNumber *fulfill, FlutterError *error) {
                                if (error != nil || [fulfill boolValue] != YES) {
                                  [action fail];
@@ -590,7 +591,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
   NSLog(@"[Callkeep][CXProviderDelegate][provider:performSetHeldCallAction:]");
 #endif
   [_delegateFlutterApi performSetHeld:action.callUUID.UUIDString
-                               onHold:@(action.onHold)
+                               onHold:action.onHold
                            completion:^(NSNumber *fulfill, FlutterError *error) {
                              if (error != nil || [fulfill boolValue] != YES) {
                                [action fail];
@@ -605,7 +606,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
   NSLog(@"[Callkeep][CXProviderDelegate][provider:performSetMutedCallAction:]");
 #endif
   [_delegateFlutterApi performSetMuted:action.callUUID.UUIDString
-                                 muted:@(action.muted)
+                                 muted:action.muted
                             completion:^(NSNumber *fulfill, FlutterError *error) {
                               if (error != nil || [fulfill boolValue] != YES) {
                                 [action fail];
