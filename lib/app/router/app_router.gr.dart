@@ -43,28 +43,28 @@ abstract class _$AppRouter extends RootStackRouter {
         child: ContactScreenPage(args.contactId),
       );
     },
+    ContactsRouterPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ContactsRouterPage(),
+      );
+    },
     ContactsScreenPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: ContactsScreenPage(),
       );
     },
-    ContactsTabPageRoute.name: (routeData) {
+    FavoritesRouterPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const ContactsTabPage(),
+        child: const FavoritesRouterPage(),
       );
     },
     FavoritesScreenPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: FavoritesScreenPage(),
-      );
-    },
-    FavoritesTabPageRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const FavoritesTabPage(),
       );
     },
     HelpScreenPageRoute.name: (routeData) {
@@ -139,16 +139,16 @@ abstract class _$AppRouter extends RootStackRouter {
         child: RecentScreenPage(args.recentId),
       );
     },
+    RecentsRouterPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const RecentsRouterPage(),
+      );
+    },
     RecentsScreenPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: RecentsScreenPage(),
-      );
-    },
-    RecentsTabPageRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const RecentsTabPage(),
       );
     },
     SettingsScreenPageRoute.name: (routeData) {
@@ -250,6 +250,20 @@ class ContactScreenPageRouteArgs {
 }
 
 /// generated route for
+/// [ContactsRouterPage]
+class ContactsRouterPageRoute extends PageRouteInfo<void> {
+  const ContactsRouterPageRoute({List<PageRouteInfo>? children})
+      : super(
+          ContactsRouterPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ContactsRouterPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [ContactsScreenPage]
 class ContactsScreenPageRoute extends PageRouteInfo<void> {
   const ContactsScreenPageRoute({List<PageRouteInfo>? children})
@@ -264,15 +278,15 @@ class ContactsScreenPageRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [ContactsTabPage]
-class ContactsTabPageRoute extends PageRouteInfo<void> {
-  const ContactsTabPageRoute({List<PageRouteInfo>? children})
+/// [FavoritesRouterPage]
+class FavoritesRouterPageRoute extends PageRouteInfo<void> {
+  const FavoritesRouterPageRoute({List<PageRouteInfo>? children})
       : super(
-          ContactsTabPageRoute.name,
+          FavoritesRouterPageRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'ContactsTabPageRoute';
+  static const String name = 'FavoritesRouterPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -287,20 +301,6 @@ class FavoritesScreenPageRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'FavoritesScreenPageRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [FavoritesTabPage]
-class FavoritesTabPageRoute extends PageRouteInfo<void> {
-  const FavoritesTabPageRoute({List<PageRouteInfo>? children})
-      : super(
-          FavoritesTabPageRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'FavoritesTabPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -495,6 +495,20 @@ class RecentScreenPageRouteArgs {
 }
 
 /// generated route for
+/// [RecentsRouterPage]
+class RecentsRouterPageRoute extends PageRouteInfo<void> {
+  const RecentsRouterPageRoute({List<PageRouteInfo>? children})
+      : super(
+          RecentsRouterPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'RecentsRouterPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [RecentsScreenPage]
 class RecentsScreenPageRoute extends PageRouteInfo<void> {
   const RecentsScreenPageRoute({List<PageRouteInfo>? children})
@@ -504,20 +518,6 @@ class RecentsScreenPageRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'RecentsScreenPageRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [RecentsTabPage]
-class RecentsTabPageRoute extends PageRouteInfo<void> {
-  const RecentsTabPageRoute({List<PageRouteInfo>? children})
-      : super(
-          RecentsTabPageRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'RecentsTabPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

@@ -8,11 +8,6 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 @RoutePage()
-class FavoritesTabPage extends AutoRouter {
-  const FavoritesTabPage({super.key});
-}
-
-@RoutePage()
 class FavoritesScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
   const FavoritesScreenPage();

@@ -18,9 +18,9 @@ class MainScreen extends StatelessWidget {
     return AutoTabsScaffold(
       lazyLoad: false,
       routes: const [
-        FavoritesTabPageRoute(),
-        RecentsTabPageRoute(),
-        ContactsTabPageRoute(),
+        FavoritesRouterPageRoute(),
+        RecentsRouterPageRoute(),
+        ContactsRouterPageRoute(),
         KeypadScreenPageRoute(),
       ],
       bottomNavigationBuilder: (_, tabsRouter) {

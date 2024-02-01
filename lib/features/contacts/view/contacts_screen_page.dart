@@ -11,11 +11,6 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 @RoutePage()
-class ContactsTabPage extends AutoRouter {
-  const ContactsTabPage({super.key});
-}
-
-@RoutePage()
 class ContactsScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
   const ContactsScreenPage();

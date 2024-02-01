@@ -59,20 +59,20 @@ class AppRouter extends _$AppRouter {
                       page: FavoritesScreenPageRoute.page,
                     ),
                     AutoRoute(
-                      page: FavoritesTabPageRoute.page,
+                      page: FavoritesRouterPageRoute.page,
                       children: [
                         AutoRoute(page: FavoritesScreenPageRoute.page, initial: true),
                       ],
                     ),
                     AutoRoute(
-                      page: RecentsTabPageRoute.page,
+                      page: RecentsRouterPageRoute.page,
                       children: [
                         AutoRoute(page: RecentsScreenPageRoute.page, initial: true),
                         AutoRoute(page: RecentScreenPageRoute.page),
                       ],
                     ),
                     AutoRoute(
-                      page: ContactsTabPageRoute.page,
+                      page: ContactsRouterPageRoute.page,
                       children: [
                         AutoRoute(page: ContactsScreenPageRoute.page, initial: true),
                         AutoRoute(page: ContactScreenPageRoute.page),
