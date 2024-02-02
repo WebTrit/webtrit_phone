@@ -42,8 +42,7 @@ class ContactsLocalTab extends StatelessWidget {
                 displayName: contact.name,
                 thumbnail: contact.thumbnail,
                 onTap: () {
-                  final autoRouter = AutoRouter.of(context);
-                  autoRouter.push(ContactScreenPageRoute(
+                  context.router.navigate(ContactScreenPageRoute(
                     contactId: contact.id,
                   ));
                 },

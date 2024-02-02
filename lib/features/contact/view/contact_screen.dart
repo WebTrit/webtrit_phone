@@ -65,7 +65,7 @@ class ContactScreen extends StatelessWidget {
                         displayName: contact.name,
                         video: false,
                       ));
-                      AutoRouter.of(context).pop();
+                      context.router.pop();
                     },
                     onVideoPressed: () {
                       final callBloc = context.read<CallBloc>();
@@ -74,7 +74,7 @@ class ContactScreen extends StatelessWidget {
                         displayName: contact.name,
                         video: true,
                       ));
-                      AutoRouter.of(context).pop();
+                      context.router.pop();
                     },
                   ),
                 for (final contactEmail in contactEmails)

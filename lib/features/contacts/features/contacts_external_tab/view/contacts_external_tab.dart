@@ -30,8 +30,7 @@ class ContactsExternalTab extends StatelessWidget {
               return ContactTile(
                 displayName: contact.name,
                 onTap: () {
-                  final autoRouter = AutoRouter.of(context);
-                  autoRouter.push(ContactScreenPageRoute(
+                  context.router.navigate(ContactScreenPageRoute(
                     contactId: contact.id,
                   ));
                 },

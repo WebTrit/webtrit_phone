@@ -23,7 +23,7 @@ class PermissionsScreen extends StatelessWidget {
       body: BlocConsumer<PermissionsCubit, PermissionsState>(
         listener: (context, state) {
           if (state.status.isSuccess || state.status.isFailure) {
-            AutoRouter.of(context).replaceAll([const MainScreenPageRoute()]);
+            context.router.replaceAll([const MainScreenPageRoute()]);
           }
         },
         builder: (context, state) {

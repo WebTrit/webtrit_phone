@@ -61,8 +61,7 @@ class FavoritesScreen extends StatelessWidget {
                       ));
                     },
                     onInfoPressed: () {
-                      final autoRouter = AutoRouter.of(context);
-                      autoRouter.push(ContactScreenPageRoute(
+                      context.router.navigate(ContactScreenPageRoute(
                         contactId: favorite.contact.id,
                       ));
                     },
