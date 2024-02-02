@@ -9,7 +9,6 @@ import 'package:webtrit_phone/app/router/main_shell.dart';
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/environment_config.dart';
 
 import 'auth_guard.dart';
 
@@ -55,13 +54,10 @@ class AppRouter extends _$AppRouter {
                   page: MainScreenPageRoute.page,
                   children: [
                     AutoRoute(
-                      initial: true,
-                      page: FavoritesScreenPageRoute.page,
-                    ),
-                    AutoRoute(
                       page: FavoritesRouterPageRoute.page,
                       children: [
                         AutoRoute(page: FavoritesScreenPageRoute.page, initial: true),
+                        AutoRoute(page: ContactScreenPageRoute.page),
                       ],
                     ),
                     AutoRoute(
