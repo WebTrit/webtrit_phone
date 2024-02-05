@@ -1510,7 +1510,7 @@ AdapterInfo _$AdapterInfoFromJson(Map<String, dynamic> json) {
 mixin _$AdapterInfo {
   String? get name => throw _privateConstructorUsedError;
   String? get version => throw _privateConstructorUsedError;
-  List<String>? get supported => throw _privateConstructorUsedError;
+  List<RawLoginType> get supported => throw _privateConstructorUsedError;
   Map<String, dynamic>? get custom => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1528,7 +1528,7 @@ abstract class $AdapterInfoCopyWith<$Res> {
   $Res call(
       {String? name,
       String? version,
-      List<String>? supported,
+      List<RawLoginType> supported,
       Map<String, dynamic>? custom});
 }
 
@@ -1547,7 +1547,7 @@ class _$AdapterInfoCopyWithImpl<$Res, $Val extends AdapterInfo>
   $Res call({
     Object? name = freezed,
     Object? version = freezed,
-    Object? supported = freezed,
+    Object? supported = null,
     Object? custom = freezed,
   }) {
     return _then(_value.copyWith(
@@ -1559,10 +1559,10 @@ class _$AdapterInfoCopyWithImpl<$Res, $Val extends AdapterInfo>
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
               as String?,
-      supported: freezed == supported
+      supported: null == supported
           ? _value.supported
           : supported // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<RawLoginType>,
       custom: freezed == custom
           ? _value.custom
           : custom // ignore: cast_nullable_to_non_nullable
@@ -1582,7 +1582,7 @@ abstract class _$$AdapterInfoImplCopyWith<$Res>
   $Res call(
       {String? name,
       String? version,
-      List<String>? supported,
+      List<RawLoginType> supported,
       Map<String, dynamic>? custom});
 }
 
@@ -1599,7 +1599,7 @@ class __$$AdapterInfoImplCopyWithImpl<$Res>
   $Res call({
     Object? name = freezed,
     Object? version = freezed,
-    Object? supported = freezed,
+    Object? supported = null,
     Object? custom = freezed,
   }) {
     return _then(_$AdapterInfoImpl(
@@ -1611,10 +1611,10 @@ class __$$AdapterInfoImplCopyWithImpl<$Res>
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
               as String?,
-      supported: freezed == supported
+      supported: null == supported
           ? _value._supported
           : supported // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<RawLoginType>,
       custom: freezed == custom
           ? _value._custom
           : custom // ignore: cast_nullable_to_non_nullable
@@ -1626,14 +1626,15 @@ class __$$AdapterInfoImplCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class _$AdapterInfoImpl implements _AdapterInfo {
+class _$AdapterInfoImpl extends _AdapterInfo {
   const _$AdapterInfoImpl(
       {this.name,
       this.version,
-      final List<String>? supported,
+      final List<RawLoginType> supported = const [],
       final Map<String, dynamic>? custom})
       : _supported = supported,
-        _custom = custom;
+        _custom = custom,
+        super._();
 
   factory _$AdapterInfoImpl.fromJson(Map<String, dynamic> json) =>
       _$$AdapterInfoImplFromJson(json);
@@ -1642,14 +1643,13 @@ class _$AdapterInfoImpl implements _AdapterInfo {
   final String? name;
   @override
   final String? version;
-  final List<String>? _supported;
+  final List<RawLoginType> _supported;
   @override
-  List<String>? get supported {
-    final value = _supported;
-    if (value == null) return null;
+  @JsonKey()
+  List<RawLoginType> get supported {
     if (_supported is EqualUnmodifiableListView) return _supported;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_supported);
   }
 
   final Map<String, dynamic>? _custom;
@@ -1702,12 +1702,13 @@ class _$AdapterInfoImpl implements _AdapterInfo {
   }
 }
 
-abstract class _AdapterInfo implements AdapterInfo {
+abstract class _AdapterInfo extends AdapterInfo {
   const factory _AdapterInfo(
       {final String? name,
       final String? version,
-      final List<String>? supported,
+      final List<RawLoginType> supported,
       final Map<String, dynamic>? custom}) = _$AdapterInfoImpl;
+  const _AdapterInfo._() : super._();
 
   factory _AdapterInfo.fromJson(Map<String, dynamic> json) =
       _$AdapterInfoImpl.fromJson;
@@ -1717,7 +1718,7 @@ abstract class _AdapterInfo implements AdapterInfo {
   @override
   String? get version;
   @override
-  List<String>? get supported;
+  List<RawLoginType> get supported;
   @override
   Map<String, dynamic>? get custom;
   @override
