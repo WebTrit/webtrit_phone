@@ -19,6 +19,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_CallActionsTooltip_accept => 'Прийняти';
 
   @override
+  String get call_CallActionsTooltip_attended_transfer => 'Керований переніс';
+
+  @override
   String get call_CallActionsTooltip_disableCamera => 'Вимкнути камеру';
 
   @override
@@ -56,6 +59,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get call_CallActionsTooltip_transfer => 'Передати';
+
+  @override
+  String get call_CallActionsTooltip_unattended_transfer => 'Некерований переніс';
 
   @override
   String get call_CallActionsTooltip_unhold => 'Поновити дзвінок';
@@ -238,10 +244,19 @@ class AppLocalizationsUk extends AppLocalizations {
   String get login_RequestFailureOtpVerificationAttemptsExceededError => 'Перевищено кількість спроб підтвердження';
 
   @override
+  String get login_RequestFailureParametersApplyError => 'Вхідні дані не можуть бути оброблені';
+
+  @override
   String get login_RequestFailurePhoneNotFoundError => 'Номер телефону не знайдено';
 
   @override
   String get login_RequestFailureUnconfiguredBundleIdError => 'Помилка конфігурації сервера додатка - сповістіть свого постачальника послуг';
+
+  @override
+  String get login_SegmentedButton_otpSignIn => 'Увійти за допомогою OTP';
+
+  @override
+  String get login_SegmentedButton_passwordSignIn => 'Вхід за паролем';
 
   @override
   String login_Text_coreUrlAssignPostDescription(Object email) {
@@ -262,6 +277,12 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get login_TextFieldLabelText_otpVerifyCode => 'Введіть код підтвердження';
+
+  @override
+  String get login_TextFieldLabelText_passwordSignInRequestLogin => 'Введіть ваш логін';
+
+  @override
+  String get login_TextFieldLabelText_passwordSignInRequestPassword => 'Введіть ваш пароль';
 
   @override
   String get login_Text_otpRequestDemoDescription => 'Якщо у вас ще немає облікового запису, він буде автоматично створений для вас.';
@@ -286,6 +307,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String login_Text_otpVerifySentToEmailAssignedWithPhone(String phone) {
     return 'На електронну пошту, прив\'язану до телефону tel:$phone, надіслано одноразовий код підтвердження.';
   }
+
+  @override
+  String get login_Undefine_noAvailableAuthLogins => 'Зараз доступні варіанти входу відсутні. Зверніться до адміністратора для отримання допомоги.';
 
   @override
   String get login_validationCoreUrlError => 'Будь ласка, введіть правильний URL';

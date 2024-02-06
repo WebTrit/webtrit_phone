@@ -19,6 +19,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_CallActionsTooltip_accept => 'Accept';
 
   @override
+  String get call_CallActionsTooltip_attended_transfer => 'Attended transfer';
+
+  @override
   String get call_CallActionsTooltip_disableCamera => 'Disable camera';
 
   @override
@@ -56,6 +59,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get call_CallActionsTooltip_transfer => 'Transfer';
+
+  @override
+  String get call_CallActionsTooltip_unattended_transfer => 'Unattended transfer';
 
   @override
   String get call_CallActionsTooltip_unhold => 'Unhold call';
@@ -238,10 +244,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_RequestFailureOtpVerificationAttemptsExceededError => 'Verification attempts exceeded';
 
   @override
+  String get login_RequestFailureParametersApplyError => 'Input data can\'t be processed';
+
+  @override
   String get login_RequestFailurePhoneNotFoundError => 'Phone number not found';
 
   @override
   String get login_RequestFailureUnconfiguredBundleIdError => 'The app is not supported by your WebTrit Cloud Backend';
+
+  @override
+  String get login_SegmentedButton_otpSignIn => 'OTP sign in';
+
+  @override
+  String get login_SegmentedButton_passwordSignIn => 'Password sign in';
 
   @override
   String login_Text_coreUrlAssignPostDescription(Object email) {
@@ -262,6 +277,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get login_TextFieldLabelText_otpVerifyCode => 'Enter the verification code';
+
+  @override
+  String get login_TextFieldLabelText_passwordSignInRequestLogin => 'Enter your login';
+
+  @override
+  String get login_TextFieldLabelText_passwordSignInRequestPassword => 'Enter your password';
 
   @override
   String get login_Text_otpRequestDemoDescription => 'If you do not have an account yet, it will be automatically created for you.';
@@ -286,6 +307,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String login_Text_otpVerifySentToEmailAssignedWithPhone(String phone) {
     return 'A one-time verification code was sent to the email assigned to the tel:$phone phone number.';
   }
+
+  @override
+  String get login_Undefine_noAvailableAuthLogins => 'Currently, there are no available login options. Please contact your administrator for assistance.';
 
   @override
   String get login_validationCoreUrlError => 'Please enter a valid URL';

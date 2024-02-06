@@ -117,6 +117,12 @@ abstract class AppLocalizations {
   /// **'Accept'**
   String get call_CallActionsTooltip_accept;
 
+  /// No description provided for @call_CallActionsTooltip_attended_transfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Attended transfer'**
+  String get call_CallActionsTooltip_attended_transfer;
+
   /// No description provided for @call_CallActionsTooltip_disableCamera.
   ///
   /// In en, this message translates to:
@@ -194,6 +200,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Transfer'**
   String get call_CallActionsTooltip_transfer;
+
+  /// No description provided for @call_CallActionsTooltip_unattended_transfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Unattended transfer'**
+  String get call_CallActionsTooltip_unattended_transfer;
 
   /// No description provided for @call_CallActionsTooltip_unhold.
   ///
@@ -543,6 +555,12 @@ abstract class AppLocalizations {
   /// **'Verification attempts exceeded'**
   String get login_RequestFailureOtpVerificationAttemptsExceededError;
 
+  /// No description provided for @login_RequestFailureParametersApplyError.
+  ///
+  /// In en, this message translates to:
+  /// **'Input data can\'t be processed'**
+  String get login_RequestFailureParametersApplyError;
+
   /// No description provided for @login_RequestFailurePhoneNotFoundError.
   ///
   /// In en, this message translates to:
@@ -554,6 +572,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The app is not supported by your WebTrit Cloud Backend'**
   String get login_RequestFailureUnconfiguredBundleIdError;
+
+  /// No description provided for @login_SegmentedButton_otpSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'OTP sign in'**
+  String get login_SegmentedButton_otpSignIn;
+
+  /// No description provided for @login_SegmentedButton_passwordSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Password sign in'**
+  String get login_SegmentedButton_passwordSignIn;
 
   /// No description provided for @login_Text_coreUrlAssignPostDescription.
   ///
@@ -591,6 +621,18 @@ abstract class AppLocalizations {
   /// **'Enter the verification code'**
   String get login_TextFieldLabelText_otpVerifyCode;
 
+  /// No description provided for @login_TextFieldLabelText_passwordSignInRequestLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your login'**
+  String get login_TextFieldLabelText_passwordSignInRequestLogin;
+
+  /// No description provided for @login_TextFieldLabelText_passwordSignInRequestPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password'**
+  String get login_TextFieldLabelText_passwordSignInRequestPassword;
+
   /// No description provided for @login_Text_otpRequestDemoDescription.
   ///
   /// In en, this message translates to:
@@ -626,6 +668,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'A one-time verification code was sent to the email assigned to the tel:{phone} phone number.'**
   String login_Text_otpVerifySentToEmailAssignedWithPhone(String phone);
+
+  /// No description provided for @login_Undefine_noAvailableAuthLogins.
+  ///
+  /// In en, this message translates to:
+  /// **'Currently, there are no available login options. Please contact your administrator for assistance.'**
+  String get login_Undefine_noAvailableAuthLogins;
 
   /// No description provided for @login_validationCoreUrlError.
   ///
