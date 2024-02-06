@@ -4,9 +4,11 @@ class ExtBackButton extends StatelessWidget {
   const ExtBackButton({
     super.key,
     this.disabled = false,
+    this.onBackPressed,
   });
 
   final bool disabled;
+  final Function? onBackPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,7 @@ class ExtBackButton extends StatelessWidget {
         Icons.arrow_back,
       ),
       tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-      onPressed: disabled ? null : () => Navigator.maybePop(context),
+      onPressed: disabled ? null : () => onBackPressed != null ? onBackPressed!() : Navigator.maybePop(context),
     );
   }
 }
