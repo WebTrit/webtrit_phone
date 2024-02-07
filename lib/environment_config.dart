@@ -34,6 +34,12 @@ class EnvironmentConfig {
     defaultValue: 'http://localhost:4000',
   );
 
+  static const DEFAULT_TENANT_ID__NAME = 'WEBTRIT_APP_DEFAULT_TENANT_ID';
+  static const DEFAULT_TENANT_ID = String.fromEnvironment(
+    DEFAULT_TENANT_ID__NAME,
+    defaultValue: '',
+  );
+
   static const APP_NAME__NAME = 'WEBTRIT_APP_NAME';
   static const APP_NAME = String.fromEnvironment(
     APP_NAME__NAME,
