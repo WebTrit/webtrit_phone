@@ -1,3 +1,4 @@
+export 'auth/auth.dart';
 export 'call/call.dart';
 export 'contact/contact.dart';
 export 'contacts/contacts.dart';
