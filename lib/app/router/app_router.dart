@@ -1,15 +1,17 @@
 import 'dart:async';
 
+import 'package:flutter/widgets.dart';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:bloc/bloc.dart';
-import 'package:flutter/widgets.dart';
+
+import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/app/router/app_shell.dart';
 import 'package:webtrit_phone/app/router/main_shell.dart';
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/environment_config.dart';
 
 import 'auth_guard.dart';
 
@@ -36,11 +38,24 @@ class AppRouter extends _$AppRouter {
   @override
   List<AutoRoute> get routes => [
         AutoRoute(
-          page: AppShellRoute.page,
           initial: true,
+          page: AppShellRoute.page,
           children: [
             AutoRoute(
-              page: LoginScreenPageRoute.page,
+              page: AuthShellPageRoute.page,
+              children: [
+                AutoRoute(page: ModeSelectScreenPageRoute.page, initial: true),
+                AutoRoute(page: SupportedLoginsScreenPageRoute.page, children: [
+                  AutoRoute(page: OtpLoginPageRoute.page, initial: true, children: [
+                    AutoRoute(page: OtpRequestScreenPageRoute.page, initial: true),
+                    AutoRoute(page: OtpVerifyScreenPageRoute.page),
+                  ]),
+                  AutoRoute(page: PasswordLoginPageRoute.page, children: [
+                    AutoRoute(page: PasswordRequestScreenPageRoute.page, initial: true),
+                  ]),
+                ]),
+                AutoRoute(page: LoginCoreUrlAssignScreenPageRoute.page),
+              ],
             ),
             AutoRoute(
               page: PermissionsScreenPageRoute.page,
@@ -131,7 +146,7 @@ class AppRouter extends _$AppRouter {
         replaceAll([const MainScreenPageRoute()], updateExistingRoutes: false);
       }
     } else {
-      replaceAll([LoginScreenPageRoute(stepPathParam: LoginStep.modeSelect.name)]);
+      replaceAll([const AuthShellPageRoute()]);
     }
   }
 

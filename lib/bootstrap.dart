@@ -104,7 +104,7 @@ class _AppBlocObserver extends BlocObserver {
 
   // Waiting for the widget tree to be created to remove the splash screen, otherwise, we will have white color flickering.
   void _removeNativeSplash(BlocBase<dynamic> bloc) {
-    if (bloc is LoginCubit || bloc is CallBloc) {
+    if (bloc is ModeSelectCubit || bloc is CallBloc) {
       Future.delayed(Duration.zero, () {
         _logger.info('Remove native splash');
         FlutterNativeSplash.remove();

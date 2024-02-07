@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/features/login/login.dart';
 
 class AuthGuard extends AutoRouteGuard {
   AuthGuard(this._secureStorage);
@@ -20,7 +19,7 @@ class AuthGuard extends AutoRouteGuard {
     if (isAuthorized) {
       resolver.next(true);
     } else {
-      router.replaceAll([LoginScreenPageRoute(stepPathParam: LoginStep.modeSelect.name)], updateExistingRoutes: false);
+      router.replaceAll([const AuthShellPageRoute()], updateExistingRoutes: false);
     }
   }
 }
