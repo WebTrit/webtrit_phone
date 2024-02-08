@@ -27,6 +27,7 @@ class SettingsScreen extends StatelessWidget {
 
     final scaffold = Scaffold(
       appBar: AppBar(
+        leading: const AutoLeadingButton(),
         title: Text(context.l10n.settings_AppBarTitle_myAccount),
         actions: [
           IconButton(

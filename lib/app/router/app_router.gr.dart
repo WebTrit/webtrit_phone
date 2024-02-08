@@ -151,6 +151,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: RecentsScreenPage(),
       );
     },
+    SettingsRouterPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const SettingsRouterPage(),
+      );
+    },
     SettingsScreenPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -518,6 +524,20 @@ class RecentsScreenPageRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'RecentsScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [SettingsRouterPage]
+class SettingsRouterPageRoute extends PageRouteInfo<void> {
+  const SettingsRouterPageRoute({List<PageRouteInfo>? children})
+      : super(
+          SettingsRouterPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SettingsRouterPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

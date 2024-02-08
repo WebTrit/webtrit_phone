@@ -115,30 +115,44 @@ class AppRouter extends _$AppRouter {
                   fullscreenDialog: true,
                 ),
                 AutoRoute(
-                  page: SettingsScreenPageRoute.page,
+                  page: SettingsRouterPageRoute.page,
                   path: 'settings',
                   fullscreenDialog: true,
-                ),
-                AutoRoute(
-                  page: AboutScreenPageRoute.page,
-                ),
-                AutoRoute(
-                  page: HelpScreenPageRoute.page,
-                ),
-                AutoRoute(
-                  page: LanguageScreenPageRoute.page,
-                ),
-                AutoRoute(
-                  page: NetworkScreenPageRoute.page,
-                ),
-                AutoRoute(
-                  page: TermsConditionsScreenPageRoute.page,
-                ),
-                AutoRoute(
-                  page: ThemeModeScreenPageRoute.page,
-                ),
-                AutoRoute(
-                  page: LogRecordsConsoleScreenPageRoute.page,
+                  children: [
+                    AutoRoute(
+                      page: SettingsScreenPageRoute.page,
+                      path: '',
+                      fullscreenDialog: true, // for AutoLeadingButton show correct CloseButton
+                    ),
+                    AutoRoute(
+                      page: AboutScreenPageRoute.page,
+                      path: 'about',
+                    ),
+                    AutoRoute(
+                      page: HelpScreenPageRoute.page,
+                      path: 'help',
+                    ),
+                    AutoRoute(
+                      page: LanguageScreenPageRoute.page,
+                      path: 'language',
+                    ),
+                    AutoRoute(
+                      page: NetworkScreenPageRoute.page,
+                      path: 'network',
+                    ),
+                    AutoRoute(
+                      page: TermsConditionsScreenPageRoute.page,
+                      path: 'terms-conditions',
+                    ),
+                    AutoRoute(
+                      page: ThemeModeScreenPageRoute.page,
+                      path: 'theme-mode',
+                    ),
+                    AutoRoute(
+                      page: LogRecordsConsoleScreenPageRoute.page,
+                      path: 'log-records-console',
+                    ),
+                  ],
                 ),
               ],
             ),
