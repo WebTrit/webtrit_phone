@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:store_info_extractor/store_info_extractor.dart';
 
+import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -15,7 +17,27 @@ class MainScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const widget = MainScreen();
+    final appPreferences = context.read<AppPreferences>();
+    final autoTabsRouter = AutoTabsRouter(
+      routes: const [
+        FavoritesRouterPageRoute(),
+        RecentsRouterPageRoute(),
+        ContactsRouterPageRoute(),
+        KeypadScreenPageRoute(),
+      ],
+      builder: (context, child) {
+        final tabsRouter = AutoTabsRouter.of(context);
+        return MainScreen(
+          body: child,
+          navigationBarFlavor: MainFlavor.values[tabsRouter.activeIndex],
+          onNavigationBarTap: (flavor) {
+            tabsRouter.setActiveIndex(flavor.index);
+
+            appPreferences.setActiveMainFlavor(flavor);
+          },
+        );
+      },
+    );
 
     final provider = BlocProvider(
       create: (context) {
@@ -24,7 +46,7 @@ class MainScreenPage extends StatelessWidget {
           storeInfoExtractor: StoreInfoExtractor(),
         )..add(const MainStarted());
       },
-      child: widget,
+      child: autoTabsRouter,
     );
     return provider;
   }

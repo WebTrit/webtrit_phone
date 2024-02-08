@@ -20,6 +20,7 @@ part 'app_router.gr.dart';
 class AppRouter extends _$AppRouter {
   AppRouter(
     this._appBloc,
+    this._appPreferences,
     this._secureStorage,
     this._appPermissions,
   ) {
@@ -27,6 +28,7 @@ class AppRouter extends _$AppRouter {
   }
 
   final AppBloc _appBloc;
+  final AppPreferences _appPreferences;
   final SecureStorage _secureStorage;
   final AppPermissions _appPermissions;
 
@@ -53,8 +55,13 @@ class AppRouter extends _$AppRouter {
                   initial: true,
                   page: MainScreenPageRoute.page,
                   children: [
+                    RedirectRoute(
+                      path: '',
+                      redirectTo: _appPreferences.getActiveMainFlavor().name,
+                    ),
                     AutoRoute(
                       page: FavoritesRouterPageRoute.page,
+                      path: MainFlavor.favorites.name,
                       children: [
                         AutoRoute(page: FavoritesScreenPageRoute.page, initial: true),
                         AutoRoute(page: ContactScreenPageRoute.page),
@@ -62,6 +69,7 @@ class AppRouter extends _$AppRouter {
                     ),
                     AutoRoute(
                       page: RecentsRouterPageRoute.page,
+                      path: MainFlavor.recents.name,
                       children: [
                         AutoRoute(page: RecentsScreenPageRoute.page, initial: true),
                         AutoRoute(page: RecentScreenPageRoute.page),
@@ -69,6 +77,7 @@ class AppRouter extends _$AppRouter {
                     ),
                     AutoRoute(
                       page: ContactsRouterPageRoute.page,
+                      path: MainFlavor.contacts.name,
                       children: [
                         AutoRoute(page: ContactsScreenPageRoute.page, initial: true),
                         AutoRoute(page: ContactScreenPageRoute.page),
@@ -76,6 +85,7 @@ class AppRouter extends _$AppRouter {
                     ),
                     AutoRoute(
                       page: KeypadScreenPageRoute.page,
+                      path: MainFlavor.keypad.name,
                     ),
                   ],
                 ),

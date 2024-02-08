@@ -48,6 +48,7 @@ class _AppState extends State<App> {
     );
     _appRouter = AppRouter(
       appBloc,
+      widget.appPreferences,
       widget.secureStorage,
       widget.appPermissions,
     );
