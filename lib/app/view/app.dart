@@ -37,17 +37,13 @@ class _AppState extends State<App> {
 
   late final AppRouter _appRouter;
 
-  AppPreferences get _appPreferences => widget.appPreferences;
-
-  AppDatabase get _appDatabase => widget.appDatabase;
-
   @override
   void initState() {
     super.initState();
     appBloc = AppBloc(
-      appPreferences: _appPreferences,
+      appPreferences: widget.appPreferences,
       secureStorage: widget.secureStorage,
-      appDatabase: _appDatabase,
+      appDatabase: widget.appDatabase,
       appThemes: widget.appThemes,
     );
     _appRouter = AppRouter(
