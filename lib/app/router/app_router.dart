@@ -38,22 +38,24 @@ class AppRouter extends _$AppRouter {
   List<AutoRoute> get routes => [
         AutoRoute(
           page: AppShellRoute.page,
-          initial: true,
+          path: '/',
           children: [
             AutoRoute(
               page: LoginScreenPageRoute.page,
+              path: 'login',
             ),
             AutoRoute(
               page: PermissionsScreenPageRoute.page,
+              path: 'permissions',
             ),
             AutoRoute(
               page: MainShellRoute.page,
-              initial: true,
+              path: '',
               guards: [AuthGuard(_secureStorage)],
               children: [
                 AutoRoute(
-                  initial: true,
                   page: MainScreenPageRoute.page,
+                  path: '',
                   children: [
                     RedirectRoute(
                       path: '',
@@ -63,24 +65,42 @@ class AppRouter extends _$AppRouter {
                       page: FavoritesRouterPageRoute.page,
                       path: MainFlavor.favorites.name,
                       children: [
-                        AutoRoute(page: FavoritesScreenPageRoute.page, initial: true),
-                        AutoRoute(page: ContactScreenPageRoute.page),
+                        AutoRoute(
+                          page: FavoritesScreenPageRoute.page,
+                          path: '',
+                        ),
+                        AutoRoute(
+                          page: ContactScreenPageRoute.page,
+                          path: 'contact',
+                        ),
                       ],
                     ),
                     AutoRoute(
                       page: RecentsRouterPageRoute.page,
                       path: MainFlavor.recents.name,
                       children: [
-                        AutoRoute(page: RecentsScreenPageRoute.page, initial: true),
-                        AutoRoute(page: RecentScreenPageRoute.page),
+                        AutoRoute(
+                          page: RecentsScreenPageRoute.page,
+                          path: '',
+                        ),
+                        AutoRoute(
+                          page: RecentScreenPageRoute.page,
+                          path: 'recent',
+                        ),
                       ],
                     ),
                     AutoRoute(
                       page: ContactsRouterPageRoute.page,
                       path: MainFlavor.contacts.name,
                       children: [
-                        AutoRoute(page: ContactsScreenPageRoute.page, initial: true),
-                        AutoRoute(page: ContactScreenPageRoute.page),
+                        AutoRoute(
+                          page: ContactsScreenPageRoute.page,
+                          path: '',
+                        ),
+                        AutoRoute(
+                          page: ContactScreenPageRoute.page,
+                          path: 'contact',
+                        ),
                       ],
                     ),
                     AutoRoute(
@@ -91,10 +111,12 @@ class AppRouter extends _$AppRouter {
                 ),
                 AutoRoute(
                   page: CallScreenPageRoute.page,
+                  path: 'call',
                   fullscreenDialog: true,
                 ),
                 AutoRoute(
                   page: SettingsScreenPageRoute.page,
+                  path: 'settings',
                   fullscreenDialog: true,
                 ),
                 AutoRoute(
