@@ -157,7 +157,7 @@ class AppRouter extends _$AppRouter {
               ],
             ),
           ],
-        )
+        ),
       ];
 
   void _onRefreshListener() {
