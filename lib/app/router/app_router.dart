@@ -109,10 +109,11 @@ class AppRouter extends _$AppRouter {
                     ),
                   ],
                 ),
-                AutoRoute(
+                CustomRoute(
                   page: CallScreenPageRoute.page,
                   path: 'call',
                   fullscreenDialog: true,
+                  transitionsBuilder: TransitionsBuilders.fadeIn,
                 ),
                 AutoRoute(
                   page: SettingsRouterPageRoute.page,
