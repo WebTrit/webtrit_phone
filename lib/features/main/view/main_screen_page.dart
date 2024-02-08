@@ -25,6 +25,7 @@ class MainScreenPage extends StatelessWidget {
         ContactsRouterPageRoute(),
         KeypadScreenPageRoute(),
       ],
+      duration: Duration.zero,
       builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
         return MainScreen(
