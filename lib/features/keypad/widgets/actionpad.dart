@@ -8,6 +8,7 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 class Actionpad extends StatelessWidget {
   const Actionpad({
     super.key,
+    this.transfer = false,
     this.video = false,
     this.onCallPressed,
     this.onCallLongPress,
@@ -15,6 +16,7 @@ class Actionpad extends StatelessWidget {
     this.onBackspaceLongPress,
   });
 
+  final bool transfer;
   final bool video;
   final VoidCallback? onCallPressed;
   final VoidCallback? onCallLongPress;
@@ -38,7 +40,11 @@ class Actionpad extends StatelessWidget {
           onLongPress: onCallLongPress,
           style: textButtonStyles?.callStart,
           child: Icon(
-            video ? Icons.videocam : Icons.call,
+            transfer
+                ? Icons.phone_forwarded
+                : video
+                    ? Icons.videocam
+                    : Icons.call,
             size: Theme.of(context).textTheme.displayMedium!.fontSize,
           ),
         ),

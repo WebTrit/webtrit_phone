@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/features/call/call.dart';
+
 import 'package:webtrit_phone/theme/theme.dart';
 
 import '../keypad.dart';
@@ -71,12 +73,19 @@ class KeypadViewState extends State<KeypadView> {
           builder: (BuildContext context, TextEditingValue value, Widget? child) {
             return BlocBuilder<KeypadCubit, KeypadState>(
               builder: (context, state) {
-                return Actionpad(
-                  video: state.video,
-                  onCallPressed: value.text.isEmpty ? null : _onCallPressed,
-                  onCallLongPress: _onCallLongPress,
-                  onBackspacePressed: value.text.isEmpty ? null : _onBackspacePressed,
-                  onBackspaceLongPress: value.text.isEmpty ? null : _onBackspaceLongPress,
+                final video = state.video;
+                return BlocBuilder<CallBloc, CallState>(
+                  buildWhen: (previous, current) => previous.intent != current.intent,
+                  builder: (context, state) {
+                    return Actionpad(
+                      transfer: state.hasTransferIntent,
+                      video: video,
+                      onCallPressed: value.text.isEmpty ? null : _onCallPressed,
+                      onCallLongPress: _onCallLongPress,
+                      onBackspacePressed: value.text.isEmpty ? null : _onBackspacePressed,
+                      onBackspaceLongPress: value.text.isEmpty ? null : _onBackspaceLongPress,
+                    );
+                  },
                 );
               },
             );

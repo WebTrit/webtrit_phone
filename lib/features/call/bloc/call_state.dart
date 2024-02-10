@@ -122,7 +122,7 @@ class CallState with _$CallState {
 
   bool get hasUnattendedTransferIntent => intent == TransferType.unattended;
 
-  bool get hasTransferIntent => hasAttendedTransferIntent || hasUnattendedTransferIntent;
+  bool get hasTransferIntent => intent != null;
 }
 
 @freezed
