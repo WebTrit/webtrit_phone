@@ -28,55 +28,72 @@ class _CallShellState extends State<CallShell> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CallBloc, CallState>(
-      listenWhen: (previous, current) => previous.display != current.display,
-      listener: (context, state) {
-        final appRouter = AutoRouter.of(context);
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<CallBloc, CallState>(
+          listenWhen: (previous, current) => previous.display != current.display,
+          listener: (context, state) {
+            final appRouter = AutoRouter.of(context);
 
-        final orientationsBloc = context.read<OrientationsBloc>();
-        if (state.display == CallDisplay.screen) {
-          orientationsBloc.add(const OrientationsChanged(PreferredOrientation.call));
-        } else {
-          orientationsBloc.add(const OrientationsChanged(PreferredOrientation.regular));
-        }
-
-        if (state.display == CallDisplay.screen) {
-          if (!appRouter.isRouteActive(CallScreenPageRoute.name)) {
-            appRouter.push(const CallScreenPageRoute());
-          }
-        } else {
-          if (appRouter.isRouteActive(CallScreenPageRoute.name)) {
-            appRouter.back();
-          }
-        }
-
-        if (state.display == CallDisplay.overlay) {
-          final avatar = _avatar;
-          if (avatar != null) {
-            if (!avatar.inserted) {
-              avatar.insert(context, state);
+            final orientationsBloc = context.read<OrientationsBloc>();
+            if (state.display == CallDisplay.screen) {
+              orientationsBloc.add(const OrientationsChanged(PreferredOrientation.call));
+            } else {
+              orientationsBloc.add(const OrientationsChanged(PreferredOrientation.regular));
             }
-          } else {
-            final avatar = ThumbnailAvatar(
-              stickyPadding: widget.stickyPadding,
-              onTap: () => appRouter.push(const CallScreenPageRoute()),
-            );
-            _avatar = avatar;
-            avatar.insert(context, state);
-          }
-        } else {
-          final avatar = _avatar;
-          if (avatar != null) {
-            if (avatar.inserted) {
-              avatar.remove();
-            }
-          }
-        }
 
-        if (state.display == CallDisplay.none) {
-          _avatar = null;
-        }
-      },
+            if (state.display == CallDisplay.screen) {
+              if (!appRouter.isRouteActive(CallScreenPageRoute.name)) {
+                appRouter.push(const CallScreenPageRoute());
+              }
+            } else {
+              if (appRouter.isRouteActive(CallScreenPageRoute.name)) {
+                appRouter.back();
+              }
+            }
+
+            if (state.display == CallDisplay.overlay) {
+              final avatar = _avatar;
+              if (avatar != null) {
+                if (!avatar.inserted) {
+                  avatar.insert(context, state);
+                }
+              } else {
+                final avatar = ThumbnailAvatar(
+                  stickyPadding: widget.stickyPadding,
+                  onTap: () => appRouter.push(const CallScreenPageRoute()),
+                );
+                _avatar = avatar;
+                avatar.insert(context, state);
+              }
+            } else {
+              final avatar = _avatar;
+              if (avatar != null) {
+                if (avatar.inserted) {
+                  avatar.remove();
+                }
+              }
+            }
+
+            if (state.display == CallDisplay.none) {
+              _avatar = null;
+            }
+          },
+          child: widget.child,
+        ),
+        BlocListener<CallBloc, CallState>(
+          listenWhen: (previous, current) =>
+              previous.activeTransfers.length != current.activeTransfers.length ||
+              previous.activeCalls.length != current.activeCalls.length,
+          listener: (context, state) {
+            if (state.display != CallDisplay.screen) {
+              if (!context.router.isRouteActive(CallScreenPageRoute.name)) {
+                context.router.push(const CallScreenPageRoute());
+              }
+            }
+          },
+        ),
+      ],
       child: widget.child,
     );
   }
