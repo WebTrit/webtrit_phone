@@ -19,6 +19,7 @@ class CallActions extends StatefulWidget {
     required this.wasAccepted,
     required this.wasHungUp,
     required this.cameraValue,
+    required this.attendedTransfer,
     this.onCameraChanged,
     required this.mutedValue,
     this.onMutedChanged,
@@ -40,6 +41,7 @@ class CallActions extends StatefulWidget {
   final bool wasAccepted;
   final bool wasHungUp;
   final bool cameraValue;
+  final bool attendedTransfer;
   final ValueChanged<bool>? onCameraChanged;
   final bool mutedValue;
   final ValueChanged<bool>? onMutedChanged;
@@ -284,33 +286,43 @@ class _CallActionsState extends State<CallActions> {
           SizedBox.square(dimension: _actionsDelimiterDimension),
           const SizedBox(),
           // row
-          Tooltip(
-            message: context.l10n.call_CallActionsTooltip_transfer,
-            child: PopupMenu(
-              offset: Offset(_dimension + 8, 0),
-              items: [
-                PopupItem(
-                  onTap: onUnattendedTransferPressed,
-                  textStyle: Theme.of(context).textTheme.bodyLarge,
-                  text: context.l10n.call_CallActionsTooltip_unattended_transfer,
-                  icon: Assets.icons.icUnattendedTransfer.svg(),
-                ),
-                PopupItem(
-                  text: context.l10n.call_CallActionsTooltip_attended_transfer,
-                  textStyle: Theme.of(context).textTheme.bodyLarge,
-                  icon: Assets.icons.icAttendedTransferSvg.svg(),
-                  onTap: onAttendedTransferPressed,
-                )
-              ],
-              child: IgnorePointer(
-                child: TextButton(
-                  onPressed: () {},
-                  style: _textButtonStyles?.callAction,
-                  child: const Icon(Icons.phone_forwarded),
+          if (widget.attendedTransfer)
+            Tooltip(
+              message: context.l10n.call_CallActionsTooltip_transfer,
+              child: TextButton(
+                onPressed: onAttendedTransferPressed,
+                style: _textButtonStyles?.callAction,
+                child: const Icon(Icons.call_made),
+              ),
+            ),
+          if (!widget.attendedTransfer)
+            Tooltip(
+              message: context.l10n.call_CallActionsTooltip_transfer,
+              child: PopupMenu(
+                offset: Offset(_dimension + 8, 0),
+                items: [
+                  PopupItem(
+                    onTap: onUnattendedTransferPressed,
+                    textStyle: Theme.of(context).textTheme.bodyLarge,
+                    text: context.l10n.call_CallActionsTooltip_unattended_transfer,
+                    icon: Assets.icons.icUnattendedTransfer.svg(),
+                  ),
+                  PopupItem(
+                    text: context.l10n.call_CallActionsTooltip_attended_transfer,
+                    textStyle: Theme.of(context).textTheme.bodyLarge,
+                    icon: Assets.icons.icAttendedTransferSvg.svg(),
+                    onTap: onAttendedTransferPressed,
+                  )
+                ],
+                child: IgnorePointer(
+                  child: TextButton(
+                    onPressed: () {},
+                    style: _textButtonStyles?.callAction,
+                    child: const Icon(Icons.phone_forwarded),
+                  ),
                 ),
               ),
             ),
-          ),
           Tooltip(
             message: widget.heldValue
                 ? context.l10n.call_CallActionsTooltip_unhold

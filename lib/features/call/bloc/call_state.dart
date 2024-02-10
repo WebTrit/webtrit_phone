@@ -1,5 +1,10 @@
 part of 'call_bloc.dart';
 
+enum TransferType {
+  attended,
+  unattended,
+}
+
 @freezed
 class CallState with _$CallState {
   const CallState._();
@@ -12,8 +17,10 @@ class CallState with _$CallState {
     int? lastSignalingDisconnectCode,
     @Default(0) int linesCount,
     @Default([]) List<ActiveCall> activeCalls,
+    @Default([]) List<String> activeTransfers,
     bool? minimized,
     bool? speaker,
+    TransferType? intent,
   }) = _CallState;
 
   CallStatus get status {
@@ -103,8 +110,14 @@ class CallState with _$CallState {
     final activeCalls = this.activeCalls.where((activeCall) {
       return activeCall.callId.uuid != uuid;
     }).toList();
-    return copyWith(activeCalls: activeCalls, minimized: activeCalls.isEmpty ? null : minimized);
+    return copyWith(activeCalls: activeCalls, minimized: activeCalls.isEmpty ? null : minimized, intent: null);
   }
+
+  bool get hasAttendedTransferIntent => intent == TransferType.attended && activeCalls.length > 1;
+
+  bool get hasUnattendedTransferIntent => intent == TransferType.unattended;
+
+  bool get hasTransferIntent => hasAttendedTransferIntent || hasUnattendedTransferIntent;
 }
 
 @freezed

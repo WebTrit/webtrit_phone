@@ -155,6 +155,10 @@ class CallControlEvent with _$CallControlEvent implements CallEvent {
 
   const factory CallControlEvent.failureApproved(UuidValue uuid) = _CallControlEventFailureApproved;
 
+  //If there are more than 2 active lines, we can choose the ones needed to create attended transfer
+  const factory CallControlEvent.attendedTransferred(ActiveCall activeCall0, ActiveCall activeCall1) =
+      _CallControlEventAttendedTransferred;
+
   const factory CallControlEvent.setActiveLine(UuidValue uuid) = _CallControlEventSetActiveLine;
 }
 
@@ -242,4 +246,9 @@ class CallScreenEvent with _$CallScreenEvent implements CallEvent {
   factory CallScreenEvent.didPush() = _CallScreenEventDidPush;
 
   factory CallScreenEvent.didPop() = _CallScreenEventDidPop;
+}
+
+@Freezed(copyWith: false)
+class IntentCallEvent with _$IntentCallEvent implements CallEvent {
+  const factory IntentCallEvent(TransferType intent) = __IntentCallEvent;
 }

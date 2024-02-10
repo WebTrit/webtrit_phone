@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
+import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -169,6 +171,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       wasAccepted: activeCall.wasAccepted,
                       wasHungUp: activeCall.wasHungUp,
                       cameraValue: cameraEnabled,
+                      attendedTransfer: context.read<CallBloc>().state.hasAttendedTransferIntent,
                       onCameraChanged: (bool value) {
                         setState(() {
                           cameraEnabled = value;
@@ -182,6 +185,24 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       speakerValue: widget.speaker,
                       onSpeakerChanged: (bool value) {
                         context.read<CallBloc>().add(CallControlEvent.speakerEnabled(activeCall.callId.uuid, value));
+                      },
+                      onAttendedTransferPressed: () {
+                        if (context.read<CallBloc>().state.hasAttendedTransferIntent) {
+                          context
+                              .read<CallBloc>()
+                              .add(CallControlEvent.attendedTransferred(activeCalls[0], activeCalls[1]));
+                        } else {
+                          context.read<CallBloc>().add(const IntentCallEvent(TransferType.attended));
+                          context.router
+                            ..pop()
+                            ..navigate(const MainScreenPageRoute(children: [KeypadScreenPageRoute()]));
+                        }
+                      },
+                      onUnattendedTransferPressed: () {
+                        context.read<CallBloc>().add(const IntentCallEvent(TransferType.unattended));
+                        context.router
+                          ..pop()
+                          ..navigate(const MainScreenPageRoute(children: [KeypadScreenPageRoute()]));
                       },
                       heldValue: activeCall.held,
                       onHeldChanged: (bool value) {

@@ -106,6 +106,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _onCallScreenEvent,
       transformer: sequential(),
     );
+    on<IntentCallEvent>(
+      _onIntentCallEvent,
+      transformer: sequential(),
+    );
 
     WidgetsBinding.instance.addObserver(this);
 
@@ -747,6 +751,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       speakerEnabled: (event) => _onCallControlEventSpeakerEnabled(event, emit),
       failureApproved: (event) => _onCallControlEventFailureApproved(event, emit),
       setActiveLine: (event) => _onCallControlEventSetActiveLine(event, emit),
+      attendedTransferred: (event) => _onCallControlEventAttendedTransferred(event, emit),
     );
   }
 
@@ -754,6 +759,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallControlEventStarted event,
     Emitter<CallState> emit,
   ) async {
+    if (state.intent == TransferType.unattended) {
+      await _unattendedCall(emit, event);
+    } else {
+      await _directCall(event, emit);
+    }
+  }
+
+  Future<void> _directCall(_CallControlEventStarted event, Emitter<CallState> emit) async {
     final callId = CallIdValue(WebtritSignalingClient.generateCallId());
 
     final error = await callkeep.startCall(
@@ -776,6 +789,38 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         renderers: RTCVideoRenderers()..initialize(),
       )));
     }
+  }
+
+  //  activeCall0 - AB_call_id
+  //  activeCall1 - AC_call_id
+  Future<void> _onCallControlEventAttendedTransferred(
+    _CallControlEventAttendedTransferred event,
+    Emitter<CallState> emit,
+  ) async {
+    final activeCall0 = event.activeCall0; //AB_call_id
+    final activeCall1 = event.activeCall1; //AC_call_id
+
+    await _signalingClient?.execute(TransferRequest(
+      transaction: WebtritSignalingClient.generateTransactionId(),
+      line: 1,
+      //AC_call_id
+      callId: activeCall1.callId.value,
+      //C_uri
+      number: activeCall1.handle.value,
+      //AB_call_id
+      replaceCallId: activeCall0.callId.value,
+    ));
+  }
+
+  Future<void> _unattendedCall(Emitter<CallState> emit, _CallControlEventStarted event) async {
+    final activeCall = state.activeCalls.current;
+
+    await _signalingClient?.execute(TransferRequest(
+      transaction: WebtritSignalingClient.generateTransactionId(),
+      line: activeCall.line,
+      callId: activeCall.callId.toString(),
+      number: event.handle.value,
+    ));
   }
 
   Future<void> __onCallControlEventAnswered(
@@ -1310,6 +1355,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         }
       }
     }
+  }
+
+  void _onIntentCallEvent(
+    IntentCallEvent event,
+    Emitter<CallState> emit,
+  ) {
+    add(CallControlEvent.setHeld(state.activeCalls.current.callId.uuid, true));
+
+    emit(state.copyWith(intent: event.intent));
   }
 
   void _onSignalingEvent(Event event) {
