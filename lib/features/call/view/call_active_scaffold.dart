@@ -182,7 +182,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       wasAccepted: activeCall.wasAccepted,
                       wasHungUp: activeCall.wasHungUp,
                       cameraValue: cameraEnabled,
-                      attendedTransfer: context.read<CallBloc>().state.hasAttendedTransferIntent,
+                      attendedTransfer: context.read<CallBloc>().state.hasActiveCallsForAttendedTransfer,
                       onCameraChanged: (bool value) {
                         setState(() {
                           cameraEnabled = value;
@@ -198,7 +198,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                         context.read<CallBloc>().add(CallControlEvent.speakerEnabled(activeCall.callId.uuid, value));
                       },
                       onAttendedTransferPressed: () {
-                        if (context.read<CallBloc>().state.hasAttendedTransferIntent) {
+                        if (context.read<CallBloc>().state.hasActiveCallsForAttendedTransfer) {
                           context
                               .read<CallBloc>()
                               .add(CallControlEvent.attendedTransferred(activeCalls[0], activeCalls[1]));

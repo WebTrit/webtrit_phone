@@ -118,9 +118,7 @@ class CallState with _$CallState {
     );
   }
 
-  bool get hasAttendedTransferIntent => intent == TransferType.attended && activeCalls.length > 1;
-
-  bool get hasUnattendedTransferIntent => intent == TransferType.unattended;
+  bool get hasActiveCallsForAttendedTransfer => intent == TransferType.attended && activeCalls.length > 1;
 
   bool get hasTransferIntent => intent != null;
 }
