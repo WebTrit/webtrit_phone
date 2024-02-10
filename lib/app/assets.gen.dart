@@ -22,6 +22,21 @@ class $AssetsCallkeepGen {
   List<AssetGenImage> get values => [iosIconTemplateImage];
 }
 
+class $AssetsIconsGen {
+  const $AssetsIconsGen();
+
+  /// File path: assets/icons/ic_attended_transfer.svg.svg
+  SvgGenImage get icAttendedTransferSvg =>
+      const SvgGenImage('assets/icons/ic_attended_transfer.svg.svg');
+
+  /// File path: assets/icons/ic_unattended_transfer.svg
+  SvgGenImage get icUnattendedTransfer =>
+      const SvgGenImage('assets/icons/ic_unattended_transfer.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [icAttendedTransferSvg, icUnattendedTransfer];
+}
+
 class $AssetsLoginGen {
   const $AssetsLoginGen();
 
@@ -60,6 +75,7 @@ class Assets {
   Assets._();
 
   static const $AssetsCallkeepGen callkeep = $AssetsCallkeepGen();
+  static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsLoginGen login = $AssetsLoginGen();
   static const SvgGenImage primaryOnboardinLogo =
       SvgGenImage('assets/primary_onboardin_logo.svg');

@@ -117,6 +117,12 @@ abstract class AppLocalizations {
   /// **'Accept'**
   String get call_CallActionsTooltip_accept;
 
+  /// No description provided for @call_CallActionsTooltip_attended_transfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Attended transfer'**
+  String get call_CallActionsTooltip_attended_transfer;
+
   /// No description provided for @call_CallActionsTooltip_disableCamera.
   ///
   /// In en, this message translates to:
@@ -194,6 +200,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Transfer'**
   String get call_CallActionsTooltip_transfer;
+
+  /// No description provided for @call_CallActionsTooltip_unattended_transfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Unattended transfer'**
+  String get call_CallActionsTooltip_unattended_transfer;
 
   /// No description provided for @call_CallActionsTooltip_unhold.
   ///

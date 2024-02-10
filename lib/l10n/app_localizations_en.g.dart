@@ -19,6 +19,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_CallActionsTooltip_accept => 'Accept';
 
   @override
+  String get call_CallActionsTooltip_attended_transfer => 'Attended transfer';
+
+  @override
   String get call_CallActionsTooltip_disableCamera => 'Disable camera';
 
   @override
@@ -56,6 +59,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get call_CallActionsTooltip_transfer => 'Transfer';
+
+  @override
+  String get call_CallActionsTooltip_unattended_transfer => 'Unattended transfer';
 
   @override
   String get call_CallActionsTooltip_unhold => 'Unhold call';

@@ -19,6 +19,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_CallActionsTooltip_accept => 'Прийняти';
 
   @override
+  String get call_CallActionsTooltip_attended_transfer => 'Керований переніс';
+
+  @override
   String get call_CallActionsTooltip_disableCamera => 'Вимкнути камеру';
 
   @override
@@ -56,6 +59,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get call_CallActionsTooltip_transfer => 'Передати';
+
+  @override
+  String get call_CallActionsTooltip_unattended_transfer => 'Некерований переніс';
 
   @override
   String get call_CallActionsTooltip_unhold => 'Поновити дзвінок';

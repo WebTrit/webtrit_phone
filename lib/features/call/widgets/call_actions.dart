@@ -2,10 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
+
+import 'popup_item.dart';
+import 'popup_menu.dart';
 
 class CallActions extends StatefulWidget {
   const CallActions({
@@ -20,7 +24,8 @@ class CallActions extends StatefulWidget {
     this.onMutedChanged,
     this.speakerValue,
     this.onSpeakerChanged,
-    this.onTransferPressed,
+    this.onAttendedTransferPressed,
+    this.onUnattendedTransferPressed,
     required this.heldValue,
     this.onHeldChanged,
     this.onHangupPressed,
@@ -40,9 +45,11 @@ class CallActions extends StatefulWidget {
   final ValueChanged<bool>? onMutedChanged;
   final bool? speakerValue;
   final ValueChanged<bool>? onSpeakerChanged;
-  final VoidCallback? onTransferPressed;
+  final VoidCallback? onAttendedTransferPressed;
+  final VoidCallback? onUnattendedTransferPressed;
   final bool heldValue;
   final ValueChanged<bool>? onHeldChanged;
+
   final void Function()? onHangupPressed;
   final void Function()? onHangupAndAcceptPressed;
   final void Function()? onHoldAndAcceptPressed;
@@ -129,7 +136,8 @@ class _CallActionsState extends State<CallActions> {
     final onMutedChanged = widget.onMutedChanged;
     final speakerValue = widget.speakerValue;
     final onSpeakerChanged = widget.onSpeakerChanged;
-    final onTransferPressed = widget.onTransferPressed;
+    final onAttendedTransferPressed = widget.onAttendedTransferPressed;
+    final onUnattendedTransferPressed = widget.onUnattendedTransferPressed;
     final onHeldChanged = widget.onHeldChanged;
 
     final TextButtonsTable buttonsTable;
@@ -278,10 +286,29 @@ class _CallActionsState extends State<CallActions> {
           // row
           Tooltip(
             message: context.l10n.call_CallActionsTooltip_transfer,
-            child: TextButton(
-              onPressed: onTransferPressed,
-              style: _textButtonStyles?.callAction,
-              child: const Icon(Icons.phone_forwarded),
+            child: PopupMenu(
+              offset: Offset(_dimension + 8, 0),
+              items: [
+                PopupItem(
+                  onTap: onUnattendedTransferPressed,
+                  textStyle: Theme.of(context).textTheme.bodyLarge,
+                  text: context.l10n.call_CallActionsTooltip_unattended_transfer,
+                  icon: Assets.icons.icUnattendedTransfer.svg(),
+                ),
+                PopupItem(
+                  text: context.l10n.call_CallActionsTooltip_attended_transfer,
+                  textStyle: Theme.of(context).textTheme.bodyLarge,
+                  icon: Assets.icons.icAttendedTransferSvg.svg(),
+                  onTap: onAttendedTransferPressed,
+                )
+              ],
+              child: IgnorePointer(
+                child: TextButton(
+                  onPressed: () {},
+                  style: _textButtonStyles?.callAction,
+                  child: const Icon(Icons.phone_forwarded),
+                ),
+              ),
             ),
           ),
           Tooltip(
