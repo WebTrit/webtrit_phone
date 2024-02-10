@@ -2730,6 +2730,7 @@ mixin _$CallControlEvent {
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
     required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
+    required TResult Function(UuidValue uuid) setActiveLine,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -2746,6 +2747,7 @@ mixin _$CallControlEvent {
     TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult? Function(UuidValue uuid)? failureApproved,
+    TResult? Function(UuidValue uuid)? setActiveLine,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -2762,6 +2764,7 @@ mixin _$CallControlEvent {
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
+    TResult Function(UuidValue uuid)? setActiveLine,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -2781,6 +2784,8 @@ mixin _$CallControlEvent {
         speakerEnabled,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
+    required TResult Function(_CallControlEventSetActiveLine value)
+        setActiveLine,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -2795,6 +2800,7 @@ mixin _$CallControlEvent {
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventSetActiveLine value)? setActiveLine,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -2809,6 +2815,7 @@ mixin _$CallControlEvent {
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult Function(_CallControlEventSetActiveLine value)? setActiveLine,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -2898,6 +2905,7 @@ class _$CallControlEventStartedImpl
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
     required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
+    required TResult Function(UuidValue uuid) setActiveLine,
   }) {
     return started(line, generic, number, email, displayName, video);
   }
@@ -2917,6 +2925,7 @@ class _$CallControlEventStartedImpl
     TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult? Function(UuidValue uuid)? failureApproved,
+    TResult? Function(UuidValue uuid)? setActiveLine,
   }) {
     return started?.call(line, generic, number, email, displayName, video);
   }
@@ -2936,6 +2945,7 @@ class _$CallControlEventStartedImpl
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
+    TResult Function(UuidValue uuid)? setActiveLine,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -2961,6 +2971,8 @@ class _$CallControlEventStartedImpl
         speakerEnabled,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
+    required TResult Function(_CallControlEventSetActiveLine value)
+        setActiveLine,
   }) {
     return started(this);
   }
@@ -2978,6 +2990,7 @@ class _$CallControlEventStartedImpl
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventSetActiveLine value)? setActiveLine,
   }) {
     return started?.call(this);
   }
@@ -2995,6 +3008,7 @@ class _$CallControlEventStartedImpl
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult Function(_CallControlEventSetActiveLine value)? setActiveLine,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -3071,6 +3085,7 @@ class _$CallControlEventAnsweredImpl
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
     required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
+    required TResult Function(UuidValue uuid) setActiveLine,
   }) {
     return answered(uuid);
   }
@@ -3090,6 +3105,7 @@ class _$CallControlEventAnsweredImpl
     TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult? Function(UuidValue uuid)? failureApproved,
+    TResult? Function(UuidValue uuid)? setActiveLine,
   }) {
     return answered?.call(uuid);
   }
@@ -3109,6 +3125,7 @@ class _$CallControlEventAnsweredImpl
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
+    TResult Function(UuidValue uuid)? setActiveLine,
     required TResult orElse(),
   }) {
     if (answered != null) {
@@ -3134,6 +3151,8 @@ class _$CallControlEventAnsweredImpl
         speakerEnabled,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
+    required TResult Function(_CallControlEventSetActiveLine value)
+        setActiveLine,
   }) {
     return answered(this);
   }
@@ -3151,6 +3170,7 @@ class _$CallControlEventAnsweredImpl
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventSetActiveLine value)? setActiveLine,
   }) {
     return answered?.call(this);
   }
@@ -3168,6 +3188,7 @@ class _$CallControlEventAnsweredImpl
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult Function(_CallControlEventSetActiveLine value)? setActiveLine,
     required TResult orElse(),
   }) {
     if (answered != null) {
@@ -3233,6 +3254,7 @@ class _$CallControlEventEndedImpl
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
     required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
+    required TResult Function(UuidValue uuid) setActiveLine,
   }) {
     return ended(uuid);
   }
@@ -3252,6 +3274,7 @@ class _$CallControlEventEndedImpl
     TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult? Function(UuidValue uuid)? failureApproved,
+    TResult? Function(UuidValue uuid)? setActiveLine,
   }) {
     return ended?.call(uuid);
   }
@@ -3271,6 +3294,7 @@ class _$CallControlEventEndedImpl
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
+    TResult Function(UuidValue uuid)? setActiveLine,
     required TResult orElse(),
   }) {
     if (ended != null) {
@@ -3296,6 +3320,8 @@ class _$CallControlEventEndedImpl
         speakerEnabled,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
+    required TResult Function(_CallControlEventSetActiveLine value)
+        setActiveLine,
   }) {
     return ended(this);
   }
@@ -3313,6 +3339,7 @@ class _$CallControlEventEndedImpl
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventSetActiveLine value)? setActiveLine,
   }) {
     return ended?.call(this);
   }
@@ -3330,6 +3357,7 @@ class _$CallControlEventEndedImpl
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult Function(_CallControlEventSetActiveLine value)? setActiveLine,
     required TResult orElse(),
   }) {
     if (ended != null) {
@@ -3399,6 +3427,7 @@ class _$CallControlEventSetHeldImpl
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
     required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
+    required TResult Function(UuidValue uuid) setActiveLine,
   }) {
     return setHeld(uuid, onHold);
   }
@@ -3418,6 +3447,7 @@ class _$CallControlEventSetHeldImpl
     TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult? Function(UuidValue uuid)? failureApproved,
+    TResult? Function(UuidValue uuid)? setActiveLine,
   }) {
     return setHeld?.call(uuid, onHold);
   }
@@ -3437,6 +3467,7 @@ class _$CallControlEventSetHeldImpl
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
+    TResult Function(UuidValue uuid)? setActiveLine,
     required TResult orElse(),
   }) {
     if (setHeld != null) {
@@ -3462,6 +3493,8 @@ class _$CallControlEventSetHeldImpl
         speakerEnabled,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
+    required TResult Function(_CallControlEventSetActiveLine value)
+        setActiveLine,
   }) {
     return setHeld(this);
   }
@@ -3479,6 +3512,7 @@ class _$CallControlEventSetHeldImpl
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventSetActiveLine value)? setActiveLine,
   }) {
     return setHeld?.call(this);
   }
@@ -3496,6 +3530,7 @@ class _$CallControlEventSetHeldImpl
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult Function(_CallControlEventSetActiveLine value)? setActiveLine,
     required TResult orElse(),
   }) {
     if (setHeld != null) {
@@ -3566,6 +3601,7 @@ class _$CallControlEventSetMutedImpl
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
     required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
+    required TResult Function(UuidValue uuid) setActiveLine,
   }) {
     return setMuted(uuid, muted);
   }
@@ -3585,6 +3621,7 @@ class _$CallControlEventSetMutedImpl
     TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult? Function(UuidValue uuid)? failureApproved,
+    TResult? Function(UuidValue uuid)? setActiveLine,
   }) {
     return setMuted?.call(uuid, muted);
   }
@@ -3604,6 +3641,7 @@ class _$CallControlEventSetMutedImpl
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
+    TResult Function(UuidValue uuid)? setActiveLine,
     required TResult orElse(),
   }) {
     if (setMuted != null) {
@@ -3629,6 +3667,8 @@ class _$CallControlEventSetMutedImpl
         speakerEnabled,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
+    required TResult Function(_CallControlEventSetActiveLine value)
+        setActiveLine,
   }) {
     return setMuted(this);
   }
@@ -3646,6 +3686,7 @@ class _$CallControlEventSetMutedImpl
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventSetActiveLine value)? setActiveLine,
   }) {
     return setMuted?.call(this);
   }
@@ -3663,6 +3704,7 @@ class _$CallControlEventSetMutedImpl
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult Function(_CallControlEventSetActiveLine value)? setActiveLine,
     required TResult orElse(),
   }) {
     if (setMuted != null) {
@@ -3733,6 +3775,7 @@ class _$CallControlEventSentDTMFImpl
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
     required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
+    required TResult Function(UuidValue uuid) setActiveLine,
   }) {
     return sentDTMF(uuid, key);
   }
@@ -3752,6 +3795,7 @@ class _$CallControlEventSentDTMFImpl
     TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult? Function(UuidValue uuid)? failureApproved,
+    TResult? Function(UuidValue uuid)? setActiveLine,
   }) {
     return sentDTMF?.call(uuid, key);
   }
@@ -3771,6 +3815,7 @@ class _$CallControlEventSentDTMFImpl
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
+    TResult Function(UuidValue uuid)? setActiveLine,
     required TResult orElse(),
   }) {
     if (sentDTMF != null) {
@@ -3796,6 +3841,8 @@ class _$CallControlEventSentDTMFImpl
         speakerEnabled,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
+    required TResult Function(_CallControlEventSetActiveLine value)
+        setActiveLine,
   }) {
     return sentDTMF(this);
   }
@@ -3813,6 +3860,7 @@ class _$CallControlEventSentDTMFImpl
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventSetActiveLine value)? setActiveLine,
   }) {
     return sentDTMF?.call(this);
   }
@@ -3830,6 +3878,7 @@ class _$CallControlEventSentDTMFImpl
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult Function(_CallControlEventSetActiveLine value)? setActiveLine,
     required TResult orElse(),
   }) {
     if (sentDTMF != null) {
@@ -3896,6 +3945,7 @@ class _$CallControlEventCameraSwitchedImpl
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
     required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
+    required TResult Function(UuidValue uuid) setActiveLine,
   }) {
     return cameraSwitched(uuid);
   }
@@ -3915,6 +3965,7 @@ class _$CallControlEventCameraSwitchedImpl
     TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult? Function(UuidValue uuid)? failureApproved,
+    TResult? Function(UuidValue uuid)? setActiveLine,
   }) {
     return cameraSwitched?.call(uuid);
   }
@@ -3934,6 +3985,7 @@ class _$CallControlEventCameraSwitchedImpl
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
+    TResult Function(UuidValue uuid)? setActiveLine,
     required TResult orElse(),
   }) {
     if (cameraSwitched != null) {
@@ -3959,6 +4011,8 @@ class _$CallControlEventCameraSwitchedImpl
         speakerEnabled,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
+    required TResult Function(_CallControlEventSetActiveLine value)
+        setActiveLine,
   }) {
     return cameraSwitched(this);
   }
@@ -3976,6 +4030,7 @@ class _$CallControlEventCameraSwitchedImpl
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventSetActiveLine value)? setActiveLine,
   }) {
     return cameraSwitched?.call(this);
   }
@@ -3993,6 +4048,7 @@ class _$CallControlEventCameraSwitchedImpl
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult Function(_CallControlEventSetActiveLine value)? setActiveLine,
     required TResult orElse(),
   }) {
     if (cameraSwitched != null) {
@@ -4062,6 +4118,7 @@ class _$CallControlEventCameraEnabledImpl
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
     required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
+    required TResult Function(UuidValue uuid) setActiveLine,
   }) {
     return cameraEnabled(uuid, enabled);
   }
@@ -4081,6 +4138,7 @@ class _$CallControlEventCameraEnabledImpl
     TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult? Function(UuidValue uuid)? failureApproved,
+    TResult? Function(UuidValue uuid)? setActiveLine,
   }) {
     return cameraEnabled?.call(uuid, enabled);
   }
@@ -4100,6 +4158,7 @@ class _$CallControlEventCameraEnabledImpl
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
+    TResult Function(UuidValue uuid)? setActiveLine,
     required TResult orElse(),
   }) {
     if (cameraEnabled != null) {
@@ -4125,6 +4184,8 @@ class _$CallControlEventCameraEnabledImpl
         speakerEnabled,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
+    required TResult Function(_CallControlEventSetActiveLine value)
+        setActiveLine,
   }) {
     return cameraEnabled(this);
   }
@@ -4142,6 +4203,7 @@ class _$CallControlEventCameraEnabledImpl
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventSetActiveLine value)? setActiveLine,
   }) {
     return cameraEnabled?.call(this);
   }
@@ -4159,6 +4221,7 @@ class _$CallControlEventCameraEnabledImpl
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult Function(_CallControlEventSetActiveLine value)? setActiveLine,
     required TResult orElse(),
   }) {
     if (cameraEnabled != null) {
@@ -4230,6 +4293,7 @@ class _$CallControlEventSpeakerEnabledImpl
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
     required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
+    required TResult Function(UuidValue uuid) setActiveLine,
   }) {
     return speakerEnabled(uuid, enabled);
   }
@@ -4249,6 +4313,7 @@ class _$CallControlEventSpeakerEnabledImpl
     TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult? Function(UuidValue uuid)? failureApproved,
+    TResult? Function(UuidValue uuid)? setActiveLine,
   }) {
     return speakerEnabled?.call(uuid, enabled);
   }
@@ -4268,6 +4333,7 @@ class _$CallControlEventSpeakerEnabledImpl
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
+    TResult Function(UuidValue uuid)? setActiveLine,
     required TResult orElse(),
   }) {
     if (speakerEnabled != null) {
@@ -4293,6 +4359,8 @@ class _$CallControlEventSpeakerEnabledImpl
         speakerEnabled,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
+    required TResult Function(_CallControlEventSetActiveLine value)
+        setActiveLine,
   }) {
     return speakerEnabled(this);
   }
@@ -4310,6 +4378,7 @@ class _$CallControlEventSpeakerEnabledImpl
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventSetActiveLine value)? setActiveLine,
   }) {
     return speakerEnabled?.call(this);
   }
@@ -4327,6 +4396,7 @@ class _$CallControlEventSpeakerEnabledImpl
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult Function(_CallControlEventSetActiveLine value)? setActiveLine,
     required TResult orElse(),
   }) {
     if (speakerEnabled != null) {
@@ -4394,6 +4464,7 @@ class _$CallControlEventFailureApprovedImpl
     required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
     required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
     required TResult Function(UuidValue uuid) failureApproved,
+    required TResult Function(UuidValue uuid) setActiveLine,
   }) {
     return failureApproved(uuid);
   }
@@ -4413,6 +4484,7 @@ class _$CallControlEventFailureApprovedImpl
     TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult? Function(UuidValue uuid)? failureApproved,
+    TResult? Function(UuidValue uuid)? setActiveLine,
   }) {
     return failureApproved?.call(uuid);
   }
@@ -4432,6 +4504,7 @@ class _$CallControlEventFailureApprovedImpl
     TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
     TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
     TResult Function(UuidValue uuid)? failureApproved,
+    TResult Function(UuidValue uuid)? setActiveLine,
     required TResult orElse(),
   }) {
     if (failureApproved != null) {
@@ -4457,6 +4530,8 @@ class _$CallControlEventFailureApprovedImpl
         speakerEnabled,
     required TResult Function(_CallControlEventFailureApproved value)
         failureApproved,
+    required TResult Function(_CallControlEventSetActiveLine value)
+        setActiveLine,
   }) {
     return failureApproved(this);
   }
@@ -4474,6 +4549,7 @@ class _$CallControlEventFailureApprovedImpl
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventSetActiveLine value)? setActiveLine,
   }) {
     return failureApproved?.call(this);
   }
@@ -4491,6 +4567,7 @@ class _$CallControlEventFailureApprovedImpl
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult Function(_CallControlEventSetActiveLine value)? setActiveLine,
     required TResult orElse(),
   }) {
     if (failureApproved != null) {
@@ -4503,6 +4580,175 @@ class _$CallControlEventFailureApprovedImpl
 abstract class _CallControlEventFailureApproved implements CallControlEvent {
   const factory _CallControlEventFailureApproved(final UuidValue uuid) =
       _$CallControlEventFailureApprovedImpl;
+
+  UuidValue get uuid;
+}
+
+/// @nodoc
+
+class _$CallControlEventSetActiveLineImpl
+    with DiagnosticableTreeMixin
+    implements _CallControlEventSetActiveLine {
+  const _$CallControlEventSetActiveLineImpl(this.uuid);
+
+  @override
+  final UuidValue uuid;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallControlEvent.setActiveLine(uuid: $uuid)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'CallControlEvent.setActiveLine'))
+      ..add(DiagnosticsProperty('uuid', uuid));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CallControlEventSetActiveLineImpl &&
+            (identical(other.uuid, uuid) || other.uuid == uuid));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, uuid);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(int? line, String? generic, String? number,
+            String? email, String? displayName, bool video)
+        started,
+    required TResult Function(UuidValue uuid) answered,
+    required TResult Function(UuidValue uuid) ended,
+    required TResult Function(UuidValue uuid, bool onHold) setHeld,
+    required TResult Function(UuidValue uuid, bool muted) setMuted,
+    required TResult Function(UuidValue uuid, String key) sentDTMF,
+    required TResult Function(UuidValue uuid) cameraSwitched,
+    required TResult Function(UuidValue uuid, bool enabled) cameraEnabled,
+    required TResult Function(UuidValue uuid, bool enabled) speakerEnabled,
+    required TResult Function(UuidValue uuid) failureApproved,
+    required TResult Function(UuidValue uuid) setActiveLine,
+  }) {
+    return setActiveLine(uuid);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(int? line, String? generic, String? number, String? email,
+            String? displayName, bool video)?
+        started,
+    TResult? Function(UuidValue uuid)? answered,
+    TResult? Function(UuidValue uuid)? ended,
+    TResult? Function(UuidValue uuid, bool onHold)? setHeld,
+    TResult? Function(UuidValue uuid, bool muted)? setMuted,
+    TResult? Function(UuidValue uuid, String key)? sentDTMF,
+    TResult? Function(UuidValue uuid)? cameraSwitched,
+    TResult? Function(UuidValue uuid, bool enabled)? cameraEnabled,
+    TResult? Function(UuidValue uuid, bool enabled)? speakerEnabled,
+    TResult? Function(UuidValue uuid)? failureApproved,
+    TResult? Function(UuidValue uuid)? setActiveLine,
+  }) {
+    return setActiveLine?.call(uuid);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(int? line, String? generic, String? number, String? email,
+            String? displayName, bool video)?
+        started,
+    TResult Function(UuidValue uuid)? answered,
+    TResult Function(UuidValue uuid)? ended,
+    TResult Function(UuidValue uuid, bool onHold)? setHeld,
+    TResult Function(UuidValue uuid, bool muted)? setMuted,
+    TResult Function(UuidValue uuid, String key)? sentDTMF,
+    TResult Function(UuidValue uuid)? cameraSwitched,
+    TResult Function(UuidValue uuid, bool enabled)? cameraEnabled,
+    TResult Function(UuidValue uuid, bool enabled)? speakerEnabled,
+    TResult Function(UuidValue uuid)? failureApproved,
+    TResult Function(UuidValue uuid)? setActiveLine,
+    required TResult orElse(),
+  }) {
+    if (setActiveLine != null) {
+      return setActiveLine(uuid);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CallControlEventStarted value) started,
+    required TResult Function(_CallControlEventAnswered value) answered,
+    required TResult Function(_CallControlEventEnded value) ended,
+    required TResult Function(_CallControlEventSetHeld value) setHeld,
+    required TResult Function(_CallControlEventSetMuted value) setMuted,
+    required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
+    required TResult Function(_CallControlEventCameraSwitched value)
+        cameraSwitched,
+    required TResult Function(_CallControlEventCameraEnabled value)
+        cameraEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value)
+        speakerEnabled,
+    required TResult Function(_CallControlEventFailureApproved value)
+        failureApproved,
+    required TResult Function(_CallControlEventSetActiveLine value)
+        setActiveLine,
+  }) {
+    return setActiveLine(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CallControlEventStarted value)? started,
+    TResult? Function(_CallControlEventAnswered value)? answered,
+    TResult? Function(_CallControlEventEnded value)? ended,
+    TResult? Function(_CallControlEventSetHeld value)? setHeld,
+    TResult? Function(_CallControlEventSetMuted value)? setMuted,
+    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
+    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
+    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventSetActiveLine value)? setActiveLine,
+  }) {
+    return setActiveLine?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CallControlEventStarted value)? started,
+    TResult Function(_CallControlEventAnswered value)? answered,
+    TResult Function(_CallControlEventEnded value)? ended,
+    TResult Function(_CallControlEventSetHeld value)? setHeld,
+    TResult Function(_CallControlEventSetMuted value)? setMuted,
+    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
+    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
+    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult Function(_CallControlEventSetActiveLine value)? setActiveLine,
+    required TResult orElse(),
+  }) {
+    if (setActiveLine != null) {
+      return setActiveLine(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _CallControlEventSetActiveLine implements CallControlEvent {
+  const factory _CallControlEventSetActiveLine(final UuidValue uuid) =
+      _$CallControlEventSetActiveLineImpl;
 
   UuidValue get uuid;
 }

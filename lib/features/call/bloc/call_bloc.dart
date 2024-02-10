@@ -746,6 +746,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       cameraEnabled: (event) => _onCallControlEventCameraEnabled(event, emit),
       speakerEnabled: (event) => _onCallControlEventSpeakerEnabled(event, emit),
       failureApproved: (event) => _onCallControlEventFailureApproved(event, emit),
+      setActiveLine: (event) => _onCallControlEventSetActiveLine(event, emit),
     );
   }
 
@@ -873,6 +874,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     emit(state.copyWithMappedActiveCall(event.uuid, (activeCall) {
       return activeCall.copyWith(failure: null);
     }));
+  }
+
+  Future<void> _onCallControlEventSetActiveLine(_CallControlEventSetActiveLine event, Emitter<CallState> emit) async {
+    final activeCall = state.activeCalls.where((element) => element.callId.uuid == event.uuid).firstOrNull;
+
+    if (activeCall == null || activeCall.held == false) return;
+
+    for (final call in state.activeCalls) {
+      add(CallControlEvent.setHeld(call.callId.uuid, true));
+    }
+
+    add(CallControlEvent.setHeld(activeCall.callId.uuid, false));
   }
 
   // processing call perform events

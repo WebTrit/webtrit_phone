@@ -23,7 +23,6 @@ class CallActions extends StatefulWidget {
     this.onTransferPressed,
     required this.heldValue,
     this.onHeldChanged,
-    this.onSwapPressed,
     this.onHangupPressed,
     this.onHangupAndAcceptPressed,
     this.onHoldAndAcceptPressed,
@@ -44,7 +43,6 @@ class CallActions extends StatefulWidget {
   final VoidCallback? onTransferPressed;
   final bool heldValue;
   final ValueChanged<bool>? onHeldChanged;
-  final void Function()? onSwapPressed;
   final void Function()? onHangupPressed;
   final void Function()? onHangupAndAcceptPressed;
   final void Function()? onHoldAndAcceptPressed;
@@ -133,7 +131,6 @@ class _CallActionsState extends State<CallActions> {
     final onSpeakerChanged = widget.onSpeakerChanged;
     final onTransferPressed = widget.onTransferPressed;
     final onHeldChanged = widget.onHeldChanged;
-    final onSwapPressed = widget.onSwapPressed;
 
     final TextButtonsTable buttonsTable;
     if (widget.isIncoming && !widget.wasAccepted) {
@@ -287,26 +284,16 @@ class _CallActionsState extends State<CallActions> {
               child: const Icon(Icons.phone_forwarded),
             ),
           ),
-          if (onSwapPressed == null)
-            Tooltip(
-              message: widget.heldValue
-                  ? context.l10n.call_CallActionsTooltip_unhold
-                  : context.l10n.call_CallActionsTooltip_hold,
-              child: TextButton(
-                onPressed: onHeldChanged == null ? null : () => onHeldChanged(!widget.heldValue),
-                style: widget.heldValue ? _textButtonStyles?.callActiveAction : _textButtonStyles?.callAction,
-                child: const Icon(Icons.pause),
-              ),
+          Tooltip(
+            message: widget.heldValue
+                ? context.l10n.call_CallActionsTooltip_unhold
+                : context.l10n.call_CallActionsTooltip_hold,
+            child: TextButton(
+              onPressed: onHeldChanged == null ? null : () => onHeldChanged(!widget.heldValue),
+              style: widget.heldValue ? _textButtonStyles?.callActiveAction : _textButtonStyles?.callAction,
+              child: const Icon(Icons.pause),
             ),
-          if (onSwapPressed != null)
-            Tooltip(
-              message: context.l10n.call_CallActionsTooltip_swap,
-              child: TextButton(
-                onPressed: onSwapPressed,
-                style: _textButtonStyles?.callAction,
-                child: const Icon(Icons.swap_calls),
-              ),
-            ),
+          ),
           Tooltip(
             message: context.l10n.call_CallActionsTooltip_showKeypad,
             child: TextButton(

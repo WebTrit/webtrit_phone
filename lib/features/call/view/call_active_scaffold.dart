@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -138,11 +139,21 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                         ),
                         for (final activeCall in activeCalls)
                           CallInfo(
-                            isIncoming: activeCall.isIncoming,
+                            status: activeCall.isIncoming
+                                ? context.l10n.call_description_incoming
+                                : context.l10n.call_description_outgoing,
+                            focus: activeCalls.length < 2
+                                ? null
+                                : activeCall.held
+                                    ? CallFocus.inactive
+                                    : CallFocus.active,
                             held: activeCall.held,
                             username: activeCall.displayName ?? activeCall.handle.value,
                             acceptedTime: activeCall.acceptedTime,
                             color: onTabGradient,
+                            onFocusLine: () {
+                              context.read<CallBloc>().add(CallControlEvent.setActiveLine(activeCall.callId.uuid));
+                            },
                           ),
                       ],
                     ),
@@ -176,19 +187,6 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       onHeldChanged: (bool value) {
                         context.read<CallBloc>().add(CallControlEvent.setHeld(activeCall.callId.uuid, value));
                       },
-                      onSwapPressed: activeCalls.length == 2
-                          ? () {
-                              // TODO maybe introduce particular event with particular callkeep method
-                              context.read<CallBloc>().add(CallControlEvent.setHeld(activeCall.callId.uuid, true));
-                              for (final otherActiveCall in activeCalls) {
-                                if (otherActiveCall.callId != activeCall.callId) {
-                                  context
-                                      .read<CallBloc>()
-                                      .add(CallControlEvent.setHeld(otherActiveCall.callId.uuid, false));
-                                }
-                              }
-                            }
-                          : null,
                       onHangupPressed: () {
                         context.read<CallBloc>().add(CallControlEvent.ended(activeCall.callId.uuid));
                       },

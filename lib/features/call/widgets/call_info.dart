@@ -8,21 +8,28 @@ import 'package:clock/clock.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
+enum CallFocus { active, inactive }
+
 class CallInfo extends StatefulWidget {
   const CallInfo({
     super.key,
-    required this.isIncoming,
+    required this.focus,
+    required this.status,
     required this.held,
     required this.username,
+    required this.onFocusLine,
     this.acceptedTime,
     this.color,
   });
 
-  final bool isIncoming;
+  final String status;
+  final CallFocus? focus;
   final bool held;
   final String username;
   final DateTime? acceptedTime;
   final Color? color;
+
+  final VoidCallback onFocusLine;
 
   @override
   State<CallInfo> createState() => _CallInfoState();
@@ -86,35 +93,46 @@ class _CallInfoState extends State<CallInfo> {
 
     final String statusMessage;
     if (duration == null) {
-      if (widget.isIncoming) {
-        statusMessage = context.l10n.call_description_incoming;
-      } else {
-        statusMessage = context.l10n.call_description_outgoing;
-      }
+      statusMessage = widget.status;
     } else if (widget.held) {
       statusMessage = context.l10n.call_description_held;
     } else {
       statusMessage = duration.format();
     }
 
-    return Column(
-      children: [
-        Text(
-          widget.username,
-          style: textTheme.displaySmall!.copyWith(color: widget.color),
-          textAlign: TextAlign.center,
+    return GestureDetector(
+      child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: widget.focus == null
+            ? null
+            : BoxDecoration(
+                color: Colors.white.withOpacity(widget.focus == CallFocus.active ? 0.30 : 0.10),
+                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+              ),
+        child: Column(
+          children: [
+            Text(
+              widget.username,
+              style: textTheme.displaySmall!.copyWith(color: widget.color),
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              statusMessage,
+              style: textTheme.bodyMedium!.copyWith(
+                color: widget.color,
+                fontFeatures: [
+                  const FontFeature.tabularFigures(),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+          ],
         ),
-        Text(
-          statusMessage,
-          style: textTheme.bodyMedium!.copyWith(
-            color: widget.color,
-            fontFeatures: [
-              const FontFeature.tabularFigures(),
-            ],
-          ),
-        ),
-        const SizedBox(height: 10),
-      ],
+      ),
+      onTap: () {
+        widget.onFocusLine();
+      },
     );
   }
 }
