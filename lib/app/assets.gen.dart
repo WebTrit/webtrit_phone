@@ -25,16 +25,16 @@ class $AssetsCallkeepGen {
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
-  /// File path: assets/icons/ic_attended_transfer.svg.svg
-  SvgGenImage get icAttendedTransferSvg =>
-      const SvgGenImage('assets/icons/ic_attended_transfer.svg.svg');
+  /// File path: assets/icons/ic_attended_transfer.svg
+  SvgGenImage get icAttendedTransfer =>
+      const SvgGenImage('assets/icons/ic_attended_transfer.svg');
 
   /// File path: assets/icons/ic_unattended_transfer.svg
   SvgGenImage get icUnattendedTransfer =>
       const SvgGenImage('assets/icons/ic_unattended_transfer.svg');
 
   /// List of all assets
-  List<SvgGenImage> get values => [icAttendedTransferSvg, icUnattendedTransfer];
+  List<SvgGenImage> get values => [icAttendedTransfer, icUnattendedTransfer];
 }
 
 class $AssetsLoginGen {

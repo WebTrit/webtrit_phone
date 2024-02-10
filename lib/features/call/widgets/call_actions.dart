@@ -310,7 +310,7 @@ class _CallActionsState extends State<CallActions> {
                   PopupItem(
                     text: context.l10n.call_CallActionsTooltip_attended_transfer,
                     textStyle: Theme.of(context).textTheme.bodyLarge,
-                    icon: Assets.icons.icAttendedTransferSvg.svg(),
+                    icon: Assets.icons.icAttendedTransfer.svg(),
                     onTap: onAttendedTransferPressed,
                   )
                 ],
