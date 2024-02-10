@@ -48,6 +48,8 @@
   "@call_description_incoming": {},
   "call_description_outgoing": "Outgoing call",
   "@call_description_outgoing": {},
+  "call_description_transferring": "Call transferring",
+  "@call_description_transferring": {},
   "call_FailureAcknowledgeDialog_title": "Failure",
   "@call_FailureAcknowledgeDialog_title": {},
   "callStatus_appUnregistered": "Unregistered",

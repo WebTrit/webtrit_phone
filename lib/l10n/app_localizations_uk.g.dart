@@ -79,6 +79,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_description_outgoing => 'Вихідний дзвінок';
 
   @override
+  String get call_description_transferring => 'Переведення дзвінка';
+
+  @override
   String get call_FailureAcknowledgeDialog_title => 'Помилка';
 
   @override

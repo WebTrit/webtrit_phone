@@ -50,6 +50,7 @@ class _CallScreenState extends State<CallScreen> {
           return CallActiveScaffold(
             speaker: state.speaker,
             activeCalls: state.activeCalls,
+            activeTransfers: state.activeTransfers,
             localePlaceholderBuilder: widget.localePlaceholderBuilder,
             remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
           );

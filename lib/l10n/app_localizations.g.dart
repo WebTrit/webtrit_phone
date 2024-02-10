@@ -237,6 +237,12 @@ abstract class AppLocalizations {
   /// **'Outgoing call'**
   String get call_description_outgoing;
 
+  /// No description provided for @call_description_transferring.
+  ///
+  /// In en, this message translates to:
+  /// **'Call transferring'**
+  String get call_description_transferring;
+
   /// No description provided for @call_FailureAcknowledgeDialog_title.
   ///
   /// In en, this message translates to:

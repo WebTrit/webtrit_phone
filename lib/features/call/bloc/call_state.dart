@@ -110,7 +110,12 @@ class CallState with _$CallState {
     final activeCalls = this.activeCalls.where((activeCall) {
       return activeCall.callId.uuid != uuid;
     }).toList();
-    return copyWith(activeCalls: activeCalls, minimized: activeCalls.isEmpty ? null : minimized, intent: null);
+    return copyWith(
+      activeCalls: activeCalls,
+      minimized: activeCalls.isEmpty ? null : minimized,
+      intent: null,
+      activeTransfers: [],
+    );
   }
 
   bool get hasAttendedTransferIntent => intent == TransferType.attended && activeCalls.length > 1;

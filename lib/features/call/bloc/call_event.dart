@@ -101,6 +101,12 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
     required int line,
     required CallIdValue callId,
   }) = _CallSignalingEventUpdated;
+
+  const factory _CallSignalingEvent.notify({
+    required CallIdValue callId,
+    SubscriptionState? subscriptionState,
+    @Default('') String message,
+  }) = _CallSignalingEventNotify;
 }
 
 // call push events

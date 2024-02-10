@@ -501,6 +501,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       hangup: (event) => __onCallSignalingEventHangup(event, emit),
       updating: (event) => __onCallSignalingEventUpdating(event, emit),
       updated: (event) => __onCallSignalingEventUpdated(event, emit),
+      notify: (event) => __onCallSignalingEventNotify(event, emit),
     );
   }
 
@@ -733,6 +734,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }));
   }
 
+  Future<void> __onCallSignalingEventNotify(
+    _CallSignalingEventNotify event,
+    Emitter<CallState> emit,
+  ) async {
+    // TODO: This logic is workaround for handle decline of transfer intent or timeout, it should be processed more correctly in the future
+    const temporarilyUnavailableEvent = '480';
+    const noEmptyLines = '486';
+    if (event.message.contains(noEmptyLines) || event.message.contains(temporarilyUnavailableEvent)) {
+      emit(state.copyWith(activeTransfers: []));
+    }
+  }
+
   // processing call control events
 
   Future<void> _onCallControlEvent(
@@ -814,6 +827,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   Future<void> _unattendedCall(Emitter<CallState> emit, _CallControlEventStarted event) async {
     final activeCall = state.activeCalls.current;
+
+    emit(state.copyWith(activeTransfers: [event.handle.value]));
 
     await _signalingClient?.execute(TransferRequest(
       transaction: WebtritSignalingClient.generateTransactionId(),
@@ -1421,6 +1436,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       add(_CallSignalingEvent.updated(
         line: event.line,
         callId: CallIdValue(event.callId),
+      ));
+    } else if (event is NotifyEvent) {
+      add(_CallSignalingEvent.notify(
+        callId: CallIdValue(event.callId),
+        subscriptionState: event.subscriptionState,
+        message: event.content,
       ));
     } else {
       _logger.warning('unhandled signaling event $event');

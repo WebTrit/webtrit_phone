@@ -13,11 +13,11 @@ enum CallFocus { active, inactive }
 class CallInfo extends StatefulWidget {
   const CallInfo({
     super.key,
-    required this.focus,
+    this.focus,
     required this.status,
     required this.held,
     required this.username,
-    required this.onFocusLine,
+    this.onFocusLine,
     this.acceptedTime,
     this.color,
   });
@@ -29,7 +29,7 @@ class CallInfo extends StatefulWidget {
   final DateTime? acceptedTime;
   final Color? color;
 
-  final VoidCallback onFocusLine;
+  final VoidCallback? onFocusLine;
 
   @override
   State<CallInfo> createState() => _CallInfoState();
@@ -130,9 +130,7 @@ class _CallInfoState extends State<CallInfo> {
           ],
         ),
       ),
-      onTap: () {
-        widget.onFocusLine();
-      },
+      onTap: () => widget.onFocusLine?.call(),
     );
   }
 }

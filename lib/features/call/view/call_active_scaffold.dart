@@ -16,12 +16,14 @@ class CallActiveScaffold extends StatefulWidget {
     super.key,
     required this.speaker,
     required this.activeCalls,
+    required this.activeTransfers,
     required this.localePlaceholderBuilder,
     required this.remotePlaceholderBuilder,
   });
 
   final bool? speaker;
   final List<ActiveCall> activeCalls;
+  final List<String> activeTransfers;
   final WidgetBuilder? localePlaceholderBuilder;
   final WidgetBuilder? remotePlaceholderBuilder;
 
@@ -43,6 +45,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   Widget build(BuildContext context) {
     final activeCalls = widget.activeCalls;
     final activeCall = activeCalls.current;
+
+    final activeTransfers = widget.activeTransfers;
 
     final video = activeCall.video;
 
@@ -156,6 +160,13 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                             onFocusLine: () {
                               context.read<CallBloc>().add(CallControlEvent.setActiveLine(activeCall.callId.uuid));
                             },
+                          ),
+                        for (final activeTransfer in activeTransfers)
+                          CallInfo(
+                            status: context.l10n.call_description_transferring,
+                            held: true,
+                            username: activeTransfer,
+                            color: onTabGradient,
                           ),
                       ],
                     ),
