@@ -31,7 +31,7 @@ class _CallShellState extends State<CallShell> {
     return BlocListener<CallBloc, CallState>(
       listenWhen: (previous, current) => previous.display != current.display,
       listener: (context, state) {
-        final appRouter = AutoRouter.of(context);
+        final router = context.router;
 
         final orientationsBloc = context.read<OrientationsBloc>();
         if (state.display == CallDisplay.screen) {
@@ -41,12 +41,12 @@ class _CallShellState extends State<CallShell> {
         }
 
         if (state.display == CallDisplay.screen) {
-          if (!appRouter.isRouteActive(CallScreenPageRoute.name)) {
-            appRouter.push(const CallScreenPageRoute());
+          if (!router.isRouteActive(CallScreenPageRoute.name)) {
+            router.push(const CallScreenPageRoute());
           }
         } else {
-          if (appRouter.isRouteActive(CallScreenPageRoute.name)) {
-            appRouter.back();
+          if (router.isRouteActive(CallScreenPageRoute.name)) {
+            router.back();
           }
         }
 
@@ -59,7 +59,7 @@ class _CallShellState extends State<CallShell> {
           } else {
             final avatar = ThumbnailAvatar(
               stickyPadding: widget.stickyPadding,
-              onTap: () => appRouter.push(const CallScreenPageRoute()),
+              onTap: () => router.push(const CallScreenPageRoute()),
             );
             _avatar = avatar;
             avatar.insert(context, state);
