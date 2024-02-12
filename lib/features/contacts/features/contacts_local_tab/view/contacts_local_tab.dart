@@ -29,7 +29,10 @@ class ContactsLocalTab extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: () => openAppSettings(),
-                child: Text(context.l10n.contacts_LocalTabButton_openAppSettings),
+                child: Text(
+                  context.l10n.contacts_LocalTabButton_openAppSettings,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ],
           );
