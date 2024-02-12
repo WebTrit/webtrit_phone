@@ -1,8 +1,4 @@
-import 'dart:async';
-
 import 'package:auto_route/auto_route.dart';
-import 'package:bloc/bloc.dart';
-import 'package:flutter/widgets.dart';
 
 import 'package:webtrit_phone/app/router/app_shell.dart';
 import 'package:webtrit_phone/app/router/main_shell.dart';
@@ -10,7 +6,7 @@ import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
 
-import 'auth_guard.dart';
+export 'package:auto_route/auto_route.dart' show ReevaluateListenable;
 
 part 'app_router.gr.dart';
 
@@ -21,25 +17,24 @@ class AppRouter extends _$AppRouter {
   AppRouter(
     this._appBloc,
     this._appPreferences,
-    this._secureStorage,
     this._appPermissions,
-  ) {
-    _refreshListenable = GoRouterRefreshBloc<AppState>(_appBloc)..addListener(_onRefreshListener);
-  }
+  );
 
   final AppBloc _appBloc;
   final AppPreferences _appPreferences;
-  final SecureStorage _secureStorage;
   final AppPermissions _appPermissions;
-
-  late final Listenable? _refreshListenable;
 
   @override
   List<AutoRoute> get routes => [
         AutoRoute(
           page: AppShellRoute.page,
           path: '/',
+          guards: [AutoRouteGuard.simple(onAppShellRouteGuardNavigation)],
           children: [
+            RedirectRoute(
+              path: '',
+              redirectTo: 'main',
+            ),
             AutoRoute(
               page: LoginScreenPageRoute.page,
               path: 'login',
@@ -50,8 +45,7 @@ class AppRouter extends _$AppRouter {
             ),
             AutoRoute(
               page: MainShellRoute.page,
-              path: '',
-              guards: [AuthGuard(_secureStorage)],
+              path: 'main',
               children: [
                 AutoRoute(
                   page: MainScreenPageRoute.page,
@@ -161,44 +155,43 @@ class AppRouter extends _$AppRouter {
         ),
       ];
 
-  void _onRefreshListener() {
-    final appPermissionsDenied = _appPermissions.isDenied;
-
+  void onAppShellRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
     final coreUrl = _appBloc.state.coreUrl;
     final token = _appBloc.state.token;
+    final appPermissionsDenied = _appPermissions.isDenied;
+
+    final routeFlattened = resolver.route.flattened;
+
+    final isLoginPath = routeFlattened.any((route) => route.name == LoginScreenPageRoute.name);
+    final isMainPath = routeFlattened.any((route) => route.name == MainShellRoute.name);
 
     if (coreUrl != null && token != null) {
-      if (appPermissionsDenied) {
-        replaceAll([const PermissionsScreenPageRoute()], updateExistingRoutes: false);
-      } else {
-        replaceAll([const MainScreenPageRoute()], updateExistingRoutes: false);
-      }
-    } else {
-      replaceAll([LoginScreenPageRoute(stepPathParam: LoginStep.modeSelect.name)]);
-    }
-  }
-
-  @override
-  void dispose() {
-    _refreshListenable?.removeListener(_onRefreshListener);
-    _refreshListenable = null;
-    super.dispose();
-  }
-}
-
-class GoRouterRefreshBloc<S> extends ChangeNotifier {
-  GoRouterRefreshBloc(BlocBase<S> bloc) {
-    notifyListeners();
-    _subscription = bloc.stream.asBroadcastStream().listen(
-          (dynamic _) => notifyListeners(),
+      if (isLoginPath) {
+        resolver.next(false);
+        router.replaceAll(
+          [const MainShellRoute()],
+          updateExistingRoutes: false,
         );
-  }
+        return;
+      } else if (isMainPath) {
+        if (appPermissionsDenied) {
+          resolver.next(false);
+          router.replaceAll(
+            [const PermissionsScreenPageRoute()],
+            updateExistingRoutes: false,
+          );
+          return;
+        }
+      }
+    } else if (!isLoginPath) {
+      resolver.next(false);
+      router.replaceAll(
+        [LoginScreenPageRoute(stepPathParam: LoginStep.modeSelect.name)],
+        updateExistingRoutes: false,
+      );
+      return;
+    }
 
-  late final StreamSubscription<S> _subscription;
-
-  @override
-  void dispose() {
-    _subscription.cancel();
-    super.dispose();
+    resolver.next(true);
   }
 }

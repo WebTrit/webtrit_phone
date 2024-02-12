@@ -49,7 +49,6 @@ class _AppState extends State<App> {
     _appRouter = AppRouter(
       appBloc,
       widget.appPreferences,
-      widget.secureStorage,
       widget.appPermissions,
     );
   }
@@ -90,6 +89,7 @@ class _AppState extends State<App> {
                     CallRouterObserver(),
                     context.read<AppAnalyticsRepository>().createObserver(),
                   ],
+                  reevaluateListenable: ReevaluateListenable.stream(appBloc.stream),
                 ),
               );
             },
