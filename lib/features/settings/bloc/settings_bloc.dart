@@ -16,7 +16,7 @@ part 'settings_event.dart';
 
 part 'settings_state.dart';
 
-final _logger = Logger('$SettingsBloc');
+final _logger = Logger('SettingsBloc');
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   SettingsBloc({

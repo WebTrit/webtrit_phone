@@ -70,7 +70,7 @@ class AppPreferences {
 
   Future<bool> removeLocale() => _sharedPreferences.remove(_kLocaleLanguageTagKey);
 
-  MainFlavor getActiveMainFlavor({MainFlavor defaultValue = MainFlavor.favorites}) {
+  MainFlavor getActiveMainFlavor({MainFlavor defaultValue = MainFlavor.keypad}) {
     final activeMainFlavorString = _sharedPreferences.getString(_kActiveMainFlavorKey);
     if (activeMainFlavorString != null) {
       try {

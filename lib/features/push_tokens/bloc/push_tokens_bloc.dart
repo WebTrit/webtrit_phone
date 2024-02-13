@@ -15,7 +15,7 @@ part 'push_tokens_event.dart';
 
 part 'push_tokens_state.dart';
 
-final _logger = Logger('$PushTokensBloc');
+final _logger = Logger('PushTokensBloc');
 
 class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements PushRegistryDelegate {
   PushTokensBloc({
