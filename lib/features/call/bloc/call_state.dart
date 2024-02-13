@@ -65,27 +65,27 @@ class CallState with _$CallState {
 
   bool get isActive => activeCalls.isNotEmpty;
 
-  ActiveCall? retrieveActiveCall(UuidValue uuid) {
+  ActiveCall? retrieveActiveCall(String callId) {
     for (var activeCall in activeCalls) {
-      if (activeCall.callId.uuid == uuid) {
+      if (activeCall.callId == callId) {
         return activeCall;
       }
     }
     return null;
   }
 
-  FutureOr<T>? performOnActiveCall<T>(UuidValue uuid, FutureOr<T>? Function(ActiveCall element) perform) {
+  FutureOr<T>? performOnActiveCall<T>(String callId, FutureOr<T>? Function(ActiveCall element) perform) {
     for (var activeCall in activeCalls) {
-      if (activeCall.callId.uuid == uuid) {
+      if (activeCall.callId == callId) {
         return perform(activeCall);
       }
     }
     return null;
   }
 
-  CallState copyWithMappedActiveCall(UuidValue uuid, ActiveCall Function(ActiveCall element) map) {
+  CallState copyWithMappedActiveCall(String callId, ActiveCall Function(ActiveCall element) map) {
     final activeCalls = this.activeCalls.map((activeCall) {
-      if (activeCall.callId.uuid == uuid) {
+      if (activeCall.callId == callId) {
         return map(activeCall);
       } else {
         return activeCall;
@@ -99,9 +99,9 @@ class CallState with _$CallState {
     return copyWith(activeCalls: activeCalls);
   }
 
-  CallState copyWithPopActiveCall(UuidValue uuid) {
+  CallState copyWithPopActiveCall(String callId) {
     final activeCalls = this.activeCalls.where((activeCall) {
-      return activeCall.callId.uuid != uuid;
+      return activeCall.callId != callId;
     }).toList();
     return copyWith(activeCalls: activeCalls, minimized: activeCalls.isEmpty ? null : minimized);
   }
@@ -114,7 +114,7 @@ class ActiveCall with _$ActiveCall {
   factory ActiveCall({
     required Direction direction,
     required int line,
-    required CallIdValue callId,
+    required String callId,
     required CallkeepHandle handle,
     String? displayName,
     required bool video,
