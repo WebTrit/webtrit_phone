@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter_contacts/flutter_contacts.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 import 'package:webtrit_phone/models/models.dart';
 
 import 'local_contacts_repository.dart';
@@ -19,8 +21,12 @@ class LocalContactsRepository implements ILocalContactsRepository {
   late int _listenedCounter;
 
   @override
-  Future<bool> requestPermission() {
-    return FlutterContacts.requestPermission();
+  Future<bool> requestPermission() async {
+    if (await Permission.contacts.isPermanentlyDenied) {
+      return false;
+    } else {
+      return await FlutterContacts.requestPermission();
+    }
   }
 
   @override
