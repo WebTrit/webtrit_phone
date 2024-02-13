@@ -9,6 +9,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_phone/app/app_bloc_observer.dart';
 import 'package:webtrit_phone/data/data.dart';
 
 import 'firebase_options.dart';
@@ -42,7 +43,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       await SecureStorage.init();
       await AppThemes.init();
 
-      Bloc.observer = _AppBlocObserver();
+      Bloc.observer = AppBlocObserver();
 
       runApp(await builder());
     },
@@ -87,44 +88,4 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 
   logger.info('onBackgroundMessage: ${message.toMap()}');
-}
-
-class _AppBlocObserver extends BlocObserver {
-  final _logger = Logger('BlocObserver');
-
-  @override
-  void onCreate(BlocBase bloc) {
-    super.onCreate(bloc);
-    _logger.fine('onCreate $bloc');
-  }
-
-  @override
-  void onEvent(Bloc bloc, Object? event) {
-    super.onEvent(bloc, event);
-    _logger.fine('onEvent $bloc: $event');
-  }
-
-  @override
-  void onChange(BlocBase bloc, Change change) {
-    super.onChange(bloc, change);
-    _logger.fine('onChange $bloc: $change');
-  }
-
-  @override
-  onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    _logger.fine('onTransition $bloc: $transition');
-  }
-
-  @override
-  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
-    super.onError(bloc, error, stackTrace);
-    _logger.warning('onError $bloc', error, stackTrace);
-  }
-
-  @override
-  void onClose(BlocBase bloc) {
-    super.onClose(bloc);
-    _logger.fine('onClose $bloc');
-  }
 }
