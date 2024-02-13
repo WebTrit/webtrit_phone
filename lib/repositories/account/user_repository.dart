@@ -7,7 +7,7 @@ import 'package:webtrit_api/webtrit_api.dart';
 export 'package:webtrit_api/webtrit_api.dart'
     show Balance, BalanceType, BillingModel, Numbers, UserInfo, $UserInfoCopyWith;
 
-final _logger = Logger('$UserRepository');
+final _logger = Logger('UserRepository');
 
 class UserRepository {
   UserRepository({

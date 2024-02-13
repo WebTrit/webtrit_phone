@@ -13,7 +13,7 @@ part 'external_contacts_sync_event.dart';
 
 part 'external_contacts_sync_state.dart';
 
-final _logger = Logger('$ExternalContactsSyncBloc');
+final _logger = Logger('ExternalContactsSyncBloc');
 
 class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalContactsSyncState> {
   ExternalContactsSyncBloc({

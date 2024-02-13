@@ -3,9 +3,9 @@ import 'package:flutter/widgets.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:logging/logging.dart';
 
-class AppRouterObserver extends AutoRouterObserver {
-  final Logger _logger = Logger('AppRouterObserver');
+final _logger = Logger('AppRouterObserver');
 
+class AppRouterObserver extends AutoRouterObserver {
   @override
   void didInitTabRoute(TabPageRoute route, TabPageRoute? previousRoute) {
     super.didInitTabRoute(route, previousRoute);

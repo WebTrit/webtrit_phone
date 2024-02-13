@@ -90,7 +90,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 class _AppBlocObserver extends BlocObserver {
-  final Logger _logger = Logger('BlocObserver');
+  final _logger = Logger('BlocObserver');
 
   @override
   void onCreate(BlocBase bloc) {

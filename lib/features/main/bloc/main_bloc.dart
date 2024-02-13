@@ -20,6 +20,8 @@ part 'main_event.dart';
 
 part 'main_state.dart';
 
+final _logger = Logger('MainBloc');
+
 class MainBloc extends Bloc<MainEvent, MainState> {
   MainBloc({
     required this.infoRepository,
@@ -32,8 +34,6 @@ class MainBloc extends Bloc<MainEvent, MainState> {
 
   final InfoRepository infoRepository;
   final StoreInfoExtractor? storeInfoExtractor;
-
-  final _logger = Logger('$MainBloc');
 
   Timer? _repeatTimer;
 

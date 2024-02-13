@@ -35,13 +35,13 @@ part 'call_state.dart';
 
 const int _kUndefinedLine = -1;
 
+final _logger = Logger('CallBloc');
+
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
   final RecentsRepository recentsRepository;
   final NotificationsBloc notificationsBloc;
   final AppBloc appBloc;
   final Callkeep callkeep;
-
-  final _logger = Logger('$CallBloc');
 
   StreamSubscription<ConnectivityResult>? _connectivityChangedSubscription;
 

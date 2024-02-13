@@ -41,7 +41,7 @@ class WebtritSignalingClient {
   @visibleForTesting
   WebtritSignalingClient.inner(this._wsc)
       : _id = _createCounter,
-        _logger = Logger('$WebtritSignalingClient-$_createCounter') {
+        _logger = Logger('WebtritSignalingClient-$_createCounter') {
     _createCounter++;
 
     _logger.fine('connected');

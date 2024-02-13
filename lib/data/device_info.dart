@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:logging/logging.dart';
 
+final Logger _logger = Logger('DeviceInfo');
+
 class DeviceInfo {
   static late DeviceInfo _instance;
 
@@ -52,8 +54,6 @@ class DeviceInfo {
   }
 
   final Map<String, dynamic> data;
-
-  final Logger _logger = Logger('$DeviceInfo');
 
   static Map<String, dynamic> _readWebBrowserInfo(WebBrowserInfo data) {
     return <String, dynamic>{

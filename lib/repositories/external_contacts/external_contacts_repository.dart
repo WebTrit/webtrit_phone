@@ -8,7 +8,7 @@ import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 
-final _logger = Logger('$ExternalContactsRepository');
+final _logger = Logger('ExternalContactsRepository');
 
 class ExternalContactsRepository {
   ExternalContactsRepository({

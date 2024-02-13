@@ -14,7 +14,7 @@ part 'about_event.dart';
 
 part 'about_state.dart';
 
-final _logger = Logger('$AboutBloc');
+final _logger = Logger('AboutBloc');
 
 class AboutBloc extends Bloc<AboutEvent, AboutState> {
   AboutBloc({
