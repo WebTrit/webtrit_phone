@@ -78,7 +78,7 @@ class _AppState extends State<App> {
                 locale: state.effectiveLocale,
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
-                restorationScopeId: 'App',
+                // restorationScopeId: 'App', // TODO: temporary comment to prevent AppShell's AutoRouter placeholder blink - additional investigation necessary
                 title: EnvironmentConfig.APP_NAME,
                 themeMode: state.effectiveThemeMode,
                 theme: themeProvider.light(),
