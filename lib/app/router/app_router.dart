@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/app/router/app_shell.dart';
 import 'package:webtrit_phone/app/router/main_shell.dart';
@@ -9,6 +10,8 @@ import 'package:webtrit_phone/features/features.dart';
 export 'package:auto_route/auto_route.dart' show ReevaluateListenable;
 
 part 'app_router.gr.dart';
+
+final _logger = Logger('AppRouter');
 
 @AutoRouterConfig(
   replaceInRouteName: null,
@@ -24,27 +27,34 @@ class AppRouter extends _$AppRouter {
   final AppPreferences _appPreferences;
   final AppPermissions _appPermissions;
 
+  String? get coreUrl => _appBloc.state.coreUrl;
+  String? get token => _appBloc.state.token;
+  bool get appPermissionsDenied => _appPermissions.isDenied;
+
   @override
   List<AutoRoute> get routes => [
-        AutoRoute(
+        AutoRoute.guarded(
           page: AppShellRoute.page,
+          onNavigation: onAppShellRouteGuardNavigation,
           path: '/',
-          guards: [AutoRouteGuard.simple(onAppShellRouteGuardNavigation)],
           children: [
             RedirectRoute(
               path: '',
               redirectTo: 'main',
             ),
-            AutoRoute(
+            AutoRoute.guarded(
               page: LoginScreenPageRoute.page,
+              onNavigation: onLoginScreenPageRouteGuardNavigation,
               path: 'login',
             ),
-            AutoRoute(
+            AutoRoute.guarded(
               page: PermissionsScreenPageRoute.page,
+              onNavigation: onPermissionsScreenPageRouteGuardNavigation,
               path: 'permissions',
             ),
-            AutoRoute(
+            AutoRoute.guarded(
               page: MainShellRoute.page,
+              onNavigation: onMainShellRouteGuardNavigation,
               path: 'main',
               children: [
                 AutoRoute(
@@ -155,43 +165,70 @@ class AppRouter extends _$AppRouter {
         ),
       ];
 
-  void onAppShellRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
-    final coreUrl = _appBloc.state.coreUrl;
-    final token = _appBloc.state.token;
-    final appPermissionsDenied = _appPermissions.isDenied;
-
-    final routeFlattened = resolver.route.flattened;
-
-    final isLoginPath = routeFlattened.any((route) => route.name == LoginScreenPageRoute.name);
-    final isMainPath = routeFlattened.any((route) => route.name == MainShellRoute.name);
+  void onLoginScreenPageRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
+    _logger.fine(_onNavigationLoggerMessage('onLoginScreenPageRouteGuardNavigation', resolver));
 
     if (coreUrl != null && token != null) {
-      if (isLoginPath) {
+      resolver.next(false);
+      router.replaceAll(
+        [const MainShellRoute()],
+      );
+    } else {
+      resolver.next(true);
+    }
+  }
+
+  void onPermissionsScreenPageRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
+    _logger.fine(_onNavigationLoggerMessage('onPermissionsScreenPageRouteGuardNavigation', resolver));
+
+    final appPermissionsDenied = _appPermissions.isDenied;
+
+    if (appPermissionsDenied) {
+      resolver.next(true);
+    } else {
+      resolver.next(false);
+      router.replaceAll(
+        [const MainShellRoute()],
+      );
+    }
+  }
+
+  void onMainShellRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
+    _logger.fine(_onNavigationLoggerMessage('onMainShellRouteGuardNavigation', resolver));
+
+    if (coreUrl != null && token != null) {
+      if (appPermissionsDenied) {
         resolver.next(false);
         router.replaceAll(
-          [const MainShellRoute()],
-          updateExistingRoutes: false,
+          [const PermissionsScreenPageRoute()],
         );
-        return;
-      } else if (isMainPath) {
-        if (appPermissionsDenied) {
-          resolver.next(false);
-          router.replaceAll(
-            [const PermissionsScreenPageRoute()],
-            updateExistingRoutes: false,
-          );
-          return;
-        }
+      } else {
+        resolver.next(true);
       }
-    } else if (!isLoginPath) {
+    } else {
       resolver.next(false);
       router.replaceAll(
         [LoginScreenPageRoute(stepPathParam: LoginStep.modeSelect.name)],
-        updateExistingRoutes: false,
       );
-      return;
     }
+  }
+
+  void onAppShellRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
+    _logger.fine(_onNavigationLoggerMessage('onAppShellRouteGuardNavigation', resolver));
 
     resolver.next(true);
+
+    // Since reevaluateListenable triggers reevaluation only on the root router,
+    // explicit reevaluation on the app shell router is necessary to ensure
+    // proper handling of login/logout functionality.
+    if (resolver.isReevaluating) {
+      final innerRouter = router.innerRouterOf<StackRouter>(AppShellRoute.name);
+      innerRouter?.reevaluateGuards();
+    }
   }
+}
+
+Object _onNavigationLoggerMessage(String callbackName, NavigationResolver resolver) {
+  return () =>
+      '$callbackName: ${resolver.route.name} (${resolver.route.fullPath}) isReevaluating=${resolver.isReevaluating}';
 }
