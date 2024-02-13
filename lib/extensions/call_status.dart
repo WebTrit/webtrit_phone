@@ -32,7 +32,7 @@ extension CallStatusColor on CallStatus {
       case CallStatus.connectError:
         return colorScheme.error;
       case CallStatus.appUnregistered:
-        return colorScheme.secondaryContainer;
+        return colorScheme.onSurfaceVariant;
       case CallStatus.connectIssue:
         return colorScheme.error;
       case CallStatus.inProgress:
