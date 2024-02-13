@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -45,9 +44,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
   }
 
   void _onStarted(LocalContactsSyncStarted event, Emitter<LocalContactsSyncState> emit) async {
-    if (await Permission.contacts.isPermanentlyDenied) {
-      emit(const LocalContactsSyncPermissionFailure());
-    } else if (await Permission.contacts.request() != PermissionStatus.granted) {
+    if (!await localContactsRepository.requestPermission()) {
       emit(const LocalContactsSyncPermissionFailure());
     } else {
       final localContactsForEachFuture = emit.onEach<List<LocalContact>>(
