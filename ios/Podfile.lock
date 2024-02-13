@@ -193,7 +193,7 @@ PODS:
   - url_launcher_ios (0.0.1):
     - Flutter
   - WebRTC-SDK (114.5735.08)
-  - webtrit_callkeep (0.0.1):
+  - webtrit_callkeep_ios (0.0.1):
     - Flutter
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
@@ -221,7 +221,7 @@ DEPENDENCIES:
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqlite3_flutter_libs (from `.symlinks/plugins/sqlite3_flutter_libs/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
-  - webtrit_callkeep (from `.symlinks/plugins/webtrit_callkeep/ios`)
+  - webtrit_callkeep_ios (from `.symlinks/plugins/webtrit_callkeep_ios/ios`)
   - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
 
 SPEC REPOS:
@@ -290,8 +290,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqlite3_flutter_libs/ios"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
-  webtrit_callkeep:
-    :path: ".symlinks/plugins/webtrit_callkeep/ios"
+  webtrit_callkeep_ios:
+    :path: ".symlinks/plugins/webtrit_callkeep_ios/ios"
   webview_flutter_wkwebview:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
@@ -313,7 +313,7 @@ SPEC CHECKSUMS:
   FirebaseInstallations: e842042ec6ac1fd2e37d7706363ebe7f662afea4
   FirebaseMessaging: 9bc34a98d2e0237e1b121915120d4d48ddcf301e
   FirebaseSessions: e5f4caa188dc8bc6142abc974355be75b042215e
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_contacts: edb1c5ce76aa433e20e6cb14c615f4c0b66e0983
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
   flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
@@ -336,9 +336,9 @@ SPEC CHECKSUMS:
   sqlite3_flutter_libs: eb769059df0356dc52ddda040f09cacc9391a7cf
   url_launcher_ios: bf5ce03e0e2088bad9cc378ea97fa0ed5b49673b
   WebRTC-SDK: c24d2a6c9f571f2ed42297cb8ffba9557093142b
-  webtrit_callkeep: bd0c4e7b220df37d3f3c43b1cbafa1953edc8627
+  webtrit_callkeep_ios: 2f4975de04cbcdb1ed49b170396ae52aa75e6d1c
   webview_flutter_wkwebview: 2e2d318f21a5e036e2c3f26171342e95908bd60a
 
 PODFILE CHECKSUM: d6dbc366d50b38d8da7390639b5467f863b13458
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.15.0
