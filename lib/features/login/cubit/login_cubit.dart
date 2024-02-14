@@ -23,10 +23,9 @@ WebtritApiClient defaultCreateWebtritApiClient(String coreUrl, String tenantId) 
 }
 
 class LoginCubit extends Cubit<LoginState> {
-  LoginCubit(
-    LoginStep step, {
+  LoginCubit({
     @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
-  }) : super(LoginState(step: step));
+  }) : super(const LoginState());
 
   final WebtritApiClientFactory createWebtritApiClient;
 
@@ -37,29 +36,6 @@ class LoginCubit extends Cubit<LoginState> {
   String get defaultTenantId => '';
 
   bool get isDemoModeEnabled => coreUrlFromEnvironment == null;
-
-  void next() {
-    var nextStepIndex = state.step.index + 1;
-    if (nextStepIndex == 1 && state.coreUrl != null) {
-      nextStepIndex++;
-    }
-    emit(state.copyWith(
-      step: LoginStep.values[nextStepIndex],
-      status: LoginStatus.input,
-    ));
-  }
-
-  void back() {
-    var prevStepIndex = state.step.index - 1;
-    if (prevStepIndex == 1 && state.coreUrlInput.value.isEmpty) {
-      prevStepIndex--;
-    }
-    final effectivePrevStep = prevStepIndex >= 0 ? LoginStep.values[prevStepIndex] : state.step;
-    emit(state.copyWith(
-      step: effectivePrevStep,
-      status: LoginStatus.input,
-    ));
-  }
 
   void dismissError() {
     emit(state.copyWith(
@@ -86,26 +62,22 @@ class LoginCubit extends Cubit<LoginState> {
 
     if (coreUrl != null) {
       emit(state.copyWith(
-        status: LoginStatus.processing,
+        processing: true,
       ));
       try {
         final client = createWebtritApiClient(coreUrl, tenantId);
         await _verifyCoreVersion(client);
         emit(state.copyWith(
-          status: LoginStatus.ok,
+          processing: false,
           coreUrl: coreUrl,
           tenantId: tenantId,
         ));
       } catch (e) {
         emit(state.copyWith(
-          status: LoginStatus.input,
+          processing: false,
           error: e,
         ));
       }
-    } else {
-      emit(state.copyWith(
-        status: LoginStatus.ok,
-      ));
     }
   }
 
@@ -118,12 +90,12 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void loginCoreUrlAssignSubmitted() async {
-    if (!state.status.isInput || !state.coreUrlInput.isValid) {
+    if (state.processing || !state.coreUrlInput.isValid) {
       return;
     }
 
     emit(state.copyWith(
-      status: LoginStatus.processing,
+      processing: true,
     ));
 
     var coreUrlInputValue = state.coreUrlInput.value;
@@ -135,25 +107,21 @@ class LoginCubit extends Cubit<LoginState> {
       final client = createWebtritApiClient(coreUrlInputValue, tenantId);
       await _verifyCoreVersion(client);
       emit(state.copyWith(
-        status: LoginStatus.ok,
+        processing: false,
         coreUrl: coreUrlInputValue,
         tenantId: tenantId,
       ));
     } catch (e) {
       emit(state.copyWith(
-        status: LoginStatus.input,
+        processing: false,
         error: e,
       ));
     }
   }
 
   void loginCoreUrlAssignBack() async {
-    if (state.status != LoginStatus.input) {
-      return;
-    }
-
     emit(state.copyWith(
-      status: LoginStatus.back,
+      demo: null,
       coreUrlInput: const UrlInput.pure(),
     ));
   }
@@ -173,24 +141,24 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void loginOptRequestSubmitted() async {
-    if (!state.status.isInput || !(state.demo ? state.emailInput.isValid : state.phoneInput.isValid)) {
+    if (state.processing || !(state.demo! ? state.emailInput.isValid : state.phoneInput.isValid)) {
       return;
     }
 
     emit(state.copyWith(
-      status: LoginStatus.processing,
+      processing: true,
     ));
     try {
       final SessionResult result;
       final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
-      if (state.demo) {
+      if (state.demo!) {
         result = await _createUserRequest(client, state.emailInput.value);
       } else {
         result = await _sessionOtpRequest(client, state.phoneInput.value);
       }
       if (result is SessionOtpProvisional) {
         emit(state.copyWith(
-          status: LoginStatus.ok,
+          processing: false,
           sessionOtpProvisional: result,
         ));
       } else if (result is SessionToken) {
@@ -202,19 +170,14 @@ class LoginCubit extends Cubit<LoginState> {
       }
     } catch (e) {
       emit(state.copyWith(
-        status: LoginStatus.input,
+        processing: false,
         error: e,
       ));
     }
   }
 
   void loginOptRequestBack() async {
-    if (state.status != LoginStatus.input) {
-      return;
-    }
-
     emit(state.copyWith(
-      status: LoginStatus.back,
       coreUrl: null,
       tenantId: null,
       emailInput: const EmailInput.pure(),
@@ -231,63 +194,58 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void loginOptVerifySubmitted() async {
-    if (state.status != LoginStatus.input || !state.codeInput.isValid) {
+    if (state.processing || !state.codeInput.isValid) {
       return;
     }
 
     emit(state.copyWith(
-      status: LoginStatus.processing,
+      processing: true,
     ));
     try {
       final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
       final sessionToken = await _sessionOtpVerify(client, state.sessionOtpProvisional!, state.codeInput.value);
 
+      // does not set processing to false to hold processing widgets state during navigation
       emit(state.copyWith(
-        status: LoginStatus.ok,
         tenantId: sessionToken.tenantId ?? state.tenantId!,
         token: sessionToken.token,
       ));
     } catch (e) {
       emit(state.copyWith(
-        status: LoginStatus.input,
+        processing: false,
         error: e,
       ));
     }
   }
 
   void loginOptVerifyBack() async {
-    if (state.status != LoginStatus.input) {
-      return;
-    }
-
     emit(state.copyWith(
-      status: LoginStatus.back,
       sessionOtpProvisional: null,
       codeInput: const CodeInput.pure(),
     ));
   }
 
   void loginOptVerifyRepeat() async {
-    if (state.status != LoginStatus.input) {
+    if (state.processing) {
       return;
     }
 
     emit(state.copyWith(
-      status: LoginStatus.processing,
+      processing: true,
     ));
 
     // TODO: Part of duplicate code with method loginOptRequestSubmitted
     try {
       final SessionResult result;
       final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
-      if (state.demo) {
+      if (state.demo!) {
         result = await _createUserRequest(client, state.emailInput.value);
       } else {
         result = await _sessionOtpRequest(client, state.phoneInput.value);
       }
       if (result is SessionOtpProvisional) {
         emit(state.copyWith(
-          status: LoginStatus.input,
+          processing: false,
           sessionOtpProvisional: result,
         ));
       } else if (result is SessionToken) {
@@ -299,7 +257,7 @@ class LoginCubit extends Cubit<LoginState> {
       }
     } catch (e) {
       emit(state.copyWith(
-        status: LoginStatus.input,
+        processing: false,
         error: e,
       ));
     }

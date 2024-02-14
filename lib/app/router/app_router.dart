@@ -43,9 +43,23 @@ class AppRouter extends _$AppRouter {
               redirectTo: 'main',
             ),
             AutoRoute.guarded(
-              page: LoginScreenPageRoute.page,
+              page: LoginRouterPageRoute.page,
               onNavigation: onLoginScreenPageRouteGuardNavigation,
               path: 'login',
+              children: [
+                AutoRoute(
+                  page: LoginModeSelectScreenPageRoute.page,
+                ),
+                AutoRoute(
+                  page: LoginCoreUrlAssignScreenPageRoute.page,
+                ),
+                AutoRoute(
+                  page: LoginOtpRequestScreenPageRoute.page,
+                ),
+                AutoRoute(
+                  page: LoginOtpVerifyScreenPageRoute.page,
+                ),
+              ],
             ),
             AutoRoute.guarded(
               page: PermissionsScreenPageRoute.page,
@@ -208,7 +222,7 @@ class AppRouter extends _$AppRouter {
     } else {
       resolver.next(false);
       router.replaceAll(
-        [LoginScreenPageRoute(stepPathParam: LoginStep.modeSelect.name)],
+        [const LoginRouterPageRoute()],
       );
     }
   }

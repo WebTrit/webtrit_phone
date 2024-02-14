@@ -16,10 +16,9 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$LoginState {
-  LoginStep get step => throw _privateConstructorUsedError;
-  LoginStatus get status => throw _privateConstructorUsedError;
+  bool get processing => throw _privateConstructorUsedError;
   Object? get error => throw _privateConstructorUsedError;
-  bool get demo => throw _privateConstructorUsedError;
+  bool? get demo => throw _privateConstructorUsedError;
   String? get coreUrl => throw _privateConstructorUsedError;
   String? get tenantId => throw _privateConstructorUsedError;
   SessionOtpProvisional? get sessionOtpProvisional =>
@@ -42,10 +41,9 @@ abstract class $LoginStateCopyWith<$Res> {
       _$LoginStateCopyWithImpl<$Res, LoginState>;
   @useResult
   $Res call(
-      {LoginStep step,
-      LoginStatus status,
+      {bool processing,
       Object? error,
-      bool demo,
+      bool? demo,
       String? coreUrl,
       String? tenantId,
       SessionOtpProvisional? sessionOtpProvisional,
@@ -69,10 +67,9 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? step = null,
-    Object? status = null,
+    Object? processing = null,
     Object? error = freezed,
-    Object? demo = null,
+    Object? demo = freezed,
     Object? coreUrl = freezed,
     Object? tenantId = freezed,
     Object? sessionOtpProvisional = freezed,
@@ -83,19 +80,15 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
     Object? codeInput = null,
   }) {
     return _then(_value.copyWith(
-      step: null == step
-          ? _value.step
-          : step // ignore: cast_nullable_to_non_nullable
-              as LoginStep,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as LoginStatus,
+      processing: null == processing
+          ? _value.processing
+          : processing // ignore: cast_nullable_to_non_nullable
+              as bool,
       error: freezed == error ? _value.error : error,
-      demo: null == demo
+      demo: freezed == demo
           ? _value.demo
           : demo // ignore: cast_nullable_to_non_nullable
-              as bool,
+              as bool?,
       coreUrl: freezed == coreUrl
           ? _value.coreUrl
           : coreUrl // ignore: cast_nullable_to_non_nullable
@@ -141,10 +134,9 @@ abstract class _$$LoginStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {LoginStep step,
-      LoginStatus status,
+      {bool processing,
       Object? error,
-      bool demo,
+      bool? demo,
       String? coreUrl,
       String? tenantId,
       SessionOtpProvisional? sessionOtpProvisional,
@@ -166,10 +158,9 @@ class __$$LoginStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? step = null,
-    Object? status = null,
+    Object? processing = null,
     Object? error = freezed,
-    Object? demo = null,
+    Object? demo = freezed,
     Object? coreUrl = freezed,
     Object? tenantId = freezed,
     Object? sessionOtpProvisional = freezed,
@@ -180,19 +171,15 @@ class __$$LoginStateImplCopyWithImpl<$Res>
     Object? codeInput = null,
   }) {
     return _then(_$LoginStateImpl(
-      step: null == step
-          ? _value.step
-          : step // ignore: cast_nullable_to_non_nullable
-              as LoginStep,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as LoginStatus,
+      processing: null == processing
+          ? _value.processing
+          : processing // ignore: cast_nullable_to_non_nullable
+              as bool,
       error: freezed == error ? _value.error : error,
-      demo: null == demo
+      demo: freezed == demo
           ? _value.demo
           : demo // ignore: cast_nullable_to_non_nullable
-              as bool,
+              as bool?,
       coreUrl: freezed == coreUrl
           ? _value.coreUrl
           : coreUrl // ignore: cast_nullable_to_non_nullable
@@ -233,10 +220,9 @@ class __$$LoginStateImplCopyWithImpl<$Res>
 
 class _$LoginStateImpl implements _LoginState {
   const _$LoginStateImpl(
-      {required this.step,
-      this.status = LoginStatus.input,
+      {this.processing = false,
       this.error,
-      this.demo = false,
+      this.demo,
       this.coreUrl,
       this.tenantId,
       this.sessionOtpProvisional,
@@ -247,15 +233,12 @@ class _$LoginStateImpl implements _LoginState {
       this.codeInput = const CodeInput.pure()});
 
   @override
-  final LoginStep step;
-  @override
   @JsonKey()
-  final LoginStatus status;
+  final bool processing;
   @override
   final Object? error;
   @override
-  @JsonKey()
-  final bool demo;
+  final bool? demo;
   @override
   final String? coreUrl;
   @override
@@ -279,7 +262,7 @@ class _$LoginStateImpl implements _LoginState {
 
   @override
   String toString() {
-    return 'LoginState(step: $step, status: $status, error: $error, demo: $demo, coreUrl: $coreUrl, tenantId: $tenantId, sessionOtpProvisional: $sessionOtpProvisional, token: $token, coreUrlInput: $coreUrlInput, emailInput: $emailInput, phoneInput: $phoneInput, codeInput: $codeInput)';
+    return 'LoginState(processing: $processing, error: $error, demo: $demo, coreUrl: $coreUrl, tenantId: $tenantId, sessionOtpProvisional: $sessionOtpProvisional, token: $token, coreUrlInput: $coreUrlInput, emailInput: $emailInput, phoneInput: $phoneInput, codeInput: $codeInput)';
   }
 
   @override
@@ -287,8 +270,8 @@ class _$LoginStateImpl implements _LoginState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LoginStateImpl &&
-            (identical(other.step, step) || other.step == step) &&
-            (identical(other.status, status) || other.status == status) &&
+            (identical(other.processing, processing) ||
+                other.processing == processing) &&
             const DeepCollectionEquality().equals(other.error, error) &&
             (identical(other.demo, demo) || other.demo == demo) &&
             (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
@@ -310,8 +293,7 @@ class _$LoginStateImpl implements _LoginState {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      step,
-      status,
+      processing,
       const DeepCollectionEquality().hash(error),
       demo,
       coreUrl,
@@ -332,10 +314,9 @@ class _$LoginStateImpl implements _LoginState {
 
 abstract class _LoginState implements LoginState {
   const factory _LoginState(
-      {required final LoginStep step,
-      final LoginStatus status,
+      {final bool processing,
       final Object? error,
-      final bool demo,
+      final bool? demo,
       final String? coreUrl,
       final String? tenantId,
       final SessionOtpProvisional? sessionOtpProvisional,
@@ -346,13 +327,11 @@ abstract class _LoginState implements LoginState {
       final CodeInput codeInput}) = _$LoginStateImpl;
 
   @override
-  LoginStep get step;
-  @override
-  LoginStatus get status;
+  bool get processing;
   @override
   Object? get error;
   @override
-  bool get demo;
+  bool? get demo;
   @override
   String? get coreUrl;
   @override

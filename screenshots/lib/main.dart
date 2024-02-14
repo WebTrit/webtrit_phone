@@ -53,8 +53,7 @@ class ScreenshotsApp extends StatelessWidget {
   late final _screenshots = [
     ScreenshotApp(
       appBloc: appBloc,
-      child: LoginScreenScreenshot(
-        LoginStep.modeSelect,
+      child: LoginModeSelectScreenScreenshot(
         appGreeting: EnvironmentConfig.APP_GREETING.isEmpty ? null : EnvironmentConfig.APP_GREETING,
       ),
     ),

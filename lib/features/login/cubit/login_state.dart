@@ -1,29 +1,11 @@
 part of 'login_cubit.dart';
 
-enum LoginStatus {
-  input,
-  processing,
-  ok,
-  back,
-}
-
-extension LoginStatusX on LoginStatus {
-  bool get isInput => this == LoginStatus.input;
-
-  bool get isProcessing => this == LoginStatus.processing;
-
-  bool get isOk => this == LoginStatus.ok;
-
-  bool get isBack => this == LoginStatus.back;
-}
-
 @freezed
 class LoginState with _$LoginState {
   const factory LoginState({
-    required LoginStep step,
-    @Default(LoginStatus.input) LoginStatus status,
+    @Default(false) bool processing,
     Object? error,
-    @Default(false) bool demo,
+    bool? demo,
     String? coreUrl,
     String? tenantId,
     SessionOtpProvisional? sessionOtpProvisional,

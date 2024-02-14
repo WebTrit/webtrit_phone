@@ -3,15 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../login.dart';
 
-class LoginModeSelectTab extends StatelessWidget {
-  const LoginModeSelectTab({
+class LoginModeSelectScreen extends StatelessWidget {
+  const LoginModeSelectScreen({
     super.key,
     this.appGreeting,
   });
@@ -23,19 +22,7 @@ class LoginModeSelectTab extends StatelessWidget {
     final themeData = Theme.of(context);
     final Gradients? gradients = themeData.extension<Gradients>();
     final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
-    return BlocConsumer<LoginCubit, LoginState>(
-      listener: (context, state) {
-        if (state.status == LoginStatus.ok) {
-          context.hideCurrentSnackBar();
-          context.read<LoginCubit>().next();
-        } else {
-          final errorL10n = state.errorL10n(context);
-          if (errorL10n != null) {
-            context.showErrorSnackBar(errorL10n);
-            context.read<LoginCubit>().dismissError();
-          }
-        }
-      },
+    return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
         final isDemoModeEnabled = context.read<LoginCubit>().isDemoModeEnabled;
         return Scaffold(
@@ -51,9 +38,8 @@ class LoginModeSelectTab extends StatelessWidget {
                         color: themeData.colorScheme.onPrimary,
                       ),
                       tooltip: context.l10n.login_ButtonTooltip_signInToYourInstance,
-                      onPressed: !state.status.isInput
-                          ? null
-                          : () => context.read<LoginCubit>().loginModeSelectSubmitter(false),
+                      onPressed:
+                          state.processing ? null : () => context.read<LoginCubit>().loginModeSelectSubmitter(false),
                     ),
                   ]
                 : null,
@@ -75,9 +61,9 @@ class LoginModeSelectTab extends StatelessWidget {
                 if (isDemoModeEnabled)
                   ElevatedButton(
                     onPressed:
-                        !state.status.isInput ? null : () => context.read<LoginCubit>().loginModeSelectSubmitter(true),
+                        state.processing ? null : () => context.read<LoginCubit>().loginModeSelectSubmitter(true),
                     style: elevatedButtonStyles?.primaryOnDark,
-                    child: state.status.isInput
+                    child: !state.processing
                         ? Text(context.l10n.login_Button_signUpToDemoInstance)
                         : SizedCircularProgressIndicator(
                             size: 16,
@@ -88,9 +74,9 @@ class LoginModeSelectTab extends StatelessWidget {
                 else
                   ElevatedButton(
                     onPressed:
-                        !state.status.isInput ? null : () => context.read<LoginCubit>().loginModeSelectSubmitter(false),
+                        state.processing ? null : () => context.read<LoginCubit>().loginModeSelectSubmitter(false),
                     style: elevatedButtonStyles?.primary,
-                    child: state.status.isInput
+                    child: !state.processing
                         ? Text(context.l10n.login_Button_signIn)
                         : SizedCircularProgressIndicator(
                             size: 16,
