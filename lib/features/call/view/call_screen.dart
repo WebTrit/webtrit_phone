@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -24,7 +25,17 @@ class CallScreen extends StatefulWidget {
   State<CallScreen> createState() => _CallScreenState();
 }
 
-class _CallScreenState extends State<CallScreen> {
+class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin {
+  @override
+  void didPush() {
+    context.read<CallBloc>().add(CallScreenEvent.didPush());
+  }
+
+  @override
+  void didPop() {
+    context.read<CallBloc>().add(CallScreenEvent.didPop());
+  }
+
   @override
   Widget build(BuildContext context) {
     final callBloc = context.read<CallBloc>();

@@ -86,8 +86,8 @@ class _AppState extends State<App> {
                 routerConfig: _appRouter.config(
                   navigatorObservers: () => [
                     AppRouterObserver(),
-                    CallRouterObserver(),
                     context.read<AppAnalyticsRepository>().createObserver(),
+                    AutoRouteObserver(),
                   ],
                   reevaluateListenable: ReevaluateListenable.stream(appBloc.stream),
                 ),

@@ -7,7 +7,7 @@ import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
 
-export 'package:auto_route/auto_route.dart' show ReevaluateListenable;
+export 'package:auto_route/auto_route.dart' show ReevaluateListenable, AutoRouteObserver;
 
 part 'app_router.gr.dart';
 
