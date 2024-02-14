@@ -11,7 +11,11 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/app/app_bloc_observer.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/utils/path_provider/_native.dart';
 
+import 'environment_config.dart';
+import 'fcm_handler.dart';
 import 'firebase_options.dart';
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
@@ -85,7 +89,24 @@ Future<void> _initFirebaseMessaging() async {
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final logger = Logger('main');
 
-  await Firebase.initializeApp();
+  final applicationDocumentsPath = await getApplicationDocumentsPath();
+
+  // TODO: Handle creating the database class AppDatabase multiple times
+  final appDatabase = AppDatabase(
+    createAppDatabaseConnection(
+      applicationDocumentsPath,
+      'db.sqlite',
+      logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
+    ),
+  );
+
+  final repository = RecentsRepository(
+    appDatabase: appDatabase,
+  );
+
+  final fcmHandler = FCMHandler(logger, repository);
+
+  await fcmHandler.execute(message);
 
   logger.info('onBackgroundMessage: ${message.toMap()}');
 }
