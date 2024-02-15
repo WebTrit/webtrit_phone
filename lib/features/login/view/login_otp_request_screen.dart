@@ -24,7 +24,6 @@ class LoginOtpRequestScreen extends StatelessWidget {
       builder: (context, state) {
         return LoginScaffold(
           appBar: AppBar(
-            title: Text(context.l10n.login_AppBarTitle_otpRequest),
             leading: ExtBackButton(
               disabled: state.processing,
             ),

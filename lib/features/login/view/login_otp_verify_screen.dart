@@ -26,7 +26,6 @@ class LoginOtpVerifyScreen extends StatelessWidget {
         final otpFromEmail = state.sessionOtpProvisional?.fromEmail;
         return LoginScaffold(
           appBar: AppBar(
-            title: Text(context.l10n.login_AppBarTitle_otpVerify),
             leading: ExtBackButton(
               disabled: state.processing,
             ),

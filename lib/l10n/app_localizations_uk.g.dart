@@ -180,15 +180,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get locale_uk => 'Українська';
 
   @override
-  String get login_AppBarTitle_coreUrlAssign => '';
-
-  @override
-  String get login_AppBarTitle_otpRequest => '';
-
-  @override
-  String get login_AppBarTitle_otpVerify => '';
-
-  @override
   String get login_Button_coreUrlAssignProceed => 'Продовжити';
 
   @override

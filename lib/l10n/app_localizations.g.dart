@@ -435,24 +435,6 @@ abstract class AppLocalizations {
   /// **'Ukrainian'**
   String get locale_uk;
 
-  /// No description provided for @login_AppBarTitle_coreUrlAssign.
-  ///
-  /// In en, this message translates to:
-  /// **''**
-  String get login_AppBarTitle_coreUrlAssign;
-
-  /// No description provided for @login_AppBarTitle_otpRequest.
-  ///
-  /// In en, this message translates to:
-  /// **''**
-  String get login_AppBarTitle_otpRequest;
-
-  /// No description provided for @login_AppBarTitle_otpVerify.
-  ///
-  /// In en, this message translates to:
-  /// **''**
-  String get login_AppBarTitle_otpVerify;
-
   /// No description provided for @login_Button_coreUrlAssignProceed.
   ///
   /// In en, this message translates to:
