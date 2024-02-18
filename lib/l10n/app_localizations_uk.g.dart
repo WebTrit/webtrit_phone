@@ -220,7 +220,7 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get login_ButtonTooltip_signInToYourInstance => 'Увійдіть до свогоWebTrit Cloud Backend';
+  String get login_ButtonTooltip_signInToYourInstance => 'Увійдіть до свого WebTrit Cloud Backend';
 
   @override
   String login_CoreVersionUnsupportedExceptionError(String actual, String supportedConstraint) {

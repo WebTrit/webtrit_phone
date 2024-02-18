@@ -156,7 +156,7 @@
       }
     }
   },
-  "login_ButtonTooltip_signInToYourInstance": "Увійдіть до свогоWebTrit Cloud Backend",
+  "login_ButtonTooltip_signInToYourInstance": "Увійдіть до свого WebTrit Cloud Backend",
   "@login_ButtonTooltip_signInToYourInstance": {},
   "login_CoreVersionUnsupportedExceptionError": "Непідтримувана версія екземпляра, будь ласка, зверніться до адміністратора вашої системи (фактична: {actual}, підтримувана: {supportedConstraint})",
   "@login_CoreVersionUnsupportedExceptionError": {
