@@ -161,11 +161,14 @@ class _MainShellState extends State<MainShell> {
           ),
           BlocProvider<CallBloc>(
             create: (context) {
+              final appBloc = context.read<AppBloc>();
+
               return CallBloc(
                 recentsRepository: context.read<RecentsRepository>(),
                 notificationsBloc: context.read<NotificationsBloc>(),
                 appBloc: context.read<AppBloc>(),
                 callkeep: callkeep,
+                pendingCallHandler: appBloc.pendingCallHandler,
               )..add(const CallStarted());
             },
           ),

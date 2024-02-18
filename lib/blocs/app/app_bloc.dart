@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
@@ -21,6 +22,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     required this.appPreferences,
     required this.secureStorage,
     required this.appDatabase,
+    required this.pendingCallHandler,
     required AppThemes appThemes,
   }) : super(AppState(
           coreUrl: secureStorage.readCoreUrl(),
@@ -40,6 +42,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final AppPreferences appPreferences;
   final SecureStorage secureStorage;
   final AppDatabase appDatabase;
+  final AndroidPendingCallHandler pendingCallHandler;
 
   void _onLogined(AppLogined event, Emitter<AppState> emit) async {
     await secureStorage.writeCoreUrl(event.coreUrl);

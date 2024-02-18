@@ -8,6 +8,12 @@ class CallStarted extends CallEvent {
   const CallStarted();
 }
 
+class HandlePendingCall extends CallEvent {
+  const HandlePendingCall(this.call);
+
+  final PendingCall? call;
+}
+
 @Freezed(copyWith: false)
 class _AppLifecycleStateChanged with _$AppLifecycleStateChanged implements CallEvent {
   const factory _AppLifecycleStateChanged(AppLifecycleState state) = __AppLifecycleStateChanged;
