@@ -246,6 +246,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get login_RequestFailureOtpVerificationAttemptsExceededError => 'Перевищено кількість спроб підтвердження';
 
   @override
+  String get login_RequestFailureParametersApplyIssueError => 'Надані дані не можуть бути оброблені';
+
+  @override
   String get login_RequestFailurePhoneNotFoundError => 'Номер телефону не знайдено';
 
   @override

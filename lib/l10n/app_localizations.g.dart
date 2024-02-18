@@ -555,6 +555,12 @@ abstract class AppLocalizations {
   /// **'Verification attempts exceeded'**
   String get login_RequestFailureOtpVerificationAttemptsExceededError;
 
+  /// No description provided for @login_RequestFailureParametersApplyIssueError.
+  ///
+  /// In en, this message translates to:
+  /// **'Provided data can\'t be processed'**
+  String get login_RequestFailureParametersApplyIssueError;
+
   /// No description provided for @login_RequestFailurePhoneNotFoundError.
   ///
   /// In en, this message translates to:

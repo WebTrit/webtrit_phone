@@ -22,6 +22,8 @@ extension LoginStateErrorL10n on LoginState {
         return context.l10n.login_SupportedLoginTypeMissedExceptionError;
       } else if (error is RequestFailure) {
         switch (error.error?.code) {
+          case 'parameters_apply_issue':
+            return context.l10n.login_RequestFailureParametersApplyIssueError;
           // sessionOtpRequest
           case 'unconfigured_bundle_id':
             return context.l10n.login_RequestFailureUnconfiguredBundleIdError;

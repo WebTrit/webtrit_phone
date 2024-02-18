@@ -181,6 +181,8 @@
   "@login_RequestFailureOtpNotFoundError": {},
   "login_RequestFailureOtpVerificationAttemptsExceededError": "Перевищено кількість спроб підтвердження",
   "@login_RequestFailureOtpVerificationAttemptsExceededError": {},
+  "login_RequestFailureParametersApplyIssueError": "Надані дані не можуть бути оброблені",
+  "@login_RequestFailureParametersApplyIssueError": {},
   "login_RequestFailurePhoneNotFoundError": "Номер телефону не знайдено",
   "@login_RequestFailurePhoneNotFoundError": {},
   "login_RequestFailureUnconfiguredBundleIdError": "Помилка конфігурації сервера додатка - сповістіть свого постачальника послуг",

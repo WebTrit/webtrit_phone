@@ -181,6 +181,8 @@
   "@login_RequestFailureOtpNotFoundError": {},
   "login_RequestFailureOtpVerificationAttemptsExceededError": "Verification attempts exceeded",
   "@login_RequestFailureOtpVerificationAttemptsExceededError": {},
+  "login_RequestFailureParametersApplyIssueError": "Provided data can't be processed",
+  "@login_RequestFailureParametersApplyIssueError": {},
   "login_RequestFailurePhoneNotFoundError": "Phone number not found",
   "@login_RequestFailurePhoneNotFoundError": {},
   "login_RequestFailureUnconfiguredBundleIdError": "The app is not supported by your WebTrit Cloud Backend",
