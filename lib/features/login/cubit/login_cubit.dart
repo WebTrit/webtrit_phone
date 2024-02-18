@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:linkify/linkify.dart';
@@ -50,40 +52,55 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
-  // LoginModeSelectTab
+  Future<void> _verifyCoreVersionAndRetrieveSupportedLoginTypesSubmitted(String coreUrl, String tenantId) async {
+    emit(state.copyWith(
+      processing: true,
+    ));
 
-  void loginModeSelectSubmitter(bool demo) async {
+    try {
+      final client = createWebtritApiClient(coreUrl, tenantId);
+      final supportedLoginTypes = await _verifyCoreVersionAndRetrieveSupportedLoginTypes(client);
+      if (state.demo == true) {
+        supportedLoginTypes?.removeWhere((loginType) => loginType != LoginType.signup);
+      }
+      if (supportedLoginTypes != null && supportedLoginTypes.isNotEmpty) {
+        emit(state.copyWith(
+          processing: false,
+          coreUrl: coreUrl,
+          tenantId: tenantId,
+          supportedLoginTypes: supportedLoginTypes,
+        ));
+      } else {
+        emit(state.copyWith(
+          processing: false,
+          error: SupportedLoginTypeMissedException(),
+        ));
+      }
+    } catch (e) {
+      emit(state.copyWith(
+        processing: false,
+        error: e,
+      ));
+    }
+  }
+
+  // LoginModeSelect
+
+  void loginModeSelectSubmitted(bool demo) async {
     emit(state.copyWith(
       demo: demo,
     ));
 
     final coreUrl = demo ? demoCoreUrlFromEnvironment : coreUrlFromEnvironment;
-    final tenantId = defaultTenantId;
 
     if (coreUrl != null) {
-      emit(state.copyWith(
-        processing: true,
-      ));
-      try {
-        final client = createWebtritApiClient(coreUrl, tenantId);
-        await _verifyCoreVersion(client);
-        emit(state.copyWith(
-          processing: false,
-          coreUrl: coreUrl,
-          tenantId: tenantId,
-        ));
-      } catch (e) {
-        emit(state.copyWith(
-          processing: false,
-          error: e,
-        ));
-      }
+      await _verifyCoreVersionAndRetrieveSupportedLoginTypesSubmitted(coreUrl, defaultTenantId);
     }
   }
 
-  // LoginCoreUrlAssignTab
+  // LoginCoreUrlAssign
 
-  void loginCoreUrlAssignCoreUrlInputChanged(String value) {
+  void coreUrlInputChanged(String value) {
     emit(state.copyWith(
       coreUrlInput: UrlInput.dirty(value),
     ));
@@ -94,29 +111,12 @@ class LoginCubit extends Cubit<LoginState> {
       return;
     }
 
-    emit(state.copyWith(
-      processing: true,
-    ));
-
     var coreUrlInputValue = state.coreUrlInput.value;
     if (!coreUrlInputValue.startsWith(RegExp(r'(https|http)://'))) {
       coreUrlInputValue = 'https://$coreUrlInputValue';
     }
-    final tenantId = defaultTenantId;
-    try {
-      final client = createWebtritApiClient(coreUrlInputValue, tenantId);
-      await _verifyCoreVersion(client);
-      emit(state.copyWith(
-        processing: false,
-        coreUrl: coreUrlInputValue,
-        tenantId: tenantId,
-      ));
-    } catch (e) {
-      emit(state.copyWith(
-        processing: false,
-        error: e,
-      ));
-    }
+
+    await _verifyCoreVersionAndRetrieveSupportedLoginTypesSubmitted(coreUrlInputValue, defaultTenantId);
   }
 
   void loginCoreUrlAssignBack() async {
@@ -126,48 +126,50 @@ class LoginCubit extends Cubit<LoginState> {
     ));
   }
 
-  // LoginOtpRequestTab
+  // LoginSwitch
 
-  void loginOptRequestEmailInputChanged(String value) {
+  void loginSwitchBack() async {
     emit(state.copyWith(
-      emailInput: EmailInput.dirty(value),
+      coreUrl: null,
+      tenantId: null,
+      supportedLoginTypes: null,
+      otpSigninSessionOtpProvisionalWithDateTime: null,
+      passwordSigninPasswordInputObscureText: true,
+      signupSessionOtpProvisionalWithDateTime: null,
+      otpSigninUserRefInput: const UserRefInput.pure(),
+      otpSigninCodeInput: const CodeInput.pure(),
+      passwordSigninUserRefInput: const UserRefInput.pure(),
+      passwordSigninPasswordInput: const PasswordInput.pure(),
+      signupEmailInput: const EmailInput.pure(),
+      signupCodeInput: const CodeInput.pure(),
     ));
   }
 
-  void loginOptRequestPhoneInputChanged(String value) {
+  // LoginOtpSigninRequest
+
+  void otpSigninUserRefInputChanged(String value) {
     emit(state.copyWith(
-      phoneInput: PhoneInput.dirty(value),
+      otpSigninUserRefInput: UserRefInput.dirty(value),
     ));
   }
 
-  void loginOptRequestSubmitted() async {
-    if (state.processing || !(state.demo! ? state.emailInput.isValid : state.phoneInput.isValid)) {
+  void loginOptSigninRequestSubmitted() async {
+    if (state.processing || !state.otpSigninUserRefInput.isValid) {
       return;
     }
 
     emit(state.copyWith(
       processing: true,
     ));
+
     try {
-      final SessionResult result;
       final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
-      if (state.demo!) {
-        result = await _createUserRequest(client, state.emailInput.value);
-      } else {
-        result = await _sessionOtpRequest(client, state.phoneInput.value);
-      }
-      if (result is SessionOtpProvisional) {
-        emit(state.copyWith(
-          processing: false,
-          sessionOtpProvisional: result,
-        ));
-      } else if (result is SessionToken) {
-        // TODO: Add logic for navigate authorized user
-        throw UnimplementedError();
-      } else {
-        // TODO: Add logic for navigate to undefine page
-        throw UnimplementedError();
-      }
+      final sessionOtpProvisional = await _createSessionOtp(client, state.otpSigninUserRefInput.value);
+
+      emit(state.copyWith(
+        processing: false,
+        otpSigninSessionOtpProvisionalWithDateTime: (sessionOtpProvisional, DateTime.now()),
+      ));
     } catch (e) {
       emit(state.copyWith(
         processing: false,
@@ -176,25 +178,16 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
-  void loginOptRequestBack() async {
+  // LoginOtpSigninVerify
+
+  void otpSigninCodeInputChanged(String value) {
     emit(state.copyWith(
-      coreUrl: null,
-      tenantId: null,
-      emailInput: const EmailInput.pure(),
-      phoneInput: const PhoneInput.pure(),
+      otpSigninCodeInput: CodeInput.dirty(value),
     ));
   }
 
-  // LoginOtpVerifyTab
-
-  void loginOptVerifyCodeInputChanged(String value) {
-    emit(state.copyWith(
-      codeInput: CodeInput.dirty(value),
-    ));
-  }
-
-  void loginOptVerifySubmitted() async {
-    if (state.processing || !state.codeInput.isValid) {
+  void loginOptSigninVerifySubmitted() async {
+    if (state.processing || !state.otpSigninCodeInput.isValid) {
       return;
     }
 
@@ -203,7 +196,8 @@ class LoginCubit extends Cubit<LoginState> {
     ));
     try {
       final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
-      final sessionToken = await _sessionOtpVerify(client, state.sessionOtpProvisional!, state.codeInput.value);
+      final sessionToken = await _verifySessionOtp(
+          client, state.otpSigninSessionOtpProvisionalWithDateTime!.$1, state.otpSigninCodeInput.value);
 
       // does not set processing to false to hold processing widgets state during navigation
       emit(state.copyWith(
@@ -218,15 +212,39 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
-  void loginOptVerifyBack() async {
+  void loginOptSigninVerifyBack() async {
     emit(state.copyWith(
-      sessionOtpProvisional: null,
-      codeInput: const CodeInput.pure(),
+      otpSigninSessionOtpProvisionalWithDateTime: null,
+      otpSigninCodeInput: const CodeInput.pure(),
     ));
   }
 
-  void loginOptVerifyRepeat() async {
-    if (state.processing) {
+  void loginOptSigninVerifyRepeat() {
+    loginOptSigninRequestSubmitted();
+  }
+
+  // LoginPasswordSignin
+
+  void passwordSigninUserRefInputChanged(String value) {
+    emit(state.copyWith(
+      passwordSigninUserRefInput: UserRefInput.dirty(value),
+    ));
+  }
+
+  void passwordSigninPasswordInputChanged(String value) {
+    emit(state.copyWith(
+      passwordSigninPasswordInput: PasswordInput.dirty(value),
+    ));
+  }
+
+  void passwordSigninPasswordInputObscureTextToggled() {
+    emit(state.copyWith(
+      passwordSigninPasswordInputObscureText: !state.passwordSigninPasswordInputObscureText,
+    ));
+  }
+
+  void loginPasswordSigninSubmitted() async {
+    if (state.processing || !state.passwordSigninUserRefInput.isValid || !state.passwordSigninPasswordInput.isValid) {
       return;
     }
 
@@ -234,25 +252,64 @@ class LoginCubit extends Cubit<LoginState> {
       processing: true,
     ));
 
-    // TODO: Part of duplicate code with method loginOptRequestSubmitted
     try {
-      final SessionResult result;
       final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
-      if (state.demo!) {
-        result = await _createUserRequest(client, state.emailInput.value);
-      } else {
-        result = await _sessionOtpRequest(client, state.phoneInput.value);
-      }
+      final sessionToken = await _createSessionRequest(
+          client, state.passwordSigninUserRefInput.value, state.passwordSigninPasswordInput.value);
+
+      // does not set processing to false to hold processing widgets state during navigation
+      emit(state.copyWith(
+        tenantId: sessionToken.tenantId ?? state.tenantId!,
+        token: sessionToken.token,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        processing: false,
+        error: e,
+      ));
+    }
+  }
+
+  void loginPasswordSigninBack() async {
+    emit(state.copyWith(
+      passwordSigninUserRefInput: const UserRefInput.pure(),
+      passwordSigninPasswordInput: const PasswordInput.pure(),
+    ));
+  }
+
+  // LoginSignupRequest
+
+  void signupEmailInputChanged(String value) {
+    emit(state.copyWith(
+      signupEmailInput: EmailInput.dirty(value),
+    ));
+  }
+
+  void loginSignupRequestSubmitted() async {
+    if (state.processing || !state.signupEmailInput.isValid) {
+      return;
+    }
+
+    emit(state.copyWith(
+      processing: true,
+    ));
+
+    try {
+      final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
+      final result = await _createUserRequest(client, state.signupEmailInput.value);
+
       if (result is SessionOtpProvisional) {
         emit(state.copyWith(
           processing: false,
-          sessionOtpProvisional: result,
+          signupSessionOtpProvisionalWithDateTime: (result, DateTime.now()),
         ));
       } else if (result is SessionToken) {
-        // TODO: Add logic for navigate authorized user
-        throw UnimplementedError();
+        // does not set processing to false to hold processing widgets state during navigation
+        emit(state.copyWith(
+          tenantId: result.tenantId ?? state.tenantId!,
+          token: result.token,
+        ));
       } else {
-        // TODO: Add logic for navigate to undefine page
         throw UnimplementedError();
       }
     } catch (e) {
@@ -262,13 +319,100 @@ class LoginCubit extends Cubit<LoginState> {
       ));
     }
   }
+
+  // LoginSignupVerify
+
+  void signupCodeInputChanged(String value) {
+    emit(state.copyWith(
+      signupCodeInput: CodeInput.dirty(value),
+    ));
+  }
+
+  void loginSignupVerifySubmitted() async {
+    if (state.processing || !state.signupCodeInput.isValid) {
+      return;
+    }
+
+    emit(state.copyWith(
+      processing: true,
+    ));
+
+    try {
+      final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
+      final sessionToken = await _verifySessionOtp(
+          client, state.signupSessionOtpProvisionalWithDateTime!.$1, state.signupCodeInput.value);
+
+      // does not set processing to false to hold processing widgets state during navigation
+      emit(state.copyWith(
+        tenantId: sessionToken.tenantId ?? state.tenantId!,
+        token: sessionToken.token,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        processing: false,
+        error: e,
+      ));
+    }
+  }
+
+  void loginSignupVerifyBack() async {
+    emit(state.copyWith(
+      signupSessionOtpProvisionalWithDateTime: null,
+      signupCodeInput: const CodeInput.pure(),
+    ));
+  }
+
+  void loginSignupVerifyRepeat() {
+    loginSignupRequestSubmitted();
+  }
 }
 
-Future<void> _verifyCoreVersion(
+Future<List<LoginType>?> _verifyCoreVersionAndRetrieveSupportedLoginTypes(
   WebtritApiClient webtritApiClient,
 ) async {
-  final actualCoreVersion = (await webtritApiClient.getSystemInfo()).core.version;
-  CoreVersion.supported().verify(actualCoreVersion);
+  final systemInfo = await webtritApiClient.getSystemInfo();
+
+  CoreVersion.supported().verify(systemInfo.core.version);
+
+  final supportedLoginTypeNames = Set.from(LoginType.values.map((e) => e.name));
+  return systemInfo.adapter?.supported
+      ?.where((supportedName) => supportedLoginTypeNames.contains(supportedName))
+      .map((supportedLoginTypeName) => LoginType.values.byName(supportedLoginTypeName))
+      .toList();
+}
+
+Future<SessionOtpProvisional> _createSessionOtp(
+  WebtritApiClient webtritApiClient,
+  String userRef,
+) async {
+  return await webtritApiClient.createSessionOtp(SessionOtpCredential(
+    bundleId: PackageInfo().packageName,
+    type: PlatformInfo().appType,
+    identifier: AppInfo().identifier,
+    userRef: userRef,
+  ));
+}
+
+Future<SessionToken> _verifySessionOtp(
+  WebtritApiClient webtritApiClient,
+  SessionOtpProvisional sessionOtpProvisional,
+  String code,
+) async {
+  return await webtritApiClient.verifySessionOtp(sessionOtpProvisional, code);
+}
+
+Future<SessionToken> _createSessionRequest(
+  WebtritApiClient webtritApiClient,
+  String userRef,
+  String password,
+) async {
+  return await webtritApiClient.createSession(SessionLoginCredential(
+    bundleId: PackageInfo().packageName,
+    type: PlatformInfo().appType,
+    identifier: AppInfo().identifier,
+    login: userRef,
+    password: password,
+  ));
 }
 
 Future<SessionResult> _createUserRequest(
@@ -283,22 +427,6 @@ Future<SessionResult> _createUserRequest(
   ));
 }
 
-Future<SessionOtpProvisional> _sessionOtpRequest(
-  WebtritApiClient webtritApiClient,
-  String phone,
-) async {
-  return await webtritApiClient.createSessionOtp(SessionOtpCredential(
-    bundleId: PackageInfo().packageName,
-    type: PlatformInfo().appType,
-    identifier: AppInfo().identifier,
-    userRef: phone,
-  ));
-}
+abstract class LoginCubitException implements Exception {}
 
-Future<SessionToken> _sessionOtpVerify(
-  WebtritApiClient webtritApiClient,
-  SessionOtpProvisional sessionOtpProvisional,
-  String code,
-) async {
-  return await webtritApiClient.verifySessionOtp(sessionOtpProvisional, code);
-}
+class SupportedLoginTypeMissedException extends LoginCubitException {}

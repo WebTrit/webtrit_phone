@@ -20,8 +20,14 @@ class LoginCoreUrlAssignScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
+
     return BlocBuilder<LoginCubit, LoginState>(
+      buildWhen: (previous, current) => whenLoginCoreUrlAssignScreenPageActive(current),
       builder: (context, state) {
+        final coreUrlAssignPreDescriptionText = context.l10n.login_Text_coreUrlAssignPreDescription;
+        final coreUrlAssignPostDescriptionText =
+            context.l10n.login_Text_coreUrlAssignPostDescription(EnvironmentConfig.SALES_EMAIL);
+
         return LoginScaffold(
           appBar: AppBar(
             leading: ExtBackButton(
@@ -39,16 +45,12 @@ class LoginCoreUrlAssignScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Linkify(
-                        text: context.l10n.login_Text_coreUrlAssignPreDescription,
-                        onOpen: (link) => context.read<LoginCubit>().launchLinkableElement(link),
-                        style: themeData.textTheme.bodyMedium,
-                        linkStyle: TextStyle(
-                          color: themeData.colorScheme.primary,
-                          fontWeight: FontWeight.bold,
+                      if (coreUrlAssignPreDescriptionText.isNotEmpty) ...[
+                        Description(
+                          text: coreUrlAssignPreDescriptionText,
                         ),
-                      ),
-                      const SizedBox(height: kInset / 2),
+                        const SizedBox(height: kInset / 2),
+                      ],
                       TextFormField(
                         enabled: !state.processing,
                         initialValue: state.coreUrlInput.value,
@@ -60,20 +62,17 @@ class LoginCoreUrlAssignScreen extends StatelessWidget {
                         ),
                         keyboardType: TextInputType.url,
                         autocorrect: false,
-                        onChanged: (value) => context.read<LoginCubit>().loginCoreUrlAssignCoreUrlInputChanged(value),
+                        onChanged: context.read<LoginCubit>().coreUrlInputChanged,
                         onFieldSubmitted:
                             !state.coreUrlInput.isValid ? null : (_) => _onCoreUrlAssignSubmitted(context),
                       ),
-                      const SizedBox(height: kInset / 8),
-                      Linkify(
-                        text: context.l10n.login_Text_coreUrlAssignPostDescription(EnvironmentConfig.SALES_EMAIL),
-                        onOpen: (link) => context.read<LoginCubit>().launchLinkableElement(link),
-                        style: themeData.textTheme.bodyMedium,
-                        linkStyle: TextStyle(
-                          color: themeData.colorScheme.primary,
-                          fontWeight: FontWeight.bold,
+                      if (coreUrlAssignPostDescriptionText.isNotEmpty) ...[
+                        const SizedBox(height: kInset / 8),
+                        Description(
+                          text: coreUrlAssignPostDescriptionText,
+                          launchLinkableElement: true,
                         ),
-                      ),
+                      ],
                       const Spacer(),
                       const SizedBox(height: kInset),
                       ElevatedButton(

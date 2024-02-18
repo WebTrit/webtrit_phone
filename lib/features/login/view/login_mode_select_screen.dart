@@ -22,9 +22,12 @@ class LoginModeSelectScreen extends StatelessWidget {
     final themeData = Theme.of(context);
     final Gradients? gradients = themeData.extension<Gradients>();
     final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
+
     return BlocBuilder<LoginCubit, LoginState>(
+      buildWhen: (previous, current) => previous.processing != current.processing,
       builder: (context, state) {
         final isDemoModeEnabled = context.read<LoginCubit>().isDemoModeEnabled;
+
         return Scaffold(
           extendBodyBehindAppBar: true,
           appBar: AppBar(
@@ -39,7 +42,7 @@ class LoginModeSelectScreen extends StatelessWidget {
                       ),
                       tooltip: context.l10n.login_ButtonTooltip_signInToYourInstance,
                       onPressed:
-                          state.processing ? null : () => context.read<LoginCubit>().loginModeSelectSubmitter(false),
+                          state.processing ? null : () => context.read<LoginCubit>().loginModeSelectSubmitted(false),
                     ),
                   ]
                 : null,
@@ -58,32 +61,21 @@ class LoginModeSelectScreen extends StatelessWidget {
                   text: appGreeting,
                 ),
                 const Spacer(),
-                if (isDemoModeEnabled)
-                  ElevatedButton(
-                    onPressed:
-                        state.processing ? null : () => context.read<LoginCubit>().loginModeSelectSubmitter(true),
-                    style: elevatedButtonStyles?.primaryOnDark,
-                    child: !state.processing
-                        ? Text(context.l10n.login_Button_signUpToDemoInstance)
-                        : SizedCircularProgressIndicator(
-                            size: 16,
-                            strokeWidth: 2,
-                            color: elevatedButtonStyles?.primaryOnDark?.foregroundColor?.resolve({}),
-                          ),
-                  )
-                else
-                  ElevatedButton(
-                    onPressed:
-                        state.processing ? null : () => context.read<LoginCubit>().loginModeSelectSubmitter(false),
-                    style: elevatedButtonStyles?.primary,
-                    child: !state.processing
-                        ? Text(context.l10n.login_Button_signIn)
-                        : SizedCircularProgressIndicator(
-                            size: 16,
-                            strokeWidth: 2,
-                            color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
-                          ),
-                  ),
+                ElevatedButton(
+                  onPressed: state.processing
+                      ? null
+                      : () => context.read<LoginCubit>().loginModeSelectSubmitted(isDemoModeEnabled),
+                  style: elevatedButtonStyles?.primary,
+                  child: !state.processing
+                      ? Text(isDemoModeEnabled
+                          ? context.l10n.login_Button_signUpToDemoInstance
+                          : context.l10n.login_Button_signIn)
+                      : SizedCircularProgressIndicator(
+                          size: 16,
+                          strokeWidth: 2,
+                          color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
+                        ),
+                ),
               ],
             ),
           ),

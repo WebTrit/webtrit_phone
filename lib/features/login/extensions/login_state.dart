@@ -18,6 +18,8 @@ extension LoginStateErrorL10n on LoginState {
           error.actual.toString(),
           error.supportedConstraint.toString(),
         );
+      } else if (error is SupportedLoginTypeMissedException) {
+        return context.l10n.login_SupportedLoginTypeMissedExceptionError;
       } else if (error is RequestFailure) {
         switch (error.error?.code) {
           // sessionOtpRequest

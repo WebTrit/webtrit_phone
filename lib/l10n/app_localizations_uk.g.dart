@@ -183,24 +183,41 @@ class AppLocalizationsUk extends AppLocalizations {
   String get login_Button_coreUrlAssignProceed => 'Продовжити';
 
   @override
-  String get login_Button_otpRequestProceed => 'Продовжити';
+  String get login_Button_otpSigninRequestProceed => 'Продовжити';
 
   @override
-  String get login_Button_otpVerifyProceed => 'Перевірити';
+  String get login_Button_otpSigninVerifyProceed => 'Перевірити';
 
   @override
-  String get login_Button_otpVerifyRepeat => 'Повторно надіслати код';
+  String get login_Button_otpSigninVerifyRepeat => 'Повторно надіслати код';
 
   @override
-  String login_Button_otpVerifyRepeatInterval(int seconds) {
+  String login_Button_otpSigninVerifyRepeatInterval(int seconds) {
     return 'Повторно надіслати код ($seconds с)';
   }
+
+  @override
+  String get login_Button_passwordSigninProceed => 'Продовжити';
 
   @override
   String get login_Button_signIn => 'Увійти';
 
   @override
+  String get login_Button_signupRequestProceed => 'Продовжити';
+
+  @override
   String get login_Button_signUpToDemoInstance => 'Зареєструватися';
+
+  @override
+  String get login_Button_signupVerifyProceed => 'Перевірити';
+
+  @override
+  String get login_Button_signupVerifyRepeat => 'Повторно надіслати код';
+
+  @override
+  String login_Button_signupVerifyRepeatInterval(int seconds) {
+    return 'Повторно надіслати код ($seconds с)';
+  }
 
   @override
   String get login_ButtonTooltip_signInToYourInstance => 'Увійдіть до свогоWebTrit Cloud Backend';
@@ -235,6 +252,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get login_RequestFailureUnconfiguredBundleIdError => 'Помилка конфігурації сервера додатка - сповістіть свого постачальника послуг';
 
   @override
+  String get login_SupportedLoginTypeMissedExceptionError => 'Поточний WebTrit Cloud Backend не підтримує жодного типу входу, сумісного з цим додатком';
+
+  @override
   String login_Text_coreUrlAssignPostDescription(Object email) {
     return 'Якщо у вас ще немає власного екземпляра WebTrit, зв\'яжіться з командою продажів за адресою $email';
   }
@@ -246,37 +266,86 @@ class AppLocalizationsUk extends AppLocalizations {
   String get login_TextFieldLabelText_coreUrlAssign => 'Введіть URL вашого WebTrit Cloud Backend';
 
   @override
-  String get login_TextFieldLabelText_otpRequestEmail => 'Введіть свою електронну пошту';
+  String get login_TextFieldLabelText_otpSigninCode => 'Введіть код підтвердження';
 
   @override
-  String get login_TextFieldLabelText_otpRequestPhone => 'Введіть свій номер телефону';
+  String get login_TextFieldLabelText_otpSigninUserRef => 'Введіть свій номер телефону чи електронну пошту';
 
   @override
-  String get login_TextFieldLabelText_otpVerifyCode => 'Введіть код підтвердження';
+  String get login_TextFieldLabelText_passwordSigninPassword => 'Введіть ваш пароль';
 
   @override
-  String get login_Text_otpRequestDemoDescription => 'Якщо у вас ще немає облікового запису, він буде автоматично створений для вас.';
+  String get login_TextFieldLabelText_passwordSigninUserRef => 'Введіть свій номер телефону чи електронну пошту';
 
   @override
-  String get login_Text_otpRequestDescription => '';
+  String get login_TextFieldLabelText_signupCode => 'Введіть код підтвердження';
 
   @override
-  String login_Text_otpVerifyCheckSpamFrom(String email) {
+  String get login_TextFieldLabelText_signupEmail => 'Введіть свою електронну пошту';
+
+  @override
+  String get login_Text_otpSigninRequestPostDescription => '';
+
+  @override
+  String get login_Text_otpSigninRequestPreDescription => '';
+
+  @override
+  String login_Text_otpSigninVerifyPostDescriptionFromEmail(String email) {
     return 'Якщо ви не бачите електронного листа з кодом підтвердження від $email у своїй скринці вхідних, будь ласка, перевірте папку спаму.';
   }
 
   @override
-  String get login_Text_otpVerifyCheckSpamGeneral => 'Якщо ви не бачите електронного листа з кодом підтвердження у своїй скринці вхідних, будь ласка, перевірте папку спаму.';
+  String get login_Text_otpSigninVerifyPostDescriptionGeneral => 'Якщо ви не бачите електронного листа з кодом підтвердження у своїй скринці вхідних, будь ласка, перевірте папку спаму.';
 
   @override
-  String login_Text_otpVerifySentToEmail(String email) {
-    return 'На $email надіслано одноразовий код підтвердження.';
+  String login_Text_otpSigninVerifyPreDescriptionUserRef(String userRef) {
+    return 'На електронну пошту, прив\'язану до наданого номера телефону чи електронної пошти, надіслано одноразовий код підтвердження.';
   }
 
   @override
   String login_Text_otpVerifySentToEmailAssignedWithPhone(String phone) {
     return 'На електронну пошту, прив\'язану до телефону tel:$phone, надіслано одноразовий код підтвердження.';
   }
+
+  @override
+  String get login_Text_passwordSigninPostDescription => '';
+
+  @override
+  String get login_Text_passwordSigninPreDescription => '';
+
+  @override
+  String get login_Text_signupRequestPostDescription => '';
+
+  @override
+  String get login_Text_signupRequestPostDescriptionDemo => 'Якщо у вас ще немає облікового запису, він буде автоматично створений для вас.';
+
+  @override
+  String get login_Text_signupRequestPreDescription => '';
+
+  @override
+  String get login_Text_signupRequestPreDescriptionDemo => '';
+
+  @override
+  String login_Text_signupVerifyPostDescriptionFromEmail(String email) {
+    return 'Якщо ви не бачите електронного листа з кодом підтвердження від $email у своїй скринці вхідних, будь ласка, перевірте папку спаму.';
+  }
+
+  @override
+  String get login_Text_signupVerifyPostDescriptionGeneral => 'Якщо ви не бачите електронного листа з кодом підтвердження у своїй скринці вхідних, будь ласка, перевірте папку спаму.';
+
+  @override
+  String login_Text_signupVerifyPreDescriptionEmail(String email) {
+    return 'На $email надіслано одноразовий код підтвердження.';
+  }
+
+  @override
+  String get loginType_otpSignin => 'Увійти за OTP';
+
+  @override
+  String get loginType_passwordSignin => 'Вхід за паролем';
+
+  @override
+  String get loginType_signup => 'Зареєструватися';
 
   @override
   String get login_validationCoreUrlError => 'Будь ласка, введіть правильний URL';
@@ -286,6 +355,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get login_validationPhoneError => 'Будь ласка, введіть правильний номер телефону';
+
+  @override
+  String get login_validationUserRefError => 'Будь ласка, введіть правильний номер телефону чи електронну пошту';
 
   @override
   String get logRecordsConsole_AppBarTitle => 'Консоль журналу';

@@ -8,6 +8,19 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 
+bool whenLoginRouterPageChange(LoginState previous, LoginState current) {
+  return (previous.demo != current.demo) ||
+      (previous.coreUrl != current.coreUrl || previous.supportedLoginTypes != current.supportedLoginTypes);
+}
+
+bool whenLoginCoreUrlAssignScreenPageActive(LoginState state) {
+  return state.demo == false;
+}
+
+bool whenLoginSwitchScreenPageActive(LoginState state) {
+  return state.coreUrl != null && state.supportedLoginTypes != null;
+}
+
 @RoutePage()
 class LoginRouterPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
@@ -31,41 +44,24 @@ class LoginRouterPage extends StatelessWidget {
               ));
         }
       },
-      buildWhen: (previous, current) =>
-          previous.demo != current.demo ||
-          previous.coreUrl != current.coreUrl ||
-          previous.sessionOtpProvisional != current.sessionOtpProvisional,
+      buildWhen: whenLoginRouterPageChange,
       builder: (context, state) {
-        final routes = <PageRouteInfo>[
-          const LoginModeSelectScreenPageRoute(),
-        ];
-        if (state.demo != null) {
-          if (state.demo == false) {
-            routes.add(const LoginCoreUrlAssignScreenPageRoute());
-          }
-          if (state.coreUrl != null) {
-            routes.add(const LoginOtpRequestScreenPageRoute());
-            if (state.sessionOtpProvisional != null) {
-              routes.add(const LoginOtpVerifyScreenPageRoute());
-            }
-          }
-        }
-
         return AutoRouter.declarative(
           navigatorObservers: () => [_HideCurrentSnackBarNavigatorObserver(context)],
           routes: (handler) {
-            return routes;
+            return [
+              const LoginModeSelectScreenPageRoute(),
+              if (whenLoginCoreUrlAssignScreenPageActive(state)) const LoginCoreUrlAssignScreenPageRoute(),
+              if (whenLoginSwitchScreenPageActive(state)) const LoginSwitchScreenPageRoute(),
+            ];
           },
           onPopRoute: (route, results) {
             switch (route.name) {
               case LoginCoreUrlAssignScreenPageRoute.name:
                 _onCoreUrlAssignBack(context);
                 break;
-              case LoginOtpRequestScreenPageRoute.name:
-                _onOtpRequestBack(context);
-                break;
-              case LoginOtpVerifyScreenPageRoute.name:
-                _onOtpVerifyBack(context);
+              case LoginSwitchScreenPageRoute.name:
+                _onSwitchBack(context);
                 break;
             }
           },
@@ -84,12 +80,8 @@ class LoginRouterPage extends StatelessWidget {
     context.read<LoginCubit>().loginCoreUrlAssignBack();
   }
 
-  void _onOtpRequestBack(BuildContext context) {
-    context.read<LoginCubit>().loginOptRequestBack();
-  }
-
-  void _onOtpVerifyBack(BuildContext context) {
-    context.read<LoginCubit>().loginOptVerifyBack();
+  void _onSwitchBack(BuildContext context) {
+    context.read<LoginCubit>().loginSwitchBack();
   }
 }
 

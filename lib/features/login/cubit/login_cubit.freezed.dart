@@ -21,13 +21,30 @@ mixin _$LoginState {
   bool? get demo => throw _privateConstructorUsedError;
   String? get coreUrl => throw _privateConstructorUsedError;
   String? get tenantId => throw _privateConstructorUsedError;
-  SessionOtpProvisional? get sessionOtpProvisional =>
+  List<LoginType>? get supportedLoginTypes =>
+      throw _privateConstructorUsedError;
+  (
+    SessionOtpProvisional,
+    DateTime
+  )? get otpSigninSessionOtpProvisionalWithDateTime =>
+      throw _privateConstructorUsedError;
+  bool get passwordSigninPasswordInputObscureText =>
+      throw _privateConstructorUsedError;
+  (
+    SessionOtpProvisional,
+    DateTime
+  )? get signupSessionOtpProvisionalWithDateTime =>
       throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
   UrlInput get coreUrlInput => throw _privateConstructorUsedError;
-  EmailInput get emailInput => throw _privateConstructorUsedError;
-  PhoneInput get phoneInput => throw _privateConstructorUsedError;
-  CodeInput get codeInput => throw _privateConstructorUsedError;
+  UserRefInput get otpSigninUserRefInput => throw _privateConstructorUsedError;
+  CodeInput get otpSigninCodeInput => throw _privateConstructorUsedError;
+  UserRefInput get passwordSigninUserRefInput =>
+      throw _privateConstructorUsedError;
+  PasswordInput get passwordSigninPasswordInput =>
+      throw _privateConstructorUsedError;
+  EmailInput get signupEmailInput => throw _privateConstructorUsedError;
+  CodeInput get signupCodeInput => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $LoginStateCopyWith<LoginState> get copyWith =>
@@ -46,12 +63,24 @@ abstract class $LoginStateCopyWith<$Res> {
       bool? demo,
       String? coreUrl,
       String? tenantId,
-      SessionOtpProvisional? sessionOtpProvisional,
+      List<LoginType>? supportedLoginTypes,
+      (
+        SessionOtpProvisional,
+        DateTime
+      )? otpSigninSessionOtpProvisionalWithDateTime,
+      bool passwordSigninPasswordInputObscureText,
+      (
+        SessionOtpProvisional,
+        DateTime
+      )? signupSessionOtpProvisionalWithDateTime,
       String? token,
       UrlInput coreUrlInput,
-      EmailInput emailInput,
-      PhoneInput phoneInput,
-      CodeInput codeInput});
+      UserRefInput otpSigninUserRefInput,
+      CodeInput otpSigninCodeInput,
+      UserRefInput passwordSigninUserRefInput,
+      PasswordInput passwordSigninPasswordInput,
+      EmailInput signupEmailInput,
+      CodeInput signupCodeInput});
 }
 
 /// @nodoc
@@ -72,12 +101,18 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
     Object? demo = freezed,
     Object? coreUrl = freezed,
     Object? tenantId = freezed,
-    Object? sessionOtpProvisional = freezed,
+    Object? supportedLoginTypes = freezed,
+    Object? otpSigninSessionOtpProvisionalWithDateTime = freezed,
+    Object? passwordSigninPasswordInputObscureText = null,
+    Object? signupSessionOtpProvisionalWithDateTime = freezed,
     Object? token = freezed,
     Object? coreUrlInput = null,
-    Object? emailInput = null,
-    Object? phoneInput = null,
-    Object? codeInput = null,
+    Object? otpSigninUserRefInput = null,
+    Object? otpSigninCodeInput = null,
+    Object? passwordSigninUserRefInput = null,
+    Object? passwordSigninPasswordInput = null,
+    Object? signupEmailInput = null,
+    Object? signupCodeInput = null,
   }) {
     return _then(_value.copyWith(
       processing: null == processing
@@ -97,10 +132,25 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
           ? _value.tenantId
           : tenantId // ignore: cast_nullable_to_non_nullable
               as String?,
-      sessionOtpProvisional: freezed == sessionOtpProvisional
-          ? _value.sessionOtpProvisional
-          : sessionOtpProvisional // ignore: cast_nullable_to_non_nullable
-              as SessionOtpProvisional?,
+      supportedLoginTypes: freezed == supportedLoginTypes
+          ? _value.supportedLoginTypes
+          : supportedLoginTypes // ignore: cast_nullable_to_non_nullable
+              as List<LoginType>?,
+      otpSigninSessionOtpProvisionalWithDateTime: freezed ==
+              otpSigninSessionOtpProvisionalWithDateTime
+          ? _value.otpSigninSessionOtpProvisionalWithDateTime
+          : otpSigninSessionOtpProvisionalWithDateTime // ignore: cast_nullable_to_non_nullable
+              as (SessionOtpProvisional, DateTime)?,
+      passwordSigninPasswordInputObscureText: null ==
+              passwordSigninPasswordInputObscureText
+          ? _value.passwordSigninPasswordInputObscureText
+          : passwordSigninPasswordInputObscureText // ignore: cast_nullable_to_non_nullable
+              as bool,
+      signupSessionOtpProvisionalWithDateTime: freezed ==
+              signupSessionOtpProvisionalWithDateTime
+          ? _value.signupSessionOtpProvisionalWithDateTime
+          : signupSessionOtpProvisionalWithDateTime // ignore: cast_nullable_to_non_nullable
+              as (SessionOtpProvisional, DateTime)?,
       token: freezed == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
@@ -109,17 +159,29 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
           ? _value.coreUrlInput
           : coreUrlInput // ignore: cast_nullable_to_non_nullable
               as UrlInput,
-      emailInput: null == emailInput
-          ? _value.emailInput
-          : emailInput // ignore: cast_nullable_to_non_nullable
+      otpSigninUserRefInput: null == otpSigninUserRefInput
+          ? _value.otpSigninUserRefInput
+          : otpSigninUserRefInput // ignore: cast_nullable_to_non_nullable
+              as UserRefInput,
+      otpSigninCodeInput: null == otpSigninCodeInput
+          ? _value.otpSigninCodeInput
+          : otpSigninCodeInput // ignore: cast_nullable_to_non_nullable
+              as CodeInput,
+      passwordSigninUserRefInput: null == passwordSigninUserRefInput
+          ? _value.passwordSigninUserRefInput
+          : passwordSigninUserRefInput // ignore: cast_nullable_to_non_nullable
+              as UserRefInput,
+      passwordSigninPasswordInput: null == passwordSigninPasswordInput
+          ? _value.passwordSigninPasswordInput
+          : passwordSigninPasswordInput // ignore: cast_nullable_to_non_nullable
+              as PasswordInput,
+      signupEmailInput: null == signupEmailInput
+          ? _value.signupEmailInput
+          : signupEmailInput // ignore: cast_nullable_to_non_nullable
               as EmailInput,
-      phoneInput: null == phoneInput
-          ? _value.phoneInput
-          : phoneInput // ignore: cast_nullable_to_non_nullable
-              as PhoneInput,
-      codeInput: null == codeInput
-          ? _value.codeInput
-          : codeInput // ignore: cast_nullable_to_non_nullable
+      signupCodeInput: null == signupCodeInput
+          ? _value.signupCodeInput
+          : signupCodeInput // ignore: cast_nullable_to_non_nullable
               as CodeInput,
     ) as $Val);
   }
@@ -139,12 +201,24 @@ abstract class _$$LoginStateImplCopyWith<$Res>
       bool? demo,
       String? coreUrl,
       String? tenantId,
-      SessionOtpProvisional? sessionOtpProvisional,
+      List<LoginType>? supportedLoginTypes,
+      (
+        SessionOtpProvisional,
+        DateTime
+      )? otpSigninSessionOtpProvisionalWithDateTime,
+      bool passwordSigninPasswordInputObscureText,
+      (
+        SessionOtpProvisional,
+        DateTime
+      )? signupSessionOtpProvisionalWithDateTime,
       String? token,
       UrlInput coreUrlInput,
-      EmailInput emailInput,
-      PhoneInput phoneInput,
-      CodeInput codeInput});
+      UserRefInput otpSigninUserRefInput,
+      CodeInput otpSigninCodeInput,
+      UserRefInput passwordSigninUserRefInput,
+      PasswordInput passwordSigninPasswordInput,
+      EmailInput signupEmailInput,
+      CodeInput signupCodeInput});
 }
 
 /// @nodoc
@@ -163,12 +237,18 @@ class __$$LoginStateImplCopyWithImpl<$Res>
     Object? demo = freezed,
     Object? coreUrl = freezed,
     Object? tenantId = freezed,
-    Object? sessionOtpProvisional = freezed,
+    Object? supportedLoginTypes = freezed,
+    Object? otpSigninSessionOtpProvisionalWithDateTime = freezed,
+    Object? passwordSigninPasswordInputObscureText = null,
+    Object? signupSessionOtpProvisionalWithDateTime = freezed,
     Object? token = freezed,
     Object? coreUrlInput = null,
-    Object? emailInput = null,
-    Object? phoneInput = null,
-    Object? codeInput = null,
+    Object? otpSigninUserRefInput = null,
+    Object? otpSigninCodeInput = null,
+    Object? passwordSigninUserRefInput = null,
+    Object? passwordSigninPasswordInput = null,
+    Object? signupEmailInput = null,
+    Object? signupCodeInput = null,
   }) {
     return _then(_$LoginStateImpl(
       processing: null == processing
@@ -188,10 +268,25 @@ class __$$LoginStateImplCopyWithImpl<$Res>
           ? _value.tenantId
           : tenantId // ignore: cast_nullable_to_non_nullable
               as String?,
-      sessionOtpProvisional: freezed == sessionOtpProvisional
-          ? _value.sessionOtpProvisional
-          : sessionOtpProvisional // ignore: cast_nullable_to_non_nullable
-              as SessionOtpProvisional?,
+      supportedLoginTypes: freezed == supportedLoginTypes
+          ? _value._supportedLoginTypes
+          : supportedLoginTypes // ignore: cast_nullable_to_non_nullable
+              as List<LoginType>?,
+      otpSigninSessionOtpProvisionalWithDateTime: freezed ==
+              otpSigninSessionOtpProvisionalWithDateTime
+          ? _value.otpSigninSessionOtpProvisionalWithDateTime
+          : otpSigninSessionOtpProvisionalWithDateTime // ignore: cast_nullable_to_non_nullable
+              as (SessionOtpProvisional, DateTime)?,
+      passwordSigninPasswordInputObscureText: null ==
+              passwordSigninPasswordInputObscureText
+          ? _value.passwordSigninPasswordInputObscureText
+          : passwordSigninPasswordInputObscureText // ignore: cast_nullable_to_non_nullable
+              as bool,
+      signupSessionOtpProvisionalWithDateTime: freezed ==
+              signupSessionOtpProvisionalWithDateTime
+          ? _value.signupSessionOtpProvisionalWithDateTime
+          : signupSessionOtpProvisionalWithDateTime // ignore: cast_nullable_to_non_nullable
+              as (SessionOtpProvisional, DateTime)?,
       token: freezed == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
@@ -200,17 +295,29 @@ class __$$LoginStateImplCopyWithImpl<$Res>
           ? _value.coreUrlInput
           : coreUrlInput // ignore: cast_nullable_to_non_nullable
               as UrlInput,
-      emailInput: null == emailInput
-          ? _value.emailInput
-          : emailInput // ignore: cast_nullable_to_non_nullable
+      otpSigninUserRefInput: null == otpSigninUserRefInput
+          ? _value.otpSigninUserRefInput
+          : otpSigninUserRefInput // ignore: cast_nullable_to_non_nullable
+              as UserRefInput,
+      otpSigninCodeInput: null == otpSigninCodeInput
+          ? _value.otpSigninCodeInput
+          : otpSigninCodeInput // ignore: cast_nullable_to_non_nullable
+              as CodeInput,
+      passwordSigninUserRefInput: null == passwordSigninUserRefInput
+          ? _value.passwordSigninUserRefInput
+          : passwordSigninUserRefInput // ignore: cast_nullable_to_non_nullable
+              as UserRefInput,
+      passwordSigninPasswordInput: null == passwordSigninPasswordInput
+          ? _value.passwordSigninPasswordInput
+          : passwordSigninPasswordInput // ignore: cast_nullable_to_non_nullable
+              as PasswordInput,
+      signupEmailInput: null == signupEmailInput
+          ? _value.signupEmailInput
+          : signupEmailInput // ignore: cast_nullable_to_non_nullable
               as EmailInput,
-      phoneInput: null == phoneInput
-          ? _value.phoneInput
-          : phoneInput // ignore: cast_nullable_to_non_nullable
-              as PhoneInput,
-      codeInput: null == codeInput
-          ? _value.codeInput
-          : codeInput // ignore: cast_nullable_to_non_nullable
+      signupCodeInput: null == signupCodeInput
+          ? _value.signupCodeInput
+          : signupCodeInput // ignore: cast_nullable_to_non_nullable
               as CodeInput,
     ));
   }
@@ -225,12 +332,19 @@ class _$LoginStateImpl implements _LoginState {
       this.demo,
       this.coreUrl,
       this.tenantId,
-      this.sessionOtpProvisional,
+      final List<LoginType>? supportedLoginTypes,
+      this.otpSigninSessionOtpProvisionalWithDateTime,
+      this.passwordSigninPasswordInputObscureText = true,
+      this.signupSessionOtpProvisionalWithDateTime,
       this.token,
       this.coreUrlInput = const UrlInput.pure(),
-      this.emailInput = const EmailInput.pure(),
-      this.phoneInput = const PhoneInput.pure(),
-      this.codeInput = const CodeInput.pure()});
+      this.otpSigninUserRefInput = const UserRefInput.pure(),
+      this.otpSigninCodeInput = const CodeInput.pure(),
+      this.passwordSigninUserRefInput = const UserRefInput.pure(),
+      this.passwordSigninPasswordInput = const PasswordInput.pure(),
+      this.signupEmailInput = const EmailInput.pure(),
+      this.signupCodeInput = const CodeInput.pure()})
+      : _supportedLoginTypes = supportedLoginTypes;
 
   @override
   @JsonKey()
@@ -243,8 +357,30 @@ class _$LoginStateImpl implements _LoginState {
   final String? coreUrl;
   @override
   final String? tenantId;
+  final List<LoginType>? _supportedLoginTypes;
   @override
-  final SessionOtpProvisional? sessionOtpProvisional;
+  List<LoginType>? get supportedLoginTypes {
+    final value = _supportedLoginTypes;
+    if (value == null) return null;
+    if (_supportedLoginTypes is EqualUnmodifiableListView)
+      return _supportedLoginTypes;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  final (
+    SessionOtpProvisional,
+    DateTime
+  )? otpSigninSessionOtpProvisionalWithDateTime;
+  @override
+  @JsonKey()
+  final bool passwordSigninPasswordInputObscureText;
+  @override
+  final (
+    SessionOtpProvisional,
+    DateTime
+  )? signupSessionOtpProvisionalWithDateTime;
   @override
   final String? token;
   @override
@@ -252,17 +388,26 @@ class _$LoginStateImpl implements _LoginState {
   final UrlInput coreUrlInput;
   @override
   @JsonKey()
-  final EmailInput emailInput;
+  final UserRefInput otpSigninUserRefInput;
   @override
   @JsonKey()
-  final PhoneInput phoneInput;
+  final CodeInput otpSigninCodeInput;
   @override
   @JsonKey()
-  final CodeInput codeInput;
+  final UserRefInput passwordSigninUserRefInput;
+  @override
+  @JsonKey()
+  final PasswordInput passwordSigninPasswordInput;
+  @override
+  @JsonKey()
+  final EmailInput signupEmailInput;
+  @override
+  @JsonKey()
+  final CodeInput signupCodeInput;
 
   @override
   String toString() {
-    return 'LoginState(processing: $processing, error: $error, demo: $demo, coreUrl: $coreUrl, tenantId: $tenantId, sessionOtpProvisional: $sessionOtpProvisional, token: $token, coreUrlInput: $coreUrlInput, emailInput: $emailInput, phoneInput: $phoneInput, codeInput: $codeInput)';
+    return 'LoginState(processing: $processing, error: $error, demo: $demo, coreUrl: $coreUrl, tenantId: $tenantId, supportedLoginTypes: $supportedLoginTypes, otpSigninSessionOtpProvisionalWithDateTime: $otpSigninSessionOtpProvisionalWithDateTime, passwordSigninPasswordInputObscureText: $passwordSigninPasswordInputObscureText, signupSessionOtpProvisionalWithDateTime: $signupSessionOtpProvisionalWithDateTime, token: $token, coreUrlInput: $coreUrlInput, otpSigninUserRefInput: $otpSigninUserRefInput, otpSigninCodeInput: $otpSigninCodeInput, passwordSigninUserRefInput: $passwordSigninUserRefInput, passwordSigninPasswordInput: $passwordSigninPasswordInput, signupEmailInput: $signupEmailInput, signupCodeInput: $signupCodeInput)';
   }
 
   @override
@@ -277,17 +422,37 @@ class _$LoginStateImpl implements _LoginState {
             (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
             (identical(other.tenantId, tenantId) ||
                 other.tenantId == tenantId) &&
-            (identical(other.sessionOtpProvisional, sessionOtpProvisional) ||
-                other.sessionOtpProvisional == sessionOtpProvisional) &&
+            const DeepCollectionEquality()
+                .equals(other._supportedLoginTypes, _supportedLoginTypes) &&
+            (identical(other.otpSigninSessionOtpProvisionalWithDateTime,
+                    otpSigninSessionOtpProvisionalWithDateTime) ||
+                other.otpSigninSessionOtpProvisionalWithDateTime ==
+                    otpSigninSessionOtpProvisionalWithDateTime) &&
+            (identical(other.passwordSigninPasswordInputObscureText,
+                    passwordSigninPasswordInputObscureText) ||
+                other.passwordSigninPasswordInputObscureText ==
+                    passwordSigninPasswordInputObscureText) &&
+            (identical(other.signupSessionOtpProvisionalWithDateTime,
+                    signupSessionOtpProvisionalWithDateTime) ||
+                other.signupSessionOtpProvisionalWithDateTime ==
+                    signupSessionOtpProvisionalWithDateTime) &&
             (identical(other.token, token) || other.token == token) &&
             (identical(other.coreUrlInput, coreUrlInput) ||
                 other.coreUrlInput == coreUrlInput) &&
-            (identical(other.emailInput, emailInput) ||
-                other.emailInput == emailInput) &&
-            (identical(other.phoneInput, phoneInput) ||
-                other.phoneInput == phoneInput) &&
-            (identical(other.codeInput, codeInput) ||
-                other.codeInput == codeInput));
+            (identical(other.otpSigninUserRefInput, otpSigninUserRefInput) ||
+                other.otpSigninUserRefInput == otpSigninUserRefInput) &&
+            (identical(other.otpSigninCodeInput, otpSigninCodeInput) ||
+                other.otpSigninCodeInput == otpSigninCodeInput) &&
+            (identical(other.passwordSigninUserRefInput, passwordSigninUserRefInput) ||
+                other.passwordSigninUserRefInput ==
+                    passwordSigninUserRefInput) &&
+            (identical(other.passwordSigninPasswordInput, passwordSigninPasswordInput) ||
+                other.passwordSigninPasswordInput ==
+                    passwordSigninPasswordInput) &&
+            (identical(other.signupEmailInput, signupEmailInput) ||
+                other.signupEmailInput == signupEmailInput) &&
+            (identical(other.signupCodeInput, signupCodeInput) ||
+                other.signupCodeInput == signupCodeInput));
   }
 
   @override
@@ -298,12 +463,18 @@ class _$LoginStateImpl implements _LoginState {
       demo,
       coreUrl,
       tenantId,
-      sessionOtpProvisional,
+      const DeepCollectionEquality().hash(_supportedLoginTypes),
+      otpSigninSessionOtpProvisionalWithDateTime,
+      passwordSigninPasswordInputObscureText,
+      signupSessionOtpProvisionalWithDateTime,
       token,
       coreUrlInput,
-      emailInput,
-      phoneInput,
-      codeInput);
+      otpSigninUserRefInput,
+      otpSigninCodeInput,
+      passwordSigninUserRefInput,
+      passwordSigninPasswordInput,
+      signupEmailInput,
+      signupCodeInput);
 
   @JsonKey(ignore: true)
   @override
@@ -319,12 +490,24 @@ abstract class _LoginState implements LoginState {
       final bool? demo,
       final String? coreUrl,
       final String? tenantId,
-      final SessionOtpProvisional? sessionOtpProvisional,
+      final List<LoginType>? supportedLoginTypes,
+      final (
+        SessionOtpProvisional,
+        DateTime
+      )? otpSigninSessionOtpProvisionalWithDateTime,
+      final bool passwordSigninPasswordInputObscureText,
+      final (
+        SessionOtpProvisional,
+        DateTime
+      )? signupSessionOtpProvisionalWithDateTime,
       final String? token,
       final UrlInput coreUrlInput,
-      final EmailInput emailInput,
-      final PhoneInput phoneInput,
-      final CodeInput codeInput}) = _$LoginStateImpl;
+      final UserRefInput otpSigninUserRefInput,
+      final CodeInput otpSigninCodeInput,
+      final UserRefInput passwordSigninUserRefInput,
+      final PasswordInput passwordSigninPasswordInput,
+      final EmailInput signupEmailInput,
+      final CodeInput signupCodeInput}) = _$LoginStateImpl;
 
   @override
   bool get processing;
@@ -337,17 +520,31 @@ abstract class _LoginState implements LoginState {
   @override
   String? get tenantId;
   @override
-  SessionOtpProvisional? get sessionOtpProvisional;
+  List<LoginType>? get supportedLoginTypes;
+  @override
+  (SessionOtpProvisional, DateTime)?
+      get otpSigninSessionOtpProvisionalWithDateTime;
+  @override
+  bool get passwordSigninPasswordInputObscureText;
+  @override
+  (SessionOtpProvisional, DateTime)?
+      get signupSessionOtpProvisionalWithDateTime;
   @override
   String? get token;
   @override
   UrlInput get coreUrlInput;
   @override
-  EmailInput get emailInput;
+  UserRefInput get otpSigninUserRefInput;
   @override
-  PhoneInput get phoneInput;
+  CodeInput get otpSigninCodeInput;
   @override
-  CodeInput get codeInput;
+  UserRefInput get passwordSigninUserRefInput;
+  @override
+  PasswordInput get passwordSigninPasswordInput;
+  @override
+  EmailInput get signupEmailInput;
+  @override
+  CodeInput get signupCodeInput;
   @override
   @JsonKey(ignore: true)
   _$$LoginStateImplCopyWith<_$LoginStateImpl> get copyWith =>

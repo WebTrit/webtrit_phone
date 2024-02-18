@@ -54,10 +54,41 @@ class AppRouter extends _$AppRouter {
                   page: LoginCoreUrlAssignScreenPageRoute.page,
                 ),
                 AutoRoute(
-                  page: LoginOtpRequestScreenPageRoute.page,
-                ),
-                AutoRoute(
-                  page: LoginOtpVerifyScreenPageRoute.page,
+                  page: LoginSwitchScreenPageRoute.page,
+                  children: [
+                    AutoRoute(
+                      page: LoginOtpSigninRouterPageRoute.page,
+                      maintainState: false,
+                      children: [
+                        AutoRoute(
+                          page: LoginOtpSigninRequestScreenPageRoute.page,
+                          maintainState: false,
+                        ),
+                        AutoRoute(
+                          page: LoginOtpSigninVerifyScreenPageRoute.page,
+                          maintainState: false,
+                        ),
+                      ],
+                    ),
+                    AutoRoute(
+                      page: LoginPasswordSigninScreenPageRoute.page,
+                      maintainState: false,
+                    ),
+                    AutoRoute(
+                      page: LoginSignupRouterPageRoute.page,
+                      maintainState: false,
+                      children: [
+                        AutoRoute(
+                          page: LoginSignupRequestScreenPageRoute.page,
+                          maintainState: false,
+                        ),
+                        AutoRoute(
+                          page: LoginSignupVerifyScreenPageRoute.page,
+                          maintainState: false,
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ],
             ),
