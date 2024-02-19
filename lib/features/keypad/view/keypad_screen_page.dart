@@ -17,9 +17,7 @@ class KeypadScreenPage extends StatelessWidget {
       title: Text(EnvironmentConfig.APP_NAME),
     );
     final provider = BlocProvider(
-      create: (context) => KeypadCubit(
-        callBloc: context.read<CallBloc>(),
-      ),
+      create: (context) => KeypadCubit(),
       child: widget,
     );
     return provider;

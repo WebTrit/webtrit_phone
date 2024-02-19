@@ -52,7 +52,8 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
-  Future<void> _verifyCoreVersionAndRetrieveSupportedLoginTypesSubmitted(String coreUrl, String tenantId) async {
+  Future<void> _verifyCoreVersionAndRetrieveSupportedLoginTypesSubmitted(
+      bool demo, String coreUrl, String tenantId) async {
     emit(state.copyWith(
       processing: true,
     ));
@@ -60,12 +61,13 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       final client = createWebtritApiClient(coreUrl, tenantId);
       final supportedLoginTypes = await _verifyCoreVersionAndRetrieveSupportedLoginTypes(client);
-      if (state.demo == true) {
+      if (demo == true) {
         supportedLoginTypes?.removeWhere((loginType) => loginType != LoginType.signup);
       }
       if (supportedLoginTypes != null && supportedLoginTypes.isNotEmpty) {
         emit(state.copyWith(
           processing: false,
+          demo: demo,
           coreUrl: coreUrl,
           tenantId: tenantId,
           supportedLoginTypes: supportedLoginTypes,
@@ -87,14 +89,14 @@ class LoginCubit extends Cubit<LoginState> {
   // LoginModeSelect
 
   void loginModeSelectSubmitted(bool demo) async {
-    emit(state.copyWith(
-      demo: demo,
-    ));
-
     final coreUrl = demo ? demoCoreUrlFromEnvironment : coreUrlFromEnvironment;
 
     if (coreUrl != null) {
-      await _verifyCoreVersionAndRetrieveSupportedLoginTypesSubmitted(coreUrl, defaultTenantId);
+      await _verifyCoreVersionAndRetrieveSupportedLoginTypesSubmitted(demo, coreUrl, defaultTenantId);
+    } else {
+      emit(state.copyWith(
+        demo: demo,
+      ));
     }
   }
 
@@ -116,7 +118,7 @@ class LoginCubit extends Cubit<LoginState> {
       coreUrlInputValue = 'https://$coreUrlInputValue';
     }
 
-    await _verifyCoreVersionAndRetrieveSupportedLoginTypesSubmitted(coreUrlInputValue, defaultTenantId);
+    await _verifyCoreVersionAndRetrieveSupportedLoginTypesSubmitted(false, coreUrlInputValue, defaultTenantId);
   }
 
   void loginCoreUrlAssignBack() async {
