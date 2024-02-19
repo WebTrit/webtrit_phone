@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/theme/theme.dart';
-
-import '../keypad.dart';
 
 class KeypadView extends StatefulWidget {
   const KeypadView({super.key});
@@ -73,7 +72,7 @@ class KeypadViewState extends State<KeypadView> {
               builder: (context, state) {
                 return Actionpad(
                   video: state.video,
-                  onCallPressed: value.text.isEmpty ? null : _onCallPressed,
+                  onCallPressed: value.text.isEmpty ? null : () => _onCallPressed(state.video),
                   onCallLongPress: _onCallLongPress,
                   onBackspacePressed: value.text.isEmpty ? null : _onBackspacePressed,
                   onBackspaceLongPress: value.text.isEmpty ? null : _onBackspaceLongPress,
@@ -89,10 +88,14 @@ class KeypadViewState extends State<KeypadView> {
     );
   }
 
-  void _onCallPressed() {
+  void _onCallPressed(bool video) {
     _focusNode.unfocus();
 
-    context.read<KeypadCubit>().call(_controller.text);
+    final callBloc = context.read<CallBloc>();
+    callBloc.add(CallControlEvent.started(
+      number: _controller.text,
+      video: video,
+    ));
   }
 
   void _onCallLongPress() {
