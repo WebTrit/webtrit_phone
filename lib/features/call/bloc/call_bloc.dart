@@ -516,7 +516,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
 
     if (error != null) {
-      if (error == CallkeepIncomingCallError.callUuidAlreadyExists) {
+      if (error == CallkeepIncomingCallError.callIdAlreadyExists) {
         _logger.info('__onCallSignalingEventIncoming reportNewIncomingCall with already existed call uuid');
         emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
           return activeCall.copyWith(line: event.line);
