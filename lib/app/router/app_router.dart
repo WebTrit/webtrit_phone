@@ -7,7 +7,7 @@ import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
 
-export 'package:auto_route/auto_route.dart' show ReevaluateListenable;
+export 'package:auto_route/auto_route.dart' show ReevaluateListenable, AutoRouteObserver;
 
 part 'app_router.gr.dart';
 
@@ -43,9 +43,54 @@ class AppRouter extends _$AppRouter {
               redirectTo: 'main',
             ),
             AutoRoute.guarded(
-              page: LoginScreenPageRoute.page,
+              page: LoginRouterPageRoute.page,
               onNavigation: onLoginScreenPageRouteGuardNavigation,
               path: 'login',
+              children: [
+                AutoRoute(
+                  page: LoginModeSelectScreenPageRoute.page,
+                ),
+                AutoRoute(
+                  page: LoginCoreUrlAssignScreenPageRoute.page,
+                ),
+                AutoRoute(
+                  page: LoginSwitchScreenPageRoute.page,
+                  children: [
+                    AutoRoute(
+                      page: LoginOtpSigninRouterPageRoute.page,
+                      maintainState: false,
+                      children: [
+                        AutoRoute(
+                          page: LoginOtpSigninRequestScreenPageRoute.page,
+                          maintainState: false,
+                        ),
+                        AutoRoute(
+                          page: LoginOtpSigninVerifyScreenPageRoute.page,
+                          maintainState: false,
+                        ),
+                      ],
+                    ),
+                    AutoRoute(
+                      page: LoginPasswordSigninScreenPageRoute.page,
+                      maintainState: false,
+                    ),
+                    AutoRoute(
+                      page: LoginSignupRouterPageRoute.page,
+                      maintainState: false,
+                      children: [
+                        AutoRoute(
+                          page: LoginSignupRequestScreenPageRoute.page,
+                          maintainState: false,
+                        ),
+                        AutoRoute(
+                          page: LoginSignupVerifyScreenPageRoute.page,
+                          maintainState: false,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
             ),
             AutoRoute.guarded(
               page: PermissionsScreenPageRoute.page,
@@ -208,7 +253,7 @@ class AppRouter extends _$AppRouter {
     } else {
       resolver.next(false);
       router.replaceAll(
-        [LoginScreenPageRoute(stepPathParam: LoginStep.modeSelect.name)],
+        [const LoginRouterPageRoute()],
       );
     }
   }

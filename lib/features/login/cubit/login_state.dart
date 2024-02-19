@@ -1,36 +1,26 @@
 part of 'login_cubit.dart';
 
-enum LoginStatus {
-  input,
-  processing,
-  ok,
-  back,
-}
-
-extension LoginStatusX on LoginStatus {
-  bool get isInput => this == LoginStatus.input;
-
-  bool get isProcessing => this == LoginStatus.processing;
-
-  bool get isOk => this == LoginStatus.ok;
-
-  bool get isBack => this == LoginStatus.back;
-}
+typedef SessionOtpProvisionalWithDateTime = (SessionOtpProvisional, DateTime);
 
 @freezed
 class LoginState with _$LoginState {
   const factory LoginState({
-    required LoginStep step,
-    @Default(LoginStatus.input) LoginStatus status,
+    @Default(false) bool processing,
     Object? error,
-    @Default(false) bool demo,
+    bool? demo,
     String? coreUrl,
     String? tenantId,
-    SessionOtpProvisional? sessionOtpProvisional,
+    List<LoginType>? supportedLoginTypes,
+    SessionOtpProvisionalWithDateTime? otpSigninSessionOtpProvisionalWithDateTime,
+    @Default(true) bool passwordSigninPasswordInputObscureText,
+    SessionOtpProvisionalWithDateTime? signupSessionOtpProvisionalWithDateTime,
     String? token,
     @Default(UrlInput.pure()) UrlInput coreUrlInput,
-    @Default(EmailInput.pure()) EmailInput emailInput,
-    @Default(PhoneInput.pure()) PhoneInput phoneInput,
-    @Default(CodeInput.pure()) CodeInput codeInput,
+    @Default(UserRefInput.pure()) UserRefInput otpSigninUserRefInput,
+    @Default(CodeInput.pure()) CodeInput otpSigninCodeInput,
+    @Default(UserRefInput.pure()) UserRefInput passwordSigninUserRefInput,
+    @Default(PasswordInput.pure()) PasswordInput passwordSigninPasswordInput,
+    @Default(EmailInput.pure()) EmailInput signupEmailInput,
+    @Default(CodeInput.pure()) CodeInput signupCodeInput,
   }) = _LoginState;
 }

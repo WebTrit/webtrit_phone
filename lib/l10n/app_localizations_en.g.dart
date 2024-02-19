@@ -180,36 +180,44 @@ class AppLocalizationsEn extends AppLocalizations {
   String get locale_uk => 'Ukrainian';
 
   @override
-  String get login_AppBarTitle_coreUrlAssign => '';
-
-  @override
-  String get login_AppBarTitle_otpRequest => '';
-
-  @override
-  String get login_AppBarTitle_otpVerify => '';
-
-  @override
   String get login_Button_coreUrlAssignProceed => 'Proceed';
 
   @override
-  String get login_Button_otpRequestProceed => 'Proceed';
+  String get login_Button_otpSigninRequestProceed => 'Proceed';
 
   @override
-  String get login_Button_otpVerifyProceed => 'Verify';
+  String get login_Button_otpSigninVerifyProceed => 'Verify';
 
   @override
-  String get login_Button_otpVerifyRepeat => 'Resend the code';
+  String get login_Button_otpSigninVerifyRepeat => 'Resend the code';
 
   @override
-  String login_Button_otpVerifyRepeatInterval(int seconds) {
+  String login_Button_otpSigninVerifyRepeatInterval(int seconds) {
     return 'Resend the code ($seconds s)';
   }
+
+  @override
+  String get login_Button_passwordSigninProceed => 'Proceed';
 
   @override
   String get login_Button_signIn => 'Sign in';
 
   @override
+  String get login_Button_signupRequestProceed => 'Proceed';
+
+  @override
   String get login_Button_signUpToDemoInstance => 'Sign up';
+
+  @override
+  String get login_Button_signupVerifyProceed => 'Verify';
+
+  @override
+  String get login_Button_signupVerifyRepeat => 'Resend the code';
+
+  @override
+  String login_Button_signupVerifyRepeatInterval(int seconds) {
+    return 'Resend the code ($seconds s)';
+  }
 
   @override
   String get login_ButtonTooltip_signInToYourInstance => 'Sign in to your WebTrit Cloud Backend';
@@ -238,10 +246,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_RequestFailureOtpVerificationAttemptsExceededError => 'Verification attempts exceeded';
 
   @override
+  String get login_RequestFailureParametersApplyIssueError => 'Provided data can\'t be processed';
+
+  @override
   String get login_RequestFailurePhoneNotFoundError => 'Phone number not found';
 
   @override
   String get login_RequestFailureUnconfiguredBundleIdError => 'The app is not supported by your WebTrit Cloud Backend';
+
+  @override
+  String get login_SupportedLoginTypeMissedExceptionError => 'The current WebTrit Cloud Backend does not support any login types compatible with this app';
 
   @override
   String login_Text_coreUrlAssignPostDescription(Object email) {
@@ -255,37 +269,86 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_TextFieldLabelText_coreUrlAssign => 'Enter your WebTrit Cloud Backend URL';
 
   @override
-  String get login_TextFieldLabelText_otpRequestEmail => 'Enter your email';
+  String get login_TextFieldLabelText_otpSigninCode => 'Enter the verification code';
 
   @override
-  String get login_TextFieldLabelText_otpRequestPhone => 'Enter your phone number';
+  String get login_TextFieldLabelText_otpSigninUserRef => 'Enter your phone number or email';
 
   @override
-  String get login_TextFieldLabelText_otpVerifyCode => 'Enter the verification code';
+  String get login_TextFieldLabelText_passwordSigninPassword => 'Enter your password';
 
   @override
-  String get login_Text_otpRequestDemoDescription => 'If you do not have an account yet, it will be automatically created for you.';
+  String get login_TextFieldLabelText_passwordSigninUserRef => 'Enter your phone number or email';
 
   @override
-  String get login_Text_otpRequestDescription => '';
+  String get login_TextFieldLabelText_signupCode => 'Enter the verification code';
 
   @override
-  String login_Text_otpVerifyCheckSpamFrom(String email) {
+  String get login_TextFieldLabelText_signupEmail => 'Enter your email';
+
+  @override
+  String get login_Text_otpSigninRequestPostDescription => '';
+
+  @override
+  String get login_Text_otpSigninRequestPreDescription => '';
+
+  @override
+  String login_Text_otpSigninVerifyPostDescriptionFromEmail(String email) {
     return 'If you do not see an email with the verification code from $email in your inbox, please check your spam folder.';
   }
 
   @override
-  String get login_Text_otpVerifyCheckSpamGeneral => 'If you do not see an email with the verification code in your inbox, please check your spam folder.';
+  String get login_Text_otpSigninVerifyPostDescriptionGeneral => 'If you do not see an email with the verification code in your inbox, please check your spam folder.';
 
   @override
-  String login_Text_otpVerifySentToEmail(String email) {
-    return 'A one-time verification code was sent to $email.';
+  String login_Text_otpSigninVerifyPreDescriptionUserRef(String userRef) {
+    return 'A one-time verification code was sent to the email assigned to provided phone number or email.';
   }
 
   @override
   String login_Text_otpVerifySentToEmailAssignedWithPhone(String phone) {
     return 'A one-time verification code was sent to the email assigned to the tel:$phone phone number.';
   }
+
+  @override
+  String get login_Text_passwordSigninPostDescription => '';
+
+  @override
+  String get login_Text_passwordSigninPreDescription => '';
+
+  @override
+  String get login_Text_signupRequestPostDescription => '';
+
+  @override
+  String get login_Text_signupRequestPostDescriptionDemo => 'If you do not have an account yet, it will be automatically created for you.';
+
+  @override
+  String get login_Text_signupRequestPreDescription => '';
+
+  @override
+  String get login_Text_signupRequestPreDescriptionDemo => '';
+
+  @override
+  String login_Text_signupVerifyPostDescriptionFromEmail(String email) {
+    return 'If you do not see an email with the verification code from $email in your inbox, please check your spam folder.';
+  }
+
+  @override
+  String get login_Text_signupVerifyPostDescriptionGeneral => 'If you do not see an email with the verification code in your inbox, please check your spam folder.';
+
+  @override
+  String login_Text_signupVerifyPreDescriptionEmail(String email) {
+    return 'A one-time verification code was sent to $email.';
+  }
+
+  @override
+  String get loginType_otpSignin => 'OTP sign in';
+
+  @override
+  String get loginType_passwordSignin => 'Password sign in';
+
+  @override
+  String get loginType_signup => 'Sign up';
 
   @override
   String get login_validationCoreUrlError => 'Please enter a valid URL';
@@ -295,6 +358,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get login_validationPhoneError => 'Please enter a valid phone number';
+
+  @override
+  String get login_validationUserRefError => 'Please enter a valid phone number or email';
 
   @override
   String get logRecordsConsole_AppBarTitle => 'Log Console';

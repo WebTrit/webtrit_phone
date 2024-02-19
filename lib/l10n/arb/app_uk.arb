@@ -120,33 +120,43 @@
   "@locale_en": {},
   "locale_uk": "Українська",
   "@locale_uk": {},
-  "login_AppBarTitle_coreUrlAssign": "",
-  "@login_AppBarTitle_coreUrlAssign": {},
-  "login_AppBarTitle_otpRequest": "",
-  "@login_AppBarTitle_otpRequest": {},
-  "login_AppBarTitle_otpVerify": "",
-  "@login_AppBarTitle_otpVerify": {},
   "login_Button_coreUrlAssignProceed": "Продовжити",
   "@login_Button_coreUrlAssignProceed": {},
-  "login_Button_otpRequestProceed": "Продовжити",
-  "@login_Button_otpRequestProceed": {},
-  "login_Button_otpVerifyProceed": "Перевірити",
-  "@login_Button_otpVerifyProceed": {},
-  "login_Button_otpVerifyRepeat": "Повторно надіслати код",
-  "@login_Button_otpVerifyRepeat": {},
-  "login_Button_otpVerifyRepeatInterval": "Повторно надіслати код ({seconds} с)",
-  "@login_Button_otpVerifyRepeatInterval": {
+  "login_Button_otpSigninRequestProceed": "Продовжити",
+  "@login_Button_otpSigninRequestProceed": {},
+  "login_Button_otpSigninVerifyProceed": "Перевірити",
+  "@login_Button_otpSigninVerifyProceed": {},
+  "login_Button_otpSigninVerifyRepeat": "Повторно надіслати код",
+  "@login_Button_otpSigninVerifyRepeat": {},
+  "login_Button_otpSigninVerifyRepeatInterval": "Повторно надіслати код ({seconds} с)",
+  "@login_Button_otpSigninVerifyRepeatInterval": {
     "placeholders": {
       "seconds": {
         "type": "int"
       }
     }
   },
+  "login_Button_passwordSigninProceed": "Продовжити",
+  "@login_Button_passwordSigninProceed": {},
   "login_Button_signIn": "Увійти",
   "@login_Button_signIn": {},
+  "login_Button_signupRequestProceed": "Продовжити",
+  "@login_Button_signupRequestProceed": {},
   "login_Button_signUpToDemoInstance": "Зареєструватися",
   "@login_Button_signUpToDemoInstance": {},
-  "login_ButtonTooltip_signInToYourInstance": "Увійдіть до свогоWebTrit Cloud Backend",
+  "login_Button_signupVerifyProceed": "Перевірити",
+  "@login_Button_signupVerifyProceed": {},
+  "login_Button_signupVerifyRepeat": "Повторно надіслати код",
+  "@login_Button_signupVerifyRepeat": {},
+  "login_Button_signupVerifyRepeatInterval": "Повторно надіслати код ({seconds} с)",
+  "@login_Button_signupVerifyRepeatInterval": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "login_ButtonTooltip_signInToYourInstance": "Увійдіть до свого WebTrit Cloud Backend",
   "@login_ButtonTooltip_signInToYourInstance": {},
   "login_CoreVersionUnsupportedExceptionError": "Непідтримувана версія екземпляра, будь ласка, зверніться до адміністратора вашої системи (фактична: {actual}, підтримувана: {supportedConstraint})",
   "@login_CoreVersionUnsupportedExceptionError": {
@@ -171,40 +181,50 @@
   "@login_RequestFailureOtpNotFoundError": {},
   "login_RequestFailureOtpVerificationAttemptsExceededError": "Перевищено кількість спроб підтвердження",
   "@login_RequestFailureOtpVerificationAttemptsExceededError": {},
+  "login_RequestFailureParametersApplyIssueError": "Надані дані не можуть бути оброблені",
+  "@login_RequestFailureParametersApplyIssueError": {},
   "login_RequestFailurePhoneNotFoundError": "Номер телефону не знайдено",
   "@login_RequestFailurePhoneNotFoundError": {},
   "login_RequestFailureUnconfiguredBundleIdError": "Помилка конфігурації сервера додатка - сповістіть свого постачальника послуг",
   "@login_RequestFailureUnconfiguredBundleIdError": {},
+  "login_SupportedLoginTypeMissedExceptionError": "Поточний WebTrit Cloud Backend не підтримує жодного типу входу, сумісного з цим додатком",
+  "@login_SupportedLoginTypeMissedExceptionError": {},
   "login_Text_coreUrlAssignPostDescription": "Якщо у вас ще немає власного екземпляра WebTrit, зв'яжіться з командою продажів за адресою {email}",
   "@login_Text_coreUrlAssignPostDescription": {},
   "login_Text_coreUrlAssignPreDescription": "Щоб робити дзвінки через вашу власну систему VoIP, будь ласка, введіть URL WebTrit Cloud Backend (як це було надано вашим менеджером з облікового запису) нижче.",
   "@login_Text_coreUrlAssignPreDescription": {},
   "login_TextFieldLabelText_coreUrlAssign": "Введіть URL вашого WebTrit Cloud Backend",
   "@login_TextFieldLabelText_coreUrlAssign": {},
-  "login_TextFieldLabelText_otpRequestEmail": "Введіть свою електронну пошту",
-  "@login_TextFieldLabelText_otpRequestEmail": {},
-  "login_TextFieldLabelText_otpRequestPhone": "Введіть свій номер телефону",
-  "@login_TextFieldLabelText_otpRequestPhone": {},
-  "login_TextFieldLabelText_otpVerifyCode": "Введіть код підтвердження",
-  "@login_TextFieldLabelText_otpVerifyCode": {},
-  "login_Text_otpRequestDemoDescription": "Якщо у вас ще немає облікового запису, він буде автоматично створений для вас.",
-  "@login_Text_otpRequestDemoDescription": {},
-  "login_Text_otpRequestDescription": "",
-  "@login_Text_otpRequestDescription": {},
-  "login_Text_otpVerifyCheckSpamFrom": "Якщо ви не бачите електронного листа з кодом підтвердження від {email} у своїй скринці вхідних, будь ласка, перевірте папку спаму.",
-  "@login_Text_otpVerifyCheckSpamFrom": {
+  "login_TextFieldLabelText_otpSigninCode": "Введіть код підтвердження",
+  "@login_TextFieldLabelText_otpSigninCode": {},
+  "login_TextFieldLabelText_otpSigninUserRef": "Введіть свій номер телефону чи електронну пошту",
+  "@login_TextFieldLabelText_otpSigninUserRef": {},
+  "login_TextFieldLabelText_passwordSigninPassword": "Введіть ваш пароль",
+  "@login_TextFieldLabelText_passwordSigninPassword": {},
+  "login_TextFieldLabelText_passwordSigninUserRef": "Введіть свій номер телефону чи електронну пошту",
+  "@login_TextFieldLabelText_passwordSigninUserRef": {},
+  "login_TextFieldLabelText_signupCode": "Введіть код підтвердження",
+  "@login_TextFieldLabelText_signupCode": {},
+  "login_TextFieldLabelText_signupEmail": "Введіть свою електронну пошту",
+  "@login_TextFieldLabelText_signupEmail": {},
+  "login_Text_otpSigninRequestPostDescription": "",
+  "@login_Text_otpSigninRequestPostDescription": {},
+  "login_Text_otpSigninRequestPreDescription": "",
+  "@login_Text_otpSigninRequestPreDescription": {},
+  "login_Text_otpSigninVerifyPostDescriptionFromEmail": "Якщо ви не бачите електронного листа з кодом підтвердження від {email} у своїй скринці вхідних, будь ласка, перевірте папку спаму.",
+  "@login_Text_otpSigninVerifyPostDescriptionFromEmail": {
     "placeholders": {
       "email": {
         "type": "String"
       }
     }
   },
-  "login_Text_otpVerifyCheckSpamGeneral": "Якщо ви не бачите електронного листа з кодом підтвердження у своїй скринці вхідних, будь ласка, перевірте папку спаму.",
-  "@login_Text_otpVerifyCheckSpamGeneral": {},
-  "login_Text_otpVerifySentToEmail": "На {email} надіслано одноразовий код підтвердження.",
-  "@login_Text_otpVerifySentToEmail": {
+  "login_Text_otpSigninVerifyPostDescriptionGeneral": "Якщо ви не бачите електронного листа з кодом підтвердження у своїй скринці вхідних, будь ласка, перевірте папку спаму.",
+  "@login_Text_otpSigninVerifyPostDescriptionGeneral": {},
+  "login_Text_otpSigninVerifyPreDescriptionUserRef": "На електронну пошту, прив'язану до наданого номера телефону чи електронної пошти, надіслано одноразовий код підтвердження.",
+  "@login_Text_otpSigninVerifyPreDescriptionUserRef": {
     "placeholders": {
-      "email": {
+      "userRef": {
         "type": "String"
       }
     }
@@ -217,12 +237,50 @@
       }
     }
   },
+  "login_Text_passwordSigninPostDescription": "",
+  "@login_Text_passwordSigninPostDescription": {},
+  "login_Text_passwordSigninPreDescription": "",
+  "@login_Text_passwordSigninPreDescription": {},
+  "login_Text_signupRequestPostDescription": "",
+  "@login_Text_signupRequestPostDescription": {},
+  "login_Text_signupRequestPostDescriptionDemo": "Якщо у вас ще немає облікового запису, він буде автоматично створений для вас.",
+  "@login_Text_signupRequestPostDescriptionDemo": {},
+  "login_Text_signupRequestPreDescription": "",
+  "@login_Text_signupRequestPreDescription": {},
+  "login_Text_signupRequestPreDescriptionDemo": "",
+  "@login_Text_signupRequestPreDescriptionDemo": {},
+  "login_Text_signupVerifyPostDescriptionFromEmail": "Якщо ви не бачите електронного листа з кодом підтвердження від {email} у своїй скринці вхідних, будь ласка, перевірте папку спаму.",
+  "@login_Text_signupVerifyPostDescriptionFromEmail": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "login_Text_signupVerifyPostDescriptionGeneral": "Якщо ви не бачите електронного листа з кодом підтвердження у своїй скринці вхідних, будь ласка, перевірте папку спаму.",
+  "@login_Text_signupVerifyPostDescriptionGeneral": {},
+  "login_Text_signupVerifyPreDescriptionEmail": "На {email} надіслано одноразовий код підтвердження.",
+  "@login_Text_signupVerifyPreDescriptionEmail": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "loginType_otpSignin": "Увійти за OTP",
+  "@loginType_otpSignin": {},
+  "loginType_passwordSignin": "Вхід за паролем",
+  "@loginType_passwordSignin": {},
+  "loginType_signup": "Зареєструватися",
+  "@loginType_signup": {},
   "login_validationCoreUrlError": "Будь ласка, введіть правильний URL",
   "@login_validationCoreUrlError": {},
   "login_validationEmailError": "Будь ласка, введіть правильну електронну пошту",
   "@login_validationEmailError": {},
   "login_validationPhoneError": "Будь ласка, введіть правильний номер телефону",
   "@login_validationPhoneError": {},
+  "login_validationUserRefError": "Будь ласка, введіть правильний номер телефону чи електронну пошту",
+  "@login_validationUserRefError": {},
   "logRecordsConsole_AppBarTitle": "Консоль журналу",
   "@logRecordsConsole_AppBarTitle": {},
   "logRecordsConsole_Button_failureRefresh": "Оновити",

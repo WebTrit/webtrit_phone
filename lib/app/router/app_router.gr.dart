@@ -95,14 +95,70 @@ abstract class _$AppRouter extends RootStackRouter {
         child: LogRecordsConsoleScreenPage(),
       );
     },
-    LoginScreenPageRoute.name: (routeData) {
-      final pathParams = routeData.inheritedPathParams;
-      final args = routeData.argsAs<LoginScreenPageRouteArgs>(
-          orElse: () => LoginScreenPageRouteArgs(
-              stepPathParam: pathParams.getString('step')));
+    LoginCoreUrlAssignScreenPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: LoginScreenPage(stepPathParam: args.stepPathParam),
+        child: LoginCoreUrlAssignScreenPage(),
+      );
+    },
+    LoginModeSelectScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: LoginModeSelectScreenPage(),
+      );
+    },
+    LoginOtpSigninRequestScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: LoginOtpSigninRequestScreenPage(),
+      );
+    },
+    LoginOtpSigninRouterPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: LoginOtpSigninRouterPage(),
+      );
+    },
+    LoginOtpSigninVerifyScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: LoginOtpSigninVerifyScreenPage(),
+      );
+    },
+    LoginPasswordSigninScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: LoginPasswordSigninScreenPage(),
+      );
+    },
+    LoginRouterPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: LoginRouterPage(),
+      );
+    },
+    LoginSignupRequestScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: LoginSignupRequestScreenPage(),
+      );
+    },
+    LoginSignupRouterPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: LoginSignupRouterPage(),
+      );
+    },
+    LoginSignupVerifyScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: LoginSignupVerifyScreenPage(),
+      );
+    },
+    LoginSwitchScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: LoginSwitchScreenPage(),
       );
     },
     MainScreenPageRoute.name: (routeData) {
@@ -385,33 +441,157 @@ class LogRecordsConsoleScreenPageRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [LoginScreenPage]
-class LoginScreenPageRoute extends PageRouteInfo<LoginScreenPageRouteArgs> {
-  LoginScreenPageRoute({
-    required String stepPathParam,
-    List<PageRouteInfo>? children,
-  }) : super(
-          LoginScreenPageRoute.name,
-          args: LoginScreenPageRouteArgs(stepPathParam: stepPathParam),
-          rawPathParams: {'step': stepPathParam},
+/// [LoginCoreUrlAssignScreenPage]
+class LoginCoreUrlAssignScreenPageRoute extends PageRouteInfo<void> {
+  const LoginCoreUrlAssignScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          LoginCoreUrlAssignScreenPageRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'LoginScreenPageRoute';
+  static const String name = 'LoginCoreUrlAssignScreenPageRoute';
 
-  static const PageInfo<LoginScreenPageRouteArgs> page =
-      PageInfo<LoginScreenPageRouteArgs>(name);
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
-class LoginScreenPageRouteArgs {
-  const LoginScreenPageRouteArgs({required this.stepPathParam});
+/// generated route for
+/// [LoginModeSelectScreenPage]
+class LoginModeSelectScreenPageRoute extends PageRouteInfo<void> {
+  const LoginModeSelectScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          LoginModeSelectScreenPageRoute.name,
+          initialChildren: children,
+        );
 
-  final String stepPathParam;
+  static const String name = 'LoginModeSelectScreenPageRoute';
 
-  @override
-  String toString() {
-    return 'LoginScreenPageRouteArgs{stepPathParam: $stepPathParam}';
-  }
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [LoginOtpSigninRequestScreenPage]
+class LoginOtpSigninRequestScreenPageRoute extends PageRouteInfo<void> {
+  const LoginOtpSigninRequestScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          LoginOtpSigninRequestScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'LoginOtpSigninRequestScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [LoginOtpSigninRouterPage]
+class LoginOtpSigninRouterPageRoute extends PageRouteInfo<void> {
+  const LoginOtpSigninRouterPageRoute({List<PageRouteInfo>? children})
+      : super(
+          LoginOtpSigninRouterPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'LoginOtpSigninRouterPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [LoginOtpSigninVerifyScreenPage]
+class LoginOtpSigninVerifyScreenPageRoute extends PageRouteInfo<void> {
+  const LoginOtpSigninVerifyScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          LoginOtpSigninVerifyScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'LoginOtpSigninVerifyScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [LoginPasswordSigninScreenPage]
+class LoginPasswordSigninScreenPageRoute extends PageRouteInfo<void> {
+  const LoginPasswordSigninScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          LoginPasswordSigninScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'LoginPasswordSigninScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [LoginRouterPage]
+class LoginRouterPageRoute extends PageRouteInfo<void> {
+  const LoginRouterPageRoute({List<PageRouteInfo>? children})
+      : super(
+          LoginRouterPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'LoginRouterPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [LoginSignupRequestScreenPage]
+class LoginSignupRequestScreenPageRoute extends PageRouteInfo<void> {
+  const LoginSignupRequestScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          LoginSignupRequestScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'LoginSignupRequestScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [LoginSignupRouterPage]
+class LoginSignupRouterPageRoute extends PageRouteInfo<void> {
+  const LoginSignupRouterPageRoute({List<PageRouteInfo>? children})
+      : super(
+          LoginSignupRouterPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'LoginSignupRouterPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [LoginSignupVerifyScreenPage]
+class LoginSignupVerifyScreenPageRoute extends PageRouteInfo<void> {
+  const LoginSignupVerifyScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          LoginSignupVerifyScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'LoginSignupVerifyScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [LoginSwitchScreenPage]
+class LoginSwitchScreenPageRoute extends PageRouteInfo<void> {
+  const LoginSwitchScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          LoginSwitchScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'LoginSwitchScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for

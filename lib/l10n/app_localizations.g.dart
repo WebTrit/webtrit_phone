@@ -435,53 +435,41 @@ abstract class AppLocalizations {
   /// **'Ukrainian'**
   String get locale_uk;
 
-  /// No description provided for @login_AppBarTitle_coreUrlAssign.
-  ///
-  /// In en, this message translates to:
-  /// **''**
-  String get login_AppBarTitle_coreUrlAssign;
-
-  /// No description provided for @login_AppBarTitle_otpRequest.
-  ///
-  /// In en, this message translates to:
-  /// **''**
-  String get login_AppBarTitle_otpRequest;
-
-  /// No description provided for @login_AppBarTitle_otpVerify.
-  ///
-  /// In en, this message translates to:
-  /// **''**
-  String get login_AppBarTitle_otpVerify;
-
   /// No description provided for @login_Button_coreUrlAssignProceed.
   ///
   /// In en, this message translates to:
   /// **'Proceed'**
   String get login_Button_coreUrlAssignProceed;
 
-  /// No description provided for @login_Button_otpRequestProceed.
+  /// No description provided for @login_Button_otpSigninRequestProceed.
   ///
   /// In en, this message translates to:
   /// **'Proceed'**
-  String get login_Button_otpRequestProceed;
+  String get login_Button_otpSigninRequestProceed;
 
-  /// No description provided for @login_Button_otpVerifyProceed.
+  /// No description provided for @login_Button_otpSigninVerifyProceed.
   ///
   /// In en, this message translates to:
   /// **'Verify'**
-  String get login_Button_otpVerifyProceed;
+  String get login_Button_otpSigninVerifyProceed;
 
-  /// No description provided for @login_Button_otpVerifyRepeat.
+  /// No description provided for @login_Button_otpSigninVerifyRepeat.
   ///
   /// In en, this message translates to:
   /// **'Resend the code'**
-  String get login_Button_otpVerifyRepeat;
+  String get login_Button_otpSigninVerifyRepeat;
 
-  /// No description provided for @login_Button_otpVerifyRepeatInterval.
+  /// No description provided for @login_Button_otpSigninVerifyRepeatInterval.
   ///
   /// In en, this message translates to:
   /// **'Resend the code ({seconds} s)'**
-  String login_Button_otpVerifyRepeatInterval(int seconds);
+  String login_Button_otpSigninVerifyRepeatInterval(int seconds);
+
+  /// No description provided for @login_Button_passwordSigninProceed.
+  ///
+  /// In en, this message translates to:
+  /// **'Proceed'**
+  String get login_Button_passwordSigninProceed;
 
   /// No description provided for @login_Button_signIn.
   ///
@@ -489,11 +477,35 @@ abstract class AppLocalizations {
   /// **'Sign in'**
   String get login_Button_signIn;
 
+  /// No description provided for @login_Button_signupRequestProceed.
+  ///
+  /// In en, this message translates to:
+  /// **'Proceed'**
+  String get login_Button_signupRequestProceed;
+
   /// No description provided for @login_Button_signUpToDemoInstance.
   ///
   /// In en, this message translates to:
   /// **'Sign up'**
   String get login_Button_signUpToDemoInstance;
+
+  /// No description provided for @login_Button_signupVerifyProceed.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get login_Button_signupVerifyProceed;
+
+  /// No description provided for @login_Button_signupVerifyRepeat.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend the code'**
+  String get login_Button_signupVerifyRepeat;
+
+  /// No description provided for @login_Button_signupVerifyRepeatInterval.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend the code ({seconds} s)'**
+  String login_Button_signupVerifyRepeatInterval(int seconds);
 
   /// No description provided for @login_ButtonTooltip_signInToYourInstance.
   ///
@@ -543,6 +555,12 @@ abstract class AppLocalizations {
   /// **'Verification attempts exceeded'**
   String get login_RequestFailureOtpVerificationAttemptsExceededError;
 
+  /// No description provided for @login_RequestFailureParametersApplyIssueError.
+  ///
+  /// In en, this message translates to:
+  /// **'Provided data can\'t be processed'**
+  String get login_RequestFailureParametersApplyIssueError;
+
   /// No description provided for @login_RequestFailurePhoneNotFoundError.
   ///
   /// In en, this message translates to:
@@ -554,6 +572,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The app is not supported by your WebTrit Cloud Backend'**
   String get login_RequestFailureUnconfiguredBundleIdError;
+
+  /// No description provided for @login_SupportedLoginTypeMissedExceptionError.
+  ///
+  /// In en, this message translates to:
+  /// **'The current WebTrit Cloud Backend does not support any login types compatible with this app'**
+  String get login_SupportedLoginTypeMissedExceptionError;
 
   /// No description provided for @login_Text_coreUrlAssignPostDescription.
   ///
@@ -573,59 +597,149 @@ abstract class AppLocalizations {
   /// **'Enter your WebTrit Cloud Backend URL'**
   String get login_TextFieldLabelText_coreUrlAssign;
 
-  /// No description provided for @login_TextFieldLabelText_otpRequestEmail.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter your email'**
-  String get login_TextFieldLabelText_otpRequestEmail;
-
-  /// No description provided for @login_TextFieldLabelText_otpRequestPhone.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter your phone number'**
-  String get login_TextFieldLabelText_otpRequestPhone;
-
-  /// No description provided for @login_TextFieldLabelText_otpVerifyCode.
+  /// No description provided for @login_TextFieldLabelText_otpSigninCode.
   ///
   /// In en, this message translates to:
   /// **'Enter the verification code'**
-  String get login_TextFieldLabelText_otpVerifyCode;
+  String get login_TextFieldLabelText_otpSigninCode;
 
-  /// No description provided for @login_Text_otpRequestDemoDescription.
+  /// No description provided for @login_TextFieldLabelText_otpSigninUserRef.
   ///
   /// In en, this message translates to:
-  /// **'If you do not have an account yet, it will be automatically created for you.'**
-  String get login_Text_otpRequestDemoDescription;
+  /// **'Enter your phone number or email'**
+  String get login_TextFieldLabelText_otpSigninUserRef;
 
-  /// No description provided for @login_Text_otpRequestDescription.
+  /// No description provided for @login_TextFieldLabelText_passwordSigninPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password'**
+  String get login_TextFieldLabelText_passwordSigninPassword;
+
+  /// No description provided for @login_TextFieldLabelText_passwordSigninUserRef.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your phone number or email'**
+  String get login_TextFieldLabelText_passwordSigninUserRef;
+
+  /// No description provided for @login_TextFieldLabelText_signupCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the verification code'**
+  String get login_TextFieldLabelText_signupCode;
+
+  /// No description provided for @login_TextFieldLabelText_signupEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email'**
+  String get login_TextFieldLabelText_signupEmail;
+
+  /// No description provided for @login_Text_otpSigninRequestPostDescription.
   ///
   /// In en, this message translates to:
   /// **''**
-  String get login_Text_otpRequestDescription;
+  String get login_Text_otpSigninRequestPostDescription;
 
-  /// No description provided for @login_Text_otpVerifyCheckSpamFrom.
+  /// No description provided for @login_Text_otpSigninRequestPreDescription.
+  ///
+  /// In en, this message translates to:
+  /// **''**
+  String get login_Text_otpSigninRequestPreDescription;
+
+  /// No description provided for @login_Text_otpSigninVerifyPostDescriptionFromEmail.
   ///
   /// In en, this message translates to:
   /// **'If you do not see an email with the verification code from {email} in your inbox, please check your spam folder.'**
-  String login_Text_otpVerifyCheckSpamFrom(String email);
+  String login_Text_otpSigninVerifyPostDescriptionFromEmail(String email);
 
-  /// No description provided for @login_Text_otpVerifyCheckSpamGeneral.
+  /// No description provided for @login_Text_otpSigninVerifyPostDescriptionGeneral.
   ///
   /// In en, this message translates to:
   /// **'If you do not see an email with the verification code in your inbox, please check your spam folder.'**
-  String get login_Text_otpVerifyCheckSpamGeneral;
+  String get login_Text_otpSigninVerifyPostDescriptionGeneral;
 
-  /// No description provided for @login_Text_otpVerifySentToEmail.
+  /// No description provided for @login_Text_otpSigninVerifyPreDescriptionUserRef.
   ///
   /// In en, this message translates to:
-  /// **'A one-time verification code was sent to {email}.'**
-  String login_Text_otpVerifySentToEmail(String email);
+  /// **'A one-time verification code was sent to the email assigned to provided phone number or email.'**
+  String login_Text_otpSigninVerifyPreDescriptionUserRef(String userRef);
 
   /// No description provided for @login_Text_otpVerifySentToEmailAssignedWithPhone.
   ///
   /// In en, this message translates to:
   /// **'A one-time verification code was sent to the email assigned to the tel:{phone} phone number.'**
   String login_Text_otpVerifySentToEmailAssignedWithPhone(String phone);
+
+  /// No description provided for @login_Text_passwordSigninPostDescription.
+  ///
+  /// In en, this message translates to:
+  /// **''**
+  String get login_Text_passwordSigninPostDescription;
+
+  /// No description provided for @login_Text_passwordSigninPreDescription.
+  ///
+  /// In en, this message translates to:
+  /// **''**
+  String get login_Text_passwordSigninPreDescription;
+
+  /// No description provided for @login_Text_signupRequestPostDescription.
+  ///
+  /// In en, this message translates to:
+  /// **''**
+  String get login_Text_signupRequestPostDescription;
+
+  /// No description provided for @login_Text_signupRequestPostDescriptionDemo.
+  ///
+  /// In en, this message translates to:
+  /// **'If you do not have an account yet, it will be automatically created for you.'**
+  String get login_Text_signupRequestPostDescriptionDemo;
+
+  /// No description provided for @login_Text_signupRequestPreDescription.
+  ///
+  /// In en, this message translates to:
+  /// **''**
+  String get login_Text_signupRequestPreDescription;
+
+  /// No description provided for @login_Text_signupRequestPreDescriptionDemo.
+  ///
+  /// In en, this message translates to:
+  /// **''**
+  String get login_Text_signupRequestPreDescriptionDemo;
+
+  /// No description provided for @login_Text_signupVerifyPostDescriptionFromEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'If you do not see an email with the verification code from {email} in your inbox, please check your spam folder.'**
+  String login_Text_signupVerifyPostDescriptionFromEmail(String email);
+
+  /// No description provided for @login_Text_signupVerifyPostDescriptionGeneral.
+  ///
+  /// In en, this message translates to:
+  /// **'If you do not see an email with the verification code in your inbox, please check your spam folder.'**
+  String get login_Text_signupVerifyPostDescriptionGeneral;
+
+  /// No description provided for @login_Text_signupVerifyPreDescriptionEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'A one-time verification code was sent to {email}.'**
+  String login_Text_signupVerifyPreDescriptionEmail(String email);
+
+  /// No description provided for @loginType_otpSignin.
+  ///
+  /// In en, this message translates to:
+  /// **'OTP sign in'**
+  String get loginType_otpSignin;
+
+  /// No description provided for @loginType_passwordSignin.
+  ///
+  /// In en, this message translates to:
+  /// **'Password sign in'**
+  String get loginType_passwordSignin;
+
+  /// No description provided for @loginType_signup.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign up'**
+  String get loginType_signup;
 
   /// No description provided for @login_validationCoreUrlError.
   ///
@@ -644,6 +758,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter a valid phone number'**
   String get login_validationPhoneError;
+
+  /// No description provided for @login_validationUserRefError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid phone number or email'**
+  String get login_validationUserRefError;
 
   /// No description provided for @logRecordsConsole_AppBarTitle.
   ///
