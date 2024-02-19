@@ -70,12 +70,20 @@ class KeypadViewState extends State<KeypadView> {
           builder: (BuildContext context, TextEditingValue value, Widget? child) {
             return BlocBuilder<KeypadCubit, KeypadState>(
               builder: (context, state) {
-                return Actionpad(
-                  video: state.video,
-                  onCallPressed: value.text.isEmpty ? null : () => _onCallPressed(state.video),
-                  onCallLongPress: _onCallLongPress,
-                  onBackspacePressed: value.text.isEmpty ? null : _onBackspacePressed,
-                  onBackspaceLongPress: value.text.isEmpty ? null : _onBackspaceLongPress,
+                return BlocBuilder<CallBloc, CallState>(
+                  buildWhen: (previous, current) =>
+                      previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
+                  builder: (context, callState) {
+                    return Actionpad(
+                      video: state.video,
+                      transfer: callState.isBlingTransferInitiated,
+                      onCallPressed: value.text.isEmpty ? null : () => _onCallPressed(state.video),
+                      onCallLongPress: _onCallLongPress,
+                      onTransferPressed: _onTransferPressed,
+                      onBackspacePressed: value.text.isEmpty ? null : _onBackspacePressed,
+                      onBackspaceLongPress: value.text.isEmpty ? null : _onBackspaceLongPress,
+                    );
+                  },
                 );
               },
             );
@@ -100,6 +108,15 @@ class KeypadViewState extends State<KeypadView> {
 
   void _onCallLongPress() {
     context.read<KeypadCubit>().callTypeSwitch();
+  }
+
+  void _onTransferPressed() {
+    _focusNode.unfocus();
+
+    final callBloc = context.read<CallBloc>();
+    callBloc.add(CallControlEvent.blindTransferred(
+      number: _controller.text,
+    ));
   }
 
   void _onKeypadPressed(keyText) {

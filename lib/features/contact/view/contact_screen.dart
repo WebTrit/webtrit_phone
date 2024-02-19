@@ -29,63 +29,76 @@ class ContactScreen extends StatelessWidget {
             );
           } else {
             final themeData = Theme.of(context);
-            return ListView(
-              children: [
-                Padding(
-                  padding: kAllPadding16,
-                  child: LeadingAvatar(
-                    username: contact.name,
-                    radius: 50,
-                  ),
-                ),
-                Text(
-                  contact.name,
-                  style: themeData.textTheme.headlineMedium,
-                  textAlign: TextAlign.center,
-                ),
-                const Divider(
-                  height: 16,
-                ),
-                for (final contactPhone in contactPhones)
-                  ContactPhoneTile(
-                    number: contactPhone.number,
-                    label: contactPhone.label,
-                    favorite: contactPhone.favorite,
-                    onFavoriteChanged: (favorite) {
-                      if (favorite) {
-                        context.read<ContactBloc>().add(ContactAddedToFavorites(contactPhone));
-                      } else {
-                        context.read<ContactBloc>().add(ContactRemovedFromFavorites(contactPhone));
-                      }
-                    },
-                    onAudioPressed: () {
-                      final callBloc = context.read<CallBloc>();
-                      callBloc.add(CallControlEvent.started(
+            return BlocBuilder<CallBloc, CallState>(
+              buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
+              builder: (context, callState) {
+                return ListView(
+                  children: [
+                    Padding(
+                      padding: kAllPadding16,
+                      child: LeadingAvatar(
+                        username: contact.name,
+                        radius: 50,
+                      ),
+                    ),
+                    Text(
+                      contact.name,
+                      style: themeData.textTheme.headlineMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                    const Divider(
+                      height: 16,
+                    ),
+                    for (final contactPhone in contactPhones)
+                      ContactPhoneTile(
                         number: contactPhone.number,
-                        displayName: contact.name,
-                        video: false,
-                      ));
-                      context.router.pop();
-                    },
-                    onVideoPressed: () {
-                      final callBloc = context.read<CallBloc>();
-                      callBloc.add(CallControlEvent.started(
-                        number: contactPhone.number,
-                        displayName: contact.name,
-                        video: true,
-                      ));
-                      context.router.pop();
-                    },
-                  ),
-                for (final contactEmail in contactEmails)
-                  ContactEmailTile(
-                    address: contactEmail.address,
-                    label: contactEmail.label,
-                    onEmailPressed: () {
-                      context.read<ContactBloc>().add(ContactEmailSend(contactEmail));
-                    },
-                  )
-              ],
+                        label: contactPhone.label,
+                        favorite: contactPhone.favorite,
+                        transfer: callState.isBlingTransferInitiated,
+                        onFavoriteChanged: (favorite) {
+                          if (favorite) {
+                            context.read<ContactBloc>().add(ContactAddedToFavorites(contactPhone));
+                          } else {
+                            context.read<ContactBloc>().add(ContactRemovedFromFavorites(contactPhone));
+                          }
+                        },
+                        onAudioPressed: () {
+                          final callBloc = context.read<CallBloc>();
+                          callBloc.add(CallControlEvent.started(
+                            number: contactPhone.number,
+                            displayName: contact.name,
+                            video: false,
+                          ));
+                          context.router.pop();
+                        },
+                        onVideoPressed: () {
+                          final callBloc = context.read<CallBloc>();
+                          callBloc.add(CallControlEvent.started(
+                            number: contactPhone.number,
+                            displayName: contact.name,
+                            video: true,
+                          ));
+                          context.router.pop();
+                        },
+                        onTransferPressed: () {
+                          final callBloc = context.read<CallBloc>();
+                          callBloc.add(CallControlEvent.blindTransferred(
+                            number: contactPhone.number,
+                          ));
+                          context.router.pop();
+                        },
+                      ),
+                    for (final contactEmail in contactEmails)
+                      ContactEmailTile(
+                        address: contactEmail.address,
+                        label: contactEmail.label,
+                        onEmailPressed: () {
+                          context.read<ContactBloc>().add(ContactEmailSend(contactEmail));
+                        },
+                      )
+                  ],
+                );
+              },
             );
           }
         },

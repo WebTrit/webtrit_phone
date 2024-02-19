@@ -154,6 +154,10 @@ class CallControlEvent with _$CallControlEvent implements CallEvent {
   const factory CallControlEvent.speakerEnabled(UuidValue uuid, bool enabled) = _CallControlEventSpeakerEnabled;
 
   const factory CallControlEvent.failureApproved(UuidValue uuid) = _CallControlEventFailureApproved;
+
+  const factory CallControlEvent.blindTransferInitiated(UuidValue uuid) = _CallControlEventBlindTransferInitiated;
+
+  const factory CallControlEvent.blindTransferred({required String number}) = _CallControlEventBlindTransferred;
 }
 
 mixin CallControlEventStartedMixin {

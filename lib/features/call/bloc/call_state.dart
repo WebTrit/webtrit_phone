@@ -65,6 +65,8 @@ class CallState with _$CallState {
 
   bool get isActive => activeCalls.isNotEmpty;
 
+  bool get isBlingTransferInitiated => activeCalls.blindTransferInitiated != null;
+
   ActiveCall? retrieveActiveCall(UuidValue uuid) {
     for (var activeCall in activeCalls) {
       if (activeCall.callId.uuid == uuid) {
@@ -81,6 +83,11 @@ class CallState with _$CallState {
       }
     }
     return null;
+  }
+
+  CallState copyWithMappedActiveCalls(ActiveCall Function(ActiveCall element) map) {
+    final activeCalls = this.activeCalls.map(map).toList();
+    return copyWith(activeCalls: activeCalls);
   }
 
   CallState copyWithMappedActiveCall(UuidValue uuid, ActiveCall Function(ActiveCall element) map) {
@@ -125,6 +132,7 @@ class ActiveCall with _$ActiveCall {
     required DateTime createdTime,
     DateTime? acceptedTime,
     DateTime? hungUpTime,
+    Transfer? transfer,
     Object? failure,
     required RTCVideoRenderers renderers,
   }) = _ActiveCall;
@@ -140,6 +148,21 @@ class ActiveCall with _$ActiveCall {
 
 extension ActiveCallIterableExtension<T extends ActiveCall> on Iterable<T> {
   T get current => lastWhere((activeCall) => !activeCall.held, orElse: () => last);
+
+  T? get blindTransferInitiated {
+    try {
+      return firstWhere((activeCall) {
+        final transfer = activeCall.transfer;
+        if (transfer == null) {
+          return false;
+        } else {
+          return transfer.isBlind && transfer.isInitiated;
+        }
+      });
+    } on StateError catch (_) {
+      return null;
+    }
+  }
 }
 
 class RTCVideoRenderers {

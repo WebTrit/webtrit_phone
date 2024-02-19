@@ -225,6 +225,12 @@ abstract class AppLocalizations {
   /// **'Outgoing call'**
   String get call_description_outgoing;
 
+  /// No description provided for @call_description_transferProcessing.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer processing'**
+  String get call_description_transferProcessing;
+
   /// No description provided for @call_FailureAcknowledgeDialog_title.
   ///
   /// In en, this message translates to:
@@ -339,6 +345,12 @@ abstract class AppLocalizations {
   /// **'Your phone'**
   String get contactsSourceLocal;
 
+  /// No description provided for @contacts_Text_blingTransferInitiated.
+  ///
+  /// In en, this message translates to:
+  /// **'Blind transferring'**
+  String get contacts_Text_blingTransferInitiated;
+
   /// No description provided for @copyToClipboard_floatingSnackBar.
   ///
   /// In en, this message translates to:
@@ -416,6 +428,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{name} deleted'**
   String favorites_SnackBar_deleted(String name);
+
+  /// No description provided for @favorites_Text_blingTransferInitiated.
+  ///
+  /// In en, this message translates to:
+  /// **'Blind transferring'**
+  String get favorites_Text_blingTransferInitiated;
 
   /// No description provided for @locale_default.
   ///
@@ -920,6 +938,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{name} deleted'**
   String recents_snackBar_deleted(String name);
+
+  /// No description provided for @recents_Text_blingTransferInitiated.
+  ///
+  /// In en, this message translates to:
+  /// **'Blind transferring'**
+  String get recents_Text_blingTransferInitiated;
 
   /// No description provided for @recentsVisibilityFilter_all.
   ///

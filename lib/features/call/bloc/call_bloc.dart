@@ -746,6 +746,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       cameraEnabled: (event) => _onCallControlEventCameraEnabled(event, emit),
       speakerEnabled: (event) => _onCallControlEventSpeakerEnabled(event, emit),
       failureApproved: (event) => _onCallControlEventFailureApproved(event, emit),
+      blindTransferInitiated: (event) => _onCallControlEventBlindTransferInitiated(event, emit),
+      blindTransferred: (event) => _onCallControlEventBlindTransferred(event, emit),
     );
   }
 
@@ -873,6 +875,55 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     emit(state.copyWithMappedActiveCall(event.uuid, (activeCall) {
       return activeCall.copyWith(failure: null);
     }));
+  }
+
+  Future<void> _onCallControlEventBlindTransferInitiated(
+    _CallControlEventBlindTransferInitiated event,
+    Emitter<CallState> emit,
+  ) async {
+    var newState = state.copyWith(minimized: true);
+
+    newState = newState.copyWithMappedActiveCall(event.uuid, (activeCall) {
+      return activeCall.copyWith(
+        transfer: const Transfer(
+          type: TransferType.blind,
+          state: TransferState.initiated,
+        ),
+      );
+    });
+
+    emit(newState);
+  }
+
+  Future<void> _onCallControlEventBlindTransferred(
+    _CallControlEventBlindTransferred event,
+    Emitter<CallState> emit,
+  ) async {
+    var newState = state.copyWith(minimized: false);
+
+    final activeCallBlindTransferInitiated = state.activeCalls.blindTransferInitiated;
+    if (activeCallBlindTransferInitiated == null) {
+      emit(newState);
+      return;
+    }
+
+    newState = newState.copyWithMappedActiveCall(activeCallBlindTransferInitiated.callId.uuid, (activeCall) {
+      return activeCall.copyWith(
+        transfer: const Transfer(
+          type: TransferType.blind,
+          state: TransferState.processing,
+        ),
+      );
+    });
+
+    emit(newState);
+
+    await _signalingClient?.execute(TransferRequest(
+      transaction: WebtritSignalingClient.generateTransactionId(),
+      line: activeCallBlindTransferInitiated.line,
+      callId: activeCallBlindTransferInitiated.callId.toString(),
+      number: event.number,
+    ));
   }
 
   // processing call perform events
@@ -1234,7 +1285,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallScreenEventDidPush event,
     Emitter<CallState> emit,
   ) async {
-    emit(state.copyWith(minimized: false));
+    var newState = state.copyWith(minimized: false);
+
+    newState = newState.copyWithMappedActiveCalls((activeCall) {
+      final transfer = activeCall.transfer;
+      if (transfer != null && transfer.isBlind && transfer.isInitiated) {
+        return activeCall.copyWith(
+          transfer: null,
+        );
+      } else {
+        return activeCall;
+      }
+    });
+
+    emit(newState);
   }
 
   Future<void> __onCallScreenEventDidPop(
