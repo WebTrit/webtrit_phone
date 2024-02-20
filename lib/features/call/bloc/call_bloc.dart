@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -107,6 +108,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       transformer: sequential(),
     );
 
+    navigator.mediaDevices.ondevicechange = (event) {
+      add(const _NavigatorMediaDevicesChange());
+    };
+
     WidgetsBinding.instance.addObserver(this);
 
     callkeep.setDelegate(this);
@@ -117,6 +122,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     callkeep.setDelegate(null);
 
     WidgetsBinding.instance.removeObserver(this);
+
+    navigator.mediaDevices.ondevicechange = null;
 
     await _connectivityChangedSubscription?.cancel();
 
@@ -864,7 +871,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     await state.performOnActiveCall(event.callId, (activeCall) async {
-      await Helper.setSpeakerphoneOn(event.enabled);
+      if (Platform.isAndroid) {
+        callkeep.setSpeaker(event.callId, event.enabled);
+      } else if (Platform.isIOS) {
+        await Helper.setSpeakerphoneOn(event.enabled);
+      }
     });
   }
 
@@ -939,6 +950,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       setHeld: (event) => __onCallPerformEventSetHeld(event, emit),
       setMuted: (event) => __onCallPerformEventSetMuted(event, emit),
       sentDTMF: (event) => __onCallPerformEventSentDTMF(event, emit),
+      setSpeaker: (event) => __onCallPerformEventSetSpeaker(event, emit),
     );
   }
 
@@ -1165,6 +1177,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         }
       }
     });
+  }
+
+  Future<void> __onCallPerformEventSetSpeaker(
+    _CallPerformEventSetSpeaker event,
+    Emitter<CallState> emit,
+  ) async {
+    event.fulfill();
+    emit(state.copyWith(speaker: event.enabled));
   }
 
   // processing peer connection events
@@ -1528,11 +1548,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   @override
+  Future<bool> performSetSpeaker(String callId, bool enabled) {
+    return _perform(_CallPerformEvent.setSpeaker(callId, enabled));
+  }
+
+  @override
   void didActivateAudioSession() {
     _logger.fine('didActivateAudioSession');
-    navigator.mediaDevices.ondevicechange = (event) {
-      add(const _NavigatorMediaDevicesChange());
-    };
     () async {
       await AppleNativeAudioManagement.audioSessionDidActivate();
       await AppleNativeAudioManagement.setIsAudioEnabled(true);
@@ -1546,7 +1568,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       await AppleNativeAudioManagement.setIsAudioEnabled(false);
       await AppleNativeAudioManagement.audioSessionDidDeactivate();
     }();
-    navigator.mediaDevices.ondevicechange = null;
   }
 
   @override
@@ -1698,11 +1719,5 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } else {
       return uri.replace(scheme: 'ws');
     }
-  }
-
-  @override
-  Future<bool> performSetSpeaker(String callId, bool enabled) {
-    // TODO: implement performSetSpeaker
-    throw UnimplementedError();
   }
 }
