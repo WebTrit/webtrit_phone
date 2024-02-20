@@ -73,6 +73,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_description_outgoing => 'Outgoing call';
 
   @override
+  String get call_description_transferProcessing => 'Transfer processing';
+
+  @override
   String get call_FailureAcknowledgeDialog_title => 'Failure';
 
   @override
@@ -130,6 +133,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contactsSourceLocal => 'Your phone';
 
   @override
+  String get contacts_Text_blingTransferInitiated => 'Blind transferring';
+
+  @override
   String get copyToClipboard_floatingSnackBar => 'Text copied';
 
   @override
@@ -169,6 +175,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String favorites_SnackBar_deleted(String name) {
     return '$name deleted';
   }
+
+  @override
+  String get favorites_Text_blingTransferInitiated => 'Blind transferring';
 
   @override
   String get locale_default => 'Default';
@@ -445,6 +454,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String recents_snackBar_deleted(String name) {
     return '$name deleted';
   }
+
+  @override
+  String get recents_Text_blingTransferInitiated => 'Blind transferring';
 
   @override
   String get recentsVisibilityFilter_all => 'All';

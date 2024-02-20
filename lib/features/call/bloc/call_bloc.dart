@@ -154,19 +154,19 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
     }
 
-    final currentActiveCallUuids = Set.from(change.currentState.activeCalls.map((e) => e.callId));
-    final nextActiveCallUuids = Set.from(change.nextState.activeCalls.map((e) => e.callId));
-    for (final removeUuid in currentActiveCallUuids.difference(nextActiveCallUuids)) {
-      assert(_peerConnectionCompleters.containsKey(removeUuid) == true);
-      _logger.finer(() => 'Remove peerConnection completer with uuid: $removeUuid');
-      _peerConnectionCompleters.remove(removeUuid);
+    final currentActiveCallIds = Set.from(change.currentState.activeCalls.map((e) => e.callId));
+    final nextActiveCallIds = Set.from(change.nextState.activeCalls.map((e) => e.callId));
+    for (final removeId in currentActiveCallIds.difference(nextActiveCallIds)) {
+      assert(_peerConnectionCompleters.containsKey(removeId) == true);
+      _logger.finer(() => 'Remove peerConnection completer with id: $removeId');
+      _peerConnectionCompleters.remove(removeId);
     }
-    for (final addUuid in nextActiveCallUuids.difference(currentActiveCallUuids)) {
-      assert(_peerConnectionCompleters.containsKey(addUuid) == false);
-      _logger.finer(() => 'Add peerConnection completer with uuid: $addUuid');
+    for (final addId in nextActiveCallIds.difference(currentActiveCallIds)) {
+      assert(_peerConnectionCompleters.containsKey(addId) == false);
+      _logger.finer(() => 'Add peerConnection completer with id: $addId');
       final completer = Completer<RTCPeerConnection>();
       completer.future.ignore(); // prevent escalating possible error that was not awaited to the error zone level
-      _peerConnectionCompleters[addUuid] = completer;
+      _peerConnectionCompleters[addId] = completer;
     }
   }
 
@@ -206,7 +206,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - value');
         return peerConnection;
       } catch (e, stackTrace) {
-        _logger.finer(() => 'Retrieve peerConnection completer with uuid: $callId - error', e, stackTrace);
+        _logger.finer(() => 'Retrieve peerConnection completer with id: $callId - error', e, stackTrace);
         return null;
       }
     }
@@ -517,7 +517,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     if (error != null) {
       if (error == CallkeepIncomingCallError.callIdAlreadyExists) {
-        _logger.info('__onCallSignalingEventIncoming reportNewIncomingCall with already existed call uuid');
+        _logger.info('__onCallSignalingEventIncoming reportNewIncomingCall with already existed call id');
         emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
           return activeCall.copyWith(line: event.line);
         }));
@@ -746,6 +746,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       cameraEnabled: (event) => _onCallControlEventCameraEnabled(event, emit),
       speakerEnabled: (event) => _onCallControlEventSpeakerEnabled(event, emit),
       failureApproved: (event) => _onCallControlEventFailureApproved(event, emit),
+      blindTransferInitiated: (event) => _onCallControlEventBlindTransferInitiated(event, emit),
+      blindTransferred: (event) => _onCallControlEventBlindTransferred(event, emit),
     );
   }
 
@@ -873,6 +875,55 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
       return activeCall.copyWith(failure: null);
     }));
+  }
+
+  Future<void> _onCallControlEventBlindTransferInitiated(
+    _CallControlEventBlindTransferInitiated event,
+    Emitter<CallState> emit,
+  ) async {
+    var newState = state.copyWith(minimized: true);
+
+    newState = newState.copyWithMappedActiveCall(event.callId, (activeCall) {
+      return activeCall.copyWith(
+        transfer: const Transfer(
+          type: TransferType.blind,
+          state: TransferState.initiated,
+        ),
+      );
+    });
+
+    emit(newState);
+  }
+
+  Future<void> _onCallControlEventBlindTransferred(
+    _CallControlEventBlindTransferred event,
+    Emitter<CallState> emit,
+  ) async {
+    var newState = state.copyWith(minimized: false);
+
+    final activeCallBlindTransferInitiated = state.activeCalls.blindTransferInitiated;
+    if (activeCallBlindTransferInitiated == null) {
+      emit(newState);
+      return;
+    }
+
+    newState = newState.copyWithMappedActiveCall(activeCallBlindTransferInitiated.callId, (activeCall) {
+      return activeCall.copyWith(
+        transfer: const Transfer(
+          type: TransferType.blind,
+          state: TransferState.processing,
+        ),
+      );
+    });
+
+    emit(newState);
+
+    await _signalingClient?.execute(TransferRequest(
+      transaction: WebtritSignalingClient.generateTransactionId(),
+      line: activeCallBlindTransferInitiated.line,
+      callId: activeCallBlindTransferInitiated.callId.toString(),
+      number: event.number,
+    ));
   }
 
   // processing call perform events
@@ -1234,7 +1285,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallScreenEventDidPush event,
     Emitter<CallState> emit,
   ) async {
-    emit(state.copyWith(minimized: false));
+    var newState = state.copyWith(minimized: false);
+
+    newState = newState.copyWithMappedActiveCalls((activeCall) {
+      final transfer = activeCall.transfer;
+      if (transfer != null && transfer.isBlind && transfer.isInitiated) {
+        return activeCall.copyWith(
+          transfer: null,
+        );
+      } else {
+        return activeCall;
+      }
+    });
+
+    emit(newState);
   }
 
   Future<void> __onCallScreenEventDidPop(

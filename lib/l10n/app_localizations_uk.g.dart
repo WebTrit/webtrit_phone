@@ -73,6 +73,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_description_outgoing => 'Вихідний дзвінок';
 
   @override
+  String get call_description_transferProcessing => 'Обробка переадресації';
+
+  @override
   String get call_FailureAcknowledgeDialog_title => 'Помилка';
 
   @override
@@ -130,6 +133,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get contactsSourceLocal => 'Ваш телефон';
 
   @override
+  String get contacts_Text_blingTransferInitiated => 'Сліпе переадресування';
+
+  @override
   String get copyToClipboard_floatingSnackBar => 'Текст скопійовано';
 
   @override
@@ -169,6 +175,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String favorites_SnackBar_deleted(String name) {
     return '$name видалено';
   }
+
+  @override
+  String get favorites_Text_blingTransferInitiated => 'Сліпе переадресування';
 
   @override
   String get locale_default => 'За замовчуванням';
@@ -445,6 +454,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String recents_snackBar_deleted(String name) {
     return '$name видалено';
   }
+
+  @override
+  String get recents_Text_blingTransferInitiated => 'Сліпе переадресування';
 
   @override
   String get recentsVisibilityFilter_all => 'Всі';

@@ -171,6 +171,12 @@ class ThemeProvider extends InheritedWidget {
         disabledForegroundColor: colors.onError.withOpacity(0.38),
         padding: EdgeInsets.zero,
       ),
+      callTransfer: TextButton.styleFrom(
+        foregroundColor: colors.onSecondary,
+        backgroundColor: colors.secondary,
+        disabledForegroundColor: colors.secondary.withOpacity(0.38),
+        padding: EdgeInsets.zero,
+      ),
       callAction: TextButton.styleFrom(
         foregroundColor: colors.surface,
         backgroundColor: colors.surface.withOpacity(0.3),

@@ -44,6 +44,8 @@
   "@call_description_incoming": {},
   "call_description_outgoing": "Вихідний дзвінок",
   "@call_description_outgoing": {},
+  "call_description_transferProcessing": "Обробка переадресації",
+  "@call_description_transferProcessing": {},
   "call_FailureAcknowledgeDialog_title": "Помилка",
   "@call_FailureAcknowledgeDialog_title": {},
   "callStatus_appUnregistered": "Незареєстровано",
@@ -82,6 +84,8 @@
   "@contactsSourceExternal": {},
   "contactsSourceLocal": "Ваш телефон",
   "@contactsSourceLocal": {},
+  "contacts_Text_blingTransferInitiated": "Сліпе переадресування",
+  "@contacts_Text_blingTransferInitiated": {},
   "copyToClipboard_floatingSnackBar": "Текст скопійовано",
   "@copyToClipboard_floatingSnackBar": {},
   "copyToClipboard_popupMenuItem": "Скопіювати в буфер обміну",
@@ -114,6 +118,8 @@
       }
     }
   },
+  "favorites_Text_blingTransferInitiated": "Сліпе переадресування",
+  "@favorites_Text_blingTransferInitiated": {},
   "locale_default": "За замовчуванням",
   "@locale_default": {},
   "locale_en": "Англійська",
@@ -348,6 +354,8 @@
       }
     }
   },
+  "recents_Text_blingTransferInitiated": "Сліпе переадресування",
+  "@recents_Text_blingTransferInitiated": {},
   "recentsVisibilityFilter_all": "Всі",
   "@recentsVisibilityFilter_all": {},
   "recentsVisibilityFilter_incoming": "Вхідні",

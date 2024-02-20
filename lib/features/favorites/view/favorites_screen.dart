@@ -38,42 +38,67 @@ class FavoritesScreen extends StatelessWidget {
                 content: Text(context.l10n.favorites_BodyCenter_empty),
               );
             } else {
-              return ListView.builder(
-                itemCount: favorites.length,
-                itemBuilder: (context, index) {
-                  final favorite = favorites[index];
-                  return FavoriteTile(
-                    favorite: favorite,
-                    onTap: () {
-                      final callBloc = context.read<CallBloc>();
-                      callBloc.add(CallControlEvent.started(
-                        number: favorite.number,
-                        displayName: favorite.name,
-                        video: false,
-                      ));
-                    },
-                    onLongPress: () {
-                      final callBloc = context.read<CallBloc>();
-                      callBloc.add(CallControlEvent.started(
-                        number: favorite.number,
-                        displayName: favorite.name,
-                        video: true,
-                      ));
-                    },
-                    onInfoPressed: () {
-                      context.router.navigate(ContactScreenPageRoute(
-                        contactId: favorite.contact.id,
-                      ));
-                    },
-                    onDeleted: (favorite) {
-                      context.showSnackBar(context.l10n.favorites_SnackBar_deleted(favorite.name));
+              return BlocBuilder<CallBloc, CallState>(
+                buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
+                builder: (context, callState) {
+                  final blingTransferInitiated = callState.isBlingTransferInitiated;
+                  return ListView.builder(
+                    itemCount: favorites.length,
+                    itemBuilder: (context, index) {
+                      final favorite = favorites[index];
+                      return FavoriteTile(
+                        favorite: favorite,
+                        onTap: blingTransferInitiated
+                            ? () {
+                                final callBloc = context.read<CallBloc>();
+                                callBloc.add(CallControlEvent.blindTransferred(
+                                  number: favorite.number,
+                                ));
+                              }
+                            : () {
+                                final callBloc = context.read<CallBloc>();
+                                callBloc.add(CallControlEvent.started(
+                                  number: favorite.number,
+                                  displayName: favorite.name,
+                                  video: false,
+                                ));
+                              },
+                        onLongPress: blingTransferInitiated
+                            ? null
+                            : () {
+                                final callBloc = context.read<CallBloc>();
+                                callBloc.add(CallControlEvent.started(
+                                  number: favorite.number,
+                                  displayName: favorite.name,
+                                  video: true,
+                                ));
+                              },
+                        onInfoPressed: () {
+                          context.router.navigate(ContactScreenPageRoute(
+                            contactId: favorite.contact.id,
+                          ));
+                        },
+                        onDeleted: (favorite) {
+                          context.showSnackBar(context.l10n.favorites_SnackBar_deleted(favorite.name));
 
-                      context.read<FavoritesBloc>().add(FavoritesRemoved(favorite: favorite));
+                          context.read<FavoritesBloc>().add(FavoritesRemoved(favorite: favorite));
+                        },
+                      );
                     },
                   );
                 },
               );
             }
+          }
+        },
+      ),
+      bottomNavigationBar: BlocBuilder<CallBloc, CallState>(
+        buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
+        builder: (context, callState) {
+          if (callState.isBlingTransferInitiated) {
+            return TransferBottomNavigationBar(context.l10n.favorites_Text_blingTransferInitiated);
+          } else {
+            return const SizedBox.shrink();
           }
         },
       ),

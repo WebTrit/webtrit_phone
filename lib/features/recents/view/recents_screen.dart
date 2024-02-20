@@ -99,41 +99,66 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                 content: Text(context.l10n.recents_BodyCenter_empty(filterL10n)),
               );
             } else {
-              return ListView.builder(
-                itemCount: recentsFiltered.length,
-                itemBuilder: (context, index) {
-                  final recent = recentsFiltered[index];
-                  return RecentTile(
-                    recent: recent,
-                    onInfoPressed: () {
-                      context.router.navigate(RecentScreenPageRoute(
-                        recentId: recent.id!,
-                      ));
-                    },
-                    onTap: () {
-                      final callBloc = context.read<CallBloc>();
-                      callBloc.add(CallControlEvent.started(
-                        number: recent.number,
-                        displayName: recent.name,
-                        video: recent.video,
-                      ));
-                    },
-                    onLongPress: () {
-                      final callBloc = context.read<CallBloc>();
-                      callBloc.add(CallControlEvent.started(
-                        number: recent.number,
-                        displayName: recent.name,
-                        video: !recent.video,
-                      ));
-                    },
-                    onDeleted: (recent) {
-                      context.showSnackBar(context.l10n.recents_snackBar_deleted(recent.name));
-                      context.read<RecentsBloc>().add(RecentsDeleted(recent));
+              return BlocBuilder<CallBloc, CallState>(
+                buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
+                builder: (context, callState) {
+                  final transfer = callState.isBlingTransferInitiated;
+                  return ListView.builder(
+                    itemCount: recentsFiltered.length,
+                    itemBuilder: (context, index) {
+                      final recent = recentsFiltered[index];
+                      return RecentTile(
+                        recent: recent,
+                        onInfoPressed: () {
+                          context.router.navigate(RecentScreenPageRoute(
+                            recentId: recent.id!,
+                          ));
+                        },
+                        onTap: transfer
+                            ? () {
+                                final callBloc = context.read<CallBloc>();
+                                callBloc.add(CallControlEvent.blindTransferred(
+                                  number: recent.number,
+                                ));
+                              }
+                            : () {
+                                final callBloc = context.read<CallBloc>();
+                                callBloc.add(CallControlEvent.started(
+                                  number: recent.number,
+                                  displayName: recent.name,
+                                  video: recent.video,
+                                ));
+                              },
+                        onLongPress: transfer
+                            ? null
+                            : () {
+                                final callBloc = context.read<CallBloc>();
+                                callBloc.add(CallControlEvent.started(
+                                  number: recent.number,
+                                  displayName: recent.name,
+                                  video: !recent.video,
+                                ));
+                              },
+                        onDeleted: (recent) {
+                          context.showSnackBar(context.l10n.recents_snackBar_deleted(recent.name));
+                          context.read<RecentsBloc>().add(RecentsDeleted(recent));
+                        },
+                      );
                     },
                   );
                 },
               );
             }
+          }
+        },
+      ),
+      bottomNavigationBar: BlocBuilder<CallBloc, CallState>(
+        buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
+        builder: (context, callState) {
+          if (callState.isBlingTransferInitiated) {
+            return TransferBottomNavigationBar(context.l10n.recents_Text_blingTransferInitiated);
+          } else {
+            return const SizedBox.shrink();
           }
         },
       ),

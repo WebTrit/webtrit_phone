@@ -14,9 +14,9 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webtrit_callkeep/ios"
 
 SPEC CHECKSUMS:
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   webtrit_callkeep: bd0c4e7b220df37d3f3c43b1cbafa1953edc8627
 
 PODFILE CHECKSUM: c886903733cf0a0267328931ef36f0b17d40a3c6
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.15.2

@@ -44,6 +44,8 @@
   "@call_description_incoming": {},
   "call_description_outgoing": "Outgoing call",
   "@call_description_outgoing": {},
+  "call_description_transferProcessing": "Transfer processing",
+  "@call_description_transferProcessing": {},
   "call_FailureAcknowledgeDialog_title": "Failure",
   "@call_FailureAcknowledgeDialog_title": {},
   "callStatus_appUnregistered": "Unregistered",
@@ -82,6 +84,8 @@
   "@contactsSourceExternal": {},
   "contactsSourceLocal": "Your phone",
   "@contactsSourceLocal": {},
+  "contacts_Text_blingTransferInitiated": "Blind transferring",
+  "@contacts_Text_blingTransferInitiated": {},
   "copyToClipboard_floatingSnackBar": "Text copied",
   "@copyToClipboard_floatingSnackBar": {},
   "copyToClipboard_popupMenuItem": "Copy to clipboard",
@@ -114,6 +118,8 @@
       }
     }
   },
+  "favorites_Text_blingTransferInitiated": "Blind transferring",
+  "@favorites_Text_blingTransferInitiated": {},
   "locale_default": "Default",
   "@locale_default": {},
   "locale_en": "English",
@@ -348,6 +354,8 @@
       }
     }
   },
+  "recents_Text_blingTransferInitiated": "Blind transferring",
+  "@recents_Text_blingTransferInitiated": {},
   "recentsVisibilityFilter_all": "All",
   "@recentsVisibilityFilter_all": {},
   "recentsVisibilityFilter_incoming": "Incoming",
