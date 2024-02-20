@@ -43,8 +43,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final NotificationsBloc notificationsBloc;
   final AppBloc appBloc;
   final Callkeep callkeep;
+  final AndroidPendingCallHandler pendingCallHandler;
 
   StreamSubscription<ConnectivityResult>? _connectivityChangedSubscription;
+  StreamSubscription<PendingCall>? _pendingCallHandlerSubscription;
 
   WebtritSignalingClient? _signalingClient;
   Timer? _signalingClientReconnectTimer;
@@ -58,9 +60,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.notificationsBloc,
     required this.appBloc,
     required this.callkeep,
+    required this.pendingCallHandler,
   }) : super(const CallState()) {
     on<CallStarted>(
       _onCallStarted,
+      transformer: sequential(),
+    );
+    on<HandlePendingCall>(
+      _onHandlePendingCall,
       transformer: sequential(),
     );
     on<_AppLifecycleStateChanged>(
@@ -115,6 +122,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     WidgetsBinding.instance.addObserver(this);
 
     callkeep.setDelegate(this);
+
+    _pendingCallHandlerSubscription = pendingCallHandler.subscribe((call) {
+      add(HandlePendingCall(call));
+    });
   }
 
   @override
@@ -126,6 +137,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     navigator.mediaDevices.ondevicechange = null;
 
     await _connectivityChangedSubscription?.cancel();
+
+    await _pendingCallHandlerSubscription?.cancel();
 
     _signalingClientReconnectTimer?.cancel();
     await _signalingClient?.disconnect();
@@ -236,6 +249,23 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   //
+
+  Future<void> _onHandlePendingCall(
+    HandlePendingCall event,
+    Emitter<CallState> emit,
+  ) async {
+    emit(state.copyWithPushActiveCall(
+      ActiveCall(
+        direction: Direction.incoming,
+        line: _kUndefinedLine,
+        callId: event.call!.id,
+        handle: CallkeepHandle.number(event.call!.handle),
+        video: false,
+        createdTime: DateTime.now(),
+        renderers: RTCVideoRenderers(),
+      ),
+    ));
+  }
 
   Future<void> _onCallStarted(
     CallStarted event,
@@ -523,10 +553,25 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
 
     if (error != null) {
-      if (error == CallkeepIncomingCallError.callIdAlreadyExists) {
-        _logger.info('__onCallSignalingEventIncoming reportNewIncomingCall with already existed call id');
+      // Check if a call instance already exists in the callkeep, which might have been added via push notifications
+      // before the signaling was initialized.
+      final callAlreadyExists = error == CallkeepIncomingCallError.callIdAlreadyExists;
+
+      // Check if a call instance already exists in the callkeep, which might have been added via push notifications
+      // before the signaling  was initialized. Also, check if the call status has been changed to "answered,"
+      // indicating it can be triggered by pressing the answer button in the notification.
+      final callAlreadyAnswered = error == CallkeepIncomingCallError.callIdAlreadyExistsAndAnswered;
+
+      if (callAlreadyExists || callAlreadyAnswered) {
         emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
-          return activeCall.copyWith(line: event.line);
+          var updatedActiveCall = activeCall.copyWith(
+            line: event.line,
+            renderers: RTCVideoRenderers()..initialize(),
+          );
+
+          if (callAlreadyAnswered) _perform(_CallPerformEvent.answered(activeCall.callId));
+
+          return updatedActiveCall;
         }));
       } else {
         _logger.warning('__onCallSignalingEventIncoming reportNewIncomingCall error: $error');
@@ -1042,6 +1087,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }));
 
     await state.performOnActiveCall(event.callId, (activeCall) async {
+      if (activeCall.line == _kUndefinedLine) return;
+
       final peerConnection = await _peerConnectionRetrieve(activeCall.callId);
       if (peerConnection == null) {
         _logger.warning('__onCallPerformEventAnswered: peerConnection is null - most likely some permissions issue');
@@ -1343,8 +1390,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             continue activeCallsLoop;
           }
         }
-      }
-      if (activeCall.line < stateHandshake.lines.length) {
+      } else if (activeCall.line < stateHandshake.lines.length) {
         final line = stateHandshake.lines[activeCall.line];
         if (line != null && line.callId == activeCall.callId) {
           continue activeCallsLoop;
