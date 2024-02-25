@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/app/core_version.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../cubit/login_cubit.dart';
 
@@ -49,5 +51,9 @@ extension LoginStateErrorL10n on LoginState {
 
       return defaultErrorL10n(context, error);
     }
+  }
+
+  List<ErrorFieldModel>? errorDetails(BuildContext context) {
+    return error?.castTo<RequestFailure>()?.errorFields(context);
   }
 }
