@@ -177,6 +177,8 @@
   },
   "login_RequestFailureEmptyEmailError": "Cannot send the verification code",
   "@login_RequestFailureEmptyEmailError": {},
+  "login_RequestFailureIdentifierIsNotValid": "The identifier appears invalid due to a non-existent",
+  "@login_RequestFailureIdentifierIsNotValid": {},
   "login_RequestFailureIncorrectOtpCodeError": "Incorrect verification code",
   "@login_RequestFailureIncorrectOtpCodeError": {},
   "login_RequestFailureOtpAlreadyVerifiedError": "Verification already verified",

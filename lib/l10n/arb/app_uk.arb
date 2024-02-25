@@ -177,6 +177,8 @@
   },
   "login_RequestFailureEmptyEmailError": "Не вдалося відправити код підтвердження",
   "@login_RequestFailureEmptyEmailError": {},
+  "login_RequestFailureIdentifierIsNotValid": "",
+  "@login_RequestFailureIdentifierIsNotValid": {},
   "login_RequestFailureIncorrectOtpCodeError": "Невірний код підтвердження",
   "@login_RequestFailureIncorrectOtpCodeError": {},
   "login_RequestFailureOtpAlreadyVerifiedError": "Перевірка вже пройдена",

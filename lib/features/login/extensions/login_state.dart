@@ -31,6 +31,8 @@ extension LoginStateErrorL10n on LoginState {
             return context.l10n.login_RequestFailurePhoneNotFoundError;
           case 'empty_email':
             return context.l10n.login_RequestFailureEmptyEmailError;
+          case 'validation_error':
+            return context.l10n.login_RequestFailureIdentifierIsNotValid;
           // sessionOtpVerify
           case 'otp_already_verified':
             return context.l10n.login_RequestFailureOtpAlreadyVerifiedError;
