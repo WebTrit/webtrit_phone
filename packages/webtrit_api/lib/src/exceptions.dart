@@ -3,10 +3,12 @@ import 'models/error.dart';
 class RequestFailure implements Exception {
   RequestFailure({
     required this.statusCode,
+    required this.requestId,
     this.error,
   });
 
   final int statusCode;
+  final String requestId;
   final ErrorResponse? error;
 
   @override

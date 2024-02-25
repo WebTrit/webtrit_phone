@@ -58,10 +58,11 @@ class WebtritApiClient {
     );
     final httpRequest = http.Request(method, url);
 
+    final xRequestId = requestId ?? _generateRequestId();
     httpRequest.headers.addAll({
       'content-type': 'application/json; charset=utf-8',
       'accept': 'application/json',
-      'x-request-id': requestId ?? _generateRequestId(),
+      'x-request-id': xRequestId,
       if (token != null) 'authorization': 'Bearer $token',
     });
     if (requestDataJson != null) {
@@ -82,6 +83,7 @@ class WebtritApiClient {
       };
       throw RequestFailure(
         statusCode: httpResponse.statusCode,
+        requestId: xRequestId,
         error: error,
       );
     }
