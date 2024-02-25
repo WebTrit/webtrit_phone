@@ -8,6 +8,7 @@ export 'duration.dart';
 export 'iterable.dart';
 export 'locale.dart';
 export 'object.dart';
+export 'request_failure.dart';
 export 'string.dart';
 export 'theme_mode.dart';
 export 'user_info.dart';

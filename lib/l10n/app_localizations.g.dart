@@ -399,6 +399,36 @@ abstract class AppLocalizations {
   /// **'A response issue occurred'**
   String get default_TypeErrorError;
 
+  /// No description provided for @default_ErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Error message'**
+  String get default_ErrorMessage;
+
+  /// No description provided for @default_ErrorDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get default_ErrorDetails;
+
+  /// No description provided for @default_ErrorPath.
+  ///
+  /// In en, this message translates to:
+  /// **'Error path'**
+  String get default_ErrorPath;
+
+  /// No description provided for @request_StatusCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Status code'**
+  String get request_StatusCode;
+
+  /// No description provided for @request_Id.
+  ///
+  /// In en, this message translates to:
+  /// **'Request id'**
+  String get request_Id;
+
   /// No description provided for @default_UnauthorizedRequestFailureError.
   ///
   /// In en, this message translates to:
@@ -542,6 +572,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cannot send the verification code'**
   String get login_RequestFailureEmptyEmailError;
+
+  /// No description provided for @login_RequestFailureIdentifierIsNotValid.
+  ///
+  /// In en, this message translates to:
+  /// **'The identifier appears invalid due to a non-existent'**
+  String get login_RequestFailureIdentifierIsNotValid;
 
   /// No description provided for @login_RequestFailureIncorrectOtpCodeError.
   ///
