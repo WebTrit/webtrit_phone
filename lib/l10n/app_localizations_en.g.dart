@@ -160,6 +160,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get default_TypeErrorError => 'A response issue occurred';
 
   @override
+  String get default_ErrorMessage => 'Error message';
+
+  @override
+  String get default_ErrorDetails => 'Details';
+
+  @override
+  String get default_ErrorPath => 'Error path';
+
+  @override
+  String get request_StatusCode => 'Status code';
+
+  @override
+  String get request_Id => 'Request id';
+
+  @override
   String get default_UnauthorizedRequestFailureError => 'An unauthorized request failure occurred';
 
   @override
@@ -238,6 +253,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get login_RequestFailureEmptyEmailError => 'Cannot send the verification code';
+
+  @override
+  String get login_RequestFailureIdentifierIsNotValid => 'The identifier appears invalid due to a non-existent';
 
   @override
   String get login_RequestFailureIncorrectOtpCodeError => 'Incorrect verification code';
