@@ -555,7 +555,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // indicating it can be triggered by pressing the answer button in the notification.
       final callAlreadyAnswered = error == CallkeepIncomingCallError.callIdAlreadyExistsAndAnswered;
 
-      if (callAlreadyExists || callAlreadyAnswered) {
+      // Check if a call instance already terminated in the callkeep, which might have been added via push notifications
+      // before the signaling  was initialized. Also, check if the call status has been changed to "terminated"
+      // indicating it can be triggered by pressing the decline button in the notification or flutter ui.
+      final callAlreadyTerminated = error == CallkeepIncomingCallError.callIdAlreadyTerminated;
+
+      if (callAlreadyExists || callAlreadyAnswered || callAlreadyTerminated) {
         emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
           var updatedActiveCall = activeCall.copyWith(
             line: event.line,
@@ -563,6 +568,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           );
 
           if (callAlreadyAnswered) _perform(_CallPerformEvent.answered(activeCall.callId));
+          if (callAlreadyTerminated) _perform(_CallPerformEvent.ended(activeCall.callId));
 
           return updatedActiveCall;
         }));
