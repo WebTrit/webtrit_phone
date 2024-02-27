@@ -41,8 +41,9 @@ class LoginModeSelectScreen extends StatelessWidget {
                         color: themeData.colorScheme.onPrimary,
                       ),
                       tooltip: context.l10n.login_ButtonTooltip_signInToYourInstance,
-                      onPressed:
-                          state.processing ? null : () => context.read<LoginCubit>().loginModeSelectSubmitted(false),
+                      onPressed: state.processing
+                          ? null
+                          : () => context.read<LoginCubit>().loginModeSelectSubmitted(LoginMode.customCore),
                     ),
                   ]
                 : null,
@@ -64,7 +65,9 @@ class LoginModeSelectScreen extends StatelessWidget {
                 ElevatedButton(
                   onPressed: state.processing
                       ? null
-                      : () => context.read<LoginCubit>().loginModeSelectSubmitted(isDemoModeEnabled),
+                      : () => context
+                          .read<LoginCubit>()
+                          .loginModeSelectSubmitted(isDemoModeEnabled ? LoginMode.demoCore : LoginMode.core),
                   style: elevatedButtonStyles?.primary,
                   child: !state.processing
                       ? Text(isDemoModeEnabled

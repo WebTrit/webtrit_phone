@@ -52,8 +52,8 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
-  Future<void> _verifyCoreVersionAndRetrieveSupportedLoginTypesSubmitted(
-      bool demo, String coreUrl, String tenantId) async {
+  Future<void> _verifyCoreVersionAndRetrieveSupportedLoginTypesSubmitted(String coreUrl, String tenantId,
+      [bool demo = false]) async {
     emit(state.copyWith(
       processing: true,
     ));
@@ -61,13 +61,12 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       final client = createWebtritApiClient(coreUrl, tenantId);
       final supportedLoginTypes = await _verifyCoreVersionAndRetrieveSupportedLoginTypes(client);
-      if (demo == true) {
+      if (demo) {
         supportedLoginTypes?.removeWhere((loginType) => loginType != LoginType.signup);
       }
       if (supportedLoginTypes != null && supportedLoginTypes.isNotEmpty) {
         emit(state.copyWith(
           processing: false,
-          demo: demo,
           coreUrl: coreUrl,
           tenantId: tenantId,
           supportedLoginTypes: supportedLoginTypes,
@@ -88,15 +87,15 @@ class LoginCubit extends Cubit<LoginState> {
 
   // LoginModeSelect
 
-  void loginModeSelectSubmitted(bool demo) async {
-    final coreUrl = demo ? demoCoreUrlFromEnvironment : coreUrlFromEnvironment;
+  void loginModeSelectSubmitted(LoginMode mode) async {
+    emit(state.copyWith(
+      mode: mode,
+    ));
 
+    final demo = mode == LoginMode.demoCore;
+    final coreUrl = demo ? demoCoreUrlFromEnvironment : coreUrlFromEnvironment;
     if (coreUrl != null) {
-      await _verifyCoreVersionAndRetrieveSupportedLoginTypesSubmitted(demo, coreUrl, defaultTenantId);
-    } else {
-      emit(state.copyWith(
-        demo: demo,
-      ));
+      await _verifyCoreVersionAndRetrieveSupportedLoginTypesSubmitted(coreUrl, defaultTenantId, demo);
     }
   }
 
@@ -118,12 +117,12 @@ class LoginCubit extends Cubit<LoginState> {
       coreUrlInputValue = 'https://$coreUrlInputValue';
     }
 
-    await _verifyCoreVersionAndRetrieveSupportedLoginTypesSubmitted(false, coreUrlInputValue, defaultTenantId);
+    await _verifyCoreVersionAndRetrieveSupportedLoginTypesSubmitted(coreUrlInputValue, defaultTenantId);
   }
 
   void loginCoreUrlAssignBack() async {
     emit(state.copyWith(
-      demo: null,
+      mode: null,
       coreUrlInput: const UrlInput.pure(),
     ));
   }
@@ -132,6 +131,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   void loginSwitchBack() async {
     emit(state.copyWith(
+      mode: state.mode == LoginMode.customCore ? state.mode : null,
       coreUrl: null,
       tenantId: null,
       supportedLoginTypes: null,

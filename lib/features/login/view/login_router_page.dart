@@ -9,12 +9,12 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 
 bool whenLoginRouterPageChange(LoginState previous, LoginState current) {
-  return (previous.demo != current.demo) ||
+  return (previous.mode != current.mode) ||
       (previous.coreUrl != current.coreUrl || previous.supportedLoginTypes != current.supportedLoginTypes);
 }
 
 bool whenLoginCoreUrlAssignScreenPageActive(LoginState state) {
-  return state.demo == false;
+  return state.mode == LoginMode.customCore;
 }
 
 bool whenLoginSwitchScreenPageActive(LoginState state) {

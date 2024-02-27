@@ -7,7 +7,7 @@ class LoginState with _$LoginState {
   const factory LoginState({
     @Default(false) bool processing,
     Object? error,
-    bool? demo,
+    LoginMode? mode,
     String? coreUrl,
     String? tenantId,
     List<LoginType>? supportedLoginTypes,

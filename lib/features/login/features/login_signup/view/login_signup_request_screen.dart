@@ -18,10 +18,10 @@ class LoginSignupRequestScreen extends StatelessWidget {
 
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
-        final signupRequestPreDescriptionText = state.demo == false
+        final signupRequestPreDescriptionText = state.mode != LoginMode.demoCore
             ? context.l10n.login_Text_signupRequestPreDescription
             : context.l10n.login_Text_signupRequestPreDescriptionDemo;
-        final signupRequestPostDescriptionText = state.demo == false
+        final signupRequestPostDescriptionText = state.mode != LoginMode.demoCore
             ? context.l10n.login_Text_signupRequestPostDescription
             : context.l10n.login_Text_signupRequestPostDescriptionDemo;
 
