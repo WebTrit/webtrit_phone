@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$LoginState {
   bool get processing => throw _privateConstructorUsedError;
   Object? get error => throw _privateConstructorUsedError;
-  bool? get demo => throw _privateConstructorUsedError;
+  LoginMode? get mode => throw _privateConstructorUsedError;
   String? get coreUrl => throw _privateConstructorUsedError;
   String? get tenantId => throw _privateConstructorUsedError;
   List<LoginType>? get supportedLoginTypes =>
@@ -60,7 +60,7 @@ abstract class $LoginStateCopyWith<$Res> {
   $Res call(
       {bool processing,
       Object? error,
-      bool? demo,
+      LoginMode? mode,
       String? coreUrl,
       String? tenantId,
       List<LoginType>? supportedLoginTypes,
@@ -98,7 +98,7 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
   $Res call({
     Object? processing = null,
     Object? error = freezed,
-    Object? demo = freezed,
+    Object? mode = freezed,
     Object? coreUrl = freezed,
     Object? tenantId = freezed,
     Object? supportedLoginTypes = freezed,
@@ -120,10 +120,10 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
           : processing // ignore: cast_nullable_to_non_nullable
               as bool,
       error: freezed == error ? _value.error : error,
-      demo: freezed == demo
-          ? _value.demo
-          : demo // ignore: cast_nullable_to_non_nullable
-              as bool?,
+      mode: freezed == mode
+          ? _value.mode
+          : mode // ignore: cast_nullable_to_non_nullable
+              as LoginMode?,
       coreUrl: freezed == coreUrl
           ? _value.coreUrl
           : coreUrl // ignore: cast_nullable_to_non_nullable
@@ -198,7 +198,7 @@ abstract class _$$LoginStateImplCopyWith<$Res>
   $Res call(
       {bool processing,
       Object? error,
-      bool? demo,
+      LoginMode? mode,
       String? coreUrl,
       String? tenantId,
       List<LoginType>? supportedLoginTypes,
@@ -234,7 +234,7 @@ class __$$LoginStateImplCopyWithImpl<$Res>
   $Res call({
     Object? processing = null,
     Object? error = freezed,
-    Object? demo = freezed,
+    Object? mode = freezed,
     Object? coreUrl = freezed,
     Object? tenantId = freezed,
     Object? supportedLoginTypes = freezed,
@@ -256,10 +256,10 @@ class __$$LoginStateImplCopyWithImpl<$Res>
           : processing // ignore: cast_nullable_to_non_nullable
               as bool,
       error: freezed == error ? _value.error : error,
-      demo: freezed == demo
-          ? _value.demo
-          : demo // ignore: cast_nullable_to_non_nullable
-              as bool?,
+      mode: freezed == mode
+          ? _value.mode
+          : mode // ignore: cast_nullable_to_non_nullable
+              as LoginMode?,
       coreUrl: freezed == coreUrl
           ? _value.coreUrl
           : coreUrl // ignore: cast_nullable_to_non_nullable
@@ -329,7 +329,7 @@ class _$LoginStateImpl implements _LoginState {
   const _$LoginStateImpl(
       {this.processing = false,
       this.error,
-      this.demo,
+      this.mode,
       this.coreUrl,
       this.tenantId,
       final List<LoginType>? supportedLoginTypes,
@@ -352,7 +352,7 @@ class _$LoginStateImpl implements _LoginState {
   @override
   final Object? error;
   @override
-  final bool? demo;
+  final LoginMode? mode;
   @override
   final String? coreUrl;
   @override
@@ -407,7 +407,7 @@ class _$LoginStateImpl implements _LoginState {
 
   @override
   String toString() {
-    return 'LoginState(processing: $processing, error: $error, demo: $demo, coreUrl: $coreUrl, tenantId: $tenantId, supportedLoginTypes: $supportedLoginTypes, otpSigninSessionOtpProvisionalWithDateTime: $otpSigninSessionOtpProvisionalWithDateTime, passwordSigninPasswordInputObscureText: $passwordSigninPasswordInputObscureText, signupSessionOtpProvisionalWithDateTime: $signupSessionOtpProvisionalWithDateTime, token: $token, coreUrlInput: $coreUrlInput, otpSigninUserRefInput: $otpSigninUserRefInput, otpSigninCodeInput: $otpSigninCodeInput, passwordSigninUserRefInput: $passwordSigninUserRefInput, passwordSigninPasswordInput: $passwordSigninPasswordInput, signupEmailInput: $signupEmailInput, signupCodeInput: $signupCodeInput)';
+    return 'LoginState(processing: $processing, error: $error, mode: $mode, coreUrl: $coreUrl, tenantId: $tenantId, supportedLoginTypes: $supportedLoginTypes, otpSigninSessionOtpProvisionalWithDateTime: $otpSigninSessionOtpProvisionalWithDateTime, passwordSigninPasswordInputObscureText: $passwordSigninPasswordInputObscureText, signupSessionOtpProvisionalWithDateTime: $signupSessionOtpProvisionalWithDateTime, token: $token, coreUrlInput: $coreUrlInput, otpSigninUserRefInput: $otpSigninUserRefInput, otpSigninCodeInput: $otpSigninCodeInput, passwordSigninUserRefInput: $passwordSigninUserRefInput, passwordSigninPasswordInput: $passwordSigninPasswordInput, signupEmailInput: $signupEmailInput, signupCodeInput: $signupCodeInput)';
   }
 
   @override
@@ -418,7 +418,7 @@ class _$LoginStateImpl implements _LoginState {
             (identical(other.processing, processing) ||
                 other.processing == processing) &&
             const DeepCollectionEquality().equals(other.error, error) &&
-            (identical(other.demo, demo) || other.demo == demo) &&
+            (identical(other.mode, mode) || other.mode == mode) &&
             (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
             (identical(other.tenantId, tenantId) ||
                 other.tenantId == tenantId) &&
@@ -460,7 +460,7 @@ class _$LoginStateImpl implements _LoginState {
       runtimeType,
       processing,
       const DeepCollectionEquality().hash(error),
-      demo,
+      mode,
       coreUrl,
       tenantId,
       const DeepCollectionEquality().hash(_supportedLoginTypes),
@@ -487,7 +487,7 @@ abstract class _LoginState implements LoginState {
   const factory _LoginState(
       {final bool processing,
       final Object? error,
-      final bool? demo,
+      final LoginMode? mode,
       final String? coreUrl,
       final String? tenantId,
       final List<LoginType>? supportedLoginTypes,
@@ -514,7 +514,7 @@ abstract class _LoginState implements LoginState {
   @override
   Object? get error;
   @override
-  bool? get demo;
+  LoginMode? get mode;
   @override
   String? get coreUrl;
   @override
