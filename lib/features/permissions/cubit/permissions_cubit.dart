@@ -23,8 +23,15 @@ class PermissionsCubit extends Cubit<PermissionsState> {
       await requestFirebaseMessagingPermission();
       emit(state.copyWith(status: PermissionsStatus.success));
     } catch (e) {
-      emit(state.copyWith(status: PermissionsStatus.failure));
+      emit(state.copyWith(error: e));
     }
+  }
+
+  void dismissError() {
+    emit(state.copyWith(
+      status: PermissionsStatus.initial,
+      error: null,
+    ));
   }
 
   Future<void> requestFirebaseMessagingPermission() async {

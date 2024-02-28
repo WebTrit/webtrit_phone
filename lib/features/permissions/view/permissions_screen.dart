@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
@@ -22,12 +23,16 @@ class PermissionsScreen extends StatelessWidget {
     return Scaffold(
       body: BlocConsumer<PermissionsCubit, PermissionsState>(
         listener: (context, state) {
-          if (state.status.isSuccess || state.status.isFailure) {
+          if (state.status.isSuccess) {
             context.router.replaceAll([const MainShellRoute()]);
+          }
+          if (state.error != null) {
+            context.showErrorSnackBar(state.error.toString());
+            context.read<PermissionsCubit>().dismissError();
           }
         },
         builder: (context, state) {
-          if (state.status.isSuccess || state.status.isFailure) {
+          if (state.status.isSuccess) {
             return const Center(
               child: CircularProgressIndicator(),
             );
@@ -52,8 +57,7 @@ class PermissionsScreen extends StatelessWidget {
                   const Spacer(),
                   const SizedBox(height: kInset),
                   OutlinedButton(
-                    onPressed:
-                        !state.status.isInitial ? null : () => context.read<PermissionsCubit>().requestPermissions(),
+                    onPressed: () => context.read<PermissionsCubit>().requestPermissions(),
                     style: elevatedButtonStyles?.primary,
                     child: Text(context.l10n.permission_Button_request),
                   ),

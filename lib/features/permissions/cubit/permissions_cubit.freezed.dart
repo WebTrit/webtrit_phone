@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$PermissionsState {
   PermissionsStatus get status => throw _privateConstructorUsedError;
+  Object? get error => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $PermissionsStateCopyWith<PermissionsState> get copyWith =>
@@ -29,7 +30,7 @@ abstract class $PermissionsStateCopyWith<$Res> {
           PermissionsState value, $Res Function(PermissionsState) then) =
       _$PermissionsStateCopyWithImpl<$Res, PermissionsState>;
   @useResult
-  $Res call({PermissionsStatus status});
+  $Res call({PermissionsStatus status, Object? error});
 }
 
 /// @nodoc
@@ -46,12 +47,14 @@ class _$PermissionsStateCopyWithImpl<$Res, $Val extends PermissionsState>
   @override
   $Res call({
     Object? status = null,
+    Object? error = freezed,
   }) {
     return _then(_value.copyWith(
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as PermissionsStatus,
+      error: freezed == error ? _value.error : error,
     ) as $Val);
   }
 }
@@ -64,7 +67,7 @@ abstract class _$$PermissionsStateImplCopyWith<$Res>
       __$$PermissionsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({PermissionsStatus status});
+  $Res call({PermissionsStatus status, Object? error});
 }
 
 /// @nodoc
@@ -79,12 +82,14 @@ class __$$PermissionsStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = null,
+    Object? error = freezed,
   }) {
     return _then(_$PermissionsStateImpl(
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as PermissionsStatus,
+      error: freezed == error ? _value.error : error,
     ));
   }
 }
@@ -92,15 +97,18 @@ class __$$PermissionsStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$PermissionsStateImpl implements _PermissionsState {
-  const _$PermissionsStateImpl({this.status = PermissionsStatus.initial});
+  const _$PermissionsStateImpl(
+      {this.status = PermissionsStatus.initial, this.error});
 
   @override
   @JsonKey()
   final PermissionsStatus status;
+  @override
+  final Object? error;
 
   @override
   String toString() {
-    return 'PermissionsState(status: $status)';
+    return 'PermissionsState(status: $status, error: $error)';
   }
 
   @override
@@ -108,11 +116,13 @@ class _$PermissionsStateImpl implements _PermissionsState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PermissionsStateImpl &&
-            (identical(other.status, status) || other.status == status));
+            (identical(other.status, status) || other.status == status) &&
+            const DeepCollectionEquality().equals(other.error, error));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, status);
+  int get hashCode => Object.hash(
+      runtimeType, status, const DeepCollectionEquality().hash(error));
 
   @JsonKey(ignore: true)
   @override
@@ -123,11 +133,14 @@ class _$PermissionsStateImpl implements _PermissionsState {
 }
 
 abstract class _PermissionsState implements PermissionsState {
-  const factory _PermissionsState({final PermissionsStatus status}) =
-      _$PermissionsStateImpl;
+  const factory _PermissionsState(
+      {final PermissionsStatus status,
+      final Object? error}) = _$PermissionsStateImpl;
 
   @override
   PermissionsStatus get status;
+  @override
+  Object? get error;
   @override
   @JsonKey(ignore: true)
   _$$PermissionsStateImplCopyWith<_$PermissionsStateImpl> get copyWith =>
