@@ -28,7 +28,7 @@ class AppPermissions {
   bool get isDenied => _isDenied;
 
   Future<Map<Permission, PermissionStatus>> request() async {
-    final permissionsRequestResults = [for (final permission in _permissions) await permission.request()];
+    final permissionsRequestResults = (await _permissions.request()).values.toList();
     _isDenied = permissionsRequestResults.every((permissionStatus) => permissionStatus.isDenied);
     return Map.fromIterables(_permissions, permissionsRequestResults);
   }
