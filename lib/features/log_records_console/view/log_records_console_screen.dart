@@ -22,11 +22,12 @@ class LogRecordsConsoleScreen extends StatelessWidget {
                 icon: const Icon(
                   Icons.delete_outline,
                 ),
-                onPressed: !state.status.isSuccess
-                    ? null
-                    : () async {
-                        context.read<LogRecordsConsoleCubit>().clear();
-                      },
+                onPressed: switch (state) {
+                  LogRecordsConsoleStateSuccess() => () {
+                      context.read<LogRecordsConsoleCubit>().clear();
+                    },
+                  _ => null,
+                },
               );
             },
           ),
@@ -36,11 +37,12 @@ class LogRecordsConsoleScreen extends StatelessWidget {
                 icon: const Icon(
                   Icons.share,
                 ),
-                onPressed: !state.status.isSuccess || state.logRecords.isEmpty
-                    ? null
-                    : () async {
-                        context.read<LogRecordsConsoleCubit>().share();
-                      },
+                onPressed: switch (state) {
+                  LogRecordsConsoleStateSuccess(:final logRecords) when logRecords.isNotEmpty => () {
+                      context.read<LogRecordsConsoleCubit>().share();
+                    },
+                  _ => null,
+                },
               );
             },
           ),
@@ -49,15 +51,15 @@ class LogRecordsConsoleScreen extends StatelessWidget {
       body: BlocBuilder<LogRecordsConsoleCubit, LogRecordsConsoleState>(
         builder: (context, state) {
           final logRecordsFormatter = context.read<LogRecordsConsoleCubit>().logRecordsFormatter;
-          switch (state.status) {
-            case LogRecordsConsoleStatus.success:
+          switch (state) {
+            case LogRecordsConsoleStateSuccess(:final logRecords):
               return SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: SizedBox(
                   width: 1200,
                   child: ListView.builder(
                     itemBuilder: (context, index) {
-                      final logRecord = state.logRecords[index];
+                      final logRecord = logRecords[index];
                       return Text(
                         logRecordsFormatter.format(logRecord),
                         maxLines: 100,
@@ -67,14 +69,16 @@ class LogRecordsConsoleScreen extends StatelessWidget {
                   ),
                 ),
               );
-            case LogRecordsConsoleStatus.failure:
+            case LogRecordsConsoleStateFailure():
               return Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(context.l10n.logRecordsConsole_Text_failure),
                     OutlinedButton(
-                      onPressed: () => context.read<LogRecordsConsoleCubit>().load(),
+                      onPressed: () {
+                        context.read<LogRecordsConsoleCubit>().load();
+                      },
                       child: Text(context.l10n.logRecordsConsole_Button_failureRefresh),
                     )
                   ],

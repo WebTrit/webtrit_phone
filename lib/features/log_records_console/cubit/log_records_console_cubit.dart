@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
 
@@ -7,6 +7,8 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 import '../utils/utils.dart';
+
+part 'log_records_console_cubit.freezed.dart';
 
 part 'log_records_console_state.dart';
 
@@ -42,6 +44,8 @@ class LogRecordsConsoleCubit extends Cubit<LogRecordsConsoleState> {
       '${time.hour.toString()}${time.minute.toString().padLeft(2, '0')}${time.second.toString().padLeft(2, '0')}';
 
   Future<void> share() async {
+    final state = this.state as LogRecordsConsoleStateSuccess;
+
     final logRecords = state.logRecords;
 
     final time = logRecords[0].time;
