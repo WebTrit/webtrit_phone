@@ -12,8 +12,8 @@ class AppPermissions {
   static late AppPermissions _instance;
 
   static Future<void> init() async {
-    final permissionsStatuses = await Future.wait(_permissions.map((permission) => permission.status));
-    final isDenied = permissionsStatuses.every((permissionStatus) => permissionStatus.isDenied);
+    final statuses = await Future.wait(_permissions.map((permission) => permission.status));
+    final isDenied = statuses.every((status) => status.isDenied);
     _instance = AppPermissions._(isDenied);
   }
 
@@ -28,8 +28,8 @@ class AppPermissions {
   bool get isDenied => _isDenied;
 
   Future<Map<Permission, PermissionStatus>> request() async {
-    final permissionsRequestResults = (await _permissions.request()).values.toList();
-    _isDenied = permissionsRequestResults.every((permissionStatus) => permissionStatus.isDenied);
-    return Map.fromIterables(_permissions, permissionsRequestResults);
+    final statusesPerRequestedPermission = await _permissions.request();
+    _isDenied = statusesPerRequestedPermission.values.every((status) => status.isDenied);
+    return statusesPerRequestedPermission;
   }
 }
