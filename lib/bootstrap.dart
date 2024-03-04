@@ -92,7 +92,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final applicationDocumentsPath = await getApplicationDocumentsPath();
 
   // TODO: Handle creating the database class AppDatabase multiple times
-  final appDatabase = AppDatabase(
+  final appDatabase = FCMIsolateDatabase.instance(
     createAppDatabaseConnection(
       applicationDocumentsPath,
       'db.sqlite',
@@ -109,4 +109,16 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await fcmHandler.execute(message);
 
   logger.info('onBackgroundMessage: ${message.toMap()}');
+}
+
+class FCMIsolateDatabase extends AppDatabase {
+  FCMIsolateDatabase(super.e);
+
+  static FCMIsolateDatabase? _instance;
+
+  static instance(executor) {
+    _instance ??= FCMIsolateDatabase(executor);
+
+    return _instance!;
+  }
 }
