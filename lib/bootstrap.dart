@@ -8,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:logging/logging.dart';
+import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/app/app_bloc_observer.dart';
 import 'package:webtrit_phone/data/data.dart';
@@ -42,6 +43,8 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       await PackageInfo.init();
       await SecureStorage.init();
       await AppThemes.init();
+
+      _initCallkeep();
 
       Bloc.observer = AppBlocObserver();
 
@@ -88,4 +91,17 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 
   logger.info('onBackgroundMessage: ${message.toMap()}');
+}
+
+void _initCallkeep() {
+  WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
+}
+
+class CallkeepLogs implements CallkeepLogsDelegate {
+  final _logger = Logger('CallkeepLogs');
+
+  @override
+  void onLog(CallkeepLogType type, String tag, String message) {
+    _logger.info('$tag $message');
+  }
 }
