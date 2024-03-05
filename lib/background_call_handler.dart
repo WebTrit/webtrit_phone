@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:collection/collection.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -15,34 +14,27 @@ import 'data/data.dart';
 
 const int _kUndefinedLine = -1;
 
-class FCMHandler implements CallkeepAndroidServiceDelegate {
-  FCMHandler(this.logger, this.recentsRepository);
+final _logger = Logger('FCMHandler');
+
+class BackgroundCallHandler implements CallkeepAndroidServiceDelegate {
+  BackgroundCallHandler(
+    this._pendingCall,
+    this._recentsRepository,
+  );
+
+  final RecentsRepository _recentsRepository;
+  final PendingCall _pendingCall;
 
   final _callNotificationDelegate = CallkeepAndroidService();
-  final Logger logger;
-  final RecentsRepository recentsRepository;
 
   late SecureStorage storage;
   late PackageInfo packageInfo;
   late WebtritSignalingClient client;
 
-  late String callId;
-  late CallkeepHandle handleValue;
-  late String displayName;
-  late bool hasVideo;
-
   final List<Line?> _lines = [];
 
-  Future execute(RemoteMessage message) async {
-    final isAndroid = PlatformInfo().isAndroid;
-    if (isAndroid) {
-      _executeAndroidPart(message);
-    }
-  }
-
-  void _executeAndroidPart(RemoteMessage message) async {
+  void init() async {
     await _initializeDependentResources();
-    await _initializeIncomingParam(message.data);
     await _initializeSignalClient();
     await _setupListeners();
   }
@@ -53,14 +45,6 @@ class FCMHandler implements CallkeepAndroidServiceDelegate {
 
     storage = SecureStorage();
     packageInfo = PackageInfo();
-  }
-
-  Future _initializeIncomingParam(Map<String, dynamic> data) async {
-// TODO: ADD logic for handle different handler types
-    callId = data[CallDataConst.callId];
-    handleValue = CallkeepHandle.number(data[CallDataConst.handleValue]);
-    displayName = data[CallDataConst.displayName] ?? '';
-    hasVideo = parseString(data[CallDataConst.hasVideo]);
   }
 
   // TODO: Do single factory
@@ -103,18 +87,18 @@ class FCMHandler implements CallkeepAndroidServiceDelegate {
     _lines.clear();
     _lines.addAll(stateHandshake.lines);
 
-    final connections = _lines.where((element) => element?.callId == callId);
+    final connections = _lines.where((element) => element?.callId == _pendingCall.id);
 
     if (connections.isNotEmpty) {
       _callNotificationDelegate.incomingCall(
-        callId,
-        handleValue,
-        displayName,
-        hasVideo,
+        _pendingCall.id,
+        CallkeepHandle.number(_pendingCall.handle),
+        _pendingCall.displayName,
+        _pendingCall.hasVideo,
       );
     } else {
       _callNotificationDelegate.hungUp(
-        callId,
+        _pendingCall.id,
       );
     }
   }
@@ -181,8 +165,8 @@ class FCMHandler implements CallkeepAndroidServiceDelegate {
       acceptedTime: acceptedTime,
       hungUpTime: hungUpTime,
     );
-    await recentsRepository.add(recent);
-    logger.info('endCallReceived: $recent');
+    await _recentsRepository.add(recent);
+    _logger.info('endCallReceived: $recent');
   }
 
   static bool parseString(
