@@ -29,11 +29,11 @@ dependencies:
   cross_file: ^0.3.3
   device_info_plus: ^9.1.2
   equatable: ^2.0.5
-  firebase_analytics: ^10.8.6
-  firebase_app_installations: ^0.2.4
-  firebase_core: ^2.25.4
-  firebase_crashlytics: ^3.4.15
-  firebase_messaging: ^14.7.16
+  firebase_analytics: ^10.8.8
+  firebase_app_installations: ^0.2.4+16
+  firebase_core: ^2.26.0
+  firebase_crashlytics: ^3.4.17
+  firebase_messaging: ^14.7.18
   flutter_bloc: ^8.1.4
   flutter_contacts: ^1.1.7
   flutter_secure_storage: ^9.0.0
