@@ -27,6 +27,10 @@
             <data android:scheme="https"/>
         </intent>
         <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="tel" />
+        </intent>
+        <intent>
             <action android:name="android.intent.action.SENDTO"/>
             <category android:name="android.intent.category.DEFAULT"/>
             <data android:scheme="mailto"/>

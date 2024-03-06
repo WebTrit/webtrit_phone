@@ -11,6 +11,7 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
@@ -813,7 +814,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       event.video,
     );
     if (error != null) {
-      _logger.warning('__onCallControlEventStarted error: $error');
+      if (error == CallkeepCallRequestError.emergencyNumber) {
+        final Uri telLaunchUri = Uri(scheme: 'tel', path: event.handle.value);
+        launchUrl(telLaunchUri);
+      } else {
+        _logger.warning('__onCallControlEventStarted error: $error');
+      }
     } else {
       emit(state.copyWithPushActiveCall(ActiveCall(
         direction: Direction.outgoing,
