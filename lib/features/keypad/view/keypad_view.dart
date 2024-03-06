@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/theme/theme.dart';
-
-import '../keypad.dart';
 
 class KeypadView extends StatefulWidget {
   const KeypadView({super.key});
@@ -71,12 +70,20 @@ class KeypadViewState extends State<KeypadView> {
           builder: (BuildContext context, TextEditingValue value, Widget? child) {
             return BlocBuilder<KeypadCubit, KeypadState>(
               builder: (context, state) {
-                return Actionpad(
-                  video: state.video,
-                  onCallPressed: value.text.isEmpty ? null : _onCallPressed,
-                  onCallLongPress: _onCallLongPress,
-                  onBackspacePressed: value.text.isEmpty ? null : _onBackspacePressed,
-                  onBackspaceLongPress: value.text.isEmpty ? null : _onBackspaceLongPress,
+                return BlocBuilder<CallBloc, CallState>(
+                  buildWhen: (previous, current) =>
+                      previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
+                  builder: (context, callState) {
+                    return Actionpad(
+                      video: state.video,
+                      transfer: callState.isBlingTransferInitiated,
+                      onCallPressed: value.text.isEmpty ? null : () => _onCallPressed(state.video),
+                      onCallLongPress: _onCallLongPress,
+                      onTransferPressed: _onTransferPressed,
+                      onBackspacePressed: value.text.isEmpty ? null : _onBackspacePressed,
+                      onBackspaceLongPress: value.text.isEmpty ? null : _onBackspaceLongPress,
+                    );
+                  },
                 );
               },
             );
@@ -89,14 +96,27 @@ class KeypadViewState extends State<KeypadView> {
     );
   }
 
-  void _onCallPressed() {
+  void _onCallPressed(bool video) {
     _focusNode.unfocus();
 
-    context.read<KeypadCubit>().call(_controller.text);
+    final callBloc = context.read<CallBloc>();
+    callBloc.add(CallControlEvent.started(
+      number: _controller.text,
+      video: video,
+    ));
   }
 
   void _onCallLongPress() {
     context.read<KeypadCubit>().callTypeSwitch();
+  }
+
+  void _onTransferPressed() {
+    _focusNode.unfocus();
+
+    final callBloc = context.read<CallBloc>();
+    callBloc.add(CallControlEvent.blindTransferred(
+      number: _controller.text,
+    ));
   }
 
   void _onKeypadPressed(keyText) {

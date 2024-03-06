@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
@@ -11,6 +10,7 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 class CallInfo extends StatefulWidget {
   const CallInfo({
     super.key,
+    required this.transferProcessing,
     required this.isIncoming,
     required this.held,
     required this.username,
@@ -18,6 +18,7 @@ class CallInfo extends StatefulWidget {
     this.color,
   });
 
+  final bool transferProcessing;
   final bool isIncoming;
   final bool held;
   final String username;
@@ -91,6 +92,8 @@ class _CallInfoState extends State<CallInfo> {
       } else {
         statusMessage = context.l10n.call_description_outgoing;
       }
+    } else if (widget.transferProcessing) {
+      statusMessage = context.l10n.call_description_transferProcessing;
     } else if (widget.held) {
       statusMessage = context.l10n.call_description_held;
     } else {

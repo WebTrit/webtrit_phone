@@ -4,9 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+import '../../call/call.dart';
 import '../contacts.dart';
 
 typedef ContactSourceTypeWidgetBuilder = Widget Function(BuildContext context, ContactSourceType sourceType);
@@ -124,6 +126,16 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
           children: [
             for (final sourceType in widget.sourceTypes) widget.sourceTypeWidgetBuilder(context, sourceType),
           ],
+        ),
+        bottomNavigationBar: BlocBuilder<CallBloc, CallState>(
+          buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
+          builder: (context, callState) {
+            if (callState.isBlingTransferInitiated) {
+              return TransferBottomNavigationBar(context.l10n.contacts_Text_blingTransferInitiated);
+            } else {
+              return const SizedBox.shrink();
+            }
+          },
         ),
       ),
     );

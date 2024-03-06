@@ -138,6 +138,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                         ),
                         for (final activeCall in activeCalls)
                           CallInfo(
+                            transferProcessing: activeCall.transfer?.isProcessing == true,
                             isIncoming: activeCall.isIncoming,
                             held: activeCall.held,
                             username: activeCall.displayName ?? activeCall.handle.value,
@@ -172,6 +173,13 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       onSpeakerChanged: (bool value) {
                         context.read<CallBloc>().add(CallControlEvent.speakerEnabled(activeCall.callId, value));
                       },
+                      onTransferPressed: !activeCall.wasAccepted || activeCall.transfer != null
+                          ? null
+                          : () {
+                              context
+                                  .read<CallBloc>()
+                                  .add(CallControlEvent.blindTransferInitiated(activeCall.callId.uuid));
+                            },
                       heldValue: activeCall.held,
                       onHeldChanged: (bool value) {
                         context.read<CallBloc>().add(CallControlEvent.setHeld(activeCall.callId, value));

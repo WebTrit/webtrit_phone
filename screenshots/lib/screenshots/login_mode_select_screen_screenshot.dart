@@ -6,23 +6,19 @@ import 'package:webtrit_phone/features/features.dart';
 
 import 'package:screenshots/mocks/mocks.dart';
 
-class LoginScreenScreenshot extends StatelessWidget {
-  const LoginScreenScreenshot(
-    this.step, {
+class LoginModeSelectScreenScreenshot extends StatelessWidget {
+  const LoginModeSelectScreenScreenshot({
     super.key,
     this.appGreeting,
   });
-
-  final LoginStep step;
 
   final String? appGreeting;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<LoginCubit>(
-      create: (context) => MockLoginCubit.loginScreen(step),
-      child: LoginScreen(
-        step,
+      create: (context) => MockLoginCubit.loginModeSelectScreen(),
+      child: LoginModeSelectScreen(
         appGreeting: appGreeting,
       ),
     );

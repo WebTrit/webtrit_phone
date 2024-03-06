@@ -89,8 +89,8 @@ class _AppState extends State<App> {
                   deepLinkBuilder: _appRouter.deepLinkBuilder,
                   navigatorObservers: () => [
                     AppRouterObserver(),
-                    CallRouterObserver(),
                     context.read<AppAnalyticsRepository>().createObserver(),
+                    AutoRouteObserver(),
                   ],
                   reevaluateListenable: ReevaluateListenable.stream(appBloc.stream),
                 ),

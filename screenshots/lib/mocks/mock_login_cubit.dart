@@ -6,14 +6,12 @@ import 'package:webtrit_phone/features/features.dart';
 class MockLoginCubit extends MockCubit<LoginState> implements LoginCubit {
   MockLoginCubit();
 
-  factory MockLoginCubit.loginScreen(LoginStep step) {
+  factory MockLoginCubit.loginModeSelectScreen() {
     final mock = MockLoginCubit();
     whenListen(
       mock,
       const Stream<LoginState>.empty(),
-      initialState: LoginState(
-        step: step,
-      ),
+      initialState: const LoginState(),
     );
     when(() => mock.isDemoModeEnabled).thenReturn(false);
     return mock;

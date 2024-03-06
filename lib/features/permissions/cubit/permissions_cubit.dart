@@ -12,19 +12,23 @@ part 'permissions_state.dart';
 class PermissionsCubit extends Cubit<PermissionsState> {
   PermissionsCubit({
     required this.appPermissions,
-  }) : super(const PermissionsState());
+  }) : super(const PermissionsState.initial());
 
   final AppPermissions appPermissions;
 
   void requestPermissions() async {
-    emit(state.copyWith(status: PermissionsStatus.inProgress));
+    emit(const PermissionsState.inProgress());
     try {
       await appPermissions.request();
       await requestFirebaseMessagingPermission();
-      emit(state.copyWith(status: PermissionsStatus.success));
+      emit(const PermissionsState.success());
     } catch (e) {
-      emit(state.copyWith(status: PermissionsStatus.failure));
+      emit(PermissionsState.failure(e));
     }
+  }
+
+  void dismissError() {
+    emit(const PermissionsState.initial());
   }
 
   Future<void> requestFirebaseMessagingPermission() async {
