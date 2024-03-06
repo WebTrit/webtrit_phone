@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -1061,6 +1062,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     if (state.retrieveActiveCall(event.callId)?.wasHungUp == true) {
+      // TODO: There's an issue where the user might have already ended the call, but the active call screen remains visible.
+      if (state.isActive) {
+        emit(state.copyWithPopActiveCall(event.callId));
+      }
       event.fail();
       return;
     }
@@ -1676,13 +1681,23 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> _ringtoneOutgoingPlay() async {
-    await _audioPlayer.setAsset(Assets.ringtones.outgoingCall1);
-    await _audioPlayer.setLoopMode(LoopMode.one);
-    _audioPlayer.play();
+    // TODO: Consider handling this functionality on the callkeep side due to known exceptions on Android.
+    if (Platform.isAndroid) {
+      return;
+    } else {
+      await _audioPlayer.setAsset(Assets.ringtones.outgoingCall1);
+      await _audioPlayer.setLoopMode(LoopMode.one);
+      _audioPlayer.play();
+    }
   }
 
   Future<void> _ringtoneStop() async {
-    await _audioPlayer.stop();
+    // TODO: Observing frequent issues with call hang-ups and resetting, possibly due to blocking methods in this function.
+    if (Platform.isAndroid) {
+      return;
+    } else {
+      await _audioPlayer.stop();
+    }
   }
 
   Uri _parseCoreUrlToSignalingUrl(String coreUrl) {
