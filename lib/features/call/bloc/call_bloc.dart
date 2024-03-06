@@ -116,6 +116,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       transformer: sequential(),
     );
 
+    navigator.mediaDevices.ondevicechange = (event) {
+      add(const _NavigatorMediaDevicesChange());
+    };
+
     WidgetsBinding.instance.addObserver(this);
 
     callkeep.setDelegate(this);
@@ -130,6 +134,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     callkeep.setDelegate(null);
 
     WidgetsBinding.instance.removeObserver(this);
+
+    navigator.mediaDevices.ondevicechange = null;
 
     await _connectivityChangedSubscription?.cancel();
 
@@ -1529,9 +1535,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   @override
   void didActivateAudioSession() {
     _logger.fine('didActivateAudioSession');
-    navigator.mediaDevices.ondevicechange = (event) {
-      add(const _NavigatorMediaDevicesChange());
-    };
     () async {
       await AppleNativeAudioManagement.audioSessionDidActivate();
       await AppleNativeAudioManagement.setIsAudioEnabled(true);
@@ -1545,7 +1548,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       await AppleNativeAudioManagement.setIsAudioEnabled(false);
       await AppleNativeAudioManagement.audioSessionDidDeactivate();
     }();
-    navigator.mediaDevices.ondevicechange = null;
   }
 
   @override
