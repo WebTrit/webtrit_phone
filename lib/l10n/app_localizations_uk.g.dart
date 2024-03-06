@@ -160,6 +160,21 @@ class AppLocalizationsUk extends AppLocalizations {
   String get default_TypeErrorError => 'Виникла проблема з відповіддю';
 
   @override
+  String get default_ErrorMessage => '';
+
+  @override
+  String get default_ErrorDetails => 'Details';
+
+  @override
+  String get default_ErrorPath => '';
+
+  @override
+  String get request_StatusCode => '';
+
+  @override
+  String get request_Id => '';
+
+  @override
   String get default_UnauthorizedRequestFailureError => 'Сталася помилка несанкціонованого запиту';
 
   @override
@@ -238,6 +253,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get login_RequestFailureEmptyEmailError => 'Не вдалося відправити код підтвердження';
+
+  @override
+  String get login_RequestFailureIdentifierIsNotValid => '';
 
   @override
   String get login_RequestFailureIncorrectOtpCodeError => 'Невірний код підтвердження';
