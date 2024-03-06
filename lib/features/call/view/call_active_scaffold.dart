@@ -178,7 +178,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                           : () {
                               context
                                   .read<CallBloc>()
-                                  .add(CallControlEvent.blindTransferInitiated(activeCall.callId.uuid));
+                                  .add(CallControlEvent.blindTransferInitiated(activeCall.callId));
                             },
                       heldValue: activeCall.held,
                       onHeldChanged: (bool value) {
