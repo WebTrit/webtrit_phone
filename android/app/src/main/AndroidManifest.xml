@@ -39,6 +39,7 @@
         </intent>
     </queries>
     <application
+        android:networkSecurityConfig="@xml/network_security_config"
         android:label="@string/APP_NAME"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
@@ -62,6 +63,10 @@
                 android:name="io.flutter.embedding.android.NormalTheme"
                 android:resource="@style/NormalTheme"
                 />
+
+            <meta-data android:name="io.flutter.network-policy"
+                android:resource="@xml/network_security_config"/>
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -70,6 +75,7 @@
             <meta-data
                 android:name="flutter_deeplinking_enabled"
                 android:value="true" />
+
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -84,5 +90,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <meta-data android:name="io.flutter.network-policy"
+            android:resource="@xml/network_security_config"/>
+
     </application>
 </manifest>
