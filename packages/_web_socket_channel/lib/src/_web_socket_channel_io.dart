@@ -1,5 +1,7 @@
 import 'dart:io' as io;
+import 'dart:io';
 
+import 'package:_web_socket_channel/src/test.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -9,7 +11,12 @@ Future<io.WebSocket> connectWebSocket(
   Duration? connectionTimeout,
   Duration? pingInterval,
 }) async {
-  final customHttpClient = io.HttpClient();
+  SecurityContext context = SecurityContext();
+
+  context.setTrustedCertificatesBytes(test);
+
+  final customHttpClient = io.HttpClient(context: context);
+
   customHttpClient.connectionTimeout = connectionTimeout;
 
   final webSocket = await io.WebSocket.connect(
