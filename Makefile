@@ -1,5 +1,5 @@
 run:
-	flutter run --dart-define-from-file=dart_define.json --debug
+	flutter run --dart-define-from-file=dart_define.json
 
 run-release:
 	flutter run --dart-define-from-file=dart_define.json --release
@@ -12,3 +12,23 @@ build-apk:
 
 build-appbundle:
 	flutter build appbundle --dart-define-from-file=dart_define.json --release
+
+configure:
+	dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart configurator-resources ../webtrit_phone_keystores --applicationId=$(id)
+	dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart configurator-generate
+
+configure-ios:
+	make configure
+	make build-ios
+
+configure-apk:
+	make configure
+	make build-apk
+
+configure-appbundle:
+	make configure
+	make build-appbundle
+
+configure-clean:
+	git reset --hard HEAD
+	git clean -df
