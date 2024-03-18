@@ -9,7 +9,10 @@ Future<io.WebSocket> connectWebSocket(
   Duration? connectionTimeout,
   Duration? pingInterval,
 }) async {
-  final customHttpClient = io.HttpClient();
+  io.SecurityContext context = io.SecurityContext(withTrustedRoots: true);
+
+  final customHttpClient = io.HttpClient(context: context);
+
   customHttpClient.connectionTimeout = connectionTimeout;
 
   final webSocket = await io.WebSocket.connect(
