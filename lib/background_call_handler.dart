@@ -14,7 +14,7 @@ import 'data/data.dart';
 
 const int _kUndefinedLine = -1;
 
-final _logger = Logger('FCMHandler');
+final _logger = Logger('BackgroundCallHandler');
 
 class BackgroundCallHandler implements CallkeepAndroidServiceDelegate {
   BackgroundCallHandler(
@@ -71,13 +71,28 @@ class BackgroundCallHandler implements CallkeepAndroidServiceDelegate {
     client.listen(
       onStateHandshake: _signalingInitialize,
       onEvent: _signalingEvent,
-      onError: (_, __) {},
-      onDisconnect: (_, __) {},
+      onError: _onSignalingError,
+      onDisconnect: _onSignalingDisconnect,
     );
   }
 
+  void _onSignalingError(error, [StackTrace? stackTrace]) {
+    _logger.severe('_onErrorCallback', error, stackTrace);
+  }
+
+  void _onSignalingDisconnect(int? code, String? reason) {
+    _logger.fine('_onSignalingDisconnect code: $code reason: $reason');
+  }
+
   void _signalingEvent(Event event) {
+    _logger.fine('_signalingEvent event: $event');
+
     if (event is HangupEvent) {
+      _callNotificationDelegate.hungUp(event.callId);
+      _close();
+    }
+
+    if (event is DecliningEvent) {
       _callNotificationDelegate.hungUp(event.callId);
       _close();
     }
