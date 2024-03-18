@@ -17,6 +17,14 @@ configure:
 	dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart configurator-resources ../webtrit_phone_keystores --applicationId=$(id)
 	dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart configurator-generate
 
+configure-demo:
+	dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart configurator-resources ../webtrit_phone_keystores --applicationId=$(id) --demo
+	dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart configurator-generate
+
+configure-classic:
+	dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart configurator-resources ../webtrit_phone_keystores --applicationId=$(id) --classic
+	dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart configurator-generate
+
 configure-ios:
 	make configure
 	make build-ios
@@ -27,6 +35,10 @@ configure-apk:
 
 configure-appbundle:
 	make configure
+	make build-appbundle
+
+configure-appbundle-demo:
+	make configure-demo
 	make build-appbundle
 
 configure-clean:
