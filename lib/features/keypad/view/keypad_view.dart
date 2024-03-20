@@ -104,6 +104,8 @@ class KeypadViewState extends State<KeypadView> {
       number: _controller.text,
       video: video,
     ));
+
+    _controller.clear();
   }
 
   void _onCallLongPress() {
@@ -117,6 +119,8 @@ class KeypadViewState extends State<KeypadView> {
     callBloc.add(CallControlEvent.blindTransferred(
       number: _controller.text,
     ));
+
+    _controller.clear();
   }
 
   void _onKeypadPressed(keyText) {
