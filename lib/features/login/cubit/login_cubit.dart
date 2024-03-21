@@ -250,9 +250,13 @@ class LoginCubit extends Cubit<LoginState> {
       return;
     }
 
-    emit(state.copyWith(
-      processing: true,
-    ));
+    // auto-fill userRef with for internal users
+    String userRef = state.passwordSigninUserRefInput.value;
+    if (userRef.length == 4 && int.tryParse(userRef) != null) {
+      emit(state.copyWith(passwordSigninUserRefInput: UserRefInput.dirty('$kInternalUserRefPrefix$userRef')));
+    }
+
+    emit(state.copyWith(processing: true));
 
     try {
       final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);

@@ -8,17 +8,50 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-class LoginPasswordSigninScreen extends StatelessWidget {
+class LoginPasswordSigninScreen extends StatefulWidget {
   const LoginPasswordSigninScreen({super.key});
+
+  @override
+  State<LoginPasswordSigninScreen> createState() => _LoginPasswordSigninScreenState();
+}
+
+class _LoginPasswordSigninScreenState extends State<LoginPasswordSigninScreen> {
+  late final passwordSigninUserRefInputController = TextEditingController();
+  late final passwordSigninPasswordInputController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    final loginCubit = context.read<LoginCubit>();
+    passwordSigninUserRefInputController.text = loginCubit.state.passwordSigninUserRefInput.value;
+    passwordSigninPasswordInputController.text = loginCubit.state.passwordSigninPasswordInput.value;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    passwordSigninUserRefInputController.dispose();
+    passwordSigninPasswordInputController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
-    return BlocBuilder<LoginCubit, LoginState>(
+
+    return BlocConsumer<LoginCubit, LoginState>(
+      listener: (context, state) {
+        if (state.passwordSigninUserRefInput.value != passwordSigninUserRefInputController.text) {
+          passwordSigninUserRefInputController.text = state.passwordSigninUserRefInput.value;
+        }
+        if (state.passwordSigninPasswordInput.value != passwordSigninPasswordInputController.text) {
+          passwordSigninPasswordInputController.text = state.passwordSigninPasswordInput.value;
+        }
+      },
       builder: (context, state) {
         final passwordSigninPreDescriptionText = context.l10n.login_Text_passwordSigninPreDescription;
         final passwordSigninPostDescriptionText = context.l10n.login_Text_passwordSigninPostDescription;
+
         return Padding(
           padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
           child: Column(
@@ -32,7 +65,7 @@ class LoginPasswordSigninScreen extends StatelessWidget {
               ],
               TextFormField(
                 enabled: !state.processing,
-                initialValue: state.passwordSigninUserRefInput.value,
+                controller: passwordSigninUserRefInputController,
                 decoration: InputDecoration(
                   labelText: context.l10n.login_TextFieldLabelText_passwordSigninUserRef,
                   helperText: '', // reserve space for validator message
@@ -49,7 +82,7 @@ class LoginPasswordSigninScreen extends StatelessWidget {
               ),
               TextFormField(
                 enabled: !state.processing,
-                initialValue: state.passwordSigninPasswordInput.value,
+                controller: passwordSigninPasswordInputController,
                 decoration: InputDecoration(
                   labelText: context.l10n.login_TextFieldLabelText_passwordSigninPassword,
                   helperText: '', // reserve space for validator message
