@@ -1,16 +1,13 @@
 import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:screenshots/router.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/environment_config.dart';
-import 'package:webtrit_phone/features/features.dart';
 
 import 'package:screenshots/data/data.dart';
 import 'package:screenshots/mocks/mocks.dart';
-import 'package:screenshots/screenshots/screenshots.dart';
-import 'package:screenshots/widgets/widgets.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,98 +24,25 @@ void main() async {
   withClock(
     Clock.fixed(dFixedTime),
     () {
-      runApp(ScreenshotsApp(
-        appBloc: appBloc,
-      ));
+      runApp(ScreenshotsApp(appBloc: appBloc));
     },
   );
 }
 
 class ScreenshotsApp extends StatelessWidget {
-  ScreenshotsApp({
-    super.key,
-    required this.appBloc,
-  });
+  ScreenshotsApp({super.key, required this.appBloc});
 
   final AppBloc appBloc;
+  final _appRouter = AppRouter();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: _router,
-      debugShowCheckedModeBanner: false,
+    return BlocProvider.value(
+      value: appBloc,
+      child: MaterialApp.router(
+        routerConfig: _appRouter.config(),
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
-
-  late final _screenshots = [
-    ScreenshotApp(
-      appBloc: appBloc,
-      child: LoginModeSelectScreenScreenshot(
-        appGreeting: EnvironmentConfig.APP_GREETING.isEmpty ? null : EnvironmentConfig.APP_GREETING,
-      ),
-    ),
-    ScreenshotApp(
-      appBloc: appBloc,
-      child: const MainScreenScreenshot(
-        MainFlavor.favorites,
-        Text(EnvironmentConfig.APP_NAME),
-      ),
-    ),
-    ScreenshotApp(
-      appBloc: appBloc,
-      child: const MainScreenScreenshot(
-        MainFlavor.recents,
-        Text(EnvironmentConfig.APP_NAME),
-      ),
-    ),
-    ScreenshotApp(
-      appBloc: appBloc,
-      child: const MainScreenScreenshot(
-        MainFlavor.keypad,
-        Text(EnvironmentConfig.APP_NAME),
-      ),
-    ),
-    ScreenshotApp(
-      appBloc: appBloc,
-      child: const SettingScreenScreenshot(),
-    ),
-    ScreenshotApp(
-      appBloc: appBloc,
-      child: const CallScreenScreenshot(false),
-    ),
-    ScreenshotApp(
-      appBloc: appBloc,
-      child: const CallScreenScreenshot(true),
-    ),
-  ];
-
-  late final _router = GoRouter(
-    routes: [
-      GoRoute(
-        path: '/',
-        redirect: (context, state) {
-          return '/0';
-        },
-      ),
-      GoRoute(
-        path: '/:$_kInitialIndexParameterName',
-        builder: (context, state) {
-          return DefaultTabController(
-            key: ValueKey(state.initialIndexParameter),
-            length: _screenshots.length,
-            initialIndex: state.initialIndexParameter,
-            child: TabBarView(
-              children: _screenshots,
-            ),
-          );
-        },
-      ),
-    ],
-  );
-}
-
-const _kInitialIndexParameterName = 'initialIndex';
-
-extension _GoRouterStateParams on GoRouterState {
-  int get initialIndexParameter => int.parse(pathParameters[_kInitialIndexParameterName]!);
 }
