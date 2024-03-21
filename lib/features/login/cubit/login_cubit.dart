@@ -250,10 +250,15 @@ class LoginCubit extends Cubit<LoginState> {
       return;
     }
 
-    // auto-fill userRef with for internal users
-    String userRef = state.passwordSigninUserRefInput.value;
-    if (userRef.length == 4 && int.tryParse(userRef) != null) {
-      emit(state.copyWith(passwordSigninUserRefInput: UserRefInput.dirty('$kInternalUserRefPrefix$userRef')));
+    if (EnvironmentConfig.EXTENSION_PREFIX_AUTOFILL) {
+      const extLength = EnvironmentConfig.EXTENSION_LENGTH ?? 99;
+      const extPrefix = EnvironmentConfig.EXTENSION_PREFIX ?? '';
+
+      String userRef = state.passwordSigninUserRefInput.value;
+
+      if (userRef.length == extLength && int.tryParse(userRef) != null) {
+        emit(state.copyWith(passwordSigninUserRefInput: UserRefInput.dirty('$extPrefix$userRef')));
+      }
     }
 
     emit(state.copyWith(processing: true));

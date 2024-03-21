@@ -21,5 +21,3 @@ const kBlankUri = 'about:blank';
 
 const initialMainRout = '/main';
 const initialCallRout = '/main/call';
-
-const kInternalUserRefPrefix = '18667478647';
