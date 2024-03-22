@@ -107,6 +107,8 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
     required int line,
     required String callId,
   }) = _CallSignalingEventUpdated;
+
+  const factory _CallSignalingEvent.unregistered() = _CallSignalingEventUnregistered;
 }
 
 // call push events
