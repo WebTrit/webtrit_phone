@@ -70,7 +70,7 @@ class BackgroundCallHandler implements CallkeepAndroidServiceDelegate {
     _callNotificationDelegate.setAndroidServiceDelegate(this);
     client.listen(
       onStateHandshake: _signalingInitialize,
-      onEvent: _signalingEvent,
+      onEvent: _onSignalingEvent,
       onError: _onSignalingError,
       onDisconnect: _onSignalingDisconnect,
     );
@@ -84,37 +84,33 @@ class BackgroundCallHandler implements CallkeepAndroidServiceDelegate {
     _logger.fine('_onSignalingDisconnect code: $code reason: $reason');
   }
 
-  void _signalingEvent(Event event) {
-    _logger.fine('_signalingEvent event: $event');
-
-    if (event is HangupEvent) {
-      _callNotificationDelegate.hungUp(event.callId);
-      _close();
-    }
-
-    if (event is DecliningEvent) {
-      _callNotificationDelegate.hungUp(event.callId);
-      _close();
-    }
-  }
-
   void _signalingInitialize(StateHandshake stateHandshake) {
     _lines.clear();
     _lines.addAll(stateHandshake.lines);
 
-    final connections = _lines.where((element) => element?.callId == _pendingCall.id);
+    for (final activeLine in stateHandshake.lines.whereType<Line>()) {
+      for (final callLog in activeLine.callLogs) {
+        if (callLog is CallEventLog) {
+          _onSignalingEvent(callLog.callEvent);
+        }
+      }
+    }
+  }
 
-    if (connections.isNotEmpty) {
-      _callNotificationDelegate.incomingCall(
-        _pendingCall.id,
-        CallkeepHandle.number(_pendingCall.handle),
-        _pendingCall.displayName,
-        _pendingCall.hasVideo,
-      );
+  void _onSignalingEvent(Event event) {
+    if (event is IncomingCallEvent) {
+      final number = CallkeepHandle.number(_pendingCall.handle);
+      _callNotificationDelegate.incomingCall(event.callId, number, _pendingCall.displayName, _pendingCall.hasVideo);
+    } else if (event is IceHangupEvent) {
+      _callNotificationDelegate.endAllCalls();
+    } else if (event is HangupEvent) {
+      _callNotificationDelegate.endCall(event.callId);
+    } else if (event is DecliningEvent) {
+      _callNotificationDelegate.endCall(event.callId);
+    } else if (event is UnregisteredEvent) {
+      _callNotificationDelegate.endAllCalls();
     } else {
-      _callNotificationDelegate.hungUp(
-        _pendingCall.id,
-      );
+      _logger.warning('unhandled signaling event $event');
     }
   }
 
