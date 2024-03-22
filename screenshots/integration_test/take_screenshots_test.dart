@@ -8,55 +8,22 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:screenshots/data/data.dart';
-import 'package:screenshots/screenshots/screenshots.dart';
+import 'package:screenshots/main.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/environment_config.dart';
-import 'package:webtrit_phone/features/features.dart';
 
 import 'package:screenshots/mocks/mocks.dart';
-import 'package:screenshots/widgets/widgets.dart';
 
-void main() async {
+void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
-  await AppThemes.init();
-  final themeSettings = AppThemes().values.first.settings;
-
   late final String screenshotNamePrefix;
   late final AppBloc appBloc;
 
-  void takeScreenshotTestWidgets(String name, FutureOr<Widget> Function() buildWidget) {
-    testWidgets(name, (tester) async {
-      final screenshotName = '$screenshotNamePrefix/$name';
-
-      final widget = await withClock(
-        Clock.fixed(dFixedTime),
-        buildWidget,
-      );
-
-      await tester.pumpWidget(widget);
-      if (Platform.isAndroid) {
-        await binding.convertFlutterSurfaceToImage();
-      }
-
-      // such odd loop logic is necessary to wait for all navigation and images to be processed completely
-      var countMinSequence = 0;
-      do {
-        final count = await tester.pumpAndSettle();
-        if (count > 1) {
-          countMinSequence = 0;
-        } else {
-          countMinSequence++;
-        }
-      } while (countMinSequence <= 3);
-
-      await binding.takeScreenshot(screenshotName);
-    });
-  }
-
   setUpAll(() async {
+    await AppThemes.init();
+    final themeSettings = AppThemes().values.first.settings;
+
     final deviceInfo = await DeviceInfoPlugin().deviceInfo;
     if (deviceInfo is AndroidDeviceInfo) {
       screenshotNamePrefix = deviceInfo.model;
@@ -75,66 +42,63 @@ void main() async {
     );
   });
 
-  group('take login screen screenshots', () {
-    takeScreenshotTestWidgets('login_screen__modeSelect', () {
-      return ScreenshotApp(
-        appBloc: appBloc,
-        child: const LoginModeSelectScreenScreenshot(),
-      );
-    });
-  });
+  void takeScreenshotTestWidgets(String name, FutureOr<Widget> Function() buildWidget) {
+    return testWidgets(name, (tester) async {
+      final screenshotName = '$screenshotNamePrefix/$name';
 
-  group('take main screen screenshots', () {
-    takeScreenshotTestWidgets('main_screen__favorites', () {
-      return ScreenshotApp(
-        appBloc: appBloc,
-        child: const MainScreenScreenshot(
-          MainFlavor.favorites,
-          Text(EnvironmentConfig.APP_NAME),
-        ),
-      );
+      final widget = await withClock(Clock.fixed(dFixedTime), buildWidget);
+
+      await tester.pumpWidget(widget);
+      if (Platform.isAndroid) await binding.convertFlutterSurfaceToImage();
+
+      // such odd loop logic is necessary to wait for all navigation and images to be processed completely
+      var countMinSequence = 0;
+      do {
+        final count = await tester.pumpAndSettle();
+        if (count > 1) {
+          countMinSequence = 0;
+        } else {
+          countMinSequence++;
+        }
+      } while (countMinSequence <= 3);
+
+      await binding.takeScreenshot(screenshotName);
     });
-    takeScreenshotTestWidgets('main_screen__recents', () {
-      return ScreenshotApp(
-        appBloc: appBloc,
-        child: const MainScreenScreenshot(
-          MainFlavor.recents,
-          Text(EnvironmentConfig.APP_NAME),
-        ),
-      );
-    });
-    takeScreenshotTestWidgets('main_screen__keypad', () {
-      return ScreenshotApp(
-        appBloc: appBloc,
-        child: const MainScreenScreenshot(
-          MainFlavor.keypad,
-          Text(EnvironmentConfig.APP_NAME),
-        ),
-      );
-    });
+  }
+
+  // group('take login screen screenshots', () {
+  takeScreenshotTestWidgets('login_screen__modeSelect', () {
+    return ScreenshotsApp(appBloc: appBloc, deepLink: '/0');
   });
+  // });
+
+  // group('take main screen screenshots', () {
+  takeScreenshotTestWidgets('main_screen__favorites', () {
+    return ScreenshotsApp(appBloc: appBloc, deepLink: '/1');
+  });
+  takeScreenshotTestWidgets('main_screen__recents', () {
+    return ScreenshotsApp(appBloc: appBloc, deepLink: '/2');
+  });
+  takeScreenshotTestWidgets('main_screen__keypad', () {
+    return ScreenshotsApp(appBloc: appBloc, deepLink: '/3');
+  });
+  // });
 
   group('take call screen screenshots', () {
     takeScreenshotTestWidgets('settings_screen', () {
-      return ScreenshotApp(
-        appBloc: appBloc,
-        child: const SettingScreenScreenshot(),
-      );
+      return ScreenshotsApp(appBloc: appBloc, deepLink: '/4');
     });
   });
 
   group('take call screen screenshots', () {
     takeScreenshotTestWidgets('call_screen__audio', () {
-      return ScreenshotApp(
-        appBloc: appBloc,
-        child: const CallScreenScreenshot(false),
-      );
+      return ScreenshotsApp(appBloc: appBloc, deepLink: '/5');
     });
     takeScreenshotTestWidgets('call_screen__video', () {
-      return ScreenshotApp(
-        appBloc: appBloc,
-        child: const CallScreenScreenshot(true),
-      );
+      return ScreenshotsApp(appBloc: appBloc, deepLink: '/6');
     });
   });
 }
+
+
+// TODO: deepLinks to constants
