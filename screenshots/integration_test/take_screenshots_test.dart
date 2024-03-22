@@ -9,6 +9,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:screenshots/data/data.dart';
 import 'package:screenshots/main.dart';
+import 'package:screenshots/router.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
@@ -66,39 +67,36 @@ void main() {
     });
   }
 
-  // group('take login screen screenshots', () {
-  takeScreenshotTestWidgets('login_screen__modeSelect', () {
-    return ScreenshotsApp(appBloc: appBloc, deepLink: '/0');
+  group('take login screen screenshots', () {
+    takeScreenshotTestWidgets('login_screen__modeSelect', () {
+      return ScreenshotsApp(appBloc: appBloc, deepLink: kScreenToIndex['login_mode_select']);
+    });
   });
-  // });
 
-  // group('take main screen screenshots', () {
-  takeScreenshotTestWidgets('main_screen__favorites', () {
-    return ScreenshotsApp(appBloc: appBloc, deepLink: '/1');
+  group('take main screen screenshots', () {
+    takeScreenshotTestWidgets('main_screen__favorites', () {
+      return ScreenshotsApp(appBloc: appBloc, deepLink: kScreenToIndex['main_favorites']);
+    });
+    takeScreenshotTestWidgets('main_screen__recents', () {
+      return ScreenshotsApp(appBloc: appBloc, deepLink: kScreenToIndex['main_recents']);
+    });
+    takeScreenshotTestWidgets('main_screen__keypad', () {
+      return ScreenshotsApp(appBloc: appBloc, deepLink: kScreenToIndex['main_keypad']);
+    });
   });
-  takeScreenshotTestWidgets('main_screen__recents', () {
-    return ScreenshotsApp(appBloc: appBloc, deepLink: '/2');
-  });
-  takeScreenshotTestWidgets('main_screen__keypad', () {
-    return ScreenshotsApp(appBloc: appBloc, deepLink: '/3');
-  });
-  // });
 
   group('take call screen screenshots', () {
     takeScreenshotTestWidgets('settings_screen', () {
-      return ScreenshotsApp(appBloc: appBloc, deepLink: '/4');
+      return ScreenshotsApp(appBloc: appBloc, deepLink: kScreenToIndex['settings']);
     });
   });
 
   group('take call screen screenshots', () {
     takeScreenshotTestWidgets('call_screen__audio', () {
-      return ScreenshotsApp(appBloc: appBloc, deepLink: '/5');
+      return ScreenshotsApp(appBloc: appBloc, deepLink: kScreenToIndex['call']);
     });
     takeScreenshotTestWidgets('call_screen__video', () {
-      return ScreenshotsApp(appBloc: appBloc, deepLink: '/6');
+      return ScreenshotsApp(appBloc: appBloc, deepLink: kScreenToIndex['call_video']);
     });
   });
 }
-
-
-// TODO: deepLinks to constants

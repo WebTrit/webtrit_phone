@@ -15,14 +15,14 @@ class AppRouter extends _$AppRouter {
   @override
   List<AutoRoute> get routes => [
         RedirectRoute(path: '/', redirectTo: '/0'),
-        AutoRoute(path: '/:$_kInitialIndexParameterName', page: IndexInputRoute.page),
+        AutoRoute(path: '/:$kInitialIndexParameterName', page: IndexInputRoute.page),
       ];
 }
 
 @RoutePage()
 class IndexInputScreen extends StatefulWidget {
   final int index;
-  const IndexInputScreen({super.key, @PathParam(_kInitialIndexParameterName) required this.index});
+  const IndexInputScreen({super.key, @PathParam(kInitialIndexParameterName) required this.index});
 
   @override
   State<IndexInputScreen> createState() => _IndexInputScreenState();
@@ -53,4 +53,15 @@ class _IndexInputScreenState extends State<IndexInputScreen> {
   }
 }
 
-const _kInitialIndexParameterName = 'initialIndex';
+const kInitialIndexParameterName = 'initialIndex';
+const kScreenToIndex = {
+  'login_mode_select': '/0',
+  'main_favorites': '/1',
+  'main_recents': '/2',
+  'main_keypad': '/3',
+  'settings': '/4',
+  'call': '/5',
+  'call_video': '/6',
+};
+
+// TODO: maybe replace index with path, so that we can use deep links to rid off push from the screenshot page
