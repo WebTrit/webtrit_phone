@@ -5,6 +5,8 @@ plugins {
     id "com.android.application"
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
+    id "com.google.gms.google-services"
+    id "com.google.firebase.crashlytics"
 }
 
 def localProperties = new Properties()
@@ -64,7 +66,7 @@ if (envDefine.WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH != null) {
 
 android {
     namespace "com.webtrit.app"
-    compileSdkVersion 33 // flutter.compileSdkVersion
+    compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
     compileOptions {
