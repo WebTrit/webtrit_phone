@@ -157,11 +157,14 @@ class _MainShellState extends State<MainShell> {
             create: (context) {
               return CallBloc(
                 recentsRepository: context.read<RecentsRepository>(),
+                appRepository: context.read<AppRepository>(),
                 notificationsBloc: context.read<NotificationsBloc>(),
                 appPreferences: context.read<AppPreferences>(),
                 appBloc: context.read<AppBloc>(),
                 callkeep: callkeep,
-              )..add(const CallStarted());
+              )
+                ..add(AccountRegisterEvent.getStatus())
+                ..add(const CallStarted());
             },
           ),
         ],

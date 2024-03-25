@@ -15,11 +15,6 @@ class SettingsLogouted with _$SettingsLogouted implements SettingsEvent {
 }
 
 @Freezed(copyWith: false)
-class SettingsRegisterStatusChanged with _$SettingsRegisterStatusChanged implements SettingsEvent {
-  const factory SettingsRegisterStatusChanged(bool value) = _SettingsRegisterStatusChanged;
-}
-
-@Freezed(copyWith: false)
 class SettingsAccountDeleted with _$SettingsAccountDeleted implements SettingsEvent {
   const factory SettingsAccountDeleted() = _SettingsAccountDeleted;
 }

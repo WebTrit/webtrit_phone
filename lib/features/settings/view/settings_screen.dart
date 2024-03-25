@@ -36,6 +36,7 @@ class SettingsScreen extends StatelessWidget {
             ),
             onPressed: () {
               context.read<SettingsBloc>().add(const SettingsRefreshed());
+              context.read<CallBloc>().add(AccountRegisterEvent.getStatus());
             },
           ),
         ],
@@ -55,13 +56,13 @@ class SettingsScreen extends StatelessWidget {
             },
           ),
           const ListTileSeparator(),
-          BlocBuilder<SettingsBloc, SettingsState>(
+          BlocBuilder<CallBloc, CallState>(
             builder: (context, state) {
               return SwitchListTile(
                 title: Text(context.l10n.settings_ListViewTileTitle_registered),
-                value: state.registerStatus,
+                value: state.registerAccountStatus.isRegistered(),
                 onChanged: (value) {
-                  context.read<SettingsBloc>().add(SettingsRegisterStatusChanged(value));
+                  context.read<CallBloc>().add(AccountRegisterEvent.changeStatus(value));
                 },
                 secondary: const Icon(Icons.account_circle_outlined),
               );

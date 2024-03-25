@@ -5,6 +5,7 @@ class CallState with _$CallState {
   const CallState._();
 
   const factory CallState({
+    required RegisterAccountStatus registerAccountStatus,
     ConnectivityResult? currentConnectivityResult,
     @Default(SignalingClientStatus.disconnect) SignalingClientStatus signalingClientStatus,
     Object? lastSignalingClientConnectError,
@@ -23,6 +24,10 @@ class CallState with _$CallState {
       return CallStatus.connectivityNone;
     } else if (lastSignalingClientConnectError != null) {
       return CallStatus.connectError;
+    } else if (registerAccountStatus.isUnregistered()) {
+      return CallStatus.appUnregistered;
+    } else if (registerAccountStatus.isProgress()) {
+      return CallStatus.inProgress;
     } else if (lastSignalingDisconnectCode != null) {
       final code = SignalingDisconnectCode.values.byCode(lastSignalingDisconnectCode);
       switch (code) {
@@ -186,4 +191,26 @@ class RTCVideoRenderers {
       remote.dispose(),
     ]);
   }
+}
+
+@Freezed(copyWith: false)
+class RegisterAccountStatus with _$RegisterAccountStatus {
+  const RegisterAccountStatus._();
+
+  const factory RegisterAccountStatus({
+    bool? registerStatus,
+    bool? progress,
+  }) = _RegisterAccountStatus;
+
+  factory RegisterAccountStatus.unregistered() => const RegisterAccountStatus(registerStatus: false);
+
+  factory RegisterAccountStatus.registered() => const RegisterAccountStatus(registerStatus: true);
+
+  factory RegisterAccountStatus.progress() => const RegisterAccountStatus(progress: true);
+
+  bool isRegistered() => registerStatus == true;
+
+  bool isUnregistered() => registerStatus == false || registerStatus == null;
+
+  bool isProgress() => progress == true;
 }

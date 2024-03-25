@@ -23,42 +23,29 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     required this.notificationsBloc,
     required this.appBloc,
     required this.userRepository,
-    required this.appRepository,
     required this.appPreferences,
-  }) : super(SettingsState(registerStatus: appPreferences.getRegisterStatus())) {
+  }) : super(const SettingsState()) {
     on<SettingsRefreshed>(_onRefreshed, transformer: restartable());
     on<SettingsLogouted>(_onLogouted, transformer: droppable());
-    on<SettingsRegisterStatusChanged>(_onRegisterStatusChanged, transformer: sequential());
     on<SettingsAccountDeleted>(_onAccountDeleted, transformer: droppable());
   }
 
   final NotificationsBloc notificationsBloc;
   final AppBloc appBloc;
   final UserRepository userRepository;
-  final AppRepository appRepository;
   final AppPreferences appPreferences;
 
   FutureOr<void> _onRefreshed(SettingsRefreshed event, Emitter<SettingsState> emit) async {
     emit(state.copyWith(progress: true));
     try {
-      final infoFuture = userRepository.getInfo();
-      final registerStatusFuture = appRepository.getRegisterStatus();
-
-      final r = await Future.wait([infoFuture, registerStatusFuture]);
-
-      final info = r[0] as UserInfo;
-      final registerStatus = r[1] as bool;
-
-      if (registerStatus != state.registerStatus) {
-        await appPreferences.setRegisterStatus(registerStatus);
-      }
+      final info = await userRepository.getInfo();
+      ;
 
       if (emit.isDone) return;
 
       emit(state.copyWith(
         progress: false,
         info: info,
-        registerStatus: registerStatus,
       ));
     } catch (e, stackTrace) {
       _logger.warning('_onRefreshed', e, stackTrace);
@@ -71,7 +58,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       emit(state.copyWith(
         progress: false,
         info: null,
-        registerStatus: appPreferences.getRegisterStatus(),
       ));
     }
   }
@@ -101,37 +87,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       if (emit.isDone) return;
 
       emit(state.copyWith(progress: false));
-    }
-  }
-
-  FutureOr<void> _onRegisterStatusChanged(SettingsRegisterStatusChanged event, Emitter<SettingsState> emit) async {
-    if (state.progress) return;
-
-    final previousRegisterStatus = state.registerStatus;
-
-    emit(state.copyWith(
-      progress: true,
-      registerStatus: event.value,
-    ));
-    try {
-      await appRepository.setRegisterStatus(event.value);
-      await appPreferences.setRegisterStatus(event.value);
-
-      if (emit.isDone) return;
-
-      emit(state.copyWith(progress: false));
-    } catch (e, stackTrace) {
-      _logger.warning('_onRegisterStatusChanged', e, stackTrace);
-
-      notificationsBloc.add(NotificationsIssued(DefaultErrorNotification(e)));
-      appBloc.maybeHandleError(e);
-
-      if (emit.isDone) return;
-
-      emit(state.copyWith(
-        progress: false,
-        registerStatus: previousRegisterStatus,
-      ));
     }
   }
 

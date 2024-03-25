@@ -40,6 +40,7 @@ final _logger = Logger('CallBloc');
 
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
   final RecentsRepository recentsRepository;
+  final AppRepository appRepository;
   final NotificationsBloc notificationsBloc;
   final AppPreferences appPreferences;
   final AppBloc appBloc;
@@ -56,11 +57,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   CallBloc({
     required this.recentsRepository,
+    required this.appRepository,
     required this.notificationsBloc,
     required this.appBloc,
     required this.callkeep,
     required this.appPreferences,
-  }) : super(const CallState()) {
+  }) : super(CallState(
+          registerAccountStatus: RegisterAccountStatus(registerStatus: appPreferences.getRegisterStatus()),
+        )) {
     on<CallStarted>(
       _onCallStarted,
       transformer: sequential(),
@@ -107,6 +111,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
     on<CallScreenEvent>(
       _onCallScreenEvent,
+      transformer: sequential(),
+    );
+    on<AccountRegisterEvent>(
+      _onAccountRegisterEvent,
       transformer: sequential(),
     );
 
@@ -426,6 +434,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       if (code == SignalingDisconnectCode.sessionMissedError) {
         notificationsBloc.add(const NotificationsIssued(CallSignalingClientSessionMissedErrorNotification()));
         appBloc.add(const AppLogouted());
+      } else if (code == SignalingDisconnectCode.appUnregisteredError) {
+        add(AccountRegisterEvent.changeStatus(false));
       }
     }
 
@@ -737,8 +747,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallSignalingEventUnregistered event,
     Emitter<CallState> emit,
   ) async {
-    _logger.fine('__onCallSignalingEventUnregistered update the registration status in the app preferences to false');
-    //TODO: Add the registration status to the app BLOC because currently, when the user is on the settings screen, they don't see the checkbox update on the UI.
+    _logger.fine('__onCallSignalingEventUnregistered update the account registration status to false');
+    emit(state.copyWith(registerAccountStatus: RegisterAccountStatus.unregistered()));
     appPreferences.setRegisterStatus(false);
 
     for (var call in state.activeCalls) {
@@ -1083,28 +1093,30 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return activeCallUpdated;
     }));
 
-    await state.performOnActiveCall(event.uuid, (activeCall) async {
-      if (activeCall.isIncoming && !activeCall.wasAccepted) {
-        await _signalingClient?.execute(DeclineRequest(
-          transaction: WebtritSignalingClient.generateTransactionId(),
-          line: activeCall.line,
-          callId: activeCall.callId.toString(),
-        ));
-      } else {
-        await _signalingClient?.execute(HangupRequest(
-          transaction: WebtritSignalingClient.generateTransactionId(),
-          line: activeCall.line,
-          callId: activeCall.callId.toString(),
-        ));
-      }
+    if (state.registerAccountStatus.isRegistered()) {
+      await state.performOnActiveCall(event.uuid, (activeCall) async {
+        if (activeCall.isIncoming && !activeCall.wasAccepted) {
+          await _signalingClient?.execute(DeclineRequest(
+            transaction: WebtritSignalingClient.generateTransactionId(),
+            line: activeCall.line,
+            callId: activeCall.callId.toString(),
+          ));
+        } else {
+          await _signalingClient?.execute(HangupRequest(
+            transaction: WebtritSignalingClient.generateTransactionId(),
+            line: activeCall.line,
+            callId: activeCall.callId.toString(),
+          ));
+        }
 
-      // Need to close peer connection after executing [HangupRequest]
-      // to prevent "Simulate a "hangup" coming from the application"
-      // because of "No WebRTC media anymore".
-      await (await _peerConnectionRetrieve(activeCall.callId.uuid))?.close();
-      await activeCall.renderers.dispose();
-      await activeCall.renderers.local.srcObject?.dispose();
-    });
+        // Need to close peer connection after executing [HangupRequest]
+        // to prevent "Simulate a "hangup" coming from the application"
+        // because of "No WebRTC media anymore".
+        await (await _peerConnectionRetrieve(activeCall.callId.uuid))?.close();
+        await activeCall.renderers.dispose();
+        await activeCall.renderers.local.srcObject?.dispose();
+      });
+    }
 
     emit(state.copyWithPopActiveCall(event.uuid));
   }
@@ -1451,6 +1463,72 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   void _onSignalingDisconnect(int? code, String? reason) {
     add(_SignalingClientEvent.disconnected(code, reason));
+  }
+
+  // Account status of registration
+  Future<void> _onAccountRegisterEvent(
+    AccountRegisterEvent event,
+    Emitter<CallState> emit,
+  ) {
+    return event.map(
+      getStatus: (event) => __getAccountRegistrationStatusEvent(event, emit),
+      changeStatus: (event) => __changeAccountRegistrationStatusEvent(event, emit),
+    );
+  }
+
+  Future<void> __getAccountRegistrationStatusEvent(
+    _GetAccountRegistrationStatusEvent event,
+    Emitter<CallState> emit,
+  ) async {
+    try {
+      final registerAccountStatus = await appRepository.getRegisterStatus();
+
+      if (registerAccountStatus != state.registerAccountStatus.registerStatus) {
+        await appPreferences.setRegisterStatus(registerAccountStatus);
+      }
+
+      if (emit.isDone) return;
+
+      emit(state.copyWith(registerAccountStatus: RegisterAccountStatus(registerStatus: registerAccountStatus)));
+    } catch (e, stackTrace) {
+      _logger.warning('__getAccountRegistrationStatusEvent', e, stackTrace);
+
+      notificationsBloc.add(NotificationsIssued(DefaultErrorNotification(e)));
+      appBloc.maybeHandleError(e);
+
+      if (emit.isDone) return;
+
+      final previousRegisterAccountStatus = RegisterAccountStatus(registerStatus: appPreferences.getRegisterStatus());
+      emit(state.copyWith(registerAccountStatus: previousRegisterAccountStatus));
+    }
+  }
+
+  Future<void> __changeAccountRegistrationStatusEvent(
+    _ChangeAccountRegistrationStatusEvent event,
+    Emitter<CallState> emit,
+  ) async {
+    if (state.registerAccountStatus.isProgress()) return;
+
+    final previousRegisterStatus = state.registerAccountStatus;
+
+    emit(state.copyWith(registerAccountStatus: RegisterAccountStatus.progress()));
+    try {
+      await appRepository.setRegisterStatus(event.value);
+      await appPreferences.setRegisterStatus(event.value);
+
+      if (emit.isDone) return;
+
+      emit(state.copyWith(registerAccountStatus: RegisterAccountStatus(registerStatus: event.value)));
+    } catch (e, stackTrace) {
+      _logger.warning('__changeAccountRegistrationStatusEvent', e, stackTrace);
+
+      notificationsBloc.add(NotificationsIssued(DefaultErrorNotification(e)));
+      appBloc.maybeHandleError(e);
+
+      if (emit.isDone) return;
+
+      emit(state.copyWith(registerAccountStatus: previousRegisterStatus));
+    }
   }
 
   // WidgetsBindingObserver

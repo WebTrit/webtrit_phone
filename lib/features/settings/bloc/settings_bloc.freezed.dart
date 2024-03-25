@@ -80,46 +80,6 @@ abstract class _SettingsLogouted implements SettingsLogouted {
 }
 
 /// @nodoc
-mixin _$SettingsRegisterStatusChanged {
-  bool get value => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-
-class _$SettingsRegisterStatusChangedImpl
-    implements _SettingsRegisterStatusChanged {
-  const _$SettingsRegisterStatusChangedImpl(this.value);
-
-  @override
-  final bool value;
-
-  @override
-  String toString() {
-    return 'SettingsRegisterStatusChanged(value: $value)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$SettingsRegisterStatusChangedImpl &&
-            (identical(other.value, value) || other.value == value));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, value);
-}
-
-abstract class _SettingsRegisterStatusChanged
-    implements SettingsRegisterStatusChanged {
-  const factory _SettingsRegisterStatusChanged(final bool value) =
-      _$SettingsRegisterStatusChangedImpl;
-
-  @override
-  bool get value;
-}
-
-/// @nodoc
 mixin _$SettingsAccountDeleted {}
 
 /// @nodoc
@@ -150,7 +110,6 @@ abstract class _SettingsAccountDeleted implements SettingsAccountDeleted {
 /// @nodoc
 mixin _$SettingsState {
   bool get progress => throw _privateConstructorUsedError;
-  bool get registerStatus => throw _privateConstructorUsedError;
   UserInfo? get info => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -164,7 +123,7 @@ abstract class $SettingsStateCopyWith<$Res> {
           SettingsState value, $Res Function(SettingsState) then) =
       _$SettingsStateCopyWithImpl<$Res, SettingsState>;
   @useResult
-  $Res call({bool progress, bool registerStatus, UserInfo? info});
+  $Res call({bool progress, UserInfo? info});
 
   $UserInfoCopyWith<$Res>? get info;
 }
@@ -183,17 +142,12 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
   @override
   $Res call({
     Object? progress = null,
-    Object? registerStatus = null,
     Object? info = freezed,
   }) {
     return _then(_value.copyWith(
       progress: null == progress
           ? _value.progress
           : progress // ignore: cast_nullable_to_non_nullable
-              as bool,
-      registerStatus: null == registerStatus
-          ? _value.registerStatus
-          : registerStatus // ignore: cast_nullable_to_non_nullable
               as bool,
       info: freezed == info
           ? _value.info
@@ -223,7 +177,7 @@ abstract class _$$SettingsStateImplCopyWith<$Res>
       __$$SettingsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool progress, bool registerStatus, UserInfo? info});
+  $Res call({bool progress, UserInfo? info});
 
   @override
   $UserInfoCopyWith<$Res>? get info;
@@ -241,17 +195,12 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? progress = null,
-    Object? registerStatus = null,
     Object? info = freezed,
   }) {
     return _then(_$SettingsStateImpl(
       progress: null == progress
           ? _value.progress
           : progress // ignore: cast_nullable_to_non_nullable
-              as bool,
-      registerStatus: null == registerStatus
-          ? _value.registerStatus
-          : registerStatus // ignore: cast_nullable_to_non_nullable
               as bool,
       info: freezed == info
           ? _value.info
@@ -264,20 +213,17 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$SettingsStateImpl implements _SettingsState {
-  const _$SettingsStateImpl(
-      {this.progress = false, required this.registerStatus, this.info});
+  const _$SettingsStateImpl({this.progress = false, this.info});
 
   @override
   @JsonKey()
   final bool progress;
   @override
-  final bool registerStatus;
-  @override
   final UserInfo? info;
 
   @override
   String toString() {
-    return 'SettingsState(progress: $progress, registerStatus: $registerStatus, info: $info)';
+    return 'SettingsState(progress: $progress, info: $info)';
   }
 
   @override
@@ -287,13 +233,11 @@ class _$SettingsStateImpl implements _SettingsState {
             other is _$SettingsStateImpl &&
             (identical(other.progress, progress) ||
                 other.progress == progress) &&
-            (identical(other.registerStatus, registerStatus) ||
-                other.registerStatus == registerStatus) &&
             (identical(other.info, info) || other.info == info));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, progress, registerStatus, info);
+  int get hashCode => Object.hash(runtimeType, progress, info);
 
   @JsonKey(ignore: true)
   @override
@@ -303,15 +247,11 @@ class _$SettingsStateImpl implements _SettingsState {
 }
 
 abstract class _SettingsState implements SettingsState {
-  const factory _SettingsState(
-      {final bool progress,
-      required final bool registerStatus,
-      final UserInfo? info}) = _$SettingsStateImpl;
+  const factory _SettingsState({final bool progress, final UserInfo? info}) =
+      _$SettingsStateImpl;
 
   @override
   bool get progress;
-  @override
-  bool get registerStatus;
   @override
   UserInfo? get info;
   @override

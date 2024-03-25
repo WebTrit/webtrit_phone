@@ -247,3 +247,12 @@ class CallScreenEvent with _$CallScreenEvent implements CallEvent {
 
   factory CallScreenEvent.didPop() = _CallScreenEventDidPop;
 }
+
+// account status registration
+
+@Freezed(copyWith: false)
+class AccountRegisterEvent with _$AccountRegisterEvent implements CallEvent {
+  factory AccountRegisterEvent.getStatus() = _GetAccountRegistrationStatusEvent;
+
+  factory AccountRegisterEvent.changeStatus(bool value) = _ChangeAccountRegistrationStatusEvent;
+}

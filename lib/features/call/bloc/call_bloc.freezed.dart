@@ -7803,7 +7803,263 @@ abstract class _CallScreenEventDidPop implements CallScreenEvent {
 }
 
 /// @nodoc
+mixin _$AccountRegisterEvent {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() getStatus,
+    required TResult Function(bool value) changeStatus,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? getStatus,
+    TResult? Function(bool value)? changeStatus,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? getStatus,
+    TResult Function(bool value)? changeStatus,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_GetAccountRegistrationStatusEvent value)
+        getStatus,
+    required TResult Function(_ChangeAccountRegistrationStatusEvent value)
+        changeStatus,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_GetAccountRegistrationStatusEvent value)? getStatus,
+    TResult? Function(_ChangeAccountRegistrationStatusEvent value)?
+        changeStatus,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_GetAccountRegistrationStatusEvent value)? getStatus,
+    TResult Function(_ChangeAccountRegistrationStatusEvent value)? changeStatus,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+
+class _$GetAccountRegistrationStatusEventImpl
+    with DiagnosticableTreeMixin
+    implements _GetAccountRegistrationStatusEvent {
+  _$GetAccountRegistrationStatusEventImpl();
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'AccountRegisterEvent.getStatus()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+        .add(DiagnosticsProperty('type', 'AccountRegisterEvent.getStatus'));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$GetAccountRegistrationStatusEventImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() getStatus,
+    required TResult Function(bool value) changeStatus,
+  }) {
+    return getStatus();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? getStatus,
+    TResult? Function(bool value)? changeStatus,
+  }) {
+    return getStatus?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? getStatus,
+    TResult Function(bool value)? changeStatus,
+    required TResult orElse(),
+  }) {
+    if (getStatus != null) {
+      return getStatus();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_GetAccountRegistrationStatusEvent value)
+        getStatus,
+    required TResult Function(_ChangeAccountRegistrationStatusEvent value)
+        changeStatus,
+  }) {
+    return getStatus(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_GetAccountRegistrationStatusEvent value)? getStatus,
+    TResult? Function(_ChangeAccountRegistrationStatusEvent value)?
+        changeStatus,
+  }) {
+    return getStatus?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_GetAccountRegistrationStatusEvent value)? getStatus,
+    TResult Function(_ChangeAccountRegistrationStatusEvent value)? changeStatus,
+    required TResult orElse(),
+  }) {
+    if (getStatus != null) {
+      return getStatus(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _GetAccountRegistrationStatusEvent
+    implements AccountRegisterEvent {
+  factory _GetAccountRegistrationStatusEvent() =
+      _$GetAccountRegistrationStatusEventImpl;
+}
+
+/// @nodoc
+
+class _$ChangeAccountRegistrationStatusEventImpl
+    with DiagnosticableTreeMixin
+    implements _ChangeAccountRegistrationStatusEvent {
+  _$ChangeAccountRegistrationStatusEventImpl(this.value);
+
+  @override
+  final bool value;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'AccountRegisterEvent.changeStatus(value: $value)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'AccountRegisterEvent.changeStatus'))
+      ..add(DiagnosticsProperty('value', value));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ChangeAccountRegistrationStatusEventImpl &&
+            (identical(other.value, value) || other.value == value));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, value);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() getStatus,
+    required TResult Function(bool value) changeStatus,
+  }) {
+    return changeStatus(value);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? getStatus,
+    TResult? Function(bool value)? changeStatus,
+  }) {
+    return changeStatus?.call(value);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? getStatus,
+    TResult Function(bool value)? changeStatus,
+    required TResult orElse(),
+  }) {
+    if (changeStatus != null) {
+      return changeStatus(value);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_GetAccountRegistrationStatusEvent value)
+        getStatus,
+    required TResult Function(_ChangeAccountRegistrationStatusEvent value)
+        changeStatus,
+  }) {
+    return changeStatus(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_GetAccountRegistrationStatusEvent value)? getStatus,
+    TResult? Function(_ChangeAccountRegistrationStatusEvent value)?
+        changeStatus,
+  }) {
+    return changeStatus?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_GetAccountRegistrationStatusEvent value)? getStatus,
+    TResult Function(_ChangeAccountRegistrationStatusEvent value)? changeStatus,
+    required TResult orElse(),
+  }) {
+    if (changeStatus != null) {
+      return changeStatus(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _ChangeAccountRegistrationStatusEvent
+    implements AccountRegisterEvent {
+  factory _ChangeAccountRegistrationStatusEvent(final bool value) =
+      _$ChangeAccountRegistrationStatusEventImpl;
+
+  bool get value;
+}
+
+/// @nodoc
 mixin _$CallState {
+  RegisterAccountStatus get registerAccountStatus =>
+      throw _privateConstructorUsedError;
   ConnectivityResult? get currentConnectivityResult =>
       throw _privateConstructorUsedError;
   SignalingClientStatus get signalingClientStatus =>
@@ -7829,7 +8085,8 @@ abstract class $CallStateCopyWith<$Res> {
       _$CallStateCopyWithImpl<$Res, CallState>;
   @useResult
   $Res call(
-      {ConnectivityResult? currentConnectivityResult,
+      {RegisterAccountStatus registerAccountStatus,
+      ConnectivityResult? currentConnectivityResult,
       SignalingClientStatus signalingClientStatus,
       Object? lastSignalingClientConnectError,
       Object? lastSignalingClientDisconnectError,
@@ -7853,6 +8110,7 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? registerAccountStatus = null,
     Object? currentConnectivityResult = freezed,
     Object? signalingClientStatus = null,
     Object? lastSignalingClientConnectError = freezed,
@@ -7864,6 +8122,10 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
     Object? speaker = freezed,
   }) {
     return _then(_value.copyWith(
+      registerAccountStatus: null == registerAccountStatus
+          ? _value.registerAccountStatus
+          : registerAccountStatus // ignore: cast_nullable_to_non_nullable
+              as RegisterAccountStatus,
       currentConnectivityResult: freezed == currentConnectivityResult
           ? _value.currentConnectivityResult
           : currentConnectivityResult // ignore: cast_nullable_to_non_nullable
@@ -7913,7 +8175,8 @@ abstract class _$$CallStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {ConnectivityResult? currentConnectivityResult,
+      {RegisterAccountStatus registerAccountStatus,
+      ConnectivityResult? currentConnectivityResult,
       SignalingClientStatus signalingClientStatus,
       Object? lastSignalingClientConnectError,
       Object? lastSignalingClientDisconnectError,
@@ -7935,6 +8198,7 @@ class __$$CallStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? registerAccountStatus = null,
     Object? currentConnectivityResult = freezed,
     Object? signalingClientStatus = null,
     Object? lastSignalingClientConnectError = freezed,
@@ -7946,6 +8210,10 @@ class __$$CallStateImplCopyWithImpl<$Res>
     Object? speaker = freezed,
   }) {
     return _then(_$CallStateImpl(
+      registerAccountStatus: null == registerAccountStatus
+          ? _value.registerAccountStatus
+          : registerAccountStatus // ignore: cast_nullable_to_non_nullable
+              as RegisterAccountStatus,
       currentConnectivityResult: freezed == currentConnectivityResult
           ? _value.currentConnectivityResult
           : currentConnectivityResult // ignore: cast_nullable_to_non_nullable
@@ -7990,7 +8258,8 @@ class __$$CallStateImplCopyWithImpl<$Res>
 
 class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
   const _$CallStateImpl(
-      {this.currentConnectivityResult,
+      {required this.registerAccountStatus,
+      this.currentConnectivityResult,
       this.signalingClientStatus = SignalingClientStatus.disconnect,
       this.lastSignalingClientConnectError,
       this.lastSignalingClientDisconnectError,
@@ -8002,6 +8271,8 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
       : _activeCalls = activeCalls,
         super._();
 
+  @override
+  final RegisterAccountStatus registerAccountStatus;
   @override
   final ConnectivityResult? currentConnectivityResult;
   @override
@@ -8032,7 +8303,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallState(currentConnectivityResult: $currentConnectivityResult, signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, linesCount: $linesCount, activeCalls: $activeCalls, minimized: $minimized, speaker: $speaker)';
+    return 'CallState(registerAccountStatus: $registerAccountStatus, currentConnectivityResult: $currentConnectivityResult, signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, linesCount: $linesCount, activeCalls: $activeCalls, minimized: $minimized, speaker: $speaker)';
   }
 
   @override
@@ -8040,6 +8311,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CallState'))
+      ..add(DiagnosticsProperty('registerAccountStatus', registerAccountStatus))
       ..add(DiagnosticsProperty(
           'currentConnectivityResult', currentConnectivityResult))
       ..add(DiagnosticsProperty('signalingClientStatus', signalingClientStatus))
@@ -8060,6 +8332,8 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallStateImpl &&
+            (identical(other.registerAccountStatus, registerAccountStatus) ||
+                other.registerAccountStatus == registerAccountStatus) &&
             (identical(other.currentConnectivityResult,
                     currentConnectivityResult) ||
                 other.currentConnectivityResult == currentConnectivityResult) &&
@@ -8087,6 +8361,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      registerAccountStatus,
       currentConnectivityResult,
       signalingClientStatus,
       const DeepCollectionEquality().hash(lastSignalingClientConnectError),
@@ -8106,7 +8381,8 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
 
 abstract class _CallState extends CallState {
   const factory _CallState(
-      {final ConnectivityResult? currentConnectivityResult,
+      {required final RegisterAccountStatus registerAccountStatus,
+      final ConnectivityResult? currentConnectivityResult,
       final SignalingClientStatus signalingClientStatus,
       final Object? lastSignalingClientConnectError,
       final Object? lastSignalingClientDisconnectError,
@@ -8117,6 +8393,8 @@ abstract class _CallState extends CallState {
       final bool? speaker}) = _$CallStateImpl;
   const _CallState._() : super._();
 
+  @override
+  RegisterAccountStatus get registerAccountStatus;
   @override
   ConnectivityResult? get currentConnectivityResult;
   @override
@@ -8609,4 +8887,63 @@ abstract class _ActiveCall extends ActiveCall {
   @JsonKey(ignore: true)
   _$$ActiveCallImplCopyWith<_$ActiveCallImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$RegisterAccountStatus {
+  bool? get registerStatus => throw _privateConstructorUsedError;
+  bool? get progress => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+
+class _$RegisterAccountStatusImpl extends _RegisterAccountStatus
+    with DiagnosticableTreeMixin {
+  const _$RegisterAccountStatusImpl({this.registerStatus, this.progress})
+      : super._();
+
+  @override
+  final bool? registerStatus;
+  @override
+  final bool? progress;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'RegisterAccountStatus(registerStatus: $registerStatus, progress: $progress)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'RegisterAccountStatus'))
+      ..add(DiagnosticsProperty('registerStatus', registerStatus))
+      ..add(DiagnosticsProperty('progress', progress));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$RegisterAccountStatusImpl &&
+            (identical(other.registerStatus, registerStatus) ||
+                other.registerStatus == registerStatus) &&
+            (identical(other.progress, progress) ||
+                other.progress == progress));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, registerStatus, progress);
+}
+
+abstract class _RegisterAccountStatus extends RegisterAccountStatus {
+  const factory _RegisterAccountStatus(
+      {final bool? registerStatus,
+      final bool? progress}) = _$RegisterAccountStatusImpl;
+  const _RegisterAccountStatus._() : super._();
+
+  @override
+  bool? get registerStatus;
+  @override
+  bool? get progress;
 }
