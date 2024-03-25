@@ -497,6 +497,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       hangup: (event) => __onCallSignalingEventHangup(event, emit),
       updating: (event) => __onCallSignalingEventUpdating(event, emit),
       updated: (event) => __onCallSignalingEventUpdated(event, emit),
+      unregistered: (event) => __onCallSignalingEventUnregistered(event, emit),
     );
   }
 
@@ -727,6 +728,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         updating: false,
       );
     }));
+  }
+
+  Future<void> __onCallSignalingEventUnregistered(
+    _CallSignalingEventUnregistered event,
+    Emitter<CallState> emit,
+  ) async {
+    for (var call in state.activeCalls) {
+      callkeep.endCall(call.callId.uuid);
+    }
   }
 
   // processing call control events
@@ -1419,6 +1429,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         line: event.line,
         callId: CallIdValue(event.callId),
       ));
+    } else if (event is UnregisteredEvent) {
+      add(const _CallSignalingEvent.unregistered());
     } else {
       _logger.warning('unhandled signaling event $event');
     }
