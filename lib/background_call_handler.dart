@@ -34,9 +34,14 @@ class BackgroundCallHandler implements CallkeepAndroidServiceDelegate {
   final List<Line?> _lines = [];
 
   void init() async {
+    await _cleanLocalConnections();
     await _initializeDependentResources();
     await _initializeSignalClient();
     await _setupListeners();
+  }
+
+  Future _cleanLocalConnections() async {
+    await _callNotificationDelegate.endAllCalls();
   }
 
   Future _initializeDependentResources() async {
