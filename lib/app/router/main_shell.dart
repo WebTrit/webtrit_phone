@@ -158,6 +158,7 @@ class _MainShellState extends State<MainShell> {
               return CallBloc(
                 recentsRepository: context.read<RecentsRepository>(),
                 notificationsBloc: context.read<NotificationsBloc>(),
+                appPreferences: context.read<AppPreferences>(),
                 appBloc: context.read<AppBloc>(),
                 callkeep: callkeep,
               )..add(const CallStarted());

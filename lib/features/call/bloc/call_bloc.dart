@@ -18,6 +18,7 @@ import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/notifications/notifications.dart';
 import 'package:webtrit_phone/models/recent.dart';
@@ -40,6 +41,7 @@ final _logger = Logger('CallBloc');
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
   final RecentsRepository recentsRepository;
   final NotificationsBloc notificationsBloc;
+  final AppPreferences appPreferences;
   final AppBloc appBloc;
   final Callkeep callkeep;
 
@@ -57,6 +59,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.notificationsBloc,
     required this.appBloc,
     required this.callkeep,
+    required this.appPreferences,
   }) : super(const CallState()) {
     on<CallStarted>(
       _onCallStarted,
@@ -734,6 +737,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallSignalingEventUnregistered event,
     Emitter<CallState> emit,
   ) async {
+    _logger.fine('__onCallSignalingEventUnregistered update the registration status in the app preferences to false');
+    //TODO: Add the registration status to the app BLOC because currently, when the user is on the settings screen, they don't see the checkbox update on the UI.
+    appPreferences.setRegisterStatus(false);
+
     for (var call in state.activeCalls) {
       callkeep.endCall(call.callId.uuid);
     }
