@@ -782,6 +782,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallControlEventStarted event,
     Emitter<CallState> emit,
   ) async {
+    if (state.registerAccountStatus.isUnregistered()) {
+      _logger.info('__onCallControlEventStarted account is not registered');
+      return;
+    }
+
     final callId = CallIdValue(WebtritSignalingClient.generateCallId());
 
     final error = await callkeep.startCall(
@@ -973,6 +978,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallPerformEventStarted event,
     Emitter<CallState> emit,
   ) async {
+    if (state.registerAccountStatus.isUnregistered()) {
+      _logger.info('__onCallPerformEventStarted account is not registered');
+      event.fail();
+      return;
+    }
+
     if (await state.performOnActiveCall(event.uuid, (activeCall) => activeCall.line != _kUndefinedLine) != true) {
       event.fail();
 
