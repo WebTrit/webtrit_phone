@@ -11,25 +11,30 @@ import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../permissions.dart';
+import '../widgets/widgets.dart';
 
 class PermissionsScreen extends StatelessWidget {
   const PermissionsScreen({
     super.key,
+    required this.appTermsAndConditionsUrl,
   });
+
+  final String appTermsAndConditionsUrl;
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
+    final isTermsAndConditionsProvided = appTermsAndConditionsUrl.isNotEmpty;
+
     return Scaffold(
       body: BlocConsumer<PermissionsCubit, PermissionsState>(
         listener: (context, state) {
-          switch (state) {
-            case PermissionsStateSuccess():
-              context.router.replaceAll([const MainShellRoute()]);
-            case PermissionsStateFailure(:final error):
-              context.showErrorSnackBar(error.toString());
-              context.read<PermissionsCubit>().dismissError();
+          if (state.status case PermissionsStatus.success) {
+            context.router.replaceAll([const MainShellRoute()]);
+          } else if (state.status case PermissionsStatus.failure) {
+            context.showErrorSnackBar(state.error.toString());
+            context.read<PermissionsCubit>().dismissError();
           }
         },
         builder: (context, state) {
@@ -52,22 +57,33 @@ class PermissionsScreen extends StatelessWidget {
                 ),
                 const Spacer(),
                 const SizedBox(height: kInset),
-                switch (state) {
-                  PermissionsStateInitial() => OutlinedButton(
-                      onPressed: () => context.read<PermissionsCubit>().requestPermissions(),
-                      style: elevatedButtonStyles?.primary,
-                      child: Text(context.l10n.permission_Button_request),
-                    ),
-                  _ => OutlinedButton(
-                      onPressed: null,
-                      style: elevatedButtonStyles?.primary,
-                      child: SizedCircularProgressIndicator(
-                        size: 16,
-                        strokeWidth: 2,
-                        color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
-                      ),
-                    ),
-                },
+                if (isTermsAndConditionsProvided)
+                  AgreementCheckbox(
+                    userAgreementAccepted: state.userAgreementAccepted,
+                    onChanged: context.read<PermissionsCubit>().changeUserAgreement,
+                    onAgreementLinkTap: () => context.router
+                        .navigate(TermsConditionsScreenPageRoute(initialUriQueryParam: appTermsAndConditionsUrl)),
+                  ),
+                const SizedBox(height: kInset / 2),
+                if (state.status.isInitial && state.userAgreementAccepted ||
+                    state.status.isInitial && !isTermsAndConditionsProvided)
+                  OutlinedButton(
+                    onPressed: () => context.read<PermissionsCubit>().requestPermissions(),
+                    style: elevatedButtonStyles?.primary,
+                    child: Text(context.l10n.permission_Button_request),
+                  )
+                else
+                  OutlinedButton(
+                    onPressed: null,
+                    style: elevatedButtonStyles?.primary,
+                    child: state.userAgreementAccepted || !isTermsAndConditionsProvided
+                        ? SizedCircularProgressIndicator(
+                            size: 16,
+                            strokeWidth: 2,
+                            color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
+                          )
+                        : Text(context.l10n.permission_Button_request),
+                  )
               ],
             ),
           );
