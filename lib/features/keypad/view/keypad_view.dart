@@ -96,16 +96,17 @@ class KeypadViewState extends State<KeypadView> {
     );
   }
 
+  String _popNumber() {
+    final currentNumber = _controller.text;
+    _controller.clear();
+    return currentNumber;
+  }
+
   void _onCallPressed(bool video) {
     _focusNode.unfocus();
 
     final callBloc = context.read<CallBloc>();
-    callBloc.add(CallControlEvent.started(
-      number: _controller.text,
-      video: video,
-    ));
-
-    _controller.clear();
+    callBloc.add(CallControlEvent.started(number: _popNumber(), video: video));
   }
 
   void _onCallLongPress() {
@@ -116,11 +117,7 @@ class KeypadViewState extends State<KeypadView> {
     _focusNode.unfocus();
 
     final callBloc = context.read<CallBloc>();
-    callBloc.add(CallControlEvent.blindTransferred(
-      number: _controller.text,
-    ));
-
-    _controller.clear();
+    callBloc.add(CallControlEvent.blindTransferred(number: _popNumber()));
   }
 
   void _onKeypadPressed(keyText) {
