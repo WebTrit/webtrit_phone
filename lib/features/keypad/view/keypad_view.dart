@@ -96,12 +96,18 @@ class KeypadViewState extends State<KeypadView> {
     );
   }
 
+  String _popNumber() {
+    final number = _controller.text;
+    _controller.clear();
+    return number;
+  }
+
   void _onCallPressed(bool video) {
     _focusNode.unfocus();
 
     final callBloc = context.read<CallBloc>();
     callBloc.add(CallControlEvent.started(
-      number: _controller.text,
+      number: _popNumber(),
       video: video,
     ));
   }
@@ -115,7 +121,7 @@ class KeypadViewState extends State<KeypadView> {
 
     final callBloc = context.read<CallBloc>();
     callBloc.add(CallControlEvent.blindTransferred(
-      number: _controller.text,
+      number: _popNumber(),
     ));
   }
 
