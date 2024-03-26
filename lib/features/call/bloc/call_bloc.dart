@@ -435,7 +435,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         notificationsBloc.add(const NotificationsIssued(CallSignalingClientSessionMissedErrorNotification()));
         appBloc.add(const AppLogouted());
       } else if (code == SignalingDisconnectCode.appUnregisteredError) {
-        add(AccountRegisterEvent.changeStatus(false));
+        add(const _CallSignalingEvent.unregistered());
       }
     }
 
