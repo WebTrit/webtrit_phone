@@ -86,4 +86,25 @@ class EnvironmentConfig {
           FCM_VAPID_KEY__NAME,
         )
       : null;
+
+  static const EXTENSION_PREFIX_AUTOFILL__NAME = 'WEBTRIT_APP_EXTENSION_PREFIX_AUTOFILL';
+  static const EXTENSION_PREFIX_AUTOFILL = bool.hasEnvironment(EXTENSION_PREFIX_AUTOFILL__NAME)
+      ? bool.fromEnvironment(
+          EXTENSION_PREFIX_AUTOFILL__NAME,
+        )
+      : false;
+
+  static const EXTENSION_LENGTH__NAME = 'WEBTRIT_APP_EXTENSION_LENGTH';
+  static const EXTENSION_LENGTH = bool.hasEnvironment(EXTENSION_LENGTH__NAME)
+      ? int.fromEnvironment(
+          EXTENSION_LENGTH__NAME,
+        )
+      : null;
+
+  static const EXTENSION_PREFIX__NAME = 'WEBTRIT_APP_EXTENSION_PREFIX';
+  static const EXTENSION_PREFIX = bool.hasEnvironment(EXTENSION_PREFIX__NAME)
+      ? String.fromEnvironment(
+          EXTENSION_PREFIX__NAME,
+        )
+      : null;
 }

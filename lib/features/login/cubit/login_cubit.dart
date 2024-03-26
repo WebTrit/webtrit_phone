@@ -250,9 +250,18 @@ class LoginCubit extends Cubit<LoginState> {
       return;
     }
 
-    emit(state.copyWith(
-      processing: true,
-    ));
+    if (EnvironmentConfig.EXTENSION_PREFIX_AUTOFILL) {
+      const extLength = EnvironmentConfig.EXTENSION_LENGTH ?? 99;
+      const extPrefix = EnvironmentConfig.EXTENSION_PREFIX ?? '';
+
+      String userRef = state.passwordSigninUserRefInput.value;
+
+      if (userRef.length == extLength && int.tryParse(userRef) != null) {
+        emit(state.copyWith(passwordSigninUserRefInput: UserRefInput.dirty('$extPrefix$userRef')));
+      }
+    }
+
+    emit(state.copyWith(processing: true));
 
     try {
       final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
