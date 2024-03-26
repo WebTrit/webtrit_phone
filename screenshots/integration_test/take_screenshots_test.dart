@@ -18,14 +18,33 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:screenshots/mocks/mocks.dart';
 import 'package:screenshots/widgets/widgets.dart';
 
-void main() async {
+void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
-  await AppThemes.init();
-  final themeSettings = AppThemes().values.first.settings;
 
   late final String screenshotNamePrefix;
   late final AppBloc appBloc;
+
+  setUpAll(() async {
+    await AppThemes.init();
+    final themeSettings = AppThemes().values.first.settings;
+
+    final deviceInfo = await DeviceInfoPlugin().deviceInfo;
+    if (deviceInfo is AndroidDeviceInfo) {
+      screenshotNamePrefix = deviceInfo.model;
+    } else if (deviceInfo is IosDeviceInfo) {
+      screenshotNamePrefix = deviceInfo.name;
+    } else if (deviceInfo is WebBrowserInfo) {
+      screenshotNamePrefix = 'web';
+    } else {
+      screenshotNamePrefix = 'undefined';
+    }
+
+    appBloc = MockAppBloc.allScreen(
+      themeSettings: themeSettings,
+      themeMode: ThemeMode.light,
+      locale: const Locale('en'),
+    );
+  });
 
   void takeScreenshotTestWidgets(String name, FutureOr<Widget> Function() buildWidget) {
     testWidgets(name, (tester) async {
@@ -55,25 +74,6 @@ void main() async {
       await binding.takeScreenshot(screenshotName);
     });
   }
-
-  setUpAll(() async {
-    final deviceInfo = await DeviceInfoPlugin().deviceInfo;
-    if (deviceInfo is AndroidDeviceInfo) {
-      screenshotNamePrefix = deviceInfo.model;
-    } else if (deviceInfo is IosDeviceInfo) {
-      screenshotNamePrefix = deviceInfo.name;
-    } else if (deviceInfo is WebBrowserInfo) {
-      screenshotNamePrefix = 'web';
-    } else {
-      screenshotNamePrefix = 'undefined';
-    }
-
-    appBloc = MockAppBloc.allScreen(
-      themeSettings: themeSettings,
-      themeMode: ThemeMode.light,
-      locale: const Locale('en'),
-    );
-  });
 
   group('take login screen screenshots', () {
     takeScreenshotTestWidgets('login_screen__modeSelect', () {
