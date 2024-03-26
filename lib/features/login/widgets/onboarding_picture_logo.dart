@@ -25,7 +25,7 @@ class OnboardingPictureLogo extends StatelessWidget {
     return WebTritPhonePictureLogo(
       asset: logo,
       text: text,
-      logoWidth: mediaQueryData.size.width * 0.42,
+      logoWidth: mediaQueryData.size.width * 0.60,
       dividerHeight: titleStyle.fontSize,
       titleStyle: titleStyle,
     );

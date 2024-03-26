@@ -62,8 +62,8 @@ class ConfirmDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () => Navigator.of(context).pop(true),
-          style: dangerous ? textButtonStyles?.dangerous : null,
-          child: Text(context.l10n.alertDialogActions_yes),
+          style: textButtonStyles?.dangerous ,
+          child: Text(context.l10n.alertDialogActions_yes,),
         ),
       ],
     );

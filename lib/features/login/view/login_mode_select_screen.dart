@@ -59,7 +59,6 @@ class LoginModeSelectScreen extends StatelessWidget {
                 const Spacer(),
                 OnboardingPictureLogo(
                   color: themeData.colorScheme.onPrimary,
-                  text: appGreeting,
                 ),
                 const Spacer(),
                 ElevatedButton(

@@ -11,12 +11,12 @@ class GroupTitleListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    return ListTile(
+    return Container(color:Color(0xff14284b),child: ListTile(
       title: Text(
         titleData,
-        style: themeData.textTheme.bodyMedium,
+        style: themeData.textTheme.bodyMedium?.copyWith(color: Colors.white),
       ),
       tileColor: themeData.colorScheme.surface,
-    );
+    ),);
   }
 }

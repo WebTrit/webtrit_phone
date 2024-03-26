@@ -207,15 +207,16 @@ class ThemeProvider extends InheritedWidget {
       isDense: true,
       filled: true,
       fillColor: colors.background,
+      labelStyle: TextStyle(color: Color(0xff14284b)),
       border: MaterialStateOutlineInputBorder.resolveWith((states) {
         final Color borderColor;
         final bool isError = states.contains(MaterialState.error);
         if (states.contains(MaterialState.disabled)) {
-          borderColor = isError ? colors.error.withOpacity(0.25) : colors.onBackground.withOpacity(0.25);
+          borderColor = isError ? colors.error.withOpacity(0.25) : Color(0xff14284b).withOpacity(0.25);
         } else if (states.contains(MaterialState.focused)) {
-          borderColor = isError ? colors.error : colors.primary;
+          borderColor = isError ? colors.error : Color(0xff14284b);
         } else {
-          borderColor = isError ? colors.error.withOpacity(0.5) : colors.onBackground.withOpacity(0.5);
+          borderColor = isError ? colors.error.withOpacity(0.5) : Color(0xff14284b).withOpacity(0.5);
         }
         return OutlineInputBorder(
           borderSide: BorderSide(
@@ -229,14 +230,15 @@ class ThemeProvider extends InheritedWidget {
   AppBarTheme appBarTheme(ColorScheme colors) {
     return const AppBarTheme(
       scrolledUnderElevation: 0,
+      backgroundColor: Color(0xff14284b),
+      foregroundColor: Colors.white,
+      surfaceTintColor: Colors.white,
       centerTitle: true,
     );
   }
 
   BottomNavigationBarThemeData bottomNavigationBarTheme(ColorScheme colors) {
-    return BottomNavigationBarThemeData(
-      backgroundColor: colors.surface,
-    );
+    return BottomNavigationBarThemeData(backgroundColor: Color(0xff14284b), unselectedItemColor: Colors.grey);
   }
 
   ElevatedButtonThemeData elevatedButtonTheme(ColorScheme colors) {
@@ -283,6 +285,11 @@ class ThemeProvider extends InheritedWidget {
       textTheme: textTheme(brightness),
       useMaterial3: true,
     ).copyWith(
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: Color(0xff14284b),
+        selectionColor: Color(0xff14284b).withOpacity(0.2),
+        selectionHandleColor: Color(0xff14284b).withOpacity(0.2),
+      ),
       // GENERAL CONFIGURATIONValueNotifier
       inputDecorationTheme: inputDecorationTheme(colorScheme),
       extensions: [

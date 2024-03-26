@@ -4,7 +4,7 @@
   "WEBTRIT_APP_PERIODIC_POLLING": true,
   "WEBTRIT_APP_CORE_URL": "https://core.nashua.co.za/",
   "WEBTRIT_APP_NAME": "NASHUA OTG",
-  "WEBTRIT_APP_GREETING": "NASHUA OTG",
+  "WEBTRIT_APP_GREETING": " ",
   "WEBTRIT_APP_DESCRIPTION": "",
   "WEBTRIT_APP_TERMS_AND_CONDITIONS_URL": "https://www.ecn.co.za/privacy-policy-softphone/",
   "WEBTRIT_APP_SALES_EMAIL": "APP_SALES_EMAIL",

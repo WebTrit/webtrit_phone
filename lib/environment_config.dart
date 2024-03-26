@@ -43,7 +43,7 @@ class EnvironmentConfig {
   static const APP_GREETING__NAME = 'WEBTRIT_APP_GREETING';
   static const APP_GREETING = String.fromEnvironment(
     APP_GREETING__NAME,
-    defaultValue: 'WebTrit',
+    defaultValue: '',
   );
 
   static const APP_DESCRIPTION__NAME = 'WEBTRIT_APP_DESCRIPTION';

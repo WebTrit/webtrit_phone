@@ -28,7 +28,7 @@ class WebTritPhonePictureLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fontSize = titleStyle.fontSize!;
-    final logoHeight = this.logoHeight ?? (logoWidth == null ? fontSize * 2.2 : null);
+    final logoHeight = this.logoHeight ?? (logoWidth == null ? fontSize * 3 : null);
 
     return Column(
       mainAxisSize: MainAxisSize.min,

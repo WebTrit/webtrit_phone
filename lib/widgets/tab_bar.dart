@@ -32,7 +32,7 @@ class ExtTabBar extends StatelessWidget {
         indicatorSize: TabBarIndicatorSize.tab,
         dividerColor: Colors.transparent,
         labelColor: themeData.colorScheme.onPrimary,
-        unselectedLabelColor: themeData.colorScheme.onSurface,
+        unselectedLabelColor: Colors.white,
         splashBorderRadius: borderRadius,
       ),
     );

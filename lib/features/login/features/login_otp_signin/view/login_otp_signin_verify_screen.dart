@@ -95,7 +95,9 @@ class LoginOtpSigninVerifyScreen extends StatelessWidget {
                   ElevatedButton(
                     onPressed:
                         state.processing || !state.otpSigninCodeInput.isValid ? null : () => _onSubmitted(context),
-                    style: elevatedButtonStyles?.primary,
+                    style: elevatedButtonStyles?.primary?.copyWith(
+                        backgroundColor: const MaterialStatePropertyAll(Color(0xff14284b)),
+                        foregroundColor: const MaterialStatePropertyAll(Colors.white)),
                     child: !state.processing
                         ? Text(context.l10n.login_Button_otpSigninVerifyProceed)
                         : SizedCircularProgressIndicator(
