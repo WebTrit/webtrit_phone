@@ -1,0 +1,13 @@
+package_rename_config:
+  android:
+    app_name: NASHUA OTG
+    package_name: com.nashua.phone.T1710696431
+    override_old_package: com.webtrit.app
+    lang: kotlin
+  ios:
+    app_name: NASHUA OTG
+    package_name: com.nashua.phone.T1710696431
+  web:
+    app_name: NASHUA OTG
+    description: 
+    bundle_name: com.nashua.phone.T1710696431

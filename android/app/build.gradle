@@ -75,7 +75,7 @@ if (envDefine.WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH != null) {
 }
 
 android {
-    namespace "com.webtrit.app"
+    namespace "com.nashua.phone.T1710696431"
     compileSdkVersion 33 // flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
@@ -93,7 +93,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.webtrit.app"
+        applicationId "com.nashua.phone.T1710696431"
         applicationIdSuffix dartDefine.WEBTRIT_APP_ID_SUFFIX
         minSdkVersion 26 // flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion

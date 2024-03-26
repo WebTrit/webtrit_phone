@@ -81,6 +81,7 @@ dependencies:
 
   app_database:
     path: ./packages/data/app_database
+  package_rename: ^1.5.3
 
 dev_dependencies:
   integration_test:

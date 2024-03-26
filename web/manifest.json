@@ -1,10 +1,10 @@
 {
-    "name": "webtrit_phone",
-    "short_name": "webtrit_phone",
+    "name": "NASHUA OTG",
+    "short_name": "NASHUA OTG",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#FFFFFF",
-    "theme_color": "#F3F5F6",
+    "theme_color": "#ffdce2f2",
     "description": "A new Flutter project.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,

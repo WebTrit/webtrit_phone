@@ -1,30 +1,34 @@
 {
-  "seedColor": "#F95A14",
+  "seedColor": "#ffffffff",
   "lightColorSchemeOverride": {
-    "primary": "#F95A14",
-    "onPrimary": "#FFFFFF",
-    "secondary": "#123752",
-    "secondaryContainer": "#EEF3F6",
-    "onSecondaryContainer": "#1F618F",
-    "tertiary": "#75B943",
-    "error": "#E74C3C",
-    "outline": "#FFFFFF",
-    "background": "#FFFFFF",
-    "onBackground": "#30302F",
-    "surface": "#EEF3F6",
-    "onSurface": "#30302F"
+    "primary": "#ffffffff",
+    "onPrimary": "#ff14284b",
+    "secondary": "#ff14284b",
+    "secondaryContainer": "#ffdce2f2",
+    "onSecondaryContainer": "#ff14284b",
+    "tertiary": "#ffa3cb54",
+    "error": "#ffd92525",
+    "outline": "#ff14284b",
+    "background": "#fffafafb",
+    "onBackground": "#ffdce2f2",
+    "surface": "#ffdce2f2",
+    "onSurface": "#ff14284b"
   },
   "primaryGradientColors": [
     {
-      "color": "#5CACE3",
+      "color": "#ff030810",
       "blend": false
     },
     {
-      "color": "#123752",
+      "color": "#ff14284b",
+      "blend": false
+    },
+    {
+      "color": "#ff030810",
       "blend": false
     }
   ],
-  "fontFamily": "Montserrat",
+  "fontFamily": "Cabin",
   "primaryOnboardingLogo": "asset://assets/primary_onboardin_logo.svg",
   "secondaryOnboardingLogo": "asset://assets/secondary_onboardin_logo.svg"
 }
