@@ -97,9 +97,9 @@ class KeypadViewState extends State<KeypadView> {
   }
 
   String _popNumber() {
-    final currentNumber = _controller.text;
+    final number = _controller.text;
     _controller.clear();
-    return currentNumber;
+    return number;
   }
 
   void _onCallPressed(bool video) {
