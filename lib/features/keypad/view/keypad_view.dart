@@ -106,7 +106,10 @@ class KeypadViewState extends State<KeypadView> {
     _focusNode.unfocus();
 
     final callBloc = context.read<CallBloc>();
-    callBloc.add(CallControlEvent.started(number: _popNumber(), video: video));
+    callBloc.add(CallControlEvent.started(
+      number: _popNumber(),
+      video: video,
+    ));
   }
 
   void _onCallLongPress() {
@@ -117,7 +120,9 @@ class KeypadViewState extends State<KeypadView> {
     _focusNode.unfocus();
 
     final callBloc = context.read<CallBloc>();
-    callBloc.add(CallControlEvent.blindTransferred(number: _popNumber()));
+    callBloc.add(CallControlEvent.blindTransferred(
+      number: _popNumber(),
+    ));
   }
 
   void _onKeypadPressed(keyText) {
