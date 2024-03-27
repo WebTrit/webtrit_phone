@@ -13,7 +13,6 @@ enum PermissionsStatus {
 class PermissionsState with _$PermissionsState {
   const factory PermissionsState({
     @Default(PermissionsStatus.initial) PermissionsStatus status,
-    @Default(false) bool userAgreementAccepted,
     Object? error,
   }) = _PermissionsState;
 }

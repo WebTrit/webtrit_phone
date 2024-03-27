@@ -12,11 +12,9 @@ part 'permissions_state.dart';
 class PermissionsCubit extends Cubit<PermissionsState> {
   PermissionsCubit({
     required this.appPermissions,
-    required this.appPreferences,
-  }) : super(PermissionsState(userAgreementAccepted: appPreferences.getUserAgreementAccepted()));
+  }) : super(const PermissionsState());
 
   final AppPermissions appPermissions;
-  final AppPreferences appPreferences;
 
   void requestPermissions() async {
     emit(state.copyWith(status: PermissionsStatus.inProgress));
@@ -27,11 +25,6 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     } catch (e) {
       emit(state.copyWith(status: PermissionsStatus.failure));
     }
-  }
-
-  void changeUserAgreement(bool userAgreementAccepted) async {
-    await appPreferences.setUserAgreementAccepted(userAgreementAccepted);
-    emit(state.copyWith(userAgreementAccepted: userAgreementAccepted));
   }
 
   void dismissError() {

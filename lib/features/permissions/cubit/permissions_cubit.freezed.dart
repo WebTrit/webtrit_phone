@@ -16,8 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$PermissionsState {
-  PermissionsStatus get status => throw _privateConstructorUsedError;
-  bool get userAgreementAccepted => throw _privateConstructorUsedError;
+  PermissionsStatus get status =>
+      throw _privateConstructorUsedError; // @Default(false) bool userAgreementAccepted,
   Object? get error => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -31,8 +31,7 @@ abstract class $PermissionsStateCopyWith<$Res> {
           PermissionsState value, $Res Function(PermissionsState) then) =
       _$PermissionsStateCopyWithImpl<$Res, PermissionsState>;
   @useResult
-  $Res call(
-      {PermissionsStatus status, bool userAgreementAccepted, Object? error});
+  $Res call({PermissionsStatus status, Object? error});
 }
 
 /// @nodoc
@@ -49,7 +48,6 @@ class _$PermissionsStateCopyWithImpl<$Res, $Val extends PermissionsState>
   @override
   $Res call({
     Object? status = null,
-    Object? userAgreementAccepted = null,
     Object? error = freezed,
   }) {
     return _then(_value.copyWith(
@@ -57,10 +55,6 @@ class _$PermissionsStateCopyWithImpl<$Res, $Val extends PermissionsState>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as PermissionsStatus,
-      userAgreementAccepted: null == userAgreementAccepted
-          ? _value.userAgreementAccepted
-          : userAgreementAccepted // ignore: cast_nullable_to_non_nullable
-              as bool,
       error: freezed == error ? _value.error : error,
     ) as $Val);
   }
@@ -74,8 +68,7 @@ abstract class _$$PermissionsStateImplCopyWith<$Res>
       __$$PermissionsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {PermissionsStatus status, bool userAgreementAccepted, Object? error});
+  $Res call({PermissionsStatus status, Object? error});
 }
 
 /// @nodoc
@@ -90,7 +83,6 @@ class __$$PermissionsStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = null,
-    Object? userAgreementAccepted = null,
     Object? error = freezed,
   }) {
     return _then(_$PermissionsStateImpl(
@@ -98,10 +90,6 @@ class __$$PermissionsStateImplCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as PermissionsStatus,
-      userAgreementAccepted: null == userAgreementAccepted
-          ? _value.userAgreementAccepted
-          : userAgreementAccepted // ignore: cast_nullable_to_non_nullable
-              as bool,
       error: freezed == error ? _value.error : error,
     ));
   }
@@ -111,22 +99,18 @@ class __$$PermissionsStateImplCopyWithImpl<$Res>
 
 class _$PermissionsStateImpl implements _PermissionsState {
   const _$PermissionsStateImpl(
-      {this.status = PermissionsStatus.initial,
-      this.userAgreementAccepted = false,
-      this.error});
+      {this.status = PermissionsStatus.initial, this.error});
 
   @override
   @JsonKey()
   final PermissionsStatus status;
-  @override
-  @JsonKey()
-  final bool userAgreementAccepted;
+// @Default(false) bool userAgreementAccepted,
   @override
   final Object? error;
 
   @override
   String toString() {
-    return 'PermissionsState(status: $status, userAgreementAccepted: $userAgreementAccepted, error: $error)';
+    return 'PermissionsState(status: $status, error: $error)';
   }
 
   @override
@@ -135,14 +119,12 @@ class _$PermissionsStateImpl implements _PermissionsState {
         (other.runtimeType == runtimeType &&
             other is _$PermissionsStateImpl &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.userAgreementAccepted, userAgreementAccepted) ||
-                other.userAgreementAccepted == userAgreementAccepted) &&
             const DeepCollectionEquality().equals(other.error, error));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, status, userAgreementAccepted,
-      const DeepCollectionEquality().hash(error));
+  int get hashCode => Object.hash(
+      runtimeType, status, const DeepCollectionEquality().hash(error));
 
   @JsonKey(ignore: true)
   @override
@@ -155,14 +137,11 @@ class _$PermissionsStateImpl implements _PermissionsState {
 abstract class _PermissionsState implements PermissionsState {
   const factory _PermissionsState(
       {final PermissionsStatus status,
-      final bool userAgreementAccepted,
       final Object? error}) = _$PermissionsStateImpl;
 
   @override
   PermissionsStatus get status;
-  @override
-  bool get userAgreementAccepted;
-  @override
+  @override // @Default(false) bool userAgreementAccepted,
   Object? get error;
   @override
   @JsonKey(ignore: true)

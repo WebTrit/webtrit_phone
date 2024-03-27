@@ -209,6 +209,34 @@ abstract class _AppLocaleChanged implements AppLocaleChanged {
 }
 
 /// @nodoc
+mixin _$AppUserAgreementAccepted {}
+
+/// @nodoc
+
+class _$AppUserAgreementAcceptedImpl implements _AppUserAgreementAccepted {
+  const _$AppUserAgreementAcceptedImpl();
+
+  @override
+  String toString() {
+    return 'AppUserAgreementAccepted()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AppUserAgreementAcceptedImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+}
+
+abstract class _AppUserAgreementAccepted implements AppUserAgreementAccepted {
+  const factory _AppUserAgreementAccepted() = _$AppUserAgreementAcceptedImpl;
+}
+
+/// @nodoc
 mixin _$AppState {
   String? get coreUrl => throw _privateConstructorUsedError;
   String? get tenantId => throw _privateConstructorUsedError;
@@ -216,6 +244,7 @@ mixin _$AppState {
   ThemeSettings get themeSettings => throw _privateConstructorUsedError;
   ThemeMode get themeMode => throw _privateConstructorUsedError;
   Locale get locale => throw _privateConstructorUsedError;
+  bool get userAgreementAccepted => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AppStateCopyWith<AppState> get copyWith =>
@@ -233,7 +262,8 @@ abstract class $AppStateCopyWith<$Res> {
       String? token,
       ThemeSettings themeSettings,
       ThemeMode themeMode,
-      Locale locale});
+      Locale locale,
+      bool userAgreementAccepted});
 
   $ThemeSettingsCopyWith<$Res> get themeSettings;
 }
@@ -257,6 +287,7 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
     Object? themeSettings = null,
     Object? themeMode = null,
     Object? locale = null,
+    Object? userAgreementAccepted = null,
   }) {
     return _then(_value.copyWith(
       coreUrl: freezed == coreUrl
@@ -283,6 +314,10 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
           ? _value.locale
           : locale // ignore: cast_nullable_to_non_nullable
               as Locale,
+      userAgreementAccepted: null == userAgreementAccepted
+          ? _value.userAgreementAccepted
+          : userAgreementAccepted // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 
@@ -309,7 +344,8 @@ abstract class _$$AppStateImplCopyWith<$Res>
       String? token,
       ThemeSettings themeSettings,
       ThemeMode themeMode,
-      Locale locale});
+      Locale locale,
+      bool userAgreementAccepted});
 
   @override
   $ThemeSettingsCopyWith<$Res> get themeSettings;
@@ -332,6 +368,7 @@ class __$$AppStateImplCopyWithImpl<$Res>
     Object? themeSettings = null,
     Object? themeMode = null,
     Object? locale = null,
+    Object? userAgreementAccepted = null,
   }) {
     return _then(_$AppStateImpl(
       coreUrl: freezed == coreUrl
@@ -358,6 +395,10 @@ class __$$AppStateImplCopyWithImpl<$Res>
           ? _value.locale
           : locale // ignore: cast_nullable_to_non_nullable
               as Locale,
+      userAgreementAccepted: null == userAgreementAccepted
+          ? _value.userAgreementAccepted
+          : userAgreementAccepted // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -371,7 +412,8 @@ class _$AppStateImpl extends _AppState {
       this.token,
       required this.themeSettings,
       required this.themeMode,
-      required this.locale})
+      required this.locale,
+      required this.userAgreementAccepted})
       : super._();
 
   @override
@@ -386,10 +428,12 @@ class _$AppStateImpl extends _AppState {
   final ThemeMode themeMode;
   @override
   final Locale locale;
+  @override
+  final bool userAgreementAccepted;
 
   @override
   String toString() {
-    return 'AppState(coreUrl: $coreUrl, tenantId: $tenantId, token: $token, themeSettings: $themeSettings, themeMode: $themeMode, locale: $locale)';
+    return 'AppState(coreUrl: $coreUrl, tenantId: $tenantId, token: $token, themeSettings: $themeSettings, themeMode: $themeMode, locale: $locale, userAgreementAccepted: $userAgreementAccepted)';
   }
 
   @override
@@ -405,12 +449,14 @@ class _$AppStateImpl extends _AppState {
                 other.themeSettings == themeSettings) &&
             (identical(other.themeMode, themeMode) ||
                 other.themeMode == themeMode) &&
-            (identical(other.locale, locale) || other.locale == locale));
+            (identical(other.locale, locale) || other.locale == locale) &&
+            (identical(other.userAgreementAccepted, userAgreementAccepted) ||
+                other.userAgreementAccepted == userAgreementAccepted));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, coreUrl, tenantId, token, themeSettings, themeMode, locale);
+  int get hashCode => Object.hash(runtimeType, coreUrl, tenantId, token,
+      themeSettings, themeMode, locale, userAgreementAccepted);
 
   @JsonKey(ignore: true)
   @override
@@ -426,7 +472,8 @@ abstract class _AppState extends AppState {
       final String? token,
       required final ThemeSettings themeSettings,
       required final ThemeMode themeMode,
-      required final Locale locale}) = _$AppStateImpl;
+      required final Locale locale,
+      required final bool userAgreementAccepted}) = _$AppStateImpl;
   const _AppState._() : super._();
 
   @override
@@ -441,6 +488,8 @@ abstract class _AppState extends AppState {
   ThemeMode get themeMode;
   @override
   Locale get locale;
+  @override
+  bool get userAgreementAccepted;
   @override
   @JsonKey(ignore: true)
   _$$AppStateImplCopyWith<_$AppStateImpl> get copyWith =>
