@@ -54,7 +54,7 @@ class _SignalingClientEvent with _$SignalingClientEvent implements CallEvent {
 @Freezed(copyWith: false)
 class _HandshakeSignalingEvent with _$HandshakeSignalingEvent implements CallEvent {
   const factory _HandshakeSignalingEvent.state({
-    required RegistrationStatus registrationStatus,
+    required Registration registration,
     required int linesCount,
   }) = _HandshakeSignalingEventState;
 }

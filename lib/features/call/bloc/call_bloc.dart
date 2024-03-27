@@ -545,7 +545,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     emit(state.copyWith(linesCount: event.linesCount));
 
-    add(_RegistrationAccountChange(event.registrationStatus.toRegistrationAccountStatus()));
+    final registrationAccountStatus = event.registration.status.toRegistrationAccountStatus();
+    add(_RegistrationAccountChange(registrationAccountStatus));
   }
 
   // processing call signaling events
@@ -1428,7 +1429,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   void _onSignalingStateHandshake(StateHandshake stateHandshake) {
     add(_HandshakeSignalingEvent.state(
-      registrationStatus: stateHandshake.registration.status,
+      registration: stateHandshake.registration,
       linesCount: stateHandshake.lines.length,
     ));
 
