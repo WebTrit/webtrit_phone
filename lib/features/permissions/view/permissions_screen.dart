@@ -69,13 +69,17 @@ class PermissionsScreen extends StatelessWidget {
                     state.status.isInitial && !isTermsAndConditionsProvided)
                   OutlinedButton(
                     onPressed: () => context.read<PermissionsCubit>().requestPermissions(),
-                    style: elevatedButtonStyles?.primary,
+                    style: elevatedButtonStyles?.primary?.copyWith(
+                        backgroundColor: const MaterialStatePropertyAll(Color(0xff14284b)),
+                        foregroundColor: const MaterialStatePropertyAll(Colors.white)),
                     child: Text(context.l10n.permission_Button_request),
                   )
                 else
                   OutlinedButton(
                     onPressed: null,
-                    style: elevatedButtonStyles?.primary,
+                    style: elevatedButtonStyles?.primary?.copyWith(
+                        backgroundColor: const MaterialStatePropertyAll(Color(0xff14284b)),
+                        foregroundColor: const MaterialStatePropertyAll(Colors.white)),
                     child: state.userAgreementAccepted || !isTermsAndConditionsProvided
                         ? SizedCircularProgressIndicator(
                             size: 16,
