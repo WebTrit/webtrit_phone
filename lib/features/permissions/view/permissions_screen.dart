@@ -46,7 +46,7 @@ class PermissionsScreen extends StatelessWidget {
                 const SizedBox(height: kInset * 2),
                 Icon(
                   Icons.settings_suggest,
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Theme.of(context).colorScheme.secondary,
                   size: kInset * 6,
                 ),
                 const SizedBox(height: kInset * 2),

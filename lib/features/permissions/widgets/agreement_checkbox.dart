@@ -38,7 +38,7 @@ class AgreementCheckbox extends StatelessWidget {
                 TextSpan(
                   text: context.l10n.permission_agreement_text2,
                   style: themeData.textTheme.labelLarge?.copyWith(
-                    color: themeData.colorScheme.primary,
+                    color: themeData.colorScheme.tertiary,
                     decoration: TextDecoration.underline,
                   ),
                   recognizer: TapGestureRecognizer()..onTap = onAgreementLinkTap,
