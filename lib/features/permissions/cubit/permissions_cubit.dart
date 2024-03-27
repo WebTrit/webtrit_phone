@@ -3,7 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 
-import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/data/app_permissions.dart';
 
 part 'permissions_cubit.freezed.dart';
 
@@ -12,26 +12,23 @@ part 'permissions_state.dart';
 class PermissionsCubit extends Cubit<PermissionsState> {
   PermissionsCubit({
     required this.appPermissions,
-  }) : super(const PermissionsState());
+  }) : super(const PermissionsState.initial());
 
   final AppPermissions appPermissions;
 
   void requestPermissions() async {
-    emit(state.copyWith(status: PermissionsStatus.inProgress));
+    emit(const PermissionsState.inProgress());
     try {
       await appPermissions.request();
       await requestFirebaseMessagingPermission();
-      emit(state.copyWith(status: PermissionsStatus.success));
+      emit(const PermissionsState.success());
     } catch (e) {
-      emit(state.copyWith(status: PermissionsStatus.failure));
+      emit(PermissionsState.failure(e));
     }
   }
 
   void dismissError() {
-    emit(state.copyWith(
-      error: null,
-      status: PermissionsStatus.initial,
-    ));
+    emit(const PermissionsState.initial());
   }
 
   Future<void> requestFirebaseMessagingPermission() async {

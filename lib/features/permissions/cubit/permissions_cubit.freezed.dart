@@ -16,12 +16,55 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$PermissionsState {
-  PermissionsStatus get status =>
-      throw _privateConstructorUsedError; // @Default(false) bool userAgreementAccepted,
-  Object? get error => throw _privateConstructorUsedError;
-
-  @JsonKey(ignore: true)
-  $PermissionsStateCopyWith<PermissionsState> get copyWith =>
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() inProgress,
+    required TResult Function() success,
+    required TResult Function(Object error) failure,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? inProgress,
+    TResult? Function()? success,
+    TResult? Function(Object error)? failure,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? inProgress,
+    TResult Function()? success,
+    TResult Function(Object error)? failure,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(PermissionsStateInitial value) initial,
+    required TResult Function(PermissionsStateInProgress value) inProgress,
+    required TResult Function(PermissionsStateSuccess value) success,
+    required TResult Function(PermissionsStateFailure value) failure,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(PermissionsStateInitial value)? initial,
+    TResult? Function(PermissionsStateInProgress value)? inProgress,
+    TResult? Function(PermissionsStateSuccess value)? success,
+    TResult? Function(PermissionsStateFailure value)? failure,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(PermissionsStateInitial value)? initial,
+    TResult Function(PermissionsStateInProgress value)? inProgress,
+    TResult Function(PermissionsStateSuccess value)? success,
+    TResult Function(PermissionsStateFailure value)? failure,
+    required TResult orElse(),
+  }) =>
       throw _privateConstructorUsedError;
 }
 
@@ -30,8 +73,6 @@ abstract class $PermissionsStateCopyWith<$Res> {
   factory $PermissionsStateCopyWith(
           PermissionsState value, $Res Function(PermissionsState) then) =
       _$PermissionsStateCopyWithImpl<$Res, PermissionsState>;
-  @useResult
-  $Res call({PermissionsStatus status, Object? error});
 }
 
 /// @nodoc
@@ -43,108 +84,503 @@ class _$PermissionsStateCopyWithImpl<$Res, $Val extends PermissionsState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? status = null,
-    Object? error = freezed,
-  }) {
-    return _then(_value.copyWith(
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as PermissionsStatus,
-      error: freezed == error ? _value.error : error,
-    ) as $Val);
-  }
 }
 
 /// @nodoc
-abstract class _$$PermissionsStateImplCopyWith<$Res>
-    implements $PermissionsStateCopyWith<$Res> {
-  factory _$$PermissionsStateImplCopyWith(_$PermissionsStateImpl value,
-          $Res Function(_$PermissionsStateImpl) then) =
-      __$$PermissionsStateImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({PermissionsStatus status, Object? error});
+abstract class _$$PermissionsStateInitialImplCopyWith<$Res> {
+  factory _$$PermissionsStateInitialImplCopyWith(
+          _$PermissionsStateInitialImpl value,
+          $Res Function(_$PermissionsStateInitialImpl) then) =
+      __$$PermissionsStateInitialImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$PermissionsStateImplCopyWithImpl<$Res>
-    extends _$PermissionsStateCopyWithImpl<$Res, _$PermissionsStateImpl>
-    implements _$$PermissionsStateImplCopyWith<$Res> {
-  __$$PermissionsStateImplCopyWithImpl(_$PermissionsStateImpl _value,
-      $Res Function(_$PermissionsStateImpl) _then)
+class __$$PermissionsStateInitialImplCopyWithImpl<$Res>
+    extends _$PermissionsStateCopyWithImpl<$Res, _$PermissionsStateInitialImpl>
+    implements _$$PermissionsStateInitialImplCopyWith<$Res> {
+  __$$PermissionsStateInitialImplCopyWithImpl(
+      _$PermissionsStateInitialImpl _value,
+      $Res Function(_$PermissionsStateInitialImpl) _then)
       : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? status = null,
-    Object? error = freezed,
-  }) {
-    return _then(_$PermissionsStateImpl(
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as PermissionsStatus,
-      error: freezed == error ? _value.error : error,
-    ));
-  }
 }
 
 /// @nodoc
 
-class _$PermissionsStateImpl implements _PermissionsState {
-  const _$PermissionsStateImpl(
-      {this.status = PermissionsStatus.initial, this.error});
-
-  @override
-  @JsonKey()
-  final PermissionsStatus status;
-// @Default(false) bool userAgreementAccepted,
-  @override
-  final Object? error;
+class _$PermissionsStateInitialImpl implements PermissionsStateInitial {
+  const _$PermissionsStateInitialImpl();
 
   @override
   String toString() {
-    return 'PermissionsState(status: $status, error: $error)';
+    return 'PermissionsState.initial()';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$PermissionsStateImpl &&
-            (identical(other.status, status) || other.status == status) &&
+            other is _$PermissionsStateInitialImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() inProgress,
+    required TResult Function() success,
+    required TResult Function(Object error) failure,
+  }) {
+    return initial();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? inProgress,
+    TResult? Function()? success,
+    TResult? Function(Object error)? failure,
+  }) {
+    return initial?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? inProgress,
+    TResult Function()? success,
+    TResult Function(Object error)? failure,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(PermissionsStateInitial value) initial,
+    required TResult Function(PermissionsStateInProgress value) inProgress,
+    required TResult Function(PermissionsStateSuccess value) success,
+    required TResult Function(PermissionsStateFailure value) failure,
+  }) {
+    return initial(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(PermissionsStateInitial value)? initial,
+    TResult? Function(PermissionsStateInProgress value)? inProgress,
+    TResult? Function(PermissionsStateSuccess value)? success,
+    TResult? Function(PermissionsStateFailure value)? failure,
+  }) {
+    return initial?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(PermissionsStateInitial value)? initial,
+    TResult Function(PermissionsStateInProgress value)? inProgress,
+    TResult Function(PermissionsStateSuccess value)? success,
+    TResult Function(PermissionsStateFailure value)? failure,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class PermissionsStateInitial implements PermissionsState {
+  const factory PermissionsStateInitial() = _$PermissionsStateInitialImpl;
+}
+
+/// @nodoc
+abstract class _$$PermissionsStateInProgressImplCopyWith<$Res> {
+  factory _$$PermissionsStateInProgressImplCopyWith(
+          _$PermissionsStateInProgressImpl value,
+          $Res Function(_$PermissionsStateInProgressImpl) then) =
+      __$$PermissionsStateInProgressImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$PermissionsStateInProgressImplCopyWithImpl<$Res>
+    extends _$PermissionsStateCopyWithImpl<$Res,
+        _$PermissionsStateInProgressImpl>
+    implements _$$PermissionsStateInProgressImplCopyWith<$Res> {
+  __$$PermissionsStateInProgressImplCopyWithImpl(
+      _$PermissionsStateInProgressImpl _value,
+      $Res Function(_$PermissionsStateInProgressImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$PermissionsStateInProgressImpl implements PermissionsStateInProgress {
+  const _$PermissionsStateInProgressImpl();
+
+  @override
+  String toString() {
+    return 'PermissionsState.inProgress()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PermissionsStateInProgressImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() inProgress,
+    required TResult Function() success,
+    required TResult Function(Object error) failure,
+  }) {
+    return inProgress();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? inProgress,
+    TResult? Function()? success,
+    TResult? Function(Object error)? failure,
+  }) {
+    return inProgress?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? inProgress,
+    TResult Function()? success,
+    TResult Function(Object error)? failure,
+    required TResult orElse(),
+  }) {
+    if (inProgress != null) {
+      return inProgress();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(PermissionsStateInitial value) initial,
+    required TResult Function(PermissionsStateInProgress value) inProgress,
+    required TResult Function(PermissionsStateSuccess value) success,
+    required TResult Function(PermissionsStateFailure value) failure,
+  }) {
+    return inProgress(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(PermissionsStateInitial value)? initial,
+    TResult? Function(PermissionsStateInProgress value)? inProgress,
+    TResult? Function(PermissionsStateSuccess value)? success,
+    TResult? Function(PermissionsStateFailure value)? failure,
+  }) {
+    return inProgress?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(PermissionsStateInitial value)? initial,
+    TResult Function(PermissionsStateInProgress value)? inProgress,
+    TResult Function(PermissionsStateSuccess value)? success,
+    TResult Function(PermissionsStateFailure value)? failure,
+    required TResult orElse(),
+  }) {
+    if (inProgress != null) {
+      return inProgress(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class PermissionsStateInProgress implements PermissionsState {
+  const factory PermissionsStateInProgress() = _$PermissionsStateInProgressImpl;
+}
+
+/// @nodoc
+abstract class _$$PermissionsStateSuccessImplCopyWith<$Res> {
+  factory _$$PermissionsStateSuccessImplCopyWith(
+          _$PermissionsStateSuccessImpl value,
+          $Res Function(_$PermissionsStateSuccessImpl) then) =
+      __$$PermissionsStateSuccessImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$PermissionsStateSuccessImplCopyWithImpl<$Res>
+    extends _$PermissionsStateCopyWithImpl<$Res, _$PermissionsStateSuccessImpl>
+    implements _$$PermissionsStateSuccessImplCopyWith<$Res> {
+  __$$PermissionsStateSuccessImplCopyWithImpl(
+      _$PermissionsStateSuccessImpl _value,
+      $Res Function(_$PermissionsStateSuccessImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$PermissionsStateSuccessImpl implements PermissionsStateSuccess {
+  const _$PermissionsStateSuccessImpl();
+
+  @override
+  String toString() {
+    return 'PermissionsState.success()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PermissionsStateSuccessImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() inProgress,
+    required TResult Function() success,
+    required TResult Function(Object error) failure,
+  }) {
+    return success();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? inProgress,
+    TResult? Function()? success,
+    TResult? Function(Object error)? failure,
+  }) {
+    return success?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? inProgress,
+    TResult Function()? success,
+    TResult Function(Object error)? failure,
+    required TResult orElse(),
+  }) {
+    if (success != null) {
+      return success();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(PermissionsStateInitial value) initial,
+    required TResult Function(PermissionsStateInProgress value) inProgress,
+    required TResult Function(PermissionsStateSuccess value) success,
+    required TResult Function(PermissionsStateFailure value) failure,
+  }) {
+    return success(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(PermissionsStateInitial value)? initial,
+    TResult? Function(PermissionsStateInProgress value)? inProgress,
+    TResult? Function(PermissionsStateSuccess value)? success,
+    TResult? Function(PermissionsStateFailure value)? failure,
+  }) {
+    return success?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(PermissionsStateInitial value)? initial,
+    TResult Function(PermissionsStateInProgress value)? inProgress,
+    TResult Function(PermissionsStateSuccess value)? success,
+    TResult Function(PermissionsStateFailure value)? failure,
+    required TResult orElse(),
+  }) {
+    if (success != null) {
+      return success(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class PermissionsStateSuccess implements PermissionsState {
+  const factory PermissionsStateSuccess() = _$PermissionsStateSuccessImpl;
+}
+
+/// @nodoc
+abstract class _$$PermissionsStateFailureImplCopyWith<$Res> {
+  factory _$$PermissionsStateFailureImplCopyWith(
+          _$PermissionsStateFailureImpl value,
+          $Res Function(_$PermissionsStateFailureImpl) then) =
+      __$$PermissionsStateFailureImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({Object error});
+}
+
+/// @nodoc
+class __$$PermissionsStateFailureImplCopyWithImpl<$Res>
+    extends _$PermissionsStateCopyWithImpl<$Res, _$PermissionsStateFailureImpl>
+    implements _$$PermissionsStateFailureImplCopyWith<$Res> {
+  __$$PermissionsStateFailureImplCopyWithImpl(
+      _$PermissionsStateFailureImpl _value,
+      $Res Function(_$PermissionsStateFailureImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? error = null,
+  }) {
+    return _then(_$PermissionsStateFailureImpl(
+      null == error ? _value.error : error,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$PermissionsStateFailureImpl implements PermissionsStateFailure {
+  const _$PermissionsStateFailureImpl(this.error);
+
+  @override
+  final Object error;
+
+  @override
+  String toString() {
+    return 'PermissionsState.failure(error: $error)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PermissionsStateFailureImpl &&
             const DeepCollectionEquality().equals(other.error, error));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, status, const DeepCollectionEquality().hash(error));
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(error));
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$PermissionsStateImplCopyWith<_$PermissionsStateImpl> get copyWith =>
-      __$$PermissionsStateImplCopyWithImpl<_$PermissionsStateImpl>(
-          this, _$identity);
+  _$$PermissionsStateFailureImplCopyWith<_$PermissionsStateFailureImpl>
+      get copyWith => __$$PermissionsStateFailureImplCopyWithImpl<
+          _$PermissionsStateFailureImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() inProgress,
+    required TResult Function() success,
+    required TResult Function(Object error) failure,
+  }) {
+    return failure(error);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? inProgress,
+    TResult? Function()? success,
+    TResult? Function(Object error)? failure,
+  }) {
+    return failure?.call(error);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? inProgress,
+    TResult Function()? success,
+    TResult Function(Object error)? failure,
+    required TResult orElse(),
+  }) {
+    if (failure != null) {
+      return failure(error);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(PermissionsStateInitial value) initial,
+    required TResult Function(PermissionsStateInProgress value) inProgress,
+    required TResult Function(PermissionsStateSuccess value) success,
+    required TResult Function(PermissionsStateFailure value) failure,
+  }) {
+    return failure(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(PermissionsStateInitial value)? initial,
+    TResult? Function(PermissionsStateInProgress value)? inProgress,
+    TResult? Function(PermissionsStateSuccess value)? success,
+    TResult? Function(PermissionsStateFailure value)? failure,
+  }) {
+    return failure?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(PermissionsStateInitial value)? initial,
+    TResult Function(PermissionsStateInProgress value)? inProgress,
+    TResult Function(PermissionsStateSuccess value)? success,
+    TResult Function(PermissionsStateFailure value)? failure,
+    required TResult orElse(),
+  }) {
+    if (failure != null) {
+      return failure(this);
+    }
+    return orElse();
+  }
 }
 
-abstract class _PermissionsState implements PermissionsState {
-  const factory _PermissionsState(
-      {final PermissionsStatus status,
-      final Object? error}) = _$PermissionsStateImpl;
+abstract class PermissionsStateFailure implements PermissionsState {
+  const factory PermissionsStateFailure(final Object error) =
+      _$PermissionsStateFailureImpl;
 
-  @override
-  PermissionsStatus get status;
-  @override // @Default(false) bool userAgreementAccepted,
-  Object? get error;
-  @override
+  Object get error;
   @JsonKey(ignore: true)
-  _$$PermissionsStateImplCopyWith<_$PermissionsStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$PermissionsStateFailureImplCopyWith<_$PermissionsStateFailureImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

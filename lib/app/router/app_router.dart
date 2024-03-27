@@ -30,6 +30,7 @@ class AppRouter extends _$AppRouter {
   String? get coreUrl => _appBloc.state.coreUrl;
   String? get token => _appBloc.state.token;
   bool get appPermissionsDenied => _appPermissions.isDenied;
+  bool get appUserAgreementUnaccepted => _appBloc.state.userAgreementAccepted != true;
 
   @override
   List<AutoRoute> get routes => [
@@ -96,6 +97,11 @@ class AppRouter extends _$AppRouter {
               page: PermissionsScreenPageRoute.page,
               onNavigation: onPermissionsScreenPageRouteGuardNavigation,
               path: 'permissions',
+            ),
+            AutoRoute.guarded(
+              page: UserAgreementScreenPageRoute.page,
+              onNavigation: onUserAgreementScreenPageRouteGuardNavigation,
+              path: 'user-agreement',
             ),
             AutoRoute.guarded(
               page: MainShellRoute.page,
@@ -226,9 +232,20 @@ class AppRouter extends _$AppRouter {
   void onPermissionsScreenPageRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
     _logger.fine(_onNavigationLoggerMessage('onPermissionsScreenPageRouteGuardNavigation', resolver));
 
-    final appPermissionsDenied = _appPermissions.isDenied;
-
     if (appPermissionsDenied) {
+      resolver.next(true);
+    } else {
+      resolver.next(false);
+      router.replaceAll(
+        [const MainShellRoute()],
+      );
+    }
+  }
+
+  void onUserAgreementScreenPageRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
+    _logger.fine(_onNavigationLoggerMessage('onPermissionsScreenPageRouteGuardNavigation', resolver));
+
+    if (appUserAgreementUnaccepted) {
       resolver.next(true);
     } else {
       resolver.next(false);
@@ -242,7 +259,12 @@ class AppRouter extends _$AppRouter {
     _logger.fine(_onNavigationLoggerMessage('onMainShellRouteGuardNavigation', resolver));
 
     if (coreUrl != null && token != null) {
-      if (appPermissionsDenied) {
+      if (appUserAgreementUnaccepted) {
+        resolver.next(false);
+        router.replaceAll(
+          [const UserAgreementScreenPageRoute()],
+        );
+      } else if (appPermissionsDenied) {
         resolver.next(false);
         router.replaceAll(
           [const PermissionsScreenPageRoute()],
