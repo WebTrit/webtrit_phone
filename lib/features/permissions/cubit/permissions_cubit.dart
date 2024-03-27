@@ -13,9 +13,7 @@ class PermissionsCubit extends Cubit<PermissionsState> {
   PermissionsCubit({
     required this.appPermissions,
     required this.appPreferences,
-  }) : super(PermissionsState(
-          userAgreementAccepted: appPreferences.getUserAgreement(),
-        ));
+  }) : super(PermissionsState(userAgreementAccepted: appPreferences.getUserAgreementAccepted()));
 
   final AppPermissions appPermissions;
   final AppPreferences appPreferences;
@@ -32,7 +30,7 @@ class PermissionsCubit extends Cubit<PermissionsState> {
   }
 
   void changeUserAgreement(bool userAgreementAccepted) async {
-    await appPreferences.setUserAgreement(userAgreementAccepted);
+    await appPreferences.setUserAgreementAccepted(userAgreementAccepted);
     emit(state.copyWith(userAgreementAccepted: userAgreementAccepted));
   }
 
