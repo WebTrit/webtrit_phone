@@ -6,6 +6,7 @@ class CallState with _$CallState {
 
   const factory CallState({
     ConnectivityResult? currentConnectivityResult,
+    @Default(RegistrationAccountStatus.registering) RegistrationAccountStatus registrationAccountStatus,
     @Default(SignalingClientStatus.disconnect) SignalingClientStatus signalingClientStatus,
     Object? lastSignalingClientConnectError,
     Object? lastSignalingClientDisconnectError,

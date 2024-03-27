@@ -497,6 +497,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       hangup: (event) => __onCallSignalingEventHangup(event, emit),
       updating: (event) => __onCallSignalingEventUpdating(event, emit),
       updated: (event) => __onCallSignalingEventUpdated(event, emit),
+      registering: (event) => __onCallSignalingEventRegistering(event, emit),
+      registered: (event) => __onCallSignalingEventRegistered(event, emit),
+      registrationFailed: (event) => __onCallSignalingEventRegistrationFailed(event, emit),
+      unregistering: (event) => __onCallSignalingEventUnregistering(event, emit),
+      unregistered: (event) => __onCallSignalingEventUnregistered(event, emit),
     );
   }
 
@@ -727,6 +732,41 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         updating: false,
       );
     }));
+  }
+
+  Future<void> __onCallSignalingEventRegistering(
+    _CallSignalingEventRegistering event,
+    Emitter<CallState> emit,
+  ) async {
+    emit(state.copyWith(registrationAccountStatus: RegistrationAccountStatus.registering));
+  }
+
+  Future<void> __onCallSignalingEventRegistered(
+    _CallSignalingEventRegistered event,
+    Emitter<CallState> emit,
+  ) async {
+    emit(state.copyWith(registrationAccountStatus: RegistrationAccountStatus.registered));
+  }
+
+  Future<void> __onCallSignalingEventRegistrationFailed(
+    _CallSignalingEventRegisterationFailed event,
+    Emitter<CallState> emit,
+  ) async {
+    emit(state.copyWith(registrationAccountStatus: RegistrationAccountStatus.failed));
+  }
+
+  Future<void> __onCallSignalingEventUnregistering(
+    _CallSignalingEventUnregistering event,
+    Emitter<CallState> emit,
+  ) async {
+    emit(state.copyWith(registrationAccountStatus: RegistrationAccountStatus.unregistering));
+  }
+
+  Future<void> __onCallSignalingEventUnregistered(
+    _CallSignalingEventUnregistered event,
+    Emitter<CallState> emit,
+  ) async {
+    emit(state.copyWith(registrationAccountStatus: RegistrationAccountStatus.unregistered));
   }
 
   // processing call control events
@@ -1419,6 +1459,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         line: event.line,
         callId: CallIdValue(event.callId),
       ));
+    } else if (event is RegisteringEvent) {
+      add(const _CallSignalingEvent.registering());
+    } else if (event is RegisteredEvent) {
+      add(const _CallSignalingEvent.registered());
+    } else if (event is RegistrationFailedEvent) {
+      add(const _CallSignalingEvent.registrationFailed());
+    } else if (event is UnregisteringEvent) {
+      add(const _CallSignalingEvent.unregistering());
+    } else if (event is UnregisteredEvent) {
+      add(const _CallSignalingEvent.unregistered());
     } else {
       _logger.warning('unhandled signaling event $event');
     }
