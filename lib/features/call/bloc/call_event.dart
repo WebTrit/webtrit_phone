@@ -23,6 +23,14 @@ class _NavigatorMediaDevicesChange with _$NavigatorMediaDevicesChange implements
   const factory _NavigatorMediaDevicesChange() = __NavigatorMediaDevicesChange;
 }
 
+// registration event change
+
+@Freezed(copyWith: false)
+class _RegistrationAccountChange with _$RegistrationAccountChange implements CallEvent {
+  const factory _RegistrationAccountChange(RegistrationAccountStatus registrationAccountStatus) =
+      __RegistrationAccountChange;
+}
+
 // signaling client events
 
 @Freezed(copyWith: false)
@@ -39,6 +47,7 @@ class _SignalingClientEvent with _$SignalingClientEvent implements CallEvent {
 @Freezed(copyWith: false)
 class _HandshakeSignalingEvent with _$HandshakeSignalingEvent implements CallEvent {
   const factory _HandshakeSignalingEvent.state({
+    required RegistrationStatus registrationStatus,
     required int linesCount,
   }) = _HandshakeSignalingEventState;
 }

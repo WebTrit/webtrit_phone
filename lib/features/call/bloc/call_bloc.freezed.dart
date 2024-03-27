@@ -150,6 +150,60 @@ abstract class __NavigatorMediaDevicesChange
 }
 
 /// @nodoc
+mixin _$RegistrationAccountChange {
+  RegistrationAccountStatus get registrationAccountStatus =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+
+class _$_RegistrationAccountChangeImpl
+    with DiagnosticableTreeMixin
+    implements __RegistrationAccountChange {
+  const _$_RegistrationAccountChangeImpl(this.registrationAccountStatus);
+
+  @override
+  final RegistrationAccountStatus registrationAccountStatus;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_RegistrationAccountChange(registrationAccountStatus: $registrationAccountStatus)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', '_RegistrationAccountChange'))
+      ..add(DiagnosticsProperty(
+          'registrationAccountStatus', registrationAccountStatus));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_RegistrationAccountChangeImpl &&
+            (identical(other.registrationAccountStatus,
+                    registrationAccountStatus) ||
+                other.registrationAccountStatus == registrationAccountStatus));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, registrationAccountStatus);
+}
+
+abstract class __RegistrationAccountChange
+    implements _RegistrationAccountChange {
+  const factory __RegistrationAccountChange(
+          final RegistrationAccountStatus registrationAccountStatus) =
+      _$_RegistrationAccountChangeImpl;
+
+  @override
+  RegistrationAccountStatus get registrationAccountStatus;
+}
+
+/// @nodoc
 mixin _$SignalingClientEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
@@ -552,20 +606,26 @@ abstract class _SignalingClientEventDisconnected
 
 /// @nodoc
 mixin _$HandshakeSignalingEvent {
+  RegistrationStatus get registrationStatus =>
+      throw _privateConstructorUsedError;
   int get linesCount => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int linesCount) state,
+    required TResult Function(
+            RegistrationStatus registrationStatus, int linesCount)
+        state,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int linesCount)? state,
+    TResult? Function(RegistrationStatus registrationStatus, int linesCount)?
+        state,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int linesCount)? state,
+    TResult Function(RegistrationStatus registrationStatus, int linesCount)?
+        state,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -592,14 +652,17 @@ mixin _$HandshakeSignalingEvent {
 class _$HandshakeSignalingEventStateImpl
     with DiagnosticableTreeMixin
     implements _HandshakeSignalingEventState {
-  const _$HandshakeSignalingEventStateImpl({required this.linesCount});
+  const _$HandshakeSignalingEventStateImpl(
+      {required this.registrationStatus, required this.linesCount});
 
+  @override
+  final RegistrationStatus registrationStatus;
   @override
   final int linesCount;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_HandshakeSignalingEvent.state(linesCount: $linesCount)';
+    return '_HandshakeSignalingEvent.state(registrationStatus: $registrationStatus, linesCount: $linesCount)';
   }
 
   @override
@@ -607,6 +670,7 @@ class _$HandshakeSignalingEventStateImpl
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_HandshakeSignalingEvent.state'))
+      ..add(DiagnosticsProperty('registrationStatus', registrationStatus))
       ..add(DiagnosticsProperty('linesCount', linesCount));
   }
 
@@ -615,37 +679,43 @@ class _$HandshakeSignalingEventStateImpl
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$HandshakeSignalingEventStateImpl &&
+            (identical(other.registrationStatus, registrationStatus) ||
+                other.registrationStatus == registrationStatus) &&
             (identical(other.linesCount, linesCount) ||
                 other.linesCount == linesCount));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, linesCount);
+  int get hashCode => Object.hash(runtimeType, registrationStatus, linesCount);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int linesCount) state,
+    required TResult Function(
+            RegistrationStatus registrationStatus, int linesCount)
+        state,
   }) {
-    return state(linesCount);
+    return state(registrationStatus, linesCount);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int linesCount)? state,
+    TResult? Function(RegistrationStatus registrationStatus, int linesCount)?
+        state,
   }) {
-    return state?.call(linesCount);
+    return state?.call(registrationStatus, linesCount);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int linesCount)? state,
+    TResult Function(RegistrationStatus registrationStatus, int linesCount)?
+        state,
     required TResult orElse(),
   }) {
     if (state != null) {
-      return state(linesCount);
+      return state(registrationStatus, linesCount);
     }
     return orElse();
   }
@@ -681,9 +751,12 @@ class _$HandshakeSignalingEventStateImpl
 
 abstract class _HandshakeSignalingEventState
     implements _HandshakeSignalingEvent {
-  const factory _HandshakeSignalingEventState({required final int linesCount}) =
-      _$HandshakeSignalingEventStateImpl;
+  const factory _HandshakeSignalingEventState(
+      {required final RegistrationStatus registrationStatus,
+      required final int linesCount}) = _$HandshakeSignalingEventStateImpl;
 
+  @override
+  RegistrationStatus get registrationStatus;
   @override
   int get linesCount;
 }

@@ -74,6 +74,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _onNavigatorMediaDevicesChange,
       transformer: droppable(),
     );
+    on<_RegistrationAccountChange>(
+      _onRegistrationAccountChange,
+      transformer: droppable(),
+    );
     on<_SignalingClientEvent>(
       _onSignalingClientEvent,
       transformer: restartable(),
@@ -297,6 +301,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
   }
 
+  // processing the registration event change
+
+  Future<void> _onRegistrationAccountChange(
+    _RegistrationAccountChange event,
+    Emitter<CallState> emit,
+  ) async {
+    _logger.fine('_onRegistrationAccountChange: ${event.registrationAccountStatus}');
+    emit(state.copyWith(registrationAccountStatus: event.registrationAccountStatus));
+  }
+
   // processing signaling client events
 
   Future<void> _onSignalingClientEvent(
@@ -423,6 +437,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       if (code == SignalingDisconnectCode.sessionMissedError) {
         notificationsBloc.add(const NotificationsIssued(CallSignalingClientSessionMissedErrorNotification()));
         appBloc.add(const AppLogouted());
+      } else if (code == SignalingDisconnectCode.appUnregisteredError) {
+        add(const _RegistrationAccountChange(RegistrationAccountStatus.unregistered));
       }
     }
 
@@ -481,6 +497,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     emit(state.copyWith(linesCount: event.linesCount));
+
+    add(_RegistrationAccountChange(event.registrationStatus.toRegistrationAccountStatus()));
   }
 
   // processing call signaling events
@@ -738,35 +756,35 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallSignalingEventRegistering event,
     Emitter<CallState> emit,
   ) async {
-    emit(state.copyWith(registrationAccountStatus: RegistrationAccountStatus.registering));
+    add(const _RegistrationAccountChange(RegistrationAccountStatus.registering));
   }
 
   Future<void> __onCallSignalingEventRegistered(
     _CallSignalingEventRegistered event,
     Emitter<CallState> emit,
   ) async {
-    emit(state.copyWith(registrationAccountStatus: RegistrationAccountStatus.registered));
+    add(const _RegistrationAccountChange(RegistrationAccountStatus.registered));
   }
 
   Future<void> __onCallSignalingEventRegistrationFailed(
     _CallSignalingEventRegisterationFailed event,
     Emitter<CallState> emit,
   ) async {
-    emit(state.copyWith(registrationAccountStatus: RegistrationAccountStatus.failed));
+    add(const _RegistrationAccountChange(RegistrationAccountStatus.failed));
   }
 
   Future<void> __onCallSignalingEventUnregistering(
     _CallSignalingEventUnregistering event,
     Emitter<CallState> emit,
   ) async {
-    emit(state.copyWith(registrationAccountStatus: RegistrationAccountStatus.unregistering));
+    add(const _RegistrationAccountChange(RegistrationAccountStatus.unregistering));
   }
 
   Future<void> __onCallSignalingEventUnregistered(
     _CallSignalingEventUnregistered event,
     Emitter<CallState> emit,
   ) async {
-    emit(state.copyWith(registrationAccountStatus: RegistrationAccountStatus.unregistered));
+    add(const _RegistrationAccountChange(RegistrationAccountStatus.unregistered));
   }
 
   // processing call control events
@@ -1352,6 +1370,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   void _onSignalingStateHandshake(StateHandshake stateHandshake) {
     add(_HandshakeSignalingEvent.state(
+      registrationStatus: stateHandshake.registration.status,
       linesCount: stateHandshake.lines.length,
     ));
 
