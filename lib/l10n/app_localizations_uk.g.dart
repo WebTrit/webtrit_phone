@@ -437,13 +437,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get permission_Text_description => 'Для забезпечення найкращого досвіду користувача програма потребує наступні дозволи: мікрофон для аудіодзвінків, камера для відеодзвінків та доступ до контактів для спрощення їх використання в програмі.\n\nДозволи можуть бути змінені у майбутньому.';
 
   @override
-  String get permission_agreement_text1 => 'Я прочитав і погоджуюсь з ';
-
-  @override
-  String get permission_agreement_text2 => 'політикою конфіденційності ';
-
-  @override
-  String get permission_agreement_text3 => ', включаючи умови користування.';
+  String permission_agreement_text(String url) {
+    return 'Я прочитав і погоджуюсь з $url, включаючи умови користування.';
+  }
 
   @override
   String recents_BodyCenter_empty(Object filter) {

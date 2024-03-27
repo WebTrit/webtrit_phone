@@ -1,16 +1,18 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/widgets/linkify.dart';
 
 class AgreementCheckbox extends StatelessWidget {
   const AgreementCheckbox({
     super.key,
+    required this.agreementLink,
     required this.userAgreementAccepted,
     required this.onChanged,
     required this.onAgreementLinkTap,
   });
 
+  final String agreementLink;
   final bool userAgreementAccepted;
   final Function(bool) onChanged;
   final Function() onAgreementLinkTap;
@@ -30,24 +32,13 @@ class AgreementCheckbox extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: RichText(
-            text: TextSpan(
-              text: context.l10n.permission_agreement_text1,
-              style: themeData.textTheme.labelLarge,
-              children: [
-                TextSpan(
-                  text: context.l10n.permission_agreement_text2,
-                  style: themeData.textTheme.labelLarge?.copyWith(
-                    color: themeData.colorScheme.primary,
-                    decoration: TextDecoration.underline,
-                  ),
-                  recognizer: TapGestureRecognizer()..onTap = onAgreementLinkTap,
-                ),
-                TextSpan(
-                  text: context.l10n.permission_agreement_text3,
-                  style: themeData.textTheme.labelLarge,
-                ),
-              ],
+          child: Linkify(
+            text: context.l10n.permission_agreement_text(agreementLink),
+            onOpen: (_) => onAgreementLinkTap(),
+            style: themeData.textTheme.labelLarge,
+            linkStyle: themeData.textTheme.labelLarge?.copyWith(
+              color: themeData.colorScheme.primary,
+              decoration: TextDecoration.underline,
             ),
           ),
         ),

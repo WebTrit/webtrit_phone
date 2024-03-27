@@ -59,6 +59,7 @@ class PermissionsScreen extends StatelessWidget {
                 const SizedBox(height: kInset),
                 if (isTermsAndConditionsProvided)
                   AgreementCheckbox(
+                    agreementLink: appTermsAndConditionsUrl,
                     userAgreementAccepted: state.userAgreementAccepted,
                     onChanged: context.read<PermissionsCubit>().changeUserAgreement,
                     onAgreementLinkTap: () => context.router
