@@ -196,10 +196,6 @@ class AppRouter extends _$AppRouter {
                       path: 'network',
                     ),
                     AutoRoute(
-                      page: TermsConditionsScreenPageRoute.page,
-                      path: 'terms-conditions',
-                    ),
-                    AutoRoute(
                       page: ThemeModeScreenPageRoute.page,
                       path: 'theme-mode',
                     ),
@@ -210,6 +206,10 @@ class AppRouter extends _$AppRouter {
                   ],
                 ),
               ],
+            ),
+            AutoRoute(
+              page: TermsConditionsScreenPageRoute.page,
+              path: 'terms-conditions',
             ),
           ],
         ),
