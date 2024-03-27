@@ -204,6 +204,44 @@ abstract class __RegistrationAccountChange
 }
 
 /// @nodoc
+mixin _$CompleteCallsAndResetState {}
+
+/// @nodoc
+
+class _$_CompleteCallsAndResetStateImpl
+    with DiagnosticableTreeMixin
+    implements __CompleteCallsAndResetState {
+  const _$_CompleteCallsAndResetStateImpl();
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CompleteCallsAndResetState()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty('type', '_CompleteCallsAndResetState'));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_CompleteCallsAndResetStateImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+}
+
+abstract class __CompleteCallsAndResetState
+    implements _CompleteCallsAndResetState {
+  const factory __CompleteCallsAndResetState() =
+      _$_CompleteCallsAndResetStateImpl;
+}
+
+/// @nodoc
 mixin _$SignalingClientEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({

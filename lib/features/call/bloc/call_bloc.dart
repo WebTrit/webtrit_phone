@@ -78,6 +78,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _onRegistrationAccountChange,
       transformer: droppable(),
     );
+    on<_CompleteCallsAndResetState>(
+      _completeCallsAndResetState,
+      transformer: droppable(),
+    );
     on<_SignalingClientEvent>(
       _onSignalingClientEvent,
       transformer: restartable(),
@@ -307,8 +311,51 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _RegistrationAccountChange event,
     Emitter<CallState> emit,
   ) async {
-    _logger.fine('_onRegistrationAccountChange: ${event.registrationAccountStatus}');
-    emit(state.copyWith(registrationAccountStatus: event.registrationAccountStatus));
+    final newRegistrationAccountStatus = event.registrationAccountStatus;
+    final previousRegistrationAccountStatus = state.registrationAccountStatus;
+    if (newRegistrationAccountStatus != previousRegistrationAccountStatus) {
+      _logger.fine('_onRegistrationAccountChange: $previousRegistrationAccountStatus to $newRegistrationAccountStatus');
+      emit(state.copyWith(registrationAccountStatus: newRegistrationAccountStatus));
+    } else {
+      _logger.fine('_onRegistrationAccountChange: status is already the same');
+      return;
+    }
+
+    switch (newRegistrationAccountStatus) {
+      case RegistrationAccountStatus.registering:
+        add(const _CompleteCallsAndResetState());
+      case RegistrationAccountStatus.registered:
+      case RegistrationAccountStatus.failed:
+        add(const _CompleteCallsAndResetState());
+      case RegistrationAccountStatus.unregistering:
+      case RegistrationAccountStatus.unregistered:
+        add(const _CompleteCallsAndResetState());
+    }
+  }
+
+  // processing the handling of the app state
+
+  Future<void> _completeCallsAndResetState(
+    _CompleteCallsAndResetState event,
+    Emitter<CallState> emit,
+  ) async {
+    for (var element in state.activeCalls) {
+      try {
+        callkeep.endCall(element.callId.uuid);
+        await state.performOnActiveCall(element.callId.uuid, (activeCall) async {
+          // Need to close peer connection after executing [HangupRequest]
+          // to prevent "Simulate a "hangup" coming from the application"
+          // because of "No WebRTC media anymore".
+          await (await _peerConnectionRetrieve(activeCall.callId.uuid))?.close();
+          await activeCall.renderers.dispose();
+          await activeCall.renderers.local.srcObject?.dispose();
+        });
+      } catch (e) {
+        _logger.warning('_completeCallsAndResetState: $e');
+      }
+
+      emit(state.copyWithPopActiveCall(element.callId.uuid));
+    }
   }
 
   // processing signaling client events

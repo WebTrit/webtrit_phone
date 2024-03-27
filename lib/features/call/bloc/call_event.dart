@@ -31,6 +31,13 @@ class _RegistrationAccountChange with _$RegistrationAccountChange implements Cal
       __RegistrationAccountChange;
 }
 
+// handle app state
+
+@Freezed(copyWith: false)
+class _CompleteCallsAndResetState with _$CompleteCallsAndResetState implements CallEvent {
+  const factory _CompleteCallsAndResetState() = __CompleteCallsAndResetState;
+}
+
 // signaling client events
 
 @Freezed(copyWith: false)
