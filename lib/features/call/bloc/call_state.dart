@@ -24,15 +24,13 @@ class CallState with _$CallState {
       return CallStatus.connectivityNone;
     } else if (lastSignalingClientConnectError != null) {
       return CallStatus.connectError;
+    } else if (registrationAccountStatus.isUnregistered) {
+      return CallStatus.appUnregistered;
+    } else if (registrationAccountStatus.isFailed) {
+      return CallStatus.connectIssue;
     } else if (lastSignalingDisconnectCode != null) {
-      final code = SignalingDisconnectCode.values.byCode(lastSignalingDisconnectCode);
-      switch (code) {
-        case SignalingDisconnectCode.appUnregisteredError:
-          return CallStatus.appUnregistered;
-        default:
-          return CallStatus.connectIssue;
-      }
-    } else if (signalingClientStatus == SignalingClientStatus.connect) {
+      return CallStatus.connectIssue;
+    } else if (signalingClientStatus.isConnect && registrationAccountStatus.isRegistered) {
       return CallStatus.ready;
     } else {
       return CallStatus.inProgress;
