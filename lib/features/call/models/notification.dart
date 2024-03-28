@@ -57,3 +57,17 @@ class CallUserMediaErrorNotification extends ErrorNotification {
     );
   }
 }
+
+class AppUnregisteredNotification extends MessageNotification {
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.notifications_errorSnackBar_appUnregistered;
+  }
+}
+
+class AppOfflineNotification extends MessageNotification {
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.notifications_errorSnackBar_appOffline;
+  }
+}

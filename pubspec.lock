@@ -334,14 +334,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.1"
-  dartlin:
-    dependency: transitive
-    description:
-      name: dartlin
-      sha256: "80764ff3d1801a086c2b802bd39ff6d306e783710741fab8e9981d2ba5ad68a1"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.6.3"
   dartx:
     dependency: transitive
     description:
@@ -398,13 +390,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.15.0"
-  dto:
-    dependency: transitive
-    description:
-      path: "../webtrit_phone_configurator_common/packages/dto"
-      relative: true
-    source: path
-    version: "0.0.1"
   equatable:
     dependency: "direct main"
     description:
@@ -914,14 +899,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
-  logger:
-    dependency: transitive
-    description:
-      name: logger
-      sha256: b3ff55aeb08d9d8901b767650285872cb1bb8f508373b3e348d60268b0c7f770
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.0"
   logging:
     dependency: "direct main"
     description:
@@ -1026,14 +1003,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
-  package_rename:
-    dependency: transitive
-    description:
-      name: package_rename
-      sha256: ea5d3da076a6fcb82c1fcbb7ea9d01f278e2a26f145b753362ec9c093e1e5e59
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.5.3"
   path:
     dependency: "direct main"
     description:
@@ -1338,14 +1307,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-  simple_mustache:
-    dependency: transitive
-    description:
-      name: simple_mustache
-      sha256: f9e9211586ba32dd6be9967c408c275b8c3493734836c8a0057c9f509a448fce
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -1751,13 +1712,6 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
-  webtrit_phone_publisher:
-    dependency: "direct dev"
-    description:
-      path: "../webtrit_phone_publisher"
-      relative: true
-    source: path
-    version: "1.0.0"
   webtrit_signaling:
     dependency: "direct main"
     description:

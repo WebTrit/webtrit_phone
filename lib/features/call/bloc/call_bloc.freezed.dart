@@ -150,6 +150,112 @@ abstract class __NavigatorMediaDevicesChange
 }
 
 /// @nodoc
+mixin _$RegistrationChange {
+  RegistrationStatus get registrationStatus =>
+      throw _privateConstructorUsedError;
+  String? get reason => throw _privateConstructorUsedError;
+  int? get code => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+
+class _$_RegistrationChangeImpl
+    with DiagnosticableTreeMixin
+    implements __RegistrationChange {
+  const _$_RegistrationChangeImpl(
+      {required this.registrationStatus, this.reason, this.code});
+
+  @override
+  final RegistrationStatus registrationStatus;
+  @override
+  final String? reason;
+  @override
+  final int? code;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_RegistrationChange(registrationStatus: $registrationStatus, reason: $reason, code: $code)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', '_RegistrationChange'))
+      ..add(DiagnosticsProperty('registrationStatus', registrationStatus))
+      ..add(DiagnosticsProperty('reason', reason))
+      ..add(DiagnosticsProperty('code', code));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_RegistrationChangeImpl &&
+            (identical(other.registrationStatus, registrationStatus) ||
+                other.registrationStatus == registrationStatus) &&
+            (identical(other.reason, reason) || other.reason == reason) &&
+            (identical(other.code, code) || other.code == code));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, registrationStatus, reason, code);
+}
+
+abstract class __RegistrationChange implements _RegistrationChange {
+  const factory __RegistrationChange(
+      {required final RegistrationStatus registrationStatus,
+      final String? reason,
+      final int? code}) = _$_RegistrationChangeImpl;
+
+  @override
+  RegistrationStatus get registrationStatus;
+  @override
+  String? get reason;
+  @override
+  int? get code;
+}
+
+/// @nodoc
+mixin _$CompleteCallsAndResetState {}
+
+/// @nodoc
+
+class _$_CompleteCallsAndResetStateImpl
+    with DiagnosticableTreeMixin
+    implements __CompleteCallsAndResetState {
+  const _$_CompleteCallsAndResetStateImpl();
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CompleteCallsAndResetState()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty('type', '_CompleteCallsAndResetState'));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_CompleteCallsAndResetStateImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+}
+
+abstract class __CompleteCallsAndResetState
+    implements _CompleteCallsAndResetState {
+  const factory __CompleteCallsAndResetState() =
+      _$_CompleteCallsAndResetStateImpl;
+}
+
+/// @nodoc
 mixin _$SignalingClientEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
@@ -552,20 +658,21 @@ abstract class _SignalingClientEventDisconnected
 
 /// @nodoc
 mixin _$HandshakeSignalingEvent {
+  Registration get registration => throw _privateConstructorUsedError;
   int get linesCount => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int linesCount) state,
+    required TResult Function(Registration registration, int linesCount) state,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int linesCount)? state,
+    TResult? Function(Registration registration, int linesCount)? state,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int linesCount)? state,
+    TResult Function(Registration registration, int linesCount)? state,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -592,14 +699,17 @@ mixin _$HandshakeSignalingEvent {
 class _$HandshakeSignalingEventStateImpl
     with DiagnosticableTreeMixin
     implements _HandshakeSignalingEventState {
-  const _$HandshakeSignalingEventStateImpl({required this.linesCount});
+  const _$HandshakeSignalingEventStateImpl(
+      {required this.registration, required this.linesCount});
 
+  @override
+  final Registration registration;
   @override
   final int linesCount;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_HandshakeSignalingEvent.state(linesCount: $linesCount)';
+    return '_HandshakeSignalingEvent.state(registration: $registration, linesCount: $linesCount)';
   }
 
   @override
@@ -607,6 +717,7 @@ class _$HandshakeSignalingEventStateImpl
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_HandshakeSignalingEvent.state'))
+      ..add(DiagnosticsProperty('registration', registration))
       ..add(DiagnosticsProperty('linesCount', linesCount));
   }
 
@@ -615,37 +726,39 @@ class _$HandshakeSignalingEventStateImpl
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$HandshakeSignalingEventStateImpl &&
+            (identical(other.registration, registration) ||
+                other.registration == registration) &&
             (identical(other.linesCount, linesCount) ||
                 other.linesCount == linesCount));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, linesCount);
+  int get hashCode => Object.hash(runtimeType, registration, linesCount);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int linesCount) state,
+    required TResult Function(Registration registration, int linesCount) state,
   }) {
-    return state(linesCount);
+    return state(registration, linesCount);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int linesCount)? state,
+    TResult? Function(Registration registration, int linesCount)? state,
   }) {
-    return state?.call(linesCount);
+    return state?.call(registration, linesCount);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int linesCount)? state,
+    TResult Function(Registration registration, int linesCount)? state,
     required TResult orElse(),
   }) {
     if (state != null) {
-      return state(linesCount);
+      return state(registration, linesCount);
     }
     return orElse();
   }
@@ -681,9 +794,12 @@ class _$HandshakeSignalingEventStateImpl
 
 abstract class _HandshakeSignalingEventState
     implements _HandshakeSignalingEvent {
-  const factory _HandshakeSignalingEventState({required final int linesCount}) =
-      _$HandshakeSignalingEventStateImpl;
+  const factory _HandshakeSignalingEventState(
+      {required final Registration registration,
+      required final int linesCount}) = _$HandshakeSignalingEventStateImpl;
 
+  @override
+  Registration get registration;
   @override
   int get linesCount;
 }
@@ -724,6 +840,10 @@ mixin _$CallSignalingEvent {
             JsepValue? jsep)
         updating,
     required TResult Function(int line, String callId) updated,
+    required TResult Function() registering,
+    required TResult Function() registered,
+    required TResult Function() registrationFailed,
+    required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) =>
       throw _privateConstructorUsedError;
@@ -758,6 +878,10 @@ mixin _$CallSignalingEvent {
             JsepValue? jsep)?
         updating,
     TResult? Function(int line, String callId)? updated,
+    TResult? Function()? registering,
+    TResult? Function()? registered,
+    TResult? Function()? registrationFailed,
+    TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) =>
       throw _privateConstructorUsedError;
@@ -792,6 +916,10 @@ mixin _$CallSignalingEvent {
             JsepValue? jsep)?
         updating,
     TResult Function(int line, String callId)? updated,
+    TResult Function()? registering,
+    TResult Function()? registered,
+    TResult Function()? registrationFailed,
+    TResult Function()? unregistering,
     TResult Function()? unregistered,
     required TResult orElse(),
   }) =>
@@ -805,6 +933,12 @@ mixin _$CallSignalingEvent {
     required TResult Function(_CallSignalingEventHangup value) hangup,
     required TResult Function(_CallSignalingEventUpdating value) updating,
     required TResult Function(_CallSignalingEventUpdated value) updated,
+    required TResult Function(_CallSignalingEventRegistering value) registering,
+    required TResult Function(_CallSignalingEventRegistered value) registered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value)
+        registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value)
+        unregistering,
     required TResult Function(_CallSignalingEventUnregistered value)
         unregistered,
   }) =>
@@ -818,6 +952,11 @@ mixin _$CallSignalingEvent {
     TResult? Function(_CallSignalingEventHangup value)? hangup,
     TResult? Function(_CallSignalingEventUpdating value)? updating,
     TResult? Function(_CallSignalingEventUpdated value)? updated,
+    TResult? Function(_CallSignalingEventRegistering value)? registering,
+    TResult? Function(_CallSignalingEventRegistered value)? registered,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
   }) =>
       throw _privateConstructorUsedError;
@@ -830,6 +969,11 @@ mixin _$CallSignalingEvent {
     TResult Function(_CallSignalingEventHangup value)? hangup,
     TResult Function(_CallSignalingEventUpdating value)? updating,
     TResult Function(_CallSignalingEventUpdated value)? updated,
+    TResult Function(_CallSignalingEventRegistering value)? registering,
+    TResult Function(_CallSignalingEventRegistered value)? registered,
+    TResult Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult Function(_CallSignalingEventUnregistered value)? unregistered,
     required TResult orElse(),
   }) =>
@@ -950,6 +1094,10 @@ class _$CallSignalingEventIncomingImpl
             JsepValue? jsep)
         updating,
     required TResult Function(int line, String callId) updated,
+    required TResult Function() registering,
+    required TResult Function() registered,
+    required TResult Function() registrationFailed,
+    required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) {
     return incoming(line, callId, callee, caller, callerDisplayName, referredBy,
@@ -988,6 +1136,10 @@ class _$CallSignalingEventIncomingImpl
             JsepValue? jsep)?
         updating,
     TResult? Function(int line, String callId)? updated,
+    TResult? Function()? registering,
+    TResult? Function()? registered,
+    TResult? Function()? registrationFailed,
+    TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) {
     return incoming?.call(line, callId, callee, caller, callerDisplayName,
@@ -1026,6 +1178,10 @@ class _$CallSignalingEventIncomingImpl
             JsepValue? jsep)?
         updating,
     TResult Function(int line, String callId)? updated,
+    TResult Function()? registering,
+    TResult Function()? registered,
+    TResult Function()? registrationFailed,
+    TResult Function()? unregistering,
     TResult Function()? unregistered,
     required TResult orElse(),
   }) {
@@ -1046,6 +1202,12 @@ class _$CallSignalingEventIncomingImpl
     required TResult Function(_CallSignalingEventHangup value) hangup,
     required TResult Function(_CallSignalingEventUpdating value) updating,
     required TResult Function(_CallSignalingEventUpdated value) updated,
+    required TResult Function(_CallSignalingEventRegistering value) registering,
+    required TResult Function(_CallSignalingEventRegistered value) registered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value)
+        registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value)
+        unregistering,
     required TResult Function(_CallSignalingEventUnregistered value)
         unregistered,
   }) {
@@ -1062,6 +1224,11 @@ class _$CallSignalingEventIncomingImpl
     TResult? Function(_CallSignalingEventHangup value)? hangup,
     TResult? Function(_CallSignalingEventUpdating value)? updating,
     TResult? Function(_CallSignalingEventUpdated value)? updated,
+    TResult? Function(_CallSignalingEventRegistering value)? registering,
+    TResult? Function(_CallSignalingEventRegistered value)? registered,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
   }) {
     return incoming?.call(this);
@@ -1077,6 +1244,11 @@ class _$CallSignalingEventIncomingImpl
     TResult Function(_CallSignalingEventHangup value)? hangup,
     TResult Function(_CallSignalingEventUpdating value)? updating,
     TResult Function(_CallSignalingEventUpdated value)? updated,
+    TResult Function(_CallSignalingEventRegistering value)? registering,
+    TResult Function(_CallSignalingEventRegistered value)? registered,
+    TResult Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult Function(_CallSignalingEventUnregistered value)? unregistered,
     required TResult orElse(),
   }) {
@@ -1184,6 +1356,10 @@ class _$CallSignalingEventRingingImpl
             JsepValue? jsep)
         updating,
     required TResult Function(int line, String callId) updated,
+    required TResult Function() registering,
+    required TResult Function() registered,
+    required TResult Function() registrationFailed,
+    required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) {
     return ringing(line, callId);
@@ -1221,6 +1397,10 @@ class _$CallSignalingEventRingingImpl
             JsepValue? jsep)?
         updating,
     TResult? Function(int line, String callId)? updated,
+    TResult? Function()? registering,
+    TResult? Function()? registered,
+    TResult? Function()? registrationFailed,
+    TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) {
     return ringing?.call(line, callId);
@@ -1258,6 +1438,10 @@ class _$CallSignalingEventRingingImpl
             JsepValue? jsep)?
         updating,
     TResult Function(int line, String callId)? updated,
+    TResult Function()? registering,
+    TResult Function()? registered,
+    TResult Function()? registrationFailed,
+    TResult Function()? unregistering,
     TResult Function()? unregistered,
     required TResult orElse(),
   }) {
@@ -1277,6 +1461,12 @@ class _$CallSignalingEventRingingImpl
     required TResult Function(_CallSignalingEventHangup value) hangup,
     required TResult Function(_CallSignalingEventUpdating value) updating,
     required TResult Function(_CallSignalingEventUpdated value) updated,
+    required TResult Function(_CallSignalingEventRegistering value) registering,
+    required TResult Function(_CallSignalingEventRegistered value) registered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value)
+        registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value)
+        unregistering,
     required TResult Function(_CallSignalingEventUnregistered value)
         unregistered,
   }) {
@@ -1293,6 +1483,11 @@ class _$CallSignalingEventRingingImpl
     TResult? Function(_CallSignalingEventHangup value)? hangup,
     TResult? Function(_CallSignalingEventUpdating value)? updating,
     TResult? Function(_CallSignalingEventUpdated value)? updated,
+    TResult? Function(_CallSignalingEventRegistering value)? registering,
+    TResult? Function(_CallSignalingEventRegistered value)? registered,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
   }) {
     return ringing?.call(this);
@@ -1308,6 +1503,11 @@ class _$CallSignalingEventRingingImpl
     TResult Function(_CallSignalingEventHangup value)? hangup,
     TResult Function(_CallSignalingEventUpdating value)? updating,
     TResult Function(_CallSignalingEventUpdated value)? updated,
+    TResult Function(_CallSignalingEventRegistering value)? registering,
+    TResult Function(_CallSignalingEventRegistered value)? registered,
+    TResult Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult Function(_CallSignalingEventUnregistered value)? unregistered,
     required TResult orElse(),
   }) {
@@ -1412,6 +1612,10 @@ class _$CallSignalingEventProgressImpl
             JsepValue? jsep)
         updating,
     required TResult Function(int line, String callId) updated,
+    required TResult Function() registering,
+    required TResult Function() registered,
+    required TResult Function() registrationFailed,
+    required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) {
     return progress(line, callId, callee, jsep);
@@ -1449,6 +1653,10 @@ class _$CallSignalingEventProgressImpl
             JsepValue? jsep)?
         updating,
     TResult? Function(int line, String callId)? updated,
+    TResult? Function()? registering,
+    TResult? Function()? registered,
+    TResult? Function()? registrationFailed,
+    TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) {
     return progress?.call(line, callId, callee, jsep);
@@ -1486,6 +1694,10 @@ class _$CallSignalingEventProgressImpl
             JsepValue? jsep)?
         updating,
     TResult Function(int line, String callId)? updated,
+    TResult Function()? registering,
+    TResult Function()? registered,
+    TResult Function()? registrationFailed,
+    TResult Function()? unregistering,
     TResult Function()? unregistered,
     required TResult orElse(),
   }) {
@@ -1505,6 +1717,12 @@ class _$CallSignalingEventProgressImpl
     required TResult Function(_CallSignalingEventHangup value) hangup,
     required TResult Function(_CallSignalingEventUpdating value) updating,
     required TResult Function(_CallSignalingEventUpdated value) updated,
+    required TResult Function(_CallSignalingEventRegistering value) registering,
+    required TResult Function(_CallSignalingEventRegistered value) registered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value)
+        registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value)
+        unregistering,
     required TResult Function(_CallSignalingEventUnregistered value)
         unregistered,
   }) {
@@ -1521,6 +1739,11 @@ class _$CallSignalingEventProgressImpl
     TResult? Function(_CallSignalingEventHangup value)? hangup,
     TResult? Function(_CallSignalingEventUpdating value)? updating,
     TResult? Function(_CallSignalingEventUpdated value)? updated,
+    TResult? Function(_CallSignalingEventRegistering value)? registering,
+    TResult? Function(_CallSignalingEventRegistered value)? registered,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
   }) {
     return progress?.call(this);
@@ -1536,6 +1759,11 @@ class _$CallSignalingEventProgressImpl
     TResult Function(_CallSignalingEventHangup value)? hangup,
     TResult Function(_CallSignalingEventUpdating value)? updating,
     TResult Function(_CallSignalingEventUpdated value)? updated,
+    TResult Function(_CallSignalingEventRegistering value)? registering,
+    TResult Function(_CallSignalingEventRegistered value)? registered,
+    TResult Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult Function(_CallSignalingEventUnregistered value)? unregistered,
     required TResult orElse(),
   }) {
@@ -1641,6 +1869,10 @@ class _$CallSignalingEventAcceptedImpl
             JsepValue? jsep)
         updating,
     required TResult Function(int line, String callId) updated,
+    required TResult Function() registering,
+    required TResult Function() registered,
+    required TResult Function() registrationFailed,
+    required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) {
     return accepted(line, callId, callee, jsep);
@@ -1678,6 +1910,10 @@ class _$CallSignalingEventAcceptedImpl
             JsepValue? jsep)?
         updating,
     TResult? Function(int line, String callId)? updated,
+    TResult? Function()? registering,
+    TResult? Function()? registered,
+    TResult? Function()? registrationFailed,
+    TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) {
     return accepted?.call(line, callId, callee, jsep);
@@ -1715,6 +1951,10 @@ class _$CallSignalingEventAcceptedImpl
             JsepValue? jsep)?
         updating,
     TResult Function(int line, String callId)? updated,
+    TResult Function()? registering,
+    TResult Function()? registered,
+    TResult Function()? registrationFailed,
+    TResult Function()? unregistering,
     TResult Function()? unregistered,
     required TResult orElse(),
   }) {
@@ -1734,6 +1974,12 @@ class _$CallSignalingEventAcceptedImpl
     required TResult Function(_CallSignalingEventHangup value) hangup,
     required TResult Function(_CallSignalingEventUpdating value) updating,
     required TResult Function(_CallSignalingEventUpdated value) updated,
+    required TResult Function(_CallSignalingEventRegistering value) registering,
+    required TResult Function(_CallSignalingEventRegistered value) registered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value)
+        registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value)
+        unregistering,
     required TResult Function(_CallSignalingEventUnregistered value)
         unregistered,
   }) {
@@ -1750,6 +1996,11 @@ class _$CallSignalingEventAcceptedImpl
     TResult? Function(_CallSignalingEventHangup value)? hangup,
     TResult? Function(_CallSignalingEventUpdating value)? updating,
     TResult? Function(_CallSignalingEventUpdated value)? updated,
+    TResult? Function(_CallSignalingEventRegistering value)? registering,
+    TResult? Function(_CallSignalingEventRegistered value)? registered,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
   }) {
     return accepted?.call(this);
@@ -1765,6 +2016,11 @@ class _$CallSignalingEventAcceptedImpl
     TResult Function(_CallSignalingEventHangup value)? hangup,
     TResult Function(_CallSignalingEventUpdating value)? updating,
     TResult Function(_CallSignalingEventUpdated value)? updated,
+    TResult Function(_CallSignalingEventRegistering value)? registering,
+    TResult Function(_CallSignalingEventRegistered value)? registered,
+    TResult Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult Function(_CallSignalingEventUnregistered value)? unregistered,
     required TResult orElse(),
   }) {
@@ -1873,6 +2129,10 @@ class _$CallSignalingEventHangupImpl
             JsepValue? jsep)
         updating,
     required TResult Function(int line, String callId) updated,
+    required TResult Function() registering,
+    required TResult Function() registered,
+    required TResult Function() registrationFailed,
+    required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) {
     return hangup(line, callId, code, reason);
@@ -1910,6 +2170,10 @@ class _$CallSignalingEventHangupImpl
             JsepValue? jsep)?
         updating,
     TResult? Function(int line, String callId)? updated,
+    TResult? Function()? registering,
+    TResult? Function()? registered,
+    TResult? Function()? registrationFailed,
+    TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) {
     return hangup?.call(line, callId, code, reason);
@@ -1947,6 +2211,10 @@ class _$CallSignalingEventHangupImpl
             JsepValue? jsep)?
         updating,
     TResult Function(int line, String callId)? updated,
+    TResult Function()? registering,
+    TResult Function()? registered,
+    TResult Function()? registrationFailed,
+    TResult Function()? unregistering,
     TResult Function()? unregistered,
     required TResult orElse(),
   }) {
@@ -1966,6 +2234,12 @@ class _$CallSignalingEventHangupImpl
     required TResult Function(_CallSignalingEventHangup value) hangup,
     required TResult Function(_CallSignalingEventUpdating value) updating,
     required TResult Function(_CallSignalingEventUpdated value) updated,
+    required TResult Function(_CallSignalingEventRegistering value) registering,
+    required TResult Function(_CallSignalingEventRegistered value) registered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value)
+        registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value)
+        unregistering,
     required TResult Function(_CallSignalingEventUnregistered value)
         unregistered,
   }) {
@@ -1982,6 +2256,11 @@ class _$CallSignalingEventHangupImpl
     TResult? Function(_CallSignalingEventHangup value)? hangup,
     TResult? Function(_CallSignalingEventUpdating value)? updating,
     TResult? Function(_CallSignalingEventUpdated value)? updated,
+    TResult? Function(_CallSignalingEventRegistering value)? registering,
+    TResult? Function(_CallSignalingEventRegistered value)? registered,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
   }) {
     return hangup?.call(this);
@@ -1997,6 +2276,11 @@ class _$CallSignalingEventHangupImpl
     TResult Function(_CallSignalingEventHangup value)? hangup,
     TResult Function(_CallSignalingEventUpdating value)? updating,
     TResult Function(_CallSignalingEventUpdated value)? updated,
+    TResult Function(_CallSignalingEventRegistering value)? registering,
+    TResult Function(_CallSignalingEventRegistered value)? registered,
+    TResult Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult Function(_CallSignalingEventUnregistered value)? unregistered,
     required TResult orElse(),
   }) {
@@ -2134,6 +2418,10 @@ class _$CallSignalingEventUpdatingImpl
             JsepValue? jsep)
         updating,
     required TResult Function(int line, String callId) updated,
+    required TResult Function() registering,
+    required TResult Function() registered,
+    required TResult Function() registrationFailed,
+    required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) {
     return updating(line, callId, callee, caller, callerDisplayName, referredBy,
@@ -2172,6 +2460,10 @@ class _$CallSignalingEventUpdatingImpl
             JsepValue? jsep)?
         updating,
     TResult? Function(int line, String callId)? updated,
+    TResult? Function()? registering,
+    TResult? Function()? registered,
+    TResult? Function()? registrationFailed,
+    TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) {
     return updating?.call(line, callId, callee, caller, callerDisplayName,
@@ -2210,6 +2502,10 @@ class _$CallSignalingEventUpdatingImpl
             JsepValue? jsep)?
         updating,
     TResult Function(int line, String callId)? updated,
+    TResult Function()? registering,
+    TResult Function()? registered,
+    TResult Function()? registrationFailed,
+    TResult Function()? unregistering,
     TResult Function()? unregistered,
     required TResult orElse(),
   }) {
@@ -2230,6 +2526,12 @@ class _$CallSignalingEventUpdatingImpl
     required TResult Function(_CallSignalingEventHangup value) hangup,
     required TResult Function(_CallSignalingEventUpdating value) updating,
     required TResult Function(_CallSignalingEventUpdated value) updated,
+    required TResult Function(_CallSignalingEventRegistering value) registering,
+    required TResult Function(_CallSignalingEventRegistered value) registered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value)
+        registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value)
+        unregistering,
     required TResult Function(_CallSignalingEventUnregistered value)
         unregistered,
   }) {
@@ -2246,6 +2548,11 @@ class _$CallSignalingEventUpdatingImpl
     TResult? Function(_CallSignalingEventHangup value)? hangup,
     TResult? Function(_CallSignalingEventUpdating value)? updating,
     TResult? Function(_CallSignalingEventUpdated value)? updated,
+    TResult? Function(_CallSignalingEventRegistering value)? registering,
+    TResult? Function(_CallSignalingEventRegistered value)? registered,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
   }) {
     return updating?.call(this);
@@ -2261,6 +2568,11 @@ class _$CallSignalingEventUpdatingImpl
     TResult Function(_CallSignalingEventHangup value)? hangup,
     TResult Function(_CallSignalingEventUpdating value)? updating,
     TResult Function(_CallSignalingEventUpdated value)? updated,
+    TResult Function(_CallSignalingEventRegistering value)? registering,
+    TResult Function(_CallSignalingEventRegistered value)? registered,
+    TResult Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult Function(_CallSignalingEventUnregistered value)? unregistered,
     required TResult orElse(),
   }) {
@@ -2368,6 +2680,10 @@ class _$CallSignalingEventUpdatedImpl
             JsepValue? jsep)
         updating,
     required TResult Function(int line, String callId) updated,
+    required TResult Function() registering,
+    required TResult Function() registered,
+    required TResult Function() registrationFailed,
+    required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) {
     return updated(line, callId);
@@ -2405,6 +2721,10 @@ class _$CallSignalingEventUpdatedImpl
             JsepValue? jsep)?
         updating,
     TResult? Function(int line, String callId)? updated,
+    TResult? Function()? registering,
+    TResult? Function()? registered,
+    TResult? Function()? registrationFailed,
+    TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) {
     return updated?.call(line, callId);
@@ -2442,6 +2762,10 @@ class _$CallSignalingEventUpdatedImpl
             JsepValue? jsep)?
         updating,
     TResult Function(int line, String callId)? updated,
+    TResult Function()? registering,
+    TResult Function()? registered,
+    TResult Function()? registrationFailed,
+    TResult Function()? unregistering,
     TResult Function()? unregistered,
     required TResult orElse(),
   }) {
@@ -2461,6 +2785,12 @@ class _$CallSignalingEventUpdatedImpl
     required TResult Function(_CallSignalingEventHangup value) hangup,
     required TResult Function(_CallSignalingEventUpdating value) updating,
     required TResult Function(_CallSignalingEventUpdated value) updated,
+    required TResult Function(_CallSignalingEventRegistering value) registering,
+    required TResult Function(_CallSignalingEventRegistered value) registered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value)
+        registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value)
+        unregistering,
     required TResult Function(_CallSignalingEventUnregistered value)
         unregistered,
   }) {
@@ -2477,6 +2807,11 @@ class _$CallSignalingEventUpdatedImpl
     TResult? Function(_CallSignalingEventHangup value)? hangup,
     TResult? Function(_CallSignalingEventUpdating value)? updating,
     TResult? Function(_CallSignalingEventUpdated value)? updated,
+    TResult? Function(_CallSignalingEventRegistering value)? registering,
+    TResult? Function(_CallSignalingEventRegistered value)? registered,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
   }) {
     return updated?.call(this);
@@ -2492,6 +2827,11 @@ class _$CallSignalingEventUpdatedImpl
     TResult Function(_CallSignalingEventHangup value)? hangup,
     TResult Function(_CallSignalingEventUpdating value)? updating,
     TResult Function(_CallSignalingEventUpdated value)? updated,
+    TResult Function(_CallSignalingEventRegistering value)? registering,
+    TResult Function(_CallSignalingEventRegistered value)? registered,
+    TResult Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult Function(_CallSignalingEventUnregistered value)? unregistered,
     required TResult orElse(),
   }) {
@@ -2509,6 +2849,931 @@ abstract class _CallSignalingEventUpdated implements _CallSignalingEvent {
 
   int get line;
   String get callId;
+}
+
+/// @nodoc
+
+class _$CallSignalingEventRegisteringImpl
+    with DiagnosticableTreeMixin
+    implements _CallSignalingEventRegistering {
+  const _$CallSignalingEventRegisteringImpl();
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallSignalingEvent.registering()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+        .add(DiagnosticsProperty('type', '_CallSignalingEvent.registering'));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CallSignalingEventRegisteringImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
+        incoming,
+    required TResult Function(int line, String callId) ringing,
+    required TResult Function(
+            int line, String callId, String callee, JsepValue? jsep)
+        progress,
+    required TResult Function(
+            int line, String callId, String? callee, JsepValue? jsep)
+        accepted,
+    required TResult Function(int line, String callId, int code, String reason)
+        hangup,
+    required TResult Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
+        updating,
+    required TResult Function(int line, String callId) updated,
+    required TResult Function() registering,
+    required TResult Function() registered,
+    required TResult Function() registrationFailed,
+    required TResult Function() unregistering,
+    required TResult Function() unregistered,
+  }) {
+    return registering();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        incoming,
+    TResult? Function(int line, String callId)? ringing,
+    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
+        progress,
+    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult? Function(int line, String callId, int code, String reason)? hangup,
+    TResult? Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult? Function(int line, String callId)? updated,
+    TResult? Function()? registering,
+    TResult? Function()? registered,
+    TResult? Function()? registrationFailed,
+    TResult? Function()? unregistering,
+    TResult? Function()? unregistered,
+  }) {
+    return registering?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        incoming,
+    TResult Function(int line, String callId)? ringing,
+    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
+        progress,
+    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult Function(int line, String callId, int code, String reason)? hangup,
+    TResult Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult Function(int line, String callId)? updated,
+    TResult Function()? registering,
+    TResult Function()? registered,
+    TResult Function()? registrationFailed,
+    TResult Function()? unregistering,
+    TResult Function()? unregistered,
+    required TResult orElse(),
+  }) {
+    if (registering != null) {
+      return registering();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CallSignalingEventIncoming value) incoming,
+    required TResult Function(_CallSignalingEventRinging value) ringing,
+    required TResult Function(_CallSignalingEventProgress value) progress,
+    required TResult Function(_CallSignalingEventAccepted value) accepted,
+    required TResult Function(_CallSignalingEventHangup value) hangup,
+    required TResult Function(_CallSignalingEventUpdating value) updating,
+    required TResult Function(_CallSignalingEventUpdated value) updated,
+    required TResult Function(_CallSignalingEventRegistering value) registering,
+    required TResult Function(_CallSignalingEventRegistered value) registered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value)
+        registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value)
+        unregistering,
+    required TResult Function(_CallSignalingEventUnregistered value)
+        unregistered,
+  }) {
+    return registering(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CallSignalingEventIncoming value)? incoming,
+    TResult? Function(_CallSignalingEventRinging value)? ringing,
+    TResult? Function(_CallSignalingEventProgress value)? progress,
+    TResult? Function(_CallSignalingEventAccepted value)? accepted,
+    TResult? Function(_CallSignalingEventHangup value)? hangup,
+    TResult? Function(_CallSignalingEventUpdating value)? updating,
+    TResult? Function(_CallSignalingEventUpdated value)? updated,
+    TResult? Function(_CallSignalingEventRegistering value)? registering,
+    TResult? Function(_CallSignalingEventRegistered value)? registered,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
+    TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
+  }) {
+    return registering?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CallSignalingEventIncoming value)? incoming,
+    TResult Function(_CallSignalingEventRinging value)? ringing,
+    TResult Function(_CallSignalingEventProgress value)? progress,
+    TResult Function(_CallSignalingEventAccepted value)? accepted,
+    TResult Function(_CallSignalingEventHangup value)? hangup,
+    TResult Function(_CallSignalingEventUpdating value)? updating,
+    TResult Function(_CallSignalingEventUpdated value)? updated,
+    TResult Function(_CallSignalingEventRegistering value)? registering,
+    TResult Function(_CallSignalingEventRegistered value)? registered,
+    TResult Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
+    TResult Function(_CallSignalingEventUnregistered value)? unregistered,
+    required TResult orElse(),
+  }) {
+    if (registering != null) {
+      return registering(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _CallSignalingEventRegistering implements _CallSignalingEvent {
+  const factory _CallSignalingEventRegistering() =
+      _$CallSignalingEventRegisteringImpl;
+}
+
+/// @nodoc
+
+class _$CallSignalingEventRegisteredImpl
+    with DiagnosticableTreeMixin
+    implements _CallSignalingEventRegistered {
+  const _$CallSignalingEventRegisteredImpl();
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallSignalingEvent.registered()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+        .add(DiagnosticsProperty('type', '_CallSignalingEvent.registered'));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CallSignalingEventRegisteredImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
+        incoming,
+    required TResult Function(int line, String callId) ringing,
+    required TResult Function(
+            int line, String callId, String callee, JsepValue? jsep)
+        progress,
+    required TResult Function(
+            int line, String callId, String? callee, JsepValue? jsep)
+        accepted,
+    required TResult Function(int line, String callId, int code, String reason)
+        hangup,
+    required TResult Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
+        updating,
+    required TResult Function(int line, String callId) updated,
+    required TResult Function() registering,
+    required TResult Function() registered,
+    required TResult Function() registrationFailed,
+    required TResult Function() unregistering,
+    required TResult Function() unregistered,
+  }) {
+    return registered();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        incoming,
+    TResult? Function(int line, String callId)? ringing,
+    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
+        progress,
+    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult? Function(int line, String callId, int code, String reason)? hangup,
+    TResult? Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult? Function(int line, String callId)? updated,
+    TResult? Function()? registering,
+    TResult? Function()? registered,
+    TResult? Function()? registrationFailed,
+    TResult? Function()? unregistering,
+    TResult? Function()? unregistered,
+  }) {
+    return registered?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        incoming,
+    TResult Function(int line, String callId)? ringing,
+    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
+        progress,
+    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult Function(int line, String callId, int code, String reason)? hangup,
+    TResult Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult Function(int line, String callId)? updated,
+    TResult Function()? registering,
+    TResult Function()? registered,
+    TResult Function()? registrationFailed,
+    TResult Function()? unregistering,
+    TResult Function()? unregistered,
+    required TResult orElse(),
+  }) {
+    if (registered != null) {
+      return registered();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CallSignalingEventIncoming value) incoming,
+    required TResult Function(_CallSignalingEventRinging value) ringing,
+    required TResult Function(_CallSignalingEventProgress value) progress,
+    required TResult Function(_CallSignalingEventAccepted value) accepted,
+    required TResult Function(_CallSignalingEventHangup value) hangup,
+    required TResult Function(_CallSignalingEventUpdating value) updating,
+    required TResult Function(_CallSignalingEventUpdated value) updated,
+    required TResult Function(_CallSignalingEventRegistering value) registering,
+    required TResult Function(_CallSignalingEventRegistered value) registered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value)
+        registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value)
+        unregistering,
+    required TResult Function(_CallSignalingEventUnregistered value)
+        unregistered,
+  }) {
+    return registered(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CallSignalingEventIncoming value)? incoming,
+    TResult? Function(_CallSignalingEventRinging value)? ringing,
+    TResult? Function(_CallSignalingEventProgress value)? progress,
+    TResult? Function(_CallSignalingEventAccepted value)? accepted,
+    TResult? Function(_CallSignalingEventHangup value)? hangup,
+    TResult? Function(_CallSignalingEventUpdating value)? updating,
+    TResult? Function(_CallSignalingEventUpdated value)? updated,
+    TResult? Function(_CallSignalingEventRegistering value)? registering,
+    TResult? Function(_CallSignalingEventRegistered value)? registered,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
+    TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
+  }) {
+    return registered?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CallSignalingEventIncoming value)? incoming,
+    TResult Function(_CallSignalingEventRinging value)? ringing,
+    TResult Function(_CallSignalingEventProgress value)? progress,
+    TResult Function(_CallSignalingEventAccepted value)? accepted,
+    TResult Function(_CallSignalingEventHangup value)? hangup,
+    TResult Function(_CallSignalingEventUpdating value)? updating,
+    TResult Function(_CallSignalingEventUpdated value)? updated,
+    TResult Function(_CallSignalingEventRegistering value)? registering,
+    TResult Function(_CallSignalingEventRegistered value)? registered,
+    TResult Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
+    TResult Function(_CallSignalingEventUnregistered value)? unregistered,
+    required TResult orElse(),
+  }) {
+    if (registered != null) {
+      return registered(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _CallSignalingEventRegistered implements _CallSignalingEvent {
+  const factory _CallSignalingEventRegistered() =
+      _$CallSignalingEventRegisteredImpl;
+}
+
+/// @nodoc
+
+class _$CallSignalingEventRegisterationFailedImpl
+    with DiagnosticableTreeMixin
+    implements _CallSignalingEventRegisterationFailed {
+  const _$CallSignalingEventRegisterationFailedImpl();
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallSignalingEvent.registrationFailed()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(
+        DiagnosticsProperty('type', '_CallSignalingEvent.registrationFailed'));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CallSignalingEventRegisterationFailedImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
+        incoming,
+    required TResult Function(int line, String callId) ringing,
+    required TResult Function(
+            int line, String callId, String callee, JsepValue? jsep)
+        progress,
+    required TResult Function(
+            int line, String callId, String? callee, JsepValue? jsep)
+        accepted,
+    required TResult Function(int line, String callId, int code, String reason)
+        hangup,
+    required TResult Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
+        updating,
+    required TResult Function(int line, String callId) updated,
+    required TResult Function() registering,
+    required TResult Function() registered,
+    required TResult Function() registrationFailed,
+    required TResult Function() unregistering,
+    required TResult Function() unregistered,
+  }) {
+    return registrationFailed();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        incoming,
+    TResult? Function(int line, String callId)? ringing,
+    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
+        progress,
+    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult? Function(int line, String callId, int code, String reason)? hangup,
+    TResult? Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult? Function(int line, String callId)? updated,
+    TResult? Function()? registering,
+    TResult? Function()? registered,
+    TResult? Function()? registrationFailed,
+    TResult? Function()? unregistering,
+    TResult? Function()? unregistered,
+  }) {
+    return registrationFailed?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        incoming,
+    TResult Function(int line, String callId)? ringing,
+    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
+        progress,
+    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult Function(int line, String callId, int code, String reason)? hangup,
+    TResult Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult Function(int line, String callId)? updated,
+    TResult Function()? registering,
+    TResult Function()? registered,
+    TResult Function()? registrationFailed,
+    TResult Function()? unregistering,
+    TResult Function()? unregistered,
+    required TResult orElse(),
+  }) {
+    if (registrationFailed != null) {
+      return registrationFailed();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CallSignalingEventIncoming value) incoming,
+    required TResult Function(_CallSignalingEventRinging value) ringing,
+    required TResult Function(_CallSignalingEventProgress value) progress,
+    required TResult Function(_CallSignalingEventAccepted value) accepted,
+    required TResult Function(_CallSignalingEventHangup value) hangup,
+    required TResult Function(_CallSignalingEventUpdating value) updating,
+    required TResult Function(_CallSignalingEventUpdated value) updated,
+    required TResult Function(_CallSignalingEventRegistering value) registering,
+    required TResult Function(_CallSignalingEventRegistered value) registered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value)
+        registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value)
+        unregistering,
+    required TResult Function(_CallSignalingEventUnregistered value)
+        unregistered,
+  }) {
+    return registrationFailed(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CallSignalingEventIncoming value)? incoming,
+    TResult? Function(_CallSignalingEventRinging value)? ringing,
+    TResult? Function(_CallSignalingEventProgress value)? progress,
+    TResult? Function(_CallSignalingEventAccepted value)? accepted,
+    TResult? Function(_CallSignalingEventHangup value)? hangup,
+    TResult? Function(_CallSignalingEventUpdating value)? updating,
+    TResult? Function(_CallSignalingEventUpdated value)? updated,
+    TResult? Function(_CallSignalingEventRegistering value)? registering,
+    TResult? Function(_CallSignalingEventRegistered value)? registered,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
+    TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
+  }) {
+    return registrationFailed?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CallSignalingEventIncoming value)? incoming,
+    TResult Function(_CallSignalingEventRinging value)? ringing,
+    TResult Function(_CallSignalingEventProgress value)? progress,
+    TResult Function(_CallSignalingEventAccepted value)? accepted,
+    TResult Function(_CallSignalingEventHangup value)? hangup,
+    TResult Function(_CallSignalingEventUpdating value)? updating,
+    TResult Function(_CallSignalingEventUpdated value)? updated,
+    TResult Function(_CallSignalingEventRegistering value)? registering,
+    TResult Function(_CallSignalingEventRegistered value)? registered,
+    TResult Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
+    TResult Function(_CallSignalingEventUnregistered value)? unregistered,
+    required TResult orElse(),
+  }) {
+    if (registrationFailed != null) {
+      return registrationFailed(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _CallSignalingEventRegisterationFailed
+    implements _CallSignalingEvent {
+  const factory _CallSignalingEventRegisterationFailed() =
+      _$CallSignalingEventRegisterationFailedImpl;
+}
+
+/// @nodoc
+
+class _$CallSignalingEventUnregisteringImpl
+    with DiagnosticableTreeMixin
+    implements _CallSignalingEventUnregistering {
+  const _$CallSignalingEventUnregisteringImpl();
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallSignalingEvent.unregistering()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+        .add(DiagnosticsProperty('type', '_CallSignalingEvent.unregistering'));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CallSignalingEventUnregisteringImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
+        incoming,
+    required TResult Function(int line, String callId) ringing,
+    required TResult Function(
+            int line, String callId, String callee, JsepValue? jsep)
+        progress,
+    required TResult Function(
+            int line, String callId, String? callee, JsepValue? jsep)
+        accepted,
+    required TResult Function(int line, String callId, int code, String reason)
+        hangup,
+    required TResult Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)
+        updating,
+    required TResult Function(int line, String callId) updated,
+    required TResult Function() registering,
+    required TResult Function() registered,
+    required TResult Function() registrationFailed,
+    required TResult Function() unregistering,
+    required TResult Function() unregistered,
+  }) {
+    return unregistering();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        incoming,
+    TResult? Function(int line, String callId)? ringing,
+    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
+        progress,
+    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult? Function(int line, String callId, int code, String reason)? hangup,
+    TResult? Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult? Function(int line, String callId)? updated,
+    TResult? Function()? registering,
+    TResult? Function()? registered,
+    TResult? Function()? registrationFailed,
+    TResult? Function()? unregistering,
+    TResult? Function()? unregistered,
+  }) {
+    return unregistering?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        incoming,
+    TResult Function(int line, String callId)? ringing,
+    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
+        progress,
+    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult Function(int line, String callId, int code, String reason)? hangup,
+    TResult Function(
+            int line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult Function(int line, String callId)? updated,
+    TResult Function()? registering,
+    TResult Function()? registered,
+    TResult Function()? registrationFailed,
+    TResult Function()? unregistering,
+    TResult Function()? unregistered,
+    required TResult orElse(),
+  }) {
+    if (unregistering != null) {
+      return unregistering();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CallSignalingEventIncoming value) incoming,
+    required TResult Function(_CallSignalingEventRinging value) ringing,
+    required TResult Function(_CallSignalingEventProgress value) progress,
+    required TResult Function(_CallSignalingEventAccepted value) accepted,
+    required TResult Function(_CallSignalingEventHangup value) hangup,
+    required TResult Function(_CallSignalingEventUpdating value) updating,
+    required TResult Function(_CallSignalingEventUpdated value) updated,
+    required TResult Function(_CallSignalingEventRegistering value) registering,
+    required TResult Function(_CallSignalingEventRegistered value) registered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value)
+        registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value)
+        unregistering,
+    required TResult Function(_CallSignalingEventUnregistered value)
+        unregistered,
+  }) {
+    return unregistering(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CallSignalingEventIncoming value)? incoming,
+    TResult? Function(_CallSignalingEventRinging value)? ringing,
+    TResult? Function(_CallSignalingEventProgress value)? progress,
+    TResult? Function(_CallSignalingEventAccepted value)? accepted,
+    TResult? Function(_CallSignalingEventHangup value)? hangup,
+    TResult? Function(_CallSignalingEventUpdating value)? updating,
+    TResult? Function(_CallSignalingEventUpdated value)? updated,
+    TResult? Function(_CallSignalingEventRegistering value)? registering,
+    TResult? Function(_CallSignalingEventRegistered value)? registered,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
+    TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
+  }) {
+    return unregistering?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CallSignalingEventIncoming value)? incoming,
+    TResult Function(_CallSignalingEventRinging value)? ringing,
+    TResult Function(_CallSignalingEventProgress value)? progress,
+    TResult Function(_CallSignalingEventAccepted value)? accepted,
+    TResult Function(_CallSignalingEventHangup value)? hangup,
+    TResult Function(_CallSignalingEventUpdating value)? updating,
+    TResult Function(_CallSignalingEventUpdated value)? updated,
+    TResult Function(_CallSignalingEventRegistering value)? registering,
+    TResult Function(_CallSignalingEventRegistered value)? registered,
+    TResult Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
+    TResult Function(_CallSignalingEventUnregistered value)? unregistered,
+    required TResult orElse(),
+  }) {
+    if (unregistering != null) {
+      return unregistering(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _CallSignalingEventUnregistering implements _CallSignalingEvent {
+  const factory _CallSignalingEventUnregistering() =
+      _$CallSignalingEventUnregisteringImpl;
 }
 
 /// @nodoc
@@ -2575,6 +3840,10 @@ class _$CallSignalingEventUnregisteredImpl
             JsepValue? jsep)
         updating,
     required TResult Function(int line, String callId) updated,
+    required TResult Function() registering,
+    required TResult Function() registered,
+    required TResult Function() registrationFailed,
+    required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) {
     return unregistered();
@@ -2612,6 +3881,10 @@ class _$CallSignalingEventUnregisteredImpl
             JsepValue? jsep)?
         updating,
     TResult? Function(int line, String callId)? updated,
+    TResult? Function()? registering,
+    TResult? Function()? registered,
+    TResult? Function()? registrationFailed,
+    TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) {
     return unregistered?.call();
@@ -2649,6 +3922,10 @@ class _$CallSignalingEventUnregisteredImpl
             JsepValue? jsep)?
         updating,
     TResult Function(int line, String callId)? updated,
+    TResult Function()? registering,
+    TResult Function()? registered,
+    TResult Function()? registrationFailed,
+    TResult Function()? unregistering,
     TResult Function()? unregistered,
     required TResult orElse(),
   }) {
@@ -2668,6 +3945,12 @@ class _$CallSignalingEventUnregisteredImpl
     required TResult Function(_CallSignalingEventHangup value) hangup,
     required TResult Function(_CallSignalingEventUpdating value) updating,
     required TResult Function(_CallSignalingEventUpdated value) updated,
+    required TResult Function(_CallSignalingEventRegistering value) registering,
+    required TResult Function(_CallSignalingEventRegistered value) registered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value)
+        registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value)
+        unregistering,
     required TResult Function(_CallSignalingEventUnregistered value)
         unregistered,
   }) {
@@ -2684,6 +3967,11 @@ class _$CallSignalingEventUnregisteredImpl
     TResult? Function(_CallSignalingEventHangup value)? hangup,
     TResult? Function(_CallSignalingEventUpdating value)? updating,
     TResult? Function(_CallSignalingEventUpdated value)? updated,
+    TResult? Function(_CallSignalingEventRegistering value)? registering,
+    TResult? Function(_CallSignalingEventRegistered value)? registered,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
   }) {
     return unregistered?.call(this);
@@ -2699,6 +3987,11 @@ class _$CallSignalingEventUnregisteredImpl
     TResult Function(_CallSignalingEventHangup value)? hangup,
     TResult Function(_CallSignalingEventUpdating value)? updating,
     TResult Function(_CallSignalingEventUpdated value)? updated,
+    TResult Function(_CallSignalingEventRegistering value)? registering,
+    TResult Function(_CallSignalingEventRegistered value)? registered,
+    TResult Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult Function(_CallSignalingEventUnregistered value)? unregistered,
     required TResult orElse(),
   }) {
@@ -7932,6 +9225,8 @@ abstract class _CallScreenEventDidPop implements CallScreenEvent {
 mixin _$CallState {
   ConnectivityResult? get currentConnectivityResult =>
       throw _privateConstructorUsedError;
+  RegistrationStatus get registrationStatus =>
+      throw _privateConstructorUsedError;
   SignalingClientStatus get signalingClientStatus =>
       throw _privateConstructorUsedError;
   Object? get lastSignalingClientConnectError =>
@@ -7956,6 +9251,7 @@ abstract class $CallStateCopyWith<$Res> {
   @useResult
   $Res call(
       {ConnectivityResult? currentConnectivityResult,
+      RegistrationStatus registrationStatus,
       SignalingClientStatus signalingClientStatus,
       Object? lastSignalingClientConnectError,
       Object? lastSignalingClientDisconnectError,
@@ -7980,6 +9276,7 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
   @override
   $Res call({
     Object? currentConnectivityResult = freezed,
+    Object? registrationStatus = null,
     Object? signalingClientStatus = null,
     Object? lastSignalingClientConnectError = freezed,
     Object? lastSignalingClientDisconnectError = freezed,
@@ -7994,6 +9291,10 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
           ? _value.currentConnectivityResult
           : currentConnectivityResult // ignore: cast_nullable_to_non_nullable
               as ConnectivityResult?,
+      registrationStatus: null == registrationStatus
+          ? _value.registrationStatus
+          : registrationStatus // ignore: cast_nullable_to_non_nullable
+              as RegistrationStatus,
       signalingClientStatus: null == signalingClientStatus
           ? _value.signalingClientStatus
           : signalingClientStatus // ignore: cast_nullable_to_non_nullable
@@ -8040,6 +9341,7 @@ abstract class _$$CallStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {ConnectivityResult? currentConnectivityResult,
+      RegistrationStatus registrationStatus,
       SignalingClientStatus signalingClientStatus,
       Object? lastSignalingClientConnectError,
       Object? lastSignalingClientDisconnectError,
@@ -8062,6 +9364,7 @@ class __$$CallStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? currentConnectivityResult = freezed,
+    Object? registrationStatus = null,
     Object? signalingClientStatus = null,
     Object? lastSignalingClientConnectError = freezed,
     Object? lastSignalingClientDisconnectError = freezed,
@@ -8076,6 +9379,10 @@ class __$$CallStateImplCopyWithImpl<$Res>
           ? _value.currentConnectivityResult
           : currentConnectivityResult // ignore: cast_nullable_to_non_nullable
               as ConnectivityResult?,
+      registrationStatus: null == registrationStatus
+          ? _value.registrationStatus
+          : registrationStatus // ignore: cast_nullable_to_non_nullable
+              as RegistrationStatus,
       signalingClientStatus: null == signalingClientStatus
           ? _value.signalingClientStatus
           : signalingClientStatus // ignore: cast_nullable_to_non_nullable
@@ -8117,6 +9424,7 @@ class __$$CallStateImplCopyWithImpl<$Res>
 class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
   const _$CallStateImpl(
       {this.currentConnectivityResult,
+      this.registrationStatus = RegistrationStatus.registering,
       this.signalingClientStatus = SignalingClientStatus.disconnect,
       this.lastSignalingClientConnectError,
       this.lastSignalingClientDisconnectError,
@@ -8130,6 +9438,9 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
 
   @override
   final ConnectivityResult? currentConnectivityResult;
+  @override
+  @JsonKey()
+  final RegistrationStatus registrationStatus;
   @override
   @JsonKey()
   final SignalingClientStatus signalingClientStatus;
@@ -8158,7 +9469,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallState(currentConnectivityResult: $currentConnectivityResult, signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, linesCount: $linesCount, activeCalls: $activeCalls, minimized: $minimized, speaker: $speaker)';
+    return 'CallState(currentConnectivityResult: $currentConnectivityResult, registrationStatus: $registrationStatus, signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, linesCount: $linesCount, activeCalls: $activeCalls, minimized: $minimized, speaker: $speaker)';
   }
 
   @override
@@ -8168,6 +9479,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('type', 'CallState'))
       ..add(DiagnosticsProperty(
           'currentConnectivityResult', currentConnectivityResult))
+      ..add(DiagnosticsProperty('registrationStatus', registrationStatus))
       ..add(DiagnosticsProperty('signalingClientStatus', signalingClientStatus))
       ..add(DiagnosticsProperty(
           'lastSignalingClientConnectError', lastSignalingClientConnectError))
@@ -8189,6 +9501,8 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
             (identical(other.currentConnectivityResult,
                     currentConnectivityResult) ||
                 other.currentConnectivityResult == currentConnectivityResult) &&
+            (identical(other.registrationStatus, registrationStatus) ||
+                other.registrationStatus == registrationStatus) &&
             (identical(other.signalingClientStatus, signalingClientStatus) ||
                 other.signalingClientStatus == signalingClientStatus) &&
             const DeepCollectionEquality().equals(
@@ -8214,6 +9528,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
   int get hashCode => Object.hash(
       runtimeType,
       currentConnectivityResult,
+      registrationStatus,
       signalingClientStatus,
       const DeepCollectionEquality().hash(lastSignalingClientConnectError),
       const DeepCollectionEquality().hash(lastSignalingClientDisconnectError),
@@ -8233,6 +9548,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
 abstract class _CallState extends CallState {
   const factory _CallState(
       {final ConnectivityResult? currentConnectivityResult,
+      final RegistrationStatus registrationStatus,
       final SignalingClientStatus signalingClientStatus,
       final Object? lastSignalingClientConnectError,
       final Object? lastSignalingClientDisconnectError,
@@ -8245,6 +9561,8 @@ abstract class _CallState extends CallState {
 
   @override
   ConnectivityResult? get currentConnectivityResult;
+  @override
+  RegistrationStatus get registrationStatus;
   @override
   SignalingClientStatus get signalingClientStatus;
   @override

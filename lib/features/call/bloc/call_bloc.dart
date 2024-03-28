@@ -25,6 +25,7 @@ import 'package:webtrit_phone/features/notifications/notifications.dart';
 import 'package:webtrit_phone/models/recent.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
+import '../extensions/extensions.dart';
 import '../models/models.dart';
 
 export 'package:webtrit_callkeep/webtrit_callkeep.dart' show CallkeepHandle, CallkeepHandleType;
@@ -81,6 +82,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
     on<_NavigatorMediaDevicesChange>(
       _onNavigatorMediaDevicesChange,
+      transformer: droppable(),
+    );
+    on<_RegistrationChange>(
+      _onRegistrationChange,
+      transformer: droppable(),
+    );
+    on<_CompleteCallsAndResetState>(
+      _completeCallsAndResetState,
       transformer: droppable(),
     );
     on<_SignalingClientEvent>(
@@ -335,6 +344,60 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
   }
 
+  // processing the registration event change
+
+  Future<void> _onRegistrationChange(
+    _RegistrationChange event,
+    Emitter<CallState> emit,
+  ) async {
+    final newRegistrationStatus = event.registrationStatus;
+    final previousRegistrationStatus = state.registrationStatus;
+    if (newRegistrationStatus != previousRegistrationStatus) {
+      _logger.fine('_onRegistrationChange: $previousRegistrationStatus to $newRegistrationStatus');
+      emit(state.copyWith(registrationStatus: newRegistrationStatus));
+    } else {
+      _logger.fine('_onRegistrationChange: status is already the same');
+      return;
+    }
+
+    if (newRegistrationStatus.isRegistering) {
+      add(const _CompleteCallsAndResetState());
+    } else if (newRegistrationStatus.isFailed || newRegistrationStatus.isUnregistered) {
+      add(const _CompleteCallsAndResetState());
+
+      if (event.reason != null) {
+        notificationsBloc.add(NotificationsMessaged(RawNotification(event.reason!)));
+      } else {
+        notificationsBloc.add(NotificationsMessaged(AppOfflineNotification()));
+      }
+    }
+  }
+
+  // processing the handling of the app state
+
+  Future<void> _completeCallsAndResetState(
+    _CompleteCallsAndResetState event,
+    Emitter<CallState> emit,
+  ) async {
+    for (var element in state.activeCalls) {
+      try {
+        callkeep.endCall(element.callId);
+        await state.performOnActiveCall(element.callId, (activeCall) async {
+          // Need to close peer connection after executing [HangupRequest]
+          // to prevent "Simulate a "hangup" coming from the application"
+          // because of "No WebRTC media anymore".
+          await (await _peerConnectionRetrieve(activeCall.callId))?.close();
+          await activeCall.renderers.dispose();
+          await activeCall.renderers.local.srcObject?.dispose();
+        });
+      } catch (e) {
+        _logger.warning('_completeCallsAndResetState: $e');
+      }
+
+      emit(state.copyWithPopActiveCall(element.callId));
+    }
+  }
+
   // processing signaling client events
 
   Future<void> _onSignalingClientEvent(
@@ -461,6 +524,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       if (code == SignalingDisconnectCode.sessionMissedError) {
         notificationsBloc.add(const NotificationsIssued(CallSignalingClientSessionMissedErrorNotification()));
         appBloc.add(const AppLogouted());
+      } else if (code == SignalingDisconnectCode.appUnregisteredError) {
+        add(const _RegistrationChange(registrationStatus: RegistrationStatus.unregistered));
       }
     }
 
@@ -519,6 +584,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     emit(state.copyWith(linesCount: event.linesCount));
+
+    add(_RegistrationChange(
+      registrationStatus: event.registration.status,
+      reason: event.registration.reason,
+      code: event.registration.code,
+    ));
   }
 
   // processing call signaling events
@@ -535,6 +606,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       hangup: (event) => __onCallSignalingEventHangup(event, emit),
       updating: (event) => __onCallSignalingEventUpdating(event, emit),
       updated: (event) => __onCallSignalingEventUpdated(event, emit),
+      registering: (event) => __onCallSignalingEventRegistering(event, emit),
+      registered: (event) => __onCallSignalingEventRegistered(event, emit),
+      registrationFailed: (event) => __onCallSignalingEventRegistrationFailed(event, emit),
+      unregistering: (event) => __onCallSignalingEventUnregistering(event, emit),
       unregistered: (event) => __onCallSignalingEventUnregistered(event, emit),
     );
   }
@@ -789,13 +864,39 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }));
   }
 
+  Future<void> __onCallSignalingEventRegistering(
+    _CallSignalingEventRegistering event,
+    Emitter<CallState> emit,
+  ) async {
+    add(const _RegistrationChange(registrationStatus: RegistrationStatus.registering));
+  }
+
+  Future<void> __onCallSignalingEventRegistered(
+    _CallSignalingEventRegistered event,
+    Emitter<CallState> emit,
+  ) async {
+    add(const _RegistrationChange(registrationStatus: RegistrationStatus.registered));
+  }
+
+  Future<void> __onCallSignalingEventRegistrationFailed(
+    _CallSignalingEventRegisterationFailed event,
+    Emitter<CallState> emit,
+  ) async {
+    add(const _RegistrationChange(registrationStatus: RegistrationStatus.registration_failed));
+  }
+
+  Future<void> __onCallSignalingEventUnregistering(
+    _CallSignalingEventUnregistering event,
+    Emitter<CallState> emit,
+  ) async {
+    add(const _RegistrationChange(registrationStatus: RegistrationStatus.unregistering));
+  }
+
   Future<void> __onCallSignalingEventUnregistered(
     _CallSignalingEventUnregistered event,
     Emitter<CallState> emit,
   ) async {
-    for (var element in state.activeCalls) {
-      callkeep.endCall(element.callId);
-    }
+    add(const _RegistrationChange(registrationStatus: RegistrationStatus.unregistered));
   }
 
   // processing call control events
@@ -824,6 +925,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallControlEventStarted event,
     Emitter<CallState> emit,
   ) async {
+    if (!state.registrationStatus.isRegistered) {
+      _logger.info('__onCallControlEventStarted account is not registered');
+      notificationsBloc.add(NotificationsMessaged(AppUnregisteredNotification()));
+
+      return;
+    }
+
     final callId = WebtritSignalingClient.generateCallId();
 
     final error = await callkeep.startCall(
@@ -1025,6 +1133,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallPerformEventStarted event,
     Emitter<CallState> emit,
   ) async {
+    if (!state.registrationStatus.isRegistered) {
+      _logger.info('__onCallPerformEventStarted account is not registered');
+      notificationsBloc.add(NotificationsMessaged(AppUnregisteredNotification()));
+
+      event.fail();
+      return;
+    }
+
     if (await state.performOnActiveCall(event.callId, (activeCall) => activeCall.line != _kUndefinedLine) != true) {
       event.fail();
 
@@ -1405,6 +1521,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   void _onSignalingStateHandshake(StateHandshake stateHandshake) {
     add(_HandshakeSignalingEvent.state(
+      registration: stateHandshake.registration,
       linesCount: stateHandshake.lines.length,
     ));
 
@@ -1511,6 +1628,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         line: event.line,
         callId: event.callId,
       ));
+    } else if (event is RegisteringEvent) {
+      add(const _CallSignalingEvent.registering());
+    } else if (event is RegisteredEvent) {
+      add(const _CallSignalingEvent.registered());
+    } else if (event is RegistrationFailedEvent) {
+      add(const _CallSignalingEvent.registrationFailed());
+    } else if (event is UnregisteringEvent) {
+      add(const _CallSignalingEvent.unregistering());
     } else if (event is UnregisteredEvent) {
       add(const _CallSignalingEvent.unregistered());
     } else {

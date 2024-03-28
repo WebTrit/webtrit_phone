@@ -29,6 +29,24 @@ class _NavigatorMediaDevicesChange with _$NavigatorMediaDevicesChange implements
   const factory _NavigatorMediaDevicesChange() = __NavigatorMediaDevicesChange;
 }
 
+// registration event change
+
+@Freezed(copyWith: false)
+class _RegistrationChange with _$RegistrationChange implements CallEvent {
+  const factory _RegistrationChange({
+    required RegistrationStatus registrationStatus,
+    String? reason,
+    int? code,
+  }) = __RegistrationChange;
+}
+
+// handle app state
+
+@Freezed(copyWith: false)
+class _CompleteCallsAndResetState with _$CompleteCallsAndResetState implements CallEvent {
+  const factory _CompleteCallsAndResetState() = __CompleteCallsAndResetState;
+}
+
 // signaling client events
 
 @Freezed(copyWith: false)
@@ -45,6 +63,7 @@ class _SignalingClientEvent with _$SignalingClientEvent implements CallEvent {
 @Freezed(copyWith: false)
 class _HandshakeSignalingEvent with _$HandshakeSignalingEvent implements CallEvent {
   const factory _HandshakeSignalingEvent.state({
+    required Registration registration,
     required int linesCount,
   }) = _HandshakeSignalingEventState;
 }
@@ -107,6 +126,14 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
     required int line,
     required String callId,
   }) = _CallSignalingEventUpdated;
+
+  const factory _CallSignalingEvent.registering() = _CallSignalingEventRegistering;
+
+  const factory _CallSignalingEvent.registered() = _CallSignalingEventRegistered;
+
+  const factory _CallSignalingEvent.registrationFailed() = _CallSignalingEventRegisterationFailed;
+
+  const factory _CallSignalingEvent.unregistering() = _CallSignalingEventUnregistering;
 
   const factory _CallSignalingEvent.unregistered() = _CallSignalingEventUnregistered;
 }
