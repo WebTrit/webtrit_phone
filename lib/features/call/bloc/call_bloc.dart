@@ -485,7 +485,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         notificationsBloc.add(const NotificationsIssued(CallSignalingClientSessionMissedErrorNotification()));
         appBloc.add(const AppLogouted());
       } else if (code == SignalingDisconnectCode.appUnregisteredError) {
-        add(const _RegistrationAccountChange(RegistrationAccountStatus.unregistered));
+        add(const _RegistrationAccountChange(registrationAccountStatus: RegistrationAccountStatus.unregistered));
       }
     }
 
@@ -546,7 +546,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     emit(state.copyWith(linesCount: event.linesCount));
 
     final registrationAccountStatus = event.registration.status.toRegistrationAccountStatus();
-    add(_RegistrationAccountChange(registrationAccountStatus));
+    add(_RegistrationAccountChange(registrationAccountStatus: registrationAccountStatus));
 
     if (registrationAccountStatus.isUnregistered || registrationAccountStatus.isFailed) {
       final reason = event.registration.reason;
@@ -811,35 +811,35 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallSignalingEventRegistering event,
     Emitter<CallState> emit,
   ) async {
-    add(const _RegistrationAccountChange(RegistrationAccountStatus.registering));
+    add(const _RegistrationAccountChange(registrationAccountStatus: RegistrationAccountStatus.registering));
   }
 
   Future<void> __onCallSignalingEventRegistered(
     _CallSignalingEventRegistered event,
     Emitter<CallState> emit,
   ) async {
-    add(const _RegistrationAccountChange(RegistrationAccountStatus.registered));
+    add(const _RegistrationAccountChange(registrationAccountStatus: RegistrationAccountStatus.registered));
   }
 
   Future<void> __onCallSignalingEventRegistrationFailed(
     _CallSignalingEventRegisterationFailed event,
     Emitter<CallState> emit,
   ) async {
-    add(const _RegistrationAccountChange(RegistrationAccountStatus.failed));
+    add(const _RegistrationAccountChange(registrationAccountStatus: RegistrationAccountStatus.failed));
   }
 
   Future<void> __onCallSignalingEventUnregistering(
     _CallSignalingEventUnregistering event,
     Emitter<CallState> emit,
   ) async {
-    add(const _RegistrationAccountChange(RegistrationAccountStatus.unregistering));
+    add(const _RegistrationAccountChange(registrationAccountStatus: RegistrationAccountStatus.unregistering));
   }
 
   Future<void> __onCallSignalingEventUnregistered(
     _CallSignalingEventUnregistered event,
     Emitter<CallState> emit,
   ) async {
-    add(const _RegistrationAccountChange(RegistrationAccountStatus.unregistered));
+    add(const _RegistrationAccountChange(registrationAccountStatus: RegistrationAccountStatus.unregistered));
   }
 
   // processing call control events
