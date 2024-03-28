@@ -11,9 +11,14 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 class UserAgreementScreen extends StatefulWidget {
-  const UserAgreementScreen({super.key, required this.appTermsAndConditionsUrl});
+  const UserAgreementScreen({
+    super.key,
+    required this.appTermsAndConditionsUrl,
+    required this.appName,
+  });
 
   final String appTermsAndConditionsUrl;
+  final String appName;
 
   @override
   State<UserAgreementScreen> createState() => _UserAgreementScreenState();
@@ -45,7 +50,7 @@ class _UserAgreementScreenState extends State<UserAgreementScreen> {
                     ),
                     const SizedBox(height: kInset * 2),
                     Text(
-                      context.l10n.permission_Text_description,
+                      context.l10n.user_agreement_description(widget.appName),
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
@@ -63,13 +68,13 @@ class _UserAgreementScreenState extends State<UserAgreementScreen> {
                       OutlinedButton(
                         onPressed: () => context.read<AppBloc>().add(const AppUserAgreementAccepted()),
                         style: elevatedButtonStyles?.primary,
-                        child: Text(context.l10n.permission_Button_request),
+                        child: Text(context.l10n.user_agreement_button_text),
                       )
                     else
                       OutlinedButton(
                         onPressed: null,
                         style: elevatedButtonStyles?.primary,
-                        child: Text(context.l10n.permission_Button_request),
+                        child: Text(context.l10n.user_agreement_button_text),
                       )
                   ],
                 ),

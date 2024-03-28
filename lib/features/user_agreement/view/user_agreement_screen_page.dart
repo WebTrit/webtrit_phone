@@ -12,8 +12,12 @@ class UserAgreementScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const appTermsAndConditionsUrl = EnvironmentConfig.APP_TERMS_AND_CONDITIONS_URL ?? '';
-    const screen = UserAgreementScreen(appTermsAndConditionsUrl: appTermsAndConditionsUrl);
+    const appTermsAndConditionsUrl = EnvironmentConfig.APP_TERMS_AND_CONDITIONS_URL ?? ''; // TODO: guard check
+    const appName = EnvironmentConfig.APP_NAME;
+    const screen = UserAgreementScreen(
+      appTermsAndConditionsUrl: appTermsAndConditionsUrl,
+      appName: appName,
+    );
     return screen;
   }
 }

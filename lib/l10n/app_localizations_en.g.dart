@@ -437,9 +437,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get permission_Text_description => 'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.';
 
   @override
-  String permission_agreement_text(String url) {
+  String user_agreement_checkbox_text(String url) {
     return 'I have read and agree to the $url, including with terms and conditions.';
   }
+
+  @override
+  String user_agreement_description(String appName) {
+    return 'Welcome to $appName';
+  }
+
+  @override
+  String get user_agreement_button_text => 'Continue';
 
   @override
   String recents_BodyCenter_empty(Object filter) {

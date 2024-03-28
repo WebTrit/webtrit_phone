@@ -338,14 +338,24 @@
   "@permission_Button_request": {},
   "permission_Text_description": "To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.",
   "@permission_Text_description": {},
-   "permission_agreement_text": "I have read and agree to the {url}, including with terms and conditions.",
-  "@permission_agreement_text": {
+  "user_agreement_checkbox_text": "I have read and agree to the {url}, including with terms and conditions.",
+  "@user_agreement_checkbox_text": {
     "placeholders": {
       "url": {
         "type": "String"
       }
     }
   },
+  "user_agreement_description": "Welcome to {appName}",
+  "@user_agreement_description": {
+    "placeholders": {
+      "appName": {
+        "type": "String"
+      }
+    }
+  },
+  "user_agreement_button_text": "Continue",
+  "@user_agreement_button_text": {},
   "recents_BodyCenter_empty": "Currently you have no {filter} recent calls.",
   "@recents_BodyCenter_empty": {},
   "recents_DeleteConfirmDialog_content": "Are you sure you want to delete the current call log?",
