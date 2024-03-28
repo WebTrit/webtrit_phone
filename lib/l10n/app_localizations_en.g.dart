@@ -532,7 +532,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_ListViewTileTitle_network => 'Network settings';
 
   @override
-  String get settings_ListViewTileTitle_registered => 'Registered';
+  String get settings_ListViewTileTitle_registered => 'Online';
 
   @override
   String get settings_ListViewTileTitle_settings => 'SETTINGS';

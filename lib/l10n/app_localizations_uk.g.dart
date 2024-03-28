@@ -532,7 +532,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_ListViewTileTitle_network => 'Налаштування мережі';
 
   @override
-  String get settings_ListViewTileTitle_registered => 'Зареєстровані';
+  String get settings_ListViewTileTitle_registered => 'В мережі';
 
   @override
   String get settings_ListViewTileTitle_settings => 'НАЛАШТУВАННЯ';

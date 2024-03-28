@@ -1074,7 +1074,7 @@ abstract class AppLocalizations {
   /// No description provided for @settings_ListViewTileTitle_registered.
   ///
   /// In en, this message translates to:
-  /// **'Registered'**
+  /// **'Online'**
   String get settings_ListViewTileTitle_registered;
 
   /// No description provided for @settings_ListViewTileTitle_settings.
