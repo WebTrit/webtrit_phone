@@ -428,6 +428,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications_errorSnackBar_callUserMedia => 'No access to media input, please check app permissions';
 
   @override
+  String get notifications_errorSnackBar_appUnregistered => 'Your application is currently disconnected from the server. Please adjust your online/offline status in the settings page to establish a connection.';
+
+  @override
   String get notImplemented => 'Sorry, not implemented yet';
 
   @override

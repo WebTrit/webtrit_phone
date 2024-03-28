@@ -332,6 +332,8 @@
   "@notifications_errorSnackBar_callUndefinedLine": {},
   "notifications_errorSnackBar_callUserMedia": "No access to media input, please check app permissions",
   "@notifications_errorSnackBar_callUserMedia": {},
+  "notifications_errorSnackBar_appUnregistered": "Your application is currently disconnected from the server. Please adjust your online/offline status in the settings page to establish a connection.",
+  "@notifications_errorSnackBar_appUnregistered": {},
   "notImplemented": "Sorry, not implemented yet",
   "@notImplemented": {},
   "permission_Button_request": "Continue",

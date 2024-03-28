@@ -547,6 +547,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     final registrationAccountStatus = event.registration.status.toRegistrationAccountStatus();
     add(_RegistrationAccountChange(registrationAccountStatus));
+
+    if (registrationAccountStatus.isUnregistered || registrationAccountStatus.isFailed) {
+      final reason = event.registration.reason;
+      if (reason != null) {
+        notificationsBloc.add(NotificationsMessaged(RawNotification(reason)));
+      }
+    }
   }
 
   // processing call signaling events
@@ -863,6 +870,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     if (!state.registrationAccountStatus.isRegistered) {
       _logger.info('__onCallControlEventStarted account is not registered');
+      notificationsBloc.add(NotificationsMessaged(AppUnregisteredNotification()));
+
       return;
     }
 
@@ -1059,6 +1068,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     if (!state.registrationAccountStatus.isRegistered) {
       _logger.info('__onCallPerformEventStarted account is not registered');
+      notificationsBloc.add(NotificationsMessaged(AppUnregisteredNotification()));
+
       event.fail();
       return;
     }

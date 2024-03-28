@@ -332,6 +332,8 @@
   "@notifications_errorSnackBar_callUndefinedLine": {},
   "notifications_errorSnackBar_callUserMedia": "Немає доступу до медіа-входу, будь ласка, перевірте дозволи програми",
   "@notifications_errorSnackBar_callUserMedia": {},
+  "notifications_errorSnackBar_appUnregistered": "Ваша програма наразі відключена від сервера. Будь ласка, налаштуйте свій статус онлайн/офлайн на сторінці налаштувань, щоб встановити з'єднання.",
+  "@notifications_errorSnackBar_appUnregistered": {},
   "notImplemented": "Вибачте, ця функція ще не реалізована",
   "@notImplemented": {},
   "permission_Button_request": "Продовжити",
