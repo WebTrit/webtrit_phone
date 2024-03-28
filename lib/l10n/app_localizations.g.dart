@@ -909,6 +909,24 @@ abstract class AppLocalizations {
   /// **'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.'**
   String get permission_Text_description;
 
+  /// No description provided for @user_agreement_checkbox_text.
+  ///
+  /// In en, this message translates to:
+  /// **'I have read and agree to the {url}, including with terms and conditions.'**
+  String user_agreement_checkbox_text(String url);
+
+  /// No description provided for @user_agreement_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to {appName}'**
+  String user_agreement_description(String appName);
+
+  /// No description provided for @user_agreement_button_text.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get user_agreement_button_text;
+
   /// No description provided for @recents_BodyCenter_empty.
   ///
   /// In en, this message translates to:

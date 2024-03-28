@@ -236,6 +236,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: ThemeModeScreenPage(),
       );
     },
+    UserAgreementScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: UserAgreementScreenPage(),
+      );
+    },
   };
 }
 
@@ -778,6 +784,20 @@ class ThemeModeScreenPageRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'ThemeModeScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [UserAgreementScreenPage]
+class UserAgreementScreenPageRoute extends PageRouteInfo<void> {
+  const UserAgreementScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          UserAgreementScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'UserAgreementScreenPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

@@ -437,6 +437,19 @@ class AppLocalizationsUk extends AppLocalizations {
   String get permission_Text_description => 'Для забезпечення найкращого досвіду користувача програма потребує наступні дозволи: мікрофон для аудіодзвінків, камера для відеодзвінків та доступ до контактів для спрощення їх використання в програмі.\n\nДозволи можуть бути змінені у майбутньому.';
 
   @override
+  String user_agreement_checkbox_text(String url) {
+    return 'Я прочитав і погоджуюсь з $url, включаючи умови користування.';
+  }
+
+  @override
+  String user_agreement_description(String appName) {
+    return 'Вітаємо до $appName';
+  }
+
+  @override
+  String get user_agreement_button_text => 'Продовжити';
+
+  @override
   String recents_BodyCenter_empty(Object filter) {
     return 'Зараз у вас немає жодних $filter останніх дзвінків.';
   }
