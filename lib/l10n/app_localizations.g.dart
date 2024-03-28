@@ -891,6 +891,18 @@ abstract class AppLocalizations {
   /// **'No access to media input, please check app permissions'**
   String get notifications_errorSnackBar_callUserMedia;
 
+  /// No description provided for @notifications_errorSnackBar_appUnregistered.
+  ///
+  /// In en, this message translates to:
+  /// **'Your application is currently disconnected from the server. Please adjust your online/offline status in the settings page to establish a connection.'**
+  String get notifications_errorSnackBar_appUnregistered;
+
+  /// No description provided for @notifications_errorSnackBar_appOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Your application is currently offline'**
+  String get notifications_errorSnackBar_appOffline;
+
   /// No description provided for @notImplemented.
   ///
   /// In en, this message translates to:
@@ -1062,7 +1074,7 @@ abstract class AppLocalizations {
   /// No description provided for @settings_ListViewTileTitle_registered.
   ///
   /// In en, this message translates to:
-  /// **'Registered'**
+  /// **'Online'**
   String get settings_ListViewTileTitle_registered;
 
   /// No description provided for @settings_ListViewTileTitle_settings.

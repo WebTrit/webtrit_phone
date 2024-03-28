@@ -428,6 +428,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications_errorSnackBar_callUserMedia => 'No access to media input, please check app permissions';
 
   @override
+  String get notifications_errorSnackBar_appUnregistered => 'Your application is currently disconnected from the server. Please adjust your online/offline status in the settings page to establish a connection.';
+
+  @override
+  String get notifications_errorSnackBar_appOffline => 'Your application is currently offline';
+
+  @override
   String get notImplemented => 'Sorry, not implemented yet';
 
   @override
@@ -526,7 +532,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_ListViewTileTitle_network => 'Network settings';
 
   @override
-  String get settings_ListViewTileTitle_registered => 'Registered';
+  String get settings_ListViewTileTitle_registered => 'Online';
 
   @override
   String get settings_ListViewTileTitle_settings => 'SETTINGS';

@@ -15,6 +15,45 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
+mixin _$NotificationsMessaged {
+  Notification get notification => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+
+class _$NotificationsMessagedImpl implements _NotificationsMessaged {
+  const _$NotificationsMessagedImpl(this.notification);
+
+  @override
+  final Notification notification;
+
+  @override
+  String toString() {
+    return 'NotificationsMessaged(notification: $notification)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$NotificationsMessagedImpl &&
+            (identical(other.notification, notification) ||
+                other.notification == notification));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, notification);
+}
+
+abstract class _NotificationsMessaged implements NotificationsMessaged {
+  const factory _NotificationsMessaged(final Notification notification) =
+      _$NotificationsMessagedImpl;
+
+  @override
+  Notification get notification;
+}
+
+/// @nodoc
 mixin _$NotificationsIssued {
   Notification get notification => throw _privateConstructorUsedError;
 }
