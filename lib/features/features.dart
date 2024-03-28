@@ -14,3 +14,4 @@ export 'push_tokens/push_token.dart';
 export 'recent/recent.dart';
 export 'recents/recents.dart';
 export 'settings/settings.dart';
+export 'terms_conditions/terms_conditions.dart';
