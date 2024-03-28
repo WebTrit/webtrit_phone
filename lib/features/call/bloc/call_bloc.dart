@@ -321,15 +321,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
-    switch (newRegistrationAccountStatus) {
-      case RegistrationAccountStatus.registering:
-        add(const _CompleteCallsAndResetState());
-      case RegistrationAccountStatus.registered:
-      case RegistrationAccountStatus.failed:
-        add(const _CompleteCallsAndResetState());
-      case RegistrationAccountStatus.unregistering:
-      case RegistrationAccountStatus.unregistered:
-        add(const _CompleteCallsAndResetState());
+    if (newRegistrationAccountStatus.isRegistering) {
+      add(const _CompleteCallsAndResetState());
+    } else if (newRegistrationAccountStatus.isFailed || newRegistrationAccountStatus.isUnregistered) {
+      add(const _CompleteCallsAndResetState());
+
+      if (event.reason != null) {
+        notificationsBloc.add(NotificationsMessaged(RawNotification(event.reason!)));
+      }
     }
   }
 
@@ -545,15 +544,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     emit(state.copyWith(linesCount: event.linesCount));
 
-    final registrationAccountStatus = event.registration.status.toRegistrationAccountStatus();
-    add(_RegistrationAccountChange(registrationAccountStatus: registrationAccountStatus));
-
-    if (registrationAccountStatus.isUnregistered || registrationAccountStatus.isFailed) {
-      final reason = event.registration.reason;
-      if (reason != null) {
-        notificationsBloc.add(NotificationsMessaged(RawNotification(reason)));
-      }
-    }
+    add(_RegistrationAccountChange(
+      registrationAccountStatus: event.registration.status.toRegistrationAccountStatus(),
+      reason: event.registration.reason,
+      code: event.registration.code,
+    ));
   }
 
   // processing call signaling events
