@@ -897,6 +897,12 @@ abstract class AppLocalizations {
   /// **'Sorry, your application is currently disconnected from the WebTrit core servers and hence can\'t call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection'**
   String get notifications_errorSnackBar_appUnregistered;
 
+  /// No description provided for @notifications_errorSnackBar_appOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Your application is currently offline'**
+  String get notifications_errorSnackBar_appOffline;
+
   /// No description provided for @notImplemented.
   ///
   /// In en, this message translates to:
