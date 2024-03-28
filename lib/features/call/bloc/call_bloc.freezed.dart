@@ -153,6 +153,8 @@ abstract class __NavigatorMediaDevicesChange
 mixin _$RegistrationAccountChange {
   RegistrationAccountStatus get registrationAccountStatus =>
       throw _privateConstructorUsedError;
+  String? get reason => throw _privateConstructorUsedError;
+  int? get code => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -160,14 +162,19 @@ mixin _$RegistrationAccountChange {
 class _$_RegistrationAccountChangeImpl
     with DiagnosticableTreeMixin
     implements __RegistrationAccountChange {
-  const _$_RegistrationAccountChangeImpl(this.registrationAccountStatus);
+  const _$_RegistrationAccountChangeImpl(
+      {required this.registrationAccountStatus, this.reason, this.code});
 
   @override
   final RegistrationAccountStatus registrationAccountStatus;
+  @override
+  final String? reason;
+  @override
+  final int? code;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_RegistrationAccountChange(registrationAccountStatus: $registrationAccountStatus)';
+    return '_RegistrationAccountChange(registrationAccountStatus: $registrationAccountStatus, reason: $reason, code: $code)';
   }
 
   @override
@@ -176,7 +183,9 @@ class _$_RegistrationAccountChangeImpl
     properties
       ..add(DiagnosticsProperty('type', '_RegistrationAccountChange'))
       ..add(DiagnosticsProperty(
-          'registrationAccountStatus', registrationAccountStatus));
+          'registrationAccountStatus', registrationAccountStatus))
+      ..add(DiagnosticsProperty('reason', reason))
+      ..add(DiagnosticsProperty('code', code));
   }
 
   @override
@@ -186,21 +195,29 @@ class _$_RegistrationAccountChangeImpl
             other is _$_RegistrationAccountChangeImpl &&
             (identical(other.registrationAccountStatus,
                     registrationAccountStatus) ||
-                other.registrationAccountStatus == registrationAccountStatus));
+                other.registrationAccountStatus == registrationAccountStatus) &&
+            (identical(other.reason, reason) || other.reason == reason) &&
+            (identical(other.code, code) || other.code == code));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, registrationAccountStatus);
+  int get hashCode =>
+      Object.hash(runtimeType, registrationAccountStatus, reason, code);
 }
 
 abstract class __RegistrationAccountChange
     implements _RegistrationAccountChange {
   const factory __RegistrationAccountChange(
-          final RegistrationAccountStatus registrationAccountStatus) =
-      _$_RegistrationAccountChangeImpl;
+      {required final RegistrationAccountStatus registrationAccountStatus,
+      final String? reason,
+      final int? code}) = _$_RegistrationAccountChangeImpl;
 
   @override
   RegistrationAccountStatus get registrationAccountStatus;
+  @override
+  String? get reason;
+  @override
+  int? get code;
 }
 
 /// @nodoc
