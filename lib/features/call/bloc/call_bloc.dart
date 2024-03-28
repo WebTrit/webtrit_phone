@@ -328,6 +328,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       if (event.reason != null) {
         notificationsBloc.add(NotificationsMessaged(RawNotification(event.reason!)));
+      } else {
+        notificationsBloc.add(NotificationsMessaged(AppOfflineNotification()));
       }
     }
   }

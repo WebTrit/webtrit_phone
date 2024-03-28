@@ -431,6 +431,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get notifications_errorSnackBar_appUnregistered => 'Ваша програма наразі відключена від сервера. Будь ласка, налаштуйте свій статус онлайн/офлайн на сторінці налаштувань, щоб встановити з\'єднання.';
 
   @override
+  String get notifications_errorSnackBar_appOffline => 'Ваш додаток наразі офлайн';
+
+  @override
   String get notImplemented => 'Вибачте, ця функція ще не реалізована';
 
   @override

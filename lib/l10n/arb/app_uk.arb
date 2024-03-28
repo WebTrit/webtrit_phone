@@ -334,6 +334,8 @@
   "@notifications_errorSnackBar_callUserMedia": {},
   "notifications_errorSnackBar_appUnregistered": "Ваша програма наразі відключена від сервера. Будь ласка, налаштуйте свій статус онлайн/офлайн на сторінці налаштувань, щоб встановити з'єднання.",
   "@notifications_errorSnackBar_appUnregistered": {},
+  "notifications_errorSnackBar_appOffline": "Ваш додаток наразі офлайн",
+  "@notifications_errorSnackBar_appOffline": {},
   "notImplemented": "Вибачте, ця функція ще не реалізована",
   "@notImplemented": {},
   "permission_Button_request": "Продовжити",

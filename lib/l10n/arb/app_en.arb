@@ -334,6 +334,8 @@
   "@notifications_errorSnackBar_callUserMedia": {},
   "notifications_errorSnackBar_appUnregistered": "Your application is currently disconnected from the server. Please adjust your online/offline status in the settings page to establish a connection.",
   "@notifications_errorSnackBar_appUnregistered": {},
+  "notifications_errorSnackBar_appOffline": "Your application is currently offline",
+  "@notifications_errorSnackBar_appOffline": {},
   "notImplemented": "Sorry, not implemented yet",
   "@notImplemented": {},
   "permission_Button_request": "Continue",
