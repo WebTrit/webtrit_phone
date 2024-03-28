@@ -5,6 +5,7 @@ import 'package:webtrit_phone/app/router/app_shell.dart';
 import 'package:webtrit_phone/app/router/main_shell.dart';
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 
 export 'package:auto_route/auto_route.dart' show ReevaluateListenable, AutoRouteObserver;
@@ -258,8 +259,11 @@ class AppRouter extends _$AppRouter {
   void onMainShellRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
     _logger.fine(_onNavigationLoggerMessage('onMainShellRouteGuardNavigation', resolver));
 
+    const appTermsAndConditionsUrl = EnvironmentConfig.APP_TERMS_AND_CONDITIONS_URL;
+    final hasToAcceptUserAgreement = appUserAgreementUnaccepted && appTermsAndConditionsUrl?.isNotEmpty == true;
+
     if (coreUrl != null && token != null) {
-      if (appUserAgreementUnaccepted) {
+      if (hasToAcceptUserAgreement) {
         resolver.next(false);
         router.replaceAll(
           [const UserAgreementScreenPageRoute()],
