@@ -22,6 +22,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/notifications/notifications.dart';
 import 'package:webtrit_phone/models/recent.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/data/data.dart';
 
 import '../models/models.dart';
 
@@ -332,12 +333,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final signalingUrl = _parseCoreUrlToSignalingUrl(appBloc.state.coreUrl!);
       final tenantId = appBloc.state.tenantId!;
       final token = appBloc.state.token!;
+      final appCerts = AppCerts();
+
       final signalingClient = await WebtritSignalingClient.connect(
         signalingUrl,
         tenantId,
         token,
         true,
         connectionTimeout: kSignalingClientConnectionTimeout,
+        certBytes: appCerts.sslCertBytes,
+        certPassword: appCerts.sslCertPassword,
       );
 
       if (emit.isDone) {
