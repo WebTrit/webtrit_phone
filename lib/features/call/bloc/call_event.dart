@@ -26,12 +26,12 @@ class _NavigatorMediaDevicesChange with _$NavigatorMediaDevicesChange implements
 // registration event change
 
 @Freezed(copyWith: false)
-class _RegistrationAccountChange with _$RegistrationAccountChange implements CallEvent {
-  const factory _RegistrationAccountChange({
-    required RegistrationAccountStatus registrationAccountStatus,
+class _RegistrationChange with _$RegistrationChange implements CallEvent {
+  const factory _RegistrationChange({
+    required RegistrationStatus registrationStatus,
     String? reason,
     int? code,
-  }) = __RegistrationAccountChange;
+  }) = __RegistrationChange;
 }
 
 // handle app state

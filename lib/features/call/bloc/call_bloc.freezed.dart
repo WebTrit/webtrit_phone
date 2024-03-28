@@ -150,8 +150,8 @@ abstract class __NavigatorMediaDevicesChange
 }
 
 /// @nodoc
-mixin _$RegistrationAccountChange {
-  RegistrationAccountStatus get registrationAccountStatus =>
+mixin _$RegistrationChange {
+  RegistrationStatus get registrationStatus =>
       throw _privateConstructorUsedError;
   String? get reason => throw _privateConstructorUsedError;
   int? get code => throw _privateConstructorUsedError;
@@ -159,14 +159,14 @@ mixin _$RegistrationAccountChange {
 
 /// @nodoc
 
-class _$_RegistrationAccountChangeImpl
+class _$_RegistrationChangeImpl
     with DiagnosticableTreeMixin
-    implements __RegistrationAccountChange {
-  const _$_RegistrationAccountChangeImpl(
-      {required this.registrationAccountStatus, this.reason, this.code});
+    implements __RegistrationChange {
+  const _$_RegistrationChangeImpl(
+      {required this.registrationStatus, this.reason, this.code});
 
   @override
-  final RegistrationAccountStatus registrationAccountStatus;
+  final RegistrationStatus registrationStatus;
   @override
   final String? reason;
   @override
@@ -174,16 +174,15 @@ class _$_RegistrationAccountChangeImpl
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_RegistrationAccountChange(registrationAccountStatus: $registrationAccountStatus, reason: $reason, code: $code)';
+    return '_RegistrationChange(registrationStatus: $registrationStatus, reason: $reason, code: $code)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', '_RegistrationAccountChange'))
-      ..add(DiagnosticsProperty(
-          'registrationAccountStatus', registrationAccountStatus))
+      ..add(DiagnosticsProperty('type', '_RegistrationChange'))
+      ..add(DiagnosticsProperty('registrationStatus', registrationStatus))
       ..add(DiagnosticsProperty('reason', reason))
       ..add(DiagnosticsProperty('code', code));
   }
@@ -192,28 +191,26 @@ class _$_RegistrationAccountChangeImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_RegistrationAccountChangeImpl &&
-            (identical(other.registrationAccountStatus,
-                    registrationAccountStatus) ||
-                other.registrationAccountStatus == registrationAccountStatus) &&
+            other is _$_RegistrationChangeImpl &&
+            (identical(other.registrationStatus, registrationStatus) ||
+                other.registrationStatus == registrationStatus) &&
             (identical(other.reason, reason) || other.reason == reason) &&
             (identical(other.code, code) || other.code == code));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, registrationAccountStatus, reason, code);
+      Object.hash(runtimeType, registrationStatus, reason, code);
 }
 
-abstract class __RegistrationAccountChange
-    implements _RegistrationAccountChange {
-  const factory __RegistrationAccountChange(
-      {required final RegistrationAccountStatus registrationAccountStatus,
+abstract class __RegistrationChange implements _RegistrationChange {
+  const factory __RegistrationChange(
+      {required final RegistrationStatus registrationStatus,
       final String? reason,
-      final int? code}) = _$_RegistrationAccountChangeImpl;
+      final int? code}) = _$_RegistrationChangeImpl;
 
   @override
-  RegistrationAccountStatus get registrationAccountStatus;
+  RegistrationStatus get registrationStatus;
   @override
   String? get reason;
   @override
@@ -9130,7 +9127,7 @@ abstract class _CallScreenEventDidPop implements CallScreenEvent {
 mixin _$CallState {
   ConnectivityResult? get currentConnectivityResult =>
       throw _privateConstructorUsedError;
-  RegistrationAccountStatus get registrationAccountStatus =>
+  RegistrationStatus get registrationStatus =>
       throw _privateConstructorUsedError;
   SignalingClientStatus get signalingClientStatus =>
       throw _privateConstructorUsedError;
@@ -9156,7 +9153,7 @@ abstract class $CallStateCopyWith<$Res> {
   @useResult
   $Res call(
       {ConnectivityResult? currentConnectivityResult,
-      RegistrationAccountStatus registrationAccountStatus,
+      RegistrationStatus registrationStatus,
       SignalingClientStatus signalingClientStatus,
       Object? lastSignalingClientConnectError,
       Object? lastSignalingClientDisconnectError,
@@ -9181,7 +9178,7 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
   @override
   $Res call({
     Object? currentConnectivityResult = freezed,
-    Object? registrationAccountStatus = null,
+    Object? registrationStatus = null,
     Object? signalingClientStatus = null,
     Object? lastSignalingClientConnectError = freezed,
     Object? lastSignalingClientDisconnectError = freezed,
@@ -9196,10 +9193,10 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
           ? _value.currentConnectivityResult
           : currentConnectivityResult // ignore: cast_nullable_to_non_nullable
               as ConnectivityResult?,
-      registrationAccountStatus: null == registrationAccountStatus
-          ? _value.registrationAccountStatus
-          : registrationAccountStatus // ignore: cast_nullable_to_non_nullable
-              as RegistrationAccountStatus,
+      registrationStatus: null == registrationStatus
+          ? _value.registrationStatus
+          : registrationStatus // ignore: cast_nullable_to_non_nullable
+              as RegistrationStatus,
       signalingClientStatus: null == signalingClientStatus
           ? _value.signalingClientStatus
           : signalingClientStatus // ignore: cast_nullable_to_non_nullable
@@ -9246,7 +9243,7 @@ abstract class _$$CallStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {ConnectivityResult? currentConnectivityResult,
-      RegistrationAccountStatus registrationAccountStatus,
+      RegistrationStatus registrationStatus,
       SignalingClientStatus signalingClientStatus,
       Object? lastSignalingClientConnectError,
       Object? lastSignalingClientDisconnectError,
@@ -9269,7 +9266,7 @@ class __$$CallStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? currentConnectivityResult = freezed,
-    Object? registrationAccountStatus = null,
+    Object? registrationStatus = null,
     Object? signalingClientStatus = null,
     Object? lastSignalingClientConnectError = freezed,
     Object? lastSignalingClientDisconnectError = freezed,
@@ -9284,10 +9281,10 @@ class __$$CallStateImplCopyWithImpl<$Res>
           ? _value.currentConnectivityResult
           : currentConnectivityResult // ignore: cast_nullable_to_non_nullable
               as ConnectivityResult?,
-      registrationAccountStatus: null == registrationAccountStatus
-          ? _value.registrationAccountStatus
-          : registrationAccountStatus // ignore: cast_nullable_to_non_nullable
-              as RegistrationAccountStatus,
+      registrationStatus: null == registrationStatus
+          ? _value.registrationStatus
+          : registrationStatus // ignore: cast_nullable_to_non_nullable
+              as RegistrationStatus,
       signalingClientStatus: null == signalingClientStatus
           ? _value.signalingClientStatus
           : signalingClientStatus // ignore: cast_nullable_to_non_nullable
@@ -9329,7 +9326,7 @@ class __$$CallStateImplCopyWithImpl<$Res>
 class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
   const _$CallStateImpl(
       {this.currentConnectivityResult,
-      this.registrationAccountStatus = RegistrationAccountStatus.registering,
+      this.registrationStatus = RegistrationStatus.registering,
       this.signalingClientStatus = SignalingClientStatus.disconnect,
       this.lastSignalingClientConnectError,
       this.lastSignalingClientDisconnectError,
@@ -9345,7 +9342,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
   final ConnectivityResult? currentConnectivityResult;
   @override
   @JsonKey()
-  final RegistrationAccountStatus registrationAccountStatus;
+  final RegistrationStatus registrationStatus;
   @override
   @JsonKey()
   final SignalingClientStatus signalingClientStatus;
@@ -9374,7 +9371,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallState(currentConnectivityResult: $currentConnectivityResult, registrationAccountStatus: $registrationAccountStatus, signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, linesCount: $linesCount, activeCalls: $activeCalls, minimized: $minimized, speaker: $speaker)';
+    return 'CallState(currentConnectivityResult: $currentConnectivityResult, registrationStatus: $registrationStatus, signalingClientStatus: $signalingClientStatus, lastSignalingClientConnectError: $lastSignalingClientConnectError, lastSignalingClientDisconnectError: $lastSignalingClientDisconnectError, lastSignalingDisconnectCode: $lastSignalingDisconnectCode, linesCount: $linesCount, activeCalls: $activeCalls, minimized: $minimized, speaker: $speaker)';
   }
 
   @override
@@ -9384,8 +9381,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('type', 'CallState'))
       ..add(DiagnosticsProperty(
           'currentConnectivityResult', currentConnectivityResult))
-      ..add(DiagnosticsProperty(
-          'registrationAccountStatus', registrationAccountStatus))
+      ..add(DiagnosticsProperty('registrationStatus', registrationStatus))
       ..add(DiagnosticsProperty('signalingClientStatus', signalingClientStatus))
       ..add(DiagnosticsProperty(
           'lastSignalingClientConnectError', lastSignalingClientConnectError))
@@ -9407,9 +9403,8 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
             (identical(other.currentConnectivityResult,
                     currentConnectivityResult) ||
                 other.currentConnectivityResult == currentConnectivityResult) &&
-            (identical(other.registrationAccountStatus,
-                    registrationAccountStatus) ||
-                other.registrationAccountStatus == registrationAccountStatus) &&
+            (identical(other.registrationStatus, registrationStatus) ||
+                other.registrationStatus == registrationStatus) &&
             (identical(other.signalingClientStatus, signalingClientStatus) ||
                 other.signalingClientStatus == signalingClientStatus) &&
             const DeepCollectionEquality().equals(
@@ -9435,7 +9430,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
   int get hashCode => Object.hash(
       runtimeType,
       currentConnectivityResult,
-      registrationAccountStatus,
+      registrationStatus,
       signalingClientStatus,
       const DeepCollectionEquality().hash(lastSignalingClientConnectError),
       const DeepCollectionEquality().hash(lastSignalingClientDisconnectError),
@@ -9455,7 +9450,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
 abstract class _CallState extends CallState {
   const factory _CallState(
       {final ConnectivityResult? currentConnectivityResult,
-      final RegistrationAccountStatus registrationAccountStatus,
+      final RegistrationStatus registrationStatus,
       final SignalingClientStatus signalingClientStatus,
       final Object? lastSignalingClientConnectError,
       final Object? lastSignalingClientDisconnectError,
@@ -9469,7 +9464,7 @@ abstract class _CallState extends CallState {
   @override
   ConnectivityResult? get currentConnectivityResult;
   @override
-  RegistrationAccountStatus get registrationAccountStatus;
+  RegistrationStatus get registrationStatus;
   @override
   SignalingClientStatus get signalingClientStatus;
   @override

@@ -5,6 +5,5 @@ export 'call_id_value.dart';
 export 'call_status.dart';
 export 'jsep_value.dart';
 export 'notification.dart';
-export 'registration_account_status.dart';
 export 'signaling_client_status.dart';
 export 'transfer.dart';

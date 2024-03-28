@@ -23,6 +23,7 @@ import 'package:webtrit_phone/features/notifications/notifications.dart';
 import 'package:webtrit_phone/models/recent.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
+import '../extensions/extensions.dart';
 import '../models/models.dart';
 
 export 'package:webtrit_callkeep/webtrit_callkeep.dart' show CallkeepHandle, CallkeepHandleType;
@@ -74,8 +75,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _onNavigatorMediaDevicesChange,
       transformer: droppable(),
     );
-    on<_RegistrationAccountChange>(
-      _onRegistrationAccountChange,
+    on<_RegistrationChange>(
+      _onRegistrationChange,
       transformer: droppable(),
     );
     on<_CompleteCallsAndResetState>(
@@ -307,23 +308,23 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   // processing the registration event change
 
-  Future<void> _onRegistrationAccountChange(
-    _RegistrationAccountChange event,
+  Future<void> _onRegistrationChange(
+    _RegistrationChange event,
     Emitter<CallState> emit,
   ) async {
-    final newRegistrationAccountStatus = event.registrationAccountStatus;
-    final previousRegistrationAccountStatus = state.registrationAccountStatus;
-    if (newRegistrationAccountStatus != previousRegistrationAccountStatus) {
-      _logger.fine('_onRegistrationAccountChange: $previousRegistrationAccountStatus to $newRegistrationAccountStatus');
-      emit(state.copyWith(registrationAccountStatus: newRegistrationAccountStatus));
+    final newRegistrationStatus = event.registrationStatus;
+    final previousRegistrationStatus = state.registrationStatus;
+    if (newRegistrationStatus != previousRegistrationStatus) {
+      _logger.fine('_onRegistrationChange: $previousRegistrationStatus to $newRegistrationStatus');
+      emit(state.copyWith(registrationStatus: newRegistrationStatus));
     } else {
-      _logger.fine('_onRegistrationAccountChange: status is already the same');
+      _logger.fine('_onRegistrationChange: status is already the same');
       return;
     }
 
-    if (newRegistrationAccountStatus.isRegistering) {
+    if (newRegistrationStatus.isRegistering) {
       add(const _CompleteCallsAndResetState());
-    } else if (newRegistrationAccountStatus.isFailed || newRegistrationAccountStatus.isUnregistered) {
+    } else if (newRegistrationStatus.isFailed || newRegistrationStatus.isUnregistered) {
       add(const _CompleteCallsAndResetState());
 
       if (event.reason != null) {
@@ -486,7 +487,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         notificationsBloc.add(const NotificationsIssued(CallSignalingClientSessionMissedErrorNotification()));
         appBloc.add(const AppLogouted());
       } else if (code == SignalingDisconnectCode.appUnregisteredError) {
-        add(const _RegistrationAccountChange(registrationAccountStatus: RegistrationAccountStatus.unregistered));
+        add(const _RegistrationChange(registrationStatus: RegistrationStatus.unregistered));
       }
     }
 
@@ -546,8 +547,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     emit(state.copyWith(linesCount: event.linesCount));
 
-    add(_RegistrationAccountChange(
-      registrationAccountStatus: event.registration.status.toRegistrationAccountStatus(),
+    add(_RegistrationChange(
+      registrationStatus: event.registration.status,
       reason: event.registration.reason,
       code: event.registration.code,
     ));
@@ -808,35 +809,35 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallSignalingEventRegistering event,
     Emitter<CallState> emit,
   ) async {
-    add(const _RegistrationAccountChange(registrationAccountStatus: RegistrationAccountStatus.registering));
+    add(const _RegistrationChange(registrationStatus: RegistrationStatus.registering));
   }
 
   Future<void> __onCallSignalingEventRegistered(
     _CallSignalingEventRegistered event,
     Emitter<CallState> emit,
   ) async {
-    add(const _RegistrationAccountChange(registrationAccountStatus: RegistrationAccountStatus.registered));
+    add(const _RegistrationChange(registrationStatus: RegistrationStatus.registered));
   }
 
   Future<void> __onCallSignalingEventRegistrationFailed(
     _CallSignalingEventRegisterationFailed event,
     Emitter<CallState> emit,
   ) async {
-    add(const _RegistrationAccountChange(registrationAccountStatus: RegistrationAccountStatus.failed));
+    add(const _RegistrationChange(registrationStatus: RegistrationStatus.registration_failed));
   }
 
   Future<void> __onCallSignalingEventUnregistering(
     _CallSignalingEventUnregistering event,
     Emitter<CallState> emit,
   ) async {
-    add(const _RegistrationAccountChange(registrationAccountStatus: RegistrationAccountStatus.unregistering));
+    add(const _RegistrationChange(registrationStatus: RegistrationStatus.unregistering));
   }
 
   Future<void> __onCallSignalingEventUnregistered(
     _CallSignalingEventUnregistered event,
     Emitter<CallState> emit,
   ) async {
-    add(const _RegistrationAccountChange(registrationAccountStatus: RegistrationAccountStatus.unregistered));
+    add(const _RegistrationChange(registrationStatus: RegistrationStatus.unregistered));
   }
 
   // processing call control events
@@ -865,7 +866,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallControlEventStarted event,
     Emitter<CallState> emit,
   ) async {
-    if (!state.registrationAccountStatus.isRegistered) {
+    if (!state.registrationStatus.isRegistered) {
       _logger.info('__onCallControlEventStarted account is not registered');
       notificationsBloc.add(NotificationsMessaged(AppUnregisteredNotification()));
 
@@ -1063,7 +1064,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallPerformEventStarted event,
     Emitter<CallState> emit,
   ) async {
-    if (!state.registrationAccountStatus.isRegistered) {
+    if (!state.registrationStatus.isRegistered) {
       _logger.info('__onCallPerformEventStarted account is not registered');
       notificationsBloc.add(NotificationsMessaged(AppUnregisteredNotification()));
 
