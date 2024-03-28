@@ -428,6 +428,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get notifications_errorSnackBar_callUserMedia => 'Немає доступу до медіа-входу, будь ласка, перевірте дозволи програми';
 
   @override
+  String get notifications_errorSnackBar_appUnregistered => 'Вибачте, ваш додаток наразі відключений від основних серверів WebTrit і тому не може здійснювати дзвінки. Будь ласка, перейдіть на сторінку налаштувань та перемістіть перемикач онлайн-статусу в положення \'вимкнуто\' і знову в положення \'увімкнуто\', щоб відновити з\'єднання';
+
+  @override
   String get notImplemented => 'Вибачте, ця функція ще не реалізована';
 
   @override
