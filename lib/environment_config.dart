@@ -86,4 +86,18 @@ class EnvironmentConfig {
           FCM_VAPID_KEY__NAME,
         )
       : null;
+
+  static const SSL_CERT_FILE__NAME = 'WEBTRIT_APP_SSL_CERT_FILE';
+  static const SSL_CERT_FILE = bool.hasEnvironment(SSL_CERT_FILE__NAME)
+      ? String.fromEnvironment(
+          SSL_CERT_FILE__NAME,
+        )
+      : null;
+
+  static const SSL_CERT_PASSWORD__NAME = 'WEBTRIT_APP_SSL_CERT_PASSWORD';
+  static const SSL_CERT_PASSWORD = bool.hasEnvironment(SSL_CERT_PASSWORD__NAME)
+      ? String.fromEnvironment(
+          SSL_CERT_PASSWORD__NAME,
+        )
+      : null;
 }

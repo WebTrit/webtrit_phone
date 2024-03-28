@@ -8,8 +8,17 @@ Future<io.WebSocket> connectWebSocket(
   Iterable<String>? protocols,
   Duration? connectionTimeout,
   Duration? pingInterval,
+  List<int>? certBytes,
+  String? certPassword,
 }) async {
-  final customHttpClient = io.HttpClient();
+  io.SecurityContext? securityContext;
+
+  if (certBytes != null) {
+    securityContext = io.SecurityContext();
+    securityContext.setTrustedCertificatesBytes(certBytes, password: certPassword);
+  }
+
+  final customHttpClient = io.HttpClient(context: securityContext);
   customHttpClient.connectionTimeout = connectionTimeout;
 
   final webSocket = await io.WebSocket.connect(

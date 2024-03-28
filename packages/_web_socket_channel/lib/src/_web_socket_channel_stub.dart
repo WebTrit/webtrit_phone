@@ -5,6 +5,8 @@ Future<dynamic> connectWebSocket(
   Iterable<String>? protocols,
   Duration? connectionTimeout,
   Duration? pingInterval,
+  List<int>? certBytes,
+  String? certPassword,
 }) {
   throw UnsupportedError('No implementation of the api provided');
 }

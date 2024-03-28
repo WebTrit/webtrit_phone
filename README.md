@@ -15,6 +15,8 @@ WebTrit Phone application.
 * `WEBTRIT_APP_PERIODIC_POLLING` (_default **true**_)
 * `WEBTRIT_APP_DEBUG_LEVEL` (_default **INFO**_)
 * `WEBTRIT_APP_DATABASE_LOG_STATEMENTS` (_default **false**_)
+* `WEBTRIT_APP_SSL_CERT_FILE` (_optional_ - filename of SSL certificate for SSL/TLS pinning, file should be placed in `assets/certificates`)
+* `WEBTRIT_APP_SSL_CERT_PASSWORD` (_optional_ - password for PKCS12 certificate)
 
 Default build variables located in [dart_define.json](dart_define.json) and could be add to `flutter` `run` or `build` with `--dart-define-from-file=dart_define.json` parameter.
 
