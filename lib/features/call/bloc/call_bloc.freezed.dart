@@ -218,41 +218,249 @@ abstract class __RegistrationChange implements _RegistrationChange {
 }
 
 /// @nodoc
-mixin _$CompleteCallsAndResetState {}
+mixin _$ResetStateEvent {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() completeCalls,
+    required TResult Function(CallIdValue callId) completeCall,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? completeCalls,
+    TResult? Function(CallIdValue callId)? completeCall,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? completeCalls,
+    TResult Function(CallIdValue callId)? completeCall,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_ResetStateEventCompleteCalls value)
+        completeCalls,
+    required TResult Function(_ResetStateEventCompleteCall value) completeCall,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_ResetStateEventCompleteCalls value)? completeCalls,
+    TResult? Function(_ResetStateEventCompleteCall value)? completeCall,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_ResetStateEventCompleteCalls value)? completeCalls,
+    TResult Function(_ResetStateEventCompleteCall value)? completeCall,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
 
 /// @nodoc
 
-class _$_CompleteCallsAndResetStateImpl
+class _$ResetStateEventCompleteCallsImpl
     with DiagnosticableTreeMixin
-    implements __CompleteCallsAndResetState {
-  const _$_CompleteCallsAndResetStateImpl();
+    implements _ResetStateEventCompleteCalls {
+  const _$ResetStateEventCompleteCallsImpl();
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CompleteCallsAndResetState()';
+    return '_ResetStateEvent.completeCalls()';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty('type', '_CompleteCallsAndResetState'));
+    properties
+        .add(DiagnosticsProperty('type', '_ResetStateEvent.completeCalls'));
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CompleteCallsAndResetStateImpl);
+            other is _$ResetStateEventCompleteCallsImpl);
   }
 
   @override
   int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() completeCalls,
+    required TResult Function(CallIdValue callId) completeCall,
+  }) {
+    return completeCalls();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? completeCalls,
+    TResult? Function(CallIdValue callId)? completeCall,
+  }) {
+    return completeCalls?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? completeCalls,
+    TResult Function(CallIdValue callId)? completeCall,
+    required TResult orElse(),
+  }) {
+    if (completeCalls != null) {
+      return completeCalls();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_ResetStateEventCompleteCalls value)
+        completeCalls,
+    required TResult Function(_ResetStateEventCompleteCall value) completeCall,
+  }) {
+    return completeCalls(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_ResetStateEventCompleteCalls value)? completeCalls,
+    TResult? Function(_ResetStateEventCompleteCall value)? completeCall,
+  }) {
+    return completeCalls?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_ResetStateEventCompleteCalls value)? completeCalls,
+    TResult Function(_ResetStateEventCompleteCall value)? completeCall,
+    required TResult orElse(),
+  }) {
+    if (completeCalls != null) {
+      return completeCalls(this);
+    }
+    return orElse();
+  }
 }
 
-abstract class __CompleteCallsAndResetState
-    implements _CompleteCallsAndResetState {
-  const factory __CompleteCallsAndResetState() =
-      _$_CompleteCallsAndResetStateImpl;
+abstract class _ResetStateEventCompleteCalls implements _ResetStateEvent {
+  const factory _ResetStateEventCompleteCalls() =
+      _$ResetStateEventCompleteCallsImpl;
+}
+
+/// @nodoc
+
+class _$ResetStateEventCompleteCallImpl
+    with DiagnosticableTreeMixin
+    implements _ResetStateEventCompleteCall {
+  const _$ResetStateEventCompleteCallImpl(this.callId);
+
+  @override
+  final CallIdValue callId;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_ResetStateEvent.completeCall(callId: $callId)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', '_ResetStateEvent.completeCall'))
+      ..add(DiagnosticsProperty('callId', callId));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ResetStateEventCompleteCallImpl &&
+            (identical(other.callId, callId) || other.callId == callId));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, callId);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() completeCalls,
+    required TResult Function(CallIdValue callId) completeCall,
+  }) {
+    return completeCall(callId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? completeCalls,
+    TResult? Function(CallIdValue callId)? completeCall,
+  }) {
+    return completeCall?.call(callId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? completeCalls,
+    TResult Function(CallIdValue callId)? completeCall,
+    required TResult orElse(),
+  }) {
+    if (completeCall != null) {
+      return completeCall(callId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_ResetStateEventCompleteCalls value)
+        completeCalls,
+    required TResult Function(_ResetStateEventCompleteCall value) completeCall,
+  }) {
+    return completeCall(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_ResetStateEventCompleteCalls value)? completeCalls,
+    TResult? Function(_ResetStateEventCompleteCall value)? completeCall,
+  }) {
+    return completeCall?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_ResetStateEventCompleteCalls value)? completeCalls,
+    TResult Function(_ResetStateEventCompleteCall value)? completeCall,
+    required TResult orElse(),
+  }) {
+    if (completeCall != null) {
+      return completeCall(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _ResetStateEventCompleteCall implements _ResetStateEvent {
+  const factory _ResetStateEventCompleteCall(final CallIdValue callId) =
+      _$ResetStateEventCompleteCallImpl;
+
+  CallIdValue get callId;
 }
 
 /// @nodoc

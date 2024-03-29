@@ -37,8 +37,10 @@ class _RegistrationChange with _$RegistrationChange implements CallEvent {
 // handle app state
 
 @Freezed(copyWith: false)
-class _CompleteCallsAndResetState with _$CompleteCallsAndResetState implements CallEvent {
-  const factory _CompleteCallsAndResetState() = __CompleteCallsAndResetState;
+class _ResetStateEvent with _$ResetStateEvent implements CallEvent {
+  const factory _ResetStateEvent.completeCalls() = _ResetStateEventCompleteCalls;
+
+  const factory _ResetStateEvent.completeCall(CallIdValue callId) = _ResetStateEventCompleteCall;
 }
 
 // signaling client events

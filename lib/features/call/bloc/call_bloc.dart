@@ -79,8 +79,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _onRegistrationChange,
       transformer: droppable(),
     );
-    on<_CompleteCallsAndResetState>(
-      _completeCallsAndResetState,
+    on<_ResetStateEvent>(
+      _onResetStateEvent,
       transformer: droppable(),
     );
     on<_SignalingClientEvent>(
@@ -323,9 +323,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
 
     if (newRegistrationStatus.isRegistering) {
-      add(const _CompleteCallsAndResetState());
+      add(const _ResetStateEvent.completeCalls());
     } else if (newRegistrationStatus.isFailed || newRegistrationStatus.isUnregistered) {
-      add(const _CompleteCallsAndResetState());
+      add(const _ResetStateEvent.completeCalls());
 
       if (event.reason != null) {
         notificationsBloc.add(NotificationsMessaged(RawNotification(event.reason!)));
@@ -336,27 +336,43 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   // processing the handling of the app state
+  Future<void> _onResetStateEvent(
+    _ResetStateEvent event,
+    Emitter<CallState> emit,
+  ) {
+    return event.map(
+      completeCalls: (event) => __onResetStateEventCompleteCalls(event, emit),
+      completeCall: (event) => __onResetStateEventCompleteCall(event, emit),
+    );
+  }
 
-  Future<void> _completeCallsAndResetState(
-    _CompleteCallsAndResetState event,
+  Future<void> __onResetStateEventCompleteCalls(
+    _ResetStateEventCompleteCalls event,
     Emitter<CallState> emit,
   ) async {
-    for (var element in state.activeCalls) {
-      try {
-        callkeep.endCall(element.callId.uuid);
-        await state.performOnActiveCall(element.callId.uuid, (activeCall) async {
-          // Need to close peer connection after executing [HangupRequest]
-          // to prevent "Simulate a "hangup" coming from the application"
-          // because of "No WebRTC media anymore".
-          await (await _peerConnectionRetrieve(activeCall.callId.uuid))?.close();
-          await activeCall.renderers.dispose();
-          await activeCall.renderers.local.srcObject?.dispose();
-        });
-      } catch (e) {
-        _logger.warning('_completeCallsAndResetState: $e');
-      }
+    _logger.warning('__onResetStateEventCompleteCalls: ${state.activeCalls}');
 
-      emit(state.copyWithPopActiveCall(element.callId.uuid));
+    for (var element in state.activeCalls) {
+      add(_ResetStateEvent.completeCall(element.callId));
+    }
+  }
+
+  Future<void> __onResetStateEventCompleteCall(
+    _ResetStateEventCompleteCall event,
+    Emitter<CallState> emit,
+  ) async {
+    _logger.warning('__onResetStateEventCompleteCall: ${event.callId}');
+
+    try {
+      callkeep.endCall(event.callId.uuid);
+      await state.performOnActiveCall(event.callId.uuid, (activeCall) async {
+        await (await _peerConnectionRetrieve(activeCall.callId.uuid))?.close();
+        await activeCall.renderers.dispose();
+        await activeCall.renderers.local.srcObject?.dispose();
+      });
+      emit(state.copyWithPopActiveCall(event.callId.uuid));
+    } catch (e) {
+      _logger.warning('__onResetStateEventCompleteCall: $e');
     }
   }
 
