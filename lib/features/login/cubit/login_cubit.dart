@@ -99,6 +99,12 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
+  void loginSignp() async {
+    emit(state.copyWith(
+      mode: LoginMode.signup,
+    ));
+  }
+
   // LoginCoreUrlAssign
 
   void coreUrlInputChanged(String value) {

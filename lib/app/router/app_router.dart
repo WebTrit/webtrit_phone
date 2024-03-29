@@ -33,7 +33,9 @@ class AppRouter extends _$AppRouter {
   final AppPermissions _appPermissions;
 
   String? get coreUrl => _appBloc.state.coreUrl;
+
   String? get token => _appBloc.state.token;
+
   bool get appPermissionsDenied => _appPermissions.isDenied;
 
   @override
@@ -54,6 +56,10 @@ class AppRouter extends _$AppRouter {
               children: [
                 AutoRoute(
                   page: LoginModeSelectScreenPageRoute.page,
+                ),
+                AutoRoute(
+                  page: LoginSignupFormRequestScreenPageRoute.page,
+                  maintainState: false,
                 ),
                 AutoRoute(
                   page: LoginCoreUrlAssignScreenPageRoute.page,
@@ -95,13 +101,10 @@ class AppRouter extends _$AppRouter {
                     ),
                   ],
                 ),
+
               ],
             ),
-            AutoRoute.guarded(
-              page: PermissionsScreenPageRoute.page,
-              onNavigation: onPermissionsScreenPageRouteGuardNavigation,
-              path: 'permissions',
-            ),
+
             AutoRoute.guarded(
               page: MainShellRoute.page,
               onNavigation: onMainShellRouteGuardNavigation,
@@ -210,6 +213,11 @@ class AppRouter extends _$AppRouter {
                   ],
                 ),
               ],
+            ),
+            AutoRoute.guarded(
+              page: PermissionsScreenPageRoute.page,
+              onNavigation: onPermissionsScreenPageRouteGuardNavigation,
+              path: 'permissions',
             ),
           ],
         ),
