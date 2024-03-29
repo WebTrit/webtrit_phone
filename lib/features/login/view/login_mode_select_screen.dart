@@ -91,7 +91,10 @@ class LoginModeSelectScreen extends StatelessWidget {
                   //     LoginSignupFormRequestScreenPageRoute(initialUriQueryParam: "https://www.nashua.co.za/contact/")),
                   style: elevatedButtonStyles?.primary
                       ?.copyWith(backgroundColor: const MaterialStatePropertyAll(Colors.transparent)),
-                  child: Text(context.l10n.login_Button_signUpToDemoInstance),
+                  child: Text(
+                    context.l10n.login_Button_signUpToDemoInstance,
+                    style: themeData.textTheme.labelLarge?.copyWith(color: Colors.white),
+                  ),
                 ),
                 const SizedBox(
                   height: 24,

@@ -89,7 +89,7 @@ class ConfirmDialog extends StatelessWidget {
         if (alert)
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            style: dangerous ? textButtonStyles?.dangerous : null,
+            style: textButtonStyles?.neutral,
             child: Text("Ok"),
           ),
       ],
