@@ -18,6 +18,10 @@ bool whenLoginCoreUrlAssignScreenPageActive(LoginState state) {
   return state.mode == LoginMode.customCore;
 }
 
+bool whenSignUpFormActive(LoginState state) {
+  return state.mode == LoginMode.signup;
+}
+
 bool whenLoginSwitchScreenPageActive(LoginState state) {
   return state.coreUrl != null && state.supportedLoginTypes != null;
 }
@@ -63,6 +67,8 @@ class LoginRouterPage extends StatelessWidget {
           routes: (handler) {
             return [
               const LoginModeSelectScreenPageRoute(),
+              if (whenSignUpFormActive(state))
+                LoginSignupFormRequestScreenPageRoute(initialUriQueryParam: "https://www.nashua.co.za/contact/"),
               if (whenLoginCoreUrlAssignScreenPageActive(state)) const LoginCoreUrlAssignScreenPageRoute(),
               if (whenLoginSwitchScreenPageActive(state)) const LoginSwitchScreenPageRoute(),
             ];
@@ -70,6 +76,9 @@ class LoginRouterPage extends StatelessWidget {
           onPopRoute: (route, results) {
             switch (route.name) {
               case LoginCoreUrlAssignScreenPageRoute.name:
+                _onCoreUrlAssignBack(context);
+                break;
+              case LoginSignupFormRequestScreenPageRoute.name:
                 _onCoreUrlAssignBack(context);
                 break;
               case LoginSwitchScreenPageRoute.name:

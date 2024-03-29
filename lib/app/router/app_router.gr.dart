@@ -137,6 +137,17 @@ abstract class _$AppRouter extends RootStackRouter {
         child: LoginRouterPage(),
       );
     },
+    LoginSignupFormRequestScreenPageRoute.name: (routeData) {
+      final queryParams = routeData.queryParams;
+      final args = routeData.argsAs<LoginSignupFormRequestScreenPageRouteArgs>(
+          orElse: () => LoginSignupFormRequestScreenPageRouteArgs(
+              initialUriQueryParam: queryParams.optString('initialUrl')));
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: LoginSignupFormRequestScreenPage(
+            initialUriQueryParam: args.initialUriQueryParam),
+      );
+    },
     LoginSignupRequestScreenPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -536,6 +547,38 @@ class LoginRouterPageRoute extends PageRouteInfo<void> {
   static const String name = 'LoginRouterPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [LoginSignupFormRequestScreenPage]
+class LoginSignupFormRequestScreenPageRoute
+    extends PageRouteInfo<LoginSignupFormRequestScreenPageRouteArgs> {
+  LoginSignupFormRequestScreenPageRoute({
+    String? initialUriQueryParam,
+    List<PageRouteInfo>? children,
+  }) : super(
+          LoginSignupFormRequestScreenPageRoute.name,
+          args: LoginSignupFormRequestScreenPageRouteArgs(
+              initialUriQueryParam: initialUriQueryParam),
+          rawQueryParams: {'initialUrl': initialUriQueryParam},
+          initialChildren: children,
+        );
+
+  static const String name = 'LoginSignupFormRequestScreenPageRoute';
+
+  static const PageInfo<LoginSignupFormRequestScreenPageRouteArgs> page =
+      PageInfo<LoginSignupFormRequestScreenPageRouteArgs>(name);
+}
+
+class LoginSignupFormRequestScreenPageRouteArgs {
+  const LoginSignupFormRequestScreenPageRouteArgs({this.initialUriQueryParam});
+
+  final String? initialUriQueryParam;
+
+  @override
+  String toString() {
+    return 'LoginSignupFormRequestScreenPageRouteArgs{initialUriQueryParam: $initialUriQueryParam}';
+  }
 }
 
 /// generated route for

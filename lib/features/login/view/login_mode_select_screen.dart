@@ -1,8 +1,12 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -78,11 +82,32 @@ class LoginModeSelectScreen extends StatelessWidget {
                           color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
                         ),
                 ),
+                const SizedBox(
+                  height: 8,
+                ),
+                TextButton(
+                  onPressed: () => context.read<LoginCubit>().loginSignp(),
+                  // onPressed: () => context.router.navigate(
+                  //     LoginSignupFormRequestScreenPageRoute(initialUriQueryParam: "https://www.nashua.co.za/contact/")),
+                  style: elevatedButtonStyles?.primary
+                      ?.copyWith(backgroundColor: const MaterialStatePropertyAll(Colors.transparent)),
+                  child: Text(context.l10n.login_Button_signUpToDemoInstance),
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
               ],
             ),
           ),
         );
       },
     );
+  }
+
+  void openPage(String link) async {
+    final url = Uri.parse(link);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    }
   }
 }
