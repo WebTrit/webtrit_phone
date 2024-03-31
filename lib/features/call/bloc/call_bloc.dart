@@ -324,6 +324,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     if (newRegistrationStatus.isRegistering) {
       add(const _ResetStateEvent.completeCalls());
+    } else if (newRegistrationStatus.isRegistered) {
+      notificationsBloc.add(NotificationsMessaged(AppOnlineNotification()));
     } else if (newRegistrationStatus.isFailed || newRegistrationStatus.isUnregistered) {
       add(const _ResetStateEvent.completeCalls());
 

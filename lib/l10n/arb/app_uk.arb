@@ -336,6 +336,8 @@
   "@notifications_errorSnackBar_appUnregistered": {},
   "notifications_errorSnackBar_appOffline": "Ваш додаток наразі офлайн",
   "@notifications_errorSnackBar_appOffline": {},
+  "notifications_errorSnackBar_appOnline": "Ваш додаток онлайн",
+  "@notifications_errorSnackBar_appOnline": {},
   "notImplemented": "Вибачте, ця функція ще не реалізована",
   "@notImplemented": {},
   "permission_Button_request": "Продовжити",

@@ -457,6 +457,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recents_errorSnackBar_loadFailure => 'Oops... an error happened ☹️';
 
   @override
+  String get notifications_errorSnackBar_appOnline => 'Your application is online';
+
+  @override
   String recents_snackBar_deleted(String name) {
     return '$name deleted';
   }

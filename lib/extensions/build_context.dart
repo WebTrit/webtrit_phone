@@ -45,4 +45,16 @@ extension BuildContextSnackBar on BuildContext {
       duration: duration,
     ));
   }
+
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSuccessSnackBar(
+    String data, {
+    SnackBarAction? action,
+    Duration duration = const Duration(seconds: 5),
+  }) {
+    return (ScaffoldMessenger.of(this)..removeCurrentSnackBar()).showSnackBar(SnackBar(
+      content: Text(data),
+      action: action,
+      backgroundColor: Theme.of(this).colorScheme.tertiary,
+    ));
+  }
 }

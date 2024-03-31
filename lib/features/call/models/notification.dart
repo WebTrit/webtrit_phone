@@ -71,3 +71,10 @@ class AppOfflineNotification extends MessageNotification {
     return context.l10n.notifications_errorSnackBar_appOffline;
   }
 }
+
+class AppOnlineNotification extends SuccessNotification {
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.notifications_errorSnackBar_appOnline;
+  }
+}
