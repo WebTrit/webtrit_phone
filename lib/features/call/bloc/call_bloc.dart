@@ -537,6 +537,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _signalingClient = null;
 
     final signalingDisconnectCode = event.code;
+    final signalingDisconnectReason = event.reason ?? event.code.toString();
     if (signalingDisconnectCode != null) {
       final code = SignalingDisconnectCode.values.byCode(signalingDisconnectCode);
       if (code == SignalingDisconnectCode.sessionMissedError) {
@@ -544,6 +545,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         appBloc.add(const AppLogouted());
       } else if (code == SignalingDisconnectCode.appUnregisteredError) {
         add(const _RegistrationChange(registrationStatus: RegistrationStatus.unregistered));
+      } else if (code == SignalingDisconnectCode.requestCallIdError) {
+        state.activeCalls.where((element) => element.wasHungUp).forEach((element) {
+          add(_ResetStateEvent.completeCall(element.callId));
+        });
+      } else {
+        notificationsBloc.add(NotificationsMessaged(RawNotification(signalingDisconnectReason)));
       }
     }
 
