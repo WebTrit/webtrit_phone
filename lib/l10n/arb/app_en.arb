@@ -370,6 +370,8 @@
   "@recents_DeleteConfirmDialog_title": {},
   "recents_errorSnackBar_loadFailure": "Oops... an error happened ☹️",
   "@recents_errorSnackBar_loadFailure": {},
+  "notifications_errorSnackBar_appOnline": "Your application is online",
+  "@notifications_errorSnackBar_appOnline": {},
   "recents_snackBar_deleted": "{name} deleted",
   "@recents_snackBar_deleted": {
     "placeholders": {

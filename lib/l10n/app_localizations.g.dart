@@ -999,6 +999,12 @@ abstract class AppLocalizations {
   /// **'Oops... an error happened ☹️'**
   String get recents_errorSnackBar_loadFailure;
 
+  /// No description provided for @notifications_errorSnackBar_appOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Your application is online'**
+  String get notifications_errorSnackBar_appOnline;
+
   /// No description provided for @recents_snackBar_deleted.
   ///
   /// In en, this message translates to:

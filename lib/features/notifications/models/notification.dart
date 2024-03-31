@@ -9,6 +9,7 @@ enum NotificationType {
   error,
   message,
   raw,
+  success,
 }
 
 @immutable
@@ -64,4 +65,11 @@ class RawNotification extends Notification {
 abstract class MessageNotification extends Notification {
   @override
   NotificationType type() => NotificationType.message;
+}
+
+abstract class SuccessNotification extends Notification {
+  const SuccessNotification();
+
+  @override
+  NotificationType type() => NotificationType.success;
 }

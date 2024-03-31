@@ -484,6 +484,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get recents_errorSnackBar_loadFailure => 'Упс... сталася помилка ☹️';
 
   @override
+  String get notifications_errorSnackBar_appOnline => 'Ваш додаток онлайн';
+
+  @override
   String recents_snackBar_deleted(String name) {
     return '$name видалено';
   }

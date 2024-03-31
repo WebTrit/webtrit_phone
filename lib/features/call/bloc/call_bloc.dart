@@ -88,8 +88,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _onRegistrationChange,
       transformer: droppable(),
     );
-    on<_CompleteCallsAndResetState>(
-      _completeCallsAndResetState,
+    on<_ResetStateEvent>(
+      _onResetStateEvent,
       transformer: droppable(),
     );
     on<_SignalingClientEvent>(
@@ -361,9 +361,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
 
     if (newRegistrationStatus.isRegistering) {
-      add(const _CompleteCallsAndResetState());
+      add(const _ResetStateEvent.completeCalls());
+    } else if (newRegistrationStatus.isRegistered) {
+      notificationsBloc.add(NotificationsMessaged(AppOnlineNotification()));
     } else if (newRegistrationStatus.isFailed || newRegistrationStatus.isUnregistered) {
-      add(const _CompleteCallsAndResetState());
+      add(const _ResetStateEvent.completeCalls());
 
       if (event.reason != null) {
         notificationsBloc.add(NotificationsMessaged(RawNotification(event.reason!)));
@@ -374,27 +376,43 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   // processing the handling of the app state
+  Future<void> _onResetStateEvent(
+    _ResetStateEvent event,
+    Emitter<CallState> emit,
+  ) {
+    return event.map(
+      completeCalls: (event) => __onResetStateEventCompleteCalls(event, emit),
+      completeCall: (event) => __onResetStateEventCompleteCall(event, emit),
+    );
+  }
 
-  Future<void> _completeCallsAndResetState(
-    _CompleteCallsAndResetState event,
+  Future<void> __onResetStateEventCompleteCalls(
+    _ResetStateEventCompleteCalls event,
     Emitter<CallState> emit,
   ) async {
-    for (var element in state.activeCalls) {
-      try {
-        callkeep.endCall(element.callId);
-        await state.performOnActiveCall(element.callId, (activeCall) async {
-          // Need to close peer connection after executing [HangupRequest]
-          // to prevent "Simulate a "hangup" coming from the application"
-          // because of "No WebRTC media anymore".
-          await (await _peerConnectionRetrieve(activeCall.callId))?.close();
-          await activeCall.renderers.dispose();
-          await activeCall.renderers.local.srcObject?.dispose();
-        });
-      } catch (e) {
-        _logger.warning('_completeCallsAndResetState: $e');
-      }
+    _logger.warning('__onResetStateEventCompleteCalls: ${state.activeCalls}');
 
-      emit(state.copyWithPopActiveCall(element.callId));
+    for (var element in state.activeCalls) {
+      add(_ResetStateEvent.completeCall(element.callId));
+    }
+  }
+
+  Future<void> __onResetStateEventCompleteCall(
+    _ResetStateEventCompleteCall event,
+    Emitter<CallState> emit,
+  ) async {
+    _logger.warning('__onResetStateEventCompleteCall: ${event.callId}');
+
+    try {
+      callkeep.endCall(event.callId);
+      await state.performOnActiveCall(event.callId, (activeCall) async {
+        await (await _peerConnectionRetrieve(activeCall.callId))?.close();
+        await activeCall.renderers.dispose();
+        await activeCall.renderers.local.srcObject?.dispose();
+      });
+      emit(state.copyWithPopActiveCall(event.callId));
+    } catch (e) {
+      _logger.warning('__onResetStateEventCompleteCall: $e');
     }
   }
 

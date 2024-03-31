@@ -36,6 +36,11 @@ class AppShell extends StatelessWidget {
                     lastNotification.l10n(context),
                     action: lastNotification.action(context),
                   );
+                case NotificationType.success:
+                  context.showSuccessSnackBar(
+                    lastNotification.l10n(context),
+                    action: lastNotification.action(context),
+                  );
               }
               context.read<NotificationsBloc>().add(const NotificationsCleared());
             }
