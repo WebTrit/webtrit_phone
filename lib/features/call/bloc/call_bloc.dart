@@ -711,25 +711,27 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallSignalingEventHangup event,
     Emitter<CallState> emit,
   ) async {
-    if (state.retrieveActiveCall(event.callId)?.wasHungUp == true) return;
+    try {
+      await _ringtoneStop();
 
-    await _ringtoneStop();
+      emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
+        final activeCallUpdated = activeCall.copyWith(hungUpTime: clock.now());
+        _addToRecents(activeCallUpdated);
+        return activeCallUpdated;
+      }));
 
-    emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
-      final activeCallUpdated = activeCall.copyWith(hungUpTime: clock.now());
-      _addToRecents(activeCallUpdated);
-      return activeCallUpdated;
-    }));
+      await state.performOnActiveCall(event.callId, (activeCall) async {
+        await (await _peerConnectionRetrieve(activeCall.callId))?.close();
+        await activeCall.renderers.dispose();
+        await activeCall.renderers.local.srcObject?.dispose();
+      });
 
-    await state.performOnActiveCall(event.callId, (activeCall) async {
-      await (await _peerConnectionRetrieve(activeCall.callId))?.close();
-      await activeCall.renderers.dispose();
-      await activeCall.renderers.local.srcObject?.dispose();
-    });
+      emit(state.copyWithPopActiveCall(event.callId));
 
-    emit(state.copyWithPopActiveCall(event.callId));
-
-    await callkeep.reportEndCall(event.callId, CallkeepEndCallReason.remoteEnded);
+      await callkeep.reportEndCall(event.callId, CallkeepEndCallReason.remoteEnded);
+    } catch (e) {
+      _logger.warning('__onCallSignalingEventHangup: $e');
+    }
   }
 
   Future<void> __onCallSignalingEventUpdating(
