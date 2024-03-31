@@ -366,7 +366,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _logger.warning('__onResetStateEventCompleteCall: ${event.callId}');
 
     try {
-      callkeep.endCall(event.callId.uuid);
       await state.performOnActiveCall(event.callId.uuid, (activeCall) async {
         await (await _peerConnectionRetrieve(activeCall.callId.uuid))?.close();
         await activeCall.renderers.dispose();
