@@ -550,8 +550,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final error = await callkeep.reportNewIncomingCall(
       event.callId,
       handle,
-      event.callerDisplayName,
-      video,
+      displayName: event.callerDisplayName,
+      hasVideo: video,
     );
 
     if (error != null) {
@@ -742,9 +742,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     await callkeep.reportUpdateCall(
       event.callId,
-      handle,
-      event.callerDisplayName,
-      video,
+      handle: handle,
+      displayName: event.callerDisplayName,
+      hasVideo: video,
     );
 
     emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
@@ -829,8 +829,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final error = await callkeep.startCall(
       callId,
       event.handle,
-      event.displayName,
-      event.video,
+      displayNameOrContactIdentifier: event.displayName,
+      hasVideo: event.video,
     );
     if (error != null) {
       if (error == CallkeepCallRequestError.emergencyNumber) {
@@ -877,7 +877,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallControlEventSetHeld event,
     Emitter<CallState> emit,
   ) async {
-    final error = await callkeep.setHeld(event.callId, event.onHold);
+    final error = await callkeep.setHeld(event.callId, onHold: event.onHold);
     if (error != null) {
       _logger.warning('__onCallControlEventSetHeld error: $error');
     }
@@ -887,7 +887,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallControlEventSetMuted event,
     Emitter<CallState> emit,
   ) async {
-    final error = await callkeep.setMuted(event.callId, event.muted);
+    final error = await callkeep.setMuted(event.callId, muted: event.muted);
     if (error != null) {
       _logger.warning('__onCallControlEventSetMuted error: $error');
     }
@@ -939,7 +939,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     await state.performOnActiveCall(event.callId, (activeCall) async {
       if (Platform.isAndroid) {
-        callkeep.setSpeaker(event.callId, event.enabled);
+        callkeep.setSpeaker(event.callId, enabled: event.enabled);
       } else if (Platform.isIOS) {
         await Helper.setSpeakerphoneOn(event.enabled);
       }
