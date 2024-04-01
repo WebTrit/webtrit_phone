@@ -1,11 +1,16 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mocktail/mocktail.dart';
 
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
+
+// Attention: undesired import, but required for the mock auto_route router stack
+import 'package:auto_route/src/router/controller/pageless_routes_observer.dart';
 
 class ScreenshotApp extends StatelessWidget {
   const ScreenshotApp({
@@ -59,7 +64,7 @@ class ScreenshotApp extends StatelessWidget {
           value: appBloc,
         ),
       ],
-      child: materialApp,
+      child: _autoStackRouterWrap(materialApp),
     );
 
     return provider;
@@ -94,4 +99,25 @@ class ScreenshotRouterDelegate extends RouterDelegate<Object> with ChangeNotifie
   Future<bool> popRoute() async {
     return false;
   }
+}
+
+//  Mock auto_route router stack
+//  Needed for invocation AutoRoute.of and other platform dependent code inside test widget
+class _AutoStackRouter extends Mock implements StackRouter {
+  @override
+  PagelessRoutesObserver pagelessRoutesObserver = PagelessRoutesObserver();
+
+  @override
+  bool canPop({bool ignoreChildRoutes = false, bool ignoreParentRoutes = false, bool ignorePagelessRoutes = false}) {
+    return true;
+  }
+}
+
+Widget _autoStackRouterWrap(Widget child) {
+  return RouterScope(
+    controller: _AutoStackRouter(),
+    stateHash: 0,
+    inheritableObserversBuilder: () => [],
+    child: StackRouterScope(controller: _AutoStackRouter(), stateHash: 0, child: child),
+  );
 }
