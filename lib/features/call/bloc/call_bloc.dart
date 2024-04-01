@@ -1045,7 +1045,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             .isConnect) {
       event.fail();
 
-      emit(state.copyWithPopActiveCall(event.callId));
+      // Notice that the tube was already hung up to avoid sending an extra event to the server
+      emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
+        return activeCall.copyWith(hungUpTime: clock.now());
+      }));
+
+      // Remove local connection
+      callkeep.endCall(event.callId);
 
       notificationsBloc.add(const NotificationsIssued(CallSignalingClientNotConnectErrorNotification()));
       return;
