@@ -446,6 +446,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications_errorSnackBar_callUserMedia => 'No access to media input, please check app permissions';
 
   @override
+  String get notifications_errorSnackBar_appUnregistered => 'Sorry, your application is currently disconnected from the WebTrit core servers and hence can\'t call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection';
+
+  @override
+  String get notifications_errorSnackBar_appOffline => 'Your application is currently offline';
+
+  @override
   String get notImplemented => 'Sorry, not implemented yet';
 
   @override
@@ -476,6 +482,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recents_errorSnackBar_loadFailure => 'Oops... an error happened ☹️';
+
+  @override
+  String get notifications_errorSnackBar_appOnline => 'Your application is online';
 
   @override
   String recents_snackBar_deleted(String name) {
@@ -553,7 +562,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_ListViewTileTitle_network => 'Network settings';
 
   @override
-  String get settings_ListViewTileTitle_registered => 'Registered';
+  String get settings_ListViewTileTitle_registered => 'Online';
 
   @override
   String get settings_ListViewTileTitle_settings => 'SETTINGS';

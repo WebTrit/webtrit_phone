@@ -346,6 +346,10 @@
   "@notifications_errorSnackBar_callUndefinedLine": {},
   "notifications_errorSnackBar_callUserMedia": "No access to media input, please check app permissions",
   "@notifications_errorSnackBar_callUserMedia": {},
+  "notifications_errorSnackBar_appUnregistered": "Sorry, your application is currently disconnected from the WebTrit core servers and hence can't call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection",
+  "@notifications_errorSnackBar_appUnregistered": {},
+  "notifications_errorSnackBar_appOffline": "Your application is currently offline",
+  "@notifications_errorSnackBar_appOffline": {},
   "notImplemented": "Sorry, not implemented yet",
   "@notImplemented": {},
   "permission_Button_request": "Continue",
@@ -366,6 +370,8 @@
   "@recents_DeleteConfirmDialog_title": {},
   "recents_errorSnackBar_loadFailure": "Oops... an error happened ☹️",
   "@recents_errorSnackBar_loadFailure": {},
+  "notifications_errorSnackBar_appOnline": "Your application is online",
+  "@notifications_errorSnackBar_appOnline": {},
   "recents_snackBar_deleted": "{name} deleted",
   "@recents_snackBar_deleted": {
     "placeholders": {
@@ -428,7 +434,7 @@
   "@settings_ListViewTileTitle_logRecordsConsole": {},
   "settings_ListViewTileTitle_network": "Network settings",
   "@settings_ListViewTileTitle_network": {},
-  "settings_ListViewTileTitle_registered": "Registered",
+  "settings_ListViewTileTitle_registered": "Online",
   "@settings_ListViewTileTitle_registered": {},
   "settings_ListViewTileTitle_settings": "SETTINGS",
   "@settings_ListViewTileTitle_settings": {},

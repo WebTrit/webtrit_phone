@@ -446,6 +446,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get notifications_errorSnackBar_callUserMedia => 'Немає доступу до медіа-входу, будь ласка, перевірте дозволи програми';
 
   @override
+  String get notifications_errorSnackBar_appUnregistered => 'Вибачте, ваш додаток наразі відключений від основних серверів WebTrit і тому не може здійснювати дзвінки. Будь ласка, перейдіть на сторінку налаштувань та перемістіть перемикач онлайн-статусу в положення \'вимкнуто\' і знову в положення \'увімкнуто\', щоб відновити з\'єднання';
+
+  @override
+  String get notifications_errorSnackBar_appOffline => 'Ваш додаток наразі офлайн';
+
+  @override
   String get notImplemented => 'Вибачте, ця функція ще не реалізована';
 
   @override
@@ -476,6 +482,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get recents_errorSnackBar_loadFailure => 'Упс... сталася помилка ☹️';
+
+  @override
+  String get notifications_errorSnackBar_appOnline => 'Ваш додаток онлайн';
 
   @override
   String recents_snackBar_deleted(String name) {
@@ -553,7 +562,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_ListViewTileTitle_network => 'Налаштування мережі';
 
   @override
-  String get settings_ListViewTileTitle_registered => 'Зареєстровані';
+  String get settings_ListViewTileTitle_registered => 'В мережі';
 
   @override
   String get settings_ListViewTileTitle_settings => 'НАЛАШТУВАННЯ';

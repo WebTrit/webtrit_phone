@@ -927,6 +927,18 @@ abstract class AppLocalizations {
   /// **'No access to media input, please check app permissions'**
   String get notifications_errorSnackBar_callUserMedia;
 
+  /// No description provided for @notifications_errorSnackBar_appUnregistered.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorry, your application is currently disconnected from the WebTrit core servers and hence can\'t call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection'**
+  String get notifications_errorSnackBar_appUnregistered;
+
+  /// No description provided for @notifications_errorSnackBar_appOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Your application is currently offline'**
+  String get notifications_errorSnackBar_appOffline;
+
   /// No description provided for @notImplemented.
   ///
   /// In en, this message translates to:
@@ -986,6 +998,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Oops... an error happened ☹️'**
   String get recents_errorSnackBar_loadFailure;
+
+  /// No description provided for @notifications_errorSnackBar_appOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Your application is online'**
+  String get notifications_errorSnackBar_appOnline;
 
   /// No description provided for @recents_snackBar_deleted.
   ///
@@ -1116,7 +1134,7 @@ abstract class AppLocalizations {
   /// No description provided for @settings_ListViewTileTitle_registered.
   ///
   /// In en, this message translates to:
-  /// **'Registered'**
+  /// **'Online'**
   String get settings_ListViewTileTitle_registered;
 
   /// No description provided for @settings_ListViewTileTitle_settings.

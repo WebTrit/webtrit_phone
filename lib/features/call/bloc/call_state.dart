@@ -6,6 +6,7 @@ class CallState with _$CallState {
 
   const factory CallState({
     ConnectivityResult? currentConnectivityResult,
+    @Default(RegistrationStatus.registering) RegistrationStatus registrationStatus,
     @Default(SignalingClientStatus.disconnect) SignalingClientStatus signalingClientStatus,
     Object? lastSignalingClientConnectError,
     Object? lastSignalingClientDisconnectError,
@@ -23,15 +24,13 @@ class CallState with _$CallState {
       return CallStatus.connectivityNone;
     } else if (lastSignalingClientConnectError != null) {
       return CallStatus.connectError;
+    } else if (registrationStatus.isUnregistered) {
+      return CallStatus.appUnregistered;
+    } else if (registrationStatus.isFailed) {
+      return CallStatus.connectIssue;
     } else if (lastSignalingDisconnectCode != null) {
-      final code = SignalingDisconnectCode.values.byCode(lastSignalingDisconnectCode);
-      switch (code) {
-        case SignalingDisconnectCode.appUnregisteredError:
-          return CallStatus.appUnregistered;
-        default:
-          return CallStatus.connectIssue;
-      }
-    } else if (signalingClientStatus == SignalingClientStatus.connect) {
+      return CallStatus.connectIssue;
+    } else if (signalingClientStatus.isConnect && registrationStatus.isRegistered) {
       return CallStatus.ready;
     } else {
       return CallStatus.inProgress;
