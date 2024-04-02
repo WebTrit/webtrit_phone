@@ -149,6 +149,14 @@ class WebtritApiClient {
     return SessionToken.fromJson(responseJson);
   }
 
+  Future<SessionToken> createSessionAutoProvision(SessionAutoProvisionCredential sessionAutoProvisionCredential) async {
+    final requestJson = sessionAutoProvisionCredential.toJson();
+
+    final responseJson = await _httpClientExecutePost(['session', 'auto-provision'], null, requestJson);
+
+    return SessionToken.fromJson(responseJson);
+  }
+
   Future<void> deleteSession(String token) async {
     await _httpClientExecuteDelete(['session'], token);
   }
