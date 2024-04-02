@@ -75,7 +75,7 @@ dependencies:
   webtrit_signaling:
     path: ./packages/webtrit_signaling
   webtrit_callkeep:
-    path: ../webtrit_callkeep_r/webtrit_callkeep
+    path: ../webtrit_callkeep/webtrit_callkeep
   store_info_extractor:
     path: ./packages/store_info_extractor
 
