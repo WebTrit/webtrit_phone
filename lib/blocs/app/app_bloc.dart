@@ -44,7 +44,23 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final AppDatabase appDatabase;
   final AndroidPendingCallHandler pendingCallHandler;
 
+  Future<void> _cleanUpUserData() async {
+    await appPreferences.clear();
+
+    await secureStorage.deleteCoreUrl();
+    await secureStorage.deleteTenantId();
+    await secureStorage.deleteToken();
+
+    await appDatabase.deleteEverything();
+  }
+
   void _onLogined(AppLogined event, Emitter<AppState> emit) async {
+    // Check if the user is re-logging in.
+    // Example: logging in with a deeplink while already logged with another account.
+    // In this case, clear the database and preferences.
+    final isRelogin = state.token != null;
+    if (isRelogin) await _cleanUpUserData();
+
     await secureStorage.writeCoreUrl(event.coreUrl);
     await secureStorage.writeTenantId(event.tenantId);
     await secureStorage.writeToken(event.token);
@@ -57,13 +73,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onLogouted(AppLogouted event, Emitter<AppState> emit) async {
-    await appPreferences.clear();
-
-    await secureStorage.deleteCoreUrl();
-    await secureStorage.deleteTenantId();
-    await secureStorage.deleteToken();
-
-    await appDatabase.deleteEverything();
+    await _cleanUpUserData();
 
     emit(state.copyWith(
       coreUrl: null,
