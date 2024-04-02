@@ -244,7 +244,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   //
 
-  void _reconnectInitiated([Duration delay = Duration.zero]) {
+  void _reconnectInitiated([Duration delay = kSignalingClientFastReconnectDelay]) {
     _signalingClientReconnectTimer?.cancel();
     _signalingClientReconnectTimer = Timer(delay, () {
       _logger.info('_reconnectInitiated Timer callback after $delay');
