@@ -103,6 +103,11 @@ class AppRouter extends _$AppRouter {
               path: 'permissions',
             ),
             AutoRoute.guarded(
+              page: AutoprovisionScreenPageRoute.page,
+              onNavigation: onAutoprovisionScreenPageRouteGuardNavigation,
+              path: 'autoprovision',
+            ),
+            AutoRoute.guarded(
               page: MainShellRoute.page,
               onNavigation: onMainShellRouteGuardNavigation,
               path: 'main',
@@ -274,6 +279,24 @@ class AppRouter extends _$AppRouter {
     if (resolver.isReevaluating) {
       final innerRouter = router.innerRouterOf<StackRouter>(AppShellRoute.name);
       innerRouter?.reevaluateGuards();
+    }
+  }
+
+  void onAutoprovisionScreenPageRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
+    _logger.fine(_onNavigationLoggerMessage('onAutoprovisionScreenPageRouteGuardNavigation', resolver));
+
+    final query = resolver.route.queryParams;
+    final configToken = query.optString('config_token');
+
+    // Protect against the case when the user navigates to the autoprovision screen
+    // without a config token. In this case, the user should be redirected to the main screen.
+    if (configToken != null && configToken.isNotEmpty) {
+      resolver.next(true);
+    } else {
+      resolver.next(false);
+      router.replaceAll(
+        [const MainShellRoute()],
+      );
     }
   }
 
