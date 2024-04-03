@@ -13,20 +13,20 @@ import 'package:screenshots/screenshots/screenshots.dart';
 import 'package:screenshots/widgets/widgets.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await AppThemes.init();
-  final themeSettings = AppThemes().values.first.settings;
-
-  final appBloc = MockAppBloc.allScreen(
-    themeSettings: themeSettings,
-    themeMode: ThemeMode.light,
-    locale: const Locale('en'),
-  );
-
   withClock(
     Clock.fixed(dFixedTime),
-    () {
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
+
+      await AppThemes.init();
+      final themeSettings = AppThemes().values.first.settings;
+
+      final appBloc = MockAppBloc.allScreen(
+        themeSettings: themeSettings,
+        themeMode: ThemeMode.light,
+        locale: const Locale('en'),
+      );
+
       runApp(ScreenshotsApp(
         appBloc: appBloc,
       ));
