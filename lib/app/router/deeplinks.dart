@@ -40,6 +40,5 @@ class HandleAutoprovision implements DeepLinkHandler {
   @override
   DeepLink? handle() => _isAutoprovision ? deepLink : null;
 
-  // TODO: extract constant
-  bool get _isAutoprovision => deepLink.path.startsWith('/autoprovision');
+  bool get _isAutoprovision => deepLink.path.startsWith(kAutoprovisionRout);
 }
