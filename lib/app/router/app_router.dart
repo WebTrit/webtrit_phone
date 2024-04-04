@@ -301,10 +301,13 @@ class AppRouter extends _$AppRouter {
   }
 
   FutureOr<DeepLink> deepLinkBuilder(PlatformDeepLink deepLink) {
-    for (var element in [
+    final handlers = <DeepLinkHandler>[
       HandleAndroidBackgroundIncomingCall(deepLink, _appBloc.pendingCallHandler),
-    ]) {
-      final deeplink = element.handle();
+      HandleAutoprovision(deepLink),
+    ];
+
+    for (final handler in handlers) {
+      final deeplink = handler.handle();
       if (deeplink != null) return deeplink;
     }
 

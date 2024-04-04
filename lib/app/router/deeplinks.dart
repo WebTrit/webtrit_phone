@@ -31,3 +31,15 @@ class HandleAndroidBackgroundIncomingCall implements DeepLinkHandler {
     }
   }
 }
+
+class HandleAutoprovision implements DeepLinkHandler {
+  HandleAutoprovision(this.deepLink);
+
+  final PlatformDeepLink deepLink;
+
+  @override
+  DeepLink? handle() => _isAutoprovision ? deepLink : null;
+
+  // TODO: extract constant
+  bool get _isAutoprovision => deepLink.path.startsWith('/autoprovision');
+}
