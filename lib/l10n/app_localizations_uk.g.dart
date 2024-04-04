@@ -596,4 +596,16 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get validationBlankError => 'Будь ласка, введіть значення';
+
+  @override
+  String get autoprovision_ReloginDialog_title => 'Підтвердження повторного входу';
+
+  @override
+  String get autoprovision_ReloginDialog_text => 'Бажаєте замінити поточний сеанс на новий?';
+
+  @override
+  String get autoprovision_ReloginDialog_confirm => 'Підтвердити';
+
+  @override
+  String get autoprovision_ReloginDialog_decline => 'Відхилити';
 }

@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/l10n/l10n.dart';
+
 class ReloginDialog extends StatelessWidget {
   const ReloginDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Relogin Confirmation'),
-      content: Text('Do you want to replace the current session with a new one?'),
+      title: Text(context.l10n.autoprovision_ReloginDialog_title),
+      content: Text(context.l10n.autoprovision_ReloginDialog_text),
       actions: <Widget>[
         TextButton(
           onPressed: () => Navigator.of(context).pop(true),
-          child: const Text('Yes'),
+          child: Text(context.l10n.autoprovision_ReloginDialog_confirm),
         ),
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
-          child: const Text('No'),
+          child: Text(context.l10n.autoprovision_ReloginDialog_decline),
         ),
       ],
     );
   }
 }
-
-// TODO: localize, use styles

@@ -1202,6 +1202,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter a value'**
   String get validationBlankError;
+
+  /// No description provided for @autoprovision_ReloginDialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Relogin Confirmation'**
+  String get autoprovision_ReloginDialog_title;
+
+  /// No description provided for @autoprovision_ReloginDialog_text.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to replace the current session with a new one?'**
+  String get autoprovision_ReloginDialog_text;
+
+  /// No description provided for @autoprovision_ReloginDialog_confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get autoprovision_ReloginDialog_confirm;
+
+  /// No description provided for @autoprovision_ReloginDialog_decline.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get autoprovision_ReloginDialog_decline;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
