@@ -78,14 +78,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
-  audio_session:
-    dependency: transitive
-    description:
-      name: audio_session
-      sha256: "6fdf255ed3af86535c96452c33ecff1245990bb25a605bfb1958661ccc3d467f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.18"
   auto_route:
     dependency: "direct main"
     description:
@@ -835,30 +827,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.7.1"
-  just_audio:
-    dependency: "direct main"
-    description:
-      name: just_audio
-      sha256: b607cd1a43bac03d85c3aaee00448ff4a589ef2a77104e3d409889ff079bf823
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.9.36"
-  just_audio_platform_interface:
-    dependency: transitive
-    description:
-      name: just_audio_platform_interface
-      sha256: c3dee0014248c97c91fe6299edb73dc4d6c6930a2f4f713579cd692d9e47f4a1
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.2.2"
-  just_audio_web:
-    dependency: transitive
-    description:
-      name: just_audio_web
-      sha256: "134356b0fe3d898293102b33b5fd618831ffdc72bb7a1b726140abdf22772b70"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.9"
   leak_tracker:
     dependency: transitive
     description:
@@ -1195,14 +1163,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.3"
-  rxdart:
-    dependency: transitive
-    description:
-      name: rxdart
-      sha256: "0c7c0cedd93788d996e33041ffecda924cc54389199cde4e6a34b440f50044cb"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.27.7"
   share_plus:
     dependency: "direct main"
     description:
@@ -1312,6 +1272,38 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  soundpool:
+    dependency: "direct main"
+    description:
+      name: soundpool
+      sha256: fe7302005759d6a3561de1711e3ea818b1ba025a62375b469196dda5b654bd38
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.1"
+  soundpool_macos:
+    dependency: transitive
+    description:
+      name: soundpool_macos
+      sha256: e0440a19d4e8f344dace336923b369184e91eebbbd8348266f4434b675bd15db
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.0"
+  soundpool_platform_interface:
+    dependency: transitive
+    description:
+      name: soundpool_platform_interface
+      sha256: "7c6666e19319151b2036c4fc9b6da3a83f2ebf4097989e6ba1c2b0bfe3612e9f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
+  soundpool_web:
+    dependency: transitive
+    description:
+      name: soundpool_web
+      sha256: "3d1eb8d6cceb8a0aec38ff9aec4fbd11a9a8101d27b27a6eb29305b83d46aee5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.0"
   source_gen:
     dependency: transitive
     description:
@@ -1676,35 +1668,56 @@ packages:
       path: "../webtrit_callkeep/webtrit_callkeep"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.1.0+1"
   webtrit_callkeep_android:
     dependency: transitive
     description:
       path: "../webtrit_callkeep/webtrit_callkeep_android"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.1.0+1"
   webtrit_callkeep_ios:
     dependency: transitive
     description:
       path: "../webtrit_callkeep/webtrit_callkeep_ios"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.1.0+1"
+  webtrit_callkeep_linux:
+    dependency: transitive
+    description:
+      path: "../webtrit_callkeep/webtrit_callkeep_linux"
+      relative: true
+    source: path
+    version: "0.1.0+1"
+  webtrit_callkeep_macos:
+    dependency: transitive
+    description:
+      path: "../webtrit_callkeep/webtrit_callkeep_macos"
+      relative: true
+    source: path
+    version: "0.1.0+1"
   webtrit_callkeep_platform_interface:
     dependency: transitive
     description:
       path: "../webtrit_callkeep/webtrit_callkeep_platform_interface"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.1.0+1"
   webtrit_callkeep_web:
     dependency: transitive
     description:
       path: "../webtrit_callkeep/webtrit_callkeep_web"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.1.0+1"
+  webtrit_callkeep_windows:
+    dependency: transitive
+    description:
+      path: "../webtrit_callkeep/webtrit_callkeep_windows"
+      relative: true
+    source: path
+    version: "0.1.0+1"
   webtrit_phone_number:
     dependency: "direct main"
     description:
