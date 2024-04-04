@@ -133,7 +133,8 @@ class ActiveCall with _$ActiveCall {
     DateTime? hungUpTime,
     Transfer? transfer,
     Object? failure,
-    required RTCVideoRenderers renderers,
+    MediaStream? localStream,
+    MediaStream? remoteStream,
   }) = _ActiveCall;
 
   bool get isIncoming => direction == Direction.incoming;
@@ -161,28 +162,5 @@ extension ActiveCallIterableExtension<T extends ActiveCall> on Iterable<T> {
     } on StateError catch (_) {
       return null;
     }
-  }
-}
-
-class RTCVideoRenderers {
-  RTCVideoRenderers()
-      : local = RTCVideoRenderer(),
-        remote = RTCVideoRenderer();
-
-  final RTCVideoRenderer local;
-  final RTCVideoRenderer remote;
-
-  Future<void> initialize() {
-    return Future.wait([
-      local.initialize(),
-      remote.initialize(),
-    ]);
-  }
-
-  Future<void> dispose() {
-    return Future.wait([
-      local.dispose(),
-      remote.dispose(),
-    ]);
   }
 }
