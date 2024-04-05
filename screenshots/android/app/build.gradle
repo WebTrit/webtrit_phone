@@ -44,7 +44,7 @@ android {
 
     defaultConfig {
         applicationId "com.webtrit.phone.screenshots"
-        minSdkVersion 23 // flutter.minSdkVersion
+        minSdkVersion 26 // flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
