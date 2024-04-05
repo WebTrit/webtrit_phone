@@ -21,9 +21,7 @@ mixin _$AppLifecycleStateChanged {
 
 /// @nodoc
 
-class _$_AppLifecycleStateChangedImpl
-    with DiagnosticableTreeMixin
-    implements __AppLifecycleStateChanged {
+class _$_AppLifecycleStateChangedImpl with DiagnosticableTreeMixin implements __AppLifecycleStateChanged {
   const _$_AppLifecycleStateChangedImpl(this.state);
 
   @override
@@ -55,8 +53,7 @@ class _$_AppLifecycleStateChangedImpl
 }
 
 abstract class __AppLifecycleStateChanged implements _AppLifecycleStateChanged {
-  const factory __AppLifecycleStateChanged(final AppLifecycleState state) =
-      _$_AppLifecycleStateChangedImpl;
+  const factory __AppLifecycleStateChanged(final AppLifecycleState state) = _$_AppLifecycleStateChangedImpl;
 
   @override
   AppLifecycleState get state;
@@ -69,9 +66,7 @@ mixin _$ConnectivityResultChanged {
 
 /// @nodoc
 
-class _$_ConnectivityResultChangedImpl
-    with DiagnosticableTreeMixin
-    implements __ConnectivityResultChanged {
+class _$_ConnectivityResultChangedImpl with DiagnosticableTreeMixin implements __ConnectivityResultChanged {
   const _$_ConnectivityResultChangedImpl(this.result);
 
   @override
@@ -102,10 +97,8 @@ class _$_ConnectivityResultChangedImpl
   int get hashCode => Object.hash(runtimeType, result);
 }
 
-abstract class __ConnectivityResultChanged
-    implements _ConnectivityResultChanged {
-  const factory __ConnectivityResultChanged(final ConnectivityResult result) =
-      _$_ConnectivityResultChangedImpl;
+abstract class __ConnectivityResultChanged implements _ConnectivityResultChanged {
+  const factory __ConnectivityResultChanged(final ConnectivityResult result) = _$_ConnectivityResultChangedImpl;
 
   @override
   ConnectivityResult get result;
@@ -116,9 +109,7 @@ mixin _$NavigatorMediaDevicesChange {}
 
 /// @nodoc
 
-class _$_NavigatorMediaDevicesChangeImpl
-    with DiagnosticableTreeMixin
-    implements __NavigatorMediaDevicesChange {
+class _$_NavigatorMediaDevicesChangeImpl with DiagnosticableTreeMixin implements __NavigatorMediaDevicesChange {
   const _$_NavigatorMediaDevicesChangeImpl();
 
   @override
@@ -134,36 +125,28 @@ class _$_NavigatorMediaDevicesChangeImpl
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_NavigatorMediaDevicesChangeImpl);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _$_NavigatorMediaDevicesChangeImpl);
   }
 
   @override
   int get hashCode => runtimeType.hashCode;
 }
 
-abstract class __NavigatorMediaDevicesChange
-    implements _NavigatorMediaDevicesChange {
-  const factory __NavigatorMediaDevicesChange() =
-      _$_NavigatorMediaDevicesChangeImpl;
+abstract class __NavigatorMediaDevicesChange implements _NavigatorMediaDevicesChange {
+  const factory __NavigatorMediaDevicesChange() = _$_NavigatorMediaDevicesChangeImpl;
 }
 
 /// @nodoc
 mixin _$RegistrationChange {
-  RegistrationStatus get registrationStatus =>
-      throw _privateConstructorUsedError;
+  RegistrationStatus get registrationStatus => throw _privateConstructorUsedError;
   String? get reason => throw _privateConstructorUsedError;
   int? get code => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 
-class _$_RegistrationChangeImpl
-    with DiagnosticableTreeMixin
-    implements __RegistrationChange {
-  const _$_RegistrationChangeImpl(
-      {required this.registrationStatus, this.reason, this.code});
+class _$_RegistrationChangeImpl with DiagnosticableTreeMixin implements __RegistrationChange {
+  const _$_RegistrationChangeImpl({required this.registrationStatus, this.reason, this.code});
 
   @override
   final RegistrationStatus registrationStatus;
@@ -199,8 +182,7 @@ class _$_RegistrationChangeImpl
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, registrationStatus, reason, code);
+  int get hashCode => Object.hash(runtimeType, registrationStatus, reason, code);
 }
 
 abstract class __RegistrationChange implements _RegistrationChange {
@@ -240,8 +222,7 @@ mixin _$ResetStateEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_ResetStateEventCompleteCalls value)
-        completeCalls,
+    required TResult Function(_ResetStateEventCompleteCalls value) completeCalls,
     required TResult Function(_ResetStateEventCompleteCall value) completeCall,
   }) =>
       throw _privateConstructorUsedError;
@@ -262,9 +243,7 @@ mixin _$ResetStateEvent {
 
 /// @nodoc
 
-class _$ResetStateEventCompleteCallsImpl
-    with DiagnosticableTreeMixin
-    implements _ResetStateEventCompleteCalls {
+class _$ResetStateEventCompleteCallsImpl with DiagnosticableTreeMixin implements _ResetStateEventCompleteCalls {
   const _$ResetStateEventCompleteCallsImpl();
 
   @override
@@ -275,15 +254,12 @@ class _$ResetStateEventCompleteCallsImpl
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties
-        .add(DiagnosticsProperty('type', '_ResetStateEvent.completeCalls'));
+    properties.add(DiagnosticsProperty('type', '_ResetStateEvent.completeCalls'));
   }
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ResetStateEventCompleteCallsImpl);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _$ResetStateEventCompleteCallsImpl);
   }
 
   @override
@@ -323,8 +299,7 @@ class _$ResetStateEventCompleteCallsImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_ResetStateEventCompleteCalls value)
-        completeCalls,
+    required TResult Function(_ResetStateEventCompleteCalls value) completeCalls,
     required TResult Function(_ResetStateEventCompleteCall value) completeCall,
   }) {
     return completeCalls(this);
@@ -354,15 +329,12 @@ class _$ResetStateEventCompleteCallsImpl
 }
 
 abstract class _ResetStateEventCompleteCalls implements _ResetStateEvent {
-  const factory _ResetStateEventCompleteCalls() =
-      _$ResetStateEventCompleteCallsImpl;
+  const factory _ResetStateEventCompleteCalls() = _$ResetStateEventCompleteCallsImpl;
 }
 
 /// @nodoc
 
-class _$ResetStateEventCompleteCallImpl
-    with DiagnosticableTreeMixin
-    implements _ResetStateEventCompleteCall {
+class _$ResetStateEventCompleteCallImpl with DiagnosticableTreeMixin implements _ResetStateEventCompleteCall {
   const _$ResetStateEventCompleteCallImpl(this.callId);
 
   @override
@@ -426,8 +398,7 @@ class _$ResetStateEventCompleteCallImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_ResetStateEventCompleteCalls value)
-        completeCalls,
+    required TResult Function(_ResetStateEventCompleteCalls value) completeCalls,
     required TResult Function(_ResetStateEventCompleteCall value) completeCall,
   }) {
     return completeCall(this);
@@ -457,8 +428,7 @@ class _$ResetStateEventCompleteCallImpl
 }
 
 abstract class _ResetStateEventCompleteCall implements _ResetStateEvent {
-  const factory _ResetStateEventCompleteCall(final String callId) =
-      _$ResetStateEventCompleteCallImpl;
+  const factory _ResetStateEventCompleteCall(final String callId) = _$ResetStateEventCompleteCallImpl;
 
   String get callId;
 }
@@ -489,29 +459,22 @@ mixin _$SignalingClientEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_SignalingClientEventConnectInitiated value)
-        connectInitiated,
-    required TResult Function(_SignalingClientEventDisconnectInitiated value)
-        disconnectInitiated,
-    required TResult Function(_SignalingClientEventDisconnected value)
-        disconnected,
+    required TResult Function(_SignalingClientEventConnectInitiated value) connectInitiated,
+    required TResult Function(_SignalingClientEventDisconnectInitiated value) disconnectInitiated,
+    required TResult Function(_SignalingClientEventDisconnected value) disconnected,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_SignalingClientEventConnectInitiated value)?
-        connectInitiated,
-    TResult? Function(_SignalingClientEventDisconnectInitiated value)?
-        disconnectInitiated,
+    TResult? Function(_SignalingClientEventConnectInitiated value)? connectInitiated,
+    TResult? Function(_SignalingClientEventDisconnectInitiated value)? disconnectInitiated,
     TResult? Function(_SignalingClientEventDisconnected value)? disconnected,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_SignalingClientEventConnectInitiated value)?
-        connectInitiated,
-    TResult Function(_SignalingClientEventDisconnectInitiated value)?
-        disconnectInitiated,
+    TResult Function(_SignalingClientEventConnectInitiated value)? connectInitiated,
+    TResult Function(_SignalingClientEventDisconnectInitiated value)? disconnectInitiated,
     TResult Function(_SignalingClientEventDisconnected value)? disconnected,
     required TResult orElse(),
   }) =>
@@ -533,15 +496,13 @@ class _$SignalingClientEventConnectInitiatedImpl
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(
-        DiagnosticsProperty('type', '_SignalingClientEvent.connectInitiated'));
+    properties.add(DiagnosticsProperty('type', '_SignalingClientEvent.connectInitiated'));
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$SignalingClientEventConnectInitiatedImpl);
+        (other.runtimeType == runtimeType && other is _$SignalingClientEventConnectInitiatedImpl);
   }
 
   @override
@@ -584,12 +545,9 @@ class _$SignalingClientEventConnectInitiatedImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_SignalingClientEventConnectInitiated value)
-        connectInitiated,
-    required TResult Function(_SignalingClientEventDisconnectInitiated value)
-        disconnectInitiated,
-    required TResult Function(_SignalingClientEventDisconnected value)
-        disconnected,
+    required TResult Function(_SignalingClientEventConnectInitiated value) connectInitiated,
+    required TResult Function(_SignalingClientEventDisconnectInitiated value) disconnectInitiated,
+    required TResult Function(_SignalingClientEventDisconnected value) disconnected,
   }) {
     return connectInitiated(this);
   }
@@ -597,10 +555,8 @@ class _$SignalingClientEventConnectInitiatedImpl
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_SignalingClientEventConnectInitiated value)?
-        connectInitiated,
-    TResult? Function(_SignalingClientEventDisconnectInitiated value)?
-        disconnectInitiated,
+    TResult? Function(_SignalingClientEventConnectInitiated value)? connectInitiated,
+    TResult? Function(_SignalingClientEventDisconnectInitiated value)? disconnectInitiated,
     TResult? Function(_SignalingClientEventDisconnected value)? disconnected,
   }) {
     return connectInitiated?.call(this);
@@ -609,10 +565,8 @@ class _$SignalingClientEventConnectInitiatedImpl
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_SignalingClientEventConnectInitiated value)?
-        connectInitiated,
-    TResult Function(_SignalingClientEventDisconnectInitiated value)?
-        disconnectInitiated,
+    TResult Function(_SignalingClientEventConnectInitiated value)? connectInitiated,
+    TResult Function(_SignalingClientEventDisconnectInitiated value)? disconnectInitiated,
     TResult Function(_SignalingClientEventDisconnected value)? disconnected,
     required TResult orElse(),
   }) {
@@ -623,10 +577,8 @@ class _$SignalingClientEventConnectInitiatedImpl
   }
 }
 
-abstract class _SignalingClientEventConnectInitiated
-    implements _SignalingClientEvent {
-  const factory _SignalingClientEventConnectInitiated() =
-      _$SignalingClientEventConnectInitiatedImpl;
+abstract class _SignalingClientEventConnectInitiated implements _SignalingClientEvent {
+  const factory _SignalingClientEventConnectInitiated() = _$SignalingClientEventConnectInitiatedImpl;
 }
 
 /// @nodoc
@@ -644,15 +596,13 @@ class _$SignalingClientEventDisconnectInitiatedImpl
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty(
-        'type', '_SignalingClientEvent.disconnectInitiated'));
+    properties.add(DiagnosticsProperty('type', '_SignalingClientEvent.disconnectInitiated'));
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$SignalingClientEventDisconnectInitiatedImpl);
+        (other.runtimeType == runtimeType && other is _$SignalingClientEventDisconnectInitiatedImpl);
   }
 
   @override
@@ -695,12 +645,9 @@ class _$SignalingClientEventDisconnectInitiatedImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_SignalingClientEventConnectInitiated value)
-        connectInitiated,
-    required TResult Function(_SignalingClientEventDisconnectInitiated value)
-        disconnectInitiated,
-    required TResult Function(_SignalingClientEventDisconnected value)
-        disconnected,
+    required TResult Function(_SignalingClientEventConnectInitiated value) connectInitiated,
+    required TResult Function(_SignalingClientEventDisconnectInitiated value) disconnectInitiated,
+    required TResult Function(_SignalingClientEventDisconnected value) disconnected,
   }) {
     return disconnectInitiated(this);
   }
@@ -708,10 +655,8 @@ class _$SignalingClientEventDisconnectInitiatedImpl
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_SignalingClientEventConnectInitiated value)?
-        connectInitiated,
-    TResult? Function(_SignalingClientEventDisconnectInitiated value)?
-        disconnectInitiated,
+    TResult? Function(_SignalingClientEventConnectInitiated value)? connectInitiated,
+    TResult? Function(_SignalingClientEventDisconnectInitiated value)? disconnectInitiated,
     TResult? Function(_SignalingClientEventDisconnected value)? disconnected,
   }) {
     return disconnectInitiated?.call(this);
@@ -720,10 +665,8 @@ class _$SignalingClientEventDisconnectInitiatedImpl
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_SignalingClientEventConnectInitiated value)?
-        connectInitiated,
-    TResult Function(_SignalingClientEventDisconnectInitiated value)?
-        disconnectInitiated,
+    TResult Function(_SignalingClientEventConnectInitiated value)? connectInitiated,
+    TResult Function(_SignalingClientEventDisconnectInitiated value)? disconnectInitiated,
     TResult Function(_SignalingClientEventDisconnected value)? disconnected,
     required TResult orElse(),
   }) {
@@ -734,17 +677,13 @@ class _$SignalingClientEventDisconnectInitiatedImpl
   }
 }
 
-abstract class _SignalingClientEventDisconnectInitiated
-    implements _SignalingClientEvent {
-  const factory _SignalingClientEventDisconnectInitiated() =
-      _$SignalingClientEventDisconnectInitiatedImpl;
+abstract class _SignalingClientEventDisconnectInitiated implements _SignalingClientEvent {
+  const factory _SignalingClientEventDisconnectInitiated() = _$SignalingClientEventDisconnectInitiatedImpl;
 }
 
 /// @nodoc
 
-class _$SignalingClientEventDisconnectedImpl
-    with DiagnosticableTreeMixin
-    implements _SignalingClientEventDisconnected {
+class _$SignalingClientEventDisconnectedImpl with DiagnosticableTreeMixin implements _SignalingClientEventDisconnected {
   const _$SignalingClientEventDisconnectedImpl(this.code, this.reason);
 
   @override
@@ -815,12 +754,9 @@ class _$SignalingClientEventDisconnectedImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_SignalingClientEventConnectInitiated value)
-        connectInitiated,
-    required TResult Function(_SignalingClientEventDisconnectInitiated value)
-        disconnectInitiated,
-    required TResult Function(_SignalingClientEventDisconnected value)
-        disconnected,
+    required TResult Function(_SignalingClientEventConnectInitiated value) connectInitiated,
+    required TResult Function(_SignalingClientEventDisconnectInitiated value) disconnectInitiated,
+    required TResult Function(_SignalingClientEventDisconnected value) disconnected,
   }) {
     return disconnected(this);
   }
@@ -828,10 +764,8 @@ class _$SignalingClientEventDisconnectedImpl
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_SignalingClientEventConnectInitiated value)?
-        connectInitiated,
-    TResult? Function(_SignalingClientEventDisconnectInitiated value)?
-        disconnectInitiated,
+    TResult? Function(_SignalingClientEventConnectInitiated value)? connectInitiated,
+    TResult? Function(_SignalingClientEventDisconnectInitiated value)? disconnectInitiated,
     TResult? Function(_SignalingClientEventDisconnected value)? disconnected,
   }) {
     return disconnected?.call(this);
@@ -840,10 +774,8 @@ class _$SignalingClientEventDisconnectedImpl
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_SignalingClientEventConnectInitiated value)?
-        connectInitiated,
-    TResult Function(_SignalingClientEventDisconnectInitiated value)?
-        disconnectInitiated,
+    TResult Function(_SignalingClientEventConnectInitiated value)? connectInitiated,
+    TResult Function(_SignalingClientEventDisconnectInitiated value)? disconnectInitiated,
     TResult Function(_SignalingClientEventDisconnected value)? disconnected,
     required TResult orElse(),
   }) {
@@ -854,10 +786,8 @@ class _$SignalingClientEventDisconnectedImpl
   }
 }
 
-abstract class _SignalingClientEventDisconnected
-    implements _SignalingClientEvent {
-  const factory _SignalingClientEventDisconnected(
-          final int? code, final String? reason) =
+abstract class _SignalingClientEventDisconnected implements _SignalingClientEvent {
+  const factory _SignalingClientEventDisconnected(final int? code, final String? reason) =
       _$SignalingClientEventDisconnectedImpl;
 
   int? get code;
@@ -904,11 +834,8 @@ mixin _$HandshakeSignalingEvent {
 
 /// @nodoc
 
-class _$HandshakeSignalingEventStateImpl
-    with DiagnosticableTreeMixin
-    implements _HandshakeSignalingEventState {
-  const _$HandshakeSignalingEventStateImpl(
-      {required this.registration, required this.linesCount});
+class _$HandshakeSignalingEventStateImpl with DiagnosticableTreeMixin implements _HandshakeSignalingEventState {
+  const _$HandshakeSignalingEventStateImpl({required this.registration, required this.linesCount});
 
   @override
   final Registration registration;
@@ -934,10 +861,8 @@ class _$HandshakeSignalingEventStateImpl
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$HandshakeSignalingEventStateImpl &&
-            (identical(other.registration, registration) ||
-                other.registration == registration) &&
-            (identical(other.linesCount, linesCount) ||
-                other.linesCount == linesCount));
+            (identical(other.registration, registration) || other.registration == registration) &&
+            (identical(other.linesCount, linesCount) || other.linesCount == linesCount));
   }
 
   @override
@@ -1000,11 +925,9 @@ class _$HandshakeSignalingEventStateImpl
   }
 }
 
-abstract class _HandshakeSignalingEventState
-    implements _HandshakeSignalingEvent {
+abstract class _HandshakeSignalingEventState implements _HandshakeSignalingEvent {
   const factory _HandshakeSignalingEventState(
-      {required final Registration registration,
-      required final int linesCount}) = _$HandshakeSignalingEventStateImpl;
+      {required final Registration registration, required final int linesCount}) = _$HandshakeSignalingEventStateImpl;
 
   @override
   Registration get registration;
@@ -1016,36 +939,15 @@ abstract class _HandshakeSignalingEventState
 mixin _$CallSignalingEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         incoming,
     required TResult Function(int line, String callId) ringing,
-    required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, JsepValue? jsep) progress,
+    required TResult Function(int line, String callId, String? callee, JsepValue? jsep) accepted,
+    required TResult Function(int line, String callId, int code, String reason) hangup,
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         updating,
     required TResult Function(int line, String callId) updated,
     required TResult Function() registering,
@@ -1057,33 +959,15 @@ mixin _$CallSignalingEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult? Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult? Function(int line, String callId, int code, String reason)? hangup,
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult? Function(int line, String callId)? updated,
     TResult? Function()? registering,
@@ -1095,33 +979,15 @@ mixin _$CallSignalingEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult Function(int line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult Function(int line, String callId)? updated,
     TResult Function()? registering,
@@ -1143,12 +1009,9 @@ mixin _$CallSignalingEvent {
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value) registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value) unregistering,
+    required TResult Function(_CallSignalingEventUnregistered value) unregistered,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -1162,8 +1025,7 @@ mixin _$CallSignalingEvent {
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
   }) =>
@@ -1179,8 +1041,7 @@ mixin _$CallSignalingEvent {
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult Function(_CallSignalingEventUnregistered value)? unregistered,
     required TResult orElse(),
@@ -1190,9 +1051,7 @@ mixin _$CallSignalingEvent {
 
 /// @nodoc
 
-class _$CallSignalingEventIncomingImpl
-    with DiagnosticableTreeMixin
-    implements _CallSignalingEventIncoming {
+class _$CallSignalingEventIncomingImpl with DiagnosticableTreeMixin implements _CallSignalingEventIncoming {
   const _$CallSignalingEventIncomingImpl(
       {required this.line,
       required this.callId,
@@ -1253,53 +1112,29 @@ class _$CallSignalingEventIncomingImpl
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.callee, callee) || other.callee == callee) &&
             (identical(other.caller, caller) || other.caller == caller) &&
-            (identical(other.callerDisplayName, callerDisplayName) ||
-                other.callerDisplayName == callerDisplayName) &&
-            (identical(other.referredBy, referredBy) ||
-                other.referredBy == referredBy) &&
-            (identical(other.replaceCallId, replaceCallId) ||
-                other.replaceCallId == replaceCallId) &&
+            (identical(other.callerDisplayName, callerDisplayName) || other.callerDisplayName == callerDisplayName) &&
+            (identical(other.referredBy, referredBy) || other.referredBy == referredBy) &&
+            (identical(other.replaceCallId, replaceCallId) || other.replaceCallId == replaceCallId) &&
             (identical(other.isFocus, isFocus) || other.isFocus == isFocus) &&
             (identical(other.jsep, jsep) || other.jsep == jsep));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, line, callId, callee, caller,
-      callerDisplayName, referredBy, replaceCallId, isFocus, jsep);
+  int get hashCode => Object.hash(
+      runtimeType, line, callId, callee, caller, callerDisplayName, referredBy, replaceCallId, isFocus, jsep);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         incoming,
     required TResult Function(int line, String callId) ringing,
-    required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, JsepValue? jsep) progress,
+    required TResult Function(int line, String callId, String? callee, JsepValue? jsep) accepted,
+    required TResult Function(int line, String callId, int code, String reason) hangup,
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         updating,
     required TResult Function(int line, String callId) updated,
     required TResult Function() registering,
@@ -1308,40 +1143,21 @@ class _$CallSignalingEventIncomingImpl
     required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) {
-    return incoming(line, callId, callee, caller, callerDisplayName, referredBy,
-        replaceCallId, isFocus, jsep);
+    return incoming(line, callId, callee, caller, callerDisplayName, referredBy, replaceCallId, isFocus, jsep);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult? Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult? Function(int line, String callId, int code, String reason)? hangup,
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult? Function(int line, String callId)? updated,
     TResult? Function()? registering,
@@ -1350,40 +1166,21 @@ class _$CallSignalingEventIncomingImpl
     TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) {
-    return incoming?.call(line, callId, callee, caller, callerDisplayName,
-        referredBy, replaceCallId, isFocus, jsep);
+    return incoming?.call(line, callId, callee, caller, callerDisplayName, referredBy, replaceCallId, isFocus, jsep);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult Function(int line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult Function(int line, String callId)? updated,
     TResult Function()? registering,
@@ -1394,8 +1191,7 @@ class _$CallSignalingEventIncomingImpl
     required TResult orElse(),
   }) {
     if (incoming != null) {
-      return incoming(line, callId, callee, caller, callerDisplayName,
-          referredBy, replaceCallId, isFocus, jsep);
+      return incoming(line, callId, callee, caller, callerDisplayName, referredBy, replaceCallId, isFocus, jsep);
     }
     return orElse();
   }
@@ -1412,12 +1208,9 @@ class _$CallSignalingEventIncomingImpl
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value) registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value) unregistering,
+    required TResult Function(_CallSignalingEventUnregistered value) unregistered,
   }) {
     return incoming(this);
   }
@@ -1434,8 +1227,7 @@ class _$CallSignalingEventIncomingImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
   }) {
@@ -1454,8 +1246,7 @@ class _$CallSignalingEventIncomingImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult Function(_CallSignalingEventUnregistered value)? unregistered,
     required TResult orElse(),
@@ -1492,11 +1283,8 @@ abstract class _CallSignalingEventIncoming implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$CallSignalingEventRingingImpl
-    with DiagnosticableTreeMixin
-    implements _CallSignalingEventRinging {
-  const _$CallSignalingEventRingingImpl(
-      {required this.line, required this.callId});
+class _$CallSignalingEventRingingImpl with DiagnosticableTreeMixin implements _CallSignalingEventRinging {
+  const _$CallSignalingEventRingingImpl({required this.line, required this.callId});
 
   @override
   final int line;
@@ -1532,36 +1320,15 @@ class _$CallSignalingEventRingingImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         incoming,
     required TResult Function(int line, String callId) ringing,
-    required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, JsepValue? jsep) progress,
+    required TResult Function(int line, String callId, String? callee, JsepValue? jsep) accepted,
+    required TResult Function(int line, String callId, int code, String reason) hangup,
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         updating,
     required TResult Function(int line, String callId) updated,
     required TResult Function() registering,
@@ -1576,33 +1343,15 @@ class _$CallSignalingEventRingingImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult? Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult? Function(int line, String callId, int code, String reason)? hangup,
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult? Function(int line, String callId)? updated,
     TResult? Function()? registering,
@@ -1617,33 +1366,15 @@ class _$CallSignalingEventRingingImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult Function(int line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult Function(int line, String callId)? updated,
     TResult Function()? registering,
@@ -1671,12 +1402,9 @@ class _$CallSignalingEventRingingImpl
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value) registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value) unregistering,
+    required TResult Function(_CallSignalingEventUnregistered value) unregistered,
   }) {
     return ringing(this);
   }
@@ -1693,8 +1421,7 @@ class _$CallSignalingEventRingingImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
   }) {
@@ -1713,8 +1440,7 @@ class _$CallSignalingEventRingingImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult Function(_CallSignalingEventUnregistered value)? unregistered,
     required TResult orElse(),
@@ -1727,9 +1453,8 @@ class _$CallSignalingEventRingingImpl
 }
 
 abstract class _CallSignalingEventRinging implements _CallSignalingEvent {
-  const factory _CallSignalingEventRinging(
-      {required final int line,
-      required final String callId}) = _$CallSignalingEventRingingImpl;
+  const factory _CallSignalingEventRinging({required final int line, required final String callId}) =
+      _$CallSignalingEventRingingImpl;
 
   int get line;
   String get callId;
@@ -1737,14 +1462,8 @@ abstract class _CallSignalingEventRinging implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$CallSignalingEventProgressImpl
-    with DiagnosticableTreeMixin
-    implements _CallSignalingEventProgress {
-  const _$CallSignalingEventProgressImpl(
-      {required this.line,
-      required this.callId,
-      required this.callee,
-      this.jsep});
+class _$CallSignalingEventProgressImpl with DiagnosticableTreeMixin implements _CallSignalingEventProgress {
+  const _$CallSignalingEventProgressImpl({required this.line, required this.callId, required this.callee, this.jsep});
 
   @override
   final int line;
@@ -1788,36 +1507,15 @@ class _$CallSignalingEventProgressImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         incoming,
     required TResult Function(int line, String callId) ringing,
-    required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, JsepValue? jsep) progress,
+    required TResult Function(int line, String callId, String? callee, JsepValue? jsep) accepted,
+    required TResult Function(int line, String callId, int code, String reason) hangup,
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         updating,
     required TResult Function(int line, String callId) updated,
     required TResult Function() registering,
@@ -1832,33 +1530,15 @@ class _$CallSignalingEventProgressImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult? Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult? Function(int line, String callId, int code, String reason)? hangup,
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult? Function(int line, String callId)? updated,
     TResult? Function()? registering,
@@ -1873,33 +1553,15 @@ class _$CallSignalingEventProgressImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult Function(int line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult Function(int line, String callId)? updated,
     TResult Function()? registering,
@@ -1927,12 +1589,9 @@ class _$CallSignalingEventProgressImpl
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value) registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value) unregistering,
+    required TResult Function(_CallSignalingEventUnregistered value) unregistered,
   }) {
     return progress(this);
   }
@@ -1949,8 +1608,7 @@ class _$CallSignalingEventProgressImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
   }) {
@@ -1969,8 +1627,7 @@ class _$CallSignalingEventProgressImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult Function(_CallSignalingEventUnregistered value)? unregistered,
     required TResult orElse(),
@@ -1997,11 +1654,8 @@ abstract class _CallSignalingEventProgress implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$CallSignalingEventAcceptedImpl
-    with DiagnosticableTreeMixin
-    implements _CallSignalingEventAccepted {
-  const _$CallSignalingEventAcceptedImpl(
-      {required this.line, required this.callId, this.callee, this.jsep});
+class _$CallSignalingEventAcceptedImpl with DiagnosticableTreeMixin implements _CallSignalingEventAccepted {
+  const _$CallSignalingEventAcceptedImpl({required this.line, required this.callId, this.callee, this.jsep});
 
   @override
   final int line;
@@ -2045,36 +1699,15 @@ class _$CallSignalingEventAcceptedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         incoming,
     required TResult Function(int line, String callId) ringing,
-    required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, JsepValue? jsep) progress,
+    required TResult Function(int line, String callId, String? callee, JsepValue? jsep) accepted,
+    required TResult Function(int line, String callId, int code, String reason) hangup,
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         updating,
     required TResult Function(int line, String callId) updated,
     required TResult Function() registering,
@@ -2089,33 +1722,15 @@ class _$CallSignalingEventAcceptedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult? Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult? Function(int line, String callId, int code, String reason)? hangup,
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult? Function(int line, String callId)? updated,
     TResult? Function()? registering,
@@ -2130,33 +1745,15 @@ class _$CallSignalingEventAcceptedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult Function(int line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult Function(int line, String callId)? updated,
     TResult Function()? registering,
@@ -2184,12 +1781,9 @@ class _$CallSignalingEventAcceptedImpl
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value) registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value) unregistering,
+    required TResult Function(_CallSignalingEventUnregistered value) unregistered,
   }) {
     return accepted(this);
   }
@@ -2206,8 +1800,7 @@ class _$CallSignalingEventAcceptedImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
   }) {
@@ -2226,8 +1819,7 @@ class _$CallSignalingEventAcceptedImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult Function(_CallSignalingEventUnregistered value)? unregistered,
     required TResult orElse(),
@@ -2254,14 +1846,9 @@ abstract class _CallSignalingEventAccepted implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$CallSignalingEventHangupImpl
-    with DiagnosticableTreeMixin
-    implements _CallSignalingEventHangup {
+class _$CallSignalingEventHangupImpl with DiagnosticableTreeMixin implements _CallSignalingEventHangup {
   const _$CallSignalingEventHangupImpl(
-      {required this.line,
-      required this.callId,
-      required this.code,
-      required this.reason});
+      {required this.line, required this.callId, required this.code, required this.reason});
 
   @override
   final int line;
@@ -2305,36 +1892,15 @@ class _$CallSignalingEventHangupImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         incoming,
     required TResult Function(int line, String callId) ringing,
-    required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, JsepValue? jsep) progress,
+    required TResult Function(int line, String callId, String? callee, JsepValue? jsep) accepted,
+    required TResult Function(int line, String callId, int code, String reason) hangup,
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         updating,
     required TResult Function(int line, String callId) updated,
     required TResult Function() registering,
@@ -2349,33 +1915,15 @@ class _$CallSignalingEventHangupImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult? Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult? Function(int line, String callId, int code, String reason)? hangup,
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult? Function(int line, String callId)? updated,
     TResult? Function()? registering,
@@ -2390,33 +1938,15 @@ class _$CallSignalingEventHangupImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult Function(int line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult Function(int line, String callId)? updated,
     TResult Function()? registering,
@@ -2444,12 +1974,9 @@ class _$CallSignalingEventHangupImpl
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value) registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value) unregistering,
+    required TResult Function(_CallSignalingEventUnregistered value) unregistered,
   }) {
     return hangup(this);
   }
@@ -2466,8 +1993,7 @@ class _$CallSignalingEventHangupImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
   }) {
@@ -2486,8 +2012,7 @@ class _$CallSignalingEventHangupImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult Function(_CallSignalingEventUnregistered value)? unregistered,
     required TResult orElse(),
@@ -2514,9 +2039,7 @@ abstract class _CallSignalingEventHangup implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$CallSignalingEventUpdatingImpl
-    with DiagnosticableTreeMixin
-    implements _CallSignalingEventUpdating {
+class _$CallSignalingEventUpdatingImpl with DiagnosticableTreeMixin implements _CallSignalingEventUpdating {
   const _$CallSignalingEventUpdatingImpl(
       {required this.line,
       required this.callId,
@@ -2577,53 +2100,29 @@ class _$CallSignalingEventUpdatingImpl
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.callee, callee) || other.callee == callee) &&
             (identical(other.caller, caller) || other.caller == caller) &&
-            (identical(other.callerDisplayName, callerDisplayName) ||
-                other.callerDisplayName == callerDisplayName) &&
-            (identical(other.referredBy, referredBy) ||
-                other.referredBy == referredBy) &&
-            (identical(other.replaceCallId, replaceCallId) ||
-                other.replaceCallId == replaceCallId) &&
+            (identical(other.callerDisplayName, callerDisplayName) || other.callerDisplayName == callerDisplayName) &&
+            (identical(other.referredBy, referredBy) || other.referredBy == referredBy) &&
+            (identical(other.replaceCallId, replaceCallId) || other.replaceCallId == replaceCallId) &&
             (identical(other.isFocus, isFocus) || other.isFocus == isFocus) &&
             (identical(other.jsep, jsep) || other.jsep == jsep));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, line, callId, callee, caller,
-      callerDisplayName, referredBy, replaceCallId, isFocus, jsep);
+  int get hashCode => Object.hash(
+      runtimeType, line, callId, callee, caller, callerDisplayName, referredBy, replaceCallId, isFocus, jsep);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         incoming,
     required TResult Function(int line, String callId) ringing,
-    required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, JsepValue? jsep) progress,
+    required TResult Function(int line, String callId, String? callee, JsepValue? jsep) accepted,
+    required TResult Function(int line, String callId, int code, String reason) hangup,
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         updating,
     required TResult Function(int line, String callId) updated,
     required TResult Function() registering,
@@ -2632,40 +2131,21 @@ class _$CallSignalingEventUpdatingImpl
     required TResult Function() unregistering,
     required TResult Function() unregistered,
   }) {
-    return updating(line, callId, callee, caller, callerDisplayName, referredBy,
-        replaceCallId, isFocus, jsep);
+    return updating(line, callId, callee, caller, callerDisplayName, referredBy, replaceCallId, isFocus, jsep);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult? Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult? Function(int line, String callId, int code, String reason)? hangup,
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult? Function(int line, String callId)? updated,
     TResult? Function()? registering,
@@ -2674,40 +2154,21 @@ class _$CallSignalingEventUpdatingImpl
     TResult? Function()? unregistering,
     TResult? Function()? unregistered,
   }) {
-    return updating?.call(line, callId, callee, caller, callerDisplayName,
-        referredBy, replaceCallId, isFocus, jsep);
+    return updating?.call(line, callId, callee, caller, callerDisplayName, referredBy, replaceCallId, isFocus, jsep);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult Function(int line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult Function(int line, String callId)? updated,
     TResult Function()? registering,
@@ -2718,8 +2179,7 @@ class _$CallSignalingEventUpdatingImpl
     required TResult orElse(),
   }) {
     if (updating != null) {
-      return updating(line, callId, callee, caller, callerDisplayName,
-          referredBy, replaceCallId, isFocus, jsep);
+      return updating(line, callId, callee, caller, callerDisplayName, referredBy, replaceCallId, isFocus, jsep);
     }
     return orElse();
   }
@@ -2736,12 +2196,9 @@ class _$CallSignalingEventUpdatingImpl
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value) registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value) unregistering,
+    required TResult Function(_CallSignalingEventUnregistered value) unregistered,
   }) {
     return updating(this);
   }
@@ -2758,8 +2215,7 @@ class _$CallSignalingEventUpdatingImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
   }) {
@@ -2778,8 +2234,7 @@ class _$CallSignalingEventUpdatingImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult Function(_CallSignalingEventUnregistered value)? unregistered,
     required TResult orElse(),
@@ -2816,11 +2271,8 @@ abstract class _CallSignalingEventUpdating implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$CallSignalingEventUpdatedImpl
-    with DiagnosticableTreeMixin
-    implements _CallSignalingEventUpdated {
-  const _$CallSignalingEventUpdatedImpl(
-      {required this.line, required this.callId});
+class _$CallSignalingEventUpdatedImpl with DiagnosticableTreeMixin implements _CallSignalingEventUpdated {
+  const _$CallSignalingEventUpdatedImpl({required this.line, required this.callId});
 
   @override
   final int line;
@@ -2856,36 +2308,15 @@ class _$CallSignalingEventUpdatedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         incoming,
     required TResult Function(int line, String callId) ringing,
-    required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, JsepValue? jsep) progress,
+    required TResult Function(int line, String callId, String? callee, JsepValue? jsep) accepted,
+    required TResult Function(int line, String callId, int code, String reason) hangup,
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         updating,
     required TResult Function(int line, String callId) updated,
     required TResult Function() registering,
@@ -2900,33 +2331,15 @@ class _$CallSignalingEventUpdatedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult? Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult? Function(int line, String callId, int code, String reason)? hangup,
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult? Function(int line, String callId)? updated,
     TResult? Function()? registering,
@@ -2941,33 +2354,15 @@ class _$CallSignalingEventUpdatedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult Function(int line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult Function(int line, String callId)? updated,
     TResult Function()? registering,
@@ -2995,12 +2390,9 @@ class _$CallSignalingEventUpdatedImpl
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value) registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value) unregistering,
+    required TResult Function(_CallSignalingEventUnregistered value) unregistered,
   }) {
     return updated(this);
   }
@@ -3017,8 +2409,7 @@ class _$CallSignalingEventUpdatedImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
   }) {
@@ -3037,8 +2428,7 @@ class _$CallSignalingEventUpdatedImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult Function(_CallSignalingEventUnregistered value)? unregistered,
     required TResult orElse(),
@@ -3051,9 +2441,8 @@ class _$CallSignalingEventUpdatedImpl
 }
 
 abstract class _CallSignalingEventUpdated implements _CallSignalingEvent {
-  const factory _CallSignalingEventUpdated(
-      {required final int line,
-      required final String callId}) = _$CallSignalingEventUpdatedImpl;
+  const factory _CallSignalingEventUpdated({required final int line, required final String callId}) =
+      _$CallSignalingEventUpdatedImpl;
 
   int get line;
   String get callId;
@@ -3061,9 +2450,7 @@ abstract class _CallSignalingEventUpdated implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$CallSignalingEventRegisteringImpl
-    with DiagnosticableTreeMixin
-    implements _CallSignalingEventRegistering {
+class _$CallSignalingEventRegisteringImpl with DiagnosticableTreeMixin implements _CallSignalingEventRegistering {
   const _$CallSignalingEventRegisteringImpl();
 
   @override
@@ -3074,15 +2461,12 @@ class _$CallSignalingEventRegisteringImpl
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties
-        .add(DiagnosticsProperty('type', '_CallSignalingEvent.registering'));
+    properties.add(DiagnosticsProperty('type', '_CallSignalingEvent.registering'));
   }
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventRegisteringImpl);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _$CallSignalingEventRegisteringImpl);
   }
 
   @override
@@ -3091,36 +2475,15 @@ class _$CallSignalingEventRegisteringImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         incoming,
     required TResult Function(int line, String callId) ringing,
-    required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, JsepValue? jsep) progress,
+    required TResult Function(int line, String callId, String? callee, JsepValue? jsep) accepted,
+    required TResult Function(int line, String callId, int code, String reason) hangup,
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         updating,
     required TResult Function(int line, String callId) updated,
     required TResult Function() registering,
@@ -3135,33 +2498,15 @@ class _$CallSignalingEventRegisteringImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult? Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult? Function(int line, String callId, int code, String reason)? hangup,
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult? Function(int line, String callId)? updated,
     TResult? Function()? registering,
@@ -3176,33 +2521,15 @@ class _$CallSignalingEventRegisteringImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult Function(int line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult Function(int line, String callId)? updated,
     TResult Function()? registering,
@@ -3230,12 +2557,9 @@ class _$CallSignalingEventRegisteringImpl
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value) registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value) unregistering,
+    required TResult Function(_CallSignalingEventUnregistered value) unregistered,
   }) {
     return registering(this);
   }
@@ -3252,8 +2576,7 @@ class _$CallSignalingEventRegisteringImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
   }) {
@@ -3272,8 +2595,7 @@ class _$CallSignalingEventRegisteringImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult Function(_CallSignalingEventUnregistered value)? unregistered,
     required TResult orElse(),
@@ -3286,15 +2608,12 @@ class _$CallSignalingEventRegisteringImpl
 }
 
 abstract class _CallSignalingEventRegistering implements _CallSignalingEvent {
-  const factory _CallSignalingEventRegistering() =
-      _$CallSignalingEventRegisteringImpl;
+  const factory _CallSignalingEventRegistering() = _$CallSignalingEventRegisteringImpl;
 }
 
 /// @nodoc
 
-class _$CallSignalingEventRegisteredImpl
-    with DiagnosticableTreeMixin
-    implements _CallSignalingEventRegistered {
+class _$CallSignalingEventRegisteredImpl with DiagnosticableTreeMixin implements _CallSignalingEventRegistered {
   const _$CallSignalingEventRegisteredImpl();
 
   @override
@@ -3305,15 +2624,12 @@ class _$CallSignalingEventRegisteredImpl
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties
-        .add(DiagnosticsProperty('type', '_CallSignalingEvent.registered'));
+    properties.add(DiagnosticsProperty('type', '_CallSignalingEvent.registered'));
   }
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventRegisteredImpl);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _$CallSignalingEventRegisteredImpl);
   }
 
   @override
@@ -3322,36 +2638,15 @@ class _$CallSignalingEventRegisteredImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         incoming,
     required TResult Function(int line, String callId) ringing,
-    required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, JsepValue? jsep) progress,
+    required TResult Function(int line, String callId, String? callee, JsepValue? jsep) accepted,
+    required TResult Function(int line, String callId, int code, String reason) hangup,
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         updating,
     required TResult Function(int line, String callId) updated,
     required TResult Function() registering,
@@ -3366,33 +2661,15 @@ class _$CallSignalingEventRegisteredImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult? Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult? Function(int line, String callId, int code, String reason)? hangup,
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult? Function(int line, String callId)? updated,
     TResult? Function()? registering,
@@ -3407,33 +2684,15 @@ class _$CallSignalingEventRegisteredImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult Function(int line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult Function(int line, String callId)? updated,
     TResult Function()? registering,
@@ -3461,12 +2720,9 @@ class _$CallSignalingEventRegisteredImpl
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value) registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value) unregistering,
+    required TResult Function(_CallSignalingEventUnregistered value) unregistered,
   }) {
     return registered(this);
   }
@@ -3483,8 +2739,7 @@ class _$CallSignalingEventRegisteredImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
   }) {
@@ -3503,8 +2758,7 @@ class _$CallSignalingEventRegisteredImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult Function(_CallSignalingEventUnregistered value)? unregistered,
     required TResult orElse(),
@@ -3517,8 +2771,7 @@ class _$CallSignalingEventRegisteredImpl
 }
 
 abstract class _CallSignalingEventRegistered implements _CallSignalingEvent {
-  const factory _CallSignalingEventRegistered() =
-      _$CallSignalingEventRegisteredImpl;
+  const factory _CallSignalingEventRegistered() = _$CallSignalingEventRegisteredImpl;
 }
 
 /// @nodoc
@@ -3536,15 +2789,13 @@ class _$CallSignalingEventRegisterationFailedImpl
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(
-        DiagnosticsProperty('type', '_CallSignalingEvent.registrationFailed'));
+    properties.add(DiagnosticsProperty('type', '_CallSignalingEvent.registrationFailed'));
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventRegisterationFailedImpl);
+        (other.runtimeType == runtimeType && other is _$CallSignalingEventRegisterationFailedImpl);
   }
 
   @override
@@ -3553,36 +2804,15 @@ class _$CallSignalingEventRegisterationFailedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         incoming,
     required TResult Function(int line, String callId) ringing,
-    required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, JsepValue? jsep) progress,
+    required TResult Function(int line, String callId, String? callee, JsepValue? jsep) accepted,
+    required TResult Function(int line, String callId, int code, String reason) hangup,
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         updating,
     required TResult Function(int line, String callId) updated,
     required TResult Function() registering,
@@ -3597,33 +2827,15 @@ class _$CallSignalingEventRegisterationFailedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult? Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult? Function(int line, String callId, int code, String reason)? hangup,
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult? Function(int line, String callId)? updated,
     TResult? Function()? registering,
@@ -3638,33 +2850,15 @@ class _$CallSignalingEventRegisterationFailedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult Function(int line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult Function(int line, String callId)? updated,
     TResult Function()? registering,
@@ -3692,12 +2886,9 @@ class _$CallSignalingEventRegisterationFailedImpl
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value) registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value) unregistering,
+    required TResult Function(_CallSignalingEventUnregistered value) unregistered,
   }) {
     return registrationFailed(this);
   }
@@ -3714,8 +2905,7 @@ class _$CallSignalingEventRegisterationFailedImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
   }) {
@@ -3734,8 +2924,7 @@ class _$CallSignalingEventRegisterationFailedImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult Function(_CallSignalingEventUnregistered value)? unregistered,
     required TResult orElse(),
@@ -3747,17 +2936,13 @@ class _$CallSignalingEventRegisterationFailedImpl
   }
 }
 
-abstract class _CallSignalingEventRegisterationFailed
-    implements _CallSignalingEvent {
-  const factory _CallSignalingEventRegisterationFailed() =
-      _$CallSignalingEventRegisterationFailedImpl;
+abstract class _CallSignalingEventRegisterationFailed implements _CallSignalingEvent {
+  const factory _CallSignalingEventRegisterationFailed() = _$CallSignalingEventRegisterationFailedImpl;
 }
 
 /// @nodoc
 
-class _$CallSignalingEventUnregisteringImpl
-    with DiagnosticableTreeMixin
-    implements _CallSignalingEventUnregistering {
+class _$CallSignalingEventUnregisteringImpl with DiagnosticableTreeMixin implements _CallSignalingEventUnregistering {
   const _$CallSignalingEventUnregisteringImpl();
 
   @override
@@ -3768,15 +2953,13 @@ class _$CallSignalingEventUnregisteringImpl
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties
-        .add(DiagnosticsProperty('type', '_CallSignalingEvent.unregistering'));
+    properties.add(DiagnosticsProperty('type', '_CallSignalingEvent.unregistering'));
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventUnregisteringImpl);
+        (other.runtimeType == runtimeType && other is _$CallSignalingEventUnregisteringImpl);
   }
 
   @override
@@ -3785,36 +2968,15 @@ class _$CallSignalingEventUnregisteringImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         incoming,
     required TResult Function(int line, String callId) ringing,
-    required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, JsepValue? jsep) progress,
+    required TResult Function(int line, String callId, String? callee, JsepValue? jsep) accepted,
+    required TResult Function(int line, String callId, int code, String reason) hangup,
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         updating,
     required TResult Function(int line, String callId) updated,
     required TResult Function() registering,
@@ -3829,33 +2991,15 @@ class _$CallSignalingEventUnregisteringImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult? Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult? Function(int line, String callId, int code, String reason)? hangup,
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult? Function(int line, String callId)? updated,
     TResult? Function()? registering,
@@ -3870,33 +3014,15 @@ class _$CallSignalingEventUnregisteringImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult Function(int line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult Function(int line, String callId)? updated,
     TResult Function()? registering,
@@ -3924,12 +3050,9 @@ class _$CallSignalingEventUnregisteringImpl
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value) registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value) unregistering,
+    required TResult Function(_CallSignalingEventUnregistered value) unregistered,
   }) {
     return unregistering(this);
   }
@@ -3946,8 +3069,7 @@ class _$CallSignalingEventUnregisteringImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
   }) {
@@ -3966,8 +3088,7 @@ class _$CallSignalingEventUnregisteringImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult Function(_CallSignalingEventUnregistered value)? unregistered,
     required TResult orElse(),
@@ -3980,15 +3101,12 @@ class _$CallSignalingEventUnregisteringImpl
 }
 
 abstract class _CallSignalingEventUnregistering implements _CallSignalingEvent {
-  const factory _CallSignalingEventUnregistering() =
-      _$CallSignalingEventUnregisteringImpl;
+  const factory _CallSignalingEventUnregistering() = _$CallSignalingEventUnregisteringImpl;
 }
 
 /// @nodoc
 
-class _$CallSignalingEventUnregisteredImpl
-    with DiagnosticableTreeMixin
-    implements _CallSignalingEventUnregistered {
+class _$CallSignalingEventUnregisteredImpl with DiagnosticableTreeMixin implements _CallSignalingEventUnregistered {
   const _$CallSignalingEventUnregisteredImpl();
 
   @override
@@ -3999,15 +3117,13 @@ class _$CallSignalingEventUnregisteredImpl
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties
-        .add(DiagnosticsProperty('type', '_CallSignalingEvent.unregistered'));
+    properties.add(DiagnosticsProperty('type', '_CallSignalingEvent.unregistered'));
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventUnregisteredImpl);
+        (other.runtimeType == runtimeType && other is _$CallSignalingEventUnregisteredImpl);
   }
 
   @override
@@ -4016,36 +3132,15 @@ class _$CallSignalingEventUnregisteredImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         incoming,
     required TResult Function(int line, String callId) ringing,
-    required TResult Function(
-            int line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
+    required TResult Function(int line, String callId, String callee, JsepValue? jsep) progress,
+    required TResult Function(int line, String callId, String? callee, JsepValue? jsep) accepted,
+    required TResult Function(int line, String callId, int code, String reason) hangup,
+    required TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)
         updating,
     required TResult Function(int line, String callId) updated,
     required TResult Function() registering,
@@ -4060,33 +3155,15 @@ class _$CallSignalingEventUnregisteredImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult? Function(int line, String callId)? ringing,
-    TResult? Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult? Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult? Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult? Function(int line, String callId, int code, String reason)? hangup,
-    TResult? Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult? Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult? Function(int line, String callId)? updated,
     TResult? Function()? registering,
@@ -4101,33 +3178,15 @@ class _$CallSignalingEventUnregisteredImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         incoming,
     TResult Function(int line, String callId)? ringing,
-    TResult Function(int line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
+    TResult Function(int line, String callId, String callee, JsepValue? jsep)? progress,
+    TResult Function(int line, String callId, String? callee, JsepValue? jsep)? accepted,
     TResult Function(int line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
+    TResult Function(int line, String callId, String callee, String caller, String? callerDisplayName,
+            String? referredBy, String? replaceCallId, bool? isFocus, JsepValue? jsep)?
         updating,
     TResult Function(int line, String callId)? updated,
     TResult Function()? registering,
@@ -4155,12 +3214,9 @@ class _$CallSignalingEventUnregisteredImpl
     required TResult Function(_CallSignalingEventUpdated value) updated,
     required TResult Function(_CallSignalingEventRegistering value) registering,
     required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value) registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value) unregistering,
+    required TResult Function(_CallSignalingEventUnregistered value) unregistered,
   }) {
     return unregistered(this);
   }
@@ -4177,8 +3233,7 @@ class _$CallSignalingEventUnregisteredImpl
     TResult? Function(_CallSignalingEventUpdated value)? updated,
     TResult? Function(_CallSignalingEventRegistering value)? registering,
     TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
   }) {
@@ -4197,8 +3252,7 @@ class _$CallSignalingEventUnregisteredImpl
     TResult Function(_CallSignalingEventUpdated value)? updated,
     TResult Function(_CallSignalingEventRegistering value)? registering,
     TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
+    TResult Function(_CallSignalingEventRegisterationFailed value)? registrationFailed,
     TResult Function(_CallSignalingEventUnregistering value)? unregistering,
     TResult Function(_CallSignalingEventUnregistered value)? unregistered,
     required TResult orElse(),
@@ -4211,8 +3265,7 @@ class _$CallSignalingEventUnregisteredImpl
 }
 
 abstract class _CallSignalingEventUnregistered implements _CallSignalingEvent {
-  const factory _CallSignalingEventUnregistered() =
-      _$CallSignalingEventUnregisteredImpl;
+  const factory _CallSignalingEventUnregistered() = _$CallSignalingEventUnregisteredImpl;
 }
 
 /// @nodoc
@@ -4224,22 +3277,22 @@ mixin _$CallPushEvent {
   CallkeepIncomingCallError? get error => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String callId, CallkeepHandle handle,
-            String? displayName, bool video, CallkeepIncomingCallError? error)
+    required TResult Function(
+            String callId, CallkeepHandle handle, String? displayName, bool video, CallkeepIncomingCallError? error)
         incoming,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video, CallkeepIncomingCallError? error)?
+    TResult? Function(
+            String callId, CallkeepHandle handle, String? displayName, bool video, CallkeepIncomingCallError? error)?
         incoming,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video, CallkeepIncomingCallError? error)?
+    TResult Function(
+            String callId, CallkeepHandle handle, String? displayName, bool video, CallkeepIncomingCallError? error)?
         incoming,
     required TResult orElse(),
   }) =>
@@ -4264,15 +3317,9 @@ mixin _$CallPushEvent {
 
 /// @nodoc
 
-class _$CallPushEventIncomingImpl
-    with DiagnosticableTreeMixin
-    implements _CallPushEventIncoming {
+class _$CallPushEventIncomingImpl with DiagnosticableTreeMixin implements _CallPushEventIncoming {
   const _$CallPushEventIncomingImpl(
-      {required this.callId,
-      required this.handle,
-      this.displayName,
-      required this.video,
-      this.error});
+      {required this.callId, required this.handle, this.displayName, required this.video, this.error});
 
   @override
   final String callId;
@@ -4309,21 +3356,19 @@ class _$CallPushEventIncomingImpl
             other is _$CallPushEventIncomingImpl &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.handle, handle) || other.handle == handle) &&
-            (identical(other.displayName, displayName) ||
-                other.displayName == displayName) &&
+            (identical(other.displayName, displayName) || other.displayName == displayName) &&
             (identical(other.video, video) || other.video == video) &&
             (identical(other.error, error) || other.error == error));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, callId, handle, displayName, video, error);
+  int get hashCode => Object.hash(runtimeType, callId, handle, displayName, video, error);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String callId, CallkeepHandle handle,
-            String? displayName, bool video, CallkeepIncomingCallError? error)
+    required TResult Function(
+            String callId, CallkeepHandle handle, String? displayName, bool video, CallkeepIncomingCallError? error)
         incoming,
   }) {
     return incoming(callId, handle, displayName, video, error);
@@ -4332,8 +3377,8 @@ class _$CallPushEventIncomingImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video, CallkeepIncomingCallError? error)?
+    TResult? Function(
+            String callId, CallkeepHandle handle, String? displayName, bool video, CallkeepIncomingCallError? error)?
         incoming,
   }) {
     return incoming?.call(callId, handle, displayName, video, error);
@@ -4342,8 +3387,8 @@ class _$CallPushEventIncomingImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video, CallkeepIncomingCallError? error)?
+    TResult Function(
+            String callId, CallkeepHandle handle, String? displayName, bool video, CallkeepIncomingCallError? error)?
         incoming,
     required TResult orElse(),
   }) {
@@ -4406,8 +3451,8 @@ abstract class _CallPushEventIncoming implements _CallPushEvent {
 mixin _$CallControlEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+    required TResult Function(
+            int? line, String? generic, String? number, String? email, String? displayName, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -4424,8 +3469,7 @@ mixin _$CallControlEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult? Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -4442,8 +3486,7 @@ mixin _$CallControlEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -4467,18 +3510,12 @@ mixin _$CallControlEvent {
     required TResult Function(_CallControlEventSetHeld value) setHeld,
     required TResult Function(_CallControlEventSetMuted value) setMuted,
     required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferred value)
-        blindTransferred,
+    required TResult Function(_CallControlEventCameraSwitched value) cameraSwitched,
+    required TResult Function(_CallControlEventCameraEnabled value) cameraEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value) speakerEnabled,
+    required TResult Function(_CallControlEventFailureApproved value) failureApproved,
+    required TResult Function(_CallControlEventBlindTransferInitiated value) blindTransferInitiated,
+    required TResult Function(_CallControlEventBlindTransferred value) blindTransferred,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -4493,10 +3530,8 @@ mixin _$CallControlEvent {
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferred value)?
-        blindTransferred,
+    TResult? Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
+    TResult? Function(_CallControlEventBlindTransferred value)? blindTransferred,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -4511,8 +3546,7 @@ mixin _$CallControlEvent {
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
+    TResult Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     required TResult orElse(),
   }) =>
@@ -4525,12 +3559,7 @@ class _$CallControlEventStartedImpl
     with DiagnosticableTreeMixin, CallControlEventStartedMixin
     implements _CallControlEventStarted {
   const _$CallControlEventStartedImpl(
-      {this.line,
-      this.generic,
-      this.number,
-      this.email,
-      this.displayName,
-      required this.video})
+      {this.line, this.generic, this.number, this.email, this.displayName, required this.video})
       : assert(!(generic == null && number == null && email == null),
             'one of generic, number or email parameters must be assign'),
         assert(
@@ -4579,20 +3608,18 @@ class _$CallControlEventStartedImpl
             (identical(other.generic, generic) || other.generic == generic) &&
             (identical(other.number, number) || other.number == number) &&
             (identical(other.email, email) || other.email == email) &&
-            (identical(other.displayName, displayName) ||
-                other.displayName == displayName) &&
+            (identical(other.displayName, displayName) || other.displayName == displayName) &&
             (identical(other.video, video) || other.video == video));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, line, generic, number, email, displayName, video);
+  int get hashCode => Object.hash(runtimeType, line, generic, number, email, displayName, video);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+    required TResult Function(
+            int? line, String? generic, String? number, String? email, String? displayName, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -4612,8 +3639,7 @@ class _$CallControlEventStartedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult? Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -4633,8 +3659,7 @@ class _$CallControlEventStartedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -4664,18 +3689,12 @@ class _$CallControlEventStartedImpl
     required TResult Function(_CallControlEventSetHeld value) setHeld,
     required TResult Function(_CallControlEventSetMuted value) setMuted,
     required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferred value)
-        blindTransferred,
+    required TResult Function(_CallControlEventCameraSwitched value) cameraSwitched,
+    required TResult Function(_CallControlEventCameraEnabled value) cameraEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value) speakerEnabled,
+    required TResult Function(_CallControlEventFailureApproved value) failureApproved,
+    required TResult Function(_CallControlEventBlindTransferInitiated value) blindTransferInitiated,
+    required TResult Function(_CallControlEventBlindTransferred value) blindTransferred,
   }) {
     return started(this);
   }
@@ -4693,10 +3712,8 @@ class _$CallControlEventStartedImpl
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferred value)?
-        blindTransferred,
+    TResult? Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
+    TResult? Function(_CallControlEventBlindTransferred value)? blindTransferred,
   }) {
     return started?.call(this);
   }
@@ -4714,8 +3731,7 @@ class _$CallControlEventStartedImpl
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
+    TResult Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     required TResult orElse(),
   }) {
@@ -4726,8 +3742,7 @@ class _$CallControlEventStartedImpl
   }
 }
 
-abstract class _CallControlEventStarted
-    implements CallControlEvent, CallControlEventStartedMixin {
+abstract class _CallControlEventStarted implements CallControlEvent, CallControlEventStartedMixin {
   const factory _CallControlEventStarted(
       {final int? line,
       final String? generic,
@@ -4746,9 +3761,7 @@ abstract class _CallControlEventStarted
 
 /// @nodoc
 
-class _$CallControlEventAnsweredImpl
-    with DiagnosticableTreeMixin
-    implements _CallControlEventAnswered {
+class _$CallControlEventAnsweredImpl with DiagnosticableTreeMixin implements _CallControlEventAnswered {
   const _$CallControlEventAnsweredImpl(this.callId);
 
   @override
@@ -4781,8 +3794,8 @@ class _$CallControlEventAnsweredImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+    required TResult Function(
+            int? line, String? generic, String? number, String? email, String? displayName, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -4802,8 +3815,7 @@ class _$CallControlEventAnsweredImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult? Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -4823,8 +3835,7 @@ class _$CallControlEventAnsweredImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -4854,18 +3865,12 @@ class _$CallControlEventAnsweredImpl
     required TResult Function(_CallControlEventSetHeld value) setHeld,
     required TResult Function(_CallControlEventSetMuted value) setMuted,
     required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferred value)
-        blindTransferred,
+    required TResult Function(_CallControlEventCameraSwitched value) cameraSwitched,
+    required TResult Function(_CallControlEventCameraEnabled value) cameraEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value) speakerEnabled,
+    required TResult Function(_CallControlEventFailureApproved value) failureApproved,
+    required TResult Function(_CallControlEventBlindTransferInitiated value) blindTransferInitiated,
+    required TResult Function(_CallControlEventBlindTransferred value) blindTransferred,
   }) {
     return answered(this);
   }
@@ -4883,10 +3888,8 @@ class _$CallControlEventAnsweredImpl
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferred value)?
-        blindTransferred,
+    TResult? Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
+    TResult? Function(_CallControlEventBlindTransferred value)? blindTransferred,
   }) {
     return answered?.call(this);
   }
@@ -4904,8 +3907,7 @@ class _$CallControlEventAnsweredImpl
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
+    TResult Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     required TResult orElse(),
   }) {
@@ -4917,17 +3919,14 @@ class _$CallControlEventAnsweredImpl
 }
 
 abstract class _CallControlEventAnswered implements CallControlEvent {
-  const factory _CallControlEventAnswered(final String callId) =
-      _$CallControlEventAnsweredImpl;
+  const factory _CallControlEventAnswered(final String callId) = _$CallControlEventAnsweredImpl;
 
   String get callId;
 }
 
 /// @nodoc
 
-class _$CallControlEventEndedImpl
-    with DiagnosticableTreeMixin
-    implements _CallControlEventEnded {
+class _$CallControlEventEndedImpl with DiagnosticableTreeMixin implements _CallControlEventEnded {
   const _$CallControlEventEndedImpl(this.callId);
 
   @override
@@ -4960,8 +3959,8 @@ class _$CallControlEventEndedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+    required TResult Function(
+            int? line, String? generic, String? number, String? email, String? displayName, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -4981,8 +3980,7 @@ class _$CallControlEventEndedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult? Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -5002,8 +4000,7 @@ class _$CallControlEventEndedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -5033,18 +4030,12 @@ class _$CallControlEventEndedImpl
     required TResult Function(_CallControlEventSetHeld value) setHeld,
     required TResult Function(_CallControlEventSetMuted value) setMuted,
     required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferred value)
-        blindTransferred,
+    required TResult Function(_CallControlEventCameraSwitched value) cameraSwitched,
+    required TResult Function(_CallControlEventCameraEnabled value) cameraEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value) speakerEnabled,
+    required TResult Function(_CallControlEventFailureApproved value) failureApproved,
+    required TResult Function(_CallControlEventBlindTransferInitiated value) blindTransferInitiated,
+    required TResult Function(_CallControlEventBlindTransferred value) blindTransferred,
   }) {
     return ended(this);
   }
@@ -5062,10 +4053,8 @@ class _$CallControlEventEndedImpl
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferred value)?
-        blindTransferred,
+    TResult? Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
+    TResult? Function(_CallControlEventBlindTransferred value)? blindTransferred,
   }) {
     return ended?.call(this);
   }
@@ -5083,8 +4072,7 @@ class _$CallControlEventEndedImpl
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
+    TResult Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     required TResult orElse(),
   }) {
@@ -5096,17 +4084,14 @@ class _$CallControlEventEndedImpl
 }
 
 abstract class _CallControlEventEnded implements CallControlEvent {
-  const factory _CallControlEventEnded(final String callId) =
-      _$CallControlEventEndedImpl;
+  const factory _CallControlEventEnded(final String callId) = _$CallControlEventEndedImpl;
 
   String get callId;
 }
 
 /// @nodoc
 
-class _$CallControlEventSetHeldImpl
-    with DiagnosticableTreeMixin
-    implements _CallControlEventSetHeld {
+class _$CallControlEventSetHeldImpl with DiagnosticableTreeMixin implements _CallControlEventSetHeld {
   const _$CallControlEventSetHeldImpl(this.callId, this.onHold);
 
   @override
@@ -5143,8 +4128,8 @@ class _$CallControlEventSetHeldImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+    required TResult Function(
+            int? line, String? generic, String? number, String? email, String? displayName, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -5164,8 +4149,7 @@ class _$CallControlEventSetHeldImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult? Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -5185,8 +4169,7 @@ class _$CallControlEventSetHeldImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -5216,18 +4199,12 @@ class _$CallControlEventSetHeldImpl
     required TResult Function(_CallControlEventSetHeld value) setHeld,
     required TResult Function(_CallControlEventSetMuted value) setMuted,
     required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferred value)
-        blindTransferred,
+    required TResult Function(_CallControlEventCameraSwitched value) cameraSwitched,
+    required TResult Function(_CallControlEventCameraEnabled value) cameraEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value) speakerEnabled,
+    required TResult Function(_CallControlEventFailureApproved value) failureApproved,
+    required TResult Function(_CallControlEventBlindTransferInitiated value) blindTransferInitiated,
+    required TResult Function(_CallControlEventBlindTransferred value) blindTransferred,
   }) {
     return setHeld(this);
   }
@@ -5245,10 +4222,8 @@ class _$CallControlEventSetHeldImpl
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferred value)?
-        blindTransferred,
+    TResult? Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
+    TResult? Function(_CallControlEventBlindTransferred value)? blindTransferred,
   }) {
     return setHeld?.call(this);
   }
@@ -5266,8 +4241,7 @@ class _$CallControlEventSetHeldImpl
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
+    TResult Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     required TResult orElse(),
   }) {
@@ -5279,8 +4253,7 @@ class _$CallControlEventSetHeldImpl
 }
 
 abstract class _CallControlEventSetHeld implements CallControlEvent {
-  const factory _CallControlEventSetHeld(
-      final String callId, final bool onHold) = _$CallControlEventSetHeldImpl;
+  const factory _CallControlEventSetHeld(final String callId, final bool onHold) = _$CallControlEventSetHeldImpl;
 
   String get callId;
   bool get onHold;
@@ -5288,9 +4261,7 @@ abstract class _CallControlEventSetHeld implements CallControlEvent {
 
 /// @nodoc
 
-class _$CallControlEventSetMutedImpl
-    with DiagnosticableTreeMixin
-    implements _CallControlEventSetMuted {
+class _$CallControlEventSetMutedImpl with DiagnosticableTreeMixin implements _CallControlEventSetMuted {
   const _$CallControlEventSetMutedImpl(this.callId, this.muted);
 
   @override
@@ -5327,8 +4298,8 @@ class _$CallControlEventSetMutedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+    required TResult Function(
+            int? line, String? generic, String? number, String? email, String? displayName, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -5348,8 +4319,7 @@ class _$CallControlEventSetMutedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult? Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -5369,8 +4339,7 @@ class _$CallControlEventSetMutedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -5400,18 +4369,12 @@ class _$CallControlEventSetMutedImpl
     required TResult Function(_CallControlEventSetHeld value) setHeld,
     required TResult Function(_CallControlEventSetMuted value) setMuted,
     required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferred value)
-        blindTransferred,
+    required TResult Function(_CallControlEventCameraSwitched value) cameraSwitched,
+    required TResult Function(_CallControlEventCameraEnabled value) cameraEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value) speakerEnabled,
+    required TResult Function(_CallControlEventFailureApproved value) failureApproved,
+    required TResult Function(_CallControlEventBlindTransferInitiated value) blindTransferInitiated,
+    required TResult Function(_CallControlEventBlindTransferred value) blindTransferred,
   }) {
     return setMuted(this);
   }
@@ -5429,10 +4392,8 @@ class _$CallControlEventSetMutedImpl
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferred value)?
-        blindTransferred,
+    TResult? Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
+    TResult? Function(_CallControlEventBlindTransferred value)? blindTransferred,
   }) {
     return setMuted?.call(this);
   }
@@ -5450,8 +4411,7 @@ class _$CallControlEventSetMutedImpl
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
+    TResult Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     required TResult orElse(),
   }) {
@@ -5463,8 +4423,7 @@ class _$CallControlEventSetMutedImpl
 }
 
 abstract class _CallControlEventSetMuted implements CallControlEvent {
-  const factory _CallControlEventSetMuted(
-      final String callId, final bool muted) = _$CallControlEventSetMutedImpl;
+  const factory _CallControlEventSetMuted(final String callId, final bool muted) = _$CallControlEventSetMutedImpl;
 
   String get callId;
   bool get muted;
@@ -5472,9 +4431,7 @@ abstract class _CallControlEventSetMuted implements CallControlEvent {
 
 /// @nodoc
 
-class _$CallControlEventSentDTMFImpl
-    with DiagnosticableTreeMixin
-    implements _CallControlEventSentDTMF {
+class _$CallControlEventSentDTMFImpl with DiagnosticableTreeMixin implements _CallControlEventSentDTMF {
   const _$CallControlEventSentDTMFImpl(this.callId, this.key);
 
   @override
@@ -5511,8 +4468,8 @@ class _$CallControlEventSentDTMFImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+    required TResult Function(
+            int? line, String? generic, String? number, String? email, String? displayName, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -5532,8 +4489,7 @@ class _$CallControlEventSentDTMFImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult? Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -5553,8 +4509,7 @@ class _$CallControlEventSentDTMFImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -5584,18 +4539,12 @@ class _$CallControlEventSentDTMFImpl
     required TResult Function(_CallControlEventSetHeld value) setHeld,
     required TResult Function(_CallControlEventSetMuted value) setMuted,
     required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferred value)
-        blindTransferred,
+    required TResult Function(_CallControlEventCameraSwitched value) cameraSwitched,
+    required TResult Function(_CallControlEventCameraEnabled value) cameraEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value) speakerEnabled,
+    required TResult Function(_CallControlEventFailureApproved value) failureApproved,
+    required TResult Function(_CallControlEventBlindTransferInitiated value) blindTransferInitiated,
+    required TResult Function(_CallControlEventBlindTransferred value) blindTransferred,
   }) {
     return sentDTMF(this);
   }
@@ -5613,10 +4562,8 @@ class _$CallControlEventSentDTMFImpl
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferred value)?
-        blindTransferred,
+    TResult? Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
+    TResult? Function(_CallControlEventBlindTransferred value)? blindTransferred,
   }) {
     return sentDTMF?.call(this);
   }
@@ -5634,8 +4581,7 @@ class _$CallControlEventSentDTMFImpl
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
+    TResult Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     required TResult orElse(),
   }) {
@@ -5647,8 +4593,7 @@ class _$CallControlEventSentDTMFImpl
 }
 
 abstract class _CallControlEventSentDTMF implements CallControlEvent {
-  const factory _CallControlEventSentDTMF(
-      final String callId, final String key) = _$CallControlEventSentDTMFImpl;
+  const factory _CallControlEventSentDTMF(final String callId, final String key) = _$CallControlEventSentDTMFImpl;
 
   String get callId;
   String get key;
@@ -5656,9 +4601,7 @@ abstract class _CallControlEventSentDTMF implements CallControlEvent {
 
 /// @nodoc
 
-class _$CallControlEventCameraSwitchedImpl
-    with DiagnosticableTreeMixin
-    implements _CallControlEventCameraSwitched {
+class _$CallControlEventCameraSwitchedImpl with DiagnosticableTreeMixin implements _CallControlEventCameraSwitched {
   const _$CallControlEventCameraSwitchedImpl(this.callId);
 
   @override
@@ -5691,8 +4634,8 @@ class _$CallControlEventCameraSwitchedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+    required TResult Function(
+            int? line, String? generic, String? number, String? email, String? displayName, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -5712,8 +4655,7 @@ class _$CallControlEventCameraSwitchedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult? Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -5733,8 +4675,7 @@ class _$CallControlEventCameraSwitchedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -5764,18 +4705,12 @@ class _$CallControlEventCameraSwitchedImpl
     required TResult Function(_CallControlEventSetHeld value) setHeld,
     required TResult Function(_CallControlEventSetMuted value) setMuted,
     required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferred value)
-        blindTransferred,
+    required TResult Function(_CallControlEventCameraSwitched value) cameraSwitched,
+    required TResult Function(_CallControlEventCameraEnabled value) cameraEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value) speakerEnabled,
+    required TResult Function(_CallControlEventFailureApproved value) failureApproved,
+    required TResult Function(_CallControlEventBlindTransferInitiated value) blindTransferInitiated,
+    required TResult Function(_CallControlEventBlindTransferred value) blindTransferred,
   }) {
     return cameraSwitched(this);
   }
@@ -5793,10 +4728,8 @@ class _$CallControlEventCameraSwitchedImpl
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferred value)?
-        blindTransferred,
+    TResult? Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
+    TResult? Function(_CallControlEventBlindTransferred value)? blindTransferred,
   }) {
     return cameraSwitched?.call(this);
   }
@@ -5814,8 +4747,7 @@ class _$CallControlEventCameraSwitchedImpl
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
+    TResult Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     required TResult orElse(),
   }) {
@@ -5827,17 +4759,14 @@ class _$CallControlEventCameraSwitchedImpl
 }
 
 abstract class _CallControlEventCameraSwitched implements CallControlEvent {
-  const factory _CallControlEventCameraSwitched(final String callId) =
-      _$CallControlEventCameraSwitchedImpl;
+  const factory _CallControlEventCameraSwitched(final String callId) = _$CallControlEventCameraSwitchedImpl;
 
   String get callId;
 }
 
 /// @nodoc
 
-class _$CallControlEventCameraEnabledImpl
-    with DiagnosticableTreeMixin
-    implements _CallControlEventCameraEnabled {
+class _$CallControlEventCameraEnabledImpl with DiagnosticableTreeMixin implements _CallControlEventCameraEnabled {
   const _$CallControlEventCameraEnabledImpl(this.callId, this.enabled);
 
   @override
@@ -5874,8 +4803,8 @@ class _$CallControlEventCameraEnabledImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+    required TResult Function(
+            int? line, String? generic, String? number, String? email, String? displayName, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -5895,8 +4824,7 @@ class _$CallControlEventCameraEnabledImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult? Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -5916,8 +4844,7 @@ class _$CallControlEventCameraEnabledImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -5947,18 +4874,12 @@ class _$CallControlEventCameraEnabledImpl
     required TResult Function(_CallControlEventSetHeld value) setHeld,
     required TResult Function(_CallControlEventSetMuted value) setMuted,
     required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferred value)
-        blindTransferred,
+    required TResult Function(_CallControlEventCameraSwitched value) cameraSwitched,
+    required TResult Function(_CallControlEventCameraEnabled value) cameraEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value) speakerEnabled,
+    required TResult Function(_CallControlEventFailureApproved value) failureApproved,
+    required TResult Function(_CallControlEventBlindTransferInitiated value) blindTransferInitiated,
+    required TResult Function(_CallControlEventBlindTransferred value) blindTransferred,
   }) {
     return cameraEnabled(this);
   }
@@ -5976,10 +4897,8 @@ class _$CallControlEventCameraEnabledImpl
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferred value)?
-        blindTransferred,
+    TResult? Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
+    TResult? Function(_CallControlEventBlindTransferred value)? blindTransferred,
   }) {
     return cameraEnabled?.call(this);
   }
@@ -5997,8 +4916,7 @@ class _$CallControlEventCameraEnabledImpl
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
+    TResult Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     required TResult orElse(),
   }) {
@@ -6010,8 +4928,7 @@ class _$CallControlEventCameraEnabledImpl
 }
 
 abstract class _CallControlEventCameraEnabled implements CallControlEvent {
-  const factory _CallControlEventCameraEnabled(
-          final String callId, final bool enabled) =
+  const factory _CallControlEventCameraEnabled(final String callId, final bool enabled) =
       _$CallControlEventCameraEnabledImpl;
 
   String get callId;
@@ -6020,9 +4937,7 @@ abstract class _CallControlEventCameraEnabled implements CallControlEvent {
 
 /// @nodoc
 
-class _$CallControlEventSpeakerEnabledImpl
-    with DiagnosticableTreeMixin
-    implements _CallControlEventSpeakerEnabled {
+class _$CallControlEventSpeakerEnabledImpl with DiagnosticableTreeMixin implements _CallControlEventSpeakerEnabled {
   const _$CallControlEventSpeakerEnabledImpl(this.callId, this.enabled);
 
   @override
@@ -6059,8 +4974,8 @@ class _$CallControlEventSpeakerEnabledImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+    required TResult Function(
+            int? line, String? generic, String? number, String? email, String? displayName, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -6080,8 +4995,7 @@ class _$CallControlEventSpeakerEnabledImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult? Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -6101,8 +5015,7 @@ class _$CallControlEventSpeakerEnabledImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -6132,18 +5045,12 @@ class _$CallControlEventSpeakerEnabledImpl
     required TResult Function(_CallControlEventSetHeld value) setHeld,
     required TResult Function(_CallControlEventSetMuted value) setMuted,
     required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferred value)
-        blindTransferred,
+    required TResult Function(_CallControlEventCameraSwitched value) cameraSwitched,
+    required TResult Function(_CallControlEventCameraEnabled value) cameraEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value) speakerEnabled,
+    required TResult Function(_CallControlEventFailureApproved value) failureApproved,
+    required TResult Function(_CallControlEventBlindTransferInitiated value) blindTransferInitiated,
+    required TResult Function(_CallControlEventBlindTransferred value) blindTransferred,
   }) {
     return speakerEnabled(this);
   }
@@ -6161,10 +5068,8 @@ class _$CallControlEventSpeakerEnabledImpl
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferred value)?
-        blindTransferred,
+    TResult? Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
+    TResult? Function(_CallControlEventBlindTransferred value)? blindTransferred,
   }) {
     return speakerEnabled?.call(this);
   }
@@ -6182,8 +5087,7 @@ class _$CallControlEventSpeakerEnabledImpl
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
+    TResult Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     required TResult orElse(),
   }) {
@@ -6195,8 +5099,7 @@ class _$CallControlEventSpeakerEnabledImpl
 }
 
 abstract class _CallControlEventSpeakerEnabled implements CallControlEvent {
-  const factory _CallControlEventSpeakerEnabled(
-          final String callId, final bool enabled) =
+  const factory _CallControlEventSpeakerEnabled(final String callId, final bool enabled) =
       _$CallControlEventSpeakerEnabledImpl;
 
   String get callId;
@@ -6205,9 +5108,7 @@ abstract class _CallControlEventSpeakerEnabled implements CallControlEvent {
 
 /// @nodoc
 
-class _$CallControlEventFailureApprovedImpl
-    with DiagnosticableTreeMixin
-    implements _CallControlEventFailureApproved {
+class _$CallControlEventFailureApprovedImpl with DiagnosticableTreeMixin implements _CallControlEventFailureApproved {
   const _$CallControlEventFailureApprovedImpl(this.callId);
 
   @override
@@ -6240,8 +5141,8 @@ class _$CallControlEventFailureApprovedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+    required TResult Function(
+            int? line, String? generic, String? number, String? email, String? displayName, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -6261,8 +5162,7 @@ class _$CallControlEventFailureApprovedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult? Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -6282,8 +5182,7 @@ class _$CallControlEventFailureApprovedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -6313,18 +5212,12 @@ class _$CallControlEventFailureApprovedImpl
     required TResult Function(_CallControlEventSetHeld value) setHeld,
     required TResult Function(_CallControlEventSetMuted value) setMuted,
     required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferred value)
-        blindTransferred,
+    required TResult Function(_CallControlEventCameraSwitched value) cameraSwitched,
+    required TResult Function(_CallControlEventCameraEnabled value) cameraEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value) speakerEnabled,
+    required TResult Function(_CallControlEventFailureApproved value) failureApproved,
+    required TResult Function(_CallControlEventBlindTransferInitiated value) blindTransferInitiated,
+    required TResult Function(_CallControlEventBlindTransferred value) blindTransferred,
   }) {
     return failureApproved(this);
   }
@@ -6342,10 +5235,8 @@ class _$CallControlEventFailureApprovedImpl
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferred value)?
-        blindTransferred,
+    TResult? Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
+    TResult? Function(_CallControlEventBlindTransferred value)? blindTransferred,
   }) {
     return failureApproved?.call(this);
   }
@@ -6363,8 +5254,7 @@ class _$CallControlEventFailureApprovedImpl
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
+    TResult Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     required TResult orElse(),
   }) {
@@ -6376,8 +5266,7 @@ class _$CallControlEventFailureApprovedImpl
 }
 
 abstract class _CallControlEventFailureApproved implements CallControlEvent {
-  const factory _CallControlEventFailureApproved(final String callId) =
-      _$CallControlEventFailureApprovedImpl;
+  const factory _CallControlEventFailureApproved(final String callId) = _$CallControlEventFailureApprovedImpl;
 
   String get callId;
 }
@@ -6401,8 +5290,7 @@ class _$CallControlEventBlindTransferInitiatedImpl
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty(
-          'type', 'CallControlEvent.blindTransferInitiated'))
+      ..add(DiagnosticsProperty('type', 'CallControlEvent.blindTransferInitiated'))
       ..add(DiagnosticsProperty('callId', callId));
   }
 
@@ -6420,8 +5308,8 @@ class _$CallControlEventBlindTransferInitiatedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+    required TResult Function(
+            int? line, String? generic, String? number, String? email, String? displayName, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -6441,8 +5329,7 @@ class _$CallControlEventBlindTransferInitiatedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult? Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -6462,8 +5349,7 @@ class _$CallControlEventBlindTransferInitiatedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -6493,18 +5379,12 @@ class _$CallControlEventBlindTransferInitiatedImpl
     required TResult Function(_CallControlEventSetHeld value) setHeld,
     required TResult Function(_CallControlEventSetMuted value) setMuted,
     required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferred value)
-        blindTransferred,
+    required TResult Function(_CallControlEventCameraSwitched value) cameraSwitched,
+    required TResult Function(_CallControlEventCameraEnabled value) cameraEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value) speakerEnabled,
+    required TResult Function(_CallControlEventFailureApproved value) failureApproved,
+    required TResult Function(_CallControlEventBlindTransferInitiated value) blindTransferInitiated,
+    required TResult Function(_CallControlEventBlindTransferred value) blindTransferred,
   }) {
     return blindTransferInitiated(this);
   }
@@ -6522,10 +5402,8 @@ class _$CallControlEventBlindTransferInitiatedImpl
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferred value)?
-        blindTransferred,
+    TResult? Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
+    TResult? Function(_CallControlEventBlindTransferred value)? blindTransferred,
   }) {
     return blindTransferInitiated?.call(this);
   }
@@ -6543,8 +5421,7 @@ class _$CallControlEventBlindTransferInitiatedImpl
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
+    TResult Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     required TResult orElse(),
   }) {
@@ -6555,8 +5432,7 @@ class _$CallControlEventBlindTransferInitiatedImpl
   }
 }
 
-abstract class _CallControlEventBlindTransferInitiated
-    implements CallControlEvent {
+abstract class _CallControlEventBlindTransferInitiated implements CallControlEvent {
   const factory _CallControlEventBlindTransferInitiated(final String callId) =
       _$CallControlEventBlindTransferInitiatedImpl;
 
@@ -6565,9 +5441,7 @@ abstract class _CallControlEventBlindTransferInitiated
 
 /// @nodoc
 
-class _$CallControlEventBlindTransferredImpl
-    with DiagnosticableTreeMixin
-    implements _CallControlEventBlindTransferred {
+class _$CallControlEventBlindTransferredImpl with DiagnosticableTreeMixin implements _CallControlEventBlindTransferred {
   const _$CallControlEventBlindTransferredImpl({required this.number});
 
   @override
@@ -6600,8 +5474,8 @@ class _$CallControlEventBlindTransferredImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int? line, String? generic, String? number,
-            String? email, String? displayName, bool video)
+    required TResult Function(
+            int? line, String? generic, String? number, String? email, String? displayName, bool video)
         started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
@@ -6621,8 +5495,7 @@ class _$CallControlEventBlindTransferredImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult? Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
@@ -6642,8 +5515,7 @@ class _$CallControlEventBlindTransferredImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int? line, String? generic, String? number, String? email,
-            String? displayName, bool video)?
+    TResult Function(int? line, String? generic, String? number, String? email, String? displayName, bool video)?
         started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
@@ -6673,18 +5545,12 @@ class _$CallControlEventBlindTransferredImpl
     required TResult Function(_CallControlEventSetHeld value) setHeld,
     required TResult Function(_CallControlEventSetMuted value) setMuted,
     required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventSpeakerEnabled value)
-        speakerEnabled,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferred value)
-        blindTransferred,
+    required TResult Function(_CallControlEventCameraSwitched value) cameraSwitched,
+    required TResult Function(_CallControlEventCameraEnabled value) cameraEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value) speakerEnabled,
+    required TResult Function(_CallControlEventFailureApproved value) failureApproved,
+    required TResult Function(_CallControlEventBlindTransferInitiated value) blindTransferInitiated,
+    required TResult Function(_CallControlEventBlindTransferred value) blindTransferred,
   }) {
     return blindTransferred(this);
   }
@@ -6702,10 +5568,8 @@ class _$CallControlEventBlindTransferredImpl
     TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferred value)?
-        blindTransferred,
+    TResult? Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
+    TResult? Function(_CallControlEventBlindTransferred value)? blindTransferred,
   }) {
     return blindTransferred?.call(this);
   }
@@ -6723,8 +5587,7 @@ class _$CallControlEventBlindTransferredImpl
     TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
     TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
+    TResult Function(_CallControlEventBlindTransferInitiated value)? blindTransferInitiated,
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     required TResult orElse(),
   }) {
@@ -6736,8 +5599,8 @@ class _$CallControlEventBlindTransferredImpl
 }
 
 abstract class _CallControlEventBlindTransferred implements CallControlEvent {
-  const factory _CallControlEventBlindTransferred(
-      {required final String number}) = _$CallControlEventBlindTransferredImpl;
+  const factory _CallControlEventBlindTransferred({required final String number}) =
+      _$CallControlEventBlindTransferredImpl;
 
   String get number;
 }
@@ -6747,9 +5610,7 @@ mixin _$CallPerformEvent {
   String get callId => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String callId, CallkeepHandle handle,
-            String? displayName, bool video)
-        started,
+    required TResult Function(String callId, CallkeepHandle handle, String? displayName, bool video) started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
     required TResult Function(String callId, bool onHold) setHeld,
@@ -6760,9 +5621,7 @@ mixin _$CallPerformEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
+    TResult? Function(String callId, CallkeepHandle handle, String? displayName, bool video)? started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
     TResult? Function(String callId, bool onHold)? setHeld,
@@ -6773,9 +5632,7 @@ mixin _$CallPerformEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
+    TResult Function(String callId, CallkeepHandle handle, String? displayName, bool video)? started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
     TResult Function(String callId, bool onHold)? setHeld,
@@ -6823,11 +5680,8 @@ mixin _$CallPerformEvent {
 
 /// @nodoc
 
-class _$CallPerformEventStartedImpl extends _CallPerformEventStarted
-    with DiagnosticableTreeMixin {
-  _$CallPerformEventStartedImpl(this.callId,
-      {required this.handle, this.displayName, required this.video})
-      : super._();
+class _$CallPerformEventStartedImpl extends _CallPerformEventStarted with DiagnosticableTreeMixin {
+  _$CallPerformEventStartedImpl(this.callId, {required this.handle, this.displayName, required this.video}) : super._();
 
   @override
   final String callId;
@@ -6861,21 +5715,17 @@ class _$CallPerformEventStartedImpl extends _CallPerformEventStarted
             other is _$CallPerformEventStartedImpl &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.handle, handle) || other.handle == handle) &&
-            (identical(other.displayName, displayName) ||
-                other.displayName == displayName) &&
+            (identical(other.displayName, displayName) || other.displayName == displayName) &&
             (identical(other.video, video) || other.video == video));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, callId, handle, displayName, video);
+  int get hashCode => Object.hash(runtimeType, callId, handle, displayName, video);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String callId, CallkeepHandle handle,
-            String? displayName, bool video)
-        started,
+    required TResult Function(String callId, CallkeepHandle handle, String? displayName, bool video) started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
     required TResult Function(String callId, bool onHold) setHeld,
@@ -6889,9 +5739,7 @@ class _$CallPerformEventStartedImpl extends _CallPerformEventStarted
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
+    TResult? Function(String callId, CallkeepHandle handle, String? displayName, bool video)? started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
     TResult? Function(String callId, bool onHold)? setHeld,
@@ -6905,9 +5753,7 @@ class _$CallPerformEventStartedImpl extends _CallPerformEventStarted
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
+    TResult Function(String callId, CallkeepHandle handle, String? displayName, bool video)? started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
     TResult Function(String callId, bool onHold)? setHeld,
@@ -6985,8 +5831,7 @@ abstract class _CallPerformEventStarted extends _CallPerformEvent {
 
 /// @nodoc
 
-class _$CallPerformEventAnsweredImpl extends _CallPerformEventAnswered
-    with DiagnosticableTreeMixin {
+class _$CallPerformEventAnsweredImpl extends _CallPerformEventAnswered with DiagnosticableTreeMixin {
   _$CallPerformEventAnsweredImpl(this.callId) : super._();
 
   @override
@@ -7019,9 +5864,7 @@ class _$CallPerformEventAnsweredImpl extends _CallPerformEventAnswered
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String callId, CallkeepHandle handle,
-            String? displayName, bool video)
-        started,
+    required TResult Function(String callId, CallkeepHandle handle, String? displayName, bool video) started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
     required TResult Function(String callId, bool onHold) setHeld,
@@ -7035,9 +5878,7 @@ class _$CallPerformEventAnsweredImpl extends _CallPerformEventAnswered
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
+    TResult? Function(String callId, CallkeepHandle handle, String? displayName, bool video)? started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
     TResult? Function(String callId, bool onHold)? setHeld,
@@ -7051,9 +5892,7 @@ class _$CallPerformEventAnsweredImpl extends _CallPerformEventAnswered
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
+    TResult Function(String callId, CallkeepHandle handle, String? displayName, bool video)? started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
     TResult Function(String callId, bool onHold)? setHeld,
@@ -7116,8 +5955,7 @@ class _$CallPerformEventAnsweredImpl extends _CallPerformEventAnswered
 }
 
 abstract class _CallPerformEventAnswered extends _CallPerformEvent {
-  factory _CallPerformEventAnswered(final String callId) =
-      _$CallPerformEventAnsweredImpl;
+  factory _CallPerformEventAnswered(final String callId) = _$CallPerformEventAnsweredImpl;
   _CallPerformEventAnswered._() : super._();
 
   @override
@@ -7126,8 +5964,7 @@ abstract class _CallPerformEventAnswered extends _CallPerformEvent {
 
 /// @nodoc
 
-class _$CallPerformEventEndedImpl extends _CallPerformEventEnded
-    with DiagnosticableTreeMixin {
+class _$CallPerformEventEndedImpl extends _CallPerformEventEnded with DiagnosticableTreeMixin {
   _$CallPerformEventEndedImpl(this.callId) : super._();
 
   @override
@@ -7160,9 +5997,7 @@ class _$CallPerformEventEndedImpl extends _CallPerformEventEnded
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String callId, CallkeepHandle handle,
-            String? displayName, bool video)
-        started,
+    required TResult Function(String callId, CallkeepHandle handle, String? displayName, bool video) started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
     required TResult Function(String callId, bool onHold) setHeld,
@@ -7176,9 +6011,7 @@ class _$CallPerformEventEndedImpl extends _CallPerformEventEnded
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
+    TResult? Function(String callId, CallkeepHandle handle, String? displayName, bool video)? started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
     TResult? Function(String callId, bool onHold)? setHeld,
@@ -7192,9 +6025,7 @@ class _$CallPerformEventEndedImpl extends _CallPerformEventEnded
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
+    TResult Function(String callId, CallkeepHandle handle, String? displayName, bool video)? started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
     TResult Function(String callId, bool onHold)? setHeld,
@@ -7257,8 +6088,7 @@ class _$CallPerformEventEndedImpl extends _CallPerformEventEnded
 }
 
 abstract class _CallPerformEventEnded extends _CallPerformEvent {
-  factory _CallPerformEventEnded(final String callId) =
-      _$CallPerformEventEndedImpl;
+  factory _CallPerformEventEnded(final String callId) = _$CallPerformEventEndedImpl;
   _CallPerformEventEnded._() : super._();
 
   @override
@@ -7267,8 +6097,7 @@ abstract class _CallPerformEventEnded extends _CallPerformEvent {
 
 /// @nodoc
 
-class _$CallPerformEventSetHeldImpl extends _CallPerformEventSetHeld
-    with DiagnosticableTreeMixin {
+class _$CallPerformEventSetHeldImpl extends _CallPerformEventSetHeld with DiagnosticableTreeMixin {
   _$CallPerformEventSetHeldImpl(this.callId, this.onHold) : super._();
 
   @override
@@ -7305,9 +6134,7 @@ class _$CallPerformEventSetHeldImpl extends _CallPerformEventSetHeld
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String callId, CallkeepHandle handle,
-            String? displayName, bool video)
-        started,
+    required TResult Function(String callId, CallkeepHandle handle, String? displayName, bool video) started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
     required TResult Function(String callId, bool onHold) setHeld,
@@ -7321,9 +6148,7 @@ class _$CallPerformEventSetHeldImpl extends _CallPerformEventSetHeld
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
+    TResult? Function(String callId, CallkeepHandle handle, String? displayName, bool video)? started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
     TResult? Function(String callId, bool onHold)? setHeld,
@@ -7337,9 +6162,7 @@ class _$CallPerformEventSetHeldImpl extends _CallPerformEventSetHeld
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
+    TResult Function(String callId, CallkeepHandle handle, String? displayName, bool video)? started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
     TResult Function(String callId, bool onHold)? setHeld,
@@ -7402,8 +6225,7 @@ class _$CallPerformEventSetHeldImpl extends _CallPerformEventSetHeld
 }
 
 abstract class _CallPerformEventSetHeld extends _CallPerformEvent {
-  factory _CallPerformEventSetHeld(final String callId, final bool onHold) =
-      _$CallPerformEventSetHeldImpl;
+  factory _CallPerformEventSetHeld(final String callId, final bool onHold) = _$CallPerformEventSetHeldImpl;
   _CallPerformEventSetHeld._() : super._();
 
   @override
@@ -7413,8 +6235,7 @@ abstract class _CallPerformEventSetHeld extends _CallPerformEvent {
 
 /// @nodoc
 
-class _$CallPerformEventSetMutedImpl extends _CallPerformEventSetMuted
-    with DiagnosticableTreeMixin {
+class _$CallPerformEventSetMutedImpl extends _CallPerformEventSetMuted with DiagnosticableTreeMixin {
   _$CallPerformEventSetMutedImpl(this.callId, this.muted) : super._();
 
   @override
@@ -7451,9 +6272,7 @@ class _$CallPerformEventSetMutedImpl extends _CallPerformEventSetMuted
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String callId, CallkeepHandle handle,
-            String? displayName, bool video)
-        started,
+    required TResult Function(String callId, CallkeepHandle handle, String? displayName, bool video) started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
     required TResult Function(String callId, bool onHold) setHeld,
@@ -7467,9 +6286,7 @@ class _$CallPerformEventSetMutedImpl extends _CallPerformEventSetMuted
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
+    TResult? Function(String callId, CallkeepHandle handle, String? displayName, bool video)? started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
     TResult? Function(String callId, bool onHold)? setHeld,
@@ -7483,9 +6300,7 @@ class _$CallPerformEventSetMutedImpl extends _CallPerformEventSetMuted
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
+    TResult Function(String callId, CallkeepHandle handle, String? displayName, bool video)? started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
     TResult Function(String callId, bool onHold)? setHeld,
@@ -7548,8 +6363,7 @@ class _$CallPerformEventSetMutedImpl extends _CallPerformEventSetMuted
 }
 
 abstract class _CallPerformEventSetMuted extends _CallPerformEvent {
-  factory _CallPerformEventSetMuted(final String callId, final bool muted) =
-      _$CallPerformEventSetMutedImpl;
+  factory _CallPerformEventSetMuted(final String callId, final bool muted) = _$CallPerformEventSetMutedImpl;
   _CallPerformEventSetMuted._() : super._();
 
   @override
@@ -7559,8 +6373,7 @@ abstract class _CallPerformEventSetMuted extends _CallPerformEvent {
 
 /// @nodoc
 
-class _$CallPerformEventSentDTMFImpl extends _CallPerformEventSentDTMF
-    with DiagnosticableTreeMixin {
+class _$CallPerformEventSentDTMFImpl extends _CallPerformEventSentDTMF with DiagnosticableTreeMixin {
   _$CallPerformEventSentDTMFImpl(this.callId, this.key) : super._();
 
   @override
@@ -7597,9 +6410,7 @@ class _$CallPerformEventSentDTMFImpl extends _CallPerformEventSentDTMF
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String callId, CallkeepHandle handle,
-            String? displayName, bool video)
-        started,
+    required TResult Function(String callId, CallkeepHandle handle, String? displayName, bool video) started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
     required TResult Function(String callId, bool onHold) setHeld,
@@ -7613,9 +6424,7 @@ class _$CallPerformEventSentDTMFImpl extends _CallPerformEventSentDTMF
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
+    TResult? Function(String callId, CallkeepHandle handle, String? displayName, bool video)? started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
     TResult? Function(String callId, bool onHold)? setHeld,
@@ -7629,9 +6438,7 @@ class _$CallPerformEventSentDTMFImpl extends _CallPerformEventSentDTMF
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
+    TResult Function(String callId, CallkeepHandle handle, String? displayName, bool video)? started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
     TResult Function(String callId, bool onHold)? setHeld,
@@ -7694,8 +6501,7 @@ class _$CallPerformEventSentDTMFImpl extends _CallPerformEventSentDTMF
 }
 
 abstract class _CallPerformEventSentDTMF extends _CallPerformEvent {
-  factory _CallPerformEventSentDTMF(final String callId, final String key) =
-      _$CallPerformEventSentDTMFImpl;
+  factory _CallPerformEventSentDTMF(final String callId, final String key) = _$CallPerformEventSentDTMFImpl;
   _CallPerformEventSentDTMF._() : super._();
 
   @override
@@ -7705,8 +6511,7 @@ abstract class _CallPerformEventSentDTMF extends _CallPerformEvent {
 
 /// @nodoc
 
-class _$CallPerformEventSetSpeakerImpl extends _CallPerformEventSetSpeaker
-    with DiagnosticableTreeMixin {
+class _$CallPerformEventSetSpeakerImpl extends _CallPerformEventSetSpeaker with DiagnosticableTreeMixin {
   _$CallPerformEventSetSpeakerImpl(this.callId, this.enabled) : super._();
 
   @override
@@ -7743,9 +6548,7 @@ class _$CallPerformEventSetSpeakerImpl extends _CallPerformEventSetSpeaker
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String callId, CallkeepHandle handle,
-            String? displayName, bool video)
-        started,
+    required TResult Function(String callId, CallkeepHandle handle, String? displayName, bool video) started,
     required TResult Function(String callId) answered,
     required TResult Function(String callId) ended,
     required TResult Function(String callId, bool onHold) setHeld,
@@ -7759,9 +6562,7 @@ class _$CallPerformEventSetSpeakerImpl extends _CallPerformEventSetSpeaker
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
+    TResult? Function(String callId, CallkeepHandle handle, String? displayName, bool video)? started,
     TResult? Function(String callId)? answered,
     TResult? Function(String callId)? ended,
     TResult? Function(String callId, bool onHold)? setHeld,
@@ -7775,9 +6576,7 @@ class _$CallPerformEventSetSpeakerImpl extends _CallPerformEventSetSpeaker
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
+    TResult Function(String callId, CallkeepHandle handle, String? displayName, bool video)? started,
     TResult Function(String callId)? answered,
     TResult Function(String callId)? ended,
     TResult Function(String callId, bool onHold)? setHeld,
@@ -7840,8 +6639,7 @@ class _$CallPerformEventSetSpeakerImpl extends _CallPerformEventSetSpeaker
 }
 
 abstract class _CallPerformEventSetSpeaker extends _CallPerformEvent {
-  factory _CallPerformEventSetSpeaker(final String callId, final bool enabled) =
-      _$CallPerformEventSetSpeakerImpl;
+  factory _CallPerformEventSetSpeaker(final String callId, final bool enabled) = _$CallPerformEventSetSpeakerImpl;
   _CallPerformEventSetSpeaker._() : super._();
 
   @override
@@ -7854,48 +6652,33 @@ mixin _$PeerConnectionEvent {
   String get callId => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String callId, RTCSignalingState state)
-        signalingStateChanged,
-    required TResult Function(String callId, RTCPeerConnectionState state)
-        connectionStateChanged,
-    required TResult Function(String callId, RTCIceGatheringState state)
-        iceGatheringStateChanged,
-    required TResult Function(String callId, RTCIceConnectionState state)
-        iceConnectionStateChanged,
-    required TResult Function(String callId, RTCIceCandidate candidate)
-        iceCandidateIdentified,
+    required TResult Function(String callId, RTCSignalingState state) signalingStateChanged,
+    required TResult Function(String callId, RTCPeerConnectionState state) connectionStateChanged,
+    required TResult Function(String callId, RTCIceGatheringState state) iceGatheringStateChanged,
+    required TResult Function(String callId, RTCIceConnectionState state) iceConnectionStateChanged,
+    required TResult Function(String callId, RTCIceCandidate candidate) iceCandidateIdentified,
     required TResult Function(String callId, MediaStream stream) streamAdded,
     required TResult Function(String callId, MediaStream stream) streamRemoved,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult? Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult? Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult? Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult? Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
+    TResult? Function(String callId, RTCSignalingState state)? signalingStateChanged,
+    TResult? Function(String callId, RTCPeerConnectionState state)? connectionStateChanged,
+    TResult? Function(String callId, RTCIceGatheringState state)? iceGatheringStateChanged,
+    TResult? Function(String callId, RTCIceConnectionState state)? iceConnectionStateChanged,
+    TResult? Function(String callId, RTCIceCandidate candidate)? iceCandidateIdentified,
     TResult? Function(String callId, MediaStream stream)? streamAdded,
     TResult? Function(String callId, MediaStream stream)? streamRemoved,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
+    TResult Function(String callId, RTCSignalingState state)? signalingStateChanged,
+    TResult Function(String callId, RTCPeerConnectionState state)? connectionStateChanged,
+    TResult Function(String callId, RTCIceGatheringState state)? iceGatheringStateChanged,
+    TResult Function(String callId, RTCIceConnectionState state)? iceConnectionStateChanged,
+    TResult Function(String callId, RTCIceCandidate candidate)? iceCandidateIdentified,
     TResult Function(String callId, MediaStream stream)? streamAdded,
     TResult Function(String callId, MediaStream stream)? streamRemoved,
     required TResult orElse(),
@@ -7903,52 +6686,33 @@ mixin _$PeerConnectionEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_PeerConnectionEventSignalingStateChanged value)
-        signalingStateChanged,
-    required TResult Function(_PeerConnectionEventConnectionStateChanged value)
-        connectionStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceGatheringStateChanged value)
-        iceGatheringStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceConnectionStateChanged value)
-        iceConnectionStateChanged,
-    required TResult Function(_PeerConnectionEventIceCandidateIdentified value)
-        iceCandidateIdentified,
-    required TResult Function(_PeerConnectionEventStreamAdded value)
-        streamAdded,
-    required TResult Function(_PeerConnectionEventStreamRemoved value)
-        streamRemoved,
+    required TResult Function(_PeerConnectionEventSignalingStateChanged value) signalingStateChanged,
+    required TResult Function(_PeerConnectionEventConnectionStateChanged value) connectionStateChanged,
+    required TResult Function(_PeerConnectionEventIceGatheringStateChanged value) iceGatheringStateChanged,
+    required TResult Function(_PeerConnectionEventIceConnectionStateChanged value) iceConnectionStateChanged,
+    required TResult Function(_PeerConnectionEventIceCandidateIdentified value) iceCandidateIdentified,
+    required TResult Function(_PeerConnectionEventStreamAdded value) streamAdded,
+    required TResult Function(_PeerConnectionEventStreamRemoved value) streamRemoved,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult? Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
+    TResult? Function(_PeerConnectionEventSignalingStateChanged value)? signalingStateChanged,
+    TResult? Function(_PeerConnectionEventConnectionStateChanged value)? connectionStateChanged,
+    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)? iceGatheringStateChanged,
+    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)? iceConnectionStateChanged,
+    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)? iceCandidateIdentified,
     TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
     TResult? Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
+    TResult Function(_PeerConnectionEventSignalingStateChanged value)? signalingStateChanged,
+    TResult Function(_PeerConnectionEventConnectionStateChanged value)? connectionStateChanged,
+    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)? iceGatheringStateChanged,
+    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)? iceConnectionStateChanged,
+    TResult Function(_PeerConnectionEventIceCandidateIdentified value)? iceCandidateIdentified,
     TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
     TResult Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
     required TResult orElse(),
@@ -7977,8 +6741,7 @@ class _$PeerConnectionEventSignalingStateChangedImpl
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty(
-          'type', '_PeerConnectionEvent.signalingStateChanged'))
+      ..add(DiagnosticsProperty('type', '_PeerConnectionEvent.signalingStateChanged'))
       ..add(DiagnosticsProperty('callId', callId))
       ..add(DiagnosticsProperty('state', state));
   }
@@ -7998,16 +6761,11 @@ class _$PeerConnectionEventSignalingStateChangedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String callId, RTCSignalingState state)
-        signalingStateChanged,
-    required TResult Function(String callId, RTCPeerConnectionState state)
-        connectionStateChanged,
-    required TResult Function(String callId, RTCIceGatheringState state)
-        iceGatheringStateChanged,
-    required TResult Function(String callId, RTCIceConnectionState state)
-        iceConnectionStateChanged,
-    required TResult Function(String callId, RTCIceCandidate candidate)
-        iceCandidateIdentified,
+    required TResult Function(String callId, RTCSignalingState state) signalingStateChanged,
+    required TResult Function(String callId, RTCPeerConnectionState state) connectionStateChanged,
+    required TResult Function(String callId, RTCIceGatheringState state) iceGatheringStateChanged,
+    required TResult Function(String callId, RTCIceConnectionState state) iceConnectionStateChanged,
+    required TResult Function(String callId, RTCIceCandidate candidate) iceCandidateIdentified,
     required TResult Function(String callId, MediaStream stream) streamAdded,
     required TResult Function(String callId, MediaStream stream) streamRemoved,
   }) {
@@ -8017,16 +6775,11 @@ class _$PeerConnectionEventSignalingStateChangedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult? Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult? Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult? Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult? Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
+    TResult? Function(String callId, RTCSignalingState state)? signalingStateChanged,
+    TResult? Function(String callId, RTCPeerConnectionState state)? connectionStateChanged,
+    TResult? Function(String callId, RTCIceGatheringState state)? iceGatheringStateChanged,
+    TResult? Function(String callId, RTCIceConnectionState state)? iceConnectionStateChanged,
+    TResult? Function(String callId, RTCIceCandidate candidate)? iceCandidateIdentified,
     TResult? Function(String callId, MediaStream stream)? streamAdded,
     TResult? Function(String callId, MediaStream stream)? streamRemoved,
   }) {
@@ -8036,16 +6789,11 @@ class _$PeerConnectionEventSignalingStateChangedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
+    TResult Function(String callId, RTCSignalingState state)? signalingStateChanged,
+    TResult Function(String callId, RTCPeerConnectionState state)? connectionStateChanged,
+    TResult Function(String callId, RTCIceGatheringState state)? iceGatheringStateChanged,
+    TResult Function(String callId, RTCIceConnectionState state)? iceConnectionStateChanged,
+    TResult Function(String callId, RTCIceCandidate candidate)? iceCandidateIdentified,
     TResult Function(String callId, MediaStream stream)? streamAdded,
     TResult Function(String callId, MediaStream stream)? streamRemoved,
     required TResult orElse(),
@@ -8059,22 +6807,13 @@ class _$PeerConnectionEventSignalingStateChangedImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_PeerConnectionEventSignalingStateChanged value)
-        signalingStateChanged,
-    required TResult Function(_PeerConnectionEventConnectionStateChanged value)
-        connectionStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceGatheringStateChanged value)
-        iceGatheringStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceConnectionStateChanged value)
-        iceConnectionStateChanged,
-    required TResult Function(_PeerConnectionEventIceCandidateIdentified value)
-        iceCandidateIdentified,
-    required TResult Function(_PeerConnectionEventStreamAdded value)
-        streamAdded,
-    required TResult Function(_PeerConnectionEventStreamRemoved value)
-        streamRemoved,
+    required TResult Function(_PeerConnectionEventSignalingStateChanged value) signalingStateChanged,
+    required TResult Function(_PeerConnectionEventConnectionStateChanged value) connectionStateChanged,
+    required TResult Function(_PeerConnectionEventIceGatheringStateChanged value) iceGatheringStateChanged,
+    required TResult Function(_PeerConnectionEventIceConnectionStateChanged value) iceConnectionStateChanged,
+    required TResult Function(_PeerConnectionEventIceCandidateIdentified value) iceCandidateIdentified,
+    required TResult Function(_PeerConnectionEventStreamAdded value) streamAdded,
+    required TResult Function(_PeerConnectionEventStreamRemoved value) streamRemoved,
   }) {
     return signalingStateChanged(this);
   }
@@ -8082,16 +6821,11 @@ class _$PeerConnectionEventSignalingStateChangedImpl
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult? Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
+    TResult? Function(_PeerConnectionEventSignalingStateChanged value)? signalingStateChanged,
+    TResult? Function(_PeerConnectionEventConnectionStateChanged value)? connectionStateChanged,
+    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)? iceGatheringStateChanged,
+    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)? iceConnectionStateChanged,
+    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)? iceCandidateIdentified,
     TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
     TResult? Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
   }) {
@@ -8101,16 +6835,11 @@ class _$PeerConnectionEventSignalingStateChangedImpl
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
+    TResult Function(_PeerConnectionEventSignalingStateChanged value)? signalingStateChanged,
+    TResult Function(_PeerConnectionEventConnectionStateChanged value)? connectionStateChanged,
+    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)? iceGatheringStateChanged,
+    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)? iceConnectionStateChanged,
+    TResult Function(_PeerConnectionEventIceCandidateIdentified value)? iceCandidateIdentified,
     TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
     TResult Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
     required TResult orElse(),
@@ -8122,10 +6851,8 @@ class _$PeerConnectionEventSignalingStateChangedImpl
   }
 }
 
-abstract class _PeerConnectionEventSignalingStateChanged
-    implements _PeerConnectionEvent {
-  const factory _PeerConnectionEventSignalingStateChanged(
-          final String callId, final RTCSignalingState state) =
+abstract class _PeerConnectionEventSignalingStateChanged implements _PeerConnectionEvent {
+  const factory _PeerConnectionEventSignalingStateChanged(final String callId, final RTCSignalingState state) =
       _$PeerConnectionEventSignalingStateChangedImpl;
 
   @override
@@ -8138,8 +6865,7 @@ abstract class _PeerConnectionEventSignalingStateChanged
 class _$PeerConnectionEventConnectionStateChangedImpl
     with DiagnosticableTreeMixin
     implements _PeerConnectionEventConnectionStateChanged {
-  const _$PeerConnectionEventConnectionStateChangedImpl(
-      this.callId, this.state);
+  const _$PeerConnectionEventConnectionStateChangedImpl(this.callId, this.state);
 
   @override
   final String callId;
@@ -8155,8 +6881,7 @@ class _$PeerConnectionEventConnectionStateChangedImpl
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty(
-          'type', '_PeerConnectionEvent.connectionStateChanged'))
+      ..add(DiagnosticsProperty('type', '_PeerConnectionEvent.connectionStateChanged'))
       ..add(DiagnosticsProperty('callId', callId))
       ..add(DiagnosticsProperty('state', state));
   }
@@ -8176,16 +6901,11 @@ class _$PeerConnectionEventConnectionStateChangedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String callId, RTCSignalingState state)
-        signalingStateChanged,
-    required TResult Function(String callId, RTCPeerConnectionState state)
-        connectionStateChanged,
-    required TResult Function(String callId, RTCIceGatheringState state)
-        iceGatheringStateChanged,
-    required TResult Function(String callId, RTCIceConnectionState state)
-        iceConnectionStateChanged,
-    required TResult Function(String callId, RTCIceCandidate candidate)
-        iceCandidateIdentified,
+    required TResult Function(String callId, RTCSignalingState state) signalingStateChanged,
+    required TResult Function(String callId, RTCPeerConnectionState state) connectionStateChanged,
+    required TResult Function(String callId, RTCIceGatheringState state) iceGatheringStateChanged,
+    required TResult Function(String callId, RTCIceConnectionState state) iceConnectionStateChanged,
+    required TResult Function(String callId, RTCIceCandidate candidate) iceCandidateIdentified,
     required TResult Function(String callId, MediaStream stream) streamAdded,
     required TResult Function(String callId, MediaStream stream) streamRemoved,
   }) {
@@ -8195,16 +6915,11 @@ class _$PeerConnectionEventConnectionStateChangedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult? Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult? Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult? Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult? Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
+    TResult? Function(String callId, RTCSignalingState state)? signalingStateChanged,
+    TResult? Function(String callId, RTCPeerConnectionState state)? connectionStateChanged,
+    TResult? Function(String callId, RTCIceGatheringState state)? iceGatheringStateChanged,
+    TResult? Function(String callId, RTCIceConnectionState state)? iceConnectionStateChanged,
+    TResult? Function(String callId, RTCIceCandidate candidate)? iceCandidateIdentified,
     TResult? Function(String callId, MediaStream stream)? streamAdded,
     TResult? Function(String callId, MediaStream stream)? streamRemoved,
   }) {
@@ -8214,16 +6929,11 @@ class _$PeerConnectionEventConnectionStateChangedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
+    TResult Function(String callId, RTCSignalingState state)? signalingStateChanged,
+    TResult Function(String callId, RTCPeerConnectionState state)? connectionStateChanged,
+    TResult Function(String callId, RTCIceGatheringState state)? iceGatheringStateChanged,
+    TResult Function(String callId, RTCIceConnectionState state)? iceConnectionStateChanged,
+    TResult Function(String callId, RTCIceCandidate candidate)? iceCandidateIdentified,
     TResult Function(String callId, MediaStream stream)? streamAdded,
     TResult Function(String callId, MediaStream stream)? streamRemoved,
     required TResult orElse(),
@@ -8237,22 +6947,13 @@ class _$PeerConnectionEventConnectionStateChangedImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_PeerConnectionEventSignalingStateChanged value)
-        signalingStateChanged,
-    required TResult Function(_PeerConnectionEventConnectionStateChanged value)
-        connectionStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceGatheringStateChanged value)
-        iceGatheringStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceConnectionStateChanged value)
-        iceConnectionStateChanged,
-    required TResult Function(_PeerConnectionEventIceCandidateIdentified value)
-        iceCandidateIdentified,
-    required TResult Function(_PeerConnectionEventStreamAdded value)
-        streamAdded,
-    required TResult Function(_PeerConnectionEventStreamRemoved value)
-        streamRemoved,
+    required TResult Function(_PeerConnectionEventSignalingStateChanged value) signalingStateChanged,
+    required TResult Function(_PeerConnectionEventConnectionStateChanged value) connectionStateChanged,
+    required TResult Function(_PeerConnectionEventIceGatheringStateChanged value) iceGatheringStateChanged,
+    required TResult Function(_PeerConnectionEventIceConnectionStateChanged value) iceConnectionStateChanged,
+    required TResult Function(_PeerConnectionEventIceCandidateIdentified value) iceCandidateIdentified,
+    required TResult Function(_PeerConnectionEventStreamAdded value) streamAdded,
+    required TResult Function(_PeerConnectionEventStreamRemoved value) streamRemoved,
   }) {
     return connectionStateChanged(this);
   }
@@ -8260,16 +6961,11 @@ class _$PeerConnectionEventConnectionStateChangedImpl
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult? Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
+    TResult? Function(_PeerConnectionEventSignalingStateChanged value)? signalingStateChanged,
+    TResult? Function(_PeerConnectionEventConnectionStateChanged value)? connectionStateChanged,
+    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)? iceGatheringStateChanged,
+    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)? iceConnectionStateChanged,
+    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)? iceCandidateIdentified,
     TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
     TResult? Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
   }) {
@@ -8279,16 +6975,11 @@ class _$PeerConnectionEventConnectionStateChangedImpl
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
+    TResult Function(_PeerConnectionEventSignalingStateChanged value)? signalingStateChanged,
+    TResult Function(_PeerConnectionEventConnectionStateChanged value)? connectionStateChanged,
+    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)? iceGatheringStateChanged,
+    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)? iceConnectionStateChanged,
+    TResult Function(_PeerConnectionEventIceCandidateIdentified value)? iceCandidateIdentified,
     TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
     TResult Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
     required TResult orElse(),
@@ -8300,10 +6991,8 @@ class _$PeerConnectionEventConnectionStateChangedImpl
   }
 }
 
-abstract class _PeerConnectionEventConnectionStateChanged
-    implements _PeerConnectionEvent {
-  const factory _PeerConnectionEventConnectionStateChanged(
-          final String callId, final RTCPeerConnectionState state) =
+abstract class _PeerConnectionEventConnectionStateChanged implements _PeerConnectionEvent {
+  const factory _PeerConnectionEventConnectionStateChanged(final String callId, final RTCPeerConnectionState state) =
       _$PeerConnectionEventConnectionStateChangedImpl;
 
   @override
@@ -8316,8 +7005,7 @@ abstract class _PeerConnectionEventConnectionStateChanged
 class _$PeerConnectionEventIceGatheringStateChangedImpl
     with DiagnosticableTreeMixin
     implements _PeerConnectionEventIceGatheringStateChanged {
-  const _$PeerConnectionEventIceGatheringStateChangedImpl(
-      this.callId, this.state);
+  const _$PeerConnectionEventIceGatheringStateChangedImpl(this.callId, this.state);
 
   @override
   final String callId;
@@ -8333,8 +7021,7 @@ class _$PeerConnectionEventIceGatheringStateChangedImpl
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty(
-          'type', '_PeerConnectionEvent.iceGatheringStateChanged'))
+      ..add(DiagnosticsProperty('type', '_PeerConnectionEvent.iceGatheringStateChanged'))
       ..add(DiagnosticsProperty('callId', callId))
       ..add(DiagnosticsProperty('state', state));
   }
@@ -8354,16 +7041,11 @@ class _$PeerConnectionEventIceGatheringStateChangedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String callId, RTCSignalingState state)
-        signalingStateChanged,
-    required TResult Function(String callId, RTCPeerConnectionState state)
-        connectionStateChanged,
-    required TResult Function(String callId, RTCIceGatheringState state)
-        iceGatheringStateChanged,
-    required TResult Function(String callId, RTCIceConnectionState state)
-        iceConnectionStateChanged,
-    required TResult Function(String callId, RTCIceCandidate candidate)
-        iceCandidateIdentified,
+    required TResult Function(String callId, RTCSignalingState state) signalingStateChanged,
+    required TResult Function(String callId, RTCPeerConnectionState state) connectionStateChanged,
+    required TResult Function(String callId, RTCIceGatheringState state) iceGatheringStateChanged,
+    required TResult Function(String callId, RTCIceConnectionState state) iceConnectionStateChanged,
+    required TResult Function(String callId, RTCIceCandidate candidate) iceCandidateIdentified,
     required TResult Function(String callId, MediaStream stream) streamAdded,
     required TResult Function(String callId, MediaStream stream) streamRemoved,
   }) {
@@ -8373,16 +7055,11 @@ class _$PeerConnectionEventIceGatheringStateChangedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult? Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult? Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult? Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult? Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
+    TResult? Function(String callId, RTCSignalingState state)? signalingStateChanged,
+    TResult? Function(String callId, RTCPeerConnectionState state)? connectionStateChanged,
+    TResult? Function(String callId, RTCIceGatheringState state)? iceGatheringStateChanged,
+    TResult? Function(String callId, RTCIceConnectionState state)? iceConnectionStateChanged,
+    TResult? Function(String callId, RTCIceCandidate candidate)? iceCandidateIdentified,
     TResult? Function(String callId, MediaStream stream)? streamAdded,
     TResult? Function(String callId, MediaStream stream)? streamRemoved,
   }) {
@@ -8392,16 +7069,11 @@ class _$PeerConnectionEventIceGatheringStateChangedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
+    TResult Function(String callId, RTCSignalingState state)? signalingStateChanged,
+    TResult Function(String callId, RTCPeerConnectionState state)? connectionStateChanged,
+    TResult Function(String callId, RTCIceGatheringState state)? iceGatheringStateChanged,
+    TResult Function(String callId, RTCIceConnectionState state)? iceConnectionStateChanged,
+    TResult Function(String callId, RTCIceCandidate candidate)? iceCandidateIdentified,
     TResult Function(String callId, MediaStream stream)? streamAdded,
     TResult Function(String callId, MediaStream stream)? streamRemoved,
     required TResult orElse(),
@@ -8415,22 +7087,13 @@ class _$PeerConnectionEventIceGatheringStateChangedImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_PeerConnectionEventSignalingStateChanged value)
-        signalingStateChanged,
-    required TResult Function(_PeerConnectionEventConnectionStateChanged value)
-        connectionStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceGatheringStateChanged value)
-        iceGatheringStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceConnectionStateChanged value)
-        iceConnectionStateChanged,
-    required TResult Function(_PeerConnectionEventIceCandidateIdentified value)
-        iceCandidateIdentified,
-    required TResult Function(_PeerConnectionEventStreamAdded value)
-        streamAdded,
-    required TResult Function(_PeerConnectionEventStreamRemoved value)
-        streamRemoved,
+    required TResult Function(_PeerConnectionEventSignalingStateChanged value) signalingStateChanged,
+    required TResult Function(_PeerConnectionEventConnectionStateChanged value) connectionStateChanged,
+    required TResult Function(_PeerConnectionEventIceGatheringStateChanged value) iceGatheringStateChanged,
+    required TResult Function(_PeerConnectionEventIceConnectionStateChanged value) iceConnectionStateChanged,
+    required TResult Function(_PeerConnectionEventIceCandidateIdentified value) iceCandidateIdentified,
+    required TResult Function(_PeerConnectionEventStreamAdded value) streamAdded,
+    required TResult Function(_PeerConnectionEventStreamRemoved value) streamRemoved,
   }) {
     return iceGatheringStateChanged(this);
   }
@@ -8438,16 +7101,11 @@ class _$PeerConnectionEventIceGatheringStateChangedImpl
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult? Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
+    TResult? Function(_PeerConnectionEventSignalingStateChanged value)? signalingStateChanged,
+    TResult? Function(_PeerConnectionEventConnectionStateChanged value)? connectionStateChanged,
+    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)? iceGatheringStateChanged,
+    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)? iceConnectionStateChanged,
+    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)? iceCandidateIdentified,
     TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
     TResult? Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
   }) {
@@ -8457,16 +7115,11 @@ class _$PeerConnectionEventIceGatheringStateChangedImpl
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
+    TResult Function(_PeerConnectionEventSignalingStateChanged value)? signalingStateChanged,
+    TResult Function(_PeerConnectionEventConnectionStateChanged value)? connectionStateChanged,
+    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)? iceGatheringStateChanged,
+    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)? iceConnectionStateChanged,
+    TResult Function(_PeerConnectionEventIceCandidateIdentified value)? iceCandidateIdentified,
     TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
     TResult Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
     required TResult orElse(),
@@ -8478,10 +7131,8 @@ class _$PeerConnectionEventIceGatheringStateChangedImpl
   }
 }
 
-abstract class _PeerConnectionEventIceGatheringStateChanged
-    implements _PeerConnectionEvent {
-  const factory _PeerConnectionEventIceGatheringStateChanged(
-          final String callId, final RTCIceGatheringState state) =
+abstract class _PeerConnectionEventIceGatheringStateChanged implements _PeerConnectionEvent {
+  const factory _PeerConnectionEventIceGatheringStateChanged(final String callId, final RTCIceGatheringState state) =
       _$PeerConnectionEventIceGatheringStateChangedImpl;
 
   @override
@@ -8494,8 +7145,7 @@ abstract class _PeerConnectionEventIceGatheringStateChanged
 class _$PeerConnectionEventIceConnectionStateChangedImpl
     with DiagnosticableTreeMixin
     implements _PeerConnectionEventIceConnectionStateChanged {
-  const _$PeerConnectionEventIceConnectionStateChangedImpl(
-      this.callId, this.state);
+  const _$PeerConnectionEventIceConnectionStateChangedImpl(this.callId, this.state);
 
   @override
   final String callId;
@@ -8511,8 +7161,7 @@ class _$PeerConnectionEventIceConnectionStateChangedImpl
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty(
-          'type', '_PeerConnectionEvent.iceConnectionStateChanged'))
+      ..add(DiagnosticsProperty('type', '_PeerConnectionEvent.iceConnectionStateChanged'))
       ..add(DiagnosticsProperty('callId', callId))
       ..add(DiagnosticsProperty('state', state));
   }
@@ -8532,16 +7181,11 @@ class _$PeerConnectionEventIceConnectionStateChangedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String callId, RTCSignalingState state)
-        signalingStateChanged,
-    required TResult Function(String callId, RTCPeerConnectionState state)
-        connectionStateChanged,
-    required TResult Function(String callId, RTCIceGatheringState state)
-        iceGatheringStateChanged,
-    required TResult Function(String callId, RTCIceConnectionState state)
-        iceConnectionStateChanged,
-    required TResult Function(String callId, RTCIceCandidate candidate)
-        iceCandidateIdentified,
+    required TResult Function(String callId, RTCSignalingState state) signalingStateChanged,
+    required TResult Function(String callId, RTCPeerConnectionState state) connectionStateChanged,
+    required TResult Function(String callId, RTCIceGatheringState state) iceGatheringStateChanged,
+    required TResult Function(String callId, RTCIceConnectionState state) iceConnectionStateChanged,
+    required TResult Function(String callId, RTCIceCandidate candidate) iceCandidateIdentified,
     required TResult Function(String callId, MediaStream stream) streamAdded,
     required TResult Function(String callId, MediaStream stream) streamRemoved,
   }) {
@@ -8551,16 +7195,11 @@ class _$PeerConnectionEventIceConnectionStateChangedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult? Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult? Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult? Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult? Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
+    TResult? Function(String callId, RTCSignalingState state)? signalingStateChanged,
+    TResult? Function(String callId, RTCPeerConnectionState state)? connectionStateChanged,
+    TResult? Function(String callId, RTCIceGatheringState state)? iceGatheringStateChanged,
+    TResult? Function(String callId, RTCIceConnectionState state)? iceConnectionStateChanged,
+    TResult? Function(String callId, RTCIceCandidate candidate)? iceCandidateIdentified,
     TResult? Function(String callId, MediaStream stream)? streamAdded,
     TResult? Function(String callId, MediaStream stream)? streamRemoved,
   }) {
@@ -8570,16 +7209,11 @@ class _$PeerConnectionEventIceConnectionStateChangedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
+    TResult Function(String callId, RTCSignalingState state)? signalingStateChanged,
+    TResult Function(String callId, RTCPeerConnectionState state)? connectionStateChanged,
+    TResult Function(String callId, RTCIceGatheringState state)? iceGatheringStateChanged,
+    TResult Function(String callId, RTCIceConnectionState state)? iceConnectionStateChanged,
+    TResult Function(String callId, RTCIceCandidate candidate)? iceCandidateIdentified,
     TResult Function(String callId, MediaStream stream)? streamAdded,
     TResult Function(String callId, MediaStream stream)? streamRemoved,
     required TResult orElse(),
@@ -8593,22 +7227,13 @@ class _$PeerConnectionEventIceConnectionStateChangedImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_PeerConnectionEventSignalingStateChanged value)
-        signalingStateChanged,
-    required TResult Function(_PeerConnectionEventConnectionStateChanged value)
-        connectionStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceGatheringStateChanged value)
-        iceGatheringStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceConnectionStateChanged value)
-        iceConnectionStateChanged,
-    required TResult Function(_PeerConnectionEventIceCandidateIdentified value)
-        iceCandidateIdentified,
-    required TResult Function(_PeerConnectionEventStreamAdded value)
-        streamAdded,
-    required TResult Function(_PeerConnectionEventStreamRemoved value)
-        streamRemoved,
+    required TResult Function(_PeerConnectionEventSignalingStateChanged value) signalingStateChanged,
+    required TResult Function(_PeerConnectionEventConnectionStateChanged value) connectionStateChanged,
+    required TResult Function(_PeerConnectionEventIceGatheringStateChanged value) iceGatheringStateChanged,
+    required TResult Function(_PeerConnectionEventIceConnectionStateChanged value) iceConnectionStateChanged,
+    required TResult Function(_PeerConnectionEventIceCandidateIdentified value) iceCandidateIdentified,
+    required TResult Function(_PeerConnectionEventStreamAdded value) streamAdded,
+    required TResult Function(_PeerConnectionEventStreamRemoved value) streamRemoved,
   }) {
     return iceConnectionStateChanged(this);
   }
@@ -8616,16 +7241,11 @@ class _$PeerConnectionEventIceConnectionStateChangedImpl
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult? Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
+    TResult? Function(_PeerConnectionEventSignalingStateChanged value)? signalingStateChanged,
+    TResult? Function(_PeerConnectionEventConnectionStateChanged value)? connectionStateChanged,
+    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)? iceGatheringStateChanged,
+    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)? iceConnectionStateChanged,
+    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)? iceCandidateIdentified,
     TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
     TResult? Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
   }) {
@@ -8635,16 +7255,11 @@ class _$PeerConnectionEventIceConnectionStateChangedImpl
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
+    TResult Function(_PeerConnectionEventSignalingStateChanged value)? signalingStateChanged,
+    TResult Function(_PeerConnectionEventConnectionStateChanged value)? connectionStateChanged,
+    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)? iceGatheringStateChanged,
+    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)? iceConnectionStateChanged,
+    TResult Function(_PeerConnectionEventIceCandidateIdentified value)? iceCandidateIdentified,
     TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
     TResult Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
     required TResult orElse(),
@@ -8656,10 +7271,8 @@ class _$PeerConnectionEventIceConnectionStateChangedImpl
   }
 }
 
-abstract class _PeerConnectionEventIceConnectionStateChanged
-    implements _PeerConnectionEvent {
-  const factory _PeerConnectionEventIceConnectionStateChanged(
-          final String callId, final RTCIceConnectionState state) =
+abstract class _PeerConnectionEventIceConnectionStateChanged implements _PeerConnectionEvent {
+  const factory _PeerConnectionEventIceConnectionStateChanged(final String callId, final RTCIceConnectionState state) =
       _$PeerConnectionEventIceConnectionStateChangedImpl;
 
   @override
@@ -8672,8 +7285,7 @@ abstract class _PeerConnectionEventIceConnectionStateChanged
 class _$PeerConnectionEventIceCandidateIdentifiedImpl
     with DiagnosticableTreeMixin
     implements _PeerConnectionEventIceCandidateIdentified {
-  const _$PeerConnectionEventIceCandidateIdentifiedImpl(
-      this.callId, this.candidate);
+  const _$PeerConnectionEventIceCandidateIdentifiedImpl(this.callId, this.candidate);
 
   @override
   final String callId;
@@ -8689,8 +7301,7 @@ class _$PeerConnectionEventIceCandidateIdentifiedImpl
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty(
-          'type', '_PeerConnectionEvent.iceCandidateIdentified'))
+      ..add(DiagnosticsProperty('type', '_PeerConnectionEvent.iceCandidateIdentified'))
       ..add(DiagnosticsProperty('callId', callId))
       ..add(DiagnosticsProperty('candidate', candidate));
   }
@@ -8701,8 +7312,7 @@ class _$PeerConnectionEventIceCandidateIdentifiedImpl
         (other.runtimeType == runtimeType &&
             other is _$PeerConnectionEventIceCandidateIdentifiedImpl &&
             (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.candidate, candidate) ||
-                other.candidate == candidate));
+            (identical(other.candidate, candidate) || other.candidate == candidate));
   }
 
   @override
@@ -8711,16 +7321,11 @@ class _$PeerConnectionEventIceCandidateIdentifiedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String callId, RTCSignalingState state)
-        signalingStateChanged,
-    required TResult Function(String callId, RTCPeerConnectionState state)
-        connectionStateChanged,
-    required TResult Function(String callId, RTCIceGatheringState state)
-        iceGatheringStateChanged,
-    required TResult Function(String callId, RTCIceConnectionState state)
-        iceConnectionStateChanged,
-    required TResult Function(String callId, RTCIceCandidate candidate)
-        iceCandidateIdentified,
+    required TResult Function(String callId, RTCSignalingState state) signalingStateChanged,
+    required TResult Function(String callId, RTCPeerConnectionState state) connectionStateChanged,
+    required TResult Function(String callId, RTCIceGatheringState state) iceGatheringStateChanged,
+    required TResult Function(String callId, RTCIceConnectionState state) iceConnectionStateChanged,
+    required TResult Function(String callId, RTCIceCandidate candidate) iceCandidateIdentified,
     required TResult Function(String callId, MediaStream stream) streamAdded,
     required TResult Function(String callId, MediaStream stream) streamRemoved,
   }) {
@@ -8730,16 +7335,11 @@ class _$PeerConnectionEventIceCandidateIdentifiedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult? Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult? Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult? Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult? Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
+    TResult? Function(String callId, RTCSignalingState state)? signalingStateChanged,
+    TResult? Function(String callId, RTCPeerConnectionState state)? connectionStateChanged,
+    TResult? Function(String callId, RTCIceGatheringState state)? iceGatheringStateChanged,
+    TResult? Function(String callId, RTCIceConnectionState state)? iceConnectionStateChanged,
+    TResult? Function(String callId, RTCIceCandidate candidate)? iceCandidateIdentified,
     TResult? Function(String callId, MediaStream stream)? streamAdded,
     TResult? Function(String callId, MediaStream stream)? streamRemoved,
   }) {
@@ -8749,16 +7349,11 @@ class _$PeerConnectionEventIceCandidateIdentifiedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
+    TResult Function(String callId, RTCSignalingState state)? signalingStateChanged,
+    TResult Function(String callId, RTCPeerConnectionState state)? connectionStateChanged,
+    TResult Function(String callId, RTCIceGatheringState state)? iceGatheringStateChanged,
+    TResult Function(String callId, RTCIceConnectionState state)? iceConnectionStateChanged,
+    TResult Function(String callId, RTCIceCandidate candidate)? iceCandidateIdentified,
     TResult Function(String callId, MediaStream stream)? streamAdded,
     TResult Function(String callId, MediaStream stream)? streamRemoved,
     required TResult orElse(),
@@ -8772,22 +7367,13 @@ class _$PeerConnectionEventIceCandidateIdentifiedImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_PeerConnectionEventSignalingStateChanged value)
-        signalingStateChanged,
-    required TResult Function(_PeerConnectionEventConnectionStateChanged value)
-        connectionStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceGatheringStateChanged value)
-        iceGatheringStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceConnectionStateChanged value)
-        iceConnectionStateChanged,
-    required TResult Function(_PeerConnectionEventIceCandidateIdentified value)
-        iceCandidateIdentified,
-    required TResult Function(_PeerConnectionEventStreamAdded value)
-        streamAdded,
-    required TResult Function(_PeerConnectionEventStreamRemoved value)
-        streamRemoved,
+    required TResult Function(_PeerConnectionEventSignalingStateChanged value) signalingStateChanged,
+    required TResult Function(_PeerConnectionEventConnectionStateChanged value) connectionStateChanged,
+    required TResult Function(_PeerConnectionEventIceGatheringStateChanged value) iceGatheringStateChanged,
+    required TResult Function(_PeerConnectionEventIceConnectionStateChanged value) iceConnectionStateChanged,
+    required TResult Function(_PeerConnectionEventIceCandidateIdentified value) iceCandidateIdentified,
+    required TResult Function(_PeerConnectionEventStreamAdded value) streamAdded,
+    required TResult Function(_PeerConnectionEventStreamRemoved value) streamRemoved,
   }) {
     return iceCandidateIdentified(this);
   }
@@ -8795,16 +7381,11 @@ class _$PeerConnectionEventIceCandidateIdentifiedImpl
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult? Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
+    TResult? Function(_PeerConnectionEventSignalingStateChanged value)? signalingStateChanged,
+    TResult? Function(_PeerConnectionEventConnectionStateChanged value)? connectionStateChanged,
+    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)? iceGatheringStateChanged,
+    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)? iceConnectionStateChanged,
+    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)? iceCandidateIdentified,
     TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
     TResult? Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
   }) {
@@ -8814,16 +7395,11 @@ class _$PeerConnectionEventIceCandidateIdentifiedImpl
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
+    TResult Function(_PeerConnectionEventSignalingStateChanged value)? signalingStateChanged,
+    TResult Function(_PeerConnectionEventConnectionStateChanged value)? connectionStateChanged,
+    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)? iceGatheringStateChanged,
+    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)? iceConnectionStateChanged,
+    TResult Function(_PeerConnectionEventIceCandidateIdentified value)? iceCandidateIdentified,
     TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
     TResult Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
     required TResult orElse(),
@@ -8835,10 +7411,8 @@ class _$PeerConnectionEventIceCandidateIdentifiedImpl
   }
 }
 
-abstract class _PeerConnectionEventIceCandidateIdentified
-    implements _PeerConnectionEvent {
-  const factory _PeerConnectionEventIceCandidateIdentified(
-          final String callId, final RTCIceCandidate candidate) =
+abstract class _PeerConnectionEventIceCandidateIdentified implements _PeerConnectionEvent {
+  const factory _PeerConnectionEventIceCandidateIdentified(final String callId, final RTCIceCandidate candidate) =
       _$PeerConnectionEventIceCandidateIdentifiedImpl;
 
   @override
@@ -8848,9 +7422,7 @@ abstract class _PeerConnectionEventIceCandidateIdentified
 
 /// @nodoc
 
-class _$PeerConnectionEventStreamAddedImpl
-    with DiagnosticableTreeMixin
-    implements _PeerConnectionEventStreamAdded {
+class _$PeerConnectionEventStreamAddedImpl with DiagnosticableTreeMixin implements _PeerConnectionEventStreamAdded {
   const _$PeerConnectionEventStreamAddedImpl(this.callId, this.stream);
 
   @override
@@ -8887,16 +7459,11 @@ class _$PeerConnectionEventStreamAddedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String callId, RTCSignalingState state)
-        signalingStateChanged,
-    required TResult Function(String callId, RTCPeerConnectionState state)
-        connectionStateChanged,
-    required TResult Function(String callId, RTCIceGatheringState state)
-        iceGatheringStateChanged,
-    required TResult Function(String callId, RTCIceConnectionState state)
-        iceConnectionStateChanged,
-    required TResult Function(String callId, RTCIceCandidate candidate)
-        iceCandidateIdentified,
+    required TResult Function(String callId, RTCSignalingState state) signalingStateChanged,
+    required TResult Function(String callId, RTCPeerConnectionState state) connectionStateChanged,
+    required TResult Function(String callId, RTCIceGatheringState state) iceGatheringStateChanged,
+    required TResult Function(String callId, RTCIceConnectionState state) iceConnectionStateChanged,
+    required TResult Function(String callId, RTCIceCandidate candidate) iceCandidateIdentified,
     required TResult Function(String callId, MediaStream stream) streamAdded,
     required TResult Function(String callId, MediaStream stream) streamRemoved,
   }) {
@@ -8906,16 +7473,11 @@ class _$PeerConnectionEventStreamAddedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult? Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult? Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult? Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult? Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
+    TResult? Function(String callId, RTCSignalingState state)? signalingStateChanged,
+    TResult? Function(String callId, RTCPeerConnectionState state)? connectionStateChanged,
+    TResult? Function(String callId, RTCIceGatheringState state)? iceGatheringStateChanged,
+    TResult? Function(String callId, RTCIceConnectionState state)? iceConnectionStateChanged,
+    TResult? Function(String callId, RTCIceCandidate candidate)? iceCandidateIdentified,
     TResult? Function(String callId, MediaStream stream)? streamAdded,
     TResult? Function(String callId, MediaStream stream)? streamRemoved,
   }) {
@@ -8925,16 +7487,11 @@ class _$PeerConnectionEventStreamAddedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
+    TResult Function(String callId, RTCSignalingState state)? signalingStateChanged,
+    TResult Function(String callId, RTCPeerConnectionState state)? connectionStateChanged,
+    TResult Function(String callId, RTCIceGatheringState state)? iceGatheringStateChanged,
+    TResult Function(String callId, RTCIceConnectionState state)? iceConnectionStateChanged,
+    TResult Function(String callId, RTCIceCandidate candidate)? iceCandidateIdentified,
     TResult Function(String callId, MediaStream stream)? streamAdded,
     TResult Function(String callId, MediaStream stream)? streamRemoved,
     required TResult orElse(),
@@ -8948,22 +7505,13 @@ class _$PeerConnectionEventStreamAddedImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_PeerConnectionEventSignalingStateChanged value)
-        signalingStateChanged,
-    required TResult Function(_PeerConnectionEventConnectionStateChanged value)
-        connectionStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceGatheringStateChanged value)
-        iceGatheringStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceConnectionStateChanged value)
-        iceConnectionStateChanged,
-    required TResult Function(_PeerConnectionEventIceCandidateIdentified value)
-        iceCandidateIdentified,
-    required TResult Function(_PeerConnectionEventStreamAdded value)
-        streamAdded,
-    required TResult Function(_PeerConnectionEventStreamRemoved value)
-        streamRemoved,
+    required TResult Function(_PeerConnectionEventSignalingStateChanged value) signalingStateChanged,
+    required TResult Function(_PeerConnectionEventConnectionStateChanged value) connectionStateChanged,
+    required TResult Function(_PeerConnectionEventIceGatheringStateChanged value) iceGatheringStateChanged,
+    required TResult Function(_PeerConnectionEventIceConnectionStateChanged value) iceConnectionStateChanged,
+    required TResult Function(_PeerConnectionEventIceCandidateIdentified value) iceCandidateIdentified,
+    required TResult Function(_PeerConnectionEventStreamAdded value) streamAdded,
+    required TResult Function(_PeerConnectionEventStreamRemoved value) streamRemoved,
   }) {
     return streamAdded(this);
   }
@@ -8971,16 +7519,11 @@ class _$PeerConnectionEventStreamAddedImpl
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult? Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
+    TResult? Function(_PeerConnectionEventSignalingStateChanged value)? signalingStateChanged,
+    TResult? Function(_PeerConnectionEventConnectionStateChanged value)? connectionStateChanged,
+    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)? iceGatheringStateChanged,
+    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)? iceConnectionStateChanged,
+    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)? iceCandidateIdentified,
     TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
     TResult? Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
   }) {
@@ -8990,16 +7533,11 @@ class _$PeerConnectionEventStreamAddedImpl
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
+    TResult Function(_PeerConnectionEventSignalingStateChanged value)? signalingStateChanged,
+    TResult Function(_PeerConnectionEventConnectionStateChanged value)? connectionStateChanged,
+    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)? iceGatheringStateChanged,
+    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)? iceConnectionStateChanged,
+    TResult Function(_PeerConnectionEventIceCandidateIdentified value)? iceCandidateIdentified,
     TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
     TResult Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
     required TResult orElse(),
@@ -9012,8 +7550,7 @@ class _$PeerConnectionEventStreamAddedImpl
 }
 
 abstract class _PeerConnectionEventStreamAdded implements _PeerConnectionEvent {
-  const factory _PeerConnectionEventStreamAdded(
-          final String callId, final MediaStream stream) =
+  const factory _PeerConnectionEventStreamAdded(final String callId, final MediaStream stream) =
       _$PeerConnectionEventStreamAddedImpl;
 
   @override
@@ -9023,9 +7560,7 @@ abstract class _PeerConnectionEventStreamAdded implements _PeerConnectionEvent {
 
 /// @nodoc
 
-class _$PeerConnectionEventStreamRemovedImpl
-    with DiagnosticableTreeMixin
-    implements _PeerConnectionEventStreamRemoved {
+class _$PeerConnectionEventStreamRemovedImpl with DiagnosticableTreeMixin implements _PeerConnectionEventStreamRemoved {
   const _$PeerConnectionEventStreamRemovedImpl(this.callId, this.stream);
 
   @override
@@ -9062,16 +7597,11 @@ class _$PeerConnectionEventStreamRemovedImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String callId, RTCSignalingState state)
-        signalingStateChanged,
-    required TResult Function(String callId, RTCPeerConnectionState state)
-        connectionStateChanged,
-    required TResult Function(String callId, RTCIceGatheringState state)
-        iceGatheringStateChanged,
-    required TResult Function(String callId, RTCIceConnectionState state)
-        iceConnectionStateChanged,
-    required TResult Function(String callId, RTCIceCandidate candidate)
-        iceCandidateIdentified,
+    required TResult Function(String callId, RTCSignalingState state) signalingStateChanged,
+    required TResult Function(String callId, RTCPeerConnectionState state) connectionStateChanged,
+    required TResult Function(String callId, RTCIceGatheringState state) iceGatheringStateChanged,
+    required TResult Function(String callId, RTCIceConnectionState state) iceConnectionStateChanged,
+    required TResult Function(String callId, RTCIceCandidate candidate) iceCandidateIdentified,
     required TResult Function(String callId, MediaStream stream) streamAdded,
     required TResult Function(String callId, MediaStream stream) streamRemoved,
   }) {
@@ -9081,16 +7611,11 @@ class _$PeerConnectionEventStreamRemovedImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult? Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult? Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult? Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult? Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
+    TResult? Function(String callId, RTCSignalingState state)? signalingStateChanged,
+    TResult? Function(String callId, RTCPeerConnectionState state)? connectionStateChanged,
+    TResult? Function(String callId, RTCIceGatheringState state)? iceGatheringStateChanged,
+    TResult? Function(String callId, RTCIceConnectionState state)? iceConnectionStateChanged,
+    TResult? Function(String callId, RTCIceCandidate candidate)? iceCandidateIdentified,
     TResult? Function(String callId, MediaStream stream)? streamAdded,
     TResult? Function(String callId, MediaStream stream)? streamRemoved,
   }) {
@@ -9100,16 +7625,11 @@ class _$PeerConnectionEventStreamRemovedImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
+    TResult Function(String callId, RTCSignalingState state)? signalingStateChanged,
+    TResult Function(String callId, RTCPeerConnectionState state)? connectionStateChanged,
+    TResult Function(String callId, RTCIceGatheringState state)? iceGatheringStateChanged,
+    TResult Function(String callId, RTCIceConnectionState state)? iceConnectionStateChanged,
+    TResult Function(String callId, RTCIceCandidate candidate)? iceCandidateIdentified,
     TResult Function(String callId, MediaStream stream)? streamAdded,
     TResult Function(String callId, MediaStream stream)? streamRemoved,
     required TResult orElse(),
@@ -9123,22 +7643,13 @@ class _$PeerConnectionEventStreamRemovedImpl
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_PeerConnectionEventSignalingStateChanged value)
-        signalingStateChanged,
-    required TResult Function(_PeerConnectionEventConnectionStateChanged value)
-        connectionStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceGatheringStateChanged value)
-        iceGatheringStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceConnectionStateChanged value)
-        iceConnectionStateChanged,
-    required TResult Function(_PeerConnectionEventIceCandidateIdentified value)
-        iceCandidateIdentified,
-    required TResult Function(_PeerConnectionEventStreamAdded value)
-        streamAdded,
-    required TResult Function(_PeerConnectionEventStreamRemoved value)
-        streamRemoved,
+    required TResult Function(_PeerConnectionEventSignalingStateChanged value) signalingStateChanged,
+    required TResult Function(_PeerConnectionEventConnectionStateChanged value) connectionStateChanged,
+    required TResult Function(_PeerConnectionEventIceGatheringStateChanged value) iceGatheringStateChanged,
+    required TResult Function(_PeerConnectionEventIceConnectionStateChanged value) iceConnectionStateChanged,
+    required TResult Function(_PeerConnectionEventIceCandidateIdentified value) iceCandidateIdentified,
+    required TResult Function(_PeerConnectionEventStreamAdded value) streamAdded,
+    required TResult Function(_PeerConnectionEventStreamRemoved value) streamRemoved,
   }) {
     return streamRemoved(this);
   }
@@ -9146,16 +7657,11 @@ class _$PeerConnectionEventStreamRemovedImpl
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult? Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
+    TResult? Function(_PeerConnectionEventSignalingStateChanged value)? signalingStateChanged,
+    TResult? Function(_PeerConnectionEventConnectionStateChanged value)? connectionStateChanged,
+    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)? iceGatheringStateChanged,
+    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)? iceConnectionStateChanged,
+    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)? iceCandidateIdentified,
     TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
     TResult? Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
   }) {
@@ -9165,16 +7671,11 @@ class _$PeerConnectionEventStreamRemovedImpl
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
+    TResult Function(_PeerConnectionEventSignalingStateChanged value)? signalingStateChanged,
+    TResult Function(_PeerConnectionEventConnectionStateChanged value)? connectionStateChanged,
+    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)? iceGatheringStateChanged,
+    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)? iceConnectionStateChanged,
+    TResult Function(_PeerConnectionEventIceCandidateIdentified value)? iceCandidateIdentified,
     TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
     TResult Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
     required TResult orElse(),
@@ -9186,10 +7687,8 @@ class _$PeerConnectionEventStreamRemovedImpl
   }
 }
 
-abstract class _PeerConnectionEventStreamRemoved
-    implements _PeerConnectionEvent {
-  const factory _PeerConnectionEventStreamRemoved(
-          final String callId, final MediaStream stream) =
+abstract class _PeerConnectionEventStreamRemoved implements _PeerConnectionEvent {
+  const factory _PeerConnectionEventStreamRemoved(final String callId, final MediaStream stream) =
       _$PeerConnectionEventStreamRemovedImpl;
 
   @override
@@ -9241,9 +7740,7 @@ mixin _$CallScreenEvent {
 
 /// @nodoc
 
-class _$CallScreenEventDidPushImpl
-    with DiagnosticableTreeMixin
-    implements _CallScreenEventDidPush {
+class _$CallScreenEventDidPushImpl with DiagnosticableTreeMixin implements _CallScreenEventDidPush {
   _$CallScreenEventDidPushImpl();
 
   @override
@@ -9259,9 +7756,7 @@ class _$CallScreenEventDidPushImpl
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallScreenEventDidPushImpl);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _$CallScreenEventDidPushImpl);
   }
 
   @override
@@ -9336,9 +7831,7 @@ abstract class _CallScreenEventDidPush implements CallScreenEvent {
 
 /// @nodoc
 
-class _$CallScreenEventDidPopImpl
-    with DiagnosticableTreeMixin
-    implements _CallScreenEventDidPop {
+class _$CallScreenEventDidPopImpl with DiagnosticableTreeMixin implements _CallScreenEventDidPop {
   _$CallScreenEventDidPopImpl();
 
   @override
@@ -9354,9 +7847,7 @@ class _$CallScreenEventDidPopImpl
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallScreenEventDidPopImpl);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _$CallScreenEventDidPopImpl);
   }
 
   @override
@@ -9431,16 +7922,11 @@ abstract class _CallScreenEventDidPop implements CallScreenEvent {
 
 /// @nodoc
 mixin _$CallState {
-  ConnectivityResult? get currentConnectivityResult =>
-      throw _privateConstructorUsedError;
-  RegistrationStatus get registrationStatus =>
-      throw _privateConstructorUsedError;
-  SignalingClientStatus get signalingClientStatus =>
-      throw _privateConstructorUsedError;
-  Object? get lastSignalingClientConnectError =>
-      throw _privateConstructorUsedError;
-  Object? get lastSignalingClientDisconnectError =>
-      throw _privateConstructorUsedError;
+  ConnectivityResult? get currentConnectivityResult => throw _privateConstructorUsedError;
+  RegistrationStatus get registrationStatus => throw _privateConstructorUsedError;
+  SignalingClientStatus get signalingClientStatus => throw _privateConstructorUsedError;
+  Object? get lastSignalingClientConnectError => throw _privateConstructorUsedError;
+  Object? get lastSignalingClientDisconnectError => throw _privateConstructorUsedError;
   int? get lastSignalingDisconnectCode => throw _privateConstructorUsedError;
   int get linesCount => throw _privateConstructorUsedError;
   List<ActiveCall> get activeCalls => throw _privateConstructorUsedError;
@@ -9448,14 +7934,12 @@ mixin _$CallState {
   bool? get speaker => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $CallStateCopyWith<CallState> get copyWith =>
-      throw _privateConstructorUsedError;
+  $CallStateCopyWith<CallState> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $CallStateCopyWith<$Res> {
-  factory $CallStateCopyWith(CallState value, $Res Function(CallState) then) =
-      _$CallStateCopyWithImpl<$Res, CallState>;
+  factory $CallStateCopyWith(CallState value, $Res Function(CallState) then) = _$CallStateCopyWithImpl<$Res, CallState>;
   @useResult
   $Res call(
       {ConnectivityResult? currentConnectivityResult,
@@ -9471,8 +7955,7 @@ abstract class $CallStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
-    implements $CallStateCopyWith<$Res> {
+class _$CallStateCopyWithImpl<$Res, $Val extends CallState> implements $CallStateCopyWith<$Res> {
   _$CallStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -9507,14 +7990,12 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
           ? _value.signalingClientStatus
           : signalingClientStatus // ignore: cast_nullable_to_non_nullable
               as SignalingClientStatus,
-      lastSignalingClientConnectError:
-          freezed == lastSignalingClientConnectError
-              ? _value.lastSignalingClientConnectError
-              : lastSignalingClientConnectError,
-      lastSignalingClientDisconnectError:
-          freezed == lastSignalingClientDisconnectError
-              ? _value.lastSignalingClientDisconnectError
-              : lastSignalingClientDisconnectError,
+      lastSignalingClientConnectError: freezed == lastSignalingClientConnectError
+          ? _value.lastSignalingClientConnectError
+          : lastSignalingClientConnectError,
+      lastSignalingClientDisconnectError: freezed == lastSignalingClientDisconnectError
+          ? _value.lastSignalingClientDisconnectError
+          : lastSignalingClientDisconnectError,
       lastSignalingDisconnectCode: freezed == lastSignalingDisconnectCode
           ? _value.lastSignalingDisconnectCode
           : lastSignalingDisconnectCode // ignore: cast_nullable_to_non_nullable
@@ -9540,10 +8021,8 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
 }
 
 /// @nodoc
-abstract class _$$CallStateImplCopyWith<$Res>
-    implements $CallStateCopyWith<$Res> {
-  factory _$$CallStateImplCopyWith(
-          _$CallStateImpl value, $Res Function(_$CallStateImpl) then) =
+abstract class _$$CallStateImplCopyWith<$Res> implements $CallStateCopyWith<$Res> {
+  factory _$$CallStateImplCopyWith(_$CallStateImpl value, $Res Function(_$CallStateImpl) then) =
       __$$CallStateImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -9561,12 +8040,9 @@ abstract class _$$CallStateImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$CallStateImplCopyWithImpl<$Res>
-    extends _$CallStateCopyWithImpl<$Res, _$CallStateImpl>
+class __$$CallStateImplCopyWithImpl<$Res> extends _$CallStateCopyWithImpl<$Res, _$CallStateImpl>
     implements _$$CallStateImplCopyWith<$Res> {
-  __$$CallStateImplCopyWithImpl(
-      _$CallStateImpl _value, $Res Function(_$CallStateImpl) _then)
-      : super(_value, _then);
+  __$$CallStateImplCopyWithImpl(_$CallStateImpl _value, $Res Function(_$CallStateImpl) _then) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -9595,14 +8071,12 @@ class __$$CallStateImplCopyWithImpl<$Res>
           ? _value.signalingClientStatus
           : signalingClientStatus // ignore: cast_nullable_to_non_nullable
               as SignalingClientStatus,
-      lastSignalingClientConnectError:
-          freezed == lastSignalingClientConnectError
-              ? _value.lastSignalingClientConnectError
-              : lastSignalingClientConnectError,
-      lastSignalingClientDisconnectError:
-          freezed == lastSignalingClientDisconnectError
-              ? _value.lastSignalingClientDisconnectError
-              : lastSignalingClientDisconnectError,
+      lastSignalingClientConnectError: freezed == lastSignalingClientConnectError
+          ? _value.lastSignalingClientConnectError
+          : lastSignalingClientConnectError,
+      lastSignalingClientDisconnectError: freezed == lastSignalingClientDisconnectError
+          ? _value.lastSignalingClientDisconnectError
+          : lastSignalingClientDisconnectError,
       lastSignalingDisconnectCode: freezed == lastSignalingDisconnectCode
           ? _value.lastSignalingDisconnectCode
           : lastSignalingDisconnectCode // ignore: cast_nullable_to_non_nullable
@@ -9685,16 +8159,12 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CallState'))
-      ..add(DiagnosticsProperty(
-          'currentConnectivityResult', currentConnectivityResult))
+      ..add(DiagnosticsProperty('currentConnectivityResult', currentConnectivityResult))
       ..add(DiagnosticsProperty('registrationStatus', registrationStatus))
       ..add(DiagnosticsProperty('signalingClientStatus', signalingClientStatus))
-      ..add(DiagnosticsProperty(
-          'lastSignalingClientConnectError', lastSignalingClientConnectError))
-      ..add(DiagnosticsProperty('lastSignalingClientDisconnectError',
-          lastSignalingClientDisconnectError))
-      ..add(DiagnosticsProperty(
-          'lastSignalingDisconnectCode', lastSignalingDisconnectCode))
+      ..add(DiagnosticsProperty('lastSignalingClientConnectError', lastSignalingClientConnectError))
+      ..add(DiagnosticsProperty('lastSignalingClientDisconnectError', lastSignalingClientDisconnectError))
+      ..add(DiagnosticsProperty('lastSignalingDisconnectCode', lastSignalingDisconnectCode))
       ..add(DiagnosticsProperty('linesCount', linesCount))
       ..add(DiagnosticsProperty('activeCalls', activeCalls))
       ..add(DiagnosticsProperty('minimized', minimized))
@@ -9706,29 +8176,21 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallStateImpl &&
-            (identical(other.currentConnectivityResult,
-                    currentConnectivityResult) ||
+            (identical(other.currentConnectivityResult, currentConnectivityResult) ||
                 other.currentConnectivityResult == currentConnectivityResult) &&
             (identical(other.registrationStatus, registrationStatus) ||
                 other.registrationStatus == registrationStatus) &&
             (identical(other.signalingClientStatus, signalingClientStatus) ||
                 other.signalingClientStatus == signalingClientStatus) &&
-            const DeepCollectionEquality().equals(
-                other.lastSignalingClientConnectError,
-                lastSignalingClientConnectError) &&
-            const DeepCollectionEquality().equals(
-                other.lastSignalingClientDisconnectError,
-                lastSignalingClientDisconnectError) &&
-            (identical(other.lastSignalingDisconnectCode,
-                    lastSignalingDisconnectCode) ||
-                other.lastSignalingDisconnectCode ==
-                    lastSignalingDisconnectCode) &&
-            (identical(other.linesCount, linesCount) ||
-                other.linesCount == linesCount) &&
             const DeepCollectionEquality()
-                .equals(other._activeCalls, _activeCalls) &&
-            (identical(other.minimized, minimized) ||
-                other.minimized == minimized) &&
+                .equals(other.lastSignalingClientConnectError, lastSignalingClientConnectError) &&
+            const DeepCollectionEquality()
+                .equals(other.lastSignalingClientDisconnectError, lastSignalingClientDisconnectError) &&
+            (identical(other.lastSignalingDisconnectCode, lastSignalingDisconnectCode) ||
+                other.lastSignalingDisconnectCode == lastSignalingDisconnectCode) &&
+            (identical(other.linesCount, linesCount) || other.linesCount == linesCount) &&
+            const DeepCollectionEquality().equals(other._activeCalls, _activeCalls) &&
+            (identical(other.minimized, minimized) || other.minimized == minimized) &&
             (identical(other.speaker, speaker) || other.speaker == speaker));
   }
 
@@ -9789,8 +8251,7 @@ abstract class _CallState extends CallState {
   bool? get speaker;
   @override
   @JsonKey(ignore: true)
-  _$$CallStateImplCopyWith<_$CallStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$CallStateImplCopyWith<_$CallStateImpl> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -9809,42 +8270,42 @@ mixin _$ActiveCall {
   DateTime? get acceptedTime => throw _privateConstructorUsedError;
   DateTime? get hungUpTime => throw _privateConstructorUsedError;
   Transfer? get transfer => throw _privateConstructorUsedError;
-  Object? get failure => throw _privateConstructorUsedError;
-  RTCVideoRenderers get renderers => throw _privateConstructorUsedError;
+  Object? get failure => throw _privateConstructorUsedError; // required RTCVideoRenderers renderers,
+  MediaStream? get localStream => throw _privateConstructorUsedError;
+  MediaStream? get remoteStream => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $ActiveCallCopyWith<ActiveCall> get copyWith =>
-      throw _privateConstructorUsedError;
+  $ActiveCallCopyWith<ActiveCall> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $ActiveCallCopyWith<$Res> {
-  factory $ActiveCallCopyWith(
-          ActiveCall value, $Res Function(ActiveCall) then) =
+  factory $ActiveCallCopyWith(ActiveCall value, $Res Function(ActiveCall) then) =
       _$ActiveCallCopyWithImpl<$Res, ActiveCall>;
   @useResult
-  $Res call(
-      {Direction direction,
-      int line,
-      String callId,
-      CallkeepHandle handle,
-      String? displayName,
-      bool video,
-      bool? frontCamera,
-      bool held,
-      bool muted,
-      bool updating,
-      DateTime createdTime,
-      DateTime? acceptedTime,
-      DateTime? hungUpTime,
-      Transfer? transfer,
-      Object? failure,
-      RTCVideoRenderers renderers});
+  $Res call({
+    Direction direction,
+    int line,
+    String callId,
+    CallkeepHandle handle,
+    String? displayName,
+    bool video,
+    bool? frontCamera,
+    bool held,
+    bool muted,
+    bool updating,
+    DateTime createdTime,
+    DateTime? acceptedTime,
+    DateTime? hungUpTime,
+    Transfer? transfer,
+    Object? failure,
+    MediaStream? localStream,
+    MediaStream? remoteStream,
+  });
 }
 
 /// @nodoc
-class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
-    implements $ActiveCallCopyWith<$Res> {
+class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall> implements $ActiveCallCopyWith<$Res> {
   _$ActiveCallCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -9870,7 +8331,8 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
     Object? hungUpTime = freezed,
     Object? transfer = freezed,
     Object? failure = freezed,
-    Object? renderers = null,
+    Object? localStream = freezed,
+    Object? remoteStream = freezed,
   }) {
     return _then(_value.copyWith(
       direction: null == direction
@@ -9930,19 +8392,21 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
           : transfer // ignore: cast_nullable_to_non_nullable
               as Transfer?,
       failure: freezed == failure ? _value.failure : failure,
-      renderers: null == renderers
-          ? _value.renderers
-          : renderers // ignore: cast_nullable_to_non_nullable
-              as RTCVideoRenderers,
+      localStream: freezed == localStream
+          ? _value.localStream
+          : localStream // ignore: cast_nullable_to_non_nullable
+              as MediaStream?,
+      remoteStream: freezed == remoteStream
+          ? _value.remoteStream
+          : remoteStream // ignore: cast_nullable_to_non_nullable
+              as MediaStream?,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$ActiveCallImplCopyWith<$Res>
-    implements $ActiveCallCopyWith<$Res> {
-  factory _$$ActiveCallImplCopyWith(
-          _$ActiveCallImpl value, $Res Function(_$ActiveCallImpl) then) =
+abstract class _$$ActiveCallImplCopyWith<$Res> implements $ActiveCallCopyWith<$Res> {
+  factory _$$ActiveCallImplCopyWith(_$ActiveCallImpl value, $Res Function(_$ActiveCallImpl) then) =
       __$$ActiveCallImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -9962,16 +8426,14 @@ abstract class _$$ActiveCallImplCopyWith<$Res>
       DateTime? hungUpTime,
       Transfer? transfer,
       Object? failure,
-      RTCVideoRenderers renderers});
+      MediaStream? localStream,
+      MediaStream? remoteStream});
 }
 
 /// @nodoc
-class __$$ActiveCallImplCopyWithImpl<$Res>
-    extends _$ActiveCallCopyWithImpl<$Res, _$ActiveCallImpl>
+class __$$ActiveCallImplCopyWithImpl<$Res> extends _$ActiveCallCopyWithImpl<$Res, _$ActiveCallImpl>
     implements _$$ActiveCallImplCopyWith<$Res> {
-  __$$ActiveCallImplCopyWithImpl(
-      _$ActiveCallImpl _value, $Res Function(_$ActiveCallImpl) _then)
-      : super(_value, _then);
+  __$$ActiveCallImplCopyWithImpl(_$ActiveCallImpl _value, $Res Function(_$ActiveCallImpl) _then) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -9991,7 +8453,8 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
     Object? hungUpTime = freezed,
     Object? transfer = freezed,
     Object? failure = freezed,
-    Object? renderers = null,
+    Object? localStream = freezed,
+    Object? remoteStream = freezed,
   }) {
     return _then(_$ActiveCallImpl(
       direction: null == direction
@@ -10051,10 +8514,14 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
           : transfer // ignore: cast_nullable_to_non_nullable
               as Transfer?,
       failure: freezed == failure ? _value.failure : failure,
-      renderers: null == renderers
-          ? _value.renderers
-          : renderers // ignore: cast_nullable_to_non_nullable
-              as RTCVideoRenderers,
+      localStream: freezed == localStream
+          ? _value.localStream
+          : localStream // ignore: cast_nullable_to_non_nullable
+              as MediaStream?,
+      remoteStream: freezed == remoteStream
+          ? _value.remoteStream
+          : remoteStream // ignore: cast_nullable_to_non_nullable
+              as MediaStream?,
     ));
   }
 }
@@ -10078,7 +8545,8 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
       this.hungUpTime,
       this.transfer,
       this.failure,
-      required this.renderers})
+      this.localStream,
+      this.remoteStream})
       : super._();
 
   @override
@@ -10115,12 +8583,15 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
   final Transfer? transfer;
   @override
   final Object? failure;
+// required RTCVideoRenderers renderers,
   @override
-  final RTCVideoRenderers renderers;
+  final MediaStream? localStream;
+  @override
+  final MediaStream? remoteStream;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, displayName: $displayName, video: $video, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, renderers: $renderers)';
+    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, displayName: $displayName, video: $video, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
   }
 
   @override
@@ -10143,7 +8614,8 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('hungUpTime', hungUpTime))
       ..add(DiagnosticsProperty('transfer', transfer))
       ..add(DiagnosticsProperty('failure', failure))
-      ..add(DiagnosticsProperty('renderers', renderers));
+      ..add(DiagnosticsProperty('localStream', localStream))
+      ..add(DiagnosticsProperty('remoteStream', remoteStream));
   }
 
   @override
@@ -10151,31 +8623,23 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ActiveCallImpl &&
-            (identical(other.direction, direction) ||
-                other.direction == direction) &&
+            (identical(other.direction, direction) || other.direction == direction) &&
             (identical(other.line, line) || other.line == line) &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.handle, handle) || other.handle == handle) &&
-            (identical(other.displayName, displayName) ||
-                other.displayName == displayName) &&
+            (identical(other.displayName, displayName) || other.displayName == displayName) &&
             (identical(other.video, video) || other.video == video) &&
-            (identical(other.frontCamera, frontCamera) ||
-                other.frontCamera == frontCamera) &&
+            (identical(other.frontCamera, frontCamera) || other.frontCamera == frontCamera) &&
             (identical(other.held, held) || other.held == held) &&
             (identical(other.muted, muted) || other.muted == muted) &&
-            (identical(other.updating, updating) ||
-                other.updating == updating) &&
-            (identical(other.createdTime, createdTime) ||
-                other.createdTime == createdTime) &&
-            (identical(other.acceptedTime, acceptedTime) ||
-                other.acceptedTime == acceptedTime) &&
-            (identical(other.hungUpTime, hungUpTime) ||
-                other.hungUpTime == hungUpTime) &&
-            (identical(other.transfer, transfer) ||
-                other.transfer == transfer) &&
+            (identical(other.updating, updating) || other.updating == updating) &&
+            (identical(other.createdTime, createdTime) || other.createdTime == createdTime) &&
+            (identical(other.acceptedTime, acceptedTime) || other.acceptedTime == acceptedTime) &&
+            (identical(other.hungUpTime, hungUpTime) || other.hungUpTime == hungUpTime) &&
+            (identical(other.transfer, transfer) || other.transfer == transfer) &&
             const DeepCollectionEquality().equals(other.failure, failure) &&
-            (identical(other.renderers, renderers) ||
-                other.renderers == renderers));
+            (identical(other.localStream, localStream) || other.localStream == localStream) &&
+            (identical(other.remoteStream, remoteStream) || other.remoteStream == remoteStream));
   }
 
   @override
@@ -10196,7 +8660,8 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
       hungUpTime,
       transfer,
       const DeepCollectionEquality().hash(failure),
-      renderers);
+      localStream,
+      remoteStream);
 
   @JsonKey(ignore: true)
   @override
@@ -10206,23 +8671,25 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
 }
 
 abstract class _ActiveCall extends ActiveCall {
-  factory _ActiveCall(
-      {required final Direction direction,
-      required final int line,
-      required final String callId,
-      required final CallkeepHandle handle,
-      final String? displayName,
-      required final bool video,
-      final bool? frontCamera,
-      final bool held,
-      final bool muted,
-      final bool updating,
-      required final DateTime createdTime,
-      final DateTime? acceptedTime,
-      final DateTime? hungUpTime,
-      final Transfer? transfer,
-      final Object? failure,
-      required final RTCVideoRenderers renderers}) = _$ActiveCallImpl;
+  factory _ActiveCall({
+    required final Direction direction,
+    required final int line,
+    required final String callId,
+    required final CallkeepHandle handle,
+    final String? displayName,
+    required final bool video,
+    final bool? frontCamera,
+    final bool held,
+    final bool muted,
+    final bool updating,
+    required final DateTime createdTime,
+    final DateTime? acceptedTime,
+    final DateTime? hungUpTime,
+    final Transfer? transfer,
+    final Object? failure,
+    final MediaStream? localStream,
+    final MediaStream? remoteStream,
+  }) = _$ActiveCallImpl;
   _ActiveCall._() : super._();
 
   @override
@@ -10255,10 +8722,11 @@ abstract class _ActiveCall extends ActiveCall {
   Transfer? get transfer;
   @override
   Object? get failure;
+  @override // required RTCVideoRenderers renderers,
+  MediaStream? get localStream;
   @override
-  RTCVideoRenderers get renderers;
+  MediaStream? get remoteStream;
   @override
   @JsonKey(ignore: true)
-  _$$ActiveCallImplCopyWith<_$ActiveCallImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$ActiveCallImplCopyWith<_$ActiveCallImpl> get copyWith => throw _privateConstructorUsedError;
 }
