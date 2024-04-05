@@ -596,4 +596,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get validationBlankError => 'Please enter a value';
+
+  @override
+  String get autoprovision_ReloginDialog_title => 'Relogin Confirmation';
+
+  @override
+  String get autoprovision_ReloginDialog_text => 'Do you want to replace the current session with a new one?';
+
+  @override
+  String get autoprovision_ReloginDialog_confirm => 'Confirm';
+
+  @override
+  String get autoprovision_ReloginDialog_decline => 'Decline';
 }

@@ -457,5 +457,13 @@
   "underDevelopment": "This page is under development.",
   "@underDevelopment": {},
   "validationBlankError": "Please enter a value",
-  "@validationBlankError": {}
+  "@validationBlankError": {},
+  "autoprovision_ReloginDialog_title": "Relogin Confirmation",
+  "@autoprovision_ReloginDialog_title": {},
+  "autoprovision_ReloginDialog_text": "Do you want to replace the current session with a new one?",
+  "@autoprovision_ReloginDialog_text": {},
+  "autoprovision_ReloginDialog_confirm": "Confirm",
+  "@autoprovision_ReloginDialog_confirm": {},
+  "autoprovision_ReloginDialog_decline": "Decline",
+  "@autoprovision_ReloginDialog_decline": {}
 }

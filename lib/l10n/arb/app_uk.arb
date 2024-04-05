@@ -457,5 +457,14 @@
   "underDevelopment": "Ця сторінка знаходиться в розробці.",
   "@underDevelopment": {},
   "validationBlankError": "Будь ласка, введіть значення",
-  "@validationBlankError": {}
+  "@validationBlankError": {},
+  "@validationBlankError": {},
+  "autoprovision_ReloginDialog_title": "Підтвердження повторного входу",
+  "@autoprovision_ReloginDialog_title": {},
+  "autoprovision_ReloginDialog_text": "Бажаєте замінити поточний сеанс на новий?",
+  "@autoprovision_ReloginDialog_text": {},
+  "autoprovision_ReloginDialog_confirm": "Підтвердити",
+  "@autoprovision_ReloginDialog_confirm": {},
+  "autoprovision_ReloginDialog_decline": "Відхилити",
+  "@autoprovision_ReloginDialog_decline": {}
 }

@@ -13,3 +13,4 @@ export 'push_tokens/push_token.dart';
 export 'recent/recent.dart';
 export 'recents/recents.dart';
 export 'settings/settings.dart';
+export 'autoprovision/autoprovision.dart';
