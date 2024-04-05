@@ -688,7 +688,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         displayName: event.callerDisplayName,
         video: video,
         createdTime: clock.now(),
-        // renderers: RTCVideoRenderers()..initialize(),
       )));
     }
 
