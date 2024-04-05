@@ -47,7 +47,7 @@ dependencies:
   google_fonts: ^6.1.0
   intl: any
   json_annotation: ^4.8.1
-  just_audio: ^0.9.36
+  soundpool: ^2.4.1
   linkify: ^5.0.0
   logging: ^1.2.0
   logging_appenders: ^1.2.0

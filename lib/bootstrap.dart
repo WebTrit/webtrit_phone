@@ -13,6 +13,7 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/app/app_bloc_observer.dart';
+import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -49,6 +50,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       await PackageInfo.init();
       await SecureStorage.init();
       await AppThemes.init();
+      await AppSound.init(outgoingCallRingAsset: Assets.ringtones.outgoingCall1);
 
       if (Platform.isAndroid) {
         WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());

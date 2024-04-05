@@ -10,11 +10,11 @@ import 'package:clock/clock.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+import 'package:webtrit_phone/data/app_sound.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 import 'package:webtrit_phone/app/assets.gen.dart';
@@ -55,7 +55,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   final _peerConnectionCompleters = <String, Completer<RTCPeerConnection>>{};
 
-  final _audioPlayer = AudioPlayer();
+  final _appSound = AppSound();
 
   CallBloc({
     required this.recentsRepository,
@@ -153,7 +153,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _signalingClientReconnectTimer?.cancel();
     await _signalingClient?.disconnect();
 
-    await _audioPlayer.dispose();
+    await _appSound.stopOutgoingCall();
 
     await super.close();
   }
@@ -649,8 +649,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final error = await callkeep.reportNewIncomingCall(
       event.callId,
       handle,
-      event.callerDisplayName,
-      video,
+      displayName: event.callerDisplayName,
+      hasVideo: video,
     );
 
     if (error != null) {
@@ -843,9 +843,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     await callkeep.reportUpdateCall(
       event.callId,
-      handle,
-      event.callerDisplayName,
-      video,
+      handle: handle,
+      displayName: event.callerDisplayName,
+      hasVideo: video,
     );
 
     emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
@@ -963,8 +963,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final error = await callkeep.startCall(
       callId,
       event.handle,
-      event.displayName,
-      event.video,
+      displayNameOrContactIdentifier: event.displayName,
+      hasVideo: event.video,
     );
     if (error != null) {
       if (error == CallkeepCallRequestError.emergencyNumber) {
@@ -1011,7 +1011,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallControlEventSetHeld event,
     Emitter<CallState> emit,
   ) async {
-    final error = await callkeep.setHeld(event.callId, event.onHold);
+    final error = await callkeep.setHeld(event.callId, onHold: event.onHold);
     if (error != null) {
       _logger.warning('__onCallControlEventSetHeld error: $error');
     }
@@ -1021,7 +1021,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallControlEventSetMuted event,
     Emitter<CallState> emit,
   ) async {
-    final error = await callkeep.setMuted(event.callId, event.muted);
+    final error = await callkeep.setMuted(event.callId, muted: event.muted);
     if (error != null) {
       _logger.warning('__onCallControlEventSetMuted error: $error');
     }
@@ -1073,7 +1073,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     await state.performOnActiveCall(event.callId, (activeCall) async {
       if (Platform.isAndroid) {
-        callkeep.setSpeaker(event.callId, event.enabled);
+        callkeep.setSpeaker(event.callId, enabled: event.enabled);
       } else if (Platform.isIOS) {
         await Helper.setSpeakerphoneOn(event.enabled);
       }
@@ -1934,22 +1934,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> _ringtoneOutgoingPlay() async {
-    // TODO: Consider handling this functionality on the callkeep side due to known exceptions on Android.
-    if (Platform.isAndroid) {
-      return;
-    } else {
-      await _audioPlayer.setAsset(Assets.ringtones.outgoingCall1);
-      await _audioPlayer.setLoopMode(LoopMode.one);
-      _audioPlayer.play();
+    try {
+      await _appSound.playOutgoingCall();
+    } catch (e) {
+      _logger.info('_ringtoneOutgoingPlay: $e');
     }
   }
 
   Future<void> _ringtoneStop() async {
-    // TODO: Observing frequent issues with call hang-ups and resetting, possibly due to blocking methods in this function.
-    if (Platform.isAndroid) {
-      return;
-    } else {
-      await _audioPlayer.stop();
+    try {
+      await _appSound.stopOutgoingCall();
+    } catch (e) {
+      _logger.info('_ringtoneStop: $e');
     }
   }
 
