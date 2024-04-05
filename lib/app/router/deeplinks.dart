@@ -42,3 +42,15 @@ class HandleAutoprovision implements DeepLinkHandler {
 
   bool get _isAutoprovision => deepLink.path.startsWith(kAutoprovisionRout);
 }
+
+class HandleReturnToMain implements DeepLinkHandler {
+  HandleReturnToMain(this.deepLink);
+
+  final PlatformDeepLink deepLink;
+
+  @override
+  DeepLink? handle() => _isMain && !_isInitial ? DeepLink.none : null;
+
+  bool get _isMain => deepLink.path == '/';
+  bool get _isInitial => deepLink.initial;
+}
