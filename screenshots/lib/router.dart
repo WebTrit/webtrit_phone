@@ -1,15 +1,15 @@
+import 'package:flutter/material.dart';
+
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:screenshots/screenshots/call_screen_screenshot.dart';
-import 'package:screenshots/screenshots/login_mode_select_screen_screenshot.dart';
-import 'package:screenshots/screenshots/main_screen_screenshot.dart';
-import 'package:screenshots/screenshots/setting_screen_screenshot.dart';
-import 'package:screenshots/widgets/screenshot_app.dart';
+
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/environment_config.dart';
-import 'package:webtrit_phone/features/main/models/main_flavor.dart';
+import 'package:webtrit_phone/features/main/models/models.dart';
+
+import 'package:screenshots/screenshots/screenshots.dart';
+import 'package:screenshots/widgets/widgets.dart';
 
 part 'router.gr.dart';
 
@@ -25,6 +25,7 @@ class AppRouter extends _$AppRouter {
 @RoutePage()
 class IndexInputScreen extends StatefulWidget {
   final int index;
+
   const IndexInputScreen({super.key, @PathParam(_kInitialIndexParameterName) required this.index});
 
   @override
