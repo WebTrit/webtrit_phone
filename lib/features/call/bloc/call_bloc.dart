@@ -993,6 +993,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     final error = await callkeep.endCall(event.callId);
+    // Handle the case where the local connection is no longer available,
+    // sending the call completion event directly to the signaling.
+    if (error == CallkeepCallRequestError.unknownCallUuid) {
+      add(_CallPerformEvent.ended(event.callId));
+    }
     if (error != null) {
       _logger.warning('__onCallControlEventEnded error: $error');
     }
