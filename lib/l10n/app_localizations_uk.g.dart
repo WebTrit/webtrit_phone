@@ -461,6 +461,15 @@ class AppLocalizationsUk extends AppLocalizations {
   String get permission_Text_description => 'Для забезпечення найкращого досвіду користувача програма потребує наступні дозволи: мікрофон для аудіодзвінків, камера для відеодзвінків та доступ до контактів для спрощення їх використання в програмі.\n\nДозволи можуть бути змінені у майбутньому.';
 
   @override
+  String get permission_miui_Text_description => 'Щоб забезпечити найкращу взаємодію з користувачем, програмі потрібно вручну надати такі дозволи:\n1. Перейдіть до \"Налаштування застосунку\" >> \"Сповіщення\".\n2. Знайдіть і ввімкніть \"Сповіщення на екрані блокування\".\n\nДозволи можна змінити будь-коли в майбутньому.';
+
+  @override
+  String get permission_miui_Button_toSettings => 'Відкрити налаштування застосунку';
+
+  @override
+  String get permission_miui_Button_gotIt => 'Зрозуміло';
+
+  @override
   String user_agreement_checkbox_text(String url) {
     return 'Я прочитав і погоджуюсь з $url, включаючи умови користування.';
   }

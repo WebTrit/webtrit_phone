@@ -957,6 +957,24 @@ abstract class AppLocalizations {
   /// **'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.'**
   String get permission_Text_description;
 
+  /// No description provided for @permission_miui_Text_description.
+  ///
+  /// In en, this message translates to:
+  /// **'To ensure the best user experience, the app needs to be granted the following permissions manually:\n1. Go to \"App settings\" >> \"Notifications\".\n2. Find and turn on \"Lockscreen notifications\".\n\nPermissions could be changed at any time in the future.'**
+  String get permission_miui_Text_description;
+
+  /// No description provided for @permission_miui_Button_toSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open app Settings'**
+  String get permission_miui_Button_toSettings;
+
+  /// No description provided for @permission_miui_Button_gotIt.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get permission_miui_Button_gotIt;
+
   /// No description provided for @user_agreement_checkbox_text.
   ///
   /// In en, this message translates to:

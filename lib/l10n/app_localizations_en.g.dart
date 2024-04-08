@@ -461,6 +461,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get permission_Text_description => 'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.';
 
   @override
+  String get permission_miui_Text_description => 'To ensure the best user experience, the app needs to be granted the following permissions manually:\n1. Go to \"App settings\" >> \"Notifications\".\n2. Find and turn on \"Lockscreen notifications\".\n\nPermissions could be changed at any time in the future.';
+
+  @override
+  String get permission_miui_Button_toSettings => 'Open app Settings';
+
+  @override
+  String get permission_miui_Button_gotIt => 'Got it';
+
+  @override
   String user_agreement_checkbox_text(String url) {
     return 'I have read the $url and consent to its terms.';
   }

@@ -358,6 +358,12 @@
   "@permission_Button_request": {},
   "permission_Text_description": "Для забезпечення найкращого досвіду користувача програма потребує наступні дозволи: мікрофон для аудіодзвінків, камера для відеодзвінків та доступ до контактів для спрощення їх використання в програмі.\n\nДозволи можуть бути змінені у майбутньому.",
   "@permission_Text_description": {},
+  "permission_miui_Text_description": "Щоб забезпечити найкращу взаємодію з користувачем, програмі потрібно вручну надати такі дозволи:\n1. Перейдіть до \"Налаштування застосунку\" >> \"Сповіщення\".\n2. Знайдіть і ввімкніть \"Сповіщення на екрані блокування\".\n\nДозволи можна змінити будь-коли в майбутньому.",
+  "@permission_miui_Text_description": {},
+  "permission_miui_Button_toSettings": "Відкрити налаштування застосунку",
+  "@permission_miui_Button_toSettings": {},
+  "permission_miui_Button_gotIt": "Зрозуміло",
+  "@permission_miui_Button_gotIt": {},
   "user_agreement_checkbox_text": "Я прочитав і погоджуюсь з {url}, включаючи умови користування.",
   "@user_agreement_checkbox_text": {
     "placeholders": {

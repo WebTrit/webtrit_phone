@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 class MiuiPermissionTipsScreen extends StatelessWidget {
@@ -26,7 +27,7 @@ class MiuiPermissionTipsScreen extends StatelessWidget {
           ),
           const SizedBox(height: kInset * 2),
           Text(
-            "Miui permission tip description",
+            context.l10n.permission_miui_Text_description,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyLarge,
           ),
@@ -35,13 +36,13 @@ class MiuiPermissionTipsScreen extends StatelessWidget {
           OutlinedButton(
             onPressed: onGoToAppSettings,
             style: elevatedButtonStyles?.primary,
-            child: Text("Go to app settings"),
+            child: Text(context.l10n.permission_miui_Button_toSettings),
           ),
           const SizedBox(height: kInset),
           OutlinedButton(
             onPressed: () => Navigator.of(context).pop(),
             style: elevatedButtonStyles?.primary,
-            child: Text("Got it"),
+            child: Text(context.l10n.permission_miui_Button_gotIt),
           ),
         ],
       ),
