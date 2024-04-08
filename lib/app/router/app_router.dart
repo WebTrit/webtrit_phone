@@ -7,6 +7,7 @@ import 'package:webtrit_phone/app/router/app_shell.dart';
 import 'package:webtrit_phone/app/router/main_shell.dart';
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 
 import 'deeplinks.dart';
@@ -35,6 +36,7 @@ class AppRouter extends _$AppRouter {
   String? get coreUrl => _appBloc.state.coreUrl;
   String? get token => _appBloc.state.token;
   bool get appPermissionsDenied => _appPermissions.isDenied;
+  bool get appUserAgreementUnaccepted => _appBloc.state.userAgreementAccepted != true;
 
   @override
   List<AutoRoute> get routes => [
@@ -101,6 +103,11 @@ class AppRouter extends _$AppRouter {
               page: PermissionsScreenPageRoute.page,
               onNavigation: onPermissionsScreenPageRouteGuardNavigation,
               path: 'permissions',
+            ),
+            AutoRoute.guarded(
+              page: UserAgreementScreenPageRoute.page,
+              onNavigation: onUserAgreementScreenPageRouteGuardNavigation,
+              path: 'user-agreement',
             ),
             AutoRoute.guarded(
               page: AutoprovisionScreenPageRoute.page,
@@ -201,10 +208,6 @@ class AppRouter extends _$AppRouter {
                       path: 'network',
                     ),
                     AutoRoute(
-                      page: TermsConditionsScreenPageRoute.page,
-                      path: 'terms-conditions',
-                    ),
-                    AutoRoute(
                       page: ThemeModeScreenPageRoute.page,
                       path: 'theme-mode',
                     ),
@@ -215,6 +218,10 @@ class AppRouter extends _$AppRouter {
                   ],
                 ),
               ],
+            ),
+            AutoRoute(
+              page: TermsConditionsScreenPageRoute.page,
+              path: 'terms-conditions',
             ),
           ],
         ),
@@ -236,9 +243,20 @@ class AppRouter extends _$AppRouter {
   void onPermissionsScreenPageRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
     _logger.fine(_onNavigationLoggerMessage('onPermissionsScreenPageRouteGuardNavigation', resolver));
 
-    final appPermissionsDenied = _appPermissions.isDenied;
-
     if (appPermissionsDenied) {
+      resolver.next(true);
+    } else {
+      resolver.next(false);
+      router.replaceAll(
+        [const MainShellRoute()],
+      );
+    }
+  }
+
+  void onUserAgreementScreenPageRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
+    _logger.fine(_onNavigationLoggerMessage('onPermissionsScreenPageRouteGuardNavigation', resolver));
+
+    if (appUserAgreementUnaccepted) {
       resolver.next(true);
     } else {
       resolver.next(false);
@@ -251,8 +269,16 @@ class AppRouter extends _$AppRouter {
   void onMainShellRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
     _logger.fine(_onNavigationLoggerMessage('onMainShellRouteGuardNavigation', resolver));
 
+    const appTermsAndConditionsUrl = EnvironmentConfig.APP_TERMS_AND_CONDITIONS_URL;
+    final hasToAcceptUserAgreement = appUserAgreementUnaccepted && appTermsAndConditionsUrl?.isNotEmpty == true;
+
     if (coreUrl != null && token != null) {
-      if (appPermissionsDenied) {
+      if (hasToAcceptUserAgreement) {
+        resolver.next(false);
+        router.replaceAll(
+          [const UserAgreementScreenPageRoute()],
+        );
+      } else if (appPermissionsDenied) {
         resolver.next(false);
         router.replaceAll(
           [const PermissionsScreenPageRoute()],

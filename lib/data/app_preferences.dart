@@ -13,7 +13,7 @@ class AppPreferences {
   static const _kActiveMainFlavorKey = 'active-main-flavor';
   static const _kActiveRecentsVisibilityFilterKey = 'active-recents-visibility-filter';
   static const _kActiveContactSourceTypeKey = 'active-contact-source-type';
-  static const _kUserAgreement = 'user-agreement';
+  static const _kUserAgreementAcceptedKey = 'user-agreement-accepted';
 
   static late AppPreferences _instance;
 
@@ -119,7 +119,7 @@ class AppPreferences {
   Future<bool> setActiveContactSourceType(ContactSourceType value) =>
       _sharedPreferences.setString(_kActiveContactSourceTypeKey, value.name);
 
-  Future<bool> setUserAgreement(bool value) => _sharedPreferences.setBool(_kUserAgreement, value);
+  Future<bool> setUserAgreementAccepted(bool value) => _sharedPreferences.setBool(_kUserAgreementAcceptedKey, value);
 
-  bool getUserAgreement() => _sharedPreferences.getBool(_kUserAgreement) ?? false;
+  bool getUserAgreementAccepted() => _sharedPreferences.getBool(_kUserAgreementAcceptedKey) ?? false;
 }

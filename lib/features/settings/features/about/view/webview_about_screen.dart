@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-
-import '../../../widgets/widgets.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class WebAboutScreen extends StatelessWidget {
   const WebAboutScreen({

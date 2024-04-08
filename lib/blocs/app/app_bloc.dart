@@ -31,12 +31,14 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           themeSettings: appThemes.values.first.settings,
           themeMode: appPreferences.getThemeMode(),
           locale: appPreferences.getLocale(),
+          userAgreementAccepted: appPreferences.getUserAgreementAccepted(),
         )) {
     on<AppLogined>(_onLogined, transformer: sequential());
     on<AppLogouted>(_onLogouted, transformer: sequential());
     on<AppThemeSettingsChanged>(_onThemeSettingsChanged, transformer: droppable());
     on<AppThemeModeChanged>(_onThemeModeChanged, transformer: droppable());
     on<AppLocaleChanged>(_onLocaleChanged, transformer: droppable());
+    on<AppUserAgreementAccepted>(_onUserAgreementAccepted, transformer: droppable());
   }
 
   final AppPreferences appPreferences;
@@ -112,5 +114,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         add(const AppLogouted());
       }
     }
+  }
+
+  void _onUserAgreementAccepted(AppUserAgreementAccepted event, Emitter<AppState> emit) async {
+    await appPreferences.setUserAgreementAccepted(true);
+    emit(state.copyWith(userAgreementAccepted: true));
   }
 }
