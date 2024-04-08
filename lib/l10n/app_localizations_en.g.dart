@@ -462,7 +462,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String user_agreement_checkbox_text(String url) {
-    return 'I have read and agree to the $url, including with terms and conditions.';
+    return 'I have read the $url and consent to its terms.';
   }
 
   @override
@@ -474,7 +474,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get user_agreement_button_text => 'Continue';
 
   @override
-  String get user_agreement_agrement_link => 'agreement';
+  String get user_agreement_agrement_link => 'terms and condition of agreement';
 
   @override
   String recents_BodyCenter_empty(Object filter) {

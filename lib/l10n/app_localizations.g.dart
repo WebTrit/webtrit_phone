@@ -960,7 +960,7 @@ abstract class AppLocalizations {
   /// No description provided for @user_agreement_checkbox_text.
   ///
   /// In en, this message translates to:
-  /// **'I have read and agree to the {url}, including with terms and conditions.'**
+  /// **'I have read the {url} and consent to its terms.'**
   String user_agreement_checkbox_text(String url);
 
   /// No description provided for @user_agreement_description.
@@ -978,7 +978,7 @@ abstract class AppLocalizations {
   /// No description provided for @user_agreement_agrement_link.
   ///
   /// In en, this message translates to:
-  /// **'agreement'**
+  /// **'terms and condition of agreement'**
   String get user_agreement_agrement_link;
 
   /// No description provided for @recents_BodyCenter_empty.
