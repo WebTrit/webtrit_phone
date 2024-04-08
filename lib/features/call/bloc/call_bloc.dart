@@ -270,7 +270,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         line: _kUndefinedLine,
         callId: event.call!.id,
         handle: CallkeepHandle.number(event.call!.handle),
-        video: false,
+        displayName: event.call?.displayName,
+        video: event.call?.hasVideo ?? false,
         createdTime: DateTime.now(),
       ),
     ));
