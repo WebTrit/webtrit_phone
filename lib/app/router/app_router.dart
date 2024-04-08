@@ -304,6 +304,7 @@ class AppRouter extends _$AppRouter {
     final handlers = <DeepLinkHandler>[
       HandleAndroidBackgroundIncomingCall(deepLink, _appBloc.pendingCallHandler),
       HandleAutoprovision(deepLink),
+      HandleReturnToMain(deepLink),
     ];
 
     for (final handler in handlers) {
