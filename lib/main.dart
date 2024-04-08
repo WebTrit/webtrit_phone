@@ -61,6 +61,11 @@ void main() {
             return AppPermissions();
           },
         ),
+        Provider<PlatformInfo>(
+          create: (context) {
+            return PlatformInfo();
+          },
+        ),
       ],
       child: MultiRepositoryProvider(
         providers: [

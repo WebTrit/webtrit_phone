@@ -17,6 +17,7 @@ class PermissionsScreenPage extends StatelessWidget {
     final provider = BlocProvider(
       create: (context) => PermissionsCubit(
         appPermissions: context.read<AppPermissions>(),
+        platformInfo: context.read<PlatformInfo>(),
       ),
       child: widget,
     );

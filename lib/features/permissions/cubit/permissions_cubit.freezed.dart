@@ -20,6 +20,7 @@ mixin _$PermissionsState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() inProgress,
+    required TResult Function(SubPlatform subPlatform) subPlatformTipNeeded,
     required TResult Function() success,
     required TResult Function(Object error) failure,
   }) =>
@@ -28,6 +29,7 @@ mixin _$PermissionsState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? inProgress,
+    TResult? Function(SubPlatform subPlatform)? subPlatformTipNeeded,
     TResult? Function()? success,
     TResult? Function(Object error)? failure,
   }) =>
@@ -36,6 +38,7 @@ mixin _$PermissionsState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
+    TResult Function(SubPlatform subPlatform)? subPlatformTipNeeded,
     TResult Function()? success,
     TResult Function(Object error)? failure,
     required TResult orElse(),
@@ -45,6 +48,8 @@ mixin _$PermissionsState {
   TResult map<TResult extends Object?>({
     required TResult Function(PermissionsStateInitial value) initial,
     required TResult Function(PermissionsStateInProgress value) inProgress,
+    required TResult Function(PermissionsStateSubPlatformTipNeeded value)
+        subPlatformTipNeeded,
     required TResult Function(PermissionsStateSuccess value) success,
     required TResult Function(PermissionsStateFailure value) failure,
   }) =>
@@ -53,6 +58,8 @@ mixin _$PermissionsState {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(PermissionsStateInitial value)? initial,
     TResult? Function(PermissionsStateInProgress value)? inProgress,
+    TResult? Function(PermissionsStateSubPlatformTipNeeded value)?
+        subPlatformTipNeeded,
     TResult? Function(PermissionsStateSuccess value)? success,
     TResult? Function(PermissionsStateFailure value)? failure,
   }) =>
@@ -61,6 +68,8 @@ mixin _$PermissionsState {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(PermissionsStateInitial value)? initial,
     TResult Function(PermissionsStateInProgress value)? inProgress,
+    TResult Function(PermissionsStateSubPlatformTipNeeded value)?
+        subPlatformTipNeeded,
     TResult Function(PermissionsStateSuccess value)? success,
     TResult Function(PermissionsStateFailure value)? failure,
     required TResult orElse(),
@@ -129,6 +138,7 @@ class _$PermissionsStateInitialImpl implements PermissionsStateInitial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() inProgress,
+    required TResult Function(SubPlatform subPlatform) subPlatformTipNeeded,
     required TResult Function() success,
     required TResult Function(Object error) failure,
   }) {
@@ -140,6 +150,7 @@ class _$PermissionsStateInitialImpl implements PermissionsStateInitial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? inProgress,
+    TResult? Function(SubPlatform subPlatform)? subPlatformTipNeeded,
     TResult? Function()? success,
     TResult? Function(Object error)? failure,
   }) {
@@ -151,6 +162,7 @@ class _$PermissionsStateInitialImpl implements PermissionsStateInitial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
+    TResult Function(SubPlatform subPlatform)? subPlatformTipNeeded,
     TResult Function()? success,
     TResult Function(Object error)? failure,
     required TResult orElse(),
@@ -166,6 +178,8 @@ class _$PermissionsStateInitialImpl implements PermissionsStateInitial {
   TResult map<TResult extends Object?>({
     required TResult Function(PermissionsStateInitial value) initial,
     required TResult Function(PermissionsStateInProgress value) inProgress,
+    required TResult Function(PermissionsStateSubPlatformTipNeeded value)
+        subPlatformTipNeeded,
     required TResult Function(PermissionsStateSuccess value) success,
     required TResult Function(PermissionsStateFailure value) failure,
   }) {
@@ -177,6 +191,8 @@ class _$PermissionsStateInitialImpl implements PermissionsStateInitial {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(PermissionsStateInitial value)? initial,
     TResult? Function(PermissionsStateInProgress value)? inProgress,
+    TResult? Function(PermissionsStateSubPlatformTipNeeded value)?
+        subPlatformTipNeeded,
     TResult? Function(PermissionsStateSuccess value)? success,
     TResult? Function(PermissionsStateFailure value)? failure,
   }) {
@@ -188,6 +204,8 @@ class _$PermissionsStateInitialImpl implements PermissionsStateInitial {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(PermissionsStateInitial value)? initial,
     TResult Function(PermissionsStateInProgress value)? inProgress,
+    TResult Function(PermissionsStateSubPlatformTipNeeded value)?
+        subPlatformTipNeeded,
     TResult Function(PermissionsStateSuccess value)? success,
     TResult Function(PermissionsStateFailure value)? failure,
     required TResult orElse(),
@@ -247,6 +265,7 @@ class _$PermissionsStateInProgressImpl implements PermissionsStateInProgress {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() inProgress,
+    required TResult Function(SubPlatform subPlatform) subPlatformTipNeeded,
     required TResult Function() success,
     required TResult Function(Object error) failure,
   }) {
@@ -258,6 +277,7 @@ class _$PermissionsStateInProgressImpl implements PermissionsStateInProgress {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? inProgress,
+    TResult? Function(SubPlatform subPlatform)? subPlatformTipNeeded,
     TResult? Function()? success,
     TResult? Function(Object error)? failure,
   }) {
@@ -269,6 +289,7 @@ class _$PermissionsStateInProgressImpl implements PermissionsStateInProgress {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
+    TResult Function(SubPlatform subPlatform)? subPlatformTipNeeded,
     TResult Function()? success,
     TResult Function(Object error)? failure,
     required TResult orElse(),
@@ -284,6 +305,8 @@ class _$PermissionsStateInProgressImpl implements PermissionsStateInProgress {
   TResult map<TResult extends Object?>({
     required TResult Function(PermissionsStateInitial value) initial,
     required TResult Function(PermissionsStateInProgress value) inProgress,
+    required TResult Function(PermissionsStateSubPlatformTipNeeded value)
+        subPlatformTipNeeded,
     required TResult Function(PermissionsStateSuccess value) success,
     required TResult Function(PermissionsStateFailure value) failure,
   }) {
@@ -295,6 +318,8 @@ class _$PermissionsStateInProgressImpl implements PermissionsStateInProgress {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(PermissionsStateInitial value)? initial,
     TResult? Function(PermissionsStateInProgress value)? inProgress,
+    TResult? Function(PermissionsStateSubPlatformTipNeeded value)?
+        subPlatformTipNeeded,
     TResult? Function(PermissionsStateSuccess value)? success,
     TResult? Function(PermissionsStateFailure value)? failure,
   }) {
@@ -306,6 +331,8 @@ class _$PermissionsStateInProgressImpl implements PermissionsStateInProgress {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(PermissionsStateInitial value)? initial,
     TResult Function(PermissionsStateInProgress value)? inProgress,
+    TResult Function(PermissionsStateSubPlatformTipNeeded value)?
+        subPlatformTipNeeded,
     TResult Function(PermissionsStateSuccess value)? success,
     TResult Function(PermissionsStateFailure value)? failure,
     required TResult orElse(),
@@ -319,6 +346,171 @@ class _$PermissionsStateInProgressImpl implements PermissionsStateInProgress {
 
 abstract class PermissionsStateInProgress implements PermissionsState {
   const factory PermissionsStateInProgress() = _$PermissionsStateInProgressImpl;
+}
+
+/// @nodoc
+abstract class _$$PermissionsStateSubPlatformTipNeededImplCopyWith<$Res> {
+  factory _$$PermissionsStateSubPlatformTipNeededImplCopyWith(
+          _$PermissionsStateSubPlatformTipNeededImpl value,
+          $Res Function(_$PermissionsStateSubPlatformTipNeededImpl) then) =
+      __$$PermissionsStateSubPlatformTipNeededImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({SubPlatform subPlatform});
+}
+
+/// @nodoc
+class __$$PermissionsStateSubPlatformTipNeededImplCopyWithImpl<$Res>
+    extends _$PermissionsStateCopyWithImpl<$Res,
+        _$PermissionsStateSubPlatformTipNeededImpl>
+    implements _$$PermissionsStateSubPlatformTipNeededImplCopyWith<$Res> {
+  __$$PermissionsStateSubPlatformTipNeededImplCopyWithImpl(
+      _$PermissionsStateSubPlatformTipNeededImpl _value,
+      $Res Function(_$PermissionsStateSubPlatformTipNeededImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? subPlatform = null,
+  }) {
+    return _then(_$PermissionsStateSubPlatformTipNeededImpl(
+      null == subPlatform
+          ? _value.subPlatform
+          : subPlatform // ignore: cast_nullable_to_non_nullable
+              as SubPlatform,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$PermissionsStateSubPlatformTipNeededImpl
+    implements PermissionsStateSubPlatformTipNeeded {
+  const _$PermissionsStateSubPlatformTipNeededImpl(this.subPlatform);
+
+  @override
+  final SubPlatform subPlatform;
+
+  @override
+  String toString() {
+    return 'PermissionsState.subPlatformTipNeeded(subPlatform: $subPlatform)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PermissionsStateSubPlatformTipNeededImpl &&
+            (identical(other.subPlatform, subPlatform) ||
+                other.subPlatform == subPlatform));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, subPlatform);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PermissionsStateSubPlatformTipNeededImplCopyWith<
+          _$PermissionsStateSubPlatformTipNeededImpl>
+      get copyWith => __$$PermissionsStateSubPlatformTipNeededImplCopyWithImpl<
+          _$PermissionsStateSubPlatformTipNeededImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() inProgress,
+    required TResult Function(SubPlatform subPlatform) subPlatformTipNeeded,
+    required TResult Function() success,
+    required TResult Function(Object error) failure,
+  }) {
+    return subPlatformTipNeeded(subPlatform);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? inProgress,
+    TResult? Function(SubPlatform subPlatform)? subPlatformTipNeeded,
+    TResult? Function()? success,
+    TResult? Function(Object error)? failure,
+  }) {
+    return subPlatformTipNeeded?.call(subPlatform);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? inProgress,
+    TResult Function(SubPlatform subPlatform)? subPlatformTipNeeded,
+    TResult Function()? success,
+    TResult Function(Object error)? failure,
+    required TResult orElse(),
+  }) {
+    if (subPlatformTipNeeded != null) {
+      return subPlatformTipNeeded(subPlatform);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(PermissionsStateInitial value) initial,
+    required TResult Function(PermissionsStateInProgress value) inProgress,
+    required TResult Function(PermissionsStateSubPlatformTipNeeded value)
+        subPlatformTipNeeded,
+    required TResult Function(PermissionsStateSuccess value) success,
+    required TResult Function(PermissionsStateFailure value) failure,
+  }) {
+    return subPlatformTipNeeded(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(PermissionsStateInitial value)? initial,
+    TResult? Function(PermissionsStateInProgress value)? inProgress,
+    TResult? Function(PermissionsStateSubPlatformTipNeeded value)?
+        subPlatformTipNeeded,
+    TResult? Function(PermissionsStateSuccess value)? success,
+    TResult? Function(PermissionsStateFailure value)? failure,
+  }) {
+    return subPlatformTipNeeded?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(PermissionsStateInitial value)? initial,
+    TResult Function(PermissionsStateInProgress value)? inProgress,
+    TResult Function(PermissionsStateSubPlatformTipNeeded value)?
+        subPlatformTipNeeded,
+    TResult Function(PermissionsStateSuccess value)? success,
+    TResult Function(PermissionsStateFailure value)? failure,
+    required TResult orElse(),
+  }) {
+    if (subPlatformTipNeeded != null) {
+      return subPlatformTipNeeded(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class PermissionsStateSubPlatformTipNeeded
+    implements PermissionsState {
+  const factory PermissionsStateSubPlatformTipNeeded(
+          final SubPlatform subPlatform) =
+      _$PermissionsStateSubPlatformTipNeededImpl;
+
+  SubPlatform get subPlatform;
+  @JsonKey(ignore: true)
+  _$$PermissionsStateSubPlatformTipNeededImplCopyWith<
+          _$PermissionsStateSubPlatformTipNeededImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -364,6 +556,7 @@ class _$PermissionsStateSuccessImpl implements PermissionsStateSuccess {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() inProgress,
+    required TResult Function(SubPlatform subPlatform) subPlatformTipNeeded,
     required TResult Function() success,
     required TResult Function(Object error) failure,
   }) {
@@ -375,6 +568,7 @@ class _$PermissionsStateSuccessImpl implements PermissionsStateSuccess {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? inProgress,
+    TResult? Function(SubPlatform subPlatform)? subPlatformTipNeeded,
     TResult? Function()? success,
     TResult? Function(Object error)? failure,
   }) {
@@ -386,6 +580,7 @@ class _$PermissionsStateSuccessImpl implements PermissionsStateSuccess {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
+    TResult Function(SubPlatform subPlatform)? subPlatformTipNeeded,
     TResult Function()? success,
     TResult Function(Object error)? failure,
     required TResult orElse(),
@@ -401,6 +596,8 @@ class _$PermissionsStateSuccessImpl implements PermissionsStateSuccess {
   TResult map<TResult extends Object?>({
     required TResult Function(PermissionsStateInitial value) initial,
     required TResult Function(PermissionsStateInProgress value) inProgress,
+    required TResult Function(PermissionsStateSubPlatformTipNeeded value)
+        subPlatformTipNeeded,
     required TResult Function(PermissionsStateSuccess value) success,
     required TResult Function(PermissionsStateFailure value) failure,
   }) {
@@ -412,6 +609,8 @@ class _$PermissionsStateSuccessImpl implements PermissionsStateSuccess {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(PermissionsStateInitial value)? initial,
     TResult? Function(PermissionsStateInProgress value)? inProgress,
+    TResult? Function(PermissionsStateSubPlatformTipNeeded value)?
+        subPlatformTipNeeded,
     TResult? Function(PermissionsStateSuccess value)? success,
     TResult? Function(PermissionsStateFailure value)? failure,
   }) {
@@ -423,6 +622,8 @@ class _$PermissionsStateSuccessImpl implements PermissionsStateSuccess {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(PermissionsStateInitial value)? initial,
     TResult Function(PermissionsStateInProgress value)? inProgress,
+    TResult Function(PermissionsStateSubPlatformTipNeeded value)?
+        subPlatformTipNeeded,
     TResult Function(PermissionsStateSuccess value)? success,
     TResult Function(PermissionsStateFailure value)? failure,
     required TResult orElse(),
@@ -505,6 +706,7 @@ class _$PermissionsStateFailureImpl implements PermissionsStateFailure {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() inProgress,
+    required TResult Function(SubPlatform subPlatform) subPlatformTipNeeded,
     required TResult Function() success,
     required TResult Function(Object error) failure,
   }) {
@@ -516,6 +718,7 @@ class _$PermissionsStateFailureImpl implements PermissionsStateFailure {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? inProgress,
+    TResult? Function(SubPlatform subPlatform)? subPlatformTipNeeded,
     TResult? Function()? success,
     TResult? Function(Object error)? failure,
   }) {
@@ -527,6 +730,7 @@ class _$PermissionsStateFailureImpl implements PermissionsStateFailure {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
+    TResult Function(SubPlatform subPlatform)? subPlatformTipNeeded,
     TResult Function()? success,
     TResult Function(Object error)? failure,
     required TResult orElse(),
@@ -542,6 +746,8 @@ class _$PermissionsStateFailureImpl implements PermissionsStateFailure {
   TResult map<TResult extends Object?>({
     required TResult Function(PermissionsStateInitial value) initial,
     required TResult Function(PermissionsStateInProgress value) inProgress,
+    required TResult Function(PermissionsStateSubPlatformTipNeeded value)
+        subPlatformTipNeeded,
     required TResult Function(PermissionsStateSuccess value) success,
     required TResult Function(PermissionsStateFailure value) failure,
   }) {
@@ -553,6 +759,8 @@ class _$PermissionsStateFailureImpl implements PermissionsStateFailure {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(PermissionsStateInitial value)? initial,
     TResult? Function(PermissionsStateInProgress value)? inProgress,
+    TResult? Function(PermissionsStateSubPlatformTipNeeded value)?
+        subPlatformTipNeeded,
     TResult? Function(PermissionsStateSuccess value)? success,
     TResult? Function(PermissionsStateFailure value)? failure,
   }) {
@@ -564,6 +772,8 @@ class _$PermissionsStateFailureImpl implements PermissionsStateFailure {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(PermissionsStateInitial value)? initial,
     TResult Function(PermissionsStateInProgress value)? inProgress,
+    TResult Function(PermissionsStateSubPlatformTipNeeded value)?
+        subPlatformTipNeeded,
     TResult Function(PermissionsStateSuccess value)? success,
     TResult Function(PermissionsStateFailure value)? failure,
     required TResult orElse(),
