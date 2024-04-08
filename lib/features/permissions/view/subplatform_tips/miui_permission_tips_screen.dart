@@ -27,8 +27,20 @@ class MiuiPermissionTipsScreen extends StatelessWidget {
           ),
           const SizedBox(height: kInset * 2),
           Text(
-            context.l10n.permission_miui_Text_description,
+            context.l10n.permission_miui_Text_heading,
             textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+          const SizedBox(height: kInset / 4),
+          Text(
+            context.l10n.permission_miui_Text_description,
+            textAlign: TextAlign.start,
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+          const SizedBox(height: kInset / 4),
+          Text(
+            context.l10n.permission_miui_Text_trailing,
+            textAlign: TextAlign.start,
             style: Theme.of(context).textTheme.bodyLarge,
           ),
           const Spacer(),

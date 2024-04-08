@@ -957,11 +957,23 @@ abstract class AppLocalizations {
   /// **'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.'**
   String get permission_Text_description;
 
+  /// No description provided for @permission_miui_Text_heading.
+  ///
+  /// In en, this message translates to:
+  /// **'To ensure the best user experience, the app needs to be granted the following permissions manually:'**
+  String get permission_miui_Text_heading;
+
   /// No description provided for @permission_miui_Text_description.
   ///
   /// In en, this message translates to:
-  /// **'To ensure the best user experience, the app needs to be granted the following permissions manually:\n1. Go to \"App settings\" >> \"Notifications\".\n2. Find and turn on \"Lockscreen notifications\".\n\nPermissions could be changed at any time in the future.'**
+  /// **'1. Go to \"App settings\" >> \"Notifications\".\n2. Find and turn on \"Lockscreen notifications\".'**
   String get permission_miui_Text_description;
+
+  /// No description provided for @permission_miui_Text_trailing.
+  ///
+  /// In en, this message translates to:
+  /// **'Permissions could be changed at any time in the future.'**
+  String get permission_miui_Text_trailing;
 
   /// No description provided for @permission_miui_Button_toSettings.
   ///
