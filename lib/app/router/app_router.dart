@@ -108,6 +108,8 @@ class AppRouter extends _$AppRouter {
               page: UserAgreementScreenPageRoute.page,
               onNavigation: onUserAgreementScreenPageRouteGuardNavigation,
               path: 'user-agreement',
+            ),
+            AutoRoute.guarded(
               page: AutoprovisionScreenPageRoute.page,
               onNavigation: onAutoprovisionScreenPageRouteGuardNavigation,
               path: 'autoprovision',
