@@ -1221,23 +1221,35 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       await peerConnection.addTrack(track, localStream);
     });
 
-    final localDescription = await peerConnection.createOffer({});
-    // Need to initiate outgoing call before set localDescription to avoid races
-    // between [OutgoingCallRequest] and [IceTrickleRequest]s.
-    await state.performOnActiveCall(event.callId, (activeCall) {
-      return _signalingClient?.execute(OutgoingCallRequest(
-        transaction: WebtritSignalingClient.generateTransactionId(),
-        line: activeCall.line,
-        callId: activeCall.callId.toString(),
-        number: activeCall.handle.normalizedValue(),
-        jsep: localDescription.toMap(),
-      ));
-    });
-    await peerConnection.setLocalDescription(localDescription);
+    try {
+      final localDescription = await peerConnection.createOffer({});
+      // Need to initiate outgoing call before set localDescription to avoid races
+      // between [OutgoingCallRequest] and [IceTrickleRequest]s.
+      await state.performOnActiveCall(event.callId, (activeCall) {
+        return _signalingClient?.execute(OutgoingCallRequest(
+          transaction: WebtritSignalingClient.generateTransactionId(),
+          line: activeCall.line,
+          callId: activeCall.callId.toString(),
+          number: activeCall.handle.normalizedValue(),
+          jsep: localDescription.toMap(),
+        ));
+      });
+      await peerConnection.setLocalDescription(localDescription);
 
-    _peerConnectionComplete(event.callId, peerConnection);
+      _peerConnectionComplete(event.callId, peerConnection);
 
-    await callkeep.reportConnectingOutgoingCall(event.callId);
+      await callkeep.reportConnectingOutgoingCall(event.callId);
+    } catch (e) {
+      // Handles exceptions during the outgoing call perform event, sends a notification, stops the ringtone, and completes the peer connection with an error.
+      // The specific error "Error setting ICE locally" indicates an issue with ICE (Interactive Connectivity Establishment) negotiation in the WebRTC signaling process.
+      _logger.warning('__onCallPerformEventStarted: $e');
+      notificationsBloc.add(NotificationsMessaged(RawNotification(e.toString())));
+
+      _ringtoneStop();
+      _peerConnectionCompleteError(event.callId, e);
+
+      add(_ResetStateEvent.completeCall(event.callId));
+    }
   }
 
   Future<void> __onCallPerformEventAnswered(
