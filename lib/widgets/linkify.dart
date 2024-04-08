@@ -185,3 +185,50 @@ class TelElement extends LinkableElement {
   @override
   bool equals(other) => other is TelElement && super.equals(other) && other.tel == tel;
 }
+
+final _urlRegex = RegExp(
+  r'^(.*?)((?:https?:\/\/|www\.)[^\s/$.?#].[^\s]*)',
+  caseSensitive: false,
+  dotAll: true,
+);
+
+class UrlReplaceLinkifier extends Linkifier {
+  const UrlReplaceLinkifier(this.replaceText);
+  final String replaceText;
+
+  @override
+  List<LinkifyElement> parse(elements, options) {
+    final list = <LinkifyElement>[];
+
+    for (var element in elements) {
+      if (element is TextElement) {
+        var match = _urlRegex.firstMatch(element.text);
+
+        if (match == null) {
+          list.add(element);
+        } else {
+          final text = element.text.replaceFirst(match.group(0)!, '');
+
+          if (match.group(1)?.isNotEmpty == true) {
+            list.add(TextElement(match.group(1)!));
+          }
+
+          if (match.group(2)?.isNotEmpty == true) {
+            var originalUrl = match.group(2)!;
+            var originText = originalUrl;
+
+            list.add(UrlElement(originalUrl, replaceText, originText));
+          }
+
+          if (text.isNotEmpty) {
+            list.addAll(parse([TextElement(text)], options));
+          }
+        }
+      } else {
+        list.add(element);
+      }
+    }
+
+    return list;
+  }
+}

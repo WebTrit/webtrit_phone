@@ -975,6 +975,12 @@ abstract class AppLocalizations {
   /// **'Continue'**
   String get user_agreement_button_text;
 
+  /// No description provided for @user_agreement_agrement_link.
+  ///
+  /// In en, this message translates to:
+  /// **'agreement'**
+  String get user_agreement_agrement_link;
+
   /// No description provided for @recents_BodyCenter_empty.
   ///
   /// In en, this message translates to:

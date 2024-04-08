@@ -40,6 +40,7 @@ class AgreementCheckbox extends StatelessWidget {
               color: themeData.colorScheme.primary,
               decoration: TextDecoration.underline,
             ),
+            linkifiers: [UrlReplaceLinkifier(context.l10n.user_agreement_agrement_link)],
           ),
         ),
       ],

@@ -374,6 +374,8 @@
   },
   "user_agreement_button_text": "Continue",
   "@user_agreement_button_text": {},
+  "user_agreement_agrement_link": "agreement",
+  "@user_agreement_agrement_link": {},
   "recents_BodyCenter_empty": "Currently you have no {filter} recent calls.",
   "@recents_BodyCenter_empty": {},
   "recents_DeleteConfirmDialog_content": "Are you sure you want to delete the current call log?",

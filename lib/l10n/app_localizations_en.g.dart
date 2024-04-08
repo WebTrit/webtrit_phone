@@ -474,6 +474,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get user_agreement_button_text => 'Continue';
 
   @override
+  String get user_agreement_agrement_link => 'agreement';
+
+  @override
   String recents_BodyCenter_empty(Object filter) {
     return 'Currently you have no $filter recent calls.';
   }

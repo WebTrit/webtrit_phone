@@ -474,6 +474,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get user_agreement_button_text => 'Продовжити';
 
   @override
+  String get user_agreement_agrement_link => 'угодою';
+
+  @override
   String recents_BodyCenter_empty(Object filter) {
     return 'Зараз у вас немає жодних $filter останніх дзвінків.';
   }

@@ -376,6 +376,8 @@
   },
   "user_agreement_button_text": "Продовжити",
   "@user_agreement_button_text": {},
+   "user_agreement_agrement_link": "угодою",
+  "@user_agreement_agrement_link": {},
   "recents_BodyCenter_empty": "Зараз у вас немає жодних {filter} останніх дзвінків.",
   "@recents_BodyCenter_empty": {},
   "recents_DeleteConfirmDialog_content": "Ви впевнені, що хочете видалити поточний журнал дзвінків?",
