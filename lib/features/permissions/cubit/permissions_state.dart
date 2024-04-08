@@ -1,19 +1,12 @@
 part of 'permissions_cubit.dart';
 
-enum PermissionsStatus {
-  initial,
-  inProgress,
-  success,
-  failure;
-
-  bool get isInitial => this == initial;
-}
-
 @freezed
 class PermissionsState with _$PermissionsState {
-  const factory PermissionsState({
-    @Default(PermissionsStatus.initial) PermissionsStatus status,
-    @Default(false) bool userAgreementAccepted,
-    Object? error,
-  }) = _PermissionsState;
+  const factory PermissionsState.initial() = PermissionsStateInitial;
+
+  const factory PermissionsState.inProgress() = PermissionsStateInProgress;
+
+  const factory PermissionsState.success() = PermissionsStateSuccess;
+
+  const factory PermissionsState.failure(Object error) = PermissionsStateFailure;
 }
