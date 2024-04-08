@@ -32,4 +32,7 @@ class AppPermissions {
     _isDenied = statusesPerRequestedPermission.values.every((status) => status.isDenied);
     return statusesPerRequestedPermission;
   }
+
+  /// Opens the app settings page.
+  Future<bool> toAppSettings() => openAppSettings();
 }
