@@ -5,7 +5,7 @@ import 'package:webtrit_phone/models/models.dart';
 
 final dAudioActiveCall = ActiveCall(
   line: 0,
-  callId: CallIdValue('123'),
+  callId: '123',
   handle: const CallkeepHandle(
     type: CallkeepHandleType.number,
     value: 'Thomas Anderson',
@@ -14,12 +14,11 @@ final dAudioActiveCall = ActiveCall(
   video: false,
   createdTime: clock.ago(minutes: 10),
   acceptedTime: clock.ago(minutes: 9, seconds: 41),
-  renderers: RTCVideoRenderers(),
 );
 
 final dVideoActiveCall = ActiveCall(
   line: 0,
-  callId: CallIdValue('123'),
+  callId: '123',
   handle: const CallkeepHandle(
     type: CallkeepHandleType.number,
     value: 'Thomas Anderson',
@@ -28,5 +27,4 @@ final dVideoActiveCall = ActiveCall(
   video: true,
   createdTime: clock.ago(minutes: 10),
   acceptedTime: clock.ago(minutes: 9, seconds: 41),
-  renderers: RTCVideoRenderers(),
 );

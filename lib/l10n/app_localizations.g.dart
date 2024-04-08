@@ -399,6 +399,36 @@ abstract class AppLocalizations {
   /// **'A response issue occurred'**
   String get default_TypeErrorError;
 
+  /// No description provided for @default_ErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Error message'**
+  String get default_ErrorMessage;
+
+  /// No description provided for @default_ErrorDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get default_ErrorDetails;
+
+  /// No description provided for @default_ErrorPath.
+  ///
+  /// In en, this message translates to:
+  /// **'Error path'**
+  String get default_ErrorPath;
+
+  /// No description provided for @request_StatusCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Status code'**
+  String get request_StatusCode;
+
+  /// No description provided for @request_Id.
+  ///
+  /// In en, this message translates to:
+  /// **'Request id'**
+  String get request_Id;
+
   /// No description provided for @default_UnauthorizedRequestFailureError.
   ///
   /// In en, this message translates to:
@@ -542,6 +572,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cannot send the verification code'**
   String get login_RequestFailureEmptyEmailError;
+
+  /// No description provided for @login_RequestFailureIdentifierIsNotValid.
+  ///
+  /// In en, this message translates to:
+  /// **'The identifier appears invalid due to a non-existent'**
+  String get login_RequestFailureIdentifierIsNotValid;
 
   /// No description provided for @login_RequestFailureIncorrectOtpCodeError.
   ///
@@ -891,6 +927,18 @@ abstract class AppLocalizations {
   /// **'No access to media input, please check app permissions'**
   String get notifications_errorSnackBar_callUserMedia;
 
+  /// No description provided for @notifications_errorSnackBar_appUnregistered.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorry, your application is currently disconnected from the WebTrit core servers and hence can\'t call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection'**
+  String get notifications_errorSnackBar_appUnregistered;
+
+  /// No description provided for @notifications_errorSnackBar_appOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Your application is currently offline'**
+  String get notifications_errorSnackBar_appOffline;
+
   /// No description provided for @notImplemented.
   ///
   /// In en, this message translates to:
@@ -950,6 +998,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Oops... an error happened ☹️'**
   String get recents_errorSnackBar_loadFailure;
+
+  /// No description provided for @notifications_errorSnackBar_appOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Your application is online'**
+  String get notifications_errorSnackBar_appOnline;
 
   /// No description provided for @recents_snackBar_deleted.
   ///
@@ -1080,7 +1134,7 @@ abstract class AppLocalizations {
   /// No description provided for @settings_ListViewTileTitle_registered.
   ///
   /// In en, this message translates to:
-  /// **'Registered'**
+  /// **'Online'**
   String get settings_ListViewTileTitle_registered;
 
   /// No description provided for @settings_ListViewTileTitle_settings.
@@ -1148,6 +1202,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter a value'**
   String get validationBlankError;
+
+  /// No description provided for @autoprovision_ReloginDialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Relogin Confirmation'**
+  String get autoprovision_ReloginDialog_title;
+
+  /// No description provided for @autoprovision_ReloginDialog_text.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to replace the current session with a new one?'**
+  String get autoprovision_ReloginDialog_text;
+
+  /// No description provided for @autoprovision_ReloginDialog_confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get autoprovision_ReloginDialog_confirm;
+
+  /// No description provided for @autoprovision_ReloginDialog_decline.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get autoprovision_ReloginDialog_decline;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

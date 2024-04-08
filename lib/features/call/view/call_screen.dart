@@ -47,7 +47,7 @@ class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin {
           final activeCall = state.activeCalls.current;
           final activeCallFailure = activeCall.failure;
           if (activeCallFailure != null) {
-            context.read<CallBloc>().add(CallControlEvent.failureApproved(activeCall.callId.uuid));
+            context.read<CallBloc>().add(CallControlEvent.failureApproved(activeCall.callId));
             AcknowledgeDialog.show(
               context,
               title: context.l10n.call_FailureAcknowledgeDialog_title,

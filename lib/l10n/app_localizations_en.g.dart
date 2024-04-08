@@ -160,6 +160,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get default_TypeErrorError => 'A response issue occurred';
 
   @override
+  String get default_ErrorMessage => 'Error message';
+
+  @override
+  String get default_ErrorDetails => 'Details';
+
+  @override
+  String get default_ErrorPath => 'Error path';
+
+  @override
+  String get request_StatusCode => 'Status code';
+
+  @override
+  String get request_Id => 'Request id';
+
+  @override
   String get default_UnauthorizedRequestFailureError => 'An unauthorized request failure occurred';
 
   @override
@@ -238,6 +253,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get login_RequestFailureEmptyEmailError => 'Cannot send the verification code';
+
+  @override
+  String get login_RequestFailureIdentifierIsNotValid => 'The identifier appears invalid due to a non-existent';
 
   @override
   String get login_RequestFailureIncorrectOtpCodeError => 'Incorrect verification code';
@@ -428,6 +446,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications_errorSnackBar_callUserMedia => 'No access to media input, please check app permissions';
 
   @override
+  String get notifications_errorSnackBar_appUnregistered => 'Sorry, your application is currently disconnected from the WebTrit core servers and hence can\'t call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection';
+
+  @override
+  String get notifications_errorSnackBar_appOffline => 'Your application is currently offline';
+
+  @override
   String get notImplemented => 'Sorry, not implemented yet';
 
   @override
@@ -462,6 +486,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recents_errorSnackBar_loadFailure => 'Oops... an error happened ☹️';
+
+  @override
+  String get notifications_errorSnackBar_appOnline => 'Your application is online';
 
   @override
   String recents_snackBar_deleted(String name) {
@@ -539,7 +566,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_ListViewTileTitle_network => 'Network settings';
 
   @override
-  String get settings_ListViewTileTitle_registered => 'Registered';
+  String get settings_ListViewTileTitle_registered => 'Online';
 
   @override
   String get settings_ListViewTileTitle_settings => 'SETTINGS';
@@ -573,4 +600,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get validationBlankError => 'Please enter a value';
+
+  @override
+  String get autoprovision_ReloginDialog_title => 'Relogin Confirmation';
+
+  @override
+  String get autoprovision_ReloginDialog_text => 'Do you want to replace the current session with a new one?';
+
+  @override
+  String get autoprovision_ReloginDialog_confirm => 'Confirm';
+
+  @override
+  String get autoprovision_ReloginDialog_decline => 'Decline';
 }

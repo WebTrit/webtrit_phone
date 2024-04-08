@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:logging/logging.dart';
 
@@ -8,6 +10,9 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 
+import 'deeplinks.dart';
+
+export 'package:auto_route/auto_route.dart' show ReevaluateListenable;
 export 'package:auto_route/auto_route.dart' show ReevaluateListenable, AutoRouteObserver;
 
 part 'app_router.gr.dart';
@@ -103,6 +108,9 @@ class AppRouter extends _$AppRouter {
               page: UserAgreementScreenPageRoute.page,
               onNavigation: onUserAgreementScreenPageRouteGuardNavigation,
               path: 'user-agreement',
+              page: AutoprovisionScreenPageRoute.page,
+              onNavigation: onAutoprovisionScreenPageRouteGuardNavigation,
+              path: 'autoprovision',
             ),
             AutoRoute.guarded(
               page: MainShellRoute.page,
@@ -296,6 +304,39 @@ class AppRouter extends _$AppRouter {
       final innerRouter = router.innerRouterOf<StackRouter>(AppShellRoute.name);
       innerRouter?.reevaluateGuards();
     }
+  }
+
+  void onAutoprovisionScreenPageRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
+    _logger.fine(_onNavigationLoggerMessage('onAutoprovisionScreenPageRouteGuardNavigation', resolver));
+
+    final query = resolver.route.queryParams;
+    final configToken = query.optString('config_token');
+
+    // Protect against the case when the user navigates to the autoprovision screen
+    // without a config token. In this case, the user should be redirected to the main screen.
+    if (configToken != null && configToken.isNotEmpty) {
+      resolver.next(true);
+    } else {
+      resolver.next(false);
+      router.replaceAll(
+        [const MainShellRoute()],
+      );
+    }
+  }
+
+  FutureOr<DeepLink> deepLinkBuilder(PlatformDeepLink deepLink) {
+    final handlers = <DeepLinkHandler>[
+      HandleAndroidBackgroundIncomingCall(deepLink, _appBloc.pendingCallHandler),
+      HandleAutoprovision(deepLink),
+      HandleReturnToMain(deepLink),
+    ];
+
+    for (final handler in handlers) {
+      final deeplink = handler.handle();
+      if (deeplink != null) return deeplink;
+    }
+
+    return DeepLink.defaultPath;
   }
 }
 

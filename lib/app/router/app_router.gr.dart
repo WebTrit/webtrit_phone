@@ -27,6 +27,16 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const AppShell(),
       );
     },
+    AutoprovisionScreenPageRoute.name: (routeData) {
+      final queryParams = routeData.queryParams;
+      final args = routeData.argsAs<AutoprovisionScreenPageRouteArgs>(
+          orElse: () => AutoprovisionScreenPageRouteArgs(
+              configToken: queryParams.optString('config_token')));
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: AutoprovisionScreenPage(configToken: args.configToken),
+      );
+    },
     CallScreenPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -271,6 +281,37 @@ class AppShellRoute extends PageRouteInfo<void> {
   static const String name = 'AppShellRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [AutoprovisionScreenPage]
+class AutoprovisionScreenPageRoute
+    extends PageRouteInfo<AutoprovisionScreenPageRouteArgs> {
+  AutoprovisionScreenPageRoute({
+    String? configToken,
+    List<PageRouteInfo>? children,
+  }) : super(
+          AutoprovisionScreenPageRoute.name,
+          args: AutoprovisionScreenPageRouteArgs(configToken: configToken),
+          rawQueryParams: {'config_token': configToken},
+          initialChildren: children,
+        );
+
+  static const String name = 'AutoprovisionScreenPageRoute';
+
+  static const PageInfo<AutoprovisionScreenPageRouteArgs> page =
+      PageInfo<AutoprovisionScreenPageRouteArgs>(name);
+}
+
+class AutoprovisionScreenPageRouteArgs {
+  const AutoprovisionScreenPageRouteArgs({this.configToken});
+
+  final String? configToken;
+
+  @override
+  String toString() {
+    return 'AutoprovisionScreenPageRouteArgs{configToken: $configToken}';
+  }
 }
 
 /// generated route for

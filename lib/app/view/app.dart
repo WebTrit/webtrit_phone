@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/app/router/app_router_observer.dart';
@@ -45,6 +46,7 @@ class _AppState extends State<App> {
       secureStorage: widget.secureStorage,
       appDatabase: widget.appDatabase,
       appThemes: widget.appThemes,
+      pendingCallHandler: AndroidPendingCallHandler(),
     );
     _appRouter = AppRouter(
       appBloc,
@@ -84,6 +86,7 @@ class _AppState extends State<App> {
                 theme: themeProvider.light(),
                 darkTheme: themeProvider.dark(),
                 routerConfig: _appRouter.config(
+                  deepLinkBuilder: _appRouter.deepLinkBuilder,
                   navigatorObservers: () => [
                     AppRouterObserver(),
                     context.read<AppAnalyticsRepository>().createObserver(),

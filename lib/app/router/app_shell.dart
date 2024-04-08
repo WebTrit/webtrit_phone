@@ -20,10 +20,28 @@ class AppShell extends StatelessWidget {
           listener: (context, state) {
             final lastNotification = state.lastNotification;
             if (lastNotification != null) {
-              context.showErrorSnackBar(
-                lastNotification.l10n(context),
-                action: lastNotification.action(context),
-              );
+              switch (lastNotification.type()) {
+                case NotificationType.error:
+                  context.showErrorSnackBar(
+                    lastNotification.l10n(context),
+                    action: lastNotification.action(context),
+                  );
+                case NotificationType.raw:
+                  context.showErrorSnackBar(
+                    lastNotification.l10n(context),
+                    action: lastNotification.action(context),
+                  );
+                case NotificationType.message:
+                  context.showSnackBar(
+                    lastNotification.l10n(context),
+                    action: lastNotification.action(context),
+                  );
+                case NotificationType.success:
+                  context.showSuccessSnackBar(
+                    lastNotification.l10n(context),
+                    action: lastNotification.action(context),
+                  );
+              }
               context.read<NotificationsBloc>().add(const NotificationsCleared());
             }
           },
