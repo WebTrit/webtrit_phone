@@ -1,40 +1,52 @@
+import 'dart:convert';
+
 import 'package:flutter/services.dart';
-import 'package:webtrit_phone/environment_config.dart';
+
+import 'package:webtrit_phone/app/assets.gen.dart';
 
 const kCertPath = 'assets/certificates/';
 
+typedef CertsData = (List<int> bytes, String? password);
+
 class AppCerts {
-  static late AppCerts _instance;
-
-  static Future<List<int>> _loadCertificate(String filename) async {
-    final sslCert = await rootBundle.load('$kCertPath$filename');
-    return sslCert.buffer.asUint8List();
-  }
-
-  static Future<void> init() async {
-    String? sslCertFile = EnvironmentConfig.SSL_CERT_FILE;
-    if (sslCertFile is String && sslCertFile.isEmpty) sslCertFile = null;
-
-    String? sslCertPassword = EnvironmentConfig.SSL_CERT_PASSWORD;
-    if (sslCertPassword is String && sslCertPassword.isEmpty) sslCertPassword = null;
-
-    List<int>? sslCertBytes;
-
-    if (sslCertFile != null) sslCertBytes = await _loadCertificate(sslCertFile);
-
-    _instance = AppCerts._(sslCertBytes, sslCertPassword);
-  }
-
+  AppCerts._(this._certs);
   factory AppCerts() => _instance;
 
-  AppCerts._(this._sslCertBytes, this._sslCertPassword);
+  static late AppCerts _instance;
+  List<CertsData> _certs = [];
 
-  List<int>? _sslCertBytes;
-  String? _sslCertPassword;
+  /// Returns the list of ssl certificates and their passwords.
+  List<CertsData> get certs => _certs;
 
-  /// Public ssl certificate for secure connection
-  List<int>? get sslCertBytes => _sslCertBytes;
+  /// Initialize the AppCerts instance with the certificatess
+  static Future<void> init() async {
+    const certAssets = Assets.certificates;
 
-  /// Password for ssl certificate, will be ignored for PEM certs
-  String? get sslCertPassword => _sslCertPassword;
+    // Load the credentials file
+    // This file contains the passwords for the certificates as key-value pairs
+    // The key is the name of the certificate file
+    final credFile = await rootBundle.loadString(certAssets.credentials);
+    final credData = jsonDecode(credFile);
+
+    // Make a list of all the certificates except the credentials file
+    final certsPaths = certAssets.values.where((path) => path != certAssets.credentials);
+
+    // Load the certificates and find their passwords
+    List<CertsData> certs = [];
+    for (final path in certsPaths) {
+      final bytes = await _loadCertificate(path);
+      final fileSegments = path.split('/').last;
+      final password = credData[fileSegments];
+      certs.add((bytes, password));
+    }
+
+    // Initialize instance with the certificates
+    _instance = AppCerts._(certs);
+  }
+
+  /// Load the certificate as bytes from the assets
+  static Future<List<int>> _loadCertificate(String path) async {
+    final sslCert = await rootBundle.load(path);
+    return sslCert.buffer.asUint8List();
+  }
 }

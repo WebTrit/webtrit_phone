@@ -59,13 +59,8 @@ class _MainShellState extends State<MainShell> {
             final appBloc = context.read<AppBloc>();
             final appCerts = AppCerts();
 
-            return WebtritApiClient(
-              Uri.parse(appBloc.state.coreUrl!),
-              appBloc.state.tenantId!,
-              connectionTimeout: kApiClientConnectionTimeout,
-              certBytes: appCerts.sslCertBytes,
-              certPassword: appCerts.sslCertPassword,
-            );
+            return WebtritApiClient(Uri.parse(appBloc.state.coreUrl!), appBloc.state.tenantId!,
+                connectionTimeout: kApiClientConnectionTimeout, certs: appCerts.certs);
           },
         ),
         RepositoryProvider<FavoritesRepository>(

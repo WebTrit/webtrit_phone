@@ -15,19 +15,27 @@ class $AssetsCallkeepGen {
   const $AssetsCallkeepGen();
 
   /// File path: assets/callkeep/ios_icon_template_image.png
-  AssetGenImage get iosIconTemplateImage =>
-      const AssetGenImage('assets/callkeep/ios_icon_template_image.png');
+  AssetGenImage get iosIconTemplateImage => const AssetGenImage('assets/callkeep/ios_icon_template_image.png');
 
   /// List of all assets
   List<AssetGenImage> get values => [iosIconTemplateImage];
+}
+
+class $AssetsCertificatesGen {
+  const $AssetsCertificatesGen();
+
+  /// File path: assets/certificates/credentials.json
+  String get credentials => 'assets/certificates/credentials.json';
+
+  /// List of all assets
+  List<String> get values => [credentials];
 }
 
 class $AssetsLoginGen {
   const $AssetsLoginGen();
 
   /// File path: assets/login/onboarding-1.svg
-  SvgGenImage get onboarding1 =>
-      const SvgGenImage('assets/login/onboarding-1.svg');
+  SvgGenImage get onboarding1 => const SvgGenImage('assets/login/onboarding-1.svg');
 
   /// List of all assets
   List<SvgGenImage> get values => [onboarding1];
@@ -60,17 +68,15 @@ class Assets {
   Assets._();
 
   static const $AssetsCallkeepGen callkeep = $AssetsCallkeepGen();
+  static const $AssetsCertificatesGen certificates = $AssetsCertificatesGen();
   static const $AssetsLoginGen login = $AssetsLoginGen();
-  static const SvgGenImage primaryOnboardinLogo =
-      SvgGenImage('assets/primary_onboardin_logo.svg');
+  static const SvgGenImage primaryOnboardinLogo = SvgGenImage('assets/primary_onboardin_logo.svg');
   static const $AssetsRingtonesGen ringtones = $AssetsRingtonesGen();
-  static const SvgGenImage secondaryOnboardinLogo =
-      SvgGenImage('assets/secondary_onboardin_logo.svg');
+  static const SvgGenImage secondaryOnboardinLogo = SvgGenImage('assets/secondary_onboardin_logo.svg');
   static const $AssetsThemesGen themes = $AssetsThemesGen();
 
   /// List of all assets
-  static List<SvgGenImage> get values =>
-      [primaryOnboardinLogo, secondaryOnboardinLogo];
+  static List<SvgGenImage> get values => [primaryOnboardinLogo, secondaryOnboardinLogo];
 }
 
 class AssetGenImage {

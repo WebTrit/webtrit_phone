@@ -5,14 +5,15 @@ import 'package:http/io_client.dart';
 
 http.Client createHttpClient({
   Duration? connectionTimeout,
-  List<int>? certBytes,
-  String? certPassword,
+  List<(List<int> bytes, String? password)> certs = const [],
 }) {
   SecurityContext? securityContext;
 
-  if (certBytes != null) {
+  if (certs.isNotEmpty) {
     securityContext = SecurityContext();
-    securityContext.setTrustedCertificatesBytes(certBytes, password: certPassword);
+    for (final cert in certs) {
+      securityContext.setTrustedCertificatesBytes(cert.$1, password: cert.$2);
+    }
   }
 
   final customHttpClient = HttpClient(context: securityContext);

@@ -15,14 +15,18 @@ WebTrit Phone application.
 * `WEBTRIT_APP_PERIODIC_POLLING` (_default **true**_)
 * `WEBTRIT_APP_DEBUG_LEVEL` (_default **INFO**_)
 * `WEBTRIT_APP_DATABASE_LOG_STATEMENTS` (_default **false**_)
-* `WEBTRIT_APP_SSL_CERT_FILE` (_optional_ - filename of SSL certificate for SSL/TLS pinning, file should be placed in `assets/certificates`)
-* `WEBTRIT_APP_SSL_CERT_PASSWORD` (_optional_ - password for PKCS12 certificate)
 
 Default build variables located in [dart_define.json](dart_define.json) and could be add to `flutter` `run` or `build` with `--dart-define-from-file=dart_define.json` parameter.
 
 ### Environment
 
 * `WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH` - path to folder structure created by `keystore-generate` command of [webtrit_phone_tools](https://github.com/WebTrit/webtrit_phone_tools) (KeystoreGenerator)
+
+### SSL Certificates
+To use SSL certificates, you need to: 
+1. add the following files to the `assets/certificates` folder
+2. for PKCS12 add passwords to the `assets/certificates/credentials.json` where the key is the file name and the value is the password
+2. run flutter_gen or buid_runner to generate the necessary code
 
 ## Build
 

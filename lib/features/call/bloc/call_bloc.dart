@@ -341,8 +341,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         token,
         true,
         connectionTimeout: kSignalingClientConnectionTimeout,
-        certBytes: appCerts.sslCertBytes,
-        certPassword: appCerts.sslCertPassword,
+        certs: appCerts.certs,
       );
 
       if (emit.isDone) {

@@ -27,8 +27,7 @@ WebtritApiClient defaultCreateWebtritApiClient(String coreUrl, String tenantId) 
     Uri.parse(coreUrl),
     tenantId,
     connectionTimeout: kApiClientConnectionTimeout,
-    certBytes: appCerts.sslCertBytes,
-    certPassword: appCerts.sslCertPassword,
+    certs: appCerts.certs,
   );
 }
 
