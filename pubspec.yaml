@@ -29,11 +29,11 @@ dependencies:
   cross_file: ^0.3.3
   device_info_plus: ^9.1.2
   equatable: ^2.0.5
-  firebase_analytics: ^10.8.6
-  firebase_app_installations: ^0.2.4
-  firebase_core: ^2.25.4
-  firebase_crashlytics: ^3.4.15
-  firebase_messaging: ^14.7.16
+  firebase_analytics: ^10.8.8
+  firebase_app_installations: ^0.2.4+16
+  firebase_core: ^2.26.0
+  firebase_crashlytics: ^3.4.17
+  firebase_messaging: ^14.7.18
   flutter_bloc: ^8.1.4
   flutter_contacts: ^1.1.7
   flutter_secure_storage: ^9.0.0
@@ -47,7 +47,7 @@ dependencies:
   google_fonts: ^6.1.0
   intl: any
   json_annotation: ^4.8.1
-  just_audio: ^0.9.36
+  soundpool: ^2.4.1
   linkify: ^5.0.0
   logging: ^1.2.0
   logging_appenders: ^1.2.0
@@ -75,7 +75,7 @@ dependencies:
   webtrit_signaling:
     path: ./packages/webtrit_signaling
   webtrit_callkeep:
-    path: ./packages/webtrit_callkeep
+    path: ../webtrit_callkeep/webtrit_callkeep
   store_info_extractor:
     path: ./packages/store_info_extractor
 
@@ -94,7 +94,8 @@ dev_dependencies:
   bloc_test: ^9.1.6
   build_runner: ^2.4.8
   flutter_gen_runner: ^5.4.0
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons:
+    git: https://github.com/fluttercommunity/flutter_launcher_icons.git
   flutter_lints: ^3.0.1
   flutter_native_splash: ^2.3.10
   freezed: ^2.4.7

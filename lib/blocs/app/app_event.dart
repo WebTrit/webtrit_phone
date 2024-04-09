@@ -32,3 +32,8 @@ class AppThemeModeChanged with _$AppThemeModeChanged implements AppEvent {
 class AppLocaleChanged with _$AppLocaleChanged implements AppEvent {
   const factory AppLocaleChanged(Locale value) = _AppLocaleChanged;
 }
+
+@Freezed(copyWith: false)
+class AppUserAgreementAccepted with _$AppUserAgreementAccepted implements AppEvent {
+  const factory AppUserAgreementAccepted() = _AppUserAgreementAccepted;
+}

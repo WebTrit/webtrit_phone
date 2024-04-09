@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/error_details_view.dart';
+
 extension BuildContextSnackBar on BuildContext {
   void removeCurrentSnackBar() {
     ScaffoldMessenger.of(this).removeCurrentSnackBar();
@@ -43,6 +45,29 @@ extension BuildContextSnackBar on BuildContext {
       behavior: SnackBarBehavior.floating,
       action: action,
       duration: duration,
+    ));
+  }
+
+  Future showErrorBottomSheetDialog(String title, List<ErrorFieldModel> fields) {
+    return showModalBottomSheet(
+      useSafeArea: true,
+      context: this,
+      builder: (context) => ErrorDetailsView(
+        title: title,
+        fields: fields,
+      ),
+    );
+  }
+
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSuccessSnackBar(
+    String data, {
+    SnackBarAction? action,
+    Duration duration = const Duration(seconds: 5),
+  }) {
+    return (ScaffoldMessenger.of(this)..removeCurrentSnackBar()).showSnackBar(SnackBar(
+      content: Text(data),
+      action: action,
+      backgroundColor: Theme.of(this).colorScheme.tertiary,
     ));
   }
 }

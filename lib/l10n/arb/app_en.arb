@@ -102,6 +102,18 @@
   "@default_TlsExceptionError": {},
   "default_TypeErrorError": "A response issue occurred",
   "@default_TypeErrorError": {},
+  "default_ErrorMessage": "Error message",
+  "@default_ErrorMessage": {},
+  "default_ErrorDetails": "Error details",
+  "@default_ErrorDetails": {},
+  "default_ErrorPath": "Error path",
+  "@default_ErrorPath": {},
+  "request_StatusCode": "Status code",
+  "@request_StatusCode": {},
+  "request_Id": "Request id",
+  "@request_Id": {},
+  "default_ErrorDetails": "Details",
+  "@default_ErrorDetails": {},
   "default_UnauthorizedRequestFailureError": "An unauthorized request failure occurred",
   "@default_UnauthorizedRequestFailureError": {},
   "favorites_BodyCenter_empty": "Currently, you have no favorite numbers.\nAdd favorites from Contacts using the star icon.",
@@ -177,6 +189,8 @@
   },
   "login_RequestFailureEmptyEmailError": "Cannot send the verification code",
   "@login_RequestFailureEmptyEmailError": {},
+  "login_RequestFailureIdentifierIsNotValid": "The identifier appears invalid due to a non-existent",
+  "@login_RequestFailureIdentifierIsNotValid": {},
   "login_RequestFailureIncorrectOtpCodeError": "Incorrect verification code",
   "@login_RequestFailureIncorrectOtpCodeError": {},
   "login_RequestFailureOtpAlreadyVerifiedError": "Verification already verified",
@@ -332,12 +346,36 @@
   "@notifications_errorSnackBar_callUndefinedLine": {},
   "notifications_errorSnackBar_callUserMedia": "No access to media input, please check app permissions",
   "@notifications_errorSnackBar_callUserMedia": {},
+  "notifications_errorSnackBar_appUnregistered": "Sorry, your application is currently disconnected from the WebTrit core servers and hence can't call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection",
+  "@notifications_errorSnackBar_appUnregistered": {},
+  "notifications_errorSnackBar_appOffline": "Your application is currently offline",
+  "@notifications_errorSnackBar_appOffline": {},
   "notImplemented": "Sorry, not implemented yet",
   "@notImplemented": {},
   "permission_Button_request": "Continue",
   "@permission_Button_request": {},
   "permission_Text_description": "To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.",
   "@permission_Text_description": {},
+  "user_agreement_checkbox_text": "I have read the {url} and consent to its terms.",
+  "@user_agreement_checkbox_text": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "user_agreement_description": "Welcome to {appName}",
+  "@user_agreement_description": {
+    "placeholders": {
+      "appName": {
+        "type": "String"
+      }
+    }
+  },
+  "user_agreement_button_text": "Continue",
+  "@user_agreement_button_text": {},
+  "user_agreement_agrement_link": "terms and condition of agreement",
+  "@user_agreement_agrement_link": {},
   "recents_BodyCenter_empty": "Currently you have no {filter} recent calls.",
   "@recents_BodyCenter_empty": {},
   "recents_DeleteConfirmDialog_content": "Are you sure you want to delete the current call log?",
@@ -346,6 +384,8 @@
   "@recents_DeleteConfirmDialog_title": {},
   "recents_errorSnackBar_loadFailure": "Oops... an error happened ☹️",
   "@recents_errorSnackBar_loadFailure": {},
+  "notifications_errorSnackBar_appOnline": "Your application is online",
+  "@notifications_errorSnackBar_appOnline": {},
   "recents_snackBar_deleted": "{name} deleted",
   "@recents_snackBar_deleted": {
     "placeholders": {
@@ -408,7 +448,7 @@
   "@settings_ListViewTileTitle_logRecordsConsole": {},
   "settings_ListViewTileTitle_network": "Network settings",
   "@settings_ListViewTileTitle_network": {},
-  "settings_ListViewTileTitle_registered": "Registered",
+  "settings_ListViewTileTitle_registered": "Online",
   "@settings_ListViewTileTitle_registered": {},
   "settings_ListViewTileTitle_settings": "SETTINGS",
   "@settings_ListViewTileTitle_settings": {},
@@ -431,5 +471,13 @@
   "underDevelopment": "This page is under development.",
   "@underDevelopment": {},
   "validationBlankError": "Please enter a value",
-  "@validationBlankError": {}
+  "@validationBlankError": {},
+  "autoprovision_ReloginDialog_title": "Relogin Confirmation",
+  "@autoprovision_ReloginDialog_title": {},
+  "autoprovision_ReloginDialog_text": "Do you want to replace the current session with a new one?",
+  "@autoprovision_ReloginDialog_text": {},
+  "autoprovision_ReloginDialog_confirm": "Confirm",
+  "@autoprovision_ReloginDialog_confirm": {},
+  "autoprovision_ReloginDialog_decline": "Decline",
+  "@autoprovision_ReloginDialog_decline": {}
 }

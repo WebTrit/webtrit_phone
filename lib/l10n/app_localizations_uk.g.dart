@@ -160,6 +160,21 @@ class AppLocalizationsUk extends AppLocalizations {
   String get default_TypeErrorError => 'Виникла проблема з відповіддю';
 
   @override
+  String get default_ErrorMessage => '';
+
+  @override
+  String get default_ErrorDetails => 'Details';
+
+  @override
+  String get default_ErrorPath => '';
+
+  @override
+  String get request_StatusCode => '';
+
+  @override
+  String get request_Id => '';
+
+  @override
   String get default_UnauthorizedRequestFailureError => 'Сталася помилка несанкціонованого запиту';
 
   @override
@@ -238,6 +253,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get login_RequestFailureEmptyEmailError => 'Не вдалося відправити код підтвердження';
+
+  @override
+  String get login_RequestFailureIdentifierIsNotValid => '';
 
   @override
   String get login_RequestFailureIncorrectOtpCodeError => 'Невірний код підтвердження';
@@ -428,6 +446,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get notifications_errorSnackBar_callUserMedia => 'Немає доступу до медіа-входу, будь ласка, перевірте дозволи програми';
 
   @override
+  String get notifications_errorSnackBar_appUnregistered => 'Вибачте, ваш додаток наразі відключений від основних серверів WebTrit і тому не може здійснювати дзвінки. Будь ласка, перейдіть на сторінку налаштувань та перемістіть перемикач онлайн-статусу в положення \'вимкнуто\' і знову в положення \'увімкнуто\', щоб відновити з\'єднання';
+
+  @override
+  String get notifications_errorSnackBar_appOffline => 'Ваш додаток наразі офлайн';
+
+  @override
   String get notImplemented => 'Вибачте, ця функція ще не реалізована';
 
   @override
@@ -435,6 +459,22 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get permission_Text_description => 'Для забезпечення найкращого досвіду користувача програма потребує наступні дозволи: мікрофон для аудіодзвінків, камера для відеодзвінків та доступ до контактів для спрощення їх використання в програмі.\n\nДозволи можуть бути змінені у майбутньому.';
+
+  @override
+  String user_agreement_checkbox_text(String url) {
+    return 'Я прочитав і погоджуюсь з $url, включаючи умови користування.';
+  }
+
+  @override
+  String user_agreement_description(String appName) {
+    return 'Вітаємо до $appName';
+  }
+
+  @override
+  String get user_agreement_button_text => 'Продовжити';
+
+  @override
+  String get user_agreement_agrement_link => 'угодою';
 
   @override
   String recents_BodyCenter_empty(Object filter) {
@@ -449,6 +489,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get recents_errorSnackBar_loadFailure => 'Упс... сталася помилка ☹️';
+
+  @override
+  String get notifications_errorSnackBar_appOnline => 'Ваш додаток онлайн';
 
   @override
   String recents_snackBar_deleted(String name) {
@@ -526,7 +569,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_ListViewTileTitle_network => 'Налаштування мережі';
 
   @override
-  String get settings_ListViewTileTitle_registered => 'Зареєстровані';
+  String get settings_ListViewTileTitle_registered => 'В мережі';
 
   @override
   String get settings_ListViewTileTitle_settings => 'НАЛАШТУВАННЯ';
@@ -560,4 +603,16 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get validationBlankError => 'Будь ласка, введіть значення';
+
+  @override
+  String get autoprovision_ReloginDialog_title => 'Підтвердження повторного входу';
+
+  @override
+  String get autoprovision_ReloginDialog_text => 'Бажаєте замінити поточний сеанс на новий?';
+
+  @override
+  String get autoprovision_ReloginDialog_confirm => 'Підтвердити';
+
+  @override
+  String get autoprovision_ReloginDialog_decline => 'Відхилити';
 }

@@ -21,6 +21,7 @@ class MockAppBloc extends MockBloc<AppEvent, AppState> implements AppBloc {
         themeSettings: themeSettings,
         themeMode: themeMode,
         locale: locale,
+        userAgreementAccepted: false,
       ),
     );
     return mock;
