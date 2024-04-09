@@ -8,6 +8,10 @@ import 'src/_http_client_stub.dart'
 
 http.Client createHttpClient({
   Duration? connectionTimeout,
+  List<(List<int> bytes, String? password)> certs = const [],
 }) {
-  return platform.createHttpClient(connectionTimeout: connectionTimeout);
+  return platform.createHttpClient(
+    connectionTimeout: connectionTimeout,
+    certs: certs,
+  );
 }

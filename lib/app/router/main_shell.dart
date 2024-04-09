@@ -64,10 +64,13 @@ class _MainShellState extends State<MainShell> {
         RepositoryProvider<WebtritApiClient>(
           create: (context) {
             final appBloc = context.read<AppBloc>();
+            final appCerts = AppCerts();
+
             return WebtritApiClient(
               Uri.parse(appBloc.state.coreUrl!),
               appBloc.state.tenantId!,
               connectionTimeout: kApiClientConnectionTimeout,
+              certs: appCerts.certs,
             );
           },
         ),

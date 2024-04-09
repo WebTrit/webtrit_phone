@@ -9,3 +9,4 @@ export 'device_info.dart';
 export 'package_info.dart';
 export 'platform_info.dart';
 export 'secure_storage.dart';
+export 'app_certs.dart';

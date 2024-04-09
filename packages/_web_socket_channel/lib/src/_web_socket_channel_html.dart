@@ -9,6 +9,7 @@ Future<html.WebSocket> connectWebSocket(
   Iterable<String>? protocols,
   Duration? connectionTimeout,
   Duration? pingInterval,
+  List<(List<int> bytes, String? password)> certs = const [],
 }) async {
   final webSocket = html.WebSocket(url, protocols);
   if (webSocket.readyState == 1) return webSocket;

@@ -11,12 +11,14 @@ Future<dynamic> connectWebSocket(
   Iterable<String>? protocols,
   Duration? connectionTimeout,
   Duration? pingInterval,
+  List<(List<int> bytes, String? password)> certs = const [],
 }) {
   return platform.connectWebSocket(
     url,
     protocols: protocols,
     connectionTimeout: connectionTimeout,
     pingInterval: pingInterval,
+    certs: certs,
   );
 }
 

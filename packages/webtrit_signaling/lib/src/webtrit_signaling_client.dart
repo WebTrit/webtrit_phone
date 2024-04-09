@@ -69,6 +69,7 @@ class WebtritSignalingClient {
     String token,
     bool force, {
     Duration? connectionTimeout,
+    List<(List<int> bytes, String? password)> certs = const [],
   }) async {
     final signalingUrl = baseUrl.replace(
       pathSegments: [
@@ -87,6 +88,7 @@ class WebtritSignalingClient {
       signalingUrl,
       protocols: [subprotocol],
       connectionTimeout: connectionTimeout,
+      certs: certs,
     );
     final wsc = createWebSocketChannel(ws);
     return WebtritSignalingClient.inner(wsc);
