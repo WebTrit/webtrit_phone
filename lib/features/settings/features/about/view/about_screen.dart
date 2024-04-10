@@ -42,7 +42,7 @@ class AboutScreen extends StatelessWidget {
                   height: delimiterHeight,
                 ),
                 Text(
-                  state.appVersion,
+                  state.storeVersion,
                   style: themeData.textTheme.titleLarge,
                 ),
                 SizedBox(

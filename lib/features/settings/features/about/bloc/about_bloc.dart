@@ -24,8 +24,8 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
   }) : super(AboutState(
           appName: packageInfo.appName,
           packageName: packageInfo.packageName,
-          version: packageInfo.version,
-          buildNumber: packageInfo.buildNumber,
+          storeBuildVersion: packageInfo.version,
+          storeBuildNumber: packageInfo.buildNumber,
           coreUrl: infoRepository.coreUrl,
         )) {
     on<AboutStarted>(_onStarted, transformer: restartable());
