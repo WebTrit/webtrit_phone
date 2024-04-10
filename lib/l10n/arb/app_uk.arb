@@ -422,6 +422,10 @@
       }
     }
   },
+  "settings_AboutText_AppVersion": "Версія додатка",
+  "@settings_AboutText_AppVersion": {},
+  "settings_AboutText_StoreVersion": "Версія збірки в магазині",
+  "@settings_AboutText_StoreVersion": {},
   "settings_AboutText_CoreVersionUndefined": "?.?.?",
   "@settings_AboutText_CoreVersionUndefined": {},
   "settings_AccountDeleteConfirmDialog_content": "Ви впевнені, що хочете видалити обліковий запис?",

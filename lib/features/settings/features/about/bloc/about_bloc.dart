@@ -19,6 +19,7 @@ final _logger = Logger('AboutBloc');
 class AboutBloc extends Bloc<AboutEvent, AboutState> {
   AboutBloc({
     required this.notificationsBloc,
+    required AppInfo appInfo,
     required PackageInfo packageInfo,
     required this.infoRepository,
   }) : super(AboutState(
@@ -26,6 +27,7 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
           packageName: packageInfo.packageName,
           storeBuildVersion: packageInfo.version,
           storeBuildNumber: packageInfo.buildNumber,
+          appVersion: appInfo.version,
           coreUrl: infoRepository.coreUrl,
         )) {
     on<AboutStarted>(_onStarted, transformer: restartable());

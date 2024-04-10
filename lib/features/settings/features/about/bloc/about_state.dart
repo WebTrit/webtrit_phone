@@ -10,6 +10,7 @@ class AboutState with _$AboutState {
     required String packageName,
     required String storeBuildVersion,
     required String storeBuildNumber,
+    required String appVersion,
     required Uri coreUrl,
     Version? coreVersion,
   }) = _AboutState;

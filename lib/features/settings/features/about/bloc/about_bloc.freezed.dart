@@ -48,6 +48,7 @@ mixin _$AboutState {
   String get packageName => throw _privateConstructorUsedError;
   String get storeBuildVersion => throw _privateConstructorUsedError;
   String get storeBuildNumber => throw _privateConstructorUsedError;
+  String get appVersion => throw _privateConstructorUsedError;
   Uri get coreUrl => throw _privateConstructorUsedError;
   Version? get coreVersion => throw _privateConstructorUsedError;
 
@@ -68,6 +69,7 @@ abstract class $AboutStateCopyWith<$Res> {
       String packageName,
       String storeBuildVersion,
       String storeBuildNumber,
+      String appVersion,
       Uri coreUrl,
       Version? coreVersion});
 }
@@ -90,6 +92,7 @@ class _$AboutStateCopyWithImpl<$Res, $Val extends AboutState>
     Object? packageName = null,
     Object? storeBuildVersion = null,
     Object? storeBuildNumber = null,
+    Object? appVersion = null,
     Object? coreUrl = null,
     Object? coreVersion = freezed,
   }) {
@@ -113,6 +116,10 @@ class _$AboutStateCopyWithImpl<$Res, $Val extends AboutState>
       storeBuildNumber: null == storeBuildNumber
           ? _value.storeBuildNumber
           : storeBuildNumber // ignore: cast_nullable_to_non_nullable
+              as String,
+      appVersion: null == appVersion
+          ? _value.appVersion
+          : appVersion // ignore: cast_nullable_to_non_nullable
               as String,
       coreUrl: null == coreUrl
           ? _value.coreUrl
@@ -140,6 +147,7 @@ abstract class _$$AboutStateImplCopyWith<$Res>
       String packageName,
       String storeBuildVersion,
       String storeBuildNumber,
+      String appVersion,
       Uri coreUrl,
       Version? coreVersion});
 }
@@ -160,6 +168,7 @@ class __$$AboutStateImplCopyWithImpl<$Res>
     Object? packageName = null,
     Object? storeBuildVersion = null,
     Object? storeBuildNumber = null,
+    Object? appVersion = null,
     Object? coreUrl = null,
     Object? coreVersion = freezed,
   }) {
@@ -184,6 +193,10 @@ class __$$AboutStateImplCopyWithImpl<$Res>
           ? _value.storeBuildNumber
           : storeBuildNumber // ignore: cast_nullable_to_non_nullable
               as String,
+      appVersion: null == appVersion
+          ? _value.appVersion
+          : appVersion // ignore: cast_nullable_to_non_nullable
+              as String,
       coreUrl: null == coreUrl
           ? _value.coreUrl
           : coreUrl // ignore: cast_nullable_to_non_nullable
@@ -205,6 +218,7 @@ class _$AboutStateImpl extends _AboutState {
       required this.packageName,
       required this.storeBuildVersion,
       required this.storeBuildNumber,
+      required this.appVersion,
       required this.coreUrl,
       this.coreVersion})
       : super._();
@@ -221,13 +235,15 @@ class _$AboutStateImpl extends _AboutState {
   @override
   final String storeBuildNumber;
   @override
+  final String appVersion;
+  @override
   final Uri coreUrl;
   @override
   final Version? coreVersion;
 
   @override
   String toString() {
-    return 'AboutState(progress: $progress, appName: $appName, packageName: $packageName, storeBuildVersion: $storeBuildVersion, storeBuildNumber: $storeBuildNumber, coreUrl: $coreUrl, coreVersion: $coreVersion)';
+    return 'AboutState(progress: $progress, appName: $appName, packageName: $packageName, storeBuildVersion: $storeBuildVersion, storeBuildNumber: $storeBuildNumber, appVersion: $appVersion, coreUrl: $coreUrl, coreVersion: $coreVersion)';
   }
 
   @override
@@ -244,6 +260,8 @@ class _$AboutStateImpl extends _AboutState {
                 other.storeBuildVersion == storeBuildVersion) &&
             (identical(other.storeBuildNumber, storeBuildNumber) ||
                 other.storeBuildNumber == storeBuildNumber) &&
+            (identical(other.appVersion, appVersion) ||
+                other.appVersion == appVersion) &&
             (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
             (identical(other.coreVersion, coreVersion) ||
                 other.coreVersion == coreVersion));
@@ -251,7 +269,7 @@ class _$AboutStateImpl extends _AboutState {
 
   @override
   int get hashCode => Object.hash(runtimeType, progress, appName, packageName,
-      storeBuildVersion, storeBuildNumber, coreUrl, coreVersion);
+      storeBuildVersion, storeBuildNumber, appVersion, coreUrl, coreVersion);
 
   @JsonKey(ignore: true)
   @override
@@ -267,6 +285,7 @@ abstract class _AboutState extends AboutState {
       required final String packageName,
       required final String storeBuildVersion,
       required final String storeBuildNumber,
+      required final String appVersion,
       required final Uri coreUrl,
       final Version? coreVersion}) = _$AboutStateImpl;
   const _AboutState._() : super._();
@@ -281,6 +300,8 @@ abstract class _AboutState extends AboutState {
   String get storeBuildVersion;
   @override
   String get storeBuildNumber;
+  @override
+  String get appVersion;
   @override
   Uri get coreUrl;
   @override

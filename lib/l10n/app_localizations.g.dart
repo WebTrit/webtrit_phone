@@ -1059,6 +1059,18 @@ abstract class AppLocalizations {
   /// **'{time}'**
   String recentTimeBeforeMidnight(DateTime time);
 
+  /// No description provided for @settings_AboutText_AppVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'App Version'**
+  String get settings_AboutText_AppVersion;
+
+  /// No description provided for @settings_AboutText_StoreVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Build version in the Store'**
+  String get settings_AboutText_StoreVersion;
+
   /// No description provided for @settings_AboutText_CoreVersionUndefined.
   ///
   /// In en, this message translates to:
