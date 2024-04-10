@@ -42,9 +42,10 @@ class _MainShellState extends State<MainShell> {
           maximumCallsPerCallGroup: 13,
           supportedHandleTypes: const {CallkeepHandleType.number},
         ),
-        android: const CallkeepAndroidOptions(
+        android: CallkeepAndroidOptions(
           incomingPath: initialCallRout,
           rootPath: initialMainRout,
+          ringtoneSound: Assets.ringtones.incomingCall1,
         ),
       ),
     );
