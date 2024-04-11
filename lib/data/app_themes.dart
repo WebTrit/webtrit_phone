@@ -18,8 +18,9 @@ class AppThemes {
 
     /// Preload Google Fonts for preventing flickering during the first render
     if (settings.fontFamily != null) {
-      GoogleFonts.getFont(settings.fontFamily!);
-      await GoogleFonts.pendingFonts();
+      await GoogleFonts.pendingFonts([
+        GoogleFonts.getFont(settings.fontFamily!),
+      ]);
     }
 
     _instance = AppThemes._(themes);
