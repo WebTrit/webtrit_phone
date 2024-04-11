@@ -530,6 +530,12 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get settings_AboutText_AppVersion => 'Версія додатка';
+
+  @override
+  String get settings_AboutText_StoreVersion => 'Версія збірки в магазині';
+
+  @override
   String get settings_AboutText_CoreVersionUndefined => '?.?.?';
 
   @override

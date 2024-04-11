@@ -100,6 +100,10 @@ dev_dependencies:
   flutter_native_splash: ^2.3.10
   freezed: ^2.4.7
   json_serializable: ^6.7.1
+  version_gen:
+    git:
+      url: https://github.com/SERDUN/version_gen.git
+
 
 flutter:
   generate: true
@@ -117,3 +121,7 @@ flutter_gen:
   integrations:
     flutter_svg: true
     flare_flutter: true
+
+version_gen:
+  path: lib/app/
+  version-spec: app_version.yaml

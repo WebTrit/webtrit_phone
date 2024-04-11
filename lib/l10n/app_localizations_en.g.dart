@@ -530,6 +530,12 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get settings_AboutText_AppVersion => 'App Version';
+
+  @override
+  String get settings_AboutText_StoreVersion => 'Build version in the Store';
+
+  @override
   String get settings_AboutText_CoreVersionUndefined => '?.?.?';
 
   @override
