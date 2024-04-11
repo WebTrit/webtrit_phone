@@ -172,6 +172,17 @@ class _MainShellState extends State<MainShell> {
               )..add(const CallStarted());
             },
           ),
+          BlocProvider<ChatsBloc>(
+            create: (context) {
+              final appBloc = context.read<AppBloc>();
+
+              final token = appBloc.state.token!;
+              final tenantId = appBloc.state.tenantId!;
+              const apiKey = 'bh9c6dgx6g34'; // TODO: move to env
+
+              return ChatsBloc(apiKey, token, tenantId)..add(const Connect());
+            },
+          ),
         ],
         child: Builder(
           builder: (context) => const CallShell(

@@ -313,6 +313,8 @@
   "@main_BottomNavigationBarItemLabel_favorites": {},
   "main_BottomNavigationBarItemLabel_keypad": "Клавіатура",
   "@main_BottomNavigationBarItemLabel_keypad": {},
+  "main_BottomNavigationBarItemLabel_chats": "Чати",
+  "@main_BottomNavigationBarItemLabel_chats": {},
   "main_BottomNavigationBarItemLabel_recents": "Останні",
   "@main_BottomNavigationBarItemLabel_recents": {},
   "main_CompatibilityIssueDialogActions_logout": "Вийти",

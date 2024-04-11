@@ -43,6 +43,18 @@ abstract class _$AppRouter extends RootStackRouter {
         child: CallScreenPage(),
       );
     },
+    ChatsRouterPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ChatsRouterPage(),
+      );
+    },
+    ChatsScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ChatsScreenPage(),
+      );
+    },
     ContactScreenPageRoute.name: (routeData) {
       final pathParams = routeData.inheritedPathParams;
       final args = routeData.argsAs<ContactScreenPageRouteArgs>(
@@ -324,6 +336,34 @@ class CallScreenPageRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'CallScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [ChatsRouterPage]
+class ChatsRouterPageRoute extends PageRouteInfo<void> {
+  const ChatsRouterPageRoute({List<PageRouteInfo>? children})
+      : super(
+          ChatsRouterPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ChatsRouterPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [ChatsScreenPage]
+class ChatsScreenPageRoute extends PageRouteInfo<void> {
+  const ChatsScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          ChatsScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ChatsScreenPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

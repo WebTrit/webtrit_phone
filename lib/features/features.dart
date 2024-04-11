@@ -16,3 +16,4 @@ export 'recents/recents.dart';
 export 'settings/settings.dart';
 export 'terms_conditions/terms_conditions.dart';
 export 'autoprovision/autoprovision.dart';
+export 'chats/chats.dart';

@@ -408,6 +408,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get main_BottomNavigationBarItemLabel_keypad => 'Клавіатура';
 
   @override
+  String get main_BottomNavigationBarItemLabel_chats => 'Чати';
+
+  @override
   String get main_BottomNavigationBarItemLabel_recents => 'Останні';
 
   @override

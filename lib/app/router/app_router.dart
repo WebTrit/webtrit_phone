@@ -173,6 +173,16 @@ class AppRouter extends _$AppRouter {
                       page: KeypadScreenPageRoute.page,
                       path: MainFlavor.keypad.name,
                     ),
+                    AutoRoute(
+                      page: ChatsRouterPageRoute.page,
+                      path: MainFlavor.chats.name,
+                      children: [
+                        AutoRoute(
+                          page: ChatsScreenPageRoute.page,
+                          path: '',
+                        ),
+                      ],
+                    ),
                   ],
                 ),
                 CustomRoute(

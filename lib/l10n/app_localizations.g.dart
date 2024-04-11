@@ -855,6 +855,12 @@ abstract class AppLocalizations {
   /// **'Keypad'**
   String get main_BottomNavigationBarItemLabel_keypad;
 
+  /// No description provided for @main_BottomNavigationBarItemLabel_chats.
+  ///
+  /// In en, this message translates to:
+  /// **'Chats'**
+  String get main_BottomNavigationBarItemLabel_chats;
+
   /// No description provided for @main_BottomNavigationBarItemLabel_recents.
   ///
   /// In en, this message translates to:

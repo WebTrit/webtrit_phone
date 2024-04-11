@@ -408,6 +408,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get main_BottomNavigationBarItemLabel_keypad => 'Keypad';
 
   @override
+  String get main_BottomNavigationBarItemLabel_chats => 'Chats';
+
+  @override
   String get main_BottomNavigationBarItemLabel_recents => 'Recents';
 
   @override
