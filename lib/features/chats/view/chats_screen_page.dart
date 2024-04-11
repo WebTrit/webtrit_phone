@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 
 @RoutePage()
@@ -11,6 +12,8 @@ class ChatsScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ChatsScreen();
+    return const ChatsScreen(
+      title: Text(EnvironmentConfig.APP_NAME),
+    );
   }
 }
