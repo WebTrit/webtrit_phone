@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 
 import 'package:equatable/equatable.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/theme/theme.dart';
@@ -14,6 +15,14 @@ class AppThemes {
     final themeJson = jsonDecode(await rootBundle.loadString(Assets.themes.original));
     final settings = ThemeSettings.fromJson(themeJson);
     final themes = [AppTheme(settings: settings)];
+
+    /// Preload Google Fonts for preventing flickering during the first render
+    if (settings.fontFamily != null) {
+      await GoogleFonts.pendingFonts([
+        GoogleFonts.getFont(settings.fontFamily!),
+      ]);
+    }
+
     _instance = AppThemes._(themes);
   }
 
