@@ -34,6 +34,12 @@ class ContactsExternalTab extends StatelessWidget {
                     contactId: contact.id,
                   ));
                 },
+                onMessagePressed: () {
+                  context.router.navigate(ChatsRouterPageRoute(children: [
+                    const ChatsScreenPageRoute(),
+                    ConversationScreenPageRoute(participantId: contact.sourceId),
+                  ]));
+                },
               );
             },
           );
