@@ -24,3 +24,6 @@ const initialMainRout = '/main';
 const initialCallRout = '/main/call';
 
 const kAutoprovisionRout = '/autoprovision';
+
+// TODO: to env or remove after moved to core
+const getStreamServiceUrl = 'https://leading-bluejay-direct.ngrok-free.app';

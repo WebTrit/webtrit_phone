@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/features/features.dart';
 
@@ -13,11 +14,11 @@ final logger = Logger('ConversationScreen');
 
 class ConversationScreen extends StatefulWidget {
   const ConversationScreen({
-    required String participantId,
+    required this.participantId,
     super.key,
   });
 
-  final String participantId = '1337';
+  final String participantId;
 
   @override
   State<ConversationScreen> createState() => _ConversationScreenState();
@@ -62,7 +63,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
     final tenantId = appBloc.state.tenantId!;
 
     final response = await http.post(
-      Uri.parse('http://192.168.1.85:3000/api/prepare-conversation'),
+      Uri.parse('$getStreamServiceUrl/api/prepare-conversation'),
       headers: {
         'Authorization': 'Bearer $token',
         'x-tenant-id': tenantId,
