@@ -31,10 +31,15 @@ abstract class _$AppRouter extends RootStackRouter {
       final queryParams = routeData.queryParams;
       final args = routeData.argsAs<AutoprovisionScreenPageRouteArgs>(
           orElse: () => AutoprovisionScreenPageRouteArgs(
-              configToken: queryParams.optString('config_token')));
+                configToken: queryParams.optString('config_token'),
+                tenantId: queryParams.optString('tenant_id'),
+              ));
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: AutoprovisionScreenPage(configToken: args.configToken),
+        child: AutoprovisionScreenPage(
+          configToken: args.configToken,
+          tenantId: args.tenantId,
+        ),
       );
     },
     CallScreenPageRoute.name: (routeData) {
@@ -289,11 +294,18 @@ class AutoprovisionScreenPageRoute
     extends PageRouteInfo<AutoprovisionScreenPageRouteArgs> {
   AutoprovisionScreenPageRoute({
     String? configToken,
+    String? tenantId,
     List<PageRouteInfo>? children,
   }) : super(
           AutoprovisionScreenPageRoute.name,
-          args: AutoprovisionScreenPageRouteArgs(configToken: configToken),
-          rawQueryParams: {'config_token': configToken},
+          args: AutoprovisionScreenPageRouteArgs(
+            configToken: configToken,
+            tenantId: tenantId,
+          ),
+          rawQueryParams: {
+            'config_token': configToken,
+            'tenant_id': tenantId,
+          },
           initialChildren: children,
         );
 
@@ -304,13 +316,18 @@ class AutoprovisionScreenPageRoute
 }
 
 class AutoprovisionScreenPageRouteArgs {
-  const AutoprovisionScreenPageRouteArgs({this.configToken});
+  const AutoprovisionScreenPageRouteArgs({
+    this.configToken,
+    this.tenantId,
+  });
 
   final String? configToken;
 
+  final String? tenantId;
+
   @override
   String toString() {
-    return 'AutoprovisionScreenPageRouteArgs{configToken: $configToken}';
+    return 'AutoprovisionScreenPageRouteArgs{configToken: $configToken, tenantId: $tenantId}';
   }
 }
 

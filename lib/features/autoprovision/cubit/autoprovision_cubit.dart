@@ -17,9 +17,15 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> {
   final _bundleId = PackageInfo().packageName;
   final _appType = PlatformInfo().appType;
 
-  late final _apiClient = WebtritApiClient(Uri.parse(_coreUrl), '', connectionTimeout: kApiClientConnectionTimeout);
+  WebtritApiClient _apiClient(String? tenantId) {
+    return WebtritApiClient(
+      Uri.parse(_coreUrl),
+      tenantId ?? '',
+      connectionTimeout: kApiClientConnectionTimeout,
+    );
+  }
 
-  Future<void> processToken(String configToken, bool loggedIn) async {
+  Future<void> processToken(String configToken, bool loggedIn, String? tenantId) async {
     emit(AutoprovisionState.processing(configToken));
 
     final credentials = SessionAutoProvisionCredential(
@@ -30,9 +36,14 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> {
     );
 
     try {
-      final result = await _apiClient.createSessionAutoProvision(credentials);
+      final apiClient = _apiClient(tenantId);
+      final result = await apiClient.createSessionAutoProvision(credentials);
       final token = result.token;
-      final tenantId = result.tenantId;
+
+      // Override tenantId if it's present in the response
+      if (result.tenantId != null && result.tenantId!.isNotEmpty) {
+        tenantId = result.tenantId;
+      }
 
       if (loggedIn) {
         emit(AutoprovisionState.replaceConfirmationNeeded(token, _coreUrl, tenantId));
