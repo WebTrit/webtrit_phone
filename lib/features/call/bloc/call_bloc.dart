@@ -808,7 +808,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
         final activeCallUpdated = activeCall.copyWith(hungUpTime: clock.now());
-        _addToRecents(activeCallUpdated);
+        if (state.retrieveActiveCall(event.callId)?.wasHungUp == false) {
+          _addToRecents(activeCallUpdated);
+        }
         return activeCallUpdated;
       }));
 
