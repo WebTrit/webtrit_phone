@@ -13,6 +13,7 @@ class RecentTile extends StatelessWidget {
     this.onTap,
     this.onLongPress,
     this.onInfoPressed,
+    this.onMessagePressed,
     this.onDeleted,
   });
 
@@ -20,6 +21,7 @@ class RecentTile extends StatelessWidget {
   final GestureTapCallback? onTap;
   final GestureLongPressCallback? onLongPress;
   final GestureTapCallback? onInfoPressed;
+  final GestureTapCallback? onMessagePressed;
   final void Function(Recent)? onDeleted;
 
   @override
@@ -60,6 +62,11 @@ class RecentTile extends StatelessWidget {
               splashRadius: 24,
               icon: const Icon(Icons.info_outlined),
               onPressed: onInfoPressed,
+            ),
+            IconButton(
+              splashRadius: 24,
+              icon: const Icon(Icons.messenger_outline),
+              onPressed: onMessagePressed,
             ),
           ],
         ),

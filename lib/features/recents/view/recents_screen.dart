@@ -114,6 +114,12 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                             recentId: recent.id!,
                           ));
                         },
+                        onMessagePressed: () {
+                          context.router.navigate(ChatsRouterPageRoute(children: [
+                            const ChatsScreenPageRoute(),
+                            ConversationScreenPageRoute(participantId: recent.number),
+                          ]));
+                        },
                         onTap: transfer
                             ? () {
                                 final callBloc = context.read<CallBloc>();

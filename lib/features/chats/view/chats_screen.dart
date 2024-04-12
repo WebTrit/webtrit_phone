@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
+import 'package:webtrit_phone/features/chats/view/channel_view.dart';
 
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -36,36 +38,13 @@ class _ChatsScreenState extends State<ChatsScreen> {
       body: StreamChannelListView(
         controller: _listController,
         onChannelTap: (channel) {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) {
-                return StreamChannel(
-                  channel: channel,
-                  child: const ChannelPage(),
-                );
-              },
+          context.router.pushWidget(
+            StreamChannel(
+              channel: channel,
+              child: const ChannelView(),
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-class ChannelPage extends StatelessWidget {
-  const ChannelPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: StreamChannelHeader(),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: StreamMessageListView(),
-          ),
-          StreamMessageInput(),
-        ],
       ),
     );
   }

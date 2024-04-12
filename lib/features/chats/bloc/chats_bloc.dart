@@ -3,8 +3,7 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-// ignore: depend_on_referenced_packages
-import 'package:http/http.dart' as http; // TODO: remove
+import 'package:http/http.dart' as http; 
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 part 'chats_event.dart';
@@ -34,7 +33,7 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
   /// TODO: move somewhere
   Future<ChatClientData> get _chatClientData async {
     final response = await http.get(
-      Uri.parse('http://192.168.1.85:3000/auth/chat-token'),
+      Uri.parse('http://192.168.1.85:3000/api/chat-token'),
       headers: {'Authorization': 'Bearer $_token', 'x-tenant-id': _tenantId},
     );
 

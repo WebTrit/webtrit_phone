@@ -23,7 +23,11 @@ class ChatsRouterPage extends StatelessWidget {
       },
       builder: (context, state) {
         if (state.status == ChatsStatus.connected) {
-          return StreamChat(client: state.client, child: const AutoRouter());
+          return StreamChat(
+            useMaterial3: true,
+            client: state.client,
+            child: const AutoRouter(),
+          );
         }
         return const Center(child: CircularProgressIndicator());
       },
