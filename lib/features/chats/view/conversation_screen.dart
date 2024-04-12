@@ -33,6 +33,12 @@ class _ConversationScreenState extends State<ConversationScreen> {
     init();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    channel?.dispose();
+  }
+
   // TODO: extract all that shit
   init() async {
     final client = StreamChat.of(context).client;
@@ -43,8 +49,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
     });
 
     try {
-      await ch.create();
-      logger.info('Channel created: ${widget.participantId}');
+      await ch.watch();
+      logger.info('connected: ${widget.participantId}');
 
       if (!mounted) return;
       setState(() => channel = ch);
