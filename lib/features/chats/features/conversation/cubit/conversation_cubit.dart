@@ -5,8 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:webtrit_phone/app/constants.dart';
-
 part 'conversation_state.dart';
 
 final logger = Logger('ConversationCubit');
@@ -19,6 +17,7 @@ class ConversationCubit extends Cubit<ConversationState> {
     this._participantId,
     this._token,
     this._tenantId,
+    this._getStreamServiceUrl,
     this._client,
   ) : super(CvnPreparing(_participantId)) {
     prepareConversation();
@@ -27,9 +26,11 @@ class ConversationCubit extends Cubit<ConversationState> {
   final String _participantId;
   final String _token;
   final String _tenantId;
+  final String _getStreamServiceUrl;
   final StreamChatClient _client;
   Channel? _channel;
 
+  /// Prepares and connects to the conversation channel
   Future<void> prepareConversation() async {
     emit(CvnPreparing(_participantId));
     final userId = _client.state.currentUser?.id;
@@ -61,7 +62,7 @@ class ConversationCubit extends Cubit<ConversationState> {
 
   Future<void> _createChannel() async {
     final response = await http.post(
-      Uri.parse('$getStreamServiceUrl/api/prepare-conversation'),
+      Uri.parse('$_getStreamServiceUrl/api/prepare-conversation'),
       headers: {
         'Authorization': 'Bearer $_token',
         'x-tenant-id': _tenantId,

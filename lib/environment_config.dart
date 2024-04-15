@@ -101,4 +101,14 @@ class EnvironmentConfig {
   static const OTP_SIGNIN_POST_DESCRIPTION_TEXT = String.fromEnvironment(
     OTP_SIGNIN_POST_DESCRIPTION_TEXT__NAME,
   );
+
+  static const GETSTREAM_SERVICE_URL__NAME = 'WEBTRIT_APP_GETSTREAM_SERVICE_URL';
+  static const GETSTREAM_SERVICE_URL = String.fromEnvironment(
+    GETSTREAM_SERVICE_URL__NAME,
+  );
+
+  static const GETSTREAM_API_KEY__NAME = 'WEBTRIT_APP_GETSTREAM_API_KEY';
+  static const GETSTREAM_API_KEY = String.fromEnvironment(
+    GETSTREAM_API_KEY__NAME,
+  );
 }

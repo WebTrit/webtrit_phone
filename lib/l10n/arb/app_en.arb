@@ -485,5 +485,11 @@
   "autoprovision_ReloginDialog_confirm": "Confirm",
   "@autoprovision_ReloginDialog_confirm": {},
   "autoprovision_ReloginDialog_decline": "Decline",
-  "@autoprovision_ReloginDialog_decline": {}
+  "@autoprovision_ReloginDialog_decline": {},
+  "chats_RouterPage_failure": "Failed connecting to chat service",
+  "@chats_RouterPage_failure": {},
+  "chats_Conversation_failure": "Failed create conversation",
+  "@chats_Conversation_failure": {},
+  "chats_ActionBtn_retry": "Retry",
+  "@chats_ActionBtn_retry": {}
 }

@@ -486,5 +486,11 @@
   "autoprovision_ReloginDialog_confirm": "Підтвердити",
   "@autoprovision_ReloginDialog_confirm": {},
   "autoprovision_ReloginDialog_decline": "Відхилити",
-  "@autoprovision_ReloginDialog_decline": {}
+  "@autoprovision_ReloginDialog_decline": {},
+  "chats_RouterPage_failure": "Не вдалося підключитися до служби чату",
+  "@chats_RouterPage_failure": {},
+  "chats_Conversation_failure": "Не вдалося створити бесіду",
+  "@chats_Conversation_failure": {},
+  "chats_ActionBtn_retry": "Повторить спробу",
+  "@chats_ActionBtn_retry": {}
 }

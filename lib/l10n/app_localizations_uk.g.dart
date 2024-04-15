@@ -624,4 +624,13 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get autoprovision_ReloginDialog_decline => 'Відхилити';
+
+  @override
+  String get chats_RouterPage_failure => 'Не вдалося підключитися до служби чату';
+
+  @override
+  String get chats_Conversation_failure => 'Не вдалося створити бесіду';
+
+  @override
+  String get chats_ActionBtn_retry => 'Повторить спробу';
 }

@@ -624,4 +624,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get autoprovision_ReloginDialog_decline => 'Decline';
+
+  @override
+  String get chats_RouterPage_failure => 'Failed connecting to chat service';
+
+  @override
+  String get chats_Conversation_failure => 'Failed create conversation';
+
+  @override
+  String get chats_ActionBtn_retry => 'Retry';
 }

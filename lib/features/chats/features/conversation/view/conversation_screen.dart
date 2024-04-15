@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class ConversationScreen extends StatefulWidget {
@@ -28,10 +29,9 @@ class _ConversationScreenState extends State<ConversationScreen> {
           }
 
           if (state is CvnError) {
-            // TODO: localize
             return NoDataPlaceholder(
-              content: const Text('Error connecting to chat service'),
-              actions: [TextButton(onPressed: retryPreparing, child: const Text('Retry'))],
+              content: Text(context.l10n.chats_Conversation_failure),
+              actions: [TextButton(onPressed: retryPreparing, child: Text(context.l10n.chats_ActionBtn_retry))],
             );
           }
 

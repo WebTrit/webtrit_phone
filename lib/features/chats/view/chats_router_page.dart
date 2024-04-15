@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 @RoutePage()
@@ -29,14 +30,8 @@ class ChatsRouterPage extends StatelessWidget {
 
         if (state.status == ChatsStatus.error) {
           return NoDataPlaceholder(
-            // TODO: localize
-            content: const Text('Error connecting to chat service'),
-            actions: [
-              TextButton(
-                onPressed: refreshChatsConnection,
-                child: const Text('Retry'),
-              ),
-            ],
+            content: Text(context.l10n.chats_RouterPage_failure),
+            actions: [TextButton(onPressed: refreshChatsConnection, child: Text(context.l10n.chats_ActionBtn_retry))],
           );
         }
 

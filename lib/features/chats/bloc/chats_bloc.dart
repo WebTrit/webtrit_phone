@@ -5,18 +5,24 @@ import 'package:equatable/equatable.dart';
 import 'package:http/http.dart' as http;
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
-import 'package:webtrit_phone/app/constants.dart';
-
 part 'chats_event.dart';
 part 'chats_state.dart';
 
+/// Cubit for managing the getstream chat connection.
+/// Responsible for requesting chat token for user from the backend service and connecting to the getstream api.
 class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
-  ChatsBloc(String apiKey, this._token, this._tenantId) : super(ChatsState.initial(apiKey)) {
+  ChatsBloc(
+    String apiKey,
+    this._token,
+    this._tenantId,
+    this._getStreamServiceUrl,
+  ) : super(ChatsState.initial(apiKey)) {
     on<Connect>(_connect);
     on<Refresh>(_refresh);
   }
   final String _token;
   final String _tenantId;
+  final String _getStreamServiceUrl;
 
   void _connect(Connect event, Emitter<ChatsState> emit) async {
     try {
@@ -41,10 +47,9 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
   }
 
   /// Fetches the chat token and user id from the chat service
-  /// TODO: move somewhere
   Future<ChatClientData> get _chatClientData async {
     final response = await http.get(
-      Uri.parse('$getStreamServiceUrl/api/chat-token'),
+      Uri.parse('$_getStreamServiceUrl/api/chat-token'),
       headers: {'Authorization': 'Bearer $_token', 'x-tenant-id': _tenantId},
     );
 
