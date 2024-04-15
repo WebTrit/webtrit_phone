@@ -53,7 +53,7 @@ dependencies:
   logging_appenders: ^1.2.0
   material_color_utilities: any
   meta: any
-  package_info_plus: ^5.0.1
+  package_info_plus: ^7.0.0
   path: ^1.8.3
   path_provider: ^2.1.2
   permission_handler: ^11.3.0
