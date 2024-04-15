@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 @RoutePage()
 class ChatsRouterPage extends StatelessWidget {
@@ -12,15 +13,11 @@ class ChatsRouterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ChatsBloc, ChatsState>(
-      listener: (context, state) {
-        if (state.status == ChatsStatus.error) {
-          final notificationsBloc = context.read<NotificationsBloc>();
-          final exception = state.error ?? Exception('Unknown error');
-          final event = NotificationsMessaged(DefaultErrorNotification(exception));
-          notificationsBloc.add(event);
-        }
-      },
+    void refreshChatsConnection() {
+      context.read<ChatsBloc>().add(const Refresh());
+    }
+
+    return BlocBuilder<ChatsBloc, ChatsState>(
       builder: (context, state) {
         if (state.status == ChatsStatus.connected) {
           return StreamChat(
@@ -29,6 +26,20 @@ class ChatsRouterPage extends StatelessWidget {
             child: const AutoRouter(),
           );
         }
+
+        if (state.status == ChatsStatus.error) {
+          return NoDataPlaceholder(
+            // TODO: localize
+            content: const Text('Error connecting to chat service'),
+            actions: [
+              TextButton(
+                onPressed: refreshChatsConnection,
+                child: const Text('Retry'),
+              ),
+            ],
+          );
+        }
+
         return const Center(child: CircularProgressIndicator());
       },
     );

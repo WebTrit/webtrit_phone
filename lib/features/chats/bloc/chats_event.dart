@@ -7,3 +7,7 @@ abstract class ChatsEvent {
 class Connect extends ChatsEvent {
   const Connect();
 }
+
+class Refresh extends ChatsEvent {
+  const Refresh();
+}

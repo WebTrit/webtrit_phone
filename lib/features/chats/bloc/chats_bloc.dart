@@ -13,12 +13,25 @@ part 'chats_state.dart';
 class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
   ChatsBloc(String apiKey, this._token, this._tenantId) : super(ChatsState.initial(apiKey)) {
     on<Connect>(_connect);
+    on<Refresh>(_refresh);
   }
   final String _token;
   final String _tenantId;
 
   void _connect(Connect event, Emitter<ChatsState> emit) async {
     try {
+      final chatClientData = await _chatClientData;
+      await state.client.connectUser(User(id: chatClientData.userId), chatClientData.token);
+      emit(state.copyWith(status: ChatsStatus.connected));
+    } on Exception catch (e) {
+      emit(state.copyWith(status: ChatsStatus.error, error: e));
+    }
+  }
+
+  void _refresh(Refresh event, Emitter<ChatsState> emit) async {
+    try {
+      emit(state.copyWith(status: ChatsStatus.connecting));
+      await state.client.disconnectUser();
       final chatClientData = await _chatClientData;
       await state.client.connectUser(User(id: chatClientData.userId), chatClientData.token);
       emit(state.copyWith(status: ChatsStatus.connected));
