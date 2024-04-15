@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:proximity_sensor/proximity_sensor.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/orientations/orientations.dart';
@@ -25,6 +27,22 @@ class CallShell extends StatefulWidget {
 
 class _CallShellState extends State<CallShell> {
   ThumbnailAvatar? _avatar;
+  StreamSubscription? _proximitySubscription;
+
+  @override
+  void dispose() {
+    super.dispose();
+    _unlistenProximity();
+  }
+
+  _listenProximity() async {
+    await ProximitySensor.setProximityScreenOff(true);
+    _proximitySubscription = ProximitySensor.events.listen((int event) {});
+  }
+
+  _unlistenProximity() async {
+    _proximitySubscription?.cancel();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +56,12 @@ class _CallShellState extends State<CallShell> {
           orientationsBloc.add(const OrientationsChanged(PreferredOrientation.call));
         } else {
           orientationsBloc.add(const OrientationsChanged(PreferredOrientation.regular));
+        }
+
+        if (state.display == CallDisplay.screen && state.activeCalls.current.video == false) {
+          _listenProximity();
+        } else {
+          _unlistenProximity();
         }
 
         if (state.display == CallDisplay.screen) {
