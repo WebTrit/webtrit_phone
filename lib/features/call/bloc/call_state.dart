@@ -64,7 +64,11 @@ class CallState with _$CallState {
 
   bool get isActive => activeCalls.isNotEmpty;
 
+  bool get isVoiceChat => activeCalls.current.video == false;
+
   bool get isBlingTransferInitiated => activeCalls.blindTransferInitiated != null;
+
+  bool get shouldListenToProximity => isActive && isVoiceChat && minimized != true;
 
   ActiveCall? retrieveActiveCall(String callId) {
     for (var activeCall in activeCalls) {

@@ -58,7 +58,7 @@ class _CallShellState extends State<CallShell> {
           orientationsBloc.add(const OrientationsChanged(PreferredOrientation.regular));
         }
 
-        if (state.display == CallDisplay.screen && state.activeCalls.current.video == false) {
+        if (state.shouldListenToProximity) {
           _listenProximity();
         } else {
           _unlistenProximity();
