@@ -1842,8 +1842,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     };
     final localStream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
     if (!kIsWeb) {
-      await Helper.setAppleAudioConfiguration(
-          AppleAudioConfiguration(appleAudioMode: video ? AppleAudioMode.videoChat : AppleAudioMode.voiceChat));
+      // Dont set apple audio mode to voice_chat if you want to controll proximity sensor manually
+      await Helper.setAppleAudioConfiguration(AppleAudioConfiguration(appleAudioMode: AppleAudioMode.videoChat));
       await Helper.setSpeakerphoneOn(video);
     }
 

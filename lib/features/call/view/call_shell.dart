@@ -36,7 +36,7 @@ class _CallShellState extends State<CallShell> {
   }
 
   _listenProximity() async {
-    await ProximitySensor.setProximityScreenOff(true);
+    await ProximitySensor.setProximityScreenOff(true).catchError((_) {});
     _proximitySubscription = ProximitySensor.events.listen((int event) {});
   }
 
