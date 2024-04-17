@@ -54,7 +54,13 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
 
   onSessionCreated(BuildContext context, SessionCreated state) async {
     await navigateBack();
-    appBloc.add(AppLogined(coreUrl: state.coreUrl, token: state.token, tenantId: state.tenantId ?? ''));
+    appBloc.add(AppLogined(coreUrl: state.coreUrl, token: state.token, tenantId: state.tenantId));
+  }
+
+  @override
+  initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => apnCubit.init());
   }
 
   @override
