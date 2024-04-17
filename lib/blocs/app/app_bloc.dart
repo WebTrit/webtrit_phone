@@ -67,7 +67,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     await secureStorage.writeTenantId(event.tenantId);
     await secureStorage.writeToken(event.token);
 
-    if (event.silent) return;
     emit(state.copyWith(
       coreUrl: event.coreUrl,
       tenantId: event.tenantId,

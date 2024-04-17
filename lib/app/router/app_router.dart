@@ -314,9 +314,10 @@ class AppRouter extends _$AppRouter {
     final query = resolver.route.queryParams;
     final configToken = query.optString('config_token');
 
-    // Protect against the case when the user navigates to the autoprovision screen
-    // without a config token. In this case, the user should be redirected to the main screen.
-    if (configToken != null && configToken.isNotEmpty) {
+    // Protect from invalid token or redirect to the main shell in case
+    // when new token is aplied by appbloc and provisioning screen is initial
+    // so the reevaluation will be triggered
+    if (configToken != null && configToken.isNotEmpty && !resolver.isReevaluating) {
       resolver.next(true);
     } else {
       resolver.next(false);

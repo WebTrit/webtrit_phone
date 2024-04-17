@@ -19,17 +19,13 @@ mixin _$AppLogined {
   String get coreUrl => throw _privateConstructorUsedError;
   String get tenantId => throw _privateConstructorUsedError;
   String get token => throw _privateConstructorUsedError;
-  bool get silent => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 
 class _$AppLoginedImpl implements _AppLogined {
   const _$AppLoginedImpl(
-      {required this.coreUrl,
-      required this.tenantId,
-      required this.token,
-      this.silent = false});
+      {required this.coreUrl, required this.tenantId, required this.token});
 
   @override
   final String coreUrl;
@@ -37,13 +33,10 @@ class _$AppLoginedImpl implements _AppLogined {
   final String tenantId;
   @override
   final String token;
-  @override
-  @JsonKey()
-  final bool silent;
 
   @override
   String toString() {
-    return 'AppLogined(coreUrl: $coreUrl, tenantId: $tenantId, token: $token, silent: $silent)';
+    return 'AppLogined(coreUrl: $coreUrl, tenantId: $tenantId, token: $token)';
   }
 
   @override
@@ -54,21 +47,18 @@ class _$AppLoginedImpl implements _AppLogined {
             (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
             (identical(other.tenantId, tenantId) ||
                 other.tenantId == tenantId) &&
-            (identical(other.token, token) || other.token == token) &&
-            (identical(other.silent, silent) || other.silent == silent));
+            (identical(other.token, token) || other.token == token));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, coreUrl, tenantId, token, silent);
+  int get hashCode => Object.hash(runtimeType, coreUrl, tenantId, token);
 }
 
 abstract class _AppLogined implements AppLogined {
   const factory _AppLogined(
       {required final String coreUrl,
       required final String tenantId,
-      required final String token,
-      final bool silent}) = _$AppLoginedImpl;
+      required final String token}) = _$AppLoginedImpl;
 
   @override
   String get coreUrl;
@@ -76,8 +66,6 @@ abstract class _AppLogined implements AppLogined {
   String get tenantId;
   @override
   String get token;
-  @override
-  bool get silent;
 }
 
 /// @nodoc

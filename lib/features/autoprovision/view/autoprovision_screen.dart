@@ -20,8 +20,9 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
   late final apnCubit = context.read<AutoprovisionCubit>();
   late final router = context.router;
 
-  navigateBack() async {
+  Future navigateBack() async {
     if (router.canPop(ignorePagelessRoutes: true)) {
+      // For case when app is launched with the autoprovision screen on top of any screen.
       await router.pop();
     } else {
       // For the case when the app is launched with the autoprovision screen as initial route.
@@ -29,45 +30,48 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
     }
   }
 
-  onError(BuildContext context, Error state) async {
+  void onError(BuildContext context, Error state) async {
     await navigateBack();
     nfnBloc.add(NotificationsMessaged(DefaultErrorNotification(state.error)));
   }
 
-  onConfirmationNeeded() async {
-    final result = await showDialog(
+  void onConfirmationNeeded() async {
+    final confirm = await showDialog(
       context: context,
       builder: (context) => const ReloginDialog(),
       useRootNavigator: false,
     );
 
+    // Drop the result if the screen was disposed during the dialog.
     if (!mounted) return;
 
-    if (result == true) {
-      apnCubit.confirmReplaceSession();
-    } else {
-      navigateBack();
-    }
+    if (confirm == true) apnCubit.confirmReplaceSession();
+    if (confirm != true) navigateBack();
   }
 
-  onSessionCreated(SessionCreated state) async {
+  void onSessionCreated(SessionCreated state) async {
     if (router.canPop()) {
       final loginUnderneeth = router.stack.first.name == LoginRouterPageRoute.name;
       final mainShellUnderneeth = router.stack.first.name == MainShellRoute.name;
 
+      // For case when app is launched with the autoprovision screen on top of the login screen.
       if (loginUnderneeth) {
         await router.pop();
         appBloc.add(AppLogined(coreUrl: state.coreUrl, token: state.token, tenantId: state.tenantId));
       }
 
+      // For case when app is launched with the autoprovision screen on top of the main shell.
+      // To avoid callkeep and signaling panic it required full sequence of dispose and init.
       if (mainShellUnderneeth) {
-        // TODO: avoid call bloc panic
-        appBloc.add(AppLogined(coreUrl: state.coreUrl, token: state.token, tenantId: state.tenantId, silent: true));
-        await router.replaceAll([const MainShellRoute()], updateExistingRoutes: false);
+        await router.pop();
+        appBloc.add(const AppLogouted());
+        await appBloc.stream.firstWhere((element) => element.token == null);
+        appBloc.add(AppLogined(coreUrl: state.coreUrl, token: state.token, tenantId: state.tenantId));
       }
     } else {
-      appBloc.add(AppLogined(coreUrl: state.coreUrl, token: state.token, tenantId: state.tenantId, silent: true));
-      router.replace(const MainShellRoute());
+      // For the case when the app is launched with the autoprovision screen as initial route.
+      appBloc.add(AppLogined(coreUrl: state.coreUrl, token: state.token, tenantId: state.tenantId));
+      // Then will be redirected by reevaluation and redirect inside [onAutoprovisionScreenPageRouteGuardNavigation]
     }
   }
 
