@@ -21,6 +21,7 @@ import 'package:webtrit_phone/utils/path_provider/_native.dart';
 
 import 'background_call_handler.dart';
 import 'environment_config.dart';
+import 'firebase_options.dart';
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   final logger = Logger('bootstrap');
@@ -71,7 +72,9 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
 @pragma('vm:entry-point')
 Future<void> _initFirebase() async {
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
 
 Future<void> _initFirebaseMessaging() async {
