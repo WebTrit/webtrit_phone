@@ -835,13 +835,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     final handle = CallkeepHandle.number(event.caller);
 
-    await callkeep.reportUpdateCall(
-      event.callId,
-      handle: handle,
-      displayName: event.callerDisplayName,
-      hasVideo: video,
-    );
-
     emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
       return activeCall.copyWith(
         handle: handle,
@@ -850,6 +843,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         updating: true,
       );
     }));
+
+    await callkeep.reportUpdateCall(
+      event.callId,
+      handle: handle,
+      displayName: event.callerDisplayName,
+      hasVideo: video,
+      proximityEnabled: state.shouldListenToProximity,
+    );
 
     final jsep = event.jsep;
     if (jsep != null) {
@@ -959,6 +960,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       event.handle,
       displayNameOrContactIdentifier: event.displayName,
       hasVideo: event.video,
+      proximityEnabled: !event.video,
     );
     if (error != null) {
       if (error == CallkeepCallRequestError.emergencyNumber) {
@@ -1103,6 +1105,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     });
 
     emit(newState);
+
+    await callkeep.reportUpdateCall(
+      state.activeCalls.current.callId,
+      proximityEnabled: state.shouldListenToProximity,
+    );
   }
 
   Future<void> _onCallControlEventBlindTransferred(
@@ -1127,6 +1134,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     });
 
     emit(newState);
+
+    await callkeep.reportUpdateCall(
+      state.activeCalls.current.callId,
+      proximityEnabled: state.shouldListenToProximity,
+    );
 
     await _signalingClient?.execute(TransferRequest(
       transaction: WebtritSignalingClient.generateTransactionId(),
@@ -1549,6 +1561,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     });
 
     emit(newState);
+
+    await callkeep.reportUpdateCall(
+      state.activeCalls.current.callId,
+      proximityEnabled: state.shouldListenToProximity,
+    );
   }
 
   Future<void> __onCallScreenEventDidPop(
@@ -1556,6 +1573,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     emit(state.copyWith(minimized: state.activeCalls.isEmpty ? null : true));
+
+    if (state.activeCalls.isNotEmpty) {
+      await callkeep.reportUpdateCall(
+        state.activeCalls.current.callId,
+        proximityEnabled: state.shouldListenToProximity,
+      );
+    }
   }
 
   // WebtritSignalingClient listen handlers
@@ -1842,8 +1866,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     };
     final localStream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
     if (!kIsWeb) {
-      await Helper.setAppleAudioConfiguration(
-          AppleAudioConfiguration(appleAudioMode: video ? AppleAudioMode.videoChat : AppleAudioMode.voiceChat));
+      await Helper.setAppleAudioConfiguration(AppleAudioConfiguration(
+        appleAudioMode: video ? AppleAudioMode.videoChat : AppleAudioMode.voiceChat,
+      ));
       await Helper.setSpeakerphoneOn(video);
     }
 

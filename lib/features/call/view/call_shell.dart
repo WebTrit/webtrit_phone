@@ -25,7 +25,6 @@ class CallShell extends StatefulWidget {
 
 class _CallShellState extends State<CallShell> {
   ThumbnailAvatar? _avatar;
-
   @override
   Widget build(BuildContext context) {
     return BlocListener<CallBloc, CallState>(
