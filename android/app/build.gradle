@@ -99,7 +99,7 @@ android {
     defaultConfig {
         applicationId "com.webtrit.app"
         applicationIdSuffix dartDefine.WEBTRIT_APP_ID_SUFFIX
-        minSdkVersion 23 // flutter.minSdkVersion
+        minSdkVersion 26 // flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
