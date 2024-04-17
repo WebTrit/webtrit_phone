@@ -48,12 +48,12 @@ def dartDefine = [
 ]
 
 def envDefine = [
-        WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH: System.env.WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH,
+        WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH: projectPropertyDartDefines['WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH'] ?: '',
 ]
 
 def keystoreMetadata
 def keystoreFile
-if (envDefine.WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH != null) {
+if (!envDefine.WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH.isEmpty()) {
     def keystoreMetadataPath = Paths.get(envDefine.WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH, "upload-keystore-metadata.json")
     def keystoreMetadataFile = rootProject.file(keystoreMetadataPath)
     println("Release signing configs retrieved from the metadata file: $keystoreMetadataFile")
