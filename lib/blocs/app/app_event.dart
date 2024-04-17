@@ -10,6 +10,7 @@ class AppLogined with _$AppLogined implements AppEvent {
     required String coreUrl,
     required String tenantId,
     required String token,
+    @Default(false) bool silent,
   }) = _AppLogined;
 }
 

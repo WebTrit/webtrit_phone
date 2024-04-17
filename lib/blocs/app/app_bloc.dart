@@ -61,15 +61,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     // Example: logging in with a deeplink while already logged with another account.
     // In this case, clear the database and preferences.
     final isRelogin = state.token != null;
-    if (isRelogin) {
-      await _cleanUpUserData();
-      emit(state.copyWith(coreUrl: null, tenantId: null, token: null));
-    }
+    if (isRelogin) await _cleanUpUserData();
 
     await secureStorage.writeCoreUrl(event.coreUrl);
     await secureStorage.writeTenantId(event.tenantId);
     await secureStorage.writeToken(event.token);
 
+    if (event.silent) return;
     emit(state.copyWith(
       coreUrl: event.coreUrl,
       tenantId: event.tenantId,

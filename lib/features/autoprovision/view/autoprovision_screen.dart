@@ -5,9 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
-import 'package:webtrit_phone/features/autoprovision/cubit/autoprovision_cubit.dart';
-import 'package:webtrit_phone/features/autoprovision/widgets/relogin_dialog.dart';
-import 'package:webtrit_phone/features/notifications/notifications.dart';
+import 'package:webtrit_phone/features/features.dart';
 
 class AutoprovisionScreen extends StatefulWidget {
   const AutoprovisionScreen({super.key});
@@ -27,7 +25,7 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
       await router.pop();
     } else {
       // For the case when the app is launched with the autoprovision screen as initial route.
-      await router.replaceAll([const AppShellRoute()]);
+      await router.replace(const MainShellRoute());
     }
   }
 
@@ -36,7 +34,7 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
     nfnBloc.add(NotificationsMessaged(DefaultErrorNotification(state.error)));
   }
 
-  onConfirmationNeeded(BuildContext context) async {
+  onConfirmationNeeded() async {
     final result = await showDialog(
       context: context,
       builder: (context) => const ReloginDialog(),
@@ -52,9 +50,25 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
     }
   }
 
-  onSessionCreated(BuildContext context, SessionCreated state) async {
-    await navigateBack();
-    appBloc.add(AppLogined(coreUrl: state.coreUrl, token: state.token, tenantId: state.tenantId));
+  onSessionCreated(SessionCreated state) async {
+    if (router.canPop()) {
+      final loginUnderneeth = router.stack.first.name == LoginRouterPageRoute.name;
+      final mainShellUnderneeth = router.stack.first.name == MainShellRoute.name;
+
+      if (loginUnderneeth) {
+        await router.pop();
+        appBloc.add(AppLogined(coreUrl: state.coreUrl, token: state.token, tenantId: state.tenantId));
+      }
+
+      if (mainShellUnderneeth) {
+        // TODO: avoid call bloc panic
+        appBloc.add(AppLogined(coreUrl: state.coreUrl, token: state.token, tenantId: state.tenantId, silent: true));
+        await router.replaceAll([const MainShellRoute()], updateExistingRoutes: false);
+      }
+    } else {
+      appBloc.add(AppLogined(coreUrl: state.coreUrl, token: state.token, tenantId: state.tenantId, silent: true));
+      router.replace(const MainShellRoute());
+    }
   }
 
   @override
@@ -69,8 +83,8 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
       body: BlocConsumer<AutoprovisionCubit, AutoprovisionState>(
         listener: (context, state) {
           if (state is Error) onError(context, state);
-          if (state is SessionCreated) onSessionCreated(context, state);
-          if (state is ReplaceConfirmationNeeded) onConfirmationNeeded(context);
+          if (state is SessionCreated) onSessionCreated(state);
+          if (state is ReplaceConfirmationNeeded) onConfirmationNeeded();
         },
         builder: (context, state) {
           return const Center(child: CircularProgressIndicator());
