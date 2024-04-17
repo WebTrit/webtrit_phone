@@ -202,24 +202,40 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   //
 
   void _peerConnectionComplete(String callId, RTCPeerConnection peerConnection) {
-    _logger.finer(() => 'Complete peerConnection completer with callId: $callId');
-    final peerConnectionCompleter = _peerConnectionCompleters[callId]!;
-    peerConnectionCompleter.complete(peerConnection);
+    try {
+      _logger.finer(() => 'Complete peerConnection completer with callId: $callId');
+      final peerConnectionCompleter = _peerConnectionCompleters[callId]!;
+      peerConnectionCompleter.complete(peerConnection);
+    } catch (e) {
+      // Handle the exception for correct functionality, for example, when the peer connection has already been completed.
+      _logger.warning('_peerConnectionComplete: $e');
+    }
   }
 
   void _peerConnectionCompleteError(String callId, Object error, [StackTrace? stackTrace]) {
-    _logger.finer(() => 'CompleteError peerConnection completer with callId: $callId');
-    final peerConnectionCompleter = _peerConnectionCompleters[callId]!;
-    peerConnectionCompleter.completeError(error, stackTrace);
+    try {
+      _logger.finer(() => 'CompleteError peerConnection completer with callId: $callId');
+      final peerConnectionCompleter = _peerConnectionCompleters[callId]!;
+      peerConnectionCompleter.completeError(error, stackTrace);
+    } catch (e) {
+      // Handle the exception for correct functionality, for example, when the peer connection has already been completed.
+      _logger.warning('_peerConnectionCompleteError: $e');
+    }
   }
 
   void _peerConnectionConditionalCompleteError(String callId, Object error, [StackTrace? stackTrace]) {
-    final peerConnectionCompleter = _peerConnectionCompleters[callId]!;
-    if (peerConnectionCompleter.isCompleted) {
-      _logger.finer(() => 'ConditionalCompleteError peerConnection completer with callId: $callId - already completed');
-    } else {
-      _logger.finer(() => 'ConditionalCompleteError peerConnection completer with callId: $callId');
-      peerConnectionCompleter.completeError(error, stackTrace);
+    try {
+      final peerConnectionCompleter = _peerConnectionCompleters[callId]!;
+      if (peerConnectionCompleter.isCompleted) {
+        _logger
+            .finer(() => 'ConditionalCompleteError peerConnection completer with callId: $callId - already completed');
+      } else {
+        _logger.finer(() => 'ConditionalCompleteError peerConnection completer with callId: $callId');
+        peerConnectionCompleter.completeError(error, stackTrace);
+      }
+    } catch (e) {
+      // Handle the exception for correct functionality, for example, when the peer connection has already been completed.
+      _logger.warning('_peerConnectionConditionalCompleteError: $e');
     }
   }
 
