@@ -6,6 +6,7 @@ plugins {
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
     id "com.google.gms.google-services"
+    id "com.google.firebase.crashlytics"
 }
 
 def localProperties = new Properties()
@@ -26,30 +27,33 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-
-def dartEnvironmentVariables = []
+def projectPropertyDartDefines = [:];
 if (project.hasProperty('dart-defines')) {
-    dartEnvironmentVariables = project.property('dart-defines')
+    projectPropertyDartDefines += project.property('dart-defines')
             .split(',')
             .collectEntries { entry ->
                 def pair = new String(entry.decodeBase64(), 'UTF-8').split('=')
-                [(pair.first()): pair.last()]
+                if (pair.size() > 1) {
+                    [(pair.first()): pair.last()]
+                } else {
+                    [(pair.first()): '']
+                }
             }
 }
 
 def dartDefine = [
-        WEBTRIT_APP_ID_SUFFIX  : project.findProperty('WEBTRIT_APP_ID_SUFFIX') ?: dartEnvironmentVariables["WEBTRIT_APP_ID_SUFFIX"] ?: '',
-        WEBTRIT_APP_LINK_DOMAIN: project.findProperty('WEBTRIT_APP_LINK_DOMAIN') ?: dartEnvironmentVariables["WEBTRIT_APP_LINK_DOMAIN"] ?: 'app.webtrit.com',
-        WEBTRIT_APP_NAME       : project.findProperty('WEBTRIT_APP_NAME') ?: dartEnvironmentVariables["WEBTRIT_APP_NAME"] ?: 'WebTrit',
+        WEBTRIT_APP_ID_SUFFIX  : projectPropertyDartDefines['WEBTRIT_APP_ID_SUFFIX'] ?: '',
+        WEBTRIT_APP_LINK_DOMAIN: projectPropertyDartDefines['WEBTRIT_APP_LINK_DOMAIN'] ?: 'app.webtrit.com',
+        WEBTRIT_APP_NAME       : projectPropertyDartDefines['WEBTRIT_APP_NAME'] ?: 'WebTrit',
 ]
 
 def envDefine = [
-        WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH: System.env.WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH ?: dartEnvironmentVariables["WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH"]
+        WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH: projectPropertyDartDefines['WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH'] ?: '',
 ]
 
 def keystoreMetadata
 def keystoreFile
-if (envDefine.WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH != null) {
+if (!envDefine.WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH.isEmpty()) {
     def keystoreMetadataPath = Paths.get(envDefine.WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH, "upload-keystore-metadata.json")
     def keystoreMetadataFile = rootProject.file(keystoreMetadataPath)
     println("Release signing configs retrieved from the metadata file: $keystoreMetadataFile")
@@ -76,7 +80,7 @@ if (envDefine.WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH != null) {
 
 android {
     namespace "com.webtrit.app"
-    compileSdkVersion 33 // flutter.compileSdkVersion
+    compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
     compileOptions {
