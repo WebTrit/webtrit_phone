@@ -18,7 +18,6 @@ import 'package:webtrit_phone/data/app_sound.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/notifications/notifications.dart';
 import 'package:webtrit_phone/models/recent.dart';
@@ -40,10 +39,12 @@ const int _kUndefinedLine = -1;
 final _logger = Logger('CallBloc');
 
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
+  final String coreUrl;
+  final String tenantId;
+  final String token;
+
   final RecentsRepository recentsRepository;
   final NotificationsBloc notificationsBloc;
-  // TODO: remove appBloc dependency
-  final AppBloc appBloc;
   final Callkeep callkeep;
   final AndroidPendingCallHandler pendingCallHandler;
 
@@ -58,9 +59,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final _appSound = AppSound();
 
   CallBloc({
+    required this.coreUrl,
+    required this.tenantId,
+    required this.token,
     required this.recentsRepository,
     required this.notificationsBloc,
-    required this.appBloc,
     required this.callkeep,
     required this.pendingCallHandler,
   }) : super(const CallState()) {
@@ -446,9 +449,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       if (emit.isDone) return;
 
-      final signalingUrl = _parseCoreUrlToSignalingUrl(appBloc.state.coreUrl!);
-      final tenantId = appBloc.state.tenantId!;
-      final token = appBloc.state.token!;
+      final signalingUrl = _parseCoreUrlToSignalingUrl(coreUrl);
       final signalingClient = await WebtritSignalingClient.connect(
         signalingUrl,
         tenantId,
@@ -540,8 +541,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final code = SignalingDisconnectCode.values.byCode(signalingDisconnectCode);
       if (code == SignalingDisconnectCode.sessionMissedError) {
         notificationsBloc.add(const NotificationsIssued(CallSignalingClientSessionMissedErrorNotification()));
-        // TODO: move to state listener, this way causes lifecycle mess
-        appBloc.add(const AppLogouted());
       } else if (code == SignalingDisconnectCode.appUnregisteredError) {
         add(const _RegistrationChange(registrationStatus: RegistrationStatus.unregistered));
       } else if (code == SignalingDisconnectCode.requestCallIdError) {
