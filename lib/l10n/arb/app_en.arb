@@ -483,5 +483,9 @@
   "autoprovision_ReloginDialog_confirm": "Confirm",
   "@autoprovision_ReloginDialog_confirm": {},
   "autoprovision_ReloginDialog_decline": "Decline",
-  "@autoprovision_ReloginDialog_decline": {}
+  "@autoprovision_ReloginDialog_decline": {},
+  "autoprovision_errorSnackBar_invalidToken": "The auto configuration credentials were rejected by the server. Please request a new configuration link",
+  "@autoprovision_errorSnackBar_invalidToken": {},
+  "autoprovision_successSnackBar_used": "Successfully retrieved your settings, your app is ready to use",
+  "@autoprovision_successSnackBar_used": {}
 }

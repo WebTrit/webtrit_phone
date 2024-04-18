@@ -2,47 +2,103 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
-import 'package:webtrit_phone/features/autoprovision/cubit/autoprovision_cubit.dart';
-import 'package:webtrit_phone/features/autoprovision/widgets/relogin_dialog.dart';
-import 'package:webtrit_phone/features/notifications/notifications.dart';
+import 'package:webtrit_phone/features/features.dart';
 
-class AutoprovisionScreen extends StatelessWidget {
+class AutoprovisionScreen extends StatefulWidget {
   const AutoprovisionScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final appBloc = context.read<AppBloc>();
-    final nfnBloc = context.read<NotificationsBloc>();
-    final apnCubit = context.read<AutoprovisionCubit>();
-    final router = context.router;
+  State<AutoprovisionScreen> createState() => _AutoprovisionScreenState();
+}
 
-    onError(BuildContext context, Error state) {
-      router.navigate(const AppShellRoute());
+class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
+  late final appBloc = context.read<AppBloc>();
+  late final nfnBloc = context.read<NotificationsBloc>();
+  late final apnCubit = context.read<AutoprovisionCubit>();
+  late final router = context.router;
+
+  Future navigateBack() async {
+    if (router.canPop(ignorePagelessRoutes: true)) {
+      // For case when app is launched with the autoprovision screen on top of any screen.
+      await router.pop();
+    } else {
+      // For the case when the app is launched with the autoprovision screen as initial route.
+      await router.replace(const MainShellRoute());
+    }
+  }
+
+  void onError(BuildContext context, Error state) async {
+    await navigateBack();
+    final error = state.error;
+    if (error is RequestFailure && error.statusCode == 401) {
+      nfnBloc.add(const NotificationsMessaged(InvalidAutoProvisioningToken()));
+    } else {
       nfnBloc.add(NotificationsMessaged(DefaultErrorNotification(state.error)));
     }
+  }
 
-    onConfirmationNeeded(BuildContext context) async {
-      final result = await showDialog(context: context, builder: (context) => const ReloginDialog());
-      if (result == true) {
-        apnCubit.confirmReplaceSession();
-      } else {
-        router.navigate(const AppShellRoute());
+  void onConfirmationNeeded() async {
+    final confirm = await showDialog(
+      context: context,
+      builder: (context) => const ReloginDialog(),
+      useRootNavigator: false,
+    );
+
+    // Drop the result if the screen was disposed during the dialog.
+    if (!mounted) return;
+
+    if (confirm == true) apnCubit.confirmReplaceSession();
+    if (confirm != true) navigateBack();
+  }
+
+  void onSessionCreated(SessionCreated state) async {
+    if (router.canPop()) {
+      final loginUnderneeth = router.stack.first.name == LoginRouterPageRoute.name;
+      final mainShellUnderneeth = router.stack.first.name == MainShellRoute.name;
+
+      // For case when app is launched with the autoprovision screen on top of the login screen.
+      if (loginUnderneeth) {
+        await router.pop();
+        appBloc.add(AppLogined(coreUrl: state.coreUrl, token: state.token, tenantId: state.tenantId));
       }
+
+      // For case when app is launched with the autoprovision screen on top of the main shell.
+      // To avoid callkeep and signaling panic it required full sequence of dispose and init.
+      if (mainShellUnderneeth) {
+        await router.pop();
+        appBloc.add(const AppLogouted());
+        await appBloc.stream.firstWhere((element) => element.token == null);
+        appBloc.add(AppLogined(coreUrl: state.coreUrl, token: state.token, tenantId: state.tenantId));
+        await appBloc.stream.firstWhere((element) => element.token == state.token);
+      }
+    } else {
+      // For the case when the app is launched with the autoprovision screen as initial route.
+      appBloc.add(AppLogined(coreUrl: state.coreUrl, token: state.token, tenantId: state.tenantId));
+      await appBloc.stream.firstWhere((element) => element.token == state.token);
+      // Then will be redirected by router reevaluation and redirect inside [onAutoprovisionScreenPageRouteGuardNavigation]
     }
 
-    onSessionCreated(BuildContext context, SessionCreated state) {
-      appBloc.add(AppLogined(coreUrl: state.coreUrl, token: state.token, tenantId: state.tenantId ?? ''));
-    }
+    nfnBloc.add(const NotificationsMessaged(SuccesfulUsedAutoProvisioningToken()));
+  }
 
+  @override
+  initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => apnCubit.init());
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: BlocConsumer<AutoprovisionCubit, AutoprovisionState>(
         listener: (context, state) {
           if (state is Error) onError(context, state);
-          if (state is SessionCreated) onSessionCreated(context, state);
-          if (state is ReplaceConfirmationNeeded) onConfirmationNeeded(context);
+          if (state is SessionCreated) onSessionCreated(state);
+          if (state is ReplaceConfirmationNeeded) onConfirmationNeeded();
         },
         builder: (context, state) {
           return const Center(child: CircularProgressIndicator());

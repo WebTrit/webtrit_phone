@@ -484,5 +484,9 @@
   "autoprovision_ReloginDialog_confirm": "Підтвердити",
   "@autoprovision_ReloginDialog_confirm": {},
   "autoprovision_ReloginDialog_decline": "Відхилити",
-  "@autoprovision_ReloginDialog_decline": {}
+  "@autoprovision_ReloginDialog_decline": {},
+  "autoprovision_errorSnackBar_invalidToken": "Облікові дані авто-конфігурації були відхилені сервером. Будь ласка, надішліть запит на нове посилання авто-конфігурації",
+  "@autoprovision_errorSnackBar_invalidToken": {},
+  "autoprovision_successSnackBar_used": "Ваші налаштування успішно отримано, ваш додаток готовий до використання",
+  "@autoprovision_successSnackBar_used": {}
 }

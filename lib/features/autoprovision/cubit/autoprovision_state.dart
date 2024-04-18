@@ -6,11 +6,10 @@ abstract base class AutoprovisionState {
 
   factory AutoprovisionState.initial() => const Initial._();
   factory AutoprovisionState.error(Object error) => Error._(error);
-  factory AutoprovisionState.processing(String configToken) => ProcessingToken._(configToken);
-  factory AutoprovisionState.replaceConfirmationNeeded(String token, String coreUrl, String? tenantId) {
-    return ReplaceConfirmationNeeded._(token, coreUrl, tenantId);
-  }
-  factory AutoprovisionState.sessionCreated(String token, String coreUrl, String? tenantId) {
+  factory AutoprovisionState.processing() => const ProcessingToken._();
+  factory AutoprovisionState.replaceConfirmationNeeded() => const ReplaceConfirmationNeeded._();
+
+  factory AutoprovisionState.sessionCreated(String token, String coreUrl, String tenantId) {
     return SessionCreated._(token, coreUrl, tenantId);
   }
 }
@@ -41,12 +40,10 @@ final class Error extends AutoprovisionState with EquatableMixin {
 
 /// Represents the state of the autoprovision cubit when processing a token.
 final class ProcessingToken extends AutoprovisionState with EquatableMixin {
-  const ProcessingToken._(this.configToken);
-
-  final String configToken;
+  const ProcessingToken._();
 
   @override
-  List<Object?> get props => [configToken];
+  List<Object?> get props => [];
 
   @override
   bool? get stringify => true;
@@ -54,14 +51,10 @@ final class ProcessingToken extends AutoprovisionState with EquatableMixin {
 
 /// Represents the state of the autoprovision cubit when needed confirmation for replace the current user session.
 final class ReplaceConfirmationNeeded extends AutoprovisionState with EquatableMixin {
-  const ReplaceConfirmationNeeded._(this.token, this.coreUrl, this.tenantId);
-
-  final String token;
-  final String coreUrl;
-  final String? tenantId;
+  const ReplaceConfirmationNeeded._();
 
   @override
-  List<Object?> get props => [token, coreUrl, tenantId];
+  List<Object?> get props => [];
 
   @override
   bool? get stringify => true;
@@ -73,7 +66,7 @@ final class SessionCreated extends AutoprovisionState with EquatableMixin {
 
   final String token;
   final String coreUrl;
-  final String? tenantId;
+  final String tenantId;
 
   @override
   List<Object?> get props => [token, coreUrl, tenantId];
