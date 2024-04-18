@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
@@ -32,7 +33,12 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
 
   void onError(BuildContext context, Error state) async {
     await navigateBack();
-    nfnBloc.add(NotificationsMessaged(DefaultErrorNotification(state.error)));
+    final error = state.error;
+    if (error is RequestFailure && error.statusCode == 401) {
+      nfnBloc.add(const NotificationsMessaged(InvalidAutoProvisioningToken()));
+    } else {
+      nfnBloc.add(NotificationsMessaged(DefaultErrorNotification(state.error)));
+    }
   }
 
   void onConfirmationNeeded() async {
@@ -67,12 +73,16 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
         appBloc.add(const AppLogouted());
         await appBloc.stream.firstWhere((element) => element.token == null);
         appBloc.add(AppLogined(coreUrl: state.coreUrl, token: state.token, tenantId: state.tenantId));
+        await appBloc.stream.firstWhere((element) => element.token == state.token);
       }
     } else {
       // For the case when the app is launched with the autoprovision screen as initial route.
       appBloc.add(AppLogined(coreUrl: state.coreUrl, token: state.token, tenantId: state.tenantId));
-      // Then will be redirected by reevaluation and redirect inside [onAutoprovisionScreenPageRouteGuardNavigation]
+      await appBloc.stream.firstWhere((element) => element.token == state.token);
+      // Then will be redirected by router reevaluation and redirect inside [onAutoprovisionScreenPageRouteGuardNavigation]
     }
+
+    nfnBloc.add(const NotificationsMessaged(SuccesfulUsedAutoProvisioningToken()));
   }
 
   @override

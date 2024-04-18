@@ -1244,6 +1244,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Decline'**
   String get autoprovision_ReloginDialog_decline;
+
+  /// No description provided for @autoprovision_errorSnackBar_invalidToken.
+  ///
+  /// In en, this message translates to:
+  /// **'The auto configuration credentials were rejected by the server. Please request a new configuration link'**
+  String get autoprovision_errorSnackBar_invalidToken;
+
+  /// No description provided for @autoprovision_successSnackBar_used.
+  ///
+  /// In en, this message translates to:
+  /// **'Successfully retrieved your settings, your app is ready to use'**
+  String get autoprovision_successSnackBar_used;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

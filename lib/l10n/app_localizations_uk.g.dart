@@ -621,4 +621,10 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get autoprovision_ReloginDialog_decline => 'Відхилити';
+
+  @override
+  String get autoprovision_errorSnackBar_invalidToken => 'Облікові дані авто-конфігурації були відхилені сервером. Будь ласка, надішліть запит на нове посилання авто-конфігурації';
+
+  @override
+  String get autoprovision_successSnackBar_used => 'Ваші налаштування успішно отримано, ваш додаток готовий до використання';
 }

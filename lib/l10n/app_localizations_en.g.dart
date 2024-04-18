@@ -621,4 +621,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get autoprovision_ReloginDialog_decline => 'Decline';
+
+  @override
+  String get autoprovision_errorSnackBar_invalidToken => 'The auto configuration credentials were rejected by the server. Please request a new configuration link';
+
+  @override
+  String get autoprovision_successSnackBar_used => 'Successfully retrieved your settings, your app is ready to use';
 }
