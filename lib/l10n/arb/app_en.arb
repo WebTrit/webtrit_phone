@@ -376,7 +376,7 @@
   "@user_agreement_button_text": {},
   "user_agreement_agrement_link": "terms and condition of agreement",
   "@user_agreement_agrement_link": {},
-  "recents_BodyCenter_empty": "Currently you have no {filter} recent calls.",
+  "recents_BodyCenter_empty": "Currently you have no {filter}recent calls.",
   "@recents_BodyCenter_empty": {},
   "recents_DeleteConfirmDialog_content": "Are you sure you want to delete the current call log?",
   "@recents_DeleteConfirmDialog_content": {},
@@ -404,6 +404,14 @@
   "@recentsVisibilityFilter_missed": {},
   "recentsVisibilityFilter_outgoing": "Outgoing",
   "@recentsVisibilityFilter_outgoing": {},
+  "recentsVisibilityFilter_all_preposit": "all",
+  "@recentsVisibilityFilter_all_preposit": {},
+  "recentsVisibilityFilter_incoming_preposit": "incoming",
+  "@recentsVisibilityFilter_incoming_preposit": {},
+  "recentsVisibilityFilter_missed_preposit": "missed",
+  "@recentsVisibilityFilter_missed_preposit": {},
+  "recentsVisibilityFilter_outgoing_preposit": "outgoing",
+  "@recentsVisibilityFilter_outgoing_preposit": {},
   "recentTimeAfterMidnight": "{time}",
   "@recentTimeAfterMidnight": {
     "placeholders": {
