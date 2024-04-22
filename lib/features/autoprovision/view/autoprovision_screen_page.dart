@@ -22,12 +22,11 @@ class AutoprovisionScreenPage extends StatelessWidget {
     // coz value are verified by the router guard [onAutoprovisionScreenPageRouteGuardNavigation]
     final configToken = this.configToken!;
     final tenantId = this.tenantId ?? '';
-
-    /// Check if user is logged in already
-    final loggedIn = context.read<AppBloc>().state.token != null;
+    final oldToken = context.read<AppBloc>().state.token;
+    final oldTenant = context.read<AppBloc>().state.tenantId ?? '';
 
     final widget = BlocProvider(
-      create: (context) => AutoprovisionCubit(configToken, tenantId, loggedIn),
+      create: (context) => AutoprovisionCubit(configToken, tenantId, oldToken, oldTenant),
       child: const AutoprovisionScreen(),
     );
 

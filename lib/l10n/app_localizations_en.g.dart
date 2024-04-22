@@ -614,7 +614,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get autoprovision_ReloginDialog_title => 'Relogin Confirmation';
 
   @override
-  String get autoprovision_ReloginDialog_text => 'Do you want to replace the current session with a new one?';
+  String get autoprovision_ReloginDialog_text => 'Do you want to use the new authentication credentials, provided in the link? You will be logged out from the current session.';
 
   @override
   String get autoprovision_ReloginDialog_confirm => 'Confirm';

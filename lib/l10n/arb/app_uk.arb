@@ -479,7 +479,7 @@
   "@validationBlankError": {},
   "autoprovision_ReloginDialog_title": "Підтвердження повторного входу",
   "@autoprovision_ReloginDialog_title": {},
-  "autoprovision_ReloginDialog_text": "Бажаєте замінити поточний сеанс на новий?",
+  "autoprovision_ReloginDialog_text": "Ви бажаєте використовувати нові облікові дані автентифікації, надані за посиланням? Ви вийдете з поточного сеансу.",
   "@autoprovision_ReloginDialog_text": {},
   "autoprovision_ReloginDialog_confirm": "Підтвердити",
   "@autoprovision_ReloginDialog_confirm": {},

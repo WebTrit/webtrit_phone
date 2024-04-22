@@ -1230,7 +1230,7 @@ abstract class AppLocalizations {
   /// No description provided for @autoprovision_ReloginDialog_text.
   ///
   /// In en, this message translates to:
-  /// **'Do you want to replace the current session with a new one?'**
+  /// **'Do you want to use the new authentication credentials, provided in the link? You will be logged out from the current session.'**
   String get autoprovision_ReloginDialog_text;
 
   /// No description provided for @autoprovision_ReloginDialog_confirm.

@@ -62,11 +62,13 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       ));
     } catch (e, stackTrace) {
       _logger.warning('_onRefreshed', e, stackTrace);
+      _logger.info('isClosed: $isClosed');
+      _logger.info('emit.isDone: ${emit.isDone}');
+      if (isClosed) return;
+      if (emit.isDone) return;
 
       notificationsBloc.add(NotificationsIssued(DefaultErrorNotification(e)));
       appBloc.maybeHandleError(e);
-
-      if (emit.isDone) return;
 
       emit(state.copyWith(
         progress: false,
