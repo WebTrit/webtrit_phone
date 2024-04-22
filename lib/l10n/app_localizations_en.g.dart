@@ -627,4 +627,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get autoprovision_successSnackBar_used => 'Successfully retrieved your settings, your app is ready to use';
+
+  @override
+  String get undefine_DeeplinkConfigurationInvalid_text => 'The auto configuration credentials are invalid, please log in';
 }

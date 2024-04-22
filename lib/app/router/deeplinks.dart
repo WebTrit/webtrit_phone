@@ -1,6 +1,12 @@
 import 'package:auto_route/auto_route.dart';
+
 import 'package:logging/logging.dart';
+
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+
+import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/features/undefined/undefined.dart';
 
 import '../constants.dart';
 
@@ -18,7 +24,7 @@ class HandleAndroidBackgroundIncomingCall implements DeepLinkHandler {
 
   @override
   DeepLink? handle() {
-    if (deepLink.path.startsWith(initialCallRout)) {
+    if (deepLink.path.startsWith(initialCallRout) && !deepLink.isExternal) {
       final uri = Uri.parse(deepLink.configuration.url);
       final pendingCall = PendingCall.fromMap(uri.queryParameters);
 
@@ -32,6 +38,19 @@ class HandleAndroidBackgroundIncomingCall implements DeepLinkHandler {
   }
 }
 
+class HandleReturnToMain implements DeepLinkHandler {
+  HandleReturnToMain(this.deepLink);
+
+  final PlatformDeepLink deepLink;
+
+  @override
+  DeepLink? handle() => !deepLink.isExternal && _isMain && !_isInitial ? DeepLink.none : null;
+
+  bool get _isMain => deepLink.path == '/';
+
+  bool get _isInitial => deepLink.initial;
+}
+
 class HandleAutoprovision implements DeepLinkHandler {
   HandleAutoprovision(this.deepLink);
 
@@ -43,14 +62,26 @@ class HandleAutoprovision implements DeepLinkHandler {
   bool get _isAutoprovision => deepLink.path.startsWith(kAutoprovisionRout);
 }
 
-class HandleReturnToMain implements DeepLinkHandler {
-  HandleReturnToMain(this.deepLink);
+class HandleNotDefinedPath implements DeepLinkHandler {
+  HandleNotDefinedPath(this.deepLink, this.router);
 
   final PlatformDeepLink deepLink;
+  final AppRouter? router;
 
   @override
-  DeepLink? handle() => _isMain && !_isInitial ? DeepLink.none : null;
+  DeepLink? handle() {
+    if (!_isDeeplinkExternal) return null;
+    if (!_isInitial && _isInvalidScreenActive) return DeepLink.none;
 
-  bool get _isMain => deepLink.path == '/';
+    return DeepLink([
+      if (_isInitial) const MainShellRoute(),
+      if (!_isInvalidScreenActive) UndefinedScreenPageRoute(undefinedType: UndefinedType.deeplinkConfigurationInvalid),
+    ]);
+  }
+
+  bool get _isInvalidScreenActive => router?.isRouteActive(UndefinedScreenPageRoute.name) == true;
+
   bool get _isInitial => deepLink.initial;
+
+  bool get _isDeeplinkExternal => deepLink.isExternal;
 }

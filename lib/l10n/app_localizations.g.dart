@@ -1256,6 +1256,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Successfully retrieved your settings, your app is ready to use'**
   String get autoprovision_successSnackBar_used;
+
+  /// No description provided for @undefine_DeeplinkConfigurationInvalid_text.
+  ///
+  /// In en, this message translates to:
+  /// **'The auto configuration credentials are invalid, please log in'**
+  String get undefine_DeeplinkConfigurationInvalid_text;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
