@@ -1,5 +1,7 @@
 import 'package:auto_route/auto_route.dart';
+
 import 'package:logging/logging.dart';
+
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import '../constants.dart';
@@ -32,17 +34,6 @@ class HandleAndroidBackgroundIncomingCall implements DeepLinkHandler {
   }
 }
 
-class HandleAutoprovision implements DeepLinkHandler {
-  HandleAutoprovision(this.deepLink);
-
-  final PlatformDeepLink deepLink;
-
-  @override
-  DeepLink? handle() => _isAutoprovision ? deepLink : null;
-
-  bool get _isAutoprovision => deepLink.path.startsWith(kAutoprovisionRout);
-}
-
 class HandleReturnToMain implements DeepLinkHandler {
   HandleReturnToMain(this.deepLink);
 
@@ -52,5 +43,17 @@ class HandleReturnToMain implements DeepLinkHandler {
   DeepLink? handle() => _isMain && !_isInitial ? DeepLink.none : null;
 
   bool get _isMain => deepLink.path == '/';
+
   bool get _isInitial => deepLink.initial;
+}
+
+class HandleAutoprovision implements DeepLinkHandler {
+  HandleAutoprovision(this.deepLink);
+
+  final PlatformDeepLink deepLink;
+
+  @override
+  DeepLink? handle() => _isAutoprovision ? deepLink : null;
+
+  bool get _isAutoprovision => deepLink.path.startsWith(kAutoprovisionRout);
 }
