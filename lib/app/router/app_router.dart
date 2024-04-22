@@ -338,6 +338,7 @@ class AppRouter extends _$AppRouter {
       HandleReturnToMain(deepLink),
       // External deep-links from outside the application
       HandleAutoprovision(deepLink),
+      HandleNotDefinedPath(deepLink, this),
     ];
 
     for (final handler in handlers) {

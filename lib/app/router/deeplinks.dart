@@ -4,7 +4,9 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
+import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/features/undefined/undefined.dart';
 
 import '../constants.dart';
 
@@ -58,4 +60,28 @@ class HandleAutoprovision implements DeepLinkHandler {
   DeepLink? handle() => _isAutoprovision ? deepLink : null;
 
   bool get _isAutoprovision => deepLink.path.startsWith(kAutoprovisionRout);
+}
+
+class HandleNotDefinedPath implements DeepLinkHandler {
+  HandleNotDefinedPath(this.deepLink, this.router);
+
+  final PlatformDeepLink deepLink;
+  final AppRouter? router;
+
+  @override
+  DeepLink? handle() {
+    if (!_isDeeplinkExternal) return null;
+    if (!_isInitial && _isInvalidScreenActive) return DeepLink.none;
+
+    return DeepLink([
+      if (_isInitial) const MainShellRoute(),
+      if (!_isInvalidScreenActive) UndefinedScreenPageRoute(undefinedType: UndefinedType.deeplinkConfigurationInvalid),
+    ]);
+  }
+
+  bool get _isInvalidScreenActive => router?.isRouteActive(UndefinedScreenPageRoute.name) == true;
+
+  bool get _isInitial => deepLink.initial;
+
+  bool get _isDeeplinkExternal => deepLink.isExternal;
 }
