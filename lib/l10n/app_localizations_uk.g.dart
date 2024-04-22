@@ -614,7 +614,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get autoprovision_ReloginDialog_title => 'Підтвердження повторного входу';
 
   @override
-  String get autoprovision_ReloginDialog_text => 'Бажаєте замінити поточний сеанс на новий?';
+  String get autoprovision_ReloginDialog_text => 'Ви бажаєте використовувати нові облікові дані автентифікації, надані за посиланням? Ви вийдете з поточного сеансу.';
 
   @override
   String get autoprovision_ReloginDialog_confirm => 'Підтвердити';
