@@ -4,6 +4,8 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
+import 'package:webtrit_phone/extensions/extensions.dart';
+
 import '../constants.dart';
 
 final _logger = Logger('DeepLinkHandler');
@@ -20,7 +22,7 @@ class HandleAndroidBackgroundIncomingCall implements DeepLinkHandler {
 
   @override
   DeepLink? handle() {
-    if (deepLink.path.startsWith(initialCallRout)) {
+    if (deepLink.path.startsWith(initialCallRout) && !deepLink.isExternal) {
       final uri = Uri.parse(deepLink.configuration.url);
       final pendingCall = PendingCall.fromMap(uri.queryParameters);
 
@@ -40,7 +42,7 @@ class HandleReturnToMain implements DeepLinkHandler {
   final PlatformDeepLink deepLink;
 
   @override
-  DeepLink? handle() => _isMain && !_isInitial ? DeepLink.none : null;
+  DeepLink? handle() => !deepLink.isExternal && _isMain && !_isInitial ? DeepLink.none : null;
 
   bool get _isMain => deepLink.path == '/';
 
