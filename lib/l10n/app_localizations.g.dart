@@ -984,7 +984,7 @@ abstract class AppLocalizations {
   /// No description provided for @recents_BodyCenter_empty.
   ///
   /// In en, this message translates to:
-  /// **'Currently you have no {filter} recent calls.'**
+  /// **'Currently you have no {filter}recent calls.'**
   String recents_BodyCenter_empty(Object filter);
 
   /// No description provided for @recents_DeleteConfirmDialog_content.
@@ -1046,6 +1046,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Outgoing'**
   String get recentsVisibilityFilter_outgoing;
+
+  /// No description provided for @recentsVisibilityFilter_all_preposit.
+  ///
+  /// In en, this message translates to:
+  /// **'all'**
+  String get recentsVisibilityFilter_all_preposit;
+
+  /// No description provided for @recentsVisibilityFilter_incoming_preposit.
+  ///
+  /// In en, this message translates to:
+  /// **'incoming'**
+  String get recentsVisibilityFilter_incoming_preposit;
+
+  /// No description provided for @recentsVisibilityFilter_missed_preposit.
+  ///
+  /// In en, this message translates to:
+  /// **'missed'**
+  String get recentsVisibilityFilter_missed_preposit;
+
+  /// No description provided for @recentsVisibilityFilter_outgoing_preposit.
+  ///
+  /// In en, this message translates to:
+  /// **'outgoing'**
+  String get recentsVisibilityFilter_outgoing_preposit;
 
   /// No description provided for @recentTimeAfterMidnight.
   ///

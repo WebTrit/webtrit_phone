@@ -478,7 +478,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String recents_BodyCenter_empty(Object filter) {
-    return 'Зараз у вас немає жодних $filter останніх дзвінків.';
+    return 'Зараз у вас немає жодних $filterостанніх дзвінків.';
   }
 
   @override
@@ -512,6 +512,18 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get recentsVisibilityFilter_outgoing => 'Вихідні';
+
+  @override
+  String get recentsVisibilityFilter_all_preposit => 'всіх';
+
+  @override
+  String get recentsVisibilityFilter_incoming_preposit => 'вхідних';
+
+  @override
+  String get recentsVisibilityFilter_missed_preposit => 'пропущених';
+
+  @override
+  String get recentsVisibilityFilter_outgoing_preposit => 'вихідних';
 
   @override
   String recentTimeAfterMidnight(DateTime time) {

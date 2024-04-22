@@ -478,7 +478,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String recents_BodyCenter_empty(Object filter) {
-    return 'Currently you have no $filter recent calls.';
+    return 'Currently you have no ${filter}recent calls.';
   }
 
   @override
@@ -512,6 +512,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recentsVisibilityFilter_outgoing => 'Outgoing';
+
+  @override
+  String get recentsVisibilityFilter_all_preposit => 'all';
+
+  @override
+  String get recentsVisibilityFilter_incoming_preposit => 'incoming';
+
+  @override
+  String get recentsVisibilityFilter_missed_preposit => 'missed';
+
+  @override
+  String get recentsVisibilityFilter_outgoing_preposit => 'outgoing';
 
   @override
   String recentTimeAfterMidnight(DateTime time) {
