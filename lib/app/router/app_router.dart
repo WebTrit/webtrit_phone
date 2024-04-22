@@ -223,6 +223,10 @@ class AppRouter extends _$AppRouter {
               page: TermsConditionsScreenPageRoute.page,
               path: 'terms-conditions',
             ),
+            AutoRoute(
+              page: UndefinedScreenPageRoute.page,
+              path: 'undefined',
+            ),
           ],
         ),
       ];

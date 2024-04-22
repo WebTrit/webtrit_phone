@@ -488,5 +488,7 @@
   "autoprovision_errorSnackBar_invalidToken": "Облікові дані авто-конфігурації були відхилені сервером. Будь ласка, надішліть запит на нове посилання авто-конфігурації",
   "@autoprovision_errorSnackBar_invalidToken": {},
   "autoprovision_successSnackBar_used": "Ваші налаштування успішно отримано, ваш додаток готовий до використання",
-  "@autoprovision_successSnackBar_used": {}
+  "@autoprovision_successSnackBar_used": {},
+  "undefine_DeeplinkConfigurationInvalid_text": "Автоматичні налаштування облікових даних недійсні, будь ласка, увійдіть у систему",
+  "@undefine_DeeplinkConfigurationInvalid_text": {}
 }

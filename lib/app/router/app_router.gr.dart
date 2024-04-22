@@ -251,6 +251,13 @@ abstract class _$AppRouter extends RootStackRouter {
         child: ThemeModeScreenPage(),
       );
     },
+    UndefinedScreenPageRoute.name: (routeData) {
+      final args = routeData.argsAs<UndefinedScreenPageRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: UndefinedScreenPage(args.undefinedType),
+      );
+    },
     UserAgreementScreenPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -844,6 +851,36 @@ class ThemeModeScreenPageRoute extends PageRouteInfo<void> {
   static const String name = 'ThemeModeScreenPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [UndefinedScreenPage]
+class UndefinedScreenPageRoute
+    extends PageRouteInfo<UndefinedScreenPageRouteArgs> {
+  UndefinedScreenPageRoute({
+    required UndefinedType undefinedType,
+    List<PageRouteInfo>? children,
+  }) : super(
+          UndefinedScreenPageRoute.name,
+          args: UndefinedScreenPageRouteArgs(undefinedType: undefinedType),
+          initialChildren: children,
+        );
+
+  static const String name = 'UndefinedScreenPageRoute';
+
+  static const PageInfo<UndefinedScreenPageRouteArgs> page =
+      PageInfo<UndefinedScreenPageRouteArgs>(name);
+}
+
+class UndefinedScreenPageRouteArgs {
+  const UndefinedScreenPageRouteArgs({required this.undefinedType});
+
+  final UndefinedType undefinedType;
+
+  @override
+  String toString() {
+    return 'UndefinedScreenPageRouteArgs{undefinedType: $undefinedType}';
+  }
 }
 
 /// generated route for

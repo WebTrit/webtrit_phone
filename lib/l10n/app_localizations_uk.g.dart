@@ -627,4 +627,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get autoprovision_successSnackBar_used => 'Ваші налаштування успішно отримано, ваш додаток готовий до використання';
+
+  @override
+  String get undefine_DeeplinkConfigurationInvalid_text => 'Автоматичні налаштування облікових даних недійсні, будь ласка, увійдіть у систему';
 }

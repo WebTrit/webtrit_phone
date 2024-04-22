@@ -487,5 +487,7 @@
   "autoprovision_errorSnackBar_invalidToken": "The auto configuration credentials were rejected by the server. Please request a new configuration link",
   "@autoprovision_errorSnackBar_invalidToken": {},
   "autoprovision_successSnackBar_used": "Successfully retrieved your settings, your app is ready to use",
-  "@autoprovision_successSnackBar_used": {}
+  "@autoprovision_successSnackBar_used": {},
+  "undefine_DeeplinkConfigurationInvalid_text": "The auto configuration credentials are invalid, please log in",
+  "@undefine_DeeplinkConfigurationInvalid_text": {}
 }
