@@ -111,7 +111,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   void maybeHandleError(Object error) {
     if (error is RequestFailure) {
       if (error.statusCode == HttpStatus.unauthorized) {
-        add(const AppLogouted());
+        if (state.token != null && state.token == error.token) {
+          add(const AppLogouted());
+        }
       }
     }
   }
