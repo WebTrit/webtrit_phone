@@ -84,6 +84,7 @@ class WebtritApiClient {
       throw RequestFailure(
         statusCode: httpResponse.statusCode,
         requestId: xRequestId,
+        token: token,
         error: error,
       );
     }

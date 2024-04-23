@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
@@ -10,6 +11,8 @@ import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 import '../call.dart';
 import 'call_active_thumbnail.dart';
+
+final _logger = Logger('CallShell');
 
 class CallShell extends StatefulWidget {
   const CallShell({
@@ -45,6 +48,7 @@ class _CallShellState extends State<CallShell> {
         if (signalingClientStatus == SignalingClientStatus.disconnect && signalingDisconnectCode is int) {
           final code = SignalingDisconnectCode.values.byCode(signalingDisconnectCode);
           if (code == SignalingDisconnectCode.sessionMissedError) {
+            _logger.warning('Signaling session listener: missed error $signalingDisconnectCode');
             context.read<AppBloc>().add(const AppLogouted());
           }
         }

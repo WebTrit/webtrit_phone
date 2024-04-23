@@ -41,6 +41,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   FutureOr<void> _onRefreshed(SettingsRefreshed event, Emitter<SettingsState> emit) async {
     emit(state.copyWith(progress: true));
     try {
+      _logger.info('Refreshing settings');
       final infoFuture = userRepository.getInfo();
       final registerStatusFuture = appRepository.getRegisterStatus();
 
