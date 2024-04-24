@@ -189,6 +189,7 @@ class TextWidgetConfig with _$TextWidgetConfig {
   @themeJsonSerializable
   const factory TextWidgetConfig({
     TextSelectionWidgetConfig? selection,
+    LinkifyWidgetConfig? linkify,
   }) = _TextWidgetConfig;
 
   factory TextWidgetConfig.fromJson(Map<String, dynamic> json) => _$TextWidgetConfigFromJson(json);
@@ -205,4 +206,16 @@ class TextSelectionWidgetConfig with _$TextSelectionWidgetConfig {
   }) = _TextSelectionWidgetConfig;
 
   factory TextSelectionWidgetConfig.fromJson(Map<String, dynamic> json) => _$TextSelectionWidgetConfigFromJson(json);
+}
+
+@freezed
+class LinkifyWidgetConfig with _$LinkifyWidgetConfig {
+  // ignore: invalid_annotation_target
+  @themeJsonSerializable
+  const factory LinkifyWidgetConfig({
+    Color? styleColor,
+    Color? linkifyStyleColor,
+  }) = _LinkifyWidgetConfig;
+
+  factory LinkifyWidgetConfig.fromJson(Map<String, dynamic> json) => _$LinkifyWidgetConfigFromJson(json);
 }

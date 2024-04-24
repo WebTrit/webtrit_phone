@@ -302,12 +302,17 @@ _$TextWidgetConfigImpl _$$TextWidgetConfigImplFromJson(
           ? null
           : TextSelectionWidgetConfig.fromJson(
               json['selection'] as Map<String, dynamic>),
+      linkify: json['linkify'] == null
+          ? null
+          : LinkifyWidgetConfig.fromJson(
+              json['linkify'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$TextWidgetConfigImplToJson(
         _$TextWidgetConfigImpl instance) =>
     <String, dynamic>{
       'selection': instance.selection,
+      'linkify': instance.linkify,
     };
 
 _$TextSelectionWidgetConfigImpl _$$TextSelectionWidgetConfigImplFromJson(
@@ -330,4 +335,22 @@ Map<String, dynamic> _$$TextSelectionWidgetConfigImplToJson(
           instance.selectionColor, const CSSColorConverter().toJson),
       'selectionHandleColor': _$JsonConverterToJson<String, Color>(
           instance.selectionHandleColor, const CSSColorConverter().toJson),
+    };
+
+_$LinkifyWidgetConfigImpl _$$LinkifyWidgetConfigImplFromJson(
+        Map<String, dynamic> json) =>
+    _$LinkifyWidgetConfigImpl(
+      styleColor: _$JsonConverterFromJson<String, Color>(
+          json['styleColor'], const CSSColorConverter().fromJson),
+      linkifyStyleColor: _$JsonConverterFromJson<String, Color>(
+          json['linkifyStyleColor'], const CSSColorConverter().fromJson),
+    );
+
+Map<String, dynamic> _$$LinkifyWidgetConfigImplToJson(
+        _$LinkifyWidgetConfigImpl instance) =>
+    <String, dynamic>{
+      'styleColor': _$JsonConverterToJson<String, Color>(
+          instance.styleColor, const CSSColorConverter().toJson),
+      'linkifyStyleColor': _$JsonConverterToJson<String, Color>(
+          instance.linkifyStyleColor, const CSSColorConverter().toJson),
     };

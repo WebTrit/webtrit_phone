@@ -2669,6 +2669,7 @@ TextWidgetConfig _$TextWidgetConfigFromJson(Map<String, dynamic> json) {
 mixin _$TextWidgetConfig {
   TextSelectionWidgetConfig? get selection =>
       throw _privateConstructorUsedError;
+  LinkifyWidgetConfig? get linkify => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -2682,9 +2683,11 @@ abstract class $TextWidgetConfigCopyWith<$Res> {
           TextWidgetConfig value, $Res Function(TextWidgetConfig) then) =
       _$TextWidgetConfigCopyWithImpl<$Res, TextWidgetConfig>;
   @useResult
-  $Res call({TextSelectionWidgetConfig? selection});
+  $Res call(
+      {TextSelectionWidgetConfig? selection, LinkifyWidgetConfig? linkify});
 
   $TextSelectionWidgetConfigCopyWith<$Res>? get selection;
+  $LinkifyWidgetConfigCopyWith<$Res>? get linkify;
 }
 
 /// @nodoc
@@ -2701,12 +2704,17 @@ class _$TextWidgetConfigCopyWithImpl<$Res, $Val extends TextWidgetConfig>
   @override
   $Res call({
     Object? selection = freezed,
+    Object? linkify = freezed,
   }) {
     return _then(_value.copyWith(
       selection: freezed == selection
           ? _value.selection
           : selection // ignore: cast_nullable_to_non_nullable
               as TextSelectionWidgetConfig?,
+      linkify: freezed == linkify
+          ? _value.linkify
+          : linkify // ignore: cast_nullable_to_non_nullable
+              as LinkifyWidgetConfig?,
     ) as $Val);
   }
 
@@ -2721,6 +2729,18 @@ class _$TextWidgetConfigCopyWithImpl<$Res, $Val extends TextWidgetConfig>
       return _then(_value.copyWith(selection: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $LinkifyWidgetConfigCopyWith<$Res>? get linkify {
+    if (_value.linkify == null) {
+      return null;
+    }
+
+    return $LinkifyWidgetConfigCopyWith<$Res>(_value.linkify!, (value) {
+      return _then(_value.copyWith(linkify: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -2731,10 +2751,13 @@ abstract class _$$TextWidgetConfigImplCopyWith<$Res>
       __$$TextWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({TextSelectionWidgetConfig? selection});
+  $Res call(
+      {TextSelectionWidgetConfig? selection, LinkifyWidgetConfig? linkify});
 
   @override
   $TextSelectionWidgetConfigCopyWith<$Res>? get selection;
+  @override
+  $LinkifyWidgetConfigCopyWith<$Res>? get linkify;
 }
 
 /// @nodoc
@@ -2749,12 +2772,17 @@ class __$$TextWidgetConfigImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? selection = freezed,
+    Object? linkify = freezed,
   }) {
     return _then(_$TextWidgetConfigImpl(
       selection: freezed == selection
           ? _value.selection
           : selection // ignore: cast_nullable_to_non_nullable
               as TextSelectionWidgetConfig?,
+      linkify: freezed == linkify
+          ? _value.linkify
+          : linkify // ignore: cast_nullable_to_non_nullable
+              as LinkifyWidgetConfig?,
     ));
   }
 }
@@ -2763,17 +2791,19 @@ class __$$TextWidgetConfigImplCopyWithImpl<$Res>
 
 @themeJsonSerializable
 class _$TextWidgetConfigImpl implements _TextWidgetConfig {
-  const _$TextWidgetConfigImpl({this.selection});
+  const _$TextWidgetConfigImpl({this.selection, this.linkify});
 
   factory _$TextWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$TextWidgetConfigImplFromJson(json);
 
   @override
   final TextSelectionWidgetConfig? selection;
+  @override
+  final LinkifyWidgetConfig? linkify;
 
   @override
   String toString() {
-    return 'TextWidgetConfig(selection: $selection)';
+    return 'TextWidgetConfig(selection: $selection, linkify: $linkify)';
   }
 
   @override
@@ -2782,12 +2812,13 @@ class _$TextWidgetConfigImpl implements _TextWidgetConfig {
         (other.runtimeType == runtimeType &&
             other is _$TextWidgetConfigImpl &&
             (identical(other.selection, selection) ||
-                other.selection == selection));
+                other.selection == selection) &&
+            (identical(other.linkify, linkify) || other.linkify == linkify));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, selection);
+  int get hashCode => Object.hash(runtimeType, selection, linkify);
 
   @JsonKey(ignore: true)
   @override
@@ -2806,13 +2837,16 @@ class _$TextWidgetConfigImpl implements _TextWidgetConfig {
 
 abstract class _TextWidgetConfig implements TextWidgetConfig {
   const factory _TextWidgetConfig(
-      {final TextSelectionWidgetConfig? selection}) = _$TextWidgetConfigImpl;
+      {final TextSelectionWidgetConfig? selection,
+      final LinkifyWidgetConfig? linkify}) = _$TextWidgetConfigImpl;
 
   factory _TextWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$TextWidgetConfigImpl.fromJson;
 
   @override
   TextSelectionWidgetConfig? get selection;
+  @override
+  LinkifyWidgetConfig? get linkify;
   @override
   @JsonKey(ignore: true)
   _$$TextWidgetConfigImplCopyWith<_$TextWidgetConfigImpl> get copyWith =>
@@ -3002,4 +3036,162 @@ abstract class _TextSelectionWidgetConfig implements TextSelectionWidgetConfig {
   @JsonKey(ignore: true)
   _$$TextSelectionWidgetConfigImplCopyWith<_$TextSelectionWidgetConfigImpl>
       get copyWith => throw _privateConstructorUsedError;
+}
+
+LinkifyWidgetConfig _$LinkifyWidgetConfigFromJson(Map<String, dynamic> json) {
+  return _LinkifyWidgetConfig.fromJson(json);
+}
+
+/// @nodoc
+mixin _$LinkifyWidgetConfig {
+  Color? get styleColor => throw _privateConstructorUsedError;
+  Color? get linkifyStyleColor => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $LinkifyWidgetConfigCopyWith<LinkifyWidgetConfig> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $LinkifyWidgetConfigCopyWith<$Res> {
+  factory $LinkifyWidgetConfigCopyWith(
+          LinkifyWidgetConfig value, $Res Function(LinkifyWidgetConfig) then) =
+      _$LinkifyWidgetConfigCopyWithImpl<$Res, LinkifyWidgetConfig>;
+  @useResult
+  $Res call({Color? styleColor, Color? linkifyStyleColor});
+}
+
+/// @nodoc
+class _$LinkifyWidgetConfigCopyWithImpl<$Res, $Val extends LinkifyWidgetConfig>
+    implements $LinkifyWidgetConfigCopyWith<$Res> {
+  _$LinkifyWidgetConfigCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? styleColor = freezed,
+    Object? linkifyStyleColor = freezed,
+  }) {
+    return _then(_value.copyWith(
+      styleColor: freezed == styleColor
+          ? _value.styleColor
+          : styleColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      linkifyStyleColor: freezed == linkifyStyleColor
+          ? _value.linkifyStyleColor
+          : linkifyStyleColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$LinkifyWidgetConfigImplCopyWith<$Res>
+    implements $LinkifyWidgetConfigCopyWith<$Res> {
+  factory _$$LinkifyWidgetConfigImplCopyWith(_$LinkifyWidgetConfigImpl value,
+          $Res Function(_$LinkifyWidgetConfigImpl) then) =
+      __$$LinkifyWidgetConfigImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({Color? styleColor, Color? linkifyStyleColor});
+}
+
+/// @nodoc
+class __$$LinkifyWidgetConfigImplCopyWithImpl<$Res>
+    extends _$LinkifyWidgetConfigCopyWithImpl<$Res, _$LinkifyWidgetConfigImpl>
+    implements _$$LinkifyWidgetConfigImplCopyWith<$Res> {
+  __$$LinkifyWidgetConfigImplCopyWithImpl(_$LinkifyWidgetConfigImpl _value,
+      $Res Function(_$LinkifyWidgetConfigImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? styleColor = freezed,
+    Object? linkifyStyleColor = freezed,
+  }) {
+    return _then(_$LinkifyWidgetConfigImpl(
+      styleColor: freezed == styleColor
+          ? _value.styleColor
+          : styleColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      linkifyStyleColor: freezed == linkifyStyleColor
+          ? _value.linkifyStyleColor
+          : linkifyStyleColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+    ));
+  }
+}
+
+/// @nodoc
+
+@themeJsonSerializable
+class _$LinkifyWidgetConfigImpl implements _LinkifyWidgetConfig {
+  const _$LinkifyWidgetConfigImpl({this.styleColor, this.linkifyStyleColor});
+
+  factory _$LinkifyWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
+      _$$LinkifyWidgetConfigImplFromJson(json);
+
+  @override
+  final Color? styleColor;
+  @override
+  final Color? linkifyStyleColor;
+
+  @override
+  String toString() {
+    return 'LinkifyWidgetConfig(styleColor: $styleColor, linkifyStyleColor: $linkifyStyleColor)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$LinkifyWidgetConfigImpl &&
+            (identical(other.styleColor, styleColor) ||
+                other.styleColor == styleColor) &&
+            (identical(other.linkifyStyleColor, linkifyStyleColor) ||
+                other.linkifyStyleColor == linkifyStyleColor));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, styleColor, linkifyStyleColor);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$LinkifyWidgetConfigImplCopyWith<_$LinkifyWidgetConfigImpl> get copyWith =>
+      __$$LinkifyWidgetConfigImplCopyWithImpl<_$LinkifyWidgetConfigImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$LinkifyWidgetConfigImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _LinkifyWidgetConfig implements LinkifyWidgetConfig {
+  const factory _LinkifyWidgetConfig(
+      {final Color? styleColor,
+      final Color? linkifyStyleColor}) = _$LinkifyWidgetConfigImpl;
+
+  factory _LinkifyWidgetConfig.fromJson(Map<String, dynamic> json) =
+      _$LinkifyWidgetConfigImpl.fromJson;
+
+  @override
+  Color? get styleColor;
+  @override
+  Color? get linkifyStyleColor;
+  @override
+  @JsonKey(ignore: true)
+  _$$LinkifyWidgetConfigImplCopyWith<_$LinkifyWidgetConfigImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

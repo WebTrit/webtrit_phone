@@ -258,6 +258,22 @@ class ThemeProvider extends InheritedWidget {
         selectionHandleColor: selection?.selectionHandleColor);
   }
 
+  LinkifyStyles linkifyStyles(
+    ColorScheme colors,
+    LinkifyWidgetConfig? linkifyWidgetConfig,
+  ) {
+    return LinkifyStyles(
+      primary: LinkifyStyle(
+        style: TextStyle(
+          color: linkifyWidgetConfig?.styleColor,
+        ),
+        linkStyle: TextStyle(
+          color: linkifyWidgetConfig?.linkifyStyleColor ?? colors.primary,
+        ),
+      ),
+    );
+  }
+
   InputDecorationTheme inputDecorationTheme(
     ColorScheme colors,
     TextFormFieldWidgetConfig? primary,
@@ -390,6 +406,10 @@ class ThemeProvider extends InheritedWidget {
           themePageConfig?.login?.modeSelect,
         ),
         // WIDGETS
+        linkifyStyles(
+          colorScheme,
+          themeWidgetConfig?.text?.linkify,
+        ),
         inputDecorations(colorScheme),
         elevatedButtonStyles(
           colorScheme,
