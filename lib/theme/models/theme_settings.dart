@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../style/style.dart';
+
 import 'theme_json_serializable.dart';
 import 'custom_color.dart';
+import 'theme_page_config.dart';
+import 'theme_widget_config.dart';
 
 part 'theme_settings.freezed.dart';
 
@@ -17,7 +20,11 @@ class ThemeSettings with _$ThemeSettings {
   const factory ThemeSettings({
     required Color seedColor,
     ColorSchemeOverride? lightColorSchemeOverride,
+    ThemeWidgetConfig? themeWidgetLightConfig,
+    ThemePageConfig? themePageLightConfig,
     ColorSchemeOverride? darkColorSchemeOverride,
+    ThemeWidgetConfig? themeWidgetDarkConfig,
+    ThemePageConfig? themePageDarkConfig,
     required List<CustomColor> primaryGradientColors,
     String? fontFamily,
     required ThemeSvgAsset primaryOnboardingLogo,
