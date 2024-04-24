@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:webtrit_phone/theme/theme_json_serializable.dart';
+import 'package:webtrit_phone/theme/models/theme_json_serializable.dart';
 
 void main() {
   group('.toColor()', () {

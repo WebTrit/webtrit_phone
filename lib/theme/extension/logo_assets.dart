@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
-import 'theme_asset.dart';
+import '../style/theme_asset.dart';
 
 class LogoAssets extends ThemeExtension<LogoAssets> {
   const LogoAssets({

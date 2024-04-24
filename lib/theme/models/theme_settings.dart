@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../style/style.dart';
 import 'theme_json_serializable.dart';
 import 'custom_color.dart';
-import 'theme_asset.dart';
 
 part 'theme_settings.freezed.dart';
 
