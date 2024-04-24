@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 
 import '../tools/tools.dart';
+import '../models/models.dart';
 
 class OnboardingPictureLogoStyle {
   OnboardingPictureLogoStyle({
+    this.picture,
     this.scale,
     this.textStyle,
   });
 
+  final ThemeSvgAsset? picture;
   final double? scale;
   final TextStyle? textStyle;
 
@@ -16,6 +19,7 @@ class OnboardingPictureLogoStyle {
       return a;
     }
     return OnboardingPictureLogoStyle(
+      picture: t < 0.5 ? a?.picture : b?.picture,
       scale: LerpTools.lerpDouble(a?.scale, b?.scale, t),
       textStyle: TextStyle.lerp(a?.textStyle, b?.textStyle, t),
     );

@@ -132,10 +132,12 @@ class ThemeProvider extends InheritedWidget {
 
   OnboardingPictureLogoStyles onboardingPictureLogoStyles(
     ColorScheme colors,
+    ThemeSvgAsset? picture,
     OnboardingPictureLogoWidgetConfig? onboardingPictureLogo,
   ) {
     return OnboardingPictureLogoStyles(
       primary: OnboardingPictureLogoStyle(
+        picture: picture,
         scale: onboardingPictureLogo?.scale,
         textStyle: TextStyle(
           color: onboardingPictureLogo?.labelColor ?? colors.onPrimary,
@@ -405,6 +407,7 @@ class ThemeProvider extends InheritedWidget {
         ),
         onboardingPictureLogoStyles(
           colorScheme,
+          settings.primaryOnboardingLogo,
           themeWidgetConfig?.picture?.onboardingPictureLogo,
         )
       ],
