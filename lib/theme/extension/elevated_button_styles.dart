@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../models/models.dart';
+
 class ElevatedButtonStyles extends ThemeExtension<ElevatedButtonStyles> {
   const ElevatedButtonStyles({
     required this.primary,
@@ -26,6 +28,21 @@ class ElevatedButtonStyles extends ThemeExtension<ElevatedButtonStyles> {
       primaryOnDark: primaryOnDark ?? this.primaryOnDark,
       neutralOnDark: neutralOnDark ?? this.neutralOnDark,
     );
+  }
+
+  ButtonStyle? getStyle(ElevatedButtonStyleType? type) {
+    switch (type) {
+      case ElevatedButtonStyleType.primary:
+        return primary;
+      case ElevatedButtonStyleType.neutral:
+        return neutral;
+      case ElevatedButtonStyleType.primaryOnDark:
+        return primaryOnDark;
+      case ElevatedButtonStyleType.neutralOnDark:
+        return neutralOnDark;
+      case null:
+        return primary;
+    }
   }
 
   @override
