@@ -1,22 +1,32 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/theme/theme.dart';
+
 class GroupTitleListTile extends StatelessWidget {
   const GroupTitleListTile({
     super.key,
     required this.titleData,
+    this.style,
   });
 
   final String titleData;
 
+  final GroutTitleListStyle? style;
+
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    return ListTile(
-      title: Text(
-        titleData,
-        style: themeData.textTheme.bodyMedium,
+    final localStyle = style ?? themeData.extension<GroupTitleListStyles>()?.primary;
+
+    return Container(
+      color: localStyle?.background ?? Colors.transparent,
+      child: ListTile(
+        title: Text(
+          titleData,
+          style: themeData.textTheme.bodyMedium?.merge(localStyle?.textStyle),
+        ),
+        tileColor: themeData.colorScheme.surface,
       ),
-      tileColor: themeData.colorScheme.surface,
     );
   }
 }
