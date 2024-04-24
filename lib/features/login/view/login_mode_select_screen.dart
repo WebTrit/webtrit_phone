@@ -13,15 +13,20 @@ class LoginModeSelectScreen extends StatelessWidget {
   const LoginModeSelectScreen({
     super.key,
     this.appGreeting,
+    this.style,
   });
 
   final String? appGreeting;
+
+  final LoginModeSelectStyle? style;
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final Gradients? gradients = themeData.extension<Gradients>();
     final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
+    final LoginPageStyles? loginPageStyles = themeData.extension<LoginPageStyles>();
+    final LoginModeSelectStyle? localStyle = style ?? loginPageStyles?.primary;
 
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => previous.processing != current.processing,
@@ -67,7 +72,7 @@ class LoginModeSelectScreen extends StatelessWidget {
                       : () => context
                           .read<LoginCubit>()
                           .loginModeSelectSubmitted(isDemoModeEnabled ? LoginMode.demoCore : LoginMode.core),
-                  style: elevatedButtonStyles?.primary,
+                  style: elevatedButtonStyles?.getStyle(localStyle?.signUpTypeButton),
                   child: !state.processing
                       ? Text(isDemoModeEnabled
                           ? context.l10n.login_Button_signUpToDemoInstance
