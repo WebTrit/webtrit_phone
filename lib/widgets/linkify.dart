@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 
 import 'package:linkify/linkify.dart';
 
+import 'package:webtrit_phone/theme/style/linkify_style.dart';
+import 'package:webtrit_phone/theme/extension/linkify_styles.dart';
+
+export 'package:webtrit_phone/theme/style/linkify_style.dart';
+
 export 'package:linkify/linkify.dart'
     show
         LinkifyElement,
@@ -24,11 +29,9 @@ class Linkify extends StatefulWidget {
     required this.text,
     this.linkifiers = const [...defaultLinkifiers, TelLinkifier()],
     this.onOpen,
+    this.enableLinkableElement = true,
     this.options = const LinkifyOptions(),
-    // TextSpan
     this.style,
-    this.linkStyle,
-    // RichText
     this.maxLines,
     this.overflow = TextOverflow.clip,
     this.strutStyle,
@@ -43,12 +46,14 @@ class Linkify extends StatefulWidget {
   /// Callback for tapping a link
   final LinkCallback? onOpen;
 
+  /// Enable linkable element
+  final bool enableLinkableElement;
+
   /// linkify's options.
   final LinkifyOptions options;
 
-  // TextSpan
-  final TextStyle? style;
-  final TextStyle? linkStyle;
+  // Style
+  final LinkifyStyle? style;
 
   // Text.rich
   final int? maxLines;
@@ -95,19 +100,23 @@ class _LinkifyState extends State<Linkify> {
 
   @override
   Widget build(BuildContext context) {
+    final style = LinkifyStyle.merge(widget.style, Theme.of(context).extension<LinkifyStyles>()?.primary);
+
     return Text.rich(
       TextSpan(
         children: _elements.map((element) {
           if (element is LinkableElement) {
             return TextSpan(
               text: element.text,
-              style: widget.style?.merge(widget.linkStyle),
+              style: style.linkStyle?.copyWith(
+                color: widget.enableLinkableElement ? style.linkStyle?.color : style.style?.color,
+              ),
               recognizer: _recognizers[element],
             );
           } else {
             return TextSpan(
               text: element.text,
-              style: widget.style,
+              style: style.style,
             );
           }
         }).toList(),
@@ -194,6 +203,7 @@ final _urlRegex = RegExp(
 
 class UrlReplaceLinkifier extends Linkifier {
   const UrlReplaceLinkifier(this.replaceText);
+
   final String replaceText;
 
   @override
