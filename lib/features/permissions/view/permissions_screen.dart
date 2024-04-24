@@ -43,9 +43,8 @@ class PermissionsScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: kInset * 2),
-                Icon(
+                const AppIcon(
                   Icons.settings_suggest,
-                  color: Theme.of(context).colorScheme.primary,
                   size: kInset * 6,
                 ),
                 const SizedBox(height: kInset * 2),
