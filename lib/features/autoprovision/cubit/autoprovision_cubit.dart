@@ -53,35 +53,38 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> {
       final result = await _apiClient(_tenantId).createSessionAutoProvision(credentials);
       final token = result.token;
       final tenantId = result.tenantId ?? _tenantId;
-
-      if (_oldToken != null) {
-        await _apiClient(_oldTenantId).deleteSession(_oldToken).catchError((e) {
-          _logger.warning('deleteSession error: $e');
-        });
-      }
-
       _logger.info('processToken success: $token, $tenantId');
-      emit(AutoprovisionState.sessionCreated(token, _coreUrl, tenantId));
+
+      if (_oldToken == null) {
+        emit(AutoprovisionState.sessionCreated(token, _coreUrl, tenantId));
+      } else {
+        emit(AutoprovisionState.replaceConfirmationNeeded(token, _coreUrl, tenantId));
+      }
     } catch (e) {
       _logger.warning('processToken error: $e');
       emit(AutoprovisionState.error(e));
     }
   }
 
-  confirmReplaceSession() {
-    _logger.info('confirmReplaceSession');
-    return _processToken();
+  confirmReplaceSession() async {
+    _logger.info('confirmReplaceSession: starts');
+
+    final state = this.state;
+    if (state is! ReplaceConfirmationNeeded) return;
+    if (_oldToken == null) return;
+
+    try {
+      await _apiClient(_oldTenantId).deleteSession(_oldToken);
+      _logger.info('confirmReplaceSession: success');
+      emit(AutoprovisionState.sessionCreated(state.token, state.coreUrl, state.tenantId));
+    } catch (e) {
+      _logger.warning('confirmReplaceSession error: $e');
+      emit(AutoprovisionState.error(e));
+    }
   }
 
   init() {
     _logger.info('init: $_configToken, $_tenantId, $_oldToken, $_oldTenantId');
-
-    // Ask for confirmation if the user is logged-in without config_token exchange
-    // to avoid closing the current session from signaling server without user consent.
-    if (_oldToken != null) {
-      emit(AutoprovisionState.replaceConfirmationNeeded());
-    } else {
-      _processToken();
-    }
+    _processToken();
   }
 }
