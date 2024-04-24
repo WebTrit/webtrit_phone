@@ -78,6 +78,14 @@ class ThemeProvider extends InheritedWidget {
     );
   }
 
+  ThemeWidgetConfig? _themeWidgetConfig(Brightness brightness) {
+    return brightness == Brightness.light ? settings.themeWidgetLightConfig : settings.themeWidgetDarkConfig;
+  }
+
+  ThemePageConfig? _themePageConfig(Brightness brightness) {
+    return brightness == Brightness.light ? settings.themePageLightConfig : settings.themePageDarkConfig;
+  }
+
   TextTheme? textTheme(Brightness brightness) {
     final fontFamily = settings.fontFamily;
     if (fontFamily == null) {
@@ -113,11 +121,39 @@ class ThemeProvider extends InheritedWidget {
     );
   }
 
-  ElevatedButtonStyles elevatedButtonStyles(ColorScheme colors) {
+  GroupTitleListStyles groupTitleListStyles(GroupTitleListTileWidgetConfig? groupTitleListTile) {
+    return GroupTitleListStyles(
+      primary: GroutTitleListStyle(
+        textStyle: const TextStyle(color: Colors.white),
+        background: groupTitleListTile?.backgroundColor,
+      ),
+    );
+  }
+
+  OnboardingPictureLogoStyles onboardingPictureLogoStyles(
+    ColorScheme colors,
+    OnboardingPictureLogoWidgetConfig? onboardingPictureLogo,
+  ) {
+    return OnboardingPictureLogoStyles(
+      primary: OnboardingPictureLogoStyle(
+        scale: onboardingPictureLogo?.scale,
+        textStyle: TextStyle(
+          color: onboardingPictureLogo?.labelColor ?? colors.onPrimary,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+
+  ElevatedButtonStyles elevatedButtonStyles(
+    ColorScheme colors,
+    ElevatedButtonWidgetConfig? elevatedButtonAddons,
+  ) {
     return ElevatedButtonStyles(
       primary: ElevatedButton.styleFrom(
-        foregroundColor: colors.onPrimary,
-        backgroundColor: colors.primary,
+        foregroundColor: elevatedButtonAddons?.foregroundColor ?? colors.onPrimary,
+        backgroundColor: elevatedButtonAddons?.backgroundColor ?? colors.primary,
+        textStyle: TextStyle(color: elevatedButtonAddons?.textColor),
         disabledForegroundColor: colors.onPrimaryContainer.withOpacity(0.38),
         disabledBackgroundColor: colors.onPrimaryContainer.withOpacity(0.12),
       ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
@@ -147,6 +183,15 @@ class ThemeProvider extends InheritedWidget {
         side: BorderSide(
           color: colors.onBackground.withOpacity(0.2),
         ),
+      ),
+    );
+  }
+
+  LoginPageStyles loginPageStyles(LoginModeSelectPageConfig? loginSettings) {
+    return LoginPageStyles(
+      primary: LoginModeSelectStyle(
+        signInTypeButton: loginSettings?.buttonSignupStyleType,
+        signUpTypeButton: loginSettings?.buttonLoginStyleType,
       ),
     );
   }
@@ -201,21 +246,41 @@ class ThemeProvider extends InheritedWidget {
     );
   }
 
-  InputDecorationTheme inputDecorationTheme(ColorScheme colors) {
+  TextSelectionThemeData textSelectionThemeData(
+    ColorScheme colors,
+    TextSelectionWidgetConfig? selection,
+  ) {
+    return TextSelectionThemeData(
+        cursorColor: selection?.cursorColor,
+        selectionColor: selection?.selectionColor,
+        selectionHandleColor: selection?.selectionHandleColor);
+  }
+
+  InputDecorationTheme inputDecorationTheme(
+    ColorScheme colors,
+    TextFormFieldWidgetConfig? primary,
+  ) {
     return InputDecorationTheme(
       floatingLabelBehavior: FloatingLabelBehavior.always,
       isDense: true,
       filled: true,
       fillColor: colors.background,
+      labelStyle: TextStyle(color: primary?.labelColor),
       border: MaterialStateOutlineInputBorder.resolveWith((states) {
         final Color borderColor;
         final bool isError = states.contains(MaterialState.error);
         if (states.contains(MaterialState.disabled)) {
-          borderColor = isError ? colors.error.withOpacity(0.25) : colors.onBackground.withOpacity(0.25);
+          borderColor = isError
+              ? primary?.border?.disabled?.errorColor ?? colors.error.withOpacity(0.25)
+              : primary?.border?.disabled?.typicalColor ?? colors.onBackground.withOpacity(0.25);
         } else if (states.contains(MaterialState.focused)) {
-          borderColor = isError ? colors.error : colors.primary;
+          borderColor = isError
+              ? primary?.border?.focused?.errorColor ?? colors.error
+              : primary?.border?.focused?.typicalColor ?? colors.primary;
         } else {
-          borderColor = isError ? colors.error.withOpacity(0.5) : colors.onBackground.withOpacity(0.5);
+          borderColor = isError
+              ? primary?.border?.any?.errorColor ?? colors.error.withOpacity(0.5)
+              : primary?.border?.any?.typicalColor ?? colors.onBackground.withOpacity(0.5);
         }
         return OutlineInputBorder(
           borderSide: BorderSide(
@@ -226,16 +291,38 @@ class ThemeProvider extends InheritedWidget {
     );
   }
 
-  AppBarTheme appBarTheme(ColorScheme colors) {
-    return const AppBarTheme(
+  AppBarTheme appBarTheme(
+    ColorScheme colors,
+    ExtTabBarWidgetConfig? extTabBar,
+  ) {
+    return AppBarTheme(
+      backgroundColor: extTabBar?.backgroundColor,
+      foregroundColor: extTabBar?.foregroundColor,
+      surfaceTintColor: Colors.white,
       scrolledUnderElevation: 0,
       centerTitle: true,
     );
   }
 
-  BottomNavigationBarThemeData bottomNavigationBarTheme(ColorScheme colors) {
+  TabBarTheme tabBarTheme(
+    ColorScheme colors,
+    ExtTabBarWidgetConfig? extTabBar,
+  ) {
+    return TabBarTheme(
+      unselectedLabelColor: extTabBar?.unSelectedItemColor ?? colors.onSurface,
+      dividerColor: Colors.transparent,
+      labelColor: colors.onPrimary,
+    );
+  }
+
+  BottomNavigationBarThemeData bottomNavigationBarTheme(
+    ColorScheme colors,
+    BottomNavigationBarWidgetConfig? bottomNavigationBar,
+  ) {
     return BottomNavigationBarThemeData(
-      backgroundColor: colors.surface,
+      backgroundColor: bottomNavigationBar?.backgroundColor ?? colors.surface,
+      unselectedItemColor: bottomNavigationBar?.unSelectedItemColor,
+      selectedItemColor: bottomNavigationBar?.selectedItemColor,
     );
   }
 
@@ -278,16 +365,34 @@ class ThemeProvider extends InheritedWidget {
   ThemeData? light([Color? targetColor]) {
     const brightness = Brightness.light;
     final colorScheme = colors(brightness, targetColor);
+    final themeWidgetConfig = _themeWidgetConfig(brightness);
+    final themePageConfig = _themePageConfig(brightness);
+
     return ThemeData.from(
       colorScheme: colorScheme,
       textTheme: textTheme(brightness),
       useMaterial3: true,
     ).copyWith(
+      textSelectionTheme: textSelectionThemeData(
+        colorScheme,
+        themeWidgetConfig?.text?.selection,
+      ),
       // GENERAL CONFIGURATIONValueNotifier
-      inputDecorationTheme: inputDecorationTheme(colorScheme),
+      inputDecorationTheme: inputDecorationTheme(
+        colorScheme,
+        themeWidgetConfig?.input?.primary,
+      ),
       extensions: [
+        // PAGES
+        loginPageStyles(
+          themePageConfig?.login?.modeSelect,
+        ),
+        // WIDGETS
         inputDecorations(colorScheme),
-        elevatedButtonStyles(colorScheme),
+        elevatedButtonStyles(
+          colorScheme,
+          themeWidgetConfig?.button?.primaryElevatedButton,
+        ),
         outlinedButtonStyles(colorScheme),
         textButtonStyles(colorScheme),
         gradients(colorScheme),
@@ -295,6 +400,13 @@ class ThemeProvider extends InheritedWidget {
           primaryOnboardin: settings.primaryOnboardingLogo,
           secondaryOnboardin: settings.secondaryOnboardingLogo,
         ),
+        groupTitleListStyles(
+          themeWidgetConfig?.group?.groupTitleListTile,
+        ),
+        onboardingPictureLogoStyles(
+          colorScheme,
+          themeWidgetConfig?.picture?.onboardingPictureLogo,
+        )
       ],
       // COLOR
       primaryColorLight: colorScheme.secondaryContainer,
@@ -303,8 +415,19 @@ class ThemeProvider extends InheritedWidget {
       indicatorColor: colorScheme.primary,
       // TYPOGRAPHY & ICONOGRAPHY
       // COMPONENT THEMES
-      appBarTheme: appBarTheme(colorScheme),
-      bottomNavigationBarTheme: bottomNavigationBarTheme(colorScheme),
+      appBarTheme: appBarTheme(
+        colorScheme,
+        themeWidgetConfig?.bar?.extTabBar,
+      ),
+
+      tabBarTheme: tabBarTheme(
+        colorScheme,
+        themeWidgetConfig?.bar?.extTabBar,
+      ),
+      bottomNavigationBarTheme: bottomNavigationBarTheme(
+        colorScheme,
+        themeWidgetConfig?.bar?.bottomNavigationBar,
+      ),
       elevatedButtonTheme: elevatedButtonTheme(colorScheme),
       outlinedButtonTheme: outlinedButtonTheme(colorScheme),
       textButtonTheme: textButtonTheme(colorScheme),
@@ -317,6 +440,8 @@ class ThemeProvider extends InheritedWidget {
     const brightness = Brightness.dark;
     // ignore: unused_local_variable
     final colorScheme = colors(brightness, targetColor);
+    // ignore: unused_local_variable
+    final themeWidgetConfig = _themeWidgetConfig(brightness);
     // TODO: Not implemented yet
     return null;
   }
