@@ -117,6 +117,7 @@ class PictureWidgetConfig with _$PictureWidgetConfig {
   @themeJsonSerializable
   const factory PictureWidgetConfig({
     OnboardingPictureLogoWidgetConfig? onboardingPictureLogo,
+    AppIconWidgetConfig? appIcon,
   }) = _PictureWidgetConfig;
 
   factory PictureWidgetConfig.fromJson(Map<String, dynamic> json) => _$PictureWidgetConfigFromJson(json);
@@ -133,6 +134,17 @@ class OnboardingPictureLogoWidgetConfig with _$OnboardingPictureLogoWidgetConfig
 
   factory OnboardingPictureLogoWidgetConfig.fromJson(Map<String, dynamic> json) =>
       _$OnboardingPictureLogoWidgetConfigFromJson(json);
+}
+
+@freezed
+class AppIconWidgetConfig with _$AppIconWidgetConfig {
+  // ignore: invalid_annotation_target
+  @themeJsonSerializable
+  const factory AppIconWidgetConfig({
+    Color? color,
+  }) = _AppIconWidgetConfig;
+
+  factory AppIconWidgetConfig.fromJson(Map<String, dynamic> json) => _$AppIconWidgetConfigFromJson(json);
 }
 
 @freezed

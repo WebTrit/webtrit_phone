@@ -274,6 +274,14 @@ class ThemeProvider extends InheritedWidget {
     );
   }
 
+  AppIconStyles appIconStyle(ColorScheme colors, AppIconWidgetConfig? appIcon) {
+    return AppIconStyles(
+      primary: AppIconStyle(
+        color: appIcon?.color ?? colors.primary,
+      ),
+    );
+  }
+
   InputDecorationTheme inputDecorationTheme(
     ColorScheme colors,
     TextFormFieldWidgetConfig? primary,
@@ -406,6 +414,10 @@ class ThemeProvider extends InheritedWidget {
           themePageConfig?.login?.modeSelect,
         ),
         // WIDGETS
+        appIconStyle(
+          colorScheme,
+          themeWidgetConfig?.picture?.appIcon,
+        ),
         linkifyStyles(
           colorScheme,
           themeWidgetConfig?.text?.linkify,

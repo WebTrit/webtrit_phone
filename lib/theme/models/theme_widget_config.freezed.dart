@@ -1614,6 +1614,7 @@ PictureWidgetConfig _$PictureWidgetConfigFromJson(Map<String, dynamic> json) {
 mixin _$PictureWidgetConfig {
   OnboardingPictureLogoWidgetConfig? get onboardingPictureLogo =>
       throw _privateConstructorUsedError;
+  AppIconWidgetConfig? get appIcon => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -1627,9 +1628,12 @@ abstract class $PictureWidgetConfigCopyWith<$Res> {
           PictureWidgetConfig value, $Res Function(PictureWidgetConfig) then) =
       _$PictureWidgetConfigCopyWithImpl<$Res, PictureWidgetConfig>;
   @useResult
-  $Res call({OnboardingPictureLogoWidgetConfig? onboardingPictureLogo});
+  $Res call(
+      {OnboardingPictureLogoWidgetConfig? onboardingPictureLogo,
+      AppIconWidgetConfig? appIcon});
 
   $OnboardingPictureLogoWidgetConfigCopyWith<$Res>? get onboardingPictureLogo;
+  $AppIconWidgetConfigCopyWith<$Res>? get appIcon;
 }
 
 /// @nodoc
@@ -1646,12 +1650,17 @@ class _$PictureWidgetConfigCopyWithImpl<$Res, $Val extends PictureWidgetConfig>
   @override
   $Res call({
     Object? onboardingPictureLogo = freezed,
+    Object? appIcon = freezed,
   }) {
     return _then(_value.copyWith(
       onboardingPictureLogo: freezed == onboardingPictureLogo
           ? _value.onboardingPictureLogo
           : onboardingPictureLogo // ignore: cast_nullable_to_non_nullable
               as OnboardingPictureLogoWidgetConfig?,
+      appIcon: freezed == appIcon
+          ? _value.appIcon
+          : appIcon // ignore: cast_nullable_to_non_nullable
+              as AppIconWidgetConfig?,
     ) as $Val);
   }
 
@@ -1667,6 +1676,18 @@ class _$PictureWidgetConfigCopyWithImpl<$Res, $Val extends PictureWidgetConfig>
       return _then(_value.copyWith(onboardingPictureLogo: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $AppIconWidgetConfigCopyWith<$Res>? get appIcon {
+    if (_value.appIcon == null) {
+      return null;
+    }
+
+    return $AppIconWidgetConfigCopyWith<$Res>(_value.appIcon!, (value) {
+      return _then(_value.copyWith(appIcon: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -1677,10 +1698,14 @@ abstract class _$$PictureWidgetConfigImplCopyWith<$Res>
       __$$PictureWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({OnboardingPictureLogoWidgetConfig? onboardingPictureLogo});
+  $Res call(
+      {OnboardingPictureLogoWidgetConfig? onboardingPictureLogo,
+      AppIconWidgetConfig? appIcon});
 
   @override
   $OnboardingPictureLogoWidgetConfigCopyWith<$Res>? get onboardingPictureLogo;
+  @override
+  $AppIconWidgetConfigCopyWith<$Res>? get appIcon;
 }
 
 /// @nodoc
@@ -1695,12 +1720,17 @@ class __$$PictureWidgetConfigImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? onboardingPictureLogo = freezed,
+    Object? appIcon = freezed,
   }) {
     return _then(_$PictureWidgetConfigImpl(
       onboardingPictureLogo: freezed == onboardingPictureLogo
           ? _value.onboardingPictureLogo
           : onboardingPictureLogo // ignore: cast_nullable_to_non_nullable
               as OnboardingPictureLogoWidgetConfig?,
+      appIcon: freezed == appIcon
+          ? _value.appIcon
+          : appIcon // ignore: cast_nullable_to_non_nullable
+              as AppIconWidgetConfig?,
     ));
   }
 }
@@ -1709,17 +1739,19 @@ class __$$PictureWidgetConfigImplCopyWithImpl<$Res>
 
 @themeJsonSerializable
 class _$PictureWidgetConfigImpl implements _PictureWidgetConfig {
-  const _$PictureWidgetConfigImpl({this.onboardingPictureLogo});
+  const _$PictureWidgetConfigImpl({this.onboardingPictureLogo, this.appIcon});
 
   factory _$PictureWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$PictureWidgetConfigImplFromJson(json);
 
   @override
   final OnboardingPictureLogoWidgetConfig? onboardingPictureLogo;
+  @override
+  final AppIconWidgetConfig? appIcon;
 
   @override
   String toString() {
-    return 'PictureWidgetConfig(onboardingPictureLogo: $onboardingPictureLogo)';
+    return 'PictureWidgetConfig(onboardingPictureLogo: $onboardingPictureLogo, appIcon: $appIcon)';
   }
 
   @override
@@ -1728,12 +1760,13 @@ class _$PictureWidgetConfigImpl implements _PictureWidgetConfig {
         (other.runtimeType == runtimeType &&
             other is _$PictureWidgetConfigImpl &&
             (identical(other.onboardingPictureLogo, onboardingPictureLogo) ||
-                other.onboardingPictureLogo == onboardingPictureLogo));
+                other.onboardingPictureLogo == onboardingPictureLogo) &&
+            (identical(other.appIcon, appIcon) || other.appIcon == appIcon));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, onboardingPictureLogo);
+  int get hashCode => Object.hash(runtimeType, onboardingPictureLogo, appIcon);
 
   @JsonKey(ignore: true)
   @override
@@ -1752,14 +1785,16 @@ class _$PictureWidgetConfigImpl implements _PictureWidgetConfig {
 
 abstract class _PictureWidgetConfig implements PictureWidgetConfig {
   const factory _PictureWidgetConfig(
-          {final OnboardingPictureLogoWidgetConfig? onboardingPictureLogo}) =
-      _$PictureWidgetConfigImpl;
+      {final OnboardingPictureLogoWidgetConfig? onboardingPictureLogo,
+      final AppIconWidgetConfig? appIcon}) = _$PictureWidgetConfigImpl;
 
   factory _PictureWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$PictureWidgetConfigImpl.fromJson;
 
   @override
   OnboardingPictureLogoWidgetConfig? get onboardingPictureLogo;
+  @override
+  AppIconWidgetConfig? get appIcon;
   @override
   @JsonKey(ignore: true)
   _$$PictureWidgetConfigImplCopyWith<_$PictureWidgetConfigImpl> get copyWith =>
@@ -1934,6 +1969,145 @@ abstract class _OnboardingPictureLogoWidgetConfig
   _$$OnboardingPictureLogoWidgetConfigImplCopyWith<
           _$OnboardingPictureLogoWidgetConfigImpl>
       get copyWith => throw _privateConstructorUsedError;
+}
+
+AppIconWidgetConfig _$AppIconWidgetConfigFromJson(Map<String, dynamic> json) {
+  return _AppIconWidgetConfig.fromJson(json);
+}
+
+/// @nodoc
+mixin _$AppIconWidgetConfig {
+  Color? get color => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $AppIconWidgetConfigCopyWith<AppIconWidgetConfig> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AppIconWidgetConfigCopyWith<$Res> {
+  factory $AppIconWidgetConfigCopyWith(
+          AppIconWidgetConfig value, $Res Function(AppIconWidgetConfig) then) =
+      _$AppIconWidgetConfigCopyWithImpl<$Res, AppIconWidgetConfig>;
+  @useResult
+  $Res call({Color? color});
+}
+
+/// @nodoc
+class _$AppIconWidgetConfigCopyWithImpl<$Res, $Val extends AppIconWidgetConfig>
+    implements $AppIconWidgetConfigCopyWith<$Res> {
+  _$AppIconWidgetConfigCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? color = freezed,
+  }) {
+    return _then(_value.copyWith(
+      color: freezed == color
+          ? _value.color
+          : color // ignore: cast_nullable_to_non_nullable
+              as Color?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$AppIconWidgetConfigImplCopyWith<$Res>
+    implements $AppIconWidgetConfigCopyWith<$Res> {
+  factory _$$AppIconWidgetConfigImplCopyWith(_$AppIconWidgetConfigImpl value,
+          $Res Function(_$AppIconWidgetConfigImpl) then) =
+      __$$AppIconWidgetConfigImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({Color? color});
+}
+
+/// @nodoc
+class __$$AppIconWidgetConfigImplCopyWithImpl<$Res>
+    extends _$AppIconWidgetConfigCopyWithImpl<$Res, _$AppIconWidgetConfigImpl>
+    implements _$$AppIconWidgetConfigImplCopyWith<$Res> {
+  __$$AppIconWidgetConfigImplCopyWithImpl(_$AppIconWidgetConfigImpl _value,
+      $Res Function(_$AppIconWidgetConfigImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? color = freezed,
+  }) {
+    return _then(_$AppIconWidgetConfigImpl(
+      color: freezed == color
+          ? _value.color
+          : color // ignore: cast_nullable_to_non_nullable
+              as Color?,
+    ));
+  }
+}
+
+/// @nodoc
+
+@themeJsonSerializable
+class _$AppIconWidgetConfigImpl implements _AppIconWidgetConfig {
+  const _$AppIconWidgetConfigImpl({this.color});
+
+  factory _$AppIconWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AppIconWidgetConfigImplFromJson(json);
+
+  @override
+  final Color? color;
+
+  @override
+  String toString() {
+    return 'AppIconWidgetConfig(color: $color)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AppIconWidgetConfigImpl &&
+            (identical(other.color, color) || other.color == color));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, color);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AppIconWidgetConfigImplCopyWith<_$AppIconWidgetConfigImpl> get copyWith =>
+      __$$AppIconWidgetConfigImplCopyWithImpl<_$AppIconWidgetConfigImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$AppIconWidgetConfigImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _AppIconWidgetConfig implements AppIconWidgetConfig {
+  const factory _AppIconWidgetConfig({final Color? color}) =
+      _$AppIconWidgetConfigImpl;
+
+  factory _AppIconWidgetConfig.fromJson(Map<String, dynamic> json) =
+      _$AppIconWidgetConfigImpl.fromJson;
+
+  @override
+  Color? get color;
+  @override
+  @JsonKey(ignore: true)
+  _$$AppIconWidgetConfigImplCopyWith<_$AppIconWidgetConfigImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 InputWidgetConfig _$InputWidgetConfigFromJson(Map<String, dynamic> json) {
