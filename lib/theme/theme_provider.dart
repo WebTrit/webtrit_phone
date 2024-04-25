@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 
+import 'package:webtrit_phone/features/settings/widgets/group_title_list_style.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'theme.dart';

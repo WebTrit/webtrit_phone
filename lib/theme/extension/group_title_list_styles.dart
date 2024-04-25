@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../style/style.dart';
+import 'package:webtrit_phone/features/settings/widgets/group_title_list_style.dart';
 
 class GroupTitleListStyles extends ThemeExtension<GroupTitleListStyles> {
   const GroupTitleListStyles({
