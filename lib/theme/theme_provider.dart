@@ -140,14 +140,15 @@ class ThemeProvider extends InheritedWidget {
     ThemeSvgAsset? picture,
     OnboardingPictureLogoWidgetConfig? onboardingPictureLogo,
   ) {
+    final textStyleColor = onboardingPictureLogo?.labelColor ?? colors.onPrimary;
+
+    final textStyle = TextStyle(color: textStyleColor, fontWeight: FontWeight.w600);
+
     return OnboardingPictureLogoStyles(
       primary: OnboardingPictureLogoStyle(
         picture: picture,
         scale: onboardingPictureLogo?.scale,
-        textStyle: TextStyle(
-          color: onboardingPictureLogo?.labelColor ?? colors.onPrimary,
-          fontWeight: FontWeight.w600,
-        ),
+        textStyle: textStyle,
       ),
     );
   }
@@ -258,23 +259,26 @@ class ThemeProvider extends InheritedWidget {
     TextSelectionWidgetConfig? selection,
   ) {
     return TextSelectionThemeData(
-        cursorColor: selection?.cursorColor,
-        selectionColor: selection?.selectionColor,
-        selectionHandleColor: selection?.selectionHandleColor);
+      cursorColor: selection?.cursorColor,
+      selectionColor: selection?.selectionColor,
+      selectionHandleColor: selection?.selectionHandleColor,
+    );
   }
 
   LinkifyStyles linkifyStyles(
     ColorScheme colors,
     LinkifyWidgetConfig? linkifyWidgetConfig,
   ) {
+    final regularTextColor = linkifyWidgetConfig?.styleColor;
+    final linkifyTextColor = linkifyWidgetConfig?.linkifyStyleColor ?? colors.primary;
+
+    final regularTextStyle = TextStyle(color: regularTextColor);
+    final linkifyTextStyle = TextStyle(color: linkifyTextColor);
+
     return LinkifyStyles(
       primary: LinkifyStyle(
-        style: TextStyle(
-          color: linkifyWidgetConfig?.styleColor,
-        ),
-        linkStyle: TextStyle(
-          color: linkifyWidgetConfig?.linkifyStyleColor ?? colors.primary,
-        ),
+        style: regularTextStyle,
+        linkStyle: linkifyTextStyle,
       ),
     );
   }
