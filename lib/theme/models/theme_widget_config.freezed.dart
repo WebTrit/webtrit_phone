@@ -2153,8 +2153,9 @@ PictureWidgetConfig _$PictureWidgetConfigFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$PictureWidgetConfig {
-  OnboardingPictureLogoWidgetConfig? get onboardingPictureLogo =>
+  LogoWidgetConfig? get onboardingPictureLogo =>
       throw _privateConstructorUsedError;
+  LogoWidgetConfig? get onboardingLogo => throw _privateConstructorUsedError;
   AppIconWidgetConfig? get appIcon => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -2170,10 +2171,12 @@ abstract class $PictureWidgetConfigCopyWith<$Res> {
       _$PictureWidgetConfigCopyWithImpl<$Res, PictureWidgetConfig>;
   @useResult
   $Res call(
-      {OnboardingPictureLogoWidgetConfig? onboardingPictureLogo,
+      {LogoWidgetConfig? onboardingPictureLogo,
+      LogoWidgetConfig? onboardingLogo,
       AppIconWidgetConfig? appIcon});
 
-  $OnboardingPictureLogoWidgetConfigCopyWith<$Res>? get onboardingPictureLogo;
+  $LogoWidgetConfigCopyWith<$Res>? get onboardingPictureLogo;
+  $LogoWidgetConfigCopyWith<$Res>? get onboardingLogo;
   $AppIconWidgetConfigCopyWith<$Res>? get appIcon;
 }
 
@@ -2191,13 +2194,18 @@ class _$PictureWidgetConfigCopyWithImpl<$Res, $Val extends PictureWidgetConfig>
   @override
   $Res call({
     Object? onboardingPictureLogo = freezed,
+    Object? onboardingLogo = freezed,
     Object? appIcon = freezed,
   }) {
     return _then(_value.copyWith(
       onboardingPictureLogo: freezed == onboardingPictureLogo
           ? _value.onboardingPictureLogo
           : onboardingPictureLogo // ignore: cast_nullable_to_non_nullable
-              as OnboardingPictureLogoWidgetConfig?,
+              as LogoWidgetConfig?,
+      onboardingLogo: freezed == onboardingLogo
+          ? _value.onboardingLogo
+          : onboardingLogo // ignore: cast_nullable_to_non_nullable
+              as LogoWidgetConfig?,
       appIcon: freezed == appIcon
           ? _value.appIcon
           : appIcon // ignore: cast_nullable_to_non_nullable
@@ -2207,14 +2215,26 @@ class _$PictureWidgetConfigCopyWithImpl<$Res, $Val extends PictureWidgetConfig>
 
   @override
   @pragma('vm:prefer-inline')
-  $OnboardingPictureLogoWidgetConfigCopyWith<$Res>? get onboardingPictureLogo {
+  $LogoWidgetConfigCopyWith<$Res>? get onboardingPictureLogo {
     if (_value.onboardingPictureLogo == null) {
       return null;
     }
 
-    return $OnboardingPictureLogoWidgetConfigCopyWith<$Res>(
-        _value.onboardingPictureLogo!, (value) {
+    return $LogoWidgetConfigCopyWith<$Res>(_value.onboardingPictureLogo!,
+        (value) {
       return _then(_value.copyWith(onboardingPictureLogo: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $LogoWidgetConfigCopyWith<$Res>? get onboardingLogo {
+    if (_value.onboardingLogo == null) {
+      return null;
+    }
+
+    return $LogoWidgetConfigCopyWith<$Res>(_value.onboardingLogo!, (value) {
+      return _then(_value.copyWith(onboardingLogo: value) as $Val);
     });
   }
 
@@ -2240,11 +2260,14 @@ abstract class _$$PictureWidgetConfigImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {OnboardingPictureLogoWidgetConfig? onboardingPictureLogo,
+      {LogoWidgetConfig? onboardingPictureLogo,
+      LogoWidgetConfig? onboardingLogo,
       AppIconWidgetConfig? appIcon});
 
   @override
-  $OnboardingPictureLogoWidgetConfigCopyWith<$Res>? get onboardingPictureLogo;
+  $LogoWidgetConfigCopyWith<$Res>? get onboardingPictureLogo;
+  @override
+  $LogoWidgetConfigCopyWith<$Res>? get onboardingLogo;
   @override
   $AppIconWidgetConfigCopyWith<$Res>? get appIcon;
 }
@@ -2261,13 +2284,18 @@ class __$$PictureWidgetConfigImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? onboardingPictureLogo = freezed,
+    Object? onboardingLogo = freezed,
     Object? appIcon = freezed,
   }) {
     return _then(_$PictureWidgetConfigImpl(
       onboardingPictureLogo: freezed == onboardingPictureLogo
           ? _value.onboardingPictureLogo
           : onboardingPictureLogo // ignore: cast_nullable_to_non_nullable
-              as OnboardingPictureLogoWidgetConfig?,
+              as LogoWidgetConfig?,
+      onboardingLogo: freezed == onboardingLogo
+          ? _value.onboardingLogo
+          : onboardingLogo // ignore: cast_nullable_to_non_nullable
+              as LogoWidgetConfig?,
       appIcon: freezed == appIcon
           ? _value.appIcon
           : appIcon // ignore: cast_nullable_to_non_nullable
@@ -2280,19 +2308,22 @@ class __$$PictureWidgetConfigImplCopyWithImpl<$Res>
 
 @themeJsonSerializable
 class _$PictureWidgetConfigImpl implements _PictureWidgetConfig {
-  const _$PictureWidgetConfigImpl({this.onboardingPictureLogo, this.appIcon});
+  const _$PictureWidgetConfigImpl(
+      {this.onboardingPictureLogo, this.onboardingLogo, this.appIcon});
 
   factory _$PictureWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$PictureWidgetConfigImplFromJson(json);
 
   @override
-  final OnboardingPictureLogoWidgetConfig? onboardingPictureLogo;
+  final LogoWidgetConfig? onboardingPictureLogo;
+  @override
+  final LogoWidgetConfig? onboardingLogo;
   @override
   final AppIconWidgetConfig? appIcon;
 
   @override
   String toString() {
-    return 'PictureWidgetConfig(onboardingPictureLogo: $onboardingPictureLogo, appIcon: $appIcon)';
+    return 'PictureWidgetConfig(onboardingPictureLogo: $onboardingPictureLogo, onboardingLogo: $onboardingLogo, appIcon: $appIcon)';
   }
 
   @override
@@ -2302,12 +2333,15 @@ class _$PictureWidgetConfigImpl implements _PictureWidgetConfig {
             other is _$PictureWidgetConfigImpl &&
             (identical(other.onboardingPictureLogo, onboardingPictureLogo) ||
                 other.onboardingPictureLogo == onboardingPictureLogo) &&
+            (identical(other.onboardingLogo, onboardingLogo) ||
+                other.onboardingLogo == onboardingLogo) &&
             (identical(other.appIcon, appIcon) || other.appIcon == appIcon));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, onboardingPictureLogo, appIcon);
+  int get hashCode =>
+      Object.hash(runtimeType, onboardingPictureLogo, onboardingLogo, appIcon);
 
   @JsonKey(ignore: true)
   @override
@@ -2326,14 +2360,17 @@ class _$PictureWidgetConfigImpl implements _PictureWidgetConfig {
 
 abstract class _PictureWidgetConfig implements PictureWidgetConfig {
   const factory _PictureWidgetConfig(
-      {final OnboardingPictureLogoWidgetConfig? onboardingPictureLogo,
+      {final LogoWidgetConfig? onboardingPictureLogo,
+      final LogoWidgetConfig? onboardingLogo,
       final AppIconWidgetConfig? appIcon}) = _$PictureWidgetConfigImpl;
 
   factory _PictureWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$PictureWidgetConfigImpl.fromJson;
 
   @override
-  OnboardingPictureLogoWidgetConfig? get onboardingPictureLogo;
+  LogoWidgetConfig? get onboardingPictureLogo;
+  @override
+  LogoWidgetConfig? get onboardingLogo;
   @override
   AppIconWidgetConfig? get appIcon;
   @override
@@ -2342,38 +2379,34 @@ abstract class _PictureWidgetConfig implements PictureWidgetConfig {
       throw _privateConstructorUsedError;
 }
 
-OnboardingPictureLogoWidgetConfig _$OnboardingPictureLogoWidgetConfigFromJson(
-    Map<String, dynamic> json) {
-  return _OnboardingPictureLogoWidgetConfig.fromJson(json);
+LogoWidgetConfig _$LogoWidgetConfigFromJson(Map<String, dynamic> json) {
+  return _LogoWidgetConfig.fromJson(json);
 }
 
 /// @nodoc
-mixin _$OnboardingPictureLogoWidgetConfig {
+mixin _$LogoWidgetConfig {
   double? get scale => throw _privateConstructorUsedError;
   Color? get labelColor => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $OnboardingPictureLogoWidgetConfigCopyWith<OnboardingPictureLogoWidgetConfig>
-      get copyWith => throw _privateConstructorUsedError;
+  $LogoWidgetConfigCopyWith<LogoWidgetConfig> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $OnboardingPictureLogoWidgetConfigCopyWith<$Res> {
-  factory $OnboardingPictureLogoWidgetConfigCopyWith(
-          OnboardingPictureLogoWidgetConfig value,
-          $Res Function(OnboardingPictureLogoWidgetConfig) then) =
-      _$OnboardingPictureLogoWidgetConfigCopyWithImpl<$Res,
-          OnboardingPictureLogoWidgetConfig>;
+abstract class $LogoWidgetConfigCopyWith<$Res> {
+  factory $LogoWidgetConfigCopyWith(
+          LogoWidgetConfig value, $Res Function(LogoWidgetConfig) then) =
+      _$LogoWidgetConfigCopyWithImpl<$Res, LogoWidgetConfig>;
   @useResult
   $Res call({double? scale, Color? labelColor});
 }
 
 /// @nodoc
-class _$OnboardingPictureLogoWidgetConfigCopyWithImpl<$Res,
-        $Val extends OnboardingPictureLogoWidgetConfig>
-    implements $OnboardingPictureLogoWidgetConfigCopyWith<$Res> {
-  _$OnboardingPictureLogoWidgetConfigCopyWithImpl(this._value, this._then);
+class _$LogoWidgetConfigCopyWithImpl<$Res, $Val extends LogoWidgetConfig>
+    implements $LogoWidgetConfigCopyWith<$Res> {
+  _$LogoWidgetConfigCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -2400,25 +2433,22 @@ class _$OnboardingPictureLogoWidgetConfigCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$OnboardingPictureLogoWidgetConfigImplCopyWith<$Res>
-    implements $OnboardingPictureLogoWidgetConfigCopyWith<$Res> {
-  factory _$$OnboardingPictureLogoWidgetConfigImplCopyWith(
-          _$OnboardingPictureLogoWidgetConfigImpl value,
-          $Res Function(_$OnboardingPictureLogoWidgetConfigImpl) then) =
-      __$$OnboardingPictureLogoWidgetConfigImplCopyWithImpl<$Res>;
+abstract class _$$LogoWidgetConfigImplCopyWith<$Res>
+    implements $LogoWidgetConfigCopyWith<$Res> {
+  factory _$$LogoWidgetConfigImplCopyWith(_$LogoWidgetConfigImpl value,
+          $Res Function(_$LogoWidgetConfigImpl) then) =
+      __$$LogoWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({double? scale, Color? labelColor});
 }
 
 /// @nodoc
-class __$$OnboardingPictureLogoWidgetConfigImplCopyWithImpl<$Res>
-    extends _$OnboardingPictureLogoWidgetConfigCopyWithImpl<$Res,
-        _$OnboardingPictureLogoWidgetConfigImpl>
-    implements _$$OnboardingPictureLogoWidgetConfigImplCopyWith<$Res> {
-  __$$OnboardingPictureLogoWidgetConfigImplCopyWithImpl(
-      _$OnboardingPictureLogoWidgetConfigImpl _value,
-      $Res Function(_$OnboardingPictureLogoWidgetConfigImpl) _then)
+class __$$LogoWidgetConfigImplCopyWithImpl<$Res>
+    extends _$LogoWidgetConfigCopyWithImpl<$Res, _$LogoWidgetConfigImpl>
+    implements _$$LogoWidgetConfigImplCopyWith<$Res> {
+  __$$LogoWidgetConfigImplCopyWithImpl(_$LogoWidgetConfigImpl _value,
+      $Res Function(_$LogoWidgetConfigImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -2427,7 +2457,7 @@ class __$$OnboardingPictureLogoWidgetConfigImplCopyWithImpl<$Res>
     Object? scale = freezed,
     Object? labelColor = freezed,
   }) {
-    return _then(_$OnboardingPictureLogoWidgetConfigImpl(
+    return _then(_$LogoWidgetConfigImpl(
       scale: freezed == scale
           ? _value.scale
           : scale // ignore: cast_nullable_to_non_nullable
@@ -2443,13 +2473,11 @@ class __$$OnboardingPictureLogoWidgetConfigImplCopyWithImpl<$Res>
 /// @nodoc
 
 @themeJsonSerializable
-class _$OnboardingPictureLogoWidgetConfigImpl
-    implements _OnboardingPictureLogoWidgetConfig {
-  const _$OnboardingPictureLogoWidgetConfigImpl({this.scale, this.labelColor});
+class _$LogoWidgetConfigImpl implements _LogoWidgetConfig {
+  const _$LogoWidgetConfigImpl({this.scale, this.labelColor});
 
-  factory _$OnboardingPictureLogoWidgetConfigImpl.fromJson(
-          Map<String, dynamic> json) =>
-      _$$OnboardingPictureLogoWidgetConfigImplFromJson(json);
+  factory _$LogoWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
+      _$$LogoWidgetConfigImplFromJson(json);
 
   @override
   final double? scale;
@@ -2458,14 +2486,14 @@ class _$OnboardingPictureLogoWidgetConfigImpl
 
   @override
   String toString() {
-    return 'OnboardingPictureLogoWidgetConfig(scale: $scale, labelColor: $labelColor)';
+    return 'LogoWidgetConfig(scale: $scale, labelColor: $labelColor)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$OnboardingPictureLogoWidgetConfigImpl &&
+            other is _$LogoWidgetConfigImpl &&
             (identical(other.scale, scale) || other.scale == scale) &&
             (identical(other.labelColor, labelColor) ||
                 other.labelColor == labelColor));
@@ -2478,28 +2506,24 @@ class _$OnboardingPictureLogoWidgetConfigImpl
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$OnboardingPictureLogoWidgetConfigImplCopyWith<
-          _$OnboardingPictureLogoWidgetConfigImpl>
-      get copyWith => __$$OnboardingPictureLogoWidgetConfigImplCopyWithImpl<
-          _$OnboardingPictureLogoWidgetConfigImpl>(this, _$identity);
+  _$$LogoWidgetConfigImplCopyWith<_$LogoWidgetConfigImpl> get copyWith =>
+      __$$LogoWidgetConfigImplCopyWithImpl<_$LogoWidgetConfigImpl>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$OnboardingPictureLogoWidgetConfigImplToJson(
+    return _$$LogoWidgetConfigImplToJson(
       this,
     );
   }
 }
 
-abstract class _OnboardingPictureLogoWidgetConfig
-    implements OnboardingPictureLogoWidgetConfig {
-  const factory _OnboardingPictureLogoWidgetConfig(
-      {final double? scale,
-      final Color? labelColor}) = _$OnboardingPictureLogoWidgetConfigImpl;
+abstract class _LogoWidgetConfig implements LogoWidgetConfig {
+  const factory _LogoWidgetConfig(
+      {final double? scale, final Color? labelColor}) = _$LogoWidgetConfigImpl;
 
-  factory _OnboardingPictureLogoWidgetConfig.fromJson(
-          Map<String, dynamic> json) =
-      _$OnboardingPictureLogoWidgetConfigImpl.fromJson;
+  factory _LogoWidgetConfig.fromJson(Map<String, dynamic> json) =
+      _$LogoWidgetConfigImpl.fromJson;
 
   @override
   double? get scale;
@@ -2507,9 +2531,8 @@ abstract class _OnboardingPictureLogoWidgetConfig
   Color? get labelColor;
   @override
   @JsonKey(ignore: true)
-  _$$OnboardingPictureLogoWidgetConfigImplCopyWith<
-          _$OnboardingPictureLogoWidgetConfigImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  _$$LogoWidgetConfigImplCopyWith<_$LogoWidgetConfigImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 AppIconWidgetConfig _$AppIconWidgetConfigFromJson(Map<String, dynamic> json) {

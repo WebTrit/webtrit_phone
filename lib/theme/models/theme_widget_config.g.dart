@@ -280,8 +280,12 @@ _$PictureWidgetConfigImpl _$$PictureWidgetConfigImplFromJson(
     _$PictureWidgetConfigImpl(
       onboardingPictureLogo: json['onboardingPictureLogo'] == null
           ? null
-          : OnboardingPictureLogoWidgetConfig.fromJson(
+          : LogoWidgetConfig.fromJson(
               json['onboardingPictureLogo'] as Map<String, dynamic>),
+      onboardingLogo: json['onboardingLogo'] == null
+          ? null
+          : LogoWidgetConfig.fromJson(
+              json['onboardingLogo'] as Map<String, dynamic>),
       appIcon: json['appIcon'] == null
           ? null
           : AppIconWidgetConfig.fromJson(
@@ -292,20 +296,20 @@ Map<String, dynamic> _$$PictureWidgetConfigImplToJson(
         _$PictureWidgetConfigImpl instance) =>
     <String, dynamic>{
       'onboardingPictureLogo': instance.onboardingPictureLogo,
+      'onboardingLogo': instance.onboardingLogo,
       'appIcon': instance.appIcon,
     };
 
-_$OnboardingPictureLogoWidgetConfigImpl
-    _$$OnboardingPictureLogoWidgetConfigImplFromJson(
-            Map<String, dynamic> json) =>
-        _$OnboardingPictureLogoWidgetConfigImpl(
-          scale: (json['scale'] as num?)?.toDouble(),
-          labelColor: _$JsonConverterFromJson<String, Color>(
-              json['labelColor'], const CSSColorConverter().fromJson),
-        );
+_$LogoWidgetConfigImpl _$$LogoWidgetConfigImplFromJson(
+        Map<String, dynamic> json) =>
+    _$LogoWidgetConfigImpl(
+      scale: (json['scale'] as num?)?.toDouble(),
+      labelColor: _$JsonConverterFromJson<String, Color>(
+          json['labelColor'], const CSSColorConverter().fromJson),
+    );
 
-Map<String, dynamic> _$$OnboardingPictureLogoWidgetConfigImplToJson(
-        _$OnboardingPictureLogoWidgetConfigImpl instance) =>
+Map<String, dynamic> _$$LogoWidgetConfigImplToJson(
+        _$LogoWidgetConfigImpl instance) =>
     <String, dynamic>{
       'scale': instance.scale,
       'labelColor': _$JsonConverterToJson<String, Color>(

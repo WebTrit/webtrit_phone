@@ -5,6 +5,7 @@ import 'package:material_color_utilities/material_color_utilities.dart';
 
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/login/view/login_mode_select_screen.dart';
+import 'package:webtrit_phone/features/login/widgets/onboarding_logo.dart';
 import 'package:webtrit_phone/features/login/widgets/onboarding_picture_logo.dart';
 import 'package:webtrit_phone/features/settings/widgets/group_title_list_tile.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -139,7 +140,7 @@ class ThemeProvider extends InheritedWidget {
   OnboardingPictureLogoStyles onboardingPictureLogoStyles(
     ColorScheme colors,
     ThemeSvgAsset? picture,
-    OnboardingPictureLogoWidgetConfig? onboardingPictureLogo,
+    LogoWidgetConfig? onboardingPictureLogo,
   ) {
     final textStyleColor = onboardingPictureLogo?.labelColor ?? colors.onPrimary;
 
@@ -149,6 +150,24 @@ class ThemeProvider extends InheritedWidget {
       primary: OnboardingPictureLogoStyle(
         picture: picture,
         scale: onboardingPictureLogo?.scale,
+        textStyle: textStyle,
+      ),
+    );
+  }
+
+  OnboardingLogoStyles onboardingLogoStyles(
+    ColorScheme colors,
+    ThemeSvgAsset? picture,
+    LogoWidgetConfig? onboardingLogoWidgetConfig,
+  ) {
+    final textStyleColor = onboardingLogoWidgetConfig?.labelColor;
+
+    final textStyle = TextStyle(color: textStyleColor);
+
+    return OnboardingLogoStyles(
+      primary: OnboardingLogoStyle(
+        picture: picture,
+        scale: onboardingLogoWidgetConfig?.scale,
         textStyle: textStyle,
       ),
     );
@@ -527,6 +546,11 @@ class ThemeProvider extends InheritedWidget {
           colorScheme,
           settings.primaryOnboardingLogo,
           themeWidgetConfig?.picture?.onboardingPictureLogo,
+        ),
+        onboardingLogoStyles(
+          colorScheme,
+          settings.secondaryOnboardingLogo,
+          themeWidgetConfig?.picture?.onboardingLogo,
         )
       ],
       // COLOR
