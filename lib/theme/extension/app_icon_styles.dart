@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../style/style.dart';
+import 'package:webtrit_phone/widgets/app_icon.dart';
 
 class AppIconStyles extends ThemeExtension<AppIconStyles> {
   const AppIconStyles({

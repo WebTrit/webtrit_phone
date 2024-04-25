@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 
+import 'package:webtrit_phone/widgets/widgets.dart';
+
 import 'theme.dart';
 
 class ThemeProvider extends InheritedWidget {
