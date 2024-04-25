@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 import 'package:linkify/linkify.dart';
 
-import 'package:webtrit_phone/theme/extension/linkify_styles.dart';
-
 import 'linkify_style.dart';
+import 'linkify_styles.dart';
 
 export 'linkify_style.dart';
+export 'linkify_styles.dart';
 
 export 'package:linkify/linkify.dart'
     show

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/theme/theme.dart';
-
 import 'group_title_list_style.dart';
+import 'group_title_list_styles.dart';
 
 export 'group_title_list_style.dart';
+export 'group_title_list_styles.dart';
 
 class GroupTitleListTile extends StatelessWidget {
   const GroupTitleListTile({

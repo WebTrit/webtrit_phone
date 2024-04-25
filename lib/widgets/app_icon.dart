@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/theme/extension/app_icon_styles.dart';
-
 import 'app_icon_style.dart';
+import 'app_icon_styles.dart';
 
 export 'app_icon_style.dart';
+export 'app_icon_styles.dart';
 
 class AppIcon extends StatelessWidget {
   const AppIcon(

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'onboarding_picture_logo_style.dart';
+import 'onboarding_picture_logo_styles.dart';
+
+export 'onboarding_picture_logo_style.dart';
+export 'onboarding_picture_logo_styles.dart';
 
 class OnboardingPictureLogo extends StatelessWidget {
   const OnboardingPictureLogo({
