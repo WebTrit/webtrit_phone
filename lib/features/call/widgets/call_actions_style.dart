@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class CallActionsStyle {
+class CallActionsStyle with Diagnosticable {
   CallActionsStyle({
     this.callStart,
     this.camera,
@@ -111,5 +111,26 @@ class CallActionsStyle {
       keypad: newKeypadStyle,
       keypadActive: newKeypadActiveStyle,
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty<ButtonStyle?>('callStart', callStart))
+      ..add(DiagnosticsProperty<ButtonStyle?>('camera', camera))
+      ..add(DiagnosticsProperty<ButtonStyle?>('cameraActive', cameraActive))
+      ..add(DiagnosticsProperty<ButtonStyle?>('muted', muted))
+      ..add(DiagnosticsProperty<ButtonStyle?>('mutedActive', mutedActive))
+      ..add(DiagnosticsProperty<ButtonStyle?>('speaker', speaker))
+      ..add(DiagnosticsProperty<ButtonStyle?>('speakerActive', speakerActive))
+      ..add(DiagnosticsProperty<ButtonStyle?>('transfer', transfer))
+      ..add(DiagnosticsProperty<ButtonStyle?>('held', held))
+      ..add(DiagnosticsProperty<ButtonStyle?>('heldActive', heldActive))
+      ..add(DiagnosticsProperty<ButtonStyle?>('swap', swap))
+      ..add(DiagnosticsProperty<ButtonStyle?>('hangup', hangup))
+      ..add(DiagnosticsProperty<ButtonStyle?>('key', key))
+      ..add(DiagnosticsProperty<ButtonStyle?>('keypad', keypad))
+      ..add(DiagnosticsProperty<ButtonStyle?>('keypadActive', keypadActive));
   }
 }
