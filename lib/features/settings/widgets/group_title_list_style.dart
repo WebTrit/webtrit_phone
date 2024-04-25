@@ -1,6 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class GroutTitleListStyle {
+class GroutTitleListStyle with Diagnosticable {
   GroutTitleListStyle({
     this.textStyle,
     this.background,
@@ -16,5 +17,12 @@ class GroutTitleListStyle {
       textStyle: newTextStyle,
       background: newBackground,
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<TextStyle?>('textStyle', textStyle));
+    properties.add(DiagnosticsProperty<Color?>('background', background));
   }
 }

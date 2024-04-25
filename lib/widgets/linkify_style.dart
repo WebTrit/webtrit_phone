@@ -1,6 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class LinkifyStyle {
+class LinkifyStyle with Diagnosticable {
   LinkifyStyle({
     this.style,
     this.linkStyle,
@@ -21,5 +22,12 @@ class LinkifyStyle {
       style: TextStyle.lerp(a?.style, b?.style, t),
       linkStyle: TextStyle.lerp(a?.linkStyle, b?.linkStyle, t),
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<TextStyle?>('style', style));
+    properties.add(DiagnosticsProperty<TextStyle?>('linkStyle', linkStyle));
   }
 }

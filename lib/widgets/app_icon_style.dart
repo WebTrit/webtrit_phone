@@ -1,6 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class AppIconStyle {
+class AppIconStyle with Diagnosticable {
   AppIconStyle({
     this.color,
   });
@@ -11,5 +12,11 @@ class AppIconStyle {
     return AppIconStyle(
       color: Color.lerp(a?.color, b?.color, t),
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<Color?>('color', color));
   }
 }

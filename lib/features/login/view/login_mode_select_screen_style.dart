@@ -1,6 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
-class LoginModeSelectScreenStyle {
+class LoginModeSelectScreenStyle with Diagnosticable {
   LoginModeSelectScreenStyle({
     this.signInTypeButton,
     this.signUpTypeButton,
@@ -16,5 +17,12 @@ class LoginModeSelectScreenStyle {
       signInTypeButton: newSignInButton,
       signUpTypeButton: newSignUpButton,
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<ElevatedButtonStyleType?>('signInTypeButton', signInTypeButton));
+    properties.add(DiagnosticsProperty<ElevatedButtonStyleType?>('signUpTypeButton', signUpTypeButton));
   }
 }
