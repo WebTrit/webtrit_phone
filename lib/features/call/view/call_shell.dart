@@ -42,7 +42,7 @@ class _CallShellState extends State<CallShell> {
           previous.lastSignalingDisconnectCode != current.lastSignalingDisconnectCode,
       listener: (context, state) {
         final signalingClientStatus = state.signalingClientStatus;
-        final signalingDisconnectCode = state.lastSignalingClientDisconnectError;
+        final signalingDisconnectCode = state.lastSignalingDisconnectCode;
 
         // Listen to signaling session expired error
         if (signalingClientStatus == SignalingClientStatus.disconnect && signalingDisconnectCode is int) {
