@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
@@ -20,7 +21,9 @@ class CallActions extends StatefulWidget {
     this.onMutedChanged,
     this.speakerValue,
     this.onSpeakerChanged,
-    this.onTransferPressed,
+    this.transferableCalls = const [],
+    required this.onBlindTransfer,
+    required this.onAttendedTransfer,
     required this.heldValue,
     this.onHeldChanged,
     this.onSwapPressed,
@@ -41,7 +44,9 @@ class CallActions extends StatefulWidget {
   final ValueChanged<bool>? onMutedChanged;
   final bool? speakerValue;
   final ValueChanged<bool>? onSpeakerChanged;
-  final VoidCallback? onTransferPressed;
+  final List<ActiveCall> transferableCalls;
+  final VoidCallback? onBlindTransfer;
+  final void Function(ActiveCall call)? onAttendedTransfer;
   final bool heldValue;
   final ValueChanged<bool>? onHeldChanged;
   final void Function()? onSwapPressed;
@@ -131,7 +136,8 @@ class _CallActionsState extends State<CallActions> {
     final onMutedChanged = widget.onMutedChanged;
     final speakerValue = widget.speakerValue;
     final onSpeakerChanged = widget.onSpeakerChanged;
-    final onTransferPressed = widget.onTransferPressed;
+    final onBlindTransfer = widget.onBlindTransfer;
+    final onAttendedTransfer = widget.onAttendedTransfer;
     final onHeldChanged = widget.onHeldChanged;
     final onSwapPressed = widget.onSwapPressed;
 
@@ -279,14 +285,44 @@ class _CallActionsState extends State<CallActions> {
           SizedBox.square(dimension: _actionsDelimiterDimension),
           const SizedBox(),
           // row
-          Tooltip(
-            message: context.l10n.call_CallActionsTooltip_transfer,
-            child: TextButton(
-              onPressed: onTransferPressed,
-              style: _textButtonStyles?.callAction,
-              child: const Icon(Icons.phone_forwarded),
+          if (widget.transferableCalls.isEmpty)
+            Tooltip(
+              message: context.l10n.call_CallActionsTooltip_transfer,
+              child: TextButton(
+                onPressed: onBlindTransfer,
+                style: _textButtonStyles?.callAction,
+                child: const Icon(Icons.phone_forwarded),
+              ),
             ),
-          ),
+          if (widget.transferableCalls.isNotEmpty)
+            Tooltip(
+              message: context.l10n.call_CallActionsTooltip_transfer,
+              child: PopupMenu(
+                offset: Offset(_dimension + 8, 0),
+                items: [
+                  for (final call in widget.transferableCalls)
+                    PopupItem(
+                      onTap: () => onAttendedTransfer?.call(call),
+                      text: call.displayName ?? call.handle.value,
+                      icon: const Icon(Icons.phone_paused),
+                      textStyle: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  PopupItem(
+                    onTap: onBlindTransfer,
+                    text: context.l10n.call_CallActionsTooltip_transfer_choose,
+                    icon: const Icon(Icons.phone_forwarded),
+                    textStyle: Theme.of(context).textTheme.bodyLarge,
+                  )
+                ],
+                child: IgnorePointer(
+                  child: TextButton(
+                    onPressed: () {},
+                    style: _textButtonStyles?.callAction,
+                    child: const Icon(Icons.phone_forwarded),
+                  ),
+                ),
+              ),
+            ),
           if (onSwapPressed == null)
             Tooltip(
               message: widget.heldValue

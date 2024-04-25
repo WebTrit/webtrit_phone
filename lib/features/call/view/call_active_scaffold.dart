@@ -39,6 +39,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   Widget build(BuildContext context) {
     final activeCalls = widget.activeCalls;
     final activeCall = activeCalls.current;
+    final backgroundCalls = activeCalls.exceptCurrent;
 
     final video = activeCall.video;
 
@@ -48,6 +49,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     final textTheme = themeData.textTheme;
     final switchCameraIconSize = textTheme.titleMedium!.fontSize!;
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
+
     return Scaffold(
       body: OrientationBuilder(
         builder: (context, orientation) {
@@ -172,10 +174,21 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       onSpeakerChanged: (bool value) {
                         context.read<CallBloc>().add(CallControlEvent.speakerEnabled(activeCall.callId, value));
                       },
-                      onTransferPressed: !activeCall.wasAccepted || activeCall.transfer != null
+                      transferableCalls: backgroundCalls,
+                      onBlindTransfer: !activeCall.wasAccepted || activeCall.transfer != null
                           ? null
                           : () {
                               context.read<CallBloc>().add(CallControlEvent.blindTransferInitiated(activeCall.callId));
+                            },
+                      onAttendedTransfer: !activeCall.wasAccepted || activeCall.transfer != null
+                          ? null
+                          : (ActiveCall referorCall) {
+                              context.read<CallBloc>().add(
+                                    CallControlEvent.attendedTransferred(
+                                      referorCall: referorCall,
+                                      transfereeCall: activeCall,
+                                    ),
+                                  );
                             },
                       heldValue: activeCall.held,
                       onHeldChanged: (bool value) {

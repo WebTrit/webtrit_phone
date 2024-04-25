@@ -58,6 +58,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_CallActionsTooltip_transfer => 'Transfer';
 
   @override
+  String get call_CallActionsTooltip_transfer_choose => 'Choose number';
+
+  @override
   String get call_CallActionsTooltip_unhold => 'Unhold call';
 
   @override

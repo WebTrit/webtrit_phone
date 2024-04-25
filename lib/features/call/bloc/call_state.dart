@@ -152,6 +152,7 @@ class ActiveCall with _$ActiveCall {
 
 extension ActiveCallIterableExtension<T extends ActiveCall> on Iterable<T> {
   T get current => lastWhere((activeCall) => !activeCall.held, orElse: () => last);
+  List<T> get exceptCurrent => where((activeCall) => activeCall != current).toList();
 
   T? get blindTransferInitiated {
     try {

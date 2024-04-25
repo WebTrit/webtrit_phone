@@ -34,6 +34,8 @@
   "@call_CallActionsTooltip_swap": {},
   "call_CallActionsTooltip_transfer": "Передати",
   "@call_CallActionsTooltip_transfer": {},
+  "call_CallActionsTooltip_transfer_choose": "Вибрати номер",
+  "@call_CallActionsTooltip_transfer_choose": {},
   "call_CallActionsTooltip_unhold": "Поновити дзвінок",
   "@call_CallActionsTooltip_unhold": {},
   "call_CallActionsTooltip_unmute": "Увімкнути мікрофон",

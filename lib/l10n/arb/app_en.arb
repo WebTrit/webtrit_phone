@@ -34,6 +34,8 @@
   "@call_CallActionsTooltip_swap": {},
   "call_CallActionsTooltip_transfer": "Transfer",
   "@call_CallActionsTooltip_transfer": {},
+  "call_CallActionsTooltip_transfer_choose": "Choose number",
+  "@call_CallActionsTooltip_transfer_choose": {},
   "call_CallActionsTooltip_unhold": "Unhold call",
   "@call_CallActionsTooltip_unhold": {},
   "call_CallActionsTooltip_unmute": "Unmute microphone",
