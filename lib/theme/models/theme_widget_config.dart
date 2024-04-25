@@ -55,6 +55,7 @@ class GroupWidgetConfig with _$GroupWidgetConfig {
   @themeJsonSerializable
   const factory GroupWidgetConfig({
     GroupTitleListTileWidgetConfig? groupTitleListTile,
+    CallActionsWidgetConfig? callActions,
   }) = _GroupWidgetConfig;
 
   factory GroupWidgetConfig.fromJson(Map<String, dynamic> json) => _$GroupWidgetConfigFromJson(json);
@@ -110,6 +111,31 @@ class GroupTitleListTileWidgetConfig with _$GroupTitleListTileWidgetConfig {
 
   factory GroupTitleListTileWidgetConfig.fromJson(Map<String, dynamic> json) =>
       _$GroupTitleListTileWidgetConfigFromJson(json);
+}
+
+@freezed
+class CallActionsWidgetConfig with _$CallActionsWidgetConfig {
+  // ignore: invalid_annotation_target
+  @themeJsonSerializable
+  const factory CallActionsWidgetConfig({
+    Color? callStartBackgroundColor,
+    Color? hangupBackgroundColor,
+    Color? transferBackgroundColor,
+    Color? cameraBackgroundColor,
+    Color? cameraActiveBackgroundColor,
+    Color? mutedBackgroundColor,
+    Color? mutedActiveBackgroundColor,
+    Color? speakerBackgroundColor,
+    Color? speakerActiveBackgroundColor,
+    Color? heldBackgroundColor,
+    Color? heldActiveBackgroundColor,
+    Color? swapBackgroundColor,
+    Color? keyBackgroundColor,
+    Color? keypadBackgroundColor,
+    Color? keypadActiveBackgroundColor,
+  }) = _CallActionsWidgetConfig;
+
+  factory CallActionsWidgetConfig.fromJson(Map<String, dynamic> json) => _$CallActionsWidgetConfigFromJson(json);
 }
 
 @freezed

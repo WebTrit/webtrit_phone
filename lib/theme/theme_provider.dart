@@ -287,24 +287,41 @@ class ThemeProvider extends InheritedWidget {
   CallActionsStyles callActionsStyles(
     ColorScheme colors,
     TextButtonStyles textButtonStyles,
+    CallActionsWidgetConfig? callActionsWidgetConfig,
   ) {
+    final callStartColor = MaterialStatePropertyAll(callActionsWidgetConfig?.callStartBackgroundColor);
+    final hangupColor = MaterialStatePropertyAll(callActionsWidgetConfig?.callStartBackgroundColor);
+    final transferColor = MaterialStatePropertyAll(callActionsWidgetConfig?.transferBackgroundColor);
+    final cameraColor = MaterialStatePropertyAll(callActionsWidgetConfig?.cameraBackgroundColor);
+    final cameraActiveColor = MaterialStatePropertyAll(callActionsWidgetConfig?.cameraActiveBackgroundColor);
+    final mutedColor = MaterialStatePropertyAll(callActionsWidgetConfig?.mutedBackgroundColor);
+    final mutedActiveColor = MaterialStatePropertyAll(callActionsWidgetConfig?.mutedActiveBackgroundColor);
+    final speakerColor = MaterialStatePropertyAll(callActionsWidgetConfig?.speakerBackgroundColor);
+    final speakerActiveColor = MaterialStatePropertyAll(callActionsWidgetConfig?.speakerActiveBackgroundColor);
+    final heldColor = MaterialStatePropertyAll(callActionsWidgetConfig?.heldBackgroundColor);
+    final heldActiveColor = MaterialStatePropertyAll(callActionsWidgetConfig?.heldActiveBackgroundColor);
+    final swapColor = MaterialStatePropertyAll(callActionsWidgetConfig?.swapBackgroundColor);
+    final keyColor = MaterialStatePropertyAll(callActionsWidgetConfig?.keyBackgroundColor);
+    final keypadColor = MaterialStatePropertyAll(callActionsWidgetConfig?.keypadBackgroundColor);
+    final keypadActiveColor = MaterialStatePropertyAll(callActionsWidgetConfig?.keypadActiveBackgroundColor);
+
     return CallActionsStyles(
       primary: CallActionsStyle(
-        callStart: textButtonStyles.callStart,
-        hangup: textButtonStyles.callHangup,
-        transfer: textButtonStyles.callAction,
-        camera: textButtonStyles.callAction,
-        cameraActive: textButtonStyles.callActiveAction,
-        muted: textButtonStyles.callAction,
-        mutedActive: textButtonStyles.callActiveAction,
-        speaker: textButtonStyles.callAction,
-        speakerActive: textButtonStyles.callActiveAction,
-        held: textButtonStyles.callAction,
-        heldActive: textButtonStyles.callActiveAction,
-        swap: textButtonStyles.callAction,
-        key: textButtonStyles.callAction,
-        keypad: textButtonStyles.callAction,
-        keypadActive: textButtonStyles.callActiveAction,
+        callStart: textButtonStyles.callStart?.copyWith(backgroundColor: callStartColor),
+        hangup: textButtonStyles.callHangup?.copyWith(backgroundColor: hangupColor),
+        transfer: textButtonStyles.callAction?.copyWith(backgroundColor: transferColor),
+        camera: textButtonStyles.callAction?.copyWith(backgroundColor: cameraColor),
+        cameraActive: textButtonStyles.callActiveAction?.copyWith(backgroundColor: cameraActiveColor),
+        muted: textButtonStyles.callAction?.copyWith(backgroundColor: mutedColor),
+        mutedActive: textButtonStyles.callActiveAction?.copyWith(backgroundColor: mutedActiveColor),
+        speaker: textButtonStyles.callAction?.copyWith(backgroundColor: speakerColor),
+        speakerActive: textButtonStyles.callActiveAction?.copyWith(backgroundColor: speakerActiveColor),
+        held: textButtonStyles.callAction?.copyWith(backgroundColor: heldColor),
+        heldActive: textButtonStyles.callActiveAction?.copyWith(backgroundColor: heldActiveColor),
+        swap: textButtonStyles.callAction?.copyWith(backgroundColor: swapColor),
+        key: textButtonStyles.callAction?.copyWith(backgroundColor: keyColor),
+        keypad: textButtonStyles.callAction?.copyWith(backgroundColor: keypadColor),
+        keypadActive: textButtonStyles.callActiveAction?.copyWith(backgroundColor: keypadActiveColor),
       ),
     );
   }
@@ -489,6 +506,7 @@ class ThemeProvider extends InheritedWidget {
         callActionsStyles(
           colorScheme,
           textButtonStyles,
+          themeWidgetConfig?.group?.callActions,
         ),
         inputDecorations(colorScheme),
         elevatedButtonStyles(

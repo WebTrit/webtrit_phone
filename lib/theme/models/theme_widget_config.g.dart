@@ -101,12 +101,17 @@ _$GroupWidgetConfigImpl _$$GroupWidgetConfigImplFromJson(
           ? null
           : GroupTitleListTileWidgetConfig.fromJson(
               json['groupTitleListTile'] as Map<String, dynamic>),
+      callActions: json['callActions'] == null
+          ? null
+          : CallActionsWidgetConfig.fromJson(
+              json['callActions'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$GroupWidgetConfigImplToJson(
         _$GroupWidgetConfigImpl instance) =>
     <String, dynamic>{
       'groupTitleListTile': instance.groupTitleListTile,
+      'callActions': instance.callActions,
     };
 
 _$BarWidgetConfigImpl _$$BarWidgetConfigImplFromJson(
@@ -189,6 +194,85 @@ Map<String, dynamic> _$$GroupTitleListTileWidgetConfigImplToJson(
     <String, dynamic>{
       'backgroundColor': _$JsonConverterToJson<String, Color>(
           instance.backgroundColor, const CSSColorConverter().toJson),
+    };
+
+_$CallActionsWidgetConfigImpl _$$CallActionsWidgetConfigImplFromJson(
+        Map<String, dynamic> json) =>
+    _$CallActionsWidgetConfigImpl(
+      callStartBackgroundColor: _$JsonConverterFromJson<String, Color>(
+          json['callStartBackgroundColor'], const CSSColorConverter().fromJson),
+      hangupBackgroundColor: _$JsonConverterFromJson<String, Color>(
+          json['hangupBackgroundColor'], const CSSColorConverter().fromJson),
+      transferBackgroundColor: _$JsonConverterFromJson<String, Color>(
+          json['transferBackgroundColor'], const CSSColorConverter().fromJson),
+      cameraBackgroundColor: _$JsonConverterFromJson<String, Color>(
+          json['cameraBackgroundColor'], const CSSColorConverter().fromJson),
+      cameraActiveBackgroundColor: _$JsonConverterFromJson<String, Color>(
+          json['cameraActiveBackgroundColor'],
+          const CSSColorConverter().fromJson),
+      mutedBackgroundColor: _$JsonConverterFromJson<String, Color>(
+          json['mutedBackgroundColor'], const CSSColorConverter().fromJson),
+      mutedActiveBackgroundColor: _$JsonConverterFromJson<String, Color>(
+          json['mutedActiveBackgroundColor'],
+          const CSSColorConverter().fromJson),
+      speakerBackgroundColor: _$JsonConverterFromJson<String, Color>(
+          json['speakerBackgroundColor'], const CSSColorConverter().fromJson),
+      speakerActiveBackgroundColor: _$JsonConverterFromJson<String, Color>(
+          json['speakerActiveBackgroundColor'],
+          const CSSColorConverter().fromJson),
+      heldBackgroundColor: _$JsonConverterFromJson<String, Color>(
+          json['heldBackgroundColor'], const CSSColorConverter().fromJson),
+      heldActiveBackgroundColor: _$JsonConverterFromJson<String, Color>(
+          json['heldActiveBackgroundColor'],
+          const CSSColorConverter().fromJson),
+      swapBackgroundColor: _$JsonConverterFromJson<String, Color>(
+          json['swapBackgroundColor'], const CSSColorConverter().fromJson),
+      keyBackgroundColor: _$JsonConverterFromJson<String, Color>(
+          json['keyBackgroundColor'], const CSSColorConverter().fromJson),
+      keypadBackgroundColor: _$JsonConverterFromJson<String, Color>(
+          json['keypadBackgroundColor'], const CSSColorConverter().fromJson),
+      keypadActiveBackgroundColor: _$JsonConverterFromJson<String, Color>(
+          json['keypadActiveBackgroundColor'],
+          const CSSColorConverter().fromJson),
+    );
+
+Map<String, dynamic> _$$CallActionsWidgetConfigImplToJson(
+        _$CallActionsWidgetConfigImpl instance) =>
+    <String, dynamic>{
+      'callStartBackgroundColor': _$JsonConverterToJson<String, Color>(
+          instance.callStartBackgroundColor, const CSSColorConverter().toJson),
+      'hangupBackgroundColor': _$JsonConverterToJson<String, Color>(
+          instance.hangupBackgroundColor, const CSSColorConverter().toJson),
+      'transferBackgroundColor': _$JsonConverterToJson<String, Color>(
+          instance.transferBackgroundColor, const CSSColorConverter().toJson),
+      'cameraBackgroundColor': _$JsonConverterToJson<String, Color>(
+          instance.cameraBackgroundColor, const CSSColorConverter().toJson),
+      'cameraActiveBackgroundColor': _$JsonConverterToJson<String, Color>(
+          instance.cameraActiveBackgroundColor,
+          const CSSColorConverter().toJson),
+      'mutedBackgroundColor': _$JsonConverterToJson<String, Color>(
+          instance.mutedBackgroundColor, const CSSColorConverter().toJson),
+      'mutedActiveBackgroundColor': _$JsonConverterToJson<String, Color>(
+          instance.mutedActiveBackgroundColor,
+          const CSSColorConverter().toJson),
+      'speakerBackgroundColor': _$JsonConverterToJson<String, Color>(
+          instance.speakerBackgroundColor, const CSSColorConverter().toJson),
+      'speakerActiveBackgroundColor': _$JsonConverterToJson<String, Color>(
+          instance.speakerActiveBackgroundColor,
+          const CSSColorConverter().toJson),
+      'heldBackgroundColor': _$JsonConverterToJson<String, Color>(
+          instance.heldBackgroundColor, const CSSColorConverter().toJson),
+      'heldActiveBackgroundColor': _$JsonConverterToJson<String, Color>(
+          instance.heldActiveBackgroundColor, const CSSColorConverter().toJson),
+      'swapBackgroundColor': _$JsonConverterToJson<String, Color>(
+          instance.swapBackgroundColor, const CSSColorConverter().toJson),
+      'keyBackgroundColor': _$JsonConverterToJson<String, Color>(
+          instance.keyBackgroundColor, const CSSColorConverter().toJson),
+      'keypadBackgroundColor': _$JsonConverterToJson<String, Color>(
+          instance.keypadBackgroundColor, const CSSColorConverter().toJson),
+      'keypadActiveBackgroundColor': _$JsonConverterToJson<String, Color>(
+          instance.keypadActiveBackgroundColor,
+          const CSSColorConverter().toJson),
     };
 
 _$PictureWidgetConfigImpl _$$PictureWidgetConfigImplFromJson(

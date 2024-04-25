@@ -738,6 +738,8 @@ GroupWidgetConfig _$GroupWidgetConfigFromJson(Map<String, dynamic> json) {
 mixin _$GroupWidgetConfig {
   GroupTitleListTileWidgetConfig? get groupTitleListTile =>
       throw _privateConstructorUsedError;
+  CallActionsWidgetConfig? get callActions =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -751,9 +753,12 @@ abstract class $GroupWidgetConfigCopyWith<$Res> {
           GroupWidgetConfig value, $Res Function(GroupWidgetConfig) then) =
       _$GroupWidgetConfigCopyWithImpl<$Res, GroupWidgetConfig>;
   @useResult
-  $Res call({GroupTitleListTileWidgetConfig? groupTitleListTile});
+  $Res call(
+      {GroupTitleListTileWidgetConfig? groupTitleListTile,
+      CallActionsWidgetConfig? callActions});
 
   $GroupTitleListTileWidgetConfigCopyWith<$Res>? get groupTitleListTile;
+  $CallActionsWidgetConfigCopyWith<$Res>? get callActions;
 }
 
 /// @nodoc
@@ -770,12 +775,17 @@ class _$GroupWidgetConfigCopyWithImpl<$Res, $Val extends GroupWidgetConfig>
   @override
   $Res call({
     Object? groupTitleListTile = freezed,
+    Object? callActions = freezed,
   }) {
     return _then(_value.copyWith(
       groupTitleListTile: freezed == groupTitleListTile
           ? _value.groupTitleListTile
           : groupTitleListTile // ignore: cast_nullable_to_non_nullable
               as GroupTitleListTileWidgetConfig?,
+      callActions: freezed == callActions
+          ? _value.callActions
+          : callActions // ignore: cast_nullable_to_non_nullable
+              as CallActionsWidgetConfig?,
     ) as $Val);
   }
 
@@ -791,6 +801,18 @@ class _$GroupWidgetConfigCopyWithImpl<$Res, $Val extends GroupWidgetConfig>
       return _then(_value.copyWith(groupTitleListTile: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $CallActionsWidgetConfigCopyWith<$Res>? get callActions {
+    if (_value.callActions == null) {
+      return null;
+    }
+
+    return $CallActionsWidgetConfigCopyWith<$Res>(_value.callActions!, (value) {
+      return _then(_value.copyWith(callActions: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -801,10 +823,14 @@ abstract class _$$GroupWidgetConfigImplCopyWith<$Res>
       __$$GroupWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({GroupTitleListTileWidgetConfig? groupTitleListTile});
+  $Res call(
+      {GroupTitleListTileWidgetConfig? groupTitleListTile,
+      CallActionsWidgetConfig? callActions});
 
   @override
   $GroupTitleListTileWidgetConfigCopyWith<$Res>? get groupTitleListTile;
+  @override
+  $CallActionsWidgetConfigCopyWith<$Res>? get callActions;
 }
 
 /// @nodoc
@@ -819,12 +845,17 @@ class __$$GroupWidgetConfigImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? groupTitleListTile = freezed,
+    Object? callActions = freezed,
   }) {
     return _then(_$GroupWidgetConfigImpl(
       groupTitleListTile: freezed == groupTitleListTile
           ? _value.groupTitleListTile
           : groupTitleListTile // ignore: cast_nullable_to_non_nullable
               as GroupTitleListTileWidgetConfig?,
+      callActions: freezed == callActions
+          ? _value.callActions
+          : callActions // ignore: cast_nullable_to_non_nullable
+              as CallActionsWidgetConfig?,
     ));
   }
 }
@@ -833,17 +864,19 @@ class __$$GroupWidgetConfigImplCopyWithImpl<$Res>
 
 @themeJsonSerializable
 class _$GroupWidgetConfigImpl implements _GroupWidgetConfig {
-  const _$GroupWidgetConfigImpl({this.groupTitleListTile});
+  const _$GroupWidgetConfigImpl({this.groupTitleListTile, this.callActions});
 
   factory _$GroupWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$GroupWidgetConfigImplFromJson(json);
 
   @override
   final GroupTitleListTileWidgetConfig? groupTitleListTile;
+  @override
+  final CallActionsWidgetConfig? callActions;
 
   @override
   String toString() {
-    return 'GroupWidgetConfig(groupTitleListTile: $groupTitleListTile)';
+    return 'GroupWidgetConfig(groupTitleListTile: $groupTitleListTile, callActions: $callActions)';
   }
 
   @override
@@ -852,12 +885,14 @@ class _$GroupWidgetConfigImpl implements _GroupWidgetConfig {
         (other.runtimeType == runtimeType &&
             other is _$GroupWidgetConfigImpl &&
             (identical(other.groupTitleListTile, groupTitleListTile) ||
-                other.groupTitleListTile == groupTitleListTile));
+                other.groupTitleListTile == groupTitleListTile) &&
+            (identical(other.callActions, callActions) ||
+                other.callActions == callActions));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, groupTitleListTile);
+  int get hashCode => Object.hash(runtimeType, groupTitleListTile, callActions);
 
   @JsonKey(ignore: true)
   @override
@@ -876,14 +911,16 @@ class _$GroupWidgetConfigImpl implements _GroupWidgetConfig {
 
 abstract class _GroupWidgetConfig implements GroupWidgetConfig {
   const factory _GroupWidgetConfig(
-          {final GroupTitleListTileWidgetConfig? groupTitleListTile}) =
-      _$GroupWidgetConfigImpl;
+      {final GroupTitleListTileWidgetConfig? groupTitleListTile,
+      final CallActionsWidgetConfig? callActions}) = _$GroupWidgetConfigImpl;
 
   factory _GroupWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$GroupWidgetConfigImpl.fromJson;
 
   @override
   GroupTitleListTileWidgetConfig? get groupTitleListTile;
+  @override
+  CallActionsWidgetConfig? get callActions;
   @override
   @JsonKey(ignore: true)
   _$$GroupWidgetConfigImplCopyWith<_$GroupWidgetConfigImpl> get copyWith =>
@@ -1643,6 +1680,470 @@ abstract class _GroupTitleListTileWidgetConfig
   @JsonKey(ignore: true)
   _$$GroupTitleListTileWidgetConfigImplCopyWith<
           _$GroupTitleListTileWidgetConfigImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+CallActionsWidgetConfig _$CallActionsWidgetConfigFromJson(
+    Map<String, dynamic> json) {
+  return _CallActionsWidgetConfig.fromJson(json);
+}
+
+/// @nodoc
+mixin _$CallActionsWidgetConfig {
+  Color? get callStartBackgroundColor => throw _privateConstructorUsedError;
+  Color? get hangupBackgroundColor => throw _privateConstructorUsedError;
+  Color? get transferBackgroundColor => throw _privateConstructorUsedError;
+  Color? get cameraBackgroundColor => throw _privateConstructorUsedError;
+  Color? get cameraActiveBackgroundColor => throw _privateConstructorUsedError;
+  Color? get mutedBackgroundColor => throw _privateConstructorUsedError;
+  Color? get mutedActiveBackgroundColor => throw _privateConstructorUsedError;
+  Color? get speakerBackgroundColor => throw _privateConstructorUsedError;
+  Color? get speakerActiveBackgroundColor => throw _privateConstructorUsedError;
+  Color? get heldBackgroundColor => throw _privateConstructorUsedError;
+  Color? get heldActiveBackgroundColor => throw _privateConstructorUsedError;
+  Color? get swapBackgroundColor => throw _privateConstructorUsedError;
+  Color? get keyBackgroundColor => throw _privateConstructorUsedError;
+  Color? get keypadBackgroundColor => throw _privateConstructorUsedError;
+  Color? get keypadActiveBackgroundColor => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $CallActionsWidgetConfigCopyWith<CallActionsWidgetConfig> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $CallActionsWidgetConfigCopyWith<$Res> {
+  factory $CallActionsWidgetConfigCopyWith(CallActionsWidgetConfig value,
+          $Res Function(CallActionsWidgetConfig) then) =
+      _$CallActionsWidgetConfigCopyWithImpl<$Res, CallActionsWidgetConfig>;
+  @useResult
+  $Res call(
+      {Color? callStartBackgroundColor,
+      Color? hangupBackgroundColor,
+      Color? transferBackgroundColor,
+      Color? cameraBackgroundColor,
+      Color? cameraActiveBackgroundColor,
+      Color? mutedBackgroundColor,
+      Color? mutedActiveBackgroundColor,
+      Color? speakerBackgroundColor,
+      Color? speakerActiveBackgroundColor,
+      Color? heldBackgroundColor,
+      Color? heldActiveBackgroundColor,
+      Color? swapBackgroundColor,
+      Color? keyBackgroundColor,
+      Color? keypadBackgroundColor,
+      Color? keypadActiveBackgroundColor});
+}
+
+/// @nodoc
+class _$CallActionsWidgetConfigCopyWithImpl<$Res,
+        $Val extends CallActionsWidgetConfig>
+    implements $CallActionsWidgetConfigCopyWith<$Res> {
+  _$CallActionsWidgetConfigCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? callStartBackgroundColor = freezed,
+    Object? hangupBackgroundColor = freezed,
+    Object? transferBackgroundColor = freezed,
+    Object? cameraBackgroundColor = freezed,
+    Object? cameraActiveBackgroundColor = freezed,
+    Object? mutedBackgroundColor = freezed,
+    Object? mutedActiveBackgroundColor = freezed,
+    Object? speakerBackgroundColor = freezed,
+    Object? speakerActiveBackgroundColor = freezed,
+    Object? heldBackgroundColor = freezed,
+    Object? heldActiveBackgroundColor = freezed,
+    Object? swapBackgroundColor = freezed,
+    Object? keyBackgroundColor = freezed,
+    Object? keypadBackgroundColor = freezed,
+    Object? keypadActiveBackgroundColor = freezed,
+  }) {
+    return _then(_value.copyWith(
+      callStartBackgroundColor: freezed == callStartBackgroundColor
+          ? _value.callStartBackgroundColor
+          : callStartBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      hangupBackgroundColor: freezed == hangupBackgroundColor
+          ? _value.hangupBackgroundColor
+          : hangupBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      transferBackgroundColor: freezed == transferBackgroundColor
+          ? _value.transferBackgroundColor
+          : transferBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      cameraBackgroundColor: freezed == cameraBackgroundColor
+          ? _value.cameraBackgroundColor
+          : cameraBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      cameraActiveBackgroundColor: freezed == cameraActiveBackgroundColor
+          ? _value.cameraActiveBackgroundColor
+          : cameraActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      mutedBackgroundColor: freezed == mutedBackgroundColor
+          ? _value.mutedBackgroundColor
+          : mutedBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      mutedActiveBackgroundColor: freezed == mutedActiveBackgroundColor
+          ? _value.mutedActiveBackgroundColor
+          : mutedActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      speakerBackgroundColor: freezed == speakerBackgroundColor
+          ? _value.speakerBackgroundColor
+          : speakerBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      speakerActiveBackgroundColor: freezed == speakerActiveBackgroundColor
+          ? _value.speakerActiveBackgroundColor
+          : speakerActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      heldBackgroundColor: freezed == heldBackgroundColor
+          ? _value.heldBackgroundColor
+          : heldBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      heldActiveBackgroundColor: freezed == heldActiveBackgroundColor
+          ? _value.heldActiveBackgroundColor
+          : heldActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      swapBackgroundColor: freezed == swapBackgroundColor
+          ? _value.swapBackgroundColor
+          : swapBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      keyBackgroundColor: freezed == keyBackgroundColor
+          ? _value.keyBackgroundColor
+          : keyBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      keypadBackgroundColor: freezed == keypadBackgroundColor
+          ? _value.keypadBackgroundColor
+          : keypadBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      keypadActiveBackgroundColor: freezed == keypadActiveBackgroundColor
+          ? _value.keypadActiveBackgroundColor
+          : keypadActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$CallActionsWidgetConfigImplCopyWith<$Res>
+    implements $CallActionsWidgetConfigCopyWith<$Res> {
+  factory _$$CallActionsWidgetConfigImplCopyWith(
+          _$CallActionsWidgetConfigImpl value,
+          $Res Function(_$CallActionsWidgetConfigImpl) then) =
+      __$$CallActionsWidgetConfigImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {Color? callStartBackgroundColor,
+      Color? hangupBackgroundColor,
+      Color? transferBackgroundColor,
+      Color? cameraBackgroundColor,
+      Color? cameraActiveBackgroundColor,
+      Color? mutedBackgroundColor,
+      Color? mutedActiveBackgroundColor,
+      Color? speakerBackgroundColor,
+      Color? speakerActiveBackgroundColor,
+      Color? heldBackgroundColor,
+      Color? heldActiveBackgroundColor,
+      Color? swapBackgroundColor,
+      Color? keyBackgroundColor,
+      Color? keypadBackgroundColor,
+      Color? keypadActiveBackgroundColor});
+}
+
+/// @nodoc
+class __$$CallActionsWidgetConfigImplCopyWithImpl<$Res>
+    extends _$CallActionsWidgetConfigCopyWithImpl<$Res,
+        _$CallActionsWidgetConfigImpl>
+    implements _$$CallActionsWidgetConfigImplCopyWith<$Res> {
+  __$$CallActionsWidgetConfigImplCopyWithImpl(
+      _$CallActionsWidgetConfigImpl _value,
+      $Res Function(_$CallActionsWidgetConfigImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? callStartBackgroundColor = freezed,
+    Object? hangupBackgroundColor = freezed,
+    Object? transferBackgroundColor = freezed,
+    Object? cameraBackgroundColor = freezed,
+    Object? cameraActiveBackgroundColor = freezed,
+    Object? mutedBackgroundColor = freezed,
+    Object? mutedActiveBackgroundColor = freezed,
+    Object? speakerBackgroundColor = freezed,
+    Object? speakerActiveBackgroundColor = freezed,
+    Object? heldBackgroundColor = freezed,
+    Object? heldActiveBackgroundColor = freezed,
+    Object? swapBackgroundColor = freezed,
+    Object? keyBackgroundColor = freezed,
+    Object? keypadBackgroundColor = freezed,
+    Object? keypadActiveBackgroundColor = freezed,
+  }) {
+    return _then(_$CallActionsWidgetConfigImpl(
+      callStartBackgroundColor: freezed == callStartBackgroundColor
+          ? _value.callStartBackgroundColor
+          : callStartBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      hangupBackgroundColor: freezed == hangupBackgroundColor
+          ? _value.hangupBackgroundColor
+          : hangupBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      transferBackgroundColor: freezed == transferBackgroundColor
+          ? _value.transferBackgroundColor
+          : transferBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      cameraBackgroundColor: freezed == cameraBackgroundColor
+          ? _value.cameraBackgroundColor
+          : cameraBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      cameraActiveBackgroundColor: freezed == cameraActiveBackgroundColor
+          ? _value.cameraActiveBackgroundColor
+          : cameraActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      mutedBackgroundColor: freezed == mutedBackgroundColor
+          ? _value.mutedBackgroundColor
+          : mutedBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      mutedActiveBackgroundColor: freezed == mutedActiveBackgroundColor
+          ? _value.mutedActiveBackgroundColor
+          : mutedActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      speakerBackgroundColor: freezed == speakerBackgroundColor
+          ? _value.speakerBackgroundColor
+          : speakerBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      speakerActiveBackgroundColor: freezed == speakerActiveBackgroundColor
+          ? _value.speakerActiveBackgroundColor
+          : speakerActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      heldBackgroundColor: freezed == heldBackgroundColor
+          ? _value.heldBackgroundColor
+          : heldBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      heldActiveBackgroundColor: freezed == heldActiveBackgroundColor
+          ? _value.heldActiveBackgroundColor
+          : heldActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      swapBackgroundColor: freezed == swapBackgroundColor
+          ? _value.swapBackgroundColor
+          : swapBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      keyBackgroundColor: freezed == keyBackgroundColor
+          ? _value.keyBackgroundColor
+          : keyBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      keypadBackgroundColor: freezed == keypadBackgroundColor
+          ? _value.keypadBackgroundColor
+          : keypadBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      keypadActiveBackgroundColor: freezed == keypadActiveBackgroundColor
+          ? _value.keypadActiveBackgroundColor
+          : keypadActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+    ));
+  }
+}
+
+/// @nodoc
+
+@themeJsonSerializable
+class _$CallActionsWidgetConfigImpl implements _CallActionsWidgetConfig {
+  const _$CallActionsWidgetConfigImpl(
+      {this.callStartBackgroundColor,
+      this.hangupBackgroundColor,
+      this.transferBackgroundColor,
+      this.cameraBackgroundColor,
+      this.cameraActiveBackgroundColor,
+      this.mutedBackgroundColor,
+      this.mutedActiveBackgroundColor,
+      this.speakerBackgroundColor,
+      this.speakerActiveBackgroundColor,
+      this.heldBackgroundColor,
+      this.heldActiveBackgroundColor,
+      this.swapBackgroundColor,
+      this.keyBackgroundColor,
+      this.keypadBackgroundColor,
+      this.keypadActiveBackgroundColor});
+
+  factory _$CallActionsWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
+      _$$CallActionsWidgetConfigImplFromJson(json);
+
+  @override
+  final Color? callStartBackgroundColor;
+  @override
+  final Color? hangupBackgroundColor;
+  @override
+  final Color? transferBackgroundColor;
+  @override
+  final Color? cameraBackgroundColor;
+  @override
+  final Color? cameraActiveBackgroundColor;
+  @override
+  final Color? mutedBackgroundColor;
+  @override
+  final Color? mutedActiveBackgroundColor;
+  @override
+  final Color? speakerBackgroundColor;
+  @override
+  final Color? speakerActiveBackgroundColor;
+  @override
+  final Color? heldBackgroundColor;
+  @override
+  final Color? heldActiveBackgroundColor;
+  @override
+  final Color? swapBackgroundColor;
+  @override
+  final Color? keyBackgroundColor;
+  @override
+  final Color? keypadBackgroundColor;
+  @override
+  final Color? keypadActiveBackgroundColor;
+
+  @override
+  String toString() {
+    return 'CallActionsWidgetConfig(callStartBackgroundColor: $callStartBackgroundColor, hangupBackgroundColor: $hangupBackgroundColor, transferBackgroundColor: $transferBackgroundColor, cameraBackgroundColor: $cameraBackgroundColor, cameraActiveBackgroundColor: $cameraActiveBackgroundColor, mutedBackgroundColor: $mutedBackgroundColor, mutedActiveBackgroundColor: $mutedActiveBackgroundColor, speakerBackgroundColor: $speakerBackgroundColor, speakerActiveBackgroundColor: $speakerActiveBackgroundColor, heldBackgroundColor: $heldBackgroundColor, heldActiveBackgroundColor: $heldActiveBackgroundColor, swapBackgroundColor: $swapBackgroundColor, keyBackgroundColor: $keyBackgroundColor, keypadBackgroundColor: $keypadBackgroundColor, keypadActiveBackgroundColor: $keypadActiveBackgroundColor)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CallActionsWidgetConfigImpl &&
+            (identical(other.callStartBackgroundColor, callStartBackgroundColor) ||
+                other.callStartBackgroundColor == callStartBackgroundColor) &&
+            (identical(other.hangupBackgroundColor, hangupBackgroundColor) ||
+                other.hangupBackgroundColor == hangupBackgroundColor) &&
+            (identical(other.transferBackgroundColor, transferBackgroundColor) ||
+                other.transferBackgroundColor == transferBackgroundColor) &&
+            (identical(other.cameraBackgroundColor, cameraBackgroundColor) ||
+                other.cameraBackgroundColor == cameraBackgroundColor) &&
+            (identical(other.cameraActiveBackgroundColor, cameraActiveBackgroundColor) ||
+                other.cameraActiveBackgroundColor ==
+                    cameraActiveBackgroundColor) &&
+            (identical(other.mutedBackgroundColor, mutedBackgroundColor) ||
+                other.mutedBackgroundColor == mutedBackgroundColor) &&
+            (identical(other.mutedActiveBackgroundColor, mutedActiveBackgroundColor) ||
+                other.mutedActiveBackgroundColor ==
+                    mutedActiveBackgroundColor) &&
+            (identical(other.speakerBackgroundColor, speakerBackgroundColor) ||
+                other.speakerBackgroundColor == speakerBackgroundColor) &&
+            (identical(other.speakerActiveBackgroundColor,
+                    speakerActiveBackgroundColor) ||
+                other.speakerActiveBackgroundColor ==
+                    speakerActiveBackgroundColor) &&
+            (identical(other.heldBackgroundColor, heldBackgroundColor) ||
+                other.heldBackgroundColor == heldBackgroundColor) &&
+            (identical(other.heldActiveBackgroundColor, heldActiveBackgroundColor) ||
+                other.heldActiveBackgroundColor == heldActiveBackgroundColor) &&
+            (identical(other.swapBackgroundColor, swapBackgroundColor) ||
+                other.swapBackgroundColor == swapBackgroundColor) &&
+            (identical(other.keyBackgroundColor, keyBackgroundColor) ||
+                other.keyBackgroundColor == keyBackgroundColor) &&
+            (identical(other.keypadBackgroundColor, keypadBackgroundColor) ||
+                other.keypadBackgroundColor == keypadBackgroundColor) &&
+            (identical(other.keypadActiveBackgroundColor, keypadActiveBackgroundColor) ||
+                other.keypadActiveBackgroundColor ==
+                    keypadActiveBackgroundColor));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      callStartBackgroundColor,
+      hangupBackgroundColor,
+      transferBackgroundColor,
+      cameraBackgroundColor,
+      cameraActiveBackgroundColor,
+      mutedBackgroundColor,
+      mutedActiveBackgroundColor,
+      speakerBackgroundColor,
+      speakerActiveBackgroundColor,
+      heldBackgroundColor,
+      heldActiveBackgroundColor,
+      swapBackgroundColor,
+      keyBackgroundColor,
+      keypadBackgroundColor,
+      keypadActiveBackgroundColor);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CallActionsWidgetConfigImplCopyWith<_$CallActionsWidgetConfigImpl>
+      get copyWith => __$$CallActionsWidgetConfigImplCopyWithImpl<
+          _$CallActionsWidgetConfigImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$CallActionsWidgetConfigImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _CallActionsWidgetConfig implements CallActionsWidgetConfig {
+  const factory _CallActionsWidgetConfig(
+          {final Color? callStartBackgroundColor,
+          final Color? hangupBackgroundColor,
+          final Color? transferBackgroundColor,
+          final Color? cameraBackgroundColor,
+          final Color? cameraActiveBackgroundColor,
+          final Color? mutedBackgroundColor,
+          final Color? mutedActiveBackgroundColor,
+          final Color? speakerBackgroundColor,
+          final Color? speakerActiveBackgroundColor,
+          final Color? heldBackgroundColor,
+          final Color? heldActiveBackgroundColor,
+          final Color? swapBackgroundColor,
+          final Color? keyBackgroundColor,
+          final Color? keypadBackgroundColor,
+          final Color? keypadActiveBackgroundColor}) =
+      _$CallActionsWidgetConfigImpl;
+
+  factory _CallActionsWidgetConfig.fromJson(Map<String, dynamic> json) =
+      _$CallActionsWidgetConfigImpl.fromJson;
+
+  @override
+  Color? get callStartBackgroundColor;
+  @override
+  Color? get hangupBackgroundColor;
+  @override
+  Color? get transferBackgroundColor;
+  @override
+  Color? get cameraBackgroundColor;
+  @override
+  Color? get cameraActiveBackgroundColor;
+  @override
+  Color? get mutedBackgroundColor;
+  @override
+  Color? get mutedActiveBackgroundColor;
+  @override
+  Color? get speakerBackgroundColor;
+  @override
+  Color? get speakerActiveBackgroundColor;
+  @override
+  Color? get heldBackgroundColor;
+  @override
+  Color? get heldActiveBackgroundColor;
+  @override
+  Color? get swapBackgroundColor;
+  @override
+  Color? get keyBackgroundColor;
+  @override
+  Color? get keypadBackgroundColor;
+  @override
+  Color? get keypadActiveBackgroundColor;
+  @override
+  @JsonKey(ignore: true)
+  _$$CallActionsWidgetConfigImplCopyWith<_$CallActionsWidgetConfigImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
