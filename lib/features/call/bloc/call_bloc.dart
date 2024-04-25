@@ -953,6 +953,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       failureApproved: (event) => _onCallControlEventFailureApproved(event, emit),
       blindTransferInitiated: (event) => _onCallControlEventBlindTransferInitiated(event, emit),
       blindTransferred: (event) => _onCallControlEventBlindTransferred(event, emit),
+      attendedTransferred: (event) => _onCallControlEventAttendedTransferred(event, emit),
     );
   }
 
@@ -1166,9 +1167,29 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } catch (e) {
       _logger.warning('_onCallControlEventBlindTransferred request error: $e');
       notificationsBloc.add(NotificationsMessaged(RawNotification(e.toString())));
+    }
+  }
 
-      _peerConnectionCompleteError(activeCallBlindTransferInitiated.callId, e);
-      add(_ResetStateEvent.completeCall(activeCallBlindTransferInitiated.callId));
+  Future<void> _onCallControlEventAttendedTransferred(
+    _CallControlEventAttendedTransferred event,
+    Emitter<CallState> emit,
+  ) async {
+    final referorCall = event.referorCall;
+    final transfereeCall = event.transfereeCall;
+
+    try {
+      final transferRequest = TransferRequest(
+        transaction: WebtritSignalingClient.generateTransactionId(),
+        line: referorCall.line,
+        callId: referorCall.callId.toString(),
+        number: referorCall.handle.normalizedValue(),
+        replaceCallId: transfereeCall.callId,
+      );
+
+      await _signalingClient?.execute(transferRequest);
+    } catch (e) {
+      _logger.warning('_onCallControlEventAttendedTransferred request error: $e');
+      notificationsBloc.add(NotificationsMessaged(RawNotification(e.toString())));
     }
   }
 
