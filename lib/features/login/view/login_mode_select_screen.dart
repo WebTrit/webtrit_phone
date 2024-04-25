@@ -9,6 +9,8 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../login.dart';
 
+export 'login_mode_select_screen_style.dart';
+
 class LoginModeSelectScreen extends StatelessWidget {
   const LoginModeSelectScreen({
     super.key,
@@ -18,7 +20,7 @@ class LoginModeSelectScreen extends StatelessWidget {
 
   final String? appGreeting;
 
-  final LoginModeSelectStyle? style;
+  final LoginModeSelectScreenStyle? style;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class LoginModeSelectScreen extends StatelessWidget {
     final Gradients? gradients = themeData.extension<Gradients>();
     final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
     final LoginPageStyles? loginPageStyles = themeData.extension<LoginPageStyles>();
-    final LoginModeSelectStyle? localStyle = style ?? loginPageStyles?.primary;
+    final LoginModeSelectScreenStyle? localStyle = style ?? loginPageStyles?.primary;
 
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => previous.processing != current.processing,

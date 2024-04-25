@@ -1,8 +1,7 @@
-import '../theme.dart';
-import '../tools/tools.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 
-class LoginModeSelectStyle {
-  LoginModeSelectStyle({
+class LoginModeSelectScreenStyle {
+  LoginModeSelectScreenStyle({
     this.signInTypeButton,
     this.signUpTypeButton,
   });
@@ -10,10 +9,10 @@ class LoginModeSelectStyle {
   final ElevatedButtonStyleType? signInTypeButton;
   final ElevatedButtonStyleType? signUpTypeButton;
 
-  static LoginModeSelectStyle lerp(LoginModeSelectStyle? a, LoginModeSelectStyle? b, double t) {
+  static LoginModeSelectScreenStyle lerp(LoginModeSelectScreenStyle? a, LoginModeSelectScreenStyle? b, double t) {
     final newSignInButton = LerpTools.lerpButtonStyleType(a?.signInTypeButton, b?.signInTypeButton, t);
     final newSignUpButton = LerpTools.lerpButtonStyleType(a?.signUpTypeButton, b?.signUpTypeButton, t);
-    return LoginModeSelectStyle(
+    return LoginModeSelectScreenStyle(
       signInTypeButton: newSignInButton,
       signUpTypeButton: newSignUpButton,
     );

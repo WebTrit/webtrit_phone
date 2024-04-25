@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
-import 'package:webtrit_phone/features/login/widgets/onboarding_picture_logo_style.dart';
 
+import 'package:webtrit_phone/features/login/view/login_mode_select_screen_style.dart';
+import 'package:webtrit_phone/features/login/widgets/onboarding_picture_logo_style.dart';
 import 'package:webtrit_phone/features/settings/widgets/group_title_list_style.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -195,7 +196,7 @@ class ThemeProvider extends InheritedWidget {
 
   LoginPageStyles loginPageStyles(LoginModeSelectPageConfig? loginSettings) {
     return LoginPageStyles(
-      primary: LoginModeSelectStyle(
+      primary: LoginModeSelectScreenStyle(
         signInTypeButton: loginSettings?.buttonSignupStyleType,
         signUpTypeButton: loginSettings?.buttonLoginStyleType,
       ),
