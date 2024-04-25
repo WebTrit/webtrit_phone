@@ -35,7 +35,6 @@ class AgreementCheckbox extends StatelessWidget {
           child: Linkify(
             text: context.l10n.user_agreement_checkbox_text(agreementLink),
             onOpen: (_) => onAgreementLinkTap(),
-            enableLinkableElement: true,
             style: LinkifyStyle(
               style: themeData.textTheme.labelLarge,
               linkStyle: themeData.textTheme.labelLarge?.copyWith(

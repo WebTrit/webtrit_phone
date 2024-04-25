@@ -30,7 +30,7 @@ class Linkify extends StatefulWidget {
     required this.text,
     this.linkifiers = const [...defaultLinkifiers, TelLinkifier()],
     this.onOpen,
-    this.enableLinkableElement = true,
+    this.highlightLinkifyElement = true,
     this.options = const LinkifyOptions(),
     this.style,
     this.maxLines,
@@ -47,8 +47,8 @@ class Linkify extends StatefulWidget {
   /// Callback for tapping a link
   final LinkCallback? onOpen;
 
-  /// Enable linkable element
-  final bool enableLinkableElement;
+  /// Highlight linkify element
+  final bool highlightLinkifyElement;
 
   /// linkify's options.
   final LinkifyOptions options;
@@ -110,7 +110,7 @@ class _LinkifyState extends State<Linkify> {
             return TextSpan(
               text: element.text,
               style: style.linkStyle?.copyWith(
-                color: widget.enableLinkableElement ? style.linkStyle?.color : style.style?.color,
+                color: widget.highlightLinkifyElement ? style.linkStyle?.color : style.style?.color,
               ),
               recognizer: _recognizers[element],
             );
