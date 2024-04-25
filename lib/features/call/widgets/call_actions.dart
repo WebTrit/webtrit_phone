@@ -140,6 +140,7 @@ class _CallActionsState extends State<CallActions> {
     final onAttendedTransfer = widget.onAttendedTransfer;
     final onHeldChanged = widget.onHeldChanged;
     final onSwapPressed = widget.onSwapPressed;
+    final themeData = Theme.of(context);
 
     final TextButtonsTable buttonsTable;
     if (widget.isIncoming && !widget.wasAccepted) {
@@ -304,14 +305,22 @@ class _CallActionsState extends State<CallActions> {
                     PopupItem(
                       onTap: () => onAttendedTransfer?.call(call),
                       text: call.displayName ?? call.handle.value,
-                      icon: const Icon(Icons.phone_paused),
-                      textStyle: Theme.of(context).textTheme.bodyLarge,
+                      icon: Icon(
+                        Icons.phone_paused_outlined,
+                        size: themeData.textTheme.bodyLarge!.fontSize,
+                        color: themeData.textTheme.bodyMedium!.color,
+                      ),
+                      textStyle: themeData.textTheme.bodyMedium,
                     ),
                   PopupItem(
                     onTap: onBlindTransfer,
                     text: context.l10n.call_CallActionsTooltip_transfer_choose,
-                    icon: const Icon(Icons.phone_forwarded),
-                    textStyle: Theme.of(context).textTheme.bodyLarge,
+                    icon: Icon(
+                      Icons.phone_forwarded_outlined,
+                      size: themeData.textTheme.bodyLarge!.fontSize,
+                      color: themeData.textTheme.bodyMedium!.color,
+                    ),
+                    textStyle: themeData.textTheme.bodyMedium,
                   )
                 ],
                 child: IgnorePointer(
