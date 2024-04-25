@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../style/style.dart';
+import 'package:webtrit_phone/widgets/linkify_style.dart';
 
 class LinkifyStyles extends ThemeExtension<LinkifyStyles> {
   const LinkifyStyles({
