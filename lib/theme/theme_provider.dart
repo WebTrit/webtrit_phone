@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 
+import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/login/view/login_mode_select_screen.dart';
 import 'package:webtrit_phone/features/login/widgets/onboarding_picture_logo.dart';
 import 'package:webtrit_phone/features/settings/widgets/group_title_list_tile.dart';
@@ -283,6 +284,31 @@ class ThemeProvider extends InheritedWidget {
     );
   }
 
+  CallActionsStyles callActionsStyles(
+    ColorScheme colors,
+    TextButtonStyles textButtonStyles,
+  ) {
+    return CallActionsStyles(
+      primary: CallActionsStyle(
+        callStart: textButtonStyles.callStart,
+        hangup: textButtonStyles.callHangup,
+        transfer: textButtonStyles.callAction,
+        camera: textButtonStyles.callAction,
+        cameraActive: textButtonStyles.callActiveAction,
+        muted: textButtonStyles.callAction,
+        mutedActive: textButtonStyles.callActiveAction,
+        speaker: textButtonStyles.callAction,
+        speakerActive: textButtonStyles.callActiveAction,
+        held: textButtonStyles.callAction,
+        heldActive: textButtonStyles.callActiveAction,
+        swap: textButtonStyles.callAction,
+        key: textButtonStyles.callAction,
+        keypad: textButtonStyles.callAction,
+        keypadActive: textButtonStyles.callActiveAction,
+      ),
+    );
+  }
+
   AppIconStyles appIconStyle(ColorScheme colors, AppIconWidgetConfig? appIcon) {
     return AppIconStyles(
       primary: AppIconStyle(
@@ -459,6 +485,10 @@ class ThemeProvider extends InheritedWidget {
         linkifyStyles(
           colorScheme,
           themeWidgetConfig?.text?.linkify,
+        ),
+        callActionsStyles(
+          colorScheme,
+          textButtonStyles,
         ),
         inputDecorations(colorScheme),
         elevatedButtonStyles(
