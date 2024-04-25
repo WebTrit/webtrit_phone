@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+import 'onboarding_picture_logo_style.dart';
+
 class OnboardingPictureLogo extends StatelessWidget {
   const OnboardingPictureLogo({
     super.key,

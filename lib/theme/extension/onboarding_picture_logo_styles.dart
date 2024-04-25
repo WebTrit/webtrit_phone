@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../style/style.dart';
+import 'package:webtrit_phone/features/login/widgets/onboarding_picture_logo_style.dart';
 
 class OnboardingPictureLogoStyles extends ThemeExtension<OnboardingPictureLogoStyles> {
   const OnboardingPictureLogoStyles({

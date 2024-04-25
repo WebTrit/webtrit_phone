@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../tools/tools.dart';
-import '../models/models.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 
 class OnboardingPictureLogoStyle {
   OnboardingPictureLogoStyle({
