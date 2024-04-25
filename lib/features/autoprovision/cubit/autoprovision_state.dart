@@ -8,7 +8,7 @@ abstract base class AutoprovisionState {
   factory AutoprovisionState.error(Object error) => Error._(error);
   factory AutoprovisionState.processing() => const ProcessingToken._();
   factory AutoprovisionState.replaceConfirmationNeeded(String token, String coreUrl, String tenantId) {
-    return SessionCreated._(token, coreUrl, tenantId);
+    return ReplaceConfirmationNeeded._(token, coreUrl, tenantId);
   }
   factory AutoprovisionState.sessionCreated(String token, String coreUrl, String tenantId) {
     return SessionCreated._(token, coreUrl, tenantId);
