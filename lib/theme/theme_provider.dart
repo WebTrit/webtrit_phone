@@ -204,7 +204,7 @@ class ThemeProvider extends InheritedWidget {
     );
   }
 
-  TextButtonStyles textButtonStyles(ColorScheme colors) {
+  TextButtonStyles _textButtonStyles(ColorScheme colors) {
     return TextButtonStyles(
       neutral: TextButton.styleFrom(
         foregroundColor: colors.secondary,
@@ -287,6 +287,15 @@ class ThemeProvider extends InheritedWidget {
     return AppIconStyles(
       primary: AppIconStyle(
         color: appIcon?.color ?? colors.primary,
+      ),
+    );
+  }
+
+  ConfirmDialogStyles confirmDialogStyles(ColorScheme colors, TextButtonStyles styles) {
+    return ConfirmDialogStyles(
+      primary: ConfirmDialogStyle(
+        activeButtonStyle1: styles.neutral,
+        activeButtonStyle2: styles.dangerous,
       ),
     );
   }
@@ -403,6 +412,8 @@ class ThemeProvider extends InheritedWidget {
     final themeWidgetConfig = _themeWidgetConfig(brightness);
     final themePageConfig = _themePageConfig(brightness);
 
+    final textButtonStyles = _textButtonStyles(colorScheme);
+
     return ThemeData.from(
       colorScheme: colorScheme,
       textTheme: textTheme(brightness),
@@ -427,6 +438,10 @@ class ThemeProvider extends InheritedWidget {
           colorScheme,
           themeWidgetConfig?.picture?.appIcon,
         ),
+        confirmDialogStyles(
+          colorScheme,
+          textButtonStyles,
+        ),
         linkifyStyles(
           colorScheme,
           themeWidgetConfig?.text?.linkify,
@@ -437,7 +452,7 @@ class ThemeProvider extends InheritedWidget {
           themeWidgetConfig?.button?.primaryElevatedButton,
         ),
         outlinedButtonStyles(colorScheme),
-        textButtonStyles(colorScheme),
+        textButtonStyles,
         gradients(colorScheme),
         logoAssets(
           primaryOnboardin: settings.primaryOnboardingLogo,

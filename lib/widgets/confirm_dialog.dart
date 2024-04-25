@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/theme/theme.dart';
+
+import 'confirm_dialog_style.dart';
+import 'confirm_dialog_styles.dart';
+
+export 'confirm_dialog_style.dart';
+export 'confirm_dialog_styles.dart';
 
 class ConfirmDialog extends StatelessWidget {
   static Future<bool?> show(
     BuildContext context, {
     required String title,
     required String content,
+    ConfirmDialogStyle? style,
   }) {
     return showDialog<bool?>(
       context: context,
@@ -15,6 +21,7 @@ class ConfirmDialog extends StatelessWidget {
         return ConfirmDialog._(
           title: title,
           content: content,
+          style: style,
         );
       },
     );
@@ -24,6 +31,7 @@ class ConfirmDialog extends StatelessWidget {
     BuildContext context, {
     required String title,
     required String content,
+    ConfirmDialogStyle? style,
   }) {
     return showDialog<bool?>(
       context: context,
@@ -32,6 +40,7 @@ class ConfirmDialog extends StatelessWidget {
           dangerous: true,
           title: title,
           content: content,
+          style: style,
         );
       },
     );
@@ -41,28 +50,31 @@ class ConfirmDialog extends StatelessWidget {
     this.dangerous = false,
     required this.title,
     required this.content,
+    required this.style,
   });
 
   final bool dangerous;
   final String title;
   final String content;
 
+  final ConfirmDialogStyle? style;
+
   @override
   Widget build(BuildContext context) {
-    final ThemeData themeData = Theme.of(context);
-    final TextButtonStyles? textButtonStyles = themeData.extension<TextButtonStyles>();
+    final localStyle = ConfirmDialogStyle.merge(style, Theme.of(context).extension<ConfirmDialogStyles>()?.primary);
+
     return AlertDialog(
       title: Text(title),
       content: Text(content),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
-          style: textButtonStyles?.neutral,
+          style: localStyle.activeButtonStyle1,
           child: Text(context.l10n.alertDialogActions_no),
         ),
         TextButton(
           onPressed: () => Navigator.of(context).pop(true),
-          style: dangerous ? textButtonStyles?.dangerous : null,
+          style: dangerous ? localStyle.activeButtonStyle2 : localStyle.defaultButtonStyle,
           child: Text(context.l10n.alertDialogActions_yes),
         ),
       ],
