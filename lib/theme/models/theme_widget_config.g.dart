@@ -28,6 +28,9 @@ _$ThemeWidgetConfigImpl _$$ThemeWidgetConfigImplFromJson(
       text: json['text'] == null
           ? null
           : TextWidgetConfig.fromJson(json['text'] as Map<String, dynamic>),
+      dialog: json['dialog'] == null
+          ? null
+          : DialogWidgetConfig.fromJson(json['dialog'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$ThemeWidgetConfigImplToJson(
@@ -39,6 +42,7 @@ Map<String, dynamic> _$$ThemeWidgetConfigImplToJson(
       'picture': instance.picture,
       'input': instance.input,
       'text': instance.text,
+      'dialog': instance.dialog,
     };
 
 _$ButtonWidgetConfigImpl _$$ButtonWidgetConfigImplFromJson(
@@ -372,4 +376,41 @@ Map<String, dynamic> _$$LinkifyWidgetConfigImplToJson(
           instance.styleColor, const CSSColorConverter().toJson),
       'linkifyStyleColor': _$JsonConverterToJson<String, Color>(
           instance.linkifyStyleColor, const CSSColorConverter().toJson),
+    };
+
+_$DialogWidgetConfigImpl _$$DialogWidgetConfigImplFromJson(
+        Map<String, dynamic> json) =>
+    _$DialogWidgetConfigImpl(
+      confirmDialog: json['confirmDialog'] == null
+          ? null
+          : ConfirmDialogWidgetConfig.fromJson(
+              json['confirmDialog'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$DialogWidgetConfigImplToJson(
+        _$DialogWidgetConfigImpl instance) =>
+    <String, dynamic>{
+      'confirmDialog': instance.confirmDialog,
+    };
+
+_$ConfirmDialogWidgetConfigImpl _$$ConfirmDialogWidgetConfigImplFromJson(
+        Map<String, dynamic> json) =>
+    _$ConfirmDialogWidgetConfigImpl(
+      activeButtonColor1: _$JsonConverterFromJson<String, Color>(
+          json['activeButtonColor1'], const CSSColorConverter().fromJson),
+      activeButtonColor2: _$JsonConverterFromJson<String, Color>(
+          json['activeButtonColor2'], const CSSColorConverter().fromJson),
+      defaultButtonColor: _$JsonConverterFromJson<String, Color>(
+          json['defaultButtonColor'], const CSSColorConverter().fromJson),
+    );
+
+Map<String, dynamic> _$$ConfirmDialogWidgetConfigImplToJson(
+        _$ConfirmDialogWidgetConfigImpl instance) =>
+    <String, dynamic>{
+      'activeButtonColor1': _$JsonConverterToJson<String, Color>(
+          instance.activeButtonColor1, const CSSColorConverter().toJson),
+      'activeButtonColor2': _$JsonConverterToJson<String, Color>(
+          instance.activeButtonColor2, const CSSColorConverter().toJson),
+      'defaultButtonColor': _$JsonConverterToJson<String, Color>(
+          instance.defaultButtonColor, const CSSColorConverter().toJson),
     };

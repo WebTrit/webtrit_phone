@@ -19,6 +19,7 @@ class ThemeWidgetConfig with _$ThemeWidgetConfig {
     PictureWidgetConfig? picture,
     InputWidgetConfig? input,
     TextWidgetConfig? text,
+    DialogWidgetConfig? dialog,
   }) = _ThemeWidgetConfig;
 
   factory ThemeWidgetConfig.fromJson(Map<String, dynamic> json) => _$ThemeWidgetConfigFromJson(json);
@@ -230,4 +231,28 @@ class LinkifyWidgetConfig with _$LinkifyWidgetConfig {
   }) = _LinkifyWidgetConfig;
 
   factory LinkifyWidgetConfig.fromJson(Map<String, dynamic> json) => _$LinkifyWidgetConfigFromJson(json);
+}
+
+@freezed
+class DialogWidgetConfig with _$DialogWidgetConfig {
+  // ignore: invalid_annotation_target
+  @themeJsonSerializable
+  const factory DialogWidgetConfig({
+    ConfirmDialogWidgetConfig? confirmDialog,
+  }) = _DialogWidgetConfig;
+
+  factory DialogWidgetConfig.fromJson(Map<String, dynamic> json) => _$DialogWidgetConfigFromJson(json);
+}
+
+@freezed
+class ConfirmDialogWidgetConfig with _$ConfirmDialogWidgetConfig {
+  // ignore: invalid_annotation_target
+  @themeJsonSerializable
+  const factory ConfirmDialogWidgetConfig({
+    Color? activeButtonColor1,
+    Color? activeButtonColor2,
+    Color? defaultButtonColor,
+  }) = _ConfirmDialogWidgetConfig;
+
+  factory ConfirmDialogWidgetConfig.fromJson(Map<String, dynamic> json) => _$ConfirmDialogWidgetConfigFromJson(json);
 }

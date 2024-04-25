@@ -26,6 +26,7 @@ mixin _$ThemeWidgetConfig {
   PictureWidgetConfig? get picture => throw _privateConstructorUsedError;
   InputWidgetConfig? get input => throw _privateConstructorUsedError;
   TextWidgetConfig? get text => throw _privateConstructorUsedError;
+  DialogWidgetConfig? get dialog => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -45,7 +46,8 @@ abstract class $ThemeWidgetConfigCopyWith<$Res> {
       BarWidgetConfig? bar,
       PictureWidgetConfig? picture,
       InputWidgetConfig? input,
-      TextWidgetConfig? text});
+      TextWidgetConfig? text,
+      DialogWidgetConfig? dialog});
 
   $ButtonWidgetConfigCopyWith<$Res>? get button;
   $GroupWidgetConfigCopyWith<$Res>? get group;
@@ -53,6 +55,7 @@ abstract class $ThemeWidgetConfigCopyWith<$Res> {
   $PictureWidgetConfigCopyWith<$Res>? get picture;
   $InputWidgetConfigCopyWith<$Res>? get input;
   $TextWidgetConfigCopyWith<$Res>? get text;
+  $DialogWidgetConfigCopyWith<$Res>? get dialog;
 }
 
 /// @nodoc
@@ -74,6 +77,7 @@ class _$ThemeWidgetConfigCopyWithImpl<$Res, $Val extends ThemeWidgetConfig>
     Object? picture = freezed,
     Object? input = freezed,
     Object? text = freezed,
+    Object? dialog = freezed,
   }) {
     return _then(_value.copyWith(
       button: freezed == button
@@ -100,6 +104,10 @@ class _$ThemeWidgetConfigCopyWithImpl<$Res, $Val extends ThemeWidgetConfig>
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
               as TextWidgetConfig?,
+      dialog: freezed == dialog
+          ? _value.dialog
+          : dialog // ignore: cast_nullable_to_non_nullable
+              as DialogWidgetConfig?,
     ) as $Val);
   }
 
@@ -174,6 +182,18 @@ class _$ThemeWidgetConfigCopyWithImpl<$Res, $Val extends ThemeWidgetConfig>
       return _then(_value.copyWith(text: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $DialogWidgetConfigCopyWith<$Res>? get dialog {
+    if (_value.dialog == null) {
+      return null;
+    }
+
+    return $DialogWidgetConfigCopyWith<$Res>(_value.dialog!, (value) {
+      return _then(_value.copyWith(dialog: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -190,7 +210,8 @@ abstract class _$$ThemeWidgetConfigImplCopyWith<$Res>
       BarWidgetConfig? bar,
       PictureWidgetConfig? picture,
       InputWidgetConfig? input,
-      TextWidgetConfig? text});
+      TextWidgetConfig? text,
+      DialogWidgetConfig? dialog});
 
   @override
   $ButtonWidgetConfigCopyWith<$Res>? get button;
@@ -204,6 +225,8 @@ abstract class _$$ThemeWidgetConfigImplCopyWith<$Res>
   $InputWidgetConfigCopyWith<$Res>? get input;
   @override
   $TextWidgetConfigCopyWith<$Res>? get text;
+  @override
+  $DialogWidgetConfigCopyWith<$Res>? get dialog;
 }
 
 /// @nodoc
@@ -223,6 +246,7 @@ class __$$ThemeWidgetConfigImplCopyWithImpl<$Res>
     Object? picture = freezed,
     Object? input = freezed,
     Object? text = freezed,
+    Object? dialog = freezed,
   }) {
     return _then(_$ThemeWidgetConfigImpl(
       button: freezed == button
@@ -249,6 +273,10 @@ class __$$ThemeWidgetConfigImplCopyWithImpl<$Res>
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
               as TextWidgetConfig?,
+      dialog: freezed == dialog
+          ? _value.dialog
+          : dialog // ignore: cast_nullable_to_non_nullable
+              as DialogWidgetConfig?,
     ));
   }
 }
@@ -258,7 +286,13 @@ class __$$ThemeWidgetConfigImplCopyWithImpl<$Res>
 @themeJsonSerializable
 class _$ThemeWidgetConfigImpl implements _ThemeWidgetConfig {
   const _$ThemeWidgetConfigImpl(
-      {this.button, this.group, this.bar, this.picture, this.input, this.text});
+      {this.button,
+      this.group,
+      this.bar,
+      this.picture,
+      this.input,
+      this.text,
+      this.dialog});
 
   factory _$ThemeWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$ThemeWidgetConfigImplFromJson(json);
@@ -275,10 +309,12 @@ class _$ThemeWidgetConfigImpl implements _ThemeWidgetConfig {
   final InputWidgetConfig? input;
   @override
   final TextWidgetConfig? text;
+  @override
+  final DialogWidgetConfig? dialog;
 
   @override
   String toString() {
-    return 'ThemeWidgetConfig(button: $button, group: $group, bar: $bar, picture: $picture, input: $input, text: $text)';
+    return 'ThemeWidgetConfig(button: $button, group: $group, bar: $bar, picture: $picture, input: $input, text: $text, dialog: $dialog)';
   }
 
   @override
@@ -291,13 +327,14 @@ class _$ThemeWidgetConfigImpl implements _ThemeWidgetConfig {
             (identical(other.bar, bar) || other.bar == bar) &&
             (identical(other.picture, picture) || other.picture == picture) &&
             (identical(other.input, input) || other.input == input) &&
-            (identical(other.text, text) || other.text == text));
+            (identical(other.text, text) || other.text == text) &&
+            (identical(other.dialog, dialog) || other.dialog == dialog));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, button, group, bar, picture, input, text);
+  int get hashCode => Object.hash(
+      runtimeType, button, group, bar, picture, input, text, dialog);
 
   @JsonKey(ignore: true)
   @override
@@ -321,7 +358,8 @@ abstract class _ThemeWidgetConfig implements ThemeWidgetConfig {
       final BarWidgetConfig? bar,
       final PictureWidgetConfig? picture,
       final InputWidgetConfig? input,
-      final TextWidgetConfig? text}) = _$ThemeWidgetConfigImpl;
+      final TextWidgetConfig? text,
+      final DialogWidgetConfig? dialog}) = _$ThemeWidgetConfigImpl;
 
   factory _ThemeWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$ThemeWidgetConfigImpl.fromJson;
@@ -338,6 +376,8 @@ abstract class _ThemeWidgetConfig implements ThemeWidgetConfig {
   InputWidgetConfig? get input;
   @override
   TextWidgetConfig? get text;
+  @override
+  DialogWidgetConfig? get dialog;
   @override
   @JsonKey(ignore: true)
   _$$ThemeWidgetConfigImplCopyWith<_$ThemeWidgetConfigImpl> get copyWith =>
@@ -3368,4 +3408,355 @@ abstract class _LinkifyWidgetConfig implements LinkifyWidgetConfig {
   @JsonKey(ignore: true)
   _$$LinkifyWidgetConfigImplCopyWith<_$LinkifyWidgetConfigImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+DialogWidgetConfig _$DialogWidgetConfigFromJson(Map<String, dynamic> json) {
+  return _DialogWidgetConfig.fromJson(json);
+}
+
+/// @nodoc
+mixin _$DialogWidgetConfig {
+  ConfirmDialogWidgetConfig? get confirmDialog =>
+      throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $DialogWidgetConfigCopyWith<DialogWidgetConfig> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $DialogWidgetConfigCopyWith<$Res> {
+  factory $DialogWidgetConfigCopyWith(
+          DialogWidgetConfig value, $Res Function(DialogWidgetConfig) then) =
+      _$DialogWidgetConfigCopyWithImpl<$Res, DialogWidgetConfig>;
+  @useResult
+  $Res call({ConfirmDialogWidgetConfig? confirmDialog});
+
+  $ConfirmDialogWidgetConfigCopyWith<$Res>? get confirmDialog;
+}
+
+/// @nodoc
+class _$DialogWidgetConfigCopyWithImpl<$Res, $Val extends DialogWidgetConfig>
+    implements $DialogWidgetConfigCopyWith<$Res> {
+  _$DialogWidgetConfigCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? confirmDialog = freezed,
+  }) {
+    return _then(_value.copyWith(
+      confirmDialog: freezed == confirmDialog
+          ? _value.confirmDialog
+          : confirmDialog // ignore: cast_nullable_to_non_nullable
+              as ConfirmDialogWidgetConfig?,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ConfirmDialogWidgetConfigCopyWith<$Res>? get confirmDialog {
+    if (_value.confirmDialog == null) {
+      return null;
+    }
+
+    return $ConfirmDialogWidgetConfigCopyWith<$Res>(_value.confirmDialog!,
+        (value) {
+      return _then(_value.copyWith(confirmDialog: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$DialogWidgetConfigImplCopyWith<$Res>
+    implements $DialogWidgetConfigCopyWith<$Res> {
+  factory _$$DialogWidgetConfigImplCopyWith(_$DialogWidgetConfigImpl value,
+          $Res Function(_$DialogWidgetConfigImpl) then) =
+      __$$DialogWidgetConfigImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({ConfirmDialogWidgetConfig? confirmDialog});
+
+  @override
+  $ConfirmDialogWidgetConfigCopyWith<$Res>? get confirmDialog;
+}
+
+/// @nodoc
+class __$$DialogWidgetConfigImplCopyWithImpl<$Res>
+    extends _$DialogWidgetConfigCopyWithImpl<$Res, _$DialogWidgetConfigImpl>
+    implements _$$DialogWidgetConfigImplCopyWith<$Res> {
+  __$$DialogWidgetConfigImplCopyWithImpl(_$DialogWidgetConfigImpl _value,
+      $Res Function(_$DialogWidgetConfigImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? confirmDialog = freezed,
+  }) {
+    return _then(_$DialogWidgetConfigImpl(
+      confirmDialog: freezed == confirmDialog
+          ? _value.confirmDialog
+          : confirmDialog // ignore: cast_nullable_to_non_nullable
+              as ConfirmDialogWidgetConfig?,
+    ));
+  }
+}
+
+/// @nodoc
+
+@themeJsonSerializable
+class _$DialogWidgetConfigImpl implements _DialogWidgetConfig {
+  const _$DialogWidgetConfigImpl({this.confirmDialog});
+
+  factory _$DialogWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
+      _$$DialogWidgetConfigImplFromJson(json);
+
+  @override
+  final ConfirmDialogWidgetConfig? confirmDialog;
+
+  @override
+  String toString() {
+    return 'DialogWidgetConfig(confirmDialog: $confirmDialog)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$DialogWidgetConfigImpl &&
+            (identical(other.confirmDialog, confirmDialog) ||
+                other.confirmDialog == confirmDialog));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, confirmDialog);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$DialogWidgetConfigImplCopyWith<_$DialogWidgetConfigImpl> get copyWith =>
+      __$$DialogWidgetConfigImplCopyWithImpl<_$DialogWidgetConfigImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$DialogWidgetConfigImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _DialogWidgetConfig implements DialogWidgetConfig {
+  const factory _DialogWidgetConfig(
+          {final ConfirmDialogWidgetConfig? confirmDialog}) =
+      _$DialogWidgetConfigImpl;
+
+  factory _DialogWidgetConfig.fromJson(Map<String, dynamic> json) =
+      _$DialogWidgetConfigImpl.fromJson;
+
+  @override
+  ConfirmDialogWidgetConfig? get confirmDialog;
+  @override
+  @JsonKey(ignore: true)
+  _$$DialogWidgetConfigImplCopyWith<_$DialogWidgetConfigImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+ConfirmDialogWidgetConfig _$ConfirmDialogWidgetConfigFromJson(
+    Map<String, dynamic> json) {
+  return _ConfirmDialogWidgetConfig.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ConfirmDialogWidgetConfig {
+  Color? get activeButtonColor1 => throw _privateConstructorUsedError;
+  Color? get activeButtonColor2 => throw _privateConstructorUsedError;
+  Color? get defaultButtonColor => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ConfirmDialogWidgetConfigCopyWith<ConfirmDialogWidgetConfig> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ConfirmDialogWidgetConfigCopyWith<$Res> {
+  factory $ConfirmDialogWidgetConfigCopyWith(ConfirmDialogWidgetConfig value,
+          $Res Function(ConfirmDialogWidgetConfig) then) =
+      _$ConfirmDialogWidgetConfigCopyWithImpl<$Res, ConfirmDialogWidgetConfig>;
+  @useResult
+  $Res call(
+      {Color? activeButtonColor1,
+      Color? activeButtonColor2,
+      Color? defaultButtonColor});
+}
+
+/// @nodoc
+class _$ConfirmDialogWidgetConfigCopyWithImpl<$Res,
+        $Val extends ConfirmDialogWidgetConfig>
+    implements $ConfirmDialogWidgetConfigCopyWith<$Res> {
+  _$ConfirmDialogWidgetConfigCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? activeButtonColor1 = freezed,
+    Object? activeButtonColor2 = freezed,
+    Object? defaultButtonColor = freezed,
+  }) {
+    return _then(_value.copyWith(
+      activeButtonColor1: freezed == activeButtonColor1
+          ? _value.activeButtonColor1
+          : activeButtonColor1 // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      activeButtonColor2: freezed == activeButtonColor2
+          ? _value.activeButtonColor2
+          : activeButtonColor2 // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      defaultButtonColor: freezed == defaultButtonColor
+          ? _value.defaultButtonColor
+          : defaultButtonColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$ConfirmDialogWidgetConfigImplCopyWith<$Res>
+    implements $ConfirmDialogWidgetConfigCopyWith<$Res> {
+  factory _$$ConfirmDialogWidgetConfigImplCopyWith(
+          _$ConfirmDialogWidgetConfigImpl value,
+          $Res Function(_$ConfirmDialogWidgetConfigImpl) then) =
+      __$$ConfirmDialogWidgetConfigImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {Color? activeButtonColor1,
+      Color? activeButtonColor2,
+      Color? defaultButtonColor});
+}
+
+/// @nodoc
+class __$$ConfirmDialogWidgetConfigImplCopyWithImpl<$Res>
+    extends _$ConfirmDialogWidgetConfigCopyWithImpl<$Res,
+        _$ConfirmDialogWidgetConfigImpl>
+    implements _$$ConfirmDialogWidgetConfigImplCopyWith<$Res> {
+  __$$ConfirmDialogWidgetConfigImplCopyWithImpl(
+      _$ConfirmDialogWidgetConfigImpl _value,
+      $Res Function(_$ConfirmDialogWidgetConfigImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? activeButtonColor1 = freezed,
+    Object? activeButtonColor2 = freezed,
+    Object? defaultButtonColor = freezed,
+  }) {
+    return _then(_$ConfirmDialogWidgetConfigImpl(
+      activeButtonColor1: freezed == activeButtonColor1
+          ? _value.activeButtonColor1
+          : activeButtonColor1 // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      activeButtonColor2: freezed == activeButtonColor2
+          ? _value.activeButtonColor2
+          : activeButtonColor2 // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      defaultButtonColor: freezed == defaultButtonColor
+          ? _value.defaultButtonColor
+          : defaultButtonColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+    ));
+  }
+}
+
+/// @nodoc
+
+@themeJsonSerializable
+class _$ConfirmDialogWidgetConfigImpl implements _ConfirmDialogWidgetConfig {
+  const _$ConfirmDialogWidgetConfigImpl(
+      {this.activeButtonColor1,
+      this.activeButtonColor2,
+      this.defaultButtonColor});
+
+  factory _$ConfirmDialogWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ConfirmDialogWidgetConfigImplFromJson(json);
+
+  @override
+  final Color? activeButtonColor1;
+  @override
+  final Color? activeButtonColor2;
+  @override
+  final Color? defaultButtonColor;
+
+  @override
+  String toString() {
+    return 'ConfirmDialogWidgetConfig(activeButtonColor1: $activeButtonColor1, activeButtonColor2: $activeButtonColor2, defaultButtonColor: $defaultButtonColor)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ConfirmDialogWidgetConfigImpl &&
+            (identical(other.activeButtonColor1, activeButtonColor1) ||
+                other.activeButtonColor1 == activeButtonColor1) &&
+            (identical(other.activeButtonColor2, activeButtonColor2) ||
+                other.activeButtonColor2 == activeButtonColor2) &&
+            (identical(other.defaultButtonColor, defaultButtonColor) ||
+                other.defaultButtonColor == defaultButtonColor));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, activeButtonColor1, activeButtonColor2, defaultButtonColor);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ConfirmDialogWidgetConfigImplCopyWith<_$ConfirmDialogWidgetConfigImpl>
+      get copyWith => __$$ConfirmDialogWidgetConfigImplCopyWithImpl<
+          _$ConfirmDialogWidgetConfigImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ConfirmDialogWidgetConfigImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ConfirmDialogWidgetConfig implements ConfirmDialogWidgetConfig {
+  const factory _ConfirmDialogWidgetConfig(
+      {final Color? activeButtonColor1,
+      final Color? activeButtonColor2,
+      final Color? defaultButtonColor}) = _$ConfirmDialogWidgetConfigImpl;
+
+  factory _ConfirmDialogWidgetConfig.fromJson(Map<String, dynamic> json) =
+      _$ConfirmDialogWidgetConfigImpl.fromJson;
+
+  @override
+  Color? get activeButtonColor1;
+  @override
+  Color? get activeButtonColor2;
+  @override
+  Color? get defaultButtonColor;
+  @override
+  @JsonKey(ignore: true)
+  _$$ConfirmDialogWidgetConfigImplCopyWith<_$ConfirmDialogWidgetConfigImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

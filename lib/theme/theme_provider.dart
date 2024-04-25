@@ -291,11 +291,24 @@ class ThemeProvider extends InheritedWidget {
     );
   }
 
-  ConfirmDialogStyles confirmDialogStyles(ColorScheme colors, TextButtonStyles styles) {
+  ConfirmDialogStyles confirmDialogStyles(
+    ColorScheme colors,
+    TextButtonStyles styles,
+    ConfirmDialogWidgetConfig? dialogConfig,
+  ) {
+    final activeButtonStyle1ForegroundColor = MaterialStatePropertyAll(dialogConfig?.activeButtonColor1);
+    final activeButtonStyle2ForegroundColor = MaterialStatePropertyAll(dialogConfig?.activeButtonColor2);
+    final defaultButtonStyleForegroundColor = MaterialStatePropertyAll(dialogConfig?.defaultButtonColor);
+
+    final activeButtonStyle1 = styles.neutral?.copyWith(foregroundColor: activeButtonStyle1ForegroundColor);
+    final activeButtonStyle2 = styles.dangerous?.copyWith(foregroundColor: activeButtonStyle2ForegroundColor);
+    final defaultButtonStyle = const ButtonStyle().copyWith(foregroundColor: defaultButtonStyleForegroundColor);
+
     return ConfirmDialogStyles(
       primary: ConfirmDialogStyle(
-        activeButtonStyle1: styles.neutral,
-        activeButtonStyle2: styles.dangerous,
+        activeButtonStyle1: activeButtonStyle1,
+        activeButtonStyle2: activeButtonStyle2,
+        defaultButtonStyle: defaultButtonStyle,
       ),
     );
   }
@@ -441,6 +454,7 @@ class ThemeProvider extends InheritedWidget {
         confirmDialogStyles(
           colorScheme,
           textButtonStyles,
+          themeWidgetConfig?.dialog?.confirmDialog,
         ),
         linkifyStyles(
           colorScheme,
