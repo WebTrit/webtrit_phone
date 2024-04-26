@@ -186,7 +186,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                               context.read<CallBloc>().add(
                                     CallControlEvent.attendedTransferred(
                                       referorCall: referorCall,
-                                      transfereeCall: activeCall,
+                                      replaceCall: activeCall,
                                     ),
                                   );
                             },

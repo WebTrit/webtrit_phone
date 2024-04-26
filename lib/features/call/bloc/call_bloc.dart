@@ -1178,7 +1178,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     final referorCall = event.referorCall;
-    final transfereeCall = event.transfereeCall;
+    final replaceCall = event.replaceCall;
 
     try {
       final transferRequest = TransferRequest(
@@ -1186,7 +1186,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         line: referorCall.line,
         callId: referorCall.callId.toString(),
         number: referorCall.handle.normalizedValue(),
-        replaceCallId: transfereeCall.callId,
+        replaceCallId: replaceCall.callId,
       );
 
       await _signalingClient?.execute(transferRequest);

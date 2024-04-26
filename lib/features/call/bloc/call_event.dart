@@ -198,7 +198,7 @@ class CallControlEvent with _$CallControlEvent implements CallEvent {
 
   const factory CallControlEvent.attendedTransferred({
     required ActiveCall referorCall,
-    required ActiveCall transfereeCall,
+    required ActiveCall replaceCall,
   }) = _CallControlEventAttendedTransferred;
 }
 
