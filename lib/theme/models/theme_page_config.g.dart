@@ -12,12 +12,16 @@ _$ThemePageConfigImpl _$$ThemePageConfigImplFromJson(
       login: json['login'] == null
           ? null
           : LoginPageConfig.fromJson(json['login'] as Map<String, dynamic>),
+      about: json['about'] == null
+          ? null
+          : AboutPageConfig.fromJson(json['about'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$ThemePageConfigImplToJson(
         _$ThemePageConfigImpl instance) =>
     <String, dynamic>{
       'login': instance.login,
+      'about': instance.about,
     };
 
 _$LoginPageConfigImpl _$$LoginPageConfigImplFromJson(
@@ -57,3 +61,15 @@ const _$ElevatedButtonStyleTypeEnumMap = {
   ElevatedButtonStyleType.primaryOnDark: 'primaryOnDark',
   ElevatedButtonStyleType.neutralOnDark: 'neutralOnDark',
 };
+
+_$AboutPageConfigImpl _$$AboutPageConfigImplFromJson(
+        Map<String, dynamic> json) =>
+    _$AboutPageConfigImpl(
+      picture: ThemeSvgAsset.fromJson(json['picture'] as String),
+    );
+
+Map<String, dynamic> _$$AboutPageConfigImplToJson(
+        _$AboutPageConfigImpl instance) =>
+    <String, dynamic>{
+      'picture': instance.picture,
+    };

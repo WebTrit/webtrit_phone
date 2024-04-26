@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'elevated_button_style_type.dart';
 import 'theme_json_serializable.dart';
+import 'theme_asset.dart';
 
 part 'theme_page_config.freezed.dart';
 
@@ -13,6 +14,7 @@ class ThemePageConfig with _$ThemePageConfig {
   @themeJsonSerializable
   const factory ThemePageConfig({
     LoginPageConfig? login,
+    AboutPageConfig? about,
   }) = _ThemePageConfig;
 
   factory ThemePageConfig.fromJson(Map<String, dynamic> json) => _$ThemePageConfigFromJson(json);
@@ -35,4 +37,13 @@ class LoginModeSelectPageConfig with _$LoginModeSelectPageConfig {
   }) = _LoginModeSelectPageConfig;
 
   factory LoginModeSelectPageConfig.fromJson(Map<String, dynamic> json) => _$LoginModeSelectPageConfigFromJson(json);
+}
+
+@freezed
+class AboutPageConfig with _$AboutPageConfig {
+  const factory AboutPageConfig({
+    required ThemeSvgAsset picture,
+  }) = _AboutPageConfig;
+
+  factory AboutPageConfig.fromJson(Map<String, dynamic> json) => _$AboutPageConfigFromJson(json);
 }

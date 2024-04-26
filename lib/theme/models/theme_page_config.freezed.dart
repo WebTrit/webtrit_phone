@@ -21,6 +21,7 @@ ThemePageConfig _$ThemePageConfigFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ThemePageConfig {
   LoginPageConfig? get login => throw _privateConstructorUsedError;
+  AboutPageConfig? get about => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,9 +35,10 @@ abstract class $ThemePageConfigCopyWith<$Res> {
           ThemePageConfig value, $Res Function(ThemePageConfig) then) =
       _$ThemePageConfigCopyWithImpl<$Res, ThemePageConfig>;
   @useResult
-  $Res call({LoginPageConfig? login});
+  $Res call({LoginPageConfig? login, AboutPageConfig? about});
 
   $LoginPageConfigCopyWith<$Res>? get login;
+  $AboutPageConfigCopyWith<$Res>? get about;
 }
 
 /// @nodoc
@@ -53,12 +55,17 @@ class _$ThemePageConfigCopyWithImpl<$Res, $Val extends ThemePageConfig>
   @override
   $Res call({
     Object? login = freezed,
+    Object? about = freezed,
   }) {
     return _then(_value.copyWith(
       login: freezed == login
           ? _value.login
           : login // ignore: cast_nullable_to_non_nullable
               as LoginPageConfig?,
+      about: freezed == about
+          ? _value.about
+          : about // ignore: cast_nullable_to_non_nullable
+              as AboutPageConfig?,
     ) as $Val);
   }
 
@@ -73,6 +80,18 @@ class _$ThemePageConfigCopyWithImpl<$Res, $Val extends ThemePageConfig>
       return _then(_value.copyWith(login: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $AboutPageConfigCopyWith<$Res>? get about {
+    if (_value.about == null) {
+      return null;
+    }
+
+    return $AboutPageConfigCopyWith<$Res>(_value.about!, (value) {
+      return _then(_value.copyWith(about: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -83,10 +102,12 @@ abstract class _$$ThemePageConfigImplCopyWith<$Res>
       __$$ThemePageConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({LoginPageConfig? login});
+  $Res call({LoginPageConfig? login, AboutPageConfig? about});
 
   @override
   $LoginPageConfigCopyWith<$Res>? get login;
+  @override
+  $AboutPageConfigCopyWith<$Res>? get about;
 }
 
 /// @nodoc
@@ -101,12 +122,17 @@ class __$$ThemePageConfigImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? login = freezed,
+    Object? about = freezed,
   }) {
     return _then(_$ThemePageConfigImpl(
       login: freezed == login
           ? _value.login
           : login // ignore: cast_nullable_to_non_nullable
               as LoginPageConfig?,
+      about: freezed == about
+          ? _value.about
+          : about // ignore: cast_nullable_to_non_nullable
+              as AboutPageConfig?,
     ));
   }
 }
@@ -115,17 +141,19 @@ class __$$ThemePageConfigImplCopyWithImpl<$Res>
 
 @themeJsonSerializable
 class _$ThemePageConfigImpl implements _ThemePageConfig {
-  const _$ThemePageConfigImpl({this.login});
+  const _$ThemePageConfigImpl({this.login, this.about});
 
   factory _$ThemePageConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$ThemePageConfigImplFromJson(json);
 
   @override
   final LoginPageConfig? login;
+  @override
+  final AboutPageConfig? about;
 
   @override
   String toString() {
-    return 'ThemePageConfig(login: $login)';
+    return 'ThemePageConfig(login: $login, about: $about)';
   }
 
   @override
@@ -133,12 +161,13 @@ class _$ThemePageConfigImpl implements _ThemePageConfig {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ThemePageConfigImpl &&
-            (identical(other.login, login) || other.login == login));
+            (identical(other.login, login) || other.login == login) &&
+            (identical(other.about, about) || other.about == about));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, login);
+  int get hashCode => Object.hash(runtimeType, login, about);
 
   @JsonKey(ignore: true)
   @override
@@ -156,14 +185,17 @@ class _$ThemePageConfigImpl implements _ThemePageConfig {
 }
 
 abstract class _ThemePageConfig implements ThemePageConfig {
-  const factory _ThemePageConfig({final LoginPageConfig? login}) =
-      _$ThemePageConfigImpl;
+  const factory _ThemePageConfig(
+      {final LoginPageConfig? login,
+      final AboutPageConfig? about}) = _$ThemePageConfigImpl;
 
   factory _ThemePageConfig.fromJson(Map<String, dynamic> json) =
       _$ThemePageConfigImpl.fromJson;
 
   @override
   LoginPageConfig? get login;
+  @override
+  AboutPageConfig? get about;
   @override
   @JsonKey(ignore: true)
   _$$ThemePageConfigImplCopyWith<_$ThemePageConfigImpl> get copyWith =>
@@ -494,4 +526,142 @@ abstract class _LoginModeSelectPageConfig implements LoginModeSelectPageConfig {
   @JsonKey(ignore: true)
   _$$LoginModeSelectPageConfigImplCopyWith<_$LoginModeSelectPageConfigImpl>
       get copyWith => throw _privateConstructorUsedError;
+}
+
+AboutPageConfig _$AboutPageConfigFromJson(Map<String, dynamic> json) {
+  return _AboutPageConfig.fromJson(json);
+}
+
+/// @nodoc
+mixin _$AboutPageConfig {
+  ThemeSvgAsset get picture => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $AboutPageConfigCopyWith<AboutPageConfig> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AboutPageConfigCopyWith<$Res> {
+  factory $AboutPageConfigCopyWith(
+          AboutPageConfig value, $Res Function(AboutPageConfig) then) =
+      _$AboutPageConfigCopyWithImpl<$Res, AboutPageConfig>;
+  @useResult
+  $Res call({ThemeSvgAsset picture});
+}
+
+/// @nodoc
+class _$AboutPageConfigCopyWithImpl<$Res, $Val extends AboutPageConfig>
+    implements $AboutPageConfigCopyWith<$Res> {
+  _$AboutPageConfigCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? picture = null,
+  }) {
+    return _then(_value.copyWith(
+      picture: null == picture
+          ? _value.picture
+          : picture // ignore: cast_nullable_to_non_nullable
+              as ThemeSvgAsset,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$AboutPageConfigImplCopyWith<$Res>
+    implements $AboutPageConfigCopyWith<$Res> {
+  factory _$$AboutPageConfigImplCopyWith(_$AboutPageConfigImpl value,
+          $Res Function(_$AboutPageConfigImpl) then) =
+      __$$AboutPageConfigImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({ThemeSvgAsset picture});
+}
+
+/// @nodoc
+class __$$AboutPageConfigImplCopyWithImpl<$Res>
+    extends _$AboutPageConfigCopyWithImpl<$Res, _$AboutPageConfigImpl>
+    implements _$$AboutPageConfigImplCopyWith<$Res> {
+  __$$AboutPageConfigImplCopyWithImpl(
+      _$AboutPageConfigImpl _value, $Res Function(_$AboutPageConfigImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? picture = null,
+  }) {
+    return _then(_$AboutPageConfigImpl(
+      picture: null == picture
+          ? _value.picture
+          : picture // ignore: cast_nullable_to_non_nullable
+              as ThemeSvgAsset,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$AboutPageConfigImpl implements _AboutPageConfig {
+  const _$AboutPageConfigImpl({required this.picture});
+
+  factory _$AboutPageConfigImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AboutPageConfigImplFromJson(json);
+
+  @override
+  final ThemeSvgAsset picture;
+
+  @override
+  String toString() {
+    return 'AboutPageConfig(picture: $picture)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AboutPageConfigImpl &&
+            (identical(other.picture, picture) || other.picture == picture));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, picture);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AboutPageConfigImplCopyWith<_$AboutPageConfigImpl> get copyWith =>
+      __$$AboutPageConfigImplCopyWithImpl<_$AboutPageConfigImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$AboutPageConfigImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _AboutPageConfig implements AboutPageConfig {
+  const factory _AboutPageConfig({required final ThemeSvgAsset picture}) =
+      _$AboutPageConfigImpl;
+
+  factory _AboutPageConfig.fromJson(Map<String, dynamic> json) =
+      _$AboutPageConfigImpl.fromJson;
+
+  @override
+  ThemeSvgAsset get picture;
+  @override
+  @JsonKey(ignore: true)
+  _$$AboutPageConfigImplCopyWith<_$AboutPageConfigImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

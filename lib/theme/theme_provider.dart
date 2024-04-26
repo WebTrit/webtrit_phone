@@ -7,6 +7,7 @@ import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/login/view/login_mode_select_screen.dart';
 import 'package:webtrit_phone/features/login/widgets/onboarding_logo.dart';
 import 'package:webtrit_phone/features/login/widgets/onboarding_picture_logo.dart';
+import 'package:webtrit_phone/features/settings/features/about/view/about_screen.dart';
 import 'package:webtrit_phone/features/settings/widgets/group_title_list_tile.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -169,6 +170,16 @@ class ThemeProvider extends InheritedWidget {
         picture: picture,
         scale: onboardingLogoWidgetConfig?.scale,
         textStyle: textStyle,
+      ),
+    );
+  }
+
+  AboutScreenStyles aboutScreenStyles(
+    AboutPageConfig? aboutPageConfig,
+  ) {
+    return AboutScreenStyles(
+      primary: AboutScreenStyle(
+        picture: aboutPageConfig?.picture,
       ),
     );
   }
@@ -551,7 +562,8 @@ class ThemeProvider extends InheritedWidget {
           colorScheme,
           settings.secondaryOnboardingLogo,
           themeWidgetConfig?.picture?.onboardingLogo,
-        )
+        ),
+        aboutScreenStyles(themePageConfig?.about)
       ],
       // COLOR
       primaryColorLight: colorScheme.secondaryContainer,
