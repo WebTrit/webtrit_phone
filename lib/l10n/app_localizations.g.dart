@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_en.g.dart';
+import 'app_localizations_it.g.dart';
 import 'app_localizations_uk.g.dart';
 
 /// Callers can lookup localized strings with an instance of AppLocalizations
@@ -90,6 +91,7 @@ abstract class AppLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
+    Locale('it'),
     Locale('uk')
   ];
 
@@ -111,11 +113,53 @@ abstract class AppLocalizations {
   /// **'Yes'**
   String get alertDialogActions_yes;
 
+  /// No description provided for @autoprovision_errorSnackBar_invalidToken.
+  ///
+  /// In en, this message translates to:
+  /// **'The auto configuration credentials were rejected by the server. Please request a new configuration link'**
+  String get autoprovision_errorSnackBar_invalidToken;
+
+  /// No description provided for @autoprovision_ReloginDialog_confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get autoprovision_ReloginDialog_confirm;
+
+  /// No description provided for @autoprovision_ReloginDialog_decline.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get autoprovision_ReloginDialog_decline;
+
+  /// No description provided for @autoprovision_ReloginDialog_text.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to replace the current session with a new one?'**
+  String get autoprovision_ReloginDialog_text;
+
+  /// No description provided for @autoprovision_ReloginDialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Relogin Confirmation'**
+  String get autoprovision_ReloginDialog_title;
+
+  /// No description provided for @autoprovision_successSnackBar_used.
+  ///
+  /// In en, this message translates to:
+  /// **'Successfully retrieved your settings, your app is ready to use'**
+  String get autoprovision_successSnackBar_used;
+
   /// No description provided for @call_CallActionsTooltip_accept.
   ///
   /// In en, this message translates to:
   /// **'Accept'**
   String get call_CallActionsTooltip_accept;
+
+  /// No description provided for @call_CallActionsTooltip_attended_transfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Attended transfer'**
+  String get call_CallActionsTooltip_attended_transfer;
 
   /// No description provided for @call_CallActionsTooltip_disableCamera.
   ///
@@ -194,6 +238,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Transfer'**
   String get call_CallActionsTooltip_transfer;
+
+  /// No description provided for @call_CallActionsTooltip_unattended_transfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Unattended transfer'**
+  String get call_CallActionsTooltip_unattended_transfer;
 
   /// No description provided for @call_CallActionsTooltip_unhold.
   ///
@@ -369,6 +419,24 @@ abstract class AppLocalizations {
   /// **'A HTTP client issue occurred'**
   String get default_ClientExceptionError;
 
+  /// No description provided for @default_ErrorDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get default_ErrorDetails;
+
+  /// No description provided for @default_ErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Error message'**
+  String get default_ErrorMessage;
+
+  /// No description provided for @default_ErrorPath.
+  ///
+  /// In en, this message translates to:
+  /// **'Error path'**
+  String get default_ErrorPath;
+
   /// No description provided for @default_FormatExceptionError.
   ///
   /// In en, this message translates to:
@@ -398,36 +466,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'A response issue occurred'**
   String get default_TypeErrorError;
-
-  /// No description provided for @default_ErrorMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Error message'**
-  String get default_ErrorMessage;
-
-  /// No description provided for @default_ErrorDetails.
-  ///
-  /// In en, this message translates to:
-  /// **'Details'**
-  String get default_ErrorDetails;
-
-  /// No description provided for @default_ErrorPath.
-  ///
-  /// In en, this message translates to:
-  /// **'Error path'**
-  String get default_ErrorPath;
-
-  /// No description provided for @request_StatusCode.
-  ///
-  /// In en, this message translates to:
-  /// **'Status code'**
-  String get request_StatusCode;
-
-  /// No description provided for @request_Id.
-  ///
-  /// In en, this message translates to:
-  /// **'Request id'**
-  String get request_Id;
 
   /// No description provided for @default_UnauthorizedRequestFailureError.
   ///
@@ -897,6 +935,24 @@ abstract class AppLocalizations {
   /// **'Check'**
   String get notifications_errorSnackBarAction_callUserMedia;
 
+  /// No description provided for @notifications_errorSnackBar_appOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Your application is currently offline'**
+  String get notifications_errorSnackBar_appOffline;
+
+  /// No description provided for @notifications_errorSnackBar_appOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Your application is online'**
+  String get notifications_errorSnackBar_appOnline;
+
+  /// No description provided for @notifications_errorSnackBar_appUnregistered.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorry, your application is currently disconnected from the WebTrit core servers and hence can\'t call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection'**
+  String get notifications_errorSnackBar_appUnregistered;
+
   /// No description provided for @notifications_errorSnackBar_callConnect.
   ///
   /// In en, this message translates to:
@@ -927,18 +983,6 @@ abstract class AppLocalizations {
   /// **'No access to media input, please check app permissions'**
   String get notifications_errorSnackBar_callUserMedia;
 
-  /// No description provided for @notifications_errorSnackBar_appUnregistered.
-  ///
-  /// In en, this message translates to:
-  /// **'Sorry, your application is currently disconnected from the WebTrit core servers and hence can\'t call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection'**
-  String get notifications_errorSnackBar_appUnregistered;
-
-  /// No description provided for @notifications_errorSnackBar_appOffline.
-  ///
-  /// In en, this message translates to:
-  /// **'Your application is currently offline'**
-  String get notifications_errorSnackBar_appOffline;
-
   /// No description provided for @notImplemented.
   ///
   /// In en, this message translates to:
@@ -956,30 +1000,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.'**
   String get permission_Text_description;
-
-  /// No description provided for @user_agreement_checkbox_text.
-  ///
-  /// In en, this message translates to:
-  /// **'I have read the {url} and consent to its terms.'**
-  String user_agreement_checkbox_text(String url);
-
-  /// No description provided for @user_agreement_description.
-  ///
-  /// In en, this message translates to:
-  /// **'Welcome to {appName}'**
-  String user_agreement_description(String appName);
-
-  /// No description provided for @user_agreement_button_text.
-  ///
-  /// In en, this message translates to:
-  /// **'Continue'**
-  String get user_agreement_button_text;
-
-  /// No description provided for @user_agreement_agrement_link.
-  ///
-  /// In en, this message translates to:
-  /// **'terms and condition of agreement'**
-  String get user_agreement_agrement_link;
 
   /// No description provided for @recents_BodyCenter_empty.
   ///
@@ -1004,12 +1024,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Oops... an error happened ☹️'**
   String get recents_errorSnackBar_loadFailure;
-
-  /// No description provided for @notifications_errorSnackBar_appOnline.
-  ///
-  /// In en, this message translates to:
-  /// **'Your application is online'**
-  String get notifications_errorSnackBar_appOnline;
 
   /// No description provided for @recents_snackBar_deleted.
   ///
@@ -1059,23 +1073,35 @@ abstract class AppLocalizations {
   /// **'{time}'**
   String recentTimeBeforeMidnight(DateTime time);
 
+  /// No description provided for @request_Id.
+  ///
+  /// In en, this message translates to:
+  /// **'Request id'**
+  String get request_Id;
+
+  /// No description provided for @request_StatusCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Status code'**
+  String get request_StatusCode;
+
   /// No description provided for @settings_AboutText_AppVersion.
   ///
   /// In en, this message translates to:
   /// **'App Version'**
   String get settings_AboutText_AppVersion;
 
-  /// No description provided for @settings_AboutText_StoreVersion.
-  ///
-  /// In en, this message translates to:
-  /// **'Build version in the Store'**
-  String get settings_AboutText_StoreVersion;
-
   /// No description provided for @settings_AboutText_CoreVersionUndefined.
   ///
   /// In en, this message translates to:
   /// **'?.?.?'**
   String get settings_AboutText_CoreVersionUndefined;
+
+  /// No description provided for @settings_AboutText_StoreVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Build version in the Store'**
+  String get settings_AboutText_StoreVersion;
 
   /// No description provided for @settings_AccountDeleteConfirmDialog_content.
   ///
@@ -1215,47 +1241,35 @@ abstract class AppLocalizations {
   /// **'This page is under development.'**
   String get underDevelopment;
 
+  /// No description provided for @user_agreement_agrement_link.
+  ///
+  /// In en, this message translates to:
+  /// **'terms and condition of agreement'**
+  String get user_agreement_agrement_link;
+
+  /// No description provided for @user_agreement_button_text.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get user_agreement_button_text;
+
+  /// No description provided for @user_agreement_checkbox_text.
+  ///
+  /// In en, this message translates to:
+  /// **'I have read the {url} and consent to its terms.'**
+  String user_agreement_checkbox_text(Object url);
+
+  /// No description provided for @user_agreement_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to {appName}'**
+  String user_agreement_description(Object appName);
+
   /// No description provided for @validationBlankError.
   ///
   /// In en, this message translates to:
   /// **'Please enter a value'**
   String get validationBlankError;
-
-  /// No description provided for @autoprovision_ReloginDialog_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Relogin Confirmation'**
-  String get autoprovision_ReloginDialog_title;
-
-  /// No description provided for @autoprovision_ReloginDialog_text.
-  ///
-  /// In en, this message translates to:
-  /// **'Do you want to replace the current session with a new one?'**
-  String get autoprovision_ReloginDialog_text;
-
-  /// No description provided for @autoprovision_ReloginDialog_confirm.
-  ///
-  /// In en, this message translates to:
-  /// **'Confirm'**
-  String get autoprovision_ReloginDialog_confirm;
-
-  /// No description provided for @autoprovision_ReloginDialog_decline.
-  ///
-  /// In en, this message translates to:
-  /// **'Decline'**
-  String get autoprovision_ReloginDialog_decline;
-
-  /// No description provided for @autoprovision_errorSnackBar_invalidToken.
-  ///
-  /// In en, this message translates to:
-  /// **'The auto configuration credentials were rejected by the server. Please request a new configuration link'**
-  String get autoprovision_errorSnackBar_invalidToken;
-
-  /// No description provided for @autoprovision_successSnackBar_used.
-  ///
-  /// In en, this message translates to:
-  /// **'Successfully retrieved your settings, your app is ready to use'**
-  String get autoprovision_successSnackBar_used;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
@@ -1267,7 +1281,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en', 'uk'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'it', 'uk'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -1279,6 +1293,7 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
     case 'en': return AppLocalizationsEn();
+    case 'it': return AppLocalizationsIt();
     case 'uk': return AppLocalizationsUk();
   }
 
