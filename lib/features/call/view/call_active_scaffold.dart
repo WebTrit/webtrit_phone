@@ -39,7 +39,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   Widget build(BuildContext context) {
     final activeCalls = widget.activeCalls;
     final activeCall = activeCalls.current;
-    final backgroundCalls = activeCalls.exceptCurrent;
+    final heldCalls = activeCalls.exceptCurrent;
 
     final video = activeCall.video;
 
@@ -174,7 +174,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       onSpeakerChanged: (bool value) {
                         context.read<CallBloc>().add(CallControlEvent.speakerEnabled(activeCall.callId, value));
                       },
-                      transferableCalls: backgroundCalls,
+                      transferableCalls: heldCalls,
                       onBlindTransfer: !activeCall.wasAccepted || activeCall.transfer != null
                           ? null
                           : () {

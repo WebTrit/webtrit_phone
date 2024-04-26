@@ -132,6 +132,8 @@ class _CallActionsState extends State<CallActions> {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+
     final onCameraChanged = widget.onCameraChanged;
     final onMutedChanged = widget.onMutedChanged;
     final speakerValue = widget.speakerValue;
@@ -140,7 +142,6 @@ class _CallActionsState extends State<CallActions> {
     final onAttendedTransfer = widget.onAttendedTransfer;
     final onHeldChanged = widget.onHeldChanged;
     final onSwapPressed = widget.onSwapPressed;
-    final themeData = Theme.of(context);
 
     final TextButtonsTable buttonsTable;
     if (widget.isIncoming && !widget.wasAccepted) {
