@@ -640,6 +640,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       hangup: (event) => __onCallSignalingEventHangup(event, emit),
       updating: (event) => __onCallSignalingEventUpdating(event, emit),
       updated: (event) => __onCallSignalingEventUpdated(event, emit),
+      transfer: (value) => __onCallSignalingEventTransfer(value, emit),
       registering: (event) => __onCallSignalingEventRegistering(event, emit),
       registered: (event) => __onCallSignalingEventRegistered(event, emit),
       registrationFailed: (event) => __onCallSignalingEventRegistrationFailed(event, emit),
@@ -897,6 +898,24 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         updating: false,
       );
     }));
+  }
+
+  Future<void> __onCallSignalingEventTransfer(
+    _CallSignalingEventTransfer event,
+    Emitter<CallState> emit,
+  ) async {
+    final replaceCallId = event.replaceCallId;
+    // If replaceCallId exists, it means that the REFER request for attended transfer
+    if (replaceCallId != null) {
+      // Find the active call that is should be replaced
+      final activeCall = state.retrieveActiveCall(replaceCallId);
+      if (activeCall == null) return;
+
+      // Update the active call with referring state
+      const transfer = Transfer(type: TransferType.blind, state: TransferState.referAsking);
+      final activeCallUpdate = activeCall.copyWith(transfer: transfer);
+      emit(state.copyWithMappedActiveCall(replaceCallId, (_) => activeCallUpdate));
+    }
   }
 
   Future<void> __onCallSignalingEventRegistering(
@@ -1192,6 +1211,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
 
       await _signalingClient?.execute(transferRequest);
+
+      // Mark the referor call as refer event sended
+      emit(state.copyWithMappedActiveCall(referorCall.callId, (activeCall) {
+        const transfer = Transfer(type: TransferType.attended, state: TransferState.referSended);
+        return activeCall.copyWith(transfer: transfer);
+      }));
     } catch (e) {
       _logger.warning('_onCallControlEventAttendedTransferred request error: $e');
       notificationsBloc.add(NotificationsMessaged(RawNotification(e.toString())));
@@ -1777,6 +1802,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         reason: event.reason,
       ));
     } else if (event is UpdatingCallEvent) {
+      print('\x1B[33mASD:\x1B[0m');
+      print('\x1B[33m$event:\x1B[0m');
       add(_CallSignalingEvent.updating(
         line: event.line,
         callId: event.callId,
@@ -1793,6 +1820,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         line: event.line,
         callId: event.callId,
       ));
+    } else if (event is TransferEvent) {
+      print('\x1B[33mASD:\x1B[0m');
+      print('\x1B[33m$event:\x1B[0m');
+      add(_CallSignalingEvent.transfer(
+        line: event.line,
+        referId: event.referId,
+        referTo: event.referTo,
+        referredBy: event.referredBy,
+        replaceCallId: event.replaceCallId,
+      ));
     } else if (event is RegisteringEvent) {
       add(const _CallSignalingEvent.registering());
     } else if (event is RegisteredEvent) {
@@ -1804,6 +1841,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } else if (event is UnregisteredEvent) {
       add(const _CallSignalingEvent.unregistered());
     } else {
+      print('\x1B[33mASD:\x1B[0m');
+      print('\x1B[33m$event:\x1B[0m');
       _logger.warning('unhandled signaling event $event');
     }
   }

@@ -129,6 +129,14 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
     required String callId,
   }) = _CallSignalingEventUpdated;
 
+  const factory _CallSignalingEvent.transfer({
+    required int line,
+    required String referId,
+    required String referTo,
+    required String? referredBy,
+    required String? replaceCallId,
+  }) = _CallSignalingEventTransfer;
+
   const factory _CallSignalingEvent.registering() = _CallSignalingEventRegistering;
 
   const factory _CallSignalingEvent.registered() = _CallSignalingEventRegistered;

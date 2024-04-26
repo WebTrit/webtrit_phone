@@ -17,14 +17,21 @@ extension TransferTypeX on TransferType {
 enum TransferState {
   initiated,
   processing,
+  referSended,
+  referAsking,
 }
 
 extension TransferStateX on TransferState {
   bool get isInitiated => this == TransferState.initiated;
 
   bool get isProcessing => this == TransferState.processing;
+
+  bool get isReferSended => this == TransferState.referSended;
+
+  bool get isReferAsking => this == TransferState.referAsking;
 }
 
+// TODO: refer data
 class Transfer extends Equatable {
   const Transfer({
     required this.type,
