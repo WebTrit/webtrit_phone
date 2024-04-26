@@ -8,11 +8,12 @@ class AboutState with _$AboutState {
     @Default(false) bool progress,
     required String appName,
     required String packageName,
-    required String version,
-    required String buildNumber,
+    required String storeBuildVersion,
+    required String storeBuildNumber,
+    required String appVersion,
     required Uri coreUrl,
     Version? coreVersion,
   }) = _AboutState;
 
-  String get appVersion => '$version-$buildNumber';
+  String get storeVersion => '$storeBuildVersion-$storeBuildNumber';
 }

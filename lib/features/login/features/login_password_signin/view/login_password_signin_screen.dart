@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/environment_config.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -18,7 +20,13 @@ class LoginPasswordSigninScreen extends StatelessWidget {
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
         final passwordSigninPreDescriptionText = context.l10n.login_Text_passwordSigninPreDescription;
-        final passwordSigninPostDescriptionText = context.l10n.login_Text_passwordSigninPostDescription;
+        String passwordSigninPostDescriptionText = context.l10n.login_Text_passwordSigninPostDescription;
+
+        const postTextEnvOverride = EnvironmentConfig.PASSWORD_SIGNIN_POST_DESCRIPTION_TEXT;
+        if (postTextEnvOverride.isNotEmpty) {
+          passwordSigninPostDescriptionText = postTextEnvOverride;
+        }
+
         return Padding(
           padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
           child: Column(

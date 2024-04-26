@@ -13,6 +13,7 @@ export 'session_login_credential.dart';
 export 'session_otp_credential.dart';
 export 'session_result.dart';
 export 'session_user_credential.dart';
+export 'session_autoprovision_credential.dart';
 export 'system_info.dart';
 export 'user_contact.dart';
 export 'user_info.dart';

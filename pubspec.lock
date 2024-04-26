@@ -13,10 +13,10 @@ packages:
     dependency: transitive
     description:
       name: _flutterfire_internals
-      sha256: "2489c399d8b23a12704bd9e056e3df957c69ceec621f4fc8d69fa7cd5211d1f4"
+      sha256: "0cb43f83f36ba8cb20502dee0c205e3f3aafb751732d724aeac3f2e044212cc2"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.24"
+    version: "1.3.29"
   _http_client:
     dependency: transitive
     description:
@@ -78,14 +78,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
-  audio_session:
-    dependency: transitive
-    description:
-      name: audio_session
-      sha256: "6fdf255ed3af86535c96452c33ecff1245990bb25a605bfb1958661ccc3d467f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.18"
   auto_route:
     dependency: "direct main"
     description:
@@ -290,10 +282,10 @@ packages:
     dependency: "direct main"
     description:
       name: cross_file
-      sha256: fedaadfa3a6996f75211d835aaeb8fede285dae94262485698afd832371b9a5e
+      sha256: "55d7b444feb71301ef6b8838dbc1ae02e63dd48c8773f3810ff53bb1e2945b32"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.3+8"
+    version: "0.3.4+1"
   crypto:
     dependency: transitive
     description:
@@ -330,10 +322,10 @@ packages:
     dependency: transitive
     description:
       name: dart_webrtc
-      sha256: "5cbc40bd9b33d0c9b8004cff52e9883c71f0f54799afc8faca77535eeb9ef857"
+      sha256: "6b101f3505865150a2b2383089b9d52c56608d1169ef5355d9e25f911afd969d"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.1"
+    version: "1.4.2"
   dartx:
     dependency: transitive
     description:
@@ -458,26 +450,26 @@ packages:
     dependency: transitive
     description:
       name: firebase_app_installations_platform_interface
-      sha256: "02d2aff4c63be9c2201e7ff99781a4f8c03e5335c2c89328a7ec1e90229cb96b"
+      sha256: b057c3d6fa887d97cb73828f7574184952bf1b7d1f49d48be2d766f6b7ed4e59
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.4+24"
+    version: "0.1.4+29"
   firebase_app_installations_web:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: firebase_app_installations_web
-      sha256: "9f600bc8cc8bcf63d5979fb32ec14bb4f7614ea81dd62acbf5cb0ccea3972e45"
+      sha256: "5d0d8c1d263eb31dacf8347e3219aab62566c1561738a6bfec69989b73b464da"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.3+24"
+    version: "0.1.5+1"
   firebase_core:
     dependency: "direct main"
     description:
       name: firebase_core
-      sha256: a746f861618eef57a11d8b658a2db1fa5a336fc82ba65b7763d7e2292687de2b
+      sha256: a864d1b6afd25497a3b57b016886d1763df52baaa69758a46723164de8d187fe
       url: "https://pub.dev"
     source: hosted
-    version: "2.26.0"
+    version: "2.29.0"
   firebase_core_platform_interface:
     dependency: transitive
     description:
@@ -490,10 +482,10 @@ packages:
     dependency: transitive
     description:
       name: firebase_core_web
-      sha256: c8e1d59385eee98de63c92f961d2a7062c5d9a65e7f45bdc7f1b0b205aab2492
+      sha256: c8b02226e548f35aace298e2bb2e6c24e34e8a203d614e742bb1146e5a4ad3c8
       url: "https://pub.dev"
     source: hosted
-    version: "2.11.5"
+    version: "2.15.0"
   firebase_crashlytics:
     dependency: "direct main"
     description:
@@ -522,18 +514,18 @@ packages:
     dependency: transitive
     description:
       name: firebase_messaging_platform_interface
-      sha256: "1109a16b69c3b4653f5dc266b1ac0a00f53c82a2ab13dd92ce58cfcd1038b6e3"
+      sha256: "80b4ccf20066b0579ebc88d4678230a5f53ab282fe040e31671af745db1588f9"
       url: "https://pub.dev"
     source: hosted
-    version: "4.5.26"
+    version: "4.5.31"
   firebase_messaging_web:
     dependency: transitive
     description:
       name: firebase_messaging_web
-      sha256: fb46f47c860be8268023b92faacfea6a4ed74e7197836dc19e7a272854903610
+      sha256: "9224aa4db1ce6f08d96a82978453d37e9980204a20e410a11d9b774b24c6841c"
       url: "https://pub.dev"
     source: hosted
-    version: "3.6.7"
+    version: "3.8.1"
   fixnum:
     dependency: transitive
     description:
@@ -685,10 +677,10 @@ packages:
     description:
       path: "."
       ref: main_ext
-      resolved-ref: "685565e745001556f40670450672bc0fd5d93098"
+      resolved-ref: ae70ef447296b837cf69239029ee83a01fe959bd
       url: "https://github.com/WebTrit/flutter-webrtc.git"
     source: git
-    version: "0.9.48+hotfix.1"
+    version: "0.10.3"
   formz:
     dependency: "direct main"
     description:
@@ -762,10 +754,10 @@ packages:
     dependency: transitive
     description:
       name: http
-      sha256: a2bbf9d017fcced29139daa8ed2bba4ece450ab222871df93ca9eec6f80c34ba
+      sha256: "761a297c042deedc1ffbb156d6e2af13886bb305c2a343a4d972504cd67dd938"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.0"
+    version: "1.2.1"
   http_multi_server:
     dependency: transitive
     description:
@@ -835,30 +827,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.7.1"
-  just_audio:
-    dependency: "direct main"
-    description:
-      name: just_audio
-      sha256: b607cd1a43bac03d85c3aaee00448ff4a589ef2a77104e3d409889ff079bf823
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.9.36"
-  just_audio_platform_interface:
-    dependency: transitive
-    description:
-      name: just_audio_platform_interface
-      sha256: c3dee0014248c97c91fe6299edb73dc4d6c6930a2f4f713579cd692d9e47f4a1
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.2.2"
-  just_audio_web:
-    dependency: transitive
-    description:
-      name: just_audio_web
-      sha256: "134356b0fe3d898293102b33b5fd618831ffdc72bb7a1b726140abdf22772b70"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.9"
   leak_tracker:
     dependency: transitive
     description:
@@ -991,18 +959,18 @@ packages:
     dependency: "direct main"
     description:
       name: package_info_plus
-      sha256: "88bc797f44a94814f2213db1c9bd5badebafdfb8290ca9f78d4b9ee2a3db4d79"
+      sha256: "2c582551839386fa7ddbc7770658be7c0f87f388a4bff72066478f597c34d17f"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.1"
+    version: "7.0.0"
   package_info_plus_platform_interface:
     dependency: transitive
     description:
       name: package_info_plus_platform_interface
-      sha256: "9bc8ba46813a4cc42c66ab781470711781940780fd8beddd0c3da62506d3a6c6"
+      sha256: f49918f3433a3146047372f9d4f1f847511f2acd5cd030e1f44fe5a50036b70e
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.1"
+    version: "3.0.0"
   path:
     dependency: "direct main"
     description:
@@ -1195,14 +1163,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.3"
-  rxdart:
-    dependency: transitive
-    description:
-      name: rxdart
-      sha256: "0c7c0cedd93788d996e33041ffecda924cc54389199cde4e6a34b440f50044cb"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.27.7"
   share_plus:
     dependency: "direct main"
     description:
@@ -1263,10 +1223,10 @@ packages:
     dependency: transitive
     description:
       name: shared_preferences_web
-      sha256: "7b15ffb9387ea3e237bb7a66b8a23d2147663d391cafc5c8f37b2e7b4bde5d21"
+      sha256: "9aee1089b36bd2aafe06582b7d7817fd317ef05fc30e6ba14bff247d0933042a"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.2"
+    version: "2.3.0"
   shared_preferences_windows:
     dependency: transitive
     description:
@@ -1312,6 +1272,38 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  soundpool:
+    dependency: "direct main"
+    description:
+      name: soundpool
+      sha256: fe7302005759d6a3561de1711e3ea818b1ba025a62375b469196dda5b654bd38
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.1"
+  soundpool_macos:
+    dependency: transitive
+    description:
+      name: soundpool_macos
+      sha256: e0440a19d4e8f344dace336923b369184e91eebbbd8348266f4434b675bd15db
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.0"
+  soundpool_platform_interface:
+    dependency: transitive
+    description:
+      name: soundpool_platform_interface
+      sha256: "7c6666e19319151b2036c4fc9b6da3a83f2ebf4097989e6ba1c2b0bfe3612e9f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
+  soundpool_web:
+    dependency: transitive
+    description:
+      name: soundpool_web
+      sha256: "3d1eb8d6cceb8a0aec38ff9aec4fbd11a9a8101d27b27a6eb29305b83d46aee5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.0"
   source_gen:
     dependency: transitive
     description:
@@ -1547,10 +1539,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_web
-      sha256: fff0932192afeedf63cdd50ecbb1bc825d31aed259f02bb8dba0f3b729a5e88b
+      sha256: "8d9e750d8c9338601e709cd0885f95825086bd8b642547f26bda435aade95d8a"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.3"
+    version: "2.3.1"
   url_launcher_windows:
     dependency: transitive
     description:
@@ -1607,6 +1599,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  version_gen:
+    dependency: "direct dev"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: db1284b4e958eddf2ea67e585335dccd44018935
+      url: "https://github.com/SERDUN/version_gen.git"
+    source: git
+    version: "1.0.1"
   vm_service:
     dependency: transitive
     description:
@@ -1627,10 +1628,10 @@ packages:
     dependency: transitive
     description:
       name: web
-      sha256: "4188706108906f002b3a293509234588823c8c979dc83304e229ff400c996b05"
+      sha256: "97da13628db363c635202ad97068d47c5b8aa555808e7a9411963c533b449b27"
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.2"
+    version: "0.5.1"
   web_socket_channel:
     dependency: transitive
     description:
@@ -1659,10 +1660,10 @@ packages:
     dependency: transitive
     description:
       name: webrtc_interface
-      sha256: "2efbd3e4e5ebeb2914253bcc51dafd3053c4b87b43f3076c74835a9deecbae3a"
+      sha256: abec3ab7956bd5ac539cf34a42fa0c82ea26675847c0966bb85160400eea9388
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.2"
+    version: "1.2.0"
   webtrit_api:
     dependency: "direct main"
     description:
@@ -1676,35 +1677,56 @@ packages:
       path: "../webtrit_callkeep/webtrit_callkeep"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.1.0+1"
   webtrit_callkeep_android:
     dependency: transitive
     description:
       path: "../webtrit_callkeep/webtrit_callkeep_android"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.1.0+1"
   webtrit_callkeep_ios:
     dependency: transitive
     description:
       path: "../webtrit_callkeep/webtrit_callkeep_ios"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.1.0+1"
+  webtrit_callkeep_linux:
+    dependency: transitive
+    description:
+      path: "../webtrit_callkeep/webtrit_callkeep_linux"
+      relative: true
+    source: path
+    version: "0.1.0+1"
+  webtrit_callkeep_macos:
+    dependency: transitive
+    description:
+      path: "../webtrit_callkeep/webtrit_callkeep_macos"
+      relative: true
+    source: path
+    version: "0.1.0+1"
   webtrit_callkeep_platform_interface:
     dependency: transitive
     description:
       path: "../webtrit_callkeep/webtrit_callkeep_platform_interface"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.1.0+1"
   webtrit_callkeep_web:
     dependency: transitive
     description:
       path: "../webtrit_callkeep/webtrit_callkeep_web"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.1.0+1"
+  webtrit_callkeep_windows:
+    dependency: transitive
+    description:
+      path: "../webtrit_callkeep/webtrit_callkeep_windows"
+      relative: true
+    source: path
+    version: "0.1.0+1"
   webtrit_phone_number:
     dependency: "direct main"
     description:

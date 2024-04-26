@@ -13,7 +13,23 @@ class AppPreferences {
   static const _kActiveMainFlavorKey = 'active-main-flavor';
   static const _kActiveRecentsVisibilityFilterKey = 'active-recents-visibility-filter';
   static const _kActiveContactSourceTypeKey = 'active-contact-source-type';
-  static const _kUserAgreement = 'user-agreement';
+  static const _kUserAgreementAcceptedKey = 'user-agreement-accepted';
+
+  // Please add all new keys here for proper cleaning of preferences
+  static const _kPreferencesList = [
+    _kRegisterStatusKey,
+    _kThemeModeKey,
+    _kLocaleLanguageTagKey,
+    _kActiveMainFlavorKey,
+    _kActiveRecentsVisibilityFilterKey,
+    _kActiveContactSourceTypeKey,
+    _kUserAgreementAcceptedKey,
+  ];
+
+  // List of preferences keys to exclude by default during clean operation
+  static const List<String> _defaultCleanExclusionList = [
+    _kUserAgreementAcceptedKey,
+  ];
 
   static late AppPreferences _instance;
 
@@ -29,7 +45,15 @@ class AppPreferences {
 
   final SharedPreferences _sharedPreferences;
 
-  Future<bool> clear() => _sharedPreferences.clear();
+  Future<bool> clear({
+    List<String> exclusion = _defaultCleanExclusionList,
+  }) {
+    return Future.wait(
+      _kPreferencesList.where((key) => !exclusion.contains(key)).map((key) => _sharedPreferences.remove(key)).toList(),
+    ).then(
+      (results) => results.every((result) => result),
+    );
+  }
 
   bool getRegisterStatus() => _sharedPreferences.getBool(_kRegisterStatusKey) ?? true;
 
@@ -119,7 +143,7 @@ class AppPreferences {
   Future<bool> setActiveContactSourceType(ContactSourceType value) =>
       _sharedPreferences.setString(_kActiveContactSourceTypeKey, value.name);
 
-  Future<bool> setUserAgreement(bool value) => _sharedPreferences.setBool(_kUserAgreement, value);
+  Future<bool> setUserAgreementAccepted(bool value) => _sharedPreferences.setBool(_kUserAgreementAcceptedKey, value);
 
-  bool getUserAgreement() => _sharedPreferences.getBool(_kUserAgreement) ?? false;
+  bool getUserAgreementAccepted() => _sharedPreferences.getBool(_kUserAgreementAcceptedKey) ?? false;
 }

@@ -42,9 +42,10 @@ class _MainShellState extends State<MainShell> {
           maximumCallsPerCallGroup: 13,
           supportedHandleTypes: const {CallkeepHandleType.number},
         ),
-        android: const CallkeepAndroidOptions(
+        android: CallkeepAndroidOptions(
           incomingPath: initialCallRout,
           rootPath: initialMainRout,
+          ringtoneSound: Assets.ringtones.incomingCall1,
         ),
       ),
     );
@@ -164,9 +165,11 @@ class _MainShellState extends State<MainShell> {
               final appBloc = context.read<AppBloc>();
 
               return CallBloc(
+                coreUrl: appBloc.state.coreUrl!,
+                tenantId: appBloc.state.tenantId!,
+                token: appBloc.state.token!,
                 recentsRepository: context.read<RecentsRepository>(),
                 notificationsBloc: context.read<NotificationsBloc>(),
-                appBloc: context.read<AppBloc>(),
                 callkeep: callkeep,
                 pendingCallHandler: appBloc.pendingCallHandler,
               )..add(const CallStarted());

@@ -10,16 +10,14 @@ import 'package:clock/clock.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+import 'package:webtrit_phone/data/app_sound.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
-import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/notifications/notifications.dart';
 import 'package:webtrit_phone/models/recent.dart';
@@ -41,9 +39,12 @@ const int _kUndefinedLine = -1;
 final _logger = Logger('CallBloc');
 
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
+  final String coreUrl;
+  final String tenantId;
+  final String token;
+
   final RecentsRepository recentsRepository;
   final NotificationsBloc notificationsBloc;
-  final AppBloc appBloc;
   final Callkeep callkeep;
   final AndroidPendingCallHandler pendingCallHandler;
 
@@ -55,12 +56,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   final _peerConnectionCompleters = <String, Completer<RTCPeerConnection>>{};
 
-  final _audioPlayer = AudioPlayer();
+  final _appSound = AppSound();
 
   CallBloc({
+    required this.coreUrl,
+    required this.tenantId,
+    required this.token,
     required this.recentsRepository,
     required this.notificationsBloc,
-    required this.appBloc,
     required this.callkeep,
     required this.pendingCallHandler,
   }) : super(const CallState()) {
@@ -153,7 +156,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _signalingClientReconnectTimer?.cancel();
     await _signalingClient?.disconnect();
 
-    await _audioPlayer.dispose();
+    await _appSound.stopOutgoingCall();
 
     await super.close();
   }
@@ -203,24 +206,40 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   //
 
   void _peerConnectionComplete(String callId, RTCPeerConnection peerConnection) {
-    _logger.finer(() => 'Complete peerConnection completer with callId: $callId');
-    final peerConnectionCompleter = _peerConnectionCompleters[callId]!;
-    peerConnectionCompleter.complete(peerConnection);
+    try {
+      _logger.finer(() => 'Complete peerConnection completer with callId: $callId');
+      final peerConnectionCompleter = _peerConnectionCompleters[callId]!;
+      peerConnectionCompleter.complete(peerConnection);
+    } catch (e) {
+      // Handle the exception for correct functionality, for example, when the peer connection has already been completed.
+      _logger.warning('_peerConnectionComplete: $e');
+    }
   }
 
   void _peerConnectionCompleteError(String callId, Object error, [StackTrace? stackTrace]) {
-    _logger.finer(() => 'CompleteError peerConnection completer with callId: $callId');
-    final peerConnectionCompleter = _peerConnectionCompleters[callId]!;
-    peerConnectionCompleter.completeError(error, stackTrace);
+    try {
+      _logger.finer(() => 'CompleteError peerConnection completer with callId: $callId');
+      final peerConnectionCompleter = _peerConnectionCompleters[callId]!;
+      peerConnectionCompleter.completeError(error, stackTrace);
+    } catch (e) {
+      // Handle the exception for correct functionality, for example, when the peer connection has already been completed.
+      _logger.warning('_peerConnectionCompleteError: $e');
+    }
   }
 
   void _peerConnectionConditionalCompleteError(String callId, Object error, [StackTrace? stackTrace]) {
-    final peerConnectionCompleter = _peerConnectionCompleters[callId]!;
-    if (peerConnectionCompleter.isCompleted) {
-      _logger.finer(() => 'ConditionalCompleteError peerConnection completer with callId: $callId - already completed');
-    } else {
-      _logger.finer(() => 'ConditionalCompleteError peerConnection completer with callId: $callId');
-      peerConnectionCompleter.completeError(error, stackTrace);
+    try {
+      final peerConnectionCompleter = _peerConnectionCompleters[callId]!;
+      if (peerConnectionCompleter.isCompleted) {
+        _logger
+            .finer(() => 'ConditionalCompleteError peerConnection completer with callId: $callId - already completed');
+      } else {
+        _logger.finer(() => 'ConditionalCompleteError peerConnection completer with callId: $callId');
+        peerConnectionCompleter.completeError(error, stackTrace);
+      }
+    } catch (e) {
+      // Handle the exception for correct functionality, for example, when the peer connection has already been completed.
+      _logger.warning('_peerConnectionConditionalCompleteError: $e');
     }
   }
 
@@ -270,9 +289,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         line: _kUndefinedLine,
         callId: event.call!.id,
         handle: CallkeepHandle.number(event.call!.handle),
-        video: false,
+        displayName: event.call?.displayName,
+        video: event.call?.hasVideo ?? false,
         createdTime: DateTime.now(),
-        renderers: RTCVideoRenderers(),
       ),
     ));
   }
@@ -406,8 +425,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     try {
       await state.performOnActiveCall(event.callId, (activeCall) async {
         await (await _peerConnectionRetrieve(activeCall.callId))?.close();
-        await activeCall.renderers.dispose();
-        await activeCall.renderers.local.srcObject?.dispose();
+        await activeCall.localStream?.dispose();
       });
       emit(state.copyWithPopActiveCall(event.callId));
     } catch (e) {
@@ -447,9 +465,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       if (emit.isDone) return;
 
-      final signalingUrl = _parseCoreUrlToSignalingUrl(appBloc.state.coreUrl!);
-      final tenantId = appBloc.state.tenantId!;
-      final token = appBloc.state.token!;
+      final signalingUrl = _parseCoreUrlToSignalingUrl(coreUrl);
       final signalingClient = await WebtritSignalingClient.connect(
         signalingUrl,
         tenantId,
@@ -541,7 +557,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final code = SignalingDisconnectCode.values.byCode(signalingDisconnectCode);
       if (code == SignalingDisconnectCode.sessionMissedError) {
         notificationsBloc.add(const NotificationsIssued(CallSignalingClientSessionMissedErrorNotification()));
-        appBloc.add(const AppLogouted());
       } else if (code == SignalingDisconnectCode.appUnregisteredError) {
         add(const _RegistrationChange(registrationStatus: RegistrationStatus.unregistered));
       } else if (code == SignalingDisconnectCode.requestCallIdError) {
@@ -586,7 +601,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       displayName: event.displayName,
       video: event.video,
       createdTime: clock.now(),
-      renderers: RTCVideoRenderers()..initialize(),
     )));
 
     // the rest logic implemented within _onSignalingStateHandshake on IncomingCallEvent from call logs processing
@@ -649,8 +663,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final error = await callkeep.reportNewIncomingCall(
       event.callId,
       handle,
-      event.callerDisplayName,
-      video,
+      displayName: event.callerDisplayName,
+      hasVideo: video,
     );
 
     if (error != null) {
@@ -670,10 +684,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       if (callAlreadyExists || callAlreadyAnswered || callAlreadyTerminated) {
         emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
-          var updatedActiveCall = activeCall.copyWith(
-            line: event.line,
-            renderers: RTCVideoRenderers()..initialize(),
-          );
+          var updatedActiveCall = activeCall.copyWith(line: event.line);
 
           if (callAlreadyAnswered) _perform(_CallPerformEvent.answered(activeCall.callId));
           if (callAlreadyTerminated) _perform(_CallPerformEvent.ended(activeCall.callId));
@@ -694,7 +705,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         displayName: event.callerDisplayName,
         video: video,
         createdTime: clock.now(),
-        renderers: RTCVideoRenderers()..initialize(),
       )));
     }
 
@@ -731,9 +741,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
-    await state.performOnActiveCall(event.callId, (activeCall) {
-      activeCall.renderers.local.srcObject = localStream;
-    });
+    emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
+      return activeCall.copyWith(localStream: localStream);
+    }));
 
     final peerConnection = await _createPeerConnection(event.callId);
     localStream.getTracks().forEach((track) async {
@@ -815,14 +825,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
         final activeCallUpdated = activeCall.copyWith(hungUpTime: clock.now());
-        _addToRecents(activeCallUpdated);
+        if (state.retrieveActiveCall(event.callId)?.wasHungUp == false) {
+          _addToRecents(activeCallUpdated);
+        }
         return activeCallUpdated;
       }));
 
       await state.performOnActiveCall(event.callId, (activeCall) async {
         await (await _peerConnectionRetrieve(activeCall.callId))?.close();
-        await activeCall.renderers.dispose();
-        await activeCall.renderers.local.srcObject?.dispose();
+        await activeCall.localStream?.dispose();
       });
 
       emit(state.copyWithPopActiveCall(event.callId));
@@ -841,13 +852,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     final handle = CallkeepHandle.number(event.caller);
 
-    await callkeep.reportUpdateCall(
-      event.callId,
-      handle,
-      event.callerDisplayName,
-      video,
-    );
-
     emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
       return activeCall.copyWith(
         handle: handle,
@@ -856,6 +860,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         updating: true,
       );
     }));
+
+    await callkeep.reportUpdateCall(
+      event.callId,
+      handle: handle,
+      displayName: event.callerDisplayName,
+      hasVideo: video,
+      proximityEnabled: state.shouldListenToProximity,
+    );
 
     final jsep = event.jsep;
     if (jsep != null) {
@@ -963,8 +975,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final error = await callkeep.startCall(
       callId,
       event.handle,
-      event.displayName,
-      event.video,
+      displayNameOrContactIdentifier: event.displayName,
+      hasVideo: event.video,
+      proximityEnabled: !event.video,
     );
     if (error != null) {
       if (error == CallkeepCallRequestError.emergencyNumber) {
@@ -982,7 +995,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         displayName: event.displayName,
         video: event.video,
         createdTime: clock.now(),
-        renderers: RTCVideoRenderers()..initialize(),
       )));
     }
   }
@@ -1002,6 +1014,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     final error = await callkeep.endCall(event.callId);
+    // Handle the case where the local connection is no longer available,
+    // sending the call completion event directly to the signaling.
+    if (error == CallkeepCallRequestError.unknownCallUuid) {
+      add(_CallPerformEvent.ended(event.callId));
+    }
     if (error != null) {
       _logger.warning('__onCallControlEventEnded error: $error');
     }
@@ -1011,7 +1028,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallControlEventSetHeld event,
     Emitter<CallState> emit,
   ) async {
-    final error = await callkeep.setHeld(event.callId, event.onHold);
+    final error = await callkeep.setHeld(event.callId, onHold: event.onHold);
     if (error != null) {
       _logger.warning('__onCallControlEventSetHeld error: $error');
     }
@@ -1021,7 +1038,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallControlEventSetMuted event,
     Emitter<CallState> emit,
   ) async {
-    final error = await callkeep.setMuted(event.callId, event.muted);
+    final error = await callkeep.setMuted(event.callId, muted: event.muted);
     if (error != null) {
       _logger.warning('__onCallControlEventSetMuted error: $error');
     }
@@ -1045,7 +1062,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return activeCall.copyWith(frontCamera: null);
     }));
     final frontCamera = await state.performOnActiveCall(event.callId, (activeCall) {
-      final videoTrack = activeCall.renderers.local.srcObject?.getVideoTracks()[0];
+      final videoTrack = activeCall.localStream?.getVideoTracks()[0];
       if (videoTrack != null) {
         return Helper.switchCamera(videoTrack);
       }
@@ -1060,7 +1077,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     await state.performOnActiveCall(event.callId, (activeCall) {
-      final videoTrack = activeCall.renderers.local.srcObject?.getVideoTracks()[0];
+      final videoTrack = activeCall.localStream?.getVideoTracks()[0];
       if (videoTrack != null) {
         videoTrack.enabled = event.enabled;
       }
@@ -1073,7 +1090,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     await state.performOnActiveCall(event.callId, (activeCall) async {
       if (Platform.isAndroid) {
-        callkeep.setSpeaker(event.callId, event.enabled);
+        callkeep.setSpeaker(event.callId, enabled: event.enabled);
       } else if (Platform.isIOS) {
         await Helper.setSpeakerphoneOn(event.enabled);
       }
@@ -1105,6 +1122,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     });
 
     emit(newState);
+
+    await callkeep.reportUpdateCall(
+      state.activeCalls.current.callId,
+      proximityEnabled: state.shouldListenToProximity,
+    );
   }
 
   Future<void> _onCallControlEventBlindTransferred(
@@ -1129,6 +1151,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     });
 
     emit(newState);
+
+    await callkeep.reportUpdateCall(
+      state.activeCalls.current.callId,
+      proximityEnabled: state.shouldListenToProximity,
+    );
 
     await _signalingClient?.execute(TransferRequest(
       transaction: WebtritSignalingClient.generateTransactionId(),
@@ -1216,32 +1243,44 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
     event.fulfill();
 
-    await state.performOnActiveCall(event.callId, (activeCall) {
-      activeCall.renderers.local.srcObject = localStream;
-    });
+    emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
+      return activeCall.copyWith(localStream: localStream);
+    }));
 
     final peerConnection = await _createPeerConnection(event.callId);
     localStream.getTracks().forEach((track) async {
       await peerConnection.addTrack(track, localStream);
     });
 
-    final localDescription = await peerConnection.createOffer({});
-    // Need to initiate outgoing call before set localDescription to avoid races
-    // between [OutgoingCallRequest] and [IceTrickleRequest]s.
-    await state.performOnActiveCall(event.callId, (activeCall) {
-      return _signalingClient?.execute(OutgoingCallRequest(
-        transaction: WebtritSignalingClient.generateTransactionId(),
-        line: activeCall.line,
-        callId: activeCall.callId.toString(),
-        number: activeCall.handle.normalizedValue(),
-        jsep: localDescription.toMap(),
-      ));
-    });
-    await peerConnection.setLocalDescription(localDescription);
+    try {
+      final localDescription = await peerConnection.createOffer({});
+      // Need to initiate outgoing call before set localDescription to avoid races
+      // between [OutgoingCallRequest] and [IceTrickleRequest]s.
+      await state.performOnActiveCall(event.callId, (activeCall) {
+        return _signalingClient?.execute(OutgoingCallRequest(
+          transaction: WebtritSignalingClient.generateTransactionId(),
+          line: activeCall.line,
+          callId: activeCall.callId.toString(),
+          number: activeCall.handle.normalizedValue(),
+          jsep: localDescription.toMap(),
+        ));
+      });
+      await peerConnection.setLocalDescription(localDescription);
 
-    _peerConnectionComplete(event.callId, peerConnection);
+      _peerConnectionComplete(event.callId, peerConnection);
 
-    await callkeep.reportConnectingOutgoingCall(event.callId);
+      await callkeep.reportConnectingOutgoingCall(event.callId);
+    } catch (e) {
+      // Handles exceptions during the outgoing call perform event, sends a notification, stops the ringtone, and completes the peer connection with an error.
+      // The specific error "Error setting ICE locally" indicates an issue with ICE (Interactive Connectivity Establishment) negotiation in the WebRTC signaling process.
+      _logger.warning('__onCallPerformEventStarted: $e');
+      notificationsBloc.add(NotificationsMessaged(RawNotification(e.toString())));
+
+      _ringtoneStop();
+      _peerConnectionCompleteError(event.callId, e);
+
+      add(_ResetStateEvent.completeCall(event.callId));
+    }
   }
 
   Future<void> __onCallPerformEventAnswered(
@@ -1318,8 +1357,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // to prevent "Simulate a "hangup" coming from the application"
       // because of "No WebRTC media anymore".
       await (await _peerConnectionRetrieve(activeCall.callId))?.close();
-      await activeCall.renderers.dispose();
-      await activeCall.renderers.local.srcObject?.dispose();
+      await activeCall.localStream?.dispose();
     });
 
     emit(state.copyWithPopActiveCall(event.callId));
@@ -1360,7 +1398,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     event.fulfill();
 
     await state.performOnActiveCall(event.callId, (activeCall) {
-      final audioTrack = activeCall.renderers.local.srcObject?.getAudioTracks()[0];
+      final audioTrack = activeCall.localStream?.getAudioTracks()[0];
       if (audioTrack != null) {
         Helper.setMicrophoneMute(event.muted, audioTrack);
       }
@@ -1496,18 +1534,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _PeerConnectionEventStreamAdded event,
     Emitter<CallState> emit,
   ) async {
-    await state.performOnActiveCall(event.callId, (activeCall) {
-      activeCall.renderers.remote.srcObject = event.stream;
-    });
+    emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
+      return activeCall.copyWith(remoteStream: event.stream);
+    }));
   }
 
   Future<void> __onPeerConnectionEventStreamRemoved(
     _PeerConnectionEventStreamRemoved event,
     Emitter<CallState> emit,
   ) async {
-    await state.performOnActiveCall(event.callId, (activeCall) {
-      activeCall.renderers.remote.srcObject = null;
-    });
+    emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
+      return activeCall.copyWith(remoteStream: null);
+    }));
   }
 
   // procession call screen events
@@ -1540,6 +1578,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     });
 
     emit(newState);
+
+    await callkeep.reportUpdateCall(
+      state.activeCalls.current.callId,
+      proximityEnabled: state.shouldListenToProximity,
+    );
   }
 
   Future<void> __onCallScreenEventDidPop(
@@ -1547,6 +1590,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     emit(state.copyWith(minimized: state.activeCalls.isEmpty ? null : true));
+
+    if (state.activeCalls.isNotEmpty) {
+      await callkeep.reportUpdateCall(
+        state.activeCalls.current.callId,
+        proximityEnabled: state.shouldListenToProximity,
+      );
+    }
   }
 
   // WebtritSignalingClient listen handlers
@@ -1833,8 +1883,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     };
     final localStream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
     if (!kIsWeb) {
-      await Helper.setAppleAudioConfiguration(
-          AppleAudioConfiguration(appleAudioMode: video ? AppleAudioMode.videoChat : AppleAudioMode.voiceChat));
+      await Helper.setAppleAudioConfiguration(AppleAudioConfiguration(
+        appleAudioMode: video ? AppleAudioMode.videoChat : AppleAudioMode.voiceChat,
+      ));
       await Helper.setSpeakerphoneOn(video);
     }
 
@@ -1934,22 +1985,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> _ringtoneOutgoingPlay() async {
-    // TODO: Consider handling this functionality on the callkeep side due to known exceptions on Android.
-    if (Platform.isAndroid) {
-      return;
-    } else {
-      await _audioPlayer.setAsset(Assets.ringtones.outgoingCall1);
-      await _audioPlayer.setLoopMode(LoopMode.one);
-      _audioPlayer.play();
+    try {
+      await _appSound.playOutgoingCall();
+    } catch (e) {
+      _logger.info('_ringtoneOutgoingPlay: $e');
     }
   }
 
   Future<void> _ringtoneStop() async {
-    // TODO: Observing frequent issues with call hang-ups and resetting, possibly due to blocking methods in this function.
-    if (Platform.isAndroid) {
-      return;
-    } else {
-      await _audioPlayer.stop();
+    try {
+      await _appSound.stopOutgoingCall();
+    } catch (e) {
+      _logger.info('_ringtoneStop: $e');
     }
   }
 

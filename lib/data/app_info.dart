@@ -1,5 +1,7 @@
 import 'package:firebase_app_installations/firebase_app_installations.dart';
 
+import 'package:webtrit_phone/app/app_version.gen.dart';
+
 class AppInfo {
   static late AppInfo _instance;
 
@@ -21,4 +23,6 @@ class AppInfo {
   String _identifier;
 
   String get identifier => _identifier;
+
+  String get version => AppVersion.version;
 }

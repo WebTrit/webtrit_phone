@@ -29,6 +29,7 @@ class AboutScreenPage extends StatelessWidget {
         create: (context) {
           return AboutBloc(
             notificationsBloc: context.read<NotificationsBloc>(),
+            appInfo: AppInfo(),
             packageInfo: PackageInfo(),
             infoRepository: context.read<InfoRepository>(),
           )..add(const AboutStarted());

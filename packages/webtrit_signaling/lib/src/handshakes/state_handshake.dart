@@ -154,7 +154,15 @@ class StateHandshake extends Handshake {
         return null;
       }
 
-      final callId = lineJson['call_id'] as String;
+      // The callId is nullable and checked for null because it can be null in certain situations.
+      // - When an outgoing call fails during setup or connection, the call_id may not be available, resulting in a null value.
+      // - After reopening the app or encountering handshake errors, such as error code 490 with the reason "Error setting ICE locally",
+      //   the call_id might be null in the call_logs.
+      final callId = lineJson['call_id'] as String?;
+      if (callId == null) {
+        return null;
+      }
+
       final callLogs = (lineJson['call_logs'] as List<dynamic>).map<CallLog>((callLogJson) {
         final timestamp = callLogJson[0] as int;
         final requestOrResponseOrEventJson = callLogJson[1];

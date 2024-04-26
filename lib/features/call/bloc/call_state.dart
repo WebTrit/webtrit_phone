@@ -64,7 +64,11 @@ class CallState with _$CallState {
 
   bool get isActive => activeCalls.isNotEmpty;
 
+  bool get isVoiceChat => activeCalls.current.video == false;
+
   bool get isBlingTransferInitiated => activeCalls.blindTransferInitiated != null;
+
+  bool get shouldListenToProximity => isActive && isVoiceChat && minimized != true;
 
   ActiveCall? retrieveActiveCall(String callId) {
     for (var activeCall in activeCalls) {
@@ -133,7 +137,8 @@ class ActiveCall with _$ActiveCall {
     DateTime? hungUpTime,
     Transfer? transfer,
     Object? failure,
-    required RTCVideoRenderers renderers,
+    MediaStream? localStream,
+    MediaStream? remoteStream,
   }) = _ActiveCall;
 
   bool get isIncoming => direction == Direction.incoming;
@@ -161,28 +166,5 @@ extension ActiveCallIterableExtension<T extends ActiveCall> on Iterable<T> {
     } on StateError catch (_) {
       return null;
     }
-  }
-}
-
-class RTCVideoRenderers {
-  RTCVideoRenderers()
-      : local = RTCVideoRenderer(),
-        remote = RTCVideoRenderer();
-
-  final RTCVideoRenderer local;
-  final RTCVideoRenderer remote;
-
-  Future<void> initialize() {
-    return Future.wait([
-      local.initialize(),
-      remote.initialize(),
-    ]);
-  }
-
-  Future<void> dispose() {
-    return Future.wait([
-      local.dispose(),
-      remote.dispose(),
-    ]);
   }
 }

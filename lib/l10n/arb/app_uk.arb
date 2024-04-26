@@ -358,12 +358,26 @@
   "@permission_Button_request": {},
   "permission_Text_description": "Для забезпечення найкращого досвіду користувача програма потребує наступні дозволи: мікрофон для аудіодзвінків, камера для відеодзвінків та доступ до контактів для спрощення їх використання в програмі.\n\nДозволи можуть бути змінені у майбутньому.",
   "@permission_Text_description": {},
-  "permission_agreement_text1": "Я прочитав і погоджуюсь з\u0020",
-  "@permission_agreement_text1": {},
-  "permission_agreement_text2": "політикою конфіденційності\u0020",
-  "@permission_agreement_text2": {},
-  "permission_agreement_text3": ", включаючи умови користування.",
-  "@permission_agreement_text3": {},
+  "user_agreement_checkbox_text": "Я прочитав і погоджуюсь з {url}, включаючи умови користування.",
+  "@user_agreement_checkbox_text": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "user_agreement_description": "Вітаємо до {appName}",
+  "@user_agreement_description": {
+    "placeholders": {
+      "appName": {
+        "type": "String"
+      }
+    }
+  },
+  "user_agreement_button_text": "Продовжити",
+  "@user_agreement_button_text": {},
+   "user_agreement_agrement_link": "угодою",
+  "@user_agreement_agrement_link": {},
   "recents_BodyCenter_empty": "Зараз у вас немає жодних {filter} останніх дзвінків.",
   "@recents_BodyCenter_empty": {},
   "recents_DeleteConfirmDialog_content": "Ви впевнені, що хочете видалити поточний журнал дзвінків?",
@@ -408,6 +422,10 @@
       }
     }
   },
+  "settings_AboutText_AppVersion": "Версія додатка",
+  "@settings_AboutText_AppVersion": {},
+  "settings_AboutText_StoreVersion": "Версія збірки в магазині",
+  "@settings_AboutText_StoreVersion": {},
   "settings_AboutText_CoreVersionUndefined": "?.?.?",
   "@settings_AboutText_CoreVersionUndefined": {},
   "settings_AccountDeleteConfirmDialog_content": "Ви впевнені, що хочете видалити обліковий запис?",
@@ -457,5 +475,18 @@
   "underDevelopment": "Ця сторінка знаходиться в розробці.",
   "@underDevelopment": {},
   "validationBlankError": "Будь ласка, введіть значення",
-  "@validationBlankError": {}
+  "@validationBlankError": {},
+  "@validationBlankError": {},
+  "autoprovision_ReloginDialog_title": "Підтвердження повторного входу",
+  "@autoprovision_ReloginDialog_title": {},
+  "autoprovision_ReloginDialog_text": "Бажаєте замінити поточний сеанс на новий?",
+  "@autoprovision_ReloginDialog_text": {},
+  "autoprovision_ReloginDialog_confirm": "Підтвердити",
+  "@autoprovision_ReloginDialog_confirm": {},
+  "autoprovision_ReloginDialog_decline": "Відхилити",
+  "@autoprovision_ReloginDialog_decline": {},
+  "autoprovision_errorSnackBar_invalidToken": "Облікові дані авто-конфігурації були відхилені сервером. Будь ласка, надішліть запит на нове посилання авто-конфігурації",
+  "@autoprovision_errorSnackBar_invalidToken": {},
+  "autoprovision_successSnackBar_used": "Ваші налаштування успішно отримано, ваш додаток готовий до використання",
+  "@autoprovision_successSnackBar_used": {}
 }

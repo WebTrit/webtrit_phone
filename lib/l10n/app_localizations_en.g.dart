@@ -461,13 +461,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get permission_Text_description => 'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.';
 
   @override
-  String get permission_agreement_text1 => 'I have read and agree to the ';
+  String user_agreement_checkbox_text(String url) {
+    return 'I have read the $url and consent to its terms.';
+  }
 
   @override
-  String get permission_agreement_text2 => 'privacy policy ';
+  String user_agreement_description(String appName) {
+    return 'Welcome to $appName';
+  }
 
   @override
-  String get permission_agreement_text3 => ', including with terms and conditions.';
+  String get user_agreement_button_text => 'Continue';
+
+  @override
+  String get user_agreement_agrement_link => 'terms and condition of agreement';
 
   @override
   String recents_BodyCenter_empty(Object filter) {
@@ -521,6 +528,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
     return '$timeString';
   }
+
+  @override
+  String get settings_AboutText_AppVersion => 'App Version';
+
+  @override
+  String get settings_AboutText_StoreVersion => 'Build version in the Store';
 
   @override
   String get settings_AboutText_CoreVersionUndefined => '?.?.?';
@@ -596,4 +609,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get validationBlankError => 'Please enter a value';
+
+  @override
+  String get autoprovision_ReloginDialog_title => 'Relogin Confirmation';
+
+  @override
+  String get autoprovision_ReloginDialog_text => 'Do you want to replace the current session with a new one?';
+
+  @override
+  String get autoprovision_ReloginDialog_confirm => 'Confirm';
+
+  @override
+  String get autoprovision_ReloginDialog_decline => 'Decline';
+
+  @override
+  String get autoprovision_errorSnackBar_invalidToken => 'The auto configuration credentials were rejected by the server. Please request a new configuration link';
+
+  @override
+  String get autoprovision_successSnackBar_used => 'Successfully retrieved your settings, your app is ready to use';
 }

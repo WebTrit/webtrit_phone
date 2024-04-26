@@ -31,6 +31,7 @@ dependencies:
   equatable: ^2.0.5
   firebase_analytics: ^10.8.8
   firebase_app_installations: ^0.2.4+16
+  firebase_app_installations_web: ^0.1.5+1
   firebase_core: ^2.26.0
   firebase_crashlytics: ^3.4.17
   firebase_messaging: ^14.7.18
@@ -47,13 +48,13 @@ dependencies:
   google_fonts: ^6.1.0
   intl: any
   json_annotation: ^4.8.1
-  just_audio: ^0.9.36
+  soundpool: ^2.4.1
   linkify: ^5.0.0
   logging: ^1.2.0
   logging_appenders: ^1.2.0
   material_color_utilities: any
   meta: any
-  package_info_plus: ^5.0.1
+  package_info_plus: ^7.0.0
   path: ^1.8.3
   path_provider: ^2.1.2
   permission_handler: ^11.3.0
@@ -100,6 +101,10 @@ dev_dependencies:
   flutter_native_splash: ^2.3.10
   freezed: ^2.4.7
   json_serializable: ^6.7.1
+  version_gen:
+    git:
+      url: https://github.com/SERDUN/version_gen.git
+
 
 flutter:
   generate: true
@@ -117,3 +122,7 @@ flutter_gen:
   integrations:
     flutter_svg: true
     flare_flutter: true
+
+version_gen:
+  path: lib/app/
+  version-spec: app_version.yaml

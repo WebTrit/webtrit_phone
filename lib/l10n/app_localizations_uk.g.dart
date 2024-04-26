@@ -461,13 +461,20 @@ class AppLocalizationsUk extends AppLocalizations {
   String get permission_Text_description => 'Для забезпечення найкращого досвіду користувача програма потребує наступні дозволи: мікрофон для аудіодзвінків, камера для відеодзвінків та доступ до контактів для спрощення їх використання в програмі.\n\nДозволи можуть бути змінені у майбутньому.';
 
   @override
-  String get permission_agreement_text1 => 'Я прочитав і погоджуюсь з ';
+  String user_agreement_checkbox_text(String url) {
+    return 'Я прочитав і погоджуюсь з $url, включаючи умови користування.';
+  }
 
   @override
-  String get permission_agreement_text2 => 'політикою конфіденційності ';
+  String user_agreement_description(String appName) {
+    return 'Вітаємо до $appName';
+  }
 
   @override
-  String get permission_agreement_text3 => ', включаючи умови користування.';
+  String get user_agreement_button_text => 'Продовжити';
+
+  @override
+  String get user_agreement_agrement_link => 'угодою';
 
   @override
   String recents_BodyCenter_empty(Object filter) {
@@ -521,6 +528,12 @@ class AppLocalizationsUk extends AppLocalizations {
 
     return '$timeString';
   }
+
+  @override
+  String get settings_AboutText_AppVersion => 'Версія додатка';
+
+  @override
+  String get settings_AboutText_StoreVersion => 'Версія збірки в магазині';
 
   @override
   String get settings_AboutText_CoreVersionUndefined => '?.?.?';
@@ -596,4 +609,22 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get validationBlankError => 'Будь ласка, введіть значення';
+
+  @override
+  String get autoprovision_ReloginDialog_title => 'Підтвердження повторного входу';
+
+  @override
+  String get autoprovision_ReloginDialog_text => 'Бажаєте замінити поточний сеанс на новий?';
+
+  @override
+  String get autoprovision_ReloginDialog_confirm => 'Підтвердити';
+
+  @override
+  String get autoprovision_ReloginDialog_decline => 'Відхилити';
+
+  @override
+  String get autoprovision_errorSnackBar_invalidToken => 'Облікові дані авто-конфігурації були відхилені сервером. Будь ласка, надішліть запит на нове посилання авто-конфігурації';
+
+  @override
+  String get autoprovision_successSnackBar_used => 'Ваші налаштування успішно отримано, ваш додаток готовий до використання';
 }

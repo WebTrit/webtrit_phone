@@ -957,23 +957,29 @@ abstract class AppLocalizations {
   /// **'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.'**
   String get permission_Text_description;
 
-  /// No description provided for @permission_agreement_text1.
+  /// No description provided for @user_agreement_checkbox_text.
   ///
   /// In en, this message translates to:
-  /// **'I have read and agree to the '**
-  String get permission_agreement_text1;
+  /// **'I have read the {url} and consent to its terms.'**
+  String user_agreement_checkbox_text(String url);
 
-  /// No description provided for @permission_agreement_text2.
+  /// No description provided for @user_agreement_description.
   ///
   /// In en, this message translates to:
-  /// **'privacy policy '**
-  String get permission_agreement_text2;
+  /// **'Welcome to {appName}'**
+  String user_agreement_description(String appName);
 
-  /// No description provided for @permission_agreement_text3.
+  /// No description provided for @user_agreement_button_text.
   ///
   /// In en, this message translates to:
-  /// **', including with terms and conditions.'**
-  String get permission_agreement_text3;
+  /// **'Continue'**
+  String get user_agreement_button_text;
+
+  /// No description provided for @user_agreement_agrement_link.
+  ///
+  /// In en, this message translates to:
+  /// **'terms and condition of agreement'**
+  String get user_agreement_agrement_link;
 
   /// No description provided for @recents_BodyCenter_empty.
   ///
@@ -1052,6 +1058,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{time}'**
   String recentTimeBeforeMidnight(DateTime time);
+
+  /// No description provided for @settings_AboutText_AppVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'App Version'**
+  String get settings_AboutText_AppVersion;
+
+  /// No description provided for @settings_AboutText_StoreVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Build version in the Store'**
+  String get settings_AboutText_StoreVersion;
 
   /// No description provided for @settings_AboutText_CoreVersionUndefined.
   ///
@@ -1202,6 +1220,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter a value'**
   String get validationBlankError;
+
+  /// No description provided for @autoprovision_ReloginDialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Relogin Confirmation'**
+  String get autoprovision_ReloginDialog_title;
+
+  /// No description provided for @autoprovision_ReloginDialog_text.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to replace the current session with a new one?'**
+  String get autoprovision_ReloginDialog_text;
+
+  /// No description provided for @autoprovision_ReloginDialog_confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get autoprovision_ReloginDialog_confirm;
+
+  /// No description provided for @autoprovision_ReloginDialog_decline.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get autoprovision_ReloginDialog_decline;
+
+  /// No description provided for @autoprovision_errorSnackBar_invalidToken.
+  ///
+  /// In en, this message translates to:
+  /// **'The auto configuration credentials were rejected by the server. Please request a new configuration link'**
+  String get autoprovision_errorSnackBar_invalidToken;
+
+  /// No description provided for @autoprovision_successSnackBar_used.
+  ///
+  /// In en, this message translates to:
+  /// **'Successfully retrieved your settings, your app is ready to use'**
+  String get autoprovision_successSnackBar_used;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

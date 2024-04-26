@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
-
-import '../../../widgets/widgets.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class TermsConditionsScreen extends StatelessWidget {
   const TermsConditionsScreen({

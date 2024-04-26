@@ -27,6 +27,21 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const AppShell(),
       );
     },
+    AutoprovisionScreenPageRoute.name: (routeData) {
+      final queryParams = routeData.queryParams;
+      final args = routeData.argsAs<AutoprovisionScreenPageRouteArgs>(
+          orElse: () => AutoprovisionScreenPageRouteArgs(
+                configToken: queryParams.optString('config_token'),
+                tenantId: queryParams.optString('tenant_id'),
+              ));
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: AutoprovisionScreenPage(
+          configToken: args.configToken,
+          tenantId: args.tenantId,
+        ),
+      );
+    },
     CallScreenPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -236,6 +251,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: ThemeModeScreenPage(),
       );
     },
+    UserAgreementScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: UserAgreementScreenPage(),
+      );
+    },
   };
 }
 
@@ -265,6 +286,49 @@ class AppShellRoute extends PageRouteInfo<void> {
   static const String name = 'AppShellRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [AutoprovisionScreenPage]
+class AutoprovisionScreenPageRoute
+    extends PageRouteInfo<AutoprovisionScreenPageRouteArgs> {
+  AutoprovisionScreenPageRoute({
+    String? configToken,
+    String? tenantId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          AutoprovisionScreenPageRoute.name,
+          args: AutoprovisionScreenPageRouteArgs(
+            configToken: configToken,
+            tenantId: tenantId,
+          ),
+          rawQueryParams: {
+            'config_token': configToken,
+            'tenant_id': tenantId,
+          },
+          initialChildren: children,
+        );
+
+  static const String name = 'AutoprovisionScreenPageRoute';
+
+  static const PageInfo<AutoprovisionScreenPageRouteArgs> page =
+      PageInfo<AutoprovisionScreenPageRouteArgs>(name);
+}
+
+class AutoprovisionScreenPageRouteArgs {
+  const AutoprovisionScreenPageRouteArgs({
+    this.configToken,
+    this.tenantId,
+  });
+
+  final String? configToken;
+
+  final String? tenantId;
+
+  @override
+  String toString() {
+    return 'AutoprovisionScreenPageRouteArgs{configToken: $configToken, tenantId: $tenantId}';
+  }
 }
 
 /// generated route for
@@ -778,6 +842,20 @@ class ThemeModeScreenPageRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'ThemeModeScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [UserAgreementScreenPage]
+class UserAgreementScreenPageRoute extends PageRouteInfo<void> {
+  const UserAgreementScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          UserAgreementScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'UserAgreementScreenPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

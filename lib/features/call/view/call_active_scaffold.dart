@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -70,8 +69,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       child: SizedBox(
                         width: mediaQueryData.size.width,
                         height: mediaQueryData.size.height,
-                        child: RTCVideoView(
-                          activeCall.renderers.remote,
+                        child: RTCStreamView(
+                          stream: activeCall.remoteStream,
                           placeholderBuilder: widget.remotePlaceholderBuilder,
                         ),
                       ),
@@ -96,8 +95,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                             height: orientation == Orientation.portrait ? 120.0 : 90.0,
                             child: activeCall.frontCamera == null
                                 ? null
-                                : RTCVideoView(
-                                    activeCall.renderers.local,
+                                : RTCStreamView(
+                                    stream: activeCall.localStream,
                                     mirror: activeCall.frontCamera!,
                                     placeholderBuilder: widget.localePlaceholderBuilder,
                                   ),
@@ -176,9 +175,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       onTransferPressed: !activeCall.wasAccepted || activeCall.transfer != null
                           ? null
                           : () {
-                              context
-                                  .read<CallBloc>()
-                                  .add(CallControlEvent.blindTransferInitiated(activeCall.callId));
+                              context.read<CallBloc>().add(CallControlEvent.blindTransferInitiated(activeCall.callId));
                             },
                       heldValue: activeCall.held,
                       onHeldChanged: (bool value) {

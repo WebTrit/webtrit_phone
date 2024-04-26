@@ -31,12 +31,14 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           themeSettings: appThemes.values.first.settings,
           themeMode: appPreferences.getThemeMode(),
           locale: appPreferences.getLocale(),
+          userAgreementAccepted: appPreferences.getUserAgreementAccepted(),
         )) {
     on<AppLogined>(_onLogined, transformer: sequential());
     on<AppLogouted>(_onLogouted, transformer: sequential());
     on<AppThemeSettingsChanged>(_onThemeSettingsChanged, transformer: droppable());
     on<AppThemeModeChanged>(_onThemeModeChanged, transformer: droppable());
     on<AppLocaleChanged>(_onLocaleChanged, transformer: droppable());
+    on<AppUserAgreementAccepted>(_onUserAgreementAccepted, transformer: droppable());
   }
 
   final AppPreferences appPreferences;
@@ -44,7 +46,23 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final AppDatabase appDatabase;
   final AndroidPendingCallHandler pendingCallHandler;
 
+  Future<void> _cleanUpUserData() async {
+    await appPreferences.clear();
+
+    await secureStorage.deleteCoreUrl();
+    await secureStorage.deleteTenantId();
+    await secureStorage.deleteToken();
+
+    await appDatabase.deleteEverything();
+  }
+
   void _onLogined(AppLogined event, Emitter<AppState> emit) async {
+    // Check if the user is re-logging in.
+    // Example: logging in with a deeplink while already logged with another account.
+    // In this case, clear the database and preferences.
+    final isRelogin = state.token != null;
+    if (isRelogin) await _cleanUpUserData();
+
     await secureStorage.writeCoreUrl(event.coreUrl);
     await secureStorage.writeTenantId(event.tenantId);
     await secureStorage.writeToken(event.token);
@@ -57,13 +75,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onLogouted(AppLogouted event, Emitter<AppState> emit) async {
-    await appPreferences.clear();
-
-    await secureStorage.deleteCoreUrl();
-    await secureStorage.deleteTenantId();
-    await secureStorage.deleteToken();
-
-    await appDatabase.deleteEverything();
+    await _cleanUpUserData();
 
     emit(state.copyWith(
       coreUrl: null,
@@ -102,5 +114,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         add(const AppLogouted());
       }
     }
+  }
+
+  void _onUserAgreementAccepted(AppUserAgreementAccepted event, Emitter<AppState> emit) async {
+    await appPreferences.setUserAgreementAccepted(true);
+    emit(state.copyWith(userAgreementAccepted: true));
   }
 }
