@@ -161,7 +161,7 @@ extension ActiveCallIterableExtension<T extends ActiveCall> on Iterable<T> {
         if (transfer == null) {
           return false;
         } else {
-          return transfer.isBlind && transfer.isInitiated;
+          return transfer is BlindTransferInitiated;
         }
       });
     } on StateError catch (_) {

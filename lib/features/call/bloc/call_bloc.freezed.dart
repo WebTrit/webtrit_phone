@@ -4858,7 +4858,7 @@ mixin _$CallControlEvent {
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String number) blindTransferred,
-    required TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)
+    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
   }) =>
       throw _privateConstructorUsedError;
@@ -4878,7 +4878,7 @@ mixin _$CallControlEvent {
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String number)? blindTransferred,
-    TResult? Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
   }) =>
       throw _privateConstructorUsedError;
@@ -4898,7 +4898,7 @@ mixin _$CallControlEvent {
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String number)? blindTransferred,
-    TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
     required TResult orElse(),
   }) =>
@@ -5055,7 +5055,7 @@ class _$CallControlEventStartedImpl
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String number) blindTransferred,
-    required TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)
+    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
   }) {
     return started(line, generic, number, email, displayName, video);
@@ -5078,7 +5078,7 @@ class _$CallControlEventStartedImpl
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String number)? blindTransferred,
-    TResult? Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
   }) {
     return started?.call(line, generic, number, email, displayName, video);
@@ -5101,7 +5101,7 @@ class _$CallControlEventStartedImpl
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String number)? blindTransferred,
-    TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
     required TResult orElse(),
   }) {
@@ -5257,7 +5257,7 @@ class _$CallControlEventAnsweredImpl
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String number) blindTransferred,
-    required TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)
+    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
   }) {
     return answered(callId);
@@ -5280,7 +5280,7 @@ class _$CallControlEventAnsweredImpl
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String number)? blindTransferred,
-    TResult? Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
   }) {
     return answered?.call(callId);
@@ -5303,7 +5303,7 @@ class _$CallControlEventAnsweredImpl
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String number)? blindTransferred,
-    TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
     required TResult orElse(),
   }) {
@@ -5448,7 +5448,7 @@ class _$CallControlEventEndedImpl
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String number) blindTransferred,
-    required TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)
+    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
   }) {
     return ended(callId);
@@ -5471,7 +5471,7 @@ class _$CallControlEventEndedImpl
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String number)? blindTransferred,
-    TResult? Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
   }) {
     return ended?.call(callId);
@@ -5494,7 +5494,7 @@ class _$CallControlEventEndedImpl
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String number)? blindTransferred,
-    TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
     required TResult orElse(),
   }) {
@@ -5643,7 +5643,7 @@ class _$CallControlEventSetHeldImpl
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String number) blindTransferred,
-    required TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)
+    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
   }) {
     return setHeld(callId, onHold);
@@ -5666,7 +5666,7 @@ class _$CallControlEventSetHeldImpl
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String number)? blindTransferred,
-    TResult? Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
   }) {
     return setHeld?.call(callId, onHold);
@@ -5689,7 +5689,7 @@ class _$CallControlEventSetHeldImpl
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String number)? blindTransferred,
-    TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
     required TResult orElse(),
   }) {
@@ -5839,7 +5839,7 @@ class _$CallControlEventSetMutedImpl
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String number) blindTransferred,
-    required TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)
+    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
   }) {
     return setMuted(callId, muted);
@@ -5862,7 +5862,7 @@ class _$CallControlEventSetMutedImpl
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String number)? blindTransferred,
-    TResult? Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
   }) {
     return setMuted?.call(callId, muted);
@@ -5885,7 +5885,7 @@ class _$CallControlEventSetMutedImpl
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String number)? blindTransferred,
-    TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
     required TResult orElse(),
   }) {
@@ -6035,7 +6035,7 @@ class _$CallControlEventSentDTMFImpl
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String number) blindTransferred,
-    required TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)
+    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
   }) {
     return sentDTMF(callId, key);
@@ -6058,7 +6058,7 @@ class _$CallControlEventSentDTMFImpl
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String number)? blindTransferred,
-    TResult? Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
   }) {
     return sentDTMF?.call(callId, key);
@@ -6081,7 +6081,7 @@ class _$CallControlEventSentDTMFImpl
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String number)? blindTransferred,
-    TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
     required TResult orElse(),
   }) {
@@ -6227,7 +6227,7 @@ class _$CallControlEventCameraSwitchedImpl
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String number) blindTransferred,
-    required TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)
+    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
   }) {
     return cameraSwitched(callId);
@@ -6250,7 +6250,7 @@ class _$CallControlEventCameraSwitchedImpl
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String number)? blindTransferred,
-    TResult? Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
   }) {
     return cameraSwitched?.call(callId);
@@ -6273,7 +6273,7 @@ class _$CallControlEventCameraSwitchedImpl
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String number)? blindTransferred,
-    TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
     required TResult orElse(),
   }) {
@@ -6422,7 +6422,7 @@ class _$CallControlEventCameraEnabledImpl
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String number) blindTransferred,
-    required TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)
+    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
   }) {
     return cameraEnabled(callId, enabled);
@@ -6445,7 +6445,7 @@ class _$CallControlEventCameraEnabledImpl
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String number)? blindTransferred,
-    TResult? Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
   }) {
     return cameraEnabled?.call(callId, enabled);
@@ -6468,7 +6468,7 @@ class _$CallControlEventCameraEnabledImpl
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String number)? blindTransferred,
-    TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
     required TResult orElse(),
   }) {
@@ -6619,7 +6619,7 @@ class _$CallControlEventSpeakerEnabledImpl
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String number) blindTransferred,
-    required TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)
+    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
   }) {
     return speakerEnabled(callId, enabled);
@@ -6642,7 +6642,7 @@ class _$CallControlEventSpeakerEnabledImpl
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String number)? blindTransferred,
-    TResult? Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
   }) {
     return speakerEnabled?.call(callId, enabled);
@@ -6665,7 +6665,7 @@ class _$CallControlEventSpeakerEnabledImpl
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String number)? blindTransferred,
-    TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
     required TResult orElse(),
   }) {
@@ -6812,7 +6812,7 @@ class _$CallControlEventFailureApprovedImpl
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String number) blindTransferred,
-    required TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)
+    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
   }) {
     return failureApproved(callId);
@@ -6835,7 +6835,7 @@ class _$CallControlEventFailureApprovedImpl
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String number)? blindTransferred,
-    TResult? Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
   }) {
     return failureApproved?.call(callId);
@@ -6858,7 +6858,7 @@ class _$CallControlEventFailureApprovedImpl
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String number)? blindTransferred,
-    TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
     required TResult orElse(),
   }) {
@@ -7004,7 +7004,7 @@ class _$CallControlEventBlindTransferInitiatedImpl
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String number) blindTransferred,
-    required TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)
+    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
   }) {
     return blindTransferInitiated(callId);
@@ -7027,7 +7027,7 @@ class _$CallControlEventBlindTransferInitiatedImpl
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String number)? blindTransferred,
-    TResult? Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
   }) {
     return blindTransferInitiated?.call(callId);
@@ -7050,7 +7050,7 @@ class _$CallControlEventBlindTransferInitiatedImpl
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String number)? blindTransferred,
-    TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
     required TResult orElse(),
   }) {
@@ -7196,7 +7196,7 @@ class _$CallControlEventBlindTransferredImpl
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String number) blindTransferred,
-    required TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)
+    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
   }) {
     return blindTransferred(number);
@@ -7219,7 +7219,7 @@ class _$CallControlEventBlindTransferredImpl
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String number)? blindTransferred,
-    TResult? Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
   }) {
     return blindTransferred?.call(number);
@@ -7242,7 +7242,7 @@ class _$CallControlEventBlindTransferredImpl
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String number)? blindTransferred,
-    TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
     required TResult orElse(),
   }) {
@@ -7342,16 +7342,16 @@ class _$CallControlEventAttendedTransferredImpl
     with DiagnosticableTreeMixin
     implements _CallControlEventAttendedTransferred {
   const _$CallControlEventAttendedTransferredImpl(
-      {required this.referorCall, required this.transfereeCall});
+      {required this.referorCall, required this.replaceCall});
 
   @override
   final ActiveCall referorCall;
   @override
-  final ActiveCall transfereeCall;
+  final ActiveCall replaceCall;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.attendedTransferred(referorCall: $referorCall, transfereeCall: $transfereeCall)';
+    return 'CallControlEvent.attendedTransferred(referorCall: $referorCall, replaceCall: $replaceCall)';
   }
 
   @override
@@ -7360,7 +7360,7 @@ class _$CallControlEventAttendedTransferredImpl
     properties
       ..add(DiagnosticsProperty('type', 'CallControlEvent.attendedTransferred'))
       ..add(DiagnosticsProperty('referorCall', referorCall))
-      ..add(DiagnosticsProperty('transfereeCall', transfereeCall));
+      ..add(DiagnosticsProperty('replaceCall', replaceCall));
   }
 
   @override
@@ -7370,12 +7370,12 @@ class _$CallControlEventAttendedTransferredImpl
             other is _$CallControlEventAttendedTransferredImpl &&
             (identical(other.referorCall, referorCall) ||
                 other.referorCall == referorCall) &&
-            (identical(other.transfereeCall, transfereeCall) ||
-                other.transfereeCall == transfereeCall));
+            (identical(other.replaceCall, replaceCall) ||
+                other.replaceCall == replaceCall));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, referorCall, transfereeCall);
+  int get hashCode => Object.hash(runtimeType, referorCall, replaceCall);
 
   @override
   @optionalTypeArgs
@@ -7394,10 +7394,10 @@ class _$CallControlEventAttendedTransferredImpl
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
     required TResult Function(String number) blindTransferred,
-    required TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)
+    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
   }) {
-    return attendedTransferred(referorCall, transfereeCall);
+    return attendedTransferred(referorCall, replaceCall);
   }
 
   @override
@@ -7417,10 +7417,10 @@ class _$CallControlEventAttendedTransferredImpl
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
     TResult? Function(String number)? blindTransferred,
-    TResult? Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
   }) {
-    return attendedTransferred?.call(referorCall, transfereeCall);
+    return attendedTransferred?.call(referorCall, replaceCall);
   }
 
   @override
@@ -7440,12 +7440,12 @@ class _$CallControlEventAttendedTransferredImpl
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
     TResult Function(String number)? blindTransferred,
-    TResult Function(ActiveCall referorCall, ActiveCall transfereeCall)?
+    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
     required TResult orElse(),
   }) {
     if (attendedTransferred != null) {
-      return attendedTransferred(referorCall, transfereeCall);
+      return attendedTransferred(referorCall, replaceCall);
     }
     return orElse();
   }
@@ -7531,11 +7531,11 @@ abstract class _CallControlEventAttendedTransferred
     implements CallControlEvent {
   const factory _CallControlEventAttendedTransferred(
           {required final ActiveCall referorCall,
-          required final ActiveCall transfereeCall}) =
+          required final ActiveCall replaceCall}) =
       _$CallControlEventAttendedTransferredImpl;
 
   ActiveCall get referorCall;
-  ActiveCall get transfereeCall;
+  ActiveCall get replaceCall;
 }
 
 /// @nodoc

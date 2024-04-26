@@ -905,16 +905,24 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     final replaceCallId = event.replaceCallId;
-    // If replaceCallId exists, it means that the REFER request for attended transfer
-    if (replaceCallId != null) {
-      // Find the active call that is should be replaced
-      final activeCall = state.retrieveActiveCall(replaceCallId);
-      if (activeCall == null) return;
+    final referredBy = event.referredBy;
+    final referId = event.referId;
+    final referTo = event.referTo;
 
-      // Update the active call with referring state
-      const transfer = Transfer(type: TransferType.blind, state: TransferState.referAsking);
-      final activeCallUpdate = activeCall.copyWith(transfer: transfer);
-      emit(state.copyWithMappedActiveCall(replaceCallId, (_) => activeCallUpdate));
+    // If replaceCallId exists, it means that the REFER request for attended transfer
+    if (replaceCallId != null && referredBy != null) {
+      // Find the active call that is should be replaced
+      final callToReplace = state.retrieveActiveCall(replaceCallId);
+      if (callToReplace == null) return;
+
+      // Update call with confirmation request state
+      final transfer = Transfer.attendedTransferConfirmationRequested(
+        referId: referId,
+        referTo: referTo,
+        referredBy: referredBy,
+      );
+      final callUpdate = callToReplace.copyWith(transfer: transfer);
+      emit(state.copyWithMappedActiveCall(replaceCallId, (_) => callUpdate));
     }
   }
 
@@ -1136,10 +1144,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     newState = newState.copyWithMappedActiveCall(event.callId, (activeCall) {
       return activeCall.copyWith(
-        transfer: const Transfer(
-          type: TransferType.blind,
-          state: TransferState.initiated,
-        ),
+        transfer: Transfer.blindTransferInitiated(),
       );
     });
 
@@ -1155,23 +1160,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallControlEventBlindTransferred event,
     Emitter<CallState> emit,
   ) async {
-    var newState = state.copyWith(minimized: false);
-
     final activeCallBlindTransferInitiated = state.activeCalls.blindTransferInitiated;
-    if (activeCallBlindTransferInitiated == null) {
-      emit(newState);
-      return;
-    }
+    if (activeCallBlindTransferInitiated == null) return;
 
+    var newState = state.copyWith(minimized: false);
     newState = newState.copyWithMappedActiveCall(activeCallBlindTransferInitiated.callId, (activeCall) {
-      return activeCall.copyWith(
-        transfer: const Transfer(
-          type: TransferType.blind,
-          state: TransferState.processing,
-        ),
-      );
+      final transfer = Transfer.blindTransferTransferred(toNumber: event.number);
+      return activeCall.copyWith(transfer: transfer);
     });
-
     emit(newState);
 
     await callkeep.reportUpdateCall(
@@ -1191,6 +1187,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } catch (e) {
       _logger.warning('_onCallControlEventBlindTransferred request error: $e');
       notificationsBloc.add(NotificationsMessaged(RawNotification(e.toString())));
+
+      // Reset the transfer state and continue conversation
+      emit(state.copyWithMappedActiveCall(activeCallBlindTransferInitiated.callId, (activeCall) {
+        return activeCall.copyWith(transfer: null);
+      }));
     }
   }
 
@@ -1199,7 +1200,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     final referorCall = event.referorCall;
-    final transfereeCall = event.transfereeCall;
+    final replaceCall = event.replaceCall;
+
+    emit(state.copyWithMappedActiveCall(referorCall.callId, (activeCall) {
+      final transfer = Transfer.attendedTransferTransferred(replaceCallId: replaceCall.callId);
+      return activeCall.copyWith(transfer: transfer);
+    }));
 
     try {
       final transferRequest = TransferRequest(
@@ -1207,19 +1213,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         line: referorCall.line,
         callId: referorCall.callId.toString(),
         number: referorCall.handle.normalizedValue(),
-        replaceCallId: transfereeCall.callId,
+        replaceCallId: replaceCall.callId,
       );
 
       await _signalingClient?.execute(transferRequest);
-
-      // Mark the referor call as refer event sended
-      emit(state.copyWithMappedActiveCall(referorCall.callId, (activeCall) {
-        const transfer = Transfer(type: TransferType.attended, state: TransferState.referSended);
-        return activeCall.copyWith(transfer: transfer);
-      }));
     } catch (e) {
       _logger.warning('_onCallControlEventAttendedTransferred request error: $e');
       notificationsBloc.add(NotificationsMessaged(RawNotification(e.toString())));
+
+      // Reset the transfer state and continue conversation
+      emit(state.copyWithMappedActiveCall(referorCall.callId, (activeCall) {
+        return activeCall.copyWith(transfer: null);
+      }));
     }
   }
 
@@ -1676,7 +1681,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     newState = newState.copyWithMappedActiveCalls((activeCall) {
       final transfer = activeCall.transfer;
-      if (transfer != null && transfer.isBlind && transfer.isInitiated) {
+      if (transfer != null && transfer is BlindTransferInitiated) {
         return activeCall.copyWith(
           transfer: null,
         );
