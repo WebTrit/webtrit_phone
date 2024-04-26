@@ -39,7 +39,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   Widget build(BuildContext context) {
     final activeCalls = widget.activeCalls;
     final activeCall = activeCalls.current;
-    final heldCalls = activeCalls.exceptCurrent;
+    final heldCalls = activeCalls.nonCurrent;
 
     final video = activeCall.video;
 
