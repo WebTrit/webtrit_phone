@@ -985,18 +985,17 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         _logger.warning('__onCallControlEventStarted error: $error');
       }
     } else {
-      emit(state.copyWithPushActiveCall(
-        ActiveCall(
-          direction: Direction.outgoing,
-          line: event.line ?? state.retrieveIdleLine() ?? _kUndefinedLine,
-          callId: callId,
-          handle: event.handle,
-          displayName: event.displayName,
-          video: event.video,
-          createdTime: clock.now(),
-        ),
-        minimized: false,
-      ));
+      final newCall = ActiveCall(
+        direction: Direction.outgoing,
+        line: event.line ?? state.retrieveIdleLine() ?? _kUndefinedLine,
+        callId: callId,
+        handle: event.handle,
+        displayName: event.displayName,
+        video: event.video,
+        createdTime: clock.now(),
+      );
+
+      emit(state.copyWithPushActiveCall(newCall).copyWith(minimized: false));
     }
   }
 

@@ -104,9 +104,9 @@ class CallState with _$CallState {
     return copyWith(activeCalls: activeCalls);
   }
 
-  CallState copyWithPushActiveCall(ActiveCall activeCall, {bool? minimized}) {
+  CallState copyWithPushActiveCall(ActiveCall activeCall) {
     final activeCalls = List<ActiveCall>.from(this.activeCalls)..add(activeCall);
-    return copyWith(activeCalls: activeCalls, minimized: minimized ?? this.minimized);
+    return copyWith(activeCalls: activeCalls);
   }
 
   CallState copyWithPopActiveCall(String callId) {
