@@ -298,11 +298,11 @@ class _CallActionsState extends State<CallActions> {
           if (widget.transferableCalls.isNotEmpty)
             Tooltip(
               message: context.l10n.call_CallActionsTooltip_transfer,
-              child: PopupMenu(
+              child: CallPopupMenuButton(
                 offset: Offset(_dimension + 8, 0),
                 items: [
                   for (final call in widget.transferableCalls)
-                    PopupItem(
+                    CallPopupMenuItem(
                       onTap: () => onAttendedTransfer?.call(call),
                       text: call.displayName ?? call.handle.value,
                       icon: Icon(
@@ -312,7 +312,7 @@ class _CallActionsState extends State<CallActions> {
                       ),
                       textStyle: themeData.textTheme.bodyMedium,
                     ),
-                  PopupItem(
+                  CallPopupMenuItem(
                     onTap: onBlindTransfer,
                     text: context.l10n.call_CallActionsTooltip_transfer_choose,
                     icon: Icon(
