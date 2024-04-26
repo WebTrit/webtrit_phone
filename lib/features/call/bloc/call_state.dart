@@ -104,9 +104,9 @@ class CallState with _$CallState {
     return copyWith(activeCalls: activeCalls);
   }
 
-  CallState copyWithPushActiveCall(ActiveCall activeCall, {bool? minimized}) {
+  CallState copyWithPushActiveCall(ActiveCall activeCall) {
     final activeCalls = List<ActiveCall>.from(this.activeCalls)..add(activeCall);
-    return copyWith(activeCalls: activeCalls, minimized: minimized ?? this.minimized);
+    return copyWith(activeCalls: activeCalls);
   }
 
   CallState copyWithPopActiveCall(String callId) {
@@ -152,7 +152,7 @@ class ActiveCall with _$ActiveCall {
 
 extension ActiveCallIterableExtension<T extends ActiveCall> on Iterable<T> {
   T get current => lastWhere((activeCall) => !activeCall.held, orElse: () => last);
-  List<T> get exceptCurrent => where((activeCall) => activeCall != current).toList();
+  List<T> get nonCurrent => where((activeCall) => activeCall != current).toList();
 
   T? get blindTransferInitiated {
     try {
