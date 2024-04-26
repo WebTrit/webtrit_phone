@@ -94,6 +94,10 @@ Follow these steps according to your specific activity to manage the localizatio
 1. Generate the localizations with the command: `flutter gen-l10n`.
 1. Commit the changes.
 
+
+## Theme Configuration
+For the theme configuration documentation, please refer to the [Theme Configuration](doc/theme_config/index.md)  .
+
 ## Contributing
 
 Contributions are always welcome!
