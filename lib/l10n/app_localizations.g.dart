@@ -957,35 +957,41 @@ abstract class AppLocalizations {
   /// **'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.'**
   String get permission_Text_description;
 
-  /// No description provided for @permission_miui_Text_heading.
+  /// No description provided for @permission_manufacturer_Text_heading.
   ///
   /// In en, this message translates to:
   /// **'To ensure the best user experience, the app needs to be granted the following permissions manually:'**
-  String get permission_miui_Text_heading;
+  String get permission_manufacturer_Text_heading;
 
-  /// No description provided for @permission_miui_Text_description.
+  /// No description provided for @permission_manufacturer_Text_xiaomi_tip1.
   ///
   /// In en, this message translates to:
-  /// **'1. Go to \"App settings\" >> \"Notifications\".\n2. Find and turn on \"Lockscreen notifications\".'**
-  String get permission_miui_Text_description;
+  /// **'1. Go to \"App settings\" → \"Notifications\".'**
+  String get permission_manufacturer_Text_xiaomi_tip1;
 
-  /// No description provided for @permission_miui_Text_trailing.
+  /// No description provided for @permission_manufacturer_Text_xiaomi_tip2.
+  ///
+  /// In en, this message translates to:
+  /// **'2. Find and turn on \"Lockscreen notifications\".'**
+  String get permission_manufacturer_Text_xiaomi_tip2;
+
+  /// No description provided for @permission_manufacturer_Text_trailing.
   ///
   /// In en, this message translates to:
   /// **'Permissions could be changed at any time in the future.'**
-  String get permission_miui_Text_trailing;
+  String get permission_manufacturer_Text_trailing;
 
-  /// No description provided for @permission_miui_Button_toSettings.
+  /// No description provided for @permission_manufacturer_Button_toSettings.
   ///
   /// In en, this message translates to:
   /// **'Open app Settings'**
-  String get permission_miui_Button_toSettings;
+  String get permission_manufacturer_Button_toSettings;
 
-  /// No description provided for @permission_miui_Button_gotIt.
+  /// No description provided for @permission_manufacturer_Button_gotIt.
   ///
   /// In en, this message translates to:
   /// **'Got it'**
-  String get permission_miui_Button_gotIt;
+  String get permission_manufacturer_Button_gotIt;
 
   /// No description provided for @user_agreement_checkbox_text.
   ///
