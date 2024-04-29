@@ -12,11 +12,11 @@ part 'permissions_state.dart';
 class PermissionsCubit extends Cubit<PermissionsState> {
   PermissionsCubit({
     required this.appPermissions,
-    required this.platformInfo,
+    required this.deviceInfo,
   }) : super(const PermissionsState.initial());
 
   final AppPermissions appPermissions;
-  final PlatformInfo platformInfo;
+  final DeviceInfo deviceInfo;
 
   void requestPermissions() async {
     emit(const PermissionsState.inProgress());
@@ -63,7 +63,7 @@ class PermissionsCubit extends Cubit<PermissionsState> {
   /// Checks and returns the detected subplatform that requires a special user handling.
   /// or `null` if no subplatform is detected.
   Future<SubPlatform?> _checkForSubplatform() async {
-    final isMiui = await platformInfo.isMiui();
+    final isMiui = deviceInfo.manufacturer?.toLowerCase() == 'xiaomi';
     if (isMiui) return SubPlatform.miui;
 
     return null;
