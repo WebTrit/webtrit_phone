@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
@@ -47,15 +45,5 @@ class PlatformInfo {
     } else {
       throw UnsupportedError('Current platform unsupported');
     }
-  }
-
-  //
-  // Additional platform specific properties and methods can be added here
-  //
-  /// Returns true if the current platform is `MIUI`
-  Future<bool> isMiui() async {
-    if (!isAndroid) return false;
-    final miuiProp = await Process.run('getprop', ['ro.miui.ui.version.name']);
-    return miuiProp.stdout.toString().trim().isNotEmpty;
   }
 }
