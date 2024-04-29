@@ -1,1 +1,1 @@
-export 'miui_permission_tips.dart';
+export 'permission_tips.dart';

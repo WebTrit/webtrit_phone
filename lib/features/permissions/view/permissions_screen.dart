@@ -28,14 +28,7 @@ class PermissionsScreen extends StatelessWidget {
           switch (state) {
             // Shows additional screen for specific sub-platform if needed
             case PermissionsStateSubPlatformTipNeeded(:final subPlatform):
-              switch (subPlatform) {
-                case SubPlatform.miui:
-                  context.router
-                      .pushWidget(MiuiPermissionTips(
-                        onGoToAppSettings: () => context.read<PermissionsCubit>().openAppSettings(),
-                      ))
-                      .then((value) => context.read<PermissionsCubit>().dismissSubPlatformTip());
-              }
+              _showPlatformTips(context, subPlatform);
             case PermissionsStateSuccess():
               context.router.replaceAll([const MainShellRoute()]);
             case PermissionsStateFailure(:final error):
@@ -99,5 +92,16 @@ class PermissionsScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Future _showPlatformTips(BuildContext context, SubPlatform subPlatform) async {
+    final permissionCubit = context.read<PermissionsCubit>();
+
+    await context.router.pushWidget(PermissionTips(
+      onGoToAppSettings: permissionCubit.openAppSettings,
+      platform: subPlatform,
+    ));
+
+    permissionCubit.dismissSubPlatformTip();
   }
 }
