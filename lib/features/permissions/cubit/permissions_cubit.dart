@@ -24,11 +24,11 @@ class PermissionsCubit extends Cubit<PermissionsState> {
       await appPermissions.request();
       await requestFirebaseMessagingPermission();
 
-      final subPlatform = _checkManufacturer();
-      if (subPlatform == null) {
+      final manufacturer = _checkManufacturer();
+      if (manufacturer == null) {
         emit(const PermissionsState.success());
       } else {
-        emit(PermissionsState.subPlatformTipNeeded(subPlatform));
+        emit(PermissionsState.manufacturerTipNeeded(manufacturer));
       }
     } catch (e) {
       emit(PermissionsState.failure(e));
@@ -39,7 +39,7 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     emit(const PermissionsState.initial());
   }
 
-  void dismissSubPlatformTip() {
+  void dismissManufacturerTip() {
     emit(const PermissionsState.success());
   }
 

@@ -27,8 +27,8 @@ class PermissionsScreen extends StatelessWidget {
         listener: (context, state) {
           switch (state) {
             // Shows additional screen for specific sub-platform if needed
-            case PermissionsStateSubPlatformTipNeeded(:final subPlatform):
-              _showPlatformTips(context, subPlatform);
+            case PermissionsManufacturerTipNeeded(:final manufacturer):
+              _showManufacturerTips(context, manufacturer);
             case PermissionsStateSuccess():
               context.router.replaceAll([const MainShellRoute()]);
             case PermissionsStateFailure(:final error):
@@ -94,14 +94,14 @@ class PermissionsScreen extends StatelessWidget {
     );
   }
 
-  Future _showPlatformTips(BuildContext context, Manufacturer subPlatform) async {
+  Future _showManufacturerTips(BuildContext context, Manufacturer manufacturer) async {
     final permissionCubit = context.read<PermissionsCubit>();
 
     await context.router.pushWidget(ManufacturerPermission(
       onGoToAppSettings: permissionCubit.openAppSettings,
-      manufacturer: subPlatform,
+      manufacturer: manufacturer,
     ));
 
-    permissionCubit.dismissSubPlatformTip();
+    permissionCubit.dismissManufacturerTip();
   }
 }

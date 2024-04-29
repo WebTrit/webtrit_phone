@@ -6,7 +6,7 @@ class PermissionsState with _$PermissionsState {
 
   const factory PermissionsState.inProgress() = PermissionsStateInProgress;
 
-  const factory PermissionsState.subPlatformTipNeeded(Manufacturer subPlatform) = PermissionsStateSubPlatformTipNeeded;
+  const factory PermissionsState.manufacturerTipNeeded(Manufacturer manufacturer) = PermissionsManufacturerTipNeeded;
 
   const factory PermissionsState.success() = PermissionsStateSuccess;
 
