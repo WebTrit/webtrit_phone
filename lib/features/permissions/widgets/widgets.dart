@@ -1,1 +1,1 @@
-export 'permission_tips.dart';
+export 'manufacturer_permission.dart';

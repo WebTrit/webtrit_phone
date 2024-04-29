@@ -97,9 +97,9 @@ class PermissionsScreen extends StatelessWidget {
   Future _showPlatformTips(BuildContext context, Manufacturer subPlatform) async {
     final permissionCubit = context.read<PermissionsCubit>();
 
-    await context.router.pushWidget(PermissionTips(
+    await context.router.pushWidget(ManufacturerPermission(
       onGoToAppSettings: permissionCubit.openAppSettings,
-      platform: subPlatform,
+      manufacturer: subPlatform,
     ));
 
     permissionCubit.dismissSubPlatformTip();
