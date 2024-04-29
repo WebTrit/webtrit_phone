@@ -1283,6 +1283,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
 
       await _signalingClient?.execute(declineRequest);
+
+      emit(state.copyWithMappedActiveCall(callId, (activeCall) {
+        return activeCall.copyWith(transfer: null);
+      }));
     } catch (e) {
       _logger.warning('_onCallControlEventAttendedRequestDeclined request error: $e');
       notificationsBloc.add(NotificationsMessaged(RawNotification(e.toString())));
