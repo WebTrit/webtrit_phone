@@ -46,6 +46,8 @@
   "@call_description_incoming": {},
   "call_description_outgoing": "Вихідний дзвінок",
   "@call_description_outgoing": {},
+  "call_description_transfer_requested": "Запит на переадресацію",
+  "@call_description_transfer_requested": {},
   "call_description_transferProcessing": "Обробка переадресації",
   "@call_description_transferProcessing": {},
   "call_FailureAcknowledgeDialog_title": "Помилка",

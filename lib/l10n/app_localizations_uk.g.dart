@@ -76,6 +76,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_description_outgoing => 'Вихідний дзвінок';
 
   @override
+  String get call_description_transfer_requested => 'Запит на переадресацію';
+
+  @override
   String get call_description_transferProcessing => 'Обробка переадресації';
 
   @override

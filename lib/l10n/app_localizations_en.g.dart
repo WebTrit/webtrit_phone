@@ -76,6 +76,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_description_outgoing => 'Outgoing call';
 
   @override
+  String get call_description_transfer_requested => 'Transfer request';
+
+  @override
   String get call_description_transferProcessing => 'Transfer processing';
 
   @override

@@ -31,6 +31,8 @@ class CallActions extends StatefulWidget {
     this.onHangupAndAcceptPressed,
     this.onHoldAndAcceptPressed,
     this.onAcceptPressed,
+    this.onApproveTransferPressed,
+    this.onDeclineTransferPressed,
     this.onKeyPressed,
   });
 
@@ -54,6 +56,8 @@ class CallActions extends StatefulWidget {
   final void Function()? onHangupAndAcceptPressed;
   final void Function()? onHoldAndAcceptPressed;
   final void Function()? onAcceptPressed;
+  final void Function()? onApproveTransferPressed;
+  final void Function()? onDeclineTransferPressed;
   final void Function(String value)? onKeyPressed;
 
   @override
@@ -211,6 +215,29 @@ class _CallActionsState extends State<CallActions> {
           ],
         );
       }
+    } else if (widget.onApproveTransferPressed != null || widget.onDeclineTransferPressed != null) {
+      buttonsTable = TextButtonsTable(
+        minimumSize: Size.square(_dimension),
+        children: [
+          Tooltip(
+            message: context.l10n.call_CallActionsTooltip_hangup,
+            child: TextButton(
+              onPressed: widget.onDeclineTransferPressed,
+              style: _textButtonStyles?.callHangup,
+              child: const Icon(Icons.call_end),
+            ),
+          ),
+          const SizedBox(),
+          Tooltip(
+            message: context.l10n.call_CallActionsTooltip_accept,
+            child: TextButton(
+              onPressed: widget.onApproveTransferPressed,
+              style: _textButtonStyles?.callStart,
+              child: const Icon(Icons.phone_forwarded),
+            ),
+          ),
+        ],
+      );
     } else {
       late List<Widget> actions;
       if (_keypadShow) {

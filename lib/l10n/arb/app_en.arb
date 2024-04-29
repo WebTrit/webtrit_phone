@@ -46,6 +46,8 @@
   "@call_description_incoming": {},
   "call_description_outgoing": "Outgoing call",
   "@call_description_outgoing": {},
+  "call_description_transfer_requested": "Transfer request",
+  "@call_description_transfer_requested": {},
   "call_description_transferProcessing": "Transfer processing",
   "@call_description_transferProcessing": {},
   "call_FailureAcknowledgeDialog_title": "Failure",
