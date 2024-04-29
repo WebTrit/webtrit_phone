@@ -55,6 +55,8 @@ class DeviceInfo {
 
   final Map<String, dynamic> data;
 
+  String? get manufacturer => data['manufacturer'];
+
   static Map<String, dynamic> _readWebBrowserInfo(WebBrowserInfo data) {
     return <String, dynamic>{
       'browserName': data.browserName.name,
