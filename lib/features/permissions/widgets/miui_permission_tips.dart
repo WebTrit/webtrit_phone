@@ -4,8 +4,8 @@ import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
-class MiuiPermissionTipsScreen extends StatelessWidget {
-  const MiuiPermissionTipsScreen({required this.onGoToAppSettings, super.key});
+class MiuiPermissionTips extends StatelessWidget {
+  const MiuiPermissionTips({required this.onGoToAppSettings, super.key});
 
   final VoidCallback onGoToAppSettings;
 

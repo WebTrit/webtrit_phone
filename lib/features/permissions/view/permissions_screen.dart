@@ -11,6 +11,7 @@ import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../permissions.dart';
+import '../widgets/widgets.dart';
 
 class PermissionsScreen extends StatelessWidget {
   const PermissionsScreen({
@@ -30,7 +31,7 @@ class PermissionsScreen extends StatelessWidget {
               switch (subPlatform) {
                 case SubPlatform.miui:
                   context.router
-                      .pushWidget(MiuiPermissionTipsScreen(
+                      .pushWidget(MiuiPermissionTips(
                         onGoToAppSettings: () => context.read<PermissionsCubit>().openAppSettings(),
                       ))
                       .then((value) => context.read<PermissionsCubit>().dismissSubPlatformTip());
