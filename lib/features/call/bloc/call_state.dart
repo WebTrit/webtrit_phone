@@ -127,6 +127,7 @@ class ActiveCall with _$ActiveCall {
     required String callId,
     required CallkeepHandle handle,
     String? displayName,
+    String? fromReferId,
     required bool video,
     @Default(true) bool? frontCamera,
     @Default(false) bool held,

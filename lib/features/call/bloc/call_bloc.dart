@@ -981,6 +981,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       blindTransferInitiated: (event) => _onCallControlEventBlindTransferInitiated(event, emit),
       blindTransferred: (event) => _onCallControlEventBlindTransferred(event, emit),
       attendedTransferred: (event) => _onCallControlEventAttendedTransferred(event, emit),
+      attendedRequestApproved: (value) => _onCallControlEventAttendedRequestApproved(value, emit),
+      attendedRequestDeclined: (value) => _onCallControlEventAttendedRequestDeclined(value, emit),
     );
   }
 
@@ -1225,6 +1227,68 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
   }
 
+  Future<void> _onCallControlEventAttendedRequestApproved(
+    _CallControlEventAttendedRequestApproved event,
+    Emitter<CallState> emit,
+  ) async {
+    final referId = event.referId;
+    final referTo = event.referTo;
+
+    final newHandle = CallkeepHandle.number(referTo);
+
+    final callId = WebtritSignalingClient.generateCallId();
+
+    final error = await callkeep.startCall(
+      callId,
+      newHandle,
+      hasVideo: false,
+      proximityEnabled: true,
+    );
+
+    if (error != null) {
+      _logger.warning('__onCallControlEventStarted error: $error');
+      notificationsBloc.add(NotificationsMessaged(RawNotification(error.toString())));
+      return;
+    }
+
+    final newCall = ActiveCall(
+      direction: Direction.outgoing,
+      line: state.retrieveIdleLine() ?? _kUndefinedLine,
+      callId: callId,
+      handle: newHandle,
+      fromReferId: referId,
+      video: false,
+      createdTime: clock.now(),
+    );
+
+    emit(state.copyWithPushActiveCall(newCall).copyWith(minimized: false));
+  }
+
+  Future<void> _onCallControlEventAttendedRequestDeclined(
+    _CallControlEventAttendedRequestDeclined event,
+    Emitter<CallState> emit,
+  ) async {
+    final referId = event.referId;
+    final callId = event.callId;
+
+    final call = state.retrieveActiveCall(callId);
+    if (call == null) return;
+
+    try {
+      final declineRequest = DeclineRequest(
+        transaction: WebtritSignalingClient.generateTransactionId(),
+        line: call.line,
+        callId: callId,
+        referId: referId,
+      );
+
+      await _signalingClient?.execute(declineRequest);
+    } catch (e) {
+      _logger.warning('_onCallControlEventAttendedRequestDeclined request error: $e');
+      notificationsBloc.add(NotificationsMessaged(RawNotification(e.toString())));
+    }
+  }
+
   // processing call perform events
 
   Future<void> _onCallPerformEvent(
@@ -1323,6 +1387,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           callId: activeCall.callId.toString(),
           number: activeCall.handle.normalizedValue(),
           jsep: localDescription.toMap(),
+          referId: activeCall.fromReferId,
         ));
       });
       await peerConnection.setLocalDescription(localDescription);

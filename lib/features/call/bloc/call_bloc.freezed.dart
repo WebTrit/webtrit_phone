@@ -4860,6 +4860,10 @@ mixin _$CallControlEvent {
     required TResult Function(String number) blindTransferred,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
+    required TResult Function(String callId, String referId)
+        attendedRequestDeclined,
+    required TResult Function(String referId, String referTo)
+        attendedRequestApproved,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -4880,6 +4884,8 @@ mixin _$CallControlEvent {
     TResult? Function(String number)? blindTransferred,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult? Function(String callId, String referId)? attendedRequestDeclined,
+    TResult? Function(String referId, String referTo)? attendedRequestApproved,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -4900,6 +4906,8 @@ mixin _$CallControlEvent {
     TResult Function(String number)? blindTransferred,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult Function(String callId, String referId)? attendedRequestDeclined,
+    TResult Function(String referId, String referTo)? attendedRequestApproved,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -4925,6 +4933,10 @@ mixin _$CallControlEvent {
         blindTransferred,
     required TResult Function(_CallControlEventAttendedTransferred value)
         attendedTransferred,
+    required TResult Function(_CallControlEventAttendedRequestDeclined value)
+        attendedRequestDeclined,
+    required TResult Function(_CallControlEventAttendedRequestApproved value)
+        attendedRequestApproved,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -4945,6 +4957,10 @@ mixin _$CallControlEvent {
         blindTransferred,
     TResult? Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult? Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -4964,6 +4980,10 @@ mixin _$CallControlEvent {
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     TResult Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -5057,6 +5077,10 @@ class _$CallControlEventStartedImpl
     required TResult Function(String number) blindTransferred,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
+    required TResult Function(String callId, String referId)
+        attendedRequestDeclined,
+    required TResult Function(String referId, String referTo)
+        attendedRequestApproved,
   }) {
     return started(line, generic, number, email, displayName, video);
   }
@@ -5080,6 +5104,8 @@ class _$CallControlEventStartedImpl
     TResult? Function(String number)? blindTransferred,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult? Function(String callId, String referId)? attendedRequestDeclined,
+    TResult? Function(String referId, String referTo)? attendedRequestApproved,
   }) {
     return started?.call(line, generic, number, email, displayName, video);
   }
@@ -5103,6 +5129,8 @@ class _$CallControlEventStartedImpl
     TResult Function(String number)? blindTransferred,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult Function(String callId, String referId)? attendedRequestDeclined,
+    TResult Function(String referId, String referTo)? attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -5134,6 +5162,10 @@ class _$CallControlEventStartedImpl
         blindTransferred,
     required TResult Function(_CallControlEventAttendedTransferred value)
         attendedTransferred,
+    required TResult Function(_CallControlEventAttendedRequestDeclined value)
+        attendedRequestDeclined,
+    required TResult Function(_CallControlEventAttendedRequestApproved value)
+        attendedRequestApproved,
   }) {
     return started(this);
   }
@@ -5157,6 +5189,10 @@ class _$CallControlEventStartedImpl
         blindTransferred,
     TResult? Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult? Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
   }) {
     return started?.call(this);
   }
@@ -5179,6 +5215,10 @@ class _$CallControlEventStartedImpl
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     TResult Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -5259,6 +5299,10 @@ class _$CallControlEventAnsweredImpl
     required TResult Function(String number) blindTransferred,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
+    required TResult Function(String callId, String referId)
+        attendedRequestDeclined,
+    required TResult Function(String referId, String referTo)
+        attendedRequestApproved,
   }) {
     return answered(callId);
   }
@@ -5282,6 +5326,8 @@ class _$CallControlEventAnsweredImpl
     TResult? Function(String number)? blindTransferred,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult? Function(String callId, String referId)? attendedRequestDeclined,
+    TResult? Function(String referId, String referTo)? attendedRequestApproved,
   }) {
     return answered?.call(callId);
   }
@@ -5305,6 +5351,8 @@ class _$CallControlEventAnsweredImpl
     TResult Function(String number)? blindTransferred,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult Function(String callId, String referId)? attendedRequestDeclined,
+    TResult Function(String referId, String referTo)? attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (answered != null) {
@@ -5336,6 +5384,10 @@ class _$CallControlEventAnsweredImpl
         blindTransferred,
     required TResult Function(_CallControlEventAttendedTransferred value)
         attendedTransferred,
+    required TResult Function(_CallControlEventAttendedRequestDeclined value)
+        attendedRequestDeclined,
+    required TResult Function(_CallControlEventAttendedRequestApproved value)
+        attendedRequestApproved,
   }) {
     return answered(this);
   }
@@ -5359,6 +5411,10 @@ class _$CallControlEventAnsweredImpl
         blindTransferred,
     TResult? Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult? Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
   }) {
     return answered?.call(this);
   }
@@ -5381,6 +5437,10 @@ class _$CallControlEventAnsweredImpl
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     TResult Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (answered != null) {
@@ -5450,6 +5510,10 @@ class _$CallControlEventEndedImpl
     required TResult Function(String number) blindTransferred,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
+    required TResult Function(String callId, String referId)
+        attendedRequestDeclined,
+    required TResult Function(String referId, String referTo)
+        attendedRequestApproved,
   }) {
     return ended(callId);
   }
@@ -5473,6 +5537,8 @@ class _$CallControlEventEndedImpl
     TResult? Function(String number)? blindTransferred,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult? Function(String callId, String referId)? attendedRequestDeclined,
+    TResult? Function(String referId, String referTo)? attendedRequestApproved,
   }) {
     return ended?.call(callId);
   }
@@ -5496,6 +5562,8 @@ class _$CallControlEventEndedImpl
     TResult Function(String number)? blindTransferred,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult Function(String callId, String referId)? attendedRequestDeclined,
+    TResult Function(String referId, String referTo)? attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (ended != null) {
@@ -5527,6 +5595,10 @@ class _$CallControlEventEndedImpl
         blindTransferred,
     required TResult Function(_CallControlEventAttendedTransferred value)
         attendedTransferred,
+    required TResult Function(_CallControlEventAttendedRequestDeclined value)
+        attendedRequestDeclined,
+    required TResult Function(_CallControlEventAttendedRequestApproved value)
+        attendedRequestApproved,
   }) {
     return ended(this);
   }
@@ -5550,6 +5622,10 @@ class _$CallControlEventEndedImpl
         blindTransferred,
     TResult? Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult? Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
   }) {
     return ended?.call(this);
   }
@@ -5572,6 +5648,10 @@ class _$CallControlEventEndedImpl
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     TResult Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (ended != null) {
@@ -5645,6 +5725,10 @@ class _$CallControlEventSetHeldImpl
     required TResult Function(String number) blindTransferred,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
+    required TResult Function(String callId, String referId)
+        attendedRequestDeclined,
+    required TResult Function(String referId, String referTo)
+        attendedRequestApproved,
   }) {
     return setHeld(callId, onHold);
   }
@@ -5668,6 +5752,8 @@ class _$CallControlEventSetHeldImpl
     TResult? Function(String number)? blindTransferred,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult? Function(String callId, String referId)? attendedRequestDeclined,
+    TResult? Function(String referId, String referTo)? attendedRequestApproved,
   }) {
     return setHeld?.call(callId, onHold);
   }
@@ -5691,6 +5777,8 @@ class _$CallControlEventSetHeldImpl
     TResult Function(String number)? blindTransferred,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult Function(String callId, String referId)? attendedRequestDeclined,
+    TResult Function(String referId, String referTo)? attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (setHeld != null) {
@@ -5722,6 +5810,10 @@ class _$CallControlEventSetHeldImpl
         blindTransferred,
     required TResult Function(_CallControlEventAttendedTransferred value)
         attendedTransferred,
+    required TResult Function(_CallControlEventAttendedRequestDeclined value)
+        attendedRequestDeclined,
+    required TResult Function(_CallControlEventAttendedRequestApproved value)
+        attendedRequestApproved,
   }) {
     return setHeld(this);
   }
@@ -5745,6 +5837,10 @@ class _$CallControlEventSetHeldImpl
         blindTransferred,
     TResult? Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult? Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
   }) {
     return setHeld?.call(this);
   }
@@ -5767,6 +5863,10 @@ class _$CallControlEventSetHeldImpl
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     TResult Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (setHeld != null) {
@@ -5841,6 +5941,10 @@ class _$CallControlEventSetMutedImpl
     required TResult Function(String number) blindTransferred,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
+    required TResult Function(String callId, String referId)
+        attendedRequestDeclined,
+    required TResult Function(String referId, String referTo)
+        attendedRequestApproved,
   }) {
     return setMuted(callId, muted);
   }
@@ -5864,6 +5968,8 @@ class _$CallControlEventSetMutedImpl
     TResult? Function(String number)? blindTransferred,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult? Function(String callId, String referId)? attendedRequestDeclined,
+    TResult? Function(String referId, String referTo)? attendedRequestApproved,
   }) {
     return setMuted?.call(callId, muted);
   }
@@ -5887,6 +5993,8 @@ class _$CallControlEventSetMutedImpl
     TResult Function(String number)? blindTransferred,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult Function(String callId, String referId)? attendedRequestDeclined,
+    TResult Function(String referId, String referTo)? attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (setMuted != null) {
@@ -5918,6 +6026,10 @@ class _$CallControlEventSetMutedImpl
         blindTransferred,
     required TResult Function(_CallControlEventAttendedTransferred value)
         attendedTransferred,
+    required TResult Function(_CallControlEventAttendedRequestDeclined value)
+        attendedRequestDeclined,
+    required TResult Function(_CallControlEventAttendedRequestApproved value)
+        attendedRequestApproved,
   }) {
     return setMuted(this);
   }
@@ -5941,6 +6053,10 @@ class _$CallControlEventSetMutedImpl
         blindTransferred,
     TResult? Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult? Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
   }) {
     return setMuted?.call(this);
   }
@@ -5963,6 +6079,10 @@ class _$CallControlEventSetMutedImpl
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     TResult Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (setMuted != null) {
@@ -6037,6 +6157,10 @@ class _$CallControlEventSentDTMFImpl
     required TResult Function(String number) blindTransferred,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
+    required TResult Function(String callId, String referId)
+        attendedRequestDeclined,
+    required TResult Function(String referId, String referTo)
+        attendedRequestApproved,
   }) {
     return sentDTMF(callId, key);
   }
@@ -6060,6 +6184,8 @@ class _$CallControlEventSentDTMFImpl
     TResult? Function(String number)? blindTransferred,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult? Function(String callId, String referId)? attendedRequestDeclined,
+    TResult? Function(String referId, String referTo)? attendedRequestApproved,
   }) {
     return sentDTMF?.call(callId, key);
   }
@@ -6083,6 +6209,8 @@ class _$CallControlEventSentDTMFImpl
     TResult Function(String number)? blindTransferred,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult Function(String callId, String referId)? attendedRequestDeclined,
+    TResult Function(String referId, String referTo)? attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (sentDTMF != null) {
@@ -6114,6 +6242,10 @@ class _$CallControlEventSentDTMFImpl
         blindTransferred,
     required TResult Function(_CallControlEventAttendedTransferred value)
         attendedTransferred,
+    required TResult Function(_CallControlEventAttendedRequestDeclined value)
+        attendedRequestDeclined,
+    required TResult Function(_CallControlEventAttendedRequestApproved value)
+        attendedRequestApproved,
   }) {
     return sentDTMF(this);
   }
@@ -6137,6 +6269,10 @@ class _$CallControlEventSentDTMFImpl
         blindTransferred,
     TResult? Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult? Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
   }) {
     return sentDTMF?.call(this);
   }
@@ -6159,6 +6295,10 @@ class _$CallControlEventSentDTMFImpl
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     TResult Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (sentDTMF != null) {
@@ -6229,6 +6369,10 @@ class _$CallControlEventCameraSwitchedImpl
     required TResult Function(String number) blindTransferred,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
+    required TResult Function(String callId, String referId)
+        attendedRequestDeclined,
+    required TResult Function(String referId, String referTo)
+        attendedRequestApproved,
   }) {
     return cameraSwitched(callId);
   }
@@ -6252,6 +6396,8 @@ class _$CallControlEventCameraSwitchedImpl
     TResult? Function(String number)? blindTransferred,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult? Function(String callId, String referId)? attendedRequestDeclined,
+    TResult? Function(String referId, String referTo)? attendedRequestApproved,
   }) {
     return cameraSwitched?.call(callId);
   }
@@ -6275,6 +6421,8 @@ class _$CallControlEventCameraSwitchedImpl
     TResult Function(String number)? blindTransferred,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult Function(String callId, String referId)? attendedRequestDeclined,
+    TResult Function(String referId, String referTo)? attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (cameraSwitched != null) {
@@ -6306,6 +6454,10 @@ class _$CallControlEventCameraSwitchedImpl
         blindTransferred,
     required TResult Function(_CallControlEventAttendedTransferred value)
         attendedTransferred,
+    required TResult Function(_CallControlEventAttendedRequestDeclined value)
+        attendedRequestDeclined,
+    required TResult Function(_CallControlEventAttendedRequestApproved value)
+        attendedRequestApproved,
   }) {
     return cameraSwitched(this);
   }
@@ -6329,6 +6481,10 @@ class _$CallControlEventCameraSwitchedImpl
         blindTransferred,
     TResult? Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult? Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
   }) {
     return cameraSwitched?.call(this);
   }
@@ -6351,6 +6507,10 @@ class _$CallControlEventCameraSwitchedImpl
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     TResult Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (cameraSwitched != null) {
@@ -6424,6 +6584,10 @@ class _$CallControlEventCameraEnabledImpl
     required TResult Function(String number) blindTransferred,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
+    required TResult Function(String callId, String referId)
+        attendedRequestDeclined,
+    required TResult Function(String referId, String referTo)
+        attendedRequestApproved,
   }) {
     return cameraEnabled(callId, enabled);
   }
@@ -6447,6 +6611,8 @@ class _$CallControlEventCameraEnabledImpl
     TResult? Function(String number)? blindTransferred,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult? Function(String callId, String referId)? attendedRequestDeclined,
+    TResult? Function(String referId, String referTo)? attendedRequestApproved,
   }) {
     return cameraEnabled?.call(callId, enabled);
   }
@@ -6470,6 +6636,8 @@ class _$CallControlEventCameraEnabledImpl
     TResult Function(String number)? blindTransferred,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult Function(String callId, String referId)? attendedRequestDeclined,
+    TResult Function(String referId, String referTo)? attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (cameraEnabled != null) {
@@ -6501,6 +6669,10 @@ class _$CallControlEventCameraEnabledImpl
         blindTransferred,
     required TResult Function(_CallControlEventAttendedTransferred value)
         attendedTransferred,
+    required TResult Function(_CallControlEventAttendedRequestDeclined value)
+        attendedRequestDeclined,
+    required TResult Function(_CallControlEventAttendedRequestApproved value)
+        attendedRequestApproved,
   }) {
     return cameraEnabled(this);
   }
@@ -6524,6 +6696,10 @@ class _$CallControlEventCameraEnabledImpl
         blindTransferred,
     TResult? Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult? Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
   }) {
     return cameraEnabled?.call(this);
   }
@@ -6546,6 +6722,10 @@ class _$CallControlEventCameraEnabledImpl
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     TResult Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (cameraEnabled != null) {
@@ -6621,6 +6801,10 @@ class _$CallControlEventSpeakerEnabledImpl
     required TResult Function(String number) blindTransferred,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
+    required TResult Function(String callId, String referId)
+        attendedRequestDeclined,
+    required TResult Function(String referId, String referTo)
+        attendedRequestApproved,
   }) {
     return speakerEnabled(callId, enabled);
   }
@@ -6644,6 +6828,8 @@ class _$CallControlEventSpeakerEnabledImpl
     TResult? Function(String number)? blindTransferred,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult? Function(String callId, String referId)? attendedRequestDeclined,
+    TResult? Function(String referId, String referTo)? attendedRequestApproved,
   }) {
     return speakerEnabled?.call(callId, enabled);
   }
@@ -6667,6 +6853,8 @@ class _$CallControlEventSpeakerEnabledImpl
     TResult Function(String number)? blindTransferred,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult Function(String callId, String referId)? attendedRequestDeclined,
+    TResult Function(String referId, String referTo)? attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (speakerEnabled != null) {
@@ -6698,6 +6886,10 @@ class _$CallControlEventSpeakerEnabledImpl
         blindTransferred,
     required TResult Function(_CallControlEventAttendedTransferred value)
         attendedTransferred,
+    required TResult Function(_CallControlEventAttendedRequestDeclined value)
+        attendedRequestDeclined,
+    required TResult Function(_CallControlEventAttendedRequestApproved value)
+        attendedRequestApproved,
   }) {
     return speakerEnabled(this);
   }
@@ -6721,6 +6913,10 @@ class _$CallControlEventSpeakerEnabledImpl
         blindTransferred,
     TResult? Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult? Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
   }) {
     return speakerEnabled?.call(this);
   }
@@ -6743,6 +6939,10 @@ class _$CallControlEventSpeakerEnabledImpl
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     TResult Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (speakerEnabled != null) {
@@ -6814,6 +7014,10 @@ class _$CallControlEventFailureApprovedImpl
     required TResult Function(String number) blindTransferred,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
+    required TResult Function(String callId, String referId)
+        attendedRequestDeclined,
+    required TResult Function(String referId, String referTo)
+        attendedRequestApproved,
   }) {
     return failureApproved(callId);
   }
@@ -6837,6 +7041,8 @@ class _$CallControlEventFailureApprovedImpl
     TResult? Function(String number)? blindTransferred,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult? Function(String callId, String referId)? attendedRequestDeclined,
+    TResult? Function(String referId, String referTo)? attendedRequestApproved,
   }) {
     return failureApproved?.call(callId);
   }
@@ -6860,6 +7066,8 @@ class _$CallControlEventFailureApprovedImpl
     TResult Function(String number)? blindTransferred,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult Function(String callId, String referId)? attendedRequestDeclined,
+    TResult Function(String referId, String referTo)? attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (failureApproved != null) {
@@ -6891,6 +7099,10 @@ class _$CallControlEventFailureApprovedImpl
         blindTransferred,
     required TResult Function(_CallControlEventAttendedTransferred value)
         attendedTransferred,
+    required TResult Function(_CallControlEventAttendedRequestDeclined value)
+        attendedRequestDeclined,
+    required TResult Function(_CallControlEventAttendedRequestApproved value)
+        attendedRequestApproved,
   }) {
     return failureApproved(this);
   }
@@ -6914,6 +7126,10 @@ class _$CallControlEventFailureApprovedImpl
         blindTransferred,
     TResult? Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult? Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
   }) {
     return failureApproved?.call(this);
   }
@@ -6936,6 +7152,10 @@ class _$CallControlEventFailureApprovedImpl
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     TResult Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (failureApproved != null) {
@@ -7006,6 +7226,10 @@ class _$CallControlEventBlindTransferInitiatedImpl
     required TResult Function(String number) blindTransferred,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
+    required TResult Function(String callId, String referId)
+        attendedRequestDeclined,
+    required TResult Function(String referId, String referTo)
+        attendedRequestApproved,
   }) {
     return blindTransferInitiated(callId);
   }
@@ -7029,6 +7253,8 @@ class _$CallControlEventBlindTransferInitiatedImpl
     TResult? Function(String number)? blindTransferred,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult? Function(String callId, String referId)? attendedRequestDeclined,
+    TResult? Function(String referId, String referTo)? attendedRequestApproved,
   }) {
     return blindTransferInitiated?.call(callId);
   }
@@ -7052,6 +7278,8 @@ class _$CallControlEventBlindTransferInitiatedImpl
     TResult Function(String number)? blindTransferred,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult Function(String callId, String referId)? attendedRequestDeclined,
+    TResult Function(String referId, String referTo)? attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (blindTransferInitiated != null) {
@@ -7083,6 +7311,10 @@ class _$CallControlEventBlindTransferInitiatedImpl
         blindTransferred,
     required TResult Function(_CallControlEventAttendedTransferred value)
         attendedTransferred,
+    required TResult Function(_CallControlEventAttendedRequestDeclined value)
+        attendedRequestDeclined,
+    required TResult Function(_CallControlEventAttendedRequestApproved value)
+        attendedRequestApproved,
   }) {
     return blindTransferInitiated(this);
   }
@@ -7106,6 +7338,10 @@ class _$CallControlEventBlindTransferInitiatedImpl
         blindTransferred,
     TResult? Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult? Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
   }) {
     return blindTransferInitiated?.call(this);
   }
@@ -7128,6 +7364,10 @@ class _$CallControlEventBlindTransferInitiatedImpl
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     TResult Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (blindTransferInitiated != null) {
@@ -7198,6 +7438,10 @@ class _$CallControlEventBlindTransferredImpl
     required TResult Function(String number) blindTransferred,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
+    required TResult Function(String callId, String referId)
+        attendedRequestDeclined,
+    required TResult Function(String referId, String referTo)
+        attendedRequestApproved,
   }) {
     return blindTransferred(number);
   }
@@ -7221,6 +7465,8 @@ class _$CallControlEventBlindTransferredImpl
     TResult? Function(String number)? blindTransferred,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult? Function(String callId, String referId)? attendedRequestDeclined,
+    TResult? Function(String referId, String referTo)? attendedRequestApproved,
   }) {
     return blindTransferred?.call(number);
   }
@@ -7244,6 +7490,8 @@ class _$CallControlEventBlindTransferredImpl
     TResult Function(String number)? blindTransferred,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult Function(String callId, String referId)? attendedRequestDeclined,
+    TResult Function(String referId, String referTo)? attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (blindTransferred != null) {
@@ -7275,6 +7523,10 @@ class _$CallControlEventBlindTransferredImpl
         blindTransferred,
     required TResult Function(_CallControlEventAttendedTransferred value)
         attendedTransferred,
+    required TResult Function(_CallControlEventAttendedRequestDeclined value)
+        attendedRequestDeclined,
+    required TResult Function(_CallControlEventAttendedRequestApproved value)
+        attendedRequestApproved,
   }) {
     return blindTransferred(this);
   }
@@ -7298,6 +7550,10 @@ class _$CallControlEventBlindTransferredImpl
         blindTransferred,
     TResult? Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult? Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
   }) {
     return blindTransferred?.call(this);
   }
@@ -7320,6 +7576,10 @@ class _$CallControlEventBlindTransferredImpl
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     TResult Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (blindTransferred != null) {
@@ -7396,6 +7656,10 @@ class _$CallControlEventAttendedTransferredImpl
     required TResult Function(String number) blindTransferred,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferred,
+    required TResult Function(String callId, String referId)
+        attendedRequestDeclined,
+    required TResult Function(String referId, String referTo)
+        attendedRequestApproved,
   }) {
     return attendedTransferred(referorCall, replaceCall);
   }
@@ -7419,6 +7683,8 @@ class _$CallControlEventAttendedTransferredImpl
     TResult? Function(String number)? blindTransferred,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult? Function(String callId, String referId)? attendedRequestDeclined,
+    TResult? Function(String referId, String referTo)? attendedRequestApproved,
   }) {
     return attendedTransferred?.call(referorCall, replaceCall);
   }
@@ -7442,6 +7708,8 @@ class _$CallControlEventAttendedTransferredImpl
     TResult Function(String number)? blindTransferred,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferred,
+    TResult Function(String callId, String referId)? attendedRequestDeclined,
+    TResult Function(String referId, String referTo)? attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (attendedTransferred != null) {
@@ -7473,6 +7741,10 @@ class _$CallControlEventAttendedTransferredImpl
         blindTransferred,
     required TResult Function(_CallControlEventAttendedTransferred value)
         attendedTransferred,
+    required TResult Function(_CallControlEventAttendedRequestDeclined value)
+        attendedRequestDeclined,
+    required TResult Function(_CallControlEventAttendedRequestApproved value)
+        attendedRequestApproved,
   }) {
     return attendedTransferred(this);
   }
@@ -7496,6 +7768,10 @@ class _$CallControlEventAttendedTransferredImpl
         blindTransferred,
     TResult? Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult? Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
   }) {
     return attendedTransferred?.call(this);
   }
@@ -7518,6 +7794,10 @@ class _$CallControlEventAttendedTransferredImpl
     TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
     TResult Function(_CallControlEventAttendedTransferred value)?
         attendedTransferred,
+    TResult Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
     required TResult orElse(),
   }) {
     if (attendedTransferred != null) {
@@ -7536,6 +7816,446 @@ abstract class _CallControlEventAttendedTransferred
 
   ActiveCall get referorCall;
   ActiveCall get replaceCall;
+}
+
+/// @nodoc
+
+class _$CallControlEventAttendedRequestDeclinedImpl
+    with DiagnosticableTreeMixin
+    implements _CallControlEventAttendedRequestDeclined {
+  const _$CallControlEventAttendedRequestDeclinedImpl(
+      {required this.callId, required this.referId});
+
+  @override
+  final String callId;
+  @override
+  final String referId;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallControlEvent.attendedRequestDeclined(callId: $callId, referId: $referId)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty(
+          'type', 'CallControlEvent.attendedRequestDeclined'))
+      ..add(DiagnosticsProperty('callId', callId))
+      ..add(DiagnosticsProperty('referId', referId));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CallControlEventAttendedRequestDeclinedImpl &&
+            (identical(other.callId, callId) || other.callId == callId) &&
+            (identical(other.referId, referId) || other.referId == referId));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, callId, referId);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(int? line, String? generic, String? number,
+            String? email, String? displayName, bool video)
+        started,
+    required TResult Function(String callId) answered,
+    required TResult Function(String callId) ended,
+    required TResult Function(String callId, bool onHold) setHeld,
+    required TResult Function(String callId, bool muted) setMuted,
+    required TResult Function(String callId, String key) sentDTMF,
+    required TResult Function(String callId) cameraSwitched,
+    required TResult Function(String callId, bool enabled) cameraEnabled,
+    required TResult Function(String callId, bool enabled) speakerEnabled,
+    required TResult Function(String callId) failureApproved,
+    required TResult Function(String callId) blindTransferInitiated,
+    required TResult Function(String number) blindTransferred,
+    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
+        attendedTransferred,
+    required TResult Function(String callId, String referId)
+        attendedRequestDeclined,
+    required TResult Function(String referId, String referTo)
+        attendedRequestApproved,
+  }) {
+    return attendedRequestDeclined(callId, referId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(int? line, String? generic, String? number, String? email,
+            String? displayName, bool video)?
+        started,
+    TResult? Function(String callId)? answered,
+    TResult? Function(String callId)? ended,
+    TResult? Function(String callId, bool onHold)? setHeld,
+    TResult? Function(String callId, bool muted)? setMuted,
+    TResult? Function(String callId, String key)? sentDTMF,
+    TResult? Function(String callId)? cameraSwitched,
+    TResult? Function(String callId, bool enabled)? cameraEnabled,
+    TResult? Function(String callId, bool enabled)? speakerEnabled,
+    TResult? Function(String callId)? failureApproved,
+    TResult? Function(String callId)? blindTransferInitiated,
+    TResult? Function(String number)? blindTransferred,
+    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
+        attendedTransferred,
+    TResult? Function(String callId, String referId)? attendedRequestDeclined,
+    TResult? Function(String referId, String referTo)? attendedRequestApproved,
+  }) {
+    return attendedRequestDeclined?.call(callId, referId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(int? line, String? generic, String? number, String? email,
+            String? displayName, bool video)?
+        started,
+    TResult Function(String callId)? answered,
+    TResult Function(String callId)? ended,
+    TResult Function(String callId, bool onHold)? setHeld,
+    TResult Function(String callId, bool muted)? setMuted,
+    TResult Function(String callId, String key)? sentDTMF,
+    TResult Function(String callId)? cameraSwitched,
+    TResult Function(String callId, bool enabled)? cameraEnabled,
+    TResult Function(String callId, bool enabled)? speakerEnabled,
+    TResult Function(String callId)? failureApproved,
+    TResult Function(String callId)? blindTransferInitiated,
+    TResult Function(String number)? blindTransferred,
+    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
+        attendedTransferred,
+    TResult Function(String callId, String referId)? attendedRequestDeclined,
+    TResult Function(String referId, String referTo)? attendedRequestApproved,
+    required TResult orElse(),
+  }) {
+    if (attendedRequestDeclined != null) {
+      return attendedRequestDeclined(callId, referId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CallControlEventStarted value) started,
+    required TResult Function(_CallControlEventAnswered value) answered,
+    required TResult Function(_CallControlEventEnded value) ended,
+    required TResult Function(_CallControlEventSetHeld value) setHeld,
+    required TResult Function(_CallControlEventSetMuted value) setMuted,
+    required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
+    required TResult Function(_CallControlEventCameraSwitched value)
+        cameraSwitched,
+    required TResult Function(_CallControlEventCameraEnabled value)
+        cameraEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value)
+        speakerEnabled,
+    required TResult Function(_CallControlEventFailureApproved value)
+        failureApproved,
+    required TResult Function(_CallControlEventBlindTransferInitiated value)
+        blindTransferInitiated,
+    required TResult Function(_CallControlEventBlindTransferred value)
+        blindTransferred,
+    required TResult Function(_CallControlEventAttendedTransferred value)
+        attendedTransferred,
+    required TResult Function(_CallControlEventAttendedRequestDeclined value)
+        attendedRequestDeclined,
+    required TResult Function(_CallControlEventAttendedRequestApproved value)
+        attendedRequestApproved,
+  }) {
+    return attendedRequestDeclined(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CallControlEventStarted value)? started,
+    TResult? Function(_CallControlEventAnswered value)? answered,
+    TResult? Function(_CallControlEventEnded value)? ended,
+    TResult? Function(_CallControlEventSetHeld value)? setHeld,
+    TResult? Function(_CallControlEventSetMuted value)? setMuted,
+    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
+    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
+    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventBlindTransferInitiated value)?
+        blindTransferInitiated,
+    TResult? Function(_CallControlEventBlindTransferred value)?
+        blindTransferred,
+    TResult? Function(_CallControlEventAttendedTransferred value)?
+        attendedTransferred,
+    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult? Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
+  }) {
+    return attendedRequestDeclined?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CallControlEventStarted value)? started,
+    TResult Function(_CallControlEventAnswered value)? answered,
+    TResult Function(_CallControlEventEnded value)? ended,
+    TResult Function(_CallControlEventSetHeld value)? setHeld,
+    TResult Function(_CallControlEventSetMuted value)? setMuted,
+    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
+    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
+    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult Function(_CallControlEventBlindTransferInitiated value)?
+        blindTransferInitiated,
+    TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
+    TResult Function(_CallControlEventAttendedTransferred value)?
+        attendedTransferred,
+    TResult Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
+    required TResult orElse(),
+  }) {
+    if (attendedRequestDeclined != null) {
+      return attendedRequestDeclined(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _CallControlEventAttendedRequestDeclined
+    implements CallControlEvent {
+  const factory _CallControlEventAttendedRequestDeclined(
+          {required final String callId, required final String referId}) =
+      _$CallControlEventAttendedRequestDeclinedImpl;
+
+  String get callId;
+  String get referId;
+}
+
+/// @nodoc
+
+class _$CallControlEventAttendedRequestApprovedImpl
+    with DiagnosticableTreeMixin
+    implements _CallControlEventAttendedRequestApproved {
+  const _$CallControlEventAttendedRequestApprovedImpl(
+      {required this.referId, required this.referTo});
+
+  @override
+  final String referId;
+  @override
+  final String referTo;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallControlEvent.attendedRequestApproved(referId: $referId, referTo: $referTo)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty(
+          'type', 'CallControlEvent.attendedRequestApproved'))
+      ..add(DiagnosticsProperty('referId', referId))
+      ..add(DiagnosticsProperty('referTo', referTo));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CallControlEventAttendedRequestApprovedImpl &&
+            (identical(other.referId, referId) || other.referId == referId) &&
+            (identical(other.referTo, referTo) || other.referTo == referTo));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, referId, referTo);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(int? line, String? generic, String? number,
+            String? email, String? displayName, bool video)
+        started,
+    required TResult Function(String callId) answered,
+    required TResult Function(String callId) ended,
+    required TResult Function(String callId, bool onHold) setHeld,
+    required TResult Function(String callId, bool muted) setMuted,
+    required TResult Function(String callId, String key) sentDTMF,
+    required TResult Function(String callId) cameraSwitched,
+    required TResult Function(String callId, bool enabled) cameraEnabled,
+    required TResult Function(String callId, bool enabled) speakerEnabled,
+    required TResult Function(String callId) failureApproved,
+    required TResult Function(String callId) blindTransferInitiated,
+    required TResult Function(String number) blindTransferred,
+    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
+        attendedTransferred,
+    required TResult Function(String callId, String referId)
+        attendedRequestDeclined,
+    required TResult Function(String referId, String referTo)
+        attendedRequestApproved,
+  }) {
+    return attendedRequestApproved(referId, referTo);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(int? line, String? generic, String? number, String? email,
+            String? displayName, bool video)?
+        started,
+    TResult? Function(String callId)? answered,
+    TResult? Function(String callId)? ended,
+    TResult? Function(String callId, bool onHold)? setHeld,
+    TResult? Function(String callId, bool muted)? setMuted,
+    TResult? Function(String callId, String key)? sentDTMF,
+    TResult? Function(String callId)? cameraSwitched,
+    TResult? Function(String callId, bool enabled)? cameraEnabled,
+    TResult? Function(String callId, bool enabled)? speakerEnabled,
+    TResult? Function(String callId)? failureApproved,
+    TResult? Function(String callId)? blindTransferInitiated,
+    TResult? Function(String number)? blindTransferred,
+    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
+        attendedTransferred,
+    TResult? Function(String callId, String referId)? attendedRequestDeclined,
+    TResult? Function(String referId, String referTo)? attendedRequestApproved,
+  }) {
+    return attendedRequestApproved?.call(referId, referTo);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(int? line, String? generic, String? number, String? email,
+            String? displayName, bool video)?
+        started,
+    TResult Function(String callId)? answered,
+    TResult Function(String callId)? ended,
+    TResult Function(String callId, bool onHold)? setHeld,
+    TResult Function(String callId, bool muted)? setMuted,
+    TResult Function(String callId, String key)? sentDTMF,
+    TResult Function(String callId)? cameraSwitched,
+    TResult Function(String callId, bool enabled)? cameraEnabled,
+    TResult Function(String callId, bool enabled)? speakerEnabled,
+    TResult Function(String callId)? failureApproved,
+    TResult Function(String callId)? blindTransferInitiated,
+    TResult Function(String number)? blindTransferred,
+    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
+        attendedTransferred,
+    TResult Function(String callId, String referId)? attendedRequestDeclined,
+    TResult Function(String referId, String referTo)? attendedRequestApproved,
+    required TResult orElse(),
+  }) {
+    if (attendedRequestApproved != null) {
+      return attendedRequestApproved(referId, referTo);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CallControlEventStarted value) started,
+    required TResult Function(_CallControlEventAnswered value) answered,
+    required TResult Function(_CallControlEventEnded value) ended,
+    required TResult Function(_CallControlEventSetHeld value) setHeld,
+    required TResult Function(_CallControlEventSetMuted value) setMuted,
+    required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
+    required TResult Function(_CallControlEventCameraSwitched value)
+        cameraSwitched,
+    required TResult Function(_CallControlEventCameraEnabled value)
+        cameraEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value)
+        speakerEnabled,
+    required TResult Function(_CallControlEventFailureApproved value)
+        failureApproved,
+    required TResult Function(_CallControlEventBlindTransferInitiated value)
+        blindTransferInitiated,
+    required TResult Function(_CallControlEventBlindTransferred value)
+        blindTransferred,
+    required TResult Function(_CallControlEventAttendedTransferred value)
+        attendedTransferred,
+    required TResult Function(_CallControlEventAttendedRequestDeclined value)
+        attendedRequestDeclined,
+    required TResult Function(_CallControlEventAttendedRequestApproved value)
+        attendedRequestApproved,
+  }) {
+    return attendedRequestApproved(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CallControlEventStarted value)? started,
+    TResult? Function(_CallControlEventAnswered value)? answered,
+    TResult? Function(_CallControlEventEnded value)? ended,
+    TResult? Function(_CallControlEventSetHeld value)? setHeld,
+    TResult? Function(_CallControlEventSetMuted value)? setMuted,
+    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
+    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
+    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventBlindTransferInitiated value)?
+        blindTransferInitiated,
+    TResult? Function(_CallControlEventBlindTransferred value)?
+        blindTransferred,
+    TResult? Function(_CallControlEventAttendedTransferred value)?
+        attendedTransferred,
+    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult? Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
+  }) {
+    return attendedRequestApproved?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CallControlEventStarted value)? started,
+    TResult Function(_CallControlEventAnswered value)? answered,
+    TResult Function(_CallControlEventEnded value)? ended,
+    TResult Function(_CallControlEventSetHeld value)? setHeld,
+    TResult Function(_CallControlEventSetMuted value)? setMuted,
+    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
+    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
+    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult Function(_CallControlEventBlindTransferInitiated value)?
+        blindTransferInitiated,
+    TResult Function(_CallControlEventBlindTransferred value)? blindTransferred,
+    TResult Function(_CallControlEventAttendedTransferred value)?
+        attendedTransferred,
+    TResult Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
+    required TResult orElse(),
+  }) {
+    if (attendedRequestApproved != null) {
+      return attendedRequestApproved(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _CallControlEventAttendedRequestApproved
+    implements CallControlEvent {
+  const factory _CallControlEventAttendedRequestApproved(
+          {required final String referId, required final String referTo}) =
+      _$CallControlEventAttendedRequestApprovedImpl;
+
+  String get referId;
+  String get referTo;
 }
 
 /// @nodoc
@@ -10596,6 +11316,7 @@ mixin _$ActiveCall {
   String get callId => throw _privateConstructorUsedError;
   CallkeepHandle get handle => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
+  String? get fromReferId => throw _privateConstructorUsedError;
   bool get video => throw _privateConstructorUsedError;
   bool? get frontCamera => throw _privateConstructorUsedError;
   bool get held => throw _privateConstructorUsedError;
@@ -10626,6 +11347,7 @@ abstract class $ActiveCallCopyWith<$Res> {
       String callId,
       CallkeepHandle handle,
       String? displayName,
+      String? fromReferId,
       bool video,
       bool? frontCamera,
       bool held,
@@ -10658,6 +11380,7 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
     Object? callId = null,
     Object? handle = null,
     Object? displayName = freezed,
+    Object? fromReferId = freezed,
     Object? video = null,
     Object? frontCamera = freezed,
     Object? held = null,
@@ -10691,6 +11414,10 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
       displayName: freezed == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      fromReferId: freezed == fromReferId
+          ? _value.fromReferId
+          : fromReferId // ignore: cast_nullable_to_non_nullable
               as String?,
       video: null == video
           ? _value.video
@@ -10755,6 +11482,7 @@ abstract class _$$ActiveCallImplCopyWith<$Res>
       String callId,
       CallkeepHandle handle,
       String? displayName,
+      String? fromReferId,
       bool video,
       bool? frontCamera,
       bool held,
@@ -10785,6 +11513,7 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
     Object? callId = null,
     Object? handle = null,
     Object? displayName = freezed,
+    Object? fromReferId = freezed,
     Object? video = null,
     Object? frontCamera = freezed,
     Object? held = null,
@@ -10818,6 +11547,10 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
       displayName: freezed == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      fromReferId: freezed == fromReferId
+          ? _value.fromReferId
+          : fromReferId // ignore: cast_nullable_to_non_nullable
               as String?,
       video: null == video
           ? _value.video
@@ -10877,6 +11610,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
       required this.callId,
       required this.handle,
       this.displayName,
+      this.fromReferId,
       required this.video,
       this.frontCamera = true,
       this.held = false,
@@ -10901,6 +11635,8 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
   final CallkeepHandle handle;
   @override
   final String? displayName;
+  @override
+  final String? fromReferId;
   @override
   final bool video;
   @override
@@ -10932,7 +11668,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, displayName: $displayName, video: $video, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
+    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, displayName: $displayName, fromReferId: $fromReferId, video: $video, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
   }
 
   @override
@@ -10945,6 +11681,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('callId', callId))
       ..add(DiagnosticsProperty('handle', handle))
       ..add(DiagnosticsProperty('displayName', displayName))
+      ..add(DiagnosticsProperty('fromReferId', fromReferId))
       ..add(DiagnosticsProperty('video', video))
       ..add(DiagnosticsProperty('frontCamera', frontCamera))
       ..add(DiagnosticsProperty('held', held))
@@ -10971,6 +11708,8 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
             (identical(other.handle, handle) || other.handle == handle) &&
             (identical(other.displayName, displayName) ||
                 other.displayName == displayName) &&
+            (identical(other.fromReferId, fromReferId) ||
+                other.fromReferId == fromReferId) &&
             (identical(other.video, video) || other.video == video) &&
             (identical(other.frontCamera, frontCamera) ||
                 other.frontCamera == frontCamera) &&
@@ -11001,6 +11740,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
       callId,
       handle,
       displayName,
+      fromReferId,
       video,
       frontCamera,
       held,
@@ -11028,6 +11768,7 @@ abstract class _ActiveCall extends ActiveCall {
       required final String callId,
       required final CallkeepHandle handle,
       final String? displayName,
+      final String? fromReferId,
       required final bool video,
       final bool? frontCamera,
       final bool held,
@@ -11052,6 +11793,8 @@ abstract class _ActiveCall extends ActiveCall {
   CallkeepHandle get handle;
   @override
   String? get displayName;
+  @override
+  String? get fromReferId;
   @override
   bool get video;
   @override

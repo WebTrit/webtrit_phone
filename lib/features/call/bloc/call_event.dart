@@ -208,6 +208,16 @@ class CallControlEvent with _$CallControlEvent implements CallEvent {
     required ActiveCall referorCall,
     required ActiveCall replaceCall,
   }) = _CallControlEventAttendedTransferred;
+
+  const factory CallControlEvent.attendedRequestDeclined({
+    required String callId,
+    required String referId,
+  }) = _CallControlEventAttendedRequestDeclined;
+
+  const factory CallControlEvent.attendedRequestApproved({
+    required String referId,
+    required String referTo,
+  }) = _CallControlEventAttendedRequestApproved;
 }
 
 mixin CallControlEventStartedMixin {
