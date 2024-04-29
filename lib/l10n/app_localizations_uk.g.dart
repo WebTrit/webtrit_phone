@@ -461,6 +461,24 @@ class AppLocalizationsUk extends AppLocalizations {
   String get permission_Text_description => 'Для забезпечення найкращого досвіду користувача програма потребує наступні дозволи: мікрофон для аудіодзвінків, камера для відеодзвінків та доступ до контактів для спрощення їх використання в програмі.\n\nДозволи можуть бути змінені у майбутньому.';
 
   @override
+  String get permission_manufacturer_Text_heading => 'Для забезпечення найкращого досвіду користувача, додатку потрібно надати наступні дозволи вручну:';
+
+  @override
+  String get permission_manufacturer_Text_xiaomi_tip1 => '1. Перейдіть в «Налаштування додатків» → «Сповіщення».\n2.';
+
+  @override
+  String get permission_manufacturer_Text_xiaomi_tip2 => '2. Знайдіть і увімкніть «Сповіщення на екрані блокування».';
+
+  @override
+  String get permission_manufacturer_Text_trailing => 'Дозволи можуть бути змінені в майбутньому в будь-який час.';
+
+  @override
+  String get permission_manufacturer_Button_toSettings => 'Відкрити налаштування додатка';
+
+  @override
+  String get permission_manufacturer_Button_gotIt => 'Зрозуміло';
+
+  @override
   String user_agreement_checkbox_text(String url) {
     return 'Я прочитав і погоджуюсь з $url, включаючи умови користування.';
   }

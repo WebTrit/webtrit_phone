@@ -356,6 +356,18 @@
   "@permission_Button_request": {},
   "permission_Text_description": "To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.",
   "@permission_Text_description": {},
+  "permission_manufacturer_Text_heading": "To ensure the best user experience, the app needs to be granted the following permissions manually:",
+  "@permission_manufacturer_Text_heading": {},
+  "permission_manufacturer_Text_xiaomi_tip1": "1. Go to \"App settings\" → \"Notifications\".",
+  "@permission_manufacturer_Text_xiaomi_tip1": {},
+  "permission_manufacturer_Text_xiaomi_tip2": "2. Find and turn on \"Lockscreen notifications\".",
+  "@permission_manufacturer_Text_xiaomi_tip2": {},
+  "permission_manufacturer_Text_trailing": "Permissions could be changed at any time in the future.",
+  "@permission_manufacturer_Text_trailing": {},
+  "permission_manufacturer_Button_toSettings": "Open app Settings",
+  "@permission_manufacturer_Button_toSettings": {},
+  "permission_manufacturer_Button_gotIt": "Got it",
+  "@permission_manufacturer_Button_gotIt": {},
   "user_agreement_checkbox_text": "I have read the {url} and consent to its terms.",
   "@user_agreement_checkbox_text": {
     "placeholders": {
