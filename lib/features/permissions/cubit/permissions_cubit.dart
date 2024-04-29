@@ -24,7 +24,7 @@ class PermissionsCubit extends Cubit<PermissionsState> {
       await appPermissions.request();
       await requestFirebaseMessagingPermission();
 
-      final subPlatform = await _checkForSubplatform();
+      final subPlatform = _checkManufacturer();
       if (subPlatform == null) {
         emit(const PermissionsState.success());
       } else {
@@ -60,12 +60,7 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     }
   }
 
-  /// Checks and returns the detected subplatform that requires a special user handling.
-  /// or `null` if no subplatform is detected.
-  Future<SubPlatform?> _checkForSubplatform() async {
-    final isMiui = deviceInfo.manufacturer?.toLowerCase() == 'xiaomi';
-    if (isMiui) return SubPlatform.miui;
-
-    return null;
+  Manufacturer? _checkManufacturer() {
+    return Manufacturer.values.asNameMap()[deviceInfo.manufacturer?.toLowerCase()];
   }
 }

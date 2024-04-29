@@ -11,13 +11,13 @@ class PermissionTips extends StatelessWidget {
     required this.onGoToAppSettings,
   });
 
-  final SubPlatform platform;
+  final Manufacturer platform;
   final VoidCallback onGoToAppSettings;
 
   @override
   Widget build(BuildContext context) {
     switch (platform) {
-      case SubPlatform.miui:
+      case Manufacturer.xiaomi:
         return MiuiPermissionTips(onGoToAppSettings: onGoToAppSettings);
     }
   }
