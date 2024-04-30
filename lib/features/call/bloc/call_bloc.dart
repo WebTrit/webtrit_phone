@@ -979,8 +979,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       speakerEnabled: (event) => _onCallControlEventSpeakerEnabled(event, emit),
       failureApproved: (event) => _onCallControlEventFailureApproved(event, emit),
       blindTransferInitiated: (event) => _onCallControlEventBlindTransferInitiated(event, emit),
-      blindTransferred: (event) => _onCallControlEventBlindTransferred(event, emit),
-      attendedTransferred: (event) => _onCallControlEventAttendedTransferred(event, emit),
+      blindTransferSubmitted: (event) => _onCallControlEventBlindTransferSubmitted(event, emit),
+      attendedTransferSubmitted: (event) => _onCallControlEventAttendedTransferSubmitted(event, emit),
       attendedRequestApproved: (value) => _onCallControlEventAttendedRequestApproved(value, emit),
       attendedRequestDeclined: (value) => _onCallControlEventAttendedRequestDeclined(value, emit),
     );
@@ -1155,8 +1155,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
   }
 
-  Future<void> _onCallControlEventBlindTransferred(
-    _CallControlEventBlindTransferred event,
+  Future<void> _onCallControlEventBlindTransferSubmitted(
+    _CallControlEventBlindTransferSubmitted event,
     Emitter<CallState> emit,
   ) async {
     final activeCallBlindTransferInitiated = state.activeCalls.blindTransferInitiated;
@@ -1164,7 +1164,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     var newState = state.copyWith(minimized: false);
     newState = newState.copyWithMappedActiveCall(activeCallBlindTransferInitiated.callId, (activeCall) {
-      final transfer = Transfer.blindTransferTransferred(toNumber: event.number);
+      final transfer = Transfer.blindTransferTransferSubmitted(toNumber: event.number);
       return activeCall.copyWith(transfer: transfer);
     });
     emit(newState);
@@ -1184,7 +1184,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       await _signalingClient?.execute(transferRequest);
     } catch (e) {
-      _logger.warning('_onCallControlEventBlindTransferred request error: $e');
+      _logger.warning('_onCallControlEventBlindTransferSubmitted request error: $e');
       notificationsBloc.add(NotificationsMessaged(RawNotification(e.toString())));
 
       // Reset the transfer state and continue conversation
@@ -1194,15 +1194,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
   }
 
-  Future<void> _onCallControlEventAttendedTransferred(
-    _CallControlEventAttendedTransferred event,
+  Future<void> _onCallControlEventAttendedTransferSubmitted(
+    _CallControlEventAttendedTransferSubmitted event,
     Emitter<CallState> emit,
   ) async {
     final referorCall = event.referorCall;
     final replaceCall = event.replaceCall;
 
     emit(state.copyWithMappedActiveCall(referorCall.callId, (activeCall) {
-      final transfer = Transfer.attendedTransferTransferred(replaceCallId: replaceCall.callId);
+      final transfer = Transfer.attendedTransferTransferSubmitted(replaceCallId: replaceCall.callId);
       return activeCall.copyWith(transfer: transfer);
     }));
 
@@ -1217,7 +1217,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       await _signalingClient?.execute(transferRequest);
     } catch (e) {
-      _logger.warning('_onCallControlEventAttendedTransferred request error: $e');
+      _logger.warning('_onCallControlEventAttendedTransferSubmitted request error: $e');
       notificationsBloc.add(NotificationsMessaged(RawNotification(e.toString())));
 
       // Reset the transfer state and continue conversation

@@ -142,7 +142,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                         ),
                         for (final activeCall in activeCalls)
                           CallInfo(
-                            transferProcessing: activeTransfer?.isTransferred ?? false,
+                            transferProcessing: activeTransfer?.processing ?? false,
                             transferRequested: false,
                             isIncoming: activeCall.isIncoming,
                             held: activeCall.held,
@@ -197,7 +197,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                           ? null
                           : (ActiveCall referorCall) {
                               context.read<CallBloc>().add(
-                                    CallControlEvent.attendedTransferred(
+                                    CallControlEvent.attendedTransferSubmitted(
                                       referorCall: referorCall,
                                       replaceCall: activeCall,
                                     ),

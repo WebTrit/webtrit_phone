@@ -202,12 +202,14 @@ class CallControlEvent with _$CallControlEvent implements CallEvent {
 
   const factory CallControlEvent.blindTransferInitiated(String callId) = _CallControlEventBlindTransferInitiated;
 
-  const factory CallControlEvent.blindTransferred({required String number}) = _CallControlEventBlindTransferred;
+  const factory CallControlEvent.blindTransferSubmitted({
+    required String number,
+  }) = _CallControlEventBlindTransferSubmitted;
 
-  const factory CallControlEvent.attendedTransferred({
+  const factory CallControlEvent.attendedTransferSubmitted({
     required ActiveCall referorCall,
     required ActiveCall replaceCall,
-  }) = _CallControlEventAttendedTransferred;
+  }) = _CallControlEventAttendedTransferSubmitted;
 
   const factory CallControlEvent.attendedRequestDeclined({
     required String callId,

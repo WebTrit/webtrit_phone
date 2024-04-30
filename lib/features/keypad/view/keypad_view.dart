@@ -130,7 +130,7 @@ class KeypadViewState extends State<KeypadView> {
     _focusNode.unfocus();
 
     final callBloc = context.read<CallBloc>();
-    callBloc.add(CallControlEvent.blindTransferred(
+    callBloc.add(CallControlEvent.blindTransferSubmitted(
       number: _popNumber(),
     ));
   }

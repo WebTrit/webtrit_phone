@@ -122,7 +122,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                         onTap: transfer
                             ? () {
                                 final callBloc = context.read<CallBloc>();
-                                callBloc.add(CallControlEvent.blindTransferred(
+                                callBloc.add(CallControlEvent.blindTransferSubmitted(
                                   number: recent.number,
                                 ));
                               }

@@ -9,12 +9,12 @@ abstract class Transfer {
     return const BlindTransferInitiated();
   }
 
-  factory Transfer.blindTransferTransferred({required String toNumber}) {
-    return BlindTransferTransferred(toNumber: toNumber);
+  factory Transfer.blindTransferTransferSubmitted({required String toNumber}) {
+    return BlindTransferTransfeSubmitted(toNumber: toNumber);
   }
 
-  factory Transfer.attendedTransferTransferred({required String replaceCallId}) {
-    return AttendedTransferTransferred(replaceCallId: replaceCallId);
+  factory Transfer.attendedTransferTransferSubmitted({required String replaceCallId}) {
+    return AttendedTransferTransferSubmitted(replaceCallId: replaceCallId);
   }
 
   factory Transfer.attendedTransferConfirmationRequested(
@@ -22,7 +22,8 @@ abstract class Transfer {
     return AttendedTransferConfirmationRequested(referId: referId, referTo: referTo, referredBy: referredBy);
   }
 
-  bool get isTransferred => this is BlindTransferTransferred || this is AttendedTransferTransferred;
+  /// Returns true if the transfer is submitted and now processing by the server.
+  bool get processing => this is BlindTransferTransfeSubmitted || this is AttendedTransferTransferSubmitted;
 }
 
 /// Represents a blind transfer initiated by the user.
@@ -36,8 +37,8 @@ class BlindTransferInitiated extends Transfer with EquatableMixin {
 
 /// Represents a blind transfer submitted by the user.
 /// The user has chosen the number to transfer the call to and wants to proceed.
-class BlindTransferTransferred extends Transfer with EquatableMixin {
-  const BlindTransferTransferred({required this.toNumber});
+class BlindTransferTransfeSubmitted extends Transfer with EquatableMixin {
+  const BlindTransferTransfeSubmitted({required this.toNumber});
 
   final String toNumber;
 
@@ -50,8 +51,8 @@ class BlindTransferTransferred extends Transfer with EquatableMixin {
 
 /// Represents a initiated attended transfer by the user.
 /// Depends on adapter calle will be transfered to the number immidietly or sended a confirmation (REFER) request before transfer.
-class AttendedTransferTransferred extends Transfer with EquatableMixin {
-  const AttendedTransferTransferred({required this.replaceCallId});
+class AttendedTransferTransferSubmitted extends Transfer with EquatableMixin {
+  const AttendedTransferTransferSubmitted({required this.replaceCallId});
 
   final String replaceCallId;
 
