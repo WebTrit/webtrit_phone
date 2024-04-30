@@ -11336,6 +11336,8 @@ mixin _$ActiveCall {
   String get callId => throw _privateConstructorUsedError;
   CallkeepHandle get handle => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
+
+  /// If the call is result of a refer request, the id should be provided.
   String? get fromReferId => throw _privateConstructorUsedError;
   bool get video => throw _privateConstructorUsedError;
   bool? get frontCamera => throw _privateConstructorUsedError;
@@ -11655,6 +11657,8 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
   final CallkeepHandle handle;
   @override
   final String? displayName;
+
+  /// If the call is result of a refer request, the id should be provided.
   @override
   final String? fromReferId;
   @override
@@ -11814,6 +11818,8 @@ abstract class _ActiveCall extends ActiveCall {
   @override
   String? get displayName;
   @override
+
+  /// If the call is result of a refer request, the id should be provided.
   String? get fromReferId;
   @override
   bool get video;

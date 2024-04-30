@@ -127,6 +127,8 @@ class ActiveCall with _$ActiveCall {
     required String callId,
     required CallkeepHandle handle,
     String? displayName,
+
+    /// If the call is result of a refer request, the id should be provided.
     String? fromReferId,
     required bool video,
     @Default(true) bool? frontCamera,

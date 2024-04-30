@@ -1873,8 +1873,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         reason: event.reason,
       ));
     } else if (event is UpdatingCallEvent) {
-      print('\x1B[33mASD:\x1B[0m');
-      print('\x1B[33m$event:\x1B[0m');
       add(_CallSignalingEvent.updating(
         line: event.line,
         callId: event.callId,
@@ -1892,8 +1890,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         callId: event.callId,
       ));
     } else if (event is TransferEvent) {
-      print('\x1B[33mASD:\x1B[0m');
-      print('\x1B[33m$event:\x1B[0m');
       add(_CallSignalingEvent.transfer(
         line: event.line,
         referId: event.referId,
@@ -1912,8 +1908,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } else if (event is UnregisteredEvent) {
       add(const _CallSignalingEvent.unregistered());
     } else {
-      print('\x1B[33mASD:\x1B[0m');
-      print('\x1B[33m$event:\x1B[0m');
       _logger.warning('unhandled signaling event $event');
     }
   }
