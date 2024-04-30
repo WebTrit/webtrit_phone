@@ -154,19 +154,5 @@ class ActiveCall with _$ActiveCall {
 extension ActiveCallIterableExtension<T extends ActiveCall> on Iterable<T> {
   T get current => lastWhere((activeCall) => !activeCall.held, orElse: () => last);
   List<T> get nonCurrent => where((activeCall) => activeCall != current).toList();
-
-  T? get blindTransferInitiated {
-    try {
-      return firstWhere((activeCall) {
-        final transfer = activeCall.transfer;
-        if (transfer == null) {
-          return false;
-        } else {
-          return transfer is BlindTransferInitiated;
-        }
-      });
-    } on StateError catch (_) {
-      return null;
-    }
-  }
+  T? get blindTransferInitiated => firstWhereOrNull((activeCall) => activeCall.transfer is BlindTransferInitiated);
 }
