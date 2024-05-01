@@ -14,14 +14,15 @@ import 'package:logging/logging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
-import 'package:webtrit_phone/data/app_sound.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
+import 'package:ssl_certificates/ssl_certificates.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/notifications/notifications.dart';
 import 'package:webtrit_phone/models/recent.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/data/app_sound.dart';
 
 import '../extensions/extensions.dart';
 import '../models/models.dart';
@@ -42,6 +43,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final String coreUrl;
   final String tenantId;
   final String token;
+  final TrustedCertificates trustedCertificates;
 
   final RecentsRepository recentsRepository;
   final NotificationsBloc notificationsBloc;
@@ -62,6 +64,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.coreUrl,
     required this.tenantId,
     required this.token,
+    required this.trustedCertificates,
     required this.recentsRepository,
     required this.notificationsBloc,
     required this.callkeep,
@@ -468,6 +471,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         token,
         true,
         connectionTimeout: kSignalingClientConnectionTimeout,
+        certs: trustedCertificates,
       );
 
       if (emit.isDone) {

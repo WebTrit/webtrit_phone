@@ -52,7 +52,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       await SecureStorage.init();
       await AppThemes.init();
       await AppSound.init(outgoingCallRingAsset: Assets.ringtones.outgoingCall1);
-      await AppCerts.init();
+      await AppCertificates.init();
 
       if (Platform.isAndroid) {
         WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());

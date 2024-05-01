@@ -64,13 +64,13 @@ class _MainShellState extends State<MainShell> {
         RepositoryProvider<WebtritApiClient>(
           create: (context) {
             final appBloc = context.read<AppBloc>();
-            final appCerts = AppCerts();
+            final appCerts = AppCertificates();
 
             return WebtritApiClient(
               Uri.parse(appBloc.state.coreUrl!),
               appBloc.state.tenantId!,
               connectionTimeout: kApiClientConnectionTimeout,
-              certs: appCerts.certs,
+              certs: appCerts.trustedCertificates,
             );
           },
         ),
@@ -166,11 +166,13 @@ class _MainShellState extends State<MainShell> {
           BlocProvider<CallBloc>(
             create: (context) {
               final appBloc = context.read<AppBloc>();
+              final appCertificates = AppCertificates();
 
               return CallBloc(
                 coreUrl: appBloc.state.coreUrl!,
                 tenantId: appBloc.state.tenantId!,
                 token: appBloc.state.token!,
+                trustedCertificates: appCertificates.trustedCertificates,
                 recentsRepository: context.read<RecentsRepository>(),
                 notificationsBloc: context.read<NotificationsBloc>(),
                 callkeep: callkeep,
