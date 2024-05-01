@@ -39,6 +39,10 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   Widget build(BuildContext context) {
     final activeCalls = widget.activeCalls;
     final activeCall = activeCalls.current;
+    final heldCalls = activeCalls.nonCurrent;
+
+    final activeTransfer = activeCall.transfer;
+    final maybeTransferRequest = activeTransfer is AttendedTransferConfirmationRequested ? activeTransfer : null;
 
     final video = activeCall.video;
 
@@ -48,6 +52,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     final textTheme = themeData.textTheme;
     final switchCameraIconSize = textTheme.titleMedium!.fontSize!;
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
+
     return Scaffold(
       body: OrientationBuilder(
         builder: (context, orientation) {
@@ -137,11 +142,21 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                         ),
                         for (final activeCall in activeCalls)
                           CallInfo(
-                            transferProcessing: activeCall.transfer?.isProcessing == true,
+                            transferProcessing: activeTransfer?.processing ?? false,
+                            transferRequested: false,
                             isIncoming: activeCall.isIncoming,
                             held: activeCall.held,
                             username: activeCall.displayName ?? activeCall.handle.value,
                             acceptedTime: activeCall.acceptedTime,
+                            color: onTabGradient,
+                          ),
+                        if (maybeTransferRequest != null)
+                          CallInfo(
+                            transferProcessing: false,
+                            transferRequested: true,
+                            isIncoming: false,
+                            held: false,
+                            username: maybeTransferRequest.referTo,
                             color: onTabGradient,
                           ),
                       ],
@@ -172,10 +187,21 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       onSpeakerChanged: (bool value) {
                         context.read<CallBloc>().add(CallControlEvent.speakerEnabled(activeCall.callId, value));
                       },
-                      onTransferPressed: !activeCall.wasAccepted || activeCall.transfer != null
+                      transferableCalls: heldCalls,
+                      onBlindTransfer: !activeCall.wasAccepted || activeTransfer != null
                           ? null
                           : () {
                               context.read<CallBloc>().add(CallControlEvent.blindTransferInitiated(activeCall.callId));
+                            },
+                      onAttendedTransfer: !activeCall.wasAccepted || activeTransfer != null
+                          ? null
+                          : (ActiveCall referorCall) {
+                              context.read<CallBloc>().add(
+                                    CallControlEvent.attendedTransferSubmitted(
+                                      referorCall: referorCall,
+                                      replaceCall: activeCall,
+                                    ),
+                                  );
                             },
                       heldValue: activeCall.held,
                       onHeldChanged: (bool value) {
@@ -220,6 +246,22 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       onAcceptPressed: () {
                         context.read<CallBloc>().add(CallControlEvent.answered(activeCall.callId));
                       },
+                      onApproveTransferPressed: maybeTransferRequest == null
+                          ? null
+                          : () {
+                              context.read<CallBloc>().add(CallControlEvent.attendedRequestApproved(
+                                    referId: maybeTransferRequest.referId,
+                                    referTo: maybeTransferRequest.referTo,
+                                  ));
+                            },
+                      onDeclineTransferPressed: maybeTransferRequest == null
+                          ? null
+                          : () {
+                              context.read<CallBloc>().add(CallControlEvent.attendedRequestDeclined(
+                                    callId: activeCall.callId,
+                                    referId: maybeTransferRequest.referId,
+                                  ));
+                            },
                       onKeyPressed: (value) {
                         context.read<CallBloc>().add(CallControlEvent.sentDTMF(activeCall.callId, value));
                       },

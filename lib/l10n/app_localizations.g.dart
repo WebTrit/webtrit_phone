@@ -195,6 +195,12 @@ abstract class AppLocalizations {
   /// **'Transfer'**
   String get call_CallActionsTooltip_transfer;
 
+  /// No description provided for @call_CallActionsTooltip_transfer_choose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose number'**
+  String get call_CallActionsTooltip_transfer_choose;
+
   /// No description provided for @call_CallActionsTooltip_unhold.
   ///
   /// In en, this message translates to:
@@ -224,6 +230,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Outgoing call'**
   String get call_description_outgoing;
+
+  /// No description provided for @call_description_transfer_requested.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer request'**
+  String get call_description_transfer_requested;
 
   /// No description provided for @call_description_transferProcessing.
   ///

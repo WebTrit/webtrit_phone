@@ -644,6 +644,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       hangup: (event) => __onCallSignalingEventHangup(event, emit),
       updating: (event) => __onCallSignalingEventUpdating(event, emit),
       updated: (event) => __onCallSignalingEventUpdated(event, emit),
+      transfer: (value) => __onCallSignalingEventTransfer(value, emit),
       registering: (event) => __onCallSignalingEventRegistering(event, emit),
       registered: (event) => __onCallSignalingEventRegistered(event, emit),
       registrationFailed: (event) => __onCallSignalingEventRegistrationFailed(event, emit),
@@ -903,6 +904,32 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }));
   }
 
+  Future<void> __onCallSignalingEventTransfer(
+    _CallSignalingEventTransfer event,
+    Emitter<CallState> emit,
+  ) async {
+    final replaceCallId = event.replaceCallId;
+    final referredBy = event.referredBy;
+    final referId = event.referId;
+    final referTo = event.referTo;
+
+    // If replaceCallId exists, it means that the REFER request for attended transfer
+    if (replaceCallId != null && referredBy != null) {
+      // Find the active call that is should be replaced
+      final callToReplace = state.retrieveActiveCall(replaceCallId);
+      if (callToReplace == null) return;
+
+      // Update call with confirmation request state
+      final transfer = Transfer.attendedTransferConfirmationRequested(
+        referId: referId,
+        referTo: referTo,
+        referredBy: referredBy,
+      );
+      final callUpdate = callToReplace.copyWith(transfer: transfer);
+      emit(state.copyWithMappedActiveCall(replaceCallId, (_) => callUpdate));
+    }
+  }
+
   Future<void> __onCallSignalingEventRegistering(
     _CallSignalingEventRegistering event,
     Emitter<CallState> emit,
@@ -956,7 +983,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       speakerEnabled: (event) => _onCallControlEventSpeakerEnabled(event, emit),
       failureApproved: (event) => _onCallControlEventFailureApproved(event, emit),
       blindTransferInitiated: (event) => _onCallControlEventBlindTransferInitiated(event, emit),
-      blindTransferred: (event) => _onCallControlEventBlindTransferred(event, emit),
+      blindTransferSubmitted: (event) => _onCallControlEventBlindTransferSubmitted(event, emit),
+      attendedTransferSubmitted: (event) => _onCallControlEventAttendedTransferSubmitted(event, emit),
+      attendedRequestApproved: (value) => _onCallControlEventAttendedRequestApproved(value, emit),
+      attendedRequestDeclined: (value) => _onCallControlEventAttendedRequestDeclined(value, emit),
     );
   }
 
@@ -988,7 +1018,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         _logger.warning('__onCallControlEventStarted error: $error');
       }
     } else {
-      emit(state.copyWithPushActiveCall(ActiveCall(
+      final newCall = ActiveCall(
         direction: Direction.outgoing,
         line: event.line ?? state.retrieveIdleLine() ?? _kUndefinedLine,
         callId: callId,
@@ -996,7 +1026,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         displayName: event.displayName,
         video: event.video,
         createdTime: clock.now(),
-      )));
+      );
+
+      emit(state.copyWithPushActiveCall(newCall).copyWith(minimized: false));
     }
   }
 
@@ -1115,10 +1147,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     newState = newState.copyWithMappedActiveCall(event.callId, (activeCall) {
       return activeCall.copyWith(
-        transfer: const Transfer(
-          type: TransferType.blind,
-          state: TransferState.initiated,
-        ),
+        transfer: Transfer.blindTransferInitiated(),
       );
     });
 
@@ -1130,27 +1159,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
   }
 
-  Future<void> _onCallControlEventBlindTransferred(
-    _CallControlEventBlindTransferred event,
+  Future<void> _onCallControlEventBlindTransferSubmitted(
+    _CallControlEventBlindTransferSubmitted event,
     Emitter<CallState> emit,
   ) async {
-    var newState = state.copyWith(minimized: false);
-
     final activeCallBlindTransferInitiated = state.activeCalls.blindTransferInitiated;
-    if (activeCallBlindTransferInitiated == null) {
-      emit(newState);
-      return;
-    }
+    if (activeCallBlindTransferInitiated == null) return;
 
+    var newState = state.copyWith(minimized: false);
     newState = newState.copyWithMappedActiveCall(activeCallBlindTransferInitiated.callId, (activeCall) {
-      return activeCall.copyWith(
-        transfer: const Transfer(
-          type: TransferType.blind,
-          state: TransferState.processing,
-        ),
-      );
+      final transfer = Transfer.blindTransferTransferSubmitted(toNumber: event.number);
+      return activeCall.copyWith(transfer: transfer);
     });
-
     emit(newState);
 
     await callkeep.reportUpdateCall(
@@ -1168,11 +1188,112 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       await _signalingClient?.execute(transferRequest);
     } catch (e) {
-      _logger.warning('_onCallControlEventBlindTransferred request error: $e');
+      _logger.warning('_onCallControlEventBlindTransferSubmitted request error: $e');
       notificationsBloc.add(NotificationsMessaged(RawNotification(e.toString())));
 
-      _peerConnectionCompleteError(activeCallBlindTransferInitiated.callId, e);
-      add(_ResetStateEvent.completeCall(activeCallBlindTransferInitiated.callId));
+      // Reset the transfer state and continue conversation
+      emit(state.copyWithMappedActiveCall(activeCallBlindTransferInitiated.callId, (activeCall) {
+        return activeCall.copyWith(transfer: null);
+      }));
+    }
+  }
+
+  Future<void> _onCallControlEventAttendedTransferSubmitted(
+    _CallControlEventAttendedTransferSubmitted event,
+    Emitter<CallState> emit,
+  ) async {
+    final referorCall = event.referorCall;
+    final replaceCall = event.replaceCall;
+
+    emit(state.copyWithMappedActiveCall(referorCall.callId, (activeCall) {
+      final transfer = Transfer.attendedTransferTransferSubmitted(replaceCallId: replaceCall.callId);
+      return activeCall.copyWith(transfer: transfer);
+    }));
+
+    try {
+      final transferRequest = TransferRequest(
+        transaction: WebtritSignalingClient.generateTransactionId(),
+        line: referorCall.line,
+        callId: referorCall.callId.toString(),
+        number: referorCall.handle.normalizedValue(),
+        replaceCallId: replaceCall.callId,
+      );
+
+      await _signalingClient?.execute(transferRequest);
+    } catch (e) {
+      _logger.warning('_onCallControlEventAttendedTransferSubmitted request error: $e');
+      notificationsBloc.add(NotificationsMessaged(RawNotification(e.toString())));
+
+      // Reset the transfer state and continue conversation
+      emit(state.copyWithMappedActiveCall(referorCall.callId, (activeCall) {
+        return activeCall.copyWith(transfer: null);
+      }));
+    }
+  }
+
+  Future<void> _onCallControlEventAttendedRequestApproved(
+    _CallControlEventAttendedRequestApproved event,
+    Emitter<CallState> emit,
+  ) async {
+    final referId = event.referId;
+    final referTo = event.referTo;
+
+    final newHandle = CallkeepHandle.number(referTo);
+
+    final callId = WebtritSignalingClient.generateCallId();
+
+    final error = await callkeep.startCall(
+      callId,
+      newHandle,
+      hasVideo: false,
+      proximityEnabled: true,
+    );
+
+    if (error != null) {
+      _logger.warning('__onCallControlEventStarted error: $error');
+      notificationsBloc.add(NotificationsMessaged(RawNotification(error.toString())));
+      return;
+    }
+
+    final newCall = ActiveCall(
+      direction: Direction.outgoing,
+      line: state.retrieveIdleLine() ?? _kUndefinedLine,
+      callId: callId,
+      handle: newHandle,
+      fromReferId: referId,
+      video: false,
+      createdTime: clock.now(),
+    );
+
+    emit(state.copyWithPushActiveCall(newCall).copyWith(minimized: false));
+  }
+
+  Future<void> _onCallControlEventAttendedRequestDeclined(
+    _CallControlEventAttendedRequestDeclined event,
+    Emitter<CallState> emit,
+  ) async {
+    final referId = event.referId;
+    final callId = event.callId;
+
+    final call = state.retrieveActiveCall(callId);
+    if (call == null) return;
+
+    try {
+      final declineRequest = DeclineRequest(
+        transaction: WebtritSignalingClient.generateTransactionId(),
+        line: call.line,
+        callId: callId,
+        referId: referId,
+      );
+
+      await _signalingClient?.execute(declineRequest);
+
+      emit(state.copyWithMappedActiveCall(callId, (activeCall) {
+        return activeCall.copyWith(transfer: null);
+      }));
+    } catch (e) {
+      _logger.warning('_onCallControlEventAttendedRequestDeclined request error: $e');
+      notificationsBloc.add(NotificationsMessaged(RawNotification(e.toString())));
     }
   }
 
@@ -1274,6 +1395,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           callId: activeCall.callId.toString(),
           number: activeCall.handle.normalizedValue(),
           jsep: localDescription.toMap(),
+          referId: activeCall.fromReferId,
         ));
       });
       await peerConnection.setLocalDescription(localDescription);
@@ -1629,7 +1751,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     newState = newState.copyWithMappedActiveCalls((activeCall) {
       final transfer = activeCall.transfer;
-      if (transfer != null && transfer.isBlind && transfer.isInitiated) {
+      if (transfer != null && transfer is BlindTransferInitiated) {
         return activeCall.copyWith(
           transfer: null,
         );
@@ -1770,6 +1892,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       add(_CallSignalingEvent.updated(
         line: event.line,
         callId: event.callId,
+      ));
+    } else if (event is TransferEvent) {
+      add(_CallSignalingEvent.transfer(
+        line: event.line,
+        referId: event.referId,
+        referTo: event.referTo,
+        referredBy: event.referredBy,
+        replaceCallId: event.replaceCallId,
       ));
     } else if (event is RegisteringEvent) {
       add(const _CallSignalingEvent.registering());

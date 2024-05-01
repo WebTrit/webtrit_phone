@@ -5,9 +5,11 @@ class DeclineRequest extends CallRequest {
     required super.transaction,
     required super.line,
     required super.callId,
+    this.referId,
   });
 
   static const typeValue = 'decline';
+  final String? referId;
 
   factory DeclineRequest.fromJson(Map<String, dynamic> json) {
     final requestTypeValue = json[Request.typeKey];
@@ -19,6 +21,7 @@ class DeclineRequest extends CallRequest {
       transaction: json['transaction'],
       line: json['line'],
       callId: json['call_id'],
+      referId: json['refer_id'],
     );
   }
 
@@ -29,6 +32,7 @@ class DeclineRequest extends CallRequest {
       'transaction': transaction,
       'line': line,
       'call_id': callId,
+      'refer_id': referId,
     };
   }
 }

@@ -82,7 +82,7 @@ class ContactScreen extends StatelessWidget {
                         },
                         onTransferPressed: () {
                           final callBloc = context.read<CallBloc>();
-                          callBloc.add(CallControlEvent.blindTransferred(
+                          callBloc.add(CallControlEvent.blindTransferSubmitted(
                             number: contactPhone.number,
                           ));
                           context.router.pop();

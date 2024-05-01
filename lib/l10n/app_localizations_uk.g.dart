@@ -58,6 +58,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_CallActionsTooltip_transfer => 'Передати';
 
   @override
+  String get call_CallActionsTooltip_transfer_choose => 'Вибрати номер';
+
+  @override
   String get call_CallActionsTooltip_unhold => 'Поновити дзвінок';
 
   @override
@@ -71,6 +74,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get call_description_outgoing => 'Вихідний дзвінок';
+
+  @override
+  String get call_description_transfer_requested => 'Запит на переадресацію';
 
   @override
   String get call_description_transferProcessing => 'Обробка переадресації';

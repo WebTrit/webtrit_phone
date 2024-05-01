@@ -129,6 +129,14 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
     required String callId,
   }) = _CallSignalingEventUpdated;
 
+  const factory _CallSignalingEvent.transfer({
+    required int line,
+    required String referId,
+    required String referTo,
+    required String? referredBy,
+    required String? replaceCallId,
+  }) = _CallSignalingEventTransfer;
+
   const factory _CallSignalingEvent.registering() = _CallSignalingEventRegistering;
 
   const factory _CallSignalingEvent.registered() = _CallSignalingEventRegistered;
@@ -194,7 +202,24 @@ class CallControlEvent with _$CallControlEvent implements CallEvent {
 
   const factory CallControlEvent.blindTransferInitiated(String callId) = _CallControlEventBlindTransferInitiated;
 
-  const factory CallControlEvent.blindTransferred({required String number}) = _CallControlEventBlindTransferred;
+  const factory CallControlEvent.blindTransferSubmitted({
+    required String number,
+  }) = _CallControlEventBlindTransferSubmitted;
+
+  const factory CallControlEvent.attendedTransferSubmitted({
+    required ActiveCall referorCall,
+    required ActiveCall replaceCall,
+  }) = _CallControlEventAttendedTransferSubmitted;
+
+  const factory CallControlEvent.attendedRequestDeclined({
+    required String callId,
+    required String referId,
+  }) = _CallControlEventAttendedRequestDeclined;
+
+  const factory CallControlEvent.attendedRequestApproved({
+    required String referId,
+    required String referTo,
+  }) = _CallControlEventAttendedRequestApproved;
 }
 
 mixin CallControlEventStartedMixin {
