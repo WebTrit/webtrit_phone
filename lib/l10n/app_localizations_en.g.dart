@@ -16,7 +16,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get alertDialogActions_yes => 'Yes';
 
   @override
+  String get autoprovision_errorSnackBar_invalidToken => 'The auto configuration credentials were rejected by the server. Please request a new configuration link';
+
+  @override
+  String get autoprovision_ReloginDialog_confirm => 'Confirm';
+
+  @override
+  String get autoprovision_ReloginDialog_decline => 'Decline';
+
+  @override
+  String get autoprovision_ReloginDialog_text => 'Do you want to use the new authentication credentials, provided in the link? You will be logged out from the current session.';
+
+  @override
+  String get autoprovision_ReloginDialog_title => 'Relogin Confirmation';
+
+  @override
+  String get autoprovision_successSnackBar_used => 'Successfully retrieved your settings, your app is ready to use';
+
+  @override
   String get call_CallActionsTooltip_accept => 'Accept';
+
+  @override
+  String get call_CallActionsTooltip_attended_transfer => 'Attended transfer';
 
   @override
   String get call_CallActionsTooltip_disableCamera => 'Disable camera';
@@ -61,6 +82,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_CallActionsTooltip_transfer_choose => 'Choose number';
 
   @override
+  String get call_CallActionsTooltip_unattended_transfer => 'Unattended transfer';
+
+  @override
   String get call_CallActionsTooltip_unhold => 'Unhold call';
 
   @override
@@ -76,10 +100,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_description_outgoing => 'Outgoing call';
 
   @override
-  String get call_description_transfer_requested => 'Transfer request';
+  String get call_description_transferProcessing => 'Transfer processing';
 
   @override
-  String get call_description_transferProcessing => 'Transfer processing';
+  String get call_description_transfer_requested => 'Transfer request';
 
   @override
   String get call_FailureAcknowledgeDialog_title => 'Failure';
@@ -151,6 +175,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get default_ClientExceptionError => 'A HTTP client issue occurred';
 
   @override
+  String get default_ErrorDetails => 'Details';
+
+  @override
+  String get default_ErrorMessage => 'Error message';
+
+  @override
+  String get default_ErrorPath => 'Error path';
+
+  @override
   String get default_FormatExceptionError => 'A response format issue occurred';
 
   @override
@@ -164,21 +197,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get default_TypeErrorError => 'A response issue occurred';
-
-  @override
-  String get default_ErrorMessage => 'Error message';
-
-  @override
-  String get default_ErrorDetails => 'Details';
-
-  @override
-  String get default_ErrorPath => 'Error path';
-
-  @override
-  String get request_StatusCode => 'Status code';
-
-  @override
-  String get request_Id => 'Request id';
 
   @override
   String get default_UnauthorizedRequestFailureError => 'An unauthorized request failure occurred';
@@ -437,6 +455,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications_errorSnackBarAction_callUserMedia => 'Check';
 
   @override
+  String get notifications_errorSnackBar_appOffline => 'Your application is currently offline';
+
+  @override
+  String get notifications_errorSnackBar_appOnline => 'Your application is online';
+
+  @override
+  String get notifications_errorSnackBar_appUnregistered => 'Sorry, your application is currently disconnected from the WebTrit core servers and hence can\'t call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection';
+
+  @override
   String get notifications_errorSnackBar_callConnect => 'Connecting to the core failed, trying to reconnect';
 
   @override
@@ -452,22 +479,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications_errorSnackBar_callUserMedia => 'No access to media input, please check app permissions';
 
   @override
-  String get notifications_errorSnackBar_appUnregistered => 'Sorry, your application is currently disconnected from the WebTrit core servers and hence can\'t call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection';
-
-  @override
-  String get notifications_errorSnackBar_appOffline => 'Your application is currently offline';
-
-  @override
   String get notImplemented => 'Sorry, not implemented yet';
 
   @override
   String get permission_Button_request => 'Continue';
 
   @override
-  String get permission_Text_description => 'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.';
+  String get permission_manufacturer_Button_gotIt => 'Got it';
+
+  @override
+  String get permission_manufacturer_Button_toSettings => 'Open app Settings';
 
   @override
   String get permission_manufacturer_Text_heading => 'To ensure the best user experience, the app needs to be granted the following permissions manually:';
+
+  @override
+  String get permission_manufacturer_Text_trailing => 'Permissions could be changed at any time in the future.';
 
   @override
   String get permission_manufacturer_Text_xiaomi_tip1 => '1. Go to \"App settings\" → \"Notifications\".';
@@ -476,29 +503,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get permission_manufacturer_Text_xiaomi_tip2 => '2. Find and turn on \"Lockscreen notifications\".';
 
   @override
-  String get permission_manufacturer_Text_trailing => 'Permissions could be changed at any time in the future.';
-
-  @override
-  String get permission_manufacturer_Button_toSettings => 'Open app Settings';
-
-  @override
-  String get permission_manufacturer_Button_gotIt => 'Got it';
-
-  @override
-  String user_agreement_checkbox_text(String url) {
-    return 'I have read the $url and consent to its terms.';
-  }
-
-  @override
-  String user_agreement_description(String appName) {
-    return 'Welcome to $appName';
-  }
-
-  @override
-  String get user_agreement_button_text => 'Continue';
-
-  @override
-  String get user_agreement_agrement_link => 'terms and condition of agreement';
+  String get permission_Text_description => 'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.';
 
   @override
   String recents_BodyCenter_empty(Object filter) {
@@ -515,9 +520,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recents_errorSnackBar_loadFailure => 'Oops... an error happened ☹️';
 
   @override
-  String get notifications_errorSnackBar_appOnline => 'Your application is online';
-
-  @override
   String recents_snackBar_deleted(String name) {
     return '$name deleted';
   }
@@ -529,22 +531,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recentsVisibilityFilter_all => 'All';
 
   @override
-  String get recentsVisibilityFilter_incoming => 'Incoming';
-
-  @override
-  String get recentsVisibilityFilter_missed => 'Missed';
-
-  @override
-  String get recentsVisibilityFilter_outgoing => 'Outgoing';
-
-  @override
   String get recentsVisibilityFilter_all_preposit => 'all';
+
+  @override
+  String get recentsVisibilityFilter_incoming => 'Incoming';
 
   @override
   String get recentsVisibilityFilter_incoming_preposit => 'incoming';
 
   @override
+  String get recentsVisibilityFilter_missed => 'Missed';
+
+  @override
   String get recentsVisibilityFilter_missed_preposit => 'missed';
+
+  @override
+  String get recentsVisibilityFilter_outgoing => 'Outgoing';
 
   @override
   String get recentsVisibilityFilter_outgoing_preposit => 'outgoing';
@@ -566,13 +568,19 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get request_Id => 'Request id';
+
+  @override
+  String get request_StatusCode => 'Status code';
+
+  @override
   String get settings_AboutText_AppVersion => 'App Version';
 
   @override
-  String get settings_AboutText_StoreVersion => 'Build version in the Store';
+  String get settings_AboutText_CoreVersionUndefined => '?.?.?';
 
   @override
-  String get settings_AboutText_CoreVersionUndefined => '?.?.?';
+  String get settings_AboutText_StoreVersion => 'Build version in the Store';
 
   @override
   String get settings_AccountDeleteConfirmDialog_content => 'Are you sure you want to delete account?';
@@ -641,29 +649,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get themeMode_system => 'System';
 
   @override
+  String get undefine_DeeplinkConfigurationInvalid_text => 'The auto configuration credentials are invalid, please log in';
+
+  @override
   String get underDevelopment => 'This page is under development.';
 
   @override
+  String get user_agreement_agrement_link => 'terms and condition of agreement';
+
+  @override
+  String get user_agreement_button_text => 'Continue';
+
+  @override
+  String user_agreement_checkbox_text(Object url) {
+    return 'I have read the $url and consent to its terms.';
+  }
+
+  @override
+  String user_agreement_description(Object appName) {
+    return 'Welcome to $appName';
+  }
+
+  @override
   String get validationBlankError => 'Please enter a value';
-
-  @override
-  String get autoprovision_ReloginDialog_title => 'Relogin Confirmation';
-
-  @override
-  String get autoprovision_ReloginDialog_text => 'Do you want to use the new authentication credentials, provided in the link? You will be logged out from the current session.';
-
-  @override
-  String get autoprovision_ReloginDialog_confirm => 'Confirm';
-
-  @override
-  String get autoprovision_ReloginDialog_decline => 'Decline';
-
-  @override
-  String get autoprovision_errorSnackBar_invalidToken => 'The auto configuration credentials were rejected by the server. Please request a new configuration link';
-
-  @override
-  String get autoprovision_successSnackBar_used => 'Successfully retrieved your settings, your app is ready to use';
-
-  @override
-  String get undefine_DeeplinkConfigurationInvalid_text => 'The auto configuration credentials are invalid, please log in';
 }
