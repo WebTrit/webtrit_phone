@@ -3,21 +3,16 @@ import 'dart:io' as io;
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import 'package:ssl_certificates/ssl_certificates.dart';
+
 Future<io.WebSocket> connectWebSocket(
   String url, {
   Iterable<String>? protocols,
   Duration? connectionTimeout,
   Duration? pingInterval,
-  List<(List<int> bytes, String? password)> certs = const [],
+  TrustedCertificates certs = TrustedCertificates.empty,
 }) async {
-  io.SecurityContext? securityContext;
-
-  if (certs.isNotEmpty) {
-    securityContext = io.SecurityContext();
-    for (final cert in certs) {
-      securityContext.setTrustedCertificatesBytes(cert.$1, password: cert.$2);
-    }
-  }
+  io.SecurityContext? securityContext = initializeSecurityContext(certs);
 
   final customHttpClient = io.HttpClient(context: securityContext);
   customHttpClient.connectionTimeout = connectionTimeout;
