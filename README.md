@@ -22,6 +22,13 @@ Default build variables located in [dart_define.json](dart_define.json) and coul
 
 * `WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH` - path to folder structure created by `keystore-generate` command of [webtrit_phone_tools](https://github.com/WebTrit/webtrit_phone_tools) (KeystoreGenerator)
 
+
+### SSL Certificates
+To use SSL certificates, you need to: 
+1. add the following files to the `assets/certificates` folder
+2. for PKCS12 add passwords to the `assets/certificates/credentials.json` where the key is the file name and the value is the password
+2. run flutter_gen or buid_runner to generate the necessary code
+
 ## Build
 
 ### Android

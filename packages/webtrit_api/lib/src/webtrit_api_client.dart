@@ -17,11 +17,13 @@ class WebtritApiClient {
     Uri baseUrl,
     String tenantId, {
     Duration? connectionTimeout,
+    TrustedCertificates certs = TrustedCertificates.empty,
   }) : this.inner(
           baseUrl,
           tenantId,
           httpClient: createHttpClient(
             connectionTimeout: connectionTimeout,
+            certs: certs,
           ),
         );
 

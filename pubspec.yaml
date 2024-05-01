@@ -79,6 +79,8 @@ dependencies:
     path: ../webtrit_callkeep/webtrit_callkeep
   store_info_extractor:
     path: ./packages/store_info_extractor
+  ssl_certificates:
+    path: ./packages/ssl_certificates
 
   app_database:
     path: ./packages/data/app_database
@@ -116,6 +118,7 @@ flutter:
     - assets/login/
     - assets/ringtones/
     - assets/themes/
+    - assets/certificates/
 
 flutter_gen:
   output: lib/app/
