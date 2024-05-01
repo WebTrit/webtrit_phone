@@ -17,7 +17,7 @@ class WebtritApiClient {
     Uri baseUrl,
     String tenantId, {
     Duration? connectionTimeout,
-    List<(List<int> bytes, String? password)> certs = const [],
+    TrustedCertificates certs = TrustedCertificates.empty,
   }) : this.inner(
           baseUrl,
           tenantId,

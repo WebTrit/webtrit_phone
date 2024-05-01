@@ -69,7 +69,7 @@ class WebtritSignalingClient {
     String token,
     bool force, {
     Duration? connectionTimeout,
-    List<(List<int> bytes, String? password)> certs = const [],
+    TrustedCertificates certs = TrustedCertificates.empty,
   }) async {
     final signalingUrl = baseUrl.replace(
       pathSegments: [
