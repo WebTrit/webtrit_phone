@@ -16,4 +16,14 @@ class MockLoginCubit extends MockCubit<LoginState> implements LoginCubit {
     when(() => mock.isDemoModeEnabled).thenReturn(false);
     return mock;
   }
+
+  factory MockLoginCubit.loginCoreUrlAssignScreen() {
+    final mock = MockLoginCubit();
+    whenListen(
+      mock,
+      const Stream<LoginState>.empty(),
+      initialState: const LoginState(),
+    );
+    return mock;
+  }
 }
