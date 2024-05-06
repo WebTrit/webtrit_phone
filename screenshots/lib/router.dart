@@ -54,6 +54,10 @@ class _IndexInputScreenState extends State<IndexInputScreen> {
       ),
       ScreenshotApp(
         appBloc: appBloc,
+        child: const LoginPasswordSignInScreenshot(),
+      ),
+      ScreenshotApp(
+        appBloc: appBloc,
         child: const MainScreenScreenshot(
           MainFlavor.favorites,
           Text(EnvironmentConfig.APP_NAME),
