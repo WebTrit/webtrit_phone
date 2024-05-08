@@ -64,9 +64,9 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
       // skip external contact that represents own account
       final externalContacts = event.contacts.where((externalContact) => externalContact.id != userInfo.numbers.main);
 
-      final contactDatas = await appDatabase.contactsDao.getAllContacts(ContactSourceTypeEnum.external);
+      final syncedExternalContactsIds =
+          await appDatabase.contactsDao.getIdsBySourceType(ContactSourceTypeEnum.external);
 
-      final syncedExternalContactsIds = contactDatas.map((contactData) => contactData.sourceId).toSet();
       final updatedExternalContactsIds = externalContacts.map((externalContact) => externalContact.id).toSet();
 
       final delExternalContactsIds = syncedExternalContactsIds.difference(updatedExternalContactsIds);

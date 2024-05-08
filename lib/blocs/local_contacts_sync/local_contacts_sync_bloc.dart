@@ -72,9 +72,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
     await appDatabase.transaction(() async {
       final localContacts = event.contacts;
 
-      final contactDatas = await appDatabase.contactsDao.getAllContacts(ContactSourceTypeEnum.local);
-
-      final syncedLocalContactsIds = contactDatas.map((contactData) => contactData.sourceId).toSet();
+      final syncedLocalContactsIds = await appDatabase.contactsDao.getIdsBySourceType(ContactSourceTypeEnum.local);
 
       final updatedLocalContactsIds = localContacts.map((localContact) => localContact.id).toSet();
 
