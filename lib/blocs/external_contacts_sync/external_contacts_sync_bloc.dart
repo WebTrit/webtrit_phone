@@ -164,7 +164,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
         if (isClosed) return;
         await _onUpdated(event, emit, retryCount: retryCount + 1, userInfo: userInfo);
       } else {
-        emit(const ExternalContactsSyncRefreshFailure());
+        emit(const ExternalContactsSyncUpdateFailure());
       }
     }
   }

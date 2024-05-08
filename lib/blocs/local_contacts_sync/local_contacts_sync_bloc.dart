@@ -142,7 +142,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
         if (isClosed) return;
         await _onUpdated(event, emit, retryCount: retryCount + 1);
       } else {
-        emit(const LocalContactsSyncRefreshFailure());
+        emit(const LocalContactsSyncUpdateFailure());
       }
     }
   }
