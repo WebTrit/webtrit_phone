@@ -31,6 +31,8 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
   final AppDatabase appDatabase;
 
   void _onStarted(ExternalContactsSyncStarted event, Emitter<ExternalContactsSyncState> emit) async {
+    _logger.info('_onStarted');
+
     final externalContactsForEachFuture = emit.onEach<List<ExternalContact>>(
       externalContactsRepository.contacts(),
       onData: (contacts) => add(_ExternalContactsSyncUpdated(contacts: contacts)),
@@ -43,10 +45,13 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
   }
 
   void _onRefreshed(ExternalContactsSyncRefreshed event, Emitter<ExternalContactsSyncState> emit) async {
+    _logger.info('_onRefreshed');
+
     emit(const ExternalContactsSyncRefreshInProgress());
     try {
       await externalContactsRepository.load();
     } catch (error) {
+      _logger.warning('_onRefreshed error: ', error);
       emit(const ExternalContactsSyncRefreshFailure());
     }
   }
@@ -57,9 +62,12 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
     int retryCount = 0,
     UserInfo? userInfo,
   }) async {
+    _logger.info('_onUpdated contacts count:${event.contacts.length}');
+
     try {
       userInfo ??= await userRepository.getInfo();
     } catch (error) {
+      _logger.warning('_onUpdated userInfo error: ', error);
       emit(const ExternalContactsSyncRefreshFailure());
       return;
     }
@@ -148,7 +156,9 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
       });
 
       emit(const ExternalContactsSyncSuccess());
-    } on Exception catch (_) {
+    } on Exception catch (e) {
+      _logger.warning('_onUpdated retry: $retryCount, error: ', e);
+
       if (retryCount < 3) {
         await Future<void>.delayed(const Duration(seconds: 1));
         if (isClosed) return;
