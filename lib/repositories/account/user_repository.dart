@@ -72,4 +72,8 @@ class UserRepository {
   Future<void> logout() async {
     await _webtritApiClient.deleteSession(_token);
   }
+
+  Future<void> delete() async {
+    await _webtritApiClient.deleteUserInfo(_token);
+  }
 }

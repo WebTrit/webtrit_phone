@@ -136,7 +136,26 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   }
 
   FutureOr<void> _onAccountDeleted(SettingsAccountDeleted event, Emitter<SettingsState> emit) async {
-    // TODO: implement actual account deletion API call when it is introduced
-    await _onLogouted(const SettingsLogouted(), emit);
+    if (state.progress) return;
+
+    emit(state.copyWith(progress: true));
+    try {
+      await userRepository.delete();
+
+      appBloc.add(const AppLogouted());
+
+      if (emit.isDone) return;
+
+      emit(state.copyWith(progress: false));
+    } catch (e, stackTrace) {
+      _logger.warning('_onAccountDeleted', e, stackTrace);
+
+      notificationsBloc.add(NotificationsIssued(DefaultErrorNotification(e)));
+      appBloc.maybeHandleError(e);
+
+      if (emit.isDone) return;
+
+      emit(state.copyWith(progress: false));
+    }
   }
 }
