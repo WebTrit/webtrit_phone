@@ -12,12 +12,12 @@ dependencies:
     sdk: flutter
 
   equatable: ^2.0.5
-  uuid: ^4.3.3
+  uuid: ^4.4.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.1
+  flutter_lints: ^4.0.0
 
   pigeon: ^16.0.5
 
