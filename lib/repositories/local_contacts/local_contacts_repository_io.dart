@@ -59,7 +59,6 @@ class LocalContactsRepository implements ILocalContactsRepository {
   Future<List<LocalContact>> _listContacts() async {
     final contacts = await FlutterContacts.getContacts(
       withProperties: true,
-      withThumbnail: true,
       withAccounts: true,
     );
     return contacts
