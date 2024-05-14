@@ -1575,6 +1575,7 @@ GroupTitleListTileWidgetConfig _$GroupTitleListTileWidgetConfigFromJson(
 /// @nodoc
 mixin _$GroupTitleListTileWidgetConfig {
   Color? get backgroundColor => throw _privateConstructorUsedError;
+  Color? get textColor => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -1590,7 +1591,7 @@ abstract class $GroupTitleListTileWidgetConfigCopyWith<$Res> {
       _$GroupTitleListTileWidgetConfigCopyWithImpl<$Res,
           GroupTitleListTileWidgetConfig>;
   @useResult
-  $Res call({Color? backgroundColor});
+  $Res call({Color? backgroundColor, Color? textColor});
 }
 
 /// @nodoc
@@ -1608,11 +1609,16 @@ class _$GroupTitleListTileWidgetConfigCopyWithImpl<$Res,
   @override
   $Res call({
     Object? backgroundColor = freezed,
+    Object? textColor = freezed,
   }) {
     return _then(_value.copyWith(
       backgroundColor: freezed == backgroundColor
           ? _value.backgroundColor
           : backgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      textColor: freezed == textColor
+          ? _value.textColor
+          : textColor // ignore: cast_nullable_to_non_nullable
               as Color?,
     ) as $Val);
   }
@@ -1627,7 +1633,7 @@ abstract class _$$GroupTitleListTileWidgetConfigImplCopyWith<$Res>
       __$$GroupTitleListTileWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Color? backgroundColor});
+  $Res call({Color? backgroundColor, Color? textColor});
 }
 
 /// @nodoc
@@ -1644,11 +1650,16 @@ class __$$GroupTitleListTileWidgetConfigImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? backgroundColor = freezed,
+    Object? textColor = freezed,
   }) {
     return _then(_$GroupTitleListTileWidgetConfigImpl(
       backgroundColor: freezed == backgroundColor
           ? _value.backgroundColor
           : backgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      textColor: freezed == textColor
+          ? _value.textColor
+          : textColor // ignore: cast_nullable_to_non_nullable
               as Color?,
     ));
   }
@@ -1659,7 +1670,8 @@ class __$$GroupTitleListTileWidgetConfigImplCopyWithImpl<$Res>
 @themeJsonSerializable
 class _$GroupTitleListTileWidgetConfigImpl
     implements _GroupTitleListTileWidgetConfig {
-  const _$GroupTitleListTileWidgetConfigImpl({this.backgroundColor});
+  const _$GroupTitleListTileWidgetConfigImpl(
+      {this.backgroundColor, this.textColor});
 
   factory _$GroupTitleListTileWidgetConfigImpl.fromJson(
           Map<String, dynamic> json) =>
@@ -1667,10 +1679,12 @@ class _$GroupTitleListTileWidgetConfigImpl
 
   @override
   final Color? backgroundColor;
+  @override
+  final Color? textColor;
 
   @override
   String toString() {
-    return 'GroupTitleListTileWidgetConfig(backgroundColor: $backgroundColor)';
+    return 'GroupTitleListTileWidgetConfig(backgroundColor: $backgroundColor, textColor: $textColor)';
   }
 
   @override
@@ -1679,12 +1693,14 @@ class _$GroupTitleListTileWidgetConfigImpl
         (other.runtimeType == runtimeType &&
             other is _$GroupTitleListTileWidgetConfigImpl &&
             (identical(other.backgroundColor, backgroundColor) ||
-                other.backgroundColor == backgroundColor));
+                other.backgroundColor == backgroundColor) &&
+            (identical(other.textColor, textColor) ||
+                other.textColor == textColor));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, backgroundColor);
+  int get hashCode => Object.hash(runtimeType, backgroundColor, textColor);
 
   @JsonKey(ignore: true)
   @override
@@ -1705,13 +1721,16 @@ class _$GroupTitleListTileWidgetConfigImpl
 abstract class _GroupTitleListTileWidgetConfig
     implements GroupTitleListTileWidgetConfig {
   const factory _GroupTitleListTileWidgetConfig(
-      {final Color? backgroundColor}) = _$GroupTitleListTileWidgetConfigImpl;
+      {final Color? backgroundColor,
+      final Color? textColor}) = _$GroupTitleListTileWidgetConfigImpl;
 
   factory _GroupTitleListTileWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$GroupTitleListTileWidgetConfigImpl.fromJson;
 
   @override
   Color? get backgroundColor;
+  @override
+  Color? get textColor;
   @override
   @JsonKey(ignore: true)
   _$$GroupTitleListTileWidgetConfigImplCopyWith<

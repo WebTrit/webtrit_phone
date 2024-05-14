@@ -192,6 +192,8 @@ _$GroupTitleListTileWidgetConfigImpl
         _$GroupTitleListTileWidgetConfigImpl(
           backgroundColor: _$JsonConverterFromJson<String, Color>(
               json['backgroundColor'], const CSSColorConverter().fromJson),
+          textColor: _$JsonConverterFromJson<String, Color>(
+              json['textColor'], const CSSColorConverter().fromJson),
         );
 
 Map<String, dynamic> _$$GroupTitleListTileWidgetConfigImplToJson(
@@ -199,6 +201,8 @@ Map<String, dynamic> _$$GroupTitleListTileWidgetConfigImplToJson(
     <String, dynamic>{
       'backgroundColor': _$JsonConverterToJson<String, Color>(
           instance.backgroundColor, const CSSColorConverter().toJson),
+      'textColor': _$JsonConverterToJson<String, Color>(
+          instance.textColor, const CSSColorConverter().toJson),
     };
 
 _$CallActionsWidgetConfigImpl _$$CallActionsWidgetConfigImplFromJson(

@@ -108,6 +108,7 @@ class GroupTitleListTileWidgetConfig with _$GroupTitleListTileWidgetConfig {
   @themeJsonSerializable
   const factory GroupTitleListTileWidgetConfig({
     Color? backgroundColor,
+    Color? textColor,
   }) = _GroupTitleListTileWidgetConfig;
 
   factory GroupTitleListTileWidgetConfig.fromJson(Map<String, dynamic> json) =>

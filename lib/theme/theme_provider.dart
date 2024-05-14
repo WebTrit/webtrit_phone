@@ -131,10 +131,17 @@ class ThemeProvider extends InheritedWidget {
   }
 
   GroupTitleListStyles groupTitleListStyles(GroupTitleListTileWidgetConfig? groupTitleListTile) {
+    final textColor = groupTitleListTile?.textColor;
+    final backgroundColor = groupTitleListTile?.backgroundColor;
+
+    final textStyle = TextStyle(
+      color: textColor,
+    );
+
     return GroupTitleListStyles(
       primary: GroutTitleListStyle(
-        textStyle: const TextStyle(color: Colors.white),
-        background: groupTitleListTile?.backgroundColor,
+        textStyle: textStyle,
+        background: backgroundColor,
       ),
     );
   }
