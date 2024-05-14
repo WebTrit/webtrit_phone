@@ -45,8 +45,8 @@ def dartDefine = [
         WEBTRIT_APP_ID_SUFFIX  : projectPropertyDartDefines['WEBTRIT_APP_ID_SUFFIX'] ?: '',
         WEBTRIT_APP_LINK_DOMAIN: projectPropertyDartDefines['WEBTRIT_APP_LINK_DOMAIN'] ?: 'app.webtrit.com',
         WEBTRIT_APP_NAME       : projectPropertyDartDefines['WEBTRIT_APP_NAME'] ?: 'WebTrit',
-        WEBTRIT_BUILD_NAME     : projectPropertyDartDefines['WEBTRIT_BUILD_NAME_ANDROID'] ?: '',
-        WEBTRIT_BUILD_NUMBER   : projectPropertyDartDefines['WEBTRIT_BUILD_NUMBER_ANDROID'] ?: '',
+        WEBTRIT_APP_BUILD_NAME     : projectPropertyDartDefines['WEBTRIT_APP_BUILD_NAME_ANDROID'] ?: '',
+        WEBTRIT_APP_BUILD_NUMBER   : projectPropertyDartDefines['WEBTRIT_APP_BUILD_NUMBER_ANDROID'] ?: '',
 ]
 
 def envDefine = [
@@ -103,8 +103,8 @@ android {
         applicationIdSuffix dartDefine.WEBTRIT_APP_ID_SUFFIX
         minSdkVersion 26 // flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
-        versionCode dartDefine.WEBTRIT_BUILD_NUMBER.toInteger()
-        versionName dartDefine.WEBTRIT_BUILD_NAME
+        versionCode dartDefine.WEBTRIT_APP_BUILD_NUMBER.toInteger()
+        versionName dartDefine.WEBTRIT_APP_BUILD_NAME
 
         resValue "string", "APP_LINK_DOMAIN", dartDefine.WEBTRIT_APP_LINK_DOMAIN
         resValue "string", "APP_NAME", dartDefine.WEBTRIT_APP_NAME
