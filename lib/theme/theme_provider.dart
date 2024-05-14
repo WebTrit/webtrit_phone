@@ -316,42 +316,123 @@ class ThemeProvider extends InheritedWidget {
 
   CallActionsStyles callActionsStyles(
     ColorScheme colors,
-    TextButtonStyles textButtonStyles,
-    CallActionsWidgetConfig? callActionsWidgetConfig,
+    CallActionsWidgetConfig? config,
   ) {
-    final callStartColor = MaterialStatePropertyAll(callActionsWidgetConfig?.callStartBackgroundColor);
-    final hangupColor = MaterialStatePropertyAll(callActionsWidgetConfig?.callStartBackgroundColor);
-    final transferColor = MaterialStatePropertyAll(callActionsWidgetConfig?.transferBackgroundColor);
-    final cameraColor = MaterialStatePropertyAll(callActionsWidgetConfig?.cameraBackgroundColor);
-    final cameraActiveColor = MaterialStatePropertyAll(callActionsWidgetConfig?.cameraActiveBackgroundColor);
-    final mutedColor = MaterialStatePropertyAll(callActionsWidgetConfig?.mutedBackgroundColor);
-    final mutedActiveColor = MaterialStatePropertyAll(callActionsWidgetConfig?.mutedActiveBackgroundColor);
-    final speakerColor = MaterialStatePropertyAll(callActionsWidgetConfig?.speakerBackgroundColor);
-    final speakerActiveColor = MaterialStatePropertyAll(callActionsWidgetConfig?.speakerActiveBackgroundColor);
-    final heldColor = MaterialStatePropertyAll(callActionsWidgetConfig?.heldBackgroundColor);
-    final heldActiveColor = MaterialStatePropertyAll(callActionsWidgetConfig?.heldActiveBackgroundColor);
-    final swapColor = MaterialStatePropertyAll(callActionsWidgetConfig?.swapBackgroundColor);
-    final keyColor = MaterialStatePropertyAll(callActionsWidgetConfig?.keyBackgroundColor);
-    final keypadColor = MaterialStatePropertyAll(callActionsWidgetConfig?.keypadBackgroundColor);
-    final keypadActiveColor = MaterialStatePropertyAll(callActionsWidgetConfig?.keypadActiveBackgroundColor);
+    final actionBackgroundColor = colors.surface.withOpacity(0.3);
+    final activeActionBackgroundColor = colors.surface;
+
+    final callStartBackgroundColor = config?.callStartBackgroundColor ?? colors.tertiary;
+    final hangupBackgroundColor = config?.hangupBackgroundColor ?? colors.error;
+    final transferBackgroundColor = config?.transferBackgroundColor ?? actionBackgroundColor;
+    final cameraBackgroundColor = config?.cameraBackgroundColor ?? actionBackgroundColor;
+    final cameraActiveBackgroundColor = config?.cameraActiveBackgroundColor ?? activeActionBackgroundColor;
+    final mutedBackgroundColor = config?.mutedBackgroundColor ?? actionBackgroundColor;
+    final mutedActiveBackgroundColor = config?.mutedActiveBackgroundColor ?? activeActionBackgroundColor;
+    final speakerBackgroundColor = config?.speakerBackgroundColor ?? actionBackgroundColor;
+    final speakerActiveBackgroundColor = config?.speakerActiveBackgroundColor ?? activeActionBackgroundColor;
+    final heldBackgroundColor = config?.heldBackgroundColor ?? actionBackgroundColor;
+    final heldActiveBackgroundColor = config?.heldActiveBackgroundColor ?? activeActionBackgroundColor;
+    final swapBackgroundColor = config?.swapBackgroundColor ?? actionBackgroundColor;
+    final keyBackgroundColor = config?.keyBackgroundColor ?? actionBackgroundColor;
+    final keypadBackgroundColor = config?.keypadBackgroundColor ?? actionBackgroundColor;
+    final keypadActiveBackgroundColor = config?.keypadActiveBackgroundColor ?? activeActionBackgroundColor;
+
+    final callStart = TextButton.styleFrom(
+      foregroundColor: colors.onTertiary,
+      backgroundColor: callStartBackgroundColor,
+      disabledForegroundColor: colors.onTertiary.withOpacity(0.38),
+      padding: EdgeInsets.zero,
+    );
+
+    final callHangup = TextButton.styleFrom(
+      foregroundColor: colors.onError,
+      backgroundColor: hangupBackgroundColor,
+      disabledForegroundColor: colors.onError.withOpacity(0.38),
+      padding: EdgeInsets.zero,
+    );
+
+    final callTransfer = TextButton.styleFrom(
+      foregroundColor: colors.onSecondary,
+      backgroundColor: transferBackgroundColor,
+      disabledForegroundColor: colors.secondary.withOpacity(0.38),
+      padding: EdgeInsets.zero,
+    );
+
+    final callAction = TextButton.styleFrom(
+      foregroundColor: colors.surface,
+      padding: EdgeInsets.zero,
+    );
+
+    final callActiveAction = TextButton.styleFrom(
+      foregroundColor: colors.onSurface,
+      padding: EdgeInsets.zero,
+    );
+
+    final cameraStyle = callAction.copyWith(
+      backgroundColor: MaterialStatePropertyAll(cameraBackgroundColor),
+    );
+
+    final cameraActiveStyle = callAction.copyWith(
+      backgroundColor: MaterialStatePropertyAll(cameraActiveBackgroundColor),
+    );
+
+    final mutedStyle = callAction.copyWith(
+      backgroundColor: MaterialStatePropertyAll(mutedBackgroundColor),
+    );
+
+    final mutedActiveStyle = callActiveAction.copyWith(
+      backgroundColor: MaterialStatePropertyAll(mutedActiveBackgroundColor),
+    );
+
+    final speakerStyle = callAction.copyWith(
+      backgroundColor: MaterialStatePropertyAll(speakerBackgroundColor),
+    );
+
+    final speakerActiveStyle = callActiveAction.copyWith(
+      backgroundColor: MaterialStatePropertyAll(speakerActiveBackgroundColor),
+    );
+
+    final heldStyle = callAction.copyWith(
+      backgroundColor: MaterialStatePropertyAll(heldBackgroundColor),
+    );
+
+    final heldActiveStyle = callActiveAction.copyWith(
+      backgroundColor: MaterialStatePropertyAll(heldActiveBackgroundColor),
+    );
+
+    final swapStyle = callAction.copyWith(
+      backgroundColor: MaterialStatePropertyAll(swapBackgroundColor),
+    );
+
+    final keyStyle = callAction.copyWith(
+      backgroundColor: MaterialStatePropertyAll(keyBackgroundColor),
+    );
+
+    final keypadStyle = callAction.copyWith(
+      backgroundColor: MaterialStatePropertyAll(keypadBackgroundColor),
+    );
+
+    final keypadActiveStyle = callActiveAction.copyWith(
+      backgroundColor: MaterialStatePropertyAll(keypadActiveBackgroundColor),
+    );
 
     return CallActionsStyles(
       primary: CallActionsStyle(
-        callStart: textButtonStyles.callStart?.copyWith(backgroundColor: callStartColor),
-        hangup: textButtonStyles.callHangup?.copyWith(backgroundColor: hangupColor),
-        transfer: textButtonStyles.callAction?.copyWith(backgroundColor: transferColor),
-        camera: textButtonStyles.callAction?.copyWith(backgroundColor: cameraColor),
-        cameraActive: textButtonStyles.callActiveAction?.copyWith(backgroundColor: cameraActiveColor),
-        muted: textButtonStyles.callAction?.copyWith(backgroundColor: mutedColor),
-        mutedActive: textButtonStyles.callActiveAction?.copyWith(backgroundColor: mutedActiveColor),
-        speaker: textButtonStyles.callAction?.copyWith(backgroundColor: speakerColor),
-        speakerActive: textButtonStyles.callActiveAction?.copyWith(backgroundColor: speakerActiveColor),
-        held: textButtonStyles.callAction?.copyWith(backgroundColor: heldColor),
-        heldActive: textButtonStyles.callActiveAction?.copyWith(backgroundColor: heldActiveColor),
-        swap: textButtonStyles.callAction?.copyWith(backgroundColor: swapColor),
-        key: textButtonStyles.callAction?.copyWith(backgroundColor: keyColor),
-        keypad: textButtonStyles.callAction?.copyWith(backgroundColor: keypadColor),
-        keypadActive: textButtonStyles.callActiveAction?.copyWith(backgroundColor: keypadActiveColor),
+        callStart: callStart,
+        hangup: callHangup,
+        transfer: callTransfer,
+        camera: cameraStyle,
+        cameraActive: cameraActiveStyle,
+        muted: mutedStyle,
+        mutedActive: mutedActiveStyle,
+        speaker: speakerStyle,
+        speakerActive: speakerActiveStyle,
+        held: heldStyle,
+        heldActive: heldActiveStyle,
+        swap: swapStyle,
+        key: keyStyle,
+        keypad: keypadStyle,
+        keypadActive: keypadActiveStyle,
       ),
     );
   }
@@ -535,7 +616,6 @@ class ThemeProvider extends InheritedWidget {
         ),
         callActionsStyles(
           colorScheme,
-          textButtonStyles,
           themeWidgetConfig?.group?.callActions,
         ),
         inputDecorations(colorScheme),
