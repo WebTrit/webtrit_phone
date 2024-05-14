@@ -14,10 +14,26 @@ _$ThemeSettingsImpl _$$ThemeSettingsImplFromJson(Map<String, dynamic> json) =>
           ? null
           : ColorSchemeOverride.fromJson(
               json['lightColorSchemeOverride'] as Map<String, dynamic>),
+      themeWidgetLightConfig: json['themeWidgetLightConfig'] == null
+          ? null
+          : ThemeWidgetConfig.fromJson(
+              json['themeWidgetLightConfig'] as Map<String, dynamic>),
+      themePageLightConfig: json['themePageLightConfig'] == null
+          ? null
+          : ThemePageConfig.fromJson(
+              json['themePageLightConfig'] as Map<String, dynamic>),
       darkColorSchemeOverride: json['darkColorSchemeOverride'] == null
           ? null
           : ColorSchemeOverride.fromJson(
               json['darkColorSchemeOverride'] as Map<String, dynamic>),
+      themeWidgetDarkConfig: json['themeWidgetDarkConfig'] == null
+          ? null
+          : ThemeWidgetConfig.fromJson(
+              json['themeWidgetDarkConfig'] as Map<String, dynamic>),
+      themePageDarkConfig: json['themePageDarkConfig'] == null
+          ? null
+          : ThemePageConfig.fromJson(
+              json['themePageDarkConfig'] as Map<String, dynamic>),
       primaryGradientColors: (json['primaryGradientColors'] as List<dynamic>)
           .map((e) => CustomColor.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -32,7 +48,11 @@ Map<String, dynamic> _$$ThemeSettingsImplToJson(_$ThemeSettingsImpl instance) =>
     <String, dynamic>{
       'seedColor': const CSSColorConverter().toJson(instance.seedColor),
       'lightColorSchemeOverride': instance.lightColorSchemeOverride,
+      'themeWidgetLightConfig': instance.themeWidgetLightConfig,
+      'themePageLightConfig': instance.themePageLightConfig,
       'darkColorSchemeOverride': instance.darkColorSchemeOverride,
+      'themeWidgetDarkConfig': instance.themeWidgetDarkConfig,
+      'themePageDarkConfig': instance.themePageDarkConfig,
       'primaryGradientColors': instance.primaryGradientColors,
       'fontFamily': instance.fontFamily,
       'primaryOnboardingLogo': instance.primaryOnboardingLogo,

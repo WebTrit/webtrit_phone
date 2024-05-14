@@ -9,6 +9,7 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/features/user_agreement/widgets/widgets.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class UserAgreementScreen extends StatefulWidget {
   const UserAgreementScreen({
@@ -43,9 +44,8 @@ class _UserAgreementScreenState extends State<UserAgreementScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const SizedBox(height: kInset * 2),
-                    Icon(
+                    const AppIcon(
                       Icons.menu_book_rounded,
-                      color: Theme.of(context).colorScheme.primary,
                       size: kInset * 6,
                     ),
                     const SizedBox(height: kInset * 2),
@@ -97,6 +97,5 @@ class _UserAgreementScreenState extends State<UserAgreementScreen> {
     );
   }
 }
-
 
 // TODO : New description and icon for user agreement

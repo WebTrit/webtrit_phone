@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'theme_json_serializable.dart';
-import 'theme.dart';
+
+import '../theme.dart';
 
 part 'custom_color.g.dart';
 
