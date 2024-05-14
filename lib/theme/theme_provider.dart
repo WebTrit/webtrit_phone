@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 
 import 'package:webtrit_phone/features/call/call.dart';
+import 'package:webtrit_phone/features/keypad/widgets/actionpad.dart';
 import 'package:webtrit_phone/features/login/view/login_mode_select_screen.dart';
 import 'package:webtrit_phone/features/login/widgets/onboarding_logo.dart';
 import 'package:webtrit_phone/features/login/widgets/onboarding_picture_logo.dart';
@@ -314,6 +315,47 @@ class ThemeProvider extends InheritedWidget {
     );
   }
 
+  ActionpadStyles actionpadStyles(
+    ColorScheme colors,
+    ActionPadWidgetConfig? config,
+  ) {
+    final callStartForegroundColor = config?.callStart?.foregroundColor ?? colors.onTertiary;
+    final callStartBackgroundColor = config?.callStart?.backgroundColor ?? colors.tertiary;
+
+    final callTransferForegroundColor = config?.callTransfer?.foregroundColor ?? colors.onSecondary;
+    final callTransferBackgroundColor = config?.callTransfer?.backgroundColor ?? colors.secondary;
+
+    final backspacePressedStyleForegroundColor = config?.backspacePressed?.foregroundColor ?? colors.onSecondary;
+    final backspacePressedStyleBackgroundColor = config?.backspacePressed?.backgroundColor;
+
+    final callStartStyle = TextButton.styleFrom(
+      foregroundColor: callStartForegroundColor,
+      backgroundColor: callStartBackgroundColor,
+      disabledForegroundColor: colors.onTertiary.withOpacity(0.38),
+      padding: EdgeInsets.zero,
+    );
+
+    final callTransferStyle = TextButton.styleFrom(
+      foregroundColor: callTransferForegroundColor,
+      backgroundColor: callTransferBackgroundColor,
+      disabledForegroundColor: colors.secondary.withOpacity(0.38),
+      padding: EdgeInsets.zero,
+    );
+
+    final backspacePressedStyle = TextButton.styleFrom(
+      foregroundColor: backspacePressedStyleForegroundColor,
+      backgroundColor: backspacePressedStyleBackgroundColor,
+    );
+
+    return ActionpadStyles(
+      primary: ActionpadStyle(
+        callStart: callStartStyle,
+        callTransfer: callTransferStyle,
+        backspacePressed: backspacePressedStyle,
+      ),
+    );
+  }
+
   CallActionsStyles callActionsStyles(
     ColorScheme colors,
     CallActionsWidgetConfig? config,
@@ -617,6 +659,10 @@ class ThemeProvider extends InheritedWidget {
         callActionsStyles(
           colorScheme,
           themeWidgetConfig?.group?.callActions,
+        ),
+        actionpadStyles(
+          colorScheme,
+          themeWidgetConfig?.actionPad,
         ),
         inputDecorations(colorScheme),
         elevatedButtonStyles(

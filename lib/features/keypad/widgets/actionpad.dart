@@ -2,8 +2,13 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
+
+import 'actionpad_style.dart';
+import 'actionpad_styles.dart';
+
+export 'actionpad_style.dart';
+export 'actionpad_styles.dart';
 
 class Actionpad extends StatelessWidget {
   const Actionpad({
@@ -15,6 +20,7 @@ class Actionpad extends StatelessWidget {
     this.onTransferPressed,
     this.onBackspacePressed,
     this.onBackspaceLongPress,
+    this.style,
   });
 
   final bool video;
@@ -25,10 +31,12 @@ class Actionpad extends StatelessWidget {
   final VoidCallback? onBackspacePressed;
   final VoidCallback? onBackspaceLongPress;
 
+  final ActionpadStyle? style;
+
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    final TextButtonStyles? textButtonStyles = themeData.extension<TextButtonStyles>();
+    final localStyle = style ?? themeData.extension<ActionpadStyles>()?.primary;
 
     final mediaQueryData = MediaQuery.of(context);
     final minimumDimension = min(mediaQueryData.size.width / 5, mediaQueryData.size.height / 7);
@@ -40,7 +48,7 @@ class Actionpad extends StatelessWidget {
         TextButton(
           onPressed: transfer ? onTransferPressed : onCallPressed,
           onLongPress: transfer ? null : onCallLongPress,
-          style: transfer ? textButtonStyles?.callTransfer : textButtonStyles?.callStart,
+          style: transfer ? localStyle?.callTransfer : localStyle?.callStart,
           child: Icon(
             transfer
                 ? Icons.phone_forwarded
@@ -53,7 +61,7 @@ class Actionpad extends StatelessWidget {
         TextButton(
           onPressed: onBackspacePressed,
           onLongPress: onBackspaceLongPress,
-          style: textButtonStyles?.neutral,
+          style: localStyle?.backspacePressed,
           child: const Icon(
             Icons.backspace_outlined,
           ),

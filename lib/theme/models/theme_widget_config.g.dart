@@ -31,6 +31,10 @@ _$ThemeWidgetConfigImpl _$$ThemeWidgetConfigImplFromJson(
       dialog: json['dialog'] == null
           ? null
           : DialogWidgetConfig.fromJson(json['dialog'] as Map<String, dynamic>),
+      actionPad: json['actionPad'] == null
+          ? null
+          : ActionPadWidgetConfig.fromJson(
+              json['actionPad'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$ThemeWidgetConfigImplToJson(
@@ -43,6 +47,7 @@ Map<String, dynamic> _$$ThemeWidgetConfigImplToJson(
       'input': instance.input,
       'text': instance.text,
       'dialog': instance.dialog,
+      'actionPad': instance.actionPad,
     };
 
 _$ButtonWidgetConfigImpl _$$ButtonWidgetConfigImplFromJson(
@@ -501,4 +506,29 @@ Map<String, dynamic> _$$ConfirmDialogWidgetConfigImplToJson(
           instance.activeButtonColor2, const CSSColorConverter().toJson),
       'defaultButtonColor': _$JsonConverterToJson<String, Color>(
           instance.defaultButtonColor, const CSSColorConverter().toJson),
+    };
+
+_$ActionPadWidgetConfigImpl _$$ActionPadWidgetConfigImplFromJson(
+        Map<String, dynamic> json) =>
+    _$ActionPadWidgetConfigImpl(
+      callStart: json['callStart'] == null
+          ? null
+          : ElevatedButtonWidgetConfig.fromJson(
+              json['callStart'] as Map<String, dynamic>),
+      callTransfer: json['callTransfer'] == null
+          ? null
+          : ElevatedButtonWidgetConfig.fromJson(
+              json['callTransfer'] as Map<String, dynamic>),
+      backspacePressed: json['backspacePressed'] == null
+          ? null
+          : ElevatedButtonWidgetConfig.fromJson(
+              json['backspacePressed'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$ActionPadWidgetConfigImplToJson(
+        _$ActionPadWidgetConfigImpl instance) =>
+    <String, dynamic>{
+      'callStart': instance.callStart,
+      'callTransfer': instance.callTransfer,
+      'backspacePressed': instance.backspacePressed,
     };

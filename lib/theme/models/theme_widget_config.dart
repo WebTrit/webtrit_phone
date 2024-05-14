@@ -20,6 +20,7 @@ class ThemeWidgetConfig with _$ThemeWidgetConfig {
     InputWidgetConfig? input,
     TextWidgetConfig? text,
     DialogWidgetConfig? dialog,
+    ActionPadWidgetConfig? actionPad,
   }) = _ThemeWidgetConfig;
 
   factory ThemeWidgetConfig.fromJson(Map<String, dynamic> json) => _$ThemeWidgetConfigFromJson(json);
@@ -281,4 +282,17 @@ class ConfirmDialogWidgetConfig with _$ConfirmDialogWidgetConfig {
   }) = _ConfirmDialogWidgetConfig;
 
   factory ConfirmDialogWidgetConfig.fromJson(Map<String, dynamic> json) => _$ConfirmDialogWidgetConfigFromJson(json);
+}
+
+@freezed
+class ActionPadWidgetConfig with _$ActionPadWidgetConfig {
+  // ignore: invalid_annotation_target
+  @themeJsonSerializable
+  const factory ActionPadWidgetConfig({
+    ElevatedButtonWidgetConfig? callStart,
+    ElevatedButtonWidgetConfig? callTransfer,
+    ElevatedButtonWidgetConfig? backspacePressed,
+  }) = _ActionPadWidgetConfig;
+
+  factory ActionPadWidgetConfig.fromJson(Map<String, dynamic> json) => _$ActionPadWidgetConfigFromJson(json);
 }

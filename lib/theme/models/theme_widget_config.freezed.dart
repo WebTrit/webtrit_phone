@@ -27,6 +27,7 @@ mixin _$ThemeWidgetConfig {
   InputWidgetConfig? get input => throw _privateConstructorUsedError;
   TextWidgetConfig? get text => throw _privateConstructorUsedError;
   DialogWidgetConfig? get dialog => throw _privateConstructorUsedError;
+  ActionPadWidgetConfig? get actionPad => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -47,7 +48,8 @@ abstract class $ThemeWidgetConfigCopyWith<$Res> {
       PictureWidgetConfig? picture,
       InputWidgetConfig? input,
       TextWidgetConfig? text,
-      DialogWidgetConfig? dialog});
+      DialogWidgetConfig? dialog,
+      ActionPadWidgetConfig? actionPad});
 
   $ButtonWidgetConfigCopyWith<$Res>? get button;
   $GroupWidgetConfigCopyWith<$Res>? get group;
@@ -56,6 +58,7 @@ abstract class $ThemeWidgetConfigCopyWith<$Res> {
   $InputWidgetConfigCopyWith<$Res>? get input;
   $TextWidgetConfigCopyWith<$Res>? get text;
   $DialogWidgetConfigCopyWith<$Res>? get dialog;
+  $ActionPadWidgetConfigCopyWith<$Res>? get actionPad;
 }
 
 /// @nodoc
@@ -78,6 +81,7 @@ class _$ThemeWidgetConfigCopyWithImpl<$Res, $Val extends ThemeWidgetConfig>
     Object? input = freezed,
     Object? text = freezed,
     Object? dialog = freezed,
+    Object? actionPad = freezed,
   }) {
     return _then(_value.copyWith(
       button: freezed == button
@@ -108,6 +112,10 @@ class _$ThemeWidgetConfigCopyWithImpl<$Res, $Val extends ThemeWidgetConfig>
           ? _value.dialog
           : dialog // ignore: cast_nullable_to_non_nullable
               as DialogWidgetConfig?,
+      actionPad: freezed == actionPad
+          ? _value.actionPad
+          : actionPad // ignore: cast_nullable_to_non_nullable
+              as ActionPadWidgetConfig?,
     ) as $Val);
   }
 
@@ -194,6 +202,18 @@ class _$ThemeWidgetConfigCopyWithImpl<$Res, $Val extends ThemeWidgetConfig>
       return _then(_value.copyWith(dialog: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ActionPadWidgetConfigCopyWith<$Res>? get actionPad {
+    if (_value.actionPad == null) {
+      return null;
+    }
+
+    return $ActionPadWidgetConfigCopyWith<$Res>(_value.actionPad!, (value) {
+      return _then(_value.copyWith(actionPad: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -211,7 +231,8 @@ abstract class _$$ThemeWidgetConfigImplCopyWith<$Res>
       PictureWidgetConfig? picture,
       InputWidgetConfig? input,
       TextWidgetConfig? text,
-      DialogWidgetConfig? dialog});
+      DialogWidgetConfig? dialog,
+      ActionPadWidgetConfig? actionPad});
 
   @override
   $ButtonWidgetConfigCopyWith<$Res>? get button;
@@ -227,6 +248,8 @@ abstract class _$$ThemeWidgetConfigImplCopyWith<$Res>
   $TextWidgetConfigCopyWith<$Res>? get text;
   @override
   $DialogWidgetConfigCopyWith<$Res>? get dialog;
+  @override
+  $ActionPadWidgetConfigCopyWith<$Res>? get actionPad;
 }
 
 /// @nodoc
@@ -247,6 +270,7 @@ class __$$ThemeWidgetConfigImplCopyWithImpl<$Res>
     Object? input = freezed,
     Object? text = freezed,
     Object? dialog = freezed,
+    Object? actionPad = freezed,
   }) {
     return _then(_$ThemeWidgetConfigImpl(
       button: freezed == button
@@ -277,6 +301,10 @@ class __$$ThemeWidgetConfigImplCopyWithImpl<$Res>
           ? _value.dialog
           : dialog // ignore: cast_nullable_to_non_nullable
               as DialogWidgetConfig?,
+      actionPad: freezed == actionPad
+          ? _value.actionPad
+          : actionPad // ignore: cast_nullable_to_non_nullable
+              as ActionPadWidgetConfig?,
     ));
   }
 }
@@ -292,7 +320,8 @@ class _$ThemeWidgetConfigImpl implements _ThemeWidgetConfig {
       this.picture,
       this.input,
       this.text,
-      this.dialog});
+      this.dialog,
+      this.actionPad});
 
   factory _$ThemeWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$ThemeWidgetConfigImplFromJson(json);
@@ -311,10 +340,12 @@ class _$ThemeWidgetConfigImpl implements _ThemeWidgetConfig {
   final TextWidgetConfig? text;
   @override
   final DialogWidgetConfig? dialog;
+  @override
+  final ActionPadWidgetConfig? actionPad;
 
   @override
   String toString() {
-    return 'ThemeWidgetConfig(button: $button, group: $group, bar: $bar, picture: $picture, input: $input, text: $text, dialog: $dialog)';
+    return 'ThemeWidgetConfig(button: $button, group: $group, bar: $bar, picture: $picture, input: $input, text: $text, dialog: $dialog, actionPad: $actionPad)';
   }
 
   @override
@@ -328,13 +359,15 @@ class _$ThemeWidgetConfigImpl implements _ThemeWidgetConfig {
             (identical(other.picture, picture) || other.picture == picture) &&
             (identical(other.input, input) || other.input == input) &&
             (identical(other.text, text) || other.text == text) &&
-            (identical(other.dialog, dialog) || other.dialog == dialog));
+            (identical(other.dialog, dialog) || other.dialog == dialog) &&
+            (identical(other.actionPad, actionPad) ||
+                other.actionPad == actionPad));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, button, group, bar, picture, input, text, dialog);
+      runtimeType, button, group, bar, picture, input, text, dialog, actionPad);
 
   @JsonKey(ignore: true)
   @override
@@ -359,7 +392,8 @@ abstract class _ThemeWidgetConfig implements ThemeWidgetConfig {
       final PictureWidgetConfig? picture,
       final InputWidgetConfig? input,
       final TextWidgetConfig? text,
-      final DialogWidgetConfig? dialog}) = _$ThemeWidgetConfigImpl;
+      final DialogWidgetConfig? dialog,
+      final ActionPadWidgetConfig? actionPad}) = _$ThemeWidgetConfigImpl;
 
   factory _ThemeWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$ThemeWidgetConfigImpl.fromJson;
@@ -378,6 +412,8 @@ abstract class _ThemeWidgetConfig implements ThemeWidgetConfig {
   TextWidgetConfig? get text;
   @override
   DialogWidgetConfig? get dialog;
+  @override
+  ActionPadWidgetConfig? get actionPad;
   @override
   @JsonKey(ignore: true)
   _$$ThemeWidgetConfigImplCopyWith<_$ThemeWidgetConfigImpl> get copyWith =>
@@ -4282,5 +4318,247 @@ abstract class _ConfirmDialogWidgetConfig implements ConfirmDialogWidgetConfig {
   @override
   @JsonKey(ignore: true)
   _$$ConfirmDialogWidgetConfigImplCopyWith<_$ConfirmDialogWidgetConfigImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+ActionPadWidgetConfig _$ActionPadWidgetConfigFromJson(
+    Map<String, dynamic> json) {
+  return _ActionPadWidgetConfig.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ActionPadWidgetConfig {
+  ElevatedButtonWidgetConfig? get callStart =>
+      throw _privateConstructorUsedError;
+  ElevatedButtonWidgetConfig? get callTransfer =>
+      throw _privateConstructorUsedError;
+  ElevatedButtonWidgetConfig? get backspacePressed =>
+      throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ActionPadWidgetConfigCopyWith<ActionPadWidgetConfig> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ActionPadWidgetConfigCopyWith<$Res> {
+  factory $ActionPadWidgetConfigCopyWith(ActionPadWidgetConfig value,
+          $Res Function(ActionPadWidgetConfig) then) =
+      _$ActionPadWidgetConfigCopyWithImpl<$Res, ActionPadWidgetConfig>;
+  @useResult
+  $Res call(
+      {ElevatedButtonWidgetConfig? callStart,
+      ElevatedButtonWidgetConfig? callTransfer,
+      ElevatedButtonWidgetConfig? backspacePressed});
+
+  $ElevatedButtonWidgetConfigCopyWith<$Res>? get callStart;
+  $ElevatedButtonWidgetConfigCopyWith<$Res>? get callTransfer;
+  $ElevatedButtonWidgetConfigCopyWith<$Res>? get backspacePressed;
+}
+
+/// @nodoc
+class _$ActionPadWidgetConfigCopyWithImpl<$Res,
+        $Val extends ActionPadWidgetConfig>
+    implements $ActionPadWidgetConfigCopyWith<$Res> {
+  _$ActionPadWidgetConfigCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? callStart = freezed,
+    Object? callTransfer = freezed,
+    Object? backspacePressed = freezed,
+  }) {
+    return _then(_value.copyWith(
+      callStart: freezed == callStart
+          ? _value.callStart
+          : callStart // ignore: cast_nullable_to_non_nullable
+              as ElevatedButtonWidgetConfig?,
+      callTransfer: freezed == callTransfer
+          ? _value.callTransfer
+          : callTransfer // ignore: cast_nullable_to_non_nullable
+              as ElevatedButtonWidgetConfig?,
+      backspacePressed: freezed == backspacePressed
+          ? _value.backspacePressed
+          : backspacePressed // ignore: cast_nullable_to_non_nullable
+              as ElevatedButtonWidgetConfig?,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ElevatedButtonWidgetConfigCopyWith<$Res>? get callStart {
+    if (_value.callStart == null) {
+      return null;
+    }
+
+    return $ElevatedButtonWidgetConfigCopyWith<$Res>(_value.callStart!,
+        (value) {
+      return _then(_value.copyWith(callStart: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ElevatedButtonWidgetConfigCopyWith<$Res>? get callTransfer {
+    if (_value.callTransfer == null) {
+      return null;
+    }
+
+    return $ElevatedButtonWidgetConfigCopyWith<$Res>(_value.callTransfer!,
+        (value) {
+      return _then(_value.copyWith(callTransfer: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ElevatedButtonWidgetConfigCopyWith<$Res>? get backspacePressed {
+    if (_value.backspacePressed == null) {
+      return null;
+    }
+
+    return $ElevatedButtonWidgetConfigCopyWith<$Res>(_value.backspacePressed!,
+        (value) {
+      return _then(_value.copyWith(backspacePressed: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$ActionPadWidgetConfigImplCopyWith<$Res>
+    implements $ActionPadWidgetConfigCopyWith<$Res> {
+  factory _$$ActionPadWidgetConfigImplCopyWith(
+          _$ActionPadWidgetConfigImpl value,
+          $Res Function(_$ActionPadWidgetConfigImpl) then) =
+      __$$ActionPadWidgetConfigImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {ElevatedButtonWidgetConfig? callStart,
+      ElevatedButtonWidgetConfig? callTransfer,
+      ElevatedButtonWidgetConfig? backspacePressed});
+
+  @override
+  $ElevatedButtonWidgetConfigCopyWith<$Res>? get callStart;
+  @override
+  $ElevatedButtonWidgetConfigCopyWith<$Res>? get callTransfer;
+  @override
+  $ElevatedButtonWidgetConfigCopyWith<$Res>? get backspacePressed;
+}
+
+/// @nodoc
+class __$$ActionPadWidgetConfigImplCopyWithImpl<$Res>
+    extends _$ActionPadWidgetConfigCopyWithImpl<$Res,
+        _$ActionPadWidgetConfigImpl>
+    implements _$$ActionPadWidgetConfigImplCopyWith<$Res> {
+  __$$ActionPadWidgetConfigImplCopyWithImpl(_$ActionPadWidgetConfigImpl _value,
+      $Res Function(_$ActionPadWidgetConfigImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? callStart = freezed,
+    Object? callTransfer = freezed,
+    Object? backspacePressed = freezed,
+  }) {
+    return _then(_$ActionPadWidgetConfigImpl(
+      callStart: freezed == callStart
+          ? _value.callStart
+          : callStart // ignore: cast_nullable_to_non_nullable
+              as ElevatedButtonWidgetConfig?,
+      callTransfer: freezed == callTransfer
+          ? _value.callTransfer
+          : callTransfer // ignore: cast_nullable_to_non_nullable
+              as ElevatedButtonWidgetConfig?,
+      backspacePressed: freezed == backspacePressed
+          ? _value.backspacePressed
+          : backspacePressed // ignore: cast_nullable_to_non_nullable
+              as ElevatedButtonWidgetConfig?,
+    ));
+  }
+}
+
+/// @nodoc
+
+@themeJsonSerializable
+class _$ActionPadWidgetConfigImpl implements _ActionPadWidgetConfig {
+  const _$ActionPadWidgetConfigImpl(
+      {this.callStart, this.callTransfer, this.backspacePressed});
+
+  factory _$ActionPadWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ActionPadWidgetConfigImplFromJson(json);
+
+  @override
+  final ElevatedButtonWidgetConfig? callStart;
+  @override
+  final ElevatedButtonWidgetConfig? callTransfer;
+  @override
+  final ElevatedButtonWidgetConfig? backspacePressed;
+
+  @override
+  String toString() {
+    return 'ActionPadWidgetConfig(callStart: $callStart, callTransfer: $callTransfer, backspacePressed: $backspacePressed)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ActionPadWidgetConfigImpl &&
+            (identical(other.callStart, callStart) ||
+                other.callStart == callStart) &&
+            (identical(other.callTransfer, callTransfer) ||
+                other.callTransfer == callTransfer) &&
+            (identical(other.backspacePressed, backspacePressed) ||
+                other.backspacePressed == backspacePressed));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, callStart, callTransfer, backspacePressed);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ActionPadWidgetConfigImplCopyWith<_$ActionPadWidgetConfigImpl>
+      get copyWith => __$$ActionPadWidgetConfigImplCopyWithImpl<
+          _$ActionPadWidgetConfigImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ActionPadWidgetConfigImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ActionPadWidgetConfig implements ActionPadWidgetConfig {
+  const factory _ActionPadWidgetConfig(
+          {final ElevatedButtonWidgetConfig? callStart,
+          final ElevatedButtonWidgetConfig? callTransfer,
+          final ElevatedButtonWidgetConfig? backspacePressed}) =
+      _$ActionPadWidgetConfigImpl;
+
+  factory _ActionPadWidgetConfig.fromJson(Map<String, dynamic> json) =
+      _$ActionPadWidgetConfigImpl.fromJson;
+
+  @override
+  ElevatedButtonWidgetConfig? get callStart;
+  @override
+  ElevatedButtonWidgetConfig? get callTransfer;
+  @override
+  ElevatedButtonWidgetConfig? get backspacePressed;
+  @override
+  @JsonKey(ignore: true)
+  _$$ActionPadWidgetConfigImplCopyWith<_$ActionPadWidgetConfigImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

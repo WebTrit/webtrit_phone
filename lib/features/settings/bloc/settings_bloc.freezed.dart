@@ -165,6 +165,8 @@ abstract class $SettingsStateCopyWith<$Res> {
       _$SettingsStateCopyWithImpl<$Res, SettingsState>;
   @useResult
   $Res call({bool progress, bool registerStatus, UserInfo? info});
+
+  $UserInfoCopyWith<$Res>? get info;
 }
 
 /// @nodoc
@@ -199,6 +201,18 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
               as UserInfo?,
     ) as $Val);
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UserInfoCopyWith<$Res>? get info {
+    if (_value.info == null) {
+      return null;
+    }
+
+    return $UserInfoCopyWith<$Res>(_value.info!, (value) {
+      return _then(_value.copyWith(info: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -210,6 +224,9 @@ abstract class _$$SettingsStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call({bool progress, bool registerStatus, UserInfo? info});
+
+  @override
+  $UserInfoCopyWith<$Res>? get info;
 }
 
 /// @nodoc
@@ -272,12 +289,11 @@ class _$SettingsStateImpl implements _SettingsState {
                 other.progress == progress) &&
             (identical(other.registerStatus, registerStatus) ||
                 other.registerStatus == registerStatus) &&
-            const DeepCollectionEquality().equals(other.info, info));
+            (identical(other.info, info) || other.info == info));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, progress, registerStatus,
-      const DeepCollectionEquality().hash(info));
+  int get hashCode => Object.hash(runtimeType, progress, registerStatus, info);
 
   @JsonKey(ignore: true)
   @override
