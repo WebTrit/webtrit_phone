@@ -22,11 +22,11 @@
 		<key>CFBundlePackageType</key>
 		<string>APPL</string>
 		<key>CFBundleShortVersionString</key>
-		<string>$(FLUTTER_BUILD_NAME)</string>
+		<string>$(WEBTRIT_BUILD_NAME_IOS)</string>
 		<key>CFBundleSignature</key>
 		<string>????</string>
 		<key>CFBundleVersion</key>
-		<string>$(FLUTTER_BUILD_NUMBER)</string>
+		<string>$(WEBTRIT_BUILD_NUMBER_IOS)</string>
 		<key>LSApplicationCategoryType</key>
 		<string></string>
 		<key>LSRequiresIPhoneOS</key>
