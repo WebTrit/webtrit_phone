@@ -69,7 +69,7 @@ class ContactScreen extends StatelessWidget {
                             displayName: contact.name,
                             video: false,
                           ));
-                          context.router.pop();
+                          context.router.maybePop();
                         },
                         onVideoPressed: () {
                           final callBloc = context.read<CallBloc>();
@@ -78,14 +78,14 @@ class ContactScreen extends StatelessWidget {
                             displayName: contact.name,
                             video: true,
                           ));
-                          context.router.pop();
+                          context.router.maybePop();
                         },
                         onTransferPressed: () {
                           final callBloc = context.read<CallBloc>();
                           callBloc.add(CallControlEvent.blindTransferSubmitted(
                             number: contactPhone.number,
                           ));
-                          context.router.pop();
+                          context.router.maybePop();
                         },
                       ),
                     for (final contactEmail in contactEmails)

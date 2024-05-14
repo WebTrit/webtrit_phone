@@ -178,6 +178,10 @@ class WebtritApiClient {
         .toList();
   }
 
+  Future<void> deleteUserInfo(String token) async {
+    await _httpClientExecuteDelete(['user'], token);
+  }
+
   Future<AppStatus> getAppStatus(String token) async {
     final responseJson = await _httpClientExecuteGet(['app', 'status'], token);
 

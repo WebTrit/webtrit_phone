@@ -50,7 +50,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final Callkeep callkeep;
   final AndroidPendingCallHandler pendingCallHandler;
 
-  StreamSubscription<ConnectivityResult>? _connectivityChangedSubscription;
+  StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
   StreamSubscription<PendingCall>? _pendingCallHandlerSubscription;
 
   WebtritSignalingClient? _signalingClient;
@@ -307,14 +307,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _connectivityChangedSubscription = Connectivity().onConnectivityChanged.listen((result) {
       _logger.finer('onConnectivityChanged: $result');
       // this check is necessary because of issue on iOS with doubling the same connectivity result
-      if (state.currentConnectivityResult != result) {
-        add(_ConnectivityResultChanged(result));
+      final currentConnectivityResult = result.first;
+      if (state.currentConnectivityResult != currentConnectivityResult) {
+        add(_ConnectivityResultChanged(currentConnectivityResult));
       }
     });
     if (state.currentConnectivityResult == null) {
       final result = await Connectivity().checkConnectivity();
       _logger.finer('checkConnectivity: $result');
-      add(_ConnectivityResultChanged(result));
+      final currentConnectivityResult = result.first;
+      add(_ConnectivityResultChanged(currentConnectivityResult));
     }
 
     AppleNativeAudioManagement.setUseManualAudio(true);

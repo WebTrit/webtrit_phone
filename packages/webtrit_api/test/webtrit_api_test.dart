@@ -645,6 +645,27 @@ void main() {
         )),
       );
     });
+
+    test('delete info', () {
+      Future<Response> handler(Request request) async {
+        expect(request.method, equalsIgnoringCase('delete'));
+        expect(request.url.toString(), equals('https://$authority/api/v1/user'));
+        expect(request.headers['authorization'], endsWith(token));
+        return Response(
+          '',
+          204,
+          request: request,
+        );
+      }
+
+      final httpClient = MockClient(expectAsync1(handler));
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
+
+      expect(
+        apiClient.deleteUserInfo(token),
+        completion(anything),
+      );
+    });
   });
 
   group('app', () {
