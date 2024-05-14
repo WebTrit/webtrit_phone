@@ -69,6 +69,7 @@ Example of a component override file:
       "group": {  
         "groupTitleListTile": {  
           "backgroundColor": "#14284b"  
+          "textColor": "#FFFFFF"  
       },  
         "callActions": {  
           "callStartBackgroundColor": "#30F91B",  
@@ -168,6 +169,7 @@ Example of a component override file:
 
 > A widget commonly used for general purposes to organize and group multiple elements.
 -   `backgroundColor`: Widget background color.
+-   `textColor`: Text color.
 
 ### callActions
 
