@@ -188,12 +188,19 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                         context.read<CallBloc>().add(CallControlEvent.speakerEnabled(activeCall.callId, value));
                       },
                       transferableCalls: heldCalls,
-                      onBlindTransfer: !activeCall.wasAccepted || activeTransfer != null
+                      onBlindTransferInitiated: !activeCall.wasAccepted || activeTransfer != null
                           ? null
                           : () {
                               context.read<CallBloc>().add(CallControlEvent.blindTransferInitiated(activeCall.callId));
                             },
-                      onAttendedTransfer: !activeCall.wasAccepted || activeTransfer != null
+                      onAttendedTransferInitiated: !activeCall.wasAccepted || activeTransfer != null
+                          ? null
+                          : () {
+                              context
+                                  .read<CallBloc>()
+                                  .add(CallControlEvent.attendedTransferInitiated(activeCall.callId));
+                            },
+                      onAttendedTransferSubmitted: !activeCall.wasAccepted || activeTransfer != null
                           ? null
                           : (ActiveCall referorCall) {
                               context.read<CallBloc>().add(

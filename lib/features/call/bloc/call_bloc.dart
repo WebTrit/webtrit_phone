@@ -985,6 +985,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       speakerEnabled: (event) => _onCallControlEventSpeakerEnabled(event, emit),
       failureApproved: (event) => _onCallControlEventFailureApproved(event, emit),
       blindTransferInitiated: (event) => _onCallControlEventBlindTransferInitiated(event, emit),
+      attendedTransferInitiated: (event) => _onCallControlEventAttendedTransferInitiated(event, emit),
       blindTransferSubmitted: (event) => _onCallControlEventBlindTransferSubmitted(event, emit),
       attendedTransferSubmitted: (event) => _onCallControlEventAttendedTransferSubmitted(event, emit),
       attendedRequestApproved: (value) => _onCallControlEventAttendedRequestApproved(value, emit),
@@ -1159,6 +1160,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       state.activeCalls.current.callId,
       proximityEnabled: state.shouldListenToProximity,
     );
+  }
+
+  Future<void> _onCallControlEventAttendedTransferInitiated(
+    _CallControlEventAttendedTransferInitiated event,
+    Emitter<CallState> emit,
+  ) async {
+    emit(state.copyWith(minimized: true));
+    await __onCallControlEventSetHeld(_CallControlEventSetHeld(event.callId, true), emit);
   }
 
   Future<void> _onCallControlEventBlindTransferSubmitted(
