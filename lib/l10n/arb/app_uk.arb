@@ -150,6 +150,8 @@
   "@locale_default": {},
   "locale_en": "Англійська",
   "@locale_en": {},
+  "locale_it": "Італійська",
+  "@locale_it": {},
   "locale_uk": "Українська",
   "@locale_uk": {},
   "login_Button_coreUrlAssignProceed": "Продовжити",
