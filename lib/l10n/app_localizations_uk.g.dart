@@ -225,6 +225,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get locale_en => 'Англійська';
 
   @override
+  String get locale_it => 'Італійська';
+
+  @override
   String get locale_uk => 'Українська';
 
   @override

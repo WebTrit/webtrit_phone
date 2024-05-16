@@ -527,6 +527,12 @@ abstract class AppLocalizations {
   /// **'English'**
   String get locale_en;
 
+  /// No description provided for @locale_it.
+  ///
+  /// In en, this message translates to:
+  /// **'Italian'**
+  String get locale_it;
+
   /// No description provided for @locale_uk.
   ///
   /// In en, this message translates to:

@@ -29,6 +29,8 @@ extension LocaleL10n on Locale {
       return context.l10n.locale_en;
     } else if (this == const Locale('uk')) {
       return context.l10n.locale_uk;
+    } else if (this == const Locale('it')) {
+      return context.l10n.locale_it;
     } else {
       return toString();
     }
