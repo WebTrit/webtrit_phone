@@ -4857,6 +4857,7 @@ mixin _$CallControlEvent {
     required TResult Function(String callId, bool enabled) speakerEnabled,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
+    required TResult Function(String callId) attendedTransferInitiated,
     required TResult Function(String number) blindTransferSubmitted,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferSubmitted,
@@ -4881,6 +4882,7 @@ mixin _$CallControlEvent {
     TResult? Function(String callId, bool enabled)? speakerEnabled,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
+    TResult? Function(String callId)? attendedTransferInitiated,
     TResult? Function(String number)? blindTransferSubmitted,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -4903,6 +4905,7 @@ mixin _$CallControlEvent {
     TResult Function(String callId, bool enabled)? speakerEnabled,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
+    TResult Function(String callId)? attendedTransferInitiated,
     TResult Function(String number)? blindTransferSubmitted,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -4929,6 +4932,8 @@ mixin _$CallControlEvent {
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
         blindTransferInitiated,
+    required TResult Function(_CallControlEventAttendedTransferInitiated value)
+        attendedTransferInitiated,
     required TResult Function(_CallControlEventBlindTransferSubmitted value)
         blindTransferSubmitted,
     required TResult Function(_CallControlEventAttendedTransferSubmitted value)
@@ -4953,6 +4958,8 @@ mixin _$CallControlEvent {
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult? Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -4977,6 +4984,8 @@ mixin _$CallControlEvent {
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -5075,6 +5084,7 @@ class _$CallControlEventStartedImpl
     required TResult Function(String callId, bool enabled) speakerEnabled,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
+    required TResult Function(String callId) attendedTransferInitiated,
     required TResult Function(String number) blindTransferSubmitted,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferSubmitted,
@@ -5102,6 +5112,7 @@ class _$CallControlEventStartedImpl
     TResult? Function(String callId, bool enabled)? speakerEnabled,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
+    TResult? Function(String callId)? attendedTransferInitiated,
     TResult? Function(String number)? blindTransferSubmitted,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -5127,6 +5138,7 @@ class _$CallControlEventStartedImpl
     TResult Function(String callId, bool enabled)? speakerEnabled,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
+    TResult Function(String callId)? attendedTransferInitiated,
     TResult Function(String number)? blindTransferSubmitted,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -5159,6 +5171,8 @@ class _$CallControlEventStartedImpl
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
         blindTransferInitiated,
+    required TResult Function(_CallControlEventAttendedTransferInitiated value)
+        attendedTransferInitiated,
     required TResult Function(_CallControlEventBlindTransferSubmitted value)
         blindTransferSubmitted,
     required TResult Function(_CallControlEventAttendedTransferSubmitted value)
@@ -5186,6 +5200,8 @@ class _$CallControlEventStartedImpl
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult? Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -5213,6 +5229,8 @@ class _$CallControlEventStartedImpl
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -5298,6 +5316,7 @@ class _$CallControlEventAnsweredImpl
     required TResult Function(String callId, bool enabled) speakerEnabled,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
+    required TResult Function(String callId) attendedTransferInitiated,
     required TResult Function(String number) blindTransferSubmitted,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferSubmitted,
@@ -5325,6 +5344,7 @@ class _$CallControlEventAnsweredImpl
     TResult? Function(String callId, bool enabled)? speakerEnabled,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
+    TResult? Function(String callId)? attendedTransferInitiated,
     TResult? Function(String number)? blindTransferSubmitted,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -5350,6 +5370,7 @@ class _$CallControlEventAnsweredImpl
     TResult Function(String callId, bool enabled)? speakerEnabled,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
+    TResult Function(String callId)? attendedTransferInitiated,
     TResult Function(String number)? blindTransferSubmitted,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -5382,6 +5403,8 @@ class _$CallControlEventAnsweredImpl
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
         blindTransferInitiated,
+    required TResult Function(_CallControlEventAttendedTransferInitiated value)
+        attendedTransferInitiated,
     required TResult Function(_CallControlEventBlindTransferSubmitted value)
         blindTransferSubmitted,
     required TResult Function(_CallControlEventAttendedTransferSubmitted value)
@@ -5409,6 +5432,8 @@ class _$CallControlEventAnsweredImpl
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult? Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -5436,6 +5461,8 @@ class _$CallControlEventAnsweredImpl
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -5510,6 +5537,7 @@ class _$CallControlEventEndedImpl
     required TResult Function(String callId, bool enabled) speakerEnabled,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
+    required TResult Function(String callId) attendedTransferInitiated,
     required TResult Function(String number) blindTransferSubmitted,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferSubmitted,
@@ -5537,6 +5565,7 @@ class _$CallControlEventEndedImpl
     TResult? Function(String callId, bool enabled)? speakerEnabled,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
+    TResult? Function(String callId)? attendedTransferInitiated,
     TResult? Function(String number)? blindTransferSubmitted,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -5562,6 +5591,7 @@ class _$CallControlEventEndedImpl
     TResult Function(String callId, bool enabled)? speakerEnabled,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
+    TResult Function(String callId)? attendedTransferInitiated,
     TResult Function(String number)? blindTransferSubmitted,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -5594,6 +5624,8 @@ class _$CallControlEventEndedImpl
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
         blindTransferInitiated,
+    required TResult Function(_CallControlEventAttendedTransferInitiated value)
+        attendedTransferInitiated,
     required TResult Function(_CallControlEventBlindTransferSubmitted value)
         blindTransferSubmitted,
     required TResult Function(_CallControlEventAttendedTransferSubmitted value)
@@ -5621,6 +5653,8 @@ class _$CallControlEventEndedImpl
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult? Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -5648,6 +5682,8 @@ class _$CallControlEventEndedImpl
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -5726,6 +5762,7 @@ class _$CallControlEventSetHeldImpl
     required TResult Function(String callId, bool enabled) speakerEnabled,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
+    required TResult Function(String callId) attendedTransferInitiated,
     required TResult Function(String number) blindTransferSubmitted,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferSubmitted,
@@ -5753,6 +5790,7 @@ class _$CallControlEventSetHeldImpl
     TResult? Function(String callId, bool enabled)? speakerEnabled,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
+    TResult? Function(String callId)? attendedTransferInitiated,
     TResult? Function(String number)? blindTransferSubmitted,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -5778,6 +5816,7 @@ class _$CallControlEventSetHeldImpl
     TResult Function(String callId, bool enabled)? speakerEnabled,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
+    TResult Function(String callId)? attendedTransferInitiated,
     TResult Function(String number)? blindTransferSubmitted,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -5810,6 +5849,8 @@ class _$CallControlEventSetHeldImpl
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
         blindTransferInitiated,
+    required TResult Function(_CallControlEventAttendedTransferInitiated value)
+        attendedTransferInitiated,
     required TResult Function(_CallControlEventBlindTransferSubmitted value)
         blindTransferSubmitted,
     required TResult Function(_CallControlEventAttendedTransferSubmitted value)
@@ -5837,6 +5878,8 @@ class _$CallControlEventSetHeldImpl
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult? Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -5864,6 +5907,8 @@ class _$CallControlEventSetHeldImpl
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -5943,6 +5988,7 @@ class _$CallControlEventSetMutedImpl
     required TResult Function(String callId, bool enabled) speakerEnabled,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
+    required TResult Function(String callId) attendedTransferInitiated,
     required TResult Function(String number) blindTransferSubmitted,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferSubmitted,
@@ -5970,6 +6016,7 @@ class _$CallControlEventSetMutedImpl
     TResult? Function(String callId, bool enabled)? speakerEnabled,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
+    TResult? Function(String callId)? attendedTransferInitiated,
     TResult? Function(String number)? blindTransferSubmitted,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -5995,6 +6042,7 @@ class _$CallControlEventSetMutedImpl
     TResult Function(String callId, bool enabled)? speakerEnabled,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
+    TResult Function(String callId)? attendedTransferInitiated,
     TResult Function(String number)? blindTransferSubmitted,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -6027,6 +6075,8 @@ class _$CallControlEventSetMutedImpl
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
         blindTransferInitiated,
+    required TResult Function(_CallControlEventAttendedTransferInitiated value)
+        attendedTransferInitiated,
     required TResult Function(_CallControlEventBlindTransferSubmitted value)
         blindTransferSubmitted,
     required TResult Function(_CallControlEventAttendedTransferSubmitted value)
@@ -6054,6 +6104,8 @@ class _$CallControlEventSetMutedImpl
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult? Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -6081,6 +6133,8 @@ class _$CallControlEventSetMutedImpl
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -6160,6 +6214,7 @@ class _$CallControlEventSentDTMFImpl
     required TResult Function(String callId, bool enabled) speakerEnabled,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
+    required TResult Function(String callId) attendedTransferInitiated,
     required TResult Function(String number) blindTransferSubmitted,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferSubmitted,
@@ -6187,6 +6242,7 @@ class _$CallControlEventSentDTMFImpl
     TResult? Function(String callId, bool enabled)? speakerEnabled,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
+    TResult? Function(String callId)? attendedTransferInitiated,
     TResult? Function(String number)? blindTransferSubmitted,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -6212,6 +6268,7 @@ class _$CallControlEventSentDTMFImpl
     TResult Function(String callId, bool enabled)? speakerEnabled,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
+    TResult Function(String callId)? attendedTransferInitiated,
     TResult Function(String number)? blindTransferSubmitted,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -6244,6 +6301,8 @@ class _$CallControlEventSentDTMFImpl
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
         blindTransferInitiated,
+    required TResult Function(_CallControlEventAttendedTransferInitiated value)
+        attendedTransferInitiated,
     required TResult Function(_CallControlEventBlindTransferSubmitted value)
         blindTransferSubmitted,
     required TResult Function(_CallControlEventAttendedTransferSubmitted value)
@@ -6271,6 +6330,8 @@ class _$CallControlEventSentDTMFImpl
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult? Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -6298,6 +6359,8 @@ class _$CallControlEventSentDTMFImpl
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -6373,6 +6436,7 @@ class _$CallControlEventCameraSwitchedImpl
     required TResult Function(String callId, bool enabled) speakerEnabled,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
+    required TResult Function(String callId) attendedTransferInitiated,
     required TResult Function(String number) blindTransferSubmitted,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferSubmitted,
@@ -6400,6 +6464,7 @@ class _$CallControlEventCameraSwitchedImpl
     TResult? Function(String callId, bool enabled)? speakerEnabled,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
+    TResult? Function(String callId)? attendedTransferInitiated,
     TResult? Function(String number)? blindTransferSubmitted,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -6425,6 +6490,7 @@ class _$CallControlEventCameraSwitchedImpl
     TResult Function(String callId, bool enabled)? speakerEnabled,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
+    TResult Function(String callId)? attendedTransferInitiated,
     TResult Function(String number)? blindTransferSubmitted,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -6457,6 +6523,8 @@ class _$CallControlEventCameraSwitchedImpl
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
         blindTransferInitiated,
+    required TResult Function(_CallControlEventAttendedTransferInitiated value)
+        attendedTransferInitiated,
     required TResult Function(_CallControlEventBlindTransferSubmitted value)
         blindTransferSubmitted,
     required TResult Function(_CallControlEventAttendedTransferSubmitted value)
@@ -6484,6 +6552,8 @@ class _$CallControlEventCameraSwitchedImpl
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult? Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -6511,6 +6581,8 @@ class _$CallControlEventCameraSwitchedImpl
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -6589,6 +6661,7 @@ class _$CallControlEventCameraEnabledImpl
     required TResult Function(String callId, bool enabled) speakerEnabled,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
+    required TResult Function(String callId) attendedTransferInitiated,
     required TResult Function(String number) blindTransferSubmitted,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferSubmitted,
@@ -6616,6 +6689,7 @@ class _$CallControlEventCameraEnabledImpl
     TResult? Function(String callId, bool enabled)? speakerEnabled,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
+    TResult? Function(String callId)? attendedTransferInitiated,
     TResult? Function(String number)? blindTransferSubmitted,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -6641,6 +6715,7 @@ class _$CallControlEventCameraEnabledImpl
     TResult Function(String callId, bool enabled)? speakerEnabled,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
+    TResult Function(String callId)? attendedTransferInitiated,
     TResult Function(String number)? blindTransferSubmitted,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -6673,6 +6748,8 @@ class _$CallControlEventCameraEnabledImpl
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
         blindTransferInitiated,
+    required TResult Function(_CallControlEventAttendedTransferInitiated value)
+        attendedTransferInitiated,
     required TResult Function(_CallControlEventBlindTransferSubmitted value)
         blindTransferSubmitted,
     required TResult Function(_CallControlEventAttendedTransferSubmitted value)
@@ -6700,6 +6777,8 @@ class _$CallControlEventCameraEnabledImpl
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult? Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -6727,6 +6806,8 @@ class _$CallControlEventCameraEnabledImpl
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -6807,6 +6888,7 @@ class _$CallControlEventSpeakerEnabledImpl
     required TResult Function(String callId, bool enabled) speakerEnabled,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
+    required TResult Function(String callId) attendedTransferInitiated,
     required TResult Function(String number) blindTransferSubmitted,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferSubmitted,
@@ -6834,6 +6916,7 @@ class _$CallControlEventSpeakerEnabledImpl
     TResult? Function(String callId, bool enabled)? speakerEnabled,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
+    TResult? Function(String callId)? attendedTransferInitiated,
     TResult? Function(String number)? blindTransferSubmitted,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -6859,6 +6942,7 @@ class _$CallControlEventSpeakerEnabledImpl
     TResult Function(String callId, bool enabled)? speakerEnabled,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
+    TResult Function(String callId)? attendedTransferInitiated,
     TResult Function(String number)? blindTransferSubmitted,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -6891,6 +6975,8 @@ class _$CallControlEventSpeakerEnabledImpl
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
         blindTransferInitiated,
+    required TResult Function(_CallControlEventAttendedTransferInitiated value)
+        attendedTransferInitiated,
     required TResult Function(_CallControlEventBlindTransferSubmitted value)
         blindTransferSubmitted,
     required TResult Function(_CallControlEventAttendedTransferSubmitted value)
@@ -6918,6 +7004,8 @@ class _$CallControlEventSpeakerEnabledImpl
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult? Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -6945,6 +7033,8 @@ class _$CallControlEventSpeakerEnabledImpl
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -7021,6 +7111,7 @@ class _$CallControlEventFailureApprovedImpl
     required TResult Function(String callId, bool enabled) speakerEnabled,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
+    required TResult Function(String callId) attendedTransferInitiated,
     required TResult Function(String number) blindTransferSubmitted,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferSubmitted,
@@ -7048,6 +7139,7 @@ class _$CallControlEventFailureApprovedImpl
     TResult? Function(String callId, bool enabled)? speakerEnabled,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
+    TResult? Function(String callId)? attendedTransferInitiated,
     TResult? Function(String number)? blindTransferSubmitted,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -7073,6 +7165,7 @@ class _$CallControlEventFailureApprovedImpl
     TResult Function(String callId, bool enabled)? speakerEnabled,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
+    TResult Function(String callId)? attendedTransferInitiated,
     TResult Function(String number)? blindTransferSubmitted,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -7105,6 +7198,8 @@ class _$CallControlEventFailureApprovedImpl
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
         blindTransferInitiated,
+    required TResult Function(_CallControlEventAttendedTransferInitiated value)
+        attendedTransferInitiated,
     required TResult Function(_CallControlEventBlindTransferSubmitted value)
         blindTransferSubmitted,
     required TResult Function(_CallControlEventAttendedTransferSubmitted value)
@@ -7132,6 +7227,8 @@ class _$CallControlEventFailureApprovedImpl
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult? Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -7159,6 +7256,8 @@ class _$CallControlEventFailureApprovedImpl
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -7234,6 +7333,7 @@ class _$CallControlEventBlindTransferInitiatedImpl
     required TResult Function(String callId, bool enabled) speakerEnabled,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
+    required TResult Function(String callId) attendedTransferInitiated,
     required TResult Function(String number) blindTransferSubmitted,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferSubmitted,
@@ -7261,6 +7361,7 @@ class _$CallControlEventBlindTransferInitiatedImpl
     TResult? Function(String callId, bool enabled)? speakerEnabled,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
+    TResult? Function(String callId)? attendedTransferInitiated,
     TResult? Function(String number)? blindTransferSubmitted,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -7286,6 +7387,7 @@ class _$CallControlEventBlindTransferInitiatedImpl
     TResult Function(String callId, bool enabled)? speakerEnabled,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
+    TResult Function(String callId)? attendedTransferInitiated,
     TResult Function(String number)? blindTransferSubmitted,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -7318,6 +7420,8 @@ class _$CallControlEventBlindTransferInitiatedImpl
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
         blindTransferInitiated,
+    required TResult Function(_CallControlEventAttendedTransferInitiated value)
+        attendedTransferInitiated,
     required TResult Function(_CallControlEventBlindTransferSubmitted value)
         blindTransferSubmitted,
     required TResult Function(_CallControlEventAttendedTransferSubmitted value)
@@ -7345,6 +7449,8 @@ class _$CallControlEventBlindTransferInitiatedImpl
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult? Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -7372,6 +7478,8 @@ class _$CallControlEventBlindTransferInitiatedImpl
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -7393,6 +7501,229 @@ abstract class _CallControlEventBlindTransferInitiated
     implements CallControlEvent {
   const factory _CallControlEventBlindTransferInitiated(final String callId) =
       _$CallControlEventBlindTransferInitiatedImpl;
+
+  String get callId;
+}
+
+/// @nodoc
+
+class _$CallControlEventAttendedTransferInitiatedImpl
+    with DiagnosticableTreeMixin
+    implements _CallControlEventAttendedTransferInitiated {
+  const _$CallControlEventAttendedTransferInitiatedImpl(this.callId);
+
+  @override
+  final String callId;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallControlEvent.attendedTransferInitiated(callId: $callId)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty(
+          'type', 'CallControlEvent.attendedTransferInitiated'))
+      ..add(DiagnosticsProperty('callId', callId));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CallControlEventAttendedTransferInitiatedImpl &&
+            (identical(other.callId, callId) || other.callId == callId));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, callId);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(int? line, String? generic, String? number,
+            String? email, String? displayName, bool video)
+        started,
+    required TResult Function(String callId) answered,
+    required TResult Function(String callId) ended,
+    required TResult Function(String callId, bool onHold) setHeld,
+    required TResult Function(String callId, bool muted) setMuted,
+    required TResult Function(String callId, String key) sentDTMF,
+    required TResult Function(String callId) cameraSwitched,
+    required TResult Function(String callId, bool enabled) cameraEnabled,
+    required TResult Function(String callId, bool enabled) speakerEnabled,
+    required TResult Function(String callId) failureApproved,
+    required TResult Function(String callId) blindTransferInitiated,
+    required TResult Function(String callId) attendedTransferInitiated,
+    required TResult Function(String number) blindTransferSubmitted,
+    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
+        attendedTransferSubmitted,
+    required TResult Function(String callId, String referId)
+        attendedRequestDeclined,
+    required TResult Function(String referId, String referTo)
+        attendedRequestApproved,
+  }) {
+    return attendedTransferInitiated(callId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(int? line, String? generic, String? number, String? email,
+            String? displayName, bool video)?
+        started,
+    TResult? Function(String callId)? answered,
+    TResult? Function(String callId)? ended,
+    TResult? Function(String callId, bool onHold)? setHeld,
+    TResult? Function(String callId, bool muted)? setMuted,
+    TResult? Function(String callId, String key)? sentDTMF,
+    TResult? Function(String callId)? cameraSwitched,
+    TResult? Function(String callId, bool enabled)? cameraEnabled,
+    TResult? Function(String callId, bool enabled)? speakerEnabled,
+    TResult? Function(String callId)? failureApproved,
+    TResult? Function(String callId)? blindTransferInitiated,
+    TResult? Function(String callId)? attendedTransferInitiated,
+    TResult? Function(String number)? blindTransferSubmitted,
+    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
+        attendedTransferSubmitted,
+    TResult? Function(String callId, String referId)? attendedRequestDeclined,
+    TResult? Function(String referId, String referTo)? attendedRequestApproved,
+  }) {
+    return attendedTransferInitiated?.call(callId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(int? line, String? generic, String? number, String? email,
+            String? displayName, bool video)?
+        started,
+    TResult Function(String callId)? answered,
+    TResult Function(String callId)? ended,
+    TResult Function(String callId, bool onHold)? setHeld,
+    TResult Function(String callId, bool muted)? setMuted,
+    TResult Function(String callId, String key)? sentDTMF,
+    TResult Function(String callId)? cameraSwitched,
+    TResult Function(String callId, bool enabled)? cameraEnabled,
+    TResult Function(String callId, bool enabled)? speakerEnabled,
+    TResult Function(String callId)? failureApproved,
+    TResult Function(String callId)? blindTransferInitiated,
+    TResult Function(String callId)? attendedTransferInitiated,
+    TResult Function(String number)? blindTransferSubmitted,
+    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
+        attendedTransferSubmitted,
+    TResult Function(String callId, String referId)? attendedRequestDeclined,
+    TResult Function(String referId, String referTo)? attendedRequestApproved,
+    required TResult orElse(),
+  }) {
+    if (attendedTransferInitiated != null) {
+      return attendedTransferInitiated(callId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CallControlEventStarted value) started,
+    required TResult Function(_CallControlEventAnswered value) answered,
+    required TResult Function(_CallControlEventEnded value) ended,
+    required TResult Function(_CallControlEventSetHeld value) setHeld,
+    required TResult Function(_CallControlEventSetMuted value) setMuted,
+    required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
+    required TResult Function(_CallControlEventCameraSwitched value)
+        cameraSwitched,
+    required TResult Function(_CallControlEventCameraEnabled value)
+        cameraEnabled,
+    required TResult Function(_CallControlEventSpeakerEnabled value)
+        speakerEnabled,
+    required TResult Function(_CallControlEventFailureApproved value)
+        failureApproved,
+    required TResult Function(_CallControlEventBlindTransferInitiated value)
+        blindTransferInitiated,
+    required TResult Function(_CallControlEventAttendedTransferInitiated value)
+        attendedTransferInitiated,
+    required TResult Function(_CallControlEventBlindTransferSubmitted value)
+        blindTransferSubmitted,
+    required TResult Function(_CallControlEventAttendedTransferSubmitted value)
+        attendedTransferSubmitted,
+    required TResult Function(_CallControlEventAttendedRequestDeclined value)
+        attendedRequestDeclined,
+    required TResult Function(_CallControlEventAttendedRequestApproved value)
+        attendedRequestApproved,
+  }) {
+    return attendedTransferInitiated(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CallControlEventStarted value)? started,
+    TResult? Function(_CallControlEventAnswered value)? answered,
+    TResult? Function(_CallControlEventEnded value)? ended,
+    TResult? Function(_CallControlEventSetHeld value)? setHeld,
+    TResult? Function(_CallControlEventSetMuted value)? setMuted,
+    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
+    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
+    TResult? Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventBlindTransferInitiated value)?
+        blindTransferInitiated,
+    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
+    TResult? Function(_CallControlEventBlindTransferSubmitted value)?
+        blindTransferSubmitted,
+    TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
+        attendedTransferSubmitted,
+    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult? Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
+  }) {
+    return attendedTransferInitiated?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CallControlEventStarted value)? started,
+    TResult Function(_CallControlEventAnswered value)? answered,
+    TResult Function(_CallControlEventEnded value)? ended,
+    TResult Function(_CallControlEventSetHeld value)? setHeld,
+    TResult Function(_CallControlEventSetMuted value)? setMuted,
+    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
+    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
+    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
+    TResult Function(_CallControlEventSpeakerEnabled value)? speakerEnabled,
+    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult Function(_CallControlEventBlindTransferInitiated value)?
+        blindTransferInitiated,
+    TResult Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
+    TResult Function(_CallControlEventBlindTransferSubmitted value)?
+        blindTransferSubmitted,
+    TResult Function(_CallControlEventAttendedTransferSubmitted value)?
+        attendedTransferSubmitted,
+    TResult Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
+    required TResult orElse(),
+  }) {
+    if (attendedTransferInitiated != null) {
+      return attendedTransferInitiated(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _CallControlEventAttendedTransferInitiated
+    implements CallControlEvent {
+  const factory _CallControlEventAttendedTransferInitiated(
+      final String callId) = _$CallControlEventAttendedTransferInitiatedImpl;
 
   String get callId;
 }
@@ -7448,6 +7779,7 @@ class _$CallControlEventBlindTransferSubmittedImpl
     required TResult Function(String callId, bool enabled) speakerEnabled,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
+    required TResult Function(String callId) attendedTransferInitiated,
     required TResult Function(String number) blindTransferSubmitted,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferSubmitted,
@@ -7475,6 +7807,7 @@ class _$CallControlEventBlindTransferSubmittedImpl
     TResult? Function(String callId, bool enabled)? speakerEnabled,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
+    TResult? Function(String callId)? attendedTransferInitiated,
     TResult? Function(String number)? blindTransferSubmitted,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -7500,6 +7833,7 @@ class _$CallControlEventBlindTransferSubmittedImpl
     TResult Function(String callId, bool enabled)? speakerEnabled,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
+    TResult Function(String callId)? attendedTransferInitiated,
     TResult Function(String number)? blindTransferSubmitted,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -7532,6 +7866,8 @@ class _$CallControlEventBlindTransferSubmittedImpl
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
         blindTransferInitiated,
+    required TResult Function(_CallControlEventAttendedTransferInitiated value)
+        attendedTransferInitiated,
     required TResult Function(_CallControlEventBlindTransferSubmitted value)
         blindTransferSubmitted,
     required TResult Function(_CallControlEventAttendedTransferSubmitted value)
@@ -7559,6 +7895,8 @@ class _$CallControlEventBlindTransferSubmittedImpl
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult? Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -7586,6 +7924,8 @@ class _$CallControlEventBlindTransferSubmittedImpl
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -7670,6 +8010,7 @@ class _$CallControlEventAttendedTransferSubmittedImpl
     required TResult Function(String callId, bool enabled) speakerEnabled,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
+    required TResult Function(String callId) attendedTransferInitiated,
     required TResult Function(String number) blindTransferSubmitted,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferSubmitted,
@@ -7697,6 +8038,7 @@ class _$CallControlEventAttendedTransferSubmittedImpl
     TResult? Function(String callId, bool enabled)? speakerEnabled,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
+    TResult? Function(String callId)? attendedTransferInitiated,
     TResult? Function(String number)? blindTransferSubmitted,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -7722,6 +8064,7 @@ class _$CallControlEventAttendedTransferSubmittedImpl
     TResult Function(String callId, bool enabled)? speakerEnabled,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
+    TResult Function(String callId)? attendedTransferInitiated,
     TResult Function(String number)? blindTransferSubmitted,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -7754,6 +8097,8 @@ class _$CallControlEventAttendedTransferSubmittedImpl
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
         blindTransferInitiated,
+    required TResult Function(_CallControlEventAttendedTransferInitiated value)
+        attendedTransferInitiated,
     required TResult Function(_CallControlEventBlindTransferSubmitted value)
         blindTransferSubmitted,
     required TResult Function(_CallControlEventAttendedTransferSubmitted value)
@@ -7781,6 +8126,8 @@ class _$CallControlEventAttendedTransferSubmittedImpl
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult? Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -7808,6 +8155,8 @@ class _$CallControlEventAttendedTransferSubmittedImpl
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -7892,6 +8241,7 @@ class _$CallControlEventAttendedRequestDeclinedImpl
     required TResult Function(String callId, bool enabled) speakerEnabled,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
+    required TResult Function(String callId) attendedTransferInitiated,
     required TResult Function(String number) blindTransferSubmitted,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferSubmitted,
@@ -7919,6 +8269,7 @@ class _$CallControlEventAttendedRequestDeclinedImpl
     TResult? Function(String callId, bool enabled)? speakerEnabled,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
+    TResult? Function(String callId)? attendedTransferInitiated,
     TResult? Function(String number)? blindTransferSubmitted,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -7944,6 +8295,7 @@ class _$CallControlEventAttendedRequestDeclinedImpl
     TResult Function(String callId, bool enabled)? speakerEnabled,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
+    TResult Function(String callId)? attendedTransferInitiated,
     TResult Function(String number)? blindTransferSubmitted,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -7976,6 +8328,8 @@ class _$CallControlEventAttendedRequestDeclinedImpl
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
         blindTransferInitiated,
+    required TResult Function(_CallControlEventAttendedTransferInitiated value)
+        attendedTransferInitiated,
     required TResult Function(_CallControlEventBlindTransferSubmitted value)
         blindTransferSubmitted,
     required TResult Function(_CallControlEventAttendedTransferSubmitted value)
@@ -8003,6 +8357,8 @@ class _$CallControlEventAttendedRequestDeclinedImpl
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult? Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -8030,6 +8386,8 @@ class _$CallControlEventAttendedRequestDeclinedImpl
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -8113,6 +8471,7 @@ class _$CallControlEventAttendedRequestApprovedImpl
     required TResult Function(String callId, bool enabled) speakerEnabled,
     required TResult Function(String callId) failureApproved,
     required TResult Function(String callId) blindTransferInitiated,
+    required TResult Function(String callId) attendedTransferInitiated,
     required TResult Function(String number) blindTransferSubmitted,
     required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
         attendedTransferSubmitted,
@@ -8140,6 +8499,7 @@ class _$CallControlEventAttendedRequestApprovedImpl
     TResult? Function(String callId, bool enabled)? speakerEnabled,
     TResult? Function(String callId)? failureApproved,
     TResult? Function(String callId)? blindTransferInitiated,
+    TResult? Function(String callId)? attendedTransferInitiated,
     TResult? Function(String number)? blindTransferSubmitted,
     TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -8165,6 +8525,7 @@ class _$CallControlEventAttendedRequestApprovedImpl
     TResult Function(String callId, bool enabled)? speakerEnabled,
     TResult Function(String callId)? failureApproved,
     TResult Function(String callId)? blindTransferInitiated,
+    TResult Function(String callId)? attendedTransferInitiated,
     TResult Function(String number)? blindTransferSubmitted,
     TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
         attendedTransferSubmitted,
@@ -8197,6 +8558,8 @@ class _$CallControlEventAttendedRequestApprovedImpl
         failureApproved,
     required TResult Function(_CallControlEventBlindTransferInitiated value)
         blindTransferInitiated,
+    required TResult Function(_CallControlEventAttendedTransferInitiated value)
+        attendedTransferInitiated,
     required TResult Function(_CallControlEventBlindTransferSubmitted value)
         blindTransferSubmitted,
     required TResult Function(_CallControlEventAttendedTransferSubmitted value)
@@ -8224,6 +8587,8 @@ class _$CallControlEventAttendedRequestApprovedImpl
     TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult? Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult? Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
@@ -8251,6 +8616,8 @@ class _$CallControlEventAttendedRequestApprovedImpl
     TResult Function(_CallControlEventFailureApproved value)? failureApproved,
     TResult Function(_CallControlEventBlindTransferInitiated value)?
         blindTransferInitiated,
+    TResult Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
     TResult Function(_CallControlEventBlindTransferSubmitted value)?
         blindTransferSubmitted,
     TResult Function(_CallControlEventAttendedTransferSubmitted value)?

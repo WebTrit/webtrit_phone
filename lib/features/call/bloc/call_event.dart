@@ -202,6 +202,8 @@ class CallControlEvent with _$CallControlEvent implements CallEvent {
 
   const factory CallControlEvent.blindTransferInitiated(String callId) = _CallControlEventBlindTransferInitiated;
 
+  const factory CallControlEvent.attendedTransferInitiated(String callId) = _CallControlEventAttendedTransferInitiated;
+
   const factory CallControlEvent.blindTransferSubmitted({
     required String number,
   }) = _CallControlEventBlindTransferSubmitted;
