@@ -1,0 +1,11 @@
+WEBTRIT_APP_DEBUG_LEVEL=ALL
+WEBTRIT_APP_DATABASE_LOG_STATEMENTS=false
+WEBTRIT_APP_PERIODIC_POLLING=true
+WEBTRIT_APP_DEMO_CORE_URL=https://core2.demo.webtrit.com/
+WEBTRIT_APP_LINK_DOMAIN=app.webtrit.com
+WEBTRIT_APP_NAME=WebTrit
+WEBTRIT_APP_DESCRIPTION=WebTrit application
+WEBTRIT_APP_TERMS_AND_CONDITIONS_URL=https://webtrit.com/legal/privacy-policy-for-webtrit-app/
+WEBTRIT_APP_SALES_EMAIL=sales@webtrit.com
+WEBTRIT_APP_FCM_VAPID_KEY=BPBbn4Fc-PNQA5_mSj623NYDEGa5lqFLKVZ9qcfLPp2zrot2Vb5GzCx-3IbhKi1EsFuzgHY11BOpkXvZqXq-5w4
+WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH=/Users/serdun/Documents/work/webtrit/webtrit_phone_keystores/com.webtrit.app

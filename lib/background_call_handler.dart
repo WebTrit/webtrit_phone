@@ -16,7 +16,7 @@ const int _kUndefinedLine = -1;
 
 final _logger = Logger('BackgroundCallHandler');
 
-class BackgroundCallHandler implements CallkeepAndroidServiceDelegate {
+class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
   BackgroundCallHandler(
     this._pendingCall,
     this._recentsRepository,
@@ -25,7 +25,7 @@ class BackgroundCallHandler implements CallkeepAndroidServiceDelegate {
   final RecentsRepository _recentsRepository;
   final PendingCall _pendingCall;
 
-  final _callNotificationDelegate = CallkeepAndroidService();
+  final _callNotificationDelegate = CallkeepBackgroundService();
 
   late SecureStorage storage;
   late PackageInfo packageInfo;
@@ -41,7 +41,7 @@ class BackgroundCallHandler implements CallkeepAndroidServiceDelegate {
   }
 
   Future _cleanLocalConnections() async {
-    await _callNotificationDelegate.endAllCalls();
+    await _callNotificationDelegate.endAllBackgroundCalls();
   }
 
   Future _initializeDependentResources() async {
@@ -72,7 +72,7 @@ class BackgroundCallHandler implements CallkeepAndroidServiceDelegate {
   }
 
   Future _setupListeners() async {
-    _callNotificationDelegate.setAndroidServiceDelegate(this);
+    _callNotificationDelegate.setBackgroundServiceDelegate(this);
     client.listen(
       onStateHandshake: _signalingInitialize,
       onEvent: _onSignalingEvent,
@@ -105,15 +105,16 @@ class BackgroundCallHandler implements CallkeepAndroidServiceDelegate {
   void _onSignalingEvent(Event event) {
     if (event is IncomingCallEvent) {
       final number = CallkeepHandle.number(_pendingCall.handle);
-      _callNotificationDelegate.incomingCall(event.callId, number, _pendingCall.displayName, _pendingCall.hasVideo);
+      _callNotificationDelegate.incomingCall(event.callId, number,
+          displayName: _pendingCall.displayName, hasVideo: _pendingCall.hasVideo);
     } else if (event is IceHangupEvent) {
-      _callNotificationDelegate.endAllCalls();
+      _callNotificationDelegate.endAllBackgroundCalls();
     } else if (event is HangupEvent) {
-      _callNotificationDelegate.endCall(event.callId);
+      _callNotificationDelegate.endBackgroundCall(event.callId);
     } else if (event is DecliningEvent) {
-      _callNotificationDelegate.endCall(event.callId);
+      _callNotificationDelegate.endBackgroundCall(event.callId);
     } else if (event is UnregisteredEvent) {
-      _callNotificationDelegate.endAllCalls();
+      _callNotificationDelegate.endAllBackgroundCalls();
     } else {
       _logger.warning('unhandled signaling event $event');
     }
@@ -164,27 +165,6 @@ class BackgroundCallHandler implements CallkeepAndroidServiceDelegate {
     _declineCall(callId);
   }
 
-  @override
-  void endCallReceived(
-    String callId,
-    String number,
-    bool video,
-    DateTime createdTime,
-    DateTime? acceptedTime,
-    DateTime? hungUpTime,
-  ) async {
-    final recent = Recent(
-      direction: Direction.incoming,
-      number: number,
-      video: video,
-      createdTime: createdTime,
-      acceptedTime: acceptedTime,
-      hungUpTime: hungUpTime,
-    );
-    await _recentsRepository.add(recent);
-    _logger.info('endCallReceived: $recent');
-  }
-
   static bool parseString(
     String value, {
     bool defaultValue = false,
@@ -195,5 +175,26 @@ class BackgroundCallHandler implements CallkeepAndroidServiceDelegate {
       return false;
     }
     return defaultValue;
+  }
+
+  @override
+  void endCallReceived(
+    String callId,
+    String number,
+    DateTime createdTime,
+    DateTime? acceptedTime,
+    DateTime? hungUpTime, {
+    bool video = false,
+  }) async {
+    final recent = Recent(
+      direction: Direction.incoming,
+      number: number,
+      video: video,
+      createdTime: createdTime,
+      acceptedTime: acceptedTime,
+      hungUpTime: hungUpTime,
+    );
+    await _recentsRepository.add(recent);
+    _logger.info('endCallReceived: $recent');
   }
 }
