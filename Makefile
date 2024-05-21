@@ -14,15 +14,15 @@ build-appbundle:
 	flutter build appbundle --dart-define-from-file=dart_define.json --release
 
 configure:
-	dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart configurator-resources --applicationId=$(id) --keystore-path=../webtrit_phone_keystores
+	dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart configurator-resources --applicationId=$(id) --keystores-path=../webtrit_phone_keystores
 	dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart configurator-generate
 
 configure-demo:
-	dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart configurator-resources --applicationId=$(id) --keystore-path=../webtrit_phone_keystores --demo
+	dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart configurator-resources --applicationId=$(id) --keystores-path=../webtrit_phone_keystores --demo
 	dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart configurator-generate
 
 configure-classic:
-	dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart configurator-resources --applicationId=$(id) --keystore-path=../webtrit_phone_keystores --classic
+	dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart configurator-resources --applicationId=$(id) --keystores-path=../webtrit_phone_keystores --classic
 	dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart configurator-generate
 
 configure-ios:
