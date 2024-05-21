@@ -334,6 +334,8 @@ class ThemeProvider extends InheritedWidget {
 
     final backspacePressedStyleForegroundColor = config?.backspacePressed?.foregroundColor ?? colors.onSecondary;
     final backspacePressedStyleBackgroundColor = config?.backspacePressed?.backgroundColor;
+    final backspacePressedStyleIconColor = config?.backspacePressed?.iconColor ?? colors.onBackground;
+    final backspacePressedStyleDisabledIconColor = config?.backspacePressed?.disabledIconColor ?? colors.background;
 
     final callStartStyle = TextButton.styleFrom(
       foregroundColor: callStartForegroundColor,
@@ -352,6 +354,8 @@ class ThemeProvider extends InheritedWidget {
     final backspacePressedStyle = TextButton.styleFrom(
       foregroundColor: backspacePressedStyleForegroundColor,
       backgroundColor: backspacePressedStyleBackgroundColor,
+      iconColor: backspacePressedStyleIconColor,
+      disabledIconColor: backspacePressedStyleDisabledIconColor,
     );
 
     return ActionpadStyles(

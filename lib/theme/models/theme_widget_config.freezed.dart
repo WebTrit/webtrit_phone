@@ -590,6 +590,8 @@ mixin _$ElevatedButtonWidgetConfig {
   Color? get backgroundColor => throw _privateConstructorUsedError;
   Color? get foregroundColor => throw _privateConstructorUsedError;
   Color? get textColor => throw _privateConstructorUsedError;
+  Color? get iconColor => throw _privateConstructorUsedError;
+  Color? get disabledIconColor => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -604,7 +606,12 @@ abstract class $ElevatedButtonWidgetConfigCopyWith<$Res> {
       _$ElevatedButtonWidgetConfigCopyWithImpl<$Res,
           ElevatedButtonWidgetConfig>;
   @useResult
-  $Res call({Color? backgroundColor, Color? foregroundColor, Color? textColor});
+  $Res call(
+      {Color? backgroundColor,
+      Color? foregroundColor,
+      Color? textColor,
+      Color? iconColor,
+      Color? disabledIconColor});
 }
 
 /// @nodoc
@@ -624,6 +631,8 @@ class _$ElevatedButtonWidgetConfigCopyWithImpl<$Res,
     Object? backgroundColor = freezed,
     Object? foregroundColor = freezed,
     Object? textColor = freezed,
+    Object? iconColor = freezed,
+    Object? disabledIconColor = freezed,
   }) {
     return _then(_value.copyWith(
       backgroundColor: freezed == backgroundColor
@@ -638,6 +647,14 @@ class _$ElevatedButtonWidgetConfigCopyWithImpl<$Res,
           ? _value.textColor
           : textColor // ignore: cast_nullable_to_non_nullable
               as Color?,
+      iconColor: freezed == iconColor
+          ? _value.iconColor
+          : iconColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      disabledIconColor: freezed == disabledIconColor
+          ? _value.disabledIconColor
+          : disabledIconColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
     ) as $Val);
   }
 }
@@ -651,7 +668,12 @@ abstract class _$$ElevatedButtonWidgetConfigImplCopyWith<$Res>
       __$$ElevatedButtonWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Color? backgroundColor, Color? foregroundColor, Color? textColor});
+  $Res call(
+      {Color? backgroundColor,
+      Color? foregroundColor,
+      Color? textColor,
+      Color? iconColor,
+      Color? disabledIconColor});
 }
 
 /// @nodoc
@@ -670,6 +692,8 @@ class __$$ElevatedButtonWidgetConfigImplCopyWithImpl<$Res>
     Object? backgroundColor = freezed,
     Object? foregroundColor = freezed,
     Object? textColor = freezed,
+    Object? iconColor = freezed,
+    Object? disabledIconColor = freezed,
   }) {
     return _then(_$ElevatedButtonWidgetConfigImpl(
       backgroundColor: freezed == backgroundColor
@@ -684,6 +708,14 @@ class __$$ElevatedButtonWidgetConfigImplCopyWithImpl<$Res>
           ? _value.textColor
           : textColor // ignore: cast_nullable_to_non_nullable
               as Color?,
+      iconColor: freezed == iconColor
+          ? _value.iconColor
+          : iconColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      disabledIconColor: freezed == disabledIconColor
+          ? _value.disabledIconColor
+          : disabledIconColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
     ));
   }
 }
@@ -693,7 +725,11 @@ class __$$ElevatedButtonWidgetConfigImplCopyWithImpl<$Res>
 @themeJsonSerializable
 class _$ElevatedButtonWidgetConfigImpl implements _ElevatedButtonWidgetConfig {
   const _$ElevatedButtonWidgetConfigImpl(
-      {this.backgroundColor, this.foregroundColor, this.textColor});
+      {this.backgroundColor,
+      this.foregroundColor,
+      this.textColor,
+      this.iconColor,
+      this.disabledIconColor});
 
   factory _$ElevatedButtonWidgetConfigImpl.fromJson(
           Map<String, dynamic> json) =>
@@ -705,10 +741,14 @@ class _$ElevatedButtonWidgetConfigImpl implements _ElevatedButtonWidgetConfig {
   final Color? foregroundColor;
   @override
   final Color? textColor;
+  @override
+  final Color? iconColor;
+  @override
+  final Color? disabledIconColor;
 
   @override
   String toString() {
-    return 'ElevatedButtonWidgetConfig(backgroundColor: $backgroundColor, foregroundColor: $foregroundColor, textColor: $textColor)';
+    return 'ElevatedButtonWidgetConfig(backgroundColor: $backgroundColor, foregroundColor: $foregroundColor, textColor: $textColor, iconColor: $iconColor, disabledIconColor: $disabledIconColor)';
   }
 
   @override
@@ -721,13 +761,17 @@ class _$ElevatedButtonWidgetConfigImpl implements _ElevatedButtonWidgetConfig {
             (identical(other.foregroundColor, foregroundColor) ||
                 other.foregroundColor == foregroundColor) &&
             (identical(other.textColor, textColor) ||
-                other.textColor == textColor));
+                other.textColor == textColor) &&
+            (identical(other.iconColor, iconColor) ||
+                other.iconColor == iconColor) &&
+            (identical(other.disabledIconColor, disabledIconColor) ||
+                other.disabledIconColor == disabledIconColor));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, backgroundColor, foregroundColor, textColor);
+  int get hashCode => Object.hash(runtimeType, backgroundColor, foregroundColor,
+      textColor, iconColor, disabledIconColor);
 
   @JsonKey(ignore: true)
   @override
@@ -749,7 +793,9 @@ abstract class _ElevatedButtonWidgetConfig
   const factory _ElevatedButtonWidgetConfig(
       {final Color? backgroundColor,
       final Color? foregroundColor,
-      final Color? textColor}) = _$ElevatedButtonWidgetConfigImpl;
+      final Color? textColor,
+      final Color? iconColor,
+      final Color? disabledIconColor}) = _$ElevatedButtonWidgetConfigImpl;
 
   factory _ElevatedButtonWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$ElevatedButtonWidgetConfigImpl.fromJson;
@@ -760,6 +806,10 @@ abstract class _ElevatedButtonWidgetConfig
   Color? get foregroundColor;
   @override
   Color? get textColor;
+  @override
+  Color? get iconColor;
+  @override
+  Color? get disabledIconColor;
   @override
   @JsonKey(ignore: true)
   _$$ElevatedButtonWidgetConfigImplCopyWith<_$ElevatedButtonWidgetConfigImpl>
