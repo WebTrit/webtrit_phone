@@ -45,6 +45,8 @@ class ElevatedButtonWidgetConfig with _$ElevatedButtonWidgetConfig {
     Color? backgroundColor,
     Color? foregroundColor,
     Color? textColor,
+    Color? iconColor,
+    Color? disabledIconColor,
   }) = _ElevatedButtonWidgetConfig;
 
   factory ElevatedButtonWidgetConfig.fromJson(Map<String, dynamic> json) => _$ElevatedButtonWidgetConfigFromJson(json);

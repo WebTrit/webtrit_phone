@@ -74,6 +74,10 @@ _$ElevatedButtonWidgetConfigImpl _$$ElevatedButtonWidgetConfigImplFromJson(
           json['foregroundColor'], const CSSColorConverter().fromJson),
       textColor: _$JsonConverterFromJson<String, Color>(
           json['textColor'], const CSSColorConverter().fromJson),
+      iconColor: _$JsonConverterFromJson<String, Color>(
+          json['iconColor'], const CSSColorConverter().fromJson),
+      disabledIconColor: _$JsonConverterFromJson<String, Color>(
+          json['disabledIconColor'], const CSSColorConverter().fromJson),
     );
 
 Map<String, dynamic> _$$ElevatedButtonWidgetConfigImplToJson(
@@ -85,6 +89,10 @@ Map<String, dynamic> _$$ElevatedButtonWidgetConfigImplToJson(
           instance.foregroundColor, const CSSColorConverter().toJson),
       'textColor': _$JsonConverterToJson<String, Color>(
           instance.textColor, const CSSColorConverter().toJson),
+      'iconColor': _$JsonConverterToJson<String, Color>(
+          instance.iconColor, const CSSColorConverter().toJson),
+      'disabledIconColor': _$JsonConverterToJson<String, Color>(
+          instance.disabledIconColor, const CSSColorConverter().toJson),
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(
