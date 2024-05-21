@@ -1,46 +1,52 @@
+# Variables
+BUILD_TYPE ?= debug
+BUILD_PLATFORM ?= apk
+BUILD_FLOW ?= classic
+DART_DEFINE_FILE = --dart-define-from-file=dart_define.json
+CONFIGURATOR = dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart
+KEYSTORES_PATH = --keystores-path=../webtrit_phone_keystores
+
+# Determine Flutter flags based on build type
+ifeq ($(BUILD_TYPE), release)
+    FLUTTER_FLAGS = $(DART_DEFINE_FILE) --release
+else
+    FLUTTER_FLAGS = $(DART_DEFINE_FILE)
+endif
+
+# Rules
+.PHONY: run build configure configure-clean create-demo-classic create-ios create-apk create-appbundle
+
+## Run the Flutter application
 run:
-	flutter run --dart-define-from-file=dart_define.json
+	flutter run $(FLUTTER_FLAGS)
 
-run-release:
-	flutter run --dart-define-from-file=dart_define.json --release
+## Build the Flutter application
+build:
+	flutter build $(BUILD_PLATFORM) $(FLUTTER_FLAGS)
 
-build-ios:
-	flutter build ios --dart-define-from-file=dart_define.json
-
-build-apk:
-	flutter build apk --dart-define-from-file=dart_define.json --release
-
-build-appbundle:
-	flutter build appbundle --dart-define-from-file=dart_define.json --release
-
+## Configure application resources
 configure:
-	dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart configurator-resources --applicationId=$(id) --keystore-path=../webtrit_phone_keystores
-	dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart configurator-generate
+	$(CONFIGURATOR) configurator-resources --applicationId=$(id) $(KEYSTORES_PATH) --$(BUILD_FLOW)
+	$(CONFIGURATOR) configurator-generate
 
-configure-demo:
-	dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart configurator-resources --applicationId=$(id) --keystore-path=../webtrit_phone_keystores --demo
-	dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart configurator-generate
-
-configure-classic:
-	dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart configurator-resources --applicationId=$(id) --keystore-path=../webtrit_phone_keystores --classic
-	dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart configurator-generate
-
-configure-ios:
-	make configure
-	make build-ios
-
-configure-apk:
-	make configure
-	make build-apk
-
-configure-appbundle:
-	make configure
-	make build-appbundle
-
-configure-appbundle-demo:
-	make configure-demo
-	make build-appbundle
-
+## Clean configuration files
 configure-clean:
 	git reset --hard HEAD
 	git clean -df
+
+## Create demo classic configuration
+create-demo-classic:
+	$(CONFIGURATOR) configurator-resources --applicationId=$(id) $(KEYSTORES_PATH) --demo
+	$(CONFIGURATOR) configurator-generate
+
+## Create iOS build
+create-ios:
+	flutter build ios $(FLUTTER_FLAGS)
+
+## Create APK build
+create-apk:
+	flutter build apk $(FLUTTER_FLAGS)
+
+## Create App Bundle build
+create-appbundle:
+	flutter build appbundle $(FLUTTER_FLAGS)

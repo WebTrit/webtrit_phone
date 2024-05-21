@@ -98,6 +98,47 @@ Follow these steps according to your specific activity to manage the localizatio
 ## Theme Configuration
 For the theme configuration documentation, please refer to the [Theme Configuration](doc/theme_config/index.md)  .
 
+## Make commands
+* `run` - Run the Flutter application
+  ```bash
+  make run
+  ```
+
+* `build` - Build the Flutter application
+  ```bash
+  make build
+  ```
+
+* `configure` - Configure application resources
+  ```bash
+  make configure id=<application_id>
+  ```
+
+* `configure-clean` - Clean configuration files
+  ```bash
+  make configure-clean
+  ```
+
+* `create-demo-classic` - Create demo classic configuration
+  ```bash
+  make create-demo-classic id=<application_id>
+  ```
+
+* `create-ios` - Create iOS build
+  ```bash
+  make create-ios
+  ```
+
+* `create-apk` - Create APK build
+  ```bash
+  make create-apk
+  ```
+
+* `create-appbundle` - Create App Bundle build
+  ```bash
+  make create-appbundle
+  ```
+
 ## Contributing
 
 Contributions are always welcome!
