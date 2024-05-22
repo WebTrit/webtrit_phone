@@ -34,6 +34,9 @@ class EnvironmentConfig {
     defaultValue: 'http://localhost:4000',
   );
 
+  static const APP_LINK_DOMAIN__NAME = 'WEBTRIT_APP_LINK_DOMAIN';
+  static const APP_LINK_DOMAIN = String.fromEnvironment(APP_LINK_DOMAIN__NAME, defaultValue: '');
+
   static const APP_NAME__NAME = 'WEBTRIT_APP_NAME';
   static const APP_NAME = String.fromEnvironment(
     APP_NAME__NAME,

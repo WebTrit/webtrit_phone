@@ -22,6 +22,13 @@ Default build variables located in [dart_define.json](dart_define.json) and coul
 
 * `WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH` - path to folder structure created by `keystore-generate` command of [webtrit_phone_tools](https://github.com/WebTrit/webtrit_phone_tools) (KeystoreGenerator)
 
+
+### SSL Certificates
+To use SSL certificates, you need to: 
+1. add the following files to the `assets/certificates` folder
+2. for PKCS12 add passwords to the `assets/certificates/credentials.json` where the key is the file name and the value is the password
+2. run flutter_gen or buid_runner to generate the necessary code
+
 ## Build
 
 ### Android
@@ -86,6 +93,51 @@ Follow these steps according to your specific activity to manage the localizatio
 1. Pull the newly added key from [Localizely](https://localizely.com) using the command: `localizely-cli pull`.
 1. Generate the localizations with the command: `flutter gen-l10n`.
 1. Commit the changes.
+
+
+## Theme Configuration
+For the theme configuration documentation, please refer to the [Theme Configuration](doc/theme_config/index.md)  .
+
+## Make commands
+* `run` - Run the Flutter application
+  ```bash
+  make run
+  ```
+
+* `build` - Build the Flutter application
+  ```bash
+  make build
+  ```
+
+* `configure` - Configure application resources
+  ```bash
+  make configure id=<application_id>
+  ```
+
+* `configure-clean` - Clean configuration files
+  ```bash
+  make configure-clean
+  ```
+
+* `create-demo-classic` - Create demo classic configuration
+  ```bash
+  make create-demo-classic id=<application_id>
+  ```
+
+* `create-ios` - Create iOS build
+  ```bash
+  make create-ios
+  ```
+
+* `create-apk` - Create APK build
+  ```bash
+  make create-apk
+  ```
+
+* `create-appbundle` - Create App Bundle build
+  ```bash
+  make create-appbundle
+  ```
 
 ## Contributing
 

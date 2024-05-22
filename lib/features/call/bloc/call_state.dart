@@ -127,6 +127,9 @@ class ActiveCall with _$ActiveCall {
     required String callId,
     required CallkeepHandle handle,
     String? displayName,
+
+    /// If the call is result of a refer request, the id should be provided.
+    String? fromReferId,
     required bool video,
     @Default(true) bool? frontCamera,
     @Default(false) bool held,
@@ -152,19 +155,6 @@ class ActiveCall with _$ActiveCall {
 
 extension ActiveCallIterableExtension<T extends ActiveCall> on Iterable<T> {
   T get current => lastWhere((activeCall) => !activeCall.held, orElse: () => last);
-
-  T? get blindTransferInitiated {
-    try {
-      return firstWhere((activeCall) {
-        final transfer = activeCall.transfer;
-        if (transfer == null) {
-          return false;
-        } else {
-          return transfer.isBlind && transfer.isInitiated;
-        }
-      });
-    } on StateError catch (_) {
-      return null;
-    }
-  }
+  List<T> get nonCurrent => where((activeCall) => activeCall != current).toList();
+  T? get blindTransferInitiated => firstWhereOrNull((activeCall) => activeCall.transfer is BlindTransferInitiated);
 }

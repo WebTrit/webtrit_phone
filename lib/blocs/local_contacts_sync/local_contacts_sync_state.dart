@@ -43,3 +43,7 @@ class LocalContactsSyncRefreshFailure extends LocalContactsSyncFailure {
 class LocalContactsSyncPermissionFailure extends LocalContactsSyncFailure {
   const LocalContactsSyncPermissionFailure();
 }
+
+class LocalContactsSyncUpdateFailure extends LocalContactsSyncFailure {
+  const LocalContactsSyncUpdateFailure();
+}

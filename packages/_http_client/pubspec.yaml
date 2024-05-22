@@ -8,5 +8,8 @@ environment:
 dependencies:
   http: ^1.1.2
 
+  ssl_certificates:
+    path: ../ssl_certificates
+
 dev_dependencies:
-  lints: ^3.0.0
+  lints: ^4.0.0

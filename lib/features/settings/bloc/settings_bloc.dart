@@ -41,6 +41,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   FutureOr<void> _onRefreshed(SettingsRefreshed event, Emitter<SettingsState> emit) async {
     emit(state.copyWith(progress: true));
     try {
+      _logger.info('Refreshing settings');
       final infoFuture = userRepository.getInfo();
       final registerStatusFuture = appRepository.getRegisterStatus();
 
@@ -62,11 +63,13 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       ));
     } catch (e, stackTrace) {
       _logger.warning('_onRefreshed', e, stackTrace);
+      _logger.info('isClosed: $isClosed');
+      _logger.info('emit.isDone: ${emit.isDone}');
+      if (isClosed) return;
+      if (emit.isDone) return;
 
       notificationsBloc.add(NotificationsIssued(DefaultErrorNotification(e)));
       appBloc.maybeHandleError(e);
-
-      if (emit.isDone) return;
 
       emit(state.copyWith(
         progress: false,
@@ -136,7 +139,26 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   }
 
   FutureOr<void> _onAccountDeleted(SettingsAccountDeleted event, Emitter<SettingsState> emit) async {
-    // TODO: implement actual account deletion API call when it is introduced
-    await _onLogouted(const SettingsLogouted(), emit);
+    if (state.progress) return;
+
+    emit(state.copyWith(progress: true));
+    try {
+      await userRepository.delete();
+
+      appBloc.add(const AppLogouted());
+
+      if (emit.isDone) return;
+
+      emit(state.copyWith(progress: false));
+    } catch (e, stackTrace) {
+      _logger.warning('_onAccountDeleted', e, stackTrace);
+
+      notificationsBloc.add(NotificationsIssued(DefaultErrorNotification(e)));
+      appBloc.maybeHandleError(e);
+
+      if (emit.isDone) return;
+
+      emit(state.copyWith(progress: false));
+    }
   }
 }

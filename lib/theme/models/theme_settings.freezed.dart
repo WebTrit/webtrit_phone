@@ -23,7 +23,15 @@ mixin _$ThemeSettings {
   Color get seedColor => throw _privateConstructorUsedError;
   ColorSchemeOverride? get lightColorSchemeOverride =>
       throw _privateConstructorUsedError;
+  ThemeWidgetConfig? get themeWidgetLightConfig =>
+      throw _privateConstructorUsedError;
+  ThemePageConfig? get themePageLightConfig =>
+      throw _privateConstructorUsedError;
   ColorSchemeOverride? get darkColorSchemeOverride =>
+      throw _privateConstructorUsedError;
+  ThemeWidgetConfig? get themeWidgetDarkConfig =>
+      throw _privateConstructorUsedError;
+  ThemePageConfig? get themePageDarkConfig =>
       throw _privateConstructorUsedError;
   List<CustomColor> get primaryGradientColors =>
       throw _privateConstructorUsedError;
@@ -47,14 +55,22 @@ abstract class $ThemeSettingsCopyWith<$Res> {
   $Res call(
       {Color seedColor,
       ColorSchemeOverride? lightColorSchemeOverride,
+      ThemeWidgetConfig? themeWidgetLightConfig,
+      ThemePageConfig? themePageLightConfig,
       ColorSchemeOverride? darkColorSchemeOverride,
+      ThemeWidgetConfig? themeWidgetDarkConfig,
+      ThemePageConfig? themePageDarkConfig,
       List<CustomColor> primaryGradientColors,
       String? fontFamily,
       ThemeSvgAsset primaryOnboardingLogo,
       ThemeSvgAsset secondaryOnboardingLogo});
 
   $ColorSchemeOverrideCopyWith<$Res>? get lightColorSchemeOverride;
+  $ThemeWidgetConfigCopyWith<$Res>? get themeWidgetLightConfig;
+  $ThemePageConfigCopyWith<$Res>? get themePageLightConfig;
   $ColorSchemeOverrideCopyWith<$Res>? get darkColorSchemeOverride;
+  $ThemeWidgetConfigCopyWith<$Res>? get themeWidgetDarkConfig;
+  $ThemePageConfigCopyWith<$Res>? get themePageDarkConfig;
 }
 
 /// @nodoc
@@ -72,7 +88,11 @@ class _$ThemeSettingsCopyWithImpl<$Res, $Val extends ThemeSettings>
   $Res call({
     Object? seedColor = null,
     Object? lightColorSchemeOverride = freezed,
+    Object? themeWidgetLightConfig = freezed,
+    Object? themePageLightConfig = freezed,
     Object? darkColorSchemeOverride = freezed,
+    Object? themeWidgetDarkConfig = freezed,
+    Object? themePageDarkConfig = freezed,
     Object? primaryGradientColors = null,
     Object? fontFamily = freezed,
     Object? primaryOnboardingLogo = null,
@@ -87,10 +107,26 @@ class _$ThemeSettingsCopyWithImpl<$Res, $Val extends ThemeSettings>
           ? _value.lightColorSchemeOverride
           : lightColorSchemeOverride // ignore: cast_nullable_to_non_nullable
               as ColorSchemeOverride?,
+      themeWidgetLightConfig: freezed == themeWidgetLightConfig
+          ? _value.themeWidgetLightConfig
+          : themeWidgetLightConfig // ignore: cast_nullable_to_non_nullable
+              as ThemeWidgetConfig?,
+      themePageLightConfig: freezed == themePageLightConfig
+          ? _value.themePageLightConfig
+          : themePageLightConfig // ignore: cast_nullable_to_non_nullable
+              as ThemePageConfig?,
       darkColorSchemeOverride: freezed == darkColorSchemeOverride
           ? _value.darkColorSchemeOverride
           : darkColorSchemeOverride // ignore: cast_nullable_to_non_nullable
               as ColorSchemeOverride?,
+      themeWidgetDarkConfig: freezed == themeWidgetDarkConfig
+          ? _value.themeWidgetDarkConfig
+          : themeWidgetDarkConfig // ignore: cast_nullable_to_non_nullable
+              as ThemeWidgetConfig?,
+      themePageDarkConfig: freezed == themePageDarkConfig
+          ? _value.themePageDarkConfig
+          : themePageDarkConfig // ignore: cast_nullable_to_non_nullable
+              as ThemePageConfig?,
       primaryGradientColors: null == primaryGradientColors
           ? _value.primaryGradientColors
           : primaryGradientColors // ignore: cast_nullable_to_non_nullable
@@ -125,6 +161,32 @@ class _$ThemeSettingsCopyWithImpl<$Res, $Val extends ThemeSettings>
 
   @override
   @pragma('vm:prefer-inline')
+  $ThemeWidgetConfigCopyWith<$Res>? get themeWidgetLightConfig {
+    if (_value.themeWidgetLightConfig == null) {
+      return null;
+    }
+
+    return $ThemeWidgetConfigCopyWith<$Res>(_value.themeWidgetLightConfig!,
+        (value) {
+      return _then(_value.copyWith(themeWidgetLightConfig: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ThemePageConfigCopyWith<$Res>? get themePageLightConfig {
+    if (_value.themePageLightConfig == null) {
+      return null;
+    }
+
+    return $ThemePageConfigCopyWith<$Res>(_value.themePageLightConfig!,
+        (value) {
+      return _then(_value.copyWith(themePageLightConfig: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
   $ColorSchemeOverrideCopyWith<$Res>? get darkColorSchemeOverride {
     if (_value.darkColorSchemeOverride == null) {
       return null;
@@ -133,6 +195,31 @@ class _$ThemeSettingsCopyWithImpl<$Res, $Val extends ThemeSettings>
     return $ColorSchemeOverrideCopyWith<$Res>(_value.darkColorSchemeOverride!,
         (value) {
       return _then(_value.copyWith(darkColorSchemeOverride: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ThemeWidgetConfigCopyWith<$Res>? get themeWidgetDarkConfig {
+    if (_value.themeWidgetDarkConfig == null) {
+      return null;
+    }
+
+    return $ThemeWidgetConfigCopyWith<$Res>(_value.themeWidgetDarkConfig!,
+        (value) {
+      return _then(_value.copyWith(themeWidgetDarkConfig: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ThemePageConfigCopyWith<$Res>? get themePageDarkConfig {
+    if (_value.themePageDarkConfig == null) {
+      return null;
+    }
+
+    return $ThemePageConfigCopyWith<$Res>(_value.themePageDarkConfig!, (value) {
+      return _then(_value.copyWith(themePageDarkConfig: value) as $Val);
     });
   }
 }
@@ -148,7 +235,11 @@ abstract class _$$ThemeSettingsImplCopyWith<$Res>
   $Res call(
       {Color seedColor,
       ColorSchemeOverride? lightColorSchemeOverride,
+      ThemeWidgetConfig? themeWidgetLightConfig,
+      ThemePageConfig? themePageLightConfig,
       ColorSchemeOverride? darkColorSchemeOverride,
+      ThemeWidgetConfig? themeWidgetDarkConfig,
+      ThemePageConfig? themePageDarkConfig,
       List<CustomColor> primaryGradientColors,
       String? fontFamily,
       ThemeSvgAsset primaryOnboardingLogo,
@@ -157,7 +248,15 @@ abstract class _$$ThemeSettingsImplCopyWith<$Res>
   @override
   $ColorSchemeOverrideCopyWith<$Res>? get lightColorSchemeOverride;
   @override
+  $ThemeWidgetConfigCopyWith<$Res>? get themeWidgetLightConfig;
+  @override
+  $ThemePageConfigCopyWith<$Res>? get themePageLightConfig;
+  @override
   $ColorSchemeOverrideCopyWith<$Res>? get darkColorSchemeOverride;
+  @override
+  $ThemeWidgetConfigCopyWith<$Res>? get themeWidgetDarkConfig;
+  @override
+  $ThemePageConfigCopyWith<$Res>? get themePageDarkConfig;
 }
 
 /// @nodoc
@@ -173,7 +272,11 @@ class __$$ThemeSettingsImplCopyWithImpl<$Res>
   $Res call({
     Object? seedColor = null,
     Object? lightColorSchemeOverride = freezed,
+    Object? themeWidgetLightConfig = freezed,
+    Object? themePageLightConfig = freezed,
     Object? darkColorSchemeOverride = freezed,
+    Object? themeWidgetDarkConfig = freezed,
+    Object? themePageDarkConfig = freezed,
     Object? primaryGradientColors = null,
     Object? fontFamily = freezed,
     Object? primaryOnboardingLogo = null,
@@ -188,10 +291,26 @@ class __$$ThemeSettingsImplCopyWithImpl<$Res>
           ? _value.lightColorSchemeOverride
           : lightColorSchemeOverride // ignore: cast_nullable_to_non_nullable
               as ColorSchemeOverride?,
+      themeWidgetLightConfig: freezed == themeWidgetLightConfig
+          ? _value.themeWidgetLightConfig
+          : themeWidgetLightConfig // ignore: cast_nullable_to_non_nullable
+              as ThemeWidgetConfig?,
+      themePageLightConfig: freezed == themePageLightConfig
+          ? _value.themePageLightConfig
+          : themePageLightConfig // ignore: cast_nullable_to_non_nullable
+              as ThemePageConfig?,
       darkColorSchemeOverride: freezed == darkColorSchemeOverride
           ? _value.darkColorSchemeOverride
           : darkColorSchemeOverride // ignore: cast_nullable_to_non_nullable
               as ColorSchemeOverride?,
+      themeWidgetDarkConfig: freezed == themeWidgetDarkConfig
+          ? _value.themeWidgetDarkConfig
+          : themeWidgetDarkConfig // ignore: cast_nullable_to_non_nullable
+              as ThemeWidgetConfig?,
+      themePageDarkConfig: freezed == themePageDarkConfig
+          ? _value.themePageDarkConfig
+          : themePageDarkConfig // ignore: cast_nullable_to_non_nullable
+              as ThemePageConfig?,
       primaryGradientColors: null == primaryGradientColors
           ? _value._primaryGradientColors
           : primaryGradientColors // ignore: cast_nullable_to_non_nullable
@@ -219,7 +338,11 @@ class _$ThemeSettingsImpl implements _ThemeSettings {
   const _$ThemeSettingsImpl(
       {required this.seedColor,
       this.lightColorSchemeOverride,
+      this.themeWidgetLightConfig,
+      this.themePageLightConfig,
       this.darkColorSchemeOverride,
+      this.themeWidgetDarkConfig,
+      this.themePageDarkConfig,
       required final List<CustomColor> primaryGradientColors,
       this.fontFamily,
       required this.primaryOnboardingLogo,
@@ -234,7 +357,15 @@ class _$ThemeSettingsImpl implements _ThemeSettings {
   @override
   final ColorSchemeOverride? lightColorSchemeOverride;
   @override
+  final ThemeWidgetConfig? themeWidgetLightConfig;
+  @override
+  final ThemePageConfig? themePageLightConfig;
+  @override
   final ColorSchemeOverride? darkColorSchemeOverride;
+  @override
+  final ThemeWidgetConfig? themeWidgetDarkConfig;
+  @override
+  final ThemePageConfig? themePageDarkConfig;
   final List<CustomColor> _primaryGradientColors;
   @override
   List<CustomColor> get primaryGradientColors {
@@ -253,7 +384,7 @@ class _$ThemeSettingsImpl implements _ThemeSettings {
 
   @override
   String toString() {
-    return 'ThemeSettings(seedColor: $seedColor, lightColorSchemeOverride: $lightColorSchemeOverride, darkColorSchemeOverride: $darkColorSchemeOverride, primaryGradientColors: $primaryGradientColors, fontFamily: $fontFamily, primaryOnboardingLogo: $primaryOnboardingLogo, secondaryOnboardingLogo: $secondaryOnboardingLogo)';
+    return 'ThemeSettings(seedColor: $seedColor, lightColorSchemeOverride: $lightColorSchemeOverride, themeWidgetLightConfig: $themeWidgetLightConfig, themePageLightConfig: $themePageLightConfig, darkColorSchemeOverride: $darkColorSchemeOverride, themeWidgetDarkConfig: $themeWidgetDarkConfig, themePageDarkConfig: $themePageDarkConfig, primaryGradientColors: $primaryGradientColors, fontFamily: $fontFamily, primaryOnboardingLogo: $primaryOnboardingLogo, secondaryOnboardingLogo: $secondaryOnboardingLogo)';
   }
 
   @override
@@ -266,9 +397,17 @@ class _$ThemeSettingsImpl implements _ThemeSettings {
             (identical(
                     other.lightColorSchemeOverride, lightColorSchemeOverride) ||
                 other.lightColorSchemeOverride == lightColorSchemeOverride) &&
+            (identical(other.themeWidgetLightConfig, themeWidgetLightConfig) ||
+                other.themeWidgetLightConfig == themeWidgetLightConfig) &&
+            (identical(other.themePageLightConfig, themePageLightConfig) ||
+                other.themePageLightConfig == themePageLightConfig) &&
             (identical(
                     other.darkColorSchemeOverride, darkColorSchemeOverride) ||
                 other.darkColorSchemeOverride == darkColorSchemeOverride) &&
+            (identical(other.themeWidgetDarkConfig, themeWidgetDarkConfig) ||
+                other.themeWidgetDarkConfig == themeWidgetDarkConfig) &&
+            (identical(other.themePageDarkConfig, themePageDarkConfig) ||
+                other.themePageDarkConfig == themePageDarkConfig) &&
             const DeepCollectionEquality()
                 .equals(other._primaryGradientColors, _primaryGradientColors) &&
             (identical(other.fontFamily, fontFamily) ||
@@ -286,7 +425,11 @@ class _$ThemeSettingsImpl implements _ThemeSettings {
       runtimeType,
       seedColor,
       lightColorSchemeOverride,
+      themeWidgetLightConfig,
+      themePageLightConfig,
       darkColorSchemeOverride,
+      themeWidgetDarkConfig,
+      themePageDarkConfig,
       const DeepCollectionEquality().hash(_primaryGradientColors),
       fontFamily,
       primaryOnboardingLogo,
@@ -310,7 +453,11 @@ abstract class _ThemeSettings implements ThemeSettings {
   const factory _ThemeSettings(
           {required final Color seedColor,
           final ColorSchemeOverride? lightColorSchemeOverride,
+          final ThemeWidgetConfig? themeWidgetLightConfig,
+          final ThemePageConfig? themePageLightConfig,
           final ColorSchemeOverride? darkColorSchemeOverride,
+          final ThemeWidgetConfig? themeWidgetDarkConfig,
+          final ThemePageConfig? themePageDarkConfig,
           required final List<CustomColor> primaryGradientColors,
           final String? fontFamily,
           required final ThemeSvgAsset primaryOnboardingLogo,
@@ -325,7 +472,15 @@ abstract class _ThemeSettings implements ThemeSettings {
   @override
   ColorSchemeOverride? get lightColorSchemeOverride;
   @override
+  ThemeWidgetConfig? get themeWidgetLightConfig;
+  @override
+  ThemePageConfig? get themePageLightConfig;
+  @override
   ColorSchemeOverride? get darkColorSchemeOverride;
+  @override
+  ThemeWidgetConfig? get themeWidgetDarkConfig;
+  @override
+  ThemePageConfig? get themePageDarkConfig;
   @override
   List<CustomColor> get primaryGradientColors;
   @override

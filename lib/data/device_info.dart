@@ -55,6 +55,8 @@ class DeviceInfo {
 
   final Map<String, dynamic> data;
 
+  String? get manufacturer => data['manufacturer'];
+
   static Map<String, dynamic> _readWebBrowserInfo(WebBrowserInfo data) {
     return <String, dynamic>{
       'browserName': data.browserName.name,
@@ -103,13 +105,8 @@ class DeviceInfo {
       'type': build.type,
       'isPhysicalDevice': build.isPhysicalDevice,
       'systemFeatures': build.systemFeatures,
-      'displaySizeInches': ((build.displayMetrics.sizeInches * 10).roundToDouble() / 10),
-      'displayWidthPixels': build.displayMetrics.widthPx,
-      'displayWidthInches': build.displayMetrics.widthInches,
-      'displayHeightPixels': build.displayMetrics.heightPx,
-      'displayHeightInches': build.displayMetrics.heightInches,
-      'displayXDpi': build.displayMetrics.xDpi,
-      'displayYDpi': build.displayMetrics.yDpi,
+      'serialNumber': build.serialNumber,
+      'isLowRamDevice': build.isLowRamDevice,
     };
   }
 

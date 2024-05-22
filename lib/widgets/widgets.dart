@@ -1,4 +1,5 @@
 export 'acknowledge_dialog.dart';
+export 'app_icon.dart';
 export 'back_button.dart';
 export 'confirm_dialog.dart';
 export 'copy_to_clipboard.dart';

@@ -7,16 +7,19 @@ class OutgoingCallRequest extends CallRequest {
     required super.callId,
     required this.number,
     required this.jsep,
+    this.referId,
   });
 
   final String number;
   final Map<String, dynamic> jsep;
+  final String? referId;
 
   @override
   List<Object?> get props => [
         ...super.props,
         number,
         jsep,
+        referId,
       ];
 
   static const typeValue = 'outgoing_call';
@@ -33,6 +36,7 @@ class OutgoingCallRequest extends CallRequest {
       callId: json['call_id'],
       number: json['number'],
       jsep: json['jsep'],
+      referId: json['refer_id'],
     );
   }
 
@@ -45,6 +49,7 @@ class OutgoingCallRequest extends CallRequest {
       'call_id': callId,
       'number': number,
       'jsep': jsep,
+      'refer_id': referId,
     };
   }
 }

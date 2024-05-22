@@ -223,6 +223,10 @@ class AppRouter extends _$AppRouter {
               page: TermsConditionsScreenPageRoute.page,
               path: 'terms-conditions',
             ),
+            AutoRoute(
+              page: UndefinedScreenPageRoute.page,
+              path: 'undefined',
+            ),
           ],
         ),
       ];
@@ -329,9 +333,12 @@ class AppRouter extends _$AppRouter {
 
   FutureOr<DeepLink> deepLinkBuilder(PlatformDeepLink deepLink) {
     final handlers = <DeepLinkHandler>[
+      // Internal deep-links within the platform
       HandleAndroidBackgroundIncomingCall(deepLink, _appBloc.pendingCallHandler),
-      HandleAutoprovision(deepLink),
       HandleReturnToMain(deepLink),
+      // External deep-links from outside the application
+      HandleAutoprovision(deepLink),
+      HandleNotDefinedPath(deepLink, this),
     ];
 
     for (final handler in handlers) {

@@ -4,11 +4,14 @@ import 'dart:html' as html;
 import 'package:web_socket_channel/html.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import 'package:ssl_certificates/ssl_certificates.dart' show TrustedCertificates;
+
 Future<html.WebSocket> connectWebSocket(
   String url, {
   Iterable<String>? protocols,
   Duration? connectionTimeout,
   Duration? pingInterval,
+  TrustedCertificates certs = TrustedCertificates.empty,
 }) async {
   final webSocket = html.WebSocket(url, protocols);
   if (webSocket.readyState == 1) return webSocket;

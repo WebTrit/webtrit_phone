@@ -22,6 +22,16 @@ class $AssetsCallkeepGen {
   List<AssetGenImage> get values => [iosIconTemplateImage];
 }
 
+class $AssetsCertificatesGen {
+  const $AssetsCertificatesGen();
+
+  /// File path: assets/certificates/credentials.json
+  String get credentials => 'assets/certificates/credentials.json';
+
+  /// List of all assets
+  List<String> get values => [credentials];
+}
+
 class $AssetsLoginGen {
   const $AssetsLoginGen();
 
@@ -52,14 +62,37 @@ class $AssetsThemesGen {
   /// File path: assets/themes/original.json
   String get original => 'assets/themes/original.json';
 
+  /// File path: assets/themes/original.page.dark.config.json
+  String get originalPageDarkConfig =>
+      'assets/themes/original.page.dark.config.json';
+
+  /// File path: assets/themes/original.page.light.config.json
+  String get originalPageLightConfig =>
+      'assets/themes/original.page.light.config.json';
+
+  /// File path: assets/themes/original.widget.dark.config.json
+  String get originalWidgetDarkConfig =>
+      'assets/themes/original.widget.dark.config.json';
+
+  /// File path: assets/themes/original.widget.light.config.json
+  String get originalWidgetLightConfig =>
+      'assets/themes/original.widget.light.config.json';
+
   /// List of all assets
-  List<String> get values => [original];
+  List<String> get values => [
+        original,
+        originalPageDarkConfig,
+        originalPageLightConfig,
+        originalWidgetDarkConfig,
+        originalWidgetLightConfig
+      ];
 }
 
 class Assets {
   Assets._();
 
   static const $AssetsCallkeepGen callkeep = $AssetsCallkeepGen();
+  static const $AssetsCertificatesGen certificates = $AssetsCertificatesGen();
   static const $AssetsLoginGen login = $AssetsLoginGen();
   static const SvgGenImage primaryOnboardinLogo =
       SvgGenImage('assets/primary_onboardin_logo.svg');

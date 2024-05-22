@@ -31,6 +31,8 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
   final AppDatabase appDatabase;
 
   void _onStarted(ExternalContactsSyncStarted event, Emitter<ExternalContactsSyncState> emit) async {
+    _logger.info('_onStarted');
+
     final externalContactsForEachFuture = emit.onEach<List<ExternalContact>>(
       externalContactsRepository.contacts(),
       onData: (contacts) => add(_ExternalContactsSyncUpdated(contacts: contacts)),
@@ -43,104 +45,127 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
   }
 
   void _onRefreshed(ExternalContactsSyncRefreshed event, Emitter<ExternalContactsSyncState> emit) async {
+    _logger.info('_onRefreshed');
+
     emit(const ExternalContactsSyncRefreshInProgress());
     try {
       await externalContactsRepository.load();
     } catch (error) {
+      _logger.warning('_onRefreshed error: ', error);
       emit(const ExternalContactsSyncRefreshFailure());
     }
   }
 
-  void _onUpdated(_ExternalContactsSyncUpdated event, Emitter<ExternalContactsSyncState> emit) async {
-    final UserInfo userInfo;
+  Future _onUpdated(
+    _ExternalContactsSyncUpdated event,
+    Emitter<ExternalContactsSyncState> emit, {
+    int retryCount = 0,
+    UserInfo? userInfo,
+  }) async {
+    _logger.info('_onUpdated contacts count:${event.contacts.length}');
+
     try {
-      userInfo = await userRepository.getInfo();
+      userInfo ??= await userRepository.getInfo();
     } catch (error) {
+      _logger.warning('_onUpdated userInfo error: ', error);
       emit(const ExternalContactsSyncRefreshFailure());
       return;
     }
 
-    await appDatabase.transaction(() async {
-      // skip external contact that represents own account
-      final externalContacts = event.contacts.where((externalContact) => externalContact.id != userInfo.numbers.main);
+    try {
+      await appDatabase.transaction(() async {
+        // skip external contact that represents own account
+        final externalContacts =
+            event.contacts.where((externalContact) => externalContact.id != userInfo!.numbers.main);
 
-      final contactDatas = await appDatabase.contactsDao.getAllContacts(ContactSourceTypeEnum.external);
+        final syncedExternalContactsIds =
+            await appDatabase.contactsDao.getIdsBySourceType(ContactSourceTypeEnum.external);
 
-      final syncedExternalContactsIds = contactDatas.map((contactData) => contactData.sourceId).toSet();
-      final updatedExternalContactsIds = externalContacts.map((externalContact) => externalContact.id).toSet();
+        final updatedExternalContactsIds = externalContacts.map((externalContact) => externalContact.id).toSet();
 
-      final delExternalContactsIds = syncedExternalContactsIds.difference(updatedExternalContactsIds);
+        final delExternalContactsIds = syncedExternalContactsIds.difference(updatedExternalContactsIds);
 
-      // to del
-      for (final externalContactsId in delExternalContactsIds) {
-        await appDatabase.contactsDao.deleteContactBySource(ContactSourceTypeEnum.external, externalContactsId);
+        // to del
+        for (final externalContactsId in delExternalContactsIds) {
+          await appDatabase.contactsDao.deleteContactBySource(ContactSourceTypeEnum.external, externalContactsId);
+        }
+
+        // to add or update
+        for (final externalContact in externalContacts) {
+          final insertOrUpdateContactData =
+              await appDatabase.contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
+            sourceType: const Value(ContactSourceTypeEnum.external),
+            sourceId: Value(externalContact.id),
+            firstName: Value(externalContact.firstName),
+            lastName: Value(externalContact.lastName),
+            aliasName: Value(externalContact.aliasName),
+          ));
+
+          final externalContactNumber = externalContact.number;
+          final externalContactExt = externalContact.ext;
+          final externalContactMobile = externalContact.mobile;
+
+          final externalContactNumbers = [
+            if (externalContactNumber != null) externalContactNumber,
+            if (externalContactExt != null) externalContactExt,
+            if (externalContactMobile != null) externalContactMobile,
+          ];
+
+          await appDatabase.contactPhonesDao
+              .deleteOtherContactPhonesOfContactId(insertOrUpdateContactData.id, externalContactNumbers);
+
+          if (externalContactNumber != null) {
+            await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(ContactPhoneDataCompanion(
+              number: Value(externalContactNumber),
+              label: const Value('number'),
+              contactId: Value(insertOrUpdateContactData.id),
+            ));
+          }
+          if (externalContactExt != null) {
+            await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(ContactPhoneDataCompanion(
+              number: Value(externalContactExt),
+              label: const Value('ext'),
+              contactId: Value(insertOrUpdateContactData.id),
+            ));
+          }
+          if (externalContactMobile != null) {
+            await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(ContactPhoneDataCompanion(
+              number: Value(externalContactMobile),
+              label: const Value('mobile'),
+              contactId: Value(insertOrUpdateContactData.id),
+            ));
+          }
+
+          final externalContactEmail = externalContact.email;
+
+          final externalContactEmails = [
+            if (externalContactEmail != null) externalContactEmail,
+          ];
+
+          await appDatabase.contactEmailsDao
+              .deleteOtherContactEmailsOfContactId(insertOrUpdateContactData.id, externalContactEmails);
+
+          if (externalContactEmail != null) {
+            await appDatabase.contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(ContactEmailDataCompanion(
+              address: Value(externalContactEmail),
+              label: const Value(''),
+              contactId: Value(insertOrUpdateContactData.id),
+            ));
+          }
+        }
+      });
+
+      emit(const ExternalContactsSyncSuccess());
+    } on Exception catch (e) {
+      _logger.warning('_onUpdated retry: $retryCount, error: ', e);
+
+      if (retryCount < 3) {
+        await Future<void>.delayed(const Duration(seconds: 1));
+        if (isClosed) return;
+        await _onUpdated(event, emit, retryCount: retryCount + 1, userInfo: userInfo);
+      } else {
+        emit(const ExternalContactsSyncUpdateFailure());
       }
-
-      // to add or update
-      for (final externalContact in externalContacts) {
-        final insertOrUpdateContactData =
-            await appDatabase.contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
-          sourceType: const Value(ContactSourceTypeEnum.external),
-          sourceId: Value(externalContact.id),
-          firstName: Value(externalContact.firstName),
-          lastName: Value(externalContact.lastName),
-          aliasName: Value(externalContact.aliasName),
-        ));
-
-        final externalContactNumber = externalContact.number;
-        final externalContactExt = externalContact.ext;
-        final externalContactMobile = externalContact.mobile;
-
-        final externalContactNumbers = [
-          if (externalContactNumber != null) externalContactNumber,
-          if (externalContactExt != null) externalContactExt,
-          if (externalContactMobile != null) externalContactMobile,
-        ];
-
-        await appDatabase.contactPhonesDao
-            .deleteOtherContactPhonesOfContactId(insertOrUpdateContactData.id, externalContactNumbers);
-
-        if (externalContactNumber != null) {
-          await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(ContactPhoneDataCompanion(
-            number: Value(externalContactNumber),
-            label: const Value('number'),
-            contactId: Value(insertOrUpdateContactData.id),
-          ));
-        }
-        if (externalContactExt != null) {
-          await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(ContactPhoneDataCompanion(
-            number: Value(externalContactExt),
-            label: const Value('ext'),
-            contactId: Value(insertOrUpdateContactData.id),
-          ));
-        }
-        if (externalContactMobile != null) {
-          await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(ContactPhoneDataCompanion(
-            number: Value(externalContactMobile),
-            label: const Value('mobile'),
-            contactId: Value(insertOrUpdateContactData.id),
-          ));
-        }
-
-        final externalContactEmail = externalContact.email;
-
-        final externalContactEmails = [
-          if (externalContactEmail != null) externalContactEmail,
-        ];
-
-        await appDatabase.contactEmailsDao
-            .deleteOtherContactEmailsOfContactId(insertOrUpdateContactData.id, externalContactEmails);
-
-        if (externalContactEmail != null) {
-          await appDatabase.contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(ContactEmailDataCompanion(
-            address: Value(externalContactEmail),
-            label: const Value(''),
-            contactId: Value(insertOrUpdateContactData.id),
-          ));
-        }
-      }
-    });
-
-    emit(const ExternalContactsSyncSuccess());
+    }
   }
 }

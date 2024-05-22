@@ -17,11 +17,13 @@ class WebtritApiClient {
     Uri baseUrl,
     String tenantId, {
     Duration? connectionTimeout,
+    TrustedCertificates certs = TrustedCertificates.empty,
   }) : this.inner(
           baseUrl,
           tenantId,
           httpClient: createHttpClient(
             connectionTimeout: connectionTimeout,
+            certs: certs,
           ),
         );
 
@@ -84,6 +86,7 @@ class WebtritApiClient {
       throw RequestFailure(
         statusCode: httpResponse.statusCode,
         requestId: xRequestId,
+        token: token,
         error: error,
       );
     }
@@ -173,6 +176,10 @@ class WebtritApiClient {
     return (responseJson['items'] as List<dynamic>)
         .map((e) => UserContact.fromJson(e as Map<String, dynamic>))
         .toList();
+  }
+
+  Future<void> deleteUserInfo(String token) async {
+    await _httpClientExecuteDelete(['user'], token);
   }
 
   Future<AppStatus> getAppStatus(String token) async {

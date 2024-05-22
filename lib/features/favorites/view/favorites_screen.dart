@@ -51,7 +51,7 @@ class FavoritesScreen extends StatelessWidget {
                         onTap: blingTransferInitiated
                             ? () {
                                 final callBloc = context.read<CallBloc>();
-                                callBloc.add(CallControlEvent.blindTransferred(
+                                callBloc.add(CallControlEvent.blindTransferSubmitted(
                                   number: favorite.number,
                                 ));
                               }

@@ -11,6 +11,7 @@ import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../permissions.dart';
+import '../widgets/widgets.dart';
 
 class PermissionsScreen extends StatelessWidget {
   const PermissionsScreen({
@@ -25,6 +26,9 @@ class PermissionsScreen extends StatelessWidget {
       body: BlocConsumer<PermissionsCubit, PermissionsState>(
         listener: (context, state) {
           switch (state) {
+            // Shows additional screen for specific sub-platform if needed
+            case PermissionsManufacturerTipNeeded(:final manufacturer):
+              _showManufacturerTips(context, manufacturer);
             case PermissionsStateSuccess():
               context.router.replaceAll([const MainShellRoute()]);
             case PermissionsStateFailure(:final error):
@@ -39,9 +43,8 @@ class PermissionsScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: kInset * 2),
-                Icon(
+                const AppIcon(
                   Icons.settings_suggest,
-                  color: Theme.of(context).colorScheme.primary,
                   size: kInset * 6,
                 ),
                 const SizedBox(height: kInset * 2),
@@ -88,5 +91,16 @@ class PermissionsScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Future _showManufacturerTips(BuildContext context, Manufacturer manufacturer) async {
+    final permissionCubit = context.read<PermissionsCubit>();
+
+    await context.router.pushWidget(ManufacturerPermission(
+      onGoToAppSettings: permissionCubit.openAppSettings,
+      manufacturer: manufacturer,
+    ));
+
+    permissionCubit.dismissManufacturerTip();
   }
 }

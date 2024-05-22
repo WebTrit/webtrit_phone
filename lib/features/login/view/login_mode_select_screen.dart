@@ -9,19 +9,27 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../login.dart';
 
+export 'login_mode_select_screen_style.dart';
+export 'login_mode_select_screen_styles.dart';
+
 class LoginModeSelectScreen extends StatelessWidget {
   const LoginModeSelectScreen({
     super.key,
     this.appGreeting,
+    this.style,
   });
 
   final String? appGreeting;
+
+  final LoginModeSelectScreenStyle? style;
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final Gradients? gradients = themeData.extension<Gradients>();
     final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
+    final LoginModeSelectScreenStyles? loginPageStyles = themeData.extension<LoginModeSelectScreenStyles>();
+    final LoginModeSelectScreenStyle? localStyle = style ?? loginPageStyles?.primary;
 
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => previous.processing != current.processing,
@@ -58,7 +66,6 @@ class LoginModeSelectScreen extends StatelessWidget {
               children: [
                 const Spacer(),
                 OnboardingPictureLogo(
-                  color: themeData.colorScheme.onPrimary,
                   text: appGreeting,
                 ),
                 const Spacer(),
@@ -68,7 +75,7 @@ class LoginModeSelectScreen extends StatelessWidget {
                       : () => context
                           .read<LoginCubit>()
                           .loginModeSelectSubmitted(isDemoModeEnabled ? LoginMode.demoCore : LoginMode.core),
-                  style: elevatedButtonStyles?.primary,
+                  style: elevatedButtonStyles?.getStyle(localStyle?.signUpTypeButton),
                   child: !state.processing
                       ? Text(isDemoModeEnabled
                           ? context.l10n.login_Button_signUpToDemoInstance

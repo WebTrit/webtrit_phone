@@ -39,6 +39,7 @@ class KeypadViewState extends State<KeypadView> {
   Widget build(BuildContext context) {
     final scaledInset = MediaQuery.of(context).size.height > 800 ? 16.0 : 8.0;
     final themeData = Theme.of(context);
+    final backgroundColor = themeData.colorScheme.background;
     final InputDecorations? inputDecorations = themeData.extension<InputDecorations>();
     return Column(
       children: [
@@ -58,6 +59,15 @@ class KeypadViewState extends State<KeypadView> {
               ),
             ),
           ),
+        ),
+
+        /// Temporary fix for the flutter rendering issue
+        /// To reproduse set font family to null, top 1-2 pixels of the keypad will be cut off
+        /// TODO: check on next flutter update if the issue is fixed and remove this container
+        Container(
+          color: backgroundColor,
+          height: 1,
+          width: double.infinity,
         ),
         Keypad(
           onKeypadPressed: _onKeypadPressed,
@@ -120,7 +130,7 @@ class KeypadViewState extends State<KeypadView> {
     _focusNode.unfocus();
 
     final callBloc = context.read<CallBloc>();
-    callBloc.add(CallControlEvent.blindTransferred(
+    callBloc.add(CallControlEvent.blindTransferSubmitted(
       number: _popNumber(),
     ));
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/widgets/linkify.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class AgreementCheckbox extends StatelessWidget {
   const AgreementCheckbox({
@@ -35,10 +35,12 @@ class AgreementCheckbox extends StatelessWidget {
           child: Linkify(
             text: context.l10n.user_agreement_checkbox_text(agreementLink),
             onOpen: (_) => onAgreementLinkTap(),
-            style: themeData.textTheme.labelLarge,
-            linkStyle: themeData.textTheme.labelLarge?.copyWith(
-              color: themeData.colorScheme.primary,
-              decoration: TextDecoration.underline,
+            style: LinkifyStyle(
+              style: themeData.textTheme.labelLarge,
+              linkStyle: themeData.textTheme.labelLarge?.copyWith(
+                decoration: TextDecoration.underline,
+                color: null,
+              ),
             ),
             linkifiers: [UrlReplaceLinkifier(context.l10n.user_agreement_agrement_link)],
           ),
