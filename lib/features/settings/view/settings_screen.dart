@@ -163,25 +163,26 @@ class SettingsScreen extends StatelessWidget {
               context.router.navigate(const AboutScreenPageRoute());
             },
           ),
-          const ListTileSeparator(),
-          ListTile(
-            leading: const Icon(Icons.nights_stay_outlined),
-            title: Text(context.l10n.settings_ListViewTileTitle_themeMode),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                BlocBuilder<AppBloc, AppState>(
-                  builder: (context, state) {
-                    return Text(state.effectiveThemeMode.l10n(context));
-                  },
-                ),
-                const Icon(Icons.navigate_next),
-              ],
-            ),
-            onTap: () {
-              context.router.navigate(const ThemeModeScreenPageRoute());
-            },
-          ),
+          // TODO(SERDUN): Uncomment when dark mode is implemented
+          // const ListTileSeparator(),
+          // ListTile(
+          //   leading: const Icon(Icons.nights_stay_outlined),
+          //   title: Text(context.l10n.settings_ListViewTileTitle_themeMode),
+          //   trailing: Row(
+          //     mainAxisSize: MainAxisSize.min,
+          //     children: [
+          //       BlocBuilder<AppBloc, AppState>(
+          //         builder: (context, state) {
+          //           return Text(state.effectiveThemeMode.l10n(context));
+          //         },
+          //       ),
+          //       const Icon(Icons.navigate_next),
+          //     ],
+          //   ),
+          //   onTap: () {
+          //     context.router.navigate(const ThemeModeScreenPageRoute());
+          //   },
+          // ),
           GroupTitleListTile(
             titleData: context.l10n.settings_ListViewTileTitle_toolbox,
           ),
