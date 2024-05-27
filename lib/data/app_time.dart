@@ -25,7 +25,7 @@ class AppTime {
       final firstView = dispatcher.views.first;
       return MediaQueryData.fromView(firstView).alwaysUse24HourFormat;
     } catch (e, stackTrace) {
-      _logger.info('Error checking 24-hour format: $e', e, stackTrace);
+      _logger.warning('Determine hour format failure: $e', e, stackTrace);
       return true;
     }
   }
