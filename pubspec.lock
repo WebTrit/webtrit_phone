@@ -310,14 +310,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  dart_casing:
-    dependency: transitive
-    description:
-      name: dart_casing
-      sha256: "103ab12ecc536b955feedddb3c3b41de6282cd4517008e9087e6293781369d07"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
   dart_style:
     dependency: transitive
     description:
@@ -587,11 +579,10 @@ packages:
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "006cb1ed53f969bf11816cde5b16dd520e1ee40e"
-      url: "https://github.com/fluttercommunity/flutter_launcher_icons.git"
-    source: git
+      name: flutter_launcher_icons
+      sha256: "526faf84284b86a4cb36d20a5e45147747b7563d921373d4ee0559c54fcdbcea"
+      url: "https://pub.dev"
+    source: hosted
     version: "0.13.1"
   flutter_lints:
     dependency: "direct dev"
@@ -618,10 +609,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_secure_storage
-      sha256: ffdbb60130e4665d2af814a0267c481bcf522c41ae2e43caf69fa0146876d685
+      sha256: "165164745e6afb5c0e3e3fcc72a012fb9e58496fb26ffb92cf22e16a821e85d0"
       url: "https://pub.dev"
     source: hosted
-    version: "9.0.0"
+    version: "9.2.2"
   flutter_secure_storage_linux:
     dependency: transitive
     description:
@@ -634,18 +625,18 @@ packages:
     dependency: transitive
     description:
       name: flutter_secure_storage_macos
-      sha256: "8cfa53010a294ff095d7be8fa5bb15f2252c50018d69c5104851303f3ff92510"
+      sha256: "1693ab11121a5f925bbea0be725abfcfbbcf36c1e29e571f84a0c0f436147a81"
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.0"
+    version: "3.1.2"
   flutter_secure_storage_platform_interface:
     dependency: transitive
     description:
       name: flutter_secure_storage_platform_interface
-      sha256: "301f67ee9b87f04aef227f57f13f126fa7b13543c8e7a93f25c5d2d534c28a4a"
+      sha256: cf91ad32ce5adef6fba4d736a542baca9daf3beac4db2d04be350b87f69ac4a8
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.1"
+    version: "1.1.2"
   flutter_secure_storage_web:
     dependency: transitive
     description:
@@ -1304,38 +1295,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
-  soundpool:
-    dependency: "direct main"
-    description:
-      name: soundpool
-      sha256: fe7302005759d6a3561de1711e3ea818b1ba025a62375b469196dda5b654bd38
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.4.1"
-  soundpool_macos:
-    dependency: transitive
-    description:
-      name: soundpool_macos
-      sha256: e0440a19d4e8f344dace336923b369184e91eebbbd8348266f4434b675bd15db
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.0"
-  soundpool_platform_interface:
-    dependency: transitive
-    description:
-      name: soundpool_platform_interface
-      sha256: "7c6666e19319151b2036c4fc9b6da3a83f2ebf4097989e6ba1c2b0bfe3612e9f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.0"
-  soundpool_web:
-    dependency: transitive
-    description:
-      name: soundpool_web
-      sha256: "3d1eb8d6cceb8a0aec38ff9aec4fbd11a9a8101d27b27a6eb29305b83d46aee5"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.0"
   source_gen:
     dependency: transitive
     description:
@@ -1400,13 +1359,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.21"
-  ssl_certificates:
-    dependency: "direct main"
-    description:
-      path: "packages/ssl_certificates"
-      relative: true
-    source: path
-    version: "1.0.0"
   stack_trace:
     dependency: transitive
     description:
@@ -1638,15 +1590,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
-  version_gen:
-    dependency: "direct dev"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: db1284b4e958eddf2ea67e585335dccd44018935
-      url: "https://github.com/SERDUN/version_gen.git"
-    source: git
-    version: "1.0.1"
   vm_service:
     dependency: transitive
     description:
@@ -1713,59 +1656,10 @@ packages:
   webtrit_callkeep:
     dependency: "direct main"
     description:
-      path: "../webtrit_callkeep/webtrit_callkeep"
+      path: "packages/webtrit_callkeep"
       relative: true
     source: path
-    version: "0.1.0+1"
-  webtrit_callkeep_android:
-    dependency: transitive
-    description:
-      path: "../webtrit_callkeep/webtrit_callkeep_android"
-      relative: true
-    source: path
-    version: "0.1.0+1"
-  webtrit_callkeep_ios:
-    dependency: transitive
-    description:
-      path: "../webtrit_callkeep/webtrit_callkeep_ios"
-      relative: true
-    source: path
-    version: "0.1.0+1"
-  webtrit_callkeep_linux:
-    dependency: transitive
-    description:
-      path: "../webtrit_callkeep/webtrit_callkeep_linux"
-      relative: true
-    source: path
-    version: "0.1.0+1"
-  webtrit_callkeep_macos:
-    dependency: transitive
-    description:
-      path: "../webtrit_callkeep/webtrit_callkeep_macos"
-      relative: true
-    source: path
-    version: "0.1.0+1"
-  webtrit_callkeep_platform_interface:
-    dependency: transitive
-    description:
-      path: "../webtrit_callkeep/webtrit_callkeep_platform_interface"
-      relative: true
-    source: path
-    version: "0.1.0+1"
-  webtrit_callkeep_web:
-    dependency: transitive
-    description:
-      path: "../webtrit_callkeep/webtrit_callkeep_web"
-      relative: true
-    source: path
-    version: "0.1.0+1"
-  webtrit_callkeep_windows:
-    dependency: transitive
-    description:
-      path: "../webtrit_callkeep/webtrit_callkeep_windows"
-      relative: true
-    source: path
-    version: "0.1.0+1"
+    version: "0.0.1"
   webtrit_phone_number:
     dependency: "direct main"
     description:
