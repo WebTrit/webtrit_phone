@@ -8,19 +8,23 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../recent.dart';
 
 class RecentHistoryTile extends StatelessWidget {
-  final Recent recent;
-  final void Function(Recent)? onDeleted;
-
   const RecentHistoryTile({
     super.key,
     required this.recent,
+    this.dateFormat,
     this.onDeleted,
   });
+
+  final Recent recent;
+  final DateFormat? dateFormat;
+  final void Function(Recent)? onDeleted;
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final onDeleted = this.onDeleted;
+    final dateFormat = this.dateFormat ?? DateFormat();
+
     return Dismissible(
       key: ObjectKey(recent),
       background: Container(
@@ -43,7 +47,7 @@ class RecentHistoryTile extends StatelessWidget {
       child: ListTile(
         contentPadding: const EdgeInsets.only(left: 16.0),
         title: Text(
-          DateFormat.yMMMd().add_jms().format(recent.createdTime),
+          dateFormat.format(recent.createdTime),
         ),
         subtitle: Row(
           children: [
