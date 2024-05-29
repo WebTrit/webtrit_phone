@@ -141,6 +141,7 @@ class _MainShellState extends State<MainShell> {
               return RecentsBloc(
                 recentsRepository: context.read<RecentsRepository>(),
                 appPreferences: context.read<AppPreferences>(),
+                dateFormat: AppTime().formatDateTime(),
               )..add(const RecentsStarted());
             },
           ),

@@ -114,6 +114,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                       final recent = recentsFiltered[index];
                       return RecentTile(
                         recent: recent,
+                        dateFormat: context.read<RecentsBloc>().dateFormat,
                         onInfoPressed: () {
                           context.router.navigate(RecentScreenPageRoute(
                             recentId: recent.id!,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:intl/intl.dart';
+
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -10,6 +12,7 @@ class RecentTile extends StatelessWidget {
   const RecentTile({
     super.key,
     required this.recent,
+    this.dateFormat,
     this.onTap,
     this.onLongPress,
     this.onInfoPressed,
@@ -17,6 +20,8 @@ class RecentTile extends StatelessWidget {
   });
 
   final Recent recent;
+  final DateFormat? dateFormat;
+
   final GestureTapCallback? onTap;
   final GestureLongPressCallback? onLongPress;
   final GestureTapCallback? onInfoPressed;
@@ -26,6 +31,8 @@ class RecentTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final onDeleted = this.onDeleted;
+    final dateFormat = this.dateFormat ?? DateFormat();
+
     return Dismissible(
       key: ObjectKey(recent),
       background: Container(
@@ -54,7 +61,7 @@ class RecentTile extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              recent.createdTime.format(context),
+              dateFormat.format(recent.createdTime),
             ),
             IconButton(
               splashRadius: 24,

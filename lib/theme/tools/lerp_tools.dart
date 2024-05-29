@@ -2,7 +2,7 @@ import '../models/models.dart';
 
 class LerpTools {
   static double lerpDouble(double? a, double? b, double t) {
-    if (a == null || b == null) return a ?? b!;
+    if (a == null || b == null) return a ?? b ?? 0;
     return (1.0 - t) * a + t * b;
   }
 
