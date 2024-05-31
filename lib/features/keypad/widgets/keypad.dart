@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import 'package:flutter_dtmf/dtmf.dart';
+
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -29,7 +31,10 @@ class Keypad extends StatelessWidget {
           KeypadKeyButton(
             text: k.text,
             subtext: k.subtext,
-            onKeyPressed: (v) => onKeypadPressed(v),
+            onKeyPressed: (v) {
+              Dtmf.playTone(digits: v, samplingRate: 80000.0);
+              onKeypadPressed(v);
+            },
             style: textButtonStyles?.neutral,
           ),
       ],
