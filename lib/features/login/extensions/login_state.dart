@@ -54,6 +54,6 @@ extension LoginStateErrorL10n on LoginState {
   }
 
   List<ErrorFieldModel>? errorDetails(BuildContext context) {
-    return error?.castTo<RequestFailure>()?.errorFields(context);
+    return error?.castToOrNull<RequestFailure>()?.errorFields(context);
   }
 }

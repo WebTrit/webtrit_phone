@@ -61,7 +61,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         info: info,
         registerStatus: registerStatus,
       ));
-    } catch (e, stackTrace) {
+    } on Exception catch (e, stackTrace) {
       _logger.warning('_onRefreshed', e, stackTrace);
       _logger.info('isClosed: $isClosed');
       _logger.info('emit.isDone: ${emit.isDone}');
@@ -91,7 +91,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       if (emit.isDone) return;
 
       emit(state.copyWith(progress: false));
-    } catch (e, stackTrace) {
+    } on Exception catch (e, stackTrace) {
       _logger.warning('_onLogouted', e, stackTrace);
 
       if (event.force) {
@@ -123,7 +123,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       if (emit.isDone) return;
 
       emit(state.copyWith(progress: false));
-    } catch (e, stackTrace) {
+    } on Exception catch (e, stackTrace) {
       _logger.warning('_onRegisterStatusChanged', e, stackTrace);
 
       notificationsBloc.add(NotificationsIssued(DefaultErrorNotification(e)));
@@ -150,7 +150,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       if (emit.isDone) return;
 
       emit(state.copyWith(progress: false));
-    } catch (e, stackTrace) {
+    } on Exception catch (e, stackTrace) {
       _logger.warning('_onAccountDeleted', e, stackTrace);
 
       notificationsBloc.add(NotificationsIssued(DefaultErrorNotification(e)));

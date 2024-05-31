@@ -388,7 +388,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       add(const _ResetStateEvent.completeCalls());
 
       if (event.reason != null) {
-        notificationsBloc.add(NotificationsMessaged(RawNotification(event.reason!)));
+        notificationsBloc.add(NotificationsMessaged(ErrorMessageNotification(event.reason!)));
       } else {
         notificationsBloc.add(NotificationsMessaged(AppOfflineNotification()));
       }
@@ -566,7 +566,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           add(_ResetStateEvent.completeCall(element.callId));
         });
       } else {
-        notificationsBloc.add(NotificationsMessaged(RawNotification(signalingDisconnectReason)));
+        notificationsBloc.add(NotificationsMessaged(ErrorMessageNotification(signalingDisconnectReason)));
       }
     }
 
@@ -886,9 +886,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           }
         });
       }
-    } catch (e) {
+    } on Exception catch (e) {
       _logger.warning('__onCallSignalingEventUpdating && jsep error: $e');
-      notificationsBloc.add(NotificationsMessaged(RawNotification(e.toString())));
+      notificationsBloc.add(NotificationsMessaged(DefaultErrorNotification(e)));
 
       _peerConnectionCompleteError(event.callId, e);
       add(_ResetStateEvent.completeCall(event.callId));
@@ -1198,9 +1198,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
 
       await _signalingClient?.execute(transferRequest);
-    } catch (e) {
+    } on Exception catch (e) {
       _logger.warning('_onCallControlEventBlindTransferSubmitted request error: $e');
-      notificationsBloc.add(NotificationsMessaged(RawNotification(e.toString())));
+      notificationsBloc.add(NotificationsMessaged(DefaultErrorNotification(e)));
 
       // Reset the transfer state and continue conversation
       emit(state.copyWithMappedActiveCall(activeCallBlindTransferInitiated.callId, (activeCall) {
@@ -1231,9 +1231,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
 
       await _signalingClient?.execute(transferRequest);
-    } catch (e) {
+    } on Exception catch (e) {
       _logger.warning('_onCallControlEventAttendedTransferSubmitted request error: $e');
-      notificationsBloc.add(NotificationsMessaged(RawNotification(e.toString())));
+      notificationsBloc.add(NotificationsMessaged(DefaultErrorNotification(e)));
 
       // Reset the transfer state and continue conversation
       emit(state.copyWithMappedActiveCall(referorCall.callId, (activeCall) {
@@ -1262,7 +1262,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     if (error != null) {
       _logger.warning('__onCallControlEventStarted error: $error');
-      notificationsBloc.add(NotificationsMessaged(RawNotification(error.toString())));
+      notificationsBloc.add(NotificationsMessaged(ErrorMessageNotification(error.toString())));
       return;
     }
 
@@ -1302,9 +1302,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       emit(state.copyWithMappedActiveCall(callId, (activeCall) {
         return activeCall.copyWith(transfer: null);
       }));
-    } catch (e) {
+    } on Exception catch (e) {
       _logger.warning('_onCallControlEventAttendedRequestDeclined request error: $e');
-      notificationsBloc.add(NotificationsMessaged(RawNotification(e.toString())));
+      notificationsBloc.add(NotificationsMessaged(DefaultErrorNotification(e)));
     }
   }
 
@@ -1414,11 +1414,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _peerConnectionComplete(event.callId, peerConnection);
 
       await callkeep.reportConnectingOutgoingCall(event.callId);
-    } catch (e) {
+    } on Exception catch (e) {
       // Handles exceptions during the outgoing call perform event, sends a notification, stops the ringtone, and completes the peer connection with an error.
       // The specific error "Error setting ICE locally" indicates an issue with ICE (Interactive Connectivity Establishment) negotiation in the WebRTC signaling process.
       _logger.warning('__onCallPerformEventStarted: $e');
-      notificationsBloc.add(NotificationsMessaged(RawNotification(e.toString())));
+      notificationsBloc.add(NotificationsMessaged(DefaultErrorNotification(e)));
 
       _ringtoneStop();
       _peerConnectionCompleteError(event.callId, e);
@@ -1459,9 +1459,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           await peerConnection.setLocalDescription(localDescription);
         }
       });
-    } catch (e) {
+    } on Exception catch (e) {
       _logger.warning('__onCallPerformEventAnswered: $e');
-      notificationsBloc.add(NotificationsMessaged(RawNotification(e.toString())));
+      notificationsBloc.add(NotificationsMessaged(DefaultErrorNotification(e)));
 
       _peerConnectionCompleteError(event.callId, e);
       add(_ResetStateEvent.completeCall(event.callId));
@@ -1548,9 +1548,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
         return activeCall.copyWith(held: event.onHold);
       }));
-    } catch (e) {
+    } on Exception catch (e) {
       _logger.warning('__onCallPerformEventSetHeld: $e');
-      notificationsBloc.add(NotificationsMessaged(RawNotification(e.toString())));
+      notificationsBloc.add(NotificationsMessaged(DefaultErrorNotification(e)));
 
       _peerConnectionCompleteError(event.callId, e);
       add(_ResetStateEvent.completeCall(event.callId));
@@ -1655,9 +1655,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             return _signalingClient?.execute(iceTrickleRequest);
           }
         });
-      } catch (e) {
+      } on Exception catch (e) {
         _logger.warning('__onPeerConnectionEventIceGatheringStateChanged: $e');
-        notificationsBloc.add(NotificationsMessaged(RawNotification(e.toString())));
+        notificationsBloc.add(NotificationsMessaged(DefaultErrorNotification(e)));
 
         _peerConnectionCompleteError(event.callId, e);
         add(_ResetStateEvent.completeCall(event.callId));
@@ -1690,9 +1690,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             await _signalingClient?.execute(updateRequest);
           }
         });
-      } catch (e) {
+      } on Exception catch (e) {
         _logger.warning('__onPeerConnectionEventIceConnectionStateChanged: $e');
-        notificationsBloc.add(NotificationsMessaged(RawNotification(e.toString())));
+        notificationsBloc.add(NotificationsMessaged(DefaultErrorNotification(e)));
 
         _peerConnectionCompleteError(event.callId, e);
         add(_ResetStateEvent.completeCall(event.callId));
@@ -1715,9 +1715,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           return _signalingClient?.execute(iceTrickleRequest);
         }
       });
-    } catch (e) {
+    } on Exception catch (e) {
       _logger.warning('__onPeerConnectionEventIceCandidateIdentified error: $e');
-      notificationsBloc.add(NotificationsMessaged(RawNotification(e.toString())));
+      notificationsBloc.add(NotificationsMessaged(DefaultErrorNotification(e)));
 
       _peerConnectionCompleteError(event.callId, e);
       add(_ResetStateEvent.completeCall(event.callId));
