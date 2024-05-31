@@ -1,6 +1,7 @@
 name: _web_socket_channel
 description: Internal package to create platform-appropriate WS clients..
 version: 1.0.0
+publish_to: none
 
 environment:
   sdk: ^3.3.0

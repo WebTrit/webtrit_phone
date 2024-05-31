@@ -1,6 +1,7 @@
 name: _http_client
 description: Internal package to create platform-appropriate HTTP clients.
 version: 1.0.0
+publish_to: none
 
 environment:
   sdk: ^3.3.0
