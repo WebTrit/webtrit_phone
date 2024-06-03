@@ -28,27 +28,27 @@ class Contacts extends Table with TableInfo {
       'display_name', aliasedName, true,
       type: DriftSqlType.string,
       requiredDuringInsert: false,
-      $customConstraints: '');
+      $customConstraints: 'NULL');
   late final GeneratedColumn<String> firstName = GeneratedColumn<String>(
       'first_name', aliasedName, true,
       type: DriftSqlType.string,
       requiredDuringInsert: false,
-      $customConstraints: '');
+      $customConstraints: 'NULL');
   late final GeneratedColumn<String> lastName = GeneratedColumn<String>(
       'last_name', aliasedName, true,
       type: DriftSqlType.string,
       requiredDuringInsert: false,
-      $customConstraints: '');
+      $customConstraints: 'NULL');
   late final GeneratedColumn<int> insertedAt = GeneratedColumn<int>(
       'inserted_at', aliasedName, true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      $customConstraints: '');
+      $customConstraints: 'NULL');
   late final GeneratedColumn<int> updatedAt = GeneratedColumn<int>(
       'updated_at', aliasedName, true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      $customConstraints: '');
+      $customConstraints: 'NULL');
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -61,9 +61,10 @@ class Contacts extends Table with TableInfo {
         updatedAt
       ];
   @override
-  String get aliasedName => _alias ?? 'contacts';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'contacts';
+  String get actualTableName => $name;
+  static const String $name = 'contacts';
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
@@ -117,19 +118,20 @@ class ContactPhones extends Table with TableInfo {
       'inserted_at', aliasedName, true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      $customConstraints: '');
+      $customConstraints: 'NULL');
   late final GeneratedColumn<int> updatedAt = GeneratedColumn<int>(
       'updated_at', aliasedName, true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      $customConstraints: '');
+      $customConstraints: 'NULL');
   @override
   List<GeneratedColumn> get $columns =>
       [id, number, label, contactId, insertedAt, updatedAt];
   @override
-  String get aliasedName => _alias ?? 'contact_phones';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'contact_phones';
+  String get actualTableName => $name;
+  static const String $name = 'contact_phones';
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
@@ -182,19 +184,20 @@ class ContactEmails extends Table with TableInfo {
       'inserted_at', aliasedName, true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      $customConstraints: '');
+      $customConstraints: 'NULL');
   late final GeneratedColumn<int> updatedAt = GeneratedColumn<int>(
       'updated_at', aliasedName, true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      $customConstraints: '');
+      $customConstraints: 'NULL');
   @override
   List<GeneratedColumn> get $columns =>
       [id, address, label, contactId, insertedAt, updatedAt];
   @override
-  String get aliasedName => _alias ?? 'contact_emails';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'contact_emails';
+  String get actualTableName => $name;
+  static const String $name = 'contact_emails';
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
@@ -253,19 +256,20 @@ class CallLogs extends Table with TableInfo {
       'accepted_at', aliasedName, true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      $customConstraints: '');
+      $customConstraints: 'NULL');
   late final GeneratedColumn<int> hungUpAt = GeneratedColumn<int>(
       'hung_up_at', aliasedName, true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      $customConstraints: '');
+      $customConstraints: 'NULL');
   @override
   List<GeneratedColumn> get $columns =>
       [id, direction, number, video, createdAt, acceptedAt, hungUpAt];
   @override
-  String get aliasedName => _alias ?? 'call_logs';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'call_logs';
+  String get actualTableName => $name;
+  static const String $name = 'call_logs';
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
@@ -307,9 +311,10 @@ class Favorites extends Table with TableInfo {
   @override
   List<GeneratedColumn> get $columns => [id, contactPhoneId, position];
   @override
-  String get aliasedName => _alias ?? 'favorites';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'favorites';
+  String get actualTableName => $name;
+  static const String $name = 'favorites';
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
