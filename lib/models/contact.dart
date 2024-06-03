@@ -15,6 +15,7 @@ class Contact extends Equatable {
     required this.id,
     required this.sourceType,
     required this.sourceId,
+    this.registered,
     this.firstName,
     this.lastName,
     this.aliasName,
@@ -24,6 +25,7 @@ class Contact extends Equatable {
   final ContactId id;
   final ContactSourceType sourceType;
   final String sourceId;
+  final bool? registered;
   final String? firstName;
   final String? lastName;
   final String? aliasName;
@@ -43,6 +45,7 @@ class Contact extends Equatable {
         id,
         sourceType,
         sourceId,
+        registered,
         firstName,
         lastName,
         aliasName,
