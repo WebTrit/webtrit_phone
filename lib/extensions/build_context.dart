@@ -48,6 +48,7 @@ extension BuildContextSnackBar on BuildContext {
     ));
   }
 
+  @Deprecated('Use ErrorDetailsScreen instead')
   Future showErrorBottomSheetDialog(String title, List<ErrorFieldModel> fields) {
     return showModalBottomSheet(
       useSafeArea: true,

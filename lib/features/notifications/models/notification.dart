@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:auto_route/auto_route.dart';
+
 import 'package:webtrit_api/webtrit_api.dart';
+import 'package:webtrit_phone/app/router/app_router.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -54,9 +57,14 @@ class DefaultErrorNotification extends ErrorNotification {
     // If the error is a Webtrit api client RequestFailure, show the error details
     final RequestFailure? requestFailure = error.castToOrNull<RequestFailure>();
     if (requestFailure != null) {
+      final errorFields = requestFailure.errorFields(context);
+      final title = l10n(context);
+
       return SnackBarAction(
         label: context.l10n.default_ErrorDetails,
-        onPressed: () => context.showErrorBottomSheetDialog(l10n(context), requestFailure.errorFields(context)),
+        onPressed: () {
+          context.router.push(ErrorDetailsScreenPageRoute(title: title, fields: errorFields));
+        },
       );
     }
 

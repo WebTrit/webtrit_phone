@@ -9,6 +9,7 @@ import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'deeplinks.dart';
 
@@ -211,10 +212,6 @@ class AppRouter extends _$AppRouter {
                       page: ThemeModeScreenPageRoute.page,
                       path: 'theme-mode',
                     ),
-                    AutoRoute(
-                      page: LogRecordsConsoleScreenPageRoute.page,
-                      path: 'log-records-console',
-                    ),
                   ],
                 ),
               ],
@@ -222,6 +219,14 @@ class AppRouter extends _$AppRouter {
             AutoRoute(
               page: TermsConditionsScreenPageRoute.page,
               path: 'terms-conditions',
+            ),
+            AutoRoute(
+              page: ErrorDetailsScreenPageRoute.page,
+              path: 'error_details',
+            ),
+            AutoRoute(
+              page: LogRecordsConsoleScreenPageRoute.page,
+              path: 'log-records-console',
             ),
             AutoRoute(
               page: UndefinedScreenPageRoute.page,
