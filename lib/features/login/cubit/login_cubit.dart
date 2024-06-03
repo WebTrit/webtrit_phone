@@ -11,6 +11,7 @@ import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/core_version.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/features/notifications/notifications.dart';
 
 import '../login.dart';
 
@@ -31,12 +32,17 @@ WebtritApiClient defaultCreateWebtritApiClient(String coreUrl, String tenantId) 
   );
 }
 
+void defaultOnNotification(Notification notification) {}
+
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit({
     @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
+    this.onNotification = defaultOnNotification,
   }) : super(const LoginState());
 
   final WebtritApiClientFactory createWebtritApiClient;
+
+  final void Function(Notification notification) onNotification;
 
   String? get coreUrlFromEnvironment => EnvironmentConfig.CORE_URL;
 
@@ -45,12 +51,6 @@ class LoginCubit extends Cubit<LoginState> {
   String get defaultTenantId => '';
 
   bool get isDemoModeEnabled => coreUrlFromEnvironment == null;
-
-  void dismissError() {
-    emit(state.copyWith(
-      error: null,
-    ));
-  }
 
   void launchLinkableElement(LinkableElement link) async {
     final url = Uri.parse(link.url);
@@ -79,16 +79,20 @@ class LoginCubit extends Cubit<LoginState> {
           supportedLoginTypes: supportedLoginTypes,
         ));
       } else {
-        emit(state.copyWith(
-          processing: false,
-          error: SupportedLoginTypeMissedException(),
-        ));
+        emit(state.copyWith(processing: false));
+        onNotification.call(const SupportedLoginTypeMissedErrorNotification());
       }
-    } catch (e) {
-      emit(state.copyWith(
-        processing: false,
-        error: e,
+    } on CoreVersionUnsupportedException catch (e) {
+      emit(state.copyWith(processing: false));
+
+      onNotification.call(CoreVersionUnsupportedErrorNotification(
+        e.actual.toString(),
+        e.supportedConstraint.toString(),
       ));
+    } on Exception catch (e) {
+      emit(state.copyWith(processing: false));
+
+      onNotification.call(LoginErrorNotification(e));
     }
   }
 
@@ -179,11 +183,9 @@ class LoginCubit extends Cubit<LoginState> {
         processing: false,
         otpSigninSessionOtpProvisionalWithDateTime: (sessionOtpProvisional, DateTime.now()),
       ));
-    } catch (e) {
-      emit(state.copyWith(
-        processing: false,
-        error: e,
-      ));
+    } on Exception catch (e) {
+      emit(state.copyWith(processing: false));
+      onNotification.call(LoginErrorNotification(e));
     }
   }
 
@@ -213,11 +215,9 @@ class LoginCubit extends Cubit<LoginState> {
         tenantId: sessionToken.tenantId ?? state.tenantId!,
         token: sessionToken.token,
       ));
-    } catch (e) {
-      emit(state.copyWith(
-        processing: false,
-        error: e,
-      ));
+    } on Exception catch (e) {
+      emit(state.copyWith(processing: false));
+      onNotification.call(LoginErrorNotification(e));
     }
   }
 
@@ -271,11 +271,9 @@ class LoginCubit extends Cubit<LoginState> {
         tenantId: sessionToken.tenantId ?? state.tenantId!,
         token: sessionToken.token,
       ));
-    } catch (e) {
-      emit(state.copyWith(
-        processing: false,
-        error: e,
-      ));
+    } on Exception catch (e) {
+      emit(state.copyWith(processing: false));
+      onNotification.call(LoginErrorNotification(e));
     }
   }
 
@@ -321,11 +319,9 @@ class LoginCubit extends Cubit<LoginState> {
       } else {
         throw UnimplementedError();
       }
-    } catch (e) {
-      emit(state.copyWith(
-        processing: false,
-        error: e,
-      ));
+    } on Exception catch (e) {
+      emit(state.copyWith(processing: false));
+      onNotification.call(LoginErrorNotification(e));
     }
   }
 
@@ -356,11 +352,9 @@ class LoginCubit extends Cubit<LoginState> {
         tenantId: sessionToken.tenantId ?? state.tenantId!,
         token: sessionToken.token,
       ));
-    } catch (e) {
-      emit(state.copyWith(
-        processing: false,
-        error: e,
-      ));
+    } on Exception catch (e) {
+      emit(state.copyWith(processing: false));
+      onNotification.call(LoginErrorNotification(e));
     }
   }
 
@@ -435,7 +429,3 @@ Future<SessionResult> _createUserRequest(
     email: email,
   ));
 }
-
-abstract class LoginCubitException implements Exception {}
-
-class SupportedLoginTypeMissedException extends LoginCubitException {}
