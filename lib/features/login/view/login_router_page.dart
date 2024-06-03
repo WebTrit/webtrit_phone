@@ -67,7 +67,7 @@ class LoginRouterPage extends StatelessWidget {
 
     final provider = BlocProvider(
       create: (context) => LoginCubit(
-        onNotification: (n) => notificationsBloc.add(NotificationsMessaged(n)),
+        onNotification: (n) => notificationsBloc.add(NotificationSubmitted(n)),
       ),
       child: declarativeAutoRouter,
     );

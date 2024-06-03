@@ -35,9 +35,9 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
     await navigateBack();
     final error = state.error;
     if (error is RequestFailure && error.statusCode == 401) {
-      nfnBloc.add(const NotificationsMessaged(InvalidAutoProvisioningToken()));
+      nfnBloc.add(const NotificationSubmitted(InvalidAutoProvisioningToken()));
     } else {
-      nfnBloc.add(NotificationsMessaged(DefaultErrorNotification(state.error)));
+      nfnBloc.add(NotificationSubmitted(DefaultErrorNotification(state.error)));
     }
   }
 
@@ -82,7 +82,7 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
       // Then will be redirected by router reevaluation and redirect inside [onAutoprovisionScreenPageRouteGuardNavigation]
     }
 
-    nfnBloc.add(const NotificationsMessaged(SuccesfulUsedAutoProvisioningToken()));
+    nfnBloc.add(const NotificationSubmitted(SuccesfulUsedAutoProvisioningToken()));
   }
 
   @override

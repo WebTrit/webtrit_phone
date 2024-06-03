@@ -50,7 +50,7 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
     } on Exception catch (e, stackTrace) {
       _logger.warning('_onStarted', e, stackTrace);
 
-      notificationsBloc.add(NotificationsIssued(DefaultErrorNotification(e)));
+      notificationsBloc.add(NotificationSubmitted(DefaultErrorNotification(e)));
 
       if (emit.isDone) return;
 

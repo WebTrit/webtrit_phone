@@ -5,13 +5,8 @@ abstract class NotificationsEvent {
 }
 
 @Freezed(copyWith: false)
-class NotificationsMessaged with _$NotificationsMessaged implements NotificationsEvent {
-  const factory NotificationsMessaged(Notification notification) = _NotificationsMessaged;
-}
-
-@Freezed(copyWith: false)
-class NotificationsIssued with _$NotificationsIssued implements NotificationsEvent {
-  const factory NotificationsIssued(Notification notification) = _NotificationsIssued;
+class NotificationSubmitted with _$NotificationSubmitted implements NotificationsEvent {
+  const factory NotificationSubmitted(Notification notification) = _NotificationSubmitted;
 }
 
 @Freezed(copyWith: false)
