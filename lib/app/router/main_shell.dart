@@ -168,6 +168,7 @@ class _MainShellState extends State<MainShell> {
             create: (context) {
               final appBloc = context.read<AppBloc>();
               final appCertificates = AppCertificates();
+              final notificationBloc = context.read<NotificationsBloc>();
 
               return CallBloc(
                 coreUrl: appBloc.state.coreUrl!,
@@ -175,7 +176,7 @@ class _MainShellState extends State<MainShell> {
                 token: appBloc.state.token!,
                 trustedCertificates: appCertificates.trustedCertificates,
                 recentsRepository: context.read<RecentsRepository>(),
-                notificationsBloc: context.read<NotificationsBloc>(),
+                onNotification: (n) => notificationBloc.add(NotificationsIssued(n)),
                 callkeep: callkeep,
                 pendingCallHandler: appBloc.pendingCallHandler,
               )..add(const CallStarted());
