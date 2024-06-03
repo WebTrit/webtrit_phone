@@ -449,6 +449,12 @@ abstract class AppLocalizations {
   /// **'Error path'**
   String get default_ErrorPath;
 
+  /// No description provided for @default_ErrorTransactionId.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction ID'**
+  String get default_ErrorTransactionId;
+
   /// No description provided for @default_FormatExceptionError.
   ///
   /// In en, this message translates to:

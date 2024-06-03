@@ -11,6 +11,7 @@ export 'object.dart';
 export 'platform_deep_link.dart';
 export 'request_failure.dart';
 export 'soundpool.dart';
+export 'signaling_exception.dart';
 export 'string.dart';
 export 'theme_mode.dart';
 export 'user_info.dart';
