@@ -3,8 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
-
-import '../widgets/widgets.dart';
+import 'package:webtrit_phone/notifications/notifications.dart';
 
 extension RequestFailureExension on RequestFailure {
   List<ErrorFieldModel> errorFields(BuildContext context) {

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 
-import 'package:webtrit_phone/widgets/widgets.dart';
-
+import '../models/models.dart';
 import 'error_details_screen.dart';
 
 @RoutePage()

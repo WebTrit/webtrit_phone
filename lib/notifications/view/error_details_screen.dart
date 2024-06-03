@@ -7,6 +7,8 @@ import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+import '../models/models.dart';
+
 class ErrorDetailsScreen extends StatelessWidget {
   const ErrorDetailsScreen({required this.title, required this.fields, super.key});
 
