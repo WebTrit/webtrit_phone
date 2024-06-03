@@ -5,8 +5,8 @@ import 'package:logging/logging.dart';
 import 'package:pub_semver/pub_semver.dart';
 
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/notifications/notifications.dart';
 
 part 'about_bloc.freezed.dart';
 

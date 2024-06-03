@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:webtrit_api/webtrit_api.dart';
-import 'package:webtrit_phone/features/notifications/notifications.dart';
+import 'package:webtrit_phone/notifications/notifications.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
 final class LoginErrorNotification extends DefaultErrorNotification {

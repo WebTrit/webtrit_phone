@@ -11,7 +11,7 @@ import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/core_version.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
-import 'package:webtrit_phone/features/notifications/notifications.dart';
+import 'package:webtrit_phone/notifications/notifications.dart';
 
 import '../login.dart';
 

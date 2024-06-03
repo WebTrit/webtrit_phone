@@ -19,7 +19,7 @@ import 'package:ssl_certificates/ssl_certificates.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/features/notifications/notifications.dart';
+import 'package:webtrit_phone/notifications/notifications.dart';
 import 'package:webtrit_phone/models/recent.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/data/app_sound.dart';

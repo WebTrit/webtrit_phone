@@ -4,7 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/notifications/notifications.dart';
 
 @RoutePage()
 class AppShell extends StatelessWidget {
