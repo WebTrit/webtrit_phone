@@ -38,7 +38,7 @@ Future<void> main(List<String> args) async {
     return await schemaDumpProcess.exitCode == ExitCode.success.code;
   });
 
-  await _executeStep(2, 3, 'Dumping schema of reference application database', () async {
+  await _executeStep(3, 3, 'Generate migration schemas of dumped schemas', () async {
     final schemaGenerateProcess = await manager.spawn('dart', [
       'run',
       'drift_dev',
