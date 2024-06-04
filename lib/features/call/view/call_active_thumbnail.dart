@@ -37,7 +37,7 @@ class CallActiveThumbnail extends StatelessWidget {
           alignment: AlignmentDirectional.center,
           children: [
             LeadingAvatar(
-              maxRadius: 24,
+              radius: 24,
               username: activeCall.displayName,
               placeholderIcon: Icons.phone_in_talk_outlined,
             ),
