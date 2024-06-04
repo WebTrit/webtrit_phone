@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 class ExternalContact extends Equatable {
   const ExternalContact({
     required this.id,
+    this.registered,
     this.firstName,
     this.lastName,
     this.aliasName,
@@ -13,6 +14,7 @@ class ExternalContact extends Equatable {
   });
 
   final String id;
+  final bool? registered;
   final String? firstName;
   final String? lastName;
   final String? aliasName;
@@ -24,6 +26,7 @@ class ExternalContact extends Equatable {
   @override
   List<Object?> get props => [
         id,
+        registered,
         firstName,
         lastName,
         aliasName,
