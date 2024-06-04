@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
@@ -22,14 +21,9 @@ class LoginSignupRequestScreen extends StatelessWidget {
         final signupRequestPreDescriptionText = state.mode != LoginMode.demoCore
             ? context.l10n.login_Text_signupRequestPreDescription
             : context.l10n.login_Text_signupRequestPreDescriptionDemo;
-        String signupRequestPostDescriptionText = state.mode != LoginMode.demoCore
+        final signupRequestPostDescriptionText = state.mode != LoginMode.demoCore
             ? context.l10n.login_Text_signupRequestPostDescription
             : context.l10n.login_Text_signupRequestPostDescriptionDemo;
-
-        const postTextEnvOverride = EnvironmentConfig.SIGNUP_POST_DESCRIPTION_TEXT;
-        if (postTextEnvOverride.isNotEmpty) {
-          signupRequestPostDescriptionText = postTextEnvOverride;
-        }
 
         return Container(
           padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
