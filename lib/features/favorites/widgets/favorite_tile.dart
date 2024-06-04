@@ -48,6 +48,8 @@ class FavoriteTile extends StatelessWidget {
         contentPadding: const EdgeInsets.only(left: 16.0),
         leading: LeadingAvatar(
           username: favorite.name,
+          thumbnail: favorite.contact.thumbnail,
+          registered: favorite.contact.registered,
         ),
         trailing: IconButton(
           splashRadius: 24,
