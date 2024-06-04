@@ -150,6 +150,8 @@ class ContactsTable extends Table {
 
   TextColumn get aliasName => text().nullable()();
 
+  BoolColumn get registered => boolean().nullable()();
+
   DateTimeColumn get insertedAt => dateTime().nullable()();
 
   DateTimeColumn get updatedAt => dateTime().nullable()();

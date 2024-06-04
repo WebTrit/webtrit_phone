@@ -50,6 +50,15 @@ class $ContactsTableTable extends ContactsTable
   late final GeneratedColumn<String> aliasName = GeneratedColumn<String>(
       'alias_name', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _registeredMeta =
+      const VerificationMeta('registered');
+  @override
+  late final GeneratedColumn<bool> registered = GeneratedColumn<bool>(
+      'registered', aliasedName, true,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("registered" IN (0, 1))'));
   static const VerificationMeta _insertedAtMeta =
       const VerificationMeta('insertedAt');
   @override
@@ -70,6 +79,7 @@ class $ContactsTableTable extends ContactsTable
         firstName,
         lastName,
         aliasName,
+        registered,
         insertedAt,
         updatedAt
       ];
@@ -105,6 +115,12 @@ class $ContactsTableTable extends ContactsTable
       context.handle(_aliasNameMeta,
           aliasName.isAcceptableOrUnknown(data['alias_name']!, _aliasNameMeta));
     }
+    if (data.containsKey('registered')) {
+      context.handle(
+          _registeredMeta,
+          registered.isAcceptableOrUnknown(
+              data['registered']!, _registeredMeta));
+    }
     if (data.containsKey('inserted_at')) {
       context.handle(
           _insertedAtMeta,
@@ -137,6 +153,8 @@ class $ContactsTableTable extends ContactsTable
           .read(DriftSqlType.string, data['${effectivePrefix}last_name']),
       aliasName: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}alias_name']),
+      registered: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}registered']),
       insertedAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}inserted_at']),
       updatedAt: attachedDatabase.typeMapping
@@ -161,6 +179,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
   final String? firstName;
   final String? lastName;
   final String? aliasName;
+  final bool? registered;
   final DateTime? insertedAt;
   final DateTime? updatedAt;
   const ContactData(
@@ -170,6 +189,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       this.firstName,
       this.lastName,
       this.aliasName,
+      this.registered,
       this.insertedAt,
       this.updatedAt});
   @override
@@ -189,6 +209,9 @@ class ContactData extends DataClass implements Insertable<ContactData> {
     }
     if (!nullToAbsent || aliasName != null) {
       map['alias_name'] = Variable<String>(aliasName);
+    }
+    if (!nullToAbsent || registered != null) {
+      map['registered'] = Variable<bool>(registered);
     }
     if (!nullToAbsent || insertedAt != null) {
       map['inserted_at'] = Variable<DateTime>(insertedAt);
@@ -213,6 +236,9 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       aliasName: aliasName == null && nullToAbsent
           ? const Value.absent()
           : Value(aliasName),
+      registered: registered == null && nullToAbsent
+          ? const Value.absent()
+          : Value(registered),
       insertedAt: insertedAt == null && nullToAbsent
           ? const Value.absent()
           : Value(insertedAt),
@@ -233,6 +259,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       firstName: serializer.fromJson<String?>(json['firstName']),
       lastName: serializer.fromJson<String?>(json['lastName']),
       aliasName: serializer.fromJson<String?>(json['aliasName']),
+      registered: serializer.fromJson<bool?>(json['registered']),
       insertedAt: serializer.fromJson<DateTime?>(json['insertedAt']),
       updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
     );
@@ -248,6 +275,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       'firstName': serializer.toJson<String?>(firstName),
       'lastName': serializer.toJson<String?>(lastName),
       'aliasName': serializer.toJson<String?>(aliasName),
+      'registered': serializer.toJson<bool?>(registered),
       'insertedAt': serializer.toJson<DateTime?>(insertedAt),
       'updatedAt': serializer.toJson<DateTime?>(updatedAt),
     };
@@ -260,6 +288,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
           Value<String?> firstName = const Value.absent(),
           Value<String?> lastName = const Value.absent(),
           Value<String?> aliasName = const Value.absent(),
+          Value<bool?> registered = const Value.absent(),
           Value<DateTime?> insertedAt = const Value.absent(),
           Value<DateTime?> updatedAt = const Value.absent()}) =>
       ContactData(
@@ -269,6 +298,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
         firstName: firstName.present ? firstName.value : this.firstName,
         lastName: lastName.present ? lastName.value : this.lastName,
         aliasName: aliasName.present ? aliasName.value : this.aliasName,
+        registered: registered.present ? registered.value : this.registered,
         insertedAt: insertedAt.present ? insertedAt.value : this.insertedAt,
         updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
       );
@@ -281,6 +311,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
           ..write('firstName: $firstName, ')
           ..write('lastName: $lastName, ')
           ..write('aliasName: $aliasName, ')
+          ..write('registered: $registered, ')
           ..write('insertedAt: $insertedAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
@@ -289,7 +320,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
 
   @override
   int get hashCode => Object.hash(id, sourceType, sourceId, firstName, lastName,
-      aliasName, insertedAt, updatedAt);
+      aliasName, registered, insertedAt, updatedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -300,6 +331,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
           other.firstName == this.firstName &&
           other.lastName == this.lastName &&
           other.aliasName == this.aliasName &&
+          other.registered == this.registered &&
           other.insertedAt == this.insertedAt &&
           other.updatedAt == this.updatedAt);
 }
@@ -311,6 +343,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
   final Value<String?> firstName;
   final Value<String?> lastName;
   final Value<String?> aliasName;
+  final Value<bool?> registered;
   final Value<DateTime?> insertedAt;
   final Value<DateTime?> updatedAt;
   const ContactDataCompanion({
@@ -320,6 +353,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
     this.firstName = const Value.absent(),
     this.lastName = const Value.absent(),
     this.aliasName = const Value.absent(),
+    this.registered = const Value.absent(),
     this.insertedAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   });
@@ -330,6 +364,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
     this.firstName = const Value.absent(),
     this.lastName = const Value.absent(),
     this.aliasName = const Value.absent(),
+    this.registered = const Value.absent(),
     this.insertedAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   })  : sourceType = Value(sourceType),
@@ -341,6 +376,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
     Expression<String>? firstName,
     Expression<String>? lastName,
     Expression<String>? aliasName,
+    Expression<bool>? registered,
     Expression<DateTime>? insertedAt,
     Expression<DateTime>? updatedAt,
   }) {
@@ -351,6 +387,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
       if (firstName != null) 'first_name': firstName,
       if (lastName != null) 'last_name': lastName,
       if (aliasName != null) 'alias_name': aliasName,
+      if (registered != null) 'registered': registered,
       if (insertedAt != null) 'inserted_at': insertedAt,
       if (updatedAt != null) 'updated_at': updatedAt,
     });
@@ -363,6 +400,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
       Value<String?>? firstName,
       Value<String?>? lastName,
       Value<String?>? aliasName,
+      Value<bool?>? registered,
       Value<DateTime?>? insertedAt,
       Value<DateTime?>? updatedAt}) {
     return ContactDataCompanion(
@@ -372,6 +410,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
       aliasName: aliasName ?? this.aliasName,
+      registered: registered ?? this.registered,
       insertedAt: insertedAt ?? this.insertedAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -399,6 +438,9 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
     if (aliasName.present) {
       map['alias_name'] = Variable<String>(aliasName.value);
     }
+    if (registered.present) {
+      map['registered'] = Variable<bool>(registered.value);
+    }
     if (insertedAt.present) {
       map['inserted_at'] = Variable<DateTime>(insertedAt.value);
     }
@@ -417,6 +459,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
           ..write('firstName: $firstName, ')
           ..write('lastName: $lastName, ')
           ..write('aliasName: $aliasName, ')
+          ..write('registered: $registered, ')
           ..write('insertedAt: $insertedAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
@@ -1743,6 +1786,7 @@ typedef $$ContactsTableTableInsertCompanionBuilder = ContactDataCompanion
   Value<String?> firstName,
   Value<String?> lastName,
   Value<String?> aliasName,
+  Value<bool?> registered,
   Value<DateTime?> insertedAt,
   Value<DateTime?> updatedAt,
 });
@@ -1754,6 +1798,7 @@ typedef $$ContactsTableTableUpdateCompanionBuilder = ContactDataCompanion
   Value<String?> firstName,
   Value<String?> lastName,
   Value<String?> aliasName,
+  Value<bool?> registered,
   Value<DateTime?> insertedAt,
   Value<DateTime?> updatedAt,
 });
@@ -1784,6 +1829,7 @@ class $$ContactsTableTableTableManager extends RootTableManager<
             Value<String?> firstName = const Value.absent(),
             Value<String?> lastName = const Value.absent(),
             Value<String?> aliasName = const Value.absent(),
+            Value<bool?> registered = const Value.absent(),
             Value<DateTime?> insertedAt = const Value.absent(),
             Value<DateTime?> updatedAt = const Value.absent(),
           }) =>
@@ -1794,6 +1840,7 @@ class $$ContactsTableTableTableManager extends RootTableManager<
             firstName: firstName,
             lastName: lastName,
             aliasName: aliasName,
+            registered: registered,
             insertedAt: insertedAt,
             updatedAt: updatedAt,
           ),
@@ -1804,6 +1851,7 @@ class $$ContactsTableTableTableManager extends RootTableManager<
             Value<String?> firstName = const Value.absent(),
             Value<String?> lastName = const Value.absent(),
             Value<String?> aliasName = const Value.absent(),
+            Value<bool?> registered = const Value.absent(),
             Value<DateTime?> insertedAt = const Value.absent(),
             Value<DateTime?> updatedAt = const Value.absent(),
           }) =>
@@ -1814,6 +1862,7 @@ class $$ContactsTableTableTableManager extends RootTableManager<
             firstName: firstName,
             lastName: lastName,
             aliasName: aliasName,
+            registered: registered,
             insertedAt: insertedAt,
             updatedAt: updatedAt,
           ),
@@ -1865,6 +1914,11 @@ class $$ContactsTableTableFilterComposer
 
   ColumnFilters<String> get aliasName => $state.composableBuilder(
       column: $state.table.aliasName,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get registered => $state.composableBuilder(
+      column: $state.table.registered,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -1943,6 +1997,11 @@ class $$ContactsTableTableOrderingComposer
 
   ColumnOrderings<String> get aliasName => $state.composableBuilder(
       column: $state.table.aliasName,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get registered => $state.composableBuilder(
+      column: $state.table.registered,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 

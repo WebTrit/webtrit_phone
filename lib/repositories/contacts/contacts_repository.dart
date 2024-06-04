@@ -57,6 +57,7 @@ class ContactsRepository {
       id: data.id,
       sourceType: data.sourceType.toModel(),
       sourceId: data.sourceId,
+      registered: data.registered,
       firstName: data.firstName,
       lastName: data.lastName,
       aliasName: data.aliasName,

@@ -38,6 +38,8 @@ class ContactScreen extends StatelessWidget {
                       padding: kAllPadding16,
                       child: LeadingAvatar(
                         username: contact.name,
+                        thumbnail: contact.thumbnail,
+                        registered: contact.registered,
                         radius: 50,
                       ),
                     ),

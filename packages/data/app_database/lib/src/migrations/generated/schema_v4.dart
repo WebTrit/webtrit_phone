@@ -24,11 +24,6 @@ class Contacts extends Table with TableInfo {
       type: DriftSqlType.string,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
-  late final GeneratedColumn<String> displayName = GeneratedColumn<String>(
-      'display_name', aliasedName, true,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      $customConstraints: 'NULL');
   late final GeneratedColumn<String> firstName = GeneratedColumn<String>(
       'first_name', aliasedName, true,
       type: DriftSqlType.string,
@@ -39,6 +34,16 @@ class Contacts extends Table with TableInfo {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: 'NULL');
+  late final GeneratedColumn<String> aliasName = GeneratedColumn<String>(
+      'alias_name', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
+  late final GeneratedColumn<int> registered = GeneratedColumn<int>(
+      'registered', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL CHECK (registered IN (0, 1))');
   late final GeneratedColumn<int> insertedAt = GeneratedColumn<int>(
       'inserted_at', aliasedName, true,
       type: DriftSqlType.int,
@@ -54,9 +59,10 @@ class Contacts extends Table with TableInfo {
         id,
         sourceType,
         sourceId,
-        displayName,
         firstName,
         lastName,
+        aliasName,
+        registered,
         insertedAt,
         updatedAt
       ];
@@ -331,8 +337,8 @@ class Favorites extends Table with TableInfo {
   bool get dontWriteConstraints => true;
 }
 
-class DatabaseAtV2 extends GeneratedDatabase {
-  DatabaseAtV2(QueryExecutor e) : super(e);
+class DatabaseAtV4 extends GeneratedDatabase {
+  DatabaseAtV4(QueryExecutor e) : super(e);
   late final Contacts contacts = Contacts(this);
   late final ContactPhones contactPhones = ContactPhones(this);
   late final ContactEmails contactEmails = ContactEmails(this);
@@ -409,5 +415,5 @@ class DatabaseAtV2 extends GeneratedDatabase {
         ],
       );
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 4;
 }
