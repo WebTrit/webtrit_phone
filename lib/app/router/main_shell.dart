@@ -181,6 +181,13 @@ class _MainShellState extends State<MainShell> {
               )..add(const CallStarted());
             },
           ),
+          BlocProvider<ChatsBloc>(
+            create: (context) {
+              final chatsWSClient = ChatsClientMockImpl();
+
+              return ChatsBloc(client: chatsWSClient)..add(const Connect());
+            },
+          ),
         ],
         child: Builder(
           builder: (context) => const CallShell(

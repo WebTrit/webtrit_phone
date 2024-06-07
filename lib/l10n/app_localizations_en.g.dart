@@ -435,6 +435,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get main_BottomNavigationBarItemLabel_keypad => 'Keypad';
 
   @override
+  String get main_BottomNavigationBarItemLabel_chats => 'Chats';
+
+  @override
   String get main_BottomNavigationBarItemLabel_recents => 'Recents';
 
   @override
@@ -675,4 +678,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get validationBlankError => 'Please enter a value';
+
+  @override
+  String get chats_RouterPage_failure => 'Failed connecting to chat service';
+
+  @override
+  String get chats_Conversation_failure => 'Failed create conversation';
+
+  @override
+  String get chats_ActionBtn_retry => 'Retry';
 }
