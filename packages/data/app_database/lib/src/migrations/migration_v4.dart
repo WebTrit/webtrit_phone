@@ -3,13 +3,27 @@ import 'package:drift/drift.dart';
 import '../app_database.dart';
 import '../migration.dart';
 
+import 'generated/schema_v4.dart' as v4;
+
 class MigrationV4 extends Migration {
   const MigrationV4();
 
   @override
   Future<void> execute(AppDatabase db, Migrator m) async {
-    await m.createTable(db.chatsTable);
-    await m.createTable(db.chatMembersTable);
-    await m.createTable(db.chatMessagesTable);
+    final chatsTable = v4.Chats(db);
+    final chatMembersTable = v4.ChatMembers(db);
+    final chatMessagesTable = v4.ChatMessages(db);
+
+    final newSchemaEntities = <DatabaseSchemaEntity>[
+      chatsTable,
+      chatMembersTable,
+      chatMessagesTable,
+      ...db.generateTableCompanionEntities(chatsTable),
+      ...db.generateTableCompanionEntities(chatMembersTable),
+      ...db.generateTableCompanionEntities(chatMessagesTable),
+    ];
+    for (final entity in newSchemaEntities) {
+      await m.create(entity);
+    }
   }
 }

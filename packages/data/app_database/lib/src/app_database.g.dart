@@ -1725,6 +1725,18 @@ class $ChatsTableTable extends ChatsTable
   late final GeneratedColumn<DateTime> deletedAtRemote =
       GeneratedColumn<DateTime>('deleted_at_remote', aliasedName, true,
           type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _insertedAtMeta =
+      const VerificationMeta('insertedAt');
+  @override
+  late final GeneratedColumn<DateTime> insertedAt = GeneratedColumn<DateTime>(
+      'inserted_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -1733,7 +1745,9 @@ class $ChatsTableTable extends ChatsTable
         creatorId,
         createdAtRemote,
         updatedAtRemote,
-        deletedAtRemote
+        deletedAtRemote,
+        insertedAt,
+        updatedAt
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1781,6 +1795,16 @@ class $ChatsTableTable extends ChatsTable
           deletedAtRemote.isAcceptableOrUnknown(
               data['deleted_at_remote']!, _deletedAtRemoteMeta));
     }
+    if (data.containsKey('inserted_at')) {
+      context.handle(
+          _insertedAtMeta,
+          insertedAt.isAcceptableOrUnknown(
+              data['inserted_at']!, _insertedAtMeta));
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    }
     return context;
   }
 
@@ -1804,6 +1828,10 @@ class $ChatsTableTable extends ChatsTable
           DriftSqlType.dateTime, data['${effectivePrefix}updated_at_remote'])!,
       deletedAtRemote: attachedDatabase.typeMapping.read(
           DriftSqlType.dateTime, data['${effectivePrefix}deleted_at_remote']),
+      insertedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}inserted_at']),
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at']),
     );
   }
 
@@ -1824,6 +1852,8 @@ class ChatData extends DataClass implements Insertable<ChatData> {
   final DateTime createdAtRemote;
   final DateTime updatedAtRemote;
   final DateTime? deletedAtRemote;
+  final DateTime? insertedAt;
+  final DateTime? updatedAt;
   const ChatData(
       {required this.id,
       required this.type,
@@ -1831,7 +1861,9 @@ class ChatData extends DataClass implements Insertable<ChatData> {
       required this.creatorId,
       required this.createdAtRemote,
       required this.updatedAtRemote,
-      this.deletedAtRemote});
+      this.deletedAtRemote,
+      this.insertedAt,
+      this.updatedAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1849,6 +1881,12 @@ class ChatData extends DataClass implements Insertable<ChatData> {
     if (!nullToAbsent || deletedAtRemote != null) {
       map['deleted_at_remote'] = Variable<DateTime>(deletedAtRemote);
     }
+    if (!nullToAbsent || insertedAt != null) {
+      map['inserted_at'] = Variable<DateTime>(insertedAt);
+    }
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<DateTime>(updatedAt);
+    }
     return map;
   }
 
@@ -1863,6 +1901,12 @@ class ChatData extends DataClass implements Insertable<ChatData> {
       deletedAtRemote: deletedAtRemote == null && nullToAbsent
           ? const Value.absent()
           : Value(deletedAtRemote),
+      insertedAt: insertedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(insertedAt),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
     );
   }
 
@@ -1878,6 +1922,8 @@ class ChatData extends DataClass implements Insertable<ChatData> {
       createdAtRemote: serializer.fromJson<DateTime>(json['createdAtRemote']),
       updatedAtRemote: serializer.fromJson<DateTime>(json['updatedAtRemote']),
       deletedAtRemote: serializer.fromJson<DateTime?>(json['deletedAtRemote']),
+      insertedAt: serializer.fromJson<DateTime?>(json['insertedAt']),
+      updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
     );
   }
   @override
@@ -1892,6 +1938,8 @@ class ChatData extends DataClass implements Insertable<ChatData> {
       'createdAtRemote': serializer.toJson<DateTime>(createdAtRemote),
       'updatedAtRemote': serializer.toJson<DateTime>(updatedAtRemote),
       'deletedAtRemote': serializer.toJson<DateTime?>(deletedAtRemote),
+      'insertedAt': serializer.toJson<DateTime?>(insertedAt),
+      'updatedAt': serializer.toJson<DateTime?>(updatedAt),
     };
   }
 
@@ -1902,7 +1950,9 @@ class ChatData extends DataClass implements Insertable<ChatData> {
           String? creatorId,
           DateTime? createdAtRemote,
           DateTime? updatedAtRemote,
-          Value<DateTime?> deletedAtRemote = const Value.absent()}) =>
+          Value<DateTime?> deletedAtRemote = const Value.absent(),
+          Value<DateTime?> insertedAt = const Value.absent(),
+          Value<DateTime?> updatedAt = const Value.absent()}) =>
       ChatData(
         id: id ?? this.id,
         type: type ?? this.type,
@@ -1913,6 +1963,8 @@ class ChatData extends DataClass implements Insertable<ChatData> {
         deletedAtRemote: deletedAtRemote.present
             ? deletedAtRemote.value
             : this.deletedAtRemote,
+        insertedAt: insertedAt.present ? insertedAt.value : this.insertedAt,
+        updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
       );
   @override
   String toString() {
@@ -1923,14 +1975,16 @@ class ChatData extends DataClass implements Insertable<ChatData> {
           ..write('creatorId: $creatorId, ')
           ..write('createdAtRemote: $createdAtRemote, ')
           ..write('updatedAtRemote: $updatedAtRemote, ')
-          ..write('deletedAtRemote: $deletedAtRemote')
+          ..write('deletedAtRemote: $deletedAtRemote, ')
+          ..write('insertedAt: $insertedAt, ')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(id, type, name, creatorId, createdAtRemote,
-      updatedAtRemote, deletedAtRemote);
+      updatedAtRemote, deletedAtRemote, insertedAt, updatedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1941,7 +1995,9 @@ class ChatData extends DataClass implements Insertable<ChatData> {
           other.creatorId == this.creatorId &&
           other.createdAtRemote == this.createdAtRemote &&
           other.updatedAtRemote == this.updatedAtRemote &&
-          other.deletedAtRemote == this.deletedAtRemote);
+          other.deletedAtRemote == this.deletedAtRemote &&
+          other.insertedAt == this.insertedAt &&
+          other.updatedAt == this.updatedAt);
 }
 
 class ChatDataCompanion extends UpdateCompanion<ChatData> {
@@ -1952,6 +2008,8 @@ class ChatDataCompanion extends UpdateCompanion<ChatData> {
   final Value<DateTime> createdAtRemote;
   final Value<DateTime> updatedAtRemote;
   final Value<DateTime?> deletedAtRemote;
+  final Value<DateTime?> insertedAt;
+  final Value<DateTime?> updatedAt;
   const ChatDataCompanion({
     this.id = const Value.absent(),
     this.type = const Value.absent(),
@@ -1960,6 +2018,8 @@ class ChatDataCompanion extends UpdateCompanion<ChatData> {
     this.createdAtRemote = const Value.absent(),
     this.updatedAtRemote = const Value.absent(),
     this.deletedAtRemote = const Value.absent(),
+    this.insertedAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
   });
   ChatDataCompanion.insert({
     this.id = const Value.absent(),
@@ -1969,6 +2029,8 @@ class ChatDataCompanion extends UpdateCompanion<ChatData> {
     required DateTime createdAtRemote,
     required DateTime updatedAtRemote,
     this.deletedAtRemote = const Value.absent(),
+    this.insertedAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
   })  : type = Value(type),
         creatorId = Value(creatorId),
         createdAtRemote = Value(createdAtRemote),
@@ -1981,6 +2043,8 @@ class ChatDataCompanion extends UpdateCompanion<ChatData> {
     Expression<DateTime>? createdAtRemote,
     Expression<DateTime>? updatedAtRemote,
     Expression<DateTime>? deletedAtRemote,
+    Expression<DateTime>? insertedAt,
+    Expression<DateTime>? updatedAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1990,6 +2054,8 @@ class ChatDataCompanion extends UpdateCompanion<ChatData> {
       if (createdAtRemote != null) 'created_at_remote': createdAtRemote,
       if (updatedAtRemote != null) 'updated_at_remote': updatedAtRemote,
       if (deletedAtRemote != null) 'deleted_at_remote': deletedAtRemote,
+      if (insertedAt != null) 'inserted_at': insertedAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
     });
   }
 
@@ -2000,7 +2066,9 @@ class ChatDataCompanion extends UpdateCompanion<ChatData> {
       Value<String>? creatorId,
       Value<DateTime>? createdAtRemote,
       Value<DateTime>? updatedAtRemote,
-      Value<DateTime?>? deletedAtRemote}) {
+      Value<DateTime?>? deletedAtRemote,
+      Value<DateTime?>? insertedAt,
+      Value<DateTime?>? updatedAt}) {
     return ChatDataCompanion(
       id: id ?? this.id,
       type: type ?? this.type,
@@ -2009,6 +2077,8 @@ class ChatDataCompanion extends UpdateCompanion<ChatData> {
       createdAtRemote: createdAtRemote ?? this.createdAtRemote,
       updatedAtRemote: updatedAtRemote ?? this.updatedAtRemote,
       deletedAtRemote: deletedAtRemote ?? this.deletedAtRemote,
+      insertedAt: insertedAt ?? this.insertedAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
@@ -2037,6 +2107,12 @@ class ChatDataCompanion extends UpdateCompanion<ChatData> {
     if (deletedAtRemote.present) {
       map['deleted_at_remote'] = Variable<DateTime>(deletedAtRemote.value);
     }
+    if (insertedAt.present) {
+      map['inserted_at'] = Variable<DateTime>(insertedAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
     return map;
   }
 
@@ -2049,7 +2125,9 @@ class ChatDataCompanion extends UpdateCompanion<ChatData> {
           ..write('creatorId: $creatorId, ')
           ..write('createdAtRemote: $createdAtRemote, ')
           ..write('updatedAtRemote: $updatedAtRemote, ')
-          ..write('deletedAtRemote: $deletedAtRemote')
+          ..write('deletedAtRemote: $deletedAtRemote, ')
+          ..write('insertedAt: $insertedAt, ')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
@@ -2091,9 +2169,21 @@ class $ChatMembersTableTable extends ChatMembersTable
   late final GeneratedColumn<DateTime> blockedAt = GeneratedColumn<DateTime>(
       'blocked_at', aliasedName, true,
       type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _insertedAtMeta =
+      const VerificationMeta('insertedAt');
+  @override
+  late final GeneratedColumn<DateTime> insertedAt = GeneratedColumn<DateTime>(
+      'inserted_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns =>
-      [chatId, userId, joinedAt, leftAt, blockedAt];
+      [chatId, userId, joinedAt, leftAt, blockedAt, insertedAt, updatedAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2130,6 +2220,16 @@ class $ChatMembersTableTable extends ChatMembersTable
       context.handle(_blockedAtMeta,
           blockedAt.isAcceptableOrUnknown(data['blocked_at']!, _blockedAtMeta));
     }
+    if (data.containsKey('inserted_at')) {
+      context.handle(
+          _insertedAtMeta,
+          insertedAt.isAcceptableOrUnknown(
+              data['inserted_at']!, _insertedAtMeta));
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    }
     return context;
   }
 
@@ -2149,6 +2249,10 @@ class $ChatMembersTableTable extends ChatMembersTable
           .read(DriftSqlType.dateTime, data['${effectivePrefix}left_at']),
       blockedAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}blocked_at']),
+      insertedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}inserted_at']),
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at']),
     );
   }
 
@@ -2164,12 +2268,16 @@ class ChatMemberData extends DataClass implements Insertable<ChatMemberData> {
   final DateTime joinedAt;
   final DateTime? leftAt;
   final DateTime? blockedAt;
+  final DateTime? insertedAt;
+  final DateTime? updatedAt;
   const ChatMemberData(
       {required this.chatId,
       required this.userId,
       required this.joinedAt,
       this.leftAt,
-      this.blockedAt});
+      this.blockedAt,
+      this.insertedAt,
+      this.updatedAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2181,6 +2289,12 @@ class ChatMemberData extends DataClass implements Insertable<ChatMemberData> {
     }
     if (!nullToAbsent || blockedAt != null) {
       map['blocked_at'] = Variable<DateTime>(blockedAt);
+    }
+    if (!nullToAbsent || insertedAt != null) {
+      map['inserted_at'] = Variable<DateTime>(insertedAt);
+    }
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<DateTime>(updatedAt);
     }
     return map;
   }
@@ -2195,6 +2309,12 @@ class ChatMemberData extends DataClass implements Insertable<ChatMemberData> {
       blockedAt: blockedAt == null && nullToAbsent
           ? const Value.absent()
           : Value(blockedAt),
+      insertedAt: insertedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(insertedAt),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
     );
   }
 
@@ -2207,6 +2327,8 @@ class ChatMemberData extends DataClass implements Insertable<ChatMemberData> {
       joinedAt: serializer.fromJson<DateTime>(json['joinedAt']),
       leftAt: serializer.fromJson<DateTime?>(json['leftAt']),
       blockedAt: serializer.fromJson<DateTime?>(json['blockedAt']),
+      insertedAt: serializer.fromJson<DateTime?>(json['insertedAt']),
+      updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
     );
   }
   @override
@@ -2218,6 +2340,8 @@ class ChatMemberData extends DataClass implements Insertable<ChatMemberData> {
       'joinedAt': serializer.toJson<DateTime>(joinedAt),
       'leftAt': serializer.toJson<DateTime?>(leftAt),
       'blockedAt': serializer.toJson<DateTime?>(blockedAt),
+      'insertedAt': serializer.toJson<DateTime?>(insertedAt),
+      'updatedAt': serializer.toJson<DateTime?>(updatedAt),
     };
   }
 
@@ -2226,13 +2350,17 @@ class ChatMemberData extends DataClass implements Insertable<ChatMemberData> {
           String? userId,
           DateTime? joinedAt,
           Value<DateTime?> leftAt = const Value.absent(),
-          Value<DateTime?> blockedAt = const Value.absent()}) =>
+          Value<DateTime?> blockedAt = const Value.absent(),
+          Value<DateTime?> insertedAt = const Value.absent(),
+          Value<DateTime?> updatedAt = const Value.absent()}) =>
       ChatMemberData(
         chatId: chatId ?? this.chatId,
         userId: userId ?? this.userId,
         joinedAt: joinedAt ?? this.joinedAt,
         leftAt: leftAt.present ? leftAt.value : this.leftAt,
         blockedAt: blockedAt.present ? blockedAt.value : this.blockedAt,
+        insertedAt: insertedAt.present ? insertedAt.value : this.insertedAt,
+        updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
       );
   @override
   String toString() {
@@ -2241,13 +2369,16 @@ class ChatMemberData extends DataClass implements Insertable<ChatMemberData> {
           ..write('userId: $userId, ')
           ..write('joinedAt: $joinedAt, ')
           ..write('leftAt: $leftAt, ')
-          ..write('blockedAt: $blockedAt')
+          ..write('blockedAt: $blockedAt, ')
+          ..write('insertedAt: $insertedAt, ')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(chatId, userId, joinedAt, leftAt, blockedAt);
+  int get hashCode => Object.hash(
+      chatId, userId, joinedAt, leftAt, blockedAt, insertedAt, updatedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2256,7 +2387,9 @@ class ChatMemberData extends DataClass implements Insertable<ChatMemberData> {
           other.userId == this.userId &&
           other.joinedAt == this.joinedAt &&
           other.leftAt == this.leftAt &&
-          other.blockedAt == this.blockedAt);
+          other.blockedAt == this.blockedAt &&
+          other.insertedAt == this.insertedAt &&
+          other.updatedAt == this.updatedAt);
 }
 
 class ChatMemberDataCompanion extends UpdateCompanion<ChatMemberData> {
@@ -2265,6 +2398,8 @@ class ChatMemberDataCompanion extends UpdateCompanion<ChatMemberData> {
   final Value<DateTime> joinedAt;
   final Value<DateTime?> leftAt;
   final Value<DateTime?> blockedAt;
+  final Value<DateTime?> insertedAt;
+  final Value<DateTime?> updatedAt;
   final Value<int> rowid;
   const ChatMemberDataCompanion({
     this.chatId = const Value.absent(),
@@ -2272,6 +2407,8 @@ class ChatMemberDataCompanion extends UpdateCompanion<ChatMemberData> {
     this.joinedAt = const Value.absent(),
     this.leftAt = const Value.absent(),
     this.blockedAt = const Value.absent(),
+    this.insertedAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   ChatMemberDataCompanion.insert({
@@ -2280,6 +2417,8 @@ class ChatMemberDataCompanion extends UpdateCompanion<ChatMemberData> {
     required DateTime joinedAt,
     this.leftAt = const Value.absent(),
     this.blockedAt = const Value.absent(),
+    this.insertedAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : chatId = Value(chatId),
         userId = Value(userId),
@@ -2290,6 +2429,8 @@ class ChatMemberDataCompanion extends UpdateCompanion<ChatMemberData> {
     Expression<DateTime>? joinedAt,
     Expression<DateTime>? leftAt,
     Expression<DateTime>? blockedAt,
+    Expression<DateTime>? insertedAt,
+    Expression<DateTime>? updatedAt,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -2298,6 +2439,8 @@ class ChatMemberDataCompanion extends UpdateCompanion<ChatMemberData> {
       if (joinedAt != null) 'joined_at': joinedAt,
       if (leftAt != null) 'left_at': leftAt,
       if (blockedAt != null) 'blocked_at': blockedAt,
+      if (insertedAt != null) 'inserted_at': insertedAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -2308,6 +2451,8 @@ class ChatMemberDataCompanion extends UpdateCompanion<ChatMemberData> {
       Value<DateTime>? joinedAt,
       Value<DateTime?>? leftAt,
       Value<DateTime?>? blockedAt,
+      Value<DateTime?>? insertedAt,
+      Value<DateTime?>? updatedAt,
       Value<int>? rowid}) {
     return ChatMemberDataCompanion(
       chatId: chatId ?? this.chatId,
@@ -2315,6 +2460,8 @@ class ChatMemberDataCompanion extends UpdateCompanion<ChatMemberData> {
       joinedAt: joinedAt ?? this.joinedAt,
       leftAt: leftAt ?? this.leftAt,
       blockedAt: blockedAt ?? this.blockedAt,
+      insertedAt: insertedAt ?? this.insertedAt,
+      updatedAt: updatedAt ?? this.updatedAt,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -2337,6 +2484,12 @@ class ChatMemberDataCompanion extends UpdateCompanion<ChatMemberData> {
     if (blockedAt.present) {
       map['blocked_at'] = Variable<DateTime>(blockedAt.value);
     }
+    if (insertedAt.present) {
+      map['inserted_at'] = Variable<DateTime>(insertedAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -2351,6 +2504,8 @@ class ChatMemberDataCompanion extends UpdateCompanion<ChatMemberData> {
           ..write('joinedAt: $joinedAt, ')
           ..write('leftAt: $leftAt, ')
           ..write('blockedAt: $blockedAt, ')
+          ..write('insertedAt: $insertedAt, ')
+          ..write('updatedAt: $updatedAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -2447,6 +2602,18 @@ class $ChatMessagesTableTable extends ChatMessagesTable
   late final GeneratedColumn<DateTime> deletedAtRemote =
       GeneratedColumn<DateTime>('deleted_at_remote', aliasedName, true,
           type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _insertedAtMeta =
+      const VerificationMeta('insertedAt');
+  @override
+  late final GeneratedColumn<DateTime> insertedAt = GeneratedColumn<DateTime>(
+      'inserted_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -2461,7 +2628,9 @@ class $ChatMessagesTableTable extends ChatMessagesTable
         content,
         createdAtRemote,
         updatedAtRemote,
-        deletedAtRemote
+        deletedAtRemote,
+        insertedAt,
+        updatedAt
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -2541,6 +2710,16 @@ class $ChatMessagesTableTable extends ChatMessagesTable
           deletedAtRemote.isAcceptableOrUnknown(
               data['deleted_at_remote']!, _deletedAtRemoteMeta));
     }
+    if (data.containsKey('inserted_at')) {
+      context.handle(
+          _insertedAtMeta,
+          insertedAt.isAcceptableOrUnknown(
+              data['inserted_at']!, _insertedAtMeta));
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    }
     return context;
   }
 
@@ -2577,6 +2756,10 @@ class $ChatMessagesTableTable extends ChatMessagesTable
           DriftSqlType.dateTime, data['${effectivePrefix}updated_at_remote'])!,
       deletedAtRemote: attachedDatabase.typeMapping.read(
           DriftSqlType.dateTime, data['${effectivePrefix}deleted_at_remote']),
+      insertedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}inserted_at']),
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at']),
     );
   }
 
@@ -2607,6 +2790,8 @@ class ChatMessageData extends DataClass implements Insertable<ChatMessageData> {
   final DateTime createdAtRemote;
   final DateTime updatedAtRemote;
   final DateTime? deletedAtRemote;
+  final DateTime? insertedAt;
+  final DateTime? updatedAt;
   const ChatMessageData(
       {required this.id,
       required this.senderId,
@@ -2620,7 +2805,9 @@ class ChatMessageData extends DataClass implements Insertable<ChatMessageData> {
       required this.content,
       required this.createdAtRemote,
       required this.updatedAtRemote,
-      this.deletedAtRemote});
+      this.deletedAtRemote,
+      this.insertedAt,
+      this.updatedAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2649,6 +2836,12 @@ class ChatMessageData extends DataClass implements Insertable<ChatMessageData> {
     map['updated_at_remote'] = Variable<DateTime>(updatedAtRemote);
     if (!nullToAbsent || deletedAtRemote != null) {
       map['deleted_at_remote'] = Variable<DateTime>(deletedAtRemote);
+    }
+    if (!nullToAbsent || insertedAt != null) {
+      map['inserted_at'] = Variable<DateTime>(insertedAt);
+    }
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<DateTime>(updatedAt);
     }
     return map;
   }
@@ -2680,6 +2873,12 @@ class ChatMessageData extends DataClass implements Insertable<ChatMessageData> {
       deletedAtRemote: deletedAtRemote == null && nullToAbsent
           ? const Value.absent()
           : Value(deletedAtRemote),
+      insertedAt: insertedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(insertedAt),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
     );
   }
 
@@ -2701,6 +2900,8 @@ class ChatMessageData extends DataClass implements Insertable<ChatMessageData> {
       createdAtRemote: serializer.fromJson<DateTime>(json['createdAtRemote']),
       updatedAtRemote: serializer.fromJson<DateTime>(json['updatedAtRemote']),
       deletedAtRemote: serializer.fromJson<DateTime?>(json['deletedAtRemote']),
+      insertedAt: serializer.fromJson<DateTime?>(json['insertedAt']),
+      updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
     );
   }
   @override
@@ -2721,6 +2922,8 @@ class ChatMessageData extends DataClass implements Insertable<ChatMessageData> {
       'createdAtRemote': serializer.toJson<DateTime>(createdAtRemote),
       'updatedAtRemote': serializer.toJson<DateTime>(updatedAtRemote),
       'deletedAtRemote': serializer.toJson<DateTime?>(deletedAtRemote),
+      'insertedAt': serializer.toJson<DateTime?>(insertedAt),
+      'updatedAt': serializer.toJson<DateTime?>(updatedAt),
     };
   }
 
@@ -2737,7 +2940,9 @@ class ChatMessageData extends DataClass implements Insertable<ChatMessageData> {
           String? content,
           DateTime? createdAtRemote,
           DateTime? updatedAtRemote,
-          Value<DateTime?> deletedAtRemote = const Value.absent()}) =>
+          Value<DateTime?> deletedAtRemote = const Value.absent(),
+          Value<DateTime?> insertedAt = const Value.absent(),
+          Value<DateTime?> updatedAt = const Value.absent()}) =>
       ChatMessageData(
         id: id ?? this.id,
         senderId: senderId ?? this.senderId,
@@ -2755,6 +2960,8 @@ class ChatMessageData extends DataClass implements Insertable<ChatMessageData> {
         deletedAtRemote: deletedAtRemote.present
             ? deletedAtRemote.value
             : this.deletedAtRemote,
+        insertedAt: insertedAt.present ? insertedAt.value : this.insertedAt,
+        updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
       );
   @override
   String toString() {
@@ -2771,7 +2978,9 @@ class ChatMessageData extends DataClass implements Insertable<ChatMessageData> {
           ..write('content: $content, ')
           ..write('createdAtRemote: $createdAtRemote, ')
           ..write('updatedAtRemote: $updatedAtRemote, ')
-          ..write('deletedAtRemote: $deletedAtRemote')
+          ..write('deletedAtRemote: $deletedAtRemote, ')
+          ..write('insertedAt: $insertedAt, ')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
@@ -2790,7 +2999,9 @@ class ChatMessageData extends DataClass implements Insertable<ChatMessageData> {
       content,
       createdAtRemote,
       updatedAtRemote,
-      deletedAtRemote);
+      deletedAtRemote,
+      insertedAt,
+      updatedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2807,7 +3018,9 @@ class ChatMessageData extends DataClass implements Insertable<ChatMessageData> {
           other.content == this.content &&
           other.createdAtRemote == this.createdAtRemote &&
           other.updatedAtRemote == this.updatedAtRemote &&
-          other.deletedAtRemote == this.deletedAtRemote);
+          other.deletedAtRemote == this.deletedAtRemote &&
+          other.insertedAt == this.insertedAt &&
+          other.updatedAt == this.updatedAt);
 }
 
 class ChatMessageDataCompanion extends UpdateCompanion<ChatMessageData> {
@@ -2824,6 +3037,8 @@ class ChatMessageDataCompanion extends UpdateCompanion<ChatMessageData> {
   final Value<DateTime> createdAtRemote;
   final Value<DateTime> updatedAtRemote;
   final Value<DateTime?> deletedAtRemote;
+  final Value<DateTime?> insertedAt;
+  final Value<DateTime?> updatedAt;
   const ChatMessageDataCompanion({
     this.id = const Value.absent(),
     this.senderId = const Value.absent(),
@@ -2838,6 +3053,8 @@ class ChatMessageDataCompanion extends UpdateCompanion<ChatMessageData> {
     this.createdAtRemote = const Value.absent(),
     this.updatedAtRemote = const Value.absent(),
     this.deletedAtRemote = const Value.absent(),
+    this.insertedAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
   });
   ChatMessageDataCompanion.insert({
     this.id = const Value.absent(),
@@ -2853,6 +3070,8 @@ class ChatMessageDataCompanion extends UpdateCompanion<ChatMessageData> {
     required DateTime createdAtRemote,
     required DateTime updatedAtRemote,
     this.deletedAtRemote = const Value.absent(),
+    this.insertedAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
   })  : senderId = Value(senderId),
         chatId = Value(chatId),
         content = Value(content),
@@ -2872,6 +3091,8 @@ class ChatMessageDataCompanion extends UpdateCompanion<ChatMessageData> {
     Expression<DateTime>? createdAtRemote,
     Expression<DateTime>? updatedAtRemote,
     Expression<DateTime>? deletedAtRemote,
+    Expression<DateTime>? insertedAt,
+    Expression<DateTime>? updatedAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -2887,6 +3108,8 @@ class ChatMessageDataCompanion extends UpdateCompanion<ChatMessageData> {
       if (createdAtRemote != null) 'created_at_remote': createdAtRemote,
       if (updatedAtRemote != null) 'updated_at_remote': updatedAtRemote,
       if (deletedAtRemote != null) 'deleted_at_remote': deletedAtRemote,
+      if (insertedAt != null) 'inserted_at': insertedAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
     });
   }
 
@@ -2903,7 +3126,9 @@ class ChatMessageDataCompanion extends UpdateCompanion<ChatMessageData> {
       Value<String>? content,
       Value<DateTime>? createdAtRemote,
       Value<DateTime>? updatedAtRemote,
-      Value<DateTime?>? deletedAtRemote}) {
+      Value<DateTime?>? deletedAtRemote,
+      Value<DateTime?>? insertedAt,
+      Value<DateTime?>? updatedAt}) {
     return ChatMessageDataCompanion(
       id: id ?? this.id,
       senderId: senderId ?? this.senderId,
@@ -2918,6 +3143,8 @@ class ChatMessageDataCompanion extends UpdateCompanion<ChatMessageData> {
       createdAtRemote: createdAtRemote ?? this.createdAtRemote,
       updatedAtRemote: updatedAtRemote ?? this.updatedAtRemote,
       deletedAtRemote: deletedAtRemote ?? this.deletedAtRemote,
+      insertedAt: insertedAt ?? this.insertedAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
@@ -2965,6 +3192,12 @@ class ChatMessageDataCompanion extends UpdateCompanion<ChatMessageData> {
     if (deletedAtRemote.present) {
       map['deleted_at_remote'] = Variable<DateTime>(deletedAtRemote.value);
     }
+    if (insertedAt.present) {
+      map['inserted_at'] = Variable<DateTime>(insertedAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
     return map;
   }
 
@@ -2983,7 +3216,9 @@ class ChatMessageDataCompanion extends UpdateCompanion<ChatMessageData> {
           ..write('content: $content, ')
           ..write('createdAtRemote: $createdAtRemote, ')
           ..write('updatedAtRemote: $updatedAtRemote, ')
-          ..write('deletedAtRemote: $deletedAtRemote')
+          ..write('deletedAtRemote: $deletedAtRemote, ')
+          ..write('insertedAt: $insertedAt, ')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
@@ -3951,6 +4186,8 @@ typedef $$ChatsTableTableInsertCompanionBuilder = ChatDataCompanion Function({
   required DateTime createdAtRemote,
   required DateTime updatedAtRemote,
   Value<DateTime?> deletedAtRemote,
+  Value<DateTime?> insertedAt,
+  Value<DateTime?> updatedAt,
 });
 typedef $$ChatsTableTableUpdateCompanionBuilder = ChatDataCompanion Function({
   Value<int> id,
@@ -3960,6 +4197,8 @@ typedef $$ChatsTableTableUpdateCompanionBuilder = ChatDataCompanion Function({
   Value<DateTime> createdAtRemote,
   Value<DateTime> updatedAtRemote,
   Value<DateTime?> deletedAtRemote,
+  Value<DateTime?> insertedAt,
+  Value<DateTime?> updatedAt,
 });
 
 class $$ChatsTableTableTableManager extends RootTableManager<
@@ -3989,6 +4228,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
             Value<DateTime> createdAtRemote = const Value.absent(),
             Value<DateTime> updatedAtRemote = const Value.absent(),
             Value<DateTime?> deletedAtRemote = const Value.absent(),
+            Value<DateTime?> insertedAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
           }) =>
               ChatDataCompanion(
             id: id,
@@ -3998,6 +4239,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
             createdAtRemote: createdAtRemote,
             updatedAtRemote: updatedAtRemote,
             deletedAtRemote: deletedAtRemote,
+            insertedAt: insertedAt,
+            updatedAt: updatedAt,
           ),
           getInsertCompanionBuilder: ({
             Value<int> id = const Value.absent(),
@@ -4007,6 +4250,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
             required DateTime createdAtRemote,
             required DateTime updatedAtRemote,
             Value<DateTime?> deletedAtRemote = const Value.absent(),
+            Value<DateTime?> insertedAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
           }) =>
               ChatDataCompanion.insert(
             id: id,
@@ -4016,6 +4261,8 @@ class $$ChatsTableTableTableManager extends RootTableManager<
             createdAtRemote: createdAtRemote,
             updatedAtRemote: updatedAtRemote,
             deletedAtRemote: deletedAtRemote,
+            insertedAt: insertedAt,
+            updatedAt: updatedAt,
           ),
         ));
 }
@@ -4069,6 +4316,16 @@ class $$ChatsTableTableFilterComposer
 
   ColumnFilters<DateTime> get deletedAtRemote => $state.composableBuilder(
       column: $state.table.deletedAtRemote,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get insertedAt => $state.composableBuilder(
+      column: $state.table.insertedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get updatedAt => $state.composableBuilder(
+      column: $state.table.updatedAt,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -4141,6 +4398,16 @@ class $$ChatsTableTableOrderingComposer
       column: $state.table.deletedAtRemote,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get insertedAt => $state.composableBuilder(
+      column: $state.table.insertedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get updatedAt => $state.composableBuilder(
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
 typedef $$ChatMembersTableTableInsertCompanionBuilder = ChatMemberDataCompanion
@@ -4150,6 +4417,8 @@ typedef $$ChatMembersTableTableInsertCompanionBuilder = ChatMemberDataCompanion
   required DateTime joinedAt,
   Value<DateTime?> leftAt,
   Value<DateTime?> blockedAt,
+  Value<DateTime?> insertedAt,
+  Value<DateTime?> updatedAt,
   Value<int> rowid,
 });
 typedef $$ChatMembersTableTableUpdateCompanionBuilder = ChatMemberDataCompanion
@@ -4159,6 +4428,8 @@ typedef $$ChatMembersTableTableUpdateCompanionBuilder = ChatMemberDataCompanion
   Value<DateTime> joinedAt,
   Value<DateTime?> leftAt,
   Value<DateTime?> blockedAt,
+  Value<DateTime?> insertedAt,
+  Value<DateTime?> updatedAt,
   Value<int> rowid,
 });
 
@@ -4188,6 +4459,8 @@ class $$ChatMembersTableTableTableManager extends RootTableManager<
             Value<DateTime> joinedAt = const Value.absent(),
             Value<DateTime?> leftAt = const Value.absent(),
             Value<DateTime?> blockedAt = const Value.absent(),
+            Value<DateTime?> insertedAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               ChatMemberDataCompanion(
@@ -4196,6 +4469,8 @@ class $$ChatMembersTableTableTableManager extends RootTableManager<
             joinedAt: joinedAt,
             leftAt: leftAt,
             blockedAt: blockedAt,
+            insertedAt: insertedAt,
+            updatedAt: updatedAt,
             rowid: rowid,
           ),
           getInsertCompanionBuilder: ({
@@ -4204,6 +4479,8 @@ class $$ChatMembersTableTableTableManager extends RootTableManager<
             required DateTime joinedAt,
             Value<DateTime?> leftAt = const Value.absent(),
             Value<DateTime?> blockedAt = const Value.absent(),
+            Value<DateTime?> insertedAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               ChatMemberDataCompanion.insert(
@@ -4212,6 +4489,8 @@ class $$ChatMembersTableTableTableManager extends RootTableManager<
             joinedAt: joinedAt,
             leftAt: leftAt,
             blockedAt: blockedAt,
+            insertedAt: insertedAt,
+            updatedAt: updatedAt,
             rowid: rowid,
           ),
         ));
@@ -4253,6 +4532,16 @@ class $$ChatMembersTableTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
+  ColumnFilters<DateTime> get insertedAt => $state.composableBuilder(
+      column: $state.table.insertedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get updatedAt => $state.composableBuilder(
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
   $$ChatsTableTableFilterComposer get chatId {
     final $$ChatsTableTableFilterComposer composer = $state.composerBuilder(
         composer: this,
@@ -4289,6 +4578,16 @@ class $$ChatMembersTableTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
+  ColumnOrderings<DateTime> get insertedAt => $state.composableBuilder(
+      column: $state.table.insertedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get updatedAt => $state.composableBuilder(
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
   $$ChatsTableTableOrderingComposer get chatId {
     final $$ChatsTableTableOrderingComposer composer = $state.composerBuilder(
         composer: this,
@@ -4317,6 +4616,8 @@ typedef $$ChatMessagesTableTableInsertCompanionBuilder
   required DateTime createdAtRemote,
   required DateTime updatedAtRemote,
   Value<DateTime?> deletedAtRemote,
+  Value<DateTime?> insertedAt,
+  Value<DateTime?> updatedAt,
 });
 typedef $$ChatMessagesTableTableUpdateCompanionBuilder
     = ChatMessageDataCompanion Function({
@@ -4333,6 +4634,8 @@ typedef $$ChatMessagesTableTableUpdateCompanionBuilder
   Value<DateTime> createdAtRemote,
   Value<DateTime> updatedAtRemote,
   Value<DateTime?> deletedAtRemote,
+  Value<DateTime?> insertedAt,
+  Value<DateTime?> updatedAt,
 });
 
 class $$ChatMessagesTableTableTableManager extends RootTableManager<
@@ -4369,6 +4672,8 @@ class $$ChatMessagesTableTableTableManager extends RootTableManager<
             Value<DateTime> createdAtRemote = const Value.absent(),
             Value<DateTime> updatedAtRemote = const Value.absent(),
             Value<DateTime?> deletedAtRemote = const Value.absent(),
+            Value<DateTime?> insertedAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
           }) =>
               ChatMessageDataCompanion(
             id: id,
@@ -4384,6 +4689,8 @@ class $$ChatMessagesTableTableTableManager extends RootTableManager<
             createdAtRemote: createdAtRemote,
             updatedAtRemote: updatedAtRemote,
             deletedAtRemote: deletedAtRemote,
+            insertedAt: insertedAt,
+            updatedAt: updatedAt,
           ),
           getInsertCompanionBuilder: ({
             Value<int> id = const Value.absent(),
@@ -4399,6 +4706,8 @@ class $$ChatMessagesTableTableTableManager extends RootTableManager<
             required DateTime createdAtRemote,
             required DateTime updatedAtRemote,
             Value<DateTime?> deletedAtRemote = const Value.absent(),
+            Value<DateTime?> insertedAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
           }) =>
               ChatMessageDataCompanion.insert(
             id: id,
@@ -4414,6 +4723,8 @@ class $$ChatMessagesTableTableTableManager extends RootTableManager<
             createdAtRemote: createdAtRemote,
             updatedAtRemote: updatedAtRemote,
             deletedAtRemote: deletedAtRemote,
+            insertedAt: insertedAt,
+            updatedAt: updatedAt,
           ),
         ));
 }
@@ -4496,6 +4807,16 @@ class $$ChatMessagesTableTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
+  ColumnFilters<DateTime> get insertedAt => $state.composableBuilder(
+      column: $state.table.insertedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get updatedAt => $state.composableBuilder(
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
   $$ChatsTableTableFilterComposer get chatId {
     final $$ChatsTableTableFilterComposer composer = $state.composerBuilder(
         composer: this,
@@ -4569,6 +4890,16 @@ class $$ChatMessagesTableTableOrderingComposer
 
   ColumnOrderings<DateTime> get deletedAtRemote => $state.composableBuilder(
       column: $state.table.deletedAtRemote,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get insertedAt => $state.composableBuilder(
+      column: $state.table.insertedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get updatedAt => $state.composableBuilder(
+      column: $state.table.updatedAt,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 

@@ -274,6 +274,10 @@ class ChatsTable extends Table {
   DateTimeColumn get updatedAtRemote => dateTime()();
 
   DateTimeColumn get deletedAtRemote => dateTime().nullable()();
+
+  DateTimeColumn get insertedAt => dateTime().nullable()();
+
+  DateTimeColumn get updatedAt => dateTime().nullable()();
 }
 
 @DataClassName('ChatMemberData')
@@ -293,6 +297,10 @@ class ChatMembersTable extends Table {
   DateTimeColumn get leftAt => dateTime().nullable()();
 
   DateTimeColumn get blockedAt => dateTime().nullable()();
+
+  DateTimeColumn get insertedAt => dateTime().nullable()();
+
+  DateTimeColumn get updatedAt => dateTime().nullable()();
 }
 
 enum SmsOutStateEnum { sending, error, delivered }
@@ -330,6 +338,10 @@ class ChatMessagesTable extends Table {
   DateTimeColumn get updatedAtRemote => dateTime()();
 
   DateTimeColumn get deletedAtRemote => dateTime().nullable()();
+
+  DateTimeColumn get insertedAt => dateTime().nullable()();
+
+  DateTimeColumn get updatedAt => dateTime().nullable()();
 }
 
 @DriftAccessor(tables: [

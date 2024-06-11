@@ -356,24 +356,43 @@ class Chats extends Table with TableInfo {
       type: DriftSqlType.string,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
-  late final GeneratedColumn<int> createdAt = GeneratedColumn<int>(
-      'created_at', aliasedName, false,
+  late final GeneratedColumn<int> createdAtRemote = GeneratedColumn<int>(
+      'created_at_remote', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<int> updatedAtRemote = GeneratedColumn<int>(
+      'updated_at_remote', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<int> deletedAtRemote = GeneratedColumn<int>(
+      'deleted_at_remote', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
+  late final GeneratedColumn<int> insertedAt = GeneratedColumn<int>(
+      'inserted_at', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
   late final GeneratedColumn<int> updatedAt = GeneratedColumn<int>(
-      'updated_at', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
-  late final GeneratedColumn<int> deletedAt = GeneratedColumn<int>(
-      'deleted_at', aliasedName, true,
+      'updated_at', aliasedName, true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       $customConstraints: 'NULL');
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, type, name, creatorId, createdAt, updatedAt, deletedAt];
+  List<GeneratedColumn> get $columns => [
+        id,
+        type,
+        name,
+        creatorId,
+        createdAtRemote,
+        updatedAtRemote,
+        deletedAtRemote,
+        insertedAt,
+        updatedAt
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -427,9 +446,19 @@ class ChatMembers extends Table with TableInfo {
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       $customConstraints: 'NULL');
+  late final GeneratedColumn<int> insertedAt = GeneratedColumn<int>(
+      'inserted_at', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
+  late final GeneratedColumn<int> updatedAt = GeneratedColumn<int>(
+      'updated_at', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
   @override
   List<GeneratedColumn> get $columns =>
-      [chatId, userId, joinedAt, leftAt, blockedAt];
+      [chatId, userId, joinedAt, leftAt, blockedAt, insertedAt, updatedAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -461,7 +490,7 @@ class ChatMessages extends Table with TableInfo {
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
       type: DriftSqlType.int,
-      requiredDuringInsert: true,
+      requiredDuringInsert: false,
       $customConstraints: 'NOT NULL');
   late final GeneratedColumn<String> senderId = GeneratedColumn<String>(
       'sender_id', aliasedName, false,
@@ -509,18 +538,28 @@ class ChatMessages extends Table with TableInfo {
       type: DriftSqlType.string,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
-  late final GeneratedColumn<int> createdAt = GeneratedColumn<int>(
-      'created_at', aliasedName, false,
+  late final GeneratedColumn<int> createdAtRemote = GeneratedColumn<int>(
+      'created_at_remote', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<int> updatedAtRemote = GeneratedColumn<int>(
+      'updated_at_remote', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<int> deletedAtRemote = GeneratedColumn<int>(
+      'deleted_at_remote', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
+  late final GeneratedColumn<int> insertedAt = GeneratedColumn<int>(
+      'inserted_at', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
   late final GeneratedColumn<int> updatedAt = GeneratedColumn<int>(
-      'updated_at', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
-  late final GeneratedColumn<int> deletedAt = GeneratedColumn<int>(
-      'deleted_at', aliasedName, true,
+      'updated_at', aliasedName, true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       $customConstraints: 'NULL');
@@ -536,9 +575,11 @@ class ChatMessages extends Table with TableInfo {
         smsOutState,
         smsNumber,
         content,
-        createdAt,
-        updatedAt,
-        deletedAt
+        createdAtRemote,
+        updatedAtRemote,
+        deletedAtRemote,
+        insertedAt,
+        updatedAt
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -546,7 +587,7 @@ class ChatMessages extends Table with TableInfo {
   String get actualTableName => $name;
   static const String $name = 'chat_messages';
   @override
-  Set<GeneratedColumn> get $primaryKey => const {};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Never map(Map<String, dynamic> data, {String? tablePrefix}) {
     throw UnsupportedError('TableInfo.map in schema verification code');
@@ -557,6 +598,8 @@ class ChatMessages extends Table with TableInfo {
     return ChatMessages(attachedDatabase, alias);
   }
 
+  @override
+  List<String> get customConstraints => const ['PRIMARY KEY(id)'];
   @override
   bool get dontWriteConstraints => true;
 }
@@ -590,13 +633,19 @@ class DatabaseAtV4 extends GeneratedDatabase {
       'CREATE TRIGGER contact_emails_after_update_trigger AFTER UPDATE ON contact_emails BEGIN UPDATE contact_emails SET updated_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id;END',
       'contact_emails_after_update_trigger');
   late final Trigger chatsAfterInsertTrigger = Trigger(
-      'CREATE TRIGGER chats_after_insert_trigger AFTER INSERT ON chats BEGIN UPDATE chats SET updated_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id;END',
+      'CREATE TRIGGER chats_after_insert_trigger AFTER INSERT ON chats BEGIN UPDATE chats SET inserted_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id AND inserted_at IS NULL;UPDATE chats SET updated_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id;END',
       'chats_after_insert_trigger');
   late final Trigger chatsAfterUpdateTrigger = Trigger(
       'CREATE TRIGGER chats_after_update_trigger AFTER UPDATE ON chats BEGIN UPDATE chats SET updated_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id;END',
       'chats_after_update_trigger');
+  late final Trigger chatMembersAfterInsertTrigger = Trigger(
+      'CREATE TRIGGER chat_members_after_insert_trigger AFTER INSERT ON chat_members BEGIN UPDATE chat_members SET inserted_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id AND inserted_at IS NULL;UPDATE chat_members SET updated_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id;END',
+      'chat_members_after_insert_trigger');
+  late final Trigger chatMembersAfterUpdateTrigger = Trigger(
+      'CREATE TRIGGER chat_members_after_update_trigger AFTER UPDATE ON chat_members BEGIN UPDATE chat_members SET updated_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id;END',
+      'chat_members_after_update_trigger');
   late final Trigger chatMessagesAfterInsertTrigger = Trigger(
-      'CREATE TRIGGER chat_messages_after_insert_trigger AFTER INSERT ON chat_messages BEGIN UPDATE chat_messages SET updated_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id;END',
+      'CREATE TRIGGER chat_messages_after_insert_trigger AFTER INSERT ON chat_messages BEGIN UPDATE chat_messages SET inserted_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id AND inserted_at IS NULL;UPDATE chat_messages SET updated_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id;END',
       'chat_messages_after_insert_trigger');
   late final Trigger chatMessagesAfterUpdateTrigger = Trigger(
       'CREATE TRIGGER chat_messages_after_update_trigger AFTER UPDATE ON chat_messages BEGIN UPDATE chat_messages SET updated_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id;END',
@@ -622,6 +671,8 @@ class DatabaseAtV4 extends GeneratedDatabase {
         contactEmailsAfterUpdateTrigger,
         chatsAfterInsertTrigger,
         chatsAfterUpdateTrigger,
+        chatMembersAfterInsertTrigger,
+        chatMembersAfterUpdateTrigger,
         chatMessagesAfterInsertTrigger,
         chatMessagesAfterUpdateTrigger
       ];
@@ -665,6 +716,16 @@ class DatabaseAtV4 extends GeneratedDatabase {
           ),
           WritePropagation(
             on: TableUpdateQuery.onTableName('chats',
+                limitUpdateKind: UpdateKind.delete),
+            result: [],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('chat_members',
+                limitUpdateKind: UpdateKind.delete),
+            result: [],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('chat_members',
                 limitUpdateKind: UpdateKind.delete),
             result: [],
           ),
