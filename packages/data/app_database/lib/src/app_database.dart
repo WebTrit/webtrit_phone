@@ -5,6 +5,8 @@ import 'migrations/migrations.dart';
 
 part 'app_database.g.dart';
 
+// TODO (Vlad): split into separate files
+
 @DriftDatabase(
   tables: [
     ContactsTable,
@@ -12,6 +14,9 @@ part 'app_database.g.dart';
     ContactEmailsTable,
     CallLogsTable,
     FavoritesTable,
+    ChatsTable,
+    ChatMembersTable,
+    ChatMessagesTable
   ],
   daos: [
     ContactsDao,
@@ -243,6 +248,84 @@ class FavoritesTable extends Table {
       integer().customConstraint('NOT NULL REFERENCES contact_phones(id) ON DELETE CASCADE')();
 
   IntColumn get position => integer()();
+}
+
+enum ChatTypeEnum { dialog, group }
+
+@DataClassName('ChatData')
+class ChatsTable extends Table {
+  @override
+  String get tableName => 'chats';
+
+  @override
+  Set<Column> get primaryKey => {id};
+
+  IntColumn get id => integer()();
+
+  TextColumn get type => textEnum<ChatTypeEnum>()();
+
+  TextColumn get name => text().nullable()();
+
+  TextColumn get creatorId => text()();
+
+  DateTimeColumn get createdAt => dateTime()();
+
+  DateTimeColumn get updatedAt => dateTime()();
+
+  DateTimeColumn get deletedAt => dateTime().nullable()();
+}
+
+@DataClassName('ChatMemberData')
+class ChatMembersTable extends Table {
+  @override
+  String get tableName => 'chat_members';
+
+  @override
+  Set<Column> get primaryKey => {chatId, userId};
+
+  IntColumn get chatId => integer().customConstraint('NOT NULL REFERENCES chats(id) ON DELETE CASCADE')();
+
+  TextColumn get userId => text()();
+
+  DateTimeColumn get joinedAt => dateTime()();
+
+  DateTimeColumn get leftAt => dateTime().nullable()();
+
+  DateTimeColumn get blockedAt => dateTime().nullable()();
+}
+
+enum SmsOutStateEnum { sending, error, delivered }
+
+@DataClassName('ChatMessageData')
+class ChatMessagesTable extends Table {
+  @override
+  String get tableName => 'chat_messages';
+
+  IntColumn get id => integer()();
+
+  TextColumn get senderId => text()();
+
+  IntColumn get chatId => integer().customConstraint('NOT NULL REFERENCES chats(id) ON DELETE CASCADE')();
+
+  IntColumn get replyToId => integer().nullable()();
+
+  IntColumn get forwardFromId => integer().nullable()();
+
+  TextColumn get authorId => text().nullable()();
+
+  BoolColumn get viaSms => boolean().withDefault(const Constant(false))();
+
+  TextColumn get smsOutState => textEnum<SmsOutStateEnum>().nullable()();
+
+  TextColumn get smsNumber => text().nullable()();
+
+  TextColumn get content => text()();
+
+  DateTimeColumn get createdAt => dateTime()();
+
+  DateTimeColumn get updatedAt => dateTime()();
+
+  DateTimeColumn get deletedAt => dateTime().nullable()();
 }
 
 @DriftAccessor(tables: [
@@ -559,4 +642,144 @@ class FavoriteDataWithContactPhoneDataAndContactData {
   final FavoriteData favoriteData;
   final ContactPhoneData contactPhoneData;
   final ContactData contactData;
+}
+
+@DriftAccessor(tables: [
+  ChatsTable,
+  ChatMembersTable,
+  ChatMessagesTable,
+])
+class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
+  ChatsDao(super.db);
+
+  // Chats
+
+  Future<List<ChatData>> getAllChats() => select(chatsTable).get();
+
+  Stream<List<ChatData>> watchAllChats() => select(chatsTable).watch();
+
+  Stream<ChatData> watchChat(Insertable<ChatData> chat) {
+    return (select(chatsTable)..whereSamePrimaryKey(chat)).watchSingle();
+  }
+
+  Future<int> upsertChat(Insertable<ChatData> chat) {
+    return into(chatsTable).insertOnConflictUpdate(chat);
+  }
+
+  Future<void> wipeStaleDeletedChatsData({int ttlSeconds = 60 * 60 * 24}) async {
+    final staleTime = clock.now().subtract(Duration(seconds: ttlSeconds));
+    await (delete(chatsTable)..where((t) => t.deletedAt.isSmallerThanValue(staleTime))).go();
+  }
+
+  // ChatMembers
+
+  Stream<List<ChatMemberData>> watchChatMembersByChatId(int chatId) {
+    return (select(chatMembersTable)..where((t) => t.chatId.equals(chatId))).watch();
+  }
+
+  Future<List<ChatMemberData>> getChatMembersByChatId(int chatId) {
+    return (select(chatMembersTable)..where((t) => t.chatId.equals(chatId))).get();
+  }
+
+  Future<int> upsertChatMember(Insertable<ChatMemberData> chatMember) {
+    return into(chatMembersTable).insertOnConflictUpdate(chatMember);
+  }
+
+  Future<int> deleteChatMember(Insertable<ChatMemberData> chatMember) {
+    return delete(chatMembersTable).delete(chatMember);
+  }
+
+  // ChatDataWithMembers
+
+  Stream<List<ChatDataWithMembers>> watchAllChatsWithMembers() {
+    final q = select(chatsTable).join([
+      leftOuterJoin(chatMembersTable, chatMembersTable.chatId.equalsExp(chatsTable.id)),
+    ]);
+    q.groupBy([chatsTable.id]);
+    return q.watch().map((rows) {
+      final chatData = <ChatData>[];
+      final members = <ChatMemberData>[];
+      for (final row in rows) {
+        final chat = row.readTable(chatsTable);
+        if (!chatData.contains(chat)) chatData.add(chat);
+
+        final member = row.readTableOrNull(chatMembersTable);
+        if (member != null) members.add(member);
+      }
+      return chatData.map((chat) {
+        return ChatDataWithMembers(chat, members.where((m) => m.chatId == chat.id).toList());
+      }).toList();
+    });
+  }
+
+  Future<List<ChatDataWithMembers>> getAllChatsWithMembers() {
+    final q = select(chatsTable).join([
+      leftOuterJoin(chatMembersTable, chatMembersTable.chatId.equalsExp(chatsTable.id)),
+    ]);
+    q.groupBy([chatsTable.id]);
+    return q.get().then((rows) {
+      final chatData = <ChatData>[];
+      final members = <ChatMemberData>[];
+      for (final row in rows) {
+        final chat = row.readTable(chatsTable);
+        if (!chatData.contains(chat)) chatData.add(chat);
+
+        final member = row.readTableOrNull(chatMembersTable);
+        if (member != null) members.add(member);
+      }
+      return chatData.map((chat) {
+        return ChatDataWithMembers(chat, members.where((m) => m.chatId == chat.id).toList());
+      }).toList();
+    });
+  }
+
+  // ChatMessages
+
+  Future<List<ChatMessageData>> getLastMessages(int chatId, {int limit = 100}) {
+    final q = (select(chatMessagesTable)
+      ..where((t) => t.chatId.equals(chatId))
+      ..orderBy([(t) => OrderingTerm.desc(t.createdAt)])
+      ..limit(limit));
+    return q.get();
+  }
+
+  Future<List<ChatMessageData>> getMessageHistory(int chatId, DateTime from, DateTime to) {
+    final q = select(chatMessagesTable)
+      ..where((t) => t.chatId.equals(chatId))
+      ..where((t) => t.createdAt.isBetweenValues(from, to));
+    return q.get();
+  }
+
+  Stream<List<ChatMessageData>> watchLastMessageUpdates(int chatId, {int limit = 100}) {
+    final q = (select(chatMessagesTable)
+      ..where((t) => t.chatId.equals(chatId))
+      ..orderBy([(t) => OrderingTerm.desc(t.updatedAt)])
+      ..limit(limit));
+    return q.watch();
+  }
+
+  Future<int> upsertChatMessage(Insertable<ChatMessageData> chatMessage) {
+    return into(chatMessagesTable).insertOnConflictUpdate(chatMessage);
+  }
+
+  Future<void> wipeStaleDeletedChatMessagesData({int ttlSeconds = 60 * 60 * 24}) async {
+    final staleTime = clock.now().subtract(Duration(seconds: ttlSeconds));
+    await (delete(chatMessagesTable)..where((t) => t.deletedAt.isSmallerThanValue(staleTime))).go();
+  }
+
+  Future<void> wipeChatsData() async {
+    await transaction(() async {
+      await delete(chatsTable).go();
+    });
+  }
+}
+
+class ChatDataWithMembers {
+  ChatDataWithMembers(
+    this.chatData,
+    this.members,
+  );
+
+  final ChatData chatData;
+  final List<ChatMemberData> members;
 }

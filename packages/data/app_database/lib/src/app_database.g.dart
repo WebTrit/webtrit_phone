@@ -1679,8 +1679,1308 @@ class FavoriteDataCompanion extends UpdateCompanion<FavoriteData> {
   }
 }
 
+class $ChatsTableTable extends ChatsTable
+    with TableInfo<$ChatsTableTable, ChatData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ChatsTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumnWithTypeConverter<ChatTypeEnum, String> type =
+      GeneratedColumn<String>('type', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<ChatTypeEnum>($ChatsTableTable.$convertertype);
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _creatorIdMeta =
+      const VerificationMeta('creatorId');
+  @override
+  late final GeneratedColumn<String> creatorId = GeneratedColumn<String>(
+      'creator_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _deletedAtMeta =
+      const VerificationMeta('deletedAt');
+  @override
+  late final GeneratedColumn<DateTime> deletedAt = GeneratedColumn<DateTime>(
+      'deleted_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, type, name, creatorId, createdAt, updatedAt, deletedAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'chats';
+  @override
+  VerificationContext validateIntegrity(Insertable<ChatData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    context.handle(_typeMeta, const VerificationResult.success());
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    }
+    if (data.containsKey('creator_id')) {
+      context.handle(_creatorIdMeta,
+          creatorId.isAcceptableOrUnknown(data['creator_id']!, _creatorIdMeta));
+    } else if (isInserting) {
+      context.missing(_creatorIdMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(_deletedAtMeta,
+          deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ChatData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ChatData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      type: $ChatsTableTable.$convertertype.fromSql(attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}type'])!),
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name']),
+      creatorId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}creator_id'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
+      deletedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}deleted_at']),
+    );
+  }
+
+  @override
+  $ChatsTableTable createAlias(String alias) {
+    return $ChatsTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<ChatTypeEnum, String, String> $convertertype =
+      const EnumNameConverter<ChatTypeEnum>(ChatTypeEnum.values);
+}
+
+class ChatData extends DataClass implements Insertable<ChatData> {
+  final int id;
+  final ChatTypeEnum type;
+  final String? name;
+  final String creatorId;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final DateTime? deletedAt;
+  const ChatData(
+      {required this.id,
+      required this.type,
+      this.name,
+      required this.creatorId,
+      required this.createdAt,
+      required this.updatedAt,
+      this.deletedAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    {
+      map['type'] =
+          Variable<String>($ChatsTableTable.$convertertype.toSql(type));
+    }
+    if (!nullToAbsent || name != null) {
+      map['name'] = Variable<String>(name);
+    }
+    map['creator_id'] = Variable<String>(creatorId);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt);
+    }
+    return map;
+  }
+
+  ChatDataCompanion toCompanion(bool nullToAbsent) {
+    return ChatDataCompanion(
+      id: Value(id),
+      type: Value(type),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+      creatorId: Value(creatorId),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
+    );
+  }
+
+  factory ChatData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ChatData(
+      id: serializer.fromJson<int>(json['id']),
+      type: $ChatsTableTable.$convertertype
+          .fromJson(serializer.fromJson<String>(json['type'])),
+      name: serializer.fromJson<String?>(json['name']),
+      creatorId: serializer.fromJson<String>(json['creatorId']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'type': serializer
+          .toJson<String>($ChatsTableTable.$convertertype.toJson(type)),
+      'name': serializer.toJson<String?>(name),
+      'creatorId': serializer.toJson<String>(creatorId),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'deletedAt': serializer.toJson<DateTime?>(deletedAt),
+    };
+  }
+
+  ChatData copyWith(
+          {int? id,
+          ChatTypeEnum? type,
+          Value<String?> name = const Value.absent(),
+          String? creatorId,
+          DateTime? createdAt,
+          DateTime? updatedAt,
+          Value<DateTime?> deletedAt = const Value.absent()}) =>
+      ChatData(
+        id: id ?? this.id,
+        type: type ?? this.type,
+        name: name.present ? name.value : this.name,
+        creatorId: creatorId ?? this.creatorId,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+        deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('ChatData(')
+          ..write('id: $id, ')
+          ..write('type: $type, ')
+          ..write('name: $name, ')
+          ..write('creatorId: $creatorId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, type, name, creatorId, createdAt, updatedAt, deletedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ChatData &&
+          other.id == this.id &&
+          other.type == this.type &&
+          other.name == this.name &&
+          other.creatorId == this.creatorId &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.deletedAt == this.deletedAt);
+}
+
+class ChatDataCompanion extends UpdateCompanion<ChatData> {
+  final Value<int> id;
+  final Value<ChatTypeEnum> type;
+  final Value<String?> name;
+  final Value<String> creatorId;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<DateTime?> deletedAt;
+  const ChatDataCompanion({
+    this.id = const Value.absent(),
+    this.type = const Value.absent(),
+    this.name = const Value.absent(),
+    this.creatorId = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+  });
+  ChatDataCompanion.insert({
+    this.id = const Value.absent(),
+    required ChatTypeEnum type,
+    this.name = const Value.absent(),
+    required String creatorId,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    this.deletedAt = const Value.absent(),
+  })  : type = Value(type),
+        creatorId = Value(creatorId),
+        createdAt = Value(createdAt),
+        updatedAt = Value(updatedAt);
+  static Insertable<ChatData> custom({
+    Expression<int>? id,
+    Expression<String>? type,
+    Expression<String>? name,
+    Expression<String>? creatorId,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+    Expression<DateTime>? deletedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (type != null) 'type': type,
+      if (name != null) 'name': name,
+      if (creatorId != null) 'creator_id': creatorId,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deletedAt != null) 'deleted_at': deletedAt,
+    });
+  }
+
+  ChatDataCompanion copyWith(
+      {Value<int>? id,
+      Value<ChatTypeEnum>? type,
+      Value<String?>? name,
+      Value<String>? creatorId,
+      Value<DateTime>? createdAt,
+      Value<DateTime>? updatedAt,
+      Value<DateTime?>? deletedAt}) {
+    return ChatDataCompanion(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      name: name ?? this.name,
+      creatorId: creatorId ?? this.creatorId,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (type.present) {
+      map['type'] =
+          Variable<String>($ChatsTableTable.$convertertype.toSql(type.value));
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (creatorId.present) {
+      map['creator_id'] = Variable<String>(creatorId.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ChatDataCompanion(')
+          ..write('id: $id, ')
+          ..write('type: $type, ')
+          ..write('name: $name, ')
+          ..write('creatorId: $creatorId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ChatMembersTableTable extends ChatMembersTable
+    with TableInfo<$ChatMembersTableTable, ChatMemberData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ChatMembersTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _chatIdMeta = const VerificationMeta('chatId');
+  @override
+  late final GeneratedColumn<int> chatId = GeneratedColumn<int>(
+      'chat_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL REFERENCES chats(id) ON DELETE CASCADE');
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
+      'user_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _joinedAtMeta =
+      const VerificationMeta('joinedAt');
+  @override
+  late final GeneratedColumn<DateTime> joinedAt = GeneratedColumn<DateTime>(
+      'joined_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _leftAtMeta = const VerificationMeta('leftAt');
+  @override
+  late final GeneratedColumn<DateTime> leftAt = GeneratedColumn<DateTime>(
+      'left_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _blockedAtMeta =
+      const VerificationMeta('blockedAt');
+  @override
+  late final GeneratedColumn<DateTime> blockedAt = GeneratedColumn<DateTime>(
+      'blocked_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [chatId, userId, joinedAt, leftAt, blockedAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'chat_members';
+  @override
+  VerificationContext validateIntegrity(Insertable<ChatMemberData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('chat_id')) {
+      context.handle(_chatIdMeta,
+          chatId.isAcceptableOrUnknown(data['chat_id']!, _chatIdMeta));
+    } else if (isInserting) {
+      context.missing(_chatIdMeta);
+    }
+    if (data.containsKey('user_id')) {
+      context.handle(_userIdMeta,
+          userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
+    if (data.containsKey('joined_at')) {
+      context.handle(_joinedAtMeta,
+          joinedAt.isAcceptableOrUnknown(data['joined_at']!, _joinedAtMeta));
+    } else if (isInserting) {
+      context.missing(_joinedAtMeta);
+    }
+    if (data.containsKey('left_at')) {
+      context.handle(_leftAtMeta,
+          leftAt.isAcceptableOrUnknown(data['left_at']!, _leftAtMeta));
+    }
+    if (data.containsKey('blocked_at')) {
+      context.handle(_blockedAtMeta,
+          blockedAt.isAcceptableOrUnknown(data['blocked_at']!, _blockedAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {chatId, userId};
+  @override
+  ChatMemberData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ChatMemberData(
+      chatId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}chat_id'])!,
+      userId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}user_id'])!,
+      joinedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}joined_at'])!,
+      leftAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}left_at']),
+      blockedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}blocked_at']),
+    );
+  }
+
+  @override
+  $ChatMembersTableTable createAlias(String alias) {
+    return $ChatMembersTableTable(attachedDatabase, alias);
+  }
+}
+
+class ChatMemberData extends DataClass implements Insertable<ChatMemberData> {
+  final int chatId;
+  final String userId;
+  final DateTime joinedAt;
+  final DateTime? leftAt;
+  final DateTime? blockedAt;
+  const ChatMemberData(
+      {required this.chatId,
+      required this.userId,
+      required this.joinedAt,
+      this.leftAt,
+      this.blockedAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['chat_id'] = Variable<int>(chatId);
+    map['user_id'] = Variable<String>(userId);
+    map['joined_at'] = Variable<DateTime>(joinedAt);
+    if (!nullToAbsent || leftAt != null) {
+      map['left_at'] = Variable<DateTime>(leftAt);
+    }
+    if (!nullToAbsent || blockedAt != null) {
+      map['blocked_at'] = Variable<DateTime>(blockedAt);
+    }
+    return map;
+  }
+
+  ChatMemberDataCompanion toCompanion(bool nullToAbsent) {
+    return ChatMemberDataCompanion(
+      chatId: Value(chatId),
+      userId: Value(userId),
+      joinedAt: Value(joinedAt),
+      leftAt:
+          leftAt == null && nullToAbsent ? const Value.absent() : Value(leftAt),
+      blockedAt: blockedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(blockedAt),
+    );
+  }
+
+  factory ChatMemberData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ChatMemberData(
+      chatId: serializer.fromJson<int>(json['chatId']),
+      userId: serializer.fromJson<String>(json['userId']),
+      joinedAt: serializer.fromJson<DateTime>(json['joinedAt']),
+      leftAt: serializer.fromJson<DateTime?>(json['leftAt']),
+      blockedAt: serializer.fromJson<DateTime?>(json['blockedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'chatId': serializer.toJson<int>(chatId),
+      'userId': serializer.toJson<String>(userId),
+      'joinedAt': serializer.toJson<DateTime>(joinedAt),
+      'leftAt': serializer.toJson<DateTime?>(leftAt),
+      'blockedAt': serializer.toJson<DateTime?>(blockedAt),
+    };
+  }
+
+  ChatMemberData copyWith(
+          {int? chatId,
+          String? userId,
+          DateTime? joinedAt,
+          Value<DateTime?> leftAt = const Value.absent(),
+          Value<DateTime?> blockedAt = const Value.absent()}) =>
+      ChatMemberData(
+        chatId: chatId ?? this.chatId,
+        userId: userId ?? this.userId,
+        joinedAt: joinedAt ?? this.joinedAt,
+        leftAt: leftAt.present ? leftAt.value : this.leftAt,
+        blockedAt: blockedAt.present ? blockedAt.value : this.blockedAt,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('ChatMemberData(')
+          ..write('chatId: $chatId, ')
+          ..write('userId: $userId, ')
+          ..write('joinedAt: $joinedAt, ')
+          ..write('leftAt: $leftAt, ')
+          ..write('blockedAt: $blockedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(chatId, userId, joinedAt, leftAt, blockedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ChatMemberData &&
+          other.chatId == this.chatId &&
+          other.userId == this.userId &&
+          other.joinedAt == this.joinedAt &&
+          other.leftAt == this.leftAt &&
+          other.blockedAt == this.blockedAt);
+}
+
+class ChatMemberDataCompanion extends UpdateCompanion<ChatMemberData> {
+  final Value<int> chatId;
+  final Value<String> userId;
+  final Value<DateTime> joinedAt;
+  final Value<DateTime?> leftAt;
+  final Value<DateTime?> blockedAt;
+  final Value<int> rowid;
+  const ChatMemberDataCompanion({
+    this.chatId = const Value.absent(),
+    this.userId = const Value.absent(),
+    this.joinedAt = const Value.absent(),
+    this.leftAt = const Value.absent(),
+    this.blockedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ChatMemberDataCompanion.insert({
+    required int chatId,
+    required String userId,
+    required DateTime joinedAt,
+    this.leftAt = const Value.absent(),
+    this.blockedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  })  : chatId = Value(chatId),
+        userId = Value(userId),
+        joinedAt = Value(joinedAt);
+  static Insertable<ChatMemberData> custom({
+    Expression<int>? chatId,
+    Expression<String>? userId,
+    Expression<DateTime>? joinedAt,
+    Expression<DateTime>? leftAt,
+    Expression<DateTime>? blockedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (chatId != null) 'chat_id': chatId,
+      if (userId != null) 'user_id': userId,
+      if (joinedAt != null) 'joined_at': joinedAt,
+      if (leftAt != null) 'left_at': leftAt,
+      if (blockedAt != null) 'blocked_at': blockedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ChatMemberDataCompanion copyWith(
+      {Value<int>? chatId,
+      Value<String>? userId,
+      Value<DateTime>? joinedAt,
+      Value<DateTime?>? leftAt,
+      Value<DateTime?>? blockedAt,
+      Value<int>? rowid}) {
+    return ChatMemberDataCompanion(
+      chatId: chatId ?? this.chatId,
+      userId: userId ?? this.userId,
+      joinedAt: joinedAt ?? this.joinedAt,
+      leftAt: leftAt ?? this.leftAt,
+      blockedAt: blockedAt ?? this.blockedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (chatId.present) {
+      map['chat_id'] = Variable<int>(chatId.value);
+    }
+    if (userId.present) {
+      map['user_id'] = Variable<String>(userId.value);
+    }
+    if (joinedAt.present) {
+      map['joined_at'] = Variable<DateTime>(joinedAt.value);
+    }
+    if (leftAt.present) {
+      map['left_at'] = Variable<DateTime>(leftAt.value);
+    }
+    if (blockedAt.present) {
+      map['blocked_at'] = Variable<DateTime>(blockedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ChatMemberDataCompanion(')
+          ..write('chatId: $chatId, ')
+          ..write('userId: $userId, ')
+          ..write('joinedAt: $joinedAt, ')
+          ..write('leftAt: $leftAt, ')
+          ..write('blockedAt: $blockedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ChatMessagesTableTable extends ChatMessagesTable
+    with TableInfo<$ChatMessagesTableTable, ChatMessageData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ChatMessagesTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _senderIdMeta =
+      const VerificationMeta('senderId');
+  @override
+  late final GeneratedColumn<String> senderId = GeneratedColumn<String>(
+      'sender_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _chatIdMeta = const VerificationMeta('chatId');
+  @override
+  late final GeneratedColumn<int> chatId = GeneratedColumn<int>(
+      'chat_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL REFERENCES chats(id) ON DELETE CASCADE');
+  static const VerificationMeta _replyToIdMeta =
+      const VerificationMeta('replyToId');
+  @override
+  late final GeneratedColumn<int> replyToId = GeneratedColumn<int>(
+      'reply_to_id', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _forwardFromIdMeta =
+      const VerificationMeta('forwardFromId');
+  @override
+  late final GeneratedColumn<int> forwardFromId = GeneratedColumn<int>(
+      'forward_from_id', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _authorIdMeta =
+      const VerificationMeta('authorId');
+  @override
+  late final GeneratedColumn<String> authorId = GeneratedColumn<String>(
+      'author_id', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _viaSmsMeta = const VerificationMeta('viaSms');
+  @override
+  late final GeneratedColumn<bool> viaSms = GeneratedColumn<bool>(
+      'via_sms', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("via_sms" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _smsOutStateMeta =
+      const VerificationMeta('smsOutState');
+  @override
+  late final GeneratedColumnWithTypeConverter<SmsOutStateEnum?, String>
+      smsOutState = GeneratedColumn<String>('sms_out_state', aliasedName, true,
+              type: DriftSqlType.string, requiredDuringInsert: false)
+          .withConverter<SmsOutStateEnum?>(
+              $ChatMessagesTableTable.$convertersmsOutStaten);
+  static const VerificationMeta _smsNumberMeta =
+      const VerificationMeta('smsNumber');
+  @override
+  late final GeneratedColumn<String> smsNumber = GeneratedColumn<String>(
+      'sms_number', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _contentMeta =
+      const VerificationMeta('content');
+  @override
+  late final GeneratedColumn<String> content = GeneratedColumn<String>(
+      'content', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _deletedAtMeta =
+      const VerificationMeta('deletedAt');
+  @override
+  late final GeneratedColumn<DateTime> deletedAt = GeneratedColumn<DateTime>(
+      'deleted_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        senderId,
+        chatId,
+        replyToId,
+        forwardFromId,
+        authorId,
+        viaSms,
+        smsOutState,
+        smsNumber,
+        content,
+        createdAt,
+        updatedAt,
+        deletedAt
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'chat_messages';
+  @override
+  VerificationContext validateIntegrity(Insertable<ChatMessageData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('sender_id')) {
+      context.handle(_senderIdMeta,
+          senderId.isAcceptableOrUnknown(data['sender_id']!, _senderIdMeta));
+    } else if (isInserting) {
+      context.missing(_senderIdMeta);
+    }
+    if (data.containsKey('chat_id')) {
+      context.handle(_chatIdMeta,
+          chatId.isAcceptableOrUnknown(data['chat_id']!, _chatIdMeta));
+    } else if (isInserting) {
+      context.missing(_chatIdMeta);
+    }
+    if (data.containsKey('reply_to_id')) {
+      context.handle(
+          _replyToIdMeta,
+          replyToId.isAcceptableOrUnknown(
+              data['reply_to_id']!, _replyToIdMeta));
+    }
+    if (data.containsKey('forward_from_id')) {
+      context.handle(
+          _forwardFromIdMeta,
+          forwardFromId.isAcceptableOrUnknown(
+              data['forward_from_id']!, _forwardFromIdMeta));
+    }
+    if (data.containsKey('author_id')) {
+      context.handle(_authorIdMeta,
+          authorId.isAcceptableOrUnknown(data['author_id']!, _authorIdMeta));
+    }
+    if (data.containsKey('via_sms')) {
+      context.handle(_viaSmsMeta,
+          viaSms.isAcceptableOrUnknown(data['via_sms']!, _viaSmsMeta));
+    }
+    context.handle(_smsOutStateMeta, const VerificationResult.success());
+    if (data.containsKey('sms_number')) {
+      context.handle(_smsNumberMeta,
+          smsNumber.isAcceptableOrUnknown(data['sms_number']!, _smsNumberMeta));
+    }
+    if (data.containsKey('content')) {
+      context.handle(_contentMeta,
+          content.isAcceptableOrUnknown(data['content']!, _contentMeta));
+    } else if (isInserting) {
+      context.missing(_contentMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(_deletedAtMeta,
+          deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => const {};
+  @override
+  ChatMessageData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ChatMessageData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      senderId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}sender_id'])!,
+      chatId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}chat_id'])!,
+      replyToId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}reply_to_id']),
+      forwardFromId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}forward_from_id']),
+      authorId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}author_id']),
+      viaSms: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}via_sms'])!,
+      smsOutState: $ChatMessagesTableTable.$convertersmsOutStaten.fromSql(
+          attachedDatabase.typeMapping.read(
+              DriftSqlType.string, data['${effectivePrefix}sms_out_state'])),
+      smsNumber: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}sms_number']),
+      content: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}content'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
+      deletedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}deleted_at']),
+    );
+  }
+
+  @override
+  $ChatMessagesTableTable createAlias(String alias) {
+    return $ChatMessagesTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<SmsOutStateEnum, String, String>
+      $convertersmsOutState =
+      const EnumNameConverter<SmsOutStateEnum>(SmsOutStateEnum.values);
+  static JsonTypeConverter2<SmsOutStateEnum?, String?, String?>
+      $convertersmsOutStaten =
+      JsonTypeConverter2.asNullable($convertersmsOutState);
+}
+
+class ChatMessageData extends DataClass implements Insertable<ChatMessageData> {
+  final int id;
+  final String senderId;
+  final int chatId;
+  final int? replyToId;
+  final int? forwardFromId;
+  final String? authorId;
+  final bool viaSms;
+  final SmsOutStateEnum? smsOutState;
+  final String? smsNumber;
+  final String content;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final DateTime? deletedAt;
+  const ChatMessageData(
+      {required this.id,
+      required this.senderId,
+      required this.chatId,
+      this.replyToId,
+      this.forwardFromId,
+      this.authorId,
+      required this.viaSms,
+      this.smsOutState,
+      this.smsNumber,
+      required this.content,
+      required this.createdAt,
+      required this.updatedAt,
+      this.deletedAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['sender_id'] = Variable<String>(senderId);
+    map['chat_id'] = Variable<int>(chatId);
+    if (!nullToAbsent || replyToId != null) {
+      map['reply_to_id'] = Variable<int>(replyToId);
+    }
+    if (!nullToAbsent || forwardFromId != null) {
+      map['forward_from_id'] = Variable<int>(forwardFromId);
+    }
+    if (!nullToAbsent || authorId != null) {
+      map['author_id'] = Variable<String>(authorId);
+    }
+    map['via_sms'] = Variable<bool>(viaSms);
+    if (!nullToAbsent || smsOutState != null) {
+      map['sms_out_state'] = Variable<String>(
+          $ChatMessagesTableTable.$convertersmsOutStaten.toSql(smsOutState));
+    }
+    if (!nullToAbsent || smsNumber != null) {
+      map['sms_number'] = Variable<String>(smsNumber);
+    }
+    map['content'] = Variable<String>(content);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt);
+    }
+    return map;
+  }
+
+  ChatMessageDataCompanion toCompanion(bool nullToAbsent) {
+    return ChatMessageDataCompanion(
+      id: Value(id),
+      senderId: Value(senderId),
+      chatId: Value(chatId),
+      replyToId: replyToId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(replyToId),
+      forwardFromId: forwardFromId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(forwardFromId),
+      authorId: authorId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(authorId),
+      viaSms: Value(viaSms),
+      smsOutState: smsOutState == null && nullToAbsent
+          ? const Value.absent()
+          : Value(smsOutState),
+      smsNumber: smsNumber == null && nullToAbsent
+          ? const Value.absent()
+          : Value(smsNumber),
+      content: Value(content),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
+    );
+  }
+
+  factory ChatMessageData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ChatMessageData(
+      id: serializer.fromJson<int>(json['id']),
+      senderId: serializer.fromJson<String>(json['senderId']),
+      chatId: serializer.fromJson<int>(json['chatId']),
+      replyToId: serializer.fromJson<int?>(json['replyToId']),
+      forwardFromId: serializer.fromJson<int?>(json['forwardFromId']),
+      authorId: serializer.fromJson<String?>(json['authorId']),
+      viaSms: serializer.fromJson<bool>(json['viaSms']),
+      smsOutState: $ChatMessagesTableTable.$convertersmsOutStaten
+          .fromJson(serializer.fromJson<String?>(json['smsOutState'])),
+      smsNumber: serializer.fromJson<String?>(json['smsNumber']),
+      content: serializer.fromJson<String>(json['content']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'senderId': serializer.toJson<String>(senderId),
+      'chatId': serializer.toJson<int>(chatId),
+      'replyToId': serializer.toJson<int?>(replyToId),
+      'forwardFromId': serializer.toJson<int?>(forwardFromId),
+      'authorId': serializer.toJson<String?>(authorId),
+      'viaSms': serializer.toJson<bool>(viaSms),
+      'smsOutState': serializer.toJson<String?>(
+          $ChatMessagesTableTable.$convertersmsOutStaten.toJson(smsOutState)),
+      'smsNumber': serializer.toJson<String?>(smsNumber),
+      'content': serializer.toJson<String>(content),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'deletedAt': serializer.toJson<DateTime?>(deletedAt),
+    };
+  }
+
+  ChatMessageData copyWith(
+          {int? id,
+          String? senderId,
+          int? chatId,
+          Value<int?> replyToId = const Value.absent(),
+          Value<int?> forwardFromId = const Value.absent(),
+          Value<String?> authorId = const Value.absent(),
+          bool? viaSms,
+          Value<SmsOutStateEnum?> smsOutState = const Value.absent(),
+          Value<String?> smsNumber = const Value.absent(),
+          String? content,
+          DateTime? createdAt,
+          DateTime? updatedAt,
+          Value<DateTime?> deletedAt = const Value.absent()}) =>
+      ChatMessageData(
+        id: id ?? this.id,
+        senderId: senderId ?? this.senderId,
+        chatId: chatId ?? this.chatId,
+        replyToId: replyToId.present ? replyToId.value : this.replyToId,
+        forwardFromId:
+            forwardFromId.present ? forwardFromId.value : this.forwardFromId,
+        authorId: authorId.present ? authorId.value : this.authorId,
+        viaSms: viaSms ?? this.viaSms,
+        smsOutState: smsOutState.present ? smsOutState.value : this.smsOutState,
+        smsNumber: smsNumber.present ? smsNumber.value : this.smsNumber,
+        content: content ?? this.content,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+        deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('ChatMessageData(')
+          ..write('id: $id, ')
+          ..write('senderId: $senderId, ')
+          ..write('chatId: $chatId, ')
+          ..write('replyToId: $replyToId, ')
+          ..write('forwardFromId: $forwardFromId, ')
+          ..write('authorId: $authorId, ')
+          ..write('viaSms: $viaSms, ')
+          ..write('smsOutState: $smsOutState, ')
+          ..write('smsNumber: $smsNumber, ')
+          ..write('content: $content, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id,
+      senderId,
+      chatId,
+      replyToId,
+      forwardFromId,
+      authorId,
+      viaSms,
+      smsOutState,
+      smsNumber,
+      content,
+      createdAt,
+      updatedAt,
+      deletedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ChatMessageData &&
+          other.id == this.id &&
+          other.senderId == this.senderId &&
+          other.chatId == this.chatId &&
+          other.replyToId == this.replyToId &&
+          other.forwardFromId == this.forwardFromId &&
+          other.authorId == this.authorId &&
+          other.viaSms == this.viaSms &&
+          other.smsOutState == this.smsOutState &&
+          other.smsNumber == this.smsNumber &&
+          other.content == this.content &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.deletedAt == this.deletedAt);
+}
+
+class ChatMessageDataCompanion extends UpdateCompanion<ChatMessageData> {
+  final Value<int> id;
+  final Value<String> senderId;
+  final Value<int> chatId;
+  final Value<int?> replyToId;
+  final Value<int?> forwardFromId;
+  final Value<String?> authorId;
+  final Value<bool> viaSms;
+  final Value<SmsOutStateEnum?> smsOutState;
+  final Value<String?> smsNumber;
+  final Value<String> content;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<DateTime?> deletedAt;
+  final Value<int> rowid;
+  const ChatMessageDataCompanion({
+    this.id = const Value.absent(),
+    this.senderId = const Value.absent(),
+    this.chatId = const Value.absent(),
+    this.replyToId = const Value.absent(),
+    this.forwardFromId = const Value.absent(),
+    this.authorId = const Value.absent(),
+    this.viaSms = const Value.absent(),
+    this.smsOutState = const Value.absent(),
+    this.smsNumber = const Value.absent(),
+    this.content = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ChatMessageDataCompanion.insert({
+    required int id,
+    required String senderId,
+    required int chatId,
+    this.replyToId = const Value.absent(),
+    this.forwardFromId = const Value.absent(),
+    this.authorId = const Value.absent(),
+    this.viaSms = const Value.absent(),
+    this.smsOutState = const Value.absent(),
+    this.smsNumber = const Value.absent(),
+    required String content,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    this.deletedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  })  : id = Value(id),
+        senderId = Value(senderId),
+        chatId = Value(chatId),
+        content = Value(content),
+        createdAt = Value(createdAt),
+        updatedAt = Value(updatedAt);
+  static Insertable<ChatMessageData> custom({
+    Expression<int>? id,
+    Expression<String>? senderId,
+    Expression<int>? chatId,
+    Expression<int>? replyToId,
+    Expression<int>? forwardFromId,
+    Expression<String>? authorId,
+    Expression<bool>? viaSms,
+    Expression<String>? smsOutState,
+    Expression<String>? smsNumber,
+    Expression<String>? content,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+    Expression<DateTime>? deletedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (senderId != null) 'sender_id': senderId,
+      if (chatId != null) 'chat_id': chatId,
+      if (replyToId != null) 'reply_to_id': replyToId,
+      if (forwardFromId != null) 'forward_from_id': forwardFromId,
+      if (authorId != null) 'author_id': authorId,
+      if (viaSms != null) 'via_sms': viaSms,
+      if (smsOutState != null) 'sms_out_state': smsOutState,
+      if (smsNumber != null) 'sms_number': smsNumber,
+      if (content != null) 'content': content,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deletedAt != null) 'deleted_at': deletedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ChatMessageDataCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? senderId,
+      Value<int>? chatId,
+      Value<int?>? replyToId,
+      Value<int?>? forwardFromId,
+      Value<String?>? authorId,
+      Value<bool>? viaSms,
+      Value<SmsOutStateEnum?>? smsOutState,
+      Value<String?>? smsNumber,
+      Value<String>? content,
+      Value<DateTime>? createdAt,
+      Value<DateTime>? updatedAt,
+      Value<DateTime?>? deletedAt,
+      Value<int>? rowid}) {
+    return ChatMessageDataCompanion(
+      id: id ?? this.id,
+      senderId: senderId ?? this.senderId,
+      chatId: chatId ?? this.chatId,
+      replyToId: replyToId ?? this.replyToId,
+      forwardFromId: forwardFromId ?? this.forwardFromId,
+      authorId: authorId ?? this.authorId,
+      viaSms: viaSms ?? this.viaSms,
+      smsOutState: smsOutState ?? this.smsOutState,
+      smsNumber: smsNumber ?? this.smsNumber,
+      content: content ?? this.content,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (senderId.present) {
+      map['sender_id'] = Variable<String>(senderId.value);
+    }
+    if (chatId.present) {
+      map['chat_id'] = Variable<int>(chatId.value);
+    }
+    if (replyToId.present) {
+      map['reply_to_id'] = Variable<int>(replyToId.value);
+    }
+    if (forwardFromId.present) {
+      map['forward_from_id'] = Variable<int>(forwardFromId.value);
+    }
+    if (authorId.present) {
+      map['author_id'] = Variable<String>(authorId.value);
+    }
+    if (viaSms.present) {
+      map['via_sms'] = Variable<bool>(viaSms.value);
+    }
+    if (smsOutState.present) {
+      map['sms_out_state'] = Variable<String>($ChatMessagesTableTable
+          .$convertersmsOutStaten
+          .toSql(smsOutState.value));
+    }
+    if (smsNumber.present) {
+      map['sms_number'] = Variable<String>(smsNumber.value);
+    }
+    if (content.present) {
+      map['content'] = Variable<String>(content.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ChatMessageDataCompanion(')
+          ..write('id: $id, ')
+          ..write('senderId: $senderId, ')
+          ..write('chatId: $chatId, ')
+          ..write('replyToId: $replyToId, ')
+          ..write('forwardFromId: $forwardFromId, ')
+          ..write('authorId: $authorId, ')
+          ..write('viaSms: $viaSms, ')
+          ..write('smsOutState: $smsOutState, ')
+          ..write('smsNumber: $smsNumber, ')
+          ..write('content: $content, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
+  _$AppDatabaseManager get managers => _$AppDatabaseManager(this);
   late final $ContactsTableTable contactsTable = $ContactsTableTable(this);
   late final $ContactPhonesTableTable contactPhonesTable =
       $ContactPhonesTableTable(this);
@@ -1688,6 +2988,11 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $ContactEmailsTableTable(this);
   late final $CallLogsTableTable callLogsTable = $CallLogsTableTable(this);
   late final $FavoritesTableTable favoritesTable = $FavoritesTableTable(this);
+  late final $ChatsTableTable chatsTable = $ChatsTableTable(this);
+  late final $ChatMembersTableTable chatMembersTable =
+      $ChatMembersTableTable(this);
+  late final $ChatMessagesTableTable chatMessagesTable =
+      $ChatMessagesTableTable(this);
   late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
   late final ContactPhonesDao contactPhonesDao =
       ContactPhonesDao(this as AppDatabase);
@@ -1704,7 +3009,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         contactPhonesTable,
         contactEmailsTable,
         callLogsTable,
-        favoritesTable
+        favoritesTable,
+        chatsTable,
+        chatMembersTable,
+        chatMessagesTable
       ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
@@ -1730,8 +3038,1566 @@ abstract class _$AppDatabase extends GeneratedDatabase {
               TableUpdate('favorites', kind: UpdateKind.delete),
             ],
           ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('chats',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('chat_members', kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('chats',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('chat_messages', kind: UpdateKind.delete),
+            ],
+          ),
         ],
       );
+}
+
+typedef $$ContactsTableTableInsertCompanionBuilder = ContactDataCompanion
+    Function({
+  Value<int> id,
+  required ContactSourceTypeEnum sourceType,
+  required String sourceId,
+  Value<String?> firstName,
+  Value<String?> lastName,
+  Value<String?> aliasName,
+  Value<DateTime?> insertedAt,
+  Value<DateTime?> updatedAt,
+});
+typedef $$ContactsTableTableUpdateCompanionBuilder = ContactDataCompanion
+    Function({
+  Value<int> id,
+  Value<ContactSourceTypeEnum> sourceType,
+  Value<String> sourceId,
+  Value<String?> firstName,
+  Value<String?> lastName,
+  Value<String?> aliasName,
+  Value<DateTime?> insertedAt,
+  Value<DateTime?> updatedAt,
+});
+
+class $$ContactsTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ContactsTableTable,
+    ContactData,
+    $$ContactsTableTableFilterComposer,
+    $$ContactsTableTableOrderingComposer,
+    $$ContactsTableTableProcessedTableManager,
+    $$ContactsTableTableInsertCompanionBuilder,
+    $$ContactsTableTableUpdateCompanionBuilder> {
+  $$ContactsTableTableTableManager(_$AppDatabase db, $ContactsTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$ContactsTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$ContactsTableTableOrderingComposer(ComposerState(db, table)),
+          getChildManagerBuilder: (p) =>
+              $$ContactsTableTableProcessedTableManager(p),
+          getUpdateCompanionBuilder: ({
+            Value<int> id = const Value.absent(),
+            Value<ContactSourceTypeEnum> sourceType = const Value.absent(),
+            Value<String> sourceId = const Value.absent(),
+            Value<String?> firstName = const Value.absent(),
+            Value<String?> lastName = const Value.absent(),
+            Value<String?> aliasName = const Value.absent(),
+            Value<DateTime?> insertedAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              ContactDataCompanion(
+            id: id,
+            sourceType: sourceType,
+            sourceId: sourceId,
+            firstName: firstName,
+            lastName: lastName,
+            aliasName: aliasName,
+            insertedAt: insertedAt,
+            updatedAt: updatedAt,
+          ),
+          getInsertCompanionBuilder: ({
+            Value<int> id = const Value.absent(),
+            required ContactSourceTypeEnum sourceType,
+            required String sourceId,
+            Value<String?> firstName = const Value.absent(),
+            Value<String?> lastName = const Value.absent(),
+            Value<String?> aliasName = const Value.absent(),
+            Value<DateTime?> insertedAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              ContactDataCompanion.insert(
+            id: id,
+            sourceType: sourceType,
+            sourceId: sourceId,
+            firstName: firstName,
+            lastName: lastName,
+            aliasName: aliasName,
+            insertedAt: insertedAt,
+            updatedAt: updatedAt,
+          ),
+        ));
+}
+
+class $$ContactsTableTableProcessedTableManager extends ProcessedTableManager<
+    _$AppDatabase,
+    $ContactsTableTable,
+    ContactData,
+    $$ContactsTableTableFilterComposer,
+    $$ContactsTableTableOrderingComposer,
+    $$ContactsTableTableProcessedTableManager,
+    $$ContactsTableTableInsertCompanionBuilder,
+    $$ContactsTableTableUpdateCompanionBuilder> {
+  $$ContactsTableTableProcessedTableManager(super.$state);
+}
+
+class $$ContactsTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $ContactsTableTable> {
+  $$ContactsTableTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnWithTypeConverterFilters<ContactSourceTypeEnum, ContactSourceTypeEnum,
+          int>
+      get sourceType => $state.composableBuilder(
+          column: $state.table.sourceType,
+          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
+              column,
+              joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get sourceId => $state.composableBuilder(
+      column: $state.table.sourceId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get firstName => $state.composableBuilder(
+      column: $state.table.firstName,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get lastName => $state.composableBuilder(
+      column: $state.table.lastName,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get aliasName => $state.composableBuilder(
+      column: $state.table.aliasName,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get insertedAt => $state.composableBuilder(
+      column: $state.table.insertedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get updatedAt => $state.composableBuilder(
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ComposableFilter contactPhonesTableRefs(
+      ComposableFilter Function($$ContactPhonesTableTableFilterComposer f) f) {
+    final $$ContactPhonesTableTableFilterComposer composer = $state
+        .composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $state.db.contactPhonesTable,
+            getReferencedColumn: (t) => t.contactId,
+            builder: (joinBuilder, parentComposers) =>
+                $$ContactPhonesTableTableFilterComposer(ComposerState(
+                    $state.db,
+                    $state.db.contactPhonesTable,
+                    joinBuilder,
+                    parentComposers)));
+    return f(composer);
+  }
+
+  ComposableFilter contactEmailsTableRefs(
+      ComposableFilter Function($$ContactEmailsTableTableFilterComposer f) f) {
+    final $$ContactEmailsTableTableFilterComposer composer = $state
+        .composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $state.db.contactEmailsTable,
+            getReferencedColumn: (t) => t.contactId,
+            builder: (joinBuilder, parentComposers) =>
+                $$ContactEmailsTableTableFilterComposer(ComposerState(
+                    $state.db,
+                    $state.db.contactEmailsTable,
+                    joinBuilder,
+                    parentComposers)));
+    return f(composer);
+  }
+}
+
+class $$ContactsTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $ContactsTableTable> {
+  $$ContactsTableTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get sourceType => $state.composableBuilder(
+      column: $state.table.sourceType,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get sourceId => $state.composableBuilder(
+      column: $state.table.sourceId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get firstName => $state.composableBuilder(
+      column: $state.table.firstName,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get lastName => $state.composableBuilder(
+      column: $state.table.lastName,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get aliasName => $state.composableBuilder(
+      column: $state.table.aliasName,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get insertedAt => $state.composableBuilder(
+      column: $state.table.insertedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get updatedAt => $state.composableBuilder(
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
+typedef $$ContactPhonesTableTableInsertCompanionBuilder
+    = ContactPhoneDataCompanion Function({
+  Value<int> id,
+  required String number,
+  required String label,
+  required int contactId,
+  Value<DateTime?> insertedAt,
+  Value<DateTime?> updatedAt,
+});
+typedef $$ContactPhonesTableTableUpdateCompanionBuilder
+    = ContactPhoneDataCompanion Function({
+  Value<int> id,
+  Value<String> number,
+  Value<String> label,
+  Value<int> contactId,
+  Value<DateTime?> insertedAt,
+  Value<DateTime?> updatedAt,
+});
+
+class $$ContactPhonesTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ContactPhonesTableTable,
+    ContactPhoneData,
+    $$ContactPhonesTableTableFilterComposer,
+    $$ContactPhonesTableTableOrderingComposer,
+    $$ContactPhonesTableTableProcessedTableManager,
+    $$ContactPhonesTableTableInsertCompanionBuilder,
+    $$ContactPhonesTableTableUpdateCompanionBuilder> {
+  $$ContactPhonesTableTableTableManager(
+      _$AppDatabase db, $ContactPhonesTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$ContactPhonesTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer: $$ContactPhonesTableTableOrderingComposer(
+              ComposerState(db, table)),
+          getChildManagerBuilder: (p) =>
+              $$ContactPhonesTableTableProcessedTableManager(p),
+          getUpdateCompanionBuilder: ({
+            Value<int> id = const Value.absent(),
+            Value<String> number = const Value.absent(),
+            Value<String> label = const Value.absent(),
+            Value<int> contactId = const Value.absent(),
+            Value<DateTime?> insertedAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              ContactPhoneDataCompanion(
+            id: id,
+            number: number,
+            label: label,
+            contactId: contactId,
+            insertedAt: insertedAt,
+            updatedAt: updatedAt,
+          ),
+          getInsertCompanionBuilder: ({
+            Value<int> id = const Value.absent(),
+            required String number,
+            required String label,
+            required int contactId,
+            Value<DateTime?> insertedAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              ContactPhoneDataCompanion.insert(
+            id: id,
+            number: number,
+            label: label,
+            contactId: contactId,
+            insertedAt: insertedAt,
+            updatedAt: updatedAt,
+          ),
+        ));
+}
+
+class $$ContactPhonesTableTableProcessedTableManager
+    extends ProcessedTableManager<
+        _$AppDatabase,
+        $ContactPhonesTableTable,
+        ContactPhoneData,
+        $$ContactPhonesTableTableFilterComposer,
+        $$ContactPhonesTableTableOrderingComposer,
+        $$ContactPhonesTableTableProcessedTableManager,
+        $$ContactPhonesTableTableInsertCompanionBuilder,
+        $$ContactPhonesTableTableUpdateCompanionBuilder> {
+  $$ContactPhonesTableTableProcessedTableManager(super.$state);
+}
+
+class $$ContactPhonesTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $ContactPhonesTableTable> {
+  $$ContactPhonesTableTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get number => $state.composableBuilder(
+      column: $state.table.number,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get label => $state.composableBuilder(
+      column: $state.table.label,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get insertedAt => $state.composableBuilder(
+      column: $state.table.insertedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get updatedAt => $state.composableBuilder(
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  $$ContactsTableTableFilterComposer get contactId {
+    final $$ContactsTableTableFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.contactId,
+        referencedTable: $state.db.contactsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) =>
+            $$ContactsTableTableFilterComposer(ComposerState($state.db,
+                $state.db.contactsTable, joinBuilder, parentComposers)));
+    return composer;
+  }
+
+  ComposableFilter favoritesTableRefs(
+      ComposableFilter Function($$FavoritesTableTableFilterComposer f) f) {
+    final $$FavoritesTableTableFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $state.db.favoritesTable,
+        getReferencedColumn: (t) => t.contactPhoneId,
+        builder: (joinBuilder, parentComposers) =>
+            $$FavoritesTableTableFilterComposer(ComposerState($state.db,
+                $state.db.favoritesTable, joinBuilder, parentComposers)));
+    return f(composer);
+  }
+}
+
+class $$ContactPhonesTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $ContactPhonesTableTable> {
+  $$ContactPhonesTableTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get number => $state.composableBuilder(
+      column: $state.table.number,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get label => $state.composableBuilder(
+      column: $state.table.label,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get insertedAt => $state.composableBuilder(
+      column: $state.table.insertedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get updatedAt => $state.composableBuilder(
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  $$ContactsTableTableOrderingComposer get contactId {
+    final $$ContactsTableTableOrderingComposer composer =
+        $state.composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.contactId,
+            referencedTable: $state.db.contactsTable,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder, parentComposers) =>
+                $$ContactsTableTableOrderingComposer(ComposerState($state.db,
+                    $state.db.contactsTable, joinBuilder, parentComposers)));
+    return composer;
+  }
+}
+
+typedef $$ContactEmailsTableTableInsertCompanionBuilder
+    = ContactEmailDataCompanion Function({
+  Value<int> id,
+  required String address,
+  required String label,
+  required int contactId,
+  Value<DateTime?> insertedAt,
+  Value<DateTime?> updatedAt,
+});
+typedef $$ContactEmailsTableTableUpdateCompanionBuilder
+    = ContactEmailDataCompanion Function({
+  Value<int> id,
+  Value<String> address,
+  Value<String> label,
+  Value<int> contactId,
+  Value<DateTime?> insertedAt,
+  Value<DateTime?> updatedAt,
+});
+
+class $$ContactEmailsTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ContactEmailsTableTable,
+    ContactEmailData,
+    $$ContactEmailsTableTableFilterComposer,
+    $$ContactEmailsTableTableOrderingComposer,
+    $$ContactEmailsTableTableProcessedTableManager,
+    $$ContactEmailsTableTableInsertCompanionBuilder,
+    $$ContactEmailsTableTableUpdateCompanionBuilder> {
+  $$ContactEmailsTableTableTableManager(
+      _$AppDatabase db, $ContactEmailsTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$ContactEmailsTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer: $$ContactEmailsTableTableOrderingComposer(
+              ComposerState(db, table)),
+          getChildManagerBuilder: (p) =>
+              $$ContactEmailsTableTableProcessedTableManager(p),
+          getUpdateCompanionBuilder: ({
+            Value<int> id = const Value.absent(),
+            Value<String> address = const Value.absent(),
+            Value<String> label = const Value.absent(),
+            Value<int> contactId = const Value.absent(),
+            Value<DateTime?> insertedAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              ContactEmailDataCompanion(
+            id: id,
+            address: address,
+            label: label,
+            contactId: contactId,
+            insertedAt: insertedAt,
+            updatedAt: updatedAt,
+          ),
+          getInsertCompanionBuilder: ({
+            Value<int> id = const Value.absent(),
+            required String address,
+            required String label,
+            required int contactId,
+            Value<DateTime?> insertedAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              ContactEmailDataCompanion.insert(
+            id: id,
+            address: address,
+            label: label,
+            contactId: contactId,
+            insertedAt: insertedAt,
+            updatedAt: updatedAt,
+          ),
+        ));
+}
+
+class $$ContactEmailsTableTableProcessedTableManager
+    extends ProcessedTableManager<
+        _$AppDatabase,
+        $ContactEmailsTableTable,
+        ContactEmailData,
+        $$ContactEmailsTableTableFilterComposer,
+        $$ContactEmailsTableTableOrderingComposer,
+        $$ContactEmailsTableTableProcessedTableManager,
+        $$ContactEmailsTableTableInsertCompanionBuilder,
+        $$ContactEmailsTableTableUpdateCompanionBuilder> {
+  $$ContactEmailsTableTableProcessedTableManager(super.$state);
+}
+
+class $$ContactEmailsTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $ContactEmailsTableTable> {
+  $$ContactEmailsTableTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get address => $state.composableBuilder(
+      column: $state.table.address,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get label => $state.composableBuilder(
+      column: $state.table.label,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get insertedAt => $state.composableBuilder(
+      column: $state.table.insertedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get updatedAt => $state.composableBuilder(
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  $$ContactsTableTableFilterComposer get contactId {
+    final $$ContactsTableTableFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.contactId,
+        referencedTable: $state.db.contactsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) =>
+            $$ContactsTableTableFilterComposer(ComposerState($state.db,
+                $state.db.contactsTable, joinBuilder, parentComposers)));
+    return composer;
+  }
+}
+
+class $$ContactEmailsTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $ContactEmailsTableTable> {
+  $$ContactEmailsTableTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get address => $state.composableBuilder(
+      column: $state.table.address,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get label => $state.composableBuilder(
+      column: $state.table.label,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get insertedAt => $state.composableBuilder(
+      column: $state.table.insertedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get updatedAt => $state.composableBuilder(
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  $$ContactsTableTableOrderingComposer get contactId {
+    final $$ContactsTableTableOrderingComposer composer =
+        $state.composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.contactId,
+            referencedTable: $state.db.contactsTable,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder, parentComposers) =>
+                $$ContactsTableTableOrderingComposer(ComposerState($state.db,
+                    $state.db.contactsTable, joinBuilder, parentComposers)));
+    return composer;
+  }
+}
+
+typedef $$CallLogsTableTableInsertCompanionBuilder = CallLogDataCompanion
+    Function({
+  Value<int> id,
+  required CallLogDirectionEnum direction,
+  required String number,
+  required bool video,
+  required DateTime createdAt,
+  Value<DateTime?> acceptedAt,
+  Value<DateTime?> hungUpAt,
+});
+typedef $$CallLogsTableTableUpdateCompanionBuilder = CallLogDataCompanion
+    Function({
+  Value<int> id,
+  Value<CallLogDirectionEnum> direction,
+  Value<String> number,
+  Value<bool> video,
+  Value<DateTime> createdAt,
+  Value<DateTime?> acceptedAt,
+  Value<DateTime?> hungUpAt,
+});
+
+class $$CallLogsTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $CallLogsTableTable,
+    CallLogData,
+    $$CallLogsTableTableFilterComposer,
+    $$CallLogsTableTableOrderingComposer,
+    $$CallLogsTableTableProcessedTableManager,
+    $$CallLogsTableTableInsertCompanionBuilder,
+    $$CallLogsTableTableUpdateCompanionBuilder> {
+  $$CallLogsTableTableTableManager(_$AppDatabase db, $CallLogsTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$CallLogsTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$CallLogsTableTableOrderingComposer(ComposerState(db, table)),
+          getChildManagerBuilder: (p) =>
+              $$CallLogsTableTableProcessedTableManager(p),
+          getUpdateCompanionBuilder: ({
+            Value<int> id = const Value.absent(),
+            Value<CallLogDirectionEnum> direction = const Value.absent(),
+            Value<String> number = const Value.absent(),
+            Value<bool> video = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime?> acceptedAt = const Value.absent(),
+            Value<DateTime?> hungUpAt = const Value.absent(),
+          }) =>
+              CallLogDataCompanion(
+            id: id,
+            direction: direction,
+            number: number,
+            video: video,
+            createdAt: createdAt,
+            acceptedAt: acceptedAt,
+            hungUpAt: hungUpAt,
+          ),
+          getInsertCompanionBuilder: ({
+            Value<int> id = const Value.absent(),
+            required CallLogDirectionEnum direction,
+            required String number,
+            required bool video,
+            required DateTime createdAt,
+            Value<DateTime?> acceptedAt = const Value.absent(),
+            Value<DateTime?> hungUpAt = const Value.absent(),
+          }) =>
+              CallLogDataCompanion.insert(
+            id: id,
+            direction: direction,
+            number: number,
+            video: video,
+            createdAt: createdAt,
+            acceptedAt: acceptedAt,
+            hungUpAt: hungUpAt,
+          ),
+        ));
+}
+
+class $$CallLogsTableTableProcessedTableManager extends ProcessedTableManager<
+    _$AppDatabase,
+    $CallLogsTableTable,
+    CallLogData,
+    $$CallLogsTableTableFilterComposer,
+    $$CallLogsTableTableOrderingComposer,
+    $$CallLogsTableTableProcessedTableManager,
+    $$CallLogsTableTableInsertCompanionBuilder,
+    $$CallLogsTableTableUpdateCompanionBuilder> {
+  $$CallLogsTableTableProcessedTableManager(super.$state);
+}
+
+class $$CallLogsTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $CallLogsTableTable> {
+  $$CallLogsTableTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnWithTypeConverterFilters<CallLogDirectionEnum, CallLogDirectionEnum,
+          int>
+      get direction => $state.composableBuilder(
+          column: $state.table.direction,
+          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
+              column,
+              joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get number => $state.composableBuilder(
+      column: $state.table.number,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get video => $state.composableBuilder(
+      column: $state.table.video,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get acceptedAt => $state.composableBuilder(
+      column: $state.table.acceptedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get hungUpAt => $state.composableBuilder(
+      column: $state.table.hungUpAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+}
+
+class $$CallLogsTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $CallLogsTableTable> {
+  $$CallLogsTableTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get direction => $state.composableBuilder(
+      column: $state.table.direction,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get number => $state.composableBuilder(
+      column: $state.table.number,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get video => $state.composableBuilder(
+      column: $state.table.video,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get acceptedAt => $state.composableBuilder(
+      column: $state.table.acceptedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get hungUpAt => $state.composableBuilder(
+      column: $state.table.hungUpAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
+typedef $$FavoritesTableTableInsertCompanionBuilder = FavoriteDataCompanion
+    Function({
+  Value<int> id,
+  required int contactPhoneId,
+  required int position,
+});
+typedef $$FavoritesTableTableUpdateCompanionBuilder = FavoriteDataCompanion
+    Function({
+  Value<int> id,
+  Value<int> contactPhoneId,
+  Value<int> position,
+});
+
+class $$FavoritesTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $FavoritesTableTable,
+    FavoriteData,
+    $$FavoritesTableTableFilterComposer,
+    $$FavoritesTableTableOrderingComposer,
+    $$FavoritesTableTableProcessedTableManager,
+    $$FavoritesTableTableInsertCompanionBuilder,
+    $$FavoritesTableTableUpdateCompanionBuilder> {
+  $$FavoritesTableTableTableManager(
+      _$AppDatabase db, $FavoritesTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$FavoritesTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$FavoritesTableTableOrderingComposer(ComposerState(db, table)),
+          getChildManagerBuilder: (p) =>
+              $$FavoritesTableTableProcessedTableManager(p),
+          getUpdateCompanionBuilder: ({
+            Value<int> id = const Value.absent(),
+            Value<int> contactPhoneId = const Value.absent(),
+            Value<int> position = const Value.absent(),
+          }) =>
+              FavoriteDataCompanion(
+            id: id,
+            contactPhoneId: contactPhoneId,
+            position: position,
+          ),
+          getInsertCompanionBuilder: ({
+            Value<int> id = const Value.absent(),
+            required int contactPhoneId,
+            required int position,
+          }) =>
+              FavoriteDataCompanion.insert(
+            id: id,
+            contactPhoneId: contactPhoneId,
+            position: position,
+          ),
+        ));
+}
+
+class $$FavoritesTableTableProcessedTableManager extends ProcessedTableManager<
+    _$AppDatabase,
+    $FavoritesTableTable,
+    FavoriteData,
+    $$FavoritesTableTableFilterComposer,
+    $$FavoritesTableTableOrderingComposer,
+    $$FavoritesTableTableProcessedTableManager,
+    $$FavoritesTableTableInsertCompanionBuilder,
+    $$FavoritesTableTableUpdateCompanionBuilder> {
+  $$FavoritesTableTableProcessedTableManager(super.$state);
+}
+
+class $$FavoritesTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $FavoritesTableTable> {
+  $$FavoritesTableTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get position => $state.composableBuilder(
+      column: $state.table.position,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  $$ContactPhonesTableTableFilterComposer get contactPhoneId {
+    final $$ContactPhonesTableTableFilterComposer composer = $state
+        .composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.contactPhoneId,
+            referencedTable: $state.db.contactPhonesTable,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder, parentComposers) =>
+                $$ContactPhonesTableTableFilterComposer(ComposerState(
+                    $state.db,
+                    $state.db.contactPhonesTable,
+                    joinBuilder,
+                    parentComposers)));
+    return composer;
+  }
+}
+
+class $$FavoritesTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $FavoritesTableTable> {
+  $$FavoritesTableTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get position => $state.composableBuilder(
+      column: $state.table.position,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  $$ContactPhonesTableTableOrderingComposer get contactPhoneId {
+    final $$ContactPhonesTableTableOrderingComposer composer =
+        $state.composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.contactPhoneId,
+            referencedTable: $state.db.contactPhonesTable,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder, parentComposers) =>
+                $$ContactPhonesTableTableOrderingComposer(ComposerState(
+                    $state.db,
+                    $state.db.contactPhonesTable,
+                    joinBuilder,
+                    parentComposers)));
+    return composer;
+  }
+}
+
+typedef $$ChatsTableTableInsertCompanionBuilder = ChatDataCompanion Function({
+  Value<int> id,
+  required ChatTypeEnum type,
+  Value<String?> name,
+  required String creatorId,
+  required DateTime createdAt,
+  required DateTime updatedAt,
+  Value<DateTime?> deletedAt,
+});
+typedef $$ChatsTableTableUpdateCompanionBuilder = ChatDataCompanion Function({
+  Value<int> id,
+  Value<ChatTypeEnum> type,
+  Value<String?> name,
+  Value<String> creatorId,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+  Value<DateTime?> deletedAt,
+});
+
+class $$ChatsTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ChatsTableTable,
+    ChatData,
+    $$ChatsTableTableFilterComposer,
+    $$ChatsTableTableOrderingComposer,
+    $$ChatsTableTableProcessedTableManager,
+    $$ChatsTableTableInsertCompanionBuilder,
+    $$ChatsTableTableUpdateCompanionBuilder> {
+  $$ChatsTableTableTableManager(_$AppDatabase db, $ChatsTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$ChatsTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$ChatsTableTableOrderingComposer(ComposerState(db, table)),
+          getChildManagerBuilder: (p) =>
+              $$ChatsTableTableProcessedTableManager(p),
+          getUpdateCompanionBuilder: ({
+            Value<int> id = const Value.absent(),
+            Value<ChatTypeEnum> type = const Value.absent(),
+            Value<String?> name = const Value.absent(),
+            Value<String> creatorId = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime> updatedAt = const Value.absent(),
+            Value<DateTime?> deletedAt = const Value.absent(),
+          }) =>
+              ChatDataCompanion(
+            id: id,
+            type: type,
+            name: name,
+            creatorId: creatorId,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            deletedAt: deletedAt,
+          ),
+          getInsertCompanionBuilder: ({
+            Value<int> id = const Value.absent(),
+            required ChatTypeEnum type,
+            Value<String?> name = const Value.absent(),
+            required String creatorId,
+            required DateTime createdAt,
+            required DateTime updatedAt,
+            Value<DateTime?> deletedAt = const Value.absent(),
+          }) =>
+              ChatDataCompanion.insert(
+            id: id,
+            type: type,
+            name: name,
+            creatorId: creatorId,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            deletedAt: deletedAt,
+          ),
+        ));
+}
+
+class $$ChatsTableTableProcessedTableManager extends ProcessedTableManager<
+    _$AppDatabase,
+    $ChatsTableTable,
+    ChatData,
+    $$ChatsTableTableFilterComposer,
+    $$ChatsTableTableOrderingComposer,
+    $$ChatsTableTableProcessedTableManager,
+    $$ChatsTableTableInsertCompanionBuilder,
+    $$ChatsTableTableUpdateCompanionBuilder> {
+  $$ChatsTableTableProcessedTableManager(super.$state);
+}
+
+class $$ChatsTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $ChatsTableTable> {
+  $$ChatsTableTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnWithTypeConverterFilters<ChatTypeEnum, ChatTypeEnum, String> get type =>
+      $state.composableBuilder(
+          column: $state.table.type,
+          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
+              column,
+              joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get name => $state.composableBuilder(
+      column: $state.table.name,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get creatorId => $state.composableBuilder(
+      column: $state.table.creatorId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get updatedAt => $state.composableBuilder(
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get deletedAt => $state.composableBuilder(
+      column: $state.table.deletedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ComposableFilter chatMembersTableRefs(
+      ComposableFilter Function($$ChatMembersTableTableFilterComposer f) f) {
+    final $$ChatMembersTableTableFilterComposer composer =
+        $state.composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $state.db.chatMembersTable,
+            getReferencedColumn: (t) => t.chatId,
+            builder: (joinBuilder, parentComposers) =>
+                $$ChatMembersTableTableFilterComposer(ComposerState($state.db,
+                    $state.db.chatMembersTable, joinBuilder, parentComposers)));
+    return f(composer);
+  }
+
+  ComposableFilter chatMessagesTableRefs(
+      ComposableFilter Function($$ChatMessagesTableTableFilterComposer f) f) {
+    final $$ChatMessagesTableTableFilterComposer composer =
+        $state.composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $state.db.chatMessagesTable,
+            getReferencedColumn: (t) => t.chatId,
+            builder: (joinBuilder, parentComposers) =>
+                $$ChatMessagesTableTableFilterComposer(ComposerState(
+                    $state.db,
+                    $state.db.chatMessagesTable,
+                    joinBuilder,
+                    parentComposers)));
+    return f(composer);
+  }
+}
+
+class $$ChatsTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $ChatsTableTable> {
+  $$ChatsTableTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get type => $state.composableBuilder(
+      column: $state.table.type,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get name => $state.composableBuilder(
+      column: $state.table.name,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get creatorId => $state.composableBuilder(
+      column: $state.table.creatorId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get updatedAt => $state.composableBuilder(
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get deletedAt => $state.composableBuilder(
+      column: $state.table.deletedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
+typedef $$ChatMembersTableTableInsertCompanionBuilder = ChatMemberDataCompanion
+    Function({
+  required int chatId,
+  required String userId,
+  required DateTime joinedAt,
+  Value<DateTime?> leftAt,
+  Value<DateTime?> blockedAt,
+  Value<int> rowid,
+});
+typedef $$ChatMembersTableTableUpdateCompanionBuilder = ChatMemberDataCompanion
+    Function({
+  Value<int> chatId,
+  Value<String> userId,
+  Value<DateTime> joinedAt,
+  Value<DateTime?> leftAt,
+  Value<DateTime?> blockedAt,
+  Value<int> rowid,
+});
+
+class $$ChatMembersTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ChatMembersTableTable,
+    ChatMemberData,
+    $$ChatMembersTableTableFilterComposer,
+    $$ChatMembersTableTableOrderingComposer,
+    $$ChatMembersTableTableProcessedTableManager,
+    $$ChatMembersTableTableInsertCompanionBuilder,
+    $$ChatMembersTableTableUpdateCompanionBuilder> {
+  $$ChatMembersTableTableTableManager(
+      _$AppDatabase db, $ChatMembersTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$ChatMembersTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$ChatMembersTableTableOrderingComposer(ComposerState(db, table)),
+          getChildManagerBuilder: (p) =>
+              $$ChatMembersTableTableProcessedTableManager(p),
+          getUpdateCompanionBuilder: ({
+            Value<int> chatId = const Value.absent(),
+            Value<String> userId = const Value.absent(),
+            Value<DateTime> joinedAt = const Value.absent(),
+            Value<DateTime?> leftAt = const Value.absent(),
+            Value<DateTime?> blockedAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ChatMemberDataCompanion(
+            chatId: chatId,
+            userId: userId,
+            joinedAt: joinedAt,
+            leftAt: leftAt,
+            blockedAt: blockedAt,
+            rowid: rowid,
+          ),
+          getInsertCompanionBuilder: ({
+            required int chatId,
+            required String userId,
+            required DateTime joinedAt,
+            Value<DateTime?> leftAt = const Value.absent(),
+            Value<DateTime?> blockedAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ChatMemberDataCompanion.insert(
+            chatId: chatId,
+            userId: userId,
+            joinedAt: joinedAt,
+            leftAt: leftAt,
+            blockedAt: blockedAt,
+            rowid: rowid,
+          ),
+        ));
+}
+
+class $$ChatMembersTableTableProcessedTableManager
+    extends ProcessedTableManager<
+        _$AppDatabase,
+        $ChatMembersTableTable,
+        ChatMemberData,
+        $$ChatMembersTableTableFilterComposer,
+        $$ChatMembersTableTableOrderingComposer,
+        $$ChatMembersTableTableProcessedTableManager,
+        $$ChatMembersTableTableInsertCompanionBuilder,
+        $$ChatMembersTableTableUpdateCompanionBuilder> {
+  $$ChatMembersTableTableProcessedTableManager(super.$state);
+}
+
+class $$ChatMembersTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $ChatMembersTableTable> {
+  $$ChatMembersTableTableFilterComposer(super.$state);
+  ColumnFilters<String> get userId => $state.composableBuilder(
+      column: $state.table.userId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get joinedAt => $state.composableBuilder(
+      column: $state.table.joinedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get leftAt => $state.composableBuilder(
+      column: $state.table.leftAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get blockedAt => $state.composableBuilder(
+      column: $state.table.blockedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  $$ChatsTableTableFilterComposer get chatId {
+    final $$ChatsTableTableFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.chatId,
+        referencedTable: $state.db.chatsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) =>
+            $$ChatsTableTableFilterComposer(ComposerState($state.db,
+                $state.db.chatsTable, joinBuilder, parentComposers)));
+    return composer;
+  }
+}
+
+class $$ChatMembersTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $ChatMembersTableTable> {
+  $$ChatMembersTableTableOrderingComposer(super.$state);
+  ColumnOrderings<String> get userId => $state.composableBuilder(
+      column: $state.table.userId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get joinedAt => $state.composableBuilder(
+      column: $state.table.joinedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get leftAt => $state.composableBuilder(
+      column: $state.table.leftAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get blockedAt => $state.composableBuilder(
+      column: $state.table.blockedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  $$ChatsTableTableOrderingComposer get chatId {
+    final $$ChatsTableTableOrderingComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.chatId,
+        referencedTable: $state.db.chatsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) =>
+            $$ChatsTableTableOrderingComposer(ComposerState($state.db,
+                $state.db.chatsTable, joinBuilder, parentComposers)));
+    return composer;
+  }
+}
+
+typedef $$ChatMessagesTableTableInsertCompanionBuilder
+    = ChatMessageDataCompanion Function({
+  required int id,
+  required String senderId,
+  required int chatId,
+  Value<int?> replyToId,
+  Value<int?> forwardFromId,
+  Value<String?> authorId,
+  Value<bool> viaSms,
+  Value<SmsOutStateEnum?> smsOutState,
+  Value<String?> smsNumber,
+  required String content,
+  required DateTime createdAt,
+  required DateTime updatedAt,
+  Value<DateTime?> deletedAt,
+  Value<int> rowid,
+});
+typedef $$ChatMessagesTableTableUpdateCompanionBuilder
+    = ChatMessageDataCompanion Function({
+  Value<int> id,
+  Value<String> senderId,
+  Value<int> chatId,
+  Value<int?> replyToId,
+  Value<int?> forwardFromId,
+  Value<String?> authorId,
+  Value<bool> viaSms,
+  Value<SmsOutStateEnum?> smsOutState,
+  Value<String?> smsNumber,
+  Value<String> content,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+  Value<DateTime?> deletedAt,
+  Value<int> rowid,
+});
+
+class $$ChatMessagesTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ChatMessagesTableTable,
+    ChatMessageData,
+    $$ChatMessagesTableTableFilterComposer,
+    $$ChatMessagesTableTableOrderingComposer,
+    $$ChatMessagesTableTableProcessedTableManager,
+    $$ChatMessagesTableTableInsertCompanionBuilder,
+    $$ChatMessagesTableTableUpdateCompanionBuilder> {
+  $$ChatMessagesTableTableTableManager(
+      _$AppDatabase db, $ChatMessagesTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$ChatMessagesTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer: $$ChatMessagesTableTableOrderingComposer(
+              ComposerState(db, table)),
+          getChildManagerBuilder: (p) =>
+              $$ChatMessagesTableTableProcessedTableManager(p),
+          getUpdateCompanionBuilder: ({
+            Value<int> id = const Value.absent(),
+            Value<String> senderId = const Value.absent(),
+            Value<int> chatId = const Value.absent(),
+            Value<int?> replyToId = const Value.absent(),
+            Value<int?> forwardFromId = const Value.absent(),
+            Value<String?> authorId = const Value.absent(),
+            Value<bool> viaSms = const Value.absent(),
+            Value<SmsOutStateEnum?> smsOutState = const Value.absent(),
+            Value<String?> smsNumber = const Value.absent(),
+            Value<String> content = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime> updatedAt = const Value.absent(),
+            Value<DateTime?> deletedAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ChatMessageDataCompanion(
+            id: id,
+            senderId: senderId,
+            chatId: chatId,
+            replyToId: replyToId,
+            forwardFromId: forwardFromId,
+            authorId: authorId,
+            viaSms: viaSms,
+            smsOutState: smsOutState,
+            smsNumber: smsNumber,
+            content: content,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            deletedAt: deletedAt,
+            rowid: rowid,
+          ),
+          getInsertCompanionBuilder: ({
+            required int id,
+            required String senderId,
+            required int chatId,
+            Value<int?> replyToId = const Value.absent(),
+            Value<int?> forwardFromId = const Value.absent(),
+            Value<String?> authorId = const Value.absent(),
+            Value<bool> viaSms = const Value.absent(),
+            Value<SmsOutStateEnum?> smsOutState = const Value.absent(),
+            Value<String?> smsNumber = const Value.absent(),
+            required String content,
+            required DateTime createdAt,
+            required DateTime updatedAt,
+            Value<DateTime?> deletedAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ChatMessageDataCompanion.insert(
+            id: id,
+            senderId: senderId,
+            chatId: chatId,
+            replyToId: replyToId,
+            forwardFromId: forwardFromId,
+            authorId: authorId,
+            viaSms: viaSms,
+            smsOutState: smsOutState,
+            smsNumber: smsNumber,
+            content: content,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            deletedAt: deletedAt,
+            rowid: rowid,
+          ),
+        ));
+}
+
+class $$ChatMessagesTableTableProcessedTableManager
+    extends ProcessedTableManager<
+        _$AppDatabase,
+        $ChatMessagesTableTable,
+        ChatMessageData,
+        $$ChatMessagesTableTableFilterComposer,
+        $$ChatMessagesTableTableOrderingComposer,
+        $$ChatMessagesTableTableProcessedTableManager,
+        $$ChatMessagesTableTableInsertCompanionBuilder,
+        $$ChatMessagesTableTableUpdateCompanionBuilder> {
+  $$ChatMessagesTableTableProcessedTableManager(super.$state);
+}
+
+class $$ChatMessagesTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $ChatMessagesTableTable> {
+  $$ChatMessagesTableTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get senderId => $state.composableBuilder(
+      column: $state.table.senderId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get replyToId => $state.composableBuilder(
+      column: $state.table.replyToId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get forwardFromId => $state.composableBuilder(
+      column: $state.table.forwardFromId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get authorId => $state.composableBuilder(
+      column: $state.table.authorId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get viaSms => $state.composableBuilder(
+      column: $state.table.viaSms,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnWithTypeConverterFilters<SmsOutStateEnum?, SmsOutStateEnum, String>
+      get smsOutState => $state.composableBuilder(
+          column: $state.table.smsOutState,
+          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
+              column,
+              joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get smsNumber => $state.composableBuilder(
+      column: $state.table.smsNumber,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get content => $state.composableBuilder(
+      column: $state.table.content,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get updatedAt => $state.composableBuilder(
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get deletedAt => $state.composableBuilder(
+      column: $state.table.deletedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  $$ChatsTableTableFilterComposer get chatId {
+    final $$ChatsTableTableFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.chatId,
+        referencedTable: $state.db.chatsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) =>
+            $$ChatsTableTableFilterComposer(ComposerState($state.db,
+                $state.db.chatsTable, joinBuilder, parentComposers)));
+    return composer;
+  }
+}
+
+class $$ChatMessagesTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $ChatMessagesTableTable> {
+  $$ChatMessagesTableTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get senderId => $state.composableBuilder(
+      column: $state.table.senderId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get replyToId => $state.composableBuilder(
+      column: $state.table.replyToId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get forwardFromId => $state.composableBuilder(
+      column: $state.table.forwardFromId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get authorId => $state.composableBuilder(
+      column: $state.table.authorId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get viaSms => $state.composableBuilder(
+      column: $state.table.viaSms,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get smsOutState => $state.composableBuilder(
+      column: $state.table.smsOutState,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get smsNumber => $state.composableBuilder(
+      column: $state.table.smsNumber,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get content => $state.composableBuilder(
+      column: $state.table.content,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get updatedAt => $state.composableBuilder(
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get deletedAt => $state.composableBuilder(
+      column: $state.table.deletedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  $$ChatsTableTableOrderingComposer get chatId {
+    final $$ChatsTableTableOrderingComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.chatId,
+        referencedTable: $state.db.chatsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) =>
+            $$ChatsTableTableOrderingComposer(ComposerState($state.db,
+                $state.db.chatsTable, joinBuilder, parentComposers)));
+    return composer;
+  }
+}
+
+class _$AppDatabaseManager {
+  final _$AppDatabase _db;
+  _$AppDatabaseManager(this._db);
+  $$ContactsTableTableTableManager get contactsTable =>
+      $$ContactsTableTableTableManager(_db, _db.contactsTable);
+  $$ContactPhonesTableTableTableManager get contactPhonesTable =>
+      $$ContactPhonesTableTableTableManager(_db, _db.contactPhonesTable);
+  $$ContactEmailsTableTableTableManager get contactEmailsTable =>
+      $$ContactEmailsTableTableTableManager(_db, _db.contactEmailsTable);
+  $$CallLogsTableTableTableManager get callLogsTable =>
+      $$CallLogsTableTableTableManager(_db, _db.callLogsTable);
+  $$FavoritesTableTableTableManager get favoritesTable =>
+      $$FavoritesTableTableTableManager(_db, _db.favoritesTable);
+  $$ChatsTableTableTableManager get chatsTable =>
+      $$ChatsTableTableTableManager(_db, _db.chatsTable);
+  $$ChatMembersTableTableTableManager get chatMembersTable =>
+      $$ChatMembersTableTableTableManager(_db, _db.chatMembersTable);
+  $$ChatMessagesTableTableTableManager get chatMessagesTable =>
+      $$ChatMessagesTableTableTableManager(_db, _db.chatMessagesTable);
 }
 
 mixin _$ContactsDaoMixin on DatabaseAccessor<AppDatabase> {
@@ -1761,4 +4627,11 @@ mixin _$FavoritesDaoMixin on DatabaseAccessor<AppDatabase> {
   $ContactPhonesTableTable get contactPhonesTable =>
       attachedDatabase.contactPhonesTable;
   $FavoritesTableTable get favoritesTable => attachedDatabase.favoritesTable;
+}
+mixin _$ChatsDaoMixin on DatabaseAccessor<AppDatabase> {
+  $ChatsTableTable get chatsTable => attachedDatabase.chatsTable;
+  $ChatMembersTableTable get chatMembersTable =>
+      attachedDatabase.chatMembersTable;
+  $ChatMessagesTableTable get chatMessagesTable =>
+      attachedDatabase.chatMessagesTable;
 }
