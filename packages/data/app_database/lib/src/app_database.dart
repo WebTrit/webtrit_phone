@@ -24,6 +24,7 @@ part 'app_database.g.dart';
     ContactEmailsDao,
     CallLogsDao,
     FavoritesDao,
+    ChatsDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {
