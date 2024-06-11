@@ -268,11 +268,11 @@ class ChatsTable extends Table {
 
   TextColumn get creatorId => text()();
 
-  DateTimeColumn get createdAt => dateTime()();
+  DateTimeColumn get createdAtRemote => dateTime()();
 
-  DateTimeColumn get updatedAt => dateTime()();
+  DateTimeColumn get updatedAtRemote => dateTime()();
 
-  DateTimeColumn get deletedAt => dateTime().nullable()();
+  DateTimeColumn get deletedAtRemote => dateTime().nullable()();
 }
 
 @DataClassName('ChatMemberData')
@@ -283,7 +283,7 @@ class ChatMembersTable extends Table {
   @override
   Set<Column> get primaryKey => {chatId, userId};
 
-  IntColumn get chatId => integer().customConstraint('NOT NULL REFERENCES chats(id) ON DELETE CASCADE')();
+  IntColumn get chatId => integer().references(ChatsTable, #id, onDelete: KeyAction.cascade)();
 
   TextColumn get userId => text()();
 
@@ -301,11 +301,14 @@ class ChatMessagesTable extends Table {
   @override
   String get tableName => 'chat_messages';
 
+  @override
+  Set<Column> get primaryKey => {id};
+
   IntColumn get id => integer()();
 
   TextColumn get senderId => text()();
 
-  IntColumn get chatId => integer().customConstraint('NOT NULL REFERENCES chats(id) ON DELETE CASCADE')();
+  IntColumn get chatId => integer().references(ChatsTable, #id, onDelete: KeyAction.cascade)();
 
   IntColumn get replyToId => integer().nullable()();
 
@@ -321,11 +324,11 @@ class ChatMessagesTable extends Table {
 
   TextColumn get content => text()();
 
-  DateTimeColumn get createdAt => dateTime()();
+  DateTimeColumn get createdAtRemote => dateTime()();
 
-  DateTimeColumn get updatedAt => dateTime()();
+  DateTimeColumn get updatedAtRemote => dateTime()();
 
-  DateTimeColumn get deletedAt => dateTime().nullable()();
+  DateTimeColumn get deletedAtRemote => dateTime().nullable()();
 }
 
 @DriftAccessor(tables: [
@@ -668,7 +671,7 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
 
   Future<void> wipeStaleDeletedChatsData({int ttlSeconds = 60 * 60 * 24}) async {
     final staleTime = clock.now().subtract(Duration(seconds: ttlSeconds));
-    await (delete(chatsTable)..where((t) => t.deletedAt.isSmallerThanValue(staleTime))).go();
+    await (delete(chatsTable)..where((t) => t.deletedAtRemote.isSmallerThanValue(staleTime))).go();
   }
 
   // ChatMembers
@@ -738,7 +741,7 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   Future<List<ChatMessageData>> getLastMessages(int chatId, {int limit = 100}) {
     final q = (select(chatMessagesTable)
       ..where((t) => t.chatId.equals(chatId))
-      ..orderBy([(t) => OrderingTerm.desc(t.createdAt)])
+      ..orderBy([(t) => OrderingTerm.desc(t.createdAtRemote)])
       ..limit(limit));
     return q.get();
   }
@@ -746,14 +749,14 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   Future<List<ChatMessageData>> getMessageHistory(int chatId, DateTime from, DateTime to) {
     final q = select(chatMessagesTable)
       ..where((t) => t.chatId.equals(chatId))
-      ..where((t) => t.createdAt.isBetweenValues(from, to));
+      ..where((t) => t.createdAtRemote.isBetweenValues(from, to));
     return q.get();
   }
 
   Stream<List<ChatMessageData>> watchLastMessageUpdates(int chatId, {int limit = 100}) {
     final q = (select(chatMessagesTable)
       ..where((t) => t.chatId.equals(chatId))
-      ..orderBy([(t) => OrderingTerm.desc(t.updatedAt)])
+      ..orderBy([(t) => OrderingTerm.desc(t.updatedAtRemote)])
       ..limit(limit));
     return q.watch();
   }
@@ -764,7 +767,7 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
 
   Future<void> wipeStaleDeletedChatMessagesData({int ttlSeconds = 60 * 60 * 24}) async {
     final staleTime = clock.now().subtract(Duration(seconds: ttlSeconds));
-    await (delete(chatMessagesTable)..where((t) => t.deletedAt.isSmallerThanValue(staleTime))).go();
+    await (delete(chatMessagesTable)..where((t) => t.deletedAtRemote.isSmallerThanValue(staleTime))).go();
   }
 
   Future<void> wipeChatsData() async {
