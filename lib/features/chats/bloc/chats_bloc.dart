@@ -33,5 +33,3 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
     }
   }
 }
-
-typedef ChatClientData = ({String userId, String token});

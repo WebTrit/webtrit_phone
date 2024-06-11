@@ -8,7 +8,7 @@ import '../../../chats.dart';
 
 part 'conversation_state.dart';
 
-final logger = Logger('ConversationCubit');
+final _logger = Logger('ConversationCubit');
 
 class ConversationCubit extends Cubit<ConversationState> {
   ConversationCubit(
@@ -22,6 +22,8 @@ class ConversationCubit extends Cubit<ConversationState> {
   final ChatsClient _client;
 
   Future<void> prepareConversation() async {
+    _logger.info('Preparing conversation with $_participantId');
+
     emit(CVSPreparing(_participantId));
 
     try {
@@ -33,6 +35,7 @@ class ConversationCubit extends Cubit<ConversationState> {
 
   @override
   Future<void> close() {
+    _logger.info('Closing conversation with $_participantId');
     return super.close();
   }
 }

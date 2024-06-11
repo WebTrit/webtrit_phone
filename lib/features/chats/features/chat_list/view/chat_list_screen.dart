@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-class ChatsScreen extends StatefulWidget {
-  const ChatsScreen({super.key, this.title});
+class ChatListScreen extends StatefulWidget {
+  const ChatListScreen({super.key, this.title});
   final Widget? title;
 
   @override
-  State<ChatsScreen> createState() => _ChatsScreenState();
+  State<ChatListScreen> createState() => _ChatListScreenState();
 }
 
-class _ChatsScreenState extends State<ChatsScreen> {
+class _ChatListScreenState extends State<ChatListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
