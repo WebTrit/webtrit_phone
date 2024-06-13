@@ -3,8 +3,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
-
-import '../../../chats.dart';
+import 'package:phoenix_socket/phoenix_socket.dart';
 
 part 'conversation_state.dart';
 
@@ -19,7 +18,7 @@ class ConversationCubit extends Cubit<ConversationState> {
   }
 
   final String _participantId;
-  final ChatsClient _client;
+  final PhoenixSocket _client;
 
   Future<void> prepareConversation() async {
     _logger.info('Preparing conversation with $_participantId');

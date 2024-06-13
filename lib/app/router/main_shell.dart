@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:phoenix_socket/phoenix_socket.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -183,9 +184,16 @@ class _MainShellState extends State<MainShell> {
           ),
           BlocProvider<ChatsBloc>(
             create: (context) {
-              final chatsWSClient = ChatsClientMockImpl();
+              final appBloc = context.read<AppBloc>();
+              final token = appBloc.state.token!;
+              final tenantId = appBloc.state.tenantId!;
 
-              return ChatsBloc(client: chatsWSClient)..add(const Connect());
+              final wsClient = PhoenixSocket(
+                'ws://192.168.1.85:4000/socket/websocket', // TODO: Replace with core URL after integration
+                socketOptions: PhoenixSocketOptions(params: {'token': token, 'tenant_id': tenantId}),
+              );
+
+              return ChatsBloc(client: wsClient)..add(const Connect());
             },
           ),
         ],
