@@ -11,6 +11,7 @@ class ChatMessage extends Equatable {
   final SmsOutState? smsOutState;
   final String? smsNumber;
   final String content;
+  final DateTime? editedAt;
   final DateTime createdAt;
   final DateTime updatedAt;
   final DateTime? deletedAt;
@@ -26,6 +27,7 @@ class ChatMessage extends Equatable {
     required this.smsOutState,
     required this.smsNumber,
     required this.content,
+    required this.editedAt,
     required this.createdAt,
     required this.updatedAt,
     required this.deletedAt,
@@ -43,6 +45,7 @@ class ChatMessage extends Equatable {
         smsOutState,
         smsNumber,
         content,
+        editedAt,
         createdAt,
         updatedAt,
         deletedAt,

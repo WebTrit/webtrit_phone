@@ -538,6 +538,11 @@ class ChatMessages extends Table with TableInfo {
       type: DriftSqlType.string,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<int> editedAt = GeneratedColumn<int>(
+      'edited_at', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
   late final GeneratedColumn<int> createdAtRemote = GeneratedColumn<int>(
       'created_at_remote', aliasedName, false,
       type: DriftSqlType.int,
@@ -575,6 +580,7 @@ class ChatMessages extends Table with TableInfo {
         smsOutState,
         smsNumber,
         content,
+        editedAt,
         createdAtRemote,
         updatedAtRemote,
         deletedAtRemote,

@@ -333,6 +333,8 @@ class ChatMessagesTable extends Table {
 
   TextColumn get content => text()();
 
+  DateTimeColumn get editedAt => dateTime().nullable()();
+
   DateTimeColumn get createdAtRemote => dateTime()();
 
   DateTimeColumn get updatedAtRemote => dateTime()();

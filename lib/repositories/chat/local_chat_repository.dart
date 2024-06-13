@@ -121,6 +121,7 @@ class LocalChatRepository {
       smsOutState: data.smsOutState != null ? SmsOutState.values.byName(data.smsOutState!.name) : null,
       smsNumber: data.smsNumber,
       content: data.content,
+      editedAt: data.editedAt,
       createdAt: data.createdAtRemote,
       updatedAt: data.updatedAtRemote,
       deletedAt: data.deletedAtRemote,
