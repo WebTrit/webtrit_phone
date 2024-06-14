@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/notifications/notifications.dart';
 
 bool whenLoginRouterPageChange(LoginState previous, LoginState current) {
   return (previous.mode != current.mode) ||

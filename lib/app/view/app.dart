@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
+import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/app/router/app_router_observer.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
@@ -12,7 +13,6 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/theme/theme.dart';
-import 'package:webtrit_phone/notifications/notifications.dart';
 
 class App extends StatefulWidget {
   const App({

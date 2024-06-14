@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/app_shell.dart';
 import 'package:webtrit_phone/app/router/main_shell.dart';
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/notifications/notifications.dart';
 
 import 'deeplinks.dart';
 

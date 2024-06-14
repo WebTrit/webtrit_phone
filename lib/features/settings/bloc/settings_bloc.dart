@@ -5,10 +5,10 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/notifications/notifications.dart';
 
 part 'settings_bloc.freezed.dart';
 

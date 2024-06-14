@@ -2,8 +2,8 @@ import 'package:flutter/widgets.dart';
 
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
+import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/notifications/notifications.dart';
 
 extension SignalingExceptionExension on WebtritSignalingException {
   List<ErrorFieldModel> errorFields(BuildContext context) {

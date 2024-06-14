@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:permission_handler/permission_handler.dart';
 
-import 'package:webtrit_phone/notifications/models/models.dart';
+import 'package:webtrit_phone/app/notifications/models/models.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
 final class CallUndefinedLineErrorNotification extends ErrorNotification {
