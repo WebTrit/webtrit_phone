@@ -76,6 +76,7 @@ class LocalChatRepository {
       members: chatMembers
           .map(
             (e) => ChatMember(
+              id: e.id,
               chatId: e.chatId,
               userId: e.userId,
               joinedAt: e.joinedAt,
@@ -101,6 +102,7 @@ class LocalChatRepository {
 
   ChatMemberData _chatMemberDataFromChatMember(ChatMember chatMember) {
     return ChatMemberData(
+      id: chatMember.id,
       chatId: chatMember.chatId,
       userId: chatMember.userId,
       joinedAt: chatMember.joinedAt,

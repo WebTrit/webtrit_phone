@@ -286,7 +286,9 @@ class ChatMembersTable extends Table {
   String get tableName => 'chat_members';
 
   @override
-  Set<Column> get primaryKey => {chatId, userId};
+  Set<Column> get primaryKey => {id};
+
+  IntColumn get id => integer()();
 
   IntColumn get chatId => integer().references(ChatsTable, #id, onDelete: KeyAction.cascade)();
 
@@ -713,7 +715,6 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
     final q = select(chatsTable).join([
       leftOuterJoin(chatMembersTable, chatMembersTable.chatId.equalsExp(chatsTable.id)),
     ]);
-    q.groupBy([chatsTable.id]);
     return q.watch().map((rows) {
       final chatData = <ChatData>[];
       final members = <ChatMemberData>[];
@@ -734,7 +735,6 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
     final q = select(chatsTable).join([
       leftOuterJoin(chatMembersTable, chatMembersTable.chatId.equalsExp(chatsTable.id)),
     ]);
-    q.groupBy([chatsTable.id]);
     return q.get().then((rows) {
       final chatData = <ChatData>[];
       final members = <ChatMemberData>[];

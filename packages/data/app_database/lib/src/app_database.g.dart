@@ -2139,6 +2139,11 @@ class $ChatMembersTableTable extends ChatMembersTable
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $ChatMembersTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _chatIdMeta = const VerificationMeta('chatId');
   @override
   late final GeneratedColumn<int> chatId = GeneratedColumn<int>(
@@ -2183,7 +2188,7 @@ class $ChatMembersTableTable extends ChatMembersTable
       type: DriftSqlType.dateTime, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns =>
-      [chatId, userId, joinedAt, leftAt, blockedAt, insertedAt, updatedAt];
+      [id, chatId, userId, joinedAt, leftAt, blockedAt, insertedAt, updatedAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2194,6 +2199,9 @@ class $ChatMembersTableTable extends ChatMembersTable
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
     if (data.containsKey('chat_id')) {
       context.handle(_chatIdMeta,
           chatId.isAcceptableOrUnknown(data['chat_id']!, _chatIdMeta));
@@ -2234,11 +2242,13 @@ class $ChatMembersTableTable extends ChatMembersTable
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {chatId, userId};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   ChatMemberData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ChatMemberData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       chatId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}chat_id'])!,
       userId: attachedDatabase.typeMapping
@@ -2263,6 +2273,7 @@ class $ChatMembersTableTable extends ChatMembersTable
 }
 
 class ChatMemberData extends DataClass implements Insertable<ChatMemberData> {
+  final int id;
   final int chatId;
   final String userId;
   final DateTime joinedAt;
@@ -2271,7 +2282,8 @@ class ChatMemberData extends DataClass implements Insertable<ChatMemberData> {
   final DateTime? insertedAt;
   final DateTime? updatedAt;
   const ChatMemberData(
-      {required this.chatId,
+      {required this.id,
+      required this.chatId,
       required this.userId,
       required this.joinedAt,
       this.leftAt,
@@ -2281,6 +2293,7 @@ class ChatMemberData extends DataClass implements Insertable<ChatMemberData> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
     map['chat_id'] = Variable<int>(chatId);
     map['user_id'] = Variable<String>(userId);
     map['joined_at'] = Variable<DateTime>(joinedAt);
@@ -2301,6 +2314,7 @@ class ChatMemberData extends DataClass implements Insertable<ChatMemberData> {
 
   ChatMemberDataCompanion toCompanion(bool nullToAbsent) {
     return ChatMemberDataCompanion(
+      id: Value(id),
       chatId: Value(chatId),
       userId: Value(userId),
       joinedAt: Value(joinedAt),
@@ -2322,6 +2336,7 @@ class ChatMemberData extends DataClass implements Insertable<ChatMemberData> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ChatMemberData(
+      id: serializer.fromJson<int>(json['id']),
       chatId: serializer.fromJson<int>(json['chatId']),
       userId: serializer.fromJson<String>(json['userId']),
       joinedAt: serializer.fromJson<DateTime>(json['joinedAt']),
@@ -2335,6 +2350,7 @@ class ChatMemberData extends DataClass implements Insertable<ChatMemberData> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
       'chatId': serializer.toJson<int>(chatId),
       'userId': serializer.toJson<String>(userId),
       'joinedAt': serializer.toJson<DateTime>(joinedAt),
@@ -2346,7 +2362,8 @@ class ChatMemberData extends DataClass implements Insertable<ChatMemberData> {
   }
 
   ChatMemberData copyWith(
-          {int? chatId,
+          {int? id,
+          int? chatId,
           String? userId,
           DateTime? joinedAt,
           Value<DateTime?> leftAt = const Value.absent(),
@@ -2354,6 +2371,7 @@ class ChatMemberData extends DataClass implements Insertable<ChatMemberData> {
           Value<DateTime?> insertedAt = const Value.absent(),
           Value<DateTime?> updatedAt = const Value.absent()}) =>
       ChatMemberData(
+        id: id ?? this.id,
         chatId: chatId ?? this.chatId,
         userId: userId ?? this.userId,
         joinedAt: joinedAt ?? this.joinedAt,
@@ -2365,6 +2383,7 @@ class ChatMemberData extends DataClass implements Insertable<ChatMemberData> {
   @override
   String toString() {
     return (StringBuffer('ChatMemberData(')
+          ..write('id: $id, ')
           ..write('chatId: $chatId, ')
           ..write('userId: $userId, ')
           ..write('joinedAt: $joinedAt, ')
@@ -2378,11 +2397,12 @@ class ChatMemberData extends DataClass implements Insertable<ChatMemberData> {
 
   @override
   int get hashCode => Object.hash(
-      chatId, userId, joinedAt, leftAt, blockedAt, insertedAt, updatedAt);
+      id, chatId, userId, joinedAt, leftAt, blockedAt, insertedAt, updatedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ChatMemberData &&
+          other.id == this.id &&
           other.chatId == this.chatId &&
           other.userId == this.userId &&
           other.joinedAt == this.joinedAt &&
@@ -2393,6 +2413,7 @@ class ChatMemberData extends DataClass implements Insertable<ChatMemberData> {
 }
 
 class ChatMemberDataCompanion extends UpdateCompanion<ChatMemberData> {
+  final Value<int> id;
   final Value<int> chatId;
   final Value<String> userId;
   final Value<DateTime> joinedAt;
@@ -2400,8 +2421,8 @@ class ChatMemberDataCompanion extends UpdateCompanion<ChatMemberData> {
   final Value<DateTime?> blockedAt;
   final Value<DateTime?> insertedAt;
   final Value<DateTime?> updatedAt;
-  final Value<int> rowid;
   const ChatMemberDataCompanion({
+    this.id = const Value.absent(),
     this.chatId = const Value.absent(),
     this.userId = const Value.absent(),
     this.joinedAt = const Value.absent(),
@@ -2409,9 +2430,9 @@ class ChatMemberDataCompanion extends UpdateCompanion<ChatMemberData> {
     this.blockedAt = const Value.absent(),
     this.insertedAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
-    this.rowid = const Value.absent(),
   });
   ChatMemberDataCompanion.insert({
+    this.id = const Value.absent(),
     required int chatId,
     required String userId,
     required DateTime joinedAt,
@@ -2419,11 +2440,11 @@ class ChatMemberDataCompanion extends UpdateCompanion<ChatMemberData> {
     this.blockedAt = const Value.absent(),
     this.insertedAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
-    this.rowid = const Value.absent(),
   })  : chatId = Value(chatId),
         userId = Value(userId),
         joinedAt = Value(joinedAt);
   static Insertable<ChatMemberData> custom({
+    Expression<int>? id,
     Expression<int>? chatId,
     Expression<String>? userId,
     Expression<DateTime>? joinedAt,
@@ -2431,9 +2452,9 @@ class ChatMemberDataCompanion extends UpdateCompanion<ChatMemberData> {
     Expression<DateTime>? blockedAt,
     Expression<DateTime>? insertedAt,
     Expression<DateTime>? updatedAt,
-    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
+      if (id != null) 'id': id,
       if (chatId != null) 'chat_id': chatId,
       if (userId != null) 'user_id': userId,
       if (joinedAt != null) 'joined_at': joinedAt,
@@ -2441,20 +2462,20 @@ class ChatMemberDataCompanion extends UpdateCompanion<ChatMemberData> {
       if (blockedAt != null) 'blocked_at': blockedAt,
       if (insertedAt != null) 'inserted_at': insertedAt,
       if (updatedAt != null) 'updated_at': updatedAt,
-      if (rowid != null) 'rowid': rowid,
     });
   }
 
   ChatMemberDataCompanion copyWith(
-      {Value<int>? chatId,
+      {Value<int>? id,
+      Value<int>? chatId,
       Value<String>? userId,
       Value<DateTime>? joinedAt,
       Value<DateTime?>? leftAt,
       Value<DateTime?>? blockedAt,
       Value<DateTime?>? insertedAt,
-      Value<DateTime?>? updatedAt,
-      Value<int>? rowid}) {
+      Value<DateTime?>? updatedAt}) {
     return ChatMemberDataCompanion(
+      id: id ?? this.id,
       chatId: chatId ?? this.chatId,
       userId: userId ?? this.userId,
       joinedAt: joinedAt ?? this.joinedAt,
@@ -2462,13 +2483,15 @@ class ChatMemberDataCompanion extends UpdateCompanion<ChatMemberData> {
       blockedAt: blockedAt ?? this.blockedAt,
       insertedAt: insertedAt ?? this.insertedAt,
       updatedAt: updatedAt ?? this.updatedAt,
-      rowid: rowid ?? this.rowid,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
     if (chatId.present) {
       map['chat_id'] = Variable<int>(chatId.value);
     }
@@ -2490,23 +2513,20 @@ class ChatMemberDataCompanion extends UpdateCompanion<ChatMemberData> {
     if (updatedAt.present) {
       map['updated_at'] = Variable<DateTime>(updatedAt.value);
     }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
     return map;
   }
 
   @override
   String toString() {
     return (StringBuffer('ChatMemberDataCompanion(')
+          ..write('id: $id, ')
           ..write('chatId: $chatId, ')
           ..write('userId: $userId, ')
           ..write('joinedAt: $joinedAt, ')
           ..write('leftAt: $leftAt, ')
           ..write('blockedAt: $blockedAt, ')
           ..write('insertedAt: $insertedAt, ')
-          ..write('updatedAt: $updatedAt, ')
-          ..write('rowid: $rowid')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
@@ -4451,6 +4471,7 @@ class $$ChatsTableTableOrderingComposer
 
 typedef $$ChatMembersTableTableInsertCompanionBuilder = ChatMemberDataCompanion
     Function({
+  Value<int> id,
   required int chatId,
   required String userId,
   required DateTime joinedAt,
@@ -4458,10 +4479,10 @@ typedef $$ChatMembersTableTableInsertCompanionBuilder = ChatMemberDataCompanion
   Value<DateTime?> blockedAt,
   Value<DateTime?> insertedAt,
   Value<DateTime?> updatedAt,
-  Value<int> rowid,
 });
 typedef $$ChatMembersTableTableUpdateCompanionBuilder = ChatMemberDataCompanion
     Function({
+  Value<int> id,
   Value<int> chatId,
   Value<String> userId,
   Value<DateTime> joinedAt,
@@ -4469,7 +4490,6 @@ typedef $$ChatMembersTableTableUpdateCompanionBuilder = ChatMemberDataCompanion
   Value<DateTime?> blockedAt,
   Value<DateTime?> insertedAt,
   Value<DateTime?> updatedAt,
-  Value<int> rowid,
 });
 
 class $$ChatMembersTableTableTableManager extends RootTableManager<
@@ -4493,6 +4513,7 @@ class $$ChatMembersTableTableTableManager extends RootTableManager<
           getChildManagerBuilder: (p) =>
               $$ChatMembersTableTableProcessedTableManager(p),
           getUpdateCompanionBuilder: ({
+            Value<int> id = const Value.absent(),
             Value<int> chatId = const Value.absent(),
             Value<String> userId = const Value.absent(),
             Value<DateTime> joinedAt = const Value.absent(),
@@ -4500,9 +4521,9 @@ class $$ChatMembersTableTableTableManager extends RootTableManager<
             Value<DateTime?> blockedAt = const Value.absent(),
             Value<DateTime?> insertedAt = const Value.absent(),
             Value<DateTime?> updatedAt = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
           }) =>
               ChatMemberDataCompanion(
+            id: id,
             chatId: chatId,
             userId: userId,
             joinedAt: joinedAt,
@@ -4510,9 +4531,9 @@ class $$ChatMembersTableTableTableManager extends RootTableManager<
             blockedAt: blockedAt,
             insertedAt: insertedAt,
             updatedAt: updatedAt,
-            rowid: rowid,
           ),
           getInsertCompanionBuilder: ({
+            Value<int> id = const Value.absent(),
             required int chatId,
             required String userId,
             required DateTime joinedAt,
@@ -4520,9 +4541,9 @@ class $$ChatMembersTableTableTableManager extends RootTableManager<
             Value<DateTime?> blockedAt = const Value.absent(),
             Value<DateTime?> insertedAt = const Value.absent(),
             Value<DateTime?> updatedAt = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
           }) =>
               ChatMemberDataCompanion.insert(
+            id: id,
             chatId: chatId,
             userId: userId,
             joinedAt: joinedAt,
@@ -4530,7 +4551,6 @@ class $$ChatMembersTableTableTableManager extends RootTableManager<
             blockedAt: blockedAt,
             insertedAt: insertedAt,
             updatedAt: updatedAt,
-            rowid: rowid,
           ),
         ));
 }
@@ -4551,6 +4571,11 @@ class $$ChatMembersTableTableProcessedTableManager
 class $$ChatMembersTableTableFilterComposer
     extends FilterComposer<_$AppDatabase, $ChatMembersTableTable> {
   $$ChatMembersTableTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
   ColumnFilters<String> get userId => $state.composableBuilder(
       column: $state.table.userId,
       builder: (column, joinBuilders) =>
@@ -4597,6 +4622,11 @@ class $$ChatMembersTableTableFilterComposer
 class $$ChatMembersTableTableOrderingComposer
     extends OrderingComposer<_$AppDatabase, $ChatMembersTableTable> {
   $$ChatMembersTableTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
   ColumnOrderings<String> get userId => $state.composableBuilder(
       column: $state.table.userId,
       builder: (column, joinBuilders) =>

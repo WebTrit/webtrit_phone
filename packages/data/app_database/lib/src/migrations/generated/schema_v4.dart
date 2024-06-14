@@ -421,6 +421,11 @@ class ChatMembers extends Table with TableInfo {
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   ChatMembers(this.attachedDatabase, [this._alias]);
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NOT NULL');
   late final GeneratedColumn<int> chatId = GeneratedColumn<int>(
       'chat_id', aliasedName, false,
       type: DriftSqlType.int,
@@ -458,14 +463,14 @@ class ChatMembers extends Table with TableInfo {
       $customConstraints: 'NULL');
   @override
   List<GeneratedColumn> get $columns =>
-      [chatId, userId, joinedAt, leftAt, blockedAt, insertedAt, updatedAt];
+      [id, chatId, userId, joinedAt, leftAt, blockedAt, insertedAt, updatedAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'chat_members';
   @override
-  Set<GeneratedColumn> get $primaryKey => {chatId, userId};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Never map(Map<String, dynamic> data, {String? tablePrefix}) {
     throw UnsupportedError('TableInfo.map in schema verification code');
@@ -477,7 +482,7 @@ class ChatMembers extends Table with TableInfo {
   }
 
   @override
-  List<String> get customConstraints => const ['PRIMARY KEY(chat_id, user_id)'];
+  List<String> get customConstraints => const ['PRIMARY KEY(id)'];
   @override
   bool get dontWriteConstraints => true;
 }
