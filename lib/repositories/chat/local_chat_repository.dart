@@ -22,6 +22,10 @@ class LocalChatRepository {
     });
   }
 
+  Future<DateTime?> getLastChatUpdate() async {
+    return _chatsDao.lastChatUpdatedAt();
+  }
+
   Future<void> upsertChat(Chat chat) async {
     final chatData = _chatDataFromChat(chat);
     final membersData = chat.members.map(_chatMemberDataFromChatMember).toList();

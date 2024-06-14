@@ -709,6 +709,15 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
     return delete(chatMembersTable).delete(chatMember);
   }
 
+  Future<DateTime?> lastChatUpdatedAt() {
+    return customSelect('SELECT MAX(updated_at_remote) FROM chats').getSingleOrNull().then((row) {
+      if (row == null) return null;
+      final secEpoh = row.data.values.first as int;
+      final millisEpoh = secEpoh * 1000;
+      return DateTime.fromMillisecondsSinceEpoch(millisEpoh);
+    });
+  }
+
   // ChatDataWithMembers
 
   Stream<List<ChatDataWithMembers>> watchAllChatsWithMembers() {

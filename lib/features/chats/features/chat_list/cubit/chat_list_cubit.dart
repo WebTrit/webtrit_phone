@@ -32,50 +32,69 @@ class ChatListCubit extends Cubit<ChatListState> {
     final localChatList = await localChatRepository.getChats();
     emit(ChatListState(chats: localChatList, initialising: false));
 
-    final lastUpdate = localChatList.fold<int?>(null, (acc, chat) {
-      final epoh = chat.updatedAt.microsecondsSinceEpoch;
-      return (epoh > (acc ?? 0)) ? epoh : acc;
+    _updatesSub = _updatesSyncStream().listen((chat) {
+      localChatRepository.upsertChat(chat);
+      emit(state.copyWith(chats: state.chats.mergeWith(chat)));
     });
-
-    _syncAndSubscribeRetryable(lastUpdate);
   }
 
-  _syncAndSubscribeRetryable(int? lastUpdate, {int attempt = 1}) async {
-    if (isClosed) return;
-    try {
-      await _syncAndSubscribe(lastUpdate);
-    } on Exception catch (e) {
-      _logger.severe('Failed to sync and subscribe', e);
-      int delaySec = 1;
-      if (attempt > 3) delaySec = 5;
-      Future.delayed(Duration(seconds: delaySec), () => _syncAndSubscribeRetryable(lastUpdate));
-    }
-  }
+  Stream<Chat> _updatesSyncStream() async* {
+    while (true) {
+      try {
+        // Get and wait for user channel to be ready
+        final userChannel = client.userChannel;
+        if (userChannel == null) throw Exception('No user channel yet');
+        if (userChannel.state != PhoenixChannelState.joined) throw Exception('User channel readynt');
 
-  Future _syncAndSubscribe(int? lastUpdate) async {
-    // TODO: buffer events during initial sync
-    final userChannel = client.userChannel;
+        // Buffer updates that may come in a gap between fetching the list and subscribing
+        List<Chat> updatesBuffer = [];
+        late final StreamSubscription bufferSub;
+        bufferSub = userChannel.messages.where((msg) => msg.event.value == 'chat_update').listen((msg) {
+          final chat = Chat.fromMap(msg.payload as Map<String, dynamic>);
+          updatesBuffer.add(chat);
+        });
 
-    Map<String, dynamic> syncRequest = {};
-    if (lastUpdate != null) syncRequest['since'] = lastUpdate;
-    final req = await userChannel.push('chat_list_get', syncRequest).future;
-    final response = req.response;
+        // Get last local update time for sync from
+        // If no update time, fetch all chats
+        final lastUpdate = await localChatRepository.getLastChatUpdate();
 
-    if (response['data'] is List) {
-      final chatList = (response['data'] as List).map((e) => Chat.fromMap(e)).toList();
-      for (final chat in chatList) {
-        await localChatRepository.upsertChat(chat);
-        emit(state.copyWith(chats: state.chats.mergeWith(chat)));
+        // Prepare sync request
+        Map<String, dynamic> syncRequest = {};
+        if (lastUpdate != null) syncRequest['since'] = lastUpdate.microsecondsSinceEpoch;
+
+        // Fetch updated chat list
+        final req = await userChannel.push('chat_list_get', syncRequest).future;
+        final chatList = (req.response['data'] as List).map((e) => Chat.fromMap(e)).toList();
+
+        // Yield fetched chats
+        for (final chat in chatList) {
+          yield chat;
+        }
+
+        // Yield buffered updates
+        bufferSub.cancel();
+        for (final chat in updatesBuffer) {
+          yield chat;
+        }
+
+        // Listen for realtime updates
+        // On disconnect break the loop to force reconnect
+        await for (final msg in userChannel.messages) {
+          if (msg.event.value == 'chat_update') {
+            final chat = Chat.fromMap(msg.payload as Map<String, dynamic>);
+            yield chat;
+          }
+          if (msg.event.value == 'phx_error') {
+            throw Exception('Phoenix disconnect');
+          }
+        }
+      } catch (e) {
+        _logger.severe('_syncAndSubscribeAsyncGen error:', e);
+      } finally {
+        // Wait a sec before retrying
+        await Future.delayed(const Duration(seconds: 1));
       }
     }
-    _updatesSub?.cancel();
-    _updatesSub = userChannel.messages.listen((msg) {
-      if (msg.event.value == 'chat_update') {
-        final chat = Chat.fromMap(msg.payload as Map<String, dynamic>);
-        localChatRepository.upsertChat(chat);
-        emit(state.copyWith(chats: state.chats.mergeWith(chat)));
-      }
-    });
   }
 
   @override

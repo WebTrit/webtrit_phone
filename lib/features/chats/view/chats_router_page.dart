@@ -13,25 +13,42 @@ class ChatsRouterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void refreshChatsConnection() {
-      context.read<ChatsBloc>().add(const Refresh());
-    }
-
     return BlocBuilder<ChatsBloc, ChatsState>(
       builder: (context, state) {
-        if (state.status == ChatsStatus.connected) {
-          return const AutoRouter();
-        }
-
-        if (state.status == ChatsStatus.error) {
-          return NoDataPlaceholder(
-            content: Text(context.l10n.chats_RouterPage_failure),
-            actions: [TextButton(onPressed: refreshChatsConnection, child: Text(context.l10n.chats_ActionBtn_retry))],
-          );
-        }
-
-        return const Center(child: CircularProgressIndicator());
+        return Column(
+          children: [
+            const Expanded(child: AutoRouter()),
+            if (state.status == ChatsStatus.connecting || state.status == ChatsStatus.initial) progressBar(),
+            if (state.status == ChatsStatus.error) disconectBar(context),
+          ],
+        );
       },
+    );
+  }
+
+  void refreshChatsConnection(BuildContext context) {
+    context.read<ChatsBloc>().add(const Refresh());
+  }
+
+  Widget disconectBar(BuildContext context) {
+    return NoDataPlaceholder(
+      content: Text(context.l10n.chats_RouterPage_failure),
+      contentPadding: const EdgeInsets.all(4),
+      actionsPadding: EdgeInsets.zero,
+      actions: [
+        TextButton(
+          onPressed: () => refreshChatsConnection(context),
+          child: Text(context.l10n.chats_ActionBtn_retry),
+        ),
+      ],
+    );
+  }
+
+  Widget progressBar() {
+    return const SizedBox(
+      height: 64,
+      width: double.infinity,
+      child: Center(child: CircularProgressIndicator()),
     );
   }
 }
