@@ -124,6 +124,11 @@ class _MainShellState extends State<MainShell> {
             webtritApiClient: context.read<WebtritApiClient>(),
           ),
         ),
+        RepositoryProvider<LocalChatRepository>(
+          create: (context) => LocalChatRepository(
+            appDatabase: context.read<AppDatabase>(),
+          ),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [

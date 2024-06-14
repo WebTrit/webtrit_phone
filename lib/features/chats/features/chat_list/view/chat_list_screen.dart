@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webtrit_phone/features/features.dart';
 
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -15,7 +17,12 @@ class _ChatListScreenState extends State<ChatListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainAppBar(title: widget.title),
-      body: const Placeholder(),
+      body: BlocBuilder<ChatListCubit, ChatListState>(builder: (context, state) {
+        if (state.initialising == false) {
+          return ChatsList(chatlist: state.chats);
+        }
+        return const Center(child: CircularProgressIndicator());
+      }),
     );
   }
 }

@@ -50,7 +50,6 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
         // Join channel for user specific events
         final userChannel = client.addChannel(topic: 'chat:user:$userId');
         await userChannel.join().future;
-        userChannel.push('greeting', {'message': 'Hello, world!'});
       }
       emit(state.copyWith(status: ChatsStatus.connected));
     } on Exception catch (e) {
