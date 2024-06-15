@@ -18,8 +18,8 @@ class AutoprovisionScreen extends StatefulWidget {
 
 class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
   late final appBloc = context.read<AppBloc>();
-  late final nfnBloc = context.read<NotificationsBloc>();
-  late final apnCubit = context.read<AutoprovisionCubit>();
+  late final notificationsBloc = context.read<NotificationsBloc>();
+  late final autoprovisionCubit = context.read<AutoprovisionCubit>();
   late final router = context.router;
 
   Future navigateBack() async {
@@ -36,9 +36,9 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
     await navigateBack();
     final error = state.error;
     if (error is RequestFailure && error.statusCode == 401) {
-      nfnBloc.add(const NotificationsSubmitted(InvalidAutoProvisioningToken()));
+      notificationsBloc.add(const NotificationsSubmitted(InvalidAutoProvisioningToken()));
     } else {
-      nfnBloc.add(NotificationsSubmitted(DefaultErrorNotification(state.error)));
+      notificationsBloc.add(NotificationsSubmitted(DefaultErrorNotification(state.error)));
     }
   }
 
@@ -52,7 +52,7 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
     // Drop the result if the screen was disposed during the dialog.
     if (!mounted) return;
 
-    if (confirm == true) apnCubit.confirmReplaceSession();
+    if (confirm == true) autoprovisionCubit.confirmReplaceSession();
     if (confirm != true) navigateBack();
   }
 
@@ -83,13 +83,13 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
       // Then will be redirected by router reevaluation and redirect inside [onAutoprovisionScreenPageRouteGuardNavigation]
     }
 
-    nfnBloc.add(const NotificationsSubmitted(SuccesfulUsedAutoProvisioningToken()));
+    notificationsBloc.add(const NotificationsSubmitted(SuccesfulUsedAutoProvisioningToken()));
   }
 
   @override
   initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => apnCubit.init());
+    WidgetsBinding.instance.addPostFrameCallback((_) => autoprovisionCubit.init());
   }
 
   @override
