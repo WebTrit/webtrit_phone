@@ -12,11 +12,11 @@ part 'notifications_state.dart';
 
 class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   NotificationsBloc() : super(const NotificationsState()) {
-    on<NotificationSubmitted>(_onNotificationSubmitted, transformer: sequential());
+    on<NotificationsSubmitted>(_onNotificationSubmitted, transformer: sequential());
     on<NotificationsCleared>(_onErrorCleared, transformer: sequential());
   }
 
-  void _onNotificationSubmitted(NotificationSubmitted event, Emitter<NotificationsState> emit) {
+  void _onNotificationSubmitted(NotificationsSubmitted event, Emitter<NotificationsState> emit) {
     emit(state.copyWith(lastNotification: event.notification));
   }
 

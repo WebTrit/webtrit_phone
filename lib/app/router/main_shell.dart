@@ -177,7 +177,7 @@ class _MainShellState extends State<MainShell> {
                 token: appBloc.state.token!,
                 trustedCertificates: appCertificates.trustedCertificates,
                 recentsRepository: context.read<RecentsRepository>(),
-                onNotification: (n) => notificationBloc.add(NotificationSubmitted(n)),
+                onNotification: (n) => notificationBloc.add(NotificationsSubmitted(n)),
                 callkeep: callkeep,
                 pendingCallHandler: appBloc.pendingCallHandler,
               )..add(const CallStarted());

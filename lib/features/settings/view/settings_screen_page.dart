@@ -25,7 +25,7 @@ class SettingsScreenPage extends StatelessWidget {
           userRepository: context.read<UserRepository>(),
           appRepository: context.read<AppRepository>(),
           appPreferences: context.read<AppPreferences>(),
-          onNotification: (n) => notificationsBloc.add(NotificationSubmitted(n)),
+          onNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
         )..add(const SettingsRefreshed());
       },
       child: widget,

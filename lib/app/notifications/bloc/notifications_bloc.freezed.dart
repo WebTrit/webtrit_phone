@@ -15,28 +15,28 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$NotificationSubmitted {
+mixin _$NotificationsSubmitted {
   Notification get notification => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 
-class _$NotificationSubmittedImpl implements _NotificationSubmitted {
-  const _$NotificationSubmittedImpl(this.notification);
+class _$NotificationsSubmittedImpl implements _NotificationsSubmitted {
+  const _$NotificationsSubmittedImpl(this.notification);
 
   @override
   final Notification notification;
 
   @override
   String toString() {
-    return 'NotificationSubmitted(notification: $notification)';
+    return 'NotificationsSubmitted(notification: $notification)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$NotificationSubmittedImpl &&
+            other is _$NotificationsSubmittedImpl &&
             (identical(other.notification, notification) ||
                 other.notification == notification));
   }
@@ -45,9 +45,9 @@ class _$NotificationSubmittedImpl implements _NotificationSubmitted {
   int get hashCode => Object.hash(runtimeType, notification);
 }
 
-abstract class _NotificationSubmitted implements NotificationSubmitted {
-  const factory _NotificationSubmitted(final Notification notification) =
-      _$NotificationSubmittedImpl;
+abstract class _NotificationsSubmitted implements NotificationsSubmitted {
+  const factory _NotificationsSubmitted(final Notification notification) =
+      _$NotificationsSubmittedImpl;
 
   @override
   Notification get notification;
