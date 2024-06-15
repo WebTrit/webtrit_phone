@@ -29,8 +29,6 @@ class LoginRouterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final notificationsBloc = context.read<NotificationsBloc>();
-
     final declarativeAutoRouter = BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state.coreUrl != null && state.tenantId != null && state.token != null) {
@@ -68,7 +66,7 @@ class LoginRouterPage extends StatelessWidget {
 
     final provider = BlocProvider(
       create: (context) => LoginCubit(
-        onNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
+        notificationsBloc: context.read<NotificationsBloc>(),
       ),
       child: declarativeAutoRouter,
     );

@@ -20,11 +20,11 @@ final _logger = Logger('SettingsBloc');
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   SettingsBloc({
+    required this.notificationsBloc,
     required this.appBloc,
     required this.userRepository,
     required this.appRepository,
     required this.appPreferences,
-    required this.onNotification,
   }) : super(SettingsState(registerStatus: appPreferences.getRegisterStatus())) {
     on<SettingsRefreshed>(_onRefreshed, transformer: restartable());
     on<SettingsLogouted>(_onLogouted, transformer: droppable());
@@ -32,11 +32,11 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<SettingsAccountDeleted>(_onAccountDeleted, transformer: droppable());
   }
 
+  final NotificationsBloc notificationsBloc;
   final AppBloc appBloc;
   final UserRepository userRepository;
   final AppRepository appRepository;
   final AppPreferences appPreferences;
-  final void Function(Notification notification) onNotification;
 
   FutureOr<void> _onRefreshed(SettingsRefreshed event, Emitter<SettingsState> emit) async {
     emit(state.copyWith(progress: true));
@@ -68,7 +68,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       if (isClosed) return;
       if (emit.isDone) return;
 
-      onNotification(DefaultErrorNotification(e));
+      notificationsBloc.add(NotificationsSubmitted(DefaultErrorNotification(e)));
       appBloc.maybeHandleError(e);
 
       emit(state.copyWith(
@@ -97,7 +97,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       if (event.force) {
         appBloc.add(const AppLogouted());
       } else {
-        onNotification(DefaultErrorNotification(e));
+        notificationsBloc.add(NotificationsSubmitted(DefaultErrorNotification(e)));
         appBloc.maybeHandleError(e);
       }
 
@@ -126,7 +126,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     } on Exception catch (e, stackTrace) {
       _logger.warning('_onRegisterStatusChanged', e, stackTrace);
 
-      onNotification(DefaultErrorNotification(e));
+      notificationsBloc.add(NotificationsSubmitted(DefaultErrorNotification(e)));
       appBloc.maybeHandleError(e);
 
       if (emit.isDone) return;
@@ -153,7 +153,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     } on Exception catch (e, stackTrace) {
       _logger.warning('_onAccountDeleted', e, stackTrace);
 
-      onNotification(DefaultErrorNotification(e));
+      notificationsBloc.add(NotificationsSubmitted(DefaultErrorNotification(e)));
       appBloc.maybeHandleError(e);
 
       if (emit.isDone) return;

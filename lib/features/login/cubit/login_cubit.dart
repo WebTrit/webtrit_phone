@@ -32,17 +32,14 @@ WebtritApiClient defaultCreateWebtritApiClient(String coreUrl, String tenantId) 
   );
 }
 
-void defaultOnNotification(Notification notification) {}
-
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit({
     @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
-    this.onNotification = defaultOnNotification,
+    required this.notificationsBloc,
   }) : super(const LoginState());
 
   final WebtritApiClientFactory createWebtritApiClient;
-
-  final void Function(Notification notification) onNotification;
+  final NotificationsBloc notificationsBloc;
 
   String? get coreUrlFromEnvironment => EnvironmentConfig.CORE_URL;
 
@@ -80,19 +77,19 @@ class LoginCubit extends Cubit<LoginState> {
         ));
       } else {
         emit(state.copyWith(processing: false));
-        onNotification.call(const SupportedLoginTypeMissedErrorNotification());
+        notificationsBloc.add(const NotificationsSubmitted(SupportedLoginTypeMissedErrorNotification()));
       }
     } on CoreVersionUnsupportedException catch (e) {
       emit(state.copyWith(processing: false));
 
-      onNotification.call(CoreVersionUnsupportedErrorNotification(
+      notificationsBloc.add(NotificationsSubmitted(CoreVersionUnsupportedErrorNotification(
         e.actual.toString(),
         e.supportedConstraint.toString(),
-      ));
+      )));
     } on Exception catch (e) {
       emit(state.copyWith(processing: false));
 
-      onNotification.call(LoginErrorNotification(e));
+      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
     }
   }
 
@@ -185,7 +182,7 @@ class LoginCubit extends Cubit<LoginState> {
       ));
     } on Exception catch (e) {
       emit(state.copyWith(processing: false));
-      onNotification.call(LoginErrorNotification(e));
+      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
     }
   }
 
@@ -217,7 +214,7 @@ class LoginCubit extends Cubit<LoginState> {
       ));
     } on Exception catch (e) {
       emit(state.copyWith(processing: false));
-      onNotification.call(LoginErrorNotification(e));
+      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
     }
   }
 
@@ -273,7 +270,7 @@ class LoginCubit extends Cubit<LoginState> {
       ));
     } on Exception catch (e) {
       emit(state.copyWith(processing: false));
-      onNotification.call(LoginErrorNotification(e));
+      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
     }
   }
 
@@ -321,7 +318,7 @@ class LoginCubit extends Cubit<LoginState> {
       }
     } on Exception catch (e) {
       emit(state.copyWith(processing: false));
-      onNotification.call(LoginErrorNotification(e));
+      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
     }
   }
 
@@ -354,7 +351,7 @@ class LoginCubit extends Cubit<LoginState> {
       ));
     } on Exception catch (e) {
       emit(state.copyWith(processing: false));
-      onNotification.call(LoginErrorNotification(e));
+      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
     }
   }
 

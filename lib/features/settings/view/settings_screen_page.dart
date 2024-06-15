@@ -16,16 +16,15 @@ class SettingsScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final notificationsBloc = context.read<NotificationsBloc>();
     const widget = SettingsScreen();
     final provider = BlocProvider(
       create: (context) {
         return SettingsBloc(
+          notificationsBloc: context.read<NotificationsBloc>(),
           appBloc: context.read<AppBloc>(),
           userRepository: context.read<UserRepository>(),
           appRepository: context.read<AppRepository>(),
           appPreferences: context.read<AppPreferences>(),
-          onNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
         )..add(const SettingsRefreshed());
       },
       child: widget,
