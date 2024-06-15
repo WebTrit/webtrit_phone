@@ -37,7 +37,6 @@ class AppShell extends StatelessWidget {
                     action: lastNotification.action(context),
                   );
               }
-
               context.read<NotificationsBloc>().add(const NotificationsCleared());
             }
           },
