@@ -56,19 +56,39 @@ class ChatListCubit extends Cubit<ChatListState> {
 
         // Get last local update time for sync from
         // If no update time, fetch all chats
-        final lastUpdate = await localChatRepository.getLastChatUpdate();
+        DateTime? lastUpdate = await localChatRepository.getLastChatUpdate();
 
-        // Prepare sync request
-        Map<String, dynamic> syncRequest = {};
-        if (lastUpdate != null) syncRequest['since'] = lastUpdate.microsecondsSinceEpoch;
+        if (lastUpdate == null) {
+          // Fetch initial chat list state
+          final req = await userChannel.push('chat_list_get', {}).future;
+          final chatList = (req.response['data'] as List).map((e) => Chat.fromMap(e)).toList();
 
-        // Fetch updated chat list
-        final req = await userChannel.push('chat_list_get', syncRequest).future;
-        final chatList = (req.response['data'] as List).map((e) => Chat.fromMap(e)).toList();
+          // Yield fetched chats
+          for (final chat in chatList) {
+            yield chat;
+          }
+        } else {
+          // Fetch chat list updates
+          while (true) {
+            final req = await userChannel.push('chat_list_updates', {
+              'updates_from': lastUpdate!.microsecondsSinceEpoch,
+              'limit': 200,
+            }).future;
+            final chatList = (req.response['data'] as List).map((e) => Chat.fromMap(e)).toList();
 
-        // Yield fetched chats
-        for (final chat in chatList) {
-          yield chat;
+            // If no more chats, break the loop
+            if (chatList.isEmpty) {
+              break;
+            }
+
+            // Yield fetched chats
+            for (final chat in chatList) {
+              yield chat;
+            }
+
+            // Update last update time
+            lastUpdate = chatList.last.updatedAt;
+          }
         }
 
         // Yield buffered updates
