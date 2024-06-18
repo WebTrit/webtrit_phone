@@ -205,7 +205,7 @@ class ThemeProvider extends InheritedWidget {
       ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
       neutral: ElevatedButton.styleFrom(
         foregroundColor: colors.onSurface,
-        backgroundColor: colors.background,
+        backgroundColor: colors.surface,
       ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
       primaryOnDark: ElevatedButton.styleFrom(
         foregroundColor: colors.onPrimary,
@@ -215,9 +215,9 @@ class ThemeProvider extends InheritedWidget {
       ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
       neutralOnDark: ElevatedButton.styleFrom(
         foregroundColor: colors.onSurface,
-        backgroundColor: colors.background,
+        backgroundColor: colors.surface,
         disabledForegroundColor: colors.onSurface.withOpacity(0.5),
-        disabledBackgroundColor: colors.background.withOpacity(0.5),
+        disabledBackgroundColor: colors.surface.withOpacity(0.5),
       ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
     );
   }
@@ -334,7 +334,7 @@ class ThemeProvider extends InheritedWidget {
     final backspacePressedStyleForegroundColor = config?.backspacePressed?.foregroundColor ?? colors.onSecondary;
     final backspacePressedStyleBackgroundColor = config?.backspacePressed?.backgroundColor;
     final backspacePressedStyleIconColor = config?.backspacePressed?.iconColor ?? colors.onSurface;
-    final backspacePressedStyleDisabledIconColor = config?.backspacePressed?.disabledIconColor ?? colors.background;
+    final backspacePressedStyleDisabledIconColor = config?.backspacePressed?.disabledIconColor ?? colors.surface;
 
     final callStartStyle = TextButton.styleFrom(
       foregroundColor: callStartForegroundColor,
@@ -527,7 +527,7 @@ class ThemeProvider extends InheritedWidget {
       floatingLabelBehavior: FloatingLabelBehavior.always,
       isDense: true,
       filled: true,
-      fillColor: colors.background,
+      fillColor: colors.surface,
       labelStyle: TextStyle(color: primary?.labelColor),
       border: MaterialStateOutlineInputBorder.resolveWith((states) {
         final Color borderColor;

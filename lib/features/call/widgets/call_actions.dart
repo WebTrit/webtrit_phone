@@ -116,7 +116,7 @@ class _CallActionsState extends State<CallActions> {
 
     _inputDecorations = themeData.extension<InputDecorations>();
     _textStyle = themeData.textTheme.displaySmall?.copyWith(
-      color: themeData.colorScheme.background,
+      color: themeData.colorScheme.surface,
     );
 
     _iconSize = themeData.textTheme.headlineLarge?.fontSize;

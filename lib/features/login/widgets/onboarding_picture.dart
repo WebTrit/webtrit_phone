@@ -15,7 +15,7 @@ class OnboardingPicture extends StatelessWidget {
     return Container(
       height: mediaQueryData.size.height / 2.5,
       decoration: BoxDecoration(
-        color: themeData.colorScheme.background,
+        color: themeData.colorScheme.surface,
         borderRadius: const BorderRadius.all(
           Radius.circular(20.0),
         ),
