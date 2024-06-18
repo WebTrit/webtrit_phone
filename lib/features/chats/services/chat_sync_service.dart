@@ -26,6 +26,8 @@ class ChatsSyncService {
   Map<int, StreamSubscription> messagesSyncSubs = {};
 
   void init() async {
+    dispose();
+    await Future.microtask(() {});
     _logger.info('Initialising');
 
     final activeChatIds = await localChatRepository.getActiveChatIds();
@@ -43,7 +45,7 @@ class ChatsSyncService {
   }
 
   _upsertMessageSubscription(Chat chat) {
-    final activeMember = chat.members.isActiveMember(int.parse(client.userId!));
+    final activeMember = chat.members.isActiveMember(client.userId!);
     final activeChat = chat.deletedAt == null;
     final shouldSubscribe = activeMember && activeChat;
 
@@ -57,7 +59,7 @@ class ChatsSyncService {
   }
 
   StreamSubscription _subscribeToMessages(int chatId) {
-    final channel = client.addChannel(topic: 'chat:chatroom:$chatId');
+    final channel = client.addChannel(topic: 'chat:chatroom:$chatId')..join();
     final messagesStream = _messagesSyncStream(chatId, channel);
     return messagesStream.listen((msg) {
       _logger.info('Message update event: $msg');
@@ -103,10 +105,8 @@ class ChatsSyncService {
         } else {
           // Fetch chat list updates
           while (true) {
-            final req = await userChannel.push('chat_list_updates', {
-              'updates_from': lastUpdate!.microsecondsSinceEpoch,
-              'limit': 200,
-            }).future;
+            final req = await userChannel
+                .push('chat_list_updates', {'from': lastUpdate!.toUtc().toIso8601String(), 'limit': 200}).future;
             final chatList = (req.response['data'] as List).map((e) => Chat.fromMap(e)).toList();
 
             // If no more chats, break the loop
@@ -142,7 +142,7 @@ class ChatsSyncService {
           }
         }
       } catch (e) {
-        _logger.severe('_syncAndSubscribeAsyncGen error:', e);
+        _logger.severe('_chatlistSyncStream error:', e);
       } finally {
         // Wait a sec before retrying
         await Future.delayed(const Duration(seconds: 1));
@@ -181,7 +181,7 @@ class ChatsSyncService {
         } else {
           // Fetch message updates
           while (true) {
-            final payload = {'chat_id': chatId, 'from': lastUpdate!.microsecondsSinceEpoch, 'limit': 200};
+            final payload = {'chat_id': chatId, 'from': lastUpdate!.toUtc().toIso8601String(), 'limit': 200};
             final req = await channel.push('messages_updates', payload).future;
             final messages = (req.response['data'] as List).map((e) => ChatMessage.fromMap(e)).toList();
 
@@ -218,7 +218,7 @@ class ChatsSyncService {
           }
         }
       } catch (e) {
-        _logger.severe('_syncAndSubscribeAsyncGen error:', e);
+        _logger.severe('_messagesSyncStream error:', e);
       } finally {
         // Wait a sec before retrying
         await Future.delayed(const Duration(seconds: 1));

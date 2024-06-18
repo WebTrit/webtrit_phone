@@ -689,8 +689,8 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
 
   Future<DateTime?> lastChatUpdatedAt() {
     final q = customSelect('SELECT MAX(updated_at_remote) FROM chats');
-    return q.getSingleOrNull().then((row) {
-      if (row == null) return null;
+    return q.getSingle().then((row) {
+      if (row.data.values.first == null) return null;
       final secEpoh = row.data.values.first as int;
       final millisEpoh = secEpoh * 1000;
       return DateTime.fromMillisecondsSinceEpoch(millisEpoh);
@@ -793,23 +793,23 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
 
   Future<int> upsertChatMessage(ChatMessageData chatMessage) async {
     bool isUpdate = chatMessage.createdAtRemote != chatMessage.updatedAtRemote;
-    if (!isUpdate) {
+    if (isUpdate) {
       // Update chat message only if exists, to prevent chat history inconsistency
       final q = (select(chatMessagesTable)..where((t) => t.id.equals(chatMessage.id)));
       final exists = (await q.getSingleOrNull()) != null;
-      if (exists) into(chatMessagesTable).insertOnConflictUpdate(chatMessage);
-      return chatMessage.id;
+      if (exists) await into(chatMessagesTable).insertOnConflictUpdate(chatMessage);
     } else {
-      return into(chatMessagesTable).insert(chatMessage);
+      return await into(chatMessagesTable).insertOnConflictUpdate(chatMessage);
     }
+    return chatMessage.id;
   }
 
   Future<DateTime?> lastChatMessageUpdatedAt(int chatId) {
     final q = customSelect('SELECT MAX(updated_at_remote) FROM chat_messages WHERE chat_id = ?',
         variables: [Variable.withInt(chatId)]);
 
-    return q.getSingleOrNull().then((row) {
-      if (row == null) return null;
+    return q.getSingle().then((row) {
+      if (row.data.values.first == null) return null;
       final secEpoh = row.data.values.first as int;
       final millisEpoh = secEpoh * 1000;
       return DateTime.fromMillisecondsSinceEpoch(millisEpoh);
