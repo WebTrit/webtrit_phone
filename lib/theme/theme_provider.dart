@@ -532,12 +532,12 @@ class ThemeProvider extends InheritedWidget {
       labelStyle: TextStyle(color: primary?.labelColor),
       border: MaterialStateOutlineInputBorder.resolveWith((states) {
         final Color borderColor;
-        final bool isError = states.contains(MaterialState.error);
-        if (states.contains(MaterialState.disabled)) {
+        final bool isError = states.contains(WidgetState.error);
+        if (states.contains(WidgetState.disabled)) {
           borderColor = isError
               ? primary?.border?.disabled?.errorColor ?? colors.error.withOpacity(0.25)
               : primary?.border?.disabled?.typicalColor ?? colors.onSurface.withOpacity(0.25);
-        } else if (states.contains(MaterialState.focused)) {
+        } else if (states.contains(WidgetState.focused)) {
           borderColor = isError
               ? primary?.border?.focused?.errorColor ?? colors.error
               : primary?.border?.focused?.typicalColor ?? colors.primary;
