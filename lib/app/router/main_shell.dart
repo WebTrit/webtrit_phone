@@ -190,6 +190,8 @@ class _MainShellState extends State<MainShell> {
           BlocProvider<ChatsBloc>(
             create: (context) {
               final appBloc = context.read<AppBloc>();
+              final appPreferences = context.read<AppPreferences>();
+              final localChatRepository = context.read<LocalChatRepository>();
               final token = appBloc.state.token!;
               final tenantId = appBloc.state.tenantId!;
 
@@ -198,8 +200,11 @@ class _MainShellState extends State<MainShell> {
                 socketOptions: PhoenixSocketOptions(params: {'token': token, 'tenant_id': tenantId}),
               );
 
-              return ChatsBloc(client: wsClient, localRepository: context.read<LocalChatRepository>())
-                ..add(const Connect());
+              return ChatsBloc(
+                client: wsClient,
+                localRepository: localChatRepository,
+                appPreferences: appPreferences,
+              )..add(const Connect());
             },
           ),
         ],

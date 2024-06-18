@@ -3,6 +3,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/chats/services/services.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -11,10 +12,10 @@ part 'chats_state.dart';
 
 class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
   ChatsBloc({
-    required PhoenixSocket client,
-    required LocalChatRepository localRepository,
-  })  : _chatsSyncService = ChatsSyncService(client, localRepository),
-        super(ChatsState.initial(client)) {
+    required this.client,
+    required this.localRepository,
+    required this.appPreferences,
+  }) : super(ChatsState.initial(client, appPreferences.getChatUserId())) {
     on<Connect>(_connect);
     on<Refresh>(_refresh);
     on<_ClientConnected>(_onClientConnected);
@@ -32,38 +33,42 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
     });
   }
 
-  final ChatsSyncService _chatsSyncService;
-  PhoenixSocket get _client => state.client;
+  final PhoenixSocket client;
+  final LocalChatRepository localRepository;
+  final AppPreferences appPreferences;
+  ChatsSyncService? _chatsSyncService;
 
   void _connect(Connect event, Emitter<ChatsState> emit) async {
     emit(state.copyWith(status: ChatsStatus.connecting));
-    _client.connect();
+    client.connect();
   }
 
   void _refresh(Refresh event, Emitter<ChatsState> emit) async {
-    if (_client.isConnected) _client.close();
+    if (client.isConnected) client.close();
     add(const Connect());
   }
 
   void _onClientConnected(_ClientConnected event, Emitter<ChatsState> emit) async {
     try {
-      if (!_client.channels.containsKey('chat:auth')) {
+      if (!client.channels.containsKey('chat:auth')) {
         // Auth process using channel connect payload
         // Can be eliminated by retrieving user_id during main auth flow
-        final authChannel = _client.addChannel(topic: 'chat:auth');
+        final authChannel = client.addChannel(topic: 'chat:auth');
         final authChannelJoinResponse = await authChannel.join().future;
         final userId = authChannelJoinResponse.response['user_id'];
+        appPreferences.setChatUserId(userId);
+        emit(state.copyWith(userId: userId));
 
         // Join channel for user specific events
-        final userChannel = _client.addChannel(topic: 'chat:user:$userId');
+        final userChannel = client.addChannel(topic: 'chat:user:$userId');
         await userChannel.join().future;
 
         // Init sync service
-        _chatsSyncService.init();
+        _chatsSyncService ??= ChatsSyncService(client, localRepository)..init();
       }
       emit(state.copyWith(status: ChatsStatus.connected));
     } on Exception catch (e) {
-      _client.close();
+      client.close();
       emit(state.copyWith(status: ChatsStatus.error, error: e));
     }
   }
@@ -78,8 +83,8 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
 
   @override
   Future<void> close() {
-    _chatsSyncService.dispose();
-    _client.close();
+    _chatsSyncService?.dispose();
+    client.close();
     return super.close();
   }
 }
