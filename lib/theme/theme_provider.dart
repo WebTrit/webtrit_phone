@@ -422,51 +422,51 @@ class ThemeProvider extends InheritedWidget {
     );
 
     final cameraStyle = callAction.copyWith(
-      backgroundColor: MaterialStatePropertyAll(cameraBackgroundColor),
+      backgroundColor: WidgetStatePropertyAll(cameraBackgroundColor),
     );
 
     final cameraActiveStyle = callAction.copyWith(
-      backgroundColor: MaterialStatePropertyAll(cameraActiveBackgroundColor),
+      backgroundColor: WidgetStatePropertyAll(cameraActiveBackgroundColor),
     );
 
     final mutedStyle = callAction.copyWith(
-      backgroundColor: MaterialStatePropertyAll(mutedBackgroundColor),
+      backgroundColor: WidgetStatePropertyAll(mutedBackgroundColor),
     );
 
     final mutedActiveStyle = callActiveAction.copyWith(
-      backgroundColor: MaterialStatePropertyAll(mutedActiveBackgroundColor),
+      backgroundColor: WidgetStatePropertyAll(mutedActiveBackgroundColor),
     );
 
     final speakerStyle = callAction.copyWith(
-      backgroundColor: MaterialStatePropertyAll(speakerBackgroundColor),
+      backgroundColor: WidgetStatePropertyAll(speakerBackgroundColor),
     );
 
     final speakerActiveStyle = callActiveAction.copyWith(
-      backgroundColor: MaterialStatePropertyAll(speakerActiveBackgroundColor),
+      backgroundColor: WidgetStatePropertyAll(speakerActiveBackgroundColor),
     );
 
     final heldStyle = callAction.copyWith(
-      backgroundColor: MaterialStatePropertyAll(heldBackgroundColor),
+      backgroundColor: WidgetStatePropertyAll(heldBackgroundColor),
     );
 
     final heldActiveStyle = callActiveAction.copyWith(
-      backgroundColor: MaterialStatePropertyAll(heldActiveBackgroundColor),
+      backgroundColor: WidgetStatePropertyAll(heldActiveBackgroundColor),
     );
 
     final swapStyle = callAction.copyWith(
-      backgroundColor: MaterialStatePropertyAll(swapBackgroundColor),
+      backgroundColor: WidgetStatePropertyAll(swapBackgroundColor),
     );
 
     final keyStyle = callAction.copyWith(
-      backgroundColor: MaterialStatePropertyAll(keyBackgroundColor),
+      backgroundColor: WidgetStatePropertyAll(keyBackgroundColor),
     );
 
     final keypadStyle = callAction.copyWith(
-      backgroundColor: MaterialStatePropertyAll(keypadBackgroundColor),
+      backgroundColor: WidgetStatePropertyAll(keypadBackgroundColor),
     );
 
     final keypadActiveStyle = callActiveAction.copyWith(
-      backgroundColor: MaterialStatePropertyAll(keypadActiveBackgroundColor),
+      backgroundColor: WidgetStatePropertyAll(keypadActiveBackgroundColor),
     );
 
     return CallActionsStyles(
@@ -503,9 +503,9 @@ class ThemeProvider extends InheritedWidget {
     TextButtonStyles styles,
     ConfirmDialogWidgetConfig? dialogConfig,
   ) {
-    final activeButtonStyle1ForegroundColor = MaterialStatePropertyAll(dialogConfig?.activeButtonColor1);
-    final activeButtonStyle2ForegroundColor = MaterialStatePropertyAll(dialogConfig?.activeButtonColor2);
-    final defaultButtonStyleForegroundColor = MaterialStatePropertyAll(dialogConfig?.defaultButtonColor);
+    final activeButtonStyle1ForegroundColor = WidgetStatePropertyAll(dialogConfig?.activeButtonColor1);
+    final activeButtonStyle2ForegroundColor = WidgetStatePropertyAll(dialogConfig?.activeButtonColor2);
+    final defaultButtonStyleForegroundColor = WidgetStatePropertyAll(dialogConfig?.defaultButtonColor);
 
     final activeButtonStyle1 = styles.neutral?.copyWith(foregroundColor: activeButtonStyle1ForegroundColor);
     final activeButtonStyle2 = styles.dangerous?.copyWith(foregroundColor: activeButtonStyle2ForegroundColor);

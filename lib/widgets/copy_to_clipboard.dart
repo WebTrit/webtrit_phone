@@ -31,7 +31,7 @@ class CopyToClipboard extends StatelessWidget {
             items: [
               PopupMenuItem<bool>(
                 enabled: false,
-                labelTextStyle: MaterialStatePropertyAll(themeData.textTheme.bodyLarge),
+                labelTextStyle: WidgetStatePropertyAll(themeData.textTheme.bodyLarge),
                 child: Text(data),
               ),
               PopupMenuItem<bool>(
