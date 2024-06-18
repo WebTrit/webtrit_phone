@@ -527,7 +527,8 @@ class ThemeProvider extends InheritedWidget {
       floatingLabelBehavior: FloatingLabelBehavior.always,
       isDense: true,
       filled: true,
-      fillColor: colors.surface,
+      // TODO(Serdun): add fill color from widget settings model
+      fillColor: Colors.transparent,
       labelStyle: TextStyle(color: primary?.labelColor),
       border: MaterialStateOutlineInputBorder.resolveWith((states) {
         final Color borderColor;
