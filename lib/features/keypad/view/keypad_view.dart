@@ -60,15 +60,6 @@ class KeypadViewState extends State<KeypadView> {
             ),
           ),
         ),
-
-        /// Temporary fix for the flutter rendering issue
-        /// To reproduse set font family to null, top 1-2 pixels of the keypad will be cut off
-        /// TODO: check on next flutter update if the issue is fixed and remove this container
-        Container(
-          color: backgroundColor,
-          height: 1,
-          width: double.infinity,
-        ),
         Keypad(
           onKeypadPressed: _onKeypadPressed,
         ),
