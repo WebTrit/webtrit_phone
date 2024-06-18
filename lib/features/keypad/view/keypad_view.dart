@@ -39,7 +39,6 @@ class KeypadViewState extends State<KeypadView> {
   Widget build(BuildContext context) {
     final scaledInset = MediaQuery.of(context).size.height > 800 ? 16.0 : 8.0;
     final themeData = Theme.of(context);
-    final backgroundColor = themeData.colorScheme.surface;
     final InputDecorations? inputDecorations = themeData.extension<InputDecorations>();
     return Column(
       children: [
