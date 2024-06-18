@@ -73,7 +73,6 @@ class ThemeProvider extends InheritedWidget {
       outline: colorSchemeOverride?.outline,
       outlineVariant: colorSchemeOverride?.outlineVariant,
       background: colorSchemeOverride?.background,
-      onBackground: colorSchemeOverride?.onBackground,
       surface: colorSchemeOverride?.surface,
       onSurface: colorSchemeOverride?.onSurface,
       surfaceVariant: colorSchemeOverride?.surfaceVariant,
@@ -205,7 +204,7 @@ class ThemeProvider extends InheritedWidget {
         disabledBackgroundColor: colors.onPrimaryContainer.withOpacity(0.12),
       ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
       neutral: ElevatedButton.styleFrom(
-        foregroundColor: colors.onBackground,
+        foregroundColor: colors.onSurface,
         backgroundColor: colors.background,
       ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
       primaryOnDark: ElevatedButton.styleFrom(
@@ -215,9 +214,9 @@ class ThemeProvider extends InheritedWidget {
         disabledBackgroundColor: colors.primary.withOpacity(0.5),
       ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
       neutralOnDark: ElevatedButton.styleFrom(
-        foregroundColor: colors.onBackground,
+        foregroundColor: colors.onSurface,
         backgroundColor: colors.background,
-        disabledForegroundColor: colors.onBackground.withOpacity(0.5),
+        disabledForegroundColor: colors.onSurface.withOpacity(0.5),
         disabledBackgroundColor: colors.background.withOpacity(0.5),
       ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
     );
@@ -226,9 +225,9 @@ class ThemeProvider extends InheritedWidget {
   OutlinedButtonStyles outlinedButtonStyles(ColorScheme colors) {
     return OutlinedButtonStyles(
       neutral: OutlinedButton.styleFrom(
-        foregroundColor: colors.onBackground,
+        foregroundColor: colors.onSurface,
         side: BorderSide(
-          color: colors.onBackground.withOpacity(0.2),
+          color: colors.onSurface.withOpacity(0.2),
         ),
       ),
     );
@@ -334,7 +333,7 @@ class ThemeProvider extends InheritedWidget {
 
     final backspacePressedStyleForegroundColor = config?.backspacePressed?.foregroundColor ?? colors.onSecondary;
     final backspacePressedStyleBackgroundColor = config?.backspacePressed?.backgroundColor;
-    final backspacePressedStyleIconColor = config?.backspacePressed?.iconColor ?? colors.onBackground;
+    final backspacePressedStyleIconColor = config?.backspacePressed?.iconColor ?? colors.onSurface;
     final backspacePressedStyleDisabledIconColor = config?.backspacePressed?.disabledIconColor ?? colors.background;
 
     final callStartStyle = TextButton.styleFrom(
@@ -536,7 +535,7 @@ class ThemeProvider extends InheritedWidget {
         if (states.contains(MaterialState.disabled)) {
           borderColor = isError
               ? primary?.border?.disabled?.errorColor ?? colors.error.withOpacity(0.25)
-              : primary?.border?.disabled?.typicalColor ?? colors.onBackground.withOpacity(0.25);
+              : primary?.border?.disabled?.typicalColor ?? colors.onSurface.withOpacity(0.25);
         } else if (states.contains(MaterialState.focused)) {
           borderColor = isError
               ? primary?.border?.focused?.errorColor ?? colors.error
@@ -544,7 +543,7 @@ class ThemeProvider extends InheritedWidget {
         } else {
           borderColor = isError
               ? primary?.border?.any?.errorColor ?? colors.error.withOpacity(0.5)
-              : primary?.border?.any?.typicalColor ?? colors.onBackground.withOpacity(0.5);
+              : primary?.border?.any?.typicalColor ?? colors.onSurface.withOpacity(0.5);
         }
         return OutlineInputBorder(
           borderSide: BorderSide(
