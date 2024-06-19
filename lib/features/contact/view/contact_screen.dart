@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -86,6 +87,12 @@ class ContactScreen extends StatelessWidget {
                             number: contactPhone.number,
                           ));
                           context.router.maybePop();
+                        },
+                        onMessagePressed: () {
+                          context.router.navigate(ChatsRouterPageRoute(children: [
+                            const ChatListScreenPageRoute(),
+                            ConversationScreenPageRoute(participantId: contact.sourceId),
+                          ]));
                         },
                       ),
                     for (final contactEmail in contactEmails)

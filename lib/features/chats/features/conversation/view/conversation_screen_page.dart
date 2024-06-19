@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 
 @RoutePage()
 class ConversationScreenPage extends StatelessWidget {
@@ -15,11 +16,13 @@ class ConversationScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final chatsBloc = context.read<ChatsBloc>();
+    final localChatRepository = context.read<LocalChatRepository>();
 
     final widget = BlocProvider(
       create: (context) => ConversationCubit(
         participantId,
         chatsBloc.state.client,
+        localChatRepository,
       ),
       child: const ConversationScreen(),
     );

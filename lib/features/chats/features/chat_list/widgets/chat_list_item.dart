@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stream_transform/stream_transform.dart';
 
+import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/chat/components/chats_event.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -53,6 +55,13 @@ class _ChatListItemState extends State<ChatListItem> {
     super.dispose();
   }
 
+  // onTap() {
+  //   context.router.navigate(ChatsRouterPageRoute(children: [
+  //     const ChatListScreenPageRoute(),
+  //     ConversationScreenPageRoute(participantId: recent.number),
+  //   ]));
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -65,6 +74,18 @@ class _ChatListItemState extends State<ChatListItem> {
         title: title(),
         subtitle: subtitle(),
         trailing: trail(),
+        onTap: () {
+          if (widget.chat.type == ChatType.dialog) {
+            final userId = widget.userId;
+            final participant = widget.chat.members.firstWhere((m) => m.userId != userId);
+            context.router.navigate(ChatsRouterPageRoute(children: [
+              const ChatListScreenPageRoute(),
+              ConversationScreenPageRoute(participantId: participant.userId),
+            ]));
+          } else {
+            // TODO: group screen
+          }
+        },
       ),
     );
   }
