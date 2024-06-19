@@ -14,14 +14,10 @@ class ChatListScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final chatsBloc = context.read<ChatsBloc>();
     final localChatRepository = context.read<LocalChatRepository>();
 
     final widget = BlocProvider(
-      create: (context) => ChatListCubit(
-        client: chatsBloc.state.client,
-        localChatRepository: localChatRepository,
-      ),
+      create: (context) => ChatListCubit(localChatRepository),
       child: const ChatListScreen(
         title: Text(EnvironmentConfig.APP_NAME),
       ),

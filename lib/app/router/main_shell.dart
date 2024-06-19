@@ -200,11 +200,7 @@ class _MainShellState extends State<MainShell> {
                 socketOptions: PhoenixSocketOptions(params: {'token': token, 'tenant_id': tenantId}),
               );
 
-              return ChatsBloc(
-                client: wsClient,
-                localRepository: localChatRepository,
-                appPreferences: appPreferences,
-              )..add(const Connect());
+              return ChatsBloc(wsClient, localChatRepository, appPreferences)..add(const Connect());
             },
           ),
         ],
