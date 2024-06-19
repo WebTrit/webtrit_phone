@@ -4,13 +4,16 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/widgets/widgets.dart';
 
 @RoutePage()
-class ChatsRouterPage extends StatelessWidget {
+class ChatsRouterPage extends StatefulWidget {
   const ChatsRouterPage({super.key});
 
+  @override
+  State<ChatsRouterPage> createState() => _ChatsRouterPageState();
+}
+
+class _ChatsRouterPageState extends State<ChatsRouterPage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ChatsBloc, ChatsState>(
@@ -18,37 +21,44 @@ class ChatsRouterPage extends StatelessWidget {
         return Column(
           children: [
             const Expanded(child: AutoRouter()),
-            if (state.status == ChatsStatus.connecting || state.status == ChatsStatus.initial) progressBar(),
-            if (state.status == ChatsStatus.error) disconectBar(context),
+            if (state.status != ChatsStatus.connected) ...[
+              const SizedBox(height: 8),
+              StateBar(state: state),
+              const SizedBox(height: 8),
+            ],
           ],
         );
       },
     );
   }
+}
 
-  void refreshChatsConnection(BuildContext context) {
-    context.read<ChatsBloc>().add(const Refresh());
-  }
+class StateBar extends StatelessWidget {
+  const StateBar({required this.state, super.key});
 
-  Widget disconectBar(BuildContext context) {
-    return NoDataPlaceholder(
-      content: Text(context.l10n.chats_RouterPage_failure),
-      contentPadding: const EdgeInsets.all(4),
-      actionsPadding: EdgeInsets.zero,
-      actions: [
-        TextButton(
-          onPressed: () => refreshChatsConnection(context),
-          child: Text(context.l10n.chats_ActionBtn_retry),
-        ),
-      ],
-    );
-  }
+  final ChatsState state;
 
-  Widget progressBar() {
-    return const SizedBox(
-      height: 64,
+  @override
+  Widget build(BuildContext context) {
+    String text = '';
+    if (state.status == ChatsStatus.initial) text = 'INITIALIZING';
+    if (state.status == ChatsStatus.connecting) text = 'CONNECTING';
+    if (state.status == ChatsStatus.error) text = 'DISCONNECTED';
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       width: double.infinity,
-      child: Center(child: CircularProgressIndicator()),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        children: [
+          const SizedBox(width: 16, height: 16, child: CircularProgressIndicator()),
+          const SizedBox(width: 8),
+          Text(text, style: const TextStyle(fontSize: 10)),
+        ],
+      ),
     );
   }
 }
