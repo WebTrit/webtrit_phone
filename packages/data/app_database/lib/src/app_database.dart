@@ -676,8 +676,10 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
 
   Future<List<ChatData>> getAllChats() => select(chatsTable).get();
 
+  @Deprecated('Useless, use repos event bus instead')
   Stream<List<ChatData>> watchAllChats() => select(chatsTable).watch();
 
+  @Deprecated('Useless, use repos event bus instead')
   Stream<ChatData> watchChat(Insertable<ChatData> chat) {
     return (select(chatsTable)..whereSamePrimaryKey(chat)).watchSingle();
   }
@@ -685,6 +687,18 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   Future<List<int>> getActiveChatIds() {
     final q = customSelect('SELECT id FROM chats WHERE deleted_at_remote IS NULL');
     return q.get().then((rows) => rows.map((row) => row.data['id'] as int).toList());
+  }
+
+  Future<int?> findDialogId(String participantId) async {
+    var variables = [Variable.withString(ChatTypeEnum.dialog.name), Variable.withString(participantId)];
+    final query = customSelect('''
+      SELECT c.id, c.type
+      FROM chats c
+      JOIN chat_members cm ON c.id = cm.chat_id
+      WHERE c.type = ? AND cm.user_id = ?
+    ''', variables: variables);
+    final rows = await query.get();
+    return rows.firstOrNull?.data.values.first as int;
   }
 
   Future<DateTime?> lastChatUpdatedAt() {
@@ -708,6 +722,7 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
 
   // ChatMembers
 
+  @Deprecated('Useless, use repos event bus instead')
   Stream<List<ChatMemberData>> watchChatMembersByChatId(int chatId) {
     return (select(chatMembersTable)..where((t) => t.chatId.equals(chatId))).watch();
   }
@@ -726,6 +741,7 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
 
   // ChatDataWithMembers
 
+  @Deprecated('Useless, use repos event bus instead')
   Stream<List<ChatDataWithMembers>> watchAllChatsWithMembers() {
     final q = select(chatsTable).join([
       leftOuterJoin(chatMembersTable, chatMembersTable.chatId.equalsExp(chatsTable.id)),
@@ -766,6 +782,25 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
     });
   }
 
+  Future<ChatDataWithMembers> getChatWithMembers(int chatId) {
+    final q = select(chatsTable).join([
+      leftOuterJoin(chatMembersTable, chatMembersTable.chatId.equalsExp(chatsTable.id)),
+    ]);
+    return q.get().then((rows) {
+      final chatData = <ChatData>[];
+      final members = <ChatMemberData>[];
+      for (final row in rows) {
+        final chat = row.readTable(chatsTable);
+        if (!chatData.contains(chat)) chatData.add(chat);
+
+        final member = row.readTableOrNull(chatMembersTable);
+        if (member != null) members.add(member);
+      }
+      return ChatDataWithMembers(
+          chatData.firstWhere((c) => c.id == chatId), members.where((m) => m.chatId == chatId).toList());
+    });
+  }
+
   // ChatMessages
 
   Future<List<ChatMessageData>> getLastMessages(int chatId, {int limit = 100}) {
@@ -779,10 +814,12 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   Future<List<ChatMessageData>> getMessageHistory(int chatId, DateTime from, DateTime to) {
     final q = select(chatMessagesTable)
       ..where((t) => t.chatId.equals(chatId))
-      ..where((t) => t.createdAtRemote.isBetweenValues(from, to));
+      ..where((t) => t.createdAtRemote.isBetweenValues(from, to))
+      ..orderBy([(t) => OrderingTerm.desc(t.createdAtRemote)]);
     return q.get();
   }
 
+  @Deprecated('Useless, use repos event bus instead')
   Stream<List<ChatMessageData>> watchLastMessageUpdates(int chatId, {int limit = 100}) {
     final q = (select(chatMessagesTable)
       ..where((t) => t.chatId.equals(chatId))
