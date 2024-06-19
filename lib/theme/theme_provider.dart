@@ -528,7 +528,7 @@ class ThemeProvider extends InheritedWidget {
       isDense: true,
       filled: true,
       // TODO(Serdun): add fill color from widget settings model
-      fillColor: Colors.transparent,
+      fillColor: colors.surfaceBright,
       labelStyle: TextStyle(color: primary?.labelColor),
       border: MaterialStateOutlineInputBorder.resolveWith((states) {
         final Color borderColor;
@@ -727,6 +727,7 @@ class ThemeProvider extends InheritedWidget {
       textButtonTheme: textButtonTheme(colorScheme),
       listTileTheme: listTileTheme(colorScheme),
       snackBarTheme: snackBarTheme(colorScheme),
+      scaffoldBackgroundColor: colorScheme.surfaceBright,
     );
   }
 

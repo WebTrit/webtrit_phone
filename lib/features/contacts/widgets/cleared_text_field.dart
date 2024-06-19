@@ -44,7 +44,7 @@ class ClearedTextFieldState extends State<ClearedTextField> {
     final iconConstraints = widget.iconConstraints;
     return Ink(
       decoration: BoxDecoration(
-        color: themeData.colorScheme.surface,
+        color: themeData.colorScheme.surfaceBright,
         borderRadius: iconConstraints == null ? null : BorderRadius.circular(iconConstraints.minHeight / 2),
       ),
       child: TextField(
