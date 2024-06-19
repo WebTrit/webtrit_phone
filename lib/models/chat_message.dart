@@ -99,3 +99,34 @@ class ChatMessage extends Equatable {
 }
 
 enum SmsOutState { sending, error, delivered }
+
+extension MessagesListExtension<T extends ChatMessage> on List<T> {
+  T findById(int id) => firstWhere((element) => element.id == id);
+
+  List<T> mergeWith(T message) {
+    final newList = toList();
+    final index = newList.indexWhere((element) => element.id == message.id);
+    if (index == -1) {
+      newList.add(message);
+    } else {
+      newList[index] = message;
+    }
+    return newList;
+  }
+
+  List<T> mergeUpdateWith(T message) {
+    final newList = toList();
+    final index = newList.indexWhere((element) => element.id == message.id);
+    if (index == -1) {
+      // Skip for messages that are older than the oldest message in the list
+      // That means this is update for message that not included in the list and
+      // will cause incorrect order for history fetching
+      if (message.createdAt.millisecondsSinceEpoch > newList.first.createdAt.millisecondsSinceEpoch) {
+        newList.add(message);
+      }
+    } else {
+      newList[index] = message;
+    }
+    return newList;
+  }
+}

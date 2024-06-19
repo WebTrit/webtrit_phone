@@ -25,6 +25,10 @@ class Chat extends Equatable {
     required this.members,
   });
 
+  bool isDialogWith(String participantId) {
+    return type == ChatType.dialog && members.any((member) => member.userId == participantId);
+  }
+
   @override
   List<Object?> get props => [id, type, name, creatorId, createdAt, updatedAt, deletedAt, members];
 
@@ -89,3 +93,18 @@ class Chat extends Equatable {
 }
 
 enum ChatType { dialog, group }
+
+extension ChatListExtension<T extends Chat> on List<T> {
+  T findById(int id) => firstWhere((element) => element.id == id);
+
+  List<T> mergeWith(T chat) {
+    final newList = toList();
+    final index = newList.indexWhere((element) => element.id == chat.id);
+    if (index == -1) {
+      newList.add(chat);
+    } else {
+      newList[index] = chat;
+    }
+    return newList;
+  }
+}

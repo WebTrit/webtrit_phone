@@ -52,3 +52,10 @@ class ChatMember extends Equatable {
 
   factory ChatMember.fromJson(String source) => ChatMember.fromMap(json.decode(source) as Map<String, dynamic>);
 }
+
+extension ChatMembersIterableExtension<T extends ChatMember> on Iterable<T> {
+  bool isActiveMember(String memberId) =>
+      any((member) => member.userId == memberId && member.blockedAt == null && member.leftAt == null);
+
+  List<ChatMember> participants(String userId) => where((member) => member.userId != userId).toList();
+}
