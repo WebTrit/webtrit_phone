@@ -18,10 +18,13 @@ class _ChatListScreenState extends State<ChatListScreen> {
     return Scaffold(
       appBar: MainAppBar(title: widget.title),
       body: BlocBuilder<ChatListCubit, ChatListState>(builder: (context, state) {
-        if (state.initialising == false) {
-          return ChatsList(chatlist: state.chats);
+        if (state.initialising) {
+          return const Center(child: CircularProgressIndicator());
         }
-        return const Center(child: CircularProgressIndicator());
+        if (state.chats.isEmpty) {
+          return const Center(child: Text('No conversations started yet'));
+        }
+        return ChatsList(chatlist: state.chats);
       }),
     );
   }
