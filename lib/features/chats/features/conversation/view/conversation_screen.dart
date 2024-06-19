@@ -16,9 +16,7 @@ class ConversationScreen extends StatefulWidget {
 class _ConversationScreenState extends State<ConversationScreen> {
   @override
   Widget build(BuildContext context) {
-    void retryPreparing() {
-      context.read<ConversationCubit>().prepareConversation();
-    }
+    void restart() => context.read<ConversationCubit>().restart();
 
     return Scaffold(
       body: BlocBuilder<ConversationCubit, ConversationState>(
@@ -30,7 +28,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
           if (state is CVSError) {
             return NoDataPlaceholder(
               content: Text(context.l10n.chats_Conversation_failure),
-              actions: [TextButton(onPressed: retryPreparing, child: Text(context.l10n.chats_ActionBtn_retry))],
+              actions: [TextButton(onPressed: restart, child: Text(context.l10n.chats_ActionBtn_retry))],
             );
           }
 

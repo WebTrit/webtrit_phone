@@ -22,6 +22,11 @@ class LocalChatRepository with ChatsDriftMapper {
   Stream<ChatsEvent> get eventBus => _eventBus.stream;
   _addEvent(ChatsEvent event) => _eventBus.add(event);
 
+  Future<Chat> getChat(int chatId) async {
+    final chatData = await _chatsDao.getChatWithMembers(chatId);
+    return chatFromDrift(chatData);
+  }
+
   Future<List<Chat>> getChats() async {
     final chatsData = await _chatsDao.getAllChatsWithMembers();
     return chatsData.map(chatFromDrift).toList();
@@ -35,6 +40,10 @@ class LocalChatRepository with ChatsDriftMapper {
 
   Future<List<int>> getActiveChatIds() async {
     return _chatsDao.getActiveChatIds();
+  }
+
+  Future<int?> findDialogId(String participantId) {
+    return _chatsDao.findDialogId(participantId);
   }
 
   Future<DateTime?> getLastChatUpdate() async {

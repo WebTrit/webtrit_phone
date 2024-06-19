@@ -6,11 +6,18 @@ abstract base class ConversationState {
 
   /// The id of the participant in the conversation
   String get participantId;
+
+  factory ConversationState.init(String participantId) => CVSInit(participantId);
+  factory ConversationState.error(String participantId, Object error) => CVSError(participantId, error);
+  factory ConversationState.ready(String participantId, {List<ChatMessage> messages = const []}) {
+    return CVSReady(participantId, messages: messages);
+  }
 }
 
 /// Represents the state of the conversation cubit when preparing the conversation.
-final class CVSPreparing extends ConversationState with EquatableMixin {
-  const CVSPreparing(this.participantId);
+/// E.g fetching the chat id, messages, etc.
+final class CVSInit extends ConversationState with EquatableMixin {
+  const CVSInit(this.participantId);
 
   @override
   final String participantId;
@@ -19,7 +26,7 @@ final class CVSPreparing extends ConversationState with EquatableMixin {
   List<Object> get props => [participantId];
 }
 
-/// Represents the state of the conversation cubit when an error occurred.
+/// Represents the error state of the conversation during the initialization.
 final class CVSError extends ConversationState with EquatableMixin {
   const CVSError(this.participantId, this.error);
 
@@ -34,11 +41,33 @@ final class CVSError extends ConversationState with EquatableMixin {
 
 /// Represents the state of the conversation cubit when the conversation is ready.
 final class CVSReady extends ConversationState with EquatableMixin {
-  const CVSReady(this.participantId);
+  const CVSReady(
+    this.participantId, {
+    this.messages = const [],
+    this.fetchingHistory = false,
+    this.historyEndReached = false,
+  });
 
   @override
   final String participantId;
+  final List<ChatMessage> messages;
+  final bool fetchingHistory;
+  final bool historyEndReached;
 
   @override
-  List<Object> get props => [participantId];
+  List<Object> get props => [participantId, messages];
+
+  copyWith({
+    String? participantId,
+    List<ChatMessage>? messages,
+    bool? fetchingHistory,
+    bool? historyEndReached,
+  }) {
+    return CVSReady(
+      participantId ?? this.participantId,
+      messages: messages ?? this.messages,
+      fetchingHistory: fetchingHistory ?? this.fetchingHistory,
+      historyEndReached: historyEndReached ?? this.historyEndReached,
+    );
+  }
 }
