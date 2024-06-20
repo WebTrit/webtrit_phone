@@ -5,6 +5,8 @@ import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 import 'package:stream_transform/stream_transform.dart';
+import 'package:uuid/uuid.dart';
+import 'package:webtrit_phone/features/chats/extensions/phoenix_socket.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/chat/components/chats_event.dart';
@@ -21,13 +23,14 @@ class ConversationCubit extends Cubit<ConversationState> {
     this._localChatRepository,
   ) : super(ConversationState.init(_participantId)) {
     _init();
-    // _logger.onRecord.listen((record) {
-    //   // ignore: avoid_print
-    //   print('\x1B[33mcht: ${record.message}\x1B[0m');
-    // });
+    _logger.onRecord.listen((record) {
+      // ignore: avoid_print
+      print('\x1B[33mcht: ${record.message}\x1B[0m');
+    });
   }
 
   final String _participantId;
+  // ignore: unused_field
   final PhoenixSocket _client;
   final LocalChatRepository _localChatRepository;
 
@@ -41,6 +44,24 @@ class ConversationCubit extends Cubit<ConversationState> {
     _chat = null;
     emit(ConversationState.init(_participantId));
     _init();
+  }
+
+  //TODO: sent queue
+  Future sendMessage(String content) async {
+    final chat = _chat;
+    if (chat == null) {
+      _client.userChannel?.push('new_dialog_msg', {
+        'to_id': _participantId,
+        'content': content,
+        'id_key': const Uuid().v4(),
+      });
+    } else {
+      _client.userChannel?.push('new_msg', {
+        'chat_id': chat.id,
+        'content': content,
+        'id_key': const Uuid().v4(),
+      });
+    }
   }
 
   Future<void> _init() async {
@@ -72,7 +93,7 @@ class ConversationCubit extends Cubit<ConversationState> {
     if (chatId == null) return;
 
     // Fetch last 20 messages from the chat history
-    final messages = await _localChatRepository.getLastMessages(chatId, limit: 20);
+    final messages = await _localChatRepository.getLastMessages(chatId, limit: 10);
     _logger.info('_initMessages: ${messages.length}');
 
     if (isClosed) return;
@@ -93,8 +114,12 @@ class ConversationCubit extends Cubit<ConversationState> {
 
   void _handleChatUpdate(Chat chat) {
     _logger.info('_handleChatUpdate: $chat');
-    if (_chat == null) _initMessages();
-    _chat = chat;
+    if (_chat == null) {
+      _chat = chat;
+      _initMessages();
+    } else {
+      _chat = chat;
+    }
   }
 
   StreamSubscription _messagesSubFactory(void Function(ChatMessage) onArrive) {
