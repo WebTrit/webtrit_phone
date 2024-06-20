@@ -765,7 +765,9 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   Future<List<ChatDataWithMembers>> getAllChatsWithMembers() {
     final q = select(chatsTable).join([
       leftOuterJoin(chatMembersTable, chatMembersTable.chatId.equalsExp(chatsTable.id)),
-    ]);
+    ])
+      ..orderBy([OrderingTerm(expression: chatsTable.updatedAtRemote, mode: OrderingMode.desc)]);
+
     return q.get().then((rows) {
       final chatData = <ChatData>[];
       final members = <ChatMemberData>[];
