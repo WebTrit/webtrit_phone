@@ -64,6 +64,50 @@ class ConversationCubit extends Cubit<ConversationState> {
     }
   }
 
+  Future fetchHistory() async {
+    final state = this.state;
+    if (state is! CVSReady) return;
+
+    final chatId = _chat?.id;
+    if (state.fetchingHistory || state.historyEndReached) return;
+
+    if (chatId == null) return;
+
+    final topMessage = state.messages.lastOrNull;
+    if (topMessage == null) return;
+
+    emit(state.copyWith(fetchingHistory: true));
+
+    _logger.info('fetchHistory: $chatId, ${topMessage.createdAt}');
+
+    try {
+      // Fetch history from local storage
+      List<ChatMessage> messages = [];
+      messages = await _localChatRepository.getMessageHistory(chatId, topMessage.createdAt, limit: 100);
+      _logger.info('fetchHistory: local messages ${messages.length}');
+
+      // If no messages found in local storage, fetch from the remote server
+      final userChannel = _client.userChannel;
+      if (messages.isEmpty && userChannel != null) {
+        final payload = {'chat_id': chatId, 'from': topMessage.createdAt.toUtc().toIso8601String(), 'limit': 100};
+        final req = await userChannel.push('messages_history', payload).future;
+        messages = (req.response['data'] as List).map((e) => ChatMessage.fromMap(e)).toList();
+        await _localChatRepository.upsertHistoryPage(messages);
+        _logger.info('fetchHistory: remote messages ${messages.length}');
+      }
+
+      final updatedMessages = [...state.messages, ...messages];
+      if (messages.isNotEmpty) {
+        emit(state.copyWith(messages: updatedMessages, fetchingHistory: false, historyEndReached: false));
+      } else {
+        emit(state.copyWith(fetchingHistory: false, historyEndReached: true));
+      }
+    } on Exception catch (e) {
+      emit(state.copyWith(fetchingHistory: false));
+      _logger.warning('fetchHistory failed', e);
+    }
+  }
+
   Future<void> _init() async {
     _logger.info('Preparing conversation with $_participantId');
 
@@ -92,8 +136,8 @@ class ConversationCubit extends Cubit<ConversationState> {
     final chatId = _chat?.id;
     if (chatId == null) return;
 
-    // Fetch last 20 messages from the chat history
-    final messages = await _localChatRepository.getLastMessages(chatId, limit: 10);
+    // Fetch last 100 messages from the chat history
+    final messages = await _localChatRepository.getLastMessages(chatId, limit: 100);
     _logger.info('_initMessages: ${messages.length}');
 
     if (isClosed) return;

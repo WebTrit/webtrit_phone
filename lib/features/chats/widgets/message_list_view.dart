@@ -13,6 +13,7 @@ class MessageListView extends StatefulWidget {
     required this.fetchingHistory,
     required this.historyEndReached,
     required this.onSend,
+    required this.onFetchHistory,
     super.key,
   });
 
@@ -21,6 +22,7 @@ class MessageListView extends StatefulWidget {
   final bool fetchingHistory;
   final bool historyEndReached;
   final Function(String content) onSend;
+  final Future Function() onFetchHistory;
 
   @override
   State<MessageListView> createState() => _MessageListViewState();
@@ -70,9 +72,7 @@ class _MessageListViewState extends State<MessageListView> {
       user: user,
       // showUserNames: true,
       showUserAvatars: true,
-      onEndReached: () async {
-        print('onEndReached');
-      },
+      onEndReached: widget.onFetchHistory,
       isLastPage: widget.historyEndReached,
       onPreviewDataFetched: _handlePreviewDataFetched,
       theme: DefaultChatTheme(

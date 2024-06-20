@@ -55,7 +55,7 @@ final class CVSReady extends ConversationState with EquatableMixin {
   final bool historyEndReached;
 
   @override
-  List<Object> get props => [participantId, messages];
+  List<Object> get props => [participantId, messages, fetchingHistory, historyEndReached];
 
   copyWith({
     String? participantId,

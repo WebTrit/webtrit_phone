@@ -107,7 +107,7 @@ class ChatsSyncService {
           // Fetch chat list updates
           while (true) {
             final req = await userChannel
-                .push('chat_list_updates', {'from': lastUpdate!.toUtc().toIso8601String(), 'limit': 200}).future;
+                .push('chat_list_updates', {'from': lastUpdate!.toUtc().toIso8601String(), 'limit': 100}).future;
             final chatList = (req.response['data'] as List).map((e) => Chat.fromMap(e)).toList();
 
             // If no more chats, break the loop
@@ -170,8 +170,8 @@ class ChatsSyncService {
         DateTime? lastUpdate = await localChatRepository.lastChatMessageUpdatedAt(chatId);
 
         if (lastUpdate == null) {
-          // Fetch last 200 messages for initial state
-          final payload = {'chat_id': chatId, 'limit': 200};
+          // Fetch last 100 messages for initial state
+          final payload = {'chat_id': chatId, 'limit': 100};
           final req = await channel.push('messages_history', payload).future;
           final messages = (req.response['data'] as List).map((e) => ChatMessage.fromMap(e)).toList();
 
@@ -182,7 +182,7 @@ class ChatsSyncService {
         } else {
           // Fetch message updates
           while (true) {
-            final payload = {'chat_id': chatId, 'from': lastUpdate!.toUtc().toIso8601String(), 'limit': 200};
+            final payload = {'chat_id': chatId, 'from': lastUpdate!.toUtc().toIso8601String(), 'limit': 100};
             final req = await channel.push('messages_updates', payload).future;
             final messages = (req.response['data'] as List).map((e) => ChatMessage.fromMap(e)).toList();
 

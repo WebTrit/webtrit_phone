@@ -811,11 +811,12 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
     return q.get();
   }
 
-  Future<List<ChatMessageData>> getMessageHistory(int chatId, DateTime from, DateTime to) {
+  Future<List<ChatMessageData>> getMessageHistory(int chatId, DateTime from, {int limit = 100}) {
     final q = select(chatMessagesTable)
       ..where((t) => t.chatId.equals(chatId))
-      ..where((t) => t.createdAtRemote.isBetweenValues(from, to))
-      ..orderBy([(t) => OrderingTerm.desc(t.createdAtRemote)]);
+      ..where((t) => t.createdAtRemote.isSmallerThanValue(from))
+      ..orderBy([(t) => OrderingTerm.desc(t.createdAtRemote)])
+      ..limit(limit);
     return q.get();
   }
 
@@ -861,6 +862,8 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   Future<void> wipeChatsData() async {
     await transaction(() async {
       await delete(chatsTable).go();
+      await delete(chatMembersTable).go();
+      await delete(chatMessagesTable).go();
     });
   }
 }

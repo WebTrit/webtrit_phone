@@ -37,6 +37,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
               fetchingHistory: state.fetchingHistory,
               historyEndReached: state.historyEndReached,
               onSend: (content) => conversationCubit.sendMessage(content),
+              onFetchHistory: conversationCubit.fetchHistory,
             );
           }
 
