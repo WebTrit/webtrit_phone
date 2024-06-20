@@ -1,3 +1,4 @@
+import 'package:app_database/app_database.dart';
 import 'package:clock/clock.dart';
 import 'package:drift/drift.dart';
 
@@ -16,7 +17,8 @@ part 'app_database.g.dart';
     FavoritesTable,
     ChatsTable,
     ChatMembersTable,
-    ChatMessagesTable
+    ChatMessagesTable,
+    ChatQueueTable
   ],
   daos: [
     ContactsDao,
@@ -348,6 +350,40 @@ class ChatMessagesTable extends Table {
   DateTimeColumn get updatedAt => dateTime().nullable()();
 }
 
+enum ChatQueueEntryTypeEnum { create, edit, delete }
+
+@DataClassName('ChatQueueEntryData')
+class ChatQueueTable extends Table {
+  @override
+  String get tableName => 'chat_queue';
+
+  IntColumn get id => integer().autoIncrement()();
+
+  TextColumn get idKey => text()();
+
+  TextColumn get type => textEnum<ChatQueueEntryTypeEnum>()();
+
+  IntColumn get chatId => integer().nullable()();
+
+  TextColumn get participantId => text().nullable()();
+
+  IntColumn get messageId => integer().nullable()();
+
+  IntColumn get replyToId => integer().nullable()();
+
+  IntColumn get forwardTo => integer().nullable()();
+
+  BoolColumn get viaSms => boolean().withDefault(const Constant(false))();
+
+  TextColumn get smsNumber => text().nullable()();
+
+  TextColumn get content => text()();
+
+  DateTimeColumn get insertedAt => dateTime().nullable()();
+
+  DateTimeColumn get updatedAt => dateTime().nullable()();
+}
+
 @DriftAccessor(tables: [
   ContactsTable,
   ContactPhonesTable,
@@ -668,6 +704,7 @@ class FavoriteDataWithContactPhoneDataAndContactData {
   ChatsTable,
   ChatMembersTable,
   ChatMessagesTable,
+  ChatQueueTable,
 ])
 class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   ChatsDao(super.db);
@@ -856,6 +893,26 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
     });
   }
 
+  // Queue
+
+  Future<List<ChatQueueEntryData>> getChatQueueEntries() {
+    return select(chatQueueTable).get();
+  }
+
+  Stream<List<ChatQueueEntryData>> watchChatQueueEntries() {
+    return select(chatQueueTable).watch();
+  }
+
+  Future<int> insertChatQueueEntry(Insertable<ChatQueueEntryData> chatQueueEntry) {
+    return into(chatQueueTable).insertOnConflictUpdate(chatQueueEntry);
+  }
+
+  Future<int> deleteChatQueueEntry(int id) {
+    return (delete(chatQueueTable)..where((t) => t.id.equals(id))).go();
+  }
+
+  // Service
+
   Future<void> wipeStaleDeletedChatMessagesData({int ttlSeconds = 60 * 60 * 24}) async {
     final staleTime = clock.now().subtract(Duration(seconds: ttlSeconds));
     await (delete(chatMessagesTable)..where((t) => t.deletedAtRemote.isSmallerThanValue(staleTime))).go();
@@ -866,6 +923,7 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
       await delete(chatsTable).go();
       await delete(chatMembersTable).go();
       await delete(chatMessagesTable).go();
+      await delete(chatQueueTable).go();
     });
   }
 }

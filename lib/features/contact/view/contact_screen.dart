@@ -91,7 +91,7 @@ class ContactScreen extends StatelessWidget {
                         onMessagePressed: () {
                           context.router.navigate(ChatsRouterPageRoute(children: [
                             const ChatListScreenPageRoute(),
-                            ConversationScreenPageRoute(participantId: contact.sourceId),
+                            ConversationScreenPageRoute(participantId: contactPhone.number),
                           ]));
                         },
                       ),

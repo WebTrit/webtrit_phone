@@ -91,4 +91,40 @@ mixin ChatsDriftMapper {
       deletedAtRemote: message.deletedAt,
     );
   }
+
+  ChatQueueEntry chatQueueEntryFromDrift(ChatQueueEntryData data) {
+    return ChatQueueEntry(
+      id: data.id,
+      idKey: data.idKey,
+      type: ChatQueueEntryType.values.byName(data.type.name),
+      chatId: data.chatId,
+      participantId: data.participantId,
+      messageId: data.messageId,
+      replyToId: data.replyToId,
+      forwardTo: data.forwardTo,
+      viaSms: data.viaSms,
+      smsNumber: data.smsNumber,
+      content: data.content,
+      insertedAt: data.insertedAt,
+      updatedAt: data.updatedAt,
+    );
+  }
+
+  ChatQueueEntryData chatQueueEntryDataFromChatQueueEntry(ChatQueueEntry entry) {
+    return ChatQueueEntryData(
+      id: entry.id,
+      idKey: entry.idKey,
+      type: ChatQueueEntryTypeEnum.values.byName(entry.type.name),
+      chatId: entry.chatId,
+      participantId: entry.participantId,
+      messageId: entry.messageId,
+      replyToId: entry.replyToId,
+      forwardTo: entry.forwardTo,
+      viaSms: entry.viaSms,
+      smsNumber: entry.smsNumber,
+      content: entry.content,
+      insertedAt: entry.insertedAt,
+      updatedAt: entry.updatedAt,
+    );
+  }
 }

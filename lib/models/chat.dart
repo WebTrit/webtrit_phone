@@ -98,12 +98,14 @@ extension ChatListExtension<T extends Chat> on List<T> {
   T findById(int id) => firstWhere((element) => element.id == id);
 
   List<T> mergeWith(T chat) {
-    final index = indexWhere((element) => element.id == chat.id);
+    final newList = List<T>.from(this);
+
+    final index = newList.indexWhere((element) => element.id == chat.id);
     if (index == -1) {
-      return [chat, ...this];
+      return [chat, ...newList];
     } else {
-      this[index] = chat;
+      newList[index] = chat;
     }
-    return this;
+    return newList;
   }
 }

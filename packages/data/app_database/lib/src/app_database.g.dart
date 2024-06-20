@@ -3283,6 +3283,629 @@ class ChatMessageDataCompanion extends UpdateCompanion<ChatMessageData> {
   }
 }
 
+class $ChatQueueTableTable extends ChatQueueTable
+    with TableInfo<$ChatQueueTableTable, ChatQueueEntryData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ChatQueueTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _idKeyMeta = const VerificationMeta('idKey');
+  @override
+  late final GeneratedColumn<String> idKey = GeneratedColumn<String>(
+      'id_key', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumnWithTypeConverter<ChatQueueEntryTypeEnum, String>
+      type = GeneratedColumn<String>('type', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<ChatQueueEntryTypeEnum>(
+              $ChatQueueTableTable.$convertertype);
+  static const VerificationMeta _chatIdMeta = const VerificationMeta('chatId');
+  @override
+  late final GeneratedColumn<int> chatId = GeneratedColumn<int>(
+      'chat_id', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _participantIdMeta =
+      const VerificationMeta('participantId');
+  @override
+  late final GeneratedColumn<String> participantId = GeneratedColumn<String>(
+      'participant_id', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _messageIdMeta =
+      const VerificationMeta('messageId');
+  @override
+  late final GeneratedColumn<int> messageId = GeneratedColumn<int>(
+      'message_id', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _replyToIdMeta =
+      const VerificationMeta('replyToId');
+  @override
+  late final GeneratedColumn<int> replyToId = GeneratedColumn<int>(
+      'reply_to_id', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _forwardToMeta =
+      const VerificationMeta('forwardTo');
+  @override
+  late final GeneratedColumn<int> forwardTo = GeneratedColumn<int>(
+      'forward_to', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _viaSmsMeta = const VerificationMeta('viaSms');
+  @override
+  late final GeneratedColumn<bool> viaSms = GeneratedColumn<bool>(
+      'via_sms', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("via_sms" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _smsNumberMeta =
+      const VerificationMeta('smsNumber');
+  @override
+  late final GeneratedColumn<String> smsNumber = GeneratedColumn<String>(
+      'sms_number', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _contentMeta =
+      const VerificationMeta('content');
+  @override
+  late final GeneratedColumn<String> content = GeneratedColumn<String>(
+      'content', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _insertedAtMeta =
+      const VerificationMeta('insertedAt');
+  @override
+  late final GeneratedColumn<DateTime> insertedAt = GeneratedColumn<DateTime>(
+      'inserted_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        idKey,
+        type,
+        chatId,
+        participantId,
+        messageId,
+        replyToId,
+        forwardTo,
+        viaSms,
+        smsNumber,
+        content,
+        insertedAt,
+        updatedAt
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'chat_queue';
+  @override
+  VerificationContext validateIntegrity(Insertable<ChatQueueEntryData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('id_key')) {
+      context.handle(
+          _idKeyMeta, idKey.isAcceptableOrUnknown(data['id_key']!, _idKeyMeta));
+    } else if (isInserting) {
+      context.missing(_idKeyMeta);
+    }
+    context.handle(_typeMeta, const VerificationResult.success());
+    if (data.containsKey('chat_id')) {
+      context.handle(_chatIdMeta,
+          chatId.isAcceptableOrUnknown(data['chat_id']!, _chatIdMeta));
+    }
+    if (data.containsKey('participant_id')) {
+      context.handle(
+          _participantIdMeta,
+          participantId.isAcceptableOrUnknown(
+              data['participant_id']!, _participantIdMeta));
+    }
+    if (data.containsKey('message_id')) {
+      context.handle(_messageIdMeta,
+          messageId.isAcceptableOrUnknown(data['message_id']!, _messageIdMeta));
+    }
+    if (data.containsKey('reply_to_id')) {
+      context.handle(
+          _replyToIdMeta,
+          replyToId.isAcceptableOrUnknown(
+              data['reply_to_id']!, _replyToIdMeta));
+    }
+    if (data.containsKey('forward_to')) {
+      context.handle(_forwardToMeta,
+          forwardTo.isAcceptableOrUnknown(data['forward_to']!, _forwardToMeta));
+    }
+    if (data.containsKey('via_sms')) {
+      context.handle(_viaSmsMeta,
+          viaSms.isAcceptableOrUnknown(data['via_sms']!, _viaSmsMeta));
+    }
+    if (data.containsKey('sms_number')) {
+      context.handle(_smsNumberMeta,
+          smsNumber.isAcceptableOrUnknown(data['sms_number']!, _smsNumberMeta));
+    }
+    if (data.containsKey('content')) {
+      context.handle(_contentMeta,
+          content.isAcceptableOrUnknown(data['content']!, _contentMeta));
+    } else if (isInserting) {
+      context.missing(_contentMeta);
+    }
+    if (data.containsKey('inserted_at')) {
+      context.handle(
+          _insertedAtMeta,
+          insertedAt.isAcceptableOrUnknown(
+              data['inserted_at']!, _insertedAtMeta));
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ChatQueueEntryData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ChatQueueEntryData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      idKey: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id_key'])!,
+      type: $ChatQueueTableTable.$convertertype.fromSql(attachedDatabase
+          .typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}type'])!),
+      chatId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}chat_id']),
+      participantId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}participant_id']),
+      messageId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}message_id']),
+      replyToId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}reply_to_id']),
+      forwardTo: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}forward_to']),
+      viaSms: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}via_sms'])!,
+      smsNumber: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}sms_number']),
+      content: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}content'])!,
+      insertedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}inserted_at']),
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at']),
+    );
+  }
+
+  @override
+  $ChatQueueTableTable createAlias(String alias) {
+    return $ChatQueueTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<ChatQueueEntryTypeEnum, String, String>
+      $convertertype = const EnumNameConverter<ChatQueueEntryTypeEnum>(
+          ChatQueueEntryTypeEnum.values);
+}
+
+class ChatQueueEntryData extends DataClass
+    implements Insertable<ChatQueueEntryData> {
+  final int id;
+  final String idKey;
+  final ChatQueueEntryTypeEnum type;
+  final int? chatId;
+  final String? participantId;
+  final int? messageId;
+  final int? replyToId;
+  final int? forwardTo;
+  final bool viaSms;
+  final String? smsNumber;
+  final String content;
+  final DateTime? insertedAt;
+  final DateTime? updatedAt;
+  const ChatQueueEntryData(
+      {required this.id,
+      required this.idKey,
+      required this.type,
+      this.chatId,
+      this.participantId,
+      this.messageId,
+      this.replyToId,
+      this.forwardTo,
+      required this.viaSms,
+      this.smsNumber,
+      required this.content,
+      this.insertedAt,
+      this.updatedAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['id_key'] = Variable<String>(idKey);
+    {
+      map['type'] =
+          Variable<String>($ChatQueueTableTable.$convertertype.toSql(type));
+    }
+    if (!nullToAbsent || chatId != null) {
+      map['chat_id'] = Variable<int>(chatId);
+    }
+    if (!nullToAbsent || participantId != null) {
+      map['participant_id'] = Variable<String>(participantId);
+    }
+    if (!nullToAbsent || messageId != null) {
+      map['message_id'] = Variable<int>(messageId);
+    }
+    if (!nullToAbsent || replyToId != null) {
+      map['reply_to_id'] = Variable<int>(replyToId);
+    }
+    if (!nullToAbsent || forwardTo != null) {
+      map['forward_to'] = Variable<int>(forwardTo);
+    }
+    map['via_sms'] = Variable<bool>(viaSms);
+    if (!nullToAbsent || smsNumber != null) {
+      map['sms_number'] = Variable<String>(smsNumber);
+    }
+    map['content'] = Variable<String>(content);
+    if (!nullToAbsent || insertedAt != null) {
+      map['inserted_at'] = Variable<DateTime>(insertedAt);
+    }
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<DateTime>(updatedAt);
+    }
+    return map;
+  }
+
+  ChatQueueEntryDataCompanion toCompanion(bool nullToAbsent) {
+    return ChatQueueEntryDataCompanion(
+      id: Value(id),
+      idKey: Value(idKey),
+      type: Value(type),
+      chatId:
+          chatId == null && nullToAbsent ? const Value.absent() : Value(chatId),
+      participantId: participantId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(participantId),
+      messageId: messageId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(messageId),
+      replyToId: replyToId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(replyToId),
+      forwardTo: forwardTo == null && nullToAbsent
+          ? const Value.absent()
+          : Value(forwardTo),
+      viaSms: Value(viaSms),
+      smsNumber: smsNumber == null && nullToAbsent
+          ? const Value.absent()
+          : Value(smsNumber),
+      content: Value(content),
+      insertedAt: insertedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(insertedAt),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
+    );
+  }
+
+  factory ChatQueueEntryData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ChatQueueEntryData(
+      id: serializer.fromJson<int>(json['id']),
+      idKey: serializer.fromJson<String>(json['idKey']),
+      type: $ChatQueueTableTable.$convertertype
+          .fromJson(serializer.fromJson<String>(json['type'])),
+      chatId: serializer.fromJson<int?>(json['chatId']),
+      participantId: serializer.fromJson<String?>(json['participantId']),
+      messageId: serializer.fromJson<int?>(json['messageId']),
+      replyToId: serializer.fromJson<int?>(json['replyToId']),
+      forwardTo: serializer.fromJson<int?>(json['forwardTo']),
+      viaSms: serializer.fromJson<bool>(json['viaSms']),
+      smsNumber: serializer.fromJson<String?>(json['smsNumber']),
+      content: serializer.fromJson<String>(json['content']),
+      insertedAt: serializer.fromJson<DateTime?>(json['insertedAt']),
+      updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'idKey': serializer.toJson<String>(idKey),
+      'type': serializer
+          .toJson<String>($ChatQueueTableTable.$convertertype.toJson(type)),
+      'chatId': serializer.toJson<int?>(chatId),
+      'participantId': serializer.toJson<String?>(participantId),
+      'messageId': serializer.toJson<int?>(messageId),
+      'replyToId': serializer.toJson<int?>(replyToId),
+      'forwardTo': serializer.toJson<int?>(forwardTo),
+      'viaSms': serializer.toJson<bool>(viaSms),
+      'smsNumber': serializer.toJson<String?>(smsNumber),
+      'content': serializer.toJson<String>(content),
+      'insertedAt': serializer.toJson<DateTime?>(insertedAt),
+      'updatedAt': serializer.toJson<DateTime?>(updatedAt),
+    };
+  }
+
+  ChatQueueEntryData copyWith(
+          {int? id,
+          String? idKey,
+          ChatQueueEntryTypeEnum? type,
+          Value<int?> chatId = const Value.absent(),
+          Value<String?> participantId = const Value.absent(),
+          Value<int?> messageId = const Value.absent(),
+          Value<int?> replyToId = const Value.absent(),
+          Value<int?> forwardTo = const Value.absent(),
+          bool? viaSms,
+          Value<String?> smsNumber = const Value.absent(),
+          String? content,
+          Value<DateTime?> insertedAt = const Value.absent(),
+          Value<DateTime?> updatedAt = const Value.absent()}) =>
+      ChatQueueEntryData(
+        id: id ?? this.id,
+        idKey: idKey ?? this.idKey,
+        type: type ?? this.type,
+        chatId: chatId.present ? chatId.value : this.chatId,
+        participantId:
+            participantId.present ? participantId.value : this.participantId,
+        messageId: messageId.present ? messageId.value : this.messageId,
+        replyToId: replyToId.present ? replyToId.value : this.replyToId,
+        forwardTo: forwardTo.present ? forwardTo.value : this.forwardTo,
+        viaSms: viaSms ?? this.viaSms,
+        smsNumber: smsNumber.present ? smsNumber.value : this.smsNumber,
+        content: content ?? this.content,
+        insertedAt: insertedAt.present ? insertedAt.value : this.insertedAt,
+        updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('ChatQueueEntryData(')
+          ..write('id: $id, ')
+          ..write('idKey: $idKey, ')
+          ..write('type: $type, ')
+          ..write('chatId: $chatId, ')
+          ..write('participantId: $participantId, ')
+          ..write('messageId: $messageId, ')
+          ..write('replyToId: $replyToId, ')
+          ..write('forwardTo: $forwardTo, ')
+          ..write('viaSms: $viaSms, ')
+          ..write('smsNumber: $smsNumber, ')
+          ..write('content: $content, ')
+          ..write('insertedAt: $insertedAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id,
+      idKey,
+      type,
+      chatId,
+      participantId,
+      messageId,
+      replyToId,
+      forwardTo,
+      viaSms,
+      smsNumber,
+      content,
+      insertedAt,
+      updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ChatQueueEntryData &&
+          other.id == this.id &&
+          other.idKey == this.idKey &&
+          other.type == this.type &&
+          other.chatId == this.chatId &&
+          other.participantId == this.participantId &&
+          other.messageId == this.messageId &&
+          other.replyToId == this.replyToId &&
+          other.forwardTo == this.forwardTo &&
+          other.viaSms == this.viaSms &&
+          other.smsNumber == this.smsNumber &&
+          other.content == this.content &&
+          other.insertedAt == this.insertedAt &&
+          other.updatedAt == this.updatedAt);
+}
+
+class ChatQueueEntryDataCompanion extends UpdateCompanion<ChatQueueEntryData> {
+  final Value<int> id;
+  final Value<String> idKey;
+  final Value<ChatQueueEntryTypeEnum> type;
+  final Value<int?> chatId;
+  final Value<String?> participantId;
+  final Value<int?> messageId;
+  final Value<int?> replyToId;
+  final Value<int?> forwardTo;
+  final Value<bool> viaSms;
+  final Value<String?> smsNumber;
+  final Value<String> content;
+  final Value<DateTime?> insertedAt;
+  final Value<DateTime?> updatedAt;
+  const ChatQueueEntryDataCompanion({
+    this.id = const Value.absent(),
+    this.idKey = const Value.absent(),
+    this.type = const Value.absent(),
+    this.chatId = const Value.absent(),
+    this.participantId = const Value.absent(),
+    this.messageId = const Value.absent(),
+    this.replyToId = const Value.absent(),
+    this.forwardTo = const Value.absent(),
+    this.viaSms = const Value.absent(),
+    this.smsNumber = const Value.absent(),
+    this.content = const Value.absent(),
+    this.insertedAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  });
+  ChatQueueEntryDataCompanion.insert({
+    this.id = const Value.absent(),
+    required String idKey,
+    required ChatQueueEntryTypeEnum type,
+    this.chatId = const Value.absent(),
+    this.participantId = const Value.absent(),
+    this.messageId = const Value.absent(),
+    this.replyToId = const Value.absent(),
+    this.forwardTo = const Value.absent(),
+    this.viaSms = const Value.absent(),
+    this.smsNumber = const Value.absent(),
+    required String content,
+    this.insertedAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  })  : idKey = Value(idKey),
+        type = Value(type),
+        content = Value(content);
+  static Insertable<ChatQueueEntryData> custom({
+    Expression<int>? id,
+    Expression<String>? idKey,
+    Expression<String>? type,
+    Expression<int>? chatId,
+    Expression<String>? participantId,
+    Expression<int>? messageId,
+    Expression<int>? replyToId,
+    Expression<int>? forwardTo,
+    Expression<bool>? viaSms,
+    Expression<String>? smsNumber,
+    Expression<String>? content,
+    Expression<DateTime>? insertedAt,
+    Expression<DateTime>? updatedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (idKey != null) 'id_key': idKey,
+      if (type != null) 'type': type,
+      if (chatId != null) 'chat_id': chatId,
+      if (participantId != null) 'participant_id': participantId,
+      if (messageId != null) 'message_id': messageId,
+      if (replyToId != null) 'reply_to_id': replyToId,
+      if (forwardTo != null) 'forward_to': forwardTo,
+      if (viaSms != null) 'via_sms': viaSms,
+      if (smsNumber != null) 'sms_number': smsNumber,
+      if (content != null) 'content': content,
+      if (insertedAt != null) 'inserted_at': insertedAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+    });
+  }
+
+  ChatQueueEntryDataCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? idKey,
+      Value<ChatQueueEntryTypeEnum>? type,
+      Value<int?>? chatId,
+      Value<String?>? participantId,
+      Value<int?>? messageId,
+      Value<int?>? replyToId,
+      Value<int?>? forwardTo,
+      Value<bool>? viaSms,
+      Value<String?>? smsNumber,
+      Value<String>? content,
+      Value<DateTime?>? insertedAt,
+      Value<DateTime?>? updatedAt}) {
+    return ChatQueueEntryDataCompanion(
+      id: id ?? this.id,
+      idKey: idKey ?? this.idKey,
+      type: type ?? this.type,
+      chatId: chatId ?? this.chatId,
+      participantId: participantId ?? this.participantId,
+      messageId: messageId ?? this.messageId,
+      replyToId: replyToId ?? this.replyToId,
+      forwardTo: forwardTo ?? this.forwardTo,
+      viaSms: viaSms ?? this.viaSms,
+      smsNumber: smsNumber ?? this.smsNumber,
+      content: content ?? this.content,
+      insertedAt: insertedAt ?? this.insertedAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (idKey.present) {
+      map['id_key'] = Variable<String>(idKey.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(
+          $ChatQueueTableTable.$convertertype.toSql(type.value));
+    }
+    if (chatId.present) {
+      map['chat_id'] = Variable<int>(chatId.value);
+    }
+    if (participantId.present) {
+      map['participant_id'] = Variable<String>(participantId.value);
+    }
+    if (messageId.present) {
+      map['message_id'] = Variable<int>(messageId.value);
+    }
+    if (replyToId.present) {
+      map['reply_to_id'] = Variable<int>(replyToId.value);
+    }
+    if (forwardTo.present) {
+      map['forward_to'] = Variable<int>(forwardTo.value);
+    }
+    if (viaSms.present) {
+      map['via_sms'] = Variable<bool>(viaSms.value);
+    }
+    if (smsNumber.present) {
+      map['sms_number'] = Variable<String>(smsNumber.value);
+    }
+    if (content.present) {
+      map['content'] = Variable<String>(content.value);
+    }
+    if (insertedAt.present) {
+      map['inserted_at'] = Variable<DateTime>(insertedAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ChatQueueEntryDataCompanion(')
+          ..write('id: $id, ')
+          ..write('idKey: $idKey, ')
+          ..write('type: $type, ')
+          ..write('chatId: $chatId, ')
+          ..write('participantId: $participantId, ')
+          ..write('messageId: $messageId, ')
+          ..write('replyToId: $replyToId, ')
+          ..write('forwardTo: $forwardTo, ')
+          ..write('viaSms: $viaSms, ')
+          ..write('smsNumber: $smsNumber, ')
+          ..write('content: $content, ')
+          ..write('insertedAt: $insertedAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   _$AppDatabaseManager get managers => _$AppDatabaseManager(this);
@@ -3298,6 +3921,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $ChatMembersTableTable(this);
   late final $ChatMessagesTableTable chatMessagesTable =
       $ChatMessagesTableTable(this);
+  late final $ChatQueueTableTable chatQueueTable = $ChatQueueTableTable(this);
   late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
   late final ContactPhonesDao contactPhonesDao =
       ContactPhonesDao(this as AppDatabase);
@@ -3318,7 +3942,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         favoritesTable,
         chatsTable,
         chatMembersTable,
-        chatMessagesTable
+        chatMessagesTable,
+        chatQueueTable
       ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
@@ -5001,6 +5626,275 @@ class $$ChatMessagesTableTableOrderingComposer
   }
 }
 
+typedef $$ChatQueueTableTableInsertCompanionBuilder
+    = ChatQueueEntryDataCompanion Function({
+  Value<int> id,
+  required String idKey,
+  required ChatQueueEntryTypeEnum type,
+  Value<int?> chatId,
+  Value<String?> participantId,
+  Value<int?> messageId,
+  Value<int?> replyToId,
+  Value<int?> forwardTo,
+  Value<bool> viaSms,
+  Value<String?> smsNumber,
+  required String content,
+  Value<DateTime?> insertedAt,
+  Value<DateTime?> updatedAt,
+});
+typedef $$ChatQueueTableTableUpdateCompanionBuilder
+    = ChatQueueEntryDataCompanion Function({
+  Value<int> id,
+  Value<String> idKey,
+  Value<ChatQueueEntryTypeEnum> type,
+  Value<int?> chatId,
+  Value<String?> participantId,
+  Value<int?> messageId,
+  Value<int?> replyToId,
+  Value<int?> forwardTo,
+  Value<bool> viaSms,
+  Value<String?> smsNumber,
+  Value<String> content,
+  Value<DateTime?> insertedAt,
+  Value<DateTime?> updatedAt,
+});
+
+class $$ChatQueueTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ChatQueueTableTable,
+    ChatQueueEntryData,
+    $$ChatQueueTableTableFilterComposer,
+    $$ChatQueueTableTableOrderingComposer,
+    $$ChatQueueTableTableProcessedTableManager,
+    $$ChatQueueTableTableInsertCompanionBuilder,
+    $$ChatQueueTableTableUpdateCompanionBuilder> {
+  $$ChatQueueTableTableTableManager(
+      _$AppDatabase db, $ChatQueueTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$ChatQueueTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$ChatQueueTableTableOrderingComposer(ComposerState(db, table)),
+          getChildManagerBuilder: (p) =>
+              $$ChatQueueTableTableProcessedTableManager(p),
+          getUpdateCompanionBuilder: ({
+            Value<int> id = const Value.absent(),
+            Value<String> idKey = const Value.absent(),
+            Value<ChatQueueEntryTypeEnum> type = const Value.absent(),
+            Value<int?> chatId = const Value.absent(),
+            Value<String?> participantId = const Value.absent(),
+            Value<int?> messageId = const Value.absent(),
+            Value<int?> replyToId = const Value.absent(),
+            Value<int?> forwardTo = const Value.absent(),
+            Value<bool> viaSms = const Value.absent(),
+            Value<String?> smsNumber = const Value.absent(),
+            Value<String> content = const Value.absent(),
+            Value<DateTime?> insertedAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              ChatQueueEntryDataCompanion(
+            id: id,
+            idKey: idKey,
+            type: type,
+            chatId: chatId,
+            participantId: participantId,
+            messageId: messageId,
+            replyToId: replyToId,
+            forwardTo: forwardTo,
+            viaSms: viaSms,
+            smsNumber: smsNumber,
+            content: content,
+            insertedAt: insertedAt,
+            updatedAt: updatedAt,
+          ),
+          getInsertCompanionBuilder: ({
+            Value<int> id = const Value.absent(),
+            required String idKey,
+            required ChatQueueEntryTypeEnum type,
+            Value<int?> chatId = const Value.absent(),
+            Value<String?> participantId = const Value.absent(),
+            Value<int?> messageId = const Value.absent(),
+            Value<int?> replyToId = const Value.absent(),
+            Value<int?> forwardTo = const Value.absent(),
+            Value<bool> viaSms = const Value.absent(),
+            Value<String?> smsNumber = const Value.absent(),
+            required String content,
+            Value<DateTime?> insertedAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              ChatQueueEntryDataCompanion.insert(
+            id: id,
+            idKey: idKey,
+            type: type,
+            chatId: chatId,
+            participantId: participantId,
+            messageId: messageId,
+            replyToId: replyToId,
+            forwardTo: forwardTo,
+            viaSms: viaSms,
+            smsNumber: smsNumber,
+            content: content,
+            insertedAt: insertedAt,
+            updatedAt: updatedAt,
+          ),
+        ));
+}
+
+class $$ChatQueueTableTableProcessedTableManager extends ProcessedTableManager<
+    _$AppDatabase,
+    $ChatQueueTableTable,
+    ChatQueueEntryData,
+    $$ChatQueueTableTableFilterComposer,
+    $$ChatQueueTableTableOrderingComposer,
+    $$ChatQueueTableTableProcessedTableManager,
+    $$ChatQueueTableTableInsertCompanionBuilder,
+    $$ChatQueueTableTableUpdateCompanionBuilder> {
+  $$ChatQueueTableTableProcessedTableManager(super.$state);
+}
+
+class $$ChatQueueTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $ChatQueueTableTable> {
+  $$ChatQueueTableTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get idKey => $state.composableBuilder(
+      column: $state.table.idKey,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnWithTypeConverterFilters<ChatQueueEntryTypeEnum, ChatQueueEntryTypeEnum,
+          String>
+      get type => $state.composableBuilder(
+          column: $state.table.type,
+          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
+              column,
+              joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get chatId => $state.composableBuilder(
+      column: $state.table.chatId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get participantId => $state.composableBuilder(
+      column: $state.table.participantId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get messageId => $state.composableBuilder(
+      column: $state.table.messageId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get replyToId => $state.composableBuilder(
+      column: $state.table.replyToId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get forwardTo => $state.composableBuilder(
+      column: $state.table.forwardTo,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get viaSms => $state.composableBuilder(
+      column: $state.table.viaSms,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get smsNumber => $state.composableBuilder(
+      column: $state.table.smsNumber,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get content => $state.composableBuilder(
+      column: $state.table.content,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get insertedAt => $state.composableBuilder(
+      column: $state.table.insertedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get updatedAt => $state.composableBuilder(
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+}
+
+class $$ChatQueueTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $ChatQueueTableTable> {
+  $$ChatQueueTableTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get idKey => $state.composableBuilder(
+      column: $state.table.idKey,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get type => $state.composableBuilder(
+      column: $state.table.type,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get chatId => $state.composableBuilder(
+      column: $state.table.chatId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get participantId => $state.composableBuilder(
+      column: $state.table.participantId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get messageId => $state.composableBuilder(
+      column: $state.table.messageId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get replyToId => $state.composableBuilder(
+      column: $state.table.replyToId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get forwardTo => $state.composableBuilder(
+      column: $state.table.forwardTo,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get viaSms => $state.composableBuilder(
+      column: $state.table.viaSms,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get smsNumber => $state.composableBuilder(
+      column: $state.table.smsNumber,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get content => $state.composableBuilder(
+      column: $state.table.content,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get insertedAt => $state.composableBuilder(
+      column: $state.table.insertedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get updatedAt => $state.composableBuilder(
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
 class _$AppDatabaseManager {
   final _$AppDatabase _db;
   _$AppDatabaseManager(this._db);
@@ -5020,6 +5914,8 @@ class _$AppDatabaseManager {
       $$ChatMembersTableTableTableManager(_db, _db.chatMembersTable);
   $$ChatMessagesTableTableTableManager get chatMessagesTable =>
       $$ChatMessagesTableTableTableManager(_db, _db.chatMessagesTable);
+  $$ChatQueueTableTableTableManager get chatQueueTable =>
+      $$ChatQueueTableTableTableManager(_db, _db.chatQueueTable);
 }
 
 mixin _$ContactsDaoMixin on DatabaseAccessor<AppDatabase> {
@@ -5056,4 +5952,5 @@ mixin _$ChatsDaoMixin on DatabaseAccessor<AppDatabase> {
       attachedDatabase.chatMembersTable;
   $ChatMessagesTableTable get chatMessagesTable =>
       attachedDatabase.chatMessagesTable;
+  $ChatQueueTableTable get chatQueueTable => attachedDatabase.chatQueueTable;
 }

@@ -615,6 +615,115 @@ class ChatMessages extends Table with TableInfo {
   bool get dontWriteConstraints => true;
 }
 
+class ChatQueue extends Table with TableInfo {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  ChatQueue(this.attachedDatabase, [this._alias]);
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NOT NULL PRIMARY KEY AUTOINCREMENT');
+  late final GeneratedColumn<String> idKey = GeneratedColumn<String>(
+      'id_key', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+      'type', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<int> chatId = GeneratedColumn<int>(
+      'chat_id', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
+  late final GeneratedColumn<String> participantId = GeneratedColumn<String>(
+      'participant_id', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
+  late final GeneratedColumn<int> messageId = GeneratedColumn<int>(
+      'message_id', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
+  late final GeneratedColumn<int> replyToId = GeneratedColumn<int>(
+      'reply_to_id', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
+  late final GeneratedColumn<int> forwardTo = GeneratedColumn<int>(
+      'forward_to', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
+  late final GeneratedColumn<int> viaSms = GeneratedColumn<int>(
+      'via_sms', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NOT NULL DEFAULT 0 CHECK (via_sms IN (0, 1))',
+      defaultValue: const CustomExpression('0'));
+  late final GeneratedColumn<String> smsNumber = GeneratedColumn<String>(
+      'sms_number', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
+  late final GeneratedColumn<String> content = GeneratedColumn<String>(
+      'content', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<int> insertedAt = GeneratedColumn<int>(
+      'inserted_at', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
+  late final GeneratedColumn<int> updatedAt = GeneratedColumn<int>(
+      'updated_at', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        idKey,
+        type,
+        chatId,
+        participantId,
+        messageId,
+        replyToId,
+        forwardTo,
+        viaSms,
+        smsNumber,
+        content,
+        insertedAt,
+        updatedAt
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'chat_queue';
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Never map(Map<String, dynamic> data, {String? tablePrefix}) {
+    throw UnsupportedError('TableInfo.map in schema verification code');
+  }
+
+  @override
+  ChatQueue createAlias(String alias) {
+    return ChatQueue(attachedDatabase, alias);
+  }
+
+  @override
+  bool get dontWriteConstraints => true;
+}
+
 class DatabaseAtV4 extends GeneratedDatabase {
   DatabaseAtV4(QueryExecutor e) : super(e);
   late final Contacts contacts = Contacts(this);
@@ -625,6 +734,7 @@ class DatabaseAtV4 extends GeneratedDatabase {
   late final Chats chats = Chats(this);
   late final ChatMembers chatMembers = ChatMembers(this);
   late final ChatMessages chatMessages = ChatMessages(this);
+  late final ChatQueue chatQueue = ChatQueue(this);
   late final Trigger contactsAfterInsertTrigger = Trigger(
       'CREATE TRIGGER contacts_after_insert_trigger AFTER INSERT ON contacts BEGIN UPDATE contacts SET inserted_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id AND inserted_at IS NULL;UPDATE contacts SET updated_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id;END',
       'contacts_after_insert_trigger');
@@ -661,6 +771,12 @@ class DatabaseAtV4 extends GeneratedDatabase {
   late final Trigger chatMessagesAfterUpdateTrigger = Trigger(
       'CREATE TRIGGER chat_messages_after_update_trigger AFTER UPDATE ON chat_messages BEGIN UPDATE chat_messages SET updated_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id;END',
       'chat_messages_after_update_trigger');
+  late final Trigger chatQueueAfterInsertTrigger = Trigger(
+      'CREATE TRIGGER chat_queue_after_insert_trigger AFTER INSERT ON chat_queue BEGIN UPDATE chat_queue SET inserted_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id AND inserted_at IS NULL;UPDATE chat_queue SET updated_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id;END',
+      'chat_queue_after_insert_trigger');
+  late final Trigger chatQueueAfterUpdateTrigger = Trigger(
+      'CREATE TRIGGER chat_queue_after_update_trigger AFTER UPDATE ON chat_queue BEGIN UPDATE chat_queue SET updated_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id;END',
+      'chat_queue_after_update_trigger');
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -674,6 +790,7 @@ class DatabaseAtV4 extends GeneratedDatabase {
         chats,
         chatMembers,
         chatMessages,
+        chatQueue,
         contactsAfterInsertTrigger,
         contactsAfterUpdateTrigger,
         contactPhonesAfterInsertTrigger,
@@ -685,7 +802,9 @@ class DatabaseAtV4 extends GeneratedDatabase {
         chatMembersAfterInsertTrigger,
         chatMembersAfterUpdateTrigger,
         chatMessagesAfterInsertTrigger,
-        chatMessagesAfterUpdateTrigger
+        chatMessagesAfterUpdateTrigger,
+        chatQueueAfterInsertTrigger,
+        chatQueueAfterUpdateTrigger
       ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
@@ -747,6 +866,16 @@ class DatabaseAtV4 extends GeneratedDatabase {
           ),
           WritePropagation(
             on: TableUpdateQuery.onTableName('chat_messages',
+                limitUpdateKind: UpdateKind.delete),
+            result: [],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('chat_queue',
+                limitUpdateKind: UpdateKind.delete),
+            result: [],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('chat_queue',
                 limitUpdateKind: UpdateKind.delete),
             result: [],
           ),

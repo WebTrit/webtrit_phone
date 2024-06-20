@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:logging/logging.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -105,6 +106,43 @@ class LocalChatRepository with ChatsDriftMapper {
   Future<DateTime?> lastChatMessageUpdatedAt(int chatId) async {
     return _chatsDao.lastChatMessageUpdatedAt(chatId);
   }
+
+  Future<List<ChatQueueEntry>> getChatQueueEntries() async {
+    final entriesData = await _chatsDao.getChatQueueEntries();
+    return entriesData.map(chatQueueEntryFromDrift).toList();
+  }
+
+  Stream<List<ChatQueueEntry>> watchChatQueueEntries() {
+    return _chatsDao.watchChatQueueEntries().map((entriesData) {
+      return entriesData.map(chatQueueEntryFromDrift).toList();
+    });
+  }
+
+  Future<int> submitNewMessage(int chatId, String content) {
+    final entryData = ChatQueueEntryDataCompanion(
+      chatId: Value(chatId),
+      idKey: Value(const Uuid().v4()),
+      content: Value(content),
+      type: const Value(ChatQueueEntryTypeEnum.create),
+    );
+    return _chatsDao.insertChatQueueEntry(entryData);
+  }
+
+  Future<int> submitNewDialogMessage(String participantId, String content) {
+    final entryData = ChatQueueEntryDataCompanion(
+      participantId: Value(participantId),
+      idKey: Value(const Uuid().v4()),
+      content: Value(content),
+      type: const Value(ChatQueueEntryTypeEnum.create),
+    );
+    return _chatsDao.insertChatQueueEntry(entryData);
+  }
+
+  Future<int> deleteChatQueueEntry(int entryId) {
+    return _chatsDao.deleteChatQueueEntry(entryId);
+  }
+
+  // ChatQueueEntryDataCompanion
 
   Future<void> wipeStaleDeletedData() async {
     await _chatsDao.wipeStaleDeletedChatMessagesData();

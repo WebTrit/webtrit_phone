@@ -34,6 +34,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
             return MessageListView(
               userId: chatsBloc.state.userId ?? 'unknown',
               messages: state.messages,
+              outboxQueue: state.outboxQueue,
               fetchingHistory: state.fetchingHistory,
               historyEndReached: state.historyEndReached,
               onSend: (content) => conversationCubit.sendMessage(content),

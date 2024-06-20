@@ -5,6 +5,7 @@ export 'contact_source_type.dart';
 export 'chat.dart';
 export 'chat_member.dart';
 export 'chat_message.dart';
+export 'chat_queue_entry.dart';
 export 'external_contact.dart';
 export 'favorite.dart';
 export 'keypad_key.dart';

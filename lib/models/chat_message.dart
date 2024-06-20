@@ -104,13 +104,15 @@ extension MessagesListExtension<T extends ChatMessage> on List<T> {
   T findById(int id) => firstWhere((element) => element.id == id);
 
   List<T> mergeWith(T message) {
-    final index = indexWhere((element) => element.id == message.id);
+    final newList = List<T>.from(this);
+
+    final index = newList.indexWhere((element) => element.id == message.id);
     if (index == -1) {
-      add(message);
+      newList.add(message);
     } else {
-      this[index] = message;
+      newList[index] = message;
     }
-    return this;
+    return newList;
   }
 
   /// Merge the real-time message update with the list of messages
@@ -119,20 +121,18 @@ extension MessagesListExtension<T extends ChatMessage> on List<T> {
   /// If the message is a new message, it will be added to the head of the list
   /// The list should me sorted by [ChatMessage.createdAt] in descending order
   List<T> mergeUpdateWith(T message) {
+    final newList = List<T>.from(this);
     bool isUpdate = message.updatedAt.isAfter(message.createdAt);
-    if (isUpdate) {
-      final index = indexWhere((element) => element.id == message.id);
-      if (index == -1) {
-        // Skip for message update that are not included in the list
-        return this;
-      } else {
-        // Update the message in the list
-        this[index] = message;
-      }
-      return this;
+
+    final index = newList.indexWhere((element) => element.id == message.id);
+    if (index == -1) {
+      // Skip for message update that are not included in the list
+      if (isUpdate) return newList;
+      return [message, ...newList];
     } else {
-      // Add new message to the head of the list
-      return [message, ...this];
+      // Update the message in the list
+      newList[index] = message;
     }
+    return newList;
   }
 }

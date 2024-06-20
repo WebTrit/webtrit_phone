@@ -5,7 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 import 'package:stream_transform/stream_transform.dart';
-import 'package:uuid/uuid.dart';
 import 'package:webtrit_phone/features/chats/extensions/phoenix_socket.dart';
 
 import 'package:webtrit_phone/models/models.dart';
@@ -23,10 +22,10 @@ class ConversationCubit extends Cubit<ConversationState> {
     this._localChatRepository,
   ) : super(ConversationState.init(_participantId)) {
     _init();
-    _logger.onRecord.listen((record) {
-      // ignore: avoid_print
-      print('\x1B[33mcht: ${record.message}\x1B[0m');
-    });
+    // _logger.onRecord.listen((record) {
+    //   // ignore: avoid_print
+    //   print('\x1B[33mcht: ${record.message}\x1B[0m');
+    // });
   }
 
   final String _participantId;
@@ -37,6 +36,7 @@ class ConversationCubit extends Cubit<ConversationState> {
   Chat? _chat;
   StreamSubscription? _chatSub;
   StreamSubscription? _messagesSub;
+  StreamSubscription? _outboxQueueSub;
 
   void restart() {
     _chatSub?.cancel();
@@ -46,21 +46,12 @@ class ConversationCubit extends Cubit<ConversationState> {
     _init();
   }
 
-  //TODO: sent queue
   Future sendMessage(String content) async {
     final chat = _chat;
     if (chat == null) {
-      _client.userChannel?.push('new_dialog_msg', {
-        'to_id': _participantId,
-        'content': content,
-        'id_key': const Uuid().v4(),
-      });
+      _localChatRepository.submitNewDialogMessage(_participantId, content);
     } else {
-      _client.userChannel?.push('new_msg', {
-        'chat_id': chat.id,
-        'content': content,
-        'id_key': const Uuid().v4(),
-      });
+      _localChatRepository.submitNewMessage(chat.id, content);
     }
   }
 
@@ -117,16 +108,15 @@ class ConversationCubit extends Cubit<ConversationState> {
       _logger.info('local chat id find result: $_chat');
 
       if (isClosed) return;
+      emit(ConversationState.ready(_participantId));
 
       // If local chat is not found, subscribtion will find the chat when it will created
       // e.g when you send the first message or another user sends to you
       _chatSub = _chatUpdateSubFactory(_handleChatUpdate);
 
-      if (chatId == null) {
-        emit(ConversationState.ready(_participantId));
-      } else {
-        await _initMessages();
-      }
+      _outboxQueueSub = _outboxQueueSubFactory(_handleOutboxQueueUpdate);
+
+      if (chatId != null) _initMessages();
     } catch (e) {
       emit(ConversationState.error(_participantId, e));
     }
@@ -141,7 +131,8 @@ class ConversationCubit extends Cubit<ConversationState> {
     _logger.info('_initMessages: ${messages.length}');
 
     if (isClosed) return;
-    emit(ConversationState.ready(_participantId, messages: messages));
+    final state = this.state;
+    if (state is CVSReady) emit(state.copyWith(messages: messages));
 
     // Subscribe to chat messages updates eg new messages, edited, deleted, etc. and merge them with the current list
     _messagesSub?.cancel();
@@ -182,11 +173,27 @@ class ConversationCubit extends Cubit<ConversationState> {
     }
   }
 
+  StreamSubscription _outboxQueueSubFactory(void Function(List<ChatQueueEntry>) onArrive) {
+    return _localChatRepository.watchChatQueueEntries().listen((entries) {
+      final chatQueueEntries = entries.where((e) {
+        return e.participantId == _participantId || (_chat?.id != null && e.chatId == _chat?.id);
+      }).toList();
+      onArrive(chatQueueEntries);
+    });
+  }
+
+  void _handleOutboxQueueUpdate(List<ChatQueueEntry> entries) {
+    _logger.info('_handleOutboxQueueUpdate: ${entries.length}');
+    final state = this.state;
+    if (state is CVSReady) emit(state.copyWith(outboxQueue: entries));
+  }
+
   @override
   Future<void> close() {
     _logger.info('Closing conversation with $_participantId');
     _chatSub?.cancel();
     _messagesSub?.cancel();
+    _outboxQueueSub?.cancel();
     return super.close();
   }
 }

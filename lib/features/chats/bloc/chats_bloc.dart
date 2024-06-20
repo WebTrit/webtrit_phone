@@ -33,9 +33,11 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
   final LocalChatRepository _repo;
   final AppPreferences _prefs;
   ChatsSyncService? _chatsSyncService;
+  OutboxQueueService? _outboxQueueService;
 
   void _connect(Connect event, Emitter<ChatsState> emit) async {
     emit(state.copyWith(status: ChatsStatus.connecting));
+    // _repo.wipeData();
     _client.connect();
   }
 
@@ -65,6 +67,8 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
 
         // Init sync service
         _chatsSyncService ??= ChatsSyncService(_client, _repo)..init();
+
+        _outboxQueueService ??= OutboxQueueService(_client, _repo)..init();
       }
       emit(state.copyWith(status: ChatsStatus.connected));
     } on Exception catch (e) {
@@ -84,6 +88,7 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
   @override
   Future<void> close() {
     _chatsSyncService?.dispose();
+    _outboxQueueService?.dispose();
     _client.close();
     return super.close();
   }

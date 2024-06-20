@@ -11,6 +11,7 @@ class MessageListView extends StatefulWidget {
     required this.userId,
     required this.messages,
     required this.fetchingHistory,
+    required this.outboxQueue,
     required this.historyEndReached,
     required this.onSend,
     required this.onFetchHistory,
@@ -19,6 +20,7 @@ class MessageListView extends StatefulWidget {
 
   final String userId;
   final List<ChatMessage> messages;
+  final List<ChatQueueEntry> outboxQueue;
   final bool fetchingHistory;
   final bool historyEndReached;
   final Function(String content) onSend;
@@ -43,11 +45,33 @@ class _MessageListViewState extends State<MessageListView> {
   void didUpdateWidget(MessageListView oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (!listEquals(oldWidget.messages, widget.messages)) mapMessages();
+    if (!listEquals(oldWidget.outboxQueue, widget.outboxQueue)) mapMessages();
   }
 
   void mapMessages() {
-    messages = widget.messages.map((msg) {
-      return TextMessage(
+    List<TextMessage> newMessages = [];
+
+    for (final entry in widget.outboxQueue) {
+      if (entry.type == ChatQueueEntryType.create) {
+        var textMessage = TextMessage(
+          author: User(
+            id: widget.userId,
+            firstName: widget.userId,
+          ),
+          id: entry.idKey,
+          text: entry.content,
+          showStatus: true,
+          status: Status.sending,
+          createdAt: DateTime.now().millisecondsSinceEpoch,
+          previewData: previews[entry.idKey.toString()],
+        );
+
+        newMessages.add(textMessage);
+      }
+    }
+
+    for (final msg in widget.messages) {
+      final textMessage = TextMessage(
         author: User(
           id: msg.senderId,
           firstName: msg.senderId,
@@ -59,7 +83,11 @@ class _MessageListViewState extends State<MessageListView> {
         createdAt: msg.createdAt.millisecondsSinceEpoch,
         previewData: previews[msg.id.toString()],
       );
-    }).toList();
+
+      newMessages.add(textMessage);
+    }
+
+    messages = newMessages;
   }
 
   @override
