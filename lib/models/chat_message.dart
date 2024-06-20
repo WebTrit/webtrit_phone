@@ -104,29 +104,35 @@ extension MessagesListExtension<T extends ChatMessage> on List<T> {
   T findById(int id) => firstWhere((element) => element.id == id);
 
   List<T> mergeWith(T message) {
-    final newList = toList();
-    final index = newList.indexWhere((element) => element.id == message.id);
+    final index = indexWhere((element) => element.id == message.id);
     if (index == -1) {
-      newList.add(message);
+      add(message);
     } else {
-      newList[index] = message;
+      this[index] = message;
     }
-    return newList;
+    return this;
   }
 
+  /// Merge the real-time message update with the list of messages
+  /// If the message is an update, it will replace the old message in the list
+  /// If the message is an update for a message that is not included in the list, it will be skipped
+  /// If the message is a new message, it will be added to the head of the list
+  /// The list should me sorted by [ChatMessage.createdAt] in descending order
   List<T> mergeUpdateWith(T message) {
-    final newList = toList();
-    final index = newList.indexWhere((element) => element.id == message.id);
-    if (index == -1) {
-      // Skip for messages that are older than the oldest message in the list
-      // That means this is update for message that not included in the list and
-      // will cause incorrect order for history fetching
-      if (message.createdAt.millisecondsSinceEpoch > newList.first.createdAt.millisecondsSinceEpoch) {
-        newList.add(message);
+    bool isUpdate = message.updatedAt.isAfter(message.createdAt);
+    if (isUpdate) {
+      final index = indexWhere((element) => element.id == message.id);
+      if (index == -1) {
+        // Skip for message update that are not included in the list
+        return this;
+      } else {
+        // Update the message in the list
+        this[index] = message;
       }
+      return this;
     } else {
-      newList[index] = message;
+      // Add new message to the head of the list
+      return [message, ...this];
     }
-    return newList;
   }
 }
