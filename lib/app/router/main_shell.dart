@@ -196,7 +196,7 @@ class _MainShellState extends State<MainShell> {
               final tenantId = appBloc.state.tenantId!;
 
               final wsClient = PhoenixSocket(
-                'ws://192.168.1.85:4000/socket/websocket', // TODO: Replace with core URL after integration
+                const String.fromEnvironment('C_CHAT_URL'), // TODO: Replace with core URL after integration
                 socketOptions: PhoenixSocketOptions(params: {'token': token, 'tenant_id': tenantId}),
               );
 
