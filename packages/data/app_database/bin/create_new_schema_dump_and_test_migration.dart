@@ -27,8 +27,7 @@ Future<void> main(List<String> args) async {
   var manager = ProcessManager();
 
   await _executeStep(2, 3, 'Dumping schema of reference application database', () async {
-    final schemaDumpProcess = await manager.spawn('flutter', [
-      'pub',
+    final schemaDumpProcess = await manager.spawn('dart', [
       'run',
       'drift_dev',
       'schema',
@@ -39,9 +38,8 @@ Future<void> main(List<String> args) async {
     return await schemaDumpProcess.exitCode == ExitCode.success.code;
   });
 
-  await _executeStep(2, 3, 'Dumping schema of reference application database', () async {
-    final schemaGenerateProcess = await manager.spawn('flutter', [
-      'pub',
+  await _executeStep(3, 3, 'Generate migration schemas of dumped schemas', () async {
+    final schemaGenerateProcess = await manager.spawn('dart', [
       'run',
       'drift_dev',
       'schema',

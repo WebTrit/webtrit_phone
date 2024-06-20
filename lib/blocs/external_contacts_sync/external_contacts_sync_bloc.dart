@@ -90,16 +90,17 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
           await appDatabase.contactsDao.deleteContactBySource(ContactSourceTypeEnum.external, externalContactsId);
         }
 
-        // to add or update
-        for (final externalContact in externalContacts) {
-          final insertOrUpdateContactData =
-              await appDatabase.contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
-            sourceType: const Value(ContactSourceTypeEnum.external),
-            sourceId: Value(externalContact.id),
-            firstName: Value(externalContact.firstName),
-            lastName: Value(externalContact.lastName),
-            aliasName: Value(externalContact.aliasName),
-          ));
+      // to add or update
+      for (final externalContact in externalContacts) {
+        final insertOrUpdateContactData =
+            await appDatabase.contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
+          sourceType: const Value(ContactSourceTypeEnum.external),
+          sourceId: Value(externalContact.id),
+          firstName: Value(externalContact.firstName),
+          lastName: Value(externalContact.lastName),
+          aliasName: Value(externalContact.aliasName),
+          registered: Value(externalContact.registered),
+        ));
 
           final externalContactNumber = externalContact.number;
           final externalContactExt = externalContact.ext;
