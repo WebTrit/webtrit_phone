@@ -698,7 +698,7 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
       WHERE c.type = ? AND cm.user_id = ?
     ''', variables: variables);
     final rows = await query.get();
-    return rows.firstOrNull?.data.values.first as int;
+    return rows.firstOrNull?.data.values.first;
   }
 
   Future<DateTime?> lastChatUpdatedAt() {
