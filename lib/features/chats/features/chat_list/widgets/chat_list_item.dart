@@ -55,12 +55,18 @@ class _ChatListItemState extends State<ChatListItem> {
     super.dispose();
   }
 
-  // onTap() {
-  //   context.router.navigate(ChatsRouterPageRoute(children: [
-  //     const ChatListScreenPageRoute(),
-  //     ConversationScreenPageRoute(participantId: recent.number),
-  //   ]));
-  // }
+  onTap() {
+    if (widget.chat.type == ChatType.dialog) {
+      final userId = widget.userId;
+      final participant = widget.chat.members.firstWhere((m) => m.userId != userId);
+      context.router.navigate(ChatsRouterPageRoute(children: [
+        const ChatListScreenPageRoute(),
+        ConversationScreenPageRoute(participantId: participant.userId),
+      ]));
+    } else {
+      // TODO: group screen
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,21 +77,35 @@ class _ChatListItemState extends State<ChatListItem> {
         borderRadius: BorderRadius.circular(16),
       ),
       child: ListTile(
+        leading: leading(),
         title: title(),
         subtitle: subtitle(),
         trailing: trail(),
-        onTap: () {
-          if (widget.chat.type == ChatType.dialog) {
-            final userId = widget.userId;
-            final participant = widget.chat.members.firstWhere((m) => m.userId != userId);
-            context.router.navigate(ChatsRouterPageRoute(children: [
-              const ChatListScreenPageRoute(),
-              ConversationScreenPageRoute(participantId: participant.userId),
-            ]));
-          } else {
-            // TODO: group screen
-          }
-        },
+        onTap: onTap,
+      ),
+    );
+  }
+
+  Widget leading() {
+    String text = '';
+    if (widget.chat.type == ChatType.dialog) {
+      final userId = widget.userId;
+      final participant = widget.chat.members.firstWhere((m) => m.userId != userId);
+      text = participant.userId;
+    } else {
+      text = widget.chat.name?.split(' ').first ?? widget.chat.id.toString();
+    }
+
+    if (text.length > 8) text = text.substring(text.length - 8);
+    return CircleAvatar(
+      child: FittedBox(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            text.toUpperCase(),
+            softWrap: true,
+          ),
+        ),
       ),
     );
   }
@@ -121,6 +141,12 @@ class _ChatListItemState extends State<ChatListItem> {
     } else {
       text = 'No messages yet';
     }
-    return Text(text, style: const TextStyle(overflow: TextOverflow.ellipsis));
+    return Text(
+      text,
+      style: const TextStyle(
+        overflow: TextOverflow.ellipsis,
+        fontSize: 12,
+      ),
+    );
   }
 }
