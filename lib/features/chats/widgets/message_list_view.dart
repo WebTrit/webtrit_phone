@@ -131,6 +131,8 @@ class _MessageListViewState extends State<MessageListView> {
   }
 
   void _handlePreviewDataFetched(TextMessage message, PreviewData previewData) {
-    setState(() => previews[message.id] = previewData);
+    previews[message.id] = previewData;
+    mapMessages();
+    setState(() {});
   }
 }
