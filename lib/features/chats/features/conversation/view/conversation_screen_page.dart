@@ -19,6 +19,7 @@ class ConversationScreenPage extends StatelessWidget {
     final localChatRepository = context.read<LocalChatRepository>();
 
     final widget = BlocProvider(
+      key: ValueKey(participantId),
       create: (context) => ConversationCubit(
         participantId,
         chatsBloc.state.client,
