@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 
 class ChatMessage extends Equatable {
   final int id;
+  final String idKey;
   final String senderId;
   final int chatId;
   final int? replyToId;
@@ -19,6 +20,7 @@ class ChatMessage extends Equatable {
 
   const ChatMessage({
     required this.id,
+    required this.idKey,
     required this.senderId,
     required this.chatId,
     required this.replyToId,
@@ -37,6 +39,7 @@ class ChatMessage extends Equatable {
   @override
   List<Object?> get props => [
         id,
+        idKey,
         senderId,
         chatId,
         replyToId,
@@ -58,6 +61,7 @@ class ChatMessage extends Equatable {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
+      'idempotency_key': idKey,
       'sender_id': senderId,
       'chat_id': chatId,
       'reply_to_id': replyToId,
@@ -77,6 +81,7 @@ class ChatMessage extends Equatable {
   factory ChatMessage.fromMap(Map<String, dynamic> map) {
     return ChatMessage(
       id: map['id'] as int,
+      idKey: map['idempotency_key'] as String,
       senderId: map['sender_id'] as String,
       chatId: map['chat_id'] as int,
       replyToId: map['reply_to_id'] != null ? map['reply_to_id'] as int : null,

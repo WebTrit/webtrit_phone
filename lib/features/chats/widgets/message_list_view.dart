@@ -65,7 +65,6 @@ class _MessageListViewState extends State<MessageListView> {
           createdAt: DateTime.now().millisecondsSinceEpoch,
           previewData: previews[entry.idKey.toString()],
         );
-
         newMessages.add(textMessage);
       }
     }
@@ -76,7 +75,7 @@ class _MessageListViewState extends State<MessageListView> {
           id: msg.senderId,
           firstName: msg.senderId,
         ),
-        id: msg.id.toString(),
+        id: msg.idKey,
         text: msg.content,
         showStatus: true,
         status: Status.delivered,
@@ -84,7 +83,10 @@ class _MessageListViewState extends State<MessageListView> {
         previewData: previews[msg.id.toString()],
       );
 
-      newMessages.add(textMessage);
+      // Ignore duplicate message that remains in the outbox
+      if (!widget.outboxQueue.map((e) => e.idKey).contains(msg.idKey)) {
+        newMessages.add(textMessage);
+      }
     }
 
     messages = newMessages;

@@ -83,7 +83,7 @@ class ConversationCubit extends Cubit<ConversationState> {
         final payload = {'chat_id': chatId, 'from': topMessage.createdAt.toUtc().toIso8601String(), 'limit': 100};
         final req = await userChannel.push('messages_history', payload).future;
         messages = (req.response['data'] as List).map((e) => ChatMessage.fromMap(e)).toList();
-        await _localChatRepository.upsertHistoryPage(messages);
+        await _localChatRepository.insertHistoryPage(messages);
         _logger.info('fetchHistory: remote messages ${messages.length}');
       }
 

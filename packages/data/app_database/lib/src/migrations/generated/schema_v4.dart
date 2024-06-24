@@ -497,6 +497,11 @@ class ChatMessages extends Table with TableInfo {
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<String> idKey = GeneratedColumn<String>(
+      'id_key', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
   late final GeneratedColumn<String> senderId = GeneratedColumn<String>(
       'sender_id', aliasedName, false,
       type: DriftSqlType.string,
@@ -576,6 +581,7 @@ class ChatMessages extends Table with TableInfo {
   @override
   List<GeneratedColumn> get $columns => [
         id,
+        idKey,
         senderId,
         chatId,
         replyToId,

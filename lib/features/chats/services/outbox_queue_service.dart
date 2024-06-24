@@ -2,15 +2,23 @@ import 'dart:async';
 
 import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/chat/components/chats_event.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 final _logger = Logger('OutboxQueueService');
 
 class OutboxQueueService {
-  OutboxQueueService(this._client, this._localChatRepository);
+  OutboxQueueService(this._client, this._localChatRepository) {
+    // TODO: Remove this before pr
+    // _logger.onRecord.listen((record) {
+    //   // ignore: avoid_print
+    //   print('\x1B[33mcht: ${record.message}\x1B[0m');
+    // });
+  }
 
   final PhoenixSocket _client;
   final LocalChatRepository _localChatRepository;
@@ -43,11 +51,15 @@ class OutboxQueueService {
               }
 
               if (r.isOk) {
+                await _localChatRepository.eventBus
+                    .whereType<ChatMessageUpdate>()
+                    .firstWhere((event) => event.message.idKey == entry.idKey);
                 await _localChatRepository.deleteChatQueueEntry(entry.id);
-                final message = ChatMessage.fromMap(r.response);
-                await _localChatRepository.upsertMessage(message);
-              } else {
+                _logger.info('After isOk on new_msg entry: ${entry.idKey}');
+              }
+              if (r.isError) {
                 await _localChatRepository.deleteChatQueueEntry(entry.id);
+                _logger.info('After isError on new_msg entry: ${entry.idKey}');
               }
             }
 
@@ -59,13 +71,15 @@ class OutboxQueueService {
               }).future;
 
               if (r.isOk) {
+                await _localChatRepository.eventBus
+                    .whereType<ChatMessageUpdate>()
+                    .firstWhere((event) => event.message.idKey == entry.idKey);
                 await _localChatRepository.deleteChatQueueEntry(entry.id);
-                final message = ChatMessage.fromMap(r.response['msg']);
-                final chat = Chat.fromMap(r.response['chat']);
-                await _localChatRepository.upsertChat(chat);
-                await _localChatRepository.upsertMessage(message);
-              } else {
+                _logger.info('After isOk on new_dialog_msg entry: ${entry.idKey}');
+              }
+              if (r.isError) {
                 await _localChatRepository.deleteChatQueueEntry(entry.id);
+                _logger.info('After isError on new_dialog_msg entry: ${entry.idKey}');
               }
             }
           }

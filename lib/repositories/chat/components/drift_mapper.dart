@@ -58,6 +58,7 @@ mixin ChatsDriftMapper {
   ChatMessage chatMessageFromDrift(ChatMessageData data) {
     return ChatMessage(
       id: data.id,
+      idKey: data.idKey,
       senderId: data.senderId,
       chatId: data.chatId,
       replyToId: data.replyToId,
@@ -77,6 +78,7 @@ mixin ChatsDriftMapper {
   ChatMessageData chatMessageDataFromChatMessage(ChatMessage message) {
     return ChatMessageData(
       id: message.id,
+      idKey: message.idKey,
       senderId: message.senderId,
       chatId: message.chatId,
       replyToId: message.replyToId,

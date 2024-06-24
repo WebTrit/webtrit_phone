@@ -39,8 +39,6 @@ class ChatsSyncService {
 
     _chatlistSyncSub = _chatlistSyncStream().listen((chat) {
       _logger.info('Chat update event: $chat');
-
-      localChatRepository.upsertChat(chat);
       _upsertMessageSubscription(chat);
     });
   }
@@ -62,10 +60,7 @@ class ChatsSyncService {
   StreamSubscription _subscribeToMessages(int chatId) {
     final channel = client.addChannel(topic: 'chat:chatroom:$chatId')..join();
     final messagesStream = _messagesSyncStream(chatId, channel);
-    return messagesStream.listen((msg) {
-      _logger.info('Message update event: $msg');
-      localChatRepository.upsertMessage(msg);
-    });
+    return messagesStream.listen((msg) => _logger.info('Message update event: $msg'));
   }
 
   _removeMessageSubscription(int chatId) {
@@ -101,6 +96,7 @@ class ChatsSyncService {
 
           // Yield fetched chats
           for (final chat in chatList) {
+            await localChatRepository.upsertChat(chat);
             yield chat;
           }
         } else {
@@ -117,6 +113,7 @@ class ChatsSyncService {
 
             // Yield fetched chats
             for (final chat in chatList) {
+              await localChatRepository.upsertChat(chat);
               yield chat;
             }
 
@@ -128,6 +125,7 @@ class ChatsSyncService {
         // Yield buffered updates
         bufferSub.cancel();
         for (final chat in updatesBuffer) {
+          await localChatRepository.upsertChat(chat);
           yield chat;
         }
 
@@ -136,6 +134,7 @@ class ChatsSyncService {
         await for (final msg in userChannel.messages) {
           if (msg.event.value == 'chat_update') {
             final chat = Chat.fromMap(msg.payload as Map<String, dynamic>);
+            await localChatRepository.upsertChat(chat);
             yield chat;
           }
           if (msg.event.value == 'phx_error') {
@@ -177,6 +176,7 @@ class ChatsSyncService {
 
           // Yield fetched chats
           for (final msg in messages) {
+            await localChatRepository.insertMessage(msg);
             yield msg;
           }
         } else {
@@ -193,6 +193,7 @@ class ChatsSyncService {
 
             // Yield fetched chats
             for (final msg in messages) {
+              await localChatRepository.upsertMessageUpdate(msg);
               yield msg;
             }
 
@@ -204,6 +205,7 @@ class ChatsSyncService {
         // Yield buffered updates
         bufferSub.cancel();
         for (final msg in updatesBuffer) {
+          await localChatRepository.upsertMessageUpdate(msg);
           yield msg;
         }
 
@@ -211,8 +213,9 @@ class ChatsSyncService {
         // On disconnect break the loop to force reconnect
         await for (final msg in channel.messages) {
           if (msg.event.value == 'message_update') {
-            final chat = ChatMessage.fromMap(msg.payload as Map<String, dynamic>);
-            yield chat;
+            final chatMsg = ChatMessage.fromMap(msg.payload as Map<String, dynamic>);
+            await localChatRepository.upsertMessageUpdate(chatMsg);
+            yield chatMsg;
           }
           if (msg.event.value == 'phx_error') {
             throw Exception('Phoenix disconnect');

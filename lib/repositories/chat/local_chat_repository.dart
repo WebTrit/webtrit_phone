@@ -85,21 +85,33 @@ class LocalChatRepository with ChatsDriftMapper {
     });
   }
 
-  Future<void> upsertMessage(ChatMessage message, {bool silent = false}) async {
+  Future<void> insertMessage(ChatMessage message, {bool silent = false}) async {
     try {
-      await _chatsDao.upsertChatMessage(chatMessageDataFromChatMessage(message));
+      await _chatsDao.insertChatMessage(chatMessageDataFromChatMessage(message));
       if (!silent) _addEvent(ChatMessageUpdate(message));
     } on Exception catch (e) {
       _logger.warning('upsertMessage failed, retrying', e);
       // Drift lock exception handling, coz cant import [DriftRemoteException]
       await Future.delayed(const Duration(milliseconds: 100));
-      await upsertMessage(message, silent: silent);
+      await insertMessage(message, silent: silent);
     }
   }
 
-  Future<void> upsertHistoryPage(List<ChatMessage> messages) async {
+  Future<void> upsertMessageUpdate(ChatMessage message, {bool silent = false}) async {
+    try {
+      await _chatsDao.upsertChatMessageUpdate(chatMessageDataFromChatMessage(message));
+      if (!silent) _addEvent(ChatMessageUpdate(message));
+    } on Exception catch (e) {
+      _logger.warning('upsertMessage failed, retrying', e);
+      // Drift lock exception handling, coz cant import [DriftRemoteException]
+      await Future.delayed(const Duration(milliseconds: 100));
+      await upsertMessageUpdate(message, silent: silent);
+    }
+  }
+
+  Future<void> insertHistoryPage(List<ChatMessage> messages) async {
     for (final message in messages) {
-      await upsertMessage(message, silent: true);
+      await insertMessage(message, silent: true);
     }
   }
 

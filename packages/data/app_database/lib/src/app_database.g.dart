@@ -2543,6 +2543,11 @@ class $ChatMessagesTableTable extends ChatMessagesTable
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _idKeyMeta = const VerificationMeta('idKey');
+  @override
+  late final GeneratedColumn<String> idKey = GeneratedColumn<String>(
+      'id_key', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _senderIdMeta =
       const VerificationMeta('senderId');
   @override
@@ -2643,6 +2648,7 @@ class $ChatMessagesTableTable extends ChatMessagesTable
   @override
   List<GeneratedColumn> get $columns => [
         id,
+        idKey,
         senderId,
         chatId,
         replyToId,
@@ -2671,6 +2677,12 @@ class $ChatMessagesTableTable extends ChatMessagesTable
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('id_key')) {
+      context.handle(
+          _idKeyMeta, idKey.isAcceptableOrUnknown(data['id_key']!, _idKeyMeta));
+    } else if (isInserting) {
+      context.missing(_idKeyMeta);
     }
     if (data.containsKey('sender_id')) {
       context.handle(_senderIdMeta,
@@ -2762,6 +2774,8 @@ class $ChatMessagesTableTable extends ChatMessagesTable
     return ChatMessageData(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      idKey: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id_key'])!,
       senderId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}sender_id'])!,
       chatId: attachedDatabase.typeMapping
@@ -2811,6 +2825,7 @@ class $ChatMessagesTableTable extends ChatMessagesTable
 
 class ChatMessageData extends DataClass implements Insertable<ChatMessageData> {
   final int id;
+  final String idKey;
   final String senderId;
   final int chatId;
   final int? replyToId;
@@ -2828,6 +2843,7 @@ class ChatMessageData extends DataClass implements Insertable<ChatMessageData> {
   final DateTime? updatedAt;
   const ChatMessageData(
       {required this.id,
+      required this.idKey,
       required this.senderId,
       required this.chatId,
       this.replyToId,
@@ -2847,6 +2863,7 @@ class ChatMessageData extends DataClass implements Insertable<ChatMessageData> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
+    map['id_key'] = Variable<String>(idKey);
     map['sender_id'] = Variable<String>(senderId);
     map['chat_id'] = Variable<int>(chatId);
     if (!nullToAbsent || replyToId != null) {
@@ -2887,6 +2904,7 @@ class ChatMessageData extends DataClass implements Insertable<ChatMessageData> {
   ChatMessageDataCompanion toCompanion(bool nullToAbsent) {
     return ChatMessageDataCompanion(
       id: Value(id),
+      idKey: Value(idKey),
       senderId: Value(senderId),
       chatId: Value(chatId),
       replyToId: replyToId == null && nullToAbsent
@@ -2928,6 +2946,7 @@ class ChatMessageData extends DataClass implements Insertable<ChatMessageData> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ChatMessageData(
       id: serializer.fromJson<int>(json['id']),
+      idKey: serializer.fromJson<String>(json['idKey']),
       senderId: serializer.fromJson<String>(json['senderId']),
       chatId: serializer.fromJson<int>(json['chatId']),
       replyToId: serializer.fromJson<int?>(json['replyToId']),
@@ -2951,6 +2970,7 @@ class ChatMessageData extends DataClass implements Insertable<ChatMessageData> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
+      'idKey': serializer.toJson<String>(idKey),
       'senderId': serializer.toJson<String>(senderId),
       'chatId': serializer.toJson<int>(chatId),
       'replyToId': serializer.toJson<int?>(replyToId),
@@ -2972,6 +2992,7 @@ class ChatMessageData extends DataClass implements Insertable<ChatMessageData> {
 
   ChatMessageData copyWith(
           {int? id,
+          String? idKey,
           String? senderId,
           int? chatId,
           Value<int?> replyToId = const Value.absent(),
@@ -2989,6 +3010,7 @@ class ChatMessageData extends DataClass implements Insertable<ChatMessageData> {
           Value<DateTime?> updatedAt = const Value.absent()}) =>
       ChatMessageData(
         id: id ?? this.id,
+        idKey: idKey ?? this.idKey,
         senderId: senderId ?? this.senderId,
         chatId: chatId ?? this.chatId,
         replyToId: replyToId.present ? replyToId.value : this.replyToId,
@@ -3012,6 +3034,7 @@ class ChatMessageData extends DataClass implements Insertable<ChatMessageData> {
   String toString() {
     return (StringBuffer('ChatMessageData(')
           ..write('id: $id, ')
+          ..write('idKey: $idKey, ')
           ..write('senderId: $senderId, ')
           ..write('chatId: $chatId, ')
           ..write('replyToId: $replyToId, ')
@@ -3034,6 +3057,7 @@ class ChatMessageData extends DataClass implements Insertable<ChatMessageData> {
   @override
   int get hashCode => Object.hash(
       id,
+      idKey,
       senderId,
       chatId,
       replyToId,
@@ -3054,6 +3078,7 @@ class ChatMessageData extends DataClass implements Insertable<ChatMessageData> {
       identical(this, other) ||
       (other is ChatMessageData &&
           other.id == this.id &&
+          other.idKey == this.idKey &&
           other.senderId == this.senderId &&
           other.chatId == this.chatId &&
           other.replyToId == this.replyToId &&
@@ -3073,6 +3098,7 @@ class ChatMessageData extends DataClass implements Insertable<ChatMessageData> {
 
 class ChatMessageDataCompanion extends UpdateCompanion<ChatMessageData> {
   final Value<int> id;
+  final Value<String> idKey;
   final Value<String> senderId;
   final Value<int> chatId;
   final Value<int?> replyToId;
@@ -3090,6 +3116,7 @@ class ChatMessageDataCompanion extends UpdateCompanion<ChatMessageData> {
   final Value<DateTime?> updatedAt;
   const ChatMessageDataCompanion({
     this.id = const Value.absent(),
+    this.idKey = const Value.absent(),
     this.senderId = const Value.absent(),
     this.chatId = const Value.absent(),
     this.replyToId = const Value.absent(),
@@ -3108,6 +3135,7 @@ class ChatMessageDataCompanion extends UpdateCompanion<ChatMessageData> {
   });
   ChatMessageDataCompanion.insert({
     this.id = const Value.absent(),
+    required String idKey,
     required String senderId,
     required int chatId,
     this.replyToId = const Value.absent(),
@@ -3123,13 +3151,15 @@ class ChatMessageDataCompanion extends UpdateCompanion<ChatMessageData> {
     this.deletedAtRemote = const Value.absent(),
     this.insertedAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
-  })  : senderId = Value(senderId),
+  })  : idKey = Value(idKey),
+        senderId = Value(senderId),
         chatId = Value(chatId),
         content = Value(content),
         createdAtRemote = Value(createdAtRemote),
         updatedAtRemote = Value(updatedAtRemote);
   static Insertable<ChatMessageData> custom({
     Expression<int>? id,
+    Expression<String>? idKey,
     Expression<String>? senderId,
     Expression<int>? chatId,
     Expression<int>? replyToId,
@@ -3148,6 +3178,7 @@ class ChatMessageDataCompanion extends UpdateCompanion<ChatMessageData> {
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (idKey != null) 'id_key': idKey,
       if (senderId != null) 'sender_id': senderId,
       if (chatId != null) 'chat_id': chatId,
       if (replyToId != null) 'reply_to_id': replyToId,
@@ -3168,6 +3199,7 @@ class ChatMessageDataCompanion extends UpdateCompanion<ChatMessageData> {
 
   ChatMessageDataCompanion copyWith(
       {Value<int>? id,
+      Value<String>? idKey,
       Value<String>? senderId,
       Value<int>? chatId,
       Value<int?>? replyToId,
@@ -3185,6 +3217,7 @@ class ChatMessageDataCompanion extends UpdateCompanion<ChatMessageData> {
       Value<DateTime?>? updatedAt}) {
     return ChatMessageDataCompanion(
       id: id ?? this.id,
+      idKey: idKey ?? this.idKey,
       senderId: senderId ?? this.senderId,
       chatId: chatId ?? this.chatId,
       replyToId: replyToId ?? this.replyToId,
@@ -3208,6 +3241,9 @@ class ChatMessageDataCompanion extends UpdateCompanion<ChatMessageData> {
     final map = <String, Expression>{};
     if (id.present) {
       map['id'] = Variable<int>(id.value);
+    }
+    if (idKey.present) {
+      map['id_key'] = Variable<String>(idKey.value);
     }
     if (senderId.present) {
       map['sender_id'] = Variable<String>(senderId.value);
@@ -3263,6 +3299,7 @@ class ChatMessageDataCompanion extends UpdateCompanion<ChatMessageData> {
   String toString() {
     return (StringBuffer('ChatMessageDataCompanion(')
           ..write('id: $id, ')
+          ..write('idKey: $idKey, ')
           ..write('senderId: $senderId, ')
           ..write('chatId: $chatId, ')
           ..write('replyToId: $replyToId, ')
@@ -5298,6 +5335,7 @@ class $$ChatMembersTableTableOrderingComposer
 typedef $$ChatMessagesTableTableInsertCompanionBuilder
     = ChatMessageDataCompanion Function({
   Value<int> id,
+  required String idKey,
   required String senderId,
   required int chatId,
   Value<int?> replyToId,
@@ -5317,6 +5355,7 @@ typedef $$ChatMessagesTableTableInsertCompanionBuilder
 typedef $$ChatMessagesTableTableUpdateCompanionBuilder
     = ChatMessageDataCompanion Function({
   Value<int> id,
+  Value<String> idKey,
   Value<String> senderId,
   Value<int> chatId,
   Value<int?> replyToId,
@@ -5356,6 +5395,7 @@ class $$ChatMessagesTableTableTableManager extends RootTableManager<
               $$ChatMessagesTableTableProcessedTableManager(p),
           getUpdateCompanionBuilder: ({
             Value<int> id = const Value.absent(),
+            Value<String> idKey = const Value.absent(),
             Value<String> senderId = const Value.absent(),
             Value<int> chatId = const Value.absent(),
             Value<int?> replyToId = const Value.absent(),
@@ -5374,6 +5414,7 @@ class $$ChatMessagesTableTableTableManager extends RootTableManager<
           }) =>
               ChatMessageDataCompanion(
             id: id,
+            idKey: idKey,
             senderId: senderId,
             chatId: chatId,
             replyToId: replyToId,
@@ -5392,6 +5433,7 @@ class $$ChatMessagesTableTableTableManager extends RootTableManager<
           ),
           getInsertCompanionBuilder: ({
             Value<int> id = const Value.absent(),
+            required String idKey,
             required String senderId,
             required int chatId,
             Value<int?> replyToId = const Value.absent(),
@@ -5410,6 +5452,7 @@ class $$ChatMessagesTableTableTableManager extends RootTableManager<
           }) =>
               ChatMessageDataCompanion.insert(
             id: id,
+            idKey: idKey,
             senderId: senderId,
             chatId: chatId,
             replyToId: replyToId,
@@ -5447,6 +5490,11 @@ class $$ChatMessagesTableTableFilterComposer
   $$ChatMessagesTableTableFilterComposer(super.$state);
   ColumnFilters<int> get id => $state.composableBuilder(
       column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get idKey => $state.composableBuilder(
+      column: $state.table.idKey,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -5540,6 +5588,11 @@ class $$ChatMessagesTableTableOrderingComposer
   $$ChatMessagesTableTableOrderingComposer(super.$state);
   ColumnOrderings<int> get id => $state.composableBuilder(
       column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get idKey => $state.composableBuilder(
+      column: $state.table.idKey,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
