@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_chat_ui/flutter_chat_ui.dart' hide TextMessage;
 import 'package:flutter_chat_types/flutter_chat_types.dart' show PartialText, PreviewData, Status, TextMessage, User;
+import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/models/models.dart';
+
+final _logger = Logger('MessageListView');
 
 class MessageListView extends StatefulWidget {
   const MessageListView({
@@ -44,12 +47,15 @@ class _MessageListViewState extends State<MessageListView> {
   @override
   void didUpdateWidget(MessageListView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (!listEquals(oldWidget.messages, widget.messages)) mapMessages();
-    if (!listEquals(oldWidget.outboxQueue, widget.outboxQueue)) mapMessages();
+    bool messagesChanged = !listEquals(oldWidget.messages, widget.messages);
+    bool outboxQueueChanged = !listEquals(oldWidget.outboxQueue, widget.outboxQueue);
+    if (messagesChanged || outboxQueueChanged) mapMessages();
   }
 
   void mapMessages() {
-    List<TextMessage> newMessages = [];
+    _logger.fine('Mapping messages msgs: ${widget.messages.length} outbox: ${widget.outboxQueue.length}');
+
+    Map<String, TextMessage> msgMap = {};
 
     for (final entry in widget.outboxQueue) {
       if (entry.type == ChatQueueEntryType.create) {
@@ -65,7 +71,7 @@ class _MessageListViewState extends State<MessageListView> {
           createdAt: DateTime.now().millisecondsSinceEpoch,
           previewData: previews[entry.idKey.toString()],
         );
-        newMessages.add(textMessage);
+        msgMap[entry.idKey] = textMessage;
       }
     }
 
@@ -83,13 +89,10 @@ class _MessageListViewState extends State<MessageListView> {
         previewData: previews[msg.id.toString()],
       );
 
-      // Ignore duplicate message that remains in the outbox
-      if (!widget.outboxQueue.map((e) => e.idKey).contains(msg.idKey)) {
-        newMessages.add(textMessage);
-      }
+      msgMap[msg.idKey] = textMessage;
     }
 
-    messages = newMessages;
+    messages = msgMap.values.toList();
   }
 
   @override
@@ -133,8 +136,14 @@ class _MessageListViewState extends State<MessageListView> {
   }
 
   void _handlePreviewDataFetched(TextMessage message, PreviewData previewData) {
-    previews[message.id] = previewData;
-    mapMessages();
-    setState(() {});
+    if (previews[message.id] == null) {
+      previews[message.id] = previewData;
+
+      setState(() {
+        final index = messages.indexWhere((element) => element.id == message.id);
+        final updatedMessage = (messages[index]).copyWith(previewData: previewData) as TextMessage;
+        if (index != -1) messages[index] = updatedMessage;
+      });
+    }
   }
 }
