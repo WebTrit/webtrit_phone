@@ -9,9 +9,11 @@ import 'package:_http_client/_http_client.dart';
 
 import 'exceptions.dart';
 import 'models/models.dart';
+import 'extensions/extensions.dart';
 
 class WebtritApiClient {
   static final _requestIdRandom = Random();
+  static final _apiSegments = ['api', 'v1'];
 
   WebtritApiClient(
     Uri baseUrl,
@@ -42,6 +44,11 @@ class WebtritApiClient {
     _httpClient.close();
   }
 
+  // TODO(Serdun): create another solution for do this method private
+  Uri prepareRequestUrl(List<String> additionalSegments) {
+    return baseUrl.prepareRequestUrl('tenant', tenantId, _apiSegments, additionalSegments);
+  }
+
   Future<dynamic> _httpClientExecute(
     String method,
     List<String> pathSegments,
@@ -49,15 +56,8 @@ class WebtritApiClient {
     Object? requestDataJson, {
     String? requestId,
   }) async {
-    final url = baseUrl.replace(
-      pathSegments: [
-        ...baseUrl.pathSegments,
-        if (tenantId.isNotEmpty) ...['tenant', tenantId],
-        'api',
-        'v1',
-        ...pathSegments,
-      ],
-    );
+    final url = prepareRequestUrl(pathSegments);
+
     final httpRequest = http.Request(method, url);
 
     final xRequestId = requestId ?? _generateRequestId();
