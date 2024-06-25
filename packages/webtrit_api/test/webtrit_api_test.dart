@@ -14,35 +14,34 @@ void main() {
 
   group('URI extension methods', () {
     test('replaceLastPathValue replaces the last occurrence of the path segment', () {
-      final url = Uri.parse('http://core.webtrit.com/path/path1/tenant/default/path2');
+      final url = Uri.https(authority, 'path/path1/tenant/default/path2');
       final updatedUrl = url.replaceLastPathValue('tenant', 'new');
-      expect(updatedUrl.toString(), 'http://core.webtrit.com/path/path1/tenant/new/path2');
+      expect(updatedUrl.toString(), Uri.https(authority, 'path/path1/tenant/new/path2').toString());
     });
 
     test('replaceLastPathValue replaces only the last occurrence of the path segment', () {
-      final url = Uri.parse('http://core.webtrit.com/path/path1/tenant/default1/path2/tenant/default2');
+      final url = Uri.https(authority, 'path/path1/tenant/default1/path2/tenant/default2');
       final updatedUrl = url.replaceLastPathValue('tenant', 'new');
-      expect(updatedUrl.toString(), 'http://core.webtrit.com/path/path1/tenant/default1/path2/tenant/new');
+      expect(updatedUrl.toString(), Uri.https(authority, 'path/path1/tenant/default1/path2/tenant/new').toString());
     });
 
     test('replaceLastPathValue does not modify URL without the specified path segment', () {
-      final url = Uri.parse('http://core.webtrit.com/path1');
+      final url = Uri.https(authority, 'path1');
       final updatedUrl = url.replaceLastPathValue('tenant', 'new');
-      expect(updatedUrl.toString(), 'http://core.webtrit.com/path1');
+      expect(updatedUrl.toString(), Uri.https(authority, 'path1').toString());
     });
 
     test('replaceLastPathValue handles base URLs without any path segments', () {
-      final url = Uri.parse('http://core.webtrit.com');
+      final url = Uri.https(authority, '');
       final updatedUrl = url.replaceLastPathValue('tenant', 'new');
-      expect(updatedUrl.toString(), 'http://core.webtrit.com');
+      expect(updatedUrl.toString(), Uri.https(authority, '').toString());
     });
 
     test('replaceLastPathValue handles URLs with multiple similar segments correctly', () {
-      final url = Uri.parse('http://core.webtrit.com/tenant/default1/path/tenant/default2');
+      final url = Uri.https(authority, 'tenant/default1/path/tenant/default2');
       final updatedUrl = url.replaceLastPathValue('tenant', 'new');
-      expect(updatedUrl.toString(), 'http://core.webtrit.com/tenant/default1/path/tenant/new');
+      expect(updatedUrl.toString(), Uri.https(authority, 'tenant/default1/path/tenant/new').toString());
     });
-
     test('prepareUrl constructs URL with provided tenant', () {
       final segments = ['path1', 'path2'];
       final apiClient = Uri.https(authority, '').prepareRequestUrl('tenant', 'default', ['api', 'v1'], segments);
