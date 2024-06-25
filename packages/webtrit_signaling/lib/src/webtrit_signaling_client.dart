@@ -13,6 +13,7 @@ import 'exceptions.dart';
 import 'handshakes/handshakes.dart';
 import 'requests/requests.dart';
 import 'responses/responses.dart';
+import 'extensions/extensions.dart';
 import 'transaction.dart';
 
 typedef StateHandshakeHandler = void Function(StateHandshake stateHandshake);
@@ -23,6 +24,7 @@ typedef DisconnectHandler = void Function(int? code, String? reason);
 class WebtritSignalingClient {
   static final _callIdRandom = Random();
   static const _callIdChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  static final _apiSegments = ['signaling', 'v1'];
 
   static String generateTransactionId() {
     return Transaction.generateId();
@@ -71,18 +73,10 @@ class WebtritSignalingClient {
     Duration? connectionTimeout,
     TrustedCertificates certs = TrustedCertificates.empty,
   }) async {
-    final signalingUrl = baseUrl.replace(
-      pathSegments: [
-        ...baseUrl.pathSegments,
-        if (tenantId.isNotEmpty) ...['tenant', tenantId],
-        'signaling',
-        'v1'
-      ],
-      queryParameters: {
-        'token': token,
-        'force': force.toString(),
-      },
-    ).toString();
+    final signalingUrl = baseUrl.prepareRequestUrl('tenant', tenantId, _apiSegments, []).replace(queryParameters: {
+      'token': token,
+      'force': force.toString(),
+    }).toString();
 
     final ws = await connectWebSocket(
       signalingUrl,
