@@ -62,7 +62,7 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> {
 
       _logger.info('processToken success: $token, $tenantId');
       emit(AutoprovisionState.sessionCreated(token, _coreUrl, tenantId));
-    } on Exception catch (e) {
+    } catch (e) {
       _logger.warning('processToken error: $e');
       emit(AutoprovisionState.error(e));
     }

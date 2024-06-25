@@ -30,7 +30,7 @@ final class CoreVersionUnsupportedErrorNotification extends ErrorNotification {
       context.l10n.login_CoreVersionUnsupportedExceptionError(actual, supportedConstraint);
 }
 
-String? _loginErrorL10n(BuildContext context, Exception error) {
+String? _loginErrorL10n(BuildContext context, Object error) {
   if (error is RequestFailure) {
     switch (error.error?.code) {
       case 'parameters_apply_issue':

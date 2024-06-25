@@ -5,7 +5,7 @@ abstract base class AutoprovisionState {
   const AutoprovisionState();
 
   factory AutoprovisionState.initial() => const Initial._();
-  factory AutoprovisionState.error(Exception error) => Error._(error);
+  factory AutoprovisionState.error(Object error) => Error._(error);
   factory AutoprovisionState.processing() => const ProcessingToken._();
   factory AutoprovisionState.replaceConfirmationNeeded() => const ReplaceConfirmationNeeded._();
 
@@ -29,7 +29,7 @@ final class Initial extends AutoprovisionState with EquatableMixin {
 final class Error extends AutoprovisionState with EquatableMixin {
   const Error._(this.error);
 
-  final Exception error;
+  final Object error;
 
   @override
   List<Object?> get props => [error];

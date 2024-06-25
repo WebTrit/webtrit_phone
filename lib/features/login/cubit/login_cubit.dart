@@ -76,20 +76,21 @@ class LoginCubit extends Cubit<LoginState> {
           supportedLoginTypes: supportedLoginTypes,
         ));
       } else {
-        emit(state.copyWith(processing: false));
         notificationsBloc.add(const NotificationsSubmitted(SupportedLoginTypeMissedErrorNotification()));
+
+        emit(state.copyWith(processing: false));
       }
     } on CoreVersionUnsupportedException catch (e) {
-      emit(state.copyWith(processing: false));
-
       notificationsBloc.add(NotificationsSubmitted(CoreVersionUnsupportedErrorNotification(
         e.actual.toString(),
         e.supportedConstraint.toString(),
       )));
-    } on Exception catch (e) {
-      emit(state.copyWith(processing: false));
 
+      emit(state.copyWith(processing: false));
+    } catch (e) {
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
+
+      emit(state.copyWith(processing: false));
     }
   }
 
@@ -180,8 +181,9 @@ class LoginCubit extends Cubit<LoginState> {
         processing: false,
         otpSigninSessionOtpProvisionalWithDateTime: (sessionOtpProvisional, DateTime.now()),
       ));
-    } on Exception catch (e) {
+    } catch (e) {
       emit(state.copyWith(processing: false));
+
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
     }
   }
@@ -212,8 +214,9 @@ class LoginCubit extends Cubit<LoginState> {
         tenantId: sessionToken.tenantId ?? state.tenantId!,
         token: sessionToken.token,
       ));
-    } on Exception catch (e) {
+    } catch (e) {
       emit(state.copyWith(processing: false));
+
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
     }
   }
@@ -268,8 +271,9 @@ class LoginCubit extends Cubit<LoginState> {
         tenantId: sessionToken.tenantId ?? state.tenantId!,
         token: sessionToken.token,
       ));
-    } on Exception catch (e) {
+    } catch (e) {
       emit(state.copyWith(processing: false));
+
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
     }
   }
@@ -316,9 +320,10 @@ class LoginCubit extends Cubit<LoginState> {
       } else {
         throw UnimplementedError();
       }
-    } on Exception catch (e) {
-      emit(state.copyWith(processing: false));
+    } catch (e) {
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
+
+      emit(state.copyWith(processing: false));
     }
   }
 
@@ -349,9 +354,10 @@ class LoginCubit extends Cubit<LoginState> {
         tenantId: sessionToken.tenantId ?? state.tenantId!,
         token: sessionToken.token,
       ));
-    } on Exception catch (e) {
-      emit(state.copyWith(processing: false));
+    } catch (e) {
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
+
+      emit(state.copyWith(processing: false));
     }
   }
 

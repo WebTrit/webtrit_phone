@@ -51,7 +51,7 @@ class ErrorMessageNotification extends ErrorNotification {
 class DefaultErrorNotification extends ErrorNotification {
   const DefaultErrorNotification(this.error);
 
-  final Exception error;
+  final Object error;
 
   @override
   String l10n(BuildContext context) => defaultErrorL10n(context, error);
