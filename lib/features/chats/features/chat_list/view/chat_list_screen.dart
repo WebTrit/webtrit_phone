@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:webtrit_phone/features/features.dart';
 
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class ChatListScreen extends StatefulWidget {
@@ -16,16 +19,26 @@ class _ChatListScreenState extends State<ChatListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(title: widget.title),
-      body: BlocBuilder<ChatListCubit, ChatListState>(builder: (context, state) {
-        if (state.initialising) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (state.chats.isEmpty) {
-          return const Center(child: Text('No conversations started yet'));
-        }
-        return ChatsList(chatlist: state.chats);
-      }),
-    );
+        appBar: MainAppBar(title: widget.title),
+        body: BlocBuilder<ChatListCubit, ChatListState>(builder: (context, state) {
+          if (state.initialising) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (state.chats.isEmpty) {
+            return const Center(child: Text('No conversations started yet'));
+          }
+          return ChatsList(chatlist: state.chats);
+        }),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            context.router.navigate(const ChatsRouterPageRoute(
+              children: [
+                ChatListScreenPageRoute(),
+                GroupBuilderScreenPageRoute(),
+              ],
+            ));
+          },
+          child: const Icon(Icons.add),
+        ));
   }
 }
