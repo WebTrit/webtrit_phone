@@ -31,10 +31,11 @@ class WebtritApiClient {
 
   @visibleForTesting
   WebtritApiClient.inner(
-    this.baseUrl,
+    Uri baseUrl,
     this.tenantId, {
     required http.Client httpClient,
-  }) : _httpClient = httpClient;
+  })  : _httpClient = httpClient,
+        baseUrl = baseUrl.prepareRequestUrl('tenant', tenantId, _apiSegments, []);
 
   final Uri baseUrl;
   final String tenantId;
@@ -44,11 +45,6 @@ class WebtritApiClient {
     _httpClient.close();
   }
 
-  // TODO(Serdun): create another solution for do this method private
-  Uri prepareRequestUrl(List<String> additionalSegments) {
-    return baseUrl.prepareRequestUrl('tenant', tenantId, _apiSegments, additionalSegments);
-  }
-
   Future<dynamic> _httpClientExecute(
     String method,
     List<String> pathSegments,
@@ -56,7 +52,7 @@ class WebtritApiClient {
     Object? requestDataJson, {
     String? requestId,
   }) async {
-    final url = prepareRequestUrl(pathSegments);
+    final url = baseUrl.replace(pathSegments: [...baseUrl.pathSegments, ...pathSegments]);
 
     final httpRequest = http.Request(method, url);
 

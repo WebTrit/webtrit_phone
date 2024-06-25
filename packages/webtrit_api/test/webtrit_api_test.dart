@@ -54,20 +54,17 @@ void main() {
     }
 
     test('prepareUrl constructs URL with provided tenant', () {
-      final tenant = 'default';
       final segments = ['path1', 'path2'];
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), tenant, httpClient: MockClient(handler));
-      final updatedUrl = apiClient.prepareRequestUrl(segments);
-      final expected = Uri.https(authority, 'tenant/$tenant/api/v1/${segments[0]}/${segments[1]}').toString();
-      expect(updatedUrl.toString(), expected);
+      final apiClient = Uri.https(authority, '').prepareRequestUrl('tenant', 'default', ['api', 'v1'], segments);
+      final expected = Uri.https(authority, 'tenant/default/api/v1/${segments[0]}/${segments[1]}').toString();
+      expect(apiClient.toString(), expected);
     });
 
     test('prepareUrl constructs URL without tenant when none is provided', () {
       final segments = ['path1', 'path2'];
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: MockClient(handler));
-      final updatedUrl = apiClient.prepareRequestUrl(segments);
+      final apiClient = Uri.https(authority, '').prepareRequestUrl('tenant', '', ['api', 'v1'], segments);
       final expected = Uri.https(authority, 'api/v1/${segments[0]}/${segments[1]}').toString();
-      expect(updatedUrl.toString(), expected);
+      expect(apiClient.toString(), expected);
     });
   });
 
@@ -83,27 +80,23 @@ void main() {
     test('prepareUrl constructs URL with a new tenant replacing the existing one', () {
       final segments = ['path1', 'path2'];
       final apiClient =
-          WebtritApiClient.inner(Uri.https(authority, 'tenant/default'), 'newTenant', httpClient: MockClient(handler));
-      final updatedUrl = apiClient.prepareRequestUrl(segments);
+          Uri.https(authority, 'tenant/default').prepareRequestUrl('tenant', 'newTenant', ['api', 'v1'], segments);
       final expected = Uri.https(authority, 'tenant/newTenant/api/v1/${segments[0]}/${segments[1]}').toString();
-      expect(updatedUrl.toString(), expected);
+      expect(apiClient.toString(), expected);
     });
 
     test('prepareUrl constructs URL keeping the existing tenant when no new tenant is provided', () {
       final segments = ['path1', 'path2'];
-      final apiClient =
-          WebtritApiClient.inner(Uri.https(authority, 'tenant/default'), '', httpClient: MockClient(handler));
-      final updatedUrl = apiClient.prepareRequestUrl(segments);
+      final apiClient = Uri.https(authority, 'tenant/default').prepareRequestUrl('tenant', '', ['api', 'v1'], segments);
       final expected = Uri.https(authority, 'tenant/default/api/v1/${segments[0]}/${segments[1]}').toString();
-      expect(updatedUrl.toString(), expected);
+      expect(apiClient.toString(), expected);
     });
 
     test('prepareUrl constructs URL with a new tenant when base URL has no tenant', () {
       final segments = ['path1', 'path2'];
-      final apiClient = WebtritApiClient.inner(Uri.https(authority, ''), 'newTenant', httpClient: MockClient(handler));
-      final updatedUrl = apiClient.prepareRequestUrl(segments);
+      final apiClient = Uri.https(authority, '').prepareRequestUrl('tenant', 'newTenant', ['api', 'v1'], segments);
       final expected = Uri.https(authority, 'tenant/newTenant/api/v1/${segments[0]}/${segments[1]}').toString();
-      expect(updatedUrl.toString(), expected);
+      expect(apiClient.toString(), expected);
     });
   });
 
