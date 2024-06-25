@@ -42,16 +42,6 @@ void main() {
       final updatedUrl = url.replaceLastPathValue('tenant', 'new');
       expect(updatedUrl.toString(), 'http://core.webtrit.com/tenant/default1/path/tenant/new');
     });
-  });
-
-  group('WebtritApiClient URL construction without tenant in base URL', () {
-    Future<Response> handler(Request request) async {
-      return Response(
-        jsonEncode({}),
-        200,
-        request: request,
-      );
-    }
 
     test('prepareUrl constructs URL with provided tenant', () {
       final segments = ['path1', 'path2'];
@@ -66,16 +56,6 @@ void main() {
       final expected = Uri.https(authority, 'api/v1/${segments[0]}/${segments[1]}').toString();
       expect(apiClient.toString(), expected);
     });
-  });
-
-  group('WebtritApiClient URL construction with tenant in base URL', () {
-    Future<Response> handler(Request request) async {
-      return Response(
-        jsonEncode({}),
-        200,
-        request: request,
-      );
-    }
 
     test('prepareUrl constructs URL with a new tenant replacing the existing one', () {
       final segments = ['path1', 'path2'];
