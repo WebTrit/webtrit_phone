@@ -374,6 +374,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.1"
+  diffutil_dart:
+    dependency: transitive
+    description:
+      name: diffutil_dart
+      sha256: "5e74883aedf87f3b703cb85e815bdc1ed9208b33501556e4a8a5572af9845c81"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.1"
   dio:
     dependency: transitive
     description:
@@ -555,6 +563,23 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "8.1.5"
+  flutter_chat_types:
+    dependency: "direct main"
+    description:
+      name: flutter_chat_types
+      sha256: e285b588f6d19d907feb1f6d912deaf22e223656769c34093b64e1c59b094fb9
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.6.2"
+  flutter_chat_ui:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: main
+      resolved-ref: "76da91a85b5c70abe66d7aec801a4c75d468c56c"
+      url: "https://github.com/WebTrit/flutter_chat_ui.git"
+    source: git
+    version: "1.6.13"
   flutter_contacts:
     dependency: "direct main"
     description:
@@ -568,6 +593,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_dtmf:
+    dependency: "direct main"
+    description:
+      name: flutter_dtmf
+      sha256: "355f0d476c204757f759caeaa65d50df91337924c0b14548f7b731a5c562f73e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.2"
   flutter_gen_core:
     dependency: transitive
     description:
@@ -593,6 +626,22 @@ packages:
       url: "https://github.com/fluttercommunity/flutter_launcher_icons.git"
     source: git
     version: "0.13.1"
+  flutter_link_previewer:
+    dependency: transitive
+    description:
+      name: flutter_link_previewer
+      sha256: "007069e60f42419fb59872beb7a3cc3ea21e9f1bdff5d40239f376fa62ca9f20"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.2"
+  flutter_linkify:
+    dependency: transitive
+    description:
+      name: flutter_linkify
+      sha256: "74669e06a8f358fee4512b4320c0b80e51cffc496607931de68d28f099254073"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.0"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -614,6 +663,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.0"
+  flutter_parsed_text:
+    dependency: transitive
+    description:
+      name: flutter_parsed_text
+      sha256: "529cf5793b7acdf16ee0f97b158d0d4ba0bf06e7121ef180abe1a5b59e32c1e2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.1"
   flutter_secure_storage:
     dependency: "direct main"
     description:
@@ -1123,6 +1180,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.2"
+  phoenix_socket:
+    dependency: "direct main"
+    description:
+      name: phoenix_socket
+      sha256: "2d56ffde59875673bffdabd1f709307ab34b317bd868402e3d3a61c23c333b1b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.4"
+  photo_view:
+    dependency: transitive
+    description:
+      name: photo_view
+      sha256: "1fc3d970a91295fbd1364296575f854c9863f225505c28c46e0a03e48960c75e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.15.0"
   platform:
     dependency: transitive
     description:
@@ -1195,6 +1268,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.27.7"
+  scroll_to_index:
+    dependency: transitive
+    description:
+      name: scroll_to_index
+      sha256: b707546e7500d9f070d63e5acf74fd437ec7eeeb68d3412ef7b0afada0b4f176
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.1"
   share_plus:
     dependency: "direct main"
     description:
@@ -1647,6 +1728,14 @@ packages:
       url: "https://github.com/SERDUN/version_gen.git"
     source: git
     version: "1.0.1"
+  visibility_detector:
+    dependency: transitive
+    description:
+      name: visibility_detector
+      sha256: dd5cc11e13494f432d15939c3aa8ae76844c42b723398643ce9addb88a5ed420
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.0+2"
   vm_service:
     dependency: transitive
     description:

@@ -70,6 +70,11 @@ dependencies:
   validators: ^3.0.0
   webview_flutter: ^4.7.0
   webview_flutter_web: ^0.2.2+4
+  flutter_chat_ui:
+    git:
+      url: https://github.com/WebTrit/flutter_chat_ui.git
+      ref: main
+  flutter_chat_types: ^3.6.2
 
   webtrit_api:
     path: ./packages/webtrit_api
