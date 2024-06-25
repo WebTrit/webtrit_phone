@@ -185,6 +185,10 @@ class AppRouter extends _$AppRouter {
                           page: ConversationScreenPageRoute.page,
                           path: 'conversation',
                         ),
+                        AutoRoute(
+                          page: GroupScreenPageRoute.page,
+                          path: 'group',
+                        ),
                       ],
                     ),
                   ],

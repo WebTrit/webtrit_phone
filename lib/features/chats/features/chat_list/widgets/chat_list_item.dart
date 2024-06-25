@@ -64,7 +64,10 @@ class _ChatListItemState extends State<ChatListItem> {
         ConversationScreenPageRoute(participantId: participant.userId),
       ]));
     } else {
-      // TODO: group screen
+      context.router.navigate(ChatsRouterPageRoute(children: [
+        const ChatListScreenPageRoute(),
+        GroupScreenPageRoute(chatId: widget.chat.id),
+      ]));
     }
   }
 

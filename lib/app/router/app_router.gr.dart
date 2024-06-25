@@ -101,6 +101,13 @@ abstract class _$AppRouter extends RootStackRouter {
         child: FavoritesScreenPage(),
       );
     },
+    GroupScreenPageRoute.name: (routeData) {
+      final args = routeData.argsAs<GroupScreenPageRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: GroupScreenPage(chatId: args.chatId),
+      );
+    },
     HelpScreenPageRoute.name: (routeData) {
       final queryParams = routeData.queryParams;
       final args = routeData.argsAs<HelpScreenPageRouteArgs>(
@@ -513,6 +520,35 @@ class FavoritesScreenPageRoute extends PageRouteInfo<void> {
   static const String name = 'FavoritesScreenPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [GroupScreenPage]
+class GroupScreenPageRoute extends PageRouteInfo<GroupScreenPageRouteArgs> {
+  GroupScreenPageRoute({
+    required int chatId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          GroupScreenPageRoute.name,
+          args: GroupScreenPageRouteArgs(chatId: chatId),
+          initialChildren: children,
+        );
+
+  static const String name = 'GroupScreenPageRoute';
+
+  static const PageInfo<GroupScreenPageRouteArgs> page =
+      PageInfo<GroupScreenPageRouteArgs>(name);
+}
+
+class GroupScreenPageRouteArgs {
+  const GroupScreenPageRouteArgs({required this.chatId});
+
+  final int chatId;
+
+  @override
+  String toString() {
+    return 'GroupScreenPageRouteArgs{chatId: $chatId}';
+  }
 }
 
 /// generated route for
