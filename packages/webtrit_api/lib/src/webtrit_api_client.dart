@@ -13,6 +13,24 @@ import 'models/models.dart';
 class WebtritApiClient {
   static final _requestIdRandom = Random();
 
+  @visibleForTesting
+  static Uri buildTenantUrl(Uri baseUrl, String tenantId) {
+    if (tenantId.isEmpty) {
+      return baseUrl;
+    } else {
+      final baseUrlPathSegments = List.of(baseUrl.pathSegments);
+      if (baseUrlPathSegments.length >= 2 && baseUrlPathSegments[baseUrlPathSegments.length - 2] == 'tenant') {
+        baseUrlPathSegments.removeRange(baseUrlPathSegments.length - 2, baseUrlPathSegments.length);
+      }
+      return baseUrl.replace(
+        pathSegments: [
+          ...baseUrlPathSegments,
+          ...['tenant', tenantId],
+        ],
+      );
+    }
+  }
+
   WebtritApiClient(
     Uri baseUrl,
     String tenantId, {
@@ -29,13 +47,13 @@ class WebtritApiClient {
 
   @visibleForTesting
   WebtritApiClient.inner(
-    this.baseUrl,
-    this.tenantId, {
+    Uri baseUrl,
+    String tenantId, {
     required http.Client httpClient,
-  }) : _httpClient = httpClient;
+  })  : _httpClient = httpClient,
+        tenantUrl = buildTenantUrl(baseUrl, tenantId);
 
-  final Uri baseUrl;
-  final String tenantId;
+  final Uri tenantUrl;
   final http.Client _httpClient;
 
   void close() {
@@ -49,10 +67,9 @@ class WebtritApiClient {
     Object? requestDataJson, {
     String? requestId,
   }) async {
-    final url = baseUrl.replace(
+    final url = tenantUrl.replace(
       pathSegments: [
-        ...baseUrl.pathSegments,
-        if (tenantId.isNotEmpty) ...['tenant', tenantId],
+        ...tenantUrl.pathSegments,
         'api',
         'v1',
         ...pathSegments,
