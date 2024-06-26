@@ -57,7 +57,7 @@ class _MessageListViewState extends State<MessageListView> {
 
     Map<String, TextMessage> msgMap = {};
 
-    for (final entry in widget.outboxQueue) {
+    for (final entry in widget.outboxQueue.reversed) {
       if (entry.type == ChatQueueEntryType.create) {
         var textMessage = TextMessage(
           author: User(

@@ -50,9 +50,9 @@ class _GroupBuilderScreenState extends State<GroupBuilderScreen> {
       try {
         final payload = {
           'name': nameController.text,
-          'members_ids': selectedUsers.toList(),
+          'member_ids': selectedUsers.toList(),
         };
-        final result = await userChannel.push('group_create', payload).future;
+        final result = await userChannel.push('chat:create_group', payload).future;
 
         if (!mounted) return;
         setState(() => busy = false);

@@ -27,73 +27,86 @@ class OutboxQueueService {
 
   init() {
     _logger.info('Initializing outbox queue service');
-    _processOutboxQueue();
-  }
-
-  _processOutboxQueue() async {
-    try {
+    Future.doWhile(() async {
       final entries = await _localChatRepository.getChatQueueEntries();
-      final channel = _client.userChannel;
-      if (channel != null && channel.state == PhoenixChannelState.joined) {
-        for (final entry in entries) {
-          _logger.info('Processing outbox queue entry: $entry');
 
-          if (entry.type == ChatQueueEntryType.create) {
-            if (entry.chatId != null) {
-              final r = await channel.push('new_msg', {
-                'chat_id': entry.chatId,
-                'content': entry.content,
-                'id_key': entry.idKey,
-              }).future;
+      for (final entry in entries) {
+        _logger.info('Processing outbox queue entry: $entry');
 
-              if (r.response != null) {
-                _logger.info('Response from new_msg: ${r.response}');
-              }
-
-              if (r.isOk) {
-                await _localChatRepository.eventBus
-                    .whereType<ChatMessageUpdate>()
-                    .firstWhere((event) => event.message.idKey == entry.idKey);
-                await _localChatRepository.deleteChatQueueEntry(entry.id);
-                _logger.info('After isOk on new_msg entry: ${entry.idKey}');
-              }
-              if (r.isError) {
-                await _localChatRepository.deleteChatQueueEntry(entry.id);
-                _logger.info('After isError on new_msg entry: ${entry.idKey}');
-              }
-            }
-
-            if (entry.participantId != null) {
-              final r = await channel.push('new_dialog_msg', {
-                'to_id': entry.participantId,
-                'content': entry.content,
-                'id_key': entry.idKey,
-              }).future;
-
-              if (r.isOk) {
-                await _localChatRepository.eventBus
-                    .whereType<ChatMessageUpdate>()
-                    .firstWhere((event) => event.message.idKey == entry.idKey);
-                await _localChatRepository.deleteChatQueueEntry(entry.id);
-                _logger.info('After isOk on new_dialog_msg entry: ${entry.idKey}');
-              }
-              if (r.isError) {
-                await _localChatRepository.deleteChatQueueEntry(entry.id);
-                _logger.info('After isError on new_dialog_msg entry: ${entry.idKey}');
-              }
-            }
+        if (entry.type == ChatQueueEntryType.create) {
+          if (entry.chatId != null) {
+            await _processNewMessage(entry.chatId!, entry.content, entry.idKey, entry.id);
+          }
+          if (entry.participantId != null) {
+            await _processNewDialogMessage(entry.participantId!, entry.content, entry.idKey, entry.id);
           }
         }
       }
-    } catch (e) {
-      _logger.severe('Failed to process outbox queue: $e');
-    }
-    if (_disposed) return;
-    await Future.delayed(const Duration(seconds: 1));
-    _processOutboxQueue();
+      if (_disposed) return false;
+      await Future.delayed(const Duration(seconds: 1));
+      return true;
+    });
   }
 
   dispose() {
     _disposed = true;
+  }
+
+  Future _processNewMessage(int chatId, String content, String idKey, int entryId) async {
+    try {
+      final channel = _client.getChatChannel(chatId);
+      if (channel == null) return;
+      if (channel.state != PhoenixChannelState.joined) return;
+
+      var payload = {'content': content, 'id_key': idKey};
+      final r = await channel.push('message:new', payload).future;
+
+      if (r.response != null) {
+        _logger.info('Response from new_msg: ${r.response}');
+      }
+
+      if (r.isOk) {
+        await _localChatRepository.eventBus
+            .whereType<ChatMessageUpdate>()
+            .firstWhere((event) => event.message.idKey == idKey)
+            .timeout(const Duration(seconds: 5));
+        await _localChatRepository.deleteChatQueueEntry(entryId);
+        _logger.info('After isOk on new_msg entry: $idKey');
+      }
+      if (r.isError) {
+        await _localChatRepository.deleteChatQueueEntry(entryId);
+        _logger.info('After isError on new_msg entry: $idKey');
+      }
+    } catch (e) {
+      _logger.severe('Error processing new message', e);
+      await _localChatRepository.deleteChatQueueEntry(entryId);
+    }
+  }
+
+  Future _processNewDialogMessage(String participantId, content, idKey, int entryId) async {
+    try {
+      final channel = _client.userChannel;
+      if (channel == null) return;
+      if (channel.state != PhoenixChannelState.joined) return;
+
+      var payload = {'recipient': participantId, 'first_message_content': content, 'id_key': idKey};
+      final r = await channel.push('chat:create_dialog', payload).future;
+
+      if (r.isOk) {
+        await _localChatRepository.eventBus
+            .whereType<ChatMessageUpdate>()
+            .firstWhere((event) => event.message.idKey == idKey)
+            .timeout(const Duration(seconds: 5));
+        await _localChatRepository.deleteChatQueueEntry(entryId);
+        _logger.info('After isOk on new_dialog_msg entry: $idKey');
+      }
+      if (r.isError) {
+        await _localChatRepository.deleteChatQueueEntry(entryId);
+        _logger.info('After isError on new_dialog_msg entry: $idKey');
+      }
+    } catch (e) {
+      _logger.severe('Error processing new dialog message', e);
+      await _localChatRepository.deleteChatQueueEntry(entryId);
+    }
   }
 }
