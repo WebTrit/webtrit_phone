@@ -116,7 +116,7 @@ abstract class AppLocalizations {
   /// No description provided for @autoprovision_errorSnackBar_invalidToken.
   ///
   /// In en, this message translates to:
-  /// **'The auto configuration credentials were rejected by the server. Please request a new configuration link'**
+  /// **'The autoconfiguration credentials were rejected by the server. Please request a new configuration link'**
   String get autoprovision_errorSnackBar_invalidToken;
 
   /// No description provided for @autoprovision_ReloginDialog_confirm.
@@ -134,7 +134,7 @@ abstract class AppLocalizations {
   /// No description provided for @autoprovision_ReloginDialog_text.
   ///
   /// In en, this message translates to:
-  /// **'Do you want to use the new authentication credentials, provided in the link? You will be logged out from the current session.'**
+  /// **'Do you want to use the new authentication credentials provided in the link? You will be logged out from the current session.'**
   String get autoprovision_ReloginDialog_text;
 
   /// No description provided for @autoprovision_ReloginDialog_title.
@@ -410,7 +410,7 @@ abstract class AppLocalizations {
   /// No description provided for @contacts_Text_blingTransferInitiated.
   ///
   /// In en, this message translates to:
-  /// **'Blind transferring'**
+  /// **'Performing blind transfer'**
   String get contacts_Text_blingTransferInitiated;
 
   /// No description provided for @copyToClipboard_floatingSnackBar.
@@ -512,7 +512,7 @@ abstract class AppLocalizations {
   /// No description provided for @favorites_Text_blingTransferInitiated.
   ///
   /// In en, this message translates to:
-  /// **'Blind transferring'**
+  /// **'Performing blind transfer'**
   String get favorites_Text_blingTransferInitiated;
 
   /// No description provided for @locale_default.
@@ -632,7 +632,7 @@ abstract class AppLocalizations {
   /// No description provided for @login_RequestFailureIdentifierIsNotValid.
   ///
   /// In en, this message translates to:
-  /// **'The identifier appears invalid due to a non-existent'**
+  /// **'The identifier is invalid or does not exist'**
   String get login_RequestFailureIdentifierIsNotValid;
 
   /// No description provided for @login_RequestFailureIncorrectOtpCodeError.
@@ -1088,7 +1088,7 @@ abstract class AppLocalizations {
   /// No description provided for @recents_Text_blingTransferInitiated.
   ///
   /// In en, this message translates to:
-  /// **'Blind transferring'**
+  /// **'Performing blind transfer'**
   String get recents_Text_blingTransferInitiated;
 
   /// No description provided for @recentsVisibilityFilter_all.
@@ -1316,7 +1316,7 @@ abstract class AppLocalizations {
   /// No description provided for @undefine_DeeplinkConfigurationInvalid_text.
   ///
   /// In en, this message translates to:
-  /// **'The auto configuration credentials are invalid, please log in'**
+  /// **'The autoconfiguration credentials are invalid, please log in'**
   String get undefine_DeeplinkConfigurationInvalid_text;
 
   /// No description provided for @underDevelopment.
@@ -1328,7 +1328,7 @@ abstract class AppLocalizations {
   /// No description provided for @user_agreement_agrement_link.
   ///
   /// In en, this message translates to:
-  /// **'terms and condition of agreement'**
+  /// **'The terms and condition of the agreement'**
   String get user_agreement_agrement_link;
 
   /// No description provided for @user_agreement_button_text.

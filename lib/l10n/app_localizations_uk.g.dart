@@ -16,7 +16,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get alertDialogActions_yes => 'Так';
 
   @override
-  String get autoprovision_errorSnackBar_invalidToken => 'Автоматичні облікові дані для конфігурації були відхилені сервером. Будь ласка, запросіть нове посилання на конфігурацію.';
+  String get autoprovision_errorSnackBar_invalidToken => 'Автоматичні облікові дані для конфігурації були відхилені сервером. Будь ласка, подайте запит на нове посилання на конфігурацію.';
 
   @override
   String get autoprovision_ReloginDialog_confirm => 'Підтвердити';
@@ -37,7 +37,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_CallActionsTooltip_accept => 'Прийняти';
 
   @override
-  String get call_CallActionsTooltip_attended_transfer => 'Керований переніс';
+  String get call_CallActionsTooltip_attended_transfer => 'Керована переадресація виклику';
 
   @override
   String get call_CallActionsTooltip_disableCamera => 'Вимкнути камеру';
@@ -82,7 +82,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_CallActionsTooltip_transfer_choose => 'Вибрати номер';
 
   @override
-  String get call_CallActionsTooltip_unattended_transfer => 'Некерований переніс';
+  String get call_CallActionsTooltip_unattended_transfer => 'Некерована переадресація виклику';
 
   @override
   String get call_CallActionsTooltip_unhold => 'Поновити дзвінок';
@@ -103,7 +103,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_description_transferProcessing => 'Обробка переадресації';
 
   @override
-  String get call_description_transfer_requested => 'Запит на переказ';
+  String get call_description_transfer_requested => 'Запит на переадресацію';
 
   @override
   String get call_FailureAcknowledgeDialog_title => 'Помилка';
@@ -163,7 +163,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get contactsSourceLocal => 'Ваш телефон';
 
   @override
-  String get contacts_Text_blingTransferInitiated => 'Сліпе переадресування';
+  String get contacts_Text_blingTransferInitiated => 'Безумовне переведення дзвінка';
 
   @override
   String get copyToClipboard_floatingSnackBar => 'Текст скопійовано';
@@ -216,7 +216,7 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get favorites_Text_blingTransferInitiated => 'Сліпе переадресування';
+  String get favorites_Text_blingTransferInitiated => 'Безумовне переведення дзвінка';
 
   @override
   String get locale_default => 'За замовчуванням';
@@ -282,7 +282,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get login_RequestFailureEmptyEmailError => 'Не вдалося відправити код підтвердження';
 
   @override
-  String get login_RequestFailureIdentifierIsNotValid => 'Ідентифікатор здається недійсним через неіснуючий';
+  String get login_RequestFailureIdentifierIsNotValid => 'Ідентифікатор недійсний, або не існує';
 
   @override
   String get login_RequestFailureIncorrectOtpCodeError => 'Невірний код підтвердження';
@@ -528,7 +528,7 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get recents_Text_blingTransferInitiated => 'Сліпе переадресування';
+  String get recents_Text_blingTransferInitiated => 'Безумовне переведення дзвінка';
 
   @override
   String get recentsVisibilityFilter_all => 'Всі';

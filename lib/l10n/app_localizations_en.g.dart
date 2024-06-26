@@ -16,7 +16,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get alertDialogActions_yes => 'Yes';
 
   @override
-  String get autoprovision_errorSnackBar_invalidToken => 'The auto configuration credentials were rejected by the server. Please request a new configuration link';
+  String get autoprovision_errorSnackBar_invalidToken => 'The autoconfiguration credentials were rejected by the server. Please request a new configuration link';
 
   @override
   String get autoprovision_ReloginDialog_confirm => 'Confirm';
@@ -25,7 +25,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get autoprovision_ReloginDialog_decline => 'Decline';
 
   @override
-  String get autoprovision_ReloginDialog_text => 'Do you want to use the new authentication credentials, provided in the link? You will be logged out from the current session.';
+  String get autoprovision_ReloginDialog_text => 'Do you want to use the new authentication credentials provided in the link? You will be logged out from the current session.';
 
   @override
   String get autoprovision_ReloginDialog_title => 'Relogin Confirmation';
@@ -163,7 +163,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contactsSourceLocal => 'Your phone';
 
   @override
-  String get contacts_Text_blingTransferInitiated => 'Blind transferring';
+  String get contacts_Text_blingTransferInitiated => 'Performing blind transfer';
 
   @override
   String get copyToClipboard_floatingSnackBar => 'Text copied';
@@ -216,7 +216,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get favorites_Text_blingTransferInitiated => 'Blind transferring';
+  String get favorites_Text_blingTransferInitiated => 'Performing blind transfer';
 
   @override
   String get locale_default => 'Default';
@@ -282,7 +282,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_RequestFailureEmptyEmailError => 'Cannot send the verification code';
 
   @override
-  String get login_RequestFailureIdentifierIsNotValid => 'The identifier appears invalid due to a non-existent';
+  String get login_RequestFailureIdentifierIsNotValid => 'The identifier is invalid or does not exist';
 
   @override
   String get login_RequestFailureIncorrectOtpCodeError => 'Incorrect verification code';
@@ -528,7 +528,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get recents_Text_blingTransferInitiated => 'Blind transferring';
+  String get recents_Text_blingTransferInitiated => 'Performing blind transfer';
 
   @override
   String get recentsVisibilityFilter_all => 'All';
@@ -652,13 +652,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get themeMode_system => 'System';
 
   @override
-  String get undefine_DeeplinkConfigurationInvalid_text => 'The auto configuration credentials are invalid, please log in';
+  String get undefine_DeeplinkConfigurationInvalid_text => 'The autoconfiguration credentials are invalid, please log in';
 
   @override
   String get underDevelopment => 'This page is under development.';
 
   @override
-  String get user_agreement_agrement_link => 'terms and condition of agreement';
+  String get user_agreement_agrement_link => 'The terms and condition of the agreement';
 
   @override
   String get user_agreement_button_text => 'Continue';
