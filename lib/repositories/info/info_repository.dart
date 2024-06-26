@@ -11,7 +11,7 @@ class InfoRepository {
 
   final WebtritApiClient _webtritApiClient;
 
-  Uri get coreUrl => _webtritApiClient.baseUrl;
+  Uri get coreUrl => _webtritApiClient.tenantUrl;
 
   Future<Version> getCoreVersion() async {
     final info = await _webtritApiClient.getSystemInfo();

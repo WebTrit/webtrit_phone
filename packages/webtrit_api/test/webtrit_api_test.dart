@@ -11,6 +11,62 @@ void main() {
   const authority = 'core.webtrit.com';
   const token = 'qwerty';
 
+  group('buildTenantUrl', () {
+    test('do not add tenant path segments for empty tenantId 1', () {
+      final baseUrl = Uri.https(authority, '/');
+      final tenantUrl = WebtritApiClient.buildTenantUrl(baseUrl, '');
+      expect(tenantUrl.toString(), equals('https://$authority/'));
+    });
+
+    test('do not add tenant path segments for empty tenantId 2', () {
+      final baseUrl = Uri.https(authority, '/path1/path2');
+      final tenantUrl = WebtritApiClient.buildTenantUrl(baseUrl, '');
+      expect(tenantUrl.toString(), equals('https://$authority/path1/path2'));
+    });
+
+    test('add tenant path segments for not empty tenantId 1', () {
+      final baseUrl = Uri.https(authority, '/');
+      final tenantUrl = WebtritApiClient.buildTenantUrl(baseUrl, 'tid');
+      expect(tenantUrl.toString(), equals('https://$authority/tenant/tid'));
+    });
+
+    test('add tenant path segments for not empty tenantId 2', () {
+      final baseUrl = Uri.https(authority, '/path1/path2');
+      final tenantUrl = WebtritApiClient.buildTenantUrl(baseUrl, 'tid');
+      expect(tenantUrl.toString(), equals('https://$authority/path1/path2/tenant/tid'));
+    });
+
+    test('do not update tenant path segments for empty tenantId 1', () {
+      final baseUrl = Uri.https(authority, '/tenant/tid1');
+      final tenantUrl = WebtritApiClient.buildTenantUrl(baseUrl, '');
+      expect(tenantUrl.toString(), equals('https://$authority/tenant/tid1'));
+    });
+
+    test('do not update tenant path segments for empty tenantId 2', () {
+      final baseUrl = Uri.https(authority, '/path1/path2/tenant/tid1');
+      final tenantUrl = WebtritApiClient.buildTenantUrl(baseUrl, '');
+      expect(tenantUrl.toString(), equals('https://$authority/path1/path2/tenant/tid1'));
+    });
+
+    test('update tenant path segments for not empty tenantId 1', () {
+      final baseUrl = Uri.https(authority, '/tenant/tid1');
+      final tenantUrl = WebtritApiClient.buildTenantUrl(baseUrl, 'tid2');
+      expect(tenantUrl.toString(), equals('https://$authority/tenant/tid2'));
+    });
+
+    test('update tenant path segments for not empty tenantId 2', () {
+      final baseUrl = Uri.https(authority, '/path1/path2/tenant/tid1');
+      final tenantUrl = WebtritApiClient.buildTenantUrl(baseUrl, 'tid2');
+      expect(tenantUrl.toString(), equals('https://$authority/path1/path2/tenant/tid2'));
+    });
+
+    test('update tenant path segments for not empty tenantId 3', () {
+      final baseUrl = Uri.https(authority, '/path1/tenant/tid1/path2/tenant/tid2');
+      final tenantUrl = WebtritApiClient.buildTenantUrl(baseUrl, 'tid3');
+      expect(tenantUrl.toString(), equals('https://$authority/path1/tenant/tid1/path2/tenant/tid3'));
+    });
+  });
+
   group('info', () {
     test('get info', () {
       Future<Response> handler(Request request) async {
