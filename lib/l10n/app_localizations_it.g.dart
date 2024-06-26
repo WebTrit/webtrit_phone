@@ -348,7 +348,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String login_Text_otpSigninVerifyPostDescriptionFromEmail(String email) {
-    return 'If you do not see an email with the verification code from $email in your inbox, please check your spam folder.';
+    return 'Se non vedi un’email con il codice di verifica da $email nella tua casella di posta, controlla la cartella dello spam.';
   }
 
   @override

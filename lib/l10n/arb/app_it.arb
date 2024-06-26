@@ -247,7 +247,7 @@
   "@login_Text_otpSigninRequestPostDescription": {},
   "login_Text_otpSigninRequestPreDescription": "",
   "@login_Text_otpSigninRequestPreDescription": {},
-  "login_Text_otpSigninVerifyPostDescriptionFromEmail": "If you do not see an email with the verification code from {email} in your inbox, please check your spam folder.",
+  "login_Text_otpSigninVerifyPostDescriptionFromEmail": "Se non vedi un’email con il codice di verifica da {email} nella tua casella di posta, controlla la cartella dello spam.",
   "@login_Text_otpSigninVerifyPostDescriptionFromEmail": {
     "placeholders": {
       "email": {
