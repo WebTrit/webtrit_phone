@@ -32,6 +32,7 @@ class LoginPasswordSigninScreen extends StatelessWidget {
                 const SizedBox(height: kInset / 2),
               ],
               TextFormField(
+                key: const Key(passwordUserInputKey),
                 enabled: !state.processing,
                 initialValue: state.passwordSigninUserRefInput.value,
                 decoration: InputDecoration(
@@ -49,6 +50,7 @@ class LoginPasswordSigninScreen extends StatelessWidget {
                 onFieldSubmitted: !state.passwordSigninUserRefInput.isValid ? null : (_) => _onSubmitted(context),
               ),
               TextFormField(
+                key: const Key(passwordPasswordInputKey),
                 enabled: !state.processing,
                 initialValue: state.passwordSigninPasswordInput.value,
                 decoration: InputDecoration(
@@ -79,6 +81,7 @@ class LoginPasswordSigninScreen extends StatelessWidget {
               const Spacer(),
               const SizedBox(height: kInset),
               ElevatedButton(
+                key: const Key(passwordButtonKey),
                 onPressed: state.processing ||
                         !state.passwordSigninUserRefInput.isValid ||
                         !state.passwordSigninPasswordInput.isValid

@@ -24,3 +24,19 @@ const initialMainRout = '/main';
 const initialCallRout = '/main/call';
 
 const kAutoprovisionRout = '/autoprovision';
+
+const loginModeScreenSignUpButtonKey = 'loginModeScreenSignUpButton';
+
+const signupEmailInputKey = 'signupEmailInput';
+const signupVerifyInputKey = 'signupVerifyInput';
+const signupEmailButtonKey = 'signupEmailButton';
+const signupVerifyButtonKey = 'signupVerifyButton';
+
+const optInputKey = 'otpInput';
+const otpVerifyInputKey = 'otpVerifyInput';
+const otpButtonKey = 'otpButton';
+const otpVerifyButtonKey = 'otpVerifyButton';
+
+const passwordUserInputKey = 'passwordUserInput';
+const passwordPasswordInputKey = 'passwordPasswordInput';
+const passwordButtonKey = 'passwordButton';

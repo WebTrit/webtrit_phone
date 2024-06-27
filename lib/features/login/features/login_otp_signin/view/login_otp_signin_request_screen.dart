@@ -34,6 +34,7 @@ class LoginOtpSigninRequestScreen extends StatelessWidget {
                 const SizedBox(height: kInset / 2),
               ],
               TextFormField(
+                key: const Key(optInputKey),
                 enabled: !state.processing,
                 initialValue: state.otpSigninUserRefInput.value,
                 decoration: InputDecoration(
@@ -59,6 +60,7 @@ class LoginOtpSigninRequestScreen extends StatelessWidget {
               const Spacer(),
               const SizedBox(height: kInset),
               ElevatedButton(
+                key: const Key(otpButtonKey),
                 onPressed:
                     state.processing || !state.otpSigninUserRefInput.isValid ? null : () => _onSubmitted(context),
                 style: elevatedButtonStyles?.primary,

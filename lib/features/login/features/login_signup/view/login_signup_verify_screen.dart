@@ -45,6 +45,7 @@ class LoginSignupVerifyScreen extends StatelessWidget {
                 const SizedBox(height: kInset / 2),
               ],
               TextFormField(
+                key: const Key(signupVerifyInputKey),
                 enabled: !state.processing,
                 initialValue: state.signupCodeInput.value,
                 decoration: InputDecoration(
@@ -93,6 +94,7 @@ class LoginSignupVerifyScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: kInset / 4),
                   ElevatedButton(
+                    key: const Key(signupVerifyButtonKey),
                     onPressed: state.processing || !state.signupCodeInput.isValid ? null : () => _onSubmitted(context),
                     style: elevatedButtonStyles?.primary,
                     child: !state.processing

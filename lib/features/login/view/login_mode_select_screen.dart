@@ -70,6 +70,7 @@ class LoginModeSelectScreen extends StatelessWidget {
                 ),
                 const Spacer(),
                 ElevatedButton(
+                  key: const Key(loginModeScreenSignUpButtonKey),
                   onPressed: state.processing
                       ? null
                       : () => context

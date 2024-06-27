@@ -45,6 +45,7 @@ class LoginSwitchScreen extends StatelessWidget {
                       .map((loginType) => ButtonSegment(
                             value: loginType,
                             label: Text(
+                              key: Key(loginType.toLoginSegmentKey()),
                               loginType.l10n(context),
                               softWrap: false,
                               overflow: TextOverflow.fade,

@@ -1,0 +1,73 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
+import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/router/main_shell.dart';
+
+import 'package:webtrit_phone/bootstrap.dart';
+import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/main.dart';
+
+main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  setUpAll(() async {
+    await bootstrap();
+
+    final appPreferences = AppPreferences();
+    final secureStorage = SecureStorage();
+
+    await appPreferences.clear();
+    await secureStorage.deleteCoreUrl();
+    await secureStorage.deleteTenantId();
+    await secureStorage.deleteToken();
+  });
+
+  final signinButton = find.byKey(const Key(loginModeScreenSignUpButtonKey));
+  final otpSegmentButton = find.byKey(Key(LoginType.otpSignin.toLoginSegmentKey()));
+  final otpInput = find.byKey(const Key(optInputKey));
+  final otpButton = find.byKey(const Key(otpButtonKey));
+  final otpVerifyInput = find.byKey(const Key(otpVerifyInputKey));
+  final otpVerifyButton = find.byKey(const Key(otpVerifyButtonKey));
+
+  // TODO: Add test credential
+  final otpCredential = '';
+  final otpVerifyCredential = '';
+  testWidgets('should login by email', (tester) async {
+    var rootApp = const RootApp();
+    await tester.pumpWidget(rootApp);
+
+    await tester.pumpAndSettle();
+
+    await tester.tap(signinButton, warnIfMissed: true);
+
+    await tester.pumpAndSettle();
+
+    await tester.tap(otpSegmentButton, warnIfMissed: true);
+
+    await tester.pumpAndSettle();
+
+    await tester.enterText(otpInput, otpCredential);
+
+    await tester.pumpAndSettle();
+
+    await tester.tap(otpButton, warnIfMissed: true);
+
+    await Future.delayed(const Duration(seconds: 1));
+
+    await tester.pumpAndSettle();
+
+    await tester.enterText(otpVerifyInput, otpVerifyCredential);
+
+    await tester.pumpAndSettle();
+
+    await tester.tap(otpVerifyButton, warnIfMissed: true);
+
+    await Future.delayed(const Duration(seconds: 1));
+
+    await tester.pumpAndSettle();
+
+    expect(find.byType(MainShell), findsOneWidget);
+  });
+}

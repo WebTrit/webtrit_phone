@@ -38,6 +38,7 @@ class LoginSignupRequestScreen extends StatelessWidget {
                 const SizedBox(height: kInset / 2),
               ],
               TextFormField(
+                key: const Key(signupEmailInputKey),
                 enabled: !state.processing,
                 initialValue: state.signupEmailInput.value,
                 decoration: InputDecoration(
@@ -62,6 +63,7 @@ class LoginSignupRequestScreen extends StatelessWidget {
               const Spacer(),
               const SizedBox(height: kInset),
               ElevatedButton(
+                key: const Key(signupEmailButtonKey),
                 onPressed: state.processing || !state.signupEmailInput.isValid ? null : () => _onSubmitted(context),
                 style: elevatedButtonStyles?.primary,
                 child: !state.processing
