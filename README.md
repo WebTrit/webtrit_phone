@@ -139,6 +139,20 @@ For the theme configuration documentation, please refer to the [Theme Configurat
   make create-appbundle
   ```
 
+## Test commands
+* Run unit and widget tests
+  ```bash
+  flutter test
+  ```
+* Run integration tests
+  ```bash
+  flutter test integration_test --dart-define-from-file=dart_define.json
+  ```
+* Run specific integration test
+  ```bash
+  flutter test integration_test flutter drive --driver=test_driver/integration_test.dart --target=integration_test/<test_file_name>.dart  --dart-define-from-file=dart_define.json
+  ```
+
 ## Contributing
 
 Contributions are always welcome!
