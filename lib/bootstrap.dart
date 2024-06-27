@@ -1,18 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-
-import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
-import 'package:webtrit_phone/app/app_bloc_observer.dart';
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
@@ -23,53 +17,21 @@ import 'background_call_handler.dart';
 import 'environment_config.dart';
 import 'firebase_options.dart';
 
-Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
-  final logger = Logger('bootstrap');
+Future<void> bootstrap() async {
+  await _initFirebase();
+  await _initFirebaseMessaging();
 
-  await runZonedGuarded(
-    () async {
-      WidgetsFlutterBinding.ensureInitialized();
-
-      await _initFirebase();
-      await _initFirebaseMessaging();
-
-      if (!kIsWeb && kDebugMode) {
-        FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
-        await FirebaseCrashlytics.instance.deleteUnsentReports();
-      }
-      FlutterError.onError = (details) {
-        logger.severe('FlutterError', details.exception, details.stack);
-        if (!kIsWeb) {
-          FirebaseCrashlytics.instance.recordFlutterFatalError(details);
-        }
-      };
-
-      await AppInfo.init();
-      await AppPermissions.init();
-      await AppPreferences.init();
-      await DeviceInfo.init();
-      await PackageInfo.init();
-      await SecureStorage.init();
-      await AppThemes.init();
-      await AppSound.init(outgoingCallRingAsset: Assets.ringtones.outgoingCall1);
-      await AppCertificates.init();
-      await AppTime.init();
-
-      if (Platform.isAndroid) {
-        WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
-      }
-
-      Bloc.observer = AppBlocObserver();
-
-      runApp(await builder());
-    },
-    (error, stackTrace) {
-      logger.severe('runZonedGuarded', error, stackTrace);
-      if (!kIsWeb) {
-        FirebaseCrashlytics.instance.recordError(error, stackTrace, fatal: true);
-      }
-    },
-  );
+  await AppInfo.init();
+  await AppPath.init();
+  await AppPermissions.init();
+  await AppPreferences.init();
+  await DeviceInfo.init();
+  await PackageInfo.init();
+  await SecureStorage.init();
+  await AppThemes.init();
+  await AppSound.init(outgoingCallRingAsset: Assets.ringtones.outgoingCall1);
+  await AppCertificates.init();
+  await AppTime.init();
 }
 
 @pragma('vm:entry-point')
