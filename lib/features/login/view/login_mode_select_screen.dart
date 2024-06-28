@@ -43,6 +43,7 @@ class LoginModeSelectScreen extends StatelessWidget {
             actions: isDemoModeEnabled
                 ? [
                     IconButton(
+                      key: const Key(loginModeScreenUrlButtonKey),
                       icon: Icon(
                         Icons.link,
                         // color set here because of https://github.com/flutter/flutter/issues/110878

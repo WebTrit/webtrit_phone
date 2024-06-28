@@ -52,6 +52,7 @@ class LoginCoreUrlAssignScreen extends StatelessWidget {
                         const SizedBox(height: kInset / 2),
                       ],
                       TextFormField(
+                        key: const Key(coreUrlInputKey),
                         enabled: !state.processing,
                         initialValue: state.coreUrlInput.value,
                         decoration: InputDecoration(
@@ -76,6 +77,7 @@ class LoginCoreUrlAssignScreen extends StatelessWidget {
                       const Spacer(),
                       const SizedBox(height: kInset),
                       ElevatedButton(
+                        key: const Key(coreUrlButtonKey),
                         onPressed: state.processing || !state.coreUrlInput.isValid
                             ? null
                             : () => _onCoreUrlAssignSubmitted(context),

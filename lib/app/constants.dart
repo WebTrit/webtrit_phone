@@ -26,6 +26,10 @@ const initialCallRout = '/main/call';
 const kAutoprovisionRout = '/autoprovision';
 
 const loginModeScreenSignUpButtonKey = 'loginModeScreenSignUpButton';
+const loginModeScreenUrlButtonKey = 'loginModeScreenUrlButton';
+
+const coreUrlInputKey = 'coreUrlInput';
+const coreUrlButtonKey = 'coreUrlButton';
 
 const signupEmailInputKey = 'signupEmailInput';
 const signupVerifyInputKey = 'signupVerifyInput';
