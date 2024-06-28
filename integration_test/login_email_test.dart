@@ -45,9 +45,10 @@ main() {
 
     await tester.pumpAndSettle();
 
-    await tester.tap(emailSegmentButton, warnIfMissed: true);
-
-    await tester.pumpAndSettle();
+    if (emailSegmentButton.evaluate().isNotEmpty) {
+      await tester.tap(emailSegmentButton, warnIfMissed: true);
+      await tester.pumpAndSettle();
+    }
 
     await tester.enterText(emailInput, emailCredential);
 

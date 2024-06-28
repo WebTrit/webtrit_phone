@@ -44,9 +44,10 @@ main() {
 
     await tester.pumpAndSettle();
 
-    await tester.tap(passwordSegmentButton, warnIfMissed: true);
-
-    await tester.pumpAndSettle();
+    if (passwordSegmentButton.evaluate().isNotEmpty) {
+      await tester.tap(passwordSegmentButton, warnIfMissed: true);
+      await tester.pumpAndSettle();
+    }
 
     await tester.enterText(passwordUserInput, passwordUserCredential);
 

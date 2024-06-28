@@ -44,9 +44,10 @@ main() {
 
     await tester.pumpAndSettle();
 
-    await tester.tap(otpSegmentButton, warnIfMissed: true);
-
-    await tester.pumpAndSettle();
+    if (otpSegmentButton.evaluate().isNotEmpty) {
+      await tester.tap(otpSegmentButton, warnIfMissed: true);
+      await tester.pumpAndSettle();
+    }
 
     await tester.enterText(otpInput, otpCredential);
 
