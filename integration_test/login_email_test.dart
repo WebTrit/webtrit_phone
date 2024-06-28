@@ -1,11 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/router/main_shell.dart';
-
 import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/main.dart';
 
@@ -31,9 +32,8 @@ main() {
   final emailVerifyInput = find.byKey(const Key(signupVerifyInputKey));
   final emailVerifyButton = find.byKey(const Key(signupVerifyButtonKey));
 
-  // TODO: Add test credential
-  final emailCredential = '';
-  final emailVerifyCredential = '';
+  final emailCredential = EnvironmentConfig.LOGIN_TEST_EMAIL_CREDENTIAL!;
+  final emailVerifyCredential = EnvironmentConfig.LOGIN_TEST_EMAIL_VERIFY_CREDENTIAL!;
 
   testWidgets('should login by email', (tester) async {
     var rootApp = const RootApp();
