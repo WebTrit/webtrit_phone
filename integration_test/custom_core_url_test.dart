@@ -30,7 +30,7 @@ main() {
 
   final testCoreUrl = EnvironmentConfig.LOGIN_TEST_CORE_URL!;
 
-  testWidgets('should login by email', (tester) async {
+  testWidgets('should accept core url and process login types', (tester) async {
     var rootApp = const RootApp();
     await tester.pumpWidget(rootApp);
 

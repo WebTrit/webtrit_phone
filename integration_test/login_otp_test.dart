@@ -35,7 +35,7 @@ main() {
   final otpCredential = EnvironmentConfig.LOGIN_TEST_OTP_CREDENTIAL!;
   final otpVerifyCredential = EnvironmentConfig.LOGIN_TEST_OTP_VERIFY_CREDENTIAL!;
 
-  testWidgets('should login by email', (tester) async {
+  testWidgets('should login by otp credentials', (tester) async {
     var rootApp = const RootApp();
     await tester.pumpWidget(rootApp);
 

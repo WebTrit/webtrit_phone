@@ -34,7 +34,7 @@ main() {
   final passwordUserCredential = EnvironmentConfig.LOGIN_TEST_PASSWORD_USER_CREDENTIAL!;
   final passwordPasswordCredential = EnvironmentConfig.LOGIN_TEST_PASSWORD_PASSWORD_CREDENTIAL!;
 
-  testWidgets('should login by email', (tester) async {
+  testWidgets('should login by password credentials', (tester) async {
     var rootApp = const RootApp();
     await tester.pumpWidget(rootApp);
 

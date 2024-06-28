@@ -35,7 +35,7 @@ main() {
   final emailCredential = EnvironmentConfig.LOGIN_TEST_EMAIL_CREDENTIAL!;
   final emailVerifyCredential = EnvironmentConfig.LOGIN_TEST_EMAIL_VERIFY_CREDENTIAL!;
 
-  testWidgets('should login by email', (tester) async {
+  testWidgets('should login by email credentials', (tester) async {
     var rootApp = const RootApp();
     await tester.pumpWidget(rootApp);
 
