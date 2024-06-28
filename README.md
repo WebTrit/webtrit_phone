@@ -15,6 +15,13 @@ WebTrit Phone application.
 * `WEBTRIT_APP_PERIODIC_POLLING` (_default **true**_)
 * `WEBTRIT_APP_DEBUG_LEVEL` (_default **INFO**_)
 * `WEBTRIT_APP_DATABASE_LOG_STATEMENTS` (_default **false**_)
+* `WEBTRIT_APP_LOGIN_TEST_CORE_URL` (_default is empty_)
+* `WEBTRIT_APP_LOGIN_TEST_EMAIL_CREDENTIAL` (_default is empty_)
+* `WEBTRIT_APP_LOGIN_TEST_EMAIL_VERIFY_CREDENTIAL` (_default is empty_)
+* `WEBTRIT_APP_LOGIN_TEST_OTP_CREDENTIAL` (_default is empty_)
+* `WEBTRIT_APP_LOGIN_TEST_OTP_VERIFY_CREDENTIAL` (_default is empty_)
+* `WEBTRIT_APP_LOGIN_TEST_PASSWORD_USER_CREDENTIAL` (_default is empty_)
+* `WEBTRIT_APP_LOGIN_TEST_PASSWORD_PASSWORD_CREDENTIAL` (_default is empty_)
 
 Default build variables located in [dart_define.json](dart_define.json) and could be add to `flutter` `run` or `build` with `--dart-define-from-file=dart_define.json` parameter.
 
