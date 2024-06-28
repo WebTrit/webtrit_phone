@@ -228,4 +228,12 @@ class WebtritApiClient {
 
     await _httpClientExecutePost(['app', 'push-tokens'], token, requestJson);
   }
+
+  Future<DemoData> createDemoData(DemoCredential sessionUserInvite) async {
+    final requestJson = sessionUserInvite.toJson();
+
+    final responseJson = await _httpClientExecutePost(['user'], null, requestJson);
+
+    return DemoData.fromJson(responseJson);
+  }
 }
