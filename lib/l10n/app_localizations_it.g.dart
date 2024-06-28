@@ -675,4 +675,28 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get validationBlankError => 'Prego inserire un valore';
+
+  @override
+  String get inviteFriends_Dialog_title => 'Invite your friends \nto try WebTrit';
+
+  @override
+  String get inviteFriends_Dialog_close => 'Hide this message';
+
+  @override
+  String get inviteFriends_Dialog_invite => 'Invite';
+
+  @override
+  String get connectToYourOwnVoIPSystem_Button_Action => 'Connect to your own VoIP system';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialogActions_demo => 'Demo';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialogActions_skip => 'Skip';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialogActions_retry => 'Retry';
 }
