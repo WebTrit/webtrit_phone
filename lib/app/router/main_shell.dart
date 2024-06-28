@@ -181,6 +181,15 @@ class _MainShellState extends State<MainShell> {
               )..add(const CallStarted());
             },
           ),
+          BlocProvider<DemoCubit>(
+            create: (context) {
+              return DemoCubit(
+                webtritApiClient: context.read<WebtritApiClient>(),
+                token: context.read<AppBloc>().state.token!,
+                tenantId: context.read<AppBloc>().state.tenantId!,
+              );
+            },
+          ),
         ],
         child: Builder(
           builder: (context) => const CallShell(

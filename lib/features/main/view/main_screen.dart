@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 
+import '../../demo/demo.dart';
 import '../main.dart';
 
 class MainScreen extends StatelessWidget {
@@ -21,7 +23,12 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final scaffold = Scaffold(
-      body: body,
+      body: DemoShell(
+        isConnectVoIPFlow: true,
+        isInviteFriends: false,
+        mainFlavor: navigationBarFlavor,
+        child: body,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         selectedLabelStyle: themeData.textTheme.bodySmall,
