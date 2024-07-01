@@ -28,9 +28,15 @@ class MainScreenPage extends StatelessWidget {
       duration: Duration.zero,
       builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
+        final flavor = MainFlavor.values[tabsRouter.activeIndex];
         return MainScreen(
-          body: child,
-          navigationBarFlavor: MainFlavor.values[tabsRouter.activeIndex],
+          body: DemoShell(
+            isConnectVoIPFlow: true,
+            isInviteFriends: false,
+            mainFlavor: flavor,
+            child: child,
+          ),
+          navigationBarFlavor: flavor,
           onNavigationBarTap: (flavor) {
             tabsRouter.setActiveIndex(flavor.index);
 
