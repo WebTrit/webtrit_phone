@@ -7,7 +7,6 @@ export 'contact_source_type.dart';
 export 'duration.dart';
 export 'iterable.dart';
 export 'locale.dart';
-export 'object.dart';
 export 'platform_deep_link.dart';
 export 'request_failure.dart';
 export 'soundpool.dart';

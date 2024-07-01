@@ -58,11 +58,11 @@ class DefaultErrorNotification extends ErrorNotification {
 
   @override
   SnackBarAction? action(BuildContext context) {
-    // If the error is a Webtrit api client RequestFailure, show the apropriate error details
-    final RequestFailure? requestFailure = error.castToOrNull<RequestFailure>();
-    if (requestFailure != null) {
-      final errorFields = requestFailure.errorFields(context);
+    final error = this.error;
+
+    if (error is RequestFailure) {
       final title = l10n(context);
+      final errorFields = error.errorFields(context);
 
       return SnackBarAction(
         label: context.l10n.default_ErrorDetails,
@@ -70,13 +70,9 @@ class DefaultErrorNotification extends ErrorNotification {
           context.router.push(ErrorDetailsScreenPageRoute(title: title, fields: errorFields));
         },
       );
-    }
-
-    // If the error is a Webtrit signaling api exception, show the apropriate error details
-    final WebtritSignalingException? signalingException = error.castToOrNull<WebtritSignalingException>();
-    if (signalingException != null) {
-      final errorFields = signalingException.errorFields(context);
+    } else if (error is WebtritSignalingException) {
       final title = l10n(context);
+      final errorFields = error.errorFields(context);
 
       return SnackBarAction(
         label: context.l10n.default_ErrorDetails,
@@ -84,8 +80,8 @@ class DefaultErrorNotification extends ErrorNotification {
           context.router.push(ErrorDetailsScreenPageRoute(title: title, fields: errorFields));
         },
       );
+    } else {
+      return null;
     }
-
-    return null;
   }
 }
