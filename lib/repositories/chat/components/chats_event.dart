@@ -16,6 +16,17 @@ class ChatUpdate extends ChatsEvent with EquatableMixin {
   bool get stringify => true;
 }
 
+class ChatRemove extends ChatsEvent with EquatableMixin {
+  const ChatRemove(this.chatId);
+  final int chatId;
+
+  @override
+  List<Object> get props => [chatId];
+
+  @override
+  bool get stringify => true;
+}
+
 class ChatMessageUpdate extends ChatsEvent with EquatableMixin {
   const ChatMessageUpdate(this.message);
   final ChatMessage message;

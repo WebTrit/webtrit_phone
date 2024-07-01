@@ -9,7 +9,7 @@ extension PhoenixSocketExt on PhoenixSocket {
   String? get userId => userChannel?.topic.split(':').last;
 
   /// Create channel by [chatId] and connect, if already exists returns it
-  PhoenixChannel createChatChannel(int chatId) => addChannel(topic: 'chat:$chatId')..join();
+  PhoenixChannel createChatChannel(int chatId) => addChannel(topic: 'chat:$chatId');
 
   /// Get chat channel by [chatId] if exists
   PhoenixChannel? getChatChannel(int chatId) => channels.values.firstWhereOrNull((c) => c.topic == 'chat:$chatId');
