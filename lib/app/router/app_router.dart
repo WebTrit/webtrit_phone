@@ -182,7 +182,7 @@ class AppRouter extends _$AppRouter {
                 ),
                 AutoRoute(
                   page: DemoWebPageRoute.page,
-                  path: '',
+                  path: 'demo-invite',
                 ),
                 CustomRoute(
                   page: CallScreenPageRoute.page,

@@ -38,7 +38,7 @@ class _DemoShellState extends State<DemoShell> with RouteAware {
         -_converterCardSize.width - kToolbarHeight - _stickyPadding.bottom,
       ));
 
-  late final DemoConvertButton _convertButton;
+  DemoConvertButton? _convertButton;
 
   @override
   void initState() {
@@ -60,15 +60,21 @@ class _DemoShellState extends State<DemoShell> with RouteAware {
   }
 
   @override
+  void dispose() {
+    _convertButton?.remove();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final bloc = context.read<DemoCubit>();
 
     if (_isAvailableToShow(context)) {
-      if (!_convertButton.inserted && bloc.state.convertPbxUrl != null) {
+      if (!(_convertButton?.inserted ?? false) && bloc.state.convertPbxUrl != null) {
         _showConverterButton(context);
       }
-    } else if (_convertButton.inserted) {
-      _convertButton.remove();
+    } else if (_convertButton?.inserted ?? false) {
+      _convertButton?.remove();
     }
 
     return BlocListener<DemoCubit, DemoCubitState>(
@@ -102,7 +108,7 @@ class _DemoShellState extends State<DemoShell> with RouteAware {
 
   void _showConverterButton(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _convertButton.insert(context);
+      _convertButton?.insert(context);
     });
   }
 
