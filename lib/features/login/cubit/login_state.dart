@@ -6,7 +6,6 @@ typedef SessionOtpProvisionalWithDateTime = (SessionOtpProvisional, DateTime);
 class LoginState with _$LoginState {
   const factory LoginState({
     @Default(false) bool processing,
-    Object? error,
     LoginMode? mode,
     String? coreUrl,
     String? tenantId,

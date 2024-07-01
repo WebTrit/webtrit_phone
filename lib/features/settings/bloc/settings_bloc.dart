@@ -5,9 +5,9 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 part 'settings_bloc.freezed.dart';
@@ -68,7 +68,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       if (isClosed) return;
       if (emit.isDone) return;
 
-      notificationsBloc.add(NotificationsIssued(DefaultErrorNotification(e)));
+      notificationsBloc.add(NotificationsSubmitted(DefaultErrorNotification(e)));
       appBloc.maybeHandleError(e);
 
       emit(state.copyWith(
@@ -97,7 +97,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       if (event.force) {
         appBloc.add(const AppLogouted());
       } else {
-        notificationsBloc.add(NotificationsIssued(DefaultErrorNotification(e)));
+        notificationsBloc.add(NotificationsSubmitted(DefaultErrorNotification(e)));
         appBloc.maybeHandleError(e);
       }
 
@@ -126,7 +126,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     } catch (e, stackTrace) {
       _logger.warning('_onRegisterStatusChanged', e, stackTrace);
 
-      notificationsBloc.add(NotificationsIssued(DefaultErrorNotification(e)));
+      notificationsBloc.add(NotificationsSubmitted(DefaultErrorNotification(e)));
       appBloc.maybeHandleError(e);
 
       if (emit.isDone) return;
@@ -153,7 +153,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     } catch (e, stackTrace) {
       _logger.warning('_onAccountDeleted', e, stackTrace);
 
-      notificationsBloc.add(NotificationsIssued(DefaultErrorNotification(e)));
+      notificationsBloc.add(NotificationsSubmitted(DefaultErrorNotification(e)));
       appBloc.maybeHandleError(e);
 
       if (emit.isDone) return;

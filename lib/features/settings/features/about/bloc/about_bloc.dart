@@ -4,8 +4,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 import 'package:pub_semver/pub_semver.dart';
 
+import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 part 'about_bloc.freezed.dart';
@@ -50,7 +50,7 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
     } catch (e, stackTrace) {
       _logger.warning('_onStarted', e, stackTrace);
 
-      notificationsBloc.add(NotificationsIssued(DefaultErrorNotification(e)));
+      notificationsBloc.add(NotificationsSubmitted(DefaultErrorNotification(e)));
 
       if (emit.isDone) return;
 

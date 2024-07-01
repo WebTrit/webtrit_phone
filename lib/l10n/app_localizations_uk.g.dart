@@ -184,6 +184,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get default_ErrorPath => 'Шлях помилки';
 
   @override
+  String get default_ErrorTransactionId => 'ID Транзакціі';
+
+  @override
   String get default_FormatExceptionError => 'Виникла проблема формату відповіді';
 
   @override

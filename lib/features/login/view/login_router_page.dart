@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/l10n/l10n.dart';
 
 bool whenLoginRouterPageChange(LoginState previous, LoginState current) {
   return (previous.mode != current.mode) ||
@@ -31,23 +31,6 @@ class LoginRouterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final declarativeAutoRouter = BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
-        final errorL10n = state.errorL10n(context);
-
-        if (errorL10n != null) {
-          final errorDetails = state.errorDetails(context);
-
-          context.showErrorSnackBar(
-            errorL10n,
-            action: errorDetails != null
-                ? SnackBarAction(
-                    label: context.l10n.default_ErrorDetails,
-                    onPressed: () => context.showErrorBottomSheetDialog(errorL10n, errorDetails),
-                  )
-                : null,
-          );
-          context.read<LoginCubit>().dismissError();
-        }
-
         if (state.coreUrl != null && state.tenantId != null && state.token != null) {
           context.read<AppBloc>().add(AppLogined(
                 coreUrl: state.coreUrl!,
@@ -82,7 +65,9 @@ class LoginRouterPage extends StatelessWidget {
     );
 
     final provider = BlocProvider(
-      create: (context) => LoginCubit(),
+      create: (context) => LoginCubit(
+        notificationsBloc: context.read<NotificationsBloc>(),
+      ),
       child: declarativeAutoRouter,
     );
     return provider;

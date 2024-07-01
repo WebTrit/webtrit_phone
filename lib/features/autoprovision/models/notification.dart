@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/features/notifications/models/models.dart';
+import 'package:webtrit_phone/app/notifications/models/notification.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
-class InvalidAutoProvisioningToken extends ErrorNotification {
+final class InvalidAutoProvisioningToken extends ErrorNotification {
   const InvalidAutoProvisioningToken();
 
   @override
@@ -12,7 +12,7 @@ class InvalidAutoProvisioningToken extends ErrorNotification {
   }
 }
 
-class SuccesfulUsedAutoProvisioningToken extends SuccessNotification {
+final class SuccesfulUsedAutoProvisioningToken extends SuccessNotification {
   const SuccesfulUsedAutoProvisioningToken();
 
   @override

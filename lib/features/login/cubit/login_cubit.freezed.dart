@@ -17,7 +17,6 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$LoginState {
   bool get processing => throw _privateConstructorUsedError;
-  Object? get error => throw _privateConstructorUsedError;
   LoginMode? get mode => throw _privateConstructorUsedError;
   String? get coreUrl => throw _privateConstructorUsedError;
   String? get tenantId => throw _privateConstructorUsedError;
@@ -59,7 +58,6 @@ abstract class $LoginStateCopyWith<$Res> {
   @useResult
   $Res call(
       {bool processing,
-      Object? error,
       LoginMode? mode,
       String? coreUrl,
       String? tenantId,
@@ -97,7 +95,6 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
   @override
   $Res call({
     Object? processing = null,
-    Object? error = freezed,
     Object? mode = freezed,
     Object? coreUrl = freezed,
     Object? tenantId = freezed,
@@ -119,7 +116,6 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
           ? _value.processing
           : processing // ignore: cast_nullable_to_non_nullable
               as bool,
-      error: freezed == error ? _value.error : error,
       mode: freezed == mode
           ? _value.mode
           : mode // ignore: cast_nullable_to_non_nullable
@@ -197,7 +193,6 @@ abstract class _$$LoginStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {bool processing,
-      Object? error,
       LoginMode? mode,
       String? coreUrl,
       String? tenantId,
@@ -233,7 +228,6 @@ class __$$LoginStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? processing = null,
-    Object? error = freezed,
     Object? mode = freezed,
     Object? coreUrl = freezed,
     Object? tenantId = freezed,
@@ -255,7 +249,6 @@ class __$$LoginStateImplCopyWithImpl<$Res>
           ? _value.processing
           : processing // ignore: cast_nullable_to_non_nullable
               as bool,
-      error: freezed == error ? _value.error : error,
       mode: freezed == mode
           ? _value.mode
           : mode // ignore: cast_nullable_to_non_nullable
@@ -328,7 +321,6 @@ class __$$LoginStateImplCopyWithImpl<$Res>
 class _$LoginStateImpl implements _LoginState {
   const _$LoginStateImpl(
       {this.processing = false,
-      this.error,
       this.mode,
       this.coreUrl,
       this.tenantId,
@@ -349,8 +341,6 @@ class _$LoginStateImpl implements _LoginState {
   @override
   @JsonKey()
   final bool processing;
-  @override
-  final Object? error;
   @override
   final LoginMode? mode;
   @override
@@ -407,7 +397,7 @@ class _$LoginStateImpl implements _LoginState {
 
   @override
   String toString() {
-    return 'LoginState(processing: $processing, error: $error, mode: $mode, coreUrl: $coreUrl, tenantId: $tenantId, supportedLoginTypes: $supportedLoginTypes, otpSigninSessionOtpProvisionalWithDateTime: $otpSigninSessionOtpProvisionalWithDateTime, passwordSigninPasswordInputObscureText: $passwordSigninPasswordInputObscureText, signupSessionOtpProvisionalWithDateTime: $signupSessionOtpProvisionalWithDateTime, token: $token, coreUrlInput: $coreUrlInput, otpSigninUserRefInput: $otpSigninUserRefInput, otpSigninCodeInput: $otpSigninCodeInput, passwordSigninUserRefInput: $passwordSigninUserRefInput, passwordSigninPasswordInput: $passwordSigninPasswordInput, signupEmailInput: $signupEmailInput, signupCodeInput: $signupCodeInput)';
+    return 'LoginState(processing: $processing, mode: $mode, coreUrl: $coreUrl, tenantId: $tenantId, supportedLoginTypes: $supportedLoginTypes, otpSigninSessionOtpProvisionalWithDateTime: $otpSigninSessionOtpProvisionalWithDateTime, passwordSigninPasswordInputObscureText: $passwordSigninPasswordInputObscureText, signupSessionOtpProvisionalWithDateTime: $signupSessionOtpProvisionalWithDateTime, token: $token, coreUrlInput: $coreUrlInput, otpSigninUserRefInput: $otpSigninUserRefInput, otpSigninCodeInput: $otpSigninCodeInput, passwordSigninUserRefInput: $passwordSigninUserRefInput, passwordSigninPasswordInput: $passwordSigninPasswordInput, signupEmailInput: $signupEmailInput, signupCodeInput: $signupCodeInput)';
   }
 
   @override
@@ -417,7 +407,6 @@ class _$LoginStateImpl implements _LoginState {
             other is _$LoginStateImpl &&
             (identical(other.processing, processing) ||
                 other.processing == processing) &&
-            const DeepCollectionEquality().equals(other.error, error) &&
             (identical(other.mode, mode) || other.mode == mode) &&
             (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
             (identical(other.tenantId, tenantId) ||
@@ -459,7 +448,6 @@ class _$LoginStateImpl implements _LoginState {
   int get hashCode => Object.hash(
       runtimeType,
       processing,
-      const DeepCollectionEquality().hash(error),
       mode,
       coreUrl,
       tenantId,
@@ -486,7 +474,6 @@ class _$LoginStateImpl implements _LoginState {
 abstract class _LoginState implements LoginState {
   const factory _LoginState(
       {final bool processing,
-      final Object? error,
       final LoginMode? mode,
       final String? coreUrl,
       final String? tenantId,
@@ -511,8 +498,6 @@ abstract class _LoginState implements LoginState {
 
   @override
   bool get processing;
-  @override
-  Object? get error;
   @override
   LoginMode? get mode;
   @override

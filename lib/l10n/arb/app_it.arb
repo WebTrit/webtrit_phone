@@ -118,6 +118,8 @@
   "@default_ErrorMessage": {},
   "default_ErrorPath": "Error path",
   "@default_ErrorPath": {},
+  "default_ErrorTransactionId": "ID transazione",
+  "@default_ErrorTransactionId": {},
   "default_FormatExceptionError": "Si è verificato un problema di formato della risposta",
   "@default_FormatExceptionError": {},
   "default_RequestFailureError": "Si è verificato un errore del server",

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/features/features.dart';
 
 @RoutePage()
 class AppShell extends StatelessWidget {
@@ -20,23 +20,18 @@ class AppShell extends StatelessWidget {
           listener: (context, state) {
             final lastNotification = state.lastNotification;
             if (lastNotification != null) {
-              switch (lastNotification.type()) {
-                case NotificationType.error:
+              switch (lastNotification) {
+                case ErrorNotification():
                   context.showErrorSnackBar(
                     lastNotification.l10n(context),
                     action: lastNotification.action(context),
                   );
-                case NotificationType.raw:
-                  context.showErrorSnackBar(
-                    lastNotification.l10n(context),
-                    action: lastNotification.action(context),
-                  );
-                case NotificationType.message:
+                case MessageNotification():
                   context.showSnackBar(
                     lastNotification.l10n(context),
                     action: lastNotification.action(context),
                   );
-                case NotificationType.success:
+                case SuccessNotification():
                   context.showSuccessSnackBar(
                     lastNotification.l10n(context),
                     action: lastNotification.action(context),

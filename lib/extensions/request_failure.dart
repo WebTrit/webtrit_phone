@@ -2,12 +2,11 @@ import 'package:flutter/widgets.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
+import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
-import '../widgets/widgets.dart';
-
 extension RequestFailureExension on RequestFailure {
-  List<ErrorFieldModel>? errorFields(BuildContext context) {
+  List<ErrorFieldModel> errorFields(BuildContext context) {
     final message = error?.message;
     final detailsReason = error?.details?.reason;
     final detailsPath = error?.details?.path;

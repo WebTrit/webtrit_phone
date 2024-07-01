@@ -3,7 +3,6 @@ export 'app_icon.dart';
 export 'back_button.dart';
 export 'confirm_dialog.dart';
 export 'copy_to_clipboard.dart';
-export 'error_details_view.dart';
 export 'keypad_key_button.dart';
 export 'leading_avatar.dart';
 export 'linkify.dart';
