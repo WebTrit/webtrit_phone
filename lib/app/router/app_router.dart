@@ -222,7 +222,7 @@ class AppRouter extends _$AppRouter {
             ),
             AutoRoute(
               page: ErrorDetailsScreenPageRoute.page,
-              path: 'error_details',
+              path: 'error-details',
             ),
             AutoRoute(
               page: LogRecordsConsoleScreenPageRoute.page,
