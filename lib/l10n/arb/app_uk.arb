@@ -118,6 +118,8 @@
   "@default_ErrorMessage": {},
   "default_ErrorPath": "Шлях помилки",
   "@default_ErrorPath": {},
+  "default_ErrorTransactionId": "ID Транзакціі",
+  "@default_ErrorTransactionId": {},
   "default_FormatExceptionError": "Виникла проблема формату відповіді",
   "@default_FormatExceptionError": {},
   "default_RequestFailureError": "Сталася помилка на сервері",

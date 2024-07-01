@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/app_shell.dart';
 import 'package:webtrit_phone/app/router/main_shell.dart';
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
@@ -211,10 +212,6 @@ class AppRouter extends _$AppRouter {
                       page: ThemeModeScreenPageRoute.page,
                       path: 'theme-mode',
                     ),
-                    AutoRoute(
-                      page: LogRecordsConsoleScreenPageRoute.page,
-                      path: 'log-records-console',
-                    ),
                   ],
                 ),
               ],
@@ -222,6 +219,14 @@ class AppRouter extends _$AppRouter {
             AutoRoute(
               page: TermsConditionsScreenPageRoute.page,
               path: 'terms-conditions',
+            ),
+            AutoRoute(
+              page: ErrorDetailsScreenPageRoute.page,
+              path: 'error-details',
+            ),
+            AutoRoute(
+              page: LogRecordsConsoleScreenPageRoute.page,
+              path: 'log-records-console',
             ),
             AutoRoute(
               page: UndefinedScreenPageRoute.page,

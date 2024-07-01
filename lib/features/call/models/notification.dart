@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:permission_handler/permission_handler.dart';
 
-import 'package:webtrit_phone/features/notifications/models/models.dart';
+import 'package:webtrit_phone/app/notifications/models/notification.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
-class CallUndefinedLineErrorNotification extends ErrorNotification {
+final class CallUndefinedLineErrorNotification extends ErrorNotification {
   const CallUndefinedLineErrorNotification();
 
   @override
@@ -14,7 +14,7 @@ class CallUndefinedLineErrorNotification extends ErrorNotification {
   }
 }
 
-class CallSignalingClientNotConnectErrorNotification extends ErrorNotification {
+final class CallSignalingClientNotConnectErrorNotification extends ErrorNotification {
   const CallSignalingClientNotConnectErrorNotification();
 
   @override
@@ -23,7 +23,7 @@ class CallSignalingClientNotConnectErrorNotification extends ErrorNotification {
   }
 }
 
-class CallSignalingClientSessionMissedErrorNotification extends ErrorNotification {
+final class CallSignalingClientSessionMissedErrorNotification extends ErrorNotification {
   const CallSignalingClientSessionMissedErrorNotification();
 
   @override
@@ -32,7 +32,7 @@ class CallSignalingClientSessionMissedErrorNotification extends ErrorNotificatio
   }
 }
 
-class CallConnectErrorNotification extends ErrorNotification {
+final class CallConnectErrorNotification extends ErrorNotification {
   const CallConnectErrorNotification();
 
   @override
@@ -41,7 +41,7 @@ class CallConnectErrorNotification extends ErrorNotification {
   }
 }
 
-class CallUserMediaErrorNotification extends ErrorNotification {
+final class CallUserMediaErrorNotification extends ErrorNotification {
   const CallUserMediaErrorNotification();
 
   @override
@@ -58,21 +58,21 @@ class CallUserMediaErrorNotification extends ErrorNotification {
   }
 }
 
-class AppUnregisteredNotification extends MessageNotification {
+final class AppUnregisteredNotification extends MessageNotification {
   @override
   String l10n(BuildContext context) {
     return context.l10n.notifications_errorSnackBar_appUnregistered;
   }
 }
 
-class AppOfflineNotification extends MessageNotification {
+final class AppOfflineNotification extends MessageNotification {
   @override
   String l10n(BuildContext context) {
     return context.l10n.notifications_errorSnackBar_appOffline;
   }
 }
 
-class AppOnlineNotification extends SuccessNotification {
+final class AppOnlineNotification extends SuccessNotification {
   @override
   String l10n(BuildContext context) {
     return context.l10n.notifications_errorSnackBar_appOnline;

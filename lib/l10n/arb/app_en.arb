@@ -118,6 +118,8 @@
   "@default_ErrorMessage": {},
   "default_ErrorPath": "Error path",
   "@default_ErrorPath": {},
+  "default_ErrorTransactionId": "Transaction ID",
+  "@default_ErrorTransactionId": {},
   "default_FormatExceptionError": "A response format issue occurred",
   "@default_FormatExceptionError": {},
   "default_RequestFailureError": "A server failure occurred",

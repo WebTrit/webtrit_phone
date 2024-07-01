@@ -184,6 +184,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get default_ErrorPath => 'Error path';
 
   @override
+  String get default_ErrorTransactionId => 'ID transazione';
+
+  @override
   String get default_FormatExceptionError => 'Si è verificato un problema di formato della risposta';
 
   @override

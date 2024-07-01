@@ -9,6 +9,7 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';

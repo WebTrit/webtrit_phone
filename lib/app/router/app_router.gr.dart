@@ -70,6 +70,16 @@ abstract class _$AppRouter extends RootStackRouter {
         child: ContactsScreenPage(),
       );
     },
+    ErrorDetailsScreenPageRoute.name: (routeData) {
+      final args = routeData.argsAs<ErrorDetailsScreenPageRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ErrorDetailsScreenPage(
+          title: args.title,
+          fields: args.fields,
+        ),
+      );
+    },
     FavoritesRouterPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -408,6 +418,45 @@ class ContactsScreenPageRoute extends PageRouteInfo<void> {
   static const String name = 'ContactsScreenPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [ErrorDetailsScreenPage]
+class ErrorDetailsScreenPageRoute
+    extends PageRouteInfo<ErrorDetailsScreenPageRouteArgs> {
+  ErrorDetailsScreenPageRoute({
+    required String title,
+    required List<ErrorFieldModel> fields,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ErrorDetailsScreenPageRoute.name,
+          args: ErrorDetailsScreenPageRouteArgs(
+            title: title,
+            fields: fields,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ErrorDetailsScreenPageRoute';
+
+  static const PageInfo<ErrorDetailsScreenPageRouteArgs> page =
+      PageInfo<ErrorDetailsScreenPageRouteArgs>(name);
+}
+
+class ErrorDetailsScreenPageRouteArgs {
+  const ErrorDetailsScreenPageRouteArgs({
+    required this.title,
+    required this.fields,
+  });
+
+  final String title;
+
+  final List<ErrorFieldModel> fields;
+
+  @override
+  String toString() {
+    return 'ErrorDetailsScreenPageRouteArgs{title: $title, fields: $fields}';
+  }
 }
 
 /// generated route for
