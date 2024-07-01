@@ -1,11 +1,28 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/features/call/call.dart';
+
 import 'package:webtrit_phone/l10n/l10n.dart';
 
-import '../../call/view/call_shell.dart';
-
 class DemoConvertButton {
-  DemoConvertButton({
+  static DemoConvertButton? _instance;
+
+  factory DemoConvertButton({
+    required EdgeInsets stickyPadding,
+    required Size size,
+    GestureTapCallback? onTap,
+    Offset? offset,
+  }) {
+    _instance ??= DemoConvertButton._internal(
+      stickyPadding: stickyPadding,
+      size: size,
+      onTap: onTap,
+      offset: offset,
+    );
+    return _instance!;
+  }
+
+  DemoConvertButton._internal({
     required this.stickyPadding,
     required this.size,
     this.onTap,
@@ -21,7 +38,9 @@ class DemoConvertButton {
   bool get inserted => _entry != null;
 
   void insert(BuildContext context) {
-    assert(_entry == null);
+    if (inserted) {
+      return; // If already inserted, do nothing
+    }
     final theme = Theme.of(context);
 
     final entry = OverlayEntry(
