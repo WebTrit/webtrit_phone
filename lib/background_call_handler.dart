@@ -47,6 +47,7 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
   Future _initializeDependentResources() async {
     await PackageInfo.init();
     await SecureStorage.init();
+    await AppCertificates.init();
 
     storage = SecureStorage();
     packageInfo = PackageInfo();
@@ -67,6 +68,7 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
       tenantId,
       token!,
       true,
+      certs: AppCertificates().trustedCertificates,
     );
     client = signalingClient;
   }
