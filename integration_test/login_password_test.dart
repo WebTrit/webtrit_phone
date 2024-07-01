@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/app/router/main_shell.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
+import 'package:webtrit_phone/app/router/main_shell.dart';
 import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
@@ -25,11 +25,11 @@ main() {
     await secureStorage.deleteToken();
   });
 
-  final signinButton = find.byKey(const Key(loginModeScreenSignUpButtonKey));
+  final signinButton = find.byKey(loginModeScreenSignUpButtonKey);
   final passwordSegmentButton = find.byKey(Key(LoginType.passwordSignin.toLoginSegmentKey()));
-  final passwordUserInput = find.byKey(const Key(passwordUserInputKey));
-  final passwordPasswordInput = find.byKey(const Key(passwordPasswordInputKey));
-  final passwordButton = find.byKey(const Key(passwordButtonKey));
+  final passwordUserInput = find.byKey(passwordUserInputKey);
+  final passwordPasswordInput = find.byKey(passwordPasswordInputKey);
+  final passwordButton = find.byKey(passwordButtonKey);
 
   final passwordUserCredential = EnvironmentConfig.LOGIN_TEST_PASSWORD_USER_CREDENTIAL!;
   final passwordPasswordCredential = EnvironmentConfig.LOGIN_TEST_PASSWORD_PASSWORD_CREDENTIAL!;

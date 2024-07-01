@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
-import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/main_shell.dart';
 import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/data/data.dart';
@@ -25,12 +25,12 @@ main() {
     await secureStorage.deleteToken();
   });
 
-  final signinButton = find.byKey(const Key(loginModeScreenSignUpButtonKey));
+  final signinButton = find.byKey(loginModeScreenSignUpButtonKey);
   final otpSegmentButton = find.byKey(Key(LoginType.otpSignin.toLoginSegmentKey()));
-  final otpInput = find.byKey(const Key(optInputKey));
-  final otpButton = find.byKey(const Key(otpButtonKey));
-  final otpVerifyInput = find.byKey(const Key(otpVerifyInputKey));
-  final otpVerifyButton = find.byKey(const Key(otpVerifyButtonKey));
+  final otpInput = find.byKey(optInputKey);
+  final otpButton = find.byKey(otpButtonKey);
+  final otpVerifyInput = find.byKey(otpVerifyInputKey);
+  final otpVerifyButton = find.byKey(otpVerifyButtonKey);
 
   final otpCredential = EnvironmentConfig.LOGIN_TEST_OTP_CREDENTIAL!;
   final otpVerifyCredential = EnvironmentConfig.LOGIN_TEST_OTP_VERIFY_CREDENTIAL!;

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
@@ -45,7 +46,7 @@ class LoginSignupVerifyScreen extends StatelessWidget {
                 const SizedBox(height: kInset / 2),
               ],
               TextFormField(
-                key: const Key(signupVerifyInputKey),
+                key: signupVerifyInputKey,
                 enabled: !state.processing,
                 initialValue: state.signupCodeInput.value,
                 decoration: InputDecoration(
@@ -94,7 +95,7 @@ class LoginSignupVerifyScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: kInset / 4),
                   ElevatedButton(
-                    key: const Key(signupVerifyButtonKey),
+                    key: signupVerifyButtonKey,
                     onPressed: state.processing || !state.signupCodeInput.isValid ? null : () => _onSubmitted(context),
                     style: elevatedButtonStyles?.primary,
                     child: !state.processing

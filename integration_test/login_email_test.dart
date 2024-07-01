@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
-import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/main_shell.dart';
 import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/data/data.dart';
@@ -25,12 +25,12 @@ main() {
     await secureStorage.deleteToken();
   });
 
-  final signinButton = find.byKey(const Key(loginModeScreenSignUpButtonKey));
+  final signinButton = find.byKey(loginModeScreenSignUpButtonKey);
   final emailSegmentButton = find.byKey(Key(LoginType.signup.toLoginSegmentKey()));
-  final emailInput = find.byKey(const Key(signupEmailInputKey));
-  final emailButton = find.byKey(const Key(signupEmailButtonKey));
-  final emailVerifyInput = find.byKey(const Key(signupVerifyInputKey));
-  final emailVerifyButton = find.byKey(const Key(signupVerifyButtonKey));
+  final emailInput = find.byKey(signupEmailInputKey);
+  final emailButton = find.byKey(signupEmailButtonKey);
+  final emailVerifyInput = find.byKey(signupVerifyInputKey);
+  final emailVerifyButton = find.byKey(signupVerifyButtonKey);
 
   final emailCredential = EnvironmentConfig.LOGIN_TEST_EMAIL_CREDENTIAL!;
   final emailVerifyCredential = EnvironmentConfig.LOGIN_TEST_EMAIL_VERIFY_CREDENTIAL!;
