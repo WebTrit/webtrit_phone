@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/app/notifications/models/models.dart';
+import 'package:webtrit_phone/app/notifications/models/notification.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
 final class InvalidAutoProvisioningToken extends ErrorNotification {
