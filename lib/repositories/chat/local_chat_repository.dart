@@ -39,34 +39,33 @@ class LocalChatRepository with ChatsDriftMapper {
     });
   }
 
-  Future<List<int>> getActiveChatIds() async {
-    return _chatsDao.getActiveChatIds();
+  Future<List<int>> getChatIds() async {
+    return _chatsDao.getChatIds();
   }
 
   Future<int?> findDialogId(String participantId) {
     return _chatsDao.findDialogId(participantId);
   }
 
+  @Deprecated('No needed anymore')
   Future<DateTime?> getLastChatUpdate() async {
     return _chatsDao.lastChatUpdatedAt();
   }
 
   Future<void> upsertChat(Chat chat) async {
-    try {
-      final chatData = chatDataFromChat(chat);
-      final membersData = chat.members.map(chatMemberDataFromChatMember).toList();
+    final chatData = chatDataFromChat(chat);
+    final membersData = chat.members.map(chatMemberDataFromChatMember).toList();
 
-      await _chatsDao.upsertChat(chatData);
-      for (final memberData in membersData) {
-        await _chatsDao.upsertChatMember(memberData);
-      }
-      _addEvent(ChatUpdate(chat));
-    } on Exception catch (e) {
-      _logger.warning('upsertChat failed, retrying', e);
-      // Drift lock exception handling, coz cant import [DriftRemoteException]
-      await Future.delayed(const Duration(milliseconds: 100));
-      await upsertChat(chat);
+    await _chatsDao.upsertChat(chatData);
+    for (final memberData in membersData) {
+      await _chatsDao.upsertChatMember(memberData);
     }
+    _addEvent(ChatUpdate(chat));
+  }
+
+  Future<void> deleteChatById(int chatId) async {
+    await _chatsDao.deleteChatById(chatId);
+    _addEvent(ChatRemove(chatId));
   }
 
   Future<List<ChatMessage>> getLastMessages(int chatId, {int limit = 100}) async {

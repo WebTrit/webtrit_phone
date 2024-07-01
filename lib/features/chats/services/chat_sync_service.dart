@@ -13,134 +13,99 @@ final _logger = Logger('ChatsSyncService');
 class ChatsSyncService {
   ChatsSyncService(this.client, this.localChatRepository) {
     // TODO: Remove this before pr
-    // _logger.onRecord.listen((record) {
-    //   // ignore: avoid_print
-    //   print('\x1B[33mcht: ${record.message}\x1B[0m');
-    // });
+    _logger.onRecord.listen((record) {
+      // ignore: avoid_print
+      print('\x1B[33mcht: ${record.message}\x1B[0m');
+    });
   }
 
   final PhoenixSocket client;
   final LocalChatRepository localChatRepository;
 
   StreamSubscription? _chatlistSyncSub;
-  Map<int, StreamSubscription> messagesSyncSubs = {};
+  Map<int, StreamSubscription> chatRoomSyncSubs = {};
 
   void init() async {
-    dispose();
-    await Future.microtask(() {});
-    _logger.info('Initialising');
-
-    final activeChatIds = await localChatRepository.getActiveChatIds();
-    for (final chatId in activeChatIds) {
-      messagesSyncSubs[chatId] = _subscribeToMessages(chatId);
-    }
-    _logger.info('Init active chat ids: $activeChatIds');
-
-    _chatlistSyncSub = _chatlistSyncStream().listen((chat) {
-      _logger.info('Chat update event: $chat');
-      _upsertMessageSubscription(chat);
-    });
+    _logger.info('Initialising...');
+    _closeSubs();
+    _chatlistSyncSub = _chatlistSyncStream().listen((e) => _logger.info('_chatlistSyncStream event: $e'));
   }
 
-  _upsertMessageSubscription(Chat chat) {
-    final activeMember = chat.members.isActiveMember(client.userId!);
-    final activeChat = chat.deletedAt == null;
-    final shouldSubscribe = activeMember && activeChat;
-
-    if (shouldSubscribe) {
-      messagesSyncSubs.putIfAbsent(chat.id, () => _subscribeToMessages(chat.id));
-    } else {
-      _removeMessageSubscription(chat.id);
-    }
-
-    _logger.info('Message subscription updated: chatId=${chat.id}, activeMember=$activeMember, activeChat=$activeChat');
+  void dispose() {
+    _logger.info('Disposing...');
+    _closeSubs();
   }
 
-  StreamSubscription _subscribeToMessages(int chatId) {
-    final channel = client.createChatChannel(chatId);
-    final messagesStream = _messagesSyncStream(chatId, channel);
-    return messagesStream.listen((msg) => _logger.info('Message update event: $msg'));
+  _chatRoomSubscribe(int chatId) {
+    _logger.info('Subscribing to chat $chatId');
+    chatRoomSyncSubs.putIfAbsent(
+      chatId,
+      () => _chatRoomSyncStream(chatId).listen((e) => _logger.info('_chatRoomSyncStream event: $e')),
+    );
   }
 
-  _removeMessageSubscription(int chatId) {
-    messagesSyncSubs.remove(chatId)?.cancel();
-    client.removeChatChannel(chatId);
+  _chatRoomUnsubscribe(int chatId) {
+    _logger.info('Unsubscribing from chat $chatId');
+    chatRoomSyncSubs.remove(chatId)?.cancel();
+    client.getChatChannel(chatId)?.leave();
   }
 
-  Stream<Chat> _chatlistSyncStream() async* {
+  Stream<dynamic> _chatlistSyncStream() async* {
     while (true) {
       try {
         // Get and wait for user channel to be ready
         final userChannel = client.userChannel;
         if (userChannel == null) throw Exception('No user channel yet');
-        if (userChannel.state != PhoenixChannelState.joined) throw Exception('User channel readynt');
+        if (userChannel.state != PhoenixChannelState.joined) throw Exception('User channel not ready yet');
 
-        // Buffer updates that may come in a gap between fetching the list and subscribing
-        List<Chat> updatesBuffer = [];
-        late final StreamSubscription bufferSub;
-        bufferSub = userChannel.messages.where((msg) => msg.event.value == 'chat_update').listen((msg) {
-          final chat = Chat.fromMap(msg.payload as Map<String, dynamic>);
-          updatesBuffer.add(chat);
-        });
+        // Get current user chat ids
+        final currentChatIds = await localChatRepository.getChatIds();
 
-        // Get last local update time for sync from
-        // If no update time, fetch all chats
-        DateTime? lastUpdate = await localChatRepository.getLastChatUpdate();
+        // // Buffer updates that may come in a gap between fetching the actual list
+        final eventsStream = userChannel.messages.transform(StreamBuffer());
 
-        if (lastUpdate == null) {
-          // Fetch initial chat list state
-          final req = await userChannel.push('chat:list', {}).future;
-          final chatList = (req.response['data'] as List).map((e) => Chat.fromMap(e)).toList();
+        // Fetch actual user chat ids
+        final req = await userChannel.push('chat:user_chat_ids', {}).future;
+        final actualChatIds = req.response.cast<int>();
 
-          // Yield fetched chats
-          for (final chat in chatList) {
-            await localChatRepository.upsertChat(chat);
-            yield chat;
-          }
-        } else {
-          // Fetch chat list updates
-          while (true) {
-            final req = await userChannel
-                .push('chat:list', {'updated_after': lastUpdate!.toUtc().toIso8601String(), 'limit': 100}).future;
-            final chatList = (req.response['data'] as List).map((e) => Chat.fromMap(e)).toList();
-
-            // If no more chats, break the loop
-            if (chatList.isEmpty) {
-              break;
-            }
-
-            // Yield fetched chats
-            for (final chat in chatList) {
-              await localChatRepository.upsertChat(chat);
-              yield chat;
-            }
-
-            // Update last update time
-            lastUpdate = chatList.last.updatedAt;
+        // Process removed chats
+        for (final chatId in currentChatIds) {
+          if (!actualChatIds.contains(chatId)) {
+            _chatRoomUnsubscribe(chatId);
+            await localChatRepository.deleteChatById(chatId);
+            yield {'event': 'removed', chatId: chatId};
           }
         }
 
-        // Yield buffered updates
-        bufferSub.cancel();
-        for (final chat in updatesBuffer) {
-          await localChatRepository.upsertChat(chat);
-          yield chat;
+        // Process actual chats
+        for (final chatId in actualChatIds) {
+          _chatRoomSubscribe(chatId);
+          yield {'event': 'actual', chatId: chatId};
         }
 
-        // Listen for realtime updates
-        // On disconnect break the loop to force reconnect
-        await for (final msg in userChannel.messages) {
-          if (msg.event.value == 'chat_update') {
-            final chat = Chat.fromMap(msg.payload as Map<String, dynamic>);
-            await localChatRepository.upsertChat(chat);
-            yield chat;
+        // Process buffered and listen for future realtime updates
+        await for (final e in eventsStream) {
+          if (e.event.value == 'chat_membership_join') {
+            final chatId = e.payload!['chat_id'];
+            _chatRoomSubscribe(chatId);
+            yield {'event': 'joined', chatId: chatId};
           }
-          if (msg.event.value == 'phx_error') {
+
+          if (e.event.value == 'chat_membership_leave') {
+            final chatId = e.payload!['chat_id'];
+            _chatRoomUnsubscribe(chatId);
+            await localChatRepository.deleteChatById(chatId);
+            yield {'event': 'leaved', chatId: chatId};
+          }
+
+          // On disconnect break the loop to force reconnect
+          if (e.event.value == 'phx_error') {
             throw Exception('Phoenix disconnect');
           }
         }
-      } catch (e) {
-        _logger.severe('_chatlistSyncStream error:', e);
+      } catch (e, _) {
+        // _logger.severe('_chatlistSyncStream error:', e,s);
+        yield {'event': 'error', 'error': e};
       } finally {
         // Wait a sec before retrying
         await Future.delayed(const Duration(seconds: 1));
@@ -148,47 +113,58 @@ class ChatsSyncService {
     }
   }
 
-  Stream<ChatMessage> _messagesSyncStream(int chatId, PhoenixChannel channel) async* {
+  Stream<dynamic> _chatRoomSyncStream(int chatId) async* {
     while (true) {
       try {
-        if (channel.state != PhoenixChannelState.joined) throw Exception('Messages channel $chatId readynt');
+        PhoenixChannel? channel = client.getChatChannel(chatId);
+        if (channel == null) {
+          channel = client.createChatChannel(chatId);
+          await channel.join().future;
+        }
 
-        // Buffer updates that may come in a gap between fetching the list and subscribing
-        List<ChatMessage> updatesBuffer = [];
-        late final StreamSubscription bufferSub;
-        bufferSub = channel.messages.where((msg) => msg.event.value == 'message_update').listen((msg) {
-          final chat = ChatMessage.fromMap(msg.payload as Map<String, dynamic>);
-          updatesBuffer.add(chat);
-        });
+        _logger.info('Chat channel state: $chatId ${channel.state}');
+        if (channel.state != PhoenixChannelState.joined) throw Exception('Chat channel not ready yet');
 
-        // Get last local update time for sync from
-        // If no update time, fetch last bunch of messages
+        // Buffer updates that may come in a gap between fetching and subscribing
+        final eventsStream = channel.messages.transform(StreamBuffer());
+
+        // Fetch chat info
+        final req = await channel.push('chat:info', {}).future;
+        final chat = Chat.fromMap(req.response as Map<String, dynamic>);
+        await localChatRepository.upsertChat(chat);
+        _logger.info('Chat info: $chat');
+        yield chat;
+
+        // Get last update time for sync messages from
         DateTime? lastUpdate = await localChatRepository.lastChatMessageUpdatedAt(chatId);
 
+        // If no last update, fetch history of last 100 messages for initial state
         if (lastUpdate == null) {
-          // Fetch last 100 messages for initial state
           final payload = {'limit': 100};
           final req = await channel.push('message:history', payload).future;
           final messages = (req.response['data'] as List).map((e) => ChatMessage.fromMap(e)).toList();
 
-          // Yield fetched chats
+          // Process fetched messages
           for (final msg in messages) {
             await localChatRepository.insertMessage(msg);
             yield msg;
           }
-        } else {
-          // Fetch message updates
+        }
+
+        // Fetch message updates since last update using pagination
+        // eg. new messages, edited, deleted, viewed, etc.
+        if (lastUpdate != null) {
           while (true) {
             final payload = {'updated_after': lastUpdate!.toUtc().toIso8601String(), 'limit': 100};
             final req = await channel.push('message:updates', payload).future;
             final messages = (req.response['data'] as List).map((e) => ChatMessage.fromMap(e)).toList();
 
-            // If no more chats, break the loop
+            // If no more messages, break the pagination loop
             if (messages.isEmpty) {
               break;
             }
 
-            // Yield fetched chats
+            // Process fetched messages
             for (final msg in messages) {
               await localChatRepository.upsertMessageUpdate(msg);
               yield msg;
@@ -199,27 +175,32 @@ class ChatsSyncService {
           }
         }
 
-        // Yield buffered updates
-        bufferSub.cancel();
-        for (final msg in updatesBuffer) {
-          await localChatRepository.upsertMessageUpdate(msg);
-          yield msg;
-        }
+        // Process buffered and listen for future realtime updates
+        await for (final e in eventsStream) {
+          _logger.info('Chat channel event $chatId: $e');
 
-        // Listen for realtime updates
-        // On disconnect break the loop to force reconnect
-        await for (final msg in channel.messages) {
-          if (msg.event.value == 'message_update') {
-            final chatMsg = ChatMessage.fromMap(msg.payload as Map<String, dynamic>);
+          if (e.event.value == 'chat_info_update') {
+            final chat = Chat.fromMap(e.payload as Map<String, dynamic>);
+            await localChatRepository.upsertChat(chat);
+            yield chat;
+          }
+
+          if (e.event.value == 'message_update') {
+            final chatMsg = ChatMessage.fromMap(e.payload as Map<String, dynamic>);
             await localChatRepository.upsertMessageUpdate(chatMsg);
             yield chatMsg;
           }
-          if (msg.event.value == 'phx_error') {
+
+          // TODO: read cursor update
+
+          // On disconnect break the loop to force reconnect
+          if (e.event.value == 'phx_error') {
             throw Exception('Phoenix disconnect');
           }
         }
-      } catch (e) {
-        _logger.severe('_messagesSyncStream error:', e);
+      } catch (e, _) {
+        // _logger.severe('_chatRoomSyncStream error: $chatId', e, s);
+        yield {'event': 'error', 'error': e};
       } finally {
         // Wait a sec before retrying
         await Future.delayed(const Duration(seconds: 1));
@@ -227,10 +208,33 @@ class ChatsSyncService {
     }
   }
 
-  void dispose() {
+  void _closeSubs() {
     _chatlistSyncSub?.cancel();
-    for (var key in messagesSyncSubs.keys) {
-      messagesSyncSubs.remove(key)?.cancel();
+    for (var key in chatRoomSyncSubs.keys) {
+      chatRoomSyncSubs.remove(key)?.cancel();
     }
+  }
+}
+
+/// A [StreamTransformer] that captures events from the source [Stream] and
+/// hold events inside [StreamController] until the sink [Stream] being listened.
+class StreamBuffer<T> extends StreamTransformerBase<T, T> {
+  StreamBuffer();
+
+  @override
+  Stream<T> bind(Stream<T> stream) {
+    final controller = StreamController<T>();
+
+    final StreamSubscription(:cancel, :pause, :resume) = stream.listen(
+      controller.add,
+      onError: controller.addError,
+      onDone: controller.close,
+    );
+
+    controller.onCancel = cancel;
+    controller.onPause = pause;
+    controller.onResume = resume;
+
+    return controller.stream;
   }
 }

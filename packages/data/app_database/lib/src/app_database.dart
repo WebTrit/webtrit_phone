@@ -723,6 +723,12 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
     return (select(chatsTable)..whereSamePrimaryKey(chat)).watchSingle();
   }
 
+  Future<List<int>> getChatIds() {
+    final q = customSelect('SELECT id FROM chats');
+    return q.get().then((rows) => rows.map((row) => row.data['id'] as int).toList());
+  }
+
+  @Deprecated('No needed anymore')
   Future<List<int>> getActiveChatIds() {
     final q = customSelect('SELECT id FROM chats WHERE deleted_at_remote IS NULL');
     return q.get().then((rows) => rows.map((row) => row.data['id'] as int).toList());
@@ -752,6 +758,10 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
 
   Future<int> upsertChat(Insertable<ChatData> chat) {
     return into(chatsTable).insertOnConflictUpdate(chat);
+  }
+
+  Future<int> deleteChatById(int chatId) {
+    return (delete(chatsTable)..where((t) => t.id.equals(chatId))).go();
   }
 
   Future<void> wipeStaleDeletedChatsData({int ttlSeconds = 60 * 60 * 24}) async {
