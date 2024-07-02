@@ -308,16 +308,6 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
     return (select(contactsTable)..whereSamePrimaryKey(contact)).watchSingle();
   }
 
-  Future<Set<String>> getIdsBySourceType(ContactSourceTypeEnum sourceType) async {
-    final rawResult = await (select(contactsTable)
-          ..where(
-            (t) => t.sourceType.equals(sourceType.index),
-          ))
-        .map((row) => row.id)
-        .get();
-    return rawResult.map((e) => e.toString()).toSet();
-  }
-
   Future<ContactData> insertOnUniqueConflictUpdateContact(Insertable<ContactData> contact) =>
       into(contactsTable).insertReturning(contact,
           onConflict: DoUpdate((_) => contact, target: [contactsTable.sourceType, contactsTable.sourceId]));
