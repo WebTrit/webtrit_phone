@@ -82,7 +82,6 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
 
         final syncedExternalContactsIds = contactDatas.map((contactData) => contactData.sourceId).toSet();
         final updatedExternalContactsIds = externalContacts.map((externalContact) => externalContact.id).toSet();
-
         final delExternalContactsIds = syncedExternalContactsIds.difference(updatedExternalContactsIds);
 
         // to del
