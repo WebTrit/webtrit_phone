@@ -58,25 +58,40 @@ class ThemeProvider extends InheritedWidget {
       onPrimary: colorSchemeOverride?.onPrimary,
       primaryContainer: colorSchemeOverride?.primaryContainer,
       onPrimaryContainer: colorSchemeOverride?.onPrimaryContainer,
+      primaryFixed: colorSchemeOverride?.primaryFixed,
+      primaryFixedDim: colorSchemeOverride?.primaryFixedDim,
+      onPrimaryFixed: colorSchemeOverride?.onPrimaryFixed,
+      onPrimaryFixedVariant: colorSchemeOverride?.onPrimaryFixedVariant,
       secondary: colorSchemeOverride?.secondary,
       onSecondary: colorSchemeOverride?.onSecondary,
       secondaryContainer: colorSchemeOverride?.secondaryContainer,
-      onSecondaryContainer: colorSchemeOverride?.onSecondaryContainer,
+      secondaryFixed: colorSchemeOverride?.secondaryFixed,
+      secondaryFixedDim: colorSchemeOverride?.secondaryFixedDim,
+      onSecondaryFixed: colorSchemeOverride?.onSecondaryFixed,
+      onSecondaryFixedVariant: colorSchemeOverride?.onSecondaryFixedVariant,
       tertiary: colorSchemeOverride?.tertiary,
       onTertiary: colorSchemeOverride?.onTertiary,
       tertiaryContainer: colorSchemeOverride?.tertiaryContainer,
       onTertiaryContainer: colorSchemeOverride?.onTertiaryContainer,
+      tertiaryFixed: colorSchemeOverride?.tertiaryFixed,
+      tertiaryFixedDim: colorSchemeOverride?.tertiaryFixedDim,
+      onTertiaryFixed: colorSchemeOverride?.onTertiaryFixed,
+      onTertiaryFixedVariant: colorSchemeOverride?.onTertiaryFixedVariant,
       error: colorSchemeOverride?.error,
       onError: colorSchemeOverride?.onError,
       errorContainer: colorSchemeOverride?.errorContainer,
       onErrorContainer: colorSchemeOverride?.onErrorContainer,
       outline: colorSchemeOverride?.outline,
       outlineVariant: colorSchemeOverride?.outlineVariant,
-      background: colorSchemeOverride?.background,
-      onBackground: colorSchemeOverride?.onBackground,
       surface: colorSchemeOverride?.surface,
       onSurface: colorSchemeOverride?.onSurface,
-      surfaceVariant: colorSchemeOverride?.surfaceVariant,
+      surfaceDim: colorSchemeOverride?.surfaceDim,
+      surfaceBright: colorSchemeOverride?.surfaceBright,
+      surfaceContainerLowest: colorSchemeOverride?.surfaceContainerLowest,
+      surfaceContainerLow: colorSchemeOverride?.surfaceContainerLow,
+      surfaceContainer: colorSchemeOverride?.surfaceContainer,
+      surfaceContainerHigh: colorSchemeOverride?.surfaceContainerHigh,
+      surfaceContainerHighest: colorSchemeOverride?.surfaceContainerHighest,
       onSurfaceVariant: colorSchemeOverride?.onSurfaceVariant,
       inverseSurface: colorSchemeOverride?.inverseSurface,
       onInverseSurface: colorSchemeOverride?.onInverseSurface,
@@ -205,8 +220,8 @@ class ThemeProvider extends InheritedWidget {
         disabledBackgroundColor: colors.onPrimaryContainer.withOpacity(0.12),
       ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
       neutral: ElevatedButton.styleFrom(
-        foregroundColor: colors.onBackground,
-        backgroundColor: colors.background,
+        foregroundColor: colors.onSurface,
+        backgroundColor: colors.surface,
       ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
       primaryOnDark: ElevatedButton.styleFrom(
         foregroundColor: colors.onPrimary,
@@ -215,10 +230,10 @@ class ThemeProvider extends InheritedWidget {
         disabledBackgroundColor: colors.primary.withOpacity(0.5),
       ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
       neutralOnDark: ElevatedButton.styleFrom(
-        foregroundColor: colors.onBackground,
-        backgroundColor: colors.background,
-        disabledForegroundColor: colors.onBackground.withOpacity(0.5),
-        disabledBackgroundColor: colors.background.withOpacity(0.5),
+        foregroundColor: colors.onSurface,
+        backgroundColor: colors.surface,
+        disabledForegroundColor: colors.onSurface.withOpacity(0.5),
+        disabledBackgroundColor: colors.surface.withOpacity(0.5),
       ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
     );
   }
@@ -226,9 +241,9 @@ class ThemeProvider extends InheritedWidget {
   OutlinedButtonStyles outlinedButtonStyles(ColorScheme colors) {
     return OutlinedButtonStyles(
       neutral: OutlinedButton.styleFrom(
-        foregroundColor: colors.onBackground,
+        foregroundColor: colors.onSurface,
         side: BorderSide(
-          color: colors.onBackground.withOpacity(0.2),
+          color: colors.onSurface.withOpacity(0.2),
         ),
       ),
     );
@@ -334,8 +349,8 @@ class ThemeProvider extends InheritedWidget {
 
     final backspacePressedStyleForegroundColor = config?.backspacePressed?.foregroundColor ?? colors.onSecondary;
     final backspacePressedStyleBackgroundColor = config?.backspacePressed?.backgroundColor;
-    final backspacePressedStyleIconColor = config?.backspacePressed?.iconColor ?? colors.onBackground;
-    final backspacePressedStyleDisabledIconColor = config?.backspacePressed?.disabledIconColor ?? colors.background;
+    final backspacePressedStyleIconColor = config?.backspacePressed?.iconColor ?? colors.onSurface;
+    final backspacePressedStyleDisabledIconColor = config?.backspacePressed?.disabledIconColor ?? colors.surface;
 
     final callStartStyle = TextButton.styleFrom(
       foregroundColor: callStartForegroundColor,
@@ -422,51 +437,51 @@ class ThemeProvider extends InheritedWidget {
     );
 
     final cameraStyle = callAction.copyWith(
-      backgroundColor: MaterialStatePropertyAll(cameraBackgroundColor),
+      backgroundColor: WidgetStatePropertyAll(cameraBackgroundColor),
     );
 
     final cameraActiveStyle = callAction.copyWith(
-      backgroundColor: MaterialStatePropertyAll(cameraActiveBackgroundColor),
+      backgroundColor: WidgetStatePropertyAll(cameraActiveBackgroundColor),
     );
 
     final mutedStyle = callAction.copyWith(
-      backgroundColor: MaterialStatePropertyAll(mutedBackgroundColor),
+      backgroundColor: WidgetStatePropertyAll(mutedBackgroundColor),
     );
 
     final mutedActiveStyle = callActiveAction.copyWith(
-      backgroundColor: MaterialStatePropertyAll(mutedActiveBackgroundColor),
+      backgroundColor: WidgetStatePropertyAll(mutedActiveBackgroundColor),
     );
 
     final speakerStyle = callAction.copyWith(
-      backgroundColor: MaterialStatePropertyAll(speakerBackgroundColor),
+      backgroundColor: WidgetStatePropertyAll(speakerBackgroundColor),
     );
 
     final speakerActiveStyle = callActiveAction.copyWith(
-      backgroundColor: MaterialStatePropertyAll(speakerActiveBackgroundColor),
+      backgroundColor: WidgetStatePropertyAll(speakerActiveBackgroundColor),
     );
 
     final heldStyle = callAction.copyWith(
-      backgroundColor: MaterialStatePropertyAll(heldBackgroundColor),
+      backgroundColor: WidgetStatePropertyAll(heldBackgroundColor),
     );
 
     final heldActiveStyle = callActiveAction.copyWith(
-      backgroundColor: MaterialStatePropertyAll(heldActiveBackgroundColor),
+      backgroundColor: WidgetStatePropertyAll(heldActiveBackgroundColor),
     );
 
     final swapStyle = callAction.copyWith(
-      backgroundColor: MaterialStatePropertyAll(swapBackgroundColor),
+      backgroundColor: WidgetStatePropertyAll(swapBackgroundColor),
     );
 
     final keyStyle = callAction.copyWith(
-      backgroundColor: MaterialStatePropertyAll(keyBackgroundColor),
+      backgroundColor: WidgetStatePropertyAll(keyBackgroundColor),
     );
 
     final keypadStyle = callAction.copyWith(
-      backgroundColor: MaterialStatePropertyAll(keypadBackgroundColor),
+      backgroundColor: WidgetStatePropertyAll(keypadBackgroundColor),
     );
 
     final keypadActiveStyle = callActiveAction.copyWith(
-      backgroundColor: MaterialStatePropertyAll(keypadActiveBackgroundColor),
+      backgroundColor: WidgetStatePropertyAll(keypadActiveBackgroundColor),
     );
 
     return CallActionsStyles(
@@ -503,9 +518,9 @@ class ThemeProvider extends InheritedWidget {
     TextButtonStyles styles,
     ConfirmDialogWidgetConfig? dialogConfig,
   ) {
-    final activeButtonStyle1ForegroundColor = MaterialStatePropertyAll(dialogConfig?.activeButtonColor1);
-    final activeButtonStyle2ForegroundColor = MaterialStatePropertyAll(dialogConfig?.activeButtonColor2);
-    final defaultButtonStyleForegroundColor = MaterialStatePropertyAll(dialogConfig?.defaultButtonColor);
+    final activeButtonStyle1ForegroundColor = WidgetStatePropertyAll(dialogConfig?.activeButtonColor1);
+    final activeButtonStyle2ForegroundColor = WidgetStatePropertyAll(dialogConfig?.activeButtonColor2);
+    final defaultButtonStyleForegroundColor = WidgetStatePropertyAll(dialogConfig?.defaultButtonColor);
 
     final activeButtonStyle1 = styles.neutral?.copyWith(foregroundColor: activeButtonStyle1ForegroundColor);
     final activeButtonStyle2 = styles.dangerous?.copyWith(foregroundColor: activeButtonStyle2ForegroundColor);
@@ -528,23 +543,24 @@ class ThemeProvider extends InheritedWidget {
       floatingLabelBehavior: FloatingLabelBehavior.always,
       isDense: true,
       filled: true,
-      fillColor: colors.background,
+      // TODO(Serdun): add fill color from widget settings model
+      fillColor: colors.surfaceBright,
       labelStyle: TextStyle(color: primary?.labelColor),
       border: MaterialStateOutlineInputBorder.resolveWith((states) {
         final Color borderColor;
-        final bool isError = states.contains(MaterialState.error);
-        if (states.contains(MaterialState.disabled)) {
+        final bool isError = states.contains(WidgetState.error);
+        if (states.contains(WidgetState.disabled)) {
           borderColor = isError
               ? primary?.border?.disabled?.errorColor ?? colors.error.withOpacity(0.25)
-              : primary?.border?.disabled?.typicalColor ?? colors.onBackground.withOpacity(0.25);
-        } else if (states.contains(MaterialState.focused)) {
+              : primary?.border?.disabled?.typicalColor ?? colors.onSurface.withOpacity(0.25);
+        } else if (states.contains(WidgetState.focused)) {
           borderColor = isError
               ? primary?.border?.focused?.errorColor ?? colors.error
               : primary?.border?.focused?.typicalColor ?? colors.primary;
         } else {
           borderColor = isError
               ? primary?.border?.any?.errorColor ?? colors.error.withOpacity(0.5)
-              : primary?.border?.any?.typicalColor ?? colors.onBackground.withOpacity(0.5);
+              : primary?.border?.any?.typicalColor ?? colors.onSurface.withOpacity(0.5);
         }
         return OutlineInputBorder(
           borderSide: BorderSide(
@@ -727,6 +743,7 @@ class ThemeProvider extends InheritedWidget {
       textButtonTheme: textButtonTheme(colorScheme),
       listTileTheme: listTileTheme(colorScheme),
       snackBarTheme: snackBarTheme(colorScheme),
+      scaffoldBackgroundColor: colorScheme.surfaceBright,
     );
   }
 

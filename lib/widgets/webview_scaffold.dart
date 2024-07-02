@@ -79,7 +79,7 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
     super.didChangeDependencies();
 
     final themeData = Theme.of(context);
-    final backgroundColor = themeData.colorScheme.background;
+    final backgroundColor = themeData.colorScheme.surface;
     if (_backgroundColorCache != backgroundColor) {
       _backgroundColorCache = backgroundColor;
       _webViewController.setBackgroundColor(backgroundColor);

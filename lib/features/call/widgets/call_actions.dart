@@ -8,9 +8,6 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-import 'call_actions_style.dart';
-import 'call_actions_styles.dart';
-
 export 'call_actions_style.dart';
 export 'call_actions_styles.dart';
 
@@ -116,7 +113,7 @@ class _CallActionsState extends State<CallActions> {
 
     _inputDecorations = themeData.extension<InputDecorations>();
     _textStyle = themeData.textTheme.displaySmall?.copyWith(
-      color: themeData.colorScheme.background,
+      color: themeData.colorScheme.surface,
     );
 
     _iconSize = themeData.textTheme.headlineLarge?.fontSize;

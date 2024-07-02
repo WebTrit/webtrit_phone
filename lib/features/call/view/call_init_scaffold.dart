@@ -14,7 +14,7 @@ class CallInitScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final Gradients? gradients = themeData.extension<Gradients>();
-    final onTabGradient = themeData.colorScheme.background;
+    final onTabGradient = themeData.colorScheme.surface;
 
     return Scaffold(
       body: Container(

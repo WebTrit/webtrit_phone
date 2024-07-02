@@ -48,7 +48,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
 
     final themeData = Theme.of(context);
     final Gradients? gradients = themeData.extension<Gradients>();
-    final onTabGradient = themeData.colorScheme.background;
+    final onTabGradient = themeData.colorScheme.surface;
     final textTheme = themeData.textTheme;
     final switchCameraIconSize = textTheme.titleMedium!.fontSize!;
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
