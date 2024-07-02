@@ -1,5 +1,7 @@
 import 'package:clock/clock.dart';
 import 'package:drift/drift.dart';
+import 'package:drift/native.dart';
+import 'package:drift/remote.dart';
 
 import 'migrations/migrations.dart';
 
@@ -44,9 +46,29 @@ class AppDatabase extends _$AppDatabase {
   MigrationStrategy get migration {
     return MigrationStrategy(
       onUpgrade: (m, from, to) async {
-        for (var version = from; version < to; version++) {
-          await migrations[version - 1].execute(this, m);
-        }
+        await customStatement('PRAGMA foreign_keys = OFF');
+
+        // Use a transaction to avoid concurrent migration
+        // with another isolate (e.g. FCM isolate init [bootstrap.dart - _firebaseMessagingBackgroundHandler])
+        await transaction(() async {
+          try {
+            for (var version = from; version < to; version++) {
+              await migrations[version - 1].execute(this, m);
+            }
+          } on DriftRemoteException catch (e) {
+            final remoteCause = e.remoteCause;
+            if (remoteCause is SqliteException && remoteCause.resultCode == 1) {
+              // If a migration fails, drop all entities and recreate them in actual form
+              // At least to provide app functionality with clean data instead of crashing loop
+              for (final e in allSchemaEntities) {
+                await m.drop(e);
+              }
+              await m.createAll();
+            } else {
+              rethrow;
+            }
+          }
+        });
 
         // Assert that the schema is valid after migrations
         assert(() {
