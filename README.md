@@ -139,6 +139,35 @@ For the theme configuration documentation, please refer to the [Theme Configurat
   make create-appbundle
   ```
 
+# Testing
+
+## Test commands
+* Run unit and widget tests
+  ```bash
+  flutter test
+  ```
+* Run integration tests
+  ```bash
+  flutter test integration_test --dart-define-from-file=dart_define.json --dart-define-from-file=dart_define_test.json 
+  ```
+* Run specific integration test
+  ```bash
+  flutter test integration_test flutter drive --driver=test_driver/integration_test.dart --target=integration_test/<test_file_name>.dart  --dart-define-from-file=dart_define.json
+  --dart-define-from-file=dart_define_test.json 
+  ```
+
+### Test variables
+
+* `WEBTRIT_APP_LOGIN_TEST_CORE_URL` (_example **http://localhost:4000\/tenant\/123123**_)
+* `WEBTRIT_APP_LOGIN_TEST_EMAIL_CREDENTIAL` (_example mail@mail.com_)
+* `WEBTRIT_APP_LOGIN_TEST_EMAIL_VERIFY_CREDENTIAL` (_example 123456_)
+* `WEBTRIT_APP_LOGIN_TEST_OTP_CREDENTIAL` (_example +1234566789_)
+* `WEBTRIT_APP_LOGIN_TEST_OTP_VERIFY_CREDENTIAL` (_example 123456_)
+* `WEBTRIT_APP_LOGIN_TEST_PASSWORD_USER_CREDENTIAL`  (_example username_)
+* `WEBTRIT_APP_LOGIN_TEST_PASSWORD_PASSWORD_CREDENTIAL` (_example 123456_)
+
+Default test variables located in dart_define_test.json and could be add to flutter drive or test with --dart-define-from-file=dart_define_test.json parameter. Also can be used multiple times to combine with regular dart_define file as on example above.
+
 ## Contributing
 
 Contributions are always welcome!

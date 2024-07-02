@@ -26,3 +26,13 @@ extension LoginTypePageRouteInfo on LoginType {
     };
   }
 }
+
+extension LoginTypeLoginSegmentKey on LoginType {
+  String toLoginSegmentKey() {
+    return switch (this) {
+      LoginType.otpSignin => 'loginTypeSegment_otpSignin',
+      LoginType.passwordSignin => 'loginTypeSegment_passwordSignin',
+      LoginType.signup => 'loginTypeSegment_signup',
+    };
+  }
+}
