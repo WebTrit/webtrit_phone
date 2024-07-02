@@ -1,14 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
-import 'package:logging/logging.dart';
+
 import 'package:path/path.dart';
 
 import 'package:ssl_certificates/ssl_certificates.dart';
 
 import 'package:webtrit_phone/app/assets.gen.dart';
-
-final Logger _logger = Logger('AppCertificates');
 
 class AppCertificates {
   AppCertificates._(this._trustedCertificates);
