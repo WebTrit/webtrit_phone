@@ -498,7 +498,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       if (emit.isDone) return;
 
       if (state.lastSignalingClientConnectError == null) {
-        notificationsBloc.add(NotificationsSubmitted(const CallConnectErrorNotification()));
+        notificationsBloc.add(const NotificationsSubmitted(CallConnectErrorNotification()));
       }
 
       emit(state.copyWith(
@@ -558,7 +558,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (signalingDisconnectCode != null) {
       final code = SignalingDisconnectCode.values.byCode(signalingDisconnectCode);
       if (code == SignalingDisconnectCode.sessionMissedError) {
-        notificationsBloc.add(NotificationsSubmitted(const CallSignalingClientSessionMissedErrorNotification()));
+        notificationsBloc.add(const NotificationsSubmitted(CallSignalingClientSessionMissedErrorNotification()));
       } else if (code == SignalingDisconnectCode.appUnregisteredError) {
         add(const _RegistrationChange(registrationStatus: RegistrationStatus.unregistered));
       } else if (code == SignalingDisconnectCode.requestCallIdError) {
@@ -741,7 +741,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       _peerConnectionCompleteError(event.callId, e, stackTrace);
 
-      notificationsBloc.add(NotificationsSubmitted(const CallUserMediaErrorNotification()));
+      notificationsBloc.add(const NotificationsSubmitted(CallUserMediaErrorNotification()));
 
       emit(state.copyWithPopActiveCall(event.callId));
 
@@ -1342,7 +1342,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       emit(state.copyWithPopActiveCall(event.callId));
 
-      notificationsBloc.add(NotificationsSubmitted(const CallUndefinedLineErrorNotification()));
+      notificationsBloc.add(const NotificationsSubmitted(CallUndefinedLineErrorNotification()));
       return;
     }
     if (!state.signalingClientStatus.isConnect &&
@@ -1363,7 +1363,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // Remove local connection
       callkeep.endCall(event.callId);
 
-      notificationsBloc.add(NotificationsSubmitted(const CallSignalingClientNotConnectErrorNotification()));
+      notificationsBloc.add(const NotificationsSubmitted(CallSignalingClientNotConnectErrorNotification()));
       return;
     }
     late final MediaStream localStream;
@@ -1381,7 +1381,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       emit(state.copyWithPopActiveCall(event.callId));
 
-      notificationsBloc.add(NotificationsSubmitted(const CallUserMediaErrorNotification()));
+      notificationsBloc.add(const NotificationsSubmitted(CallUserMediaErrorNotification()));
       return;
     }
     event.fulfill();
