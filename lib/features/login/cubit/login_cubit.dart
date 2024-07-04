@@ -43,11 +43,15 @@ class LoginCubit extends Cubit<LoginState> {
 
   String? get coreUrlFromEnvironment => EnvironmentConfig.CORE_URL;
 
+  String? get credentialsRequestUrl => EnvironmentConfig.APP_CREDENTIALS_REQUEST_URL;
+
   String? get demoCoreUrlFromEnvironment => EnvironmentConfig.DEMO_CORE_URL;
 
   String get defaultTenantId => '';
 
   bool get isDemoModeEnabled => coreUrlFromEnvironment == null;
+
+  bool get isCredentialsRequestUrlEnabled => credentialsRequestUrl != null;
 
   void launchLinkableElement(LinkableElement link) async {
     final url = Uri.parse(link.url);
@@ -103,7 +107,7 @@ class LoginCubit extends Cubit<LoginState> {
 
     final demo = mode == LoginMode.demoCore;
     final coreUrl = demo ? demoCoreUrlFromEnvironment : coreUrlFromEnvironment;
-    if (coreUrl != null) {
+    if (coreUrl != null && mode != LoginMode.credentialsRequest) {
       await _verifyCoreVersionAndRetrieveSupportedLoginTypesSubmitted(coreUrl, defaultTenantId, demo);
     }
   }
@@ -133,6 +137,12 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(
       mode: null,
       coreUrlInput: const UrlInput.pure(),
+    ));
+  }
+
+  void credentialsRequestUrlAssignBack() async {
+    emit(state.copyWith(
+      mode: null,
     ));
   }
 

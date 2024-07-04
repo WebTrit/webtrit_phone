@@ -59,6 +59,10 @@ class AppRouter extends _$AppRouter {
                   page: LoginModeSelectScreenPageRoute.page,
                 ),
                 AutoRoute(
+                  page: LoginCredentialsRequestScreenPageRoute.page,
+                  maintainState: false,
+                ),
+                AutoRoute(
                   page: LoginCoreUrlAssignScreenPageRoute.page,
                 ),
                 AutoRoute(
