@@ -50,7 +50,7 @@ class UndefinedScreen extends StatelessWidget {
                       const Spacer(),
                       const SizedBox(height: kInset),
                       OutlinedButton(
-                        onPressed: () => context.router.pop(),
+                        onPressed: () => context.router.maybePop(),
                         style: elevatedButtonStyles?.primary,
                         child: Text(context.l10n.permission_Button_request),
                       ),

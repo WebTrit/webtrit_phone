@@ -25,7 +25,7 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
   Future navigateBack() async {
     if (router.canPop(ignorePagelessRoutes: true)) {
       // For case when app is launched with the autoprovision screen on top of any screen.
-      await router.pop();
+      await router.maybePop();
     } else {
       // For the case when the app is launched with the autoprovision screen as initial route.
       await router.replace(const MainShellRoute());
@@ -63,14 +63,14 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
 
       // For case when app is launched with the autoprovision screen on top of the login screen.
       if (loginUnderneeth) {
-        await router.pop();
+        await router.maybePop();
         appBloc.add(AppLogined(coreUrl: state.coreUrl, token: state.token, tenantId: state.tenantId));
       }
 
       // For case when app is launched with the autoprovision screen on top of the main shell.
       // To avoid callkeep and signaling panic it required full sequence of dispose and init.
       if (mainShellUnderneeth) {
-        await router.pop();
+        await router.maybePop();
         appBloc.add(const AppLogouted());
         await appBloc.stream.firstWhere((element) => element.token == null);
         appBloc.add(AppLogined(coreUrl: state.coreUrl, token: state.token, tenantId: state.tenantId));
