@@ -881,6 +881,30 @@ abstract class AppLocalizations {
   /// **'Please enter a valid phone number or email'**
   String get login_validationUserRefError;
 
+  /// No description provided for @login_requestCredentials_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign up'**
+  String get login_requestCredentials_button;
+
+  /// No description provided for @login_requestCredentials_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign up'**
+  String get login_requestCredentials_title;
+
+  /// No description provided for @login_requestCredentials_DialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Account Request'**
+  String get login_requestCredentials_DialogTitle;
+
+  /// No description provided for @login_requestCredentials_DialogContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Please provide basic information and specify in the message that you would like to receive an account. Our administrators will verify the information and send the account details to your email.'**
+  String get login_requestCredentials_DialogContent;
+
   /// No description provided for @logRecordsConsole_AppBarTitle.
   ///
   /// In en, this message translates to:
