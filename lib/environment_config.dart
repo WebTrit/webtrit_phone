@@ -77,6 +77,13 @@ class EnvironmentConfig {
         )
       : null;
 
+  static const APP_CREDENTIALS_REQUEST_URL__NAME = 'WEBTRIT_APP_CREDENTIALS_REQUEST_URL';
+  static const APP_CREDENTIALS_REQUEST_URL = bool.hasEnvironment(APP_CREDENTIALS_REQUEST_URL__NAME)
+      ? String.fromEnvironment(
+          APP_CREDENTIALS_REQUEST_URL__NAME,
+        )
+      : null;
+
   static const SALES_EMAIL__NAME = 'WEBTRIT_APP_SALES_EMAIL';
   static const SALES_EMAIL = String.fromEnvironment(
     SALES_EMAIL__NAME,
