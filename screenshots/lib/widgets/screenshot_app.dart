@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+// ignore: depend_on_referenced_packages
 import 'package:auto_route/auto_route.dart';
 import 'package:mocktail/mocktail.dart';
+
 // TODO(ScreenshotApp): Remove this import after fixing this bug https://github.com/Milad-Akarie/auto_route_library/issues/1806
-// ignore: implementation_imports
+// ignore: implementation_imports, depend_on_referenced_packages
 import 'package:auto_route/src/router/controller/pageless_routes_observer.dart';
 
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
