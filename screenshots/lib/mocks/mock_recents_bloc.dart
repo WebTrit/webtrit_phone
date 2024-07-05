@@ -1,4 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:intl/intl.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -18,6 +20,7 @@ class MockRecentsBloc extends MockBloc<RecentsEvent, RecentsState> implements Re
         filter: RecentsVisibilityFilter.all,
       ),
     );
+    when(() => mock.dateFormat).thenReturn(DateFormat.yMMMd().add_Hm());
     return mock;
   }
 }
