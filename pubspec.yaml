@@ -8,7 +8,13 @@ publish_to: 'none'
 #   - <Build>: non-negative integer computed as follows:
 #       <Major> * 1000000 + <Minor> * 10000 + <Patch> * 100 + <published build iteration for Major.Minor.Patch combination>
 # Note: <Minor>, <Patch>, and <Build> should be within the range of 0 to 99.
-version: 1.1.0+1010000
+version: 0.0.0+0000000
+
+# Version format for app_version: <Major>.<Minor>.<Patch>
+# Where:
+#   - <Major>, <Minor>, <Patch>: non-negative integers, decided by the developer
+# app_version represents tasks and fixed bugs, which is different from the build version that is specific to each client
+app_version: 1.2.0
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
@@ -105,15 +111,13 @@ dev_dependencies:
   flutter_native_splash: ^2.4.0
   freezed: ^2.5.2
   json_serializable: ^6.7.1
-  version_gen:
-    git:
-      url: https://github.com/SERDUN/version_gen.git
 
 flutter:
   generate: true
   uses-material-design: true
 
   assets:
+    - pubspec.yaml
     - assets/
     - assets/callkeep/
     - assets/login/
