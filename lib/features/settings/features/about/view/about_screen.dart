@@ -72,7 +72,10 @@ class AboutScreen extends StatelessWidget {
                 SizedBox(
                   height: delimiterHeight,
                 ),
-                Text(state.coreUrl.toString()),
+                Text(
+                  state.coreUrl.toString(),
+                  textAlign: TextAlign.center,
+                ),
                 Stack(
                   alignment: AlignmentDirectional.center,
                   children: [
