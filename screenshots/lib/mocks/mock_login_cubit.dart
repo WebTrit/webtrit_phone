@@ -18,6 +18,7 @@ class MockLoginCubit extends MockCubit<LoginState> implements LoginCubit {
       initialState: const LoginState(),
     );
     when(() => mock.isDemoModeEnabled).thenReturn(false);
+    when(() => mock.isCredentialsRequestUrlEnabled).thenReturn(false);
     return mock;
   }
 
