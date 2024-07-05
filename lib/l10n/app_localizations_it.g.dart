@@ -420,6 +420,18 @@ class AppLocalizationsIt extends AppLocalizations {
   String get login_validationUserRefError => 'Per favore, inserisci un numero di telefono o un\'email valida';
 
   @override
+  String get login_requestCredentials_button => 'Iscriviti';
+
+  @override
+  String get login_requestCredentials_title => 'Iscriviti';
+
+  @override
+  String get login_requestCredentials_DialogTitle => 'Richiesta Account';
+
+  @override
+  String get login_requestCredentials_DialogContent => 'Per favore, fornisci informazioni di base e specifica nel messaggio che desideri ricevere un account. I nostri amministratori verificheranno le informazioni e invieranno i dettagli dell\'account alla tua email.';
+
+  @override
   String get logRecordsConsole_AppBarTitle => 'Console dei log';
 
   @override

@@ -35,6 +35,7 @@ class LoginModeSelectScreen extends StatelessWidget {
       buildWhen: (previous, current) => previous.processing != current.processing,
       builder: (context, state) {
         final isDemoModeEnabled = context.read<LoginCubit>().isDemoModeEnabled;
+        final isCredentialsRequestUrlEnabled = context.read<LoginCubit>().isCredentialsRequestUrlEnabled;
 
         return Scaffold(
           extendBodyBehindAppBar: true,
@@ -86,6 +87,11 @@ class LoginModeSelectScreen extends StatelessWidget {
                           color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
                         ),
                 ),
+                if (isCredentialsRequestUrlEnabled)
+                  TextButton(
+                    onPressed: () => context.read<LoginCubit>().loginModeSelectSubmitted(LoginMode.credentialsRequest),
+                    child: Text(context.l10n.login_requestCredentials_button),
+                  ),
               ],
             ),
           ),

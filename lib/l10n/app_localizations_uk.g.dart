@@ -420,6 +420,18 @@ class AppLocalizationsUk extends AppLocalizations {
   String get login_validationUserRefError => 'Будь ласка, введіть правильний номер телефону чи електронну пошту';
 
   @override
+  String get login_requestCredentials_button => 'Зареєструватися';
+
+  @override
+  String get login_requestCredentials_title => 'Зареєструватися';
+
+  @override
+  String get login_requestCredentials_DialogTitle => 'Запит акаунта';
+
+  @override
+  String get login_requestCredentials_DialogContent => 'Будь ласка, надайте основну інформацію та вкажіть у повідомленні, що ви хочете отримати акаунт. Наші адміністратори перевірять інформацію та надішлють деталі акаунта на вашу електронну пошту.';
+
+  @override
   String get logRecordsConsole_AppBarTitle => 'Консоль журналу';
 
   @override
