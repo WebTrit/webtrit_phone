@@ -37,11 +37,11 @@ class DemoCubit extends Cubit<DemoCubitState> {
   final String _token;
   final String _tenantId;
 
-  final _actionConvert = 'convert';
+  final _typeConvert = 'convert';
 
-  Future<DemoData> _generateAction(String type) async {
+  Future<DemoData> _prepareRequest(String type) async {
     final account = await _webtritApiClient.getUserInfo(_token);
-    _logger.info('_generateAction: $account');
+    _logger.info('_prepareRequest: $account');
 
     return _webtritApiClient.createDemoData(DemoCredential(
       type: _platformInfo.appType,
@@ -54,7 +54,7 @@ class DemoCubit extends Cubit<DemoCubitState> {
 
   void _initializeConvertPbxUrl() async {
     try {
-      final data = await _generateAction(_actionConvert);
+      final data = await _prepareRequest(_typeConvert);
 
       _logger.info('_initializeConvertPbxUrl: $data');
 
