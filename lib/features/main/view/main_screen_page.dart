@@ -5,8 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:store_info_extractor/store_info_extractor.dart';
 
+import 'package:webtrit_api/webtrit_api.dart';
+
 import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -18,6 +22,8 @@ class MainScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appPreferences = context.read<AppPreferences>();
+    const appDemoFlow = EnvironmentConfig.CORE_URL == null;
+
     final autoTabsRouter = AutoTabsRouter(
       routes: const [
         FavoritesRouterPageRoute(),
@@ -28,9 +34,16 @@ class MainScreenPage extends StatelessWidget {
       duration: Duration.zero,
       builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
+        final isRouteActive = context.router.isRouteActive(MainScreenPageRoute.name);
+        final flavor = MainFlavor.values[tabsRouter.activeIndex];
+
+        if (appDemoFlow) {
+          context.read<DemoCubit>().changeVisibleConvertedButton(isRouteActive && flavor != MainFlavor.keypad);
+        }
+
         return MainScreen(
           body: child,
-          navigationBarFlavor: MainFlavor.values[tabsRouter.activeIndex],
+          navigationBarFlavor: flavor,
           onNavigationBarTap: (flavor) {
             tabsRouter.setActiveIndex(flavor.index);
 
@@ -47,8 +60,20 @@ class MainScreenPage extends StatelessWidget {
           storeInfoExtractor: StoreInfoExtractor(),
         )..add(const MainStarted());
       },
-      child: autoTabsRouter,
+      child: appDemoFlow
+          ? BlocProvider<DemoCubit>(
+              create: (context) => DemoCubit(
+                webtritApiClient: context.read<WebtritApiClient>(),
+                platformInfo: PlatformInfo(),
+                appInfo: AppInfo(),
+                token: context.read<AppBloc>().state.token!,
+                tenantId: context.read<AppBloc>().state.tenantId!,
+              ),
+              child: DemoShell(child: autoTabsRouter),
+            )
+          : autoTabsRouter,
     );
+
     return provider;
   }
 }
