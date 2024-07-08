@@ -515,5 +515,15 @@
   "user_agreement_description": "Benvenuto in {appName}",
   "@user_agreement_description": {},
   "validationBlankError": "Prego inserire un valore",
-  "@validationBlankError": {}
+  "@validationBlankError": {},
+  "connectToYourOwnVoIPSystem_Button_Action": "Connettiti al tuo sistema VoIP",
+  "@connectToYourOwnVoIPSystem_Button_Action": {},
+  "webRegistration_ErrorAcknowledgeDialog_title": "Errore risorsa web",
+  "@webRegistration_ErrorAcknowledgeDialog_title": {},
+  "webRegistration_ErrorAcknowledgeDialogActions_demo": "Demo",
+  "@webRegistration_ErrorAcknowledgeDialogActions_demo": {},
+  "webRegistration_ErrorAcknowledgeDialogActions_skip": "Salta",
+  "@webRegistration_ErrorAcknowledgeDialogActions_skip": {},
+  "webRegistration_ErrorAcknowledgeDialogActions_retry": "Riprova",
+  "@webRegistration_ErrorAcknowledgeDialogActions_retry": {}
 }

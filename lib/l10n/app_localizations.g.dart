@@ -1384,6 +1384,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter a value'**
   String get validationBlankError;
+
+  /// No description provided for @connectToYourOwnVoIPSystem_Button_Action.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect to your own VoIP system'**
+  String get connectToYourOwnVoIPSystem_Button_Action;
+
+  /// No description provided for @webRegistration_ErrorAcknowledgeDialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Web resource error'**
+  String get webRegistration_ErrorAcknowledgeDialog_title;
+
+  /// No description provided for @webRegistration_ErrorAcknowledgeDialogActions_demo.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo'**
+  String get webRegistration_ErrorAcknowledgeDialogActions_demo;
+
+  /// No description provided for @webRegistration_ErrorAcknowledgeDialogActions_skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get webRegistration_ErrorAcknowledgeDialogActions_skip;
+
+  /// No description provided for @webRegistration_ErrorAcknowledgeDialogActions_retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get webRegistration_ErrorAcknowledgeDialogActions_retry;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

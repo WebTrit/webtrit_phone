@@ -690,4 +690,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get validationBlankError => 'Please enter a value';
+
+  @override
+  String get connectToYourOwnVoIPSystem_Button_Action => 'Connect to your own VoIP system';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialogActions_demo => 'Demo';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialogActions_skip => 'Skip';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialogActions_retry => 'Retry';
 }
