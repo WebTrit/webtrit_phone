@@ -16,19 +16,22 @@ class ChatsRouterPage extends StatefulWidget {
 class _ChatsRouterPageState extends State<ChatsRouterPage> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChatsBloc, ChatsState>(
-      builder: (context, state) {
-        return Column(
-          children: [
-            const Expanded(child: AutoRouter()),
-            if (state.status != ChatsStatus.connected) ...[
-              const SizedBox(height: 8),
-              StateBar(state: state),
-              const SizedBox(height: 8),
+    return BlocProvider(
+      create: (context) => MessageForwardCubit(),
+      child: BlocBuilder<ChatsBloc, ChatsState>(
+        builder: (context, state) {
+          return Column(
+            children: [
+              const Expanded(child: AutoRouter()),
+              if (state.status != ChatsStatus.connected) ...[
+                const SizedBox(height: 8),
+                StateBar(state: state),
+                const SizedBox(height: 8),
+              ],
             ],
-          ],
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

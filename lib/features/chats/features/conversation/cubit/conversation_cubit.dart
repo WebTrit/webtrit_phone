@@ -55,6 +55,22 @@ class ConversationCubit extends Cubit<ConversationState> {
     }
   }
 
+  Future sendReply(String content, ChatMessage refMessage) async {
+    throw UnimplementedError();
+  }
+
+  Future sendForward(String content, ChatMessage refMessage) async {
+    throw UnimplementedError();
+  }
+
+  Future sendEdit(String content, ChatMessage refMessage) async {
+    throw UnimplementedError();
+  }
+
+  Future deleteMessage(ChatMessage message) async {
+    throw UnimplementedError();
+  }
+
   Future fetchHistory() async {
     final state = this.state;
     if (state is! CVSReady) return;

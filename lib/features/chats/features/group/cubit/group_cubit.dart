@@ -49,6 +49,22 @@ class GroupCubit extends Cubit<GroupState> {
     _localChatRepository.submitNewMessage(_chatId, content);
   }
 
+  Future sendReply(String content, ChatMessage refMessage) async {
+    throw UnimplementedError();
+  }
+
+  Future sendForward(String content, ChatMessage refMessage) async {
+    throw UnimplementedError();
+  }
+
+  Future sendEdit(String content, ChatMessage refMessage) async {
+    throw UnimplementedError();
+  }
+
+  Future deleteMessage(ChatMessage message) async {
+    throw UnimplementedError();
+  }
+
   Future fetchHistory() async {
     final state = this.state;
     if (state is! GroupStateReady) return;

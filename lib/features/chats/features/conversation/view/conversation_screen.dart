@@ -37,7 +37,11 @@ class _ConversationScreenState extends State<ConversationScreen> {
               outboxQueue: state.outboxQueue,
               fetchingHistory: state.fetchingHistory,
               historyEndReached: state.historyEndReached,
-              onSend: (content) => conversationCubit.sendMessage(content),
+              onSendMessage: (content) => conversationCubit.sendMessage(content),
+              onSendReply: (content, refMessage) => conversationCubit.sendReply(content, refMessage),
+              onSendForward: (content, refMessage) => conversationCubit.sendForward(content, refMessage),
+              onSendEdit: (content, refMessage) => conversationCubit.sendEdit(content, refMessage),
+              onDelete: (refMessage) => conversationCubit.deleteMessage(refMessage),
               onFetchHistory: conversationCubit.fetchHistory,
             );
           }

@@ -25,7 +25,7 @@ class _ChatListItemState extends State<ChatListItem> {
   late final localChatRepository = context.read<LocalChatRepository>();
 
   ChatMessage? lastMessage;
-  late final StreamSubscription _sub;
+  StreamSubscription? _sub;
 
   @override
   void initState() {
@@ -51,7 +51,7 @@ class _ChatListItemState extends State<ChatListItem> {
 
   @override
   void dispose() {
-    _sub.cancel();
+    _sub?.cancel();
     super.dispose();
   }
 
