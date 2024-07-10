@@ -113,30 +113,35 @@ For the theme configuration documentation, please refer to the [Theme Configurat
   ```bash
   make configure id=<application_id>
   ```
-
-* `configure-clean` - Clean configuration files
+  
+* `configure-demo` - Create demo configuration
   ```bash
-  make configure-clean
+  make configure-demo id=<application_id>
   ```
 
-* `create-demo-classic` - Create demo classic configuration
+* `configure-classic` - Create demo configuration
   ```bash
-  make create-demo-classic id=<application_id>
+  make configure-classic id=<application_id>
   ```
 
-* `create-ios` - Create iOS build
+* `build-ios` - Create iOS build
   ```bash
-  make create-ios
+  make build-ios
   ```
 
-* `create-apk` - Create APK build
+* `build-apk` - Create APK build
   ```bash
-  make create-apk
+  make build-apk
   ```
 
-* `create-appbundle` - Create App Bundle build
+* `build-appbundle` - Create App Bundle build
   ```bash
-  make create-appbundle
+  make build-appbundle
+  ```
+
+* `clean-git` - Clean git files
+  ```bash
+  make clean-git
   ```
 
 ## Contributing
