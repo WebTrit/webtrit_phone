@@ -127,6 +127,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get callStatus_ready => 'Connection established';
 
   @override
+  String get connectToYourOwnVoIPSystem_Button_Action => 'Connect to your own VoIP system';
+
+  @override
   String get contacts_ExternalTabButton_refresh => 'Refresh';
 
   @override
@@ -222,6 +225,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get favorites_Text_blingTransferInitiated => 'Performing blind transfer';
 
   @override
+  String get inviteFriends_Dialog_close => 'Hide this message';
+
+  @override
+  String get inviteFriends_Dialog_invite => 'Invite';
+
+  @override
+  String get inviteFriends_Dialog_title => 'Invite your friends \nto try WebTrit';
+
+  @override
   String get locale_default => 'Default';
 
   @override
@@ -280,6 +292,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String login_CoreVersionUnsupportedExceptionError(String actual, String supportedConstraint) {
     return 'An incompatible instance version provided, please contact the administrator of your system (actual: $actual, supported: $supportedConstraint)';
   }
+
+  @override
+  String get login_requestCredentials_button => 'Sign up';
+
+  @override
+  String get login_requestCredentials_DialogContent => 'Please provide basic information and specify in the message that you would like to receive an account. Our administrators will verify the information and send the account details to your email.';
+
+  @override
+  String get login_requestCredentials_DialogTitle => 'Account Request';
+
+  @override
+  String get login_requestCredentials_title => 'Sign up';
 
   @override
   String get login_RequestFailureEmptyEmailError => 'Cannot send the verification code';
@@ -418,18 +442,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get login_validationUserRefError => 'Please enter a valid phone number or email';
-
-  @override
-  String get login_requestCredentials_button => 'Sign up';
-
-  @override
-  String get login_requestCredentials_title => 'Sign up';
-
-  @override
-  String get login_requestCredentials_DialogTitle => 'Account Request';
-
-  @override
-  String get login_requestCredentials_DialogContent => 'Please provide basic information and specify in the message that you would like to receive an account. Our administrators will verify the information and send the account details to your email.';
 
   @override
   String get logRecordsConsole_AppBarTitle => 'Log Console';
@@ -692,17 +704,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get validationBlankError => 'Please enter a value';
 
   @override
-  String get connectToYourOwnVoIPSystem_Button_Action => 'Connect to your own VoIP system';
-
-  @override
-  String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
-
-  @override
   String get webRegistration_ErrorAcknowledgeDialogActions_demo => 'Demo';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialogActions_retry => 'Retry';
 
   @override
   String get webRegistration_ErrorAcknowledgeDialogActions_skip => 'Skip';
 
   @override
-  String get webRegistration_ErrorAcknowledgeDialogActions_retry => 'Retry';
+  String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
 }

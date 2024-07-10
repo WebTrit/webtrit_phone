@@ -335,6 +335,12 @@ abstract class AppLocalizations {
   /// **'Connection established'**
   String get callStatus_ready;
 
+  /// No description provided for @connectToYourOwnVoIPSystem_Button_Action.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect to your own VoIP system'**
+  String get connectToYourOwnVoIPSystem_Button_Action;
+
   /// No description provided for @contacts_ExternalTabButton_refresh.
   ///
   /// In en, this message translates to:
@@ -521,6 +527,24 @@ abstract class AppLocalizations {
   /// **'Performing blind transfer'**
   String get favorites_Text_blingTransferInitiated;
 
+  /// No description provided for @inviteFriends_Dialog_close.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide this message'**
+  String get inviteFriends_Dialog_close;
+
+  /// No description provided for @inviteFriends_Dialog_invite.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite'**
+  String get inviteFriends_Dialog_invite;
+
+  /// No description provided for @inviteFriends_Dialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite your friends \nto try WebTrit'**
+  String get inviteFriends_Dialog_title;
+
   /// No description provided for @locale_default.
   ///
   /// In en, this message translates to:
@@ -628,6 +652,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An incompatible instance version provided, please contact the administrator of your system (actual: {actual}, supported: {supportedConstraint})'**
   String login_CoreVersionUnsupportedExceptionError(String actual, String supportedConstraint);
+
+  /// No description provided for @login_requestCredentials_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign up'**
+  String get login_requestCredentials_button;
+
+  /// No description provided for @login_requestCredentials_DialogContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Please provide basic information and specify in the message that you would like to receive an account. Our administrators will verify the information and send the account details to your email.'**
+  String get login_requestCredentials_DialogContent;
+
+  /// No description provided for @login_requestCredentials_DialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Account Request'**
+  String get login_requestCredentials_DialogTitle;
+
+  /// No description provided for @login_requestCredentials_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign up'**
+  String get login_requestCredentials_title;
 
   /// No description provided for @login_RequestFailureEmptyEmailError.
   ///
@@ -880,30 +928,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter a valid phone number or email'**
   String get login_validationUserRefError;
-
-  /// No description provided for @login_requestCredentials_button.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign up'**
-  String get login_requestCredentials_button;
-
-  /// No description provided for @login_requestCredentials_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign up'**
-  String get login_requestCredentials_title;
-
-  /// No description provided for @login_requestCredentials_DialogTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Account Request'**
-  String get login_requestCredentials_DialogTitle;
-
-  /// No description provided for @login_requestCredentials_DialogContent.
-  ///
-  /// In en, this message translates to:
-  /// **'Please provide basic information and specify in the message that you would like to receive an account. Our administrators will verify the information and send the account details to your email.'**
-  String get login_requestCredentials_DialogContent;
 
   /// No description provided for @logRecordsConsole_AppBarTitle.
   ///
@@ -1385,23 +1409,17 @@ abstract class AppLocalizations {
   /// **'Please enter a value'**
   String get validationBlankError;
 
-  /// No description provided for @connectToYourOwnVoIPSystem_Button_Action.
-  ///
-  /// In en, this message translates to:
-  /// **'Connect to your own VoIP system'**
-  String get connectToYourOwnVoIPSystem_Button_Action;
-
-  /// No description provided for @webRegistration_ErrorAcknowledgeDialog_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Web resource error'**
-  String get webRegistration_ErrorAcknowledgeDialog_title;
-
   /// No description provided for @webRegistration_ErrorAcknowledgeDialogActions_demo.
   ///
   /// In en, this message translates to:
   /// **'Demo'**
   String get webRegistration_ErrorAcknowledgeDialogActions_demo;
+
+  /// No description provided for @webRegistration_ErrorAcknowledgeDialogActions_retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get webRegistration_ErrorAcknowledgeDialogActions_retry;
 
   /// No description provided for @webRegistration_ErrorAcknowledgeDialogActions_skip.
   ///
@@ -1409,11 +1427,11 @@ abstract class AppLocalizations {
   /// **'Skip'**
   String get webRegistration_ErrorAcknowledgeDialogActions_skip;
 
-  /// No description provided for @webRegistration_ErrorAcknowledgeDialogActions_retry.
+  /// No description provided for @webRegistration_ErrorAcknowledgeDialog_title.
   ///
   /// In en, this message translates to:
-  /// **'Retry'**
-  String get webRegistration_ErrorAcknowledgeDialogActions_retry;
+  /// **'Web resource error'**
+  String get webRegistration_ErrorAcknowledgeDialog_title;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

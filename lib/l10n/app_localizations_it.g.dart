@@ -127,6 +127,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get callStatus_ready => 'Connessione stabilita';
 
   @override
+  String get connectToYourOwnVoIPSystem_Button_Action => 'Connettiti al tuo sistema VoIP';
+
+  @override
   String get contacts_ExternalTabButton_refresh => 'Refresh';
 
   @override
@@ -222,6 +225,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String get favorites_Text_blingTransferInitiated => 'Trasferimento senza vedere';
 
   @override
+  String get inviteFriends_Dialog_close => 'Nascondi questo messaggio';
+
+  @override
+  String get inviteFriends_Dialog_invite => 'Invitare';
+
+  @override
+  String get inviteFriends_Dialog_title => 'Invita i tuoi amici a provare WebTrit';
+
+  @override
   String get locale_default => 'Predefinito';
 
   @override
@@ -280,6 +292,18 @@ class AppLocalizationsIt extends AppLocalizations {
   String login_CoreVersionUnsupportedExceptionError(String actual, String supportedConstraint) {
     return 'È stata fornita una versione di richiesta incompatibile, contattare l\'amministratore del sistema (actual:$actual, supported:$supportedConstraint)';
   }
+
+  @override
+  String get login_requestCredentials_button => 'Iscriviti';
+
+  @override
+  String get login_requestCredentials_DialogContent => 'Si prega di fornire informazioni di base e specificare nel messaggio che si desidera ricevere un account. I nostri amministratori verificheranno le informazioni e invieranno i dettagli dell’account alla tua email.';
+
+  @override
+  String get login_requestCredentials_DialogTitle => 'Richiesta di account';
+
+  @override
+  String get login_requestCredentials_title => 'Iscriviti';
 
   @override
   String get login_RequestFailureEmptyEmailError => 'Impossibile inviare il codice di verifica';
@@ -418,18 +442,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get login_validationUserRefError => 'Per favore, inserisci un numero di telefono o un\'email valida';
-
-  @override
-  String get login_requestCredentials_button => 'Iscriviti';
-
-  @override
-  String get login_requestCredentials_title => 'Iscriviti';
-
-  @override
-  String get login_requestCredentials_DialogTitle => 'Richiesta Account';
-
-  @override
-  String get login_requestCredentials_DialogContent => 'Per favore, fornisci informazioni di base e specifica nel messaggio che desideri ricevere un account. I nostri amministratori verificheranno le informazioni e invieranno i dettagli dell\'account alla tua email.';
 
   @override
   String get logRecordsConsole_AppBarTitle => 'Console dei log';
@@ -692,17 +704,14 @@ class AppLocalizationsIt extends AppLocalizations {
   String get validationBlankError => 'Prego inserire un valore';
 
   @override
-  String get connectToYourOwnVoIPSystem_Button_Action => 'Connettiti al tuo sistema VoIP';
-
-  @override
-  String get webRegistration_ErrorAcknowledgeDialog_title => 'Errore risorsa web';
-
-  @override
   String get webRegistration_ErrorAcknowledgeDialogActions_demo => 'Demo';
 
   @override
-  String get webRegistration_ErrorAcknowledgeDialogActions_skip => 'Salta';
+  String get webRegistration_ErrorAcknowledgeDialogActions_retry => 'Retry';
 
   @override
-  String get webRegistration_ErrorAcknowledgeDialogActions_retry => 'Riprova';
+  String get webRegistration_ErrorAcknowledgeDialogActions_skip => 'Skip';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
 }
