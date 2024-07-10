@@ -113,12 +113,7 @@ For the theme configuration documentation, please refer to the [Theme Configurat
   ```bash
   make configure id=<application_id>
   ```
-
-* `configure-clean` - Clean configuration files
-  ```bash
-  make configure-clean
-  ```
-
+  
 * `configure-demo` - Create demo configuration
   ```bash
   make configure-demo id=<application_id>
@@ -142,6 +137,11 @@ For the theme configuration documentation, please refer to the [Theme Configurat
 * `build-appbundle` - Create App Bundle build
   ```bash
   make build-appbundle
+  ```
+
+* `clean-git` - Clean git files
+  ```bash
+  make clean-git
   ```
 
 ## Contributing

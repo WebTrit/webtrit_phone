@@ -29,11 +29,6 @@ configure:
 	$(CONFIGURATOR) configurator-resources --applicationId=$(id) $(KEYSTORES_PATH) --$(BUILD_FLOW)
 	$(CONFIGURATOR) configurator-generate
 
-## Clean configuration files
-configure-clean:
-	git reset --hard HEAD
-	git clean -df
-
 ## Create demo configuration
 configure-demo:
 	$(CONFIGURATOR) configurator-resources --applicationId=$(id) $(KEYSTORES_PATH) --demo
@@ -55,3 +50,8 @@ build-apk:
 ## Create App Bundle build
 build-appbundle:
 	flutter build appbundle $(FLUTTER_FLAGS)
+
+## Clean git files
+clean-git:
+	git reset --hard HEAD
+	git clean -df
