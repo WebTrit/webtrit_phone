@@ -34,19 +34,24 @@ configure-clean:
 	git reset --hard HEAD
 	git clean -df
 
-## Create demo classic configuration
-create-demo-classic:
+## Create demo configuration
+configure-demo:
 	$(CONFIGURATOR) configurator-resources --applicationId=$(id) $(KEYSTORES_PATH) --demo
 	$(CONFIGURATOR) configurator-generate
 
+## Create classic configuration
+configure-classic:
+	$(CONFIGURATOR) configurator-resources --applicationId=$(id) $(KEYSTORES_PATH) --classic
+	$(CONFIGURATOR) configurator-generate
+
 ## Create iOS build
-create-ios:
+build-ios:
 	flutter build ios $(FLUTTER_FLAGS)
 
 ## Create APK build
-create-apk:
+build-apk:
 	flutter build apk $(FLUTTER_FLAGS)
 
 ## Create App Bundle build
-create-appbundle:
+build-appbundle:
 	flutter build appbundle $(FLUTTER_FLAGS)
