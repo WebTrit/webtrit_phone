@@ -2,6 +2,7 @@ export 'autoprovision/autoprovision.dart';
 export 'call/call.dart';
 export 'contact/contact.dart';
 export 'contacts/contacts.dart';
+export 'demo/demo.dart';
 export 'favorites/favorites.dart';
 export 'keypad/keypad.dart';
 export 'log_records_console/log_records_console.dart';

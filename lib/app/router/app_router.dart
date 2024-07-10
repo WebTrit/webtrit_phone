@@ -180,6 +180,10 @@ class AppRouter extends _$AppRouter {
                     ),
                   ],
                 ),
+                AutoRoute(
+                  page: DemoWebPageRoute.page,
+                  path: 'demo',
+                ),
                 CustomRoute(
                   page: CallScreenPageRoute.page,
                   path: 'call',

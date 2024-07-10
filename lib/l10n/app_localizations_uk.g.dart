@@ -690,4 +690,19 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get validationBlankError => 'Будь ласка, введіть значення';
+
+  @override
+  String get connectToYourOwnVoIPSystem_Button_Action => 'Підключитися до власної VoIP системи';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialog_title => 'Помилка веб-ресурсу';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialogActions_demo => 'Демо';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialogActions_skip => 'Пропустити';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialogActions_retry => 'Спробувати знову';
 }

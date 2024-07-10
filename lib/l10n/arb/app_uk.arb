@@ -515,5 +515,15 @@
   "user_agreement_description": "Ласкаво просимо до {appName}",
   "@user_agreement_description": {},
   "validationBlankError": "Будь ласка, введіть значення",
-  "@validationBlankError": {}
+  "@validationBlankError": {},
+  "connectToYourOwnVoIPSystem_Button_Action": "Підключитися до власної VoIP системи",
+  "@connectToYourOwnVoIPSystem_Button_Action": {},
+  "webRegistration_ErrorAcknowledgeDialog_title": "Помилка веб-ресурсу",
+  "@webRegistration_ErrorAcknowledgeDialog_title": {},
+  "webRegistration_ErrorAcknowledgeDialogActions_demo": "Демо",
+  "@webRegistration_ErrorAcknowledgeDialogActions_demo": {},
+  "webRegistration_ErrorAcknowledgeDialogActions_skip": "Пропустити",
+  "@webRegistration_ErrorAcknowledgeDialogActions_skip": {},
+  "webRegistration_ErrorAcknowledgeDialogActions_retry": "Спробувати знову",
+  "@webRegistration_ErrorAcknowledgeDialogActions_retry": {}
 }
