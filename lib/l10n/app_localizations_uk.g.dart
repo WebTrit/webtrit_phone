@@ -127,6 +127,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get callStatus_ready => 'Підключення встановлено';
 
   @override
+  String get connectToYourOwnVoIPSystem_Button_Action => 'Підключіться до власної VoIP-системи';
+
+  @override
   String get contacts_ExternalTabButton_refresh => 'Оновити';
 
   @override
@@ -184,7 +187,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get default_ErrorPath => 'Шлях помилки';
 
   @override
-  String get default_ErrorTransactionId => 'ID Транзакціі';
+  String get default_ErrorTransactionId => 'Ідентифікатор транзакції';
 
   @override
   String get default_FormatExceptionError => 'Виникла проблема формату відповіді';
@@ -220,6 +223,15 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get favorites_Text_blingTransferInitiated => 'Безумовне переведення дзвінка';
+
+  @override
+  String get inviteFriends_Dialog_close => 'Приховати це повідомлення';
+
+  @override
+  String get inviteFriends_Dialog_invite => 'Запросити';
+
+  @override
+  String get inviteFriends_Dialog_title => 'Запросіть своїх друзів спробувати WebTrit';
 
   @override
   String get locale_default => 'За замовчуванням';
@@ -280,6 +292,18 @@ class AppLocalizationsUk extends AppLocalizations {
   String login_CoreVersionUnsupportedExceptionError(String actual, String supportedConstraint) {
     return 'Непідтримувана версія екземпляра, будь ласка, зверніться до адміністратора вашої системи (фактична: $actual, підтримувана: $supportedConstraint)';
   }
+
+  @override
+  String get login_requestCredentials_button => 'Зареєструватися';
+
+  @override
+  String get login_requestCredentials_DialogContent => 'Будь ласка, надайте базову інформацію і зазначте у повідомленні, що ви хотіли б отримати обліковий запис. Наші адміністратори перевірять інформацію і надішлють деталі облікового запису на вашу електронну пошту.';
+
+  @override
+  String get login_requestCredentials_DialogTitle => 'Запит на обліковий запис';
+
+  @override
+  String get login_requestCredentials_title => 'Зареєструватися';
 
   @override
   String get login_RequestFailureEmptyEmailError => 'Не вдалося відправити код підтвердження';
@@ -418,18 +442,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get login_validationUserRefError => 'Будь ласка, введіть правильний номер телефону чи електронну пошту';
-
-  @override
-  String get login_requestCredentials_button => 'Зареєструватися';
-
-  @override
-  String get login_requestCredentials_title => 'Зареєструватися';
-
-  @override
-  String get login_requestCredentials_DialogTitle => 'Запит акаунта';
-
-  @override
-  String get login_requestCredentials_DialogContent => 'Будь ласка, надайте основну інформацію та вкажіть у повідомленні, що ви хочете отримати акаунт. Наші адміністратори перевірять інформацію та надішлють деталі акаунта на вашу електронну пошту.';
 
   @override
   String get logRecordsConsole_AppBarTitle => 'Консоль журналу';
@@ -692,17 +704,14 @@ class AppLocalizationsUk extends AppLocalizations {
   String get validationBlankError => 'Будь ласка, введіть значення';
 
   @override
-  String get connectToYourOwnVoIPSystem_Button_Action => 'Підключитися до власної VoIP системи';
+  String get webRegistration_ErrorAcknowledgeDialogActions_demo => 'Demo';
 
   @override
-  String get webRegistration_ErrorAcknowledgeDialog_title => 'Помилка веб-ресурсу';
+  String get webRegistration_ErrorAcknowledgeDialogActions_retry => 'Retry';
 
   @override
-  String get webRegistration_ErrorAcknowledgeDialogActions_demo => 'Демо';
+  String get webRegistration_ErrorAcknowledgeDialogActions_skip => 'Skip';
 
   @override
-  String get webRegistration_ErrorAcknowledgeDialogActions_skip => 'Пропустити';
-
-  @override
-  String get webRegistration_ErrorAcknowledgeDialogActions_retry => 'Спробувати знову';
+  String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
 }
