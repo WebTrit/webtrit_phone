@@ -74,7 +74,7 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<DemoWebPageRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: DemoWebPage(args.initialUri),
+        child: DemoWebPage(args.initialUrl),
       );
     },
     ErrorDetailsScreenPageRoute.name: (routeData) {
@@ -202,7 +202,7 @@ abstract class _$AppRouter extends RootStackRouter {
     MainScreenPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const MainScreenPage(),
+        child: MainScreenPage(),
       );
     },
     MainShellRoute.name: (routeData) {
@@ -437,11 +437,11 @@ class ContactsScreenPageRoute extends PageRouteInfo<void> {
 /// [DemoWebPage]
 class DemoWebPageRoute extends PageRouteInfo<DemoWebPageRouteArgs> {
   DemoWebPageRoute({
-    required Uri initialUri,
+    required Uri initialUrl,
     List<PageRouteInfo>? children,
   }) : super(
           DemoWebPageRoute.name,
-          args: DemoWebPageRouteArgs(initialUri: initialUri),
+          args: DemoWebPageRouteArgs(initialUrl: initialUrl),
           initialChildren: children,
         );
 
@@ -452,13 +452,13 @@ class DemoWebPageRoute extends PageRouteInfo<DemoWebPageRouteArgs> {
 }
 
 class DemoWebPageRouteArgs {
-  const DemoWebPageRouteArgs({required this.initialUri});
+  const DemoWebPageRouteArgs({required this.initialUrl});
 
-  final Uri initialUri;
+  final Uri initialUrl;
 
   @override
   String toString() {
-    return 'DemoWebPageRouteArgs{initialUri: $initialUri}';
+    return 'DemoWebPageRouteArgs{initialUrl: $initialUrl}';
   }
 }
 

@@ -85,7 +85,7 @@ class _DemoShellState extends State<DemoShell> with RouteAware {
 
   void _handleDemoWebScreenState(BuildContext context, DemoCubitState state) {
     if (state.openDemoWebScreen) {
-      context.router.push(DemoWebPageRoute(initialUri: Uri.parse(state.convertPbxUrl!)));
+      context.router.push(DemoWebPageRoute(initialUrl: Uri.parse(state.convertPbxUrl!)));
     }
   }
 
