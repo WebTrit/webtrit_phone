@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
@@ -26,7 +25,7 @@ main() {
   });
 
   final signinButton = find.byKey(loginModeScreenSignUpButtonKey);
-  final passwordSegmentButton = find.byKey(Key(LoginType.passwordSignin.toLoginSegmentKey()));
+  final passwordSegmentButton = find.byKey(LoginType.passwordSignin.toLoginSegmentKey());
   final passwordUserInput = find.byKey(passwordUserInputKey);
   final passwordPasswordInput = find.byKey(passwordPasswordInputKey);
   final passwordButton = find.byKey(passwordButtonKey);

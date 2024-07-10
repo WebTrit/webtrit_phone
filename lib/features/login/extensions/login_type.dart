@@ -28,11 +28,11 @@ extension LoginTypePageRouteInfo on LoginType {
 }
 
 extension LoginTypeLoginSegmentKey on LoginType {
-  String toLoginSegmentKey() {
+  Key toLoginSegmentKey() {
     return switch (this) {
-      LoginType.otpSignin => 'loginTypeSegment_otpSignin',
-      LoginType.passwordSignin => 'loginTypeSegment_passwordSignin',
-      LoginType.signup => 'loginTypeSegment_signup',
+      LoginType.otpSignin => const Key('loginTypeSegment_otpSignin'),
+      LoginType.passwordSignin => const Key('loginTypeSegment_passwordSignin'),
+      LoginType.signup => const Key('loginTypeSegment_signup'),
     };
   }
 }
