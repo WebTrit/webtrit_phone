@@ -5,9 +5,10 @@ import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/main_shell.dart';
 import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/main.dart';
+
+import 'integration_test_environment_config.dart';
 
 main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -31,8 +32,8 @@ main() {
   final otpVerifyInput = find.byKey(otpVerifyInputKey);
   final otpVerifyButton = find.byKey(otpVerifyButtonKey);
 
-  final otpCredential = EnvironmentConfig.LOGIN_TEST_OTP_CREDENTIAL!;
-  final otpVerifyCredential = EnvironmentConfig.LOGIN_TEST_OTP_VERIFY_CREDENTIAL!;
+  final otpCredential = IntegrationTestEnvironmentConfig.LOGIN_TEST_OTP_CREDENTIAL!;
+  final otpVerifyCredential = IntegrationTestEnvironmentConfig.LOGIN_TEST_OTP_VERIFY_CREDENTIAL!;
 
   testWidgets('should login by otp credentials', (tester) async {
     var rootApp = const RootApp();

@@ -5,9 +5,10 @@ import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/main_shell.dart';
 import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/main.dart';
+
+import 'integration_test_environment_config.dart';
 
 main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -30,8 +31,8 @@ main() {
   final passwordPasswordInput = find.byKey(passwordPasswordInputKey);
   final passwordButton = find.byKey(passwordButtonKey);
 
-  final passwordUserCredential = EnvironmentConfig.LOGIN_TEST_PASSWORD_USER_CREDENTIAL!;
-  final passwordPasswordCredential = EnvironmentConfig.LOGIN_TEST_PASSWORD_PASSWORD_CREDENTIAL!;
+  final passwordUserCredential = IntegrationTestEnvironmentConfig.LOGIN_TEST_PASSWORD_USER_CREDENTIAL!;
+  final passwordPasswordCredential = IntegrationTestEnvironmentConfig.LOGIN_TEST_PASSWORD_PASSWORD_CREDENTIAL!;
 
   testWidgets('should login by password credentials', (tester) async {
     var rootApp = const RootApp();

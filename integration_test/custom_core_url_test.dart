@@ -4,9 +4,10 @@ import 'package:integration_test/integration_test.dart';
 import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/main.dart';
+
+import 'integration_test_environment_config.dart';
 
 main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +28,7 @@ main() {
   final coreUrlInput = find.byKey(coreUrlInputKey);
   final coreUrlButton = find.byKey(coreUrlButtonKey);
 
-  final testCoreUrl = EnvironmentConfig.LOGIN_TEST_CORE_URL!;
+  final testCoreUrl = IntegrationTestEnvironmentConfig.LOGIN_TEST_CORE_URL!;
 
   testWidgets('should accept core url and process login types', (tester) async {
     var rootApp = const RootApp();
