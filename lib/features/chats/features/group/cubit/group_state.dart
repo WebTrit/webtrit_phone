@@ -43,7 +43,9 @@ final class GroupStateReady extends GroupState with EquatableMixin {
     this.chatId,
     this.chat, {
     this.messages = const [],
-    this.outboxQueue = const [],
+    this.outboxMessages = const [],
+    this.outboxMessageEdits = const [],
+    this.outboxMessageDeletes = const [],
     this.fetchingHistory = false,
     this.historyEndReached = false,
   });
@@ -53,19 +55,32 @@ final class GroupStateReady extends GroupState with EquatableMixin {
   final Chat chat;
 
   final List<ChatMessage> messages;
-  final List<ChatQueueEntry> outboxQueue;
+  final List<ChatOutboxMessageEntry> outboxMessages;
+  final List<ChatOutboxMessageEditEntry> outboxMessageEdits;
+  final List<ChatOutboxMessageDeleteEntry> outboxMessageDeletes;
 
   final bool fetchingHistory;
   final bool historyEndReached;
 
   @override
-  List<Object> get props => [chatId, chat, messages, outboxQueue, fetchingHistory, historyEndReached];
+  List<Object> get props => [
+        chatId,
+        chat,
+        messages,
+        outboxMessages,
+        outboxMessageEdits,
+        outboxMessageDeletes,
+        fetchingHistory,
+        historyEndReached,
+      ];
 
   copyWith({
     int? chatId,
     Chat? chat,
     List<ChatMessage>? messages,
-    List<ChatQueueEntry>? outboxQueue,
+    List<ChatOutboxMessageEntry>? outboxMessages,
+    List<ChatOutboxMessageEditEntry>? outboxMessageEdits,
+    List<ChatOutboxMessageDeleteEntry>? outboxMessageDeletes,
     bool? fetchingHistory,
     bool? historyEndReached,
   }) {
@@ -73,7 +88,9 @@ final class GroupStateReady extends GroupState with EquatableMixin {
       chatId ?? this.chatId,
       chat ?? this.chat,
       messages: messages ?? this.messages,
-      outboxQueue: outboxQueue ?? this.outboxQueue,
+      outboxMessages: outboxMessages ?? this.outboxMessages,
+      outboxMessageEdits: outboxMessageEdits ?? this.outboxMessageEdits,
+      outboxMessageDeletes: outboxMessageDeletes ?? this.outboxMessageDeletes,
       fetchingHistory: fetchingHistory ?? this.fetchingHistory,
       historyEndReached: historyEndReached ?? this.historyEndReached,
     );

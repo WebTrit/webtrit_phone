@@ -16,14 +16,16 @@ class ConversationScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final chatsBloc = context.read<ChatsBloc>();
-    final localChatRepository = context.read<LocalChatRepository>();
+    final chatsRepository = context.read<ChatsRepository>();
+    final chatsOutboxRepository = context.read<ChatsOutboxRepository>();
 
     final widget = BlocProvider(
       key: ValueKey(participantId),
       create: (context) => ConversationCubit(
         participantId,
         chatsBloc.state.client,
-        localChatRepository,
+        chatsRepository,
+        chatsOutboxRepository,
       ),
       child: const ConversationScreen(),
     );

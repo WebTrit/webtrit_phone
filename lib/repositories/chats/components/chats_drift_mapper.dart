@@ -1,6 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-// ignore_for_file: unused_element, unused_field
-
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 
@@ -88,45 +85,10 @@ mixin ChatsDriftMapper {
       smsOutState: message.smsOutState != null ? SmsOutStateEnum.values.byName(message.smsOutState!.name) : null,
       smsNumber: message.smsNumber,
       content: message.content,
+      editedAt: message.editedAt,
       createdAtRemote: message.createdAt,
       updatedAtRemote: message.updatedAt,
       deletedAtRemote: message.deletedAt,
-    );
-  }
-
-  ChatQueueEntry chatQueueEntryFromDrift(ChatQueueEntryData data) {
-    return ChatQueueEntry(
-      id: data.id,
-      idKey: data.idKey,
-      type: ChatQueueEntryType.values.byName(data.type.name),
-      chatId: data.chatId,
-      participantId: data.participantId,
-      messageId: data.messageId,
-      replyToId: data.replyToId,
-      forwardTo: data.forwardTo,
-      viaSms: data.viaSms,
-      smsNumber: data.smsNumber,
-      content: data.content,
-      insertedAt: data.insertedAt,
-      updatedAt: data.updatedAt,
-    );
-  }
-
-  ChatQueueEntryData chatQueueEntryDataFromChatQueueEntry(ChatQueueEntry entry) {
-    return ChatQueueEntryData(
-      id: entry.id,
-      idKey: entry.idKey,
-      type: ChatQueueEntryTypeEnum.values.byName(entry.type.name),
-      chatId: entry.chatId,
-      participantId: entry.participantId,
-      messageId: entry.messageId,
-      replyToId: entry.replyToId,
-      forwardTo: entry.forwardTo,
-      viaSms: entry.viaSms,
-      smsNumber: entry.smsNumber,
-      content: entry.content,
-      insertedAt: entry.insertedAt,
-      updatedAt: entry.updatedAt,
     );
   }
 }

@@ -8,7 +8,7 @@ import 'package:stream_transform/stream_transform.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/repositories/chat/components/chats_event.dart';
+import 'package:webtrit_phone/repositories/chats/components/chats_events.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 class ChatListItem extends StatefulWidget {
@@ -22,7 +22,7 @@ class ChatListItem extends StatefulWidget {
 }
 
 class _ChatListItemState extends State<ChatListItem> {
-  late final localChatRepository = context.read<LocalChatRepository>();
+  late final chatsRepository = context.read<ChatsRepository>();
 
   ChatMessage? lastMessage;
   StreamSubscription? _sub;
@@ -34,11 +34,11 @@ class _ChatListItemState extends State<ChatListItem> {
   }
 
   init() async {
-    final lastMessages = await localChatRepository.getLastMessages(widget.chat.id, limit: 1);
+    final lastMessages = await chatsRepository.getLastMessages(widget.chat.id, limit: 1);
     if (!mounted) return;
     if (lastMessages.isNotEmpty) setState(() => lastMessage = lastMessages.first);
 
-    _sub = localChatRepository.eventBus
+    _sub = chatsRepository.eventBus
         .whereType<ChatMessageUpdate>()
         .where((event) => event.message.chatId == widget.chat.id)
         .listen((event) {

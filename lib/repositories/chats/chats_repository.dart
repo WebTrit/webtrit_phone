@@ -1,20 +1,17 @@
 import 'dart:async';
 
 import 'package:logging/logging.dart';
-import 'package:uuid/uuid.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 
-import 'components/chats_event.dart';
-import 'components/drift_mapper.dart';
+import 'components/chats_events.dart';
+import 'components/chats_drift_mapper.dart';
 
-Logger _logger = Logger('LocalChatRepository');
+Logger _logger = Logger('ChatsRepository');
 
-class LocalChatRepository with ChatsDriftMapper {
-  LocalChatRepository({
-    required AppDatabase appDatabase,
-  }) : _appDatabase = appDatabase;
+class ChatsRepository with ChatsDriftMapper {
+  ChatsRepository({required AppDatabase appDatabase}) : _appDatabase = appDatabase;
 
   final AppDatabase _appDatabase;
   ChatsDao get _chatsDao => _appDatabase.chatsDao;
@@ -31,12 +28,6 @@ class LocalChatRepository with ChatsDriftMapper {
   Future<List<Chat>> getChats() async {
     final chatsData = await _chatsDao.getAllChatsWithMembers();
     return chatsData.map(chatFromDrift).toList();
-  }
-
-  Stream<List<Chat>> watchChats() {
-    return _chatsDao.watchAllChatsWithMembers().map((chatsData) {
-      return chatsData.map(chatFromDrift).toList();
-    });
   }
 
   Future<List<int>> getChatIds() async {
@@ -78,12 +69,6 @@ class LocalChatRepository with ChatsDriftMapper {
     return messagesData.map(chatMessageFromDrift).toList();
   }
 
-  Stream<List<ChatMessage>> watchLastMessageUpdates(int chatId, {int limit = 100}) {
-    return _chatsDao.watchLastMessageUpdates(chatId, limit: limit).map((messagesData) {
-      return messagesData.map(chatMessageFromDrift).toList();
-    });
-  }
-
   Future<void> insertMessage(ChatMessage message, {bool silent = false}) async {
     try {
       await _chatsDao.insertChatMessage(chatMessageDataFromChatMessage(message));
@@ -118,42 +103,9 @@ class LocalChatRepository with ChatsDriftMapper {
     return _chatsDao.lastChatMessageUpdatedAt(chatId);
   }
 
-  Future<List<ChatQueueEntry>> getChatQueueEntries() async {
-    final entriesData = await _chatsDao.getChatQueueEntries();
-    return entriesData.map(chatQueueEntryFromDrift).toList();
+  Future<int> deleteOutboxMessageDelete(int id) {
+    return _chatsDao.deleteChatOutboxMessageDelete(id);
   }
-
-  Stream<List<ChatQueueEntry>> watchChatQueueEntries() {
-    return _chatsDao.watchChatQueueEntries().map((entriesData) {
-      return entriesData.map(chatQueueEntryFromDrift).toList();
-    });
-  }
-
-  Future<int> submitNewMessage(int chatId, String content) {
-    final entryData = ChatQueueEntryDataCompanion(
-      chatId: Value(chatId),
-      idKey: Value(const Uuid().v4()),
-      content: Value(content),
-      type: const Value(ChatQueueEntryTypeEnum.create),
-    );
-    return _chatsDao.insertChatQueueEntry(entryData);
-  }
-
-  Future<int> submitNewDialogMessage(String participantId, String content) {
-    final entryData = ChatQueueEntryDataCompanion(
-      participantId: Value(participantId),
-      idKey: Value(const Uuid().v4()),
-      content: Value(content),
-      type: const Value(ChatQueueEntryTypeEnum.create),
-    );
-    return _chatsDao.insertChatQueueEntry(entryData);
-  }
-
-  Future<int> deleteChatQueueEntry(int entryId) {
-    return _chatsDao.deleteChatQueueEntry(entryId);
-  }
-
-  // ChatQueueEntryDataCompanion
 
   Future<void> wipeStaleDeletedData() async {
     await _chatsDao.wipeStaleDeletedChatMessagesData();

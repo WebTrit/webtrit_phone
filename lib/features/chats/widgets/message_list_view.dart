@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:logging/logging.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/call/widgets/popup_menu.dart';
 import 'package:webtrit_phone/features/chats/chats.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -16,7 +17,9 @@ class MessageListView extends StatefulWidget {
     required this.userId,
     required this.messages,
     required this.fetchingHistory,
-    required this.outboxQueue,
+    required this.outboxMessages,
+    required this.outboxMessageEdits,
+    required this.outboxMessageDeletes,
     required this.historyEndReached,
     required this.onSendMessage,
     required this.onSendReply,
@@ -29,7 +32,9 @@ class MessageListView extends StatefulWidget {
 
   final String userId;
   final List<ChatMessage> messages;
-  final List<ChatQueueEntry> outboxQueue;
+  final List<ChatOutboxMessageEntry> outboxMessages;
+  final List<ChatOutboxMessageEditEntry> outboxMessageEdits;
+  final List<ChatOutboxMessageDeleteEntry> outboxMessageDeletes;
   final bool fetchingHistory;
   final bool historyEndReached;
   final Function(String content) onSendMessage;
@@ -47,7 +52,7 @@ class _MessageListViewState extends State<MessageListView> {
   late final messageForwardCubit = context.read<MessageForwardCubit>();
   late final user = types.User(id: widget.userId);
   final Map<String, types.PreviewData> previews = {};
-  List<types.TextMessage> messages = [];
+  List<types.Message> messages = [];
   ChatMessage? editingMessage;
   ChatMessage? replyingMessage;
 
@@ -60,48 +65,66 @@ class _MessageListViewState extends State<MessageListView> {
   @override
   void didUpdateWidget(MessageListView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    bool messagesChanged = !listEquals(oldWidget.messages, widget.messages);
-    bool outboxQueueChanged = !listEquals(oldWidget.outboxQueue, widget.outboxQueue);
-    if (messagesChanged || outboxQueueChanged) mapMessages();
+    bool messagesChanged() => !listEquals(oldWidget.messages, widget.messages);
+    bool outboxMessagesChanged() => !listEquals(oldWidget.outboxMessages, widget.outboxMessages);
+    bool outboxMessageEditsChanged() => !listEquals(oldWidget.outboxMessageEdits, widget.outboxMessageEdits);
+    bool outboxMessageDeletesChanged() => !listEquals(oldWidget.outboxMessageDeletes, widget.outboxMessageDeletes);
+    if (outboxMessagesChanged() || outboxMessageEditsChanged() || outboxMessageDeletesChanged() || messagesChanged()) {
+      mapMessages();
+    }
   }
 
   void mapMessages() {
-    _logger.fine('Mapping messages msgs: ${widget.messages.length} outbox: ${widget.outboxQueue.length}');
+    _logger.fine('Mapping messages msgs: ${widget.messages.length} outbox: ${widget.outboxMessages.length}');
 
-    Map<String, types.TextMessage> msgMap = {};
+    Map<String, types.Message> msgMap = {};
 
-    for (final entry in widget.outboxQueue.reversed) {
-      if (entry.type == ChatQueueEntryType.create) {
-        var textMessage = types.TextMessage(
-          author: types.User(
-            id: widget.userId,
-            firstName: widget.userId,
-          ),
-          id: entry.idKey,
-          text: entry.content,
-          showStatus: true,
-          status: types.Status.sending,
-          createdAt: DateTime.now().millisecondsSinceEpoch,
-          previewData: previews[entry.idKey.toString()],
-        );
-        msgMap[entry.idKey] = textMessage;
-      }
+    for (final entry in widget.outboxMessages.reversed) {
+      var textMessage = types.TextMessage(
+        author: types.User(
+          id: widget.userId,
+          firstName: widget.userId,
+        ),
+        id: entry.idKey,
+        text: entry.content,
+        showStatus: true,
+        status: types.Status.sending,
+        createdAt: DateTime.now().millisecondsSinceEpoch,
+        previewData: previews[entry.content],
+      );
+      msgMap[entry.idKey] = textMessage;
     }
 
     for (final msg in widget.messages) {
+      final editEntry = widget.outboxMessageEdits.firstWhereOrNull((element) => element.idKey == msg.idKey);
+      final deleteEntry = widget.outboxMessageDeletes.firstWhereOrNull((element) => element.idKey == msg.idKey);
+      final inOutbox = editEntry != null || deleteEntry != null;
+
+      String text = msg.content;
+      if (editEntry != null) text = editEntry.newContent;
+      if (msg.deletedAt != null || deleteEntry != null) text = '[deleted]';
+
+      final metadata = {
+        'message': msg,
+        'edited': msg.editedAt != null || editEntry != null,
+        'deleted': msg.deletedAt != null || deleteEntry != null,
+      };
+
       final textMessage = types.TextMessage(
-          author: types.User(
-            id: msg.senderId,
-            firstName: msg.senderId,
-          ),
-          id: msg.idKey,
-          remoteId: msg.id.toString(),
-          text: msg.content,
-          showStatus: true,
-          status: types.Status.delivered,
-          createdAt: msg.createdAt.millisecondsSinceEpoch,
-          previewData: previews[msg.id.toString()],
-          metadata: {'message': msg});
+        author: types.User(
+          id: msg.senderId,
+          firstName: msg.senderId,
+        ),
+        id: msg.idKey,
+        remoteId: msg.id.toString(),
+        text: text,
+        showStatus: true,
+        status: inOutbox ? types.Status.sending : types.Status.delivered,
+        createdAt: msg.createdAt.millisecondsSinceEpoch,
+        updatedAt: msg.updatedAt.millisecondsSinceEpoch,
+        previewData: previews[text],
+        metadata: metadata,
+      );
 
       msgMap[msg.idKey] = textMessage;
     }
@@ -110,12 +133,12 @@ class _MessageListViewState extends State<MessageListView> {
   }
 
   void handlePreviewDataFetched(types.TextMessage message, types.PreviewData previewData) {
-    if (previews[message.id] == null) {
-      previews[message.id] = previewData;
+    if (previews[message.text] == null) {
+      previews[message.text] = previewData;
 
       setState(() {
         final index = messages.indexWhere((element) => element.id == message.id);
-        final updatedMessage = (messages[index]).copyWith(previewData: previewData) as types.TextMessage;
+        final updatedMessage = (messages[index] as types.TextMessage).copyWith(previewData: previewData);
         if (index != -1) messages[index] = updatedMessage;
       });
     }
@@ -208,14 +231,66 @@ class _MessageListViewState extends State<MessageListView> {
           );
         },
       ),
-      textMessageBuilder: (m, {required messageWidth, required showName}) {
-        ChatMessage? message;
-        if (m.metadata != null && m.metadata!.containsKey('message')) {
-          message = m.metadata!['message'] as ChatMessage;
+      // bubbleBuilder: (child, {required message, required nextMessageInGroup}) {
+      //   ChatMessage? realMessage;
+      //   if (message.metadata != null && message.metadata!.containsKey('message')) {
+      //     realMessage = message.metadata!['message'] as ChatMessage;
+      //   }
+
+      //   final isMine = realMessage == null || realMessage.senderId == widget.userId;
+
+      //   const defaultBuubleRadius = Radius.circular(8);
+
+      //   Radius buttomLeftRadius;
+      //   if (!nextMessageInGroup) {
+      //     buttomLeftRadius = isMine ? defaultBuubleRadius : const Radius.circular(0);
+      //   } else {
+      //     buttomLeftRadius = defaultBuubleRadius;
+      //   }
+
+      //   Radius buttomRightRadius;
+      //   if (!nextMessageInGroup) {
+      //     buttomRightRadius = isMine ? const Radius.circular(0) : defaultBuubleRadius;
+      //   } else {
+      //     buttomRightRadius = defaultBuubleRadius;
+      //   }
+
+      //   return Column(
+      //     children: [
+      //       Container(
+      //         decoration: BoxDecoration(
+      //           color: isMine ? Colors.deepPurple : Colors.amberAccent,
+      //           borderRadius: BorderRadius.only(
+      //             topLeft: defaultBuubleRadius,
+      //             topRight: defaultBuubleRadius,
+      //             bottomLeft: buttomLeftRadius,
+      //             bottomRight: buttomRightRadius,
+      //           ),
+      //           boxShadow: [
+      //             BoxShadow(
+      //               color: Colors.black.withOpacity(0.1),
+      //               spreadRadius: 1,
+      //               blurRadius: 2,
+      //               offset: const Offset(0, 1),
+      //             ),
+      //           ],
+      //         ),
+      //         child: child,
+      //       ),
+      //       const Text('data')
+      //     ],
+      //   );
+      // },
+      textMessageBuilder: (message, {required messageWidth, required showName}) {
+        ChatMessage? realMessage;
+        if (message.metadata != null && message.metadata!.containsKey('message')) {
+          realMessage = message.metadata!['message'] as ChatMessage;
         }
 
-        final isSended = message?.id != null;
-        final isMine = message?.senderId == widget.userId;
+        final isEdited = message.metadata != null && message.metadata!['edited'] == true;
+
+        final isSended = realMessage?.id != null;
+        final isMine = realMessage == null || realMessage.senderId == widget.userId;
 
         return CallPopupMenuButton(
           items: [
@@ -223,33 +298,46 @@ class _MessageListViewState extends State<MessageListView> {
               CallPopupMenuItem(
                 text: 'Reply',
                 icon: const Icon(Icons.reply),
-                onTap: () => handleSetForReply(message!),
+                onTap: () => handleSetForReply(realMessage!),
               ),
             if (isSended)
               CallPopupMenuItem(
                 text: 'Forward',
                 icon: const Icon(Icons.forward),
-                onTap: () => handleSetForForward(message!),
+                onTap: () => handleSetForForward(realMessage!),
               ),
             if (isMine && isSended)
               CallPopupMenuItem(
                 text: 'Edit',
                 icon: const Icon(Icons.edit),
-                onTap: () => handleSetForEdit(message!),
+                onTap: () => handleSetForEdit(realMessage!),
               ),
             if (isMine && isSended)
               CallPopupMenuItem(
                 text: 'Delete',
                 icon: const Icon(Icons.remove),
-                onTap: () => handleDelete(message!),
+                onTap: () => handleDelete(realMessage!),
               ),
           ],
-          child: TextMessage(
-            emojiEnlargementBehavior: EmojiEnlargementBehavior.never,
-            hideBackgroundOnEmojiMessages: false,
-            message: m,
-            showName: showName,
-            usePreviewData: true,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Flexible(
+                child: TextMessage(
+                  emojiEnlargementBehavior: EmojiEnlargementBehavior.never,
+                  hideBackgroundOnEmojiMessages: false,
+                  message: message,
+                  showName: showName,
+                  usePreviewData: true,
+                  onPreviewDataFetched: handlePreviewDataFetched,
+                ),
+              ),
+              if (isEdited)
+                const Padding(
+                  padding: EdgeInsets.only(right: 8),
+                  child: Icon(Icons.edit, size: 16, color: Colors.grey),
+                ),
+            ],
           ),
         );
       },

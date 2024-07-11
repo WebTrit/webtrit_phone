@@ -51,7 +51,9 @@ class _GroupScreenState extends State<GroupScreen> {
                 return MessageListView(
                   userId: chatsBloc.state.userId ?? 'unknown',
                   messages: state.messages,
-                  outboxQueue: state.outboxQueue,
+                  outboxMessages: state.outboxMessages,
+                  outboxMessageEdits: state.outboxMessageEdits,
+                  outboxMessageDeletes: state.outboxMessageDeletes,
                   fetchingHistory: state.fetchingHistory,
                   historyEndReached: state.historyEndReached,
                   onSendMessage: (content) => groupCubit.sendMessage(content),

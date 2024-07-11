@@ -44,7 +44,9 @@ final class CVSReady extends ConversationState with EquatableMixin {
   const CVSReady(
     this.participantId, {
     this.messages = const [],
-    this.outboxQueue = const [],
+    this.outboxMessages = const [],
+    this.outboxMessageEdits = const [],
+    this.outboxMessageDeletes = const [],
     this.fetchingHistory = false,
     this.historyEndReached = false,
   });
@@ -52,25 +54,39 @@ final class CVSReady extends ConversationState with EquatableMixin {
   @override
   final String participantId;
   final List<ChatMessage> messages;
-  final List<ChatQueueEntry> outboxQueue;
+  final List<ChatOutboxMessageEntry> outboxMessages;
+  final List<ChatOutboxMessageEditEntry> outboxMessageEdits;
+  final List<ChatOutboxMessageDeleteEntry> outboxMessageDeletes;
 
   final bool fetchingHistory;
   final bool historyEndReached;
 
   @override
-  List<Object> get props => [participantId, messages, outboxQueue, fetchingHistory, historyEndReached];
+  List<Object> get props => [
+        participantId,
+        messages,
+        outboxMessages,
+        outboxMessageEdits,
+        outboxMessageDeletes,
+        fetchingHistory,
+        historyEndReached,
+      ];
 
   copyWith({
     String? participantId,
     List<ChatMessage>? messages,
-    List<ChatQueueEntry>? outboxQueue,
+    List<ChatOutboxMessageEntry>? outboxMessages,
+    List<ChatOutboxMessageEditEntry>? outboxMessageEdits,
+    List<ChatOutboxMessageDeleteEntry>? outboxMessageDeletes,
     bool? fetchingHistory,
     bool? historyEndReached,
   }) {
     return CVSReady(
       participantId ?? this.participantId,
       messages: messages ?? this.messages,
-      outboxQueue: outboxQueue ?? this.outboxQueue,
+      outboxMessages: outboxMessages ?? this.outboxMessages,
+      outboxMessageEdits: outboxMessageEdits ?? this.outboxMessageEdits,
+      outboxMessageDeletes: outboxMessageDeletes ?? this.outboxMessageDeletes,
       fetchingHistory: fetchingHistory ?? this.fetchingHistory,
       historyEndReached: historyEndReached ?? this.historyEndReached,
     );

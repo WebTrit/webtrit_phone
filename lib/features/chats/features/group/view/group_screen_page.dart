@@ -16,14 +16,16 @@ class GroupScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final chatsBloc = context.read<ChatsBloc>();
-    final localChatRepository = context.read<LocalChatRepository>();
+    final chatsRepository = context.read<ChatsRepository>();
+    final chatsOutboxRepository = context.read<ChatsOutboxRepository>();
 
     final widget = BlocProvider(
       key: ValueKey(chatId),
       create: (context) => GroupCubit(
         chatId,
         chatsBloc.state.client,
-        localChatRepository,
+        chatsRepository,
+        chatsOutboxRepository,
       ),
       child: const GroupScreen(),
     );

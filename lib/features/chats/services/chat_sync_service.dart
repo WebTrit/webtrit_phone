@@ -11,7 +11,7 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 final _logger = Logger('ChatsSyncService');
 
 class ChatsSyncService {
-  ChatsSyncService(this.client, this.localChatRepository) {
+  ChatsSyncService(this.client, this.chatsRepository) {
     // TODO: Remove this before pr
     _logger.onRecord.listen((record) {
       // ignore: avoid_print
@@ -20,7 +20,7 @@ class ChatsSyncService {
   }
 
   final PhoenixSocket client;
-  final LocalChatRepository localChatRepository;
+  final ChatsRepository chatsRepository;
 
   StreamSubscription? _chatlistSyncSub;
   Map<int, StreamSubscription> chatRoomSyncSubs = {};
@@ -59,7 +59,7 @@ class ChatsSyncService {
         if (userChannel.state != PhoenixChannelState.joined) throw Exception('User channel not ready yet');
 
         // Get current user chat ids
-        final currentChatIds = await localChatRepository.getChatIds();
+        final currentChatIds = await chatsRepository.getChatIds();
 
         // // Buffer updates that may come in a gap between fetching the actual list
         final eventsStream = userChannel.messages.transform(StreamBuffer());
@@ -72,7 +72,7 @@ class ChatsSyncService {
         for (final chatId in currentChatIds) {
           if (!actualChatIds.contains(chatId)) {
             _chatRoomUnsubscribe(chatId);
-            await localChatRepository.deleteChatById(chatId);
+            await chatsRepository.deleteChatById(chatId);
             yield {'event': 'removed', chatId: chatId};
           }
         }
@@ -94,7 +94,7 @@ class ChatsSyncService {
           if (e.event.value == 'chat_membership_leave') {
             final chatId = e.payload!['chat_id'];
             _chatRoomUnsubscribe(chatId);
-            await localChatRepository.deleteChatById(chatId);
+            await chatsRepository.deleteChatById(chatId);
             yield {'event': 'leaved', chatId: chatId};
           }
 
@@ -131,12 +131,12 @@ class ChatsSyncService {
         // Fetch chat info
         final req = await channel.push('chat:info', {}).future;
         final chat = Chat.fromMap(req.response as Map<String, dynamic>);
-        await localChatRepository.upsertChat(chat);
+        await chatsRepository.upsertChat(chat);
         _logger.info('Chat info: $chat');
         yield chat;
 
         // Get last update time for sync messages from
-        DateTime? lastUpdate = await localChatRepository.lastChatMessageUpdatedAt(chatId);
+        DateTime? lastUpdate = await chatsRepository.lastChatMessageUpdatedAt(chatId);
 
         // If no last update, fetch history of last 100 messages for initial state
         if (lastUpdate == null) {
@@ -146,7 +146,7 @@ class ChatsSyncService {
 
           // Process fetched messages
           for (final msg in messages) {
-            await localChatRepository.insertMessage(msg);
+            await chatsRepository.insertMessage(msg);
             yield msg;
           }
         }
@@ -166,7 +166,7 @@ class ChatsSyncService {
 
             // Process fetched messages
             for (final msg in messages) {
-              await localChatRepository.upsertMessageUpdate(msg);
+              await chatsRepository.upsertMessageUpdate(msg);
               yield msg;
             }
 
@@ -181,13 +181,13 @@ class ChatsSyncService {
 
           if (e.event.value == 'chat_info_update') {
             final chat = Chat.fromMap(e.payload as Map<String, dynamic>);
-            await localChatRepository.upsertChat(chat);
+            await chatsRepository.upsertChat(chat);
             yield chat;
           }
 
           if (e.event.value == 'message_update') {
             final chatMsg = ChatMessage.fromMap(e.payload as Map<String, dynamic>);
-            await localChatRepository.upsertMessageUpdate(chatMsg);
+            await chatsRepository.upsertMessageUpdate(chatMsg);
             yield chatMsg;
           }
 

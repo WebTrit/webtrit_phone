@@ -18,7 +18,9 @@ part 'app_database.g.dart';
     ChatsTable,
     ChatMembersTable,
     ChatMessagesTable,
-    ChatQueueTable
+    ChatOutboxMessageTable,
+    ChatOutboxMessageEditTable,
+    ChatOutboxMessageDeleteTable,
   ],
   daos: [
     ContactsDao,
@@ -352,28 +354,25 @@ class ChatMessagesTable extends Table {
   DateTimeColumn get updatedAt => dateTime().nullable()();
 }
 
-enum ChatQueueEntryTypeEnum { create, edit, delete }
-
-@DataClassName('ChatQueueEntryData')
-class ChatQueueTable extends Table {
+@DataClassName('ChatOutboxMessageData')
+class ChatOutboxMessageTable extends Table {
   @override
-  String get tableName => 'chat_queue';
+  String get tableName => 'chat_outbox_messages';
 
-  IntColumn get id => integer().autoIncrement()();
+  @override
+  Set<Column> get primaryKey => {idKey};
 
   TextColumn get idKey => text()();
 
-  TextColumn get type => textEnum<ChatQueueEntryTypeEnum>()();
-
-  IntColumn get chatId => integer().nullable()();
+  IntColumn get chatId => integer().nullable().references(ChatsTable, #id, onDelete: KeyAction.cascade)();
 
   TextColumn get participantId => text().nullable()();
 
-  IntColumn get messageId => integer().nullable()();
-
   IntColumn get replyToId => integer().nullable()();
 
-  IntColumn get forwardTo => integer().nullable()();
+  IntColumn get forwardFromId => integer().nullable()();
+
+  TextColumn get authorId => text().nullable()();
 
   BoolColumn get viaSms => boolean().withDefault(const Constant(false))();
 
@@ -381,9 +380,49 @@ class ChatQueueTable extends Table {
 
   TextColumn get content => text()();
 
-  DateTimeColumn get insertedAt => dateTime().nullable()();
+  // DateTimeColumn get insertedAt => dateTime().nullable()();
 
-  DateTimeColumn get updatedAt => dateTime().nullable()();
+  // DateTimeColumn get updatedAt => dateTime().nullable()();
+}
+
+@DataClassName('ChatOutboxMessageEditData')
+class ChatOutboxMessageEditTable extends Table {
+  @override
+  String get tableName => 'chat_outbox_message_edits';
+
+  @override
+  Set<Column> get primaryKey => {id};
+
+  IntColumn get id => integer()();
+
+  TextColumn get idKey => text()();
+
+  IntColumn get chatId => integer().references(ChatsTable, #id, onDelete: KeyAction.cascade)();
+
+  TextColumn get newContent => text()();
+
+  // DateTimeColumn get insertedAt => dateTime().nullable()();
+
+  // DateTimeColumn get updatedAt => dateTime().nullable()();
+}
+
+@DataClassName('ChatOutboxMessageDeleteData')
+class ChatOutboxMessageDeleteTable extends Table {
+  @override
+  String get tableName => 'chat_outbox_message_deletes';
+
+  @override
+  Set<Column> get primaryKey => {id};
+
+  IntColumn get id => integer()();
+
+  TextColumn get idKey => text()();
+
+  IntColumn get chatId => integer().references(ChatsTable, #id, onDelete: KeyAction.cascade)();
+
+  // DateTimeColumn get insertedAt => dateTime().nullable()();
+
+  // DateTimeColumn get updatedAt => dateTime().nullable()();
 }
 
 @DriftAccessor(tables: [
@@ -706,7 +745,9 @@ class FavoriteDataWithContactPhoneDataAndContactData {
   ChatsTable,
   ChatMembersTable,
   ChatMessagesTable,
-  ChatQueueTable,
+  ChatOutboxMessageTable,
+  ChatOutboxMessageEditTable,
+  ChatOutboxMessageDeleteTable,
 ])
 class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   ChatsDao(super.db);
@@ -917,22 +958,58 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
     });
   }
 
-  // Queue
+  // Messages outbox
 
-  Future<List<ChatQueueEntryData>> getChatQueueEntries() {
-    return select(chatQueueTable).get();
+  Future<List<ChatOutboxMessageData>> getChatOutboxMessages() {
+    return select(chatOutboxMessageTable).get();
   }
 
-  Stream<List<ChatQueueEntryData>> watchChatQueueEntries() {
-    return select(chatQueueTable).watch();
+  Stream<List<ChatOutboxMessageData>> watchChatOutboxMessages() {
+    return select(chatOutboxMessageTable).watch();
   }
 
-  Future<int> insertChatQueueEntry(Insertable<ChatQueueEntryData> chatQueueEntry) {
-    return into(chatQueueTable).insertOnConflictUpdate(chatQueueEntry);
+  Future<int> insertChatOutboxMessage(Insertable<ChatOutboxMessageData> chatOutboxMessage) {
+    return into(chatOutboxMessageTable).insertOnConflictUpdate(chatOutboxMessage);
   }
 
-  Future<int> deleteChatQueueEntry(int id) {
-    return (delete(chatQueueTable)..where((t) => t.id.equals(id))).go();
+  Future<int> deleteChatOutboxMessage(String idKey) {
+    return (delete(chatOutboxMessageTable)..where((t) => t.idKey.equals(idKey))).go();
+  }
+
+  // Message edits outbox
+
+  Future<List<ChatOutboxMessageEditData>> getChatOutboxMessageEdits() {
+    return select(chatOutboxMessageEditTable).get();
+  }
+
+  Stream<List<ChatOutboxMessageEditData>> watchChatOutboxMessageEdits() {
+    return select(chatOutboxMessageEditTable).watch();
+  }
+
+  Future<int> insertChatOutboxMessageEdit(Insertable<ChatOutboxMessageEditData> chatOutboxMessageEdit) {
+    return into(chatOutboxMessageEditTable).insertOnConflictUpdate(chatOutboxMessageEdit);
+  }
+
+  Future<int> deleteChatOutboxMessageEdit(int id) {
+    return (delete(chatOutboxMessageEditTable)..where((t) => t.id.equals(id))).go();
+  }
+
+  // Message deletes outbox
+
+  Future<List<ChatOutboxMessageDeleteData>> getChatOutboxMessageDeletes() {
+    return select(chatOutboxMessageDeleteTable).get();
+  }
+
+  Stream<List<ChatOutboxMessageDeleteData>> watchChatOutboxMessageDeletes() {
+    return select(chatOutboxMessageDeleteTable).watch();
+  }
+
+  Future<int> insertChatOutboxMessageDelete(Insertable<ChatOutboxMessageDeleteData> chatOutboxMessageDelete) {
+    return into(chatOutboxMessageDeleteTable).insertOnConflictUpdate(chatOutboxMessageDelete);
+  }
+
+  Future<int> deleteChatOutboxMessageDelete(int id) {
+    return (delete(chatOutboxMessageDeleteTable)..where((t) => t.id.equals(id))).go();
   }
 
   // Service
@@ -947,7 +1024,10 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
       await delete(chatsTable).go();
       await delete(chatMembersTable).go();
       await delete(chatMessagesTable).go();
-      await delete(chatQueueTable).go();
+      // await delete(chatQueueTable).go();
+      await delete(chatOutboxMessageTable).go();
+      await delete(chatOutboxMessageEditTable).go();
+      await delete(chatOutboxMessageDeleteTable).go();
     });
   }
 }

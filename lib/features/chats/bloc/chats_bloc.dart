@@ -11,7 +11,12 @@ part 'chats_event.dart';
 part 'chats_state.dart';
 
 class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
-  ChatsBloc(this._client, this._repo, this._prefs) : super(ChatsState.initial(_client, _prefs.getChatUserId())) {
+  ChatsBloc(
+    this._client,
+    this._chatsRepository,
+    this._outboxRepository,
+    this._prefs,
+  ) : super(ChatsState.initial(_client, _prefs.getChatUserId())) {
     on<Connect>(_connect);
     on<Refresh>(_refresh);
     on<_ClientConnected>(_onClientConnected);
@@ -30,7 +35,8 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
   }
 
   final PhoenixSocket _client;
-  final LocalChatRepository _repo;
+  final ChatsRepository _chatsRepository;
+  final ChatsOutboxRepository _outboxRepository;
   final AppPreferences _prefs;
   ChatsSyncService? _chatsSyncService;
   OutboxQueueService? _outboxQueueService;
@@ -66,9 +72,9 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
         await userChannel.join().future;
 
         // Init sync service
-        _chatsSyncService ??= ChatsSyncService(_client, _repo)..init();
+        _chatsSyncService ??= ChatsSyncService(_client, _chatsRepository)..init();
 
-        _outboxQueueService ??= OutboxQueueService(_client, _repo)..init();
+        _outboxQueueService ??= OutboxQueueService(_client, _chatsRepository, _outboxRepository)..init();
       }
       emit(state.copyWith(status: ChatsStatus.connected));
     } on Exception catch (e) {

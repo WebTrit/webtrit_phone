@@ -5,10 +5,10 @@ import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 import 'package:stream_transform/stream_transform.dart';
+import 'package:uuid/uuid.dart';
 import 'package:webtrit_phone/features/chats/extensions/phoenix_socket.dart';
 
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/repositories/chat/components/chats_event.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 part 'group_state.dart';
@@ -19,7 +19,8 @@ class GroupCubit extends Cubit<GroupState> {
   GroupCubit(
     this._chatId,
     this._client,
-    this._localChatRepository,
+    this._chatsRepository,
+    this._outboxRepository,
   ) : super(GroupState.init(_chatId)) {
     _init();
     // _logger.onRecord.listen((record) {
@@ -30,39 +31,69 @@ class GroupCubit extends Cubit<GroupState> {
 
   final int _chatId;
   final PhoenixSocket _client;
-  final LocalChatRepository _localChatRepository;
+  final ChatsRepository _chatsRepository;
+  final ChatsOutboxRepository _outboxRepository;
 
   StreamSubscription? _chatSub;
   StreamSubscription? _messagesSub;
-  StreamSubscription? _outboxQueueSub;
+  StreamSubscription? _outboxMessagesSub;
+  StreamSubscription? _outboxMessageEditsSub;
+  StreamSubscription? _outboxMessageDeletesSub;
 
   void restart() {
-    _chatSub?.cancel();
-    _messagesSub?.cancel();
-    _outboxQueueSub?.cancel();
-    // _chat = null;
+    _logger.info('Restarting group $_chatId');
+    _cancelSubs();
     emit(GroupState.init(_chatId));
     _init();
   }
 
   Future sendMessage(String content) async {
-    _localChatRepository.submitNewMessage(_chatId, content);
+    final outboxEntry = ChatOutboxMessageEntry(
+      idKey: (const Uuid()).v4(),
+      chatId: _chatId,
+      content: content,
+    );
+    _outboxRepository.insertOutboxMessage(outboxEntry);
   }
 
   Future sendReply(String content, ChatMessage refMessage) async {
-    throw UnimplementedError();
+    final outboxEntry = ChatOutboxMessageEntry(
+      idKey: (const Uuid()).v4(),
+      chatId: _chatId,
+      replyToId: refMessage.id,
+      content: content,
+    );
+    _outboxRepository.insertOutboxMessage(outboxEntry);
   }
 
   Future sendForward(String content, ChatMessage refMessage) async {
-    throw UnimplementedError();
+    final outboxEntry = ChatOutboxMessageEntry(
+      idKey: (const Uuid()).v4(),
+      chatId: _chatId,
+      forwardFromId: refMessage.id,
+      authorId: refMessage.senderId,
+      content: content,
+    );
+    _outboxRepository.insertOutboxMessage(outboxEntry);
   }
 
   Future sendEdit(String content, ChatMessage refMessage) async {
-    throw UnimplementedError();
+    final outboxEntry = ChatOutboxMessageEditEntry(
+      id: refMessage.id,
+      idKey: refMessage.idKey,
+      chatId: _chatId,
+      newContent: content,
+    );
+    _outboxRepository.insertOutboxMessageEdit(outboxEntry);
   }
 
   Future deleteMessage(ChatMessage message) async {
-    throw UnimplementedError();
+    final outboxEntry = ChatOutboxMessageDeleteEntry(
+      id: message.id,
+      idKey: message.idKey,
+      chatId: _chatId,
+    );
+    _outboxRepository.insertOutboxMessageDelete(outboxEntry);
   }
 
   Future fetchHistory() async {
@@ -81,7 +112,7 @@ class GroupCubit extends Cubit<GroupState> {
     try {
       // Fetch history from local storage
       List<ChatMessage> messages = [];
-      messages = await _localChatRepository.getMessageHistory(_chatId, topMessage.createdAt, limit: 100);
+      messages = await _chatsRepository.getMessageHistory(_chatId, topMessage.createdAt, limit: 100);
       _logger.info('fetchHistory: local messages ${messages.length}');
 
       // If no messages found in local storage, fetch from the remote server
@@ -90,7 +121,7 @@ class GroupCubit extends Cubit<GroupState> {
         final payload = {'created_before': topMessage.createdAt.toUtc().toIso8601String(), 'limit': 100};
         final req = await channel.push('message:history', payload).future;
         messages = (req.response['data'] as List).map((e) => ChatMessage.fromMap(e)).toList();
-        await _localChatRepository.insertHistoryPage(messages);
+        await _chatsRepository.insertHistoryPage(messages);
         _logger.info('fetchHistory: remote messages ${messages.length}');
       }
 
@@ -110,9 +141,9 @@ class GroupCubit extends Cubit<GroupState> {
     _logger.info('Preparing group $_chatId');
 
     try {
-      final chat = await _localChatRepository.getChat(_chatId);
+      final chat = await _chatsRepository.getChat(_chatId);
       _logger.info('init chat: $chat');
-      final messages = await _localChatRepository.getLastMessages(_chatId, limit: 100);
+      final messages = await _chatsRepository.getLastMessages(_chatId, limit: 100);
       _logger.info('init msg\'s: ${messages.length}');
 
       if (isClosed) return;
@@ -120,14 +151,16 @@ class GroupCubit extends Cubit<GroupState> {
 
       _chatSub = _chatUpdateSubFactory(_handleChatUpdate);
       _messagesSub = _messagesSubFactory(_handleMessageUpdate);
-      _outboxQueueSub = _outboxQueueSubFactory(_handleOutboxQueueUpdate);
+      _outboxMessagesSub = _outboxMessagesSubFactory(_handleOutboxMessagesUpdate);
+      _outboxMessageEditsSub = _outboxMessageEditsSubFactory(_handleOutboxMessageEditsUpdate);
+      _outboxMessageDeletesSub = _outboxMessageDeletesSubFactory(_handleOutboxMessageDeletesUpdate);
     } catch (e) {
       emit(GroupState.error(_chatId, e));
     }
   }
 
   StreamSubscription _chatUpdateSubFactory(void Function(Chat) onArrive) {
-    return _localChatRepository.eventBus.whereType<ChatUpdate>().listen((event) {
+    return _chatsRepository.eventBus.whereType<ChatUpdate>().listen((event) {
       final chat = event.chat;
       final desiredChat = chat.id == _chatId;
       if (desiredChat) onArrive(chat);
@@ -141,7 +174,7 @@ class GroupCubit extends Cubit<GroupState> {
   }
 
   StreamSubscription _messagesSubFactory(void Function(ChatMessage) onArrive) {
-    return _localChatRepository.eventBus.whereType<ChatMessageUpdate>().listen((event) {
+    return _chatsRepository.eventBus.whereType<ChatMessageUpdate>().listen((event) {
       final message = event.message;
       if (message.chatId == _chatId) onArrive(message);
     });
@@ -156,25 +189,57 @@ class GroupCubit extends Cubit<GroupState> {
     }
   }
 
-  StreamSubscription _outboxQueueSubFactory(void Function(List<ChatQueueEntry>) onArrive) {
-    return _localChatRepository.watchChatQueueEntries().listen((entries) {
+  StreamSubscription _outboxMessagesSubFactory(void Function(List<ChatOutboxMessageEntry>) onArrive) {
+    return _outboxRepository.watchChatOutboxMessages().listen((entries) {
       final chatQueueEntries = entries.where((e) => e.chatId == _chatId).toList();
       onArrive(chatQueueEntries);
     });
   }
 
-  void _handleOutboxQueueUpdate(List<ChatQueueEntry> entries) {
-    _logger.info('_handleOutboxQueueUpdate: ${entries.length}');
+  void _handleOutboxMessagesUpdate(List<ChatOutboxMessageEntry> entries) {
+    _logger.info('_handleOutboxMessagesUpdate: ${entries.length}');
     final state = this.state;
-    if (state is GroupStateReady) emit(state.copyWith(outboxQueue: entries));
+    if (state is GroupStateReady) emit(state.copyWith(outboxMessages: entries));
+  }
+
+  StreamSubscription _outboxMessageEditsSubFactory(void Function(List<ChatOutboxMessageEditEntry>) onArrive) {
+    return _outboxRepository.watchChatOutboxMessageEdits().listen((entries) {
+      final chatQueueEntries = entries.where((e) => e.chatId == _chatId).toList();
+      onArrive(chatQueueEntries);
+    });
+  }
+
+  void _handleOutboxMessageEditsUpdate(List<ChatOutboxMessageEditEntry> entries) {
+    _logger.info('handleOutboxMessageEditsUpdate: ${entries.length}');
+    final state = this.state;
+    if (state is GroupStateReady) emit(state.copyWith(outboxMessageEdits: entries));
+  }
+
+  StreamSubscription _outboxMessageDeletesSubFactory(void Function(List<ChatOutboxMessageDeleteEntry>) onArrive) {
+    return _outboxRepository.watchChatOutboxMessageDeletes().listen((entries) {
+      final chatQueueEntries = entries.where((e) => e.chatId == _chatId).toList();
+      onArrive(chatQueueEntries);
+    });
+  }
+
+  void _handleOutboxMessageDeletesUpdate(List<ChatOutboxMessageDeleteEntry> entries) {
+    _logger.info('handleOutboxMessageDeletesUpdate: ${entries.length}');
+    final state = this.state;
+    if (state is GroupStateReady) emit(state.copyWith(outboxMessageDeletes: entries));
   }
 
   @override
   Future<void> close() {
     _logger.info('Closing group $_chatId');
+    _cancelSubs();
+    return super.close();
+  }
+
+  void _cancelSubs() {
     _chatSub?.cancel();
     _messagesSub?.cancel();
-    _outboxQueueSub?.cancel();
-    return super.close();
+    _outboxMessagesSub?.cancel();
+    _outboxMessageEditsSub?.cancel();
+    _outboxMessageDeletesSub?.cancel();
   }
 }

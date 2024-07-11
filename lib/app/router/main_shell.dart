@@ -124,8 +124,13 @@ class _MainShellState extends State<MainShell> {
             webtritApiClient: context.read<WebtritApiClient>(),
           ),
         ),
-        RepositoryProvider<LocalChatRepository>(
-          create: (context) => LocalChatRepository(
+        RepositoryProvider<ChatsRepository>(
+          create: (context) => ChatsRepository(
+            appDatabase: context.read<AppDatabase>(),
+          ),
+        ),
+        RepositoryProvider<ChatsOutboxRepository>(
+          create: (context) => ChatsOutboxRepository(
             appDatabase: context.read<AppDatabase>(),
           ),
         ),
@@ -191,7 +196,8 @@ class _MainShellState extends State<MainShell> {
             create: (context) {
               final appBloc = context.read<AppBloc>();
               final appPreferences = context.read<AppPreferences>();
-              final localChatRepository = context.read<LocalChatRepository>();
+              final chatsRepository = context.read<ChatsRepository>();
+              final chatsOutboxRepository = context.read<ChatsOutboxRepository>();
               final token = appBloc.state.token!;
               final tenantId = appBloc.state.tenantId!;
 
@@ -200,7 +206,7 @@ class _MainShellState extends State<MainShell> {
                 socketOptions: PhoenixSocketOptions(params: {'token': token, 'tenant_id': tenantId}),
               );
 
-              return ChatsBloc(wsClient, localChatRepository, appPreferences)..add(const Connect());
+              return ChatsBloc(wsClient, chatsRepository, chatsOutboxRepository, appPreferences)..add(const Connect());
             },
           ),
         ],

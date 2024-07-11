@@ -6,7 +6,7 @@ import 'package:logging/logging.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/repositories/chat/components/chats_event.dart';
+import 'package:webtrit_phone/repositories/chats/components/chats_events.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 part 'chat_list_state.dart';
@@ -14,21 +14,21 @@ part 'chat_list_state.dart';
 final _logger = Logger('ChatListCubit');
 
 class ChatListCubit extends Cubit<ChatListState> {
-  ChatListCubit(this._localChatRepository) : super(ChatListState.initial()) {
+  ChatListCubit(this._chatsRepository) : super(ChatListState.initial()) {
     init();
   }
 
-  final LocalChatRepository _localChatRepository;
+  final ChatsRepository _chatsRepository;
   late final StreamSubscription _chatsListSub;
 
   void init() async {
     _logger.info('Initialising');
 
-    final chats = await _localChatRepository.getChats();
+    final chats = await _chatsRepository.getChats();
     emit(ChatListState(chats: chats, initialising: false));
     _logger.info('Initialised: ${chats.length} chats');
 
-    _chatsListSub = _localChatRepository.eventBus.whereType<ChatUpdate>().listen((event) {
+    _chatsListSub = _chatsRepository.eventBus.whereType<ChatUpdate>().listen((event) {
       _logger.info('ChatUpdate: ${event.chat}');
       emit(state.copyWith(chats: state.chats.mergeWith(event.chat)));
     });
