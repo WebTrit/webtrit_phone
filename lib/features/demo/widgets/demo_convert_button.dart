@@ -81,6 +81,10 @@ class DemoConvertButton {
   void remove() {
     _entry?.remove();
     _entry = null;
+  }
+
+  void dispose() {
+    remove();
     _instance = null;
   }
 }
