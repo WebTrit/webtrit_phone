@@ -48,7 +48,7 @@ class _DemoShellState extends State<DemoShell> with RouteAware {
 
   @override
   void dispose() {
-    _convertButton?.remove();
+    _convertButton?.dispose();
     super.dispose();
   }
 
