@@ -137,6 +137,15 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
     required String? replaceCallId,
   }) = _CallSignalingEventTransfer;
 
+  const factory _CallSignalingEvent.notify({
+    required int line,
+    required String callId,
+    required String? notify,
+    required SubscriptionState? subscriptionState,
+    required String? contentType,
+    required String content,
+  }) = _CallSignalingEventNotify;
+
   const factory _CallSignalingEvent.registering() = _CallSignalingEventRegistering;
 
   const factory _CallSignalingEvent.registered() = _CallSignalingEventRegistered;

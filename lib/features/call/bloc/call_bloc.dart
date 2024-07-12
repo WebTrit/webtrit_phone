@@ -647,6 +647,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       updating: (event) => __onCallSignalingEventUpdating(event, emit),
       updated: (event) => __onCallSignalingEventUpdated(event, emit),
       transfer: (value) => __onCallSignalingEventTransfer(value, emit),
+      notify: (value) => __onCallSignalingEventNotify(value, emit),
       registering: (event) => __onCallSignalingEventRegistering(event, emit),
       registered: (event) => __onCallSignalingEventRegistered(event, emit),
       registrationFailed: (event) => __onCallSignalingEventRegistrationFailed(event, emit),
@@ -930,6 +931,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final callUpdate = callToReplace.copyWith(transfer: transfer);
       emit(state.copyWithMappedActiveCall(replaceCallId, (_) => callUpdate));
     }
+  }
+
+  Future<void> __onCallSignalingEventNotify(
+    _CallSignalingEventNotify event,
+    Emitter<CallState> emit,
+  ) async {
+    // TODO: add processing of NOTIFY messages as needed
+    //       for example `event.notify == 'refer' && event.contentType == 'message/sipfrag' && event.content.capitalize.contains('SIP/2.0 200 OK')`
+
+    _logger.fine('__onCallSignalingEventNotify: $event');
   }
 
   Future<void> __onCallSignalingEventRegistering(
@@ -1913,6 +1924,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         referTo: event.referTo,
         referredBy: event.referredBy,
         replaceCallId: event.replaceCallId,
+      ));
+    } else if (event is NotifyEvent) {
+      add(_CallSignalingEvent.notify(
+        line: event.line,
+        callId: event.callId,
+        notify: event.notify,
+        subscriptionState: event.subscriptionState,
+        contentType: event.contentType,
+        content: event.content,
       ));
     } else if (event is RegisteringEvent) {
       add(const _CallSignalingEvent.registering());
