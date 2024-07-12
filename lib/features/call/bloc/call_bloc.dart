@@ -1179,8 +1179,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     var newState = state.copyWith(minimized: false);
     newState = newState.copyWithMappedActiveCall(activeCallBlindTransferInitiated.callId, (activeCall) {
-      final transfer = Transfer.blindTransferTransferSubmitted(toNumber: event.number);
-      return activeCall.copyWith(transfer: transfer);
+      return activeCall.copyWith(
+        transfer: Transfer.blindTransferTransferSubmitted(toNumber: event.number),
+      );
     });
     emit(newState);
 
@@ -1217,8 +1218,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final replaceCall = event.replaceCall;
 
     emit(state.copyWithMappedActiveCall(referorCall.callId, (activeCall) {
-      final transfer = Transfer.attendedTransferTransferSubmitted(replaceCallId: replaceCall.callId);
-      return activeCall.copyWith(transfer: transfer);
+      return activeCall.copyWith(
+        transfer: Transfer.attendedTransferTransferSubmitted(replaceCallId: replaceCall.callId),
+      );
     }));
 
     try {
