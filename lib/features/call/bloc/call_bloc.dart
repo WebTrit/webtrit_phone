@@ -749,7 +749,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       var declineRequest = DeclineRequest(
         transaction: WebtritSignalingClient.generateTransactionId(),
         line: activeCall.line,
-        callId: activeCall.callId.toString(),
+        callId: activeCall.callId,
       );
 
       _signalingClient?.execute(declineRequest).catchError((e) {
@@ -880,7 +880,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             await _signalingClient?.execute(UpdateRequest(
               transaction: WebtritSignalingClient.generateTransactionId(),
               line: activeCall.line,
-              callId: activeCall.callId.toString(),
+              callId: activeCall.callId,
               jsep: localDescription.toMap(),
             ));
             await peerConnection.setLocalDescription(localDescription);
@@ -1205,7 +1205,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final transferRequest = TransferRequest(
         transaction: WebtritSignalingClient.generateTransactionId(),
         line: activeCallBlindTransferInitiated.line,
-        callId: activeCallBlindTransferInitiated.callId.toString(),
+        callId: activeCallBlindTransferInitiated.callId,
         number: event.number,
       );
 
@@ -1238,7 +1238,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final transferRequest = TransferRequest(
         transaction: WebtritSignalingClient.generateTransactionId(),
         line: referorCall.line,
-        callId: referorCall.callId.toString(),
+        callId: referorCall.callId,
         number: replaceCall.handle.normalizedValue(),
         replaceCallId: replaceCall.callId,
       );
@@ -1416,7 +1416,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         return _signalingClient?.execute(OutgoingCallRequest(
           transaction: WebtritSignalingClient.generateTransactionId(),
           line: activeCall.line,
-          callId: activeCall.callId.toString(),
+          callId: activeCall.callId,
           number: activeCall.handle.normalizedValue(),
           jsep: localDescription.toMap(),
           referId: activeCall.fromReferId,
@@ -1466,7 +1466,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           await _signalingClient?.execute(AcceptRequest(
             transaction: WebtritSignalingClient.generateTransactionId(),
             line: activeCall.line,
-            callId: activeCall.callId.toString(),
+            callId: activeCall.callId,
             jsep: localDescription.toMap(),
           ));
           await peerConnection.setLocalDescription(localDescription);
@@ -1508,7 +1508,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         final declineRequest = DeclineRequest(
           transaction: WebtritSignalingClient.generateTransactionId(),
           line: activeCall.line,
-          callId: activeCall.callId.toString(),
+          callId: activeCall.callId,
         );
         await _signalingClient?.execute(declineRequest).catchError((e) {
           _logger.warning('__onCallPerformEventEnded declineRequest error: $e');
@@ -1517,7 +1517,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         final hangupRequest = HangupRequest(
           transaction: WebtritSignalingClient.generateTransactionId(),
           line: activeCall.line,
-          callId: activeCall.callId.toString(),
+          callId: activeCall.callId,
         );
         await _signalingClient?.execute(hangupRequest).catchError((e) {
           _logger.warning('__onCallPerformEventEnded hangupRequest error: $e');
@@ -1546,14 +1546,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           return _signalingClient?.execute(HoldRequest(
             transaction: WebtritSignalingClient.generateTransactionId(),
             line: activeCall.line,
-            callId: activeCall.callId.toString(),
+            callId: activeCall.callId,
             direction: HoldDirection.inactive,
           ));
         } else {
           return _signalingClient?.execute(UnholdRequest(
             transaction: WebtritSignalingClient.generateTransactionId(),
             line: activeCall.line,
-            callId: activeCall.callId.toString(),
+            callId: activeCall.callId,
           ));
         }
       });
@@ -1697,7 +1697,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             final updateRequest = UpdateRequest(
               transaction: WebtritSignalingClient.generateTransactionId(),
               line: activeCall.line,
-              callId: activeCall.callId.toString(),
+              callId: activeCall.callId,
               jsep: localDescription.toMap(),
             );
             await _signalingClient?.execute(updateRequest);
