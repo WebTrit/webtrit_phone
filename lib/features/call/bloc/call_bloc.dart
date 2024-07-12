@@ -1226,7 +1226,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         transaction: WebtritSignalingClient.generateTransactionId(),
         line: referorCall.line,
         callId: referorCall.callId.toString(),
-        number: referorCall.handle.normalizedValue(),
+        number: replaceCall.handle.normalizedValue(),
         replaceCallId: replaceCall.callId,
       );
 
