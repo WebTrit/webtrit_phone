@@ -70,14 +70,14 @@ class ConversationCubit extends Cubit<ConversationState> {
     _outboxRepository.insertOutboxMessage(outboxEntry);
   }
 
-  Future sendForward(String content, ChatMessage refMessage) async {
+  Future sendForward(ChatMessage refMessage) async {
     final outboxEntry = ChatOutboxMessageEntry(
       idKey: (const Uuid()).v4(),
       chatId: _chat?.id,
       participantId: _participantId,
-      forwardFromId: refMessage.id,
+      forwardFromId: refMessage.chatId,
       authorId: refMessage.senderId,
-      content: content,
+      content: refMessage.content,
     );
     _outboxRepository.insertOutboxMessage(outboxEntry);
   }

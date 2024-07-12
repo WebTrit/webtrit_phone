@@ -66,13 +66,13 @@ class GroupCubit extends Cubit<GroupState> {
     _outboxRepository.insertOutboxMessage(outboxEntry);
   }
 
-  Future sendForward(String content, ChatMessage refMessage) async {
+  Future sendForward(ChatMessage refMessage) async {
     final outboxEntry = ChatOutboxMessageEntry(
       idKey: (const Uuid()).v4(),
       chatId: _chatId,
-      forwardFromId: refMessage.id,
+      forwardFromId: refMessage.chatId,
       authorId: refMessage.senderId,
-      content: content,
+      content: refMessage.content,
     );
     _outboxRepository.insertOutboxMessage(outboxEntry);
   }

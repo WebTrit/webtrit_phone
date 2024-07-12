@@ -59,6 +59,11 @@ class ChatsRepository with ChatsDriftMapper {
     _addEvent(ChatRemove(chatId));
   }
 
+  Future<ChatMessage?> getMessageById(int messageId) async {
+    final messageData = await _chatsDao.getChatMessageById(messageId);
+    return messageData != null ? chatMessageFromDrift(messageData) : null;
+  }
+
   Future<List<ChatMessage>> getLastMessages(int chatId, {int limit = 100}) async {
     final messagesData = await _chatsDao.getLastMessages(chatId, limit: limit);
     return messagesData.map(chatMessageFromDrift).toList();

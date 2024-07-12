@@ -895,6 +895,10 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
 
   // ChatMessages
 
+  Future<ChatMessageData?> getChatMessageById(int id) {
+    return (select(chatMessagesTable)..where((t) => t.id.equals(id))).getSingleOrNull();
+  }
+
   Future<List<ChatMessageData>> getLastMessages(int chatId, {int limit = 100}) {
     final q = (select(chatMessagesTable)
       ..where((t) => t.chatId.equals(chatId))

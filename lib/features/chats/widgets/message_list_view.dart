@@ -5,9 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:logging/logging.dart';
+import 'package:auto_route/auto_route.dart';
+
+import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/features/call/widgets/popup_menu.dart';
 import 'package:webtrit_phone/features/chats/chats.dart';
+import 'package:webtrit_phone/features/chats/widgets/widgets.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 final _logger = Logger('MessageListView');
@@ -51,10 +54,11 @@ class MessageListView extends StatefulWidget {
 class _MessageListViewState extends State<MessageListView> {
   late final messageForwardCubit = context.read<MessageForwardCubit>();
   late final user = types.User(id: widget.userId);
-  final Map<String, types.PreviewData> previews = {};
   List<types.Message> messages = [];
   ChatMessage? editingMessage;
   ChatMessage? replyingMessage;
+
+  final inputController = TextEditingController();
 
   @override
   void initState() {
@@ -90,7 +94,6 @@ class _MessageListViewState extends State<MessageListView> {
         showStatus: true,
         status: types.Status.sending,
         createdAt: DateTime.now().millisecondsSinceEpoch,
-        previewData: previews[entry.content],
       );
       msgMap[entry.idKey] = textMessage;
     }
@@ -122,7 +125,6 @@ class _MessageListViewState extends State<MessageListView> {
         status: inOutbox ? types.Status.sending : types.Status.delivered,
         createdAt: msg.createdAt.millisecondsSinceEpoch,
         updatedAt: msg.updatedAt.millisecondsSinceEpoch,
-        previewData: previews[text],
         metadata: metadata,
       );
 
@@ -130,18 +132,6 @@ class _MessageListViewState extends State<MessageListView> {
     }
 
     messages = msgMap.values.toList();
-  }
-
-  void handlePreviewDataFetched(types.TextMessage message, types.PreviewData previewData) {
-    if (previews[message.text] == null) {
-      previews[message.text] = previewData;
-
-      setState(() {
-        final index = messages.indexWhere((element) => element.id == message.id);
-        final updatedMessage = (messages[index] as types.TextMessage).copyWith(previewData: previewData);
-        if (index != -1) messages[index] = updatedMessage;
-      });
-    }
   }
 
   void handleSend(types.PartialText message) {
@@ -156,6 +146,7 @@ class _MessageListViewState extends State<MessageListView> {
     } else if (editingMessage != null) {
       widget.onSendEdit(message.text, editingMessage!);
       setState(() => editingMessage = null);
+      inputController.text = '';
     } else {
       widget.onSendMessage(message.text);
     }
@@ -170,13 +161,16 @@ class _MessageListViewState extends State<MessageListView> {
   void handleSetForForward(ChatMessage message) {
     setState(() => editingMessage = null);
     setState(() => replyingMessage = null);
-    messageForwardCubit.setForForward(message);
+    context.router.navigate(const ChatsRouterPageRoute(children: [ChatListScreenPageRoute()])).then((_) {
+      messageForwardCubit.setForForward(message);
+    });
   }
 
   void handleSetForEdit(ChatMessage message) {
     messageForwardCubit.clear();
     setState(() => replyingMessage = null);
     setState(() => editingMessage = message);
+    inputController.text = message.content;
   }
 
   void handleDelete(ChatMessage message) {
@@ -195,152 +189,72 @@ class _MessageListViewState extends State<MessageListView> {
       showUserAvatars: true,
       onEndReached: widget.onFetchHistory,
       isLastPage: widget.historyEndReached,
-      onPreviewDataFetched: handlePreviewDataFetched,
       theme: DefaultChatTheme(
         inputBackgroundColor: Colors.white,
         inputTextColor: Colors.black,
         primaryColor: theme.primaryColor,
-        secondaryColor: theme.secondaryHeaderColor,
+        secondaryColor: theme.primaryColorDark,
+        sentMessageBodyTextStyle: const TextStyle(color: Colors.white),
+        receivedMessageBodyTextStyle: const TextStyle(color: Colors.white),
         inputMargin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         inputPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        messageInsetsVertical: 0,
+        messageInsetsHorizontal: 0,
         inputContainerDecoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: theme.cardColor,
-              spreadRadius: 4,
-              blurRadius: 8,
-              offset: const Offset(2, 4),
-            ),
-          ],
+          boxShadow: [BoxShadow(color: theme.cardColor, spreadRadius: 4, blurRadius: 8, offset: const Offset(2, 4))],
         ),
       ),
       customBottomWidget: BlocBuilder<MessageForwardCubit, ChatMessage?>(
-        builder: (context, messageForReply) {
+        builder: (context, messageForForward) {
           return Column(
             children: [
-              if (messageForReply != null) const Text('Forward'),
-              if (messageForReply != null) Text(messageForReply.content),
-              if (replyingMessage != null) const Text('Reply'),
-              if (replyingMessage != null) Text(replyingMessage!.content),
-              if (editingMessage != null) const Text('Edit'),
-              if (editingMessage != null) Text(editingMessage!.content),
-              Input(onSendPressed: handleSend),
+              if (messageForForward != null)
+                ExchangeBar(
+                  text: messageForForward.content,
+                  icon: Icons.forward,
+                  onCancel: messageForwardCubit.clear,
+                  onConfirm: () {
+                    widget.onSendForward(messageForForward.content, messageForForward);
+                    messageForwardCubit.clear();
+                  },
+                ),
+              if (replyingMessage != null)
+                ExchangeBar(
+                  text: replyingMessage!.content,
+                  icon: Icons.reply,
+                  onCancel: () => setState(() => replyingMessage = null),
+                ),
+              if (editingMessage != null)
+                ExchangeBar(
+                  text: editingMessage!.content,
+                  icon: Icons.edit_note,
+                  onCancel: () {
+                    setState(() => editingMessage = null);
+                    inputController.text = '';
+                    FocusScope.of(context).unfocus();
+                  },
+                ),
+              if (messageForForward == null)
+                Input(
+                  onSendPressed: handleSend,
+                  options: InputOptions(textEditingController: inputController),
+                ),
             ],
           );
         },
       ),
-      // bubbleBuilder: (child, {required message, required nextMessageInGroup}) {
-      //   ChatMessage? realMessage;
-      //   if (message.metadata != null && message.metadata!.containsKey('message')) {
-      //     realMessage = message.metadata!['message'] as ChatMessage;
-      //   }
-
-      //   final isMine = realMessage == null || realMessage.senderId == widget.userId;
-
-      //   const defaultBuubleRadius = Radius.circular(8);
-
-      //   Radius buttomLeftRadius;
-      //   if (!nextMessageInGroup) {
-      //     buttomLeftRadius = isMine ? defaultBuubleRadius : const Radius.circular(0);
-      //   } else {
-      //     buttomLeftRadius = defaultBuubleRadius;
-      //   }
-
-      //   Radius buttomRightRadius;
-      //   if (!nextMessageInGroup) {
-      //     buttomRightRadius = isMine ? const Radius.circular(0) : defaultBuubleRadius;
-      //   } else {
-      //     buttomRightRadius = defaultBuubleRadius;
-      //   }
-
-      //   return Column(
-      //     children: [
-      //       Container(
-      //         decoration: BoxDecoration(
-      //           color: isMine ? Colors.deepPurple : Colors.amberAccent,
-      //           borderRadius: BorderRadius.only(
-      //             topLeft: defaultBuubleRadius,
-      //             topRight: defaultBuubleRadius,
-      //             bottomLeft: buttomLeftRadius,
-      //             bottomRight: buttomRightRadius,
-      //           ),
-      //           boxShadow: [
-      //             BoxShadow(
-      //               color: Colors.black.withOpacity(0.1),
-      //               spreadRadius: 1,
-      //               blurRadius: 2,
-      //               offset: const Offset(0, 1),
-      //             ),
-      //           ],
-      //         ),
-      //         child: child,
-      //       ),
-      //       const Text('data')
-      //     ],
-      //   );
-      // },
-      textMessageBuilder: (message, {required messageWidth, required showName}) {
-        ChatMessage? realMessage;
-        if (message.metadata != null && message.metadata!.containsKey('message')) {
-          realMessage = message.metadata!['message'] as ChatMessage;
-        }
-
-        final isEdited = message.metadata != null && message.metadata!['edited'] == true;
-
-        final isSended = realMessage?.id != null;
-        final isMine = realMessage == null || realMessage.senderId == widget.userId;
-
-        return CallPopupMenuButton(
-          items: [
-            if (isSended)
-              CallPopupMenuItem(
-                text: 'Reply',
-                icon: const Icon(Icons.reply),
-                onTap: () => handleSetForReply(realMessage!),
-              ),
-            if (isSended)
-              CallPopupMenuItem(
-                text: 'Forward',
-                icon: const Icon(Icons.forward),
-                onTap: () => handleSetForForward(realMessage!),
-              ),
-            if (isMine && isSended)
-              CallPopupMenuItem(
-                text: 'Edit',
-                icon: const Icon(Icons.edit),
-                onTap: () => handleSetForEdit(realMessage!),
-              ),
-            if (isMine && isSended)
-              CallPopupMenuItem(
-                text: 'Delete',
-                icon: const Icon(Icons.remove),
-                onTap: () => handleDelete(realMessage!),
-              ),
-          ],
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Flexible(
-                child: TextMessage(
-                  emojiEnlargementBehavior: EmojiEnlargementBehavior.never,
-                  hideBackgroundOnEmojiMessages: false,
-                  message: message,
-                  showName: showName,
-                  usePreviewData: true,
-                  onPreviewDataFetched: handlePreviewDataFetched,
-                ),
-              ),
-              if (isEdited)
-                const Padding(
-                  padding: EdgeInsets.only(right: 8),
-                  child: Icon(Icons.edit, size: 16, color: Colors.grey),
-                ),
-            ],
-          ),
-        );
-      },
+      textMessageBuilder: (message, {required messageWidth, required showName}) => MessageView(
+        userId: widget.userId,
+        message: message,
+        messageWidth: messageWidth,
+        showName: showName,
+        handleSetForReply: handleSetForReply,
+        handleSetForForward: handleSetForForward,
+        handleSetForEdit: handleSetForEdit,
+        handleDelete: handleDelete,
+      ),
     );
   }
 }

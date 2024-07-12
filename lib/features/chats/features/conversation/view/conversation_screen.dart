@@ -41,7 +41,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
               historyEndReached: state.historyEndReached,
               onSendMessage: (content) => conversationCubit.sendMessage(content),
               onSendReply: (content, refMessage) => conversationCubit.sendReply(content, refMessage),
-              onSendForward: (content, refMessage) => conversationCubit.sendForward(content, refMessage),
+              onSendForward: (content, refMessage) => conversationCubit.sendForward(refMessage),
               onSendEdit: (content, refMessage) => conversationCubit.sendEdit(content, refMessage),
               onDelete: (refMessage) => conversationCubit.deleteMessage(refMessage),
               onFetchHistory: conversationCubit.fetchHistory,
