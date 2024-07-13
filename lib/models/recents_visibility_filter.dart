@@ -22,4 +22,18 @@ extension RecentsVisibilityFilterI10nExtension on RecentsVisibilityFilter {
         return context.l10n.recentsVisibilityFilter_outgoing;
     }
   }
+
+  /// Returns the praepositional form of the filter.
+  String l10nPreposit(BuildContext context) {
+    switch (this) {
+      case RecentsVisibilityFilter.all:
+        return context.l10n.recentsVisibilityFilter_all_preposit;
+      case RecentsVisibilityFilter.missed:
+        return context.l10n.recentsVisibilityFilter_missed_preposit;
+      case RecentsVisibilityFilter.incoming:
+        return context.l10n.recentsVisibilityFilter_incoming_preposit;
+      case RecentsVisibilityFilter.outgoing:
+        return context.l10n.recentsVisibilityFilter_outgoing_preposit;
+    }
+  }
 }

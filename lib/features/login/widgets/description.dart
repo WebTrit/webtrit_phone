@@ -21,10 +21,12 @@ class Description extends StatelessWidget {
     return Linkify(
       text: text,
       onOpen: !launchLinkableElement ? null : (link) => context.read<LoginCubit>().launchLinkableElement(link),
-      style: themeData.textTheme.bodyMedium,
-      linkStyle: TextStyle(
-        color: !launchLinkableElement ? null : themeData.colorScheme.primary,
-        fontWeight: FontWeight.bold,
+      highlightLinkifyElement: launchLinkableElement,
+      style: LinkifyStyle(
+        style: themeData.textTheme.bodyMedium,
+        linkStyle: const TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

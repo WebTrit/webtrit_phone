@@ -20,6 +20,7 @@ mixin _$PermissionsState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() inProgress,
+    required TResult Function(Manufacturer manufacturer) manufacturerTipNeeded,
     required TResult Function() success,
     required TResult Function(Object error) failure,
   }) =>
@@ -28,6 +29,7 @@ mixin _$PermissionsState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? inProgress,
+    TResult? Function(Manufacturer manufacturer)? manufacturerTipNeeded,
     TResult? Function()? success,
     TResult? Function(Object error)? failure,
   }) =>
@@ -36,6 +38,7 @@ mixin _$PermissionsState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
+    TResult Function(Manufacturer manufacturer)? manufacturerTipNeeded,
     TResult Function()? success,
     TResult Function(Object error)? failure,
     required TResult orElse(),
@@ -45,6 +48,8 @@ mixin _$PermissionsState {
   TResult map<TResult extends Object?>({
     required TResult Function(PermissionsStateInitial value) initial,
     required TResult Function(PermissionsStateInProgress value) inProgress,
+    required TResult Function(PermissionsManufacturerTipNeeded value)
+        manufacturerTipNeeded,
     required TResult Function(PermissionsStateSuccess value) success,
     required TResult Function(PermissionsStateFailure value) failure,
   }) =>
@@ -53,6 +58,8 @@ mixin _$PermissionsState {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(PermissionsStateInitial value)? initial,
     TResult? Function(PermissionsStateInProgress value)? inProgress,
+    TResult? Function(PermissionsManufacturerTipNeeded value)?
+        manufacturerTipNeeded,
     TResult? Function(PermissionsStateSuccess value)? success,
     TResult? Function(PermissionsStateFailure value)? failure,
   }) =>
@@ -61,6 +68,8 @@ mixin _$PermissionsState {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(PermissionsStateInitial value)? initial,
     TResult Function(PermissionsStateInProgress value)? inProgress,
+    TResult Function(PermissionsManufacturerTipNeeded value)?
+        manufacturerTipNeeded,
     TResult Function(PermissionsStateSuccess value)? success,
     TResult Function(PermissionsStateFailure value)? failure,
     required TResult orElse(),
@@ -129,6 +138,7 @@ class _$PermissionsStateInitialImpl implements PermissionsStateInitial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() inProgress,
+    required TResult Function(Manufacturer manufacturer) manufacturerTipNeeded,
     required TResult Function() success,
     required TResult Function(Object error) failure,
   }) {
@@ -140,6 +150,7 @@ class _$PermissionsStateInitialImpl implements PermissionsStateInitial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? inProgress,
+    TResult? Function(Manufacturer manufacturer)? manufacturerTipNeeded,
     TResult? Function()? success,
     TResult? Function(Object error)? failure,
   }) {
@@ -151,6 +162,7 @@ class _$PermissionsStateInitialImpl implements PermissionsStateInitial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
+    TResult Function(Manufacturer manufacturer)? manufacturerTipNeeded,
     TResult Function()? success,
     TResult Function(Object error)? failure,
     required TResult orElse(),
@@ -166,6 +178,8 @@ class _$PermissionsStateInitialImpl implements PermissionsStateInitial {
   TResult map<TResult extends Object?>({
     required TResult Function(PermissionsStateInitial value) initial,
     required TResult Function(PermissionsStateInProgress value) inProgress,
+    required TResult Function(PermissionsManufacturerTipNeeded value)
+        manufacturerTipNeeded,
     required TResult Function(PermissionsStateSuccess value) success,
     required TResult Function(PermissionsStateFailure value) failure,
   }) {
@@ -177,6 +191,8 @@ class _$PermissionsStateInitialImpl implements PermissionsStateInitial {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(PermissionsStateInitial value)? initial,
     TResult? Function(PermissionsStateInProgress value)? inProgress,
+    TResult? Function(PermissionsManufacturerTipNeeded value)?
+        manufacturerTipNeeded,
     TResult? Function(PermissionsStateSuccess value)? success,
     TResult? Function(PermissionsStateFailure value)? failure,
   }) {
@@ -188,6 +204,8 @@ class _$PermissionsStateInitialImpl implements PermissionsStateInitial {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(PermissionsStateInitial value)? initial,
     TResult Function(PermissionsStateInProgress value)? inProgress,
+    TResult Function(PermissionsManufacturerTipNeeded value)?
+        manufacturerTipNeeded,
     TResult Function(PermissionsStateSuccess value)? success,
     TResult Function(PermissionsStateFailure value)? failure,
     required TResult orElse(),
@@ -247,6 +265,7 @@ class _$PermissionsStateInProgressImpl implements PermissionsStateInProgress {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() inProgress,
+    required TResult Function(Manufacturer manufacturer) manufacturerTipNeeded,
     required TResult Function() success,
     required TResult Function(Object error) failure,
   }) {
@@ -258,6 +277,7 @@ class _$PermissionsStateInProgressImpl implements PermissionsStateInProgress {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? inProgress,
+    TResult? Function(Manufacturer manufacturer)? manufacturerTipNeeded,
     TResult? Function()? success,
     TResult? Function(Object error)? failure,
   }) {
@@ -269,6 +289,7 @@ class _$PermissionsStateInProgressImpl implements PermissionsStateInProgress {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
+    TResult Function(Manufacturer manufacturer)? manufacturerTipNeeded,
     TResult Function()? success,
     TResult Function(Object error)? failure,
     required TResult orElse(),
@@ -284,6 +305,8 @@ class _$PermissionsStateInProgressImpl implements PermissionsStateInProgress {
   TResult map<TResult extends Object?>({
     required TResult Function(PermissionsStateInitial value) initial,
     required TResult Function(PermissionsStateInProgress value) inProgress,
+    required TResult Function(PermissionsManufacturerTipNeeded value)
+        manufacturerTipNeeded,
     required TResult Function(PermissionsStateSuccess value) success,
     required TResult Function(PermissionsStateFailure value) failure,
   }) {
@@ -295,6 +318,8 @@ class _$PermissionsStateInProgressImpl implements PermissionsStateInProgress {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(PermissionsStateInitial value)? initial,
     TResult? Function(PermissionsStateInProgress value)? inProgress,
+    TResult? Function(PermissionsManufacturerTipNeeded value)?
+        manufacturerTipNeeded,
     TResult? Function(PermissionsStateSuccess value)? success,
     TResult? Function(PermissionsStateFailure value)? failure,
   }) {
@@ -306,6 +331,8 @@ class _$PermissionsStateInProgressImpl implements PermissionsStateInProgress {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(PermissionsStateInitial value)? initial,
     TResult Function(PermissionsStateInProgress value)? inProgress,
+    TResult Function(PermissionsManufacturerTipNeeded value)?
+        manufacturerTipNeeded,
     TResult Function(PermissionsStateSuccess value)? success,
     TResult Function(PermissionsStateFailure value)? failure,
     required TResult orElse(),
@@ -319,6 +346,169 @@ class _$PermissionsStateInProgressImpl implements PermissionsStateInProgress {
 
 abstract class PermissionsStateInProgress implements PermissionsState {
   const factory PermissionsStateInProgress() = _$PermissionsStateInProgressImpl;
+}
+
+/// @nodoc
+abstract class _$$PermissionsManufacturerTipNeededImplCopyWith<$Res> {
+  factory _$$PermissionsManufacturerTipNeededImplCopyWith(
+          _$PermissionsManufacturerTipNeededImpl value,
+          $Res Function(_$PermissionsManufacturerTipNeededImpl) then) =
+      __$$PermissionsManufacturerTipNeededImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({Manufacturer manufacturer});
+}
+
+/// @nodoc
+class __$$PermissionsManufacturerTipNeededImplCopyWithImpl<$Res>
+    extends _$PermissionsStateCopyWithImpl<$Res,
+        _$PermissionsManufacturerTipNeededImpl>
+    implements _$$PermissionsManufacturerTipNeededImplCopyWith<$Res> {
+  __$$PermissionsManufacturerTipNeededImplCopyWithImpl(
+      _$PermissionsManufacturerTipNeededImpl _value,
+      $Res Function(_$PermissionsManufacturerTipNeededImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? manufacturer = null,
+  }) {
+    return _then(_$PermissionsManufacturerTipNeededImpl(
+      null == manufacturer
+          ? _value.manufacturer
+          : manufacturer // ignore: cast_nullable_to_non_nullable
+              as Manufacturer,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$PermissionsManufacturerTipNeededImpl
+    implements PermissionsManufacturerTipNeeded {
+  const _$PermissionsManufacturerTipNeededImpl(this.manufacturer);
+
+  @override
+  final Manufacturer manufacturer;
+
+  @override
+  String toString() {
+    return 'PermissionsState.manufacturerTipNeeded(manufacturer: $manufacturer)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PermissionsManufacturerTipNeededImpl &&
+            (identical(other.manufacturer, manufacturer) ||
+                other.manufacturer == manufacturer));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, manufacturer);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PermissionsManufacturerTipNeededImplCopyWith<
+          _$PermissionsManufacturerTipNeededImpl>
+      get copyWith => __$$PermissionsManufacturerTipNeededImplCopyWithImpl<
+          _$PermissionsManufacturerTipNeededImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() inProgress,
+    required TResult Function(Manufacturer manufacturer) manufacturerTipNeeded,
+    required TResult Function() success,
+    required TResult Function(Object error) failure,
+  }) {
+    return manufacturerTipNeeded(manufacturer);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? inProgress,
+    TResult? Function(Manufacturer manufacturer)? manufacturerTipNeeded,
+    TResult? Function()? success,
+    TResult? Function(Object error)? failure,
+  }) {
+    return manufacturerTipNeeded?.call(manufacturer);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? inProgress,
+    TResult Function(Manufacturer manufacturer)? manufacturerTipNeeded,
+    TResult Function()? success,
+    TResult Function(Object error)? failure,
+    required TResult orElse(),
+  }) {
+    if (manufacturerTipNeeded != null) {
+      return manufacturerTipNeeded(manufacturer);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(PermissionsStateInitial value) initial,
+    required TResult Function(PermissionsStateInProgress value) inProgress,
+    required TResult Function(PermissionsManufacturerTipNeeded value)
+        manufacturerTipNeeded,
+    required TResult Function(PermissionsStateSuccess value) success,
+    required TResult Function(PermissionsStateFailure value) failure,
+  }) {
+    return manufacturerTipNeeded(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(PermissionsStateInitial value)? initial,
+    TResult? Function(PermissionsStateInProgress value)? inProgress,
+    TResult? Function(PermissionsManufacturerTipNeeded value)?
+        manufacturerTipNeeded,
+    TResult? Function(PermissionsStateSuccess value)? success,
+    TResult? Function(PermissionsStateFailure value)? failure,
+  }) {
+    return manufacturerTipNeeded?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(PermissionsStateInitial value)? initial,
+    TResult Function(PermissionsStateInProgress value)? inProgress,
+    TResult Function(PermissionsManufacturerTipNeeded value)?
+        manufacturerTipNeeded,
+    TResult Function(PermissionsStateSuccess value)? success,
+    TResult Function(PermissionsStateFailure value)? failure,
+    required TResult orElse(),
+  }) {
+    if (manufacturerTipNeeded != null) {
+      return manufacturerTipNeeded(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class PermissionsManufacturerTipNeeded implements PermissionsState {
+  const factory PermissionsManufacturerTipNeeded(
+      final Manufacturer manufacturer) = _$PermissionsManufacturerTipNeededImpl;
+
+  Manufacturer get manufacturer;
+  @JsonKey(ignore: true)
+  _$$PermissionsManufacturerTipNeededImplCopyWith<
+          _$PermissionsManufacturerTipNeededImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -364,6 +554,7 @@ class _$PermissionsStateSuccessImpl implements PermissionsStateSuccess {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() inProgress,
+    required TResult Function(Manufacturer manufacturer) manufacturerTipNeeded,
     required TResult Function() success,
     required TResult Function(Object error) failure,
   }) {
@@ -375,6 +566,7 @@ class _$PermissionsStateSuccessImpl implements PermissionsStateSuccess {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? inProgress,
+    TResult? Function(Manufacturer manufacturer)? manufacturerTipNeeded,
     TResult? Function()? success,
     TResult? Function(Object error)? failure,
   }) {
@@ -386,6 +578,7 @@ class _$PermissionsStateSuccessImpl implements PermissionsStateSuccess {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
+    TResult Function(Manufacturer manufacturer)? manufacturerTipNeeded,
     TResult Function()? success,
     TResult Function(Object error)? failure,
     required TResult orElse(),
@@ -401,6 +594,8 @@ class _$PermissionsStateSuccessImpl implements PermissionsStateSuccess {
   TResult map<TResult extends Object?>({
     required TResult Function(PermissionsStateInitial value) initial,
     required TResult Function(PermissionsStateInProgress value) inProgress,
+    required TResult Function(PermissionsManufacturerTipNeeded value)
+        manufacturerTipNeeded,
     required TResult Function(PermissionsStateSuccess value) success,
     required TResult Function(PermissionsStateFailure value) failure,
   }) {
@@ -412,6 +607,8 @@ class _$PermissionsStateSuccessImpl implements PermissionsStateSuccess {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(PermissionsStateInitial value)? initial,
     TResult? Function(PermissionsStateInProgress value)? inProgress,
+    TResult? Function(PermissionsManufacturerTipNeeded value)?
+        manufacturerTipNeeded,
     TResult? Function(PermissionsStateSuccess value)? success,
     TResult? Function(PermissionsStateFailure value)? failure,
   }) {
@@ -423,6 +620,8 @@ class _$PermissionsStateSuccessImpl implements PermissionsStateSuccess {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(PermissionsStateInitial value)? initial,
     TResult Function(PermissionsStateInProgress value)? inProgress,
+    TResult Function(PermissionsManufacturerTipNeeded value)?
+        manufacturerTipNeeded,
     TResult Function(PermissionsStateSuccess value)? success,
     TResult Function(PermissionsStateFailure value)? failure,
     required TResult orElse(),
@@ -505,6 +704,7 @@ class _$PermissionsStateFailureImpl implements PermissionsStateFailure {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() inProgress,
+    required TResult Function(Manufacturer manufacturer) manufacturerTipNeeded,
     required TResult Function() success,
     required TResult Function(Object error) failure,
   }) {
@@ -516,6 +716,7 @@ class _$PermissionsStateFailureImpl implements PermissionsStateFailure {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? inProgress,
+    TResult? Function(Manufacturer manufacturer)? manufacturerTipNeeded,
     TResult? Function()? success,
     TResult? Function(Object error)? failure,
   }) {
@@ -527,6 +728,7 @@ class _$PermissionsStateFailureImpl implements PermissionsStateFailure {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
+    TResult Function(Manufacturer manufacturer)? manufacturerTipNeeded,
     TResult Function()? success,
     TResult Function(Object error)? failure,
     required TResult orElse(),
@@ -542,6 +744,8 @@ class _$PermissionsStateFailureImpl implements PermissionsStateFailure {
   TResult map<TResult extends Object?>({
     required TResult Function(PermissionsStateInitial value) initial,
     required TResult Function(PermissionsStateInProgress value) inProgress,
+    required TResult Function(PermissionsManufacturerTipNeeded value)
+        manufacturerTipNeeded,
     required TResult Function(PermissionsStateSuccess value) success,
     required TResult Function(PermissionsStateFailure value) failure,
   }) {
@@ -553,6 +757,8 @@ class _$PermissionsStateFailureImpl implements PermissionsStateFailure {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(PermissionsStateInitial value)? initial,
     TResult? Function(PermissionsStateInProgress value)? inProgress,
+    TResult? Function(PermissionsManufacturerTipNeeded value)?
+        manufacturerTipNeeded,
     TResult? Function(PermissionsStateSuccess value)? success,
     TResult? Function(PermissionsStateFailure value)? failure,
   }) {
@@ -564,6 +770,8 @@ class _$PermissionsStateFailureImpl implements PermissionsStateFailure {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(PermissionsStateInitial value)? initial,
     TResult Function(PermissionsStateInProgress value)? inProgress,
+    TResult Function(PermissionsManufacturerTipNeeded value)?
+        manufacturerTipNeeded,
     TResult Function(PermissionsStateSuccess value)? success,
     TResult Function(PermissionsStateFailure value)? failure,
     required TResult orElse(),

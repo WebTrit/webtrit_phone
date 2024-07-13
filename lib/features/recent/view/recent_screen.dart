@@ -54,6 +54,7 @@ class RecentScreen extends StatelessWidget {
                   for (final recent in recents)
                     RecentHistoryTile(
                       recent: recent,
+                      dateFormat: context.read<RecentBloc>().dateFormat,
                       onDeleted: (recent) {
                         context.showSnackBar(context.l10n.recents_snackBar_deleted(recent.name));
 

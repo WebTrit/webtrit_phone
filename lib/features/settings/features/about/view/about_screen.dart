@@ -3,22 +3,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-import '../about.dart';
+import '../bloc/about_bloc.dart';
+
+import 'about_screen_style.dart';
+import 'about_screen_styles.dart';
+
+export 'about_screen_style.dart';
+export 'about_screen_styles.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({
     super.key,
+    this.style,
   });
+
+  final AboutScreenStyle? style;
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+    final localStyle = style ?? themeData.extension<AboutScreenStyles>()?.primary;
+    final logo = localStyle?.picture;
+
     return BlocBuilder<AboutBloc, AboutState>(
       builder: (context, state) {
         final themeData = Theme.of(context);
-        final logo = themeData.extension<LogoAssets>()?.primaryOnboarding;
         final logoHeight = themeData.textTheme.displayLarge!.fontSize! * 1.5;
         final delimiterHeight = themeData.textTheme.titleLarge!.fontSize!;
         return Scaffold(
@@ -42,13 +53,29 @@ class AboutScreen extends StatelessWidget {
                   height: delimiterHeight,
                 ),
                 Text(
+                  context.l10n.settings_AboutText_AppVersion,
+                ),
+                Text(
                   state.appVersion,
                   style: themeData.textTheme.titleLarge,
                 ),
                 SizedBox(
                   height: delimiterHeight,
                 ),
-                Text(state.coreUrl.toString()),
+                Text(
+                  context.l10n.settings_AboutText_StoreVersion,
+                ),
+                Text(
+                  state.storeVersion,
+                  style: themeData.textTheme.titleLarge,
+                ),
+                SizedBox(
+                  height: delimiterHeight,
+                ),
+                Text(
+                  state.coreUrl.toString(),
+                  textAlign: TextAlign.center,
+                ),
                 Stack(
                   alignment: AlignmentDirectional.center,
                   children: [

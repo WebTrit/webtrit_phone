@@ -8,7 +8,13 @@ publish_to: 'none'
 #   - <Build>: non-negative integer computed as follows:
 #       <Major> * 1000000 + <Minor> * 10000 + <Patch> * 100 + <published build iteration for Major.Minor.Patch combination>
 # Note: <Minor>, <Patch>, and <Build> should be within the range of 0 to 99.
-version: 1.1.0+1010000
+version: 0.0.0+0000000
+
+# Version format for app_version: <Major>.<Minor>.<Patch>
+# Where:
+#   - <Major>, <Minor>, <Patch>: non-negative integers, decided by the developer
+# app_version represents tasks and fixed bugs, which is different from the build version that is specific to each client
+app_version: 1.3.1
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
@@ -36,6 +42,7 @@ dependencies:
   firebase_messaging: ^14.9.2
   flutter_bloc: ^8.1.5
   flutter_contacts: ^1.1.7
+  flutter_dtmf: ^3.0.2
   flutter_secure_storage: ^9.2.2
   flutter_svg: ^2.0.10+1
   flutter_webrtc:
@@ -47,6 +54,7 @@ dependencies:
   google_fonts: ^6.2.1
   intl: any
   json_annotation: ^4.8.1
+  soundpool: ^2.4.1
   just_audio: ^0.9.37
   linkify: ^5.0.0
   logging: ^1.2.0
@@ -67,6 +75,7 @@ dependencies:
   validators: ^3.0.0
   webview_flutter: ^4.7.0
   webview_flutter_web: ^0.2.2+4
+  collection: ^1.18.0
 
   webtrit_api:
     path: ./packages/webtrit_api
@@ -75,9 +84,11 @@ dependencies:
   webtrit_signaling:
     path: ./packages/webtrit_signaling
   webtrit_callkeep:
-    path: ./packages/webtrit_callkeep
+    path: ../webtrit_callkeep/webtrit_callkeep
   store_info_extractor:
     path: ./packages/store_info_extractor
+  ssl_certificates:
+    path: ./packages/ssl_certificates
 
   app_database:
     path: ./packages/data/app_database
@@ -94,7 +105,8 @@ dev_dependencies:
   bloc_test: ^9.1.7
   build_runner: ^2.4.9
   flutter_gen_runner: ^5.4.0
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons:
+    git: https://github.com/fluttercommunity/flutter_launcher_icons.git
   flutter_lints: ^4.0.0
   flutter_native_splash: ^2.4.0
   freezed: ^2.5.2
@@ -105,11 +117,13 @@ flutter:
   uses-material-design: true
 
   assets:
+    - pubspec.yaml
     - assets/
     - assets/callkeep/
     - assets/login/
     - assets/ringtones/
     - assets/themes/
+    - assets/certificates/
 
 flutter_gen:
   output: lib/app/

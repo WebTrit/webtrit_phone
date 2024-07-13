@@ -8,8 +8,9 @@
 // ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal,deprecated_member_use
 
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:vector_graphics/vector_graphics.dart';
 
 class $AssetsCallkeepGen {
   const $AssetsCallkeepGen();
@@ -20,6 +21,16 @@ class $AssetsCallkeepGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [iosIconTemplateImage];
+}
+
+class $AssetsCertificatesGen {
+  const $AssetsCertificatesGen();
+
+  /// File path: assets/certificates/credentials.json
+  String get credentials => 'assets/certificates/credentials.json';
+
+  /// List of all assets
+  List<String> get values => [credentials];
 }
 
 class $AssetsLoginGen {
@@ -52,14 +63,37 @@ class $AssetsThemesGen {
   /// File path: assets/themes/original.json
   String get original => 'assets/themes/original.json';
 
+  /// File path: assets/themes/original.page.dark.config.json
+  String get originalPageDarkConfig =>
+      'assets/themes/original.page.dark.config.json';
+
+  /// File path: assets/themes/original.page.light.config.json
+  String get originalPageLightConfig =>
+      'assets/themes/original.page.light.config.json';
+
+  /// File path: assets/themes/original.widget.dark.config.json
+  String get originalWidgetDarkConfig =>
+      'assets/themes/original.widget.dark.config.json';
+
+  /// File path: assets/themes/original.widget.light.config.json
+  String get originalWidgetLightConfig =>
+      'assets/themes/original.widget.light.config.json';
+
   /// List of all assets
-  List<String> get values => [original];
+  List<String> get values => [
+        original,
+        originalPageDarkConfig,
+        originalPageLightConfig,
+        originalWidgetDarkConfig,
+        originalWidgetLightConfig
+      ];
 }
 
 class Assets {
   Assets._();
 
   static const $AssetsCallkeepGen callkeep = $AssetsCallkeepGen();
+  static const $AssetsCertificatesGen certificates = $AssetsCertificatesGen();
   static const $AssetsLoginGen login = $AssetsLoginGen();
   static const SvgGenImage primaryOnboardinLogo =
       SvgGenImage('assets/primary_onboardin_logo.svg');
@@ -67,16 +101,19 @@ class Assets {
   static const SvgGenImage secondaryOnboardinLogo =
       SvgGenImage('assets/secondary_onboardin_logo.svg');
   static const $AssetsThemesGen themes = $AssetsThemesGen();
+  static const String pubspec = 'pubspec.yaml';
 
   /// List of all assets
-  static List<SvgGenImage> get values =>
-      [primaryOnboardinLogo, secondaryOnboardinLogo];
+  static List<dynamic> get values =>
+      [primaryOnboardinLogo, secondaryOnboardinLogo, pubspec];
 }
 
 class AssetGenImage {
-  const AssetGenImage(this._assetName);
+  const AssetGenImage(this._assetName, {this.size = null});
 
   final String _assetName;
+
+  final Size? size;
 
   Image image({
     Key? key,
@@ -148,9 +185,20 @@ class AssetGenImage {
 }
 
 class SvgGenImage {
-  const SvgGenImage(this._assetName);
+  const SvgGenImage(
+    this._assetName, {
+    this.size = null,
+  }) : _isVecFormat = false;
+
+  const SvgGenImage.vec(
+    this._assetName, {
+    this.size = null,
+  }) : _isVecFormat = true;
 
   final String _assetName;
+
+  final Size? size;
+  final bool _isVecFormat;
 
   SvgPicture svg({
     Key? key,
@@ -165,19 +213,21 @@ class SvgGenImage {
     WidgetBuilder? placeholderBuilder,
     String? semanticsLabel,
     bool excludeFromSemantics = false,
-    SvgTheme theme = const SvgTheme(),
+    SvgTheme? theme,
     ColorFilter? colorFilter,
     Clip clipBehavior = Clip.hardEdge,
     @deprecated Color? color,
     @deprecated BlendMode colorBlendMode = BlendMode.srcIn,
     @deprecated bool cacheColorFilter = false,
   }) {
-    return SvgPicture.asset(
-      _assetName,
+    return SvgPicture(
+      _isVecFormat
+          ? AssetBytesLoader(_assetName,
+              assetBundle: bundle, packageName: package)
+          : SvgAssetLoader(_assetName,
+              assetBundle: bundle, packageName: package),
       key: key,
       matchTextDirection: matchTextDirection,
-      bundle: bundle,
-      package: package,
       width: width,
       height: height,
       fit: fit,
@@ -187,9 +237,8 @@ class SvgGenImage {
       semanticsLabel: semanticsLabel,
       excludeFromSemantics: excludeFromSemantics,
       theme: theme,
-      colorFilter: colorFilter,
-      color: color,
-      colorBlendMode: colorBlendMode,
+      colorFilter: colorFilter ??
+          (color == null ? null : ColorFilter.mode(color, colorBlendMode)),
       clipBehavior: clipBehavior,
       cacheColorFilter: cacheColorFilter,
     );

@@ -10,8 +10,9 @@ part 'error.g.dart';
 class ErrorResponse with _$ErrorResponse {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory ErrorResponse({
-    required String code,
-    List<ErrorDetail>? details,
+    String? code,
+    String? message,
+    ErrorDetail? details,
   }) = _ErrorResponse;
 
   factory ErrorResponse.fromJson(Map<String, dynamic> json) => _$ErrorResponseFromJson(json);
@@ -21,7 +22,7 @@ class ErrorResponse with _$ErrorResponse {
 class ErrorDetail with _$ErrorDetail {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory ErrorDetail({
-    required String path,
+    String? path,
     required String reason,
   }) = _ErrorDetail;
 

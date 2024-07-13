@@ -34,6 +34,9 @@ class EnvironmentConfig {
     defaultValue: 'http://localhost:4000',
   );
 
+  static const APP_LINK_DOMAIN__NAME = 'WEBTRIT_APP_LINK_DOMAIN';
+  static const APP_LINK_DOMAIN = String.fromEnvironment(APP_LINK_DOMAIN__NAME, defaultValue: '');
+
   static const APP_NAME__NAME = 'WEBTRIT_APP_NAME';
   static const APP_NAME = String.fromEnvironment(
     APP_NAME__NAME,
@@ -71,6 +74,13 @@ class EnvironmentConfig {
   static const APP_TERMS_AND_CONDITIONS_URL = bool.hasEnvironment(APP_TERMS_AND_CONDITIONS_URL__NAME)
       ? String.fromEnvironment(
           APP_TERMS_AND_CONDITIONS_URL__NAME,
+        )
+      : null;
+
+  static const APP_CREDENTIALS_REQUEST_URL__NAME = 'WEBTRIT_APP_CREDENTIALS_REQUEST_URL';
+  static const APP_CREDENTIALS_REQUEST_URL = bool.hasEnvironment(APP_CREDENTIALS_REQUEST_URL__NAME)
+      ? String.fromEnvironment(
+          APP_CREDENTIALS_REQUEST_URL__NAME,
         )
       : null;
 

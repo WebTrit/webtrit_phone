@@ -239,7 +239,7 @@ packages:
     source: hosted
     version: "4.10.0"
   collection:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: collection
       sha256: ee67cb0715911d28db6bf4af1026078bd6f0128b07a5f66fb2ed94ec6783c09a
@@ -310,6 +310,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  dart_casing:
+    dependency: transitive
+    description:
+      name: dart_casing
+      sha256: "103ab12ecc536b955feedddb3c3b41de6282cd4517008e9087e6293781369d07"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   dart_style:
     dependency: transitive
     description:
@@ -560,6 +568,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_dtmf:
+    dependency: "direct main"
+    description:
+      name: flutter_dtmf
+      sha256: "355f0d476c204757f759caeaa65d50df91337924c0b14548f7b731a5c562f73e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.2"
   flutter_gen_core:
     dependency: transitive
     description:
@@ -579,10 +595,11 @@ packages:
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
-      name: flutter_launcher_icons
-      sha256: "526faf84284b86a4cb36d20a5e45147747b7563d921373d4ee0559c54fcdbcea"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "006cb1ed53f969bf11816cde5b16dd520e1ee40e"
+      url: "https://github.com/fluttercommunity/flutter_launcher_icons.git"
+    source: git
     version: "0.13.1"
   flutter_lints:
     dependency: "direct dev"
@@ -1295,6 +1312,38 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  soundpool:
+    dependency: "direct main"
+    description:
+      name: soundpool
+      sha256: fe7302005759d6a3561de1711e3ea818b1ba025a62375b469196dda5b654bd38
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.1"
+  soundpool_macos:
+    dependency: transitive
+    description:
+      name: soundpool_macos
+      sha256: e0440a19d4e8f344dace336923b369184e91eebbbd8348266f4434b675bd15db
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.0"
+  soundpool_platform_interface:
+    dependency: transitive
+    description:
+      name: soundpool_platform_interface
+      sha256: "7c6666e19319151b2036c4fc9b6da3a83f2ebf4097989e6ba1c2b0bfe3612e9f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
+  soundpool_web:
+    dependency: transitive
+    description:
+      name: soundpool_web
+      sha256: "3d1eb8d6cceb8a0aec38ff9aec4fbd11a9a8101d27b27a6eb29305b83d46aee5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.0"
   source_gen:
     dependency: transitive
     description:
@@ -1359,6 +1408,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.21"
+  ssl_certificates:
+    dependency: "direct main"
+    description:
+      path: "packages/ssl_certificates"
+      relative: true
+    source: path
+    version: "1.0.0"
   stack_trace:
     dependency: transitive
     description:
@@ -1656,10 +1712,59 @@ packages:
   webtrit_callkeep:
     dependency: "direct main"
     description:
-      path: "packages/webtrit_callkeep"
+      path: "../webtrit_callkeep/webtrit_callkeep"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.1.0+1"
+  webtrit_callkeep_android:
+    dependency: transitive
+    description:
+      path: "../webtrit_callkeep/webtrit_callkeep_android"
+      relative: true
+    source: path
+    version: "0.1.0+1"
+  webtrit_callkeep_ios:
+    dependency: transitive
+    description:
+      path: "../webtrit_callkeep/webtrit_callkeep_ios"
+      relative: true
+    source: path
+    version: "0.1.0+1"
+  webtrit_callkeep_linux:
+    dependency: transitive
+    description:
+      path: "../webtrit_callkeep/webtrit_callkeep_linux"
+      relative: true
+    source: path
+    version: "0.1.0+1"
+  webtrit_callkeep_macos:
+    dependency: transitive
+    description:
+      path: "../webtrit_callkeep/webtrit_callkeep_macos"
+      relative: true
+    source: path
+    version: "0.1.0+1"
+  webtrit_callkeep_platform_interface:
+    dependency: transitive
+    description:
+      path: "../webtrit_callkeep/webtrit_callkeep_platform_interface"
+      relative: true
+    source: path
+    version: "0.1.0+1"
+  webtrit_callkeep_web:
+    dependency: transitive
+    description:
+      path: "../webtrit_callkeep/webtrit_callkeep_web"
+      relative: true
+    source: path
+    version: "0.1.0+1"
+  webtrit_callkeep_windows:
+    dependency: transitive
+    description:
+      path: "../webtrit_callkeep/webtrit_callkeep_windows"
+      relative: true
+    source: path
+    version: "0.1.0+1"
   webtrit_phone_number:
     dependency: "direct main"
     description:

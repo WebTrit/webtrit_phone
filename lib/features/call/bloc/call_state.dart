@@ -6,6 +6,7 @@ class CallState with _$CallState {
 
   const factory CallState({
     ConnectivityResult? currentConnectivityResult,
+    @Default(RegistrationStatus.registering) RegistrationStatus registrationStatus,
     @Default(SignalingClientStatus.disconnect) SignalingClientStatus signalingClientStatus,
     Object? lastSignalingClientConnectError,
     Object? lastSignalingClientDisconnectError,
@@ -23,15 +24,13 @@ class CallState with _$CallState {
       return CallStatus.connectivityNone;
     } else if (lastSignalingClientConnectError != null) {
       return CallStatus.connectError;
+    } else if (registrationStatus.isUnregistered) {
+      return CallStatus.appUnregistered;
+    } else if (registrationStatus.isFailed) {
+      return CallStatus.connectIssue;
     } else if (lastSignalingDisconnectCode != null) {
-      final code = SignalingDisconnectCode.values.byCode(lastSignalingDisconnectCode);
-      switch (code) {
-        case SignalingDisconnectCode.appUnregisteredError:
-          return CallStatus.appUnregistered;
-        default:
-          return CallStatus.connectIssue;
-      }
-    } else if (signalingClientStatus == SignalingClientStatus.connect) {
+      return CallStatus.connectIssue;
+    } else if (signalingClientStatus.isConnect && registrationStatus.isRegistered) {
       return CallStatus.ready;
     } else {
       return CallStatus.inProgress;
@@ -65,20 +64,24 @@ class CallState with _$CallState {
 
   bool get isActive => activeCalls.isNotEmpty;
 
+  bool get isVoiceChat => activeCalls.current.video == false;
+
   bool get isBlingTransferInitiated => activeCalls.blindTransferInitiated != null;
 
-  ActiveCall? retrieveActiveCall(UuidValue uuid) {
+  bool get shouldListenToProximity => isActive && isVoiceChat && minimized != true;
+
+  ActiveCall? retrieveActiveCall(String callId) {
     for (var activeCall in activeCalls) {
-      if (activeCall.callId.uuid == uuid) {
+      if (activeCall.callId == callId) {
         return activeCall;
       }
     }
     return null;
   }
 
-  FutureOr<T>? performOnActiveCall<T>(UuidValue uuid, FutureOr<T>? Function(ActiveCall element) perform) {
+  FutureOr<T>? performOnActiveCall<T>(String callId, FutureOr<T>? Function(ActiveCall element) perform) {
     for (var activeCall in activeCalls) {
-      if (activeCall.callId.uuid == uuid) {
+      if (activeCall.callId == callId) {
         return perform(activeCall);
       }
     }
@@ -90,9 +93,9 @@ class CallState with _$CallState {
     return copyWith(activeCalls: activeCalls);
   }
 
-  CallState copyWithMappedActiveCall(UuidValue uuid, ActiveCall Function(ActiveCall element) map) {
+  CallState copyWithMappedActiveCall(String callId, ActiveCall Function(ActiveCall element) map) {
     final activeCalls = this.activeCalls.map((activeCall) {
-      if (activeCall.callId.uuid == uuid) {
+      if (activeCall.callId == callId) {
         return map(activeCall);
       } else {
         return activeCall;
@@ -106,9 +109,9 @@ class CallState with _$CallState {
     return copyWith(activeCalls: activeCalls);
   }
 
-  CallState copyWithPopActiveCall(UuidValue uuid) {
+  CallState copyWithPopActiveCall(String callId) {
     final activeCalls = this.activeCalls.where((activeCall) {
-      return activeCall.callId.uuid != uuid;
+      return activeCall.callId != callId;
     }).toList();
     return copyWith(activeCalls: activeCalls, minimized: activeCalls.isEmpty ? null : minimized);
   }
@@ -121,9 +124,12 @@ class ActiveCall with _$ActiveCall {
   factory ActiveCall({
     required Direction direction,
     required int line,
-    required CallIdValue callId,
+    required String callId,
     required CallkeepHandle handle,
     String? displayName,
+
+    /// If the call is result of a refer request, the id should be provided.
+    String? fromReferId,
     required bool video,
     @Default(true) bool? frontCamera,
     @Default(false) bool held,
@@ -134,7 +140,8 @@ class ActiveCall with _$ActiveCall {
     DateTime? hungUpTime,
     Transfer? transfer,
     Object? failure,
-    required RTCVideoRenderers renderers,
+    MediaStream? localStream,
+    MediaStream? remoteStream,
   }) = _ActiveCall;
 
   bool get isIncoming => direction == Direction.incoming;
@@ -148,42 +155,6 @@ class ActiveCall with _$ActiveCall {
 
 extension ActiveCallIterableExtension<T extends ActiveCall> on Iterable<T> {
   T get current => lastWhere((activeCall) => !activeCall.held, orElse: () => last);
-
-  T? get blindTransferInitiated {
-    try {
-      return firstWhere((activeCall) {
-        final transfer = activeCall.transfer;
-        if (transfer == null) {
-          return false;
-        } else {
-          return transfer.isBlind && transfer.isInitiated;
-        }
-      });
-    } on StateError catch (_) {
-      return null;
-    }
-  }
-}
-
-class RTCVideoRenderers {
-  RTCVideoRenderers()
-      : local = RTCVideoRenderer(),
-        remote = RTCVideoRenderer();
-
-  final RTCVideoRenderer local;
-  final RTCVideoRenderer remote;
-
-  Future<void> initialize() {
-    return Future.wait([
-      local.initialize(),
-      remote.initialize(),
-    ]);
-  }
-
-  Future<void> dispose() {
-    return Future.wait([
-      local.dispose(),
-      remote.dispose(),
-    ]);
-  }
+  List<T> get nonCurrent => where((activeCall) => activeCall != current).toList();
+  T? get blindTransferInitiated => firstWhereOrNull((activeCall) => activeCall.transfer is BlindTransferInitiated);
 }

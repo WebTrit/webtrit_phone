@@ -24,6 +24,24 @@ class WebtritSignalingClient {
   static final _callIdRandom = Random();
   static const _callIdChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
+  @visibleForTesting
+  static Uri buildTenantUrl(Uri baseUrl, String tenantId) {
+    if (tenantId.isEmpty) {
+      return baseUrl;
+    } else {
+      final baseUrlPathSegments = List.of(baseUrl.pathSegments);
+      if (baseUrlPathSegments.length >= 2 && baseUrlPathSegments[baseUrlPathSegments.length - 2] == 'tenant') {
+        baseUrlPathSegments.removeRange(baseUrlPathSegments.length - 2, baseUrlPathSegments.length);
+      }
+      return baseUrl.replace(
+        pathSegments: [
+          ...baseUrlPathSegments,
+          ...['tenant', tenantId],
+        ],
+      );
+    }
+  }
+
   static String generateTransactionId() {
     return Transaction.generateId();
   }
@@ -69,13 +87,14 @@ class WebtritSignalingClient {
     String token,
     bool force, {
     Duration? connectionTimeout,
+    TrustedCertificates certs = TrustedCertificates.empty,
   }) async {
-    final signalingUrl = baseUrl.replace(
+    final tenantUrl = buildTenantUrl(baseUrl, tenantId);
+    final signalingUrl = tenantUrl.replace(
       pathSegments: [
-        ...baseUrl.pathSegments,
-        if (tenantId.isNotEmpty) ...['tenant', tenantId],
+        ...tenantUrl.pathSegments,
         'signaling',
-        'v1'
+        'v1',
       ],
       queryParameters: {
         'token': token,
@@ -87,6 +106,7 @@ class WebtritSignalingClient {
       signalingUrl,
       protocols: [subprotocol],
       connectionTimeout: connectionTimeout,
+      certs: certs,
     );
     final wsc = createWebSocketChannel(ws);
     return WebtritSignalingClient.inner(wsc);

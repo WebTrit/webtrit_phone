@@ -53,21 +53,16 @@ class LogRecordsConsoleScreen extends StatelessWidget {
           final logRecordsFormatter = context.read<LogRecordsConsoleCubit>().logRecordsFormatter;
           switch (state) {
             case LogRecordsConsoleStateSuccess(:final logRecords):
-              return SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: SizedBox(
-                  width: 1200,
-                  child: ListView.builder(
-                    itemBuilder: (context, index) {
-                      final logRecord = logRecords[index];
-                      return Text(
-                        logRecordsFormatter.format(logRecord),
-                        maxLines: 100,
-                      );
-                    },
-                    itemCount: state.logRecords.length,
-                  ),
-                ),
+              return ListView.separated(
+                itemBuilder: (context, index) {
+                  final logRecord = logRecords[index];
+                  return Text(
+                    logRecordsFormatter.format(logRecord),
+                    maxLines: 100,
+                  );
+                },
+                separatorBuilder: (context, index) => const Divider(),
+                itemCount: state.logRecords.length,
               );
             case LogRecordsConsoleStateFailure():
               return Center(

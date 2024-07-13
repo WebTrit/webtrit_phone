@@ -3,6 +3,12 @@ import 'package:flutter/material.dart';
 
 import 'package:linkify/linkify.dart';
 
+import 'linkify_style.dart';
+import 'linkify_styles.dart';
+
+export 'linkify_style.dart';
+export 'linkify_styles.dart';
+
 export 'package:linkify/linkify.dart'
     show
         LinkifyElement,
@@ -24,11 +30,9 @@ class Linkify extends StatefulWidget {
     required this.text,
     this.linkifiers = const [...defaultLinkifiers, TelLinkifier()],
     this.onOpen,
+    this.highlightLinkifyElement = true,
     this.options = const LinkifyOptions(),
-    // TextSpan
     this.style,
-    this.linkStyle,
-    // RichText
     this.maxLines,
     this.overflow = TextOverflow.clip,
     this.strutStyle,
@@ -43,12 +47,14 @@ class Linkify extends StatefulWidget {
   /// Callback for tapping a link
   final LinkCallback? onOpen;
 
+  /// Highlight linkify element
+  final bool highlightLinkifyElement;
+
   /// linkify's options.
   final LinkifyOptions options;
 
-  // TextSpan
-  final TextStyle? style;
-  final TextStyle? linkStyle;
+  // Style
+  final LinkifyStyle? style;
 
   // Text.rich
   final int? maxLines;
@@ -95,19 +101,23 @@ class _LinkifyState extends State<Linkify> {
 
   @override
   Widget build(BuildContext context) {
+    final style = LinkifyStyle.merge(widget.style, Theme.of(context).extension<LinkifyStyles>()?.primary);
+
     return Text.rich(
       TextSpan(
         children: _elements.map((element) {
           if (element is LinkableElement) {
             return TextSpan(
               text: element.text,
-              style: widget.style?.merge(widget.linkStyle),
+              style: style.linkStyle?.copyWith(
+                color: widget.highlightLinkifyElement ? style.linkStyle?.color : style.style?.color,
+              ),
               recognizer: _recognizers[element],
             );
           } else {
             return TextSpan(
               text: element.text,
-              style: widget.style,
+              style: style.style,
             );
           }
         }).toList(),
@@ -184,4 +194,52 @@ class TelElement extends LinkableElement {
 
   @override
   bool equals(other) => other is TelElement && super.equals(other) && other.tel == tel;
+}
+
+final _urlRegex = RegExp(
+  r'^(.*?)((?:https?:\/\/|www\.)[^\s/$.?#].[^\s]*)',
+  caseSensitive: false,
+  dotAll: true,
+);
+
+class UrlReplaceLinkifier extends Linkifier {
+  const UrlReplaceLinkifier(this.replaceText);
+
+  final String replaceText;
+
+  @override
+  List<LinkifyElement> parse(elements, options) {
+    final list = <LinkifyElement>[];
+
+    for (var element in elements) {
+      if (element is TextElement) {
+        var match = _urlRegex.firstMatch(element.text);
+
+        if (match == null) {
+          list.add(element);
+        } else {
+          final text = element.text.replaceFirst(match.group(0)!, '');
+
+          if (match.group(1)?.isNotEmpty == true) {
+            list.add(TextElement(match.group(1)!));
+          }
+
+          if (match.group(2)?.isNotEmpty == true) {
+            var originalUrl = match.group(2)!;
+            var originText = originalUrl;
+
+            list.add(UrlElement(originalUrl, replaceText, originText));
+          }
+
+          if (text.isNotEmpty) {
+            list.addAll(parse([TextElement(text)], options));
+          }
+        }
+      } else {
+        list.add(element);
+      }
+    }
+
+    return list;
+  }
 }

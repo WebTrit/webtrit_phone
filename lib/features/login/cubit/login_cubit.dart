@@ -9,6 +9,7 @@ import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/core_version.dart';
+import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 
@@ -21,17 +22,28 @@ part 'login_state.dart';
 typedef WebtritApiClientFactory = WebtritApiClient Function(String coreUrl, String tenantId);
 
 WebtritApiClient defaultCreateWebtritApiClient(String coreUrl, String tenantId) {
-  return WebtritApiClient(Uri.parse(coreUrl), tenantId, connectionTimeout: kApiClientConnectionTimeout);
+  final appCertificates = AppCertificates();
+
+  return WebtritApiClient(
+    Uri.parse(coreUrl),
+    tenantId,
+    connectionTimeout: kApiClientConnectionTimeout,
+    certs: appCertificates.trustedCertificates,
+  );
 }
 
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit({
     @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
+    required this.notificationsBloc,
   }) : super(const LoginState());
 
   final WebtritApiClientFactory createWebtritApiClient;
+  final NotificationsBloc notificationsBloc;
 
   String? get coreUrlFromEnvironment => EnvironmentConfig.CORE_URL;
+
+  String? get credentialsRequestUrl => EnvironmentConfig.APP_CREDENTIALS_REQUEST_URL;
 
   String? get demoCoreUrlFromEnvironment => EnvironmentConfig.DEMO_CORE_URL;
 
@@ -39,11 +51,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   bool get isDemoModeEnabled => coreUrlFromEnvironment == null;
 
-  void dismissError() {
-    emit(state.copyWith(
-      error: null,
-    ));
-  }
+  bool get isCredentialsRequestUrlEnabled => credentialsRequestUrl != null;
 
   void launchLinkableElement(LinkableElement link) async {
     final url = Uri.parse(link.url);
@@ -72,16 +80,21 @@ class LoginCubit extends Cubit<LoginState> {
           supportedLoginTypes: supportedLoginTypes,
         ));
       } else {
-        emit(state.copyWith(
-          processing: false,
-          error: SupportedLoginTypeMissedException(),
-        ));
+        notificationsBloc.add(const NotificationsSubmitted(SupportedLoginTypeMissedErrorNotification()));
+
+        emit(state.copyWith(processing: false));
       }
+    } on CoreVersionUnsupportedException catch (e) {
+      notificationsBloc.add(NotificationsSubmitted(CoreVersionUnsupportedErrorNotification(
+        e.actual.toString(),
+        e.supportedConstraint.toString(),
+      )));
+
+      emit(state.copyWith(processing: false));
     } catch (e) {
-      emit(state.copyWith(
-        processing: false,
-        error: e,
-      ));
+      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
+
+      emit(state.copyWith(processing: false));
     }
   }
 
@@ -94,7 +107,7 @@ class LoginCubit extends Cubit<LoginState> {
 
     final demo = mode == LoginMode.demoCore;
     final coreUrl = demo ? demoCoreUrlFromEnvironment : coreUrlFromEnvironment;
-    if (coreUrl != null) {
+    if (coreUrl != null && mode != LoginMode.credentialsRequest) {
       await _verifyCoreVersionAndRetrieveSupportedLoginTypesSubmitted(coreUrl, defaultTenantId, demo);
     }
   }
@@ -124,6 +137,12 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(
       mode: null,
       coreUrlInput: const UrlInput.pure(),
+    ));
+  }
+
+  void credentialsRequestUrlAssignBack() async {
+    emit(state.copyWith(
+      mode: null,
     ));
   }
 
@@ -173,10 +192,9 @@ class LoginCubit extends Cubit<LoginState> {
         otpSigninSessionOtpProvisionalWithDateTime: (sessionOtpProvisional, DateTime.now()),
       ));
     } catch (e) {
-      emit(state.copyWith(
-        processing: false,
-        error: e,
-      ));
+      emit(state.copyWith(processing: false));
+
+      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
     }
   }
 
@@ -207,10 +225,9 @@ class LoginCubit extends Cubit<LoginState> {
         token: sessionToken.token,
       ));
     } catch (e) {
-      emit(state.copyWith(
-        processing: false,
-        error: e,
-      ));
+      emit(state.copyWith(processing: false));
+
+      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
     }
   }
 
@@ -265,10 +282,9 @@ class LoginCubit extends Cubit<LoginState> {
         token: sessionToken.token,
       ));
     } catch (e) {
-      emit(state.copyWith(
-        processing: false,
-        error: e,
-      ));
+      emit(state.copyWith(processing: false));
+
+      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
     }
   }
 
@@ -315,10 +331,9 @@ class LoginCubit extends Cubit<LoginState> {
         throw UnimplementedError();
       }
     } catch (e) {
-      emit(state.copyWith(
-        processing: false,
-        error: e,
-      ));
+      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
+
+      emit(state.copyWith(processing: false));
     }
   }
 
@@ -350,10 +365,9 @@ class LoginCubit extends Cubit<LoginState> {
         token: sessionToken.token,
       ));
     } catch (e) {
-      emit(state.copyWith(
-        processing: false,
-        error: e,
-      ));
+      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
+
+      emit(state.copyWith(processing: false));
     }
   }
 
@@ -428,7 +442,3 @@ Future<SessionResult> _createUserRequest(
     email: email,
   ));
 }
-
-abstract class LoginCubitException implements Exception {}
-
-class SupportedLoginTypeMissedException extends LoginCubitException {}

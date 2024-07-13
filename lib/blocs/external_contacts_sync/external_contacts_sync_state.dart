@@ -39,3 +39,7 @@ abstract class ExternalContactsSyncFailure extends ExternalContactsSyncState {
 class ExternalContactsSyncRefreshFailure extends ExternalContactsSyncFailure {
   const ExternalContactsSyncRefreshFailure();
 }
+
+class ExternalContactsSyncUpdateFailure extends ExternalContactsSyncFailure {
+  const ExternalContactsSyncUpdateFailure();
+}

@@ -21,6 +21,8 @@ download:
       locale_code: en
     - file: lib/l10n/arb/app_uk.arb
       locale_code: uk
+    - file: lib/l10n/arb/app_it.arb
+      locale_code: it
   params:
     export_empty_as: main
     java_properties_encoding: utf_8

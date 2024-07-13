@@ -13,27 +13,47 @@ import 'models/models.dart';
 class WebtritApiClient {
   static final _requestIdRandom = Random();
 
+  @visibleForTesting
+  static Uri buildTenantUrl(Uri baseUrl, String tenantId) {
+    if (tenantId.isEmpty) {
+      return baseUrl;
+    } else {
+      final baseUrlPathSegments = List.of(baseUrl.pathSegments);
+      if (baseUrlPathSegments.length >= 2 && baseUrlPathSegments[baseUrlPathSegments.length - 2] == 'tenant') {
+        baseUrlPathSegments.removeRange(baseUrlPathSegments.length - 2, baseUrlPathSegments.length);
+      }
+      return baseUrl.replace(
+        pathSegments: [
+          ...baseUrlPathSegments,
+          ...['tenant', tenantId],
+        ],
+      );
+    }
+  }
+
   WebtritApiClient(
     Uri baseUrl,
     String tenantId, {
     Duration? connectionTimeout,
+    TrustedCertificates certs = TrustedCertificates.empty,
   }) : this.inner(
           baseUrl,
           tenantId,
           httpClient: createHttpClient(
             connectionTimeout: connectionTimeout,
+            certs: certs,
           ),
         );
 
   @visibleForTesting
   WebtritApiClient.inner(
-    this.baseUrl,
-    this.tenantId, {
+    Uri baseUrl,
+    String tenantId, {
     required http.Client httpClient,
-  }) : _httpClient = httpClient;
+  })  : _httpClient = httpClient,
+        tenantUrl = buildTenantUrl(baseUrl, tenantId);
 
-  final Uri baseUrl;
-  final String tenantId;
+  final Uri tenantUrl;
   final http.Client _httpClient;
 
   void close() {
@@ -47,10 +67,9 @@ class WebtritApiClient {
     Object? requestDataJson, {
     String? requestId,
   }) async {
-    final url = baseUrl.replace(
+    final url = tenantUrl.replace(
       pathSegments: [
-        ...baseUrl.pathSegments,
-        if (tenantId.isNotEmpty) ...['tenant', tenantId],
+        ...tenantUrl.pathSegments,
         'api',
         'v1',
         ...pathSegments,
@@ -58,10 +77,11 @@ class WebtritApiClient {
     );
     final httpRequest = http.Request(method, url);
 
+    final xRequestId = requestId ?? _generateRequestId();
     httpRequest.headers.addAll({
       'content-type': 'application/json; charset=utf-8',
       'accept': 'application/json',
-      'x-request-id': requestId ?? _generateRequestId(),
+      'x-request-id': xRequestId,
       if (token != null) 'authorization': 'Bearer $token',
     });
     if (requestDataJson != null) {
@@ -82,6 +102,8 @@ class WebtritApiClient {
       };
       throw RequestFailure(
         statusCode: httpResponse.statusCode,
+        requestId: xRequestId,
+        token: token,
         error: error,
       );
     }
@@ -147,6 +169,14 @@ class WebtritApiClient {
     return SessionToken.fromJson(responseJson);
   }
 
+  Future<SessionToken> createSessionAutoProvision(SessionAutoProvisionCredential sessionAutoProvisionCredential) async {
+    final requestJson = sessionAutoProvisionCredential.toJson();
+
+    final responseJson = await _httpClientExecutePost(['session', 'auto-provision'], null, requestJson);
+
+    return SessionToken.fromJson(responseJson);
+  }
+
   Future<void> deleteSession(String token) async {
     await _httpClientExecuteDelete(['session'], token);
   }
@@ -197,5 +227,13 @@ class WebtritApiClient {
     final requestJson = appPushToken.toJson();
 
     await _httpClientExecutePost(['app', 'push-tokens'], token, requestJson);
+  }
+
+  Future<DemoData> createDemoData(DemoCredential sessionUserInvite) async {
+    final requestJson = sessionUserInvite.toJson();
+
+    final responseJson = await _httpClientExecutePost(['user'], null, requestJson);
+
+    return DemoData.fromJson(responseJson);
   }
 }

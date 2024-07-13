@@ -29,7 +29,9 @@ class Keypad extends StatelessWidget {
           KeypadKeyButton(
             text: k.text,
             subtext: k.subtext,
-            onKeyPressed: (v) => onKeypadPressed(v),
+            onKeyPressed: (v) {
+              onKeypadPressed(v);
+            },
             style: textButtonStyles?.neutral,
           ),
       ],

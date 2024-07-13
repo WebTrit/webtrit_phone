@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -40,15 +39,20 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   Widget build(BuildContext context) {
     final activeCalls = widget.activeCalls;
     final activeCall = activeCalls.current;
+    final heldCalls = activeCalls.nonCurrent;
+
+    final activeTransfer = activeCall.transfer;
+    final maybeTransferRequest = activeTransfer is AttendedTransferConfirmationRequested ? activeTransfer : null;
 
     final video = activeCall.video;
 
     final themeData = Theme.of(context);
     final Gradients? gradients = themeData.extension<Gradients>();
-    final onTabGradient = themeData.colorScheme.background;
+    final onTabGradient = themeData.colorScheme.surface;
     final textTheme = themeData.textTheme;
     final switchCameraIconSize = textTheme.titleMedium!.fontSize!;
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
+
     return Scaffold(
       body: OrientationBuilder(
         builder: (context, orientation) {
@@ -70,8 +74,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       child: SizedBox(
                         width: mediaQueryData.size.width,
                         height: mediaQueryData.size.height,
-                        child: RTCVideoView(
-                          activeCall.renderers.remote,
+                        child: RTCStreamView(
+                          stream: activeCall.remoteStream,
                           placeholderBuilder: widget.remotePlaceholderBuilder,
                         ),
                       ),
@@ -86,7 +90,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       onTap: activeCall.frontCamera == null
                           ? null
                           : () {
-                              context.read<CallBloc>().add(CallControlEvent.cameraSwitched(activeCall.callId.uuid));
+                              context.read<CallBloc>().add(CallControlEvent.cameraSwitched(activeCall.callId));
                             },
                       child: Stack(
                         children: [
@@ -96,8 +100,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                             height: orientation == Orientation.portrait ? 120.0 : 90.0,
                             child: activeCall.frontCamera == null
                                 ? null
-                                : RTCVideoView(
-                                    activeCall.renderers.local,
+                                : RTCStreamView(
+                                    stream: activeCall.localStream,
                                     mirror: activeCall.frontCamera!,
                                     placeholderBuilder: widget.localePlaceholderBuilder,
                                   ),
@@ -138,11 +142,21 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                         ),
                         for (final activeCall in activeCalls)
                           CallInfo(
-                            transferProcessing: activeCall.transfer?.isProcessing == true,
+                            transferProcessing: activeTransfer?.processing ?? false,
+                            transferRequested: false,
                             isIncoming: activeCall.isIncoming,
                             held: activeCall.held,
                             username: activeCall.displayName ?? activeCall.handle.value,
                             acceptedTime: activeCall.acceptedTime,
+                            color: onTabGradient,
+                          ),
+                        if (maybeTransferRequest != null)
+                          CallInfo(
+                            transferProcessing: false,
+                            transferRequested: true,
+                            isIncoming: false,
+                            held: false,
+                            username: maybeTransferRequest.referTo,
                             color: onTabGradient,
                           ),
                       ],
@@ -163,52 +177,66 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                         setState(() {
                           cameraEnabled = value;
                         });
-                        context.read<CallBloc>().add(CallControlEvent.cameraEnabled(activeCall.callId.uuid, value));
+                        context.read<CallBloc>().add(CallControlEvent.cameraEnabled(activeCall.callId, value));
                       },
                       mutedValue: activeCall.muted,
                       onMutedChanged: (bool value) {
-                        context.read<CallBloc>().add(CallControlEvent.setMuted(activeCall.callId.uuid, value));
+                        context.read<CallBloc>().add(CallControlEvent.setMuted(activeCall.callId, value));
                       },
                       speakerValue: widget.speaker,
                       onSpeakerChanged: (bool value) {
-                        context.read<CallBloc>().add(CallControlEvent.speakerEnabled(activeCall.callId.uuid, value));
+                        context.read<CallBloc>().add(CallControlEvent.speakerEnabled(activeCall.callId, value));
                       },
-                      onTransferPressed: !activeCall.wasAccepted || activeCall.transfer != null
+                      transferableCalls: heldCalls,
+                      onBlindTransferInitiated: !activeCall.wasAccepted || activeTransfer != null
+                          ? null
+                          : () {
+                              context.read<CallBloc>().add(CallControlEvent.blindTransferInitiated(activeCall.callId));
+                            },
+                      onAttendedTransferInitiated: !activeCall.wasAccepted || activeTransfer != null
                           ? null
                           : () {
                               context
                                   .read<CallBloc>()
-                                  .add(CallControlEvent.blindTransferInitiated(activeCall.callId.uuid));
+                                  .add(CallControlEvent.attendedTransferInitiated(activeCall.callId));
+                            },
+                      onAttendedTransferSubmitted: !activeCall.wasAccepted || activeTransfer != null
+                          ? null
+                          : (ActiveCall referorCall) {
+                              context.read<CallBloc>().add(
+                                    CallControlEvent.attendedTransferSubmitted(
+                                      referorCall: referorCall,
+                                      replaceCall: activeCall,
+                                    ),
+                                  );
                             },
                       heldValue: activeCall.held,
                       onHeldChanged: (bool value) {
-                        context.read<CallBloc>().add(CallControlEvent.setHeld(activeCall.callId.uuid, value));
+                        context.read<CallBloc>().add(CallControlEvent.setHeld(activeCall.callId, value));
                       },
                       onSwapPressed: activeCalls.length == 2
                           ? () {
                               // TODO maybe introduce particular event with particular callkeep method
-                              context.read<CallBloc>().add(CallControlEvent.setHeld(activeCall.callId.uuid, true));
+                              context.read<CallBloc>().add(CallControlEvent.setHeld(activeCall.callId, true));
                               for (final otherActiveCall in activeCalls) {
                                 if (otherActiveCall.callId != activeCall.callId) {
-                                  context
-                                      .read<CallBloc>()
-                                      .add(CallControlEvent.setHeld(otherActiveCall.callId.uuid, false));
+                                  context.read<CallBloc>().add(CallControlEvent.setHeld(otherActiveCall.callId, false));
                                 }
                               }
                             }
                           : null,
                       onHangupPressed: () {
-                        context.read<CallBloc>().add(CallControlEvent.ended(activeCall.callId.uuid));
+                        context.read<CallBloc>().add(CallControlEvent.ended(activeCall.callId));
                       },
                       onHangupAndAcceptPressed: activeCalls.length > 1
                           ? () {
                               // TODO maybe introduce particular event with particular callkeep method
                               for (final otherActiveCall in activeCalls) {
                                 if (otherActiveCall.callId != activeCall.callId) {
-                                  context.read<CallBloc>().add(CallControlEvent.ended(otherActiveCall.callId.uuid));
+                                  context.read<CallBloc>().add(CallControlEvent.ended(otherActiveCall.callId));
                                 }
                               }
-                              context.read<CallBloc>().add(CallControlEvent.answered(activeCall.callId.uuid));
+                              context.read<CallBloc>().add(CallControlEvent.answered(activeCall.callId));
                             }
                           : null,
                       onHoldAndAcceptPressed: activeCalls.length > 1
@@ -216,19 +244,33 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                               // TODO maybe introduce particular event with particular callkeep method
                               for (final otherActiveCall in activeCalls) {
                                 if (otherActiveCall.callId != activeCall.callId) {
-                                  context
-                                      .read<CallBloc>()
-                                      .add(CallControlEvent.setHeld(otherActiveCall.callId.uuid, true));
+                                  context.read<CallBloc>().add(CallControlEvent.setHeld(otherActiveCall.callId, true));
                                 }
                               }
-                              context.read<CallBloc>().add(CallControlEvent.answered(activeCall.callId.uuid));
+                              context.read<CallBloc>().add(CallControlEvent.answered(activeCall.callId));
                             }
                           : null,
                       onAcceptPressed: () {
-                        context.read<CallBloc>().add(CallControlEvent.answered(activeCall.callId.uuid));
+                        context.read<CallBloc>().add(CallControlEvent.answered(activeCall.callId));
                       },
+                      onApproveTransferPressed: maybeTransferRequest == null
+                          ? null
+                          : () {
+                              context.read<CallBloc>().add(CallControlEvent.attendedRequestApproved(
+                                    referId: maybeTransferRequest.referId,
+                                    referTo: maybeTransferRequest.referTo,
+                                  ));
+                            },
+                      onDeclineTransferPressed: maybeTransferRequest == null
+                          ? null
+                          : () {
+                              context.read<CallBloc>().add(CallControlEvent.attendedRequestDeclined(
+                                    callId: activeCall.callId,
+                                    referId: maybeTransferRequest.referId,
+                                  ));
+                            },
                       onKeyPressed: (value) {
-                        context.read<CallBloc>().add(CallControlEvent.sentDTMF(activeCall.callId.uuid, value));
+                        context.read<CallBloc>().add(CallControlEvent.sentDTMF(activeCall.callId, value));
                       },
                     ),
                   ),

@@ -94,7 +94,12 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
           } else {
             final recentsFiltered = state.recentsFiltered!; // can not be null if state.recents is not null
             if (recentsFiltered.isEmpty) {
-              final filterL10n = state.filter == RecentsVisibilityFilter.all ? '' : state.filter.l10n(context);
+              final String filterL10n;
+              if (state.filter == RecentsVisibilityFilter.all) {
+                filterL10n = '';
+              } else {
+                filterL10n = '${state.filter.l10nPreposit(context)} ';
+              }
               return NoDataPlaceholder(
                 content: Text(context.l10n.recents_BodyCenter_empty(filterL10n)),
               );
@@ -109,6 +114,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                       final recent = recentsFiltered[index];
                       return RecentTile(
                         recent: recent,
+                        dateFormat: context.read<RecentsBloc>().dateFormat,
                         onInfoPressed: () {
                           context.router.navigate(RecentScreenPageRoute(
                             recentId: recent.id!,
@@ -117,7 +123,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                         onTap: transfer
                             ? () {
                                 final callBloc = context.read<CallBloc>();
-                                callBloc.add(CallControlEvent.blindTransferred(
+                                callBloc.add(CallControlEvent.blindTransferSubmitted(
                                   number: recent.number,
                                 ));
                               }

@@ -1,6 +1,7 @@
 name: _web_socket_channel
 description: Internal package to create platform-appropriate WS clients..
 version: 1.0.0
+publish_to: none
 
 environment:
   sdk: ^3.3.0
@@ -9,6 +10,9 @@ dependencies:
   # stick to specific version, because following version move to incompatible with current implementation pkg:web
   # (https://pub.dev/packages/web_socket_channel/changelog#241)
   web_socket_channel: 2.4.0
+
+  ssl_certificates:
+    path: ../ssl_certificates
 
 dev_dependencies:
   lints: ^4.0.0

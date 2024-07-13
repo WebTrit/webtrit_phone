@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:webtrit_phone/app/constants.dart';
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
@@ -19,6 +19,7 @@ class LoginPasswordSigninScreen extends StatelessWidget {
       builder: (context, state) {
         final passwordSigninPreDescriptionText = context.l10n.login_Text_passwordSigninPreDescription;
         final passwordSigninPostDescriptionText = context.l10n.login_Text_passwordSigninPostDescription;
+
         return Padding(
           padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
           child: Column(

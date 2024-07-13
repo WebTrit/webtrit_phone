@@ -16,7 +16,28 @@ class AppLocalizationsUk extends AppLocalizations {
   String get alertDialogActions_yes => 'Так';
 
   @override
+  String get autoprovision_errorSnackBar_invalidToken => 'Автоматичні облікові дані для конфігурації були відхилені сервером. Будь ласка, подайте запит на нове посилання на конфігурацію.';
+
+  @override
+  String get autoprovision_ReloginDialog_confirm => 'Підтвердити';
+
+  @override
+  String get autoprovision_ReloginDialog_decline => 'Відмовитися';
+
+  @override
+  String get autoprovision_ReloginDialog_text => 'Ви хочете використати нові облікові дані для аутентифікації, надані у посиланні? Поточна сесія буде завершина';
+
+  @override
+  String get autoprovision_ReloginDialog_title => 'Підтвердження перелогіну';
+
+  @override
+  String get autoprovision_successSnackBar_used => 'Успішно отримано ваші налаштування, ваш додаток готовий до використання.';
+
+  @override
   String get call_CallActionsTooltip_accept => 'Прийняти';
+
+  @override
+  String get call_CallActionsTooltip_attended_transfer => 'Керована переадресація виклику';
 
   @override
   String get call_CallActionsTooltip_disableCamera => 'Вимкнути камеру';
@@ -58,6 +79,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_CallActionsTooltip_transfer => 'Передати';
 
   @override
+  String get call_CallActionsTooltip_transfer_choose => 'Вибрати номер';
+
+  @override
+  String get call_CallActionsTooltip_unattended_transfer => 'Некерована переадресація виклику';
+
+  @override
   String get call_CallActionsTooltip_unhold => 'Поновити дзвінок';
 
   @override
@@ -74,6 +101,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get call_description_transferProcessing => 'Обробка переадресації';
+
+  @override
+  String get call_description_transfer_requested => 'Запит на переадресацію';
 
   @override
   String get call_FailureAcknowledgeDialog_title => 'Помилка';
@@ -95,6 +125,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get callStatus_ready => 'Підключення встановлено';
+
+  @override
+  String get connectToYourOwnVoIPSystem_Button_Action => 'Підключіться до власної VoIP-системи';
 
   @override
   String get contacts_ExternalTabButton_refresh => 'Оновити';
@@ -133,7 +166,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get contactsSourceLocal => 'Ваш телефон';
 
   @override
-  String get contacts_Text_blingTransferInitiated => 'Сліпе переадресування';
+  String get contacts_Text_blingTransferInitiated => 'Безумовне переведення дзвінка';
 
   @override
   String get copyToClipboard_floatingSnackBar => 'Текст скопійовано';
@@ -143,6 +176,18 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get default_ClientExceptionError => 'Сталася проблема з клієнтом HTTP';
+
+  @override
+  String get default_ErrorDetails => 'Деталі помилки';
+
+  @override
+  String get default_ErrorMessage => 'Повідомлення про помилку';
+
+  @override
+  String get default_ErrorPath => 'Шлях помилки';
+
+  @override
+  String get default_ErrorTransactionId => 'Ідентифікатор транзакції';
 
   @override
   String get default_FormatExceptionError => 'Виникла проблема формату відповіді';
@@ -177,13 +222,25 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get favorites_Text_blingTransferInitiated => 'Сліпе переадресування';
+  String get favorites_Text_blingTransferInitiated => 'Безумовне переведення дзвінка';
+
+  @override
+  String get inviteFriends_Dialog_close => 'Приховати це повідомлення';
+
+  @override
+  String get inviteFriends_Dialog_invite => 'Запросити';
+
+  @override
+  String get inviteFriends_Dialog_title => 'Запросіть своїх друзів спробувати WebTrit';
 
   @override
   String get locale_default => 'За замовчуванням';
 
   @override
   String get locale_en => 'Англійська';
+
+  @override
+  String get locale_it => 'Італійська';
 
   @override
   String get locale_uk => 'Українська';
@@ -237,7 +294,22 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get login_requestCredentials_button => 'Зареєструватися';
+
+  @override
+  String get login_requestCredentials_DialogContent => 'Будь ласка, надайте базову інформацію і зазначте у повідомленні, що ви хотіли б отримати обліковий запис. Наші адміністратори перевірять інформацію і надішлють деталі облікового запису на вашу електронну пошту.';
+
+  @override
+  String get login_requestCredentials_DialogTitle => 'Запит на обліковий запис';
+
+  @override
+  String get login_requestCredentials_title => 'Зареєструватися';
+
+  @override
   String get login_RequestFailureEmptyEmailError => 'Не вдалося відправити код підтвердження';
+
+  @override
+  String get login_RequestFailureIdentifierIsNotValid => 'Ідентифікатор недійсний, або не існує';
 
   @override
   String get login_RequestFailureIncorrectOtpCodeError => 'Невірний код підтвердження';
@@ -413,6 +485,15 @@ class AppLocalizationsUk extends AppLocalizations {
   String get notifications_errorSnackBarAction_callUserMedia => 'Перевірити';
 
   @override
+  String get notifications_errorSnackBar_appOffline => 'Ваш додаток зараз офлайн.';
+
+  @override
+  String get notifications_errorSnackBar_appOnline => 'Ваш додаток онлайн.';
+
+  @override
+  String get notifications_errorSnackBar_appUnregistered => 'Вибачте, ваш додаток наразі відключений від серверів WebTrit та не може здійснювати запити зараз. Будь ласка, перейдіть на сторінку налаштувань і перемістіть вимикач стану онлайн вимкнути й увімкнути знову, щоб відновити з\'єднання.';
+
+  @override
   String get notifications_errorSnackBar_callConnect => 'Підключення до ядра не вдалося, спроба з\'єднання';
 
   @override
@@ -432,6 +513,24 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get permission_Button_request => 'Продовжити';
+
+  @override
+  String get permission_manufacturer_Button_gotIt => 'Зрозумів';
+
+  @override
+  String get permission_manufacturer_Button_toSettings => 'Відкрийте налаштування програми';
+
+  @override
+  String get permission_manufacturer_Text_heading => 'Щоб забезпечити найкращу взаємодію з користувачем, програмі потрібно вручну надати такі дозволи:';
+
+  @override
+  String get permission_manufacturer_Text_trailing => 'Дозволи можуть бути змінені в будь-який час у майбутньому.';
+
+  @override
+  String get permission_manufacturer_Text_xiaomi_tip1 => '1. Перейдіть у «Налаштування програми» → «Сповіщення».';
+
+  @override
+  String get permission_manufacturer_Text_xiaomi_tip2 => '2. Знайдіть і ввімкніть «Сповіщення на екрані блокування».';
 
   @override
   String get permission_Text_description => 'Для забезпечення найкращого досвіду користувача програма потребує наступні дозволи: мікрофон для аудіодзвінків, камера для відеодзвінків та доступ до контактів для спрощення їх використання в програмі.\n\nДозволи можуть бути змінені у майбутньому.';
@@ -456,19 +555,31 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get recents_Text_blingTransferInitiated => 'Сліпе переадресування';
+  String get recents_Text_blingTransferInitiated => 'Безумовне переведення дзвінка';
 
   @override
   String get recentsVisibilityFilter_all => 'Всі';
 
   @override
+  String get recentsVisibilityFilter_all_preposit => 'всі';
+
+  @override
   String get recentsVisibilityFilter_incoming => 'Вхідні';
+
+  @override
+  String get recentsVisibilityFilter_incoming_preposit => 'вхідні';
 
   @override
   String get recentsVisibilityFilter_missed => 'Пропущені';
 
   @override
+  String get recentsVisibilityFilter_missed_preposit => 'пропущені';
+
+  @override
   String get recentsVisibilityFilter_outgoing => 'Вихідні';
+
+  @override
+  String get recentsVisibilityFilter_outgoing_preposit => 'вихідні';
 
   @override
   String recentTimeAfterMidnight(DateTime time) {
@@ -487,7 +598,19 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get request_Id => 'Ідентифікатор запиту';
+
+  @override
+  String get request_StatusCode => 'Код статусу запиту';
+
+  @override
+  String get settings_AboutText_AppVersion => 'Версія додатка';
+
+  @override
   String get settings_AboutText_CoreVersionUndefined => '?.?.?';
+
+  @override
+  String get settings_AboutText_StoreVersion => 'Версія збірки в магазині';
 
   @override
   String get settings_AccountDeleteConfirmDialog_content => 'Ви впевнені, що хочете видалити обліковий запис?';
@@ -556,8 +679,39 @@ class AppLocalizationsUk extends AppLocalizations {
   String get themeMode_system => 'Системний';
 
   @override
+  String get undefine_DeeplinkConfigurationInvalid_text => 'Облікові дані автоматичної конфігурації недійсні, увійдіть';
+
+  @override
   String get underDevelopment => 'Ця сторінка знаходиться в розробці.';
 
   @override
+  String get user_agreement_agrement_link => 'угодою';
+
+  @override
+  String get user_agreement_button_text => 'Продовжити';
+
+  @override
+  String user_agreement_checkbox_text(Object url) {
+    return 'Я прочитав $url і погоджуюся з умовами';
+  }
+
+  @override
+  String user_agreement_description(Object appName) {
+    return 'Ласкаво просимо до $appName';
+  }
+
+  @override
   String get validationBlankError => 'Будь ласка, введіть значення';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialogActions_demo => 'Demo';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialogActions_retry => 'Retry';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialogActions_skip => 'Skip';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
 }

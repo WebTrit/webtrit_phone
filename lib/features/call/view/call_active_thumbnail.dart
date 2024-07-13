@@ -6,7 +6,7 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../call.dart';
 
-class CallActiveThumbnail extends StatelessWidget {
+class CallActiveThumbnail extends StatefulWidget {
   const CallActiveThumbnail({
     super.key,
     required this.activeCall,
@@ -19,8 +19,30 @@ class CallActiveThumbnail extends StatelessWidget {
   final WidgetBuilder? remotePlaceholderBuilder;
 
   @override
+  State<CallActiveThumbnail> createState() => _CallActiveThumbnailState();
+}
+
+class _CallActiveThumbnailState extends State<CallActiveThumbnail> {
+  late final RTCVideoRenderer remoteRenderer = RTCVideoRenderer();
+
+  @override
+  initState() {
+    super.initState();
+    remoteRenderer.initialize().then((value) {
+      if (!mounted) return;
+      remoteRenderer.srcObject = widget.activeCall.remoteStream;
+    });
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+    remoteRenderer.srcObject = null;
+    remoteRenderer.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final remoteRenderer = activeCall.renderers.remote;
     return ValueListenableBuilder<RTCVideoValue>(
       valueListenable: remoteRenderer,
       builder: (BuildContext context, RTCVideoValue value, Widget? child) {
@@ -38,13 +60,13 @@ class CallActiveThumbnail extends StatelessWidget {
           children: [
             LeadingAvatar(
               radius: 24,
-              username: activeCall.displayName,
+              username: widget.activeCall.displayName,
               placeholderIcon: Icons.phone_in_talk_outlined,
             ),
             RTCVideoView(
               remoteRenderer,
               objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
-              placeholderBuilder: remotePlaceholderBuilder,
+              placeholderBuilder: widget.remotePlaceholderBuilder,
             ),
           ],
         ),

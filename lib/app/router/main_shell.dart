@@ -9,6 +9,7 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
@@ -32,16 +33,23 @@ class _MainShellState extends State<MainShell> {
   void initState() {
     super.initState();
     callkeep = Callkeep();
-    callkeep.setUp(CallkeepOptions(
-      ios: CallkeepIOSOptions(
-        localizedName: PackageInfo().appName,
-        ringtoneSound: Assets.ringtones.incomingCall1,
-        iconTemplateImageAssetName: Assets.callkeep.iosIconTemplateImage.path,
-        maximumCallGroups: 2,
-        maximumCallsPerCallGroup: 5,
-        supportedHandleTypes: const {CallkeepHandleType.number},
+    callkeep.setUp(
+      CallkeepOptions(
+        ios: CallkeepIOSOptions(
+          localizedName: PackageInfo().appName,
+          ringtoneSound: Assets.ringtones.incomingCall1,
+          iconTemplateImageAssetName: Assets.callkeep.iosIconTemplateImage.path,
+          maximumCallGroups: 13,
+          maximumCallsPerCallGroup: 13,
+          supportedHandleTypes: const {CallkeepHandleType.number},
+        ),
+        android: CallkeepAndroidOptions(
+          incomingPath: initialCallRout,
+          rootPath: initialMainRout,
+          ringtoneSound: Assets.ringtones.incomingCall1,
+        ),
       ),
-    ));
+    );
   }
 
   @override
@@ -57,10 +65,13 @@ class _MainShellState extends State<MainShell> {
         RepositoryProvider<WebtritApiClient>(
           create: (context) {
             final appBloc = context.read<AppBloc>();
+            final appCerts = AppCertificates();
+
             return WebtritApiClient(
               Uri.parse(appBloc.state.coreUrl!),
               appBloc.state.tenantId!,
               connectionTimeout: kApiClientConnectionTimeout,
+              certs: appCerts.trustedCertificates,
             );
           },
         ),
@@ -131,6 +142,7 @@ class _MainShellState extends State<MainShell> {
               return RecentsBloc(
                 recentsRepository: context.read<RecentsRepository>(),
                 appPreferences: context.read<AppPreferences>(),
+                dateFormat: AppTime().formatDateTime(),
               )..add(const RecentsStarted());
             },
           ),
@@ -155,11 +167,18 @@ class _MainShellState extends State<MainShell> {
           ),
           BlocProvider<CallBloc>(
             create: (context) {
+              final appBloc = context.read<AppBloc>();
+              final appCertificates = AppCertificates();
+
               return CallBloc(
+                coreUrl: appBloc.state.coreUrl!,
+                tenantId: appBloc.state.tenantId!,
+                token: appBloc.state.token!,
+                trustedCertificates: appCertificates.trustedCertificates,
                 recentsRepository: context.read<RecentsRepository>(),
                 notificationsBloc: context.read<NotificationsBloc>(),
-                appBloc: context.read<AppBloc>(),
                 callkeep: callkeep,
+                pendingCallHandler: appBloc.pendingCallHandler,
               )..add(const CallStarted());
             },
           ),

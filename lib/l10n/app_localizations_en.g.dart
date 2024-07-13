@@ -16,7 +16,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get alertDialogActions_yes => 'Yes';
 
   @override
+  String get autoprovision_errorSnackBar_invalidToken => 'The autoconfiguration credentials were rejected by the server. Please request a new configuration link';
+
+  @override
+  String get autoprovision_ReloginDialog_confirm => 'Confirm';
+
+  @override
+  String get autoprovision_ReloginDialog_decline => 'Decline';
+
+  @override
+  String get autoprovision_ReloginDialog_text => 'Do you want to use the new authentication credentials provided in the link? You will be logged out from the current session.';
+
+  @override
+  String get autoprovision_ReloginDialog_title => 'Relogin Confirmation';
+
+  @override
+  String get autoprovision_successSnackBar_used => 'Successfully retrieved your settings, your app is ready to use';
+
+  @override
   String get call_CallActionsTooltip_accept => 'Accept';
+
+  @override
+  String get call_CallActionsTooltip_attended_transfer => 'Attended transfer';
 
   @override
   String get call_CallActionsTooltip_disableCamera => 'Disable camera';
@@ -58,6 +79,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_CallActionsTooltip_transfer => 'Transfer';
 
   @override
+  String get call_CallActionsTooltip_transfer_choose => 'Choose number';
+
+  @override
+  String get call_CallActionsTooltip_unattended_transfer => 'Unattended transfer';
+
+  @override
   String get call_CallActionsTooltip_unhold => 'Unhold call';
 
   @override
@@ -74,6 +101,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get call_description_transferProcessing => 'Transfer processing';
+
+  @override
+  String get call_description_transfer_requested => 'Transfer request';
 
   @override
   String get call_FailureAcknowledgeDialog_title => 'Failure';
@@ -95,6 +125,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get callStatus_ready => 'Connection established';
+
+  @override
+  String get connectToYourOwnVoIPSystem_Button_Action => 'Connect to your own VoIP system';
 
   @override
   String get contacts_ExternalTabButton_refresh => 'Refresh';
@@ -133,7 +166,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contactsSourceLocal => 'Your phone';
 
   @override
-  String get contacts_Text_blingTransferInitiated => 'Blind transferring';
+  String get contacts_Text_blingTransferInitiated => 'Performing blind transfer';
 
   @override
   String get copyToClipboard_floatingSnackBar => 'Text copied';
@@ -143,6 +176,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get default_ClientExceptionError => 'A HTTP client issue occurred';
+
+  @override
+  String get default_ErrorDetails => 'Details';
+
+  @override
+  String get default_ErrorMessage => 'Error message';
+
+  @override
+  String get default_ErrorPath => 'Error path';
+
+  @override
+  String get default_ErrorTransactionId => 'Transaction ID';
 
   @override
   String get default_FormatExceptionError => 'A response format issue occurred';
@@ -177,13 +222,25 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get favorites_Text_blingTransferInitiated => 'Blind transferring';
+  String get favorites_Text_blingTransferInitiated => 'Performing blind transfer';
+
+  @override
+  String get inviteFriends_Dialog_close => 'Hide this message';
+
+  @override
+  String get inviteFriends_Dialog_invite => 'Invite';
+
+  @override
+  String get inviteFriends_Dialog_title => 'Invite your friends \nto try WebTrit';
 
   @override
   String get locale_default => 'Default';
 
   @override
   String get locale_en => 'English';
+
+  @override
+  String get locale_it => 'Italian';
 
   @override
   String get locale_uk => 'Ukrainian';
@@ -237,7 +294,22 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get login_requestCredentials_button => 'Sign up';
+
+  @override
+  String get login_requestCredentials_DialogContent => 'Please provide basic information and specify in the message that you would like to receive an account. Our administrators will verify the information and send the account details to your email.';
+
+  @override
+  String get login_requestCredentials_DialogTitle => 'Account Request';
+
+  @override
+  String get login_requestCredentials_title => 'Sign up';
+
+  @override
   String get login_RequestFailureEmptyEmailError => 'Cannot send the verification code';
+
+  @override
+  String get login_RequestFailureIdentifierIsNotValid => 'The identifier is invalid or does not exist';
 
   @override
   String get login_RequestFailureIncorrectOtpCodeError => 'Incorrect verification code';
@@ -413,6 +485,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications_errorSnackBarAction_callUserMedia => 'Check';
 
   @override
+  String get notifications_errorSnackBar_appOffline => 'Your application is currently offline';
+
+  @override
+  String get notifications_errorSnackBar_appOnline => 'Your application is online';
+
+  @override
+  String get notifications_errorSnackBar_appUnregistered => 'Sorry, your application is currently disconnected from the WebTrit core servers and hence can\'t call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection';
+
+  @override
   String get notifications_errorSnackBar_callConnect => 'Connecting to the core failed, trying to reconnect';
 
   @override
@@ -434,11 +515,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get permission_Button_request => 'Continue';
 
   @override
+  String get permission_manufacturer_Button_gotIt => 'Got it';
+
+  @override
+  String get permission_manufacturer_Button_toSettings => 'Open app Settings';
+
+  @override
+  String get permission_manufacturer_Text_heading => 'To ensure the best user experience, the app needs to be granted the following permissions manually:';
+
+  @override
+  String get permission_manufacturer_Text_trailing => 'Permissions could be changed at any time in the future.';
+
+  @override
+  String get permission_manufacturer_Text_xiaomi_tip1 => '1. Go to \"App settings\" → \"Notifications\".';
+
+  @override
+  String get permission_manufacturer_Text_xiaomi_tip2 => '2. Find and turn on \"Lockscreen notifications\".';
+
+  @override
   String get permission_Text_description => 'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.';
 
   @override
   String recents_BodyCenter_empty(Object filter) {
-    return 'Currently you have no $filter recent calls.';
+    return 'Currently you have no ${filter}recent calls.';
   }
 
   @override
@@ -456,19 +555,31 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get recents_Text_blingTransferInitiated => 'Blind transferring';
+  String get recents_Text_blingTransferInitiated => 'Performing blind transfer';
 
   @override
   String get recentsVisibilityFilter_all => 'All';
 
   @override
+  String get recentsVisibilityFilter_all_preposit => 'all';
+
+  @override
   String get recentsVisibilityFilter_incoming => 'Incoming';
+
+  @override
+  String get recentsVisibilityFilter_incoming_preposit => 'incoming';
 
   @override
   String get recentsVisibilityFilter_missed => 'Missed';
 
   @override
+  String get recentsVisibilityFilter_missed_preposit => 'missed';
+
+  @override
   String get recentsVisibilityFilter_outgoing => 'Outgoing';
+
+  @override
+  String get recentsVisibilityFilter_outgoing_preposit => 'outgoing';
 
   @override
   String recentTimeAfterMidnight(DateTime time) {
@@ -487,7 +598,19 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get request_Id => 'Request id';
+
+  @override
+  String get request_StatusCode => 'Status code';
+
+  @override
+  String get settings_AboutText_AppVersion => 'App Version';
+
+  @override
   String get settings_AboutText_CoreVersionUndefined => '?.?.?';
+
+  @override
+  String get settings_AboutText_StoreVersion => 'Build version in the Store';
 
   @override
   String get settings_AccountDeleteConfirmDialog_content => 'Are you sure you want to delete account?';
@@ -526,7 +649,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_ListViewTileTitle_network => 'Network settings';
 
   @override
-  String get settings_ListViewTileTitle_registered => 'Registered';
+  String get settings_ListViewTileTitle_registered => 'Online';
 
   @override
   String get settings_ListViewTileTitle_settings => 'SETTINGS';
@@ -556,8 +679,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String get themeMode_system => 'System';
 
   @override
+  String get undefine_DeeplinkConfigurationInvalid_text => 'The autoconfiguration credentials are invalid, please log in';
+
+  @override
   String get underDevelopment => 'This page is under development.';
 
   @override
+  String get user_agreement_agrement_link => 'The terms and condition of the agreement';
+
+  @override
+  String get user_agreement_button_text => 'Continue';
+
+  @override
+  String user_agreement_checkbox_text(Object url) {
+    return 'I have read the $url and consent to its terms.';
+  }
+
+  @override
+  String user_agreement_description(Object appName) {
+    return 'Welcome to $appName';
+  }
+
+  @override
   String get validationBlankError => 'Please enter a value';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialogActions_demo => 'Demo';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialogActions_retry => 'Retry';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialogActions_skip => 'Skip';
+
+  @override
+  String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
 }
