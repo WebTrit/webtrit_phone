@@ -39,6 +39,8 @@ class MessageView extends StatefulWidget {
 
 class _MessageViewState extends State<MessageView> {
   late final chatsRepository = context.read<ChatsRepository>();
+  late final client = context.read<ChatsBloc>().state.client;
+
   static final previewsCache = LruMap<int, types.PreviewData>(maximumSize: 500);
 
   void handlePreviewDataFetched(types.TextMessage message, types.PreviewData previewData) {
@@ -52,8 +54,21 @@ class _MessageViewState extends State<MessageView> {
     return message;
   }
 
-  Future<ChatMessage?> fetchMessage(int id) async {
-    return await chatsRepository.getMessageById(id);
+  Future<ChatMessage?> fetchMessage(int msgId, int chatId) async {
+    final msg = await chatsRepository.getMessageById(msgId);
+    if (msg != null) return msg;
+
+    final channel = client.getChatChannel(chatId);
+    if (channel == null) return null;
+
+    final req = await channel.push('message:get:$msgId', {}).future;
+    if (req.isOk) {
+      final msg = ChatMessage.fromMap(req.response);
+      await chatsRepository.upsertMessage(msg, silent: true);
+      return msg;
+    }
+
+    return null;
   }
 
   @override
@@ -133,7 +148,7 @@ class _MessageViewState extends State<MessageView> {
 
   Widget replySegment(ChatMessage realMessage) {
     return FutureBuilder(
-        future: fetchMessage(realMessage.replyToId!),
+        future: fetchMessage(realMessage.replyToId!, realMessage.chatId),
         builder: (context, snapshot) {
           final msg = snapshot.data;
 
