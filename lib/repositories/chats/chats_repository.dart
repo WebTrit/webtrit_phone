@@ -38,11 +38,6 @@ class ChatsRepository with ChatsDriftMapper {
     return _chatsDao.findDialogId(participantId);
   }
 
-  @Deprecated('No needed anymore')
-  Future<DateTime?> getLastChatUpdate() async {
-    return _chatsDao.lastChatUpdatedAt();
-  }
-
   Future<void> upsertChat(Chat chat) async {
     final chatData = chatDataFromChat(chat);
     final membersData = chat.members.map(chatMemberDataFromChatMember).toList();
@@ -64,52 +59,43 @@ class ChatsRepository with ChatsDriftMapper {
     return messageData != null ? chatMessageFromDrift(messageData) : null;
   }
 
-  Future<List<ChatMessage>> getLastMessages(int chatId, {int limit = 100}) async {
-    final messagesData = await _chatsDao.getLastMessages(chatId, limit: limit);
+  Future<List<ChatMessage>> getMessageHistory(int chatId, {DateTime? from, DateTime? to, int limit = 100}) async {
+    final messagesData = await _chatsDao.getMessageHistory(chatId, from: from, to: to, limit: limit);
     return messagesData.map(chatMessageFromDrift).toList();
   }
 
-  Future<List<ChatMessage>> getMessageHistory(int chatId, DateTime from, {int limit = 100}) async {
-    final messagesData = await _chatsDao.getMessageHistory(chatId, from, limit: limit);
-    return messagesData.map(chatMessageFromDrift).toList();
-  }
-
-  Future<void> insertMessage(ChatMessage message, {bool silent = false}) async {
+  Future<void> upsertMessage(ChatMessage message, {bool silent = false}) async {
     try {
-      await _chatsDao.insertChatMessage(chatMessageDataFromChatMessage(message));
+      await _chatsDao.upsertChatMessage(chatMessageDataFromChatMessage(message));
       if (!silent) _addEvent(ChatMessageUpdate(message));
     } on Exception catch (e) {
       _logger.warning('upsertMessage failed, retrying', e);
       // Drift lock exception handling, coz cant import [DriftRemoteException]
       await Future.delayed(const Duration(milliseconds: 100));
-      await insertMessage(message, silent: silent);
-    }
-  }
-
-  Future<void> upsertMessageUpdate(ChatMessage message, {bool silent = false}) async {
-    try {
-      await _chatsDao.upsertChatMessageUpdate(chatMessageDataFromChatMessage(message));
-      if (!silent) _addEvent(ChatMessageUpdate(message));
-    } on Exception catch (e) {
-      _logger.warning('upsertMessage failed, retrying', e);
-      // Drift lock exception handling, coz cant import [DriftRemoteException]
-      await Future.delayed(const Duration(milliseconds: 100));
-      await upsertMessageUpdate(message, silent: silent);
+      await upsertMessage(message, silent: silent);
     }
   }
 
   Future<void> insertHistoryPage(List<ChatMessage> messages) async {
     for (final message in messages) {
-      await insertMessage(message, silent: true);
+      await upsertMessage(message, silent: true);
     }
-  }
-
-  Future<DateTime?> lastChatMessageUpdatedAt(int chatId) async {
-    return _chatsDao.lastChatMessageUpdatedAt(chatId);
   }
 
   Future<int> deleteOutboxMessageDelete(int id) {
     return _chatsDao.deleteChatOutboxMessageDelete(id);
+  }
+
+  Future<ChatMessageSyncCursor?> getChatMessageSyncCursor(int chatId, MessageSyncCursorType cursorType) async {
+    final type = chatMessageSyncCursorTypeEnumFromDrift(cursorType);
+    final data = await _chatsDao.getChatMessageSyncCursor(chatId, type);
+    if (data != null) return chatMessageSyncCursorFromDrift(data);
+    return null;
+  }
+
+  Future<void> upsertChatMessageSyncCursor(ChatMessageSyncCursor cursor) async {
+    final data = chatMessageSyncCursorDataFromChatMessageSyncCursor(cursor);
+    await _chatsDao.upsertChatMessageSyncCursor(data);
   }
 
   Future<void> wipeStaleDeletedData() async {

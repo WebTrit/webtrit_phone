@@ -91,4 +91,28 @@ mixin ChatsDriftMapper {
       deletedAtRemote: message.deletedAt,
     );
   }
+
+  MessageSyncCursorType chatMessageSyncCursorTypeFromDrift(MessageSyncCursorTypeEnum type) {
+    return MessageSyncCursorType.values.byName(type.name);
+  }
+
+  MessageSyncCursorTypeEnum chatMessageSyncCursorTypeEnumFromDrift(MessageSyncCursorType type) {
+    return MessageSyncCursorTypeEnum.values.byName(type.name);
+  }
+
+  ChatMessageSyncCursor chatMessageSyncCursorFromDrift(ChatMessageSyncCursorData data) {
+    return ChatMessageSyncCursor(
+      chatId: data.chatId,
+      cursorType: chatMessageSyncCursorTypeFromDrift(data.cursorType),
+      time: DateTime.fromMicrosecondsSinceEpoch(data.timestampUsec),
+    );
+  }
+
+  ChatMessageSyncCursorData chatMessageSyncCursorDataFromChatMessageSyncCursor(ChatMessageSyncCursor cursor) {
+    return ChatMessageSyncCursorData(
+      chatId: cursor.chatId,
+      cursorType: chatMessageSyncCursorTypeEnumFromDrift(cursor.cursorType),
+      timestampUsec: cursor.time.microsecondsSinceEpoch,
+    );
+  }
 }

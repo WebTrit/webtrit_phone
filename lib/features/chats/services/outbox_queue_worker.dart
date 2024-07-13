@@ -2,20 +2,15 @@ import 'dart:async';
 
 import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
-import 'package:stream_transform/stream_transform.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-final _logger = Logger('OutboxQueueService');
+final _logger = Logger('OutboxQueueWorker');
 
-class OutboxQueueService {
-  OutboxQueueService(
-    this._client,
-    this._chatsRepository,
-    this._outboxRepository,
-  ) {
+class OutboxQueueWorker {
+  OutboxQueueWorker(this._client, this._chatsRepository, this._outboxRepository) {
     // TODO: Remove this before pr
     // _logger.onRecord.listen((record) {
     //   // ignore: avoid_print
@@ -32,26 +27,16 @@ class OutboxQueueService {
   init() {
     _logger.info('Initializing outbox queue service');
     Future.doWhile(() async {
-      final messageEntries = await _outboxRepository.getChatOutboxMessages();
-
-      for (final entry in messageEntries) {
-        if (entry.chatId != null) {
-          await _processNewMessage(entry.chatId!, entry);
-        }
-        if (entry.participantId != null) {
-          await _processNewDialogMessage(entry.participantId!, entry);
-        }
+      for (final entry in await _outboxRepository.getChatOutboxMessages()) {
+        if (entry.chatId != null) await _processNewMessage(entry.chatId!, entry);
+        if (entry.participantId != null) await _processNewDialogMessage(entry.participantId!, entry);
       }
 
-      final messageEditEntries = await _outboxRepository.getChatOutboxMessageEdits();
-
-      for (final entry in messageEditEntries) {
+      for (final entry in await _outboxRepository.getChatOutboxMessageEdits()) {
         await _processMessageEdit(entry);
       }
 
-      final messageDeleteEntries = await _outboxRepository.getChatOutboxMessageDeletes();
-
-      for (final entry in messageDeleteEntries) {
+      for (final entry in await _outboxRepository.getChatOutboxMessageDeletes()) {
         await _processMessageDelete(entry);
       }
 
@@ -87,20 +72,20 @@ class OutboxQueueService {
       }
 
       if (r.isOk) {
-        await _chatsRepository.eventBus
-            .whereType<ChatMessageUpdate>()
-            .firstWhere((event) => event.message.idKey == message.idKey)
-            .timeout(const Duration(seconds: 5));
+        final message = ChatMessage.fromMap(r.response);
+        await _chatsRepository.upsertMessage(message);
         await _outboxRepository.deleteOutboxMessage(message.idKey);
-        _logger.info('After isOk on new_msg entry: $message.idKey');
+        _logger.info('After isOk on new_msg entry: ${message.idKey}');
       }
-      if (r.isError) {
-        await _outboxRepository.deleteOutboxMessage(message.idKey);
-        _logger.info('After isError on new_msg entry: $message.idKey');
-      }
+      if (r.isError) throw Exception('Error processing new message');
     } catch (e) {
       _logger.severe('Error processing new message', e);
-      await _outboxRepository.deleteOutboxMessage(message.idKey);
+      if (message.sendAttempts > 5) {
+        _logger.severe('Send attempts exceeded for message: ${message.idKey}');
+        await _outboxRepository.deleteOutboxMessage(message.idKey);
+      } else {
+        await _outboxRepository.upsertOutboxMessage(message.incAttempt());
+      }
     }
   }
 
@@ -123,20 +108,21 @@ class OutboxQueueService {
       final r = await channel.push('chat:create_dialog', payload).future;
 
       if (r.isOk) {
-        await _chatsRepository.eventBus
-            .whereType<ChatMessageUpdate>()
-            .firstWhere((event) => event.message.idKey == message.idKey)
-            .timeout(const Duration(seconds: 5));
+        final chat = Chat.fromMap(r.response['chat']);
+        final chatMessage = ChatMessage.fromMap(r.response['msg']);
+        await _chatsRepository.upsertChat(chat);
+        await _chatsRepository.upsertMessage(chatMessage);
         await _outboxRepository.deleteOutboxMessage(message.idKey);
-        _logger.info('After isOk on new_dialog_msg entry: $message.idKey');
       }
-      if (r.isError) {
-        await _outboxRepository.deleteOutboxMessage(message.idKey);
-        _logger.info('After isError on new_dialog_msg entry: $message.idKey');
-      }
+      if (r.isError) throw Exception('Error processing new dialog message');
     } catch (e) {
       _logger.severe('Error processing new dialog message', e);
-      await _outboxRepository.deleteOutboxMessage(message.idKey);
+      if (message.sendAttempts > 5) {
+        _logger.severe('Send attempts exceeded for dialog message: ${message.idKey}');
+        await _outboxRepository.deleteOutboxMessage(message.idKey);
+      } else {
+        await _outboxRepository.upsertOutboxMessage(message.incAttempt());
+      }
     }
   }
 
@@ -150,20 +136,20 @@ class OutboxQueueService {
       final r = await channel.push('message:edit', payload).future;
 
       if (r.isOk) {
-        await _chatsRepository.eventBus
-            .whereType<ChatMessageUpdate>()
-            .firstWhere((event) => event.message.idKey == messageEdit.idKey)
-            .timeout(const Duration(seconds: 5));
+        final message = ChatMessage.fromMap(r.response);
+        await _chatsRepository.upsertMessage(message);
         await _outboxRepository.deleteOutboxMessageEdit(messageEdit.id);
         _logger.info('After isOk on edit_msg entry: ${messageEdit.id}');
       }
-      if (r.isError) {
-        await _outboxRepository.deleteOutboxMessageEdit(messageEdit.id);
-        _logger.info('After isError on edit_msg entry: ${messageEdit.id}');
-      }
+      if (r.isError) throw Exception('Error processing message edit');
     } catch (e) {
       _logger.severe('Error processing message edit', e);
-      await _outboxRepository.deleteOutboxMessageEdit(messageEdit.id);
+      if (messageEdit.sendAttempts > 5) {
+        _logger.severe('Send attempts exceeded for edit message: ${messageEdit.idKey}');
+        await _outboxRepository.deleteOutboxMessageEdit(messageEdit.id);
+      } else {
+        await _outboxRepository.upsertOutboxMessageEdit(messageEdit.incAttempts());
+      }
     }
   }
 
@@ -177,20 +163,20 @@ class OutboxQueueService {
       final r = await channel.push('message:delete', payload).future;
 
       if (r.isOk) {
-        await _chatsRepository.eventBus
-            .whereType<ChatMessageUpdate>()
-            .firstWhere((event) => event.message.idKey == messageDelete.idKey)
-            .timeout(const Duration(seconds: 5));
+        final message = ChatMessage.fromMap(r.response);
+        await _chatsRepository.upsertMessage(message);
         await _outboxRepository.deleteOutboxMessageDelete(messageDelete.id);
-        _logger.info('After isOk on delete_msg entry: ${messageDelete.id}');
+        _logger.info('After isOk on delete_msg entry: ${message.idKey}');
       }
-      if (r.isError) {
-        await _outboxRepository.deleteOutboxMessageDelete(messageDelete.id);
-        _logger.info('After isError on delete_msg entry: ${messageDelete.id}');
-      }
+      if (r.isError) throw Exception('Error processing message delete');
     } catch (e) {
       _logger.severe('Error processing message delete', e);
-      await _outboxRepository.deleteOutboxMessageDelete(messageDelete.id);
+      if (messageDelete.sendAttempts > 5) {
+        _logger.severe('Send attempts exceeded for delete message: ${messageDelete.idKey}');
+        await _outboxRepository.deleteOutboxMessageDelete(messageDelete.id);
+      } else {
+        await _outboxRepository.upsertOutboxMessageDelete(messageDelete.incAttempts());
+      }
     }
   }
 }

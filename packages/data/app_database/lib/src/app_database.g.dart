@@ -3384,6 +3384,14 @@ class $ChatOutboxMessageTableTable extends ChatOutboxMessageTable
   late final GeneratedColumn<String> content = GeneratedColumn<String>(
       'content', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _sendAttemptsMeta =
+      const VerificationMeta('sendAttempts');
+  @override
+  late final GeneratedColumn<int> sendAttempts = GeneratedColumn<int>(
+      'send_attempts', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
   @override
   List<GeneratedColumn> get $columns => [
         idKey,
@@ -3394,7 +3402,8 @@ class $ChatOutboxMessageTableTable extends ChatOutboxMessageTable
         authorId,
         viaSms,
         smsNumber,
-        content
+        content,
+        sendAttempts
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -3453,6 +3462,12 @@ class $ChatOutboxMessageTableTable extends ChatOutboxMessageTable
     } else if (isInserting) {
       context.missing(_contentMeta);
     }
+    if (data.containsKey('send_attempts')) {
+      context.handle(
+          _sendAttemptsMeta,
+          sendAttempts.isAcceptableOrUnknown(
+              data['send_attempts']!, _sendAttemptsMeta));
+    }
     return context;
   }
 
@@ -3480,6 +3495,8 @@ class $ChatOutboxMessageTableTable extends ChatOutboxMessageTable
           .read(DriftSqlType.string, data['${effectivePrefix}sms_number']),
       content: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}content'])!,
+      sendAttempts: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}send_attempts'])!,
     );
   }
 
@@ -3500,6 +3517,7 @@ class ChatOutboxMessageData extends DataClass
   final bool viaSms;
   final String? smsNumber;
   final String content;
+  final int sendAttempts;
   const ChatOutboxMessageData(
       {required this.idKey,
       this.chatId,
@@ -3509,7 +3527,8 @@ class ChatOutboxMessageData extends DataClass
       this.authorId,
       required this.viaSms,
       this.smsNumber,
-      required this.content});
+      required this.content,
+      required this.sendAttempts});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -3534,6 +3553,7 @@ class ChatOutboxMessageData extends DataClass
       map['sms_number'] = Variable<String>(smsNumber);
     }
     map['content'] = Variable<String>(content);
+    map['send_attempts'] = Variable<int>(sendAttempts);
     return map;
   }
 
@@ -3559,6 +3579,7 @@ class ChatOutboxMessageData extends DataClass
           ? const Value.absent()
           : Value(smsNumber),
       content: Value(content),
+      sendAttempts: Value(sendAttempts),
     );
   }
 
@@ -3575,6 +3596,7 @@ class ChatOutboxMessageData extends DataClass
       viaSms: serializer.fromJson<bool>(json['viaSms']),
       smsNumber: serializer.fromJson<String?>(json['smsNumber']),
       content: serializer.fromJson<String>(json['content']),
+      sendAttempts: serializer.fromJson<int>(json['sendAttempts']),
     );
   }
   @override
@@ -3590,6 +3612,7 @@ class ChatOutboxMessageData extends DataClass
       'viaSms': serializer.toJson<bool>(viaSms),
       'smsNumber': serializer.toJson<String?>(smsNumber),
       'content': serializer.toJson<String>(content),
+      'sendAttempts': serializer.toJson<int>(sendAttempts),
     };
   }
 
@@ -3602,7 +3625,8 @@ class ChatOutboxMessageData extends DataClass
           Value<String?> authorId = const Value.absent(),
           bool? viaSms,
           Value<String?> smsNumber = const Value.absent(),
-          String? content}) =>
+          String? content,
+          int? sendAttempts}) =>
       ChatOutboxMessageData(
         idKey: idKey ?? this.idKey,
         chatId: chatId.present ? chatId.value : this.chatId,
@@ -3615,6 +3639,7 @@ class ChatOutboxMessageData extends DataClass
         viaSms: viaSms ?? this.viaSms,
         smsNumber: smsNumber.present ? smsNumber.value : this.smsNumber,
         content: content ?? this.content,
+        sendAttempts: sendAttempts ?? this.sendAttempts,
       );
   @override
   String toString() {
@@ -3627,14 +3652,15 @@ class ChatOutboxMessageData extends DataClass
           ..write('authorId: $authorId, ')
           ..write('viaSms: $viaSms, ')
           ..write('smsNumber: $smsNumber, ')
-          ..write('content: $content')
+          ..write('content: $content, ')
+          ..write('sendAttempts: $sendAttempts')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(idKey, chatId, participantId, replyToId,
-      forwardFromId, authorId, viaSms, smsNumber, content);
+      forwardFromId, authorId, viaSms, smsNumber, content, sendAttempts);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3647,7 +3673,8 @@ class ChatOutboxMessageData extends DataClass
           other.authorId == this.authorId &&
           other.viaSms == this.viaSms &&
           other.smsNumber == this.smsNumber &&
-          other.content == this.content);
+          other.content == this.content &&
+          other.sendAttempts == this.sendAttempts);
 }
 
 class ChatOutboxMessageDataCompanion
@@ -3661,6 +3688,7 @@ class ChatOutboxMessageDataCompanion
   final Value<bool> viaSms;
   final Value<String?> smsNumber;
   final Value<String> content;
+  final Value<int> sendAttempts;
   final Value<int> rowid;
   const ChatOutboxMessageDataCompanion({
     this.idKey = const Value.absent(),
@@ -3672,6 +3700,7 @@ class ChatOutboxMessageDataCompanion
     this.viaSms = const Value.absent(),
     this.smsNumber = const Value.absent(),
     this.content = const Value.absent(),
+    this.sendAttempts = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   ChatOutboxMessageDataCompanion.insert({
@@ -3684,6 +3713,7 @@ class ChatOutboxMessageDataCompanion
     this.viaSms = const Value.absent(),
     this.smsNumber = const Value.absent(),
     required String content,
+    this.sendAttempts = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : idKey = Value(idKey),
         content = Value(content);
@@ -3697,6 +3727,7 @@ class ChatOutboxMessageDataCompanion
     Expression<bool>? viaSms,
     Expression<String>? smsNumber,
     Expression<String>? content,
+    Expression<int>? sendAttempts,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -3709,6 +3740,7 @@ class ChatOutboxMessageDataCompanion
       if (viaSms != null) 'via_sms': viaSms,
       if (smsNumber != null) 'sms_number': smsNumber,
       if (content != null) 'content': content,
+      if (sendAttempts != null) 'send_attempts': sendAttempts,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -3723,6 +3755,7 @@ class ChatOutboxMessageDataCompanion
       Value<bool>? viaSms,
       Value<String?>? smsNumber,
       Value<String>? content,
+      Value<int>? sendAttempts,
       Value<int>? rowid}) {
     return ChatOutboxMessageDataCompanion(
       idKey: idKey ?? this.idKey,
@@ -3734,6 +3767,7 @@ class ChatOutboxMessageDataCompanion
       viaSms: viaSms ?? this.viaSms,
       smsNumber: smsNumber ?? this.smsNumber,
       content: content ?? this.content,
+      sendAttempts: sendAttempts ?? this.sendAttempts,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -3768,6 +3802,9 @@ class ChatOutboxMessageDataCompanion
     if (content.present) {
       map['content'] = Variable<String>(content.value);
     }
+    if (sendAttempts.present) {
+      map['send_attempts'] = Variable<int>(sendAttempts.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -3786,6 +3823,7 @@ class ChatOutboxMessageDataCompanion
           ..write('viaSms: $viaSms, ')
           ..write('smsNumber: $smsNumber, ')
           ..write('content: $content, ')
+          ..write('sendAttempts: $sendAttempts, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -3823,8 +3861,17 @@ class $ChatOutboxMessageEditTableTable extends ChatOutboxMessageEditTable
   late final GeneratedColumn<String> newContent = GeneratedColumn<String>(
       'new_content', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _sendAttemptsMeta =
+      const VerificationMeta('sendAttempts');
   @override
-  List<GeneratedColumn> get $columns => [id, idKey, chatId, newContent];
+  late final GeneratedColumn<int> sendAttempts = GeneratedColumn<int>(
+      'send_attempts', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, idKey, chatId, newContent, sendAttempts];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -3859,6 +3906,12 @@ class $ChatOutboxMessageEditTableTable extends ChatOutboxMessageEditTable
     } else if (isInserting) {
       context.missing(_newContentMeta);
     }
+    if (data.containsKey('send_attempts')) {
+      context.handle(
+          _sendAttemptsMeta,
+          sendAttempts.isAcceptableOrUnknown(
+              data['send_attempts']!, _sendAttemptsMeta));
+    }
     return context;
   }
 
@@ -3877,6 +3930,8 @@ class $ChatOutboxMessageEditTableTable extends ChatOutboxMessageEditTable
           .read(DriftSqlType.int, data['${effectivePrefix}chat_id'])!,
       newContent: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}new_content'])!,
+      sendAttempts: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}send_attempts'])!,
     );
   }
 
@@ -3892,11 +3947,13 @@ class ChatOutboxMessageEditData extends DataClass
   final String idKey;
   final int chatId;
   final String newContent;
+  final int sendAttempts;
   const ChatOutboxMessageEditData(
       {required this.id,
       required this.idKey,
       required this.chatId,
-      required this.newContent});
+      required this.newContent,
+      required this.sendAttempts});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -3904,6 +3961,7 @@ class ChatOutboxMessageEditData extends DataClass
     map['id_key'] = Variable<String>(idKey);
     map['chat_id'] = Variable<int>(chatId);
     map['new_content'] = Variable<String>(newContent);
+    map['send_attempts'] = Variable<int>(sendAttempts);
     return map;
   }
 
@@ -3913,6 +3971,7 @@ class ChatOutboxMessageEditData extends DataClass
       idKey: Value(idKey),
       chatId: Value(chatId),
       newContent: Value(newContent),
+      sendAttempts: Value(sendAttempts),
     );
   }
 
@@ -3924,6 +3983,7 @@ class ChatOutboxMessageEditData extends DataClass
       idKey: serializer.fromJson<String>(json['idKey']),
       chatId: serializer.fromJson<int>(json['chatId']),
       newContent: serializer.fromJson<String>(json['newContent']),
+      sendAttempts: serializer.fromJson<int>(json['sendAttempts']),
     );
   }
   @override
@@ -3934,16 +3994,22 @@ class ChatOutboxMessageEditData extends DataClass
       'idKey': serializer.toJson<String>(idKey),
       'chatId': serializer.toJson<int>(chatId),
       'newContent': serializer.toJson<String>(newContent),
+      'sendAttempts': serializer.toJson<int>(sendAttempts),
     };
   }
 
   ChatOutboxMessageEditData copyWith(
-          {int? id, String? idKey, int? chatId, String? newContent}) =>
+          {int? id,
+          String? idKey,
+          int? chatId,
+          String? newContent,
+          int? sendAttempts}) =>
       ChatOutboxMessageEditData(
         id: id ?? this.id,
         idKey: idKey ?? this.idKey,
         chatId: chatId ?? this.chatId,
         newContent: newContent ?? this.newContent,
+        sendAttempts: sendAttempts ?? this.sendAttempts,
       );
   @override
   String toString() {
@@ -3951,13 +4017,14 @@ class ChatOutboxMessageEditData extends DataClass
           ..write('id: $id, ')
           ..write('idKey: $idKey, ')
           ..write('chatId: $chatId, ')
-          ..write('newContent: $newContent')
+          ..write('newContent: $newContent, ')
+          ..write('sendAttempts: $sendAttempts')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, idKey, chatId, newContent);
+  int get hashCode => Object.hash(id, idKey, chatId, newContent, sendAttempts);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3965,7 +4032,8 @@ class ChatOutboxMessageEditData extends DataClass
           other.id == this.id &&
           other.idKey == this.idKey &&
           other.chatId == this.chatId &&
-          other.newContent == this.newContent);
+          other.newContent == this.newContent &&
+          other.sendAttempts == this.sendAttempts);
 }
 
 class ChatOutboxMessageEditDataCompanion
@@ -3974,17 +4042,20 @@ class ChatOutboxMessageEditDataCompanion
   final Value<String> idKey;
   final Value<int> chatId;
   final Value<String> newContent;
+  final Value<int> sendAttempts;
   const ChatOutboxMessageEditDataCompanion({
     this.id = const Value.absent(),
     this.idKey = const Value.absent(),
     this.chatId = const Value.absent(),
     this.newContent = const Value.absent(),
+    this.sendAttempts = const Value.absent(),
   });
   ChatOutboxMessageEditDataCompanion.insert({
     this.id = const Value.absent(),
     required String idKey,
     required int chatId,
     required String newContent,
+    this.sendAttempts = const Value.absent(),
   })  : idKey = Value(idKey),
         chatId = Value(chatId),
         newContent = Value(newContent);
@@ -3993,12 +4064,14 @@ class ChatOutboxMessageEditDataCompanion
     Expression<String>? idKey,
     Expression<int>? chatId,
     Expression<String>? newContent,
+    Expression<int>? sendAttempts,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (idKey != null) 'id_key': idKey,
       if (chatId != null) 'chat_id': chatId,
       if (newContent != null) 'new_content': newContent,
+      if (sendAttempts != null) 'send_attempts': sendAttempts,
     });
   }
 
@@ -4006,12 +4079,14 @@ class ChatOutboxMessageEditDataCompanion
       {Value<int>? id,
       Value<String>? idKey,
       Value<int>? chatId,
-      Value<String>? newContent}) {
+      Value<String>? newContent,
+      Value<int>? sendAttempts}) {
     return ChatOutboxMessageEditDataCompanion(
       id: id ?? this.id,
       idKey: idKey ?? this.idKey,
       chatId: chatId ?? this.chatId,
       newContent: newContent ?? this.newContent,
+      sendAttempts: sendAttempts ?? this.sendAttempts,
     );
   }
 
@@ -4030,6 +4105,9 @@ class ChatOutboxMessageEditDataCompanion
     if (newContent.present) {
       map['new_content'] = Variable<String>(newContent.value);
     }
+    if (sendAttempts.present) {
+      map['send_attempts'] = Variable<int>(sendAttempts.value);
+    }
     return map;
   }
 
@@ -4039,7 +4117,8 @@ class ChatOutboxMessageEditDataCompanion
           ..write('id: $id, ')
           ..write('idKey: $idKey, ')
           ..write('chatId: $chatId, ')
-          ..write('newContent: $newContent')
+          ..write('newContent: $newContent, ')
+          ..write('sendAttempts: $sendAttempts')
           ..write(')'))
         .toString();
   }
@@ -4071,8 +4150,16 @@ class $ChatOutboxMessageDeleteTableTable extends ChatOutboxMessageDeleteTable
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES chats (id) ON DELETE CASCADE'));
+  static const VerificationMeta _sendAttemptsMeta =
+      const VerificationMeta('sendAttempts');
   @override
-  List<GeneratedColumn> get $columns => [id, idKey, chatId];
+  late final GeneratedColumn<int> sendAttempts = GeneratedColumn<int>(
+      'send_attempts', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  @override
+  List<GeneratedColumn> get $columns => [id, idKey, chatId, sendAttempts];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -4099,6 +4186,12 @@ class $ChatOutboxMessageDeleteTableTable extends ChatOutboxMessageDeleteTable
     } else if (isInserting) {
       context.missing(_chatIdMeta);
     }
+    if (data.containsKey('send_attempts')) {
+      context.handle(
+          _sendAttemptsMeta,
+          sendAttempts.isAcceptableOrUnknown(
+              data['send_attempts']!, _sendAttemptsMeta));
+    }
     return context;
   }
 
@@ -4115,6 +4208,8 @@ class $ChatOutboxMessageDeleteTableTable extends ChatOutboxMessageDeleteTable
           .read(DriftSqlType.string, data['${effectivePrefix}id_key'])!,
       chatId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}chat_id'])!,
+      sendAttempts: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}send_attempts'])!,
     );
   }
 
@@ -4129,14 +4224,19 @@ class ChatOutboxMessageDeleteData extends DataClass
   final int id;
   final String idKey;
   final int chatId;
+  final int sendAttempts;
   const ChatOutboxMessageDeleteData(
-      {required this.id, required this.idKey, required this.chatId});
+      {required this.id,
+      required this.idKey,
+      required this.chatId,
+      required this.sendAttempts});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['id_key'] = Variable<String>(idKey);
     map['chat_id'] = Variable<int>(chatId);
+    map['send_attempts'] = Variable<int>(sendAttempts);
     return map;
   }
 
@@ -4145,6 +4245,7 @@ class ChatOutboxMessageDeleteData extends DataClass
       id: Value(id),
       idKey: Value(idKey),
       chatId: Value(chatId),
+      sendAttempts: Value(sendAttempts),
     );
   }
 
@@ -4155,6 +4256,7 @@ class ChatOutboxMessageDeleteData extends DataClass
       id: serializer.fromJson<int>(json['id']),
       idKey: serializer.fromJson<String>(json['idKey']),
       chatId: serializer.fromJson<int>(json['chatId']),
+      sendAttempts: serializer.fromJson<int>(json['sendAttempts']),
     );
   }
   @override
@@ -4164,34 +4266,39 @@ class ChatOutboxMessageDeleteData extends DataClass
       'id': serializer.toJson<int>(id),
       'idKey': serializer.toJson<String>(idKey),
       'chatId': serializer.toJson<int>(chatId),
+      'sendAttempts': serializer.toJson<int>(sendAttempts),
     };
   }
 
-  ChatOutboxMessageDeleteData copyWith({int? id, String? idKey, int? chatId}) =>
+  ChatOutboxMessageDeleteData copyWith(
+          {int? id, String? idKey, int? chatId, int? sendAttempts}) =>
       ChatOutboxMessageDeleteData(
         id: id ?? this.id,
         idKey: idKey ?? this.idKey,
         chatId: chatId ?? this.chatId,
+        sendAttempts: sendAttempts ?? this.sendAttempts,
       );
   @override
   String toString() {
     return (StringBuffer('ChatOutboxMessageDeleteData(')
           ..write('id: $id, ')
           ..write('idKey: $idKey, ')
-          ..write('chatId: $chatId')
+          ..write('chatId: $chatId, ')
+          ..write('sendAttempts: $sendAttempts')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, idKey, chatId);
+  int get hashCode => Object.hash(id, idKey, chatId, sendAttempts);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ChatOutboxMessageDeleteData &&
           other.id == this.id &&
           other.idKey == this.idKey &&
-          other.chatId == this.chatId);
+          other.chatId == this.chatId &&
+          other.sendAttempts == this.sendAttempts);
 }
 
 class ChatOutboxMessageDeleteDataCompanion
@@ -4199,35 +4306,44 @@ class ChatOutboxMessageDeleteDataCompanion
   final Value<int> id;
   final Value<String> idKey;
   final Value<int> chatId;
+  final Value<int> sendAttempts;
   const ChatOutboxMessageDeleteDataCompanion({
     this.id = const Value.absent(),
     this.idKey = const Value.absent(),
     this.chatId = const Value.absent(),
+    this.sendAttempts = const Value.absent(),
   });
   ChatOutboxMessageDeleteDataCompanion.insert({
     this.id = const Value.absent(),
     required String idKey,
     required int chatId,
+    this.sendAttempts = const Value.absent(),
   })  : idKey = Value(idKey),
         chatId = Value(chatId);
   static Insertable<ChatOutboxMessageDeleteData> custom({
     Expression<int>? id,
     Expression<String>? idKey,
     Expression<int>? chatId,
+    Expression<int>? sendAttempts,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (idKey != null) 'id_key': idKey,
       if (chatId != null) 'chat_id': chatId,
+      if (sendAttempts != null) 'send_attempts': sendAttempts,
     });
   }
 
   ChatOutboxMessageDeleteDataCompanion copyWith(
-      {Value<int>? id, Value<String>? idKey, Value<int>? chatId}) {
+      {Value<int>? id,
+      Value<String>? idKey,
+      Value<int>? chatId,
+      Value<int>? sendAttempts}) {
     return ChatOutboxMessageDeleteDataCompanion(
       id: id ?? this.id,
       idKey: idKey ?? this.idKey,
       chatId: chatId ?? this.chatId,
+      sendAttempts: sendAttempts ?? this.sendAttempts,
     );
   }
 
@@ -4243,6 +4359,9 @@ class ChatOutboxMessageDeleteDataCompanion
     if (chatId.present) {
       map['chat_id'] = Variable<int>(chatId.value);
     }
+    if (sendAttempts.present) {
+      map['send_attempts'] = Variable<int>(sendAttempts.value);
+    }
     return map;
   }
 
@@ -4251,7 +4370,256 @@ class ChatOutboxMessageDeleteDataCompanion
     return (StringBuffer('ChatOutboxMessageDeleteDataCompanion(')
           ..write('id: $id, ')
           ..write('idKey: $idKey, ')
-          ..write('chatId: $chatId')
+          ..write('chatId: $chatId, ')
+          ..write('sendAttempts: $sendAttempts')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ChatMessageSyncCursorTableTable extends ChatMessageSyncCursorTable
+    with
+        TableInfo<$ChatMessageSyncCursorTableTable, ChatMessageSyncCursorData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ChatMessageSyncCursorTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _chatIdMeta = const VerificationMeta('chatId');
+  @override
+  late final GeneratedColumn<int> chatId = GeneratedColumn<int>(
+      'chat_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES chats (id) ON DELETE CASCADE'));
+  static const VerificationMeta _cursorTypeMeta =
+      const VerificationMeta('cursorType');
+  @override
+  late final GeneratedColumnWithTypeConverter<MessageSyncCursorTypeEnum, String>
+      cursorType = GeneratedColumn<String>('cursor_type', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<MessageSyncCursorTypeEnum>(
+              $ChatMessageSyncCursorTableTable.$convertercursorType);
+  static const VerificationMeta _timestampUsecMeta =
+      const VerificationMeta('timestampUsec');
+  @override
+  late final GeneratedColumn<int> timestampUsec = GeneratedColumn<int>(
+      'timestamp_usec', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [chatId, cursorType, timestampUsec];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'chat_message_sync_cursors';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<ChatMessageSyncCursorData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('chat_id')) {
+      context.handle(_chatIdMeta,
+          chatId.isAcceptableOrUnknown(data['chat_id']!, _chatIdMeta));
+    } else if (isInserting) {
+      context.missing(_chatIdMeta);
+    }
+    context.handle(_cursorTypeMeta, const VerificationResult.success());
+    if (data.containsKey('timestamp_usec')) {
+      context.handle(
+          _timestampUsecMeta,
+          timestampUsec.isAcceptableOrUnknown(
+              data['timestamp_usec']!, _timestampUsecMeta));
+    } else if (isInserting) {
+      context.missing(_timestampUsecMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {chatId, cursorType};
+  @override
+  ChatMessageSyncCursorData map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ChatMessageSyncCursorData(
+      chatId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}chat_id'])!,
+      cursorType: $ChatMessageSyncCursorTableTable.$convertercursorType.fromSql(
+          attachedDatabase.typeMapping.read(
+              DriftSqlType.string, data['${effectivePrefix}cursor_type'])!),
+      timestampUsec: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}timestamp_usec'])!,
+    );
+  }
+
+  @override
+  $ChatMessageSyncCursorTableTable createAlias(String alias) {
+    return $ChatMessageSyncCursorTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<MessageSyncCursorTypeEnum, String, String>
+      $convertercursorType = const EnumNameConverter<MessageSyncCursorTypeEnum>(
+          MessageSyncCursorTypeEnum.values);
+}
+
+class ChatMessageSyncCursorData extends DataClass
+    implements Insertable<ChatMessageSyncCursorData> {
+  final int chatId;
+  final MessageSyncCursorTypeEnum cursorType;
+  final int timestampUsec;
+  const ChatMessageSyncCursorData(
+      {required this.chatId,
+      required this.cursorType,
+      required this.timestampUsec});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['chat_id'] = Variable<int>(chatId);
+    {
+      map['cursor_type'] = Variable<String>($ChatMessageSyncCursorTableTable
+          .$convertercursorType
+          .toSql(cursorType));
+    }
+    map['timestamp_usec'] = Variable<int>(timestampUsec);
+    return map;
+  }
+
+  ChatMessageSyncCursorDataCompanion toCompanion(bool nullToAbsent) {
+    return ChatMessageSyncCursorDataCompanion(
+      chatId: Value(chatId),
+      cursorType: Value(cursorType),
+      timestampUsec: Value(timestampUsec),
+    );
+  }
+
+  factory ChatMessageSyncCursorData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ChatMessageSyncCursorData(
+      chatId: serializer.fromJson<int>(json['chatId']),
+      cursorType: $ChatMessageSyncCursorTableTable.$convertercursorType
+          .fromJson(serializer.fromJson<String>(json['cursorType'])),
+      timestampUsec: serializer.fromJson<int>(json['timestampUsec']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'chatId': serializer.toJson<int>(chatId),
+      'cursorType': serializer.toJson<String>($ChatMessageSyncCursorTableTable
+          .$convertercursorType
+          .toJson(cursorType)),
+      'timestampUsec': serializer.toJson<int>(timestampUsec),
+    };
+  }
+
+  ChatMessageSyncCursorData copyWith(
+          {int? chatId,
+          MessageSyncCursorTypeEnum? cursorType,
+          int? timestampUsec}) =>
+      ChatMessageSyncCursorData(
+        chatId: chatId ?? this.chatId,
+        cursorType: cursorType ?? this.cursorType,
+        timestampUsec: timestampUsec ?? this.timestampUsec,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('ChatMessageSyncCursorData(')
+          ..write('chatId: $chatId, ')
+          ..write('cursorType: $cursorType, ')
+          ..write('timestampUsec: $timestampUsec')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(chatId, cursorType, timestampUsec);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ChatMessageSyncCursorData &&
+          other.chatId == this.chatId &&
+          other.cursorType == this.cursorType &&
+          other.timestampUsec == this.timestampUsec);
+}
+
+class ChatMessageSyncCursorDataCompanion
+    extends UpdateCompanion<ChatMessageSyncCursorData> {
+  final Value<int> chatId;
+  final Value<MessageSyncCursorTypeEnum> cursorType;
+  final Value<int> timestampUsec;
+  final Value<int> rowid;
+  const ChatMessageSyncCursorDataCompanion({
+    this.chatId = const Value.absent(),
+    this.cursorType = const Value.absent(),
+    this.timestampUsec = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ChatMessageSyncCursorDataCompanion.insert({
+    required int chatId,
+    required MessageSyncCursorTypeEnum cursorType,
+    required int timestampUsec,
+    this.rowid = const Value.absent(),
+  })  : chatId = Value(chatId),
+        cursorType = Value(cursorType),
+        timestampUsec = Value(timestampUsec);
+  static Insertable<ChatMessageSyncCursorData> custom({
+    Expression<int>? chatId,
+    Expression<String>? cursorType,
+    Expression<int>? timestampUsec,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (chatId != null) 'chat_id': chatId,
+      if (cursorType != null) 'cursor_type': cursorType,
+      if (timestampUsec != null) 'timestamp_usec': timestampUsec,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ChatMessageSyncCursorDataCompanion copyWith(
+      {Value<int>? chatId,
+      Value<MessageSyncCursorTypeEnum>? cursorType,
+      Value<int>? timestampUsec,
+      Value<int>? rowid}) {
+    return ChatMessageSyncCursorDataCompanion(
+      chatId: chatId ?? this.chatId,
+      cursorType: cursorType ?? this.cursorType,
+      timestampUsec: timestampUsec ?? this.timestampUsec,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (chatId.present) {
+      map['chat_id'] = Variable<int>(chatId.value);
+    }
+    if (cursorType.present) {
+      map['cursor_type'] = Variable<String>($ChatMessageSyncCursorTableTable
+          .$convertercursorType
+          .toSql(cursorType.value));
+    }
+    if (timestampUsec.present) {
+      map['timestamp_usec'] = Variable<int>(timestampUsec.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ChatMessageSyncCursorDataCompanion(')
+          ..write('chatId: $chatId, ')
+          ..write('cursorType: $cursorType, ')
+          ..write('timestampUsec: $timestampUsec, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -4278,6 +4646,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $ChatOutboxMessageEditTableTable(this);
   late final $ChatOutboxMessageDeleteTableTable chatOutboxMessageDeleteTable =
       $ChatOutboxMessageDeleteTableTable(this);
+  late final $ChatMessageSyncCursorTableTable chatMessageSyncCursorTable =
+      $ChatMessageSyncCursorTableTable(this);
   late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
   late final ContactPhonesDao contactPhonesDao =
       ContactPhonesDao(this as AppDatabase);
@@ -4301,7 +4671,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         chatMessagesTable,
         chatOutboxMessageTable,
         chatOutboxMessageEditTable,
-        chatOutboxMessageDeleteTable
+        chatOutboxMessageDeleteTable,
+        chatMessageSyncCursorTable
       ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
@@ -4361,6 +4732,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
             result: [
               TableUpdate('chat_outbox_message_deletes',
                   kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('chats',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('chat_message_sync_cursors', kind: UpdateKind.delete),
             ],
           ),
         ],
@@ -5479,6 +5857,25 @@ class $$ChatsTableTableFilterComposer
                     parentComposers)));
     return f(composer);
   }
+
+  ComposableFilter chatMessageSyncCursorTableRefs(
+      ComposableFilter Function(
+              $$ChatMessageSyncCursorTableTableFilterComposer f)
+          f) {
+    final $$ChatMessageSyncCursorTableTableFilterComposer composer =
+        $state.composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $state.db.chatMessageSyncCursorTable,
+            getReferencedColumn: (t) => t.chatId,
+            builder: (joinBuilder, parentComposers) =>
+                $$ChatMessageSyncCursorTableTableFilterComposer(ComposerState(
+                    $state.db,
+                    $state.db.chatMessageSyncCursorTable,
+                    joinBuilder,
+                    parentComposers)));
+    return f(composer);
+  }
 }
 
 class $$ChatsTableTableOrderingComposer
@@ -6089,6 +6486,7 @@ typedef $$ChatOutboxMessageTableTableInsertCompanionBuilder
   Value<bool> viaSms,
   Value<String?> smsNumber,
   required String content,
+  Value<int> sendAttempts,
   Value<int> rowid,
 });
 typedef $$ChatOutboxMessageTableTableUpdateCompanionBuilder
@@ -6102,6 +6500,7 @@ typedef $$ChatOutboxMessageTableTableUpdateCompanionBuilder
   Value<bool> viaSms,
   Value<String?> smsNumber,
   Value<String> content,
+  Value<int> sendAttempts,
   Value<int> rowid,
 });
 
@@ -6135,6 +6534,7 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
             Value<bool> viaSms = const Value.absent(),
             Value<String?> smsNumber = const Value.absent(),
             Value<String> content = const Value.absent(),
+            Value<int> sendAttempts = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               ChatOutboxMessageDataCompanion(
@@ -6147,6 +6547,7 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
             viaSms: viaSms,
             smsNumber: smsNumber,
             content: content,
+            sendAttempts: sendAttempts,
             rowid: rowid,
           ),
           getInsertCompanionBuilder: ({
@@ -6159,6 +6560,7 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
             Value<bool> viaSms = const Value.absent(),
             Value<String?> smsNumber = const Value.absent(),
             required String content,
+            Value<int> sendAttempts = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               ChatOutboxMessageDataCompanion.insert(
@@ -6171,6 +6573,7 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
             viaSms: viaSms,
             smsNumber: smsNumber,
             content: content,
+            sendAttempts: sendAttempts,
             rowid: rowid,
           ),
         ));
@@ -6232,6 +6635,11 @@ class $$ChatOutboxMessageTableTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
+  ColumnFilters<int> get sendAttempts => $state.composableBuilder(
+      column: $state.table.sendAttempts,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
   $$ChatsTableTableFilterComposer get chatId {
     final $$ChatsTableTableFilterComposer composer = $state.composerBuilder(
         composer: this,
@@ -6288,6 +6696,11 @@ class $$ChatOutboxMessageTableTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
+  ColumnOrderings<int> get sendAttempts => $state.composableBuilder(
+      column: $state.table.sendAttempts,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
   $$ChatsTableTableOrderingComposer get chatId {
     final $$ChatsTableTableOrderingComposer composer = $state.composerBuilder(
         composer: this,
@@ -6307,6 +6720,7 @@ typedef $$ChatOutboxMessageEditTableTableInsertCompanionBuilder
   required String idKey,
   required int chatId,
   required String newContent,
+  Value<int> sendAttempts,
 });
 typedef $$ChatOutboxMessageEditTableTableUpdateCompanionBuilder
     = ChatOutboxMessageEditDataCompanion Function({
@@ -6314,6 +6728,7 @@ typedef $$ChatOutboxMessageEditTableTableUpdateCompanionBuilder
   Value<String> idKey,
   Value<int> chatId,
   Value<String> newContent,
+  Value<int> sendAttempts,
 });
 
 class $$ChatOutboxMessageEditTableTableTableManager extends RootTableManager<
@@ -6341,24 +6756,28 @@ class $$ChatOutboxMessageEditTableTableTableManager extends RootTableManager<
             Value<String> idKey = const Value.absent(),
             Value<int> chatId = const Value.absent(),
             Value<String> newContent = const Value.absent(),
+            Value<int> sendAttempts = const Value.absent(),
           }) =>
               ChatOutboxMessageEditDataCompanion(
             id: id,
             idKey: idKey,
             chatId: chatId,
             newContent: newContent,
+            sendAttempts: sendAttempts,
           ),
           getInsertCompanionBuilder: ({
             Value<int> id = const Value.absent(),
             required String idKey,
             required int chatId,
             required String newContent,
+            Value<int> sendAttempts = const Value.absent(),
           }) =>
               ChatOutboxMessageEditDataCompanion.insert(
             id: id,
             idKey: idKey,
             chatId: chatId,
             newContent: newContent,
+            sendAttempts: sendAttempts,
           ),
         ));
 }
@@ -6394,6 +6813,11 @@ class $$ChatOutboxMessageEditTableTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
+  ColumnFilters<int> get sendAttempts => $state.composableBuilder(
+      column: $state.table.sendAttempts,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
   $$ChatsTableTableFilterComposer get chatId {
     final $$ChatsTableTableFilterComposer composer = $state.composerBuilder(
         composer: this,
@@ -6425,6 +6849,11 @@ class $$ChatOutboxMessageEditTableTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
+  ColumnOrderings<int> get sendAttempts => $state.composableBuilder(
+      column: $state.table.sendAttempts,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
   $$ChatsTableTableOrderingComposer get chatId {
     final $$ChatsTableTableOrderingComposer composer = $state.composerBuilder(
         composer: this,
@@ -6443,12 +6872,14 @@ typedef $$ChatOutboxMessageDeleteTableTableInsertCompanionBuilder
   Value<int> id,
   required String idKey,
   required int chatId,
+  Value<int> sendAttempts,
 });
 typedef $$ChatOutboxMessageDeleteTableTableUpdateCompanionBuilder
     = ChatOutboxMessageDeleteDataCompanion Function({
   Value<int> id,
   Value<String> idKey,
   Value<int> chatId,
+  Value<int> sendAttempts,
 });
 
 class $$ChatOutboxMessageDeleteTableTableTableManager extends RootTableManager<
@@ -6475,21 +6906,25 @@ class $$ChatOutboxMessageDeleteTableTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<String> idKey = const Value.absent(),
             Value<int> chatId = const Value.absent(),
+            Value<int> sendAttempts = const Value.absent(),
           }) =>
               ChatOutboxMessageDeleteDataCompanion(
             id: id,
             idKey: idKey,
             chatId: chatId,
+            sendAttempts: sendAttempts,
           ),
           getInsertCompanionBuilder: ({
             Value<int> id = const Value.absent(),
             required String idKey,
             required int chatId,
+            Value<int> sendAttempts = const Value.absent(),
           }) =>
               ChatOutboxMessageDeleteDataCompanion.insert(
             id: id,
             idKey: idKey,
             chatId: chatId,
+            sendAttempts: sendAttempts,
           ),
         ));
 }
@@ -6520,6 +6955,11 @@ class $$ChatOutboxMessageDeleteTableTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
+  ColumnFilters<int> get sendAttempts => $state.composableBuilder(
+      column: $state.table.sendAttempts,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
   $$ChatsTableTableFilterComposer get chatId {
     final $$ChatsTableTableFilterComposer composer = $state.composerBuilder(
         composer: this,
@@ -6544,6 +6984,141 @@ class $$ChatOutboxMessageDeleteTableTableOrderingComposer
 
   ColumnOrderings<String> get idKey => $state.composableBuilder(
       column: $state.table.idKey,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get sendAttempts => $state.composableBuilder(
+      column: $state.table.sendAttempts,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  $$ChatsTableTableOrderingComposer get chatId {
+    final $$ChatsTableTableOrderingComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.chatId,
+        referencedTable: $state.db.chatsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) =>
+            $$ChatsTableTableOrderingComposer(ComposerState($state.db,
+                $state.db.chatsTable, joinBuilder, parentComposers)));
+    return composer;
+  }
+}
+
+typedef $$ChatMessageSyncCursorTableTableInsertCompanionBuilder
+    = ChatMessageSyncCursorDataCompanion Function({
+  required int chatId,
+  required MessageSyncCursorTypeEnum cursorType,
+  required int timestampUsec,
+  Value<int> rowid,
+});
+typedef $$ChatMessageSyncCursorTableTableUpdateCompanionBuilder
+    = ChatMessageSyncCursorDataCompanion Function({
+  Value<int> chatId,
+  Value<MessageSyncCursorTypeEnum> cursorType,
+  Value<int> timestampUsec,
+  Value<int> rowid,
+});
+
+class $$ChatMessageSyncCursorTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ChatMessageSyncCursorTableTable,
+    ChatMessageSyncCursorData,
+    $$ChatMessageSyncCursorTableTableFilterComposer,
+    $$ChatMessageSyncCursorTableTableOrderingComposer,
+    $$ChatMessageSyncCursorTableTableProcessedTableManager,
+    $$ChatMessageSyncCursorTableTableInsertCompanionBuilder,
+    $$ChatMessageSyncCursorTableTableUpdateCompanionBuilder> {
+  $$ChatMessageSyncCursorTableTableTableManager(
+      _$AppDatabase db, $ChatMessageSyncCursorTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$ChatMessageSyncCursorTableTableFilterComposer(
+              ComposerState(db, table)),
+          orderingComposer: $$ChatMessageSyncCursorTableTableOrderingComposer(
+              ComposerState(db, table)),
+          getChildManagerBuilder: (p) =>
+              $$ChatMessageSyncCursorTableTableProcessedTableManager(p),
+          getUpdateCompanionBuilder: ({
+            Value<int> chatId = const Value.absent(),
+            Value<MessageSyncCursorTypeEnum> cursorType = const Value.absent(),
+            Value<int> timestampUsec = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ChatMessageSyncCursorDataCompanion(
+            chatId: chatId,
+            cursorType: cursorType,
+            timestampUsec: timestampUsec,
+            rowid: rowid,
+          ),
+          getInsertCompanionBuilder: ({
+            required int chatId,
+            required MessageSyncCursorTypeEnum cursorType,
+            required int timestampUsec,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ChatMessageSyncCursorDataCompanion.insert(
+            chatId: chatId,
+            cursorType: cursorType,
+            timestampUsec: timestampUsec,
+            rowid: rowid,
+          ),
+        ));
+}
+
+class $$ChatMessageSyncCursorTableTableProcessedTableManager
+    extends ProcessedTableManager<
+        _$AppDatabase,
+        $ChatMessageSyncCursorTableTable,
+        ChatMessageSyncCursorData,
+        $$ChatMessageSyncCursorTableTableFilterComposer,
+        $$ChatMessageSyncCursorTableTableOrderingComposer,
+        $$ChatMessageSyncCursorTableTableProcessedTableManager,
+        $$ChatMessageSyncCursorTableTableInsertCompanionBuilder,
+        $$ChatMessageSyncCursorTableTableUpdateCompanionBuilder> {
+  $$ChatMessageSyncCursorTableTableProcessedTableManager(super.$state);
+}
+
+class $$ChatMessageSyncCursorTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $ChatMessageSyncCursorTableTable> {
+  $$ChatMessageSyncCursorTableTableFilterComposer(super.$state);
+  ColumnWithTypeConverterFilters<MessageSyncCursorTypeEnum,
+          MessageSyncCursorTypeEnum, String>
+      get cursorType => $state.composableBuilder(
+          column: $state.table.cursorType,
+          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
+              column,
+              joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get timestampUsec => $state.composableBuilder(
+      column: $state.table.timestampUsec,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  $$ChatsTableTableFilterComposer get chatId {
+    final $$ChatsTableTableFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.chatId,
+        referencedTable: $state.db.chatsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) =>
+            $$ChatsTableTableFilterComposer(ComposerState($state.db,
+                $state.db.chatsTable, joinBuilder, parentComposers)));
+    return composer;
+  }
+}
+
+class $$ChatMessageSyncCursorTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $ChatMessageSyncCursorTableTable> {
+  $$ChatMessageSyncCursorTableTableOrderingComposer(super.$state);
+  ColumnOrderings<String> get cursorType => $state.composableBuilder(
+      column: $state.table.cursorType,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get timestampUsec => $state.composableBuilder(
+      column: $state.table.timestampUsec,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
@@ -6590,6 +7165,10 @@ class _$AppDatabaseManager {
       get chatOutboxMessageDeleteTable =>
           $$ChatOutboxMessageDeleteTableTableTableManager(
               _db, _db.chatOutboxMessageDeleteTable);
+  $$ChatMessageSyncCursorTableTableTableManager
+      get chatMessageSyncCursorTable =>
+          $$ChatMessageSyncCursorTableTableTableManager(
+              _db, _db.chatMessageSyncCursorTable);
 }
 
 mixin _$ContactsDaoMixin on DatabaseAccessor<AppDatabase> {
@@ -6632,4 +7211,6 @@ mixin _$ChatsDaoMixin on DatabaseAccessor<AppDatabase> {
       attachedDatabase.chatOutboxMessageEditTable;
   $ChatOutboxMessageDeleteTableTable get chatOutboxMessageDeleteTable =>
       attachedDatabase.chatOutboxMessageDeleteTable;
+  $ChatMessageSyncCursorTableTable get chatMessageSyncCursorTable =>
+      attachedDatabase.chatMessageSyncCursorTable;
 }

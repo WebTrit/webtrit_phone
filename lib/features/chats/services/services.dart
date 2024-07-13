@@ -1,2 +1,2 @@
-export 'chat_sync_service.dart';
-export 'outbox_queue_service.dart';
+export 'chat_sync_worker.dart';
+export 'outbox_queue_worker.dart';

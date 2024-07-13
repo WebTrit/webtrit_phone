@@ -38,12 +38,12 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
   final ChatsRepository _chatsRepository;
   final ChatsOutboxRepository _outboxRepository;
   final AppPreferences _prefs;
-  ChatsSyncService? _chatsSyncService;
-  OutboxQueueService? _outboxQueueService;
+  ChatsSyncWorker? _chatsSyncWorker;
+  OutboxQueueWorker? _outboxQueueWorker;
 
   void _connect(Connect event, Emitter<ChatsState> emit) async {
     emit(state.copyWith(status: ChatsStatus.connecting));
-    // _repo.wipeData();
+    // _chatsRepository.wipeData();
     _client.connect();
   }
 
@@ -71,10 +71,9 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
         final userChannel = _client.addChannel(topic: 'chat:user:$userId');
         await userChannel.join().future;
 
-        // Init sync service
-        _chatsSyncService ??= ChatsSyncService(_client, _chatsRepository)..init();
-
-        _outboxQueueService ??= OutboxQueueService(_client, _chatsRepository, _outboxRepository)..init();
+        // Init workers
+        _chatsSyncWorker ??= ChatsSyncWorker(_client, _chatsRepository)..init();
+        _outboxQueueWorker ??= OutboxQueueWorker(_client, _chatsRepository, _outboxRepository)..init();
       }
       emit(state.copyWith(status: ChatsStatus.connected));
     } on Exception catch (e) {
@@ -93,8 +92,8 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
 
   @override
   Future<void> close() {
-    _chatsSyncService?.dispose();
-    _outboxQueueService?.dispose();
+    _chatsSyncWorker?.dispose();
+    _outboxQueueWorker?.dispose();
     _client.close();
     return super.close();
   }

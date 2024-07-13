@@ -16,6 +16,7 @@ mixin ChatsOutboxDriftMapper {
       viaSms: data.viaSms,
       smsNumber: data.smsNumber,
       content: data.content,
+      sendAttempts: data.sendAttempts,
     );
   }
 
@@ -30,6 +31,7 @@ mixin ChatsOutboxDriftMapper {
       viaSms: entry.viaSms,
       smsNumber: entry.smsNumber,
       content: entry.content,
+      sendAttempts: entry.sendAttempts,
     );
   }
 
@@ -39,6 +41,7 @@ mixin ChatsOutboxDriftMapper {
       idKey: data.idKey,
       chatId: data.chatId,
       newContent: data.newContent,
+      sendAttempts: data.sendAttempts,
     );
   }
 
@@ -48,6 +51,7 @@ mixin ChatsOutboxDriftMapper {
       idKey: entry.idKey,
       chatId: entry.chatId,
       newContent: entry.newContent,
+      sendAttempts: entry.sendAttempts,
     );
   }
 
@@ -56,6 +60,7 @@ mixin ChatsOutboxDriftMapper {
       id: data.id,
       idKey: data.idKey,
       chatId: data.chatId,
+      sendAttempts: data.sendAttempts,
     );
   }
 
@@ -65,6 +70,7 @@ mixin ChatsOutboxDriftMapper {
       id: entry.id,
       idKey: entry.idKey,
       chatId: entry.chatId,
+      sendAttempts: entry.sendAttempts,
     );
   }
 }

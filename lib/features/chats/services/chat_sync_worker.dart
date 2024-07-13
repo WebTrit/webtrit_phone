@@ -8,19 +8,20 @@ import 'package:webtrit_phone/features/chats/chats.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-final _logger = Logger('ChatsSyncService');
+final _logger = Logger('ChatsSyncWorker');
 
-class ChatsSyncService {
-  ChatsSyncService(this.client, this.chatsRepository) {
+class ChatsSyncWorker {
+  ChatsSyncWorker(this.client, this.chatsRepository, {this.pageSize = 100}) {
     // TODO: Remove this before pr
-    _logger.onRecord.listen((record) {
-      // ignore: avoid_print
-      print('\x1B[33mcht: ${record.message}\x1B[0m');
-    });
+    // _logger.onRecord.listen((record) {
+    //   // ignore: avoid_print
+    //   print('\x1B[33mcht: ${record.message}\x1B[0m');
+    // });
   }
 
   final PhoenixSocket client;
   final ChatsRepository chatsRepository;
+  final int pageSize;
 
   StreamSubscription? _chatlistSyncSub;
   Map<int, StreamSubscription> chatRoomSyncSubs = {};
@@ -136,42 +137,66 @@ class ChatsSyncService {
         yield chat;
 
         // Get last update time for sync messages from
-        DateTime? lastUpdate = await chatsRepository.lastChatMessageUpdatedAt(chatId);
+        // DateTime? lastUpdate = await chatsRepository.lastChatMessageUpdatedAt(chatId);
+        final newestCursor = await chatsRepository.getChatMessageSyncCursor(chatId, MessageSyncCursorType.newest);
 
         // If no last update, fetch history of last 100 messages for initial state
-        if (lastUpdate == null) {
-          final payload = {'limit': 100};
+        if (newestCursor == null) {
+          final payload = {'limit': pageSize};
           final req = await channel.push('message:history', payload).future;
           final messages = (req.response['data'] as List).map((e) => ChatMessage.fromMap(e)).toList();
 
-          // Process fetched messages
-          for (final msg in messages) {
-            await chatsRepository.insertMessage(msg);
-            yield msg;
+          if (messages.isNotEmpty) {
+            // Process fetched messages
+            for (final msg in messages.reversed) {
+              await chatsRepository.upsertMessage(msg);
+              yield msg;
+            }
+
+            // set initial cursors
+            // Pay attention, the history is fetched in reverse order
+            await chatsRepository.upsertChatMessageSyncCursor(ChatMessageSyncCursor(
+              chatId: chatId,
+              cursorType: MessageSyncCursorType.oldest,
+              time: messages.last.updatedAt,
+            ));
+            await chatsRepository.upsertChatMessageSyncCursor(ChatMessageSyncCursor(
+              chatId: chatId,
+              cursorType: MessageSyncCursorType.newest,
+              time: messages.first.updatedAt,
+            ));
           }
         }
 
         // Fetch message updates since last update using pagination
         // eg. new messages, edited, deleted, viewed, etc.
-        if (lastUpdate != null) {
+        if (newestCursor != null) {
+          var pagingCursor = newestCursor;
           while (true) {
-            final payload = {'updated_after': lastUpdate!.toUtc().toIso8601String(), 'limit': 100};
+            final payload = {'updated_after': pagingCursor.time.toUtc().toIso8601String(), 'limit': pageSize};
             final req = await channel.push('message:updates', payload).future;
             final messages = (req.response['data'] as List).map((e) => ChatMessage.fromMap(e)).toList();
 
             // If no more messages, break the pagination loop
-            if (messages.isEmpty) {
-              break;
-            }
+            if (messages.isNotEmpty) {
+              // Process fetched messages
+              for (final msg in messages) {
+                await chatsRepository.upsertMessage(msg);
+                yield msg;
+              }
 
-            // Process fetched messages
-            for (final msg in messages) {
-              await chatsRepository.upsertMessageUpdate(msg);
-              yield msg;
-            }
+              // Update local newest cursor to continue pagination
+              pagingCursor = ChatMessageSyncCursor(
+                chatId: chatId,
+                cursorType: MessageSyncCursorType.newest,
+                time: messages.last.updatedAt,
+              );
 
-            // Update last update time
-            lastUpdate = messages.last.updatedAt;
+              // Set the newest cursor
+              await chatsRepository.upsertChatMessageSyncCursor(pagingCursor);
+            }
+            // Break pagination loop if results less than limit
+            if (messages.length < pageSize) break;
           }
         }
 
@@ -187,7 +212,7 @@ class ChatsSyncService {
 
           if (e.event.value == 'message_update') {
             final chatMsg = ChatMessage.fromMap(e.payload as Map<String, dynamic>);
-            await chatsRepository.upsertMessageUpdate(chatMsg);
+            await chatsRepository.upsertMessage(chatMsg);
             yield chatMsg;
           }
 

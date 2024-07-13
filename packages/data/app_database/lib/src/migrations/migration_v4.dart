@@ -16,6 +16,7 @@ class MigrationV4 extends Migration {
     final chatOutboxMessagesTable = v4.ChatOutboxMessages(db);
     final chatOutboxMessageEditsTable = v4.ChatOutboxMessageEdits(db);
     final chatOutboxMessageDeletesTable = v4.ChatOutboxMessageDeletes(db);
+    final chatMessageSyncCursorTable = v4.ChatMessageSyncCursors(db);
 
     final newSchemaEntities = <DatabaseSchemaEntity>[
       chatsTable,
@@ -24,12 +25,14 @@ class MigrationV4 extends Migration {
       chatOutboxMessagesTable,
       chatOutboxMessageEditsTable,
       chatOutboxMessageDeletesTable,
+      chatMessageSyncCursorTable,
       ...db.generateTableCompanionEntities(chatsTable),
       ...db.generateTableCompanionEntities(chatMembersTable),
       ...db.generateTableCompanionEntities(chatMessagesTable),
       ...db.generateTableCompanionEntities(chatOutboxMessagesTable),
       ...db.generateTableCompanionEntities(chatOutboxMessageEditsTable),
       ...db.generateTableCompanionEntities(chatOutboxMessageDeletesTable),
+      ...db.generateTableCompanionEntities(chatMessageSyncCursorTable),
     ];
     for (final entity in newSchemaEntities) {
       await m.create(entity);

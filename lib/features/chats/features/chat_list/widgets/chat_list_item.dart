@@ -34,7 +34,7 @@ class _ChatListItemState extends State<ChatListItem> {
   }
 
   init() async {
-    final lastMessages = await chatsRepository.getLastMessages(widget.chat.id, limit: 1);
+    final lastMessages = await chatsRepository.getMessageHistory(widget.chat.id, limit: 1);
     if (!mounted) return;
     if (lastMessages.isNotEmpty) setState(() => lastMessage = lastMessages.first);
 

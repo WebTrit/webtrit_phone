@@ -25,9 +25,9 @@ class ChatsOutboxRepository with ChatsOutboxDriftMapper {
     });
   }
 
-  Future<int> insertOutboxMessage(ChatOutboxMessageEntry entry) {
+  Future<int> upsertOutboxMessage(ChatOutboxMessageEntry entry) {
     final entryData = chatOutboxMessageDataFromChatOutboxMessageEntry(entry);
-    return _chatsDao.insertChatOutboxMessage(entryData);
+    return _chatsDao.upsertChatOutboxMessage(entryData);
   }
 
   Future<int> deleteOutboxMessage(String idKey) {
@@ -45,9 +45,9 @@ class ChatsOutboxRepository with ChatsOutboxDriftMapper {
     });
   }
 
-  Future<int> insertOutboxMessageEdit(ChatOutboxMessageEditEntry entry) {
+  Future<int> upsertOutboxMessageEdit(ChatOutboxMessageEditEntry entry) {
     final entryData = chatOutboxMessageEditDataFromChatOutboxMessageEditEntry(entry);
-    return _chatsDao.insertChatOutboxMessageEdit(entryData);
+    return _chatsDao.upsertChatOutboxMessageEdit(entryData);
   }
 
   Future<int> deleteOutboxMessageEdit(int id) {
@@ -65,9 +65,9 @@ class ChatsOutboxRepository with ChatsOutboxDriftMapper {
     });
   }
 
-  Future<int> insertOutboxMessageDelete(ChatOutboxMessageDeleteEntry entry) {
+  Future<int> upsertOutboxMessageDelete(ChatOutboxMessageDeleteEntry entry) {
     final entryData = chatOutboxMessageDeleteDataFromChatOutboxMessageDeleteEntry(entry);
-    return _chatsDao.insertChatOutboxMessageDelete(entryData);
+    return _chatsDao.upsertChatOutboxMessageDelete(entryData);
   }
 
   Future<int> deleteOutboxMessageDelete(int id) {

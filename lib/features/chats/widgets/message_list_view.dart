@@ -132,6 +132,7 @@ class _MessageListViewState extends State<MessageListView> {
     }
 
     messages = msgMap.values.toList();
+    messages.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
   }
 
   void handleSend(types.PartialText message) {

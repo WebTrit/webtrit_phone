@@ -53,7 +53,7 @@ class GroupCubit extends Cubit<GroupState> {
       chatId: _chatId,
       content: content,
     );
-    _outboxRepository.insertOutboxMessage(outboxEntry);
+    _outboxRepository.upsertOutboxMessage(outboxEntry);
   }
 
   Future sendReply(String content, ChatMessage refMessage) async {
@@ -63,7 +63,7 @@ class GroupCubit extends Cubit<GroupState> {
       replyToId: refMessage.id,
       content: content,
     );
-    _outboxRepository.insertOutboxMessage(outboxEntry);
+    _outboxRepository.upsertOutboxMessage(outboxEntry);
   }
 
   Future sendForward(ChatMessage refMessage) async {
@@ -74,7 +74,7 @@ class GroupCubit extends Cubit<GroupState> {
       authorId: refMessage.senderId,
       content: refMessage.content,
     );
-    _outboxRepository.insertOutboxMessage(outboxEntry);
+    _outboxRepository.upsertOutboxMessage(outboxEntry);
   }
 
   Future sendEdit(String content, ChatMessage refMessage) async {
@@ -84,7 +84,7 @@ class GroupCubit extends Cubit<GroupState> {
       chatId: _chatId,
       newContent: content,
     );
-    _outboxRepository.insertOutboxMessageEdit(outboxEntry);
+    _outboxRepository.upsertOutboxMessageEdit(outboxEntry);
   }
 
   Future deleteMessage(ChatMessage message) async {
@@ -93,7 +93,7 @@ class GroupCubit extends Cubit<GroupState> {
       idKey: message.idKey,
       chatId: _chatId,
     );
-    _outboxRepository.insertOutboxMessageDelete(outboxEntry);
+    _outboxRepository.upsertOutboxMessageDelete(outboxEntry);
   }
 
   Future fetchHistory() async {
@@ -110,9 +110,12 @@ class GroupCubit extends Cubit<GroupState> {
     _logger.info('fetchHistory: $_chatId, ${topMessage.createdAt}');
 
     try {
-      // Fetch history from local storage
       List<ChatMessage> messages = [];
-      messages = await _chatsRepository.getMessageHistory(_chatId, topMessage.createdAt, limit: 100);
+
+      // Fetch history from local storage
+      // Exclude reply,forward cache and other messages that are not in sync
+      final oldestCursor = await _chatsRepository.getChatMessageSyncCursor(_chatId, MessageSyncCursorType.oldest);
+      messages = await _chatsRepository.getMessageHistory(_chatId, from: topMessage.createdAt, to: oldestCursor?.time);
       _logger.info('fetchHistory: local messages ${messages.length}');
 
       // If no messages found in local storage, fetch from the remote server
@@ -121,9 +124,18 @@ class GroupCubit extends Cubit<GroupState> {
         final payload = {'created_before': topMessage.createdAt.toUtc().toIso8601String(), 'limit': 100};
         final req = await channel.push('message:history', payload).future;
         messages = (req.response['data'] as List).map((e) => ChatMessage.fromMap(e)).toList();
-        await _chatsRepository.insertHistoryPage(messages);
         _logger.info('fetchHistory: remote messages ${messages.length}');
+        if (messages.isNotEmpty) {
+          await _chatsRepository.insertHistoryPage(messages);
+          await _chatsRepository.upsertChatMessageSyncCursor(ChatMessageSyncCursor(
+            chatId: _chatId,
+            cursorType: MessageSyncCursorType.oldest,
+            time: messages.last.updatedAt,
+          ));
+        }
       }
+
+      if (isClosed) return;
 
       final updatedMessages = [...state.messages, ...messages];
       if (messages.isNotEmpty) {
@@ -143,7 +155,9 @@ class GroupCubit extends Cubit<GroupState> {
     try {
       final chat = await _chatsRepository.getChat(_chatId);
       _logger.info('init chat: $chat');
-      final messages = await _chatsRepository.getLastMessages(_chatId, limit: 100);
+
+      final oldestCursor = await _chatsRepository.getChatMessageSyncCursor(_chatId, MessageSyncCursorType.oldest);
+      final messages = await _chatsRepository.getMessageHistory(_chatId, to: oldestCursor?.time);
       _logger.info('init msg\'s: ${messages.length}');
 
       if (isClosed) return;
