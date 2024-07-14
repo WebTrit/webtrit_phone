@@ -25,11 +25,21 @@ class OutboxQueueWorker {
   bool _disposed = false;
 
   init() {
-    _logger.info('Initializing outbox queue service');
+    _logger.info('Initialising...');
     Future.doWhile(() async {
       for (final entry in await _outboxRepository.getChatOutboxMessages()) {
-        if (entry.chatId != null) await _processNewMessage(entry.chatId!, entry);
-        if (entry.participantId != null) await _processNewDialogMessage(entry.participantId!, entry);
+        if (entry.chatId != null) {
+          await _processNewMessage(entry.chatId!, entry);
+        } else if (entry.participantId != null) {
+          // Check if dialog with participant already created, if so use it
+          // Can happen when user wrore many messages to the same new participant being offline
+          final maybeDialogId = await _chatsRepository.findDialogId(entry.participantId!);
+          if (maybeDialogId != null) {
+            await _processNewMessage(maybeDialogId, entry);
+          } else {
+            await _processNewDialogMessage(entry.participantId!, entry);
+          }
+        }
       }
 
       for (final entry in await _outboxRepository.getChatOutboxMessageEdits()) {
@@ -47,6 +57,7 @@ class OutboxQueueWorker {
   }
 
   dispose() {
+    _logger.info('Disposing...');
     _disposed = true;
   }
 
