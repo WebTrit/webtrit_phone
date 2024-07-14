@@ -114,10 +114,7 @@ class _MessageListViewState extends State<MessageListView> {
       };
 
       final textMessage = types.TextMessage(
-        author: types.User(
-          id: msg.senderId,
-          firstName: msg.senderId,
-        ),
+        author: types.User(id: msg.senderId, firstName: msg.senderId),
         id: msg.idKey,
         remoteId: msg.id.toString(),
         text: text,

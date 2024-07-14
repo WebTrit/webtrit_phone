@@ -5,7 +5,7 @@ import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:quiver/collection.dart';
 
-import 'package:webtrit_phone/features/call/widgets/popup_menu.dart';
+import 'package:webtrit_phone/features/chats/widgets/name_builder.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -82,8 +82,12 @@ class _MessageViewState extends State<MessageView> {
     final isDeleted = widget.message.metadata != null && widget.message.metadata!['deleted'] == true;
     final isSended = realMessage?.id != null;
     final isMine = realMessage == null || realMessage.senderId == widget.userId;
-    final isForwarded = realMessage?.forwardFromId != null && realMessage?.authorId != null;
+    final isForward = realMessage?.forwardFromId != null && realMessage?.authorId != null;
     final isReply = realMessage?.replyToId != null;
+
+    final senderId = realMessage?.senderId ?? widget.userId;
+
+    if (isDeleted) {}
 
     return CallPopupMenuButton(
       items: [
@@ -99,7 +103,7 @@ class _MessageViewState extends State<MessageView> {
             icon: const Icon(Icons.forward),
             onTap: () => widget.handleSetForForward(realMessage!),
           ),
-        if (isMine && isSended && !isForwarded && !isDeleted)
+        if (isMine && isSended && !isForward && !isDeleted)
           CallPopupMenuItem(
             text: 'Edit',
             icon: const Icon(Icons.edit),
@@ -118,27 +122,32 @@ class _MessageViewState extends State<MessageView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (isReply) ...[
-              replySegment(realMessage!),
+              replyQuote(realMessage!),
               const SizedBox(height: 8),
             ],
-            if (isForwarded) ...[
-              forwardSegment(realMessage!),
+            if (isForward) ...[
+              forwardQuote(realMessage!),
               const SizedBox(height: 8),
+              NameBuilder(senderId: senderId, userId: widget.userId),
               const Text('[forwarded]', style: TextStyle(color: Colors.white, fontSize: 12)),
             ],
-            if (!isForwarded)
+            if (!isForward && !isDeleted)
               TextMessage(
                 emojiEnlargementBehavior: EmojiEnlargementBehavior.never,
                 hideBackgroundOnEmojiMessages: false,
                 message: messageWithPreview(widget.message),
-                showName: !isMine,
+                showName: true,
                 usePreviewData: true,
                 onPreviewDataFetched: handlePreviewDataFetched,
                 options: const TextMessageOptions(isTextSelectable: false),
+                nameBuilder: (user) => NameBuilder(senderId: user.id, userId: widget.userId),
               ),
-            if (isEdited) ...[
-              const SizedBox(height: 8),
+            if (isEdited && !isDeleted) ...[
               const Text('[edited]', style: TextStyle(color: Colors.white, fontSize: 12)),
+            ],
+            if (isDeleted) ...[
+              NameBuilder(senderId: senderId, userId: widget.userId),
+              const Text('[deleted]', style: TextStyle(color: Colors.white, fontSize: 12)),
             ],
           ],
         ),
@@ -146,7 +155,7 @@ class _MessageViewState extends State<MessageView> {
     );
   }
 
-  Widget replySegment(ChatMessage realMessage) {
+  Widget replyQuote(ChatMessage realMessage) {
     return FutureBuilder(
         future: fetchMessage(realMessage.replyToId!, realMessage.chatId),
         builder: (context, snapshot) {
@@ -183,12 +192,13 @@ class _MessageViewState extends State<MessageView> {
               usePreviewData: true,
               onPreviewDataFetched: handlePreviewDataFetched,
               options: const TextMessageOptions(isTextSelectable: false),
+              nameBuilder: (user) => NameBuilder(senderId: user.id, userId: widget.userId),
             ),
           );
         });
   }
 
-  Widget forwardSegment(ChatMessage msg) {
+  Widget forwardQuote(ChatMessage msg) {
     final textMessage = types.TextMessage(
       author: types.User(id: msg.authorId!, firstName: msg.authorId),
       id: msg.idKey,
@@ -220,6 +230,7 @@ class _MessageViewState extends State<MessageView> {
         usePreviewData: true,
         onPreviewDataFetched: handlePreviewDataFetched,
         options: const TextMessageOptions(isTextSelectable: false),
+        nameBuilder: (user) => NameBuilder(senderId: user.id, userId: widget.userId),
       ),
     );
   }
