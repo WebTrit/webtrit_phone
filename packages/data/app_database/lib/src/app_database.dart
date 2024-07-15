@@ -44,9 +44,14 @@ class AppDatabase extends _$AppDatabase {
   MigrationStrategy get migration {
     return MigrationStrategy(
       onUpgrade: (m, from, to) async {
-        for (var version = from; version < to; version++) {
-          await migrations[version - 1].execute(this, m);
-        }
+        // disable foreign_keys before migrations
+        await customStatement('PRAGMA foreign_keys = OFF');
+
+        await transaction(() async {
+          for (var version = from; version < to; version++) {
+            await migrations[version - 1].execute(this, m);
+          }
+        });
 
         // Assert that the schema is valid after migrations
         assert(() {
