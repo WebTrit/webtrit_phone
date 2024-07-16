@@ -179,80 +179,92 @@ class _MessageListViewState extends State<MessageListView> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return FlyerChat(
-      messages: messages,
-      onSendPressed: handleSend,
-      user: user,
-      showUserNames: true,
-      showUserAvatars: true,
-      onEndReached: widget.onFetchHistory,
-      isLastPage: widget.historyEndReached,
-      theme: DefaultChatTheme(
-        inputBackgroundColor: Colors.white,
-        inputTextColor: Colors.black,
-        primaryColor: theme.primaryColor,
-        secondaryColor: theme.primaryColorDark,
-        sentMessageBodyTextStyle: const TextStyle(color: Colors.white),
-        receivedMessageBodyTextStyle: const TextStyle(color: Colors.white),
-        inputMargin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        inputPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        messageInsetsVertical: 0,
-        messageInsetsHorizontal: 0,
-        inputContainerDecoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [BoxShadow(color: theme.cardColor, spreadRadius: 4, blurRadius: 8, offset: const Offset(2, 4))],
-        ),
-      ),
-      customBottomWidget: BlocBuilder<MessageForwardCubit, ChatMessage?>(
-        builder: (context, messageForForward) {
-          return Column(
-            children: [
-              if (messageForForward != null)
-                ExchangeBar(
-                  text: messageForForward.content,
-                  icon: Icons.forward,
-                  onCancel: messageForwardCubit.clear,
-                  onConfirm: () {
-                    widget.onSendForward(messageForForward.content, messageForForward);
-                    messageForwardCubit.clear();
-                  },
-                ),
-              if (replyingMessage != null)
-                ExchangeBar(
-                  text: replyingMessage!.content,
-                  icon: Icons.reply,
-                  onCancel: () => setState(() => replyingMessage = null),
-                ),
-              if (editingMessage != null)
-                ExchangeBar(
-                  text: editingMessage!.content,
-                  icon: Icons.edit_note,
-                  onCancel: () {
-                    setState(() => editingMessage = null);
-                    inputController.text = '';
-                    FocusScope.of(context).unfocus();
-                  },
-                ),
-              if (messageForForward == null)
-                Input(
-                  onSendPressed: handleSend,
-                  options: InputOptions(textEditingController: inputController),
-                ),
-            ],
-          );
-        },
-      ),
-      textMessageBuilder: (message, {required messageWidth, required showName}) => MessageView(
-        userId: widget.userId,
-        message: message,
-        messageWidth: messageWidth,
-        showName: showName,
-        handleSetForReply: handleSetForReply,
-        handleSetForForward: handleSetForForward,
-        handleSetForEdit: handleSetForEdit,
-        handleDelete: handleDelete,
-      ),
+    return BlocBuilder<ChatTypingCubit, TypingState>(
+      builder: (context, typingState) {
+        final typingUsers = typingState.map((userId) => types.User(id: userId, firstName: userId)).toList();
+
+        return FlyerChat(
+          messages: messages,
+          onSendPressed: handleSend,
+          user: user,
+          showUserNames: true,
+          showUserAvatars: true,
+          onEndReached: widget.onFetchHistory,
+          isLastPage: widget.historyEndReached,
+          typingIndicatorOptions: TypingIndicatorOptions(typingUsers: typingUsers),
+          theme: DefaultChatTheme(
+            inputBackgroundColor: Colors.white,
+            inputTextColor: Colors.black,
+            primaryColor: theme.primaryColor,
+            secondaryColor: theme.primaryColorDark,
+            sentMessageBodyTextStyle: const TextStyle(color: Colors.white),
+            receivedMessageBodyTextStyle: const TextStyle(color: Colors.white),
+            inputMargin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            inputPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            messageInsetsVertical: 0,
+            messageInsetsHorizontal: 0,
+            inputContainerDecoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(color: theme.cardColor, spreadRadius: 4, blurRadius: 8, offset: const Offset(2, 4))
+              ],
+            ),
+          ),
+          customBottomWidget: BlocBuilder<MessageForwardCubit, ChatMessage?>(
+            builder: (context, messageForForward) {
+              return Column(
+                children: [
+                  if (messageForForward != null)
+                    ExchangeBar(
+                      text: messageForForward.content,
+                      icon: Icons.forward,
+                      onCancel: messageForwardCubit.clear,
+                      onConfirm: () {
+                        widget.onSendForward(messageForForward.content, messageForForward);
+                        messageForwardCubit.clear();
+                      },
+                    ),
+                  if (replyingMessage != null)
+                    ExchangeBar(
+                      text: replyingMessage!.content,
+                      icon: Icons.reply,
+                      onCancel: () => setState(() => replyingMessage = null),
+                    ),
+                  if (editingMessage != null)
+                    ExchangeBar(
+                      text: editingMessage!.content,
+                      icon: Icons.edit_note,
+                      onCancel: () {
+                        setState(() => editingMessage = null);
+                        inputController.text = '';
+                        FocusScope.of(context).unfocus();
+                      },
+                    ),
+                  if (messageForForward == null)
+                    Input(
+                      onSendPressed: handleSend,
+                      options: InputOptions(
+                        textEditingController: inputController,
+                        onTextChanged: (_) => context.read<ChatTypingCubit>().sendTyping(),
+                      ),
+                    ),
+                ],
+              );
+            },
+          ),
+          textMessageBuilder: (message, {required messageWidth, required showName}) => MessageView(
+            userId: widget.userId,
+            message: message,
+            messageWidth: messageWidth,
+            showName: showName,
+            handleSetForReply: handleSetForReply,
+            handleSetForForward: handleSetForForward,
+            handleSetForEdit: handleSetForEdit,
+            handleDelete: handleDelete,
+          ),
+        );
+      },
     );
   }
 }

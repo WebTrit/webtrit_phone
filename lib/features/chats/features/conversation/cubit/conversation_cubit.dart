@@ -168,7 +168,7 @@ class ConversationCubit extends Cubit<ConversationState> {
       _logger.info('local chat id find result: $_chat');
 
       if (isClosed) return;
-      emit(ConversationState.ready(_participantId));
+      emit(ConversationState.ready(_participantId, chat: _chat));
 
       // If local chat is not found, subscribtion will find the chat when it will created
       // e.g when you send the first message or another user sends to you
@@ -212,12 +212,14 @@ class ConversationCubit extends Cubit<ConversationState> {
 
   void _handleChatUpdate(Chat chat) {
     _logger.info('_handleChatUpdate: $chat');
-    if (_chat == null) {
-      _chat = chat;
-      _initMessages();
-    } else {
-      _chat = chat;
-    }
+    final chatWasntExistBefore = _chat == null;
+
+    _chat = chat;
+    final state = this.state;
+    if (state is CVSReady) emit(state.copyWith(chat: chat));
+
+    // Init messages after chat is created for conversation with the participant
+    if (chatWasntExistBefore) _initMessages();
   }
 
   StreamSubscription _messagesSubFactory(void Function(ChatMessage) onArrive) {

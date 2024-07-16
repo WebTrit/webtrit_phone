@@ -9,8 +9,8 @@ abstract base class ConversationState {
 
   factory ConversationState.init(String participantId) => CVSInit(participantId);
   factory ConversationState.error(String participantId, Object error) => CVSError(participantId, error);
-  factory ConversationState.ready(String participantId, {List<ChatMessage> messages = const []}) {
-    return CVSReady(participantId, messages: messages);
+  factory ConversationState.ready(String participantId, {Chat? chat, List<ChatMessage> messages = const []}) {
+    return CVSReady(participantId, messages: messages, chat: chat);
   }
 }
 
@@ -43,6 +43,7 @@ final class CVSError extends ConversationState with EquatableMixin {
 final class CVSReady extends ConversationState with EquatableMixin {
   const CVSReady(
     this.participantId, {
+    this.chat,
     this.messages = const [],
     this.outboxMessages = const [],
     this.outboxMessageEdits = const [],
@@ -53,6 +54,7 @@ final class CVSReady extends ConversationState with EquatableMixin {
 
   @override
   final String participantId;
+  final Chat? chat;
   final List<ChatMessage> messages;
   final List<ChatOutboxMessageEntry> outboxMessages;
   final List<ChatOutboxMessageEditEntry> outboxMessageEdits;
@@ -64,6 +66,7 @@ final class CVSReady extends ConversationState with EquatableMixin {
   @override
   List<Object> get props => [
         participantId,
+        chat ?? 0,
         messages,
         outboxMessages,
         outboxMessageEdits,
@@ -74,6 +77,7 @@ final class CVSReady extends ConversationState with EquatableMixin {
 
   copyWith({
     String? participantId,
+    Chat? chat,
     List<ChatMessage>? messages,
     List<ChatOutboxMessageEntry>? outboxMessages,
     List<ChatOutboxMessageEditEntry>? outboxMessageEdits,
@@ -83,6 +87,7 @@ final class CVSReady extends ConversationState with EquatableMixin {
   }) {
     return CVSReady(
       participantId ?? this.participantId,
+      chat: chat ?? this.chat,
       messages: messages ?? this.messages,
       outboxMessages: outboxMessages ?? this.outboxMessages,
       outboxMessageEdits: outboxMessageEdits ?? this.outboxMessageEdits,
