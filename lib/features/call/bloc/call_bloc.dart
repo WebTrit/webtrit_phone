@@ -288,13 +288,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     const direction = Direction.incoming;
-    final hasVideo = event.call?.hasVideo ?? false;
     final callId = event.call!.id;
     final handle = CallkeepHandle.number(event.call!.handle);
     final displayName = event.call?.displayName;
+    final video = event.call?.hasVideo ?? false;
     final createdTime = DateTime.now();
 
-    callkeep.setSpeaker(callId, enabled: hasVideo);
+    callkeep.setSpeaker(callId, enabled: video);
 
     emit(state.copyWithPushActiveCall(
       ActiveCall(
@@ -303,7 +303,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         callId: callId,
         handle: handle,
         displayName: displayName,
-        video: hasVideo,
+        video: video,
         createdTime: createdTime,
       ),
     ));
