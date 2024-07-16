@@ -52,7 +52,7 @@ class WebtritSignalingClient {
 
   static const subprotocol = 'webtrit-protocol';
 
-  static const defaultExecuteTransactionTimeoutDuration = Duration(milliseconds: 5000);
+  static const defaultExecuteTransactionTimeoutDuration = Duration(milliseconds: 10000);
 
   static int _createCounter = 0;
 
