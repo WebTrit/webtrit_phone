@@ -75,7 +75,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       transformer: sequential(),
     );
     on<HandlePendingCall>(
-      _onHandlePendingCall,
+      _onHandleAndroidPendingCall,
       transformer: sequential(),
     );
     on<_AppLifecycleStateChanged>(
@@ -283,7 +283,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   //
 
-  Future<void> _onHandlePendingCall(
+  Future<void> _onHandleAndroidPendingCall(
     HandlePendingCall event,
     Emitter<CallState> emit,
   ) async {
