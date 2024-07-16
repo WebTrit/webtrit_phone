@@ -176,18 +176,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     super.onChange(change);
 
     if (change.currentState.isActive != change.nextState.isActive) {
-      final appLifecycleState = WidgetsFlutterBinding.ensureInitialized().lifecycleState;
-      if (appLifecycleState == AppLifecycleState.paused || appLifecycleState == AppLifecycleState.detached) {
-        if (change.nextState.isActive) {
-          if (_signalingClient == null) {
-            _reconnectInitiated();
-          }
-        } else {
-          if (_signalingClient != null) {
-            _disconnectInitiated();
-          }
-        }
-      }
+      _handleAppLifecycleStateChange(change.nextState);
     }
 
     final currentActiveCallUuids = Set.from(change.currentState.activeCalls.map((e) => e.callId));
@@ -206,6 +195,23 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
   }
 
+  void _handleAppLifecycleStateChange(CallState state) {
+    final appLifecycleState = WidgetsFlutterBinding.ensureInitialized().lifecycleState;
+    final isAppInBackground =
+        appLifecycleState == AppLifecycleState.paused || appLifecycleState == AppLifecycleState.detached;
+
+    if (isAppInBackground) {
+      if (state.isActive) {
+        if (_signalingClient == null) {
+          _reconnectInitiated();
+        }
+      } else {
+        if (_signalingClient != null) {
+          _disconnectInitiated();
+        }
+      }
+    }
+  }
   //
 
   void _peerConnectionComplete(String callId, RTCPeerConnection peerConnection) {
