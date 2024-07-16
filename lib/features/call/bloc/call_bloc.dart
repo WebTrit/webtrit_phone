@@ -287,6 +287,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     HandlePendingCall event,
     Emitter<CallState> emit,
   ) async {
+    callkeep.setSpeaker(event.call!.id, enabled: event.call?.hasVideo ?? false);
+
     emit(state.copyWithPushActiveCall(
       ActiveCall(
         direction: Direction.incoming,
