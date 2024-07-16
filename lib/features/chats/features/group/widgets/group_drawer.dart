@@ -123,7 +123,7 @@ class _GroupDrawerState extends State<GroupDrawer> {
                             minTileHeight: 0,
                             title: Text(member.userId),
                             subtitle: Text(member.groupAuthorities?.name ?? 'member'),
-                            trailing: (amIOwner || amIModerator)
+                            trailing: (canMakeModerator || canRemoveModerator || canRemove)
                                 ? SizedBox(
                                     width: 20,
                                     child: CallPopupMenuButton(
