@@ -74,8 +74,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _onCallStarted,
       transformer: sequential(),
     );
-    on<HandlePendingCall>(
-      _onHandleAndroidPendingCall,
+    on<AndroidPendingCallAdded>(
+      _onAndroidPendingCallAdded,
       transformer: sequential(),
     );
     on<_AppLifecycleStateChanged>(
@@ -140,7 +140,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     callkeep.setDelegate(this);
 
     _pendingCallHandlerSubscription = pendingCallHandler.subscribe((call) {
-      add(HandlePendingCall(call));
+      add(AndroidPendingCallAdded(call));
     });
   }
 
@@ -283,8 +283,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   //
 
-  Future<void> _onHandleAndroidPendingCall(
-    HandlePendingCall event,
+  Future<void> _onAndroidPendingCallAdded(
+    AndroidPendingCallAdded event,
     Emitter<CallState> emit,
   ) async {
     const direction = Direction.incoming;
