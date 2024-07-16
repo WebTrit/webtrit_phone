@@ -191,7 +191,11 @@ class _MessageListViewState extends State<MessageListView> {
           showUserAvatars: true,
           onEndReached: widget.onFetchHistory,
           isLastPage: widget.historyEndReached,
-          typingIndicatorOptions: TypingIndicatorOptions(typingUsers: typingUsers),
+          typingIndicatorOptions: TypingIndicatorOptions(
+            typingUsers: typingUsers,
+            animationSpeed: const Duration(seconds: 1),
+            typingMode: TypingIndicatorMode.both,
+          ),
           theme: DefaultChatTheme(
             inputBackgroundColor: Colors.white,
             inputTextColor: Colors.black,
