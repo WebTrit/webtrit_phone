@@ -177,11 +177,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     if (change.currentState.isActive != change.nextState.isActive) {
       final appLifecycleState = WidgetsFlutterBinding.ensureInitialized().lifecycleState;
-      final isAppInBackground = appLifecycleState == AppLifecycleState.paused ||
+      if (appLifecycleState == AppLifecycleState.paused ||
           appLifecycleState == AppLifecycleState.detached ||
-          appLifecycleState == AppLifecycleState.inactive;
-
-      if (isAppInBackground) {
+          appLifecycleState == AppLifecycleState.inactive) {
         if (change.nextState.isActive) {
           if (_signalingClient == null) {
             _reconnectInitiated();
