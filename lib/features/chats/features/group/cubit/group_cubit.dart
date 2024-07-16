@@ -96,6 +96,81 @@ class GroupCubit extends Cubit<GroupState> {
     _outboxRepository.upsertOutboxMessageDelete(outboxEntry);
   }
 
+  Future<bool> leaveGroup() async {
+    final state = this.state;
+    if (state is! GroupStateReady) return false;
+    if (state.busy) return false;
+    emit(state.copyWith(busy: true));
+
+    final channel = _client.getChatChannel(_chatId);
+    if (channel == null || channel.state != PhoenixChannelState.joined) return false;
+    final r = await channel.push('chat:leave_group', {}).future;
+    emit(state.copyWith(busy: false));
+    if (r.isOk) return true;
+
+    return false;
+  }
+
+  Future addUser(String phoneNumber) async {
+    final state = this.state;
+    if (state is! GroupStateReady) return;
+    if (state.busy) return;
+    emit(state.copyWith(busy: true));
+
+    final channel = _client.getChatChannel(_chatId);
+    if (channel == null || channel.state != PhoenixChannelState.joined) return;
+    final r = await channel.push('chat:add_group_member', {'member_id': phoneNumber}).future;
+    emit(state.copyWith(busy: false));
+    if (r.isOk) return true;
+
+    return false;
+  }
+
+  Future removeUser(String phoneNumber) async {
+    final state = this.state;
+    if (state is! GroupStateReady) return;
+    if (state.busy) return;
+    emit(state.copyWith(busy: true));
+
+    final channel = _client.getChatChannel(_chatId);
+    if (channel == null || channel.state != PhoenixChannelState.joined) return;
+    final r = await channel.push('chat:remove_group_member', {'member_id': phoneNumber}).future;
+    emit(state.copyWith(busy: false));
+    if (r.isOk) return true;
+
+    return false;
+  }
+
+  Future setModerator(String userId, bool isModerator) async {
+    final state = this.state;
+    if (state is! GroupStateReady) return;
+    if (state.busy) return;
+    emit(state.copyWith(busy: true));
+
+    final channel = _client.getChatChannel(_chatId);
+    if (channel == null || channel.state != PhoenixChannelState.joined) return;
+    final r = await channel.push('chat:set_group_moderator', {'member_id': userId, 'is_moderator': isModerator}).future;
+    emit(state.copyWith(busy: false));
+    if (r.isOk) return true;
+
+    return false;
+  }
+
+  Future setName(String name) async {
+    final state = this.state;
+    if (state is! GroupStateReady) return;
+    if (state.busy) return;
+    emit(state.copyWith(busy: true));
+
+    final channel = _client.getChatChannel(_chatId);
+    if (channel == null || channel.state != PhoenixChannelState.joined) return;
+    final r = await channel.push('chat:set_group_name', {'name': name}).future;
+    emit(state.copyWith(busy: false));
+    if (r.isOk) return true;
+
+    return false;
+  }
+
   Future fetchHistory() async {
     final state = this.state;
     if (state is! GroupStateReady) return;

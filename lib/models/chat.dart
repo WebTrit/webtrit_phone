@@ -8,20 +8,16 @@ class Chat extends Equatable {
   final int id;
   final ChatType type;
   final String? name;
-  final String creatorId;
-  final DateTime createdAt;
+  final DateTime insertedAt;
   final DateTime updatedAt;
-  final DateTime? deletedAt;
   final List<ChatMember> members;
 
   const Chat({
     required this.id,
     required this.type,
     required this.name,
-    required this.creatorId,
-    required this.createdAt,
+    required this.insertedAt,
     required this.updatedAt,
-    required this.deletedAt,
     required this.members,
   });
 
@@ -30,7 +26,7 @@ class Chat extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, type, name, creatorId, createdAt, updatedAt, deletedAt, members];
+  List<Object?> get props => [id, type, name, insertedAt, updatedAt, members];
 
   @override
   bool get stringify => true;
@@ -40,19 +36,16 @@ class Chat extends Equatable {
     ChatType? type,
     String? name,
     String? creatorId,
-    DateTime? createdAt,
+    DateTime? insertedAt,
     DateTime? updatedAt,
-    DateTime? deletedAt,
     List<ChatMember>? members,
   }) {
     return Chat(
       id: id ?? this.id,
       type: type ?? this.type,
       name: name ?? this.name,
-      creatorId: creatorId ?? this.creatorId,
-      createdAt: createdAt ?? this.createdAt,
+      insertedAt: insertedAt ?? this.insertedAt,
       updatedAt: updatedAt ?? this.updatedAt,
-      deletedAt: deletedAt ?? this.deletedAt,
       members: members ?? this.members,
     );
   }
@@ -62,10 +55,8 @@ class Chat extends Equatable {
       'id': id,
       'type': type.name,
       'name': name,
-      'creator_id': creatorId,
-      'created_at': createdAt.toIso8601String(),
+      'insertedAt': insertedAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
-      'deleted_at': deletedAt?.toIso8601String(),
       'members': members.map((x) => x.toMap()).toList(),
     };
   }
@@ -75,10 +66,8 @@ class Chat extends Equatable {
       id: map['id'] as int,
       type: ChatType.values.byName(map['type']),
       name: map['name'] != null ? map['name'] as String : null,
-      creatorId: map['creator_id'] as String,
-      createdAt: DateTime.parse(map['created_at']),
+      insertedAt: DateTime.parse(map['inserted_at']),
       updatedAt: DateTime.parse(map['updated_at']),
-      deletedAt: map['deleted_at'] != null ? DateTime.parse(map['deleted_at']) : null,
       members: List<ChatMember>.from(
         (map['members'] as List<dynamic>).map<ChatMember>(
           (x) => ChatMember.fromMap(x as Map<String, dynamic>),

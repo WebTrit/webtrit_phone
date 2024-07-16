@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
+import 'package:webtrit_phone/extensions/iterable.dart';
 
 import 'package:webtrit_phone/features/chats/chats.dart';
 
@@ -87,13 +88,13 @@ class ChatsSyncWorker {
         // Process buffered and listen for future realtime updates
         await for (final e in eventsStream) {
           if (e.event.value == 'chat_membership_join') {
-            final chatId = e.payload!['chat_id'];
+            final chatId = int.parse(e.payload!['chat_id'].toString());
             _chatRoomSubscribe(chatId);
             yield {'event': 'joined', chatId: chatId};
           }
 
           if (e.event.value == 'chat_membership_leave') {
-            final chatId = e.payload!['chat_id'];
+            final chatId = int.parse(e.payload!['chat_id'].toString());
             _chatRoomUnsubscribe(chatId);
             await chatsRepository.deleteChatById(chatId);
             yield {'event': 'leaved', chatId: chatId};
@@ -105,11 +106,11 @@ class ChatsSyncWorker {
           }
         }
       } catch (e, _) {
-        // _logger.severe('_chatlistSyncStream error:', e,s);
-        yield {'event': 'error', 'error': e};
+        yield e;
       } finally {
         // Wait a sec before retrying
         await Future.delayed(const Duration(seconds: 1));
+        yield {'event': 'retry'};
       }
     }
   }
@@ -205,8 +206,14 @@ class ChatsSyncWorker {
           _logger.info('Chat channel event $chatId: $e');
 
           if (e.event.value == 'chat_info_update') {
+            final userId = client.userId!;
             final chat = Chat.fromMap(e.payload as Map<String, dynamic>);
-            await chatsRepository.upsertChat(chat);
+
+            // Skip upsert for event where user is leaved from chat
+            if (chat.members.firstWhereOrNull((m) => m.userId == userId) != null) {
+              await chatsRepository.upsertChat(chat);
+            }
+
             yield chat;
           }
 
@@ -224,11 +231,11 @@ class ChatsSyncWorker {
           }
         }
       } catch (e, _) {
-        // _logger.severe('_chatRoomSyncStream error: $chatId', e, s);
-        yield {'event': 'error', 'error': e};
+        yield e;
       } finally {
         // Wait a sec before retrying
         await Future.delayed(const Duration(seconds: 1));
+        yield {'event': 'retry'};
       }
     }
   }

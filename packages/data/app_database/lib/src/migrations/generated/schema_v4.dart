@@ -351,13 +351,8 @@ class Chats extends Table with TableInfo {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: 'NULL');
-  late final GeneratedColumn<String> creatorId = GeneratedColumn<String>(
-      'creator_id', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
-  late final GeneratedColumn<int> createdAtRemote = GeneratedColumn<int>(
-      'created_at_remote', aliasedName, false,
+  late final GeneratedColumn<int> insertedAtRemote = GeneratedColumn<int>(
+      'inserted_at_remote', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
@@ -366,11 +361,6 @@ class Chats extends Table with TableInfo {
       type: DriftSqlType.int,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
-  late final GeneratedColumn<int> deletedAtRemote = GeneratedColumn<int>(
-      'deleted_at_remote', aliasedName, true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NULL');
   late final GeneratedColumn<int> insertedAt = GeneratedColumn<int>(
       'inserted_at', aliasedName, true,
       type: DriftSqlType.int,
@@ -386,10 +376,8 @@ class Chats extends Table with TableInfo {
         id,
         type,
         name,
-        creatorId,
-        createdAtRemote,
+        insertedAtRemote,
         updatedAtRemote,
-        deletedAtRemote,
         insertedAt,
         updatedAt
       ];
@@ -436,19 +424,9 @@ class ChatMembers extends Table with TableInfo {
       type: DriftSqlType.string,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
-  late final GeneratedColumn<int> joinedAt = GeneratedColumn<int>(
-      'joined_at', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
-  late final GeneratedColumn<int> leftAt = GeneratedColumn<int>(
-      'left_at', aliasedName, true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NULL');
-  late final GeneratedColumn<int> blockedAt = GeneratedColumn<int>(
-      'blocked_at', aliasedName, true,
-      type: DriftSqlType.int,
+  late final GeneratedColumn<String> groupAuthorities = GeneratedColumn<String>(
+      'group_authorities', aliasedName, true,
+      type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: 'NULL');
   late final GeneratedColumn<int> insertedAt = GeneratedColumn<int>(
@@ -463,7 +441,7 @@ class ChatMembers extends Table with TableInfo {
       $customConstraints: 'NULL');
   @override
   List<GeneratedColumn> get $columns =>
-      [id, chatId, userId, joinedAt, leftAt, blockedAt, insertedAt, updatedAt];
+      [id, chatId, userId, groupAuthorities, insertedAt, updatedAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override

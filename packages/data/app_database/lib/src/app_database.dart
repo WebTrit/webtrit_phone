@@ -272,18 +272,16 @@ class ChatsTable extends Table {
 
   TextColumn get name => text().nullable()();
 
-  TextColumn get creatorId => text()();
-
-  DateTimeColumn get createdAtRemote => dateTime()();
+  DateTimeColumn get insertedAtRemote => dateTime()();
 
   DateTimeColumn get updatedAtRemote => dateTime()();
-
-  DateTimeColumn get deletedAtRemote => dateTime().nullable()();
 
   DateTimeColumn get insertedAt => dateTime().nullable()();
 
   DateTimeColumn get updatedAt => dateTime().nullable()();
 }
+
+enum GroupAuthoritiesEnum { moderator, owner }
 
 @DataClassName('ChatMemberData')
 class ChatMembersTable extends Table {
@@ -299,11 +297,7 @@ class ChatMembersTable extends Table {
 
   TextColumn get userId => text()();
 
-  DateTimeColumn get joinedAt => dateTime()();
-
-  DateTimeColumn get leftAt => dateTime().nullable()();
-
-  DateTimeColumn get blockedAt => dateTime().nullable()();
+  TextColumn get groupAuthorities => textEnum<GroupAuthoritiesEnum>().nullable()();
 
   DateTimeColumn get insertedAt => dateTime().nullable()();
 
@@ -804,11 +798,6 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
     return (delete(chatsTable)..where((t) => t.id.equals(chatId))).go();
   }
 
-  Future<void> wipeStaleDeletedChatsData({int ttlSeconds = 60 * 60 * 24}) async {
-    final staleTime = clock.now().subtract(Duration(seconds: ttlSeconds));
-    await (delete(chatsTable)..where((t) => t.deletedAtRemote.isSmallerThanValue(staleTime))).go();
-  }
-
   // ChatMembers
 
   Future<List<ChatMemberData>> getChatMembersByChatId(int chatId) {
@@ -816,7 +805,7 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   }
 
   Future<int> upsertChatMember(Insertable<ChatMemberData> chatMember) {
-    return into(chatMembersTable).insertOnConflictUpdate(chatMember);
+    return into(chatMembersTable).insert(chatMember, mode: InsertMode.insertOrReplace);
   }
 
   Future<int> deleteChatMember(Insertable<ChatMemberData> chatMember) {
@@ -862,6 +851,21 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
       }
       return ChatDataWithMembers(
           chatData.firstWhere((c) => c.id == chatId), members.where((m) => m.chatId == chatId).toList());
+    });
+  }
+
+  Future upsertChatWithMembers(ChatDataWithMembers data) async {
+    await transaction(() async {
+      final currentChatMembers = await getChatMembersByChatId(data.chatData.id);
+      final membersToDelete = currentChatMembers.where((m) => !data.members.any((newM) => newM.userId == m.userId));
+      final membersToUpsert = data.members;
+      await upsertChat(data.chatData);
+      for (final member in membersToDelete) {
+        await deleteChatMember(member);
+      }
+      for (final member in membersToUpsert) {
+        await upsertChatMember(member);
+      }
     });
   }
 
@@ -968,10 +972,15 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
       await delete(chatsTable).go();
       await delete(chatMembersTable).go();
       await delete(chatMessagesTable).go();
+      await delete(chatMessageSyncCursorTable).go();
+    });
+  }
+
+  Future<void> wipeOutboxMessagesData() async {
+    await transaction(() async {
       await delete(chatOutboxMessageTable).go();
       await delete(chatOutboxMessageEditTable).go();
       await delete(chatOutboxMessageDeleteTable).go();
-      await delete(chatMessageSyncCursorTable).go();
     });
   }
 }

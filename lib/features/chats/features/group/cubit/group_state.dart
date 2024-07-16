@@ -48,6 +48,7 @@ final class GroupStateReady extends GroupState with EquatableMixin {
     this.outboxMessageDeletes = const [],
     this.fetchingHistory = false,
     this.historyEndReached = false,
+    this.busy = false,
   });
 
   @override
@@ -61,6 +62,7 @@ final class GroupStateReady extends GroupState with EquatableMixin {
 
   final bool fetchingHistory;
   final bool historyEndReached;
+  final bool busy;
 
   @override
   List<Object> get props => [
@@ -72,6 +74,7 @@ final class GroupStateReady extends GroupState with EquatableMixin {
         outboxMessageDeletes,
         fetchingHistory,
         historyEndReached,
+        busy,
       ];
 
   copyWith({
@@ -83,6 +86,7 @@ final class GroupStateReady extends GroupState with EquatableMixin {
     List<ChatOutboxMessageDeleteEntry>? outboxMessageDeletes,
     bool? fetchingHistory,
     bool? historyEndReached,
+    bool? busy,
   }) {
     return GroupStateReady(
       chatId ?? this.chatId,
@@ -93,6 +97,7 @@ final class GroupStateReady extends GroupState with EquatableMixin {
       outboxMessageDeletes: outboxMessageDeletes ?? this.outboxMessageDeletes,
       fetchingHistory: fetchingHistory ?? this.fetchingHistory,
       historyEndReached: historyEndReached ?? this.historyEndReached,
+      busy: busy ?? this.busy,
     );
   }
 }

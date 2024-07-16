@@ -74,12 +74,7 @@ class ChatsOutboxRepository with ChatsOutboxDriftMapper {
     return _chatsDao.deleteChatOutboxMessageDelete(id);
   }
 
-  Future<void> wipeStaleDeletedData() async {
-    await _chatsDao.wipeStaleDeletedChatMessagesData();
-    await _chatsDao.wipeStaleDeletedChatsData();
-  }
-
-  Future<void> wipeData() async {
-    await _chatsDao.wipeChatsData();
+  Future<void> wipeOutboxData() async {
+    await _chatsDao.wipeOutboxMessagesData();
   }
 }

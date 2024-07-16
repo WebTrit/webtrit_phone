@@ -41,11 +41,8 @@ class ChatsRepository with ChatsDriftMapper {
   Future<void> upsertChat(Chat chat) async {
     final chatData = chatDataFromChat(chat);
     final membersData = chat.members.map(chatMemberDataFromChatMember).toList();
-
-    await _chatsDao.upsertChat(chatData);
-    for (final memberData in membersData) {
-      await _chatsDao.upsertChatMember(memberData);
-    }
+    final chatDataWithMembers = ChatDataWithMembers(chatData, membersData);
+    _chatsDao.upsertChatWithMembers(chatDataWithMembers);
     _addEvent(ChatUpdate(chat));
   }
 
@@ -100,10 +97,9 @@ class ChatsRepository with ChatsDriftMapper {
 
   Future<void> wipeStaleDeletedData() async {
     await _chatsDao.wipeStaleDeletedChatMessagesData();
-    await _chatsDao.wipeStaleDeletedChatsData();
   }
 
-  Future<void> wipeData() async {
+  Future<void> wipeChatsData() async {
     await _chatsDao.wipeChatsData();
   }
 }

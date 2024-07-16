@@ -7,21 +7,17 @@ class ChatMember extends Equatable {
   final int id;
   final int chatId;
   final String userId;
-  final DateTime joinedAt;
-  final DateTime? leftAt;
-  final DateTime? blockedAt;
+  final GroupAuthorities? groupAuthorities;
 
   const ChatMember({
     required this.id,
     required this.chatId,
     required this.userId,
-    required this.joinedAt,
-    this.leftAt,
-    this.blockedAt,
+    required this.groupAuthorities,
   });
 
   @override
-  List<Object?> get props => [id, chatId, userId, joinedAt, leftAt, blockedAt];
+  List<Object?> get props => [id, chatId, userId, groupAuthorities];
 
   @override
   bool get stringify => true;
@@ -31,9 +27,7 @@ class ChatMember extends Equatable {
       'id': id,
       'chat_id': chatId,
       'user_id': userId,
-      'joined_at': joinedAt.millisecondsSinceEpoch,
-      'left_at': leftAt?.millisecondsSinceEpoch,
-      'blocked_at': blockedAt?.millisecondsSinceEpoch,
+      'group_authorities': groupAuthorities?.name,
     };
   }
 
@@ -42,9 +36,8 @@ class ChatMember extends Equatable {
       id: map['id'] as int,
       chatId: map['chat_id'] as int,
       userId: map['user_id'] as String,
-      joinedAt: DateTime.parse(map['joined_at']),
-      leftAt: map['left_at'] != null ? DateTime.parse(map['left_at']) : null,
-      blockedAt: map['blocked_at'] != null ? DateTime.parse(map['blocked_at']) : null,
+      groupAuthorities:
+          map['group_authorities'] == null ? null : GroupAuthorities.values.byName(map['group_authorities'] as String),
     );
   }
 
@@ -54,8 +47,9 @@ class ChatMember extends Equatable {
 }
 
 extension ChatMembersIterableExtension<T extends ChatMember> on Iterable<T> {
-  bool isActiveMember(String memberId) =>
-      any((member) => member.userId == memberId && member.blockedAt == null && member.leftAt == null);
+  bool isActiveMember(String memberId) => any((member) => member.userId == memberId);
 
   List<ChatMember> participants(String userId) => where((member) => member.userId != userId).toList();
 }
+
+enum GroupAuthorities { moderator, owner }

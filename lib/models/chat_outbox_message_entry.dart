@@ -24,10 +24,7 @@ class ChatOutboxMessageEntry extends Equatable {
     this.smsNumber,
     required this.content,
     this.sendAttempts = 0,
-  }) : assert(
-          (participantId != null && chatId == null) || (chatId != null && participantId == null),
-          'Either chatId or participantId must be set',
-        );
+  });
 
   @override
   List<Object?> get props => [

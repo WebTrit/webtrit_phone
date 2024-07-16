@@ -108,7 +108,7 @@ class OutboxQueueWorker {
 
       var payload = {
         'recipient': participantId,
-        'first_message_content': message.content,
+        'content': message.content,
         'id_key': message.idKey,
         'reply_to_id': message.replyToId,
         'forwarded_from_id': message.forwardFromId,
@@ -116,7 +116,7 @@ class OutboxQueueWorker {
         'via_sms': message.viaSms,
         'sms_number': message.smsNumber,
       };
-      final r = await channel.push('chat:create_dialog', payload).future;
+      final r = await channel.push('message:new', payload).future;
 
       if (r.isOk) {
         final chat = Chat.fromMap(r.response['chat']);

@@ -36,20 +36,13 @@ class _GroupScreenState extends State<GroupScreen> {
               style: const TextStyle(fontSize: 20),
               textAlign: TextAlign.center,
             ),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.more_vert),
-                onPressed: () {
-                  // TODO: drawer impl
-                },
-              ),
-            ],
           ),
+          endDrawer: GroupDrawer(userId: chatsBloc.state.userId ?? '-1'),
           body: Builder(
             builder: (context) {
               if (state is GroupStateReady) {
                 return MessageListView(
-                  userId: chatsBloc.state.userId ?? 'unknown',
+                  userId: chatsBloc.state.userId ?? '-1',
                   messages: state.messages,
                   outboxMessages: state.outboxMessages,
                   outboxMessageEdits: state.outboxMessageEdits,

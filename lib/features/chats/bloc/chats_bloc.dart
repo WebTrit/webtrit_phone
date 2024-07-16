@@ -43,7 +43,8 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
 
   void _connect(Connect event, Emitter<ChatsState> emit) async {
     emit(state.copyWith(status: ChatsStatus.connecting));
-    // _chatsRepository.wipeData();
+    // _chatsRepository.wipeChatsData();
+    // _outboxRepository.wipeOutboxData();
     _client.connect();
   }
 

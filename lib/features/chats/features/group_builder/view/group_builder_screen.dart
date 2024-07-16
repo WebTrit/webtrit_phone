@@ -1,5 +1,6 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
@@ -18,19 +19,21 @@ class GroupBuilderScreen extends StatefulWidget {
 }
 
 class _GroupBuilderScreenState extends State<GroupBuilderScreen> {
-  final nameformKey = GlobalKey<FormState>();
-  final userNumberformKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
-  final userMainNumberController = TextEditingController();
   Set<String> selectedUsers = {};
   bool busy = false;
 
-  void onAddMember() {
-    if (userNumberformKey.currentState!.validate()) {
-      setState(() {
-        selectedUsers.add(userMainNumberController.text);
-        userMainNumberController.clear();
-      });
+  bool get isValid => formKey.currentState?.validate() == true;
+
+  onAddUser() async {
+    final result = await showDialog<String>(
+      context: context,
+      builder: (context) => const AddUserDialog(),
+    );
+
+    if (result != null) {
+      setState(() => selectedUsers.add(result));
     }
   }
 
@@ -39,15 +42,15 @@ class _GroupBuilderScreenState extends State<GroupBuilderScreen> {
   }
 
   Future<void> onSubmit() async {
-    if (nameformKey.currentState!.validate()) {
+    if (isValid) {
       final chatsBloc = context.read<ChatsBloc>();
       final userChannel = chatsBloc.state.client.userChannel;
       if (userChannel == null) {
         context.showErrorSnackBar('Connection error, please try later');
         return;
       }
-      setState(() => busy = true);
       try {
+        setState(() => busy = true);
         final payload = {
           'name': nameController.text,
           'member_ids': selectedUsers.toList(),
@@ -55,12 +58,12 @@ class _GroupBuilderScreenState extends State<GroupBuilderScreen> {
         final result = await userChannel.push('chat:create_group', payload).future;
 
         if (!mounted) return;
-        setState(() => busy = false);
-
         if (result.isOk) Navigator.of(context).pop();
         if (result.isError) throw Exception(result.response.toString());
       } catch (_) {
         context.showErrorSnackBar('Error happened while creating group, please try again');
+      } finally {
+        setState(() => busy = false);
       }
     }
   }
@@ -69,32 +72,51 @@ class _GroupBuilderScreenState extends State<GroupBuilderScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('New group form')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  children: [
-                    const Text('Group name'),
-                    const SizedBox(height: 8),
-                    Form(key: nameformKey, child: nameField()),
-                    const SizedBox(height: 16),
-                    const Text('Invite members'),
-                    const SizedBox(height: 8),
-                    ...membersList(),
-                    const SizedBox(height: 8),
-                    Form(key: userNumberformKey, child: memberField()),
-                  ],
-                ),
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
+                        children: [
+                          avatar(),
+                          const SizedBox(height: 16),
+                          const Text('Group name'),
+                          const SizedBox(height: 8),
+                          nameField(),
+                          const SizedBox(height: 16),
+                          const Text('Members'),
+                          const SizedBox(height: 8),
+                          ...membersList(),
+                          const SizedBox(height: 8),
+                          Row(children: [
+                            TextButton(onPressed: onAddUser, child: const Text('Add user')),
+                          ]),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  ElevatedButton(onPressed: isValid ? onSubmit : null, child: const Text('Submit'))
+                ],
               ),
             ),
-            const SizedBox(height: 8),
-            ElevatedButton(onPressed: onSubmit, child: const Text('Submit'))
-          ],
-        ),
+          ),
+          if (busy)
+            Container(
+              color: Colors.black.withOpacity(0.1),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
+                child: const Center(child: CircularProgressIndicator()),
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -111,45 +133,36 @@ class _GroupBuilderScreenState extends State<GroupBuilderScreen> {
     });
   }
 
-  Widget memberField() {
-    return Column(
-      children: [
-        TextFormField(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter a user main number';
-            }
-
-            if (value.length < 6) {
-              return 'User main number must be at least 6 characters';
-            }
-            return null;
-          },
-          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.phone,
-          controller: userMainNumberController,
-          decoration: const InputDecoration(labelText: 'User main number'),
-        ),
-        Row(children: [TextButton(onPressed: onAddMember, child: const Text('Add'))])
-      ],
-    );
-  }
-
   Widget nameField() {
     return TextFormField(
       controller: nameController,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: const InputDecoration(labelText: 'Group Name'),
       validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter a group name';
-        }
-        if (value.length < 3) {
-          return 'Group name must be at least 3 characters';
-        }
+        if (value == null || value.isEmpty) return 'Please enter a group name';
+        if (value.length < 3) return 'Group name must be at least 3 characters';
         return null;
       },
+      onChanged: (value) => setState(() {}),
+    );
+  }
+
+  Widget avatar() {
+    String text = nameController.text;
+
+    text = text.split(' ').first;
+
+    if (text.length > 8) text = text.substring(text.length - 8);
+    return CircleAvatar(
+      child: FittedBox(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            text.toUpperCase(),
+            softWrap: true,
+          ),
+        ),
+      ),
     );
   }
 }

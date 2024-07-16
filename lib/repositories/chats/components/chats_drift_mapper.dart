@@ -10,19 +10,16 @@ mixin ChatsDriftMapper {
       id: chatData.id,
       type: ChatType.values.byName(chatData.type.name),
       name: chatData.name,
-      creatorId: chatData.creatorId,
-      createdAt: chatData.createdAtRemote,
+      insertedAt: chatData.insertedAtRemote,
       updatedAt: chatData.updatedAtRemote,
-      deletedAt: chatData.deletedAtRemote,
       members: chatMembers
           .map(
             (e) => ChatMember(
               id: e.id,
               chatId: e.chatId,
               userId: e.userId,
-              joinedAt: e.joinedAt,
-              leftAt: e.leftAt,
-              blockedAt: e.blockedAt,
+              groupAuthorities:
+                  e.groupAuthorities != null ? GroupAuthorities.values.byName(e.groupAuthorities!.name) : null,
             ),
           )
           .toList(),
@@ -34,10 +31,8 @@ mixin ChatsDriftMapper {
       id: chat.id,
       type: ChatTypeEnum.values.byName(chat.type.name),
       name: chat.name,
-      creatorId: chat.creatorId,
-      createdAtRemote: chat.createdAt,
+      insertedAtRemote: chat.insertedAt,
       updatedAtRemote: chat.updatedAt,
-      deletedAtRemote: chat.deletedAt,
     );
   }
 
@@ -46,9 +41,9 @@ mixin ChatsDriftMapper {
       id: chatMember.id,
       chatId: chatMember.chatId,
       userId: chatMember.userId,
-      joinedAt: chatMember.joinedAt,
-      leftAt: chatMember.leftAt,
-      blockedAt: chatMember.blockedAt,
+      groupAuthorities: chatMember.groupAuthorities != null
+          ? GroupAuthoritiesEnum.values.byName(chatMember.groupAuthorities!.name)
+          : null,
     );
   }
 
