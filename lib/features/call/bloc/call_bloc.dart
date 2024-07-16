@@ -74,8 +74,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _onCallStarted,
       transformer: sequential(),
     );
-    on<HandlePendingCall>(
-      _onHandlePendingCall,
+    on<AndroidPendingCallAdded>(
+      _onAndroidPendingCallAdded,
       transformer: sequential(),
     );
     on<_AppLifecycleStateChanged>(
@@ -140,7 +140,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     callkeep.setDelegate(this);
 
     _pendingCallHandlerSubscription = pendingCallHandler.subscribe((call) {
-      add(HandlePendingCall(call));
+      add(AndroidPendingCallAdded(call));
     });
   }
 
@@ -285,19 +285,28 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   //
 
-  Future<void> _onHandlePendingCall(
-    HandlePendingCall event,
+  Future<void> _onAndroidPendingCallAdded(
+    AndroidPendingCallAdded event,
     Emitter<CallState> emit,
   ) async {
+    const direction = Direction.incoming;
+    final callId = event.call!.id;
+    final handle = CallkeepHandle.number(event.call!.handle);
+    final displayName = event.call?.displayName;
+    final video = event.call?.hasVideo ?? false;
+    final createdTime = DateTime.now();
+
+    callkeep.setSpeaker(callId, enabled: video);
+
     emit(state.copyWithPushActiveCall(
       ActiveCall(
-        direction: Direction.incoming,
+        direction: direction,
         line: _kUndefinedLine,
-        callId: event.call!.id,
-        handle: CallkeepHandle.number(event.call!.handle),
-        displayName: event.call?.displayName,
-        video: event.call?.hasVideo ?? false,
-        createdTime: DateTime.now(),
+        callId: callId,
+        handle: handle,
+        displayName: displayName,
+        video: video,
+        createdTime: createdTime,
       ),
     ));
   }

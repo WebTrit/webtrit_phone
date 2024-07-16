@@ -8,8 +8,8 @@ class CallStarted extends CallEvent {
   const CallStarted();
 }
 
-class HandlePendingCall extends CallEvent {
-  const HandlePendingCall(this.call);
+class AndroidPendingCallAdded extends CallEvent {
+  const AndroidPendingCallAdded(this.call);
 
   final PendingCall? call;
 }
