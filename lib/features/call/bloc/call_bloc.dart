@@ -287,17 +287,24 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     HandlePendingCall event,
     Emitter<CallState> emit,
   ) async {
-    callkeep.setSpeaker(event.call!.id, enabled: event.call?.hasVideo ?? false);
+    const direction = Direction.incoming;
+    final hasVideo = event.call?.hasVideo ?? false;
+    final callId = event.call!.id;
+    final handle = CallkeepHandle.number(event.call!.handle);
+    final displayName = event.call?.displayName;
+    final createdTime = DateTime.now();
+
+    callkeep.setSpeaker(callId, enabled: hasVideo);
 
     emit(state.copyWithPushActiveCall(
       ActiveCall(
-        direction: Direction.incoming,
+        direction: direction,
         line: _kUndefinedLine,
-        callId: event.call!.id,
-        handle: CallkeepHandle.number(event.call!.handle),
-        displayName: event.call?.displayName,
-        video: event.call?.hasVideo ?? false,
-        createdTime: DateTime.now(),
+        callId: callId,
+        handle: handle,
+        displayName: displayName,
+        video: hasVideo,
+        createdTime: createdTime,
       ),
     ));
   }
