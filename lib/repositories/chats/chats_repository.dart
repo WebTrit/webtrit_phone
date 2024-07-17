@@ -73,6 +73,13 @@ class ChatsRepository with ChatsDriftMapper {
     }
   }
 
+  Future<void> updateViews(List<int> messageIds, DateTime viewedAt) async {
+    final messages = await _chatsDao.updateViews(messageIds, viewedAt);
+    for (final message in messages) {
+      _addEvent(ChatMessageUpdate(chatMessageFromDrift(message)));
+    }
+  }
+
   Future<void> insertHistoryPage(List<ChatMessage> messages) async {
     for (final message in messages) {
       await upsertMessage(message, silent: true);

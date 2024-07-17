@@ -13,6 +13,7 @@ class ChatMessage extends Equatable {
   final SmsOutState? smsOutState;
   final String? smsNumber;
   final String content;
+  final DateTime? viewedAt;
   final DateTime? editedAt;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -30,6 +31,7 @@ class ChatMessage extends Equatable {
     required this.smsOutState,
     required this.smsNumber,
     required this.content,
+    required this.viewedAt,
     required this.editedAt,
     required this.createdAt,
     required this.updatedAt,
@@ -49,6 +51,7 @@ class ChatMessage extends Equatable {
         smsOutState,
         smsNumber,
         content,
+        viewedAt,
         editedAt,
         createdAt,
         updatedAt,
@@ -71,6 +74,7 @@ class ChatMessage extends Equatable {
       'sms_out_state': smsOutState?.name,
       'sms_number': smsNumber,
       'content': content,
+      'viewed_at': viewedAt?.toIso8601String(),
       'edited_at': editedAt?.toIso8601String(),
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
@@ -91,6 +95,7 @@ class ChatMessage extends Equatable {
       smsOutState: map['sms_out_state'] != null ? SmsOutState.values.byName(map['sms_out_state'] as String) : null,
       smsNumber: map['sms_number'] != null ? map['sms_number'] as String : null,
       content: map['content'] as String,
+      viewedAt: map['viewed_at'] != null ? DateTime.parse(map['viewed_at'] as String) : null,
       editedAt: map['edited_at'] != null ? DateTime.parse(map['edited_at'] as String) : null,
       createdAt: DateTime.parse(map['created_at'] as String),
       updatedAt: DateTime.parse(map['updated_at'] as String),
@@ -120,24 +125,34 @@ extension MessagesListExtension<T extends ChatMessage> on List<T> {
     return newList;
   }
 
-  /// Merge the real-time message update with the list of messages
-  /// If the message is an update, it will replace the old message in the list
-  /// If the message is an update for a message that is not included in the list, it will be skipped
-  /// If the message is a new message, it will be added to the head of the list
-  /// The list should me sorted by [ChatMessage.createdAt] in descending order
+  /// Merge the real-time message update(new,edit,viewed) with the list of messages in a view
   List<T> mergeUpdateWith(T message) {
     final newList = List<T>.from(this);
-    bool isUpdate = message.updatedAt.isAfter(message.createdAt);
 
-    final index = newList.indexWhere((element) => element.id == message.id);
-    if (index == -1) {
-      // Skip for message update that are not included in the list
-      if (isUpdate) return newList;
-      return [message, ...newList];
-    } else {
-      // Update the message in the list
+    // If empty list, return the message
+    if (newList.isEmpty) return [message];
+
+    // If the message is an update, replace the old message in the list
+    final index = newList.indexWhere((m) => m.id == message.id);
+    if (index != -1) {
       newList[index] = message;
+      return newList;
     }
-    return newList;
+
+    // If the message is a new message, add it to the head of the list
+    if (message.createdAt.isAfter(newList.first.createdAt)) {
+      return [message, ...newList];
+    }
+
+    // If the message is an update for a message that is not included in the list,
+    // skip it if the message is older than the last message in the list (views,edits,replies of non-fetched history)
+    // otherwise, add and sort the list
+    if (message.createdAt.isAfter(newList.last.createdAt)) {
+      newList.add(message);
+      newList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      return newList;
+    }
+
+    return this;
   }
 }

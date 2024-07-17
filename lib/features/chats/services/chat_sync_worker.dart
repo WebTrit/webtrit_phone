@@ -220,10 +220,24 @@ class ChatsSyncWorker {
           if (e.event.value == 'message_update') {
             final chatMsg = ChatMessage.fromMap(e.payload as Map<String, dynamic>);
             await chatsRepository.upsertMessage(chatMsg);
+            await chatsRepository.upsertChatMessageSyncCursor(ChatMessageSyncCursor(
+              chatId: chatId,
+              cursorType: MessageSyncCursorType.newest,
+              time: chatMsg.updatedAt,
+            ));
             yield chatMsg;
           }
 
-          // TODO: read cursor update
+          if (e.event.value == 'messages_viewed') {
+            final messageIds = (e.payload!['message_ids'] as List).cast<int>();
+            final viewedAt = DateTime.parse(e.payload!['viewed_at'] as String);
+            await chatsRepository.updateViews(messageIds, viewedAt);
+            await chatsRepository.upsertChatMessageSyncCursor(ChatMessageSyncCursor(
+              chatId: chatId,
+              cursorType: MessageSyncCursorType.newest,
+              time: viewedAt,
+            ));
+          }
 
           // On disconnect break the loop to force reconnect
           if (e.event.value == 'phx_error') {

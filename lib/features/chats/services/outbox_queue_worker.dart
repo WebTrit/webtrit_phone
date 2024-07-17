@@ -50,6 +50,11 @@ class OutboxQueueWorker {
         await _processMessageDelete(entry);
       }
 
+      final messageViews = await _outboxRepository.getChatOutboxMessageViews();
+      for (final chatId in messageViews.map((e) => e.chatId).toSet()) {
+        _processMessageView(messageViews.where((e) => e.chatId == chatId).toList(), chatId);
+      }
+
       if (_disposed) return false;
       await Future.delayed(const Duration(seconds: 1));
       return true;
@@ -187,6 +192,35 @@ class OutboxQueueWorker {
         await _outboxRepository.deleteOutboxMessageDelete(messageDelete.id);
       } else {
         await _outboxRepository.upsertOutboxMessageDelete(messageDelete.incAttempts());
+      }
+    }
+  }
+
+  Future _processMessageView(List<ChatOutboxMessageViewEntry> messageViews, int chatId) async {
+    try {
+      final channel = _client.getChatChannel(chatId);
+      if (channel == null) return;
+      if (channel.state != PhoenixChannelState.joined) return;
+
+      var payload = {'message_ids': messageViews.map((e) => e.id).toList()};
+      final r = await channel.push('message:mark_as_viewed', payload).future;
+
+      if (r.isOk) {
+        for (final messageView in messageViews) {
+          await _outboxRepository.deleteOutboxMessageView(messageView.id);
+        }
+        _logger.info('After isOk on view message: $chatId ${messageViews.length}');
+      }
+      if (r.isError) throw Exception('Error processing message view');
+    } catch (e) {
+      _logger.severe('Error processing message view', e);
+      if (messageViews.last.sendAttempts > 5) {
+        _logger.severe('Send attempts exceeded for view message: $chatId ${messageViews.length}');
+        for (final messageView in messageViews) {
+          await _outboxRepository.deleteOutboxMessageView(messageView.id);
+        }
+      } else {
+        await _outboxRepository.upsertOutboxMessageView(messageViews.last.incAttempts());
       }
     }
   }

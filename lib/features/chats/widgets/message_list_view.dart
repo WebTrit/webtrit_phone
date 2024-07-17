@@ -29,6 +29,7 @@ class MessageListView extends StatefulWidget {
     required this.onSendForward,
     required this.onSendEdit,
     required this.onDelete,
+    required this.onViewed,
     required this.onFetchHistory,
     super.key,
   });
@@ -45,6 +46,7 @@ class MessageListView extends StatefulWidget {
   final Function(String content, ChatMessage refMessage) onSendForward;
   final Function(String content, ChatMessage refMessage) onSendEdit;
   final Function(ChatMessage refMessage) onDelete;
+  final Function(ChatMessage refMessage) onViewed;
   final Future Function() onFetchHistory;
 
   @override
@@ -113,13 +115,26 @@ class _MessageListViewState extends State<MessageListView> {
         'deleted': msg.deletedAt != null || deleteEntry != null,
       };
 
+      types.Status status;
+      if (inOutbox) {
+        // If message has changes in outbox that no sended yet
+        status = types.Status.sending;
+      } else {
+        // Else show status based on message state
+        if (msg.viewedAt != null) {
+          status = types.Status.seen;
+        } else {
+          status = types.Status.delivered;
+        }
+      }
+
       final textMessage = types.TextMessage(
         author: types.User(id: msg.senderId, firstName: msg.senderId),
         id: msg.idKey,
         remoteId: msg.id.toString(),
         text: text,
         showStatus: true,
-        status: inOutbox ? types.Status.sending : types.Status.delivered,
+        status: status,
         createdAt: msg.createdAt.millisecondsSinceEpoch,
         updatedAt: msg.updatedAt.millisecondsSinceEpoch,
         metadata: metadata,
@@ -196,6 +211,16 @@ class _MessageListViewState extends State<MessageListView> {
             animationSpeed: const Duration(seconds: 1),
             typingMode: TypingIndicatorMode.both,
           ),
+          onMessageVisibilityChanged: (m, visible) {
+            if (m.metadata != null && m.metadata!.containsKey('message')) {
+              final realMessage = m.metadata!['message'] as ChatMessage;
+              final isMine = realMessage.senderId == widget.userId;
+              final viewed = realMessage.viewedAt != null;
+              if (!isMine && !viewed && visible) {
+                widget.onViewed(realMessage);
+              }
+            }
+          },
           theme: DefaultChatTheme(
             inputBackgroundColor: Colors.white,
             inputTextColor: Colors.black,

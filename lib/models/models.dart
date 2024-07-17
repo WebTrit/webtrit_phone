@@ -9,6 +9,7 @@ export 'chat_message_sync_cursor.dart';
 export 'chat_outbox_message_entry.dart';
 export 'chat_outbox_message_edit_entry.dart';
 export 'chat_outbox_message_delete_entry.dart';
+export 'chat_outbox_message_view_entry.dart';
 export 'external_contact.dart';
 export 'favorite.dart';
 export 'keypad_key.dart';
