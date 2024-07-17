@@ -91,10 +91,11 @@ extension ChatListExtension<T extends Chat> on List<T> {
 
     final index = newList.indexWhere((element) => element.id == chat.id);
     if (index == -1) {
-      return [chat, ...newList];
+      newList.add(chat);
     } else {
       newList[index] = chat;
     }
+    newList.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
     return newList;
   }
 }

@@ -23,6 +23,8 @@ class ChatListCubit extends Cubit<ChatListState> {
     _logger.info('Initialising');
 
     final chats = await _chatsRepository.getChats();
+    chats.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+
     emit(ChatListState(chats: chats, initialising: false));
     _logger.info('Initialised: ${chats.length} chats');
 
