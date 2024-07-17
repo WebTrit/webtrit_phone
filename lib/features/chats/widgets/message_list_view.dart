@@ -209,7 +209,7 @@ class _MessageListViewState extends State<MessageListView> {
           typingIndicatorOptions: TypingIndicatorOptions(
             typingUsers: typingUsers,
             animationSpeed: const Duration(seconds: 1),
-            typingMode: TypingIndicatorMode.both,
+            typingMode: TypingIndicatorMode.name,
           ),
           onMessageVisibilityChanged: (m, visible) {
             if (m.metadata != null && m.metadata!.containsKey('message')) {
@@ -220,6 +220,30 @@ class _MessageListViewState extends State<MessageListView> {
                 widget.onViewed(realMessage);
               }
             }
+          },
+          avatarBuilder: (author) {
+            String name = author.firstName ?? 'N/A';
+            final numberFromName = int.tryParse(name);
+            if (numberFromName != null && name.length > 3) {
+              name = name.substring(name.length - 3);
+            }
+            return Padding(
+              padding: const EdgeInsets.all(4),
+              child: CircleAvatar(
+                maxRadius: 16,
+                backgroundColor: theme.primaryColorDark.withOpacity(0.8),
+                child: FittedBox(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      name,
+                      softWrap: true,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+            );
           },
           theme: DefaultChatTheme(
             inputBackgroundColor: Colors.white,
