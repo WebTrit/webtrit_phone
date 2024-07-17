@@ -159,7 +159,7 @@ class ChatsSyncWorker {
             await chatsRepository.upsertChatMessageSyncCursor(ChatMessageSyncCursor(
               chatId: chatId,
               cursorType: MessageSyncCursorType.oldest,
-              time: messages.last.updatedAt,
+              time: messages.last.createdAt,
             ));
             await chatsRepository.upsertChatMessageSyncCursor(ChatMessageSyncCursor(
               chatId: chatId,

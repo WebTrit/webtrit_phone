@@ -150,7 +150,7 @@ class ConversationCubit extends Cubit<ConversationState> {
           await _chatsRepository.upsertChatMessageSyncCursor(ChatMessageSyncCursor(
             chatId: chatId,
             cursorType: MessageSyncCursorType.oldest,
-            time: messages.last.updatedAt,
+            time: messages.last.createdAt,
           ));
         }
       }

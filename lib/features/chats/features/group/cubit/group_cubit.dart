@@ -214,7 +214,7 @@ class GroupCubit extends Cubit<GroupState> {
           await _chatsRepository.upsertChatMessageSyncCursor(ChatMessageSyncCursor(
             chatId: _chatId,
             cursorType: MessageSyncCursorType.oldest,
-            time: messages.last.updatedAt,
+            time: messages.last.createdAt,
           ));
         }
       }
