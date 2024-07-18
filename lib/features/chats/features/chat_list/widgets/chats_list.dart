@@ -15,7 +15,11 @@ class ChatsList extends StatelessWidget {
         final chat = chatlist[index];
         return BlocBuilder<ChatsBloc, ChatsState>(
           builder: (context, state) {
-            return ChatListItem(chat: chat, userId: state.userId);
+            return ChatListItem(
+              chat: chat,
+              userId: state.userId,
+              key: ValueKey(chat.id),
+            );
           },
         );
       },
