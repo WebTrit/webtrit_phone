@@ -462,6 +462,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get main_BottomNavigationBarItemLabel_keypad => 'Клавіатура';
 
   @override
+  String get main_BottomNavigationBarItemLabel_chats => 'Chats';
+
+  @override
   String get main_BottomNavigationBarItemLabel_recents => 'Останні';
 
   @override
@@ -714,4 +717,13 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get chats_RouterPage_failure => 'Failed connecting to chat service';
+
+  @override
+  String get chats_Conversation_failure => 'Failed create conversation';
+
+  @override
+  String get chats_ActionBtn_retry => 'Retry';
 }

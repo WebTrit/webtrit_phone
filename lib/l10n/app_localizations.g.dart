@@ -965,6 +965,12 @@ abstract class AppLocalizations {
   /// **'Keypad'**
   String get main_BottomNavigationBarItemLabel_keypad;
 
+  /// No description provided for @main_BottomNavigationBarItemLabel_chats.
+  ///
+  /// In en, this message translates to:
+  /// **'Chats'**
+  String get main_BottomNavigationBarItemLabel_chats;
+
   /// No description provided for @main_BottomNavigationBarItemLabel_recents.
   ///
   /// In en, this message translates to:
@@ -1432,6 +1438,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Web resource error'**
   String get webRegistration_ErrorAcknowledgeDialog_title;
+
+  /// No description provided for @chats_RouterPage_failure.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed connecting to chat service'**
+  String get chats_RouterPage_failure;
+
+  /// No description provided for @chats_Conversation_failure.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed create conversation'**
+  String get chats_Conversation_failure;
+
+  /// No description provided for @chats_ActionBtn_retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get chats_ActionBtn_retry;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

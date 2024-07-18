@@ -30,6 +30,7 @@ class MainScreenPage extends StatelessWidget {
         RecentsRouterPageRoute(),
         ContactsRouterPageRoute(),
         KeypadScreenPageRoute(),
+        ChatsRouterPageRoute()
       ],
       duration: Duration.zero,
       builder: (context, child) {

@@ -13,6 +13,7 @@ class ContactTile extends StatelessWidget {
     this.smart = false,
     this.onTap,
     this.onLongPress,
+    this.onMessagePressed,
   });
 
   final String displayName;
@@ -21,6 +22,7 @@ class ContactTile extends StatelessWidget {
   final bool smart;
   final GestureTapCallback? onTap;
   final GestureLongPressCallback? onLongPress;
+  final GestureTapCallback? onMessagePressed;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +35,17 @@ class ContactTile extends StatelessWidget {
         smart: smart,
       ),
       title: Text(displayName),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (onMessagePressed != null)
+            IconButton(
+              splashRadius: 24,
+              icon: const Icon(Icons.messenger_outline),
+              onPressed: onMessagePressed,
+            ),
+        ],
+      ),
       onTap: onTap,
       onLongPress: onLongPress,
     );

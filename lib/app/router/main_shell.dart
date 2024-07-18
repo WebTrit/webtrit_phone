@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:phoenix_socket/phoenix_socket.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -124,6 +125,16 @@ class _MainShellState extends State<MainShell> {
             webtritApiClient: context.read<WebtritApiClient>(),
           ),
         ),
+        RepositoryProvider<ChatsRepository>(
+          create: (context) => ChatsRepository(
+            appDatabase: context.read<AppDatabase>(),
+          ),
+        ),
+        RepositoryProvider<ChatsOutboxRepository>(
+          create: (context) => ChatsOutboxRepository(
+            appDatabase: context.read<AppDatabase>(),
+          ),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -180,6 +191,23 @@ class _MainShellState extends State<MainShell> {
                 callkeep: callkeep,
                 pendingCallHandler: appBloc.pendingCallHandler,
               )..add(const CallStarted());
+            },
+          ),
+          BlocProvider<ChatsBloc>(
+            create: (context) {
+              final appBloc = context.read<AppBloc>();
+              final appPreferences = context.read<AppPreferences>();
+              final chatsRepository = context.read<ChatsRepository>();
+              final chatsOutboxRepository = context.read<ChatsOutboxRepository>();
+              final token = appBloc.state.token!;
+              final tenantId = appBloc.state.tenantId!;
+
+              final wsClient = PhoenixSocket(
+                const String.fromEnvironment('C_CHAT_URL'), // TODO: Replace with core URL after integration
+                socketOptions: PhoenixSocketOptions(params: {'token': token, 'tenant_id': tenantId}),
+              );
+
+              return ChatsBloc(wsClient, chatsRepository, chatsOutboxRepository, appPreferences)..add(const Connect());
             },
           ),
         ],

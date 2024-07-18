@@ -48,6 +48,18 @@ abstract class _$AppRouter extends RootStackRouter {
         child: CallScreenPage(),
       );
     },
+    ChatListScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ChatListScreenPage(),
+      );
+    },
+    ChatsRouterPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ChatsRouterPage(),
+      );
+    },
     ContactScreenPageRoute.name: (routeData) {
       final pathParams = routeData.inheritedPathParams;
       final args = routeData.argsAs<ContactScreenPageRouteArgs>(
@@ -68,6 +80,13 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: ContactsScreenPage(),
+      );
+    },
+    ConversationScreenPageRoute.name: (routeData) {
+      final args = routeData.argsAs<ConversationScreenPageRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ConversationScreenPage(participantId: args.participantId),
       );
     },
     DemoWebPageRoute.name: (routeData) {
@@ -97,6 +116,19 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: FavoritesScreenPage(),
+      );
+    },
+    GroupBuilderScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const GroupBuilderScreenPage(),
+      );
+    },
+    GroupScreenPageRoute.name: (routeData) {
+      final args = routeData.argsAs<GroupScreenPageRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: GroupScreenPage(chatId: args.chatId),
       );
     },
     HelpScreenPageRoute.name: (routeData) {
@@ -376,6 +408,34 @@ class CallScreenPageRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [ChatListScreenPage]
+class ChatListScreenPageRoute extends PageRouteInfo<void> {
+  const ChatListScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          ChatListScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ChatListScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [ChatsRouterPage]
+class ChatsRouterPageRoute extends PageRouteInfo<void> {
+  const ChatsRouterPageRoute({List<PageRouteInfo>? children})
+      : super(
+          ChatsRouterPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ChatsRouterPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [ContactScreenPage]
 class ContactScreenPageRoute extends PageRouteInfo<ContactScreenPageRouteArgs> {
   ContactScreenPageRoute({
@@ -431,6 +491,36 @@ class ContactsScreenPageRoute extends PageRouteInfo<void> {
   static const String name = 'ContactsScreenPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [ConversationScreenPage]
+class ConversationScreenPageRoute
+    extends PageRouteInfo<ConversationScreenPageRouteArgs> {
+  ConversationScreenPageRoute({
+    required String participantId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ConversationScreenPageRoute.name,
+          args: ConversationScreenPageRouteArgs(participantId: participantId),
+          initialChildren: children,
+        );
+
+  static const String name = 'ConversationScreenPageRoute';
+
+  static const PageInfo<ConversationScreenPageRouteArgs> page =
+      PageInfo<ConversationScreenPageRouteArgs>(name);
+}
+
+class ConversationScreenPageRouteArgs {
+  const ConversationScreenPageRouteArgs({required this.participantId});
+
+  final String participantId;
+
+  @override
+  String toString() {
+    return 'ConversationScreenPageRouteArgs{participantId: $participantId}';
+  }
 }
 
 /// generated route for
@@ -527,6 +617,49 @@ class FavoritesScreenPageRoute extends PageRouteInfo<void> {
   static const String name = 'FavoritesScreenPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [GroupBuilderScreenPage]
+class GroupBuilderScreenPageRoute extends PageRouteInfo<void> {
+  const GroupBuilderScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          GroupBuilderScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'GroupBuilderScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [GroupScreenPage]
+class GroupScreenPageRoute extends PageRouteInfo<GroupScreenPageRouteArgs> {
+  GroupScreenPageRoute({
+    required int chatId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          GroupScreenPageRoute.name,
+          args: GroupScreenPageRouteArgs(chatId: chatId),
+          initialChildren: children,
+        );
+
+  static const String name = 'GroupScreenPageRoute';
+
+  static const PageInfo<GroupScreenPageRouteArgs> page =
+      PageInfo<GroupScreenPageRouteArgs>(name);
+}
+
+class GroupScreenPageRouteArgs {
+  const GroupScreenPageRouteArgs({required this.chatId});
+
+  final int chatId;
+
+  @override
+  String toString() {
+    return 'GroupScreenPageRouteArgs{chatId: $chatId}';
+  }
 }
 
 /// generated route for
