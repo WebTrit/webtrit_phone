@@ -141,7 +141,7 @@ class ConversationCubit extends Cubit<ConversationState> {
       // If no messages found in local storage, fetch from the remote server
       final channel = _client.getChatChannel(chatId);
       if (messages.isEmpty && channel != null) {
-        final payload = {'created_before': topMessage.createdAt.toUtc().toIso8601String(), 'limit': 100};
+        final payload = {'created_before': topMessage.createdAt.toUtc().toIso8601String(), 'limit': 50};
         final req = await channel.push('message:history', payload).future;
         messages = (req.response['data'] as List).map((e) => ChatMessage.fromMap(e)).toList();
         _logger.info('fetchHistory: remote messages ${messages.length}');

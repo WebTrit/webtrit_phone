@@ -12,7 +12,12 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 final _logger = Logger('ChatsSyncWorker');
 
 class ChatsSyncWorker {
-  ChatsSyncWorker(this.client, this.chatsRepository, {this.pageSize = 100}) {
+  ChatsSyncWorker(
+    this.client,
+    this.chatsRepository, {
+    this.pageSize = 50,
+    this.pushTimeout = const Duration(seconds: 10),
+  }) {
     // TODO: Remove this before pr
     // _logger.onRecord.listen((record) {
     //   // ignore: avoid_print
@@ -23,6 +28,7 @@ class ChatsSyncWorker {
   final PhoenixSocket client;
   final ChatsRepository chatsRepository;
   final int pageSize;
+  final Duration pushTimeout;
 
   StreamSubscription? _chatlistSyncSub;
   Map<int, StreamSubscription> chatRoomSyncSubs = {};
@@ -67,7 +73,7 @@ class ChatsSyncWorker {
         final eventsStream = userChannel.messages.transform(StreamBuffer());
 
         // Fetch actual user chat ids
-        final req = await userChannel.push('chat:user_chat_ids', {}).future;
+        final req = await userChannel.push('chat:user_chat_ids', {}, pushTimeout).future;
         final actualChatIds = req.response.cast<int>();
 
         // Process removed chats
@@ -131,7 +137,7 @@ class ChatsSyncWorker {
         final eventsStream = channel.messages.transform(StreamBuffer());
 
         // Fetch chat info
-        final req = await channel.push('chat:info', {}).future;
+        final req = await channel.push('chat:info', {}, pushTimeout).future;
         final chat = Chat.fromMap(req.response as Map<String, dynamic>);
         await chatsRepository.upsertChat(chat);
         _logger.info('Chat info: $chat');
@@ -144,7 +150,7 @@ class ChatsSyncWorker {
         // If no last update, fetch history of last 100 messages for initial state
         if (newestCursor == null) {
           final payload = {'limit': pageSize};
-          final req = await channel.push('message:history', payload).future;
+          final req = await channel.push('message:history', payload, pushTimeout).future;
           final messages = (req.response['data'] as List).map((e) => ChatMessage.fromMap(e)).toList();
 
           if (messages.isNotEmpty) {
@@ -175,7 +181,7 @@ class ChatsSyncWorker {
           var pagingCursor = newestCursor;
           while (true) {
             final payload = {'updated_after': pagingCursor.time.toUtc().toIso8601String(), 'limit': pageSize};
-            final req = await channel.push('message:updates', payload).future;
+            final req = await channel.push('message:updates', payload, pushTimeout).future;
             final messages = (req.response['data'] as List).map((e) => ChatMessage.fromMap(e)).toList();
 
             // If no more messages, break the pagination loop
