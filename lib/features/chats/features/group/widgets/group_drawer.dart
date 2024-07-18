@@ -82,82 +82,66 @@ class _GroupDrawerState extends State<GroupDrawer> {
                     children: [
                       DrawerHeader(
                         decoration: BoxDecoration(color: Theme.of(context).primaryColor),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        child: Column(
                           children: [
-                            Flexible(
-                              child: Text(
-                                name,
-                                style: theme.textTheme.headlineMedium?.copyWith(color: Colors.white),
+                            Expanded(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      name,
+                                      style: theme.textTheme.headlineSmall?.copyWith(color: Colors.white),
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  if (amIOwner || amIModerator)
+                                    IconButton(
+                                      onPressed: () => onSetName(chat.name),
+                                      icon: const Icon(Icons.edit, color: Colors.white, size: 18),
+                                    ),
+                                ],
                               ),
                             ),
-                            if (amIOwner || amIModerator)
-                              IconButton(
-                                onPressed: () => onSetName(chat.name),
-                                icon: const Icon(Icons.edit, color: Colors.white),
+                            SizedBox(
+                              width: double.infinity,
+                              child: Text(
+                                'id: ${chat.id}',
+                                style: const TextStyle(fontSize: 12, color: Colors.white),
+                                textAlign: TextAlign.right,
                               ),
+                            ),
                           ],
                         ),
                       ),
-                      if (canInvite)
-                        TextButton.icon(
-                          onPressed: onAddUser,
-                          label: const Text('Add user'),
-                          icon: const Icon(Icons.person_add_alt, size: 16),
+                      Text(
+                        'Group members',
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          fontSize: 18,
+                          color: theme.primaryColor,
                         ),
-                      // Text('Members', style: theme.textTheme.headlineSmall),
+                      ),
                       Expanded(
                           child: ListView(
-                        padding: const EdgeInsets.all(8),
-                        children: chat.members.map((member) {
-                          final isModerator = member.groupAuthorities == GroupAuthorities.moderator;
-                          final isRegular = member.groupAuthorities == null;
-
-                          final canRemoveUsers = amIOwner || amIModerator && isRegular;
-                          final canRemoveModerators = amIOwner && isModerator;
-                          final canRemove = canRemoveUsers || canRemoveModerators;
-                          final canMakeModerator = amIOwner && isRegular;
-                          final canRemoveModerator = amIOwner && isModerator;
-
-                          return ListTile(
-                            minTileHeight: 0,
-                            title: Text(member.userId),
-                            subtitle: Text(member.groupAuthorities?.name ?? 'member'),
-                            trailing: (canMakeModerator || canRemoveModerator || canRemove)
-                                ? SizedBox(
-                                    width: 20,
-                                    child: CallPopupMenuButton(
-                                      items: [
-                                        if (canMakeModerator)
-                                          CallPopupMenuItem(
-                                            icon: const Icon(Icons.add_moderator_outlined),
-                                            text: 'Make moderator',
-                                            onTap: () => onSetModerator(member.userId, true),
-                                          ),
-                                        if (canRemoveModerator)
-                                          CallPopupMenuItem(
-                                            icon: const Icon(Icons.remove_moderator_outlined),
-                                            text: 'Unmake moderator',
-                                            onTap: () => onSetModerator(member.userId, false),
-                                          ),
-                                        if (canRemove)
-                                          CallPopupMenuItem(
-                                            icon: const Icon(Icons.person_remove_alt_1_outlined),
-                                            text: 'Remove',
-                                            onTap: () => onRemoveUser(member.userId),
-                                          ),
-                                      ],
-                                    ),
-                                  )
-                                : null,
-                          );
-                        }).toList(),
+                        padding: const EdgeInsets.all(0),
+                        children: [
+                          ...members(chat, amIOwner, amIModerator),
+                          if (canInvite)
+                            TextButton.icon(
+                              onPressed: onAddUser,
+                              label: const Text('Add user'),
+                              icon: const Icon(Icons.person_add_alt, size: 16),
+                            ),
+                        ],
                       )),
-                      TextButton.icon(
-                        onPressed: onLeaveGroup,
-                        label: const Text('Leave group'),
-                        icon: const Icon(Icons.output_sharp, size: 16),
-                      ),
+                      ElevatedButton(
+                          onPressed: onLeaveGroup,
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [Icon(Icons.output_sharp, size: 16), SizedBox(width: 4), Text('Leave group')],
+                          )),
+                      const SizedBox(height: 8),
                     ],
                   ),
                   if (state.busy)
@@ -177,5 +161,51 @@ class _GroupDrawerState extends State<GroupDrawer> {
         ),
       ),
     );
+  }
+
+  List<Widget> members(Chat chat, bool amIOwner, bool amIModerator) {
+    return chat.members.map((member) {
+      final isModerator = member.groupAuthorities == GroupAuthorities.moderator;
+      final isRegular = member.groupAuthorities == null;
+
+      final canRemoveUsers = amIOwner || amIModerator && isRegular;
+      final canRemoveModerators = amIOwner && isModerator;
+      final canRemove = canRemoveUsers || canRemoveModerators;
+      final canMakeModerator = amIOwner && isRegular;
+      final canRemoveModerator = amIOwner && isModerator;
+
+      return ListTile(
+        minTileHeight: 0,
+        title: Text(member.userId),
+        subtitle: Text(member.groupAuthorities?.name ?? 'member'),
+        trailing: (canMakeModerator || canRemoveModerator || canRemove)
+            ? SizedBox(
+                width: 20,
+                child: CallPopupMenuButton(
+                  items: [
+                    if (canMakeModerator)
+                      CallPopupMenuItem(
+                        icon: const Icon(Icons.add_moderator_outlined),
+                        text: 'Make moderator',
+                        onTap: () => onSetModerator(member.userId, true),
+                      ),
+                    if (canRemoveModerator)
+                      CallPopupMenuItem(
+                        icon: const Icon(Icons.remove_moderator_outlined),
+                        text: 'Unmake moderator',
+                        onTap: () => onSetModerator(member.userId, false),
+                      ),
+                    if (canRemove)
+                      CallPopupMenuItem(
+                        icon: const Icon(Icons.person_remove_alt_1_outlined),
+                        text: 'Remove',
+                        onTap: () => onRemoveUser(member.userId),
+                      ),
+                  ],
+                ),
+              )
+            : null,
+      );
+    }).toList();
   }
 }
