@@ -165,6 +165,7 @@ class _GroupDrawerState extends State<GroupDrawer> {
 
   List<Widget> members(Chat chat, bool amIOwner, bool amIModerator) {
     return chat.members.map((member) {
+      final isMe = member.userId == widget.userId;
       final isModerator = member.groupAuthorities == GroupAuthorities.moderator;
       final isRegular = member.groupAuthorities == null;
 
@@ -178,7 +179,7 @@ class _GroupDrawerState extends State<GroupDrawer> {
         minTileHeight: 0,
         title: Text(member.userId),
         subtitle: Text(member.groupAuthorities?.name ?? 'member'),
-        trailing: (canMakeModerator || canRemoveModerator || canRemove)
+        trailing: ((canMakeModerator || canRemoveModerator || canRemove) && !isMe)
             ? SizedBox(
                 width: 20,
                 child: CallPopupMenuButton(
