@@ -193,6 +193,7 @@ class _MessageListViewState extends State<MessageListView> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return BlocBuilder<ChatTypingCubit, TypingState>(
       builder: (context, typingState) {
@@ -231,7 +232,7 @@ class _MessageListViewState extends State<MessageListView> {
               padding: const EdgeInsets.all(4),
               child: CircleAvatar(
                 maxRadius: 16,
-                backgroundColor: theme.primaryColorDark.withOpacity(0.8),
+                backgroundColor: colorScheme.tertiary,
                 child: FittedBox(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -248,8 +249,8 @@ class _MessageListViewState extends State<MessageListView> {
           theme: DefaultChatTheme(
             inputBackgroundColor: Colors.white,
             inputTextColor: Colors.black,
-            primaryColor: theme.primaryColor,
-            secondaryColor: theme.primaryColorDark,
+            primaryColor: colorScheme.primary,
+            secondaryColor: colorScheme.secondary,
             sentMessageBodyTextStyle: const TextStyle(color: Colors.white),
             receivedMessageBodyTextStyle: const TextStyle(color: Colors.white),
             inputMargin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
