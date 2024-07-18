@@ -45,7 +45,7 @@ class _AddUserDialogState extends State<AddUserDialog> {
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) {
                     if (value == null || value.isEmpty) return 'Please enter phone number';
-                    if (value.length < 8) return 'Phone number is too short';
+                    if (value.length < 3) return 'Phone number is too short';
                     return null;
                   },
                   inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^[+\d]+$'))],
