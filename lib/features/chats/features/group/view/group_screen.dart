@@ -56,13 +56,14 @@ class _GroupScreenState extends State<GroupScreen> {
                     outboxMessageDeletes: state.outboxMessageDeletes,
                     fetchingHistory: state.fetchingHistory,
                     historyEndReached: state.historyEndReached,
-                    onSendMessage: (content) => groupCubit.sendMessage(content),
+                    onSendMessage: (content, _) => groupCubit.sendMessage(content),
                     onSendReply: (content, refMessage) => groupCubit.sendReply(content, refMessage),
                     onSendForward: (content, refMessage) => groupCubit.sendForward(refMessage),
                     onSendEdit: (content, refMessage) => groupCubit.sendEdit(content, refMessage),
                     onDelete: (refMessage) => groupCubit.deleteMessage(refMessage),
                     onViewed: (refMessage) => groupCubit.markAsViewed(refMessage),
                     onFetchHistory: groupCubit.fetchHistory,
+                    hasSmsFeature: false,
                   );
                 }
 

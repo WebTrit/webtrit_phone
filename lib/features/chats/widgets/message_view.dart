@@ -145,6 +145,11 @@ class _MessageViewState extends State<MessageView> {
             if (isEdited && !isDeleted) ...[
               const Text('[edited]', style: TextStyle(color: Colors.white, fontSize: 12)),
             ],
+            if (isMine && (realMessage?.viaSms ?? false) && !isDeleted) ...[
+              const Text('[sms]', style: TextStyle(color: Colors.white, fontSize: 12)),
+              if (realMessage?.smsOutState != null)
+                Text('[${realMessage?.smsOutState?.name}]', style: const TextStyle(color: Colors.white, fontSize: 12)),
+            ],
             if (isDeleted) ...[
               NameBuilder(senderId: senderId, userId: widget.userId),
               const Text('[deleted]', style: TextStyle(color: Colors.white, fontSize: 12)),

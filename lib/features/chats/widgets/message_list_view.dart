@@ -31,6 +31,7 @@ class MessageListView extends StatefulWidget {
     required this.onDelete,
     required this.onViewed,
     required this.onFetchHistory,
+    required this.hasSmsFeature,
     super.key,
   });
 
@@ -41,13 +42,14 @@ class MessageListView extends StatefulWidget {
   final List<ChatOutboxMessageDeleteEntry> outboxMessageDeletes;
   final bool fetchingHistory;
   final bool historyEndReached;
-  final Function(String content) onSendMessage;
+  final Function(String content, bool useSms) onSendMessage;
   final Function(String content, ChatMessage refMessage) onSendReply;
   final Function(String content, ChatMessage refMessage) onSendForward;
   final Function(String content, ChatMessage refMessage) onSendEdit;
   final Function(ChatMessage refMessage) onDelete;
   final Function(ChatMessage refMessage) onViewed;
   final Future Function() onFetchHistory;
+  final bool hasSmsFeature;
 
   @override
   State<MessageListView> createState() => _MessageListViewState();
@@ -59,6 +61,7 @@ class _MessageListViewState extends State<MessageListView> {
   List<types.Message> messages = [];
   ChatMessage? editingMessage;
   ChatMessage? replyingMessage;
+  bool useSms = false;
 
   final inputController = TextEditingController();
 
@@ -161,7 +164,7 @@ class _MessageListViewState extends State<MessageListView> {
       setState(() => editingMessage = null);
       inputController.text = '';
     } else {
-      widget.onSendMessage(message.text);
+      widget.onSendMessage(message.text, widget.hasSmsFeature ? useSms : false);
     }
   }
 
@@ -296,12 +299,34 @@ class _MessageListViewState extends State<MessageListView> {
                       },
                     ),
                   if (messageForForward == null)
-                    Input(
-                      onSendPressed: handleSend,
-                      options: InputOptions(
-                        textEditingController: inputController,
-                        onTextChanged: (_) => context.read<ChatTypingCubit>().sendTyping(),
-                      ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Input(
+                            onSendPressed: handleSend,
+                            options: InputOptions(
+                              textEditingController: inputController,
+                              onTextChanged: (_) => context.read<ChatTypingCubit>().sendTyping(),
+                            ),
+                          ),
+                        ),
+                        if (widget.hasSmsFeature &&
+                            replyingMessage == null &&
+                            editingMessage == null &&
+                            messageForForward == null)
+                          Column(
+                            children: [
+                              SizedBox(
+                                height: 24,
+                                child: Checkbox(
+                                  value: useSms,
+                                  onChanged: (v) => setState(() => useSms = v ?? false),
+                                ),
+                              ),
+                              const Text('SMS', style: TextStyle(fontSize: 12)),
+                            ],
+                          ),
+                      ],
                     ),
                 ],
               );
