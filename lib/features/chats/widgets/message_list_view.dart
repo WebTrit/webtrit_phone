@@ -210,6 +210,7 @@ class _MessageListViewState extends State<MessageListView> {
           showUserAvatars: true,
           onEndReached: widget.onFetchHistory,
           isLastPage: widget.historyEndReached,
+          emojiEnlargementBehavior: EmojiEnlargementBehavior.never,
           typingIndicatorOptions: TypingIndicatorOptions(
             typingUsers: typingUsers,
             animationSpeed: const Duration(seconds: 1),
