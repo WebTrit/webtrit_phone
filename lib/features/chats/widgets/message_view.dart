@@ -40,6 +40,7 @@ class MessageView extends StatefulWidget {
 class _MessageViewState extends State<MessageView> {
   late final chatsRepository = context.read<ChatsRepository>();
   late final client = context.read<ChatsBloc>().state.client;
+  final widgetKey = GlobalKey();
 
   static final previewsCache = LruMap<int, types.PreviewData>(maximumSize: 500);
 
@@ -71,6 +72,19 @@ class _MessageViewState extends State<MessageView> {
     return null;
   }
 
+  RelativeRect getRelativeRect(GlobalKey key) {
+    final RenderBox button = context.findRenderObject()! as RenderBox;
+    final RenderBox overlay = Navigator.of(context).overlay!.context.findRenderObject()! as RenderBox;
+    late Offset offset = const Offset(5, 0);
+    return RelativeRect.fromRect(
+      Rect.fromPoints(
+        button.localToGlobal(offset, ancestor: overlay),
+        button.localToGlobal(button.size.bottomRight(Offset.zero) + offset, ancestor: overlay),
+      ),
+      Offset.zero & overlay.size,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     ChatMessage? realMessage;
@@ -89,35 +103,43 @@ class _MessageViewState extends State<MessageView> {
 
     if (isDeleted) {}
 
-    return CallPopupMenuButton(
-      items: [
-        if (isSended && !isDeleted)
-          CallPopupMenuItem(
-            text: 'Reply',
-            icon: const Icon(Icons.reply),
-            onTap: () => widget.handleSetForReply(realMessage!),
-          ),
-        if (isSended && !isDeleted)
-          CallPopupMenuItem(
-            text: 'Forward',
-            icon: const Icon(Icons.forward),
-            onTap: () => widget.handleSetForForward(realMessage!),
-          ),
-        if (isMine && isSended && !isForward && !isDeleted)
-          CallPopupMenuItem(
-            text: 'Edit',
-            icon: const Icon(Icons.edit),
-            onTap: () => widget.handleSetForEdit(realMessage!),
-          ),
-        if (isMine && isSended && !isDeleted)
-          CallPopupMenuItem(
-            text: 'Delete',
-            icon: const Icon(Icons.remove),
-            onTap: () => widget.handleDelete(realMessage!),
-          ),
-      ],
-      child: Padding(
+    return GestureDetector(
+      onLongPress: () {
+        showMenu(
+          context: context,
+          position: getRelativeRect(widgetKey),
+          items: [
+            if (isSended && !isDeleted)
+              MessageMenuItem(
+                text: 'Reply',
+                icon: const Icon(Icons.reply),
+                onTap: () => widget.handleSetForReply(realMessage!),
+              ),
+            if (isSended && !isDeleted)
+              MessageMenuItem(
+                text: 'Forward',
+                icon: const Icon(Icons.forward),
+                onTap: () => widget.handleSetForForward(realMessage!),
+              ),
+            if (isMine && isSended && !isForward && !isDeleted)
+              MessageMenuItem(
+                text: 'Edit',
+                icon: const Icon(Icons.edit),
+                onTap: () => widget.handleSetForEdit(realMessage!),
+              ),
+            if (isMine && isSended && !isDeleted)
+              MessageMenuItem(
+                text: 'Delete',
+                icon: const Icon(Icons.remove),
+                onTap: () => widget.handleDelete(realMessage!),
+              ),
+          ],
+        );
+      },
+      child: Container(
         padding: const EdgeInsets.all(12),
+        key: widgetKey,
+        color: Colors.amber.withOpacity(0.01),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -133,7 +155,7 @@ class _MessageViewState extends State<MessageView> {
             ],
             if (!isForward && !isDeleted)
               TextMessage(
-                emojiEnlargementBehavior: EmojiEnlargementBehavior.never,
+                emojiEnlargementBehavior: EmojiEnlargementBehavior.single,
                 hideBackgroundOnEmojiMessages: false,
                 message: messageWithPreview(widget.message),
                 showName: true,
@@ -190,7 +212,7 @@ class _MessageViewState extends State<MessageView> {
               ],
             ),
             child: TextMessage(
-              emojiEnlargementBehavior: EmojiEnlargementBehavior.never,
+              emojiEnlargementBehavior: EmojiEnlargementBehavior.single,
               hideBackgroundOnEmojiMessages: false,
               message: messageWithPreview(textMessage),
               showName: true,
@@ -228,7 +250,7 @@ class _MessageViewState extends State<MessageView> {
         ],
       ),
       child: TextMessage(
-        emojiEnlargementBehavior: EmojiEnlargementBehavior.never,
+        emojiEnlargementBehavior: EmojiEnlargementBehavior.single,
         hideBackgroundOnEmojiMessages: false,
         message: messageWithPreview(textMessage),
         showName: true,
@@ -239,4 +261,25 @@ class _MessageViewState extends State<MessageView> {
       ),
     );
   }
+}
+
+class MessageMenuItem extends PopupMenuItem {
+  MessageMenuItem({
+    super.key,
+    super.value,
+    super.onTap,
+    super.enabled = true,
+    super.textStyle,
+    required String text,
+    required Widget icon,
+  }) : super(
+          child: Row(
+            children: [
+              Padding(padding: const EdgeInsets.all(8), child: icon),
+              Padding(padding: const EdgeInsets.symmetric(horizontal: 4), child: Text(text)),
+            ],
+          ),
+          height: 0,
+          padding: EdgeInsets.zero,
+        );
 }
