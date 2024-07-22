@@ -10,6 +10,7 @@ import 'package:webtrit_phone/features/features.dart';
 // TODO:
 //  - extract logic to cubit
 //  - handle business errors
+//  - use contacts picker or user search instead raw numbers, when core/adapter arch will be ready to distinguish users
 
 class GroupBuilderScreen extends StatefulWidget {
   const GroupBuilderScreen({super.key});

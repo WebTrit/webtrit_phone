@@ -21,4 +21,4 @@ class NameBuilder extends StatelessWidget {
   }
 }
 
-// TODO: load contact name from contacts
+// TODO: load contact name from contacts if exists

@@ -225,3 +225,6 @@ class OutboxQueueWorker {
     }
   }
 }
+
+
+// TODO: extract events and commands to separate classes

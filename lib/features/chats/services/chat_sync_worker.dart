@@ -116,7 +116,7 @@ class ChatsSyncWorker {
       } finally {
         // Wait a sec before retrying
         await Future.delayed(const Duration(seconds: 1));
-        yield {'event': 'retry'};
+        yield {'event': 'retry'}; // Do not remove this yield, it's important for break on close stream
       }
     }
   }
@@ -144,7 +144,6 @@ class ChatsSyncWorker {
         yield chat;
 
         // Get last update time for sync messages from
-        // DateTime? lastUpdate = await chatsRepository.lastChatMessageUpdatedAt(chatId);
         final newestCursor = await chatsRepository.getChatMessageSyncCursor(chatId, MessageSyncCursorType.newest);
 
         // If no last update, fetch history of last 100 messages for initial state
@@ -255,7 +254,7 @@ class ChatsSyncWorker {
       } finally {
         // Wait a sec before retrying
         await Future.delayed(const Duration(seconds: 1));
-        yield {'event': 'retry'};
+        yield {'event': 'retry'}; // Do not remove this yield, it's important for break on close stream
       }
     }
   }
@@ -290,3 +289,8 @@ class StreamBuffer<T> extends StreamTransformerBase<T, T> {
     return controller.stream;
   }
 }
+
+
+
+// TODO: implelemnt skip since for chat info
+// TODO: extract events and commands to separate classes
