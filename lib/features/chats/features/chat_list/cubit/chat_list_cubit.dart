@@ -22,23 +22,27 @@ class ChatListCubit extends Cubit<ChatListState> {
   void init() async {
     _logger.info('Initialising');
 
-    final chats = await _chatsRepository.getChats();
-    chats.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
-
-    emit(ChatListState(chats: chats, initialising: false));
-    _logger.info('Initialised: ${chats.length} chats');
+    final chatsList = await _chatsRepository.getChats();
+    chatsList.sort(_comparator);
+    emit(ChatListState(chats: chatsList, initialising: false));
+    _logger.info('Initialised: ${chatsList.length} chats');
 
     _chatsListSub = _chatsRepository.eventBus.listen((event) {
       _logger.info('Event: $event');
 
       if (event is ChatUpdate) {
-        emit(state.copyWith(chats: state.chats.mergeWith(event.chat)));
+        var newList = state.chats.copyMerge(event.chat);
+        newList.sort(_comparator);
+        emit(state.copyWith(chats: newList));
       }
       if (event is ChatRemove) {
-        emit(state.copyWith(chats: state.chats.where((chat) => chat.id != event.chatId).toList()));
+        var newList = state.chats.copyRemove(event.chatId);
+        emit(state.copyWith(chats: newList));
       }
     });
   }
+
+  int _comparator(Chat a, Chat b) => b.updatedAt.compareTo(a.updatedAt);
 
   @override
   Future<void> close() {

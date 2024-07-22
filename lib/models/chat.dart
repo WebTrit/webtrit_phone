@@ -86,7 +86,7 @@ enum ChatType { dialog, group }
 extension ChatListExtension<T extends Chat> on List<T> {
   T findById(int id) => firstWhere((element) => element.id == id);
 
-  List<T> mergeWith(T chat) {
+  List<T> copyMerge(T chat) {
     final newList = List<T>.from(this);
 
     final index = newList.indexWhere((element) => element.id == chat.id);
@@ -95,7 +95,10 @@ extension ChatListExtension<T extends Chat> on List<T> {
     } else {
       newList[index] = chat;
     }
-    newList.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
     return newList;
+  }
+
+  List<T> copyRemove(int chatId) {
+    return where((chat) => chat.id != chatId).toList();
   }
 }

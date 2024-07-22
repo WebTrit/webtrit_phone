@@ -8,7 +8,6 @@ import 'package:stream_transform/stream_transform.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/repositories/chats/components/chats_events.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 class ChatListItem extends StatefulWidget {
