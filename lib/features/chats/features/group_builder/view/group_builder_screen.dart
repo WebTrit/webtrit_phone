@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 
 // TODO:
 //  - extract logic to cubit
@@ -20,17 +22,19 @@ class GroupBuilderScreen extends StatefulWidget {
 }
 
 class _GroupBuilderScreenState extends State<GroupBuilderScreen> {
+  late final contactsRepository = context.read<ContactsRepository>();
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
-  Set<String> selectedUsers = {};
+
+  Set<Contact> selectedUsers = {};
   bool busy = false;
 
   bool get isValid => formKey.currentState?.validate() == true;
 
   onAddUser() async {
-    final result = await showDialog<String>(
+    final result = await showDialog<Contact>(
       context: context,
-      builder: (context) => const AddUserDialog(),
+      builder: (context) => AddContactDialog(contactsRepository: contactsRepository),
     );
 
     if (result != null) {
@@ -38,7 +42,7 @@ class _GroupBuilderScreenState extends State<GroupBuilderScreen> {
     }
   }
 
-  void onRemoveMember(String user) {
+  void onRemoveMember(Contact user) {
     setState(() => selectedUsers.remove(user));
   }
 
@@ -54,7 +58,7 @@ class _GroupBuilderScreenState extends State<GroupBuilderScreen> {
         setState(() => busy = true);
         final payload = {
           'name': nameController.text,
-          'member_ids': selectedUsers.toList(),
+          'member_ids': selectedUsers.map((contact) => contact.sourceId).toList(),
         };
         final result = await userChannel.push('chat:create_group', payload).future;
 
@@ -123,13 +127,11 @@ class _GroupBuilderScreenState extends State<GroupBuilderScreen> {
   }
 
   Iterable<Widget> membersList() {
-    return selectedUsers.map((user) {
-      return ListTile(
-        title: Text(user),
-        trailing: IconButton(
-          icon: const Icon(Icons.remove),
-          onPressed: () => onRemoveMember(user),
-        ),
+    return selectedUsers.map((contact) {
+      return ContactTile(
+        displayName: contact.name,
+        thumbnail: contact.thumbnail,
+        registered: contact.registered,
       );
     });
   }
