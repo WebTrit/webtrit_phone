@@ -20,6 +20,7 @@ UserContact _$UserContactFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$UserContact {
+  String get userId => throw _privateConstructorUsedError;
   SipStatus? get sipStatus => throw _privateConstructorUsedError;
   Numbers get numbers => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
@@ -41,7 +42,8 @@ abstract class $UserContactCopyWith<$Res> {
       _$UserContactCopyWithImpl<$Res, UserContact>;
   @useResult
   $Res call(
-      {SipStatus? sipStatus,
+      {String userId,
+      SipStatus? sipStatus,
       Numbers numbers,
       String? email,
       String? firstName,
@@ -65,6 +67,7 @@ class _$UserContactCopyWithImpl<$Res, $Val extends UserContact>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? userId = null,
     Object? sipStatus = freezed,
     Object? numbers = null,
     Object? email = freezed,
@@ -74,6 +77,10 @@ class _$UserContactCopyWithImpl<$Res, $Val extends UserContact>
     Object? companyName = freezed,
   }) {
     return _then(_value.copyWith(
+      userId: null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
       sipStatus: freezed == sipStatus
           ? _value.sipStatus
           : sipStatus // ignore: cast_nullable_to_non_nullable
@@ -123,7 +130,8 @@ abstract class _$$UserContactImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {SipStatus? sipStatus,
+      {String userId,
+      SipStatus? sipStatus,
       Numbers numbers,
       String? email,
       String? firstName,
@@ -146,6 +154,7 @@ class __$$UserContactImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? userId = null,
     Object? sipStatus = freezed,
     Object? numbers = null,
     Object? email = freezed,
@@ -155,6 +164,10 @@ class __$$UserContactImplCopyWithImpl<$Res>
     Object? companyName = freezed,
   }) {
     return _then(_$UserContactImpl(
+      userId: null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
       sipStatus: freezed == sipStatus
           ? _value.sipStatus
           : sipStatus // ignore: cast_nullable_to_non_nullable
@@ -192,7 +205,8 @@ class __$$UserContactImplCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$UserContactImpl implements _UserContact {
   const _$UserContactImpl(
-      {this.sipStatus,
+      {required this.userId,
+      this.sipStatus,
       required this.numbers,
       this.email,
       this.firstName,
@@ -203,6 +217,8 @@ class _$UserContactImpl implements _UserContact {
   factory _$UserContactImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserContactImplFromJson(json);
 
+  @override
+  final String userId;
   @override
   final SipStatus? sipStatus;
   @override
@@ -220,7 +236,7 @@ class _$UserContactImpl implements _UserContact {
 
   @override
   String toString() {
-    return 'UserContact(sipStatus: $sipStatus, numbers: $numbers, email: $email, firstName: $firstName, lastName: $lastName, aliasName: $aliasName, companyName: $companyName)';
+    return 'UserContact(userId: $userId, sipStatus: $sipStatus, numbers: $numbers, email: $email, firstName: $firstName, lastName: $lastName, aliasName: $aliasName, companyName: $companyName)';
   }
 
   @override
@@ -228,6 +244,7 @@ class _$UserContactImpl implements _UserContact {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$UserContactImpl &&
+            (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.sipStatus, sipStatus) ||
                 other.sipStatus == sipStatus) &&
             (identical(other.numbers, numbers) || other.numbers == numbers) &&
@@ -244,8 +261,8 @@ class _$UserContactImpl implements _UserContact {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, sipStatus, numbers, email,
-      firstName, lastName, aliasName, companyName);
+  int get hashCode => Object.hash(runtimeType, userId, sipStatus, numbers,
+      email, firstName, lastName, aliasName, companyName);
 
   @JsonKey(ignore: true)
   @override
@@ -263,7 +280,8 @@ class _$UserContactImpl implements _UserContact {
 
 abstract class _UserContact implements UserContact {
   const factory _UserContact(
-      {final SipStatus? sipStatus,
+      {required final String userId,
+      final SipStatus? sipStatus,
       required final Numbers numbers,
       final String? email,
       final String? firstName,
@@ -274,6 +292,8 @@ abstract class _UserContact implements UserContact {
   factory _UserContact.fromJson(Map<String, dynamic> json) =
       _$UserContactImpl.fromJson;
 
+  @override
+  String get userId;
   @override
   SipStatus? get sipStatus;
   @override
