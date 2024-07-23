@@ -143,7 +143,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                         for (final activeCall in activeCalls)
                           CallInfo(
                             transferProcessing: activeTransfer?.processing ?? false,
-                            transferAttemptInvite: false,
+                            transferAttemptInvite: activeCall.transfer?.attemptInviteTransfer ?? false,
                             isIncoming: activeCall.isIncoming,
                             held: activeCall.held,
                             username: activeCall.displayName ?? activeCall.handle.value,
@@ -173,7 +173,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       wasAccepted: activeCall.wasAccepted,
                       wasHungUp: activeCall.wasHungUp,
                       cameraValue: cameraEnabled,
-                      transferAttemptInvite: false,
+                      transferAttemptInvite: activeCall.transfer?.attemptInviteTransfer ?? false,
                       onCameraChanged: (bool value) {
                         setState(() {
                           cameraEnabled = value;
