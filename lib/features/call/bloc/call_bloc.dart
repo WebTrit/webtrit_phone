@@ -720,7 +720,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         displayName: event.callerDisplayName,
         video: video,
         createdTime: clock.now(),
-        transfer: Transfer.tryCreateAttemptedTransfer(event.referredBy, event.replaceCallId),
+        transfer: Transfer.tryCreateAttemptInviteTransfer(event.referredBy, event.replaceCallId),
       )));
     }
 
