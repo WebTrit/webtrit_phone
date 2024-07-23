@@ -24,6 +24,8 @@ mixin _$Transfer {
         attendedTransferTransferSubmitted,
     required TResult Function(String referId, String referTo, String referredBy)
         attendedTransferConfirmationRequested,
+    required TResult Function(String replaceCallId, String referredBy)
+        attemptInviteTransfer,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -33,6 +35,8 @@ mixin _$Transfer {
     TResult? Function(String replaceCallId)? attendedTransferTransferSubmitted,
     TResult? Function(String referId, String referTo, String referredBy)?
         attendedTransferConfirmationRequested,
+    TResult? Function(String replaceCallId, String referredBy)?
+        attemptInviteTransfer,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -42,6 +46,8 @@ mixin _$Transfer {
     TResult Function(String replaceCallId)? attendedTransferTransferSubmitted,
     TResult Function(String referId, String referTo, String referredBy)?
         attendedTransferConfirmationRequested,
+    TResult Function(String replaceCallId, String referredBy)?
+        attemptInviteTransfer,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -55,6 +61,8 @@ mixin _$Transfer {
         attendedTransferTransferSubmitted,
     required TResult Function(AttendedTransferConfirmationRequested value)
         attendedTransferConfirmationRequested,
+    required TResult Function(AttemptInviteTransfer value)
+        attemptInviteTransfer,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -66,6 +74,7 @@ mixin _$Transfer {
         attendedTransferTransferSubmitted,
     TResult? Function(AttendedTransferConfirmationRequested value)?
         attendedTransferConfirmationRequested,
+    TResult? Function(AttemptInviteTransfer value)? attemptInviteTransfer,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -77,6 +86,7 @@ mixin _$Transfer {
         attendedTransferTransferSubmitted,
     TResult Function(AttendedTransferConfirmationRequested value)?
         attendedTransferConfirmationRequested,
+    TResult Function(AttemptInviteTransfer value)? attemptInviteTransfer,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -146,6 +156,8 @@ class _$BlindTransferInitiatedImpl extends BlindTransferInitiated {
         attendedTransferTransferSubmitted,
     required TResult Function(String referId, String referTo, String referredBy)
         attendedTransferConfirmationRequested,
+    required TResult Function(String replaceCallId, String referredBy)
+        attemptInviteTransfer,
   }) {
     return blindTransferInitiated();
   }
@@ -158,6 +170,8 @@ class _$BlindTransferInitiatedImpl extends BlindTransferInitiated {
     TResult? Function(String replaceCallId)? attendedTransferTransferSubmitted,
     TResult? Function(String referId, String referTo, String referredBy)?
         attendedTransferConfirmationRequested,
+    TResult? Function(String replaceCallId, String referredBy)?
+        attemptInviteTransfer,
   }) {
     return blindTransferInitiated?.call();
   }
@@ -170,6 +184,8 @@ class _$BlindTransferInitiatedImpl extends BlindTransferInitiated {
     TResult Function(String replaceCallId)? attendedTransferTransferSubmitted,
     TResult Function(String referId, String referTo, String referredBy)?
         attendedTransferConfirmationRequested,
+    TResult Function(String replaceCallId, String referredBy)?
+        attemptInviteTransfer,
     required TResult orElse(),
   }) {
     if (blindTransferInitiated != null) {
@@ -189,6 +205,8 @@ class _$BlindTransferInitiatedImpl extends BlindTransferInitiated {
         attendedTransferTransferSubmitted,
     required TResult Function(AttendedTransferConfirmationRequested value)
         attendedTransferConfirmationRequested,
+    required TResult Function(AttemptInviteTransfer value)
+        attemptInviteTransfer,
   }) {
     return blindTransferInitiated(this);
   }
@@ -203,6 +221,7 @@ class _$BlindTransferInitiatedImpl extends BlindTransferInitiated {
         attendedTransferTransferSubmitted,
     TResult? Function(AttendedTransferConfirmationRequested value)?
         attendedTransferConfirmationRequested,
+    TResult? Function(AttemptInviteTransfer value)? attemptInviteTransfer,
   }) {
     return blindTransferInitiated?.call(this);
   }
@@ -217,6 +236,7 @@ class _$BlindTransferInitiatedImpl extends BlindTransferInitiated {
         attendedTransferTransferSubmitted,
     TResult Function(AttendedTransferConfirmationRequested value)?
         attendedTransferConfirmationRequested,
+    TResult Function(AttemptInviteTransfer value)? attemptInviteTransfer,
     required TResult orElse(),
   }) {
     if (blindTransferInitiated != null) {
@@ -308,6 +328,8 @@ class _$BlindTransferTransferSubmittedImpl
         attendedTransferTransferSubmitted,
     required TResult Function(String referId, String referTo, String referredBy)
         attendedTransferConfirmationRequested,
+    required TResult Function(String replaceCallId, String referredBy)
+        attemptInviteTransfer,
   }) {
     return blindTransferTransferSubmitted(toNumber);
   }
@@ -320,6 +342,8 @@ class _$BlindTransferTransferSubmittedImpl
     TResult? Function(String replaceCallId)? attendedTransferTransferSubmitted,
     TResult? Function(String referId, String referTo, String referredBy)?
         attendedTransferConfirmationRequested,
+    TResult? Function(String replaceCallId, String referredBy)?
+        attemptInviteTransfer,
   }) {
     return blindTransferTransferSubmitted?.call(toNumber);
   }
@@ -332,6 +356,8 @@ class _$BlindTransferTransferSubmittedImpl
     TResult Function(String replaceCallId)? attendedTransferTransferSubmitted,
     TResult Function(String referId, String referTo, String referredBy)?
         attendedTransferConfirmationRequested,
+    TResult Function(String replaceCallId, String referredBy)?
+        attemptInviteTransfer,
     required TResult orElse(),
   }) {
     if (blindTransferTransferSubmitted != null) {
@@ -351,6 +377,8 @@ class _$BlindTransferTransferSubmittedImpl
         attendedTransferTransferSubmitted,
     required TResult Function(AttendedTransferConfirmationRequested value)
         attendedTransferConfirmationRequested,
+    required TResult Function(AttemptInviteTransfer value)
+        attemptInviteTransfer,
   }) {
     return blindTransferTransferSubmitted(this);
   }
@@ -365,6 +393,7 @@ class _$BlindTransferTransferSubmittedImpl
         attendedTransferTransferSubmitted,
     TResult? Function(AttendedTransferConfirmationRequested value)?
         attendedTransferConfirmationRequested,
+    TResult? Function(AttemptInviteTransfer value)? attemptInviteTransfer,
   }) {
     return blindTransferTransferSubmitted?.call(this);
   }
@@ -379,6 +408,7 @@ class _$BlindTransferTransferSubmittedImpl
         attendedTransferTransferSubmitted,
     TResult Function(AttendedTransferConfirmationRequested value)?
         attendedTransferConfirmationRequested,
+    TResult Function(AttemptInviteTransfer value)? attemptInviteTransfer,
     required TResult orElse(),
   }) {
     if (blindTransferTransferSubmitted != null) {
@@ -478,6 +508,8 @@ class _$AttendedTransferTransferSubmittedImpl
         attendedTransferTransferSubmitted,
     required TResult Function(String referId, String referTo, String referredBy)
         attendedTransferConfirmationRequested,
+    required TResult Function(String replaceCallId, String referredBy)
+        attemptInviteTransfer,
   }) {
     return attendedTransferTransferSubmitted(replaceCallId);
   }
@@ -490,6 +522,8 @@ class _$AttendedTransferTransferSubmittedImpl
     TResult? Function(String replaceCallId)? attendedTransferTransferSubmitted,
     TResult? Function(String referId, String referTo, String referredBy)?
         attendedTransferConfirmationRequested,
+    TResult? Function(String replaceCallId, String referredBy)?
+        attemptInviteTransfer,
   }) {
     return attendedTransferTransferSubmitted?.call(replaceCallId);
   }
@@ -502,6 +536,8 @@ class _$AttendedTransferTransferSubmittedImpl
     TResult Function(String replaceCallId)? attendedTransferTransferSubmitted,
     TResult Function(String referId, String referTo, String referredBy)?
         attendedTransferConfirmationRequested,
+    TResult Function(String replaceCallId, String referredBy)?
+        attemptInviteTransfer,
     required TResult orElse(),
   }) {
     if (attendedTransferTransferSubmitted != null) {
@@ -521,6 +557,8 @@ class _$AttendedTransferTransferSubmittedImpl
         attendedTransferTransferSubmitted,
     required TResult Function(AttendedTransferConfirmationRequested value)
         attendedTransferConfirmationRequested,
+    required TResult Function(AttemptInviteTransfer value)
+        attemptInviteTransfer,
   }) {
     return attendedTransferTransferSubmitted(this);
   }
@@ -535,6 +573,7 @@ class _$AttendedTransferTransferSubmittedImpl
         attendedTransferTransferSubmitted,
     TResult? Function(AttendedTransferConfirmationRequested value)?
         attendedTransferConfirmationRequested,
+    TResult? Function(AttemptInviteTransfer value)? attemptInviteTransfer,
   }) {
     return attendedTransferTransferSubmitted?.call(this);
   }
@@ -549,6 +588,7 @@ class _$AttendedTransferTransferSubmittedImpl
         attendedTransferTransferSubmitted,
     TResult Function(AttendedTransferConfirmationRequested value)?
         attendedTransferConfirmationRequested,
+    TResult Function(AttemptInviteTransfer value)? attemptInviteTransfer,
     required TResult orElse(),
   }) {
     if (attendedTransferTransferSubmitted != null) {
@@ -666,6 +706,8 @@ class _$AttendedTransferConfirmationRequestedImpl
         attendedTransferTransferSubmitted,
     required TResult Function(String referId, String referTo, String referredBy)
         attendedTransferConfirmationRequested,
+    required TResult Function(String replaceCallId, String referredBy)
+        attemptInviteTransfer,
   }) {
     return attendedTransferConfirmationRequested(referId, referTo, referredBy);
   }
@@ -678,6 +720,8 @@ class _$AttendedTransferConfirmationRequestedImpl
     TResult? Function(String replaceCallId)? attendedTransferTransferSubmitted,
     TResult? Function(String referId, String referTo, String referredBy)?
         attendedTransferConfirmationRequested,
+    TResult? Function(String replaceCallId, String referredBy)?
+        attemptInviteTransfer,
   }) {
     return attendedTransferConfirmationRequested?.call(
         referId, referTo, referredBy);
@@ -691,6 +735,8 @@ class _$AttendedTransferConfirmationRequestedImpl
     TResult Function(String replaceCallId)? attendedTransferTransferSubmitted,
     TResult Function(String referId, String referTo, String referredBy)?
         attendedTransferConfirmationRequested,
+    TResult Function(String replaceCallId, String referredBy)?
+        attemptInviteTransfer,
     required TResult orElse(),
   }) {
     if (attendedTransferConfirmationRequested != null) {
@@ -711,6 +757,8 @@ class _$AttendedTransferConfirmationRequestedImpl
         attendedTransferTransferSubmitted,
     required TResult Function(AttendedTransferConfirmationRequested value)
         attendedTransferConfirmationRequested,
+    required TResult Function(AttemptInviteTransfer value)
+        attemptInviteTransfer,
   }) {
     return attendedTransferConfirmationRequested(this);
   }
@@ -725,6 +773,7 @@ class _$AttendedTransferConfirmationRequestedImpl
         attendedTransferTransferSubmitted,
     TResult? Function(AttendedTransferConfirmationRequested value)?
         attendedTransferConfirmationRequested,
+    TResult? Function(AttemptInviteTransfer value)? attemptInviteTransfer,
   }) {
     return attendedTransferConfirmationRequested?.call(this);
   }
@@ -739,6 +788,7 @@ class _$AttendedTransferConfirmationRequestedImpl
         attendedTransferTransferSubmitted,
     TResult Function(AttendedTransferConfirmationRequested value)?
         attendedTransferConfirmationRequested,
+    TResult Function(AttemptInviteTransfer value)? attemptInviteTransfer,
     required TResult orElse(),
   }) {
     if (attendedTransferConfirmationRequested != null) {
@@ -762,5 +812,192 @@ abstract class AttendedTransferConfirmationRequested extends Transfer {
   @JsonKey(ignore: true)
   _$$AttendedTransferConfirmationRequestedImplCopyWith<
           _$AttendedTransferConfirmationRequestedImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$AttemptInviteTransferImplCopyWith<$Res> {
+  factory _$$AttemptInviteTransferImplCopyWith(
+          _$AttemptInviteTransferImpl value,
+          $Res Function(_$AttemptInviteTransferImpl) then) =
+      __$$AttemptInviteTransferImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String replaceCallId, String referredBy});
+}
+
+/// @nodoc
+class __$$AttemptInviteTransferImplCopyWithImpl<$Res>
+    extends _$TransferCopyWithImpl<$Res, _$AttemptInviteTransferImpl>
+    implements _$$AttemptInviteTransferImplCopyWith<$Res> {
+  __$$AttemptInviteTransferImplCopyWithImpl(_$AttemptInviteTransferImpl _value,
+      $Res Function(_$AttemptInviteTransferImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? replaceCallId = null,
+    Object? referredBy = null,
+  }) {
+    return _then(_$AttemptInviteTransferImpl(
+      replaceCallId: null == replaceCallId
+          ? _value.replaceCallId
+          : replaceCallId // ignore: cast_nullable_to_non_nullable
+              as String,
+      referredBy: null == referredBy
+          ? _value.referredBy
+          : referredBy // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$AttemptInviteTransferImpl extends AttemptInviteTransfer {
+  const _$AttemptInviteTransferImpl(
+      {required this.replaceCallId, required this.referredBy})
+      : super._();
+
+  @override
+  final String replaceCallId;
+  @override
+  final String referredBy;
+
+  @override
+  String toString() {
+    return 'Transfer.attemptInviteTransfer(replaceCallId: $replaceCallId, referredBy: $referredBy)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AttemptInviteTransferImpl &&
+            (identical(other.replaceCallId, replaceCallId) ||
+                other.replaceCallId == replaceCallId) &&
+            (identical(other.referredBy, referredBy) ||
+                other.referredBy == referredBy));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, replaceCallId, referredBy);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AttemptInviteTransferImplCopyWith<_$AttemptInviteTransferImpl>
+      get copyWith => __$$AttemptInviteTransferImplCopyWithImpl<
+          _$AttemptInviteTransferImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() blindTransferInitiated,
+    required TResult Function(String toNumber) blindTransferTransferSubmitted,
+    required TResult Function(String replaceCallId)
+        attendedTransferTransferSubmitted,
+    required TResult Function(String referId, String referTo, String referredBy)
+        attendedTransferConfirmationRequested,
+    required TResult Function(String replaceCallId, String referredBy)
+        attemptInviteTransfer,
+  }) {
+    return attemptInviteTransfer(replaceCallId, referredBy);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? blindTransferInitiated,
+    TResult? Function(String toNumber)? blindTransferTransferSubmitted,
+    TResult? Function(String replaceCallId)? attendedTransferTransferSubmitted,
+    TResult? Function(String referId, String referTo, String referredBy)?
+        attendedTransferConfirmationRequested,
+    TResult? Function(String replaceCallId, String referredBy)?
+        attemptInviteTransfer,
+  }) {
+    return attemptInviteTransfer?.call(replaceCallId, referredBy);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? blindTransferInitiated,
+    TResult Function(String toNumber)? blindTransferTransferSubmitted,
+    TResult Function(String replaceCallId)? attendedTransferTransferSubmitted,
+    TResult Function(String referId, String referTo, String referredBy)?
+        attendedTransferConfirmationRequested,
+    TResult Function(String replaceCallId, String referredBy)?
+        attemptInviteTransfer,
+    required TResult orElse(),
+  }) {
+    if (attemptInviteTransfer != null) {
+      return attemptInviteTransfer(replaceCallId, referredBy);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(BlindTransferInitiated value)
+        blindTransferInitiated,
+    required TResult Function(BlindTransferTransferSubmitted value)
+        blindTransferTransferSubmitted,
+    required TResult Function(AttendedTransferTransferSubmitted value)
+        attendedTransferTransferSubmitted,
+    required TResult Function(AttendedTransferConfirmationRequested value)
+        attendedTransferConfirmationRequested,
+    required TResult Function(AttemptInviteTransfer value)
+        attemptInviteTransfer,
+  }) {
+    return attemptInviteTransfer(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(BlindTransferInitiated value)? blindTransferInitiated,
+    TResult? Function(BlindTransferTransferSubmitted value)?
+        blindTransferTransferSubmitted,
+    TResult? Function(AttendedTransferTransferSubmitted value)?
+        attendedTransferTransferSubmitted,
+    TResult? Function(AttendedTransferConfirmationRequested value)?
+        attendedTransferConfirmationRequested,
+    TResult? Function(AttemptInviteTransfer value)? attemptInviteTransfer,
+  }) {
+    return attemptInviteTransfer?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(BlindTransferInitiated value)? blindTransferInitiated,
+    TResult Function(BlindTransferTransferSubmitted value)?
+        blindTransferTransferSubmitted,
+    TResult Function(AttendedTransferTransferSubmitted value)?
+        attendedTransferTransferSubmitted,
+    TResult Function(AttendedTransferConfirmationRequested value)?
+        attendedTransferConfirmationRequested,
+    TResult Function(AttemptInviteTransfer value)? attemptInviteTransfer,
+    required TResult orElse(),
+  }) {
+    if (attemptInviteTransfer != null) {
+      return attemptInviteTransfer(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class AttemptInviteTransfer extends Transfer {
+  const factory AttemptInviteTransfer(
+      {required final String replaceCallId,
+      required final String referredBy}) = _$AttemptInviteTransferImpl;
+  const AttemptInviteTransfer._() : super._();
+
+  String get replaceCallId;
+  String get referredBy;
+  @JsonKey(ignore: true)
+  _$$AttemptInviteTransferImplCopyWith<_$AttemptInviteTransferImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
