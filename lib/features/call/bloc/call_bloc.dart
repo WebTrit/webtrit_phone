@@ -1172,7 +1172,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     newState = newState.copyWithMappedActiveCall(event.callId, (activeCall) {
       return activeCall.copyWith(
-        transfer: Transfer.blindTransferInitiated(),
+        transfer: const Transfer.blindTransferInitiated(),
       );
     });
 
