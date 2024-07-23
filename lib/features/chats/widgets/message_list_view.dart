@@ -256,6 +256,8 @@ class _MessageListViewState extends State<MessageListView> {
             secondaryColor: colorScheme.secondary,
             sentMessageBodyTextStyle: const TextStyle(color: Colors.white),
             receivedMessageBodyTextStyle: const TextStyle(color: Colors.white),
+            receivedMessageLinkTitleTextStyle: const TextStyle(color: Colors.white),
+            receivedMessageLinkDescriptionTextStyle: const TextStyle(color: Colors.white),
             inputMargin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             inputPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             messageInsetsVertical: 0,
