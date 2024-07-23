@@ -902,7 +902,7 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
     q.where((t) => t.chatId.equals(chatId));
     if (from != null) q.where((t) => t.createdAtRemote.isSmallerThanValue(from));
     if (to != null) q.where((t) => t.createdAtRemote.isBiggerOrEqualValue(to));
-    q.orderBy([(t) => OrderingTerm.desc(t.createdAtRemote)]);
+    q.orderBy([(t) => OrderingTerm.desc(t.createdAtRemote), (t) => OrderingTerm.desc(t.id)]);
     q.limit(limit);
     return q.get();
   }
