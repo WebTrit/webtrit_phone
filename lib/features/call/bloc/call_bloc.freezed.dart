@@ -12446,6 +12446,8 @@ abstract class $ActiveCallCopyWith<$Res> {
       Object? failure,
       MediaStream? localStream,
       MediaStream? remoteStream});
+
+  $TransferCopyWith<$Res>? get transfer;
 }
 
 /// @nodoc
@@ -12552,6 +12554,18 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
               as MediaStream?,
     ) as $Val);
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $TransferCopyWith<$Res>? get transfer {
+    if (_value.transfer == null) {
+      return null;
+    }
+
+    return $TransferCopyWith<$Res>(_value.transfer!, (value) {
+      return _then(_value.copyWith(transfer: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -12581,6 +12595,9 @@ abstract class _$$ActiveCallImplCopyWith<$Res>
       Object? failure,
       MediaStream? localStream,
       MediaStream? remoteStream});
+
+  @override
+  $TransferCopyWith<$Res>? get transfer;
 }
 
 /// @nodoc
