@@ -127,6 +127,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get callStatus_ready => 'Підключення встановлено';
 
   @override
+  String get call_CallActionsTooltip_accept_attemptInviteTransfer => 'Прийняти запрошення на переадресацію до іншого дзвінка';
+
+  @override
+  String get call_CallActionsTooltip_decline_attemptInviteTransfer => 'Відхилити запрошення на переадресацію до іншого дзвінка';
+
+  @override
   String get connectToYourOwnVoIPSystem_Button_Action => 'Підключіться до власної VoIP-системи';
 
   @override

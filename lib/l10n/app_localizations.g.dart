@@ -335,6 +335,18 @@ abstract class AppLocalizations {
   /// **'Connection established'**
   String get callStatus_ready;
 
+  /// No description provided for @call_CallActionsTooltip_accept_attemptInviteTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept transfer invite to another call'**
+  String get call_CallActionsTooltip_accept_attemptInviteTransfer;
+
+  /// No description provided for @call_CallActionsTooltip_decline_attemptInviteTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline transfer invite to another call'**
+  String get call_CallActionsTooltip_decline_attemptInviteTransfer;
+
   /// No description provided for @connectToYourOwnVoIPSystem_Button_Action.
   ///
   /// In en, this message translates to:
