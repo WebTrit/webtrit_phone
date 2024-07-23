@@ -173,6 +173,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       wasAccepted: activeCall.wasAccepted,
                       wasHungUp: activeCall.wasHungUp,
                       cameraValue: cameraEnabled,
+                      transferAttemptInvite: false,
                       onCameraChanged: (bool value) {
                         setState(() {
                           cameraEnabled = value;
