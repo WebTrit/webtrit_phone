@@ -908,7 +908,7 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   }
 
   Future<int?> upsertChatMessage(ChatMessageData chatMessage) async {
-    return into(chatMessagesTable).insertOnConflictUpdate(chatMessage);
+    return into(chatMessagesTable).insert(chatMessage, mode: InsertMode.insertOrReplace);
   }
 
   Future<List<ChatMessageData>> updateViews(List<int> messageIds, DateTime viewedAt) async {
@@ -921,6 +921,17 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
     );
 
     return r;
+  }
+
+  Stream<int> unreadMessagesCount(int chatId, String userId) {
+    final amount = chatMessagesTable.id.count();
+    var q = (selectOnly(chatMessagesTable)..addColumns([amount]));
+    q.where(
+      chatMessagesTable.chatId.equals(chatId) &
+          chatMessagesTable.senderId.isNotIn([userId]) &
+          chatMessagesTable.viewedAt.isNull(),
+    );
+    return q.watchSingle().map((data) => data.read(amount) ?? 0);
   }
 
   // Message sync cursor

@@ -9,17 +9,17 @@ class ChatsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: chatlist.length,
-      itemBuilder: (context, index) {
-        final chat = chatlist[index];
-        return BlocBuilder<ChatsBloc, ChatsState>(
-          builder: (context, state) {
-            return ChatListItem(
-              chat: chat,
-              userId: state.userId,
-              key: ValueKey(chat.id),
-            );
+    return BlocBuilder<ChatsBloc, ChatsState>(
+      builder: (context, state) {
+        final userId = state.userId;
+        if (userId == null) return const Center(child: CircularProgressIndicator());
+
+        return ListView.builder(
+          itemCount: chatlist.length,
+          itemBuilder: (context, index) {
+            final chat = chatlist[index];
+
+            return ChatListItem(chat: chat, userId: userId, key: ValueKey(chat.id));
           },
         );
       },

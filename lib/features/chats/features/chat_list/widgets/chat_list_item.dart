@@ -14,7 +14,7 @@ class ChatListItem extends StatefulWidget {
   const ChatListItem({required this.chat, required this.userId, super.key});
 
   final Chat chat;
-  final String? userId;
+  final String userId;
 
   @override
   State<ChatListItem> createState() => _ChatListItemState();
@@ -24,7 +24,10 @@ class _ChatListItemState extends State<ChatListItem> {
   late final chatsRepository = context.read<ChatsRepository>();
 
   ChatMessage? lastMessage;
-  StreamSubscription? _sub;
+  StreamSubscription? _lastMsgSub;
+
+  int unreadMsgsCount = 0;
+  StreamSubscription? _unreadMsgsSub;
 
   @override
   void initState() {
@@ -37,7 +40,7 @@ class _ChatListItemState extends State<ChatListItem> {
     if (!mounted) return;
     if (lastMessages.isNotEmpty) setState(() => lastMessage = lastMessages.first);
 
-    _sub = chatsRepository.eventBus
+    _lastMsgSub = chatsRepository.eventBus
         .whereType<ChatMessageUpdate>()
         .where((event) => event.message.chatId == widget.chat.id)
         .listen((event) {
@@ -46,11 +49,18 @@ class _ChatListItemState extends State<ChatListItem> {
         setState(() => lastMessage = event.message);
       }
     });
+
+    _unreadMsgsSub = chatsRepository.unreadMessagesCount(widget.chat.id, widget.userId).listen((count) {
+      if (count != unreadMsgsCount) {
+        setState(() => unreadMsgsCount = count);
+      }
+    });
   }
 
   @override
   void dispose() {
-    _sub?.cancel();
+    _lastMsgSub?.cancel();
+    _unreadMsgsSub?.cancel();
     super.dispose();
   }
 
@@ -82,7 +92,6 @@ class _ChatListItemState extends State<ChatListItem> {
         leading: leading(),
         title: title(),
         subtitle: subtitle(),
-        trailing: trail(),
         onTap: onTap,
       ),
     );
@@ -116,18 +125,35 @@ class _ChatListItemState extends State<ChatListItem> {
     if (widget.chat.type == ChatType.dialog) {
       final userId = widget.userId;
       final participant = widget.chat.members.firstWhere((m) => m.userId != userId);
-      return Text(participant.userId, style: const TextStyle(overflow: TextOverflow.ellipsis));
+      return Row(
+        children: [
+          Expanded(child: Text(participant.userId, style: const TextStyle(overflow: TextOverflow.ellipsis))),
+          const SizedBox(width: 4),
+          const Icon(Icons.person, size: 12),
+          const SizedBox(width: 4),
+        ],
+      );
     } else {
       final name = widget.chat.name ?? 'Chat ${widget.chat.id}';
-      return Text(name, style: const TextStyle(overflow: TextOverflow.ellipsis));
+      return Row(
+        children: [
+          Expanded(child: Text(name, style: const TextStyle(overflow: TextOverflow.ellipsis))),
+          const SizedBox(width: 4),
+          usersCount(),
+        ],
+      );
     }
   }
 
-  Widget trail() {
+  Widget usersCount() {
     final membersCount = widget.chat.members.length;
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: [const Icon(Icons.people, size: 16), const SizedBox(width: 8), Text('$membersCount')],
+      children: [
+        const Icon(Icons.people, size: 12),
+        const SizedBox(width: 4),
+        Text('$membersCount', style: const TextStyle(fontSize: 12))
+      ],
     );
   }
 
@@ -143,12 +169,32 @@ class _ChatListItemState extends State<ChatListItem> {
     } else {
       text = 'No messages yet';
     }
-    return Text(
-      text,
-      style: const TextStyle(
-        overflow: TextOverflow.ellipsis,
-        fontSize: 12,
-      ),
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            text,
+            style: const TextStyle(
+              overflow: TextOverflow.ellipsis,
+              fontSize: 12,
+            ),
+          ),
+        ),
+        if (unreadMsgsCount > 0) ...[
+          const SizedBox(width: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              '$unreadMsgsCount',
+              style: const TextStyle(color: Colors.white, fontSize: 12),
+            ),
+          ),
+        ]
+      ],
     );
   }
 }
