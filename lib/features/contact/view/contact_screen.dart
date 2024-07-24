@@ -6,6 +6,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/call/call.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../contact.dart';
@@ -17,23 +18,35 @@ class ContactScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: BlocBuilder<ContactBloc, ContactState>(
-        builder: (context, state) {
-          final contact = state.contact;
-          final contactPhones = state.contactPhones;
-          final contactEmails = state.contactEmails;
-          if (contact == null || contactPhones == null || contactEmails == null) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            final themeData = Theme.of(context);
-            return BlocBuilder<CallBloc, CallState>(
-              buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
-              builder: (context, callState) {
-                return ListView(
+    final themeData = Theme.of(context);
+    return BlocBuilder<ContactBloc, ContactState>(
+      builder: (context, state) {
+        final contact = state.contact;
+        final contactPhones = state.contactPhones;
+        final contactEmails = state.contactEmails;
+        if (contact == null || contactPhones == null || contactEmails == null) {
+          return const Scaffold(body: Center(child: CircularProgressIndicator()));
+        } else {
+          final canMessage = (contact.sourceType == ContactSourceType.external) && contact.sourceId.isNotEmpty;
+          return BlocBuilder<CallBloc, CallState>(
+            buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
+            builder: (context, callState) {
+              return Scaffold(
+                appBar: AppBar(
+                  actions: [
+                    if (canMessage)
+                      IconButton(
+                        icon: const Icon(Icons.message),
+                        onPressed: () {
+                          context.router.navigate(ChatsRouterPageRoute(children: [
+                            const ChatListScreenPageRoute(),
+                            ConversationScreenPageRoute(participantId: contact.sourceId),
+                          ]));
+                        },
+                      ),
+                  ],
+                ),
+                body: ListView(
                   children: [
                     Padding(
                       padding: kAllPadding16,
@@ -90,12 +103,6 @@ class ContactScreen extends StatelessWidget {
                           ));
                           context.router.maybePop();
                         },
-                        onMessagePressed: () {
-                          context.router.navigate(ChatsRouterPageRoute(children: [
-                            const ChatListScreenPageRoute(),
-                            ConversationScreenPageRoute(participantId: contactPhone.number),
-                          ]));
-                        },
                       ),
                     for (final contactEmail in contactEmails)
                       ContactEmailTile(
@@ -106,12 +113,12 @@ class ContactScreen extends StatelessWidget {
                         },
                       )
                   ],
-                );
-              },
-            );
-          }
-        },
-      ),
+                ),
+              );
+            },
+          );
+        }
+      },
     );
   }
 }
