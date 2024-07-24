@@ -29,20 +29,29 @@ class _GroupScreenState extends State<GroupScreen> {
           }
         },
         builder: (context, state) {
-          String titleText = 'Group: ${groupCubit.state.chatId}';
-          if (state is GroupStateReady) {
-            final groupName = state.chat.name;
-            if (groupName != null && groupName.isNotEmpty) titleText = groupName;
-          }
-
           return Scaffold(
             appBar: AppBar(
-              title: Text(
-                titleText,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 20),
-                textAlign: TextAlign.center,
-              ),
+              title: Builder(builder: (context) {
+                if (state is GroupStateReady && (state.chat.name?.isNotEmpty ?? false)) {
+                  return FadeIn(
+                    child: Text(
+                      state.chat.name!,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                  );
+                } else {
+                  return FadeIn(
+                    child: Text(
+                      'Group: ${groupCubit.state.chatId}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                  );
+                }
+              }),
             ),
             endDrawer: GroupDrawer(userId: chatsBloc.state.userId ?? '-1'),
             body: Builder(

@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/call/widgets/widgets.dart';
 import 'package:webtrit_phone/features/chats/features/group/group.dart';
+import 'package:webtrit_phone/features/chats/widgets/widgets.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 class GroupDrawer extends StatefulWidget {
@@ -137,9 +138,13 @@ class _GroupDrawerState extends State<GroupDrawer> {
                       )),
                       ElevatedButton(
                           onPressed: onLeaveGroup,
-                          child: const Row(
+                          child: Row(
                             mainAxisSize: MainAxisSize.min,
-                            children: [Icon(Icons.output_sharp, size: 16), SizedBox(width: 4), Text('Leave group')],
+                            children: [
+                              const Icon(Icons.output_sharp, size: 16),
+                              const SizedBox(width: 4),
+                              if (amIOwner) const Text('Delete and leave') else const Text('Leave group'),
+                            ],
                           )),
                       const SizedBox(height: 8),
                     ],
@@ -177,8 +182,8 @@ class _GroupDrawerState extends State<GroupDrawer> {
 
       return ListTile(
         minTileHeight: 0,
-        title: Text(member.userId),
-        subtitle: Text(member.groupAuthorities?.name ?? 'member'),
+        title: ParticipantName(senderId: member.userId, userId: widget.userId),
+        subtitle: Text(member.groupAuthorities?.name ?? 'member', style: const TextStyle(fontSize: 12)),
         trailing: ((canMakeModerator || canRemoveModerator || canRemove) && !isMe)
             ? SizedBox(
                 width: 20,

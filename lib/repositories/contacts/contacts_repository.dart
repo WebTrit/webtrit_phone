@@ -32,6 +32,13 @@ class ContactsRepository {
         .map(_toContact);
   }
 
+  Stream<Contact?> watchContactBySource(ContactSourceType sourceType, String sourceId) {
+    return _appDatabase.contactsDao.watchContactBySource(sourceType.toData(), sourceId).map((c) {
+      if (c == null) return null;
+      return _toContact(c);
+    });
+  }
+
   Stream<List<ContactPhone>> watchContactPhones(ContactId contactId) {
     return _appDatabase.contactPhonesDao
         .watchContactPhonesExtByContactId(contactId)
