@@ -32,12 +32,4 @@ class Transfer with _$Transfer {
 
   // Returns true if the transfer is an attempted attended transfer.
   bool get attemptInviteTransfer => this is AttemptInviteTransfer;
-
-  // Attempts to create an invite attempt transfer if both referredBy and replaceCallId are not null.
-  static Transfer? tryCreateAttemptInviteTransfer(String? referredBy, String? replaceCallId) {
-    if (referredBy != null && replaceCallId != null) {
-      return Transfer.attemptInviteTransfer(replaceCallId: replaceCallId, referredBy: referredBy);
-    }
-    return null;
-  }
 }
