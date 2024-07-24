@@ -103,7 +103,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get call_description_transferProcessing => 'Elaborazione del trasferimento';
 
   @override
-  String get call_description_transfer_requested => 'Richiesta di trasferimento';
+  String get call_description_requestToAttendedTransfer => 'Richiesta di trasferimento';
 
   @override
   String get call_FailureAcknowledgeDialog_title => 'Guasto';

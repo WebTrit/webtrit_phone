@@ -103,7 +103,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_description_transferProcessing => 'Обробка переадресації';
 
   @override
-  String get call_description_transfer_requested => 'Запит на переадресацію';
+  String get call_description_requestToAttendedTransfer => 'Запит на переадресацію';
 
   @override
   String get call_FailureAcknowledgeDialog_title => 'Помилка';

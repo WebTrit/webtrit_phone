@@ -103,7 +103,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_description_transferProcessing => 'Transfer processing';
 
   @override
-  String get call_description_transfer_requested => 'Transfer request';
+  String get call_description_requestToAttendedTransfer => 'Transfer request';
 
   @override
   String get call_FailureAcknowledgeDialog_title => 'Failure';

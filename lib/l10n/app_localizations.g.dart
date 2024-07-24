@@ -287,11 +287,11 @@ abstract class AppLocalizations {
   /// **'Transfer processing'**
   String get call_description_transferProcessing;
 
-  /// No description provided for @call_description_transfer_requested.
+  /// No description provided for @call_description_requestToAttendedTransfer.
   ///
   /// In en, this message translates to:
   /// **'Transfer request'**
-  String get call_description_transfer_requested;
+  String get call_description_requestToAttendedTransfer;
 
   /// No description provided for @call_FailureAcknowledgeDialog_title.
   ///
