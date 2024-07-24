@@ -11,6 +11,7 @@ class CallInfo extends StatefulWidget {
   const CallInfo({
     super.key,
     required this.transferProcessing,
+    required this.requestToAttendedTransfer,
     required this.inviteToAttendedTransfer,
     required this.isIncoming,
     required this.held,
@@ -20,6 +21,7 @@ class CallInfo extends StatefulWidget {
   });
 
   final bool transferProcessing;
+  final bool requestToAttendedTransfer;
   final bool inviteToAttendedTransfer;
   final bool isIncoming;
   final bool held;
@@ -89,7 +91,7 @@ class _CallInfoState extends State<CallInfo> {
 
     final String statusMessage;
     if (duration == null) {
-      if (widget.inviteToAttendedTransfer) {
+      if (widget.requestToAttendedTransfer) {
         statusMessage = context.l10n.call_description_transfer_requested;
       } else if (widget.isIncoming) {
         statusMessage = context.l10n.call_description_incoming;

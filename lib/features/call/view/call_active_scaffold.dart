@@ -143,6 +143,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                         for (final activeCall in activeCalls)
                           CallInfo(
                             transferProcessing: activeTransfer?.processing ?? false,
+                            requestToAttendedTransfer: false,
                             inviteToAttendedTransfer: activeCall.transfer?.inviteToAttendedTransfer ?? false,
                             isIncoming: activeCall.isIncoming,
                             held: activeCall.held,
@@ -153,7 +154,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                         if (maybeTransferRequest != null)
                           CallInfo(
                             transferProcessing: false,
-                            inviteToAttendedTransfer: true,
+                            requestToAttendedTransfer: true,
+                            inviteToAttendedTransfer: false,
                             isIncoming: false,
                             held: false,
                             username: maybeTransferRequest.referTo,
