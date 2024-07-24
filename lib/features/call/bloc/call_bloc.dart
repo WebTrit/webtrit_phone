@@ -713,7 +713,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
     } else {
       final transfer = (event.referredBy != null && event.replaceCallId != null)
-          ? Transfer.attemptInviteTransfer(replaceCallId: event.replaceCallId!, referredBy: event.referredBy!)
+          ? InviteToAttendedTransfer(replaceCallId: event.replaceCallId!, referredBy: event.referredBy!)
           : null;
 
       emit(state.copyWithPushActiveCall(ActiveCall(

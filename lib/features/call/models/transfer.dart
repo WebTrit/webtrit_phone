@@ -20,10 +20,10 @@ class Transfer with _$Transfer {
     required String referredBy,
   }) = AttendedTransferConfirmationRequested;
 
-  const factory Transfer.attemptInviteTransfer({
+  const factory Transfer.inviteToAttendedTransfer({
     required String replaceCallId,
     required String referredBy,
-  }) = AttemptInviteTransfer;
+  }) = InviteToAttendedTransfer;
 
   const Transfer._();
 
@@ -31,5 +31,5 @@ class Transfer with _$Transfer {
   bool get processing => this is BlindTransferTransferSubmitted || this is AttendedTransferTransferSubmitted;
 
   // Returns true if the transfer is an attempted attended transfer.
-  bool get attemptInviteTransfer => this is AttemptInviteTransfer;
+  bool get inviteToAttendedTransfer => this is InviteToAttendedTransfer;
 }

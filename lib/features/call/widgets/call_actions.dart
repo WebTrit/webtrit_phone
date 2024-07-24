@@ -19,7 +19,7 @@ class CallActions extends StatefulWidget {
     required this.wasAccepted,
     required this.wasHungUp,
     required this.cameraValue,
-    required this.transferAttemptInvite,
+    required this.inviteToAttendedTransfer,
     this.onCameraChanged,
     required this.mutedValue,
     this.onMutedChanged,
@@ -47,7 +47,7 @@ class CallActions extends StatefulWidget {
   final bool wasAccepted;
   final bool wasHungUp;
   final bool cameraValue;
-  final bool transferAttemptInvite;
+  final bool inviteToAttendedTransfer;
   final ValueChanged<bool>? onCameraChanged;
   final bool mutedValue;
   final ValueChanged<bool>? onMutedChanged;
@@ -166,8 +166,8 @@ class _CallActionsState extends State<CallActions> {
           minimumSize: Size.square(_dimension),
           children: [
             Tooltip(
-              message: widget.transferAttemptInvite
-                  ? context.l10n.call_CallActionsTooltip_decline_attemptInviteTransfer
+              message: widget.inviteToAttendedTransfer
+                  ? context.l10n.call_CallActionsTooltip_decline_inviteToAttendedTransfer
                   : context.l10n.call_CallActionsTooltip_hangup,
               child: TextButton(
                 onPressed: widget.onHangupPressed,
@@ -177,8 +177,8 @@ class _CallActionsState extends State<CallActions> {
             ),
             const SizedBox(),
             Tooltip(
-              message: widget.transferAttemptInvite
-                  ? context.l10n.call_CallActionsTooltip_accept_attemptInviteTransfer
+              message: widget.inviteToAttendedTransfer
+                  ? context.l10n.call_CallActionsTooltip_accept_inviteToAttendedTransfer
                   : context.l10n.call_CallActionsTooltip_accept,
               child: TextButton(
                 onPressed: widget.onAcceptPressed,

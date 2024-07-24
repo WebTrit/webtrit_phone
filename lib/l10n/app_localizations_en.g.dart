@@ -127,10 +127,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get callStatus_ready => 'Connection established';
 
   @override
-  String get call_CallActionsTooltip_accept_attemptInviteTransfer => 'Accept transfer invite to another call';
+  String get call_CallActionsTooltip_accept_inviteToAttendedTransfer => 'Accept transfer invite to another call';
 
   @override
-  String get call_CallActionsTooltip_decline_attemptInviteTransfer => 'Decline transfer invite to another call';
+  String get call_CallActionsTooltip_decline_inviteToAttendedTransfer => 'Decline transfer invite to another call';
 
   @override
   String get connectToYourOwnVoIPSystem_Button_Action => 'Connect to your own VoIP system';
