@@ -194,6 +194,7 @@ class _MainShellState extends State<MainShell> {
             },
           ),
           BlocProvider<ChatsBloc>(
+            lazy: false,
             create: (context) {
               final appBloc = context.read<AppBloc>();
               final appPreferences = context.read<AppPreferences>();
