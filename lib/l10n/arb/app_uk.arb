@@ -80,6 +80,7 @@
   "@callStatus_inProgress": {},
   "callStatus_ready": "Підключення встановлено",
   "@callStatus_ready": {},
+  "call_description_inviteToAttendedTransfer": "Вас запрошено приєднатися до дзвінка з передачею",
   "call_CallActionsTooltip_accept_inviteToAttendedTransfer": "Прийняти запрошення на переадресацію до іншого дзвінка",
   "@call_CallActionsTooltip_accept_inviteToAttendedTransfer": {},
   "call_CallActionsTooltip_decline_inviteToAttendedTransfer": "Відхилити запрошення на переадресацію до іншого дзвінка",

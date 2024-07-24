@@ -80,6 +80,7 @@
   "@callStatus_inProgress": {},
   "callStatus_ready": "Connection established",
   "@callStatus_ready": {},
+  "call_description_inviteToAttendedTransfer": "You've been invited to join an attended transfer call",
   "call_CallActionsTooltip_accept_inviteToAttendedTransfer": "Accept transfer invite to another call",
   "@call_CallActionsTooltip_accept_inviteToAttendedTransfer": {},
   "call_CallActionsTooltip_decline_inviteToAttendedTransfer": "Decline transfer invite to another call",

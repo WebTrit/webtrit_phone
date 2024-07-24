@@ -127,6 +127,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get callStatus_ready => 'Підключення встановлено';
 
   @override
+  String get call_description_inviteToAttendedTransfer => 'Вас запрошено приєднатися до дзвінка з передачею';
+
+  @override
   String get call_CallActionsTooltip_accept_inviteToAttendedTransfer => 'Прийняти запрошення на переадресацію до іншого дзвінка';
 
   @override

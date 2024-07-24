@@ -80,6 +80,7 @@
   "@callStatus_inProgress": {},
   "callStatus_ready": "Connessione stabilita",
   "@callStatus_ready": {},
+  "call_description_inviteToAttendedTransfer": "Sei stato invitato a partecipare a una chiamata di trasferimento assistito",
   "call_CallActionsTooltip_accept_inviteToAttendedTransfer": "Accetta l'invito al trasferimento a un'altra chiamata",
   "@call_CallActionsTooltip_accept_inviteToAttendedTransfer": {},
   "call_CallActionsTooltip_decline_inviteToAttendedTransfer": "Rifiuta l'invito al trasferimento a un'altra chiamata",

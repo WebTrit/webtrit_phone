@@ -127,6 +127,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get callStatus_ready => 'Connessione stabilita';
 
   @override
+  String get call_description_inviteToAttendedTransfer => 'Sei stato invitato a partecipare a una chiamata di trasferimento assistito';
+
+  @override
   String get call_CallActionsTooltip_accept_inviteToAttendedTransfer => 'Accetta l\'invito al trasferimento a un\'altra chiamata';
 
   @override

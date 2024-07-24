@@ -335,6 +335,12 @@ abstract class AppLocalizations {
   /// **'Connection established'**
   String get callStatus_ready;
 
+  /// No description provided for @call_description_inviteToAttendedTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve been invited to join an attended transfer call'**
+  String get call_description_inviteToAttendedTransfer;
+
   /// No description provided for @call_CallActionsTooltip_accept_inviteToAttendedTransfer.
   ///
   /// In en, this message translates to:

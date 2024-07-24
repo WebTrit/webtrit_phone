@@ -127,6 +127,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get callStatus_ready => 'Connection established';
 
   @override
+  String get call_description_inviteToAttendedTransfer => 'You\'ve been invited to join an attended transfer call';
+
+  @override
   String get call_CallActionsTooltip_accept_inviteToAttendedTransfer => 'Accept transfer invite to another call';
 
   @override

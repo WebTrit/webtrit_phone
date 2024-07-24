@@ -91,7 +91,9 @@ class _CallInfoState extends State<CallInfo> {
 
     final String statusMessage;
     if (duration == null) {
-      if (widget.requestToAttendedTransfer) {
+      if (widget.inviteToAttendedTransfer) {
+        statusMessage = context.l10n.call_description_inviteToAttendedTransfer;
+      } else if (widget.requestToAttendedTransfer) {
         statusMessage = context.l10n.call_description_transfer_requested;
       } else if (widget.isIncoming) {
         statusMessage = context.l10n.call_description_incoming;
