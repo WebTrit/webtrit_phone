@@ -456,7 +456,7 @@ class ThemeProvider extends InheritedWidget {
     final cameraStyle = callAction.copyWith(
       backgroundColor: WidgetStatePropertyAll(cameraBackgroundColor),
     );
-    final cameraActiveStyle = callAction.copyWith(
+    final cameraActiveStyle = callActiveAction.copyWith(
       backgroundColor: WidgetStatePropertyAll(cameraActiveBackgroundColor),
     );
 
