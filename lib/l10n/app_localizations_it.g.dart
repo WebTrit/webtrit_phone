@@ -103,7 +103,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get call_description_transferProcessing => 'Elaborazione del trasferimento';
 
   @override
-  String get call_description_transfer_requested => 'Richiesta di trasferimento';
+  String get call_description_requestToAttendedTransfer => 'Richiesta di trasferimento';
 
   @override
   String get call_FailureAcknowledgeDialog_title => 'Guasto';
@@ -125,6 +125,15 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get callStatus_ready => 'Connessione stabilita';
+
+  @override
+  String get call_description_inviteToAttendedTransfer => 'Sei stato invitato a partecipare a una chiamata di trasferimento assistito';
+
+  @override
+  String get call_CallActionsTooltip_accept_inviteToAttendedTransfer => 'Accetta l\'invito al trasferimento a un\'altra chiamata';
+
+  @override
+  String get call_CallActionsTooltip_decline_inviteToAttendedTransfer => 'Rifiuta l\'invito al trasferimento a un\'altra chiamata';
 
   @override
   String get connectToYourOwnVoIPSystem_Button_Action => 'Connettiti al tuo sistema VoIP';

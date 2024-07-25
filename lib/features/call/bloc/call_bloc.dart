@@ -712,6 +712,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         return;
       }
     } else {
+      final transfer = (event.referredBy != null && event.replaceCallId != null)
+          ? InviteToAttendedTransfer(replaceCallId: event.replaceCallId!, referredBy: event.referredBy!)
+          : null;
+
       emit(state.copyWithPushActiveCall(ActiveCall(
         direction: Direction.incoming,
         line: event.line,
@@ -720,6 +724,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         displayName: event.callerDisplayName,
         video: video,
         createdTime: clock.now(),
+        transfer: transfer,
       )));
     }
 
@@ -1172,7 +1177,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     newState = newState.copyWithMappedActiveCall(event.callId, (activeCall) {
       return activeCall.copyWith(
-        transfer: Transfer.blindTransferInitiated(),
+        transfer: const Transfer.blindTransferInitiated(),
       );
     });
 

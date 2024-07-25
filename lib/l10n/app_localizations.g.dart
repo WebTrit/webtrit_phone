@@ -287,11 +287,11 @@ abstract class AppLocalizations {
   /// **'Transfer processing'**
   String get call_description_transferProcessing;
 
-  /// No description provided for @call_description_transfer_requested.
+  /// No description provided for @call_description_requestToAttendedTransfer.
   ///
   /// In en, this message translates to:
   /// **'Transfer request'**
-  String get call_description_transfer_requested;
+  String get call_description_requestToAttendedTransfer;
 
   /// No description provided for @call_FailureAcknowledgeDialog_title.
   ///
@@ -334,6 +334,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Connection established'**
   String get callStatus_ready;
+
+  /// No description provided for @call_description_inviteToAttendedTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve been invited to join an attended transfer call'**
+  String get call_description_inviteToAttendedTransfer;
+
+  /// No description provided for @call_CallActionsTooltip_accept_inviteToAttendedTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept transfer invite to another call'**
+  String get call_CallActionsTooltip_accept_inviteToAttendedTransfer;
+
+  /// No description provided for @call_CallActionsTooltip_decline_inviteToAttendedTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline transfer invite to another call'**
+  String get call_CallActionsTooltip_decline_inviteToAttendedTransfer;
 
   /// No description provided for @connectToYourOwnVoIPSystem_Button_Action.
   ///

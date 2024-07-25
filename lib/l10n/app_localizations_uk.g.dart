@@ -103,7 +103,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_description_transferProcessing => 'Обробка переадресації';
 
   @override
-  String get call_description_transfer_requested => 'Запит на переадресацію';
+  String get call_description_requestToAttendedTransfer => 'Запит на переадресацію';
 
   @override
   String get call_FailureAcknowledgeDialog_title => 'Помилка';
@@ -125,6 +125,15 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get callStatus_ready => 'Підключення встановлено';
+
+  @override
+  String get call_description_inviteToAttendedTransfer => 'Вас запрошено приєднатися до дзвінка з передачею';
+
+  @override
+  String get call_CallActionsTooltip_accept_inviteToAttendedTransfer => 'Прийняти запрошення на переадресацію до іншого дзвінка';
+
+  @override
+  String get call_CallActionsTooltip_decline_inviteToAttendedTransfer => 'Відхилити запрошення на переадресацію до іншого дзвінка';
 
   @override
   String get connectToYourOwnVoIPSystem_Button_Action => 'Підключіться до власної VoIP-системи';
