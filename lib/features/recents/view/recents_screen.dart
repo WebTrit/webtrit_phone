@@ -112,44 +112,53 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                     itemCount: recentsFiltered.length,
                     itemBuilder: (context, index) {
                       final recent = recentsFiltered[index];
+                      final canMessage = recent.contactSourceType == ContactSourceType.external &&
+                          (recent.contactSourceId?.isNotEmpty ?? false);
                       return RecentTile(
-                        recent: recent,
-                        dateFormat: context.read<RecentsBloc>().dateFormat,
-                        onInfoPressed: () {
-                          context.router.navigate(RecentScreenPageRoute(
-                            recentId: recent.id!,
-                          ));
-                        },
-                        onTap: transfer
-                            ? () {
-                                final callBloc = context.read<CallBloc>();
-                                callBloc.add(CallControlEvent.blindTransferSubmitted(
-                                  number: recent.number,
-                                ));
-                              }
-                            : () {
-                                final callBloc = context.read<CallBloc>();
-                                callBloc.add(CallControlEvent.started(
-                                  number: recent.number,
-                                  displayName: recent.name,
-                                  video: recent.video,
-                                ));
-                              },
-                        onLongPress: transfer
-                            ? null
-                            : () {
-                                final callBloc = context.read<CallBloc>();
-                                callBloc.add(CallControlEvent.started(
-                                  number: recent.number,
-                                  displayName: recent.name,
-                                  video: !recent.video,
-                                ));
-                              },
-                        onDeleted: (recent) {
-                          context.showSnackBar(context.l10n.recents_snackBar_deleted(recent.name));
-                          context.read<RecentsBloc>().add(RecentsDeleted(recent));
-                        },
-                      );
+                          recent: recent,
+                          dateFormat: context.read<RecentsBloc>().dateFormat,
+                          onInfoPressed: () {
+                            context.router.navigate(RecentScreenPageRoute(
+                              recentId: recent.id!,
+                            ));
+                          },
+                          onTap: transfer
+                              ? () {
+                                  final callBloc = context.read<CallBloc>();
+                                  callBloc.add(CallControlEvent.blindTransferSubmitted(
+                                    number: recent.number,
+                                  ));
+                                }
+                              : () {
+                                  final callBloc = context.read<CallBloc>();
+                                  callBloc.add(CallControlEvent.started(
+                                    number: recent.number,
+                                    displayName: recent.name,
+                                    video: recent.video,
+                                  ));
+                                },
+                          onLongPress: transfer
+                              ? null
+                              : () {
+                                  final callBloc = context.read<CallBloc>();
+                                  callBloc.add(CallControlEvent.started(
+                                    number: recent.number,
+                                    displayName: recent.name,
+                                    video: !recent.video,
+                                  ));
+                                },
+                          onDeleted: (recent) {
+                            context.showSnackBar(context.l10n.recents_snackBar_deleted(recent.name));
+                            context.read<RecentsBloc>().add(RecentsDeleted(recent));
+                          },
+                          onMessagePressed: canMessage
+                              ? () {
+                                  context.router.navigate(ChatsRouterPageRoute(children: [
+                                    const ChatListScreenPageRoute(),
+                                    ConversationScreenPageRoute(participantId: recent.contactSourceId!),
+                                  ]));
+                                }
+                              : null);
                     },
                   );
                 },
