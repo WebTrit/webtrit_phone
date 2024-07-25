@@ -75,10 +75,9 @@ class KeypadViewState extends State<KeypadView> {
                       previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
                   builder: (context, callState) {
                     return Actionpad(
-                      video: state.video,
                       transfer: callState.isBlingTransferInitiated,
-                      onCallPressed: value.text.isEmpty ? null : () => _onCallPressed(state.video),
-                      onCallLongPress: _onCallLongPress,
+                      onAudioCallPressed: value.text.isEmpty ? null : () => _onCallPressed(false),
+                      onVideoCallPressed: value.text.isEmpty ? null : () => _onCallPressed(true),
                       onTransferPressed: _onTransferPressed,
                       onBackspacePressed: value.text.isEmpty ? null : _onBackspacePressed,
                       onBackspaceLongPress: value.text.isEmpty ? null : _onBackspaceLongPress,
