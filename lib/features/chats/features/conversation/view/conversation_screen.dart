@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/features/chats/widgets/widgets.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class ConversationScreen extends StatefulWidget {
@@ -22,11 +23,30 @@ class _ConversationScreenState extends State<ConversationScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Dialog: ${conversationCubit.state.participantId}',
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(fontSize: 20),
-        ),
+        title: ContactInfoBuilder(
+            sourceType: ContactSourceType.external,
+            sourceId: conversationCubit.state.participantId,
+            builder: (context, contact) {
+              if (contact != null) {
+                return FadeIn(
+                  child: Text(
+                    contact.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                );
+              } else {
+                return FadeIn(
+                  child: Text(
+                    'Dialog: ${conversationCubit.state.participantId}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                );
+              }
+            }),
       ),
       body: BlocProvider(
         create: (context) => ChatTypingCubit(chatsBloc.state.client),

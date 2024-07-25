@@ -77,7 +77,7 @@ class ExternalContactsRepository {
     return contacts.map((contact) {
       final numbers = contact.numbers;
       return ExternalContact(
-        id: numbers.main,
+        id: contact.userId,
         registered: contact.sipStatus == null ? null : contact.sipStatus == SipStatus.registered,
         firstName: contact.firstName,
         lastName: contact.lastName,

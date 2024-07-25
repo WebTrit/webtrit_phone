@@ -7,7 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/call/widgets/widgets.dart';
 import 'package:webtrit_phone/features/chats/features/group/group.dart';
+import 'package:webtrit_phone/features/chats/widgets/widgets.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 
 class GroupDrawer extends StatefulWidget {
   const GroupDrawer({required this.userId, super.key});
@@ -19,8 +21,24 @@ class GroupDrawer extends StatefulWidget {
 
 class _GroupDrawerState extends State<GroupDrawer> {
   late final groupCubit = context.read<GroupCubit>();
+  late final contactsRepository = context.read<ContactsRepository>();
 
-  onLeaveGroup() async {
+  onLeaveGroup(bool amIOwner) async {
+    String askText;
+    if (amIOwner) {
+      askText = 'Are you sure you want leave and delete this group?';
+    } else {
+      askText = 'Are you sure you want to leave this group?';
+    }
+
+    final askResult = await showDialog<bool>(
+      context: context,
+      builder: (context) => ConfirmDialog(askText: askText),
+    );
+
+    if (!mounted) return;
+    if (askResult != true) return;
+
     final result = await groupCubit.leaveGroup();
 
     if (!mounted) return;
@@ -29,22 +47,40 @@ class _GroupDrawerState extends State<GroupDrawer> {
   }
 
   onAddUser() async {
-    final result = await showDialog<String>(
+    final result = await showDialog<Contact>(
       context: context,
-      builder: (context) => const AddUserDialog(),
+      builder: (context) => AddContactDialog(contactsRepository: contactsRepository),
     );
-
-    if (result != null) {
-      await groupCubit.addUser(result);
-    }
+    if (!mounted) return;
+    if (result != null) await groupCubit.addUser(result.sourceId);
   }
 
   onRemoveUser(String userId) async {
-    await groupCubit.removeUser(userId);
+    String askText = 'Are you sure you want to remove this user from the group?';
+
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => ConfirmDialog(askText: askText),
+    );
+    if (!mounted) return;
+    if (result == true) await groupCubit.removeUser(userId);
   }
 
   onSetModerator(String userId, bool isModerator) async {
-    await groupCubit.setModerator(userId, isModerator);
+    String askText;
+    if (isModerator) {
+      askText = 'Are you sure you want to make this user a moderator?';
+    } else {
+      askText = 'Are you sure you want to remove this user from moderators?';
+    }
+
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => ConfirmDialog(askText: askText),
+    );
+
+    if (!mounted) return;
+    if (result == true) await groupCubit.setModerator(userId, isModerator);
   }
 
   onSetName(String? currentName) async {
@@ -52,10 +88,8 @@ class _GroupDrawerState extends State<GroupDrawer> {
       context: context,
       builder: (context) => GroupNameDialog(initialName: currentName),
     );
-
-    if (result != null) {
-      await groupCubit.setName(result);
-    }
+    if (!mounted) return;
+    if (result != null) await groupCubit.setName(result);
   }
 
   @override
@@ -136,10 +170,14 @@ class _GroupDrawerState extends State<GroupDrawer> {
                         ],
                       )),
                       ElevatedButton(
-                          onPressed: onLeaveGroup,
-                          child: const Row(
+                          onPressed: () => onLeaveGroup(amIOwner),
+                          child: Row(
                             mainAxisSize: MainAxisSize.min,
-                            children: [Icon(Icons.output_sharp, size: 16), SizedBox(width: 4), Text('Leave group')],
+                            children: [
+                              const Icon(Icons.output_sharp, size: 16),
+                              const SizedBox(width: 4),
+                              if (amIOwner) const Text('Delete and leave') else const Text('Leave group'),
+                            ],
                           )),
                       const SizedBox(height: 8),
                     ],
@@ -177,8 +215,8 @@ class _GroupDrawerState extends State<GroupDrawer> {
 
       return ListTile(
         minTileHeight: 0,
-        title: Text(member.userId),
-        subtitle: Text(member.groupAuthorities?.name ?? 'member'),
+        title: ParticipantName(senderId: member.userId, userId: widget.userId),
+        subtitle: Text(member.groupAuthorities?.name ?? 'member', style: const TextStyle(fontSize: 12)),
         trailing: ((canMakeModerator || canRemoveModerator || canRemove) && !isMe)
             ? SizedBox(
                 width: 20,

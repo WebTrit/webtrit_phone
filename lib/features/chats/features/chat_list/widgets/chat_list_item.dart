@@ -7,8 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/features/chats/widgets/widgets.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class ChatListItem extends StatefulWidget {
   const ChatListItem({required this.chat, required this.userId, super.key});
@@ -127,7 +129,20 @@ class _ChatListItemState extends State<ChatListItem> {
       final participant = widget.chat.members.firstWhere((m) => m.userId != userId);
       return Row(
         children: [
-          Expanded(child: Text(participant.userId, style: const TextStyle(overflow: TextOverflow.ellipsis))),
+          Expanded(
+            child: ContactInfoBuilder(
+              sourceType: ContactSourceType.external,
+              sourceId: participant.userId,
+              builder: (context, contact) {
+                const textStyle = TextStyle(overflow: TextOverflow.ellipsis);
+                if (contact != null) {
+                  return FadeIn(child: Text(contact.name, style: textStyle));
+                } else {
+                  return FadeIn(child: Text(participant.userId, style: textStyle));
+                }
+              },
+            ),
+          ),
           const SizedBox(width: 4),
           const Icon(Icons.person, size: 12),
           const SizedBox(width: 4),

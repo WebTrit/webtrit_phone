@@ -518,6 +518,11 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
     return (select(contactsTable)..whereSamePrimaryKey(contact)).watchSingle();
   }
 
+  Stream<ContactData?> watchContactBySource(ContactSourceTypeEnum sourceType, String sourceId) {
+    return (select(contactsTable)..where((t) => t.sourceType.equalsValue(sourceType) & t.sourceId.equals(sourceId)))
+        .watchSingleOrNull();
+  }
+
   Future<ContactData> insertOnUniqueConflictUpdateContact(Insertable<ContactData> contact) =>
       into(contactsTable).insertReturning(contact,
           onConflict: DoUpdate((_) => contact, target: [contactsTable.sourceType, contactsTable.sourceId]));

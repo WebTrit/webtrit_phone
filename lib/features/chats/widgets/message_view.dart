@@ -149,7 +149,7 @@ class _MessageViewState extends State<MessageView> {
             if (isForward) ...[
               forwardQuote(realMessage!),
               const SizedBox(height: 8),
-              NameBuilder(senderId: senderId, userId: widget.userId),
+              ParticipantName(senderId: senderId, userId: widget.userId),
               const Text('[forwarded]', style: TextStyle(color: Colors.white, fontSize: 12)),
             ],
             if (!isForward && !isDeleted)
@@ -161,7 +161,7 @@ class _MessageViewState extends State<MessageView> {
                 usePreviewData: true,
                 onPreviewDataFetched: handlePreviewDataFetched,
                 options: const TextMessageOptions(isTextSelectable: false),
-                nameBuilder: (user) => NameBuilder(senderId: user.id, userId: widget.userId),
+                nameBuilder: (user) => ParticipantName(senderId: user.id, userId: widget.userId),
               ),
             if (isEdited && !isDeleted) ...[
               const Text('[edited]', style: TextStyle(color: Colors.white, fontSize: 12)),
@@ -172,7 +172,7 @@ class _MessageViewState extends State<MessageView> {
                 Text('[${realMessage?.smsOutState?.name}]', style: const TextStyle(color: Colors.white, fontSize: 12)),
             ],
             if (isDeleted) ...[
-              NameBuilder(senderId: senderId, userId: widget.userId),
+              ParticipantName(senderId: senderId, userId: widget.userId),
               const Text('[deleted]', style: TextStyle(color: Colors.white, fontSize: 12)),
             ],
             // if (realMessage?.viewedAt != null) ...[
@@ -232,7 +232,7 @@ class _MessageViewState extends State<MessageView> {
               usePreviewData: true,
               onPreviewDataFetched: handlePreviewDataFetched,
               options: const TextMessageOptions(isTextSelectable: false),
-              nameBuilder: (user) => NameBuilder(senderId: user.id, userId: widget.userId),
+              nameBuilder: (user) => ParticipantName(senderId: user.id, userId: widget.userId),
             ),
           );
         });
@@ -270,7 +270,7 @@ class _MessageViewState extends State<MessageView> {
         usePreviewData: true,
         onPreviewDataFetched: handlePreviewDataFetched,
         options: const TextMessageOptions(isTextSelectable: false),
-        nameBuilder: (user) => NameBuilder(senderId: user.id, userId: widget.userId),
+        nameBuilder: (user) => ParticipantName(senderId: user.id, userId: widget.userId),
       ),
     );
   }

@@ -70,11 +70,21 @@ class RecentTile extends StatelessWidget {
               icon: const Icon(Icons.info_outlined),
               onPressed: onInfoPressed,
             ),
-            IconButton(
-              splashRadius: 24,
-              icon: const Icon(Icons.messenger_outline),
-              onPressed: onMessagePressed,
-            ),
+            if (onMessagePressed != null)
+              IconButton(
+                splashRadius: 24,
+                icon: const Icon(Icons.messenger_outline),
+                onPressed: onMessagePressed,
+              )
+            else
+              GestureDetector(
+                onTap: () {},
+                child: const IconButton(
+                  splashRadius: 24,
+                  icon: Icon(Icons.messenger_outline),
+                  onPressed: null,
+                ),
+              )
           ],
         ),
         title: Text(

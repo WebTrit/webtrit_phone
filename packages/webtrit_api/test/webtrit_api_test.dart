@@ -641,6 +641,7 @@ void main() {
           jsonEncode({
             'items': [
               {
+                'user_id': '123',
                 'sip_status': 'registered',
                 'numbers': {
                   'main': '14155551234',
@@ -654,6 +655,7 @@ void main() {
                 'company_name': 'company_name',
               },
               {
+                'user_id': '234',
                 'numbers': {
                   'main': 'number_2',
                 },
@@ -676,6 +678,7 @@ void main() {
         completion(equals(
           [
             UserContact(
+              userId: '123',
               sipStatus: SipStatus.registered,
               numbers: Numbers(
                 main: '14155551234',
@@ -692,6 +695,7 @@ void main() {
               companyName: 'company_name',
             ),
             UserContact(
+              userId: '234',
               numbers: Numbers(main: 'number_2'),
               firstName: 'first_name_2',
               lastName: 'last_name_2',
