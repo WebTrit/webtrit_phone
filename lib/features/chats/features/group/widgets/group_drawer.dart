@@ -9,6 +9,7 @@ import 'package:webtrit_phone/features/call/widgets/widgets.dart';
 import 'package:webtrit_phone/features/chats/features/group/group.dart';
 import 'package:webtrit_phone/features/chats/widgets/widgets.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 
 class GroupDrawer extends StatefulWidget {
   const GroupDrawer({required this.userId, super.key});
@@ -20,6 +21,7 @@ class GroupDrawer extends StatefulWidget {
 
 class _GroupDrawerState extends State<GroupDrawer> {
   late final groupCubit = context.read<GroupCubit>();
+  late final contactsRepository = context.read<ContactsRepository>();
 
   onLeaveGroup() async {
     final result = await groupCubit.leaveGroup();
@@ -30,13 +32,13 @@ class _GroupDrawerState extends State<GroupDrawer> {
   }
 
   onAddUser() async {
-    final result = await showDialog<String>(
+    final result = await showDialog<Contact>(
       context: context,
-      builder: (context) => const AddUserDialog(),
+      builder: (context) => AddContactDialog(contactsRepository: contactsRepository),
     );
 
     if (result != null) {
-      await groupCubit.addUser(result);
+      await groupCubit.addUser(result.sourceId);
     }
   }
 
