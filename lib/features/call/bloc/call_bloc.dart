@@ -616,6 +616,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       createdTime: clock.now(),
     )));
 
+    // Function to verify speaker availability for the upcoming event, ensuring the speaker button is correctly enabled or disabled
+    add(const _NavigatorMediaDevicesChange());
+
     // the rest logic implemented within _onSignalingStateHandshake on IncomingCallEvent from call logs processing
   }
 
