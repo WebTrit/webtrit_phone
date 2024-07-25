@@ -23,7 +23,22 @@ class _GroupDrawerState extends State<GroupDrawer> {
   late final groupCubit = context.read<GroupCubit>();
   late final contactsRepository = context.read<ContactsRepository>();
 
-  onLeaveGroup() async {
+  onLeaveGroup(bool amIOwner) async {
+    String askText;
+    if (amIOwner) {
+      askText = 'Are you sure you want leave and delete this group?';
+    } else {
+      askText = 'Are you sure you want to leave this group?';
+    }
+
+    final askResult = await showDialog<bool>(
+      context: context,
+      builder: (context) => ConfirmDialog(askText: askText),
+    );
+
+    if (!mounted) return;
+    if (askResult != true) return;
+
     final result = await groupCubit.leaveGroup();
 
     if (!mounted) return;
@@ -36,18 +51,36 @@ class _GroupDrawerState extends State<GroupDrawer> {
       context: context,
       builder: (context) => AddContactDialog(contactsRepository: contactsRepository),
     );
-
-    if (result != null) {
-      await groupCubit.addUser(result.sourceId);
-    }
+    if (!mounted) return;
+    if (result != null) await groupCubit.addUser(result.sourceId);
   }
 
   onRemoveUser(String userId) async {
-    await groupCubit.removeUser(userId);
+    String askText = 'Are you sure you want to remove this user from the group?';
+
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => ConfirmDialog(askText: askText),
+    );
+    if (!mounted) return;
+    if (result == true) await groupCubit.removeUser(userId);
   }
 
   onSetModerator(String userId, bool isModerator) async {
-    await groupCubit.setModerator(userId, isModerator);
+    String askText;
+    if (isModerator) {
+      askText = 'Are you sure you want to make this user a moderator?';
+    } else {
+      askText = 'Are you sure you want to remove this user from moderators?';
+    }
+
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => ConfirmDialog(askText: askText),
+    );
+
+    if (!mounted) return;
+    if (result == true) await groupCubit.setModerator(userId, isModerator);
   }
 
   onSetName(String? currentName) async {
@@ -55,10 +88,8 @@ class _GroupDrawerState extends State<GroupDrawer> {
       context: context,
       builder: (context) => GroupNameDialog(initialName: currentName),
     );
-
-    if (result != null) {
-      await groupCubit.setName(result);
-    }
+    if (!mounted) return;
+    if (result != null) await groupCubit.setName(result);
   }
 
   @override
@@ -139,7 +170,7 @@ class _GroupDrawerState extends State<GroupDrawer> {
                         ],
                       )),
                       ElevatedButton(
-                          onPressed: onLeaveGroup,
+                          onPressed: () => onLeaveGroup(amIOwner),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
