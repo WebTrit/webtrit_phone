@@ -84,6 +84,10 @@ class ChatsRepository with ChatsDriftMapper {
     return _chatsDao.unreadMessagesCount(chatId, userId);
   }
 
+  Stream<int> chatsWithUnreadedMessagesCount(String userId) {
+    return _chatsDao.chatsWithUnreadedMessagesCount(userId);
+  }
+
   Future<void> insertHistoryPage(List<ChatMessage> messages) async {
     for (final message in messages) {
       await upsertMessage(message, silent: true);

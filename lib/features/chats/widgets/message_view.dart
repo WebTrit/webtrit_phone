@@ -5,7 +5,6 @@ import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:quiver/collection.dart';
 
-import 'package:webtrit_phone/features/chats/widgets/name_builder.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -176,6 +175,20 @@ class _MessageViewState extends State<MessageView> {
               NameBuilder(senderId: senderId, userId: widget.userId),
               const Text('[deleted]', style: TextStyle(color: Colors.white, fontSize: 12)),
             ],
+            // if (realMessage?.viewedAt != null) ...[
+            //   Row(
+            //     mainAxisSize: MainAxisSize.min,
+            //     children: [
+            //       Icon(Icons.remove_red_eye_outlined, color: Colors.blue[200], size: 10),
+            //       const SizedBox(width: 4),
+            //       if (realMessage?.viewedAt != null)
+            //         Text(
+            //           DateFormat('MM/dd/yyyy HH:mm').format(realMessage!.viewedAt!),
+            //           style: TextStyle(color: Colors.blue[200], fontSize: 10),
+            //         ),
+            //     ],
+            //   ),
+            // ],
           ],
         ),
       ),

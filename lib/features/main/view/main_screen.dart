@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
+import 'package:webtrit_phone/features/chats/chats.dart';
 
 import '../main.dart';
 
@@ -35,6 +36,13 @@ class MainScreen extends StatelessWidget {
           }
         },
         items: MainFlavor.values.map((flavor) {
+          if (flavor == MainFlavor.chats) {
+            return BottomNavigationBarItem(
+              icon: ChatFlavorOverlay(child: Icon(flavor.icon)),
+              label: flavor.labelL10n(context),
+              activeIcon: ChatFlavorOverlay(child: Icon(flavor.icon)),
+            );
+          }
           return BottomNavigationBarItem(
             icon: Icon(flavor.icon),
             label: flavor.labelL10n(context),

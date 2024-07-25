@@ -7,3 +7,4 @@ export 'features/group_builder/group_builder.dart';
 export 'cubits/cubits.dart';
 export 'view/chats_router_page.dart';
 export 'services/services.dart';
+export 'widgets/widgets.dart';
