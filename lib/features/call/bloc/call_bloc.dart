@@ -956,10 +956,27 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallSignalingEventNotify event,
     Emitter<CallState> emit,
   ) async {
-    // TODO: add processing of NOTIFY messages as needed
-    //       for example `event.notify == 'refer' && event.contentType == 'message/sipfrag' && event.content.capitalize.contains('SIP/2.0 200 OK')`
-
     _logger.fine('__onCallSignalingEventNotify: $event');
+
+    _handleSignalingEventCompleteTransferNotification(event);
+  }
+
+  // Handles NOTIFY events indicating the completion of a call transfer.
+  // Triggered when a 'refer' NOTIFY message with 'SIP/2.0 200 OK' content and
+  // 'terminated' subscription state is received, indicating a successful transfer.
+  // This was the original call (call A) that was transferred. Notify events indicate
+  // the transfer status ('100 Trying', '200 OK'), but the call may not close
+  // automatically as it could be transferred to another session or line.
+  void _handleSignalingEventCompleteTransferNotification(_CallSignalingEventNotify event) {
+    if (event.notify == NotifyType.refer &&
+        event.contentType == NotifyContentType.messageSipfrag &&
+        NotifyContent.match200OK(event.content) &&
+        event.subscriptionState == SubscriptionState.terminated) {
+      // Verifies if the original call line is currently active in the state
+      if (state.activeCalls.any((it) => it.callId == event.callId)) {
+        add(CallControlEvent.ended(event.callId));
+      }
+    }
   }
 
   Future<void> __onCallSignalingEventRegistering(
