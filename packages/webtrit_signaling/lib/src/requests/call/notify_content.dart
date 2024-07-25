@@ -1,7 +1,8 @@
 class NotifyContent {
-  static const String sip200OKContent = 'SIP/2.0 200 OK';
+  // ignore: constant_identifier_names
+  static const String _200OK = 'SIP/2.0 200 OK';
 
   static bool match200OK(String content) {
-    return content.startsWith(sip200OKContent);
+    return content.startsWith(_200OK);
   }
 }
