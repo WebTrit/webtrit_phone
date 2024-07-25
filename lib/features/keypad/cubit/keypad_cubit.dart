@@ -5,8 +5,4 @@ part 'keypad_state.dart';
 
 class KeypadCubit extends Cubit<KeypadState> {
   KeypadCubit() : super(const KeypadState());
-
-  void callTypeSwitch() {
-    emit(KeypadState(video: !state.video));
-  }
 }

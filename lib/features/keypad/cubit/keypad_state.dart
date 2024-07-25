@@ -1,14 +1,8 @@
 part of 'keypad_cubit.dart';
 
 class KeypadState extends Equatable {
-  const KeypadState({
-    this.video = false,
-  });
-
-  final bool video;
+  const KeypadState();
 
   @override
-  List<Object?> get props => [
-        video,
-      ];
+  List<Object?> get props => [];
 }

@@ -111,10 +111,6 @@ class KeypadViewState extends State<KeypadView> {
     ));
   }
 
-  void _onCallLongPress() {
-    context.read<KeypadCubit>().callTypeSwitch();
-  }
-
   void _onTransferPressed() {
     _focusNode.unfocus();
 
