@@ -960,13 +960,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   // the transfer status ('100 Trying', '200 OK'), but the call may not close
   // automatically as it could be transferred to another session or line.
   void _handleSignalingEventCompleteTransferNotification(_CallSignalingEventNotify event) {
-    const String referNotify = 'refer';
-    const String sipfragContentType = 'message/sipfrag';
-    const String sip200OKContent = 'SIP/2.0 200 OK';
-
-    if (event.notify == referNotify &&
-        event.contentType == sipfragContentType &&
-        event.content.contains(sip200OKContent) &&
+    if (event.notify == NotifyType.refer &&
+        event.contentType == NotifyContentType.messageSipfrag &&
+        NotifyContent.match200OK(event.content) &&
         event.subscriptionState == SubscriptionState.terminated) {
       // Verifies if the original call line is currently active in the state
       if (state.activeCalls.any((it) => it.callId == event.callId)) {
