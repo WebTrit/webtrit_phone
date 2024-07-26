@@ -173,27 +173,37 @@ class _ChatListItemState extends State<ChatListItem> {
   }
 
   Widget subtitle() {
-    String text = '';
-    if (lastMessage != null) {
-      bool isOwn = lastMessage!.senderId == widget.userId;
-      if (isOwn) {
-        text = 'You: ${lastMessage!.content}';
-      } else {
-        text = '${lastMessage!.senderId}: ${lastMessage!.content}';
-      }
-    } else {
-      text = 'No messages yet';
-    }
     return Row(
       children: [
         Expanded(
-          child: Text(
-            text,
-            style: const TextStyle(
-              overflow: TextOverflow.ellipsis,
-              fontSize: 12,
-            ),
-          ),
+          child: Builder(builder: (context) {
+            const textStyle = TextStyle(overflow: TextOverflow.ellipsis, fontSize: 12);
+
+            final message = lastMessage;
+
+            if (message == null) return const SizedBox();
+            if (message.senderId == widget.userId) return Text('You: ${message.content}', style: textStyle);
+            return ContactInfoBuilder(
+              sourceType: ContactSourceType.external,
+              sourceId: message.senderId,
+              builder: (context, contact) {
+                if (contact == null) {
+                  return FadeIn(
+                    child: Text(
+                      message.content,
+                      style: textStyle,
+                    ),
+                  );
+                }
+                return FadeIn(
+                  child: Text(
+                    '${contact.name.split(' ').first}: ${lastMessage!.content}',
+                    style: textStyle,
+                  ),
+                );
+              },
+            );
+          }),
         ),
         if (unreadMsgsCount > 0) ...[
           const SizedBox(width: 8),
