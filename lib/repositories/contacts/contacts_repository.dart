@@ -39,6 +39,12 @@ class ContactsRepository {
     });
   }
 
+  Future<Contact?> getContactBySource(ContactSourceType sourceType, String sourceId) async {
+    final contactData = await _appDatabase.contactsDao.getContactBySource(sourceType.toData(), sourceId);
+    if (contactData == null) return null;
+    return _toContact(contactData);
+  }
+
   Stream<List<ContactPhone>> watchContactPhones(ContactId contactId) {
     return _appDatabase.contactPhonesDao
         .watchContactPhonesExtByContactId(contactId)

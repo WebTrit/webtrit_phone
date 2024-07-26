@@ -8,6 +8,7 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -32,6 +33,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
       await _initFirebase();
       await _initFirebaseMessaging();
+      await _initLocalNotifications();
 
       if (!kIsWeb && kDebugMode) {
         FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
@@ -149,4 +151,28 @@ class FCMIsolateDatabase extends AppDatabase {
 
     return _instance!;
   }
+}
+
+Future _initLocalNotifications() async {
+  await AwesomeNotifications().initialize(
+    null,
+    [
+      // init basic channel
+      NotificationChannel(
+          channelGroupKey: 'basic_channel_group',
+          channelKey: 'basic_channel',
+          channelName: 'Basic notifications',
+          channelDescription: 'Notification channel for basic tests',
+          defaultColor: const Color(0xFF9D50DD),
+          ledColor: Colors.white),
+      // init chats channel
+      NotificationChannel(
+          channelGroupKey: 'chats_channel_group',
+          channelKey: 'chats_channel',
+          channelName: 'Chats notifications',
+          channelDescription: 'Notification channel for chats',
+          defaultColor: const Color(0xFF9D50DD),
+          ledColor: Colors.white),
+    ],
+  );
 }
