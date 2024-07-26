@@ -1,7 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quiver/collection.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -23,21 +22,20 @@ class ContactInfoBuilder extends StatefulWidget {
 
 class _ContactInfoBuilderState extends State<ContactInfoBuilder> {
   late final contactsRepo = context.read<ContactsRepository>();
-  late final StreamSubscription contactSub;
+  static final cache = LruMap<String, Contact>(maximumSize: 100);
   Contact? contact;
 
   @override
   void initState() {
     super.initState();
-    contactSub = contactsRepo.watchContactBySource(widget.sourceType, widget.sourceId).listen((contact) {
-      setState(() => this.contact = contact);
-    });
-  }
-
-  @override
-  void dispose() {
-    contactSub.cancel();
-    super.dispose();
+    contact = cache[widget.sourceId];
+    if (contact == null) {
+      contactsRepo.getContactBySource(widget.sourceType, widget.sourceId).then((contact) {
+        if (contact == null) return;
+        cache.putIfAbsent(widget.sourceId, () => contact);
+        if (mounted) setState(() => this.contact = contact);
+      });
+    }
   }
 
   @override
