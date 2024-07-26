@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/features/chats/widgets/widgets.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class GroupScreen extends StatefulWidget {
@@ -19,9 +19,10 @@ class _GroupScreenState extends State<GroupScreen> {
   Widget build(BuildContext context) {
     final chatsBloc = context.read<ChatsBloc>();
     final groupCubit = context.read<GroupCubit>();
+    final contactsRepo = context.read<ContactsRepository>();
 
     return BlocProvider(
-      create: (context) => ChatTypingCubit(chatsBloc.state.client),
+      create: (context) => ChatTypingCubit(chatsBloc.state.client, contactsRepo),
       child: BlocConsumer<GroupCubit, GroupState>(
         listener: (context, state) {
           if (state is GroupStateReady) {

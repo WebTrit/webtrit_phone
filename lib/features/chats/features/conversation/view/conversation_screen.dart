@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/features/chats/widgets/widgets.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class ConversationScreen extends StatefulWidget {
@@ -20,6 +20,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
   Widget build(BuildContext context) {
     final chatsBloc = context.read<ChatsBloc>();
     final conversationCubit = context.read<ConversationCubit>();
+    final contactsRepo = context.read<ContactsRepository>();
 
     return Scaffold(
       appBar: AppBar(
@@ -49,7 +50,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
             }),
       ),
       body: BlocProvider(
-        create: (context) => ChatTypingCubit(chatsBloc.state.client),
+        create: (context) => ChatTypingCubit(chatsBloc.state.client, contactsRepo),
         child: BlocConsumer<ConversationCubit, ConversationState>(
           listener: (context, state) {
             if (state is CVSReady && state.chat != null) {

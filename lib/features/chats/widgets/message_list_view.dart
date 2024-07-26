@@ -10,7 +10,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/chats/chats.dart';
-import 'package:webtrit_phone/features/chats/widgets/widgets.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 final _logger = Logger('MessageListView');
@@ -199,7 +198,7 @@ class _MessageListViewState extends State<MessageListView> {
 
     return BlocBuilder<ChatTypingCubit, TypingState>(
       builder: (context, typingState) {
-        final typingUsers = typingState.map((userId) => types.User(id: userId, firstName: userId)).toList();
+        final typingUsers = typingState.map((typing) => types.User(id: typing.userId, firstName: typing.name)).toList();
 
         return FlyerChat(
           messages: messages,

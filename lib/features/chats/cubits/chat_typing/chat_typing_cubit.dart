@@ -5,17 +5,21 @@ import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 
 final _logger = Logger('ChatTypingCubit');
 
 class ChatTypingCubit extends Cubit<TypingState> {
   ChatTypingCubit(
-    this.client, {
+    this.client,
+    this.contactsRepo, {
     this.typeThrottle = const Duration(seconds: 3),
     this.typeTimeout = const Duration(seconds: 5),
   }) : super({});
 
   final PhoenixSocket client;
+  final ContactsRepository contactsRepo;
   final Duration typeThrottle;
   final Duration typeTimeout;
 
@@ -47,24 +51,31 @@ class ChatTypingCubit extends Cubit<TypingState> {
     }
   }
 
-  void _handleEvent(e) {
+  Future<void> _handleEvent(e) async {
     if (e is TypingEvent) {
-      final ids = state;
-      ids.add(e.userId);
-      emit(Set.from(ids));
+      final typings = state;
+      // typings.add(e.userId);
+      final userId = e.userId;
+      final contact = await contactsRepo.getContactBySource(ContactSourceType.external, userId);
+      if (contact != null) {
+        typings.add((userId: userId, name: contact.name));
+      } else {
+        typings.add((userId: userId, name: 'unknown'));
+      }
+      emit(Set.from(typings));
       _typingTimers[e.userId]?.cancel();
       _typingTimers[e.userId] = Timer(typeTimeout, () {
         if (isClosed) return;
-        final ids = state;
-        ids.remove(e.userId);
-        emit(Set.from(ids));
+        final typings = state;
+        typings.removeWhere((typing) => typing.userId == e.userId);
+        emit(Set.from(typings));
       });
     }
 
     if (e is SentEvent) {
-      final ids = state;
-      ids.remove(e.senderId);
-      emit(Set.from(ids));
+      final typings = state;
+      typings.removeWhere((typing) => typing.userId == e.senderId);
+      emit(Set.from(typings));
     }
   }
 
@@ -107,4 +118,4 @@ class ChatTypingCubit extends Cubit<TypingState> {
 
 typedef TypingEvent = ({String userId});
 typedef SentEvent = ({String senderId});
-typedef TypingState = Set<String>;
+typedef TypingState = Set<({String userId, String name})>;
