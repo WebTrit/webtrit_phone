@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:intl/intl.dart';
 import 'package:quiver/collection.dart';
 
 import 'package:webtrit_phone/features/features.dart';
@@ -97,6 +98,7 @@ class _MessageViewState extends State<MessageView> {
     final isMine = realMessage == null || realMessage.senderId == widget.userId;
     final isForward = realMessage?.forwardFromId != null && realMessage?.authorId != null;
     final isReply = realMessage?.replyToId != null;
+    final isViewed = realMessage?.viewedAt != null;
 
     final senderId = realMessage?.senderId ?? widget.userId;
 
@@ -138,7 +140,7 @@ class _MessageViewState extends State<MessageView> {
       child: Container(
         padding: const EdgeInsets.all(12),
         key: widgetKey,
-        color: Colors.amber.withOpacity(0.01),
+        color: !isViewed ? Colors.blueGrey.withOpacity(0.4) : null,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -175,20 +177,21 @@ class _MessageViewState extends State<MessageView> {
               ParticipantName(senderId: senderId, userId: widget.userId),
               const Text('[deleted]', style: TextStyle(color: Colors.white, fontSize: 12)),
             ],
-            // if (realMessage?.viewedAt != null) ...[
-            //   Row(
-            //     mainAxisSize: MainAxisSize.min,
-            //     children: [
-            //       Icon(Icons.remove_red_eye_outlined, color: Colors.blue[200], size: 10),
-            //       const SizedBox(width: 4),
-            //       if (realMessage?.viewedAt != null)
-            //         Text(
-            //           DateFormat('MM/dd/yyyy HH:mm').format(realMessage!.viewedAt!),
-            //           style: TextStyle(color: Colors.blue[200], fontSize: 10),
-            //         ),
-            //     ],
-            //   ),
-            // ],
+            if (realMessage?.viewedAt != null && isMine) ...[
+              const SizedBox(height: 4),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.remove_red_eye_outlined, color: Colors.blue[200], size: 10),
+                  const SizedBox(width: 4),
+                  if (realMessage?.viewedAt != null)
+                    Text(
+                      DateFormat('HH:mm').format(realMessage!.viewedAt!),
+                      style: TextStyle(color: Colors.blue[200], fontSize: 10),
+                    ),
+                ],
+              ),
+            ],
           ],
         ),
       ),
