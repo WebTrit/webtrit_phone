@@ -175,4 +175,18 @@ Future _initLocalNotifications() async {
           ledColor: Colors.white),
     ],
   );
+
+  AwesomeNotifications().setListeners(onActionReceivedMethod: LocalNotificationsBroker._handleActionReceived);
+}
+
+/// This class is used to handle local notifications actions from global context
+/// It holds them in a stream to be consumed by the app local components
+class LocalNotificationsBroker {
+  static final StreamController<ReceivedAction> _chatActions = StreamController();
+  static Stream<ReceivedAction> get chatActionsStream => _chatActions.stream;
+
+  @pragma('vm:entry-point')
+  static Future _handleActionReceived(ReceivedAction action) async {
+    if (action.channelKey == 'chats_channel') _chatActions.add(action);
+  }
 }

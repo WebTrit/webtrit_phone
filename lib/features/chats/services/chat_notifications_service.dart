@@ -5,6 +5,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -56,7 +57,7 @@ class ChatNotificationsService extends AutoRouterObserver {
   void _init() async {
     _logger.info('Initialising...');
     _eventsSub = chatsRepository.eventBus.listen(_handleEvent);
-    AwesomeNotifications().setListeners(onActionReceivedMethod: _notificationActionHandler);
+    LocalNotificationsBroker.chatActionsStream.listen(_notificationActionHandler);
   }
 
   Future<void> _handleEvent(ChatsEvent e) async {
@@ -99,7 +100,12 @@ class ChatNotificationsService extends AutoRouterObserver {
                 ? message.content
                 : '${contact?.name ?? message.senderId}: ${message.content}',
             displayOnForeground: shouldDisplayOnForeground,
-            payload: {'chatId': message.chatId.toString()},
+            payload: {
+              'type': 'chat',
+              'chatId': message.chatId.toString(),
+              'message': message.toJson(),
+              'chat': chat.toJson(),
+            },
           ),
         );
       } catch (e) {
@@ -110,15 +116,14 @@ class ChatNotificationsService extends AutoRouterObserver {
     }
   }
 
-  /// TODO; make static
   Future<void> _notificationActionHandler(ReceivedAction action) async {
     _logger.info('onActionReceivedMethod');
     try {
       final payload = action.payload;
-      if (payload == null) return;
-      final chatId = int.tryParse(payload['chatId'] ?? '');
-      if (chatId == null) return;
-      final chat = await chatsRepository.getChat(chatId);
+
+      if (payload?['chat'] == null) return;
+      final chat = Chat.fromJson(payload!['chat']!);
+
       if (chat.type == ChatType.dialog) {
         final participant = chat.members.firstWhere((m) => m.userId != userId);
         navigator?.context.router.root.navigate(ChatsRouterPageRoute(children: [

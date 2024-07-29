@@ -55,7 +55,7 @@ class Chat extends Equatable {
       'id': id,
       'type': type.name,
       'name': name,
-      'insertedAt': insertedAt.toIso8601String(),
+      'inserted_at': insertedAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
       'members': members.map((x) => x.toMap()).toList(),
     };
