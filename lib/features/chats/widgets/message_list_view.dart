@@ -238,10 +238,15 @@ class _MessageListViewState extends State<MessageListView> {
                 child: FittedBox(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      name,
-                      softWrap: true,
-                      style: const TextStyle(color: Colors.white),
+                    child: ParticipantName(
+                      senderId: author.id,
+                      userId: widget.userId,
+                      textMap: (name) {
+                        var text = name.split(' ').first;
+                        if (text.length > 16) text = text.substring(0, 16);
+                        return text;
+                      },
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
                     ),
                   ),
                 ),

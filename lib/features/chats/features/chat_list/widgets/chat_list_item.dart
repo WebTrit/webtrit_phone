@@ -100,27 +100,45 @@ class _ChatListItemState extends State<ChatListItem> {
   }
 
   Widget leading() {
-    String text = '';
     if (widget.chat.type == ChatType.dialog) {
       final userId = widget.userId;
       final participant = widget.chat.members.firstWhere((m) => m.userId != userId);
-      text = participant.userId;
-    } else {
-      text = widget.chat.name?.split(' ').first ?? widget.chat.id.toString();
-    }
-
-    if (text.length > 8) text = text.substring(text.length - 8);
-    return CircleAvatar(
-      child: FittedBox(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            text.toUpperCase(),
-            softWrap: true,
+      return CircleAvatar(
+        child: FittedBox(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ContactInfoBuilder(
+              sourceType: ContactSourceType.external,
+              sourceId: participant.userId,
+              builder: (context, contact) {
+                const textStyle = TextStyle(overflow: TextOverflow.ellipsis);
+                if (contact != null) {
+                  var text = contact.name.split(' ').first;
+                  if (text.length > 16) text = text.substring(0, 16);
+                  return FadeIn(child: Text(text, style: textStyle));
+                } else {
+                  return FadeIn(child: Text(participant.userId, style: textStyle));
+                }
+              },
+            ),
           ),
         ),
-      ),
-    );
+      );
+    } else {
+      var text = widget.chat.name?.split(' ').first ?? widget.chat.id.toString();
+      if (text.length > 16) text = text.substring(0, 16);
+      return CircleAvatar(
+        child: FittedBox(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              text.toUpperCase(),
+              softWrap: true,
+            ),
+          ),
+        ),
+      );
+    }
   }
 
   Widget title() {

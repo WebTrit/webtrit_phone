@@ -9,6 +9,7 @@ class ParticipantName extends StatelessWidget {
     required this.senderId,
     required this.userId,
     this.style,
+    this.textMap,
     super.key,
   }) : isMine = senderId == userId;
 
@@ -16,6 +17,7 @@ class ParticipantName extends StatelessWidget {
   final String userId;
   final bool isMine;
   final TextStyle? style;
+  final String Function(String)? textMap;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,8 @@ class ParticipantName extends StatelessWidget {
         sourceId: senderId,
         builder: (context, contact) {
           if (contact != null) {
-            return FadeIn(child: Text(contact.name, style: textStyle, maxLines: 1, overflow: TextOverflow.ellipsis));
+            final name = textMap?.call(contact.name) ?? contact.name;
+            return FadeIn(child: Text(name, style: textStyle, maxLines: 1, overflow: TextOverflow.ellipsis));
           } else {
             return FadeIn(child: Text(senderId, style: textStyle, maxLines: 1, overflow: TextOverflow.ellipsis));
           }
