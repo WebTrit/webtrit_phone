@@ -42,14 +42,17 @@ class Actionpad extends StatelessWidget {
     return TextButtonsTable(
       minimumSize: Size.square(minimumDimension),
       children: [
-        Transform.scale(
-          scale: .75,
-          child: TextButton(
-            onPressed: onVideoCallPressed,
-            style: localStyle?.callStart,
-            child: Icon(
-              Icons.videocam,
-              size: Theme.of(context).textTheme.displayMedium!.fontSize,
+        Visibility(
+          visible: !transfer,
+          child: Transform.scale(
+            scale: .75,
+            child: TextButton(
+              onPressed: onVideoCallPressed,
+              style: localStyle?.callStart,
+              child: Icon(
+                Icons.videocam,
+                size: Theme.of(context).textTheme.displayMedium!.fontSize,
+              ),
             ),
           ),
         ),
