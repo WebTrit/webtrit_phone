@@ -88,13 +88,16 @@ Future<void> _initFirebaseMessaging() async {
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     logger.info('onMessage: ${message.toMap()}');
+    RemoteNotificationsBroker._handleForegroundMessage(message);
   });
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     logger.info('onMessageOpenedApp: ${message.toMap()}');
+    RemoteNotificationsBroker._handleOpenedMessage(message);
   });
   final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
   if (initialMessage != null) {
     logger.info('initialMessage: ${initialMessage.toMap()}');
+    RemoteNotificationsBroker._handleOpenedMessage(initialMessage);
   }
 
   // actual FirebaseMessaging permission request executed in [PermissionsCubit]
@@ -183,10 +186,38 @@ Future _initLocalNotifications() async {
 /// It holds them in a stream to be consumed by the app local components
 class LocalNotificationsBroker {
   static final StreamController<ReceivedAction> _chatActions = StreamController();
+
+  ///  Stream of chat local notifications actions, tap dismiss etc.
   static Stream<ReceivedAction> get chatActionsStream => _chatActions.stream;
 
   @pragma('vm:entry-point')
   static Future _handleActionReceived(ReceivedAction action) async {
     if (action.channelKey == 'chats_channel') _chatActions.add(action);
+  }
+}
+
+/// This class is used to handle remote notifications from global context
+/// It holds them in a stream to be consumed by the app local components
+class RemoteNotificationsBroker {
+  static final StreamController<RemoteMessage> _chatOpenedMessages = StreamController();
+
+  /// Stream of chat remote notifications that tapped by user and opened the app
+  static Stream<RemoteMessage> get chatOpenedMessagesStream => _chatOpenedMessages.stream;
+
+  static final StreamController<RemoteMessage> _chatForegroundMessages = StreamController();
+
+  /// Stream of chat remote notifications that received while the app is in foreground
+  static Stream<RemoteMessage> get chatForegroundMessagesStream => _chatForegroundMessages.stream;
+
+  static void _handleOpenedMessage(RemoteMessage message) {
+    if (message.data['chat_id'] != null) {
+      _chatOpenedMessages.add(message);
+    }
+  }
+
+  static void _handleForegroundMessage(RemoteMessage message) {
+    if (message.data['chat_id'] != null) {
+      _chatForegroundMessages.add(message);
+    }
   }
 }
