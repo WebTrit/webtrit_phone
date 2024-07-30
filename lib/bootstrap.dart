@@ -88,16 +88,16 @@ Future<void> _initFirebaseMessaging() async {
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     logger.info('onMessage: ${message.toMap()}');
-    RemoteNotificationsBroker._handleForegroundMessage(message);
+    FirebaseNotificationsBroker._handleForegroundMessage(message);
   });
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     logger.info('onMessageOpenedApp: ${message.toMap()}');
-    RemoteNotificationsBroker._handleOpenedMessage(message);
+    FirebaseNotificationsBroker._handleOpenedMessage(message);
   });
   final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
   if (initialMessage != null) {
     logger.info('initialMessage: ${initialMessage.toMap()}');
-    RemoteNotificationsBroker._handleOpenedMessage(initialMessage);
+    FirebaseNotificationsBroker._handleOpenedMessage(initialMessage);
   }
 
   // actual FirebaseMessaging permission request executed in [PermissionsCubit]
@@ -179,15 +179,15 @@ Future _initLocalNotifications() async {
     ],
   );
 
-  AwesomeNotifications().setListeners(onActionReceivedMethod: LocalNotificationsBroker._handleActionReceived);
+  AwesomeNotifications().setListeners(onActionReceivedMethod: AwesomeNotificationsBroker._handleActionReceived);
 }
 
 /// This class is used to handle local notifications actions from global context
-/// It holds them in a stream to be consumed by the app local components
-class LocalNotificationsBroker {
+/// It holds them in a stream controller buffer to be consumed by the apropriate app components when they are ready
+class AwesomeNotificationsBroker {
   static final StreamController<ReceivedAction> _chatActions = StreamController();
 
-  ///  Stream of chat local notifications actions, tap dismiss etc.
+  /// Stream of chat local notifications actions, tap dismiss etc.
   static Stream<ReceivedAction> get chatActionsStream => _chatActions.stream;
 
   @pragma('vm:entry-point')
@@ -197,8 +197,8 @@ class LocalNotificationsBroker {
 }
 
 /// This class is used to handle remote notifications from global context
-/// It holds them in a stream to be consumed by the app local components
-class RemoteNotificationsBroker {
+/// It holds them in a stream controller buffer to be consumed by the apropriate app components when they are ready
+class FirebaseNotificationsBroker {
   static final StreamController<RemoteMessage> _chatOpenedMessages = StreamController();
 
   /// Stream of chat remote notifications that tapped by user and opened the app

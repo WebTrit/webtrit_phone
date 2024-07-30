@@ -1,11 +1,7 @@
-// ignore_for_file: unused_element
 import 'dart:async';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:logging/logging.dart';
 
-import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -15,6 +11,8 @@ class ChatNotificationsService {
   ChatNotificationsService(
     this.chatsRepository,
     this.contactsRepository,
+    this.remoteNotificationRepository,
+    this.localNotificationRepository,
     this.mainScreenRouteStateRepository, {
     required this.openChatList,
     required this.openChat,
@@ -26,6 +24,8 @@ class ChatNotificationsService {
   late final String userId;
   final ChatsRepository chatsRepository;
   final ContactsRepository contactsRepository;
+  final RemoteNotificationRepository remoteNotificationRepository;
+  final LocalNotificationRepository localNotificationRepository;
   final MainScreenRouteStateRepository mainScreenRouteStateRepository;
 
   /// Whether to handle foreground chat events from internal datasource and display it notifications from the app
@@ -44,9 +44,9 @@ class ChatNotificationsService {
     _logger.info('Initialising...');
     this.userId = userId;
     _subs.add(chatsRepository.eventBus.listen(_handleLocalEvent));
-    _subs.add(LocalNotificationsBroker.chatActionsStream.listen(_notificationActionHandler));
-    _subs.add(RemoteNotificationsBroker.chatForegroundMessagesStream.listen(_handleForegroundRemoteMessage));
-    _subs.add(RemoteNotificationsBroker.chatOpenedMessagesStream.listen(_handleOpenedRemoteMessage));
+    _subs.add(localNotificationRepository.chatActionsStream.listen(_notificationActionHandler));
+    _subs.add(remoteNotificationRepository.chatNotificationsStream.listen(_handleForegroundRemoteNotification));
+    _subs.add(remoteNotificationRepository.chatOpenNotificationsStream.listen(_handleOpenedRemoteNotification));
   }
 
   Future<void> _handleLocalEvent(ChatsEvent e) async {
@@ -56,21 +56,18 @@ class ChatNotificationsService {
       if (message.senderId == userId) return;
 
       if (message.viewedAt != null || message.deletedAt != null) {
-        _logger.info('Dismiss notification for message ${message.id}');
         _dismissNotification(message.id);
-        return;
       } else {
         _displayNotificationFromEvent(message.chatId, message.senderId, message.id, message.content);
-        _logger.info('Notification created for message ${message.id}');
       }
     }
   }
 
-  Future<void> _notificationActionHandler(ReceivedAction action) async {
+  Future<void> _notificationActionHandler(LocalNotificationActionDTO action) async {
     _logger.info('onActionReceivedMethod');
     try {
       final payload = action.payload;
-      final chatId = int.tryParse(payload?['chatId'] ?? '');
+      final chatId = int.tryParse(payload['chatId'] ?? '');
       if (chatId == null) return;
 
       await _routeToChat(chatId);
@@ -79,7 +76,7 @@ class ChatNotificationsService {
     }
   }
 
-  Future<void> _handleForegroundRemoteMessage(RemoteMessage message) async {
+  Future<void> _handleForegroundRemoteNotification(RemoteNotificationDTO message) async {
     _logger.info('onMessageReceivedMethod');
     try {
       final chatId = int.tryParse(message.data['chat_id'] ?? '');
@@ -87,9 +84,9 @@ class ChatNotificationsService {
       final senderId = message.data['sender_id'];
       if (chatId == null || messageId == null || senderId == null) return;
 
-      final title = message.notification?.title;
-      final body = message.notification?.body;
-      if (title == null || body == null) return;
+      final title = message.title;
+      final body = message.body;
+      if (title.isEmpty || body.isEmpty) return;
 
       _displayNotificationFromRemote(messageId, chatId, senderId, title, body);
     } on Exception catch (e) {
@@ -97,12 +94,13 @@ class ChatNotificationsService {
     }
   }
 
-  Future<void> _handleOpenedRemoteMessage(RemoteMessage message) async {
+  Future<void> _handleOpenedRemoteNotification(RemoteNotificationDTO message) async {
     _logger.info('onMessageReceivedMethod');
     try {
       final chatId = int.tryParse(message.data['chat_id'] ?? '');
       if (chatId == null) return;
 
+      _logger.info('Opening chat $chatId');
       await _routeToChat(chatId);
     } on Exception catch (e) {
       _logger.severe('Error handling foreground remote message: $e');
@@ -111,35 +109,36 @@ class ChatNotificationsService {
 
   Future<void> _routeToChat(int chatId) async {
     final chat = await tryGetChat(chatId);
+    _logger.info('Found chat: $chat');
 
     if (chat == null) return openChatList();
 
-    if (chat.type == ChatType.dialog) {
-      final participant = chat.members.firstWhere((m) => m.userId != userId);
-      return openConversation(participant.userId);
+    if (chat.type == ChatType.group) {
+      _logger.info('Opening chat $chatId');
+      return openChat(chatId);
     }
 
-    return openChat(chatId);
+    if (chat.type == ChatType.dialog) {
+      final participant = chat.members.firstWhere((m) => m.userId != userId);
+      _logger.info('Opening conversation with $participant');
+      return openConversation(participant.userId);
+    }
   }
 
   Future _displayNotificationFromEvent(int chatId, String senderId, int messageId, String content) async {
     if (!handleLocal) return;
+    if (_shouldSkipNotification(chatId, senderId)) return;
+
     try {
       final chat = await tryGetChat(chatId);
       if (chat == null) return;
       final contact = await contactsRepository.getContactBySource(ContactSourceType.external, senderId);
 
-      AwesomeNotifications().createNotification(
-        content: NotificationContent(
-          id: messageId,
-          channelKey: 'chats_channel',
-          actionType: ActionType.Default,
-          title: chat.type == ChatType.dialog ? contact?.name ?? senderId : chat.name,
-          body: chat.type == ChatType.dialog ? content : '${contact?.name ?? senderId}: $content',
-          displayOnForeground: _shouldSkipNotification(chatId, senderId) == false,
-          displayOnBackground: false,
-          payload: {'chatId': chatId.toString()},
-        ),
+      localNotificationRepository.pushChatMessageNotification(
+        messageId,
+        chat.type == ChatType.dialog ? contact?.name ?? senderId : chat.name ?? 'Message',
+        chat.type == ChatType.dialog ? content : '${contact?.name ?? senderId}: $content',
+        {'chatId': chatId.toString()},
       );
     } catch (e) {
       _logger.severe('Error getting chat for message $messageId: $e');
@@ -148,22 +147,18 @@ class ChatNotificationsService {
 
   Future _displayNotificationFromRemote(int messageId, int chatId, String senderId, String title, String body) async {
     if (!handleRemote) return;
-    AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: messageId,
-        channelKey: 'chats_channel',
-        actionType: ActionType.Default,
-        title: title,
-        body: body,
-        displayOnForeground: _shouldSkipNotification(chatId, senderId) == false,
-        displayOnBackground: false,
-        payload: {'chatId': chatId.toString()},
-      ),
+    if (_shouldSkipNotification(chatId, senderId)) return;
+
+    localNotificationRepository.pushChatMessageNotification(
+      messageId,
+      title,
+      body,
+      {'chatId': chatId.toString()},
     );
   }
 
   Future _dismissNotification(int messageId) async {
-    AwesomeNotifications().dismiss(messageId);
+    localNotificationRepository.dissmissNotification(messageId);
   }
 
   bool _shouldSkipNotification(int chatId, String participantId) {
@@ -196,9 +191,3 @@ class ChatNotificationsService {
     }
   }
 }
-
-
-
-  // TODO: 
-  //  - decouple from AwesomeNotifications
-  //  - decouple from FirebaseMessaging

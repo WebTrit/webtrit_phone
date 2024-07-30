@@ -138,6 +138,12 @@ class _MainShellState extends State<MainShell> {
         RepositoryProvider<MainScreenRouteStateRepository>(
           create: (context) => MainScreenRouteStateRepositoryAutoRouteImpl(),
         ),
+        RepositoryProvider<RemoteNotificationRepository>(
+          create: (context) => RemoteNotificationRepositoryFirebaseImpl(),
+        ),
+        RepositoryProvider<LocalNotificationRepository>(
+          create: (context) => LocalNotificationRepositoryAwesomeImpl(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [

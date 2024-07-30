@@ -24,6 +24,8 @@ class _ChatsShellState extends State<ChatsShell> {
     chatNotificationsService = ChatNotificationsService(
       context.read<ChatsRepository>(),
       context.read<ContactsRepository>(),
+      context.read<RemoteNotificationRepository>(),
+      context.read<LocalNotificationRepository>(),
       context.read<MainScreenRouteStateRepository>(),
       openChatList: onOpenChatList,
       openChat: onOpenChat,
