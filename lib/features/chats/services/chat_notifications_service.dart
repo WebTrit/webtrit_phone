@@ -5,7 +5,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:logging/logging.dart';
 
-import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -168,14 +167,16 @@ class ChatNotificationsService {
   }
 
   bool _shouldSkipNotification(int chatId, String participantId) {
-    final routeArgs = mainScreenRouteStateRepository.lastRouteArgs;
+    final chatsTabActive = mainScreenRouteStateRepository.isChatsTabActive();
 
-    if (routeArgs is GroupScreenPageRouteArgs && routeArgs.chatId == chatId) {
-      return true;
-    }
-    if (routeArgs is ConversationScreenPageRouteArgs && routeArgs.participantId == participantId) {
-      return true;
-    }
+    // Skip if chats tab is active and chat screen inside
+    final chatScreenActive = mainScreenRouteStateRepository.isChatScreenActive(chatId);
+    if (chatScreenActive && chatsTabActive) return true;
+
+    // Skip if chats tab is active and conversation screen inside
+    final conversationScreenActive = mainScreenRouteStateRepository.isConversationScreenActive(participantId);
+    if (conversationScreenActive && chatsTabActive) return true;
+
     return false;
   }
 
@@ -199,6 +200,5 @@ class ChatNotificationsService {
 
 
   // TODO: 
-  //  - decouple from approuter
   //  - decouple from AwesomeNotifications
   //  - decouple from FirebaseMessaging

@@ -136,7 +136,7 @@ class _MainShellState extends State<MainShell> {
           ),
         ),
         RepositoryProvider<MainScreenRouteStateRepository>(
-          create: (context) => MainScreenRouteStateRepository(),
+          create: (context) => MainScreenRouteStateRepositoryAutoRouteImpl(),
         ),
       ],
       child: MultiBlocProvider(
