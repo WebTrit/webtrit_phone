@@ -4,7 +4,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/repositories/repositories.dart';
 
 @RoutePage()
 class ChatsRouterPage extends StatefulWidget {
@@ -21,21 +20,7 @@ class _ChatsRouterPageState extends State<ChatsRouterPage> {
       create: (context) => MessageForwardCubit(),
       child: Column(
         children: [
-          BlocBuilder<ChatsBloc, ChatsState>(
-            buildWhen: (previous, current) => previous.userId != current.userId,
-            builder: (context, state) {
-              final chatsRepository = context.read<ChatsRepository>();
-              final contactsRepository = context.read<ContactsRepository>();
-              final userId = state.userId;
-              return Expanded(
-                child: AutoRouter(
-                  navigatorObservers: () => [
-                    if (userId != null) ChatNotificationsService(userId, chatsRepository, contactsRepository),
-                  ],
-                ),
-              );
-            },
-          ),
+          const Expanded(child: AutoRouter()),
           BlocBuilder<ChatsBloc, ChatsState>(
             buildWhen: (previous, current) => previous.status != current.status,
             builder: (context, state) {

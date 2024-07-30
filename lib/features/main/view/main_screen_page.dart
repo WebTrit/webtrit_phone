@@ -22,6 +22,7 @@ class MainScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appPreferences = context.read<AppPreferences>();
+    final mainScreenRouteStateRepository = context.read<MainScreenRouteStateRepository>();
     const appDemoFlow = EnvironmentConfig.CORE_URL == null;
 
     final autoTabsRouter = AutoTabsRouter(
@@ -52,6 +53,7 @@ class MainScreenPage extends StatelessWidget {
           },
         );
       },
+      navigatorObservers: () => [MainScreenNavigatorObserver(mainScreenRouteStateRepository)],
     );
 
     final provider = BlocProvider(

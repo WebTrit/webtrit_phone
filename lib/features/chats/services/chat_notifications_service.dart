@@ -1,94 +1,67 @@
 // ignore_for_file: unused_element
 import 'dart:async';
-import 'package:flutter/material.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:logging/logging.dart';
-import 'package:auto_route/auto_route.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/models/models.dart';
-
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 final _logger = Logger('ChatNotificationsService');
 
-class ChatNotificationsService extends AutoRouterObserver {
+class ChatNotificationsService {
   ChatNotificationsService(
-    this.userId,
     this.chatsRepository,
-    this.contactsRepository, {
+    this.contactsRepository,
+    this.mainScreenRouteStateRepository, {
+    required this.openChatList,
+    required this.openChat,
+    required this.openConversation,
     this.handleLocal = false,
     this.handleRemote = true,
-  }) {
-    _init();
-  }
+  });
 
-  final String userId;
+  late final String userId;
   final ChatsRepository chatsRepository;
   final ContactsRepository contactsRepository;
+  final MainScreenRouteStateRepository mainScreenRouteStateRepository;
 
-  /// Whether to handle chat events from internal datasource and display it notifications from the app
+  /// Whether to handle foreground chat events from internal datasource and display it notifications from the app
   final bool handleLocal;
 
   /// Whether to handle foreground push notifications from fcm/apns and display it as notifications from the app
   final bool handleRemote;
 
-  StreamSubscription? _eventsSub;
+  final Function openChatList;
+  final Function(int chatId) openChat;
+  final Function(String participantId) openConversation;
 
-  // Vars used to skip notifications for chats that are opened in foreground
-  int? _groupIdOpened;
-  String? _dialogWithUserIdOpened;
+  final List<StreamSubscription> _subs = [];
 
-  @override
-  void didPush(Route route, Route? previousRoute) {
-    final args = route.data?.route.args;
-    if (args is ConversationScreenPageRouteArgs) {
-      _dialogWithUserIdOpened = args.participantId;
-    }
-    if (args is GroupScreenPageRouteArgs) {
-      _groupIdOpened = args.chatId;
-    }
-    super.didPush(route, previousRoute);
-  }
-
-  @override
-  void didPop(Route route, Route? previousRoute) {
-    final args = route.data?.route.args;
-    if (args is ConversationScreenPageRouteArgs && args.participantId == _dialogWithUserIdOpened) {
-      _dialogWithUserIdOpened = null;
-    }
-    if (args is GroupScreenPageRouteArgs && args.chatId == _groupIdOpened) {
-      _groupIdOpened = null;
-    }
-    super.didPop(route, previousRoute);
-  }
-
-  void _init() async {
+  void init(String userId) async {
     _logger.info('Initialising...');
-    _eventsSub = chatsRepository.eventBus.listen(_handleLocalEvent);
-    LocalNotificationsBroker.chatActionsStream.listen(_notificationActionHandler);
-    RemoteNotificationsBroker.chatForegroundMessagesStream.listen(_handleForegroundRemoteMessage);
-    RemoteNotificationsBroker.chatOpenedMessagesStream.listen(_handleOpenedRemoteMessage);
+    this.userId = userId;
+    _subs.add(chatsRepository.eventBus.listen(_handleLocalEvent));
+    _subs.add(LocalNotificationsBroker.chatActionsStream.listen(_notificationActionHandler));
+    _subs.add(RemoteNotificationsBroker.chatForegroundMessagesStream.listen(_handleForegroundRemoteMessage));
+    _subs.add(RemoteNotificationsBroker.chatOpenedMessagesStream.listen(_handleOpenedRemoteMessage));
   }
 
   Future<void> _handleLocalEvent(ChatsEvent e) async {
-    // Skip handling local events if not needed
-    if (!handleLocal) return;
-
     if (e is ChatMessageUpdate) {
       _logger.info('ChatMessageReceived: ${e.message}');
       final message = e.message;
       if (message.senderId == userId) return;
 
       if (message.viewedAt != null || message.deletedAt != null) {
-        _logger.info('Dismiss local notification for message ${message.id}');
-        _dismissLocalNotification(message.id);
+        _logger.info('Dismiss notification for message ${message.id}');
+        _dismissNotification(message.id);
         return;
       } else {
-        _displayLocalNotification(message.chatId, message.senderId, message.id, message.content);
+        _displayNotificationFromEvent(message.chatId, message.senderId, message.id, message.content);
         _logger.info('Notification created for message ${message.id}');
       }
     }
@@ -108,9 +81,6 @@ class ChatNotificationsService extends AutoRouterObserver {
   }
 
   Future<void> _handleForegroundRemoteMessage(RemoteMessage message) async {
-    // Skip handling remote messages if not needed
-    if (!handleRemote) return;
-
     _logger.info('onMessageReceivedMethod');
     try {
       final chatId = int.tryParse(message.data['chat_id'] ?? '');
@@ -122,7 +92,7 @@ class ChatNotificationsService extends AutoRouterObserver {
       final body = message.notification?.body;
       if (title == null || body == null) return;
 
-      _displayRemoteNotification(messageId, chatId, senderId, title, body);
+      _displayNotificationFromRemote(messageId, chatId, senderId, title, body);
     } on Exception catch (e) {
       _logger.severe('Error handling foreground remote message: $e');
     }
@@ -142,31 +112,19 @@ class ChatNotificationsService extends AutoRouterObserver {
 
   Future<void> _routeToChat(int chatId) async {
     final chat = await tryGetChat(chatId);
-    if (chat == null) {
-      await navigator?.context.router.root.navigate(
-        const ChatsRouterPageRoute(
-          children: [ChatListScreenPageRoute()],
-        ),
-      );
-    } else {
-      if (chat.type == ChatType.dialog) {
-        final participant = chat.members.firstWhere((m) => m.userId != userId);
-        await navigator?.context.router.root.navigate(
-          ChatsRouterPageRoute(
-            children: [const ChatListScreenPageRoute(), ConversationScreenPageRoute(participantId: participant.userId)],
-          ),
-        );
-      } else {
-        await navigator?.context.router.root.navigate(
-          ChatsRouterPageRoute(
-            children: [const ChatListScreenPageRoute(), GroupScreenPageRoute(chatId: chatId)],
-          ),
-        );
-      }
+
+    if (chat == null) return openChatList();
+
+    if (chat.type == ChatType.dialog) {
+      final participant = chat.members.firstWhere((m) => m.userId != userId);
+      return openConversation(participant.userId);
     }
+
+    return openChat(chatId);
   }
 
-  Future _displayLocalNotification(int chatId, String senderId, int messageId, String content) async {
+  Future _displayNotificationFromEvent(int chatId, String senderId, int messageId, String content) async {
+    if (!handleLocal) return;
     try {
       final chat = await tryGetChat(chatId);
       if (chat == null) return;
@@ -180,6 +138,7 @@ class ChatNotificationsService extends AutoRouterObserver {
           title: chat.type == ChatType.dialog ? contact?.name ?? senderId : chat.name,
           body: chat.type == ChatType.dialog ? content : '${contact?.name ?? senderId}: $content',
           displayOnForeground: _shouldSkipNotification(chatId, senderId) == false,
+          displayOnBackground: false,
           payload: {'chatId': chatId.toString()},
         ),
       );
@@ -188,7 +147,8 @@ class ChatNotificationsService extends AutoRouterObserver {
     }
   }
 
-  Future _displayRemoteNotification(int messageId, int chatId, String senderId, String title, String body) async {
+  Future _displayNotificationFromRemote(int messageId, int chatId, String senderId, String title, String body) async {
+    if (!handleRemote) return;
     AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: messageId,
@@ -197,19 +157,23 @@ class ChatNotificationsService extends AutoRouterObserver {
         title: title,
         body: body,
         displayOnForeground: _shouldSkipNotification(chatId, senderId) == false,
+        displayOnBackground: false,
         payload: {'chatId': chatId.toString()},
       ),
     );
   }
 
-  Future _dismissLocalNotification(int messageId) async {
+  Future _dismissNotification(int messageId) async {
     AwesomeNotifications().dismiss(messageId);
   }
 
   bool _shouldSkipNotification(int chatId, String participantId) {
-    if (chatId == _groupIdOpened) {
+    final routeArgs = mainScreenRouteStateRepository.lastRouteArgs;
+
+    if (routeArgs is GroupScreenPageRouteArgs && routeArgs.chatId == chatId) {
       return true;
-    } else if (participantId == _dialogWithUserIdOpened) {
+    }
+    if (routeArgs is ConversationScreenPageRouteArgs && routeArgs.participantId == participantId) {
       return true;
     }
     return false;
@@ -224,8 +188,17 @@ class ChatNotificationsService extends AutoRouterObserver {
     return null;
   }
 
-  void dispose() {
+  Future<void> dispose() async {
     _logger.info('Disposing...');
-    _eventsSub?.cancel();
+    for (var sub in _subs) {
+      await sub.cancel();
+    }
   }
 }
+
+
+
+  // TODO: 
+  //  - decouple from approuter
+  //  - decouple from AwesomeNotifications
+  //  - decouple from FirebaseMessaging

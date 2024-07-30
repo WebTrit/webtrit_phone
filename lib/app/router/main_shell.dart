@@ -135,6 +135,9 @@ class _MainShellState extends State<MainShell> {
             appDatabase: context.read<AppDatabase>(),
           ),
         ),
+        RepositoryProvider<MainScreenRouteStateRepository>(
+          create: (context) => MainScreenRouteStateRepository(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -213,9 +216,7 @@ class _MainShellState extends State<MainShell> {
           ),
         ],
         child: Builder(
-          builder: (context) => const CallShell(
-            child: AutoRouter(),
-          ),
+          builder: (context) => const CallShell(child: ChatsShell(child: AutoRouter())),
         ),
       ),
     );
