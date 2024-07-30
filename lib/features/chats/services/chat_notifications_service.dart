@@ -122,7 +122,7 @@ class ChatNotificationsService extends AutoRouterObserver {
       final body = message.notification?.body;
       if (title == null || body == null) return;
 
-      _displayRemoteNotification(messageId, chatId, title, body);
+      _displayRemoteNotification(messageId, chatId, senderId, title, body);
     } on Exception catch (e) {
       _logger.severe('Error handling foreground remote message: $e');
     }
@@ -179,7 +179,7 @@ class ChatNotificationsService extends AutoRouterObserver {
           actionType: ActionType.Default,
           title: chat.type == ChatType.dialog ? contact?.name ?? senderId : chat.name,
           body: chat.type == ChatType.dialog ? content : '${contact?.name ?? senderId}: $content',
-          displayOnForeground: _shouldSkipNotification(chatId, senderId),
+          displayOnForeground: _shouldSkipNotification(chatId, senderId) == false,
           payload: {'chatId': chatId.toString()},
         ),
       );
@@ -188,7 +188,7 @@ class ChatNotificationsService extends AutoRouterObserver {
     }
   }
 
-  Future _displayRemoteNotification(int messageId, int chatId, String title, String body) async {
+  Future _displayRemoteNotification(int messageId, int chatId, String senderId, String title, String body) async {
     AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: messageId,
@@ -196,7 +196,7 @@ class ChatNotificationsService extends AutoRouterObserver {
         actionType: ActionType.Default,
         title: title,
         body: body,
-        displayOnForeground: _shouldSkipNotification(chatId, userId),
+        displayOnForeground: _shouldSkipNotification(chatId, senderId) == false,
         payload: {'chatId': chatId.toString()},
       ),
     );
@@ -206,10 +206,10 @@ class ChatNotificationsService extends AutoRouterObserver {
     AwesomeNotifications().dismiss(messageId);
   }
 
-  bool _shouldSkipNotification(int chatId, String userId) {
+  bool _shouldSkipNotification(int chatId, String participantId) {
     if (chatId == _groupIdOpened) {
       return true;
-    } else if (userId == _dialogWithUserIdOpened) {
+    } else if (participantId == _dialogWithUserIdOpened) {
       return true;
     }
     return false;
