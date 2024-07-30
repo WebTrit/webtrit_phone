@@ -1497,6 +1497,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     try {
       await state.performOnActiveCall(event.callId, (activeCall) async {
+        // Condition occur when the user interacts with a push notification before signaling is properly initialized. In this case, the
+        // CallKeep method "reportNewIncomingCall" may return callIdAlreadyExistsAndAnswered.
         if (activeCall.line == _kUndefinedLine) return;
 
         final peerConnection = await _peerConnectionRetrieve(activeCall.callId);
