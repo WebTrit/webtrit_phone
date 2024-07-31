@@ -60,6 +60,7 @@ class LocalContactsRepository implements ILocalContactsRepository {
     final contacts = await FlutterContacts.getContacts(
       withProperties: true,
       withAccounts: true,
+      withThumbnail: true,
     );
     return contacts
         .where((contact) {
