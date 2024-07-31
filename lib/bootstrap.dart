@@ -8,7 +8,7 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -157,29 +157,12 @@ class FCMIsolateDatabase extends AppDatabase {
 }
 
 Future _initLocalNotifications() async {
-  await AwesomeNotifications().initialize(
-    null,
-    [
-      // init basic channel
-      NotificationChannel(
-          channelGroupKey: 'basic_channel_group',
-          channelKey: 'basic_channel',
-          channelName: 'Basic notifications',
-          channelDescription: 'Notification channel for basic tests',
-          defaultColor: const Color(0xFF9D50DD),
-          ledColor: Colors.white),
-      // init chats channel
-      NotificationChannel(
-          channelGroupKey: 'chats_channel_group',
-          channelKey: 'chats_channel',
-          channelName: 'Chats notifications',
-          channelDescription: 'Notification channel for chats',
-          defaultColor: const Color(0xFF9D50DD),
-          ledColor: Colors.white),
-    ],
-  );
-
-  AwesomeNotifications().setListeners(
-    onActionReceivedMethod: AwesomeNotificationsBroker.handleActionReceived,
+  await FlutterLocalNotificationsPlugin().initialize(
+    const InitializationSettings(
+      iOS: DarwinInitializationSettings(),
+      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+    ),
+    onDidReceiveNotificationResponse: LocalNotificationsBroker.handleActionReceived,
+    onDidReceiveBackgroundNotificationResponse: LocalNotificationsBroker.handleActionReceived,
   );
 }

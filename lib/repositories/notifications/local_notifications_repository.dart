@@ -1,5 +1,7 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 
@@ -13,41 +15,37 @@ abstract class LocalNotificationRepository {
 class LocalNotificationRepositoryAwesomeImpl implements LocalNotificationRepository {
   @override
   Stream<LocalNotificationActionDTO> get chatActionsStream {
-    return AwesomeNotificationsBroker.chatActionsStream.map((action) {
+    return LocalNotificationsBroker.chatActionsStream.map((action) {
+      final payload = action.payload;
       return LocalNotificationActionDTO(
         id: action.id ?? -1,
-        payload: action.payload ?? {},
-        type: () {
-          switch (action.actionType) {
-            case ActionType.Default:
-              return LocalNotificationActionType.tap;
-            case ActionType.DismissAction:
-              return LocalNotificationActionType.dismiss;
-            default:
-              return LocalNotificationActionType.other;
-          }
-        }(),
+        payload: payload != null ? json.decode(payload) : {},
+        type: LocalNotificationActionType.tap,
       );
     });
   }
 
   @override
   Future<void> pushChatMessageNotification(int id, String title, String body, Map<String, String> payload) async {
-    AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: id,
-        channelKey: 'chats_channel',
-        actionType: ActionType.Default,
-        title: title,
-        body: body,
-        payload: payload,
+    FlutterLocalNotificationsPlugin().show(
+      id,
+      title,
+      body,
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'chats_channel',
+          'chats channel',
+          importance: Importance.defaultImportance,
+          priority: Priority.defaultPriority,
+        ),
       ),
+      payload: const JsonEncoder().convert(payload),
     );
   }
 
   @override
   Future<void> dissmissNotification(int id) async {
-    AwesomeNotifications().dismiss(id);
+    FlutterLocalNotificationsPlugin().cancel(id);
   }
 }
 

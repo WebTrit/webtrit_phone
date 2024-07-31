@@ -1,9 +1,6 @@
 PODS:
   - audio_session (0.0.1):
     - Flutter
-  - awesome_notifications (0.9.3):
-    - Flutter
-    - IosAwnCore (~> 0.9.3)
   - connectivity_plus (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -108,6 +105,8 @@ PODS:
     - Flutter
   - flutter_dtmf (1.0.1):
     - Flutter
+  - flutter_local_notifications (0.0.1):
+    - Flutter
   - flutter_native_splash (0.0.1):
     - Flutter
   - flutter_secure_storage (6.0.0):
@@ -169,7 +168,6 @@ PODS:
     - GoogleUtilities/Privacy
   - integration_test (0.0.1):
     - Flutter
-  - IosAwnCore (0.9.3)
   - just_audio (0.0.1):
     - Flutter
   - nanopb (2.30910.0):
@@ -219,7 +217,6 @@ PODS:
 
 DEPENDENCIES:
   - audio_session (from `.symlinks/plugins/audio_session/ios`)
-  - awesome_notifications (from `.symlinks/plugins/awesome_notifications/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/darwin`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
@@ -230,6 +227,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_contacts (from `.symlinks/plugins/flutter_contacts/ios`)
   - flutter_dtmf (from `.symlinks/plugins/flutter_dtmf/ios`)
+  - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - flutter_webrtc (from `.symlinks/plugins/flutter_webrtc/ios`)
@@ -261,7 +259,6 @@ SPEC REPOS:
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleUtilities
-    - IosAwnCore
     - nanopb
     - PromisesObjC
     - PromisesSwift
@@ -271,8 +268,6 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   audio_session:
     :path: ".symlinks/plugins/audio_session/ios"
-  awesome_notifications:
-    :path: ".symlinks/plugins/awesome_notifications/ios"
   connectivity_plus:
     :path: ".symlinks/plugins/connectivity_plus/darwin"
   device_info_plus:
@@ -293,6 +288,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_contacts/ios"
   flutter_dtmf:
     :path: ".symlinks/plugins/flutter_dtmf/ios"
+  flutter_local_notifications:
+    :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_native_splash:
     :path: ".symlinks/plugins/flutter_native_splash/ios"
   flutter_secure_storage:
@@ -326,7 +323,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   audio_session: 088d2483ebd1dc43f51d253d4a1c517d9a2e7207
-  awesome_notifications: 66d28ab7174ca2823b04d275cb043e0a4a3eb9cf
   connectivity_plus: ddd7f30999e1faaef5967c23d5b6d503d10434db
   device_info_plus: 97af1d7e84681a90d0693e63169a5d50e0839a0d
   Firebase: 0312a2352584f782ea56f66d91606891d4607f06
@@ -347,6 +343,7 @@ SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_contacts: edb1c5ce76aa433e20e6cb14c615f4c0b66e0983
   flutter_dtmf: d86aaec3002a172abba756dc179aaf786bb82215
+  flutter_local_notifications: 4cde75091f6327eb8517fa068a0a5950212d2086
   flutter_native_splash: edf599c81f74d093a4daf8e17bd7a018854bc778
   flutter_secure_storage: d33dac7ae2ea08509be337e775f6b59f1ff45f12
   flutter_webrtc: 9bc044b0b5bcaabd0fb7d52c90421fb540f8c35e
@@ -354,7 +351,6 @@ SPEC CHECKSUMS:
   GoogleDataTransport: 6c09b596d841063d76d4288cc2d2f42cc36e1e2a
   GoogleUtilities: ea963c370a38a8069cc5f7ba4ca849a60b6d7d15
   integration_test: ce0a3ffa1de96d1a89ca0ac26fca7ea18a749ef4
-  IosAwnCore: b8601fbb37f7b3560f31b84ebf55a72f65812e05
   just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
   nanopb: 438bc412db1928dac798aa6fd75726007be04262
   package_info_plus: 58f0028419748fad15bf008b270aaa8e54380b1c
@@ -372,6 +368,6 @@ SPEC CHECKSUMS:
   webtrit_callkeep_ios: 2f4975de04cbcdb1ed49b170396ae52aa75e6d1c
   webview_flutter_wkwebview: be0f0d33777f1bfd0c9fdcb594786704dbf65f36
 
-PODFILE CHECKSUM: c3c81fc7852ae51787c11092d93fa624d092bf9f
+PODFILE CHECKSUM: 91a5e7c16e7449c5b36b48e139b796830c0b0ea1
 
 COCOAPODS: 1.15.2

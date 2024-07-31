@@ -80,7 +80,7 @@ class ChatNotificationsService {
     _logger.info('onMessageReceivedMethod');
     try {
       final chatId = int.tryParse(message.data['chat_id'] ?? '');
-      final messageId = int.tryParse(message.data['message_id'] ?? '');
+      final messageId = int.tryParse(message.data['message_id'] ?? message.data['msg_id'] ?? '');
       final senderId = message.data['sender_id'];
       if (chatId == null || messageId == null || senderId == null) return;
 
