@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import 'package:webtrit_phone/bootstrap.dart';
+import 'package:webtrit_phone/push_notification/push_notifications.dart';
 
 abstract class RemoteNotificationRepository {
   /// Stream of chat notifications that were tapped and opened the app from a background or terminated state

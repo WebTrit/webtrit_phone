@@ -1,7 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:equatable/equatable.dart';
 
-import 'package:webtrit_phone/bootstrap.dart';
+import 'package:webtrit_phone/push_notification/push_notifications.dart';
 
 abstract class LocalNotificationRepository {
   /// Stream of chat notifications actions that were tapped or dismissed
