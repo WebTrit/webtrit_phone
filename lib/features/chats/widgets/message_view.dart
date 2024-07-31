@@ -72,10 +72,10 @@ class _MessageViewState extends State<MessageView> {
     return null;
   }
 
-  RelativeRect getRelativeRect(GlobalKey key) {
+  RelativeRect getRelativeRect(GlobalKey key, bool isMine) {
     final RenderBox button = context.findRenderObject()! as RenderBox;
     final RenderBox overlay = Navigator.of(context).overlay!.context.findRenderObject()! as RenderBox;
-    late Offset offset = const Offset(5, 0);
+    late Offset offset = Offset(isMine ? -48 : 48, 16);
     return RelativeRect.fromRect(
       Rect.fromPoints(
         button.localToGlobal(offset, ancestor: overlay),
@@ -105,10 +105,17 @@ class _MessageViewState extends State<MessageView> {
     if (isDeleted) {}
 
     return GestureDetector(
-      onLongPress: () {
+      onLongPress: () async {
+        if (FocusScope.of(context).hasFocus) {
+          FocusScope.of(context).unfocus();
+          await Future.delayed(const Duration(milliseconds: 400));
+          if (!mounted) return;
+        }
         showMenu(
+          // has mount check
+          // ignore: use_build_context_synchronously
           context: context,
-          position: getRelativeRect(widgetKey),
+          position: getRelativeRect(widgetKey, isMine),
           items: [
             if (isSended && !isDeleted)
               MessageMenuItem(
@@ -140,7 +147,8 @@ class _MessageViewState extends State<MessageView> {
       child: Container(
         padding: const EdgeInsets.all(12),
         key: widgetKey,
-        color: !isViewed ? Colors.blueGrey.withOpacity(0.4) : null,
+        // 0.01 is for background press recognition
+        color: !isViewed ? Colors.blueGrey.withOpacity(0.4) : Colors.blueGrey.withOpacity(0.01),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
