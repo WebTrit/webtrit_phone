@@ -108,6 +108,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
             firstName: Value(localContact.firstName),
             lastName: Value(localContact.lastName),
             aliasName: Value(localContact.displayName),
+            thumbnail: Value(localContact.thumbnail),
           ));
 
           await appDatabase.contactPhonesDao.deleteOtherContactPhonesOfContactId(

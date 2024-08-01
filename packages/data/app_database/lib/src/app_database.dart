@@ -155,6 +155,8 @@ class ContactsTable extends Table {
 
   TextColumn get aliasName => text().nullable()();
 
+  BlobColumn get thumbnail => blob().nullable()();
+
   BoolColumn get registered => boolean().nullable()();
 
   DateTimeColumn get insertedAt => dateTime().nullable()();
