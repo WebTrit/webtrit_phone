@@ -9,6 +9,7 @@ export 'billing_model.dart';
 export 'common.dart';
 export 'demo/demo.dart';
 export 'error.dart';
+export 'error/error.dart';
 export 'otp_notification_type.dart';
 export 'session_autoprovision_credential.dart';
 export 'session_login_credential.dart';
