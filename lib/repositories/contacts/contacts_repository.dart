@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:gravatar_utils/gravatar_utils.dart';
+
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -52,16 +54,22 @@ class ContactsRepository {
     return _appDatabase.favoritesDao.deleteByContactPhoneId(contactPhone.id);
   }
 
-  Contact _toContact(ContactData data) {
+  Contact _toContact(ContactWithEmailData data) {
+    final email = data.email?.address;
+    final gravatarUrl = email != null
+        ? Gravatar(email).image(scheme: 'https', defaultImage: DefaultImage.fileNotFound).toString()
+        : null;
+
     return Contact(
-      id: data.id,
-      sourceType: data.sourceType.toModel(),
-      sourceId: data.sourceId,
-      registered: data.registered,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      aliasName: data.aliasName,
-      thumbnail: data.thumbnail,
+      id: data.contact.id,
+      sourceType: data.contact.sourceType.toModel(),
+      sourceId: data.contact.sourceId,
+      registered: data.contact.registered,
+      firstName: data.contact.firstName,
+      lastName: data.contact.lastName,
+      aliasName: data.contact.aliasName,
+      thumbnail: data.contact.thumbnail,
+      thumbnailUrl: gravatarUrl,
     );
   }
 
