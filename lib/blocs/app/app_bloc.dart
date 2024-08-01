@@ -7,6 +7,7 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/theme/theme.dart';
@@ -16,6 +17,17 @@ part 'app_bloc.freezed.dart';
 part 'app_event.dart';
 
 part 'app_state.dart';
+
+WebtritApiClient defaultCreateWebtritApiClient(String coreUrl, String tenantId) {
+  final appCertificates = AppCertificates();
+
+  return WebtritApiClient(
+    Uri.parse(coreUrl),
+    tenantId,
+    connectionTimeout: kApiClientConnectionTimeout,
+    certs: appCertificates.trustedCertificates,
+  );
+}
 
 class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc({
@@ -35,6 +47,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         )) {
     on<AppLogined>(_onLogined, transformer: sequential());
     on<AppLogouted>(_onLogouted, transformer: sequential());
+    on<AppLogoutedTeardown>(_onLogoutedTeardown, transformer: sequential());
     on<AppThemeSettingsChanged>(_onThemeSettingsChanged, transformer: droppable());
     on<AppThemeModeChanged>(_onThemeModeChanged, transformer: droppable());
     on<AppLocaleChanged>(_onLocaleChanged, transformer: droppable());
@@ -75,6 +88,16 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onLogouted(AppLogouted event, Emitter<AppState> emit) async {
+    final client = defaultCreateWebtritApiClient(state.coreUrl!, state.tenantId!);
+
+    try {
+      await client.getUserInfo(state.token!);
+    } on RequestFailure catch (e) {
+      emit(state.copyWith(
+        accountErrorType: AccountErrorType.values.firstWhereOrNull((it) => it.code == e.error?.code),
+      ));
+    }
+
     await _cleanUpUserData();
 
     emit(state.copyWith(
@@ -82,6 +105,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       tenantId: null,
       token: null,
     ));
+  }
+
+  void _onLogoutedTeardown(AppLogoutedTeardown event, Emitter<AppState> emit) async {
+    emit(state.copyWith(accountErrorType: null));
   }
 
   void _onThemeSettingsChanged(AppThemeSettingsChanged event, Emitter<AppState> emit) {
