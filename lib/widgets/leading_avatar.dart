@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 
-class LeadingAvatar extends StatelessWidget {
+class LeadingAvatar extends StatefulWidget {
   const LeadingAvatar({
     super.key,
     required this.username,
     this.thumbnail,
+    this.thumbnailUrl,
     this.placeholderIcon = Icons.person_outline,
     this.registered,
     this.smart = false,
@@ -17,44 +18,26 @@ class LeadingAvatar extends StatelessWidget {
 
   final String? username;
   final Uint8List? thumbnail;
+  final String? thumbnailUrl;
   final IconData placeholderIcon;
   final bool? registered;
   final bool smart;
-
   final double radius;
+
+  @override
+  State<LeadingAvatar> createState() => _LeadingAvatarState();
+}
+
+class _LeadingAvatarState extends State<LeadingAvatar> {
+  bool _imageLoadFailed = false;
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final colorScheme = themeData.colorScheme;
 
-    final username = this.username;
-    final Uint8List? thumbnail = this.thumbnail;
-
-    final ImageProvider? foregroundImage;
-    final Widget? child;
-
-    if (thumbnail != null) {
-      foregroundImage = MemoryImage(thumbnail);
-      child = null;
-    } else {
-      foregroundImage = null;
-      if (username != null) {
-        child = Text(
-          username.initialism,
-          softWrap: false,
-          overflow: TextOverflow.fade,
-        );
-      } else {
-        child = Icon(
-          placeholderIcon,
-        );
-      }
-    }
-
-    final bool? registered = this.registered;
-
-    final diameter = radius * 2;
+    final diameter = widget.radius * 2;
+    final foregroundImage = _getImageProvider();
 
     return SizedBox(
       width: diameter,
@@ -65,40 +48,125 @@ class LeadingAvatar extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             CircleAvatar(
-              radius: radius,
+              radius: widget.radius,
               backgroundColor: colorScheme.secondaryContainer,
               foregroundColor: colorScheme.onSecondaryContainer,
               foregroundImage: foregroundImage,
-              child: child,
-            ),
-            if (smart)
-              Positioned(
-                left: diameter * -0.1,
-                bottom: diameter * -0.1,
-                width: diameter * 0.4,
-                height: diameter * 0.4,
-                child: CircleAvatar(
-                  backgroundColor: colorScheme.surfaceContainerLowest,
-                  child: Icon(
-                    Icons.person,
-                    size: diameter * 0.4 * 0.9,
-                  ),
-                ),
+              // Conditionally set onForegroundImageError
+              onForegroundImageError: foregroundImage != null
+                  ? (_, __) {
+                      setState(() {
+                        _imageLoadFailed = true;
+                      });
+                    }
+                  : null,
+              child: _LeadingForegroundWidget(
+                username: widget.username,
+                foregroundImage: foregroundImage,
+                placeholderIcon: widget.placeholderIcon,
               ),
-            if (registered != null)
-              Positioned(
-                right: 0,
-                bottom: 0,
-                width: diameter * 0.2,
-                height: diameter * 0.2,
-                child: Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: registered ? colorScheme.tertiary : colorScheme.surface,
-                  ),
-                ),
-              )
+            ),
+            if (widget.smart) _SmartIndicator(diameter: diameter, colorScheme: colorScheme),
+            if (widget.registered != null)
+              _RegisteredIndicator(
+                diameter: diameter,
+                colorScheme: colorScheme,
+                registered: widget.registered!,
+              ),
           ],
+        ),
+      ),
+    );
+  }
+
+  ImageProvider? _getImageProvider() {
+    if (_imageLoadFailed) {
+      return null;
+    }
+    if (widget.thumbnail != null) {
+      return MemoryImage(widget.thumbnail!);
+    } else if (widget.thumbnailUrl != null) {
+      return NetworkImage(widget.thumbnailUrl!);
+    }
+    return null;
+  }
+}
+
+class _LeadingForegroundWidget extends StatelessWidget {
+  const _LeadingForegroundWidget({
+    required this.username,
+    required this.foregroundImage,
+    required this.placeholderIcon,
+  });
+
+  final String? username;
+  final ImageProvider? foregroundImage;
+  final IconData placeholderIcon;
+
+  @override
+  Widget build(BuildContext context) {
+    if (foregroundImage != null) return const SizedBox.shrink();
+
+    if (username != null) {
+      return Text(
+        username!.initialism,
+        softWrap: false,
+        overflow: TextOverflow.fade,
+      );
+    }
+    return Icon(placeholderIcon);
+  }
+}
+
+class _SmartIndicator extends StatelessWidget {
+  const _SmartIndicator({
+    required this.diameter,
+    required this.colorScheme,
+  });
+
+  final double diameter;
+  final ColorScheme colorScheme;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      left: diameter * -0.1,
+      bottom: diameter * -0.1,
+      width: diameter * 0.4,
+      height: diameter * 0.4,
+      child: CircleAvatar(
+        backgroundColor: colorScheme.surfaceContainerLowest,
+        child: Icon(
+          Icons.person,
+          size: diameter * 0.4 * 0.9,
+        ),
+      ),
+    );
+  }
+}
+
+class _RegisteredIndicator extends StatelessWidget {
+  const _RegisteredIndicator({
+    required this.diameter,
+    required this.colorScheme,
+    required this.registered,
+  });
+
+  final double diameter;
+  final ColorScheme colorScheme;
+  final bool registered;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      right: 0,
+      bottom: 0,
+      width: diameter * 0.2,
+      height: diameter * 0.2,
+      child: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: registered ? colorScheme.tertiary : colorScheme.surface,
         ),
       ),
     );
