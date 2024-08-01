@@ -43,6 +43,7 @@ class ContactsLocalTab extends StatelessWidget {
               final contact = state.contacts[index];
               return ContactTile(
                 displayName: contact.name,
+                thumbnailUrl: contact.thumbnailUrl,
                 thumbnail: contact.thumbnail,
                 onTap: () {
                   context.router.navigate(ContactScreenPageRoute(

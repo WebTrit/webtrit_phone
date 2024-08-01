@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:gravatar_utils/gravatar_utils.dart';
+
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
@@ -48,6 +50,9 @@ class UserInfoListTile extends StatelessWidget {
           children: [
             LeadingAvatar(
               username: info?.name ?? '?',
+              thumbnailUrl: info?.email != null
+                  ? Gravatar(info!.email!).image(scheme: 'https', defaultImage: DefaultImage.fileNotFound).toString()
+                  : null,
               radius: radius,
             ),
             const SizedBox(width: 8),
