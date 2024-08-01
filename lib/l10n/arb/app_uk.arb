@@ -536,5 +536,7 @@
   "webRegistration_ErrorAcknowledgeDialogActions_skip": "Skip",
   "@webRegistration_ErrorAcknowledgeDialogActions_skip": {},
   "webRegistration_ErrorAcknowledgeDialog_title": "Web resource error",
-  "@webRegistration_ErrorAcknowledgeDialog_title": {}
+  "@webRegistration_ErrorAcknowledgeDialog_title": {},
+  "account_selfCarePasswordExpired_message": "Термін дії вашого пароля самообслуговування минув. Оновіть його за допомогою самообслуговування.\nДоки пароль не буде змінено, доступ до служби буде обмежено.",
+  "@account_selfCarePasswordExpired_message": {}
 }

@@ -723,4 +723,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get account_selfCarePasswordExpired_message => 'Your self-care password has expired. Please update it using your self-care.\nUntil the password is changed, access to the service will be limited.';
 }

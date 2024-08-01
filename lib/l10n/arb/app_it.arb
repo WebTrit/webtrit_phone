@@ -536,5 +536,7 @@
   "webRegistration_ErrorAcknowledgeDialogActions_skip": "Skip",
   "@webRegistration_ErrorAcknowledgeDialogActions_skip": {},
   "webRegistration_ErrorAcknowledgeDialog_title": "Web resource error",
-  "@webRegistration_ErrorAcknowledgeDialog_title": {}
+  "@webRegistration_ErrorAcknowledgeDialog_title": {},
+  "account_selfCarePasswordExpired_message": "La tua password di self-care è scaduta. Ti preghiamo di aggiornarla utilizzando il self-care.\nFino a quando la password non sarà cambiata, l'accesso al servizio sarà limitato.",
+  "@account_selfCarePasswordExpired_message": {}
 }

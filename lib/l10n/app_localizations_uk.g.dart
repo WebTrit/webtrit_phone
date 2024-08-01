@@ -723,4 +723,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get account_selfCarePasswordExpired_message => 'Термін дії вашого пароля самообслуговування минув. Оновіть його за допомогою самообслуговування.\nДоки пароль не буде змінено, доступ до служби буде обмежено.';
 }
