@@ -304,7 +304,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
           contactsTable.firstName,
           contactsTable.aliasName,
           contactPhonesTable.number,
-        ].map((c) => c.like('%$searchBit%')).reduce((v, e) => v | e),
+        ].map((c) => c.regexp('.*$searchBit.*', caseSensitive: false)).reduce((v, e) => v | e),
       );
     }
     q.groupBy([contactPhonesTable.contactId]);
