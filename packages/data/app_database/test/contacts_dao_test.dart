@@ -52,49 +52,51 @@ void main() {
     await database.close();
   });
 
-  test('watchAllLikeContacts matching "Тарас"', () async {
-    final likeContactsStream = database.contactsDao.watchAllLikeContacts(['Тарас']);
-    final likeContacts = await likeContactsStream.first;
+  group('watchAllLikeContacts', () {
+    test('matching "Тарас"', () async {
+      final likeContactsStream = database.contactsDao.watchAllLikeContacts(['Тарас']);
+      final likeContacts = await likeContactsStream.first;
 
-    expect(likeContacts.length, 1);
-    expect(likeContacts.first.firstName, '');
-    expect(likeContacts.first.lastName, 'Тарас Шевченко');
-  });
+      expect(likeContacts.length, 1);
+      expect(likeContacts.first.firstName, '');
+      expect(likeContacts.first.lastName, 'Тарас Шевченко');
+    });
 
-  test('watchAllLikeContacts matching "шев"', () async {
-    final likeContactsStream = database.contactsDao.watchAllLikeContacts(['шев']);
-    final likeContacts = await likeContactsStream.first;
+    test('matching "шев"', () async {
+      final likeContactsStream = database.contactsDao.watchAllLikeContacts(['шев']);
+      final likeContacts = await likeContactsStream.first;
 
-    expect(likeContacts.length, 1);
-    expect(likeContacts.first.firstName, '');
-    expect(likeContacts.first.lastName, 'Тарас Шевченко');
-  });
+      expect(likeContacts.length, 1);
+      expect(likeContacts.first.firstName, '');
+      expect(likeContacts.first.lastName, 'Тарас Шевченко');
+    });
 
-  test('watchAllLikeContacts matching "Smit"', () async {
-    final likeContactsStream = database.contactsDao.watchAllLikeContacts(['Smit']);
-    final likeContacts = await likeContactsStream.first;
+    test('matching "Smit"', () async {
+      final likeContactsStream = database.contactsDao.watchAllLikeContacts(['Smit']);
+      final likeContacts = await likeContactsStream.first;
 
-    expect(likeContacts.length, 1);
-    expect(likeContacts.first.firstName, 'Jane');
-    expect(likeContacts.first.lastName, 'Smith');
-  });
+      expect(likeContacts.length, 1);
+      expect(likeContacts.first.firstName, 'Jane');
+      expect(likeContacts.first.lastName, 'Smith');
+    });
 
-  test('watchAllLikeContacts matching "mar"', () async {
-    final likeContactsStream = database.contactsDao.watchAllLikeContacts(['mar']);
-    final likeContacts = await likeContactsStream.first;
+    test('matching "mar"', () async {
+      final likeContactsStream = database.contactsDao.watchAllLikeContacts(['mar']);
+      final likeContacts = await likeContactsStream.first;
 
-    expect(likeContacts.length, 1);
-    expect(likeContacts.first.firstName, 'Bob');
-    expect(likeContacts.first.lastName, 'Marly');
-  });
+      expect(likeContacts.length, 1);
+      expect(likeContacts.first.firstName, 'Bob');
+      expect(likeContacts.first.lastName, 'Marly');
+    });
 
-  test('watchAllContacts', () async {
-    final allContactsStream = database.contactsDao.watchAllContacts();
-    final allContacts = await allContactsStream.first;
+    test('all contacts', () async {
+      final allContactsStream = database.contactsDao.watchAllContacts();
+      final allContacts = await allContactsStream.first;
 
-    expect(allContacts.length, 3);
-    expect(allContacts.any((contact) => contact.lastName == 'Тарас Шевченко'), isTrue);
-    expect(allContacts.any((contact) => contact.lastName == 'Smith'), isTrue);
-    expect(allContacts.any((contact) => contact.lastName == 'Marly'), isTrue);
+      expect(allContacts.length, 3);
+      expect(allContacts.any((contact) => contact.lastName == 'Тарас Шевченко'), isTrue);
+      expect(allContacts.any((contact) => contact.lastName == 'Smith'), isTrue);
+      expect(allContacts.any((contact) => contact.lastName == 'Marly'), isTrue);
+    });
   });
 }
