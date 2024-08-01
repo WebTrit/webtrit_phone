@@ -10,6 +10,7 @@ void main() {
     database = AppDatabase(NativeDatabase.memory());
 
     final contactsDao = database.contactsDao;
+    final contactEmailsDao = database.contactEmailsDao;
 
     await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
       sourceType: Value(ContactSourceTypeEnum.local),
@@ -46,6 +47,24 @@ void main() {
       number: Value('0987654321'),
       label: Value('Work'),
     ));
+
+    await contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(ContactEmailDataCompanion(
+      contactId: Value(1),
+      address: Value('taras@example.com'),
+      label: Value('Personal'),
+    ));
+
+    await contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(ContactEmailDataCompanion(
+      contactId: Value(2),
+      address: Value('jane@example.com'),
+      label: Value('Work'),
+    ));
+
+    await contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(ContactEmailDataCompanion(
+      contactId: Value(2),
+      address: Value('jane.smith@example.com'),
+      label: Value('Personal'),
+    ));
   });
 
   tearDown(() async {
@@ -58,8 +77,9 @@ void main() {
       final likeContacts = await likeContactsStream.first;
 
       expect(likeContacts.length, 1);
-      expect(likeContacts.first.firstName, '');
-      expect(likeContacts.first.lastName, 'Тарас Шевченко');
+      expect(likeContacts.first.contact.firstName, '');
+      expect(likeContacts.first.contact.lastName, 'Тарас Шевченко');
+      expect(likeContacts.first.email?.address, 'taras@example.com');
     });
 
     test('matching "шев"', () async {
@@ -67,8 +87,9 @@ void main() {
       final likeContacts = await likeContactsStream.first;
 
       expect(likeContacts.length, 1);
-      expect(likeContacts.first.firstName, '');
-      expect(likeContacts.first.lastName, 'Тарас Шевченко');
+      expect(likeContacts.first.contact.firstName, '');
+      expect(likeContacts.first.contact.lastName, 'Тарас Шевченко');
+      expect(likeContacts.first.email?.address, 'taras@example.com');
     });
 
     test('matching "Smit"', () async {
@@ -76,8 +97,9 @@ void main() {
       final likeContacts = await likeContactsStream.first;
 
       expect(likeContacts.length, 1);
-      expect(likeContacts.first.firstName, 'Jane');
-      expect(likeContacts.first.lastName, 'Smith');
+      expect(likeContacts.first.contact.firstName, 'Jane');
+      expect(likeContacts.first.contact.lastName, 'Smith');
+      expect(likeContacts.first.email?.address, 'jane.smith@example.com');
     });
 
     test('matching "mar"', () async {
@@ -85,8 +107,9 @@ void main() {
       final likeContacts = await likeContactsStream.first;
 
       expect(likeContacts.length, 1);
-      expect(likeContacts.first.firstName, 'Bob');
-      expect(likeContacts.first.lastName, 'Marly');
+      expect(likeContacts.first.contact.firstName, 'Bob');
+      expect(likeContacts.first.contact.lastName, 'Marly');
+      expect(likeContacts.first.email?.address, null);
     });
 
     test('all contacts', () async {
@@ -94,9 +117,9 @@ void main() {
       final allContacts = await allContactsStream.first;
 
       expect(allContacts.length, 3);
-      expect(allContacts.any((contact) => contact.lastName == 'Тарас Шевченко'), isTrue);
-      expect(allContacts.any((contact) => contact.lastName == 'Smith'), isTrue);
-      expect(allContacts.any((contact) => contact.lastName == 'Marly'), isTrue);
+      expect(allContacts.any((contact) => contact.contact.lastName == 'Тарас Шевченко'), isTrue);
+      expect(allContacts.any((contact) => contact.contact.lastName == 'Smith'), isTrue);
+      expect(allContacts.any((contact) => contact.contact.lastName == 'Marly'), isTrue);
     });
   });
 }
