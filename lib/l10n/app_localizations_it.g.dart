@@ -37,7 +37,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get call_CallActionsTooltip_accept => 'Accetta chiamata';
 
   @override
+  String get call_CallActionsTooltip_accept_inviteToAttendedTransfer => 'Accetta trasferimento';
+
+  @override
   String get call_CallActionsTooltip_attended_transfer => 'Trasferimento assistito';
+
+  @override
+  String get call_CallActionsTooltip_decline_inviteToAttendedTransfer => 'Rifiuta trasferimento';
 
   @override
   String get call_CallActionsTooltip_disableCamera => 'Disattiva video';
@@ -97,13 +103,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get call_description_incoming => 'Chiamata in arrivo';
 
   @override
+  String get call_description_inviteToAttendedTransfer => 'Sei stato invitato a unirti a una chiamata di trasferimento assistito';
+
+  @override
   String get call_description_outgoing => 'Chiamata in corso';
+
+  @override
+  String get call_description_requestToAttendedTransfer => 'Richiesta di trasferimento';
 
   @override
   String get call_description_transferProcessing => 'Elaborazione del trasferimento';
 
   @override
-  String get call_description_requestToAttendedTransfer => 'Richiesta di trasferimento';
+  String get call_description_transfer_requested => 'Richiesta di trasferimento';
 
   @override
   String get call_FailureAcknowledgeDialog_title => 'Guasto';
@@ -125,15 +137,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get callStatus_ready => 'Connessione stabilita';
-
-  @override
-  String get call_description_inviteToAttendedTransfer => 'Sei stato invitato a partecipare a una chiamata di trasferimento assistito';
-
-  @override
-  String get call_CallActionsTooltip_accept_inviteToAttendedTransfer => 'Accetta l\'invito al trasferimento a un\'altra chiamata';
-
-  @override
-  String get call_CallActionsTooltip_decline_inviteToAttendedTransfer => 'Rifiuta l\'invito al trasferimento a un\'altra chiamata';
 
   @override
   String get connectToYourOwnVoIPSystem_Button_Action => 'Connettiti al tuo sistema VoIP';
@@ -217,7 +220,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get default_UnauthorizedRequestFailureError => 'Si è verificato un errore di richiesta non autorizzata';
 
   @override
-  String get favorites_BodyCenter_empty => 'Al momento non hai numeri preferiti.\nAggiungi ai preferiti dai Contatti usando l\'icona a stella.';
+  String get favorites_BodyCenter_empty => 'Al momento non hai numeri preferiti.\nAggiungi ai preferiti dai Contatti usando l\'icona a stella';
 
   @override
   String get favorites_DeleteConfirmDialog_content => 'Sei sicuro di voler eliminare il contatto preferito?';

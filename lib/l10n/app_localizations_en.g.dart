@@ -37,7 +37,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_CallActionsTooltip_accept => 'Accept';
 
   @override
+  String get call_CallActionsTooltip_accept_inviteToAttendedTransfer => 'Accept transfer';
+
+  @override
   String get call_CallActionsTooltip_attended_transfer => 'Attended transfer';
+
+  @override
+  String get call_CallActionsTooltip_decline_inviteToAttendedTransfer => 'Decline transfer';
 
   @override
   String get call_CallActionsTooltip_disableCamera => 'Disable camera';
@@ -97,13 +103,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_description_incoming => 'Incoming call';
 
   @override
+  String get call_description_inviteToAttendedTransfer => 'You\'ve been invited to join an attended transfer call';
+
+  @override
   String get call_description_outgoing => 'Outgoing call';
+
+  @override
+  String get call_description_requestToAttendedTransfer => 'Transfer request';
 
   @override
   String get call_description_transferProcessing => 'Transfer processing';
 
   @override
-  String get call_description_requestToAttendedTransfer => 'Transfer request';
+  String get call_description_transfer_requested => 'Transfer request';
 
   @override
   String get call_FailureAcknowledgeDialog_title => 'Failure';
@@ -125,15 +137,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get callStatus_ready => 'Connection established';
-
-  @override
-  String get call_description_inviteToAttendedTransfer => 'You\'ve been invited to join an attended transfer call';
-
-  @override
-  String get call_CallActionsTooltip_accept_inviteToAttendedTransfer => 'Accept transfer invite to another call';
-
-  @override
-  String get call_CallActionsTooltip_decline_inviteToAttendedTransfer => 'Decline transfer invite to another call';
 
   @override
   String get connectToYourOwnVoIPSystem_Button_Action => 'Connect to your own VoIP system';
@@ -217,7 +220,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get default_UnauthorizedRequestFailureError => 'An unauthorized request failure occurred';
 
   @override
-  String get favorites_BodyCenter_empty => 'Currently, you have no favorite numbers.\nAdd favorites from Contacts using the star icon.';
+  String get favorites_BodyCenter_empty => 'Currently, you have no favorite numbers.\nAdd favorites from Contacts using the star icon';
 
   @override
   String get favorites_DeleteConfirmDialog_content => 'Are you sure you want to delete the current favorite number?';
@@ -410,7 +413,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_Text_signupRequestPostDescription => '';
 
   @override
-  String get login_Text_signupRequestPostDescriptionDemo => 'If you do not have an account yet, it will be automatically created for you.';
+  String get login_Text_signupRequestPostDescriptionDemo => 'If you do not have an account yet, it will be automatically created for you';
 
   @override
   String get login_Text_signupRequestPreDescription => '';
@@ -694,7 +697,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get underDevelopment => 'This page is under development.';
 
   @override
-  String get user_agreement_agrement_link => 'The terms and condition of the agreement';
+  String get user_agreement_agrement_link => 'The terms and conditions of the agreement';
 
   @override
   String get user_agreement_button_text => 'Continue';
