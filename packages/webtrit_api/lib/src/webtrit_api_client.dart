@@ -236,4 +236,12 @@ class WebtritApiClient {
 
     return DemoData.fromJson(responseJson);
   }
+
+  Future<DemoCallToActionsResponse> getCallToActions(String token, DemoCallToActionsParam callToActionsParam) async {
+    final requestJson = callToActionsParam.toJson();
+
+    final responseJson = await _httpClientExecutePost(['custom', 'private', 'call-to-actions','/'], token, requestJson);
+
+    return DemoCallToActionsResponse.fromJson(responseJson);
+  }
 }
