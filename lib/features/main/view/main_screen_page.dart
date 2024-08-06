@@ -77,9 +77,9 @@ class MainScreenPage extends StatelessWidget {
 
     final blocListener = BlocListener<AppBloc, AppState>(
       listenWhen: (previous, current) =>
-          previous.accountErrorType != current.accountErrorType && current.accountErrorType != null,
+          previous.accountErrorCode != current.accountErrorCode && current.accountErrorCode != null,
       listener: (BuildContext context, state) {
-        context.showErrorSnackBar(state.accountErrorType!.l10n(context));
+        context.showErrorSnackBar(state.accountErrorCode!.l10n(context));
         context.read<AppBloc>().add(const AppLogoutedTeardown());
       },
       child: provider,

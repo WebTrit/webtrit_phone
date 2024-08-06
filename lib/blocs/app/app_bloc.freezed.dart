@@ -268,7 +268,7 @@ mixin _$AppState {
   String? get coreUrl => throw _privateConstructorUsedError;
   String? get tenantId => throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
-  AccountErrorType? get accountErrorType => throw _privateConstructorUsedError;
+  AccountErrorCode? get accountErrorCode => throw _privateConstructorUsedError;
   ThemeSettings get themeSettings => throw _privateConstructorUsedError;
   ThemeMode get themeMode => throw _privateConstructorUsedError;
   Locale get locale => throw _privateConstructorUsedError;
@@ -288,7 +288,7 @@ abstract class $AppStateCopyWith<$Res> {
       {String? coreUrl,
       String? tenantId,
       String? token,
-      AccountErrorType? accountErrorType,
+      AccountErrorCode? accountErrorCode,
       ThemeSettings themeSettings,
       ThemeMode themeMode,
       Locale locale,
@@ -313,7 +313,7 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
     Object? coreUrl = freezed,
     Object? tenantId = freezed,
     Object? token = freezed,
-    Object? accountErrorType = freezed,
+    Object? accountErrorCode = freezed,
     Object? themeSettings = null,
     Object? themeMode = null,
     Object? locale = null,
@@ -332,10 +332,10 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
-      accountErrorType: freezed == accountErrorType
-          ? _value.accountErrorType
-          : accountErrorType // ignore: cast_nullable_to_non_nullable
-              as AccountErrorType?,
+      accountErrorCode: freezed == accountErrorCode
+          ? _value.accountErrorCode
+          : accountErrorCode // ignore: cast_nullable_to_non_nullable
+              as AccountErrorCode?,
       themeSettings: null == themeSettings
           ? _value.themeSettings
           : themeSettings // ignore: cast_nullable_to_non_nullable
@@ -376,7 +376,7 @@ abstract class _$$AppStateImplCopyWith<$Res>
       {String? coreUrl,
       String? tenantId,
       String? token,
-      AccountErrorType? accountErrorType,
+      AccountErrorCode? accountErrorCode,
       ThemeSettings themeSettings,
       ThemeMode themeMode,
       Locale locale,
@@ -400,7 +400,7 @@ class __$$AppStateImplCopyWithImpl<$Res>
     Object? coreUrl = freezed,
     Object? tenantId = freezed,
     Object? token = freezed,
-    Object? accountErrorType = freezed,
+    Object? accountErrorCode = freezed,
     Object? themeSettings = null,
     Object? themeMode = null,
     Object? locale = null,
@@ -419,10 +419,10 @@ class __$$AppStateImplCopyWithImpl<$Res>
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
-      accountErrorType: freezed == accountErrorType
-          ? _value.accountErrorType
-          : accountErrorType // ignore: cast_nullable_to_non_nullable
-              as AccountErrorType?,
+      accountErrorCode: freezed == accountErrorCode
+          ? _value.accountErrorCode
+          : accountErrorCode // ignore: cast_nullable_to_non_nullable
+              as AccountErrorCode?,
       themeSettings: null == themeSettings
           ? _value.themeSettings
           : themeSettings // ignore: cast_nullable_to_non_nullable
@@ -450,7 +450,7 @@ class _$AppStateImpl extends _AppState {
       {this.coreUrl,
       this.tenantId,
       this.token,
-      this.accountErrorType,
+      this.accountErrorCode,
       required this.themeSettings,
       required this.themeMode,
       required this.locale,
@@ -464,7 +464,7 @@ class _$AppStateImpl extends _AppState {
   @override
   final String? token;
   @override
-  final AccountErrorType? accountErrorType;
+  final AccountErrorCode? accountErrorCode;
   @override
   final ThemeSettings themeSettings;
   @override
@@ -476,7 +476,7 @@ class _$AppStateImpl extends _AppState {
 
   @override
   String toString() {
-    return 'AppState(coreUrl: $coreUrl, tenantId: $tenantId, token: $token, accountErrorType: $accountErrorType, themeSettings: $themeSettings, themeMode: $themeMode, locale: $locale, userAgreementAccepted: $userAgreementAccepted)';
+    return 'AppState(coreUrl: $coreUrl, tenantId: $tenantId, token: $token, accountErrorCode: $accountErrorCode, themeSettings: $themeSettings, themeMode: $themeMode, locale: $locale, userAgreementAccepted: $userAgreementAccepted)';
   }
 
   @override
@@ -488,8 +488,8 @@ class _$AppStateImpl extends _AppState {
             (identical(other.tenantId, tenantId) ||
                 other.tenantId == tenantId) &&
             (identical(other.token, token) || other.token == token) &&
-            (identical(other.accountErrorType, accountErrorType) ||
-                other.accountErrorType == accountErrorType) &&
+            (identical(other.accountErrorCode, accountErrorCode) ||
+                other.accountErrorCode == accountErrorCode) &&
             (identical(other.themeSettings, themeSettings) ||
                 other.themeSettings == themeSettings) &&
             (identical(other.themeMode, themeMode) ||
@@ -505,7 +505,7 @@ class _$AppStateImpl extends _AppState {
       coreUrl,
       tenantId,
       token,
-      accountErrorType,
+      accountErrorCode,
       themeSettings,
       themeMode,
       locale,
@@ -523,7 +523,7 @@ abstract class _AppState extends AppState {
       {final String? coreUrl,
       final String? tenantId,
       final String? token,
-      final AccountErrorType? accountErrorType,
+      final AccountErrorCode? accountErrorCode,
       required final ThemeSettings themeSettings,
       required final ThemeMode themeMode,
       required final Locale locale,
@@ -537,7 +537,7 @@ abstract class _AppState extends AppState {
   @override
   String? get token;
   @override
-  AccountErrorType? get accountErrorType;
+  AccountErrorCode? get accountErrorCode;
   @override
   ThemeSettings get themeSettings;
   @override

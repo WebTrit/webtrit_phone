@@ -85,7 +85,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       await client.getUserInfo(state.token!);
     } on RequestFailure catch (e) {
       emit(state.copyWith(
-        accountErrorType: AccountErrorType.values.firstWhereOrNull((it) => it.code == e.error?.code),
+        accountErrorCode: AccountErrorCode.values.firstWhereOrNull((it) => it.value == e.error?.code),
       ));
     }
 
@@ -99,7 +99,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onLogoutedTeardown(AppLogoutedTeardown event, Emitter<AppState> emit) async {
-    emit(state.copyWith(accountErrorType: null));
+    emit(state.copyWith(accountErrorCode: null));
   }
 
   void _onThemeSettingsChanged(AppThemeSettingsChanged event, Emitter<AppState> emit) {

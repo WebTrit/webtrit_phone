@@ -8,7 +8,7 @@ class AppState with _$AppState {
     String? coreUrl,
     String? tenantId,
     String? token,
-    AccountErrorType? accountErrorType,
+    AccountErrorCode? accountErrorCode,
     required ThemeSettings themeSettings,
     required ThemeMode themeMode,
     required Locale locale,
