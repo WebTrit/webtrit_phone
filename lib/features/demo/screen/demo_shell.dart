@@ -21,34 +21,11 @@ class DemoShell extends StatefulWidget {
 }
 
 class _DemoShellState extends State<DemoShell> with RouteAware {
-  static const _converterCardSize = Size(120, 120);
-  static const _stickyPadding = EdgeInsets.all(8);
-
-  DemoConvertButton? _convertButton;
-
-  Size get _screenSize => MediaQuery.of(context).size;
-
-  EdgeInsets get _safePadding => MediaQuery.of(context).padding;
-
-  Offset get _defaultButtonOffset => _screenSize.bottomRight(Offset(
-        -_converterCardSize.width - _stickyPadding.right,
-        -_converterCardSize.height - kBottomNavigationBarHeight - _stickyPadding.bottom - _safePadding.bottom,
-      ));
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _convertButton = DemoConvertButton(
-      stickyPadding: _stickyPadding,
-      offset: _defaultButtonOffset,
-      size: _converterCardSize,
-      onTap: () => context.read<DemoCubit>().openDemoWebScreen(),
-    );
-  }
+  late final _demoActionButtonController = DemoActionOverlayController(context);
 
   @override
   void dispose() {
-    _convertButton?.dispose();
+    _demoActionButtonController.removeAllOverlay();
     super.dispose();
   }
 
@@ -57,49 +34,27 @@ class _DemoShellState extends State<DemoShell> with RouteAware {
     return MultiBlocListener(
       listeners: [
         BlocListener<DemoCubit, DemoCubitState>(
-          listenWhen: (previous, current) =>
-              previous.convertPbxUrl != current.convertPbxUrl ||
-              previous.showConvertedButton != current.showConvertedButton,
           listener: _handleConvertedState,
           child: widget.child,
         ),
-        BlocListener<DemoCubit, DemoCubitState>(
-          listenWhen: (previous, current) => previous.openDemoWebScreen != current.openDemoWebScreen,
-          listener: _handleDemoWebScreenState,
-          child: widget.child,
-        )
       ],
       child: widget.child,
     );
   }
 
   void _handleConvertedState(BuildContext context, DemoCubitState state) {
-    if (state.showConvertedButton && state.convertPbxUrl != null) {
-      _showConverterButton(context, state);
-    }
-
-    if (!state.showConvertedButton) {
-      _hideConverterButton();
-    }
-  }
-
-  void _handleDemoWebScreenState(BuildContext context, DemoCubitState state) {
-    if (state.openDemoWebScreen) {
-      context.router.push(DemoWebPageRoute(initialUrl: Uri.parse(state.convertPbxUrl!)));
-    }
-  }
-
-  void _showConverterButton(BuildContext context, DemoCubitState state) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!(_convertButton?.inserted ?? false)) {
-        _convertButton?.insert(context);
-      }
-    });
-  }
-
-  void _hideConverterButton() {
-    if (_convertButton?.inserted ?? false) {
-      _convertButton?.remove();
+    _demoActionButtonController.hideAllOverlay();
+    for (var it in state.flavorActions) {
+      _demoActionButtonController.addOverlay(
+        id: it.url,
+        child: DemoActionButton(
+          title: it.title,
+          description: it.description,
+        ),
+        onTap: () => context.router.push(DemoWebPageRoute(
+          initialUrl: Uri.parse(it.url),
+        )),
+      );
     }
   }
 }

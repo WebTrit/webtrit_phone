@@ -176,7 +176,7 @@ class __$$DemoCubitStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$DemoCubitStateImpl implements _DemoCubitState {
+class _$DemoCubitStateImpl extends _DemoCubitState {
   const _$DemoCubitStateImpl(
       {this.mainFlavor,
       this.userInfo,
@@ -184,7 +184,8 @@ class _$DemoCubitStateImpl implements _DemoCubitState {
       this.showConvertedButton = false,
       this.openDemoWebScreen = false,
       this.convertPbxUrl})
-      : _actions = actions;
+      : _actions = actions,
+        super._();
 
   @override
   final MainFlavor? mainFlavor;
@@ -249,7 +250,7 @@ class _$DemoCubitStateImpl implements _DemoCubitState {
           this, _$identity);
 }
 
-abstract class _DemoCubitState implements DemoCubitState {
+abstract class _DemoCubitState extends DemoCubitState {
   const factory _DemoCubitState(
       {final MainFlavor? mainFlavor,
       final UserInfo? userInfo,
@@ -257,6 +258,7 @@ abstract class _DemoCubitState implements DemoCubitState {
       final bool showConvertedButton,
       final bool openDemoWebScreen,
       final String? convertPbxUrl}) = _$DemoCubitStateImpl;
+  const _DemoCubitState._() : super._();
 
   @override
   MainFlavor? get mainFlavor;

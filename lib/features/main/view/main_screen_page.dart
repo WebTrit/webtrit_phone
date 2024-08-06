@@ -38,7 +38,7 @@ class MainScreenPage extends StatelessWidget {
         final flavor = MainFlavor.values[tabsRouter.activeIndex];
 
         if (appDemoFlow) {
-          context.read<DemoCubit>().changeVisibleConvertedButton(isRouteActive && flavor != MainFlavor.keypad);
+          context.read<DemoCubit>().updateFlavorActions(isRouteActive ? flavor : null);
         }
 
         return MainScreen(

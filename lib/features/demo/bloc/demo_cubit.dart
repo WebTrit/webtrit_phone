@@ -42,8 +42,10 @@ class DemoCubit extends Cubit<DemoCubitState> {
 
   final _typeConvert = 'convert';
 
-  void updateFlavorActions(MainFlavor flavor) async {
-    _getFlavorActions(flavor);
+  void updateFlavorActions(MainFlavor? flavor) async {
+    if (flavor != null) {
+      _getFlavorActions(flavor);
+    }
 
     emit(state.copyWith(mainFlavor: flavor));
   }
