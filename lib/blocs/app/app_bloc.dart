@@ -79,7 +79,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onLogouted(AppLogouted event, Emitter<AppState> emit) async {
-    final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
+    final client = createWebtritApiClient(state.coreUrl!, state.tenantId ?? '');
 
     try {
       await client.getUserInfo(state.token!);
