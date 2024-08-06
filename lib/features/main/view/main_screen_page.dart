@@ -64,10 +64,7 @@ class MainScreenPage extends StatelessWidget {
           ? BlocProvider<DemoCubit>(
               create: (context) => DemoCubit(
                 webtritApiClient: context.read<WebtritApiClient>(),
-                platformInfo: PlatformInfo(),
-                appInfo: AppInfo(),
                 token: context.read<AppBloc>().state.token!,
-                tenantId: context.read<AppBloc>().state.tenantId!,
               ),
               child: DemoShell(child: autoTabsRouter),
             )
