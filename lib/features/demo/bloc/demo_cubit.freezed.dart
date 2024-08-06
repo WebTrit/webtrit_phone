@@ -20,9 +20,6 @@ mixin _$DemoCubitState {
   UserInfo? get userInfo => throw _privateConstructorUsedError;
   Map<MainFlavor, DemoActions> get actions =>
       throw _privateConstructorUsedError;
-  bool get showConvertedButton => throw _privateConstructorUsedError;
-  bool get openDemoWebScreen => throw _privateConstructorUsedError;
-  String? get convertPbxUrl => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $DemoCubitStateCopyWith<DemoCubitState> get copyWith =>
@@ -38,10 +35,7 @@ abstract class $DemoCubitStateCopyWith<$Res> {
   $Res call(
       {MainFlavor? mainFlavor,
       UserInfo? userInfo,
-      Map<MainFlavor, DemoActions> actions,
-      bool showConvertedButton,
-      bool openDemoWebScreen,
-      String? convertPbxUrl});
+      Map<MainFlavor, DemoActions> actions});
 
   $UserInfoCopyWith<$Res>? get userInfo;
 }
@@ -62,9 +56,6 @@ class _$DemoCubitStateCopyWithImpl<$Res, $Val extends DemoCubitState>
     Object? mainFlavor = freezed,
     Object? userInfo = freezed,
     Object? actions = null,
-    Object? showConvertedButton = null,
-    Object? openDemoWebScreen = null,
-    Object? convertPbxUrl = freezed,
   }) {
     return _then(_value.copyWith(
       mainFlavor: freezed == mainFlavor
@@ -79,18 +70,6 @@ class _$DemoCubitStateCopyWithImpl<$Res, $Val extends DemoCubitState>
           ? _value.actions
           : actions // ignore: cast_nullable_to_non_nullable
               as Map<MainFlavor, DemoActions>,
-      showConvertedButton: null == showConvertedButton
-          ? _value.showConvertedButton
-          : showConvertedButton // ignore: cast_nullable_to_non_nullable
-              as bool,
-      openDemoWebScreen: null == openDemoWebScreen
-          ? _value.openDemoWebScreen
-          : openDemoWebScreen // ignore: cast_nullable_to_non_nullable
-              as bool,
-      convertPbxUrl: freezed == convertPbxUrl
-          ? _value.convertPbxUrl
-          : convertPbxUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
     ) as $Val);
   }
 
@@ -118,10 +97,7 @@ abstract class _$$DemoCubitStateImplCopyWith<$Res>
   $Res call(
       {MainFlavor? mainFlavor,
       UserInfo? userInfo,
-      Map<MainFlavor, DemoActions> actions,
-      bool showConvertedButton,
-      bool openDemoWebScreen,
-      String? convertPbxUrl});
+      Map<MainFlavor, DemoActions> actions});
 
   @override
   $UserInfoCopyWith<$Res>? get userInfo;
@@ -141,9 +117,6 @@ class __$$DemoCubitStateImplCopyWithImpl<$Res>
     Object? mainFlavor = freezed,
     Object? userInfo = freezed,
     Object? actions = null,
-    Object? showConvertedButton = null,
-    Object? openDemoWebScreen = null,
-    Object? convertPbxUrl = freezed,
   }) {
     return _then(_$DemoCubitStateImpl(
       mainFlavor: freezed == mainFlavor
@@ -158,18 +131,6 @@ class __$$DemoCubitStateImplCopyWithImpl<$Res>
           ? _value._actions
           : actions // ignore: cast_nullable_to_non_nullable
               as Map<MainFlavor, DemoActions>,
-      showConvertedButton: null == showConvertedButton
-          ? _value.showConvertedButton
-          : showConvertedButton // ignore: cast_nullable_to_non_nullable
-              as bool,
-      openDemoWebScreen: null == openDemoWebScreen
-          ? _value.openDemoWebScreen
-          : openDemoWebScreen // ignore: cast_nullable_to_non_nullable
-              as bool,
-      convertPbxUrl: freezed == convertPbxUrl
-          ? _value.convertPbxUrl
-          : convertPbxUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
     ));
   }
 }
@@ -180,10 +141,7 @@ class _$DemoCubitStateImpl extends _DemoCubitState {
   const _$DemoCubitStateImpl(
       {this.mainFlavor,
       this.userInfo,
-      final Map<MainFlavor, DemoActions> actions = const {},
-      this.showConvertedButton = false,
-      this.openDemoWebScreen = false,
-      this.convertPbxUrl})
+      final Map<MainFlavor, DemoActions> actions = const {}})
       : _actions = actions,
         super._();
 
@@ -201,17 +159,8 @@ class _$DemoCubitStateImpl extends _DemoCubitState {
   }
 
   @override
-  @JsonKey()
-  final bool showConvertedButton;
-  @override
-  @JsonKey()
-  final bool openDemoWebScreen;
-  @override
-  final String? convertPbxUrl;
-
-  @override
   String toString() {
-    return 'DemoCubitState(mainFlavor: $mainFlavor, userInfo: $userInfo, actions: $actions, showConvertedButton: $showConvertedButton, openDemoWebScreen: $openDemoWebScreen, convertPbxUrl: $convertPbxUrl)';
+    return 'DemoCubitState(mainFlavor: $mainFlavor, userInfo: $userInfo, actions: $actions)';
   }
 
   @override
@@ -223,24 +172,12 @@ class _$DemoCubitStateImpl extends _DemoCubitState {
                 other.mainFlavor == mainFlavor) &&
             (identical(other.userInfo, userInfo) ||
                 other.userInfo == userInfo) &&
-            const DeepCollectionEquality().equals(other._actions, _actions) &&
-            (identical(other.showConvertedButton, showConvertedButton) ||
-                other.showConvertedButton == showConvertedButton) &&
-            (identical(other.openDemoWebScreen, openDemoWebScreen) ||
-                other.openDemoWebScreen == openDemoWebScreen) &&
-            (identical(other.convertPbxUrl, convertPbxUrl) ||
-                other.convertPbxUrl == convertPbxUrl));
+            const DeepCollectionEquality().equals(other._actions, _actions));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      mainFlavor,
-      userInfo,
-      const DeepCollectionEquality().hash(_actions),
-      showConvertedButton,
-      openDemoWebScreen,
-      convertPbxUrl);
+  int get hashCode => Object.hash(runtimeType, mainFlavor, userInfo,
+      const DeepCollectionEquality().hash(_actions));
 
   @JsonKey(ignore: true)
   @override
@@ -254,10 +191,7 @@ abstract class _DemoCubitState extends DemoCubitState {
   const factory _DemoCubitState(
       {final MainFlavor? mainFlavor,
       final UserInfo? userInfo,
-      final Map<MainFlavor, DemoActions> actions,
-      final bool showConvertedButton,
-      final bool openDemoWebScreen,
-      final String? convertPbxUrl}) = _$DemoCubitStateImpl;
+      final Map<MainFlavor, DemoActions> actions}) = _$DemoCubitStateImpl;
   const _DemoCubitState._() : super._();
 
   @override
@@ -266,12 +200,6 @@ abstract class _DemoCubitState extends DemoCubitState {
   UserInfo? get userInfo;
   @override
   Map<MainFlavor, DemoActions> get actions;
-  @override
-  bool get showConvertedButton;
-  @override
-  bool get openDemoWebScreen;
-  @override
-  String? get convertPbxUrl;
   @override
   @JsonKey(ignore: true)
   _$$DemoCubitStateImplCopyWith<_$DemoCubitStateImpl> get copyWith =>
