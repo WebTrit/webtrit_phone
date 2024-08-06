@@ -7,10 +7,10 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
-import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/theme/theme.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 part 'app_bloc.freezed.dart';
 
@@ -18,23 +18,13 @@ part 'app_event.dart';
 
 part 'app_state.dart';
 
-WebtritApiClient defaultCreateWebtritApiClient(String coreUrl, String tenantId) {
-  final appCertificates = AppCertificates();
-
-  return WebtritApiClient(
-    Uri.parse(coreUrl),
-    tenantId,
-    connectionTimeout: kApiClientConnectionTimeout,
-    certs: appCertificates.trustedCertificates,
-  );
-}
-
 class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc({
     required this.appPreferences,
     required this.secureStorage,
     required this.appDatabase,
     required this.pendingCallHandler,
+    @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
     required AppThemes appThemes,
   }) : super(AppState(
           coreUrl: secureStorage.readCoreUrl(),
@@ -58,6 +48,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final SecureStorage secureStorage;
   final AppDatabase appDatabase;
   final AndroidPendingCallHandler pendingCallHandler;
+  final WebtritApiClientFactory createWebtritApiClient;
 
   Future<void> _cleanUpUserData() async {
     await appPreferences.clear();
@@ -88,7 +79,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onLogouted(AppLogouted event, Emitter<AppState> emit) async {
-    final client = defaultCreateWebtritApiClient(state.coreUrl!, state.tenantId!);
+    final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
 
     try {
       await client.getUserInfo(state.token!);
