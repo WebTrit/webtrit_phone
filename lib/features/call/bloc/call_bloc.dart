@@ -1497,8 +1497,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     try {
       await state.performOnActiveCall(event.callId, (activeCall) async {
-        // Condition occur when the user interacts with a push notification before signaling is properly initialized. In this case, the
-        // CallKeep method "reportNewIncomingCall" may return callIdAlreadyExistsAndAnswered.
+        // Condition occur when the user interacts with a push notification before signaling is properly initialized.
+        // In this case, the CallKeep method "reportNewIncomingCall" may return callIdAlreadyExistsAndAnswered.
         if (activeCall.line == _kUndefinedLine) return;
 
         final peerConnection = await _peerConnectionRetrieve(activeCall.callId);
@@ -1530,8 +1530,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallPerformEventEnded event,
     Emitter<CallState> emit,
   ) async {
-    // Condition occur when the user interacts with a push notification before signaling is properly initialized. In this case, the
-    // CallKeep method "reportNewIncomingCall" may return callIdAlreadyTerminated.
+    // Condition occur when the user interacts with a push notification before signaling is properly initialized.
+    // In this case, the CallKeep method "reportNewIncomingCall" may return callIdAlreadyTerminated.
     if (state.retrieveActiveCall(event.callId)?.line == _kUndefinedLine) return;
 
     if (state.retrieveActiveCall(event.callId)?.wasHungUp == true) {
