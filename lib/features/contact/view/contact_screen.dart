@@ -37,9 +37,9 @@ class ContactScreen extends StatelessWidget {
                     Padding(
                       padding: kAllPadding16,
                       child: LeadingAvatar(
-                        thumbnailUrl: contact.thumbnailUrl,
                         username: contact.name,
                         thumbnail: contact.thumbnail,
+                        thumbnailUrl: contact.thumbnailUrl,
                         registered: contact.registered,
                         radius: 50,
                       ),
