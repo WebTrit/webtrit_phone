@@ -262,15 +262,6 @@ class FavoritesTable extends Table {
 class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin {
   ContactsDao(super.db);
 
-  JoinedSelectStatement _selectAllContactsWithFirstEmail([ContactSourceTypeEnum? sourceType]) {
-    final query = _selectAllContacts(sourceType).join([
-      leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
-    ]);
-    query.groupBy([contactsTable.id]);
-
-    return query;
-  }
-
   SimpleSelectStatement<$ContactsTableTable, ContactData> _selectAllContacts([ContactSourceTypeEnum? sourceType]) =>
       select(contactsTable)
         ..where((t) {
@@ -286,41 +277,25 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
           (t) => OrderingTerm.asc(t.aliasName),
         ]);
 
-  Stream<List<ContactWithEmailData>> watchAllContacts([ContactSourceTypeEnum? sourceType]) {
-    final contacts = _selectAllContactsWithFirstEmail(sourceType);
-
-    return contacts.watch().map((rows) => rows
-        .map((row) => ContactWithEmailData(
-              contact: row.readTable(contactsTable),
-              email: row.readTableOrNull(contactEmailsTable),
-            ))
-        .toList());
-  }
+  Stream<List<ContactData>> watchAllContacts([ContactSourceTypeEnum? sourceType]) =>
+      _selectAllContacts(sourceType).watch();
 
   Future<List<ContactData>> getAllContacts([ContactSourceTypeEnum? sourceType]) => _selectAllContacts(sourceType).get();
 
-  Stream<List<ContactWithEmailData>> watchAllNotEmptyContacts([ContactSourceTypeEnum? sourceType]) {
-    final q = _selectAllContactsWithFirstEmail(sourceType);
-
+  Stream<List<ContactData>> watchAllNotEmptyContacts([ContactSourceTypeEnum? sourceType]) {
+    final q = _selectAllContacts(sourceType);
     q.where(
-      [
-        contactsTable.lastName,
-        contactsTable.firstName,
-        contactsTable.aliasName,
+      (t) => [
+        t.lastName,
+        t.firstName,
+        t.aliasName,
       ].map((c) => c.isNotNull() & c.equalsExp(const Constant('')).not()).reduce((v, e) => v | e),
     );
-
-    return q.watch().map((rows) => rows
-        .map((row) => ContactWithEmailData(
-              contact: row.readTable(contactsTable),
-              email: row.readTableOrNull(contactEmailsTable),
-            ))
-        .toList());
+    return q.watch();
   }
 
-  Stream<List<ContactWithEmailData>> watchAllLikeContacts(Iterable<String> searchBits,
-      [ContactSourceTypeEnum? sourceType]) {
-    final q = _selectAllContactsWithFirstEmail(sourceType).join([
+  Stream<List<ContactData>> watchAllLikeContacts(Iterable<String> searchBits, [ContactSourceTypeEnum? sourceType]) {
+    final q = _selectAllContacts(sourceType).join([
       leftOuterJoin(contactPhonesTable, contactPhonesTable.contactId.equalsExp(contactsTable.id)),
     ]);
     for (final searchBit in searchBits) {
@@ -333,26 +308,12 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
         ].map((c) => c.regexp('.*$searchBit.*', caseSensitive: false)).reduce((v, e) => v | e),
       );
     }
-
-    q.groupBy([contactsTable.id]);
-    return q.watch().map((rows) => rows
-        .map((row) => ContactWithEmailData(
-              contact: row.readTable(contactsTable),
-              email: row.readTableOrNull(contactEmailsTable),
-            ))
-        .toList());
+    q.groupBy([contactPhonesTable.contactId]);
+    return q.watch().map((rows) => rows.map((row) => row.readTable(contactsTable)).toList());
   }
 
-  Stream<ContactWithEmailData> watchContact(Insertable<ContactData> contact) {
-    return (select(contactsTable)..whereSamePrimaryKey(contact))
-        .join([
-          leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
-        ])
-        .watchSingle()
-        .map((row) => ContactWithEmailData(
-              contact: row.readTable(contactsTable),
-              email: row.readTableOrNull(contactEmailsTable),
-            ));
+  Stream<ContactData> watchContact(Insertable<ContactData> contact) {
+    return (select(contactsTable)..whereSamePrimaryKey(contact)).watchSingle();
   }
 
   Stream<List<ContactWithPhonesAndEmailsData>> watchAllContactsWithPhonesAndEmailsExt([
@@ -663,14 +624,4 @@ class FavoriteDataWithContactPhoneDataAndContactData {
   final FavoriteData favoriteData;
   final ContactPhoneData contactPhoneData;
   final ContactData contactData;
-}
-
-class ContactWithEmailData {
-  ContactWithEmailData({
-    required this.contact,
-    this.email,
-  });
-
-  final ContactData contact;
-  final ContactEmailData? email;
 }

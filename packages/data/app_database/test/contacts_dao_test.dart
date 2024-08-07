@@ -77,9 +77,8 @@ void main() {
       final likeContacts = await likeContactsStream.first;
 
       expect(likeContacts.length, 1);
-      expect(likeContacts.first.contact.firstName, '');
-      expect(likeContacts.first.contact.lastName, 'Тарас Шевченко');
-      expect(likeContacts.first.email?.address, 'taras@example.com');
+      expect(likeContacts.first.firstName, '');
+      expect(likeContacts.first.lastName, 'Тарас Шевченко');
     });
 
     test('matching "шев"', () async {
@@ -87,9 +86,8 @@ void main() {
       final likeContacts = await likeContactsStream.first;
 
       expect(likeContacts.length, 1);
-      expect(likeContacts.first.contact.firstName, '');
-      expect(likeContacts.first.contact.lastName, 'Тарас Шевченко');
-      expect(likeContacts.first.email?.address, 'taras@example.com');
+      expect(likeContacts.first.firstName, '');
+      expect(likeContacts.first.lastName, 'Тарас Шевченко');
     });
 
     test('matching "Smit"', () async {
@@ -97,9 +95,8 @@ void main() {
       final likeContacts = await likeContactsStream.first;
 
       expect(likeContacts.length, 1);
-      expect(likeContacts.first.contact.firstName, 'Jane');
-      expect(likeContacts.first.contact.lastName, 'Smith');
-      expect(likeContacts.first.email?.address, 'jane.smith@example.com');
+      expect(likeContacts.first.firstName, 'Jane');
+      expect(likeContacts.first.lastName, 'Smith');
     });
 
     test('matching "mar"', () async {
@@ -107,9 +104,8 @@ void main() {
       final likeContacts = await likeContactsStream.first;
 
       expect(likeContacts.length, 1);
-      expect(likeContacts.first.contact.firstName, 'Bob');
-      expect(likeContacts.first.contact.lastName, 'Marly');
-      expect(likeContacts.first.email?.address, null);
+      expect(likeContacts.first.firstName, 'Bob');
+      expect(likeContacts.first.lastName, 'Marly');
     });
 
     test('all contacts', () async {
@@ -117,9 +113,9 @@ void main() {
       final allContacts = await allContactsStream.first;
 
       expect(allContacts.length, 3);
-      expect(allContacts.any((contact) => contact.contact.lastName == 'Тарас Шевченко'), isTrue);
-      expect(allContacts.any((contact) => contact.contact.lastName == 'Smith'), isTrue);
-      expect(allContacts.any((contact) => contact.contact.lastName == 'Marly'), isTrue);
+      expect(allContacts.any((contact) => contact.lastName == 'Тарас Шевченко'), isTrue);
+      expect(allContacts.any((contact) => contact.lastName == 'Smith'), isTrue);
+      expect(allContacts.any((contact) => contact.lastName == 'Marly'), isTrue);
     });
   });
 
@@ -157,7 +153,6 @@ void main() {
       expect(likeContacts.length, 1);
       expect(likeContacts.first.contact.firstName, 'Jane');
       expect(likeContacts.first.contact.lastName, 'Smith');
-
       expect(likeContacts.first.emails.length, 2);
       expect(likeContacts.first.emails.any((email) => email.address == 'jane@example.com'), isTrue);
       expect(likeContacts.first.emails.any((email) => email.address == 'jane.smith@example.com'), isTrue);
