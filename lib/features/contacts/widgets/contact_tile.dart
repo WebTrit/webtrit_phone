@@ -18,7 +18,7 @@ class ContactTile extends StatelessWidget {
 
   final String displayName;
   final Uint8List? thumbnail;
-  final String? thumbnailUrl;
+  final Uri? thumbnailUrl;
   final bool? registered;
   final bool smart;
   final GestureTapCallback? onTap;

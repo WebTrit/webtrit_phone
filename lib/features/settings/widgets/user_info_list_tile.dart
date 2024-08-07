@@ -49,7 +49,7 @@ class UserInfoListTile extends StatelessWidget {
           children: [
             LeadingAvatar(
               username: info?.name ?? '?',
-              thumbnailUrl: gravatarThumbnailUrl(info?.email).toString(),
+              thumbnailUrl: gravatarThumbnailUrl(info?.email),
               radius: radius,
             ),
             const SizedBox(width: 8),

@@ -31,7 +31,7 @@ class Contact extends Equatable {
   final String? lastName;
   final String? aliasName;
   final Uint8List? thumbnail;
-  final String? thumbnailUrl;
+  final Uri? thumbnailUrl;
 
   String get name {
     final aliasName = this.aliasName;

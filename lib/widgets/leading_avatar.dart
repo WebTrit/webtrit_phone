@@ -18,7 +18,7 @@ class LeadingAvatar extends StatefulWidget {
 
   final String? username;
   final Uint8List? thumbnail;
-  final String? thumbnailUrl;
+  final Uri? thumbnailUrl;
   final IconData placeholderIcon;
   final bool? registered;
   final bool smart;
@@ -86,7 +86,7 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
     if (widget.thumbnail != null) {
       return MemoryImage(widget.thumbnail!);
     } else if (widget.thumbnailUrl != null) {
-      return NetworkImage(widget.thumbnailUrl!);
+      return NetworkImage(widget.thumbnailUrl.toString());
     }
     return null;
   }

@@ -66,7 +66,7 @@ class ContactsRepository {
       lastName: data.contact.lastName,
       aliasName: data.contact.aliasName,
       thumbnail: data.contact.thumbnail,
-      thumbnailUrl: gravatarUrl.toString(),
+      thumbnailUrl: gravatarUrl,
     );
   }
 
