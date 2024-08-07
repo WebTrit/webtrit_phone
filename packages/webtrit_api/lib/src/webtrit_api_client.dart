@@ -66,6 +66,7 @@ class WebtritApiClient {
     String? token,
     Object? requestDataJson, {
     String? requestId,
+    Map<String, String>? headers,
   }) async {
     final url = tenantUrl.replace(
       pathSegments: [
@@ -78,12 +79,18 @@ class WebtritApiClient {
     final httpRequest = http.Request(method, url);
 
     final xRequestId = requestId ?? _generateRequestId();
+
     httpRequest.headers.addAll({
       'content-type': 'application/json; charset=utf-8',
       'accept': 'application/json',
       'x-request-id': xRequestId,
       if (token != null) 'authorization': 'Bearer $token',
     });
+
+    if (headers != null) {
+      httpRequest.headers.addAll(headers);
+    }
+
     if (requestDataJson != null) {
       httpRequest.body = jsonEncode(requestDataJson);
     }
@@ -113,24 +120,42 @@ class WebtritApiClient {
     return String.fromCharCodes(List.generate(length, (index) => _requestIdRandom.nextInt(26) + 97));
   }
 
-  Future<dynamic> _httpClientExecuteGet(List<String> pathSegments, String? token) {
+  Future<dynamic> _httpClientExecuteGet(
+    List<String> pathSegments,
+    Map<String, String>? headers,
+    String? token,
+  ) {
     return _httpClientExecute('get', pathSegments, token, null);
   }
 
-  Future<dynamic> _httpClientExecutePost(List<String> pathSegments, String? token, Object? requestDataJson) {
-    return _httpClientExecute('post', pathSegments, token, requestDataJson);
+  Future<dynamic> _httpClientExecutePost(
+    List<String> pathSegments,
+    Map<String, String>? headers,
+    String? token,
+    Object? requestDataJson,
+  ) {
+    return _httpClientExecute('post', pathSegments, token, requestDataJson, headers: headers);
   }
 
-  Future<dynamic> _httpClientExecutePatch(List<String> pathSegments, String? token, Object? requestDataJson) {
+  Future<dynamic> _httpClientExecutePatch(
+    List<String> pathSegments,
+    Map<String, String>? headers,
+    String? token,
+    Object? requestDataJson,
+  ) {
     return _httpClientExecute('patch', pathSegments, token, requestDataJson);
   }
 
-  Future<dynamic> _httpClientExecuteDelete(List<String> pathSegments, String? token) {
+  Future<dynamic> _httpClientExecuteDelete(
+    List<String> pathSegments,
+    Map<String, String>? headers,
+    String? token,
+  ) {
     return _httpClientExecute('delete', pathSegments, token, null);
   }
 
   Future<SystemInfo> getSystemInfo() async {
-    final responseJson = await _httpClientExecuteGet(['system-info'], null);
+    final responseJson = await _httpClientExecuteGet(['system-info'], null, null);
 
     return SystemInfo.fromJson(responseJson);
   }
@@ -138,7 +163,7 @@ class WebtritApiClient {
   Future<SessionResult> createUser(SessionUserCredential sessionUserCredential) async {
     final requestJson = sessionUserCredential.toJson();
 
-    final responseJson = await _httpClientExecutePost(['user'], null, requestJson);
+    final responseJson = await _httpClientExecutePost(['user'], null, null, requestJson);
 
     return SessionResult.fromJson(responseJson);
   }
@@ -146,7 +171,7 @@ class WebtritApiClient {
   Future<SessionOtpProvisional> createSessionOtp(SessionOtpCredential sessionOtpCredential) async {
     final requestJson = sessionOtpCredential.toJson();
 
-    final responseJson = await _httpClientExecutePost(['session', 'otp-create'], null, requestJson);
+    final responseJson = await _httpClientExecutePost(['session', 'otp-create'], null, null, requestJson);
 
     return SessionOtpProvisional.fromJson(responseJson);
   }
@@ -157,14 +182,14 @@ class WebtritApiClient {
       'code': code,
     };
 
-    final responseJson = await _httpClientExecutePost(['session', 'otp-verify'], null, requestJson);
+    final responseJson = await _httpClientExecutePost(['session', 'otp-verify'], null, null, requestJson);
     return SessionToken.fromJson(responseJson);
   }
 
   Future<SessionToken> createSession(SessionLoginCredential sessionLoginCredential) async {
     final requestJson = sessionLoginCredential.toJson();
 
-    final responseJson = await _httpClientExecutePost(['session'], null, requestJson);
+    final responseJson = await _httpClientExecutePost(['session'], null, null, requestJson);
 
     return SessionToken.fromJson(responseJson);
   }
@@ -172,23 +197,23 @@ class WebtritApiClient {
   Future<SessionToken> createSessionAutoProvision(SessionAutoProvisionCredential sessionAutoProvisionCredential) async {
     final requestJson = sessionAutoProvisionCredential.toJson();
 
-    final responseJson = await _httpClientExecutePost(['session', 'auto-provision'], null, requestJson);
+    final responseJson = await _httpClientExecutePost(['session', 'auto-provision'], null, null, requestJson);
 
     return SessionToken.fromJson(responseJson);
   }
 
   Future<void> deleteSession(String token) async {
-    await _httpClientExecuteDelete(['session'], token);
+    await _httpClientExecuteDelete(['session'], null, token);
   }
 
   Future<UserInfo> getUserInfo(String token) async {
-    final responseJson = await _httpClientExecuteGet(['user'], token);
+    final responseJson = await _httpClientExecuteGet(['user'], null, token);
 
     return UserInfo.fromJson(responseJson);
   }
 
   Future<List<UserContact>> getUserContactList(String token) async {
-    final responseJson = await _httpClientExecuteGet(['user', 'contacts'], token);
+    final responseJson = await _httpClientExecuteGet(['user', 'contacts'], null, token);
 
     return (responseJson['items'] as List<dynamic>)
         .map((e) => UserContact.fromJson(e as Map<String, dynamic>))
@@ -196,11 +221,11 @@ class WebtritApiClient {
   }
 
   Future<void> deleteUserInfo(String token) async {
-    await _httpClientExecuteDelete(['user'], token);
+    await _httpClientExecuteDelete(['user'], null, token);
   }
 
   Future<AppStatus> getAppStatus(String token) async {
-    final responseJson = await _httpClientExecuteGet(['app', 'status'], token);
+    final responseJson = await _httpClientExecuteGet(['app', 'status'], null, token);
 
     return AppStatus.fromJson(responseJson);
   }
@@ -208,17 +233,17 @@ class WebtritApiClient {
   Future<void> updateAppStatus(String token, AppStatus appStatus) async {
     final requestJson = appStatus.toJson();
 
-    await _httpClientExecutePatch(['app', 'status'], token, requestJson);
+    await _httpClientExecutePatch(['app', 'status'], null, token, requestJson);
   }
 
   Future<void> createAppContact(String token, List<AppContact> appContacts) async {
     final requestJson = appContacts.map((e) => e.toJson()).toList();
 
-    await _httpClientExecutePost(['app', 'contacts'], token, requestJson);
+    await _httpClientExecutePost(['app', 'contacts'], null, token, requestJson);
   }
 
   Future<List<AppSmartContact>> getAppSmartContactList(String token) async {
-    final responseJson = await _httpClientExecuteGet(['app', 'contacts', 'smart'], token);
+    final responseJson = await _httpClientExecuteGet(['app', 'contacts', 'smart'], null, token);
 
     return (responseJson as List<dynamic>).map((e) => AppSmartContact.fromJson(e as Map<String, dynamic>)).toList();
   }
@@ -226,13 +251,18 @@ class WebtritApiClient {
   Future<void> createAppPushToken(String token, AppPushToken appPushToken) async {
     final requestJson = appPushToken.toJson();
 
-    await _httpClientExecutePost(['app', 'push-tokens'], token, requestJson);
+    await _httpClientExecutePost(['app', 'push-tokens'], null, token, requestJson);
   }
 
   Future<DemoCallToActionsResponse> getCallToActions(String token, DemoCallToActionsParam callToActionsParam) async {
     final requestJson = callToActionsParam.toJson();
 
-    final responseJson = await _httpClientExecutePost(['custom', 'private', 'call-to-actions','/'], token, requestJson);
+    final responseJson = await _httpClientExecutePost(
+      ['custom', 'private', 'call-to-actions', '/'],
+      null,
+      token,
+      requestJson,
+    );
 
     return DemoCallToActionsResponse.fromJson(responseJson);
   }
