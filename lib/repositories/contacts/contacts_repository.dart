@@ -16,12 +16,12 @@ class ContactsRepository {
     final searchBits = search.split(' ').where((value) => value.isNotEmpty);
     if (searchBits.isEmpty) {
       return _appDatabase.contactsDao
-          .watchAllNotEmptyContacts(sourceType?.toData())
-          .map(((contactDatas) => contactDatas.map(_toContact).toList()));
+          .watchAllContactsWithPhonesAndEmailsExt(null, sourceType?.toData())
+          .map(((contactDatas) => contactDatas.map(_toContactWithPhonesAndEmails).toList()));
     } else {
       return _appDatabase.contactsDao
-          .watchAllLikeContacts(searchBits, sourceType?.toData())
-          .map(((contactDatas) => contactDatas.map(_toContact).toList()));
+          .watchAllContactsWithPhonesAndEmailsExt(searchBits, sourceType?.toData())
+          .map(((contactDatas) => contactDatas.map(_toContactWithPhonesAndEmails).toList()));
     }
   }
 
@@ -53,8 +53,8 @@ class ContactsRepository {
     return _appDatabase.favoritesDao.deleteByContactPhoneId(contactPhone.id);
   }
 
-  Contact _toContact(ContactWithEmailData data) {
-    final email = data.email?.address;
+  Contact _toContactWithPhonesAndEmails(ContactWithPhonesAndEmailsData data) {
+    final email = data.emails.firstOrNull?.address;
     final gravatarUrl = gravatarThumbnailUrl(email);
 
     return Contact(
@@ -67,6 +67,19 @@ class ContactsRepository {
       aliasName: data.contact.aliasName,
       thumbnail: data.contact.thumbnail,
       thumbnailUrl: gravatarUrl,
+    );
+  }
+
+  Contact _toContact(ContactData data) {
+    return Contact(
+      id: data.id,
+      sourceType: data.sourceType.toModel(),
+      sourceId: data.sourceId,
+      registered: data.registered,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      aliasName: data.aliasName,
+      thumbnail: data.thumbnail,
     );
   }
 
