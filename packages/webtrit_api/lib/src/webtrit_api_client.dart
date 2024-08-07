@@ -254,12 +254,16 @@ class WebtritApiClient {
     await _httpClientExecutePost(['app', 'push-tokens'], null, token, requestJson);
   }
 
-  Future<DemoCallToActionsResponse> getCallToActions(String token, DemoCallToActionsParam callToActionsParam) async {
+  Future<DemoCallToActionsResponse> getCallToActions(
+    String token,
+    String locale,
+    DemoCallToActionsParam callToActionsParam,
+  ) async {
     final requestJson = callToActionsParam.toJson();
 
     final responseJson = await _httpClientExecutePost(
       ['custom', 'private', 'call-to-actions', '/'],
-      null,
+      {'Accept-Language': locale},
       token,
       requestJson,
     );
