@@ -5,10 +5,12 @@ class DemoCubitState with _$DemoCubitState {
   const DemoCubitState._();
 
   const factory DemoCubitState({
-    MainFlavor? mainFlavor,
+    required MainFlavor flavor,
+    required Locale locale,
     UserInfo? userInfo,
+    @Default(true) bool enable,
     @Default({}) Map<MainFlavor, DemoActions> actions,
   }) = _DemoCubitState;
 
-  List<DemoCallToActionsResponseActions> get flavorActions => actions[mainFlavor]?.action ?? [];
+  List<DemoCallToActionsResponseActions> get flavorActions => enable ? actions[flavor]?.action ?? [] : [];
 }

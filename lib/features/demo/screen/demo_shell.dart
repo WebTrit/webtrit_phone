@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 
 import '../bloc/demo_cubit.dart';
 import '../widgets/widgets.dart';
@@ -34,15 +35,23 @@ class _DemoShellState extends State<DemoShell> with RouteAware {
     return MultiBlocListener(
       listeners: [
         BlocListener<DemoCubit, DemoCubitState>(
-          listener: _handleConvertedState,
+          listener: _listenActionsChanging,
           child: widget.child,
         ),
       ],
-      child: widget.child,
+      child: BlocListener<AppBloc, AppState>(
+        listener: _listenLocaleChanging,
+        listenWhen: (AppState previous, AppState current) => previous.locale != current.locale,
+        child: widget.child,
+      ),
     );
   }
 
-  void _handleConvertedState(BuildContext context, DemoCubitState state) {
+  void _listenLocaleChanging(BuildContext context, AppState state) {
+    context.read<DemoCubit>().updateConfiguration(locale: state.locale);
+  }
+
+  void _listenActionsChanging(BuildContext context, DemoCubitState state) {
     _demoActionButtonController.hideAllOverlay();
     for (var it in state.flavorActions) {
       _demoActionButtonController.addOverlay(

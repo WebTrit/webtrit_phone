@@ -38,7 +38,10 @@ class MainScreenPage extends StatelessWidget {
         final flavor = MainFlavor.values[tabsRouter.activeIndex];
 
         if (appDemoFlow) {
-          context.read<DemoCubit>().updateFlavorActions(isRouteActive ? flavor : null);
+          final locale = context.read<AppBloc>().state.locale;
+
+          context.read<DemoCubit>().updateConfiguration(flavor: flavor, enable: isRouteActive, locale: locale);
+          context.read<DemoCubit>().getActions();
         }
 
         return MainScreen(
@@ -52,7 +55,6 @@ class MainScreenPage extends StatelessWidget {
         );
       },
     );
-
     final provider = BlocProvider(
       create: (context) {
         return MainBloc(
@@ -65,6 +67,8 @@ class MainScreenPage extends StatelessWidget {
               create: (context) => DemoCubit(
                 webtritApiClient: context.read<WebtritApiClient>(),
                 token: context.read<AppBloc>().state.token!,
+                flavor: MainFlavor.contacts,
+                locale: context.read<AppBloc>().state.locale,
               ),
               child: DemoShell(child: autoTabsRouter),
             )

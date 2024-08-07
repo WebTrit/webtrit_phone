@@ -1,8 +1,8 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:logging/logging.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
@@ -14,30 +14,44 @@ part 'demo_cubit_state.dart';
 
 part 'demo_cubit.freezed.dart';
 
-final _logger = Logger('DemoCubit');
-
 class DemoCubit extends Cubit<DemoCubitState> {
   DemoCubit({
     required WebtritApiClient webtritApiClient,
     required String token,
+    required Locale locale,
+    required MainFlavor flavor,
   })  : _webtritApiClient = webtritApiClient,
         _token = token,
-        super(const DemoCubitState());
+        super(DemoCubitState(flavor: flavor, locale: locale));
 
   final WebtritApiClient _webtritApiClient;
 
   final String _token;
 
-  void updateFlavorActions(MainFlavor? flavor) async {
-    if (flavor != null) {
-      _getFlavorActions(flavor);
-    }
+  void updateConfiguration({
+    MainFlavor? flavor,
+    bool? enable,
+    Locale? locale,
+  }) async {
+    final newFlavor = flavor ?? state.flavor;
+    final newAvailability = enable ?? state.enable;
+    final newLocale = locale ?? state.locale;
+    final newActions = locale != state.locale ? <MainFlavor, DemoActions>{} : state.actions;
 
-    emit(state.copyWith(mainFlavor: flavor));
+    emit(state.copyWith(
+      flavor: newFlavor,
+      enable: newAvailability,
+      locale: newLocale,
+      actions: newActions,
+    ));
   }
 
-  void _getFlavorActions(MainFlavor flavor) async {
+  void getActions() async {
+    if (!state.enable) return;
+
     final flavorActions = Map.of(state.actions);
+    final flavor = state.flavor;
+
     final userInfo = await _getUserInfo();
 
     if (flavorActions[flavor]?.isIncomplete ?? true) {
@@ -49,13 +63,10 @@ class DemoCubit extends Cubit<DemoCubitState> {
       }
     }
 
-    emit(state.copyWith(actions: flavorActions, userInfo: userInfo));
-  }
-
-  Future<UserInfo> _getUserInfo() async {
-    final account = state.userInfo ?? await _webtritApiClient.getUserInfo(_token);
-    _logger.info('_getUserInfo: $account');
-    return account;
+    emit(state.copyWith(
+      actions: flavorActions,
+      userInfo: userInfo,
+    ));
   }
 
   Future<DemoCallToActionsResponse> _getActions(MainFlavor tab, UserInfo userInfo) async {
@@ -63,10 +74,18 @@ class DemoCubit extends Cubit<DemoCubitState> {
       email: userInfo.email!,
       tab: tab.name,
     );
-    final actions = _webtritApiClient.getCallToActions(_token, callToActionParam);
 
-    _logger.info('_getActions: $actions');
+    final actions = _webtritApiClient.getCallToActions(
+      _token,
+      state.locale.toString(),
+      callToActionParam,
+    );
 
     return actions;
+  }
+
+  Future<UserInfo> _getUserInfo() async {
+    final account = state.userInfo ?? await _webtritApiClient.getUserInfo(_token);
+    return account;
   }
 }

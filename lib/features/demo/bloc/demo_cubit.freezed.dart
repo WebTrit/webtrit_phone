@@ -16,8 +16,10 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$DemoCubitState {
-  MainFlavor? get mainFlavor => throw _privateConstructorUsedError;
+  MainFlavor get flavor => throw _privateConstructorUsedError;
+  Locale get locale => throw _privateConstructorUsedError;
   UserInfo? get userInfo => throw _privateConstructorUsedError;
+  bool get enable => throw _privateConstructorUsedError;
   Map<MainFlavor, DemoActions> get actions =>
       throw _privateConstructorUsedError;
 
@@ -33,8 +35,10 @@ abstract class $DemoCubitStateCopyWith<$Res> {
       _$DemoCubitStateCopyWithImpl<$Res, DemoCubitState>;
   @useResult
   $Res call(
-      {MainFlavor? mainFlavor,
+      {MainFlavor flavor,
+      Locale locale,
       UserInfo? userInfo,
+      bool enable,
       Map<MainFlavor, DemoActions> actions});
 
   $UserInfoCopyWith<$Res>? get userInfo;
@@ -53,19 +57,29 @@ class _$DemoCubitStateCopyWithImpl<$Res, $Val extends DemoCubitState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? mainFlavor = freezed,
+    Object? flavor = null,
+    Object? locale = null,
     Object? userInfo = freezed,
+    Object? enable = null,
     Object? actions = null,
   }) {
     return _then(_value.copyWith(
-      mainFlavor: freezed == mainFlavor
-          ? _value.mainFlavor
-          : mainFlavor // ignore: cast_nullable_to_non_nullable
-              as MainFlavor?,
+      flavor: null == flavor
+          ? _value.flavor
+          : flavor // ignore: cast_nullable_to_non_nullable
+              as MainFlavor,
+      locale: null == locale
+          ? _value.locale
+          : locale // ignore: cast_nullable_to_non_nullable
+              as Locale,
       userInfo: freezed == userInfo
           ? _value.userInfo
           : userInfo // ignore: cast_nullable_to_non_nullable
               as UserInfo?,
+      enable: null == enable
+          ? _value.enable
+          : enable // ignore: cast_nullable_to_non_nullable
+              as bool,
       actions: null == actions
           ? _value.actions
           : actions // ignore: cast_nullable_to_non_nullable
@@ -95,8 +109,10 @@ abstract class _$$DemoCubitStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {MainFlavor? mainFlavor,
+      {MainFlavor flavor,
+      Locale locale,
       UserInfo? userInfo,
+      bool enable,
       Map<MainFlavor, DemoActions> actions});
 
   @override
@@ -114,19 +130,29 @@ class __$$DemoCubitStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? mainFlavor = freezed,
+    Object? flavor = null,
+    Object? locale = null,
     Object? userInfo = freezed,
+    Object? enable = null,
     Object? actions = null,
   }) {
     return _then(_$DemoCubitStateImpl(
-      mainFlavor: freezed == mainFlavor
-          ? _value.mainFlavor
-          : mainFlavor // ignore: cast_nullable_to_non_nullable
-              as MainFlavor?,
+      flavor: null == flavor
+          ? _value.flavor
+          : flavor // ignore: cast_nullable_to_non_nullable
+              as MainFlavor,
+      locale: null == locale
+          ? _value.locale
+          : locale // ignore: cast_nullable_to_non_nullable
+              as Locale,
       userInfo: freezed == userInfo
           ? _value.userInfo
           : userInfo // ignore: cast_nullable_to_non_nullable
               as UserInfo?,
+      enable: null == enable
+          ? _value.enable
+          : enable // ignore: cast_nullable_to_non_nullable
+              as bool,
       actions: null == actions
           ? _value._actions
           : actions // ignore: cast_nullable_to_non_nullable
@@ -139,16 +165,23 @@ class __$$DemoCubitStateImplCopyWithImpl<$Res>
 
 class _$DemoCubitStateImpl extends _DemoCubitState {
   const _$DemoCubitStateImpl(
-      {this.mainFlavor,
+      {required this.flavor,
+      required this.locale,
       this.userInfo,
+      this.enable = true,
       final Map<MainFlavor, DemoActions> actions = const {}})
       : _actions = actions,
         super._();
 
   @override
-  final MainFlavor? mainFlavor;
+  final MainFlavor flavor;
+  @override
+  final Locale locale;
   @override
   final UserInfo? userInfo;
+  @override
+  @JsonKey()
+  final bool enable;
   final Map<MainFlavor, DemoActions> _actions;
   @override
   @JsonKey()
@@ -160,7 +193,7 @@ class _$DemoCubitStateImpl extends _DemoCubitState {
 
   @override
   String toString() {
-    return 'DemoCubitState(mainFlavor: $mainFlavor, userInfo: $userInfo, actions: $actions)';
+    return 'DemoCubitState(flavor: $flavor, locale: $locale, userInfo: $userInfo, enable: $enable, actions: $actions)';
   }
 
   @override
@@ -168,15 +201,16 @@ class _$DemoCubitStateImpl extends _DemoCubitState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$DemoCubitStateImpl &&
-            (identical(other.mainFlavor, mainFlavor) ||
-                other.mainFlavor == mainFlavor) &&
+            (identical(other.flavor, flavor) || other.flavor == flavor) &&
+            (identical(other.locale, locale) || other.locale == locale) &&
             (identical(other.userInfo, userInfo) ||
                 other.userInfo == userInfo) &&
+            (identical(other.enable, enable) || other.enable == enable) &&
             const DeepCollectionEquality().equals(other._actions, _actions));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, mainFlavor, userInfo,
+  int get hashCode => Object.hash(runtimeType, flavor, locale, userInfo, enable,
       const DeepCollectionEquality().hash(_actions));
 
   @JsonKey(ignore: true)
@@ -189,15 +223,21 @@ class _$DemoCubitStateImpl extends _DemoCubitState {
 
 abstract class _DemoCubitState extends DemoCubitState {
   const factory _DemoCubitState(
-      {final MainFlavor? mainFlavor,
+      {required final MainFlavor flavor,
+      required final Locale locale,
       final UserInfo? userInfo,
+      final bool enable,
       final Map<MainFlavor, DemoActions> actions}) = _$DemoCubitStateImpl;
   const _DemoCubitState._() : super._();
 
   @override
-  MainFlavor? get mainFlavor;
+  MainFlavor get flavor;
+  @override
+  Locale get locale;
   @override
   UserInfo? get userInfo;
+  @override
+  bool get enable;
   @override
   Map<MainFlavor, DemoActions> get actions;
   @override
