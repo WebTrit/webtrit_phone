@@ -25,19 +25,19 @@ _$DemoCallToActionsResponseActionsImpl
     _$$DemoCallToActionsResponseActionsImplFromJson(
             Map<String, dynamic> json) =>
         _$DemoCallToActionsResponseActionsImpl(
-          description: json['description'] as String,
           extraData: DemoCallToActionsResponseActionsExtraData.fromJson(
               json['extra_data'] as Map<String, dynamic>),
-          title: json['title'] as String,
+          title: json['title'] as String?,
+          description: json['description'] as String?,
           url: json['url'] as String,
         );
 
 Map<String, dynamic> _$$DemoCallToActionsResponseActionsImplToJson(
         _$DemoCallToActionsResponseActionsImpl instance) =>
     <String, dynamic>{
-      'description': instance.description,
       'extra_data': instance.extraData,
       'title': instance.title,
+      'description': instance.description,
       'url': instance.url,
     };
 

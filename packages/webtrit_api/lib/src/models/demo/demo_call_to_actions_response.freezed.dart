@@ -157,16 +157,16 @@ DemoCallToActionsResponseActions _$DemoCallToActionsResponseActionsFromJson(
 
 /// @nodoc
 mixin _$DemoCallToActionsResponseActions {
-  String get description => throw _privateConstructorUsedError;
-  set description(String value) => throw _privateConstructorUsedError;
   @JsonKey(name: 'extra_data')
   DemoCallToActionsResponseActionsExtraData get extraData =>
       throw _privateConstructorUsedError;
   @JsonKey(name: 'extra_data')
   set extraData(DemoCallToActionsResponseActionsExtraData value) =>
       throw _privateConstructorUsedError;
-  String get title => throw _privateConstructorUsedError;
-  set title(String value) => throw _privateConstructorUsedError;
+  String? get title => throw _privateConstructorUsedError;
+  set title(String? value) => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
+  set description(String? value) => throw _privateConstructorUsedError;
   String get url => throw _privateConstructorUsedError;
   set url(String value) => throw _privateConstructorUsedError;
 
@@ -185,10 +185,10 @@ abstract class $DemoCallToActionsResponseActionsCopyWith<$Res> {
           DemoCallToActionsResponseActions>;
   @useResult
   $Res call(
-      {String description,
-      @JsonKey(name: 'extra_data')
+      {@JsonKey(name: 'extra_data')
       DemoCallToActionsResponseActionsExtraData extraData,
-      String title,
+      String? title,
+      String? description,
       String url});
 
   $DemoCallToActionsResponseActionsExtraDataCopyWith<$Res> get extraData;
@@ -208,24 +208,24 @@ class _$DemoCallToActionsResponseActionsCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? description = null,
     Object? extraData = null,
-    Object? title = null,
+    Object? title = freezed,
+    Object? description = freezed,
     Object? url = null,
   }) {
     return _then(_value.copyWith(
-      description: null == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String,
       extraData: null == extraData
           ? _value.extraData
           : extraData // ignore: cast_nullable_to_non_nullable
               as DemoCallToActionsResponseActionsExtraData,
-      title: null == title
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
       url: null == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
@@ -253,10 +253,10 @@ abstract class _$$DemoCallToActionsResponseActionsImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String description,
-      @JsonKey(name: 'extra_data')
+      {@JsonKey(name: 'extra_data')
       DemoCallToActionsResponseActionsExtraData extraData,
-      String title,
+      String? title,
+      String? description,
       String url});
 
   @override
@@ -276,24 +276,24 @@ class __$$DemoCallToActionsResponseActionsImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? description = null,
     Object? extraData = null,
-    Object? title = null,
+    Object? title = freezed,
+    Object? description = freezed,
     Object? url = null,
   }) {
     return _then(_$DemoCallToActionsResponseActionsImpl(
-      description: null == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String,
       extraData: null == extraData
           ? _value.extraData
           : extraData // ignore: cast_nullable_to_non_nullable
               as DemoCallToActionsResponseActionsExtraData,
-      title: null == title
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
       url: null == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
@@ -307,9 +307,9 @@ class __$$DemoCallToActionsResponseActionsImplCopyWithImpl<$Res>
 class _$DemoCallToActionsResponseActionsImpl
     implements _DemoCallToActionsResponseActions {
   _$DemoCallToActionsResponseActionsImpl(
-      {required this.description,
-      @JsonKey(name: 'extra_data') required this.extraData,
-      required this.title,
+      {@JsonKey(name: 'extra_data') required this.extraData,
+      this.title,
+      this.description,
       required this.url});
 
   factory _$DemoCallToActionsResponseActionsImpl.fromJson(
@@ -317,18 +317,18 @@ class _$DemoCallToActionsResponseActionsImpl
       _$$DemoCallToActionsResponseActionsImplFromJson(json);
 
   @override
-  String description;
-  @override
   @JsonKey(name: 'extra_data')
   DemoCallToActionsResponseActionsExtraData extraData;
   @override
-  String title;
+  String? title;
+  @override
+  String? description;
   @override
   String url;
 
   @override
   String toString() {
-    return 'DemoCallToActionsResponseActions(description: $description, extraData: $extraData, title: $title, url: $url)';
+    return 'DemoCallToActionsResponseActions(extraData: $extraData, title: $title, description: $description, url: $url)';
   }
 
   @JsonKey(ignore: true)
@@ -350,10 +350,10 @@ class _$DemoCallToActionsResponseActionsImpl
 abstract class _DemoCallToActionsResponseActions
     implements DemoCallToActionsResponseActions {
   factory _DemoCallToActionsResponseActions(
-      {required String description,
-      @JsonKey(name: 'extra_data')
+      {@JsonKey(name: 'extra_data')
       required DemoCallToActionsResponseActionsExtraData extraData,
-      required String title,
+      String? title,
+      String? description,
       required String url}) = _$DemoCallToActionsResponseActionsImpl;
 
   factory _DemoCallToActionsResponseActions.fromJson(
@@ -361,16 +361,16 @@ abstract class _DemoCallToActionsResponseActions
       _$DemoCallToActionsResponseActionsImpl.fromJson;
 
   @override
-  String get description;
-  set description(String value);
-  @override
   @JsonKey(name: 'extra_data')
   DemoCallToActionsResponseActionsExtraData get extraData;
   @JsonKey(name: 'extra_data')
   set extraData(DemoCallToActionsResponseActionsExtraData value);
   @override
-  String get title;
-  set title(String value);
+  String? get title;
+  set title(String? value);
+  @override
+  String? get description;
+  set description(String? value);
   @override
   String get url;
   set url(String value);

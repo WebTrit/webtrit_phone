@@ -18,10 +18,10 @@ class DemoCallToActionsResponse with _$DemoCallToActionsResponse {
 @unfreezed
 class DemoCallToActionsResponseActions with _$DemoCallToActionsResponseActions {
   factory DemoCallToActionsResponseActions({
-    required String description,
-    @JsonKey(name: 'extra_data') required DemoCallToActionsResponseActionsExtraData extraData,
-    required String title,
+    String? title,
+    String? description,
     required String url,
+    @JsonKey(name: 'extra_data') required DemoCallToActionsResponseActionsExtraData extraData,
   }) = _DemoCallToActionsResponseActions;
 
   factory DemoCallToActionsResponseActions.fromJson(Map<String, dynamic> json) =>
