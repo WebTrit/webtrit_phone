@@ -1,10 +1,9 @@
 import 'dart:async';
 
-import 'package:gravatar_utils/gravatar_utils.dart';
-
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 class ContactsRepository {
   ContactsRepository({
@@ -56,9 +55,7 @@ class ContactsRepository {
 
   Contact _toContact(ContactWithEmailData data) {
     final email = data.email?.address;
-    final gravatarUrl = email != null
-        ? Gravatar(email).image(scheme: 'https', defaultImage: DefaultImage.fileNotFound).toString()
-        : null;
+    final gravatarUrl = gravatarThumbnailUrl(email);
 
     return Contact(
       id: data.contact.id,
@@ -69,7 +66,7 @@ class ContactsRepository {
       lastName: data.contact.lastName,
       aliasName: data.contact.aliasName,
       thumbnail: data.contact.thumbnail,
-      thumbnailUrl: gravatarUrl,
+      thumbnailUrl: gravatarUrl.toString(),
     );
   }
 

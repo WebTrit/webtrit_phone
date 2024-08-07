@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:gravatar_utils/gravatar_utils.dart';
-
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 const _kHoldSpaceData = ' ';
@@ -50,9 +49,7 @@ class UserInfoListTile extends StatelessWidget {
           children: [
             LeadingAvatar(
               username: info?.name ?? '?',
-              thumbnailUrl: info?.email != null
-                  ? Gravatar(info!.email!).image(scheme: 'https', defaultImage: DefaultImage.fileNotFound).toString()
-                  : null,
+              thumbnailUrl: gravatarThumbnailUrl(info?.email).toString(),
               radius: radius,
             ),
             const SizedBox(width: 8),
