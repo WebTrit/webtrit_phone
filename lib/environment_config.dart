@@ -21,9 +21,9 @@ class EnvironmentConfig {
     defaultValue: true,
   );
 
-  static const WEBTRIT_APP_ENABLE_ATTENDED_TRANSFER__NAME = 'WEBTRIT_APP_ENABLE_ATTENDED_TRANSFER';
-  static const WEBTRIT_APP_ENABLE_ATTENDED_TRANSFER = bool.fromEnvironment(
-    WEBTRIT_APP_ENABLE_ATTENDED_TRANSFER__NAME,
+  static const ENABLE_ATTENDED_TRANSFER__NAME = 'WEBTRIT_APP_ENABLE_ATTENDED_TRANSFER';
+  static const ENABLE_ATTENDED_TRANSFER = bool.fromEnvironment(
+    ENABLE_ATTENDED_TRANSFER__NAME,
     defaultValue: true,
   );
 

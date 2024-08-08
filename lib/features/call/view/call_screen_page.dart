@@ -13,7 +13,7 @@ class CallScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final widget = CallScreen(
-      config: CallActiveConfig(enableTransfer: EnvironmentConfig.WEBTRIT_APP_ENABLE_ATTENDED_TRANSFER),
+      config: CallActiveConfig(enableTransfer: EnvironmentConfig.ENABLE_ATTENDED_TRANSFER),
     );
     return widget;
   }
