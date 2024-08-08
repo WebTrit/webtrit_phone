@@ -16,9 +16,12 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$DemoCubitState {
-  bool get showConvertedButton => throw _privateConstructorUsedError;
-  bool get openDemoWebScreen => throw _privateConstructorUsedError;
-  String? get convertPbxUrl => throw _privateConstructorUsedError;
+  MainFlavor get flavor => throw _privateConstructorUsedError;
+  Locale get locale => throw _privateConstructorUsedError;
+  UserInfo? get userInfo => throw _privateConstructorUsedError;
+  bool get enable => throw _privateConstructorUsedError;
+  Map<MainFlavor, DemoActions> get actions =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $DemoCubitStateCopyWith<DemoCubitState> get copyWith =>
@@ -32,9 +35,13 @@ abstract class $DemoCubitStateCopyWith<$Res> {
       _$DemoCubitStateCopyWithImpl<$Res, DemoCubitState>;
   @useResult
   $Res call(
-      {bool showConvertedButton,
-      bool openDemoWebScreen,
-      String? convertPbxUrl});
+      {MainFlavor flavor,
+      Locale locale,
+      UserInfo? userInfo,
+      bool enable,
+      Map<MainFlavor, DemoActions> actions});
+
+  $UserInfoCopyWith<$Res>? get userInfo;
 }
 
 /// @nodoc
@@ -50,24 +57,46 @@ class _$DemoCubitStateCopyWithImpl<$Res, $Val extends DemoCubitState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? showConvertedButton = null,
-    Object? openDemoWebScreen = null,
-    Object? convertPbxUrl = freezed,
+    Object? flavor = null,
+    Object? locale = null,
+    Object? userInfo = freezed,
+    Object? enable = null,
+    Object? actions = null,
   }) {
     return _then(_value.copyWith(
-      showConvertedButton: null == showConvertedButton
-          ? _value.showConvertedButton
-          : showConvertedButton // ignore: cast_nullable_to_non_nullable
+      flavor: null == flavor
+          ? _value.flavor
+          : flavor // ignore: cast_nullable_to_non_nullable
+              as MainFlavor,
+      locale: null == locale
+          ? _value.locale
+          : locale // ignore: cast_nullable_to_non_nullable
+              as Locale,
+      userInfo: freezed == userInfo
+          ? _value.userInfo
+          : userInfo // ignore: cast_nullable_to_non_nullable
+              as UserInfo?,
+      enable: null == enable
+          ? _value.enable
+          : enable // ignore: cast_nullable_to_non_nullable
               as bool,
-      openDemoWebScreen: null == openDemoWebScreen
-          ? _value.openDemoWebScreen
-          : openDemoWebScreen // ignore: cast_nullable_to_non_nullable
-              as bool,
-      convertPbxUrl: freezed == convertPbxUrl
-          ? _value.convertPbxUrl
-          : convertPbxUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
+      actions: null == actions
+          ? _value.actions
+          : actions // ignore: cast_nullable_to_non_nullable
+              as Map<MainFlavor, DemoActions>,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UserInfoCopyWith<$Res>? get userInfo {
+    if (_value.userInfo == null) {
+      return null;
+    }
+
+    return $UserInfoCopyWith<$Res>(_value.userInfo!, (value) {
+      return _then(_value.copyWith(userInfo: value) as $Val);
+    });
   }
 }
 
@@ -80,9 +109,14 @@ abstract class _$$DemoCubitStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {bool showConvertedButton,
-      bool openDemoWebScreen,
-      String? convertPbxUrl});
+      {MainFlavor flavor,
+      Locale locale,
+      UserInfo? userInfo,
+      bool enable,
+      Map<MainFlavor, DemoActions> actions});
+
+  @override
+  $UserInfoCopyWith<$Res>? get userInfo;
 }
 
 /// @nodoc
@@ -96,47 +130,70 @@ class __$$DemoCubitStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? showConvertedButton = null,
-    Object? openDemoWebScreen = null,
-    Object? convertPbxUrl = freezed,
+    Object? flavor = null,
+    Object? locale = null,
+    Object? userInfo = freezed,
+    Object? enable = null,
+    Object? actions = null,
   }) {
     return _then(_$DemoCubitStateImpl(
-      showConvertedButton: null == showConvertedButton
-          ? _value.showConvertedButton
-          : showConvertedButton // ignore: cast_nullable_to_non_nullable
+      flavor: null == flavor
+          ? _value.flavor
+          : flavor // ignore: cast_nullable_to_non_nullable
+              as MainFlavor,
+      locale: null == locale
+          ? _value.locale
+          : locale // ignore: cast_nullable_to_non_nullable
+              as Locale,
+      userInfo: freezed == userInfo
+          ? _value.userInfo
+          : userInfo // ignore: cast_nullable_to_non_nullable
+              as UserInfo?,
+      enable: null == enable
+          ? _value.enable
+          : enable // ignore: cast_nullable_to_non_nullable
               as bool,
-      openDemoWebScreen: null == openDemoWebScreen
-          ? _value.openDemoWebScreen
-          : openDemoWebScreen // ignore: cast_nullable_to_non_nullable
-              as bool,
-      convertPbxUrl: freezed == convertPbxUrl
-          ? _value.convertPbxUrl
-          : convertPbxUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
+      actions: null == actions
+          ? _value._actions
+          : actions // ignore: cast_nullable_to_non_nullable
+              as Map<MainFlavor, DemoActions>,
     ));
   }
 }
 
 /// @nodoc
 
-class _$DemoCubitStateImpl implements _DemoCubitState {
+class _$DemoCubitStateImpl extends _DemoCubitState {
   const _$DemoCubitStateImpl(
-      {this.showConvertedButton = false,
-      this.openDemoWebScreen = false,
-      this.convertPbxUrl});
+      {required this.flavor,
+      required this.locale,
+      this.userInfo,
+      this.enable = true,
+      final Map<MainFlavor, DemoActions> actions = const {}})
+      : _actions = actions,
+        super._();
 
   @override
-  @JsonKey()
-  final bool showConvertedButton;
+  final MainFlavor flavor;
+  @override
+  final Locale locale;
+  @override
+  final UserInfo? userInfo;
   @override
   @JsonKey()
-  final bool openDemoWebScreen;
+  final bool enable;
+  final Map<MainFlavor, DemoActions> _actions;
   @override
-  final String? convertPbxUrl;
+  @JsonKey()
+  Map<MainFlavor, DemoActions> get actions {
+    if (_actions is EqualUnmodifiableMapView) return _actions;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_actions);
+  }
 
   @override
   String toString() {
-    return 'DemoCubitState(showConvertedButton: $showConvertedButton, openDemoWebScreen: $openDemoWebScreen, convertPbxUrl: $convertPbxUrl)';
+    return 'DemoCubitState(flavor: $flavor, locale: $locale, userInfo: $userInfo, enable: $enable, actions: $actions)';
   }
 
   @override
@@ -144,17 +201,17 @@ class _$DemoCubitStateImpl implements _DemoCubitState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$DemoCubitStateImpl &&
-            (identical(other.showConvertedButton, showConvertedButton) ||
-                other.showConvertedButton == showConvertedButton) &&
-            (identical(other.openDemoWebScreen, openDemoWebScreen) ||
-                other.openDemoWebScreen == openDemoWebScreen) &&
-            (identical(other.convertPbxUrl, convertPbxUrl) ||
-                other.convertPbxUrl == convertPbxUrl));
+            (identical(other.flavor, flavor) || other.flavor == flavor) &&
+            (identical(other.locale, locale) || other.locale == locale) &&
+            (identical(other.userInfo, userInfo) ||
+                other.userInfo == userInfo) &&
+            (identical(other.enable, enable) || other.enable == enable) &&
+            const DeepCollectionEquality().equals(other._actions, _actions));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, showConvertedButton, openDemoWebScreen, convertPbxUrl);
+  int get hashCode => Object.hash(runtimeType, flavor, locale, userInfo, enable,
+      const DeepCollectionEquality().hash(_actions));
 
   @JsonKey(ignore: true)
   @override
@@ -164,18 +221,25 @@ class _$DemoCubitStateImpl implements _DemoCubitState {
           this, _$identity);
 }
 
-abstract class _DemoCubitState implements DemoCubitState {
+abstract class _DemoCubitState extends DemoCubitState {
   const factory _DemoCubitState(
-      {final bool showConvertedButton,
-      final bool openDemoWebScreen,
-      final String? convertPbxUrl}) = _$DemoCubitStateImpl;
+      {required final MainFlavor flavor,
+      required final Locale locale,
+      final UserInfo? userInfo,
+      final bool enable,
+      final Map<MainFlavor, DemoActions> actions}) = _$DemoCubitStateImpl;
+  const _DemoCubitState._() : super._();
 
   @override
-  bool get showConvertedButton;
+  MainFlavor get flavor;
   @override
-  bool get openDemoWebScreen;
+  Locale get locale;
   @override
-  String? get convertPbxUrl;
+  UserInfo? get userInfo;
+  @override
+  bool get enable;
+  @override
+  Map<MainFlavor, DemoActions> get actions;
   @override
   @JsonKey(ignore: true)
   _$$DemoCubitStateImplCopyWith<_$DemoCubitStateImpl> get copyWith =>

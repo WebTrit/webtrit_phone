@@ -1,77 +1,91 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:logging/logging.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
-import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/features/main/main.dart';
+
+import '../models/models.dart';
 
 part 'demo_cubit_state.dart';
 
 part 'demo_cubit.freezed.dart';
 
-final _logger = Logger('DemoCubit');
-
 class DemoCubit extends Cubit<DemoCubitState> {
   DemoCubit({
     required WebtritApiClient webtritApiClient,
-    required PlatformInfo platformInfo,
-    required AppInfo appInfo,
-    required String tenantId,
     required String token,
+    required Locale locale,
+    required MainFlavor flavor,
   })  : _webtritApiClient = webtritApiClient,
-        _platformInfo = platformInfo,
-        _appInfo = appInfo,
-        _tenantId = tenantId,
         _token = token,
-        super(const DemoCubitState()) {
-    _initializeConvertPbxUrl();
-  }
+        super(DemoCubitState(flavor: flavor, locale: locale));
 
   final WebtritApiClient _webtritApiClient;
-  final PlatformInfo _platformInfo;
-  final AppInfo _appInfo;
 
   final String _token;
-  final String _tenantId;
 
-  final _typeConvert = 'convert';
+  void updateConfiguration({
+    MainFlavor? flavor,
+    bool? enable,
+    Locale? locale,
+  }) async {
+    final newFlavor = flavor ?? state.flavor;
+    final newAvailability = enable ?? state.enable;
+    final newLocale = locale ?? state.locale;
+    final newActions = locale != state.locale ? <MainFlavor, DemoActions>{} : state.actions;
 
-  Future<DemoData> _prepareRequest(String type) async {
-    final account = await _webtritApiClient.getUserInfo(_token);
-    _logger.info('_prepareRequest: $account');
-
-    return _webtritApiClient.createDemoData(DemoCredential(
-      type: _platformInfo.appType,
-      identifier: _appInfo.identifier,
-      email: account.email!,
-      tenantId: _tenantId,
-      action: type,
+    emit(state.copyWith(
+      flavor: newFlavor,
+      enable: newAvailability,
+      locale: newLocale,
+      actions: newActions,
     ));
   }
 
-  void _initializeConvertPbxUrl() async {
-    try {
-      final data = await _prepareRequest(_typeConvert);
+  void getActions() async {
+    if (!state.enable) return;
 
-      _logger.info('_initializeConvertPbxUrl: $data');
+    final flavorActions = Map.of(state.actions);
+    final flavor = state.flavor;
 
-      emit(state.copyWith(
-        convertPbxUrl: data.convertPbxUrl,
-      ));
-    } catch (e) {
-      _logger.warning('_initializeConvertPbxUrl: $e');
+    final userInfo = await _getUserInfo();
+
+    if (flavorActions[flavor]?.isIncomplete ?? true) {
+      try {
+        final actions = await _getActions(flavor, userInfo);
+        flavorActions[flavor] = DemoActions.complete(actions.actions);
+      } catch (e) {
+        flavorActions[flavor] = DemoActions.complete([]);
+      }
     }
+
+    emit(state.copyWith(
+      actions: flavorActions,
+      userInfo: userInfo,
+    ));
   }
 
-  void changeVisibleConvertedButton(bool visible) async {
-    emit(state.copyWith(showConvertedButton: visible));
+  Future<DemoCallToActionsResponse> _getActions(MainFlavor tab, UserInfo userInfo) async {
+    final callToActionParam = DemoCallToActionsParam(
+      email: userInfo.email!,
+      tab: tab.name,
+    );
+
+    final actions = _webtritApiClient.getCallToActions(
+      _token,
+      state.locale.toString(),
+      callToActionParam,
+    );
+
+    return actions;
   }
 
-  void openDemoWebScreen() async {
-    emit(state.copyWith(openDemoWebScreen: true));
-    emit(state.copyWith(openDemoWebScreen: false));
+  Future<UserInfo> _getUserInfo() async {
+    final account = state.userInfo ?? await _webtritApiClient.getUserInfo(_token);
+    return account;
   }
 }
