@@ -22,9 +22,7 @@ DemoCallToActionsParam _$DemoCallToActionsParamFromJson(
 /// @nodoc
 mixin _$DemoCallToActionsParam {
   String get email => throw _privateConstructorUsedError;
-  set email(String value) => throw _privateConstructorUsedError;
   String get tab => throw _privateConstructorUsedError;
-  set tab(String value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -121,14 +119,27 @@ class _$DemoCallToActionsParamImpl implements _DemoCallToActionsParam {
       _$$DemoCallToActionsParamImplFromJson(json);
 
   @override
-  String email;
+  final String email;
   @override
-  String tab;
+  final String tab;
 
   @override
   String toString() {
     return 'DemoCallToActionsParam(email: $email, tab: $tab)';
   }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$DemoCallToActionsParamImpl &&
+            (identical(other.email, email) || other.email == email) &&
+            (identical(other.tab, tab) || other.tab == tab));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, email, tab);
 
   @JsonKey(ignore: true)
   @override
@@ -147,18 +158,16 @@ class _$DemoCallToActionsParamImpl implements _DemoCallToActionsParam {
 
 abstract class _DemoCallToActionsParam implements DemoCallToActionsParam {
   factory _DemoCallToActionsParam(
-      {required String email,
-      required String tab}) = _$DemoCallToActionsParamImpl;
+      {required final String email,
+      required final String tab}) = _$DemoCallToActionsParamImpl;
 
   factory _DemoCallToActionsParam.fromJson(Map<String, dynamic> json) =
       _$DemoCallToActionsParamImpl.fromJson;
 
   @override
   String get email;
-  set email(String value);
   @override
   String get tab;
-  set tab(String value);
   @override
   @JsonKey(ignore: true)
   _$$DemoCallToActionsParamImplCopyWith<_$DemoCallToActionsParamImpl>

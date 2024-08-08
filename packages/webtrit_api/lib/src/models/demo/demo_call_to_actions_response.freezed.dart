@@ -23,8 +23,6 @@ DemoCallToActionsResponse _$DemoCallToActionsResponseFromJson(
 mixin _$DemoCallToActionsResponse {
   List<DemoCallToActionsResponseActions> get actions =>
       throw _privateConstructorUsedError;
-  set actions(List<DemoCallToActionsResponseActions> value) =>
-      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -95,7 +93,7 @@ class __$$DemoCallToActionsResponseImplCopyWithImpl<$Res>
   }) {
     return _then(_$DemoCallToActionsResponseImpl(
       actions: null == actions
-          ? _value.actions
+          ? _value._actions
           : actions // ignore: cast_nullable_to_non_nullable
               as List<DemoCallToActionsResponseActions>,
     ));
@@ -105,18 +103,38 @@ class __$$DemoCallToActionsResponseImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$DemoCallToActionsResponseImpl implements _DemoCallToActionsResponse {
-  _$DemoCallToActionsResponseImpl({required this.actions});
+  _$DemoCallToActionsResponseImpl(
+      {required final List<DemoCallToActionsResponseActions> actions})
+      : _actions = actions;
 
   factory _$DemoCallToActionsResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$DemoCallToActionsResponseImplFromJson(json);
 
+  final List<DemoCallToActionsResponseActions> _actions;
   @override
-  List<DemoCallToActionsResponseActions> actions;
+  List<DemoCallToActionsResponseActions> get actions {
+    if (_actions is EqualUnmodifiableListView) return _actions;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_actions);
+  }
 
   @override
   String toString() {
     return 'DemoCallToActionsResponse(actions: $actions)';
   }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$DemoCallToActionsResponseImpl &&
+            const DeepCollectionEquality().equals(other._actions, _actions));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_actions));
 
   @JsonKey(ignore: true)
   @override
@@ -135,7 +153,7 @@ class _$DemoCallToActionsResponseImpl implements _DemoCallToActionsResponse {
 
 abstract class _DemoCallToActionsResponse implements DemoCallToActionsResponse {
   factory _DemoCallToActionsResponse(
-          {required List<DemoCallToActionsResponseActions> actions}) =
+          {required final List<DemoCallToActionsResponseActions> actions}) =
       _$DemoCallToActionsResponseImpl;
 
   factory _DemoCallToActionsResponse.fromJson(Map<String, dynamic> json) =
@@ -143,7 +161,6 @@ abstract class _DemoCallToActionsResponse implements DemoCallToActionsResponse {
 
   @override
   List<DemoCallToActionsResponseActions> get actions;
-  set actions(List<DemoCallToActionsResponseActions> value);
   @override
   @JsonKey(ignore: true)
   _$$DemoCallToActionsResponseImplCopyWith<_$DemoCallToActionsResponseImpl>
@@ -157,18 +174,12 @@ DemoCallToActionsResponseActions _$DemoCallToActionsResponseActionsFromJson(
 
 /// @nodoc
 mixin _$DemoCallToActionsResponseActions {
+  String? get title => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
+  String get url => throw _privateConstructorUsedError;
   @JsonKey(name: 'extra_data')
   DemoCallToActionsResponseActionsExtraData get extraData =>
       throw _privateConstructorUsedError;
-  @JsonKey(name: 'extra_data')
-  set extraData(DemoCallToActionsResponseActionsExtraData value) =>
-      throw _privateConstructorUsedError;
-  String? get title => throw _privateConstructorUsedError;
-  set title(String? value) => throw _privateConstructorUsedError;
-  String? get description => throw _privateConstructorUsedError;
-  set description(String? value) => throw _privateConstructorUsedError;
-  String get url => throw _privateConstructorUsedError;
-  set url(String value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -185,11 +196,11 @@ abstract class $DemoCallToActionsResponseActionsCopyWith<$Res> {
           DemoCallToActionsResponseActions>;
   @useResult
   $Res call(
-      {@JsonKey(name: 'extra_data')
-      DemoCallToActionsResponseActionsExtraData extraData,
-      String? title,
+      {String? title,
       String? description,
-      String url});
+      String url,
+      @JsonKey(name: 'extra_data')
+      DemoCallToActionsResponseActionsExtraData extraData});
 
   $DemoCallToActionsResponseActionsExtraDataCopyWith<$Res> get extraData;
 }
@@ -208,16 +219,12 @@ class _$DemoCallToActionsResponseActionsCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? extraData = null,
     Object? title = freezed,
     Object? description = freezed,
     Object? url = null,
+    Object? extraData = null,
   }) {
     return _then(_value.copyWith(
-      extraData: null == extraData
-          ? _value.extraData
-          : extraData // ignore: cast_nullable_to_non_nullable
-              as DemoCallToActionsResponseActionsExtraData,
       title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -230,6 +237,10 @@ class _$DemoCallToActionsResponseActionsCopyWithImpl<$Res,
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
               as String,
+      extraData: null == extraData
+          ? _value.extraData
+          : extraData // ignore: cast_nullable_to_non_nullable
+              as DemoCallToActionsResponseActionsExtraData,
     ) as $Val);
   }
 
@@ -253,11 +264,11 @@ abstract class _$$DemoCallToActionsResponseActionsImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: 'extra_data')
-      DemoCallToActionsResponseActionsExtraData extraData,
-      String? title,
+      {String? title,
       String? description,
-      String url});
+      String url,
+      @JsonKey(name: 'extra_data')
+      DemoCallToActionsResponseActionsExtraData extraData});
 
   @override
   $DemoCallToActionsResponseActionsExtraDataCopyWith<$Res> get extraData;
@@ -276,16 +287,12 @@ class __$$DemoCallToActionsResponseActionsImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? extraData = null,
     Object? title = freezed,
     Object? description = freezed,
     Object? url = null,
+    Object? extraData = null,
   }) {
     return _then(_$DemoCallToActionsResponseActionsImpl(
-      extraData: null == extraData
-          ? _value.extraData
-          : extraData // ignore: cast_nullable_to_non_nullable
-              as DemoCallToActionsResponseActionsExtraData,
       title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -298,6 +305,10 @@ class __$$DemoCallToActionsResponseActionsImplCopyWithImpl<$Res>
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
               as String,
+      extraData: null == extraData
+          ? _value.extraData
+          : extraData // ignore: cast_nullable_to_non_nullable
+              as DemoCallToActionsResponseActionsExtraData,
     ));
   }
 }
@@ -307,29 +318,47 @@ class __$$DemoCallToActionsResponseActionsImplCopyWithImpl<$Res>
 class _$DemoCallToActionsResponseActionsImpl
     implements _DemoCallToActionsResponseActions {
   _$DemoCallToActionsResponseActionsImpl(
-      {@JsonKey(name: 'extra_data') required this.extraData,
-      this.title,
+      {this.title,
       this.description,
-      required this.url});
+      required this.url,
+      @JsonKey(name: 'extra_data') required this.extraData});
 
   factory _$DemoCallToActionsResponseActionsImpl.fromJson(
           Map<String, dynamic> json) =>
       _$$DemoCallToActionsResponseActionsImplFromJson(json);
 
   @override
+  final String? title;
+  @override
+  final String? description;
+  @override
+  final String url;
+  @override
   @JsonKey(name: 'extra_data')
-  DemoCallToActionsResponseActionsExtraData extraData;
-  @override
-  String? title;
-  @override
-  String? description;
-  @override
-  String url;
+  final DemoCallToActionsResponseActionsExtraData extraData;
 
   @override
   String toString() {
-    return 'DemoCallToActionsResponseActions(extraData: $extraData, title: $title, description: $description, url: $url)';
+    return 'DemoCallToActionsResponseActions(title: $title, description: $description, url: $url, extraData: $extraData)';
   }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$DemoCallToActionsResponseActionsImpl &&
+            (identical(other.title, title) || other.title == title) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
+            (identical(other.url, url) || other.url == url) &&
+            (identical(other.extraData, extraData) ||
+                other.extraData == extraData));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, title, description, url, extraData);
 
   @JsonKey(ignore: true)
   @override
@@ -350,30 +379,26 @@ class _$DemoCallToActionsResponseActionsImpl
 abstract class _DemoCallToActionsResponseActions
     implements DemoCallToActionsResponseActions {
   factory _DemoCallToActionsResponseActions(
-      {@JsonKey(name: 'extra_data')
-      required DemoCallToActionsResponseActionsExtraData extraData,
-      String? title,
-      String? description,
-      required String url}) = _$DemoCallToActionsResponseActionsImpl;
+          {final String? title,
+          final String? description,
+          required final String url,
+          @JsonKey(name: 'extra_data')
+          required final DemoCallToActionsResponseActionsExtraData extraData}) =
+      _$DemoCallToActionsResponseActionsImpl;
 
   factory _DemoCallToActionsResponseActions.fromJson(
           Map<String, dynamic> json) =
       _$DemoCallToActionsResponseActionsImpl.fromJson;
 
   @override
-  @JsonKey(name: 'extra_data')
-  DemoCallToActionsResponseActionsExtraData get extraData;
-  @JsonKey(name: 'extra_data')
-  set extraData(DemoCallToActionsResponseActionsExtraData value);
-  @override
   String? get title;
-  set title(String? value);
   @override
   String? get description;
-  set description(String? value);
   @override
   String get url;
-  set url(String value);
+  @override
+  @JsonKey(name: 'extra_data')
+  DemoCallToActionsResponseActionsExtraData get extraData;
   @override
   @JsonKey(ignore: true)
   _$$DemoCallToActionsResponseActionsImplCopyWith<
@@ -391,12 +416,8 @@ DemoCallToActionsResponseActionsExtraData
 mixin _$DemoCallToActionsResponseActionsExtraData {
   @JsonKey(name: 'api_token')
   String get apiToken => throw _privateConstructorUsedError;
-  @JsonKey(name: 'api_token')
-  set apiToken(String value) => throw _privateConstructorUsedError;
   @JsonKey(name: 'token_expires')
   String get tokenExpires => throw _privateConstructorUsedError;
-  @JsonKey(name: 'token_expires')
-  set tokenExpires(String value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -506,15 +527,30 @@ class _$DemoCallToActionsResponseActionsExtraDataImpl
 
   @override
   @JsonKey(name: 'api_token')
-  String apiToken;
+  final String apiToken;
   @override
   @JsonKey(name: 'token_expires')
-  String tokenExpires;
+  final String tokenExpires;
 
   @override
   String toString() {
     return 'DemoCallToActionsResponseActionsExtraData(apiToken: $apiToken, tokenExpires: $tokenExpires)';
   }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$DemoCallToActionsResponseActionsExtraDataImpl &&
+            (identical(other.apiToken, apiToken) ||
+                other.apiToken == apiToken) &&
+            (identical(other.tokenExpires, tokenExpires) ||
+                other.tokenExpires == tokenExpires));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, apiToken, tokenExpires);
 
   @JsonKey(ignore: true)
   @override
@@ -537,8 +573,8 @@ class _$DemoCallToActionsResponseActionsExtraDataImpl
 abstract class _DemoCallToActionsResponseActionsExtraData
     implements DemoCallToActionsResponseActionsExtraData {
   factory _DemoCallToActionsResponseActionsExtraData(
-          {@JsonKey(name: 'api_token') required String apiToken,
-          @JsonKey(name: 'token_expires') required String tokenExpires}) =
+          {@JsonKey(name: 'api_token') required final String apiToken,
+          @JsonKey(name: 'token_expires') required final String tokenExpires}) =
       _$DemoCallToActionsResponseActionsExtraDataImpl;
 
   factory _DemoCallToActionsResponseActionsExtraData.fromJson(
@@ -548,13 +584,9 @@ abstract class _DemoCallToActionsResponseActionsExtraData
   @override
   @JsonKey(name: 'api_token')
   String get apiToken;
-  @JsonKey(name: 'api_token')
-  set apiToken(String value);
   @override
   @JsonKey(name: 'token_expires')
   String get tokenExpires;
-  @JsonKey(name: 'token_expires')
-  set tokenExpires(String value);
   @override
   @JsonKey(ignore: true)
   _$$DemoCallToActionsResponseActionsExtraDataImplCopyWith<

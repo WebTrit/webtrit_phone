@@ -4,7 +4,7 @@ part 'demo_call_to_actions_param.freezed.dart';
 
 part 'demo_call_to_actions_param.g.dart';
 
-@unfreezed
+@freezed
 class DemoCallToActionsParam with _$DemoCallToActionsParam {
   factory DemoCallToActionsParam({
     required String email,

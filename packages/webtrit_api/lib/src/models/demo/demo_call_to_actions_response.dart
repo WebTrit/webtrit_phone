@@ -6,7 +6,7 @@ part 'demo_call_to_actions_response.freezed.dart';
 
 part 'demo_call_to_actions_response.g.dart';
 
-@unfreezed
+@freezed
 class DemoCallToActionsResponse with _$DemoCallToActionsResponse {
   factory DemoCallToActionsResponse({
     required List<DemoCallToActionsResponseActions> actions,
@@ -15,7 +15,7 @@ class DemoCallToActionsResponse with _$DemoCallToActionsResponse {
   factory DemoCallToActionsResponse.fromJson(Map<String, dynamic> json) => _$DemoCallToActionsResponseFromJson(json);
 }
 
-@unfreezed
+@freezed
 class DemoCallToActionsResponseActions with _$DemoCallToActionsResponseActions {
   factory DemoCallToActionsResponseActions({
     String? title,
@@ -28,7 +28,7 @@ class DemoCallToActionsResponseActions with _$DemoCallToActionsResponseActions {
       _$DemoCallToActionsResponseActionsFromJson(json);
 }
 
-@unfreezed
+@freezed
 class DemoCallToActionsResponseActionsExtraData with _$DemoCallToActionsResponseActionsExtraData {
   factory DemoCallToActionsResponseActionsExtraData({
     @JsonKey(name: 'api_token') required String apiToken,
