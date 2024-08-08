@@ -2739,6 +2739,8 @@ mixin _$ContactsDaoMixin on DatabaseAccessor<AppDatabase> {
   $ContactsTableTable get contactsTable => attachedDatabase.contactsTable;
   $ContactPhonesTableTable get contactPhonesTable =>
       attachedDatabase.contactPhonesTable;
+  $ContactEmailsTableTable get contactEmailsTable =>
+      attachedDatabase.contactEmailsTable;
 }
 mixin _$ContactPhonesDaoMixin on DatabaseAccessor<AppDatabase> {
   $ContactsTableTable get contactsTable => attachedDatabase.contactsTable;

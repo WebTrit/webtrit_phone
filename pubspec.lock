@@ -386,10 +386,10 @@ packages:
     dependency: transitive
     description:
       name: drift
-      sha256: "6acedc562ffeed308049f78fb1906abad3d65714580b6745441ee6d50ec564cd"
+      sha256: "4e0ffee40d23f0b809e6cff1ad202886f51d629649073ed42d9cd1d194ea943e"
       url: "https://pub.dev"
     source: hosted
-    version: "2.18.0"
+    version: "2.19.1+1"
   equatable:
     dependency: "direct main"
     description:
@@ -758,6 +758,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.1"
+  gravatar_utils:
+    dependency: "direct main"
+    description:
+      name: gravatar_utils
+      sha256: "39030e331ce34b278e6a6859ed97ea8d3d5ad3011f9a859ede5907849564246d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   html:
     dependency: transitive
     description:
@@ -1396,18 +1404,18 @@ packages:
     dependency: transitive
     description:
       name: sqlite3
-      sha256: b384f598b813b347c5a7e5ffad82cbaff1bec3d1561af267041e66f6f0899295
+      sha256: fde692580bee3379374af1f624eb3e113ab2865ecb161dbe2d8ac2de9735dbdb
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.3"
+    version: "2.4.5"
   sqlite3_flutter_libs:
     dependency: transitive
     description:
       name: sqlite3_flutter_libs
-      sha256: fb2a106a2ea6042fe57de2c47074cc31539a941819c91e105b864744605da3f5
+      sha256: "62bbb4073edbcdf53f40c80775f33eea01d301b7b81417e5b3fb7395416258c1"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.21"
+    version: "0.5.24"
   ssl_certificates:
     dependency: "direct main"
     description:
@@ -1860,5 +1868,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.3.0 <4.0.0"
+  dart: ">=3.4.0 <4.0.0"
   flutter: ">=3.19.2"
