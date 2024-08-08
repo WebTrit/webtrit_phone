@@ -111,7 +111,8 @@ class __$$DemoCallToActionsParamImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(fieldRename: FieldRename.snake)
 class _$DemoCallToActionsParamImpl implements _DemoCallToActionsParam {
   _$DemoCallToActionsParamImpl({required this.email, required this.tab});
 

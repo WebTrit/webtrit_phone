@@ -101,7 +101,8 @@ class __$$DemoCallToActionsResponseImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(fieldRename: FieldRename.snake)
 class _$DemoCallToActionsResponseImpl implements _DemoCallToActionsResponse {
   _$DemoCallToActionsResponseImpl(
       {required final List<DemoCallToActionsResponseActions> actions})
@@ -314,7 +315,8 @@ class __$$DemoCallToActionsResponseActionsImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(fieldRename: FieldRename.snake)
 class _$DemoCallToActionsResponseActionsImpl
     implements _DemoCallToActionsResponseActions {
   _$DemoCallToActionsResponseActionsImpl(
@@ -514,7 +516,8 @@ class __$$DemoCallToActionsResponseActionsExtraDataImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(fieldRename: FieldRename.snake)
 class _$DemoCallToActionsResponseActionsExtraDataImpl
     implements _DemoCallToActionsResponseActionsExtraData {
   _$DemoCallToActionsResponseActionsExtraDataImpl(

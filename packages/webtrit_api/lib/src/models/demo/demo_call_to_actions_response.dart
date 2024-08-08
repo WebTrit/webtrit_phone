@@ -8,6 +8,7 @@ part 'demo_call_to_actions_response.g.dart';
 
 @freezed
 class DemoCallToActionsResponse with _$DemoCallToActionsResponse {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   factory DemoCallToActionsResponse({
     required List<DemoCallToActionsResponseActions> actions,
   }) = _DemoCallToActionsResponse;
@@ -17,6 +18,7 @@ class DemoCallToActionsResponse with _$DemoCallToActionsResponse {
 
 @freezed
 class DemoCallToActionsResponseActions with _$DemoCallToActionsResponseActions {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   factory DemoCallToActionsResponseActions({
     String? title,
     String? description,
@@ -30,6 +32,7 @@ class DemoCallToActionsResponseActions with _$DemoCallToActionsResponseActions {
 
 @freezed
 class DemoCallToActionsResponseActionsExtraData with _$DemoCallToActionsResponseActionsExtraData {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   factory DemoCallToActionsResponseActionsExtraData({
     @JsonKey(name: 'api_token') required String apiToken,
     @JsonKey(name: 'token_expires') required String tokenExpires,
