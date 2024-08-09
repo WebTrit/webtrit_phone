@@ -748,13 +748,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         return activeCall.copyWith(localStream: localStream);
       }));
 
-      if (callAlreadyAnswered) {
-        add(CallControlEvent.answered(activeCall.callId));
-      }
-
-      if (callAlreadyTerminated) {
-        add(CallControlEvent.ended(activeCall.callId));
-      }
+      Future.delayed(Duration.zero, () {
+        if (callAlreadyAnswered) {
+          add(CallControlEvent.answered(activeCall.callId));
+        } else if (callAlreadyTerminated) {
+          add(CallControlEvent.ended(activeCall.callId));
+        }
+      });
     } catch (e, stackTrace) {
       _logger.warning('__onCallSignalingEventIncoming _getUserMedia', e, stackTrace);
 
