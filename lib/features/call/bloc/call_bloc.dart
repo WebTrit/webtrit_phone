@@ -748,6 +748,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         return activeCall.copyWith(localStream: localStream);
       }));
 
+      // Defer the event execution to the end of the event loop to avoid exceptions like CallkeepCallRequestError.internal.
+      // Can occur when the user quickly answers or ends a call.
+      // TODO(Serdun): Investigate how it can be improved without using Future.delayed.
       Future.delayed(Duration.zero, () {
         if (callAlreadyAnswered) {
           add(CallControlEvent.answered(activeCall.callId));
