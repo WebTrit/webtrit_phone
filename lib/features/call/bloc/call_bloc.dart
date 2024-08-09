@@ -709,25 +709,21 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         ? InviteToAttendedTransfer(replaceCallId: event.replaceCallId!, referredBy: event.referredBy!)
         : null;
 
+    final newActiveCall = ActiveCall(
+      direction: Direction.incoming,
+      line: event.line,
+      callId: event.callId,
+      handle: handle,
+      displayName: event.callerDisplayName,
+      video: video,
+      createdTime: clock.now(),
+      transfer: transfer,
+    );
+
     if (state.retrieveActiveCall(event.callId) != null) {
-      emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
-        return activeCall.copyWith(
-          line: event.line,
-          transfer: transfer,
-          createdTime: clock.now(),
-        );
-      }));
+      emit(state.copyWithMappedActiveCall(event.callId, (activeCall) => newActiveCall));
     } else {
-      emit(state.copyWithPushActiveCall(ActiveCall(
-        direction: Direction.incoming,
-        line: event.line,
-        callId: event.callId,
-        handle: handle,
-        displayName: event.callerDisplayName,
-        video: video,
-        createdTime: clock.now(),
-        transfer: transfer,
-      )));
+      emit(state.copyWithPushActiveCall(newActiveCall));
     }
 
     final activeCall = state.retrieveActiveCall(event.callId)!;
