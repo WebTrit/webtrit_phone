@@ -30,6 +30,7 @@ class ContactsExternalTab extends StatelessWidget {
               return ContactTile(
                 displayName: contact.name,
                 registered: contact.registered,
+                thumbnail: contact.thumbnail,
                 thumbnailUrl: contact.thumbnailUrl,
                 onTap: () {
                   context.router.navigate(ContactScreenPageRoute(
