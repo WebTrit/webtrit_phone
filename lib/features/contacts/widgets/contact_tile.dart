@@ -31,9 +31,9 @@ class ContactTile extends StatelessWidget {
       leading: LeadingAvatar(
         username: displayName,
         thumbnail: thumbnail,
+        thumbnailUrl: thumbnailUrl,
         registered: registered,
         smart: smart,
-        thumbnailUrl: thumbnailUrl,
       ),
       title: Text(displayName),
       onTap: onTap,
