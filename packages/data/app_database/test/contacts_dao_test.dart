@@ -121,7 +121,7 @@ void main() {
 
   group('watchAllContactsWithPhonesAndEmailsLikeExt', () {
     test('matching "Тарас"', () async {
-      final likeContactsStream = database.contactsDao.watchAllContactsWithPhonesAndEmailsExt(['Тарас']);
+      final likeContactsStream = database.contactsDao.watchAllContactsExt(['Тарас']);
       final likeContacts = await likeContactsStream.first;
 
       expect(likeContacts.length, 1);
@@ -134,7 +134,7 @@ void main() {
     });
 
     test('matching "шев"', () async {
-      final likeContactsStream = database.contactsDao.watchAllContactsWithPhonesAndEmailsExt(['шев']);
+      final likeContactsStream = database.contactsDao.watchAllContactsExt(['шев']);
       final likeContacts = await likeContactsStream.first;
 
       expect(likeContacts.length, 1);
@@ -147,7 +147,7 @@ void main() {
     });
 
     test('matching "Smit"', () async {
-      final likeContactsStream = database.contactsDao.watchAllContactsWithPhonesAndEmailsExt(['Smit']);
+      final likeContactsStream = database.contactsDao.watchAllContactsExt(['Smit']);
       final likeContacts = await likeContactsStream.first;
 
       expect(likeContacts.length, 1);
@@ -161,7 +161,7 @@ void main() {
     });
 
     test('matching "mar"', () async {
-      final likeContactsStream = database.contactsDao.watchAllContactsWithPhonesAndEmailsExt(['mar']);
+      final likeContactsStream = database.contactsDao.watchAllContactsExt(['mar']);
       final likeContacts = await likeContactsStream.first;
 
       expect(likeContacts.length, 1);
@@ -172,7 +172,7 @@ void main() {
     });
 
     test('all contacts', () async {
-      final allContactsStream = database.contactsDao.watchAllContactsWithPhonesAndEmailsExt();
+      final allContactsStream = database.contactsDao.watchAllContactsExt();
       final allContacts = await allContactsStream.first;
 
       expect(allContacts.length, 3);

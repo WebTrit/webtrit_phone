@@ -16,11 +16,11 @@ class ContactsRepository {
     final searchBits = search.split(' ').where((value) => value.isNotEmpty);
     if (searchBits.isEmpty) {
       return _appDatabase.contactsDao
-          .watchAllContactsWithPhonesAndEmailsExt(null, sourceType?.toData())
+          .watchAllContactsExt(null, sourceType?.toData())
           .map(((contactDatas) => contactDatas.map(_toContactWithPhonesAndEmails).toList()));
     } else {
       return _appDatabase.contactsDao
-          .watchAllContactsWithPhonesAndEmailsExt(searchBits, sourceType?.toData())
+          .watchAllContactsExt(searchBits, sourceType?.toData())
           .map(((contactDatas) => contactDatas.map(_toContactWithPhonesAndEmails).toList()));
     }
   }

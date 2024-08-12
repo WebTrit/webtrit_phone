@@ -316,7 +316,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
     return (select(contactsTable)..whereSamePrimaryKey(contact)).watchSingle();
   }
 
-  Stream<List<ContactWithPhonesAndEmailsData>> watchAllContactsWithPhonesAndEmailsExt([
+  Stream<List<ContactWithPhonesAndEmailsData>> watchAllContactsExt([
     Iterable<String>? searchBits,
     ContactSourceTypeEnum? sourceType,
   ]) {
