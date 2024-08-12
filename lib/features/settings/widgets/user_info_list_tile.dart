@@ -4,6 +4,7 @@ import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 const _kHoldSpaceData = ' ';
@@ -48,6 +49,7 @@ class UserInfoListTile extends StatelessWidget {
           children: [
             LeadingAvatar(
               username: info?.name ?? '?',
+              thumbnailUrl: gravatarThumbnailUrl(info?.email),
               radius: radius,
             ),
             const SizedBox(width: 8),
