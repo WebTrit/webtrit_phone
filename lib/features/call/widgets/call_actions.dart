@@ -19,6 +19,7 @@ class CallActions extends StatefulWidget {
     required this.wasAccepted,
     required this.wasHungUp,
     required this.cameraValue,
+    required this.inviteToAttendedTransfer,
     this.onCameraChanged,
     required this.mutedValue,
     this.onMutedChanged,
@@ -46,6 +47,7 @@ class CallActions extends StatefulWidget {
   final bool wasAccepted;
   final bool wasHungUp;
   final bool cameraValue;
+  final bool inviteToAttendedTransfer;
   final ValueChanged<bool>? onCameraChanged;
   final bool mutedValue;
   final ValueChanged<bool>? onMutedChanged;
@@ -164,7 +166,9 @@ class _CallActionsState extends State<CallActions> {
           minimumSize: Size.square(_dimension),
           children: [
             Tooltip(
-              message: context.l10n.call_CallActionsTooltip_hangup,
+              message: widget.inviteToAttendedTransfer
+                  ? context.l10n.call_CallActionsTooltip_decline_inviteToAttendedTransfer
+                  : context.l10n.call_CallActionsTooltip_hangup,
               child: TextButton(
                 onPressed: widget.onHangupPressed,
                 style: style.hangup,
@@ -173,7 +177,9 @@ class _CallActionsState extends State<CallActions> {
             ),
             const SizedBox(),
             Tooltip(
-              message: context.l10n.call_CallActionsTooltip_accept,
+              message: widget.inviteToAttendedTransfer
+                  ? context.l10n.call_CallActionsTooltip_accept_inviteToAttendedTransfer
+                  : context.l10n.call_CallActionsTooltip_accept,
               child: TextButton(
                 onPressed: widget.onAcceptPressed,
                 style: style.callStart,
@@ -330,16 +336,17 @@ class _CallActionsState extends State<CallActions> {
                 offset: Offset(_dimension + 8, 0),
                 items: [
                   for (final call in widget.transferableCalls)
-                    CallPopupMenuItem(
-                      onTap: () => onAttendedTransferSubmitted?.call(call),
-                      text: call.displayName ?? call.handle.value,
-                      icon: Icon(
-                        Icons.phone_paused_outlined,
-                        size: themeData.textTheme.bodyLarge!.fontSize,
-                        color: themeData.textTheme.bodyMedium!.color,
+                    if (onAttendedTransferSubmitted != null)
+                      CallPopupMenuItem(
+                        onTap: () => onAttendedTransferSubmitted.call(call),
+                        text: call.displayName ?? call.handle.value,
+                        icon: Icon(
+                          Icons.phone_paused_outlined,
+                          size: themeData.textTheme.bodyLarge!.fontSize,
+                          color: themeData.textTheme.bodyMedium!.color,
+                        ),
+                        textStyle: themeData.textTheme.bodyMedium,
                       ),
-                      textStyle: themeData.textTheme.bodyMedium,
-                    ),
                   CallPopupMenuItem(
                     onTap: onBlindTransferInitiated,
                     text: context.l10n.call_CallActionsTooltip_transfer_choose,
@@ -376,16 +383,17 @@ class _CallActionsState extends State<CallActions> {
                     ),
                     textStyle: themeData.textTheme.bodyMedium,
                   ),
-                  CallPopupMenuItem(
-                    onTap: onAttendedTransferInitiated,
-                    text: context.l10n.call_CallActionsTooltip_attended_transfer,
-                    icon: Icon(
-                      Icons.phone_forwarded_outlined,
-                      size: themeData.textTheme.bodyLarge!.fontSize,
-                      color: themeData.textTheme.bodyMedium!.color,
-                    ),
-                    textStyle: themeData.textTheme.bodyMedium,
-                  )
+                  if (onAttendedTransferInitiated != null)
+                    CallPopupMenuItem(
+                      onTap: onAttendedTransferInitiated,
+                      text: context.l10n.call_CallActionsTooltip_attended_transfer,
+                      icon: Icon(
+                        Icons.phone_forwarded_outlined,
+                        size: themeData.textTheme.bodyLarge!.fontSize,
+                        color: themeData.textTheme.bodyMedium!.color,
+                      ),
+                      textStyle: themeData.textTheme.bodyMedium,
+                    )
                 ],
                 child: IgnorePointer(
                   child: TextButton(

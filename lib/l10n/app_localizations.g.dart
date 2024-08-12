@@ -155,11 +155,23 @@ abstract class AppLocalizations {
   /// **'Accept'**
   String get call_CallActionsTooltip_accept;
 
+  /// No description provided for @call_CallActionsTooltip_accept_inviteToAttendedTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept transfer'**
+  String get call_CallActionsTooltip_accept_inviteToAttendedTransfer;
+
   /// No description provided for @call_CallActionsTooltip_attended_transfer.
   ///
   /// In en, this message translates to:
   /// **'Attended transfer'**
   String get call_CallActionsTooltip_attended_transfer;
+
+  /// No description provided for @call_CallActionsTooltip_decline_inviteToAttendedTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline transfer'**
+  String get call_CallActionsTooltip_decline_inviteToAttendedTransfer;
 
   /// No description provided for @call_CallActionsTooltip_disableCamera.
   ///
@@ -275,11 +287,23 @@ abstract class AppLocalizations {
   /// **'Incoming call'**
   String get call_description_incoming;
 
+  /// No description provided for @call_description_inviteToAttendedTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve been invited to join an attended transfer call'**
+  String get call_description_inviteToAttendedTransfer;
+
   /// No description provided for @call_description_outgoing.
   ///
   /// In en, this message translates to:
   /// **'Outgoing call'**
   String get call_description_outgoing;
+
+  /// No description provided for @call_description_requestToAttendedTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer request'**
+  String get call_description_requestToAttendedTransfer;
 
   /// No description provided for @call_description_transferProcessing.
   ///
@@ -500,7 +524,7 @@ abstract class AppLocalizations {
   /// No description provided for @favorites_BodyCenter_empty.
   ///
   /// In en, this message translates to:
-  /// **'Currently, you have no favorite numbers.\nAdd favorites from Contacts using the star icon.'**
+  /// **'Currently, you have no favorite numbers.\nAdd favorites from Contacts using the star icon'**
   String get favorites_BodyCenter_empty;
 
   /// No description provided for @favorites_DeleteConfirmDialog_content.
@@ -854,7 +878,7 @@ abstract class AppLocalizations {
   /// No description provided for @login_Text_signupRequestPostDescriptionDemo.
   ///
   /// In en, this message translates to:
-  /// **'If you do not have an account yet, it will be automatically created for you.'**
+  /// **'If you do not have an account yet, it will be automatically created for you'**
   String get login_Text_signupRequestPostDescriptionDemo;
 
   /// No description provided for @login_Text_signupRequestPreDescription.
@@ -1382,7 +1406,7 @@ abstract class AppLocalizations {
   /// No description provided for @user_agreement_agrement_link.
   ///
   /// In en, this message translates to:
-  /// **'The terms and condition of the agreement'**
+  /// **'The terms and conditions of the agreement'**
   String get user_agreement_agrement_link;
 
   /// No description provided for @user_agreement_button_text.
@@ -1432,6 +1456,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Web resource error'**
   String get webRegistration_ErrorAcknowledgeDialog_title;
+
+  /// No description provided for @account_selfCarePasswordExpired_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Your self-care password has expired. Please update it using your self-care.\nUntil the password is changed, access to the service will be limited.'**
+  String get account_selfCarePasswordExpired_message;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

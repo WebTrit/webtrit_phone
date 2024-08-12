@@ -13,20 +13,18 @@ export 'actionpad_styles.dart';
 class Actionpad extends StatelessWidget {
   const Actionpad({
     super.key,
-    this.video = false,
     this.transfer = false,
-    this.onCallPressed,
-    this.onCallLongPress,
+    this.onAudioCallPressed,
+    this.onVideoCallPressed,
     this.onTransferPressed,
     this.onBackspacePressed,
     this.onBackspaceLongPress,
     this.style,
   });
 
-  final bool video;
   final bool transfer;
-  final VoidCallback? onCallPressed;
-  final VoidCallback? onCallLongPress;
+  final VoidCallback? onAudioCallPressed;
+  final VoidCallback? onVideoCallPressed;
   final VoidCallback? onTransferPressed;
   final VoidCallback? onBackspacePressed;
   final VoidCallback? onBackspaceLongPress;
@@ -44,17 +42,25 @@ class Actionpad extends StatelessWidget {
     return TextButtonsTable(
       minimumSize: Size.square(minimumDimension),
       children: [
-        const SizedBox(),
+        Visibility(
+          visible: !transfer,
+          child: Transform.scale(
+            scale: .75,
+            child: TextButton(
+              onPressed: onVideoCallPressed,
+              style: localStyle?.callStart,
+              child: Icon(
+                Icons.videocam,
+                size: Theme.of(context).textTheme.displayMedium!.fontSize,
+              ),
+            ),
+          ),
+        ),
         TextButton(
-          onPressed: transfer ? onTransferPressed : onCallPressed,
-          onLongPress: transfer ? null : onCallLongPress,
+          onPressed: transfer ? onTransferPressed : onAudioCallPressed,
           style: transfer ? localStyle?.callTransfer : localStyle?.callStart,
           child: Icon(
-            transfer
-                ? Icons.phone_forwarded
-                : video
-                    ? Icons.videocam
-                    : Icons.call,
+            transfer ? Icons.phone_forwarded : Icons.call,
             size: Theme.of(context).textTheme.displayMedium!.fontSize,
           ),
         ),

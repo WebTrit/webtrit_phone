@@ -7,30 +7,17 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
-import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/core_version.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 import '../login.dart';
 
 part 'login_cubit.freezed.dart';
 
 part 'login_state.dart';
-
-typedef WebtritApiClientFactory = WebtritApiClient Function(String coreUrl, String tenantId);
-
-WebtritApiClient defaultCreateWebtritApiClient(String coreUrl, String tenantId) {
-  final appCertificates = AppCertificates();
-
-  return WebtritApiClient(
-    Uri.parse(coreUrl),
-    tenantId,
-    connectionTimeout: kApiClientConnectionTimeout,
-    certs: appCertificates.trustedCertificates,
-  );
-}
 
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit({

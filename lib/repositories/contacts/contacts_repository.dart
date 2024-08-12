@@ -61,6 +61,7 @@ class ContactsRepository {
       firstName: data.firstName,
       lastName: data.lastName,
       aliasName: data.aliasName,
+      thumbnail: data.thumbnail,
     );
   }
 

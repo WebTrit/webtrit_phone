@@ -616,6 +616,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       createdTime: clock.now(),
     )));
 
+    // Function to verify speaker availability for the upcoming event, ensuring the speaker button is correctly enabled or disabled
+    add(const _NavigatorMediaDevicesChange());
+
     // the rest logic implemented within _onSignalingStateHandshake on IncomingCallEvent from call logs processing
   }
 
@@ -682,45 +685,45 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       hasVideo: video,
     );
 
-    if (error != null) {
-      // Check if a call instance already exists in the callkeep, which might have been added via push notifications
-      // before the signaling was initialized.
-      final callAlreadyExists = error == CallkeepIncomingCallError.callIdAlreadyExists;
+    // Check if a call instance already exists in the callkeep, which might have been added via push notifications
+    // before the signaling was initialized.
+    final callAlreadyExists = error == CallkeepIncomingCallError.callIdAlreadyExists;
 
-      // Check if a call instance already exists in the callkeep, which might have been added via push notifications
-      // before the signaling  was initialized. Also, check if the call status has been changed to "answered,"
-      // indicating it can be triggered by pressing the answer button in the notification.
-      final callAlreadyAnswered = error == CallkeepIncomingCallError.callIdAlreadyExistsAndAnswered;
+    // Check if a call instance already exists in the callkeep, which might have been added via push notifications
+    // before the signaling  was initialized. Also, check if the call status has been changed to "answered,"
+    // indicating it can be triggered by pressing the answer button in the notification.
+    final callAlreadyAnswered = error == CallkeepIncomingCallError.callIdAlreadyExistsAndAnswered;
 
-      // Check if a call instance already terminated in the callkeep, which might have been added via push notifications
-      // before the signaling  was initialized. Also, check if the call status has been changed to "terminated"
-      // indicating it can be triggered by pressing the decline button in the notification or flutter ui.
-      final callAlreadyTerminated = error == CallkeepIncomingCallError.callIdAlreadyTerminated;
+    // Check if a call instance already terminated in the callkeep, which might have been added via push notifications
+    // before the signaling  was initialized. Also, check if the call status has been changed to "terminated"
+    // indicating it can be triggered by pressing the decline button in the notification or flutter ui.
+    final callAlreadyTerminated = error == CallkeepIncomingCallError.callIdAlreadyTerminated;
 
-      if (callAlreadyExists || callAlreadyAnswered || callAlreadyTerminated) {
-        emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
-          var updatedActiveCall = activeCall.copyWith(line: event.line);
+    if (error != null && !callAlreadyExists && !callAlreadyAnswered && !callAlreadyTerminated) {
+      _logger.warning('__onCallSignalingEventIncoming reportNewIncomingCall error: $error');
+      // TODO: implement correct incoming call hangup (take into account that _signalingClient could be disconnected)
+      return;
+    }
 
-          if (callAlreadyAnswered) _perform(_CallPerformEvent.answered(activeCall.callId));
-          if (callAlreadyTerminated) _perform(_CallPerformEvent.ended(activeCall.callId));
+    final transfer = (event.referredBy != null && event.replaceCallId != null)
+        ? InviteToAttendedTransfer(replaceCallId: event.replaceCallId!, referredBy: event.referredBy!)
+        : null;
 
-          return updatedActiveCall;
-        }));
-      } else {
-        _logger.warning('__onCallSignalingEventIncoming reportNewIncomingCall error: $error');
-        // TODO: implement correct incoming call hangup (take into account that _signalingClient could be disconnected)
-        return;
-      }
+    final newActiveCall = ActiveCall(
+      direction: Direction.incoming,
+      line: event.line,
+      callId: event.callId,
+      handle: handle,
+      displayName: event.callerDisplayName,
+      video: video,
+      createdTime: clock.now(),
+      transfer: transfer,
+    );
+
+    if (state.retrieveActiveCall(event.callId) != null) {
+      emit(state.copyWithMappedActiveCall(event.callId, (activeCall) => newActiveCall));
     } else {
-      emit(state.copyWithPushActiveCall(ActiveCall(
-        direction: Direction.incoming,
-        line: event.line,
-        callId: event.callId,
-        handle: handle,
-        displayName: event.callerDisplayName,
-        video: video,
-        createdTime: clock.now(),
-      )));
+      emit(state.copyWithPushActiveCall(newActiveCall));
     }
 
     final activeCall = state.retrieveActiveCall(event.callId)!;
@@ -744,6 +747,17 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       emit(state.copyWithMappedActiveCall(event.callId, (activeCall) {
         return activeCall.copyWith(localStream: localStream);
       }));
+
+      // Defer the event execution to the end of the event loop to avoid exceptions like CallkeepCallRequestError.internal.
+      // Can occur when the user quickly answers or ends a call.
+      // TODO(Serdun): Investigate how it can be improved without using Future.delayed.
+      Future.delayed(Duration.zero, () {
+        if (callAlreadyAnswered) {
+          add(CallControlEvent.answered(activeCall.callId));
+        } else if (callAlreadyTerminated) {
+          add(CallControlEvent.ended(activeCall.callId));
+        }
+      });
     } catch (e, stackTrace) {
       _logger.warning('__onCallSignalingEventIncoming _getUserMedia', e, stackTrace);
 
@@ -948,10 +962,27 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallSignalingEventNotify event,
     Emitter<CallState> emit,
   ) async {
-    // TODO: add processing of NOTIFY messages as needed
-    //       for example `event.notify == 'refer' && event.contentType == 'message/sipfrag' && event.content.capitalize.contains('SIP/2.0 200 OK')`
-
     _logger.fine('__onCallSignalingEventNotify: $event');
+
+    _handleSignalingEventCompleteTransferNotification(event);
+  }
+
+  // Handles NOTIFY events indicating the completion of a call transfer.
+  // Triggered when a 'refer' NOTIFY message with 'SIP/2.0 200 OK' content and
+  // 'terminated' subscription state is received, indicating a successful transfer.
+  // This was the original call (call A) that was transferred. Notify events indicate
+  // the transfer status ('100 Trying', '200 OK'), but the call may not close
+  // automatically as it could be transferred to another session or line.
+  void _handleSignalingEventCompleteTransferNotification(_CallSignalingEventNotify event) {
+    if (event.notify == NotifyType.refer &&
+        event.contentType == NotifyContentType.messageSipfrag &&
+        NotifyContent.match200OK(event.content) &&
+        event.subscriptionState == SubscriptionState.terminated) {
+      // Verifies if the original call line is currently active in the state
+      if (state.activeCalls.any((it) => it.callId == event.callId)) {
+        add(CallControlEvent.ended(event.callId));
+      }
+    }
   }
 
   Future<void> __onCallSignalingEventRegistering(
@@ -1172,7 +1203,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     newState = newState.copyWithMappedActiveCall(event.callId, (activeCall) {
       return activeCall.copyWith(
-        transfer: Transfer.blindTransferInitiated(),
+        transfer: const Transfer.blindTransferInitiated(),
       );
     });
 
@@ -1465,6 +1496,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     try {
       await state.performOnActiveCall(event.callId, (activeCall) async {
+        // Condition occur when the user interacts with a push notification before signaling is properly initialized.
+        // In this case, the CallKeep method "reportNewIncomingCall" may return callIdAlreadyExistsAndAnswered.
         if (activeCall.line == _kUndefinedLine) return;
 
         final peerConnection = await _peerConnectionRetrieve(activeCall.callId);
@@ -1496,6 +1529,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallPerformEventEnded event,
     Emitter<CallState> emit,
   ) async {
+    // Condition occur when the user interacts with a push notification before signaling is properly initialized.
+    // In this case, the CallKeep method "reportNewIncomingCall" may return callIdAlreadyTerminated.
+    if (state.retrieveActiveCall(event.callId)?.line == _kUndefinedLine) return;
+
     if (state.retrieveActiveCall(event.callId)?.wasHungUp == true) {
       // TODO: There's an issue where the user might have already ended the call, but the active call screen remains visible.
       if (state.isActive) {

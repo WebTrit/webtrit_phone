@@ -50,6 +50,12 @@ class $ContactsTableTable extends ContactsTable
   late final GeneratedColumn<String> aliasName = GeneratedColumn<String>(
       'alias_name', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _thumbnailMeta =
+      const VerificationMeta('thumbnail');
+  @override
+  late final GeneratedColumn<Uint8List> thumbnail = GeneratedColumn<Uint8List>(
+      'thumbnail', aliasedName, true,
+      type: DriftSqlType.blob, requiredDuringInsert: false);
   static const VerificationMeta _registeredMeta =
       const VerificationMeta('registered');
   @override
@@ -79,6 +85,7 @@ class $ContactsTableTable extends ContactsTable
         firstName,
         lastName,
         aliasName,
+        thumbnail,
         registered,
         insertedAt,
         updatedAt
@@ -114,6 +121,10 @@ class $ContactsTableTable extends ContactsTable
     if (data.containsKey('alias_name')) {
       context.handle(_aliasNameMeta,
           aliasName.isAcceptableOrUnknown(data['alias_name']!, _aliasNameMeta));
+    }
+    if (data.containsKey('thumbnail')) {
+      context.handle(_thumbnailMeta,
+          thumbnail.isAcceptableOrUnknown(data['thumbnail']!, _thumbnailMeta));
     }
     if (data.containsKey('registered')) {
       context.handle(
@@ -153,6 +164,8 @@ class $ContactsTableTable extends ContactsTable
           .read(DriftSqlType.string, data['${effectivePrefix}last_name']),
       aliasName: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}alias_name']),
+      thumbnail: attachedDatabase.typeMapping
+          .read(DriftSqlType.blob, data['${effectivePrefix}thumbnail']),
       registered: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}registered']),
       insertedAt: attachedDatabase.typeMapping
@@ -179,6 +192,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
   final String? firstName;
   final String? lastName;
   final String? aliasName;
+  final Uint8List? thumbnail;
   final bool? registered;
   final DateTime? insertedAt;
   final DateTime? updatedAt;
@@ -189,6 +203,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       this.firstName,
       this.lastName,
       this.aliasName,
+      this.thumbnail,
       this.registered,
       this.insertedAt,
       this.updatedAt});
@@ -209,6 +224,9 @@ class ContactData extends DataClass implements Insertable<ContactData> {
     }
     if (!nullToAbsent || aliasName != null) {
       map['alias_name'] = Variable<String>(aliasName);
+    }
+    if (!nullToAbsent || thumbnail != null) {
+      map['thumbnail'] = Variable<Uint8List>(thumbnail);
     }
     if (!nullToAbsent || registered != null) {
       map['registered'] = Variable<bool>(registered);
@@ -236,6 +254,9 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       aliasName: aliasName == null && nullToAbsent
           ? const Value.absent()
           : Value(aliasName),
+      thumbnail: thumbnail == null && nullToAbsent
+          ? const Value.absent()
+          : Value(thumbnail),
       registered: registered == null && nullToAbsent
           ? const Value.absent()
           : Value(registered),
@@ -259,6 +280,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       firstName: serializer.fromJson<String?>(json['firstName']),
       lastName: serializer.fromJson<String?>(json['lastName']),
       aliasName: serializer.fromJson<String?>(json['aliasName']),
+      thumbnail: serializer.fromJson<Uint8List?>(json['thumbnail']),
       registered: serializer.fromJson<bool?>(json['registered']),
       insertedAt: serializer.fromJson<DateTime?>(json['insertedAt']),
       updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
@@ -275,6 +297,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       'firstName': serializer.toJson<String?>(firstName),
       'lastName': serializer.toJson<String?>(lastName),
       'aliasName': serializer.toJson<String?>(aliasName),
+      'thumbnail': serializer.toJson<Uint8List?>(thumbnail),
       'registered': serializer.toJson<bool?>(registered),
       'insertedAt': serializer.toJson<DateTime?>(insertedAt),
       'updatedAt': serializer.toJson<DateTime?>(updatedAt),
@@ -288,6 +311,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
           Value<String?> firstName = const Value.absent(),
           Value<String?> lastName = const Value.absent(),
           Value<String?> aliasName = const Value.absent(),
+          Value<Uint8List?> thumbnail = const Value.absent(),
           Value<bool?> registered = const Value.absent(),
           Value<DateTime?> insertedAt = const Value.absent(),
           Value<DateTime?> updatedAt = const Value.absent()}) =>
@@ -298,10 +322,29 @@ class ContactData extends DataClass implements Insertable<ContactData> {
         firstName: firstName.present ? firstName.value : this.firstName,
         lastName: lastName.present ? lastName.value : this.lastName,
         aliasName: aliasName.present ? aliasName.value : this.aliasName,
+        thumbnail: thumbnail.present ? thumbnail.value : this.thumbnail,
         registered: registered.present ? registered.value : this.registered,
         insertedAt: insertedAt.present ? insertedAt.value : this.insertedAt,
         updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
       );
+  ContactData copyWithCompanion(ContactDataCompanion data) {
+    return ContactData(
+      id: data.id.present ? data.id.value : this.id,
+      sourceType:
+          data.sourceType.present ? data.sourceType.value : this.sourceType,
+      sourceId: data.sourceId.present ? data.sourceId.value : this.sourceId,
+      firstName: data.firstName.present ? data.firstName.value : this.firstName,
+      lastName: data.lastName.present ? data.lastName.value : this.lastName,
+      aliasName: data.aliasName.present ? data.aliasName.value : this.aliasName,
+      thumbnail: data.thumbnail.present ? data.thumbnail.value : this.thumbnail,
+      registered:
+          data.registered.present ? data.registered.value : this.registered,
+      insertedAt:
+          data.insertedAt.present ? data.insertedAt.value : this.insertedAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('ContactData(')
@@ -311,6 +354,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
           ..write('firstName: $firstName, ')
           ..write('lastName: $lastName, ')
           ..write('aliasName: $aliasName, ')
+          ..write('thumbnail: $thumbnail, ')
           ..write('registered: $registered, ')
           ..write('insertedAt: $insertedAt, ')
           ..write('updatedAt: $updatedAt')
@@ -319,8 +363,17 @@ class ContactData extends DataClass implements Insertable<ContactData> {
   }
 
   @override
-  int get hashCode => Object.hash(id, sourceType, sourceId, firstName, lastName,
-      aliasName, registered, insertedAt, updatedAt);
+  int get hashCode => Object.hash(
+      id,
+      sourceType,
+      sourceId,
+      firstName,
+      lastName,
+      aliasName,
+      $driftBlobEquality.hash(thumbnail),
+      registered,
+      insertedAt,
+      updatedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -331,6 +384,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
           other.firstName == this.firstName &&
           other.lastName == this.lastName &&
           other.aliasName == this.aliasName &&
+          $driftBlobEquality.equals(other.thumbnail, this.thumbnail) &&
           other.registered == this.registered &&
           other.insertedAt == this.insertedAt &&
           other.updatedAt == this.updatedAt);
@@ -343,6 +397,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
   final Value<String?> firstName;
   final Value<String?> lastName;
   final Value<String?> aliasName;
+  final Value<Uint8List?> thumbnail;
   final Value<bool?> registered;
   final Value<DateTime?> insertedAt;
   final Value<DateTime?> updatedAt;
@@ -353,6 +408,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
     this.firstName = const Value.absent(),
     this.lastName = const Value.absent(),
     this.aliasName = const Value.absent(),
+    this.thumbnail = const Value.absent(),
     this.registered = const Value.absent(),
     this.insertedAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
@@ -364,6 +420,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
     this.firstName = const Value.absent(),
     this.lastName = const Value.absent(),
     this.aliasName = const Value.absent(),
+    this.thumbnail = const Value.absent(),
     this.registered = const Value.absent(),
     this.insertedAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
@@ -376,6 +433,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
     Expression<String>? firstName,
     Expression<String>? lastName,
     Expression<String>? aliasName,
+    Expression<Uint8List>? thumbnail,
     Expression<bool>? registered,
     Expression<DateTime>? insertedAt,
     Expression<DateTime>? updatedAt,
@@ -387,6 +445,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
       if (firstName != null) 'first_name': firstName,
       if (lastName != null) 'last_name': lastName,
       if (aliasName != null) 'alias_name': aliasName,
+      if (thumbnail != null) 'thumbnail': thumbnail,
       if (registered != null) 'registered': registered,
       if (insertedAt != null) 'inserted_at': insertedAt,
       if (updatedAt != null) 'updated_at': updatedAt,
@@ -400,6 +459,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
       Value<String?>? firstName,
       Value<String?>? lastName,
       Value<String?>? aliasName,
+      Value<Uint8List?>? thumbnail,
       Value<bool?>? registered,
       Value<DateTime?>? insertedAt,
       Value<DateTime?>? updatedAt}) {
@@ -410,6 +470,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
       aliasName: aliasName ?? this.aliasName,
+      thumbnail: thumbnail ?? this.thumbnail,
       registered: registered ?? this.registered,
       insertedAt: insertedAt ?? this.insertedAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -438,6 +499,9 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
     if (aliasName.present) {
       map['alias_name'] = Variable<String>(aliasName.value);
     }
+    if (thumbnail.present) {
+      map['thumbnail'] = Variable<Uint8List>(thumbnail.value);
+    }
     if (registered.present) {
       map['registered'] = Variable<bool>(registered.value);
     }
@@ -459,6 +523,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
           ..write('firstName: $firstName, ')
           ..write('lastName: $lastName, ')
           ..write('aliasName: $aliasName, ')
+          ..write('thumbnail: $thumbnail, ')
           ..write('registered: $registered, ')
           ..write('insertedAt: $insertedAt, ')
           ..write('updatedAt: $updatedAt')
@@ -672,6 +737,18 @@ class ContactPhoneData extends DataClass
         insertedAt: insertedAt.present ? insertedAt.value : this.insertedAt,
         updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
       );
+  ContactPhoneData copyWithCompanion(ContactPhoneDataCompanion data) {
+    return ContactPhoneData(
+      id: data.id.present ? data.id.value : this.id,
+      number: data.number.present ? data.number.value : this.number,
+      label: data.label.present ? data.label.value : this.label,
+      contactId: data.contactId.present ? data.contactId.value : this.contactId,
+      insertedAt:
+          data.insertedAt.present ? data.insertedAt.value : this.insertedAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('ContactPhoneData(')
@@ -1004,6 +1081,18 @@ class ContactEmailData extends DataClass
         insertedAt: insertedAt.present ? insertedAt.value : this.insertedAt,
         updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
       );
+  ContactEmailData copyWithCompanion(ContactEmailDataCompanion data) {
+    return ContactEmailData(
+      id: data.id.present ? data.id.value : this.id,
+      address: data.address.present ? data.address.value : this.address,
+      label: data.label.present ? data.label.value : this.label,
+      contactId: data.contactId.present ? data.contactId.value : this.contactId,
+      insertedAt:
+          data.insertedAt.present ? data.insertedAt.value : this.insertedAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('ContactEmailData(')
@@ -1367,6 +1456,19 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
         acceptedAt: acceptedAt.present ? acceptedAt.value : this.acceptedAt,
         hungUpAt: hungUpAt.present ? hungUpAt.value : this.hungUpAt,
       );
+  CallLogData copyWithCompanion(CallLogDataCompanion data) {
+    return CallLogData(
+      id: data.id.present ? data.id.value : this.id,
+      direction: data.direction.present ? data.direction.value : this.direction,
+      number: data.number.present ? data.number.value : this.number,
+      video: data.video.present ? data.video.value : this.video,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      acceptedAt:
+          data.acceptedAt.present ? data.acceptedAt.value : this.acceptedAt,
+      hungUpAt: data.hungUpAt.present ? data.hungUpAt.value : this.hungUpAt,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('CallLogData(')
@@ -1639,6 +1741,16 @@ class FavoriteData extends DataClass implements Insertable<FavoriteData> {
         contactPhoneId: contactPhoneId ?? this.contactPhoneId,
         position: position ?? this.position,
       );
+  FavoriteData copyWithCompanion(FavoriteDataCompanion data) {
+    return FavoriteData(
+      id: data.id.present ? data.id.value : this.id,
+      contactPhoneId: data.contactPhoneId.present
+          ? data.contactPhoneId.value
+          : this.contactPhoneId,
+      position: data.position.present ? data.position.value : this.position,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('FavoriteData(')
@@ -1724,7 +1836,7 @@ class FavoriteDataCompanion extends UpdateCompanion<FavoriteData> {
 
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
-  _$AppDatabaseManager get managers => _$AppDatabaseManager(this);
+  $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $ContactsTableTable contactsTable = $ContactsTableTable(this);
   late final $ContactPhonesTableTable contactPhonesTable =
       $ContactPhonesTableTable(this);
@@ -1778,7 +1890,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       );
 }
 
-typedef $$ContactsTableTableInsertCompanionBuilder = ContactDataCompanion
+typedef $$ContactsTableTableCreateCompanionBuilder = ContactDataCompanion
     Function({
   Value<int> id,
   required ContactSourceTypeEnum sourceType,
@@ -1786,6 +1898,7 @@ typedef $$ContactsTableTableInsertCompanionBuilder = ContactDataCompanion
   Value<String?> firstName,
   Value<String?> lastName,
   Value<String?> aliasName,
+  Value<Uint8List?> thumbnail,
   Value<bool?> registered,
   Value<DateTime?> insertedAt,
   Value<DateTime?> updatedAt,
@@ -1798,6 +1911,7 @@ typedef $$ContactsTableTableUpdateCompanionBuilder = ContactDataCompanion
   Value<String?> firstName,
   Value<String?> lastName,
   Value<String?> aliasName,
+  Value<Uint8List?> thumbnail,
   Value<bool?> registered,
   Value<DateTime?> insertedAt,
   Value<DateTime?> updatedAt,
@@ -1809,8 +1923,7 @@ class $$ContactsTableTableTableManager extends RootTableManager<
     ContactData,
     $$ContactsTableTableFilterComposer,
     $$ContactsTableTableOrderingComposer,
-    $$ContactsTableTableProcessedTableManager,
-    $$ContactsTableTableInsertCompanionBuilder,
+    $$ContactsTableTableCreateCompanionBuilder,
     $$ContactsTableTableUpdateCompanionBuilder> {
   $$ContactsTableTableTableManager(_$AppDatabase db, $ContactsTableTable table)
       : super(TableManagerState(
@@ -1820,15 +1933,14 @@ class $$ContactsTableTableTableManager extends RootTableManager<
               $$ContactsTableTableFilterComposer(ComposerState(db, table)),
           orderingComposer:
               $$ContactsTableTableOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$ContactsTableTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<ContactSourceTypeEnum> sourceType = const Value.absent(),
             Value<String> sourceId = const Value.absent(),
             Value<String?> firstName = const Value.absent(),
             Value<String?> lastName = const Value.absent(),
             Value<String?> aliasName = const Value.absent(),
+            Value<Uint8List?> thumbnail = const Value.absent(),
             Value<bool?> registered = const Value.absent(),
             Value<DateTime?> insertedAt = const Value.absent(),
             Value<DateTime?> updatedAt = const Value.absent(),
@@ -1840,17 +1952,19 @@ class $$ContactsTableTableTableManager extends RootTableManager<
             firstName: firstName,
             lastName: lastName,
             aliasName: aliasName,
+            thumbnail: thumbnail,
             registered: registered,
             insertedAt: insertedAt,
             updatedAt: updatedAt,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required ContactSourceTypeEnum sourceType,
             required String sourceId,
             Value<String?> firstName = const Value.absent(),
             Value<String?> lastName = const Value.absent(),
             Value<String?> aliasName = const Value.absent(),
+            Value<Uint8List?> thumbnail = const Value.absent(),
             Value<bool?> registered = const Value.absent(),
             Value<DateTime?> insertedAt = const Value.absent(),
             Value<DateTime?> updatedAt = const Value.absent(),
@@ -1862,23 +1976,12 @@ class $$ContactsTableTableTableManager extends RootTableManager<
             firstName: firstName,
             lastName: lastName,
             aliasName: aliasName,
+            thumbnail: thumbnail,
             registered: registered,
             insertedAt: insertedAt,
             updatedAt: updatedAt,
           ),
         ));
-}
-
-class $$ContactsTableTableProcessedTableManager extends ProcessedTableManager<
-    _$AppDatabase,
-    $ContactsTableTable,
-    ContactData,
-    $$ContactsTableTableFilterComposer,
-    $$ContactsTableTableOrderingComposer,
-    $$ContactsTableTableProcessedTableManager,
-    $$ContactsTableTableInsertCompanionBuilder,
-    $$ContactsTableTableUpdateCompanionBuilder> {
-  $$ContactsTableTableProcessedTableManager(super.$state);
 }
 
 class $$ContactsTableTableFilterComposer
@@ -1914,6 +2017,11 @@ class $$ContactsTableTableFilterComposer
 
   ColumnFilters<String> get aliasName => $state.composableBuilder(
       column: $state.table.aliasName,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<Uint8List> get thumbnail => $state.composableBuilder(
+      column: $state.table.thumbnail,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -2000,6 +2108,11 @@ class $$ContactsTableTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
+  ColumnOrderings<Uint8List> get thumbnail => $state.composableBuilder(
+      column: $state.table.thumbnail,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
   ColumnOrderings<bool> get registered => $state.composableBuilder(
       column: $state.table.registered,
       builder: (column, joinBuilders) =>
@@ -2016,7 +2129,7 @@ class $$ContactsTableTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-typedef $$ContactPhonesTableTableInsertCompanionBuilder
+typedef $$ContactPhonesTableTableCreateCompanionBuilder
     = ContactPhoneDataCompanion Function({
   Value<int> id,
   required String number,
@@ -2041,8 +2154,7 @@ class $$ContactPhonesTableTableTableManager extends RootTableManager<
     ContactPhoneData,
     $$ContactPhonesTableTableFilterComposer,
     $$ContactPhonesTableTableOrderingComposer,
-    $$ContactPhonesTableTableProcessedTableManager,
-    $$ContactPhonesTableTableInsertCompanionBuilder,
+    $$ContactPhonesTableTableCreateCompanionBuilder,
     $$ContactPhonesTableTableUpdateCompanionBuilder> {
   $$ContactPhonesTableTableTableManager(
       _$AppDatabase db, $ContactPhonesTableTable table)
@@ -2053,9 +2165,7 @@ class $$ContactPhonesTableTableTableManager extends RootTableManager<
               $$ContactPhonesTableTableFilterComposer(ComposerState(db, table)),
           orderingComposer: $$ContactPhonesTableTableOrderingComposer(
               ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$ContactPhonesTableTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> number = const Value.absent(),
             Value<String> label = const Value.absent(),
@@ -2071,7 +2181,7 @@ class $$ContactPhonesTableTableTableManager extends RootTableManager<
             insertedAt: insertedAt,
             updatedAt: updatedAt,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required String number,
             required String label,
@@ -2088,19 +2198,6 @@ class $$ContactPhonesTableTableTableManager extends RootTableManager<
             updatedAt: updatedAt,
           ),
         ));
-}
-
-class $$ContactPhonesTableTableProcessedTableManager
-    extends ProcessedTableManager<
-        _$AppDatabase,
-        $ContactPhonesTableTable,
-        ContactPhoneData,
-        $$ContactPhonesTableTableFilterComposer,
-        $$ContactPhonesTableTableOrderingComposer,
-        $$ContactPhonesTableTableProcessedTableManager,
-        $$ContactPhonesTableTableInsertCompanionBuilder,
-        $$ContactPhonesTableTableUpdateCompanionBuilder> {
-  $$ContactPhonesTableTableProcessedTableManager(super.$state);
 }
 
 class $$ContactPhonesTableTableFilterComposer
@@ -2199,7 +2296,7 @@ class $$ContactPhonesTableTableOrderingComposer
   }
 }
 
-typedef $$ContactEmailsTableTableInsertCompanionBuilder
+typedef $$ContactEmailsTableTableCreateCompanionBuilder
     = ContactEmailDataCompanion Function({
   Value<int> id,
   required String address,
@@ -2224,8 +2321,7 @@ class $$ContactEmailsTableTableTableManager extends RootTableManager<
     ContactEmailData,
     $$ContactEmailsTableTableFilterComposer,
     $$ContactEmailsTableTableOrderingComposer,
-    $$ContactEmailsTableTableProcessedTableManager,
-    $$ContactEmailsTableTableInsertCompanionBuilder,
+    $$ContactEmailsTableTableCreateCompanionBuilder,
     $$ContactEmailsTableTableUpdateCompanionBuilder> {
   $$ContactEmailsTableTableTableManager(
       _$AppDatabase db, $ContactEmailsTableTable table)
@@ -2236,9 +2332,7 @@ class $$ContactEmailsTableTableTableManager extends RootTableManager<
               $$ContactEmailsTableTableFilterComposer(ComposerState(db, table)),
           orderingComposer: $$ContactEmailsTableTableOrderingComposer(
               ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$ContactEmailsTableTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> address = const Value.absent(),
             Value<String> label = const Value.absent(),
@@ -2254,7 +2348,7 @@ class $$ContactEmailsTableTableTableManager extends RootTableManager<
             insertedAt: insertedAt,
             updatedAt: updatedAt,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required String address,
             required String label,
@@ -2271,19 +2365,6 @@ class $$ContactEmailsTableTableTableManager extends RootTableManager<
             updatedAt: updatedAt,
           ),
         ));
-}
-
-class $$ContactEmailsTableTableProcessedTableManager
-    extends ProcessedTableManager<
-        _$AppDatabase,
-        $ContactEmailsTableTable,
-        ContactEmailData,
-        $$ContactEmailsTableTableFilterComposer,
-        $$ContactEmailsTableTableOrderingComposer,
-        $$ContactEmailsTableTableProcessedTableManager,
-        $$ContactEmailsTableTableInsertCompanionBuilder,
-        $$ContactEmailsTableTableUpdateCompanionBuilder> {
-  $$ContactEmailsTableTableProcessedTableManager(super.$state);
 }
 
 class $$ContactEmailsTableTableFilterComposer
@@ -2369,7 +2450,7 @@ class $$ContactEmailsTableTableOrderingComposer
   }
 }
 
-typedef $$CallLogsTableTableInsertCompanionBuilder = CallLogDataCompanion
+typedef $$CallLogsTableTableCreateCompanionBuilder = CallLogDataCompanion
     Function({
   Value<int> id,
   required CallLogDirectionEnum direction,
@@ -2396,8 +2477,7 @@ class $$CallLogsTableTableTableManager extends RootTableManager<
     CallLogData,
     $$CallLogsTableTableFilterComposer,
     $$CallLogsTableTableOrderingComposer,
-    $$CallLogsTableTableProcessedTableManager,
-    $$CallLogsTableTableInsertCompanionBuilder,
+    $$CallLogsTableTableCreateCompanionBuilder,
     $$CallLogsTableTableUpdateCompanionBuilder> {
   $$CallLogsTableTableTableManager(_$AppDatabase db, $CallLogsTableTable table)
       : super(TableManagerState(
@@ -2407,9 +2487,7 @@ class $$CallLogsTableTableTableManager extends RootTableManager<
               $$CallLogsTableTableFilterComposer(ComposerState(db, table)),
           orderingComposer:
               $$CallLogsTableTableOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$CallLogsTableTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<CallLogDirectionEnum> direction = const Value.absent(),
             Value<String> number = const Value.absent(),
@@ -2427,7 +2505,7 @@ class $$CallLogsTableTableTableManager extends RootTableManager<
             acceptedAt: acceptedAt,
             hungUpAt: hungUpAt,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required CallLogDirectionEnum direction,
             required String number,
@@ -2446,18 +2524,6 @@ class $$CallLogsTableTableTableManager extends RootTableManager<
             hungUpAt: hungUpAt,
           ),
         ));
-}
-
-class $$CallLogsTableTableProcessedTableManager extends ProcessedTableManager<
-    _$AppDatabase,
-    $CallLogsTableTable,
-    CallLogData,
-    $$CallLogsTableTableFilterComposer,
-    $$CallLogsTableTableOrderingComposer,
-    $$CallLogsTableTableProcessedTableManager,
-    $$CallLogsTableTableInsertCompanionBuilder,
-    $$CallLogsTableTableUpdateCompanionBuilder> {
-  $$CallLogsTableTableProcessedTableManager(super.$state);
 }
 
 class $$CallLogsTableTableFilterComposer
@@ -2541,7 +2607,7 @@ class $$CallLogsTableTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-typedef $$FavoritesTableTableInsertCompanionBuilder = FavoriteDataCompanion
+typedef $$FavoritesTableTableCreateCompanionBuilder = FavoriteDataCompanion
     Function({
   Value<int> id,
   required int contactPhoneId,
@@ -2560,8 +2626,7 @@ class $$FavoritesTableTableTableManager extends RootTableManager<
     FavoriteData,
     $$FavoritesTableTableFilterComposer,
     $$FavoritesTableTableOrderingComposer,
-    $$FavoritesTableTableProcessedTableManager,
-    $$FavoritesTableTableInsertCompanionBuilder,
+    $$FavoritesTableTableCreateCompanionBuilder,
     $$FavoritesTableTableUpdateCompanionBuilder> {
   $$FavoritesTableTableTableManager(
       _$AppDatabase db, $FavoritesTableTable table)
@@ -2572,9 +2637,7 @@ class $$FavoritesTableTableTableManager extends RootTableManager<
               $$FavoritesTableTableFilterComposer(ComposerState(db, table)),
           orderingComposer:
               $$FavoritesTableTableOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$FavoritesTableTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<int> contactPhoneId = const Value.absent(),
             Value<int> position = const Value.absent(),
@@ -2584,7 +2647,7 @@ class $$FavoritesTableTableTableManager extends RootTableManager<
             contactPhoneId: contactPhoneId,
             position: position,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required int contactPhoneId,
             required int position,
@@ -2595,18 +2658,6 @@ class $$FavoritesTableTableTableManager extends RootTableManager<
             position: position,
           ),
         ));
-}
-
-class $$FavoritesTableTableProcessedTableManager extends ProcessedTableManager<
-    _$AppDatabase,
-    $FavoritesTableTable,
-    FavoriteData,
-    $$FavoritesTableTableFilterComposer,
-    $$FavoritesTableTableOrderingComposer,
-    $$FavoritesTableTableProcessedTableManager,
-    $$FavoritesTableTableInsertCompanionBuilder,
-    $$FavoritesTableTableUpdateCompanionBuilder> {
-  $$FavoritesTableTableProcessedTableManager(super.$state);
 }
 
 class $$FavoritesTableTableFilterComposer
@@ -2669,9 +2720,9 @@ class $$FavoritesTableTableOrderingComposer
   }
 }
 
-class _$AppDatabaseManager {
+class $AppDatabaseManager {
   final _$AppDatabase _db;
-  _$AppDatabaseManager(this._db);
+  $AppDatabaseManager(this._db);
   $$ContactsTableTableTableManager get contactsTable =>
       $$ContactsTableTableTableManager(_db, _db.contactsTable);
   $$ContactPhonesTableTableTableManager get contactPhonesTable =>

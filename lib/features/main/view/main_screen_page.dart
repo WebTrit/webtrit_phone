@@ -11,6 +11,7 @@ import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -38,7 +39,10 @@ class MainScreenPage extends StatelessWidget {
         final flavor = MainFlavor.values[tabsRouter.activeIndex];
 
         if (appDemoFlow) {
-          context.read<DemoCubit>().changeVisibleConvertedButton(isRouteActive && flavor != MainFlavor.keypad);
+          final locale = context.read<AppBloc>().state.locale;
+
+          context.read<DemoCubit>().updateConfiguration(flavor: flavor, enable: isRouteActive, locale: locale);
+          context.read<DemoCubit>().getActions();
         }
 
         return MainScreen(
@@ -52,7 +56,6 @@ class MainScreenPage extends StatelessWidget {
         );
       },
     );
-
     final provider = BlocProvider(
       create: (context) {
         return MainBloc(
@@ -64,16 +67,25 @@ class MainScreenPage extends StatelessWidget {
           ? BlocProvider<DemoCubit>(
               create: (context) => DemoCubit(
                 webtritApiClient: context.read<WebtritApiClient>(),
-                platformInfo: PlatformInfo(),
-                appInfo: AppInfo(),
                 token: context.read<AppBloc>().state.token!,
-                tenantId: context.read<AppBloc>().state.tenantId!,
+                flavor: MainFlavor.contacts,
+                locale: context.read<AppBloc>().state.locale,
               ),
               child: DemoShell(child: autoTabsRouter),
             )
           : autoTabsRouter,
     );
 
-    return provider;
+    final blocListener = BlocListener<AppBloc, AppState>(
+      listenWhen: (previous, current) =>
+          previous.accountErrorCode != current.accountErrorCode && current.accountErrorCode != null,
+      listener: (BuildContext context, state) {
+        context.showErrorSnackBar(state.accountErrorCode!.l10n(context));
+        context.read<AppBloc>().add(const AppLogoutedTeardown());
+      },
+      child: provider,
+    );
+
+    return blocListener;
   }
 }
