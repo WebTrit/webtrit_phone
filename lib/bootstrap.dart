@@ -54,6 +54,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       await AppSound.init(outgoingCallRingAsset: Assets.ringtones.outgoingCall1);
       await AppCertificates.init();
       await AppTime.init();
+      await AppErrorFilter.init();
 
       if (Platform.isAndroid) {
         WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
@@ -65,9 +66,13 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
     },
     (error, stackTrace) {
       logger.severe('runZonedGuarded', error, stackTrace);
-      if (!kIsWeb) {
-        FirebaseCrashlytics.instance.recordError(error, stackTrace, fatal: true);
-      }
+      AppErrorFilter().shouldRecord(error)
+          ? FirebaseCrashlytics.instance.recordError(error, stackTrace, fatal: true)
+          : logger.info('Error filtered: $error');
+
+      AppErrorFilter().shouldRecordButNotFatal(error)
+          ? FirebaseCrashlytics.instance.recordError(error, stackTrace, fatal: false)
+          : logger.info('Error filtered: $error');
     },
   );
 }
