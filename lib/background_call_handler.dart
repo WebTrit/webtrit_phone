@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -136,19 +135,9 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
     }
   }
 
-// TODO: Duplicate here and call_bloc.dart
-  int? retrieveIdleLine(List<Line?> lines, String callId) {
-    for (var line = 0; line < lines.length; line++) {
-      if (lines.firstWhereOrNull((line) => line?.callId == callId) != null) {
-        return line;
-      }
-    }
-    return null;
-  }
-
   void _declineCall(String callId) async {
     final transaction = WebtritSignalingClient.generateTransactionId();
-    var line = retrieveIdleLine(_lines, callId) ?? _kUndefinedLine;
+    var line = _lines.indexWhere((line) => line?.callId == callId);
 
     if (line != _kUndefinedLine) {
       var uuid = _lines[line]?.callId ?? '';
