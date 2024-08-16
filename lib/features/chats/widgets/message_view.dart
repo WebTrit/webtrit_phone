@@ -41,7 +41,6 @@ class MessageView extends StatefulWidget {
 class _MessageViewState extends State<MessageView> {
   late final chatsRepository = context.read<ChatsRepository>();
   late final client = context.read<ChatsBloc>().state.client;
-  final widgetKey = GlobalKey();
 
   static final previewsCache = LruMap<int, types.PreviewData>(maximumSize: 500);
 
@@ -73,7 +72,7 @@ class _MessageViewState extends State<MessageView> {
     return null;
   }
 
-  RelativeRect getRelativeRect(GlobalKey key, bool isMine) {
+  RelativeRect getPosition(bool isMine) {
     final RenderBox button = context.findRenderObject()! as RenderBox;
     final RenderBox overlay = Navigator.of(context).overlay!.context.findRenderObject()! as RenderBox;
     late Offset offset = Offset(isMine ? -48 : 48, 16);
@@ -147,12 +146,11 @@ class _MessageViewState extends State<MessageView> {
         // Check if has any items to show
         if (popupItems.isEmpty) return;
 
-        final position = getRelativeRect(widgetKey, isMine);
+        final position = getPosition(isMine);
         showMenu(context: this.context, position: position, items: popupItems);
       },
       child: Container(
         padding: const EdgeInsets.all(12),
-        key: widgetKey,
         // 0.01 is for background press recognition
         color: !isViewed ? Colors.blueGrey.withOpacity(0.4) : Colors.blueGrey.withOpacity(0.01),
         child: Column(
