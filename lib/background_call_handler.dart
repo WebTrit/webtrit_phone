@@ -139,7 +139,7 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
 // TODO: Duplicate here and call_bloc.dart
   int? retrieveIdleLine(List<Line?> lines, String callId) {
     for (var line = 0; line < lines.length; line++) {
-      if (lines.firstWhereOrNull((line) => line?.callId == callId) == null) {
+      if (lines.firstWhereOrNull((line) => line?.callId == callId) != null) {
         return line;
       }
     }
