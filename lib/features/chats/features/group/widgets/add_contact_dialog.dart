@@ -56,17 +56,18 @@ class _AddContactDialogState extends State<AddContactDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Add user', style: theme.textTheme.headlineMedium),
+              Text('Choose contact', style: theme.textTheme.headlineMedium),
               const SizedBox(height: 16),
               Flexible(
                 child: ListView(
                   shrinkWrap: true,
                   children: contacts.map((Contact contact) {
                     return ContactTile(
-                        displayName: contact.name,
-                        thumbnail: contact.thumbnail,
-                        registered: contact.registered,
-                        onTap: () => onConfirm(contact));
+                      displayName: contact.name,
+                      thumbnail: contact.thumbnail,
+                      registered: contact.registered,
+                      onTap: () => onConfirm(contact),
+                    );
                   }).toList(),
                 ),
               ),

@@ -76,7 +76,7 @@ class _GroupBuilderScreenState extends State<GroupBuilderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('New group form')),
+      appBar: AppBar(title: const Text('Create group')),
       body: Stack(
         children: [
           Padding(
