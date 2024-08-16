@@ -87,20 +87,18 @@ class _MessageViewState extends State<MessageView> {
 
   @override
   Widget build(BuildContext context) {
-    ChatMessage? realMessage;
-    if (widget.message.metadata != null && widget.message.metadata!.containsKey('message')) {
-      realMessage = widget.message.metadata!['message'] as ChatMessage;
-    }
+    final uiMessage = widget.message;
+    final chatMessage = widget.message.chatMessage;
 
-    final isEdited = widget.message.metadata != null && widget.message.metadata!['edited'] == true;
-    final isDeleted = widget.message.metadata != null && widget.message.metadata!['deleted'] == true;
-    final isSended = realMessage?.id != null;
-    final isMine = realMessage == null || realMessage.senderId == widget.userId;
-    final isForward = realMessage?.forwardFromId != null && realMessage?.authorId != null;
-    final isReply = realMessage?.replyToId != null;
-    final isViewed = realMessage?.viewedAt != null;
+    final isEdited = uiMessage.isEdited;
+    final isDeleted = uiMessage.isDeleted;
+    final isSended = chatMessage?.id != null;
+    final isMine = chatMessage == null || chatMessage.senderId == widget.userId;
+    final isForward = chatMessage?.forwardFromId != null && chatMessage?.authorId != null;
+    final isReply = chatMessage?.replyToId != null;
+    final isViewed = chatMessage?.viewedAt != null;
 
-    final senderId = realMessage?.senderId ?? widget.userId;
+    final senderId = chatMessage?.senderId ?? widget.userId;
 
     if (isDeleted) {}
 
@@ -121,25 +119,25 @@ class _MessageViewState extends State<MessageView> {
               MessageMenuItem(
                 text: 'Reply',
                 icon: const Icon(Icons.reply),
-                onTap: () => widget.handleSetForReply(realMessage!),
+                onTap: () => widget.handleSetForReply(chatMessage!),
               ),
             if (isSended && !isDeleted)
               MessageMenuItem(
                 text: 'Forward',
                 icon: const Icon(Icons.forward),
-                onTap: () => widget.handleSetForForward(realMessage!),
+                onTap: () => widget.handleSetForForward(chatMessage!),
               ),
             if (isMine && isSended && !isForward && !isDeleted)
               MessageMenuItem(
                 text: 'Edit',
                 icon: const Icon(Icons.edit),
-                onTap: () => widget.handleSetForEdit(realMessage!),
+                onTap: () => widget.handleSetForEdit(chatMessage!),
               ),
             if (isMine && isSended && !isDeleted)
               MessageMenuItem(
                 text: 'Delete',
                 icon: const Icon(Icons.remove),
-                onTap: () => widget.handleDelete(realMessage!),
+                onTap: () => widget.handleDelete(chatMessage!),
               ),
           ],
         );
@@ -153,11 +151,11 @@ class _MessageViewState extends State<MessageView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (isReply) ...[
-              replyQuote(realMessage!),
+              replyQuote(chatMessage!),
               const SizedBox(height: 8),
             ],
             if (isForward) ...[
-              forwardQuote(realMessage!),
+              forwardQuote(chatMessage!),
               const SizedBox(height: 8),
               ParticipantName(senderId: senderId, userId: widget.userId),
               const Text('[forwarded]', style: TextStyle(color: Colors.white, fontSize: 12)),
@@ -166,7 +164,7 @@ class _MessageViewState extends State<MessageView> {
               TextMessage(
                 emojiEnlargementBehavior: EmojiEnlargementBehavior.single,
                 hideBackgroundOnEmojiMessages: false,
-                message: messageWithPreview(widget.message),
+                message: messageWithPreview(uiMessage),
                 showName: true,
                 usePreviewData: true,
                 onPreviewDataFetched: handlePreviewDataFetched,
@@ -176,25 +174,25 @@ class _MessageViewState extends State<MessageView> {
             if (isEdited && !isDeleted) ...[
               const Text('[edited]', style: TextStyle(color: Colors.white, fontSize: 12)),
             ],
-            if (isMine && (realMessage?.viaSms ?? false) && !isDeleted) ...[
+            if (isMine && (chatMessage?.viaSms ?? false) && !isDeleted) ...[
               const Text('[sms]', style: TextStyle(color: Colors.white, fontSize: 12)),
-              if (realMessage?.smsOutState != null)
-                Text('[${realMessage?.smsOutState?.name}]', style: const TextStyle(color: Colors.white, fontSize: 12)),
+              if (chatMessage?.smsOutState != null)
+                Text('[${chatMessage?.smsOutState?.name}]', style: const TextStyle(color: Colors.white, fontSize: 12)),
             ],
             if (isDeleted) ...[
               ParticipantName(senderId: senderId, userId: widget.userId),
               const Text('[deleted]', style: TextStyle(color: Colors.white, fontSize: 12)),
             ],
-            if (realMessage?.viewedAt != null && isMine) ...[
+            if (chatMessage?.viewedAt != null && isMine) ...[
               const SizedBox(height: 4),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(Icons.remove_red_eye_outlined, color: Colors.blue[200], size: 10),
                   const SizedBox(width: 4),
-                  if (realMessage?.viewedAt != null)
+                  if (chatMessage?.viewedAt != null)
                     Text(
-                      DateFormat('HH:mm').format(realMessage!.viewedAt!),
+                      DateFormat('HH:mm').format(chatMessage!.viewedAt!),
                       style: TextStyle(color: Colors.blue[200], fontSize: 10),
                     ),
                 ],
@@ -206,9 +204,9 @@ class _MessageViewState extends State<MessageView> {
     );
   }
 
-  Widget replyQuote(ChatMessage realMessage) {
+  Widget replyQuote(ChatMessage chatMessage) {
     return FutureBuilder(
-        future: fetchMessage(realMessage.replyToId!, realMessage.chatId),
+        future: fetchMessage(chatMessage.replyToId!, chatMessage.chatId),
         builder: (context, snapshot) {
           final msg = snapshot.data;
 

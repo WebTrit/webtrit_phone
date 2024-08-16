@@ -214,15 +214,15 @@ class _MessageListViewState extends State<MessageListView> {
             animationSpeed: const Duration(seconds: 1),
             typingMode: TypingIndicatorMode.name,
           ),
-          onMessageVisibilityChanged: (m, visible) {
-            if (m.metadata != null && m.metadata!.containsKey('message')) {
-              final realMessage = m.metadata!['message'] as ChatMessage;
-              final isMine = realMessage.senderId == widget.userId;
-              final viewed = realMessage.viewedAt != null;
-              if (!isMine && !viewed && visible) {
-                widget.onViewed(realMessage);
-              }
-            }
+          onMessageVisibilityChanged: (uiMessage, visible) {
+            ChatMessage? chatMessage = uiMessage.chatMessage;
+            if (chatMessage == null) return;
+
+            final mine = chatMessage.senderId == widget.userId;
+            final viewed = chatMessage.viewedAt != null;
+            final becameViwed = visible && !viewed && !mine;
+
+            if (becameViwed) widget.onViewed(chatMessage);
           },
           avatarBuilder: (author) {
             String name = author.firstName ?? 'N/A';
