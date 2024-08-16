@@ -568,14 +568,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_dtmf:
-    dependency: "direct main"
-    description:
-      name: flutter_dtmf
-      sha256: "355f0d476c204757f759caeaa65d50df91337924c0b14548f7b731a5c562f73e"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.2"
   flutter_gen_core:
     dependency: transitive
     description:
