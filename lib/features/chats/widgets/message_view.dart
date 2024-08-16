@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
@@ -99,48 +100,55 @@ class _MessageViewState extends State<MessageView> {
     final isViewed = chatMessage?.viewedAt != null;
 
     final senderId = chatMessage?.senderId ?? widget.userId;
+    final hasContent = (chatMessage?.content.isNotEmpty == true) && chatMessage?.content != '-';
 
-    if (isDeleted) {}
+    final popupItems = [
+      if (hasContent)
+        MessageMenuItem(
+            text: 'Copy to clipboard',
+            icon: const Icon(Icons.copy_rounded),
+            onTap: () => Clipboard.setData(ClipboardData(text: chatMessage!.content))),
+      if (isSended && !isDeleted)
+        MessageMenuItem(
+          text: 'Reply',
+          icon: const Icon(Icons.question_answer_outlined),
+          onTap: () => widget.handleSetForReply(chatMessage!),
+        ),
+      if (isSended && !isDeleted)
+        MessageMenuItem(
+          text: 'Forward',
+          icon: const Icon(Icons.forward_outlined),
+          onTap: () => widget.handleSetForForward(chatMessage!),
+        ),
+      if (isMine && isSended && !isForward && !isDeleted)
+        MessageMenuItem(
+          text: 'Edit',
+          icon: const Icon(Icons.edit_note_outlined),
+          onTap: () => widget.handleSetForEdit(chatMessage!),
+        ),
+      if (isMine && isSended && !isDeleted)
+        MessageMenuItem(
+          text: 'Delete',
+          icon: const Icon(Icons.remove),
+          onTap: () => widget.handleDelete(chatMessage!),
+        ),
+    ];
 
     return GestureDetector(
       onLongPress: () async {
+        // Dismiss keyboard if it's open and wait for it to close before showing the popup
+        // to keep the popup in the right position
         if (FocusScope.of(context).hasFocus) {
           FocusScope.of(context).unfocus();
           await Future.delayed(const Duration(milliseconds: 400));
           if (!mounted) return;
         }
-        showMenu(
-          // has mount check
-          // ignore: use_build_context_synchronously
-          context: context,
-          position: getRelativeRect(widgetKey, isMine),
-          items: [
-            if (isSended && !isDeleted)
-              MessageMenuItem(
-                text: 'Reply',
-                icon: const Icon(Icons.reply),
-                onTap: () => widget.handleSetForReply(chatMessage!),
-              ),
-            if (isSended && !isDeleted)
-              MessageMenuItem(
-                text: 'Forward',
-                icon: const Icon(Icons.forward),
-                onTap: () => widget.handleSetForForward(chatMessage!),
-              ),
-            if (isMine && isSended && !isForward && !isDeleted)
-              MessageMenuItem(
-                text: 'Edit',
-                icon: const Icon(Icons.edit),
-                onTap: () => widget.handleSetForEdit(chatMessage!),
-              ),
-            if (isMine && isSended && !isDeleted)
-              MessageMenuItem(
-                text: 'Delete',
-                icon: const Icon(Icons.remove),
-                onTap: () => widget.handleDelete(chatMessage!),
-              ),
-          ],
-        );
+
+        // Check if has any items to show
+        if (popupItems.isEmpty) return;
+
+        final position = getRelativeRect(widgetKey, isMine);
+        showMenu(context: this.context, position: position, items: popupItems);
       },
       child: Container(
         padding: const EdgeInsets.all(12),
