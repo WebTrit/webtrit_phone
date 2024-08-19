@@ -96,12 +96,12 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
   }
 
   void _onSignalingEvent(Event event) {
+    _logger.warning('_onSignalingEvent $event');
+
     final eventHandlers = <Type, void Function(Event)>{
       IncomingCallEvent: (e) => _handleIncomingCall(e as IncomingCallEvent),
-      IceHangupEvent: (_) => _callNotificationDelegate.endAllBackgroundCalls(),
-      HangupEvent: (e) => _callNotificationDelegate.endBackgroundCall((e as HangupEvent).callId),
-      DecliningEvent: (e) => _callNotificationDelegate.endBackgroundCall((e as DecliningEvent).callId),
-      UnregisteredEvent: (_) => _callNotificationDelegate.endAllBackgroundCalls(),
+      HangupEvent: (e) => _handleHangupCall(e as HangupEvent),
+      UnregisteredEvent: (e) => _handleUnregisteredEvent(e as UnregisteredEvent),
     };
 
     final handler = eventHandlers[event.runtimeType];
@@ -120,6 +120,21 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
       displayName: _pendingCall.displayName,
       hasVideo: _pendingCall.hasVideo,
     );
+  }
+
+  void _handleHangupCall(HangupEvent event) {
+    // TODO (Serdun): If the decline event is not from the other side, the connection has already been closed in the Android ConnectionService, which might trigger a warning.
+    // Improve the flow to ensure this method is called only when the connection is confirmed to exist.
+    _callNotificationDelegate.endBackgroundCall(event.callId);
+
+    // The hangup event is triggered when a call is either declined or the user hangs up.
+    // This allows us to close the signaling connection for the current isolate.
+    _close();
+  }
+
+  void _handleUnregisteredEvent(UnregisteredEvent event) {
+    _callNotificationDelegate.endAllBackgroundCalls();
+    _close();
   }
 
   Uri _parseCoreUrlToSignalingUrl(String coreUrl) {
@@ -141,11 +156,16 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
     } else {
       _logger.warning('declineCall: callId not found $callId');
     }
-    await _close();
   }
 
   Future<void> _close() async {
-    await client.disconnect();
+    _logger.info('_close signaling client');
+
+    try {
+      await client.disconnect();
+    } catch (e) {
+      _logger.severe('Failed to disconnect client', e);
+    }
   }
 
   @override
