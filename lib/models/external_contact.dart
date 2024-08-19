@@ -4,6 +4,7 @@ class ExternalContact extends Equatable {
   const ExternalContact({
     required this.id,
     this.registered,
+    this.appInstalled,
     this.firstName,
     this.lastName,
     this.aliasName,
@@ -15,6 +16,7 @@ class ExternalContact extends Equatable {
 
   final String id;
   final bool? registered;
+  final bool? appInstalled;
   final String? firstName;
   final String? lastName;
   final String? aliasName;
@@ -27,6 +29,7 @@ class ExternalContact extends Equatable {
   List<Object?> get props => [
         id,
         registered,
+        appInstalled,
         firstName,
         lastName,
         aliasName,
