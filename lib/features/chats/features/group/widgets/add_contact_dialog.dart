@@ -34,7 +34,7 @@ class _AddContactDialogState extends State<AddContactDialog> {
   void initState() {
     super.initState();
     contactsSub = widget.contactsRepository.watchContacts('', ContactSourceType.external).listen((contacts) {
-      setState(() => this.contacts = contacts);
+      setState(() => this.contacts = contacts.where((contact) => contact.appInstalled == true).toList());
     });
   }
 
@@ -58,19 +58,21 @@ class _AddContactDialogState extends State<AddContactDialog> {
             children: [
               Text('Choose contact', style: theme.textTheme.headlineMedium),
               const SizedBox(height: 16),
-              Flexible(
-                child: ListView(
-                  shrinkWrap: true,
-                  children: contacts.map((Contact contact) {
-                    return ContactTile(
-                      displayName: contact.name,
-                      thumbnail: contact.thumbnail,
-                      registered: contact.registered,
-                      onTap: () => onConfirm(contact),
-                    );
-                  }).toList(),
+              if (contacts.isEmpty) const Text('No contacts found'),
+              if (contacts.isNotEmpty)
+                Flexible(
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: contacts.map((Contact contact) {
+                      return ContactTile(
+                        displayName: contact.name,
+                        thumbnail: contact.thumbnail,
+                        registered: contact.registered,
+                        onTap: () => onConfirm(contact),
+                      );
+                    }).toList(),
+                  ),
                 ),
-              ),
               const SizedBox(height: 16),
               TextButton(onPressed: onCancel, child: const Text('Cancel')),
             ],

@@ -112,8 +112,10 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                     itemCount: recentsFiltered.length,
                     itemBuilder: (context, index) {
                       final recent = recentsFiltered[index];
+                      final contactSourceId = recent.contactSourceId;
                       final canMessage = recent.contactSourceType == ContactSourceType.external &&
-                          (recent.contactSourceId?.isNotEmpty ?? false);
+                          (contactSourceId?.isNotEmpty ?? false) &&
+                          recent.contactAppInstalled == true;
                       return RecentTile(
                           recent: recent,
                           dateFormat: context.read<RecentsBloc>().dateFormat,
@@ -155,7 +157,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                               ? () {
                                   context.router.navigate(ChatsRouterPageRoute(children: [
                                     const ChatListScreenPageRoute(),
-                                    ConversationScreenPageRoute(participantId: recent.contactSourceId!),
+                                    ConversationScreenPageRoute(participantId: contactSourceId!),
                                   ]));
                                 }
                               : null);

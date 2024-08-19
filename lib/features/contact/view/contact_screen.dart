@@ -27,7 +27,9 @@ class ContactScreen extends StatelessWidget {
         if (contact == null || contactPhones == null || contactEmails == null) {
           return const Scaffold(body: Center(child: CircularProgressIndicator()));
         } else {
-          final canMessage = (contact.sourceType == ContactSourceType.external) && contact.sourceId.isNotEmpty;
+          final canMessage = (contact.sourceType == ContactSourceType.external) &&
+              contact.sourceId.isNotEmpty &&
+              contact.appInstalled == true;
           return BlocBuilder<CallBloc, CallState>(
             buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
             builder: (context, callState) {
