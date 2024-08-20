@@ -92,15 +92,12 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
   void _onSignalingEvent(Event event) {
     _logger.info('_onSignalingEvent $event');
 
-    final eventHandlers = <Type, void Function(Event)>{
-      IncomingCallEvent: (e) => _handleIncomingCall(e as IncomingCallEvent),
-      HangupEvent: (e) => _handleHangupCall(e as HangupEvent),
-      UnregisteredEvent: (e) => _handleUnregisteredEvent(e as UnregisteredEvent),
-    };
-
-    final handler = eventHandlers[event.runtimeType];
-    if (handler != null) {
-      handler(event);
+    if (event is IncomingCallEvent) {
+      _handleIncomingCall(event);
+    } else if (event is HangupEvent) {
+      _handleHangupCall(event);
+    } else if (event is UnregisteredEvent) {
+      _handleUnregisteredEvent(event);
     } else {
       _logger.warning('unhandled signaling event $event');
     }
