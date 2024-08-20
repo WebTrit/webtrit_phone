@@ -138,13 +138,13 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
 
   Future<void> _declineCall(String callId) async {
     final transaction = WebtritSignalingClient.generateTransactionId();
-    final lineIndex = _lines.indexWhere((line) => line?.callId == callId);
+    final line = _lines.indexWhere((line) => line?.callId == callId);
 
-    if (lineIndex != _kUndefinedLine) {
+    if (line != _kUndefinedLine) {
       final decline = DeclineRequest(
         transaction: transaction,
-        line: lineIndex,
-        callId: _lines[lineIndex]!.callId,
+        line: line,
+        callId: _lines[line]!.callId,
       );
       await client.execute(decline);
     } else {
