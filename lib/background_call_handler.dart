@@ -24,7 +24,6 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
   final _callNotificationDelegate = CallkeepBackgroundService();
 
   late SecureStorage storage;
-  late PackageInfo packageInfo;
   late WebtritSignalingClient client;
 
   final List<Line?> _lines = [];
@@ -41,12 +40,10 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
   }
 
   Future _initializeDependentResources() async {
-    await PackageInfo.init();
     await SecureStorage.init();
     await AppCertificates.init();
 
     storage = SecureStorage();
-    packageInfo = PackageInfo();
   }
 
   Future<void> _initializeSignalClient() async {
