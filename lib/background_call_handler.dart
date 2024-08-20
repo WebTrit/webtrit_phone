@@ -187,14 +187,4 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
     await _recentsRepository.add(recent);
     _logger.info('endCallReceived: $recent');
   }
-
-  static bool parseString(
-    String value, {
-    bool defaultValue = false,
-  }) {
-    final trimmedValue = value.trim().toLowerCase();
-    if (trimmedValue == 'true') return true;
-    if (trimmedValue == 'false') return false;
-    return defaultValue;
-  }
 }
