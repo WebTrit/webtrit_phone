@@ -90,7 +90,7 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
   }
 
   void _onSignalingEvent(Event event) {
-    _logger.warning('_onSignalingEvent $event');
+    _logger.info('_onSignalingEvent $event');
 
     final eventHandlers = <Type, void Function(Event)>{
       IncomingCallEvent: (e) => _handleIncomingCall(e as IncomingCallEvent),
