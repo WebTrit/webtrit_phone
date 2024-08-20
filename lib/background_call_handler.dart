@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -8,7 +6,6 @@ import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/recents/recents_repository.dart';
 
-import 'app/constants.dart';
 import 'data/data.dart';
 
 const int _kUndefinedLine = -1;
@@ -58,9 +55,6 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
     final tenantId = storage.readTenantId() ?? '';
 
     final certificates = AppCertificates().trustedCertificates;
-    final httpClient = HttpClient();
-    httpClient.connectionTimeout = kSignalingClientConnectionTimeout;
-
     client = await WebtritSignalingClient.connect(signalingUrl, tenantId, token!, true, certs: certificates);
   }
 
