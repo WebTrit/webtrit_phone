@@ -53,9 +53,15 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
     final signalingUrl = _parseCoreUrlToSignalingUrl(storage.readCoreUrl() ?? '');
     final token = storage.readToken();
     final tenantId = storage.readTenantId() ?? '';
-
     final certificates = AppCertificates().trustedCertificates;
-    client = await WebtritSignalingClient.connect(signalingUrl, tenantId, token!, true, certs: certificates);
+
+    client = await WebtritSignalingClient.connect(
+      signalingUrl,
+      tenantId,
+      token!,
+      true,
+      certs: certificates,
+    );
   }
 
   Future<void> _setupListeners() async {
