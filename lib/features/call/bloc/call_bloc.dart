@@ -844,6 +844,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallSignalingEventHangup event,
     Emitter<CallState> emit,
   ) async {
+    final code = SignalingResponseCode.values.byCode(event.code);
+    if (code != null) {
+      _logger.warning('__onCallSignalingEventHangup: $code');
+      notificationsBloc.add(NotificationsSubmitted(AppUnregisteredNotification()));
+    }
+
     try {
       await _ringtoneStop();
 
