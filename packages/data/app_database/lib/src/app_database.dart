@@ -168,7 +168,9 @@ class ContactsTable extends Table {
 
   BoolColumn get registered => boolean().nullable()();
 
-  BoolColumn get appInstalled => boolean().nullable()();
+  BoolColumn get userRegistered => boolean().nullable()();
+
+  BoolColumn get isCurrentUser => boolean().nullable()();
 
   DateTimeColumn get insertedAt => dateTime().nullable()();
 

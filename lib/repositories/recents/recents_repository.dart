@@ -67,7 +67,8 @@ class RecentsRepository {
       aliasName: contactData?.aliasName,
       contactSourceId: contactData?.sourceId,
       contactSourceType: contactData?.sourceType.toModel(),
-      contactAppInstalled: contactData?.appInstalled,
+      contactUserRegistered: contactData?.userRegistered,
+      contactIsCurrentUser: contactData?.isCurrentUser,
     );
   }
 

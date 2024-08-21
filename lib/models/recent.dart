@@ -30,7 +30,8 @@ class Recent extends Equatable {
   final Uint8List? thumbnail;
   final String? contactSourceId;
   final ContactSourceType? contactSourceType;
-  final bool? contactAppInstalled;
+  final bool? contactUserRegistered;
+  final bool? contactIsCurrentUser;
 
   const Recent({
     required this.direction,
@@ -46,7 +47,8 @@ class Recent extends Equatable {
     this.thumbnail,
     this.contactSourceId,
     this.contactSourceType,
-    this.contactAppInstalled,
+    this.contactUserRegistered,
+    this.contactIsCurrentUser,
   });
 
   bool get isComplete => acceptedTime != null;
@@ -90,6 +92,7 @@ class Recent extends Equatable {
         thumbnail,
         contactSourceId,
         contactSourceType,
-        contactAppInstalled,
+        contactUserRegistered,
+        contactIsCurrentUser,
       ];
 }

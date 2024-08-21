@@ -16,7 +16,8 @@ class Contact extends Equatable {
     required this.sourceType,
     required this.sourceId,
     this.registered,
-    this.appInstalled,
+    this.userRegistered,
+    this.isCurrentUser,
     this.firstName,
     this.lastName,
     this.aliasName,
@@ -26,8 +27,16 @@ class Contact extends Equatable {
   final ContactId id;
   final ContactSourceType sourceType;
   final String sourceId;
+
+  /// SIP Registered status
   final bool? registered;
-  final bool? appInstalled;
+
+  /// User account registered status
+  final bool? userRegistered;
+
+  /// Is currently loggined user
+  final bool? isCurrentUser;
+
   final String? firstName;
   final String? lastName;
   final String? aliasName;
@@ -48,7 +57,8 @@ class Contact extends Equatable {
         sourceType,
         sourceId,
         registered,
-        appInstalled,
+        userRegistered,
+        isCurrentUser,
         firstName,
         lastName,
         aliasName,

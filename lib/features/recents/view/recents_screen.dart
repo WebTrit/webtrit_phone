@@ -115,7 +115,8 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                       final contactSourceId = recent.contactSourceId;
                       final canMessage = recent.contactSourceType == ContactSourceType.external &&
                           (contactSourceId?.isNotEmpty ?? false) &&
-                          recent.contactAppInstalled == true;
+                          recent.contactUserRegistered == true &&
+                          recent.contactIsCurrentUser == false;
                       return RecentTile(
                           recent: recent,
                           dateFormat: context.read<RecentsBloc>().dateFormat,

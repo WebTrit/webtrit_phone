@@ -19,6 +19,8 @@ class UserContact with _$UserContact {
     String? lastName,
     String? aliasName,
     String? companyName,
+    bool? isCurrentUser,
+    bool? isRegisteredUser,
   }) = _UserContact;
 
   factory UserContact.fromJson(Map<String, Object?> json) => _$UserContactFromJson(json);

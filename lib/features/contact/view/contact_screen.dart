@@ -29,7 +29,8 @@ class ContactScreen extends StatelessWidget {
         } else {
           final canMessage = (contact.sourceType == ContactSourceType.external) &&
               contact.sourceId.isNotEmpty &&
-              contact.appInstalled == true;
+              contact.userRegistered == true &&
+              contact.isCurrentUser == false;
           return BlocBuilder<CallBloc, CallState>(
             buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
             builder: (context, callState) {

@@ -16,6 +16,8 @@ _$UserContactImpl _$$UserContactImplFromJson(Map<String, dynamic> json) =>
       lastName: json['last_name'] as String?,
       aliasName: json['alias_name'] as String?,
       companyName: json['company_name'] as String?,
+      isCurrentUser: json['is_current_user'] as bool?,
+      isRegisteredUser: json['is_registered_user'] as bool?,
     );
 
 Map<String, dynamic> _$$UserContactImplToJson(_$UserContactImpl instance) =>
@@ -28,6 +30,8 @@ Map<String, dynamic> _$$UserContactImplToJson(_$UserContactImpl instance) =>
       'last_name': instance.lastName,
       'alias_name': instance.aliasName,
       'company_name': instance.companyName,
+      'is_current_user': instance.isCurrentUser,
+      'is_registered_user': instance.isRegisteredUser,
     };
 
 const _$SipStatusEnumMap = {

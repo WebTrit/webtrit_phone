@@ -11,6 +11,7 @@ class MigrationV6 extends Migration {
   @override
   Future<void> execute(AppDatabase db, Migrator m) async {
     final contactsTable = v6.Contacts(db);
-    await m.addColumn(contactsTable, contactsTable.appInstalled);
+    await m.addColumn(contactsTable, contactsTable.userRegistered);
+    await m.addColumn(contactsTable, contactsTable.isCurrentUser);
   }
 }

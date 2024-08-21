@@ -79,6 +79,8 @@ class ExternalContactsRepository {
       return ExternalContact(
         id: contact.userId,
         registered: contact.sipStatus == null ? null : contact.sipStatus == SipStatus.registered,
+        userRegistered: contact.isRegisteredUser,
+        isCurrentUser: contact.isCurrentUser,
         firstName: contact.firstName,
         lastName: contact.lastName,
         aliasName: contact.aliasName,

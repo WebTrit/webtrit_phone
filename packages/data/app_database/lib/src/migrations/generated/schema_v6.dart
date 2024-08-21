@@ -44,11 +44,16 @@ class Contacts extends Table with TableInfo {
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       $customConstraints: 'NULL CHECK (registered IN (0, 1))');
-  late final GeneratedColumn<int> appInstalled = GeneratedColumn<int>(
-      'app_installed', aliasedName, true,
+  late final GeneratedColumn<int> userRegistered = GeneratedColumn<int>(
+      'user_registered', aliasedName, true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      $customConstraints: 'NULL CHECK (app_installed IN (0, 1))');
+      $customConstraints: 'NULL CHECK (user_registered IN (0, 1))');
+  late final GeneratedColumn<int> isCurrentUser = GeneratedColumn<int>(
+      'is_current_user', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL CHECK (is_current_user IN (0, 1))');
   late final GeneratedColumn<int> insertedAt = GeneratedColumn<int>(
       'inserted_at', aliasedName, true,
       type: DriftSqlType.int,
@@ -68,7 +73,8 @@ class Contacts extends Table with TableInfo {
         lastName,
         aliasName,
         registered,
-        appInstalled,
+        userRegistered,
+        isCurrentUser,
         insertedAt,
         updatedAt
       ];

@@ -34,7 +34,9 @@ class _AddContactDialogState extends State<AddContactDialog> {
   void initState() {
     super.initState();
     contactsSub = widget.contactsRepository.watchContacts('', ContactSourceType.external).listen((contacts) {
-      setState(() => this.contacts = contacts.where((contact) => contact.appInstalled == true).toList());
+      setState(() => this.contacts = contacts.where((contact) {
+            return contact.userRegistered == true && contact.isCurrentUser == false;
+          }).toList());
     });
   }
 

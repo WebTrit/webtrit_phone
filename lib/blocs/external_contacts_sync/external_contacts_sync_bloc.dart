@@ -99,7 +99,8 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
             lastName: Value(externalContact.lastName),
             aliasName: Value(externalContact.aliasName),
             registered: Value(externalContact.registered),
-            appInstalled: Value(externalContact.appInstalled),
+            userRegistered: Value(externalContact.userRegistered),
+            isCurrentUser: Value(externalContact.isCurrentUser),
           ));
 
           final externalContactNumber = externalContact.number;
