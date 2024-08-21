@@ -361,6 +361,12 @@ abstract class AppLocalizations {
   /// **'Connection established'**
   String get callStatus_ready;
 
+  /// No description provided for @call_ThumbnailAvatar_currentlyNoActiveCall.
+  ///
+  /// In en, this message translates to:
+  /// **'Currently, there is no active call'**
+  String get call_ThumbnailAvatar_currentlyNoActiveCall;
+
   /// No description provided for @connectToYourOwnVoIPSystem_Button_Action.
   ///
   /// In en, this message translates to:

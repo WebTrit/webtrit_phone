@@ -141,6 +141,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get callStatus_ready => 'Connessione stabilita';
 
   @override
+  String get call_ThumbnailAvatar_currentlyNoActiveCall => 'Actualmente, no hay ninguna llamada activa';
+
+  @override
   String get connectToYourOwnVoIPSystem_Button_Action => 'Connettiti al tuo sistema VoIP';
 
   @override

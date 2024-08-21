@@ -4,10 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_signaling/webtrit_signaling.dart';
+
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/features/orientations/orientations.dart';
-import 'package:webtrit_signaling/webtrit_signaling.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 
 import '../call.dart';
 import 'call_active_thumbnail.dart';
@@ -30,6 +32,7 @@ class CallShell extends StatefulWidget {
 
 class _CallShellState extends State<CallShell> {
   ThumbnailAvatar? _avatar;
+
   @override
   Widget build(BuildContext context) {
     return signalingListener(displayListener(widget.child));
@@ -89,18 +92,27 @@ class _CallShellState extends State<CallShell> {
           } else {
             final avatar = ThumbnailAvatar(
               stickyPadding: widget.stickyPadding,
-              onTap: () => router.push(const CallScreenPageRoute()),
+              onTap: () {
+                if (state.activeCalls.isNotEmpty) {
+                  router.push(const CallScreenPageRoute());
+                } else {
+                  // Handle scenario where no active call exists, ensuring the listener is properly removed and the thumbnail is correctly managed.
+                  _removeThumbnailAvatar();
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(context.l10n.call_ThumbnailAvatar_currentlyNoActiveCall),
+                      backgroundColor: Colors.grey,
+                    ),
+                  );
+                }
+              },
             );
             _avatar = avatar;
             avatar.insert(context, state);
           }
         } else {
-          final avatar = _avatar;
-          if (avatar != null) {
-            if (avatar.inserted) {
-              avatar.remove();
-            }
-          }
+          _removeThumbnailAvatar();
         }
 
         if (state.display == CallDisplay.none) {
@@ -109,6 +121,15 @@ class _CallShellState extends State<CallShell> {
       },
       child: child,
     );
+  }
+
+  void _removeThumbnailAvatar() {
+    final avatar = _avatar;
+    if (avatar != null) {
+      if (avatar.inserted) {
+        avatar.remove();
+      }
+    }
   }
 }
 
