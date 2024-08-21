@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/features/chats/chats.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -113,10 +114,6 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                     itemBuilder: (context, index) {
                       final recent = recentsFiltered[index];
                       final contactSourceId = recent.contactSourceId;
-                      final canMessage = recent.contactSourceType == ContactSourceType.external &&
-                          (contactSourceId?.isNotEmpty ?? false) &&
-                          recent.contactUserRegistered == true &&
-                          recent.contactIsCurrentUser == false;
                       return RecentTile(
                           recent: recent,
                           dateFormat: context.read<RecentsBloc>().dateFormat,
@@ -154,7 +151,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                             context.showSnackBar(context.l10n.recents_snackBar_deleted(recent.name));
                             context.read<RecentsBloc>().add(RecentsDeleted(recent));
                           },
-                          onMessagePressed: canMessage
+                          onMessagePressed: recent.canMessage
                               ? () {
                                   context.router.navigate(ChatsRouterPageRoute(children: [
                                     const ChatListScreenPageRoute(),

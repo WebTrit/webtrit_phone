@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:webtrit_phone/features/contacts/contacts.dart';
+import 'package:webtrit_phone/features/features.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -34,9 +34,7 @@ class _AddContactDialogState extends State<AddContactDialog> {
   void initState() {
     super.initState();
     contactsSub = widget.contactsRepository.watchContacts('', ContactSourceType.external).listen((contacts) {
-      setState(() => this.contacts = contacts.where((contact) {
-            return contact.userRegistered == true && contact.isCurrentUser == false;
-          }).toList());
+      setState(() => this.contacts = contacts.where((contact) => contact.canMessage).toList());
     });
   }
 

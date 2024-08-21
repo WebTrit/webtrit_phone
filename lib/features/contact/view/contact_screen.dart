@@ -6,7 +6,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/call/call.dart';
-import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/features/chats/extensions/contact.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../contact.dart';
@@ -27,17 +27,13 @@ class ContactScreen extends StatelessWidget {
         if (contact == null || contactPhones == null || contactEmails == null) {
           return const Scaffold(body: Center(child: CircularProgressIndicator()));
         } else {
-          final canMessage = (contact.sourceType == ContactSourceType.external) &&
-              contact.sourceId.isNotEmpty &&
-              contact.userRegistered == true &&
-              contact.isCurrentUser == false;
           return BlocBuilder<CallBloc, CallState>(
             buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
             builder: (context, callState) {
               return Scaffold(
                 appBar: AppBar(
                   actions: [
-                    if (canMessage)
+                    if (contact.canMessage)
                       IconButton(
                         icon: const Icon(Icons.message),
                         onPressed: () {
