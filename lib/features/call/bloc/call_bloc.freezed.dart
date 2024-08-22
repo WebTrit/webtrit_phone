@@ -12047,7 +12047,9 @@ mixin _$CallState {
   bool? get minimized => throw _privateConstructorUsedError;
   bool? get speaker => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CallState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CallStateCopyWith<CallState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -12080,6 +12082,8 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of CallState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -12168,6 +12172,8 @@ class __$$CallStateImplCopyWithImpl<$Res>
       _$CallStateImpl _value, $Res Function(_$CallStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CallState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -12346,7 +12352,9 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
       minimized,
       speaker);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CallState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CallStateImplCopyWith<_$CallStateImpl> get copyWith =>
@@ -12387,8 +12395,11 @@ abstract class _CallState extends CallState {
   bool? get minimized;
   @override
   bool? get speaker;
+
+  /// Create a copy of CallState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CallStateImplCopyWith<_$CallStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -12400,6 +12411,7 @@ mixin _$ActiveCall {
   String get callId => throw _privateConstructorUsedError;
   CallkeepHandle get handle => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
+  CallProcessingStatus? get status => throw _privateConstructorUsedError;
 
   /// If the call is result of a refer request, the id should be provided.
   String? get fromReferId => throw _privateConstructorUsedError;
@@ -12416,7 +12428,9 @@ mixin _$ActiveCall {
   MediaStream? get localStream => throw _privateConstructorUsedError;
   MediaStream? get remoteStream => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ActiveCall
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ActiveCallCopyWith<ActiveCall> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -12433,6 +12447,7 @@ abstract class $ActiveCallCopyWith<$Res> {
       String callId,
       CallkeepHandle handle,
       String? displayName,
+      CallProcessingStatus? status,
       String? fromReferId,
       bool video,
       bool? frontCamera,
@@ -12460,6 +12475,8 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ActiveCall
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -12468,6 +12485,7 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
     Object? callId = null,
     Object? handle = null,
     Object? displayName = freezed,
+    Object? status = freezed,
     Object? fromReferId = freezed,
     Object? video = null,
     Object? frontCamera = freezed,
@@ -12503,6 +12521,10 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
               as String?,
+      status: freezed == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as CallProcessingStatus?,
       fromReferId: freezed == fromReferId
           ? _value.fromReferId
           : fromReferId // ignore: cast_nullable_to_non_nullable
@@ -12555,6 +12577,8 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
     ) as $Val);
   }
 
+  /// Create a copy of ActiveCall
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $TransferCopyWith<$Res>? get transfer {
@@ -12582,6 +12606,7 @@ abstract class _$$ActiveCallImplCopyWith<$Res>
       String callId,
       CallkeepHandle handle,
       String? displayName,
+      CallProcessingStatus? status,
       String? fromReferId,
       bool video,
       bool? frontCamera,
@@ -12608,6 +12633,8 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
       _$ActiveCallImpl _value, $Res Function(_$ActiveCallImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ActiveCall
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -12616,6 +12643,7 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
     Object? callId = null,
     Object? handle = null,
     Object? displayName = freezed,
+    Object? status = freezed,
     Object? fromReferId = freezed,
     Object? video = null,
     Object? frontCamera = freezed,
@@ -12651,6 +12679,10 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
               as String?,
+      status: freezed == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as CallProcessingStatus?,
       fromReferId: freezed == fromReferId
           ? _value.fromReferId
           : fromReferId // ignore: cast_nullable_to_non_nullable
@@ -12713,6 +12745,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
       required this.callId,
       required this.handle,
       this.displayName,
+      this.status,
       this.fromReferId,
       required this.video,
       this.frontCamera = true,
@@ -12738,6 +12771,8 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
   final CallkeepHandle handle;
   @override
   final String? displayName;
+  @override
+  final CallProcessingStatus? status;
 
   /// If the call is result of a refer request, the id should be provided.
   @override
@@ -12773,7 +12808,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, displayName: $displayName, fromReferId: $fromReferId, video: $video, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
+    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, displayName: $displayName, status: $status, fromReferId: $fromReferId, video: $video, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, createdTime: $createdTime, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
   }
 
   @override
@@ -12786,6 +12821,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('callId', callId))
       ..add(DiagnosticsProperty('handle', handle))
       ..add(DiagnosticsProperty('displayName', displayName))
+      ..add(DiagnosticsProperty('status', status))
       ..add(DiagnosticsProperty('fromReferId', fromReferId))
       ..add(DiagnosticsProperty('video', video))
       ..add(DiagnosticsProperty('frontCamera', frontCamera))
@@ -12813,6 +12849,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
             (identical(other.handle, handle) || other.handle == handle) &&
             (identical(other.displayName, displayName) ||
                 other.displayName == displayName) &&
+            (identical(other.status, status) || other.status == status) &&
             (identical(other.fromReferId, fromReferId) ||
                 other.fromReferId == fromReferId) &&
             (identical(other.video, video) || other.video == video) &&
@@ -12838,28 +12875,32 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      direction,
-      line,
-      callId,
-      handle,
-      displayName,
-      fromReferId,
-      video,
-      frontCamera,
-      held,
-      muted,
-      updating,
-      createdTime,
-      acceptedTime,
-      hungUpTime,
-      transfer,
-      const DeepCollectionEquality().hash(failure),
-      localStream,
-      remoteStream);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        direction,
+        line,
+        callId,
+        handle,
+        displayName,
+        status,
+        fromReferId,
+        video,
+        frontCamera,
+        held,
+        muted,
+        updating,
+        createdTime,
+        acceptedTime,
+        hungUpTime,
+        transfer,
+        const DeepCollectionEquality().hash(failure),
+        localStream,
+        remoteStream
+      ]);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ActiveCall
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ActiveCallImplCopyWith<_$ActiveCallImpl> get copyWith =>
@@ -12873,6 +12914,7 @@ abstract class _ActiveCall extends ActiveCall {
       required final String callId,
       required final CallkeepHandle handle,
       final String? displayName,
+      final CallProcessingStatus? status,
       final String? fromReferId,
       required final bool video,
       final bool? frontCamera,
@@ -12899,8 +12941,10 @@ abstract class _ActiveCall extends ActiveCall {
   @override
   String? get displayName;
   @override
+  CallProcessingStatus? get status;
 
   /// If the call is result of a refer request, the id should be provided.
+  @override
   String? get fromReferId;
   @override
   bool get video;
@@ -12926,8 +12970,11 @@ abstract class _ActiveCall extends ActiveCall {
   MediaStream? get localStream;
   @override
   MediaStream? get remoteStream;
+
+  /// Create a copy of ActiveCall
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ActiveCallImplCopyWith<_$ActiveCallImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

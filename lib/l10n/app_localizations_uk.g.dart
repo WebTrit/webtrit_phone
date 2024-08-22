@@ -141,6 +141,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get callStatus_ready => 'Підключення встановлено';
 
   @override
+  String get callProcessingStatus_disconnecting => 'Відключення дзвінка, будь ласка, зачекайте…';
+
+  @override
   String get call_ThumbnailAvatar_currentlyNoActiveCall => 'Зараз немає активних дзвінків';
 
   @override

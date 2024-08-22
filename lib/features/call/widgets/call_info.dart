@@ -18,6 +18,7 @@ class CallInfo extends StatefulWidget {
     required this.username,
     this.acceptedTime,
     this.color,
+    this.callProcessingStatus,
   });
 
   final bool transferProcessing;
@@ -28,6 +29,8 @@ class CallInfo extends StatefulWidget {
   final String username;
   final DateTime? acceptedTime;
   final Color? color;
+
+  final Widget? callProcessingStatus;
 
   @override
   State<CallInfo> createState() => _CallInfoState();
@@ -125,6 +128,7 @@ class _CallInfoState extends State<CallInfo> {
           ),
         ),
         const SizedBox(height: 10),
+        if (widget.callProcessingStatus != null) widget.callProcessingStatus!,
       ],
     );
   }

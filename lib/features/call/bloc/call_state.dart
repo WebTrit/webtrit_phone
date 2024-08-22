@@ -127,6 +127,7 @@ class ActiveCall with _$ActiveCall {
     required String callId,
     required CallkeepHandle handle,
     String? displayName,
+    CallProcessingStatus? status,
 
     /// If the call is result of a refer request, the id should be provided.
     String? fromReferId,

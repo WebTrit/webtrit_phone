@@ -361,6 +361,12 @@ abstract class AppLocalizations {
   /// **'Connection established'**
   String get callStatus_ready;
 
+  /// No description provided for @callProcessingStatus_disconnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnecting the call, please hold on…'**
+  String get callProcessingStatus_disconnecting;
+
   /// No description provided for @call_ThumbnailAvatar_currentlyNoActiveCall.
   ///
   /// In en, this message translates to:

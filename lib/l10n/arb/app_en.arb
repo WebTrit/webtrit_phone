@@ -88,6 +88,8 @@
   "@callStatus_inProgress": {},
   "callStatus_ready": "Connection established",
   "@callStatus_ready": {},
+  "callProcessingStatus_disconnecting": "Disconnecting the call, please hold on…",
+  "@callProcessingStatus_disconnecting": {},
   "call_ThumbnailAvatar_currentlyNoActiveCall": "Currently, there is no active call",
   "@call_ThumbnailAvatar_currentlyNoActiveCall": {},
   "connectToYourOwnVoIPSystem_Button_Action": "Connect to your own VoIP system",
