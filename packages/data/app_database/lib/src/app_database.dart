@@ -47,20 +47,30 @@ class AppDatabase extends _$AppDatabase {
         // disable foreign_keys before migrations
         await customStatement('PRAGMA foreign_keys = OFF');
 
-        await transaction(() async {
-          for (var version = from; version < to; version++) {
-            await migrations[version - 1].execute(this, m);
+        if (to < from) {
+          // Perform a clean downgrade of the database when the app is downgraded from a newer test flight version to an older production version.
+          // This ensures that the database schema is compatible with the older version by removing all existing tables.
+          for (final table in allTables) {
+            await m.deleteTable(table.actualTableName);
           }
-        });
 
-        // Assert that the schema is valid after migrations
-        assert(() {
-          () async {
-            final wrongForeignKeys = await customSelect('PRAGMA foreign_key_check').get();
-            assert(wrongForeignKeys.isEmpty, '${wrongForeignKeys.map((e) => e.data)}');
-          }();
-          return true;
-        }());
+          await m.createAll();
+        } else {
+          await transaction(() async {
+            for (var version = from; version < to; version++) {
+              await migrations[version - 1].execute(this, m);
+            }
+          });
+
+          // Assert that the schema is valid after migrations
+          assert(() {
+            () async {
+              final wrongForeignKeys = await customSelect('PRAGMA foreign_key_check').get();
+              assert(wrongForeignKeys.isEmpty, '${wrongForeignKeys.map((e) => e.data)}');
+            }();
+            return true;
+          }());
+        }
       },
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON;');
