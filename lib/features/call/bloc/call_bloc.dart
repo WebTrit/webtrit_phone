@@ -1237,6 +1237,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final activeCallBlindTransferInitiated = state.activeCalls.blindTransferInitiated;
     if (activeCallBlindTransferInitiated == null) return;
 
+    // Check if the number is already in active calls
+    final isNumberAlreadyConnected = state.activeCalls.any((call) => call.handle.value == event.number);
+    if (isNumberAlreadyConnected) {
+      notificationsBloc.add(NotificationsSubmitted(ActiveLineBlindTransferWarningNotification()));
+      return;
+    }
+
     var newState = state.copyWith(minimized: false);
     newState = newState.copyWithMappedActiveCall(activeCallBlindTransferInitiated.callId, (activeCall) {
       return activeCall.copyWith(

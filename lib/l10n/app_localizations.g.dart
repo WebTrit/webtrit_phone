@@ -1081,6 +1081,12 @@ abstract class AppLocalizations {
   /// **'No access to media input, please check app permissions'**
   String get notifications_errorSnackBar_callUserMedia;
 
+  /// No description provided for @notifications_errorSnackBar_activeLineBlindTransferWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'You are already on the line with the recipient you are trying to blind transfer to'**
+  String get notifications_errorSnackBar_activeLineBlindTransferWarning;
+
   /// No description provided for @notImplemented.
   ///
   /// In en, this message translates to:
