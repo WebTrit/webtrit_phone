@@ -191,38 +191,30 @@ class _ChatListItemState extends State<ChatListItem> {
   }
 
   Widget subtitle() {
+    const textStyle = TextStyle(overflow: TextOverflow.ellipsis, fontSize: 12);
+    final lastMessage = this.lastMessage;
+
     return Row(
       children: [
-        Expanded(
-          child: Builder(builder: (context) {
-            const textStyle = TextStyle(overflow: TextOverflow.ellipsis, fontSize: 12);
-
-            final message = lastMessage;
-
-            if (message == null) return const SizedBox();
-            if (message.senderId == widget.userId) return Text('You: ${message.content}', style: textStyle);
-            return ContactInfoBuilder(
-              sourceType: ContactSourceType.external,
-              sourceId: message.senderId,
-              builder: (context, contact) {
-                if (contact == null) {
-                  return FadeIn(
-                    child: Text(
-                      message.content,
-                      style: textStyle,
-                    ),
-                  );
-                }
-                return FadeIn(
-                  child: Text(
-                    '${contact.name.split(' ').first}: ${lastMessage!.content}',
+        if (lastMessage != null)
+          Expanded(
+            child: FadeIn(
+              child: Row(
+                children: [
+                  ParticipantName(
+                    senderId: lastMessage.senderId,
+                    userId: widget.userId,
                     style: textStyle,
+                    textMap: (t) => '$t:',
                   ),
-                );
-              },
-            );
-          }),
-        ),
+                  const SizedBox(width: 4),
+                  Expanded(child: Text(lastMessage.content, style: textStyle))
+                ],
+              ),
+            ),
+          )
+        else
+          const Spacer(),
         if (unreadMsgsCount > 0) ...[
           const SizedBox(width: 8),
           Container(
