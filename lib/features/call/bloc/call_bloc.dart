@@ -1541,7 +1541,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     // Condition occur when the user interacts with a push notification before signaling is properly initialized.
     // In this case, the CallKeep method "reportNewIncomingCall" may return callIdAlreadyTerminated.
-    if (state.retrieveActiveCall(event.callId)?.line == _kUndefinedLine) return;
+    if (state.retrieveActiveCall(event.callId)?.line == _kUndefinedLine) {
+      add(_ResetStateEvent.completeCall(event.callId));
+      return;
+    }
 
     if (state.retrieveActiveCall(event.callId)?.wasHungUp == true) {
       // TODO: There's an issue where the user might have already ended the call, but the active call screen remains visible.
