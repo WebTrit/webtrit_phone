@@ -131,6 +131,12 @@ class _CallShellState extends State<CallShell> {
       }
     }
   }
+
+  @override
+  void dispose() {
+    _removeThumbnailAvatar();
+    super.dispose();
+  }
 }
 
 class ThumbnailAvatar {
