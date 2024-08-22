@@ -12,7 +12,7 @@ abstract class LocalNotificationRepository {
   Future<void> dissmissNotification(int id);
 }
 
-class LocalNotificationRepositoryAwesomeImpl implements LocalNotificationRepository {
+class LocalNotificationRepositoryFLNImpl implements LocalNotificationRepository {
   @override
   Stream<LocalNotificationActionDTO> get chatActionsStream {
     return LocalNotificationsBroker.chatActionsStream.map((action) {

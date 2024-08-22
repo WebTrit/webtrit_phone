@@ -142,7 +142,7 @@ class _MainShellState extends State<MainShell> {
           create: (context) => RemoteNotificationRepositoryFirebaseImpl(),
         ),
         RepositoryProvider<LocalNotificationRepository>(
-          create: (context) => LocalNotificationRepositoryAwesomeImpl(),
+          create: (context) => LocalNotificationRepositoryFLNImpl(),
         ),
       ],
       child: MultiBlocProvider(
