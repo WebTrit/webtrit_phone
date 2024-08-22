@@ -256,7 +256,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } else {
       try {
         _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - await');
-        final peerConnection = await peerConnectionCompleter.future;
+        final peerConnection = await peerConnectionCompleter.future.timeout(
+          kPeerConnectionRetrieveTimeout,
+          onTimeout: () => throw TimeoutException('Timeout while retrieving peer connection for callId: $callId'),
+        );
         _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - value');
         return peerConnection;
       } catch (e, stackTrace) {
