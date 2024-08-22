@@ -256,6 +256,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } else {
       try {
         _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - await');
+        // Timeout to handle scenarios where `complete` is never called.
+        // This can occur, for example, when a push is received for an incorrect account
+        // after a forced logout.
         final peerConnection = await peerConnectionCompleter.future.timeout(
           kPeerConnectionRetrieveTimeout,
           onTimeout: () => throw TimeoutException('Timeout while retrieving peer connection for callId: $callId'),
