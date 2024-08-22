@@ -55,7 +55,10 @@ class _ChatListScreenState extends State<ChatListScreen> {
   void onStartDialog() async {
     final result = await showDialog<Contact>(
       context: context,
-      builder: (context) => AddContactDialog(contactsRepository: contactsRepository),
+      builder: (context) => AddContactDialog(
+        contactsRepository: contactsRepository,
+        filter: (contact) => contact.canMessage,
+      ),
     );
     if (result == null) return;
     if (!mounted) return;

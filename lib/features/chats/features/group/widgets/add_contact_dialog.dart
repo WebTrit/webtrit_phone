@@ -6,13 +6,17 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
+bool _defaultFilter(Contact contact) => true;
+
 class AddContactDialog extends StatefulWidget {
   const AddContactDialog({
     required this.contactsRepository,
+    this.filter = _defaultFilter,
     super.key,
   });
 
   final ContactsRepository contactsRepository;
+  final bool Function(Contact) filter;
 
   @override
   State<AddContactDialog> createState() => _AddContactDialogState();
@@ -34,7 +38,7 @@ class _AddContactDialogState extends State<AddContactDialog> {
   void initState() {
     super.initState();
     contactsSub = widget.contactsRepository.watchContacts('', ContactSourceType.external).listen((contacts) {
-      setState(() => this.contacts = contacts.where((contact) => contact.canMessage).toList());
+      setState(() => this.contacts = contacts.where(widget.filter).toList());
     });
   }
 

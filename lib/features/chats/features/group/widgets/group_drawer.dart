@@ -6,8 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/call/widgets/widgets.dart';
-import 'package:webtrit_phone/features/chats/features/group/group.dart';
-import 'package:webtrit_phone/features/chats/widgets/widgets.dart';
+import 'package:webtrit_phone/features/chats/chats.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -49,7 +48,21 @@ class _GroupDrawerState extends State<GroupDrawer> {
   onAddUser() async {
     final result = await showDialog<Contact>(
       context: context,
-      builder: (context) => AddContactDialog(contactsRepository: contactsRepository),
+      builder: (context) => AddContactDialog(
+        contactsRepository: contactsRepository,
+        filter: (contact) {
+          final state = groupCubit.state;
+          if (state is GroupStateReady) {
+            final chat = state.chat;
+            final members = chat.members.map((m) => m.userId).toSet();
+            final isMe = contact.sourceId == widget.userId;
+            final isMember = members.contains(contact.sourceId);
+            final canMessage = contact.canMessage;
+            return !isMe && !isMember && canMessage;
+          }
+          return false;
+        },
+      ),
     );
     if (!mounted) return;
     if (result != null) await groupCubit.addUser(result.sourceId);

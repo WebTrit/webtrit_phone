@@ -12,7 +12,6 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 // TODO:
 //  - extract logic to cubit
 //  - handle business errors
-//  - use contacts picker or user search instead raw numbers, when core/adapter arch will be ready to distinguish users
 
 class GroupBuilderScreen extends StatefulWidget {
   const GroupBuilderScreen({super.key});
@@ -34,7 +33,10 @@ class _GroupBuilderScreenState extends State<GroupBuilderScreen> {
   onAddUser() async {
     final result = await showDialog<Contact>(
       context: context,
-      builder: (context) => AddContactDialog(contactsRepository: contactsRepository),
+      builder: (context) => AddContactDialog(
+        contactsRepository: contactsRepository,
+        filter: (contact) => !selectedUsers.contains(contact) && contact.canMessage,
+      ),
     );
 
     if (result != null) {
