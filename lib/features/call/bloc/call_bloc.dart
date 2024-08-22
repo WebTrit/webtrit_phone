@@ -1826,38 +1826,46 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallScreenEventDidPush event,
     Emitter<CallState> emit,
   ) async {
+    final hasActiveCalls = state.activeCalls.isNotEmpty;
     var newState = state.copyWith(minimized: false);
 
-    newState = newState.copyWithMappedActiveCalls((activeCall) {
-      final transfer = activeCall.transfer;
-      if (transfer != null && transfer is BlindTransferInitiated) {
-        return activeCall.copyWith(
-          transfer: null,
-        );
-      } else {
-        return activeCall;
-      }
-    });
+    if (hasActiveCalls) {
+      newState = newState.copyWithMappedActiveCalls((activeCall) {
+        final transfer = activeCall.transfer;
+        if (transfer != null && transfer is BlindTransferInitiated) {
+          return activeCall.copyWith(
+            transfer: null,
+          );
+        } else {
+          return activeCall;
+        }
+      });
 
-    emit(newState);
+      emit(newState);
 
-    await callkeep.reportUpdateCall(
-      state.activeCalls.current.callId,
-      proximityEnabled: state.shouldListenToProximity,
-    );
+      await callkeep.reportUpdateCall(
+        state.activeCalls.current.callId,
+        proximityEnabled: state.shouldListenToProximity,
+      );
+    } else {
+      _logger.warning('__onCallScreenEventDidPush: activeCalls is empty');
+    }
   }
 
   Future<void> __onCallScreenEventDidPop(
     _CallScreenEventDidPop event,
     Emitter<CallState> emit,
   ) async {
-    emit(state.copyWith(minimized: state.activeCalls.isEmpty ? null : true));
+    final hasActiveCalls = state.activeCalls.isNotEmpty;
+    emit(state.copyWith(minimized: hasActiveCalls ? true : null));
 
-    if (state.activeCalls.isNotEmpty) {
+    if (hasActiveCalls) {
       await callkeep.reportUpdateCall(
         state.activeCalls.current.callId,
         proximityEnabled: state.shouldListenToProximity,
       );
+    } else {
+      _logger.warning('__onCallScreenEventDidPop: activeCalls is empty');
     }
   }
 
