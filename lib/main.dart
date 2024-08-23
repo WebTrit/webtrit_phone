@@ -23,6 +23,7 @@ void main() {
   bootstrap(() async {
     final logRecordsRepository = LogRecordsRepository([
       LocalLogDataSource(),
+      RemoteLogDataSource(),
     ]);
 
     logRecordsRepository.attachToLogger(Logger.root);
