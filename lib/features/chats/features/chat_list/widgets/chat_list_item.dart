@@ -197,25 +197,18 @@ class _ChatListItemState extends State<ChatListItem> {
 
     return Row(
       children: [
-        if (lastMessage != null)
-          Expanded(
-            child: FadeIn(
-              child: Row(
-                children: [
-                  ParticipantName(
-                    senderId: lastMessage.senderId,
-                    userId: widget.userId,
-                    style: textStyle,
-                    textMap: (t) => '$t:',
-                  ),
-                  const SizedBox(width: 4),
-                  Expanded(child: Text(lastMessage.content, style: textStyle))
-                ],
-              ),
+        if (lastMessage != null) ...[
+          Flexible(
+            child: ParticipantName(
+              senderId: lastMessage.senderId,
+              userId: widget.userId,
+              style: textStyle,
+              textMap: (t) => '$t: ',
             ),
-          )
-        else
-          Expanded(child: FadeIn(child: Text(context.l10n.chats_ChatListItem_empty, style: textStyle))),
+          ),
+          Expanded(child: FadeIn(child: Text(lastMessage.content, style: textStyle)))
+        ],
+        if (lastMessage == null) Expanded(child: Text(context.l10n.chats_ChatListItem_empty, style: textStyle)),
         if (unreadMsgsCount > 0) ...[
           const SizedBox(width: 8),
           Container(
