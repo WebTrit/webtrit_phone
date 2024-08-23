@@ -21,6 +21,24 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const isMessagingFeatureEnabled = true; // TODO: Integrate with future feature flags
+
+    List<BottomNavigationBarItem> navBarItems = [];
+
+    for (var flavor in MainFlavor.values) {
+      Widget icon = Icon(flavor.icon);
+      String label = flavor.labelL10n(context);
+
+      if (flavor == MainFlavor.chats) {
+        // ignore: dead_code
+        if (!isMessagingFeatureEnabled) continue;
+        icon = ChatFlavorOverlay(child: icon);
+      }
+
+      final item = BottomNavigationBarItem(icon: icon, label: label);
+      navBarItems.add(item);
+    }
+
     final themeData = Theme.of(context);
     final scaffold = Scaffold(
       body: body,
@@ -29,25 +47,8 @@ class MainScreen extends StatelessWidget {
         selectedLabelStyle: themeData.textTheme.bodySmall,
         unselectedLabelStyle: themeData.textTheme.bodySmall,
         currentIndex: navigationBarFlavor.index,
-        onTap: (index) {
-          final onNavigationBarTap = this.onNavigationBarTap;
-          if (onNavigationBarTap != null) {
-            onNavigationBarTap(MainFlavor.values[index]);
-          }
-        },
-        items: MainFlavor.values.map((flavor) {
-          if (flavor == MainFlavor.chats) {
-            return BottomNavigationBarItem(
-              icon: ChatFlavorOverlay(child: Icon(flavor.icon)),
-              label: flavor.labelL10n(context),
-              activeIcon: ChatFlavorOverlay(child: Icon(flavor.icon)),
-            );
-          }
-          return BottomNavigationBarItem(
-            icon: Icon(flavor.icon),
-            label: flavor.labelL10n(context),
-          );
-        }).toList(),
+        onTap: (index) => onNavigationBarTap?.call(MainFlavor.values[index]),
+        items: navBarItems,
       ),
     );
 
