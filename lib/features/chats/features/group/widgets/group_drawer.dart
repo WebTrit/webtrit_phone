@@ -241,22 +241,31 @@ class _GroupDrawerState extends State<GroupDrawer> {
                 child: CallPopupMenuButton(
                   items: [
                     if (canMakeModerator)
-                      CallPopupMenuItem(
-                        icon: const Icon(Icons.add_moderator_outlined),
-                        text: context.l10n.chats_GroupDrawer_makeModeratorBtnText,
-                        onTap: () => onSetModerator(member.userId, true),
+                      PopupMenuItem(
+                        child: ListTile(
+                          title: Text(context.l10n.chats_GroupDrawer_makeModeratorBtnText),
+                          leading: const Icon(Icons.add_moderator_outlined),
+                          onTap: () => onSetModerator(member.userId, true),
+                          dense: true,
+                        ),
                       ),
                     if (canRemoveModerator)
-                      CallPopupMenuItem(
-                        icon: const Icon(Icons.remove_moderator_outlined),
-                        text: context.l10n.chats_GroupDrawer_unmakeModeratorBtnText,
-                        onTap: () => onSetModerator(member.userId, false),
+                      PopupMenuItem(
+                        child: ListTile(
+                          title: Text(context.l10n.chats_GroupDrawer_unmakeModeratorBtnText),
+                          leading: const Icon(Icons.remove_moderator_outlined),
+                          onTap: () => onSetModerator(member.userId, false),
+                          dense: true,
+                        ),
                       ),
                     if (canRemove)
-                      CallPopupMenuItem(
-                        icon: const Icon(Icons.person_remove_alt_1_outlined),
-                        text: context.l10n.chats_GroupDrawer_removeUserBtnText,
-                        onTap: () => onRemoveUser(member.userId),
+                      PopupMenuItem(
+                        child: ListTile(
+                          title: Text(context.l10n.chats_GroupDrawer_removeUserBtnText),
+                          leading: const Icon(Icons.person_remove_alt_1_outlined),
+                          onTap: () => onRemoveUser(member.userId),
+                          dense: true,
+                        ),
                       ),
                   ],
                 ),
