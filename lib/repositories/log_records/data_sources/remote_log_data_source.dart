@@ -8,22 +8,22 @@ import 'package:webtrit_phone/data/data.dart';
 import 'log_data_source.dart';
 
 class RemoteLogDataSource implements LogDataSource {
+  final DeviceInfo _deviceInfo;
+  final SecureStorage _secureStorage;
   final DatabaseReference _databaseReference;
   final FirebaseRemoteConfig _remoteConfig;
   final List<String> _excludedLoggerNames;
   final String _userSessionId;
-  final DeviceInfo _deviceInfo;
-  final SecureStorage _secureStorage;
 
   bool _firebaseRemoteLogging = false;
 
   RemoteLogDataSource()
-      : _databaseReference = FirebaseDatabase.instance.ref().child('phone_logs'),
+      : _deviceInfo = DeviceInfo(),
+        _secureStorage = SecureStorage(),
+        _databaseReference = FirebaseDatabase.instance.ref().child('phone_logs'),
         _remoteConfig = FirebaseRemoteConfig.instance,
         _excludedLoggerNames = ['AppBlocObserver', 'AppRouterObserver'],
-        _userSessionId = 'Session: ${DateFormat.yMMMd().add_Hm().format(DateTime.now()).toString()}',
-        _deviceInfo = DeviceInfo(),
-        _secureStorage = SecureStorage() {
+        _userSessionId = 'Session: ${DateFormat.yMMMd().add_Hm().format(DateTime.now()).toString()}' {
     _initialize();
   }
 
