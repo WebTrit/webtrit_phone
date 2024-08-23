@@ -60,7 +60,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
           builder: (context, state) {
             if (state is CVSReady) {
               return MessageListView(
-                userId: chatsBloc.state.userId ?? 'unknown',
+                userId: chatsBloc.state.userId!,
                 messages: state.messages,
                 outboxMessages: state.outboxMessages,
                 outboxMessageEdits: state.outboxMessageEdits,

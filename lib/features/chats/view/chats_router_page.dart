@@ -21,7 +21,17 @@ class _ChatsRouterPageState extends State<ChatsRouterPage> {
       create: (context) => MessageForwardCubit(),
       child: Column(
         children: [
-          const Expanded(child: AutoRouter()),
+          BlocBuilder<ChatsBloc, ChatsState>(
+            buildWhen: (previous, current) => previous.userId != current.userId,
+            builder: (context, state) {
+              if (state.userId != null) {
+                return const Expanded(child: AutoRouter());
+              } else {
+                return const Expanded(child: Center(child: CircularProgressIndicator()));
+              }
+              // return Expanded(child: AutoRouter());
+            },
+          ),
           BlocBuilder<ChatsBloc, ChatsState>(
             buildWhen: (previous, current) => previous.status != current.status,
             builder: (context, state) {

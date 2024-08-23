@@ -54,12 +54,12 @@ class _GroupScreenState extends State<GroupScreen> {
                 }
               }),
             ),
-            endDrawer: GroupDrawer(userId: chatsBloc.state.userId ?? '-1'),
+            endDrawer: GroupDrawer(userId: chatsBloc.state.userId!),
             body: Builder(
               builder: (context) {
                 if (state is GroupStateReady) {
                   return MessageListView(
-                    userId: chatsBloc.state.userId ?? '-1',
+                    userId: chatsBloc.state.userId!,
                     messages: state.messages,
                     outboxMessages: state.outboxMessages,
                     outboxMessageEdits: state.outboxMessageEdits,
