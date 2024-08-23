@@ -27,7 +27,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
         title: ContactInfoBuilder(
             sourceType: ContactSourceType.external,
             sourceId: conversationCubit.state.participantId,
-            builder: (context, contact) {
+            builder: (context, contact, {required bool loading}) {
+              if (loading) return const SizedBox();
               if (contact != null) {
                 return FadeIn(
                   child: Text(

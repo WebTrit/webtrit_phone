@@ -111,7 +111,9 @@ class _ChatListItemState extends State<ChatListItem> {
             child: ContactInfoBuilder(
               sourceType: ContactSourceType.external,
               sourceId: participant.userId,
-              builder: (context, contact) {
+              builder: (context, contact, {required bool loading}) {
+                if (loading) return const SizedBox();
+
                 const textStyle = TextStyle(overflow: TextOverflow.ellipsis);
                 if (contact != null) {
                   var text = contact.name.split(' ').first;
@@ -152,7 +154,9 @@ class _ChatListItemState extends State<ChatListItem> {
             child: ContactInfoBuilder(
               sourceType: ContactSourceType.external,
               sourceId: participant.userId,
-              builder: (context, contact) {
+              builder: (context, contact, {required bool loading}) {
+                if (loading) return const SizedBox();
+
                 const textStyle = TextStyle(overflow: TextOverflow.ellipsis);
                 if (contact != null) {
                   return FadeIn(child: Text(contact.name, style: textStyle));
@@ -208,7 +212,8 @@ class _ChatListItemState extends State<ChatListItem> {
           ),
           Expanded(child: FadeIn(child: Text(lastMessage.content, style: textStyle)))
         ],
-        if (lastMessage == null) Expanded(child: Text(context.l10n.chats_ChatListItem_empty, style: textStyle)),
+        if (lastMessage == null)
+          Expanded(child: FadeIn(child: Text(context.l10n.chats_ChatListItem_empty, style: textStyle))),
         if (unreadMsgsCount > 0) ...[
           const SizedBox(width: 8),
           Container(
