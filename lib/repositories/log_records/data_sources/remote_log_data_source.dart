@@ -1,4 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:intl/intl.dart';
 import 'package:logging/logging.dart';
 
@@ -8,13 +9,17 @@ import 'log_data_source.dart';
 
 class RemoteLogDataSource implements LogDataSource {
   final DatabaseReference _databaseReference;
+  final FirebaseRemoteConfig _remoteConfig;
   final List<String> _excludedLoggerNames;
   final String _userSessionId;
   final DeviceInfo _deviceInfo;
   final SecureStorage _secureStorage;
 
+  bool _firebaseRemoteLogging = false;
+
   RemoteLogDataSource()
       : _databaseReference = FirebaseDatabase.instance.ref().child('phone_logs'),
+        _remoteConfig = FirebaseRemoteConfig.instance,
         _excludedLoggerNames = ['AppBlocObserver', 'AppRouterObserver'],
         _userSessionId = 'Session: ${DateFormat.yMMMd().add_Hm().format(DateTime.now()).toString()}',
         _deviceInfo = DeviceInfo(),
@@ -22,10 +27,22 @@ class RemoteLogDataSource implements LogDataSource {
     _initialize();
   }
 
-  void _initialize() {
-    final sanitizedDeviceInfo = _sanitizeKeys(_deviceInfo.data);
-    _databaseReference.child(_userSessionId).set({
-      'device_info': sanitizedDeviceInfo,
+  void _initialize() async {
+    try {
+      await _remoteConfig.fetchAndActivate();
+      _firebaseRemoteLogging = _remoteConfig.getBool('firebaseRemoteLogging');
+
+      if (_firebaseRemoteLogging) {
+        _initSessionData();
+      }
+    } catch (e) {
+      Logger('RemoteLogDataSource').severe('Initialization failed', e);
+    }
+  }
+
+  Future<void> _initSessionData() async {
+    await _databaseReference.child(_userSessionId).set({
+      'device_info': _sanitizeKeys(_deviceInfo.data),
       'storage_core': _secureStorage.readCoreUrl(),
       'storage_tenant_id': _secureStorage.readTenantId(),
     });
@@ -40,11 +57,6 @@ class RemoteLogDataSource implements LogDataSource {
     return sanitizedData;
   }
 
-  void excludeLoggerNames(List<String> loggerNames) {
-    _excludedLoggerNames.clear();
-    _excludedLoggerNames.addAll(loggerNames);
-  }
-
   @override
   Future<List<LogRecord>> getLogRecords() async {
     return [];
@@ -52,6 +64,8 @@ class RemoteLogDataSource implements LogDataSource {
 
   @override
   void addLogRecord(LogRecord record) {
+    if (!_firebaseRemoteLogging) return;
+
     final logData = {
       'level': record.level.name,
       'message': record.message,
