@@ -104,33 +104,49 @@ class _MessageViewState extends State<MessageView> {
 
     final popupItems = [
       if (hasContent)
-        MessageMenuItem(
-            text: context.l10n.chats_MessageView_textcopy,
-            icon: const Icon(Icons.copy_rounded),
-            onTap: () => Clipboard.setData(ClipboardData(text: chatMessage!.content))),
-      if (isSended && !isDeleted)
-        MessageMenuItem(
-          text: context.l10n.chats_MessageView_reply,
-          icon: const Icon(Icons.question_answer_outlined),
-          onTap: () => widget.handleSetForReply(chatMessage!),
+        PopupMenuItem(
+          child: ListTile(
+            title: Text(context.l10n.chats_MessageView_textcopy),
+            leading: const Icon(Icons.copy_rounded),
+            onTap: () => Clipboard.setData(ClipboardData(text: chatMessage!.content)),
+            dense: true,
+          ),
         ),
       if (isSended && !isDeleted)
-        MessageMenuItem(
-          text: context.l10n.chats_MessageView_forward,
-          icon: const Icon(Icons.forward_outlined),
-          onTap: () => widget.handleSetForForward(chatMessage!),
+        PopupMenuItem(
+          child: ListTile(
+            title: Text(context.l10n.chats_MessageView_reply),
+            leading: const Icon(Icons.question_answer_outlined),
+            onTap: () => widget.handleSetForReply(chatMessage!),
+            dense: true,
+          ),
+        ),
+      if (isSended && !isDeleted)
+        PopupMenuItem(
+          child: ListTile(
+            title: Text(context.l10n.chats_MessageView_forward),
+            leading: const Icon(Icons.forward_outlined),
+            onTap: () => widget.handleSetForForward(chatMessage!),
+            dense: true,
+          ),
         ),
       if (isMine && isSended && !isForward && !isDeleted)
-        MessageMenuItem(
-          text: context.l10n.chats_MessageView_edit,
-          icon: const Icon(Icons.edit_note_outlined),
-          onTap: () => widget.handleSetForEdit(chatMessage!),
+        PopupMenuItem(
+          child: ListTile(
+            title: Text(context.l10n.chats_MessageView_edit),
+            leading: const Icon(Icons.edit_note_outlined),
+            onTap: () => widget.handleSetForEdit(chatMessage!),
+            dense: true,
+          ),
         ),
       if (isMine && isSended && !isDeleted)
-        MessageMenuItem(
-          text: context.l10n.chats_MessageView_delete,
-          icon: const Icon(Icons.remove),
-          onTap: () => widget.handleDelete(chatMessage!),
+        PopupMenuItem(
+          child: ListTile(
+            title: Text(context.l10n.chats_MessageView_delete),
+            leading: const Icon(Icons.remove),
+            onTap: () => widget.handleDelete(chatMessage!),
+            dense: true,
+          ),
         ),
     ];
 
@@ -290,25 +306,4 @@ class _MessageViewState extends State<MessageView> {
       ),
     );
   }
-}
-
-class MessageMenuItem extends PopupMenuItem {
-  MessageMenuItem({
-    super.key,
-    super.value,
-    super.onTap,
-    super.enabled = true,
-    super.textStyle,
-    required String text,
-    required Widget icon,
-  }) : super(
-          child: Row(
-            children: [
-              Padding(padding: const EdgeInsets.all(8), child: icon),
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 4), child: Text(text)),
-            ],
-          ),
-          height: 0,
-          padding: EdgeInsets.zero,
-        );
 }
