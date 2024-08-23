@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -60,9 +61,9 @@ class _AddContactDialogState extends State<AddContactDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Choose contact', style: theme.textTheme.headlineMedium),
+              Text(context.l10n.chats_AddContactDialog_title, style: theme.textTheme.headlineMedium),
               const SizedBox(height: 16),
-              if (contacts.isEmpty) const Text('No contacts found'),
+              if (contacts.isEmpty) Text(context.l10n.chats_AddContactDialog_empty),
               if (contacts.isNotEmpty)
                 Flexible(
                   child: ListView(
@@ -78,7 +79,7 @@ class _AddContactDialogState extends State<AddContactDialog> {
                   ),
                 ),
               const SizedBox(height: 16),
-              TextButton(onPressed: onCancel, child: const Text('Cancel')),
+              TextButton(onPressed: onCancel, child: Text(context.l10n.chats_AddContactDialog_cancel)),
             ],
           ),
         ),

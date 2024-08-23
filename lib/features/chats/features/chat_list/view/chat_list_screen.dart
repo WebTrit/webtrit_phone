@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -24,14 +25,14 @@ class _ChatListScreenState extends State<ChatListScreen> {
   late final popupItems = [
     PopupMenuItem(
       child: ListTile(
-        title: const Text('Start dialog'),
+        title: Text(context.l10n.chats_ChatListScreen_startDialog),
         leading: const Icon(Icons.person_add_alt),
         onTap: onStartDialog,
       ),
     ),
     PopupMenuItem(
       child: ListTile(
-        title: const Text('Create group'),
+        title: Text(context.l10n.chats_ChatListScreen_createGroup),
         leading: const Icon(Icons.group_add_outlined),
         onTap: onCreateGroup,
       ),
@@ -89,7 +90,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
           return const Center(child: CircularProgressIndicator());
         }
         if (state.chats.isEmpty) {
-          return const Center(child: Text('No conversations started yet'));
+          return Center(child: Text(context.l10n.chats_ChatListScreen_empty));
         }
         return ChatsList(chatlist: state.chats);
       }),

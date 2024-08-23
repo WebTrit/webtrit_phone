@@ -3,15 +3,18 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:phoenix_socket/phoenix_socket.dart';
 
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 // TODO:
 //  - extract logic to cubit
 //  - handle business errors
+//  - use notificationBloc
 
 class GroupBuilderScreen extends StatefulWidget {
   const GroupBuilderScreen({super.key});
@@ -49,36 +52,36 @@ class _GroupBuilderScreenState extends State<GroupBuilderScreen> {
   }
 
   Future<void> onSubmit() async {
-    if (isValid) {
-      final chatsBloc = context.read<ChatsBloc>();
-      final userChannel = chatsBloc.state.client.userChannel;
-      if (userChannel == null) {
-        context.showErrorSnackBar('Connection error, please try later');
-        return;
-      }
-      try {
-        setState(() => busy = true);
-        final payload = {
-          'name': nameController.text,
-          'member_ids': selectedUsers.map((contact) => contact.sourceId).toList(),
-        };
-        final result = await userChannel.push('chat:create_group', payload).future;
+    if (isValid) return;
+    final chatsBloc = context.read<ChatsBloc>();
+    final userChannel = chatsBloc.state.client.userChannel;
+    if (userChannel == null || userChannel.state != PhoenixChannelState.joined) {
+      context.showErrorSnackBar(context.l10n.chats_GroupBuilderScreen_connectionError);
+      return;
+    }
 
-        if (!mounted) return;
-        if (result.isOk) Navigator.of(context).pop();
-        if (result.isError) throw Exception(result.response.toString());
-      } catch (_) {
-        context.showErrorSnackBar('Error happened while creating group, please try again');
-      } finally {
-        setState(() => busy = false);
-      }
+    try {
+      setState(() => busy = true);
+      final payload = {
+        'name': nameController.text,
+        'member_ids': selectedUsers.map((contact) => contact.sourceId).toList(),
+      };
+      final result = await userChannel.push('chat:create_group', payload).future;
+
+      if (!mounted) return;
+      if (result.isOk) Navigator.of(context).pop();
+      if (result.isError) throw Exception(result.response.toString());
+    } catch (_) {
+      context.showErrorSnackBar(context.l10n.chats_GroupBuilderScreen_submitError);
+    } finally {
+      setState(() => busy = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Create group')),
+      appBar: AppBar(title: Text(context.l10n.chats_GroupBuilderScreen_screenTitle)),
       body: Stack(
         children: [
           Padding(
@@ -94,23 +97,29 @@ class _GroupBuilderScreenState extends State<GroupBuilderScreen> {
                         children: [
                           avatar(),
                           const SizedBox(height: 16),
-                          const Text('Group name'),
+                          Text(context.l10n.chats_GroupBuilderScreen_groupNameHeadline),
                           const SizedBox(height: 8),
                           nameField(),
                           const SizedBox(height: 16),
-                          const Text('Members'),
+                          Text(context.l10n.chats_GroupBuilderScreen_membersHeadline),
                           const SizedBox(height: 8),
                           ...membersList(),
                           const SizedBox(height: 8),
                           Row(children: [
-                            TextButton(onPressed: onAddUser, child: const Text('Add user')),
+                            TextButton(
+                              onPressed: onAddUser,
+                              child: Text(context.l10n.chats_GroupBuilderScreen_addUserBtnText),
+                            ),
                           ]),
                         ],
                       ),
                     ),
                   ),
                   const SizedBox(height: 8),
-                  ElevatedButton(onPressed: isValid ? onSubmit : null, child: const Text('Submit'))
+                  ElevatedButton(
+                    onPressed: isValid ? onSubmit : null,
+                    child: Text(context.l10n.chats_GroupBuilderScreen_submitBtnText),
+                  ),
                 ],
               ),
             ),
@@ -142,10 +151,10 @@ class _GroupBuilderScreenState extends State<GroupBuilderScreen> {
     return TextFormField(
       controller: nameController,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: const InputDecoration(labelText: 'Group Name'),
+      decoration: InputDecoration(labelText: context.l10n.chats_GroupBuilderScreen_nameFieldLabel),
       validator: (value) {
-        if (value == null || value.isEmpty) return 'Please enter a group name';
-        if (value.length < 3) return 'Group name must be at least 3 characters';
+        if (value == null || value.isEmpty) return context.l10n.chats_GroupBuilderScreen_nameFieldEmpty;
+        if (value.length < 3) return context.l10n.chats_GroupBuilderScreen_nameFieldShort;
         return null;
       },
       onChanged: (value) => setState(() {}),

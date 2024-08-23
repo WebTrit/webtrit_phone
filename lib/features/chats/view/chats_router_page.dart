@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 
 @RoutePage()
 class ChatsRouterPage extends StatefulWidget {
@@ -49,9 +50,9 @@ class StateBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String text = '';
-    if (state.status == ChatsStatus.initial) text = 'INITIALIZING';
-    if (state.status == ChatsStatus.connecting) text = 'CONNECTING';
-    if (state.status == ChatsStatus.error) text = 'DISCONNECTED';
+    if (state.status == ChatsStatus.initial) text = context.l10n.chats_StateBar_initializing;
+    if (state.status == ChatsStatus.connecting) text = context.l10n.chats_StateBar_connecting;
+    if (state.status == ChatsStatus.error) text = context.l10n.chats_StateBar_error;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),

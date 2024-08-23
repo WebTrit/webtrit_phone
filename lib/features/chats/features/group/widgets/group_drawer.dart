@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/call/widgets/widgets.dart';
 import 'package:webtrit_phone/features/chats/chats.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -25,9 +26,9 @@ class _GroupDrawerState extends State<GroupDrawer> {
   onLeaveGroup(bool amIOwner) async {
     String askText;
     if (amIOwner) {
-      askText = 'Are you sure you want leave and delete this group?';
+      askText = context.l10n.chats_GroupDrawer_leaveAndDeleteAsk;
     } else {
-      askText = 'Are you sure you want to leave this group?';
+      askText = context.l10n.chats_GroupDrawer_leaveAsk;
     }
 
     final askResult = await showDialog<bool>(
@@ -69,7 +70,7 @@ class _GroupDrawerState extends State<GroupDrawer> {
   }
 
   onRemoveUser(String userId) async {
-    String askText = 'Are you sure you want to remove this user from the group?';
+    String askText = context.l10n.chats_GroupDrawer_removeUserAsk;
 
     final result = await showDialog<bool>(
       context: context,
@@ -82,9 +83,9 @@ class _GroupDrawerState extends State<GroupDrawer> {
   onSetModerator(String userId, bool isModerator) async {
     String askText;
     if (isModerator) {
-      askText = 'Are you sure you want to make this user a moderator?';
+      askText = context.l10n.chats_GroupDrawer_makeModeratorAsk;
     } else {
-      askText = 'Are you sure you want to remove this user from moderators?';
+      askText = context.l10n.chats_GroupDrawer_removeModeratorAsk;
     }
 
     final result = await showDialog<bool>(
@@ -116,7 +117,7 @@ class _GroupDrawerState extends State<GroupDrawer> {
           builder: (context, state) {
             if (state is GroupStateReady) {
               final chat = state.chat;
-              final name = chat.name ?? 'Group: ${groupCubit.state.chatId}';
+              final name = chat.name ?? '${context.l10n.chats_GroupDrawer_titlePrefix}: ${groupCubit.state.chatId}';
 
               final groupAuthorities = chat.members.firstWhere((m) => m.userId == widget.userId).groupAuthorities;
               final amIOwner = groupAuthorities == GroupAuthorities.owner;
@@ -163,7 +164,7 @@ class _GroupDrawerState extends State<GroupDrawer> {
                         ),
                       ),
                       Text(
-                        'Group members',
+                        context.l10n.chats_GroupDrawer_groupMembersHeadline,
                         style: theme.textTheme.headlineSmall?.copyWith(
                           fontSize: 18,
                           color: theme.primaryColor,
@@ -177,7 +178,7 @@ class _GroupDrawerState extends State<GroupDrawer> {
                           if (canInvite)
                             TextButton.icon(
                               onPressed: onAddUser,
-                              label: const Text('Add user'),
+                              label: Text(context.l10n.chats_GroupDrawer_addUserBtnText),
                               icon: const Icon(Icons.person_add_alt, size: 16),
                             ),
                         ],
@@ -189,7 +190,8 @@ class _GroupDrawerState extends State<GroupDrawer> {
                             children: [
                               const Icon(Icons.output_sharp, size: 16),
                               const SizedBox(width: 4),
-                              if (amIOwner) const Text('Delete and leave') else const Text('Leave group'),
+                              if (amIOwner) Text(context.l10n.chats_GroupDrawer_deleteLeaveBtnText),
+                              if (!amIOwner) Text(context.l10n.chats_GroupDrawer_leaveBtnText),
                             ],
                           )),
                       const SizedBox(height: 8),
@@ -229,7 +231,10 @@ class _GroupDrawerState extends State<GroupDrawer> {
       return ListTile(
         minTileHeight: 0,
         title: ParticipantName(senderId: member.userId, userId: widget.userId),
-        subtitle: Text(member.groupAuthorities?.name ?? 'member', style: const TextStyle(fontSize: 12)),
+        subtitle: Text(
+          member.groupAuthorities?.nameL10n(context) ?? context.l10n.chats_GroupAuthorities_noauthorities,
+          style: const TextStyle(fontSize: 12),
+        ),
         trailing: ((canMakeModerator || canRemoveModerator || canRemove) && !isMe)
             ? SizedBox(
                 width: 20,
@@ -238,19 +243,19 @@ class _GroupDrawerState extends State<GroupDrawer> {
                     if (canMakeModerator)
                       CallPopupMenuItem(
                         icon: const Icon(Icons.add_moderator_outlined),
-                        text: 'Make moderator',
+                        text: context.l10n.chats_GroupDrawer_makeModeratorBtnText,
                         onTap: () => onSetModerator(member.userId, true),
                       ),
                     if (canRemoveModerator)
                       CallPopupMenuItem(
                         icon: const Icon(Icons.remove_moderator_outlined),
-                        text: 'Unmake moderator',
+                        text: context.l10n.chats_GroupDrawer_unmakeModeratorBtnText,
                         onTap: () => onSetModerator(member.userId, false),
                       ),
                     if (canRemove)
                       CallPopupMenuItem(
                         icon: const Icon(Icons.person_remove_alt_1_outlined),
-                        text: 'Remove',
+                        text: context.l10n.chats_GroupDrawer_removeUserBtnText,
                         onTap: () => onRemoveUser(member.userId),
                       ),
                   ],

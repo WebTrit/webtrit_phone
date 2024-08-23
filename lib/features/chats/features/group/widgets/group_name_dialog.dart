@@ -1,7 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-
 import 'package:flutter/services.dart';
+
+import 'package:webtrit_phone/l10n/l10n.dart';
 
 class GroupNameDialog extends StatefulWidget {
   const GroupNameDialog({super.key, this.initialName});
@@ -40,21 +41,21 @@ class _GroupNameDialogState extends State<GroupNameDialog> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('Group name', style: theme.textTheme.headlineMedium),
+                Text(context.l10n.chats_GroupNameDialog_title, style: theme.textTheme.headlineMedium),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: textController,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) {
-                    if (value == null || value.isEmpty) return 'Please enter group name';
-                    if (value.length < 3) return 'Group name is too short';
+                    if (value == null || value.isEmpty) return context.l10n.chats_GroupNameDialog_fieldValidation_empty;
+                    if (value.length < 3) return context.l10n.chats_GroupNameDialog_fieldValidation_short;
                     return null;
                   },
                   inputFormatters: [FilteringTextInputFormatter.singleLineFormatter],
                   keyboardType: TextInputType.name,
-                  decoration: const InputDecoration(
-                    labelText: 'Group name',
-                    hintText: 'Enter group name',
+                  decoration: InputDecoration(
+                    labelText: context.l10n.chats_GroupNameDialog_fieldLabel,
+                    hintText: context.l10n.chats_GroupNameDialog_fieldHint,
                   ),
                   onChanged: (value) => setState(() {}),
                 ),
@@ -62,8 +63,14 @@ class _GroupNameDialogState extends State<GroupNameDialog> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    TextButton(onPressed: onCancel, child: const Text('Cancel')),
-                    TextButton(onPressed: isValid ? onConfirm : null, child: const Text('Save')),
+                    TextButton(
+                      onPressed: onCancel,
+                      child: Text(context.l10n.chats_GroupNameDialog_cancelBtnText),
+                    ),
+                    TextButton(
+                      onPressed: isValid ? onConfirm : null,
+                      child: Text(context.l10n.chats_GroupNameDialog_saveBtnText),
+                    ),
                   ],
                 ),
               ],

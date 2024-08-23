@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/features/chats/widgets/widgets.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -26,7 +27,10 @@ class ParticipantName extends StatelessWidget {
     final textStyle = style ?? TextStyle(color: scheme.secondaryFixed, fontSize: 12, fontWeight: FontWeight.bold);
 
     if (isMine) {
-      return Text('You', style: textStyle);
+      return Text(
+        textMap?.call(context.l10n.chats_ParticipantName_you) ?? context.l10n.chats_ParticipantName_you,
+        style: textStyle,
+      );
     } else {
       return ContactInfoBuilder(
         sourceType: ContactSourceType.external,

@@ -719,11 +719,179 @@ class AppLocalizationsUk extends AppLocalizations {
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
 
   @override
-  String get chats_RouterPage_failure => 'Failed connecting to chat service';
+  String get chats_Conversation_failure => 'Помилка завантаження розмови';
 
   @override
-  String get chats_Conversation_failure => 'Failed create conversation';
+  String get chats_ActionBtn_retry => 'Повторить спробу';
 
   @override
-  String get chats_ActionBtn_retry => 'Retry';
+  String get chats_MessageView_textcopy => 'Копіювати в буфер обміну';
+
+  @override
+  String get chats_MessageView_reply => 'Відповісти';
+
+  @override
+  String get chats_MessageView_forward => 'Переслати';
+
+  @override
+  String get chats_MessageView_edit => 'Редагувати';
+
+  @override
+  String get chats_MessageView_delete => 'Видалити';
+
+  @override
+  String get chats_MessageView_forwarded => '[переслано]';
+
+  @override
+  String get chats_MessageView_edited => '[відредаговано]';
+
+  @override
+  String get chats_MessageView_deleted => '[видалено]';
+
+  @override
+  String get chats_ParticipantName_you => 'Ви';
+
+  @override
+  String get chats_StateBar_initializing => 'ІНІЦІАЛІЗАЦІЯ';
+
+  @override
+  String get chats_StateBar_connecting => 'ПІДКЛЮЧЕННЯ';
+
+  @override
+  String get chats_StateBar_error => 'ВІДКЛЮЧЕНО';
+
+  @override
+  String get chats_ChatListScreen_startDialog => 'Почати діалог';
+
+  @override
+  String get chats_ChatListScreen_createGroup => 'Створити групу';
+
+  @override
+  String get chats_ChatListScreen_empty => 'Немає переписок';
+
+  @override
+  String get chats_ConversationScreen_titlePrefix => 'Діалог:';
+
+  @override
+  String get chats_GroupScreen_titlePrefix => 'Група:';
+
+  @override
+  String get chats_AddContactDialog_title => 'Виберіть контакт:';
+
+  @override
+  String get chats_AddContactDialog_empty => 'Контакти не знайдено';
+
+  @override
+  String get chats_AddContactDialog_cancel => 'Скасувати';
+
+  @override
+  String get chats_ConfirmDialog_ask => 'Ви впевнені?';
+
+  @override
+  String get chats_ConfirmDialog_confirm => 'Так';
+
+  @override
+  String get chats_ConfirmDialog_cancel => 'Ні';
+
+  @override
+  String get chats_GroupAuthorities_noauthorities => 'учасник';
+
+  @override
+  String get chats_GroupAuthorities_moderator => 'модератор';
+
+  @override
+  String get chats_GroupAuthorities_owner => 'власник';
+
+  @override
+  String get chats_GroupDrawer_leaveAsk => 'Ви впевнені, що бажаєте залишити цю групу?';
+
+  @override
+  String get chats_GroupDrawer_leaveAndDeleteAsk => 'Ви впевнені, що бажаєте залишити та видалити цю групу?';
+
+  @override
+  String get chats_GroupDrawer_removeUserAsk => 'Ви впевнені, що хочете видалити цього користувача з групи?';
+
+  @override
+  String get chats_GroupDrawer_makeModeratorAsk => 'Ви впевнені, що хочете зробити цього користувача модератором?';
+
+  @override
+  String get chats_GroupDrawer_removeModeratorAsk => 'Ви впевнені, що хочете видалити цього користувача з модераторів?';
+
+  @override
+  String get chats_GroupDrawer_titlePrefix => 'Група:';
+
+  @override
+  String get chats_GroupDrawer_groupMembersHeadline => 'Члени групи';
+
+  @override
+  String get chats_GroupDrawer_addUserBtnText => 'Додати користувача';
+
+  @override
+  String get chats_GroupDrawer_leaveBtnText => 'Вийти з групи';
+
+  @override
+  String get chats_GroupDrawer_deleteLeaveBtnText => 'Видалити і залишити';
+
+  @override
+  String get chats_GroupDrawer_makeModeratorBtnText => 'Зробити модератором';
+
+  @override
+  String get chats_GroupDrawer_unmakeModeratorBtnText => 'Прибрати модератора';
+
+  @override
+  String get chats_GroupDrawer_removeUserBtnText => 'Видалити';
+
+  @override
+  String get chats_GroupNameDialog_title => 'Назва групи';
+
+  @override
+  String get chats_GroupNameDialog_fieldLabel => 'Назва групи';
+
+  @override
+  String get chats_GroupNameDialog_fieldHint => 'Введіть назву групи';
+
+  @override
+  String get chats_GroupNameDialog_fieldValidation_empty => 'Будь ласка, введіть назву групи';
+
+  @override
+  String get chats_GroupNameDialog_fieldValidation_short => 'Назва групи занадто коротка';
+
+  @override
+  String get chats_GroupNameDialog_saveBtnText => 'Зберегти';
+
+  @override
+  String get chats_GroupNameDialog_cancelBtnText => 'Скасувати';
+
+  @override
+  String get chats_GroupBuilderScreen_screenTitle => 'Створити групу';
+
+  @override
+  String get chats_GroupBuilderScreen_groupNameHeadline => 'Назва групи';
+
+  @override
+  String get chats_GroupBuilderScreen_membersHeadline => 'Члени групи';
+
+  @override
+  String get chats_GroupBuilderScreen_addUserBtnText => 'Додати користувача';
+
+  @override
+  String get chats_GroupBuilderScreen_submitBtnText => 'Надіслати';
+
+  @override
+  String get chats_GroupBuilderScreen_nameFieldLabel => 'Назва групи';
+
+  @override
+  String get chats_GroupBuilderScreen_nameFieldEmpty => 'Будь ласка, введіть назву групи';
+
+  @override
+  String get chats_GroupBuilderScreen_nameFieldShort => 'Назва групи має містити не менше 3 символів';
+
+  @override
+  String get chats_GroupBuilderScreen_connectionError => 'Помилка підключення, спробуйте пізніше';
+
+  @override
+  String get chats_GroupBuilderScreen_submitError => 'Під час створення групи сталася помилка, повторіть спробу';
+
+  @override
+  String get endoflist => '';
 }

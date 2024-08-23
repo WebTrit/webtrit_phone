@@ -45,7 +45,7 @@ class _GroupScreenState extends State<GroupScreen> {
                 } else {
                   return FadeIn(
                     child: Text(
-                      'Group: ${groupCubit.state.chatId}',
+                      '${context.l10n.chats_GroupScreen_titlePrefix} ${groupCubit.state.chatId}',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontSize: 20),

@@ -40,7 +40,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
               } else {
                 return FadeIn(
                   child: Text(
-                    'Dialog: ${conversationCubit.state.participantId}',
+                    '${context.l10n.chats_ConversationScreen_titlePrefix} ${conversationCubit.state.participantId}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontSize: 20),

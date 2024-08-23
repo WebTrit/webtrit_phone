@@ -1,17 +1,14 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
-class ConfirmDialog extends StatefulWidget {
-  const ConfirmDialog({
-    this.askText = 'Are you sure?',
-    this.confirmText = 'Yes',
-    this.cancelText = 'No',
-    super.key,
-  });
+import 'package:webtrit_phone/l10n/l10n.dart';
 
-  final String askText;
-  final String confirmText;
-  final String cancelText;
+class ConfirmDialog extends StatefulWidget {
+  const ConfirmDialog({this.askText, this.confirmText, this.cancelText, super.key});
+
+  final String? askText;
+  final String? confirmText;
+  final String? cancelText;
 
   @override
   State<ConfirmDialog> createState() => _ConfirmDialogState();
@@ -28,6 +25,10 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final askText = widget.askText ?? context.l10n.chats_ConfirmDialog_ask;
+    final confirmText = widget.confirmText ?? context.l10n.chats_ConfirmDialog_confirm;
+    final cancelText = widget.cancelText ?? context.l10n.chats_ConfirmDialog_cancel;
+
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
       child: Dialog(
@@ -36,17 +37,13 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                widget.askText,
-                style: const TextStyle(fontSize: 18),
-                textAlign: TextAlign.center,
-              ),
+              Text(askText, style: const TextStyle(fontSize: 18), textAlign: TextAlign.center),
               const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  TextButton(onPressed: onCancel, child: Text(widget.cancelText)),
-                  TextButton(onPressed: onConfirm, child: Text(widget.confirmText)),
+                  TextButton(onPressed: onCancel, child: Text(cancelText)),
+                  TextButton(onPressed: onConfirm, child: Text(confirmText)),
                 ],
               ),
             ],

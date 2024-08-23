@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:quiver/collection.dart';
 
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -104,30 +105,30 @@ class _MessageViewState extends State<MessageView> {
     final popupItems = [
       if (hasContent)
         MessageMenuItem(
-            text: 'Copy to clipboard',
+            text: context.l10n.chats_MessageView_textcopy,
             icon: const Icon(Icons.copy_rounded),
             onTap: () => Clipboard.setData(ClipboardData(text: chatMessage!.content))),
       if (isSended && !isDeleted)
         MessageMenuItem(
-          text: 'Reply',
+          text: context.l10n.chats_MessageView_reply,
           icon: const Icon(Icons.question_answer_outlined),
           onTap: () => widget.handleSetForReply(chatMessage!),
         ),
       if (isSended && !isDeleted)
         MessageMenuItem(
-          text: 'Forward',
+          text: context.l10n.chats_MessageView_forward,
           icon: const Icon(Icons.forward_outlined),
           onTap: () => widget.handleSetForForward(chatMessage!),
         ),
       if (isMine && isSended && !isForward && !isDeleted)
         MessageMenuItem(
-          text: 'Edit',
+          text: context.l10n.chats_MessageView_edit,
           icon: const Icon(Icons.edit_note_outlined),
           onTap: () => widget.handleSetForEdit(chatMessage!),
         ),
       if (isMine && isSended && !isDeleted)
         MessageMenuItem(
-          text: 'Delete',
+          text: context.l10n.chats_MessageView_delete,
           icon: const Icon(Icons.remove),
           onTap: () => widget.handleDelete(chatMessage!),
         ),
@@ -164,7 +165,7 @@ class _MessageViewState extends State<MessageView> {
               forwardQuote(chatMessage!),
               const SizedBox(height: 8),
               ParticipantName(senderId: senderId, userId: widget.userId),
-              const Text('[forwarded]', style: TextStyle(color: Colors.white, fontSize: 12)),
+              Text(context.l10n.chats_MessageView_forwarded, style: const TextStyle(color: Colors.white, fontSize: 12)),
             ],
             if (!isForward && !isDeleted)
               TextMessage(
@@ -178,7 +179,7 @@ class _MessageViewState extends State<MessageView> {
                 nameBuilder: (user) => ParticipantName(senderId: user.id, userId: widget.userId),
               ),
             if (isEdited && !isDeleted) ...[
-              const Text('[edited]', style: TextStyle(color: Colors.white, fontSize: 12)),
+              Text(context.l10n.chats_MessageView_edited, style: const TextStyle(color: Colors.white, fontSize: 12)),
             ],
             if (isMine && (chatMessage?.viaSms ?? false) && !isDeleted) ...[
               const Text('[sms]', style: TextStyle(color: Colors.white, fontSize: 12)),
@@ -187,7 +188,7 @@ class _MessageViewState extends State<MessageView> {
             ],
             if (isDeleted) ...[
               ParticipantName(senderId: senderId, userId: widget.userId),
-              const Text('[deleted]', style: TextStyle(color: Colors.white, fontSize: 12)),
+              Text(context.l10n.chats_MessageView_deleted, style: const TextStyle(color: Colors.white, fontSize: 12)),
             ],
             if (chatMessage?.viewedAt != null && isMine) ...[
               const SizedBox(height: 4),
