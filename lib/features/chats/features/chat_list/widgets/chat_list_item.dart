@@ -8,6 +8,7 @@ import 'package:stream_transform/stream_transform.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/chats/widgets/widgets.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -214,7 +215,7 @@ class _ChatListItemState extends State<ChatListItem> {
             ),
           )
         else
-          const Spacer(),
+          Expanded(child: FadeIn(child: Text(context.l10n.chats_ChatListItem_empty, style: textStyle))),
         if (unreadMsgsCount > 0) ...[
           const SizedBox(width: 8),
           Container(

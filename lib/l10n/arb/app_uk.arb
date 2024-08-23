@@ -573,6 +573,9 @@
   "chats_ChatListScreen_empty": "Немає переписок",
   "@chats_ChatListScreen_empty": {},
 
+  "chats_ChatListItem_empty": "Поки немає повідомлень",
+  "@chats_ChatListScreen_empty": {},
+
   "chats_ConversationScreen_titlePrefix": "Діалог:",
   "@chats_ConversationScreen_titlePrefix": {},
   

@@ -770,6 +770,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get chats_ChatListScreen_empty => 'Nessuna conversazione è ancora iniziata';
 
   @override
+  String get chats_ChatListItem_empty => 'Nessun messaggio ancora';
+
+  @override
   String get chats_ConversationScreen_titlePrefix => 'Dialogo:';
 
   @override

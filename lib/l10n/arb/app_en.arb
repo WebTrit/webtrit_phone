@@ -575,6 +575,9 @@
   "chats_ChatListScreen_empty": "No conversations started yet",
   "@chats_ChatListScreen_empty": {},
   
+  "chats_ChatListItem_empty": "No messages yet",
+  "@chats_ChatListScreen_empty": {},
+  
   "chats_ConversationScreen_titlePrefix": "Dialog:",
   "@chats_ConversationScreen_titlePrefix": {},
 

@@ -1541,6 +1541,12 @@ abstract class AppLocalizations {
   /// **'No conversations started yet'**
   String get chats_ChatListScreen_empty;
 
+  /// No description provided for @chats_ChatListItem_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages yet'**
+  String get chats_ChatListItem_empty;
+
   /// No description provided for @chats_ConversationScreen_titlePrefix.
   ///
   /// In en, this message translates to:

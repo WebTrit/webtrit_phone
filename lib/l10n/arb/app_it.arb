@@ -573,6 +573,9 @@
   "chats_ChatListScreen_empty": "Nessuna conversazione è ancora iniziata",
   "@chats_ChatListScreen_empty": {},
 
+  "chats_ChatListItem_empty": "Nessun messaggio ancora",
+  "@chats_ChatListScreen_empty": {},
+
   "chats_ConversationScreen_titlePrefix": "Dialogo:",
   "@chats_ConversationScreen_titlePrefix": {},
 

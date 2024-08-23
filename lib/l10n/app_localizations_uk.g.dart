@@ -770,6 +770,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get chats_ChatListScreen_empty => 'Немає переписок';
 
   @override
+  String get chats_ChatListItem_empty => 'Поки немає повідомлень';
+
+  @override
   String get chats_ConversationScreen_titlePrefix => 'Діалог:';
 
   @override
