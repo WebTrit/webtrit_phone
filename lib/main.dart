@@ -24,9 +24,8 @@ void main() {
     final logRecordsRepository = LogRecordsRepository([
       LocalLogDataSource(),
       RemoteLogDataSource(),
-    ]);
-
-    logRecordsRepository.attachToLogger(Logger.root);
+    ])
+      ..attachToLogger(Logger.root);
 
     final appAnalyticsRepository = AppAnalyticsRepository(instance: FirebaseAnalytics.instance);
 
