@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/l10n/l10n.dart';
+
 import '../extensions/extensions.dart';
 import '../models/models.dart';
 
@@ -20,6 +22,7 @@ class ManufacturerPermission extends StatelessWidget {
     switch (manufacturer) {
       case Manufacturer.xiaomi:
         return PermissionTips(
+          title: context.l10n.permission_manufacturer_Text_heading,
           instruction: manufacturer.tips(context),
           onGoToAppSettings: onGoToAppSettings,
         );

@@ -7,10 +7,12 @@ import 'package:webtrit_phone/theme/theme.dart';
 class PermissionTips extends StatelessWidget {
   const PermissionTips({
     super.key,
+    required this.title,
     required this.instruction,
     required this.onGoToAppSettings,
   });
 
+  final String title;
   final List<String> instruction;
   final VoidCallback onGoToAppSettings;
 
@@ -32,7 +34,7 @@ class PermissionTips extends StatelessWidget {
           ),
           const SizedBox(height: kInset * 2),
           Text(
-            context.l10n.permission_manufacturer_Text_heading,
+            title,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyLarge,
           ),
