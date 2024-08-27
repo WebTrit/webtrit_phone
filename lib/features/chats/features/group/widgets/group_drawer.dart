@@ -119,119 +119,104 @@ class _GroupDrawerState extends State<GroupDrawer> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
-      child: Drawer(
-        child: BlocBuilder<GroupCubit, GroupState>(
-          builder: (context, state) {
-            if (state is GroupStateReady) {
-              final chat = state.chat;
-              final name = chat.name ?? '${context.l10n.chats_GroupDrawer_titlePrefix}: ${groupCubit.state.chatId}';
+    return Drawer(
+      child: BlocBuilder<GroupCubit, GroupState>(
+        builder: (context, state) {
+          if (state is GroupStateReady) {
+            final chat = state.chat;
+            final name = chat.name ?? '${context.l10n.chats_GroupDrawer_titlePrefix}: ${groupCubit.state.chatId}';
 
-              final groupAuthorities = chat.members.firstWhere((m) => m.userId == widget.userId).groupAuthorities;
-              final amIOwner = groupAuthorities == GroupAuthorities.owner;
-              final amIModerator = groupAuthorities == GroupAuthorities.moderator;
-              final canInvite = amIOwner || amIModerator;
+            final groupAuthorities = chat.members.firstWhere((m) => m.userId == widget.userId).groupAuthorities;
+            final amIOwner = groupAuthorities == GroupAuthorities.owner;
+            final amIModerator = groupAuthorities == GroupAuthorities.moderator;
+            final canInvite = amIOwner || amIModerator;
 
-              return Stack(
-                children: [
-                  Column(
+            return Column(
+              children: [
+                DrawerHeader(
+                  decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+                  child: Column(
                     children: [
-                      DrawerHeader(
-                        decoration: BoxDecoration(color: Theme.of(context).primaryColor),
-                        child: Column(
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Expanded(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Flexible(
-                                    child: Text(
-                                      name,
-                                      style: theme.textTheme.headlineSmall?.copyWith(color: Colors.white),
-                                      maxLines: 3,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  if (amIOwner || amIModerator)
-                                    IconButton(
-                                      onPressed: () => onSetName(chat.name),
-                                      icon: const Icon(Icons.edit, color: Colors.white, size: 18),
-                                    ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              width: double.infinity,
+                            Flexible(
                               child: Text(
-                                'id: ${chat.id}',
-                                style: const TextStyle(fontSize: 12, color: Colors.white),
-                                textAlign: TextAlign.right,
+                                name,
+                                style: theme.textTheme.headlineSmall?.copyWith(color: Colors.white),
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
+                            if (amIOwner || amIModerator)
+                              IconButton(
+                                onPressed: () => onSetName(chat.name),
+                                icon: const Icon(Icons.edit, color: Colors.white, size: 18),
+                              ),
                           ],
                         ),
                       ),
-                      Text(
-                        context.l10n.chats_GroupDrawer_groupMembersHeadline,
-                        style: theme.textTheme.headlineSmall?.copyWith(
-                          fontSize: 18,
-                          color: theme.primaryColor,
+                      SizedBox(
+                        width: double.infinity,
+                        child: Text(
+                          'id: ${chat.id}',
+                          style: const TextStyle(fontSize: 12, color: Colors.white),
+                          textAlign: TextAlign.right,
                         ),
                       ),
-                      Expanded(
-                          child: ListView(
-                        padding: const EdgeInsets.all(0),
-                        children: [
-                          ...members(chat, amIOwner, amIModerator),
-                          if (canInvite)
-                            TextButton.icon(
-                              onPressed: onAddUser,
-                              label: Text(context.l10n.chats_GroupDrawer_addUserBtnText),
-                              icon: const Icon(Icons.person_add_alt, size: 16),
-                            ),
-                        ],
-                      )),
-                      if (amIOwner)
-                        ElevatedButton(
-                            onPressed: () => onDeleteGroup(),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(Icons.output_sharp, size: 16),
-                                const SizedBox(width: 4),
-                                Text(context.l10n.chats_GroupDrawer_deleteLeaveBtnText),
-                              ],
-                            )),
-                      if (!amIOwner)
-                        ElevatedButton(
-                            onPressed: () => onLeaveGroup(),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(Icons.output_sharp, size: 16),
-                                const SizedBox(width: 4),
-                                Text(context.l10n.chats_GroupDrawer_leaveBtnText),
-                              ],
-                            )),
-                      const SizedBox(height: 8),
                     ],
                   ),
-                  if (state.busy)
-                    Container(
-                      color: Colors.black.withOpacity(0.1),
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-                        child: const Center(child: CircularProgressIndicator()),
+                ),
+                Text(
+                  context.l10n.chats_GroupDrawer_groupMembersHeadline,
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontSize: 18,
+                    color: theme.primaryColor,
+                  ),
+                ),
+                Expanded(
+                    child: ListView(
+                  padding: const EdgeInsets.all(0),
+                  children: [
+                    ...members(chat, amIOwner, amIModerator),
+                    if (canInvite)
+                      TextButton.icon(
+                        onPressed: onAddUser,
+                        label: Text(context.l10n.chats_GroupDrawer_addUserBtnText),
+                        icon: const Icon(Icons.person_add_alt, size: 16),
                       ),
-                    ),
-                ],
-              );
-            }
+                  ],
+                )),
+                if (amIOwner)
+                  ElevatedButton(
+                      onPressed: () => onDeleteGroup(),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.output_sharp, size: 16),
+                          const SizedBox(width: 4),
+                          Text(context.l10n.chats_GroupDrawer_deleteLeaveBtnText),
+                        ],
+                      )),
+                if (!amIOwner)
+                  ElevatedButton(
+                      onPressed: () => onLeaveGroup(),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.output_sharp, size: 16),
+                          const SizedBox(width: 4),
+                          Text(context.l10n.chats_GroupDrawer_leaveBtnText),
+                        ],
+                      )),
+                const SizedBox(height: 8),
+              ],
+            );
+          }
 
-            return const Center(child: CircularProgressIndicator());
-          },
-        ),
+          return const Center(child: CircularProgressIndicator());
+        },
       ),
     );
   }
@@ -262,28 +247,28 @@ class _GroupDrawerState extends State<GroupDrawer> {
                   items: [
                     if (canMakeModerator)
                       PopupMenuItem(
+                        onTap: () => onSetModerator(member.userId, true),
                         child: ListTile(
                           title: Text(context.l10n.chats_GroupDrawer_makeModeratorBtnText),
                           leading: const Icon(Icons.add_moderator_outlined),
-                          onTap: () => onSetModerator(member.userId, true),
                           dense: true,
                         ),
                       ),
                     if (canRemoveModerator)
                       PopupMenuItem(
+                        onTap: () => onSetModerator(member.userId, false),
                         child: ListTile(
                           title: Text(context.l10n.chats_GroupDrawer_unmakeModeratorBtnText),
                           leading: const Icon(Icons.remove_moderator_outlined),
-                          onTap: () => onSetModerator(member.userId, false),
                           dense: true,
                         ),
                       ),
                     if (canRemove)
                       PopupMenuItem(
+                        onTap: () => onRemoveUser(member.userId),
                         child: ListTile(
                           title: Text(context.l10n.chats_GroupDrawer_removeUserBtnText),
                           leading: const Icon(Icons.person_remove_alt_1_outlined),
-                          onTap: () => onRemoveUser(member.userId),
                           dense: true,
                         ),
                       ),

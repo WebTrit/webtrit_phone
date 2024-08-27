@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/features/features.dart';
@@ -15,12 +16,12 @@ class GroupScreen extends StatefulWidget {
 }
 
 class _GroupScreenState extends State<GroupScreen> {
+  late final chatsBloc = context.read<ChatsBloc>();
+  late final groupCubit = context.read<GroupCubit>();
+  late final contactsRepo = context.read<ContactsRepository>();
+
   @override
   Widget build(BuildContext context) {
-    final chatsBloc = context.read<ChatsBloc>();
-    final groupCubit = context.read<GroupCubit>();
-    final contactsRepo = context.read<ContactsRepository>();
-
     return BlocProvider(
       create: (context) => ChatTypingCubit(chatsBloc.state.client, contactsRepo),
       child: BlocConsumer<GroupCubit, GroupState>(
@@ -30,67 +31,79 @@ class _GroupScreenState extends State<GroupScreen> {
           }
         },
         builder: (context, state) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Builder(builder: (context) {
-                if (state is GroupStateReady && (state.chat.name?.isNotEmpty ?? false)) {
-                  return FadeIn(
-                    child: Text(
-                      state.chat.name!,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                  );
-                } else {
-                  return FadeIn(
-                    child: Text(
-                      '${context.l10n.chats_GroupScreen_titlePrefix} ${groupCubit.state.chatId}',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                  );
-                }
-              }),
-            ),
-            endDrawer: GroupDrawer(userId: chatsBloc.state.userId!),
-            body: Builder(
-              builder: (context) {
-                if (state is GroupStateReady) {
-                  return MessageListView(
-                    userId: chatsBloc.state.userId!,
-                    messages: state.messages,
-                    outboxMessages: state.outboxMessages,
-                    outboxMessageEdits: state.outboxMessageEdits,
-                    outboxMessageDeletes: state.outboxMessageDeletes,
-                    fetchingHistory: state.fetchingHistory,
-                    historyEndReached: state.historyEndReached,
-                    onSendMessage: (content, _) => groupCubit.sendMessage(content),
-                    onSendReply: (content, refMessage) => groupCubit.sendReply(content, refMessage),
-                    onSendForward: (content, refMessage) => groupCubit.sendForward(refMessage),
-                    onSendEdit: (content, refMessage) => groupCubit.sendEdit(content, refMessage),
-                    onDelete: (refMessage) => groupCubit.deleteMessage(refMessage),
-                    onViewed: (refMessage) => groupCubit.markAsViewed(refMessage),
-                    onFetchHistory: groupCubit.fetchHistory,
-                    hasSmsFeature: false,
-                  );
-                }
+          return Stack(
+            children: [
+              Scaffold(
+                appBar: AppBar(
+                  title: Builder(builder: (context) {
+                    if (state is GroupStateReady && (state.chat.name?.isNotEmpty ?? false)) {
+                      return FadeIn(
+                        child: Text(
+                          state.chat.name!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                      );
+                    } else {
+                      return FadeIn(
+                        child: Text(
+                          '${context.l10n.chats_GroupScreen_titlePrefix} ${groupCubit.state.chatId}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                      );
+                    }
+                  }),
+                ),
+                endDrawer: GroupDrawer(userId: chatsBloc.state.userId!),
+                body: Builder(
+                  builder: (context) {
+                    if (state is GroupStateReady) {
+                      return MessageListView(
+                        userId: chatsBloc.state.userId!,
+                        messages: state.messages,
+                        outboxMessages: state.outboxMessages,
+                        outboxMessageEdits: state.outboxMessageEdits,
+                        outboxMessageDeletes: state.outboxMessageDeletes,
+                        fetchingHistory: state.fetchingHistory,
+                        historyEndReached: state.historyEndReached,
+                        onSendMessage: (content, _) => groupCubit.sendMessage(content),
+                        onSendReply: (content, refMessage) => groupCubit.sendReply(content, refMessage),
+                        onSendForward: (content, refMessage) => groupCubit.sendForward(refMessage),
+                        onSendEdit: (content, refMessage) => groupCubit.sendEdit(content, refMessage),
+                        onDelete: (refMessage) => groupCubit.deleteMessage(refMessage),
+                        onViewed: (refMessage) => groupCubit.markAsViewed(refMessage),
+                        onFetchHistory: groupCubit.fetchHistory,
+                        hasSmsFeature: false,
+                      );
+                    }
 
-                if (state is GroupStateError) {
-                  return NoDataPlaceholder(
-                    content: Text(context.l10n.chats_Conversation_failure),
-                    actions: [
-                      TextButton(onPressed: groupCubit.restart, child: Text(context.l10n.chats_ActionBtn_retry))
-                    ],
-                  );
-                }
+                    if (state is GroupStateError) {
+                      return NoDataPlaceholder(
+                        content: Text(context.l10n.chats_Conversation_failure),
+                        actions: [
+                          TextButton(onPressed: groupCubit.restart, child: Text(context.l10n.chats_ActionBtn_retry))
+                        ],
+                      );
+                    }
 
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              },
-            ),
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                ),
+              ),
+              if (state is GroupStateReady && state.busy)
+                Container(
+                  color: Colors.black.withOpacity(0.1),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+                    child: const Center(child: CircularProgressIndicator()),
+                  ),
+                ),
+            ],
           );
         },
       ),

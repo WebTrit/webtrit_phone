@@ -105,46 +105,46 @@ class _MessageViewState extends State<MessageView> {
     final popupItems = [
       if (hasContent)
         PopupMenuItem(
+          onTap: () => Clipboard.setData(ClipboardData(text: chatMessage!.content)),
           child: ListTile(
             title: Text(context.l10n.chats_MessageView_textcopy),
             leading: const Icon(Icons.copy_rounded),
-            onTap: () => Clipboard.setData(ClipboardData(text: chatMessage!.content)),
             dense: true,
           ),
         ),
       if (isSended && !isDeleted)
         PopupMenuItem(
+          onTap: () => widget.handleSetForReply(chatMessage!),
           child: ListTile(
             title: Text(context.l10n.chats_MessageView_reply),
             leading: const Icon(Icons.question_answer_outlined),
-            onTap: () => widget.handleSetForReply(chatMessage!),
             dense: true,
           ),
         ),
       if (isSended && !isDeleted)
         PopupMenuItem(
+          onTap: () => widget.handleSetForForward(chatMessage!),
           child: ListTile(
             title: Text(context.l10n.chats_MessageView_forward),
             leading: const Icon(Icons.forward_outlined),
-            onTap: () => widget.handleSetForForward(chatMessage!),
             dense: true,
           ),
         ),
       if (isMine && isSended && !isForward && !isDeleted)
         PopupMenuItem(
+          onTap: () => widget.handleSetForEdit(chatMessage!),
           child: ListTile(
             title: Text(context.l10n.chats_MessageView_edit),
             leading: const Icon(Icons.edit_note_outlined),
-            onTap: () => widget.handleSetForEdit(chatMessage!),
             dense: true,
           ),
         ),
       if (isMine && isSended && !isDeleted)
         PopupMenuItem(
+          onTap: () => widget.handleDelete(chatMessage!),
           child: ListTile(
             title: Text(context.l10n.chats_MessageView_delete),
             leading: const Icon(Icons.remove),
-            onTap: () => widget.handleDelete(chatMessage!),
             dense: true,
           ),
         ),

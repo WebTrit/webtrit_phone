@@ -24,17 +24,17 @@ class _ChatListScreenState extends State<ChatListScreen> {
 
   late final popupItems = [
     PopupMenuItem(
+      onTap: onStartDialog,
       child: ListTile(
         title: Text(context.l10n.chats_ChatListScreen_startDialog),
         leading: const Icon(Icons.person_add_alt),
-        onTap: onStartDialog,
       ),
     ),
     PopupMenuItem(
+      onTap: onCreateGroup,
       child: ListTile(
         title: Text(context.l10n.chats_ChatListScreen_createGroup),
         leading: const Icon(Icons.group_add_outlined),
-        onTap: onCreateGroup,
       ),
     ),
   ];
