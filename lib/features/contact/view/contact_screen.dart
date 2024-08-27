@@ -52,6 +52,7 @@ class ContactScreen extends StatelessWidget {
                       child: LeadingAvatar(
                         username: contact.name,
                         thumbnail: contact.thumbnail,
+                        thumbnailUrl: contact.thumbnailUrl,
                         registered: contact.registered,
                         radius: 50,
                       ),

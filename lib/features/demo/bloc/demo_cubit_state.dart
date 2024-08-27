@@ -2,9 +2,15 @@ part of 'demo_cubit.dart';
 
 @freezed
 class DemoCubitState with _$DemoCubitState {
+  const DemoCubitState._();
+
   const factory DemoCubitState({
-    @Default(false) bool showConvertedButton,
-    @Default(false) bool openDemoWebScreen,
-    String? convertPbxUrl,
+    required MainFlavor flavor,
+    required Locale locale,
+    UserInfo? userInfo,
+    @Default(true) bool enable,
+    @Default({}) Map<MainFlavor, DemoActions> actions,
   }) = _DemoCubitState;
+
+  List<DemoCallToActionsResponseActions> get flavorActions => enable ? actions[flavor]?.action ?? [] : [];
 }

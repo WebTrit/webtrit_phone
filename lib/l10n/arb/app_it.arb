@@ -20,8 +20,12 @@
   "@autoprovision_successSnackBar_used": {},
   "call_CallActionsTooltip_accept": "Accetta chiamata",
   "@call_CallActionsTooltip_accept": {},
+  "call_CallActionsTooltip_accept_inviteToAttendedTransfer": "Accetta trasferimento",
+  "@call_CallActionsTooltip_accept_inviteToAttendedTransfer": {},
   "call_CallActionsTooltip_attended_transfer": "Trasferimento assistito",
   "@call_CallActionsTooltip_attended_transfer": {},
+  "call_CallActionsTooltip_decline_inviteToAttendedTransfer": "Rifiuta trasferimento",
+  "@call_CallActionsTooltip_decline_inviteToAttendedTransfer": {},
   "call_CallActionsTooltip_disableCamera": "Disattiva video",
   "@call_CallActionsTooltip_disableCamera": {},
   "call_CallActionsTooltip_disableSpeaker": "Disattiva vivavoce",
@@ -60,8 +64,12 @@
   "@call_description_held": {},
   "call_description_incoming": "Chiamata in arrivo",
   "@call_description_incoming": {},
+  "call_description_inviteToAttendedTransfer": "Sei stato invitato a unirti a una chiamata di trasferimento assistito",
+  "@call_description_inviteToAttendedTransfer": {},
   "call_description_outgoing": "Chiamata in corso",
   "@call_description_outgoing": {},
+  "call_description_requestToAttendedTransfer": "Richiesta di trasferimento",
+  "@call_description_requestToAttendedTransfer": {},
   "call_description_transferProcessing": "Elaborazione del trasferimento",
   "@call_description_transferProcessing": {},
   "call_description_transfer_requested": "Richiesta di trasferimento",
@@ -134,7 +142,7 @@
   "@default_TypeErrorError": {},
   "default_UnauthorizedRequestFailureError": "Si è verificato un errore di richiesta non autorizzata",
   "@default_UnauthorizedRequestFailureError": {},
-  "favorites_BodyCenter_empty": "Al momento non hai numeri preferiti.\nAggiungi ai preferiti dai Contatti usando l'icona a stella.",
+  "favorites_BodyCenter_empty": "Al momento non hai numeri preferiti.\nAggiungi ai preferiti dai Contatti usando l'icona a stella",
   "@favorites_BodyCenter_empty": {},
   "favorites_DeleteConfirmDialog_content": "Sei sicuro di voler eliminare il contatto preferito?",
   "@favorites_DeleteConfirmDialog_content": {},
@@ -532,12 +540,10 @@
   "@webRegistration_ErrorAcknowledgeDialogActions_skip": {},
   "webRegistration_ErrorAcknowledgeDialog_title": "Web resource error",
   "@webRegistration_ErrorAcknowledgeDialog_title": {},
-
   "chats_Conversation_failure": "Errore di caricamento della conversazione",
   "@chats_Conversation_failure": {},
   "chats_ActionBtn_retry": "Riprova",
   "@chats_ActionBtn_retry": {},
-
   "chats_MessageView_textcopy": "Copia negli appunti",
   "@chats_MessageView_textcopy": {},
   "chats_MessageView_reply": "Rispondere",
@@ -548,61 +554,50 @@
   "@chats_MessageView_edit": {},
   "chats_MessageView_delete": "Eliminare",
   "@chats_MessageView_delete": {},
-
   "chats_MessageView_forwarded": "[inoltrato]",
   "@chats_MessageView_forwarded": {},
   "chats_MessageView_edited": "[modificato]",
   "@chats_MessageView_edited": {},
   "chats_MessageView_deleted": "[cancellato]",
   "@chats_MessageView_deleted": {},
-
   "chats_ParticipantName_you": "Voi",
   "@chats_ParticipantName_you": {},
-
   "chats_StateBar_initializing": "INIZIALIZZAZIONE",
   "@chats_StateBar_initializing": {},
   "chats_StateBar_connecting": "CONNESSIONE",
   "@chats_StateBar_connecting": {},
   "chats_StateBar_error": "DISCONNESSO",
   "@chats_StateBar_error": {},
-
   "chats_ChatListScreen_startDialog": "Avvia dialogo",
   "@chats_ChatListScreen_startDialog": {},
   "chats_ChatListScreen_createGroup": "Crea gruppo",
   "@chats_ChatListScreen_createGroup": {},
   "chats_ChatListScreen_empty": "Nessuna conversazione è ancora iniziata",
   "@chats_ChatListScreen_empty": {},
-
   "chats_ChatListItem_empty": "Nessun messaggio ancora",
   "@chats_ChatListScreen_empty": {},
-
   "chats_ConversationScreen_titlePrefix": "Dialogo:",
   "@chats_ConversationScreen_titlePrefix": {},
-
   "chats_GroupScreen_titlePrefix": "Gruppo:",
   "@chats_GroupScreen_titlePrefix": {},
-
   "chats_AddContactDialog_title": "Scegli il contatto:",
   "@chats_AddContactDialog_title": {},
   "chats_AddContactDialog_empty": "Nessun contatto trovato",
   "@chats_AddContactDialog_empty": {},
   "chats_AddContactDialog_cancel": "Cancellare",
   "@chats_AddContactDialog_cancel": {},
-
   "chats_ConfirmDialog_ask": "SÌ?",
   "@chats_ConfirmDialog_ask": {},
   "chats_ConfirmDialog_confirm": "SÌ",
   "@chats_ConfirmDialog_confirm": {},
   "chats_ConfirmDialog_cancel": "No",
   "@chats_ConfirmDialog_cancel": {},
-
   "chats_GroupAuthorities_noauthorities": "membro",
   "@chats_GroupAuthorities_noauthorities": {},
   "chats_GroupAuthorities_moderator": "moderatore",
   "@chats_GroupAuthorities_noauthorities": {},
   "chats_GroupAuthorities_owner": "proprietario",
   "@chats_GroupAuthorities_owner": {},
-
   "chats_GroupDrawer_leaveAsk": "Sei sicuro di voler abbandonare questo gruppo?",
   "@chats_GroupDrawer_leaveAsk": {},
   "chats_GroupDrawer_leaveAndDeleteAsk": "Vuoi davvero uscire ed eliminare questo gruppo?",
@@ -629,7 +624,6 @@
   "@chats_GroupDrawer_unmakeModeratorBtnText": {},
   "chats_GroupDrawer_removeUserBtnText": "Rimuovere",
   "@chats_GroupDrawer_removeUserBtnText": {},
-
   "chats_GroupNameDialog_title": "Nome del gruppo",
   "@chats_GroupNameDialog_title": {},
   "chats_GroupNameDialog_fieldLabel": "Nome del gruppo",
@@ -644,7 +638,6 @@
   "@chats_GroupNameDialog_saveBtnText": {},
   "chats_GroupNameDialog_cancelBtnText": "Cancellare",
   "@chats_GroupNameDialog_cancelBtnText": {},
-
   "chats_GroupBuilderScreen_screenTitle": "Crea gruppo",
   "@chats_GroupBuilderScreen_screenTitle": {},
   "chats_GroupBuilderScreen_groupNameHeadline": "Nome del gruppo",
@@ -665,7 +658,6 @@
   "@chats_GroupBuilderScreen_connectionError": {},
   "chats_GroupBuilderScreen_submitError": "Si è verificato un errore durante la creazione del gruppo, riprovare.",
   "@chats_GroupBuilderScreen_submitError": {},
-
-  "endoflist": "",
-  "@endoflist": {}
+  "account_selfCarePasswordExpired_message": "La tua password di self-care è scaduta. Ti preghiamo di aggiornarla utilizzando il self-care.\nFino a quando la password non sarà cambiata, l'accesso al servizio sarà limitato.",
+  "@account_selfCarePasswordExpired_message": {}
 }

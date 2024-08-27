@@ -19,6 +19,11 @@ class AppLogouted with _$AppLogouted implements AppEvent {
 }
 
 @Freezed(copyWith: false)
+class AppLogoutedTeardown with _$AppLogoutedTeardown implements AppEvent {
+  const factory AppLogoutedTeardown() = _AppLogoutTeardown;
+}
+
+@Freezed(copyWith: false)
 class AppThemeSettingsChanged with _$AppThemeSettingsChanged implements AppEvent {
   const factory AppThemeSettingsChanged(ThemeSettings value) = _AppThemeSettingsChanged;
 }

@@ -389,22 +389,36 @@ class ThemeProvider extends InheritedWidget {
     final actionBackgroundColor = colors.surface.withOpacity(0.3);
     final activeActionBackgroundColor = colors.surface;
 
+    // Common color group
     final callStartBackgroundColor = config?.callStartBackgroundColor ?? colors.tertiary;
     final hangupBackgroundColor = config?.hangupBackgroundColor ?? colors.error;
     final transferBackgroundColor = config?.transferBackgroundColor ?? actionBackgroundColor;
+
+    // Camera color group
     final cameraBackgroundColor = config?.cameraBackgroundColor ?? actionBackgroundColor;
     final cameraActiveBackgroundColor = config?.cameraActiveBackgroundColor ?? activeActionBackgroundColor;
+
+    // Muted color group
     final mutedBackgroundColor = config?.mutedBackgroundColor ?? actionBackgroundColor;
     final mutedActiveBackgroundColor = config?.mutedActiveBackgroundColor ?? activeActionBackgroundColor;
+
+    // Speaker color group
     final speakerBackgroundColor = config?.speakerBackgroundColor ?? actionBackgroundColor;
     final speakerActiveBackgroundColor = config?.speakerActiveBackgroundColor ?? activeActionBackgroundColor;
+
+    // Held color group
     final heldBackgroundColor = config?.heldBackgroundColor ?? actionBackgroundColor;
     final heldActiveBackgroundColor = config?.heldActiveBackgroundColor ?? activeActionBackgroundColor;
+
+    // Swap color group
     final swapBackgroundColor = config?.swapBackgroundColor ?? actionBackgroundColor;
+
+    // Key color group
     final keyBackgroundColor = config?.keyBackgroundColor ?? actionBackgroundColor;
     final keypadBackgroundColor = config?.keypadBackgroundColor ?? actionBackgroundColor;
     final keypadActiveBackgroundColor = config?.keypadActiveBackgroundColor ?? activeActionBackgroundColor;
 
+    // Start call style group
     final callStart = TextButton.styleFrom(
       foregroundColor: colors.onTertiary,
       backgroundColor: callStartBackgroundColor,
@@ -412,6 +426,7 @@ class ThemeProvider extends InheritedWidget {
       padding: EdgeInsets.zero,
     );
 
+    // Hangup style group
     final callHangup = TextButton.styleFrom(
       foregroundColor: colors.onError,
       backgroundColor: hangupBackgroundColor,
@@ -419,6 +434,7 @@ class ThemeProvider extends InheritedWidget {
       padding: EdgeInsets.zero,
     );
 
+    // Transfer style group
     final callTransfer = TextButton.styleFrom(
       foregroundColor: colors.onSecondary,
       backgroundColor: transferBackgroundColor,
@@ -426,60 +442,60 @@ class ThemeProvider extends InheritedWidget {
       padding: EdgeInsets.zero,
     );
 
+    // Common style group
     final callAction = TextButton.styleFrom(
       foregroundColor: colors.surface,
       padding: EdgeInsets.zero,
     );
-
     final callActiveAction = TextButton.styleFrom(
       foregroundColor: colors.onSurface,
       padding: EdgeInsets.zero,
     );
 
+    // Camera style group
     final cameraStyle = callAction.copyWith(
       backgroundColor: WidgetStatePropertyAll(cameraBackgroundColor),
     );
-
-    final cameraActiveStyle = callAction.copyWith(
+    final cameraActiveStyle = callActiveAction.copyWith(
       backgroundColor: WidgetStatePropertyAll(cameraActiveBackgroundColor),
     );
 
+    // Muted style group
     final mutedStyle = callAction.copyWith(
       backgroundColor: WidgetStatePropertyAll(mutedBackgroundColor),
     );
-
     final mutedActiveStyle = callActiveAction.copyWith(
       backgroundColor: WidgetStatePropertyAll(mutedActiveBackgroundColor),
     );
 
+    // Speaker style group
     final speakerStyle = callAction.copyWith(
       backgroundColor: WidgetStatePropertyAll(speakerBackgroundColor),
     );
-
     final speakerActiveStyle = callActiveAction.copyWith(
       backgroundColor: WidgetStatePropertyAll(speakerActiveBackgroundColor),
     );
 
+    // Held style group
     final heldStyle = callAction.copyWith(
       backgroundColor: WidgetStatePropertyAll(heldBackgroundColor),
     );
-
     final heldActiveStyle = callActiveAction.copyWith(
       backgroundColor: WidgetStatePropertyAll(heldActiveBackgroundColor),
     );
 
+    // Swap style group
     final swapStyle = callAction.copyWith(
       backgroundColor: WidgetStatePropertyAll(swapBackgroundColor),
     );
 
+    // Key style group
     final keyStyle = callAction.copyWith(
       backgroundColor: WidgetStatePropertyAll(keyBackgroundColor),
     );
-
     final keypadStyle = callAction.copyWith(
       backgroundColor: WidgetStatePropertyAll(keypadBackgroundColor),
     );
-
     final keypadActiveStyle = callActiveAction.copyWith(
       backgroundColor: WidgetStatePropertyAll(keypadActiveBackgroundColor),
     );

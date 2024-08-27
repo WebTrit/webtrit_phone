@@ -10,35 +10,7 @@ class MigrationV5 extends Migration {
 
   @override
   Future<void> execute(AppDatabase db, Migrator m) async {
-    final chatsTable = v5.Chats(db);
-    final chatMembersTable = v5.ChatMembers(db);
-    final chatMessagesTable = v5.ChatMessages(db);
-    final chatOutboxMessagesTable = v5.ChatOutboxMessages(db);
-    final chatOutboxMessageEditsTable = v5.ChatOutboxMessageEdits(db);
-    final chatOutboxMessageDeletesTable = v5.ChatOutboxMessageDeletes(db);
-    final chatOutboxMessageViewsTable = v5.ChatOutboxMessageViews(db);
-    final chatMessageSyncCursorTable = v5.ChatMessageSyncCursors(db);
-
-    final newSchemaEntities = <DatabaseSchemaEntity>[
-      chatsTable,
-      chatMembersTable,
-      chatMessagesTable,
-      chatOutboxMessagesTable,
-      chatOutboxMessageEditsTable,
-      chatOutboxMessageDeletesTable,
-      chatOutboxMessageViewsTable,
-      chatMessageSyncCursorTable,
-      ...db.generateTableCompanionEntities(chatsTable),
-      ...db.generateTableCompanionEntities(chatMembersTable),
-      ...db.generateTableCompanionEntities(chatMessagesTable),
-      ...db.generateTableCompanionEntities(chatOutboxMessagesTable),
-      ...db.generateTableCompanionEntities(chatOutboxMessageEditsTable),
-      ...db.generateTableCompanionEntities(chatOutboxMessageDeletesTable),
-      ...db.generateTableCompanionEntities(chatOutboxMessageViewsTable),
-      ...db.generateTableCompanionEntities(chatMessageSyncCursorTable),
-    ];
-    for (final entity in newSchemaEntities) {
-      await m.create(entity);
-    }
+    final contactsTable = v5.Contacts(db);
+    await m.addColumn(contactsTable, contactsTable.thumbnail);
   }
 }

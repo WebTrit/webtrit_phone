@@ -166,6 +166,8 @@ class ContactsTable extends Table {
 
   TextColumn get aliasName => text().nullable()();
 
+  BlobColumn get thumbnail => blob().nullable()();
+
   BoolColumn get registered => boolean().nullable()();
 
   BoolColumn get userRegistered => boolean().nullable()();
@@ -464,6 +466,7 @@ class ChatMessageSyncCursorTable extends Table {
 @DriftAccessor(tables: [
   ContactsTable,
   ContactPhonesTable,
+  ContactEmailsTable,
 ])
 class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin {
   ContactsDao(super.db);
@@ -511,7 +514,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
           contactsTable.firstName,
           contactsTable.aliasName,
           contactPhonesTable.number,
-        ].map((c) => c.like('%$searchBit%')).reduce((v, e) => v | e),
+        ].map((c) => c.regexp('.*$searchBit.*', caseSensitive: false)).reduce((v, e) => v | e),
       );
     }
     q.groupBy([contactPhonesTable.contactId]);
@@ -532,6 +535,59 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
         .getSingleOrNull();
   }
 
+  Stream<List<ContactWithPhonesAndEmailsData>> watchAllContactsExt([
+    Iterable<String>? searchBits,
+    ContactSourceTypeEnum? sourceType,
+  ]) {
+    final q = _selectAllContacts(sourceType).join([
+      leftOuterJoin(contactPhonesTable, contactPhonesTable.contactId.equalsExp(contactsTable.id)),
+      leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
+    ]);
+
+    if (searchBits != null) {
+      q.where(
+        searchBits.map((searchBit) {
+          return [
+            contactsTable.lastName,
+            contactsTable.firstName,
+            contactsTable.aliasName,
+            contactPhonesTable.number,
+            contactEmailsTable.address,
+          ].map((c) => c.regexp('.*$searchBit.*', caseSensitive: false)).reduce((v, e) => v | e);
+        }).reduce((v, e) => v | e),
+      );
+    }
+
+    return q.watch().map((rows) {
+      final Map<int, ContactWithPhonesAndEmailsData> contactMap = {};
+
+      for (final row in rows) {
+        final contact = row.readTable(contactsTable);
+        final phone = row.readTableOrNull(contactPhonesTable);
+        final email = row.readTableOrNull(contactEmailsTable);
+
+        final contactWithPhonesAndEmails = contactMap.putIfAbsent(
+          contact.id,
+          () => ContactWithPhonesAndEmailsData(
+            contact: contact,
+            phones: [],
+            emails: [],
+          ),
+        );
+
+        if (phone != null && !contactWithPhonesAndEmails.phones.contains(phone)) {
+          contactWithPhonesAndEmails.phones.add(phone);
+        }
+
+        if (email != null && !contactWithPhonesAndEmails.emails.contains(email)) {
+          contactWithPhonesAndEmails.emails.add(email);
+        }
+      }
+
+      return contactMap.values.toList();
+    });
+  }
+
   Future<ContactData> insertOnUniqueConflictUpdateContact(Insertable<ContactData> contact) =>
       into(contactsTable).insertReturning(contact,
           onConflict: DoUpdate((_) => contact, target: [contactsTable.sourceType, contactsTable.sourceId]));
@@ -540,6 +596,18 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
 
   Future<int> deleteContactBySource(ContactSourceTypeEnum sourceType, String sourceId) =>
       (delete(contactsTable)..where((t) => t.sourceType.equalsValue(sourceType) & t.sourceId.equals(sourceId))).go();
+}
+
+class ContactWithPhonesAndEmailsData {
+  ContactWithPhonesAndEmailsData({
+    required this.contact,
+    required this.phones,
+    required this.emails,
+  });
+
+  final ContactData contact;
+  final List<ContactPhoneData> phones;
+  final List<ContactEmailData> emails;
 }
 
 @DriftAccessor(tables: [

@@ -9,6 +9,7 @@ import 'schema_v3.dart' as v3;
 import 'schema_v4.dart' as v4;
 import 'schema_v5.dart' as v5;
 import 'schema_v6.dart' as v6;
+import 'schema_v7.dart' as v7;
 
 class GeneratedHelper implements SchemaInstantiationHelper {
   @override
@@ -26,8 +27,10 @@ class GeneratedHelper implements SchemaInstantiationHelper {
         return v5.DatabaseAtV5(db);
       case 6:
         return v6.DatabaseAtV6(db);
+      case 7:
+        return v7.DatabaseAtV7(db);
       default:
-        throw MissingSchemaException(version, const {1, 2, 3, 4, 5, 6});
+        throw MissingSchemaException(version, const {1, 2, 3, 4, 5, 6, 7});
     }
   }
 }

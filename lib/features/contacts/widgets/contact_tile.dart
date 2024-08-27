@@ -9,6 +9,7 @@ class ContactTile extends StatelessWidget {
     super.key,
     required this.displayName,
     this.thumbnail,
+    this.thumbnailUrl,
     this.registered,
     this.smart = false,
     this.onTap,
@@ -18,6 +19,7 @@ class ContactTile extends StatelessWidget {
 
   final String displayName;
   final Uint8List? thumbnail;
+  final Uri? thumbnailUrl;
   final bool? registered;
   final bool smart;
   final GestureTapCallback? onTap;
@@ -31,6 +33,7 @@ class ContactTile extends StatelessWidget {
       leading: LeadingAvatar(
         username: displayName,
         thumbnail: thumbnail,
+        thumbnailUrl: thumbnailUrl,
         registered: registered,
         smart: smart,
       ),

@@ -50,6 +50,12 @@ class $ContactsTableTable extends ContactsTable
   late final GeneratedColumn<String> aliasName = GeneratedColumn<String>(
       'alias_name', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _thumbnailMeta =
+      const VerificationMeta('thumbnail');
+  @override
+  late final GeneratedColumn<Uint8List> thumbnail = GeneratedColumn<Uint8List>(
+      'thumbnail', aliasedName, true,
+      type: DriftSqlType.blob, requiredDuringInsert: false);
   static const VerificationMeta _registeredMeta =
       const VerificationMeta('registered');
   @override
@@ -97,6 +103,7 @@ class $ContactsTableTable extends ContactsTable
         firstName,
         lastName,
         aliasName,
+        thumbnail,
         registered,
         userRegistered,
         isCurrentUser,
@@ -134,6 +141,10 @@ class $ContactsTableTable extends ContactsTable
     if (data.containsKey('alias_name')) {
       context.handle(_aliasNameMeta,
           aliasName.isAcceptableOrUnknown(data['alias_name']!, _aliasNameMeta));
+    }
+    if (data.containsKey('thumbnail')) {
+      context.handle(_thumbnailMeta,
+          thumbnail.isAcceptableOrUnknown(data['thumbnail']!, _thumbnailMeta));
     }
     if (data.containsKey('registered')) {
       context.handle(
@@ -185,6 +196,8 @@ class $ContactsTableTable extends ContactsTable
           .read(DriftSqlType.string, data['${effectivePrefix}last_name']),
       aliasName: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}alias_name']),
+      thumbnail: attachedDatabase.typeMapping
+          .read(DriftSqlType.blob, data['${effectivePrefix}thumbnail']),
       registered: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}registered']),
       userRegistered: attachedDatabase.typeMapping
@@ -215,6 +228,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
   final String? firstName;
   final String? lastName;
   final String? aliasName;
+  final Uint8List? thumbnail;
   final bool? registered;
   final bool? userRegistered;
   final bool? isCurrentUser;
@@ -227,6 +241,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       this.firstName,
       this.lastName,
       this.aliasName,
+      this.thumbnail,
       this.registered,
       this.userRegistered,
       this.isCurrentUser,
@@ -249,6 +264,9 @@ class ContactData extends DataClass implements Insertable<ContactData> {
     }
     if (!nullToAbsent || aliasName != null) {
       map['alias_name'] = Variable<String>(aliasName);
+    }
+    if (!nullToAbsent || thumbnail != null) {
+      map['thumbnail'] = Variable<Uint8List>(thumbnail);
     }
     if (!nullToAbsent || registered != null) {
       map['registered'] = Variable<bool>(registered);
@@ -282,6 +300,9 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       aliasName: aliasName == null && nullToAbsent
           ? const Value.absent()
           : Value(aliasName),
+      thumbnail: thumbnail == null && nullToAbsent
+          ? const Value.absent()
+          : Value(thumbnail),
       registered: registered == null && nullToAbsent
           ? const Value.absent()
           : Value(registered),
@@ -311,6 +332,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       firstName: serializer.fromJson<String?>(json['firstName']),
       lastName: serializer.fromJson<String?>(json['lastName']),
       aliasName: serializer.fromJson<String?>(json['aliasName']),
+      thumbnail: serializer.fromJson<Uint8List?>(json['thumbnail']),
       registered: serializer.fromJson<bool?>(json['registered']),
       userRegistered: serializer.fromJson<bool?>(json['userRegistered']),
       isCurrentUser: serializer.fromJson<bool?>(json['isCurrentUser']),
@@ -329,6 +351,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       'firstName': serializer.toJson<String?>(firstName),
       'lastName': serializer.toJson<String?>(lastName),
       'aliasName': serializer.toJson<String?>(aliasName),
+      'thumbnail': serializer.toJson<Uint8List?>(thumbnail),
       'registered': serializer.toJson<bool?>(registered),
       'userRegistered': serializer.toJson<bool?>(userRegistered),
       'isCurrentUser': serializer.toJson<bool?>(isCurrentUser),
@@ -344,6 +367,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
           Value<String?> firstName = const Value.absent(),
           Value<String?> lastName = const Value.absent(),
           Value<String?> aliasName = const Value.absent(),
+          Value<Uint8List?> thumbnail = const Value.absent(),
           Value<bool?> registered = const Value.absent(),
           Value<bool?> userRegistered = const Value.absent(),
           Value<bool?> isCurrentUser = const Value.absent(),
@@ -356,6 +380,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
         firstName: firstName.present ? firstName.value : this.firstName,
         lastName: lastName.present ? lastName.value : this.lastName,
         aliasName: aliasName.present ? aliasName.value : this.aliasName,
+        thumbnail: thumbnail.present ? thumbnail.value : this.thumbnail,
         registered: registered.present ? registered.value : this.registered,
         userRegistered:
             userRegistered.present ? userRegistered.value : this.userRegistered,
@@ -364,6 +389,30 @@ class ContactData extends DataClass implements Insertable<ContactData> {
         insertedAt: insertedAt.present ? insertedAt.value : this.insertedAt,
         updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
       );
+  ContactData copyWithCompanion(ContactDataCompanion data) {
+    return ContactData(
+      id: data.id.present ? data.id.value : this.id,
+      sourceType:
+          data.sourceType.present ? data.sourceType.value : this.sourceType,
+      sourceId: data.sourceId.present ? data.sourceId.value : this.sourceId,
+      firstName: data.firstName.present ? data.firstName.value : this.firstName,
+      lastName: data.lastName.present ? data.lastName.value : this.lastName,
+      aliasName: data.aliasName.present ? data.aliasName.value : this.aliasName,
+      thumbnail: data.thumbnail.present ? data.thumbnail.value : this.thumbnail,
+      registered:
+          data.registered.present ? data.registered.value : this.registered,
+      userRegistered: data.userRegistered.present
+          ? data.userRegistered.value
+          : this.userRegistered,
+      isCurrentUser: data.isCurrentUser.present
+          ? data.isCurrentUser.value
+          : this.isCurrentUser,
+      insertedAt:
+          data.insertedAt.present ? data.insertedAt.value : this.insertedAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('ContactData(')
@@ -373,6 +422,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
           ..write('firstName: $firstName, ')
           ..write('lastName: $lastName, ')
           ..write('aliasName: $aliasName, ')
+          ..write('thumbnail: $thumbnail, ')
           ..write('registered: $registered, ')
           ..write('userRegistered: $userRegistered, ')
           ..write('isCurrentUser: $isCurrentUser, ')
@@ -390,6 +440,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       firstName,
       lastName,
       aliasName,
+      $driftBlobEquality.hash(thumbnail),
       registered,
       userRegistered,
       isCurrentUser,
@@ -405,6 +456,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
           other.firstName == this.firstName &&
           other.lastName == this.lastName &&
           other.aliasName == this.aliasName &&
+          $driftBlobEquality.equals(other.thumbnail, this.thumbnail) &&
           other.registered == this.registered &&
           other.userRegistered == this.userRegistered &&
           other.isCurrentUser == this.isCurrentUser &&
@@ -419,6 +471,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
   final Value<String?> firstName;
   final Value<String?> lastName;
   final Value<String?> aliasName;
+  final Value<Uint8List?> thumbnail;
   final Value<bool?> registered;
   final Value<bool?> userRegistered;
   final Value<bool?> isCurrentUser;
@@ -431,6 +484,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
     this.firstName = const Value.absent(),
     this.lastName = const Value.absent(),
     this.aliasName = const Value.absent(),
+    this.thumbnail = const Value.absent(),
     this.registered = const Value.absent(),
     this.userRegistered = const Value.absent(),
     this.isCurrentUser = const Value.absent(),
@@ -444,6 +498,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
     this.firstName = const Value.absent(),
     this.lastName = const Value.absent(),
     this.aliasName = const Value.absent(),
+    this.thumbnail = const Value.absent(),
     this.registered = const Value.absent(),
     this.userRegistered = const Value.absent(),
     this.isCurrentUser = const Value.absent(),
@@ -458,6 +513,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
     Expression<String>? firstName,
     Expression<String>? lastName,
     Expression<String>? aliasName,
+    Expression<Uint8List>? thumbnail,
     Expression<bool>? registered,
     Expression<bool>? userRegistered,
     Expression<bool>? isCurrentUser,
@@ -471,6 +527,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
       if (firstName != null) 'first_name': firstName,
       if (lastName != null) 'last_name': lastName,
       if (aliasName != null) 'alias_name': aliasName,
+      if (thumbnail != null) 'thumbnail': thumbnail,
       if (registered != null) 'registered': registered,
       if (userRegistered != null) 'user_registered': userRegistered,
       if (isCurrentUser != null) 'is_current_user': isCurrentUser,
@@ -486,6 +543,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
       Value<String?>? firstName,
       Value<String?>? lastName,
       Value<String?>? aliasName,
+      Value<Uint8List?>? thumbnail,
       Value<bool?>? registered,
       Value<bool?>? userRegistered,
       Value<bool?>? isCurrentUser,
@@ -498,6 +556,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
       aliasName: aliasName ?? this.aliasName,
+      thumbnail: thumbnail ?? this.thumbnail,
       registered: registered ?? this.registered,
       userRegistered: userRegistered ?? this.userRegistered,
       isCurrentUser: isCurrentUser ?? this.isCurrentUser,
@@ -528,6 +587,9 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
     if (aliasName.present) {
       map['alias_name'] = Variable<String>(aliasName.value);
     }
+    if (thumbnail.present) {
+      map['thumbnail'] = Variable<Uint8List>(thumbnail.value);
+    }
     if (registered.present) {
       map['registered'] = Variable<bool>(registered.value);
     }
@@ -555,6 +617,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
           ..write('firstName: $firstName, ')
           ..write('lastName: $lastName, ')
           ..write('aliasName: $aliasName, ')
+          ..write('thumbnail: $thumbnail, ')
           ..write('registered: $registered, ')
           ..write('userRegistered: $userRegistered, ')
           ..write('isCurrentUser: $isCurrentUser, ')
@@ -770,6 +833,18 @@ class ContactPhoneData extends DataClass
         insertedAt: insertedAt.present ? insertedAt.value : this.insertedAt,
         updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
       );
+  ContactPhoneData copyWithCompanion(ContactPhoneDataCompanion data) {
+    return ContactPhoneData(
+      id: data.id.present ? data.id.value : this.id,
+      number: data.number.present ? data.number.value : this.number,
+      label: data.label.present ? data.label.value : this.label,
+      contactId: data.contactId.present ? data.contactId.value : this.contactId,
+      insertedAt:
+          data.insertedAt.present ? data.insertedAt.value : this.insertedAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('ContactPhoneData(')
@@ -1102,6 +1177,18 @@ class ContactEmailData extends DataClass
         insertedAt: insertedAt.present ? insertedAt.value : this.insertedAt,
         updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
       );
+  ContactEmailData copyWithCompanion(ContactEmailDataCompanion data) {
+    return ContactEmailData(
+      id: data.id.present ? data.id.value : this.id,
+      address: data.address.present ? data.address.value : this.address,
+      label: data.label.present ? data.label.value : this.label,
+      contactId: data.contactId.present ? data.contactId.value : this.contactId,
+      insertedAt:
+          data.insertedAt.present ? data.insertedAt.value : this.insertedAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('ContactEmailData(')
@@ -1465,6 +1552,19 @@ class CallLogData extends DataClass implements Insertable<CallLogData> {
         acceptedAt: acceptedAt.present ? acceptedAt.value : this.acceptedAt,
         hungUpAt: hungUpAt.present ? hungUpAt.value : this.hungUpAt,
       );
+  CallLogData copyWithCompanion(CallLogDataCompanion data) {
+    return CallLogData(
+      id: data.id.present ? data.id.value : this.id,
+      direction: data.direction.present ? data.direction.value : this.direction,
+      number: data.number.present ? data.number.value : this.number,
+      video: data.video.present ? data.video.value : this.video,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      acceptedAt:
+          data.acceptedAt.present ? data.acceptedAt.value : this.acceptedAt,
+      hungUpAt: data.hungUpAt.present ? data.hungUpAt.value : this.hungUpAt,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('CallLogData(')
@@ -1737,6 +1837,16 @@ class FavoriteData extends DataClass implements Insertable<FavoriteData> {
         contactPhoneId: contactPhoneId ?? this.contactPhoneId,
         position: position ?? this.position,
       );
+  FavoriteData copyWithCompanion(FavoriteDataCompanion data) {
+    return FavoriteData(
+      id: data.id.present ? data.id.value : this.id,
+      contactPhoneId: data.contactPhoneId.present
+          ? data.contactPhoneId.value
+          : this.contactPhoneId,
+      position: data.position.present ? data.position.value : this.position,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('FavoriteData(')
@@ -2055,6 +2165,23 @@ class ChatData extends DataClass implements Insertable<ChatData> {
         insertedAt: insertedAt.present ? insertedAt.value : this.insertedAt,
         updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
       );
+  ChatData copyWithCompanion(ChatDataCompanion data) {
+    return ChatData(
+      id: data.id.present ? data.id.value : this.id,
+      type: data.type.present ? data.type.value : this.type,
+      name: data.name.present ? data.name.value : this.name,
+      insertedAtRemote: data.insertedAtRemote.present
+          ? data.insertedAtRemote.value
+          : this.insertedAtRemote,
+      updatedAtRemote: data.updatedAtRemote.present
+          ? data.updatedAtRemote.value
+          : this.updatedAtRemote,
+      insertedAt:
+          data.insertedAt.present ? data.insertedAt.value : this.insertedAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('ChatData(')
@@ -2414,6 +2541,20 @@ class ChatMemberData extends DataClass implements Insertable<ChatMemberData> {
         insertedAt: insertedAt.present ? insertedAt.value : this.insertedAt,
         updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
       );
+  ChatMemberData copyWithCompanion(ChatMemberDataCompanion data) {
+    return ChatMemberData(
+      id: data.id.present ? data.id.value : this.id,
+      chatId: data.chatId.present ? data.chatId.value : this.chatId,
+      userId: data.userId.present ? data.userId.value : this.userId,
+      groupAuthorities: data.groupAuthorities.present
+          ? data.groupAuthorities.value
+          : this.groupAuthorities,
+      insertedAt:
+          data.insertedAt.present ? data.insertedAt.value : this.insertedAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('ChatMemberData(')
@@ -3064,6 +3205,39 @@ class ChatMessageData extends DataClass implements Insertable<ChatMessageData> {
         insertedAt: insertedAt.present ? insertedAt.value : this.insertedAt,
         updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
       );
+  ChatMessageData copyWithCompanion(ChatMessageDataCompanion data) {
+    return ChatMessageData(
+      id: data.id.present ? data.id.value : this.id,
+      idKey: data.idKey.present ? data.idKey.value : this.idKey,
+      senderId: data.senderId.present ? data.senderId.value : this.senderId,
+      chatId: data.chatId.present ? data.chatId.value : this.chatId,
+      replyToId: data.replyToId.present ? data.replyToId.value : this.replyToId,
+      forwardFromId: data.forwardFromId.present
+          ? data.forwardFromId.value
+          : this.forwardFromId,
+      authorId: data.authorId.present ? data.authorId.value : this.authorId,
+      viaSms: data.viaSms.present ? data.viaSms.value : this.viaSms,
+      smsOutState:
+          data.smsOutState.present ? data.smsOutState.value : this.smsOutState,
+      smsNumber: data.smsNumber.present ? data.smsNumber.value : this.smsNumber,
+      content: data.content.present ? data.content.value : this.content,
+      viewedAt: data.viewedAt.present ? data.viewedAt.value : this.viewedAt,
+      editedAt: data.editedAt.present ? data.editedAt.value : this.editedAt,
+      createdAtRemote: data.createdAtRemote.present
+          ? data.createdAtRemote.value
+          : this.createdAtRemote,
+      updatedAtRemote: data.updatedAtRemote.present
+          ? data.updatedAtRemote.value
+          : this.updatedAtRemote,
+      deletedAtRemote: data.deletedAtRemote.present
+          ? data.deletedAtRemote.value
+          : this.deletedAtRemote,
+      insertedAt:
+          data.insertedAt.present ? data.insertedAt.value : this.insertedAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('ChatMessageData(')
@@ -3689,6 +3863,27 @@ class ChatOutboxMessageData extends DataClass
         content: content ?? this.content,
         sendAttempts: sendAttempts ?? this.sendAttempts,
       );
+  ChatOutboxMessageData copyWithCompanion(ChatOutboxMessageDataCompanion data) {
+    return ChatOutboxMessageData(
+      idKey: data.idKey.present ? data.idKey.value : this.idKey,
+      chatId: data.chatId.present ? data.chatId.value : this.chatId,
+      participantId: data.participantId.present
+          ? data.participantId.value
+          : this.participantId,
+      replyToId: data.replyToId.present ? data.replyToId.value : this.replyToId,
+      forwardFromId: data.forwardFromId.present
+          ? data.forwardFromId.value
+          : this.forwardFromId,
+      authorId: data.authorId.present ? data.authorId.value : this.authorId,
+      viaSms: data.viaSms.present ? data.viaSms.value : this.viaSms,
+      smsNumber: data.smsNumber.present ? data.smsNumber.value : this.smsNumber,
+      content: data.content.present ? data.content.value : this.content,
+      sendAttempts: data.sendAttempts.present
+          ? data.sendAttempts.value
+          : this.sendAttempts,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('ChatOutboxMessageData(')
@@ -4059,6 +4254,20 @@ class ChatOutboxMessageEditData extends DataClass
         newContent: newContent ?? this.newContent,
         sendAttempts: sendAttempts ?? this.sendAttempts,
       );
+  ChatOutboxMessageEditData copyWithCompanion(
+      ChatOutboxMessageEditDataCompanion data) {
+    return ChatOutboxMessageEditData(
+      id: data.id.present ? data.id.value : this.id,
+      idKey: data.idKey.present ? data.idKey.value : this.idKey,
+      chatId: data.chatId.present ? data.chatId.value : this.chatId,
+      newContent:
+          data.newContent.present ? data.newContent.value : this.newContent,
+      sendAttempts: data.sendAttempts.present
+          ? data.sendAttempts.value
+          : this.sendAttempts,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('ChatOutboxMessageEditData(')
@@ -4326,6 +4535,18 @@ class ChatOutboxMessageDeleteData extends DataClass
         chatId: chatId ?? this.chatId,
         sendAttempts: sendAttempts ?? this.sendAttempts,
       );
+  ChatOutboxMessageDeleteData copyWithCompanion(
+      ChatOutboxMessageDeleteDataCompanion data) {
+    return ChatOutboxMessageDeleteData(
+      id: data.id.present ? data.id.value : this.id,
+      idKey: data.idKey.present ? data.idKey.value : this.idKey,
+      chatId: data.chatId.present ? data.chatId.value : this.chatId,
+      sendAttempts: data.sendAttempts.present
+          ? data.sendAttempts.value
+          : this.sendAttempts,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('ChatOutboxMessageDeleteData(')
@@ -4579,6 +4800,18 @@ class ChatOutboxMessageViewData extends DataClass
         chatId: chatId ?? this.chatId,
         sendAttempts: sendAttempts ?? this.sendAttempts,
       );
+  ChatOutboxMessageViewData copyWithCompanion(
+      ChatOutboxMessageViewDataCompanion data) {
+    return ChatOutboxMessageViewData(
+      id: data.id.present ? data.id.value : this.id,
+      idKey: data.idKey.present ? data.idKey.value : this.idKey,
+      chatId: data.chatId.present ? data.chatId.value : this.chatId,
+      sendAttempts: data.sendAttempts.present
+          ? data.sendAttempts.value
+          : this.sendAttempts,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('ChatOutboxMessageViewData(')
@@ -4826,6 +5059,18 @@ class ChatMessageSyncCursorData extends DataClass
         cursorType: cursorType ?? this.cursorType,
         timestampUsec: timestampUsec ?? this.timestampUsec,
       );
+  ChatMessageSyncCursorData copyWithCompanion(
+      ChatMessageSyncCursorDataCompanion data) {
+    return ChatMessageSyncCursorData(
+      chatId: data.chatId.present ? data.chatId.value : this.chatId,
+      cursorType:
+          data.cursorType.present ? data.cursorType.value : this.cursorType,
+      timestampUsec: data.timestampUsec.present
+          ? data.timestampUsec.value
+          : this.timestampUsec,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('ChatMessageSyncCursorData(')
@@ -4928,7 +5173,7 @@ class ChatMessageSyncCursorDataCompanion
 
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
-  _$AppDatabaseManager get managers => _$AppDatabaseManager(this);
+  $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $ContactsTableTable contactsTable = $ContactsTableTable(this);
   late final $ContactPhonesTableTable contactPhonesTable =
       $ContactPhonesTableTable(this);
@@ -5056,7 +5301,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       );
 }
 
-typedef $$ContactsTableTableInsertCompanionBuilder = ContactDataCompanion
+typedef $$ContactsTableTableCreateCompanionBuilder = ContactDataCompanion
     Function({
   Value<int> id,
   required ContactSourceTypeEnum sourceType,
@@ -5064,6 +5309,7 @@ typedef $$ContactsTableTableInsertCompanionBuilder = ContactDataCompanion
   Value<String?> firstName,
   Value<String?> lastName,
   Value<String?> aliasName,
+  Value<Uint8List?> thumbnail,
   Value<bool?> registered,
   Value<bool?> userRegistered,
   Value<bool?> isCurrentUser,
@@ -5078,6 +5324,7 @@ typedef $$ContactsTableTableUpdateCompanionBuilder = ContactDataCompanion
   Value<String?> firstName,
   Value<String?> lastName,
   Value<String?> aliasName,
+  Value<Uint8List?> thumbnail,
   Value<bool?> registered,
   Value<bool?> userRegistered,
   Value<bool?> isCurrentUser,
@@ -5091,8 +5338,7 @@ class $$ContactsTableTableTableManager extends RootTableManager<
     ContactData,
     $$ContactsTableTableFilterComposer,
     $$ContactsTableTableOrderingComposer,
-    $$ContactsTableTableProcessedTableManager,
-    $$ContactsTableTableInsertCompanionBuilder,
+    $$ContactsTableTableCreateCompanionBuilder,
     $$ContactsTableTableUpdateCompanionBuilder> {
   $$ContactsTableTableTableManager(_$AppDatabase db, $ContactsTableTable table)
       : super(TableManagerState(
@@ -5102,15 +5348,14 @@ class $$ContactsTableTableTableManager extends RootTableManager<
               $$ContactsTableTableFilterComposer(ComposerState(db, table)),
           orderingComposer:
               $$ContactsTableTableOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$ContactsTableTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<ContactSourceTypeEnum> sourceType = const Value.absent(),
             Value<String> sourceId = const Value.absent(),
             Value<String?> firstName = const Value.absent(),
             Value<String?> lastName = const Value.absent(),
             Value<String?> aliasName = const Value.absent(),
+            Value<Uint8List?> thumbnail = const Value.absent(),
             Value<bool?> registered = const Value.absent(),
             Value<bool?> userRegistered = const Value.absent(),
             Value<bool?> isCurrentUser = const Value.absent(),
@@ -5124,19 +5369,21 @@ class $$ContactsTableTableTableManager extends RootTableManager<
             firstName: firstName,
             lastName: lastName,
             aliasName: aliasName,
+            thumbnail: thumbnail,
             registered: registered,
             userRegistered: userRegistered,
             isCurrentUser: isCurrentUser,
             insertedAt: insertedAt,
             updatedAt: updatedAt,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required ContactSourceTypeEnum sourceType,
             required String sourceId,
             Value<String?> firstName = const Value.absent(),
             Value<String?> lastName = const Value.absent(),
             Value<String?> aliasName = const Value.absent(),
+            Value<Uint8List?> thumbnail = const Value.absent(),
             Value<bool?> registered = const Value.absent(),
             Value<bool?> userRegistered = const Value.absent(),
             Value<bool?> isCurrentUser = const Value.absent(),
@@ -5150,6 +5397,7 @@ class $$ContactsTableTableTableManager extends RootTableManager<
             firstName: firstName,
             lastName: lastName,
             aliasName: aliasName,
+            thumbnail: thumbnail,
             registered: registered,
             userRegistered: userRegistered,
             isCurrentUser: isCurrentUser,
@@ -5157,18 +5405,6 @@ class $$ContactsTableTableTableManager extends RootTableManager<
             updatedAt: updatedAt,
           ),
         ));
-}
-
-class $$ContactsTableTableProcessedTableManager extends ProcessedTableManager<
-    _$AppDatabase,
-    $ContactsTableTable,
-    ContactData,
-    $$ContactsTableTableFilterComposer,
-    $$ContactsTableTableOrderingComposer,
-    $$ContactsTableTableProcessedTableManager,
-    $$ContactsTableTableInsertCompanionBuilder,
-    $$ContactsTableTableUpdateCompanionBuilder> {
-  $$ContactsTableTableProcessedTableManager(super.$state);
 }
 
 class $$ContactsTableTableFilterComposer
@@ -5204,6 +5440,11 @@ class $$ContactsTableTableFilterComposer
 
   ColumnFilters<String> get aliasName => $state.composableBuilder(
       column: $state.table.aliasName,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<Uint8List> get thumbnail => $state.composableBuilder(
+      column: $state.table.thumbnail,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -5300,6 +5541,11 @@ class $$ContactsTableTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
+  ColumnOrderings<Uint8List> get thumbnail => $state.composableBuilder(
+      column: $state.table.thumbnail,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
   ColumnOrderings<bool> get registered => $state.composableBuilder(
       column: $state.table.registered,
       builder: (column, joinBuilders) =>
@@ -5326,7 +5572,7 @@ class $$ContactsTableTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-typedef $$ContactPhonesTableTableInsertCompanionBuilder
+typedef $$ContactPhonesTableTableCreateCompanionBuilder
     = ContactPhoneDataCompanion Function({
   Value<int> id,
   required String number,
@@ -5351,8 +5597,7 @@ class $$ContactPhonesTableTableTableManager extends RootTableManager<
     ContactPhoneData,
     $$ContactPhonesTableTableFilterComposer,
     $$ContactPhonesTableTableOrderingComposer,
-    $$ContactPhonesTableTableProcessedTableManager,
-    $$ContactPhonesTableTableInsertCompanionBuilder,
+    $$ContactPhonesTableTableCreateCompanionBuilder,
     $$ContactPhonesTableTableUpdateCompanionBuilder> {
   $$ContactPhonesTableTableTableManager(
       _$AppDatabase db, $ContactPhonesTableTable table)
@@ -5363,9 +5608,7 @@ class $$ContactPhonesTableTableTableManager extends RootTableManager<
               $$ContactPhonesTableTableFilterComposer(ComposerState(db, table)),
           orderingComposer: $$ContactPhonesTableTableOrderingComposer(
               ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$ContactPhonesTableTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> number = const Value.absent(),
             Value<String> label = const Value.absent(),
@@ -5381,7 +5624,7 @@ class $$ContactPhonesTableTableTableManager extends RootTableManager<
             insertedAt: insertedAt,
             updatedAt: updatedAt,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required String number,
             required String label,
@@ -5398,19 +5641,6 @@ class $$ContactPhonesTableTableTableManager extends RootTableManager<
             updatedAt: updatedAt,
           ),
         ));
-}
-
-class $$ContactPhonesTableTableProcessedTableManager
-    extends ProcessedTableManager<
-        _$AppDatabase,
-        $ContactPhonesTableTable,
-        ContactPhoneData,
-        $$ContactPhonesTableTableFilterComposer,
-        $$ContactPhonesTableTableOrderingComposer,
-        $$ContactPhonesTableTableProcessedTableManager,
-        $$ContactPhonesTableTableInsertCompanionBuilder,
-        $$ContactPhonesTableTableUpdateCompanionBuilder> {
-  $$ContactPhonesTableTableProcessedTableManager(super.$state);
 }
 
 class $$ContactPhonesTableTableFilterComposer
@@ -5509,7 +5739,7 @@ class $$ContactPhonesTableTableOrderingComposer
   }
 }
 
-typedef $$ContactEmailsTableTableInsertCompanionBuilder
+typedef $$ContactEmailsTableTableCreateCompanionBuilder
     = ContactEmailDataCompanion Function({
   Value<int> id,
   required String address,
@@ -5534,8 +5764,7 @@ class $$ContactEmailsTableTableTableManager extends RootTableManager<
     ContactEmailData,
     $$ContactEmailsTableTableFilterComposer,
     $$ContactEmailsTableTableOrderingComposer,
-    $$ContactEmailsTableTableProcessedTableManager,
-    $$ContactEmailsTableTableInsertCompanionBuilder,
+    $$ContactEmailsTableTableCreateCompanionBuilder,
     $$ContactEmailsTableTableUpdateCompanionBuilder> {
   $$ContactEmailsTableTableTableManager(
       _$AppDatabase db, $ContactEmailsTableTable table)
@@ -5546,9 +5775,7 @@ class $$ContactEmailsTableTableTableManager extends RootTableManager<
               $$ContactEmailsTableTableFilterComposer(ComposerState(db, table)),
           orderingComposer: $$ContactEmailsTableTableOrderingComposer(
               ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$ContactEmailsTableTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> address = const Value.absent(),
             Value<String> label = const Value.absent(),
@@ -5564,7 +5791,7 @@ class $$ContactEmailsTableTableTableManager extends RootTableManager<
             insertedAt: insertedAt,
             updatedAt: updatedAt,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required String address,
             required String label,
@@ -5581,19 +5808,6 @@ class $$ContactEmailsTableTableTableManager extends RootTableManager<
             updatedAt: updatedAt,
           ),
         ));
-}
-
-class $$ContactEmailsTableTableProcessedTableManager
-    extends ProcessedTableManager<
-        _$AppDatabase,
-        $ContactEmailsTableTable,
-        ContactEmailData,
-        $$ContactEmailsTableTableFilterComposer,
-        $$ContactEmailsTableTableOrderingComposer,
-        $$ContactEmailsTableTableProcessedTableManager,
-        $$ContactEmailsTableTableInsertCompanionBuilder,
-        $$ContactEmailsTableTableUpdateCompanionBuilder> {
-  $$ContactEmailsTableTableProcessedTableManager(super.$state);
 }
 
 class $$ContactEmailsTableTableFilterComposer
@@ -5679,7 +5893,7 @@ class $$ContactEmailsTableTableOrderingComposer
   }
 }
 
-typedef $$CallLogsTableTableInsertCompanionBuilder = CallLogDataCompanion
+typedef $$CallLogsTableTableCreateCompanionBuilder = CallLogDataCompanion
     Function({
   Value<int> id,
   required CallLogDirectionEnum direction,
@@ -5706,8 +5920,7 @@ class $$CallLogsTableTableTableManager extends RootTableManager<
     CallLogData,
     $$CallLogsTableTableFilterComposer,
     $$CallLogsTableTableOrderingComposer,
-    $$CallLogsTableTableProcessedTableManager,
-    $$CallLogsTableTableInsertCompanionBuilder,
+    $$CallLogsTableTableCreateCompanionBuilder,
     $$CallLogsTableTableUpdateCompanionBuilder> {
   $$CallLogsTableTableTableManager(_$AppDatabase db, $CallLogsTableTable table)
       : super(TableManagerState(
@@ -5717,9 +5930,7 @@ class $$CallLogsTableTableTableManager extends RootTableManager<
               $$CallLogsTableTableFilterComposer(ComposerState(db, table)),
           orderingComposer:
               $$CallLogsTableTableOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$CallLogsTableTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<CallLogDirectionEnum> direction = const Value.absent(),
             Value<String> number = const Value.absent(),
@@ -5737,7 +5948,7 @@ class $$CallLogsTableTableTableManager extends RootTableManager<
             acceptedAt: acceptedAt,
             hungUpAt: hungUpAt,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required CallLogDirectionEnum direction,
             required String number,
@@ -5756,18 +5967,6 @@ class $$CallLogsTableTableTableManager extends RootTableManager<
             hungUpAt: hungUpAt,
           ),
         ));
-}
-
-class $$CallLogsTableTableProcessedTableManager extends ProcessedTableManager<
-    _$AppDatabase,
-    $CallLogsTableTable,
-    CallLogData,
-    $$CallLogsTableTableFilterComposer,
-    $$CallLogsTableTableOrderingComposer,
-    $$CallLogsTableTableProcessedTableManager,
-    $$CallLogsTableTableInsertCompanionBuilder,
-    $$CallLogsTableTableUpdateCompanionBuilder> {
-  $$CallLogsTableTableProcessedTableManager(super.$state);
 }
 
 class $$CallLogsTableTableFilterComposer
@@ -5851,7 +6050,7 @@ class $$CallLogsTableTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-typedef $$FavoritesTableTableInsertCompanionBuilder = FavoriteDataCompanion
+typedef $$FavoritesTableTableCreateCompanionBuilder = FavoriteDataCompanion
     Function({
   Value<int> id,
   required int contactPhoneId,
@@ -5870,8 +6069,7 @@ class $$FavoritesTableTableTableManager extends RootTableManager<
     FavoriteData,
     $$FavoritesTableTableFilterComposer,
     $$FavoritesTableTableOrderingComposer,
-    $$FavoritesTableTableProcessedTableManager,
-    $$FavoritesTableTableInsertCompanionBuilder,
+    $$FavoritesTableTableCreateCompanionBuilder,
     $$FavoritesTableTableUpdateCompanionBuilder> {
   $$FavoritesTableTableTableManager(
       _$AppDatabase db, $FavoritesTableTable table)
@@ -5882,9 +6080,7 @@ class $$FavoritesTableTableTableManager extends RootTableManager<
               $$FavoritesTableTableFilterComposer(ComposerState(db, table)),
           orderingComposer:
               $$FavoritesTableTableOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$FavoritesTableTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<int> contactPhoneId = const Value.absent(),
             Value<int> position = const Value.absent(),
@@ -5894,7 +6090,7 @@ class $$FavoritesTableTableTableManager extends RootTableManager<
             contactPhoneId: contactPhoneId,
             position: position,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required int contactPhoneId,
             required int position,
@@ -5905,18 +6101,6 @@ class $$FavoritesTableTableTableManager extends RootTableManager<
             position: position,
           ),
         ));
-}
-
-class $$FavoritesTableTableProcessedTableManager extends ProcessedTableManager<
-    _$AppDatabase,
-    $FavoritesTableTable,
-    FavoriteData,
-    $$FavoritesTableTableFilterComposer,
-    $$FavoritesTableTableOrderingComposer,
-    $$FavoritesTableTableProcessedTableManager,
-    $$FavoritesTableTableInsertCompanionBuilder,
-    $$FavoritesTableTableUpdateCompanionBuilder> {
-  $$FavoritesTableTableProcessedTableManager(super.$state);
 }
 
 class $$FavoritesTableTableFilterComposer
@@ -5979,7 +6163,7 @@ class $$FavoritesTableTableOrderingComposer
   }
 }
 
-typedef $$ChatsTableTableInsertCompanionBuilder = ChatDataCompanion Function({
+typedef $$ChatsTableTableCreateCompanionBuilder = ChatDataCompanion Function({
   Value<int> id,
   required ChatTypeEnum type,
   Value<String?> name,
@@ -6004,8 +6188,7 @@ class $$ChatsTableTableTableManager extends RootTableManager<
     ChatData,
     $$ChatsTableTableFilterComposer,
     $$ChatsTableTableOrderingComposer,
-    $$ChatsTableTableProcessedTableManager,
-    $$ChatsTableTableInsertCompanionBuilder,
+    $$ChatsTableTableCreateCompanionBuilder,
     $$ChatsTableTableUpdateCompanionBuilder> {
   $$ChatsTableTableTableManager(_$AppDatabase db, $ChatsTableTable table)
       : super(TableManagerState(
@@ -6015,9 +6198,7 @@ class $$ChatsTableTableTableManager extends RootTableManager<
               $$ChatsTableTableFilterComposer(ComposerState(db, table)),
           orderingComposer:
               $$ChatsTableTableOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$ChatsTableTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<ChatTypeEnum> type = const Value.absent(),
             Value<String?> name = const Value.absent(),
@@ -6035,7 +6216,7 @@ class $$ChatsTableTableTableManager extends RootTableManager<
             insertedAt: insertedAt,
             updatedAt: updatedAt,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required ChatTypeEnum type,
             Value<String?> name = const Value.absent(),
@@ -6054,18 +6235,6 @@ class $$ChatsTableTableTableManager extends RootTableManager<
             updatedAt: updatedAt,
           ),
         ));
-}
-
-class $$ChatsTableTableProcessedTableManager extends ProcessedTableManager<
-    _$AppDatabase,
-    $ChatsTableTable,
-    ChatData,
-    $$ChatsTableTableFilterComposer,
-    $$ChatsTableTableOrderingComposer,
-    $$ChatsTableTableProcessedTableManager,
-    $$ChatsTableTableInsertCompanionBuilder,
-    $$ChatsTableTableUpdateCompanionBuilder> {
-  $$ChatsTableTableProcessedTableManager(super.$state);
 }
 
 class $$ChatsTableTableFilterComposer
@@ -6273,7 +6442,7 @@ class $$ChatsTableTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-typedef $$ChatMembersTableTableInsertCompanionBuilder = ChatMemberDataCompanion
+typedef $$ChatMembersTableTableCreateCompanionBuilder = ChatMemberDataCompanion
     Function({
   Value<int> id,
   required int chatId,
@@ -6298,8 +6467,7 @@ class $$ChatMembersTableTableTableManager extends RootTableManager<
     ChatMemberData,
     $$ChatMembersTableTableFilterComposer,
     $$ChatMembersTableTableOrderingComposer,
-    $$ChatMembersTableTableProcessedTableManager,
-    $$ChatMembersTableTableInsertCompanionBuilder,
+    $$ChatMembersTableTableCreateCompanionBuilder,
     $$ChatMembersTableTableUpdateCompanionBuilder> {
   $$ChatMembersTableTableTableManager(
       _$AppDatabase db, $ChatMembersTableTable table)
@@ -6310,9 +6478,7 @@ class $$ChatMembersTableTableTableManager extends RootTableManager<
               $$ChatMembersTableTableFilterComposer(ComposerState(db, table)),
           orderingComposer:
               $$ChatMembersTableTableOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$ChatMembersTableTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<int> chatId = const Value.absent(),
             Value<String> userId = const Value.absent(),
@@ -6329,7 +6495,7 @@ class $$ChatMembersTableTableTableManager extends RootTableManager<
             insertedAt: insertedAt,
             updatedAt: updatedAt,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required int chatId,
             required String userId,
@@ -6347,19 +6513,6 @@ class $$ChatMembersTableTableTableManager extends RootTableManager<
             updatedAt: updatedAt,
           ),
         ));
-}
-
-class $$ChatMembersTableTableProcessedTableManager
-    extends ProcessedTableManager<
-        _$AppDatabase,
-        $ChatMembersTableTable,
-        ChatMemberData,
-        $$ChatMembersTableTableFilterComposer,
-        $$ChatMembersTableTableOrderingComposer,
-        $$ChatMembersTableTableProcessedTableManager,
-        $$ChatMembersTableTableInsertCompanionBuilder,
-        $$ChatMembersTableTableUpdateCompanionBuilder> {
-  $$ChatMembersTableTableProcessedTableManager(super.$state);
 }
 
 class $$ChatMembersTableTableFilterComposer
@@ -6447,7 +6600,7 @@ class $$ChatMembersTableTableOrderingComposer
   }
 }
 
-typedef $$ChatMessagesTableTableInsertCompanionBuilder
+typedef $$ChatMessagesTableTableCreateCompanionBuilder
     = ChatMessageDataCompanion Function({
   Value<int> id,
   required String idKey,
@@ -6496,8 +6649,7 @@ class $$ChatMessagesTableTableTableManager extends RootTableManager<
     ChatMessageData,
     $$ChatMessagesTableTableFilterComposer,
     $$ChatMessagesTableTableOrderingComposer,
-    $$ChatMessagesTableTableProcessedTableManager,
-    $$ChatMessagesTableTableInsertCompanionBuilder,
+    $$ChatMessagesTableTableCreateCompanionBuilder,
     $$ChatMessagesTableTableUpdateCompanionBuilder> {
   $$ChatMessagesTableTableTableManager(
       _$AppDatabase db, $ChatMessagesTableTable table)
@@ -6508,9 +6660,7 @@ class $$ChatMessagesTableTableTableManager extends RootTableManager<
               $$ChatMessagesTableTableFilterComposer(ComposerState(db, table)),
           orderingComposer: $$ChatMessagesTableTableOrderingComposer(
               ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$ChatMessagesTableTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> idKey = const Value.absent(),
             Value<String> senderId = const Value.absent(),
@@ -6550,7 +6700,7 @@ class $$ChatMessagesTableTableTableManager extends RootTableManager<
             insertedAt: insertedAt,
             updatedAt: updatedAt,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required String idKey,
             required String senderId,
@@ -6591,19 +6741,6 @@ class $$ChatMessagesTableTableTableManager extends RootTableManager<
             updatedAt: updatedAt,
           ),
         ));
-}
-
-class $$ChatMessagesTableTableProcessedTableManager
-    extends ProcessedTableManager<
-        _$AppDatabase,
-        $ChatMessagesTableTable,
-        ChatMessageData,
-        $$ChatMessagesTableTableFilterComposer,
-        $$ChatMessagesTableTableOrderingComposer,
-        $$ChatMessagesTableTableProcessedTableManager,
-        $$ChatMessagesTableTableInsertCompanionBuilder,
-        $$ChatMessagesTableTableUpdateCompanionBuilder> {
-  $$ChatMessagesTableTableProcessedTableManager(super.$state);
 }
 
 class $$ChatMessagesTableTableFilterComposer
@@ -6810,7 +6947,7 @@ class $$ChatMessagesTableTableOrderingComposer
   }
 }
 
-typedef $$ChatOutboxMessageTableTableInsertCompanionBuilder
+typedef $$ChatOutboxMessageTableTableCreateCompanionBuilder
     = ChatOutboxMessageDataCompanion Function({
   required String idKey,
   Value<int?> chatId,
@@ -6845,8 +6982,7 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
     ChatOutboxMessageData,
     $$ChatOutboxMessageTableTableFilterComposer,
     $$ChatOutboxMessageTableTableOrderingComposer,
-    $$ChatOutboxMessageTableTableProcessedTableManager,
-    $$ChatOutboxMessageTableTableInsertCompanionBuilder,
+    $$ChatOutboxMessageTableTableCreateCompanionBuilder,
     $$ChatOutboxMessageTableTableUpdateCompanionBuilder> {
   $$ChatOutboxMessageTableTableTableManager(
       _$AppDatabase db, $ChatOutboxMessageTableTable table)
@@ -6857,9 +6993,7 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
               ComposerState(db, table)),
           orderingComposer: $$ChatOutboxMessageTableTableOrderingComposer(
               ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$ChatOutboxMessageTableTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<String> idKey = const Value.absent(),
             Value<int?> chatId = const Value.absent(),
             Value<String?> participantId = const Value.absent(),
@@ -6885,7 +7019,7 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
             sendAttempts: sendAttempts,
             rowid: rowid,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             required String idKey,
             Value<int?> chatId = const Value.absent(),
             Value<String?> participantId = const Value.absent(),
@@ -6912,19 +7046,6 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
             rowid: rowid,
           ),
         ));
-}
-
-class $$ChatOutboxMessageTableTableProcessedTableManager
-    extends ProcessedTableManager<
-        _$AppDatabase,
-        $ChatOutboxMessageTableTable,
-        ChatOutboxMessageData,
-        $$ChatOutboxMessageTableTableFilterComposer,
-        $$ChatOutboxMessageTableTableOrderingComposer,
-        $$ChatOutboxMessageTableTableProcessedTableManager,
-        $$ChatOutboxMessageTableTableInsertCompanionBuilder,
-        $$ChatOutboxMessageTableTableUpdateCompanionBuilder> {
-  $$ChatOutboxMessageTableTableProcessedTableManager(super.$state);
 }
 
 class $$ChatOutboxMessageTableTableFilterComposer
@@ -7049,7 +7170,7 @@ class $$ChatOutboxMessageTableTableOrderingComposer
   }
 }
 
-typedef $$ChatOutboxMessageEditTableTableInsertCompanionBuilder
+typedef $$ChatOutboxMessageEditTableTableCreateCompanionBuilder
     = ChatOutboxMessageEditDataCompanion Function({
   Value<int> id,
   required String idKey,
@@ -7072,8 +7193,7 @@ class $$ChatOutboxMessageEditTableTableTableManager extends RootTableManager<
     ChatOutboxMessageEditData,
     $$ChatOutboxMessageEditTableTableFilterComposer,
     $$ChatOutboxMessageEditTableTableOrderingComposer,
-    $$ChatOutboxMessageEditTableTableProcessedTableManager,
-    $$ChatOutboxMessageEditTableTableInsertCompanionBuilder,
+    $$ChatOutboxMessageEditTableTableCreateCompanionBuilder,
     $$ChatOutboxMessageEditTableTableUpdateCompanionBuilder> {
   $$ChatOutboxMessageEditTableTableTableManager(
       _$AppDatabase db, $ChatOutboxMessageEditTableTable table)
@@ -7084,9 +7204,7 @@ class $$ChatOutboxMessageEditTableTableTableManager extends RootTableManager<
               ComposerState(db, table)),
           orderingComposer: $$ChatOutboxMessageEditTableTableOrderingComposer(
               ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$ChatOutboxMessageEditTableTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> idKey = const Value.absent(),
             Value<int> chatId = const Value.absent(),
@@ -7100,7 +7218,7 @@ class $$ChatOutboxMessageEditTableTableTableManager extends RootTableManager<
             newContent: newContent,
             sendAttempts: sendAttempts,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required String idKey,
             required int chatId,
@@ -7115,19 +7233,6 @@ class $$ChatOutboxMessageEditTableTableTableManager extends RootTableManager<
             sendAttempts: sendAttempts,
           ),
         ));
-}
-
-class $$ChatOutboxMessageEditTableTableProcessedTableManager
-    extends ProcessedTableManager<
-        _$AppDatabase,
-        $ChatOutboxMessageEditTableTable,
-        ChatOutboxMessageEditData,
-        $$ChatOutboxMessageEditTableTableFilterComposer,
-        $$ChatOutboxMessageEditTableTableOrderingComposer,
-        $$ChatOutboxMessageEditTableTableProcessedTableManager,
-        $$ChatOutboxMessageEditTableTableInsertCompanionBuilder,
-        $$ChatOutboxMessageEditTableTableUpdateCompanionBuilder> {
-  $$ChatOutboxMessageEditTableTableProcessedTableManager(super.$state);
 }
 
 class $$ChatOutboxMessageEditTableTableFilterComposer
@@ -7202,7 +7307,7 @@ class $$ChatOutboxMessageEditTableTableOrderingComposer
   }
 }
 
-typedef $$ChatOutboxMessageDeleteTableTableInsertCompanionBuilder
+typedef $$ChatOutboxMessageDeleteTableTableCreateCompanionBuilder
     = ChatOutboxMessageDeleteDataCompanion Function({
   Value<int> id,
   required String idKey,
@@ -7223,8 +7328,7 @@ class $$ChatOutboxMessageDeleteTableTableTableManager extends RootTableManager<
     ChatOutboxMessageDeleteData,
     $$ChatOutboxMessageDeleteTableTableFilterComposer,
     $$ChatOutboxMessageDeleteTableTableOrderingComposer,
-    $$ChatOutboxMessageDeleteTableTableProcessedTableManager,
-    $$ChatOutboxMessageDeleteTableTableInsertCompanionBuilder,
+    $$ChatOutboxMessageDeleteTableTableCreateCompanionBuilder,
     $$ChatOutboxMessageDeleteTableTableUpdateCompanionBuilder> {
   $$ChatOutboxMessageDeleteTableTableTableManager(
       _$AppDatabase db, $ChatOutboxMessageDeleteTableTable table)
@@ -7235,9 +7339,7 @@ class $$ChatOutboxMessageDeleteTableTableTableManager extends RootTableManager<
               ComposerState(db, table)),
           orderingComposer: $$ChatOutboxMessageDeleteTableTableOrderingComposer(
               ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$ChatOutboxMessageDeleteTableTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> idKey = const Value.absent(),
             Value<int> chatId = const Value.absent(),
@@ -7249,7 +7351,7 @@ class $$ChatOutboxMessageDeleteTableTableTableManager extends RootTableManager<
             chatId: chatId,
             sendAttempts: sendAttempts,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required String idKey,
             required int chatId,
@@ -7262,19 +7364,6 @@ class $$ChatOutboxMessageDeleteTableTableTableManager extends RootTableManager<
             sendAttempts: sendAttempts,
           ),
         ));
-}
-
-class $$ChatOutboxMessageDeleteTableTableProcessedTableManager
-    extends ProcessedTableManager<
-        _$AppDatabase,
-        $ChatOutboxMessageDeleteTableTable,
-        ChatOutboxMessageDeleteData,
-        $$ChatOutboxMessageDeleteTableTableFilterComposer,
-        $$ChatOutboxMessageDeleteTableTableOrderingComposer,
-        $$ChatOutboxMessageDeleteTableTableProcessedTableManager,
-        $$ChatOutboxMessageDeleteTableTableInsertCompanionBuilder,
-        $$ChatOutboxMessageDeleteTableTableUpdateCompanionBuilder> {
-  $$ChatOutboxMessageDeleteTableTableProcessedTableManager(super.$state);
 }
 
 class $$ChatOutboxMessageDeleteTableTableFilterComposer
@@ -7340,7 +7429,7 @@ class $$ChatOutboxMessageDeleteTableTableOrderingComposer
   }
 }
 
-typedef $$ChatOutboxMessageViewsTableTableInsertCompanionBuilder
+typedef $$ChatOutboxMessageViewsTableTableCreateCompanionBuilder
     = ChatOutboxMessageViewDataCompanion Function({
   Value<int> id,
   required String idKey,
@@ -7361,8 +7450,7 @@ class $$ChatOutboxMessageViewsTableTableTableManager extends RootTableManager<
     ChatOutboxMessageViewData,
     $$ChatOutboxMessageViewsTableTableFilterComposer,
     $$ChatOutboxMessageViewsTableTableOrderingComposer,
-    $$ChatOutboxMessageViewsTableTableProcessedTableManager,
-    $$ChatOutboxMessageViewsTableTableInsertCompanionBuilder,
+    $$ChatOutboxMessageViewsTableTableCreateCompanionBuilder,
     $$ChatOutboxMessageViewsTableTableUpdateCompanionBuilder> {
   $$ChatOutboxMessageViewsTableTableTableManager(
       _$AppDatabase db, $ChatOutboxMessageViewsTableTable table)
@@ -7373,9 +7461,7 @@ class $$ChatOutboxMessageViewsTableTableTableManager extends RootTableManager<
               ComposerState(db, table)),
           orderingComposer: $$ChatOutboxMessageViewsTableTableOrderingComposer(
               ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$ChatOutboxMessageViewsTableTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> idKey = const Value.absent(),
             Value<int> chatId = const Value.absent(),
@@ -7387,7 +7473,7 @@ class $$ChatOutboxMessageViewsTableTableTableManager extends RootTableManager<
             chatId: chatId,
             sendAttempts: sendAttempts,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required String idKey,
             required int chatId,
@@ -7400,19 +7486,6 @@ class $$ChatOutboxMessageViewsTableTableTableManager extends RootTableManager<
             sendAttempts: sendAttempts,
           ),
         ));
-}
-
-class $$ChatOutboxMessageViewsTableTableProcessedTableManager
-    extends ProcessedTableManager<
-        _$AppDatabase,
-        $ChatOutboxMessageViewsTableTable,
-        ChatOutboxMessageViewData,
-        $$ChatOutboxMessageViewsTableTableFilterComposer,
-        $$ChatOutboxMessageViewsTableTableOrderingComposer,
-        $$ChatOutboxMessageViewsTableTableProcessedTableManager,
-        $$ChatOutboxMessageViewsTableTableInsertCompanionBuilder,
-        $$ChatOutboxMessageViewsTableTableUpdateCompanionBuilder> {
-  $$ChatOutboxMessageViewsTableTableProcessedTableManager(super.$state);
 }
 
 class $$ChatOutboxMessageViewsTableTableFilterComposer
@@ -7477,7 +7550,7 @@ class $$ChatOutboxMessageViewsTableTableOrderingComposer
   }
 }
 
-typedef $$ChatMessageSyncCursorTableTableInsertCompanionBuilder
+typedef $$ChatMessageSyncCursorTableTableCreateCompanionBuilder
     = ChatMessageSyncCursorDataCompanion Function({
   required int chatId,
   required MessageSyncCursorTypeEnum cursorType,
@@ -7498,8 +7571,7 @@ class $$ChatMessageSyncCursorTableTableTableManager extends RootTableManager<
     ChatMessageSyncCursorData,
     $$ChatMessageSyncCursorTableTableFilterComposer,
     $$ChatMessageSyncCursorTableTableOrderingComposer,
-    $$ChatMessageSyncCursorTableTableProcessedTableManager,
-    $$ChatMessageSyncCursorTableTableInsertCompanionBuilder,
+    $$ChatMessageSyncCursorTableTableCreateCompanionBuilder,
     $$ChatMessageSyncCursorTableTableUpdateCompanionBuilder> {
   $$ChatMessageSyncCursorTableTableTableManager(
       _$AppDatabase db, $ChatMessageSyncCursorTableTable table)
@@ -7510,9 +7582,7 @@ class $$ChatMessageSyncCursorTableTableTableManager extends RootTableManager<
               ComposerState(db, table)),
           orderingComposer: $$ChatMessageSyncCursorTableTableOrderingComposer(
               ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$ChatMessageSyncCursorTableTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<int> chatId = const Value.absent(),
             Value<MessageSyncCursorTypeEnum> cursorType = const Value.absent(),
             Value<int> timestampUsec = const Value.absent(),
@@ -7524,7 +7594,7 @@ class $$ChatMessageSyncCursorTableTableTableManager extends RootTableManager<
             timestampUsec: timestampUsec,
             rowid: rowid,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             required int chatId,
             required MessageSyncCursorTypeEnum cursorType,
             required int timestampUsec,
@@ -7537,19 +7607,6 @@ class $$ChatMessageSyncCursorTableTableTableManager extends RootTableManager<
             rowid: rowid,
           ),
         ));
-}
-
-class $$ChatMessageSyncCursorTableTableProcessedTableManager
-    extends ProcessedTableManager<
-        _$AppDatabase,
-        $ChatMessageSyncCursorTableTable,
-        ChatMessageSyncCursorData,
-        $$ChatMessageSyncCursorTableTableFilterComposer,
-        $$ChatMessageSyncCursorTableTableOrderingComposer,
-        $$ChatMessageSyncCursorTableTableProcessedTableManager,
-        $$ChatMessageSyncCursorTableTableInsertCompanionBuilder,
-        $$ChatMessageSyncCursorTableTableUpdateCompanionBuilder> {
-  $$ChatMessageSyncCursorTableTableProcessedTableManager(super.$state);
 }
 
 class $$ChatMessageSyncCursorTableTableFilterComposer
@@ -7607,9 +7664,9 @@ class $$ChatMessageSyncCursorTableTableOrderingComposer
   }
 }
 
-class _$AppDatabaseManager {
+class $AppDatabaseManager {
   final _$AppDatabase _db;
-  _$AppDatabaseManager(this._db);
+  $AppDatabaseManager(this._db);
   $$ContactsTableTableTableManager get contactsTable =>
       $$ContactsTableTableTableManager(_db, _db.contactsTable);
   $$ContactPhonesTableTableTableManager get contactPhonesTable =>
@@ -7651,6 +7708,8 @@ mixin _$ContactsDaoMixin on DatabaseAccessor<AppDatabase> {
   $ContactsTableTable get contactsTable => attachedDatabase.contactsTable;
   $ContactPhonesTableTable get contactPhonesTable =>
       attachedDatabase.contactPhonesTable;
+  $ContactEmailsTableTable get contactEmailsTable =>
+      attachedDatabase.contactEmailsTable;
 }
 mixin _$ContactPhonesDaoMixin on DatabaseAccessor<AppDatabase> {
   $ContactsTableTable get contactsTable => attachedDatabase.contactsTable;

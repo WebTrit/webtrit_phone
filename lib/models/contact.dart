@@ -22,6 +22,7 @@ class Contact extends Equatable {
     this.lastName,
     this.aliasName,
     this.thumbnail,
+    this.thumbnailUrl,
   });
 
   final ContactId id;
@@ -41,6 +42,7 @@ class Contact extends Equatable {
   final String? lastName;
   final String? aliasName;
   final Uint8List? thumbnail;
+  final Uri? thumbnailUrl;
 
   String get name {
     final aliasName = this.aliasName;

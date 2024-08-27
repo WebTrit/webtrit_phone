@@ -12,12 +12,14 @@ class CallActiveScaffold extends StatefulWidget {
     super.key,
     required this.speaker,
     required this.activeCalls,
+    required this.config,
     required this.localePlaceholderBuilder,
     required this.remotePlaceholderBuilder,
   });
 
   final bool? speaker;
   final List<ActiveCall> activeCalls;
+  final CallActiveConfig? config;
   final WidgetBuilder? localePlaceholderBuilder;
   final WidgetBuilder? remotePlaceholderBuilder;
 
@@ -52,6 +54,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     final textTheme = themeData.textTheme;
     final switchCameraIconSize = textTheme.titleMedium!.fontSize!;
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
+
+    final enableAttendedTransfer = widget.config?.enableTransfer ?? true;
 
     return Scaffold(
       body: OrientationBuilder(
@@ -143,7 +147,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                         for (final activeCall in activeCalls)
                           CallInfo(
                             transferProcessing: activeTransfer?.processing ?? false,
-                            transferRequested: false,
+                            requestToAttendedTransfer: false,
+                            inviteToAttendedTransfer: activeCall.transfer?.inviteToAttendedTransfer ?? false,
                             isIncoming: activeCall.isIncoming,
                             held: activeCall.held,
                             username: activeCall.displayName ?? activeCall.handle.value,
@@ -153,7 +158,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                         if (maybeTransferRequest != null)
                           CallInfo(
                             transferProcessing: false,
-                            transferRequested: true,
+                            requestToAttendedTransfer: true,
+                            inviteToAttendedTransfer: false,
                             isIncoming: false,
                             held: false,
                             username: maybeTransferRequest.referTo,
@@ -173,6 +179,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       wasAccepted: activeCall.wasAccepted,
                       wasHungUp: activeCall.wasHungUp,
                       cameraValue: cameraEnabled,
+                      inviteToAttendedTransfer: activeCall.transfer?.inviteToAttendedTransfer ?? false,
                       onCameraChanged: (bool value) {
                         setState(() {
                           cameraEnabled = value;
@@ -193,23 +200,29 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                           : () {
                               context.read<CallBloc>().add(CallControlEvent.blindTransferInitiated(activeCall.callId));
                             },
-                      onAttendedTransferInitiated: !activeCall.wasAccepted || activeTransfer != null
-                          ? null
-                          : () {
-                              context
-                                  .read<CallBloc>()
-                                  .add(CallControlEvent.attendedTransferInitiated(activeCall.callId));
-                            },
-                      onAttendedTransferSubmitted: !activeCall.wasAccepted || activeTransfer != null
-                          ? null
-                          : (ActiveCall referorCall) {
-                              context.read<CallBloc>().add(
-                                    CallControlEvent.attendedTransferSubmitted(
-                                      referorCall: referorCall,
-                                      replaceCall: activeCall,
-                                    ),
-                                  );
-                            },
+                      // TODO (Serdun): Simplify complex condition in the widget tree.
+                      onAttendedTransferInitiated: enableAttendedTransfer
+                          ? (!activeCall.wasAccepted || activeTransfer != null
+                              ? null
+                              : () {
+                                  context
+                                      .read<CallBloc>()
+                                      .add(CallControlEvent.attendedTransferInitiated(activeCall.callId));
+                                })
+                          : null,
+                      // TODO (Serdun): Simplify complex condition in the widget tree.
+                      onAttendedTransferSubmitted: enableAttendedTransfer
+                          ? (!activeCall.wasAccepted || activeTransfer != null
+                              ? null
+                              : (ActiveCall referorCall) {
+                                  context.read<CallBloc>().add(
+                                        CallControlEvent.attendedTransferSubmitted(
+                                          referorCall: referorCall,
+                                          replaceCall: activeCall,
+                                        ),
+                                      );
+                                })
+                          : null,
                       heldValue: activeCall.held,
                       onHeldChanged: (bool value) {
                         context.read<CallBloc>().add(CallControlEvent.setHeld(activeCall.callId, value));

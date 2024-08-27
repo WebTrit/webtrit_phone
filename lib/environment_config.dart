@@ -21,6 +21,12 @@ class EnvironmentConfig {
     defaultValue: true,
   );
 
+  static const ENABLE_ATTENDED_TRANSFER__NAME = 'WEBTRIT_APP_ENABLE_ATTENDED_TRANSFER';
+  static const ENABLE_ATTENDED_TRANSFER = bool.fromEnvironment(
+    ENABLE_ATTENDED_TRANSFER__NAME,
+    defaultValue: true,
+  );
+
   static const CORE_URL__NAME = 'WEBTRIT_APP_CORE_URL';
   static const CORE_URL = bool.hasEnvironment(CORE_URL__NAME)
       ? String.fromEnvironment(

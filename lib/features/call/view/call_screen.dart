@@ -14,10 +14,12 @@ import 'call_init_scaffold.dart';
 class CallScreen extends StatefulWidget {
   const CallScreen({
     super.key,
+    this.config,
     this.localePlaceholderBuilder,
     this.remotePlaceholderBuilder,
   });
 
+  final CallActiveConfig? config;
   final WidgetBuilder? localePlaceholderBuilder;
   final WidgetBuilder? remotePlaceholderBuilder;
 
@@ -61,6 +63,7 @@ class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin {
           return CallActiveScaffold(
             speaker: state.speaker,
             activeCalls: state.activeCalls,
+            config: widget.config,
             localePlaceholderBuilder: widget.localePlaceholderBuilder,
             remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
           );

@@ -10,6 +10,7 @@ import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/theme/theme.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 part 'app_bloc.freezed.dart';
 
@@ -23,6 +24,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     required this.secureStorage,
     required this.appDatabase,
     required this.pendingCallHandler,
+    @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
     required AppThemes appThemes,
   }) : super(AppState(
           coreUrl: secureStorage.readCoreUrl(),
@@ -35,6 +37,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         )) {
     on<AppLogined>(_onLogined, transformer: sequential());
     on<AppLogouted>(_onLogouted, transformer: sequential());
+    on<AppLogoutedTeardown>(_onLogoutedTeardown, transformer: sequential());
     on<AppThemeSettingsChanged>(_onThemeSettingsChanged, transformer: droppable());
     on<AppThemeModeChanged>(_onThemeModeChanged, transformer: droppable());
     on<AppLocaleChanged>(_onLocaleChanged, transformer: droppable());
@@ -45,6 +48,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final SecureStorage secureStorage;
   final AppDatabase appDatabase;
   final AndroidPendingCallHandler pendingCallHandler;
+  final WebtritApiClientFactory createWebtritApiClient;
 
   Future<void> _cleanUpUserData() async {
     await appPreferences.clear();
@@ -75,6 +79,16 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onLogouted(AppLogouted event, Emitter<AppState> emit) async {
+    final client = createWebtritApiClient(state.coreUrl!, state.tenantId ?? '');
+
+    try {
+      await client.getUserInfo(state.token!);
+    } on RequestFailure catch (e) {
+      emit(state.copyWith(
+        accountErrorCode: AccountErrorCode.values.firstWhereOrNull((it) => it.value == e.error?.code),
+      ));
+    }
+
     await _cleanUpUserData();
 
     emit(state.copyWith(
@@ -82,6 +96,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       tenantId: null,
       token: null,
     ));
+  }
+
+  void _onLogoutedTeardown(AppLogoutedTeardown event, Emitter<AppState> emit) async {
+    emit(state.copyWith(accountErrorCode: null));
   }
 
   void _onThemeSettingsChanged(AppThemeSettingsChanged event, Emitter<AppState> emit) {
