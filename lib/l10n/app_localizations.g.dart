@@ -2407,6 +2407,42 @@ abstract class AppLocalizations {
   /// **'To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.'**
   String get permission_Text_description;
 
+  /// No description provided for @permission_manageFullScreenNotificationPermissions.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Full-Screen Notification Permissions'**
+  String get permission_manageFullScreenNotificationPermissions;
+
+  /// No description provided for @permission_manageFullScreenNotificationInstructions_step1.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to your phone\'s Settings.'**
+  String get permission_manageFullScreenNotificationInstructions_step1;
+
+  /// No description provided for @permission_manageFullScreenNotificationInstructions_step2.
+  ///
+  /// In en, this message translates to:
+  /// **'Navigate to \'Special App Access\' under the \'Apps & notifications\' section.'**
+  String get permission_manageFullScreenNotificationInstructions_step2;
+
+  /// No description provided for @permission_manageFullScreenNotificationInstructions_step3.
+  ///
+  /// In en, this message translates to:
+  /// **'Find and tap on \'Manage full screen intents\'.'**
+  String get permission_manageFullScreenNotificationInstructions_step3;
+
+  /// No description provided for @permission_manageFullScreenNotificationInstructions_step4.
+  ///
+  /// In en, this message translates to:
+  /// **'Select the app for which you want to manage full-screen notifications.'**
+  String get permission_manageFullScreenNotificationInstructions_step4;
+
+  /// No description provided for @permission_manageFullScreenNotificationInstructions_step5.
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle the permission to enable or disable full-screen notifications for that app.'**
+  String get permission_manageFullScreenNotificationInstructions_step5;
+
   /// No description provided for @recents_BodyCenter_empty.
   ///
   /// In en, this message translates to:

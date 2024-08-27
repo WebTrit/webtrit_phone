@@ -1,2 +1,1 @@
 export 'manufacturer.dart';
-
