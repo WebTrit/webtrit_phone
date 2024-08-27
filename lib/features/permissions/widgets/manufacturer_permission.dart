@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../extensions/extensions.dart';
-import '../cubit/permissions_cubit.dart';
+import '../models/models.dart';
 
 import 'manufacturer_permission_tips.dart';
 

@@ -13,6 +13,3 @@ class PermissionsState with _$PermissionsState {
   const factory PermissionsState.failure(Object error) = PermissionsStateFailure;
 }
 
-enum Manufacturer {
-  xiaomi,
-}

@@ -10,6 +10,7 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+import '../models/models.dart';
 import '../permissions.dart';
 import '../widgets/widgets.dart';
 
