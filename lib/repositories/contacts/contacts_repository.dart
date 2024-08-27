@@ -75,6 +75,8 @@ class ContactsRepository {
       sourceType: data.contact.sourceType.toModel(),
       sourceId: data.contact.sourceId,
       registered: data.contact.registered,
+      userRegistered: data.contact.userRegistered,
+      isCurrentUser: data.contact.isCurrentUser,
       firstName: data.contact.firstName,
       lastName: data.contact.lastName,
       aliasName: data.contact.aliasName,
