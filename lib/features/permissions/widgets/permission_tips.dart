@@ -29,34 +29,49 @@ class PermissionTips extends StatelessWidget {
           const SizedBox(height: kInset * 2),
           Icon(
             Icons.settings_suggest,
-            color: Theme.of(context).colorScheme.primary,
+            color: themeData.colorScheme.primary,
             size: kInset * 6,
           ),
           const SizedBox(height: kInset * 2),
           Text(
             title,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyLarge,
+            style: themeData.textTheme.bodyLarge,
           ),
           const SizedBox(height: kInset / 4),
           Card(
-            elevation: 0.5,
+            elevation: 0,
             child: Padding(
               padding: const EdgeInsets.all(8),
               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: instruction.map((it) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: kInset / 8),
-                      child: Text(it, textAlign: TextAlign.start, style: Theme.of(context).textTheme.labelLarge),
-                    );
-                  }).toList()),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: instruction.asMap().entries.map((entry) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: kInset / 8),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${entry.key + 1}. ',
+                          style: themeData.textTheme.labelLarge,
+                        ),
+                        Expanded(
+                          child: Text(
+                            entry.value,
+                            style: themeData.textTheme.labelLarge,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
           ),
           Text(
             context.l10n.permission_manufacturer_Text_trailing,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.labelMedium,
+            style: themeData.textTheme.labelMedium,
           ),
           const Spacer(),
           const SizedBox(height: kInset),
