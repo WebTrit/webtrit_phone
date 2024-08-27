@@ -234,6 +234,7 @@ class _GroupDrawerState extends State<GroupDrawer> {
       final canRemoveModerator = amIOwner && isModerator;
 
       return ListTile(
+        key: ObjectKey(member),
         minTileHeight: 0,
         title: ParticipantName(senderId: member.userId, userId: widget.userId),
         subtitle: Text(

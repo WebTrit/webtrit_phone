@@ -180,7 +180,7 @@ class _MessageViewState extends State<MessageView> {
             if (isForward) ...[
               forwardQuote(chatMessage!),
               const SizedBox(height: 8),
-              ParticipantName(senderId: senderId, userId: widget.userId),
+              ParticipantName(senderId: senderId, userId: widget.userId, key: Key(senderId)),
               Text(context.l10n.chats_MessageView_forwarded, style: const TextStyle(color: Colors.white, fontSize: 12)),
             ],
             if (!isForward && !isDeleted)
@@ -192,7 +192,7 @@ class _MessageViewState extends State<MessageView> {
                 usePreviewData: true,
                 onPreviewDataFetched: handlePreviewDataFetched,
                 options: const TextMessageOptions(isTextSelectable: false),
-                nameBuilder: (user) => ParticipantName(senderId: user.id, userId: widget.userId),
+                nameBuilder: (user) => ParticipantName(senderId: user.id, userId: widget.userId, key: Key(user.id)),
               ),
             if (isEdited && !isDeleted) ...[
               Text(context.l10n.chats_MessageView_edited, style: const TextStyle(color: Colors.white, fontSize: 12)),
@@ -203,7 +203,7 @@ class _MessageViewState extends State<MessageView> {
             //     Text('[${chatMessage?.smsOutState?.name}]', style: const TextStyle(color: Colors.white, fontSize: 12)),
             // ],
             if (isDeleted) ...[
-              ParticipantName(senderId: senderId, userId: widget.userId),
+              ParticipantName(senderId: senderId, userId: widget.userId, key: Key(senderId)),
               Text(context.l10n.chats_MessageView_deleted, style: const TextStyle(color: Colors.white, fontSize: 12)),
             ],
             // if (chatMessage?.viewedAt != null && isMine) ...[
@@ -264,7 +264,7 @@ class _MessageViewState extends State<MessageView> {
               usePreviewData: true,
               onPreviewDataFetched: handlePreviewDataFetched,
               options: const TextMessageOptions(isTextSelectable: false),
-              nameBuilder: (user) => ParticipantName(senderId: user.id, userId: widget.userId),
+              nameBuilder: (user) => ParticipantName(senderId: user.id, userId: widget.userId, key: Key(user.id)),
             ),
           );
         });
@@ -302,7 +302,7 @@ class _MessageViewState extends State<MessageView> {
         usePreviewData: true,
         onPreviewDataFetched: handlePreviewDataFetched,
         options: const TextMessageOptions(isTextSelectable: false),
-        nameBuilder: (user) => ParticipantName(senderId: user.id, userId: widget.userId),
+        nameBuilder: (user) => ParticipantName(senderId: user.id, userId: widget.userId, key: Key(user.id)),
       ),
     );
   }
