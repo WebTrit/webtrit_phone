@@ -38,6 +38,12 @@ class LocalNotificationRepositoryFLNImpl implements LocalNotificationRepository 
           importance: Importance.defaultImportance,
           priority: Priority.defaultPriority,
         ),
+        iOS: DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+          interruptionLevel: InterruptionLevel.active,
+        ),
       ),
       payload: const JsonEncoder().convert(payload),
     );
