@@ -23,23 +23,32 @@ class _GroupDrawerState extends State<GroupDrawer> {
   late final groupCubit = context.read<GroupCubit>();
   late final contactsRepository = context.read<ContactsRepository>();
 
-  onLeaveGroup(bool amIOwner) async {
-    String askText;
-    if (amIOwner) {
-      askText = context.l10n.chats_GroupDrawer_leaveAndDeleteAsk;
-    } else {
-      askText = context.l10n.chats_GroupDrawer_leaveAsk;
-    }
-
+  onLeaveGroup() async {
     final askResult = await showDialog<bool>(
       context: context,
-      builder: (context) => ConfirmDialog(askText: askText),
+      builder: (context) => ConfirmDialog(askText: context.l10n.chats_GroupDrawer_leaveAsk),
     );
 
     if (!mounted) return;
     if (askResult != true) return;
 
     final result = await groupCubit.leaveGroup();
+
+    if (!mounted) return;
+    const route = ChatsRouterPageRoute(children: [ChatListScreenPageRoute()]);
+    if (result) context.router.navigate(route);
+  }
+
+  onDeleteGroup() async {
+    final askResult = await showDialog<bool>(
+      context: context,
+      builder: (context) => ConfirmDialog(askText: context.l10n.chats_GroupDrawer_leaveAndDeleteAsk),
+    );
+
+    if (!mounted) return;
+    if (askResult != true) return;
+
+    final result = await groupCubit.deleteGroup();
 
     if (!mounted) return;
     const route = ChatsRouterPageRoute(children: [ChatListScreenPageRoute()]);
@@ -183,17 +192,28 @@ class _GroupDrawerState extends State<GroupDrawer> {
                             ),
                         ],
                       )),
-                      ElevatedButton(
-                          onPressed: () => onLeaveGroup(amIOwner),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(Icons.output_sharp, size: 16),
-                              const SizedBox(width: 4),
-                              if (amIOwner) Text(context.l10n.chats_GroupDrawer_deleteLeaveBtnText),
-                              if (!amIOwner) Text(context.l10n.chats_GroupDrawer_leaveBtnText),
-                            ],
-                          )),
+                      if (amIOwner)
+                        ElevatedButton(
+                            onPressed: () => onDeleteGroup(),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.output_sharp, size: 16),
+                                const SizedBox(width: 4),
+                                Text(context.l10n.chats_GroupDrawer_deleteLeaveBtnText),
+                              ],
+                            )),
+                      if (!amIOwner)
+                        ElevatedButton(
+                            onPressed: () => onLeaveGroup(),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.output_sharp, size: 16),
+                                const SizedBox(width: 4),
+                                Text(context.l10n.chats_GroupDrawer_leaveBtnText),
+                              ],
+                            )),
                       const SizedBox(height: 8),
                     ],
                   ),

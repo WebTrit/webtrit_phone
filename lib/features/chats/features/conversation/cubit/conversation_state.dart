@@ -50,6 +50,7 @@ final class CVSReady extends ConversationState with EquatableMixin {
     this.outboxMessageDeletes = const [],
     this.fetchingHistory = false,
     this.historyEndReached = false,
+    this.busy = false,
   });
 
   @override
@@ -62,6 +63,7 @@ final class CVSReady extends ConversationState with EquatableMixin {
 
   final bool fetchingHistory;
   final bool historyEndReached;
+  final bool busy;
 
   @override
   List<Object> get props => [
@@ -73,6 +75,7 @@ final class CVSReady extends ConversationState with EquatableMixin {
         outboxMessageDeletes,
         fetchingHistory,
         historyEndReached,
+        busy,
       ];
 
   copyWith({
@@ -84,6 +87,7 @@ final class CVSReady extends ConversationState with EquatableMixin {
     List<ChatOutboxMessageDeleteEntry>? outboxMessageDeletes,
     bool? fetchingHistory,
     bool? historyEndReached,
+    bool? busy,
   }) {
     return CVSReady(
       participantId ?? this.participantId,
@@ -94,6 +98,7 @@ final class CVSReady extends ConversationState with EquatableMixin {
       outboxMessageDeletes: outboxMessageDeletes ?? this.outboxMessageDeletes,
       fetchingHistory: fetchingHistory ?? this.fetchingHistory,
       historyEndReached: historyEndReached ?? this.historyEndReached,
+      busy: busy ?? this.busy,
     );
   }
 }

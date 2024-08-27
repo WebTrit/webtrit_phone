@@ -788,6 +788,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get chats_ConversationScreen_titlePrefix => 'Dialogo:';
 
   @override
+  String get chats_ConversationScreen_deleteDialog => 'Elimina dialogo';
+
+  @override
+  String get chats_ConversationScreen_deleteAsk => 'Sei sicuro di voler eliminare questa finestra di dialogo?';
+
+  @override
   String get chats_GroupScreen_titlePrefix => 'Gruppo:';
 
   @override

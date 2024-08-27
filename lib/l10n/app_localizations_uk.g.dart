@@ -788,6 +788,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get chats_ConversationScreen_titlePrefix => 'Діалог:';
 
   @override
+  String get chats_ConversationScreen_deleteDialog => 'Видалити діалог';
+
+  @override
+  String get chats_ConversationScreen_deleteAsk => 'Ви впевнені, що хочете видалити цей діалог?';
+
+  @override
   String get chats_GroupScreen_titlePrefix => 'Група:';
 
   @override

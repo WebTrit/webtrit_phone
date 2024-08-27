@@ -115,6 +115,24 @@ class ConversationCubit extends Cubit<ConversationState> {
     _outboxRepository.upsertOutboxMessageView(outboxEntry);
   }
 
+  Future<bool> deleteDialog() async {
+    final state = this.state;
+
+    if (_chat == null) return false;
+
+    if (state is! CVSReady) return false;
+    if (state.busy) return false;
+    emit(state.copyWith(busy: true));
+
+    final channel = _client.getChatChannel(_chat!.id);
+    if (channel == null || channel.state != PhoenixChannelState.joined) return false;
+    final r = await channel.push('chat:delete', {}).future;
+
+    emit(state.copyWith(busy: false));
+    if (r.isOk) return true;
+    return false;
+  }
+
   Future fetchHistory() async {
     final state = this.state;
     if (state is! CVSReady) return;

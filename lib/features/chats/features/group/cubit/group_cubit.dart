@@ -120,6 +120,22 @@ class GroupCubit extends Cubit<GroupState> {
     return false;
   }
 
+  Future<bool> deleteGroup() async {
+    final state = this.state;
+
+    if (state is! GroupStateReady) return false;
+    if (state.busy) return false;
+    emit(state.copyWith(busy: true));
+
+    final channel = _client.getChatChannel(_chatId);
+    if (channel == null || channel.state != PhoenixChannelState.joined) return false;
+    final r = await channel.push('chat:delete', {}).future;
+
+    emit(state.copyWith(busy: false));
+    if (r.isOk) return true;
+    return false;
+  }
+
   Future addUser(String phoneNumber) async {
     final state = this.state;
     if (state is! GroupStateReady) return;
