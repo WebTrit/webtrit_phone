@@ -120,7 +120,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                         onDelete: (refMessage) => conversationCubit.deleteMessage(refMessage),
                         onViewed: (refMessage) => conversationCubit.markAsViewed(refMessage),
                         onFetchHistory: conversationCubit.fetchHistory,
-                        hasSmsFeature: true,
+                        hasSmsFeature: false,
                       );
                     }
 
