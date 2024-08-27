@@ -2392,13 +2392,13 @@ abstract class AppLocalizations {
   /// No description provided for @permission_manufacturer_Text_xiaomi_tip1.
   ///
   /// In en, this message translates to:
-  /// **'1. Go to \"App settings\" → \"Notifications\".'**
+  /// **'Go to \"App settings\" → \"Notifications\".'**
   String get permission_manufacturer_Text_xiaomi_tip1;
 
   /// No description provided for @permission_manufacturer_Text_xiaomi_tip2.
   ///
   /// In en, this message translates to:
-  /// **'2. Find and turn on \"Lockscreen notifications\".'**
+  /// **'Find and turn on \"Lockscreen notifications\".'**
   String get permission_manufacturer_Text_xiaomi_tip2;
 
   /// No description provided for @permission_Text_description.

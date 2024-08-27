@@ -1180,7 +1180,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get permission_manufacturer_Text_xiaomi_tip1 => 'Vai su \"Impostazioni dell\'app\" → \"Notifiche\".';
 
   @override
-  String get permission_manufacturer_Text_xiaomi_tip2 => '2. Trova e attiva \"Notifiche sulla schermata di blocco\".';
+  String get permission_manufacturer_Text_xiaomi_tip2 => 'Trova e attiva \"Notifiche sulla schermata di blocco\".';
 
   @override
   String get permission_Text_description => 'Per garantire la migliore esperienza utente, all\'app devono essere concesse le seguenti autorizzazioni: microfono per le chiamate audio, fotocamera per le videochiamate e contatti per semplificare il raggiungimento degli utenti dall\'app.\n\nLe autorizzazioni possono essere modificate in qualsiasi momento anche successivamente.';

@@ -1177,10 +1177,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get permission_manufacturer_Text_trailing => 'Дозволи можуть бути змінені в будь-який час у майбутньому.';
 
   @override
-  String get permission_manufacturer_Text_xiaomi_tip1 => '1. Перейдіть у «Налаштування програми» → «Сповіщення».';
+  String get permission_manufacturer_Text_xiaomi_tip1 => 'Перейдіть у «Налаштування програми» → «Сповіщення».';
 
   @override
-  String get permission_manufacturer_Text_xiaomi_tip2 => '2. Знайдіть і ввімкніть «Сповіщення на екрані блокування».';
+  String get permission_manufacturer_Text_xiaomi_tip2 => 'Знайдіть і ввімкніть «Сповіщення на екрані блокування».';
 
   @override
   String get permission_Text_description => 'Для забезпечення найкращого досвіду користувача програма потребує наступні дозволи: мікрофон для аудіодзвінків, камера для відеодзвінків та доступ до контактів для спрощення їх використання в програмі.\n\nДозволи можуть бути змінені у майбутньому.';
