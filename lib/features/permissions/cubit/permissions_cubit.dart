@@ -5,6 +5,8 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 
+import '../models/models.dart';
+
 part 'permissions_cubit.freezed.dart';
 
 part 'permissions_state.dart';
