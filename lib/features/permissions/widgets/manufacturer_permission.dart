@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../extensions/extensions.dart';
 import '../models/models.dart';
 
-import 'manufacturer_permission_tips.dart';
+import 'permission_tips.dart';
 
 class ManufacturerPermission extends StatelessWidget {
   const ManufacturerPermission({
@@ -19,7 +19,7 @@ class ManufacturerPermission extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (manufacturer) {
       case Manufacturer.xiaomi:
-        return ManufacturerPermissionTips(
+        return PermissionTips(
           instruction: manufacturer.tips(context),
           onGoToAppSettings: onGoToAppSettings,
         );

@@ -4,8 +4,8 @@ import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
-class ManufacturerPermissionTips extends StatelessWidget {
-  const ManufacturerPermissionTips({
+class PermissionTips extends StatelessWidget {
+  const PermissionTips({
     super.key,
     required this.instruction,
     required this.onGoToAppSettings,
