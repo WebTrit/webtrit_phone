@@ -113,7 +113,7 @@ class PermissionsScreen extends StatelessWidget {
     final permissionCubit = context.read<PermissionsCubit>();
 
     await context.router.pushWidget(SpecialPermission(
-      onGoToAppSettings: permissionCubit.openAppSettings,
+      onGoToAppSettings: () => permissionCubit.openAppSpecialPermissionSettings(permission),
       specialPermissions: permission,
     ));
 

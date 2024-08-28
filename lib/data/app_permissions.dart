@@ -44,4 +44,12 @@ class AppPermissions {
 
   /// Opens the app settings page.
   Future<bool> toAppSettings() => openAppSettings();
+
+  Future<bool> toSpecialPermissionAppSettings(CallkeepSpecialPermissions? permission) {
+    if (permission == CallkeepSpecialPermissions.fullScreenIntent) {
+      return WebtritCallkeepPermissions().openFullScreenIntentSettings();
+    }
+
+    return openAppSettings();
+  }
 }

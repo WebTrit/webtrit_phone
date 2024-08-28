@@ -53,6 +53,10 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     appPermissions.toAppSettings();
   }
 
+  void openAppSpecialPermissionSettings(CallkeepSpecialPermissions permission) {
+    appPermissions.toSpecialPermissionAppSettings(permission);
+  }
+
   Future<void> requestFirebaseMessagingPermission() async {
     final logger = Logger('FirebaseMessaging');
 
