@@ -202,24 +202,26 @@ class _MainShellState extends State<MainShell> {
               )..add(const CallStarted());
             },
           ),
-          BlocProvider<ChatsBloc>(
-            lazy: false,
-            create: (context) {
-              final appBloc = context.read<AppBloc>();
-              final appPreferences = context.read<AppPreferences>();
-              final chatsRepository = context.read<ChatsRepository>();
-              final chatsOutboxRepository = context.read<ChatsOutboxRepository>();
-              final token = appBloc.state.token!;
-              final tenantId = appBloc.state.tenantId!;
+          if (EnvironmentConfig.CHAT_FEATURE_ENABLE)
+            BlocProvider<ChatsBloc>(
+              lazy: false,
+              create: (context) {
+                final appBloc = context.read<AppBloc>();
+                final appPreferences = context.read<AppPreferences>();
+                final chatsRepository = context.read<ChatsRepository>();
+                final chatsOutboxRepository = context.read<ChatsOutboxRepository>();
+                final token = appBloc.state.token!;
+                final tenantId = appBloc.state.tenantId!;
 
-              final wsClient = PhoenixSocket(
-                const String.fromEnvironment('C_CHAT_URL'), // TODO: Replace with core URL after integration
-                socketOptions: PhoenixSocketOptions(params: {'token': token, 'tenant_id': tenantId}),
-              );
+                final wsClient = PhoenixSocket(
+                  const String.fromEnvironment(EnvironmentConfig.CHAT_SERVICE_URL),
+                  socketOptions: PhoenixSocketOptions(params: {'token': token, 'tenant_id': tenantId}),
+                );
 
-              return ChatsBloc(wsClient, chatsRepository, chatsOutboxRepository, appPreferences)..add(const Connect());
-            },
-          ),
+                return ChatsBloc(wsClient, chatsRepository, chatsOutboxRepository, appPreferences)
+                  ..add(const Connect());
+              },
+            ),
         ],
         child: Builder(
           builder: (context) => const CallShell(child: ChatsShell(child: AutoRouter())),

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/chats/chats.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -64,6 +65,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     final mediaQueryData = MediaQuery.of(context);
+    const chatsEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE;
 
     return Scaffold(
       appBar: MainAppBar(
@@ -151,7 +153,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                             context.showSnackBar(context.l10n.recents_snackBar_deleted(recent.name));
                             context.read<RecentsBloc>().add(RecentsDeleted(recent));
                           },
-                          onMessagePressed: recent.canMessage
+                          onMessagePressed: chatsEnabled && recent.canMessage
                               ? () {
                                   context.router.navigate(ChatsRouterPageRoute(children: [
                                     const ChatListScreenPageRoute(),

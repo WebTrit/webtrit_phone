@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/main/models/models.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -98,10 +99,14 @@ class AppPreferences {
   Future<bool> removeLocale() => _sharedPreferences.remove(_kLocaleLanguageTagKey);
 
   MainFlavor getActiveMainFlavor({MainFlavor defaultValue = MainFlavor.contacts}) {
+    const chatsEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE;
+
     final activeMainFlavorString = _sharedPreferences.getString(_kActiveMainFlavorKey);
     if (activeMainFlavorString != null) {
       try {
-        return MainFlavor.values.byName(activeMainFlavorString);
+        final flavor = MainFlavor.values.byName(activeMainFlavorString);
+        if (flavor == MainFlavor.chats && !chatsEnabled) return defaultValue;
+        return flavor;
       } catch (_) {
         return defaultValue;
       }

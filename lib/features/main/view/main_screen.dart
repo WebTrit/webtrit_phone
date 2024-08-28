@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/chats/chats.dart';
 
 import '../main.dart';
@@ -21,7 +22,7 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const isMessagingFeatureEnabled = true; // TODO: Integrate with future feature flags
+    const isMessagingFeatureEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE;
 
     List<BottomNavigationBarItem> navBarItems = [];
 
@@ -30,7 +31,6 @@ class MainScreen extends StatelessWidget {
       String label = flavor.labelL10n(context);
 
       if (flavor == MainFlavor.chats) {
-        // ignore: dead_code
         if (!isMessagingFeatureEnabled) continue;
         icon = ChatFlavorOverlay(child: icon);
       }

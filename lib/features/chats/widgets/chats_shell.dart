@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -21,6 +22,10 @@ class _ChatsShellState extends State<ChatsShell> {
 
   @override
   void initState() {
+    super.initState();
+    const chatsEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE;
+    if (!chatsEnabled) return;
+
     chatNotificationsService = ChatNotificationsService(
       context.read<ChatsRepository>(),
       context.read<ContactsRepository>(),
@@ -47,8 +52,6 @@ class _ChatsShellState extends State<ChatsShell> {
       await Future.delayed(const Duration(milliseconds: 100));
       return true;
     });
-
-    super.initState();
   }
 
   @override

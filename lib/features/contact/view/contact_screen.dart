@@ -5,6 +5,7 @@ import 'package:auto_route/auto_route.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/chats/extensions/contact.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -19,6 +20,8 @@ class ContactScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    const chatsEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE;
+
     return BlocBuilder<ContactBloc, ContactState>(
       builder: (context, state) {
         final contact = state.contact;
@@ -33,7 +36,7 @@ class ContactScreen extends StatelessWidget {
               return Scaffold(
                 appBar: AppBar(
                   actions: [
-                    if (contact.canMessage)
+                    if (chatsEnabled && contact.canMessage)
                       IconButton(
                         icon: const Icon(Icons.message),
                         onPressed: () {
