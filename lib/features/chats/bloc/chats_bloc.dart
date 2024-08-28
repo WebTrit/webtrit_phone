@@ -95,7 +95,7 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
   Future<void> close() {
     _chatsSyncWorker?.dispose();
     _outboxQueueWorker?.dispose();
-    _client.close();
+    _client.dispose();
     return super.close();
   }
 }

@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 import 'dart:async';
 
 import 'package:logging/logging.dart';
@@ -31,7 +32,7 @@ class ChatsSyncWorker {
   final Duration pushTimeout;
 
   StreamSubscription? _chatlistSyncSub;
-  Map<int, StreamSubscription> chatRoomSyncSubs = {};
+  final Map<int, StreamSubscription> _chatRoomSyncSubs = {};
 
   void init() async {
     _logger.info('Initialising...');
@@ -46,7 +47,7 @@ class ChatsSyncWorker {
 
   _chatRoomSubscribe(int chatId) {
     _logger.info('Subscribing to chat $chatId');
-    chatRoomSyncSubs.putIfAbsent(
+    _chatRoomSyncSubs.putIfAbsent(
       chatId,
       () => _chatRoomSyncStream(chatId).listen((e) => _logger.info('_chatRoomSyncStream event: $e')),
     );
@@ -54,7 +55,7 @@ class ChatsSyncWorker {
 
   _chatRoomUnsubscribe(int chatId) {
     _logger.info('Unsubscribing from chat $chatId');
-    chatRoomSyncSubs.remove(chatId)?.cancel();
+    _chatRoomSyncSubs.remove(chatId)?.cancel();
     client.getChatChannel(chatId)?.leave();
   }
 
@@ -261,9 +262,8 @@ class ChatsSyncWorker {
 
   void _closeSubs() {
     _chatlistSyncSub?.cancel();
-    for (var key in chatRoomSyncSubs.keys) {
-      chatRoomSyncSubs.remove(key)?.cancel();
-    }
+    _chatRoomSyncSubs.values.forEach((sub) => sub.cancel());
+    _chatRoomSyncSubs.clear();
   }
 }
 
