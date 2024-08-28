@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-// import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 import 'package:quiver/collection.dart';
 
 import 'package:webtrit_phone/features/features.dart';
@@ -206,21 +206,21 @@ class _MessageViewState extends State<MessageView> {
               ParticipantName(senderId: senderId, userId: widget.userId, key: Key(senderId)),
               Text(context.l10n.chats_MessageView_deleted, style: const TextStyle(color: Colors.white, fontSize: 12)),
             ],
-            // if (chatMessage?.viewedAt != null && isMine) ...[
-            //   const SizedBox(height: 4),
-            //   Row(
-            //     mainAxisSize: MainAxisSize.min,
-            //     children: [
-            //       Icon(Icons.remove_red_eye_outlined, color: Colors.blue[200], size: 10),
-            //       const SizedBox(width: 4),
-            //       if (chatMessage?.viewedAt != null)
-            //         Text(
-            //           DateFormat('HH:mm').format(chatMessage!.viewedAt!),
-            //           style: TextStyle(color: Colors.blue[200], fontSize: 10),
-            //         ),
-            //     ],
-            //   ),
-            // ],
+            if (chatMessage?.createdAt != null) ...[
+              const SizedBox(height: 4),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.access_time, color: Colors.blue[100], size: 10),
+                  const SizedBox(width: 2),
+                  Text(
+                    DateFormat('HH:mm').format(chatMessage!.createdAt),
+                    style: TextStyle(color: Colors.blue[100], fontSize: 10),
+                    textAlign: TextAlign.right,
+                  ),
+                ],
+              ),
+            ],
           ],
         ),
       ),
