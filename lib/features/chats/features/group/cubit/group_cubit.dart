@@ -129,7 +129,7 @@ class GroupCubit extends Cubit<GroupState> {
 
     final channel = _client.getChatChannel(_chatId);
     if (channel == null || channel.state != PhoenixChannelState.joined) return false;
-    final r = await channel.push('chat:delete', {}).future;
+    final r = await channel.push('chat:leave_group', {}).future;
 
     emit(state.copyWith(busy: false));
     if (r.isOk) return true;

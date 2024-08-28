@@ -84,23 +84,23 @@ class _ConversationScreenState extends State<ConversationScreen> {
                       }
                     },
                   ),
-                  actions: [
-                    PopupMenuButton(
-                      itemBuilder: (context) {
-                        return [
-                          PopupMenuItem(
-                            onTap: onDeleteDialog,
-                            child: ListTile(
-                              title: Text(context.l10n.chats_ConversationScreen_deleteDialog),
-                              leading: const Icon(Icons.playlist_remove_rounded),
-                              dense: true,
-                            ),
-                          )
-                        ];
-                      },
-                      icon: const Icon(Icons.menu),
-                    ),
-                  ],
+                  // actions: [
+                  //   PopupMenuButton(
+                  //     itemBuilder: (context) {
+                  //       return [
+                  //         PopupMenuItem(
+                  //           onTap: onDeleteDialog,
+                  //           child: ListTile(
+                  //             title: Text(context.l10n.chats_ConversationScreen_deleteDialog),
+                  //             leading: const Icon(Icons.playlist_remove_rounded),
+                  //             dense: true,
+                  //           ),
+                  //         )
+                  //       ];
+                  //     },
+                  //     icon: const Icon(Icons.menu),
+                  //   ),
+                  // ],
                 ),
                 body: Builder(
                   builder: (context) {
