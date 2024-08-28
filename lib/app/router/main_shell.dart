@@ -214,7 +214,7 @@ class _MainShellState extends State<MainShell> {
                 final tenantId = appBloc.state.tenantId!;
 
                 final wsClient = PhoenixSocket(
-                  const String.fromEnvironment(EnvironmentConfig.CHAT_SERVICE_URL),
+                  EnvironmentConfig.CHAT_SERVICE_URL,
                   socketOptions: PhoenixSocketOptions(params: {'token': token, 'tenant_id': tenantId}),
                 );
 
