@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stream_transform/stream_transform.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/chats/widgets/widgets.dart';
@@ -25,12 +24,10 @@ class ChatListItem extends StatefulWidget {
 
 class _ChatListItemState extends State<ChatListItem> {
   late final chatsRepository = context.read<ChatsRepository>();
+  StreamSubscription? updatesSub;
 
   ChatMessage? lastMessage;
-  StreamSubscription? _lastMsgSub;
-
   int unreadMsgsCount = 0;
-  StreamSubscription? _unreadMsgsSub;
 
   @override
   void initState() {
@@ -39,31 +36,41 @@ class _ChatListItemState extends State<ChatListItem> {
   }
 
   init() async {
-    final lastMessages = await chatsRepository.getMessageHistory(widget.chat.id, limit: 1);
+    await loadLastMessage();
+    await loadUnreadCount();
+
     if (!mounted) return;
-    if (lastMessages.isNotEmpty) setState(() => lastMessage = lastMessages.first);
 
-    _lastMsgSub = chatsRepository.eventBus
-        .whereType<ChatMessageUpdate>()
-        .where((event) => event.message.chatId == widget.chat.id)
-        .listen((event) {
-      // Be sure to use >= to handle edit of the last message
-      if (event.message.createdAt.microsecondsSinceEpoch >= (lastMessage?.createdAt.microsecondsSinceEpoch ?? 0)) {
-        setState(() => lastMessage = event.message);
+    updatesSub = chatsRepository.eventBus.listen((event) {
+      if (event is ChatMessageUpdate && event.message.chatId == widget.chat.id) {
+        final message = event.message;
+        // Be sure to use >= to handle edit of the last message
+        if (message.createdAt.microsecondsSinceEpoch >= (lastMessage?.createdAt.microsecondsSinceEpoch ?? 0)) {
+          if (mounted) setState(() => lastMessage = message);
+        }
+        loadUnreadCount();
       }
-    });
-
-    _unreadMsgsSub = chatsRepository.unreadMessagesCount(widget.chat.id, widget.userId).listen((count) {
-      if (count != unreadMsgsCount) {
-        setState(() => unreadMsgsCount = count);
+      if (event is ChatReadCursorUpdate && event.cursor.chatId == widget.chat.id) {
+        loadUnreadCount();
       }
     });
   }
 
+  Future loadLastMessage() async {
+    final lastMessages = await chatsRepository.getMessageHistory(widget.chat.id, limit: 1);
+    if (!mounted) return;
+    if (lastMessages.isNotEmpty) setState(() => lastMessage = lastMessages.first);
+  }
+
+  Future loadUnreadCount() async {
+    final count = await chatsRepository.unreadMessagesCountUsingReadCursors(widget.chat.id, widget.userId);
+    if (!mounted) return;
+    if (count != unreadMsgsCount) setState(() => unreadMsgsCount = count);
+  }
+
   @override
   void dispose() {
-    _lastMsgSub?.cancel();
-    _unreadMsgsSub?.cancel();
+    updatesSub?.cancel();
     super.dispose();
   }
 

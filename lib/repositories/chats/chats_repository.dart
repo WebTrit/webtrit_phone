@@ -80,10 +80,12 @@ class ChatsRepository with ChatsDriftMapper {
     }
   }
 
+  @Deprecated('use cursors instead')
   Stream<int> unreadMessagesCount(int chatId, String userId) {
     return _chatsDao.unreadMessagesCount(chatId, userId);
   }
 
+  @Deprecated('use cursors instead')
   Stream<int> chatsWithUnreadedMessagesCount(String userId) {
     return _chatsDao.chatsWithUnreadedMessagesCount(userId);
   }
@@ -132,10 +134,12 @@ class ChatsRepository with ChatsDriftMapper {
     _addEvent(ChatReadCursorUpdate(cursor));
   }
 
+  // TODO: rename after migration
   Future<int> unreadMessagesCountUsingReadCursors(int chatId, String userId) {
     return _chatsDao.unreadMessagesCountUsingReadCursors(chatId, userId);
   }
 
+  // TODO: rename after migration
   Future<int> chatsWithUnreadedMessagesCountUsingReadCursors(String userId) {
     return _chatsDao.chatsWithUnreadedMessagesCountUsingReadCursors(userId);
   }
