@@ -91,4 +91,20 @@ mixin ChatsOutboxDriftMapper {
       sendAttempts: entry.sendAttempts,
     );
   }
+
+  ChatOutboxReadCursorEntry chatOutboxReadCursorEntryFromDrift(ChatOutboxReadCursorData data) {
+    return ChatOutboxReadCursorEntry(
+      chatId: data.chatId,
+      time: DateTime.fromMicrosecondsSinceEpoch(data.timestampUsec),
+      sendAttempts: data.sendAttempts,
+    );
+  }
+
+  ChatOutboxReadCursorData chatOutboxReadCursorDataFromEntry(ChatOutboxReadCursorEntry entry) {
+    return ChatOutboxReadCursorData(
+      chatId: entry.chatId,
+      timestampUsec: entry.time.microsecondsSinceEpoch,
+      sendAttempts: entry.sendAttempts,
+    );
+  }
 }

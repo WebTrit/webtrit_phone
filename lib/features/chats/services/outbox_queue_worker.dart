@@ -55,6 +55,10 @@ class OutboxQueueWorker {
         _processMessageView(messageViews.where((e) => e.chatId == chatId).toList(), chatId);
       }
 
+      for (final entry in await _outboxRepository.getOutboxReadCursors()) {
+        await _processReadCursor(entry);
+      }
+
       if (_disposed) return false;
       await Future.delayed(const Duration(seconds: 1));
       return true;
@@ -221,6 +225,31 @@ class OutboxQueueWorker {
         }
       } else {
         await _outboxRepository.upsertOutboxMessageView(messageViews.last.incAttempts());
+      }
+    }
+  }
+
+  Future _processReadCursor(ChatOutboxReadCursorEntry readCursor) async {
+    try {
+      final channel = _client.getChatChannel(readCursor.chatId);
+      if (channel == null) return;
+      if (channel.state != PhoenixChannelState.joined) return;
+
+      var payload = {'time': readCursor.time};
+      final r = await channel.push('chat:set_read_cursor', payload).future;
+
+      if (r.isOk) {
+        await _outboxRepository.deleteOutboxReadCursor(readCursor.chatId);
+        _logger.info('After isOk on read cursor: ${readCursor.chatId}');
+      }
+      if (r.isError) throw Exception('Error processing read cursor');
+    } catch (e) {
+      _logger.severe('Error processing read cursor', e);
+      if (readCursor.sendAttempts > 5) {
+        _logger.severe('Send attempts exceeded for read cursor: ${readCursor.chatId}');
+        await _outboxRepository.deleteOutboxReadCursor(readCursor.chatId);
+      } else {
+        await _outboxRepository.upsertOutboxReadCursor(readCursor.incAttempts());
       }
     }
   }

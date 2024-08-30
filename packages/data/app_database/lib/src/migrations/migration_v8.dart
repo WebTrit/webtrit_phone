@@ -11,6 +11,8 @@ class MigrationV8 extends Migration {
   @override
   Future<void> execute(AppDatabase db, Migrator m) async {
     final readCursorsTable = v8.ChatMessageReadCursors(db);
+    final readCursorsOutboxTable = v8.ChatOutboxReadCursors(db);
     await m.createTable(readCursorsTable);
+    await m.createTable(readCursorsOutboxTable);
   }
 }

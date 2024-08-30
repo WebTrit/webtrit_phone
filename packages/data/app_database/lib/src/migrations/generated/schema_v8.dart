@@ -629,6 +629,97 @@ class ChatMessages extends Table with TableInfo {
   bool get dontWriteConstraints => true;
 }
 
+class ChatMessageSyncCursors extends Table with TableInfo {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  ChatMessageSyncCursors(this.attachedDatabase, [this._alias]);
+  late final GeneratedColumn<int> chatId = GeneratedColumn<int>(
+      'chat_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL REFERENCES chats(id)ON DELETE CASCADE');
+  late final GeneratedColumn<String> cursorType = GeneratedColumn<String>(
+      'cursor_type', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<int> timestampUsec = GeneratedColumn<int>(
+      'timestamp_usec', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  @override
+  List<GeneratedColumn> get $columns => [chatId, cursorType, timestampUsec];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'chat_message_sync_cursors';
+  @override
+  Set<GeneratedColumn> get $primaryKey => {chatId, cursorType};
+  @override
+  Never map(Map<String, dynamic> data, {String? tablePrefix}) {
+    throw UnsupportedError('TableInfo.map in schema verification code');
+  }
+
+  @override
+  ChatMessageSyncCursors createAlias(String alias) {
+    return ChatMessageSyncCursors(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints =>
+      const ['PRIMARY KEY(chat_id, cursor_type)'];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class ChatMessageReadCursors extends Table with TableInfo {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  ChatMessageReadCursors(this.attachedDatabase, [this._alias]);
+  late final GeneratedColumn<int> chatId = GeneratedColumn<int>(
+      'chat_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL REFERENCES chats(id)ON DELETE CASCADE');
+  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
+      'user_id', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<int> timestampUsec = GeneratedColumn<int>(
+      'timestamp_usec', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  @override
+  List<GeneratedColumn> get $columns => [chatId, userId, timestampUsec];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'chat_message_read_cursors';
+  @override
+  Set<GeneratedColumn> get $primaryKey => {chatId, userId};
+  @override
+  Never map(Map<String, dynamic> data, {String? tablePrefix}) {
+    throw UnsupportedError('TableInfo.map in schema verification code');
+  }
+
+  @override
+  ChatMessageReadCursors createAlias(String alias) {
+    return ChatMessageReadCursors(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints => const ['PRIMARY KEY(chat_id, user_id)'];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
 class ChatOutboxMessages extends Table with TableInfo {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -881,93 +972,48 @@ class ChatOutboxMessageViews extends Table with TableInfo {
   bool get dontWriteConstraints => true;
 }
 
-class ChatMessageSyncCursors extends Table with TableInfo {
+class ChatOutboxReadCursors extends Table with TableInfo {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  ChatMessageSyncCursors(this.attachedDatabase, [this._alias]);
+  ChatOutboxReadCursors(this.attachedDatabase, [this._alias]);
   late final GeneratedColumn<int> chatId = GeneratedColumn<int>(
       'chat_id', aliasedName, false,
       type: DriftSqlType.int,
-      requiredDuringInsert: true,
+      requiredDuringInsert: false,
       $customConstraints: 'NOT NULL REFERENCES chats(id)ON DELETE CASCADE');
-  late final GeneratedColumn<String> cursorType = GeneratedColumn<String>(
-      'cursor_type', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
   late final GeneratedColumn<int> timestampUsec = GeneratedColumn<int>(
       'timestamp_usec', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<int> sendAttempts = GeneratedColumn<int>(
+      'send_attempts', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NOT NULL DEFAULT 0',
+      defaultValue: const CustomExpression('0'));
   @override
-  List<GeneratedColumn> get $columns => [chatId, cursorType, timestampUsec];
+  List<GeneratedColumn> get $columns => [chatId, timestampUsec, sendAttempts];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'chat_message_sync_cursors';
+  static const String $name = 'chat_outbox_read_cursors';
   @override
-  Set<GeneratedColumn> get $primaryKey => {chatId, cursorType};
+  Set<GeneratedColumn> get $primaryKey => {chatId};
   @override
   Never map(Map<String, dynamic> data, {String? tablePrefix}) {
     throw UnsupportedError('TableInfo.map in schema verification code');
   }
 
   @override
-  ChatMessageSyncCursors createAlias(String alias) {
-    return ChatMessageSyncCursors(attachedDatabase, alias);
+  ChatOutboxReadCursors createAlias(String alias) {
+    return ChatOutboxReadCursors(attachedDatabase, alias);
   }
 
   @override
-  List<String> get customConstraints =>
-      const ['PRIMARY KEY(chat_id, cursor_type)'];
-  @override
-  bool get dontWriteConstraints => true;
-}
-
-class ChatMessageReadCursors extends Table with TableInfo {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  ChatMessageReadCursors(this.attachedDatabase, [this._alias]);
-  late final GeneratedColumn<int> chatId = GeneratedColumn<int>(
-      'chat_id', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL REFERENCES chats(id)ON DELETE CASCADE');
-  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
-      'user_id', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
-  late final GeneratedColumn<int> timestampUsec = GeneratedColumn<int>(
-      'timestamp_usec', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
-  @override
-  List<GeneratedColumn> get $columns => [chatId, userId, timestampUsec];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'chat_message_read_cursors';
-  @override
-  Set<GeneratedColumn> get $primaryKey => {chatId, userId};
-  @override
-  Never map(Map<String, dynamic> data, {String? tablePrefix}) {
-    throw UnsupportedError('TableInfo.map in schema verification code');
-  }
-
-  @override
-  ChatMessageReadCursors createAlias(String alias) {
-    return ChatMessageReadCursors(attachedDatabase, alias);
-  }
-
-  @override
-  List<String> get customConstraints => const ['PRIMARY KEY(chat_id, user_id)'];
+  List<String> get customConstraints => const ['PRIMARY KEY(chat_id)'];
   @override
   bool get dontWriteConstraints => true;
 }
@@ -982,6 +1028,10 @@ class DatabaseAtV8 extends GeneratedDatabase {
   late final Chats chats = Chats(this);
   late final ChatMembers chatMembers = ChatMembers(this);
   late final ChatMessages chatMessages = ChatMessages(this);
+  late final ChatMessageSyncCursors chatMessageSyncCursors =
+      ChatMessageSyncCursors(this);
+  late final ChatMessageReadCursors chatMessageReadCursors =
+      ChatMessageReadCursors(this);
   late final ChatOutboxMessages chatOutboxMessages = ChatOutboxMessages(this);
   late final ChatOutboxMessageEdits chatOutboxMessageEdits =
       ChatOutboxMessageEdits(this);
@@ -989,10 +1039,8 @@ class DatabaseAtV8 extends GeneratedDatabase {
       ChatOutboxMessageDeletes(this);
   late final ChatOutboxMessageViews chatOutboxMessageViews =
       ChatOutboxMessageViews(this);
-  late final ChatMessageSyncCursors chatMessageSyncCursors =
-      ChatMessageSyncCursors(this);
-  late final ChatMessageReadCursors chatMessageReadCursors =
-      ChatMessageReadCursors(this);
+  late final ChatOutboxReadCursors chatOutboxReadCursors =
+      ChatOutboxReadCursors(this);
   late final Trigger contactsAfterInsertTrigger = Trigger(
       'CREATE TRIGGER contacts_after_insert_trigger AFTER INSERT ON contacts BEGIN UPDATE contacts SET inserted_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id AND inserted_at IS NULL;UPDATE contacts SET updated_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id;END',
       'contacts_after_insert_trigger');
@@ -1042,12 +1090,13 @@ class DatabaseAtV8 extends GeneratedDatabase {
         chats,
         chatMembers,
         chatMessages,
+        chatMessageSyncCursors,
+        chatMessageReadCursors,
         chatOutboxMessages,
         chatOutboxMessageEdits,
         chatOutboxMessageDeletes,
         chatOutboxMessageViews,
-        chatMessageSyncCursors,
-        chatMessageReadCursors,
+        chatOutboxReadCursors,
         contactsAfterInsertTrigger,
         contactsAfterUpdateTrigger,
         contactPhonesAfterInsertTrigger,

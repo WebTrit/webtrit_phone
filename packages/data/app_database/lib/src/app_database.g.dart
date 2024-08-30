@@ -3542,6 +3542,511 @@ class ChatMessageDataCompanion extends UpdateCompanion<ChatMessageData> {
   }
 }
 
+class $ChatMessageSyncCursorTableTable extends ChatMessageSyncCursorTable
+    with
+        TableInfo<$ChatMessageSyncCursorTableTable, ChatMessageSyncCursorData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ChatMessageSyncCursorTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _chatIdMeta = const VerificationMeta('chatId');
+  @override
+  late final GeneratedColumn<int> chatId = GeneratedColumn<int>(
+      'chat_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES chats (id) ON DELETE CASCADE'));
+  static const VerificationMeta _cursorTypeMeta =
+      const VerificationMeta('cursorType');
+  @override
+  late final GeneratedColumnWithTypeConverter<MessageSyncCursorTypeEnum, String>
+      cursorType = GeneratedColumn<String>('cursor_type', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<MessageSyncCursorTypeEnum>(
+              $ChatMessageSyncCursorTableTable.$convertercursorType);
+  static const VerificationMeta _timestampUsecMeta =
+      const VerificationMeta('timestampUsec');
+  @override
+  late final GeneratedColumn<int> timestampUsec = GeneratedColumn<int>(
+      'timestamp_usec', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [chatId, cursorType, timestampUsec];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'chat_message_sync_cursors';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<ChatMessageSyncCursorData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('chat_id')) {
+      context.handle(_chatIdMeta,
+          chatId.isAcceptableOrUnknown(data['chat_id']!, _chatIdMeta));
+    } else if (isInserting) {
+      context.missing(_chatIdMeta);
+    }
+    context.handle(_cursorTypeMeta, const VerificationResult.success());
+    if (data.containsKey('timestamp_usec')) {
+      context.handle(
+          _timestampUsecMeta,
+          timestampUsec.isAcceptableOrUnknown(
+              data['timestamp_usec']!, _timestampUsecMeta));
+    } else if (isInserting) {
+      context.missing(_timestampUsecMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {chatId, cursorType};
+  @override
+  ChatMessageSyncCursorData map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ChatMessageSyncCursorData(
+      chatId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}chat_id'])!,
+      cursorType: $ChatMessageSyncCursorTableTable.$convertercursorType.fromSql(
+          attachedDatabase.typeMapping.read(
+              DriftSqlType.string, data['${effectivePrefix}cursor_type'])!),
+      timestampUsec: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}timestamp_usec'])!,
+    );
+  }
+
+  @override
+  $ChatMessageSyncCursorTableTable createAlias(String alias) {
+    return $ChatMessageSyncCursorTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<MessageSyncCursorTypeEnum, String, String>
+      $convertercursorType = const EnumNameConverter<MessageSyncCursorTypeEnum>(
+          MessageSyncCursorTypeEnum.values);
+}
+
+class ChatMessageSyncCursorData extends DataClass
+    implements Insertable<ChatMessageSyncCursorData> {
+  final int chatId;
+  final MessageSyncCursorTypeEnum cursorType;
+  final int timestampUsec;
+  const ChatMessageSyncCursorData(
+      {required this.chatId,
+      required this.cursorType,
+      required this.timestampUsec});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['chat_id'] = Variable<int>(chatId);
+    {
+      map['cursor_type'] = Variable<String>($ChatMessageSyncCursorTableTable
+          .$convertercursorType
+          .toSql(cursorType));
+    }
+    map['timestamp_usec'] = Variable<int>(timestampUsec);
+    return map;
+  }
+
+  ChatMessageSyncCursorDataCompanion toCompanion(bool nullToAbsent) {
+    return ChatMessageSyncCursorDataCompanion(
+      chatId: Value(chatId),
+      cursorType: Value(cursorType),
+      timestampUsec: Value(timestampUsec),
+    );
+  }
+
+  factory ChatMessageSyncCursorData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ChatMessageSyncCursorData(
+      chatId: serializer.fromJson<int>(json['chatId']),
+      cursorType: $ChatMessageSyncCursorTableTable.$convertercursorType
+          .fromJson(serializer.fromJson<String>(json['cursorType'])),
+      timestampUsec: serializer.fromJson<int>(json['timestampUsec']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'chatId': serializer.toJson<int>(chatId),
+      'cursorType': serializer.toJson<String>($ChatMessageSyncCursorTableTable
+          .$convertercursorType
+          .toJson(cursorType)),
+      'timestampUsec': serializer.toJson<int>(timestampUsec),
+    };
+  }
+
+  ChatMessageSyncCursorData copyWith(
+          {int? chatId,
+          MessageSyncCursorTypeEnum? cursorType,
+          int? timestampUsec}) =>
+      ChatMessageSyncCursorData(
+        chatId: chatId ?? this.chatId,
+        cursorType: cursorType ?? this.cursorType,
+        timestampUsec: timestampUsec ?? this.timestampUsec,
+      );
+  ChatMessageSyncCursorData copyWithCompanion(
+      ChatMessageSyncCursorDataCompanion data) {
+    return ChatMessageSyncCursorData(
+      chatId: data.chatId.present ? data.chatId.value : this.chatId,
+      cursorType:
+          data.cursorType.present ? data.cursorType.value : this.cursorType,
+      timestampUsec: data.timestampUsec.present
+          ? data.timestampUsec.value
+          : this.timestampUsec,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ChatMessageSyncCursorData(')
+          ..write('chatId: $chatId, ')
+          ..write('cursorType: $cursorType, ')
+          ..write('timestampUsec: $timestampUsec')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(chatId, cursorType, timestampUsec);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ChatMessageSyncCursorData &&
+          other.chatId == this.chatId &&
+          other.cursorType == this.cursorType &&
+          other.timestampUsec == this.timestampUsec);
+}
+
+class ChatMessageSyncCursorDataCompanion
+    extends UpdateCompanion<ChatMessageSyncCursorData> {
+  final Value<int> chatId;
+  final Value<MessageSyncCursorTypeEnum> cursorType;
+  final Value<int> timestampUsec;
+  final Value<int> rowid;
+  const ChatMessageSyncCursorDataCompanion({
+    this.chatId = const Value.absent(),
+    this.cursorType = const Value.absent(),
+    this.timestampUsec = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ChatMessageSyncCursorDataCompanion.insert({
+    required int chatId,
+    required MessageSyncCursorTypeEnum cursorType,
+    required int timestampUsec,
+    this.rowid = const Value.absent(),
+  })  : chatId = Value(chatId),
+        cursorType = Value(cursorType),
+        timestampUsec = Value(timestampUsec);
+  static Insertable<ChatMessageSyncCursorData> custom({
+    Expression<int>? chatId,
+    Expression<String>? cursorType,
+    Expression<int>? timestampUsec,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (chatId != null) 'chat_id': chatId,
+      if (cursorType != null) 'cursor_type': cursorType,
+      if (timestampUsec != null) 'timestamp_usec': timestampUsec,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ChatMessageSyncCursorDataCompanion copyWith(
+      {Value<int>? chatId,
+      Value<MessageSyncCursorTypeEnum>? cursorType,
+      Value<int>? timestampUsec,
+      Value<int>? rowid}) {
+    return ChatMessageSyncCursorDataCompanion(
+      chatId: chatId ?? this.chatId,
+      cursorType: cursorType ?? this.cursorType,
+      timestampUsec: timestampUsec ?? this.timestampUsec,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (chatId.present) {
+      map['chat_id'] = Variable<int>(chatId.value);
+    }
+    if (cursorType.present) {
+      map['cursor_type'] = Variable<String>($ChatMessageSyncCursorTableTable
+          .$convertercursorType
+          .toSql(cursorType.value));
+    }
+    if (timestampUsec.present) {
+      map['timestamp_usec'] = Variable<int>(timestampUsec.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ChatMessageSyncCursorDataCompanion(')
+          ..write('chatId: $chatId, ')
+          ..write('cursorType: $cursorType, ')
+          ..write('timestampUsec: $timestampUsec, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ChatMessageReadCursorTableTable extends ChatMessageReadCursorTable
+    with
+        TableInfo<$ChatMessageReadCursorTableTable, ChatMessageReadCursorData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ChatMessageReadCursorTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _chatIdMeta = const VerificationMeta('chatId');
+  @override
+  late final GeneratedColumn<int> chatId = GeneratedColumn<int>(
+      'chat_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES chats (id) ON DELETE CASCADE'));
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
+      'user_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _timestampUsecMeta =
+      const VerificationMeta('timestampUsec');
+  @override
+  late final GeneratedColumn<int> timestampUsec = GeneratedColumn<int>(
+      'timestamp_usec', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [chatId, userId, timestampUsec];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'chat_message_read_cursors';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<ChatMessageReadCursorData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('chat_id')) {
+      context.handle(_chatIdMeta,
+          chatId.isAcceptableOrUnknown(data['chat_id']!, _chatIdMeta));
+    } else if (isInserting) {
+      context.missing(_chatIdMeta);
+    }
+    if (data.containsKey('user_id')) {
+      context.handle(_userIdMeta,
+          userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
+    if (data.containsKey('timestamp_usec')) {
+      context.handle(
+          _timestampUsecMeta,
+          timestampUsec.isAcceptableOrUnknown(
+              data['timestamp_usec']!, _timestampUsecMeta));
+    } else if (isInserting) {
+      context.missing(_timestampUsecMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {chatId, userId};
+  @override
+  ChatMessageReadCursorData map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ChatMessageReadCursorData(
+      chatId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}chat_id'])!,
+      userId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}user_id'])!,
+      timestampUsec: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}timestamp_usec'])!,
+    );
+  }
+
+  @override
+  $ChatMessageReadCursorTableTable createAlias(String alias) {
+    return $ChatMessageReadCursorTableTable(attachedDatabase, alias);
+  }
+}
+
+class ChatMessageReadCursorData extends DataClass
+    implements Insertable<ChatMessageReadCursorData> {
+  final int chatId;
+  final String userId;
+  final int timestampUsec;
+  const ChatMessageReadCursorData(
+      {required this.chatId,
+      required this.userId,
+      required this.timestampUsec});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['chat_id'] = Variable<int>(chatId);
+    map['user_id'] = Variable<String>(userId);
+    map['timestamp_usec'] = Variable<int>(timestampUsec);
+    return map;
+  }
+
+  ChatMessageReadCursorDataCompanion toCompanion(bool nullToAbsent) {
+    return ChatMessageReadCursorDataCompanion(
+      chatId: Value(chatId),
+      userId: Value(userId),
+      timestampUsec: Value(timestampUsec),
+    );
+  }
+
+  factory ChatMessageReadCursorData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ChatMessageReadCursorData(
+      chatId: serializer.fromJson<int>(json['chatId']),
+      userId: serializer.fromJson<String>(json['userId']),
+      timestampUsec: serializer.fromJson<int>(json['timestampUsec']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'chatId': serializer.toJson<int>(chatId),
+      'userId': serializer.toJson<String>(userId),
+      'timestampUsec': serializer.toJson<int>(timestampUsec),
+    };
+  }
+
+  ChatMessageReadCursorData copyWith(
+          {int? chatId, String? userId, int? timestampUsec}) =>
+      ChatMessageReadCursorData(
+        chatId: chatId ?? this.chatId,
+        userId: userId ?? this.userId,
+        timestampUsec: timestampUsec ?? this.timestampUsec,
+      );
+  ChatMessageReadCursorData copyWithCompanion(
+      ChatMessageReadCursorDataCompanion data) {
+    return ChatMessageReadCursorData(
+      chatId: data.chatId.present ? data.chatId.value : this.chatId,
+      userId: data.userId.present ? data.userId.value : this.userId,
+      timestampUsec: data.timestampUsec.present
+          ? data.timestampUsec.value
+          : this.timestampUsec,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ChatMessageReadCursorData(')
+          ..write('chatId: $chatId, ')
+          ..write('userId: $userId, ')
+          ..write('timestampUsec: $timestampUsec')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(chatId, userId, timestampUsec);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ChatMessageReadCursorData &&
+          other.chatId == this.chatId &&
+          other.userId == this.userId &&
+          other.timestampUsec == this.timestampUsec);
+}
+
+class ChatMessageReadCursorDataCompanion
+    extends UpdateCompanion<ChatMessageReadCursorData> {
+  final Value<int> chatId;
+  final Value<String> userId;
+  final Value<int> timestampUsec;
+  final Value<int> rowid;
+  const ChatMessageReadCursorDataCompanion({
+    this.chatId = const Value.absent(),
+    this.userId = const Value.absent(),
+    this.timestampUsec = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ChatMessageReadCursorDataCompanion.insert({
+    required int chatId,
+    required String userId,
+    required int timestampUsec,
+    this.rowid = const Value.absent(),
+  })  : chatId = Value(chatId),
+        userId = Value(userId),
+        timestampUsec = Value(timestampUsec);
+  static Insertable<ChatMessageReadCursorData> custom({
+    Expression<int>? chatId,
+    Expression<String>? userId,
+    Expression<int>? timestampUsec,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (chatId != null) 'chat_id': chatId,
+      if (userId != null) 'user_id': userId,
+      if (timestampUsec != null) 'timestamp_usec': timestampUsec,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ChatMessageReadCursorDataCompanion copyWith(
+      {Value<int>? chatId,
+      Value<String>? userId,
+      Value<int>? timestampUsec,
+      Value<int>? rowid}) {
+    return ChatMessageReadCursorDataCompanion(
+      chatId: chatId ?? this.chatId,
+      userId: userId ?? this.userId,
+      timestampUsec: timestampUsec ?? this.timestampUsec,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (chatId.present) {
+      map['chat_id'] = Variable<int>(chatId.value);
+    }
+    if (userId.present) {
+      map['user_id'] = Variable<String>(userId.value);
+    }
+    if (timestampUsec.present) {
+      map['timestamp_usec'] = Variable<int>(timestampUsec.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ChatMessageReadCursorDataCompanion(')
+          ..write('chatId: $chatId, ')
+          ..write('userId: $userId, ')
+          ..write('timestampUsec: $timestampUsec, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $ChatOutboxMessageTableTable extends ChatOutboxMessageTable
     with TableInfo<$ChatOutboxMessageTableTable, ChatOutboxMessageData> {
   @override
@@ -4911,316 +5416,50 @@ class ChatOutboxMessageViewDataCompanion
   }
 }
 
-class $ChatMessageSyncCursorTableTable extends ChatMessageSyncCursorTable
-    with
-        TableInfo<$ChatMessageSyncCursorTableTable, ChatMessageSyncCursorData> {
+class $ChatOutboxReadCursorsTableTable extends ChatOutboxReadCursorsTable
+    with TableInfo<$ChatOutboxReadCursorsTableTable, ChatOutboxReadCursorData> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ChatMessageSyncCursorTableTable(this.attachedDatabase, [this._alias]);
+  $ChatOutboxReadCursorsTableTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _chatIdMeta = const VerificationMeta('chatId');
   @override
   late final GeneratedColumn<int> chatId = GeneratedColumn<int>(
       'chat_id', aliasedName, false,
       type: DriftSqlType.int,
-      requiredDuringInsert: true,
+      requiredDuringInsert: false,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES chats (id) ON DELETE CASCADE'));
-  static const VerificationMeta _cursorTypeMeta =
-      const VerificationMeta('cursorType');
-  @override
-  late final GeneratedColumnWithTypeConverter<MessageSyncCursorTypeEnum, String>
-      cursorType = GeneratedColumn<String>('cursor_type', aliasedName, false,
-              type: DriftSqlType.string, requiredDuringInsert: true)
-          .withConverter<MessageSyncCursorTypeEnum>(
-              $ChatMessageSyncCursorTableTable.$convertercursorType);
   static const VerificationMeta _timestampUsecMeta =
       const VerificationMeta('timestampUsec');
   @override
   late final GeneratedColumn<int> timestampUsec = GeneratedColumn<int>(
       'timestamp_usec', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _sendAttemptsMeta =
+      const VerificationMeta('sendAttempts');
   @override
-  List<GeneratedColumn> get $columns => [chatId, cursorType, timestampUsec];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'chat_message_sync_cursors';
-  @override
-  VerificationContext validateIntegrity(
-      Insertable<ChatMessageSyncCursorData> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('chat_id')) {
-      context.handle(_chatIdMeta,
-          chatId.isAcceptableOrUnknown(data['chat_id']!, _chatIdMeta));
-    } else if (isInserting) {
-      context.missing(_chatIdMeta);
-    }
-    context.handle(_cursorTypeMeta, const VerificationResult.success());
-    if (data.containsKey('timestamp_usec')) {
-      context.handle(
-          _timestampUsecMeta,
-          timestampUsec.isAcceptableOrUnknown(
-              data['timestamp_usec']!, _timestampUsecMeta));
-    } else if (isInserting) {
-      context.missing(_timestampUsecMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {chatId, cursorType};
-  @override
-  ChatMessageSyncCursorData map(Map<String, dynamic> data,
-      {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return ChatMessageSyncCursorData(
-      chatId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}chat_id'])!,
-      cursorType: $ChatMessageSyncCursorTableTable.$convertercursorType.fromSql(
-          attachedDatabase.typeMapping.read(
-              DriftSqlType.string, data['${effectivePrefix}cursor_type'])!),
-      timestampUsec: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}timestamp_usec'])!,
-    );
-  }
-
-  @override
-  $ChatMessageSyncCursorTableTable createAlias(String alias) {
-    return $ChatMessageSyncCursorTableTable(attachedDatabase, alias);
-  }
-
-  static JsonTypeConverter2<MessageSyncCursorTypeEnum, String, String>
-      $convertercursorType = const EnumNameConverter<MessageSyncCursorTypeEnum>(
-          MessageSyncCursorTypeEnum.values);
-}
-
-class ChatMessageSyncCursorData extends DataClass
-    implements Insertable<ChatMessageSyncCursorData> {
-  final int chatId;
-  final MessageSyncCursorTypeEnum cursorType;
-  final int timestampUsec;
-  const ChatMessageSyncCursorData(
-      {required this.chatId,
-      required this.cursorType,
-      required this.timestampUsec});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['chat_id'] = Variable<int>(chatId);
-    {
-      map['cursor_type'] = Variable<String>($ChatMessageSyncCursorTableTable
-          .$convertercursorType
-          .toSql(cursorType));
-    }
-    map['timestamp_usec'] = Variable<int>(timestampUsec);
-    return map;
-  }
-
-  ChatMessageSyncCursorDataCompanion toCompanion(bool nullToAbsent) {
-    return ChatMessageSyncCursorDataCompanion(
-      chatId: Value(chatId),
-      cursorType: Value(cursorType),
-      timestampUsec: Value(timestampUsec),
-    );
-  }
-
-  factory ChatMessageSyncCursorData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return ChatMessageSyncCursorData(
-      chatId: serializer.fromJson<int>(json['chatId']),
-      cursorType: $ChatMessageSyncCursorTableTable.$convertercursorType
-          .fromJson(serializer.fromJson<String>(json['cursorType'])),
-      timestampUsec: serializer.fromJson<int>(json['timestampUsec']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'chatId': serializer.toJson<int>(chatId),
-      'cursorType': serializer.toJson<String>($ChatMessageSyncCursorTableTable
-          .$convertercursorType
-          .toJson(cursorType)),
-      'timestampUsec': serializer.toJson<int>(timestampUsec),
-    };
-  }
-
-  ChatMessageSyncCursorData copyWith(
-          {int? chatId,
-          MessageSyncCursorTypeEnum? cursorType,
-          int? timestampUsec}) =>
-      ChatMessageSyncCursorData(
-        chatId: chatId ?? this.chatId,
-        cursorType: cursorType ?? this.cursorType,
-        timestampUsec: timestampUsec ?? this.timestampUsec,
-      );
-  ChatMessageSyncCursorData copyWithCompanion(
-      ChatMessageSyncCursorDataCompanion data) {
-    return ChatMessageSyncCursorData(
-      chatId: data.chatId.present ? data.chatId.value : this.chatId,
-      cursorType:
-          data.cursorType.present ? data.cursorType.value : this.cursorType,
-      timestampUsec: data.timestampUsec.present
-          ? data.timestampUsec.value
-          : this.timestampUsec,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('ChatMessageSyncCursorData(')
-          ..write('chatId: $chatId, ')
-          ..write('cursorType: $cursorType, ')
-          ..write('timestampUsec: $timestampUsec')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(chatId, cursorType, timestampUsec);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is ChatMessageSyncCursorData &&
-          other.chatId == this.chatId &&
-          other.cursorType == this.cursorType &&
-          other.timestampUsec == this.timestampUsec);
-}
-
-class ChatMessageSyncCursorDataCompanion
-    extends UpdateCompanion<ChatMessageSyncCursorData> {
-  final Value<int> chatId;
-  final Value<MessageSyncCursorTypeEnum> cursorType;
-  final Value<int> timestampUsec;
-  final Value<int> rowid;
-  const ChatMessageSyncCursorDataCompanion({
-    this.chatId = const Value.absent(),
-    this.cursorType = const Value.absent(),
-    this.timestampUsec = const Value.absent(),
-    this.rowid = const Value.absent(),
-  });
-  ChatMessageSyncCursorDataCompanion.insert({
-    required int chatId,
-    required MessageSyncCursorTypeEnum cursorType,
-    required int timestampUsec,
-    this.rowid = const Value.absent(),
-  })  : chatId = Value(chatId),
-        cursorType = Value(cursorType),
-        timestampUsec = Value(timestampUsec);
-  static Insertable<ChatMessageSyncCursorData> custom({
-    Expression<int>? chatId,
-    Expression<String>? cursorType,
-    Expression<int>? timestampUsec,
-    Expression<int>? rowid,
-  }) {
-    return RawValuesInsertable({
-      if (chatId != null) 'chat_id': chatId,
-      if (cursorType != null) 'cursor_type': cursorType,
-      if (timestampUsec != null) 'timestamp_usec': timestampUsec,
-      if (rowid != null) 'rowid': rowid,
-    });
-  }
-
-  ChatMessageSyncCursorDataCompanion copyWith(
-      {Value<int>? chatId,
-      Value<MessageSyncCursorTypeEnum>? cursorType,
-      Value<int>? timestampUsec,
-      Value<int>? rowid}) {
-    return ChatMessageSyncCursorDataCompanion(
-      chatId: chatId ?? this.chatId,
-      cursorType: cursorType ?? this.cursorType,
-      timestampUsec: timestampUsec ?? this.timestampUsec,
-      rowid: rowid ?? this.rowid,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (chatId.present) {
-      map['chat_id'] = Variable<int>(chatId.value);
-    }
-    if (cursorType.present) {
-      map['cursor_type'] = Variable<String>($ChatMessageSyncCursorTableTable
-          .$convertercursorType
-          .toSql(cursorType.value));
-    }
-    if (timestampUsec.present) {
-      map['timestamp_usec'] = Variable<int>(timestampUsec.value);
-    }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('ChatMessageSyncCursorDataCompanion(')
-          ..write('chatId: $chatId, ')
-          ..write('cursorType: $cursorType, ')
-          ..write('timestampUsec: $timestampUsec, ')
-          ..write('rowid: $rowid')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $ChatMessageReadCursorTableTable extends ChatMessageReadCursorTable
-    with
-        TableInfo<$ChatMessageReadCursorTableTable, ChatMessageReadCursorData> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $ChatMessageReadCursorTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _chatIdMeta = const VerificationMeta('chatId');
-  @override
-  late final GeneratedColumn<int> chatId = GeneratedColumn<int>(
-      'chat_id', aliasedName, false,
+  late final GeneratedColumn<int> sendAttempts = GeneratedColumn<int>(
+      'send_attempts', aliasedName, false,
       type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES chats (id) ON DELETE CASCADE'));
-  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
   @override
-  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
-      'user_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _timestampUsecMeta =
-      const VerificationMeta('timestampUsec');
-  @override
-  late final GeneratedColumn<int> timestampUsec = GeneratedColumn<int>(
-      'timestamp_usec', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns => [chatId, userId, timestampUsec];
+  List<GeneratedColumn> get $columns => [chatId, timestampUsec, sendAttempts];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'chat_message_read_cursors';
+  static const String $name = 'chat_outbox_read_cursors';
   @override
   VerificationContext validateIntegrity(
-      Insertable<ChatMessageReadCursorData> instance,
+      Insertable<ChatOutboxReadCursorData> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('chat_id')) {
       context.handle(_chatIdMeta,
           chatId.isAcceptableOrUnknown(data['chat_id']!, _chatIdMeta));
-    } else if (isInserting) {
-      context.missing(_chatIdMeta);
-    }
-    if (data.containsKey('user_id')) {
-      context.handle(_userIdMeta,
-          userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
-    } else if (isInserting) {
-      context.missing(_userIdMeta);
     }
     if (data.containsKey('timestamp_usec')) {
       context.handle(
@@ -5230,64 +5469,70 @@ class $ChatMessageReadCursorTableTable extends ChatMessageReadCursorTable
     } else if (isInserting) {
       context.missing(_timestampUsecMeta);
     }
+    if (data.containsKey('send_attempts')) {
+      context.handle(
+          _sendAttemptsMeta,
+          sendAttempts.isAcceptableOrUnknown(
+              data['send_attempts']!, _sendAttemptsMeta));
+    }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {chatId, userId};
+  Set<GeneratedColumn> get $primaryKey => {chatId};
   @override
-  ChatMessageReadCursorData map(Map<String, dynamic> data,
+  ChatOutboxReadCursorData map(Map<String, dynamic> data,
       {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return ChatMessageReadCursorData(
+    return ChatOutboxReadCursorData(
       chatId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}chat_id'])!,
-      userId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}user_id'])!,
       timestampUsec: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}timestamp_usec'])!,
+      sendAttempts: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}send_attempts'])!,
     );
   }
 
   @override
-  $ChatMessageReadCursorTableTable createAlias(String alias) {
-    return $ChatMessageReadCursorTableTable(attachedDatabase, alias);
+  $ChatOutboxReadCursorsTableTable createAlias(String alias) {
+    return $ChatOutboxReadCursorsTableTable(attachedDatabase, alias);
   }
 }
 
-class ChatMessageReadCursorData extends DataClass
-    implements Insertable<ChatMessageReadCursorData> {
+class ChatOutboxReadCursorData extends DataClass
+    implements Insertable<ChatOutboxReadCursorData> {
   final int chatId;
-  final String userId;
   final int timestampUsec;
-  const ChatMessageReadCursorData(
+  final int sendAttempts;
+  const ChatOutboxReadCursorData(
       {required this.chatId,
-      required this.userId,
-      required this.timestampUsec});
+      required this.timestampUsec,
+      required this.sendAttempts});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['chat_id'] = Variable<int>(chatId);
-    map['user_id'] = Variable<String>(userId);
     map['timestamp_usec'] = Variable<int>(timestampUsec);
+    map['send_attempts'] = Variable<int>(sendAttempts);
     return map;
   }
 
-  ChatMessageReadCursorDataCompanion toCompanion(bool nullToAbsent) {
-    return ChatMessageReadCursorDataCompanion(
+  ChatOutboxReadCursorDataCompanion toCompanion(bool nullToAbsent) {
+    return ChatOutboxReadCursorDataCompanion(
       chatId: Value(chatId),
-      userId: Value(userId),
       timestampUsec: Value(timestampUsec),
+      sendAttempts: Value(sendAttempts),
     );
   }
 
-  factory ChatMessageReadCursorData.fromJson(Map<String, dynamic> json,
+  factory ChatOutboxReadCursorData.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return ChatMessageReadCursorData(
+    return ChatOutboxReadCursorData(
       chatId: serializer.fromJson<int>(json['chatId']),
-      userId: serializer.fromJson<String>(json['userId']),
       timestampUsec: serializer.fromJson<int>(json['timestampUsec']),
+      sendAttempts: serializer.fromJson<int>(json['sendAttempts']),
     );
   }
   @override
@@ -5295,94 +5540,87 @@ class ChatMessageReadCursorData extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'chatId': serializer.toJson<int>(chatId),
-      'userId': serializer.toJson<String>(userId),
       'timestampUsec': serializer.toJson<int>(timestampUsec),
+      'sendAttempts': serializer.toJson<int>(sendAttempts),
     };
   }
 
-  ChatMessageReadCursorData copyWith(
-          {int? chatId, String? userId, int? timestampUsec}) =>
-      ChatMessageReadCursorData(
+  ChatOutboxReadCursorData copyWith(
+          {int? chatId, int? timestampUsec, int? sendAttempts}) =>
+      ChatOutboxReadCursorData(
         chatId: chatId ?? this.chatId,
-        userId: userId ?? this.userId,
         timestampUsec: timestampUsec ?? this.timestampUsec,
+        sendAttempts: sendAttempts ?? this.sendAttempts,
       );
-  ChatMessageReadCursorData copyWithCompanion(
-      ChatMessageReadCursorDataCompanion data) {
-    return ChatMessageReadCursorData(
+  ChatOutboxReadCursorData copyWithCompanion(
+      ChatOutboxReadCursorDataCompanion data) {
+    return ChatOutboxReadCursorData(
       chatId: data.chatId.present ? data.chatId.value : this.chatId,
-      userId: data.userId.present ? data.userId.value : this.userId,
       timestampUsec: data.timestampUsec.present
           ? data.timestampUsec.value
           : this.timestampUsec,
+      sendAttempts: data.sendAttempts.present
+          ? data.sendAttempts.value
+          : this.sendAttempts,
     );
   }
 
   @override
   String toString() {
-    return (StringBuffer('ChatMessageReadCursorData(')
+    return (StringBuffer('ChatOutboxReadCursorData(')
           ..write('chatId: $chatId, ')
-          ..write('userId: $userId, ')
-          ..write('timestampUsec: $timestampUsec')
+          ..write('timestampUsec: $timestampUsec, ')
+          ..write('sendAttempts: $sendAttempts')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(chatId, userId, timestampUsec);
+  int get hashCode => Object.hash(chatId, timestampUsec, sendAttempts);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is ChatMessageReadCursorData &&
+      (other is ChatOutboxReadCursorData &&
           other.chatId == this.chatId &&
-          other.userId == this.userId &&
-          other.timestampUsec == this.timestampUsec);
+          other.timestampUsec == this.timestampUsec &&
+          other.sendAttempts == this.sendAttempts);
 }
 
-class ChatMessageReadCursorDataCompanion
-    extends UpdateCompanion<ChatMessageReadCursorData> {
+class ChatOutboxReadCursorDataCompanion
+    extends UpdateCompanion<ChatOutboxReadCursorData> {
   final Value<int> chatId;
-  final Value<String> userId;
   final Value<int> timestampUsec;
-  final Value<int> rowid;
-  const ChatMessageReadCursorDataCompanion({
+  final Value<int> sendAttempts;
+  const ChatOutboxReadCursorDataCompanion({
     this.chatId = const Value.absent(),
-    this.userId = const Value.absent(),
     this.timestampUsec = const Value.absent(),
-    this.rowid = const Value.absent(),
+    this.sendAttempts = const Value.absent(),
   });
-  ChatMessageReadCursorDataCompanion.insert({
-    required int chatId,
-    required String userId,
+  ChatOutboxReadCursorDataCompanion.insert({
+    this.chatId = const Value.absent(),
     required int timestampUsec,
-    this.rowid = const Value.absent(),
-  })  : chatId = Value(chatId),
-        userId = Value(userId),
-        timestampUsec = Value(timestampUsec);
-  static Insertable<ChatMessageReadCursorData> custom({
+    this.sendAttempts = const Value.absent(),
+  }) : timestampUsec = Value(timestampUsec);
+  static Insertable<ChatOutboxReadCursorData> custom({
     Expression<int>? chatId,
-    Expression<String>? userId,
     Expression<int>? timestampUsec,
-    Expression<int>? rowid,
+    Expression<int>? sendAttempts,
   }) {
     return RawValuesInsertable({
       if (chatId != null) 'chat_id': chatId,
-      if (userId != null) 'user_id': userId,
       if (timestampUsec != null) 'timestamp_usec': timestampUsec,
-      if (rowid != null) 'rowid': rowid,
+      if (sendAttempts != null) 'send_attempts': sendAttempts,
     });
   }
 
-  ChatMessageReadCursorDataCompanion copyWith(
+  ChatOutboxReadCursorDataCompanion copyWith(
       {Value<int>? chatId,
-      Value<String>? userId,
       Value<int>? timestampUsec,
-      Value<int>? rowid}) {
-    return ChatMessageReadCursorDataCompanion(
+      Value<int>? sendAttempts}) {
+    return ChatOutboxReadCursorDataCompanion(
       chatId: chatId ?? this.chatId,
-      userId: userId ?? this.userId,
       timestampUsec: timestampUsec ?? this.timestampUsec,
-      rowid: rowid ?? this.rowid,
+      sendAttempts: sendAttempts ?? this.sendAttempts,
     );
   }
 
@@ -5392,25 +5630,21 @@ class ChatMessageReadCursorDataCompanion
     if (chatId.present) {
       map['chat_id'] = Variable<int>(chatId.value);
     }
-    if (userId.present) {
-      map['user_id'] = Variable<String>(userId.value);
-    }
     if (timestampUsec.present) {
       map['timestamp_usec'] = Variable<int>(timestampUsec.value);
     }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
+    if (sendAttempts.present) {
+      map['send_attempts'] = Variable<int>(sendAttempts.value);
     }
     return map;
   }
 
   @override
   String toString() {
-    return (StringBuffer('ChatMessageReadCursorDataCompanion(')
+    return (StringBuffer('ChatOutboxReadCursorDataCompanion(')
           ..write('chatId: $chatId, ')
-          ..write('userId: $userId, ')
           ..write('timestampUsec: $timestampUsec, ')
-          ..write('rowid: $rowid')
+          ..write('sendAttempts: $sendAttempts')
           ..write(')'))
         .toString();
   }
@@ -5431,6 +5665,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $ChatMembersTableTable(this);
   late final $ChatMessagesTableTable chatMessagesTable =
       $ChatMessagesTableTable(this);
+  late final $ChatMessageSyncCursorTableTable chatMessageSyncCursorTable =
+      $ChatMessageSyncCursorTableTable(this);
+  late final $ChatMessageReadCursorTableTable chatMessageReadCursorTable =
+      $ChatMessageReadCursorTableTable(this);
   late final $ChatOutboxMessageTableTable chatOutboxMessageTable =
       $ChatOutboxMessageTableTable(this);
   late final $ChatOutboxMessageEditTableTable chatOutboxMessageEditTable =
@@ -5439,10 +5677,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $ChatOutboxMessageDeleteTableTable(this);
   late final $ChatOutboxMessageViewsTableTable chatOutboxMessageViewsTable =
       $ChatOutboxMessageViewsTableTable(this);
-  late final $ChatMessageSyncCursorTableTable chatMessageSyncCursorTable =
-      $ChatMessageSyncCursorTableTable(this);
-  late final $ChatMessageReadCursorTableTable chatMessageReadCursorTable =
-      $ChatMessageReadCursorTableTable(this);
+  late final $ChatOutboxReadCursorsTableTable chatOutboxReadCursorsTable =
+      $ChatOutboxReadCursorsTableTable(this);
   late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
   late final ContactPhonesDao contactPhonesDao =
       ContactPhonesDao(this as AppDatabase);
@@ -5464,12 +5700,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         chatsTable,
         chatMembersTable,
         chatMessagesTable,
+        chatMessageSyncCursorTable,
+        chatMessageReadCursorTable,
         chatOutboxMessageTable,
         chatOutboxMessageEditTable,
         chatOutboxMessageDeleteTable,
         chatOutboxMessageViewsTable,
-        chatMessageSyncCursorTable,
-        chatMessageReadCursorTable
+        chatOutboxReadCursorsTable
       ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
@@ -5513,6 +5750,20 @@ abstract class _$AppDatabase extends GeneratedDatabase {
             on: TableUpdateQuery.onTableName('chats',
                 limitUpdateKind: UpdateKind.delete),
             result: [
+              TableUpdate('chat_message_sync_cursors', kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('chats',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('chat_message_read_cursors', kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('chats',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
               TableUpdate('chat_outbox_messages', kind: UpdateKind.delete),
             ],
           ),
@@ -5542,14 +5793,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
             on: TableUpdateQuery.onTableName('chats',
                 limitUpdateKind: UpdateKind.delete),
             result: [
-              TableUpdate('chat_message_sync_cursors', kind: UpdateKind.delete),
-            ],
-          ),
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('chats',
-                limitUpdateKind: UpdateKind.delete),
-            result: [
-              TableUpdate('chat_message_read_cursors', kind: UpdateKind.delete),
+              TableUpdate('chat_outbox_read_cursors', kind: UpdateKind.delete),
             ],
           ),
         ],
@@ -6563,6 +6807,44 @@ class $$ChatsTableTableFilterComposer
     return f(composer);
   }
 
+  ComposableFilter chatMessageSyncCursorTableRefs(
+      ComposableFilter Function(
+              $$ChatMessageSyncCursorTableTableFilterComposer f)
+          f) {
+    final $$ChatMessageSyncCursorTableTableFilterComposer composer =
+        $state.composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $state.db.chatMessageSyncCursorTable,
+            getReferencedColumn: (t) => t.chatId,
+            builder: (joinBuilder, parentComposers) =>
+                $$ChatMessageSyncCursorTableTableFilterComposer(ComposerState(
+                    $state.db,
+                    $state.db.chatMessageSyncCursorTable,
+                    joinBuilder,
+                    parentComposers)));
+    return f(composer);
+  }
+
+  ComposableFilter chatMessageReadCursorTableRefs(
+      ComposableFilter Function(
+              $$ChatMessageReadCursorTableTableFilterComposer f)
+          f) {
+    final $$ChatMessageReadCursorTableTableFilterComposer composer =
+        $state.composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $state.db.chatMessageReadCursorTable,
+            getReferencedColumn: (t) => t.chatId,
+            builder: (joinBuilder, parentComposers) =>
+                $$ChatMessageReadCursorTableTableFilterComposer(ComposerState(
+                    $state.db,
+                    $state.db.chatMessageReadCursorTable,
+                    joinBuilder,
+                    parentComposers)));
+    return f(composer);
+  }
+
   ComposableFilter chatOutboxMessageTableRefs(
       ComposableFilter Function($$ChatOutboxMessageTableTableFilterComposer f)
           f) {
@@ -6638,39 +6920,20 @@ class $$ChatsTableTableFilterComposer
     return f(composer);
   }
 
-  ComposableFilter chatMessageSyncCursorTableRefs(
+  ComposableFilter chatOutboxReadCursorsTableRefs(
       ComposableFilter Function(
-              $$ChatMessageSyncCursorTableTableFilterComposer f)
+              $$ChatOutboxReadCursorsTableTableFilterComposer f)
           f) {
-    final $$ChatMessageSyncCursorTableTableFilterComposer composer =
+    final $$ChatOutboxReadCursorsTableTableFilterComposer composer =
         $state.composerBuilder(
             composer: this,
             getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.chatMessageSyncCursorTable,
+            referencedTable: $state.db.chatOutboxReadCursorsTable,
             getReferencedColumn: (t) => t.chatId,
             builder: (joinBuilder, parentComposers) =>
-                $$ChatMessageSyncCursorTableTableFilterComposer(ComposerState(
+                $$ChatOutboxReadCursorsTableTableFilterComposer(ComposerState(
                     $state.db,
-                    $state.db.chatMessageSyncCursorTable,
-                    joinBuilder,
-                    parentComposers)));
-    return f(composer);
-  }
-
-  ComposableFilter chatMessageReadCursorTableRefs(
-      ComposableFilter Function(
-              $$ChatMessageReadCursorTableTableFilterComposer f)
-          f) {
-    final $$ChatMessageReadCursorTableTableFilterComposer composer =
-        $state.composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.chatMessageReadCursorTable,
-            getReferencedColumn: (t) => t.chatId,
-            builder: (joinBuilder, parentComposers) =>
-                $$ChatMessageReadCursorTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.chatMessageReadCursorTable,
+                    $state.db.chatOutboxReadCursorsTable,
                     joinBuilder,
                     parentComposers)));
     return f(composer);
@@ -7205,6 +7468,231 @@ class $$ChatMessagesTableTableOrderingComposer
 
   ColumnOrderings<DateTime> get updatedAt => $state.composableBuilder(
       column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  $$ChatsTableTableOrderingComposer get chatId {
+    final $$ChatsTableTableOrderingComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.chatId,
+        referencedTable: $state.db.chatsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) =>
+            $$ChatsTableTableOrderingComposer(ComposerState($state.db,
+                $state.db.chatsTable, joinBuilder, parentComposers)));
+    return composer;
+  }
+}
+
+typedef $$ChatMessageSyncCursorTableTableCreateCompanionBuilder
+    = ChatMessageSyncCursorDataCompanion Function({
+  required int chatId,
+  required MessageSyncCursorTypeEnum cursorType,
+  required int timestampUsec,
+  Value<int> rowid,
+});
+typedef $$ChatMessageSyncCursorTableTableUpdateCompanionBuilder
+    = ChatMessageSyncCursorDataCompanion Function({
+  Value<int> chatId,
+  Value<MessageSyncCursorTypeEnum> cursorType,
+  Value<int> timestampUsec,
+  Value<int> rowid,
+});
+
+class $$ChatMessageSyncCursorTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ChatMessageSyncCursorTableTable,
+    ChatMessageSyncCursorData,
+    $$ChatMessageSyncCursorTableTableFilterComposer,
+    $$ChatMessageSyncCursorTableTableOrderingComposer,
+    $$ChatMessageSyncCursorTableTableCreateCompanionBuilder,
+    $$ChatMessageSyncCursorTableTableUpdateCompanionBuilder> {
+  $$ChatMessageSyncCursorTableTableTableManager(
+      _$AppDatabase db, $ChatMessageSyncCursorTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$ChatMessageSyncCursorTableTableFilterComposer(
+              ComposerState(db, table)),
+          orderingComposer: $$ChatMessageSyncCursorTableTableOrderingComposer(
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> chatId = const Value.absent(),
+            Value<MessageSyncCursorTypeEnum> cursorType = const Value.absent(),
+            Value<int> timestampUsec = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ChatMessageSyncCursorDataCompanion(
+            chatId: chatId,
+            cursorType: cursorType,
+            timestampUsec: timestampUsec,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required int chatId,
+            required MessageSyncCursorTypeEnum cursorType,
+            required int timestampUsec,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ChatMessageSyncCursorDataCompanion.insert(
+            chatId: chatId,
+            cursorType: cursorType,
+            timestampUsec: timestampUsec,
+            rowid: rowid,
+          ),
+        ));
+}
+
+class $$ChatMessageSyncCursorTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $ChatMessageSyncCursorTableTable> {
+  $$ChatMessageSyncCursorTableTableFilterComposer(super.$state);
+  ColumnWithTypeConverterFilters<MessageSyncCursorTypeEnum,
+          MessageSyncCursorTypeEnum, String>
+      get cursorType => $state.composableBuilder(
+          column: $state.table.cursorType,
+          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
+              column,
+              joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get timestampUsec => $state.composableBuilder(
+      column: $state.table.timestampUsec,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  $$ChatsTableTableFilterComposer get chatId {
+    final $$ChatsTableTableFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.chatId,
+        referencedTable: $state.db.chatsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) =>
+            $$ChatsTableTableFilterComposer(ComposerState($state.db,
+                $state.db.chatsTable, joinBuilder, parentComposers)));
+    return composer;
+  }
+}
+
+class $$ChatMessageSyncCursorTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $ChatMessageSyncCursorTableTable> {
+  $$ChatMessageSyncCursorTableTableOrderingComposer(super.$state);
+  ColumnOrderings<String> get cursorType => $state.composableBuilder(
+      column: $state.table.cursorType,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get timestampUsec => $state.composableBuilder(
+      column: $state.table.timestampUsec,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  $$ChatsTableTableOrderingComposer get chatId {
+    final $$ChatsTableTableOrderingComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.chatId,
+        referencedTable: $state.db.chatsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) =>
+            $$ChatsTableTableOrderingComposer(ComposerState($state.db,
+                $state.db.chatsTable, joinBuilder, parentComposers)));
+    return composer;
+  }
+}
+
+typedef $$ChatMessageReadCursorTableTableCreateCompanionBuilder
+    = ChatMessageReadCursorDataCompanion Function({
+  required int chatId,
+  required String userId,
+  required int timestampUsec,
+  Value<int> rowid,
+});
+typedef $$ChatMessageReadCursorTableTableUpdateCompanionBuilder
+    = ChatMessageReadCursorDataCompanion Function({
+  Value<int> chatId,
+  Value<String> userId,
+  Value<int> timestampUsec,
+  Value<int> rowid,
+});
+
+class $$ChatMessageReadCursorTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ChatMessageReadCursorTableTable,
+    ChatMessageReadCursorData,
+    $$ChatMessageReadCursorTableTableFilterComposer,
+    $$ChatMessageReadCursorTableTableOrderingComposer,
+    $$ChatMessageReadCursorTableTableCreateCompanionBuilder,
+    $$ChatMessageReadCursorTableTableUpdateCompanionBuilder> {
+  $$ChatMessageReadCursorTableTableTableManager(
+      _$AppDatabase db, $ChatMessageReadCursorTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$ChatMessageReadCursorTableTableFilterComposer(
+              ComposerState(db, table)),
+          orderingComposer: $$ChatMessageReadCursorTableTableOrderingComposer(
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> chatId = const Value.absent(),
+            Value<String> userId = const Value.absent(),
+            Value<int> timestampUsec = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ChatMessageReadCursorDataCompanion(
+            chatId: chatId,
+            userId: userId,
+            timestampUsec: timestampUsec,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required int chatId,
+            required String userId,
+            required int timestampUsec,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ChatMessageReadCursorDataCompanion.insert(
+            chatId: chatId,
+            userId: userId,
+            timestampUsec: timestampUsec,
+            rowid: rowid,
+          ),
+        ));
+}
+
+class $$ChatMessageReadCursorTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $ChatMessageReadCursorTableTable> {
+  $$ChatMessageReadCursorTableTableFilterComposer(super.$state);
+  ColumnFilters<String> get userId => $state.composableBuilder(
+      column: $state.table.userId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get timestampUsec => $state.composableBuilder(
+      column: $state.table.timestampUsec,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  $$ChatsTableTableFilterComposer get chatId {
+    final $$ChatsTableTableFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.chatId,
+        referencedTable: $state.db.chatsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) =>
+            $$ChatsTableTableFilterComposer(ComposerState($state.db,
+                $state.db.chatsTable, joinBuilder, parentComposers)));
+    return composer;
+  }
+}
+
+class $$ChatMessageReadCursorTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $ChatMessageReadCursorTableTable> {
+  $$ChatMessageReadCursorTableTableOrderingComposer(super.$state);
+  ColumnOrderings<String> get userId => $state.composableBuilder(
+      column: $state.table.userId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get timestampUsec => $state.composableBuilder(
+      column: $state.table.timestampUsec,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
@@ -7824,78 +8312,69 @@ class $$ChatOutboxMessageViewsTableTableOrderingComposer
   }
 }
 
-typedef $$ChatMessageSyncCursorTableTableCreateCompanionBuilder
-    = ChatMessageSyncCursorDataCompanion Function({
-  required int chatId,
-  required MessageSyncCursorTypeEnum cursorType,
-  required int timestampUsec,
-  Value<int> rowid,
-});
-typedef $$ChatMessageSyncCursorTableTableUpdateCompanionBuilder
-    = ChatMessageSyncCursorDataCompanion Function({
+typedef $$ChatOutboxReadCursorsTableTableCreateCompanionBuilder
+    = ChatOutboxReadCursorDataCompanion Function({
   Value<int> chatId,
-  Value<MessageSyncCursorTypeEnum> cursorType,
+  required int timestampUsec,
+  Value<int> sendAttempts,
+});
+typedef $$ChatOutboxReadCursorsTableTableUpdateCompanionBuilder
+    = ChatOutboxReadCursorDataCompanion Function({
+  Value<int> chatId,
   Value<int> timestampUsec,
-  Value<int> rowid,
+  Value<int> sendAttempts,
 });
 
-class $$ChatMessageSyncCursorTableTableTableManager extends RootTableManager<
+class $$ChatOutboxReadCursorsTableTableTableManager extends RootTableManager<
     _$AppDatabase,
-    $ChatMessageSyncCursorTableTable,
-    ChatMessageSyncCursorData,
-    $$ChatMessageSyncCursorTableTableFilterComposer,
-    $$ChatMessageSyncCursorTableTableOrderingComposer,
-    $$ChatMessageSyncCursorTableTableCreateCompanionBuilder,
-    $$ChatMessageSyncCursorTableTableUpdateCompanionBuilder> {
-  $$ChatMessageSyncCursorTableTableTableManager(
-      _$AppDatabase db, $ChatMessageSyncCursorTableTable table)
+    $ChatOutboxReadCursorsTableTable,
+    ChatOutboxReadCursorData,
+    $$ChatOutboxReadCursorsTableTableFilterComposer,
+    $$ChatOutboxReadCursorsTableTableOrderingComposer,
+    $$ChatOutboxReadCursorsTableTableCreateCompanionBuilder,
+    $$ChatOutboxReadCursorsTableTableUpdateCompanionBuilder> {
+  $$ChatOutboxReadCursorsTableTableTableManager(
+      _$AppDatabase db, $ChatOutboxReadCursorsTableTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$ChatMessageSyncCursorTableTableFilterComposer(
+          filteringComposer: $$ChatOutboxReadCursorsTableTableFilterComposer(
               ComposerState(db, table)),
-          orderingComposer: $$ChatMessageSyncCursorTableTableOrderingComposer(
+          orderingComposer: $$ChatOutboxReadCursorsTableTableOrderingComposer(
               ComposerState(db, table)),
           updateCompanionCallback: ({
             Value<int> chatId = const Value.absent(),
-            Value<MessageSyncCursorTypeEnum> cursorType = const Value.absent(),
             Value<int> timestampUsec = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
+            Value<int> sendAttempts = const Value.absent(),
           }) =>
-              ChatMessageSyncCursorDataCompanion(
+              ChatOutboxReadCursorDataCompanion(
             chatId: chatId,
-            cursorType: cursorType,
             timestampUsec: timestampUsec,
-            rowid: rowid,
+            sendAttempts: sendAttempts,
           ),
           createCompanionCallback: ({
-            required int chatId,
-            required MessageSyncCursorTypeEnum cursorType,
+            Value<int> chatId = const Value.absent(),
             required int timestampUsec,
-            Value<int> rowid = const Value.absent(),
+            Value<int> sendAttempts = const Value.absent(),
           }) =>
-              ChatMessageSyncCursorDataCompanion.insert(
+              ChatOutboxReadCursorDataCompanion.insert(
             chatId: chatId,
-            cursorType: cursorType,
             timestampUsec: timestampUsec,
-            rowid: rowid,
+            sendAttempts: sendAttempts,
           ),
         ));
 }
 
-class $$ChatMessageSyncCursorTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $ChatMessageSyncCursorTableTable> {
-  $$ChatMessageSyncCursorTableTableFilterComposer(super.$state);
-  ColumnWithTypeConverterFilters<MessageSyncCursorTypeEnum,
-          MessageSyncCursorTypeEnum, String>
-      get cursorType => $state.composableBuilder(
-          column: $state.table.cursorType,
-          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
-              column,
-              joinBuilders: joinBuilders));
-
+class $$ChatOutboxReadCursorsTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $ChatOutboxReadCursorsTableTable> {
+  $$ChatOutboxReadCursorsTableTableFilterComposer(super.$state);
   ColumnFilters<int> get timestampUsec => $state.composableBuilder(
       column: $state.table.timestampUsec,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get sendAttempts => $state.composableBuilder(
+      column: $state.table.sendAttempts,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -7912,127 +8391,16 @@ class $$ChatMessageSyncCursorTableTableFilterComposer
   }
 }
 
-class $$ChatMessageSyncCursorTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $ChatMessageSyncCursorTableTable> {
-  $$ChatMessageSyncCursorTableTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get cursorType => $state.composableBuilder(
-      column: $state.table.cursorType,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
+class $$ChatOutboxReadCursorsTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $ChatOutboxReadCursorsTableTable> {
+  $$ChatOutboxReadCursorsTableTableOrderingComposer(super.$state);
   ColumnOrderings<int> get timestampUsec => $state.composableBuilder(
       column: $state.table.timestampUsec,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
-  $$ChatsTableTableOrderingComposer get chatId {
-    final $$ChatsTableTableOrderingComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.chatId,
-        referencedTable: $state.db.chatsTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$ChatsTableTableOrderingComposer(ComposerState($state.db,
-                $state.db.chatsTable, joinBuilder, parentComposers)));
-    return composer;
-  }
-}
-
-typedef $$ChatMessageReadCursorTableTableCreateCompanionBuilder
-    = ChatMessageReadCursorDataCompanion Function({
-  required int chatId,
-  required String userId,
-  required int timestampUsec,
-  Value<int> rowid,
-});
-typedef $$ChatMessageReadCursorTableTableUpdateCompanionBuilder
-    = ChatMessageReadCursorDataCompanion Function({
-  Value<int> chatId,
-  Value<String> userId,
-  Value<int> timestampUsec,
-  Value<int> rowid,
-});
-
-class $$ChatMessageReadCursorTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $ChatMessageReadCursorTableTable,
-    ChatMessageReadCursorData,
-    $$ChatMessageReadCursorTableTableFilterComposer,
-    $$ChatMessageReadCursorTableTableOrderingComposer,
-    $$ChatMessageReadCursorTableTableCreateCompanionBuilder,
-    $$ChatMessageReadCursorTableTableUpdateCompanionBuilder> {
-  $$ChatMessageReadCursorTableTableTableManager(
-      _$AppDatabase db, $ChatMessageReadCursorTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer: $$ChatMessageReadCursorTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$ChatMessageReadCursorTableTableOrderingComposer(
-              ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> chatId = const Value.absent(),
-            Value<String> userId = const Value.absent(),
-            Value<int> timestampUsec = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              ChatMessageReadCursorDataCompanion(
-            chatId: chatId,
-            userId: userId,
-            timestampUsec: timestampUsec,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required int chatId,
-            required String userId,
-            required int timestampUsec,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              ChatMessageReadCursorDataCompanion.insert(
-            chatId: chatId,
-            userId: userId,
-            timestampUsec: timestampUsec,
-            rowid: rowid,
-          ),
-        ));
-}
-
-class $$ChatMessageReadCursorTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $ChatMessageReadCursorTableTable> {
-  $$ChatMessageReadCursorTableTableFilterComposer(super.$state);
-  ColumnFilters<String> get userId => $state.composableBuilder(
-      column: $state.table.userId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get timestampUsec => $state.composableBuilder(
-      column: $state.table.timestampUsec,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  $$ChatsTableTableFilterComposer get chatId {
-    final $$ChatsTableTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.chatId,
-        referencedTable: $state.db.chatsTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$ChatsTableTableFilterComposer(ComposerState($state.db,
-                $state.db.chatsTable, joinBuilder, parentComposers)));
-    return composer;
-  }
-}
-
-class $$ChatMessageReadCursorTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $ChatMessageReadCursorTableTable> {
-  $$ChatMessageReadCursorTableTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get userId => $state.composableBuilder(
-      column: $state.table.userId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get timestampUsec => $state.composableBuilder(
-      column: $state.table.timestampUsec,
+  ColumnOrderings<int> get sendAttempts => $state.composableBuilder(
+      column: $state.table.sendAttempts,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
@@ -8068,6 +8436,14 @@ class $AppDatabaseManager {
       $$ChatMembersTableTableTableManager(_db, _db.chatMembersTable);
   $$ChatMessagesTableTableTableManager get chatMessagesTable =>
       $$ChatMessagesTableTableTableManager(_db, _db.chatMessagesTable);
+  $$ChatMessageSyncCursorTableTableTableManager
+      get chatMessageSyncCursorTable =>
+          $$ChatMessageSyncCursorTableTableTableManager(
+              _db, _db.chatMessageSyncCursorTable);
+  $$ChatMessageReadCursorTableTableTableManager
+      get chatMessageReadCursorTable =>
+          $$ChatMessageReadCursorTableTableTableManager(
+              _db, _db.chatMessageReadCursorTable);
   $$ChatOutboxMessageTableTableTableManager get chatOutboxMessageTable =>
       $$ChatOutboxMessageTableTableTableManager(
           _db, _db.chatOutboxMessageTable);
@@ -8083,14 +8459,10 @@ class $AppDatabaseManager {
       get chatOutboxMessageViewsTable =>
           $$ChatOutboxMessageViewsTableTableTableManager(
               _db, _db.chatOutboxMessageViewsTable);
-  $$ChatMessageSyncCursorTableTableTableManager
-      get chatMessageSyncCursorTable =>
-          $$ChatMessageSyncCursorTableTableTableManager(
-              _db, _db.chatMessageSyncCursorTable);
-  $$ChatMessageReadCursorTableTableTableManager
-      get chatMessageReadCursorTable =>
-          $$ChatMessageReadCursorTableTableTableManager(
-              _db, _db.chatMessageReadCursorTable);
+  $$ChatOutboxReadCursorsTableTableTableManager
+      get chatOutboxReadCursorsTable =>
+          $$ChatOutboxReadCursorsTableTableTableManager(
+              _db, _db.chatOutboxReadCursorsTable);
 }
 
 mixin _$ContactsDaoMixin on DatabaseAccessor<AppDatabase> {
@@ -8129,6 +8501,10 @@ mixin _$ChatsDaoMixin on DatabaseAccessor<AppDatabase> {
       attachedDatabase.chatMembersTable;
   $ChatMessagesTableTable get chatMessagesTable =>
       attachedDatabase.chatMessagesTable;
+  $ChatMessageSyncCursorTableTable get chatMessageSyncCursorTable =>
+      attachedDatabase.chatMessageSyncCursorTable;
+  $ChatMessageReadCursorTableTable get chatMessageReadCursorTable =>
+      attachedDatabase.chatMessageReadCursorTable;
   $ChatOutboxMessageTableTable get chatOutboxMessageTable =>
       attachedDatabase.chatOutboxMessageTable;
   $ChatOutboxMessageEditTableTable get chatOutboxMessageEditTable =>
@@ -8137,8 +8513,6 @@ mixin _$ChatsDaoMixin on DatabaseAccessor<AppDatabase> {
       attachedDatabase.chatOutboxMessageDeleteTable;
   $ChatOutboxMessageViewsTableTable get chatOutboxMessageViewsTable =>
       attachedDatabase.chatOutboxMessageViewsTable;
-  $ChatMessageSyncCursorTableTable get chatMessageSyncCursorTable =>
-      attachedDatabase.chatMessageSyncCursorTable;
-  $ChatMessageReadCursorTableTable get chatMessageReadCursorTable =>
-      attachedDatabase.chatMessageReadCursorTable;
+  $ChatOutboxReadCursorsTableTable get chatOutboxReadCursorsTable =>
+      attachedDatabase.chatOutboxReadCursorsTable;
 }
