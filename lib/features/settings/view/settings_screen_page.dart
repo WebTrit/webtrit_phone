@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -16,7 +17,9 @@ class SettingsScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const widget = SettingsScreen();
+    const widget = SettingsScreen(
+      enableLogRecordsConsole: EnvironmentConfig.LOG_RECORD_FEATURE_ENABLE,
+    );
     final provider = BlocProvider(
       create: (context) {
         return SettingsBloc(

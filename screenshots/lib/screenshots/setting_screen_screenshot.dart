@@ -39,7 +39,9 @@ class _SettingScreenScreenshotState extends State<SettingScreenScreenshot> {
                   create: (context) => MockSettingsBloc.settingsScreen(),
                 ),
               ],
-              child: const SettingsScreen(),
+              child: const SettingsScreen(
+                enableLogRecordsConsole: true,
+              ),
             );
           },
           transitionDuration: Duration.zero,

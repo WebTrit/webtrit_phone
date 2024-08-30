@@ -18,7 +18,10 @@ import '../widgets/widgets.dart';
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({
     super.key,
+    required this.enableLogRecordsConsole,
   });
+
+  final bool enableLogRecordsConsole;
 
   @override
   Widget build(BuildContext context) {
@@ -186,14 +189,15 @@ class SettingsScreen extends StatelessWidget {
           GroupTitleListTile(
             titleData: context.l10n.settings_ListViewTileTitle_toolbox,
           ),
-          ListTile(
-            leading: const Icon(Icons.aod_outlined),
-            title: Text(context.l10n.settings_ListViewTileTitle_logRecordsConsole),
-            trailing: const Icon(Icons.navigate_next),
-            onTap: () {
-              context.router.navigate(const LogRecordsConsoleScreenPageRoute());
-            },
-          ),
+          if (enableLogRecordsConsole)
+            ListTile(
+              leading: const Icon(Icons.aod_outlined),
+              title: Text(context.l10n.settings_ListViewTileTitle_logRecordsConsole),
+              trailing: const Icon(Icons.navigate_next),
+              onTap: () {
+                context.router.navigate(const LogRecordsConsoleScreenPageRoute());
+              },
+            ),
           const ListTileSeparator(),
           ListTile(
             leading: const Icon(Icons.delete_outline),
