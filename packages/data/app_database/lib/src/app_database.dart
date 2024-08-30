@@ -1067,6 +1067,10 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
         .getSingleOrNull();
   }
 
+  Stream<List<ChatMessageReadCursorData>> watchChatMessageReadCursors(int chatId) {
+    return (select(chatMessageReadCursorTable)..where((t) => t.chatId.equals(chatId))).watch();
+  }
+
   Future<int> unreadMessagesCountUsingReadCursors(int chatId, String userId) async {
     final userReadCursor = await getChatMessageReadCursor(chatId, userId);
     if (userReadCursor != null) {

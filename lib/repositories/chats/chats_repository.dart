@@ -116,6 +116,12 @@ class ChatsRepository with ChatsDriftMapper {
     return null;
   }
 
+  Stream<List<ChatMessageReadCursor>> watchChatMessageReadCursors(int chatId) {
+    return _chatsDao
+        .watchChatMessageReadCursors(chatId)
+        .map((data) => data.map(chatMessageReadCursorFromDrift).toList());
+  }
+
   Future<void> upsertChatMessageReadCursor(ChatMessageReadCursor cursor) async {
     final data = ChatMessageReadCursorData(
       chatId: cursor.chatId,

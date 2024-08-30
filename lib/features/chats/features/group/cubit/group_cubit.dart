@@ -39,6 +39,7 @@ class GroupCubit extends Cubit<GroupState> {
   StreamSubscription? _outboxMessagesSub;
   StreamSubscription? _outboxMessageEditsSub;
   StreamSubscription? _outboxMessageDeletesSub;
+  StreamSubscription? _readCursorsSub;
 
   void restart() {
     _logger.info('Restarting group $_chatId');
@@ -103,6 +104,14 @@ class GroupCubit extends Cubit<GroupState> {
       chatId: _chatId,
     );
     _outboxRepository.upsertOutboxMessageView(outboxEntry);
+  }
+
+  Future userReadedUntilUpdate(DateTime time) async {
+    final outboxEntry = ChatOutboxReadCursorEntry(
+      chatId: _chatId,
+      time: time,
+    );
+    _outboxRepository.upsertOutboxReadCursor(outboxEntry);
   }
 
   Future<bool> leaveGroup() async {
@@ -268,6 +277,7 @@ class GroupCubit extends Cubit<GroupState> {
       _outboxMessagesSub = _outboxMessagesSubFactory(_handleOutboxMessagesUpdate);
       _outboxMessageEditsSub = _outboxMessageEditsSubFactory(_handleOutboxMessageEditsUpdate);
       _outboxMessageDeletesSub = _outboxMessageDeletesSubFactory(_handleOutboxMessageDeletesUpdate);
+      _readCursorsSub = _readCursorsSubFactory(_handleReadCursorsUpdate);
     } catch (e) {
       emit(GroupState.error(_chatId, e));
     }
@@ -342,6 +352,16 @@ class GroupCubit extends Cubit<GroupState> {
     if (state is GroupStateReady) emit(state.copyWith(outboxMessageDeletes: entries));
   }
 
+  StreamSubscription _readCursorsSubFactory(void Function(List<ChatMessageReadCursor>) onArrive) {
+    return _chatsRepository.watchChatMessageReadCursors(_chatId).listen(onArrive);
+  }
+
+  void _handleReadCursorsUpdate(List<ChatMessageReadCursor> cursors) {
+    _logger.info('handleReadCursorsUpdate: ${cursors.length}');
+    final state = this.state;
+    if (state is GroupStateReady) emit(state.copyWith(readCursors: cursors));
+  }
+
   @override
   Future<void> close() {
     _logger.info('Closing group $_chatId');
@@ -355,5 +375,6 @@ class GroupCubit extends Cubit<GroupState> {
     _outboxMessagesSub?.cancel();
     _outboxMessageEditsSub?.cancel();
     _outboxMessageDeletesSub?.cancel();
+    _readCursorsSub?.cancel();
   }
 }

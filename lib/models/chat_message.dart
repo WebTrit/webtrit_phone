@@ -13,6 +13,7 @@ class ChatMessage extends Equatable {
   final SmsOutState? smsOutState;
   final String? smsNumber;
   final String content;
+  @Deprecated('Use cursors instead, now used for backward compatibility')
   final DateTime? viewedAt;
   final DateTime? editedAt;
   final DateTime createdAt;
