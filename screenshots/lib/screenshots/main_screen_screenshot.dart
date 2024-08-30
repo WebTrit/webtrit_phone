@@ -32,6 +32,12 @@ class MainScreenScreenshot extends StatelessWidget {
       child: MainScreen(
         body: _flavorWidgetBuilder(context, flavor),
         navigationBarFlavor: flavor,
+        allowedFlavors: const [
+          MainFlavor.favorites,
+          MainFlavor.recents,
+          MainFlavor.contacts,
+          MainFlavor.keypad,
+        ],
       ),
     );
   }

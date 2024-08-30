@@ -25,33 +25,48 @@ class MainScreenPage extends StatelessWidget {
     final appPreferences = context.read<AppPreferences>();
     const appDemoFlow = EnvironmentConfig.CORE_URL == null;
 
+    final allowedFlavors = getAllowedFlavors();
+
     final autoTabsRouter = AutoTabsRouter(
-      routes: const [
-        FavoritesRouterPageRoute(),
-        RecentsRouterPageRoute(),
-        ContactsRouterPageRoute(),
-        KeypadScreenPageRoute(),
-      ],
+      routes: allowedFlavors.map((flavor) {
+        switch (flavor) {
+          case MainFlavor.favorites:
+            return const FavoritesRouterPageRoute();
+          case MainFlavor.recents:
+            return const RecentsRouterPageRoute();
+          case MainFlavor.contacts:
+            return const ContactsRouterPageRoute();
+          case MainFlavor.keypad:
+            return const KeypadScreenPageRoute();
+        }
+      }).toList(),
       duration: Duration.zero,
       builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
         final isRouteActive = context.router.isRouteActive(MainScreenPageRoute.name);
-        final flavor = MainFlavor.values[tabsRouter.activeIndex];
+        final flavor = allowedFlavors[tabsRouter.activeIndex];
 
         if (appDemoFlow) {
           final locale = context.read<AppBloc>().state.locale;
 
-          context.read<DemoCubit>().updateConfiguration(flavor: flavor, enable: isRouteActive, locale: locale);
+          context.read<DemoCubit>().updateConfiguration(
+                flavor: flavor,
+                enable: isRouteActive,
+                locale: locale,
+              );
           context.read<DemoCubit>().getActions();
         }
 
         return MainScreen(
           body: child,
           navigationBarFlavor: flavor,
+          allowedFlavors: allowedFlavors,
           onNavigationBarTap: (flavor) {
-            tabsRouter.setActiveIndex(flavor.index);
-
-            appPreferences.setActiveMainFlavor(flavor);
+            final index = allowedFlavors.indexOf(flavor);
+            if (index != -1) {
+              tabsRouter.setActiveIndex(index);
+              appPreferences.setActiveMainFlavor(flavor);
+            }
           },
         );
       },
@@ -68,7 +83,7 @@ class MainScreenPage extends StatelessWidget {
               create: (context) => DemoCubit(
                 webtritApiClient: context.read<WebtritApiClient>(),
                 token: context.read<AppBloc>().state.token!,
-                flavor: MainFlavor.contacts,
+                flavor: allowedFlavors.contains(MainFlavor.contacts) ? MainFlavor.contacts : allowedFlavors.first,
                 locale: context.read<AppBloc>().state.locale,
               ),
               child: DemoShell(child: autoTabsRouter),
@@ -87,5 +102,20 @@ class MainScreenPage extends StatelessWidget {
     );
 
     return blocListener;
+  }
+
+  List<MainFlavor> getAllowedFlavors() {
+    return MainFlavor.values.where((flavor) {
+      switch (flavor) {
+        case MainFlavor.keypad:
+          return EnvironmentConfig.KEYPAD_FEATURE_ENABLE;
+        case MainFlavor.favorites:
+          return EnvironmentConfig.FAVOURITE_FEATURE_ENABLE;
+        case MainFlavor.contacts:
+          return EnvironmentConfig.CONTACT_FEATURE_ENABLE;
+        case MainFlavor.recents:
+          return EnvironmentConfig.RECENT_FEATURE_ENABLE;
+      }
+    }).toList();
   }
 }
