@@ -49,7 +49,7 @@ class ChatsSyncWorker {
     _logger.info('Subscribing to chat $chatId');
     _chatRoomSyncSubs.putIfAbsent(
       chatId,
-      () => _chatRoomSyncStream(chatId).listen((e) => _logger.info('_chatRoomSyncStream event: $e')),
+      () => _chatRoomSyncStream(chatId).listen((e) => _logger.info('_chatRoomSyncStream chat: $chatId event: $e')),
     );
   }
 
@@ -138,11 +138,18 @@ class ChatsSyncWorker {
         final eventsStream = channel.messages.transform(StreamBuffer());
 
         // Fetch chat info
-        final req = await channel.push('chat:info', {}, pushTimeout).future;
-        final chat = Chat.fromMap(req.response as Map<String, dynamic>);
+        final infoReq = await channel.push('chat:info', {}, pushTimeout).future;
+        final chat = Chat.fromMap(infoReq.response as Map<String, dynamic>);
         await chatsRepository.upsertChat(chat);
-        _logger.info('Chat info: $chat');
         yield chat;
+
+        // Fetch read cursors
+        final cursorsReq = await channel.push('chat:get_cursors', {}, pushTimeout).future;
+        final cursors = (cursorsReq.response['data'] as List).map((e) => ChatMessageReadCursor.fromMap(e)).toList();
+        for (final cursor in cursors) {
+          await chatsRepository.upsertChatMessageReadCursor(cursor);
+          yield cursor;
+        }
 
         // Get last update time for sync messages from
         final newestCursor = await chatsRepository.getChatMessageSyncCursor(chatId, MessageSyncCursorType.newest);
@@ -209,8 +216,6 @@ class ChatsSyncWorker {
 
         // Process buffered and listen for future realtime updates
         await for (final e in eventsStream) {
-          _logger.info('Chat channel event $chatId: $e');
-
           if (e.event.value == 'chat_info_update') {
             final userId = client.userId!;
             final chat = Chat.fromMap(e.payload as Map<String, dynamic>);
@@ -243,6 +248,13 @@ class ChatsSyncWorker {
               cursorType: MessageSyncCursorType.newest,
               time: viewedAt,
             ));
+            yield {'event': 'viewed', messageIds: messageIds, viewedAt: viewedAt};
+          }
+
+          if (e.event.value == 'read_cursor_update') {
+            final cursor = ChatMessageReadCursor.fromMap(e.payload as Map<String, dynamic>);
+            await chatsRepository.upsertChatMessageReadCursor(cursor);
+            yield cursor;
           }
 
           // On disconnect break the loop to force reconnect

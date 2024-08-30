@@ -110,6 +110,30 @@ class ChatsRepository with ChatsDriftMapper {
     await _chatsDao.upsertChatMessageSyncCursor(data);
   }
 
+  Future<ChatMessageReadCursor?> getChatMessageReadCursor(int chatId, String userId) async {
+    final data = await _chatsDao.getChatMessageReadCursor(chatId, userId);
+    if (data != null) return chatMessageReadCursorFromDrift(data);
+    return null;
+  }
+
+  Future<void> upsertChatMessageReadCursor(ChatMessageReadCursor cursor) async {
+    final data = ChatMessageReadCursorData(
+      chatId: cursor.chatId,
+      userId: cursor.userId,
+      timestampUsec: cursor.time.microsecondsSinceEpoch,
+    );
+    await _chatsDao.upsertChatMessageReadCursor(data);
+    _addEvent(ChatReadCursorUpdate(cursor));
+  }
+
+  Future<int> unreadMessagesCountUsingReadCursors(int chatId, String userId) {
+    return _chatsDao.unreadMessagesCountUsingReadCursors(chatId, userId);
+  }
+
+  Future<int> chatsWithUnreadedMessagesCountUsingReadCursors(String userId) {
+    return _chatsDao.chatsWithUnreadedMessagesCountUsingReadCursors(userId);
+  }
+
   Future<void> wipeStaleDeletedData() async {
     await _chatsDao.wipeStaleDeletedChatMessagesData();
   }

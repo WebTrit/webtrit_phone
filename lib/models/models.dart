@@ -6,6 +6,7 @@ export 'chat.dart';
 export 'chat_member.dart';
 export 'chat_message.dart';
 export 'chat_message_sync_cursor.dart';
+export 'chat_message_read_cursor.dart';
 export 'chat_outbox_message_entry.dart';
 export 'chat_outbox_message_edit_entry.dart';
 export 'chat_outbox_message_delete_entry.dart';

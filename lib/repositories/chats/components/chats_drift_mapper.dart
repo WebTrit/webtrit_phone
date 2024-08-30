@@ -112,4 +112,20 @@ mixin ChatsDriftMapper {
       timestampUsec: cursor.time.microsecondsSinceEpoch,
     );
   }
+
+  ChatMessageReadCursor chatMessageReadCursorFromDrift(ChatMessageReadCursorData data) {
+    return ChatMessageReadCursor(
+      chatId: data.chatId,
+      userId: data.userId,
+      time: DateTime.fromMicrosecondsSinceEpoch(data.timestampUsec),
+    );
+  }
+
+  ChatMessageReadCursorData chatMessageReadCursorDataFromChatMessageReadCursor(ChatMessageReadCursor cursor) {
+    return ChatMessageReadCursorData(
+      chatId: cursor.chatId,
+      userId: cursor.userId,
+      timestampUsec: cursor.time.microsecondsSinceEpoch,
+    );
+  }
 }
