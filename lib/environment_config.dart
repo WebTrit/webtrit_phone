@@ -102,4 +102,46 @@ class EnvironmentConfig {
           FCM_VAPID_KEY__NAME,
         )
       : null;
+
+  static const FAVOURITE_FEATURE_ENABLE__NAME = 'WEBTRIT_APP_FAVOURITE_FEATURE_ENABLE';
+  static const FAVOURITE_FEATURE_ENABLE = bool.fromEnvironment(
+    FAVOURITE_FEATURE_ENABLE__NAME,
+    defaultValue: true,
+  );
+
+  static const RECENT_FEATURE_ENABLE__NAME = 'WEBTRIT_APP_RECENT_FEATURE_ENABLE';
+  static const RECENT_FEATURE_ENABLE = bool.fromEnvironment(
+    RECENT_FEATURE_ENABLE__NAME,
+    defaultValue: true,
+  );
+
+  static const CONTACT_FEATURE_ENABLE__NAME = 'WEBTRIT_APP_CONTACT_FEATURE_ENABLE';
+  static const CONTACT_FEATURE_ENABLE = bool.fromEnvironment(
+    CONTACT_FEATURE_ENABLE__NAME,
+    defaultValue: true,
+  );
+
+  static const KEYPAD_FEATURE_ENABLE__NAME = 'WEBTRIT_APP_KEYPAD_FEATURE_ENABLE';
+  static const KEYPAD_FEATURE_ENABLE = bool.fromEnvironment(
+    KEYPAD_FEATURE_ENABLE__NAME,
+    defaultValue: true,
+  );
+
+  static const LOCAL_CONTACTS_FEATURE_ENABLE__NAME = 'WEBTRIT_APP_LOCAL_CONTACTS_FEATURE_ENABLE';
+  static const LOCAL_CONTACTS_FEATURE_ENABLE = bool.fromEnvironment(
+    LOCAL_CONTACTS_FEATURE_ENABLE__NAME,
+    defaultValue: true,
+  );
+
+  static const REMOTE_CONTACTS_FEATURE_ENABLE__NAME = 'WEBTRIT_APP_REMOTE_CONTACTS_FEATURE_ENABLE';
+  static const REMOTE_CONTACTS_FEATURE_ENABLE = bool.fromEnvironment(
+    REMOTE_CONTACTS_FEATURE_ENABLE__NAME,
+    defaultValue: true,
+  );
+
+  static const LOG_RECORD_FEATURE_ENABLE__NAME = 'WEBTRIT_APP_LOG_RECORD_FEATURE_ENABLE';
+  static const LOG_RECORD_FEATURE_ENABLE = bool.fromEnvironment(
+    LOG_RECORD_FEATURE_ENABLE__NAME,
+    defaultValue: true,
+  );
 }
