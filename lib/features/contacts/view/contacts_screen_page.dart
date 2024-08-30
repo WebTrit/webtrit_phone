@@ -20,8 +20,8 @@ class ContactsScreenPage extends StatelessWidget {
     final widget = ContactsScreen(
       title: const Text(EnvironmentConfig.APP_NAME),
       sourceTypes: const [
-        ContactSourceType.local,
-        ContactSourceType.external,
+        if (EnvironmentConfig.LOCAL_CONTACTS_FEATURE_ENABLE) ContactSourceType.local,
+        if (EnvironmentConfig.REMOTE_CONTACTS_FEATURE_ENABLE) ContactSourceType.external,
       ],
       sourceTypeWidgetBuilder: _contactSourceTypeWidgetBuilder,
     );
@@ -35,35 +35,36 @@ class ContactsScreenPage extends StatelessWidget {
   }
 
   Widget _contactSourceTypeWidgetBuilder(BuildContext context, ContactSourceType sourceType) {
-    switch (sourceType) {
-      case ContactSourceType.local:
-        const widget = ContactsLocalTab();
-        final provider = BlocProvider(
-          create: (context) {
-            final contactsSearchBloc = context.read<ContactsBloc>();
-            return ContactsLocalTabBloc(
-              contactsRepository: context.read<ContactsRepository>(),
-              contactsSearchBloc: contactsSearchBloc,
-              localContactsSyncBloc: context.read<LocalContactsSyncBloc>(),
-            )..add(ContactsLocalTabStarted(search: contactsSearchBloc.state.search));
-          },
-          child: widget,
-        );
-        return provider;
-      case ContactSourceType.external:
-        const widget = ContactsExternalTab();
-        final provider = BlocProvider(
-          create: (context) {
-            final contactsSearchBloc = context.read<ContactsBloc>();
-            return ContactsExternalTabBloc(
-              contactsRepository: context.read<ContactsRepository>(),
-              contactsSearchBloc: contactsSearchBloc,
-              externalContactsSyncBloc: context.read<ExternalContactsSyncBloc>(),
-            )..add(ContactsExternalTabStarted(search: contactsSearchBloc.state.search));
-          },
-          child: widget,
-        );
-        return provider;
+    if (EnvironmentConfig.LOCAL_CONTACTS_FEATURE_ENABLE && sourceType == ContactSourceType.local) {
+      const widget = ContactsLocalTab();
+      final provider = BlocProvider(
+        create: (context) {
+          final contactsSearchBloc = context.read<ContactsBloc>();
+          return ContactsLocalTabBloc(
+            contactsRepository: context.read<ContactsRepository>(),
+            contactsSearchBloc: contactsSearchBloc,
+            localContactsSyncBloc: context.read<LocalContactsSyncBloc>(),
+          )..add(ContactsLocalTabStarted(search: contactsSearchBloc.state.search));
+        },
+        child: widget,
+      );
+      return provider;
+    } else if (EnvironmentConfig.REMOTE_CONTACTS_FEATURE_ENABLE && sourceType == ContactSourceType.external) {
+      const widget = ContactsExternalTab();
+      final provider = BlocProvider(
+        create: (context) {
+          final contactsSearchBloc = context.read<ContactsBloc>();
+          return ContactsExternalTabBloc(
+            contactsRepository: context.read<ContactsRepository>(),
+            contactsSearchBloc: contactsSearchBloc,
+            externalContactsSyncBloc: context.read<ExternalContactsSyncBloc>(),
+          )..add(ContactsExternalTabStarted(search: contactsSearchBloc.state.search));
+        },
+        child: widget,
+      );
+      return provider;
+    } else {
+      return const SizedBox.shrink();
     }
   }
 }
