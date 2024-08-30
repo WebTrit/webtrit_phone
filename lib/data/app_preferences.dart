@@ -15,7 +15,7 @@ class AppPreferences {
   static const _kActiveRecentsVisibilityFilterKey = 'active-recents-visibility-filter';
   static const _kActiveContactSourceTypeKey = 'active-contact-source-type';
   static const _kUserAgreementAcceptedKey = 'user-agreement-accepted';
-  static const _chatUserIdKey = 'chat-user-id';
+  static const _kChatUserIdKey = 'chat-user-id';
 
   // Please add all new keys here for proper cleaning of preferences
   static const _kPreferencesList = [
@@ -26,7 +26,7 @@ class AppPreferences {
     _kActiveRecentsVisibilityFilterKey,
     _kActiveContactSourceTypeKey,
     _kUserAgreementAcceptedKey,
-    _chatUserIdKey,
+    _kChatUserIdKey,
   ];
 
   // List of preferences keys to exclude by default during clean operation
@@ -154,7 +154,7 @@ class AppPreferences {
 
   bool getUserAgreementAccepted() => _sharedPreferences.getBool(_kUserAgreementAcceptedKey) ?? false;
 
-  Future<bool> setChatUserId(String value) => _sharedPreferences.setString(_chatUserIdKey, value);
+  Future<bool> setChatUserId(String value) => _sharedPreferences.setString(_kChatUserIdKey, value);
 
-  String? getChatUserId() => _sharedPreferences.getString(_chatUserIdKey);
+  String? getChatUserId() => _sharedPreferences.getString(_kChatUserIdKey);
 }
