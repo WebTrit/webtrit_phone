@@ -223,9 +223,7 @@ class _MainShellState extends State<MainShell> {
               },
             ),
         ],
-        child: Builder(
-          builder: (context) => const CallShell(child: ChatsShell(child: AutoRouter())),
-        ),
+        child: Builder(builder: (_) => const CallShell(child: ChatsShell(child: AutoRouter()))),
       ),
     );
   }
