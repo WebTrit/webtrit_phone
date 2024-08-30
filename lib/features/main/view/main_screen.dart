@@ -28,24 +28,26 @@ class MainScreen extends StatelessWidget {
 
     final scaffold = Scaffold(
       body: body,
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        selectedLabelStyle: themeData.textTheme.bodySmall,
-        unselectedLabelStyle: themeData.textTheme.bodySmall,
-        currentIndex: currentIndex,
-        onTap: (index) {
-          final onNavigationBarTap = this.onNavigationBarTap;
-          if (onNavigationBarTap != null) {
-            onNavigationBarTap(allowedFlavors[index]);
-          }
-        },
-        items: allowedFlavors.map((flavor) {
-          return BottomNavigationBarItem(
-            icon: Icon(flavor.icon),
-            label: flavor.labelL10n(context),
-          );
-        }).toList(),
-      ),
+      bottomNavigationBar: allowedFlavors.length > 1
+          ? BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              selectedLabelStyle: themeData.textTheme.bodySmall,
+              unselectedLabelStyle: themeData.textTheme.bodySmall,
+              currentIndex: currentIndex,
+              onTap: (index) {
+                final onNavigationBarTap = this.onNavigationBarTap;
+                if (onNavigationBarTap != null) {
+                  onNavigationBarTap(allowedFlavors[index]);
+                }
+              },
+              items: allowedFlavors.map((flavor) {
+                return BottomNavigationBarItem(
+                  icon: Icon(flavor.icon),
+                  label: flavor.labelL10n(context),
+                );
+              }).toList(),
+            )
+          : null,
     );
 
     return BlocListener<MainBloc, MainState>(
