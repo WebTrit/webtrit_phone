@@ -7,6 +7,8 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
+// TODO: extract events and commands to separate classes
+
 final _logger = Logger('OutboxQueueWorker');
 
 class OutboxQueueWorker {
@@ -225,6 +227,3 @@ class OutboxQueueWorker {
     }
   }
 }
-
-
-// TODO: extract events and commands to separate classes

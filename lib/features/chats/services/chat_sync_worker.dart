@@ -10,6 +10,9 @@ import 'package:webtrit_phone/features/chats/chats.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
+// TODO: implelemnt skip since for chat info
+// TODO: extract events and commands to separate classes
+
 final _logger = Logger('ChatsSyncWorker');
 
 class ChatsSyncWorker {
@@ -289,8 +292,3 @@ class StreamBuffer<T> extends StreamTransformerBase<T, T> {
     return controller.stream;
   }
 }
-
-
-
-// TODO: implelemnt skip since for chat info
-// TODO: extract events and commands to separate classes
