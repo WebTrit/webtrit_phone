@@ -474,7 +474,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get main_BottomNavigationBarItemLabel_keypad => 'Tastiera';
 
   @override
-  String get main_BottomNavigationBarItemLabel_chats => 'Chats';
+  String get main_BottomNavigationBarItemLabel_chats => 'Le chat';
 
   @override
   String get main_BottomNavigationBarItemLabel_recents => 'Recenti';
