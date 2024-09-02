@@ -555,33 +555,23 @@ class ChatMessages extends Table with TableInfo {
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       $customConstraints: 'NULL');
-  late final GeneratedColumn<int> editedAt = GeneratedColumn<int>(
-      'edited_at', aliasedName, true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NULL');
-  late final GeneratedColumn<int> createdAtRemote = GeneratedColumn<int>(
-      'created_at_remote', aliasedName, false,
+  late final GeneratedColumn<int> createdAtRemoteUsec = GeneratedColumn<int>(
+      'created_at_remote_usec', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
-  late final GeneratedColumn<int> updatedAtRemote = GeneratedColumn<int>(
-      'updated_at_remote', aliasedName, false,
+  late final GeneratedColumn<int> updatedAtRemoteUsec = GeneratedColumn<int>(
+      'updated_at_remote_usec', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
-  late final GeneratedColumn<int> deletedAtRemote = GeneratedColumn<int>(
-      'deleted_at_remote', aliasedName, true,
+  late final GeneratedColumn<int> editedAtRemoteUsec = GeneratedColumn<int>(
+      'edited_at_remote_usec', aliasedName, true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       $customConstraints: 'NULL');
-  late final GeneratedColumn<int> insertedAt = GeneratedColumn<int>(
-      'inserted_at', aliasedName, true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NULL');
-  late final GeneratedColumn<int> updatedAt = GeneratedColumn<int>(
-      'updated_at', aliasedName, true,
+  late final GeneratedColumn<int> deletedAtRemoteUsec = GeneratedColumn<int>(
+      'deleted_at_remote_usec', aliasedName, true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       $customConstraints: 'NULL');
@@ -599,12 +589,10 @@ class ChatMessages extends Table with TableInfo {
         smsNumber,
         content,
         viewedAt,
-        editedAt,
-        createdAtRemote,
-        updatedAtRemote,
-        deletedAtRemote,
-        insertedAt,
-        updatedAt
+        createdAtRemoteUsec,
+        updatedAtRemoteUsec,
+        editedAtRemoteUsec,
+        deletedAtRemoteUsec
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1071,12 +1059,6 @@ class DatabaseAtV8 extends GeneratedDatabase {
   late final Trigger chatMembersAfterUpdateTrigger = Trigger(
       'CREATE TRIGGER chat_members_after_update_trigger AFTER UPDATE ON chat_members BEGIN UPDATE chat_members SET updated_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id;END',
       'chat_members_after_update_trigger');
-  late final Trigger chatMessagesAfterInsertTrigger = Trigger(
-      'CREATE TRIGGER chat_messages_after_insert_trigger AFTER INSERT ON chat_messages BEGIN UPDATE chat_messages SET inserted_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id AND inserted_at IS NULL;UPDATE chat_messages SET updated_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id;END',
-      'chat_messages_after_insert_trigger');
-  late final Trigger chatMessagesAfterUpdateTrigger = Trigger(
-      'CREATE TRIGGER chat_messages_after_update_trigger AFTER UPDATE ON chat_messages BEGIN UPDATE chat_messages SET updated_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id;END',
-      'chat_messages_after_update_trigger');
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1106,9 +1088,7 @@ class DatabaseAtV8 extends GeneratedDatabase {
         chatsAfterInsertTrigger,
         chatsAfterUpdateTrigger,
         chatMembersAfterInsertTrigger,
-        chatMembersAfterUpdateTrigger,
-        chatMessagesAfterInsertTrigger,
-        chatMessagesAfterUpdateTrigger
+        chatMembersAfterUpdateTrigger
       ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
@@ -1160,16 +1140,6 @@ class DatabaseAtV8 extends GeneratedDatabase {
           ),
           WritePropagation(
             on: TableUpdateQuery.onTableName('chat_members',
-                limitUpdateKind: UpdateKind.delete),
-            result: [],
-          ),
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('chat_messages',
-                limitUpdateKind: UpdateKind.delete),
-            result: [],
-          ),
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('chat_messages',
                 limitUpdateKind: UpdateKind.delete),
             result: [],
           ),

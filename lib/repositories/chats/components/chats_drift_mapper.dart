@@ -61,10 +61,11 @@ mixin ChatsDriftMapper {
       smsNumber: data.smsNumber,
       content: data.content,
       viewedAt: data.viewedAt,
-      editedAt: data.editedAt,
-      createdAt: data.createdAtRemote,
-      updatedAt: data.updatedAtRemote,
-      deletedAt: data.deletedAtRemote,
+      createdAt: DateTime.fromMicrosecondsSinceEpoch(data.createdAtRemoteUsec),
+      updatedAt: DateTime.fromMicrosecondsSinceEpoch(data.updatedAtRemoteUsec),
+      editedAt: data.editedAtRemoteUsec != null ? DateTime.fromMicrosecondsSinceEpoch(data.editedAtRemoteUsec!) : null,
+      deletedAt:
+          data.deletedAtRemoteUsec != null ? DateTime.fromMicrosecondsSinceEpoch(data.deletedAtRemoteUsec!) : null,
     );
   }
 
@@ -82,10 +83,10 @@ mixin ChatsDriftMapper {
       smsNumber: message.smsNumber,
       content: message.content,
       viewedAt: message.viewedAt,
-      editedAt: message.editedAt,
-      createdAtRemote: message.createdAt,
-      updatedAtRemote: message.updatedAt,
-      deletedAtRemote: message.deletedAt,
+      createdAtRemoteUsec: message.createdAt.microsecondsSinceEpoch,
+      updatedAtRemoteUsec: message.updatedAt.microsecondsSinceEpoch,
+      editedAtRemoteUsec: message.editedAt?.microsecondsSinceEpoch,
+      deletedAtRemoteUsec: message.deletedAt?.microsecondsSinceEpoch,
     );
   }
 

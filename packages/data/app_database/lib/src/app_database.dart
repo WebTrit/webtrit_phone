@@ -351,19 +351,16 @@ class ChatMessagesTable extends Table {
 
   TextColumn get content => text()();
 
+  @Deprecated('Will be removed in the future, use cursors instead')
   DateTimeColumn get viewedAt => dateTime().nullable()();
 
-  DateTimeColumn get editedAt => dateTime().nullable()();
+  IntColumn get createdAtRemoteUsec => integer()();
 
-  DateTimeColumn get createdAtRemote => dateTime()();
+  IntColumn get updatedAtRemoteUsec => integer()();
 
-  DateTimeColumn get updatedAtRemote => dateTime()();
+  IntColumn get editedAtRemoteUsec => integer().nullable()();
 
-  DateTimeColumn get deletedAtRemote => dateTime().nullable()();
-
-  DateTimeColumn get insertedAt => dateTime().nullable()();
-
-  DateTimeColumn get updatedAt => dateTime().nullable()();
+  IntColumn get deletedAtRemoteUsec => integer().nullable()();
 }
 
 enum MessageSyncCursorTypeEnum { oldest, newest }
@@ -1016,9 +1013,9 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   }) async {
     final q = select(chatMessagesTable);
     q.where((t) => t.chatId.equals(chatId));
-    if (from != null) q.where((t) => t.createdAtRemote.isSmallerThanValue(from));
-    if (to != null) q.where((t) => t.createdAtRemote.isBiggerOrEqualValue(to));
-    q.orderBy([(t) => OrderingTerm.desc(t.createdAtRemote), (t) => OrderingTerm.desc(t.id)]);
+    if (from != null) q.where((t) => t.createdAtRemoteUsec.isSmallerThanValue(from.microsecondsSinceEpoch));
+    if (to != null) q.where((t) => t.createdAtRemoteUsec.isBiggerOrEqualValue(to.microsecondsSinceEpoch));
+    q.orderBy([(t) => OrderingTerm.desc(t.createdAtRemoteUsec), (t) => OrderingTerm.desc(t.id)]);
     q.limit(limit);
     return q.get();
   }
@@ -1032,7 +1029,7 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
     final r = await q.writeReturning(
       ChatMessageDataCompanion(
         viewedAt: Value(viewedAt),
-        updatedAt: Value(viewedAt),
+        updatedAtRemoteUsec: Value(viewedAt.microsecondsSinceEpoch),
       ),
     );
     return r;
@@ -1074,13 +1071,12 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   Future<int> unreadMessagesCountUsingReadCursors(int chatId, String userId) async {
     final userReadCursor = await getChatMessageReadCursor(chatId, userId);
     if (userReadCursor != null) {
-      final readTime = DateTime.fromMicrosecondsSinceEpoch(userReadCursor.timestampUsec);
       final amount = chatMessagesTable.id.count();
       var q = (selectOnly(chatMessagesTable)..addColumns([amount]));
       q.where(
         chatMessagesTable.chatId.equals(chatId) &
             chatMessagesTable.senderId.isNotIn([userId]) &
-            chatMessagesTable.createdAtRemote.isBiggerThanValue(readTime),
+            chatMessagesTable.createdAtRemoteUsec.isBiggerThanValue(userReadCursor.timestampUsec),
       );
       return q.getSingle().then((data) => data.read(amount) ?? 0);
     }
@@ -1093,13 +1089,12 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
     int count = 0;
     for (final cursor in userReadCursors) {
       final chatId = cursor.chatId;
-      final readTime = DateTime.fromMicrosecondsSinceEpoch(cursor.timestampUsec);
       final amount = chatMessagesTable.id.count();
       var q = (selectOnly(chatMessagesTable)..addColumns([amount]));
       q.where(
         chatMessagesTable.chatId.equals(chatId) &
             chatMessagesTable.senderId.isNotIn([userId]) &
-            chatMessagesTable.createdAtRemote.isBiggerThanValue(readTime),
+            chatMessagesTable.createdAtRemoteUsec.isBiggerThanValue(cursor.timestampUsec),
       );
       final unreadMessages = await q.getSingle().then((data) => data.read(amount) ?? 0);
       if (unreadMessages > 0) count++;
@@ -1221,7 +1216,9 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
 
   Future<void> wipeStaleDeletedChatMessagesData({int ttlSeconds = 60 * 60 * 24}) async {
     final staleTime = clock.now().subtract(Duration(seconds: ttlSeconds));
-    await (delete(chatMessagesTable)..where((t) => t.deletedAtRemote.isSmallerThanValue(staleTime))).go();
+    await (delete(chatMessagesTable)
+          ..where((t) => t.deletedAtRemoteUsec.isSmallerThanValue(staleTime.microsecondsSinceEpoch)))
+        .go();
   }
 
   Future<void> wipeChatsData() async {

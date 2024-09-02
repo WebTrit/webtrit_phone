@@ -15,9 +15,9 @@ class ChatMessage extends Equatable {
   final String content;
   @Deprecated('Use cursors instead, now used for backward compatibility')
   final DateTime? viewedAt;
-  final DateTime? editedAt;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final DateTime? editedAt;
   final DateTime? deletedAt;
 
   const ChatMessage({
@@ -33,9 +33,9 @@ class ChatMessage extends Equatable {
     required this.smsNumber,
     required this.content,
     required this.viewedAt,
-    required this.editedAt,
     required this.createdAt,
     required this.updatedAt,
+    required this.editedAt,
     required this.deletedAt,
   });
 
@@ -53,9 +53,9 @@ class ChatMessage extends Equatable {
         smsNumber,
         content,
         viewedAt,
-        editedAt,
         createdAt,
         updatedAt,
+        editedAt,
         deletedAt,
       ];
 
@@ -76,9 +76,9 @@ class ChatMessage extends Equatable {
       'sms_number': smsNumber,
       'content': content,
       'viewed_at': viewedAt?.toIso8601String(),
-      'edited_at': editedAt?.toIso8601String(),
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
+      'edited_at': editedAt?.toIso8601String(),
       'deleted_at': deletedAt?.toIso8601String(),
     };
   }
@@ -97,9 +97,9 @@ class ChatMessage extends Equatable {
       smsNumber: map['sms_number'] != null ? map['sms_number'] as String : null,
       content: map['content'] as String,
       viewedAt: map['viewed_at'] != null ? DateTime.parse(map['viewed_at'] as String) : null,
-      editedAt: map['edited_at'] != null ? DateTime.parse(map['edited_at'] as String) : null,
       createdAt: DateTime.parse(map['created_at'] as String),
       updatedAt: DateTime.parse(map['updated_at'] as String),
+      editedAt: map['edited_at'] != null ? DateTime.parse(map['edited_at'] as String) : null,
       deletedAt: map['deleted_at'] != null ? DateTime.parse(map['deleted_at'] as String) : null,
     );
   }
