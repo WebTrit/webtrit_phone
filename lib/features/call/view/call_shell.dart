@@ -72,7 +72,7 @@ class _CallShellState extends State<CallShell> {
 
         if (state.display == CallDisplay.screen) {
           if (!router.isRouteActive(CallScreenPageRoute.name)) {
-            router.push(const CallScreenPageRoute());
+            _openCallScreen(router);
           }
         } else {
           if (router.isRouteActive(CallScreenPageRoute.name)) {
@@ -89,7 +89,7 @@ class _CallShellState extends State<CallShell> {
           } else {
             final avatar = ThumbnailAvatar(
               stickyPadding: widget.stickyPadding,
-              onTap: () => router.push(const CallScreenPageRoute()),
+              onTap: () => _openCallScreen(router),
             );
             _avatar = avatar;
             avatar.insert(context, state);
@@ -109,6 +109,12 @@ class _CallShellState extends State<CallShell> {
       },
       child: child,
     );
+  }
+
+  void _openCallScreen(StackRouter router) {
+    // Use navigate to prevent duplicating CallScreenPageRoute in the stack.
+    // For example, if the user is on a different route branch like LogRecordsConsoleScreenPageRoute, navigate ensures CallScreenPageRoute is not added again.
+    router.navigate(const CallScreenPageRoute());
   }
 }
 
