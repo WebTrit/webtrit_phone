@@ -9,8 +9,6 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 
 part 'chat_list_state.dart';
 
-// TODO: fetch with last message and sort by last message date
-
 final _logger = Logger('ChatListCubit');
 
 class ChatListCubit extends Cubit<ChatListState> {
@@ -24,8 +22,9 @@ class ChatListCubit extends Cubit<ChatListState> {
   void init() async {
     _logger.info('Initialising');
 
-    final chatsList = await _chatsRepository.getChats();
+    final chatsList = await _chatsRepository.getChatsWithLastMessages();
     chatsList.sort(_comparator);
+
     emit(ChatListState(chats: chatsList, initialising: false));
     _logger.info('Initialised: ${chatsList.length} chats');
 
@@ -33,18 +32,52 @@ class ChatListCubit extends Cubit<ChatListState> {
       _logger.info('Event: $event');
 
       if (event is ChatUpdate) {
-        var newList = state.chats.copyMerge(event.chat);
-        newList.sort(_comparator);
-        emit(state.copyWith(chats: newList));
+        emit(state.copyWith(chats: _mergeWithChatUpdate(event.chat)));
       }
       if (event is ChatRemove) {
-        var newList = state.chats.copyRemove(event.chatId);
-        emit(state.copyWith(chats: newList));
+        emit(state.copyWith(chats: _removeChat(event.chatId)));
+      }
+      if (event is ChatMessageUpdate) {
+        emit(state.copyWith(chats: _mergeWithMessageUpdate(event.message)));
       }
     });
   }
 
-  int _comparator(Chat a, Chat b) => b.updatedAt.compareTo(a.updatedAt);
+  /// Sort chat list by last message if available, otherwise by chat update time
+  int _comparator((Chat, ChatMessage?) a, (Chat, ChatMessage?) b) {
+    final aLastActivity = a.$2?.createdAt ?? a.$1.updatedAt;
+    final bLastActivity = b.$2?.createdAt ?? b.$1.updatedAt;
+    return bLastActivity.compareTo(aLastActivity);
+  }
+
+  List<(Chat, ChatMessage?)> _mergeWithChatUpdate(Chat chat) {
+    List<(Chat, ChatMessage?)> newList;
+    final index = state.chats.indexWhere((element) => element.$1.id == chat.id);
+    if (index == -1) {
+      newList = state.chats + [(chat, null)];
+    } else {
+      newList = List.of(state.chats);
+      newList[index] = (chat, newList[index].$2);
+    }
+    newList.sort(_comparator);
+    return newList;
+  }
+
+  List<(Chat, ChatMessage?)> _mergeWithMessageUpdate(ChatMessage message) {
+    final index = state.chats.indexWhere((element) => element.$1.id == message.chatId);
+    if (index != -1) {
+      final newList = List.of(state.chats);
+      newList[index] = (newList[index].$1, message);
+      newList.sort(_comparator);
+      return newList;
+    }
+
+    return state.chats;
+  }
+
+  List<(Chat, ChatMessage?)> _removeChat(int chatId) {
+    return state.chats.where((element) => element.$1.id != chatId).toList();
+  }
 
   @override
   Future<void> close() {

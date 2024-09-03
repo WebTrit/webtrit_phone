@@ -965,6 +965,18 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
     });
   }
 
+  Future<List<(ChatDataWithMembers chatdata, ChatMessageData? lastMsg)>> getAllChatsWithMembersAndLastMessage() async {
+    final chatsData = await getAllChatsWithMembers();
+    final result = <(ChatDataWithMembers chatdata, ChatMessageData? lastMsg)>[];
+
+    for (final chatData in chatsData) {
+      final lastMsg = await getMessageHistory(chatData.chatData.id, limit: 1);
+      if (lastMsg.isNotEmpty) result.add((chatData, lastMsg.first));
+    }
+
+    return result;
+  }
+
   Future<ChatDataWithMembers> getChatWithMembers(int chatId) {
     final q = select(chatsTable).join([
       leftOuterJoin(chatMembersTable, chatMembersTable.chatId.equalsExp(chatsTable.id)),

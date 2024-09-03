@@ -26,6 +26,11 @@ mixin ChatsDriftMapper {
     );
   }
 
+  (Chat chat, ChatMessage? message) chatWithLastMessageFromDrift((ChatDataWithMembers, ChatMessageData?) data) {
+    final lastMessageData = data.$2;
+    return (chatFromDrift(data.$1), lastMessageData != null ? chatMessageFromDrift(lastMessageData) : null);
+  }
+
   ChatData chatDataFromChat(Chat chat) {
     return ChatData(
       id: chat.id,

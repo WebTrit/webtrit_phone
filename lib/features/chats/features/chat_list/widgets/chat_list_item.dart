@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
@@ -9,15 +7,13 @@ import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/chats/chats.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-// TODO: get last message from list cubit state after refactoring
-
 class ChatListItem extends StatefulWidget {
-  const ChatListItem({required this.chat, required this.userId, super.key});
+  const ChatListItem({required this.chat, required this.lastMessage, required this.userId, super.key});
 
   final Chat chat;
+  final ChatMessage? lastMessage;
   final String userId;
 
   @override
@@ -25,45 +21,6 @@ class ChatListItem extends StatefulWidget {
 }
 
 class _ChatListItemState extends State<ChatListItem> {
-  late final chatsRepository = context.read<ChatsRepository>();
-  StreamSubscription? updatesSub;
-
-  ChatMessage? lastMessage;
-
-  @override
-  void initState() {
-    super.initState();
-    init();
-  }
-
-  init() async {
-    await loadLastMessage();
-
-    if (!mounted) return;
-
-    updatesSub = chatsRepository.eventBus.listen((event) {
-      if (event is ChatMessageUpdate && event.message.chatId == widget.chat.id) {
-        final message = event.message;
-        // Be sure to use >= to handle edit of the last message
-        if (message.createdAt.microsecondsSinceEpoch >= (lastMessage?.createdAt.microsecondsSinceEpoch ?? 0)) {
-          if (mounted) setState(() => lastMessage = message);
-        }
-      }
-    });
-  }
-
-  Future loadLastMessage() async {
-    final lastMessages = await chatsRepository.getMessageHistory(widget.chat.id, limit: 1);
-    if (!mounted) return;
-    if (lastMessages.isNotEmpty) setState(() => lastMessage = lastMessages.first);
-  }
-
-  @override
-  void dispose() {
-    updatesSub?.cancel();
-    super.dispose();
-  }
-
   onTap() {
     if (widget.chat.type == ChatType.dialog) {
       final userId = widget.userId;
@@ -194,7 +151,7 @@ class _ChatListItemState extends State<ChatListItem> {
 
   Widget subtitle() {
     const textStyle = TextStyle(overflow: TextOverflow.ellipsis, fontSize: 12);
-    final lastMessage = this.lastMessage;
+    final lastMessage = widget.lastMessage;
 
     return Row(
       children: [

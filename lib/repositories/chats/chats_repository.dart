@@ -30,6 +30,11 @@ class ChatsRepository with ChatsDriftMapper {
     return chatsData.map(chatFromDrift).toList();
   }
 
+  Future<List<(Chat, ChatMessage?)>> getChatsWithLastMessages() async {
+    final chatsData = await _chatsDao.getAllChatsWithMembersAndLastMessage();
+    return chatsData.map((data) => chatWithLastMessageFromDrift(data)).toList();
+  }
+
   Future<List<int>> getChatIds() async {
     return _chatsDao.getChatIds();
   }

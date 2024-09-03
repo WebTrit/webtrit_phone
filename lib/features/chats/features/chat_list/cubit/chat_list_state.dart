@@ -1,7 +1,7 @@
 part of 'chat_list_cubit.dart';
 
 class ChatListState with EquatableMixin {
-  final List<Chat> chats;
+  final List<(Chat, ChatMessage?)> chats;
   final bool initialising;
 
   ChatListState({required this.chats, required this.initialising});
@@ -12,7 +12,7 @@ class ChatListState with EquatableMixin {
   List<Object> get props => [chats, initialising];
 
   ChatListState copyWith({
-    List<Chat>? chats,
+    List<(Chat, ChatMessage?)>? chats,
     bool? initialising,
   }) {
     return ChatListState(
