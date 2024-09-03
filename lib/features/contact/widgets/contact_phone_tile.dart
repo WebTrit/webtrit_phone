@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/widgets/widgets.dart';
+
 class ContactPhoneTile extends StatelessWidget {
   const ContactPhoneTile({
     super.key,
@@ -58,7 +60,10 @@ class ContactPhoneTile extends StatelessWidget {
           ],
         ],
       ),
-      title: Text(number),
+      title: CopyToClipboard(
+        data: number,
+        child: Text(number),
+      ),
       subtitle: Text(label),
       onTap: onTap,
       onLongPress: onLongPress,
