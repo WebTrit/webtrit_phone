@@ -113,7 +113,7 @@ class ChatsOutboxRepository with ChatsOutboxDriftMapper {
     });
   }
 
-  Future<int> upsertOutboxReadCursor(ChatOutboxReadCursorEntry entry) {
+  Future upsertOutboxReadCursor(ChatOutboxReadCursorEntry entry) {
     final entryData = chatOutboxReadCursorDataFromEntry(entry);
     return _chatsDao.upsertChatOutboxReadCursor(entryData);
   }

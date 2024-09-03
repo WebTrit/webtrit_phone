@@ -134,14 +134,8 @@ class ChatsRepository with ChatsDriftMapper {
     _addEvent(ChatReadCursorUpdate(cursor));
   }
 
-  // TODO: rename after migration
-  Future<int> unreadMessagesCountUsingReadCursors(int chatId, String userId) {
-    return _chatsDao.unreadMessagesCountUsingReadCursors(chatId, userId);
-  }
-
-  // TODO: rename after migration
-  Future<int> chatsWithUnreadedMessagesCountUsingReadCursors(String userId) {
-    return _chatsDao.chatsWithUnreadedMessagesCountUsingReadCursors(userId);
+  Future<Map<int, int>> unreadedCountPerChat(String userId) {
+    return _chatsDao.unreadedCountPerChat(userId);
   }
 
   Future<void> wipeStaleDeletedData() async {

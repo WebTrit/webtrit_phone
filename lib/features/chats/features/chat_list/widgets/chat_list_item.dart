@@ -6,11 +6,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
-import 'package:webtrit_phone/features/chats/widgets/widgets.dart';
+import 'package:webtrit_phone/features/chats/chats.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
+
+// TODO: get last message from list cubit state after refactoring
 
 class ChatListItem extends StatefulWidget {
   const ChatListItem({required this.chat, required this.userId, super.key});
@@ -27,7 +29,6 @@ class _ChatListItemState extends State<ChatListItem> {
   StreamSubscription? updatesSub;
 
   ChatMessage? lastMessage;
-  int unreadMsgsCount = 0;
 
   @override
   void initState() {
@@ -37,7 +38,6 @@ class _ChatListItemState extends State<ChatListItem> {
 
   init() async {
     await loadLastMessage();
-    await loadUnreadCount();
 
     if (!mounted) return;
 
@@ -48,10 +48,6 @@ class _ChatListItemState extends State<ChatListItem> {
         if (message.createdAt.microsecondsSinceEpoch >= (lastMessage?.createdAt.microsecondsSinceEpoch ?? 0)) {
           if (mounted) setState(() => lastMessage = message);
         }
-        loadUnreadCount();
-      }
-      if (event is ChatReadCursorUpdate && event.cursor.chatId == widget.chat.id) {
-        loadUnreadCount();
       }
     });
   }
@@ -60,12 +56,6 @@ class _ChatListItemState extends State<ChatListItem> {
     final lastMessages = await chatsRepository.getMessageHistory(widget.chat.id, limit: 1);
     if (!mounted) return;
     if (lastMessages.isNotEmpty) setState(() => lastMessage = lastMessages.first);
-  }
-
-  Future loadUnreadCount() async {
-    final count = await chatsRepository.unreadMessagesCountUsingReadCursors(widget.chat.id, widget.userId);
-    if (!mounted) return;
-    if (count != unreadMsgsCount) setState(() => unreadMsgsCount = count);
   }
 
   @override
@@ -223,20 +213,25 @@ class _ChatListItemState extends State<ChatListItem> {
               child: Text(context.l10n.chats_ChatListItem_empty, style: textStyle),
             ),
           ),
-        if (unreadMsgsCount > 0) ...[
-          const SizedBox(width: 8),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Text(
-              '$unreadMsgsCount',
-              style: const TextStyle(color: Colors.white, fontSize: 12),
-            ),
-          ),
-        ]
+        BlocBuilder<UnreadCountCubit, UnreadCountState>(
+          builder: (context, state) {
+            final count = state.unreadCountForChat(widget.chat.id);
+            if (count == 0) return const SizedBox();
+
+            return Container(
+              margin: const EdgeInsets.only(left: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                '$count',
+                style: const TextStyle(color: Colors.white, fontSize: 12),
+              ),
+            );
+          },
+        ),
       ],
     );
   }

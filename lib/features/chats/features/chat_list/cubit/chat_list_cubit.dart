@@ -9,6 +9,8 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 
 part 'chat_list_state.dart';
 
+// TODO: fetch with last message and sort by last message date
+
 final _logger = Logger('ChatListCubit');
 
 class ChatListCubit extends Cubit<ChatListState> {

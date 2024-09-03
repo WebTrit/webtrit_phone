@@ -240,6 +240,8 @@ class OutboxQueueWorker {
 
       if (r.isOk) {
         await _outboxRepository.deleteOutboxReadCursor(readCursor.chatId);
+        final c = ChatMessageReadCursor(chatId: readCursor.chatId, userId: _client.userId!, time: readCursor.time);
+        await _chatsRepository.upsertChatMessageReadCursor(c);
         _logger.info('After isOk on read cursor: ${readCursor.chatId}');
       }
       if (r.isError) throw Exception('Error processing read cursor');
