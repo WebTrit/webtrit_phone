@@ -394,6 +394,8 @@
   "@notifications_errorSnackBar_callUndefinedLine": {},
   "notifications_errorSnackBar_callUserMedia": "Немає доступу до медіа-входу, будь ласка, перевірте дозволи програми",
   "@notifications_errorSnackBar_callUserMedia": {},
+  "notifications_errorSnackBar_activeLineBlindTransferWarning": "Ви вже на лінії з одержувачем, до якого намагаєтеся здійснити безумовний переказ",
+  "@notifications_errorSnackBar_activeLineBlindTransferWarning": {},
   "notImplemented": "Вибачте, ця функція ще не реалізована",
   "@notImplemented": {},
   "permission_Button_request": "Продовжити",
