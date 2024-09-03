@@ -38,6 +38,16 @@ class RecentScreen extends StatelessWidget {
                     radius: 50,
                   ),
                 ),
+                CopyToClipboard(
+                  data: recent.number,
+                  child: Text(
+                    recent.number,
+                    style: themeData.textTheme.labelLarge?.copyWith(
+                      color: themeData.colorScheme.outlineVariant,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
                 Text(
                   recent.name,
                   style: themeData.textTheme.headlineMedium,
