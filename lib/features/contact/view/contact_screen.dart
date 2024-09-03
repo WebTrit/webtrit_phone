@@ -5,6 +5,7 @@ import 'package:auto_route/auto_route.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/features/call/call.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../contact.dart';
@@ -32,6 +33,7 @@ class ContactScreen extends StatelessWidget {
             return BlocBuilder<CallBloc, CallState>(
               buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
               builder: (context, callState) {
+                final email = state.contactEmails?.firstOrNull?.address;
                 return ListView(
                   children: [
                     Padding(
@@ -39,7 +41,7 @@ class ContactScreen extends StatelessWidget {
                       child: LeadingAvatar(
                         username: contact.name,
                         thumbnail: contact.thumbnail,
-                        thumbnailUrl: contact.thumbnailUrl,
+                        thumbnailUrl: contact.thumbnailUrl ?? gravatarThumbnailUrl(email),
                         registered: contact.registered,
                         radius: 50,
                       ),
