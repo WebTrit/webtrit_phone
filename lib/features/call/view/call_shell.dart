@@ -72,15 +72,7 @@ class _CallShellState extends State<CallShell> {
 
         if (state.display == CallDisplay.screen) {
           if (!router.isRouteActive(CallScreenPageRoute.name)) {
-            // Utilize navigate instead of push for CallScreenPageRoute to prevent route duplication.
-            // Using router.push(const CallScreenPageRoute()) adds a new instance of the route to the stack,
-            // even if MainScreenPageRoute is already present. This can lead to unnecessary duplication of routes,
-            // complicating the navigation stack and potentially causing unexpected behavior.
-            // The router.navigate(const CallScreenPageRoute()) method ensures that if the route already exists
-            // in the stack, it will not be duplicated. This approach streamlines the navigation flow by reusing
-            // the existing route instance and removing any redundant routes, resulting in a cleaner and more
-            // predictable navigation experience.
-            router.navigate(const CallScreenPageRoute());
+            _openCallScreen(router);
           }
         } else {
           if (router.isRouteActive(CallScreenPageRoute.name)) {
@@ -97,7 +89,7 @@ class _CallShellState extends State<CallShell> {
           } else {
             final avatar = ThumbnailAvatar(
               stickyPadding: widget.stickyPadding,
-              onTap: () => router.push(const CallScreenPageRoute()),
+              onTap: () => _openCallScreen(router),
             );
             _avatar = avatar;
             avatar.insert(context, state);
@@ -117,6 +109,12 @@ class _CallShellState extends State<CallShell> {
       },
       child: child,
     );
+  }
+
+  void _openCallScreen(StackRouter router) {
+    // Use navigate to prevent duplicating CallScreenPageRoute in the stack.
+    // For example, if the user is on a different route branch like LogRecordsConsoleScreenPageRoute, navigate ensures CallScreenPageRoute is not added again.
+    router.navigate(const CallScreenPageRoute());
   }
 }
 
