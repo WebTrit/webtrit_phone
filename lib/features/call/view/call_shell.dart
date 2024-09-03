@@ -72,7 +72,15 @@ class _CallShellState extends State<CallShell> {
 
         if (state.display == CallDisplay.screen) {
           if (!router.isRouteActive(CallScreenPageRoute.name)) {
-            router.push(const CallScreenPageRoute());
+            // Utilize navigate instead of push for CallScreenPageRoute to prevent route duplication.
+            // Using router.push(const CallScreenPageRoute()) adds a new instance of the route to the stack,
+            // even if MainScreenPageRoute is already present. This can lead to unnecessary duplication of routes,
+            // complicating the navigation stack and potentially causing unexpected behavior.
+            // The router.navigate(const CallScreenPageRoute()) method ensures that if the route already exists
+            // in the stack, it will not be duplicated. This approach streamlines the navigation flow by reusing
+            // the existing route instance and removing any redundant routes, resulting in a cleaner and more
+            // predictable navigation experience.
+            router.navigate(const CallScreenPageRoute());
           }
         } else {
           if (router.isRouteActive(CallScreenPageRoute.name)) {
