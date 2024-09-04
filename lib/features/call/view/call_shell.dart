@@ -76,7 +76,11 @@ class _CallShellState extends State<CallShell> {
           }
         } else {
           if (router.isRouteActive(CallScreenPageRoute.name)) {
-            router.back();
+            if (state.isBlingTransferInitiated) {
+              router.navigate(const MainScreenPageRoute());
+            } else {
+              router.back();
+            }
           }
         }
 
