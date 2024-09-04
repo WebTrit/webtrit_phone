@@ -77,7 +77,7 @@ class _CallShellState extends State<CallShell> {
         } else {
           if (router.isRouteActive(CallScreenPageRoute.name)) {
             if (state.isBlingTransferInitiated) {
-              router.popUntil((route) => route.settings.name == MainScreenPageRoute.name, scoped: false);
+              router.navigate(const MainScreenPageRoute());
             } else {
               router.back();
             }
