@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 
 @RoutePage()
 class KeypadScreenPage extends StatelessWidget {
@@ -17,7 +18,9 @@ class KeypadScreenPage extends StatelessWidget {
       title: Text(EnvironmentConfig.APP_NAME),
     );
     final provider = BlocProvider(
-      create: (context) => KeypadCubit(),
+      create: (context) => KeypadCubit(
+        context.read<ContactsRepository>(),
+      ),
       child: widget,
     );
     return provider;

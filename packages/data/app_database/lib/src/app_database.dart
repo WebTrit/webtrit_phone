@@ -292,6 +292,16 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
 
   Future<List<ContactData>> getAllContacts([ContactSourceTypeEnum? sourceType]) => _selectAllContacts(sourceType).get();
 
+  Future<List<ContactData>> getContactsByPhoneNumber(String number) async {
+    final query = select(contactsTable)
+        .join([innerJoin(contactPhonesTable, contactPhonesTable.contactId.equalsExp(contactsTable.id))])
+      ..groupBy([contactPhonesTable.contactId])
+      ..where(contactPhonesTable.number.equals(number));
+
+    final results = await query.get();
+    return results.map((row) => row.readTable(contactsTable)).toList();
+  }
+
   Stream<List<ContactData>> watchAllNotEmptyContacts([ContactSourceTypeEnum? sourceType]) {
     final q = _selectAllContacts(sourceType);
     q.where(
