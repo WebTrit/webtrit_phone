@@ -14,11 +14,15 @@ class MigrationV8 extends Migration {
     final readCursorsOutboxTable = v8.ChatOutboxReadCursors(db);
     final chatMessagesTable = v8.ChatMessages(db);
     final syncCursorsTable = v8.ChatMessageSyncCursors(db);
-    await m.createTable(readCursorsTable);
-    await m.createTable(readCursorsOutboxTable);
+
+    // recreate tables with breaking changes
     await m.deleteTable(chatMessagesTable.aliasedName);
     await m.createTable(chatMessagesTable);
     await m.deleteTable(syncCursorsTable.aliasedName);
     await m.createTable(syncCursorsTable);
+
+    // create new tables
+    await m.createTable(readCursorsTable);
+    await m.createTable(readCursorsOutboxTable);
   }
 }
