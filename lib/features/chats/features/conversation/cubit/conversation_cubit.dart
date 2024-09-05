@@ -299,7 +299,6 @@ class ConversationCubit extends Cubit<ConversationState> {
     int chatId,
     void Function(List<ChatOutboxMessageEditEntry>) onArrive,
   ) {
-    // TODO: query with chatId
     return _outboxRepository.watchChatOutboxMessageEdits().listen((entries) {
       final chatQueueEntries = entries.where((e) => e.chatId == chatId).toList();
       onArrive(chatQueueEntries);
@@ -316,7 +315,6 @@ class ConversationCubit extends Cubit<ConversationState> {
     int chatId,
     void Function(List<ChatOutboxMessageDeleteEntry>) onArrive,
   ) {
-    // TODO: query with chatId
     return _outboxRepository.watchChatOutboxMessageDeletes().listen((entries) {
       final chatQueueEntries = entries.where((e) => e.chatId == chatId).toList();
       onArrive(chatQueueEntries);

@@ -56,7 +56,7 @@ class UnreadCountState with EquatableMixin {
 
   factory UnreadCountState.fromCountPerChat(Map<int, int> chatUnreadCounts) {
     final totalUnreadCount = chatUnreadCounts.values.fold(0, (sum, count) => sum + count);
-    final chatsWithUnreadCount = chatUnreadCounts.keys.length;
+    final chatsWithUnreadCount = chatUnreadCounts.values.where((count) => count > 0).length;
     return UnreadCountState._(chatUnreadCounts, totalUnreadCount, chatsWithUnreadCount);
   }
 

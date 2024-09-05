@@ -135,8 +135,8 @@ class ChatsRepository with ChatsDriftMapper {
       userId: cursor.userId,
       timestampUsec: cursor.time.microsecondsSinceEpoch,
     );
-    await _chatsDao.upsertChatMessageReadCursor(data);
-    _addEvent(ChatReadCursorUpdate(cursor));
+    final inserted = await _chatsDao.upsertChatMessageReadCursor(data);
+    if (inserted != null) _addEvent(ChatReadCursorUpdate(cursor));
   }
 
   Future<Map<int, int>> unreadedCountPerChat(String userId) {

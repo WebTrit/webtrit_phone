@@ -1067,8 +1067,16 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
 
   // Message read cursors
 
-  Future<int> upsertChatMessageReadCursor(Insertable<ChatMessageReadCursorData> chatMessageReadCursor) {
-    return into(chatMessageReadCursorTable).insertOnConflictUpdate(chatMessageReadCursor);
+  Future<ChatMessageReadCursorData?> upsertChatMessageReadCursor(ChatMessageReadCursorData chatMessageReadCursor) {
+    return into(chatMessageReadCursorTable).insertReturningOrNull(
+      chatMessageReadCursor,
+      mode: InsertMode.insertOrReplace,
+      onConflict: DoUpdate(
+        (_) => chatMessageReadCursor,
+        target: [chatMessageReadCursorTable.chatId, chatMessageReadCursorTable.userId],
+        where: (old) => old.timestampUsec.isSmallerOrEqualValue(chatMessageReadCursor.timestampUsec),
+      ),
+    );
   }
 
   Future<ChatMessageReadCursorData?> getChatMessageReadCursor(int chatId, String userId) async {
@@ -1201,11 +1209,15 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   }
 
   Future upsertChatOutboxReadCursor(ChatOutboxReadCursorData newCursor) async {
-    final oldCursor = await getChatOutboxReadCursor(newCursor.chatId);
-    if (oldCursor != null &&
-        oldCursor.timestampUsec >= newCursor.timestampUsec &&
-        oldCursor.sendAttempts == newCursor.sendAttempts) return;
-    return into(chatOutboxReadCursorsTable).insertOnConflictUpdate(newCursor);
+    return await into(chatOutboxReadCursorsTable).insert(
+      newCursor,
+      mode: InsertMode.insertOrReplace,
+      onConflict: DoUpdate(
+        (_) => newCursor,
+        target: [chatOutboxReadCursorsTable.chatId],
+        where: (old) => old.timestampUsec.isSmallerThanValue(newCursor.timestampUsec),
+      ),
+    );
   }
 
   Future<int> deleteChatOutboxReadCursor(int chatId) {
