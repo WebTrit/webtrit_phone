@@ -136,142 +136,303 @@ class WebtritApiClient {
   Future<dynamic> _httpClientExecuteGet(
     List<String> pathSegments,
     Map<String, String>? headers,
-    String? token,
-  ) {
-    return _httpClientExecute('get', pathSegments, token, null);
+    String? token, {
+    RequestOptions options = const RequestOptions(),
+  }) {
+    return _httpClientExecute(
+      'get',
+      pathSegments,
+      token,
+      null,
+      options: options,
+    );
   }
 
   Future<dynamic> _httpClientExecutePost(
     List<String> pathSegments,
     Map<String, String>? headers,
     String? token,
-    Object? requestDataJson,
-  ) {
-    return _httpClientExecute('post', pathSegments, token, requestDataJson, headers: headers);
+    Object? requestDataJson, {
+    RequestOptions options = const RequestOptions(),
+  }) {
+    return _httpClientExecute(
+      'post',
+      pathSegments,
+      token,
+      requestDataJson,
+      headers: headers,
+      options: options,
+    );
   }
 
   Future<dynamic> _httpClientExecutePatch(
     List<String> pathSegments,
     Map<String, String>? headers,
     String? token,
-    Object? requestDataJson,
-  ) {
-    return _httpClientExecute('patch', pathSegments, token, requestDataJson);
+    Object? requestDataJson, {
+    RequestOptions options = const RequestOptions(),
+  }) {
+    return _httpClientExecute(
+      'patch',
+      pathSegments,
+      token,
+      requestDataJson,
+      options: options,
+    );
   }
 
   Future<dynamic> _httpClientExecuteDelete(
     List<String> pathSegments,
     Map<String, String>? headers,
-    String? token,
-  ) {
-    return _httpClientExecute('delete', pathSegments, token, null);
+    String? token, {
+    RequestOptions options = const RequestOptions(),
+  }) {
+    return _httpClientExecute(
+      'delete',
+      pathSegments,
+      token,
+      null,
+      options: options,
+    );
   }
 
-  Future<SystemInfo> getSystemInfo() async {
-    final responseJson = await _httpClientExecuteGet(['system-info'], null, null);
+  Future<SystemInfo> getSystemInfo({
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final responseJson = await _httpClientExecuteGet(
+      ['system-info'],
+      null,
+      null,
+      options: options,
+    );
 
     return SystemInfo.fromJson(responseJson);
   }
 
-  Future<SessionResult> createUser(SessionUserCredential sessionUserCredential) async {
+  Future<SessionResult> createUser(
+    SessionUserCredential sessionUserCredential, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
     final requestJson = sessionUserCredential.toJson();
 
-    final responseJson = await _httpClientExecutePost(['user'], null, null, requestJson);
+    final responseJson = await _httpClientExecutePost(
+      ['user'],
+      null,
+      null,
+      requestJson,
+      options: options,
+    );
 
     return SessionResult.fromJson(responseJson);
   }
 
-  Future<SessionOtpProvisional> createSessionOtp(SessionOtpCredential sessionOtpCredential) async {
+  Future<SessionOtpProvisional> createSessionOtp(
+    SessionOtpCredential sessionOtpCredential, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
     final requestJson = sessionOtpCredential.toJson();
 
-    final responseJson = await _httpClientExecutePost(['session', 'otp-create'], null, null, requestJson);
+    final responseJson = await _httpClientExecutePost(
+      ['session', 'otp-create'],
+      null,
+      null,
+      requestJson,
+      options: options,
+    );
 
     return SessionOtpProvisional.fromJson(responseJson);
   }
 
-  Future<SessionToken> verifySessionOtp(SessionOtpProvisional sessionOtpProvisional, String code) async {
+  Future<SessionToken> verifySessionOtp(
+    SessionOtpProvisional sessionOtpProvisional,
+    String code, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
     final requestJson = {
       'otp_id': sessionOtpProvisional.otpId,
       'code': code,
     };
 
-    final responseJson = await _httpClientExecutePost(['session', 'otp-verify'], null, null, requestJson);
+    final responseJson = await _httpClientExecutePost(
+      ['session', 'otp-verify'],
+      null,
+      null,
+      requestJson,
+      options: options,
+    );
     return SessionToken.fromJson(responseJson);
   }
 
-  Future<SessionToken> createSession(SessionLoginCredential sessionLoginCredential) async {
+  Future<SessionToken> createSession(
+    SessionLoginCredential sessionLoginCredential, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
     final requestJson = sessionLoginCredential.toJson();
 
-    final responseJson = await _httpClientExecutePost(['session'], null, null, requestJson);
+    final responseJson = await _httpClientExecutePost(
+      ['session'],
+      null,
+      null,
+      requestJson,
+      options: options,
+    );
 
     return SessionToken.fromJson(responseJson);
   }
 
-  Future<SessionToken> createSessionAutoProvision(SessionAutoProvisionCredential sessionAutoProvisionCredential) async {
+  Future<SessionToken> createSessionAutoProvision(
+    SessionAutoProvisionCredential sessionAutoProvisionCredential, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
     final requestJson = sessionAutoProvisionCredential.toJson();
 
-    final responseJson = await _httpClientExecutePost(['session', 'auto-provision'], null, null, requestJson);
+    final responseJson = await _httpClientExecutePost(
+      ['session', 'auto-provision'],
+      null,
+      null,
+      requestJson,
+      options: options,
+    );
 
     return SessionToken.fromJson(responseJson);
   }
 
-  Future<void> deleteSession(String token) async {
-    await _httpClientExecuteDelete(['session'], null, token);
+  Future<void> deleteSession(
+    String token, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    await _httpClientExecuteDelete(
+      ['session'],
+      null,
+      token,
+      options: options,
+    );
   }
 
-  Future<UserInfo> getUserInfo(String token) async {
-    final responseJson = await _httpClientExecuteGet(['user'], null, token);
+  Future<UserInfo> getUserInfo(
+    String token, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final responseJson = await _httpClientExecuteGet(
+      ['user'],
+      null,
+      token,
+      options: options,
+    );
 
     return UserInfo.fromJson(responseJson);
   }
 
-  Future<List<UserContact>> getUserContactList(String token) async {
-    final responseJson = await _httpClientExecuteGet(['user', 'contacts'], null, token);
+  Future<List<UserContact>> getUserContactList(
+    String token, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final responseJson = await _httpClientExecuteGet(
+      ['user', 'contacts'],
+      null,
+      token,
+      options: options,
+    );
 
     return (responseJson['items'] as List<dynamic>)
         .map((e) => UserContact.fromJson(e as Map<String, dynamic>))
         .toList();
   }
 
-  Future<void> deleteUserInfo(String token) async {
-    await _httpClientExecuteDelete(['user'], null, token);
+  Future<void> deleteUserInfo(
+    String token, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    await _httpClientExecuteDelete(
+      ['user'],
+      null,
+      token,
+      options: options,
+    );
   }
 
-  Future<AppStatus> getAppStatus(String token) async {
-    final responseJson = await _httpClientExecuteGet(['app', 'status'], null, token);
+  Future<AppStatus> getAppStatus(
+    String token, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final responseJson = await _httpClientExecuteGet(
+      ['app', 'status'],
+      null,
+      token,
+      options: options,
+    );
 
     return AppStatus.fromJson(responseJson);
   }
 
-  Future<void> updateAppStatus(String token, AppStatus appStatus) async {
+  Future<void> updateAppStatus(
+    String token,
+    AppStatus appStatus, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
     final requestJson = appStatus.toJson();
 
-    await _httpClientExecutePatch(['app', 'status'], null, token, requestJson);
+    await _httpClientExecutePatch(
+      ['app', 'status'],
+      null,
+      token,
+      requestJson,
+      options: options,
+    );
   }
 
-  Future<void> createAppContact(String token, List<AppContact> appContacts) async {
+  Future<void> createAppContact(
+    String token,
+    List<AppContact> appContacts, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
     final requestJson = appContacts.map((e) => e.toJson()).toList();
 
-    await _httpClientExecutePost(['app', 'contacts'], null, token, requestJson);
+    await _httpClientExecutePost(
+      ['app', 'contacts'],
+      null,
+      token,
+      requestJson,
+      options: options,
+    );
   }
 
-  Future<List<AppSmartContact>> getAppSmartContactList(String token) async {
-    final responseJson = await _httpClientExecuteGet(['app', 'contacts', 'smart'], null, token);
+  Future<List<AppSmartContact>> getAppSmartContactList(
+    String token, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final responseJson = await _httpClientExecuteGet(
+      ['app', 'contacts', 'smart'],
+      null,
+      token,
+      options: options,
+    );
 
     return (responseJson as List<dynamic>).map((e) => AppSmartContact.fromJson(e as Map<String, dynamic>)).toList();
   }
 
-  Future<void> createAppPushToken(String token, AppPushToken appPushToken) async {
+  Future<void> createAppPushToken(
+    String token,
+    AppPushToken appPushToken, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
     final requestJson = appPushToken.toJson();
 
-    await _httpClientExecutePost(['app', 'push-tokens'], null, token, requestJson);
+    await _httpClientExecutePost(
+      ['app', 'push-tokens'],
+      null,
+      token,
+      requestJson,
+      options: options,
+    );
   }
 
   Future<DemoCallToActionsResponse> getCallToActions(
     String token,
     String locale,
-    DemoCallToActionsParam callToActionsParam,
-  ) async {
+    DemoCallToActionsParam callToActionsParam, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
     final requestJson = callToActionsParam.toJson();
 
     final responseJson = await _httpClientExecutePost(
@@ -279,6 +440,7 @@ class WebtritApiClient {
       {'Accept-Language': locale},
       token,
       requestJson,
+      options: options,
     );
 
     return DemoCallToActionsResponse.fromJson(responseJson);
