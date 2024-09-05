@@ -8,6 +8,7 @@ import 'package:meta/meta.dart';
 import 'package:_http_client/_http_client.dart';
 
 import 'exceptions.dart';
+import 'webtrit_api_request_options.dart';
 import 'models/models.dart';
 
 class WebtritApiClient {
@@ -67,52 +68,64 @@ class WebtritApiClient {
     Object? requestDataJson, {
     String? requestId,
     Map<String, String>? headers,
+    RequestOptions options = const RequestOptions(),
   }) async {
-    final url = tenantUrl.replace(
-      pathSegments: [
-        ...tenantUrl.pathSegments,
-        'api',
-        'v1',
-        ...pathSegments,
-      ],
-    );
-    final httpRequest = http.Request(method, url);
+    int requestAttempt = 0;
+    while (true) {
+      try {
+        final url = tenantUrl.replace(
+          pathSegments: [
+            ...tenantUrl.pathSegments,
+            'api',
+            'v1',
+            ...pathSegments,
+          ],
+        );
+        final httpRequest = http.Request(method, url);
 
-    final xRequestId = requestId ?? _generateRequestId();
+        final xRequestId = requestId ?? _generateRequestId();
 
-    httpRequest.headers.addAll({
-      'content-type': 'application/json; charset=utf-8',
-      'accept': 'application/json',
-      'x-request-id': xRequestId,
-      if (token != null) 'authorization': 'Bearer $token',
-    });
+        httpRequest.headers.addAll({
+          'content-type': 'application/json; charset=utf-8',
+          'accept': 'application/json',
+          'x-request-id': xRequestId,
+          if (token != null) 'authorization': 'Bearer $token',
+        });
 
-    if (headers != null) {
-      httpRequest.headers.addAll(headers);
-    }
+        if (headers != null) {
+          httpRequest.headers.addAll(headers);
+        }
 
-    if (requestDataJson != null) {
-      httpRequest.body = jsonEncode(requestDataJson);
-    }
-    final httpResponse = await http.Response.fromStream(await _httpClient.send(httpRequest));
+        if (requestDataJson != null) {
+          httpRequest.body = jsonEncode(requestDataJson);
+        }
+        final httpResponse = await http.Response.fromStream(await _httpClient.send(httpRequest));
 
-    final responseData = httpResponse.body;
-    final responseDataJson = responseData.isEmpty ? {} : jsonDecode(responseData);
+        final responseData = httpResponse.body;
+        final responseDataJson = responseData.isEmpty ? {} : jsonDecode(responseData);
 
-    if (httpResponse.statusCode == 200 || httpResponse.statusCode == 204) {
-      return responseDataJson;
-    } else {
-      final error = switch (responseDataJson) {
-        Map(isEmpty: true) => null,
-        {'errors': {'detail': _}} => null,
-        _ => ErrorResponse.fromJson(responseDataJson),
-      };
-      throw RequestFailure(
-        statusCode: httpResponse.statusCode,
-        requestId: xRequestId,
-        token: token,
-        error: error,
-      );
+        if (httpResponse.statusCode == 200 || httpResponse.statusCode == 204) {
+          return responseDataJson;
+        } else {
+          final error = switch (responseDataJson) {
+            Map(isEmpty: true) => null,
+            {'errors': {'detail': _}} => null,
+            _ => ErrorResponse.fromJson(responseDataJson),
+          };
+          throw RequestFailure(
+            statusCode: httpResponse.statusCode,
+            requestId: xRequestId,
+            token: token,
+            error: error,
+          );
+        }
+      } catch (e) {
+        if (requestAttempt >= options.retries) {
+          rethrow;
+        }
+        requestAttempt++;
+        await Future.delayed(options.retryDelay);
+      }
     }
   }
 
