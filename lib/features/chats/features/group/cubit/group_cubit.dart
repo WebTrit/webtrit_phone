@@ -34,7 +34,8 @@ class GroupCubit extends Cubit<GroupState> {
   final ChatsRepository _chatsRepository;
   final ChatsOutboxRepository _outboxRepository;
 
-  StreamSubscription? _chatSub;
+  StreamSubscription? _chatUpdateSub;
+  StreamSubscription? _chatRemoveSub;
   StreamSubscription? _messagesSub;
   StreamSubscription? _outboxMessagesSub;
   StreamSubscription? _outboxMessageEditsSub;
@@ -263,7 +264,8 @@ class GroupCubit extends Cubit<GroupState> {
       if (isClosed) return;
       emit(GroupState.ready(_chatId, chat, messages: messages));
 
-      _chatSub = _chatUpdateSubFactory(_handleChatUpdate);
+      _chatUpdateSub = _chatUpdateSubFactory(_handleChatUpdate);
+      _chatRemoveSub = _chatRemoveSubFactory(_handleChatRemove);
       _messagesSub = _messagesSubFactory(_handleMessageUpdate);
       _outboxMessagesSub = _outboxMessagesSubFactory(_handleOutboxMessagesUpdate);
       _outboxMessageEditsSub = _outboxMessageEditsSubFactory(_handleOutboxMessageEditsUpdate);
@@ -286,6 +288,17 @@ class GroupCubit extends Cubit<GroupState> {
     _logger.info('_handleChatUpdate: $chat');
     final state = this.state;
     if (state is GroupStateReady) emit(state.copyWith(chat: chat));
+  }
+
+  StreamSubscription _chatRemoveSubFactory(void Function(int) onArrive) {
+    return _chatsRepository.eventBus.whereType<ChatRemove>().listen((event) {
+      onArrive(event.chatId);
+    });
+  }
+
+  void _handleChatRemove(int chatId) {
+    _logger.info('_handleChatRemove: $chatId');
+    if (chatId == _chatId) emit(GroupState.left(_chatId));
   }
 
   StreamSubscription _messagesSubFactory(void Function(ChatMessage) onArrive) {
@@ -361,7 +374,8 @@ class GroupCubit extends Cubit<GroupState> {
   }
 
   void _cancelSubs() {
-    _chatSub?.cancel();
+    _chatUpdateSub?.cancel();
+    _chatRemoveSub?.cancel();
     _messagesSub?.cancel();
     _outboxMessagesSub?.cancel();
     _outboxMessageEditsSub?.cancel();

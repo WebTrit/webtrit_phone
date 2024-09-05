@@ -209,12 +209,13 @@ class _MessageViewState extends State<MessageView> {
               const SizedBox(height: 4),
               Row(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Icon(Icons.access_time, color: Colors.blue[100], size: 10),
                   const SizedBox(width: 2),
                   Text(
                     DateFormat('HH:mm').format(chatMessage!.createdAt),
-                    style: TextStyle(color: Colors.blue[100], fontSize: 10),
+                    style: TextStyle(color: Colors.blue[100], fontSize: 10, height: 1),
                     textAlign: TextAlign.right,
                   ),
                 ],

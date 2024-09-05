@@ -35,7 +35,8 @@ class ConversationCubit extends Cubit<ConversationState> {
   final ChatsOutboxRepository _outboxRepository;
 
   Chat? _chat;
-  StreamSubscription? _chatSub;
+  StreamSubscription? _chatUpdateSub;
+  StreamSubscription? _chatRemoveSub;
   StreamSubscription? _messagesSub;
   StreamSubscription? _outboxMessagesSub;
   StreamSubscription? _outboxMessageEditsSub;
@@ -202,7 +203,8 @@ class ConversationCubit extends Cubit<ConversationState> {
 
       // If local chat is not found, subscribtion will find the chat when it will created
       // e.g when you send the first message or another user sends to you
-      _chatSub = _chatUpdateSubFactory(_handleChatUpdate);
+      _chatUpdateSub = _chatUpdateSubFactory(_handleChatUpdate);
+      _chatRemoveSub = _chatRemoveSubFactory(_handleChatRemove);
       _outboxMessagesSub = _outboxMessagesSubFactory(_handleOutboxMessagesUpdate);
 
       if (_chat != null) await _initMessages(_chat!.id);
@@ -252,6 +254,17 @@ class ConversationCubit extends Cubit<ConversationState> {
 
     // Init messages after chat is created for conversation with the participant
     if (chatWasntExistBefore) _initMessages(chat.id);
+  }
+
+  StreamSubscription _chatRemoveSubFactory(void Function(int) onArrive) {
+    return _chatsRepository.eventBus.whereType<ChatRemove>().listen((event) {
+      onArrive(event.chatId);
+    });
+  }
+
+  void _handleChatRemove(int chatId) {
+    _logger.info('_handleChatRemove: $chatId');
+    if (_chat?.id == chatId) emit(ConversationState.left(_participantId));
   }
 
   StreamSubscription _messagesSubFactory(int chatId, void Function(ChatMessage) onArrive) {
@@ -335,7 +348,8 @@ class ConversationCubit extends Cubit<ConversationState> {
   }
 
   _cancelSubs() {
-    _chatSub?.cancel();
+    _chatUpdateSub?.cancel();
+    _chatRemoveSub?.cancel();
     _messagesSub?.cancel();
     _outboxMessagesSub?.cancel();
     _outboxMessageEditsSub?.cancel();

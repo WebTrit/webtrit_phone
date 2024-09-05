@@ -9,6 +9,7 @@ abstract base class ConversationState {
 
   factory ConversationState.init(String participantId) => CVSInit(participantId);
   factory ConversationState.error(String participantId, Object error) => CVSError(participantId, error);
+  factory ConversationState.left(String participantId) => CVSLeft(participantId);
   factory ConversationState.ready(String participantId, {Chat? chat, List<ChatMessage> messages = const []}) {
     return CVSReady(participantId, messages: messages, chat: chat);
   }
@@ -37,6 +38,17 @@ final class CVSError extends ConversationState with EquatableMixin {
 
   @override
   List<Object> get props => [participantId, error];
+}
+
+/// Represents the state of the conversation after user leaved/removed.
+final class CVSLeft extends ConversationState with EquatableMixin {
+  const CVSLeft(this.participantId);
+
+  @override
+  final String participantId;
+
+  @override
+  List<Object> get props => [participantId];
 }
 
 /// Represents the state of the conversation cubit when the conversation is ready.

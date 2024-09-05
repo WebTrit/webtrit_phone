@@ -2,7 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:auto_route/auto_route.dart';
 
+import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -28,6 +30,10 @@ class _GroupScreenState extends State<GroupScreen> {
         listener: (context, state) {
           if (state is GroupStateReady) {
             context.read<ChatTypingCubit>().init(state.chat.id);
+          }
+          if (state is GroupStateLeft) {
+            const route = ChatsRouterPageRoute(children: [ChatListScreenPageRoute()]);
+            context.router.navigate(route);
           }
         },
         builder: (context, state) {

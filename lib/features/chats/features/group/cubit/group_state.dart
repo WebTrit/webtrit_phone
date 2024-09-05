@@ -7,6 +7,7 @@ abstract base class GroupState {
 
   factory GroupState.init(int chatId) => GroupStateInit(chatId);
   factory GroupState.error(int chatId, Object error) => GroupStateError(chatId, error);
+  factory GroupState.left(int chatId) => GroupStateLeft(chatId);
   factory GroupState.ready(int chatId, Chat chat, {List<ChatMessage> messages = const []}) {
     return GroupStateReady(chatId, chat, messages: messages);
   }
@@ -35,6 +36,17 @@ final class GroupStateError extends GroupState with EquatableMixin {
 
   @override
   List<Object> get props => [chatId, error];
+}
+
+/// Represents the state of the group after user leaved/removed.
+final class GroupStateLeft extends GroupState with EquatableMixin {
+  const GroupStateLeft(this.chatId);
+
+  @override
+  final int chatId;
+
+  @override
+  List<Object> get props => [chatId];
 }
 
 /// Represents the state of the group cubit when the group is ready.
