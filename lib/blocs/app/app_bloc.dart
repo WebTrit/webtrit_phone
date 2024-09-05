@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:logging/logging.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
@@ -17,6 +18,8 @@ part 'app_bloc.freezed.dart';
 part 'app_event.dart';
 
 part 'app_state.dart';
+
+final _logger = Logger('AppBloc');
 
 class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc({
@@ -87,6 +90,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       emit(state.copyWith(
         accountErrorCode: AccountErrorCode.values.firstWhereOrNull((it) => it.value == e.error?.code),
       ));
+    } catch (e) {
+      _logger.severe('_onLogouted', e);
     }
 
     await _cleanUpUserData();
