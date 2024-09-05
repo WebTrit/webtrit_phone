@@ -94,6 +94,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     } catch (e, stackTrace) {
       _logger.warning('_onLogouted', e, stackTrace);
 
+      // TODO(Serdun): Implement a queue for logging out the server session once the connection is re-established.
       appBloc.add(const AppLogouted());
       notificationsBloc.add(NotificationsSubmitted(DefaultErrorNotification(e)));
 
