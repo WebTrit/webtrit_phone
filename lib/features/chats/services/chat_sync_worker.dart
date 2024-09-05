@@ -239,18 +239,6 @@ class ChatsSyncWorker {
             yield chatMsg;
           }
 
-          if (e.event.value == 'messages_viewed') {
-            final messageIds = (e.payload!['message_ids'] as List).cast<int>();
-            final viewedAt = DateTime.parse(e.payload!['viewed_at'] as String);
-            await chatsRepository.updateViews(messageIds, viewedAt);
-            await chatsRepository.upsertChatMessageSyncCursor(ChatMessageSyncCursor(
-              chatId: chatId,
-              cursorType: MessageSyncCursorType.newest,
-              time: viewedAt,
-            ));
-            yield {'event': 'viewed', messageIds: messageIds, viewedAt: viewedAt};
-          }
-
           if (e.event.value == 'chat:cursor:set') {
             final cursor = ChatMessageReadCursor.fromMap(e.payload as Map<String, dynamic>);
             await chatsRepository.upsertChatMessageReadCursor(cursor);

@@ -78,23 +78,6 @@ class ChatsRepository with ChatsDriftMapper {
     }
   }
 
-  Future<void> updateViews(List<int> messageIds, DateTime viewedAt) async {
-    final messages = await _chatsDao.updateViews(messageIds, viewedAt);
-    for (final message in messages) {
-      _addEvent(ChatMessageUpdate(chatMessageFromDrift(message)));
-    }
-  }
-
-  @Deprecated('use cursors instead')
-  Stream<int> unreadMessagesCount(int chatId, String userId) {
-    return _chatsDao.unreadMessagesCount(chatId, userId);
-  }
-
-  @Deprecated('use cursors instead')
-  Stream<int> chatsWithUnreadedMessagesCount(String userId) {
-    return _chatsDao.chatsWithUnreadedMessagesCount(userId);
-  }
-
   Future<void> insertHistoryPage(List<ChatMessage> messages) async {
     for (final message in messages) {
       await upsertMessage(message, silent: true);

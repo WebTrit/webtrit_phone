@@ -22,7 +22,6 @@ part 'app_database.g.dart';
     ChatOutboxMessageTable,
     ChatOutboxMessageEditTable,
     ChatOutboxMessageDeleteTable,
-    ChatOutboxMessageViewsTable,
     ChatOutboxReadCursorsTable,
   ],
   daos: [
@@ -351,9 +350,6 @@ class ChatMessagesTable extends Table {
 
   TextColumn get content => text()();
 
-  @Deprecated('Will be removed in the future, use cursors instead')
-  DateTimeColumn get viewedAt => dateTime().nullable()();
-
   IntColumn get createdAtRemoteUsec => integer()();
 
   IntColumn get updatedAtRemoteUsec => integer()();
@@ -447,23 +443,6 @@ class ChatOutboxMessageEditTable extends Table {
 class ChatOutboxMessageDeleteTable extends Table {
   @override
   String get tableName => 'chat_outbox_message_deletes';
-
-  @override
-  Set<Column> get primaryKey => {id};
-
-  IntColumn get id => integer()();
-
-  TextColumn get idKey => text()();
-
-  IntColumn get chatId => integer().references(ChatsTable, #id, onDelete: KeyAction.cascade)();
-
-  IntColumn get sendAttempts => integer().withDefault(const Constant(0))();
-}
-
-@DataClassName('ChatOutboxMessageViewData')
-class ChatOutboxMessageViewsTable extends Table {
-  @override
-  String get tableName => 'chat_outbox_message_views';
 
   @override
   Set<Column> get primaryKey => {id};
@@ -883,7 +862,6 @@ class FavoriteDataWithContactPhoneDataAndContactData {
   ChatOutboxMessageTable,
   ChatOutboxMessageEditTable,
   ChatOutboxMessageDeleteTable,
-  ChatOutboxMessageViewsTable,
   ChatOutboxReadCursorsTable,
 ])
 class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
@@ -1036,35 +1014,6 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
     return into(chatMessagesTable).insertOnConflictUpdate(chatMessage);
   }
 
-  Future<List<ChatMessageData>> updateViews(List<int> messageIds, DateTime viewedAt) async {
-    final q = update(chatMessagesTable)..where((t) => t.id.isIn(messageIds));
-    final r = await q.writeReturning(
-      ChatMessageDataCompanion(
-        viewedAt: Value(viewedAt),
-        updatedAtRemoteUsec: Value(viewedAt.microsecondsSinceEpoch),
-      ),
-    );
-    return r;
-  }
-
-  Stream<int> unreadMessagesCount(int chatId, String userId) {
-    final amount = chatMessagesTable.id.count();
-    var q = (selectOnly(chatMessagesTable)..addColumns([amount]));
-    q.where(
-      chatMessagesTable.chatId.equals(chatId) &
-          chatMessagesTable.senderId.isNotIn([userId]) &
-          chatMessagesTable.viewedAt.isNull(),
-    );
-    return q.watchSingle().map((data) => data.read(amount) ?? 0);
-  }
-
-  Stream<int> chatsWithUnreadedMessagesCount(String userId) {
-    var q = (selectOnly(chatMessagesTable)..addColumns([chatMessagesTable.chatId]));
-    q.where(chatMessagesTable.senderId.isNotIn([userId]) & chatMessagesTable.viewedAt.isNull());
-    q.groupBy([chatMessagesTable.chatId]);
-    return q.watch().map((data) => data.length);
-  }
-
   // Message read cursors
 
   Future<ChatMessageReadCursorData?> upsertChatMessageReadCursor(ChatMessageReadCursorData chatMessageReadCursor) {
@@ -1172,24 +1121,6 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
     return (delete(chatOutboxMessageDeleteTable)..where((t) => t.id.equals(id))).go();
   }
 
-  // Message views outbox
-
-  Future<List<ChatOutboxMessageViewData>> getChatOutboxMessageViews() {
-    return select(chatOutboxMessageViewsTable).get();
-  }
-
-  Stream<List<ChatOutboxMessageViewData>> watchChatOutboxMessageViews() {
-    return select(chatOutboxMessageViewsTable).watch();
-  }
-
-  Future<int> upsertChatOutboxMessageView(ChatOutboxMessageViewData chatOutboxMessageView) {
-    return into(chatOutboxMessageViewsTable).insertOnConflictUpdate(chatOutboxMessageView);
-  }
-
-  Future<int> deleteChatOutboxMessageView(int id) {
-    return (delete(chatOutboxMessageViewsTable)..where((t) => t.id.equals(id))).go();
-  }
-
   // Read cursors outbox
 
   Future<ChatOutboxReadCursorData?> getChatOutboxReadCursor(int chatId) {
@@ -1248,7 +1179,6 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
       await delete(chatOutboxMessageTable).go();
       await delete(chatOutboxMessageEditTable).go();
       await delete(chatOutboxMessageDeleteTable).go();
-      await delete(chatOutboxMessageViewsTable).go();
       await delete(chatOutboxReadCursorsTable).go();
     });
   }

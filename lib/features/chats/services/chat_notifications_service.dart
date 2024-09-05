@@ -50,12 +50,12 @@ class ChatNotificationsService {
   }
 
   Future<void> _handleLocalEvent(ChatsEvent e) async {
+    // TODO: handle read cursor above displayed notifications and dismiss them
     if (e is ChatMessageUpdate) {
-      _logger.info('ChatMessageReceived: ${e.message}');
       final message = e.message;
       if (message.senderId == userId) return;
 
-      if (message.viewedAt != null || message.deletedAt != null) {
+      if (message.deletedAt != null) {
         _dismissNotification(message.id);
       } else {
         _displayNotificationFromEvent(message.chatId, message.senderId, message.id, message.content);

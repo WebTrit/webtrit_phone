@@ -74,24 +74,6 @@ mixin ChatsOutboxDriftMapper {
     );
   }
 
-  ChatOutboxMessageViewEntry chatOutboxMessageViewEntryFromDrift(ChatOutboxMessageViewData data) {
-    return ChatOutboxMessageViewEntry(
-      id: data.id,
-      idKey: data.idKey,
-      chatId: data.chatId,
-      sendAttempts: data.sendAttempts,
-    );
-  }
-
-  ChatOutboxMessageViewData chatOutboxMessageViewDataFromChatOutboxMessageViewEntry(ChatOutboxMessageViewEntry entry) {
-    return ChatOutboxMessageViewData(
-      id: entry.id,
-      idKey: entry.idKey,
-      chatId: entry.chatId,
-      sendAttempts: entry.sendAttempts,
-    );
-  }
-
   ChatOutboxReadCursorEntry chatOutboxReadCursorEntryFromDrift(ChatOutboxReadCursorData data) {
     return ChatOutboxReadCursorEntry(
       chatId: data.chatId,

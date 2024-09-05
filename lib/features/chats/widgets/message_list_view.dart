@@ -29,7 +29,6 @@ class MessageListView extends StatefulWidget {
     required this.onSendForward,
     required this.onSendEdit,
     required this.onDelete,
-    required this.onViewed,
     required this.userReadedUntilUpdate,
     required this.onFetchHistory,
     required this.hasSmsFeature,
@@ -49,7 +48,6 @@ class MessageListView extends StatefulWidget {
   final Function(String content, ChatMessage refMessage) onSendForward;
   final Function(String content, ChatMessage refMessage) onSendEdit;
   final Function(ChatMessage refMessage) onDelete;
-  final Function(ChatMessage refMessage) onViewed;
   final Function(DateTime until) userReadedUntilUpdate;
   final Future Function() onFetchHistory;
   final bool hasSmsFeature;
@@ -118,9 +116,7 @@ class _MessageListViewState extends State<MessageListView> {
       final deleteEntry = widget.outboxMessageDeletes.firstWhereOrNull((element) => element.idKey == msg.idKey);
       final inOutbox = editEntry != null || deleteEntry != null;
 
-      @Deprecated('Use seenNew instead, now used for backward compatibility')
-      final seenOld = msg.viewedAt != null;
-      final seenNew = participantsReadedUntil != null && !msg.createdAt.isAfter(participantsReadedUntil);
+      final seen = participantsReadedUntil != null && !msg.createdAt.isAfter(participantsReadedUntil);
 
       String text = msg.content;
       if (editEntry != null) text = editEntry.newContent;
@@ -138,7 +134,7 @@ class _MessageListViewState extends State<MessageListView> {
         status = types.Status.sending;
       } else {
         // Else show status based on message state
-        if (seenOld || seenNew) {
+        if (seen) {
           status = types.Status.seen;
         } else {
           status = types.Status.delivered;
@@ -237,11 +233,6 @@ class _MessageListViewState extends State<MessageListView> {
 
             final mine = chatMessage.senderId == widget.userId;
             if (mine) return;
-
-            final viewed = chatMessage.viewedAt != null;
-            final becameViwed = !viewed;
-
-            if (becameViwed) widget.onViewed(chatMessage);
 
             final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
             final reachedUnreaded = userReadedUntil == null || chatMessage.createdAt.isAfter(userReadedUntil);

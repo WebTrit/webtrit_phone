@@ -97,15 +97,6 @@ class GroupCubit extends Cubit<GroupState> {
     _outboxRepository.upsertOutboxMessageDelete(outboxEntry);
   }
 
-  Future markAsViewed(ChatMessage message) async {
-    final outboxEntry = ChatOutboxMessageViewEntry(
-      id: message.id,
-      idKey: message.idKey,
-      chatId: _chatId,
-    );
-    _outboxRepository.upsertOutboxMessageView(outboxEntry);
-  }
-
   Future userReadedUntilUpdate(DateTime time) async {
     final outboxEntry = ChatOutboxReadCursorEntry(
       chatId: _chatId,

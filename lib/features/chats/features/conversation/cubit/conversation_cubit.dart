@@ -106,16 +106,6 @@ class ConversationCubit extends Cubit<ConversationState> {
     _outboxRepository.upsertOutboxMessageDelete(outboxEntry);
   }
 
-  Future markAsViewed(ChatMessage message) async {
-    if (_chat == null) return;
-    final outboxEntry = ChatOutboxMessageViewEntry(
-      id: message.id,
-      idKey: message.idKey,
-      chatId: _chat!.id,
-    );
-    _outboxRepository.upsertOutboxMessageView(outboxEntry);
-  }
-
   Future userReadedUntilUpdate(DateTime time) async {
     if (_chat == null) return;
     final outboxEntry = ChatOutboxReadCursorEntry(

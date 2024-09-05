@@ -119,7 +119,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
                         onSendForward: (content, refMessage) => conversationCubit.sendForward(refMessage),
                         onSendEdit: (content, refMessage) => conversationCubit.sendEdit(content, refMessage),
                         onDelete: (refMessage) => conversationCubit.deleteMessage(refMessage),
-                        onViewed: (refMessage) => conversationCubit.markAsViewed(refMessage),
                         userReadedUntilUpdate: (until) => conversationCubit.userReadedUntilUpdate(until),
                         onFetchHistory: conversationCubit.fetchHistory,
                         hasSmsFeature: false,
