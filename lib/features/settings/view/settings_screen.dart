@@ -82,17 +82,6 @@ class SettingsScreen extends StatelessWidget {
                 settingsBloc.add(const SettingsLogouted());
               }
             },
-            onLongPress: () async {
-              final settingsBloc = context.read<SettingsBloc>();
-              final logout = await ConfirmDialog.show(
-                context,
-                title: context.l10n.settings_ForceLogoutConfirmDialog_title,
-                content: context.l10n.settings_ForceLogoutConfirmDialog_content,
-              );
-              if (logout == true) {
-                settingsBloc.add(const SettingsLogouted(force: true));
-              }
-            },
           ),
           GroupTitleListTile(
             titleData: context.l10n.settings_ListViewTileTitle_settings,

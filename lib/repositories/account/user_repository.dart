@@ -70,7 +70,10 @@ class UserRepository {
   }
 
   Future<void> logout() async {
-    await _webtritApiClient.deleteSession(_token);
+    await _webtritApiClient.deleteSession(
+      _token,
+      options: RequestOptions.withExtraRetries(),
+    );
   }
 
   Future<void> delete() async {
