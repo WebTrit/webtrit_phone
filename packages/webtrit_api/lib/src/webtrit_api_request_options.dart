@@ -6,4 +6,16 @@ class RequestOptions {
     this.retries = 0,
     this.retryDelay = const Duration(seconds: 1),
   });
+
+  factory RequestOptions.withNoRetries() {
+    return const RequestOptions(retries: 0, retryDelay: Duration(seconds: 1));
+  }
+
+  factory RequestOptions.withDefaultRetries() {
+    return const RequestOptions(retries: 3, retryDelay: Duration(seconds: 1));
+  }
+
+  factory RequestOptions.withExtraRetries() {
+    return const RequestOptions(retries: 5, retryDelay: Duration(seconds: 2));
+  }
 }
