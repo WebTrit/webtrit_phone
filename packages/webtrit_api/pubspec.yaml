@@ -12,6 +12,7 @@ dependencies:
   json_annotation: ^4.9.0
   meta: any
   pub_semver: ^2.1.4
+  logging: ^1.2.0
 
   _http_client:
     path: ../_http_client

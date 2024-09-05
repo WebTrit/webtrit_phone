@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 
 import 'package:_http_client/_http_client.dart';
@@ -13,6 +14,8 @@ import 'models/models.dart';
 
 class WebtritApiClient {
   static final _requestIdRandom = Random();
+
+  final Logger _logger;
 
   @visibleForTesting
   static Uri buildTenantUrl(Uri baseUrl, String tenantId) {
@@ -51,7 +54,9 @@ class WebtritApiClient {
     Uri baseUrl,
     String tenantId, {
     required http.Client httpClient,
+    Logger? logger,
   })  : _httpClient = httpClient,
+        _logger = Logger('WebtritApiClient'),
         tenantUrl = buildTenantUrl(baseUrl, tenantId);
 
   final Uri tenantUrl;
@@ -99,10 +104,16 @@ class WebtritApiClient {
         if (requestDataJson != null) {
           httpRequest.body = jsonEncode(requestDataJson);
         }
+
+        _logger.info(' ${method.toUpperCase()} request($requestAttempt) to $url with requestId: $xRequestId');
+
         final httpResponse = await http.Response.fromStream(await _httpClient.send(httpRequest));
 
         final responseData = httpResponse.body;
         final responseDataJson = responseData.isEmpty ? {} : jsonDecode(responseData);
+
+        _logger.info(
+            '${method.toUpperCase()} response with status code: ${httpResponse.statusCode} for requestId: $xRequestId, response body: ${httpResponse.body}');
 
         if (httpResponse.statusCode == 200 || httpResponse.statusCode == 204) {
           return responseDataJson;
@@ -120,6 +131,7 @@ class WebtritApiClient {
           );
         }
       } catch (e) {
+        _logger.severe('${method.toUpperCase()} failed for requestId: $requestId with error: $e');
         if (requestAttempt >= options.retries) {
           rethrow;
         }
