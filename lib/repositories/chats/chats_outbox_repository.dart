@@ -74,24 +74,36 @@ class ChatsOutboxRepository with ChatsOutboxDriftMapper {
     return _chatsDao.deleteChatOutboxMessageDelete(id);
   }
 
-  Future<List<ChatOutboxMessageViewEntry>> getChatOutboxMessageViews() async {
-    final entriesData = await _chatsDao.getChatOutboxMessageViews();
-    return entriesData.map(chatOutboxMessageViewEntryFromDrift).toList();
+  Future<ChatOutboxReadCursorEntry?> getOutboxReadCursor(int chatId) {
+    return _chatsDao
+        .getChatOutboxReadCursor(chatId)
+        .then((data) => data != null ? chatOutboxReadCursorEntryFromDrift(data) : null);
   }
 
-  Stream<List<ChatOutboxMessageViewEntry>> watchChatOutboxMessageViews() {
-    return _chatsDao.watchChatOutboxMessageViews().map((entriesData) {
-      return entriesData.map(chatOutboxMessageViewEntryFromDrift).toList();
+  Stream<ChatOutboxReadCursorEntry?> watchOutboxReadCursor(int chatId) {
+    return _chatsDao
+        .watchChatOutboxReadCursor(chatId)
+        .map((data) => data != null ? chatOutboxReadCursorEntryFromDrift(data) : null);
+  }
+
+  Future<List<ChatOutboxReadCursorEntry>> getOutboxReadCursors() async {
+    final entriesData = await _chatsDao.getChatOutboxReadCursors();
+    return entriesData.map(chatOutboxReadCursorEntryFromDrift).toList();
+  }
+
+  Stream<List<ChatOutboxReadCursorEntry>> watchOutboxReadCursors() {
+    return _chatsDao.watchChatOutboxReadCursors().map((entriesData) {
+      return entriesData.map(chatOutboxReadCursorEntryFromDrift).toList();
     });
   }
 
-  Future<int> upsertOutboxMessageView(ChatOutboxMessageViewEntry entry) {
-    final entryData = chatOutboxMessageViewDataFromChatOutboxMessageViewEntry(entry);
-    return _chatsDao.upsertChatOutboxMessageView(entryData);
+  Future upsertOutboxReadCursor(ChatOutboxReadCursorEntry entry) {
+    final entryData = chatOutboxReadCursorDataFromEntry(entry);
+    return _chatsDao.upsertChatOutboxReadCursor(entryData);
   }
 
-  Future<int> deleteOutboxMessageView(int id) {
-    return _chatsDao.deleteChatOutboxMessageView(id);
+  Future<int> deleteOutboxReadCursor(int chatId) {
+    return _chatsDao.deleteChatOutboxReadCursor(chatId);
   }
 
   Future<void> wipeOutboxData() async {

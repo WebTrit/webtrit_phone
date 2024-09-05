@@ -52,9 +52,8 @@ class OutboxQueueWorker {
         await _processMessageDelete(entry);
       }
 
-      final messageViews = await _outboxRepository.getChatOutboxMessageViews();
-      for (final chatId in messageViews.map((e) => e.chatId).toSet()) {
-        _processMessageView(messageViews.where((e) => e.chatId == chatId).toList(), chatId);
+      for (final entry in await _outboxRepository.getOutboxReadCursors()) {
+        await _processReadCursor(entry);
       }
 
       if (_disposed) return false;
@@ -76,7 +75,7 @@ class OutboxQueueWorker {
 
       var payload = {
         'content': message.content,
-        'id_key': message.idKey,
+        'idempotency_key': message.idKey,
         'reply_to_id': message.replyToId,
         'forwarded_from_id': message.forwardFromId,
         'author_id': message.authorId,
@@ -116,7 +115,7 @@ class OutboxQueueWorker {
       var payload = {
         'recipient': participantId,
         'content': message.content,
-        'id_key': message.idKey,
+        'idempotency_key': message.idKey,
         'reply_to_id': message.replyToId,
         'forwarded_from_id': message.forwardFromId,
         'author_id': message.authorId,
@@ -150,8 +149,8 @@ class OutboxQueueWorker {
       if (channel == null) return;
       if (channel.state != PhoenixChannelState.joined) return;
 
-      var payload = {'new_content': messageEdit.newContent, 'id': messageEdit.id};
-      final r = await channel.push('message:edit', payload).future;
+      var payload = {'new_content': messageEdit.newContent};
+      final r = await channel.push('message:edit:${messageEdit.id}', payload).future;
 
       if (r.isOk) {
         final message = ChatMessage.fromMap(r.response);
@@ -177,8 +176,7 @@ class OutboxQueueWorker {
       if (channel == null) return;
       if (channel.state != PhoenixChannelState.joined) return;
 
-      var payload = {'id': messageDelete.id};
-      final r = await channel.push('message:delete', payload).future;
+      final r = await channel.push('message:delete:${messageDelete.id}', {}).future;
 
       if (r.isOk) {
         final message = ChatMessage.fromMap(r.response);
@@ -198,31 +196,29 @@ class OutboxQueueWorker {
     }
   }
 
-  Future _processMessageView(List<ChatOutboxMessageViewEntry> messageViews, int chatId) async {
+  Future _processReadCursor(ChatOutboxReadCursorEntry readCursor) async {
     try {
-      final channel = _client.getChatChannel(chatId);
+      final channel = _client.getChatChannel(readCursor.chatId);
       if (channel == null) return;
       if (channel.state != PhoenixChannelState.joined) return;
 
-      var payload = {'message_ids': messageViews.map((e) => e.id).toList()};
-      final r = await channel.push('message:mark_as_viewed', payload).future;
+      var payload = {'last_read_at': readCursor.time.toUtc().toIso8601String()};
+      final r = await channel.push('chat:cursor:set', payload).future;
 
       if (r.isOk) {
-        for (final messageView in messageViews) {
-          await _outboxRepository.deleteOutboxMessageView(messageView.id);
-        }
-        _logger.info('After isOk on view message: $chatId ${messageViews.length}');
+        await _outboxRepository.deleteOutboxReadCursor(readCursor.chatId);
+        final c = ChatMessageReadCursor(chatId: readCursor.chatId, userId: _client.userId!, time: readCursor.time);
+        await _chatsRepository.upsertChatMessageReadCursor(c);
+        _logger.info('After isOk on read cursor: ${readCursor.chatId}');
       }
-      if (r.isError) throw Exception('Error processing message view');
+      if (r.isError) throw Exception('Error processing read cursor');
     } catch (e) {
-      _logger.severe('Error processing message view', e);
-      if (messageViews.last.sendAttempts > 5) {
-        _logger.severe('Send attempts exceeded for view message: $chatId ${messageViews.length}');
-        for (final messageView in messageViews) {
-          await _outboxRepository.deleteOutboxMessageView(messageView.id);
-        }
+      _logger.severe('Error processing read cursor', e);
+      if (readCursor.sendAttempts > 5) {
+        _logger.severe('Send attempts exceeded for read cursor: ${readCursor.chatId}');
+        await _outboxRepository.deleteOutboxReadCursor(readCursor.chatId);
       } else {
-        await _outboxRepository.upsertOutboxMessageView(messageViews.last.incAttempts());
+        await _outboxRepository.upsertOutboxReadCursor(readCursor.incAttempts());
       }
     }
   }

@@ -30,6 +30,11 @@ class ChatsRepository with ChatsDriftMapper {
     return chatsData.map(chatFromDrift).toList();
   }
 
+  Future<List<(Chat, ChatMessage?)>> getChatsWithLastMessages() async {
+    final chatsData = await _chatsDao.getAllChatsWithMembersAndLastMessage();
+    return chatsData.map((data) => chatWithLastMessageFromDrift(data)).toList();
+  }
+
   Future<List<int>> getChatIds() async {
     return _chatsDao.getChatIds();
   }
@@ -73,21 +78,6 @@ class ChatsRepository with ChatsDriftMapper {
     }
   }
 
-  Future<void> updateViews(List<int> messageIds, DateTime viewedAt) async {
-    final messages = await _chatsDao.updateViews(messageIds, viewedAt);
-    for (final message in messages) {
-      _addEvent(ChatMessageUpdate(chatMessageFromDrift(message)));
-    }
-  }
-
-  Stream<int> unreadMessagesCount(int chatId, String userId) {
-    return _chatsDao.unreadMessagesCount(chatId, userId);
-  }
-
-  Stream<int> chatsWithUnreadedMessagesCount(String userId) {
-    return _chatsDao.chatsWithUnreadedMessagesCount(userId);
-  }
-
   Future<void> insertHistoryPage(List<ChatMessage> messages) async {
     for (final message in messages) {
       await upsertMessage(message, silent: true);
@@ -108,6 +98,32 @@ class ChatsRepository with ChatsDriftMapper {
   Future<void> upsertChatMessageSyncCursor(ChatMessageSyncCursor cursor) async {
     final data = chatMessageSyncCursorDataFromChatMessageSyncCursor(cursor);
     await _chatsDao.upsertChatMessageSyncCursor(data);
+  }
+
+  Future<ChatMessageReadCursor?> getChatMessageReadCursor(int chatId, String userId) async {
+    final data = await _chatsDao.getChatMessageReadCursor(chatId, userId);
+    if (data != null) return chatMessageReadCursorFromDrift(data);
+    return null;
+  }
+
+  Stream<List<ChatMessageReadCursor>> watchChatMessageReadCursors(int chatId) {
+    return _chatsDao
+        .watchChatMessageReadCursors(chatId)
+        .map((data) => data.map(chatMessageReadCursorFromDrift).toList());
+  }
+
+  Future<void> upsertChatMessageReadCursor(ChatMessageReadCursor cursor) async {
+    final data = ChatMessageReadCursorData(
+      chatId: cursor.chatId,
+      userId: cursor.userId,
+      timestampUsec: cursor.time.microsecondsSinceEpoch,
+    );
+    final inserted = await _chatsDao.upsertChatMessageReadCursor(data);
+    if (inserted != null) _addEvent(ChatReadCursorUpdate(cursor));
+  }
+
+  Future<Map<int, int>> unreadedCountPerChat(String userId) {
+    return _chatsDao.unreadedCountPerChat(userId);
   }
 
   Future<void> wipeStaleDeletedData() async {

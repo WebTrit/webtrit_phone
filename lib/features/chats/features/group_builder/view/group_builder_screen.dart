@@ -66,7 +66,7 @@ class _GroupBuilderScreenState extends State<GroupBuilderScreen> {
         'name': nameController.text,
         'member_ids': selectedUsers.map((contact) => contact.sourceId).toList(),
       };
-      final result = await userChannel.push('chat:create_group', payload).future;
+      final result = await userChannel.push('chat:new', payload).future;
 
       if (!mounted) return;
       if (result.isOk) Navigator.of(context).pop();

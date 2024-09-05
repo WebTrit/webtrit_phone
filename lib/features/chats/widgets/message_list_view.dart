@@ -22,13 +22,14 @@ class MessageListView extends StatefulWidget {
     required this.outboxMessages,
     required this.outboxMessageEdits,
     required this.outboxMessageDeletes,
+    required this.readCursors,
     required this.historyEndReached,
     required this.onSendMessage,
     required this.onSendReply,
     required this.onSendForward,
     required this.onSendEdit,
     required this.onDelete,
-    required this.onViewed,
+    required this.userReadedUntilUpdate,
     required this.onFetchHistory,
     required this.hasSmsFeature,
     super.key,
@@ -39,6 +40,7 @@ class MessageListView extends StatefulWidget {
   final List<ChatOutboxMessageEntry> outboxMessages;
   final List<ChatOutboxMessageEditEntry> outboxMessageEdits;
   final List<ChatOutboxMessageDeleteEntry> outboxMessageDeletes;
+  final List<ChatMessageReadCursor> readCursors;
   final bool fetchingHistory;
   final bool historyEndReached;
   final Function(String content, bool useSms) onSendMessage;
@@ -46,7 +48,7 @@ class MessageListView extends StatefulWidget {
   final Function(String content, ChatMessage refMessage) onSendForward;
   final Function(String content, ChatMessage refMessage) onSendEdit;
   final Function(ChatMessage refMessage) onDelete;
-  final Function(ChatMessage refMessage) onViewed;
+  final Function(DateTime until) userReadedUntilUpdate;
   final Future Function() onFetchHistory;
   final bool hasSmsFeature;
 
@@ -77,9 +79,14 @@ class _MessageListViewState extends State<MessageListView> {
     bool outboxMessagesChanged() => !listEquals(oldWidget.outboxMessages, widget.outboxMessages);
     bool outboxMessageEditsChanged() => !listEquals(oldWidget.outboxMessageEdits, widget.outboxMessageEdits);
     bool outboxMessageDeletesChanged() => !listEquals(oldWidget.outboxMessageDeletes, widget.outboxMessageDeletes);
-    if (outboxMessagesChanged() || outboxMessageEditsChanged() || outboxMessageDeletesChanged() || messagesChanged()) {
-      mapMessages();
-    }
+    bool readCursorsChanged() => !listEquals(oldWidget.readCursors, widget.readCursors);
+
+    final shouldRemap = outboxMessagesChanged() ||
+        outboxMessageEditsChanged() ||
+        outboxMessageDeletesChanged() ||
+        readCursorsChanged() ||
+        messagesChanged();
+    if (shouldRemap) mapMessages();
   }
 
   void mapMessages() {
@@ -102,10 +109,14 @@ class _MessageListViewState extends State<MessageListView> {
       msgMap[entry.idKey] = textMessage;
     }
 
+    final participantsReadedUntil = widget.readCursors.participantsReadedUntil(widget.userId);
+
     for (final msg in widget.messages) {
       final editEntry = widget.outboxMessageEdits.firstWhereOrNull((element) => element.idKey == msg.idKey);
       final deleteEntry = widget.outboxMessageDeletes.firstWhereOrNull((element) => element.idKey == msg.idKey);
       final inOutbox = editEntry != null || deleteEntry != null;
+
+      final seen = participantsReadedUntil != null && !msg.createdAt.isAfter(participantsReadedUntil);
 
       String text = msg.content;
       if (editEntry != null) text = editEntry.newContent;
@@ -123,7 +134,7 @@ class _MessageListViewState extends State<MessageListView> {
         status = types.Status.sending;
       } else {
         // Else show status based on message state
-        if (msg.viewedAt != null) {
+        if (seen) {
           status = types.Status.seen;
         } else {
           status = types.Status.delivered;
@@ -215,14 +226,17 @@ class _MessageListViewState extends State<MessageListView> {
             typingMode: TypingIndicatorMode.name,
           ),
           onMessageVisibilityChanged: (uiMessage, visible) {
+            if (!visible) return;
+
             ChatMessage? chatMessage = uiMessage.chatMessage;
             if (chatMessage == null) return;
 
             final mine = chatMessage.senderId == widget.userId;
-            final viewed = chatMessage.viewedAt != null;
-            final becameViwed = visible && !viewed && !mine;
+            if (mine) return;
 
-            if (becameViwed) widget.onViewed(chatMessage);
+            final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
+            final reachedUnreaded = userReadedUntil == null || chatMessage.createdAt.isAfter(userReadedUntil);
+            if (reachedUnreaded) widget.userReadedUntilUpdate(chatMessage.createdAt);
           },
           avatarBuilder: (author) {
             String name = author.firstName ?? 'N/A';

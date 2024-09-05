@@ -222,6 +222,15 @@ class _MainShellState extends State<MainShell> {
                   ..add(const Connect());
               },
             ),
+          if (EnvironmentConfig.CHAT_FEATURE_ENABLE)
+            BlocProvider<UnreadCountCubit>(
+              create: (context) {
+                return UnreadCountCubit(
+                  appPreferences: context.read<AppPreferences>(),
+                  chatsRepository: context.read<ChatsRepository>(),
+                )..init();
+              },
+            ),
         ],
         child: Builder(builder: (_) => const CallShell(child: ChatsShell(child: AutoRouter()))),
       ),

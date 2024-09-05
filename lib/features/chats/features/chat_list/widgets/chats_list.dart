@@ -5,7 +5,7 @@ import 'package:webtrit_phone/models/models.dart';
 
 class ChatsList extends StatelessWidget {
   const ChatsList({required this.chatlist, super.key});
-  final List<Chat> chatlist;
+  final List<(Chat, ChatMessage?)> chatlist;
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +14,12 @@ class ChatsList extends StatelessWidget {
         final userId = state.userId;
         if (userId == null) return const Center(child: CircularProgressIndicator());
 
-        return ListView.builder(
-          itemCount: chatlist.length,
-          itemBuilder: (context, index) {
-            final chat = chatlist[index];
-
-            return ChatListItem(chat: chat, userId: userId, key: ValueKey(chat.id));
-          },
+        return ListView(
+          children: chatlist.map((e) {
+            final chat = e.$1;
+            final lastMessage = e.$2;
+            return ChatListItem(chat: chat, lastMessage: lastMessage, userId: userId);
+          }).toList(),
         );
       },
     );

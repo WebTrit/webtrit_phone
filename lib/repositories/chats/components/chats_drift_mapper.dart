@@ -26,6 +26,11 @@ mixin ChatsDriftMapper {
     );
   }
 
+  (Chat chat, ChatMessage? message) chatWithLastMessageFromDrift((ChatDataWithMembers, ChatMessageData?) data) {
+    final lastMessageData = data.$2;
+    return (chatFromDrift(data.$1), lastMessageData != null ? chatMessageFromDrift(lastMessageData) : null);
+  }
+
   ChatData chatDataFromChat(Chat chat) {
     return ChatData(
       id: chat.id,
@@ -60,11 +65,11 @@ mixin ChatsDriftMapper {
       smsOutState: data.smsOutState != null ? SmsOutState.values.byName(data.smsOutState!.name) : null,
       smsNumber: data.smsNumber,
       content: data.content,
-      viewedAt: data.viewedAt,
-      editedAt: data.editedAt,
-      createdAt: data.createdAtRemote,
-      updatedAt: data.updatedAtRemote,
-      deletedAt: data.deletedAtRemote,
+      createdAt: DateTime.fromMicrosecondsSinceEpoch(data.createdAtRemoteUsec),
+      updatedAt: DateTime.fromMicrosecondsSinceEpoch(data.updatedAtRemoteUsec),
+      editedAt: data.editedAtRemoteUsec != null ? DateTime.fromMicrosecondsSinceEpoch(data.editedAtRemoteUsec!) : null,
+      deletedAt:
+          data.deletedAtRemoteUsec != null ? DateTime.fromMicrosecondsSinceEpoch(data.deletedAtRemoteUsec!) : null,
     );
   }
 
@@ -81,11 +86,10 @@ mixin ChatsDriftMapper {
       smsOutState: message.smsOutState != null ? SmsOutStateEnum.values.byName(message.smsOutState!.name) : null,
       smsNumber: message.smsNumber,
       content: message.content,
-      viewedAt: message.viewedAt,
-      editedAt: message.editedAt,
-      createdAtRemote: message.createdAt,
-      updatedAtRemote: message.updatedAt,
-      deletedAtRemote: message.deletedAt,
+      createdAtRemoteUsec: message.createdAt.microsecondsSinceEpoch,
+      updatedAtRemoteUsec: message.updatedAt.microsecondsSinceEpoch,
+      editedAtRemoteUsec: message.editedAt?.microsecondsSinceEpoch,
+      deletedAtRemoteUsec: message.deletedAt?.microsecondsSinceEpoch,
     );
   }
 
@@ -109,6 +113,22 @@ mixin ChatsDriftMapper {
     return ChatMessageSyncCursorData(
       chatId: cursor.chatId,
       cursorType: chatMessageSyncCursorTypeEnumFromDrift(cursor.cursorType),
+      timestampUsec: cursor.time.microsecondsSinceEpoch,
+    );
+  }
+
+  ChatMessageReadCursor chatMessageReadCursorFromDrift(ChatMessageReadCursorData data) {
+    return ChatMessageReadCursor(
+      chatId: data.chatId,
+      userId: data.userId,
+      time: DateTime.fromMicrosecondsSinceEpoch(data.timestampUsec),
+    );
+  }
+
+  ChatMessageReadCursorData chatMessageReadCursorDataFromChatMessageReadCursor(ChatMessageReadCursor cursor) {
+    return ChatMessageReadCursorData(
+      chatId: cursor.chatId,
+      userId: cursor.userId,
       timestampUsec: cursor.time.microsecondsSinceEpoch,
     );
   }

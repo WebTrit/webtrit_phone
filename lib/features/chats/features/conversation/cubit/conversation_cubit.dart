@@ -40,6 +40,7 @@ class ConversationCubit extends Cubit<ConversationState> {
   StreamSubscription? _outboxMessagesSub;
   StreamSubscription? _outboxMessageEditsSub;
   StreamSubscription? _outboxMessageDeletesSub;
+  StreamSubscription? _readCursorsSub;
 
   void restart() {
     _logger.info('Restarting conversation with $_participantId');
@@ -105,14 +106,13 @@ class ConversationCubit extends Cubit<ConversationState> {
     _outboxRepository.upsertOutboxMessageDelete(outboxEntry);
   }
 
-  Future markAsViewed(ChatMessage message) async {
+  Future userReadedUntilUpdate(DateTime time) async {
     if (_chat == null) return;
-    final outboxEntry = ChatOutboxMessageViewEntry(
-      id: message.id,
-      idKey: message.idKey,
+    final outboxEntry = ChatOutboxReadCursorEntry(
       chatId: _chat!.id,
+      time: time,
     );
-    _outboxRepository.upsertOutboxMessageView(outboxEntry);
+    _outboxRepository.upsertOutboxReadCursor(outboxEntry);
   }
 
   Future<bool> deleteDialog() async {
@@ -195,7 +195,7 @@ class ConversationCubit extends Cubit<ConversationState> {
     try {
       final chatId = await _chatsRepository.findDialogId(_participantId);
       if (chatId != null) _chat = await _chatsRepository.getChat(chatId);
-      _logger.info('local chat id find result: $_chat');
+      _logger.info('local chat find result: $_chat');
 
       if (isClosed) return;
       emit(ConversationState.ready(_participantId, chat: _chat));
@@ -203,21 +203,15 @@ class ConversationCubit extends Cubit<ConversationState> {
       // If local chat is not found, subscribtion will find the chat when it will created
       // e.g when you send the first message or another user sends to you
       _chatSub = _chatUpdateSubFactory(_handleChatUpdate);
-
       _outboxMessagesSub = _outboxMessagesSubFactory(_handleOutboxMessagesUpdate);
-      _outboxMessageEditsSub = _outboxMessageEditsSubFactory(_handleOutboxMessageEditsUpdate);
-      _outboxMessageDeletesSub = _outboxMessageDeletesSubFactory(_handleOutboxMessageDeletesUpdate);
 
-      if (chatId != null) await _initMessages();
+      if (_chat != null) await _initMessages(_chat!.id);
     } catch (e) {
       emit(ConversationState.error(_participantId, e));
     }
   }
 
-  Future<void> _initMessages() async {
-    final chatId = _chat?.id;
-    if (chatId == null) return;
-
+  Future<void> _initMessages(int chatId) async {
     // Fetch last 100 messages from the chat history
     final oldestCursor = await _chatsRepository.getChatMessageSyncCursor(chatId, MessageSyncCursorType.oldest);
     final messages = await _chatsRepository.getMessageHistory(chatId, to: oldestCursor?.time);
@@ -229,7 +223,15 @@ class ConversationCubit extends Cubit<ConversationState> {
 
     // Subscribe to chat messages updates eg new messages, edited, deleted, etc. and merge them with the current list
     _messagesSub?.cancel();
-    _messagesSub = _messagesSubFactory(_handleMessageUpdate);
+    _messagesSub = _messagesSubFactory(chatId, _handleMessageUpdate);
+
+    // Subscribe to read cursors updates
+    _readCursorsSub?.cancel();
+    _readCursorsSub = _readCursorsSubFactory(chatId, _handleReadCursorsUpdate);
+
+    // Subscribe to outbox message edits and deletes
+    _outboxMessageEditsSub = _outboxMessageEditsSubFactory(chatId, _handleOutboxMessageEditsUpdate);
+    _outboxMessageDeletesSub = _outboxMessageDeletesSubFactory(chatId, _handleOutboxMessageDeletesUpdate);
   }
 
   StreamSubscription _chatUpdateSubFactory(void Function(Chat) onArrive) {
@@ -249,13 +251,13 @@ class ConversationCubit extends Cubit<ConversationState> {
     if (state is CVSReady) emit(state.copyWith(chat: chat));
 
     // Init messages after chat is created for conversation with the participant
-    if (chatWasntExistBefore) _initMessages();
+    if (chatWasntExistBefore) _initMessages(chat.id);
   }
 
-  StreamSubscription _messagesSubFactory(void Function(ChatMessage) onArrive) {
+  StreamSubscription _messagesSubFactory(int chatId, void Function(ChatMessage) onArrive) {
     return _chatsRepository.eventBus.whereType<ChatMessageUpdate>().listen((event) {
       final message = event.message;
-      if (message.chatId == (_chat?.id ?? -1)) onArrive(message);
+      if (message.chatId == chatId) onArrive(message);
     });
   }
 
@@ -283,9 +285,12 @@ class ConversationCubit extends Cubit<ConversationState> {
     if (state is CVSReady) emit(state.copyWith(outboxMessages: entries));
   }
 
-  StreamSubscription _outboxMessageEditsSubFactory(void Function(List<ChatOutboxMessageEditEntry>) onArrive) {
+  StreamSubscription _outboxMessageEditsSubFactory(
+    int chatId,
+    void Function(List<ChatOutboxMessageEditEntry>) onArrive,
+  ) {
     return _outboxRepository.watchChatOutboxMessageEdits().listen((entries) {
-      final chatQueueEntries = entries.where((e) => e.chatId == _chat?.id).toList();
+      final chatQueueEntries = entries.where((e) => e.chatId == chatId).toList();
       onArrive(chatQueueEntries);
     });
   }
@@ -296,9 +301,12 @@ class ConversationCubit extends Cubit<ConversationState> {
     if (state is CVSReady) emit(state.copyWith(outboxMessageEdits: entries));
   }
 
-  StreamSubscription _outboxMessageDeletesSubFactory(void Function(List<ChatOutboxMessageDeleteEntry>) onArrive) {
+  StreamSubscription _outboxMessageDeletesSubFactory(
+    int chatId,
+    void Function(List<ChatOutboxMessageDeleteEntry>) onArrive,
+  ) {
     return _outboxRepository.watchChatOutboxMessageDeletes().listen((entries) {
-      final chatQueueEntries = entries.where((e) => e.chatId == _chat?.id).toList();
+      final chatQueueEntries = entries.where((e) => e.chatId == chatId).toList();
       onArrive(chatQueueEntries);
     });
   }
@@ -307,6 +315,16 @@ class ConversationCubit extends Cubit<ConversationState> {
     _logger.info('_handleOutboxMessageDeletesUpdate: ${entries.length}');
     final state = this.state;
     if (state is CVSReady) emit(state.copyWith(outboxMessageDeletes: entries));
+  }
+
+  StreamSubscription _readCursorsSubFactory(int chatId, void Function(List<ChatMessageReadCursor>) onArrive) {
+    return _chatsRepository.watchChatMessageReadCursors(chatId).listen(onArrive);
+  }
+
+  void _handleReadCursorsUpdate(List<ChatMessageReadCursor> cursors) {
+    _logger.info('_handleReadCursorsUpdate: ${cursors.length}');
+    final state = this.state;
+    if (state is CVSReady) emit(state.copyWith(readCursors: cursors));
   }
 
   @override
@@ -322,5 +340,6 @@ class ConversationCubit extends Cubit<ConversationState> {
     _outboxMessagesSub?.cancel();
     _outboxMessageEditsSub?.cancel();
     _outboxMessageDeletesSub?.cancel();
+    _readCursorsSub?.cancel();
   }
 }

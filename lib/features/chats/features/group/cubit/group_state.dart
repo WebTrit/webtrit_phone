@@ -46,6 +46,7 @@ final class GroupStateReady extends GroupState with EquatableMixin {
     this.outboxMessages = const [],
     this.outboxMessageEdits = const [],
     this.outboxMessageDeletes = const [],
+    this.readCursors = const [],
     this.fetchingHistory = false,
     this.historyEndReached = false,
     this.busy = false,
@@ -59,6 +60,7 @@ final class GroupStateReady extends GroupState with EquatableMixin {
   final List<ChatOutboxMessageEntry> outboxMessages;
   final List<ChatOutboxMessageEditEntry> outboxMessageEdits;
   final List<ChatOutboxMessageDeleteEntry> outboxMessageDeletes;
+  final List<ChatMessageReadCursor> readCursors;
 
   final bool fetchingHistory;
   final bool historyEndReached;
@@ -72,6 +74,7 @@ final class GroupStateReady extends GroupState with EquatableMixin {
         outboxMessages,
         outboxMessageEdits,
         outboxMessageDeletes,
+        readCursors,
         fetchingHistory,
         historyEndReached,
         busy,
@@ -84,6 +87,7 @@ final class GroupStateReady extends GroupState with EquatableMixin {
     List<ChatOutboxMessageEntry>? outboxMessages,
     List<ChatOutboxMessageEditEntry>? outboxMessageEdits,
     List<ChatOutboxMessageDeleteEntry>? outboxMessageDeletes,
+    List<ChatMessageReadCursor>? readCursors,
     bool? fetchingHistory,
     bool? historyEndReached,
     bool? busy,
@@ -95,6 +99,7 @@ final class GroupStateReady extends GroupState with EquatableMixin {
       outboxMessages: outboxMessages ?? this.outboxMessages,
       outboxMessageEdits: outboxMessageEdits ?? this.outboxMessageEdits,
       outboxMessageDeletes: outboxMessageDeletes ?? this.outboxMessageDeletes,
+      readCursors: readCursors ?? this.readCursors,
       fetchingHistory: fetchingHistory ?? this.fetchingHistory,
       historyEndReached: historyEndReached ?? this.historyEndReached,
       busy: busy ?? this.busy,

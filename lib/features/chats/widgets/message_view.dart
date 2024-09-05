@@ -97,7 +97,6 @@ class _MessageViewState extends State<MessageView> {
     final isMine = chatMessage == null || chatMessage.senderId == widget.userId;
     final isForward = chatMessage?.forwardFromId != null && chatMessage?.authorId != null;
     final isReply = chatMessage?.replyToId != null;
-    final isViewed = chatMessage?.viewedAt != null;
 
     final senderId = chatMessage?.senderId ?? widget.userId;
     final hasContent = (chatMessage?.content.isNotEmpty == true) && chatMessage?.content != '-';
@@ -169,7 +168,7 @@ class _MessageViewState extends State<MessageView> {
       child: Container(
         padding: const EdgeInsets.all(12),
         // 0.01 is for background press recognition
-        color: !isViewed ? Colors.blueGrey.withOpacity(0.4) : Colors.blueGrey.withOpacity(0.01),
+        color: Colors.blueGrey.withOpacity(0.01),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

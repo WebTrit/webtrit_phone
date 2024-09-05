@@ -39,6 +39,7 @@ class GroupCubit extends Cubit<GroupState> {
   StreamSubscription? _outboxMessagesSub;
   StreamSubscription? _outboxMessageEditsSub;
   StreamSubscription? _outboxMessageDeletesSub;
+  StreamSubscription? _readCursorsSub;
 
   void restart() {
     _logger.info('Restarting group $_chatId');
@@ -96,13 +97,12 @@ class GroupCubit extends Cubit<GroupState> {
     _outboxRepository.upsertOutboxMessageDelete(outboxEntry);
   }
 
-  Future markAsViewed(ChatMessage message) async {
-    final outboxEntry = ChatOutboxMessageViewEntry(
-      id: message.id,
-      idKey: message.idKey,
+  Future userReadedUntilUpdate(DateTime time) async {
+    final outboxEntry = ChatOutboxReadCursorEntry(
       chatId: _chatId,
+      time: time,
     );
-    _outboxRepository.upsertOutboxMessageView(outboxEntry);
+    _outboxRepository.upsertOutboxReadCursor(outboxEntry);
   }
 
   Future<bool> leaveGroup() async {
@@ -113,7 +113,7 @@ class GroupCubit extends Cubit<GroupState> {
 
     final channel = _client.getChatChannel(_chatId);
     if (channel == null || channel.state != PhoenixChannelState.joined) return false;
-    final r = await channel.push('chat:leave_group', {}).future;
+    final r = await channel.push('chat:member:leave', {}).future;
     emit(state.copyWith(busy: false));
     if (r.isOk) return true;
 
@@ -129,14 +129,14 @@ class GroupCubit extends Cubit<GroupState> {
 
     final channel = _client.getChatChannel(_chatId);
     if (channel == null || channel.state != PhoenixChannelState.joined) return false;
-    final r = await channel.push('chat:leave_group', {}).future;
+    final r = await channel.push('chat:delete', {}).future;
 
     emit(state.copyWith(busy: false));
     if (r.isOk) return true;
     return false;
   }
 
-  Future addUser(String phoneNumber) async {
+  Future addUser(String userId) async {
     final state = this.state;
     if (state is! GroupStateReady) return;
     if (state.busy) return;
@@ -144,14 +144,14 @@ class GroupCubit extends Cubit<GroupState> {
 
     final channel = _client.getChatChannel(_chatId);
     if (channel == null || channel.state != PhoenixChannelState.joined) return;
-    final r = await channel.push('chat:add_group_member', {'member_id': phoneNumber}).future;
+    final r = await channel.push('chat:member:add:$userId', {}).future;
     emit(state.copyWith(busy: false));
     if (r.isOk) return true;
 
     return false;
   }
 
-  Future removeUser(String phoneNumber) async {
+  Future removeUser(String userId) async {
     final state = this.state;
     if (state is! GroupStateReady) return;
     if (state.busy) return;
@@ -159,7 +159,7 @@ class GroupCubit extends Cubit<GroupState> {
 
     final channel = _client.getChatChannel(_chatId);
     if (channel == null || channel.state != PhoenixChannelState.joined) return;
-    final r = await channel.push('chat:remove_group_member', {'member_id': phoneNumber}).future;
+    final r = await channel.push('chat:member:remove:$userId', {}).future;
     emit(state.copyWith(busy: false));
     if (r.isOk) return true;
 
@@ -174,7 +174,7 @@ class GroupCubit extends Cubit<GroupState> {
 
     final channel = _client.getChatChannel(_chatId);
     if (channel == null || channel.state != PhoenixChannelState.joined) return;
-    final r = await channel.push('chat:set_group_moderator', {'member_id': userId, 'is_moderator': isModerator}).future;
+    final r = await channel.push('chat:member:set_authorities:$userId', {'is_moderator': isModerator}).future;
     emit(state.copyWith(busy: false));
     if (r.isOk) return true;
 
@@ -189,7 +189,7 @@ class GroupCubit extends Cubit<GroupState> {
 
     final channel = _client.getChatChannel(_chatId);
     if (channel == null || channel.state != PhoenixChannelState.joined) return;
-    final r = await channel.push('chat:set_group_name', {'name': name}).future;
+    final r = await channel.push('chat:patch', {'name': name}).future;
     emit(state.copyWith(busy: false));
     if (r.isOk) return true;
 
@@ -268,6 +268,7 @@ class GroupCubit extends Cubit<GroupState> {
       _outboxMessagesSub = _outboxMessagesSubFactory(_handleOutboxMessagesUpdate);
       _outboxMessageEditsSub = _outboxMessageEditsSubFactory(_handleOutboxMessageEditsUpdate);
       _outboxMessageDeletesSub = _outboxMessageDeletesSubFactory(_handleOutboxMessageDeletesUpdate);
+      _readCursorsSub = _readCursorsSubFactory(_handleReadCursorsUpdate);
     } catch (e) {
       emit(GroupState.error(_chatId, e));
     }
@@ -342,6 +343,16 @@ class GroupCubit extends Cubit<GroupState> {
     if (state is GroupStateReady) emit(state.copyWith(outboxMessageDeletes: entries));
   }
 
+  StreamSubscription _readCursorsSubFactory(void Function(List<ChatMessageReadCursor>) onArrive) {
+    return _chatsRepository.watchChatMessageReadCursors(_chatId).listen(onArrive);
+  }
+
+  void _handleReadCursorsUpdate(List<ChatMessageReadCursor> cursors) {
+    _logger.info('handleReadCursorsUpdate: ${cursors.length}');
+    final state = this.state;
+    if (state is GroupStateReady) emit(state.copyWith(readCursors: cursors));
+  }
+
   @override
   Future<void> close() {
     _logger.info('Closing group $_chatId');
@@ -355,5 +366,6 @@ class GroupCubit extends Cubit<GroupState> {
     _outboxMessagesSub?.cancel();
     _outboxMessageEditsSub?.cancel();
     _outboxMessageDeletesSub?.cancel();
+    _readCursorsSub?.cancel();
   }
 }

@@ -44,7 +44,7 @@ class ChatTypingCubit extends Cubit<TypingState> {
       final channel = client.getChatChannel(_chatId!);
       if (channel == null) throw Exception('No channel yet');
       if (channel.state != PhoenixChannelState.joined) throw Exception('Channel not ready yet');
-      channel.push('user:typing', {});
+      channel.push('chat:typing', {});
       _lastTypingSent = DateTime.now();
     } catch (e) {
       _logger.warning('Failed to send typing event: $e');

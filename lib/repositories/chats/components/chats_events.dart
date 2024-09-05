@@ -37,3 +37,14 @@ class ChatMessageUpdate extends ChatsEvent with EquatableMixin {
   @override
   bool get stringify => true;
 }
+
+class ChatReadCursorUpdate extends ChatsEvent with EquatableMixin {
+  const ChatReadCursorUpdate(this.cursor);
+  final ChatMessageReadCursor cursor;
+
+  @override
+  List<Object> get props => [cursor];
+
+  @override
+  bool get stringify => true;
+}

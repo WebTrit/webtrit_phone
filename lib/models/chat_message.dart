@@ -13,10 +13,9 @@ class ChatMessage extends Equatable {
   final SmsOutState? smsOutState;
   final String? smsNumber;
   final String content;
-  final DateTime? viewedAt;
-  final DateTime? editedAt;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final DateTime? editedAt;
   final DateTime? deletedAt;
 
   const ChatMessage({
@@ -31,10 +30,9 @@ class ChatMessage extends Equatable {
     required this.smsOutState,
     required this.smsNumber,
     required this.content,
-    required this.viewedAt,
-    required this.editedAt,
     required this.createdAt,
     required this.updatedAt,
+    required this.editedAt,
     required this.deletedAt,
   });
 
@@ -51,10 +49,9 @@ class ChatMessage extends Equatable {
         smsOutState,
         smsNumber,
         content,
-        viewedAt,
-        editedAt,
         createdAt,
         updatedAt,
+        editedAt,
         deletedAt,
       ];
 
@@ -74,10 +71,9 @@ class ChatMessage extends Equatable {
       'sms_out_state': smsOutState?.name,
       'sms_number': smsNumber,
       'content': content,
-      'viewed_at': viewedAt?.toIso8601String(),
-      'edited_at': editedAt?.toIso8601String(),
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
+      'edited_at': editedAt?.toIso8601String(),
       'deleted_at': deletedAt?.toIso8601String(),
     };
   }
@@ -95,10 +91,9 @@ class ChatMessage extends Equatable {
       smsOutState: map['sms_out_state'] != null ? SmsOutState.values.byName(map['sms_out_state'] as String) : null,
       smsNumber: map['sms_number'] != null ? map['sms_number'] as String : null,
       content: map['content'] as String,
-      viewedAt: map['viewed_at'] != null ? DateTime.parse(map['viewed_at'] as String) : null,
-      editedAt: map['edited_at'] != null ? DateTime.parse(map['edited_at'] as String) : null,
       createdAt: DateTime.parse(map['created_at'] as String),
       updatedAt: DateTime.parse(map['updated_at'] as String),
+      editedAt: map['edited_at'] != null ? DateTime.parse(map['edited_at'] as String) : null,
       deletedAt: map['deleted_at'] != null ? DateTime.parse(map['deleted_at'] as String) : null,
     );
   }
