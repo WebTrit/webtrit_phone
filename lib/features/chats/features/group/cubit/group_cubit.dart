@@ -122,7 +122,7 @@ class GroupCubit extends Cubit<GroupState> {
 
     final channel = _client.getChatChannel(_chatId);
     if (channel == null || channel.state != PhoenixChannelState.joined) return false;
-    final r = await channel.push('chat:leave_group', {}).future;
+    final r = await channel.push('chat:member:leave', {}).future;
     emit(state.copyWith(busy: false));
     if (r.isOk) return true;
 
@@ -138,14 +138,14 @@ class GroupCubit extends Cubit<GroupState> {
 
     final channel = _client.getChatChannel(_chatId);
     if (channel == null || channel.state != PhoenixChannelState.joined) return false;
-    final r = await channel.push('chat:leave_group', {}).future;
+    final r = await channel.push('chat:delete', {}).future;
 
     emit(state.copyWith(busy: false));
     if (r.isOk) return true;
     return false;
   }
 
-  Future addUser(String phoneNumber) async {
+  Future addUser(String userId) async {
     final state = this.state;
     if (state is! GroupStateReady) return;
     if (state.busy) return;
@@ -153,14 +153,14 @@ class GroupCubit extends Cubit<GroupState> {
 
     final channel = _client.getChatChannel(_chatId);
     if (channel == null || channel.state != PhoenixChannelState.joined) return;
-    final r = await channel.push('chat:add_group_member', {'member_id': phoneNumber}).future;
+    final r = await channel.push('chat:member:add:$userId', {}).future;
     emit(state.copyWith(busy: false));
     if (r.isOk) return true;
 
     return false;
   }
 
-  Future removeUser(String phoneNumber) async {
+  Future removeUser(String userId) async {
     final state = this.state;
     if (state is! GroupStateReady) return;
     if (state.busy) return;
@@ -168,7 +168,7 @@ class GroupCubit extends Cubit<GroupState> {
 
     final channel = _client.getChatChannel(_chatId);
     if (channel == null || channel.state != PhoenixChannelState.joined) return;
-    final r = await channel.push('chat:remove_group_member', {'member_id': phoneNumber}).future;
+    final r = await channel.push('chat:member:remove:$userId', {}).future;
     emit(state.copyWith(busy: false));
     if (r.isOk) return true;
 
@@ -183,7 +183,7 @@ class GroupCubit extends Cubit<GroupState> {
 
     final channel = _client.getChatChannel(_chatId);
     if (channel == null || channel.state != PhoenixChannelState.joined) return;
-    final r = await channel.push('chat:set_group_moderator', {'member_id': userId, 'is_moderator': isModerator}).future;
+    final r = await channel.push('chat:member:set_authorities:$userId', {'is_moderator': isModerator}).future;
     emit(state.copyWith(busy: false));
     if (r.isOk) return true;
 
@@ -198,7 +198,7 @@ class GroupCubit extends Cubit<GroupState> {
 
     final channel = _client.getChatChannel(_chatId);
     if (channel == null || channel.state != PhoenixChannelState.joined) return;
-    final r = await channel.push('chat:set_group_name', {'name': name}).future;
+    final r = await channel.push('chat:patch', {'name': name}).future;
     emit(state.copyWith(busy: false));
     if (r.isOk) return true;
 

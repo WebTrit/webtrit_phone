@@ -74,7 +74,7 @@ class ChatsSyncWorker {
         final eventsStream = userChannel.messages.transform(StreamBuffer());
 
         // Fetch actual user chat ids
-        final req = await userChannel.push('chat:user_chat_ids', {}, pushTimeout).future;
+        final req = await userChannel.push('chat:get_ids', {}, pushTimeout).future;
         final actualChatIds = req.response.cast<int>();
 
         // Process removed chats
@@ -138,14 +138,14 @@ class ChatsSyncWorker {
         final eventsStream = channel.messages.transform(StreamBuffer());
 
         // Fetch chat info
-        final infoReq = await channel.push('chat:info', {}, pushTimeout).future;
+        final infoReq = await channel.push('chat:get', {}, pushTimeout).future;
         final chat = Chat.fromMap(infoReq.response as Map<String, dynamic>);
         await chatsRepository.upsertChat(chat);
         yield chat;
 
         // Fetch read cursors
-        final cursorsReq = await channel.push('chat:get_cursors', {}, pushTimeout).future;
-        final cursors = (cursorsReq.response['data'] as List).map((e) => ChatMessageReadCursor.fromMap(e)).toList();
+        final cursorsReq = await channel.push('chat:cursor:get', {}, pushTimeout).future;
+        final cursors = (cursorsReq.response as List).map((e) => ChatMessageReadCursor.fromMap(e)).toList();
         for (final cursor in cursors) {
           await chatsRepository.upsertChatMessageReadCursor(cursor);
           yield cursor;
@@ -251,7 +251,7 @@ class ChatsSyncWorker {
             yield {'event': 'viewed', messageIds: messageIds, viewedAt: viewedAt};
           }
 
-          if (e.event.value == 'read_cursor_update') {
+          if (e.event.value == 'chat:cursor:set') {
             final cursor = ChatMessageReadCursor.fromMap(e.payload as Map<String, dynamic>);
             await chatsRepository.upsertChatMessageReadCursor(cursor);
             yield cursor;

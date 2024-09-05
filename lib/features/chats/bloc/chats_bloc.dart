@@ -55,10 +55,10 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
 
   void _onClientConnected(_ClientConnected event, Emitter<ChatsState> emit) async {
     try {
-      if (!_client.channels.containsKey('chat:auth')) {
+      if (!_client.channels.containsKey('chat:user:me')) {
         // Auth process using channel connect payload
         // Can be eliminated by retrieving user_id during main auth flow
-        final authChannel = _client.addChannel(topic: 'chat:auth');
+        final authChannel = _client.addChannel(topic: 'chat:user:me');
         final authChannelJoinResponse = await authChannel.join().future;
         final userId = authChannelJoinResponse.response['user_id'];
 

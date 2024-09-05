@@ -24,7 +24,7 @@ class ChatMessageReadCursor extends Equatable {
     return <String, dynamic>{
       'chat_id': chatId,
       'user_id': userId,
-      'time': time.toIso8601String,
+      'last_read_at': time.toIso8601String,
     };
   }
 
@@ -32,7 +32,7 @@ class ChatMessageReadCursor extends Equatable {
     return ChatMessageReadCursor(
       chatId: map['chat_id'] as int,
       userId: map['user_id'] as String,
-      time: DateTime.parse(map['time'] as String),
+      time: DateTime.parse(map['last_read_at'] as String),
     );
   }
 

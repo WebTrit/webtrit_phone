@@ -78,7 +78,7 @@ class OutboxQueueWorker {
 
       var payload = {
         'content': message.content,
-        'id_key': message.idKey,
+        'idempotency_key': message.idKey,
         'reply_to_id': message.replyToId,
         'forwarded_from_id': message.forwardFromId,
         'author_id': message.authorId,
@@ -118,7 +118,7 @@ class OutboxQueueWorker {
       var payload = {
         'recipient': participantId,
         'content': message.content,
-        'id_key': message.idKey,
+        'idempotency_key': message.idKey,
         'reply_to_id': message.replyToId,
         'forwarded_from_id': message.forwardFromId,
         'author_id': message.authorId,
@@ -152,8 +152,8 @@ class OutboxQueueWorker {
       if (channel == null) return;
       if (channel.state != PhoenixChannelState.joined) return;
 
-      var payload = {'new_content': messageEdit.newContent, 'id': messageEdit.id};
-      final r = await channel.push('message:edit', payload).future;
+      var payload = {'new_content': messageEdit.newContent};
+      final r = await channel.push('message:edit:${messageEdit.id}', payload).future;
 
       if (r.isOk) {
         final message = ChatMessage.fromMap(r.response);
@@ -179,8 +179,7 @@ class OutboxQueueWorker {
       if (channel == null) return;
       if (channel.state != PhoenixChannelState.joined) return;
 
-      var payload = {'id': messageDelete.id};
-      final r = await channel.push('message:delete', payload).future;
+      final r = await channel.push('message:delete:${messageDelete.id}', {}).future;
 
       if (r.isOk) {
         final message = ChatMessage.fromMap(r.response);
@@ -235,8 +234,8 @@ class OutboxQueueWorker {
       if (channel == null) return;
       if (channel.state != PhoenixChannelState.joined) return;
 
-      var payload = {'time': readCursor.time};
-      final r = await channel.push('chat:set_read_cursor', payload).future;
+      var payload = {'last_read_at': readCursor.time.toUtc().toIso8601String()};
+      final r = await channel.push('chat:cursor:set', payload).future;
 
       if (r.isOk) {
         await _outboxRepository.deleteOutboxReadCursor(readCursor.chatId);
