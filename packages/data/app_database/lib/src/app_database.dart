@@ -606,6 +606,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
     );
 
     return q.watch().map((rows) {
+      if (rows.isEmpty) return null;
       ContactData contact = rows.first.readTable(contactsTable);
       List<ContactPhoneData> phones = [];
       List<ContactEmailData> emails = [];
