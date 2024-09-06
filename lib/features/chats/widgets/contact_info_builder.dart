@@ -26,7 +26,6 @@ class ContactInfoBuilder extends StatefulWidget {
 class _ContactInfoBuilderState extends State<ContactInfoBuilder> {
   late final contactsRepo = context.read<ContactsRepository>();
   late final StreamSubscription contactSub;
-  late final StreamSubscription contactEmailsSub;
 
   Contact? contact;
   bool loading = true;
@@ -34,10 +33,15 @@ class _ContactInfoBuilderState extends State<ContactInfoBuilder> {
   @override
   void initState() {
     super.initState();
-    contactSub = contactsRepo.watchContactBySourceWithPhonesAndEmails(widget.sourceType, widget.sourceId).listen((ct) {
-      loading = false;
-      if (mounted) setState(() => contact = ct);
-    });
+    final e = ContactWatchPoolEntry(widget.sourceType, widget.sourceId, contactsRepo);
+    setContact(e.value);
+    contactSub = e.stream.listen((c) => setContact(c));
+  }
+
+  setContact(Contact? contact) {
+    loading = false;
+    this.contact = contact;
+    if (mounted) setState(() {});
   }
 
   @override
@@ -49,5 +53,49 @@ class _ContactInfoBuilderState extends State<ContactInfoBuilder> {
   @override
   Widget build(BuildContext context) {
     return widget.builder(context, contact, loading: loading);
+  }
+}
+
+/// Pool of broadcast auto-closable [stream] for [Contact] with its last [value]
+/// used to avoid invoking multiple streams and futures for same contact on same screen
+class ContactWatchPoolEntry {
+  ContactWatchPoolEntry._(this._sourceType, this._sourceId, this._contactsRepo) {
+    _controller = StreamController<Contact?>.broadcast(onListen: _onListen, onCancel: _onCancel);
+  }
+
+  factory ContactWatchPoolEntry(ContactSourceType sourceType, String sourceId, ContactsRepository contactsRepo) {
+    final key = '$sourceType:$sourceId';
+    return _pool.putIfAbsent(key, () => ContactWatchPoolEntry._(sourceType, sourceId, contactsRepo));
+  }
+
+  static final _pool = <String, ContactWatchPoolEntry>{};
+
+  final ContactSourceType _sourceType;
+  final String _sourceId;
+  final ContactsRepository _contactsRepo;
+
+  late StreamController<Contact?> _controller;
+  StreamSubscription? _sub;
+  Contact? _contact;
+
+  /// Updates stream of contact
+  Stream<Contact?> get stream => _controller.stream;
+
+  /// Last cached value of contact
+  Contact? get value => _contact;
+
+  _onListen() {
+    final stream = _contactsRepo.watchContactBySourceWithPhonesAndEmails(_sourceType, _sourceId);
+    _sub = stream.listen((contact) => _handleUpdate(contact));
+  }
+
+  _handleUpdate(Contact? contact) {
+    _controller.add(contact);
+    _contact = contact;
+  }
+
+  _onCancel() {
+    _sub?.cancel();
+    _contact = null;
   }
 }
