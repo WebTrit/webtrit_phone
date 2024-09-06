@@ -93,6 +93,9 @@ class _$PermissionsStateCopyWithImpl<$Res, $Val extends PermissionsState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of PermissionsState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -111,6 +114,9 @@ class __$$PermissionsStateInitialImplCopyWithImpl<$Res>
       _$PermissionsStateInitialImpl _value,
       $Res Function(_$PermissionsStateInitialImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of PermissionsState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -238,6 +244,9 @@ class __$$PermissionsStateInProgressImplCopyWithImpl<$Res>
       _$PermissionsStateInProgressImpl _value,
       $Res Function(_$PermissionsStateInProgressImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of PermissionsState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -368,6 +377,8 @@ class __$$PermissionsManufacturerTipNeededImplCopyWithImpl<$Res>
       $Res Function(_$PermissionsManufacturerTipNeededImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of PermissionsState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -408,7 +419,9 @@ class _$PermissionsManufacturerTipNeededImpl
   @override
   int get hashCode => Object.hash(runtimeType, manufacturer);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PermissionsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PermissionsManufacturerTipNeededImplCopyWith<
@@ -505,7 +518,10 @@ abstract class PermissionsManufacturerTipNeeded implements PermissionsState {
       final Manufacturer manufacturer) = _$PermissionsManufacturerTipNeededImpl;
 
   Manufacturer get manufacturer;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of PermissionsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PermissionsManufacturerTipNeededImplCopyWith<
           _$PermissionsManufacturerTipNeededImpl>
       get copyWith => throw _privateConstructorUsedError;
@@ -527,6 +543,9 @@ class __$$PermissionsStateSuccessImplCopyWithImpl<$Res>
       _$PermissionsStateSuccessImpl _value,
       $Res Function(_$PermissionsStateSuccessImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of PermissionsState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -656,6 +675,8 @@ class __$$PermissionsStateFailureImplCopyWithImpl<$Res>
       $Res Function(_$PermissionsStateFailureImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of PermissionsState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -692,7 +713,9 @@ class _$PermissionsStateFailureImpl implements PermissionsStateFailure {
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(error));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PermissionsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PermissionsStateFailureImplCopyWith<_$PermissionsStateFailureImpl>
@@ -788,7 +811,10 @@ abstract class PermissionsStateFailure implements PermissionsState {
       _$PermissionsStateFailureImpl;
 
   Object get error;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of PermissionsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PermissionsStateFailureImplCopyWith<_$PermissionsStateFailureImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

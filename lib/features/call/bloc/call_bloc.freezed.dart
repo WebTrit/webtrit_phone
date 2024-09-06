@@ -12047,7 +12047,9 @@ mixin _$CallState {
   bool? get minimized => throw _privateConstructorUsedError;
   bool? get speaker => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CallState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CallStateCopyWith<CallState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -12080,6 +12082,8 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of CallState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -12168,6 +12172,8 @@ class __$$CallStateImplCopyWithImpl<$Res>
       _$CallStateImpl _value, $Res Function(_$CallStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CallState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -12346,7 +12352,9 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
       minimized,
       speaker);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CallState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CallStateImplCopyWith<_$CallStateImpl> get copyWith =>
@@ -12387,8 +12395,11 @@ abstract class _CallState extends CallState {
   bool? get minimized;
   @override
   bool? get speaker;
+
+  /// Create a copy of CallState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CallStateImplCopyWith<_$CallStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -12416,7 +12427,9 @@ mixin _$ActiveCall {
   MediaStream? get localStream => throw _privateConstructorUsedError;
   MediaStream? get remoteStream => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ActiveCall
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ActiveCallCopyWith<ActiveCall> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -12460,6 +12473,8 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ActiveCall
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -12555,6 +12570,8 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
     ) as $Val);
   }
 
+  /// Create a copy of ActiveCall
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $TransferCopyWith<$Res>? get transfer {
@@ -12608,6 +12625,8 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
       _$ActiveCallImpl _value, $Res Function(_$ActiveCallImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ActiveCall
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -12859,7 +12878,9 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
       localStream,
       remoteStream);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ActiveCall
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ActiveCallImplCopyWith<_$ActiveCallImpl> get copyWith =>
@@ -12898,9 +12919,9 @@ abstract class _ActiveCall extends ActiveCall {
   CallkeepHandle get handle;
   @override
   String? get displayName;
-  @override
 
   /// If the call is result of a refer request, the id should be provided.
+  @override
   String? get fromReferId;
   @override
   bool get video;
@@ -12926,8 +12947,11 @@ abstract class _ActiveCall extends ActiveCall {
   MediaStream? get localStream;
   @override
   MediaStream? get remoteStream;
+
+  /// Create a copy of ActiveCall
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ActiveCallImplCopyWith<_$ActiveCallImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
