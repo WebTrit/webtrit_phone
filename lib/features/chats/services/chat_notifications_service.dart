@@ -79,9 +79,10 @@ class ChatNotificationsService {
   Future<void> _handleForegroundRemoteNotification(RemoteNotificationDTO message) async {
     _logger.info('onMessageReceivedMethod');
     try {
+      // TODO: remove fallback keys
       final chatId = int.tryParse(message.data['chat_id'] ?? '');
-      final messageId = int.tryParse(message.data['message_id'] ?? message.data['msg_id'] ?? '');
-      final senderId = message.data['sender_id'];
+      final messageId = int.tryParse(message.data['msg_id'] ?? message.data['chat_message_id'] ?? '');
+      final senderId = message.data['sender_id'] ?? message.data['chat_message_sender_id'];
       if (chatId == null || messageId == null || senderId == null) return;
 
       final title = message.title;
