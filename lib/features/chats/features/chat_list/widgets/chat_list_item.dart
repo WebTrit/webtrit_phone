@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/chats/chats.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -42,7 +43,7 @@ class _ChatListItemState extends State<ChatListItem> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
+        color: Theme.of(context).cardColor.withOpacity(0.1),
         borderRadius: BorderRadius.circular(16),
       ),
       child: ListTile(
@@ -58,47 +59,32 @@ class _ChatListItemState extends State<ChatListItem> {
     if (widget.chat.type == ChatType.dialog) {
       final userId = widget.userId;
       final participant = widget.chat.members.firstWhere((m) => m.userId != userId);
-      return CircleAvatar(
-        child: FittedBox(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ContactInfoBuilder(
-              sourceType: ContactSourceType.external,
-              sourceId: participant.userId,
-              builder: (context, contact, {required bool loading}) {
-                if (loading) return const SizedBox();
-
-                const textStyle = TextStyle(overflow: TextOverflow.ellipsis);
-                if (contact != null) {
-                  var text = contact.name.split(' ').first;
-                  if (text.length > 16) text = text.substring(0, 16);
-                  return FadeIn(child: Text(text, style: textStyle));
-                } else {
-                  return FadeIn(child: Text(participant.userId, style: textStyle));
-                }
-              },
-            ),
-          ),
-        ),
+      return ContactInfoBuilder(
+        sourceType: ContactSourceType.external,
+        sourceId: participant.userId,
+        builder: (context, contact, {required bool loading}) {
+          return LeadingAvatar(
+            username: contact?.name,
+            thumbnail: contact?.thumbnail,
+            thumbnailUrl: contact?.thumbnailUrl,
+            registered: contact?.registered,
+            radius: 24,
+          );
+        },
       );
     } else {
       var text = widget.chat.name?.split(' ').first ?? widget.chat.id.toString();
       if (text.length > 16) text = text.substring(0, 16);
-      return CircleAvatar(
-        child: FittedBox(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              text.toUpperCase(),
-              softWrap: true,
-            ),
-          ),
-        ),
+      return LeadingAvatar(
+        username: widget.chat.name ?? 'Chat ${widget.chat.id}',
+        radius: 24,
       );
     }
   }
 
   Widget title() {
+    final lastMessage = widget.lastMessage;
+
     if (widget.chat.type == ChatType.dialog) {
       final userId = widget.userId;
       final participant = widget.chat.members.firstWhere((m) => m.userId != userId);
@@ -121,8 +107,7 @@ class _ChatListItemState extends State<ChatListItem> {
             ),
           ),
           const SizedBox(width: 4),
-          const Icon(Icons.person, size: 12),
-          const SizedBox(width: 4),
+          if (lastMessage != null) Text(lastMessage.createdAt.timeOrDate, style: const TextStyle(fontSize: 12)),
         ],
       );
     } else {
@@ -131,7 +116,7 @@ class _ChatListItemState extends State<ChatListItem> {
         children: [
           Expanded(child: Text(name, style: const TextStyle(overflow: TextOverflow.ellipsis))),
           const SizedBox(width: 4),
-          usersCount(),
+          if (lastMessage != null) Text(lastMessage.createdAt.timeOrDate, style: const TextStyle(fontSize: 12)),
         ],
       );
     }
@@ -157,11 +142,21 @@ class _ChatListItemState extends State<ChatListItem> {
       children: [
         if (lastMessage != null)
           Expanded(
-            child: ParticipantName(
-              senderId: lastMessage.senderId,
-              userId: widget.userId,
-              style: textStyle,
-              textMap: (name) => '$name: ${lastMessage.content}',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ParticipantName(
+                  senderId: lastMessage.senderId,
+                  userId: widget.userId,
+                  style: textStyle,
+                  textMap: (name) => '$name:',
+                ),
+                Text(
+                  lastMessage.content,
+                  style: textStyle,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
           )
         else
@@ -179,7 +174,7 @@ class _ChatListItemState extends State<ChatListItem> {
               margin: const EdgeInsets.only(left: 8),
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
               decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
+                color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(

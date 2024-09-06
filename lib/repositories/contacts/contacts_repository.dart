@@ -40,6 +40,13 @@ class ContactsRepository {
     });
   }
 
+  Stream<Contact?> watchContactBySourceWithPhonesAndEmails(ContactSourceType sourceType, String sourceId) {
+    return _appDatabase.contactsDao.watchContactExtBySource(sourceType.toData(), sourceId).map((c) {
+      if (c == null) return null;
+      return _toContactWithPhonesAndEmails(c);
+    });
+  }
+
   Future<Contact?> getContactBySource(ContactSourceType sourceType, String sourceId) async {
     final contactData = await _appDatabase.contactsDao.getContactBySource(sourceType.toData(), sourceId);
     if (contactData == null) return null;

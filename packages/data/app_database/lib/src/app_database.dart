@@ -596,6 +596,32 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
     });
   }
 
+  Stream<ContactWithPhonesAndEmailsData?> watchContactExtBySource(ContactSourceTypeEnum sourceType, String sourceId) {
+    final q =
+        (select(contactsTable)..where((t) => t.sourceType.equalsValue(sourceType) & t.sourceId.equals(sourceId))).join(
+      [
+        leftOuterJoin(contactPhonesTable, contactPhonesTable.contactId.equalsExp(contactsTable.id)),
+        leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
+      ],
+    );
+
+    return q.watch().map((rows) {
+      ContactData contact = rows.first.readTable(contactsTable);
+      List<ContactPhoneData> phones = [];
+      List<ContactEmailData> emails = [];
+
+      for (final row in rows) {
+        final phone = row.readTableOrNull(contactPhonesTable);
+        final email = row.readTableOrNull(contactEmailsTable);
+
+        if (phone != null && !phones.contains(phone)) phones.add(phone);
+        if (email != null && !emails.contains(email)) emails.add(email);
+      }
+
+      return ContactWithPhonesAndEmailsData(contact: contact, phones: phones, emails: emails);
+    });
+  }
+
   Future<ContactData> insertOnUniqueConflictUpdateContact(Insertable<ContactData> contact) =>
       into(contactsTable).insertReturning(contact,
           onConflict: DoUpdate((_) => contact, target: [contactsTable.sourceType, contactsTable.sourceId]));

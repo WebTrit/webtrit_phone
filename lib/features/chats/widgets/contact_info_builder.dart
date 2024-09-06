@@ -26,6 +26,7 @@ class ContactInfoBuilder extends StatefulWidget {
 class _ContactInfoBuilderState extends State<ContactInfoBuilder> {
   late final contactsRepo = context.read<ContactsRepository>();
   late final StreamSubscription contactSub;
+  late final StreamSubscription contactEmailsSub;
 
   Contact? contact;
   bool loading = true;
@@ -33,7 +34,7 @@ class _ContactInfoBuilderState extends State<ContactInfoBuilder> {
   @override
   void initState() {
     super.initState();
-    contactSub = contactsRepo.watchContactBySource(widget.sourceType, widget.sourceId).listen((ct) {
+    contactSub = contactsRepo.watchContactBySourceWithPhonesAndEmails(widget.sourceType, widget.sourceId).listen((ct) {
       loading = false;
       if (mounted) setState(() => contact = ct);
     });
