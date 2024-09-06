@@ -18,9 +18,7 @@ class ChatListScreenPage extends StatelessWidget {
 
     final widget = BlocProvider(
       create: (context) => ChatListCubit(chatsRepository),
-      child: const ChatListScreen(
-        title: Text(EnvironmentConfig.APP_NAME),
-      ),
+      child: const ChatListScreen(title: Text(EnvironmentConfig.APP_NAME)),
     );
 
     return widget;

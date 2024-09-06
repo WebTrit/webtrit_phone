@@ -89,10 +89,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
         if (state.initialising) {
           return const Center(child: CircularProgressIndicator());
         }
-        if (state.chats.isEmpty) {
-          return Center(child: Text(context.l10n.chats_ChatListScreen_empty));
-        }
-        return ChatsList(chatlist: state.chats);
+
+        return ChatsList(chatlist: state.chats, smsChatlist: state.smsChats);
       }),
       floatingActionButton: FloatingActionButton(
         key: actionButtonKey,

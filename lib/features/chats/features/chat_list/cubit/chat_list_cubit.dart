@@ -25,7 +25,7 @@ class ChatListCubit extends Cubit<ChatListState> {
     final chatsList = await _chatsRepository.getChatsWithLastMessages();
     chatsList.sort(_comparator);
 
-    emit(ChatListState(chats: chatsList, initialising: false));
+    emit(ChatListState(chatsList, [], false));
     _logger.info('Initialised: ${chatsList.length} chats');
 
     _chatsListSub = _chatsRepository.eventBus.listen((event) {
