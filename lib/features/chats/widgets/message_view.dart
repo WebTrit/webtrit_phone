@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_parsed_text/flutter_parsed_text.dart';
+import 'package:flutter_link_previewer/flutter_link_previewer.dart';
 
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -43,19 +46,6 @@ class _MessageViewState extends State<MessageView> {
   late final chatsRepository = context.read<ChatsRepository>();
   late final client = context.read<ChatsBloc>().state.client;
 
-  static final previewsCache = LruMap<int, types.PreviewData>(maximumSize: 500);
-
-  void handlePreviewDataFetched(types.TextMessage message, types.PreviewData previewData) {
-    setState(() => previewsCache[message.text.hashCode] = previewData);
-  }
-
-  types.TextMessage messageWithPreview(types.TextMessage message) {
-    if (previewsCache.containsKey(message.text.hashCode)) {
-      return message.copyWith(previewData: previewsCache[message.text.hashCode]) as types.TextMessage;
-    }
-    return message;
-  }
-
   Future<ChatMessage?> fetchMessage(int msgId, int chatId) async {
     final msg = await chatsRepository.getMessageById(msgId);
     if (msg != null) return msg;
@@ -88,6 +78,9 @@ class _MessageViewState extends State<MessageView> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     final uiMessage = widget.message;
     final chatMessage = widget.message.chatMessage;
 
@@ -172,54 +165,27 @@ class _MessageViewState extends State<MessageView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            ParticipantName(senderId: senderId, userId: widget.userId, key: Key(senderId)),
+            const SizedBox(height: 4),
             if (isReply) ...[
               replyQuote(chatMessage!),
               const SizedBox(height: 8),
             ],
             if (isForward) ...[
               forwardQuote(chatMessage!),
-              const SizedBox(height: 8),
-              ParticipantName(senderId: senderId, userId: widget.userId, key: Key(senderId)),
-              Text(context.l10n.chats_MessageView_forwarded, style: const TextStyle(color: Colors.white, fontSize: 12)),
             ],
-            if (!isForward && !isDeleted)
-              TextMessage(
-                emojiEnlargementBehavior: EmojiEnlargementBehavior.single,
-                hideBackgroundOnEmojiMessages: false,
-                message: messageWithPreview(uiMessage),
-                showName: true,
-                usePreviewData: true,
-                onPreviewDataFetched: handlePreviewDataFetched,
-                options: const TextMessageOptions(isTextSelectable: false),
-                nameBuilder: (user) => ParticipantName(senderId: user.id, userId: widget.userId, key: Key(user.id)),
-              ),
+            if (!isForward && !isDeleted) ...[
+              MessageBody(text: chatMessage?.content ?? uiMessage.text),
+            ],
             if (isEdited && !isDeleted) ...[
               Text(context.l10n.chats_MessageView_edited, style: const TextStyle(color: Colors.white, fontSize: 12)),
             ],
-            // if (isMine && (chatMessage?.viaSms ?? false) && !isDeleted) ...[
-            //   const Text('[sms]', style: TextStyle(color: Colors.white, fontSize: 12)),
-            //   if (chatMessage?.smsOutState != null)
-            //     Text('[${chatMessage?.smsOutState?.name}]', style: const TextStyle(color: Colors.white, fontSize: 12)),
-            // ],
             if (isDeleted) ...[
-              ParticipantName(senderId: senderId, userId: widget.userId, key: Key(senderId)),
               Text(context.l10n.chats_MessageView_deleted, style: const TextStyle(color: Colors.white, fontSize: 12)),
             ],
             if (chatMessage?.createdAt != null) ...[
               const SizedBox(height: 4),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(Icons.access_time, color: Colors.blue[100], size: 10),
-                  const SizedBox(width: 2),
-                  Text(
-                    chatMessage!.createdAt.toHHmm,
-                    style: TextStyle(color: Colors.blue[100], fontSize: 10, height: 1),
-                    textAlign: TextAlign.right,
-                  ),
-                ],
-              ),
+              Text(chatMessage!.createdAt.toHHmm, style: TextStyle(color: colorScheme.secondaryFixed, fontSize: 10))
             ],
           ],
         ),
@@ -228,82 +194,177 @@ class _MessageViewState extends State<MessageView> {
   }
 
   Widget replyQuote(ChatMessage chatMessage) {
+    final colorScheme = Theme.of(context).colorScheme;
     return FutureBuilder(
         future: fetchMessage(chatMessage.replyToId!, chatMessage.chatId),
         builder: (context, snapshot) {
           final msg = snapshot.data;
 
-          final textMessage = types.TextMessage(
-            author: types.User(id: msg?.senderId ?? '-1', firstName: msg?.senderId ?? 'loading...'),
-            id: msg?.idKey ?? '-1',
-            remoteId: msg?.id.toString(),
-            text: msg?.content ?? 'loading...',
-            showStatus: false,
-            createdAt: msg?.createdAt.millisecondsSinceEpoch,
-          );
-
           return Container(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.grey.withOpacity(0.4),
+              color: Colors.grey.withOpacity(0.25),
               borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  spreadRadius: 1,
-                  blurRadius: 32,
-                  offset: const Offset(0, 1),
-                ),
-              ],
+              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), spreadRadius: 0, blurRadius: 16)],
             ),
-            child: TextMessage(
-              emojiEnlargementBehavior: EmojiEnlargementBehavior.single,
-              hideBackgroundOnEmojiMessages: false,
-              message: messageWithPreview(textMessage),
-              showName: true,
-              usePreviewData: true,
-              onPreviewDataFetched: handlePreviewDataFetched,
-              options: const TextMessageOptions(isTextSelectable: false),
-              nameBuilder: (user) => ParticipantName(senderId: user.id, userId: widget.userId, key: Key(user.id)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (msg != null)
+                      ParticipantName(senderId: msg.senderId, userId: widget.userId, key: Key(msg.senderId))
+                    else
+                      Text('loading...', style: TextStyle(color: colorScheme.secondaryFixed, fontSize: 14)),
+                    const SizedBox(width: 8),
+                    Icon(Icons.reply_outlined, color: colorScheme.secondaryFixed, size: 14),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                MessageBody(text: msg?.content ?? 'loading...'),
+              ],
             ),
           );
         });
   }
 
   Widget forwardQuote(ChatMessage msg) {
-    final textMessage = types.TextMessage(
-      author: types.User(id: msg.authorId!, firstName: msg.authorId),
-      id: msg.idKey,
-      remoteId: msg.id.toString(),
-      text: msg.content,
-      showStatus: false,
-      createdAt: msg.createdAt.millisecondsSinceEpoch,
-    );
-
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Colors.grey.withOpacity(0.4),
+        color: Colors.grey.withOpacity(0.25),
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 32,
-            offset: const Offset(0, 1),
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), spreadRadius: 0, blurRadius: 16)],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Flexible(child: ParticipantName(senderId: msg.authorId!, userId: widget.userId, key: Key(msg.authorId!))),
+              const SizedBox(width: 8),
+              Icon(Icons.forward_outlined, color: colorScheme.secondaryFixed, size: 14),
+            ],
           ),
+          const SizedBox(height: 4),
+          MessageBody(text: msg.content),
         ],
       ),
-      child: TextMessage(
-        emojiEnlargementBehavior: EmojiEnlargementBehavior.single,
-        hideBackgroundOnEmojiMessages: false,
-        message: messageWithPreview(textMessage),
-        showName: true,
-        usePreviewData: true,
-        onPreviewDataFetched: handlePreviewDataFetched,
-        options: const TextMessageOptions(isTextSelectable: false),
-        nameBuilder: (user) => ParticipantName(senderId: user.id, userId: widget.userId, key: Key(user.id)),
-      ),
+    );
+  }
+}
+
+class MessageBody extends StatefulWidget {
+  const MessageBody({
+    super.key,
+    required this.text,
+    this.style = const TextStyle(
+      color: Colors.white,
+      fontSize: 12,
+      fontWeight: FontWeight.w400,
+      decorationColor: Colors.white,
+    ),
+  });
+
+  final String text;
+  final TextStyle style;
+
+  @override
+  State<MessageBody> createState() => _MessageBodyState();
+}
+
+class _MessageBodyState extends State<MessageBody> {
+  String? link;
+  types.PreviewData? linkPreview;
+  static final previewsCache = LruMap<String, types.PreviewData>(maximumSize: 100);
+
+  @override
+  void initState() {
+    super.initState();
+    findLink(widget.text);
+  }
+
+  @override
+  void didUpdateWidget(covariant MessageBody oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.text != widget.text) findLink(widget.text);
+  }
+
+  findLink(String text) {
+    final regex = RegExp(regexLink, caseSensitive: false);
+    final match = regex.stringMatch(text);
+    linkPreview = previewsCache[match];
+    if (mounted) setState(() => link = match);
+  }
+
+  setLinkPreview(data) {
+    if (link != null) previewsCache[link!] = data;
+    if (mounted) setState(() => linkPreview = data);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (link != null) ...[
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.25),
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), spreadRadius: 0, blurRadius: 16)],
+            ),
+            padding: const EdgeInsets.all(8),
+            // margin: const EdgeInsets.symmetric(vertical: 8),
+            child: LayoutBuilder(builder: (context, constrains) {
+              return LinkPreview(
+                textStyle: widget.style,
+                linkStyle: widget.style,
+                headerStyle: widget.style,
+                metadataTextStyle: widget.style,
+                metadataTitleStyle: widget.style,
+                enableAnimation: true,
+                onPreviewDataFetched: setLinkPreview,
+                previewData: linkPreview,
+                text: link!,
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.all(0),
+              );
+            }),
+          ),
+          const SizedBox(height: 8),
+        ],
+        ParsedText(
+          parse: [
+            mailToMatcher(
+              style: widget.style.copyWith(decoration: TextDecoration.underline),
+            ),
+            urlMatcher(
+              style: widget.style.copyWith(decoration: TextDecoration.underline),
+            ),
+            boldMatcher(
+              style: widget.style.merge(PatternStyle.bold.textStyle),
+            ),
+            italicMatcher(
+              style: widget.style.merge(PatternStyle.italic.textStyle),
+            ),
+            lineThroughMatcher(
+              style: widget.style.merge(PatternStyle.lineThrough.textStyle),
+            ),
+            codeMatcher(
+              style: widget.style.merge(PatternStyle.code.textStyle),
+            ),
+          ],
+          regexOptions: const RegexOptions(multiLine: true, dotAll: true),
+          style: widget.style.copyWith(fontFamily: theme.textTheme.bodyMedium?.fontFamily),
+          text: widget.text,
+          textWidthBasis: TextWidthBasis.longestLine,
+        ),
+      ],
     );
   }
 }

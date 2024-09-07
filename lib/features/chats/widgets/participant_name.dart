@@ -36,14 +36,14 @@ class ParticipantName extends StatelessWidget {
         sourceType: ContactSourceType.external,
         sourceId: senderId,
         builder: (context, contact, {required bool loading}) {
-          if (loading) return const SizedBox();
+          if (loading) return const SizedBox.shrink();
 
-          if (contact != null) {
-            final name = textMap?.call(contact.name) ?? contact.name;
-            return FadeIn(child: Text(name, style: textStyle, maxLines: 1, overflow: TextOverflow.ellipsis));
-          } else {
-            return FadeIn(child: Text(senderId, style: textStyle, maxLines: 1, overflow: TextOverflow.ellipsis));
-          }
+          final name = contact?.name ?? senderId;
+          final mappedName = textMap?.call(name) ?? name;
+          return FadeIn(
+            duration: const Duration(milliseconds: 100),
+            child: Text(mappedName, style: textStyle, maxLines: 1, overflow: TextOverflow.ellipsis),
+          );
         },
       );
     }
