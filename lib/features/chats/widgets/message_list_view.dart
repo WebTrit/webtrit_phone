@@ -12,8 +12,11 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/chats/chats.dart';
 import 'package:webtrit_phone/models/models.dart';
 
+import 'message_view.dart';
+
 final _logger = Logger('MessageListView');
 
+@Deprecated('Use message_list_view_custom instead, its will be removed')
 class MessageListView extends StatefulWidget {
   const MessageListView({
     required this.userId,
@@ -355,8 +358,6 @@ class _MessageListViewState extends State<MessageListView> {
           textMessageBuilder: (message, {required messageWidth, required showName}) => MessageView(
             userId: widget.userId,
             message: message,
-            messageWidth: messageWidth,
-            showName: showName,
             handleSetForReply: handleSetForReply,
             handleSetForForward: handleSetForForward,
             handleSetForEdit: handleSetForEdit,
