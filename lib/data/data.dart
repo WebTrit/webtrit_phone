@@ -1,6 +1,7 @@
 export 'package:app_database/app_database.dart';
 
 export 'app_certificates.dart';
+export 'app_error_filter.dart';
 export 'app_info.dart';
 export 'app_permissions.dart';
 export 'app_preferences.dart';
