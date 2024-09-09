@@ -271,8 +271,8 @@ class _MessageViewState extends State<MessageView> {
                           if (isMine && isSended == false)
                             CircularProgressTemplate(color: colorScheme.onSurface, size: 12, width: 1),
                           if (isMine && isSended && !isViewedByMembers)
-                            Icon(Icons.done, color: colorScheme.onSurface, size: 12),
-                          if (isMine && isViewedByMembers) Icon(Icons.done_all, color: colorScheme.onSurface, size: 12),
+                            Icon(Icons.done, color: colorScheme.tertiary, size: 12),
+                          if (isMine && isViewedByMembers) Icon(Icons.done_all, color: colorScheme.tertiary, size: 12),
                           const SizedBox(width: 2),
                           if (chatMessage?.createdAt != null)
                             Text(chatMessage!.createdAt.toHHmm, style: theme.subContentStyle)
@@ -517,10 +517,9 @@ class _MessageBodyState extends State<MessageBody> {
 }
 
 extension MsgViewExt on ThemeData {
-  TextStyle get userNameStyle =>
-      TextStyle(color: colorScheme.onSecondaryContainer, fontSize: 12, fontWeight: FontWeight.w600);
+  TextStyle get userNameStyle => TextStyle(color: colorScheme.onSurface, fontSize: 12, fontWeight: FontWeight.w600);
   TextStyle get contentStyle => TextStyle(color: colorScheme.onSurface, fontSize: 12);
-  TextStyle get subContentStyle => TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 10);
+  TextStyle get subContentStyle => TextStyle(color: colorScheme.onSurface.withOpacity(0.5), fontSize: 10);
   Color get contentColor => colorScheme.onSecondaryFixed;
   BoxDecoration get quoteDecoration => BoxDecoration(
         color: colorScheme.secondaryFixed.withOpacity(0.25),
