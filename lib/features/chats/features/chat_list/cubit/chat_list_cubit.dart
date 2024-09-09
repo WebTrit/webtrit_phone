@@ -65,10 +65,12 @@ class ChatListCubit extends Cubit<ChatListState> {
 
   List<(Chat, ChatMessage?)> _mergeWithMessageUpdate(ChatMessage message) {
     final index = state.chats.indexWhere((element) => element.$1.id == message.chatId);
-    if (index != -1) {
+    final oldMessage = state.chats[index].$2;
+    final isOldMessageNewer = oldMessage != null && oldMessage.createdAt.isAfter(message.createdAt);
+
+    if (index != -1 && !isOldMessageNewer) {
       final newList = List.of(state.chats);
       newList[index] = (newList[index].$1, message);
-      newList.sort(_comparator);
       return newList;
     }
 
