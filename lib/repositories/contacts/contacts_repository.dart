@@ -89,6 +89,8 @@ class ContactsRepository {
       aliasName: data.contact.aliasName,
       thumbnail: data.contact.thumbnail,
       thumbnailUrl: gravatarUrl,
+      phones: data.phones.map(_toRealContactPhone).toList(),
+      emails: data.emails.map(_toContactEmail).toList(),
     );
   }
 
@@ -113,6 +115,15 @@ class ContactsRepository {
       number: data.contactPhoneData.number,
       label: data.contactPhoneData.label,
       favorite: data.favoriteData != null,
+    );
+  }
+
+  ContactPhone _toRealContactPhone(ContactPhoneData data) {
+    return ContactPhone(
+      id: data.id,
+      number: data.number,
+      label: data.label,
+      favorite: false,
     );
   }
 
