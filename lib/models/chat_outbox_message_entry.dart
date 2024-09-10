@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 
 class ChatOutboxMessageEntry extends Equatable {
   final String idKey;
+  final String content;
   final int? chatId;
   final String? participantId;
   final int? replyToId;
@@ -10,11 +11,11 @@ class ChatOutboxMessageEntry extends Equatable {
   final String? authorId;
   final bool viaSms;
   final String? smsNumber;
-  final String content;
   final int sendAttempts;
 
   const ChatOutboxMessageEntry({
     required this.idKey,
+    required this.content,
     this.chatId,
     this.participantId,
     this.replyToId,
@@ -22,13 +23,13 @@ class ChatOutboxMessageEntry extends Equatable {
     this.authorId,
     this.viaSms = false,
     this.smsNumber,
-    required this.content,
     this.sendAttempts = 0,
   });
 
   @override
   List<Object?> get props => [
         idKey,
+        content,
         chatId,
         participantId,
         replyToId,
@@ -36,7 +37,6 @@ class ChatOutboxMessageEntry extends Equatable {
         authorId,
         viaSms,
         smsNumber,
-        content,
         sendAttempts,
       ];
 
@@ -46,17 +46,18 @@ class ChatOutboxMessageEntry extends Equatable {
   ChatOutboxMessageEntry copyWith({
     String? idKey,
     int? chatId,
+    String? content,
     String? participantId,
     int? replyToId,
     int? forwardFromId,
     String? authorId,
     bool? viaSms,
     String? smsNumber,
-    String? content,
     int? sendAttempts,
   }) {
     return ChatOutboxMessageEntry(
       idKey: idKey ?? this.idKey,
+      content: content ?? this.content,
       chatId: chatId ?? this.chatId,
       participantId: participantId ?? this.participantId,
       replyToId: replyToId ?? this.replyToId,
@@ -64,7 +65,6 @@ class ChatOutboxMessageEntry extends Equatable {
       authorId: authorId ?? this.authorId,
       viaSms: viaSms ?? this.viaSms,
       smsNumber: smsNumber ?? this.smsNumber,
-      content: content ?? this.content,
       sendAttempts: sendAttempts ?? this.sendAttempts,
     );
   }

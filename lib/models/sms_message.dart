@@ -1,49 +1,45 @@
 import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
-class ChatMessage extends Equatable {
+enum SmsSendingStatus { waiting, sent, failed, delivered }
+
+class SmsMessage extends Equatable {
   final int id;
   final String idKey;
-  final String senderId;
-  final int chatId;
-  final int? replyToId;
-  final int? forwardFromId;
-  final String? authorId;
+  final String externalId;
+  final int conversationId;
+  final String fromPhoneNumber;
+  final String toPhoneNumber;
+  final SmsSendingStatus sendingStatus;
   final String content;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final DateTime? editedAt;
-  final DateTime? deletedAt;
 
-  const ChatMessage({
+  const SmsMessage({
     required this.id,
     required this.idKey,
-    required this.senderId,
-    required this.chatId,
-    required this.replyToId,
-    required this.forwardFromId,
-    required this.authorId,
+    required this.externalId,
+    required this.conversationId,
+    required this.fromPhoneNumber,
+    required this.toPhoneNumber,
+    required this.sendingStatus,
     required this.content,
     required this.createdAt,
     required this.updatedAt,
-    required this.editedAt,
-    required this.deletedAt,
   });
 
   @override
   List<Object?> get props => [
         id,
         idKey,
-        senderId,
-        chatId,
-        replyToId,
-        forwardFromId,
-        authorId,
+        externalId,
+        conversationId,
+        fromPhoneNumber,
+        toPhoneNumber,
+        sendingStatus,
         content,
         createdAt,
         updatedAt,
-        editedAt,
-        deletedAt,
       ];
 
   @override
@@ -53,42 +49,38 @@ class ChatMessage extends Equatable {
     return <String, dynamic>{
       'id': id,
       'idempotency_key': idKey,
-      'sender_id': senderId,
-      'chat_id': chatId,
-      'reply_to_id': replyToId,
-      'forwarded_from_id': forwardFromId,
-      'author_id': authorId,
+      'external_id': externalId,
+      'sms_conversation_id': conversationId,
+      'from_phone_number': fromPhoneNumber,
+      'to_phone_number': toPhoneNumber,
+      'sending_status': sendingStatus.name,
       'content': content,
-      'created_at': createdAt.toIso8601String(),
+      'inserted_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
-      'edited_at': editedAt?.toIso8601String(),
-      'deleted_at': deletedAt?.toIso8601String(),
     };
   }
 
-  factory ChatMessage.fromMap(Map<String, dynamic> map) {
-    return ChatMessage(
+  factory SmsMessage.fromMap(Map<String, dynamic> map) {
+    return SmsMessage(
       id: map['id'] as int,
       idKey: map['idempotency_key'] as String,
-      senderId: map['sender_id'] as String,
-      chatId: map['chat_id'] as int,
-      replyToId: map['reply_to_id'] != null ? map['reply_to_id'] as int : null,
-      forwardFromId: map['forwarded_from_id'] != null ? map['forwarded_from_id'] as int : null,
-      authorId: map['author_id'] != null ? map['author_id'] as String : null,
+      externalId: map['external_id'] as String,
+      conversationId: map['sms_conversation_id'] as int,
+      fromPhoneNumber: map['from_phone_number'] as String,
+      toPhoneNumber: map['to_phone_number'] as String,
+      sendingStatus: SmsSendingStatus.values.byName(map['sending_status'] as String),
       content: map['content'] as String,
-      createdAt: DateTime.parse(map['created_at'] as String),
+      createdAt: DateTime.parse(map['inserted_at'] as String),
       updatedAt: DateTime.parse(map['updated_at'] as String),
-      editedAt: map['edited_at'] != null ? DateTime.parse(map['edited_at'] as String) : null,
-      deletedAt: map['deleted_at'] != null ? DateTime.parse(map['deleted_at'] as String) : null,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory ChatMessage.fromJson(String source) => ChatMessage.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory SmsMessage.fromJson(String source) => SmsMessage.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
-extension MessagesListExtension<T extends ChatMessage> on List<T> {
+extension SmsMessageListExtension<T extends SmsMessage> on List<T> {
   T findById(int id) => firstWhere((element) => element.id == id);
 
   List<T> mergeWith(T message) {

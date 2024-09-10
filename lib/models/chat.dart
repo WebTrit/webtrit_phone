@@ -8,7 +8,7 @@ class Chat extends Equatable {
   final int id;
   final ChatType type;
   final String? name;
-  final DateTime insertedAt;
+  final DateTime createdAt;
   final DateTime updatedAt;
   final List<ChatMember> members;
 
@@ -16,7 +16,7 @@ class Chat extends Equatable {
     required this.id,
     required this.type,
     required this.name,
-    required this.insertedAt,
+    required this.createdAt,
     required this.updatedAt,
     required this.members,
   });
@@ -26,7 +26,7 @@ class Chat extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, type, name, insertedAt, updatedAt, members];
+  List<Object?> get props => [id, type, name, createdAt, updatedAt, members];
 
   @override
   bool get stringify => true;
@@ -36,7 +36,7 @@ class Chat extends Equatable {
     ChatType? type,
     String? name,
     String? creatorId,
-    DateTime? insertedAt,
+    DateTime? createdAt,
     DateTime? updatedAt,
     List<ChatMember>? members,
   }) {
@@ -44,7 +44,7 @@ class Chat extends Equatable {
       id: id ?? this.id,
       type: type ?? this.type,
       name: name ?? this.name,
-      insertedAt: insertedAt ?? this.insertedAt,
+      createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       members: members ?? this.members,
     );
@@ -55,7 +55,7 @@ class Chat extends Equatable {
       'id': id,
       'type': type.name,
       'name': name,
-      'inserted_at': insertedAt.toIso8601String(),
+      'inserted_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
       'members': members.map((x) => x.toMap()).toList(),
     };
@@ -66,7 +66,7 @@ class Chat extends Equatable {
       id: map['id'] as int,
       type: ChatType.values.byName(map['type']),
       name: map['name'] != null ? map['name'] as String : null,
-      insertedAt: DateTime.parse(map['inserted_at']),
+      createdAt: DateTime.parse(map['inserted_at']),
       updatedAt: DateTime.parse(map['updated_at']),
       members: List<ChatMember>.from(
         (map['members'] as List<dynamic>).map<ChatMember>(

@@ -1,12 +1,9 @@
 import 'dart:async';
 
-import 'package:logging/logging.dart';
-
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/repositories/chats/components/chats_outbox_drift_mapper.dart';
 
-Logger _logger = Logger('ChatsOutboxRepository');
+import 'components/chats_outbox_drift_mapper.dart';
 
 class ChatsOutboxRepository with ChatsOutboxDriftMapper {
   ChatsOutboxRepository({required AppDatabase appDatabase}) : _appDatabase = appDatabase;
@@ -16,17 +13,17 @@ class ChatsOutboxRepository with ChatsOutboxDriftMapper {
 
   Future<List<ChatOutboxMessageEntry>> getChatOutboxMessages() async {
     final entriesData = await _chatsDao.getChatOutboxMessages();
-    return entriesData.map(chatOutboxMessageEntryFromDrift).toList();
+    return entriesData.map(outboxMessageEntryFromDrift).toList();
   }
 
   Stream<List<ChatOutboxMessageEntry>> watchChatOutboxMessages() {
     return _chatsDao.watchChatOutboxMessages().map((entriesData) {
-      return entriesData.map(chatOutboxMessageEntryFromDrift).toList();
+      return entriesData.map(outboxMessageEntryFromDrift).toList();
     });
   }
 
   Future<int> upsertOutboxMessage(ChatOutboxMessageEntry entry) {
-    final entryData = chatOutboxMessageDataFromChatOutboxMessageEntry(entry);
+    final entryData = outboxMessageEntryToDrift(entry);
     return _chatsDao.upsertChatOutboxMessage(entryData);
   }
 
@@ -36,17 +33,17 @@ class ChatsOutboxRepository with ChatsOutboxDriftMapper {
 
   Future<List<ChatOutboxMessageEditEntry>> getChatOutboxMessageEdits() async {
     final entriesData = await _chatsDao.getChatOutboxMessageEdits();
-    return entriesData.map(chatOutboxMessageEditEntryFromDrift).toList();
+    return entriesData.map(outboxMessageEditEntryFromDrift).toList();
   }
 
   Stream<List<ChatOutboxMessageEditEntry>> watchChatOutboxMessageEdits() {
     return _chatsDao.watchChatOutboxMessageEdits().map((entriesData) {
-      return entriesData.map(chatOutboxMessageEditEntryFromDrift).toList();
+      return entriesData.map(outboxMessageEditEntryFromDrift).toList();
     });
   }
 
   Future<int> upsertOutboxMessageEdit(ChatOutboxMessageEditEntry entry) {
-    final entryData = chatOutboxMessageEditDataFromChatOutboxMessageEditEntry(entry);
+    final entryData = outboxMessageEditEntryToDrift(entry);
     return _chatsDao.upsertChatOutboxMessageEdit(entryData);
   }
 
@@ -56,17 +53,17 @@ class ChatsOutboxRepository with ChatsOutboxDriftMapper {
 
   Future<List<ChatOutboxMessageDeleteEntry>> getChatOutboxMessageDeletes() async {
     final entriesData = await _chatsDao.getChatOutboxMessageDeletes();
-    return entriesData.map(chatOutboxMessageDeleteEntryFromDrift).toList();
+    return entriesData.map(outboxMessageDeleteEntryFromDrift).toList();
   }
 
   Stream<List<ChatOutboxMessageDeleteEntry>> watchChatOutboxMessageDeletes() {
     return _chatsDao.watchChatOutboxMessageDeletes().map((entriesData) {
-      return entriesData.map(chatOutboxMessageDeleteEntryFromDrift).toList();
+      return entriesData.map(outboxMessageDeleteEntryFromDrift).toList();
     });
   }
 
   Future<int> upsertOutboxMessageDelete(ChatOutboxMessageDeleteEntry entry) {
-    final entryData = chatOutboxMessageDeleteDataFromChatOutboxMessageDeleteEntry(entry);
+    final entryData = outboxMessageDeleteEntryToDrift(entry);
     return _chatsDao.upsertChatOutboxMessageDelete(entryData);
   }
 
@@ -77,28 +74,28 @@ class ChatsOutboxRepository with ChatsOutboxDriftMapper {
   Future<ChatOutboxReadCursorEntry?> getOutboxReadCursor(int chatId) {
     return _chatsDao
         .getChatOutboxReadCursor(chatId)
-        .then((data) => data != null ? chatOutboxReadCursorEntryFromDrift(data) : null);
+        .then((data) => data != null ? outboxReadCursorEntryFromDrift(data) : null);
   }
 
   Stream<ChatOutboxReadCursorEntry?> watchOutboxReadCursor(int chatId) {
     return _chatsDao
         .watchChatOutboxReadCursor(chatId)
-        .map((data) => data != null ? chatOutboxReadCursorEntryFromDrift(data) : null);
+        .map((data) => data != null ? outboxReadCursorEntryFromDrift(data) : null);
   }
 
   Future<List<ChatOutboxReadCursorEntry>> getOutboxReadCursors() async {
     final entriesData = await _chatsDao.getChatOutboxReadCursors();
-    return entriesData.map(chatOutboxReadCursorEntryFromDrift).toList();
+    return entriesData.map(outboxReadCursorEntryFromDrift).toList();
   }
 
   Stream<List<ChatOutboxReadCursorEntry>> watchOutboxReadCursors() {
     return _chatsDao.watchChatOutboxReadCursors().map((entriesData) {
-      return entriesData.map(chatOutboxReadCursorEntryFromDrift).toList();
+      return entriesData.map(outboxReadCursorEntryFromDrift).toList();
     });
   }
 
   Future upsertOutboxReadCursor(ChatOutboxReadCursorEntry entry) {
-    final entryData = chatOutboxReadCursorDataFromEntry(entry);
+    final entryData = outboxReadCursorEntryToDrift(entry);
     return _chatsDao.upsertChatOutboxReadCursor(entryData);
   }
 

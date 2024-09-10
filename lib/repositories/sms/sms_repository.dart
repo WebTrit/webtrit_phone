@@ -1,0 +1,92 @@
+import 'dart:async';
+
+import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/models/models.dart';
+
+import 'components/sms_events.dart';
+import 'components/sms_drift_mapper.dart';
+
+class SmsRepository with SmsDriftMapper {
+  SmsRepository({required AppDatabase appDatabase}) : _appDatabase = appDatabase;
+
+  final AppDatabase _appDatabase;
+  SmsDao get _smsDao => _appDatabase.smsDao;
+
+  final StreamController<SmsEvent> _eventBus = StreamController.broadcast();
+  Stream<SmsEvent> get eventBus => _eventBus.stream;
+  _addEvent(SmsEvent event) => _eventBus.add(event);
+
+  Future<SmsConversation?> getConversation(int conversationId) async {
+    final conversationData = await _smsDao.getConversationById(conversationId);
+    if (conversationData == null) return null;
+    return conversationFromDrift(conversationData);
+  }
+
+  Future<List<SmsConversation>> getConversations() async {
+    final conversationsData = await _smsDao.getAllConversations();
+    return conversationsData.map(conversationFromDrift).toList();
+  }
+
+  Future<List<(SmsConversation, SmsMessage?)>> getConversationsWithLastMessages() async {
+    final conversationsData = await _smsDao.getConversationsWithLastMessage();
+    return conversationsData.map((data) => conversationWithLastMessageFromDrift(data)).toList();
+  }
+
+  Future<List<int>> getConversationIds() async {
+    return _smsDao.getConversationIds();
+  }
+
+  Future<SmsConversation?> findConversationByPhoneNumber(String phoneNumber) async {
+    final conversationData = await _smsDao.findConversationByPhoneNumber(phoneNumber);
+    return conversationData != null ? conversationFromDrift(conversationData) : null;
+  }
+
+  Future<void> upsertConversation(SmsConversation conversation) async {
+    final conversationData = conversationToDrift(conversation);
+    _smsDao.upsertConversation(conversationData);
+    _addEvent(SmsConversationUpdate(conversation));
+  }
+
+  Future<void> deleteConversationById(int conversationId) async {
+    await _smsDao.deleteConversationById(conversationId);
+    _addEvent(SmsConversationRemove(conversationId));
+  }
+
+  Future<SmsMessage?> getMessageById(int messageId) async {
+    final messageData = await _smsDao.getMessageById(messageId);
+    return messageData != null ? messageFromDrift(messageData) : null;
+  }
+
+  Future<List<SmsMessage>> getMessageHistory(int conversationId,
+      {DateTime? from, DateTime? to, int limit = 100}) async {
+    final messagesData = await _smsDao.getMessageHistory(conversationId, from: from, to: to, limit: limit);
+    return messagesData.map(messageFromDrift).toList();
+  }
+
+  Future<void> upsertMessage(SmsMessage message, {bool silent = false}) async {
+    await _smsDao.upsertMessage(messageToDrift(message));
+    if (!silent) _addEvent(SmsMessageUpdate(message));
+  }
+
+  Future<void> insertHistoryPage(List<SmsMessage> messages) async {
+    for (final message in messages) {
+      await upsertMessage(message, silent: true);
+    }
+  }
+
+  Future<SmsMessageSyncCursor?> getMessageSyncCursor(int conversationId, SmsSyncCursorType cursorType) async {
+    final type = messageSyncCursorTypeEnumToDrift(cursorType);
+    final data = await _smsDao.getSyncCursor(conversationId, type);
+    if (data != null) return messageSyncCursorFromDrift(data);
+    return null;
+  }
+
+  Future<void> upsertSmsMessageSyncCursor(SmsMessageSyncCursor cursor) async {
+    final data = messageSyncCursorToDrift(cursor);
+    await _smsDao.upsertSyncCursor(data);
+  }
+
+  Future<void> wipeData() async {
+    await _smsDao.wipeData();
+  }
+}

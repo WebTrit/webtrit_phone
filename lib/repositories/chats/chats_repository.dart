@@ -1,14 +1,10 @@
 import 'dart:async';
 
-import 'package:logging/logging.dart';
-
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 import 'components/chats_events.dart';
 import 'components/chats_drift_mapper.dart';
-
-Logger _logger = Logger('ChatsRepository');
 
 class ChatsRepository with ChatsDriftMapper {
   ChatsRepository({required AppDatabase appDatabase}) : _appDatabase = appDatabase;
@@ -20,8 +16,9 @@ class ChatsRepository with ChatsDriftMapper {
   Stream<ChatsEvent> get eventBus => _eventBus.stream;
   _addEvent(ChatsEvent event) => _eventBus.add(event);
 
-  Future<Chat> getChat(int chatId) async {
+  Future<Chat?> getChat(int chatId) async {
     final chatData = await _chatsDao.getChatWithMembers(chatId);
+    if (chatData == null) return null;
     return chatFromDrift(chatData);
   }
 
@@ -44,8 +41,8 @@ class ChatsRepository with ChatsDriftMapper {
   }
 
   Future<void> upsertChat(Chat chat) async {
-    final chatData = chatDataFromChat(chat);
-    final membersData = chat.members.map(chatMemberDataFromChatMember).toList();
+    final chatData = chatToDrift(chat);
+    final membersData = chat.members.map(chatMemberToDrift).toList();
     final chatDataWithMembers = ChatDataWithMembers(chatData, membersData);
     _chatsDao.upsertChatWithMembers(chatDataWithMembers);
     _addEvent(ChatUpdate(chat));
@@ -57,25 +54,18 @@ class ChatsRepository with ChatsDriftMapper {
   }
 
   Future<ChatMessage?> getMessageById(int messageId) async {
-    final messageData = await _chatsDao.getChatMessageById(messageId);
-    return messageData != null ? chatMessageFromDrift(messageData) : null;
+    final messageData = await _chatsDao.getMessageById(messageId);
+    return messageData != null ? messageFromDrift(messageData) : null;
   }
 
   Future<List<ChatMessage>> getMessageHistory(int chatId, {DateTime? from, DateTime? to, int limit = 100}) async {
     final messagesData = await _chatsDao.getMessageHistory(chatId, from: from, to: to, limit: limit);
-    return messagesData.map(chatMessageFromDrift).toList();
+    return messagesData.map(messageFromDrift).toList();
   }
 
   Future<void> upsertMessage(ChatMessage message, {bool silent = false}) async {
-    try {
-      await _chatsDao.upsertChatMessage(chatMessageDataFromChatMessage(message));
-      if (!silent) _addEvent(ChatMessageUpdate(message));
-    } on Exception catch (e) {
-      _logger.warning('upsertMessage failed, retrying', e);
-      // Drift lock exception handling, coz cant import [DriftRemoteException]
-      await Future.delayed(const Duration(milliseconds: 100));
-      await upsertMessage(message, silent: silent);
-    }
+    await _chatsDao.upsertChatMessage(messageToDrift(message));
+    if (!silent) _addEvent(ChatMessageUpdate(message));
   }
 
   Future<void> insertHistoryPage(List<ChatMessage> messages) async {
@@ -84,32 +74,26 @@ class ChatsRepository with ChatsDriftMapper {
     }
   }
 
-  Future<int> deleteOutboxMessageDelete(int id) {
-    return _chatsDao.deleteChatOutboxMessageDelete(id);
-  }
-
   Future<ChatMessageSyncCursor?> getChatMessageSyncCursor(int chatId, MessageSyncCursorType cursorType) async {
-    final type = chatMessageSyncCursorTypeEnumFromDrift(cursorType);
+    final type = messageSyncCursorTypeToDrift(cursorType);
     final data = await _chatsDao.getChatMessageSyncCursor(chatId, type);
-    if (data != null) return chatMessageSyncCursorFromDrift(data);
+    if (data != null) return messageSyncCursorFromDrift(data);
     return null;
   }
 
   Future<void> upsertChatMessageSyncCursor(ChatMessageSyncCursor cursor) async {
-    final data = chatMessageSyncCursorDataFromChatMessageSyncCursor(cursor);
+    final data = messageSyncCursorToDrift(cursor);
     await _chatsDao.upsertChatMessageSyncCursor(data);
   }
 
   Future<ChatMessageReadCursor?> getChatMessageReadCursor(int chatId, String userId) async {
     final data = await _chatsDao.getChatMessageReadCursor(chatId, userId);
-    if (data != null) return chatMessageReadCursorFromDrift(data);
+    if (data != null) return messageReadCursorFromDrift(data);
     return null;
   }
 
   Stream<List<ChatMessageReadCursor>> watchChatMessageReadCursors(int chatId) {
-    return _chatsDao
-        .watchChatMessageReadCursors(chatId)
-        .map((data) => data.map(chatMessageReadCursorFromDrift).toList());
+    return _chatsDao.watchChatMessageReadCursors(chatId).map((data) => data.map(messageReadCursorFromDrift).toList());
   }
 
   Future<void> upsertChatMessageReadCursor(ChatMessageReadCursor cursor) async {

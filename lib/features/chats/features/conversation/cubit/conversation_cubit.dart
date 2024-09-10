@@ -194,6 +194,7 @@ class ConversationCubit extends Cubit<ConversationState> {
     _logger.info('Preparing conversation with $_participantId');
 
     try {
+      // TODO: use full chat object instead of just id
       final chatId = await _chatsRepository.findDialogId(_participantId);
       if (chatId != null) _chat = await _chatsRepository.getChat(chatId);
       _logger.info('local chat find result: $_chat');

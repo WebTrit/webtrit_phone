@@ -1,11 +1,8 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-// ignore_for_file: unused_element, unused_field
-
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 mixin ChatsOutboxDriftMapper {
-  ChatOutboxMessageEntry chatOutboxMessageEntryFromDrift(ChatOutboxMessageData data) {
+  ChatOutboxMessageEntry outboxMessageEntryFromDrift(ChatOutboxMessageData data) {
     return ChatOutboxMessageEntry(
       idKey: data.idKey,
       chatId: data.chatId,
@@ -20,7 +17,7 @@ mixin ChatsOutboxDriftMapper {
     );
   }
 
-  ChatOutboxMessageData chatOutboxMessageDataFromChatOutboxMessageEntry(ChatOutboxMessageEntry entry) {
+  ChatOutboxMessageData outboxMessageEntryToDrift(ChatOutboxMessageEntry entry) {
     return ChatOutboxMessageData(
       idKey: entry.idKey,
       chatId: entry.chatId,
@@ -35,7 +32,7 @@ mixin ChatsOutboxDriftMapper {
     );
   }
 
-  ChatOutboxMessageEditEntry chatOutboxMessageEditEntryFromDrift(ChatOutboxMessageEditData data) {
+  ChatOutboxMessageEditEntry outboxMessageEditEntryFromDrift(ChatOutboxMessageEditData data) {
     return ChatOutboxMessageEditEntry(
       id: data.id,
       idKey: data.idKey,
@@ -45,7 +42,7 @@ mixin ChatsOutboxDriftMapper {
     );
   }
 
-  ChatOutboxMessageEditData chatOutboxMessageEditDataFromChatOutboxMessageEditEntry(ChatOutboxMessageEditEntry entry) {
+  ChatOutboxMessageEditData outboxMessageEditEntryToDrift(ChatOutboxMessageEditEntry entry) {
     return ChatOutboxMessageEditData(
       id: entry.id,
       idKey: entry.idKey,
@@ -55,7 +52,7 @@ mixin ChatsOutboxDriftMapper {
     );
   }
 
-  ChatOutboxMessageDeleteEntry chatOutboxMessageDeleteEntryFromDrift(ChatOutboxMessageDeleteData data) {
+  ChatOutboxMessageDeleteEntry outboxMessageDeleteEntryFromDrift(ChatOutboxMessageDeleteData data) {
     return ChatOutboxMessageDeleteEntry(
       id: data.id,
       idKey: data.idKey,
@@ -64,8 +61,7 @@ mixin ChatsOutboxDriftMapper {
     );
   }
 
-  ChatOutboxMessageDeleteData chatOutboxMessageDeleteDataFromChatOutboxMessageDeleteEntry(
-      ChatOutboxMessageDeleteEntry entry) {
+  ChatOutboxMessageDeleteData outboxMessageDeleteEntryToDrift(ChatOutboxMessageDeleteEntry entry) {
     return ChatOutboxMessageDeleteData(
       id: entry.id,
       idKey: entry.idKey,
@@ -74,7 +70,7 @@ mixin ChatsOutboxDriftMapper {
     );
   }
 
-  ChatOutboxReadCursorEntry chatOutboxReadCursorEntryFromDrift(ChatOutboxReadCursorData data) {
+  ChatOutboxReadCursorEntry outboxReadCursorEntryFromDrift(ChatOutboxReadCursorData data) {
     return ChatOutboxReadCursorEntry(
       chatId: data.chatId,
       time: DateTime.fromMicrosecondsSinceEpoch(data.timestampUsec),
@@ -82,7 +78,7 @@ mixin ChatsOutboxDriftMapper {
     );
   }
 
-  ChatOutboxReadCursorData chatOutboxReadCursorDataFromEntry(ChatOutboxReadCursorEntry entry) {
+  ChatOutboxReadCursorData outboxReadCursorEntryToDrift(ChatOutboxReadCursorEntry entry) {
     return ChatOutboxReadCursorData(
       chatId: entry.chatId,
       timestampUsec: entry.time.microsecondsSinceEpoch,

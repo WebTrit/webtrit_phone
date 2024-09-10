@@ -19,3 +19,7 @@ export 'local_contact_email.dart';
 export 'local_contact_phone.dart';
 export 'recent.dart';
 export 'recents_visibility_filter.dart';
+export 'sms_conversation.dart';
+export 'sms_message.dart';
+export 'sms_outbox_message_entry.dart';
+export 'sms_message_sync_cursor.dart';

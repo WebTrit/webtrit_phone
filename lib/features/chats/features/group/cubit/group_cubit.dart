@@ -255,6 +255,7 @@ class GroupCubit extends Cubit<GroupState> {
 
     try {
       final chat = await _chatsRepository.getChat(_chatId);
+      if (chat == null) throw Exception('Chat not found');
       _logger.info('init chat: $chat');
 
       final oldestCursor = await _chatsRepository.getChatMessageSyncCursor(_chatId, MessageSyncCursorType.oldest);

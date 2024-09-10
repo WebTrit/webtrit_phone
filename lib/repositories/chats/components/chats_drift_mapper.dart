@@ -1,6 +1,8 @@
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 
+typedef ChatWithLastMessage = (Chat, ChatMessage?);
+
 mixin ChatsDriftMapper {
   Chat chatFromDrift(ChatDataWithMembers data) {
     final chatData = data.chatData;
@@ -10,7 +12,7 @@ mixin ChatsDriftMapper {
       id: chatData.id,
       type: ChatType.values.byName(chatData.type.name),
       name: chatData.name,
-      insertedAt: chatData.insertedAtRemote,
+      createdAt: chatData.createdAtRemote,
       updatedAt: chatData.updatedAtRemote,
       members: chatMembers
           .map(
@@ -26,22 +28,22 @@ mixin ChatsDriftMapper {
     );
   }
 
-  (Chat chat, ChatMessage? message) chatWithLastMessageFromDrift((ChatDataWithMembers, ChatMessageData?) data) {
+  ChatWithLastMessage chatWithLastMessageFromDrift((ChatDataWithMembers, ChatMessageData?) data) {
     final lastMessageData = data.$2;
-    return (chatFromDrift(data.$1), lastMessageData != null ? chatMessageFromDrift(lastMessageData) : null);
+    return (chatFromDrift(data.$1), lastMessageData != null ? messageFromDrift(lastMessageData) : null);
   }
 
-  ChatData chatDataFromChat(Chat chat) {
+  ChatData chatToDrift(Chat chat) {
     return ChatData(
       id: chat.id,
       type: ChatTypeEnum.values.byName(chat.type.name),
       name: chat.name,
-      insertedAtRemote: chat.insertedAt,
+      createdAtRemote: chat.createdAt,
       updatedAtRemote: chat.updatedAt,
     );
   }
 
-  ChatMemberData chatMemberDataFromChatMember(ChatMember chatMember) {
+  ChatMemberData chatMemberToDrift(ChatMember chatMember) {
     return ChatMemberData(
       id: chatMember.id,
       chatId: chatMember.chatId,
@@ -52,7 +54,7 @@ mixin ChatsDriftMapper {
     );
   }
 
-  ChatMessage chatMessageFromDrift(ChatMessageData data) {
+  ChatMessage messageFromDrift(ChatMessageData data) {
     return ChatMessage(
       id: data.id,
       idKey: data.idKey,
@@ -61,9 +63,6 @@ mixin ChatsDriftMapper {
       replyToId: data.replyToId,
       forwardFromId: data.forwardFromId,
       authorId: data.authorId,
-      viaSms: data.viaSms,
-      smsOutState: data.smsOutState != null ? SmsOutState.values.byName(data.smsOutState!.name) : null,
-      smsNumber: data.smsNumber,
       content: data.content,
       createdAt: DateTime.fromMicrosecondsSinceEpoch(data.createdAtRemoteUsec),
       updatedAt: DateTime.fromMicrosecondsSinceEpoch(data.updatedAtRemoteUsec),
@@ -73,7 +72,7 @@ mixin ChatsDriftMapper {
     );
   }
 
-  ChatMessageData chatMessageDataFromChatMessage(ChatMessage message) {
+  ChatMessageData messageToDrift(ChatMessage message) {
     return ChatMessageData(
       id: message.id,
       idKey: message.idKey,
@@ -82,9 +81,6 @@ mixin ChatsDriftMapper {
       replyToId: message.replyToId,
       forwardFromId: message.forwardFromId,
       authorId: message.authorId,
-      viaSms: message.viaSms,
-      smsOutState: message.smsOutState != null ? SmsOutStateEnum.values.byName(message.smsOutState!.name) : null,
-      smsNumber: message.smsNumber,
       content: message.content,
       createdAtRemoteUsec: message.createdAt.microsecondsSinceEpoch,
       updatedAtRemoteUsec: message.updatedAt.microsecondsSinceEpoch,
@@ -93,31 +89,31 @@ mixin ChatsDriftMapper {
     );
   }
 
-  MessageSyncCursorType chatMessageSyncCursorTypeFromDrift(MessageSyncCursorTypeEnum type) {
+  MessageSyncCursorType messageSyncCursorTypeFromDrift(MessageSyncCursorTypeEnum type) {
     return MessageSyncCursorType.values.byName(type.name);
   }
 
-  MessageSyncCursorTypeEnum chatMessageSyncCursorTypeEnumFromDrift(MessageSyncCursorType type) {
+  MessageSyncCursorTypeEnum messageSyncCursorTypeToDrift(MessageSyncCursorType type) {
     return MessageSyncCursorTypeEnum.values.byName(type.name);
   }
 
-  ChatMessageSyncCursor chatMessageSyncCursorFromDrift(ChatMessageSyncCursorData data) {
+  ChatMessageSyncCursor messageSyncCursorFromDrift(ChatMessageSyncCursorData data) {
     return ChatMessageSyncCursor(
       chatId: data.chatId,
-      cursorType: chatMessageSyncCursorTypeFromDrift(data.cursorType),
+      cursorType: messageSyncCursorTypeFromDrift(data.cursorType),
       time: DateTime.fromMicrosecondsSinceEpoch(data.timestampUsec),
     );
   }
 
-  ChatMessageSyncCursorData chatMessageSyncCursorDataFromChatMessageSyncCursor(ChatMessageSyncCursor cursor) {
+  ChatMessageSyncCursorData messageSyncCursorToDrift(ChatMessageSyncCursor cursor) {
     return ChatMessageSyncCursorData(
       chatId: cursor.chatId,
-      cursorType: chatMessageSyncCursorTypeEnumFromDrift(cursor.cursorType),
+      cursorType: messageSyncCursorTypeToDrift(cursor.cursorType),
       timestampUsec: cursor.time.microsecondsSinceEpoch,
     );
   }
 
-  ChatMessageReadCursor chatMessageReadCursorFromDrift(ChatMessageReadCursorData data) {
+  ChatMessageReadCursor messageReadCursorFromDrift(ChatMessageReadCursorData data) {
     return ChatMessageReadCursor(
       chatId: data.chatId,
       userId: data.userId,
@@ -125,7 +121,7 @@ mixin ChatsDriftMapper {
     );
   }
 
-  ChatMessageReadCursorData chatMessageReadCursorDataFromChatMessageReadCursor(ChatMessageReadCursor cursor) {
+  ChatMessageReadCursorData messageReadCursorToDrift(ChatMessageReadCursor cursor) {
     return ChatMessageReadCursorData(
       chatId: cursor.chatId,
       userId: cursor.userId,
