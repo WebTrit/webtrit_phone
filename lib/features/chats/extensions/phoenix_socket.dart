@@ -11,12 +11,13 @@ extension PhoenixSocketExt on PhoenixSocket {
   /// Create channel by [chatId] and connect, if already exists returns it
   PhoenixChannel createChatChannel(int chatId) => addChannel(topic: 'chat:$chatId');
 
+  /// Create sms conversation channel by [conversationId] and connect, if already exists returns it
+  PhoenixChannel createSmsConversationChannel(int conversationId) => addChannel(topic: 'chat:sms:$conversationId');
+
   /// Get chat channel by [chatId] if exists
   PhoenixChannel? getChatChannel(int chatId) => channels.values.firstWhereOrNull((c) => c.topic == 'chat:$chatId');
 
-  /// Disconnect and remove channel by [chatId]
-  void removeChatChannel(int chatId) {
-    final channel = getChatChannel(chatId);
-    if (channel != null) removeChannel(channel);
-  }
+  /// Get sms conversation channel by [conversationId] if exists
+  PhoenixChannel? getSmsConversationChannel(int conversationId) =>
+      channels.values.firstWhereOrNull((c) => c.topic == 'chat:sms:$conversationId');
 }
