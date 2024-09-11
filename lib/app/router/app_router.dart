@@ -6,9 +6,11 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/app_shell.dart';
 import 'package:webtrit_phone/app/router/main_shell.dart';
+import 'package:webtrit_phone/background_call_handler.dart';
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 
 import 'deeplinks.dart';
@@ -23,7 +25,7 @@ final _logger = Logger('AppRouter');
 @AutoRouterConfig(
   replaceInRouteName: null,
 )
-class AppRouter extends _$AppRouter {
+class AppRouter extends RootStackRouter {
   AppRouter(
     this._appBloc,
     this._appPreferences,
@@ -35,9 +37,14 @@ class AppRouter extends _$AppRouter {
   final AppPermissions _appPermissions;
 
   String? get coreUrl => _appBloc.state.coreUrl;
+
   String? get token => _appBloc.state.token;
+
   bool get appPermissionsDenied => _appPermissions.isDenied;
+
   bool get appUserAgreementUnaccepted => _appBloc.state.userAgreementAccepted != true;
+
+  BottomMenuFlavorManager get bottomMenuFlavorManager => AppFeatureAvailability().bottomMenuFlavorManager;
 
   @override
   List<AutoRoute> get routes => [
@@ -130,11 +137,11 @@ class AppRouter extends _$AppRouter {
                   children: [
                     RedirectRoute(
                       path: '',
-                      redirectTo: _appPreferences.getActiveMainFlavor().name,
+                      redirectTo: bottomMenuFlavorManager.getRedirectTo(),
                     ),
                     AutoRoute(
                       page: FavoritesRouterPageRoute.page,
-                      path: MainFlavor.favorites.name,
+                      path: bottomMenuFlavorManager.getFlavorPathIfExists(MainFlavorType.favorites),
                       children: [
                         AutoRoute(
                           page: FavoritesScreenPageRoute.page,
@@ -148,7 +155,7 @@ class AppRouter extends _$AppRouter {
                     ),
                     AutoRoute(
                       page: RecentsRouterPageRoute.page,
-                      path: MainFlavor.recents.name,
+                      path: bottomMenuFlavorManager.getFlavorPathIfExists(MainFlavorType.recents),
                       children: [
                         AutoRoute(
                           page: RecentsScreenPageRoute.page,
@@ -162,7 +169,7 @@ class AppRouter extends _$AppRouter {
                     ),
                     AutoRoute(
                       page: ContactsRouterPageRoute.page,
-                      path: MainFlavor.contacts.name,
+                      path: bottomMenuFlavorManager.getFlavorPathIfExists(MainFlavorType.contacts),
                       children: [
                         AutoRoute(
                           page: ContactsScreenPageRoute.page,
@@ -176,8 +183,15 @@ class AppRouter extends _$AppRouter {
                     ),
                     AutoRoute(
                       page: KeypadScreenPageRoute.page,
-                      path: MainFlavor.keypad.name,
+                      path: bottomMenuFlavorManager.getFlavorPathIfExists(MainFlavorType.keypad),
                     ),
+                    ...bottomMenuFlavorManager.getEmbeddedFlavors().map((flavor) {
+                      return AutoRoute(
+                        usesPathAsKey: true,
+                        path: flavor.path,
+                        page: EmbeddedScreenPageRoute.page,
+                      );
+                    }),
                   ],
                 ),
                 AutoRoute(
@@ -367,3 +381,24 @@ Object _onNavigationLoggerMessage(String callbackName, NavigationResolver resolv
   return () =>
       '$callbackName: ${resolver.route.name} (${resolver.route.fullPath}) isReevaluating=${resolver.isReevaluating}';
 }
+
+// class CustomRedirectGuard extends AutoRouteGuard {
+//   final BottomMenuFlavorManager bottomMenuFlavorManager;
+//
+//   CustomRedirectGuard(this.bottomMenuFlavorManager);
+//
+//   @override
+//   void onNavigation(NavigationResolver resolver, StackRouter router) {
+//     final hasEmbedded = resolver.route.children?.firstWhereOrNull(
+//       (child) => child.name == EmbeddedScreenPageRoute.name && child.args == null,
+//     );
+//
+//     if (hasEmbedded != null) {
+//       final embeddedData = bottomMenuFlavorManager.getFlavorByUniqueId(hasEmbedded.stringMatch)!.data!;
+//       router.navigate(EmbeddedScreenPageRoute(embeddedData: embeddedData.path));
+//     } else {
+//       // Continue with navigation
+//       resolver.next(true);
+//     }
+//   }
+// }

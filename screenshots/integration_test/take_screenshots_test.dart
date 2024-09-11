@@ -89,7 +89,7 @@ void main() {
       return ScreenshotApp(
         appBloc: appBloc,
         child: const MainScreenScreenshot(
-          MainFlavor.favorites,
+          BottomMenuFlavorManager.favorites,
           Text(EnvironmentConfig.APP_NAME),
         ),
       );
@@ -98,7 +98,7 @@ void main() {
       return ScreenshotApp(
         appBloc: appBloc,
         child: const MainScreenScreenshot(
-          MainFlavor.recents,
+          BottomMenuFlavorManager.recents,
           Text(EnvironmentConfig.APP_NAME),
         ),
       );
@@ -107,7 +107,7 @@ void main() {
       return ScreenshotApp(
         appBloc: appBloc,
         child: const MainScreenScreenshot(
-          MainFlavor.keypad,
+          BottomMenuFlavorManager.keypad,
           Text(EnvironmentConfig.APP_NAME),
         ),
       );

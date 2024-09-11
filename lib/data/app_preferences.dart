@@ -95,11 +95,11 @@ class AppPreferences {
 
   Future<bool> removeLocale() => _sharedPreferences.remove(_kLocaleLanguageTagKey);
 
-  MainFlavor getActiveMainFlavor({MainFlavor defaultValue = MainFlavor.contacts}) {
+  MainFlavorType getActiveMainFlavor({MainFlavorType defaultValue = MainFlavorType.contacts}) {
     final activeMainFlavorString = _sharedPreferences.getString(_kActiveMainFlavorKey);
     if (activeMainFlavorString != null) {
       try {
-        return MainFlavor.values.byName(activeMainFlavorString);
+        return MainFlavorType.values.byName(activeMainFlavorString);
       } catch (_) {
         return defaultValue;
       }
@@ -108,7 +108,8 @@ class AppPreferences {
     }
   }
 
-  Future<bool> setActiveMainFlavor(MainFlavor value) => _sharedPreferences.setString(_kActiveMainFlavorKey, value.name);
+  Future<bool> setActiveMainFlavor(MainFlavor value) =>
+      _sharedPreferences.setString(_kActiveMainFlavorKey, value.type.value);
 
   RecentsVisibilityFilter getActiveRecentsVisibilityFilter(
       {RecentsVisibilityFilter defaultValue = RecentsVisibilityFilter.all}) {

@@ -79,7 +79,7 @@ class HandleNotDefinedPath implements DeepLinkHandler {
     ]);
   }
 
-  bool get _isInvalidScreenActive => router?.isRouteActive(UndefinedScreenPageRoute.name) == true;
+  bool get _isInvalidScreenActive => true;
 
   bool get _isInitial => deepLink.initial;
 

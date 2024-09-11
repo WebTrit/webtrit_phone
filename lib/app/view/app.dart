@@ -54,6 +54,8 @@ class _AppState extends State<App> {
       widget.appPreferences,
       widget.appPermissions,
     );
+
+    _appRouter.delegate();
   }
 
   @override

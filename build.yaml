@@ -1,0 +1,5 @@
+targets:
+  $default:
+    builders:
+      l10n_mapper_generator:l10n_mapper_builder:
+        enabled: true

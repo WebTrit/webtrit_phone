@@ -95,18 +95,18 @@ packages:
     dependency: "direct main"
     description:
       name: auto_route
-      sha256: eb33554581a0a4aa7e6da0f13a44291a55bf71359012f1d9feb41634ff908ff8
+      sha256: b83e8ce46da7228cdd019b5a11205454847f0a971bca59a7529b98df9876889b
       url: "https://pub.dev"
     source: hosted
-    version: "7.9.2"
+    version: "9.2.2"
   auto_route_generator:
     dependency: "direct dev"
     description:
       name: auto_route_generator
-      sha256: "11067a3bcd643812518fe26c0c9ec073990286cabfd9d74b6da9ef9b913c4d22"
+      sha256: c9086eb07271e51b44071ad5cff34e889f3156710b964a308c2ab590769e79e6
       url: "https://pub.dev"
     source: hosted
-    version: "7.3.2"
+    version: "9.0.0"
   bloc:
     dependency: "direct main"
     description:
@@ -620,7 +620,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_native_splash:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_native_splash
       sha256: aa06fec78de2190f3db4319dd60fdc8d12b2626e93ef9828633928c2dcaea840
@@ -896,6 +896,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.11"
+  l10n_mapper_generator:
+    dependency: "direct main"
+    description:
+      name: l10n_mapper_generator
+      sha256: "5ee55c5c521f6c0ba043d8335cf428dfe24a16cb940f0ed5b7453ce9783657f2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.2"
   leak_tracker:
     dependency: transitive
     description:
@@ -1700,13 +1708,13 @@ packages:
     source: hosted
     version: "1.1.0"
   web:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: web
-      sha256: "97da13628db363c635202ad97068d47c5b8aa555808e7a9411963c533b449b27"
+      sha256: d43c1d6b787bf0afad444700ae7f4db8827f701bc61c255ac8d328c6f4d52062
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.1"
+    version: "1.0.0"
   web_socket_channel:
     dependency: transitive
     description:

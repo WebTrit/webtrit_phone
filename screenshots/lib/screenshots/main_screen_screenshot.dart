@@ -14,7 +14,7 @@ class MainScreenScreenshot extends StatelessWidget {
     super.key,
   });
 
-  final MainFlavor flavor;
+  final BottomMenuFlavorManager flavor;
 
   final Widget? title;
 
@@ -36,9 +36,9 @@ class MainScreenScreenshot extends StatelessWidget {
     );
   }
 
-  Widget _flavorWidgetBuilder(BuildContext context, MainFlavor flavor) {
+  Widget _flavorWidgetBuilder(BuildContext context, BottomMenuFlavorManager flavor) {
     switch (flavor) {
-      case MainFlavor.favorites:
+      case BottomMenuFlavorManager.favorites:
         final widget = FavoritesScreen(
           title: title,
         );
@@ -47,7 +47,7 @@ class MainScreenScreenshot extends StatelessWidget {
           child: widget,
         );
         return provider;
-      case MainFlavor.recents:
+      case BottomMenuFlavorManager.recents:
         final widget = RecentsScreen(
           title: title,
         );
@@ -56,7 +56,7 @@ class MainScreenScreenshot extends StatelessWidget {
           child: widget,
         );
         return provider;
-      case MainFlavor.contacts:
+      case BottomMenuFlavorManager.contacts:
         final widget = ContactsScreen(
           sourceTypes: const [
             ContactSourceType.local,
@@ -70,7 +70,7 @@ class MainScreenScreenshot extends StatelessWidget {
           child: widget,
         );
         return provider;
-      case MainFlavor.keypad:
+      case BottomMenuFlavorManager.keypad:
         final widget = KeypadScreen(
           title: title,
         );

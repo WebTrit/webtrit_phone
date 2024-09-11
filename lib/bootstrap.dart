@@ -8,6 +8,7 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -15,12 +16,15 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_phone/app/app_bloc_observer.dart';
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/path_provider/_native.dart';
 
+import 'app/router/app_router.dart';
 import 'background_call_handler.dart';
 import 'environment_config.dart';
+import 'features/features.dart';
 import 'firebase_options.dart';
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
@@ -28,7 +32,8 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
   await runZonedGuarded(
     () async {
-      WidgetsFlutterBinding.ensureInitialized();
+      WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+      // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
       await _initFirebase();
       await _initFirebaseMessaging();
@@ -51,9 +56,23 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       await PackageInfo.init();
       await SecureStorage.init();
       await AppThemes.init();
+      await AppFeatureAvailability.init(AppThemes().uiComposeSettings);
       await AppSound.init(outgoingCallRingAsset: Assets.ringtones.outgoingCall1);
       await AppCertificates.init();
       await AppTime.init();
+
+
+      // MainFlavor.addFlavor(keypadFlavor);
+      // MainFlavor.addFlavor(favoritesFlavor);
+
+      // final callUser = EmbeddedFlavor(
+      //   title: "Embaded",
+      //   icon: IconData(0xe037, fontFamily: 'MaterialIcons'),
+      //   embeddedData: EmbeddedFlavorData(
+      //     url: "https://webtrit-app.web.app/example/example_embedded_call.html",
+      //   ),
+      // );
+      // MainFlavor.addFlavor(callUser);
 
       if (Platform.isAndroid) {
         WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());

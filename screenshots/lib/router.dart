@@ -72,21 +72,21 @@ class _IndexInputScreenState extends State<IndexInputScreen> {
       ScreenshotApp(
         appBloc: appBloc,
         child: const MainScreenScreenshot(
-          MainFlavor.favorites,
+          BottomMenuFlavorManager.favorites,
           Text(EnvironmentConfig.APP_NAME),
         ),
       ),
       ScreenshotApp(
         appBloc: appBloc,
         child: const MainScreenScreenshot(
-          MainFlavor.recents,
+          BottomMenuFlavorManager.recents,
           Text(EnvironmentConfig.APP_NAME),
         ),
       ),
       ScreenshotApp(
         appBloc: appBloc,
         child: const MainScreenScreenshot(
-          MainFlavor.keypad,
+          BottomMenuFlavorManager.keypad,
           Text(EnvironmentConfig.APP_NAME),
         ),
       ),

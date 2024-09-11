@@ -19,11 +19,13 @@ class WebViewScaffold extends StatefulWidget {
     this.title,
     required this.initialUri,
     this.addLocaleNameToQueryParameters = true,
+    this.showToolbar = true,
   });
 
   final Widget? title;
   final Uri initialUri;
   final bool addLocaleNameToQueryParameters;
+  final bool showToolbar;
 
   @override
   State<WebViewScaffold> createState() => _WebViewScaffoldState();
@@ -83,7 +85,7 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
     if (_backgroundColorCache != backgroundColor) {
       _backgroundColorCache = backgroundColor;
       _webViewController.setBackgroundColor(backgroundColor);
-    }
+   }
 
     final effectiveInitialUrl = _composeEffectiveInitialUrl();
     if (_effectiveInitialUrlCache != effectiveInitialUrl) {
@@ -118,20 +120,22 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: widget.title,
-        leading: const ExtBackButton(),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.refresh,
-            ),
-            onPressed: () {
-              _webViewController.reload();
-            },
-          ),
-        ],
-      ),
+      appBar: widget.showToolbar
+          ? AppBar(
+              title: widget.title,
+              leading: const ExtBackButton(),
+              actions: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.refresh,
+                  ),
+                  onPressed: () {
+                    _webViewController.reload();
+                  },
+                ),
+              ],
+            )
+          : null,
       body: Stack(
         alignment: AlignmentDirectional.topCenter,
         children: [

@@ -1,0 +1,40 @@
+{
+  "bottomMenuTabs": [
+    {
+      "title": "Title embedded 4",
+      "icon": "0xee55",
+      "type": "embedded",
+      "initial": false,
+      "data": {
+        "url": "https://webtrit-app.web.app/example/example_embedded_registration.html"
+      }
+    },
+    {
+      "title": "Keypad",
+      "icon": "0xee38",
+      "type": "keypad",
+      "initial": false,
+      "data": {
+        "url": "https://webtrit-app.web.app/example/example_embedded_call.html"
+      }
+    },
+    {
+      "title": "Title embedded 5",
+      "icon": "0xee55",
+      "type": "embedded",
+      "initial": true,
+      "data": {
+        "url": "https://webtrit-app.web.app/example/example_embedded_registration.html"
+      }
+    },
+    {
+      "title": "Title embedded 6",
+      "icon": "0xee55",
+      "type": "embedded",
+      "initial": false,
+      "data": {
+        "url": "https://webtrit-app.web.app/example/example_embedded_registration.html"
+      }
+    }
+  ]
+}

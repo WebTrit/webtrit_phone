@@ -10,4 +10,13 @@ extension GenericIterableExtension<T> on Iterable<T> {
     }
     return null;
   }
+
+  bool containsElementOfType<U>() {
+    return any((element) => element is U);
+  }
+
+  U getElementByType<U>() {
+    var element = firstWhere((element) => element is U) as U;
+    return element;
+  }
 }

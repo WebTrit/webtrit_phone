@@ -4,18 +4,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 
+import 'package:webtrit_phone/l10n/l10n.dart';
+
 import '../main.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({
     Key? key,
     required this.body,
-    required this.navigationBarFlavor,
+    required this.flavors,
+    required this.activeFlavor,
     this.onNavigationBarTap,
   }) : super(key: key ?? const ValueKey<String>('MainScreen'));
 
   final Widget body;
-  final MainFlavor navigationBarFlavor;
+  final List<MainFlavor> flavors;
+  final MainFlavor activeFlavor;
   final ValueChanged<MainFlavor>? onNavigationBarTap;
 
   @override
@@ -27,17 +31,17 @@ class MainScreen extends StatelessWidget {
         type: BottomNavigationBarType.fixed,
         selectedLabelStyle: themeData.textTheme.bodySmall,
         unselectedLabelStyle: themeData.textTheme.bodySmall,
-        currentIndex: navigationBarFlavor.index,
+        currentIndex: flavors.indexOf(activeFlavor),
         onTap: (index) {
           final onNavigationBarTap = this.onNavigationBarTap;
           if (onNavigationBarTap != null) {
-            onNavigationBarTap(MainFlavor.values[index]);
+            onNavigationBarTap(flavors[index]);
           }
         },
-        items: MainFlavor.values.map((flavor) {
+        items: flavors.map((flavor) {
           return BottomNavigationBarItem(
             icon: Icon(flavor.icon),
-            label: flavor.labelL10n(context),
+            label: context.getL10n(flavor.title),
           );
         }).toList(),
       ),

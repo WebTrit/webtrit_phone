@@ -72,7 +72,7 @@ class DemoCubit extends Cubit<DemoCubitState> {
   Future<DemoCallToActionsResponse> _getActions(MainFlavor tab, UserInfo userInfo) async {
     final callToActionParam = DemoCallToActionsParam(
       email: userInfo.email!,
-      tab: tab.name,
+      tab: "tab.name",
     );
 
     final actions = _webtritApiClient.getCallToActions(

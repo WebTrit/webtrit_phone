@@ -71,6 +71,10 @@ class $AssetsThemesGen {
   String get originalPageLightConfig =>
       'assets/themes/original.page.light.config.json';
 
+  /// File path: assets/themes/original.ui.compose.config.json
+  String get originalUiComposeConfig =>
+      'assets/themes/original.ui.compose.config.json';
+
   /// File path: assets/themes/original.widget.dark.config.json
   String get originalWidgetDarkConfig =>
       'assets/themes/original.widget.dark.config.json';
@@ -84,6 +88,7 @@ class $AssetsThemesGen {
         original,
         originalPageDarkConfig,
         originalPageLightConfig,
+        originalUiComposeConfig,
         originalWidgetDarkConfig,
         originalWidgetLightConfig
       ];
