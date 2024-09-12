@@ -15,23 +15,13 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$LoginCustomSigninState {
-  SessionToken? get sessionToken => throw _privateConstructorUsedError;
-
-  /// Create a copy of LoginCustomSigninState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $LoginCustomSigninStateCopyWith<LoginCustomSigninState> get copyWith =>
-      throw _privateConstructorUsedError;
-}
+mixin _$LoginCustomSigninState {}
 
 /// @nodoc
 abstract class $LoginCustomSigninStateCopyWith<$Res> {
   factory $LoginCustomSigninStateCopyWith(LoginCustomSigninState value,
           $Res Function(LoginCustomSigninState) then) =
       _$LoginCustomSigninStateCopyWithImpl<$Res, LoginCustomSigninState>;
-  @useResult
-  $Res call({SessionToken? sessionToken});
 }
 
 /// @nodoc
@@ -47,30 +37,14 @@ class _$LoginCustomSigninStateCopyWithImpl<$Res,
 
   /// Create a copy of LoginCustomSigninState
   /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? sessionToken = freezed,
-  }) {
-    return _then(_value.copyWith(
-      sessionToken: freezed == sessionToken
-          ? _value.sessionToken
-          : sessionToken // ignore: cast_nullable_to_non_nullable
-              as SessionToken?,
-    ) as $Val);
-  }
 }
 
 /// @nodoc
-abstract class _$$LoginCustomSigninStateImplCopyWith<$Res>
-    implements $LoginCustomSigninStateCopyWith<$Res> {
+abstract class _$$LoginCustomSigninStateImplCopyWith<$Res> {
   factory _$$LoginCustomSigninStateImplCopyWith(
           _$LoginCustomSigninStateImpl value,
           $Res Function(_$LoginCustomSigninStateImpl) then) =
       __$$LoginCustomSigninStateImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({SessionToken? sessionToken});
 }
 
 /// @nodoc
@@ -85,66 +59,29 @@ class __$$LoginCustomSigninStateImplCopyWithImpl<$Res>
 
   /// Create a copy of LoginCustomSigninState
   /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? sessionToken = freezed,
-  }) {
-    return _then(_$LoginCustomSigninStateImpl(
-      sessionToken: freezed == sessionToken
-          ? _value.sessionToken
-          : sessionToken // ignore: cast_nullable_to_non_nullable
-              as SessionToken?,
-    ));
-  }
 }
 
 /// @nodoc
 
 class _$LoginCustomSigninStateImpl implements _LoginCustomSigninState {
-  const _$LoginCustomSigninStateImpl({this.sessionToken});
-
-  @override
-  final SessionToken? sessionToken;
+  const _$LoginCustomSigninStateImpl();
 
   @override
   String toString() {
-    return 'LoginCustomSigninState(sessionToken: $sessionToken)';
+    return 'LoginCustomSigninState()';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LoginCustomSigninStateImpl &&
-            (identical(other.sessionToken, sessionToken) ||
-                other.sessionToken == sessionToken));
+            other is _$LoginCustomSigninStateImpl);
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, sessionToken);
-
-  /// Create a copy of LoginCustomSigninState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$LoginCustomSigninStateImplCopyWith<_$LoginCustomSigninStateImpl>
-      get copyWith => __$$LoginCustomSigninStateImplCopyWithImpl<
-          _$LoginCustomSigninStateImpl>(this, _$identity);
+  int get hashCode => runtimeType.hashCode;
 }
 
 abstract class _LoginCustomSigninState implements LoginCustomSigninState {
-  const factory _LoginCustomSigninState({final SessionToken? sessionToken}) =
-      _$LoginCustomSigninStateImpl;
-
-  @override
-  SessionToken? get sessionToken;
-
-  /// Create a copy of LoginCustomSigninState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$LoginCustomSigninStateImplCopyWith<_$LoginCustomSigninStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  const factory _LoginCustomSigninState() = _$LoginCustomSigninStateImpl;
 }

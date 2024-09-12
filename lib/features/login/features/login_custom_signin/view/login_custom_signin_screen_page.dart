@@ -22,7 +22,10 @@ class LoginCustomSigninScreenPage extends StatelessWidget {
     final customLoginFeature = FeatureAccess().customLoginFeature!;
 
     return BlocProvider(
-      create: (context) => LoginCustomSigninCubit(context.read<NotificationsBloc>()),
+      create: (context) => LoginCustomSigninCubit(
+        context.read<NotificationsBloc>(),
+        context.read<LoginCubit>(),
+      ),
       child: LoginCustomSigninScreen(
         title: context.parseL10n(customLoginFeature.titleL10n!),
         initialUri: customLoginFeature.uri!,
