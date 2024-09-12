@@ -392,17 +392,30 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
-    if (newRegistrationStatus.isRegistering) {
-      add(const _ResetStateEvent.completeCalls());
-    } else if (newRegistrationStatus.isRegistered) {
+    if (newRegistrationStatus.isRegistered) {
       notificationsBloc.add(NotificationsSubmitted(AppOnlineNotification()));
-    } else if (newRegistrationStatus.isFailed || newRegistrationStatus.isUnregistered) {
-      add(const _ResetStateEvent.completeCalls());
+      return;
+    }
 
-      if (event.registration.reason != null) {
-        notificationsBloc.add(NotificationsSubmitted(ErrorMessageNotification(event.registration.reason!)));
-      } else {
-        notificationsBloc.add(NotificationsSubmitted(AppOfflineNotification()));
+    if (newRegistrationStatus.isRegistering || newRegistrationStatus.isFailed || newRegistrationStatus.isUnregistered) {
+      add(const _ResetStateEvent.completeCalls());
+    }
+
+    if (newRegistrationStatus.isUnregistered) {
+      notificationsBloc.add(NotificationsSubmitted(AppOfflineNotification()));
+      return;
+    }
+
+    if (newRegistrationStatus.isFailed) {
+      final code = SignalingRegistrationFailedCode.values.byCode(event.registration.code!);
+      final reason = event.registration.reason ?? code.toString();
+
+      switch (code) {
+        case SignalingRegistrationFailedCode.sipServerUnavailable:
+          notificationsBloc.add(NotificationsSubmitted(SipServerUnavailable()));
+          return;
+        default:
+          notificationsBloc.add(NotificationsSubmitted(ErrorMessageNotification(reason)));
       }
     }
   }
