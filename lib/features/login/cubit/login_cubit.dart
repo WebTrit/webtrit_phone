@@ -94,7 +94,10 @@ class LoginCubit extends Cubit<LoginState> {
 
     final demo = mode == LoginMode.demoCore;
     final coreUrl = demo ? demoCoreUrlFromEnvironment : coreUrlFromEnvironment;
-    if (coreUrl != null && mode != LoginMode.credentialsRequest) {
+
+    if (mode == LoginMode.customSignIn) {
+      emit(state.copyWith(coreUrl: coreUrl));
+    } else if (coreUrl != null && mode != LoginMode.credentialsRequest) {
       await _verifyCoreVersionAndRetrieveSupportedLoginTypesSubmitted(coreUrl, defaultTenantId, demo);
     }
   }
@@ -128,6 +131,12 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void credentialsRequestUrlAssignBack() async {
+    emit(state.copyWith(
+      mode: null,
+    ));
+  }
+
+  void customSigninAssignBack() async {
     emit(state.copyWith(
       mode: null,
     ));
@@ -264,15 +273,19 @@ class LoginCubit extends Cubit<LoginState> {
           client, state.passwordSigninUserRefInput.value, state.passwordSigninPasswordInput.value);
 
       // does not set processing to false to hold processing widgets state during navigation
-      emit(state.copyWith(
-        tenantId: sessionToken.tenantId ?? state.tenantId!,
-        token: sessionToken.token,
-      ));
+      loginSigninSubmitted(sessionToken);
     } catch (e) {
       emit(state.copyWith(processing: false));
 
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
     }
+  }
+
+  void loginSigninSubmitted(SessionToken token) async {
+    emit(state.copyWith(
+      tenantId: token.tenantId ?? state.tenantId ?? defaultTenantId,
+      token: token.token,
+    ));
   }
 
   void loginPasswordSigninBack() async {

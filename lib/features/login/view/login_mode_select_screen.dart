@@ -16,10 +16,13 @@ class LoginModeSelectScreen extends StatelessWidget {
   const LoginModeSelectScreen({
     super.key,
     this.appGreeting,
+    this.enableCustomLogin = false,
     this.style,
   });
 
   final String? appGreeting;
+
+  final bool enableCustomLogin;
 
   final LoginModeSelectScreenStyle? style;
 
@@ -50,9 +53,7 @@ class LoginModeSelectScreen extends StatelessWidget {
                         color: themeData.colorScheme.onPrimary,
                       ),
                       tooltip: context.l10n.login_ButtonTooltip_signInToYourInstance,
-                      onPressed: state.processing
-                          ? null
-                          : () => context.read<LoginCubit>().loginModeSelectSubmitted(LoginMode.customCore),
+                      onPressed: state.processing ? null : () => _onCustomCoreLogin(context),
                     ),
                   ]
                 : null,
@@ -71,11 +72,7 @@ class LoginModeSelectScreen extends StatelessWidget {
                 ),
                 const Spacer(),
                 ElevatedButton(
-                  onPressed: state.processing
-                      ? null
-                      : () => context
-                          .read<LoginCubit>()
-                          .loginModeSelectSubmitted(isDemoModeEnabled ? LoginMode.demoCore : LoginMode.core),
+                  onPressed: state.processing ? null : () => _onCoreLogin(context, isDemoModeEnabled),
                   style: elevatedButtonStyles?.getStyle(localStyle?.signUpTypeButton),
                   child: !state.processing
                       ? Text(isDemoModeEnabled
@@ -89,7 +86,7 @@ class LoginModeSelectScreen extends StatelessWidget {
                 ),
                 if (isCredentialsRequestUrlEnabled)
                   TextButton(
-                    onPressed: () => context.read<LoginCubit>().loginModeSelectSubmitted(LoginMode.credentialsRequest),
+                    onPressed: () => _onCredentialsRequestLogin(context),
                     child: Text(context.l10n.login_requestCredentials_button),
                   ),
               ],
@@ -98,5 +95,21 @@ class LoginModeSelectScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  void _onCustomCoreLogin(BuildContext context) {
+    context.read<LoginCubit>().loginModeSelectSubmitted(LoginMode.customCore);
+  }
+
+  void _onCoreLogin(BuildContext context, bool isDemoModeEnabled) {
+    if (enableCustomLogin) {
+      context.read<LoginCubit>().loginModeSelectSubmitted(LoginMode.customSignIn);
+    } else {
+      context.read<LoginCubit>().loginModeSelectSubmitted(isDemoModeEnabled ? LoginMode.demoCore : LoginMode.core);
+    }
+  }
+
+  void _onCredentialsRequestLogin(BuildContext context) {
+    context.read<LoginCubit>().loginModeSelectSubmitted(LoginMode.credentialsRequest);
   }
 }
