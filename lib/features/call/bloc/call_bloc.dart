@@ -387,7 +387,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _logger.fine('_onRegistrationChange: $previousRegistrationStatus to $newRegistrationStatus');
       emit(state.copyWith(registrationStatus: newRegistrationStatus));
     } else {
-      _logger.fine('_onRegistrationChange: status is already the same');
+      _logger.fine('_onRegistrationChange: no change in status ($newRegistrationStatus)');
       return;
     }
 
