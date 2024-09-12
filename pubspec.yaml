@@ -76,7 +76,7 @@ dependencies:
   webview_flutter_web: ^0.2.2+4
   collection: ^1.18.0
   gravatar_utils: ^1.0.0
-  l10n_mapper_generator: 2.1.2
+  l10n_mapper_generator: ^2.1.2
 
   webtrit_api:
     path: ./packages/webtrit_api
