@@ -381,8 +381,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _RegistrationChange event,
     Emitter<CallState> emit,
   ) async {
-    final newRegistrationStatus = event.registrationStatus;
+    final newRegistrationStatus = event.registration.status;
     final previousRegistrationStatus = state.registrationStatus;
+
     if (newRegistrationStatus != previousRegistrationStatus) {
       _logger.fine('_onRegistrationChange: $previousRegistrationStatus to $newRegistrationStatus');
       emit(state.copyWith(registrationStatus: newRegistrationStatus));
@@ -398,8 +399,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } else if (newRegistrationStatus.isFailed || newRegistrationStatus.isUnregistered) {
       add(const _ResetStateEvent.completeCalls());
 
-      if (event.reason != null) {
-        notificationsBloc.add(NotificationsSubmitted(ErrorMessageNotification(event.reason!)));
+      if (event.registration.reason != null) {
+        notificationsBloc.add(NotificationsSubmitted(ErrorMessageNotification(event.registration.reason!)));
       } else {
         notificationsBloc.add(NotificationsSubmitted(AppOfflineNotification()));
       }
@@ -571,7 +572,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       if (code == SignalingDisconnectCode.sessionMissedError) {
         notificationsBloc.add(const NotificationsSubmitted(CallSignalingClientSessionMissedErrorNotification()));
       } else if (code == SignalingDisconnectCode.appUnregisteredError) {
-        add(const _RegistrationChange(registrationStatus: RegistrationStatus.unregistered));
+        add(const _RegistrationChange(registration: Registration(status: RegistrationStatus.unregistered)));
       } else if (code == SignalingDisconnectCode.requestCallIdError) {
         state.activeCalls.where((element) => element.wasHungUp).forEach((element) {
           add(_ResetStateEvent.completeCall(element.callId));
@@ -639,11 +640,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     emit(state.copyWith(linesCount: event.linesCount));
 
-    add(_RegistrationChange(
-      registrationStatus: event.registration.status,
-      reason: event.registration.reason,
-      code: event.registration.code,
-    ));
+    add(_RegistrationChange(registration: event.registration));
   }
 
   // processing call signaling events
@@ -996,35 +993,35 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallSignalingEventRegistering event,
     Emitter<CallState> emit,
   ) async {
-    add(const _RegistrationChange(registrationStatus: RegistrationStatus.registering));
+    add(const _RegistrationChange(registration: Registration(status: RegistrationStatus.registering)));
   }
 
   Future<void> __onCallSignalingEventRegistered(
     _CallSignalingEventRegistered event,
     Emitter<CallState> emit,
   ) async {
-    add(const _RegistrationChange(registrationStatus: RegistrationStatus.registered));
+    add(const _RegistrationChange(registration: Registration(status: RegistrationStatus.registered)));
   }
 
   Future<void> __onCallSignalingEventRegistrationFailed(
     _CallSignalingEventRegisterationFailed event,
     Emitter<CallState> emit,
   ) async {
-    add(const _RegistrationChange(registrationStatus: RegistrationStatus.registration_failed));
+    add(const _RegistrationChange(registration: Registration(status: RegistrationStatus.registration_failed)));
   }
 
   Future<void> __onCallSignalingEventUnregistering(
     _CallSignalingEventUnregistering event,
     Emitter<CallState> emit,
   ) async {
-    add(const _RegistrationChange(registrationStatus: RegistrationStatus.unregistering));
+    add(const _RegistrationChange(registration: Registration(status: RegistrationStatus.unregistering)));
   }
 
   Future<void> __onCallSignalingEventUnregistered(
     _CallSignalingEventUnregistered event,
     Emitter<CallState> emit,
   ) async {
-    add(const _RegistrationChange(registrationStatus: RegistrationStatus.unregistered));
+    add(const _RegistrationChange(registration: Registration(status: RegistrationStatus.unregistered)));
   }
 
   // processing call control events

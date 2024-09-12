@@ -34,9 +34,7 @@ class _NavigatorMediaDevicesChange with _$NavigatorMediaDevicesChange implements
 @Freezed(copyWith: false)
 class _RegistrationChange with _$RegistrationChange implements CallEvent {
   const factory _RegistrationChange({
-    required RegistrationStatus registrationStatus,
-    String? reason,
-    int? code,
+    required Registration registration,
   }) = __RegistrationChange;
 }
 
