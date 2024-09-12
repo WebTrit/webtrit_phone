@@ -38,6 +38,7 @@ class LoginModeSelectScreen extends StatelessWidget {
       buildWhen: (previous, current) => previous.processing != current.processing,
       builder: (context, state) {
         final isDemoModeEnabled = context.read<LoginCubit>().isDemoModeEnabled;
+        // TODO(Serdun): Move to configure scheme as it did for custom login
         final isCredentialsRequestUrlEnabled = context.read<LoginCubit>().isCredentialsRequestUrlEnabled;
 
         return Scaffold(
