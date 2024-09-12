@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:webview_flutter/webview_flutter.dart';
-
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -13,17 +12,23 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'webview_progress_indicator.dart';
 
+export 'package:webview_flutter/webview_flutter.dart' show JavaScriptMessage;
+
+typedef JavaScriptChannels = Map<String, void Function(JavaScriptMessage)>;
+
 class WebViewScaffold extends StatefulWidget {
   const WebViewScaffold({
     super.key,
     this.title,
     required this.initialUri,
     this.addLocaleNameToQueryParameters = true,
+    this.javaScriptChannels = const {},
   });
 
   final Widget? title;
   final Uri initialUri;
   final bool addLocaleNameToQueryParameters;
+  final JavaScriptChannels javaScriptChannels;
 
   @override
   State<WebViewScaffold> createState() => _WebViewScaffoldState();
@@ -62,6 +67,8 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
           _webViewController.setUserAgent(userAgent),
           _webViewController.enableZoom(false),
           _webViewController.setJavaScriptMode(JavaScriptMode.unrestricted),
+          for (var entry in widget.javaScriptChannels.entries)
+            _webViewController.addJavaScriptChannel(entry.key, onMessageReceived: entry.value),
           _webViewController.setNavigationDelegate(
             NavigationDelegate(
               onProgress: (progress) {
