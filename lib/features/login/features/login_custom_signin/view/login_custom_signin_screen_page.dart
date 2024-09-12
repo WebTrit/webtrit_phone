@@ -24,7 +24,7 @@ class LoginCustomSigninScreenPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => LoginCustomSigninCubit(context.read<NotificationsBloc>()),
       child: LoginCustomSigninScreen(
-        title: context.findL10n(customLoginFeature.titleL10n!),
+        title: context.parseL10n(customLoginFeature.titleL10n!),
         initialUri: customLoginFeature.uri!,
       ),
     );

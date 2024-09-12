@@ -10,6 +10,7 @@ export 'default_error_l10n.dart';
 extension AppLocalizationsX on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this)!;
 
-  String findL10n(String translationKey, {List<Object>? arguments}) =>
-      parseL10n(translationKey, arguments: arguments) ?? translationKey;
+  String parseL10n(String translationKey, {List<Object>? arguments}) {
+    return AppLocalizationsExtension(this).parseL10n(translationKey, arguments: arguments) ?? translationKey;
+  }
 }
