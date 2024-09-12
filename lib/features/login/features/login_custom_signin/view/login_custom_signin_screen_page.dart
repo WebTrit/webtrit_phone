@@ -6,6 +6,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 
 import '../bloc/login_custom_signin_cubit.dart';
 
@@ -23,7 +24,7 @@ class LoginCustomSigninScreenPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => LoginCustomSigninCubit(context.read<NotificationsBloc>()),
       child: LoginCustomSigninScreen(
-        title: customLoginFeature.titleL10n!,
+        title: context.findL10n(customLoginFeature.titleL10n!),
         initialUri: customLoginFeature.uri!,
       ),
     );
