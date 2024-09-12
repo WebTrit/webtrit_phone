@@ -384,6 +384,8 @@
   "@notifications_errorSnackBar_appOnline": {},
   "notifications_errorSnackBar_appUnregistered": "Вибачте, ваш додаток наразі відключений від серверів WebTrit та не може здійснювати запити. Будь ласка, перейдіть на сторінку налаштувань і перемістіть вимикач стану онлайн у вимкнути й увімкнути знову, щоб відновити з'єднання.",
   "@notifications_errorSnackBar_appUnregistered": {},
+  "notifications_errorSnackBar_sipServiceUnavailable": "Помилка аутентифікації з віддаленою VoIP системою",
+  "@notifications_errorSnackBar_sipServiceUnavailable": {},
   "notifications_errorSnackBar_callConnect": "Підключення до ядра не вдалося, спроба з'єднання",
   "@notifications_errorSnackBar_callConnect": {},
   "notifications_errorSnackBar_callSignalingClientNotConnect": "Не вдається ініціювати дзвінок, перевірте статус з'єднання",
