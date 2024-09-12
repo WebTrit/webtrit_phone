@@ -21,15 +21,13 @@ class LoginCustomSigninScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<LoginCustomSigninCubit, LoginCustomSigninState>(
       builder: (context, state) {
-        final javaScriptChannels = {
-          _loginJavascriptChannelName: (JavaScriptMessage message) =>
-              context.read<LoginCustomSigninCubit>().manageScriptChannelsData(message.message),
-        };
-
         return WebViewScaffold(
           title: Text(title),
           initialUri: initialUri,
-          javaScriptChannels: javaScriptChannels,
+          javaScriptChannels: {
+            _loginJavascriptChannelName: (JavaScriptMessage message) =>
+                context.read<LoginCustomSigninCubit>().manageScriptChannelsData(message.message),
+          },
         );
       },
       listener: _handleStateChange,
