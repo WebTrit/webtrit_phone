@@ -65,8 +65,8 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
           _webViewController.setUserAgent(userAgent),
           _webViewController.enableZoom(false),
           _webViewController.setJavaScriptMode(JavaScriptMode.unrestricted),
-          for (var entry in widget.javaScriptChannels.entries)
-            _webViewController.addJavaScriptChannel(entry.key, onMessageReceived: entry.value),
+          for (var MapEntry(key: name, value: onMessageReceived) in widget.javaScriptChannels.entries)
+            _webViewController.addJavaScriptChannel(name, onMessageReceived: onMessageReceived),
           _webViewController.setNavigationDelegate(
             NavigationDelegate(
               onProgress: (progress) {
