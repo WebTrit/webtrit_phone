@@ -14,8 +14,6 @@ import 'webview_progress_indicator.dart';
 
 export 'package:webview_flutter/webview_flutter.dart' show JavaScriptMessage;
 
-typedef JavaScriptChannels = Map<String, void Function(JavaScriptMessage)>;
-
 class WebViewScaffold extends StatefulWidget {
   const WebViewScaffold({
     super.key,
@@ -28,7 +26,7 @@ class WebViewScaffold extends StatefulWidget {
   final Widget? title;
   final Uri initialUri;
   final bool addLocaleNameToQueryParameters;
-  final JavaScriptChannels javaScriptChannels;
+  final Map<String, void Function(JavaScriptMessage)> javaScriptChannels;
 
   @override
   State<WebViewScaffold> createState() => _WebViewScaffoldState();
