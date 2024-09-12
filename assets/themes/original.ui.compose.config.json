@@ -1,0 +1,9 @@
+{
+  "login": {
+    "customSignIn": {
+      "enabled": false,
+      "titleL10n": "login_requestCredentials_title",
+      "url": "https://webtrit-app.web.app/example/example_embedded_login.html"
+    }
+  }
+}
