@@ -26,14 +26,18 @@ class FeatureAccess {
 
   static CustomLoginFeature? _tryEnableCustomLoginFeature(UiComposeSettings uiComposeSettings) {
     final customLogin = uiComposeSettings.login?.customSignIn;
-    _logger.info('Custom sign-in is enabled: $customLogin');
 
-    return uiComposeSettings.isCustomSignInEnabled
-        ? CustomLoginFeature(
-            titleL10n: customLogin!.titleL10n!,
-            uri: Uri.parse(customLogin.url!),
-          )
-        : null;
+    if (uiComposeSettings.isCustomSignInEnabled) {
+      _logger.info('Custom sign-in is enabled');
+
+      return CustomLoginFeature(
+        titleL10n: customLogin!.titleL10n!,
+        uri: Uri.parse(customLogin.url!),
+      );
+    } else {
+      _logger.info('Custom sign-in is disabled');
+      return null;
+    }
   }
 
   factory FeatureAccess() => _instance;
