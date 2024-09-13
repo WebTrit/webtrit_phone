@@ -9,6 +9,7 @@ import 'package:meta/meta.dart';
 import 'package:_http_client/_http_client.dart';
 
 import 'exceptions.dart';
+import 'webtrit_api_method.dart';
 import 'webtrit_api_request_options.dart';
 import 'models/models.dart';
 
@@ -67,7 +68,7 @@ class WebtritApiClient {
   }
 
   Future<dynamic> _httpClientExecute(
-    String method,
+    HttpMethod method,
     List<String> pathSegments,
     String? token,
     Object? requestDataJson, {
@@ -83,7 +84,7 @@ class WebtritApiClient {
         ...pathSegments,
       ],
     );
-    final httpRequest = http.Request(method, url);
+    final httpRequest = http.Request(method.name, url);
 
     final xRequestId = requestId ?? _generateRequestId();
 
@@ -106,7 +107,7 @@ class WebtritApiClient {
 
     while (true) {
       try {
-        _logger.info(' ${method.toUpperCase()} request($requestAttempt) to $url with requestId: $xRequestId');
+        _logger.info(' ${method.name.toUpperCase()} request($requestAttempt) to $url with requestId: $xRequestId');
 
         final httpResponse = await http.Response.fromStream(await _httpClient.send(httpRequest));
 
@@ -114,7 +115,7 @@ class WebtritApiClient {
         final responseDataJson = responseData.isEmpty ? {} : jsonDecode(responseData);
 
         _logger.info(
-            '${method.toUpperCase()} response with status code: ${httpResponse.statusCode} for requestId: $xRequestId, response body: ${httpResponse.body}');
+            '${method.name.toUpperCase()} response with status code: ${httpResponse.statusCode} for requestId: $xRequestId, response body: ${httpResponse.body}');
 
         if (httpResponse.statusCode == 200 || httpResponse.statusCode == 204) {
           return responseDataJson;
@@ -132,7 +133,7 @@ class WebtritApiClient {
           );
         }
       } catch (e) {
-        _logger.severe('${method.toUpperCase()} failed for requestId: $requestId with error: $e');
+        _logger.severe('${method.name.toUpperCase()} failed for requestId: $requestId with error: $e');
         if (requestAttempt >= options.retries) {
           rethrow;
         }
@@ -153,7 +154,7 @@ class WebtritApiClient {
     RequestOptions options = const RequestOptions(),
   }) {
     return _httpClientExecute(
-      'get',
+      HttpMethod.get,
       pathSegments,
       token,
       null,
@@ -169,7 +170,7 @@ class WebtritApiClient {
     RequestOptions options = const RequestOptions(),
   }) {
     return _httpClientExecute(
-      'post',
+      HttpMethod.post,
       pathSegments,
       token,
       requestDataJson,
@@ -186,7 +187,7 @@ class WebtritApiClient {
     RequestOptions options = const RequestOptions(),
   }) {
     return _httpClientExecute(
-      'patch',
+      HttpMethod.patch,
       pathSegments,
       token,
       requestDataJson,
@@ -201,7 +202,7 @@ class WebtritApiClient {
     RequestOptions options = const RequestOptions(),
   }) {
     return _httpClientExecute(
-      'delete',
+      HttpMethod.delete,
       pathSegments,
       token,
       null,
