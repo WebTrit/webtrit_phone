@@ -21,7 +21,7 @@ class _MessagingRouterPageState extends State<MessagingRouterPage> {
       create: (context) => MessageForwardCubit(),
       child: Column(
         children: [
-          BlocBuilder<ChatsBloc, ChatsState>(
+          BlocBuilder<MessagingBloc, MessagingState>(
             buildWhen: (previous, current) => previous.userId != current.userId,
             builder: (context, state) {
               if (state.userId != null) {
@@ -32,12 +32,12 @@ class _MessagingRouterPageState extends State<MessagingRouterPage> {
               // return Expanded(child: AutoRouter());
             },
           ),
-          BlocBuilder<ChatsBloc, ChatsState>(
+          BlocBuilder<MessagingBloc, MessagingState>(
             buildWhen: (previous, current) => previous.status != current.status,
             builder: (context, state) {
               return Column(
                 children: [
-                  if (state.status != ChatsStatus.connected) ...[
+                  if (state.status != ConnectionStatus.connected) ...[
                     const SizedBox(height: 8),
                     StateBar(state: state),
                     const SizedBox(height: 8),
@@ -55,14 +55,14 @@ class _MessagingRouterPageState extends State<MessagingRouterPage> {
 class StateBar extends StatelessWidget {
   const StateBar({required this.state, super.key});
 
-  final ChatsState state;
+  final MessagingState state;
 
   @override
   Widget build(BuildContext context) {
     String text = '';
-    if (state.status == ChatsStatus.initial) text = context.l10n.chats_StateBar_initializing;
-    if (state.status == ChatsStatus.connecting) text = context.l10n.chats_StateBar_connecting;
-    if (state.status == ChatsStatus.error) text = context.l10n.chats_StateBar_error;
+    if (state.status == ConnectionStatus.initial) text = context.l10n.chats_StateBar_initializing;
+    if (state.status == ConnectionStatus.connecting) text = context.l10n.chats_StateBar_connecting;
+    if (state.status == ConnectionStatus.error) text = context.l10n.chats_StateBar_error;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
