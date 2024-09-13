@@ -1547,23 +1547,23 @@ abstract class AppLocalizations {
   /// **'DISCONNECTED'**
   String get chats_StateBar_error;
 
-  /// No description provided for @chats_ChatListScreen_startDialog.
+  /// No description provided for @chats_ConversationsScreen_startDialog.
   ///
   /// In en, this message translates to:
   /// **'Start dialog'**
-  String get chats_ChatListScreen_startDialog;
+  String get chats_ConversationsScreen_startDialog;
 
-  /// No description provided for @chats_ChatListScreen_createGroup.
+  /// No description provided for @chats_ConversationsScreen_createGroup.
   ///
   /// In en, this message translates to:
   /// **'Create group'**
-  String get chats_ChatListScreen_createGroup;
+  String get chats_ConversationsScreen_createGroup;
 
-  /// No description provided for @chats_ChatListScreen_empty.
+  /// No description provided for @chats_ConversationsScreen_empty.
   ///
   /// In en, this message translates to:
   /// **'No conversations started yet'**
-  String get chats_ChatListScreen_empty;
+  String get chats_ConversationsScreen_empty;
 
   /// No description provided for @chats_ChatListItem_empty.
   ///

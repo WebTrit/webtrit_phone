@@ -8,17 +8,17 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 @RoutePage()
-class ChatListScreenPage extends StatelessWidget {
+class ConversationsScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
-  const ChatListScreenPage();
+  const ConversationsScreenPage();
 
   @override
   Widget build(BuildContext context) {
     final chatsRepository = context.read<ChatsRepository>();
 
     final widget = BlocProvider(
-      create: (context) => ChatListCubit(chatsRepository),
-      child: const ChatListScreen(title: Text(EnvironmentConfig.APP_NAME)),
+      create: (context) => ChatConversationsCubit(chatsRepository),
+      child: const ConversationsScreen(title: Text(EnvironmentConfig.APP_NAME)),
     );
 
     return widget;

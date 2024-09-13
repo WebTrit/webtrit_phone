@@ -13,15 +13,15 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-class ChatListScreen extends StatefulWidget {
-  const ChatListScreen({super.key, this.title});
+class ConversationsScreen extends StatefulWidget {
+  const ConversationsScreen({super.key, this.title});
   final Widget? title;
 
   @override
-  State<ChatListScreen> createState() => _ChatListScreenState();
+  State<ConversationsScreen> createState() => _ConversationsScreenState();
 }
 
-class _ChatListScreenState extends State<ChatListScreen> {
+class _ConversationsScreenState extends State<ConversationsScreen> {
   late final contactsRepository = context.read<ContactsRepository>();
 
   showBottomSheet() async {
@@ -51,7 +51,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
     if (result is Contact) {
       context.router.navigate(MessagingRouterPageRoute(
         children: [
-          const ChatListScreenPageRoute(),
+          const ConversationsScreenPageRoute(),
           ConversationScreenPageRoute(participantId: result.sourceId),
         ],
       ));
@@ -61,7 +61,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
     if (result == kGroupResult) {
       context.router.navigate(const MessagingRouterPageRoute(
         children: [
-          ChatListScreenPageRoute(),
+          ConversationsScreenPageRoute(),
           GroupBuilderScreenPageRoute(),
         ],
       ));
@@ -75,10 +75,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
 
     return Scaffold(
       appBar: MainAppBar(title: widget.title),
-      body: BlocBuilder<ChatListCubit, ChatListState>(builder: (context, state) {
-        if (state.initialising) return const Center(child: CircularProgressIndicator());
-        return ChatsList(chatlist: state.chats, smsChatlist: state.smsChats);
-      }),
+      body: const ConversationsList(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: colorScheme.primary,
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32))),
@@ -155,7 +152,7 @@ class _NewConversationPageState extends State<NewConversationPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: ListTile(
-                title: Text(context.l10n.chats_ChatListScreen_createGroup),
+                title: Text(context.l10n.chats_ConversationsScreen_createGroup),
                 leading: Icon(
                   Icons.group_add_rounded,
                   color: colorScheme.onSurface.withOpacity(0.75),

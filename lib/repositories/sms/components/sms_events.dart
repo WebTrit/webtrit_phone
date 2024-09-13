@@ -6,22 +6,22 @@ sealed class SmsEvent {
 }
 
 class SmsConversationUpdate extends SmsEvent with EquatableMixin {
-  const SmsConversationUpdate(this.chat);
-  final SmsConversation chat;
+  const SmsConversationUpdate(this.conversation);
+  final SmsConversation conversation;
 
   @override
-  List<Object> get props => [chat];
+  List<Object> get props => [conversation];
 
   @override
   bool get stringify => true;
 }
 
 class SmsConversationRemove extends SmsEvent with EquatableMixin {
-  const SmsConversationRemove(this.chatId);
-  final int chatId;
+  const SmsConversationRemove(this.conversationId);
+  final int conversationId;
 
   @override
-  List<Object> get props => [chatId];
+  List<Object> get props => [conversationId];
 
   @override
   bool get stringify => true;

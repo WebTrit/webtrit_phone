@@ -32,7 +32,7 @@ class _GroupScreenState extends State<GroupScreen> {
             context.read<ChatTypingCubit>().init(state.chat.id);
           }
           if (state is GroupStateLeft) {
-            const route = MessagingRouterPageRoute(children: [ChatListScreenPageRoute()]);
+            const route = MessagingRouterPageRoute(children: [ConversationsScreenPageRoute()]);
             context.router.navigate(route);
           }
         },

@@ -773,13 +773,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chats_StateBar_error => 'DISCONNECTED';
 
   @override
-  String get chats_ChatListScreen_startDialog => 'Start dialog';
+  String get chats_ConversationsScreen_startDialog => 'Start dialog';
 
   @override
-  String get chats_ChatListScreen_createGroup => 'Create group';
+  String get chats_ConversationsScreen_createGroup => 'Create group';
 
   @override
-  String get chats_ChatListScreen_empty => 'No conversations started yet';
+  String get chats_ConversationsScreen_empty => 'No conversations started yet';
 
   @override
   String get chats_ChatListItem_empty => 'No messages yet';

@@ -48,10 +48,10 @@ abstract class _$AppRouter extends RootStackRouter {
         child: CallScreenPage(),
       );
     },
-    ChatListScreenPageRoute.name: (routeData) {
+    ConversationsScreenPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: ChatListScreenPage(),
+        child: ConversationsScreenPage(),
       );
     },
     MessagingRouterPageRoute.name: (routeData) {
@@ -401,15 +401,15 @@ class CallScreenPageRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [ChatListScreenPage]
-class ChatListScreenPageRoute extends PageRouteInfo<void> {
-  const ChatListScreenPageRoute({List<PageRouteInfo>? children})
+/// [ConversationsScreenPage]
+class ConversationsScreenPageRoute extends PageRouteInfo<void> {
+  const ConversationsScreenPageRoute({List<PageRouteInfo>? children})
       : super(
-          ChatListScreenPageRoute.name,
+          ConversationsScreenPageRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'ChatListScreenPageRoute';
+  static const String name = 'ConversationsScreenPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

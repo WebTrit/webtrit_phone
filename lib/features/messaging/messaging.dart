@@ -1,6 +1,6 @@
 export 'extensions/extensions.dart';
 export 'bloc/messaging_bloc.dart';
-export 'features/chat_list/chat_list.dart';
+export 'features/conversations/conversations.dart';
 export 'features/conversation/conversation.dart';
 export 'features/group/group.dart';
 export 'features/group_builder/group_builder.dart';

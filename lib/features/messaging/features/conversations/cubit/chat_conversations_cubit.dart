@@ -7,38 +7,38 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-part 'chat_list_state.dart';
+part 'chat_conversations_state.dart';
 
-final _logger = Logger('ChatListCubit');
+final _logger = Logger('ChatConversationsCubit');
 
-class ChatListCubit extends Cubit<ChatListState> {
-  ChatListCubit(this._chatsRepository) : super(ChatListState.initial()) {
+class ChatConversationsCubit extends Cubit<ChatConversationsState> {
+  ChatConversationsCubit(this._repository) : super(ChatConversationsState.initial()) {
     init();
   }
 
-  final ChatsRepository _chatsRepository;
-  late final StreamSubscription _chatsListSub;
+  final ChatsRepository _repository;
+  late final StreamSubscription _conversationsSub;
 
   void init() async {
     _logger.info('Initialising');
 
-    final chatsList = await _chatsRepository.getChatsWithLastMessages();
-    chatsList.sort(_comparator);
+    final conversations = await _repository.getChatsWithLastMessages();
+    conversations.sort(_comparator);
 
-    emit(ChatListState(chatsList, [], false));
-    _logger.info('Initialised: ${chatsList.length} chats');
+    emit(ChatConversationsState(conversations, false));
+    _logger.info('Initialised: ${conversations.length} chats');
 
-    _chatsListSub = _chatsRepository.eventBus.listen((event) {
+    _conversationsSub = _repository.eventBus.listen((event) {
       _logger.info('Event: $event');
 
       if (event is ChatUpdate) {
-        emit(state.copyWith(chats: _mergeWithChatUpdate(event.chat)));
+        emit(state.copyWith(conversations: _mergeWithChatUpdate(event.chat)));
       }
       if (event is ChatRemove) {
-        emit(state.copyWith(chats: _removeChat(event.chatId)));
+        emit(state.copyWith(conversations: _removeChat(event.chatId)));
       }
       if (event is ChatMessageUpdate) {
-        emit(state.copyWith(chats: _mergeWithMessageUpdate(event.message)));
+        emit(state.copyWith(conversations: _mergeWithMessageUpdate(event.message)));
       }
     });
   }
@@ -52,11 +52,11 @@ class ChatListCubit extends Cubit<ChatListState> {
 
   List<(Chat, ChatMessage?)> _mergeWithChatUpdate(Chat chat) {
     List<(Chat, ChatMessage?)> newList;
-    final index = state.chats.indexWhere((element) => element.$1.id == chat.id);
+    final index = state.conversations.indexWhere((e) => e.$1.id == chat.id);
     if (index == -1) {
-      newList = state.chats + [(chat, null)];
+      newList = state.conversations + [(chat, null)];
     } else {
-      newList = List.of(state.chats);
+      newList = List.of(state.conversations);
       newList[index] = (chat, newList[index].$2);
     }
     newList.sort(_comparator);
@@ -64,26 +64,26 @@ class ChatListCubit extends Cubit<ChatListState> {
   }
 
   List<(Chat, ChatMessage?)> _mergeWithMessageUpdate(ChatMessage message) {
-    final index = state.chats.indexWhere((element) => element.$1.id == message.chatId);
-    final oldMessage = state.chats[index].$2;
+    final index = state.conversations.indexWhere((e) => e.$1.id == message.chatId);
+    final oldMessage = state.conversations[index].$2;
     final isOldMessageNewer = oldMessage != null && oldMessage.createdAt.isAfter(message.createdAt);
 
     if (index != -1 && !isOldMessageNewer) {
-      final newList = List.of(state.chats);
+      final newList = List.of(state.conversations);
       newList[index] = (newList[index].$1, message);
       return newList;
     }
 
-    return state.chats;
+    return state.conversations;
   }
 
   List<(Chat, ChatMessage?)> _removeChat(int chatId) {
-    return state.chats.where((element) => element.$1.id != chatId).toList();
+    return state.conversations.where((e) => e.$1.id != chatId).toList();
   }
 
   @override
   Future<void> close() {
-    _chatsListSub.cancel();
+    _conversationsSub.cancel();
     return super.close();
   }
 }

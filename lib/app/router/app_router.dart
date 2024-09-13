@@ -183,7 +183,7 @@ class AppRouter extends _$AppRouter {
                       path: MainFlavor.messaging.name,
                       children: [
                         AutoRoute(
-                          page: ChatListScreenPageRoute.page,
+                          page: ConversationsScreenPageRoute.page,
                           path: '',
                         ),
                         AutoRoute(

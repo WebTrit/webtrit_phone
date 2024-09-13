@@ -10,30 +10,30 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-class ChatListItem extends StatefulWidget {
-  const ChatListItem({required this.chat, required this.lastMessage, required this.userId, super.key});
+class ChatConversationsTile extends StatefulWidget {
+  const ChatConversationsTile({required this.conversation, required this.lastMessage, required this.userId, super.key});
 
-  final Chat chat;
+  final Chat conversation;
   final ChatMessage? lastMessage;
   final String userId;
 
   @override
-  State<ChatListItem> createState() => _ChatListItemState();
+  State<ChatConversationsTile> createState() => _ChatConversationsTileState();
 }
 
-class _ChatListItemState extends State<ChatListItem> {
+class _ChatConversationsTileState extends State<ChatConversationsTile> {
   onTap() {
-    if (widget.chat.type == ChatType.dialog) {
+    if (widget.conversation.type == ChatType.dialog) {
       final userId = widget.userId;
-      final participant = widget.chat.members.firstWhere((m) => m.userId != userId);
+      final participant = widget.conversation.members.firstWhere((m) => m.userId != userId);
       context.router.navigate(MessagingRouterPageRoute(children: [
-        const ChatListScreenPageRoute(),
+        const ConversationsScreenPageRoute(),
         ConversationScreenPageRoute(participantId: participant.userId),
       ]));
     } else {
       context.router.navigate(MessagingRouterPageRoute(children: [
-        const ChatListScreenPageRoute(),
-        GroupScreenPageRoute(chatId: widget.chat.id),
+        const ConversationsScreenPageRoute(),
+        GroupScreenPageRoute(chatId: widget.conversation.id),
       ]));
     }
   }
@@ -56,9 +56,9 @@ class _ChatListItemState extends State<ChatListItem> {
   }
 
   Widget leading() {
-    if (widget.chat.type == ChatType.dialog) {
+    if (widget.conversation.type == ChatType.dialog) {
       final userId = widget.userId;
-      final participant = widget.chat.members.firstWhere((m) => m.userId != userId);
+      final participant = widget.conversation.members.firstWhere((m) => m.userId != userId);
       return ContactInfoBuilder(
         sourceType: ContactSourceType.external,
         sourceId: participant.userId,
@@ -73,10 +73,10 @@ class _ChatListItemState extends State<ChatListItem> {
         },
       );
     } else {
-      var text = widget.chat.name?.split(' ').first ?? widget.chat.id.toString();
+      var text = widget.conversation.name?.split(' ').first ?? widget.conversation.id.toString();
       if (text.length > 16) text = text.substring(0, 16);
       return LeadingAvatar(
-        username: widget.chat.name ?? 'Chat ${widget.chat.id}',
+        username: widget.conversation.name ?? 'Chat ${widget.conversation.id}',
         radius: 24,
       );
     }
@@ -85,9 +85,9 @@ class _ChatListItemState extends State<ChatListItem> {
   Widget title() {
     final lastMessage = widget.lastMessage;
 
-    if (widget.chat.type == ChatType.dialog) {
+    if (widget.conversation.type == ChatType.dialog) {
       final userId = widget.userId;
-      final participant = widget.chat.members.firstWhere((m) => m.userId != userId);
+      final participant = widget.conversation.members.firstWhere((m) => m.userId != userId);
       return Row(
         children: [
           Expanded(
@@ -111,7 +111,7 @@ class _ChatListItemState extends State<ChatListItem> {
         ],
       );
     } else {
-      final name = widget.chat.name ?? 'Chat ${widget.chat.id}';
+      final name = widget.conversation.name ?? 'Chat ${widget.conversation.id}';
       return Row(
         children: [
           Expanded(child: Text(name, style: const TextStyle(overflow: TextOverflow.ellipsis))),
@@ -123,7 +123,7 @@ class _ChatListItemState extends State<ChatListItem> {
   }
 
   Widget usersCount() {
-    final membersCount = widget.chat.members.length;
+    final membersCount = widget.conversation.members.length;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -167,7 +167,7 @@ class _ChatListItemState extends State<ChatListItem> {
           ),
         BlocBuilder<UnreadCountCubit, UnreadCountState>(
           builder: (context, state) {
-            final count = state.unreadCountForChat(widget.chat.id);
+            final count = state.unreadCountForChat(widget.conversation.id);
             if (count == 0) return const SizedBox();
 
             return Container(

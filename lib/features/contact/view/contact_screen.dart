@@ -41,7 +41,7 @@ class ContactScreen extends StatelessWidget {
                         icon: const Icon(Icons.message),
                         onPressed: () {
                           context.router.navigate(MessagingRouterPageRoute(children: [
-                            const ChatListScreenPageRoute(),
+                            const ConversationsScreenPageRoute(),
                             ConversationScreenPageRoute(participantId: contact.sourceId),
                           ]));
                         },

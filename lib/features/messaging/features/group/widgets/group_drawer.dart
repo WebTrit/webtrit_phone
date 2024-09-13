@@ -34,7 +34,7 @@ class _GroupDrawerState extends State<GroupDrawer> {
     final result = await groupCubit.leaveGroup();
 
     if (!mounted) return;
-    const route = MessagingRouterPageRoute(children: [ChatListScreenPageRoute()]);
+    const route = MessagingRouterPageRoute(children: [ConversationsScreenPageRoute()]);
     if (result) context.router.navigate(route);
   }
 
@@ -50,7 +50,7 @@ class _GroupDrawerState extends State<GroupDrawer> {
     final result = await groupCubit.deleteGroup();
 
     if (!mounted) return;
-    const route = MessagingRouterPageRoute(children: [ChatListScreenPageRoute()]);
+    const route = MessagingRouterPageRoute(children: [ConversationsScreenPageRoute()]);
     if (result) context.router.navigate(route);
   }
 

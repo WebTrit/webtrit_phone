@@ -773,13 +773,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get chats_StateBar_error => 'ВІДКЛЮЧЕНО';
 
   @override
-  String get chats_ChatListScreen_startDialog => 'Почати діалог';
+  String get chats_ConversationsScreen_startDialog => 'Почати діалог';
 
   @override
-  String get chats_ChatListScreen_createGroup => 'Створити групу';
+  String get chats_ConversationsScreen_createGroup => 'Створити групу';
 
   @override
-  String get chats_ChatListScreen_empty => 'Немає переписок';
+  String get chats_ConversationsScreen_empty => 'Немає переписок';
 
   @override
   String get chats_ChatListItem_empty => 'Поки немає повідомлень';

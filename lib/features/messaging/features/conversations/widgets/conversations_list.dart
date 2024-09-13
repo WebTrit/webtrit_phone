@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/models/models.dart';
 
-class ChatsList extends StatefulWidget {
-  const ChatsList({required this.chatlist, required this.smsChatlist, super.key});
-  final List<(Chat, ChatMessage?)> chatlist;
-  final List<(Chat, ChatMessage?)> smsChatlist;
+class ConversationsList extends StatefulWidget {
+  const ConversationsList({super.key});
 
   @override
-  State<ChatsList> createState() => _ChatsListState();
+  State<ConversationsList> createState() => _ConversationsListState();
 }
 
-class _ChatsListState extends State<ChatsList> {
+class _ConversationsListState extends State<ConversationsList> {
   final userId = AppPreferences().getChatUserId()!;
   final chatsEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE;
   final smsEnabled = EnvironmentConfig.SMS_FEATURE_ENABLE;
@@ -39,16 +37,18 @@ class _ChatsListState extends State<ChatsList> {
         ],
         if (showChats)
           Expanded(
-            child: Builder(
-              builder: (context) {
-                final chats = widget.chatlist;
-                if (chats.isEmpty) return Center(child: Text(context.l10n.chats_ChatListScreen_empty));
+            child: BlocBuilder<ChatConversationsCubit, ChatConversationsState>(
+              builder: (context, state) {
+                if (state.initialising) return const Center(child: CircularProgressIndicator());
+
+                final conversations = state.conversations;
+                if (conversations.isEmpty) return Center(child: Text(context.l10n.chats_ConversationsScreen_empty));
 
                 return ListView(
-                  children: chats.map((e) {
-                    final chat = e.$1;
+                  children: conversations.map((e) {
+                    final conversation = e.$1;
                     final lastMessage = e.$2;
-                    return ChatListItem(chat: chat, lastMessage: lastMessage, userId: userId);
+                    return ChatConversationsTile(conversation: conversation, lastMessage: lastMessage, userId: userId);
                   }).toList(),
                 );
               },
@@ -56,16 +56,18 @@ class _ChatsListState extends State<ChatsList> {
           ),
         if (showSms)
           Expanded(
-            child: Builder(
-              builder: (context) {
-                final smsChats = widget.smsChatlist;
-                if (smsChats.isEmpty) return Center(child: Text(context.l10n.chats_ChatListScreen_empty));
+            child: BlocBuilder<SmsConversationsCubit, SmsConversationsState>(
+              builder: (context, state) {
+                if (state.initialising) return const Center(child: CircularProgressIndicator());
+
+                final conversations = state.conversations;
+                if (conversations.isEmpty) return Center(child: Text(context.l10n.chats_ConversationsScreen_empty));
 
                 return ListView(
-                  children: smsChats.map((e) {
-                    final chat = e.$1;
+                  children: conversations.map((e) {
+                    final conversation = e.$1;
                     final lastMessage = e.$2;
-                    return ChatListItem(chat: chat, lastMessage: lastMessage, userId: userId);
+                    return SmsConversationsTile(conversation: conversation, lastMessage: lastMessage, userId: userId);
                   }).toList(),
                 );
               },
