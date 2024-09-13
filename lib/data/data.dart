@@ -12,3 +12,4 @@ export 'feature_access.dart';
 export 'package_info.dart';
 export 'platform_info.dart';
 export 'secure_storage.dart';
+export 'queue_request_worker.dart';
