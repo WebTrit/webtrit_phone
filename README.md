@@ -95,13 +95,13 @@ Follow these steps according to your specific activity to manage the localizatio
 1. Commit the changes.
 
 
-## App Configuration
+## Application Configuration
 
-### 1. Theme Configuration
-To learn about configuring themes for your application, please check out the [Theme Configuration](doc/theme_config/index.md) documentation.
+### 1. Theme Settings
+For guidance on configuring themes in your application, refer to the [Theme Settings](doc/theme_config/index.md) documentation.
 
-### 2. Custom Login Configuration
-For detailed instructions on setting up and customizing the login process for your application, refer to the [Custom Login Configuration](doc/custom_login/index.md) guide.
+### 2. Custom Login Setup
+To learn how to configure and customize the login process, please consult the [Custom Login Setup](doc/custom_login/index.md) guide.
 
 ## Make commands
 * `run` - Run the Flutter application
