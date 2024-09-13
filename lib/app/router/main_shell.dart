@@ -232,7 +232,7 @@ class _MainShellState extends State<MainShell> {
               },
             ),
         ],
-        child: Builder(builder: (_) => const CallShell(child: ChatsShell(child: AutoRouter()))),
+        child: Builder(builder: (_) => const CallShell(child: MessagingShell(child: AutoRouter()))),
       ),
     );
   }

@@ -8,16 +8,16 @@ import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-class ChatsShell extends StatefulWidget {
-  const ChatsShell({required this.child, super.key});
+class MessagingShell extends StatefulWidget {
+  const MessagingShell({required this.child, super.key});
 
   final Widget child;
 
   @override
-  State<ChatsShell> createState() => _ChatsShellState();
+  State<MessagingShell> createState() => _MessagingShellState();
 }
 
-class _ChatsShellState extends State<ChatsShell> {
+class _MessagingShellState extends State<MessagingShell> {
   late final ChatsNotificationsService chatsNotificationsService;
 
   @override

@@ -3,4 +3,4 @@ export 'exchange_bar.dart';
 export 'main_flavor_overlay.dart';
 export 'participant_name.dart';
 export 'contact_info_builder.dart';
-export 'chats_shell.dart';
+export 'shell.dart';
