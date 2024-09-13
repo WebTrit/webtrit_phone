@@ -6,6 +6,7 @@ import 'package:phoenix_socket/phoenix_socket.dart';
 import 'package:webtrit_phone/features/chats/chats.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 // TODO: extract events and commands to separate classes
 
@@ -77,7 +78,7 @@ class SmsSyncWorker {
         final currentIds = await smsRepository.getConversationIds();
 
         // Buffer updates that may come in a gap between fetching the actual list
-        final eventsStream = userChannel.messages.transform(StreamBuffer());
+        final eventsStream = userChannel.messages.transform(BufferTransformer());
 
         // Fetch actual user chat ids
         final req = await userChannel.push('sms:conversation:get_ids', {}, pushTimeout).future;
@@ -139,7 +140,7 @@ class SmsSyncWorker {
         if (channel.state != PhoenixChannelState.joined) throw Exception('Chat channel not ready yet');
 
         // Buffer updates that may come in a gap between fetching and subscribing
-        final eventsStream = channel.messages.transform(StreamBuffer());
+        final eventsStream = channel.messages.transform(BufferTransformer());
 
         // Fetch chat info
         final infoReq = await channel.push('sms:conversation:get', {}, pushTimeout).future;
@@ -251,28 +252,5 @@ class SmsSyncWorker {
       await sub.cancel();
     }
     _conversationSyncSubs.clear();
-  }
-}
-
-/// A [StreamTransformer] that captures events from the source [Stream] and
-/// hold events inside [StreamController] until the sink [Stream] being listened.
-class StreamBuffer<T> extends StreamTransformerBase<T, T> {
-  StreamBuffer();
-
-  @override
-  Stream<T> bind(Stream<T> stream) {
-    final controller = StreamController<T>();
-
-    final StreamSubscription(:cancel, :pause, :resume) = stream.listen(
-      controller.add,
-      onError: controller.addError,
-      onDone: controller.close,
-    );
-
-    controller.onCancel = cancel;
-    controller.onPause = pause;
-    controller.onResume = resume;
-
-    return controller.stream;
   }
 }
