@@ -41,6 +41,11 @@ class SmsRepository with SmsDriftMapper {
     return conversationData != null ? conversationFromDrift(conversationData) : null;
   }
 
+  Future<SmsConversation?> findConversationBetweenNumbers(String firstNumber, String secondNumber) async {
+    final conversationData = await _smsDao.findConversationBetweenNumbers(firstNumber, secondNumber);
+    return conversationData != null ? conversationFromDrift(conversationData) : null;
+  }
+
   Future<void> upsertConversation(SmsConversation conversation) async {
     final conversationData = conversationToDrift(conversation);
     _smsDao.upsertConversation(conversationData);

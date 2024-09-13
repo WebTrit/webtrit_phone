@@ -1330,6 +1330,14 @@ class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
         .getSingleOrNull();
   }
 
+  Future<SmsConversationData?> findConversationBetweenNumbers(String firstNumber, String secondNumber) {
+    return (select(smsConversationsTable)
+          ..where((t) =>
+              t.firstPhoneNumber.isIn([firstNumber, secondNumber]) &
+              t.secondPhoneNumber.isIn([firstNumber, secondNumber])))
+        .getSingleOrNull();
+  }
+
   Future<int> upsertConversation(Insertable<SmsConversationData> smsConversation) {
     return into(smsConversationsTable).insertOnConflictUpdate(smsConversation);
   }

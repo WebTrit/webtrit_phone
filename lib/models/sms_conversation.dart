@@ -17,6 +17,11 @@ class SmsConversation extends Equatable {
     required this.updatedAt,
   });
 
+  isConversationBetween(String firstNumber, String secondNumber) {
+    return (firstPhoneNumber == firstNumber && secondPhoneNumber == secondNumber) ||
+        (firstPhoneNumber == secondNumber && secondPhoneNumber == firstNumber);
+  }
+
   @override
   List<Object?> get props => [id, firstPhoneNumber, secondPhoneNumber, createdAt, updatedAt];
 

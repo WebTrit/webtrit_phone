@@ -135,14 +135,14 @@ class ConversationCubit extends Cubit<ConversationState> {
   Future fetchHistory() async {
     final state = this.state;
     if (state is! CVSReady) return;
-
-    final chatId = _chat?.id;
     if (state.fetchingHistory || state.historyEndReached) return;
 
+    final chatId = _chat?.id;
     if (chatId == null) return;
 
     final topMessage = state.messages.lastOrNull;
     if (topMessage == null) return;
+    final topDate = topMessage.createdAt;
 
     emit(state.copyWith(fetchingHistory: true));
 
@@ -152,15 +152,16 @@ class ConversationCubit extends Cubit<ConversationState> {
       List<ChatMessage> messages = [];
 
       // Fetch history from local storage
-      // Exclude reply,forward cache and other messages that are not in sync
+      // Exclude reply,forward cache and other messages that are not in sync boundaries
       final oldestCursor = await _chatsRepository.getChatMessageSyncCursor(chatId, MessageSyncCursorType.oldest);
-      messages = await _chatsRepository.getMessageHistory(chatId, from: topMessage.createdAt, to: oldestCursor?.time);
+      final syncedTo = oldestCursor?.time;
+      messages = await _chatsRepository.getMessageHistory(chatId, from: topDate, to: syncedTo);
       _logger.info('fetchHistory: local messages ${messages.length}');
 
       // If no messages found in local storage, fetch from the remote server
       final channel = _client.getChatChannel(chatId);
       if (messages.isEmpty && channel != null) {
-        final payload = {'created_before': topMessage.createdAt.toUtc().toIso8601String(), 'limit': 50};
+        final payload = {'created_before': topDate.toUtc().toIso8601String(), 'limit': 50};
         final req = await channel.push('message:history', payload).future;
         messages = (req.response['data'] as List).map((e) => ChatMessage.fromMap(e)).toList();
         _logger.info('fetchHistory: remote messages ${messages.length}');

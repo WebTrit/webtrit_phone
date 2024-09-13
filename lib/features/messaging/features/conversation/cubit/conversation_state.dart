@@ -10,8 +10,8 @@ abstract base class ConversationState {
   factory ConversationState.init(String participantId) => CVSInit(participantId);
   factory ConversationState.error(String participantId, Object error) => CVSError(participantId, error);
   factory ConversationState.left(String participantId) => CVSLeft(participantId);
-  factory ConversationState.ready(String participantId, {Chat? chat, List<ChatMessage> messages = const []}) {
-    return CVSReady(participantId, messages: messages, chat: chat);
+  factory ConversationState.ready(String participantId, {Chat? chat}) {
+    return CVSReady(participantId, chat: chat);
   }
 }
 
