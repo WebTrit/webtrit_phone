@@ -9,7 +9,7 @@ import 'package:meta/meta.dart';
 import 'package:_http_client/_http_client.dart';
 
 import 'exceptions.dart';
-import 'webtrit_api_method.dart';
+import 'webtrit_api_models.dart';
 import 'webtrit_api_request_options.dart';
 import 'models/models.dart';
 
@@ -135,7 +135,7 @@ class WebtritApiClient {
       } catch (e) {
         _logger.severe('${method.name.toUpperCase()} failed for requestId: $requestId with error: $e');
         if (requestAttempt >= options.retries) {
-          rethrow;
+          throw ResponseException(method, url, xRequestId, token, requestAttempt, e);
         }
         requestAttempt++;
         await Future.delayed(options.retryDelay);
