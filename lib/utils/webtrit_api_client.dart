@@ -15,3 +15,12 @@ WebtritApiClient defaultCreateWebtritApiClient(String coreUrl, String tenantId) 
     certs: appCertificates.trustedCertificates,
   );
 }
+
+LightHttpClient createApiClient() {
+  final appCertificates = AppCertificates();
+
+  return LightHttpClient(
+    connectionTimeout: kApiClientConnectionTimeout,
+    certs: appCertificates.trustedCertificates,
+  );
+}
