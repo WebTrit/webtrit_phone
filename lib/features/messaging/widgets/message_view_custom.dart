@@ -306,7 +306,7 @@ class ReplyQuote extends StatefulWidget {
 
 class _ReplyQuoteState extends State<ReplyQuote> {
   late final chatsRepository = context.read<ChatsRepository>();
-  late final client = context.read<ChatsBloc>().state.client;
+  late final client = context.read<MessagingBloc>().state.client;
 
   /// Fetch the message from local
   /// If the message is not found in the local storage, it will fetch it from the server

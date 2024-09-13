@@ -7,16 +7,16 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/messaging/services/services.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-part 'chats_event.dart';
-part 'chats_state.dart';
+part 'messaging_event.dart';
+part 'messaging_state.dart';
 
-class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
-  ChatsBloc(
+class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
+  MessagingBloc(
     this._client,
     this._chatsRepository,
     this._outboxRepository,
     this._prefs,
-  ) : super(ChatsState.initial(_client, _prefs.getChatUserId())) {
+  ) : super(MessagingState.initial(_client, _prefs.getChatUserId())) {
     on<Connect>(_connect);
     on<Refresh>(_refresh);
     on<_ClientConnected>(_onClientConnected);
@@ -41,19 +41,19 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
   ChatsSyncWorker? _chatsSyncWorker;
   ChatsOutboxWorker? _chatsOutboxWorker;
 
-  void _connect(Connect event, Emitter<ChatsState> emit) async {
-    emit(state.copyWith(status: ChatsStatus.connecting));
+  void _connect(Connect event, Emitter<MessagingState> emit) async {
+    emit(state.copyWith(status: ConnectionStatus.connecting));
     // _chatsRepository.wipeChatsData();
     // _outboxRepository.wipeOutboxData();
     _client.connect();
   }
 
-  void _refresh(Refresh event, Emitter<ChatsState> emit) async {
+  void _refresh(Refresh event, Emitter<MessagingState> emit) async {
     if (_client.isConnected) _client.close();
     add(const Connect());
   }
 
-  void _onClientConnected(_ClientConnected event, Emitter<ChatsState> emit) async {
+  void _onClientConnected(_ClientConnected event, Emitter<MessagingState> emit) async {
     try {
       if (!_client.channels.containsKey('chat:me')) {
         // Auth process using channel connect payload
@@ -76,19 +76,19 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
         _chatsSyncWorker ??= ChatsSyncWorker(_client, _chatsRepository)..init();
         _chatsOutboxWorker ??= ChatsOutboxWorker(_client, _chatsRepository, _outboxRepository)..init();
       }
-      emit(state.copyWith(status: ChatsStatus.connected));
+      emit(state.copyWith(status: ConnectionStatus.connected));
     } on Exception catch (e) {
       _client.close();
-      emit(state.copyWith(status: ChatsStatus.error, error: e));
+      emit(state.copyWith(status: ConnectionStatus.error, error: e));
     }
   }
 
-  void _onClientDisconnected(_ClientDisconnected event, Emitter<ChatsState> emit) async {
-    emit(state.copyWith(status: ChatsStatus.connecting));
+  void _onClientDisconnected(_ClientDisconnected event, Emitter<MessagingState> emit) async {
+    emit(state.copyWith(status: ConnectionStatus.connecting));
   }
 
-  void _onClientError(_ClientError event, Emitter<ChatsState> emit) {
-    emit(state.copyWith(status: ChatsStatus.error, error: Exception(event.error)));
+  void _onClientError(_ClientError event, Emitter<MessagingState> emit) {
+    emit(state.copyWith(status: ConnectionStatus.error, error: Exception(event.error)));
   }
 
   @override

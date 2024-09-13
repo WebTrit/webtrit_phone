@@ -21,7 +21,7 @@ class ConversationScreen extends StatefulWidget {
 }
 
 class _ConversationScreenState extends State<ConversationScreen> {
-  late final chatsBloc = context.read<ChatsBloc>();
+  late final messagingBloc = context.read<MessagingBloc>();
   late final conversationCubit = context.read<ConversationCubit>();
   late final contactsRepo = context.read<ContactsRepository>();
 
@@ -46,7 +46,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ChatTypingCubit(chatsBloc.state.client, contactsRepo),
+      create: (context) => ChatTypingCubit(messagingBloc.state.client, contactsRepo),
       child: BlocConsumer<ConversationCubit, ConversationState>(
         listener: (context, state) {
           if (state is CVSReady && state.chat != null) {
@@ -110,7 +110,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                   builder: (context) {
                     if (state is CVSReady) {
                       return MessageListView(
-                        userId: chatsBloc.state.userId!,
+                        userId: messagingBloc.state.userId!,
                         messages: state.messages,
                         outboxMessages: state.outboxMessages,
                         outboxMessageEdits: state.outboxMessageEdits,

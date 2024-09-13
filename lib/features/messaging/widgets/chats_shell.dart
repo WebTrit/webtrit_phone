@@ -39,11 +39,11 @@ class _ChatsShellState extends State<ChatsShell> {
 
     // Wait for userId to be available to initialize chat notifications
     // Todo: remove this when userId is available during main auth flow
-    final chatsBloc = context.read<ChatsBloc>();
+    final messagingBloc = context.read<MessagingBloc>();
     Future.doWhile(() async {
       if (!mounted) return false;
 
-      final userId = chatsBloc.state.userId;
+      final userId = messagingBloc.state.userId;
       if (userId != null) {
         chatsNotificationsService.init(userId);
         return false;

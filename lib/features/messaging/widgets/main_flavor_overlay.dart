@@ -19,7 +19,7 @@ class _ChatFlavorOverlayState extends State<ChatFlavorOverlay> {
     return Stack(
       children: [
         widget.child,
-        BlocBuilder<ChatsBloc, ChatsState>(
+        BlocBuilder<MessagingBloc, MessagingState>(
           builder: (context, state) {
             // Prevent unnecessary initialization of UnreadCountCubit
             if (state.userId == null) return const SizedBox();

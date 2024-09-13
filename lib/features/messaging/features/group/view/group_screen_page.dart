@@ -15,7 +15,7 @@ class GroupScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final chatsBloc = context.read<ChatsBloc>();
+    final messagingBloc = context.read<MessagingBloc>();
     final chatsRepository = context.read<ChatsRepository>();
     final chatsOutboxRepository = context.read<ChatsOutboxRepository>();
 
@@ -23,7 +23,7 @@ class GroupScreenPage extends StatelessWidget {
       key: ValueKey(chatId),
       create: (context) => GroupCubit(
         chatId,
-        chatsBloc.state.client,
+        messagingBloc.state.client,
         chatsRepository,
         chatsOutboxRepository,
       ),

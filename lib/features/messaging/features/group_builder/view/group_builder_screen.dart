@@ -53,8 +53,8 @@ class _GroupBuilderScreenState extends State<GroupBuilderScreen> {
 
   Future<void> onSubmit() async {
     if (!isValid) return;
-    final chatsBloc = context.read<ChatsBloc>();
-    final userChannel = chatsBloc.state.client.userChannel;
+    final messagingBloc = context.read<MessagingBloc>();
+    final userChannel = messagingBloc.state.client.userChannel;
     if (userChannel == null || userChannel.state != PhoenixChannelState.joined) {
       context.showErrorSnackBar(context.l10n.chats_GroupBuilderScreen_connectionError);
       return;

@@ -203,7 +203,7 @@ class _MainShellState extends State<MainShell> {
             },
           ),
           if (EnvironmentConfig.CHAT_FEATURE_ENABLE)
-            BlocProvider<ChatsBloc>(
+            BlocProvider<MessagingBloc>(
               lazy: false,
               create: (context) {
                 final appBloc = context.read<AppBloc>();
@@ -218,7 +218,7 @@ class _MainShellState extends State<MainShell> {
                   socketOptions: PhoenixSocketOptions(params: {'token': token, 'tenant_id': tenantId}),
                 );
 
-                return ChatsBloc(wsClient, chatsRepository, chatsOutboxRepository, appPreferences)
+                return MessagingBloc(wsClient, chatsRepository, chatsOutboxRepository, appPreferences)
                   ..add(const Connect());
               },
             ),

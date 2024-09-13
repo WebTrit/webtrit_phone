@@ -40,7 +40,7 @@ class MessageView extends StatefulWidget {
 
 class _MessageViewState extends State<MessageView> {
   late final chatsRepository = context.read<ChatsRepository>();
-  late final client = context.read<ChatsBloc>().state.client;
+  late final client = context.read<MessagingBloc>().state.client;
 
   Future<ChatMessage?> fetchMessage(int msgId, int chatId) async {
     final msg = await chatsRepository.getMessageById(msgId);
