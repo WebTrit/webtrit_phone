@@ -30,9 +30,9 @@ class MainScreen extends StatelessWidget {
       Widget icon = Icon(flavor.icon);
       String label = flavor.labelL10n(context);
 
-      if (flavor == MainFlavor.chats) {
+      if (flavor == MainFlavor.messaging) {
         if (!isMessagingFeatureEnabled) continue;
-        icon = ChatFlavorOverlay(child: icon);
+        icon = MessagingFlavorOverlay(child: icon);
       }
 
       final item = BottomNavigationBarItem(icon: icon, label: label);

@@ -3,5 +3,5 @@ enum MainFlavor {
   recents,
   contacts,
   keypad,
-  chats,
+  messaging,
 }

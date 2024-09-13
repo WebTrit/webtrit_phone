@@ -4,16 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 
-class ChatFlavorOverlay extends StatefulWidget {
-  const ChatFlavorOverlay({required this.child, super.key});
+class MessagingFlavorOverlay extends StatefulWidget {
+  const MessagingFlavorOverlay({required this.child, super.key});
 
   final Widget child;
 
   @override
-  State<ChatFlavorOverlay> createState() => _ChatFlavorOverlayState();
+  State<MessagingFlavorOverlay> createState() => _MessagingFlavorOverlayState();
 }
 
-class _ChatFlavorOverlayState extends State<ChatFlavorOverlay> {
+class _MessagingFlavorOverlayState extends State<MessagingFlavorOverlay> {
   @override
   Widget build(BuildContext context) {
     return Stack(

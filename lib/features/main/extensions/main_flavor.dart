@@ -15,7 +15,7 @@ extension MainFlavorLabelL10n on MainFlavor {
         return context.l10n.main_BottomNavigationBarItemLabel_contacts;
       case MainFlavor.keypad:
         return context.l10n.main_BottomNavigationBarItemLabel_keypad;
-      case MainFlavor.chats:
+      case MainFlavor.messaging:
         return context.l10n.main_BottomNavigationBarItemLabel_chats;
     }
   }
@@ -32,7 +32,7 @@ extension MainFlavorIcon on MainFlavor {
         return Icons.account_circle_outlined;
       case MainFlavor.keypad:
         return Icons.dialpad;
-      case MainFlavor.chats:
+      case MainFlavor.messaging:
         return Icons.chat_bubble_outline;
     }
   }

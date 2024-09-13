@@ -105,7 +105,7 @@ class AppPreferences {
     if (activeMainFlavorString != null) {
       try {
         final flavor = MainFlavor.values.byName(activeMainFlavorString);
-        if (flavor == MainFlavor.chats && !chatsEnabled) return defaultValue;
+        if (flavor == MainFlavor.messaging && !chatsEnabled) return defaultValue;
         return flavor;
       } catch (_) {
         return defaultValue;
