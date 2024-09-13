@@ -9,7 +9,7 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 
 // TODO: extract events and commands to separate classes
 
-final _logger = Logger('OutboxQueueWorker');
+final _logger = Logger('ChatsOutboxWorker');
 
 class ChatsOutboxWorker {
   ChatsOutboxWorker(this._client, this._chatsRepository, this._outboxRepository) {
