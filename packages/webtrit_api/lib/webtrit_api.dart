@@ -9,3 +9,4 @@ export 'src/models/models.dart';
 export 'src/webtrit_api_client.dart';
 export 'src/webtrit_api_request_options.dart';
 export 'src/webtrit_api_models.dart';
+export 'src/webtrit_api_light_client.dart';

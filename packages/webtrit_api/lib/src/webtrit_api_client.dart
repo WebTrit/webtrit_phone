@@ -11,11 +11,10 @@ import 'package:_http_client/_http_client.dart';
 import 'exceptions.dart';
 import 'webtrit_api_models.dart';
 import 'webtrit_api_request_options.dart';
+import 'webtrit_api_utils.dart';
 import 'models/models.dart';
 
 class WebtritApiClient {
-  static final _requestIdRandom = Random();
-
   final Logger _logger;
 
   @visibleForTesting
@@ -86,7 +85,7 @@ class WebtritApiClient {
     );
     final httpRequest = http.Request(method.name, url);
 
-    final xRequestId = requestId ?? _generateRequestId();
+    final xRequestId = requestId ?? ApiUtils.generateRequestId();
 
     httpRequest.headers.addAll({
       'content-type': 'application/json; charset=utf-8',
@@ -141,10 +140,6 @@ class WebtritApiClient {
         await Future.delayed(options.retryDelay);
       }
     }
-  }
-
-  String _generateRequestId([int length = 32]) {
-    return String.fromCharCodes(List.generate(length, (index) => _requestIdRandom.nextInt(26) + 97));
   }
 
   Future<dynamic> _httpClientExecuteGet(
