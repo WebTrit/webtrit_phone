@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
+import 'package:webtrit_phone/data/data.dart';
 
 export 'package:webtrit_api/webtrit_api.dart'
     show Balance, BalanceType, BillingModel, Numbers, UserInfo, $UserInfoCopyWith;
@@ -12,9 +13,11 @@ final _logger = Logger('UserRepository');
 class UserRepository {
   UserRepository({
     required WebtritApiClient webtritApiClient,
+    required QueueRequestWorker queueRequestWorker,
     required String token,
     bool periodicPolling = true,
   })  : _webtritApiClient = webtritApiClient,
+        _queueRequestWorker = queueRequestWorker,
         _token = token,
         _periodicPolling = periodicPolling {
     _controller = StreamController<UserInfo>.broadcast(
@@ -27,6 +30,8 @@ class UserRepository {
   final WebtritApiClient _webtritApiClient;
   final String _token;
   final bool _periodicPolling;
+
+  QueueRequestWorker _queueRequestWorker;
 
   late StreamController<UserInfo> _controller;
   late int _listenedCounter;
@@ -70,10 +75,17 @@ class UserRepository {
   }
 
   Future<void> logout() async {
-    await _webtritApiClient.deleteSession(
-      _token,
-      options: RequestOptions.withExtraRetries(),
-    );
+    try {
+      await _webtritApiClient.deleteSession(
+        _token,
+        options: RequestOptions.withExtraRetries(),
+      );
+    } catch (e) {
+      if (e is ResponseException) {
+        _queueRequestWorker.storeRequest(e.method, e.url, token: _token);
+      }
+      rethrow;
+    }
   }
 
   Future<void> delete() async {
