@@ -400,10 +400,6 @@ class ChatOutboxMessageTable extends Table {
 
   TextColumn get authorId => text().nullable()();
 
-  BoolColumn get viaSms => boolean().withDefault(const Constant(false))();
-
-  TextColumn get smsNumber => text().nullable()();
-
   TextColumn get content => text()();
 
   IntColumn get sendAttempts => integer().withDefault(const Constant(0))();

@@ -690,17 +690,6 @@ class ChatOutboxMessages extends Table with TableInfo {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: 'NULL');
-  late final GeneratedColumn<int> viaSms = GeneratedColumn<int>(
-      'via_sms', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL DEFAULT 0 CHECK (via_sms IN (0, 1))',
-      defaultValue: const CustomExpression('0'));
-  late final GeneratedColumn<String> smsNumber = GeneratedColumn<String>(
-      'sms_number', aliasedName, true,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      $customConstraints: 'NULL');
   late final GeneratedColumn<String> content = GeneratedColumn<String>(
       'content', aliasedName, false,
       type: DriftSqlType.string,
@@ -720,8 +709,6 @@ class ChatOutboxMessages extends Table with TableInfo {
         replyToId,
         forwardFromId,
         authorId,
-        viaSms,
-        smsNumber,
         content,
         sendAttempts
       ];

@@ -9,8 +9,6 @@ class ChatOutboxMessageEntry extends Equatable {
   final int? replyToId;
   final int? forwardFromId;
   final String? authorId;
-  final bool viaSms;
-  final String? smsNumber;
   final int sendAttempts;
 
   const ChatOutboxMessageEntry({
@@ -21,8 +19,6 @@ class ChatOutboxMessageEntry extends Equatable {
     this.replyToId,
     this.forwardFromId,
     this.authorId,
-    this.viaSms = false,
-    this.smsNumber,
     this.sendAttempts = 0,
   });
 
@@ -35,8 +31,6 @@ class ChatOutboxMessageEntry extends Equatable {
         replyToId,
         forwardFromId,
         authorId,
-        viaSms,
-        smsNumber,
         sendAttempts,
       ];
 
@@ -51,8 +45,6 @@ class ChatOutboxMessageEntry extends Equatable {
     int? replyToId,
     int? forwardFromId,
     String? authorId,
-    bool? viaSms,
-    String? smsNumber,
     int? sendAttempts,
   }) {
     return ChatOutboxMessageEntry(
@@ -63,8 +55,6 @@ class ChatOutboxMessageEntry extends Equatable {
       replyToId: replyToId ?? this.replyToId,
       forwardFromId: forwardFromId ?? this.forwardFromId,
       authorId: authorId ?? this.authorId,
-      viaSms: viaSms ?? this.viaSms,
-      smsNumber: smsNumber ?? this.smsNumber,
       sendAttempts: sendAttempts ?? this.sendAttempts,
     );
   }

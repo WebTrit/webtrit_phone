@@ -118,14 +118,13 @@ class _ConversationScreenState extends State<ConversationScreen> {
                         readCursors: state.readCursors,
                         fetchingHistory: state.fetchingHistory,
                         historyEndReached: state.historyEndReached,
-                        onSendMessage: (content, useSms) => conversationCubit.sendMessage(content, useSms),
+                        onSendMessage: (content) => conversationCubit.sendMessage(content),
                         onSendReply: (content, refMessage) => conversationCubit.sendReply(content, refMessage),
                         onSendForward: (content, refMessage) => conversationCubit.sendForward(refMessage),
                         onSendEdit: (content, refMessage) => conversationCubit.sendEdit(content, refMessage),
                         onDelete: (refMessage) => conversationCubit.deleteMessage(refMessage),
                         userReadedUntilUpdate: (until) => conversationCubit.userReadedUntilUpdate(until),
                         onFetchHistory: conversationCubit.fetchHistory,
-                        hasSmsFeature: false,
                       );
                     }
 

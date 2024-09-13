@@ -10,8 +10,6 @@ mixin ChatsOutboxDriftMapper {
       replyToId: data.replyToId,
       forwardFromId: data.forwardFromId,
       authorId: data.authorId,
-      viaSms: data.viaSms,
-      smsNumber: data.smsNumber,
       content: data.content,
       sendAttempts: data.sendAttempts,
     );
@@ -25,8 +23,6 @@ mixin ChatsOutboxDriftMapper {
       replyToId: entry.replyToId,
       forwardFromId: entry.forwardFromId,
       authorId: entry.authorId,
-      viaSms: entry.viaSms,
-      smsNumber: entry.smsNumber,
       content: entry.content,
       sendAttempts: entry.sendAttempts,
     );

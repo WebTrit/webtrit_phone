@@ -1,10 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:flutter_chat_ui/flutter_chat_ui.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-import 'package:logging/logging.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
@@ -14,9 +11,6 @@ import 'package:webtrit_phone/models/models.dart';
 
 import 'message_view.dart';
 
-final _logger = Logger('MessageListView');
-
-@Deprecated('Use message_list_view_custom instead, its will be removed')
 class MessageListView extends StatefulWidget {
   const MessageListView({
     required this.userId,
@@ -34,7 +28,6 @@ class MessageListView extends StatefulWidget {
     required this.onDelete,
     required this.userReadedUntilUpdate,
     required this.onFetchHistory,
-    required this.hasSmsFeature,
     super.key,
   });
 
@@ -46,14 +39,13 @@ class MessageListView extends StatefulWidget {
   final List<ChatMessageReadCursor> readCursors;
   final bool fetchingHistory;
   final bool historyEndReached;
-  final Function(String content, bool useSms) onSendMessage;
+  final Function(String content) onSendMessage;
   final Function(String content, ChatMessage refMessage) onSendReply;
   final Function(String content, ChatMessage refMessage) onSendForward;
   final Function(String content, ChatMessage refMessage) onSendEdit;
   final Function(ChatMessage refMessage) onDelete;
   final Function(DateTime until) userReadedUntilUpdate;
   final Future Function() onFetchHistory;
-  final bool hasSmsFeature;
 
   @override
   State<MessageListView> createState() => _MessageListViewState();
@@ -61,18 +53,30 @@ class MessageListView extends StatefulWidget {
 
 class _MessageListViewState extends State<MessageListView> {
   late final messageForwardCubit = context.read<MessageForwardCubit>();
-  late final user = types.User(id: widget.userId);
-  List<types.Message> messages = [];
+  late final inputController = TextEditingController();
+  late final scrollController = ScrollController();
+
+  List<Widget> elements = [];
   ChatMessage? editingMessage;
   ChatMessage? replyingMessage;
   bool useSms = false;
 
-  final inputController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
-    mapMessages();
+    mapElements();
+    scrollController.addListener(() {
+      final maxScroll = scrollController.position.maxScrollExtent;
+      final position = scrollController.position.pixels;
+
+      final scrollRemaining = maxScroll - position;
+      const hystoryFetchScrollThreshold = 500.0;
+
+      final shouldFetch = scrollRemaining < hystoryFetchScrollThreshold;
+      final canFetch = !widget.historyEndReached && !widget.fetchingHistory;
+
+      if (shouldFetch && canFetch) widget.onFetchHistory();
+    });
   }
 
   @override
@@ -89,95 +93,107 @@ class _MessageListViewState extends State<MessageListView> {
         outboxMessageDeletesChanged() ||
         readCursorsChanged() ||
         messagesChanged();
-    if (shouldRemap) mapMessages();
+    if (shouldRemap) mapElements();
   }
 
-  void mapMessages() {
-    _logger.fine('Mapping messages msgs: ${widget.messages.length} outbox: ${widget.outboxMessages.length}');
+  mapElements() {
+    final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
+    final membersReadedUntil = widget.readCursors.participantsReadedUntil(widget.userId);
 
-    Map<String, types.Message> msgMap = {};
+    elements = [];
 
     for (final entry in widget.outboxMessages.reversed) {
-      var textMessage = types.TextMessage(
-        author: types.User(
-          id: widget.userId,
-          firstName: widget.userId,
+      elements.add(
+        MessageView(
+          userId: widget.userId,
+          outboxMessage: entry,
+          handleSetForReply: handleSetForReply,
+          handleSetForForward: handleSetForForward,
+          handleSetForEdit: handleSetForEdit,
+          handleDelete: handleDelete,
         ),
-        id: entry.idKey,
-        text: entry.content,
-        showStatus: true,
-        status: types.Status.sending,
-        createdAt: DateTime.now().millisecondsSinceEpoch,
       );
-      msgMap[entry.idKey] = textMessage;
     }
 
-    final participantsReadedUntil = widget.readCursors.participantsReadedUntil(widget.userId);
+    for (var i = 0; i <= widget.messages.length - 1; i++) {
+      final message = widget.messages[i];
+      final newEntry = widget.outboxMessages.firstWhereOrNull((element) => element.idKey == message.idKey);
+      final editEntry = widget.outboxMessageEdits.firstWhereOrNull((element) => element.idKey == message.idKey);
+      final deleteEntry = widget.outboxMessageDeletes.firstWhereOrNull((element) => element.idKey == message.idKey);
 
-    for (final msg in widget.messages) {
-      final editEntry = widget.outboxMessageEdits.firstWhereOrNull((element) => element.idKey == msg.idKey);
-      final deleteEntry = widget.outboxMessageDeletes.firstWhereOrNull((element) => element.idKey == msg.idKey);
-      final inOutbox = editEntry != null || deleteEntry != null;
+      if (newEntry != null) continue;
 
-      final seen = participantsReadedUntil != null && !msg.createdAt.isAfter(participantsReadedUntil);
+      final isLast = i == 0;
+      final nextMessage = isLast ? null : widget.messages[i - 1];
 
-      String text = msg.content;
-      if (editEntry != null) text = editEntry.newContent;
-      if (msg.deletedAt != null || deleteEntry != null) text = '[deleted]';
+      var lastMsgOfTheDay = false;
 
-      final metadata = {
-        'message': msg,
-        'edited': msg.editedAt != null || editEntry != null,
-        'deleted': msg.deletedAt != null || deleteEntry != null,
-      };
-
-      types.Status status;
-      if (inOutbox) {
-        // If message has changes in outbox that no sended yet
-        status = types.Status.sending;
-      } else {
-        // Else show status based on message state
-        if (seen) {
-          status = types.Status.seen;
-        } else {
-          status = types.Status.delivered;
-        }
+      if (nextMessage != null) {
+        final nextMsgDate = nextMessage.createdAt;
+        final msgDate = message.createdAt;
+        lastMsgOfTheDay = nextMsgDate.day != msgDate.day;
       }
 
-      final textMessage = types.TextMessage(
-        author: types.User(id: msg.senderId, firstName: msg.senderId),
-        id: msg.idKey,
-        remoteId: msg.id.toString(),
-        text: text,
-        showStatus: true,
-        status: status,
-        createdAt: msg.createdAt.millisecondsSinceEpoch,
-        updatedAt: msg.updatedAt.millisecondsSinceEpoch,
-        metadata: metadata,
+      if (lastMsgOfTheDay) {
+        elements.add(
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Center(
+              child: Text(
+                message.createdAt.toDayOfMonth,
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
+              ),
+            ),
+          ),
+        );
+      }
+
+      elements.add(
+        MessageView(
+          userId: widget.userId,
+          chatMessage: message,
+          outboxEditEntry: editEntry,
+          outboxDeleteEntry: deleteEntry,
+          userReadedUntil: userReadedUntil,
+          membersReadedUntil: membersReadedUntil,
+          handleSetForReply: handleSetForReply,
+          handleSetForForward: handleSetForForward,
+          handleSetForEdit: handleSetForEdit,
+          handleDelete: handleDelete,
+          onRendered: () {
+            final mine = message.senderId == widget.userId;
+            if (mine) return;
+
+            final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
+            final reachedUnreaded = userReadedUntil == null || message.createdAt.isAfter(userReadedUntil);
+            if (reachedUnreaded) widget.userReadedUntilUpdate(message.createdAt);
+          },
+          key: ObjectKey(message),
+        ),
       );
-
-      msgMap[msg.idKey] = textMessage;
     }
-
-    messages = msgMap.values.toList();
   }
 
-  void handleSend(types.PartialText message) {
+  void handleSend() {
     final messageForForward = messageForwardCubit.state;
+    final message = inputController.text.trim();
+    if (message.isEmpty) return;
 
     if (messageForForward != null) {
-      widget.onSendForward(message.text, messageForForward);
+      widget.onSendForward(message, messageForForward);
       messageForwardCubit.clear();
     } else if (replyingMessage != null) {
-      widget.onSendReply(message.text, replyingMessage!);
+      widget.onSendReply(message, replyingMessage!);
       setState(() => replyingMessage = null);
     } else if (editingMessage != null) {
-      widget.onSendEdit(message.text, editingMessage!);
+      widget.onSendEdit(message, editingMessage!);
       setState(() => editingMessage = null);
-      inputController.text = '';
     } else {
-      widget.onSendMessage(message.text, widget.hasSmsFeature ? useSms : false);
+      widget.onSendMessage(message);
     }
+
+    inputController.text = '';
+    FocusScope.of(context).unfocus();
   }
 
   void handleSetForReply(ChatMessage message) {
@@ -207,162 +223,155 @@ class _MessageListViewState extends State<MessageListView> {
 
   @override
   Widget build(BuildContext context) {
+    return Column(children: [
+      Expanded(child: list()),
+      field(),
+    ]);
+  }
+
+  Widget list() {
+    return ShaderMask(
+      shaderCallback: (Rect rect) {
+        return LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Colors.black.withOpacity(0.75),
+            Colors.transparent,
+            Colors.transparent,
+            Colors.black.withOpacity(0.75),
+          ],
+          stops: const [0.0, 0.025, 0.975, 1.0],
+        ).createShader(rect);
+      },
+      blendMode: BlendMode.dstOut,
+      child: ListView(
+        controller: scrollController,
+        reverse: true,
+        cacheExtent: 500,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        children: [
+          typingIndicator(),
+          ...elements,
+          historyFetchIndicator(),
+        ],
+      ),
+    );
+  }
+
+  Widget historyFetchIndicator() {
+    if (widget.fetchingHistory) {
+      return const Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Center(
+          child: SizedBox(
+            width: 16,
+            height: 16,
+            child: CircularProgressIndicator(),
+          ),
+        ),
+      );
+    }
+
+    return const SizedBox();
+  }
+
+  Widget typingIndicator() {
+    return BlocBuilder<ChatTypingCubit, TypingState>(
+      builder: (context, state) {
+        final typing = state.isNotEmpty;
+        final typingUsers = state.map((e) => e.name).join(', ');
+
+        if (typing) {
+          return Column(
+            children: [
+              const SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  '$typingUsers is typing...',
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+              ),
+            ],
+          );
+        }
+
+        return const SizedBox();
+      },
+    );
+  }
+
+  Widget field() {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return BlocBuilder<ChatTypingCubit, TypingState>(
-      builder: (context, typingState) {
-        final typingUsers = typingState.map((typing) => types.User(id: typing.userId, firstName: typing.name)).toList();
+    return BlocBuilder<MessageForwardCubit, ChatMessage?>(
+      builder: (context, state) {
+        final messageForForward = state;
 
-        return FlyerChat(
-          messages: messages,
-          onSendPressed: handleSend,
-          user: user,
-          showUserNames: true,
-          showUserAvatars: true,
-          onEndReached: widget.onFetchHistory,
-          isLastPage: widget.historyEndReached,
-          emojiEnlargementBehavior: EmojiEnlargementBehavior.never,
-          typingIndicatorOptions: TypingIndicatorOptions(
-            typingUsers: typingUsers,
-            animationSpeed: const Duration(seconds: 1),
-            typingMode: TypingIndicatorMode.name,
-          ),
-          onMessageVisibilityChanged: (uiMessage, visible) {
-            if (!visible) return;
-
-            ChatMessage? chatMessage = uiMessage.chatMessage;
-            if (chatMessage == null) return;
-
-            final mine = chatMessage.senderId == widget.userId;
-            if (mine) return;
-
-            final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
-            final reachedUnreaded = userReadedUntil == null || chatMessage.createdAt.isAfter(userReadedUntil);
-            if (reachedUnreaded) widget.userReadedUntilUpdate(chatMessage.createdAt);
-          },
-          avatarBuilder: (author) {
-            String name = author.firstName ?? 'N/A';
-            final numberFromName = int.tryParse(name);
-            if (numberFromName != null && name.length > 3) {
-              name = name.substring(name.length - 3);
-            }
-            return Padding(
-              padding: const EdgeInsets.all(4),
-              child: CircleAvatar(
-                maxRadius: 16,
-                backgroundColor: colorScheme.tertiary,
-                child: FittedBox(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ParticipantName(
-                      senderId: author.id,
-                      userId: widget.userId,
-                      textMap: (name) {
-                        var text = name.split(' ').first;
-                        if (text.length > 16) text = text.substring(0, 16);
-                        return text;
-                      },
-                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
+        return Column(
+          children: [
+            if (messageForForward != null)
+              ExchangeBar(
+                text: messageForForward.content,
+                icon: Icons.forward,
+                onCancel: messageForwardCubit.clear,
+                onConfirm: () {
+                  widget.onSendForward(messageForForward.content, messageForForward);
+                  messageForwardCubit.clear();
+                },
+              ),
+            if (replyingMessage != null)
+              ExchangeBar(
+                text: replyingMessage!.content,
+                icon: Icons.reply,
+                onCancel: () => setState(() => replyingMessage = null),
+              ),
+            if (editingMessage != null)
+              ExchangeBar(
+                text: editingMessage!.content,
+                icon: Icons.edit_note,
+                onCancel: () {
+                  setState(() => editingMessage = null);
+                  inputController.text = '';
+                  FocusScope.of(context).unfocus();
+                },
+              ),
+            if (messageForForward == null)
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                        color: colorScheme.onSurface.withOpacity(0.1),
+                        spreadRadius: 4,
+                        blurRadius: 8,
+                        offset: const Offset(2, 4))
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: inputController,
+                        onFieldSubmitted: (_) => handleSend(),
+                        onChanged: (value) => context.read<ChatTypingCubit>().sendTyping(),
+                        decoration: const InputDecoration(
+                          hintText: 'Type a message',
+                          border: InputBorder.none,
+                        ),
+                      ),
                     ),
-                  ),
+                    GestureDetector(
+                      child: Icon(Icons.send, size: 24, color: colorScheme.secondary),
+                      onTap: () => handleSend(),
+                    ),
+                  ],
                 ),
               ),
-            );
-          },
-          theme: DefaultChatTheme(
-            inputBackgroundColor: Colors.white,
-            inputTextColor: Colors.black,
-            primaryColor: colorScheme.primary,
-            secondaryColor: colorScheme.secondary,
-            sentMessageBodyTextStyle: const TextStyle(color: Colors.white),
-            receivedMessageBodyTextStyle: const TextStyle(color: Colors.white),
-            receivedMessageLinkTitleTextStyle: const TextStyle(color: Colors.white),
-            receivedMessageLinkDescriptionTextStyle: const TextStyle(color: Colors.white),
-            inputMargin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            inputPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            messageInsetsVertical: 0,
-            messageInsetsHorizontal: 0,
-            inputContainerDecoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: [
-                BoxShadow(color: theme.cardColor, spreadRadius: 4, blurRadius: 8, offset: const Offset(2, 4))
-              ],
-            ),
-          ),
-          customBottomWidget: BlocBuilder<MessageForwardCubit, ChatMessage?>(
-            builder: (context, messageForForward) {
-              return Column(
-                children: [
-                  if (messageForForward != null)
-                    ExchangeBar(
-                      text: messageForForward.content,
-                      icon: Icons.forward,
-                      onCancel: messageForwardCubit.clear,
-                      onConfirm: () {
-                        widget.onSendForward(messageForForward.content, messageForForward);
-                        messageForwardCubit.clear();
-                      },
-                    ),
-                  if (replyingMessage != null)
-                    ExchangeBar(
-                      text: replyingMessage!.content,
-                      icon: Icons.reply,
-                      onCancel: () => setState(() => replyingMessage = null),
-                    ),
-                  if (editingMessage != null)
-                    ExchangeBar(
-                      text: editingMessage!.content,
-                      icon: Icons.edit_note,
-                      onCancel: () {
-                        setState(() => editingMessage = null);
-                        inputController.text = '';
-                        FocusScope.of(context).unfocus();
-                      },
-                    ),
-                  if (messageForForward == null)
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Input(
-                            onSendPressed: handleSend,
-                            options: InputOptions(
-                              textEditingController: inputController,
-                              onTextChanged: (_) => context.read<ChatTypingCubit>().sendTyping(),
-                            ),
-                          ),
-                        ),
-                        if (widget.hasSmsFeature &&
-                            replyingMessage == null &&
-                            editingMessage == null &&
-                            messageForForward == null)
-                          Column(
-                            children: [
-                              SizedBox(
-                                height: 24,
-                                child: Checkbox(
-                                  value: useSms,
-                                  onChanged: (v) => setState(() => useSms = v ?? false),
-                                ),
-                              ),
-                              const Text('SMS', style: TextStyle(fontSize: 12)),
-                            ],
-                          ),
-                      ],
-                    ),
-                ],
-              );
-            },
-          ),
-          textMessageBuilder: (message, {required messageWidth, required showName}) => MessageView(
-            userId: widget.userId,
-            message: message,
-            handleSetForReply: handleSetForReply,
-            handleSetForForward: handleSetForForward,
-            handleSetForEdit: handleSetForEdit,
-            handleDelete: handleDelete,
-          ),
+          ],
         );
       },
     );

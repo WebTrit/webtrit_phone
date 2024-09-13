@@ -79,8 +79,6 @@ class ChatsOutboxWorker {
         'reply_to_id': message.replyToId,
         'forwarded_from_id': message.forwardFromId,
         'author_id': message.authorId,
-        'via_sms': message.viaSms,
-        'sms_number': message.smsNumber,
       };
       final r = await channel.push('message:new', payload).future;
 
@@ -119,8 +117,6 @@ class ChatsOutboxWorker {
         'reply_to_id': message.replyToId,
         'forwarded_from_id': message.forwardFromId,
         'author_id': message.authorId,
-        'via_sms': message.viaSms,
-        'sms_number': message.smsNumber,
       };
       final r = await channel.push('message:new', payload).future;
 

@@ -51,14 +51,12 @@ class ConversationCubit extends Cubit<ConversationState> {
     _init();
   }
 
-  Future sendMessage(String content, bool useSms) async {
+  Future sendMessage(String content) async {
     final outboxEntry = ChatOutboxMessageEntry(
       idKey: (const Uuid()).v4(),
       chatId: _chat?.id,
       participantId: _participantId,
       content: content,
-      viaSms: useSms,
-      smsNumber: useSms ? _participantId : null,
     );
     _outboxRepository.upsertOutboxMessage(outboxEntry);
   }

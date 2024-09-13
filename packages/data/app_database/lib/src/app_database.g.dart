@@ -3682,21 +3682,6 @@ class $ChatOutboxMessageTableTable extends ChatOutboxMessageTable
   late final GeneratedColumn<String> authorId = GeneratedColumn<String>(
       'author_id', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _viaSmsMeta = const VerificationMeta('viaSms');
-  @override
-  late final GeneratedColumn<bool> viaSms = GeneratedColumn<bool>(
-      'via_sms', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("via_sms" IN (0, 1))'),
-      defaultValue: const Constant(false));
-  static const VerificationMeta _smsNumberMeta =
-      const VerificationMeta('smsNumber');
-  @override
-  late final GeneratedColumn<String> smsNumber = GeneratedColumn<String>(
-      'sms_number', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _contentMeta =
       const VerificationMeta('content');
   @override
@@ -3719,8 +3704,6 @@ class $ChatOutboxMessageTableTable extends ChatOutboxMessageTable
         replyToId,
         forwardFromId,
         authorId,
-        viaSms,
-        smsNumber,
         content,
         sendAttempts
       ];
@@ -3767,14 +3750,6 @@ class $ChatOutboxMessageTableTable extends ChatOutboxMessageTable
       context.handle(_authorIdMeta,
           authorId.isAcceptableOrUnknown(data['author_id']!, _authorIdMeta));
     }
-    if (data.containsKey('via_sms')) {
-      context.handle(_viaSmsMeta,
-          viaSms.isAcceptableOrUnknown(data['via_sms']!, _viaSmsMeta));
-    }
-    if (data.containsKey('sms_number')) {
-      context.handle(_smsNumberMeta,
-          smsNumber.isAcceptableOrUnknown(data['sms_number']!, _smsNumberMeta));
-    }
     if (data.containsKey('content')) {
       context.handle(_contentMeta,
           content.isAcceptableOrUnknown(data['content']!, _contentMeta));
@@ -3808,10 +3783,6 @@ class $ChatOutboxMessageTableTable extends ChatOutboxMessageTable
           .read(DriftSqlType.int, data['${effectivePrefix}forward_from_id']),
       authorId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}author_id']),
-      viaSms: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}via_sms'])!,
-      smsNumber: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}sms_number']),
       content: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}content'])!,
       sendAttempts: attachedDatabase.typeMapping
@@ -3833,8 +3804,6 @@ class ChatOutboxMessageData extends DataClass
   final int? replyToId;
   final int? forwardFromId;
   final String? authorId;
-  final bool viaSms;
-  final String? smsNumber;
   final String content;
   final int sendAttempts;
   const ChatOutboxMessageData(
@@ -3844,8 +3813,6 @@ class ChatOutboxMessageData extends DataClass
       this.replyToId,
       this.forwardFromId,
       this.authorId,
-      required this.viaSms,
-      this.smsNumber,
       required this.content,
       required this.sendAttempts});
   @override
@@ -3866,10 +3833,6 @@ class ChatOutboxMessageData extends DataClass
     }
     if (!nullToAbsent || authorId != null) {
       map['author_id'] = Variable<String>(authorId);
-    }
-    map['via_sms'] = Variable<bool>(viaSms);
-    if (!nullToAbsent || smsNumber != null) {
-      map['sms_number'] = Variable<String>(smsNumber);
     }
     map['content'] = Variable<String>(content);
     map['send_attempts'] = Variable<int>(sendAttempts);
@@ -3893,10 +3856,6 @@ class ChatOutboxMessageData extends DataClass
       authorId: authorId == null && nullToAbsent
           ? const Value.absent()
           : Value(authorId),
-      viaSms: Value(viaSms),
-      smsNumber: smsNumber == null && nullToAbsent
-          ? const Value.absent()
-          : Value(smsNumber),
       content: Value(content),
       sendAttempts: Value(sendAttempts),
     );
@@ -3912,8 +3871,6 @@ class ChatOutboxMessageData extends DataClass
       replyToId: serializer.fromJson<int?>(json['replyToId']),
       forwardFromId: serializer.fromJson<int?>(json['forwardFromId']),
       authorId: serializer.fromJson<String?>(json['authorId']),
-      viaSms: serializer.fromJson<bool>(json['viaSms']),
-      smsNumber: serializer.fromJson<String?>(json['smsNumber']),
       content: serializer.fromJson<String>(json['content']),
       sendAttempts: serializer.fromJson<int>(json['sendAttempts']),
     );
@@ -3928,8 +3885,6 @@ class ChatOutboxMessageData extends DataClass
       'replyToId': serializer.toJson<int?>(replyToId),
       'forwardFromId': serializer.toJson<int?>(forwardFromId),
       'authorId': serializer.toJson<String?>(authorId),
-      'viaSms': serializer.toJson<bool>(viaSms),
-      'smsNumber': serializer.toJson<String?>(smsNumber),
       'content': serializer.toJson<String>(content),
       'sendAttempts': serializer.toJson<int>(sendAttempts),
     };
@@ -3942,8 +3897,6 @@ class ChatOutboxMessageData extends DataClass
           Value<int?> replyToId = const Value.absent(),
           Value<int?> forwardFromId = const Value.absent(),
           Value<String?> authorId = const Value.absent(),
-          bool? viaSms,
-          Value<String?> smsNumber = const Value.absent(),
           String? content,
           int? sendAttempts}) =>
       ChatOutboxMessageData(
@@ -3955,8 +3908,6 @@ class ChatOutboxMessageData extends DataClass
         forwardFromId:
             forwardFromId.present ? forwardFromId.value : this.forwardFromId,
         authorId: authorId.present ? authorId.value : this.authorId,
-        viaSms: viaSms ?? this.viaSms,
-        smsNumber: smsNumber.present ? smsNumber.value : this.smsNumber,
         content: content ?? this.content,
         sendAttempts: sendAttempts ?? this.sendAttempts,
       );
@@ -3972,8 +3923,6 @@ class ChatOutboxMessageData extends DataClass
           ? data.forwardFromId.value
           : this.forwardFromId,
       authorId: data.authorId.present ? data.authorId.value : this.authorId,
-      viaSms: data.viaSms.present ? data.viaSms.value : this.viaSms,
-      smsNumber: data.smsNumber.present ? data.smsNumber.value : this.smsNumber,
       content: data.content.present ? data.content.value : this.content,
       sendAttempts: data.sendAttempts.present
           ? data.sendAttempts.value
@@ -3990,8 +3939,6 @@ class ChatOutboxMessageData extends DataClass
           ..write('replyToId: $replyToId, ')
           ..write('forwardFromId: $forwardFromId, ')
           ..write('authorId: $authorId, ')
-          ..write('viaSms: $viaSms, ')
-          ..write('smsNumber: $smsNumber, ')
           ..write('content: $content, ')
           ..write('sendAttempts: $sendAttempts')
           ..write(')'))
@@ -4000,7 +3947,7 @@ class ChatOutboxMessageData extends DataClass
 
   @override
   int get hashCode => Object.hash(idKey, chatId, participantId, replyToId,
-      forwardFromId, authorId, viaSms, smsNumber, content, sendAttempts);
+      forwardFromId, authorId, content, sendAttempts);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -4011,8 +3958,6 @@ class ChatOutboxMessageData extends DataClass
           other.replyToId == this.replyToId &&
           other.forwardFromId == this.forwardFromId &&
           other.authorId == this.authorId &&
-          other.viaSms == this.viaSms &&
-          other.smsNumber == this.smsNumber &&
           other.content == this.content &&
           other.sendAttempts == this.sendAttempts);
 }
@@ -4025,8 +3970,6 @@ class ChatOutboxMessageDataCompanion
   final Value<int?> replyToId;
   final Value<int?> forwardFromId;
   final Value<String?> authorId;
-  final Value<bool> viaSms;
-  final Value<String?> smsNumber;
   final Value<String> content;
   final Value<int> sendAttempts;
   final Value<int> rowid;
@@ -4037,8 +3980,6 @@ class ChatOutboxMessageDataCompanion
     this.replyToId = const Value.absent(),
     this.forwardFromId = const Value.absent(),
     this.authorId = const Value.absent(),
-    this.viaSms = const Value.absent(),
-    this.smsNumber = const Value.absent(),
     this.content = const Value.absent(),
     this.sendAttempts = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -4050,8 +3991,6 @@ class ChatOutboxMessageDataCompanion
     this.replyToId = const Value.absent(),
     this.forwardFromId = const Value.absent(),
     this.authorId = const Value.absent(),
-    this.viaSms = const Value.absent(),
-    this.smsNumber = const Value.absent(),
     required String content,
     this.sendAttempts = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -4064,8 +4003,6 @@ class ChatOutboxMessageDataCompanion
     Expression<int>? replyToId,
     Expression<int>? forwardFromId,
     Expression<String>? authorId,
-    Expression<bool>? viaSms,
-    Expression<String>? smsNumber,
     Expression<String>? content,
     Expression<int>? sendAttempts,
     Expression<int>? rowid,
@@ -4077,8 +4014,6 @@ class ChatOutboxMessageDataCompanion
       if (replyToId != null) 'reply_to_id': replyToId,
       if (forwardFromId != null) 'forward_from_id': forwardFromId,
       if (authorId != null) 'author_id': authorId,
-      if (viaSms != null) 'via_sms': viaSms,
-      if (smsNumber != null) 'sms_number': smsNumber,
       if (content != null) 'content': content,
       if (sendAttempts != null) 'send_attempts': sendAttempts,
       if (rowid != null) 'rowid': rowid,
@@ -4092,8 +4027,6 @@ class ChatOutboxMessageDataCompanion
       Value<int?>? replyToId,
       Value<int?>? forwardFromId,
       Value<String?>? authorId,
-      Value<bool>? viaSms,
-      Value<String?>? smsNumber,
       Value<String>? content,
       Value<int>? sendAttempts,
       Value<int>? rowid}) {
@@ -4104,8 +4037,6 @@ class ChatOutboxMessageDataCompanion
       replyToId: replyToId ?? this.replyToId,
       forwardFromId: forwardFromId ?? this.forwardFromId,
       authorId: authorId ?? this.authorId,
-      viaSms: viaSms ?? this.viaSms,
-      smsNumber: smsNumber ?? this.smsNumber,
       content: content ?? this.content,
       sendAttempts: sendAttempts ?? this.sendAttempts,
       rowid: rowid ?? this.rowid,
@@ -4133,12 +4064,6 @@ class ChatOutboxMessageDataCompanion
     if (authorId.present) {
       map['author_id'] = Variable<String>(authorId.value);
     }
-    if (viaSms.present) {
-      map['via_sms'] = Variable<bool>(viaSms.value);
-    }
-    if (smsNumber.present) {
-      map['sms_number'] = Variable<String>(smsNumber.value);
-    }
     if (content.present) {
       map['content'] = Variable<String>(content.value);
     }
@@ -4160,8 +4085,6 @@ class ChatOutboxMessageDataCompanion
           ..write('replyToId: $replyToId, ')
           ..write('forwardFromId: $forwardFromId, ')
           ..write('authorId: $authorId, ')
-          ..write('viaSms: $viaSms, ')
-          ..write('smsNumber: $smsNumber, ')
           ..write('content: $content, ')
           ..write('sendAttempts: $sendAttempts, ')
           ..write('rowid: $rowid')
@@ -8390,8 +8313,6 @@ typedef $$ChatOutboxMessageTableTableCreateCompanionBuilder
   Value<int?> replyToId,
   Value<int?> forwardFromId,
   Value<String?> authorId,
-  Value<bool> viaSms,
-  Value<String?> smsNumber,
   required String content,
   Value<int> sendAttempts,
   Value<int> rowid,
@@ -8404,8 +8325,6 @@ typedef $$ChatOutboxMessageTableTableUpdateCompanionBuilder
   Value<int?> replyToId,
   Value<int?> forwardFromId,
   Value<String?> authorId,
-  Value<bool> viaSms,
-  Value<String?> smsNumber,
   Value<String> content,
   Value<int> sendAttempts,
   Value<int> rowid,
@@ -8435,8 +8354,6 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
             Value<int?> replyToId = const Value.absent(),
             Value<int?> forwardFromId = const Value.absent(),
             Value<String?> authorId = const Value.absent(),
-            Value<bool> viaSms = const Value.absent(),
-            Value<String?> smsNumber = const Value.absent(),
             Value<String> content = const Value.absent(),
             Value<int> sendAttempts = const Value.absent(),
             Value<int> rowid = const Value.absent(),
@@ -8448,8 +8365,6 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
             replyToId: replyToId,
             forwardFromId: forwardFromId,
             authorId: authorId,
-            viaSms: viaSms,
-            smsNumber: smsNumber,
             content: content,
             sendAttempts: sendAttempts,
             rowid: rowid,
@@ -8461,8 +8376,6 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
             Value<int?> replyToId = const Value.absent(),
             Value<int?> forwardFromId = const Value.absent(),
             Value<String?> authorId = const Value.absent(),
-            Value<bool> viaSms = const Value.absent(),
-            Value<String?> smsNumber = const Value.absent(),
             required String content,
             Value<int> sendAttempts = const Value.absent(),
             Value<int> rowid = const Value.absent(),
@@ -8474,8 +8387,6 @@ class $$ChatOutboxMessageTableTableTableManager extends RootTableManager<
             replyToId: replyToId,
             forwardFromId: forwardFromId,
             authorId: authorId,
-            viaSms: viaSms,
-            smsNumber: smsNumber,
             content: content,
             sendAttempts: sendAttempts,
             rowid: rowid,
@@ -8508,16 +8419,6 @@ class $$ChatOutboxMessageTableTableFilterComposer
 
   ColumnFilters<String> get authorId => $state.composableBuilder(
       column: $state.table.authorId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get viaSms => $state.composableBuilder(
-      column: $state.table.viaSms,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get smsNumber => $state.composableBuilder(
-      column: $state.table.smsNumber,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -8569,16 +8470,6 @@ class $$ChatOutboxMessageTableTableOrderingComposer
 
   ColumnOrderings<String> get authorId => $state.composableBuilder(
       column: $state.table.authorId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get viaSms => $state.composableBuilder(
-      column: $state.table.viaSms,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get smsNumber => $state.composableBuilder(
-      column: $state.table.smsNumber,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
