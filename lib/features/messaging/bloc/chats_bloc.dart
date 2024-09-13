@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/features/chats/services/services.dart';
+import 'package:webtrit_phone/features/messaging/services/services.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 part 'chats_event.dart';

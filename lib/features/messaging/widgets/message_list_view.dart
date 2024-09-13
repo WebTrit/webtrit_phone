@@ -9,7 +9,7 @@ import 'package:auto_route/auto_route.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/features/chats/chats.dart';
+import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 import 'message_view.dart';

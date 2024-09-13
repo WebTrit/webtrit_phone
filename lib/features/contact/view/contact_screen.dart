@@ -7,7 +7,7 @@ import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/call/call.dart';
-import 'package:webtrit_phone/features/chats/extensions/contact.dart';
+import 'package:webtrit_phone/features/messaging/extensions/contact.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../contact.dart';

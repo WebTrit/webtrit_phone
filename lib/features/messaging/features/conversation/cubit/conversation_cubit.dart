@@ -6,7 +6,7 @@ import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 import 'package:stream_transform/stream_transform.dart';
 import 'package:uuid/uuid.dart';
-import 'package:webtrit_phone/features/chats/extensions/phoenix_socket.dart';
+import 'package:webtrit_phone/features/messaging/extensions/phoenix_socket.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';

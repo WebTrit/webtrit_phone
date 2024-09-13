@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 
-import 'package:webtrit_phone/features/chats/chats.dart';
+import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';

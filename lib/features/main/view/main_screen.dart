@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/environment_config.dart';
-import 'package:webtrit_phone/features/chats/chats.dart';
+import 'package:webtrit_phone/features/messaging/messaging.dart';
 
 import '../main.dart';
 
