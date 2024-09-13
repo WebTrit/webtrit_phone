@@ -109,6 +109,7 @@ class _MainShellState extends State<MainShell> {
         RepositoryProvider<UserRepository>(
           create: (context) => UserRepository(
             webtritApiClient: context.read<WebtritApiClient>(),
+            queueRequestWorker: QueueRequestWorker(),
             token: context.read<AppBloc>().state.token!,
             periodicPolling: EnvironmentConfig.PERIODIC_POLLING,
           ),
