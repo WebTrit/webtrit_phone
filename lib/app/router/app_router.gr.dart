@@ -54,17 +54,16 @@ abstract class _$AppRouter extends RootStackRouter {
         child: ChatListScreenPage(),
       );
     },
-    ChatsRouterPageRoute.name: (routeData) {
+    MessagingRouterPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const ChatsRouterPage(),
+        child: const MessagingRouterPage(),
       );
     },
     ContactScreenPageRoute.name: (routeData) {
       final pathParams = routeData.inheritedPathParams;
       final args = routeData.argsAs<ContactScreenPageRouteArgs>(
-          orElse: () => ContactScreenPageRouteArgs(
-              contactId: pathParams.getInt('contactId')));
+          orElse: () => ContactScreenPageRouteArgs(contactId: pathParams.getInt('contactId')));
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: ContactScreenPage(args.contactId),
@@ -134,8 +133,7 @@ abstract class _$AppRouter extends RootStackRouter {
     HelpScreenPageRoute.name: (routeData) {
       final queryParams = routeData.queryParams;
       final args = routeData.argsAs<HelpScreenPageRouteArgs>(
-          orElse: () => HelpScreenPageRouteArgs(
-              initialUriQueryParam: queryParams.optString('initialUrl')));
+          orElse: () => HelpScreenPageRouteArgs(initialUriQueryParam: queryParams.optString('initialUrl')));
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: HelpScreenPage(initialUriQueryParam: args.initialUriQueryParam),
@@ -258,8 +256,7 @@ abstract class _$AppRouter extends RootStackRouter {
     RecentScreenPageRoute.name: (routeData) {
       final pathParams = routeData.inheritedPathParams;
       final args = routeData.argsAs<RecentScreenPageRouteArgs>(
-          orElse: () => RecentScreenPageRouteArgs(
-              recentId: pathParams.getInt('recentId')));
+          orElse: () => RecentScreenPageRouteArgs(recentId: pathParams.getInt('recentId')));
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: RecentScreenPage(args.recentId),
@@ -292,12 +289,10 @@ abstract class _$AppRouter extends RootStackRouter {
     TermsConditionsScreenPageRoute.name: (routeData) {
       final queryParams = routeData.queryParams;
       final args = routeData.argsAs<TermsConditionsScreenPageRouteArgs>(
-          orElse: () => TermsConditionsScreenPageRouteArgs(
-              initialUriQueryParam: queryParams.optString('initialUrl')));
+          orElse: () => TermsConditionsScreenPageRouteArgs(initialUriQueryParam: queryParams.optString('initialUrl')));
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: TermsConditionsScreenPage(
-            initialUriQueryParam: args.initialUriQueryParam),
+        child: TermsConditionsScreenPage(initialUriQueryParam: args.initialUriQueryParam),
       );
     },
     ThemeModeScreenPageRoute.name: (routeData) {
@@ -352,8 +347,7 @@ class AppShellRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [AutoprovisionScreenPage]
-class AutoprovisionScreenPageRoute
-    extends PageRouteInfo<AutoprovisionScreenPageRouteArgs> {
+class AutoprovisionScreenPageRoute extends PageRouteInfo<AutoprovisionScreenPageRouteArgs> {
   AutoprovisionScreenPageRoute({
     String? configToken,
     String? tenantId,
@@ -373,8 +367,7 @@ class AutoprovisionScreenPageRoute
 
   static const String name = 'AutoprovisionScreenPageRoute';
 
-  static const PageInfo<AutoprovisionScreenPageRouteArgs> page =
-      PageInfo<AutoprovisionScreenPageRouteArgs>(name);
+  static const PageInfo<AutoprovisionScreenPageRouteArgs> page = PageInfo<AutoprovisionScreenPageRouteArgs>(name);
 }
 
 class AutoprovisionScreenPageRouteArgs {
@@ -422,15 +415,15 @@ class ChatListScreenPageRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [ChatsRouterPage]
-class ChatsRouterPageRoute extends PageRouteInfo<void> {
-  const ChatsRouterPageRoute({List<PageRouteInfo>? children})
+/// [MessagingRouterPage]
+class MessagingRouterPageRoute extends PageRouteInfo<void> {
+  const MessagingRouterPageRoute({List<PageRouteInfo>? children})
       : super(
-          ChatsRouterPageRoute.name,
+          MessagingRouterPageRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'ChatsRouterPageRoute';
+  static const String name = 'MessagingRouterPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -450,8 +443,7 @@ class ContactScreenPageRoute extends PageRouteInfo<ContactScreenPageRouteArgs> {
 
   static const String name = 'ContactScreenPageRoute';
 
-  static const PageInfo<ContactScreenPageRouteArgs> page =
-      PageInfo<ContactScreenPageRouteArgs>(name);
+  static const PageInfo<ContactScreenPageRouteArgs> page = PageInfo<ContactScreenPageRouteArgs>(name);
 }
 
 class ContactScreenPageRouteArgs {
@@ -495,8 +487,7 @@ class ContactsScreenPageRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [ConversationScreenPage]
-class ConversationScreenPageRoute
-    extends PageRouteInfo<ConversationScreenPageRouteArgs> {
+class ConversationScreenPageRoute extends PageRouteInfo<ConversationScreenPageRouteArgs> {
   ConversationScreenPageRoute({
     required String participantId,
     List<PageRouteInfo>? children,
@@ -508,8 +499,7 @@ class ConversationScreenPageRoute
 
   static const String name = 'ConversationScreenPageRoute';
 
-  static const PageInfo<ConversationScreenPageRouteArgs> page =
-      PageInfo<ConversationScreenPageRouteArgs>(name);
+  static const PageInfo<ConversationScreenPageRouteArgs> page = PageInfo<ConversationScreenPageRouteArgs>(name);
 }
 
 class ConversationScreenPageRouteArgs {
@@ -537,8 +527,7 @@ class DemoWebPageRoute extends PageRouteInfo<DemoWebPageRouteArgs> {
 
   static const String name = 'DemoWebPageRoute';
 
-  static const PageInfo<DemoWebPageRouteArgs> page =
-      PageInfo<DemoWebPageRouteArgs>(name);
+  static const PageInfo<DemoWebPageRouteArgs> page = PageInfo<DemoWebPageRouteArgs>(name);
 }
 
 class DemoWebPageRouteArgs {
@@ -554,8 +543,7 @@ class DemoWebPageRouteArgs {
 
 /// generated route for
 /// [ErrorDetailsScreenPage]
-class ErrorDetailsScreenPageRoute
-    extends PageRouteInfo<ErrorDetailsScreenPageRouteArgs> {
+class ErrorDetailsScreenPageRoute extends PageRouteInfo<ErrorDetailsScreenPageRouteArgs> {
   ErrorDetailsScreenPageRoute({
     required String title,
     required List<ErrorFieldModel> fields,
@@ -571,8 +559,7 @@ class ErrorDetailsScreenPageRoute
 
   static const String name = 'ErrorDetailsScreenPageRoute';
 
-  static const PageInfo<ErrorDetailsScreenPageRouteArgs> page =
-      PageInfo<ErrorDetailsScreenPageRouteArgs>(name);
+  static const PageInfo<ErrorDetailsScreenPageRouteArgs> page = PageInfo<ErrorDetailsScreenPageRouteArgs>(name);
 }
 
 class ErrorDetailsScreenPageRouteArgs {
@@ -647,8 +634,7 @@ class GroupScreenPageRoute extends PageRouteInfo<GroupScreenPageRouteArgs> {
 
   static const String name = 'GroupScreenPageRoute';
 
-  static const PageInfo<GroupScreenPageRouteArgs> page =
-      PageInfo<GroupScreenPageRouteArgs>(name);
+  static const PageInfo<GroupScreenPageRouteArgs> page = PageInfo<GroupScreenPageRouteArgs>(name);
 }
 
 class GroupScreenPageRouteArgs {
@@ -670,16 +656,14 @@ class HelpScreenPageRoute extends PageRouteInfo<HelpScreenPageRouteArgs> {
     List<PageRouteInfo>? children,
   }) : super(
           HelpScreenPageRoute.name,
-          args: HelpScreenPageRouteArgs(
-              initialUriQueryParam: initialUriQueryParam),
+          args: HelpScreenPageRouteArgs(initialUriQueryParam: initialUriQueryParam),
           rawQueryParams: {'initialUrl': initialUriQueryParam},
           initialChildren: children,
         );
 
   static const String name = 'HelpScreenPageRoute';
 
-  static const PageInfo<HelpScreenPageRouteArgs> page =
-      PageInfo<HelpScreenPageRouteArgs>(name);
+  static const PageInfo<HelpScreenPageRouteArgs> page = PageInfo<HelpScreenPageRouteArgs>(name);
 }
 
 class HelpScreenPageRouteArgs {
@@ -974,8 +958,7 @@ class RecentScreenPageRoute extends PageRouteInfo<RecentScreenPageRouteArgs> {
 
   static const String name = 'RecentScreenPageRoute';
 
-  static const PageInfo<RecentScreenPageRouteArgs> page =
-      PageInfo<RecentScreenPageRouteArgs>(name);
+  static const PageInfo<RecentScreenPageRouteArgs> page = PageInfo<RecentScreenPageRouteArgs>(name);
 }
 
 class RecentScreenPageRouteArgs {
@@ -1047,23 +1030,20 @@ class SettingsScreenPageRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [TermsConditionsScreenPage]
-class TermsConditionsScreenPageRoute
-    extends PageRouteInfo<TermsConditionsScreenPageRouteArgs> {
+class TermsConditionsScreenPageRoute extends PageRouteInfo<TermsConditionsScreenPageRouteArgs> {
   TermsConditionsScreenPageRoute({
     String? initialUriQueryParam,
     List<PageRouteInfo>? children,
   }) : super(
           TermsConditionsScreenPageRoute.name,
-          args: TermsConditionsScreenPageRouteArgs(
-              initialUriQueryParam: initialUriQueryParam),
+          args: TermsConditionsScreenPageRouteArgs(initialUriQueryParam: initialUriQueryParam),
           rawQueryParams: {'initialUrl': initialUriQueryParam},
           initialChildren: children,
         );
 
   static const String name = 'TermsConditionsScreenPageRoute';
 
-  static const PageInfo<TermsConditionsScreenPageRouteArgs> page =
-      PageInfo<TermsConditionsScreenPageRouteArgs>(name);
+  static const PageInfo<TermsConditionsScreenPageRouteArgs> page = PageInfo<TermsConditionsScreenPageRouteArgs>(name);
 }
 
 class TermsConditionsScreenPageRouteArgs {
@@ -1093,8 +1073,7 @@ class ThemeModeScreenPageRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [UndefinedScreenPage]
-class UndefinedScreenPageRoute
-    extends PageRouteInfo<UndefinedScreenPageRouteArgs> {
+class UndefinedScreenPageRoute extends PageRouteInfo<UndefinedScreenPageRouteArgs> {
   UndefinedScreenPageRoute({
     required UndefinedType undefinedType,
     List<PageRouteInfo>? children,
@@ -1106,8 +1085,7 @@ class UndefinedScreenPageRoute
 
   static const String name = 'UndefinedScreenPageRoute';
 
-  static const PageInfo<UndefinedScreenPageRouteArgs> page =
-      PageInfo<UndefinedScreenPageRouteArgs>(name);
+  static const PageInfo<UndefinedScreenPageRouteArgs> page = PageInfo<UndefinedScreenPageRouteArgs>(name);
 }
 
 class UndefinedScreenPageRouteArgs {

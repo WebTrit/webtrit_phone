@@ -26,12 +26,12 @@ class _ChatListItemState extends State<ChatListItem> {
     if (widget.chat.type == ChatType.dialog) {
       final userId = widget.userId;
       final participant = widget.chat.members.firstWhere((m) => m.userId != userId);
-      context.router.navigate(ChatsRouterPageRoute(children: [
+      context.router.navigate(MessagingRouterPageRoute(children: [
         const ChatListScreenPageRoute(),
         ConversationScreenPageRoute(participantId: participant.userId),
       ]));
     } else {
-      context.router.navigate(ChatsRouterPageRoute(children: [
+      context.router.navigate(MessagingRouterPageRoute(children: [
         const ChatListScreenPageRoute(),
         GroupScreenPageRoute(chatId: widget.chat.id),
       ]));

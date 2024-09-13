@@ -27,7 +27,7 @@ class MainScreenRouteStateRepositoryAutoRouteImpl implements MainScreenRouteStat
   void setLastRouteArgs(dynamic lastRouteArgs) => _lastRouteArgs = lastRouteArgs;
 
   @override
-  bool isChatsTabActive() => _activeTabPage == ChatsRouterPageRoute.name;
+  bool isChatsTabActive() => _activeTabPage == MessagingRouterPageRoute.name;
 
   @override
   bool isChatScreenActive(int chatId) {

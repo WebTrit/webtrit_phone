@@ -189,7 +189,7 @@ class _MessageListViewState extends State<MessageListView> {
   void handleSetForForward(ChatMessage message) {
     setState(() => editingMessage = null);
     setState(() => replyingMessage = null);
-    context.router.navigate(const ChatsRouterPageRoute(children: [ChatListScreenPageRoute()])).then((_) {
+    context.router.navigate(const MessagingRouterPageRoute(children: [ChatListScreenPageRoute()])).then((_) {
       messageForwardCubit.setForForward(message);
     });
   }

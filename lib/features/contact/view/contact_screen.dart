@@ -40,7 +40,7 @@ class ContactScreen extends StatelessWidget {
                       IconButton(
                         icon: const Icon(Icons.message),
                         onPressed: () {
-                          context.router.navigate(ChatsRouterPageRoute(children: [
+                          context.router.navigate(MessagingRouterPageRoute(children: [
                             const ChatListScreenPageRoute(),
                             ConversationScreenPageRoute(participantId: contact.sourceId),
                           ]));

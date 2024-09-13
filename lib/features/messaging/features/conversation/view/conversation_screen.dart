@@ -39,7 +39,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
     if (!mounted) return;
     if (result != true) return;
 
-    const route = ChatsRouterPageRoute(children: [ChatListScreenPageRoute()]);
+    const route = MessagingRouterPageRoute(children: [ChatListScreenPageRoute()]);
     context.router.navigate(route);
   }
 
@@ -53,7 +53,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
             context.read<ChatTypingCubit>().init(state.chat!.id);
           }
           if (state is CVSLeft) {
-            const route = ChatsRouterPageRoute(children: [ChatListScreenPageRoute()]);
+            const route = MessagingRouterPageRoute(children: [ChatListScreenPageRoute()]);
             context.router.navigate(route);
           }
         },

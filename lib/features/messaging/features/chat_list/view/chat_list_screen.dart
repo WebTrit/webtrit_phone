@@ -49,7 +49,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
 
     // If the user selected a contact, navigate to the new conversation screen
     if (result is Contact) {
-      context.router.navigate(ChatsRouterPageRoute(
+      context.router.navigate(MessagingRouterPageRoute(
         children: [
           const ChatListScreenPageRoute(),
           ConversationScreenPageRoute(participantId: result.sourceId),
@@ -59,7 +59,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
 
     // If the user selected the group option, navigate to the group builder screen
     if (result == kGroupResult) {
-      context.router.navigate(const ChatsRouterPageRoute(
+      context.router.navigate(const MessagingRouterPageRoute(
         children: [
           ChatListScreenPageRoute(),
           GroupBuilderScreenPageRoute(),

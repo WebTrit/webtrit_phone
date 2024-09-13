@@ -7,14 +7,14 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
 @RoutePage()
-class ChatsRouterPage extends StatefulWidget {
-  const ChatsRouterPage({super.key});
+class MessagingRouterPage extends StatefulWidget {
+  const MessagingRouterPage({super.key});
 
   @override
-  State<ChatsRouterPage> createState() => _ChatsRouterPageState();
+  State<MessagingRouterPage> createState() => _MessagingRouterPageState();
 }
 
-class _ChatsRouterPageState extends State<ChatsRouterPage> {
+class _MessagingRouterPageState extends State<MessagingRouterPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(

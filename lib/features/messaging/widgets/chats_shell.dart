@@ -62,7 +62,7 @@ class _ChatsShellState extends State<ChatsShell> {
 
   onOpenConversation(participantId) {
     context.router.root.navigate(
-      ChatsRouterPageRoute(
+      MessagingRouterPageRoute(
         children: [const ChatListScreenPageRoute(), ConversationScreenPageRoute(participantId: participantId)],
       ),
     );
@@ -70,14 +70,14 @@ class _ChatsShellState extends State<ChatsShell> {
 
   onOpenChat(chatId) {
     context.router.root.navigate(
-      ChatsRouterPageRoute(
+      MessagingRouterPageRoute(
         children: [const ChatListScreenPageRoute(), GroupScreenPageRoute(chatId: chatId)],
       ),
     );
   }
 
   onOpenChatList() {
-    context.router.root.navigate(const ChatsRouterPageRoute());
+    context.router.root.navigate(const MessagingRouterPageRoute());
   }
 
   @override
