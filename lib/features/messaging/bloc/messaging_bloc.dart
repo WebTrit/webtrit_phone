@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/messaging/services/services.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -12,10 +13,12 @@ part 'messaging_state.dart';
 
 class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   MessagingBloc(
+    this._prefs,
     this._client,
     this._chatsRepository,
-    this._outboxRepository,
-    this._prefs,
+    this._chatsOutboxRepository,
+    this._smsRepository,
+    this._smsOutboxRepository,
   ) : super(MessagingState.initial(_client, _prefs.getChatUserId())) {
     on<Connect>(_connect);
     on<Refresh>(_refresh);
@@ -34,12 +37,16 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     });
   }
 
+  final AppPreferences _prefs;
   final PhoenixSocket _client;
   final ChatsRepository _chatsRepository;
-  final ChatsOutboxRepository _outboxRepository;
-  final AppPreferences _prefs;
+  final ChatsOutboxRepository _chatsOutboxRepository;
+  final SmsRepository _smsRepository;
+  final SmsOutboxRepository _smsOutboxRepository;
   ChatsSyncWorker? _chatsSyncWorker;
   ChatsOutboxWorker? _chatsOutboxWorker;
+  SmsSyncWorker? _smsSyncWorker;
+  SmsOutboxWorker? _smsOutboxWorker;
 
   void _connect(Connect event, Emitter<MessagingState> emit) async {
     emit(state.copyWith(status: ConnectionStatus.connecting));
@@ -73,8 +80,14 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
         await userChannel.join().future;
 
         // Init workers
-        _chatsSyncWorker ??= ChatsSyncWorker(_client, _chatsRepository)..init();
-        _chatsOutboxWorker ??= ChatsOutboxWorker(_client, _chatsRepository, _outboxRepository)..init();
+        if (EnvironmentConfig.CHAT_FEATURE_ENABLE) {
+          _chatsSyncWorker ??= ChatsSyncWorker(_client, _chatsRepository)..init();
+          _chatsOutboxWorker ??= ChatsOutboxWorker(_client, _chatsRepository, _chatsOutboxRepository)..init();
+        }
+        if (EnvironmentConfig.SMS_FEATURE_ENABLE) {
+          _smsSyncWorker ??= SmsSyncWorker(_client, _smsRepository)..init();
+          _smsOutboxWorker ??= SmsOutboxWorker(_client, _smsRepository, _smsOutboxRepository)..init();
+        }
       }
       emit(state.copyWith(status: ConnectionStatus.connected));
     } on Exception catch (e) {
@@ -95,6 +108,8 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   Future<void> close() {
     _chatsSyncWorker?.dispose();
     _chatsOutboxWorker?.dispose();
+    _smsSyncWorker?.dispose();
+    _smsOutboxWorker?.dispose();
     _client.dispose();
     return super.close();
   }

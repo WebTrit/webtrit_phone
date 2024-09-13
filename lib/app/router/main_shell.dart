@@ -135,6 +135,16 @@ class _MainShellState extends State<MainShell> {
             appDatabase: context.read<AppDatabase>(),
           ),
         ),
+        RepositoryProvider<SmsRepository>(
+          create: (context) => SmsRepository(
+            appDatabase: context.read<AppDatabase>(),
+          ),
+        ),
+        RepositoryProvider<SmsOutboxRepository>(
+          create: (context) => SmsOutboxRepository(
+            appDatabase: context.read<AppDatabase>(),
+          ),
+        ),
         RepositoryProvider<MainScreenRouteStateRepository>(
           create: (context) => MainScreenRouteStateRepositoryAutoRouteImpl(),
         ),
@@ -202,7 +212,7 @@ class _MainShellState extends State<MainShell> {
               )..add(const CallStarted());
             },
           ),
-          if (EnvironmentConfig.CHAT_FEATURE_ENABLE)
+          if (EnvironmentConfig.CHAT_FEATURE_ENABLE || EnvironmentConfig.SMS_FEATURE_ENABLE)
             BlocProvider<MessagingBloc>(
               lazy: false,
               create: (context) {
@@ -210,16 +220,27 @@ class _MainShellState extends State<MainShell> {
                 final appPreferences = context.read<AppPreferences>();
                 final chatsRepository = context.read<ChatsRepository>();
                 final chatsOutboxRepository = context.read<ChatsOutboxRepository>();
+                final smsRepository = context.read<SmsRepository>();
+                final smsOutboxRepository = context.read<SmsOutboxRepository>();
                 final token = appBloc.state.token!;
                 final tenantId = appBloc.state.tenantId!;
 
-                final wsClient = PhoenixSocket(
+                final client = PhoenixSocket(
                   EnvironmentConfig.CHAT_SERVICE_URL,
-                  socketOptions: PhoenixSocketOptions(params: {'token': token, 'tenant_id': tenantId}),
+                  socketOptions: PhoenixSocketOptions(params: {
+                    'token': token,
+                    'tenant_id': tenantId,
+                  }),
                 );
 
-                return MessagingBloc(wsClient, chatsRepository, chatsOutboxRepository, appPreferences)
-                  ..add(const Connect());
+                return MessagingBloc(
+                  appPreferences,
+                  client,
+                  chatsRepository,
+                  chatsOutboxRepository,
+                  smsRepository,
+                  smsOutboxRepository,
+                )..add(const Connect());
               },
             ),
           if (EnvironmentConfig.CHAT_FEATURE_ENABLE)
