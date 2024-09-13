@@ -18,7 +18,7 @@ class ChatsShell extends StatefulWidget {
 }
 
 class _ChatsShellState extends State<ChatsShell> {
-  late final ChatNotificationsService chatNotificationsService;
+  late final ChatsNotificationsService chatsNotificationsService;
 
   @override
   void initState() {
@@ -26,7 +26,7 @@ class _ChatsShellState extends State<ChatsShell> {
     const chatsEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE;
     if (!chatsEnabled) return;
 
-    chatNotificationsService = ChatNotificationsService(
+    chatsNotificationsService = ChatsNotificationsService(
       context.read<ChatsRepository>(),
       context.read<ContactsRepository>(),
       context.read<RemoteNotificationRepository>(),
@@ -45,7 +45,7 @@ class _ChatsShellState extends State<ChatsShell> {
 
       final userId = chatsBloc.state.userId;
       if (userId != null) {
-        chatNotificationsService.init(userId);
+        chatsNotificationsService.init(userId);
         return false;
       }
 
@@ -56,7 +56,7 @@ class _ChatsShellState extends State<ChatsShell> {
 
   @override
   void dispose() {
-    chatNotificationsService.dispose();
+    chatsNotificationsService.dispose();
     super.dispose();
   }
 

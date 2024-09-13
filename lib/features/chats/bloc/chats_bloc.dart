@@ -39,7 +39,7 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
   final ChatsOutboxRepository _outboxRepository;
   final AppPreferences _prefs;
   ChatsSyncWorker? _chatsSyncWorker;
-  OutboxQueueWorker? _outboxQueueWorker;
+  ChatsOutboxWorker? _chatsOutboxWorker;
 
   void _connect(Connect event, Emitter<ChatsState> emit) async {
     emit(state.copyWith(status: ChatsStatus.connecting));
@@ -74,7 +74,7 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
 
         // Init workers
         _chatsSyncWorker ??= ChatsSyncWorker(_client, _chatsRepository)..init();
-        _outboxQueueWorker ??= OutboxQueueWorker(_client, _chatsRepository, _outboxRepository)..init();
+        _chatsOutboxWorker ??= ChatsOutboxWorker(_client, _chatsRepository, _outboxRepository)..init();
       }
       emit(state.copyWith(status: ChatsStatus.connected));
     } on Exception catch (e) {
@@ -94,7 +94,7 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
   @override
   Future<void> close() {
     _chatsSyncWorker?.dispose();
-    _outboxQueueWorker?.dispose();
+    _chatsOutboxWorker?.dispose();
     _client.dispose();
     return super.close();
   }

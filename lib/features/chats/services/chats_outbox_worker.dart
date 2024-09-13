@@ -11,8 +11,8 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 
 final _logger = Logger('OutboxQueueWorker');
 
-class OutboxQueueWorker {
-  OutboxQueueWorker(this._client, this._chatsRepository, this._outboxRepository) {
+class ChatsOutboxWorker {
+  ChatsOutboxWorker(this._client, this._chatsRepository, this._outboxRepository) {
     // TODO: Remove this before pr
     // _logger.onRecord.listen((record) {
     //   // ignore: avoid_print

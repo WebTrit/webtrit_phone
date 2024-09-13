@@ -7,8 +7,8 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 
 final _logger = Logger('ChatNotificationsService');
 
-class ChatNotificationsService {
-  ChatNotificationsService(
+class ChatsNotificationsService {
+  ChatsNotificationsService(
     this.chatsRepository,
     this.contactsRepository,
     this.remoteNotificationRepository,
