@@ -139,6 +139,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: LoginCredentialsRequestScreenPage(),
       );
     },
+    LoginCustomSigninScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: LoginCustomSigninScreenPage(),
+      );
+    },
     LoginModeSelectScreenPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -626,6 +632,20 @@ class LoginCredentialsRequestScreenPageRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'LoginCredentialsRequestScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [LoginCustomSigninScreenPage]
+class LoginCustomSigninScreenPageRoute extends PageRouteInfo<void> {
+  const LoginCustomSigninScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          LoginCustomSigninScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'LoginCustomSigninScreenPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

@@ -896,6 +896,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.11"
+  l10n_mapper_generator:
+    dependency: "direct main"
+    description:
+      name: l10n_mapper_generator
+      sha256: "5ee55c5c521f6c0ba043d8335cf428dfe24a16cb940f0ed5b7453ce9783657f2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.2"
   leak_tracker:
     dependency: transitive
     description:
@@ -1687,10 +1695,10 @@ packages:
     dependency: transitive
     description:
       name: vm_service
-      sha256: f652077d0bdf60abe4c1f6377448e8655008eef28f128bc023f7b5e8dfeb48fc
+      sha256: "5c5f338a667b4c644744b661f309fb8080bb94b18a7e91ef1dbd343bed00ed6d"
       url: "https://pub.dev"
     source: hosted
-    version: "14.2.4"
+    version: "14.2.5"
   watcher:
     dependency: transitive
     description:
