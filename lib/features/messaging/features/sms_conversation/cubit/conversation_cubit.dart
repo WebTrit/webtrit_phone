@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 import 'package:stream_transform/stream_transform.dart';
+import 'package:uuid/uuid.dart';
 import 'package:webtrit_phone/features/features.dart';
 
 import 'package:webtrit_phone/models/models.dart';
@@ -28,12 +30,6 @@ class SmsConversationCubit extends Cubit<ConversationState> {
     // });
   }
 
-  // final String _firstNumber;
-  // final String _secondNumber;
-
-  // /// Should be removed as soon as possible when backend will be ready
-  // final String? _recipientId;
-
   final UsersCreds _creds;
 
   final PhoenixSocket _client;
@@ -53,29 +49,36 @@ class SmsConversationCubit extends Cubit<ConversationState> {
   }
 
   Future sendMessage(String content) async {
-    // final outboxEntry = SmsOutboxMessageEntry(
-    //     // fromPhoneNumber: fromPhoneNumber,
-    //     // toPhoneNumber: toPhoneNumber,
-    //     // content: content,
-    //     );
-    // _outboxRepository.upsertOutboxMessage(outboxEntry);
+    final userNumbers = await _repository.getUserSmsNumbers();
+    final userNumber = userNumbers.firstWhereOrNull((e) => e == _creds.firstNumber || e == _creds.secondNumber);
+    if (userNumber == null) return;
+    final recipientNumber = _creds.firstNumber == userNumber ? _creds.secondNumber : _creds.firstNumber;
+
+    final outboxEntry = SmsOutboxMessageEntry(
+      idKey: (const Uuid()).v4(),
+      fromPhoneNumber: userNumber,
+      toPhoneNumber: recipientNumber,
+      recepientId: _creds.recipientId,
+      content: content,
+    );
+    _outboxRepository.upsertOutboxMessage(outboxEntry);
   }
 
   Future<bool> deleteDialog() async {
-    // final state = this.state;
+    final state = this.state;
+    if (state is! CVSReady || state.busy) return false;
 
-    // if (_chat == null) return false;
+    final conversationId = state.conversation?.id;
+    if (conversationId == null) return false;
 
-    // if (state is! CVSReady) return false;
-    // if (state.busy) return false;
-    // emit(state.copyWith(busy: true));
+    final channel = _client.getSmsConversationChannel(conversationId);
+    if (channel == null || channel.state != PhoenixChannelState.joined) return false;
 
-    // final channel = _client.getChatChannel(_chat!.id);
-    // if (channel == null || channel.state != PhoenixChannelState.joined) return false;
-    // final r = await channel.push('chat:delete', {}).future;
+    emit(state.copyWith(busy: true));
+    final r = await channel.push('sms_converstaion:delete', {}).future;
 
-    // emit(state.copyWith(busy: false));
-    // if (r.isOk) return true;
+    emit(state.copyWith(busy: false));
+    if (r.isOk) return true;
     return false;
   }
 

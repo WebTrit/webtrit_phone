@@ -6058,6 +6058,12 @@ class $SmsOutboxMessagesTableTable extends SmsOutboxMessagesTable
   late final GeneratedColumn<String> toPhoneNumber = GeneratedColumn<String>(
       'to_phone_number', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _recepientIdMeta =
+      const VerificationMeta('recepientId');
+  @override
+  late final GeneratedColumn<String> recepientId = GeneratedColumn<String>(
+      'recepient_id', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _contentMeta =
       const VerificationMeta('content');
   @override
@@ -6078,6 +6084,7 @@ class $SmsOutboxMessagesTableTable extends SmsOutboxMessagesTable
         conversationId,
         fromPhoneNumber,
         toPhoneNumber,
+        recepientId,
         content,
         sendAttempts
       ];
@@ -6120,6 +6127,12 @@ class $SmsOutboxMessagesTableTable extends SmsOutboxMessagesTable
     } else if (isInserting) {
       context.missing(_toPhoneNumberMeta);
     }
+    if (data.containsKey('recepient_id')) {
+      context.handle(
+          _recepientIdMeta,
+          recepientId.isAcceptableOrUnknown(
+              data['recepient_id']!, _recepientIdMeta));
+    }
     if (data.containsKey('content')) {
       context.handle(_contentMeta,
           content.isAcceptableOrUnknown(data['content']!, _contentMeta));
@@ -6149,6 +6162,8 @@ class $SmsOutboxMessagesTableTable extends SmsOutboxMessagesTable
           DriftSqlType.string, data['${effectivePrefix}from_phone_number'])!,
       toPhoneNumber: attachedDatabase.typeMapping.read(
           DriftSqlType.string, data['${effectivePrefix}to_phone_number'])!,
+      recepientId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}recepient_id']),
       content: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}content'])!,
       sendAttempts: attachedDatabase.typeMapping
@@ -6168,6 +6183,7 @@ class SmsOutboxMessageData extends DataClass
   final int? conversationId;
   final String fromPhoneNumber;
   final String toPhoneNumber;
+  final String? recepientId;
   final String content;
   final int sendAttempts;
   const SmsOutboxMessageData(
@@ -6175,6 +6191,7 @@ class SmsOutboxMessageData extends DataClass
       this.conversationId,
       required this.fromPhoneNumber,
       required this.toPhoneNumber,
+      this.recepientId,
       required this.content,
       required this.sendAttempts});
   @override
@@ -6186,6 +6203,9 @@ class SmsOutboxMessageData extends DataClass
     }
     map['from_phone_number'] = Variable<String>(fromPhoneNumber);
     map['to_phone_number'] = Variable<String>(toPhoneNumber);
+    if (!nullToAbsent || recepientId != null) {
+      map['recepient_id'] = Variable<String>(recepientId);
+    }
     map['content'] = Variable<String>(content);
     map['send_attempts'] = Variable<int>(sendAttempts);
     return map;
@@ -6199,6 +6219,9 @@ class SmsOutboxMessageData extends DataClass
           : Value(conversationId),
       fromPhoneNumber: Value(fromPhoneNumber),
       toPhoneNumber: Value(toPhoneNumber),
+      recepientId: recepientId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(recepientId),
       content: Value(content),
       sendAttempts: Value(sendAttempts),
     );
@@ -6212,6 +6235,7 @@ class SmsOutboxMessageData extends DataClass
       conversationId: serializer.fromJson<int?>(json['conversationId']),
       fromPhoneNumber: serializer.fromJson<String>(json['fromPhoneNumber']),
       toPhoneNumber: serializer.fromJson<String>(json['toPhoneNumber']),
+      recepientId: serializer.fromJson<String?>(json['recepientId']),
       content: serializer.fromJson<String>(json['content']),
       sendAttempts: serializer.fromJson<int>(json['sendAttempts']),
     );
@@ -6224,6 +6248,7 @@ class SmsOutboxMessageData extends DataClass
       'conversationId': serializer.toJson<int?>(conversationId),
       'fromPhoneNumber': serializer.toJson<String>(fromPhoneNumber),
       'toPhoneNumber': serializer.toJson<String>(toPhoneNumber),
+      'recepientId': serializer.toJson<String?>(recepientId),
       'content': serializer.toJson<String>(content),
       'sendAttempts': serializer.toJson<int>(sendAttempts),
     };
@@ -6234,6 +6259,7 @@ class SmsOutboxMessageData extends DataClass
           Value<int?> conversationId = const Value.absent(),
           String? fromPhoneNumber,
           String? toPhoneNumber,
+          Value<String?> recepientId = const Value.absent(),
           String? content,
           int? sendAttempts}) =>
       SmsOutboxMessageData(
@@ -6242,6 +6268,7 @@ class SmsOutboxMessageData extends DataClass
             conversationId.present ? conversationId.value : this.conversationId,
         fromPhoneNumber: fromPhoneNumber ?? this.fromPhoneNumber,
         toPhoneNumber: toPhoneNumber ?? this.toPhoneNumber,
+        recepientId: recepientId.present ? recepientId.value : this.recepientId,
         content: content ?? this.content,
         sendAttempts: sendAttempts ?? this.sendAttempts,
       );
@@ -6257,6 +6284,8 @@ class SmsOutboxMessageData extends DataClass
       toPhoneNumber: data.toPhoneNumber.present
           ? data.toPhoneNumber.value
           : this.toPhoneNumber,
+      recepientId:
+          data.recepientId.present ? data.recepientId.value : this.recepientId,
       content: data.content.present ? data.content.value : this.content,
       sendAttempts: data.sendAttempts.present
           ? data.sendAttempts.value
@@ -6271,6 +6300,7 @@ class SmsOutboxMessageData extends DataClass
           ..write('conversationId: $conversationId, ')
           ..write('fromPhoneNumber: $fromPhoneNumber, ')
           ..write('toPhoneNumber: $toPhoneNumber, ')
+          ..write('recepientId: $recepientId, ')
           ..write('content: $content, ')
           ..write('sendAttempts: $sendAttempts')
           ..write(')'))
@@ -6279,7 +6309,7 @@ class SmsOutboxMessageData extends DataClass
 
   @override
   int get hashCode => Object.hash(idKey, conversationId, fromPhoneNumber,
-      toPhoneNumber, content, sendAttempts);
+      toPhoneNumber, recepientId, content, sendAttempts);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -6288,6 +6318,7 @@ class SmsOutboxMessageData extends DataClass
           other.conversationId == this.conversationId &&
           other.fromPhoneNumber == this.fromPhoneNumber &&
           other.toPhoneNumber == this.toPhoneNumber &&
+          other.recepientId == this.recepientId &&
           other.content == this.content &&
           other.sendAttempts == this.sendAttempts);
 }
@@ -6298,6 +6329,7 @@ class SmsOutboxMessageDataCompanion
   final Value<int?> conversationId;
   final Value<String> fromPhoneNumber;
   final Value<String> toPhoneNumber;
+  final Value<String?> recepientId;
   final Value<String> content;
   final Value<int> sendAttempts;
   final Value<int> rowid;
@@ -6306,6 +6338,7 @@ class SmsOutboxMessageDataCompanion
     this.conversationId = const Value.absent(),
     this.fromPhoneNumber = const Value.absent(),
     this.toPhoneNumber = const Value.absent(),
+    this.recepientId = const Value.absent(),
     this.content = const Value.absent(),
     this.sendAttempts = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -6315,6 +6348,7 @@ class SmsOutboxMessageDataCompanion
     this.conversationId = const Value.absent(),
     required String fromPhoneNumber,
     required String toPhoneNumber,
+    this.recepientId = const Value.absent(),
     required String content,
     this.sendAttempts = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -6327,6 +6361,7 @@ class SmsOutboxMessageDataCompanion
     Expression<int>? conversationId,
     Expression<String>? fromPhoneNumber,
     Expression<String>? toPhoneNumber,
+    Expression<String>? recepientId,
     Expression<String>? content,
     Expression<int>? sendAttempts,
     Expression<int>? rowid,
@@ -6336,6 +6371,7 @@ class SmsOutboxMessageDataCompanion
       if (conversationId != null) 'conversation_id': conversationId,
       if (fromPhoneNumber != null) 'from_phone_number': fromPhoneNumber,
       if (toPhoneNumber != null) 'to_phone_number': toPhoneNumber,
+      if (recepientId != null) 'recepient_id': recepientId,
       if (content != null) 'content': content,
       if (sendAttempts != null) 'send_attempts': sendAttempts,
       if (rowid != null) 'rowid': rowid,
@@ -6347,6 +6383,7 @@ class SmsOutboxMessageDataCompanion
       Value<int?>? conversationId,
       Value<String>? fromPhoneNumber,
       Value<String>? toPhoneNumber,
+      Value<String?>? recepientId,
       Value<String>? content,
       Value<int>? sendAttempts,
       Value<int>? rowid}) {
@@ -6355,6 +6392,7 @@ class SmsOutboxMessageDataCompanion
       conversationId: conversationId ?? this.conversationId,
       fromPhoneNumber: fromPhoneNumber ?? this.fromPhoneNumber,
       toPhoneNumber: toPhoneNumber ?? this.toPhoneNumber,
+      recepientId: recepientId ?? this.recepientId,
       content: content ?? this.content,
       sendAttempts: sendAttempts ?? this.sendAttempts,
       rowid: rowid ?? this.rowid,
@@ -6376,6 +6414,9 @@ class SmsOutboxMessageDataCompanion
     if (toPhoneNumber.present) {
       map['to_phone_number'] = Variable<String>(toPhoneNumber.value);
     }
+    if (recepientId.present) {
+      map['recepient_id'] = Variable<String>(recepientId.value);
+    }
     if (content.present) {
       map['content'] = Variable<String>(content.value);
     }
@@ -6395,6 +6436,7 @@ class SmsOutboxMessageDataCompanion
           ..write('conversationId: $conversationId, ')
           ..write('fromPhoneNumber: $fromPhoneNumber, ')
           ..write('toPhoneNumber: $toPhoneNumber, ')
+          ..write('recepientId: $recepientId, ')
           ..write('content: $content, ')
           ..write('sendAttempts: $sendAttempts, ')
           ..write('rowid: $rowid')
@@ -9554,6 +9596,7 @@ typedef $$SmsOutboxMessagesTableTableCreateCompanionBuilder
   Value<int?> conversationId,
   required String fromPhoneNumber,
   required String toPhoneNumber,
+  Value<String?> recepientId,
   required String content,
   Value<int> sendAttempts,
   Value<int> rowid,
@@ -9564,6 +9607,7 @@ typedef $$SmsOutboxMessagesTableTableUpdateCompanionBuilder
   Value<int?> conversationId,
   Value<String> fromPhoneNumber,
   Value<String> toPhoneNumber,
+  Value<String?> recepientId,
   Value<String> content,
   Value<int> sendAttempts,
   Value<int> rowid,
@@ -9591,6 +9635,7 @@ class $$SmsOutboxMessagesTableTableTableManager extends RootTableManager<
             Value<int?> conversationId = const Value.absent(),
             Value<String> fromPhoneNumber = const Value.absent(),
             Value<String> toPhoneNumber = const Value.absent(),
+            Value<String?> recepientId = const Value.absent(),
             Value<String> content = const Value.absent(),
             Value<int> sendAttempts = const Value.absent(),
             Value<int> rowid = const Value.absent(),
@@ -9600,6 +9645,7 @@ class $$SmsOutboxMessagesTableTableTableManager extends RootTableManager<
             conversationId: conversationId,
             fromPhoneNumber: fromPhoneNumber,
             toPhoneNumber: toPhoneNumber,
+            recepientId: recepientId,
             content: content,
             sendAttempts: sendAttempts,
             rowid: rowid,
@@ -9609,6 +9655,7 @@ class $$SmsOutboxMessagesTableTableTableManager extends RootTableManager<
             Value<int?> conversationId = const Value.absent(),
             required String fromPhoneNumber,
             required String toPhoneNumber,
+            Value<String?> recepientId = const Value.absent(),
             required String content,
             Value<int> sendAttempts = const Value.absent(),
             Value<int> rowid = const Value.absent(),
@@ -9618,6 +9665,7 @@ class $$SmsOutboxMessagesTableTableTableManager extends RootTableManager<
             conversationId: conversationId,
             fromPhoneNumber: fromPhoneNumber,
             toPhoneNumber: toPhoneNumber,
+            recepientId: recepientId,
             content: content,
             sendAttempts: sendAttempts,
             rowid: rowid,
@@ -9640,6 +9688,11 @@ class $$SmsOutboxMessagesTableTableFilterComposer
 
   ColumnFilters<String> get toPhoneNumber => $state.composableBuilder(
       column: $state.table.toPhoneNumber,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get recepientId => $state.composableBuilder(
+      column: $state.table.recepientId,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -9685,6 +9738,11 @@ class $$SmsOutboxMessagesTableTableOrderingComposer
 
   ColumnOrderings<String> get toPhoneNumber => $state.composableBuilder(
       column: $state.table.toPhoneNumber,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get recepientId => $state.composableBuilder(
+      column: $state.table.recepientId,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 

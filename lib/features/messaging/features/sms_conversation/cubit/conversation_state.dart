@@ -1,5 +1,7 @@
 part of 'conversation_cubit.dart';
 
+/// recipientId should be removed as soon as possible when backend will be ready
+/// to avoid unsecurity bullshit from the backend side
 typedef UsersCreds = ({String firstNumber, String secondNumber, String? recipientId});
 
 /// Base class for the states of the conversation cubit.

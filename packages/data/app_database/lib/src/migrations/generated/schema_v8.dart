@@ -1116,6 +1116,11 @@ class SmsOutboxMessages extends Table with TableInfo {
       type: DriftSqlType.string,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<String> recepientId = GeneratedColumn<String>(
+      'recepient_id', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
   late final GeneratedColumn<String> content = GeneratedColumn<String>(
       'content', aliasedName, false,
       type: DriftSqlType.string,
@@ -1133,6 +1138,7 @@ class SmsOutboxMessages extends Table with TableInfo {
         conversationId,
         fromPhoneNumber,
         toPhoneNumber,
+        recepientId,
         content,
         sendAttempts
       ];

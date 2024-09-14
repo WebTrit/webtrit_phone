@@ -9,6 +9,7 @@ mixin SmsOutboxDriftMapper {
       toPhoneNumber: data.toPhoneNumber,
       content: data.content,
       conversationId: data.conversationId,
+      recepientId: data.recepientId,
       sendAttempts: data.sendAttempts,
     );
   }
@@ -20,6 +21,7 @@ mixin SmsOutboxDriftMapper {
       toPhoneNumber: entry.toPhoneNumber,
       content: entry.content,
       conversationId: entry.conversationId,
+      recepientId: entry.recepientId,
       sendAttempts: entry.sendAttempts,
     );
   }

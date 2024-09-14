@@ -541,6 +541,8 @@ class SmsOutboxMessagesTable extends Table {
 
   TextColumn get toPhoneNumber => text()();
 
+  TextColumn get recepientId => text().nullable()();
+
   TextColumn get content => text()();
 
   IntColumn get sendAttempts => integer().withDefault(const Constant(0))();
