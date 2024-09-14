@@ -4,9 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 import 'package:flutter_link_previewer/flutter_link_previewer.dart';
-
-import 'package:flutter_chat_ui/flutter_chat_ui.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:quiver/collection.dart';
 
 import 'package:webtrit_phone/extensions/datetime.dart';
@@ -428,8 +425,8 @@ class MessageBody extends StatefulWidget {
 
 class _MessageBodyState extends State<MessageBody> {
   String? link;
-  types.PreviewData? linkPreview;
-  static final previewsCache = LruMap<String, types.PreviewData>(maximumSize: 100);
+  dynamic linkPreview;
+  static final previewsCache = LruMap<String, dynamic>(maximumSize: 100);
 
   @override
   void initState() {
@@ -487,24 +484,12 @@ class _MessageBodyState extends State<MessageBody> {
         ],
         ParsedText(
           parse: [
-            mailToMatcher(
-              style: style.copyWith(decoration: TextDecoration.underline),
-            ),
-            urlMatcher(
-              style: style.copyWith(decoration: TextDecoration.underline),
-            ),
-            boldMatcher(
-              style: style.merge(PatternStyle.bold.textStyle),
-            ),
-            italicMatcher(
-              style: style.merge(PatternStyle.italic.textStyle),
-            ),
-            lineThroughMatcher(
-              style: style.merge(PatternStyle.lineThrough.textStyle),
-            ),
-            codeMatcher(
-              style: style.merge(PatternStyle.code.textStyle),
-            ),
+            mailToMatcher(style: style.copyWith(decoration: TextDecoration.underline)),
+            urlMatcher(style: style.copyWith(decoration: TextDecoration.underline)),
+            boldMatcher(style: style.merge(PatternStyle.bold.textStyle)),
+            italicMatcher(style: style.merge(PatternStyle.italic.textStyle)),
+            lineThroughMatcher(style: style.merge(PatternStyle.lineThrough.textStyle)),
+            codeMatcher(style: style.merge(PatternStyle.code.textStyle)),
           ],
           regexOptions: const RegexOptions(multiLine: true, dotAll: true),
           style: style.copyWith(fontFamily: theme.textTheme.bodyMedium?.fontFamily),

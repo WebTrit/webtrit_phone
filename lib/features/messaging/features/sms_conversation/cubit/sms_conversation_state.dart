@@ -11,18 +11,18 @@ abstract base class SmsConversationState {
   /// The id of the participant in the conversation
   UsersCreds get creds;
 
-  factory SmsConversationState.init(UsersCreds creds) => CVSInit(creds);
-  factory SmsConversationState.error(UsersCreds creds, Object error) => CVSError(creds, error);
-  factory SmsConversationState.left(UsersCreds creds) => CVSLeft(creds);
+  factory SmsConversationState.init(UsersCreds creds) => SCSInit(creds);
+  factory SmsConversationState.error(UsersCreds creds, Object error) => SCSError(creds, error);
+  factory SmsConversationState.left(UsersCreds creds) => SCSLeft(creds);
   factory SmsConversationState.ready(UsersCreds creds, {SmsConversation? conversation}) {
-    return CVSReady(creds, conversation: conversation);
+    return SCSReady(creds, conversation: conversation);
   }
 }
 
 /// Represents the state of the conversation cubit when preparing the conversation.
 /// E.g fetching the chat id, messages, etc.
-final class CVSInit extends SmsConversationState with EquatableMixin {
-  const CVSInit(this.creds);
+final class SCSInit extends SmsConversationState with EquatableMixin {
+  const SCSInit(this.creds);
 
   @override
   final UsersCreds creds;
@@ -32,8 +32,8 @@ final class CVSInit extends SmsConversationState with EquatableMixin {
 }
 
 /// Represents the error state of the conversation during the initialization.
-final class CVSError extends SmsConversationState with EquatableMixin {
-  const CVSError(this.creds, this.error);
+final class SCSError extends SmsConversationState with EquatableMixin {
+  const SCSError(this.creds, this.error);
 
   @override
   final UsersCreds creds;
@@ -45,8 +45,8 @@ final class CVSError extends SmsConversationState with EquatableMixin {
 }
 
 /// Represents the state of the conversation after user leaved/removed.
-final class CVSLeft extends SmsConversationState with EquatableMixin {
-  const CVSLeft(this.creds);
+final class SCSLeft extends SmsConversationState with EquatableMixin {
+  const SCSLeft(this.creds);
 
   @override
   final UsersCreds creds;
@@ -56,8 +56,8 @@ final class CVSLeft extends SmsConversationState with EquatableMixin {
 }
 
 /// Represents the state of the conversation cubit when the conversation is ready.
-final class CVSReady extends SmsConversationState with EquatableMixin {
-  const CVSReady(
+final class SCSReady extends SmsConversationState with EquatableMixin {
+  const SCSReady(
     this.creds, {
     this.conversation,
     this.messages = const [],
@@ -97,7 +97,7 @@ final class CVSReady extends SmsConversationState with EquatableMixin {
     bool? historyEndReached,
     bool? busy,
   }) {
-    return CVSReady(
+    return SCSReady(
       creds ?? this.creds,
       conversation: conversation ?? this.conversation,
       messages: messages ?? this.messages,

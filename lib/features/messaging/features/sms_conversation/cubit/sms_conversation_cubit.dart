@@ -66,7 +66,7 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
 
   Future<bool> deleteDialog() async {
     final state = this.state;
-    if (state is! CVSReady || state.busy) return false;
+    if (state is! SCSReady || state.busy) return false;
 
     final conversationId = state.conversation?.id;
     if (conversationId == null) return false;
@@ -84,7 +84,7 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
 
   Future fetchHistory() async {
     final state = this.state;
-    if (state is! CVSReady) return;
+    if (state is! SCSReady) return;
 
     if (state.fetchingHistory || state.historyEndReached) return;
 
@@ -171,7 +171,7 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
 
     if (isClosed) return;
     final state = this.state;
-    if (state is CVSReady) emit(state.copyWith(messages: messages));
+    if (state is SCSReady) emit(state.copyWith(messages: messages));
 
     // Subscribe to chat messages updates eg new messages, edited, deleted, etc. and merge them with the current list
     _messagesSub?.cancel();
@@ -189,7 +189,7 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
   void _handleConversationUpdate(SmsConversation conversation) {
     _logger.info('_handleConversationUpdate: $conversation');
     final state = this.state;
-    if (state is! CVSReady) return;
+    if (state is! SCSReady) return;
     final chatWasntExistBefore = state.conversation == null;
 
     emit(state.copyWith(conversation: conversation));
@@ -207,7 +207,7 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
   void _handleConversationRemove(int conversationId) {
     _logger.info('_handleConversationRemove: $conversationId');
     final state = this.state;
-    if (state is! CVSReady) return;
+    if (state is! SCSReady) return;
     if (state.conversation?.id == conversationId) emit(SmsConversationState.left(_creds));
   }
 
@@ -220,7 +220,7 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
   void _handleMessageUpdate(int conversationId, SmsMessage message) {
     _logger.info('_handleMessageUpdate: $message');
     final state = this.state;
-    if (state is! CVSReady) return;
+    if (state is! SCSReady) return;
     if (message.conversationId != conversationId) return;
     final updatedMessages = state.messages.mergeUpdateWith(message);
     emit(state.copyWith(messages: updatedMessages));
@@ -235,7 +235,7 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
   void _handleOutboxMessagesUpdate(List<SmsOutboxMessageEntry> entries) {
     _logger.info('_handleOutboxMessagesUpdate: ${entries.length}');
     final state = this.state;
-    if (state is! CVSReady) return;
+    if (state is! SCSReady) return;
     final conversationEntries = entries
         .where((e) =>
             (e.fromPhoneNumber == _creds.firstNumber && e.toPhoneNumber == _creds.secondNumber) ||
