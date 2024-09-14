@@ -12,6 +12,8 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+// TODO: localizations
+
 class SmsConversationsTile extends StatefulWidget {
   const SmsConversationsTile({required this.conversation, required this.lastMessage, required this.userId, super.key});
 
@@ -36,44 +38,42 @@ class _SmsConversationsTileState extends State<SmsConversationsTile> {
         color: Theme.of(context).cardColor.withOpacity(0.1),
         borderRadius: BorderRadius.circular(16),
       ),
-      child: ListTile(
-        leading: leading(),
-        title: title(),
-        subtitle: subtitle(),
-        onTap: onTap,
-      ),
+      child: UserSmsNumbersBuilder(builder: (context, List<String> numbers, {required loading}) {
+        final firstNumber = widget.conversation.firstPhoneNumber;
+        final secondNumber = widget.conversation.secondPhoneNumber;
+        String? userNumber;
+        userNumber = numbers.firstWhereOrNull((e) => e == firstNumber || e == secondNumber);
+        String? recipientNumber;
+        if (userNumber != null) recipientNumber = firstNumber == userNumber ? secondNumber : firstNumber;
+
+        return ListTile(
+          leading: leading(recipientNumber),
+          title: title(recipientNumber),
+          subtitle: subtitle(userNumber),
+          onTap: onTap,
+        );
+      }),
     );
   }
 
-  Widget leading() {
-    return const LeadingAvatar(
-      username: 'SMS',
-      radius: 24,
-    );
+  Widget leading(String? recipientNumber) {
+    final text = recipientNumber?.substring(recipientNumber.length - 2) ?? '';
+    return LeadingAvatar(username: text, radius: 24);
   }
 
-  Widget title() {
+  Widget title(String? recipientNumber) {
     final lastMessage = widget.lastMessage;
-    final firstPhoneNumber = widget.conversation.firstPhoneNumber;
-    final secondPhoneNumber = widget.conversation.secondPhoneNumber;
 
     return Row(
       children: [
-        Expanded(
-          child: Column(
-            children: [
-              Text(firstPhoneNumber, style: const TextStyle(overflow: TextOverflow.ellipsis)),
-              Text(secondPhoneNumber, style: const TextStyle(overflow: TextOverflow.ellipsis)),
-            ],
-          ),
-        ),
+        Expanded(child: Text(recipientNumber ?? '', style: const TextStyle(overflow: TextOverflow.ellipsis))),
         const SizedBox(width: 4),
         if (lastMessage != null) Text(lastMessage.createdAt.timeOrDate, style: const TextStyle(fontSize: 12)),
       ],
     );
   }
 
-  Widget subtitle() {
+  Widget subtitle(String? userNumber) {
     const textStyle = TextStyle(overflow: TextOverflow.ellipsis, fontSize: 12);
     final lastMessage = widget.lastMessage;
 
@@ -85,7 +85,7 @@ class _SmsConversationsTileState extends State<SmsConversationsTile> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  lastMessage.fromPhoneNumber,
+                  lastMessage.fromPhoneNumber == userNumber ? 'you' : lastMessage.fromPhoneNumber,
                   style: textStyle,
                   overflow: TextOverflow.ellipsis,
                 ),
