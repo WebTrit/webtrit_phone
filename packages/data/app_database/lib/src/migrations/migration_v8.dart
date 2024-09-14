@@ -20,6 +20,7 @@ class MigrationV8 extends Migration {
     final smsMessagesTable = v8.SmsMessages(db);
     final smsOutboxMessagesTable = v8.SmsOutboxMessages(db);
     final smsSyncCursorsTable = v8.SmsMessageSyncCursors(db);
+    final userSmsNumbersTable = v8.UserSmsNumbers(db);
 
     // recreate tables with breaking changes
     await m.deleteTable(chatMessagesTable.aliasedName);
@@ -34,5 +35,6 @@ class MigrationV8 extends Migration {
     await m.createTable(smsMessagesTable);
     await m.createTable(smsOutboxMessagesTable);
     await m.createTable(smsSyncCursorsTable);
+    await m.createTable(userSmsNumbersTable);
   }
 }

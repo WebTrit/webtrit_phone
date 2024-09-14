@@ -27,6 +27,7 @@ part 'app_database.g.dart';
     SmsMessagesTable,
     SmsMessageSyncCursorTable,
     SmsOutboxMessagesTable,
+    UserSmsNumbersTable,
   ],
   daos: [
     ContactsDao,
@@ -543,6 +544,17 @@ class SmsOutboxMessagesTable extends Table {
   TextColumn get content => text()();
 
   IntColumn get sendAttempts => integer().withDefault(const Constant(0))();
+}
+
+@DataClassName('UserSmsNumberData')
+class UserSmsNumbersTable extends Table {
+  @override
+  String get tableName => 'user_sms_numbers';
+
+  @override
+  Set<Column> get primaryKey => {phoneNumber};
+
+  TextColumn get phoneNumber => text()();
 }
 
 @DriftAccessor(tables: [
@@ -1077,6 +1089,7 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   }
 
   Future upsertChatWithMembers(ChatDataWithMembers data) async {
+    // Todo: replace with batch
     await transaction(() async {
       final currentChatMembers = await getChatMembersByChatId(data.chatData.id);
       final membersToDelete = currentChatMembers.where((m) => !data.members.any((newM) => newM.userId == m.userId));
@@ -1293,6 +1306,7 @@ typedef ConversationDataWithLastMessage = (SmsConversationData conversation, Sms
   SmsMessagesTable,
   SmsMessageSyncCursorTable,
   SmsOutboxMessagesTable,
+  UserSmsNumbersTable,
 ])
 class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
   SmsDao(super.db);
@@ -1401,11 +1415,29 @@ class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
     return into(smsMessageSyncCursorTable).insertOnConflictUpdate(smsMessageSyncCursor);
   }
 
+  // User sms numbers
+
+  Future<List<UserSmsNumberData>> getUserSmsNumbers() {
+    return select(userSmsNumbersTable).get();
+  }
+
+  Stream<List<UserSmsNumberData>> watchUserSmsNumbers() {
+    return select(userSmsNumbersTable).watch();
+  }
+
+  Future upsertUserSmsNumbers(List<UserSmsNumberData> userSmsNumbers) async {
+    return batch((batch) {
+      batch.deleteWhere(userSmsNumbersTable, (t) => t.phoneNumber.isNotIn(userSmsNumbers.map((e) => e.phoneNumber)));
+      batch.insertAllOnConflictUpdate(userSmsNumbersTable, userSmsNumbers);
+    });
+  }
+
   Future<void> wipeData() async {
     await transaction(() async {
       await delete(smsConversationsTable).go();
       await delete(smsMessagesTable).go();
       await delete(smsOutboxMessagesTable).go();
+      await delete(smsMessageSyncCursorTable).go();
     });
   }
 

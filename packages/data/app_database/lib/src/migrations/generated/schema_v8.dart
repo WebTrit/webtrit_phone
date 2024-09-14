@@ -1159,6 +1159,41 @@ class SmsOutboxMessages extends Table with TableInfo {
   bool get dontWriteConstraints => true;
 }
 
+class UserSmsNumbers extends Table with TableInfo {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  UserSmsNumbers(this.attachedDatabase, [this._alias]);
+  late final GeneratedColumn<String> phoneNumber = GeneratedColumn<String>(
+      'phone_number', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  @override
+  List<GeneratedColumn> get $columns => [phoneNumber];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'user_sms_numbers';
+  @override
+  Set<GeneratedColumn> get $primaryKey => {phoneNumber};
+  @override
+  Never map(Map<String, dynamic> data, {String? tablePrefix}) {
+    throw UnsupportedError('TableInfo.map in schema verification code');
+  }
+
+  @override
+  UserSmsNumbers createAlias(String alias) {
+    return UserSmsNumbers(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints => const ['PRIMARY KEY(phone_number)'];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
 class DatabaseAtV8 extends GeneratedDatabase {
   DatabaseAtV8(QueryExecutor e) : super(e);
   late final Contacts contacts = Contacts(this);
@@ -1185,6 +1220,7 @@ class DatabaseAtV8 extends GeneratedDatabase {
   late final SmsMessageSyncCursors smsMessageSyncCursors =
       SmsMessageSyncCursors(this);
   late final SmsOutboxMessages smsOutboxMessages = SmsOutboxMessages(this);
+  late final UserSmsNumbers userSmsNumbers = UserSmsNumbers(this);
   late final Trigger contactsAfterInsertTrigger = Trigger(
       'CREATE TRIGGER contacts_after_insert_trigger AFTER INSERT ON contacts BEGIN UPDATE contacts SET inserted_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id AND inserted_at IS NULL;UPDATE contacts SET updated_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id;END',
       'contacts_after_insert_trigger');
@@ -1226,6 +1262,7 @@ class DatabaseAtV8 extends GeneratedDatabase {
         smsMessages,
         smsMessageSyncCursors,
         smsOutboxMessages,
+        userSmsNumbers,
         contactsAfterInsertTrigger,
         contactsAfterUpdateTrigger,
         contactPhonesAfterInsertTrigger,

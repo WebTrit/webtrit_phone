@@ -6403,6 +6403,167 @@ class SmsOutboxMessageDataCompanion
   }
 }
 
+class $UserSmsNumbersTableTable extends UserSmsNumbersTable
+    with TableInfo<$UserSmsNumbersTableTable, UserSmsNumberData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $UserSmsNumbersTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _phoneNumberMeta =
+      const VerificationMeta('phoneNumber');
+  @override
+  late final GeneratedColumn<String> phoneNumber = GeneratedColumn<String>(
+      'phone_number', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [phoneNumber];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'user_sms_numbers';
+  @override
+  VerificationContext validateIntegrity(Insertable<UserSmsNumberData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('phone_number')) {
+      context.handle(
+          _phoneNumberMeta,
+          phoneNumber.isAcceptableOrUnknown(
+              data['phone_number']!, _phoneNumberMeta));
+    } else if (isInserting) {
+      context.missing(_phoneNumberMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {phoneNumber};
+  @override
+  UserSmsNumberData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return UserSmsNumberData(
+      phoneNumber: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}phone_number'])!,
+    );
+  }
+
+  @override
+  $UserSmsNumbersTableTable createAlias(String alias) {
+    return $UserSmsNumbersTableTable(attachedDatabase, alias);
+  }
+}
+
+class UserSmsNumberData extends DataClass
+    implements Insertable<UserSmsNumberData> {
+  final String phoneNumber;
+  const UserSmsNumberData({required this.phoneNumber});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['phone_number'] = Variable<String>(phoneNumber);
+    return map;
+  }
+
+  UserSmsNumberDataCompanion toCompanion(bool nullToAbsent) {
+    return UserSmsNumberDataCompanion(
+      phoneNumber: Value(phoneNumber),
+    );
+  }
+
+  factory UserSmsNumberData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return UserSmsNumberData(
+      phoneNumber: serializer.fromJson<String>(json['phoneNumber']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'phoneNumber': serializer.toJson<String>(phoneNumber),
+    };
+  }
+
+  UserSmsNumberData copyWith({String? phoneNumber}) => UserSmsNumberData(
+        phoneNumber: phoneNumber ?? this.phoneNumber,
+      );
+  UserSmsNumberData copyWithCompanion(UserSmsNumberDataCompanion data) {
+    return UserSmsNumberData(
+      phoneNumber:
+          data.phoneNumber.present ? data.phoneNumber.value : this.phoneNumber,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UserSmsNumberData(')
+          ..write('phoneNumber: $phoneNumber')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => phoneNumber.hashCode;
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is UserSmsNumberData && other.phoneNumber == this.phoneNumber);
+}
+
+class UserSmsNumberDataCompanion extends UpdateCompanion<UserSmsNumberData> {
+  final Value<String> phoneNumber;
+  final Value<int> rowid;
+  const UserSmsNumberDataCompanion({
+    this.phoneNumber = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  UserSmsNumberDataCompanion.insert({
+    required String phoneNumber,
+    this.rowid = const Value.absent(),
+  }) : phoneNumber = Value(phoneNumber);
+  static Insertable<UserSmsNumberData> custom({
+    Expression<String>? phoneNumber,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (phoneNumber != null) 'phone_number': phoneNumber,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  UserSmsNumberDataCompanion copyWith(
+      {Value<String>? phoneNumber, Value<int>? rowid}) {
+    return UserSmsNumberDataCompanion(
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (phoneNumber.present) {
+      map['phone_number'] = Variable<String>(phoneNumber.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UserSmsNumberDataCompanion(')
+          ..write('phoneNumber: $phoneNumber, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -6438,6 +6599,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $SmsMessageSyncCursorTableTable(this);
   late final $SmsOutboxMessagesTableTable smsOutboxMessagesTable =
       $SmsOutboxMessagesTableTable(this);
+  late final $UserSmsNumbersTableTable userSmsNumbersTable =
+      $UserSmsNumbersTableTable(this);
   late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
   late final ContactPhonesDao contactPhonesDao =
       ContactPhonesDao(this as AppDatabase);
@@ -6469,7 +6632,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         smsConversationsTable,
         smsMessagesTable,
         smsMessageSyncCursorTable,
-        smsOutboxMessagesTable
+        smsOutboxMessagesTable,
+        userSmsNumbersTable
       ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
@@ -9551,6 +9715,71 @@ class $$SmsOutboxMessagesTableTableOrderingComposer
   }
 }
 
+typedef $$UserSmsNumbersTableTableCreateCompanionBuilder
+    = UserSmsNumberDataCompanion Function({
+  required String phoneNumber,
+  Value<int> rowid,
+});
+typedef $$UserSmsNumbersTableTableUpdateCompanionBuilder
+    = UserSmsNumberDataCompanion Function({
+  Value<String> phoneNumber,
+  Value<int> rowid,
+});
+
+class $$UserSmsNumbersTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $UserSmsNumbersTableTable,
+    UserSmsNumberData,
+    $$UserSmsNumbersTableTableFilterComposer,
+    $$UserSmsNumbersTableTableOrderingComposer,
+    $$UserSmsNumbersTableTableCreateCompanionBuilder,
+    $$UserSmsNumbersTableTableUpdateCompanionBuilder> {
+  $$UserSmsNumbersTableTableTableManager(
+      _$AppDatabase db, $UserSmsNumbersTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$UserSmsNumbersTableTableFilterComposer(
+              ComposerState(db, table)),
+          orderingComposer: $$UserSmsNumbersTableTableOrderingComposer(
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> phoneNumber = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              UserSmsNumberDataCompanion(
+            phoneNumber: phoneNumber,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String phoneNumber,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              UserSmsNumberDataCompanion.insert(
+            phoneNumber: phoneNumber,
+            rowid: rowid,
+          ),
+        ));
+}
+
+class $$UserSmsNumbersTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $UserSmsNumbersTableTable> {
+  $$UserSmsNumbersTableTableFilterComposer(super.$state);
+  ColumnFilters<String> get phoneNumber => $state.composableBuilder(
+      column: $state.table.phoneNumber,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+}
+
+class $$UserSmsNumbersTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $UserSmsNumbersTableTable> {
+  $$UserSmsNumbersTableTableOrderingComposer(super.$state);
+  ColumnOrderings<String> get phoneNumber => $state.composableBuilder(
+      column: $state.table.phoneNumber,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
 class $AppDatabaseManager {
   final _$AppDatabase _db;
   $AppDatabaseManager(this._db);
@@ -9603,6 +9832,8 @@ class $AppDatabaseManager {
   $$SmsOutboxMessagesTableTableTableManager get smsOutboxMessagesTable =>
       $$SmsOutboxMessagesTableTableTableManager(
           _db, _db.smsOutboxMessagesTable);
+  $$UserSmsNumbersTableTableTableManager get userSmsNumbersTable =>
+      $$UserSmsNumbersTableTableTableManager(_db, _db.userSmsNumbersTable);
 }
 
 mixin _$ContactsDaoMixin on DatabaseAccessor<AppDatabase> {
@@ -9663,4 +9894,6 @@ mixin _$SmsDaoMixin on DatabaseAccessor<AppDatabase> {
       attachedDatabase.smsMessageSyncCursorTable;
   $SmsOutboxMessagesTableTable get smsOutboxMessagesTable =>
       attachedDatabase.smsOutboxMessagesTable;
+  $UserSmsNumbersTableTable get userSmsNumbersTable =>
+      attachedDatabase.userSmsNumbersTable;
 }

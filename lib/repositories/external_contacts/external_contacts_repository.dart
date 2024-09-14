@@ -30,6 +30,8 @@ class ExternalContactsRepository {
   final bool _periodicPolling;
 
   late StreamController<List<ExternalContact>> _controller;
+  // TODO: Remove useless variable _listenedCounter
+  // *The [onListen] callback is called when the first listener is subscribed, and the [onCancel] is called when there are no longer any active listeners. If a listener is added again later, after the [onCancel] was called, the [onListen] will be called again.*
   late int _listenedCounter;
   Timer? _periodicTimer;
 

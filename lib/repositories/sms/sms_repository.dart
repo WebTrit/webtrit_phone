@@ -91,6 +91,20 @@ class SmsRepository with SmsDriftMapper {
     await _smsDao.upsertSyncCursor(data);
   }
 
+  Future<List<String>> getUserSmsNumbers() async {
+    final data = await _smsDao.getUserSmsNumbers();
+    return data.map((e) => e.phoneNumber).toList();
+  }
+
+  Stream<List<String>> watchUserSmsNumbers() {
+    return _smsDao.watchUserSmsNumbers().map((event) => event.map((e) => e.phoneNumber).toList());
+  }
+
+  Future<void> upsertUserSmsNumbers(List<String> numbers) async {
+    final data = numbers.map((e) => UserSmsNumberData(phoneNumber: e)).toList();
+    await _smsDao.upsertUserSmsNumbers(data);
+  }
+
   Future<void> wipeData() async {
     await _smsDao.wipeData();
   }

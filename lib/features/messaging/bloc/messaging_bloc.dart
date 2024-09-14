@@ -79,6 +79,13 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
         final userChannel = _client.addChannel(topic: 'chat:user:$userId');
         await userChannel.join().future;
 
+        // Retrieve avaliable user sms phone numbers for sms feature
+        if (EnvironmentConfig.SMS_FEATURE_ENABLE) {
+          final result = await userChannel.push('user:get_info', {}).future;
+          List<String> smsNumbers = result.response['sms_phone_numbers'].cast<String>();
+          _smsRepository.upsertUserSmsNumbers(smsNumbers);
+        }
+
         // Init workers
         if (EnvironmentConfig.CHAT_FEATURE_ENABLE) {
           _chatsSyncWorker ??= ChatsSyncWorker(_client, _chatsRepository)..init();
