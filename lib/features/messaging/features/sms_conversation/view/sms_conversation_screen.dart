@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
@@ -7,22 +8,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/widgets/fade_id.dart';
 import 'package:webtrit_phone/widgets/no_data_placeholder.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
-class ConversationScreen extends StatefulWidget {
-  const ConversationScreen({super.key});
+class SmsConversationScreen extends StatefulWidget {
+  const SmsConversationScreen({super.key});
 
   @override
-  State<ConversationScreen> createState() => _ConversationScreenState();
+  State<SmsConversationScreen> createState() => _SmsConversationScreenState();
 }
 
-class _ConversationScreenState extends State<ConversationScreen> {
+class _SmsConversationScreenState extends State<SmsConversationScreen> {
   late final messagingBloc = context.read<MessagingBloc>();
-  late final conversationCubit = context.read<ConversationCubit>();
+  late final conversationCubit = context.read<SmsConversationCubit>();
   late final contactsRepo = context.read<ContactsRepository>();
 
   onDeleteDialog() async {
@@ -34,7 +34,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
     if (!mounted) return;
     if (askResult != true) return;
 
-    final result = await conversationCubit.deleteDialog();
+    final result = await conversationCubit.deleteConversation();
 
     if (!mounted) return;
     if (result != true) return;
@@ -45,32 +45,34 @@ class _ConversationScreenState extends State<ConversationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ChatTypingCubit(messagingBloc.state.client, contactsRepo),
-      child: BlocConsumer<ConversationCubit, ConversationState>(
-        listener: (context, state) {
-          if (state is CVSReady && state.chat != null) {
-            context.read<ChatTypingCubit>().init(state.chat!.id);
-          }
-          if (state is CVSLeft) {
-            const route = MessagingRouterPageRoute(children: [ConversationsScreenPageRoute()]);
-            context.router.navigate(route);
-          }
-        },
-        builder: (context, state) {
+    return BlocConsumer<SmsConversationCubit, SmsConversationState>(
+      listener: (context, state) {
+        if (state is CVSLeft) {
+          const route = MessagingRouterPageRoute(children: [ConversationsScreenPageRoute()]);
+          context.router.navigate(route);
+        }
+      },
+      builder: (context, state) {
+        return UserSmsNumbersBuilder(builder: (context, List<String> numbers, {required loading}) {
+          final firstNumber = state.creds.firstNumber;
+          final secondNumber = state.creds.secondNumber;
+          String? userNumber;
+          userNumber = numbers.firstWhereOrNull((e) => e == firstNumber || e == secondNumber);
+          String? recipientNumber;
+          if (userNumber != null) recipientNumber = firstNumber == userNumber ? secondNumber : firstNumber;
+
+          if (loading) return const SizedBox();
+
           return Stack(
             children: [
               Scaffold(
                 appBar: AppBar(
-                  title: ContactInfoBuilder(
-                    sourceType: ContactSourceType.external,
-                    sourceId: conversationCubit.state.participantId,
-                    builder: (context, contact, {required bool loading}) {
-                      if (loading) return const SizedBox();
-                      if (contact != null) {
+                  title: Builder(
+                    builder: (context) {
+                      if (recipientNumber != null) {
                         return FadeIn(
                           child: Text(
-                            contact.name,
+                            recipientNumber,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(fontSize: 20),
@@ -78,11 +80,21 @@ class _ConversationScreenState extends State<ConversationScreen> {
                         );
                       } else {
                         return FadeIn(
-                          child: Text(
-                            '${context.l10n.chats_ConversationScreen_titlePrefix} ${conversationCubit.state.participantId}',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 20),
+                          child: Column(
+                            children: [
+                              Text(
+                                firstNumber,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(fontSize: 20),
+                              ),
+                              Text(
+                                secondNumber,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(fontSize: 20),
+                              ),
+                            ],
                           ),
                         );
                       }
@@ -108,27 +120,19 @@ class _ConversationScreenState extends State<ConversationScreen> {
                 ),
                 body: Builder(
                   builder: (context) {
-                    if (state is CVSReady) {
-                      return ChatMessageListView(
-                        userId: messagingBloc.state.userId!,
+                    if (state is SCSReady) {
+                      return SmsMessageListView(
+                        userNumber: userNumber,
                         messages: state.messages,
                         outboxMessages: state.outboxMessages,
-                        outboxMessageEdits: state.outboxMessageEdits,
-                        outboxMessageDeletes: state.outboxMessageDeletes,
-                        readCursors: state.readCursors,
                         fetchingHistory: state.fetchingHistory,
                         historyEndReached: state.historyEndReached,
                         onSendMessage: (content) => conversationCubit.sendMessage(content),
-                        onSendReply: (content, refMessage) => conversationCubit.sendReply(content, refMessage),
-                        onSendForward: (content, refMessage) => conversationCubit.sendForward(refMessage),
-                        onSendEdit: (content, refMessage) => conversationCubit.sendEdit(content, refMessage),
-                        onDelete: (refMessage) => conversationCubit.deleteMessage(refMessage),
-                        userReadedUntilUpdate: (until) => conversationCubit.userReadedUntilUpdate(until),
                         onFetchHistory: conversationCubit.fetchHistory,
                       );
                     }
 
-                    if (state is CVSError) {
+                    if (state is SCSError) {
                       return NoDataPlaceholder(
                         content: Text(context.l10n.chats_Conversation_failure),
                         actions: [
@@ -144,7 +148,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                   },
                 ),
               ),
-              if (state is CVSReady && state.busy)
+              if (state is SCSReady && state.busy)
                 Container(
                   color: Colors.black.withOpacity(0.1),
                   child: BackdropFilter(
@@ -154,8 +158,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
                 ),
             ],
           );
-        },
-      ),
+        });
+      },
     );
   }
 }

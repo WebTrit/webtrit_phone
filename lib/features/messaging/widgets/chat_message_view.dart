@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_parsed_text/flutter_parsed_text.dart';
-import 'package:flutter_link_previewer/flutter_link_previewer.dart';
-import 'package:quiver/collection.dart';
 
 import 'package:webtrit_phone/extensions/datetime.dart';
 import 'package:webtrit_phone/features/features.dart';
@@ -13,11 +10,13 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-class MessageView extends StatefulWidget {
-  const MessageView({
+import 'message_body.dart';
+
+class ChatMessageView extends StatefulWidget {
+  const ChatMessageView({
     super.key,
     required this.userId,
-    this.chatMessage,
+    this.message,
     this.outboxMessage,
     this.outboxEditEntry,
     this.outboxDeleteEntry,
@@ -31,7 +30,7 @@ class MessageView extends StatefulWidget {
   });
 
   final String userId;
-  final ChatMessage? chatMessage;
+  final ChatMessage? message;
   final ChatOutboxMessageEntry? outboxMessage;
   final ChatOutboxMessageEditEntry? outboxEditEntry;
   final ChatOutboxMessageDeleteEntry? outboxDeleteEntry;
@@ -61,10 +60,10 @@ class MessageView extends StatefulWidget {
   final Function()? onRendered;
 
   @override
-  State<MessageView> createState() => _MessageViewState();
+  State<ChatMessageView> createState() => _ChatMessageViewState();
 }
 
-class _MessageViewState extends State<MessageView> {
+class _ChatMessageViewState extends State<ChatMessageView> {
   // Key to get the position of the message body to show the popup menu
   late final bodyKey = GlobalKey();
 
@@ -96,35 +95,35 @@ class _MessageViewState extends State<MessageView> {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    final chatMessage = widget.chatMessage;
+    final message = widget.message;
     final outboxMessage = widget.outboxMessage;
     final outboxEditEntry = widget.outboxEditEntry;
     final outboxDeleteEntry = widget.outboxDeleteEntry;
     final userReadedUntil = widget.userReadedUntil;
     final membersReadedUntil = widget.membersReadedUntil;
 
-    final content = outboxEditEntry?.newContent ?? outboxMessage?.content ?? chatMessage?.content ?? '';
+    final content = outboxEditEntry?.newContent ?? outboxMessage?.content ?? message?.content ?? '';
     final hasContent = (content.isNotEmpty == true) && content != '-';
 
-    final senderId = chatMessage?.senderId ?? widget.userId;
+    final senderId = message?.senderId ?? widget.userId;
     final isMine = senderId == widget.userId;
-    final isSended = chatMessage != null;
-    final isEdited = outboxEditEntry != null || chatMessage?.editedAt != null;
-    final isDeleted = outboxDeleteEntry != null || chatMessage?.deletedAt != null;
+    final isSended = message != null;
+    final isEdited = outboxEditEntry != null || message?.editedAt != null;
+    final isDeleted = outboxDeleteEntry != null || message?.deletedAt != null;
 
-    final isForward = chatMessage?.forwardFromId != null && chatMessage?.authorId != null;
-    final isReply = chatMessage?.replyToId != null;
+    final isForward = message?.forwardFromId != null && message?.authorId != null;
+    final isReply = message?.replyToId != null;
 
     var isViewedByMembers = false;
     var isViewedByUser = false;
 
-    if (isSended && membersReadedUntil != null) isViewedByMembers = !chatMessage.createdAt.isAfter(membersReadedUntil);
-    if (isSended && userReadedUntil != null) isViewedByUser = !chatMessage.createdAt.isAfter(userReadedUntil);
+    if (isSended && membersReadedUntil != null) isViewedByMembers = !message.createdAt.isAfter(membersReadedUntil);
+    if (isSended && userReadedUntil != null) isViewedByUser = !message.createdAt.isAfter(userReadedUntil);
 
     final popupItems = [
       if (hasContent)
         PopupMenuItem(
-          onTap: () => Clipboard.setData(ClipboardData(text: chatMessage!.content)),
+          onTap: () => Clipboard.setData(ClipboardData(text: message!.content)),
           child: ListTile(
             title: Text(context.l10n.chats_MessageView_textcopy),
             leading: const Icon(Icons.copy_rounded),
@@ -133,7 +132,7 @@ class _MessageViewState extends State<MessageView> {
         ),
       if (isSended && !isDeleted)
         PopupMenuItem(
-          onTap: () => widget.handleSetForReply(chatMessage),
+          onTap: () => widget.handleSetForReply(message),
           child: ListTile(
             title: Text(context.l10n.chats_MessageView_reply),
             leading: const Icon(Icons.question_answer_outlined),
@@ -142,7 +141,7 @@ class _MessageViewState extends State<MessageView> {
         ),
       if (isSended && !isDeleted)
         PopupMenuItem(
-          onTap: () => widget.handleSetForForward(chatMessage),
+          onTap: () => widget.handleSetForForward(message),
           child: ListTile(
             title: Text(context.l10n.chats_MessageView_forward),
             leading: const Icon(Icons.forward_outlined),
@@ -151,7 +150,7 @@ class _MessageViewState extends State<MessageView> {
         ),
       if (isMine && isSended && !isForward && !isDeleted)
         PopupMenuItem(
-          onTap: () => widget.handleSetForEdit(chatMessage),
+          onTap: () => widget.handleSetForEdit(message),
           child: ListTile(
             title: Text(context.l10n.chats_MessageView_edit),
             leading: const Icon(Icons.edit_note_outlined),
@@ -160,7 +159,7 @@ class _MessageViewState extends State<MessageView> {
         ),
       if (isMine && isSended && !isDeleted)
         PopupMenuItem(
-          onTap: () => widget.handleDelete(chatMessage),
+          onTap: () => widget.handleDelete(message),
           child: ListTile(
             title: Text(context.l10n.chats_MessageView_delete),
             leading: const Icon(Icons.remove),
@@ -241,11 +240,11 @@ class _MessageViewState extends State<MessageView> {
                       ),
                       const SizedBox(height: 4),
                       if (isReply) ...[
-                        ReplyQuote(userId: widget.userId, chatMessage: chatMessage!),
+                        ReplyQuote(userId: widget.userId, message: message!),
                         const SizedBox(height: 4),
                       ],
                       if (isForward) ...[
-                        ForwartQuote(context: context, userId: widget.userId, msg: chatMessage!),
+                        ForwartQuote(context: context, userId: widget.userId, msg: message!),
                       ],
                       if (!isForward && !isDeleted) ...[
                         MessageBody(text: content, style: theme.contentStyle),
@@ -271,8 +270,7 @@ class _MessageViewState extends State<MessageView> {
                             Icon(Icons.done, color: colorScheme.tertiary, size: 12),
                           if (isMine && isViewedByMembers) Icon(Icons.done_all, color: colorScheme.tertiary, size: 12),
                           const SizedBox(width: 2),
-                          if (chatMessage?.createdAt != null)
-                            Text(chatMessage!.createdAt.toHHmm, style: theme.subContentStyle)
+                          if (message?.createdAt != null) Text(message!.createdAt.toHHmm, style: theme.subContentStyle)
                         ],
                       ),
                     ],
@@ -291,11 +289,11 @@ class ReplyQuote extends StatefulWidget {
   const ReplyQuote({
     super.key,
     required this.userId,
-    required this.chatMessage,
+    required this.message,
   });
 
   final String userId;
-  final ChatMessage chatMessage;
+  final ChatMessage message;
 
   @override
   State<ReplyQuote> createState() => _ReplyQuoteState();
@@ -331,7 +329,7 @@ class _ReplyQuoteState extends State<ReplyQuote> {
     final theme = Theme.of(context);
 
     return FutureBuilder(
-        future: fetchMessage(widget.chatMessage.replyToId!, widget.chatMessage.chatId),
+        future: fetchMessage(widget.message.replyToId!, widget.message.chatId),
         builder: (context, snapshot) {
           final message = snapshot.data;
 
@@ -405,110 +403,4 @@ class ForwartQuote extends StatelessWidget {
       ),
     );
   }
-}
-
-class MessageBody extends StatefulWidget {
-  const MessageBody({
-    required this.text,
-    this.style,
-    this.previewDecoration,
-    super.key,
-  });
-
-  final String text;
-  final TextStyle? style;
-  final BoxDecoration? previewDecoration;
-
-  @override
-  State<MessageBody> createState() => _MessageBodyState();
-}
-
-class _MessageBodyState extends State<MessageBody> {
-  String? link;
-  dynamic linkPreview;
-  static final previewsCache = LruMap<String, dynamic>(maximumSize: 100);
-
-  @override
-  void initState() {
-    super.initState();
-    findLink(widget.text);
-  }
-
-  @override
-  void didUpdateWidget(covariant MessageBody oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.text != widget.text) findLink(widget.text);
-  }
-
-  findLink(String text) {
-    final regex = RegExp(regexLink, caseSensitive: false);
-    final match = regex.stringMatch(text);
-    linkPreview = previewsCache[match];
-    if (mounted) setState(() => link = match);
-  }
-
-  setLinkPreview(data) {
-    if (link != null) previewsCache[link!] = data;
-    if (mounted) setState(() => linkPreview = data);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    final style = widget.style ?? theme.contentStyle;
-    final previewDecoration = widget.previewDecoration ?? theme.quoteDecoration;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (link != null) ...[
-          Container(
-            decoration: previewDecoration,
-            padding: const EdgeInsets.all(8),
-            child: LinkPreview(
-              textStyle: widget.style,
-              linkStyle: widget.style,
-              headerStyle: widget.style,
-              metadataTextStyle: widget.style,
-              metadataTitleStyle: widget.style,
-              enableAnimation: true,
-              onPreviewDataFetched: setLinkPreview,
-              previewData: linkPreview,
-              text: link!,
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.all(0),
-            ),
-          ),
-          const SizedBox(height: 8),
-        ],
-        ParsedText(
-          parse: [
-            mailToMatcher(style: style.copyWith(decoration: TextDecoration.underline)),
-            urlMatcher(style: style.copyWith(decoration: TextDecoration.underline)),
-            boldMatcher(style: style.merge(PatternStyle.bold.textStyle)),
-            italicMatcher(style: style.merge(PatternStyle.italic.textStyle)),
-            lineThroughMatcher(style: style.merge(PatternStyle.lineThrough.textStyle)),
-            codeMatcher(style: style.merge(PatternStyle.code.textStyle)),
-          ],
-          regexOptions: const RegexOptions(multiLine: true, dotAll: true),
-          style: style.copyWith(fontFamily: theme.textTheme.bodyMedium?.fontFamily),
-          text: widget.text,
-          textWidthBasis: TextWidthBasis.longestLine,
-        ),
-      ],
-    );
-  }
-}
-
-extension MsgViewExt on ThemeData {
-  TextStyle get userNameStyle => TextStyle(color: colorScheme.onSurface, fontSize: 12, fontWeight: FontWeight.w600);
-  TextStyle get contentStyle => TextStyle(color: colorScheme.onSurface, fontSize: 12);
-  TextStyle get subContentStyle => TextStyle(color: colorScheme.onSurface.withOpacity(0.5), fontSize: 10);
-  Color get contentColor => colorScheme.onSecondaryFixed;
-  BoxDecoration get quoteDecoration => BoxDecoration(
-        color: colorScheme.secondaryFixed.withOpacity(0.25),
-        borderRadius: BorderRadius.circular(8),
-        border: Border(left: BorderSide(color: colorScheme.secondaryFixed, width: 2)),
-      );
 }

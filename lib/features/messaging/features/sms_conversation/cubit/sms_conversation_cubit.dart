@@ -64,7 +64,7 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     _outboxRepository.upsertOutboxMessage(outboxEntry);
   }
 
-  Future<bool> deleteDialog() async {
+  Future<bool> deleteConversation() async {
     final state = this.state;
     if (state is! SCSReady || state.busy) return false;
 

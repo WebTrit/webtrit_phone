@@ -9,10 +9,10 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/models/models.dart';
 
-import 'message_view.dart';
+import 'chat_message_view.dart';
 
-class MessageListView extends StatefulWidget {
-  const MessageListView({
+class ChatMessageListView extends StatefulWidget {
+  const ChatMessageListView({
     required this.userId,
     required this.messages,
     required this.fetchingHistory,
@@ -48,10 +48,10 @@ class MessageListView extends StatefulWidget {
   final Future Function() onFetchHistory;
 
   @override
-  State<MessageListView> createState() => _MessageListViewState();
+  State<ChatMessageListView> createState() => _ChatMessageListViewState();
 }
 
-class _MessageListViewState extends State<MessageListView> {
+class _ChatMessageListViewState extends State<ChatMessageListView> {
   late final messageForwardCubit = context.read<MessageForwardCubit>();
   late final inputController = TextEditingController();
   late final scrollController = ScrollController();
@@ -59,7 +59,6 @@ class _MessageListViewState extends State<MessageListView> {
   List<Widget> elements = [];
   ChatMessage? editingMessage;
   ChatMessage? replyingMessage;
-  bool useSms = false;
 
   @override
   void initState() {
@@ -80,7 +79,7 @@ class _MessageListViewState extends State<MessageListView> {
   }
 
   @override
-  void didUpdateWidget(MessageListView oldWidget) {
+  void didUpdateWidget(ChatMessageListView oldWidget) {
     super.didUpdateWidget(oldWidget);
     bool messagesChanged() => !listEquals(oldWidget.messages, widget.messages);
     bool outboxMessagesChanged() => !listEquals(oldWidget.outboxMessages, widget.outboxMessages);
@@ -104,7 +103,7 @@ class _MessageListViewState extends State<MessageListView> {
 
     for (final entry in widget.outboxMessages.reversed) {
       elements.add(
-        MessageView(
+        ChatMessageView(
           userId: widget.userId,
           outboxMessage: entry,
           handleSetForReply: handleSetForReply,
@@ -149,9 +148,9 @@ class _MessageListViewState extends State<MessageListView> {
       }
 
       elements.add(
-        MessageView(
+        ChatMessageView(
           userId: widget.userId,
-          chatMessage: message,
+          message: message,
           outboxEditEntry: editEntry,
           outboxDeleteEntry: deleteEntry,
           userReadedUntil: userReadedUntil,
@@ -176,20 +175,20 @@ class _MessageListViewState extends State<MessageListView> {
 
   void handleSend() {
     final messageForForward = messageForwardCubit.state;
-    final message = inputController.text.trim();
-    if (message.isEmpty) return;
+    final content = inputController.text.trim();
+    if (content.isEmpty) return;
 
     if (messageForForward != null) {
-      widget.onSendForward(message, messageForForward);
+      widget.onSendForward(content, messageForForward);
       messageForwardCubit.clear();
     } else if (replyingMessage != null) {
-      widget.onSendReply(message, replyingMessage!);
+      widget.onSendReply(content, replyingMessage!);
       setState(() => replyingMessage = null);
     } else if (editingMessage != null) {
-      widget.onSendEdit(message, editingMessage!);
+      widget.onSendEdit(content, editingMessage!);
       setState(() => editingMessage = null);
     } else {
-      widget.onSendMessage(message);
+      widget.onSendMessage(content);
     }
 
     inputController.text = '';
@@ -358,10 +357,7 @@ class _MessageListViewState extends State<MessageListView> {
                         controller: inputController,
                         onFieldSubmitted: (_) => handleSend(),
                         onChanged: (value) => context.read<ChatTypingCubit>().sendTyping(),
-                        decoration: const InputDecoration(
-                          hintText: 'Type a message',
-                          border: InputBorder.none,
-                        ),
+                        decoration: const InputDecoration(hintText: 'Type a message', border: InputBorder.none),
                       ),
                     ),
                     GestureDetector(

@@ -67,7 +67,7 @@ class _GroupScreenState extends State<GroupScreen> {
                 body: Builder(
                   builder: (context) {
                     if (state is GroupStateReady) {
-                      return MessageListView(
+                      return ChatMessageListView(
                         userId: messagingBloc.state.userId!,
                         messages: state.messages,
                         outboxMessages: state.outboxMessages,
