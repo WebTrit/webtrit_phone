@@ -12,17 +12,17 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-part 'conversation_state.dart';
+part 'sms_conversation_state.dart';
 
 final _logger = Logger('SmsConversationCubit');
 
-class SmsConversationCubit extends Cubit<ConversationState> {
+class SmsConversationCubit extends Cubit<SmsConversationState> {
   SmsConversationCubit(
     this._creds,
     this._client,
     this._repository,
     this._outboxRepository,
-  ) : super(ConversationState.init(_creds)) {
+  ) : super(SmsConversationState.init(_creds)) {
     _init();
     // _logger.onRecord.listen((record) {
     //   // ignore: avoid_print
@@ -44,7 +44,7 @@ class SmsConversationCubit extends Cubit<ConversationState> {
   void restart() {
     _logger.info('Restarting sms conversation with $_creds');
     _cancelSubs();
-    emit(ConversationState.init(_creds));
+    emit(SmsConversationState.init(_creds));
     _init();
   }
 
@@ -148,7 +148,7 @@ class SmsConversationCubit extends Cubit<ConversationState> {
       _logger.info('local chat find result: $c');
 
       if (isClosed) return;
-      emit(ConversationState.ready(_creds, conversation: c));
+      emit(SmsConversationState.ready(_creds, conversation: c));
 
       // If local conversation is not found, subscribtion will find the conversation when it will created
       // e.g when you send the first message or another user sends to you
@@ -159,7 +159,7 @@ class SmsConversationCubit extends Cubit<ConversationState> {
       // if (c != null) _conversation = c;
       if (c != null) await _initMessages(c.id);
     } catch (e) {
-      emit(ConversationState.error(_creds, e));
+      emit(SmsConversationState.error(_creds, e));
     }
   }
 
@@ -208,7 +208,7 @@ class SmsConversationCubit extends Cubit<ConversationState> {
     _logger.info('_handleConversationRemove: $conversationId');
     final state = this.state;
     if (state is! CVSReady) return;
-    if (state.conversation?.id == conversationId) emit(ConversationState.left(_creds));
+    if (state.conversation?.id == conversationId) emit(SmsConversationState.left(_creds));
   }
 
   StreamSubscription _messagesSubFactory(void Function(SmsMessage) onArrive) {

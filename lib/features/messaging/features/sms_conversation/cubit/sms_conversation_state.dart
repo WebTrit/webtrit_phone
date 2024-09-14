@@ -1,27 +1,27 @@
-part of 'conversation_cubit.dart';
+part of 'sms_conversation_cubit.dart';
 
 /// recipientId should be removed as soon as possible when backend will be ready
 /// to avoid unsecurity bullshit from the backend side
 typedef UsersCreds = ({String firstNumber, String secondNumber, String? recipientId});
 
 /// Base class for the states of the conversation cubit.
-abstract base class ConversationState {
-  const ConversationState();
+abstract base class SmsConversationState {
+  const SmsConversationState();
 
   /// The id of the participant in the conversation
   UsersCreds get creds;
 
-  factory ConversationState.init(UsersCreds creds) => CVSInit(creds);
-  factory ConversationState.error(UsersCreds creds, Object error) => CVSError(creds, error);
-  factory ConversationState.left(UsersCreds creds) => CVSLeft(creds);
-  factory ConversationState.ready(UsersCreds creds, {SmsConversation? conversation}) {
+  factory SmsConversationState.init(UsersCreds creds) => CVSInit(creds);
+  factory SmsConversationState.error(UsersCreds creds, Object error) => CVSError(creds, error);
+  factory SmsConversationState.left(UsersCreds creds) => CVSLeft(creds);
+  factory SmsConversationState.ready(UsersCreds creds, {SmsConversation? conversation}) {
     return CVSReady(creds, conversation: conversation);
   }
 }
 
 /// Represents the state of the conversation cubit when preparing the conversation.
 /// E.g fetching the chat id, messages, etc.
-final class CVSInit extends ConversationState with EquatableMixin {
+final class CVSInit extends SmsConversationState with EquatableMixin {
   const CVSInit(this.creds);
 
   @override
@@ -32,7 +32,7 @@ final class CVSInit extends ConversationState with EquatableMixin {
 }
 
 /// Represents the error state of the conversation during the initialization.
-final class CVSError extends ConversationState with EquatableMixin {
+final class CVSError extends SmsConversationState with EquatableMixin {
   const CVSError(this.creds, this.error);
 
   @override
@@ -45,7 +45,7 @@ final class CVSError extends ConversationState with EquatableMixin {
 }
 
 /// Represents the state of the conversation after user leaved/removed.
-final class CVSLeft extends ConversationState with EquatableMixin {
+final class CVSLeft extends SmsConversationState with EquatableMixin {
   const CVSLeft(this.creds);
 
   @override
@@ -56,7 +56,7 @@ final class CVSLeft extends ConversationState with EquatableMixin {
 }
 
 /// Represents the state of the conversation cubit when the conversation is ready.
-final class CVSReady extends ConversationState with EquatableMixin {
+final class CVSReady extends SmsConversationState with EquatableMixin {
   const CVSReady(
     this.creds, {
     this.conversation,
