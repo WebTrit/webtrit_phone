@@ -5,8 +5,11 @@ import 'package:equatable/equatable.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/features/messaging/extensions/phoenix_socket.dart';
 import 'package:webtrit_phone/features/messaging/services/services.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+
+// TODO: add logger
 
 part 'messaging_event.dart';
 part 'messaging_state.dart';
@@ -56,13 +59,14 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   }
 
   void _refresh(Refresh event, Emitter<MessagingState> emit) async {
-    if (_client.isConnected) _client.close();
+    if (_client.isConnected) _client.dispose();
+    await Future.delayed(const Duration(milliseconds: 10)); // _client.dispose() fake sync so...
     add(const Connect());
   }
 
   void _onClientConnected(_ClientConnected event, Emitter<MessagingState> emit) async {
     try {
-      if (!_client.channels.containsKey('chat:me')) {
+      if (_client.userChannel == null) {
         // Auth process using channel connect payload
         // Can be eliminated by retrieving user_id during main auth flow
         final authChannel = _client.addChannel(topic: 'chat:me');
@@ -98,7 +102,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
       }
       emit(state.copyWith(status: ConnectionStatus.connected));
     } on Exception catch (e) {
-      _client.close();
+      _client.dispose();
       emit(state.copyWith(status: ConnectionStatus.error, error: e));
     }
   }
