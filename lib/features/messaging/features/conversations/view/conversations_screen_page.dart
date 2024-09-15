@@ -15,9 +15,13 @@ class ConversationsScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final chatsRepository = context.read<ChatsRepository>();
+    final smsRepository = context.read<SmsRepository>();
 
-    final widget = BlocProvider(
-      create: (context) => ChatConversationsCubit(chatsRepository),
+    final widget = MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => ChatConversationsCubit(chatsRepository)),
+        BlocProvider(create: (context) => SmsConversationsCubit(smsRepository)),
+      ],
       child: const ConversationsScreen(title: Text(EnvironmentConfig.APP_NAME)),
     );
 
