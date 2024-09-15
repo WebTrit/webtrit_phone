@@ -7,9 +7,10 @@ abstract class MainScreenRouteStateRepository {
   void setActiveTabPage(String activeTabPage);
   void setLastRouteArgs(dynamic lastRouteArgs);
 
-  bool isChatsTabActive();
+  bool isMessagingTabActive();
   bool isChatScreenActive(int chatId);
   bool isConversationScreenActive(String participantId);
+  bool isSmsConversationScreenActive(String firstNumber, String secondNumber);
 }
 
 class MainScreenRouteStateRepositoryAutoRouteImpl implements MainScreenRouteStateRepository {
@@ -27,7 +28,7 @@ class MainScreenRouteStateRepositoryAutoRouteImpl implements MainScreenRouteStat
   void setLastRouteArgs(dynamic lastRouteArgs) => _lastRouteArgs = lastRouteArgs;
 
   @override
-  bool isChatsTabActive() => _activeTabPage == MessagingRouterPageRoute.name;
+  bool isMessagingTabActive() => _activeTabPage == MessagingRouterPageRoute.name;
 
   @override
   bool isChatScreenActive(int chatId) {
@@ -39,5 +40,13 @@ class MainScreenRouteStateRepositoryAutoRouteImpl implements MainScreenRouteStat
   bool isConversationScreenActive(String participantId) {
     final routeArgs = lastRouteArgs;
     return routeArgs is ConversationScreenPageRouteArgs && routeArgs.participantId == participantId;
+  }
+
+  @override
+  bool isSmsConversationScreenActive(String firstNumber, String secondNumber) {
+    final routeArgs = lastRouteArgs;
+    return routeArgs is SmsConversationScreenPageRouteArgs &&
+        routeArgs.firstNumber == firstNumber &&
+        routeArgs.secondNumber == secondNumber;
   }
 }

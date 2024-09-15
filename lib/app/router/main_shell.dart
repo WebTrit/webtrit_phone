@@ -243,7 +243,7 @@ class _MainShellState extends State<MainShell> {
                 )..add(const Connect());
               },
             ),
-          if (EnvironmentConfig.CHAT_FEATURE_ENABLE)
+          if (EnvironmentConfig.CHAT_FEATURE_ENABLE || EnvironmentConfig.SMS_FEATURE_ENABLE)
             BlocProvider<UnreadCountCubit>(
               create: (context) {
                 return UnreadCountCubit(

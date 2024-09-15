@@ -88,16 +88,16 @@ Future<void> _initFirebaseMessaging() async {
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     logger.info('onMessage: ${message.toMap()}');
-    FirebaseNotificationsBroker.handleForegroundMessage(message);
+    FirebaseNotificationsBroker.handleForegroundNotification(message);
   });
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     logger.info('onMessageOpenedApp: ${message.toMap()}');
-    FirebaseNotificationsBroker.handleOpenedMessage(message);
+    FirebaseNotificationsBroker.handleOpenedNotification(message);
   });
   final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
   if (initialMessage != null) {
     logger.info('initialMessage: ${initialMessage.toMap()}');
-    FirebaseNotificationsBroker.handleOpenedMessage(initialMessage);
+    FirebaseNotificationsBroker.handleOpenedNotification(initialMessage);
   }
 
   // actual FirebaseMessaging permission request executed in [PermissionsCubit]

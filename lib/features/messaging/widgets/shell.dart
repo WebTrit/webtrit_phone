@@ -18,16 +18,18 @@ class MessagingShell extends StatefulWidget {
 }
 
 class _MessagingShellState extends State<MessagingShell> {
-  late final ChatsNotificationsService chatsNotificationsService;
+  late final MessagingNotificationsService notificationsService;
 
   @override
   void initState() {
     super.initState();
     const chatsEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE;
-    if (!chatsEnabled) return;
+    const smsEnabled = EnvironmentConfig.SMS_FEATURE_ENABLE;
+    if (!chatsEnabled && !smsEnabled) return;
 
-    chatsNotificationsService = ChatsNotificationsService(
+    notificationsService = MessagingNotificationsService(
       context.read<ChatsRepository>(),
+      context.read<SmsRepository>(),
       context.read<ContactsRepository>(),
       context.read<RemoteNotificationRepository>(),
       context.read<LocalNotificationRepository>(),
@@ -35,28 +37,15 @@ class _MessagingShellState extends State<MessagingShell> {
       openChatList: onOpenChatList,
       openChat: onOpenChat,
       openConversation: onOpenConversation,
+      openSmsConversation: onOpenSmsConversation,
     );
 
-    // Wait for userId to be available to initialize chat notifications
-    // Todo: remove this when userId is available during main auth flow
-    final messagingBloc = context.read<MessagingBloc>();
-    Future.doWhile(() async {
-      if (!mounted) return false;
-
-      final userId = messagingBloc.state.userId;
-      if (userId != null) {
-        chatsNotificationsService.init(userId);
-        return false;
-      }
-
-      await Future.delayed(const Duration(milliseconds: 100));
-      return true;
-    });
+    notificationsService.init();
   }
 
   @override
   void dispose() {
-    chatsNotificationsService.dispose();
+    notificationsService.dispose();
     super.dispose();
   }
 
@@ -72,6 +61,17 @@ class _MessagingShellState extends State<MessagingShell> {
     context.router.root.navigate(
       MessagingRouterPageRoute(
         children: [const ConversationsScreenPageRoute(), GroupScreenPageRoute(chatId: chatId)],
+      ),
+    );
+  }
+
+  onOpenSmsConversation(firstNumber, secondNumber) {
+    context.router.root.navigate(
+      MessagingRouterPageRoute(
+        children: [
+          const ConversationsScreenPageRoute(),
+          SmsConversationScreenPageRoute(firstNumber: firstNumber, secondNumber: secondNumber)
+        ],
       ),
     );
   }
