@@ -23,6 +23,7 @@ class ConversationsScreen extends StatefulWidget {
 
 class _ConversationsScreenState extends State<ConversationsScreen> {
   late final contactsRepository = context.read<ContactsRepository>();
+  late final smsRepository = context.read<SmsRepository>();
 
   showBottomSheet() async {
     final result = await showModalBottomSheet(
@@ -63,6 +64,60 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
         children: [
           ConversationsScreenPageRoute(),
           GroupBuilderScreenPageRoute(),
+        ],
+      ));
+    }
+
+    // If the user selected a phone number, navigate to the sms screen
+    if (result is ContactPhone) {
+      final userNumbers = await smsRepository.getUserSmsNumbers();
+
+      if (!mounted) return;
+
+      if (userNumbers.isEmpty) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('No phone number'),
+            content: const Text('You need to have a phone number linked to you account to send SMS messages'),
+            actions: [
+              TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('OK')),
+            ],
+          ),
+        );
+        return;
+      }
+      String userNumber;
+      if (userNumbers.length > 1) {
+        final result = await showModalBottomSheet(
+          context: context,
+          builder: (context) => Column(
+            children: [
+              const ListTile(
+                title: Text('Select a number', style: TextStyle(fontWeight: FontWeight.bold)),
+              ),
+              ...userNumbers.map((number) {
+                return ListTile(
+                  title: Text(number),
+                  onTap: () => Navigator.of(context).pop(number),
+                );
+              }),
+            ],
+          ),
+        );
+
+        if (result == null) return;
+        userNumber = result;
+      } else {
+        userNumber = userNumbers.first;
+      }
+
+      if (!mounted) return;
+
+      context.router.navigate(MessagingRouterPageRoute(
+        children: [
+          const ConversationsScreenPageRoute(),
+          SmsConversationScreenPageRoute(firstNumber: userNumber, secondNumber: result.number),
         ],
       ));
     }
@@ -123,6 +178,10 @@ class _NewConversationPageState extends State<NewConversationPage> {
     Navigator.of(context).pop(contact);
   }
 
+  onContactPhoneConfirm(ContactPhone phone) {
+    Navigator.of(context).pop(phone);
+  }
+
   onNewGroupConfirm() {
     Navigator.of(context).pop(kGroupResult);
   }
@@ -149,17 +208,18 @@ class _NewConversationPageState extends State<NewConversationPage> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: ListTile(
-                title: Text(context.l10n.chats_ConversationsScreen_createGroup),
-                leading: Icon(
-                  Icons.group_add_rounded,
-                  color: colorScheme.onSurface.withOpacity(0.75),
+            if (chatFeatureEnabled)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: ListTile(
+                  title: Text(context.l10n.chats_ConversationsScreen_createGroup),
+                  leading: Icon(
+                    Icons.group_add_rounded,
+                    color: colorScheme.onSurface.withOpacity(0.75),
+                  ),
+                  onTap: onNewGroupConfirm,
                 ),
-                onTap: onNewGroupConfirm,
               ),
-            ),
             const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -209,7 +269,7 @@ class _NewConversationPageState extends State<NewConversationPage> {
                           for (final phone in contact.phones)
                             ListTile(
                               title: Text('Send sms to ${phone.number}'),
-                              onTap: () => {},
+                              onTap: () => onContactPhoneConfirm(phone),
                             ),
                       ],
                     ),
