@@ -99,7 +99,7 @@ class BottomMenuFeature {
     bool cacheSelectedTab = true,
   }) {
     final preferencesPath = cacheSelectedTab ? _appPreferences.getActiveMainFlavor() : null;
-    _activeTab = (preferencesPath != null
+    _activeTab = (preferencesPath != null && tabs.any((tab) => tab.flavor == preferencesPath)
         ? tabs.firstWhereOrNull((tab) => tab.flavor == preferencesPath)
         : tabs.firstWhereOrNull((tab) => tab.initial) ?? _tabs.first)!;
   }
