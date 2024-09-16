@@ -28,7 +28,7 @@ class MainScreenPage extends StatelessWidget {
     final bottomMenuManager = context.read<FeatureAccess>().bottomMenuFeature;
 
     final autoTabsRouter = AutoTabsRouter(
-      routes: _getRoutePages(bottomMenuManager.tabs),
+      routes: _buildRoutePages(bottomMenuManager.tabs),
       duration: Duration.zero,
       builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
@@ -88,7 +88,7 @@ class MainScreenPage extends StatelessWidget {
     return blocListener;
   }
 
-  List<PageRouteInfo> _getRoutePages(List<BottomMenuTab> tabs) {
+  List<PageRouteInfo> _buildRoutePages(List<BottomMenuTab> tabs) {
     return tabs.map<PageRouteInfo<dynamic>>((flavor) {
       switch (flavor.flavor) {
         case MainFlavor.favorites:
