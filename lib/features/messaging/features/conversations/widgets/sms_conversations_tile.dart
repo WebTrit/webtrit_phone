@@ -27,7 +27,15 @@ class SmsConversationsTile extends StatefulWidget {
 
 class _SmsConversationsTileState extends State<SmsConversationsTile> {
   onTap() {
-    throw UnimplementedError();
+    context.router.navigate(MessagingRouterPageRoute(
+      children: [
+        const ConversationsScreenPageRoute(),
+        SmsConversationScreenPageRoute(
+          firstNumber: widget.conversation.firstPhoneNumber,
+          secondNumber: widget.conversation.secondPhoneNumber,
+        ),
+      ],
+    ));
   }
 
   @override
