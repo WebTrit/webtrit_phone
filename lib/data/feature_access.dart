@@ -9,6 +9,9 @@ import 'app_themes.dart';
 
 final Logger _logger = Logger('FeatureAccess');
 
+// This class handles more than just data, as it encapsulates logic for configuring features.
+// Consider moving it into dedicated service components to improve separation of concerns
+// and maintainability.
 class FeatureAccess {
   static late FeatureAccess _instance;
 
