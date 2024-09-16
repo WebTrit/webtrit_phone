@@ -103,6 +103,9 @@ For guidance on configuring themes in your application, refer to the [Theme Sett
 ### 2. Custom Login Setup
 To learn how to configure and customize the login process, please consult the [Custom Login Setup](doc/custom_login/index.md) guide.
 
+### 3. Custom Bottom Menu
+To configure the bottom menu according to your application’s needs, refer to the [Bottom Menu Configuration](doc/bottom_menu_config/index.md) guide. 
+
 ## Make commands
 * `run` - Run the Flutter application
   ```bash

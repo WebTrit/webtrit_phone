@@ -33,6 +33,11 @@ void main() {
             return AppPreferences();
           },
         ),
+        Provider<FeatureAccess>(
+          create: (context) {
+            return FeatureAccess();
+          },
+        ),
         Provider<SecureStorage>(
           create: (context) {
             return SecureStorage();

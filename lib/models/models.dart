@@ -9,5 +9,6 @@ export 'keypad_key.dart';
 export 'local_contact.dart';
 export 'local_contact_email.dart';
 export 'local_contact_phone.dart';
+export 'main_flavor.dart';
 export 'recent.dart';
 export 'recents_visibility_filter.dart';

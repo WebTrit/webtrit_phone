@@ -6,7 +6,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
-import 'package:webtrit_phone/features/main/main.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 import '../models/models.dart';
 

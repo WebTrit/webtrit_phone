@@ -10,6 +10,7 @@ import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 import 'deeplinks.dart';
 
@@ -26,13 +27,14 @@ final _logger = Logger('AppRouter');
 class AppRouter extends _$AppRouter {
   AppRouter(
     this._appBloc,
-    this._appPreferences,
     this._appPermissions,
+    this._initialMainFlavor,
   );
 
   final AppBloc _appBloc;
-  final AppPreferences _appPreferences;
   final AppPermissions _appPermissions;
+
+  final MainFlavor _initialMainFlavor;
 
   String? get coreUrl => _appBloc.state.coreUrl;
   String? get token => _appBloc.state.token;
@@ -134,7 +136,7 @@ class AppRouter extends _$AppRouter {
                   children: [
                     RedirectRoute(
                       path: '',
-                      redirectTo: _appPreferences.getActiveMainFlavor().name,
+                      redirectTo: _initialMainFlavor.name,
                     ),
                     AutoRoute(
                       page: FavoritesRouterPageRoute.page,
