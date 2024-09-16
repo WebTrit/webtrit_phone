@@ -8,7 +8,7 @@ abstract class MainScreenRouteStateRepository {
   void setLastRouteArgs(dynamic lastRouteArgs);
 
   bool isMessagingTabActive();
-  bool isChatScreenActive(int chatId);
+  bool isGroupScreenActive(int chatId);
   bool isConversationScreenActive(String participantId);
   bool isSmsConversationScreenActive(String firstNumber, String secondNumber);
 }
@@ -31,7 +31,7 @@ class MainScreenRouteStateRepositoryAutoRouteImpl implements MainScreenRouteStat
   bool isMessagingTabActive() => _activeTabPage == MessagingRouterPageRoute.name;
 
   @override
-  bool isChatScreenActive(int chatId) {
+  bool isGroupScreenActive(int chatId) {
     final routeArgs = lastRouteArgs;
     return routeArgs is GroupScreenPageRouteArgs && routeArgs.chatId == chatId;
   }

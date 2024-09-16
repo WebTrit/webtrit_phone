@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:logging/logging.dart';
-import 'package:webtrit_phone/data/app_preferences.dart';
 
+import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -54,8 +54,8 @@ class MessagingNotificationsService {
         _dismissNotification(message.id);
       }
     }
-    // TODO: handle read cursor above displayed notifications and dismiss them
     // TODO: handle sms messages events
+    // TODO: handle read cursor above displayed notifications and dismiss them
   }
 
   Future<void> _localActionHandler(LocalNotificationActionDTO action) async {
@@ -78,24 +78,16 @@ class MessagingNotificationsService {
     try {
       final title = message.title;
       final body = message.body;
-      final messageId = int.tryParse(message.data['msg_id'] ?? message.data['chat_message_id'] ?? '');
+      final messageId = int.tryParse(message.data['chat_message_id']);
       if (title == null || body == null || messageId == null) return;
 
-      // TODO: remove fallback keys
-      final chatId = int.tryParse(message.data['chat_id'] ?? '');
-      final senderId = message.data['sender_id'] ?? message.data['chat_message_sender_id'];
-      if (chatId != null && senderId != null) {
-        _displayChatNotification(messageId, chatId, senderId, title, body);
-      }
+      final chatId = int.tryParse(message.data['chat_id']);
+      if (chatId != null) _displayChatNotification(messageId, chatId, title, body);
 
-      final smsConversationId = int.tryParse(message.data['sms_conversation_id'] ?? '');
-      final firstNumber = message.data['first_number'];
-      final secondNumber = message.data['second_number'];
-      if (smsConversationId != null && firstNumber != null && secondNumber != null) {
-        _displaySmsNotification(messageId, smsConversationId, firstNumber, secondNumber, title, body);
-      }
+      final conversationId = int.tryParse(message.data['sms_conversation_id']);
+      if (conversationId != null) _displaySmsNotification(messageId, conversationId, title, body);
 
-      _logger.info('Foreground message handle result: chatId - $chatId, smsConversationId- $smsConversationId');
+      _logger.info('Foreground message handle result: chatId - $chatId, smsConversationId- $conversationId');
     } on Exception catch (e) {
       _logger.severe('Error handling foreground remote message: $e');
     }
@@ -147,47 +139,62 @@ class MessagingNotificationsService {
     openSmsConversation(firstNumber, secondNumber);
   }
 
-  Future _displayChatNotification(int messageId, int chatId, String senderId, String title, String body) async {
-    _logger.info('_displayChatNotification $messageId, $chatId, $senderId, $title, $body');
-    if (_shouldSkipChatNotification(chatId, senderId)) return;
+  Future _displayChatNotification(int messageId, int chatId, String title, String body) async {
+    _logger.info('_displayChatNotification $messageId, $chatId,$title, $body');
+
+    final chat = await _tryGetChat(chatId);
+    if (chat != null && _shouldSkipChatNotification(chat)) return;
 
     localNotificationRepository.pusNotification(messageId, title, body, {
       'chatId': chatId.toString(),
-      'senderId': senderId,
     });
   }
 
-  Future _displaySmsNotification(
-      int messageId, int conversationId, String firstNumber, String secondNumber, String title, String body) async {
-    _logger.info('_displaySmsNotification $messageId, $conversationId, $firstNumber, $secondNumber, $title, $body');
-    if (_shouldSkipSmsNotification(firstNumber, secondNumber)) return;
+  Future _displaySmsNotification(int messageId, int conversationId, String title, String body) async {
+    _logger.info('_displaySmsNotification $messageId, $conversationId, $title, $body');
+
+    final conversation = await _tryGetSmsConversation(conversationId);
+    if (conversation != null && _shouldSkipSmsNotification(conversation)) return;
 
     localNotificationRepository.pusNotification(messageId, title, body, {
       'smsConversationId': conversationId.toString(),
-      'firstNumber': firstNumber,
-      'secondNumber': secondNumber,
     });
   }
 
-  bool _shouldSkipChatNotification(int chatId, String participantId) {
-    _logger.info('_shouldSkipChatNotification chat: $chatId participant: $participantId');
+  bool _shouldSkipChatNotification(Chat chat) {
+    final chatType = chat.type;
+    final chatId = chat.id;
+    _logger.info('_shouldSkipChatNotification chat: $chatId type: $chatType');
+
     final messagingTabActive = mainScreenRouteStateRepository.isMessagingTabActive();
     _logger.info('messagingTabActive: $messagingTabActive');
-    final chatScreenActive = mainScreenRouteStateRepository.isChatScreenActive(chatId);
-    _logger.info('chatScreen: $chatScreenActive');
-    final conversationScreenActive = mainScreenRouteStateRepository.isConversationScreenActive(participantId);
-    _logger.info('conversationScreen: $conversationScreenActive');
 
-    // Skip if chats tab is active and chat screen inside
-    if (messagingTabActive && chatScreenActive) return true;
-    // Skip if chats tab is active and conversation screen inside
-    if (messagingTabActive && conversationScreenActive) return true;
+    if (chatType == ChatType.group) {
+      final groupScreenActive = mainScreenRouteStateRepository.isGroupScreenActive(chat.id);
+      _logger.info('groupScreenActive: $groupScreenActive');
+
+      // Skip if chats tab is active and group chat screen inside
+      return messagingTabActive && groupScreenActive;
+    }
+
+    if (chatType == ChatType.dialog) {
+      if (_userId == null) return false;
+      final participantId = chat.members.firstWhere((m) => m.userId != _userId).userId;
+      final conversationScreenActive = mainScreenRouteStateRepository.isConversationScreenActive(participantId);
+      _logger.info('conversationScreen: $conversationScreenActive');
+
+      // Skip if chats tab is active and conversation screen inside
+      if (messagingTabActive && conversationScreenActive) return true;
+    }
 
     return false;
   }
 
-  bool _shouldSkipSmsNotification(String firstNumber, String secondNumber) {
+  bool _shouldSkipSmsNotification(SmsConversation conversation) {
+    final firstNumber = conversation.firstPhoneNumber;
+    final secondNumber = conversation.secondPhoneNumber;
     _logger.info('_shouldSkipSmsNotification firstNumber: $firstNumber second: $secondNumber');
+
     final messagingTabActive = mainScreenRouteStateRepository.isMessagingTabActive();
     _logger.info('messagingTabActive: $messagingTabActive');
     final smsConversationScreenActive =
