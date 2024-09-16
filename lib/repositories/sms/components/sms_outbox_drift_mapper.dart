@@ -25,4 +25,22 @@ mixin SmsOutboxDriftMapper {
       sendAttempts: entry.sendAttempts,
     );
   }
+
+  SmsOutboxMessageDeleteEntry smsOutboxMessageDeleteEntryFromDrift(SmsOutboxMessageDeleteData data) {
+    return SmsOutboxMessageDeleteEntry(
+      id: data.id,
+      idKey: data.idKey,
+      conversationId: data.conversationId,
+      sendAttempts: data.sendAttempts,
+    );
+  }
+
+  SmsOutboxMessageDeleteData smsOutboxMessageDeleteEntryToDrift(SmsOutboxMessageDeleteEntry entry) {
+    return SmsOutboxMessageDeleteData(
+      id: entry.id,
+      idKey: entry.idKey,
+      conversationId: entry.conversationId,
+      sendAttempts: entry.sendAttempts,
+    );
+  }
 }

@@ -1006,6 +1006,11 @@ class SmsMessages extends Table with TableInfo {
       type: DriftSqlType.int,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<int> deletedAtRemoteUsec = GeneratedColumn<int>(
+      'deleted_at_remote_usec', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -1017,7 +1022,8 @@ class SmsMessages extends Table with TableInfo {
         sendingStatus,
         content,
         createdAtRemoteUsec,
-        updatedAtRemoteUsec
+        updatedAtRemoteUsec,
+        deletedAtRemoteUsec
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1165,6 +1171,59 @@ class SmsOutboxMessages extends Table with TableInfo {
   bool get dontWriteConstraints => true;
 }
 
+class SmsOutboxMessageDeletes extends Table with TableInfo {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  SmsOutboxMessageDeletes(this.attachedDatabase, [this._alias]);
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<String> idKey = GeneratedColumn<String>(
+      'id_key', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<int> conversationId = GeneratedColumn<int>(
+      'conversation_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints:
+          'NOT NULL REFERENCES sms_conversations(id)ON DELETE CASCADE');
+  late final GeneratedColumn<int> sendAttempts = GeneratedColumn<int>(
+      'send_attempts', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NOT NULL DEFAULT 0',
+      defaultValue: const CustomExpression('0'));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, idKey, conversationId, sendAttempts];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'sms_outbox_message_deletes';
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Never map(Map<String, dynamic> data, {String? tablePrefix}) {
+    throw UnsupportedError('TableInfo.map in schema verification code');
+  }
+
+  @override
+  SmsOutboxMessageDeletes createAlias(String alias) {
+    return SmsOutboxMessageDeletes(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints => const ['PRIMARY KEY(id)'];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
 class UserSmsNumbers extends Table with TableInfo {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -1226,6 +1285,8 @@ class DatabaseAtV8 extends GeneratedDatabase {
   late final SmsMessageSyncCursors smsMessageSyncCursors =
       SmsMessageSyncCursors(this);
   late final SmsOutboxMessages smsOutboxMessages = SmsOutboxMessages(this);
+  late final SmsOutboxMessageDeletes smsOutboxMessageDeletes =
+      SmsOutboxMessageDeletes(this);
   late final UserSmsNumbers userSmsNumbers = UserSmsNumbers(this);
   late final Trigger contactsAfterInsertTrigger = Trigger(
       'CREATE TRIGGER contacts_after_insert_trigger AFTER INSERT ON contacts BEGIN UPDATE contacts SET inserted_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id AND inserted_at IS NULL;UPDATE contacts SET updated_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id;END',
@@ -1268,6 +1329,7 @@ class DatabaseAtV8 extends GeneratedDatabase {
         smsMessages,
         smsMessageSyncCursors,
         smsOutboxMessages,
+        smsOutboxMessageDeletes,
         userSmsNumbers,
         contactsAfterInsertTrigger,
         contactsAfterUpdateTrigger,

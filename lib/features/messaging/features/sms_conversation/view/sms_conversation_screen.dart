@@ -125,9 +125,11 @@ class _SmsConversationScreenState extends State<SmsConversationScreen> {
                         userNumber: userNumber,
                         messages: state.messages,
                         outboxMessages: state.outboxMessages,
+                        outboxMessageDeletes: state.outboxMessageDeletes,
                         fetchingHistory: state.fetchingHistory,
                         historyEndReached: state.historyEndReached,
                         onSendMessage: (content) => conversationCubit.sendMessage(content),
+                        onDelete: (refMessage) => conversationCubit.deleteMessage(refMessage),
                         onFetchHistory: conversationCubit.fetchHistory,
                       );
                     }

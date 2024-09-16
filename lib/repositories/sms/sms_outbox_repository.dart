@@ -29,6 +29,26 @@ class SmsOutboxRepository with SmsOutboxDriftMapper {
     return _smsDao.deleteOutboxMessage(idKey);
   }
 
+  Future<List<SmsOutboxMessageDeleteEntry>> getOutboxMessageDeletes() async {
+    final entriesData = await _smsDao.getOutboxMessageDeletes();
+    return entriesData.map(smsOutboxMessageDeleteEntryFromDrift).toList();
+  }
+
+  Stream<List<SmsOutboxMessageDeleteEntry>> watchOutboxMessageDeletes() {
+    return _smsDao.watchOutboxMessageDeletes().map((entriesData) {
+      return entriesData.map(smsOutboxMessageDeleteEntryFromDrift).toList();
+    });
+  }
+
+  Future<int> upsertOutboxMessageDelete(SmsOutboxMessageDeleteEntry entry) {
+    final entryData = smsOutboxMessageDeleteEntryToDrift(entry);
+    return _smsDao.upsertOutboxMessageDelete(entryData);
+  }
+
+  Future<int> deleteOutboxMessageDelete(int id) {
+    return _smsDao.deleteOutboxMessageDelete(id);
+  }
+
   Future<void> wipeOutboxData() async {
     await _smsDao.wipeOutboxData();
   }

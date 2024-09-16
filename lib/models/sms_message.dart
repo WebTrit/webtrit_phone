@@ -14,6 +14,7 @@ class SmsMessage extends Equatable {
   final String content;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final DateTime? deletedAt;
 
   const SmsMessage({
     required this.id,
@@ -26,6 +27,7 @@ class SmsMessage extends Equatable {
     required this.content,
     required this.createdAt,
     required this.updatedAt,
+    required this.deletedAt,
   });
 
   @override
@@ -40,6 +42,7 @@ class SmsMessage extends Equatable {
         content,
         createdAt,
         updatedAt,
+        deletedAt,
       ];
 
   @override
@@ -57,6 +60,7 @@ class SmsMessage extends Equatable {
       'content': content,
       'inserted_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
+      'deleted_at': deletedAt?.toIso8601String(),
     };
   }
 
@@ -72,6 +76,7 @@ class SmsMessage extends Equatable {
       content: map['content'] as String,
       createdAt: DateTime.parse(map['inserted_at'] as String),
       updatedAt: DateTime.parse(map['updated_at'] as String),
+      deletedAt: map['deleted_at'] != null ? DateTime.parse(map['deleted_at'] as String) : null,
     );
   }
 

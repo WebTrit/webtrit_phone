@@ -17,12 +17,18 @@ class SmsMessageView extends StatefulWidget {
     required this.userNumber,
     this.message,
     this.outboxMessage,
+    this.outboxDeleteEntry,
+    required this.handleDelete,
     this.onRendered,
   });
 
   final String? userNumber;
   final SmsMessage? message;
   final SmsOutboxMessageEntry? outboxMessage;
+  final SmsOutboxMessageDeleteEntry? outboxDeleteEntry;
+
+  /// Callback function on popup menu delete item selected
+  final Function(SmsMessage refMessage) handleDelete;
 
   /// Callback function that is called when the message is mounted by flutter framework
   /// using [PostFrameCallback] to ensure that the message is rendered before calling the function
@@ -66,6 +72,7 @@ class _SmsMessageViewState extends State<SmsMessageView> {
 
     final message = widget.message;
     final outboxMessage = widget.outboxMessage;
+    final outboxDeleteEntry = widget.outboxDeleteEntry;
 
     final content = outboxMessage?.content ?? message?.content ?? '';
     final hasContent = (content.isNotEmpty == true) && content != '-';
@@ -73,6 +80,7 @@ class _SmsMessageViewState extends State<SmsMessageView> {
     final senderNumber = message?.fromPhoneNumber ?? widget.userNumber;
     final isMine = senderNumber == widget.userNumber;
     final isSended = message != null;
+    final isDeleted = outboxDeleteEntry != null || message?.deletedAt != null;
 
     final popupItems = [
       if (hasContent)
@@ -81,6 +89,15 @@ class _SmsMessageViewState extends State<SmsMessageView> {
           child: ListTile(
             title: Text(context.l10n.chats_MessageView_textcopy),
             leading: const Icon(Icons.copy_rounded),
+            dense: true,
+          ),
+        ),
+      if (isMine && isSended && !isDeleted)
+        PopupMenuItem(
+          onTap: () => widget.handleDelete(message),
+          child: ListTile(
+            title: Text(context.l10n.chats_MessageView_delete),
+            leading: const Icon(Icons.remove),
             dense: true,
           ),
         ),
@@ -141,7 +158,12 @@ class _SmsMessageViewState extends State<SmsMessageView> {
                     children: [
                       Text(senderNumber ?? '', style: theme.userNameStyle),
                       const SizedBox(height: 4),
-                      MessageBody(text: content, style: theme.contentStyle),
+                      if (!isDeleted) ...[
+                        MessageBody(text: content, style: theme.contentStyle),
+                      ],
+                      if (isDeleted) ...[
+                        Text(context.l10n.chats_MessageView_deleted, style: theme.subContentStyle),
+                      ],
                       const SizedBox(height: 4),
                       Row(
                         mainAxisSize: MainAxisSize.max,

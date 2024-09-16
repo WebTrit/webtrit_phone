@@ -27,6 +27,7 @@ part 'app_database.g.dart';
     SmsMessagesTable,
     SmsMessageSyncCursorTable,
     SmsOutboxMessagesTable,
+    SmsOutboxMessageDeleteTable,
     UserSmsNumbersTable,
   ],
   daos: [
@@ -505,6 +506,8 @@ class SmsMessagesTable extends Table {
   IntColumn get createdAtRemoteUsec => integer()();
 
   IntColumn get updatedAtRemoteUsec => integer()();
+
+  IntColumn get deletedAtRemoteUsec => integer().nullable()();
 }
 
 enum SmsSyncCursorTypeEnum { oldest, newest }
@@ -544,6 +547,23 @@ class SmsOutboxMessagesTable extends Table {
   TextColumn get recepientId => text().nullable()();
 
   TextColumn get content => text()();
+
+  IntColumn get sendAttempts => integer().withDefault(const Constant(0))();
+}
+
+@DataClassName('SmsOutboxMessageDeleteData')
+class SmsOutboxMessageDeleteTable extends Table {
+  @override
+  String get tableName => 'sms_outbox_message_deletes';
+
+  @override
+  Set<Column> get primaryKey => {id};
+
+  IntColumn get id => integer()();
+
+  TextColumn get idKey => text()();
+
+  IntColumn get conversationId => integer().references(SmsConversationsTable, #id, onDelete: KeyAction.cascade)();
 
   IntColumn get sendAttempts => integer().withDefault(const Constant(0))();
 }
@@ -1308,6 +1328,7 @@ typedef ConversationDataWithLastMessage = (SmsConversationData conversation, Sms
   SmsMessagesTable,
   SmsMessageSyncCursorTable,
   SmsOutboxMessagesTable,
+  SmsOutboxMessageDeleteTable,
   UserSmsNumbersTable,
 ])
 class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
@@ -1405,6 +1426,24 @@ class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
     return (delete(smsOutboxMessagesTable)..where((t) => t.idKey.equals(idKey))).go();
   }
 
+  // Outbox message deletes
+
+  Future<List<SmsOutboxMessageDeleteData>> getOutboxMessageDeletes() {
+    return select(smsOutboxMessageDeleteTable).get();
+  }
+
+  Stream<List<SmsOutboxMessageDeleteData>> watchOutboxMessageDeletes() {
+    return select(smsOutboxMessageDeleteTable).watch();
+  }
+
+  Future<int> upsertOutboxMessageDelete(Insertable<SmsOutboxMessageDeleteData> smsOutboxMessageDelete) {
+    return into(smsOutboxMessageDeleteTable).insertOnConflictUpdate(smsOutboxMessageDelete);
+  }
+
+  Future<int> deleteOutboxMessageDelete(int id) {
+    return (delete(smsOutboxMessageDeleteTable)..where((t) => t.id.equals(id))).go();
+  }
+
   // Sync cursors
 
   Future<SmsMessageSyncCursorData?> getSyncCursor(int conversationId, SmsSyncCursorTypeEnum cursorType) {
@@ -1446,6 +1485,7 @@ class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
   Future<void> wipeOutboxData() async {
     await transaction(() async {
       await delete(smsOutboxMessagesTable).go();
+      await delete(smsOutboxMessageDeleteTable).go();
     });
   }
 }

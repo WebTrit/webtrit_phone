@@ -40,6 +40,7 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
   StreamSubscription? _chatRemoveSub;
   StreamSubscription? _messagesSub;
   StreamSubscription? _outboxMessagesSub;
+  StreamSubscription? _outboxMessageDeletesSub;
 
   void restart() {
     _logger.info('Restarting sms conversation with $_creds');
@@ -62,6 +63,21 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
       content: content,
     );
     _outboxRepository.upsertOutboxMessage(outboxEntry);
+  }
+
+  Future deleteMessage(SmsMessage message) async {
+    final state = this.state;
+    if (state is! SCSReady || state.busy) return false;
+
+    final conversationId = state.conversation?.id;
+    if (conversationId == null) return false;
+
+    final outboxEntry = SmsOutboxMessageDeleteEntry(
+      id: message.id,
+      idKey: message.idKey,
+      conversationId: conversationId,
+    );
+    _outboxRepository.upsertOutboxMessageDelete(outboxEntry);
   }
 
   Future<bool> deleteConversation() async {
@@ -156,7 +172,6 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
       _chatRemoveSub = _conversationRemoveSubFactory(_handleConversationRemove);
       _outboxMessagesSub = _outboxMessagesSubFactory(_handleOutboxMessagesUpdate);
 
-      // if (c != null) _conversation = c;
       if (c != null) await _initMessages(c.id);
     } catch (e) {
       emit(SmsConversationState.error(_creds, e));
@@ -176,6 +191,10 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     // Subscribe to chat messages updates eg new messages, edited, deleted, etc. and merge them with the current list
     _messagesSub?.cancel();
     _messagesSub = _messagesSubFactory((msg) => _handleMessageUpdate(conversationId, msg));
+
+    // Subscribe to outbox messages updates
+    _outboxMessageDeletesSub =
+        _outboxMessageDeletesSubFactory((entries) => _handleOutboxMessageDeletesUpdate(conversationId, entries));
   }
 
   StreamSubscription _conversationUpdateSubFactory(void Function(SmsConversation) onArrive) {
@@ -244,6 +263,18 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     emit(state.copyWith(outboxMessages: conversationEntries));
   }
 
+  StreamSubscription _outboxMessageDeletesSubFactory(void Function(List<SmsOutboxMessageDeleteEntry>) onArrive) {
+    return _outboxRepository.watchOutboxMessageDeletes().listen((entries) => onArrive(entries));
+  }
+
+  void _handleOutboxMessageDeletesUpdate(int conversationId, List<SmsOutboxMessageDeleteEntry> entries) {
+    _logger.info('_handleOutboxMessageDeletesUpdate: ${entries.length}');
+    final state = this.state;
+    if (state is! SCSReady) return;
+    final conversationEntries = entries.where((e) => e.conversationId == conversationId).toList();
+    emit(state.copyWith(outboxMessageDeletes: conversationEntries));
+  }
+
   @override
   Future<void> close() {
     _logger.info('Closing sms conversation with $_creds');
@@ -256,5 +287,6 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     _chatRemoveSub?.cancel();
     _messagesSub?.cancel();
     _outboxMessagesSub?.cancel();
+    _outboxMessageDeletesSub?.cancel();
   }
 }

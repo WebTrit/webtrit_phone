@@ -15,8 +15,10 @@ class SmsMessageListView extends StatefulWidget {
     required this.messages,
     required this.fetchingHistory,
     required this.outboxMessages,
+    required this.outboxMessageDeletes,
     required this.historyEndReached,
     required this.onSendMessage,
+    required this.onDelete,
     required this.onFetchHistory,
     super.key,
   });
@@ -24,9 +26,11 @@ class SmsMessageListView extends StatefulWidget {
   final String? userNumber;
   final List<SmsMessage> messages;
   final List<SmsOutboxMessageEntry> outboxMessages;
+  final List<SmsOutboxMessageDeleteEntry> outboxMessageDeletes;
   final bool fetchingHistory;
   final bool historyEndReached;
   final Function(String content) onSendMessage;
+  final Function(SmsMessage refMessage) onDelete;
   final Future Function() onFetchHistory;
 
   @override
@@ -62,8 +66,9 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
     super.didUpdateWidget(oldWidget);
     bool messagesChanged() => !listEquals(oldWidget.messages, widget.messages);
     bool outboxMessagesChanged() => !listEquals(oldWidget.outboxMessages, widget.outboxMessages);
+    bool outboxMessageDeletesChanged() => !listEquals(oldWidget.outboxMessageDeletes, widget.outboxMessageDeletes);
 
-    final shouldRemap = outboxMessagesChanged() || messagesChanged();
+    final shouldRemap = outboxMessagesChanged() || outboxMessageDeletesChanged() || messagesChanged();
     if (shouldRemap) mapElements();
   }
 
@@ -75,6 +80,7 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
         SmsMessageView(
           userNumber: widget.userNumber,
           outboxMessage: entry,
+          handleDelete: handleDelete,
         ),
       );
     }
@@ -82,6 +88,7 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
     for (var i = 0; i <= widget.messages.length - 1; i++) {
       final message = widget.messages[i];
       final newEntry = widget.outboxMessages.firstWhereOrNull((element) => element.idKey == message.idKey);
+      final deleteEntry = widget.outboxMessageDeletes.firstWhereOrNull((element) => element.idKey == message.idKey);
 
       if (newEntry != null) continue;
 
@@ -114,6 +121,8 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
         SmsMessageView(
           userNumber: widget.userNumber,
           message: message,
+          outboxDeleteEntry: deleteEntry,
+          handleDelete: handleDelete,
           key: ObjectKey(message),
         ),
       );
@@ -128,6 +137,10 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
 
     inputController.text = '';
     FocusScope.of(context).unfocus();
+  }
+
+  void handleDelete(SmsMessage message) {
+    widget.onDelete(message);
   }
 
   @override

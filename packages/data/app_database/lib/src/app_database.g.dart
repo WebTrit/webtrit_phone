@@ -5290,6 +5290,12 @@ class $SmsMessagesTableTable extends SmsMessagesTable
   late final GeneratedColumn<int> updatedAtRemoteUsec = GeneratedColumn<int>(
       'updated_at_remote_usec', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _deletedAtRemoteUsecMeta =
+      const VerificationMeta('deletedAtRemoteUsec');
+  @override
+  late final GeneratedColumn<int> deletedAtRemoteUsec = GeneratedColumn<int>(
+      'deleted_at_remote_usec', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -5301,7 +5307,8 @@ class $SmsMessagesTableTable extends SmsMessagesTable
         sendingStatus,
         content,
         createdAtRemoteUsec,
-        updatedAtRemoteUsec
+        updatedAtRemoteUsec,
+        deletedAtRemoteUsec
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -5377,6 +5384,12 @@ class $SmsMessagesTableTable extends SmsMessagesTable
     } else if (isInserting) {
       context.missing(_updatedAtRemoteUsecMeta);
     }
+    if (data.containsKey('deleted_at_remote_usec')) {
+      context.handle(
+          _deletedAtRemoteUsecMeta,
+          deletedAtRemoteUsec.isAcceptableOrUnknown(
+              data['deleted_at_remote_usec']!, _deletedAtRemoteUsecMeta));
+    }
     return context;
   }
 
@@ -5407,6 +5420,8 @@ class $SmsMessagesTableTable extends SmsMessagesTable
           DriftSqlType.int, data['${effectivePrefix}created_at_remote_usec'])!,
       updatedAtRemoteUsec: attachedDatabase.typeMapping.read(
           DriftSqlType.int, data['${effectivePrefix}updated_at_remote_usec'])!,
+      deletedAtRemoteUsec: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}deleted_at_remote_usec']),
     );
   }
 
@@ -5431,6 +5446,7 @@ class SmsMessageData extends DataClass implements Insertable<SmsMessageData> {
   final String content;
   final int createdAtRemoteUsec;
   final int updatedAtRemoteUsec;
+  final int? deletedAtRemoteUsec;
   const SmsMessageData(
       {required this.id,
       required this.idKey,
@@ -5441,7 +5457,8 @@ class SmsMessageData extends DataClass implements Insertable<SmsMessageData> {
       required this.sendingStatus,
       required this.content,
       required this.createdAtRemoteUsec,
-      required this.updatedAtRemoteUsec});
+      required this.updatedAtRemoteUsec,
+      this.deletedAtRemoteUsec});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -5458,6 +5475,9 @@ class SmsMessageData extends DataClass implements Insertable<SmsMessageData> {
     map['content'] = Variable<String>(content);
     map['created_at_remote_usec'] = Variable<int>(createdAtRemoteUsec);
     map['updated_at_remote_usec'] = Variable<int>(updatedAtRemoteUsec);
+    if (!nullToAbsent || deletedAtRemoteUsec != null) {
+      map['deleted_at_remote_usec'] = Variable<int>(deletedAtRemoteUsec);
+    }
     return map;
   }
 
@@ -5473,6 +5493,9 @@ class SmsMessageData extends DataClass implements Insertable<SmsMessageData> {
       content: Value(content),
       createdAtRemoteUsec: Value(createdAtRemoteUsec),
       updatedAtRemoteUsec: Value(updatedAtRemoteUsec),
+      deletedAtRemoteUsec: deletedAtRemoteUsec == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAtRemoteUsec),
     );
   }
 
@@ -5493,6 +5516,8 @@ class SmsMessageData extends DataClass implements Insertable<SmsMessageData> {
           serializer.fromJson<int>(json['createdAtRemoteUsec']),
       updatedAtRemoteUsec:
           serializer.fromJson<int>(json['updatedAtRemoteUsec']),
+      deletedAtRemoteUsec:
+          serializer.fromJson<int?>(json['deletedAtRemoteUsec']),
     );
   }
   @override
@@ -5510,6 +5535,7 @@ class SmsMessageData extends DataClass implements Insertable<SmsMessageData> {
       'content': serializer.toJson<String>(content),
       'createdAtRemoteUsec': serializer.toJson<int>(createdAtRemoteUsec),
       'updatedAtRemoteUsec': serializer.toJson<int>(updatedAtRemoteUsec),
+      'deletedAtRemoteUsec': serializer.toJson<int?>(deletedAtRemoteUsec),
     };
   }
 
@@ -5523,7 +5549,8 @@ class SmsMessageData extends DataClass implements Insertable<SmsMessageData> {
           SmsSendingStatusEnum? sendingStatus,
           String? content,
           int? createdAtRemoteUsec,
-          int? updatedAtRemoteUsec}) =>
+          int? updatedAtRemoteUsec,
+          Value<int?> deletedAtRemoteUsec = const Value.absent()}) =>
       SmsMessageData(
         id: id ?? this.id,
         idKey: idKey ?? this.idKey,
@@ -5535,6 +5562,9 @@ class SmsMessageData extends DataClass implements Insertable<SmsMessageData> {
         content: content ?? this.content,
         createdAtRemoteUsec: createdAtRemoteUsec ?? this.createdAtRemoteUsec,
         updatedAtRemoteUsec: updatedAtRemoteUsec ?? this.updatedAtRemoteUsec,
+        deletedAtRemoteUsec: deletedAtRemoteUsec.present
+            ? deletedAtRemoteUsec.value
+            : this.deletedAtRemoteUsec,
       );
   SmsMessageData copyWithCompanion(SmsMessageDataCompanion data) {
     return SmsMessageData(
@@ -5561,6 +5591,9 @@ class SmsMessageData extends DataClass implements Insertable<SmsMessageData> {
       updatedAtRemoteUsec: data.updatedAtRemoteUsec.present
           ? data.updatedAtRemoteUsec.value
           : this.updatedAtRemoteUsec,
+      deletedAtRemoteUsec: data.deletedAtRemoteUsec.present
+          ? data.deletedAtRemoteUsec.value
+          : this.deletedAtRemoteUsec,
     );
   }
 
@@ -5576,7 +5609,8 @@ class SmsMessageData extends DataClass implements Insertable<SmsMessageData> {
           ..write('sendingStatus: $sendingStatus, ')
           ..write('content: $content, ')
           ..write('createdAtRemoteUsec: $createdAtRemoteUsec, ')
-          ..write('updatedAtRemoteUsec: $updatedAtRemoteUsec')
+          ..write('updatedAtRemoteUsec: $updatedAtRemoteUsec, ')
+          ..write('deletedAtRemoteUsec: $deletedAtRemoteUsec')
           ..write(')'))
         .toString();
   }
@@ -5592,7 +5626,8 @@ class SmsMessageData extends DataClass implements Insertable<SmsMessageData> {
       sendingStatus,
       content,
       createdAtRemoteUsec,
-      updatedAtRemoteUsec);
+      updatedAtRemoteUsec,
+      deletedAtRemoteUsec);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -5606,7 +5641,8 @@ class SmsMessageData extends DataClass implements Insertable<SmsMessageData> {
           other.sendingStatus == this.sendingStatus &&
           other.content == this.content &&
           other.createdAtRemoteUsec == this.createdAtRemoteUsec &&
-          other.updatedAtRemoteUsec == this.updatedAtRemoteUsec);
+          other.updatedAtRemoteUsec == this.updatedAtRemoteUsec &&
+          other.deletedAtRemoteUsec == this.deletedAtRemoteUsec);
 }
 
 class SmsMessageDataCompanion extends UpdateCompanion<SmsMessageData> {
@@ -5620,6 +5656,7 @@ class SmsMessageDataCompanion extends UpdateCompanion<SmsMessageData> {
   final Value<String> content;
   final Value<int> createdAtRemoteUsec;
   final Value<int> updatedAtRemoteUsec;
+  final Value<int?> deletedAtRemoteUsec;
   const SmsMessageDataCompanion({
     this.id = const Value.absent(),
     this.idKey = const Value.absent(),
@@ -5631,6 +5668,7 @@ class SmsMessageDataCompanion extends UpdateCompanion<SmsMessageData> {
     this.content = const Value.absent(),
     this.createdAtRemoteUsec = const Value.absent(),
     this.updatedAtRemoteUsec = const Value.absent(),
+    this.deletedAtRemoteUsec = const Value.absent(),
   });
   SmsMessageDataCompanion.insert({
     this.id = const Value.absent(),
@@ -5643,6 +5681,7 @@ class SmsMessageDataCompanion extends UpdateCompanion<SmsMessageData> {
     required String content,
     required int createdAtRemoteUsec,
     required int updatedAtRemoteUsec,
+    this.deletedAtRemoteUsec = const Value.absent(),
   })  : idKey = Value(idKey),
         externalId = Value(externalId),
         conversationId = Value(conversationId),
@@ -5663,6 +5702,7 @@ class SmsMessageDataCompanion extends UpdateCompanion<SmsMessageData> {
     Expression<String>? content,
     Expression<int>? createdAtRemoteUsec,
     Expression<int>? updatedAtRemoteUsec,
+    Expression<int>? deletedAtRemoteUsec,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -5677,6 +5717,8 @@ class SmsMessageDataCompanion extends UpdateCompanion<SmsMessageData> {
         'created_at_remote_usec': createdAtRemoteUsec,
       if (updatedAtRemoteUsec != null)
         'updated_at_remote_usec': updatedAtRemoteUsec,
+      if (deletedAtRemoteUsec != null)
+        'deleted_at_remote_usec': deletedAtRemoteUsec,
     });
   }
 
@@ -5690,7 +5732,8 @@ class SmsMessageDataCompanion extends UpdateCompanion<SmsMessageData> {
       Value<SmsSendingStatusEnum>? sendingStatus,
       Value<String>? content,
       Value<int>? createdAtRemoteUsec,
-      Value<int>? updatedAtRemoteUsec}) {
+      Value<int>? updatedAtRemoteUsec,
+      Value<int?>? deletedAtRemoteUsec}) {
     return SmsMessageDataCompanion(
       id: id ?? this.id,
       idKey: idKey ?? this.idKey,
@@ -5702,6 +5745,7 @@ class SmsMessageDataCompanion extends UpdateCompanion<SmsMessageData> {
       content: content ?? this.content,
       createdAtRemoteUsec: createdAtRemoteUsec ?? this.createdAtRemoteUsec,
       updatedAtRemoteUsec: updatedAtRemoteUsec ?? this.updatedAtRemoteUsec,
+      deletedAtRemoteUsec: deletedAtRemoteUsec ?? this.deletedAtRemoteUsec,
     );
   }
 
@@ -5740,6 +5784,9 @@ class SmsMessageDataCompanion extends UpdateCompanion<SmsMessageData> {
     if (updatedAtRemoteUsec.present) {
       map['updated_at_remote_usec'] = Variable<int>(updatedAtRemoteUsec.value);
     }
+    if (deletedAtRemoteUsec.present) {
+      map['deleted_at_remote_usec'] = Variable<int>(deletedAtRemoteUsec.value);
+    }
     return map;
   }
 
@@ -5755,7 +5802,8 @@ class SmsMessageDataCompanion extends UpdateCompanion<SmsMessageData> {
           ..write('sendingStatus: $sendingStatus, ')
           ..write('content: $content, ')
           ..write('createdAtRemoteUsec: $createdAtRemoteUsec, ')
-          ..write('updatedAtRemoteUsec: $updatedAtRemoteUsec')
+          ..write('updatedAtRemoteUsec: $updatedAtRemoteUsec, ')
+          ..write('deletedAtRemoteUsec: $deletedAtRemoteUsec')
           ..write(')'))
         .toString();
   }
@@ -6445,6 +6493,277 @@ class SmsOutboxMessageDataCompanion
   }
 }
 
+class $SmsOutboxMessageDeleteTableTable extends SmsOutboxMessageDeleteTable
+    with
+        TableInfo<$SmsOutboxMessageDeleteTableTable,
+            SmsOutboxMessageDeleteData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SmsOutboxMessageDeleteTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _idKeyMeta = const VerificationMeta('idKey');
+  @override
+  late final GeneratedColumn<String> idKey = GeneratedColumn<String>(
+      'id_key', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _conversationIdMeta =
+      const VerificationMeta('conversationId');
+  @override
+  late final GeneratedColumn<int> conversationId = GeneratedColumn<int>(
+      'conversation_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES sms_conversations (id) ON DELETE CASCADE'));
+  static const VerificationMeta _sendAttemptsMeta =
+      const VerificationMeta('sendAttempts');
+  @override
+  late final GeneratedColumn<int> sendAttempts = GeneratedColumn<int>(
+      'send_attempts', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, idKey, conversationId, sendAttempts];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'sms_outbox_message_deletes';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<SmsOutboxMessageDeleteData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('id_key')) {
+      context.handle(
+          _idKeyMeta, idKey.isAcceptableOrUnknown(data['id_key']!, _idKeyMeta));
+    } else if (isInserting) {
+      context.missing(_idKeyMeta);
+    }
+    if (data.containsKey('conversation_id')) {
+      context.handle(
+          _conversationIdMeta,
+          conversationId.isAcceptableOrUnknown(
+              data['conversation_id']!, _conversationIdMeta));
+    } else if (isInserting) {
+      context.missing(_conversationIdMeta);
+    }
+    if (data.containsKey('send_attempts')) {
+      context.handle(
+          _sendAttemptsMeta,
+          sendAttempts.isAcceptableOrUnknown(
+              data['send_attempts']!, _sendAttemptsMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  SmsOutboxMessageDeleteData map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SmsOutboxMessageDeleteData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      idKey: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id_key'])!,
+      conversationId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}conversation_id'])!,
+      sendAttempts: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}send_attempts'])!,
+    );
+  }
+
+  @override
+  $SmsOutboxMessageDeleteTableTable createAlias(String alias) {
+    return $SmsOutboxMessageDeleteTableTable(attachedDatabase, alias);
+  }
+}
+
+class SmsOutboxMessageDeleteData extends DataClass
+    implements Insertable<SmsOutboxMessageDeleteData> {
+  final int id;
+  final String idKey;
+  final int conversationId;
+  final int sendAttempts;
+  const SmsOutboxMessageDeleteData(
+      {required this.id,
+      required this.idKey,
+      required this.conversationId,
+      required this.sendAttempts});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['id_key'] = Variable<String>(idKey);
+    map['conversation_id'] = Variable<int>(conversationId);
+    map['send_attempts'] = Variable<int>(sendAttempts);
+    return map;
+  }
+
+  SmsOutboxMessageDeleteDataCompanion toCompanion(bool nullToAbsent) {
+    return SmsOutboxMessageDeleteDataCompanion(
+      id: Value(id),
+      idKey: Value(idKey),
+      conversationId: Value(conversationId),
+      sendAttempts: Value(sendAttempts),
+    );
+  }
+
+  factory SmsOutboxMessageDeleteData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SmsOutboxMessageDeleteData(
+      id: serializer.fromJson<int>(json['id']),
+      idKey: serializer.fromJson<String>(json['idKey']),
+      conversationId: serializer.fromJson<int>(json['conversationId']),
+      sendAttempts: serializer.fromJson<int>(json['sendAttempts']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'idKey': serializer.toJson<String>(idKey),
+      'conversationId': serializer.toJson<int>(conversationId),
+      'sendAttempts': serializer.toJson<int>(sendAttempts),
+    };
+  }
+
+  SmsOutboxMessageDeleteData copyWith(
+          {int? id, String? idKey, int? conversationId, int? sendAttempts}) =>
+      SmsOutboxMessageDeleteData(
+        id: id ?? this.id,
+        idKey: idKey ?? this.idKey,
+        conversationId: conversationId ?? this.conversationId,
+        sendAttempts: sendAttempts ?? this.sendAttempts,
+      );
+  SmsOutboxMessageDeleteData copyWithCompanion(
+      SmsOutboxMessageDeleteDataCompanion data) {
+    return SmsOutboxMessageDeleteData(
+      id: data.id.present ? data.id.value : this.id,
+      idKey: data.idKey.present ? data.idKey.value : this.idKey,
+      conversationId: data.conversationId.present
+          ? data.conversationId.value
+          : this.conversationId,
+      sendAttempts: data.sendAttempts.present
+          ? data.sendAttempts.value
+          : this.sendAttempts,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SmsOutboxMessageDeleteData(')
+          ..write('id: $id, ')
+          ..write('idKey: $idKey, ')
+          ..write('conversationId: $conversationId, ')
+          ..write('sendAttempts: $sendAttempts')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, idKey, conversationId, sendAttempts);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SmsOutboxMessageDeleteData &&
+          other.id == this.id &&
+          other.idKey == this.idKey &&
+          other.conversationId == this.conversationId &&
+          other.sendAttempts == this.sendAttempts);
+}
+
+class SmsOutboxMessageDeleteDataCompanion
+    extends UpdateCompanion<SmsOutboxMessageDeleteData> {
+  final Value<int> id;
+  final Value<String> idKey;
+  final Value<int> conversationId;
+  final Value<int> sendAttempts;
+  const SmsOutboxMessageDeleteDataCompanion({
+    this.id = const Value.absent(),
+    this.idKey = const Value.absent(),
+    this.conversationId = const Value.absent(),
+    this.sendAttempts = const Value.absent(),
+  });
+  SmsOutboxMessageDeleteDataCompanion.insert({
+    this.id = const Value.absent(),
+    required String idKey,
+    required int conversationId,
+    this.sendAttempts = const Value.absent(),
+  })  : idKey = Value(idKey),
+        conversationId = Value(conversationId);
+  static Insertable<SmsOutboxMessageDeleteData> custom({
+    Expression<int>? id,
+    Expression<String>? idKey,
+    Expression<int>? conversationId,
+    Expression<int>? sendAttempts,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (idKey != null) 'id_key': idKey,
+      if (conversationId != null) 'conversation_id': conversationId,
+      if (sendAttempts != null) 'send_attempts': sendAttempts,
+    });
+  }
+
+  SmsOutboxMessageDeleteDataCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? idKey,
+      Value<int>? conversationId,
+      Value<int>? sendAttempts}) {
+    return SmsOutboxMessageDeleteDataCompanion(
+      id: id ?? this.id,
+      idKey: idKey ?? this.idKey,
+      conversationId: conversationId ?? this.conversationId,
+      sendAttempts: sendAttempts ?? this.sendAttempts,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (idKey.present) {
+      map['id_key'] = Variable<String>(idKey.value);
+    }
+    if (conversationId.present) {
+      map['conversation_id'] = Variable<int>(conversationId.value);
+    }
+    if (sendAttempts.present) {
+      map['send_attempts'] = Variable<int>(sendAttempts.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SmsOutboxMessageDeleteDataCompanion(')
+          ..write('id: $id, ')
+          ..write('idKey: $idKey, ')
+          ..write('conversationId: $conversationId, ')
+          ..write('sendAttempts: $sendAttempts')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $UserSmsNumbersTableTable extends UserSmsNumbersTable
     with TableInfo<$UserSmsNumbersTableTable, UserSmsNumberData> {
   @override
@@ -6641,6 +6960,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $SmsMessageSyncCursorTableTable(this);
   late final $SmsOutboxMessagesTableTable smsOutboxMessagesTable =
       $SmsOutboxMessagesTableTable(this);
+  late final $SmsOutboxMessageDeleteTableTable smsOutboxMessageDeleteTable =
+      $SmsOutboxMessageDeleteTableTable(this);
   late final $UserSmsNumbersTableTable userSmsNumbersTable =
       $UserSmsNumbersTableTable(this);
   late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
@@ -6675,6 +6996,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         smsMessagesTable,
         smsMessageSyncCursorTable,
         smsOutboxMessagesTable,
+        smsOutboxMessageDeleteTable,
         userSmsNumbersTable
       ];
   @override
@@ -6777,6 +7099,14 @@ abstract class _$AppDatabase extends GeneratedDatabase {
                 limitUpdateKind: UpdateKind.delete),
             result: [
               TableUpdate('sms_outbox_messages', kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('sms_conversations',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('sms_outbox_message_deletes',
+                  kind: UpdateKind.delete),
             ],
           ),
         ],
@@ -9209,6 +9539,25 @@ class $$SmsConversationsTableTableFilterComposer
                     parentComposers)));
     return f(composer);
   }
+
+  ComposableFilter smsOutboxMessageDeleteTableRefs(
+      ComposableFilter Function(
+              $$SmsOutboxMessageDeleteTableTableFilterComposer f)
+          f) {
+    final $$SmsOutboxMessageDeleteTableTableFilterComposer composer =
+        $state.composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $state.db.smsOutboxMessageDeleteTable,
+            getReferencedColumn: (t) => t.conversationId,
+            builder: (joinBuilder, parentComposers) =>
+                $$SmsOutboxMessageDeleteTableTableFilterComposer(ComposerState(
+                    $state.db,
+                    $state.db.smsOutboxMessageDeleteTable,
+                    joinBuilder,
+                    parentComposers)));
+    return f(composer);
+  }
 }
 
 class $$SmsConversationsTableTableOrderingComposer
@@ -9252,6 +9601,7 @@ typedef $$SmsMessagesTableTableCreateCompanionBuilder = SmsMessageDataCompanion
   required String content,
   required int createdAtRemoteUsec,
   required int updatedAtRemoteUsec,
+  Value<int?> deletedAtRemoteUsec,
 });
 typedef $$SmsMessagesTableTableUpdateCompanionBuilder = SmsMessageDataCompanion
     Function({
@@ -9265,6 +9615,7 @@ typedef $$SmsMessagesTableTableUpdateCompanionBuilder = SmsMessageDataCompanion
   Value<String> content,
   Value<int> createdAtRemoteUsec,
   Value<int> updatedAtRemoteUsec,
+  Value<int?> deletedAtRemoteUsec,
 });
 
 class $$SmsMessagesTableTableTableManager extends RootTableManager<
@@ -9295,6 +9646,7 @@ class $$SmsMessagesTableTableTableManager extends RootTableManager<
             Value<String> content = const Value.absent(),
             Value<int> createdAtRemoteUsec = const Value.absent(),
             Value<int> updatedAtRemoteUsec = const Value.absent(),
+            Value<int?> deletedAtRemoteUsec = const Value.absent(),
           }) =>
               SmsMessageDataCompanion(
             id: id,
@@ -9307,6 +9659,7 @@ class $$SmsMessagesTableTableTableManager extends RootTableManager<
             content: content,
             createdAtRemoteUsec: createdAtRemoteUsec,
             updatedAtRemoteUsec: updatedAtRemoteUsec,
+            deletedAtRemoteUsec: deletedAtRemoteUsec,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
@@ -9319,6 +9672,7 @@ class $$SmsMessagesTableTableTableManager extends RootTableManager<
             required String content,
             required int createdAtRemoteUsec,
             required int updatedAtRemoteUsec,
+            Value<int?> deletedAtRemoteUsec = const Value.absent(),
           }) =>
               SmsMessageDataCompanion.insert(
             id: id,
@@ -9331,6 +9685,7 @@ class $$SmsMessagesTableTableTableManager extends RootTableManager<
             content: content,
             createdAtRemoteUsec: createdAtRemoteUsec,
             updatedAtRemoteUsec: updatedAtRemoteUsec,
+            deletedAtRemoteUsec: deletedAtRemoteUsec,
           ),
         ));
 }
@@ -9383,6 +9738,11 @@ class $$SmsMessagesTableTableFilterComposer
 
   ColumnFilters<int> get updatedAtRemoteUsec => $state.composableBuilder(
       column: $state.table.updatedAtRemoteUsec,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get deletedAtRemoteUsec => $state.composableBuilder(
+      column: $state.table.deletedAtRemoteUsec,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -9448,6 +9808,11 @@ class $$SmsMessagesTableTableOrderingComposer
 
   ColumnOrderings<int> get updatedAtRemoteUsec => $state.composableBuilder(
       column: $state.table.updatedAtRemoteUsec,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get deletedAtRemoteUsec => $state.composableBuilder(
+      column: $state.table.deletedAtRemoteUsec,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
@@ -9773,6 +10138,135 @@ class $$SmsOutboxMessagesTableTableOrderingComposer
   }
 }
 
+typedef $$SmsOutboxMessageDeleteTableTableCreateCompanionBuilder
+    = SmsOutboxMessageDeleteDataCompanion Function({
+  Value<int> id,
+  required String idKey,
+  required int conversationId,
+  Value<int> sendAttempts,
+});
+typedef $$SmsOutboxMessageDeleteTableTableUpdateCompanionBuilder
+    = SmsOutboxMessageDeleteDataCompanion Function({
+  Value<int> id,
+  Value<String> idKey,
+  Value<int> conversationId,
+  Value<int> sendAttempts,
+});
+
+class $$SmsOutboxMessageDeleteTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $SmsOutboxMessageDeleteTableTable,
+    SmsOutboxMessageDeleteData,
+    $$SmsOutboxMessageDeleteTableTableFilterComposer,
+    $$SmsOutboxMessageDeleteTableTableOrderingComposer,
+    $$SmsOutboxMessageDeleteTableTableCreateCompanionBuilder,
+    $$SmsOutboxMessageDeleteTableTableUpdateCompanionBuilder> {
+  $$SmsOutboxMessageDeleteTableTableTableManager(
+      _$AppDatabase db, $SmsOutboxMessageDeleteTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$SmsOutboxMessageDeleteTableTableFilterComposer(
+              ComposerState(db, table)),
+          orderingComposer: $$SmsOutboxMessageDeleteTableTableOrderingComposer(
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> idKey = const Value.absent(),
+            Value<int> conversationId = const Value.absent(),
+            Value<int> sendAttempts = const Value.absent(),
+          }) =>
+              SmsOutboxMessageDeleteDataCompanion(
+            id: id,
+            idKey: idKey,
+            conversationId: conversationId,
+            sendAttempts: sendAttempts,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String idKey,
+            required int conversationId,
+            Value<int> sendAttempts = const Value.absent(),
+          }) =>
+              SmsOutboxMessageDeleteDataCompanion.insert(
+            id: id,
+            idKey: idKey,
+            conversationId: conversationId,
+            sendAttempts: sendAttempts,
+          ),
+        ));
+}
+
+class $$SmsOutboxMessageDeleteTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $SmsOutboxMessageDeleteTableTable> {
+  $$SmsOutboxMessageDeleteTableTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get idKey => $state.composableBuilder(
+      column: $state.table.idKey,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get sendAttempts => $state.composableBuilder(
+      column: $state.table.sendAttempts,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  $$SmsConversationsTableTableFilterComposer get conversationId {
+    final $$SmsConversationsTableTableFilterComposer composer =
+        $state.composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.conversationId,
+            referencedTable: $state.db.smsConversationsTable,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder, parentComposers) =>
+                $$SmsConversationsTableTableFilterComposer(ComposerState(
+                    $state.db,
+                    $state.db.smsConversationsTable,
+                    joinBuilder,
+                    parentComposers)));
+    return composer;
+  }
+}
+
+class $$SmsOutboxMessageDeleteTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $SmsOutboxMessageDeleteTableTable> {
+  $$SmsOutboxMessageDeleteTableTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get idKey => $state.composableBuilder(
+      column: $state.table.idKey,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get sendAttempts => $state.composableBuilder(
+      column: $state.table.sendAttempts,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  $$SmsConversationsTableTableOrderingComposer get conversationId {
+    final $$SmsConversationsTableTableOrderingComposer composer =
+        $state.composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.conversationId,
+            referencedTable: $state.db.smsConversationsTable,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder, parentComposers) =>
+                $$SmsConversationsTableTableOrderingComposer(ComposerState(
+                    $state.db,
+                    $state.db.smsConversationsTable,
+                    joinBuilder,
+                    parentComposers)));
+    return composer;
+  }
+}
+
 typedef $$UserSmsNumbersTableTableCreateCompanionBuilder
     = UserSmsNumberDataCompanion Function({
   required String phoneNumber,
@@ -9890,6 +10384,10 @@ class $AppDatabaseManager {
   $$SmsOutboxMessagesTableTableTableManager get smsOutboxMessagesTable =>
       $$SmsOutboxMessagesTableTableTableManager(
           _db, _db.smsOutboxMessagesTable);
+  $$SmsOutboxMessageDeleteTableTableTableManager
+      get smsOutboxMessageDeleteTable =>
+          $$SmsOutboxMessageDeleteTableTableTableManager(
+              _db, _db.smsOutboxMessageDeleteTable);
   $$UserSmsNumbersTableTableTableManager get userSmsNumbersTable =>
       $$UserSmsNumbersTableTableTableManager(_db, _db.userSmsNumbersTable);
 }
@@ -9952,6 +10450,8 @@ mixin _$SmsDaoMixin on DatabaseAccessor<AppDatabase> {
       attachedDatabase.smsMessageSyncCursorTable;
   $SmsOutboxMessagesTableTable get smsOutboxMessagesTable =>
       attachedDatabase.smsOutboxMessagesTable;
+  $SmsOutboxMessageDeleteTableTable get smsOutboxMessageDeleteTable =>
+      attachedDatabase.smsOutboxMessageDeleteTable;
   $UserSmsNumbersTableTable get userSmsNumbersTable =>
       attachedDatabase.userSmsNumbersTable;
 }

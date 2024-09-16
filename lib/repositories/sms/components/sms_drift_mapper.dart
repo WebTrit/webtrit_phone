@@ -41,6 +41,8 @@ mixin SmsDriftMapper {
       content: data.content,
       createdAt: DateTime.fromMicrosecondsSinceEpoch(data.createdAtRemoteUsec),
       updatedAt: DateTime.fromMicrosecondsSinceEpoch(data.updatedAtRemoteUsec),
+      deletedAt:
+          data.deletedAtRemoteUsec != null ? DateTime.fromMicrosecondsSinceEpoch(data.deletedAtRemoteUsec!) : null,
     );
   }
 
@@ -56,6 +58,7 @@ mixin SmsDriftMapper {
       content: message.content,
       createdAtRemoteUsec: message.createdAt.microsecondsSinceEpoch,
       updatedAtRemoteUsec: message.updatedAt.microsecondsSinceEpoch,
+      deletedAtRemoteUsec: message.deletedAt?.microsecondsSinceEpoch,
     );
   }
 

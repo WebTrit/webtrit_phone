@@ -22,4 +22,5 @@ export 'recents_visibility_filter.dart';
 export 'sms_conversation.dart';
 export 'sms_message.dart';
 export 'sms_outbox_message_entry.dart';
+export 'sms_outbox_message_delete_entry.dart';
 export 'sms_message_sync_cursor.dart';
