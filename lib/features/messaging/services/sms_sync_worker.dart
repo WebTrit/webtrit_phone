@@ -80,6 +80,11 @@ class SmsSyncWorker {
         // Buffer updates that may come in a gap between fetching the actual list
         final eventsStream = userChannel.messages.transform(BufferTransformer());
 
+        // Fetch user phone numbers
+        final result = await userChannel.push('user:get_info', {}).future;
+        List<String> smsNumbers = result.response['sms_phone_numbers'].cast<String>();
+        smsRepository.upsertUserSmsNumbers(smsNumbers);
+
         // Fetch actual user chat ids
         final req = await userChannel.push('sms:conversation:get_ids', {}, pushTimeout).future;
         final actualChatIds = req.response.cast<int>();
