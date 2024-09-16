@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 import '../main.dart';
 
@@ -10,13 +12,15 @@ class MainScreen extends StatelessWidget {
   const MainScreen({
     Key? key,
     required this.body,
-    required this.navigationBarFlavor,
+    required this.currentTab,
+    required this.tabs,
     this.onNavigationBarTap,
   }) : super(key: key ?? const ValueKey<String>('MainScreen'));
 
   final Widget body;
-  final MainFlavor navigationBarFlavor;
-  final ValueChanged<MainFlavor>? onNavigationBarTap;
+  final BottomMenuTab currentTab;
+  final List<BottomMenuTab> tabs;
+  final ValueChanged<BottomMenuTab>? onNavigationBarTap;
 
   @override
   Widget build(BuildContext context) {
@@ -27,17 +31,17 @@ class MainScreen extends StatelessWidget {
         type: BottomNavigationBarType.fixed,
         selectedLabelStyle: themeData.textTheme.bodySmall,
         unselectedLabelStyle: themeData.textTheme.bodySmall,
-        currentIndex: navigationBarFlavor.index,
+        currentIndex: tabs.indexOf(currentTab),
         onTap: (index) {
           final onNavigationBarTap = this.onNavigationBarTap;
           if (onNavigationBarTap != null) {
-            onNavigationBarTap(MainFlavor.values[index]);
+            onNavigationBarTap(tabs[index]);
           }
         },
-        items: MainFlavor.values.map((flavor) {
+        items: tabs.map((tab) {
           return BottomNavigationBarItem(
-            icon: Icon(flavor.icon),
-            label: flavor.labelL10n(context),
+            icon: Icon(tab.icon),
+            label: context.parseL10n(tab.titleL10n),
           );
         }).toList(),
       ),

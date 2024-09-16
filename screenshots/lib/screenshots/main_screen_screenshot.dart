@@ -20,6 +20,37 @@ class MainScreenScreenshot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<BottomMenuTab> tabs = [
+      BottomMenuTab(
+        enabled: true,
+        initial: true,
+        flavor: MainFlavor.favorites,
+        titleL10n: 'main_BottomNavigationBarItemLabel_favorites',
+        icon: Icons.star,
+      ),
+      BottomMenuTab(
+        enabled: true,
+        initial: false,
+        flavor: MainFlavor.recents,
+        titleL10n: ' main_BottomNavigationBarItemLabel_recents ',
+        icon: Icons.history,
+      ),
+      BottomMenuTab(
+        enabled: true,
+        initial: false,
+        flavor: MainFlavor.contacts,
+        titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
+        icon: Icons.people,
+      ),
+      BottomMenuTab(
+        enabled: true,
+        initial: false,
+        flavor: MainFlavor.keypad,
+        titleL10n: 'main_BottomNavigationBarItemLabel_keypad',
+        icon: Icons.dialpad,
+      )
+    ];
+
     return MultiBlocProvider(
       providers: [
         BlocProvider<CallBloc>(
@@ -31,7 +62,8 @@ class MainScreenScreenshot extends StatelessWidget {
       ],
       child: MainScreen(
         body: _flavorWidgetBuilder(context, flavor),
-        navigationBarFlavor: flavor,
+        tabs: tabs,
+        currentTab: tabs.firstWhere((tab) => tab.flavor == flavor),
       ),
     );
   }
