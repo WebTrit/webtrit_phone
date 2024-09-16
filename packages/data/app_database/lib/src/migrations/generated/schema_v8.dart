@@ -966,10 +966,10 @@ class SmsMessages extends Table with TableInfo {
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
   late final GeneratedColumn<String> externalId = GeneratedColumn<String>(
-      'external_id', aliasedName, false,
+      'external_id', aliasedName, true,
       type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
   late final GeneratedColumn<int> conversationId = GeneratedColumn<int>(
       'conversation_id', aliasedName, false,
       type: DriftSqlType.int,

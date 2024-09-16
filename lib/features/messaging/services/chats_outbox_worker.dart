@@ -94,7 +94,7 @@ class ChatsOutboxWorker {
       }
       if (r.isError) throw Exception('Error processing new message');
     } catch (e) {
-      _logger.severe('Error processing new message', e);
+      _logger.severe('Error processing new message, attempt: ${message.sendAttempts}', e);
       if (message.sendAttempts > 5) {
         _logger.severe('Send attempts exceeded for message: ${message.idKey}');
         await _outboxRepository.deleteOutboxMessage(message.idKey);
@@ -129,7 +129,7 @@ class ChatsOutboxWorker {
       }
       if (r.isError) throw Exception('Error processing new dialog message');
     } catch (e) {
-      _logger.severe('Error processing new dialog message', e);
+      _logger.severe('Error processing new dialog message, attempt: ${message.sendAttempts}', e);
       if (message.sendAttempts > 5) {
         _logger.severe('Send attempts exceeded for dialog message: ${message.idKey}');
         await _outboxRepository.deleteOutboxMessage(message.idKey);
@@ -156,7 +156,7 @@ class ChatsOutboxWorker {
       }
       if (r.isError) throw Exception('Error processing message edit');
     } catch (e) {
-      _logger.severe('Error processing message edit', e);
+      _logger.severe('Error processing message edit, attempt: ${messageEdit.sendAttempts}', e);
       if (messageEdit.sendAttempts > 5) {
         _logger.severe('Send attempts exceeded for edit message: ${messageEdit.idKey}');
         await _outboxRepository.deleteOutboxMessageEdit(messageEdit.id);
@@ -182,7 +182,7 @@ class ChatsOutboxWorker {
       }
       if (r.isError) throw Exception('Error processing message delete');
     } catch (e) {
-      _logger.severe('Error processing message delete', e);
+      _logger.severe('Error processing message delete, attempt: ${messageDelete.sendAttempts}', e);
       if (messageDelete.sendAttempts > 5) {
         _logger.severe('Send attempts exceeded for delete message: ${messageDelete.idKey}');
         await _outboxRepository.deleteOutboxMessageDelete(messageDelete.id);
@@ -209,7 +209,7 @@ class ChatsOutboxWorker {
       }
       if (r.isError) throw Exception('Error processing read cursor');
     } catch (e) {
-      _logger.severe('Error processing read cursor', e);
+      _logger.severe('Error processing read cursor, attempt: ${readCursor.sendAttempts}', e);
       if (readCursor.sendAttempts > 5) {
         _logger.severe('Send attempts exceeded for read cursor: ${readCursor.chatId}');
         await _outboxRepository.deleteOutboxReadCursor(readCursor.chatId);

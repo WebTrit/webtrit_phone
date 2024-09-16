@@ -66,24 +66,21 @@ class SmsOutboxWorker {
         'idempotency_key': message.idKey,
         'from_phone_number': message.fromPhoneNumber,
         'to_phone_number': message.toPhoneNumber,
-        'conversation_id': message.conversationId,
+        'recepient_id': message.recepientId,
       };
       final r = await channel.push('sms:message:new', payload).future;
-
-      if (r.response != null) {
-        _logger.info('Response from new_msg: ${r.response}');
-      }
+      if (r.response != null) _logger.info('Response from new_msg: ${r.response}');
 
       if (r.isOk) {
-        final chat = SmsConversation.fromMap(r.response['chat']);
-        final chatMessage = SmsMessage.fromMap(r.response['msg']);
-        await _smsRepository.upsertConversation(chat);
-        await _smsRepository.upsertMessage(chatMessage);
+        final conversation = SmsConversation.fromMap(r.response['conversation']);
+        final message = SmsMessage.fromMap(r.response['message']);
+        await _smsRepository.upsertConversation(conversation);
+        await _smsRepository.upsertMessage(message);
         await _outboxRepository.deleteOutboxMessage(message.idKey);
       }
       if (r.isError) throw Exception('Error processing new dialog message');
     } catch (e) {
-      _logger.severe('Error processing new dialog message', e);
+      _logger.severe('Error processing new dialog message, attempt: ${message.sendAttempts}', e);
       if (message.sendAttempts > 5) {
         _logger.severe('Send attempts exceeded for dialog message: ${message.idKey}');
         await _outboxRepository.deleteOutboxMessage(message.idKey);
@@ -109,7 +106,7 @@ class SmsOutboxWorker {
       }
       if (r.isError) throw Exception('Error processing message delete');
     } catch (e) {
-      _logger.severe('Error processing message delete', e);
+      _logger.severe('Error processing message delete, attempt: ${messageDelete.sendAttempts}', e);
       if (messageDelete.sendAttempts > 5) {
         _logger.severe('Send attempts exceeded for delete message: ${messageDelete.idKey}');
         await _outboxRepository.deleteOutboxMessageDelete(messageDelete.id);

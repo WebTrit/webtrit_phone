@@ -5240,8 +5240,8 @@ class $SmsMessagesTableTable extends SmsMessagesTable
       const VerificationMeta('externalId');
   @override
   late final GeneratedColumn<String> externalId = GeneratedColumn<String>(
-      'external_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      'external_id', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _conversationIdMeta =
       const VerificationMeta('conversationId');
   @override
@@ -5334,8 +5334,6 @@ class $SmsMessagesTableTable extends SmsMessagesTable
           _externalIdMeta,
           externalId.isAcceptableOrUnknown(
               data['external_id']!, _externalIdMeta));
-    } else if (isInserting) {
-      context.missing(_externalIdMeta);
     }
     if (data.containsKey('conversation_id')) {
       context.handle(
@@ -5404,7 +5402,7 @@ class $SmsMessagesTableTable extends SmsMessagesTable
       idKey: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id_key'])!,
       externalId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}external_id'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}external_id']),
       conversationId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}conversation_id'])!,
       fromPhoneNumber: attachedDatabase.typeMapping.read(
@@ -5438,7 +5436,7 @@ class $SmsMessagesTableTable extends SmsMessagesTable
 class SmsMessageData extends DataClass implements Insertable<SmsMessageData> {
   final int id;
   final String idKey;
-  final String externalId;
+  final String? externalId;
   final int conversationId;
   final String fromPhoneNumber;
   final String toPhoneNumber;
@@ -5450,7 +5448,7 @@ class SmsMessageData extends DataClass implements Insertable<SmsMessageData> {
   const SmsMessageData(
       {required this.id,
       required this.idKey,
-      required this.externalId,
+      this.externalId,
       required this.conversationId,
       required this.fromPhoneNumber,
       required this.toPhoneNumber,
@@ -5464,7 +5462,9 @@ class SmsMessageData extends DataClass implements Insertable<SmsMessageData> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['id_key'] = Variable<String>(idKey);
-    map['external_id'] = Variable<String>(externalId);
+    if (!nullToAbsent || externalId != null) {
+      map['external_id'] = Variable<String>(externalId);
+    }
     map['conversation_id'] = Variable<int>(conversationId);
     map['from_phone_number'] = Variable<String>(fromPhoneNumber);
     map['to_phone_number'] = Variable<String>(toPhoneNumber);
@@ -5485,7 +5485,9 @@ class SmsMessageData extends DataClass implements Insertable<SmsMessageData> {
     return SmsMessageDataCompanion(
       id: Value(id),
       idKey: Value(idKey),
-      externalId: Value(externalId),
+      externalId: externalId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(externalId),
       conversationId: Value(conversationId),
       fromPhoneNumber: Value(fromPhoneNumber),
       toPhoneNumber: Value(toPhoneNumber),
@@ -5505,7 +5507,7 @@ class SmsMessageData extends DataClass implements Insertable<SmsMessageData> {
     return SmsMessageData(
       id: serializer.fromJson<int>(json['id']),
       idKey: serializer.fromJson<String>(json['idKey']),
-      externalId: serializer.fromJson<String>(json['externalId']),
+      externalId: serializer.fromJson<String?>(json['externalId']),
       conversationId: serializer.fromJson<int>(json['conversationId']),
       fromPhoneNumber: serializer.fromJson<String>(json['fromPhoneNumber']),
       toPhoneNumber: serializer.fromJson<String>(json['toPhoneNumber']),
@@ -5526,7 +5528,7 @@ class SmsMessageData extends DataClass implements Insertable<SmsMessageData> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'idKey': serializer.toJson<String>(idKey),
-      'externalId': serializer.toJson<String>(externalId),
+      'externalId': serializer.toJson<String?>(externalId),
       'conversationId': serializer.toJson<int>(conversationId),
       'fromPhoneNumber': serializer.toJson<String>(fromPhoneNumber),
       'toPhoneNumber': serializer.toJson<String>(toPhoneNumber),
@@ -5542,7 +5544,7 @@ class SmsMessageData extends DataClass implements Insertable<SmsMessageData> {
   SmsMessageData copyWith(
           {int? id,
           String? idKey,
-          String? externalId,
+          Value<String?> externalId = const Value.absent(),
           int? conversationId,
           String? fromPhoneNumber,
           String? toPhoneNumber,
@@ -5554,7 +5556,7 @@ class SmsMessageData extends DataClass implements Insertable<SmsMessageData> {
       SmsMessageData(
         id: id ?? this.id,
         idKey: idKey ?? this.idKey,
-        externalId: externalId ?? this.externalId,
+        externalId: externalId.present ? externalId.value : this.externalId,
         conversationId: conversationId ?? this.conversationId,
         fromPhoneNumber: fromPhoneNumber ?? this.fromPhoneNumber,
         toPhoneNumber: toPhoneNumber ?? this.toPhoneNumber,
@@ -5648,7 +5650,7 @@ class SmsMessageData extends DataClass implements Insertable<SmsMessageData> {
 class SmsMessageDataCompanion extends UpdateCompanion<SmsMessageData> {
   final Value<int> id;
   final Value<String> idKey;
-  final Value<String> externalId;
+  final Value<String?> externalId;
   final Value<int> conversationId;
   final Value<String> fromPhoneNumber;
   final Value<String> toPhoneNumber;
@@ -5673,7 +5675,7 @@ class SmsMessageDataCompanion extends UpdateCompanion<SmsMessageData> {
   SmsMessageDataCompanion.insert({
     this.id = const Value.absent(),
     required String idKey,
-    required String externalId,
+    this.externalId = const Value.absent(),
     required int conversationId,
     required String fromPhoneNumber,
     required String toPhoneNumber,
@@ -5683,7 +5685,6 @@ class SmsMessageDataCompanion extends UpdateCompanion<SmsMessageData> {
     required int updatedAtRemoteUsec,
     this.deletedAtRemoteUsec = const Value.absent(),
   })  : idKey = Value(idKey),
-        externalId = Value(externalId),
         conversationId = Value(conversationId),
         fromPhoneNumber = Value(fromPhoneNumber),
         toPhoneNumber = Value(toPhoneNumber),
@@ -5725,7 +5726,7 @@ class SmsMessageDataCompanion extends UpdateCompanion<SmsMessageData> {
   SmsMessageDataCompanion copyWith(
       {Value<int>? id,
       Value<String>? idKey,
-      Value<String>? externalId,
+      Value<String?>? externalId,
       Value<int>? conversationId,
       Value<String>? fromPhoneNumber,
       Value<String>? toPhoneNumber,
@@ -9593,7 +9594,7 @@ typedef $$SmsMessagesTableTableCreateCompanionBuilder = SmsMessageDataCompanion
     Function({
   Value<int> id,
   required String idKey,
-  required String externalId,
+  Value<String?> externalId,
   required int conversationId,
   required String fromPhoneNumber,
   required String toPhoneNumber,
@@ -9607,7 +9608,7 @@ typedef $$SmsMessagesTableTableUpdateCompanionBuilder = SmsMessageDataCompanion
     Function({
   Value<int> id,
   Value<String> idKey,
-  Value<String> externalId,
+  Value<String?> externalId,
   Value<int> conversationId,
   Value<String> fromPhoneNumber,
   Value<String> toPhoneNumber,
@@ -9638,7 +9639,7 @@ class $$SmsMessagesTableTableTableManager extends RootTableManager<
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> idKey = const Value.absent(),
-            Value<String> externalId = const Value.absent(),
+            Value<String?> externalId = const Value.absent(),
             Value<int> conversationId = const Value.absent(),
             Value<String> fromPhoneNumber = const Value.absent(),
             Value<String> toPhoneNumber = const Value.absent(),
@@ -9664,7 +9665,7 @@ class $$SmsMessagesTableTableTableManager extends RootTableManager<
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required String idKey,
-            required String externalId,
+            Value<String?> externalId = const Value.absent(),
             required int conversationId,
             required String fromPhoneNumber,
             required String toPhoneNumber,

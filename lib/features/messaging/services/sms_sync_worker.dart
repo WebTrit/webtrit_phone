@@ -9,6 +9,7 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 // TODO: extract events and commands to separate classes
+// TODO: remove push timeout, it uses parrent value
 
 final _logger = Logger('SmsSyncWorker');
 
@@ -38,7 +39,7 @@ class SmsSyncWorker {
     _logger.info('Initialising...');
     await _closeSubs();
     _conversationlistSyncSub =
-        _conversationlistSyncStream().listen((e) => _logger.info('_chatlistSyncStream event: $e'));
+        _conversationlistSyncStream().listen((e) => _logger.info('_conversationlistSyncStream event: $e'));
   }
 
   Future dispose() async {
@@ -225,7 +226,7 @@ class SmsSyncWorker {
             yield conversation;
           }
 
-          if (e.event.value == 'message_update') {
+          if (e.event.value == 'sms_message_update') {
             final chatMsg = SmsMessage.fromMap(e.payload as Map<String, dynamic>);
             await smsRepository.upsertMessage(chatMsg);
             await smsRepository.upsertSmsMessageSyncCursor(SmsMessageSyncCursor(

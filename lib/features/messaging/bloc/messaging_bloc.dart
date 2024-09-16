@@ -88,10 +88,10 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
           _chatsSyncWorker ??= ChatsSyncWorker(_client, _chatsRepository)..init();
           _chatsOutboxWorker ??= ChatsOutboxWorker(_client, _chatsRepository, _chatsOutboxRepository)..init();
         }
-        // if (EnvironmentConfig.SMS_FEATURE_ENABLE) {
-        //   _smsSyncWorker ??= SmsSyncWorker(_client, _smsRepository)..init();
-        //   _smsOutboxWorker ??= SmsOutboxWorker(_client, _smsRepository, _smsOutboxRepository)..init();
-        // }
+        if (EnvironmentConfig.SMS_FEATURE_ENABLE) {
+          _smsSyncWorker ??= SmsSyncWorker(_client, _smsRepository)..init();
+          _smsOutboxWorker ??= SmsOutboxWorker(_client, _smsRepository, _smsOutboxRepository)..init();
+        }
       }
       emit(state.copyWith(status: ConnectionStatus.connected));
     } on Exception catch (e) {

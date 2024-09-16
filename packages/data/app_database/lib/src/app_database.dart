@@ -491,7 +491,7 @@ class SmsMessagesTable extends Table {
 
   TextColumn get idKey => text()();
 
-  TextColumn get externalId => text()();
+  TextColumn get externalId => text().nullable()();
 
   IntColumn get conversationId => integer().references(SmsConversationsTable, #id, onDelete: KeyAction.cascade)();
 
@@ -1094,6 +1094,7 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
     final q = select(chatsTable).join([
       leftOuterJoin(chatMembersTable, chatMembersTable.chatId.equalsExp(chatsTable.id)),
     ]);
+    q.where(chatsTable.id.equals(chatId));
     return q.get().then((rows) {
       ChatData? chatData;
       final members = <ChatMemberData>[];

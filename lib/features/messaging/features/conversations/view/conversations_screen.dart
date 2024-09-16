@@ -69,7 +69,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
     }
 
     // If the user selected a phone number, navigate to the sms screen
-    if (result is ContactPhone) {
+    if (result is (ContactPhone, String)) {
       final userNumbers = await smsRepository.getUserSmsNumbers();
 
       if (!mounted) return;
@@ -117,7 +117,11 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
       context.router.navigate(MessagingRouterPageRoute(
         children: [
           const ConversationsScreenPageRoute(),
-          SmsConversationScreenPageRoute(firstNumber: userNumber, secondNumber: result.number),
+          SmsConversationScreenPageRoute(
+            firstNumber: userNumber,
+            secondNumber: result.$1.number,
+            recipientId: result.$2,
+          ),
         ],
       ));
     }
@@ -178,8 +182,8 @@ class _NewConversationPageState extends State<NewConversationPage> {
     Navigator.of(context).pop(contact);
   }
 
-  onContactPhoneConfirm(ContactPhone phone) {
-    Navigator.of(context).pop(phone);
+  onContactPhoneConfirm(ContactPhone phone, String userId) {
+    Navigator.of(context).pop((phone, userId));
   }
 
   onNewGroupConfirm() {
@@ -269,7 +273,7 @@ class _NewConversationPageState extends State<NewConversationPage> {
                           for (final phone in contact.phones)
                             ListTile(
                               title: Text('Send sms to ${phone.number}'),
-                              onTap: () => onContactPhoneConfirm(phone),
+                              onTap: () => onContactPhoneConfirm(phone, contact.sourceId),
                             ),
                       ],
                     ),

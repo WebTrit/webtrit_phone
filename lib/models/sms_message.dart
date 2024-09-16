@@ -6,7 +6,7 @@ enum SmsSendingStatus { waiting, sent, failed, delivered }
 class SmsMessage extends Equatable {
   final int id;
   final String idKey;
-  final String externalId;
+  final String? externalId;
   final int conversationId;
   final String fromPhoneNumber;
   final String toPhoneNumber;
@@ -68,7 +68,7 @@ class SmsMessage extends Equatable {
     return SmsMessage(
       id: map['id'] as int,
       idKey: map['idempotency_key'] as String,
-      externalId: map['external_id'] as String,
+      externalId: map['external_id'] != null ? map['external_id'] as String : null,
       conversationId: map['sms_conversation_id'] as int,
       fromPhoneNumber: map['from_phone_number'] as String,
       toPhoneNumber: map['to_phone_number'] as String,

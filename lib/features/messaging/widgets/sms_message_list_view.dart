@@ -1,10 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 import 'sms_message_view.dart';
@@ -220,7 +217,7 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
             child: TextFormField(
               controller: inputController,
               onFieldSubmitted: (_) => handleSend(),
-              onChanged: (value) => context.read<ChatTypingCubit>().sendTyping(),
+              onChanged: (_) {},
               decoration: const InputDecoration(hintText: 'Type a message', border: InputBorder.none),
             ),
           ),
