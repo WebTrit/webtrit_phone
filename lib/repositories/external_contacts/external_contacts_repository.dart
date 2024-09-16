@@ -89,6 +89,7 @@ class ExternalContactsRepository {
         number: numbers.main,
         ext: numbers.ext,
         mobile: numbers.main,
+        smsNumbers: numbers.sms,
         email: contact.email,
       );
     }).toList();

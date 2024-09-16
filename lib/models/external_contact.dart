@@ -12,6 +12,7 @@ class ExternalContact extends Equatable {
     this.number,
     this.ext,
     this.mobile,
+    this.smsNumbers,
     this.email,
   });
 
@@ -32,6 +33,7 @@ class ExternalContact extends Equatable {
   final String? number;
   final String? ext;
   final String? mobile;
+  final List<String>? smsNumbers;
   final String? email;
 
   @override
@@ -46,6 +48,7 @@ class ExternalContact extends Equatable {
         number,
         ext,
         mobile,
+        smsNumbers,
         email,
       ];
 }

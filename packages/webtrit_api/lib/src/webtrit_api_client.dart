@@ -215,9 +215,9 @@ class WebtritApiClient {
   Future<List<UserContact>> getUserContactList(String token) async {
     final responseJson = await _httpClientExecuteGet(['user', 'contacts'], null, token);
 
-    return (responseJson['items'] as List<dynamic>)
-        .map((e) => UserContact.fromJson(e as Map<String, dynamic>))
-        .toList();
+    return (responseJson['items'] as List<dynamic>).map((e) {
+      return UserContact.fromJson(e as Map<String, dynamic>);
+    }).toList();
   }
 
   Future<void> deleteUserInfo(String token) async {

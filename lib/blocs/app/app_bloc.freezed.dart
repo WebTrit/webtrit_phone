@@ -488,8 +488,8 @@ class _$AppStateImpl extends _AppState {
             (identical(other.tenantId, tenantId) ||
                 other.tenantId == tenantId) &&
             (identical(other.token, token) || other.token == token) &&
-            const DeepCollectionEquality()
-                .equals(other.accountErrorCode, accountErrorCode) &&
+            (identical(other.accountErrorCode, accountErrorCode) ||
+                other.accountErrorCode == accountErrorCode) &&
             (identical(other.themeSettings, themeSettings) ||
                 other.themeSettings == themeSettings) &&
             (identical(other.themeMode, themeMode) ||
@@ -505,7 +505,7 @@ class _$AppStateImpl extends _AppState {
       coreUrl,
       tenantId,
       token,
-      const DeepCollectionEquality().hash(accountErrorCode),
+      accountErrorCode,
       themeSettings,
       themeMode,
       locale,

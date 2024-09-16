@@ -14,6 +14,7 @@ class Numbers with _$Numbers {
     required String main,
     String? ext,
     List<String>? additional,
+    List<String>? sms,
   }) = _Numbers;
 
   factory Numbers.fromJson(Map<String, Object?> json) => _$NumbersFromJson(json);

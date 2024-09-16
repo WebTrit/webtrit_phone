@@ -3732,22 +3732,16 @@ class _$CallSignalingEventNotifyImpl
             (identical(other.line, line) || other.line == line) &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.notify, notify) || other.notify == notify) &&
-            const DeepCollectionEquality()
-                .equals(other.subscriptionState, subscriptionState) &&
+            (identical(other.subscriptionState, subscriptionState) ||
+                other.subscriptionState == subscriptionState) &&
             (identical(other.contentType, contentType) ||
                 other.contentType == contentType) &&
             (identical(other.content, content) || other.content == content));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      line,
-      callId,
-      notify,
-      const DeepCollectionEquality().hash(subscriptionState),
-      contentType,
-      content);
+  int get hashCode => Object.hash(runtimeType, line, callId, notify,
+      subscriptionState, contentType, content);
 
   @override
   @optionalTypeArgs
