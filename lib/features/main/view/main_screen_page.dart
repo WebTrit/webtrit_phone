@@ -42,9 +42,10 @@ class MainScreenPage extends StatelessWidget {
           context.read<DemoCubit>().getActions();
         }
 
-        return bottomMenuManager.tabs.length == 1
-            ? child
-            : MainScreen(
+        // Tabs are guaranteed to be non-empty due to validation during the bootstrap phase.
+        // Therefore, we only check if there's more than one tab to determine the layout.
+        return bottomMenuManager.tabs.length > 1
+            ? MainScreen(
                 body: child,
                 currentTab: bottomMenuManager.activeTab,
                 tabs: bottomMenuManager.tabs,
@@ -52,7 +53,8 @@ class MainScreenPage extends StatelessWidget {
                   bottomMenuManager.activeFlavor = flavor;
                   tabsRouter.setActiveIndex(bottomMenuManager.activeIndex);
                 },
-              );
+              )
+            : child;
       },
     );
     final provider = BlocProvider(
