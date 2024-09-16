@@ -99,13 +99,13 @@ class AppPreferences {
   Future<bool> removeLocale() => _sharedPreferences.remove(_kLocaleLanguageTagKey);
 
   MainFlavor getActiveMainFlavor({MainFlavor defaultValue = MainFlavor.contacts}) {
-    const chatsEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE;
+    const messagingEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE || EnvironmentConfig.SMS_FEATURE_ENABLE;
 
     final activeMainFlavorString = _sharedPreferences.getString(_kActiveMainFlavorKey);
     if (activeMainFlavorString != null) {
       try {
         final flavor = MainFlavor.values.byName(activeMainFlavorString);
-        if (flavor == MainFlavor.messaging && !chatsEnabled) return defaultValue;
+        if (flavor == MainFlavor.messaging && !messagingEnabled) return defaultValue;
         return flavor;
       } catch (_) {
         return defaultValue;

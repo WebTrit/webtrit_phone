@@ -22,7 +22,7 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const isMessagingFeatureEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE;
+    const isMessagingFeatureEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE || EnvironmentConfig.SMS_FEATURE_ENABLE;
 
     List<BottomNavigationBarItem> navBarItems = [];
 
