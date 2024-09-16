@@ -5,5 +5,40 @@
       "titleL10n": "login_requestCredentials_title",
       "url": "https://webtrit-app.web.app/example/example_embedded_login.html"
     }
+  },
+  "main": {
+    "bottomMenu": {
+      "cacheSelectedTab": true,
+      "tabs": [
+        {
+          "enabled": true,
+          "initial": false,
+          "type": "favorites",
+          "titleL10n": "main_BottomNavigationBarItemLabel_favorites",
+          "icon": "0xe5fd"
+        },
+        {
+          "enabled": true,
+          "initial": false,
+          "type": "recents",
+          "titleL10n": "main_BottomNavigationBarItemLabel_recents",
+          "icon": "0xe03a"
+        },
+        {
+          "enabled": true,
+          "initial": false,
+          "type": "contacts",
+          "titleL10n": "main_BottomNavigationBarItemLabel_contacts",
+          "icon": "0xee35"
+        },
+        {
+          "enabled": true,
+          "initial": true,
+          "type": "keypad",
+          "titleL10n": "main_BottomNavigationBarItemLabel_keypad",
+          "icon": "0xe1ce"
+        }
+      ]
+    }
   }
 }
