@@ -17,6 +17,10 @@ _$UiComposeSettingsImpl _$$UiComposeSettingsImplFromJson(
           ? null
           : UiComposeSettingsMain.fromJson(
               json['main'] as Map<String, dynamic>),
+      account: json['account'] == null
+          ? null
+          : UiComposeSettingsAccount.fromJson(
+              json['account'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$UiComposeSettingsImplToJson(
@@ -24,6 +28,7 @@ Map<String, dynamic> _$$UiComposeSettingsImplToJson(
     <String, dynamic>{
       'login': instance.login,
       'main': instance.main,
+      'account': instance.account,
     };
 
 _$UiComposeSettingsLoginImpl _$$UiComposeSettingsLoginImplFromJson(
@@ -109,4 +114,74 @@ Map<String, dynamic> _$$UiComposeSettingsBottomMenuTabImplToJson(
       'type': instance.type,
       'titleL10n': instance.titleL10n,
       'icon': const IconDataConverter().toJson(instance.icon),
+    };
+
+_$UiComposeSettingsAccountImpl _$$UiComposeSettingsAccountImplFromJson(
+        Map<String, dynamic> json) =>
+    _$UiComposeSettingsAccountImpl(
+      sections: (json['sections'] as List<dynamic>?)
+              ?.map((e) => UiComposeSettingsAccountSection.fromJson(
+                  e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+    );
+
+Map<String, dynamic> _$$UiComposeSettingsAccountImplToJson(
+        _$UiComposeSettingsAccountImpl instance) =>
+    <String, dynamic>{
+      'sections': instance.sections,
+    };
+
+_$UiComposeSettingsAccountSectionImpl
+    _$$UiComposeSettingsAccountSectionImplFromJson(Map<String, dynamic> json) =>
+        _$UiComposeSettingsAccountSectionImpl(
+          titleL10n: json['titleL10n'] as String,
+          items: (json['items'] as List<dynamic>?)
+                  ?.map((e) => UiComposeSettingsAccountItem.fromJson(
+                      e as Map<String, dynamic>))
+                  .toList() ??
+              const [],
+        );
+
+Map<String, dynamic> _$$UiComposeSettingsAccountSectionImplToJson(
+        _$UiComposeSettingsAccountSectionImpl instance) =>
+    <String, dynamic>{
+      'titleL10n': instance.titleL10n,
+      'items': instance.items,
+    };
+
+_$UiComposeSettingsAccountItemImpl _$$UiComposeSettingsAccountItemImplFromJson(
+        Map<String, dynamic> json) =>
+    _$UiComposeSettingsAccountItemImpl(
+      enabled: json['enabled'] as bool? ?? true,
+      titleL10n: json['titleL10n'] as String,
+      type: json['type'] as String?,
+      icon: const IconDataConverter().fromJson(json['icon'] as String),
+      data: json['data'] == null
+          ? null
+          : UiComposeSettingsAccountItemData.fromJson(
+              json['data'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$UiComposeSettingsAccountItemImplToJson(
+        _$UiComposeSettingsAccountItemImpl instance) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'titleL10n': instance.titleL10n,
+      'type': instance.type,
+      'icon': const IconDataConverter().toJson(instance.icon),
+      'data': instance.data,
+    };
+
+_$UiComposeSettingsAccountItemDataImpl
+    _$$UiComposeSettingsAccountItemDataImplFromJson(
+            Map<String, dynamic> json) =>
+        _$UiComposeSettingsAccountItemDataImpl(
+          url: json['url'] as String,
+        );
+
+Map<String, dynamic> _$$UiComposeSettingsAccountItemDataImplToJson(
+        _$UiComposeSettingsAccountItemDataImpl instance) =>
+    <String, dynamic>{
+      'url': instance.url,
     };

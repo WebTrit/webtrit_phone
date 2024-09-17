@@ -16,7 +16,9 @@ class SettingsScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const widget = SettingsScreen();
+    final featureAccess = context.read<FeatureAccess>();
+    final widget = SettingsScreen(accountFeature: featureAccess.accountFeature);
+
     final provider = BlocProvider(
       create: (context) {
         return SettingsBloc(

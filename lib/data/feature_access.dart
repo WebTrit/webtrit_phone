@@ -15,10 +15,11 @@ final Logger _logger = Logger('FeatureAccess');
 class FeatureAccess {
   static late FeatureAccess _instance;
 
-  FeatureAccess._(this.customLoginFeature, this.bottomMenuFeature);
+  FeatureAccess._(this.customLoginFeature, this.bottomMenuFeature, this.accountFeature);
 
   final CustomLoginFeature? customLoginFeature;
   final BottomMenuFeature bottomMenuFeature;
+  final AccountFeature accountFeature;
 
   static Future<void> init() async {
     final theme = AppThemes();
@@ -29,8 +30,9 @@ class FeatureAccess {
     try {
       final customLoginFeature = _tryEnableCustomLoginFeature(uiComposeSettings);
       final bottomMenuManager = _tryConfigureBottomMenuFeature(uiComposeSettings, preferences);
+      final accountFeature = _tryConfigureAccountFeature(uiComposeSettings, preferences);
 
-      _instance = FeatureAccess._(customLoginFeature, bottomMenuManager);
+      _instance = FeatureAccess._(customLoginFeature, bottomMenuManager, accountFeature);
     } catch (e, stackTrace) {
       _logger.severe('Failed to initialize FeatureAccess', e, stackTrace);
       rethrow;
@@ -63,6 +65,27 @@ class FeatureAccess {
     }
 
     return BottomMenuFeature(bottomMenuTabs, preferences, cacheSelectedTab: bottomMenu.cacheSelectedTab);
+  }
+
+  static AccountFeature _tryConfigureAccountFeature(
+    UiComposeSettings uiComposeSettings,
+    AppPreferences preferences,
+  ) {
+    final accountSections = uiComposeSettings.account?.sections.map((section) {
+      return AccountSection(
+        titleL10n: section.titleL10n,
+        items: section.items.map((item) {
+          return AccountItem(
+            titleL10n: item.titleL10n,
+            icon: item.icon,
+            data: item.data != null ? AccountItemData(url: item.data!.url!) : null,
+            type: item.type!,
+          );
+        }).toList(),
+      );
+    }).toList();
+
+    return AccountFeature(accountSections!);
   }
 
   static CustomLoginFeature? _tryEnableCustomLoginFeature(UiComposeSettings uiComposeSettings) {
@@ -112,4 +135,12 @@ class BottomMenuFeature {
     _appPreferences.setActiveMainFlavor(flavor.flavor);
     _activeTab = flavor;
   }
+}
+
+class AccountFeature {
+  final List<AccountSection> _sections;
+
+  AccountFeature(this._sections);
+
+  List<AccountSection> get sections => List.unmodifiable(_sections);
 }

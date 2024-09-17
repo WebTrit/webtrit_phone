@@ -1,7 +1,5 @@
 import 'package:flutter/widgets.dart';
-
 import 'package:freezed_annotation/freezed_annotation.dart';
-
 import 'icon_data_converter.dart';
 
 part 'ui_compose_settings.freezed.dart';
@@ -15,6 +13,7 @@ class UiComposeSettings with _$UiComposeSettings {
   const factory UiComposeSettings({
     UiComposeSettingsLogin? login,
     UiComposeSettingsMain? main,
+    UiComposeSettingsAccount? account, // Added account
   }) = _UiComposeSettings;
 
   factory UiComposeSettings.fromJson(Map<String, dynamic> json) => _$UiComposeSettingsFromJson(json);
@@ -85,4 +84,57 @@ class UiComposeSettingsBottomMenuTab with _$UiComposeSettingsBottomMenuTab {
 
   factory UiComposeSettingsBottomMenuTab.fromJson(Map<String, dynamic> json) =>
       _$UiComposeSettingsBottomMenuTabFromJson(json);
+}
+
+// New class for account settings
+@freezed
+class UiComposeSettingsAccount with _$UiComposeSettingsAccount {
+  const UiComposeSettingsAccount._();
+
+  const factory UiComposeSettingsAccount({
+    @Default([]) List<UiComposeSettingsAccountSection> sections,
+  }) = _UiComposeSettingsAccount;
+
+  factory UiComposeSettingsAccount.fromJson(Map<String, dynamic> json) => _$UiComposeSettingsAccountFromJson(json);
+}
+
+@freezed
+class UiComposeSettingsAccountSection with _$UiComposeSettingsAccountSection {
+  const UiComposeSettingsAccountSection._();
+
+  const factory UiComposeSettingsAccountSection({
+    required String titleL10n,
+    @Default([]) List<UiComposeSettingsAccountItem> items,
+  }) = _UiComposeSettingsAccountSection;
+
+  factory UiComposeSettingsAccountSection.fromJson(Map<String, dynamic> json) =>
+      _$UiComposeSettingsAccountSectionFromJson(json);
+}
+
+@freezed
+class UiComposeSettingsAccountItem with _$UiComposeSettingsAccountItem {
+  const UiComposeSettingsAccountItem._();
+
+  const factory UiComposeSettingsAccountItem({
+    @Default(true) bool enabled,
+    required String titleL10n,
+    String? type,
+    @IconDataConverter() required IconData icon,
+    required UiComposeSettingsAccountItemData? data,
+  }) = _UiComposeSettingsAccountItem;
+
+  factory UiComposeSettingsAccountItem.fromJson(Map<String, dynamic> json) =>
+      _$UiComposeSettingsAccountItemFromJson(json);
+}
+
+@freezed
+class UiComposeSettingsAccountItemData with _$UiComposeSettingsAccountItemData {
+  const UiComposeSettingsAccountItemData._();
+
+  const factory UiComposeSettingsAccountItemData({
+    required String url,
+  }) = _UiComposeSettingsAccountItemData;
+
+  factory UiComposeSettingsAccountItemData.fromJson(Map<String, dynamic> json) =>
+      _$UiComposeSettingsAccountItemDataFromJson(json);
 }

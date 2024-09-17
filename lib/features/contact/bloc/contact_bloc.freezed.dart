@@ -139,7 +139,9 @@ mixin _$ContactState {
   List<ContactPhone>? get contactPhones => throw _privateConstructorUsedError;
   List<ContactEmail>? get contactEmails => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ContactState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ContactStateCopyWith<ContactState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -166,6 +168,8 @@ class _$ContactStateCopyWithImpl<$Res, $Val extends ContactState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ContactState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -212,6 +216,8 @@ class __$$ContactStateImplCopyWithImpl<$Res>
       _$ContactStateImpl _value, $Res Function(_$ContactStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ContactState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -292,7 +298,9 @@ class _$ContactStateImpl implements _ContactState {
       const DeepCollectionEquality().hash(_contactPhones),
       const DeepCollectionEquality().hash(_contactEmails));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ContactState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ContactStateImplCopyWith<_$ContactStateImpl> get copyWith =>
@@ -311,8 +319,11 @@ abstract class _ContactState implements ContactState {
   List<ContactPhone>? get contactPhones;
   @override
   List<ContactEmail>? get contactEmails;
+
+  /// Create a copy of ContactState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ContactStateImplCopyWith<_$ContactStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
