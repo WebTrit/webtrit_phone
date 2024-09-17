@@ -37,9 +37,15 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
         builder: (context) => NewConversationPage(
             contactsRepository: contactsRepository,
             filter: (contact) {
-              if (chatFeatureEnabled && !smsFetureEnabled) return contact.canMessage;
-              if (!chatFeatureEnabled && smsFetureEnabled) return contact.phones.isNotEmpty;
-              if (chatFeatureEnabled && smsFetureEnabled) return contact.canMessage || contact.phones.isNotEmpty;
+              if (chatFeatureEnabled && !smsFetureEnabled) {
+                return contact.canMessage;
+              }
+              if (!chatFeatureEnabled && smsFetureEnabled) {
+                return contact.phones.isNotEmpty && contact.isCurrentUser == false;
+              }
+              if (chatFeatureEnabled && smsFetureEnabled) {
+                return contact.canMessage || contact.phones.isNotEmpty && contact.isCurrentUser == false;
+              }
               return false;
             }),
       ),
