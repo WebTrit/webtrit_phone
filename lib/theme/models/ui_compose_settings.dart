@@ -80,6 +80,7 @@ class UiComposeSettingsBottomMenuTab with _$UiComposeSettingsBottomMenuTab {
     required String type,
     required String titleL10n,
     @IconDataConverter() required IconData icon,
+    UiComposeSettingsBottomMenuTabData? data,
   }) = _UiComposeSettingsBottomMenuTab;
 
   factory UiComposeSettingsBottomMenuTab.fromJson(Map<String, dynamic> json) =>
@@ -137,4 +138,14 @@ class UiComposeSettingsAccountItemData with _$UiComposeSettingsAccountItemData {
 
   factory UiComposeSettingsAccountItemData.fromJson(Map<String, dynamic> json) =>
       _$UiComposeSettingsAccountItemDataFromJson(json);
+}
+
+@unfreezed
+class UiComposeSettingsBottomMenuTabData with _$UiComposeSettingsBottomMenuTabData {
+  factory UiComposeSettingsBottomMenuTabData({
+    required String url,
+  }) = _UiComposeSettingsBottomMenuTabData;
+
+  factory UiComposeSettingsBottomMenuTabData.fromJson(Map<String, dynamic> json) =>
+      _$UiComposeSettingsBottomMenuTabDataFromJson(json);
 }

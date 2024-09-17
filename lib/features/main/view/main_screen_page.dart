@@ -102,8 +102,16 @@ class MainScreenPage extends StatelessWidget {
         case MainFlavor.keypad:
           return const KeypadScreenPageRoute();
         default:
-          throw Exception('Unknown flavor type');
+          return _getEmbeddedRoute(flavor);
       }
     }).toList();
+  }
+
+  PageRouteInfo<dynamic> _getEmbeddedRoute(BottomMenuTab flavor) {
+    final embedded = EmbeddedScreenPage.getPageRoute(flavor.flavor, flavor.data!);
+    if (embedded != null) {
+      return embedded;
+    }
+    throw Exception('Unknown flavor type: ${flavor.flavor}');
   }
 }

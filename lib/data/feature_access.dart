@@ -57,6 +57,7 @@ class FeatureAccess {
         flavor: MainFlavor.values.byName(tab.type),
         titleL10n: tab.titleL10n,
         icon: tab.icon,
+        data: tab.data != null ? BottomMenuTabData(url: tab.data!.url) : null,
       );
     }).toList();
 
@@ -125,6 +126,8 @@ class BottomMenuFeature {
     _activeTab = (preferencesPath != null && tabs.any((tab) => tab.flavor == preferencesPath)
         ? tabs.firstWhereOrNull((tab) => tab.flavor == preferencesPath)
         : tabs.firstWhereOrNull((tab) => tab.initial) ?? _tabs.first)!;
+
+    _logger.info('Active tab: ${_activeTab.flavor}');
   }
 
   bool isTabEnabled(MainFlavor flavor) {
