@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webtrit_phone/features/embedded/bloc/embedded_cubit.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -109,6 +110,17 @@ class MainScreenScreenshot extends StatelessWidget {
         final provider = BlocProvider<KeypadCubit>(
           create: (context) => MockKeypadCubit.mainScreen(),
           child: widget,
+        );
+        return provider;
+      case MainFlavor.embedded1:
+      case MainFlavor.embedded2:
+      case MainFlavor.embedded3:
+        final provider = BlocProvider<EmbeddedCubit>(
+          create: (context) => MockEmbeddedCubit.mainScreen(),
+          child: EmbeddedScreen(
+            initialUri: Uri.parse('htts://example.com'),
+            title: const Text("Embedded page"),
+          ),
         );
         return provider;
     }
