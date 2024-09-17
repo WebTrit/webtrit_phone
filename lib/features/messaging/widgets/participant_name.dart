@@ -41,7 +41,7 @@ class ParticipantName extends StatelessWidget {
           final name = contact?.name ?? senderId;
           final mappedName = textMap?.call(name) ?? name;
           return FadeIn(
-            duration: const Duration(milliseconds: 100),
+            duration: const Duration(milliseconds: 300),
             child: Text(mappedName, style: textStyle, maxLines: 1, overflow: TextOverflow.ellipsis),
           );
         },

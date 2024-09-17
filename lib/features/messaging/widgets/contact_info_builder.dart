@@ -96,6 +96,5 @@ class ContactWatchPoolEntry {
 
   _onCancel() {
     _sub?.cancel();
-    _contact = null;
   }
 }

@@ -83,6 +83,5 @@ class NumbersWatchSubject {
 
   _onCancel() {
     _sub?.cancel();
-    _numbersCache = null;
   }
 }

@@ -197,12 +197,16 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                 sourceType: ContactSourceType.external,
                 sourceId: senderId,
                 builder: (context, contact, {required bool loading}) {
-                  return LeadingAvatar(
-                    username: contact?.name,
-                    thumbnail: contact?.thumbnail,
-                    thumbnailUrl: contact?.thumbnailUrl,
-                    registered: contact?.registered,
-                    radius: 20,
+                  return FadeIn(
+                    key: ValueKey(contact),
+                    duration: const Duration(milliseconds: 300),
+                    child: LeadingAvatar(
+                      username: contact?.name,
+                      thumbnail: contact?.thumbnail,
+                      thumbnailUrl: contact?.thumbnailUrl,
+                      registered: contact?.registered,
+                      radius: 20,
+                    ),
                   );
                 },
               ),
