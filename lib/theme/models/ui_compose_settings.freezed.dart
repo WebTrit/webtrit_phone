@@ -987,6 +987,8 @@ mixin _$UiComposeSettingsBottomMenuTab {
   String get titleL10n => throw _privateConstructorUsedError;
   @IconDataConverter()
   IconData get icon => throw _privateConstructorUsedError;
+  UiComposeSettingsBottomMenuTabData? get data =>
+      throw _privateConstructorUsedError;
 
   /// Serializes this UiComposeSettingsBottomMenuTab to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1011,7 +1013,10 @@ abstract class $UiComposeSettingsBottomMenuTabCopyWith<$Res> {
       bool initial,
       String type,
       String titleL10n,
-      @IconDataConverter() IconData icon});
+      @IconDataConverter() IconData icon,
+      UiComposeSettingsBottomMenuTabData? data});
+
+  $UiComposeSettingsBottomMenuTabDataCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -1035,6 +1040,7 @@ class _$UiComposeSettingsBottomMenuTabCopyWithImpl<$Res,
     Object? type = null,
     Object? titleL10n = null,
     Object? icon = null,
+    Object? data = freezed,
   }) {
     return _then(_value.copyWith(
       enabled: null == enabled
@@ -1057,7 +1063,26 @@ class _$UiComposeSettingsBottomMenuTabCopyWithImpl<$Res,
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
               as IconData,
+      data: freezed == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as UiComposeSettingsBottomMenuTabData?,
     ) as $Val);
+  }
+
+  /// Create a copy of UiComposeSettingsBottomMenuTab
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $UiComposeSettingsBottomMenuTabDataCopyWith<$Res>? get data {
+    if (_value.data == null) {
+      return null;
+    }
+
+    return $UiComposeSettingsBottomMenuTabDataCopyWith<$Res>(_value.data!,
+        (value) {
+      return _then(_value.copyWith(data: value) as $Val);
+    });
   }
 }
 
@@ -1075,7 +1100,11 @@ abstract class _$$UiComposeSettingsBottomMenuTabImplCopyWith<$Res>
       bool initial,
       String type,
       String titleL10n,
-      @IconDataConverter() IconData icon});
+      @IconDataConverter() IconData icon,
+      UiComposeSettingsBottomMenuTabData? data});
+
+  @override
+  $UiComposeSettingsBottomMenuTabDataCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -1098,6 +1127,7 @@ class __$$UiComposeSettingsBottomMenuTabImplCopyWithImpl<$Res>
     Object? type = null,
     Object? titleL10n = null,
     Object? icon = null,
+    Object? data = freezed,
   }) {
     return _then(_$UiComposeSettingsBottomMenuTabImpl(
       enabled: null == enabled
@@ -1120,6 +1150,10 @@ class __$$UiComposeSettingsBottomMenuTabImplCopyWithImpl<$Res>
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
               as IconData,
+      data: freezed == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as UiComposeSettingsBottomMenuTabData?,
     ));
   }
 }
@@ -1133,7 +1167,8 @@ class _$UiComposeSettingsBottomMenuTabImpl
       this.initial = false,
       required this.type,
       required this.titleL10n,
-      @IconDataConverter() required this.icon})
+      @IconDataConverter() required this.icon,
+      this.data})
       : super._();
 
   factory _$UiComposeSettingsBottomMenuTabImpl.fromJson(
@@ -1153,10 +1188,12 @@ class _$UiComposeSettingsBottomMenuTabImpl
   @override
   @IconDataConverter()
   final IconData icon;
+  @override
+  final UiComposeSettingsBottomMenuTabData? data;
 
   @override
   String toString() {
-    return 'UiComposeSettingsBottomMenuTab(enabled: $enabled, initial: $initial, type: $type, titleL10n: $titleL10n, icon: $icon)';
+    return 'UiComposeSettingsBottomMenuTab(enabled: $enabled, initial: $initial, type: $type, titleL10n: $titleL10n, icon: $icon, data: $data)';
   }
 
   @override
@@ -1169,13 +1206,14 @@ class _$UiComposeSettingsBottomMenuTabImpl
             (identical(other.type, type) || other.type == type) &&
             (identical(other.titleL10n, titleL10n) ||
                 other.titleL10n == titleL10n) &&
-            (identical(other.icon, icon) || other.icon == icon));
+            (identical(other.icon, icon) || other.icon == icon) &&
+            (identical(other.data, data) || other.data == data));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, enabled, initial, type, titleL10n, icon);
+      Object.hash(runtimeType, enabled, initial, type, titleL10n, icon, data);
 
   /// Create a copy of UiComposeSettingsBottomMenuTab
   /// with the given fields replaced by the non-null parameter values.
@@ -1202,7 +1240,8 @@ abstract class _UiComposeSettingsBottomMenuTab
           final bool initial,
           required final String type,
           required final String titleL10n,
-          @IconDataConverter() required final IconData icon}) =
+          @IconDataConverter() required final IconData icon,
+          final UiComposeSettingsBottomMenuTabData? data}) =
       _$UiComposeSettingsBottomMenuTabImpl;
   const _UiComposeSettingsBottomMenuTab._() : super._();
 
@@ -1220,6 +1259,8 @@ abstract class _UiComposeSettingsBottomMenuTab
   @override
   @IconDataConverter()
   IconData get icon;
+  @override
+  UiComposeSettingsBottomMenuTabData? get data;
 
   /// Create a copy of UiComposeSettingsBottomMenuTab
   /// with the given fields replaced by the non-null parameter values.
@@ -1227,5 +1268,160 @@ abstract class _UiComposeSettingsBottomMenuTab
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UiComposeSettingsBottomMenuTabImplCopyWith<
           _$UiComposeSettingsBottomMenuTabImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+UiComposeSettingsBottomMenuTabData _$UiComposeSettingsBottomMenuTabDataFromJson(
+    Map<String, dynamic> json) {
+  return _UiComposeSettingsBottomMenuTabData.fromJson(json);
+}
+
+/// @nodoc
+mixin _$UiComposeSettingsBottomMenuTabData {
+  String get url => throw _privateConstructorUsedError;
+  set url(String value) => throw _privateConstructorUsedError;
+
+  /// Serializes this UiComposeSettingsBottomMenuTabData to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of UiComposeSettingsBottomMenuTabData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $UiComposeSettingsBottomMenuTabDataCopyWith<
+          UiComposeSettingsBottomMenuTabData>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $UiComposeSettingsBottomMenuTabDataCopyWith<$Res> {
+  factory $UiComposeSettingsBottomMenuTabDataCopyWith(
+          UiComposeSettingsBottomMenuTabData value,
+          $Res Function(UiComposeSettingsBottomMenuTabData) then) =
+      _$UiComposeSettingsBottomMenuTabDataCopyWithImpl<$Res,
+          UiComposeSettingsBottomMenuTabData>;
+  @useResult
+  $Res call({String url});
+}
+
+/// @nodoc
+class _$UiComposeSettingsBottomMenuTabDataCopyWithImpl<$Res,
+        $Val extends UiComposeSettingsBottomMenuTabData>
+    implements $UiComposeSettingsBottomMenuTabDataCopyWith<$Res> {
+  _$UiComposeSettingsBottomMenuTabDataCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of UiComposeSettingsBottomMenuTabData
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? url = null,
+  }) {
+    return _then(_value.copyWith(
+      url: null == url
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$UiComposeSettingsBottomMenuTabDataImplCopyWith<$Res>
+    implements $UiComposeSettingsBottomMenuTabDataCopyWith<$Res> {
+  factory _$$UiComposeSettingsBottomMenuTabDataImplCopyWith(
+          _$UiComposeSettingsBottomMenuTabDataImpl value,
+          $Res Function(_$UiComposeSettingsBottomMenuTabDataImpl) then) =
+      __$$UiComposeSettingsBottomMenuTabDataImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String url});
+}
+
+/// @nodoc
+class __$$UiComposeSettingsBottomMenuTabDataImplCopyWithImpl<$Res>
+    extends _$UiComposeSettingsBottomMenuTabDataCopyWithImpl<$Res,
+        _$UiComposeSettingsBottomMenuTabDataImpl>
+    implements _$$UiComposeSettingsBottomMenuTabDataImplCopyWith<$Res> {
+  __$$UiComposeSettingsBottomMenuTabDataImplCopyWithImpl(
+      _$UiComposeSettingsBottomMenuTabDataImpl _value,
+      $Res Function(_$UiComposeSettingsBottomMenuTabDataImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of UiComposeSettingsBottomMenuTabData
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? url = null,
+  }) {
+    return _then(_$UiComposeSettingsBottomMenuTabDataImpl(
+      url: null == url
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$UiComposeSettingsBottomMenuTabDataImpl
+    implements _UiComposeSettingsBottomMenuTabData {
+  _$UiComposeSettingsBottomMenuTabDataImpl({required this.url});
+
+  factory _$UiComposeSettingsBottomMenuTabDataImpl.fromJson(
+          Map<String, dynamic> json) =>
+      _$$UiComposeSettingsBottomMenuTabDataImplFromJson(json);
+
+  @override
+  String url;
+
+  @override
+  String toString() {
+    return 'UiComposeSettingsBottomMenuTabData(url: $url)';
+  }
+
+  /// Create a copy of UiComposeSettingsBottomMenuTabData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$UiComposeSettingsBottomMenuTabDataImplCopyWith<
+          _$UiComposeSettingsBottomMenuTabDataImpl>
+      get copyWith => __$$UiComposeSettingsBottomMenuTabDataImplCopyWithImpl<
+          _$UiComposeSettingsBottomMenuTabDataImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$UiComposeSettingsBottomMenuTabDataImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _UiComposeSettingsBottomMenuTabData
+    implements UiComposeSettingsBottomMenuTabData {
+  factory _UiComposeSettingsBottomMenuTabData({required String url}) =
+      _$UiComposeSettingsBottomMenuTabDataImpl;
+
+  factory _UiComposeSettingsBottomMenuTabData.fromJson(
+          Map<String, dynamic> json) =
+      _$UiComposeSettingsBottomMenuTabDataImpl.fromJson;
+
+  @override
+  String get url;
+  set url(String value);
+
+  /// Create a copy of UiComposeSettingsBottomMenuTabData
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$UiComposeSettingsBottomMenuTabDataImplCopyWith<
+          _$UiComposeSettingsBottomMenuTabDataImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
