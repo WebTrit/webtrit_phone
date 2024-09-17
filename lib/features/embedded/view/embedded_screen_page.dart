@@ -37,7 +37,7 @@ abstract class EmbeddedScreenPage extends StatelessWidget {
     };
 
     for (final entry in routes.entries) {
-      final embedded = route.existRouteWIthRequiredParams(entry.key);
+      final embedded = route.findRouteWithRequiredParams(entry.key);
       if (embedded != null && bottomMenuTabData != null) {
         return entry.value(bottomMenuTabData) as PageRouteInfo<dynamic>;
       }
