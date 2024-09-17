@@ -15,18 +15,6 @@ import 'webview_progress_indicator.dart';
 
 export 'package:webview_flutter/webview_flutter.dart' show JavaScriptMessage;
 
-class WebViewScaffoldOption {
-  final bool showToolbar;
-
-  const WebViewScaffoldOption({
-    required this.showToolbar,
-  });
-
-  static const defaultOption = WebViewScaffoldOption(showToolbar: true);
-
-  static const tabOption = WebViewScaffoldOption(showToolbar: false);
-}
-
 class WebViewScaffold extends StatefulWidget {
   const WebViewScaffold({
     super.key,
@@ -34,14 +22,14 @@ class WebViewScaffold extends StatefulWidget {
     required this.initialUri,
     this.addLocaleNameToQueryParameters = true,
     this.javaScriptChannels = const {},
-    this.option = WebViewScaffoldOption.defaultOption,
+    this.showToolbar = true,
   });
 
   final Widget? title;
   final Uri initialUri;
   final bool addLocaleNameToQueryParameters;
   final Map<String, void Function(JavaScriptMessage)> javaScriptChannels;
-  final WebViewScaffoldOption option;
+  final bool showToolbar;
 
   @override
   State<WebViewScaffold> createState() => _WebViewScaffoldState();
@@ -138,7 +126,7 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: widget.option.showToolbar
+      appBar: widget.showToolbar
           ? AppBar(
               title: widget.title,
               leading: const ExtBackButton(),

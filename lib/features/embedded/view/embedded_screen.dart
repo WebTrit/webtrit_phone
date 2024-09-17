@@ -26,7 +26,7 @@ class EmbeddedScreen extends StatelessWidget {
       body: BlocBuilder<EmbeddedCubit, EmbeddedState>(
         builder: (context, state) => WebViewScaffold(
           initialUri: initialUri,
-          option: WebViewScaffoldOption.tabOption,
+          showToolbar: false,
         ),
       ),
     );
