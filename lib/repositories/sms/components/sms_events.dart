@@ -37,3 +37,14 @@ class SmsMessageUpdate extends SmsEvent with EquatableMixin {
   @override
   bool get stringify => true;
 }
+
+class SmsReadCursorUpdate extends SmsEvent with EquatableMixin {
+  const SmsReadCursorUpdate(this.cursor);
+  final SmsMessageReadCursor cursor;
+
+  @override
+  List<Object> get props => [cursor];
+
+  @override
+  bool get stringify => true;
+}

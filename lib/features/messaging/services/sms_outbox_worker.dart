@@ -36,6 +36,10 @@ class SmsOutboxWorker {
         await _processMessageDelete(entry);
       }
 
+      // for (final entry in await _outboxRepository.getOutboxReadCursors()) {
+      //   await _processReadCursor(entry);
+      // }
+
       if (_disposed) return false;
       await Future.delayed(const Duration(seconds: 1));
       return true;
@@ -112,6 +116,34 @@ class SmsOutboxWorker {
         await _outboxRepository.deleteOutboxMessageDelete(messageDelete.id);
       } else {
         await _outboxRepository.upsertOutboxMessageDelete(messageDelete.incAttempts());
+      }
+    }
+  }
+
+  Future _processReadCursor(SmsOutboxReadCursorEntry readCursor) async {
+    try {
+      final channel = _client.getSmsConversationChannel(readCursor.conversationId);
+      if (channel == null) return;
+      if (channel.state != PhoenixChannelState.joined) return;
+
+      var payload = {'last_read_at': readCursor.time.toUtc().toIso8601String()};
+      final r = await channel.push('sms:cursor:set', payload).future;
+
+      if (r.isOk) {
+        await _outboxRepository.deleteOutboxReadCursor(readCursor.conversationId);
+        final c = SmsMessageReadCursor(
+            conversationId: readCursor.conversationId, userId: _client.userId!, time: readCursor.time);
+        await _smsRepository.upsertMessageReadCursor(c);
+        _logger.info('After isOk on read cursor: ${readCursor.conversationId}');
+      }
+      if (r.isError) throw Exception('Error processing read cursor');
+    } catch (e) {
+      _logger.severe('Error processing read cursor, attempt: ${readCursor.sendAttempts}', e);
+      if (readCursor.sendAttempts > 5) {
+        _logger.severe('Send attempts exceeded for read cursor: ${readCursor.conversationId}');
+        await _outboxRepository.deleteOutboxReadCursor(readCursor.conversationId);
+      } else {
+        await _outboxRepository.upsertOutboxReadCursor(readCursor.incAttempts());
       }
     }
   }

@@ -122,14 +122,17 @@ class _SmsConversationScreenState extends State<SmsConversationScreen> {
                   builder: (context) {
                     if (state is SCSReady) {
                       return SmsMessageListView(
+                        userId: messagingBloc.state.userId!,
                         userNumber: userNumber,
                         messages: state.messages,
                         outboxMessages: state.outboxMessages,
                         outboxMessageDeletes: state.outboxMessageDeletes,
+                        readCursors: state.readCursors,
                         fetchingHistory: state.fetchingHistory,
                         historyEndReached: state.historyEndReached,
                         onSendMessage: (content) => conversationCubit.sendMessage(content),
                         onDelete: (refMessage) => conversationCubit.deleteMessage(refMessage),
+                        userReadedUntilUpdate: (date) => conversationCubit.userReadedUntilUpdate(date),
                         onFetchHistory: conversationCubit.fetchHistory,
                       );
                     }

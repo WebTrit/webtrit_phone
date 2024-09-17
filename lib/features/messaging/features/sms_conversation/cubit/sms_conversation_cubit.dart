@@ -41,6 +41,7 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
   StreamSubscription? _messagesSub;
   StreamSubscription? _outboxMessagesSub;
   StreamSubscription? _outboxMessageDeletesSub;
+  StreamSubscription? _readCursorsSub;
 
   void restart() {
     _logger.info('Restarting sms conversation with $_creds');
@@ -78,6 +79,20 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
       conversationId: conversationId,
     );
     _outboxRepository.upsertOutboxMessageDelete(outboxEntry);
+  }
+
+  Future userReadedUntilUpdate(DateTime time) async {
+    final state = this.state;
+    if (state is! SCSReady || state.busy) return false;
+
+    final conversationId = state.conversation?.id;
+    if (conversationId == null) return false;
+
+    final outboxEntry = SmsOutboxReadCursorEntry(
+      conversationId: conversationId,
+      time: time,
+    );
+    _outboxRepository.upsertOutboxReadCursor(outboxEntry);
   }
 
   Future<bool> deleteConversation() async {
@@ -192,6 +207,10 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     _messagesSub?.cancel();
     _messagesSub = _messagesSubFactory((msg) => _handleMessageUpdate(conversationId, msg));
 
+    // Subscribe to read cursors updates
+    _readCursorsSub?.cancel();
+    _readCursorsSub = _readCursorsSubFactory(conversationId, _handleReadCursorsUpdate);
+
     // Subscribe to outbox messages updates
     _outboxMessageDeletesSub =
         _outboxMessageDeletesSubFactory((entries) => _handleOutboxMessageDeletesUpdate(conversationId, entries));
@@ -275,6 +294,16 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     emit(state.copyWith(outboxMessageDeletes: conversationEntries));
   }
 
+  StreamSubscription _readCursorsSubFactory(int conversationId, void Function(List<SmsMessageReadCursor>) onArrive) {
+    return _repository.watchMessageReadCursors(conversationId).listen(onArrive);
+  }
+
+  void _handleReadCursorsUpdate(List<SmsMessageReadCursor> cursors) {
+    _logger.info('_handleReadCursorsUpdate: ${cursors.length}');
+    final state = this.state;
+    if (state is SCSReady) emit(state.copyWith(readCursors: cursors));
+  }
+
   @override
   Future<void> close() {
     _logger.info('Closing sms conversation with $_creds');
@@ -288,5 +317,6 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     _messagesSub?.cancel();
     _outboxMessagesSub?.cancel();
     _outboxMessageDeletesSub?.cancel();
+    _readCursorsSub?.cancel();
   }
 }

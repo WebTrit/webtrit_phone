@@ -6075,6 +6075,255 @@ class SmsMessageSyncCursorDataCompanion
   }
 }
 
+class $SmsMessageReadCursorTableTable extends SmsMessageReadCursorTable
+    with TableInfo<$SmsMessageReadCursorTableTable, SmsMessageReadCursorData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SmsMessageReadCursorTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _conversationIdMeta =
+      const VerificationMeta('conversationId');
+  @override
+  late final GeneratedColumn<int> conversationId = GeneratedColumn<int>(
+      'conversation_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES sms_conversations (id) ON DELETE CASCADE'));
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
+      'user_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _timestampUsecMeta =
+      const VerificationMeta('timestampUsec');
+  @override
+  late final GeneratedColumn<int> timestampUsec = GeneratedColumn<int>(
+      'timestamp_usec', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [conversationId, userId, timestampUsec];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'sms_message_read_cursors';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<SmsMessageReadCursorData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('conversation_id')) {
+      context.handle(
+          _conversationIdMeta,
+          conversationId.isAcceptableOrUnknown(
+              data['conversation_id']!, _conversationIdMeta));
+    } else if (isInserting) {
+      context.missing(_conversationIdMeta);
+    }
+    if (data.containsKey('user_id')) {
+      context.handle(_userIdMeta,
+          userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
+    if (data.containsKey('timestamp_usec')) {
+      context.handle(
+          _timestampUsecMeta,
+          timestampUsec.isAcceptableOrUnknown(
+              data['timestamp_usec']!, _timestampUsecMeta));
+    } else if (isInserting) {
+      context.missing(_timestampUsecMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {conversationId, userId};
+  @override
+  SmsMessageReadCursorData map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SmsMessageReadCursorData(
+      conversationId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}conversation_id'])!,
+      userId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}user_id'])!,
+      timestampUsec: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}timestamp_usec'])!,
+    );
+  }
+
+  @override
+  $SmsMessageReadCursorTableTable createAlias(String alias) {
+    return $SmsMessageReadCursorTableTable(attachedDatabase, alias);
+  }
+}
+
+class SmsMessageReadCursorData extends DataClass
+    implements Insertable<SmsMessageReadCursorData> {
+  final int conversationId;
+  final String userId;
+  final int timestampUsec;
+  const SmsMessageReadCursorData(
+      {required this.conversationId,
+      required this.userId,
+      required this.timestampUsec});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['conversation_id'] = Variable<int>(conversationId);
+    map['user_id'] = Variable<String>(userId);
+    map['timestamp_usec'] = Variable<int>(timestampUsec);
+    return map;
+  }
+
+  SmsMessageReadCursorDataCompanion toCompanion(bool nullToAbsent) {
+    return SmsMessageReadCursorDataCompanion(
+      conversationId: Value(conversationId),
+      userId: Value(userId),
+      timestampUsec: Value(timestampUsec),
+    );
+  }
+
+  factory SmsMessageReadCursorData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SmsMessageReadCursorData(
+      conversationId: serializer.fromJson<int>(json['conversationId']),
+      userId: serializer.fromJson<String>(json['userId']),
+      timestampUsec: serializer.fromJson<int>(json['timestampUsec']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'conversationId': serializer.toJson<int>(conversationId),
+      'userId': serializer.toJson<String>(userId),
+      'timestampUsec': serializer.toJson<int>(timestampUsec),
+    };
+  }
+
+  SmsMessageReadCursorData copyWith(
+          {int? conversationId, String? userId, int? timestampUsec}) =>
+      SmsMessageReadCursorData(
+        conversationId: conversationId ?? this.conversationId,
+        userId: userId ?? this.userId,
+        timestampUsec: timestampUsec ?? this.timestampUsec,
+      );
+  SmsMessageReadCursorData copyWithCompanion(
+      SmsMessageReadCursorDataCompanion data) {
+    return SmsMessageReadCursorData(
+      conversationId: data.conversationId.present
+          ? data.conversationId.value
+          : this.conversationId,
+      userId: data.userId.present ? data.userId.value : this.userId,
+      timestampUsec: data.timestampUsec.present
+          ? data.timestampUsec.value
+          : this.timestampUsec,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SmsMessageReadCursorData(')
+          ..write('conversationId: $conversationId, ')
+          ..write('userId: $userId, ')
+          ..write('timestampUsec: $timestampUsec')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(conversationId, userId, timestampUsec);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SmsMessageReadCursorData &&
+          other.conversationId == this.conversationId &&
+          other.userId == this.userId &&
+          other.timestampUsec == this.timestampUsec);
+}
+
+class SmsMessageReadCursorDataCompanion
+    extends UpdateCompanion<SmsMessageReadCursorData> {
+  final Value<int> conversationId;
+  final Value<String> userId;
+  final Value<int> timestampUsec;
+  final Value<int> rowid;
+  const SmsMessageReadCursorDataCompanion({
+    this.conversationId = const Value.absent(),
+    this.userId = const Value.absent(),
+    this.timestampUsec = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  SmsMessageReadCursorDataCompanion.insert({
+    required int conversationId,
+    required String userId,
+    required int timestampUsec,
+    this.rowid = const Value.absent(),
+  })  : conversationId = Value(conversationId),
+        userId = Value(userId),
+        timestampUsec = Value(timestampUsec);
+  static Insertable<SmsMessageReadCursorData> custom({
+    Expression<int>? conversationId,
+    Expression<String>? userId,
+    Expression<int>? timestampUsec,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (conversationId != null) 'conversation_id': conversationId,
+      if (userId != null) 'user_id': userId,
+      if (timestampUsec != null) 'timestamp_usec': timestampUsec,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  SmsMessageReadCursorDataCompanion copyWith(
+      {Value<int>? conversationId,
+      Value<String>? userId,
+      Value<int>? timestampUsec,
+      Value<int>? rowid}) {
+    return SmsMessageReadCursorDataCompanion(
+      conversationId: conversationId ?? this.conversationId,
+      userId: userId ?? this.userId,
+      timestampUsec: timestampUsec ?? this.timestampUsec,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (conversationId.present) {
+      map['conversation_id'] = Variable<int>(conversationId.value);
+    }
+    if (userId.present) {
+      map['user_id'] = Variable<String>(userId.value);
+    }
+    if (timestampUsec.present) {
+      map['timestamp_usec'] = Variable<int>(timestampUsec.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SmsMessageReadCursorDataCompanion(')
+          ..write('conversationId: $conversationId, ')
+          ..write('userId: $userId, ')
+          ..write('timestampUsec: $timestampUsec, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $SmsOutboxMessagesTableTable extends SmsOutboxMessagesTable
     with TableInfo<$SmsOutboxMessagesTableTable, SmsOutboxMessageData> {
   @override
@@ -6765,6 +7014,246 @@ class SmsOutboxMessageDeleteDataCompanion
   }
 }
 
+class $SmsOutboxReadCursorsTableTable extends SmsOutboxReadCursorsTable
+    with TableInfo<$SmsOutboxReadCursorsTableTable, SmsOutboxReadCursorData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SmsOutboxReadCursorsTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _conversationIdMeta =
+      const VerificationMeta('conversationId');
+  @override
+  late final GeneratedColumn<int> conversationId = GeneratedColumn<int>(
+      'conversation_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES sms_conversations (id) ON DELETE CASCADE'));
+  static const VerificationMeta _timestampUsecMeta =
+      const VerificationMeta('timestampUsec');
+  @override
+  late final GeneratedColumn<int> timestampUsec = GeneratedColumn<int>(
+      'timestamp_usec', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _sendAttemptsMeta =
+      const VerificationMeta('sendAttempts');
+  @override
+  late final GeneratedColumn<int> sendAttempts = GeneratedColumn<int>(
+      'send_attempts', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [conversationId, timestampUsec, sendAttempts];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'sms_outbox_read_cursors';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<SmsOutboxReadCursorData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('conversation_id')) {
+      context.handle(
+          _conversationIdMeta,
+          conversationId.isAcceptableOrUnknown(
+              data['conversation_id']!, _conversationIdMeta));
+    }
+    if (data.containsKey('timestamp_usec')) {
+      context.handle(
+          _timestampUsecMeta,
+          timestampUsec.isAcceptableOrUnknown(
+              data['timestamp_usec']!, _timestampUsecMeta));
+    } else if (isInserting) {
+      context.missing(_timestampUsecMeta);
+    }
+    if (data.containsKey('send_attempts')) {
+      context.handle(
+          _sendAttemptsMeta,
+          sendAttempts.isAcceptableOrUnknown(
+              data['send_attempts']!, _sendAttemptsMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {conversationId};
+  @override
+  SmsOutboxReadCursorData map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SmsOutboxReadCursorData(
+      conversationId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}conversation_id'])!,
+      timestampUsec: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}timestamp_usec'])!,
+      sendAttempts: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}send_attempts'])!,
+    );
+  }
+
+  @override
+  $SmsOutboxReadCursorsTableTable createAlias(String alias) {
+    return $SmsOutboxReadCursorsTableTable(attachedDatabase, alias);
+  }
+}
+
+class SmsOutboxReadCursorData extends DataClass
+    implements Insertable<SmsOutboxReadCursorData> {
+  final int conversationId;
+  final int timestampUsec;
+  final int sendAttempts;
+  const SmsOutboxReadCursorData(
+      {required this.conversationId,
+      required this.timestampUsec,
+      required this.sendAttempts});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['conversation_id'] = Variable<int>(conversationId);
+    map['timestamp_usec'] = Variable<int>(timestampUsec);
+    map['send_attempts'] = Variable<int>(sendAttempts);
+    return map;
+  }
+
+  SmsOutboxReadCursorDataCompanion toCompanion(bool nullToAbsent) {
+    return SmsOutboxReadCursorDataCompanion(
+      conversationId: Value(conversationId),
+      timestampUsec: Value(timestampUsec),
+      sendAttempts: Value(sendAttempts),
+    );
+  }
+
+  factory SmsOutboxReadCursorData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SmsOutboxReadCursorData(
+      conversationId: serializer.fromJson<int>(json['conversationId']),
+      timestampUsec: serializer.fromJson<int>(json['timestampUsec']),
+      sendAttempts: serializer.fromJson<int>(json['sendAttempts']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'conversationId': serializer.toJson<int>(conversationId),
+      'timestampUsec': serializer.toJson<int>(timestampUsec),
+      'sendAttempts': serializer.toJson<int>(sendAttempts),
+    };
+  }
+
+  SmsOutboxReadCursorData copyWith(
+          {int? conversationId, int? timestampUsec, int? sendAttempts}) =>
+      SmsOutboxReadCursorData(
+        conversationId: conversationId ?? this.conversationId,
+        timestampUsec: timestampUsec ?? this.timestampUsec,
+        sendAttempts: sendAttempts ?? this.sendAttempts,
+      );
+  SmsOutboxReadCursorData copyWithCompanion(
+      SmsOutboxReadCursorDataCompanion data) {
+    return SmsOutboxReadCursorData(
+      conversationId: data.conversationId.present
+          ? data.conversationId.value
+          : this.conversationId,
+      timestampUsec: data.timestampUsec.present
+          ? data.timestampUsec.value
+          : this.timestampUsec,
+      sendAttempts: data.sendAttempts.present
+          ? data.sendAttempts.value
+          : this.sendAttempts,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SmsOutboxReadCursorData(')
+          ..write('conversationId: $conversationId, ')
+          ..write('timestampUsec: $timestampUsec, ')
+          ..write('sendAttempts: $sendAttempts')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(conversationId, timestampUsec, sendAttempts);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SmsOutboxReadCursorData &&
+          other.conversationId == this.conversationId &&
+          other.timestampUsec == this.timestampUsec &&
+          other.sendAttempts == this.sendAttempts);
+}
+
+class SmsOutboxReadCursorDataCompanion
+    extends UpdateCompanion<SmsOutboxReadCursorData> {
+  final Value<int> conversationId;
+  final Value<int> timestampUsec;
+  final Value<int> sendAttempts;
+  const SmsOutboxReadCursorDataCompanion({
+    this.conversationId = const Value.absent(),
+    this.timestampUsec = const Value.absent(),
+    this.sendAttempts = const Value.absent(),
+  });
+  SmsOutboxReadCursorDataCompanion.insert({
+    this.conversationId = const Value.absent(),
+    required int timestampUsec,
+    this.sendAttempts = const Value.absent(),
+  }) : timestampUsec = Value(timestampUsec);
+  static Insertable<SmsOutboxReadCursorData> custom({
+    Expression<int>? conversationId,
+    Expression<int>? timestampUsec,
+    Expression<int>? sendAttempts,
+  }) {
+    return RawValuesInsertable({
+      if (conversationId != null) 'conversation_id': conversationId,
+      if (timestampUsec != null) 'timestamp_usec': timestampUsec,
+      if (sendAttempts != null) 'send_attempts': sendAttempts,
+    });
+  }
+
+  SmsOutboxReadCursorDataCompanion copyWith(
+      {Value<int>? conversationId,
+      Value<int>? timestampUsec,
+      Value<int>? sendAttempts}) {
+    return SmsOutboxReadCursorDataCompanion(
+      conversationId: conversationId ?? this.conversationId,
+      timestampUsec: timestampUsec ?? this.timestampUsec,
+      sendAttempts: sendAttempts ?? this.sendAttempts,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (conversationId.present) {
+      map['conversation_id'] = Variable<int>(conversationId.value);
+    }
+    if (timestampUsec.present) {
+      map['timestamp_usec'] = Variable<int>(timestampUsec.value);
+    }
+    if (sendAttempts.present) {
+      map['send_attempts'] = Variable<int>(sendAttempts.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SmsOutboxReadCursorDataCompanion(')
+          ..write('conversationId: $conversationId, ')
+          ..write('timestampUsec: $timestampUsec, ')
+          ..write('sendAttempts: $sendAttempts')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $UserSmsNumbersTableTable extends UserSmsNumbersTable
     with TableInfo<$UserSmsNumbersTableTable, UserSmsNumberData> {
   @override
@@ -6959,10 +7448,14 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $SmsMessagesTableTable(this);
   late final $SmsMessageSyncCursorTableTable smsMessageSyncCursorTable =
       $SmsMessageSyncCursorTableTable(this);
+  late final $SmsMessageReadCursorTableTable smsMessageReadCursorTable =
+      $SmsMessageReadCursorTableTable(this);
   late final $SmsOutboxMessagesTableTable smsOutboxMessagesTable =
       $SmsOutboxMessagesTableTable(this);
   late final $SmsOutboxMessageDeleteTableTable smsOutboxMessageDeleteTable =
       $SmsOutboxMessageDeleteTableTable(this);
+  late final $SmsOutboxReadCursorsTableTable smsOutboxReadCursorsTable =
+      $SmsOutboxReadCursorsTableTable(this);
   late final $UserSmsNumbersTableTable userSmsNumbersTable =
       $UserSmsNumbersTableTable(this);
   late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
@@ -6996,8 +7489,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         smsConversationsTable,
         smsMessagesTable,
         smsMessageSyncCursorTable,
+        smsMessageReadCursorTable,
         smsOutboxMessagesTable,
         smsOutboxMessageDeleteTable,
+        smsOutboxReadCursorsTable,
         userSmsNumbersTable
       ];
   @override
@@ -7099,6 +7594,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
             on: TableUpdateQuery.onTableName('sms_conversations',
                 limitUpdateKind: UpdateKind.delete),
             result: [
+              TableUpdate('sms_message_read_cursors', kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('sms_conversations',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
               TableUpdate('sms_outbox_messages', kind: UpdateKind.delete),
             ],
           ),
@@ -7108,6 +7610,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
             result: [
               TableUpdate('sms_outbox_message_deletes',
                   kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('sms_conversations',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('sms_outbox_read_cursors', kind: UpdateKind.delete),
             ],
           ),
         ],
@@ -9523,6 +10032,25 @@ class $$SmsConversationsTableTableFilterComposer
     return f(composer);
   }
 
+  ComposableFilter smsMessageReadCursorTableRefs(
+      ComposableFilter Function(
+              $$SmsMessageReadCursorTableTableFilterComposer f)
+          f) {
+    final $$SmsMessageReadCursorTableTableFilterComposer composer =
+        $state.composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $state.db.smsMessageReadCursorTable,
+            getReferencedColumn: (t) => t.conversationId,
+            builder: (joinBuilder, parentComposers) =>
+                $$SmsMessageReadCursorTableTableFilterComposer(ComposerState(
+                    $state.db,
+                    $state.db.smsMessageReadCursorTable,
+                    joinBuilder,
+                    parentComposers)));
+    return f(composer);
+  }
+
   ComposableFilter smsOutboxMessagesTableRefs(
       ComposableFilter Function($$SmsOutboxMessagesTableTableFilterComposer f)
           f) {
@@ -9555,6 +10083,25 @@ class $$SmsConversationsTableTableFilterComposer
                 $$SmsOutboxMessageDeleteTableTableFilterComposer(ComposerState(
                     $state.db,
                     $state.db.smsOutboxMessageDeleteTable,
+                    joinBuilder,
+                    parentComposers)));
+    return f(composer);
+  }
+
+  ComposableFilter smsOutboxReadCursorsTableRefs(
+      ComposableFilter Function(
+              $$SmsOutboxReadCursorsTableTableFilterComposer f)
+          f) {
+    final $$SmsOutboxReadCursorsTableTableFilterComposer composer =
+        $state.composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $state.db.smsOutboxReadCursorsTable,
+            getReferencedColumn: (t) => t.conversationId,
+            builder: (joinBuilder, parentComposers) =>
+                $$SmsOutboxReadCursorsTableTableFilterComposer(ComposerState(
+                    $state.db,
+                    $state.db.smsOutboxReadCursorsTable,
                     joinBuilder,
                     parentComposers)));
     return f(composer);
@@ -9956,6 +10503,125 @@ class $$SmsMessageSyncCursorTableTableOrderingComposer
   }
 }
 
+typedef $$SmsMessageReadCursorTableTableCreateCompanionBuilder
+    = SmsMessageReadCursorDataCompanion Function({
+  required int conversationId,
+  required String userId,
+  required int timestampUsec,
+  Value<int> rowid,
+});
+typedef $$SmsMessageReadCursorTableTableUpdateCompanionBuilder
+    = SmsMessageReadCursorDataCompanion Function({
+  Value<int> conversationId,
+  Value<String> userId,
+  Value<int> timestampUsec,
+  Value<int> rowid,
+});
+
+class $$SmsMessageReadCursorTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $SmsMessageReadCursorTableTable,
+    SmsMessageReadCursorData,
+    $$SmsMessageReadCursorTableTableFilterComposer,
+    $$SmsMessageReadCursorTableTableOrderingComposer,
+    $$SmsMessageReadCursorTableTableCreateCompanionBuilder,
+    $$SmsMessageReadCursorTableTableUpdateCompanionBuilder> {
+  $$SmsMessageReadCursorTableTableTableManager(
+      _$AppDatabase db, $SmsMessageReadCursorTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$SmsMessageReadCursorTableTableFilterComposer(
+              ComposerState(db, table)),
+          orderingComposer: $$SmsMessageReadCursorTableTableOrderingComposer(
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> conversationId = const Value.absent(),
+            Value<String> userId = const Value.absent(),
+            Value<int> timestampUsec = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              SmsMessageReadCursorDataCompanion(
+            conversationId: conversationId,
+            userId: userId,
+            timestampUsec: timestampUsec,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required int conversationId,
+            required String userId,
+            required int timestampUsec,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              SmsMessageReadCursorDataCompanion.insert(
+            conversationId: conversationId,
+            userId: userId,
+            timestampUsec: timestampUsec,
+            rowid: rowid,
+          ),
+        ));
+}
+
+class $$SmsMessageReadCursorTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $SmsMessageReadCursorTableTable> {
+  $$SmsMessageReadCursorTableTableFilterComposer(super.$state);
+  ColumnFilters<String> get userId => $state.composableBuilder(
+      column: $state.table.userId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get timestampUsec => $state.composableBuilder(
+      column: $state.table.timestampUsec,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  $$SmsConversationsTableTableFilterComposer get conversationId {
+    final $$SmsConversationsTableTableFilterComposer composer =
+        $state.composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.conversationId,
+            referencedTable: $state.db.smsConversationsTable,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder, parentComposers) =>
+                $$SmsConversationsTableTableFilterComposer(ComposerState(
+                    $state.db,
+                    $state.db.smsConversationsTable,
+                    joinBuilder,
+                    parentComposers)));
+    return composer;
+  }
+}
+
+class $$SmsMessageReadCursorTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $SmsMessageReadCursorTableTable> {
+  $$SmsMessageReadCursorTableTableOrderingComposer(super.$state);
+  ColumnOrderings<String> get userId => $state.composableBuilder(
+      column: $state.table.userId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get timestampUsec => $state.composableBuilder(
+      column: $state.table.timestampUsec,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  $$SmsConversationsTableTableOrderingComposer get conversationId {
+    final $$SmsConversationsTableTableOrderingComposer composer =
+        $state.composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.conversationId,
+            referencedTable: $state.db.smsConversationsTable,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder, parentComposers) =>
+                $$SmsConversationsTableTableOrderingComposer(ComposerState(
+                    $state.db,
+                    $state.db.smsConversationsTable,
+                    joinBuilder,
+                    parentComposers)));
+    return composer;
+  }
+}
+
 typedef $$SmsOutboxMessagesTableTableCreateCompanionBuilder
     = SmsOutboxMessageDataCompanion Function({
   required String idKey,
@@ -10268,6 +10934,119 @@ class $$SmsOutboxMessageDeleteTableTableOrderingComposer
   }
 }
 
+typedef $$SmsOutboxReadCursorsTableTableCreateCompanionBuilder
+    = SmsOutboxReadCursorDataCompanion Function({
+  Value<int> conversationId,
+  required int timestampUsec,
+  Value<int> sendAttempts,
+});
+typedef $$SmsOutboxReadCursorsTableTableUpdateCompanionBuilder
+    = SmsOutboxReadCursorDataCompanion Function({
+  Value<int> conversationId,
+  Value<int> timestampUsec,
+  Value<int> sendAttempts,
+});
+
+class $$SmsOutboxReadCursorsTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $SmsOutboxReadCursorsTableTable,
+    SmsOutboxReadCursorData,
+    $$SmsOutboxReadCursorsTableTableFilterComposer,
+    $$SmsOutboxReadCursorsTableTableOrderingComposer,
+    $$SmsOutboxReadCursorsTableTableCreateCompanionBuilder,
+    $$SmsOutboxReadCursorsTableTableUpdateCompanionBuilder> {
+  $$SmsOutboxReadCursorsTableTableTableManager(
+      _$AppDatabase db, $SmsOutboxReadCursorsTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$SmsOutboxReadCursorsTableTableFilterComposer(
+              ComposerState(db, table)),
+          orderingComposer: $$SmsOutboxReadCursorsTableTableOrderingComposer(
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> conversationId = const Value.absent(),
+            Value<int> timestampUsec = const Value.absent(),
+            Value<int> sendAttempts = const Value.absent(),
+          }) =>
+              SmsOutboxReadCursorDataCompanion(
+            conversationId: conversationId,
+            timestampUsec: timestampUsec,
+            sendAttempts: sendAttempts,
+          ),
+          createCompanionCallback: ({
+            Value<int> conversationId = const Value.absent(),
+            required int timestampUsec,
+            Value<int> sendAttempts = const Value.absent(),
+          }) =>
+              SmsOutboxReadCursorDataCompanion.insert(
+            conversationId: conversationId,
+            timestampUsec: timestampUsec,
+            sendAttempts: sendAttempts,
+          ),
+        ));
+}
+
+class $$SmsOutboxReadCursorsTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $SmsOutboxReadCursorsTableTable> {
+  $$SmsOutboxReadCursorsTableTableFilterComposer(super.$state);
+  ColumnFilters<int> get timestampUsec => $state.composableBuilder(
+      column: $state.table.timestampUsec,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get sendAttempts => $state.composableBuilder(
+      column: $state.table.sendAttempts,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  $$SmsConversationsTableTableFilterComposer get conversationId {
+    final $$SmsConversationsTableTableFilterComposer composer =
+        $state.composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.conversationId,
+            referencedTable: $state.db.smsConversationsTable,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder, parentComposers) =>
+                $$SmsConversationsTableTableFilterComposer(ComposerState(
+                    $state.db,
+                    $state.db.smsConversationsTable,
+                    joinBuilder,
+                    parentComposers)));
+    return composer;
+  }
+}
+
+class $$SmsOutboxReadCursorsTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $SmsOutboxReadCursorsTableTable> {
+  $$SmsOutboxReadCursorsTableTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get timestampUsec => $state.composableBuilder(
+      column: $state.table.timestampUsec,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get sendAttempts => $state.composableBuilder(
+      column: $state.table.sendAttempts,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  $$SmsConversationsTableTableOrderingComposer get conversationId {
+    final $$SmsConversationsTableTableOrderingComposer composer =
+        $state.composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.conversationId,
+            referencedTable: $state.db.smsConversationsTable,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder, parentComposers) =>
+                $$SmsConversationsTableTableOrderingComposer(ComposerState(
+                    $state.db,
+                    $state.db.smsConversationsTable,
+                    joinBuilder,
+                    parentComposers)));
+    return composer;
+  }
+}
+
 typedef $$UserSmsNumbersTableTableCreateCompanionBuilder
     = UserSmsNumberDataCompanion Function({
   required String phoneNumber,
@@ -10382,6 +11161,9 @@ class $AppDatabaseManager {
   $$SmsMessageSyncCursorTableTableTableManager get smsMessageSyncCursorTable =>
       $$SmsMessageSyncCursorTableTableTableManager(
           _db, _db.smsMessageSyncCursorTable);
+  $$SmsMessageReadCursorTableTableTableManager get smsMessageReadCursorTable =>
+      $$SmsMessageReadCursorTableTableTableManager(
+          _db, _db.smsMessageReadCursorTable);
   $$SmsOutboxMessagesTableTableTableManager get smsOutboxMessagesTable =>
       $$SmsOutboxMessagesTableTableTableManager(
           _db, _db.smsOutboxMessagesTable);
@@ -10389,6 +11171,9 @@ class $AppDatabaseManager {
       get smsOutboxMessageDeleteTable =>
           $$SmsOutboxMessageDeleteTableTableTableManager(
               _db, _db.smsOutboxMessageDeleteTable);
+  $$SmsOutboxReadCursorsTableTableTableManager get smsOutboxReadCursorsTable =>
+      $$SmsOutboxReadCursorsTableTableTableManager(
+          _db, _db.smsOutboxReadCursorsTable);
   $$UserSmsNumbersTableTableTableManager get userSmsNumbersTable =>
       $$UserSmsNumbersTableTableTableManager(_db, _db.userSmsNumbersTable);
 }
@@ -10449,10 +11234,14 @@ mixin _$SmsDaoMixin on DatabaseAccessor<AppDatabase> {
       attachedDatabase.smsMessagesTable;
   $SmsMessageSyncCursorTableTable get smsMessageSyncCursorTable =>
       attachedDatabase.smsMessageSyncCursorTable;
+  $SmsMessageReadCursorTableTable get smsMessageReadCursorTable =>
+      attachedDatabase.smsMessageReadCursorTable;
   $SmsOutboxMessagesTableTable get smsOutboxMessagesTable =>
       attachedDatabase.smsOutboxMessagesTable;
   $SmsOutboxMessageDeleteTableTable get smsOutboxMessageDeleteTable =>
       attachedDatabase.smsOutboxMessageDeleteTable;
+  $SmsOutboxReadCursorsTableTable get smsOutboxReadCursorsTable =>
+      attachedDatabase.smsOutboxReadCursorsTable;
   $UserSmsNumbersTableTable get userSmsNumbersTable =>
       attachedDatabase.userSmsNumbersTable;
 }

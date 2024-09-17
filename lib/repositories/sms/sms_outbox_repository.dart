@@ -49,6 +49,37 @@ class SmsOutboxRepository with SmsOutboxDriftMapper {
     return _smsDao.deleteOutboxMessageDelete(id);
   }
 
+  Future<SmsOutboxReadCursorEntry?> getOutboxReadCursor(int conversationId) async {
+    final data = await _smsDao.getSmsOutboxReadCursor(conversationId);
+    return data != null ? outboxReadCursorEntryFromDrift(data) : null;
+  }
+
+  Stream<SmsOutboxReadCursorEntry?> watchOutboxReadCursor(int conversationId) {
+    return _smsDao.watchSmsOutboxReadCursor(conversationId).map((data) {
+      return data != null ? outboxReadCursorEntryFromDrift(data) : null;
+    });
+  }
+
+  Future<List<SmsOutboxReadCursorEntry>> getOutboxReadCursors() async {
+    final entriesData = await _smsDao.getSmsOutboxReadCursors();
+    return entriesData.map(outboxReadCursorEntryFromDrift).toList();
+  }
+
+  Stream<List<SmsOutboxReadCursorEntry>> watchOutboxReadCursors() {
+    return _smsDao.watchSmsOutboxReadCursors().map((entriesData) {
+      return entriesData.map(outboxReadCursorEntryFromDrift).toList();
+    });
+  }
+
+  Future upsertOutboxReadCursor(SmsOutboxReadCursorEntry entry) {
+    final entryData = outboxReadCursorEntryToDrift(entry);
+    return _smsDao.upsertSmsOutboxReadCursor(entryData);
+  }
+
+  Future<int> deleteOutboxReadCursor(int conversationId) {
+    return _smsDao.deleteSmsOutboxReadCursor(conversationId);
+  }
+
   Future<void> wipeOutboxData() async {
     await _smsDao.wipeOutboxData();
   }

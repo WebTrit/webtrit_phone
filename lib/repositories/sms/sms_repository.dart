@@ -105,6 +105,33 @@ class SmsRepository with SmsDriftMapper {
     await _smsDao.upsertUserSmsNumbers(data);
   }
 
+  Future<SmsMessageReadCursor?> getMessageReadCursor(int conversationId, String userId) async {
+    final data = await _smsDao.getSmsMessageReadCursor(conversationId, userId);
+    if (data != null) return messageReadCursorFromDrift(data);
+    return null;
+  }
+
+  Stream<List<SmsMessageReadCursor>> watchMessageReadCursors(int conversationId) {
+    return _smsDao
+        .watchSmsMessageReadCursors(conversationId)
+        .map((data) => data.map(messageReadCursorFromDrift).toList());
+  }
+
+  Future<void> upsertMessageReadCursor(SmsMessageReadCursor cursor) async {
+    final data = SmsMessageReadCursorData(
+      conversationId: cursor.conversationId,
+      userId: cursor.userId,
+      timestampUsec: cursor.time.microsecondsSinceEpoch,
+    );
+
+    final inserted = await _smsDao.upsertSmsMessageReadCursor(data);
+    if (inserted != null) _addEvent(SmsReadCursorUpdate(cursor));
+  }
+
+  Future<Map<int, int>> unreadedCountPerConversation(String userId) {
+    return _smsDao.unreadedCountPerConversation(userId);
+  }
+
   Future<void> wipeData() async {
     await _smsDao.wipeData();
   }

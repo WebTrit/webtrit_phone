@@ -63,6 +63,7 @@ final class SCSReady extends SmsConversationState with EquatableMixin {
     this.messages = const [],
     this.outboxMessages = const [],
     this.outboxMessageDeletes = const [],
+    this.readCursors = const [],
     this.fetchingHistory = false,
     this.historyEndReached = false,
     this.busy = false,
@@ -74,6 +75,7 @@ final class SCSReady extends SmsConversationState with EquatableMixin {
   final List<SmsMessage> messages;
   final List<SmsOutboxMessageEntry> outboxMessages;
   final List<SmsOutboxMessageDeleteEntry> outboxMessageDeletes;
+  final List<SmsMessageReadCursor> readCursors;
 
   final bool fetchingHistory;
   final bool historyEndReached;
@@ -86,6 +88,7 @@ final class SCSReady extends SmsConversationState with EquatableMixin {
         messages,
         outboxMessages,
         outboxMessageDeletes,
+        readCursors,
         fetchingHistory,
         historyEndReached,
         busy,
@@ -97,6 +100,7 @@ final class SCSReady extends SmsConversationState with EquatableMixin {
     List<SmsMessage>? messages,
     List<SmsOutboxMessageEntry>? outboxMessages,
     List<SmsOutboxMessageDeleteEntry>? outboxMessageDeletes,
+    List<SmsMessageReadCursor>? readCursors,
     bool? fetchingHistory,
     bool? historyEndReached,
     bool? busy,
@@ -107,6 +111,7 @@ final class SCSReady extends SmsConversationState with EquatableMixin {
       messages: messages ?? this.messages,
       outboxMessages: outboxMessages ?? this.outboxMessages,
       outboxMessageDeletes: outboxMessageDeletes ?? this.outboxMessageDeletes,
+      readCursors: readCursors ?? this.readCursors,
       fetchingHistory: fetchingHistory ?? this.fetchingHistory,
       historyEndReached: historyEndReached ?? this.historyEndReached,
       busy: busy ?? this.busy,

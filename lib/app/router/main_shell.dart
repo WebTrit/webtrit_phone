@@ -249,6 +249,7 @@ class _MainShellState extends State<MainShell> {
                 return UnreadCountCubit(
                   appPreferences: context.read<AppPreferences>(),
                   chatsRepository: context.read<ChatsRepository>(),
+                  smsRepository: context.read<SmsRepository>(),
                 )..init();
               },
             ),

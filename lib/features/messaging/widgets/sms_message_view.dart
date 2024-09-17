@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -18,6 +20,8 @@ class SmsMessageView extends StatefulWidget {
     this.message,
     this.outboxMessage,
     this.outboxDeleteEntry,
+    this.userReadedUntil,
+    this.membersReadedUntil,
     required this.handleDelete,
     this.onRendered,
   });
@@ -26,6 +30,14 @@ class SmsMessageView extends StatefulWidget {
   final SmsMessage? message;
   final SmsOutboxMessageEntry? outboxMessage;
   final SmsOutboxMessageDeleteEntry? outboxDeleteEntry;
+
+  /// Timestamp of the last message read by the user
+  /// Used to display the read status of the message that user didnt see
+  final DateTime? userReadedUntil;
+
+  /// Timestamp of the last message read by the members
+  /// Used to display the read status of the message sent by the user
+  final DateTime? membersReadedUntil;
 
   /// Callback function on popup menu delete item selected
   final Function(SmsMessage refMessage) handleDelete;
@@ -73,6 +85,8 @@ class _SmsMessageViewState extends State<SmsMessageView> {
     final message = widget.message;
     final outboxMessage = widget.outboxMessage;
     final outboxDeleteEntry = widget.outboxDeleteEntry;
+    final userReadedUntil = widget.userReadedUntil;
+    final membersReadedUntil = widget.membersReadedUntil;
 
     final content = outboxMessage?.content ?? message?.content ?? '';
     final hasContent = (content.isNotEmpty == true) && content != '-';
@@ -81,6 +95,12 @@ class _SmsMessageViewState extends State<SmsMessageView> {
     final isMine = senderNumber == widget.userNumber;
     final isSended = message != null;
     final isDeleted = outboxDeleteEntry != null || message?.deletedAt != null;
+
+    var isViewedByMembers = false;
+    var isViewedByUser = false;
+
+    if (isSended && membersReadedUntil != null) isViewedByMembers = !message.createdAt.isAfter(membersReadedUntil);
+    if (isSended && userReadedUntil != null) isViewedByUser = !message.createdAt.isAfter(userReadedUntil);
 
     final popupItems = [
       if (hasContent)
@@ -138,6 +158,9 @@ class _SmsMessageViewState extends State<SmsMessageView> {
               child: Container(
                 decoration: BoxDecoration(
                   color: isMine ? colorScheme.secondaryFixed.withOpacity(0.3) : colorScheme.surfaceContainer,
+                  // color: isMine
+                  //     ? colorScheme.secondaryFixed.withOpacity(0.3)
+                  //     : colorScheme.surfaceContainer.withOpacity(isViewedByUser ? 1 : 0.85),
                   borderRadius: isMine
                       ? const BorderRadius.only(
                           topLeft: Radius.circular(12),
@@ -175,7 +198,9 @@ class _SmsMessageViewState extends State<SmsMessageView> {
                           ],
                           if (isMine && !isSended)
                             CircularProgressTemplate(color: colorScheme.onSurface, size: 12, width: 1),
-                          if (isMine && isSended) Icon(Icons.done, color: colorScheme.tertiary, size: 12),
+                          if (isMine && isSended && !isViewedByMembers)
+                            Icon(Icons.done, color: colorScheme.tertiary, size: 12),
+                          if (isMine && isViewedByMembers) Icon(Icons.done_all, color: colorScheme.tertiary, size: 12),
                           const SizedBox(width: 2),
                           if (message?.createdAt != null) Text(message!.createdAt.toHHmm, style: theme.subContentStyle),
                         ],

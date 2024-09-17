@@ -43,4 +43,20 @@ mixin SmsOutboxDriftMapper {
       sendAttempts: entry.sendAttempts,
     );
   }
+
+  SmsOutboxReadCursorEntry outboxReadCursorEntryFromDrift(SmsOutboxReadCursorData data) {
+    return SmsOutboxReadCursorEntry(
+      conversationId: data.conversationId,
+      time: DateTime.fromMicrosecondsSinceEpoch(data.timestampUsec),
+      sendAttempts: data.sendAttempts,
+    );
+  }
+
+  SmsOutboxReadCursorData outboxReadCursorEntryToDrift(SmsOutboxReadCursorEntry entry) {
+    return SmsOutboxReadCursorData(
+      conversationId: entry.conversationId,
+      timestampUsec: entry.time.microsecondsSinceEpoch,
+      sendAttempts: entry.sendAttempts,
+    );
+  }
 }

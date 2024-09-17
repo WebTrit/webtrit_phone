@@ -111,6 +111,25 @@ class _SmsConversationsTileState extends State<SmsConversationsTile> {
               child: Text(context.l10n.chats_ChatListItem_empty, style: textStyle),
             ),
           ),
+        BlocBuilder<UnreadCountCubit, UnreadCountState>(
+          builder: (context, state) {
+            final count = state.unreadCountForSmsConversation(widget.conversation.id);
+            if (count == 0) return const SizedBox();
+
+            return Container(
+              margin: const EdgeInsets.only(left: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                '$count',
+                style: const TextStyle(color: Colors.white, fontSize: 12),
+              ),
+            );
+          },
+        ),
       ],
     );
   }

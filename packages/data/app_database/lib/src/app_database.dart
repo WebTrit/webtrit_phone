@@ -26,8 +26,10 @@ part 'app_database.g.dart';
     SmsConversationsTable,
     SmsMessagesTable,
     SmsMessageSyncCursorTable,
+    SmsMessageReadCursorTable,
     SmsOutboxMessagesTable,
     SmsOutboxMessageDeleteTable,
+    SmsOutboxReadCursorsTable,
     UserSmsNumbersTable,
   ],
   daos: [
@@ -527,6 +529,21 @@ class SmsMessageSyncCursorTable extends Table {
   IntColumn get timestampUsec => integer()();
 }
 
+@DataClassName('SmsMessageReadCursorData')
+class SmsMessageReadCursorTable extends Table {
+  @override
+  String get tableName => 'sms_message_read_cursors';
+
+  @override
+  Set<Column> get primaryKey => {conversationId, userId};
+
+  IntColumn get conversationId => integer().references(SmsConversationsTable, #id, onDelete: KeyAction.cascade)();
+
+  TextColumn get userId => text()();
+
+  IntColumn get timestampUsec => integer()();
+}
+
 @DataClassName('SmsOutboxMessageData')
 class SmsOutboxMessagesTable extends Table {
   @override
@@ -564,6 +581,21 @@ class SmsOutboxMessageDeleteTable extends Table {
   TextColumn get idKey => text()();
 
   IntColumn get conversationId => integer().references(SmsConversationsTable, #id, onDelete: KeyAction.cascade)();
+
+  IntColumn get sendAttempts => integer().withDefault(const Constant(0))();
+}
+
+@DataClassName('SmsOutboxReadCursorData')
+class SmsOutboxReadCursorsTable extends Table {
+  @override
+  String get tableName => 'sms_outbox_read_cursors';
+
+  @override
+  Set<Column> get primaryKey => {conversationId};
+
+  IntColumn get conversationId => integer().references(SmsConversationsTable, #id, onDelete: KeyAction.cascade)();
+
+  IntColumn get timestampUsec => integer()();
 
   IntColumn get sendAttempts => integer().withDefault(const Constant(0))();
 }
@@ -1328,8 +1360,10 @@ typedef ConversationDataWithLastMessage = (SmsConversationData conversation, Sms
   SmsConversationsTable,
   SmsMessagesTable,
   SmsMessageSyncCursorTable,
+  SmsMessageReadCursorTable,
   SmsOutboxMessagesTable,
   SmsOutboxMessageDeleteTable,
+  SmsOutboxReadCursorsTable,
   UserSmsNumbersTable,
 ])
 class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
@@ -1409,6 +1443,61 @@ class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
     return into(smsMessagesTable).insertOnConflictUpdate(smsMessage);
   }
 
+  // Message read cursors
+
+  Future<SmsMessageReadCursorData?> upsertSmsMessageReadCursor(SmsMessageReadCursorData smsMessageReadCursor) {
+    return into(smsMessageReadCursorTable).insertReturningOrNull(
+      smsMessageReadCursor,
+      mode: InsertMode.insertOrReplace,
+      onConflict: DoUpdate(
+        (_) => smsMessageReadCursor,
+        target: [smsMessageReadCursorTable.conversationId, smsMessageReadCursorTable.userId],
+        where: (old) => old.timestampUsec.isSmallerOrEqualValue(smsMessageReadCursor.timestampUsec),
+      ),
+    );
+  }
+
+  Future<SmsMessageReadCursorData?> getSmsMessageReadCursor(int conversationId, String userId) async {
+    return (select(smsMessageReadCursorTable)
+          ..where((t) => t.conversationId.equals(conversationId) & t.userId.equals(userId)))
+        .getSingleOrNull();
+  }
+
+  Stream<List<SmsMessageReadCursorData>> watchSmsMessageReadCursors(int conversationId) {
+    return (select(smsMessageReadCursorTable)..where((t) => t.conversationId.equals(conversationId))).watch();
+  }
+
+  Future<Map<int, int>> unreadedCountPerConversation(String userId) async {
+    final userNumbers = (await getUserSmsNumbers()).map((e) => e.phoneNumber).toList();
+    final userReadCursors = await (select(smsMessageReadCursorTable)..where((t) => t.userId.equals(userId))).get();
+    Map<int, int> result = {};
+    for (final cursor in userReadCursors) {
+      final amount = smsMessagesTable.id.count();
+      var q = (selectOnly(smsMessagesTable)..addColumns([amount]));
+      q.where(
+        smsMessagesTable.conversationId.equals(cursor.conversationId) &
+            smsMessagesTable.fromPhoneNumber.isNotIn(userNumbers) &
+            smsMessagesTable.deletedAtRemoteUsec.isNull() &
+            smsMessagesTable.createdAtRemoteUsec.isBiggerThanValue(cursor.timestampUsec),
+      );
+      final unreadMessages = await q.getSingle().then((data) => data.read(amount) ?? 0);
+      result[cursor.conversationId] = unreadMessages;
+    }
+    return result;
+  }
+
+  // Sync cursors
+
+  Future<SmsMessageSyncCursorData?> getSyncCursor(int conversationId, SmsSyncCursorTypeEnum cursorType) {
+    return (select(smsMessageSyncCursorTable)
+          ..where((t) => t.conversationId.equals(conversationId) & t.cursorType.equals(cursorType.name)))
+        .getSingleOrNull();
+  }
+
+  Future<int> upsertSyncCursor(Insertable<SmsMessageSyncCursorData> smsMessageSyncCursor) {
+    return into(smsMessageSyncCursorTable).insertOnConflictUpdate(smsMessageSyncCursor);
+  }
+
   // Outbox messages
 
   Future<List<SmsOutboxMessageData>> getOutboxMessages() {
@@ -1445,16 +1534,39 @@ class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
     return (delete(smsOutboxMessageDeleteTable)..where((t) => t.id.equals(id))).go();
   }
 
-  // Sync cursors
+  // Read cursors outbox
 
-  Future<SmsMessageSyncCursorData?> getSyncCursor(int conversationId, SmsSyncCursorTypeEnum cursorType) {
-    return (select(smsMessageSyncCursorTable)
-          ..where((t) => t.conversationId.equals(conversationId) & t.cursorType.equals(cursorType.name)))
-        .getSingleOrNull();
+  Future<SmsOutboxReadCursorData?> getSmsOutboxReadCursor(int conversationId) {
+    return (select(smsOutboxReadCursorsTable)..where((t) => t.conversationId.equals(conversationId))).getSingleOrNull();
   }
 
-  Future<int> upsertSyncCursor(Insertable<SmsMessageSyncCursorData> smsMessageSyncCursor) {
-    return into(smsMessageSyncCursorTable).insertOnConflictUpdate(smsMessageSyncCursor);
+  Stream<SmsOutboxReadCursorData?> watchSmsOutboxReadCursor(int conversationId) {
+    return (select(smsOutboxReadCursorsTable)..where((t) => t.conversationId.equals(conversationId)))
+        .watchSingleOrNull();
+  }
+
+  Future<List<SmsOutboxReadCursorData>> getSmsOutboxReadCursors() {
+    return select(smsOutboxReadCursorsTable).get();
+  }
+
+  Stream<List<SmsOutboxReadCursorData>> watchSmsOutboxReadCursors() {
+    return select(smsOutboxReadCursorsTable).watch();
+  }
+
+  Future upsertSmsOutboxReadCursor(SmsOutboxReadCursorData newCursor) async {
+    return await into(smsOutboxReadCursorsTable).insert(
+      newCursor,
+      mode: InsertMode.insertOrReplace,
+      onConflict: DoUpdate(
+        (_) => newCursor,
+        target: [smsOutboxReadCursorsTable.conversationId],
+        where: (old) => old.timestampUsec.isSmallerThanValue(newCursor.timestampUsec),
+      ),
+    );
+  }
+
+  Future<int> deleteSmsOutboxReadCursor(int conversationId) {
+    return (delete(smsOutboxReadCursorsTable)..where((t) => t.conversationId.equals(conversationId))).go();
   }
 
   // User sms numbers
@@ -1480,6 +1592,7 @@ class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
       await delete(smsMessagesTable).go();
       await delete(smsOutboxMessagesTable).go();
       await delete(smsMessageSyncCursorTable).go();
+      await delete(smsMessageReadCursorTable).go();
     });
   }
 
@@ -1487,6 +1600,7 @@ class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
     await transaction(() async {
       await delete(smsOutboxMessagesTable).go();
       await delete(smsOutboxMessageDeleteTable).go();
+      await delete(smsOutboxReadCursorsTable).go();
     });
   }
 }

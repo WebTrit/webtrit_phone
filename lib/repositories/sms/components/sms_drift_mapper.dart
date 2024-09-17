@@ -85,4 +85,20 @@ mixin SmsDriftMapper {
       timestampUsec: cursor.time.microsecondsSinceEpoch,
     );
   }
+
+  SmsMessageReadCursor messageReadCursorFromDrift(SmsMessageReadCursorData data) {
+    return SmsMessageReadCursor(
+      conversationId: data.conversationId,
+      userId: data.userId,
+      time: DateTime.fromMicrosecondsSinceEpoch(data.timestampUsec),
+    );
+  }
+
+  SmsMessageReadCursorData messageReadCursorToDrift(SmsMessageReadCursor cursor) {
+    return SmsMessageReadCursorData(
+      conversationId: cursor.conversationId,
+      userId: cursor.userId,
+      timestampUsec: cursor.time.microsecondsSinceEpoch,
+    );
+  }
 }

@@ -1096,6 +1096,53 @@ class SmsMessageSyncCursors extends Table with TableInfo {
   bool get dontWriteConstraints => true;
 }
 
+class SmsMessageReadCursors extends Table with TableInfo {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  SmsMessageReadCursors(this.attachedDatabase, [this._alias]);
+  late final GeneratedColumn<int> conversationId = GeneratedColumn<int>(
+      'conversation_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints:
+          'NOT NULL REFERENCES sms_conversations(id)ON DELETE CASCADE');
+  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
+      'user_id', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<int> timestampUsec = GeneratedColumn<int>(
+      'timestamp_usec', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  @override
+  List<GeneratedColumn> get $columns => [conversationId, userId, timestampUsec];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'sms_message_read_cursors';
+  @override
+  Set<GeneratedColumn> get $primaryKey => {conversationId, userId};
+  @override
+  Never map(Map<String, dynamic> data, {String? tablePrefix}) {
+    throw UnsupportedError('TableInfo.map in schema verification code');
+  }
+
+  @override
+  SmsMessageReadCursors createAlias(String alias) {
+    return SmsMessageReadCursors(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints =>
+      const ['PRIMARY KEY(conversation_id, user_id)'];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
 class SmsOutboxMessages extends Table with TableInfo {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -1224,6 +1271,54 @@ class SmsOutboxMessageDeletes extends Table with TableInfo {
   bool get dontWriteConstraints => true;
 }
 
+class SmsOutboxReadCursors extends Table with TableInfo {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  SmsOutboxReadCursors(this.attachedDatabase, [this._alias]);
+  late final GeneratedColumn<int> conversationId = GeneratedColumn<int>(
+      'conversation_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints:
+          'NOT NULL REFERENCES sms_conversations(id)ON DELETE CASCADE');
+  late final GeneratedColumn<int> timestampUsec = GeneratedColumn<int>(
+      'timestamp_usec', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<int> sendAttempts = GeneratedColumn<int>(
+      'send_attempts', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NOT NULL DEFAULT 0',
+      defaultValue: const CustomExpression('0'));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [conversationId, timestampUsec, sendAttempts];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'sms_outbox_read_cursors';
+  @override
+  Set<GeneratedColumn> get $primaryKey => {conversationId};
+  @override
+  Never map(Map<String, dynamic> data, {String? tablePrefix}) {
+    throw UnsupportedError('TableInfo.map in schema verification code');
+  }
+
+  @override
+  SmsOutboxReadCursors createAlias(String alias) {
+    return SmsOutboxReadCursors(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints => const ['PRIMARY KEY(conversation_id)'];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
 class UserSmsNumbers extends Table with TableInfo {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -1284,9 +1379,13 @@ class DatabaseAtV8 extends GeneratedDatabase {
   late final SmsMessages smsMessages = SmsMessages(this);
   late final SmsMessageSyncCursors smsMessageSyncCursors =
       SmsMessageSyncCursors(this);
+  late final SmsMessageReadCursors smsMessageReadCursors =
+      SmsMessageReadCursors(this);
   late final SmsOutboxMessages smsOutboxMessages = SmsOutboxMessages(this);
   late final SmsOutboxMessageDeletes smsOutboxMessageDeletes =
       SmsOutboxMessageDeletes(this);
+  late final SmsOutboxReadCursors smsOutboxReadCursors =
+      SmsOutboxReadCursors(this);
   late final UserSmsNumbers userSmsNumbers = UserSmsNumbers(this);
   late final Trigger contactsAfterInsertTrigger = Trigger(
       'CREATE TRIGGER contacts_after_insert_trigger AFTER INSERT ON contacts BEGIN UPDATE contacts SET inserted_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id AND inserted_at IS NULL;UPDATE contacts SET updated_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id;END',
@@ -1328,8 +1427,10 @@ class DatabaseAtV8 extends GeneratedDatabase {
         smsConversations,
         smsMessages,
         smsMessageSyncCursors,
+        smsMessageReadCursors,
         smsOutboxMessages,
         smsOutboxMessageDeletes,
+        smsOutboxReadCursors,
         userSmsNumbers,
         contactsAfterInsertTrigger,
         contactsAfterUpdateTrigger,

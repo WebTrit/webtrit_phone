@@ -8,26 +8,31 @@ import 'sms_message_view.dart';
 
 class SmsMessageListView extends StatefulWidget {
   const SmsMessageListView({
+    required this.userId,
     required this.userNumber,
     required this.messages,
     required this.fetchingHistory,
     required this.outboxMessages,
     required this.outboxMessageDeletes,
+    required this.readCursors,
     required this.historyEndReached,
     required this.onSendMessage,
     required this.onDelete,
+    required this.userReadedUntilUpdate,
     required this.onFetchHistory,
     super.key,
   });
-
+  final String userId;
   final String? userNumber;
   final List<SmsMessage> messages;
   final List<SmsOutboxMessageEntry> outboxMessages;
   final List<SmsOutboxMessageDeleteEntry> outboxMessageDeletes;
+  final List<SmsMessageReadCursor> readCursors;
   final bool fetchingHistory;
   final bool historyEndReached;
   final Function(String content) onSendMessage;
   final Function(SmsMessage refMessage) onDelete;
+  final Function(DateTime until) userReadedUntilUpdate;
   final Future Function() onFetchHistory;
 
   @override
@@ -64,12 +69,17 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
     bool messagesChanged() => !listEquals(oldWidget.messages, widget.messages);
     bool outboxMessagesChanged() => !listEquals(oldWidget.outboxMessages, widget.outboxMessages);
     bool outboxMessageDeletesChanged() => !listEquals(oldWidget.outboxMessageDeletes, widget.outboxMessageDeletes);
+    bool readCursorsChanged() => !listEquals(oldWidget.readCursors, widget.readCursors);
 
-    final shouldRemap = outboxMessagesChanged() || outboxMessageDeletesChanged() || messagesChanged();
+    final shouldRemap =
+        outboxMessagesChanged() || outboxMessageDeletesChanged() || readCursorsChanged() || messagesChanged();
     if (shouldRemap) mapElements();
   }
 
   mapElements() {
+    final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
+    final membersReadedUntil = widget.readCursors.participantsReadedUntil(widget.userId);
+
     elements = [];
 
     for (final entry in widget.outboxMessages.reversed) {
@@ -119,7 +129,17 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
           userNumber: widget.userNumber,
           message: message,
           outboxDeleteEntry: deleteEntry,
+          userReadedUntil: userReadedUntil,
+          membersReadedUntil: membersReadedUntil,
           handleDelete: handleDelete,
+          onRendered: () {
+            final mine = message.fromPhoneNumber == widget.userNumber;
+            if (mine) return;
+
+            final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
+            final reachedUnreaded = userReadedUntil == null || message.createdAt.isAfter(userReadedUntil);
+            if (reachedUnreaded) widget.userReadedUntilUpdate(message.createdAt);
+          },
           key: ObjectKey(message),
         ),
       );

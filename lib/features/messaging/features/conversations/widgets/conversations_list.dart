@@ -144,15 +144,39 @@ class _ConversationsListState extends State<ConversationsList> {
                       tabType = TabType.sms;
                     });
                   },
-                  child: Container(
+                  child: SizedBox(
                     width: 120,
                     height: 30,
-                    alignment: Alignment.center,
-                    child: Text(
-                      'SMS',
-                      style: TextStyle(
-                        color: tabType == TabType.sms ? colorScheme.onPrimary : colorScheme.onSurface,
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'SMS',
+                          style: TextStyle(
+                            color: tabType == TabType.sms ? colorScheme.onPrimary : colorScheme.onSurface,
+                          ),
+                        ),
+                        if (state.smsConversationsWithUnreadCount > 0) ...[
+                          const SizedBox(width: 4),
+                          Container(
+                            width: 14,
+                            height: 14,
+                            padding: const EdgeInsets.symmetric(horizontal: 1),
+                            decoration: BoxDecoration(
+                              color: tabType == TabType.sms ? colorScheme.onPrimary : colorScheme.onSurface,
+                              shape: BoxShape.circle,
+                            ),
+                            child: FittedBox(
+                              child: Text(
+                                state.smsConversationsWithUnreadCount.toString(),
+                                style: TextStyle(
+                                  color: tabType == TabType.sms ? colorScheme.onSurface : colorScheme.onPrimary,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ]
+                      ],
                     ),
                   ),
                 ),

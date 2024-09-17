@@ -26,7 +26,7 @@ class _MessagingFlavorOverlayState extends State<MessagingFlavorOverlay> {
 
             return BlocBuilder<UnreadCountCubit, UnreadCountState>(
               builder: (context, state) {
-                final count = state.chatsWithUnreadCount;
+                final count = state.chatsWithUnreadCount + state.smsConversationsWithUnreadCount;
                 // Skip rendering if there are no unread messages
                 if (count == 0) return const SizedBox();
 

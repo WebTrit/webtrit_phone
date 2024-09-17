@@ -154,6 +154,14 @@ class SmsSyncWorker {
         await smsRepository.upsertConversation(conversation);
         yield conversation;
 
+        // Fetch read cursors
+        // final cursorsReq = await channel.push('sms:cursor:get', {}, pushTimeout).future;
+        // final cursors = (cursorsReq.response as List).map((e) => SmsMessageReadCursor.fromMap(e)).toList();
+        // for (final cursor in cursors) {
+        //   await smsRepository.upsertMessageReadCursor(cursor);
+        //   yield cursor;
+        // }
+
         // Get last update time for sync messages from
         final newestCursor = await smsRepository.getMessageSyncCursor(conversationId, SmsSyncCursorType.newest);
 
@@ -236,6 +244,12 @@ class SmsSyncWorker {
             ));
             yield chatMsg;
           }
+
+          // if (e.event.value == 'sms:cursor:set') {
+          //   final cursor = SmsMessageReadCursor.fromMap(e.payload as Map<String, dynamic>);
+          //   await smsRepository.upsertMessageReadCursor(cursor);
+          //   yield cursor;
+          // }
 
           // On disconnect break the loop to force reconnect
           if (e.event.value == 'phx_error') {

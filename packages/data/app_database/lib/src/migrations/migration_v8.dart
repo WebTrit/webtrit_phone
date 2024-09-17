@@ -18,9 +18,11 @@ class MigrationV8 extends Migration {
 
     final smsConversationsTable = v8.SmsConversations(db);
     final smsMessagesTable = v8.SmsMessages(db);
+    final smsSyncCursorsTable = v8.SmsMessageSyncCursors(db);
+    final smsReadCursorsTable = v8.SmsMessageReadCursors(db);
     final smsOutboxMessagesTable = v8.SmsOutboxMessages(db);
     final smsOutboxMessageDeletesTable = v8.SmsOutboxMessageDeletes(db);
-    final smsSyncCursorsTable = v8.SmsMessageSyncCursors(db);
+    final smsOutboxReadCursorsTable = v8.SmsOutboxReadCursors(db);
     final userSmsNumbersTable = v8.UserSmsNumbers(db);
 
     // recreate tables with breaking changes
@@ -34,9 +36,11 @@ class MigrationV8 extends Migration {
     await m.createTable(readCursorsOutboxTable);
     await m.createTable(smsConversationsTable);
     await m.createTable(smsMessagesTable);
+    await m.createTable(smsSyncCursorsTable);
+    await m.createTable(smsReadCursorsTable);
     await m.createTable(smsOutboxMessagesTable);
     await m.createTable(smsOutboxMessageDeletesTable);
-    await m.createTable(smsSyncCursorsTable);
+    await m.createTable(smsOutboxReadCursorsTable);
     await m.createTable(userSmsNumbersTable);
   }
 }

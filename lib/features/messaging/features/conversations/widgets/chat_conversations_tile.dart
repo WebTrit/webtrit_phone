@@ -167,7 +167,7 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
           ),
         BlocBuilder<UnreadCountCubit, UnreadCountState>(
           builder: (context, state) {
-            final count = state.unreadCountForChat(widget.conversation.id);
+            final count = state.unreadCountForChatConversation(widget.conversation.id);
             if (count == 0) return const SizedBox();
 
             return Container(
