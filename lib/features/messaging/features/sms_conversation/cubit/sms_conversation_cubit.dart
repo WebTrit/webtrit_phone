@@ -91,7 +91,7 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     if (channel == null || channel.state != PhoenixChannelState.joined) return false;
 
     emit(state.copyWith(busy: true));
-    final r = await channel.push('sms_converstaion:delete', {}).future;
+    final r = await channel.push('sms:conversation:delete', {}).future;
 
     emit(state.copyWith(busy: false));
     if (r.isOk) return true;

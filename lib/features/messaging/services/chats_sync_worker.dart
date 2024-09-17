@@ -64,8 +64,8 @@ class ChatsSyncWorker {
 
   Future _chatRoomUnsubscribe(int chatId) async {
     _logger.info('Unsubscribing from chat $chatId');
-    await _chatRoomSyncSubs.remove(chatId)?.cancel();
-    client.getChatChannel(chatId)?.leave();
+    _chatRoomSyncSubs.remove(chatId)?.cancel();
+    await client.getChatChannel(chatId)?.leave().future;
   }
 
   Stream<dynamic> _chatlistSyncStream() async* {

@@ -63,8 +63,8 @@ class SmsSyncWorker {
 
   Future _conversationUnsubscribe(int conversationId) async {
     _logger.info('Unsubscribing from chat $conversationId');
-    await _conversationSyncSubs.remove(conversationId)?.cancel();
-    client.getSmsConversationChannel(conversationId)?.leave();
+    _conversationSyncSubs.remove(conversationId)?.cancel();
+    await client.getSmsConversationChannel(conversationId)?.leave().future;
   }
 
   Stream<dynamic> _conversationlistSyncStream() async* {
