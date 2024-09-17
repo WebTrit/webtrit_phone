@@ -10,3 +10,17 @@ export 'view/router_page.dart';
 export 'services/services.dart';
 export 'widgets/widgets.dart';
 export 'utils/utils.dart';
+
+
+// TODO: 
+// - chats creation screen split
+// - group creation new stepper flow
+// - chat info screens 
+// - localizations
+// - routing remake
+// - finish resolve naming issues
+// - notifications autodismiss on read
+// - integratiions with Dima's optional pages
+// - move userId retrieving to main auth flow
+// - random refacfotring, maybe tests?
+// (like ephemeral logic to blocs, structs for ws events, constants for keys, etc)
