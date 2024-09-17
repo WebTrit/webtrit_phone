@@ -1183,7 +1183,7 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
       var q = (selectOnly(chatMessagesTable)..addColumns([amount]));
       q.where(
         chatMessagesTable.chatId.equals(cursor.chatId) &
-            chatMessagesTable.senderId.isNotIn([userId]) &
+            chatMessagesTable.senderId.isNotValue(userId) &
             chatMessagesTable.deletedAtRemoteUsec.isNull() &
             chatMessagesTable.createdAtRemoteUsec.isBiggerThanValue(cursor.timestampUsec),
       );
