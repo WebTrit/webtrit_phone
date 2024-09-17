@@ -105,6 +105,7 @@ class UiComposeSettingsAccountSection with _$UiComposeSettingsAccountSection {
 
   const factory UiComposeSettingsAccountSection({
     required String titleL10n,
+    @Default(true) bool enabled,
     @Default([]) List<UiComposeSettingsAccountItem> items,
   }) = _UiComposeSettingsAccountSection;
 

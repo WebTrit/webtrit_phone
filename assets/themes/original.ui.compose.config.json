@@ -1,24 +1,24 @@
 {
   "login": {
     "customSignIn": {
-      "enabled": false,
+      "enabled": true,
       "titleL10n": "login_requestCredentials_title",
       "url": "https://webtrit-app.web.app/example/example_embedded_login.html"
     }
   },
   "main": {
     "bottomMenu": {
-      "cacheSelectedTab": true,
+      "cacheSelectedTab": false,
       "tabs": [
         {
-          "enabled": true,
+          "enabled": false,
           "initial": false,
           "type": "favorites",
           "titleL10n": "main_BottomNavigationBarItemLabel_favorites",
           "icon": "0xe5fd"
         },
         {
-          "enabled": true,
+          "enabled": false,
           "initial": false,
           "type": "recents",
           "titleL10n": "main_BottomNavigationBarItemLabel_recents",
@@ -34,19 +34,19 @@
         {
           "enabled": true,
           "initial": true,
-          "type": "keypad",
-          "titleL10n": "main_BottomNavigationBarItemLabel_keypad",
-          "icon": "0xe1ce"
-        },
-        {
-          "enabled": false,
-          "initial": false,
           "type": "embedded1",
           "titleL10n": "embaded1TitleL10n",
           "icon": "0xe2ce",
           "data": {
             "url": "https://webtrit-app.web.app/example/example_embedded_advertisement.html"
           }
+        },
+        {
+          "enabled": true,
+          "initial": false,
+          "type": "keypad",
+          "titleL10n": "main_BottomNavigationBarItemLabel_keypad",
+          "icon": "0xe1ce"
         },
         {
           "enabled": false,
@@ -76,6 +76,7 @@
       {
         "titleL10n": "settings_ListViewTileTitle_settings",
         "type": "settings",
+        "enabled": true,
         "items": [
           {
             "enabled": true,
@@ -105,9 +106,10 @@
       },
       {
         "titleL10n": "settings_ListViewTileTitle_toolbox",
+        "enabled": true,
         "items": [
           {
-            "enabled": true,
+            "enabled": false,
             "titleL10n": "settings_ListViewTileTitle_logRecordsConsole",
             "icon": "0xee79",
             "type": "log"
@@ -120,11 +122,35 @@
           },
           {
             "enabled": true,
-            "titleL10n": "Text ",
+            "titleL10n": "Text 2",
             "icon": "0xe3a2",
             "type": "embedded",
             "data": {
               "url": "https://webtrit-app.web.app/example/example_embedded_registration.html"
+            }
+          },
+          {
+            "enabled": false,
+            "titleL10n": "Text 1 ",
+            "icon": "0xe3a2",
+            "type": "embedded",
+            "data": {
+              "url": "https://webtrit-app.web.app/example/example_embedded_statistics.html"
+            }
+          }
+        ]
+      },
+      {
+        "titleL10n": "New embedded section",
+        "enabled": true,
+        "items": [
+          {
+            "enabled": true,
+            "titleL10n": "Rating of the cats",
+            "icon": "0xe3a2",
+            "type": "embedded",
+            "data": {
+              "url": "https://webtrit-app.web.app/example/example_embedded_rating.html"
             }
           }
         ]

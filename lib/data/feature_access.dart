@@ -72,10 +72,10 @@ class FeatureAccess {
     UiComposeSettings uiComposeSettings,
     AppPreferences preferences,
   ) {
-    final accountSections = uiComposeSettings.account?.sections.map((section) {
+    final accountSections = uiComposeSettings.account?.sections.where((section) => section.enabled).map((section) {
       return AccountSection(
         titleL10n: section.titleL10n,
-        items: section.items.map((item) {
+        items: section.items.where((item) => item.enabled).map((item) {
           return AccountItem(
             titleL10n: item.titleL10n,
             icon: item.icon,

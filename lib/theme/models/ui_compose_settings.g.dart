@@ -121,19 +121,6 @@ Map<String, dynamic> _$$UiComposeSettingsBottomMenuTabImplToJson(
       'data': instance.data,
     };
 
-_$UiComposeSettingsBottomMenuTabDataImpl
-    _$$UiComposeSettingsBottomMenuTabDataImplFromJson(
-            Map<String, dynamic> json) =>
-        _$UiComposeSettingsBottomMenuTabDataImpl(
-          url: json['url'] as String,
-        );
-
-Map<String, dynamic> _$$UiComposeSettingsBottomMenuTabDataImplToJson(
-        _$UiComposeSettingsBottomMenuTabDataImpl instance) =>
-    <String, dynamic>{
-      'url': instance.url,
-    };
-
 _$UiComposeSettingsAccountImpl _$$UiComposeSettingsAccountImplFromJson(
         Map<String, dynamic> json) =>
     _$UiComposeSettingsAccountImpl(
@@ -154,6 +141,7 @@ _$UiComposeSettingsAccountSectionImpl
     _$$UiComposeSettingsAccountSectionImplFromJson(Map<String, dynamic> json) =>
         _$UiComposeSettingsAccountSectionImpl(
           titleL10n: json['titleL10n'] as String,
+          enabled: json['enabled'] as bool? ?? true,
           items: (json['items'] as List<dynamic>?)
                   ?.map((e) => UiComposeSettingsAccountItem.fromJson(
                       e as Map<String, dynamic>))
@@ -165,6 +153,7 @@ Map<String, dynamic> _$$UiComposeSettingsAccountSectionImplToJson(
         _$UiComposeSettingsAccountSectionImpl instance) =>
     <String, dynamic>{
       'titleL10n': instance.titleL10n,
+      'enabled': instance.enabled,
       'items': instance.items,
     };
 
@@ -200,6 +189,19 @@ _$UiComposeSettingsAccountItemDataImpl
 
 Map<String, dynamic> _$$UiComposeSettingsAccountItemDataImplToJson(
         _$UiComposeSettingsAccountItemDataImpl instance) =>
+    <String, dynamic>{
+      'url': instance.url,
+    };
+
+_$UiComposeSettingsBottomMenuTabDataImpl
+    _$$UiComposeSettingsBottomMenuTabDataImplFromJson(
+            Map<String, dynamic> json) =>
+        _$UiComposeSettingsBottomMenuTabDataImpl(
+          url: json['url'] as String,
+        );
+
+Map<String, dynamic> _$$UiComposeSettingsBottomMenuTabDataImplToJson(
+        _$UiComposeSettingsBottomMenuTabDataImpl instance) =>
     <String, dynamic>{
       'url': instance.url,
     };
