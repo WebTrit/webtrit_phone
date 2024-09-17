@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quiver/collection.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -69,6 +70,7 @@ class ContactWatchPoolEntry {
   }
 
   static final _pool = <String, ContactWatchPoolEntry>{};
+  static final _valueCache = LruMap<String, Contact>(maximumSize: 100);
 
   final ContactSourceType _sourceType;
   final String _sourceId;
@@ -76,13 +78,12 @@ class ContactWatchPoolEntry {
 
   late StreamController<Contact?> _controller;
   StreamSubscription? _sub;
-  Contact? _contact;
 
   /// Updates stream of contact
   Stream<Contact?> get stream => _controller.stream;
 
   /// Last cached value of contact
-  Contact? get value => _contact;
+  Contact? get value => _valueCache[_sourceId];
 
   _onListen() {
     final stream = _contactsRepo.watchContactBySourceWithPhonesAndEmails(_sourceType, _sourceId);
@@ -91,10 +92,11 @@ class ContactWatchPoolEntry {
 
   _handleUpdate(Contact? contact) {
     _controller.add(contact);
-    _contact = contact;
+    if (contact != null) _valueCache[_sourceId] = contact;
   }
 
   _onCancel() {
     _sub?.cancel();
+    _pool.remove('$_sourceType:$_sourceId');
   }
 }
