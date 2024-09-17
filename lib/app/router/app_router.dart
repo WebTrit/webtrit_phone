@@ -133,6 +133,16 @@ class AppRouter extends _$AppRouter {
                 AutoRoute(
                   page: MainScreenPageRoute.page,
                   path: '',
+                  guards: [
+                    // Redirects to the appropriate embedded screen if required parameters are missing
+                    // This ensures that necessary data is passed to the embedded screen when the initial route is loaded.
+                    AutoRouteGuard.redirect(
+                      (resolver) => EmbeddedScreenPage.getPageRouteInfo(
+                        resolver.route,
+                        _initialBottomMenuTab.data,
+                      ),
+                    ),
+                  ],
                   children: [
                     RedirectRoute(
                       path: '',
@@ -183,6 +193,19 @@ class AppRouter extends _$AppRouter {
                     AutoRoute(
                       page: KeypadScreenPageRoute.page,
                       path: MainFlavor.keypad.name,
+                    ),
+                    // Embedded flavors
+                    AutoRoute(
+                      page: EmbeddedScreenPage1Route.page,
+                      path: MainFlavor.embedded1.name,
+                    ),
+                    AutoRoute(
+                      page: EmbeddedScreenPage2Route.page,
+                      path: MainFlavor.embedded2.name,
+                    ),
+                    AutoRoute(
+                      page: EmbeddedScreenPage3Route.page,
+                      path: MainFlavor.embedded3.name,
                     ),
                   ],
                 ),
