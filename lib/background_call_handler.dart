@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -9,7 +6,6 @@ import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/recents/recents_repository.dart';
 
-import 'app/constants.dart';
 import 'data/data.dart';
 
 const int _kUndefinedLine = -1;
@@ -28,7 +24,6 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
   final _callNotificationDelegate = CallkeepBackgroundService();
 
   late SecureStorage storage;
-  late PackageInfo packageInfo;
   late WebtritSignalingClient client;
 
   final List<Line?> _lines = [];
@@ -45,35 +40,28 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
   }
 
   Future _initializeDependentResources() async {
-    await PackageInfo.init();
     await SecureStorage.init();
     await AppCertificates.init();
 
     storage = SecureStorage();
-    packageInfo = PackageInfo();
   }
 
-  // TODO: Do single factory
-  Future _initializeSignalClient() async {
+  Future<void> _initializeSignalClient() async {
     final signalingUrl = _parseCoreUrlToSignalingUrl(storage.readCoreUrl() ?? '');
-
     final token = storage.readToken();
     final tenantId = storage.readTenantId() ?? '';
+    final certificates = AppCertificates().trustedCertificates;
 
-    final httpClient = HttpClient();
-    httpClient.connectionTimeout = kSignalingClientConnectionTimeout;
-
-    final signalingClient = await WebtritSignalingClient.connect(
+    client = await WebtritSignalingClient.connect(
       signalingUrl,
       tenantId,
       token!,
       true,
-      certs: AppCertificates().trustedCertificates,
+      certs: certificates,
     );
-    client = signalingClient;
   }
 
-  Future _setupListeners() async {
+  Future<void> _setupListeners() async {
     _callNotificationDelegate.setBackgroundServiceDelegate(this);
     client.listen(
       onStateHandshake: _signalingInitialize,
@@ -105,65 +93,73 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
   }
 
   void _onSignalingEvent(Event event) {
+    _logger.info('_onSignalingEvent $event');
+
     if (event is IncomingCallEvent) {
-      final number = CallkeepHandle.number(_pendingCall.handle);
-      _callNotificationDelegate.incomingCall(
-        event.callId,
-        number,
-        displayName: _pendingCall.displayName,
-        hasVideo: _pendingCall.hasVideo,
-      );
-    } else if (event is IceHangupEvent) {
-      _callNotificationDelegate.endAllBackgroundCalls();
+      _handleIncomingCall(event);
     } else if (event is HangupEvent) {
-      _callNotificationDelegate.endBackgroundCall(event.callId);
-    } else if (event is DecliningEvent) {
-      _callNotificationDelegate.endBackgroundCall(event.callId);
+      _handleHangupCall(event);
     } else if (event is UnregisteredEvent) {
-      _callNotificationDelegate.endAllBackgroundCalls();
+      _handleUnregisteredEvent(event);
     } else {
       _logger.warning('unhandled signaling event $event');
     }
   }
 
-// TODO: Duplicate here and call_bloc.dart
-  Uri _parseCoreUrlToSignalingUrl(String coreUrl) {
-    final uri = Uri.parse(coreUrl);
-    if (uri.scheme.endsWith('s')) {
-      return uri.replace(scheme: 'wss');
-    } else {
-      return uri.replace(scheme: 'ws');
-    }
+  void _handleIncomingCall(IncomingCallEvent event) {
+    final number = CallkeepHandle.number(_pendingCall.handle);
+    _callNotificationDelegate.incomingCall(
+      event.callId,
+      number,
+      displayName: _pendingCall.displayName,
+      hasVideo: _pendingCall.hasVideo,
+    );
   }
 
-// TODO: Duplicate here and call_bloc.dart
-  int? retrieveIdleLine(List<Line?> lines, String callId) {
-    for (var line = 0; line < lines.length; line++) {
-      if (lines.firstWhereOrNull((line) => line?.callId == callId) == null) {
-        return line;
-      }
-    }
-    return null;
-  }
+  void _handleHangupCall(HangupEvent event) {
+    // TODO (Serdun): If the decline event is not from the other side, the connection has already been closed in the Android ConnectionService, which might trigger a warning.
+    // Improve the flow to ensure this method is called only when the connection is confirmed to exist.
+    _callNotificationDelegate.endBackgroundCall(event.callId);
 
-  void _declineCall(String callId) async {
-    final transaction = WebtritSignalingClient.generateTransactionId();
-    var line = retrieveIdleLine(_lines, callId) ?? _kUndefinedLine;
-
-    if (line != _kUndefinedLine) {
-      var uuid = _lines[line]?.callId ?? '';
-      var decline = DeclineRequest(
-        transaction: transaction,
-        line: line,
-        callId: uuid,
-      );
-      await client.execute(decline);
-    }
+    // The hangup event is triggered when a call is either declined or the user hangs up.
+    // This allows us to close the signaling connection for the current isolate.
     _close();
   }
 
-  void _close() async {
-    await client.disconnect();
+  void _handleUnregisteredEvent(UnregisteredEvent event) {
+    _callNotificationDelegate.endAllBackgroundCalls();
+    _close();
+  }
+
+  Uri _parseCoreUrlToSignalingUrl(String coreUrl) {
+    final uri = Uri.parse(coreUrl);
+    return uri.replace(scheme: uri.scheme.endsWith('s') ? 'wss' : 'ws');
+  }
+
+  Future<void> _declineCall(String callId) async {
+    final transaction = WebtritSignalingClient.generateTransactionId();
+    final line = _lines.indexWhere((line) => line?.callId == callId);
+
+    if (line != _kUndefinedLine) {
+      final decline = DeclineRequest(
+        transaction: transaction,
+        line: line,
+        callId: _lines[line]!.callId,
+      );
+      await client.execute(decline);
+    } else {
+      _logger.warning('declineCall: callId not found $callId');
+    }
+  }
+
+  Future<void> _close() async {
+    _logger.info('_close signaling client');
+
+    try {
+      await client.disconnect();
+    } catch (e) {
+      _logger.severe('Failed to disconnect client', e);
+    }
   }
 
   @override
@@ -172,7 +168,7 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
   }
 
   @override
-  void endCallReceived(
+  Future<void> endCallReceived(
     String callId,
     String number,
     DateTime createdTime,
@@ -190,17 +186,5 @@ class BackgroundCallHandler implements CallkeepBackgroundServiceDelegate {
     );
     await _recentsRepository.add(recent);
     _logger.info('endCallReceived: $recent');
-  }
-
-  static bool parseString(
-    String value, {
-    bool defaultValue = false,
-  }) {
-    if (value.trim().toLowerCase() == 'true') {
-      return true;
-    } else if (value.trim().toLowerCase() == 'false') {
-      return false;
-    }
-    return defaultValue;
   }
 }
