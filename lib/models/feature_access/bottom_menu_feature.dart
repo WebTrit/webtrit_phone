@@ -17,7 +17,7 @@ class BottomMenuTab {
     required this.flavor,
     required this.titleL10n,
     required this.icon,
-    required this.data,
+    this.data,
   });
 }
 
