@@ -28,13 +28,13 @@ class AppRouter extends _$AppRouter {
   AppRouter(
     this._appBloc,
     this._appPermissions,
-    this._initialMainFlavor,
+    this._initialBottomMenuTab,
   );
 
   final AppBloc _appBloc;
   final AppPermissions _appPermissions;
 
-  final MainFlavor _initialMainFlavor;
+  final BottomMenuTab _initialBottomMenuTab;
 
   String? get coreUrl => _appBloc.state.coreUrl;
   String? get token => _appBloc.state.token;
@@ -136,7 +136,7 @@ class AppRouter extends _$AppRouter {
                   children: [
                     RedirectRoute(
                       path: '',
-                      redirectTo: _initialMainFlavor.name,
+                      redirectTo: _initialBottomMenuTab.flavor.name,
                     ),
                     AutoRoute(
                       page: FavoritesRouterPageRoute.page,
