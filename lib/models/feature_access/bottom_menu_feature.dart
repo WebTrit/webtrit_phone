@@ -2,6 +2,8 @@ import 'package:flutter/widgets.dart';
 
 import '../main_flavor.dart';
 
+import 'config_data.dart';
+
 @immutable
 class BottomMenuTab {
   final bool enabled;
@@ -9,7 +11,7 @@ class BottomMenuTab {
   final MainFlavor flavor;
   final String titleL10n;
   final IconData icon;
-  final BottomMenuTabData? data;
+  final ConfigData? data;
 
   const BottomMenuTab({
     required this.enabled,
@@ -19,13 +21,4 @@ class BottomMenuTab {
     required this.icon,
     this.data,
   });
-}
-
-@immutable
-class BottomMenuTabData {
-  const BottomMenuTabData({
-    required this.url,
-  });
-
-  final String url;
 }

@@ -494,7 +494,7 @@ class DemoWebPageRouteArgs {
 class EmbeddedScreenPage1Route
     extends PageRouteInfo<EmbeddedScreenPage1RouteArgs> {
   EmbeddedScreenPage1Route({
-    required BottomMenuTabData data,
+    required ConfigData data,
     List<PageRouteInfo>? children,
   }) : super(
           EmbeddedScreenPage1Route.name,
@@ -511,7 +511,7 @@ class EmbeddedScreenPage1Route
 class EmbeddedScreenPage1RouteArgs {
   const EmbeddedScreenPage1RouteArgs({required this.data});
 
-  final BottomMenuTabData data;
+  final ConfigData data;
 
   @override
   String toString() {
@@ -524,7 +524,7 @@ class EmbeddedScreenPage1RouteArgs {
 class EmbeddedScreenPage2Route
     extends PageRouteInfo<EmbeddedScreenPage2RouteArgs> {
   EmbeddedScreenPage2Route({
-    required BottomMenuTabData data,
+    required ConfigData data,
     List<PageRouteInfo>? children,
   }) : super(
           EmbeddedScreenPage2Route.name,
@@ -541,7 +541,7 @@ class EmbeddedScreenPage2Route
 class EmbeddedScreenPage2RouteArgs {
   const EmbeddedScreenPage2RouteArgs({required this.data});
 
-  final BottomMenuTabData data;
+  final ConfigData data;
 
   @override
   String toString() {
@@ -554,7 +554,7 @@ class EmbeddedScreenPage2RouteArgs {
 class EmbeddedScreenPage3Route
     extends PageRouteInfo<EmbeddedScreenPage3RouteArgs> {
   EmbeddedScreenPage3Route({
-    required BottomMenuTabData data,
+    required ConfigData data,
     List<PageRouteInfo>? children,
   }) : super(
           EmbeddedScreenPage3Route.name,
@@ -571,7 +571,7 @@ class EmbeddedScreenPage3Route
 class EmbeddedScreenPage3RouteArgs {
   const EmbeddedScreenPage3RouteArgs({required this.data});
 
-  final BottomMenuTabData data;
+  final ConfigData data;
 
   @override
   String toString() {

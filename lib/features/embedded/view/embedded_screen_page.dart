@@ -16,20 +16,20 @@ abstract class EmbeddedScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors const
   const EmbeddedScreenPage(this.data);
 
-  final BottomMenuTabData data;
+  final ConfigData data;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => EmbeddedCubit(),
       child: EmbeddedScreen(
-        initialUri: Uri.parse(data.url),
+        initialUri: data.url,
         title: const Text(EnvironmentConfig.APP_NAME),
       ),
     );
   }
 
-  static PageRouteInfo<dynamic>? getPageRouteInfo(RouteMatch route, BottomMenuTabData? bottomMenuTabData) {
+  static PageRouteInfo<dynamic>? getPageRouteInfo(RouteMatch route, ConfigData? bottomMenuTabData) {
     final routes = {
       EmbeddedScreenPage1Route.page: (data) => EmbeddedScreenPage1Route(data: data),
       EmbeddedScreenPage2Route.page: (data) => EmbeddedScreenPage2Route(data: data),
@@ -45,7 +45,7 @@ abstract class EmbeddedScreenPage extends StatelessWidget {
     return null;
   }
 
-  static PageRouteInfo<dynamic>? getPageRoute(MainFlavor flavor, BottomMenuTabData data) {
+  static PageRouteInfo<dynamic>? getPageRoute(MainFlavor flavor, ConfigData data) {
     final routes = {
       MainFlavor.embedded1: () => EmbeddedScreenPage1Route(data: data),
       MainFlavor.embedded2: () => EmbeddedScreenPage2Route(data: data),

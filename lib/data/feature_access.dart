@@ -61,7 +61,7 @@ class FeatureAccess {
         flavor: MainFlavor.values.byName(tab.type),
         titleL10n: tab.titleL10n,
         icon: tab.icon,
-        data: tab.data != null ? BottomMenuTabData(url: tab.data!.url) : null,
+        data: tab.data != null ? ConfigData.url(tab.data!.url) : null,
       );
     }).toList();
 
