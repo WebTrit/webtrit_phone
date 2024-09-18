@@ -9,4 +9,8 @@ extension ContactMessagingExt on Contact {
         userRegistered == true &&
         isCurrentUser == false;
   }
+
+  bool get canSendSms {
+    return phones.isNotEmpty && isCurrentUser != true;
+  }
 }

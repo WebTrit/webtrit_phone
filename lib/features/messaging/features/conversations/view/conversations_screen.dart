@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -25,7 +24,21 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
   late final contactsRepository = context.read<ContactsRepository>();
   late final smsRepository = context.read<SmsRepository>();
 
-  showBottomSheet() async {
+  final chatsEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE;
+  final smsEnabled = EnvironmentConfig.SMS_FEATURE_ENABLE;
+
+  late TabType tabType = chatsEnabled ? TabType.chat : TabType.sms;
+
+  onFloatingButton() {
+    if (tabType == TabType.chat) {
+      onNewChatConversation();
+    }
+    if (tabType == TabType.sms) {
+      onNewSmsConversation();
+    }
+  }
+
+  onNewChatConversation() async {
     final result = await showModalBottomSheet(
       useRootNavigator: true,
       useSafeArea: true,
@@ -34,20 +47,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
       builder: (context) => BottomSheet(
         enableDrag: false,
         onClosing: () {},
-        builder: (context) => NewConversationPage(
-            contactsRepository: contactsRepository,
-            filter: (contact) {
-              if (chatFeatureEnabled && !smsFetureEnabled) {
-                return contact.canMessage;
-              }
-              if (!chatFeatureEnabled && smsFetureEnabled) {
-                return contact.phones.isNotEmpty && contact.isCurrentUser == false;
-              }
-              if (chatFeatureEnabled && smsFetureEnabled) {
-                return contact.canMessage || contact.phones.isNotEmpty && contact.isCurrentUser == false;
-              }
-              return false;
-            }),
+        builder: (context) => NewChatConversation(contactsRepository: contactsRepository),
       ),
     );
 
@@ -73,9 +73,27 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
         ],
       ));
     }
+  }
+
+  onNewSmsConversation() async {
+    final result = await showModalBottomSheet(
+      useRootNavigator: true,
+      useSafeArea: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (context) => BottomSheet(
+        enableDrag: false,
+        onClosing: () {},
+        builder: (context) => NewSmsConversation(contactsRepository: contactsRepository),
+      ),
+    );
+
+    await Future.delayed(const Duration(milliseconds: 300));
+    if (!mounted) return;
 
     // If the user selected a phone number, navigate to the sms screen
-    if (result is (ContactPhone, String)) {
+    if (result is (String, String?)) {
+      final (number, recipientId) = result;
       final userNumbers = await smsRepository.getUserSmsNumbers();
 
       if (!mounted) return;
@@ -123,11 +141,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
       context.router.navigate(MessagingRouterPageRoute(
         children: [
           const ConversationsScreenPageRoute(),
-          SmsConversationScreenPageRoute(
-            firstNumber: userNumber,
-            secondNumber: result.$1.number,
-            recipientId: result.$2,
-          ),
+          SmsConversationScreenPageRoute(firstNumber: userNumber, secondNumber: number, recipientId: recipientId),
         ],
       ));
     }
@@ -140,161 +154,135 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
 
     return Scaffold(
       appBar: MainAppBar(title: widget.title),
-      body: const ConversationsList(),
+      body: Column(
+        children: [
+          if (chatsEnabled && smsEnabled) ...[
+            const SizedBox(height: 10),
+            tabButtons(colorScheme),
+            const SizedBox(height: 10),
+            Expanded(child: ConversationsList(tabType: tabType)),
+          ],
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: colorScheme.primary,
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32))),
-        onPressed: showBottomSheet,
+        onPressed: onFloatingButton,
         child: Icon(Icons.add, color: colorScheme.onPrimary),
       ),
     );
   }
-}
 
-class NewConversationPage extends StatefulWidget {
-  const NewConversationPage({
-    required this.contactsRepository,
-    this.filter = _defaultFilter,
-    super.key,
-  });
-
-  final ContactsRepository contactsRepository;
-  final bool Function(Contact) filter;
-
-  @override
-  State<NewConversationPage> createState() => _NewConversationPageState();
-}
-
-class _NewConversationPageState extends State<NewConversationPage> {
-  late final StreamSubscription contactsSub;
-  List<Contact> contacts = [];
-  String contactsSearchFilter = '';
-
-  @override
-  void initState() {
-    super.initState();
-    contactsSub = widget.contactsRepository.watchContacts('', ContactSourceType.external).listen((contacts) {
-      setState(() => this.contacts = contacts.where(widget.filter).toList());
-    });
-  }
-
-  @override
-  void dispose() {
-    contactsSub.cancel();
-    super.dispose();
-  }
-
-  onContactConfirm(Contact contact) {
-    Navigator.of(context).pop(contact);
-  }
-
-  onContactPhoneConfirm(ContactPhone phone, String userId) {
-    Navigator.of(context).pop((phone, userId));
-  }
-
-  onNewGroupConfirm() {
-    Navigator.of(context).pop(kGroupResult);
-  }
-
-  onCancel() {
-    Navigator.of(context).pop();
-  }
-
-  List<Contact> get contactsFiltered {
-    return contactsSearchFilter.isEmpty
-        ? contacts
-        : contacts.where((contact) => contact.name.toLowerCase().contains(contactsSearchFilter)).toList();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return ClipRRect(
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-      child: Scaffold(
-        appBar: AppBar(title: const Text('Write to')),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (chatFeatureEnabled)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: ListTile(
-                  title: Text(context.l10n.chats_ConversationsScreen_createGroup),
-                  leading: Icon(
-                    Icons.group_add_rounded,
-                    color: colorScheme.onSurface.withOpacity(0.75),
-                  ),
-                  onTap: onNewGroupConfirm,
-                ),
-              ),
-            const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text('Cloud PBX contacts', style: Theme.of(context).textTheme.headlineSmall),
-            ),
-            const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search contacts',
-                  fillColor: colorScheme.surface,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  prefixIcon: const Icon(Icons.search),
-                ),
-                onChanged: (value) => setState(() => contactsSearchFilter = value.toLowerCase()),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Flexible(
-              child: ListView(
-                children: contactsFiltered.map((Contact contact) {
-                  return Theme(
-                    data: theme.copyWith(
-                      dividerColor: Colors.transparent,
-                      highlightColor: colorScheme.primary.withOpacity(0.1),
-                    ),
-                    child: ExpansionTile(
-                      leading: LeadingAvatar(
-                        username: contact.name,
-                        thumbnail: contact.thumbnail,
-                        thumbnailUrl: contact.thumbnailUrl,
-                        registered: contact.registered,
-                        radius: 24,
-                      ),
-                      title: Text(contact.name),
+  Widget tabButtons(ColorScheme colorScheme) {
+    return Container(
+      decoration: BoxDecoration(
+        color: colorScheme.primary,
+        border: Border.all(color: colorScheme.secondaryFixedDim),
+        borderRadius: BorderRadius.circular(9),
+      ),
+      child: BlocBuilder<UnreadCountCubit, UnreadCountState>(
+        builder: (context, state) {
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Material(
+                color: tabType == TabType.chat ? colorScheme.primary : colorScheme.surfaceBright,
+                borderRadius: BorderRadius.circular(8),
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      tabType = TabType.chat;
+                    });
+                  },
+                  child: SizedBox(
+                    width: 120,
+                    height: 30,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        if (chatFeatureEnabled)
-                          ListTile(
-                            title: const Text('Send in-app message'),
-                            onTap: () => onContactConfirm(contact),
+                        Text(
+                          'Messages',
+                          style: TextStyle(
+                            color: tabType == TabType.chat ? colorScheme.onPrimary : colorScheme.onSurface,
                           ),
-                        if (smsFetureEnabled)
-                          for (final phone in contact.phones)
-                            ListTile(
-                              title: Text('Send sms to ${phone.number}'),
-                              onTap: () => onContactPhoneConfirm(phone, contact.sourceId),
+                        ),
+                        if (state.chatsWithUnreadCount > 0) ...[
+                          const SizedBox(width: 4),
+                          Container(
+                            width: 14,
+                            height: 14,
+                            padding: const EdgeInsets.symmetric(horizontal: 1),
+                            decoration: BoxDecoration(
+                              color: tabType == TabType.chat ? colorScheme.onPrimary : colorScheme.onSurface,
+                              shape: BoxShape.circle,
                             ),
+                            child: FittedBox(
+                              child: Text(
+                                state.chatsWithUnreadCount.toString(),
+                                style: TextStyle(
+                                  color: tabType == TabType.chat ? colorScheme.onSurface : colorScheme.onPrimary,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ]
                       ],
                     ),
-                  );
-                }).toList(),
+                  ),
+                ),
               ),
-            ),
-          ],
-        ),
+              Material(
+                color: tabType == TabType.sms ? colorScheme.primary : colorScheme.surfaceBright,
+                borderRadius: BorderRadius.circular(8),
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      tabType = TabType.sms;
+                    });
+                  },
+                  child: SizedBox(
+                    width: 120,
+                    height: 30,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'SMS',
+                          style: TextStyle(
+                            color: tabType == TabType.sms ? colorScheme.onPrimary : colorScheme.onSurface,
+                          ),
+                        ),
+                        if (state.smsConversationsWithUnreadCount > 0) ...[
+                          const SizedBox(width: 4),
+                          Container(
+                            width: 14,
+                            height: 14,
+                            padding: const EdgeInsets.symmetric(horizontal: 1),
+                            decoration: BoxDecoration(
+                              color: tabType == TabType.sms ? colorScheme.onPrimary : colorScheme.onSurface,
+                              shape: BoxShape.circle,
+                            ),
+                            child: FittedBox(
+                              child: Text(
+                                state.smsConversationsWithUnreadCount.toString(),
+                                style: TextStyle(
+                                  color: tabType == TabType.sms ? colorScheme.onSurface : colorScheme.onPrimary,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ]
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
 }
 
-bool _defaultFilter(Contact contact) => true;
-const kGroupResult = 'new_group';
-const smsFetureEnabled = EnvironmentConfig.SMS_FEATURE_ENABLE;
-const chatFeatureEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE;
+enum TabType { chat, sms }
