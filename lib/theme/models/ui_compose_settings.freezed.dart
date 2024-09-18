@@ -22,6 +22,7 @@ UiComposeSettings _$UiComposeSettingsFromJson(Map<String, dynamic> json) {
 mixin _$UiComposeSettings {
   UiComposeSettingsLogin? get login => throw _privateConstructorUsedError;
   UiComposeSettingsMain? get main => throw _privateConstructorUsedError;
+  UiComposeSettingsSettings? get settings => throw _privateConstructorUsedError;
 
   /// Serializes this UiComposeSettings to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -39,10 +40,14 @@ abstract class $UiComposeSettingsCopyWith<$Res> {
           UiComposeSettings value, $Res Function(UiComposeSettings) then) =
       _$UiComposeSettingsCopyWithImpl<$Res, UiComposeSettings>;
   @useResult
-  $Res call({UiComposeSettingsLogin? login, UiComposeSettingsMain? main});
+  $Res call(
+      {UiComposeSettingsLogin? login,
+      UiComposeSettingsMain? main,
+      UiComposeSettingsSettings? settings});
 
   $UiComposeSettingsLoginCopyWith<$Res>? get login;
   $UiComposeSettingsMainCopyWith<$Res>? get main;
+  $UiComposeSettingsSettingsCopyWith<$Res>? get settings;
 }
 
 /// @nodoc
@@ -62,6 +67,7 @@ class _$UiComposeSettingsCopyWithImpl<$Res, $Val extends UiComposeSettings>
   $Res call({
     Object? login = freezed,
     Object? main = freezed,
+    Object? settings = freezed,
   }) {
     return _then(_value.copyWith(
       login: freezed == login
@@ -72,6 +78,10 @@ class _$UiComposeSettingsCopyWithImpl<$Res, $Val extends UiComposeSettings>
           ? _value.main
           : main // ignore: cast_nullable_to_non_nullable
               as UiComposeSettingsMain?,
+      settings: freezed == settings
+          ? _value.settings
+          : settings // ignore: cast_nullable_to_non_nullable
+              as UiComposeSettingsSettings?,
     ) as $Val);
   }
 
@@ -102,6 +112,20 @@ class _$UiComposeSettingsCopyWithImpl<$Res, $Val extends UiComposeSettings>
       return _then(_value.copyWith(main: value) as $Val);
     });
   }
+
+  /// Create a copy of UiComposeSettings
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $UiComposeSettingsSettingsCopyWith<$Res>? get settings {
+    if (_value.settings == null) {
+      return null;
+    }
+
+    return $UiComposeSettingsSettingsCopyWith<$Res>(_value.settings!, (value) {
+      return _then(_value.copyWith(settings: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -112,12 +136,17 @@ abstract class _$$UiComposeSettingsImplCopyWith<$Res>
       __$$UiComposeSettingsImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({UiComposeSettingsLogin? login, UiComposeSettingsMain? main});
+  $Res call(
+      {UiComposeSettingsLogin? login,
+      UiComposeSettingsMain? main,
+      UiComposeSettingsSettings? settings});
 
   @override
   $UiComposeSettingsLoginCopyWith<$Res>? get login;
   @override
   $UiComposeSettingsMainCopyWith<$Res>? get main;
+  @override
+  $UiComposeSettingsSettingsCopyWith<$Res>? get settings;
 }
 
 /// @nodoc
@@ -135,6 +164,7 @@ class __$$UiComposeSettingsImplCopyWithImpl<$Res>
   $Res call({
     Object? login = freezed,
     Object? main = freezed,
+    Object? settings = freezed,
   }) {
     return _then(_$UiComposeSettingsImpl(
       login: freezed == login
@@ -145,6 +175,10 @@ class __$$UiComposeSettingsImplCopyWithImpl<$Res>
           ? _value.main
           : main // ignore: cast_nullable_to_non_nullable
               as UiComposeSettingsMain?,
+      settings: freezed == settings
+          ? _value.settings
+          : settings // ignore: cast_nullable_to_non_nullable
+              as UiComposeSettingsSettings?,
     ));
   }
 }
@@ -152,7 +186,8 @@ class __$$UiComposeSettingsImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$UiComposeSettingsImpl extends _UiComposeSettings {
-  const _$UiComposeSettingsImpl({this.login, this.main}) : super._();
+  const _$UiComposeSettingsImpl({this.login, this.main, this.settings})
+      : super._();
 
   factory _$UiComposeSettingsImpl.fromJson(Map<String, dynamic> json) =>
       _$$UiComposeSettingsImplFromJson(json);
@@ -161,10 +196,12 @@ class _$UiComposeSettingsImpl extends _UiComposeSettings {
   final UiComposeSettingsLogin? login;
   @override
   final UiComposeSettingsMain? main;
+  @override
+  final UiComposeSettingsSettings? settings;
 
   @override
   String toString() {
-    return 'UiComposeSettings(login: $login, main: $main)';
+    return 'UiComposeSettings(login: $login, main: $main, settings: $settings)';
   }
 
   @override
@@ -173,12 +210,14 @@ class _$UiComposeSettingsImpl extends _UiComposeSettings {
         (other.runtimeType == runtimeType &&
             other is _$UiComposeSettingsImpl &&
             (identical(other.login, login) || other.login == login) &&
-            (identical(other.main, main) || other.main == main));
+            (identical(other.main, main) || other.main == main) &&
+            (identical(other.settings, settings) ||
+                other.settings == settings));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, login, main);
+  int get hashCode => Object.hash(runtimeType, login, main, settings);
 
   /// Create a copy of UiComposeSettings
   /// with the given fields replaced by the non-null parameter values.
@@ -200,7 +239,8 @@ class _$UiComposeSettingsImpl extends _UiComposeSettings {
 abstract class _UiComposeSettings extends UiComposeSettings {
   const factory _UiComposeSettings(
       {final UiComposeSettingsLogin? login,
-      final UiComposeSettingsMain? main}) = _$UiComposeSettingsImpl;
+      final UiComposeSettingsMain? main,
+      final UiComposeSettingsSettings? settings}) = _$UiComposeSettingsImpl;
   const _UiComposeSettings._() : super._();
 
   factory _UiComposeSettings.fromJson(Map<String, dynamic> json) =
@@ -210,6 +250,8 @@ abstract class _UiComposeSettings extends UiComposeSettings {
   UiComposeSettingsLogin? get login;
   @override
   UiComposeSettingsMain? get main;
+  @override
+  UiComposeSettingsSettings? get settings;
 
   /// Create a copy of UiComposeSettings
   /// with the given fields replaced by the non-null parameter values.
@@ -987,8 +1029,7 @@ mixin _$UiComposeSettingsBottomMenuTab {
   String get titleL10n => throw _privateConstructorUsedError;
   @IconDataConverter()
   IconData get icon => throw _privateConstructorUsedError;
-  UiComposeSettingsBottomMenuTabData? get data =>
-      throw _privateConstructorUsedError;
+  UiComposeSettingsData? get data => throw _privateConstructorUsedError;
 
   /// Serializes this UiComposeSettingsBottomMenuTab to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1014,9 +1055,9 @@ abstract class $UiComposeSettingsBottomMenuTabCopyWith<$Res> {
       String type,
       String titleL10n,
       @IconDataConverter() IconData icon,
-      UiComposeSettingsBottomMenuTabData? data});
+      UiComposeSettingsData? data});
 
-  $UiComposeSettingsBottomMenuTabDataCopyWith<$Res>? get data;
+  $UiComposeSettingsDataCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -1066,7 +1107,7 @@ class _$UiComposeSettingsBottomMenuTabCopyWithImpl<$Res,
       data: freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as UiComposeSettingsBottomMenuTabData?,
+              as UiComposeSettingsData?,
     ) as $Val);
   }
 
@@ -1074,13 +1115,12 @@ class _$UiComposeSettingsBottomMenuTabCopyWithImpl<$Res,
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $UiComposeSettingsBottomMenuTabDataCopyWith<$Res>? get data {
+  $UiComposeSettingsDataCopyWith<$Res>? get data {
     if (_value.data == null) {
       return null;
     }
 
-    return $UiComposeSettingsBottomMenuTabDataCopyWith<$Res>(_value.data!,
-        (value) {
+    return $UiComposeSettingsDataCopyWith<$Res>(_value.data!, (value) {
       return _then(_value.copyWith(data: value) as $Val);
     });
   }
@@ -1101,10 +1141,10 @@ abstract class _$$UiComposeSettingsBottomMenuTabImplCopyWith<$Res>
       String type,
       String titleL10n,
       @IconDataConverter() IconData icon,
-      UiComposeSettingsBottomMenuTabData? data});
+      UiComposeSettingsData? data});
 
   @override
-  $UiComposeSettingsBottomMenuTabDataCopyWith<$Res>? get data;
+  $UiComposeSettingsDataCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -1153,7 +1193,7 @@ class __$$UiComposeSettingsBottomMenuTabImplCopyWithImpl<$Res>
       data: freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as UiComposeSettingsBottomMenuTabData?,
+              as UiComposeSettingsData?,
     ));
   }
 }
@@ -1189,7 +1229,7 @@ class _$UiComposeSettingsBottomMenuTabImpl
   @IconDataConverter()
   final IconData icon;
   @override
-  final UiComposeSettingsBottomMenuTabData? data;
+  final UiComposeSettingsData? data;
 
   @override
   String toString() {
@@ -1241,7 +1281,7 @@ abstract class _UiComposeSettingsBottomMenuTab
           required final String type,
           required final String titleL10n,
           @IconDataConverter() required final IconData icon,
-          final UiComposeSettingsBottomMenuTabData? data}) =
+          final UiComposeSettingsData? data}) =
       _$UiComposeSettingsBottomMenuTabImpl;
   const _UiComposeSettingsBottomMenuTab._() : super._();
 
@@ -1260,7 +1300,7 @@ abstract class _UiComposeSettingsBottomMenuTab
   @IconDataConverter()
   IconData get icon;
   @override
-  UiComposeSettingsBottomMenuTabData? get data;
+  UiComposeSettingsData? get data;
 
   /// Create a copy of UiComposeSettingsBottomMenuTab
   /// with the given fields replaced by the non-null parameter values.
@@ -1271,50 +1311,710 @@ abstract class _UiComposeSettingsBottomMenuTab
       get copyWith => throw _privateConstructorUsedError;
 }
 
-UiComposeSettingsBottomMenuTabData _$UiComposeSettingsBottomMenuTabDataFromJson(
+UiComposeSettingsSettings _$UiComposeSettingsSettingsFromJson(
     Map<String, dynamic> json) {
-  return _UiComposeSettingsBottomMenuTabData.fromJson(json);
+  return _UiComposeSettingsSettings.fromJson(json);
 }
 
 /// @nodoc
-mixin _$UiComposeSettingsBottomMenuTabData {
-  String get url => throw _privateConstructorUsedError;
-  set url(String value) => throw _privateConstructorUsedError;
+mixin _$UiComposeSettingsSettings {
+  List<UiComposeSettingsSettingsSection> get sections =>
+      throw _privateConstructorUsedError;
 
-  /// Serializes this UiComposeSettingsBottomMenuTabData to a JSON map.
+  /// Serializes this UiComposeSettingsSettings to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  /// Create a copy of UiComposeSettingsBottomMenuTabData
+  /// Create a copy of UiComposeSettingsSettings
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $UiComposeSettingsBottomMenuTabDataCopyWith<
-          UiComposeSettingsBottomMenuTabData>
-      get copyWith => throw _privateConstructorUsedError;
+  $UiComposeSettingsSettingsCopyWith<UiComposeSettingsSettings> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $UiComposeSettingsBottomMenuTabDataCopyWith<$Res> {
-  factory $UiComposeSettingsBottomMenuTabDataCopyWith(
-          UiComposeSettingsBottomMenuTabData value,
-          $Res Function(UiComposeSettingsBottomMenuTabData) then) =
-      _$UiComposeSettingsBottomMenuTabDataCopyWithImpl<$Res,
-          UiComposeSettingsBottomMenuTabData>;
+abstract class $UiComposeSettingsSettingsCopyWith<$Res> {
+  factory $UiComposeSettingsSettingsCopyWith(UiComposeSettingsSettings value,
+          $Res Function(UiComposeSettingsSettings) then) =
+      _$UiComposeSettingsSettingsCopyWithImpl<$Res, UiComposeSettingsSettings>;
   @useResult
-  $Res call({String url});
+  $Res call({List<UiComposeSettingsSettingsSection> sections});
 }
 
 /// @nodoc
-class _$UiComposeSettingsBottomMenuTabDataCopyWithImpl<$Res,
-        $Val extends UiComposeSettingsBottomMenuTabData>
-    implements $UiComposeSettingsBottomMenuTabDataCopyWith<$Res> {
-  _$UiComposeSettingsBottomMenuTabDataCopyWithImpl(this._value, this._then);
+class _$UiComposeSettingsSettingsCopyWithImpl<$Res,
+        $Val extends UiComposeSettingsSettings>
+    implements $UiComposeSettingsSettingsCopyWith<$Res> {
+  _$UiComposeSettingsSettingsCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of UiComposeSettingsBottomMenuTabData
+  /// Create a copy of UiComposeSettingsSettings
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? sections = null,
+  }) {
+    return _then(_value.copyWith(
+      sections: null == sections
+          ? _value.sections
+          : sections // ignore: cast_nullable_to_non_nullable
+              as List<UiComposeSettingsSettingsSection>,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$UiComposeSettingsSettingsImplCopyWith<$Res>
+    implements $UiComposeSettingsSettingsCopyWith<$Res> {
+  factory _$$UiComposeSettingsSettingsImplCopyWith(
+          _$UiComposeSettingsSettingsImpl value,
+          $Res Function(_$UiComposeSettingsSettingsImpl) then) =
+      __$$UiComposeSettingsSettingsImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({List<UiComposeSettingsSettingsSection> sections});
+}
+
+/// @nodoc
+class __$$UiComposeSettingsSettingsImplCopyWithImpl<$Res>
+    extends _$UiComposeSettingsSettingsCopyWithImpl<$Res,
+        _$UiComposeSettingsSettingsImpl>
+    implements _$$UiComposeSettingsSettingsImplCopyWith<$Res> {
+  __$$UiComposeSettingsSettingsImplCopyWithImpl(
+      _$UiComposeSettingsSettingsImpl _value,
+      $Res Function(_$UiComposeSettingsSettingsImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of UiComposeSettingsSettings
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? sections = null,
+  }) {
+    return _then(_$UiComposeSettingsSettingsImpl(
+      sections: null == sections
+          ? _value._sections
+          : sections // ignore: cast_nullable_to_non_nullable
+              as List<UiComposeSettingsSettingsSection>,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$UiComposeSettingsSettingsImpl extends _UiComposeSettingsSettings {
+  const _$UiComposeSettingsSettingsImpl(
+      {final List<UiComposeSettingsSettingsSection> sections = const []})
+      : _sections = sections,
+        super._();
+
+  factory _$UiComposeSettingsSettingsImpl.fromJson(Map<String, dynamic> json) =>
+      _$$UiComposeSettingsSettingsImplFromJson(json);
+
+  final List<UiComposeSettingsSettingsSection> _sections;
+  @override
+  @JsonKey()
+  List<UiComposeSettingsSettingsSection> get sections {
+    if (_sections is EqualUnmodifiableListView) return _sections;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_sections);
+  }
+
+  @override
+  String toString() {
+    return 'UiComposeSettingsSettings(sections: $sections)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$UiComposeSettingsSettingsImpl &&
+            const DeepCollectionEquality().equals(other._sections, _sections));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_sections));
+
+  /// Create a copy of UiComposeSettingsSettings
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$UiComposeSettingsSettingsImplCopyWith<_$UiComposeSettingsSettingsImpl>
+      get copyWith => __$$UiComposeSettingsSettingsImplCopyWithImpl<
+          _$UiComposeSettingsSettingsImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$UiComposeSettingsSettingsImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _UiComposeSettingsSettings extends UiComposeSettingsSettings {
+  const factory _UiComposeSettingsSettings(
+          {final List<UiComposeSettingsSettingsSection> sections}) =
+      _$UiComposeSettingsSettingsImpl;
+  const _UiComposeSettingsSettings._() : super._();
+
+  factory _UiComposeSettingsSettings.fromJson(Map<String, dynamic> json) =
+      _$UiComposeSettingsSettingsImpl.fromJson;
+
+  @override
+  List<UiComposeSettingsSettingsSection> get sections;
+
+  /// Create a copy of UiComposeSettingsSettings
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$UiComposeSettingsSettingsImplCopyWith<_$UiComposeSettingsSettingsImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+UiComposeSettingsSettingsSection _$UiComposeSettingsSettingsSectionFromJson(
+    Map<String, dynamic> json) {
+  return _UiComposeSettingsSettingsSection.fromJson(json);
+}
+
+/// @nodoc
+mixin _$UiComposeSettingsSettingsSection {
+  String get titleL10n => throw _privateConstructorUsedError;
+  bool get enabled => throw _privateConstructorUsedError;
+  List<UiComposeSettingsSettingsItem> get items =>
+      throw _privateConstructorUsedError;
+
+  /// Serializes this UiComposeSettingsSettingsSection to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of UiComposeSettingsSettingsSection
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $UiComposeSettingsSettingsSectionCopyWith<UiComposeSettingsSettingsSection>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $UiComposeSettingsSettingsSectionCopyWith<$Res> {
+  factory $UiComposeSettingsSettingsSectionCopyWith(
+          UiComposeSettingsSettingsSection value,
+          $Res Function(UiComposeSettingsSettingsSection) then) =
+      _$UiComposeSettingsSettingsSectionCopyWithImpl<$Res,
+          UiComposeSettingsSettingsSection>;
+  @useResult
+  $Res call(
+      {String titleL10n,
+      bool enabled,
+      List<UiComposeSettingsSettingsItem> items});
+}
+
+/// @nodoc
+class _$UiComposeSettingsSettingsSectionCopyWithImpl<$Res,
+        $Val extends UiComposeSettingsSettingsSection>
+    implements $UiComposeSettingsSettingsSectionCopyWith<$Res> {
+  _$UiComposeSettingsSettingsSectionCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of UiComposeSettingsSettingsSection
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? titleL10n = null,
+    Object? enabled = null,
+    Object? items = null,
+  }) {
+    return _then(_value.copyWith(
+      titleL10n: null == titleL10n
+          ? _value.titleL10n
+          : titleL10n // ignore: cast_nullable_to_non_nullable
+              as String,
+      enabled: null == enabled
+          ? _value.enabled
+          : enabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+      items: null == items
+          ? _value.items
+          : items // ignore: cast_nullable_to_non_nullable
+              as List<UiComposeSettingsSettingsItem>,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$UiComposeSettingsSettingsSectionImplCopyWith<$Res>
+    implements $UiComposeSettingsSettingsSectionCopyWith<$Res> {
+  factory _$$UiComposeSettingsSettingsSectionImplCopyWith(
+          _$UiComposeSettingsSettingsSectionImpl value,
+          $Res Function(_$UiComposeSettingsSettingsSectionImpl) then) =
+      __$$UiComposeSettingsSettingsSectionImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String titleL10n,
+      bool enabled,
+      List<UiComposeSettingsSettingsItem> items});
+}
+
+/// @nodoc
+class __$$UiComposeSettingsSettingsSectionImplCopyWithImpl<$Res>
+    extends _$UiComposeSettingsSettingsSectionCopyWithImpl<$Res,
+        _$UiComposeSettingsSettingsSectionImpl>
+    implements _$$UiComposeSettingsSettingsSectionImplCopyWith<$Res> {
+  __$$UiComposeSettingsSettingsSectionImplCopyWithImpl(
+      _$UiComposeSettingsSettingsSectionImpl _value,
+      $Res Function(_$UiComposeSettingsSettingsSectionImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of UiComposeSettingsSettingsSection
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? titleL10n = null,
+    Object? enabled = null,
+    Object? items = null,
+  }) {
+    return _then(_$UiComposeSettingsSettingsSectionImpl(
+      titleL10n: null == titleL10n
+          ? _value.titleL10n
+          : titleL10n // ignore: cast_nullable_to_non_nullable
+              as String,
+      enabled: null == enabled
+          ? _value.enabled
+          : enabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+      items: null == items
+          ? _value._items
+          : items // ignore: cast_nullable_to_non_nullable
+              as List<UiComposeSettingsSettingsItem>,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$UiComposeSettingsSettingsSectionImpl
+    extends _UiComposeSettingsSettingsSection {
+  const _$UiComposeSettingsSettingsSectionImpl(
+      {required this.titleL10n,
+      this.enabled = true,
+      final List<UiComposeSettingsSettingsItem> items = const []})
+      : _items = items,
+        super._();
+
+  factory _$UiComposeSettingsSettingsSectionImpl.fromJson(
+          Map<String, dynamic> json) =>
+      _$$UiComposeSettingsSettingsSectionImplFromJson(json);
+
+  @override
+  final String titleL10n;
+  @override
+  @JsonKey()
+  final bool enabled;
+  final List<UiComposeSettingsSettingsItem> _items;
+  @override
+  @JsonKey()
+  List<UiComposeSettingsSettingsItem> get items {
+    if (_items is EqualUnmodifiableListView) return _items;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_items);
+  }
+
+  @override
+  String toString() {
+    return 'UiComposeSettingsSettingsSection(titleL10n: $titleL10n, enabled: $enabled, items: $items)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$UiComposeSettingsSettingsSectionImpl &&
+            (identical(other.titleL10n, titleL10n) ||
+                other.titleL10n == titleL10n) &&
+            (identical(other.enabled, enabled) || other.enabled == enabled) &&
+            const DeepCollectionEquality().equals(other._items, _items));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, titleL10n, enabled,
+      const DeepCollectionEquality().hash(_items));
+
+  /// Create a copy of UiComposeSettingsSettingsSection
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$UiComposeSettingsSettingsSectionImplCopyWith<
+          _$UiComposeSettingsSettingsSectionImpl>
+      get copyWith => __$$UiComposeSettingsSettingsSectionImplCopyWithImpl<
+          _$UiComposeSettingsSettingsSectionImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$UiComposeSettingsSettingsSectionImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _UiComposeSettingsSettingsSection
+    extends UiComposeSettingsSettingsSection {
+  const factory _UiComposeSettingsSettingsSection(
+          {required final String titleL10n,
+          final bool enabled,
+          final List<UiComposeSettingsSettingsItem> items}) =
+      _$UiComposeSettingsSettingsSectionImpl;
+  const _UiComposeSettingsSettingsSection._() : super._();
+
+  factory _UiComposeSettingsSettingsSection.fromJson(
+          Map<String, dynamic> json) =
+      _$UiComposeSettingsSettingsSectionImpl.fromJson;
+
+  @override
+  String get titleL10n;
+  @override
+  bool get enabled;
+  @override
+  List<UiComposeSettingsSettingsItem> get items;
+
+  /// Create a copy of UiComposeSettingsSettingsSection
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$UiComposeSettingsSettingsSectionImplCopyWith<
+          _$UiComposeSettingsSettingsSectionImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+UiComposeSettingsSettingsItem _$UiComposeSettingsSettingsItemFromJson(
+    Map<String, dynamic> json) {
+  return _UiComposeSettingsSettingsItem.fromJson(json);
+}
+
+/// @nodoc
+mixin _$UiComposeSettingsSettingsItem {
+  bool get enabled => throw _privateConstructorUsedError;
+  String get titleL10n => throw _privateConstructorUsedError;
+  String? get type => throw _privateConstructorUsedError;
+  @IconDataConverter()
+  IconData get icon => throw _privateConstructorUsedError;
+  UiComposeSettingsData? get data => throw _privateConstructorUsedError;
+
+  /// Serializes this UiComposeSettingsSettingsItem to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of UiComposeSettingsSettingsItem
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $UiComposeSettingsSettingsItemCopyWith<UiComposeSettingsSettingsItem>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $UiComposeSettingsSettingsItemCopyWith<$Res> {
+  factory $UiComposeSettingsSettingsItemCopyWith(
+          UiComposeSettingsSettingsItem value,
+          $Res Function(UiComposeSettingsSettingsItem) then) =
+      _$UiComposeSettingsSettingsItemCopyWithImpl<$Res,
+          UiComposeSettingsSettingsItem>;
+  @useResult
+  $Res call(
+      {bool enabled,
+      String titleL10n,
+      String? type,
+      @IconDataConverter() IconData icon,
+      UiComposeSettingsData? data});
+
+  $UiComposeSettingsDataCopyWith<$Res>? get data;
+}
+
+/// @nodoc
+class _$UiComposeSettingsSettingsItemCopyWithImpl<$Res,
+        $Val extends UiComposeSettingsSettingsItem>
+    implements $UiComposeSettingsSettingsItemCopyWith<$Res> {
+  _$UiComposeSettingsSettingsItemCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of UiComposeSettingsSettingsItem
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? enabled = null,
+    Object? titleL10n = null,
+    Object? type = freezed,
+    Object? icon = null,
+    Object? data = freezed,
+  }) {
+    return _then(_value.copyWith(
+      enabled: null == enabled
+          ? _value.enabled
+          : enabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+      titleL10n: null == titleL10n
+          ? _value.titleL10n
+          : titleL10n // ignore: cast_nullable_to_non_nullable
+              as String,
+      type: freezed == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String?,
+      icon: null == icon
+          ? _value.icon
+          : icon // ignore: cast_nullable_to_non_nullable
+              as IconData,
+      data: freezed == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as UiComposeSettingsData?,
+    ) as $Val);
+  }
+
+  /// Create a copy of UiComposeSettingsSettingsItem
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $UiComposeSettingsDataCopyWith<$Res>? get data {
+    if (_value.data == null) {
+      return null;
+    }
+
+    return $UiComposeSettingsDataCopyWith<$Res>(_value.data!, (value) {
+      return _then(_value.copyWith(data: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$UiComposeSettingsSettingsItemImplCopyWith<$Res>
+    implements $UiComposeSettingsSettingsItemCopyWith<$Res> {
+  factory _$$UiComposeSettingsSettingsItemImplCopyWith(
+          _$UiComposeSettingsSettingsItemImpl value,
+          $Res Function(_$UiComposeSettingsSettingsItemImpl) then) =
+      __$$UiComposeSettingsSettingsItemImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {bool enabled,
+      String titleL10n,
+      String? type,
+      @IconDataConverter() IconData icon,
+      UiComposeSettingsData? data});
+
+  @override
+  $UiComposeSettingsDataCopyWith<$Res>? get data;
+}
+
+/// @nodoc
+class __$$UiComposeSettingsSettingsItemImplCopyWithImpl<$Res>
+    extends _$UiComposeSettingsSettingsItemCopyWithImpl<$Res,
+        _$UiComposeSettingsSettingsItemImpl>
+    implements _$$UiComposeSettingsSettingsItemImplCopyWith<$Res> {
+  __$$UiComposeSettingsSettingsItemImplCopyWithImpl(
+      _$UiComposeSettingsSettingsItemImpl _value,
+      $Res Function(_$UiComposeSettingsSettingsItemImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of UiComposeSettingsSettingsItem
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? enabled = null,
+    Object? titleL10n = null,
+    Object? type = freezed,
+    Object? icon = null,
+    Object? data = freezed,
+  }) {
+    return _then(_$UiComposeSettingsSettingsItemImpl(
+      enabled: null == enabled
+          ? _value.enabled
+          : enabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+      titleL10n: null == titleL10n
+          ? _value.titleL10n
+          : titleL10n // ignore: cast_nullable_to_non_nullable
+              as String,
+      type: freezed == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String?,
+      icon: null == icon
+          ? _value.icon
+          : icon // ignore: cast_nullable_to_non_nullable
+              as IconData,
+      data: freezed == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as UiComposeSettingsData?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$UiComposeSettingsSettingsItemImpl
+    extends _UiComposeSettingsSettingsItem {
+  const _$UiComposeSettingsSettingsItemImpl(
+      {this.enabled = true,
+      required this.titleL10n,
+      this.type,
+      @IconDataConverter() required this.icon,
+      required this.data})
+      : super._();
+
+  factory _$UiComposeSettingsSettingsItemImpl.fromJson(
+          Map<String, dynamic> json) =>
+      _$$UiComposeSettingsSettingsItemImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final bool enabled;
+  @override
+  final String titleL10n;
+  @override
+  final String? type;
+  @override
+  @IconDataConverter()
+  final IconData icon;
+  @override
+  final UiComposeSettingsData? data;
+
+  @override
+  String toString() {
+    return 'UiComposeSettingsSettingsItem(enabled: $enabled, titleL10n: $titleL10n, type: $type, icon: $icon, data: $data)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$UiComposeSettingsSettingsItemImpl &&
+            (identical(other.enabled, enabled) || other.enabled == enabled) &&
+            (identical(other.titleL10n, titleL10n) ||
+                other.titleL10n == titleL10n) &&
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.icon, icon) || other.icon == icon) &&
+            (identical(other.data, data) || other.data == data));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, enabled, titleL10n, type, icon, data);
+
+  /// Create a copy of UiComposeSettingsSettingsItem
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$UiComposeSettingsSettingsItemImplCopyWith<
+          _$UiComposeSettingsSettingsItemImpl>
+      get copyWith => __$$UiComposeSettingsSettingsItemImplCopyWithImpl<
+          _$UiComposeSettingsSettingsItemImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$UiComposeSettingsSettingsItemImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _UiComposeSettingsSettingsItem
+    extends UiComposeSettingsSettingsItem {
+  const factory _UiComposeSettingsSettingsItem(
+          {final bool enabled,
+          required final String titleL10n,
+          final String? type,
+          @IconDataConverter() required final IconData icon,
+          required final UiComposeSettingsData? data}) =
+      _$UiComposeSettingsSettingsItemImpl;
+  const _UiComposeSettingsSettingsItem._() : super._();
+
+  factory _UiComposeSettingsSettingsItem.fromJson(Map<String, dynamic> json) =
+      _$UiComposeSettingsSettingsItemImpl.fromJson;
+
+  @override
+  bool get enabled;
+  @override
+  String get titleL10n;
+  @override
+  String? get type;
+  @override
+  @IconDataConverter()
+  IconData get icon;
+  @override
+  UiComposeSettingsData? get data;
+
+  /// Create a copy of UiComposeSettingsSettingsItem
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$UiComposeSettingsSettingsItemImplCopyWith<
+          _$UiComposeSettingsSettingsItemImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+UiComposeSettingsData _$UiComposeSettingsDataFromJson(
+    Map<String, dynamic> json) {
+  return _UiComposeSettingsData.fromJson(json);
+}
+
+/// @nodoc
+mixin _$UiComposeSettingsData {
+  String get url => throw _privateConstructorUsedError;
+
+  /// Serializes this UiComposeSettingsData to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of UiComposeSettingsData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $UiComposeSettingsDataCopyWith<UiComposeSettingsData> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $UiComposeSettingsDataCopyWith<$Res> {
+  factory $UiComposeSettingsDataCopyWith(UiComposeSettingsData value,
+          $Res Function(UiComposeSettingsData) then) =
+      _$UiComposeSettingsDataCopyWithImpl<$Res, UiComposeSettingsData>;
+  @useResult
+  $Res call({String url});
+}
+
+/// @nodoc
+class _$UiComposeSettingsDataCopyWithImpl<$Res,
+        $Val extends UiComposeSettingsData>
+    implements $UiComposeSettingsDataCopyWith<$Res> {
+  _$UiComposeSettingsDataCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of UiComposeSettingsData
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -1331,35 +2031,34 @@ class _$UiComposeSettingsBottomMenuTabDataCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$UiComposeSettingsBottomMenuTabDataImplCopyWith<$Res>
-    implements $UiComposeSettingsBottomMenuTabDataCopyWith<$Res> {
-  factory _$$UiComposeSettingsBottomMenuTabDataImplCopyWith(
-          _$UiComposeSettingsBottomMenuTabDataImpl value,
-          $Res Function(_$UiComposeSettingsBottomMenuTabDataImpl) then) =
-      __$$UiComposeSettingsBottomMenuTabDataImplCopyWithImpl<$Res>;
+abstract class _$$UiComposeSettingsDataImplCopyWith<$Res>
+    implements $UiComposeSettingsDataCopyWith<$Res> {
+  factory _$$UiComposeSettingsDataImplCopyWith(
+          _$UiComposeSettingsDataImpl value,
+          $Res Function(_$UiComposeSettingsDataImpl) then) =
+      __$$UiComposeSettingsDataImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String url});
 }
 
 /// @nodoc
-class __$$UiComposeSettingsBottomMenuTabDataImplCopyWithImpl<$Res>
-    extends _$UiComposeSettingsBottomMenuTabDataCopyWithImpl<$Res,
-        _$UiComposeSettingsBottomMenuTabDataImpl>
-    implements _$$UiComposeSettingsBottomMenuTabDataImplCopyWith<$Res> {
-  __$$UiComposeSettingsBottomMenuTabDataImplCopyWithImpl(
-      _$UiComposeSettingsBottomMenuTabDataImpl _value,
-      $Res Function(_$UiComposeSettingsBottomMenuTabDataImpl) _then)
+class __$$UiComposeSettingsDataImplCopyWithImpl<$Res>
+    extends _$UiComposeSettingsDataCopyWithImpl<$Res,
+        _$UiComposeSettingsDataImpl>
+    implements _$$UiComposeSettingsDataImplCopyWith<$Res> {
+  __$$UiComposeSettingsDataImplCopyWithImpl(_$UiComposeSettingsDataImpl _value,
+      $Res Function(_$UiComposeSettingsDataImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of UiComposeSettingsBottomMenuTabData
+  /// Create a copy of UiComposeSettingsData
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? url = null,
   }) {
-    return _then(_$UiComposeSettingsBottomMenuTabDataImpl(
+    return _then(_$UiComposeSettingsDataImpl(
       url: null == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
@@ -1370,58 +2069,64 @@ class __$$UiComposeSettingsBottomMenuTabDataImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$UiComposeSettingsBottomMenuTabDataImpl
-    implements _UiComposeSettingsBottomMenuTabData {
-  _$UiComposeSettingsBottomMenuTabDataImpl({required this.url});
+class _$UiComposeSettingsDataImpl extends _UiComposeSettingsData {
+  const _$UiComposeSettingsDataImpl({required this.url}) : super._();
 
-  factory _$UiComposeSettingsBottomMenuTabDataImpl.fromJson(
-          Map<String, dynamic> json) =>
-      _$$UiComposeSettingsBottomMenuTabDataImplFromJson(json);
+  factory _$UiComposeSettingsDataImpl.fromJson(Map<String, dynamic> json) =>
+      _$$UiComposeSettingsDataImplFromJson(json);
 
   @override
-  String url;
+  final String url;
 
   @override
   String toString() {
-    return 'UiComposeSettingsBottomMenuTabData(url: $url)';
+    return 'UiComposeSettingsData(url: $url)';
   }
 
-  /// Create a copy of UiComposeSettingsBottomMenuTabData
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$UiComposeSettingsDataImpl &&
+            (identical(other.url, url) || other.url == url));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, url);
+
+  /// Create a copy of UiComposeSettingsData
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$UiComposeSettingsBottomMenuTabDataImplCopyWith<
-          _$UiComposeSettingsBottomMenuTabDataImpl>
-      get copyWith => __$$UiComposeSettingsBottomMenuTabDataImplCopyWithImpl<
-          _$UiComposeSettingsBottomMenuTabDataImpl>(this, _$identity);
+  _$$UiComposeSettingsDataImplCopyWith<_$UiComposeSettingsDataImpl>
+      get copyWith => __$$UiComposeSettingsDataImplCopyWithImpl<
+          _$UiComposeSettingsDataImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$UiComposeSettingsBottomMenuTabDataImplToJson(
+    return _$$UiComposeSettingsDataImplToJson(
       this,
     );
   }
 }
 
-abstract class _UiComposeSettingsBottomMenuTabData
-    implements UiComposeSettingsBottomMenuTabData {
-  factory _UiComposeSettingsBottomMenuTabData({required String url}) =
-      _$UiComposeSettingsBottomMenuTabDataImpl;
+abstract class _UiComposeSettingsData extends UiComposeSettingsData {
+  const factory _UiComposeSettingsData({required final String url}) =
+      _$UiComposeSettingsDataImpl;
+  const _UiComposeSettingsData._() : super._();
 
-  factory _UiComposeSettingsBottomMenuTabData.fromJson(
-          Map<String, dynamic> json) =
-      _$UiComposeSettingsBottomMenuTabDataImpl.fromJson;
+  factory _UiComposeSettingsData.fromJson(Map<String, dynamic> json) =
+      _$UiComposeSettingsDataImpl.fromJson;
 
   @override
   String get url;
-  set url(String value);
 
-  /// Create a copy of UiComposeSettingsBottomMenuTabData
+  /// Create a copy of UiComposeSettingsData
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$UiComposeSettingsBottomMenuTabDataImplCopyWith<
-          _$UiComposeSettingsBottomMenuTabDataImpl>
+  _$$UiComposeSettingsDataImplCopyWith<_$UiComposeSettingsDataImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
