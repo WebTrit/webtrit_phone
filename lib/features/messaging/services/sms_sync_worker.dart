@@ -128,9 +128,7 @@ class SmsSyncWorker {
       } catch (e, _) {
         yield e;
       } finally {
-        for (var sub in _conversationSyncSubs.values) {
-          await sub.cancel();
-        }
+        _conversationSyncSubs.forEach((key, value) => value.cancel());
         _conversationSyncSubs.clear();
         // Wait a sec before retrying
         await Future.delayed(const Duration(seconds: 1));
@@ -268,9 +266,7 @@ class SmsSyncWorker {
 
   Future<void> _closeSubs() async {
     _conversationlistSyncSub?.cancel();
-    for (var sub in _conversationSyncSubs.values) {
-      await sub.cancel();
-    }
+    _conversationSyncSubs.forEach((key, value) => value.cancel());
     _conversationSyncSubs.clear();
   }
 }

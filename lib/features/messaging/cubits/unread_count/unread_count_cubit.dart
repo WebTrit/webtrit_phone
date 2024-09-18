@@ -35,7 +35,6 @@ class UnreadCountCubit extends Cubit<UnreadCountState> {
 
   void _updateUnreadCount() async {
     userId ??= appPreferences.getChatUserId();
-    _logger.fine('unread count update for user $userId');
 
     if (userId == null) return;
     final chatCounts = await chatsRepository.unreadedCountPerChat(userId!);

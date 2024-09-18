@@ -233,8 +233,7 @@ class MessagingNotificationsService {
 
   Future<void> dispose() async {
     _logger.info('Disposing...');
-    for (var sub in _subs) {
-      await sub.cancel();
-    }
+    // ignore: avoid_function_literals_in_foreach_calls
+    _subs.forEach((sub) => sub.cancel());
   }
 }
