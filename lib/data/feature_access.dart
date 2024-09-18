@@ -15,10 +15,15 @@ final Logger _logger = Logger('FeatureAccess');
 class FeatureAccess {
   static late FeatureAccess _instance;
 
-  FeatureAccess._(this.customLoginFeature, this.bottomMenuFeature);
+  FeatureAccess._(
+    this.customLoginFeature,
+    this.bottomMenuFeature,
+    this.settingsFeature,
+  );
 
   final CustomLoginFeature? customLoginFeature;
   final BottomMenuFeature bottomMenuFeature;
+  final SettingsFeature settingsFeature;
 
   static Future<void> init() async {
     final theme = AppThemes();
@@ -29,8 +34,9 @@ class FeatureAccess {
     try {
       final customLoginFeature = _tryEnableCustomLoginFeature(uiComposeSettings);
       final bottomMenuManager = _tryConfigureBottomMenuFeature(uiComposeSettings, preferences);
+      final settingsFeature = _tryConfigureSettingsFeature(uiComposeSettings, preferences);
 
-      _instance = FeatureAccess._(customLoginFeature, bottomMenuManager);
+      _instance = FeatureAccess._(customLoginFeature, bottomMenuManager, settingsFeature);
     } catch (e, stackTrace) {
       _logger.severe('Failed to initialize FeatureAccess', e, stackTrace);
       rethrow;
@@ -64,6 +70,27 @@ class FeatureAccess {
     }
 
     return BottomMenuFeature(bottomMenuTabs, preferences, cacheSelectedTab: bottomMenu.cacheSelectedTab);
+  }
+
+  static SettingsFeature _tryConfigureSettingsFeature(
+    UiComposeSettings uiComposeSettings,
+    AppPreferences preferences,
+  ) {
+    final settingSections = uiComposeSettings.settings?.sections.where((section) => section.enabled).map((section) {
+      return SettingsSection(
+        titleL10n: section.titleL10n,
+        items: section.items.where((item) => item.enabled).map((item) {
+          return SettingItem(
+            titleL10n: item.titleL10n,
+            icon: item.icon,
+            data: item.data != null ? ConfigData.url(item.data!.url) : null,
+            flavor: SettingsFlavor.values.byName(item.type!),
+          );
+        }).toList(),
+      );
+    }).toList();
+
+    return SettingsFeature(settingSections!);
   }
 
   static CustomLoginFeature? _tryEnableCustomLoginFeature(UiComposeSettings uiComposeSettings) {
@@ -115,4 +142,12 @@ class BottomMenuFeature {
     _appPreferences.setActiveMainFlavor(flavor.flavor);
     _activeTab = flavor;
   }
+}
+
+class SettingsFeature {
+  final List<SettingsSection> _sections;
+
+  SettingsFeature(this._sections);
+
+  List<SettingsSection> get sections => List.unmodifiable(_sections);
 }
