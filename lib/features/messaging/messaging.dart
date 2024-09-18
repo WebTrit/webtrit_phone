@@ -20,7 +20,8 @@ export 'widgets/widgets.dart';
 // - finish resolve naming issues
 // - typing animation
 // - notifications autodismiss on read
-// - integratiions with Dima's optional pages
+// - integratiion with Dima's optional pages
+// - merge messaging to dev or dev to messaging?
 // - move userId retrieving to main auth flow
 // - random refacfotring, maybe tests?
 // (like ephemeral logic to blocs, structs for ws events, constants for keys, etc)
