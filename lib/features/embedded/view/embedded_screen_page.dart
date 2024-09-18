@@ -5,7 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../bloc/embedded_cubit.dart';
 import '../extensions/extensions.dart';
@@ -20,11 +22,21 @@ abstract class EmbeddedScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenTitle = Text(data.titleL10n == null ? EnvironmentConfig.APP_NAME : context.parseL10n(data.titleL10n!));
+
+    // TODO(Serdun): Improve app bar type selection method
+    final appbar = data.titleL10n == null
+        ? MainAppBar(title: screenTitle)
+        : AppBar(
+            leading: const AutoLeadingButton(),
+            title: screenTitle,
+          );
+
     return BlocProvider(
       create: (context) => EmbeddedCubit(),
       child: EmbeddedScreen(
         initialUri: data.url,
-        title: const Text(EnvironmentConfig.APP_NAME),
+        appBar: appbar,
       ),
     );
   }

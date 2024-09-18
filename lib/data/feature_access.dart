@@ -83,7 +83,7 @@ class FeatureAccess {
           return SettingItem(
             titleL10n: item.titleL10n,
             icon: item.icon,
-            data: item.data != null ? ConfigData.url(item.data!.url) : null,
+            data: item.data != null ? ConfigData.create(item.data!.url, item.titleL10n) : null,
             flavor: SettingsFlavor.values.byName(item.type!),
           );
         }).toList(),

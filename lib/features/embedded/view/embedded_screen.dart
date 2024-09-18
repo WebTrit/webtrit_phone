@@ -10,19 +10,17 @@ class EmbeddedScreen extends StatelessWidget {
   const EmbeddedScreen({
     super.key,
     required this.initialUri,
-    required this.title,
+    required this.appBar,
   });
 
   final Uri initialUri;
 
-  final Widget title;
+  final PreferredSizeWidget appBar;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(
-        title: title,
-      ),
+      appBar: appBar,
       body: BlocBuilder<EmbeddedCubit, EmbeddedState>(
         builder: (context, state) => WebViewScaffold(
           initialUri: initialUri,
