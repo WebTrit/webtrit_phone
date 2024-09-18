@@ -22,14 +22,14 @@ abstract class EmbeddedScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenTitle = Text(data.titleL10n == null ? EnvironmentConfig.APP_NAME : context.parseL10n(data.titleL10n!));
-
     // TODO(Serdun): Improve app bar type selection method
     final appbar = data.titleL10n == null
-        ? MainAppBar(title: screenTitle)
+        ? MainAppBar(
+            title: const Text(EnvironmentConfig.APP_NAME),
+          )
         : AppBar(
             leading: const AutoLeadingButton(),
-            title: screenTitle,
+            title: Text(context.parseL10n(data.titleL10n!)),
           );
 
     return BlocProvider(
