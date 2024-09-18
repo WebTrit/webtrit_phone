@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/features/embedded/exports.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/feature_access/exports.dart';
 import 'package:webtrit_phone/models/settings_flavor.dart';
@@ -135,11 +136,7 @@ class SettingsScreen extends StatelessWidget {
       case SettingsFlavor.deleteAccount:
         _deleteAccount(context);
       case SettingsFlavor.embedded:
-        context.router.pushWidget(
-          WebViewScaffold(
-            initialUri: item.data!.url,
-          ),
-        );
+        context.router.navigate(EmbeddedScreenPage.route(item.data!));
     }
   }
 

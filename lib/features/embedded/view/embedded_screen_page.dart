@@ -29,6 +29,10 @@ abstract class EmbeddedScreenPage extends StatelessWidget {
     );
   }
 
+  static PageRouteInfo<dynamic> route(ConfigData bottomMenuTabData) {
+    return EmbeddedScreenPage1Route(data: bottomMenuTabData);
+  }
+
   static PageRouteInfo<dynamic>? getPageRouteInfo(RouteMatch route, ConfigData? bottomMenuTabData) {
     final routes = {
       EmbeddedScreenPage1Route.page: (data) => EmbeddedScreenPage1Route(data: data),
