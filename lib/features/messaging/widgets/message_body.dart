@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_link_previewer/flutter_link_previewer.dart';
-import 'package:flutter_parsed_text/flutter_parsed_text.dart';
+
 import 'package:quiver/collection.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_parsed_text/flutter_parsed_text.dart';
+import 'package:flutter_link_previewer/flutter_link_previewer.dart';
+
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 
 class MessageBody extends StatefulWidget {
@@ -83,10 +86,10 @@ class _MessageBodyState extends State<MessageBody> {
           parse: [
             mailToMatcher(style: style.copyWith(decoration: TextDecoration.underline)),
             urlMatcher(style: style.copyWith(decoration: TextDecoration.underline)),
-            boldMatcher(style: style.merge(PatternStyle.bold.textStyle)),
-            italicMatcher(style: style.merge(PatternStyle.italic.textStyle)),
-            lineThroughMatcher(style: style.merge(PatternStyle.lineThrough.textStyle)),
-            codeMatcher(style: style.merge(PatternStyle.code.textStyle)),
+            boldMatcher(style: style.copyWith(fontWeight: FontWeight.bold)),
+            italicMatcher(style: style.copyWith(fontStyle: FontStyle.italic)),
+            lineThroughMatcher(style: style.copyWith(decoration: TextDecoration.lineThrough)),
+            codeMatcher(style: style.copyWith(fontFamily: 'Courier')),
           ],
           regexOptions: const RegexOptions(multiLine: true, dotAll: true),
           style: style.copyWith(fontFamily: theme.textTheme.bodyMedium?.fontFamily),
@@ -96,4 +99,82 @@ class _MessageBodyState extends State<MessageBody> {
       ],
     );
   }
+}
+
+MatchText mailToMatcher({final TextStyle? style}) {
+  return MatchText(
+    onTap: (mail) async {
+      final url = Uri(scheme: 'mailto', path: mail);
+      if (await canLaunchUrl(url)) await launchUrl(url);
+    },
+    pattern: regexEmail,
+    style: style,
+  );
+}
+
+MatchText urlMatcher({final TextStyle? style, final Function(String url)? onLinkPressed}) {
+  return MatchText(
+    onTap: (urlText) async {
+      final protocolIdentifierRegex = RegExp(
+        r'^((http|ftp|https):\/\/)',
+        caseSensitive: false,
+      );
+      if (!urlText.startsWith(protocolIdentifierRegex)) {
+        urlText = 'https://$urlText';
+      }
+      if (onLinkPressed != null) {
+        onLinkPressed(urlText);
+      } else {
+        final url = Uri.tryParse(urlText);
+        if (url != null && await canLaunchUrl(url)) {
+          await launchUrl(
+            url,
+            mode: LaunchMode.externalApplication,
+          );
+        }
+      }
+    },
+    pattern: regexLink,
+    style: style,
+  );
+}
+
+MatchText boldMatcher({final TextStyle? style}) {
+  return MatchText(
+    pattern: r'\*[^*]+\*',
+    style: style,
+    renderText: ({required String str, required String pattern}) {
+      return {'display': str.replaceAll('*', '')};
+    },
+  );
+}
+
+MatchText italicMatcher({final TextStyle? style}) {
+  return MatchText(
+    pattern: r'_[^_]+_',
+    style: style,
+    renderText: ({required String str, required String pattern}) {
+      return {'display': str.replaceAll('_', '')};
+    },
+  );
+}
+
+MatchText lineThroughMatcher({final TextStyle? style}) {
+  return MatchText(
+    pattern: r'~[^~]+~',
+    style: style,
+    renderText: ({required String str, required String pattern}) {
+      return {'display': str.replaceAll('~', '')};
+    },
+  );
+}
+
+MatchText codeMatcher({final TextStyle? style}) {
+  return MatchText(
+    pattern: r'`[^`]+`',
+    style: style,
+    renderText: ({required String str, required String pattern}) {
+      return {'display': str.replaceAll('`', '')};
+    },
+  );
 }

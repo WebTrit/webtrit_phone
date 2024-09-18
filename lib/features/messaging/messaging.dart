@@ -9,7 +9,6 @@ export 'cubits/cubits.dart';
 export 'view/router_page.dart';
 export 'services/services.dart';
 export 'widgets/widgets.dart';
-export 'utils/utils.dart';
 
 
 // TODO: 
