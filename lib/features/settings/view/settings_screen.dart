@@ -96,7 +96,7 @@ class SettingsScreen extends StatelessWidget {
                             ListTile(
                               leading: Icon(item.icon),
                               title: Text(context.parseL10n(item.titleL10n)),
-                              onTap: () => _handleNavigation(context, item),
+                              onTap: () => _onSectionItemTap(context, item),
                             ),
                             const ListTileSeparator(),
                           ],
@@ -120,7 +120,7 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  void _handleNavigation(BuildContext context, SettingItem item) {
+  void _onSectionItemTap(BuildContext context, SettingItem item) {
     switch (item.flavor) {
       case SettingsFlavor.network:
         context.router.navigate(const NetworkScreenPageRoute());
