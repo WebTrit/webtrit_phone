@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'package:screenshots/mocks/mocks.dart';
 
@@ -117,8 +118,10 @@ class MainScreenScreenshot extends StatelessWidget {
         final provider = BlocProvider<EmbeddedCubit>(
           create: (context) => MockEmbeddedCubit.mainScreen(),
           child: EmbeddedScreen(
-            initialUri: Uri.parse('htts://example.com'),
-            title: const Text("Embedded page"),
+            initialUri: Uri.parse('https://example.com'),
+            appBar: MainAppBar(
+              title: const Text('Embedded'),
+            ),
           ),
         );
         return provider;

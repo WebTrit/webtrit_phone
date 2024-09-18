@@ -12,3 +12,4 @@ export 'local_contact_phone.dart';
 export 'main_flavor.dart';
 export 'recent.dart';
 export 'recents_visibility_filter.dart';
+export 'settings_flavor.dart';

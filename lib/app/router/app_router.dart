@@ -269,6 +269,10 @@ class AppRouter extends _$AppRouter {
               page: UndefinedScreenPageRoute.page,
               path: 'undefined',
             ),
+            AutoRoute(
+              page: EmbeddedScreenPage1Route.page,
+              path: 'embedded',
+            ),
           ],
         ),
       ];

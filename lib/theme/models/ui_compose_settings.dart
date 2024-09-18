@@ -15,6 +15,7 @@ class UiComposeSettings with _$UiComposeSettings {
   const factory UiComposeSettings({
     UiComposeSettingsLogin? login,
     UiComposeSettingsMain? main,
+    UiComposeSettingsSettings? settings,
   }) = _UiComposeSettings;
 
   factory UiComposeSettings.fromJson(Map<String, dynamic> json) => _$UiComposeSettingsFromJson(json);
@@ -81,19 +82,61 @@ class UiComposeSettingsBottomMenuTab with _$UiComposeSettingsBottomMenuTab {
     required String type,
     required String titleL10n,
     @IconDataConverter() required IconData icon,
-    UiComposeSettingsBottomMenuTabData? data,
+    UiComposeSettingsData? data,
   }) = _UiComposeSettingsBottomMenuTab;
 
   factory UiComposeSettingsBottomMenuTab.fromJson(Map<String, dynamic> json) =>
       _$UiComposeSettingsBottomMenuTabFromJson(json);
 }
 
-@unfreezed
-class UiComposeSettingsBottomMenuTabData with _$UiComposeSettingsBottomMenuTabData {
-  factory UiComposeSettingsBottomMenuTabData({
-    required String url,
-  }) = _UiComposeSettingsBottomMenuTabData;
+@freezed
+class UiComposeSettingsSettings with _$UiComposeSettingsSettings {
+  const UiComposeSettingsSettings._();
 
-  factory UiComposeSettingsBottomMenuTabData.fromJson(Map<String, dynamic> json) =>
-      _$UiComposeSettingsBottomMenuTabDataFromJson(json);
+  const factory UiComposeSettingsSettings({
+    @Default([]) List<UiComposeSettingsSettingsSection> sections,
+  }) = _UiComposeSettingsSettings;
+
+  factory UiComposeSettingsSettings.fromJson(Map<String, dynamic> json) => _$UiComposeSettingsSettingsFromJson(json);
+}
+
+@freezed
+class UiComposeSettingsSettingsSection with _$UiComposeSettingsSettingsSection {
+  const UiComposeSettingsSettingsSection._();
+
+  const factory UiComposeSettingsSettingsSection({
+    required String titleL10n,
+    @Default(true) bool enabled,
+    @Default([]) List<UiComposeSettingsSettingsItem> items,
+  }) = _UiComposeSettingsSettingsSection;
+
+  factory UiComposeSettingsSettingsSection.fromJson(Map<String, dynamic> json) =>
+      _$UiComposeSettingsSettingsSectionFromJson(json);
+}
+
+@freezed
+class UiComposeSettingsSettingsItem with _$UiComposeSettingsSettingsItem {
+  const UiComposeSettingsSettingsItem._();
+
+  const factory UiComposeSettingsSettingsItem({
+    @Default(true) bool enabled,
+    required String titleL10n,
+    String? type,
+    @IconDataConverter() required IconData icon,
+    required UiComposeSettingsData? data,
+  }) = _UiComposeSettingsSettingsItem;
+
+  factory UiComposeSettingsSettingsItem.fromJson(Map<String, dynamic> json) =>
+      _$UiComposeSettingsSettingsItemFromJson(json);
+}
+
+@freezed
+class UiComposeSettingsData with _$UiComposeSettingsData {
+  const UiComposeSettingsData._();
+
+  const factory UiComposeSettingsData({
+    required String url,
+  }) = _UiComposeSettingsData;
+
+  factory UiComposeSettingsData.fromJson(Map<String, dynamic> json) => _$UiComposeSettingsDataFromJson(json);
 }

@@ -70,5 +70,99 @@
         }
       ]
     }
+  },
+  "settings": {
+    "sections": [
+      {
+        "titleL10n": "settings_ListViewTileTitle_settings",
+        "enabled": true,
+        "items": [
+          {
+            "enabled": true,
+            "type": "network",
+            "titleL10n": "settings_ListViewTileTitle_network",
+            "icon": "0xe424"
+          },
+          {
+            "enabled": true,
+            "type": "language",
+            "titleL10n": "settings_ListViewTileTitle_language",
+            "icon": "0xe366"
+          },
+          {
+            "enabled": false,
+            "type": "help",
+            "titleL10n": "settings_ListViewTileTitle_help",
+            "icon": "0xe30b"
+          },
+          {
+            "enabled": true,
+            "type": "terms",
+            "titleL10n": "settings_ListViewTileTitle_termsConditions",
+            "icon": "0xeedf",
+            "data": {
+              "url": "https://webtrit.com/legal/privacy-policy-for-webtrit-app/"
+            }
+          },
+          {
+            "enabled": true,
+            "type": "about",
+            "titleL10n": "settings_ListViewTileTitle_about",
+            "icon": "0xe140"
+          }
+        ]
+      },
+      {
+        "titleL10n": "settings_ListViewTileTitle_toolbox",
+        "enabled": true,
+        "items": [
+          {
+            "enabled": false,
+            "titleL10n": "settings_ListViewTileTitle_logRecordsConsole",
+            "icon": "0xee79",
+            "type": "log"
+          },
+          {
+            "enabled": true,
+            "titleL10n": "settings_ListViewTileTitle_accountDelete",
+            "icon": "0xe1bb",
+            "type": "deleteAccount"
+          },
+          {
+            "enabled": false,
+            "titleL10n": "settings_ListViewTileTitle_embedded1",
+            "icon": "0xe3a2",
+            "type": "embedded",
+            "data": {
+              "url": "https://webtrit-app.web.app/example/example_embedded_registration.html"
+            }
+          },
+          {
+            "enabled": false,
+            "titleL10n": "settings_ListViewTileTitle_embedded2",
+            "icon": "0xe3a2",
+            "type": "embedded",
+            "data": {
+              "url": "https://webtrit-app.web.app/example/example_embedded_statistics.html"
+            }
+          }
+        ]
+      },
+      {
+        "titleL10n": "settings_ListViewTileTitle_embedded_section1",
+        "enabled": false,
+        "items": [
+          {
+            "enabled": true,
+            "titleL10n": "settings_ListViewTileTitle_embedded3",
+            "icon": "0xe3a2",
+            "type": "embedded",
+            "data": {
+              "url": "https://webtrit-app.web.app/example/example_embedded_rating.html"
+            }
+          }
+        ]
+      }
+    ]
   }
 }

@@ -5,7 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../bloc/embedded_cubit.dart';
 import '../extensions/extensions.dart';
@@ -16,20 +18,34 @@ abstract class EmbeddedScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors const
   const EmbeddedScreenPage(this.data);
 
-  final BottomMenuTabData data;
+  final ConfigData data;
 
   @override
   Widget build(BuildContext context) {
+    // TODO(Serdun): Improve app bar type selection method
+    final appbar = data.titleL10n == null
+        ? MainAppBar(
+            title: const Text(EnvironmentConfig.APP_NAME),
+          )
+        : AppBar(
+            leading: const AutoLeadingButton(),
+            title: Text(context.parseL10n(data.titleL10n!)),
+          );
+
     return BlocProvider(
       create: (context) => EmbeddedCubit(),
       child: EmbeddedScreen(
-        initialUri: Uri.parse(data.url),
-        title: const Text(EnvironmentConfig.APP_NAME),
+        initialUri: data.url,
+        appBar: appbar,
       ),
     );
   }
 
-  static PageRouteInfo<dynamic>? getPageRouteInfo(RouteMatch route, BottomMenuTabData? bottomMenuTabData) {
+  static PageRouteInfo<dynamic> route(ConfigData bottomMenuTabData) {
+    return EmbeddedScreenPage1Route(data: bottomMenuTabData);
+  }
+
+  static PageRouteInfo<dynamic>? getPageRouteInfo(RouteMatch route, ConfigData? bottomMenuTabData) {
     final routes = {
       EmbeddedScreenPage1Route.page: (data) => EmbeddedScreenPage1Route(data: data),
       EmbeddedScreenPage2Route.page: (data) => EmbeddedScreenPage2Route(data: data),
@@ -45,7 +61,7 @@ abstract class EmbeddedScreenPage extends StatelessWidget {
     return null;
   }
 
-  static PageRouteInfo<dynamic>? getPageRoute(MainFlavor flavor, BottomMenuTabData data) {
+  static PageRouteInfo<dynamic>? getPageRoute(MainFlavor flavor, ConfigData data) {
     final routes = {
       MainFlavor.embedded1: () => EmbeddedScreenPage1Route(data: data),
       MainFlavor.embedded2: () => EmbeddedScreenPage2Route(data: data),

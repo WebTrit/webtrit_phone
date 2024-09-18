@@ -17,6 +17,10 @@ _$UiComposeSettingsImpl _$$UiComposeSettingsImplFromJson(
           ? null
           : UiComposeSettingsMain.fromJson(
               json['main'] as Map<String, dynamic>),
+      settings: json['settings'] == null
+          ? null
+          : UiComposeSettingsSettings.fromJson(
+              json['settings'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$UiComposeSettingsImplToJson(
@@ -24,6 +28,7 @@ Map<String, dynamic> _$$UiComposeSettingsImplToJson(
     <String, dynamic>{
       'login': instance.login,
       'main': instance.main,
+      'settings': instance.settings,
     };
 
 _$UiComposeSettingsLoginImpl _$$UiComposeSettingsLoginImplFromJson(
@@ -101,7 +106,7 @@ _$UiComposeSettingsBottomMenuTabImpl
           icon: const IconDataConverter().fromJson(json['icon'] as String),
           data: json['data'] == null
               ? null
-              : UiComposeSettingsBottomMenuTabData.fromJson(
+              : UiComposeSettingsData.fromJson(
                   json['data'] as Map<String, dynamic>),
         );
 
@@ -116,15 +121,74 @@ Map<String, dynamic> _$$UiComposeSettingsBottomMenuTabImplToJson(
       'data': instance.data,
     };
 
-_$UiComposeSettingsBottomMenuTabDataImpl
-    _$$UiComposeSettingsBottomMenuTabDataImplFromJson(
+_$UiComposeSettingsSettingsImpl _$$UiComposeSettingsSettingsImplFromJson(
+        Map<String, dynamic> json) =>
+    _$UiComposeSettingsSettingsImpl(
+      sections: (json['sections'] as List<dynamic>?)
+              ?.map((e) => UiComposeSettingsSettingsSection.fromJson(
+                  e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+    );
+
+Map<String, dynamic> _$$UiComposeSettingsSettingsImplToJson(
+        _$UiComposeSettingsSettingsImpl instance) =>
+    <String, dynamic>{
+      'sections': instance.sections,
+    };
+
+_$UiComposeSettingsSettingsSectionImpl
+    _$$UiComposeSettingsSettingsSectionImplFromJson(
             Map<String, dynamic> json) =>
-        _$UiComposeSettingsBottomMenuTabDataImpl(
-          url: json['url'] as String,
+        _$UiComposeSettingsSettingsSectionImpl(
+          titleL10n: json['titleL10n'] as String,
+          enabled: json['enabled'] as bool? ?? true,
+          items: (json['items'] as List<dynamic>?)
+                  ?.map((e) => UiComposeSettingsSettingsItem.fromJson(
+                      e as Map<String, dynamic>))
+                  .toList() ??
+              const [],
         );
 
-Map<String, dynamic> _$$UiComposeSettingsBottomMenuTabDataImplToJson(
-        _$UiComposeSettingsBottomMenuTabDataImpl instance) =>
+Map<String, dynamic> _$$UiComposeSettingsSettingsSectionImplToJson(
+        _$UiComposeSettingsSettingsSectionImpl instance) =>
+    <String, dynamic>{
+      'titleL10n': instance.titleL10n,
+      'enabled': instance.enabled,
+      'items': instance.items,
+    };
+
+_$UiComposeSettingsSettingsItemImpl
+    _$$UiComposeSettingsSettingsItemImplFromJson(Map<String, dynamic> json) =>
+        _$UiComposeSettingsSettingsItemImpl(
+          enabled: json['enabled'] as bool? ?? true,
+          titleL10n: json['titleL10n'] as String,
+          type: json['type'] as String?,
+          icon: const IconDataConverter().fromJson(json['icon'] as String),
+          data: json['data'] == null
+              ? null
+              : UiComposeSettingsData.fromJson(
+                  json['data'] as Map<String, dynamic>),
+        );
+
+Map<String, dynamic> _$$UiComposeSettingsSettingsItemImplToJson(
+        _$UiComposeSettingsSettingsItemImpl instance) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'titleL10n': instance.titleL10n,
+      'type': instance.type,
+      'icon': const IconDataConverter().toJson(instance.icon),
+      'data': instance.data,
+    };
+
+_$UiComposeSettingsDataImpl _$$UiComposeSettingsDataImplFromJson(
+        Map<String, dynamic> json) =>
+    _$UiComposeSettingsDataImpl(
+      url: json['url'] as String,
+    );
+
+Map<String, dynamic> _$$UiComposeSettingsDataImplToJson(
+        _$UiComposeSettingsDataImpl instance) =>
     <String, dynamic>{
       'url': instance.url,
     };
