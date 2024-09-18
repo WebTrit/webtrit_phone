@@ -61,7 +61,11 @@ class FeatureAccess {
         flavor: MainFlavor.values.byName(tab.type),
         titleL10n: tab.titleL10n,
         icon: tab.icon,
-        data: tab.data != null ? ConfigData.url(tab.data!.url) : null,
+        data: tab.data != null
+            ? ConfigData(
+                url: Uri.parse(tab.data!.url),
+              )
+            : null,
       );
     }).toList();
 
@@ -83,7 +87,12 @@ class FeatureAccess {
           return SettingItem(
             titleL10n: item.titleL10n,
             icon: item.icon,
-            data: item.data != null ? ConfigData.create(item.data!.url, item.titleL10n) : null,
+            data: item.data != null
+                ? ConfigData(
+                    url: Uri.parse(item.data!.url),
+                    titleL10n: item.titleL10n,
+                  )
+                : null,
             flavor: SettingsFlavor.values.byName(item.type!),
           );
         }).toList(),
