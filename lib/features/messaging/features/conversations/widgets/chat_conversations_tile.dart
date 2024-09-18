@@ -91,19 +91,10 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
       return Row(
         children: [
           Expanded(
-            child: ContactInfoBuilder(
-              sourceType: ContactSourceType.external,
-              sourceId: participant.userId,
-              builder: (context, contact, {required bool loading}) {
-                if (loading) return const SizedBox();
-
-                const textStyle = TextStyle(overflow: TextOverflow.ellipsis);
-                if (contact != null) {
-                  return FadeIn(child: Text(contact.name, style: textStyle));
-                } else {
-                  return FadeIn(child: Text(participant.userId, style: textStyle));
-                }
-              },
+            child: ParticipantName(
+              senderId: participant.userId,
+              userId: userId,
+              style: const TextStyle(overflow: TextOverflow.ellipsis),
             ),
           ),
           const SizedBox(width: 4),
@@ -160,11 +151,7 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
             ),
           )
         else
-          Expanded(
-            child: FadeIn(
-              child: Text(context.l10n.chats_ChatListItem_empty, style: textStyle),
-            ),
-          ),
+          Expanded(child: Text(context.l10n.chats_ChatListItem_empty, style: textStyle)),
         BlocBuilder<UnreadCountCubit, UnreadCountState>(
           builder: (context, state) {
             final count = state.unreadCountForChatConversation(widget.conversation.id);

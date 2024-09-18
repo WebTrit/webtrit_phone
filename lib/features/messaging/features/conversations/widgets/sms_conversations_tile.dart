@@ -106,11 +106,7 @@ class _SmsConversationsTileState extends State<SmsConversationsTile> {
             ),
           )
         else
-          Expanded(
-            child: FadeIn(
-              child: Text(context.l10n.chats_ChatListItem_empty, style: textStyle),
-            ),
-          ),
+          Expanded(child: Text(context.l10n.chats_ChatListItem_empty, style: textStyle)),
         BlocBuilder<UnreadCountCubit, UnreadCountState>(
           builder: (context, state) {
             final count = state.unreadCountForSmsConversation(widget.conversation.id);

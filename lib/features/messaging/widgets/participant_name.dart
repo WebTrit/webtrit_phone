@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/features/messaging/widgets/widgets.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/widgets/widgets.dart';
 
 class ParticipantName extends StatelessWidget {
   const ParticipantName({
@@ -40,10 +39,7 @@ class ParticipantName extends StatelessWidget {
 
           final name = contact?.name ?? senderId;
           final mappedName = textMap?.call(name) ?? name;
-          return FadeIn(
-            duration: const Duration(milliseconds: 300),
-            child: Text(mappedName, style: textStyle, maxLines: 1, overflow: TextOverflow.ellipsis),
-          );
+          return Text(mappedName, style: textStyle, maxLines: 1, overflow: TextOverflow.ellipsis);
         },
       );
     }
