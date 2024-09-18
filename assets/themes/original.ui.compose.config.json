@@ -75,7 +75,6 @@
     "sections": [
       {
         "titleL10n": "settings_ListViewTileTitle_settings",
-        "type": "settings",
         "enabled": true,
         "items": [
           {
