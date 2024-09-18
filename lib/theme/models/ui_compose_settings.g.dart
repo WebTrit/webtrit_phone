@@ -99,6 +99,10 @@ _$UiComposeSettingsBottomMenuTabImpl
           type: json['type'] as String,
           titleL10n: json['titleL10n'] as String,
           icon: const IconDataConverter().fromJson(json['icon'] as String),
+          data: json['data'] == null
+              ? null
+              : UiComposeSettingsBottomMenuTabData.fromJson(
+                  json['data'] as Map<String, dynamic>),
         );
 
 Map<String, dynamic> _$$UiComposeSettingsBottomMenuTabImplToJson(
@@ -109,4 +113,18 @@ Map<String, dynamic> _$$UiComposeSettingsBottomMenuTabImplToJson(
       'type': instance.type,
       'titleL10n': instance.titleL10n,
       'icon': const IconDataConverter().toJson(instance.icon),
+      'data': instance.data,
+    };
+
+_$UiComposeSettingsBottomMenuTabDataImpl
+    _$$UiComposeSettingsBottomMenuTabDataImplFromJson(
+            Map<String, dynamic> json) =>
+        _$UiComposeSettingsBottomMenuTabDataImpl(
+          url: json['url'] as String,
+        );
+
+Map<String, dynamic> _$$UiComposeSettingsBottomMenuTabDataImplToJson(
+        _$UiComposeSettingsBottomMenuTabDataImpl instance) =>
+    <String, dynamic>{
+      'url': instance.url,
     };

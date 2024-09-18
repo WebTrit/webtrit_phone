@@ -21,28 +21,28 @@ class MainScreenScreenshot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<BottomMenuTab> tabs = [
-      BottomMenuTab(
+      const BottomMenuTab(
         enabled: true,
         initial: true,
         flavor: MainFlavor.favorites,
         titleL10n: 'main_BottomNavigationBarItemLabel_favorites',
         icon: Icons.star,
       ),
-      BottomMenuTab(
+      const BottomMenuTab(
         enabled: true,
         initial: false,
         flavor: MainFlavor.recents,
         titleL10n: ' main_BottomNavigationBarItemLabel_recents ',
         icon: Icons.history,
       ),
-      BottomMenuTab(
+      const BottomMenuTab(
         enabled: true,
         initial: false,
         flavor: MainFlavor.contacts,
         titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
         icon: Icons.people,
       ),
-      BottomMenuTab(
+      const BottomMenuTab(
         enabled: true,
         initial: false,
         flavor: MainFlavor.keypad,
@@ -109,6 +109,17 @@ class MainScreenScreenshot extends StatelessWidget {
         final provider = BlocProvider<KeypadCubit>(
           create: (context) => MockKeypadCubit.mainScreen(),
           child: widget,
+        );
+        return provider;
+      case MainFlavor.embedded1:
+      case MainFlavor.embedded2:
+      case MainFlavor.embedded3:
+        final provider = BlocProvider<EmbeddedCubit>(
+          create: (context) => MockEmbeddedCubit.mainScreen(),
+          child: EmbeddedScreen(
+            initialUri: Uri.parse('htts://example.com'),
+            title: const Text("Embedded page"),
+          ),
         );
         return provider;
     }

@@ -22,12 +22,14 @@ class WebViewScaffold extends StatefulWidget {
     required this.initialUri,
     this.addLocaleNameToQueryParameters = true,
     this.javaScriptChannels = const {},
+    this.showToolbar = true,
   });
 
   final Widget? title;
   final Uri initialUri;
   final bool addLocaleNameToQueryParameters;
   final Map<String, void Function(JavaScriptMessage)> javaScriptChannels;
+  final bool showToolbar;
 
   @override
   State<WebViewScaffold> createState() => _WebViewScaffoldState();
@@ -124,20 +126,18 @@ class _WebViewScaffoldState extends State<WebViewScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: widget.title,
-        leading: const ExtBackButton(),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.refresh,
-            ),
-            onPressed: () {
-              _webViewController.reload();
-            },
-          ),
-        ],
-      ),
+      appBar: widget.showToolbar
+          ? AppBar(
+              title: widget.title,
+              leading: const ExtBackButton(),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.refresh),
+                  onPressed: _webViewController.reload,
+                ),
+              ],
+            )
+          : null,
       body: Stack(
         alignment: AlignmentDirectional.topCenter,
         children: [

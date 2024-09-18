@@ -2,5 +2,8 @@ enum MainFlavor {
   favorites,
   recents,
   contacts,
-  keypad;
+  keypad,
+  embedded1,
+  embedded2,
+  embedded3;
 }

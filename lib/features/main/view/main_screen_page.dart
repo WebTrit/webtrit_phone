@@ -91,8 +91,8 @@ class MainScreenPage extends StatelessWidget {
   }
 
   List<PageRouteInfo> _buildRoutePages(List<BottomMenuTab> tabs) {
-    return tabs.map<PageRouteInfo<dynamic>>((flavor) {
-      switch (flavor.flavor) {
+    return tabs.map<PageRouteInfo<dynamic>>((tab) {
+      switch (tab.flavor) {
         case MainFlavor.favorites:
           return const FavoritesRouterPageRoute();
         case MainFlavor.recents:
@@ -102,7 +102,11 @@ class MainScreenPage extends StatelessWidget {
         case MainFlavor.keypad:
           return const KeypadScreenPageRoute();
         default:
-          throw Exception('Unknown flavor type');
+          final embedded = EmbeddedScreenPage.getPageRoute(tab.flavor, tab.data!);
+          if (embedded != null) {
+            return embedded;
+          }
+          throw Exception('Unknown flavor type: ${tab.flavor}');
       }
     }).toList();
   }

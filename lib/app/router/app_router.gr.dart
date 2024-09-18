@@ -77,6 +77,27 @@ abstract class _$AppRouter extends RootStackRouter {
         child: DemoWebPage(args.initialUrl),
       );
     },
+    EmbeddedScreenPage1Route.name: (routeData) {
+      final args = routeData.argsAs<EmbeddedScreenPage1RouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: EmbeddedScreenPage1(args.data),
+      );
+    },
+    EmbeddedScreenPage2Route.name: (routeData) {
+      final args = routeData.argsAs<EmbeddedScreenPage2RouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: EmbeddedScreenPage2(args.data),
+      );
+    },
+    EmbeddedScreenPage3Route.name: (routeData) {
+      final args = routeData.argsAs<EmbeddedScreenPage3RouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: EmbeddedScreenPage3(args.data),
+      );
+    },
     ErrorDetailsScreenPageRoute.name: (routeData) {
       final args = routeData.argsAs<ErrorDetailsScreenPageRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -465,6 +486,96 @@ class DemoWebPageRouteArgs {
   @override
   String toString() {
     return 'DemoWebPageRouteArgs{initialUrl: $initialUrl}';
+  }
+}
+
+/// generated route for
+/// [EmbeddedScreenPage1]
+class EmbeddedScreenPage1Route
+    extends PageRouteInfo<EmbeddedScreenPage1RouteArgs> {
+  EmbeddedScreenPage1Route({
+    required BottomMenuTabData data,
+    List<PageRouteInfo>? children,
+  }) : super(
+          EmbeddedScreenPage1Route.name,
+          args: EmbeddedScreenPage1RouteArgs(data: data),
+          initialChildren: children,
+        );
+
+  static const String name = 'EmbeddedScreenPage1Route';
+
+  static const PageInfo<EmbeddedScreenPage1RouteArgs> page =
+      PageInfo<EmbeddedScreenPage1RouteArgs>(name);
+}
+
+class EmbeddedScreenPage1RouteArgs {
+  const EmbeddedScreenPage1RouteArgs({required this.data});
+
+  final BottomMenuTabData data;
+
+  @override
+  String toString() {
+    return 'EmbeddedScreenPage1RouteArgs{data: $data}';
+  }
+}
+
+/// generated route for
+/// [EmbeddedScreenPage2]
+class EmbeddedScreenPage2Route
+    extends PageRouteInfo<EmbeddedScreenPage2RouteArgs> {
+  EmbeddedScreenPage2Route({
+    required BottomMenuTabData data,
+    List<PageRouteInfo>? children,
+  }) : super(
+          EmbeddedScreenPage2Route.name,
+          args: EmbeddedScreenPage2RouteArgs(data: data),
+          initialChildren: children,
+        );
+
+  static const String name = 'EmbeddedScreenPage2Route';
+
+  static const PageInfo<EmbeddedScreenPage2RouteArgs> page =
+      PageInfo<EmbeddedScreenPage2RouteArgs>(name);
+}
+
+class EmbeddedScreenPage2RouteArgs {
+  const EmbeddedScreenPage2RouteArgs({required this.data});
+
+  final BottomMenuTabData data;
+
+  @override
+  String toString() {
+    return 'EmbeddedScreenPage2RouteArgs{data: $data}';
+  }
+}
+
+/// generated route for
+/// [EmbeddedScreenPage3]
+class EmbeddedScreenPage3Route
+    extends PageRouteInfo<EmbeddedScreenPage3RouteArgs> {
+  EmbeddedScreenPage3Route({
+    required BottomMenuTabData data,
+    List<PageRouteInfo>? children,
+  }) : super(
+          EmbeddedScreenPage3Route.name,
+          args: EmbeddedScreenPage3RouteArgs(data: data),
+          initialChildren: children,
+        );
+
+  static const String name = 'EmbeddedScreenPage3Route';
+
+  static const PageInfo<EmbeddedScreenPage3RouteArgs> page =
+      PageInfo<EmbeddedScreenPage3RouteArgs>(name);
+}
+
+class EmbeddedScreenPage3RouteArgs {
+  const EmbeddedScreenPage3RouteArgs({required this.data});
+
+  final BottomMenuTabData data;
+
+  @override
+  String toString() {
+    return 'EmbeddedScreenPage3RouteArgs{data: $data}';
   }
 }
 

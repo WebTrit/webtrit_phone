@@ -23,8 +23,12 @@ mixin _$ThemePageConfig {
   LoginPageConfig? get login => throw _privateConstructorUsedError;
   AboutPageConfig? get about => throw _privateConstructorUsedError;
 
+  /// Serializes this ThemePageConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ThemePageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ThemePageConfigCopyWith<ThemePageConfig> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -51,6 +55,8 @@ class _$ThemePageConfigCopyWithImpl<$Res, $Val extends ThemePageConfig>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ThemePageConfig
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -69,6 +75,8 @@ class _$ThemePageConfigCopyWithImpl<$Res, $Val extends ThemePageConfig>
     ) as $Val);
   }
 
+  /// Create a copy of ThemePageConfig
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $LoginPageConfigCopyWith<$Res>? get login {
@@ -81,6 +89,8 @@ class _$ThemePageConfigCopyWithImpl<$Res, $Val extends ThemePageConfig>
     });
   }
 
+  /// Create a copy of ThemePageConfig
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $AboutPageConfigCopyWith<$Res>? get about {
@@ -118,6 +128,8 @@ class __$$ThemePageConfigImplCopyWithImpl<$Res>
       _$ThemePageConfigImpl _value, $Res Function(_$ThemePageConfigImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ThemePageConfig
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -165,11 +177,13 @@ class _$ThemePageConfigImpl implements _ThemePageConfig {
             (identical(other.about, about) || other.about == about));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, login, about);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ThemePageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ThemePageConfigImplCopyWith<_$ThemePageConfigImpl> get copyWith =>
@@ -196,8 +210,11 @@ abstract class _ThemePageConfig implements ThemePageConfig {
   LoginPageConfig? get login;
   @override
   AboutPageConfig? get about;
+
+  /// Create a copy of ThemePageConfig
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ThemePageConfigImplCopyWith<_$ThemePageConfigImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -211,8 +228,12 @@ mixin _$LoginPageConfig {
   LoginModeSelectPageConfig get modeSelect =>
       throw _privateConstructorUsedError;
 
+  /// Serializes this LoginPageConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of LoginPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $LoginPageConfigCopyWith<LoginPageConfig> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -238,6 +259,8 @@ class _$LoginPageConfigCopyWithImpl<$Res, $Val extends LoginPageConfig>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of LoginPageConfig
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -251,6 +274,8 @@ class _$LoginPageConfigCopyWithImpl<$Res, $Val extends LoginPageConfig>
     ) as $Val);
   }
 
+  /// Create a copy of LoginPageConfig
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $LoginModeSelectPageConfigCopyWith<$Res> get modeSelect {
@@ -282,6 +307,8 @@ class __$$LoginPageConfigImplCopyWithImpl<$Res>
       _$LoginPageConfigImpl _value, $Res Function(_$LoginPageConfigImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of LoginPageConfig
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -321,11 +348,13 @@ class _$LoginPageConfigImpl implements _LoginPageConfig {
                 other.modeSelect == modeSelect));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, modeSelect);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of LoginPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LoginPageConfigImplCopyWith<_$LoginPageConfigImpl> get copyWith =>
@@ -350,8 +379,11 @@ abstract class _LoginPageConfig implements LoginPageConfig {
 
   @override
   LoginModeSelectPageConfig get modeSelect;
+
+  /// Create a copy of LoginPageConfig
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoginPageConfigImplCopyWith<_$LoginPageConfigImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -368,8 +400,12 @@ mixin _$LoginModeSelectPageConfig {
   ElevatedButtonStyleType get buttonSignupStyleType =>
       throw _privateConstructorUsedError;
 
+  /// Serializes this LoginModeSelectPageConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of LoginModeSelectPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $LoginModeSelectPageConfigCopyWith<LoginModeSelectPageConfig> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -396,6 +432,8 @@ class _$LoginModeSelectPageConfigCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of LoginModeSelectPageConfig
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -439,6 +477,8 @@ class __$$LoginModeSelectPageConfigImplCopyWithImpl<$Res>
       $Res Function(_$LoginModeSelectPageConfigImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of LoginModeSelectPageConfig
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -489,12 +529,14 @@ class _$LoginModeSelectPageConfigImpl implements _LoginModeSelectPageConfig {
                 other.buttonSignupStyleType == buttonSignupStyleType));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, buttonLoginStyleType, buttonSignupStyleType);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of LoginModeSelectPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LoginModeSelectPageConfigImplCopyWith<_$LoginModeSelectPageConfigImpl>
@@ -522,8 +564,11 @@ abstract class _LoginModeSelectPageConfig implements LoginModeSelectPageConfig {
   ElevatedButtonStyleType get buttonLoginStyleType;
   @override
   ElevatedButtonStyleType get buttonSignupStyleType;
+
+  /// Create a copy of LoginModeSelectPageConfig
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoginModeSelectPageConfigImplCopyWith<_$LoginModeSelectPageConfigImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -536,8 +581,12 @@ AboutPageConfig _$AboutPageConfigFromJson(Map<String, dynamic> json) {
 mixin _$AboutPageConfig {
   ThemeSvgAsset get picture => throw _privateConstructorUsedError;
 
+  /// Serializes this AboutPageConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AboutPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AboutPageConfigCopyWith<AboutPageConfig> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -561,6 +610,8 @@ class _$AboutPageConfigCopyWithImpl<$Res, $Val extends AboutPageConfig>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AboutPageConfig
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -594,6 +645,8 @@ class __$$AboutPageConfigImplCopyWithImpl<$Res>
       _$AboutPageConfigImpl _value, $Res Function(_$AboutPageConfigImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AboutPageConfig
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -632,11 +685,13 @@ class _$AboutPageConfigImpl implements _AboutPageConfig {
             (identical(other.picture, picture) || other.picture == picture));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, picture);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AboutPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AboutPageConfigImplCopyWith<_$AboutPageConfigImpl> get copyWith =>
@@ -660,8 +715,11 @@ abstract class _AboutPageConfig implements AboutPageConfig {
 
   @override
   ThemeSvgAsset get picture;
+
+  /// Create a copy of AboutPageConfig
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AboutPageConfigImplCopyWith<_$AboutPageConfigImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -37,6 +37,36 @@
           "type": "keypad",
           "titleL10n": "main_BottomNavigationBarItemLabel_keypad",
           "icon": "0xe1ce"
+        },
+        {
+          "enabled": false,
+          "initial": false,
+          "type": "embedded1",
+          "titleL10n": "embaded1TitleL10n",
+          "icon": "0xe2ce",
+          "data": {
+            "url": "https://webtrit-app.web.app/example/example_embedded_advertisement.html"
+          }
+        },
+        {
+          "enabled": false,
+          "initial": false,
+          "type": "embedded2",
+          "titleL10n": "embaded2TitleL10n",
+          "icon": "0xe2ce",
+          "data": {
+            "url": "https://webtrit-app.web.app/example/example_embedded_call.html"
+          }
+        },
+        {
+          "enabled": false,
+          "initial": false,
+          "type": "embedded3",
+          "titleL10n": "embaded3TitleL10n",
+          "icon": "0xe2ce",
+          "data": {
+            "url": "https://webtrit-app.web.app/example/example_embedded_wallet_balance.html"
+          }
         }
       ]
     }
