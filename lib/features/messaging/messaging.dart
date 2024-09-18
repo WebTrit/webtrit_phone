@@ -18,6 +18,7 @@ export 'widgets/widgets.dart';
 // - localizations
 // - routing remake
 // - finish resolve naming issues
+// - typing animation
 // - notifications autodismiss on read
 // - integratiions with Dima's optional pages
 // - move userId retrieving to main auth flow
