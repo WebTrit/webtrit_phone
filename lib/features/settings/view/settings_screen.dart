@@ -82,28 +82,30 @@ class SettingsScreen extends StatelessWidget {
             },
           ),
           Column(
-            children: sections.map((section) {
-              return Column(
-                children: [
-                  GroupTitleListTile(
-                    titleData: context.parseL10n(section.titleL10n),
-                  ),
-                  Column(
-                    children: section.items.map((item) {
-                      return Column(children: [
-                        ListTile(
-                          leading: Icon(item.icon),
-                          title: Text(context.parseL10n(item.titleL10n)),
-                          onTap: () => _handleNavigation(context, item),
+            children: [
+              for (var section in sections)
+                Column(
+                  children: [
+                    GroupTitleListTile(
+                      titleData: context.parseL10n(section.titleL10n),
+                    ),
+                    ...[
+                      for (var item in section.items)
+                        Column(
+                          children: [
+                            ListTile(
+                              leading: Icon(item.icon),
+                              title: Text(context.parseL10n(item.titleL10n)),
+                              onTap: () => _handleNavigation(context, item),
+                            ),
+                            const ListTileSeparator(),
+                          ],
                         ),
-                        const ListTileSeparator()
-                      ]);
-                    }).toList(),
-                  ),
-                ],
-              );
-            }).toList(),
-          ),
+                    ],
+                  ],
+                ),
+            ],
+          )
         ],
       ),
     );
