@@ -576,6 +576,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         state.activeCalls.where((element) => element.wasHungUp).forEach((element) {
           add(_ResetStateEvent.completeCall(element.callId));
         });
+      } else if (code == SignalingDisconnectCode.controllerExitError) {
+        _logger.info(
+            '__onSignalingClientEventDisconnected: skipping user notification for controller exit as it is expected during system unregistration');
       } else {
         notificationsBloc.add(NotificationsSubmitted(ErrorMessageNotification(signalingDisconnectReason)));
       }
