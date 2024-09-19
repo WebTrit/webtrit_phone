@@ -60,6 +60,9 @@ class $AssetsRingtonesGen {
 class $AssetsThemesGen {
   const $AssetsThemesGen();
 
+  /// File path: assets/themes/app.config.json
+  String get appConfig => 'assets/themes/app.config.json';
+
   /// File path: assets/themes/original.json
   String get original => 'assets/themes/original.json';
 
@@ -71,10 +74,6 @@ class $AssetsThemesGen {
   String get originalPageLightConfig =>
       'assets/themes/original.page.light.config.json';
 
-  /// File path: assets/themes/original.ui.compose.config.json
-  String get originalUiComposeConfig =>
-      'assets/themes/original.ui.compose.config.json';
-
   /// File path: assets/themes/original.widget.dark.config.json
   String get originalWidgetDarkConfig =>
       'assets/themes/original.widget.dark.config.json';
@@ -85,10 +84,10 @@ class $AssetsThemesGen {
 
   /// List of all assets
   List<String> get values => [
+        appConfig,
         original,
         originalPageDarkConfig,
         originalPageLightConfig,
-        originalUiComposeConfig,
         originalWidgetDarkConfig,
         originalWidgetLightConfig
       ];
@@ -114,16 +113,11 @@ class Assets {
 }
 
 class AssetGenImage {
-  const AssetGenImage(
-    this._assetName, {
-    this.size,
-    this.flavors = const {},
-  });
+  const AssetGenImage(this._assetName, {this.size = null});
 
   final String _assetName;
 
   final Size? size;
-  final Set<String> flavors;
 
   Image image({
     Key? key,
@@ -197,19 +191,17 @@ class AssetGenImage {
 class SvgGenImage {
   const SvgGenImage(
     this._assetName, {
-    this.size,
-    this.flavors = const {},
+    this.size = null,
   }) : _isVecFormat = false;
 
   const SvgGenImage.vec(
     this._assetName, {
-    this.size,
-    this.flavors = const {},
+    this.size = null,
   }) : _isVecFormat = true;
 
   final String _assetName;
+
   final Size? size;
-  final Set<String> flavors;
   final bool _isVecFormat;
 
   SvgPicture svg({
@@ -232,23 +224,12 @@ class SvgGenImage {
     @deprecated BlendMode colorBlendMode = BlendMode.srcIn,
     @deprecated bool cacheColorFilter = false,
   }) {
-    final BytesLoader loader;
-    if (_isVecFormat) {
-      loader = AssetBytesLoader(
-        _assetName,
-        assetBundle: bundle,
-        packageName: package,
-      );
-    } else {
-      loader = SvgAssetLoader(
-        _assetName,
-        assetBundle: bundle,
-        packageName: package,
-        theme: theme,
-      );
-    }
     return SvgPicture(
-      loader,
+      _isVecFormat
+          ? AssetBytesLoader(_assetName,
+              assetBundle: bundle, packageName: package)
+          : SvgAssetLoader(_assetName,
+              assetBundle: bundle, packageName: package),
       key: key,
       matchTextDirection: matchTextDirection,
       width: width,
@@ -259,6 +240,7 @@ class SvgGenImage {
       placeholderBuilder: placeholderBuilder,
       semanticsLabel: semanticsLabel,
       excludeFromSemantics: excludeFromSemantics,
+      theme: theme,
       colorFilter: colorFilter ??
           (color == null ? null : ColorFilter.mode(color, colorBlendMode)),
       clipBehavior: clipBehavior,

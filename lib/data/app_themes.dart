@@ -20,7 +20,7 @@ class AppThemes {
     final themeWidgetDarkConfigJson = await _getJson(Assets.themes.originalWidgetDarkConfig);
     final themePageDarkConfigJson = await _getJson(Assets.themes.originalPageDarkConfig);
 
-    final uiComposeConfigJson = await _getJson(Assets.themes.originalUiComposeConfig);
+    final appConfigJson = await _getJson(Assets.themes.appConfig);
 
     final themeWidgetLightConfig = ThemeWidgetConfig.fromJson(themeWidgetLightConfigJson);
     final themePageLightConfig = ThemePageConfig.fromJson(themePageLightConfigJson);
@@ -28,7 +28,7 @@ class AppThemes {
     final themeWidgetDarkConfig = ThemeWidgetConfig.fromJson(themeWidgetDarkConfigJson);
     final themePageDarkConfig = ThemePageConfig.fromJson(themePageDarkConfigJson);
 
-    final uiComposeConfig = UiComposeSettings.fromJson(uiComposeConfigJson);
+    final appConfig = AppConfig.fromJson(appConfigJson);
 
     final settings = ThemeSettings.fromJson(themeJson).copyWith(
       themeWidgetLightConfig: themeWidgetLightConfig,
@@ -45,7 +45,7 @@ class AppThemes {
       ]);
     }
 
-    _instance = AppThemes._(themes, uiComposeConfig);
+    _instance = AppThemes._(themes, appConfig);
   }
 
   static Future<dynamic> _getJson(String path) async {
@@ -56,10 +56,10 @@ class AppThemes {
     return _instance;
   }
 
-  AppThemes._(this.values, this.uiComposeSettings);
+  AppThemes._(this.values, this.appConfig);
 
   final List<AppTheme> values;
-  final UiComposeSettings uiComposeSettings;
+  final AppConfig appConfig;
 }
 
 class AppTheme extends Equatable {
