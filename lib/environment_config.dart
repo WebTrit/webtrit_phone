@@ -76,13 +76,6 @@ class EnvironmentConfig {
         )
       : null;
 
-  static const APP_TERMS_AND_CONDITIONS_URL__NAME = 'WEBTRIT_APP_TERMS_AND_CONDITIONS_URL';
-  static const APP_TERMS_AND_CONDITIONS_URL = bool.hasEnvironment(APP_TERMS_AND_CONDITIONS_URL__NAME)
-      ? String.fromEnvironment(
-          APP_TERMS_AND_CONDITIONS_URL__NAME,
-        )
-      : null;
-
   static const APP_CREDENTIALS_REQUEST_URL__NAME = 'WEBTRIT_APP_CREDENTIALS_REQUEST_URL';
   static const APP_CREDENTIALS_REQUEST_URL = bool.hasEnvironment(APP_CREDENTIALS_REQUEST_URL__NAME)
       ? String.fromEnvironment(

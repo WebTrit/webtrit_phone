@@ -80,26 +80,44 @@ class FeatureAccess {
     AppConfig appConfig,
     AppPreferences preferences,
   ) {
-    final settingSections = appConfig.settings?.sections.where((section) => section.enabled).map((section) {
-      return SettingsSection(
-        titleL10n: section.titleL10n,
-        items: section.items.where((item) => item.enabled).map((item) {
-          return SettingItem(
-            titleL10n: item.titleL10n,
-            icon: item.icon,
-            data: item.data != null
-                ? ConfigData(
-                    url: Uri.parse(item.data!.url),
-                    titleL10n: item.titleL10n,
-                  )
-                : null,
-            flavor: SettingsFlavor.values.byName(item.type!),
-          );
-        }).toList(),
-      );
-    }).toList();
+    final settingSections = <SettingsSection>[];
 
-    return SettingsFeature(settingSections!);
+    late final Uri termsAndConditions;
+
+    for (var section in appConfig.settings!.sections.where((section) => section.enabled)) {
+      final items = <SettingItem>[];
+
+      for (var item in section.items.where((item) => item.enabled)) {
+        final configData = item.data == null
+            ? null
+            : ConfigData(
+                url: Uri.parse(item.data!.url),
+                titleL10n: item.titleL10n,
+              );
+
+        final settingItem = SettingItem(
+          titleL10n: item.titleL10n,
+          icon: item.icon,
+          data: configData,
+          flavor: SettingsFlavor.values.byName(item.type!),
+        );
+
+        termsAndConditions = settingItem.flavor == SettingsFlavor.terms
+            ? settingItem.data!.url
+            : throw Exception('Terms and conditions not found');
+
+        items.add(settingItem);
+      }
+
+      settingSections.add(
+        SettingsSection(
+          titleL10n: section.titleL10n,
+          items: items,
+        ),
+      );
+    }
+
+    return SettingsFeature(settingSections, termsAndConditions);
   }
 
   static CustomLoginFeature? _tryEnableCustomLoginFeature(AppConfig appConfig) {
@@ -156,7 +174,9 @@ class BottomMenuFeature {
 class SettingsFeature {
   final List<SettingsSection> _sections;
 
-  SettingsFeature(this._sections);
+  final Uri termsAndConditions;
+
+  SettingsFeature(this._sections, this.termsAndConditions);
 
   List<SettingsSection> get sections => List.unmodifiable(_sections);
 }
