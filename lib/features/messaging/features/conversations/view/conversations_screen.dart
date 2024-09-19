@@ -185,94 +185,100 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
           return Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Material(
-                color: tabType == TabType.chat ? colorScheme.primary : colorScheme.surfaceBright,
-                borderRadius: BorderRadius.circular(8),
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      tabType = TabType.chat;
-                    });
-                  },
-                  child: SizedBox(
-                    width: 120,
-                    height: 30,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Messages',
-                          style: TextStyle(
-                            color: tabType == TabType.chat ? colorScheme.onPrimary : colorScheme.onSurface,
-                          ),
-                        ),
-                        if (state.chatsWithUnreadCount > 0) ...[
-                          const SizedBox(width: 4),
-                          Container(
-                            width: 14,
-                            height: 14,
-                            padding: const EdgeInsets.symmetric(horizontal: 1),
-                            decoration: BoxDecoration(
+              AnimatedContainer(
+                decoration: BoxDecoration(
+                  color: tabType == TabType.chat ? colorScheme.primary : colorScheme.surfaceBright,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeOut,
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () => setState(() => tabType = TabType.chat),
+                    child: SizedBox(
+                      width: 120,
+                      height: 30,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Messages',
+                            style: TextStyle(
                               color: tabType == TabType.chat ? colorScheme.onPrimary : colorScheme.onSurface,
-                              shape: BoxShape.circle,
                             ),
-                            child: FittedBox(
-                              child: Text(
-                                state.chatsWithUnreadCount.toString(),
-                                style: TextStyle(
-                                  color: tabType == TabType.chat ? colorScheme.onSurface : colorScheme.onPrimary,
+                          ),
+                          if (state.chatsWithUnreadCount > 0) ...[
+                            const SizedBox(width: 4),
+                            Container(
+                              width: 14,
+                              height: 14,
+                              padding: const EdgeInsets.symmetric(horizontal: 1),
+                              decoration: BoxDecoration(
+                                color: tabType == TabType.chat ? colorScheme.onPrimary : colorScheme.onSurface,
+                                shape: BoxShape.circle,
+                              ),
+                              child: FittedBox(
+                                child: Text(
+                                  state.chatsWithUnreadCount.toString(),
+                                  style: TextStyle(
+                                    color: tabType == TabType.chat ? colorScheme.onSurface : colorScheme.onPrimary,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ]
-                      ],
+                          ]
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-              Material(
-                color: tabType == TabType.sms ? colorScheme.primary : colorScheme.surfaceBright,
-                borderRadius: BorderRadius.circular(8),
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      tabType = TabType.sms;
-                    });
-                  },
-                  child: SizedBox(
-                    width: 120,
-                    height: 30,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'SMS',
-                          style: TextStyle(
-                            color: tabType == TabType.sms ? colorScheme.onPrimary : colorScheme.onSurface,
-                          ),
-                        ),
-                        if (state.smsConversationsWithUnreadCount > 0) ...[
-                          const SizedBox(width: 4),
-                          Container(
-                            width: 14,
-                            height: 14,
-                            padding: const EdgeInsets.symmetric(horizontal: 1),
-                            decoration: BoxDecoration(
+              AnimatedContainer(
+                decoration: BoxDecoration(
+                  color: tabType == TabType.sms ? colorScheme.primary : colorScheme.surfaceBright,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeOut,
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () => setState(() => tabType = TabType.sms),
+                    child: SizedBox(
+                      width: 120,
+                      height: 30,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'SMS',
+                            style: TextStyle(
                               color: tabType == TabType.sms ? colorScheme.onPrimary : colorScheme.onSurface,
-                              shape: BoxShape.circle,
                             ),
-                            child: FittedBox(
-                              child: Text(
-                                state.smsConversationsWithUnreadCount.toString(),
-                                style: TextStyle(
-                                  color: tabType == TabType.sms ? colorScheme.onSurface : colorScheme.onPrimary,
+                          ),
+                          if (state.smsConversationsWithUnreadCount > 0) ...[
+                            const SizedBox(width: 4),
+                            Container(
+                              width: 14,
+                              height: 14,
+                              padding: const EdgeInsets.symmetric(horizontal: 1),
+                              decoration: BoxDecoration(
+                                color: tabType == TabType.sms ? colorScheme.onPrimary : colorScheme.onSurface,
+                                shape: BoxShape.circle,
+                              ),
+                              child: FittedBox(
+                                child: Text(
+                                  state.smsConversationsWithUnreadCount.toString(),
+                                  style: TextStyle(
+                                    color: tabType == TabType.sms ? colorScheme.onSurface : colorScheme.onPrimary,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ]
-                      ],
+                          ]
+                        ],
+                      ),
                     ),
                   ),
                 ),
