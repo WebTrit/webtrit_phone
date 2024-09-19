@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:provider/provider.dart';
 
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/user_agreement/view/user_agreement_screen.dart';
 
@@ -12,10 +14,11 @@ class UserAgreementScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const appTermsAndConditionsUrl = EnvironmentConfig.APP_TERMS_AND_CONDITIONS_URL ?? '';
+    final appTermsAndConditionsUrl = context.read<FeatureAccess>().settingsFeature.termsAndConditions;
+
     const appName = EnvironmentConfig.APP_NAME;
-    const screen = UserAgreementScreen(
-      appTermsAndConditionsUrl: appTermsAndConditionsUrl,
+    final screen = UserAgreementScreen(
+      appTermsAndConditionsUrl: appTermsAndConditionsUrl.toString(),
       appName: appName,
     );
     return screen;

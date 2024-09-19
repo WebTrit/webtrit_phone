@@ -29,12 +29,12 @@ class FeatureAccess {
     final theme = AppThemes();
     final preferences = AppPreferences();
 
-    final uiComposeSettings = theme.uiComposeSettings;
+    final appConfig = theme.appConfig;
 
     try {
-      final customLoginFeature = _tryEnableCustomLoginFeature(uiComposeSettings);
-      final bottomMenuManager = _tryConfigureBottomMenuFeature(uiComposeSettings, preferences);
-      final settingsFeature = _tryConfigureSettingsFeature(uiComposeSettings, preferences);
+      final customLoginFeature = _tryEnableCustomLoginFeature(appConfig);
+      final bottomMenuManager = _tryConfigureBottomMenuFeature(appConfig, preferences);
+      final settingsFeature = _tryConfigureSettingsFeature(appConfig, preferences);
 
       _instance = FeatureAccess._(customLoginFeature, bottomMenuManager, settingsFeature);
     } catch (e, stackTrace) {
@@ -46,10 +46,10 @@ class FeatureAccess {
   factory FeatureAccess() => _instance;
 
   static BottomMenuFeature _tryConfigureBottomMenuFeature(
-    UiComposeSettings uiComposeSettings,
+    AppConfig appConfig,
     AppPreferences preferences,
   ) {
-    final bottomMenu = uiComposeSettings.main?.bottomMenu;
+    final bottomMenu = appConfig.main?.bottomMenu;
     if (bottomMenu == null || bottomMenu.tabs.isEmpty) {
       throw Exception('Bottom menu configuration is missing or empty');
     }
@@ -77,35 +77,53 @@ class FeatureAccess {
   }
 
   static SettingsFeature _tryConfigureSettingsFeature(
-    UiComposeSettings uiComposeSettings,
+    AppConfig appConfig,
     AppPreferences preferences,
   ) {
-    final settingSections = uiComposeSettings.settings?.sections.where((section) => section.enabled).map((section) {
-      return SettingsSection(
-        titleL10n: section.titleL10n,
-        items: section.items.where((item) => item.enabled).map((item) {
-          return SettingItem(
-            titleL10n: item.titleL10n,
-            icon: item.icon,
-            data: item.data != null
-                ? ConfigData(
-                    url: Uri.parse(item.data!.url),
-                    titleL10n: item.titleL10n,
-                  )
-                : null,
-            flavor: SettingsFlavor.values.byName(item.type!),
-          );
-        }).toList(),
-      );
-    }).toList();
+    final settingSections = <SettingsSection>[];
 
-    return SettingsFeature(settingSections!);
+    late final Uri termsAndConditions;
+
+    for (var section in appConfig.settings!.sections.where((section) => section.enabled)) {
+      final items = <SettingItem>[];
+
+      for (var item in section.items.where((item) => item.enabled)) {
+        final configData = item.data == null
+            ? null
+            : ConfigData(
+                url: Uri.parse(item.data!.url),
+                titleL10n: item.titleL10n,
+              );
+
+        final settingItem = SettingItem(
+          titleL10n: item.titleL10n,
+          icon: item.icon,
+          data: configData,
+          flavor: SettingsFlavor.values.byName(item.type!),
+        );
+
+        termsAndConditions = settingItem.flavor == SettingsFlavor.terms
+            ? settingItem.data!.url
+            : throw Exception('Terms and conditions not found');
+
+        items.add(settingItem);
+      }
+
+      settingSections.add(
+        SettingsSection(
+          titleL10n: section.titleL10n,
+          items: items,
+        ),
+      );
+    }
+
+    return SettingsFeature(settingSections, termsAndConditions);
   }
 
-  static CustomLoginFeature? _tryEnableCustomLoginFeature(UiComposeSettings uiComposeSettings) {
-    final customLogin = uiComposeSettings.login?.customSignIn;
+  static CustomLoginFeature? _tryEnableCustomLoginFeature(AppConfig appConfig) {
+    final customLogin = appConfig.login?.customSignIn;
 
-    if (uiComposeSettings.isCustomSignInEnabled) {
+    if (appConfig.isCustomSignInEnabled) {
       _logger.info('Custom sign-in is enabled');
 
       return CustomLoginFeature(
@@ -156,7 +174,9 @@ class BottomMenuFeature {
 class SettingsFeature {
   final List<SettingsSection> _sections;
 
-  SettingsFeature(this._sections);
+  final Uri termsAndConditions;
+
+  SettingsFeature(this._sections, this.termsAndConditions);
 
   List<SettingsSection> get sections => List.unmodifiable(_sections);
 }
