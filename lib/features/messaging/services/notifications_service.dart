@@ -78,13 +78,13 @@ class MessagingNotificationsService {
     try {
       final title = message.title;
       final body = message.body;
-      final messageId = int.tryParse(message.data['chat_message_id']);
+      final messageId = int.tryParse(message.data['chat_message_id'] ?? '');
       if (title == null || body == null || messageId == null) return;
 
-      final chatId = int.tryParse(message.data['chat_id']);
+      final chatId = int.tryParse(message.data['chat_id'] ?? '');
       if (chatId != null) _displayChatNotification(messageId, chatId, title, body);
 
-      final conversationId = int.tryParse(message.data['sms_conversation_id']);
+      final conversationId = int.tryParse(message.data['sms_conversation_id'] ?? '');
       if (conversationId != null) _displaySmsNotification(messageId, conversationId, title, body);
 
       _logger.info('Foreground message handle result: chatId - $chatId, smsConversationId- $conversationId');
