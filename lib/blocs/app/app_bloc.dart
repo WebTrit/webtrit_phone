@@ -60,7 +60,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     await secureStorage.deleteTenantId();
     await secureStorage.deleteToken();
 
-    await appDatabase.deleteEverything();
+    // If a migration issue or another exception occurs during this phase, it may block the logout process.
+    try {
+      await appDatabase.deleteEverything();
+    } catch (e) {
+      _logger.severe('_cleanUpUserData', e);
+    }
   }
 
   void _onLogined(AppLogined event, Emitter<AppState> emit) async {
