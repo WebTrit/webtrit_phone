@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 
@@ -84,7 +85,8 @@ class SmsSyncWorker {
         // Fetch user phone numbers
         final result = await userChannel.push('user:get_info', {}).future;
         List<String> smsNumbers = result.response['sms_phone_numbers'].cast<String>();
-        smsRepository.upsertUserSmsNumbers(smsNumbers);
+        final validNumbers = smsNumbers.map((e) => e.e164Phone).whereNotNull().toList();
+        smsRepository.upsertUserSmsNumbers(validNumbers);
 
         // Fetch actual user chat ids
         final req = await userChannel.push('sms:conversation:get_ids', {}, pushTimeout).future;

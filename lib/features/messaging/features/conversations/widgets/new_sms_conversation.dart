@@ -1,13 +1,19 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:validators/validators.dart';
 
-import 'package:webtrit_phone/features/messaging/extensions/contact.dart';
+import 'package:dlibphonenumber/dlibphonenumber.dart';
+import 'package:flutter_sim_country_code/flutter_sim_country_code.dart';
+import 'package:logging/logging.dart';
+
+import 'package:webtrit_phone/features/messaging/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
+
+final _logger = Logger('NewSmsConversation');
 
 class NewSmsConversation extends StatefulWidget {
   const NewSmsConversation({
@@ -24,22 +30,46 @@ class NewSmsConversation extends StatefulWidget {
 }
 
 class _NewSmsConversationState extends State<NewSmsConversation> {
+  final PhoneNumberUtil phoneUtil = PhoneNumberUtil.instance;
   late final StreamSubscription contactsSub;
+  String? simCountryCode;
 
+  bool initializing = true;
   List<Contact> localContacts = [];
   List<Contact> externalContacts = [];
   String searchFilterValue = '';
+  PhoneNumber? customNumber;
 
   @override
   void initState() {
     super.initState();
-    contactsSub = widget.contactsRepository.watchContacts('').listen((contacts) {
+    contactsSub = widget.contactsRepository.watchContacts('').asyncMap(
+      (contacts) async {
+        return compute((contacts) {
+          return contacts.where((contact) {
+            contact.phones.removeWhere((number) => !number.number.isValidPhone);
+            return contact.phones.isNotEmpty;
+          }).toList();
+        }, contacts);
+      },
+    ).listen((contacts) {
       final filtered = contacts.where(widget.filter).toList();
       setState(() {
+        initializing = false;
         localContacts = filtered.where((contact) => contact.sourceType == ContactSourceType.local).toList();
         externalContacts = filtered.where((contact) => contact.sourceType == ContactSourceType.external).toList();
       });
     });
+
+    FlutterSimCountryCode.simCountryCode.then(
+      (value) {
+        _logger.info('SimCountryCode: $value');
+        if (mounted) setState(() => simCountryCode = value);
+      },
+      onError: (e) {
+        _logger.warning('Error getting simCountryCode: $e');
+      },
+    );
   }
 
   @override
@@ -48,8 +78,14 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
     super.dispose();
   }
 
-  onConfirm(String number, String? participantId) {
+  onConfirm(String selectedNumber, String? participantId) {
+    final number = selectedNumber.e164Phone!;
     Navigator.of(context).pop((number, participantId));
+  }
+
+  onCreateByNumber() {
+    final number = phoneUtil.format(customNumber!, PhoneNumberFormat.e164);
+    Navigator.of(context).pop((number, null));
   }
 
   onCancel() {
@@ -63,10 +99,15 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
   }
 
   bool get isNumberInField {
-    if (searchFilterValue.length < 6) return false;
-    final matchInter = matches(searchFilterValue, r'^\+?[0-9]+$');
-    final matchLocal = matches(searchFilterValue, r'^[0-9]+$');
-    return matchInter || matchLocal;
+    if (searchFilterValue.isEmpty) return false;
+    try {
+      final customNumber = phoneUtil.parse(searchFilterValue, simCountryCode);
+      this.customNumber = customNumber;
+      return phoneUtil.isValidNumber(customNumber);
+    } on NumberParseException catch (e) {
+      _logger.info('NumberParseException: $e');
+      return false;
+    }
   }
 
   @override
@@ -94,7 +135,7 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
           actions: [
             if (isNumberInField)
               TextButton(
-                onPressed: () => onConfirm(searchFilterValue, null),
+                onPressed: onCreateByNumber,
                 child: Text(
                   context.l10n.chats_NewConversation_create,
                   style: TextStyle(color: colorScheme.primary),
@@ -122,39 +163,42 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
               ),
             ),
             const SizedBox(height: 8),
-            Flexible(
-              child: ListView(
-                children: [
-                  if (externalContactsToShow.isNotEmpty) ...[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
-                        context.l10n.chats_NewConversation_externalContacts_heading,
-                        style: Theme.of(context).textTheme.headlineSmall,
+            if (initializing)
+              const Expanded(child: Center(child: CircularProgressIndicator()))
+            else
+              Flexible(
+                child: ListView(
+                  children: [
+                    if (externalContactsToShow.isNotEmpty) ...[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          context.l10n.chats_NewConversation_externalContacts_heading,
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 8)
-                  ],
-                  ...externalContactsToShow.map((Contact contact) {
-                    return tileBuilder(contact);
-                  }),
-                  const SizedBox(height: 8),
-                  if (localContactsToShow.isNotEmpty) ...[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
-                        context.l10n.chats_NewConversation_localContacts_heading,
-                        style: Theme.of(context).textTheme.headlineSmall,
+                      const SizedBox(height: 8)
+                    ],
+                    ...externalContactsToShow.map((Contact contact) {
+                      return tileBuilder(contact);
+                    }),
+                    const SizedBox(height: 8),
+                    if (localContactsToShow.isNotEmpty) ...[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          context.l10n.chats_NewConversation_localContacts_heading,
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 8)
+                      const SizedBox(height: 8)
+                    ],
+                    ...localContactsToShow.map((Contact contact) {
+                      return tileBuilder(contact);
+                    }),
                   ],
-                  ...localContactsToShow.map((Contact contact) {
-                    return tileBuilder(contact);
-                  }),
-                ],
+                ),
               ),
-            ),
           ],
         ),
       ),
@@ -165,10 +209,9 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    final numbers = contact.phones.where((number) => number.label != 'ext').toList();
     final userId = contact.sourceType == ContactSourceType.external ? contact.sourceId : null;
 
-    if (numbers.length > 1) {
+    if (contact.phones.length > 1) {
       return Theme(
         data: theme.copyWith(
           dividerColor: Colors.transparent,
@@ -183,7 +226,7 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
             radius: 24,
           ),
           title: Text(contact.name),
-          children: numbers.map((number) {
+          children: contact.phones.map((number) {
             return ListTile(
               title: Text(number.number),
               onTap: () => onConfirm(number.number, userId),
@@ -202,7 +245,8 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
         radius: 24,
       ),
       title: Text(contact.name),
-      onTap: () => onConfirm(numbers.first.number, userId),
+      subtitle: Text(contact.phones.first.number, style: theme.textTheme.bodySmall),
+      onTap: () => onConfirm(contact.phones.first.number, userId),
     );
   }
 }
