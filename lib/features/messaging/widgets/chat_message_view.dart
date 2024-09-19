@@ -169,8 +169,6 @@ class _ChatMessageViewState extends State<ChatMessageView> {
     ];
 
     return FadeIn(
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeIn,
       child: GestureDetector(
         onLongPress: () async {
           // Dismiss keyboard if it's open and wait for it to close before showing the popup
