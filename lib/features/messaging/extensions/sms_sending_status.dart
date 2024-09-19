@@ -1,0 +1,19 @@
+import 'package:flutter/material.dart';
+
+import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/sms_message.dart';
+
+extension SmsSendingStatusL10n on SmsSendingStatus {
+  String nameL10n(BuildContext context) {
+    switch (this) {
+      case SmsSendingStatus.waiting:
+        return context.l10n.chats_SmsSendingStatus_waiting;
+      case SmsSendingStatus.sent:
+        return context.l10n.chats_SmsSendingStatus_sent;
+      case SmsSendingStatus.failed:
+        return context.l10n.chats_SmsSendingStatus_failed;
+      case SmsSendingStatus.delivered:
+        return context.l10n.chats_SmsSendingStatus_delivered;
+    }
+  }
+}

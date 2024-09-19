@@ -93,7 +93,9 @@ class _SmsConversationsTileState extends State<SmsConversationsTile> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  lastMessage.fromPhoneNumber == userNumber ? 'you' : lastMessage.fromPhoneNumber,
+                  lastMessage.fromPhoneNumber == userNumber
+                      ? context.l10n.chats_Conversations_tile_you
+                      : lastMessage.fromPhoneNumber,
                   style: textStyle,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -106,7 +108,7 @@ class _SmsConversationsTileState extends State<SmsConversationsTile> {
             ),
           )
         else
-          Expanded(child: Text(context.l10n.chats_ChatListItem_empty, style: textStyle)),
+          Expanded(child: Text(context.l10n.chats_Conversations_tile_empty, style: textStyle)),
         BlocBuilder<UnreadCountCubit, UnreadCountState>(
           builder: (context, state) {
             final count = state.unreadCountForSmsConversation(widget.conversation.id);

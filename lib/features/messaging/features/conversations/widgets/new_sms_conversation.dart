@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:validators/validators.dart';
-import 'package:webtrit_phone/features/messaging/extensions/contact.dart';
 
+import 'package:webtrit_phone/features/messaging/extensions/contact.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -80,17 +81,24 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
       borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Write to'),
+          title: Text(context.l10n.chats_NewConversation_title),
           automaticallyImplyLeading: false,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
+          leading: TextButton(
             onPressed: onCancel,
+            child: Text(
+              context.l10n.chats_NewConversation_cancel,
+              style: TextStyle(color: colorScheme.primary),
+            ),
           ),
+          leadingWidth: 100,
           actions: [
             if (isNumberInField)
-              IconButton(
-                icon: const Icon(Icons.check),
+              TextButton(
                 onPressed: () => onConfirm(searchFilterValue, null),
+                child: Text(
+                  context.l10n.chats_NewConversation_create,
+                  style: TextStyle(color: colorScheme.primary),
+                ),
               ),
           ],
         ),
@@ -102,7 +110,7 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: TextField(
                 decoration: InputDecoration(
-                  hintText: 'Search or enter phone number',
+                  hintText: context.l10n.chats_NewConversation_contactOrNumberSearch_hint,
                   fillColor: colorScheme.surface,
                   border: OutlineInputBorder(
                     borderSide: BorderSide.none,
@@ -120,7 +128,10 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
                   if (externalContactsToShow.isNotEmpty) ...[
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Text('Cloud PBX contacts', style: Theme.of(context).textTheme.headlineSmall),
+                      child: Text(
+                        context.l10n.chats_NewConversation_externalContacts_heading,
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
                     ),
                     const SizedBox(height: 8)
                   ],
@@ -131,7 +142,10 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
                   if (localContactsToShow.isNotEmpty) ...[
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Text('Local contacts', style: Theme.of(context).textTheme.headlineSmall),
+                      child: Text(
+                        context.l10n.chats_NewConversation_localContacts_heading,
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
                     ),
                     const SizedBox(height: 8)
                   ],

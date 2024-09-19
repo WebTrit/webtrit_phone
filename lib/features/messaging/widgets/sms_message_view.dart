@@ -11,8 +11,6 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'message_body.dart';
 
-// TODO: sms sending state localize or replace with icons
-
 class SmsMessageView extends StatefulWidget {
   const SmsMessageView({
     super.key,
@@ -193,7 +191,7 @@ class _SmsMessageViewState extends State<SmsMessageView> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           if (isMine && isSended) ...[
-                            Text(message.sendingStatus.name, style: theme.subContentStyle),
+                            Text(message.sendingStatus.nameL10n(context), style: theme.subContentStyle),
                             const SizedBox(width: 2),
                           ],
                           if (isMine && !isSended)

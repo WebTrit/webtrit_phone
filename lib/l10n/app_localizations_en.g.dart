@@ -761,6 +761,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chats_MessageView_deleted => '[deleted]';
 
   @override
+  String get chats_SmsSendingStatus_waiting => 'waiting';
+
+  @override
+  String get chats_SmsSendingStatus_sent => 'sent';
+
+  @override
+  String get chats_SmsSendingStatus_failed => 'failed';
+
+  @override
+  String get chats_SmsSendingStatus_delivered => 'delivered';
+
+  @override
   String get chats_ParticipantName_you => 'You';
 
   @override
@@ -776,13 +788,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chats_ConversationsScreen_startDialog => 'Start dialog';
 
   @override
-  String get chats_ConversationsScreen_createGroup => 'Create group';
-
-  @override
   String get chats_ConversationsScreen_empty => 'No conversations started yet';
 
   @override
-  String get chats_ChatListItem_empty => 'No messages yet';
+  String get chats_ConversationsScreen_messages_title => 'Messages';
+
+  @override
+  String get chats_ConversationsScreen_smses_title => 'SMS';
+
+  @override
+  String get chats_ConversationsScreen_selectNumberSheet_title => 'Select a number';
+
+  @override
+  String get chats_ConversationsScreen_noNumberAlert_title => 'No phone number';
+
+  @override
+  String get chats_ConversationsScreen_noNumberAlert_text => 'You need to have a phone number linked to you account to send SMS messages';
+
+  @override
+  String get chats_Conversations_tile_empty => 'No messages yet';
+
+  @override
+  String get chats_Conversations_tile_you => 'You';
+
+  @override
+  String get chats_MessageListView_field_hint => 'Type a message';
 
   @override
   String get chats_ConversationScreen_titlePrefix => 'Dialog:';
@@ -792,6 +822,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chats_ConversationScreen_deleteAsk => 'Are you sure you want to delete this dialog?';
+
+  @override
+  String get chats_NewConversation_createGroup => 'Create group';
+
+  @override
+  String get chats_NewConversation_title => 'New chat';
+
+  @override
+  String get chats_NewConversation_cancel => 'Cancel';
+
+  @override
+  String get chats_NewConversation_create => 'Create';
+
+  @override
+  String get chats_NewConversation_externalContacts_heading => 'Cloud PBX contacts';
+
+  @override
+  String get chats_NewConversation_localContacts_heading => 'Local contacts';
+
+  @override
+  String get chats_NewConversation_contactSearch_hint => 'Search contacts';
+
+  @override
+  String get chats_NewConversation_contactOrNumberSearch_hint => 'Search or enter phone number';
 
   @override
   String get chats_GroupScreen_titlePrefix => 'Group:';

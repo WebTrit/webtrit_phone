@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 import 'sms_message_view.dart';
@@ -238,7 +239,10 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
               controller: inputController,
               onFieldSubmitted: (_) => handleSend(),
               onChanged: (_) {},
-              decoration: const InputDecoration(hintText: 'Type a message', border: InputBorder.none),
+              decoration: InputDecoration(
+                hintText: context.l10n.chats_MessageListView_field_hint,
+                border: InputBorder.none,
+              ),
             ),
           ),
           GestureDetector(

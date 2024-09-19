@@ -8,9 +8,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
+
+enum TabType { chat, sms }
 
 class ConversationsScreen extends StatefulWidget {
   const ConversationsScreen({super.key, this.title});
@@ -102,11 +105,9 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('No phone number'),
-            content: const Text('You need to have a phone number linked to you account to send SMS messages'),
-            actions: [
-              TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('OK')),
-            ],
+            title: Text(context.l10n.chats_ConversationsScreen_noNumberAlert_title),
+            content: Text(context.l10n.chats_ConversationsScreen_noNumberAlert_text),
+            actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('OK'))],
           ),
         );
         return;
@@ -117,8 +118,11 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
           context: context,
           builder: (context) => Column(
             children: [
-              const ListTile(
-                title: Text('Select a number', style: TextStyle(fontWeight: FontWeight.bold)),
+              ListTile(
+                title: Text(
+                  context.l10n.chats_ConversationsScreen_selectNumberSheet_title,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
               ...userNumbers.map((number) {
                 return ListTile(
@@ -174,6 +178,8 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
   }
 
   Widget tabButtons(ColorScheme colorScheme) {
+    final theme = Theme.of(context);
+
     return Container(
       decoration: BoxDecoration(
         color: colorScheme.primary,
@@ -197,14 +203,14 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
                   child: InkWell(
                     onTap: () => setState(() => tabType = TabType.chat),
                     child: SizedBox(
-                      width: 120,
+                      width: _computeTabTittleWidth(context) + 40,
                       height: 30,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Messages',
-                            style: TextStyle(
+                            context.l10n.chats_ConversationsScreen_messages_title,
+                            style: theme.textTheme.bodyMedium!.copyWith(
                               color: tabType == TabType.chat ? colorScheme.onPrimary : colorScheme.onSurface,
                             ),
                           ),
@@ -246,14 +252,14 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
                   child: InkWell(
                     onTap: () => setState(() => tabType = TabType.sms),
                     child: SizedBox(
-                      width: 120,
+                      width: _computeTabTittleWidth(context) + 40,
                       height: 30,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'SMS',
-                            style: TextStyle(
+                            context.l10n.chats_ConversationsScreen_smses_title,
+                            style: theme.textTheme.bodyMedium!.copyWith(
                               color: tabType == TabType.sms ? colorScheme.onPrimary : colorScheme.onSurface,
                             ),
                           ),
@@ -291,4 +297,16 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
   }
 }
 
-enum TabType { chat, sms }
+double _computeTabTittleWidth(BuildContext context) {
+  final theme = Theme.of(context);
+  final chatsText = context.l10n.chats_ConversationsScreen_messages_title;
+  final smsText = context.l10n.chats_ConversationsScreen_smses_title;
+  final longerText = chatsText.length > smsText.length ? chatsText : smsText;
+
+  final painter = TextPainter(
+    text: TextSpan(text: longerText, style: theme.textTheme.bodyMedium!),
+    textDirection: TextDirection.ltr,
+  )..layout();
+
+  return painter.width;
+}

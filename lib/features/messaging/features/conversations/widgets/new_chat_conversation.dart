@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:webtrit_phone/features/messaging/extensions/contact.dart';
 
+import 'package:webtrit_phone/features/messaging/extensions/contact.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -68,14 +68,24 @@ class _NewChatConversationState extends State<NewChatConversation> {
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Write to')),
+        appBar: AppBar(
+          title: Text(context.l10n.chats_NewConversation_title),
+          leading: TextButton(
+            onPressed: onCancel,
+            child: Text(
+              context.l10n.chats_NewConversation_cancel,
+              style: TextStyle(color: colorScheme.primary),
+            ),
+          ),
+          leadingWidth: 100,
+        ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: ListTile(
-                title: Text(context.l10n.chats_ConversationsScreen_createGroup),
+                title: Text(context.l10n.chats_NewConversation_createGroup),
                 leading: Icon(
                   Icons.group_add_rounded,
                   color: colorScheme.onSurface.withOpacity(0.75),
@@ -86,14 +96,17 @@ class _NewChatConversationState extends State<NewChatConversation> {
             const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text('Cloud PBX contacts', style: Theme.of(context).textTheme.headlineSmall),
+              child: Text(
+                context.l10n.chats_NewConversation_externalContacts_heading,
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
             ),
             const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: TextField(
                 decoration: InputDecoration(
-                  hintText: 'Search contacts',
+                  hintText: context.l10n.chats_NewConversation_contactSearch_hint,
                   fillColor: colorScheme.surface,
                   border: OutlineInputBorder(
                     borderSide: BorderSide.none,

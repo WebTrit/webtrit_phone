@@ -1523,6 +1523,30 @@ abstract class AppLocalizations {
   /// **'[deleted]'**
   String get chats_MessageView_deleted;
 
+  /// No description provided for @chats_SmsSendingStatus_waiting.
+  ///
+  /// In en, this message translates to:
+  /// **'waiting'**
+  String get chats_SmsSendingStatus_waiting;
+
+  /// No description provided for @chats_SmsSendingStatus_sent.
+  ///
+  /// In en, this message translates to:
+  /// **'sent'**
+  String get chats_SmsSendingStatus_sent;
+
+  /// No description provided for @chats_SmsSendingStatus_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'failed'**
+  String get chats_SmsSendingStatus_failed;
+
+  /// No description provided for @chats_SmsSendingStatus_delivered.
+  ///
+  /// In en, this message translates to:
+  /// **'delivered'**
+  String get chats_SmsSendingStatus_delivered;
+
   /// No description provided for @chats_ParticipantName_you.
   ///
   /// In en, this message translates to:
@@ -1553,23 +1577,59 @@ abstract class AppLocalizations {
   /// **'Start dialog'**
   String get chats_ConversationsScreen_startDialog;
 
-  /// No description provided for @chats_ConversationsScreen_createGroup.
-  ///
-  /// In en, this message translates to:
-  /// **'Create group'**
-  String get chats_ConversationsScreen_createGroup;
-
   /// No description provided for @chats_ConversationsScreen_empty.
   ///
   /// In en, this message translates to:
   /// **'No conversations started yet'**
   String get chats_ConversationsScreen_empty;
 
-  /// No description provided for @chats_ChatListItem_empty.
+  /// No description provided for @chats_ConversationsScreen_messages_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get chats_ConversationsScreen_messages_title;
+
+  /// No description provided for @chats_ConversationsScreen_smses_title.
+  ///
+  /// In en, this message translates to:
+  /// **'SMS'**
+  String get chats_ConversationsScreen_smses_title;
+
+  /// No description provided for @chats_ConversationsScreen_selectNumberSheet_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a number'**
+  String get chats_ConversationsScreen_selectNumberSheet_title;
+
+  /// No description provided for @chats_ConversationsScreen_noNumberAlert_title.
+  ///
+  /// In en, this message translates to:
+  /// **'No phone number'**
+  String get chats_ConversationsScreen_noNumberAlert_title;
+
+  /// No description provided for @chats_ConversationsScreen_noNumberAlert_text.
+  ///
+  /// In en, this message translates to:
+  /// **'You need to have a phone number linked to you account to send SMS messages'**
+  String get chats_ConversationsScreen_noNumberAlert_text;
+
+  /// No description provided for @chats_Conversations_tile_empty.
   ///
   /// In en, this message translates to:
   /// **'No messages yet'**
-  String get chats_ChatListItem_empty;
+  String get chats_Conversations_tile_empty;
+
+  /// No description provided for @chats_Conversations_tile_you.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get chats_Conversations_tile_you;
+
+  /// No description provided for @chats_MessageListView_field_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Type a message'**
+  String get chats_MessageListView_field_hint;
 
   /// No description provided for @chats_ConversationScreen_titlePrefix.
   ///
@@ -1588,6 +1648,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Are you sure you want to delete this dialog?'**
   String get chats_ConversationScreen_deleteAsk;
+
+  /// No description provided for @chats_NewConversation_createGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Create group'**
+  String get chats_NewConversation_createGroup;
+
+  /// No description provided for @chats_NewConversation_title.
+  ///
+  /// In en, this message translates to:
+  /// **'New chat'**
+  String get chats_NewConversation_title;
+
+  /// No description provided for @chats_NewConversation_cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get chats_NewConversation_cancel;
+
+  /// No description provided for @chats_NewConversation_create.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get chats_NewConversation_create;
+
+  /// No description provided for @chats_NewConversation_externalContacts_heading.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud PBX contacts'**
+  String get chats_NewConversation_externalContacts_heading;
+
+  /// No description provided for @chats_NewConversation_localContacts_heading.
+  ///
+  /// In en, this message translates to:
+  /// **'Local contacts'**
+  String get chats_NewConversation_localContacts_heading;
+
+  /// No description provided for @chats_NewConversation_contactSearch_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search contacts'**
+  String get chats_NewConversation_contactSearch_hint;
+
+  /// No description provided for @chats_NewConversation_contactOrNumberSearch_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search or enter phone number'**
+  String get chats_NewConversation_contactOrNumberSearch_hint;
 
   /// No description provided for @chats_GroupScreen_titlePrefix.
   ///

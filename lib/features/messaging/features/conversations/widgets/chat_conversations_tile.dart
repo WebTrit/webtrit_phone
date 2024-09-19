@@ -151,7 +151,7 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
             ),
           )
         else
-          Expanded(child: Text(context.l10n.chats_ChatListItem_empty, style: textStyle)),
+          Expanded(child: Text(context.l10n.chats_Conversations_tile_empty, style: textStyle)),
         BlocBuilder<UnreadCountCubit, UnreadCountState>(
           builder: (context, state) {
             final count = state.unreadCountForChatConversation(widget.conversation.id);

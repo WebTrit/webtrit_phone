@@ -7,6 +7,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 import 'chat_message_view.dart';
@@ -357,7 +358,10 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
                         controller: inputController,
                         onFieldSubmitted: (_) => handleSend(),
                         onChanged: (value) => context.read<ChatTypingCubit>().sendTyping(),
-                        decoration: const InputDecoration(hintText: 'Type a message', border: InputBorder.none),
+                        decoration: InputDecoration(
+                          hintText: context.l10n.chats_MessageListView_field_hint,
+                          border: InputBorder.none,
+                        ),
                       ),
                     ),
                     GestureDetector(

@@ -761,6 +761,18 @@ class AppLocalizationsUk extends AppLocalizations {
   String get chats_MessageView_deleted => '[видалено]';
 
   @override
+  String get chats_SmsSendingStatus_waiting => 'очікування';
+
+  @override
+  String get chats_SmsSendingStatus_sent => 'надіслано';
+
+  @override
+  String get chats_SmsSendingStatus_failed => 'не вдалось';
+
+  @override
+  String get chats_SmsSendingStatus_delivered => 'доставлено';
+
+  @override
   String get chats_ParticipantName_you => 'Ви';
 
   @override
@@ -776,13 +788,31 @@ class AppLocalizationsUk extends AppLocalizations {
   String get chats_ConversationsScreen_startDialog => 'Почати діалог';
 
   @override
-  String get chats_ConversationsScreen_createGroup => 'Створити групу';
-
-  @override
   String get chats_ConversationsScreen_empty => 'Немає переписок';
 
   @override
-  String get chats_ChatListItem_empty => 'Поки немає повідомлень';
+  String get chats_ConversationsScreen_messages_title => 'Повідомлення';
+
+  @override
+  String get chats_ConversationsScreen_smses_title => 'SMS';
+
+  @override
+  String get chats_ConversationsScreen_selectNumberSheet_title => 'Виберіть номер';
+
+  @override
+  String get chats_ConversationsScreen_noNumberAlert_title => 'Немає номера телефону';
+
+  @override
+  String get chats_ConversationsScreen_noNumberAlert_text => 'Щоб надсилати SMS-повідомлення, потрібно мати номер телефону, прив’язаний до вашого облікового запису';
+
+  @override
+  String get chats_Conversations_tile_empty => 'Поки немає повідомлень';
+
+  @override
+  String get chats_Conversations_tile_you => 'Ви';
+
+  @override
+  String get chats_MessageListView_field_hint => 'Введіть повідомлення';
 
   @override
   String get chats_ConversationScreen_titlePrefix => 'Діалог:';
@@ -792,6 +822,30 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get chats_ConversationScreen_deleteAsk => 'Ви впевнені, що хочете видалити цей діалог?';
+
+  @override
+  String get chats_NewConversation_createGroup => 'Створити групу';
+
+  @override
+  String get chats_NewConversation_title => 'Новий чат';
+
+  @override
+  String get chats_NewConversation_cancel => 'Скасувати';
+
+  @override
+  String get chats_NewConversation_create => 'Створити';
+
+  @override
+  String get chats_NewConversation_externalContacts_heading => 'Контакти Хмарної АТС';
+
+  @override
+  String get chats_NewConversation_localContacts_heading => 'Локальні контакти';
+
+  @override
+  String get chats_NewConversation_contactSearch_hint => 'Пошук контактів';
+
+  @override
+  String get chats_NewConversation_contactOrNumberSearch_hint => 'Знайдіть або введіть номер телефону';
 
   @override
   String get chats_GroupScreen_titlePrefix => 'Група:';

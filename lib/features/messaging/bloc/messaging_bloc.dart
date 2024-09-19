@@ -54,7 +54,9 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   void _connect(Connect event, Emitter<MessagingState> emit) async {
     emit(state.copyWith(status: ConnectionStatus.connecting));
     // _chatsRepository.wipeChatsData();
-    // _outboxRepository.wipeOutboxData();
+    // _chatsOutboxRepository.wipeOutboxData();
+    // _smsRepository.wipeData();
+    // _smsOutboxRepository.wipeOutboxData();
     _client.connect();
   }
 
