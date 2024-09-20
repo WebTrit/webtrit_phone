@@ -50,30 +50,41 @@ class FeatureAccess {
     AppPreferences preferences,
   ) {
     final bottomMenu = appConfig.main?.bottomMenu;
+
     if (bottomMenu == null || bottomMenu.tabs.isEmpty) {
       throw Exception('Bottom menu configuration is missing or empty');
     }
 
-    final bottomMenuTabs = bottomMenu.tabs.where((tab) => tab.enabled).map((tab) {
-      return BottomMenuTab(
+    final bottomMenuTabs = <BottomMenuTab>[];
+
+    for (var tab in bottomMenu.tabs.where((tab) => tab.enabled)) {
+      final configData = tab.data == null
+          ? null
+          : ConfigData(
+              url: Uri.parse(tab.data!.url),
+            );
+
+      final bottomMenuTab = BottomMenuTab(
         enabled: tab.enabled,
         initial: tab.initial,
         flavor: MainFlavor.values.byName(tab.type),
         titleL10n: tab.titleL10n,
         icon: tab.icon,
-        data: tab.data != null
-            ? ConfigData(
-                url: Uri.parse(tab.data!.url),
-              )
-            : null,
+        data: configData,
       );
-    }).toList();
 
-    if (bottomMenuTabs.isEmpty) {
-      throw Exception('Bottom menu configuration is empty');
+      bottomMenuTabs.add(bottomMenuTab);
     }
 
-    return BottomMenuFeature(bottomMenuTabs, preferences, cacheSelectedTab: bottomMenu.cacheSelectedTab);
+    if (bottomMenuTabs.isEmpty) {
+      throw Exception('No enabled tabs found in bottom menu configuration');
+    }
+
+    return BottomMenuFeature(
+      bottomMenuTabs,
+      preferences,
+      cacheSelectedTab: bottomMenu.cacheSelectedTab,
+    );
   }
 
   static SettingsFeature _tryConfigureSettingsFeature(
