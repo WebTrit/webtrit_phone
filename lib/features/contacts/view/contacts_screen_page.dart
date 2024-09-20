@@ -30,10 +30,7 @@ class ContactsScreenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final widget = ContactsScreen(
       title: const Text(EnvironmentConfig.APP_NAME),
-      sourceTypes: const [
-        ContactSourceType.local,
-        ContactSourceType.external,
-      ],
+      sourceTypes: sourceTypes,
       sourceTypeWidgetBuilder: _contactSourceTypeWidgetBuilder,
     );
     final provider = BlocProvider(
