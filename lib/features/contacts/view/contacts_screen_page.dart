@@ -7,10 +7,10 @@ import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/features/embedded/extensions/extensions.dart';
 
 @RoutePage()
 class ContactsScreenPage extends StatelessWidget {
