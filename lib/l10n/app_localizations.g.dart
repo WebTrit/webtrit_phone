@@ -1697,6 +1697,24 @@ abstract class AppLocalizations {
   /// **'Search or enter phone number'**
   String get chats_NewConversation_contactOrNumberSearch_hint;
 
+  /// No description provided for @chats_NewConversation_invite_heading.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite users:'**
+  String get chats_NewConversation_invite_heading;
+
+  /// No description provided for @chats_NewConversation_next_action.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get chats_NewConversation_next_action;
+
+  /// No description provided for @chats_NewConversation_back_action.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get chats_NewConversation_back_action;
+
   /// No description provided for @chats_GroupScreen_titlePrefix.
   ///
   /// In en, this message translates to:

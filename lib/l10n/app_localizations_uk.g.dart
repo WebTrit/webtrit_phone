@@ -848,6 +848,15 @@ class AppLocalizationsUk extends AppLocalizations {
   String get chats_NewConversation_contactOrNumberSearch_hint => 'Знайдіть або введіть номер телефону';
 
   @override
+  String get chats_NewConversation_invite_heading => 'Запросити користувачів:';
+
+  @override
+  String get chats_NewConversation_next_action => 'Далі';
+
+  @override
+  String get chats_NewConversation_back_action => 'Назад';
+
+  @override
   String get chats_GroupScreen_titlePrefix => 'Група:';
 
   @override

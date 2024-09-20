@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:ui';
-import 'package:flutter/material.dart';
-import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/l10n/l10n.dart';
 
+import 'package:flutter/material.dart';
+
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 bool _defaultFilter(Contact contact) => true;
 
@@ -69,11 +70,17 @@ class _AddContactDialogState extends State<AddContactDialog> {
                   child: ListView(
                     shrinkWrap: true,
                     children: contacts.map((Contact contact) {
-                      return ContactTile(
-                        displayName: contact.name,
-                        thumbnail: contact.thumbnail,
-                        registered: contact.registered,
+                      return ListTile(
                         onTap: () => onConfirm(contact),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                        leading: LeadingAvatar(
+                          username: contact.name,
+                          thumbnail: contact.thumbnail,
+                          thumbnailUrl: contact.thumbnailUrl,
+                          registered: contact.registered,
+                          radius: 24,
+                        ),
+                        title: Text(contact.name),
                       );
                     }).toList(),
                   ),

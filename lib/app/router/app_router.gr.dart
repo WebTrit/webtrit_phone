@@ -112,12 +112,6 @@ abstract class _$AppRouter extends RootStackRouter {
         child: FavoritesScreenPage(),
       );
     },
-    GroupBuilderScreenPageRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const GroupBuilderScreenPage(),
-      );
-    },
     GroupScreenPageRoute.name: (routeData) {
       final args = routeData.argsAs<GroupScreenPageRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -612,20 +606,6 @@ class FavoritesScreenPageRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'FavoritesScreenPageRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [GroupBuilderScreenPage]
-class GroupBuilderScreenPageRoute extends PageRouteInfo<void> {
-  const GroupBuilderScreenPageRoute({List<PageRouteInfo>? children})
-      : super(
-          GroupBuilderScreenPageRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'GroupBuilderScreenPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

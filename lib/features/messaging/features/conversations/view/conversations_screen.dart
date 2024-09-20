@@ -24,6 +24,7 @@ class ConversationsScreen extends StatefulWidget {
 }
 
 class _ConversationsScreenState extends State<ConversationsScreen> {
+  late final messagingBloc = context.read<MessagingBloc>();
   late final contactsRepository = context.read<ContactsRepository>();
   late final smsRepository = context.read<SmsRepository>();
 
@@ -69,12 +70,20 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
 
     // If the user selected the group option, navigate to the group builder screen
     if (result == kGroupResult) {
-      context.router.navigate(const MessagingRouterPageRoute(
-        children: [
-          ConversationsScreenPageRoute(),
-          GroupBuilderScreenPageRoute(),
-        ],
-      ));
+      showModalBottomSheet(
+        useRootNavigator: true,
+        useSafeArea: true,
+        isScrollControlled: true,
+        context: context,
+        builder: (context) => BottomSheet(
+          enableDrag: false,
+          onClosing: () {},
+          builder: (context) => NewGroupConversation(
+            contactsRepository: contactsRepository,
+            messagingBloc: messagingBloc,
+          ),
+        ),
+      );
     }
   }
 

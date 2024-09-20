@@ -848,6 +848,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chats_NewConversation_contactOrNumberSearch_hint => 'Search or enter phone number';
 
   @override
+  String get chats_NewConversation_invite_heading => 'Invite users:';
+
+  @override
+  String get chats_NewConversation_next_action => 'Next';
+
+  @override
+  String get chats_NewConversation_back_action => 'Back';
+
+  @override
   String get chats_GroupScreen_titlePrefix => 'Group:';
 
   @override
