@@ -22,7 +22,7 @@ class SmsMessageReadCursor extends Equatable {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'conversation_id': conversationId,
+      'sms_conversation_id': conversationId,
       'user_id': userId,
       'last_read_at': time.toIso8601String,
     };
@@ -30,7 +30,7 @@ class SmsMessageReadCursor extends Equatable {
 
   factory SmsMessageReadCursor.fromMap(Map<String, dynamic> map) {
     return SmsMessageReadCursor(
-      conversationId: map['conversation_id'] as int,
+      conversationId: map['sms_conversation_id'] as int,
       userId: map['user_id'] as String,
       time: DateTime.parse(map['last_read_at'] as String),
     );

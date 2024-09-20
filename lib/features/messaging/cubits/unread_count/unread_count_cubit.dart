@@ -80,11 +80,11 @@ class UnreadCountState with EquatableMixin {
   final Map<int, int> smsUnreadCounts;
   final int smsConversationsWithUnreadCount;
 
-  int unreadCountForChatConversation(int chatId) => chatUnreadCounts[chatId] ?? 0;
-  int unreadCountForSmsConversation(int chatId) => chatUnreadCounts[chatId] ?? 0;
+  int unreadCountForChatConversation(int id) => chatUnreadCounts[id] ?? 0;
+  int unreadCountForSmsConversation(int id) => smsUnreadCounts[id] ?? 0;
 
   @override
-  List<Object> get props => [chatUnreadCounts, chatsWithUnreadCount];
+  List<Object> get props => [chatUnreadCounts, chatsWithUnreadCount, smsUnreadCounts, smsConversationsWithUnreadCount];
 
   @override
   bool get stringify => true;

@@ -36,9 +36,9 @@ class SmsOutboxWorker {
         await _processMessageDelete(entry);
       }
 
-      // for (final entry in await _outboxRepository.getOutboxReadCursors()) {
-      //   await _processReadCursor(entry);
-      // }
+      for (final entry in await _outboxRepository.getOutboxReadCursors()) {
+        await _processReadCursor(entry);
+      }
 
       if (_disposed) return false;
       await Future.delayed(const Duration(seconds: 1));
@@ -127,7 +127,7 @@ class SmsOutboxWorker {
       if (channel.state != PhoenixChannelState.joined) return;
 
       var payload = {'last_read_at': readCursor.time.toUtc().toIso8601String()};
-      final r = await channel.push('sms:cursor:set', payload).future;
+      final r = await channel.push('sms:conversation:cursor:set', payload).future;
 
       if (r.isOk) {
         await _outboxRepository.deleteOutboxReadCursor(readCursor.conversationId);

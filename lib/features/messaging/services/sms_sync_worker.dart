@@ -85,8 +85,8 @@ class SmsSyncWorker {
         // Fetch user phone numbers
         final result = await userChannel.push('user:get_info', {}).future;
         List<String> smsNumbers = result.response['sms_phone_numbers'].cast<String>();
-        final validNumbers = smsNumbers.map((e) => e.e164Phone).whereNotNull().toList();
-        smsRepository.upsertUserSmsNumbers(validNumbers);
+        final e164Numbers = smsNumbers.map((e) => e.e164Phone).whereNotNull().toList();
+        smsRepository.upsertUserSmsNumbers(e164Numbers);
 
         // Fetch actual user chat ids
         final req = await userChannel.push('sms:conversation:get_ids', {}, pushTimeout).future;
@@ -155,12 +155,12 @@ class SmsSyncWorker {
         yield conversation;
 
         // Fetch read cursors
-        // final cursorsReq = await channel.push('sms:cursor:get', {}, pushTimeout).future;
-        // final cursors = (cursorsReq.response as List).map((e) => SmsMessageReadCursor.fromMap(e)).toList();
-        // for (final cursor in cursors) {
-        //   await smsRepository.upsertMessageReadCursor(cursor);
-        //   yield cursor;
-        // }
+        final cursorsReq = await channel.push('sms:conversation:cursor:get', {}, pushTimeout).future;
+        final cursors = (cursorsReq.response as List).map((e) => SmsMessageReadCursor.fromMap(e)).toList();
+        for (final cursor in cursors) {
+          await smsRepository.upsertMessageReadCursor(cursor);
+          yield cursor;
+        }
 
         // Get last update time for sync messages from
         final newestCursor = await smsRepository.getMessageSyncCursor(conversationId, SmsSyncCursorType.newest);
@@ -245,11 +245,11 @@ class SmsSyncWorker {
             yield chatMsg;
           }
 
-          // if (e.event.value == 'sms:cursor:set') {
-          //   final cursor = SmsMessageReadCursor.fromMap(e.payload as Map<String, dynamic>);
-          //   await smsRepository.upsertMessageReadCursor(cursor);
-          //   yield cursor;
-          // }
+          if (e.event.value == 'sms:conversation:cursor:set') {
+            final cursor = SmsMessageReadCursor.fromMap(e.payload as Map<String, dynamic>);
+            await smsRepository.upsertMessageReadCursor(cursor);
+            yield cursor;
+          }
 
           // On disconnect break the loop to force reconnect
           if (e.event.value == 'phx_error') {
