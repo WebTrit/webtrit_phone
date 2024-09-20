@@ -74,12 +74,15 @@ class AppConfigBottomMenu with _$AppConfigBottomMenu {
 class AppConfigBottomMenuTab with _$AppConfigBottomMenuTab {
   const AppConfigBottomMenuTab._();
 
+  static const String contactSourceTypes = 'contactSourceTypes';
+
   const factory AppConfigBottomMenuTab({
     @Default(true) bool enabled,
     @Default(false) bool initial,
     required String type,
     required String titleL10n,
     @IconDataConverter() required IconData icon,
+    @Default({}) Map<String, dynamic> config,
     AppConfigData? data,
   }) = _AppConfigBottomMenuTab;
 

@@ -96,6 +96,7 @@ _$AppConfigBottomMenuTabImpl _$$AppConfigBottomMenuTabImplFromJson(
       type: json['type'] as String,
       titleL10n: json['titleL10n'] as String,
       icon: const IconDataConverter().fromJson(json['icon'] as String),
+      config: json['config'] as Map<String, dynamic>? ?? const {},
       data: json['data'] == null
           ? null
           : AppConfigData.fromJson(json['data'] as Map<String, dynamic>),
@@ -109,6 +110,7 @@ Map<String, dynamic> _$$AppConfigBottomMenuTabImplToJson(
       'type': instance.type,
       'titleL10n': instance.titleL10n,
       'icon': const IconDataConverter().toJson(instance.icon),
+      'config': instance.config,
       'data': instance.data,
     };
 

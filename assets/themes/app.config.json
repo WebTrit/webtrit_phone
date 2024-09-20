@@ -29,7 +29,13 @@
           "initial": false,
           "type": "contacts",
           "titleL10n": "main_BottomNavigationBarItemLabel_contacts",
-          "icon": "0xee35"
+          "icon": "0xee35",
+          "config": {
+            "contactSourceTypes": [
+              "local",
+              "external"
+            ]
+          }
         },
         {
           "enabled": true,
