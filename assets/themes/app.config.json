@@ -30,7 +30,7 @@
           "type": "contacts",
           "titleL10n": "main_BottomNavigationBarItemLabel_contacts",
           "icon": "0xee35",
-          "config": {
+          "data": {
             "contactSourceTypes": [
               "local",
               "external"

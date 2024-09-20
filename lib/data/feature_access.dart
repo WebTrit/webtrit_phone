@@ -70,17 +70,12 @@ class FeatureAccess {
 
   static BottomMenuTab _createBottomMenuTab(AppConfigBottomMenuTab tab) {
     final flavor = MainFlavor.values.byName(tab.type);
-
-    final configData = tab.data == null
-        ? null
-        : ConfigData(
-            url: Uri.parse(tab.data!.url),
-          );
+    final urlString = tab.data[AppConfigBottomMenuTab.dataUrl] as String?;
+    final data = urlString == null ? null : ConfigData(url: Uri.parse(urlString));
 
     if (flavor == MainFlavor.contacts) {
-      final sourceTypes = (tab.config[AppConfigBottomMenuTab.contactSourceTypes] as List<dynamic>)
-          .map((type) => ContactSourceType.values.byName(type as String))
-          .toList();
+      final sourceTypesList = (tab.data[AppConfigBottomMenuTab.dataContactSourceTypes] as List<dynamic>).cast<String>();
+      final sourceTypes = sourceTypesList.map((type) => ContactSourceType.values.byName(type)).toList();
 
       return ContactsBottomMenuTab(
         enabled: tab.enabled,
@@ -88,7 +83,7 @@ class FeatureAccess {
         flavor: flavor,
         titleL10n: tab.titleL10n,
         icon: tab.icon,
-        data: configData,
+        data: data,
         contactSourceTypes: sourceTypes,
       );
     } else {
@@ -98,7 +93,7 @@ class FeatureAccess {
         flavor: flavor,
         titleL10n: tab.titleL10n,
         icon: tab.icon,
-        data: configData,
+        data: data,
       );
     }
   }

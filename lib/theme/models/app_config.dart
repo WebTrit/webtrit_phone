@@ -74,7 +74,8 @@ class AppConfigBottomMenu with _$AppConfigBottomMenu {
 class AppConfigBottomMenuTab with _$AppConfigBottomMenuTab {
   const AppConfigBottomMenuTab._();
 
-  static const String contactSourceTypes = 'contactSourceTypes';
+  static const String dataContactSourceTypes = 'contactSourceTypes';
+  static const String dataUrl = 'url';
 
   const factory AppConfigBottomMenuTab({
     @Default(true) bool enabled,
@@ -82,8 +83,7 @@ class AppConfigBottomMenuTab with _$AppConfigBottomMenuTab {
     required String type,
     required String titleL10n,
     @IconDataConverter() required IconData icon,
-    @Default({}) Map<String, dynamic> config,
-    AppConfigData? data,
+    @Default({}) Map<String, dynamic> data,
   }) = _AppConfigBottomMenuTab;
 
   factory AppConfigBottomMenuTab.fromJson(Map<String, dynamic> json) => _$AppConfigBottomMenuTabFromJson(json);

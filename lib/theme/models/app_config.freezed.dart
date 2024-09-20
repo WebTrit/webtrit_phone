@@ -994,8 +994,7 @@ mixin _$AppConfigBottomMenuTab {
   String get titleL10n => throw _privateConstructorUsedError;
   @IconDataConverter()
   IconData get icon => throw _privateConstructorUsedError;
-  Map<String, dynamic> get config => throw _privateConstructorUsedError;
-  AppConfigData? get data => throw _privateConstructorUsedError;
+  Map<String, dynamic> get data => throw _privateConstructorUsedError;
 
   /// Serializes this AppConfigBottomMenuTab to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1019,10 +1018,7 @@ abstract class $AppConfigBottomMenuTabCopyWith<$Res> {
       String type,
       String titleL10n,
       @IconDataConverter() IconData icon,
-      Map<String, dynamic> config,
-      AppConfigData? data});
-
-  $AppConfigDataCopyWith<$Res>? get data;
+      Map<String, dynamic> data});
 }
 
 /// @nodoc
@@ -1046,8 +1042,7 @@ class _$AppConfigBottomMenuTabCopyWithImpl<$Res,
     Object? type = null,
     Object? titleL10n = null,
     Object? icon = null,
-    Object? config = null,
-    Object? data = freezed,
+    Object? data = null,
   }) {
     return _then(_value.copyWith(
       enabled: null == enabled
@@ -1070,29 +1065,11 @@ class _$AppConfigBottomMenuTabCopyWithImpl<$Res,
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
               as IconData,
-      config: null == config
-          ? _value.config
-          : config // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>,
-      data: freezed == data
+      data: null == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as AppConfigData?,
+              as Map<String, dynamic>,
     ) as $Val);
-  }
-
-  /// Create a copy of AppConfigBottomMenuTab
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $AppConfigDataCopyWith<$Res>? get data {
-    if (_value.data == null) {
-      return null;
-    }
-
-    return $AppConfigDataCopyWith<$Res>(_value.data!, (value) {
-      return _then(_value.copyWith(data: value) as $Val);
-    });
   }
 }
 
@@ -1111,11 +1088,7 @@ abstract class _$$AppConfigBottomMenuTabImplCopyWith<$Res>
       String type,
       String titleL10n,
       @IconDataConverter() IconData icon,
-      Map<String, dynamic> config,
-      AppConfigData? data});
-
-  @override
-  $AppConfigDataCopyWith<$Res>? get data;
+      Map<String, dynamic> data});
 }
 
 /// @nodoc
@@ -1138,8 +1111,7 @@ class __$$AppConfigBottomMenuTabImplCopyWithImpl<$Res>
     Object? type = null,
     Object? titleL10n = null,
     Object? icon = null,
-    Object? config = null,
-    Object? data = freezed,
+    Object? data = null,
   }) {
     return _then(_$AppConfigBottomMenuTabImpl(
       enabled: null == enabled
@@ -1162,14 +1134,10 @@ class __$$AppConfigBottomMenuTabImplCopyWithImpl<$Res>
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
               as IconData,
-      config: null == config
-          ? _value._config
-          : config // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>,
-      data: freezed == data
-          ? _value.data
+      data: null == data
+          ? _value._data
           : data // ignore: cast_nullable_to_non_nullable
-              as AppConfigData?,
+              as Map<String, dynamic>,
     ));
   }
 }
@@ -1183,9 +1151,8 @@ class _$AppConfigBottomMenuTabImpl extends _AppConfigBottomMenuTab {
       required this.type,
       required this.titleL10n,
       @IconDataConverter() required this.icon,
-      final Map<String, dynamic> config = const {},
-      this.data})
-      : _config = config,
+      final Map<String, dynamic> data = const {}})
+      : _data = data,
         super._();
 
   factory _$AppConfigBottomMenuTabImpl.fromJson(Map<String, dynamic> json) =>
@@ -1204,21 +1171,18 @@ class _$AppConfigBottomMenuTabImpl extends _AppConfigBottomMenuTab {
   @override
   @IconDataConverter()
   final IconData icon;
-  final Map<String, dynamic> _config;
+  final Map<String, dynamic> _data;
   @override
   @JsonKey()
-  Map<String, dynamic> get config {
-    if (_config is EqualUnmodifiableMapView) return _config;
+  Map<String, dynamic> get data {
+    if (_data is EqualUnmodifiableMapView) return _data;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(_config);
+    return EqualUnmodifiableMapView(_data);
   }
 
   @override
-  final AppConfigData? data;
-
-  @override
   String toString() {
-    return 'AppConfigBottomMenuTab(enabled: $enabled, initial: $initial, type: $type, titleL10n: $titleL10n, icon: $icon, config: $config, data: $data)';
+    return 'AppConfigBottomMenuTab(enabled: $enabled, initial: $initial, type: $type, titleL10n: $titleL10n, icon: $icon, data: $data)';
   }
 
   @override
@@ -1232,14 +1196,13 @@ class _$AppConfigBottomMenuTabImpl extends _AppConfigBottomMenuTab {
             (identical(other.titleL10n, titleL10n) ||
                 other.titleL10n == titleL10n) &&
             (identical(other.icon, icon) || other.icon == icon) &&
-            const DeepCollectionEquality().equals(other._config, _config) &&
-            (identical(other.data, data) || other.data == data));
+            const DeepCollectionEquality().equals(other._data, _data));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, enabled, initial, type,
-      titleL10n, icon, const DeepCollectionEquality().hash(_config), data);
+      titleL10n, icon, const DeepCollectionEquality().hash(_data));
 
   /// Create a copy of AppConfigBottomMenuTab
   /// with the given fields replaced by the non-null parameter values.
@@ -1265,8 +1228,7 @@ abstract class _AppConfigBottomMenuTab extends AppConfigBottomMenuTab {
       required final String type,
       required final String titleL10n,
       @IconDataConverter() required final IconData icon,
-      final Map<String, dynamic> config,
-      final AppConfigData? data}) = _$AppConfigBottomMenuTabImpl;
+      final Map<String, dynamic> data}) = _$AppConfigBottomMenuTabImpl;
   const _AppConfigBottomMenuTab._() : super._();
 
   factory _AppConfigBottomMenuTab.fromJson(Map<String, dynamic> json) =
@@ -1284,9 +1246,7 @@ abstract class _AppConfigBottomMenuTab extends AppConfigBottomMenuTab {
   @IconDataConverter()
   IconData get icon;
   @override
-  Map<String, dynamic> get config;
-  @override
-  AppConfigData? get data;
+  Map<String, dynamic> get data;
 
   /// Create a copy of AppConfigBottomMenuTab
   /// with the given fields replaced by the non-null parameter values.
