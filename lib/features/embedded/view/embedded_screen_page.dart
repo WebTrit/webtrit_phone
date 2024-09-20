@@ -5,12 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/environment_config.dart';
-import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../bloc/embedded_cubit.dart';
+import '../extensions/extensions.dart';
 
 import 'embedded_screen.dart';
 
@@ -52,13 +52,7 @@ abstract class EmbeddedScreenPage extends StatelessWidget {
       EmbeddedScreenPage3Route.page: (data) => EmbeddedScreenPage3Route(data: data),
     };
 
-    for (final entry in routes.entries) {
-      final embedded = route.findRouteWithRequiredParams(entry.key);
-      if (embedded != null && bottomMenuTabData != null) {
-        return entry.value(bottomMenuTabData) as PageRouteInfo<dynamic>;
-      }
-    }
-    return null;
+    return route.getPageRouteInfo(routes, bottomMenuTabData);
   }
 
   static PageRouteInfo<dynamic>? getPageRoute(MainFlavor flavor, ConfigData data) {
