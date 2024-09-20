@@ -122,19 +122,8 @@ class AppConfigSettingsItem with _$AppConfigSettingsItem {
     required String titleL10n,
     String? type,
     @IconDataConverter() required IconData icon,
-    required AppConfigData? data,
+    @Default({}) Map<String, dynamic> data,
   }) = _AppConfigSettingsItem;
 
   factory AppConfigSettingsItem.fromJson(Map<String, dynamic> json) => _$AppConfigSettingsItemFromJson(json);
-}
-
-@freezed
-class AppConfigData with _$AppConfigData {
-  const AppConfigData._();
-
-  const factory AppConfigData({
-    required String url,
-  }) = _AppConfigData;
-
-  factory AppConfigData.fromJson(Map<String, dynamic> json) => _$AppConfigDataFromJson(json);
 }

@@ -110,17 +110,13 @@ class FeatureAccess {
       final items = <SettingItem>[];
 
       for (var item in section.items.where((item) => item.enabled)) {
-        final configData = item.data == null
-            ? null
-            : ConfigData(
-                url: Uri.parse(item.data!.url),
-                titleL10n: item.titleL10n,
-              );
+        final urlString = item.data[AppConfigBottomMenuTab.dataUrl] as String?;
+        final data = urlString == null ? null : ConfigData(url: Uri.parse(urlString));
 
         final settingItem = SettingItem(
           titleL10n: item.titleL10n,
           icon: item.icon,
-          data: configData,
+          data: data,
           flavor: SettingsFlavor.values.byName(item.type!),
         );
 
