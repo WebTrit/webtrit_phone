@@ -113,10 +113,13 @@ class FeatureAccess {
           flavor: SettingsFlavor.values.byName(item.type!),
         );
 
-        termsAndConditions = settingItem.flavor == SettingsFlavor.terms
-            ? settingItem.data!.url
-            : throw Exception('Terms and conditions not found');
-
+        if (settingItem.flavor == SettingsFlavor.terms) {
+          if (settingItem.data?.url != null) {
+            termsAndConditions = settingItem.data!.url;
+          } else {
+            throw Exception('Terms and conditions not found');
+          }
+        }
         items.add(settingItem);
       }
 
