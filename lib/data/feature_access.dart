@@ -55,26 +55,7 @@ class FeatureAccess {
       throw Exception('Bottom menu configuration is missing or empty');
     }
 
-    final bottomMenuTabs = <BottomMenuTab>[];
-
-    for (var tab in bottomMenu.tabs.where((tab) => tab.enabled)) {
-      final configData = tab.data == null
-          ? null
-          : ConfigData(
-              url: Uri.parse(tab.data!.url),
-            );
-
-      final bottomMenuTab = BottomMenuTab(
-        enabled: tab.enabled,
-        initial: tab.initial,
-        flavor: MainFlavor.values.byName(tab.type),
-        titleL10n: tab.titleL10n,
-        icon: tab.icon,
-        data: configData,
-      );
-
-      bottomMenuTabs.add(bottomMenuTab);
-    }
+    final bottomMenuTabs = bottomMenu.tabs.where((tab) => tab.enabled).map((tab) => _createBottomMenuTab(tab)).toList();
 
     if (bottomMenuTabs.isEmpty) {
       throw Exception('No enabled tabs found in bottom menu configuration');
@@ -85,6 +66,41 @@ class FeatureAccess {
       preferences,
       cacheSelectedTab: bottomMenu.cacheSelectedTab,
     );
+  }
+
+  static BottomMenuTab _createBottomMenuTab(AppConfigBottomMenuTab tab) {
+    final flavor = MainFlavor.values.byName(tab.type);
+
+    final configData = tab.data == null
+        ? null
+        : ConfigData(
+            url: Uri.parse(tab.data!.url),
+          );
+
+    if (flavor == MainFlavor.contacts) {
+      final sourceTypes = (tab.config[AppConfigBottomMenuTab.contactSourceTypes] as List<dynamic>)
+          .map((type) => ContactSourceType.values.byName(type as String))
+          .toList();
+
+      return ContactsBottomMenuTab(
+        enabled: tab.enabled,
+        initial: tab.initial,
+        flavor: flavor,
+        titleL10n: tab.titleL10n,
+        icon: tab.icon,
+        data: configData,
+        contactSourceTypes: sourceTypes,
+      );
+    } else {
+      return BottomMenuTab(
+        enabled: tab.enabled,
+        initial: tab.initial,
+        flavor: flavor,
+        titleL10n: tab.titleL10n,
+        icon: tab.icon,
+        data: configData,
+      );
+    }
   }
 
   static SettingsFeature _tryConfigureSettingsFeature(
@@ -153,8 +169,9 @@ class FeatureAccess {
 
 class BottomMenuFeature {
   final List<BottomMenuTab> _tabs;
-  final AppPreferences _appPreferences;
   late BottomMenuTab _activeTab;
+
+  final AppPreferences _appPreferences;
 
   List<BottomMenuTab> get tabs => List.unmodifiable(_tabs);
 
