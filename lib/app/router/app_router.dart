@@ -133,8 +133,8 @@ class AppRouter extends _$AppRouter {
                   page: MainScreenPageRoute.page,
                   path: '',
                   guards: [
-                    // Redirects to the appropriate embedded screen if required parameters are missing
-                    // This ensures that necessary data is passed to the embedded screen when the initial route is loaded.
+                    // Redirects to the appropriate screen if required parameters are missing
+                    // This ensures that necessary data is passed to the  screen when the initial route is loaded.
                     AutoRouteGuard.redirect(
                       (resolver) => EmbeddedScreenPage.getPageRouteInfo(
                         resolver.route,
@@ -182,8 +182,8 @@ class AppRouter extends _$AppRouter {
                         AutoRoute(
                           page: ContactsScreenPageRoute.page,
                           guards: [
-                            // Redirects to the appropriate embedded screen if required parameters are missing
-                            // This ensures that necessary data is passed to the embedded screen when the initial route is loaded.
+                            // Redirects to the appropriate screen if required parameters are missing
+                            // This ensures that necessary data is passed to the  screen when the initial route is loaded.
                             AutoRouteGuard.redirect(
                               (resolver) => ContactsScreenPage.getPageRouteInfo(
                                 resolver.route,
