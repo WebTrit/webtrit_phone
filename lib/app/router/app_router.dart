@@ -181,6 +181,16 @@ class AppRouter extends _$AppRouter {
                       children: [
                         AutoRoute(
                           page: ContactsScreenPageRoute.page,
+                          guards: [
+                            // Redirects to the appropriate embedded screen if required parameters are missing
+                            // This ensures that necessary data is passed to the embedded screen when the initial route is loaded.
+                            AutoRouteGuard.redirect(
+                              (resolver) => ContactsScreenPage.getPageRouteInfo(
+                                resolver.route,
+                                () => _initialBottomMenuTab.toContacts.contactSourceTypes,
+                              ),
+                            ),
+                          ],
                           path: '',
                         ),
                         AutoRoute(

@@ -3,17 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/features/embedded/extensions/extensions.dart';
 
 @RoutePage()
 class ContactsScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
-  const ContactsScreenPage();
+  const ContactsScreenPage({
+    required this.sourceTypes,
+  });
+
+  final List<ContactSourceType> sourceTypes;
+
+  static PageRouteInfo<dynamic>? getPageRouteInfo(RouteMatch route, List<ContactSourceType> Function() sourceTypes) {
+    final featureRoute = route.findRouteWithRequiredParams(ContactsScreenPageRoute.page);
+    return featureRoute != null ? ContactsScreenPageRoute(sourceTypes: sourceTypes()) : null;
+  }
 
   @override
   Widget build(BuildContext context) {
