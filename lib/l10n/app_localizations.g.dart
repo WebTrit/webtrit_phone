@@ -1775,83 +1775,89 @@ abstract class AppLocalizations {
   /// **'owner'**
   String get chats_GroupAuthorities_owner;
 
-  /// No description provided for @chats_GroupDrawer_leaveAsk.
+  /// No description provided for @chats_GroupInfo_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Group info'**
+  String get chats_GroupInfo_title;
+
+  /// No description provided for @chats_GroupInfo_leaveAsk.
   ///
   /// In en, this message translates to:
   /// **'Are you sure you want to leave this group?'**
-  String get chats_GroupDrawer_leaveAsk;
+  String get chats_GroupInfo_leaveAsk;
 
-  /// No description provided for @chats_GroupDrawer_leaveAndDeleteAsk.
+  /// No description provided for @chats_GroupInfo_leaveAndDeleteAsk.
   ///
   /// In en, this message translates to:
   /// **'Are you sure you want leave and delete this group?'**
-  String get chats_GroupDrawer_leaveAndDeleteAsk;
+  String get chats_GroupInfo_leaveAndDeleteAsk;
 
-  /// No description provided for @chats_GroupDrawer_removeUserAsk.
+  /// No description provided for @chats_GroupInfo_removeUserAsk.
   ///
   /// In en, this message translates to:
   /// **'Are you sure you want to remove this user from the group?'**
-  String get chats_GroupDrawer_removeUserAsk;
+  String get chats_GroupInfo_removeUserAsk;
 
-  /// No description provided for @chats_GroupDrawer_makeModeratorAsk.
+  /// No description provided for @chats_GroupInfo_makeModeratorAsk.
   ///
   /// In en, this message translates to:
   /// **'Are you sure you want to make this user a moderator?'**
-  String get chats_GroupDrawer_makeModeratorAsk;
+  String get chats_GroupInfo_makeModeratorAsk;
 
-  /// No description provided for @chats_GroupDrawer_removeModeratorAsk.
+  /// No description provided for @chats_GroupInfo_removeModeratorAsk.
   ///
   /// In en, this message translates to:
   /// **'Are you sure you want to remove this user from moderators?'**
-  String get chats_GroupDrawer_removeModeratorAsk;
+  String get chats_GroupInfo_removeModeratorAsk;
 
-  /// No description provided for @chats_GroupDrawer_titlePrefix.
+  /// No description provided for @chats_GroupInfo_titlePrefix.
   ///
   /// In en, this message translates to:
   /// **'Group:'**
-  String get chats_GroupDrawer_titlePrefix;
+  String get chats_GroupInfo_titlePrefix;
 
-  /// No description provided for @chats_GroupDrawer_groupMembersHeadline.
+  /// No description provided for @chats_GroupInfo_groupMembersHeadline.
   ///
   /// In en, this message translates to:
   /// **'Group members'**
-  String get chats_GroupDrawer_groupMembersHeadline;
+  String get chats_GroupInfo_groupMembersHeadline;
 
-  /// No description provided for @chats_GroupDrawer_addUserBtnText.
+  /// No description provided for @chats_GroupInfo_addUserBtnText.
   ///
   /// In en, this message translates to:
   /// **'Add user'**
-  String get chats_GroupDrawer_addUserBtnText;
+  String get chats_GroupInfo_addUserBtnText;
 
-  /// No description provided for @chats_GroupDrawer_leaveBtnText.
+  /// No description provided for @chats_GroupInfo_leaveBtnText.
   ///
   /// In en, this message translates to:
   /// **'Leave group'**
-  String get chats_GroupDrawer_leaveBtnText;
+  String get chats_GroupInfo_leaveBtnText;
 
-  /// No description provided for @chats_GroupDrawer_deleteLeaveBtnText.
+  /// No description provided for @chats_GroupInfo_deleteLeaveBtnText.
   ///
   /// In en, this message translates to:
   /// **'Delete and leave'**
-  String get chats_GroupDrawer_deleteLeaveBtnText;
+  String get chats_GroupInfo_deleteLeaveBtnText;
 
-  /// No description provided for @chats_GroupDrawer_makeModeratorBtnText.
+  /// No description provided for @chats_GroupInfo_makeModeratorBtnText.
   ///
   /// In en, this message translates to:
   /// **'Make moderator'**
-  String get chats_GroupDrawer_makeModeratorBtnText;
+  String get chats_GroupInfo_makeModeratorBtnText;
 
-  /// No description provided for @chats_GroupDrawer_unmakeModeratorBtnText.
+  /// No description provided for @chats_GroupInfo_unmakeModeratorBtnText.
   ///
   /// In en, this message translates to:
   /// **'Unmake moderator'**
-  String get chats_GroupDrawer_unmakeModeratorBtnText;
+  String get chats_GroupInfo_unmakeModeratorBtnText;
 
-  /// No description provided for @chats_GroupDrawer_removeUserBtnText.
+  /// No description provided for @chats_GroupInfo_removeUserBtnText.
   ///
   /// In en, this message translates to:
   /// **'Remove'**
-  String get chats_GroupDrawer_removeUserBtnText;
+  String get chats_GroupInfo_removeUserBtnText;
 
   /// No description provided for @chats_GroupNameDialog_title.
   ///

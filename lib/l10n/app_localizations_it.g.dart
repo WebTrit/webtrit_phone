@@ -887,43 +887,46 @@ class AppLocalizationsIt extends AppLocalizations {
   String get chats_GroupAuthorities_owner => 'proprietario';
 
   @override
-  String get chats_GroupDrawer_leaveAsk => 'Sei sicuro di voler abbandonare questo gruppo?';
+  String get chats_GroupInfo_title => 'Informazioni sul gruppo';
 
   @override
-  String get chats_GroupDrawer_leaveAndDeleteAsk => 'Vuoi davvero uscire ed eliminare questo gruppo?';
+  String get chats_GroupInfo_leaveAsk => 'Sei sicuro di voler abbandonare questo gruppo?';
 
   @override
-  String get chats_GroupDrawer_removeUserAsk => 'Vuoi davvero rimuovere questo utente dal gruppo?';
+  String get chats_GroupInfo_leaveAndDeleteAsk => 'Vuoi davvero uscire ed eliminare questo gruppo?';
 
   @override
-  String get chats_GroupDrawer_makeModeratorAsk => 'Sei sicuro di voler rendere questo utente un moderatore?';
+  String get chats_GroupInfo_removeUserAsk => 'Vuoi davvero rimuovere questo utente dal gruppo?';
 
   @override
-  String get chats_GroupDrawer_removeModeratorAsk => 'Sei sicuro di voler rimuovere questo utente dai moderatori?';
+  String get chats_GroupInfo_makeModeratorAsk => 'Sei sicuro di voler rendere questo utente un moderatore?';
 
   @override
-  String get chats_GroupDrawer_titlePrefix => 'Gruppo:';
+  String get chats_GroupInfo_removeModeratorAsk => 'Sei sicuro di voler rimuovere questo utente dai moderatori?';
 
   @override
-  String get chats_GroupDrawer_groupMembersHeadline => 'Membri del gruppo';
+  String get chats_GroupInfo_titlePrefix => 'Gruppo:';
 
   @override
-  String get chats_GroupDrawer_addUserBtnText => 'Aggiungi utente';
+  String get chats_GroupInfo_groupMembersHeadline => 'Membri del gruppo';
 
   @override
-  String get chats_GroupDrawer_leaveBtnText => 'Lascia il gruppo';
+  String get chats_GroupInfo_addUserBtnText => 'Aggiungi utente';
 
   @override
-  String get chats_GroupDrawer_deleteLeaveBtnText => 'Elimina e lascia';
+  String get chats_GroupInfo_leaveBtnText => 'Lascia il gruppo';
 
   @override
-  String get chats_GroupDrawer_makeModeratorBtnText => 'Rendi moderatore';
+  String get chats_GroupInfo_deleteLeaveBtnText => 'Elimina e lascia';
 
   @override
-  String get chats_GroupDrawer_unmakeModeratorBtnText => 'Annulla moderatore';
+  String get chats_GroupInfo_makeModeratorBtnText => 'Rendi moderatore';
 
   @override
-  String get chats_GroupDrawer_removeUserBtnText => 'Rimuovere';
+  String get chats_GroupInfo_unmakeModeratorBtnText => 'Annulla moderatore';
+
+  @override
+  String get chats_GroupInfo_removeUserBtnText => 'Rimuovere';
 
   @override
   String get chats_GroupNameDialog_title => 'Nome del gruppo';

@@ -887,43 +887,46 @@ class AppLocalizationsUk extends AppLocalizations {
   String get chats_GroupAuthorities_owner => 'власник';
 
   @override
-  String get chats_GroupDrawer_leaveAsk => 'Ви впевнені, що бажаєте залишити цю групу?';
+  String get chats_GroupInfo_title => 'Інформація про групу';
 
   @override
-  String get chats_GroupDrawer_leaveAndDeleteAsk => 'Ви впевнені, що бажаєте залишити та видалити цю групу?';
+  String get chats_GroupInfo_leaveAsk => 'Ви впевнені, що бажаєте залишити цю групу?';
 
   @override
-  String get chats_GroupDrawer_removeUserAsk => 'Ви впевнені, що хочете видалити цього користувача з групи?';
+  String get chats_GroupInfo_leaveAndDeleteAsk => 'Ви впевнені, що бажаєте залишити та видалити цю групу?';
 
   @override
-  String get chats_GroupDrawer_makeModeratorAsk => 'Ви впевнені, що хочете зробити цього користувача модератором?';
+  String get chats_GroupInfo_removeUserAsk => 'Ви впевнені, що хочете видалити цього користувача з групи?';
 
   @override
-  String get chats_GroupDrawer_removeModeratorAsk => 'Ви впевнені, що хочете видалити цього користувача з модераторів?';
+  String get chats_GroupInfo_makeModeratorAsk => 'Ви впевнені, що хочете зробити цього користувача модератором?';
 
   @override
-  String get chats_GroupDrawer_titlePrefix => 'Група:';
+  String get chats_GroupInfo_removeModeratorAsk => 'Ви впевнені, що хочете видалити цього користувача з модераторів?';
 
   @override
-  String get chats_GroupDrawer_groupMembersHeadline => 'Члени групи';
+  String get chats_GroupInfo_titlePrefix => 'Група:';
 
   @override
-  String get chats_GroupDrawer_addUserBtnText => 'Додати користувача';
+  String get chats_GroupInfo_groupMembersHeadline => 'Члени групи';
 
   @override
-  String get chats_GroupDrawer_leaveBtnText => 'Вийти з групи';
+  String get chats_GroupInfo_addUserBtnText => 'Додати користувача';
 
   @override
-  String get chats_GroupDrawer_deleteLeaveBtnText => 'Видалити і залишити';
+  String get chats_GroupInfo_leaveBtnText => 'Вийти з групи';
 
   @override
-  String get chats_GroupDrawer_makeModeratorBtnText => 'Зробити модератором';
+  String get chats_GroupInfo_deleteLeaveBtnText => 'Видалити і залишити';
 
   @override
-  String get chats_GroupDrawer_unmakeModeratorBtnText => 'Прибрати модератора';
+  String get chats_GroupInfo_makeModeratorBtnText => 'Зробити модератором';
 
   @override
-  String get chats_GroupDrawer_removeUserBtnText => 'Видалити';
+  String get chats_GroupInfo_unmakeModeratorBtnText => 'Прибрати модератора';
+
+  @override
+  String get chats_GroupInfo_removeUserBtnText => 'Видалити';
 
   @override
   String get chats_GroupNameDialog_title => 'Назва групи';

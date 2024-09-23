@@ -22,6 +22,21 @@ class _GroupScreenState extends State<GroupScreen> {
   late final groupCubit = context.read<GroupCubit>();
   late final contactsRepo = context.read<ContactsRepository>();
 
+  onMenuTap() {
+    showModalBottomSheet(
+      useSafeArea: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (context) => BlocProvider.value(
+        value: groupCubit,
+        child: ClipRRect(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+          child: GroupInfo(userId: messagingBloc.state.userId!),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -62,8 +77,10 @@ class _GroupScreenState extends State<GroupScreen> {
                       );
                     }
                   }),
+                  actions: [
+                    IconButton(onPressed: onMenuTap, icon: const Icon(Icons.menu)),
+                  ],
                 ),
-                endDrawer: GroupDrawer(userId: messagingBloc.state.userId!),
                 body: Builder(
                   builder: (context) {
                     if (state is GroupStateReady) {
