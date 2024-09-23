@@ -74,13 +74,16 @@ class AppConfigBottomMenu with _$AppConfigBottomMenu {
 class AppConfigBottomMenuTab with _$AppConfigBottomMenuTab {
   const AppConfigBottomMenuTab._();
 
+  static const String dataContactSourceTypes = 'contactSourceTypes';
+  static const String dataUrl = 'url';
+
   const factory AppConfigBottomMenuTab({
     @Default(true) bool enabled,
     @Default(false) bool initial,
     required String type,
     required String titleL10n,
     @IconDataConverter() required IconData icon,
-    AppConfigData? data,
+    @Default({}) Map<String, dynamic> data,
   }) = _AppConfigBottomMenuTab;
 
   factory AppConfigBottomMenuTab.fromJson(Map<String, dynamic> json) => _$AppConfigBottomMenuTabFromJson(json);
@@ -119,19 +122,8 @@ class AppConfigSettingsItem with _$AppConfigSettingsItem {
     required String titleL10n,
     String? type,
     @IconDataConverter() required IconData icon,
-    required AppConfigData? data,
+    @Default({}) Map<String, dynamic> data,
   }) = _AppConfigSettingsItem;
 
   factory AppConfigSettingsItem.fromJson(Map<String, dynamic> json) => _$AppConfigSettingsItemFromJson(json);
-}
-
-@freezed
-class AppConfigData with _$AppConfigData {
-  const AppConfigData._();
-
-  const factory AppConfigData({
-    required String url,
-  }) = _AppConfigData;
-
-  factory AppConfigData.fromJson(Map<String, dynamic> json) => _$AppConfigDataFromJson(json);
 }

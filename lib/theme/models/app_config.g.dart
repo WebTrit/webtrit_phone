@@ -96,9 +96,7 @@ _$AppConfigBottomMenuTabImpl _$$AppConfigBottomMenuTabImplFromJson(
       type: json['type'] as String,
       titleL10n: json['titleL10n'] as String,
       icon: const IconDataConverter().fromJson(json['icon'] as String),
-      data: json['data'] == null
-          ? null
-          : AppConfigData.fromJson(json['data'] as Map<String, dynamic>),
+      data: json['data'] as Map<String, dynamic>? ?? const {},
     );
 
 Map<String, dynamic> _$$AppConfigBottomMenuTabImplToJson(
@@ -155,9 +153,7 @@ _$AppConfigSettingsItemImpl _$$AppConfigSettingsItemImplFromJson(
       titleL10n: json['titleL10n'] as String,
       type: json['type'] as String?,
       icon: const IconDataConverter().fromJson(json['icon'] as String),
-      data: json['data'] == null
-          ? null
-          : AppConfigData.fromJson(json['data'] as Map<String, dynamic>),
+      data: json['data'] as Map<String, dynamic>? ?? const {},
     );
 
 Map<String, dynamic> _$$AppConfigSettingsItemImplToJson(
@@ -168,14 +164,4 @@ Map<String, dynamic> _$$AppConfigSettingsItemImplToJson(
       'type': instance.type,
       'icon': const IconDataConverter().toJson(instance.icon),
       'data': instance.data,
-    };
-
-_$AppConfigDataImpl _$$AppConfigDataImplFromJson(Map<String, dynamic> json) =>
-    _$AppConfigDataImpl(
-      url: json['url'] as String,
-    );
-
-Map<String, dynamic> _$$AppConfigDataImplToJson(_$AppConfigDataImpl instance) =>
-    <String, dynamic>{
-      'url': instance.url,
     };

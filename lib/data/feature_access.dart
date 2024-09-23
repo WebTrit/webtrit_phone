@@ -50,30 +50,52 @@ class FeatureAccess {
     AppPreferences preferences,
   ) {
     final bottomMenu = appConfig.main?.bottomMenu;
+
     if (bottomMenu == null || bottomMenu.tabs.isEmpty) {
       throw Exception('Bottom menu configuration is missing or empty');
     }
 
-    final bottomMenuTabs = bottomMenu.tabs.where((tab) => tab.enabled).map((tab) {
+    final bottomMenuTabs = bottomMenu.tabs.where((tab) => tab.enabled).map((tab) => _createBottomMenuTab(tab)).toList();
+
+    if (bottomMenuTabs.isEmpty) {
+      throw Exception('No enabled tabs found in bottom menu configuration');
+    }
+
+    return BottomMenuFeature(
+      bottomMenuTabs,
+      preferences,
+      cacheSelectedTab: bottomMenu.cacheSelectedTab,
+    );
+  }
+
+  static BottomMenuTab _createBottomMenuTab(AppConfigBottomMenuTab tab) {
+    final flavor = MainFlavor.values.byName(tab.type);
+    final urlString = tab.data[AppConfigBottomMenuTab.dataUrl] as String?;
+    final data = urlString == null ? null : ConfigData(url: Uri.parse(urlString));
+
+    if (flavor == MainFlavor.contacts) {
+      final sourceTypesList = (tab.data[AppConfigBottomMenuTab.dataContactSourceTypes] as List<dynamic>).cast<String>();
+      final sourceTypes = sourceTypesList.map((type) => ContactSourceType.values.byName(type)).toList();
+
+      return ContactsBottomMenuTab(
+        enabled: tab.enabled,
+        initial: tab.initial,
+        flavor: flavor,
+        titleL10n: tab.titleL10n,
+        icon: tab.icon,
+        data: data,
+        contactSourceTypes: sourceTypes,
+      );
+    } else {
       return BottomMenuTab(
         enabled: tab.enabled,
         initial: tab.initial,
-        flavor: MainFlavor.values.byName(tab.type),
+        flavor: flavor,
         titleL10n: tab.titleL10n,
         icon: tab.icon,
-        data: tab.data != null
-            ? ConfigData(
-                url: Uri.parse(tab.data!.url),
-              )
-            : null,
+        data: data,
       );
-    }).toList();
-
-    if (bottomMenuTabs.isEmpty) {
-      throw Exception('Bottom menu configuration is empty');
     }
-
-    return BottomMenuFeature(bottomMenuTabs, preferences, cacheSelectedTab: bottomMenu.cacheSelectedTab);
   }
 
   static SettingsFeature _tryConfigureSettingsFeature(
@@ -88,24 +110,23 @@ class FeatureAccess {
       final items = <SettingItem>[];
 
       for (var item in section.items.where((item) => item.enabled)) {
-        final configData = item.data == null
-            ? null
-            : ConfigData(
-                url: Uri.parse(item.data!.url),
-                titleL10n: item.titleL10n,
-              );
+        final urlString = item.data[AppConfigBottomMenuTab.dataUrl] as String?;
+        final data = urlString == null ? null : ConfigData(url: Uri.parse(urlString));
 
         final settingItem = SettingItem(
           titleL10n: item.titleL10n,
           icon: item.icon,
-          data: configData,
+          data: data,
           flavor: SettingsFlavor.values.byName(item.type!),
         );
 
-        termsAndConditions = settingItem.flavor == SettingsFlavor.terms
-            ? settingItem.data!.url
-            : throw Exception('Terms and conditions not found');
-
+        if (settingItem.flavor == SettingsFlavor.terms) {
+          if (settingItem.data?.url != null) {
+            termsAndConditions = settingItem.data!.url;
+          } else {
+            throw Exception('Terms and conditions not found');
+          }
+        }
         items.add(settingItem);
       }
 
@@ -139,8 +160,9 @@ class FeatureAccess {
 
 class BottomMenuFeature {
   final List<BottomMenuTab> _tabs;
-  final AppPreferences _appPreferences;
   late BottomMenuTab _activeTab;
+
+  final AppPreferences _appPreferences;
 
   List<BottomMenuTab> get tabs => List.unmodifiable(_tabs);
 

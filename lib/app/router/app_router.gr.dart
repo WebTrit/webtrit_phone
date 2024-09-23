@@ -65,9 +65,10 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     ContactsScreenPageRoute.name: (routeData) {
+      final args = routeData.argsAs<ContactsScreenPageRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: ContactsScreenPage(),
+        child: ContactsScreenPage(sourceTypes: args.sourceTypes),
       );
     },
     DemoWebPageRoute.name: (routeData) {
@@ -448,16 +449,32 @@ class ContactsRouterPageRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [ContactsScreenPage]
-class ContactsScreenPageRoute extends PageRouteInfo<void> {
-  const ContactsScreenPageRoute({List<PageRouteInfo>? children})
-      : super(
+class ContactsScreenPageRoute
+    extends PageRouteInfo<ContactsScreenPageRouteArgs> {
+  ContactsScreenPageRoute({
+    required List<ContactSourceType> sourceTypes,
+    List<PageRouteInfo>? children,
+  }) : super(
           ContactsScreenPageRoute.name,
+          args: ContactsScreenPageRouteArgs(sourceTypes: sourceTypes),
           initialChildren: children,
         );
 
   static const String name = 'ContactsScreenPageRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<ContactsScreenPageRouteArgs> page =
+      PageInfo<ContactsScreenPageRouteArgs>(name);
+}
+
+class ContactsScreenPageRouteArgs {
+  const ContactsScreenPageRouteArgs({required this.sourceTypes});
+
+  final List<ContactSourceType> sourceTypes;
+
+  @override
+  String toString() {
+    return 'ContactsScreenPageRouteArgs{sourceTypes: $sourceTypes}';
+  }
 }
 
 /// generated route for
