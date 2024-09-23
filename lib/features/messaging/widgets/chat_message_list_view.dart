@@ -283,17 +283,19 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
         final typingUsers = state.map((e) => e.name).join(', ');
 
         if (typing) {
-          return Column(
-            children: [
-              const SizedBox(height: 8),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  '$typingUsers is typing...',
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Row(
+              children: [
+                const TypingIconDriver(),
+                Flexible(
+                  child: Text(
+                    '$typingUsers is typing...',
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         }
 

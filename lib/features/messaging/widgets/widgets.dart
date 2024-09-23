@@ -6,3 +6,4 @@ export 'participant_name.dart';
 export 'contact_info_builder.dart';
 export 'user_sms_numbers_builder.dart';
 export 'shell.dart';
+export 'typing_icon_driver.dart';
