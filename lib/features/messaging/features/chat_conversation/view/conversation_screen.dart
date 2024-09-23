@@ -68,12 +68,23 @@ class _ConversationScreenState extends State<ConversationScreen> {
                     builder: (context, contact, {required bool loading}) {
                       if (loading) return const SizedBox();
                       if (contact != null) {
+                        final online = contact.registered == true;
+
                         return FadeIn(
-                          child: Text(
-                            contact.name,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 20),
+                          child: Column(
+                            children: [
+                              Text(
+                                contact.name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(fontSize: 20),
+                              ),
+                              if (online)
+                                const Text(
+                                  'online',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                            ],
                           ),
                         );
                       } else {
@@ -133,14 +144,14 @@ class _ConversationScreenState extends State<ConversationScreen> {
                         content: Text(context.l10n.chats_Conversation_failure),
                         actions: [
                           TextButton(
-                              onPressed: conversationCubit.restart, child: Text(context.l10n.chats_ActionBtn_retry))
+                            onPressed: conversationCubit.restart,
+                            child: Text(context.l10n.chats_ActionBtn_retry),
+                          )
                         ],
                       );
                     }
 
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
+                    return const Center(child: CircularProgressIndicator());
                   },
                 ),
               ),
