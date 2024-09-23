@@ -25,9 +25,9 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final askText = widget.askText ?? context.l10n.chats_ConfirmDialog_ask;
-    final confirmText = widget.confirmText ?? context.l10n.chats_ConfirmDialog_confirm;
-    final cancelText = widget.cancelText ?? context.l10n.chats_ConfirmDialog_cancel;
+    final askText = widget.askText ?? context.l10n.messaging_ConfirmDialog_ask;
+    final confirmText = widget.confirmText ?? context.l10n.messaging_ConfirmDialog_confirm;
+    final cancelText = widget.cancelText ?? context.l10n.messaging_ConfirmDialog_cancel;
 
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),

@@ -105,7 +105,7 @@ class _SmsMessageViewState extends State<SmsMessageView> {
         PopupMenuItem(
           onTap: () => Clipboard.setData(ClipboardData(text: message!.content)),
           child: ListTile(
-            title: Text(context.l10n.chats_MessageView_textcopy),
+            title: Text(context.l10n.messaging_MessageView_textcopy),
             leading: const Icon(Icons.copy_rounded),
             dense: true,
           ),
@@ -114,7 +114,7 @@ class _SmsMessageViewState extends State<SmsMessageView> {
         PopupMenuItem(
           onTap: () => widget.handleDelete(message),
           child: ListTile(
-            title: Text(context.l10n.chats_MessageView_delete),
+            title: Text(context.l10n.messaging_MessageView_delete),
             leading: const Icon(Icons.remove),
             dense: true,
           ),
@@ -183,7 +183,7 @@ class _SmsMessageViewState extends State<SmsMessageView> {
                         MessageBody(text: content, style: theme.contentStyle),
                       ],
                       if (isDeleted) ...[
-                        Text(context.l10n.chats_MessageView_deleted, style: theme.subContentStyle),
+                        Text(context.l10n.messaging_MessageView_deleted, style: theme.subContentStyle),
                       ],
                       const SizedBox(height: 4),
                       Row(

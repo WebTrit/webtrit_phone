@@ -125,7 +125,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
         PopupMenuItem(
           onTap: () => Clipboard.setData(ClipboardData(text: message!.content)),
           child: ListTile(
-            title: Text(context.l10n.chats_MessageView_textcopy),
+            title: Text(context.l10n.messaging_MessageView_textcopy),
             leading: const Icon(Icons.copy_rounded),
             dense: true,
           ),
@@ -134,7 +134,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
         PopupMenuItem(
           onTap: () => widget.handleSetForReply(message),
           child: ListTile(
-            title: Text(context.l10n.chats_MessageView_reply),
+            title: Text(context.l10n.messaging_MessageView_reply),
             leading: const Icon(Icons.question_answer_outlined),
             dense: true,
           ),
@@ -143,7 +143,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
         PopupMenuItem(
           onTap: () => widget.handleSetForForward(message),
           child: ListTile(
-            title: Text(context.l10n.chats_MessageView_forward),
+            title: Text(context.l10n.messaging_MessageView_forward),
             leading: const Icon(Icons.forward_outlined),
             dense: true,
           ),
@@ -152,7 +152,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
         PopupMenuItem(
           onTap: () => widget.handleSetForEdit(message),
           child: ListTile(
-            title: Text(context.l10n.chats_MessageView_edit),
+            title: Text(context.l10n.messaging_MessageView_edit),
             leading: const Icon(Icons.edit_note_outlined),
             dense: true,
           ),
@@ -161,7 +161,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
         PopupMenuItem(
           onTap: () => widget.handleDelete(message),
           child: ListTile(
-            title: Text(context.l10n.chats_MessageView_delete),
+            title: Text(context.l10n.messaging_MessageView_delete),
             leading: const Icon(Icons.remove),
             dense: true,
           ),
@@ -254,11 +254,11 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                           const SizedBox(height: 4),
                           Align(
                             alignment: Alignment.centerRight,
-                            child: Text(context.l10n.chats_MessageView_edited, style: theme.subContentStyle),
+                            child: Text(context.l10n.messaging_MessageView_edited, style: theme.subContentStyle),
                           ),
                         ],
                         if (isDeleted) ...[
-                          Text(context.l10n.chats_MessageView_deleted, style: theme.subContentStyle),
+                          Text(context.l10n.messaging_MessageView_deleted, style: theme.subContentStyle),
                         ],
                         const SizedBox(height: 4),
                         Row(

@@ -62,9 +62,9 @@ class _AddContactDialogState extends State<AddContactDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(context.l10n.chats_AddContactDialog_title, style: theme.textTheme.headlineMedium),
+              Text(context.l10n.messaging_AddContactDialog_title, style: theme.textTheme.headlineMedium),
               const SizedBox(height: 16),
-              if (contacts.isEmpty) Text(context.l10n.chats_AddContactDialog_empty),
+              if (contacts.isEmpty) Text(context.l10n.messaging_AddContactDialog_empty),
               if (contacts.isNotEmpty)
                 Flexible(
                   child: ListView(
@@ -86,7 +86,7 @@ class _AddContactDialogState extends State<AddContactDialog> {
                   ),
                 ),
               const SizedBox(height: 16),
-              TextButton(onPressed: onCancel, child: Text(context.l10n.chats_AddContactDialog_cancel)),
+              TextButton(onPressed: onCancel, child: Text(context.l10n.messaging_AddContactDialog_cancel)),
             ],
           ),
         ),

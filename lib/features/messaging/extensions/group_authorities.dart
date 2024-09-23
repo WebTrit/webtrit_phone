@@ -7,9 +7,9 @@ extension GroupAuthoritiesL10n on GroupAuthorities {
   String nameL10n(BuildContext context) {
     switch (this) {
       case GroupAuthorities.owner:
-        return context.l10n.chats_GroupAuthorities_owner;
+        return context.l10n.messaging_GroupAuthorities_owner;
       case GroupAuthorities.moderator:
-        return context.l10n.chats_GroupAuthorities_moderator;
+        return context.l10n.messaging_GroupAuthorities_moderator;
     }
   }
 }

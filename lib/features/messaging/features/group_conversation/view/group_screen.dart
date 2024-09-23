@@ -69,7 +69,7 @@ class _GroupScreenState extends State<GroupScreen> {
                     } else {
                       return FadeIn(
                         child: Text(
-                          '${context.l10n.chats_GroupScreen_titlePrefix} ${groupCubit.state.chatId}',
+                          '${context.l10n.messaging_GroupScreen_titlePrefix} ${groupCubit.state.chatId}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(fontSize: 20),
@@ -105,9 +105,9 @@ class _GroupScreenState extends State<GroupScreen> {
 
                     if (state is GroupStateError) {
                       return NoDataPlaceholder(
-                        content: Text(context.l10n.chats_Conversation_failure),
+                        content: Text(context.l10n.messaging_Conversation_failure),
                         actions: [
-                          TextButton(onPressed: groupCubit.restart, child: Text(context.l10n.chats_ActionBtn_retry))
+                          TextButton(onPressed: groupCubit.restart, child: Text(context.l10n.messaging_ActionBtn_retry))
                         ],
                       );
                     }

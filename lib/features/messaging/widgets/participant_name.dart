@@ -27,7 +27,7 @@ class ParticipantName extends StatelessWidget {
 
     if (isMine) {
       return Text(
-        textMap?.call(context.l10n.chats_ParticipantName_you) ?? context.l10n.chats_ParticipantName_you,
+        textMap?.call(context.l10n.messaging_ParticipantName_you) ?? context.l10n.messaging_ParticipantName_you,
         style: textStyle,
       );
     } else {

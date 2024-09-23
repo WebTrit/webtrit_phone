@@ -114,8 +114,8 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text(context.l10n.chats_ConversationsScreen_noNumberAlert_title),
-            content: Text(context.l10n.chats_ConversationsScreen_noNumberAlert_text),
+            title: Text(context.l10n.messaging_ConversationsScreen_noNumberAlert_title),
+            content: Text(context.l10n.messaging_ConversationsScreen_noNumberAlert_text),
             actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('OK'))],
           ),
         );
@@ -129,7 +129,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
             children: [
               ListTile(
                 title: Text(
-                  context.l10n.chats_ConversationsScreen_selectNumberSheet_title,
+                  context.l10n.messaging_ConversationsScreen_selectNumberSheet_title,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
@@ -218,7 +218,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            context.l10n.chats_ConversationsScreen_messages_title,
+                            context.l10n.messaging_ConversationsScreen_messages_title,
                             style: theme.textTheme.bodyMedium!.copyWith(
                               color: tabType == TabType.chat ? colorScheme.onPrimary : colorScheme.onSurface,
                             ),
@@ -267,7 +267,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            context.l10n.chats_ConversationsScreen_smses_title,
+                            context.l10n.messaging_ConversationsScreen_smses_title,
                             style: theme.textTheme.bodyMedium!.copyWith(
                               color: tabType == TabType.sms ? colorScheme.onPrimary : colorScheme.onSurface,
                             ),
@@ -308,8 +308,8 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
 
 double _computeTabTittleWidth(BuildContext context) {
   final theme = Theme.of(context);
-  final chatsText = context.l10n.chats_ConversationsScreen_messages_title;
-  final smsText = context.l10n.chats_ConversationsScreen_smses_title;
+  final chatsText = context.l10n.messaging_ConversationsScreen_messages_title;
+  final smsText = context.l10n.messaging_ConversationsScreen_smses_title;
   final longerText = chatsText.length > smsText.length ? chatsText : smsText;
 
   final painter = TextPainter(

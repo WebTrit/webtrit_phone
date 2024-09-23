@@ -361,7 +361,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
                         onFieldSubmitted: (_) => handleSend(),
                         onChanged: (value) => context.read<ChatTypingCubit>().sendTyping(),
                         decoration: InputDecoration(
-                          hintText: context.l10n.chats_MessageListView_field_hint,
+                          hintText: context.l10n.messaging_MessageListView_field_hint,
                           border: InputBorder.none,
                         ),
                       ),

@@ -28,7 +28,7 @@ class _GroupInfoState extends State<GroupInfo> {
   onLeaveGroup() async {
     final askResult = await showDialog<bool>(
       context: context,
-      builder: (context) => ConfirmDialog(askText: context.l10n.chats_GroupInfo_leaveAsk),
+      builder: (context) => ConfirmDialog(askText: context.l10n.messaging_GroupInfo_leaveAsk),
     );
 
     if (!mounted) return;
@@ -44,7 +44,7 @@ class _GroupInfoState extends State<GroupInfo> {
   onDeleteGroup() async {
     final askResult = await showDialog<bool>(
       context: context,
-      builder: (context) => ConfirmDialog(askText: context.l10n.chats_GroupInfo_leaveAndDeleteAsk),
+      builder: (context) => ConfirmDialog(askText: context.l10n.messaging_GroupInfo_leaveAndDeleteAsk),
     );
 
     if (!mounted) return;
@@ -81,7 +81,7 @@ class _GroupInfoState extends State<GroupInfo> {
   }
 
   onRemoveUser(String userId) async {
-    String askText = context.l10n.chats_GroupInfo_removeUserAsk;
+    String askText = context.l10n.messaging_GroupInfo_removeUserAsk;
 
     final result = await showDialog<bool>(
       context: context,
@@ -94,9 +94,9 @@ class _GroupInfoState extends State<GroupInfo> {
   onSetModerator(String userId, bool isModerator) async {
     String askText;
     if (isModerator) {
-      askText = context.l10n.chats_GroupInfo_makeModeratorAsk;
+      askText = context.l10n.messaging_GroupInfo_makeModeratorAsk;
     } else {
-      askText = context.l10n.chats_GroupInfo_removeModeratorAsk;
+      askText = context.l10n.messaging_GroupInfo_removeModeratorAsk;
     }
 
     final result = await showDialog<bool>(
@@ -120,7 +120,7 @@ class _GroupInfoState extends State<GroupInfo> {
       builder: (context, state) {
         if (state is GroupStateReady) {
           final chat = state.chat;
-          final name = chat.name ?? '${context.l10n.chats_GroupInfo_titlePrefix}: ${groupCubit.state.chatId}';
+          final name = chat.name ?? '${context.l10n.messaging_GroupInfo_titlePrefix}: ${groupCubit.state.chatId}';
 
           final groupAuthorities = chat.members.firstWhere((m) => m.userId == widget.userId).groupAuthorities;
           final amIOwner = groupAuthorities == GroupAuthorities.owner;
@@ -132,7 +132,7 @@ class _GroupInfoState extends State<GroupInfo> {
             children: [
               Scaffold(
                 appBar: AppBar(
-                  title: Text(context.l10n.chats_GroupInfo_title),
+                  title: Text(context.l10n.messaging_GroupInfo_title),
                   actions: [
                     CallPopupMenuButton(
                       items: [
@@ -140,7 +140,7 @@ class _GroupInfoState extends State<GroupInfo> {
                           PopupMenuItem(
                             onTap: () => onDeleteGroup(),
                             child: ListTile(
-                              title: Text(context.l10n.chats_GroupInfo_deleteLeaveBtnText),
+                              title: Text(context.l10n.messaging_GroupInfo_deleteLeaveBtnText),
                               leading: const Icon(Icons.output_sharp),
                               dense: true,
                             ),
@@ -149,7 +149,7 @@ class _GroupInfoState extends State<GroupInfo> {
                           PopupMenuItem(
                             onTap: () => onLeaveGroup(),
                             child: ListTile(
-                              title: Text(context.l10n.chats_GroupInfo_leaveBtnText),
+                              title: Text(context.l10n.messaging_GroupInfo_leaveBtnText),
                               leading: const Icon(Icons.output_sharp),
                               dense: true,
                             ),
@@ -178,7 +178,7 @@ class _GroupInfoState extends State<GroupInfo> {
                       SizedBox(
                         width: double.infinity,
                         child: Text(
-                          context.l10n.chats_GroupInfo_groupMembersHeadline,
+                          context.l10n.messaging_GroupInfo_groupMembersHeadline,
                           style: theme.textTheme.headlineSmall?.copyWith(
                             fontSize: 18,
                             color: theme.primaryColor,
@@ -196,7 +196,7 @@ class _GroupInfoState extends State<GroupInfo> {
                                 children: [
                                   TextButton.icon(
                                     onPressed: onAddUser,
-                                    label: Text(context.l10n.chats_GroupInfo_addUserBtnText),
+                                    label: Text(context.l10n.messaging_GroupInfo_addUserBtnText),
                                     icon: const Icon(Icons.person_add, size: 16),
                                   ),
                                 ],
@@ -234,7 +234,7 @@ class _GroupInfoState extends State<GroupInfo> {
       enabled: canChangeName,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
-        labelText: context.l10n.chats_GroupBuilderScreen_nameFieldLabel,
+        labelText: context.l10n.messaging_GroupBuilderScreen_nameFieldLabel,
         border: OutlineInputBorder(
           borderSide: BorderSide(color: colorScheme.secondaryFixed, width: 1),
           borderRadius: BorderRadius.circular(8),
@@ -254,10 +254,10 @@ class _GroupInfoState extends State<GroupInfo> {
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return context.l10n.chats_GroupBuilderScreen_nameFieldEmpty;
+          return context.l10n.messaging_GroupBuilderScreen_nameFieldEmpty;
         }
         if (value.length < 3) {
-          return context.l10n.chats_GroupBuilderScreen_nameFieldShort;
+          return context.l10n.messaging_GroupBuilderScreen_nameFieldShort;
         }
         return null;
       },
@@ -296,7 +296,7 @@ class _GroupInfoState extends State<GroupInfo> {
               ),
               title: Text(contact?.name ?? member.userId),
               subtitle: Text(
-                member.groupAuthorities?.nameL10n(context) ?? context.l10n.chats_GroupAuthorities_noauthorities,
+                member.groupAuthorities?.nameL10n(context) ?? context.l10n.messaging_GroupAuthorities_noauthorities,
                 style: const TextStyle(fontSize: 12),
               ),
               trailing: ((canMakeModerator || canRemoveModerator || canRemove) && !isMe)
@@ -308,7 +308,7 @@ class _GroupInfoState extends State<GroupInfo> {
                             PopupMenuItem(
                               onTap: () => onSetModerator(member.userId, true),
                               child: ListTile(
-                                title: Text(context.l10n.chats_GroupInfo_makeModeratorBtnText),
+                                title: Text(context.l10n.messaging_GroupInfo_makeModeratorBtnText),
                                 leading: const Icon(Icons.add_moderator_outlined),
                                 dense: true,
                               ),
@@ -317,7 +317,7 @@ class _GroupInfoState extends State<GroupInfo> {
                             PopupMenuItem(
                               onTap: () => onSetModerator(member.userId, false),
                               child: ListTile(
-                                title: Text(context.l10n.chats_GroupInfo_unmakeModeratorBtnText),
+                                title: Text(context.l10n.messaging_GroupInfo_unmakeModeratorBtnText),
                                 leading: const Icon(Icons.remove_moderator_outlined),
                                 dense: true,
                               ),
@@ -326,7 +326,7 @@ class _GroupInfoState extends State<GroupInfo> {
                             PopupMenuItem(
                               onTap: () => onRemoveUser(member.userId),
                               child: ListTile(
-                                title: Text(context.l10n.chats_GroupInfo_removeUserBtnText),
+                                title: Text(context.l10n.messaging_GroupInfo_removeUserBtnText),
                                 leading: const Icon(Icons.person_remove_alt_1_outlined),
                                 dense: true,
                               ),

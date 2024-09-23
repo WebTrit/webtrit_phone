@@ -69,11 +69,11 @@ class _NewChatConversationState extends State<NewChatConversation> {
       borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(context.l10n.chats_NewConversation_title),
+          title: Text(context.l10n.messaging_NewConversation_title),
           leading: TextButton(
             onPressed: onCancel,
             child: Text(
-              context.l10n.chats_NewConversation_cancel,
+              context.l10n.messaging_NewConversation_cancel,
               style: TextStyle(color: colorScheme.primary),
             ),
           ),
@@ -85,7 +85,7 @@ class _NewChatConversationState extends State<NewChatConversation> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: ListTile(
-                title: Text(context.l10n.chats_NewConversation_createGroup),
+                title: Text(context.l10n.messaging_NewConversation_createGroup),
                 leading: Icon(
                   Icons.group_add_rounded,
                   color: colorScheme.onSurface.withOpacity(0.75),
@@ -97,7 +97,7 @@ class _NewChatConversationState extends State<NewChatConversation> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
-                context.l10n.chats_NewConversation_externalContacts_heading,
+                context.l10n.messaging_NewConversation_externalContacts_heading,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
@@ -106,7 +106,7 @@ class _NewChatConversationState extends State<NewChatConversation> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: TextField(
                 decoration: InputDecoration(
-                  hintText: context.l10n.chats_NewConversation_contactSearch_hint,
+                  hintText: context.l10n.messaging_NewConversation_contactSearch_hint,
                   fillColor: colorScheme.surface,
                   border: OutlineInputBorder(
                     borderSide: BorderSide.none,

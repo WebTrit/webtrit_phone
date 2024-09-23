@@ -28,7 +28,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
   onDeleteDialog() async {
     final askResult = await showDialog<bool>(
       context: context,
-      builder: (context) => ConfirmDialog(askText: context.l10n.chats_ConversationScreen_deleteAsk),
+      builder: (context) => ConfirmDialog(askText: context.l10n.messaging_ConversationScreen_deleteAsk),
     );
 
     if (!mounted) return;
@@ -90,7 +90,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                       } else {
                         return FadeIn(
                           child: Text(
-                            '${context.l10n.chats_ConversationScreen_titlePrefix} ${conversationCubit.state.participantId}',
+                            '${context.l10n.messaging_ConversationScreen_titlePrefix} ${conversationCubit.state.participantId}',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(fontSize: 20),
@@ -106,7 +106,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                           PopupMenuItem(
                             onTap: onDeleteDialog,
                             child: ListTile(
-                              title: Text(context.l10n.chats_ConversationScreen_deleteDialog),
+                              title: Text(context.l10n.messaging_ConversationScreen_deleteDialog),
                               leading: const Icon(Icons.playlist_remove_rounded),
                               dense: true,
                             ),
@@ -141,11 +141,11 @@ class _ConversationScreenState extends State<ConversationScreen> {
 
                     if (state is CVSError) {
                       return NoDataPlaceholder(
-                        content: Text(context.l10n.chats_Conversation_failure),
+                        content: Text(context.l10n.messaging_Conversation_failure),
                         actions: [
                           TextButton(
                             onPressed: conversationCubit.restart,
-                            child: Text(context.l10n.chats_ActionBtn_retry),
+                            child: Text(context.l10n.messaging_ActionBtn_retry),
                           )
                         ],
                       );

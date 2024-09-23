@@ -1463,503 +1463,503 @@ abstract class AppLocalizations {
   /// **'Web resource error'**
   String get webRegistration_ErrorAcknowledgeDialog_title;
 
-  /// No description provided for @chats_Conversation_failure.
+  /// No description provided for @messaging_Conversation_failure.
   ///
   /// In en, this message translates to:
   /// **'Conversation load error'**
-  String get chats_Conversation_failure;
+  String get messaging_Conversation_failure;
 
-  /// No description provided for @chats_ActionBtn_retry.
+  /// No description provided for @messaging_ActionBtn_retry.
   ///
   /// In en, this message translates to:
   /// **'Retry'**
-  String get chats_ActionBtn_retry;
+  String get messaging_ActionBtn_retry;
 
-  /// No description provided for @chats_MessageView_textcopy.
+  /// No description provided for @messaging_MessageView_textcopy.
   ///
   /// In en, this message translates to:
   /// **'Copy to clipboard'**
-  String get chats_MessageView_textcopy;
+  String get messaging_MessageView_textcopy;
 
-  /// No description provided for @chats_MessageView_reply.
+  /// No description provided for @messaging_MessageView_reply.
   ///
   /// In en, this message translates to:
   /// **'Reply'**
-  String get chats_MessageView_reply;
+  String get messaging_MessageView_reply;
 
-  /// No description provided for @chats_MessageView_forward.
+  /// No description provided for @messaging_MessageView_forward.
   ///
   /// In en, this message translates to:
   /// **'Forward'**
-  String get chats_MessageView_forward;
+  String get messaging_MessageView_forward;
 
-  /// No description provided for @chats_MessageView_edit.
+  /// No description provided for @messaging_MessageView_edit.
   ///
   /// In en, this message translates to:
   /// **'Edit'**
-  String get chats_MessageView_edit;
+  String get messaging_MessageView_edit;
 
-  /// No description provided for @chats_MessageView_delete.
+  /// No description provided for @messaging_MessageView_delete.
   ///
   /// In en, this message translates to:
   /// **'Delete'**
-  String get chats_MessageView_delete;
+  String get messaging_MessageView_delete;
 
-  /// No description provided for @chats_MessageView_forwarded.
+  /// No description provided for @messaging_MessageView_forwarded.
   ///
   /// In en, this message translates to:
   /// **'[forwarded]'**
-  String get chats_MessageView_forwarded;
+  String get messaging_MessageView_forwarded;
 
-  /// No description provided for @chats_MessageView_edited.
+  /// No description provided for @messaging_MessageView_edited.
   ///
   /// In en, this message translates to:
   /// **'[edited]'**
-  String get chats_MessageView_edited;
+  String get messaging_MessageView_edited;
 
-  /// No description provided for @chats_MessageView_deleted.
+  /// No description provided for @messaging_MessageView_deleted.
   ///
   /// In en, this message translates to:
   /// **'[deleted]'**
-  String get chats_MessageView_deleted;
+  String get messaging_MessageView_deleted;
 
-  /// No description provided for @chats_SmsSendingStatus_waiting.
+  /// No description provided for @messaging_SmsSendingStatus_waiting.
   ///
   /// In en, this message translates to:
   /// **'waiting'**
-  String get chats_SmsSendingStatus_waiting;
+  String get messaging_SmsSendingStatus_waiting;
 
-  /// No description provided for @chats_SmsSendingStatus_sent.
+  /// No description provided for @messaging_SmsSendingStatus_sent.
   ///
   /// In en, this message translates to:
   /// **'sent'**
-  String get chats_SmsSendingStatus_sent;
+  String get messaging_SmsSendingStatus_sent;
 
-  /// No description provided for @chats_SmsSendingStatus_failed.
+  /// No description provided for @messaging_SmsSendingStatus_failed.
   ///
   /// In en, this message translates to:
   /// **'failed'**
-  String get chats_SmsSendingStatus_failed;
+  String get messaging_SmsSendingStatus_failed;
 
-  /// No description provided for @chats_SmsSendingStatus_delivered.
+  /// No description provided for @messaging_SmsSendingStatus_delivered.
   ///
   /// In en, this message translates to:
   /// **'delivered'**
-  String get chats_SmsSendingStatus_delivered;
+  String get messaging_SmsSendingStatus_delivered;
 
-  /// No description provided for @chats_ParticipantName_you.
+  /// No description provided for @messaging_ParticipantName_you.
   ///
   /// In en, this message translates to:
   /// **'You'**
-  String get chats_ParticipantName_you;
+  String get messaging_ParticipantName_you;
 
-  /// No description provided for @chats_StateBar_initializing.
+  /// No description provided for @messaging_StateBar_initializing.
   ///
   /// In en, this message translates to:
   /// **'INITIALIZING'**
-  String get chats_StateBar_initializing;
+  String get messaging_StateBar_initializing;
 
-  /// No description provided for @chats_StateBar_connecting.
+  /// No description provided for @messaging_StateBar_connecting.
   ///
   /// In en, this message translates to:
   /// **'CONNECTING'**
-  String get chats_StateBar_connecting;
+  String get messaging_StateBar_connecting;
 
-  /// No description provided for @chats_StateBar_error.
+  /// No description provided for @messaging_StateBar_error.
   ///
   /// In en, this message translates to:
   /// **'DISCONNECTED'**
-  String get chats_StateBar_error;
+  String get messaging_StateBar_error;
 
-  /// No description provided for @chats_ConversationsScreen_startDialog.
+  /// No description provided for @messaging_ConversationsScreen_startDialog.
   ///
   /// In en, this message translates to:
   /// **'Start dialog'**
-  String get chats_ConversationsScreen_startDialog;
+  String get messaging_ConversationsScreen_startDialog;
 
-  /// No description provided for @chats_ConversationsScreen_empty.
+  /// No description provided for @messaging_ConversationsScreen_empty.
   ///
   /// In en, this message translates to:
   /// **'No conversations started yet'**
-  String get chats_ConversationsScreen_empty;
+  String get messaging_ConversationsScreen_empty;
 
-  /// No description provided for @chats_ConversationsScreen_messages_title.
+  /// No description provided for @messaging_ConversationsScreen_messages_title.
   ///
   /// In en, this message translates to:
   /// **'Messages'**
-  String get chats_ConversationsScreen_messages_title;
+  String get messaging_ConversationsScreen_messages_title;
 
-  /// No description provided for @chats_ConversationsScreen_smses_title.
+  /// No description provided for @messaging_ConversationsScreen_smses_title.
   ///
   /// In en, this message translates to:
   /// **'SMS'**
-  String get chats_ConversationsScreen_smses_title;
+  String get messaging_ConversationsScreen_smses_title;
 
-  /// No description provided for @chats_ConversationsScreen_selectNumberSheet_title.
+  /// No description provided for @messaging_ConversationsScreen_selectNumberSheet_title.
   ///
   /// In en, this message translates to:
   /// **'Select a number'**
-  String get chats_ConversationsScreen_selectNumberSheet_title;
+  String get messaging_ConversationsScreen_selectNumberSheet_title;
 
-  /// No description provided for @chats_ConversationsScreen_noNumberAlert_title.
+  /// No description provided for @messaging_ConversationsScreen_noNumberAlert_title.
   ///
   /// In en, this message translates to:
   /// **'No phone number'**
-  String get chats_ConversationsScreen_noNumberAlert_title;
+  String get messaging_ConversationsScreen_noNumberAlert_title;
 
-  /// No description provided for @chats_ConversationsScreen_noNumberAlert_text.
+  /// No description provided for @messaging_ConversationsScreen_noNumberAlert_text.
   ///
   /// In en, this message translates to:
   /// **'You need to have a phone number linked to you account to send SMS messages'**
-  String get chats_ConversationsScreen_noNumberAlert_text;
+  String get messaging_ConversationsScreen_noNumberAlert_text;
 
-  /// No description provided for @chats_Conversations_tile_empty.
+  /// No description provided for @messaging_Conversations_tile_empty.
   ///
   /// In en, this message translates to:
   /// **'No messages yet'**
-  String get chats_Conversations_tile_empty;
+  String get messaging_Conversations_tile_empty;
 
-  /// No description provided for @chats_Conversations_tile_you.
+  /// No description provided for @messaging_Conversations_tile_you.
   ///
   /// In en, this message translates to:
   /// **'You'**
-  String get chats_Conversations_tile_you;
+  String get messaging_Conversations_tile_you;
 
-  /// No description provided for @chats_MessageListView_field_hint.
+  /// No description provided for @messaging_MessageListView_field_hint.
   ///
   /// In en, this message translates to:
   /// **'Type a message'**
-  String get chats_MessageListView_field_hint;
+  String get messaging_MessageListView_field_hint;
 
-  /// No description provided for @chats_ConversationScreen_titlePrefix.
+  /// No description provided for @messaging_ConversationScreen_titlePrefix.
   ///
   /// In en, this message translates to:
   /// **'Dialog:'**
-  String get chats_ConversationScreen_titlePrefix;
+  String get messaging_ConversationScreen_titlePrefix;
 
-  /// No description provided for @chats_ConversationScreen_deleteDialog.
+  /// No description provided for @messaging_ConversationScreen_deleteDialog.
   ///
   /// In en, this message translates to:
   /// **'Delete dialog'**
-  String get chats_ConversationScreen_deleteDialog;
+  String get messaging_ConversationScreen_deleteDialog;
 
-  /// No description provided for @chats_ConversationScreen_deleteAsk.
+  /// No description provided for @messaging_ConversationScreen_deleteAsk.
   ///
   /// In en, this message translates to:
   /// **'Are you sure you want to delete this dialog?'**
-  String get chats_ConversationScreen_deleteAsk;
+  String get messaging_ConversationScreen_deleteAsk;
 
-  /// No description provided for @chats_NewConversation_createGroup.
+  /// No description provided for @messaging_NewConversation_createGroup.
   ///
   /// In en, this message translates to:
   /// **'Create group'**
-  String get chats_NewConversation_createGroup;
+  String get messaging_NewConversation_createGroup;
 
-  /// No description provided for @chats_NewConversation_title.
+  /// No description provided for @messaging_NewConversation_title.
   ///
   /// In en, this message translates to:
   /// **'New chat'**
-  String get chats_NewConversation_title;
+  String get messaging_NewConversation_title;
 
-  /// No description provided for @chats_NewConversation_cancel.
+  /// No description provided for @messaging_NewConversation_cancel.
   ///
   /// In en, this message translates to:
   /// **'Cancel'**
-  String get chats_NewConversation_cancel;
+  String get messaging_NewConversation_cancel;
 
-  /// No description provided for @chats_NewConversation_create.
+  /// No description provided for @messaging_NewConversation_create.
   ///
   /// In en, this message translates to:
   /// **'Create'**
-  String get chats_NewConversation_create;
+  String get messaging_NewConversation_create;
 
-  /// No description provided for @chats_NewConversation_externalContacts_heading.
+  /// No description provided for @messaging_NewConversation_externalContacts_heading.
   ///
   /// In en, this message translates to:
   /// **'Cloud PBX contacts'**
-  String get chats_NewConversation_externalContacts_heading;
+  String get messaging_NewConversation_externalContacts_heading;
 
-  /// No description provided for @chats_NewConversation_localContacts_heading.
+  /// No description provided for @messaging_NewConversation_localContacts_heading.
   ///
   /// In en, this message translates to:
   /// **'Local contacts'**
-  String get chats_NewConversation_localContacts_heading;
+  String get messaging_NewConversation_localContacts_heading;
 
-  /// No description provided for @chats_NewConversation_contactSearch_hint.
+  /// No description provided for @messaging_NewConversation_contactSearch_hint.
   ///
   /// In en, this message translates to:
   /// **'Search contacts'**
-  String get chats_NewConversation_contactSearch_hint;
+  String get messaging_NewConversation_contactSearch_hint;
 
-  /// No description provided for @chats_NewConversation_contactOrNumberSearch_hint.
+  /// No description provided for @messaging_NewConversation_contactOrNumberSearch_hint.
   ///
   /// In en, this message translates to:
   /// **'Search or enter phone number'**
-  String get chats_NewConversation_contactOrNumberSearch_hint;
+  String get messaging_NewConversation_contactOrNumberSearch_hint;
 
-  /// No description provided for @chats_NewConversation_invite_heading.
+  /// No description provided for @messaging_NewConversation_invite_heading.
   ///
   /// In en, this message translates to:
   /// **'Invite users:'**
-  String get chats_NewConversation_invite_heading;
+  String get messaging_NewConversation_invite_heading;
 
-  /// No description provided for @chats_NewConversation_next_action.
+  /// No description provided for @messaging_NewConversation_next_action.
   ///
   /// In en, this message translates to:
   /// **'Next'**
-  String get chats_NewConversation_next_action;
+  String get messaging_NewConversation_next_action;
 
-  /// No description provided for @chats_NewConversation_back_action.
+  /// No description provided for @messaging_NewConversation_back_action.
   ///
   /// In en, this message translates to:
   /// **'Back'**
-  String get chats_NewConversation_back_action;
+  String get messaging_NewConversation_back_action;
 
-  /// No description provided for @chats_GroupScreen_titlePrefix.
+  /// No description provided for @messaging_GroupScreen_titlePrefix.
   ///
   /// In en, this message translates to:
   /// **'Group:'**
-  String get chats_GroupScreen_titlePrefix;
+  String get messaging_GroupScreen_titlePrefix;
 
-  /// No description provided for @chats_AddContactDialog_title.
+  /// No description provided for @messaging_AddContactDialog_title.
   ///
   /// In en, this message translates to:
   /// **'Choose contact:'**
-  String get chats_AddContactDialog_title;
+  String get messaging_AddContactDialog_title;
 
-  /// No description provided for @chats_AddContactDialog_empty.
+  /// No description provided for @messaging_AddContactDialog_empty.
   ///
   /// In en, this message translates to:
   /// **'No contacts found'**
-  String get chats_AddContactDialog_empty;
+  String get messaging_AddContactDialog_empty;
 
-  /// No description provided for @chats_AddContactDialog_cancel.
+  /// No description provided for @messaging_AddContactDialog_cancel.
   ///
   /// In en, this message translates to:
   /// **'Cancel'**
-  String get chats_AddContactDialog_cancel;
+  String get messaging_AddContactDialog_cancel;
 
-  /// No description provided for @chats_ConfirmDialog_ask.
+  /// No description provided for @messaging_ConfirmDialog_ask.
   ///
   /// In en, this message translates to:
   /// **'Are you sure?'**
-  String get chats_ConfirmDialog_ask;
+  String get messaging_ConfirmDialog_ask;
 
-  /// No description provided for @chats_ConfirmDialog_confirm.
+  /// No description provided for @messaging_ConfirmDialog_confirm.
   ///
   /// In en, this message translates to:
   /// **'Yes'**
-  String get chats_ConfirmDialog_confirm;
+  String get messaging_ConfirmDialog_confirm;
 
-  /// No description provided for @chats_ConfirmDialog_cancel.
+  /// No description provided for @messaging_ConfirmDialog_cancel.
   ///
   /// In en, this message translates to:
   /// **'No'**
-  String get chats_ConfirmDialog_cancel;
+  String get messaging_ConfirmDialog_cancel;
 
-  /// No description provided for @chats_GroupAuthorities_noauthorities.
+  /// No description provided for @messaging_GroupAuthorities_noauthorities.
   ///
   /// In en, this message translates to:
   /// **'member'**
-  String get chats_GroupAuthorities_noauthorities;
+  String get messaging_GroupAuthorities_noauthorities;
 
-  /// No description provided for @chats_GroupAuthorities_moderator.
+  /// No description provided for @messaging_GroupAuthorities_moderator.
   ///
   /// In en, this message translates to:
   /// **'moderator'**
-  String get chats_GroupAuthorities_moderator;
+  String get messaging_GroupAuthorities_moderator;
 
-  /// No description provided for @chats_GroupAuthorities_owner.
+  /// No description provided for @messaging_GroupAuthorities_owner.
   ///
   /// In en, this message translates to:
   /// **'owner'**
-  String get chats_GroupAuthorities_owner;
+  String get messaging_GroupAuthorities_owner;
 
-  /// No description provided for @chats_GroupInfo_title.
+  /// No description provided for @messaging_GroupInfo_title.
   ///
   /// In en, this message translates to:
   /// **'Group info'**
-  String get chats_GroupInfo_title;
+  String get messaging_GroupInfo_title;
 
-  /// No description provided for @chats_GroupInfo_leaveAsk.
+  /// No description provided for @messaging_GroupInfo_leaveAsk.
   ///
   /// In en, this message translates to:
   /// **'Are you sure you want to leave this group?'**
-  String get chats_GroupInfo_leaveAsk;
+  String get messaging_GroupInfo_leaveAsk;
 
-  /// No description provided for @chats_GroupInfo_leaveAndDeleteAsk.
+  /// No description provided for @messaging_GroupInfo_leaveAndDeleteAsk.
   ///
   /// In en, this message translates to:
   /// **'Are you sure you want leave and delete this group?'**
-  String get chats_GroupInfo_leaveAndDeleteAsk;
+  String get messaging_GroupInfo_leaveAndDeleteAsk;
 
-  /// No description provided for @chats_GroupInfo_removeUserAsk.
+  /// No description provided for @messaging_GroupInfo_removeUserAsk.
   ///
   /// In en, this message translates to:
   /// **'Are you sure you want to remove this user from the group?'**
-  String get chats_GroupInfo_removeUserAsk;
+  String get messaging_GroupInfo_removeUserAsk;
 
-  /// No description provided for @chats_GroupInfo_makeModeratorAsk.
+  /// No description provided for @messaging_GroupInfo_makeModeratorAsk.
   ///
   /// In en, this message translates to:
   /// **'Are you sure you want to make this user a moderator?'**
-  String get chats_GroupInfo_makeModeratorAsk;
+  String get messaging_GroupInfo_makeModeratorAsk;
 
-  /// No description provided for @chats_GroupInfo_removeModeratorAsk.
+  /// No description provided for @messaging_GroupInfo_removeModeratorAsk.
   ///
   /// In en, this message translates to:
   /// **'Are you sure you want to remove this user from moderators?'**
-  String get chats_GroupInfo_removeModeratorAsk;
+  String get messaging_GroupInfo_removeModeratorAsk;
 
-  /// No description provided for @chats_GroupInfo_titlePrefix.
+  /// No description provided for @messaging_GroupInfo_titlePrefix.
   ///
   /// In en, this message translates to:
   /// **'Group:'**
-  String get chats_GroupInfo_titlePrefix;
+  String get messaging_GroupInfo_titlePrefix;
 
-  /// No description provided for @chats_GroupInfo_groupMembersHeadline.
+  /// No description provided for @messaging_GroupInfo_groupMembersHeadline.
   ///
   /// In en, this message translates to:
   /// **'Group members'**
-  String get chats_GroupInfo_groupMembersHeadline;
+  String get messaging_GroupInfo_groupMembersHeadline;
 
-  /// No description provided for @chats_GroupInfo_addUserBtnText.
+  /// No description provided for @messaging_GroupInfo_addUserBtnText.
   ///
   /// In en, this message translates to:
   /// **'Add user'**
-  String get chats_GroupInfo_addUserBtnText;
+  String get messaging_GroupInfo_addUserBtnText;
 
-  /// No description provided for @chats_GroupInfo_leaveBtnText.
+  /// No description provided for @messaging_GroupInfo_leaveBtnText.
   ///
   /// In en, this message translates to:
   /// **'Leave group'**
-  String get chats_GroupInfo_leaveBtnText;
+  String get messaging_GroupInfo_leaveBtnText;
 
-  /// No description provided for @chats_GroupInfo_deleteLeaveBtnText.
+  /// No description provided for @messaging_GroupInfo_deleteLeaveBtnText.
   ///
   /// In en, this message translates to:
   /// **'Delete and leave'**
-  String get chats_GroupInfo_deleteLeaveBtnText;
+  String get messaging_GroupInfo_deleteLeaveBtnText;
 
-  /// No description provided for @chats_GroupInfo_makeModeratorBtnText.
+  /// No description provided for @messaging_GroupInfo_makeModeratorBtnText.
   ///
   /// In en, this message translates to:
   /// **'Make moderator'**
-  String get chats_GroupInfo_makeModeratorBtnText;
+  String get messaging_GroupInfo_makeModeratorBtnText;
 
-  /// No description provided for @chats_GroupInfo_unmakeModeratorBtnText.
+  /// No description provided for @messaging_GroupInfo_unmakeModeratorBtnText.
   ///
   /// In en, this message translates to:
   /// **'Unmake moderator'**
-  String get chats_GroupInfo_unmakeModeratorBtnText;
+  String get messaging_GroupInfo_unmakeModeratorBtnText;
 
-  /// No description provided for @chats_GroupInfo_removeUserBtnText.
+  /// No description provided for @messaging_GroupInfo_removeUserBtnText.
   ///
   /// In en, this message translates to:
   /// **'Remove'**
-  String get chats_GroupInfo_removeUserBtnText;
+  String get messaging_GroupInfo_removeUserBtnText;
 
-  /// No description provided for @chats_GroupNameDialog_title.
+  /// No description provided for @messaging_GroupNameDialog_title.
   ///
   /// In en, this message translates to:
   /// **'Group name'**
-  String get chats_GroupNameDialog_title;
+  String get messaging_GroupNameDialog_title;
 
-  /// No description provided for @chats_GroupNameDialog_fieldLabel.
+  /// No description provided for @messaging_GroupNameDialog_fieldLabel.
   ///
   /// In en, this message translates to:
   /// **'Group name'**
-  String get chats_GroupNameDialog_fieldLabel;
+  String get messaging_GroupNameDialog_fieldLabel;
 
-  /// No description provided for @chats_GroupNameDialog_fieldHint.
+  /// No description provided for @messaging_GroupNameDialog_fieldHint.
   ///
   /// In en, this message translates to:
   /// **'Enter group name'**
-  String get chats_GroupNameDialog_fieldHint;
+  String get messaging_GroupNameDialog_fieldHint;
 
-  /// No description provided for @chats_GroupNameDialog_fieldValidation_empty.
+  /// No description provided for @messaging_GroupNameDialog_fieldValidation_empty.
   ///
   /// In en, this message translates to:
   /// **'Please enter group name'**
-  String get chats_GroupNameDialog_fieldValidation_empty;
+  String get messaging_GroupNameDialog_fieldValidation_empty;
 
-  /// No description provided for @chats_GroupNameDialog_fieldValidation_short.
+  /// No description provided for @messaging_GroupNameDialog_fieldValidation_short.
   ///
   /// In en, this message translates to:
   /// **'Group name is too short'**
-  String get chats_GroupNameDialog_fieldValidation_short;
+  String get messaging_GroupNameDialog_fieldValidation_short;
 
-  /// No description provided for @chats_GroupNameDialog_saveBtnText.
+  /// No description provided for @messaging_GroupNameDialog_saveBtnText.
   ///
   /// In en, this message translates to:
   /// **'Save'**
-  String get chats_GroupNameDialog_saveBtnText;
+  String get messaging_GroupNameDialog_saveBtnText;
 
-  /// No description provided for @chats_GroupNameDialog_cancelBtnText.
+  /// No description provided for @messaging_GroupNameDialog_cancelBtnText.
   ///
   /// In en, this message translates to:
   /// **'Cancel'**
-  String get chats_GroupNameDialog_cancelBtnText;
+  String get messaging_GroupNameDialog_cancelBtnText;
 
-  /// No description provided for @chats_GroupBuilderScreen_screenTitle.
+  /// No description provided for @messaging_GroupBuilderScreen_screenTitle.
   ///
   /// In en, this message translates to:
   /// **'Create group'**
-  String get chats_GroupBuilderScreen_screenTitle;
+  String get messaging_GroupBuilderScreen_screenTitle;
 
-  /// No description provided for @chats_GroupBuilderScreen_groupNameHeadline.
+  /// No description provided for @messaging_GroupBuilderScreen_groupNameHeadline.
   ///
   /// In en, this message translates to:
   /// **'Group name'**
-  String get chats_GroupBuilderScreen_groupNameHeadline;
+  String get messaging_GroupBuilderScreen_groupNameHeadline;
 
-  /// No description provided for @chats_GroupBuilderScreen_membersHeadline.
+  /// No description provided for @messaging_GroupBuilderScreen_membersHeadline.
   ///
   /// In en, this message translates to:
   /// **'Members'**
-  String get chats_GroupBuilderScreen_membersHeadline;
+  String get messaging_GroupBuilderScreen_membersHeadline;
 
-  /// No description provided for @chats_GroupBuilderScreen_addUserBtnText.
+  /// No description provided for @messaging_GroupBuilderScreen_addUserBtnText.
   ///
   /// In en, this message translates to:
   /// **'Add user'**
-  String get chats_GroupBuilderScreen_addUserBtnText;
+  String get messaging_GroupBuilderScreen_addUserBtnText;
 
-  /// No description provided for @chats_GroupBuilderScreen_submitBtnText.
+  /// No description provided for @messaging_GroupBuilderScreen_submitBtnText.
   ///
   /// In en, this message translates to:
   /// **'Submit'**
-  String get chats_GroupBuilderScreen_submitBtnText;
+  String get messaging_GroupBuilderScreen_submitBtnText;
 
-  /// No description provided for @chats_GroupBuilderScreen_nameFieldLabel.
+  /// No description provided for @messaging_GroupBuilderScreen_nameFieldLabel.
   ///
   /// In en, this message translates to:
   /// **'Group Name'**
-  String get chats_GroupBuilderScreen_nameFieldLabel;
+  String get messaging_GroupBuilderScreen_nameFieldLabel;
 
-  /// No description provided for @chats_GroupBuilderScreen_nameFieldEmpty.
+  /// No description provided for @messaging_GroupBuilderScreen_nameFieldEmpty.
   ///
   /// In en, this message translates to:
   /// **'Please enter a group name'**
-  String get chats_GroupBuilderScreen_nameFieldEmpty;
+  String get messaging_GroupBuilderScreen_nameFieldEmpty;
 
-  /// No description provided for @chats_GroupBuilderScreen_nameFieldShort.
+  /// No description provided for @messaging_GroupBuilderScreen_nameFieldShort.
   ///
   /// In en, this message translates to:
   /// **'Group name must be at least 3 characters'**
-  String get chats_GroupBuilderScreen_nameFieldShort;
+  String get messaging_GroupBuilderScreen_nameFieldShort;
 
-  /// No description provided for @chats_GroupBuilderScreen_connectionError.
+  /// No description provided for @messaging_GroupBuilderScreen_connectionError.
   ///
   /// In en, this message translates to:
   /// **'Connection error, please try later'**
-  String get chats_GroupBuilderScreen_connectionError;
+  String get messaging_GroupBuilderScreen_connectionError;
 
-  /// No description provided for @chats_GroupBuilderScreen_submitError.
+  /// No description provided for @messaging_GroupBuilderScreen_submitError.
   ///
   /// In en, this message translates to:
   /// **'Error happened while creating group, please try again'**
-  String get chats_GroupBuilderScreen_submitError;
+  String get messaging_GroupBuilderScreen_submitError;
 
   /// No description provided for @account_selfCarePasswordExpired_message.
   ///

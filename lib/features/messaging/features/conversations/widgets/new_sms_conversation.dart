@@ -122,12 +122,12 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
       borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(context.l10n.chats_NewConversation_title),
+          title: Text(context.l10n.messaging_NewConversation_title),
           automaticallyImplyLeading: false,
           leading: TextButton(
             onPressed: onCancel,
             child: Text(
-              context.l10n.chats_NewConversation_cancel,
+              context.l10n.messaging_NewConversation_cancel,
               style: TextStyle(color: colorScheme.primary),
             ),
           ),
@@ -137,7 +137,7 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
               TextButton(
                 onPressed: onCreateByNumber,
                 child: Text(
-                  context.l10n.chats_NewConversation_create,
+                  context.l10n.messaging_NewConversation_create,
                   style: TextStyle(color: colorScheme.primary),
                 ),
               ),
@@ -151,7 +151,7 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: TextField(
                 decoration: InputDecoration(
-                  hintText: context.l10n.chats_NewConversation_contactOrNumberSearch_hint,
+                  hintText: context.l10n.messaging_NewConversation_contactOrNumberSearch_hint,
                   fillColor: colorScheme.surface,
                   border: OutlineInputBorder(
                     borderSide: BorderSide.none,
@@ -173,7 +173,7 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
-                          context.l10n.chats_NewConversation_externalContacts_heading,
+                          context.l10n.messaging_NewConversation_externalContacts_heading,
                           style: Theme.of(context).textTheme.headlineSmall,
                         ),
                       ),
@@ -187,7 +187,7 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
-                          context.l10n.chats_NewConversation_localContacts_heading,
+                          context.l10n.messaging_NewConversation_localContacts_heading,
                           style: Theme.of(context).textTheme.headlineSmall,
                         ),
                       ),

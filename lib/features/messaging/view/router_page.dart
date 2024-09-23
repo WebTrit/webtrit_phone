@@ -60,9 +60,9 @@ class StateBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String text = '';
-    if (state.status == ConnectionStatus.initial) text = context.l10n.chats_StateBar_initializing;
-    if (state.status == ConnectionStatus.connecting) text = context.l10n.chats_StateBar_connecting;
-    if (state.status == ConnectionStatus.error) text = context.l10n.chats_StateBar_error;
+    if (state.status == ConnectionStatus.initial) text = context.l10n.messaging_StateBar_initializing;
+    if (state.status == ConnectionStatus.connecting) text = context.l10n.messaging_StateBar_connecting;
+    if (state.status == ConnectionStatus.error) text = context.l10n.messaging_StateBar_error;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),

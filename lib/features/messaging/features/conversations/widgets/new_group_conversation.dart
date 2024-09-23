@@ -112,7 +112,7 @@ class _NewGroupConversationState extends State<NewGroupConversation> {
 
     final userChannel = widget.messagingBloc.state.client.userChannel;
     if (userChannel == null || userChannel.state != PhoenixChannelState.joined) {
-      context.showErrorSnackBar(context.l10n.chats_GroupBuilderScreen_connectionError);
+      context.showErrorSnackBar(context.l10n.messaging_GroupBuilderScreen_connectionError);
       return;
     }
 
@@ -128,7 +128,7 @@ class _NewGroupConversationState extends State<NewGroupConversation> {
       if (result.isOk) Navigator.of(context).pop();
       if (result.isError) throw Exception(result.response.toString());
     } catch (_) {
-      context.showErrorSnackBar(context.l10n.chats_GroupBuilderScreen_submitError);
+      context.showErrorSnackBar(context.l10n.messaging_GroupBuilderScreen_submitError);
     } finally {
       setState(() => state.copyWith(busy: false));
     }
@@ -141,22 +141,22 @@ class _NewGroupConversationState extends State<NewGroupConversation> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.chats_GroupBuilderScreen_screenTitle),
+        title: Text(context.l10n.messaging_GroupBuilderScreen_screenTitle),
         leading: TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(context.l10n.chats_NewConversation_cancel),
+          child: Text(context.l10n.messaging_NewConversation_cancel),
         ),
         leadingWidth: 100,
         actions: [
           if (state is ContactSelection)
             TextButton(
               onPressed: () => setState(() => this.state = FillInfo(state.selectedContacts)),
-              child: Text(context.l10n.chats_NewConversation_next_action),
+              child: Text(context.l10n.messaging_NewConversation_next_action),
             ),
           if (state is FillInfo && isNameValid)
             TextButton(
               onPressed: onSubmit,
-              child: Text(context.l10n.chats_NewConversation_create),
+              child: Text(context.l10n.messaging_NewConversation_create),
             ),
         ],
       ),
@@ -182,7 +182,7 @@ class _NewGroupConversationState extends State<NewGroupConversation> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         child: Text(
-                          context.l10n.chats_NewConversation_invite_heading,
+                          context.l10n.messaging_NewConversation_invite_heading,
                           style: TextStyle(color: colorScheme.secondary.withOpacity(0.7), fontSize: 16),
                         ),
                       ),
@@ -218,7 +218,7 @@ class _NewGroupConversationState extends State<NewGroupConversation> {
                   child: Row(
                     children: [
                       Text(
-                        context.l10n.chats_NewConversation_externalContacts_heading,
+                        context.l10n.messaging_NewConversation_externalContacts_heading,
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                     ],
@@ -229,7 +229,7 @@ class _NewGroupConversationState extends State<NewGroupConversation> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: TextField(
                     decoration: InputDecoration(
-                      hintText: context.l10n.chats_NewConversation_contactSearch_hint,
+                      hintText: context.l10n.messaging_NewConversation_contactSearch_hint,
                       fillColor: colorScheme.surface,
                       border: OutlineInputBorder(
                         borderSide: BorderSide.none,
@@ -302,7 +302,7 @@ class _NewGroupConversationState extends State<NewGroupConversation> {
                             SizedBox(
                               width: double.infinity,
                               child: Text(
-                                context.l10n.chats_GroupBuilderScreen_membersHeadline,
+                                context.l10n.messaging_GroupBuilderScreen_membersHeadline,
                                 textAlign: TextAlign.left,
                                 style: TextStyle(color: colorScheme.secondary.withOpacity(0.7), fontSize: 16),
                               ),
@@ -349,7 +349,7 @@ class _NewGroupConversationState extends State<NewGroupConversation> {
       controller: nameController,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
-        labelText: context.l10n.chats_GroupBuilderScreen_nameFieldLabel,
+        labelText: context.l10n.messaging_GroupBuilderScreen_nameFieldLabel,
         border: OutlineInputBorder(
           borderSide: BorderSide(color: colorScheme.secondaryFixed, width: 1),
           borderRadius: BorderRadius.circular(8),
@@ -368,8 +368,8 @@ class _NewGroupConversationState extends State<NewGroupConversation> {
         ),
       ),
       validator: (value) {
-        if (value == null || value.isEmpty) return context.l10n.chats_GroupBuilderScreen_nameFieldEmpty;
-        if (value.length < 3) return context.l10n.chats_GroupBuilderScreen_nameFieldShort;
+        if (value == null || value.isEmpty) return context.l10n.messaging_GroupBuilderScreen_nameFieldEmpty;
+        if (value.length < 3) return context.l10n.messaging_GroupBuilderScreen_nameFieldShort;
         return null;
       },
       onChanged: (value) => setState(() {}),

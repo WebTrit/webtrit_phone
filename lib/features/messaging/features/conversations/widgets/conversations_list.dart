@@ -18,7 +18,7 @@ class ConversationsList extends StatelessWidget {
         if (state.initialising) return const Center(child: CircularProgressIndicator());
 
         final conversations = state.conversations;
-        if (conversations.isEmpty) return Center(child: Text(context.l10n.chats_ConversationsScreen_empty));
+        if (conversations.isEmpty) return Center(child: Text(context.l10n.messaging_ConversationsScreen_empty));
 
         return ListView(
           children: conversations.map((e) {
@@ -35,7 +35,7 @@ class ConversationsList extends StatelessWidget {
         if (state.initialising) return const Center(child: CircularProgressIndicator());
 
         final conversations = state.conversations;
-        if (conversations.isEmpty) return Center(child: Text(context.l10n.chats_ConversationsScreen_empty));
+        if (conversations.isEmpty) return Center(child: Text(context.l10n.messaging_ConversationsScreen_empty));
 
         return ListView(
           children: conversations.map((e) {

@@ -240,7 +240,7 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
               onFieldSubmitted: (_) => handleSend(),
               onChanged: (_) {},
               decoration: InputDecoration(
-                hintText: context.l10n.chats_MessageListView_field_hint,
+                hintText: context.l10n.messaging_MessageListView_field_hint,
                 border: InputBorder.none,
               ),
             ),
