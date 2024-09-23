@@ -79,8 +79,7 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
   }
 
   onConfirm(String selectedNumber, String? participantId) {
-    // Navigator.of(context).pop((selectedNumber.e164Phone!, participantId));
-    Navigator.of(context).pop((selectedNumber, participantId));
+    Navigator.of(context).pop((selectedNumber.e164Phone!, participantId));
   }
 
   onCreateByNumber() {
