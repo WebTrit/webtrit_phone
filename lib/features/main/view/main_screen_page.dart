@@ -98,7 +98,13 @@ class MainScreenPage extends StatelessWidget {
         case MainFlavor.recents:
           return const RecentsRouterPageRoute();
         case MainFlavor.contacts:
-          return const ContactsRouterPageRoute();
+          return ContactsRouterPageRoute(
+            children: [
+              ContactsScreenPageRoute(
+                sourceTypes: tab.toContacts.contactSourceTypes,
+              )
+            ],
+          );
         case MainFlavor.keypad:
           return const KeypadScreenPageRoute();
         default:
