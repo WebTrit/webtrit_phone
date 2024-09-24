@@ -8,16 +8,17 @@ part of 'app_config.dart';
 
 _$AppConfigImpl _$$AppConfigImplFromJson(Map<String, dynamic> json) =>
     _$AppConfigImpl(
-      login: json['login'] == null
+      loginConfig: json['loginConfig'] == null
           ? null
-          : AppConfigLogin.fromJson(json['login'] as Map<String, dynamic>),
-      main: json['main'] == null
+          : AppConfigLogin.fromJson(
+              json['loginConfig'] as Map<String, dynamic>),
+      mainConfig: json['mainConfig'] == null
           ? null
-          : AppConfigMain.fromJson(json['main'] as Map<String, dynamic>),
-      settings: json['settings'] == null
+          : AppConfigMain.fromJson(json['mainConfig'] as Map<String, dynamic>),
+      settingsConfig: json['settingsConfig'] == null
           ? null
           : AppConfigSettings.fromJson(
-              json['settings'] as Map<String, dynamic>),
+              json['settingsConfig'] as Map<String, dynamic>),
       callConfig: json['callConfig'] == null
           ? const AppConfigCall()
           : AppConfigCall.fromJson(json['callConfig'] as Map<String, dynamic>),
@@ -25,9 +26,9 @@ _$AppConfigImpl _$$AppConfigImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$AppConfigImplToJson(_$AppConfigImpl instance) =>
     <String, dynamic>{
-      'login': instance.login,
-      'main': instance.main,
-      'settings': instance.settings,
+      'loginConfig': instance.loginConfig,
+      'mainConfig': instance.mainConfig,
+      'settingsConfig': instance.settingsConfig,
       'callConfig': instance.callConfig,
     };
 

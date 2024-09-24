@@ -13,17 +13,15 @@ class AppConfig with _$AppConfig {
   const AppConfig._();
 
   const factory AppConfig({
-    AppConfigLogin? login,
-    AppConfigMain? main,
-    AppConfigSettings? settings,
-    // TODO (Serdun): The field 'call' had a conflict with a generated file.
-    // To resolve this, I renamed it to 'callConfig' by adding the 'Config' prefix.
+    AppConfigLogin? loginConfig,
+    AppConfigMain? mainConfig,
+    AppConfigSettings? settingsConfig,
     @Default(AppConfigCall()) AppConfigCall callConfig,
   }) = _AppConfig;
 
   factory AppConfig.fromJson(Map<String, dynamic> json) => _$AppConfigFromJson(json);
 
-  bool get isCustomSignInEnabled => login?.customSignIn?.enabled == true;
+  bool get isCustomSignInEnabled => loginConfig?.customSignIn?.enabled == true;
 }
 
 @freezed

@@ -52,7 +52,7 @@ class FeatureAccess {
     AppConfig appConfig,
     AppPreferences preferences,
   ) {
-    final bottomMenu = appConfig.main?.bottomMenu;
+    final bottomMenu = appConfig.mainConfig?.bottomMenu;
 
     if (bottomMenu == null || bottomMenu.tabs.isEmpty) {
       throw Exception('Bottom menu configuration is missing or empty');
@@ -109,7 +109,7 @@ class FeatureAccess {
 
     late final Uri termsAndConditions;
 
-    for (var section in appConfig.settings!.sections.where((section) => section.enabled)) {
+    for (var section in appConfig.settingsConfig!.sections.where((section) => section.enabled)) {
       final items = <SettingItem>[];
 
       for (var item in section.items.where((item) => item.enabled)) {
@@ -145,7 +145,7 @@ class FeatureAccess {
   }
 
   static CustomLoginFeature? _tryEnableCustomLoginFeature(AppConfig appConfig) {
-    final customLogin = appConfig.login?.customSignIn;
+    final customLogin = appConfig.loginConfig?.customSignIn;
 
     if (appConfig.isCustomSignInEnabled) {
       _logger.info('Custom sign-in is enabled');

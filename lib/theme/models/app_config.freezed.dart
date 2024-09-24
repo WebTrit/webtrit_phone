@@ -20,11 +20,9 @@ AppConfig _$AppConfigFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AppConfig {
-  AppConfigLogin? get login => throw _privateConstructorUsedError;
-  AppConfigMain? get main => throw _privateConstructorUsedError;
-  AppConfigSettings? get settings =>
-      throw _privateConstructorUsedError; // TODO (Serdun): The field 'call' had a conflict with a generated file.
-// To resolve this, I renamed it to 'callConfig' by adding the 'Config' prefix.
+  AppConfigLogin? get loginConfig => throw _privateConstructorUsedError;
+  AppConfigMain? get mainConfig => throw _privateConstructorUsedError;
+  AppConfigSettings? get settingsConfig => throw _privateConstructorUsedError;
   AppConfigCall get callConfig => throw _privateConstructorUsedError;
 
   /// Serializes this AppConfig to a JSON map.
@@ -43,14 +41,14 @@ abstract class $AppConfigCopyWith<$Res> {
       _$AppConfigCopyWithImpl<$Res, AppConfig>;
   @useResult
   $Res call(
-      {AppConfigLogin? login,
-      AppConfigMain? main,
-      AppConfigSettings? settings,
+      {AppConfigLogin? loginConfig,
+      AppConfigMain? mainConfig,
+      AppConfigSettings? settingsConfig,
       AppConfigCall callConfig});
 
-  $AppConfigLoginCopyWith<$Res>? get login;
-  $AppConfigMainCopyWith<$Res>? get main;
-  $AppConfigSettingsCopyWith<$Res>? get settings;
+  $AppConfigLoginCopyWith<$Res>? get loginConfig;
+  $AppConfigMainCopyWith<$Res>? get mainConfig;
+  $AppConfigSettingsCopyWith<$Res>? get settingsConfig;
   $AppConfigCallCopyWith<$Res> get callConfig;
 }
 
@@ -69,23 +67,23 @@ class _$AppConfigCopyWithImpl<$Res, $Val extends AppConfig>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? login = freezed,
-    Object? main = freezed,
-    Object? settings = freezed,
+    Object? loginConfig = freezed,
+    Object? mainConfig = freezed,
+    Object? settingsConfig = freezed,
     Object? callConfig = null,
   }) {
     return _then(_value.copyWith(
-      login: freezed == login
-          ? _value.login
-          : login // ignore: cast_nullable_to_non_nullable
+      loginConfig: freezed == loginConfig
+          ? _value.loginConfig
+          : loginConfig // ignore: cast_nullable_to_non_nullable
               as AppConfigLogin?,
-      main: freezed == main
-          ? _value.main
-          : main // ignore: cast_nullable_to_non_nullable
+      mainConfig: freezed == mainConfig
+          ? _value.mainConfig
+          : mainConfig // ignore: cast_nullable_to_non_nullable
               as AppConfigMain?,
-      settings: freezed == settings
-          ? _value.settings
-          : settings // ignore: cast_nullable_to_non_nullable
+      settingsConfig: freezed == settingsConfig
+          ? _value.settingsConfig
+          : settingsConfig // ignore: cast_nullable_to_non_nullable
               as AppConfigSettings?,
       callConfig: null == callConfig
           ? _value.callConfig
@@ -98,13 +96,13 @@ class _$AppConfigCopyWithImpl<$Res, $Val extends AppConfig>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $AppConfigLoginCopyWith<$Res>? get login {
-    if (_value.login == null) {
+  $AppConfigLoginCopyWith<$Res>? get loginConfig {
+    if (_value.loginConfig == null) {
       return null;
     }
 
-    return $AppConfigLoginCopyWith<$Res>(_value.login!, (value) {
-      return _then(_value.copyWith(login: value) as $Val);
+    return $AppConfigLoginCopyWith<$Res>(_value.loginConfig!, (value) {
+      return _then(_value.copyWith(loginConfig: value) as $Val);
     });
   }
 
@@ -112,13 +110,13 @@ class _$AppConfigCopyWithImpl<$Res, $Val extends AppConfig>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $AppConfigMainCopyWith<$Res>? get main {
-    if (_value.main == null) {
+  $AppConfigMainCopyWith<$Res>? get mainConfig {
+    if (_value.mainConfig == null) {
       return null;
     }
 
-    return $AppConfigMainCopyWith<$Res>(_value.main!, (value) {
-      return _then(_value.copyWith(main: value) as $Val);
+    return $AppConfigMainCopyWith<$Res>(_value.mainConfig!, (value) {
+      return _then(_value.copyWith(mainConfig: value) as $Val);
     });
   }
 
@@ -126,13 +124,13 @@ class _$AppConfigCopyWithImpl<$Res, $Val extends AppConfig>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $AppConfigSettingsCopyWith<$Res>? get settings {
-    if (_value.settings == null) {
+  $AppConfigSettingsCopyWith<$Res>? get settingsConfig {
+    if (_value.settingsConfig == null) {
       return null;
     }
 
-    return $AppConfigSettingsCopyWith<$Res>(_value.settings!, (value) {
-      return _then(_value.copyWith(settings: value) as $Val);
+    return $AppConfigSettingsCopyWith<$Res>(_value.settingsConfig!, (value) {
+      return _then(_value.copyWith(settingsConfig: value) as $Val);
     });
   }
 
@@ -156,17 +154,17 @@ abstract class _$$AppConfigImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {AppConfigLogin? login,
-      AppConfigMain? main,
-      AppConfigSettings? settings,
+      {AppConfigLogin? loginConfig,
+      AppConfigMain? mainConfig,
+      AppConfigSettings? settingsConfig,
       AppConfigCall callConfig});
 
   @override
-  $AppConfigLoginCopyWith<$Res>? get login;
+  $AppConfigLoginCopyWith<$Res>? get loginConfig;
   @override
-  $AppConfigMainCopyWith<$Res>? get main;
+  $AppConfigMainCopyWith<$Res>? get mainConfig;
   @override
-  $AppConfigSettingsCopyWith<$Res>? get settings;
+  $AppConfigSettingsCopyWith<$Res>? get settingsConfig;
   @override
   $AppConfigCallCopyWith<$Res> get callConfig;
 }
@@ -184,23 +182,23 @@ class __$$AppConfigImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? login = freezed,
-    Object? main = freezed,
-    Object? settings = freezed,
+    Object? loginConfig = freezed,
+    Object? mainConfig = freezed,
+    Object? settingsConfig = freezed,
     Object? callConfig = null,
   }) {
     return _then(_$AppConfigImpl(
-      login: freezed == login
-          ? _value.login
-          : login // ignore: cast_nullable_to_non_nullable
+      loginConfig: freezed == loginConfig
+          ? _value.loginConfig
+          : loginConfig // ignore: cast_nullable_to_non_nullable
               as AppConfigLogin?,
-      main: freezed == main
-          ? _value.main
-          : main // ignore: cast_nullable_to_non_nullable
+      mainConfig: freezed == mainConfig
+          ? _value.mainConfig
+          : mainConfig // ignore: cast_nullable_to_non_nullable
               as AppConfigMain?,
-      settings: freezed == settings
-          ? _value.settings
-          : settings // ignore: cast_nullable_to_non_nullable
+      settingsConfig: freezed == settingsConfig
+          ? _value.settingsConfig
+          : settingsConfig // ignore: cast_nullable_to_non_nullable
               as AppConfigSettings?,
       callConfig: null == callConfig
           ? _value.callConfig
@@ -214,9 +212,9 @@ class __$$AppConfigImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$AppConfigImpl extends _AppConfig {
   const _$AppConfigImpl(
-      {this.login,
-      this.main,
-      this.settings,
+      {this.loginConfig,
+      this.mainConfig,
+      this.settingsConfig,
       this.callConfig = const AppConfigCall()})
       : super._();
 
@@ -224,20 +222,18 @@ class _$AppConfigImpl extends _AppConfig {
       _$$AppConfigImplFromJson(json);
 
   @override
-  final AppConfigLogin? login;
+  final AppConfigLogin? loginConfig;
   @override
-  final AppConfigMain? main;
+  final AppConfigMain? mainConfig;
   @override
-  final AppConfigSettings? settings;
-// TODO (Serdun): The field 'call' had a conflict with a generated file.
-// To resolve this, I renamed it to 'callConfig' by adding the 'Config' prefix.
+  final AppConfigSettings? settingsConfig;
   @override
   @JsonKey()
   final AppConfigCall callConfig;
 
   @override
   String toString() {
-    return 'AppConfig(login: $login, main: $main, settings: $settings, callConfig: $callConfig)';
+    return 'AppConfig(loginConfig: $loginConfig, mainConfig: $mainConfig, settingsConfig: $settingsConfig, callConfig: $callConfig)';
   }
 
   @override
@@ -245,18 +241,20 @@ class _$AppConfigImpl extends _AppConfig {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AppConfigImpl &&
-            (identical(other.login, login) || other.login == login) &&
-            (identical(other.main, main) || other.main == main) &&
-            (identical(other.settings, settings) ||
-                other.settings == settings) &&
+            (identical(other.loginConfig, loginConfig) ||
+                other.loginConfig == loginConfig) &&
+            (identical(other.mainConfig, mainConfig) ||
+                other.mainConfig == mainConfig) &&
+            (identical(other.settingsConfig, settingsConfig) ||
+                other.settingsConfig == settingsConfig) &&
             (identical(other.callConfig, callConfig) ||
                 other.callConfig == callConfig));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, login, main, settings, callConfig);
+  int get hashCode => Object.hash(
+      runtimeType, loginConfig, mainConfig, settingsConfig, callConfig);
 
   /// Create a copy of AppConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -276,9 +274,9 @@ class _$AppConfigImpl extends _AppConfig {
 
 abstract class _AppConfig extends AppConfig {
   const factory _AppConfig(
-      {final AppConfigLogin? login,
-      final AppConfigMain? main,
-      final AppConfigSettings? settings,
+      {final AppConfigLogin? loginConfig,
+      final AppConfigMain? mainConfig,
+      final AppConfigSettings? settingsConfig,
       final AppConfigCall callConfig}) = _$AppConfigImpl;
   const _AppConfig._() : super._();
 
@@ -286,13 +284,11 @@ abstract class _AppConfig extends AppConfig {
       _$AppConfigImpl.fromJson;
 
   @override
-  AppConfigLogin? get login;
+  AppConfigLogin? get loginConfig;
   @override
-  AppConfigMain? get main;
+  AppConfigMain? get mainConfig;
   @override
-  AppConfigSettings?
-      get settings; // TODO (Serdun): The field 'call' had a conflict with a generated file.
-// To resolve this, I renamed it to 'callConfig' by adding the 'Config' prefix.
+  AppConfigSettings? get settingsConfig;
   @override
   AppConfigCall get callConfig;
 
