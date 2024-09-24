@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -12,14 +13,14 @@ class CallActiveScaffold extends StatefulWidget {
     super.key,
     required this.speaker,
     required this.activeCalls,
-    required this.config,
+    required this.transferConfig,
     required this.localePlaceholderBuilder,
     required this.remotePlaceholderBuilder,
   });
 
   final bool? speaker;
   final List<ActiveCall> activeCalls;
-  final CallActiveConfig? config;
+  final TransferConfig transferConfig;
   final WidgetBuilder? localePlaceholderBuilder;
   final WidgetBuilder? remotePlaceholderBuilder;
 
@@ -54,8 +55,6 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     final textTheme = themeData.textTheme;
     final switchCameraIconSize = textTheme.titleMedium!.fontSize!;
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
-
-    final enableAttendedTransfer = widget.config?.enableTransfer ?? true;
 
     return Scaffold(
       body: OrientationBuilder(
@@ -195,13 +194,17 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                         context.read<CallBloc>().add(CallControlEvent.speakerEnabled(activeCall.callId, value));
                       },
                       transferableCalls: heldCalls,
-                      onBlindTransferInitiated: !activeCall.wasAccepted || activeTransfer != null
-                          ? null
-                          : () {
-                              context.read<CallBloc>().add(CallControlEvent.blindTransferInitiated(activeCall.callId));
-                            },
+                      onBlindTransferInitiated: widget.transferConfig.enableBlindTransfer
+                          ? (!activeCall.wasAccepted || activeTransfer != null
+                              ? null
+                              : () {
+                                  context
+                                      .read<CallBloc>()
+                                      .add(CallControlEvent.blindTransferInitiated(activeCall.callId));
+                                })
+                          : null,
                       // TODO (Serdun): Simplify complex condition in the widget tree.
-                      onAttendedTransferInitiated: enableAttendedTransfer
+                      onAttendedTransferInitiated: widget.transferConfig.enableAttendedTransfer
                           ? (!activeCall.wasAccepted || activeTransfer != null
                               ? null
                               : () {
@@ -211,7 +214,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                 })
                           : null,
                       // TODO (Serdun): Simplify complex condition in the widget tree.
-                      onAttendedTransferSubmitted: enableAttendedTransfer
+                      onAttendedTransferSubmitted: widget.transferConfig.enableAttendedTransfer
                           ? (!activeCall.wasAccepted || activeTransfer != null
                               ? null
                               : (ActiveCall referorCall) {
