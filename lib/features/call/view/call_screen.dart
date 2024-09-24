@@ -5,6 +5,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../call.dart';
@@ -14,12 +15,16 @@ import 'call_init_scaffold.dart';
 class CallScreen extends StatefulWidget {
   const CallScreen({
     super.key,
-    this.config,
     this.localePlaceholderBuilder,
     this.remotePlaceholderBuilder,
+    this.transferConfig = const TransferConfig(
+      enableBlindTransfer: true,
+      enableAttendedTransfer: true,
+    ),
   });
 
-  final CallActiveConfig? config;
+  final TransferConfig transferConfig;
+
   final WidgetBuilder? localePlaceholderBuilder;
   final WidgetBuilder? remotePlaceholderBuilder;
 
@@ -63,7 +68,7 @@ class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin {
           return CallActiveScaffold(
             speaker: state.speaker,
             activeCalls: state.activeCalls,
-            config: widget.config,
+            transferConfig: widget.transferConfig,
             localePlaceholderBuilder: widget.localePlaceholderBuilder,
             remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
           );

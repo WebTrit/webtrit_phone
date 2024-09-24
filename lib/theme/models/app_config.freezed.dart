@@ -22,7 +22,10 @@ AppConfig _$AppConfigFromJson(Map<String, dynamic> json) {
 mixin _$AppConfig {
   AppConfigLogin? get login => throw _privateConstructorUsedError;
   AppConfigMain? get main => throw _privateConstructorUsedError;
-  AppConfigSettings? get settings => throw _privateConstructorUsedError;
+  AppConfigSettings? get settings =>
+      throw _privateConstructorUsedError; // TODO (Serdun): The field 'call' had a conflict with a generated file.
+// To resolve this, I renamed it to 'callConfig' by adding the 'Config' prefix.
+  AppConfigCall get callConfig => throw _privateConstructorUsedError;
 
   /// Serializes this AppConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -42,11 +45,13 @@ abstract class $AppConfigCopyWith<$Res> {
   $Res call(
       {AppConfigLogin? login,
       AppConfigMain? main,
-      AppConfigSettings? settings});
+      AppConfigSettings? settings,
+      AppConfigCall callConfig});
 
   $AppConfigLoginCopyWith<$Res>? get login;
   $AppConfigMainCopyWith<$Res>? get main;
   $AppConfigSettingsCopyWith<$Res>? get settings;
+  $AppConfigCallCopyWith<$Res> get callConfig;
 }
 
 /// @nodoc
@@ -67,6 +72,7 @@ class _$AppConfigCopyWithImpl<$Res, $Val extends AppConfig>
     Object? login = freezed,
     Object? main = freezed,
     Object? settings = freezed,
+    Object? callConfig = null,
   }) {
     return _then(_value.copyWith(
       login: freezed == login
@@ -81,6 +87,10 @@ class _$AppConfigCopyWithImpl<$Res, $Val extends AppConfig>
           ? _value.settings
           : settings // ignore: cast_nullable_to_non_nullable
               as AppConfigSettings?,
+      callConfig: null == callConfig
+          ? _value.callConfig
+          : callConfig // ignore: cast_nullable_to_non_nullable
+              as AppConfigCall,
     ) as $Val);
   }
 
@@ -125,6 +135,16 @@ class _$AppConfigCopyWithImpl<$Res, $Val extends AppConfig>
       return _then(_value.copyWith(settings: value) as $Val);
     });
   }
+
+  /// Create a copy of AppConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AppConfigCallCopyWith<$Res> get callConfig {
+    return $AppConfigCallCopyWith<$Res>(_value.callConfig, (value) {
+      return _then(_value.copyWith(callConfig: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -138,7 +158,8 @@ abstract class _$$AppConfigImplCopyWith<$Res>
   $Res call(
       {AppConfigLogin? login,
       AppConfigMain? main,
-      AppConfigSettings? settings});
+      AppConfigSettings? settings,
+      AppConfigCall callConfig});
 
   @override
   $AppConfigLoginCopyWith<$Res>? get login;
@@ -146,6 +167,8 @@ abstract class _$$AppConfigImplCopyWith<$Res>
   $AppConfigMainCopyWith<$Res>? get main;
   @override
   $AppConfigSettingsCopyWith<$Res>? get settings;
+  @override
+  $AppConfigCallCopyWith<$Res> get callConfig;
 }
 
 /// @nodoc
@@ -164,6 +187,7 @@ class __$$AppConfigImplCopyWithImpl<$Res>
     Object? login = freezed,
     Object? main = freezed,
     Object? settings = freezed,
+    Object? callConfig = null,
   }) {
     return _then(_$AppConfigImpl(
       login: freezed == login
@@ -178,6 +202,10 @@ class __$$AppConfigImplCopyWithImpl<$Res>
           ? _value.settings
           : settings // ignore: cast_nullable_to_non_nullable
               as AppConfigSettings?,
+      callConfig: null == callConfig
+          ? _value.callConfig
+          : callConfig // ignore: cast_nullable_to_non_nullable
+              as AppConfigCall,
     ));
   }
 }
@@ -185,7 +213,12 @@ class __$$AppConfigImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$AppConfigImpl extends _AppConfig {
-  const _$AppConfigImpl({this.login, this.main, this.settings}) : super._();
+  const _$AppConfigImpl(
+      {this.login,
+      this.main,
+      this.settings,
+      this.callConfig = const AppConfigCall()})
+      : super._();
 
   factory _$AppConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$AppConfigImplFromJson(json);
@@ -196,10 +229,15 @@ class _$AppConfigImpl extends _AppConfig {
   final AppConfigMain? main;
   @override
   final AppConfigSettings? settings;
+// TODO (Serdun): The field 'call' had a conflict with a generated file.
+// To resolve this, I renamed it to 'callConfig' by adding the 'Config' prefix.
+  @override
+  @JsonKey()
+  final AppConfigCall callConfig;
 
   @override
   String toString() {
-    return 'AppConfig(login: $login, main: $main, settings: $settings)';
+    return 'AppConfig(login: $login, main: $main, settings: $settings, callConfig: $callConfig)';
   }
 
   @override
@@ -210,12 +248,15 @@ class _$AppConfigImpl extends _AppConfig {
             (identical(other.login, login) || other.login == login) &&
             (identical(other.main, main) || other.main == main) &&
             (identical(other.settings, settings) ||
-                other.settings == settings));
+                other.settings == settings) &&
+            (identical(other.callConfig, callConfig) ||
+                other.callConfig == callConfig));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, login, main, settings);
+  int get hashCode =>
+      Object.hash(runtimeType, login, main, settings, callConfig);
 
   /// Create a copy of AppConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -237,7 +278,8 @@ abstract class _AppConfig extends AppConfig {
   const factory _AppConfig(
       {final AppConfigLogin? login,
       final AppConfigMain? main,
-      final AppConfigSettings? settings}) = _$AppConfigImpl;
+      final AppConfigSettings? settings,
+      final AppConfigCall callConfig}) = _$AppConfigImpl;
   const _AppConfig._() : super._();
 
   factory _AppConfig.fromJson(Map<String, dynamic> json) =
@@ -248,7 +290,11 @@ abstract class _AppConfig extends AppConfig {
   @override
   AppConfigMain? get main;
   @override
-  AppConfigSettings? get settings;
+  AppConfigSettings?
+      get settings; // TODO (Serdun): The field 'call' had a conflict with a generated file.
+// To resolve this, I renamed it to 'callConfig' by adding the 'Config' prefix.
+  @override
+  AppConfigCall get callConfig;
 
   /// Create a copy of AppConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -1879,4 +1925,351 @@ abstract class _AppConfigSettingsItem extends AppConfigSettingsItem {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AppConfigSettingsItemImplCopyWith<_$AppConfigSettingsItemImpl>
       get copyWith => throw _privateConstructorUsedError;
+}
+
+AppConfigCall _$AppConfigCallFromJson(Map<String, dynamic> json) {
+  return _AppConfigCall.fromJson(json);
+}
+
+/// @nodoc
+mixin _$AppConfigCall {
+  AppConfigTransfer get transfer => throw _privateConstructorUsedError;
+
+  /// Serializes this AppConfigCall to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of AppConfigCall
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $AppConfigCallCopyWith<AppConfigCall> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AppConfigCallCopyWith<$Res> {
+  factory $AppConfigCallCopyWith(
+          AppConfigCall value, $Res Function(AppConfigCall) then) =
+      _$AppConfigCallCopyWithImpl<$Res, AppConfigCall>;
+  @useResult
+  $Res call({AppConfigTransfer transfer});
+
+  $AppConfigTransferCopyWith<$Res> get transfer;
+}
+
+/// @nodoc
+class _$AppConfigCallCopyWithImpl<$Res, $Val extends AppConfigCall>
+    implements $AppConfigCallCopyWith<$Res> {
+  _$AppConfigCallCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of AppConfigCall
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? transfer = null,
+  }) {
+    return _then(_value.copyWith(
+      transfer: null == transfer
+          ? _value.transfer
+          : transfer // ignore: cast_nullable_to_non_nullable
+              as AppConfigTransfer,
+    ) as $Val);
+  }
+
+  /// Create a copy of AppConfigCall
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AppConfigTransferCopyWith<$Res> get transfer {
+    return $AppConfigTransferCopyWith<$Res>(_value.transfer, (value) {
+      return _then(_value.copyWith(transfer: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$AppConfigCallImplCopyWith<$Res>
+    implements $AppConfigCallCopyWith<$Res> {
+  factory _$$AppConfigCallImplCopyWith(
+          _$AppConfigCallImpl value, $Res Function(_$AppConfigCallImpl) then) =
+      __$$AppConfigCallImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({AppConfigTransfer transfer});
+
+  @override
+  $AppConfigTransferCopyWith<$Res> get transfer;
+}
+
+/// @nodoc
+class __$$AppConfigCallImplCopyWithImpl<$Res>
+    extends _$AppConfigCallCopyWithImpl<$Res, _$AppConfigCallImpl>
+    implements _$$AppConfigCallImplCopyWith<$Res> {
+  __$$AppConfigCallImplCopyWithImpl(
+      _$AppConfigCallImpl _value, $Res Function(_$AppConfigCallImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AppConfigCall
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? transfer = null,
+  }) {
+    return _then(_$AppConfigCallImpl(
+      transfer: null == transfer
+          ? _value.transfer
+          : transfer // ignore: cast_nullable_to_non_nullable
+              as AppConfigTransfer,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$AppConfigCallImpl extends _AppConfigCall {
+  const _$AppConfigCallImpl(
+      {this.transfer = const AppConfigTransfer(
+          enableBlindTransfer: true, enableAttendedTransfer: true)})
+      : super._();
+
+  factory _$AppConfigCallImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AppConfigCallImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final AppConfigTransfer transfer;
+
+  @override
+  String toString() {
+    return 'AppConfigCall(transfer: $transfer)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AppConfigCallImpl &&
+            (identical(other.transfer, transfer) ||
+                other.transfer == transfer));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, transfer);
+
+  /// Create a copy of AppConfigCall
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AppConfigCallImplCopyWith<_$AppConfigCallImpl> get copyWith =>
+      __$$AppConfigCallImplCopyWithImpl<_$AppConfigCallImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$AppConfigCallImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _AppConfigCall extends AppConfigCall {
+  const factory _AppConfigCall({final AppConfigTransfer transfer}) =
+      _$AppConfigCallImpl;
+  const _AppConfigCall._() : super._();
+
+  factory _AppConfigCall.fromJson(Map<String, dynamic> json) =
+      _$AppConfigCallImpl.fromJson;
+
+  @override
+  AppConfigTransfer get transfer;
+
+  /// Create a copy of AppConfigCall
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$AppConfigCallImplCopyWith<_$AppConfigCallImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+AppConfigTransfer _$AppConfigTransferFromJson(Map<String, dynamic> json) {
+  return _AppConfigTransfer.fromJson(json);
+}
+
+/// @nodoc
+mixin _$AppConfigTransfer {
+  bool get enableBlindTransfer => throw _privateConstructorUsedError;
+  bool get enableAttendedTransfer => throw _privateConstructorUsedError;
+
+  /// Serializes this AppConfigTransfer to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of AppConfigTransfer
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $AppConfigTransferCopyWith<AppConfigTransfer> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AppConfigTransferCopyWith<$Res> {
+  factory $AppConfigTransferCopyWith(
+          AppConfigTransfer value, $Res Function(AppConfigTransfer) then) =
+      _$AppConfigTransferCopyWithImpl<$Res, AppConfigTransfer>;
+  @useResult
+  $Res call({bool enableBlindTransfer, bool enableAttendedTransfer});
+}
+
+/// @nodoc
+class _$AppConfigTransferCopyWithImpl<$Res, $Val extends AppConfigTransfer>
+    implements $AppConfigTransferCopyWith<$Res> {
+  _$AppConfigTransferCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of AppConfigTransfer
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? enableBlindTransfer = null,
+    Object? enableAttendedTransfer = null,
+  }) {
+    return _then(_value.copyWith(
+      enableBlindTransfer: null == enableBlindTransfer
+          ? _value.enableBlindTransfer
+          : enableBlindTransfer // ignore: cast_nullable_to_non_nullable
+              as bool,
+      enableAttendedTransfer: null == enableAttendedTransfer
+          ? _value.enableAttendedTransfer
+          : enableAttendedTransfer // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$AppConfigTransferImplCopyWith<$Res>
+    implements $AppConfigTransferCopyWith<$Res> {
+  factory _$$AppConfigTransferImplCopyWith(_$AppConfigTransferImpl value,
+          $Res Function(_$AppConfigTransferImpl) then) =
+      __$$AppConfigTransferImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({bool enableBlindTransfer, bool enableAttendedTransfer});
+}
+
+/// @nodoc
+class __$$AppConfigTransferImplCopyWithImpl<$Res>
+    extends _$AppConfigTransferCopyWithImpl<$Res, _$AppConfigTransferImpl>
+    implements _$$AppConfigTransferImplCopyWith<$Res> {
+  __$$AppConfigTransferImplCopyWithImpl(_$AppConfigTransferImpl _value,
+      $Res Function(_$AppConfigTransferImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AppConfigTransfer
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? enableBlindTransfer = null,
+    Object? enableAttendedTransfer = null,
+  }) {
+    return _then(_$AppConfigTransferImpl(
+      enableBlindTransfer: null == enableBlindTransfer
+          ? _value.enableBlindTransfer
+          : enableBlindTransfer // ignore: cast_nullable_to_non_nullable
+              as bool,
+      enableAttendedTransfer: null == enableAttendedTransfer
+          ? _value.enableAttendedTransfer
+          : enableAttendedTransfer // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$AppConfigTransferImpl extends _AppConfigTransfer {
+  const _$AppConfigTransferImpl(
+      {this.enableBlindTransfer = true, this.enableAttendedTransfer = true})
+      : super._();
+
+  factory _$AppConfigTransferImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AppConfigTransferImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final bool enableBlindTransfer;
+  @override
+  @JsonKey()
+  final bool enableAttendedTransfer;
+
+  @override
+  String toString() {
+    return 'AppConfigTransfer(enableBlindTransfer: $enableBlindTransfer, enableAttendedTransfer: $enableAttendedTransfer)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AppConfigTransferImpl &&
+            (identical(other.enableBlindTransfer, enableBlindTransfer) ||
+                other.enableBlindTransfer == enableBlindTransfer) &&
+            (identical(other.enableAttendedTransfer, enableAttendedTransfer) ||
+                other.enableAttendedTransfer == enableAttendedTransfer));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, enableBlindTransfer, enableAttendedTransfer);
+
+  /// Create a copy of AppConfigTransfer
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AppConfigTransferImplCopyWith<_$AppConfigTransferImpl> get copyWith =>
+      __$$AppConfigTransferImplCopyWithImpl<_$AppConfigTransferImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$AppConfigTransferImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _AppConfigTransfer extends AppConfigTransfer {
+  const factory _AppConfigTransfer(
+      {final bool enableBlindTransfer,
+      final bool enableAttendedTransfer}) = _$AppConfigTransferImpl;
+  const _AppConfigTransfer._() : super._();
+
+  factory _AppConfigTransfer.fromJson(Map<String, dynamic> json) =
+      _$AppConfigTransferImpl.fromJson;
+
+  @override
+  bool get enableBlindTransfer;
+  @override
+  bool get enableAttendedTransfer;
+
+  /// Create a copy of AppConfigTransfer
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$AppConfigTransferImplCopyWith<_$AppConfigTransferImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

@@ -347,16 +347,17 @@ class _CallActionsState extends State<CallActions> {
                         ),
                         textStyle: themeData.textTheme.bodyMedium,
                       ),
-                  CallPopupMenuItem(
-                    onTap: onBlindTransferInitiated,
-                    text: context.l10n.call_CallActionsTooltip_transfer_choose,
-                    icon: Icon(
-                      Icons.phone_forwarded_outlined,
-                      size: themeData.textTheme.bodyLarge!.fontSize,
-                      color: themeData.textTheme.bodyMedium!.color,
-                    ),
-                    textStyle: themeData.textTheme.bodyMedium,
-                  )
+                  if (onBlindTransferInitiated != null)
+                    CallPopupMenuItem(
+                      onTap: onBlindTransferInitiated,
+                      text: context.l10n.call_CallActionsTooltip_transfer_choose,
+                      icon: Icon(
+                        Icons.phone_forwarded_outlined,
+                        size: themeData.textTheme.bodyLarge!.fontSize,
+                        color: themeData.textTheme.bodyMedium!.color,
+                      ),
+                      textStyle: themeData.textTheme.bodyMedium,
+                    )
                 ],
                 child: IgnorePointer(
                   child: TextButton(
@@ -373,16 +374,17 @@ class _CallActionsState extends State<CallActions> {
               child: CallPopupMenuButton(
                 offset: Offset(_dimension + 8, 0),
                 items: [
-                  CallPopupMenuItem(
-                    onTap: onBlindTransferInitiated,
-                    text: context.l10n.call_CallActionsTooltip_unattended_transfer,
-                    icon: Icon(
-                      Icons.phone_forwarded_outlined,
-                      size: themeData.textTheme.bodyLarge!.fontSize,
-                      color: themeData.textTheme.bodyMedium!.color,
+                  if (onBlindTransferInitiated != null)
+                    CallPopupMenuItem(
+                      onTap: onBlindTransferInitiated,
+                      text: context.l10n.call_CallActionsTooltip_unattended_transfer,
+                      icon: Icon(
+                        Icons.phone_forwarded_outlined,
+                        size: themeData.textTheme.bodyLarge!.fontSize,
+                        color: themeData.textTheme.bodyMedium!.color,
+                      ),
+                      textStyle: themeData.textTheme.bodyMedium,
                     ),
-                    textStyle: themeData.textTheme.bodyMedium,
-                  ),
                   if (onAttendedTransferInitiated != null)
                     CallPopupMenuItem(
                       onTap: onAttendedTransferInitiated,
@@ -397,7 +399,7 @@ class _CallActionsState extends State<CallActions> {
                 ],
                 child: IgnorePointer(
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: onBlindTransferInitiated == null && onAttendedTransferInitiated == null ? null : () {},
                     style: style.transfer,
                     child: const Icon(Icons.phone_forwarded),
                   ),

@@ -170,5 +170,11 @@
         ]
       }
     ]
+  },
+  "callConfig": {
+    "transfer": {
+      "enableBlindTransfer": true,
+      "enableAttendedTransfer": true
+    }
   }
 }
