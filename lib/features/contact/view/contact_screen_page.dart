@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 @RoutePage()
@@ -15,7 +17,12 @@ class ContactScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const widget = ContactScreen();
+    final featureAccess = context.read<FeatureAccess>();
+
+    final widget = ContactScreen(
+      favoritesVisible: featureAccess.bottomMenuFeature.isTabEnabled(MainFlavor.favorites),
+      transferVisible: true,
+    );
     final provider = BlocProvider(
       create: (context) {
         return ContactBloc(

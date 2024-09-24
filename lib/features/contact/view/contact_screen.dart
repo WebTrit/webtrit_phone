@@ -13,7 +13,12 @@ import '../contact.dart';
 class ContactScreen extends StatelessWidget {
   const ContactScreen({
     super.key,
+    required this.favoritesVisible,
+    required this.transferVisible,
   });
+
+  final bool favoritesVisible;
+  final bool transferVisible;
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +63,8 @@ class ContactScreen extends StatelessWidget {
                       ContactPhoneTile(
                         number: contactPhone.number,
                         label: contactPhone.label,
+                        favoritesVisible: favoritesVisible,
+                        transferVisible: transferVisible,
                         favorite: contactPhone.favorite,
                         transfer: callState.isBlingTransferInitiated,
                         onFavoriteChanged: (favorite) {
