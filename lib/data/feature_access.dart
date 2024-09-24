@@ -19,11 +19,13 @@ class FeatureAccess {
     this.customLoginFeature,
     this.bottomMenuFeature,
     this.settingsFeature,
+    this.callFeature,
   );
 
   final CustomLoginFeature? customLoginFeature;
   final BottomMenuFeature bottomMenuFeature;
   final SettingsFeature settingsFeature;
+  final CallFeature? callFeature;
 
   static Future<void> init() async {
     final theme = AppThemes();
@@ -35,8 +37,9 @@ class FeatureAccess {
       final customLoginFeature = _tryEnableCustomLoginFeature(appConfig);
       final bottomMenuManager = _tryConfigureBottomMenuFeature(appConfig, preferences);
       final settingsFeature = _tryConfigureSettingsFeature(appConfig, preferences);
+      final callFeature = _tryConfigureCallFeature(appConfig);
 
-      _instance = FeatureAccess._(customLoginFeature, bottomMenuManager, settingsFeature);
+      _instance = FeatureAccess._(customLoginFeature, bottomMenuManager, settingsFeature, callFeature);
     } catch (e, stackTrace) {
       _logger.severe('Failed to initialize FeatureAccess', e, stackTrace);
       rethrow;
@@ -156,6 +159,17 @@ class FeatureAccess {
       return null;
     }
   }
+
+  static CallFeature? _tryConfigureCallFeature(AppConfig appConfig) {
+    final callConfig = appConfig.callConfig;
+
+    return CallFeature(
+      transfer: TransferConfig(
+        enableBlindTransfer: callConfig.transfer.enableBlindTransfer,
+        enableAttendedTransfer: callConfig.transfer.enableAttendedTransfer,
+      ),
+    );
+  }
 }
 
 class BottomMenuFeature {
@@ -201,4 +215,12 @@ class SettingsFeature {
   SettingsFeature(this._sections, this.termsAndConditions);
 
   List<SettingsSection> get sections => List.unmodifiable(_sections);
+}
+
+class CallFeature {
+  final TransferConfig transfer;
+
+  CallFeature({
+    required this.transfer,
+  });
 }
