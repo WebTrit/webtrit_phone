@@ -1637,17 +1637,23 @@ abstract class AppLocalizations {
   /// **'Dialog:'**
   String get messaging_ConversationScreen_titlePrefix;
 
-  /// No description provided for @messaging_ConversationScreen_deleteDialog.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete dialog'**
-  String get messaging_ConversationScreen_deleteDialog;
-
-  /// No description provided for @messaging_ConversationScreen_deleteAsk.
+  /// No description provided for @messaging_ConversationInfo_deleteAsk.
   ///
   /// In en, this message translates to:
   /// **'Are you sure you want to delete this dialog?'**
-  String get messaging_ConversationScreen_deleteAsk;
+  String get messaging_ConversationInfo_deleteAsk;
+
+  /// No description provided for @messaging_ConversationInfo_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact info'**
+  String get messaging_ConversationInfo_title;
+
+  /// No description provided for @messaging_ConversationInfo_deleteBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete dialog'**
+  String get messaging_ConversationInfo_deleteBtn;
 
   /// No description provided for @messaging_NewConversation_createGroup.
   ///

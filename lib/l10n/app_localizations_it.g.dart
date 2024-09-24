@@ -818,10 +818,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_ConversationScreen_titlePrefix => 'Dialogo:';
 
   @override
-  String get messaging_ConversationScreen_deleteDialog => 'Elimina dialogo';
+  String get messaging_ConversationInfo_deleteAsk => 'Sei sicuro di voler eliminare questa finestra di dialogo?';
 
   @override
-  String get messaging_ConversationScreen_deleteAsk => 'Sei sicuro di voler eliminare questa finestra di dialogo?';
+  String get messaging_ConversationInfo_title => 'Informazioni contatto';
+
+  @override
+  String get messaging_ConversationInfo_deleteBtn => 'Elimina dialogo';
 
   @override
   String get messaging_NewConversation_createGroup => 'Crea gruppo';

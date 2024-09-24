@@ -25,22 +25,19 @@ class _ConversationScreenState extends State<ConversationScreen> {
   late final conversationCubit = context.read<ConversationCubit>();
   late final contactsRepo = context.read<ContactsRepository>();
 
-  onDeleteDialog() async {
-    final askResult = await showDialog<bool>(
+  onMenuTap() {
+    showModalBottomSheet(
+      useSafeArea: true,
+      isScrollControlled: true,
       context: context,
-      builder: (context) => ConfirmDialog(askText: context.l10n.messaging_ConversationScreen_deleteAsk),
+      builder: (context) => BlocProvider.value(
+        value: conversationCubit,
+        child: ClipRRect(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+          child: ConversationInfo(userId: messagingBloc.state.userId!),
+        ),
+      ),
     );
-
-    if (!mounted) return;
-    if (askResult != true) return;
-
-    final result = await conversationCubit.deleteDialog();
-
-    if (!mounted) return;
-    if (result != true) return;
-
-    const route = MessagingRouterPageRoute(children: [ConversationsScreenPageRoute()]);
-    context.router.navigate(route);
   }
 
   @override
@@ -100,21 +97,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                     },
                   ),
                   actions: [
-                    PopupMenuButton(
-                      itemBuilder: (context) {
-                        return [
-                          PopupMenuItem(
-                            onTap: onDeleteDialog,
-                            child: ListTile(
-                              title: Text(context.l10n.messaging_ConversationScreen_deleteDialog),
-                              leading: const Icon(Icons.playlist_remove_rounded),
-                              dense: true,
-                            ),
-                          )
-                        ];
-                      },
-                      icon: const Icon(Icons.menu),
-                    ),
+                    IconButton(onPressed: onMenuTap, icon: const Icon(Icons.menu)),
                   ],
                 ),
                 body: Builder(

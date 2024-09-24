@@ -28,7 +28,7 @@ class _SmsConversationScreenState extends State<SmsConversationScreen> {
   onDeleteDialog() async {
     final askResult = await showDialog<bool>(
       context: context,
-      builder: (context) => ConfirmDialog(askText: context.l10n.messaging_ConversationScreen_deleteAsk),
+      builder: (context) => ConfirmDialog(askText: context.l10n.messaging_ConversationInfo_deleteAsk),
     );
 
     if (!mounted) return;
@@ -107,7 +107,7 @@ class _SmsConversationScreenState extends State<SmsConversationScreen> {
                           PopupMenuItem(
                             onTap: onDeleteDialog,
                             child: ListTile(
-                              title: Text(context.l10n.messaging_ConversationScreen_deleteDialog),
+                              title: Text(context.l10n.messaging_ConversationInfo_deleteBtn),
                               leading: const Icon(Icons.playlist_remove_rounded),
                               dense: true,
                             ),

@@ -6,7 +6,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
-import 'package:webtrit_phone/features/call/widgets/widgets.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -143,8 +142,8 @@ class _GroupInfoState extends State<GroupInfo> {
                 appBar: AppBar(
                   title: Text(context.l10n.messaging_GroupInfo_title),
                   actions: [
-                    CallPopupMenuButton(
-                      items: [
+                    PopupMenuButton(
+                      itemBuilder: (_) => [
                         if (amIOwner)
                           PopupMenuItem(
                             onTap: () => onDeleteGroup(),
@@ -311,8 +310,8 @@ class _GroupInfoState extends State<GroupInfo> {
               trailing: ((canMakeModerator || canRemoveModerator || canRemove) && !isMe)
                   ? SizedBox(
                       width: 20,
-                      child: CallPopupMenuButton(
-                        items: [
+                      child: PopupMenuButton(
+                        itemBuilder: (_) => [
                           if (canMakeModerator)
                             PopupMenuItem(
                               onTap: () => onSetModerator(member.userId, true),
