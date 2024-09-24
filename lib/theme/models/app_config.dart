@@ -13,15 +13,15 @@ class AppConfig with _$AppConfig {
   const AppConfig._();
 
   const factory AppConfig({
-    AppConfigLogin? loginConfig,
-    AppConfigMain? mainConfig,
-    AppConfigSettings? settingsConfig,
+    @Default(AppConfigLogin()) AppConfigLogin loginConfig,
+    @Default(AppConfigMain()) AppConfigMain mainConfig,
+    @Default(AppConfigSettings()) AppConfigSettings settingsConfig,
     @Default(AppConfigCall()) AppConfigCall callConfig,
   }) = _AppConfig;
 
   factory AppConfig.fromJson(Map<String, dynamic> json) => _$AppConfigFromJson(json);
 
-  bool get isCustomSignInEnabled => loginConfig?.customSignIn?.enabled == true;
+  bool get isCustomSignInEnabled => loginConfig.customSignIn?.enabled == true;
 }
 
 @freezed
@@ -40,9 +40,9 @@ class AppConfigLoginCustomSignIn with _$AppConfigLoginCustomSignIn {
   const AppConfigLoginCustomSignIn._();
 
   const factory AppConfigLoginCustomSignIn({
-    bool? enabled,
-    String? titleL10n,
-    String? url,
+    required bool enabled,
+    required String titleL10n,
+    required String url,
   }) = _AppConfigLoginCustomSignIn;
 
   factory AppConfigLoginCustomSignIn.fromJson(Map<String, dynamic> json) => _$AppConfigLoginCustomSignInFromJson(json);
@@ -53,7 +53,7 @@ class AppConfigMain with _$AppConfigMain {
   const AppConfigMain._();
 
   const factory AppConfigMain({
-    AppConfigBottomMenu? bottomMenu,
+    @Default(AppConfigBottomMenu(cacheSelectedTab: true, tabs: [])) AppConfigBottomMenu bottomMenu,
   }) = _AppConfigMain;
 
   factory AppConfigMain.fromJson(Map<String, dynamic> json) => _$AppConfigMainFromJson(json);
@@ -121,7 +121,7 @@ class AppConfigSettingsItem with _$AppConfigSettingsItem {
   const factory AppConfigSettingsItem({
     @Default(true) bool enabled,
     required String titleL10n,
-    String? type,
+    required String type,
     @IconDataConverter() required IconData icon,
     @Default({}) Map<String, dynamic> data,
   }) = _AppConfigSettingsItem;

@@ -9,14 +9,14 @@ part of 'app_config.dart';
 _$AppConfigImpl _$$AppConfigImplFromJson(Map<String, dynamic> json) =>
     _$AppConfigImpl(
       loginConfig: json['loginConfig'] == null
-          ? null
+          ? const AppConfigLogin()
           : AppConfigLogin.fromJson(
               json['loginConfig'] as Map<String, dynamic>),
       mainConfig: json['mainConfig'] == null
-          ? null
+          ? const AppConfigMain()
           : AppConfigMain.fromJson(json['mainConfig'] as Map<String, dynamic>),
       settingsConfig: json['settingsConfig'] == null
-          ? null
+          ? const AppConfigSettings()
           : AppConfigSettings.fromJson(
               json['settingsConfig'] as Map<String, dynamic>),
       callConfig: json['callConfig'] == null
@@ -49,9 +49,9 @@ Map<String, dynamic> _$$AppConfigLoginImplToJson(
 _$AppConfigLoginCustomSignInImpl _$$AppConfigLoginCustomSignInImplFromJson(
         Map<String, dynamic> json) =>
     _$AppConfigLoginCustomSignInImpl(
-      enabled: json['enabled'] as bool?,
-      titleL10n: json['titleL10n'] as String?,
-      url: json['url'] as String?,
+      enabled: json['enabled'] as bool,
+      titleL10n: json['titleL10n'] as String,
+      url: json['url'] as String,
     );
 
 Map<String, dynamic> _$$AppConfigLoginCustomSignInImplToJson(
@@ -65,7 +65,7 @@ Map<String, dynamic> _$$AppConfigLoginCustomSignInImplToJson(
 _$AppConfigMainImpl _$$AppConfigMainImplFromJson(Map<String, dynamic> json) =>
     _$AppConfigMainImpl(
       bottomMenu: json['bottomMenu'] == null
-          ? null
+          ? const AppConfigBottomMenu(cacheSelectedTab: true, tabs: [])
           : AppConfigBottomMenu.fromJson(
               json['bottomMenu'] as Map<String, dynamic>),
     );
@@ -156,7 +156,7 @@ _$AppConfigSettingsItemImpl _$$AppConfigSettingsItemImplFromJson(
     _$AppConfigSettingsItemImpl(
       enabled: json['enabled'] as bool? ?? true,
       titleL10n: json['titleL10n'] as String,
-      type: json['type'] as String?,
+      type: json['type'] as String,
       icon: const IconDataConverter().fromJson(json['icon'] as String),
       data: json['data'] as Map<String, dynamic>? ?? const {},
     );
