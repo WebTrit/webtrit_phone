@@ -1,12 +1,12 @@
 {
-  "login": {
+  "loginConfig": {
     "customSignIn": {
       "enabled": false,
       "titleL10n": "login_requestCredentials_title",
       "url": "https://webtrit-app.web.app/example/example_embedded_login.html"
     }
   },
-  "main": {
+  "mainConfig": {
     "bottomMenu": {
       "cacheSelectedTab": true,
       "tabs": [
@@ -77,14 +77,14 @@
       ]
     }
   },
-  "settings": {
+  "settingsConfig": {
     "sections": [
       {
         "titleL10n": "settings_ListViewTileTitle_settings",
         "enabled": true,
         "items": [
           {
-            "enabled": true,
+            "enabled": false,
             "type": "network",
             "titleL10n": "settings_ListViewTileTitle_network",
             "icon": "0xe424"

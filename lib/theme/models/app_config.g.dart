@@ -8,16 +8,17 @@ part of 'app_config.dart';
 
 _$AppConfigImpl _$$AppConfigImplFromJson(Map<String, dynamic> json) =>
     _$AppConfigImpl(
-      login: json['login'] == null
-          ? null
-          : AppConfigLogin.fromJson(json['login'] as Map<String, dynamic>),
-      main: json['main'] == null
-          ? null
-          : AppConfigMain.fromJson(json['main'] as Map<String, dynamic>),
-      settings: json['settings'] == null
-          ? null
+      loginConfig: json['loginConfig'] == null
+          ? const AppConfigLogin()
+          : AppConfigLogin.fromJson(
+              json['loginConfig'] as Map<String, dynamic>),
+      mainConfig: json['mainConfig'] == null
+          ? const AppConfigMain()
+          : AppConfigMain.fromJson(json['mainConfig'] as Map<String, dynamic>),
+      settingsConfig: json['settingsConfig'] == null
+          ? const AppConfigSettings()
           : AppConfigSettings.fromJson(
-              json['settings'] as Map<String, dynamic>),
+              json['settingsConfig'] as Map<String, dynamic>),
       callConfig: json['callConfig'] == null
           ? const AppConfigCall()
           : AppConfigCall.fromJson(json['callConfig'] as Map<String, dynamic>),
@@ -25,9 +26,9 @@ _$AppConfigImpl _$$AppConfigImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$AppConfigImplToJson(_$AppConfigImpl instance) =>
     <String, dynamic>{
-      'login': instance.login,
-      'main': instance.main,
-      'settings': instance.settings,
+      'loginConfig': instance.loginConfig,
+      'mainConfig': instance.mainConfig,
+      'settingsConfig': instance.settingsConfig,
       'callConfig': instance.callConfig,
     };
 
@@ -48,9 +49,9 @@ Map<String, dynamic> _$$AppConfigLoginImplToJson(
 _$AppConfigLoginCustomSignInImpl _$$AppConfigLoginCustomSignInImplFromJson(
         Map<String, dynamic> json) =>
     _$AppConfigLoginCustomSignInImpl(
-      enabled: json['enabled'] as bool?,
-      titleL10n: json['titleL10n'] as String?,
-      url: json['url'] as String?,
+      enabled: json['enabled'] as bool,
+      titleL10n: json['titleL10n'] as String,
+      url: json['url'] as String,
     );
 
 Map<String, dynamic> _$$AppConfigLoginCustomSignInImplToJson(
@@ -64,7 +65,7 @@ Map<String, dynamic> _$$AppConfigLoginCustomSignInImplToJson(
 _$AppConfigMainImpl _$$AppConfigMainImplFromJson(Map<String, dynamic> json) =>
     _$AppConfigMainImpl(
       bottomMenu: json['bottomMenu'] == null
-          ? null
+          ? const AppConfigBottomMenu(cacheSelectedTab: true, tabs: [])
           : AppConfigBottomMenu.fromJson(
               json['bottomMenu'] as Map<String, dynamic>),
     );
@@ -155,7 +156,7 @@ _$AppConfigSettingsItemImpl _$$AppConfigSettingsItemImplFromJson(
     _$AppConfigSettingsItemImpl(
       enabled: json['enabled'] as bool? ?? true,
       titleL10n: json['titleL10n'] as String,
-      type: json['type'] as String?,
+      type: json['type'] as String,
       icon: const IconDataConverter().fromJson(json['icon'] as String),
       data: json['data'] as Map<String, dynamic>? ?? const {},
     );
