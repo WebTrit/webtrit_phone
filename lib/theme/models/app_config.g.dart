@@ -18,6 +18,9 @@ _$AppConfigImpl _$$AppConfigImplFromJson(Map<String, dynamic> json) =>
           ? null
           : AppConfigSettings.fromJson(
               json['settings'] as Map<String, dynamic>),
+      callConfig: json['callConfig'] == null
+          ? const AppConfigCall()
+          : AppConfigCall.fromJson(json['callConfig'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$AppConfigImplToJson(_$AppConfigImpl instance) =>
@@ -25,6 +28,7 @@ Map<String, dynamic> _$$AppConfigImplToJson(_$AppConfigImpl instance) =>
       'login': instance.login,
       'main': instance.main,
       'settings': instance.settings,
+      'callConfig': instance.callConfig,
     };
 
 _$AppConfigLoginImpl _$$AppConfigLoginImplFromJson(Map<String, dynamic> json) =>
@@ -164,4 +168,32 @@ Map<String, dynamic> _$$AppConfigSettingsItemImplToJson(
       'type': instance.type,
       'icon': const IconDataConverter().toJson(instance.icon),
       'data': instance.data,
+    };
+
+_$AppConfigCallImpl _$$AppConfigCallImplFromJson(Map<String, dynamic> json) =>
+    _$AppConfigCallImpl(
+      transfer: json['transfer'] == null
+          ? const AppConfigTransfer(
+              enableBlindTransfer: true, enableAttendedTransfer: true)
+          : AppConfigTransfer.fromJson(
+              json['transfer'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$AppConfigCallImplToJson(_$AppConfigCallImpl instance) =>
+    <String, dynamic>{
+      'transfer': instance.transfer,
+    };
+
+_$AppConfigTransferImpl _$$AppConfigTransferImplFromJson(
+        Map<String, dynamic> json) =>
+    _$AppConfigTransferImpl(
+      enableBlindTransfer: json['enableBlindTransfer'] as bool? ?? true,
+      enableAttendedTransfer: json['enableAttendedTransfer'] as bool? ?? true,
+    );
+
+Map<String, dynamic> _$$AppConfigTransferImplToJson(
+        _$AppConfigTransferImpl instance) =>
+    <String, dynamic>{
+      'enableBlindTransfer': instance.enableBlindTransfer,
+      'enableAttendedTransfer': instance.enableAttendedTransfer,
     };

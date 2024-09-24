@@ -16,6 +16,9 @@ class AppConfig with _$AppConfig {
     AppConfigLogin? login,
     AppConfigMain? main,
     AppConfigSettings? settings,
+    // TODO (Serdun): The field 'call' had a conflict with a generated file.
+    // To resolve this, I renamed it to 'callConfig' by adding the 'Config' prefix.
+    @Default(AppConfigCall()) AppConfigCall callConfig,
   }) = _AppConfig;
 
   factory AppConfig.fromJson(Map<String, dynamic> json) => _$AppConfigFromJson(json);
@@ -126,4 +129,31 @@ class AppConfigSettingsItem with _$AppConfigSettingsItem {
   }) = _AppConfigSettingsItem;
 
   factory AppConfigSettingsItem.fromJson(Map<String, dynamic> json) => _$AppConfigSettingsItemFromJson(json);
+}
+
+@freezed
+class AppConfigCall with _$AppConfigCall {
+  const AppConfigCall._();
+
+  const factory AppConfigCall({
+    @Default(AppConfigTransfer(
+      enableBlindTransfer: true,
+      enableAttendedTransfer: true,
+    ))
+    AppConfigTransfer transfer,
+  }) = _AppConfigCall;
+
+  factory AppConfigCall.fromJson(Map<String, dynamic> json) => _$AppConfigCallFromJson(json);
+}
+
+@freezed
+class AppConfigTransfer with _$AppConfigTransfer {
+  const AppConfigTransfer._();
+
+  const factory AppConfigTransfer({
+    @Default(true) bool enableBlindTransfer,
+    @Default(true) bool enableAttendedTransfer,
+  }) = _AppConfigTransfer;
+
+  factory AppConfigTransfer.fromJson(Map<String, dynamic> json) => _$AppConfigTransferFromJson(json);
 }
