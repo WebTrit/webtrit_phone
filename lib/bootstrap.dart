@@ -47,6 +47,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
         }
       };
 
+      // Initialization order is crucial for proper app setup
       await AppInfo.init();
       await AppThemes.init();
       await AppPreferences.init();
