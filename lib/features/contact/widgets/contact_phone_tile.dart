@@ -8,7 +8,7 @@ class ContactPhoneTile extends StatelessWidget {
     super.key,
     required this.number,
     required this.label,
-    required this.favoritesVisible,
+    required this.favoriteVisible,
     required this.transferVisible,
     required this.favorite,
     required this.transfer,
@@ -22,7 +22,7 @@ class ContactPhoneTile extends StatelessWidget {
 
   final String number;
   final String label;
-  final bool favoritesVisible;
+  final bool favoriteVisible;
   final bool transferVisible;
   final bool favorite;
   final bool transfer;
@@ -40,7 +40,7 @@ class ContactPhoneTile extends StatelessWidget {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (favoritesVisible)
+          if (favoriteVisible)
             IconButton(
               splashRadius: 24,
               icon: favorite ? const Icon(Icons.star) : const Icon(Icons.star_border),

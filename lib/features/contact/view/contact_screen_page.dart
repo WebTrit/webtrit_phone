@@ -20,7 +20,7 @@ class ContactScreenPage extends StatelessWidget {
     final featureAccess = context.read<FeatureAccess>();
 
     final widget = ContactScreen(
-      favoritesVisible: featureAccess.bottomMenuFeature.isTabEnabled(MainFlavor.favorites),
+      favoriteVisible: featureAccess.bottomMenuFeature.isTabEnabled(MainFlavor.favorites),
       transferVisible: true,
     );
     final provider = BlocProvider(
