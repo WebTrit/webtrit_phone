@@ -1721,23 +1721,23 @@ abstract class AppLocalizations {
   /// **'Group:'**
   String get messaging_GroupScreen_titlePrefix;
 
-  /// No description provided for @messaging_AddContactDialog_title.
+  /// No description provided for @messaging_ChooseContact_title.
   ///
   /// In en, this message translates to:
   /// **'Choose contact:'**
-  String get messaging_AddContactDialog_title;
+  String get messaging_ChooseContact_title;
 
-  /// No description provided for @messaging_AddContactDialog_empty.
+  /// No description provided for @messaging_ChooseContact_empty.
   ///
   /// In en, this message translates to:
   /// **'No contacts found'**
-  String get messaging_AddContactDialog_empty;
+  String get messaging_ChooseContact_empty;
 
-  /// No description provided for @messaging_AddContactDialog_cancel.
+  /// No description provided for @messaging_ChooseContact_cancel.
   ///
   /// In en, this message translates to:
   /// **'Cancel'**
-  String get messaging_AddContactDialog_cancel;
+  String get messaging_ChooseContact_cancel;
 
   /// No description provided for @messaging_ConfirmDialog_ask.
   ///

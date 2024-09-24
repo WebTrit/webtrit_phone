@@ -860,13 +860,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_GroupScreen_titlePrefix => 'Gruppo:';
 
   @override
-  String get messaging_AddContactDialog_title => 'Scegli il contatto:';
+  String get messaging_ChooseContact_title => 'Scegli il contatto:';
 
   @override
-  String get messaging_AddContactDialog_empty => 'Nessun contatto trovato';
+  String get messaging_ChooseContact_empty => 'Nessun contatto trovato';
 
   @override
-  String get messaging_AddContactDialog_cancel => 'Cancellare';
+  String get messaging_ChooseContact_cancel => 'Cancellare';
 
   @override
   String get messaging_ConfirmDialog_ask => 'SÌ?';

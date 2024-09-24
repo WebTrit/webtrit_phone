@@ -860,13 +860,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_GroupScreen_titlePrefix => 'Група:';
 
   @override
-  String get messaging_AddContactDialog_title => 'Виберіть контакт:';
+  String get messaging_ChooseContact_title => 'Виберіть контакт:';
 
   @override
-  String get messaging_AddContactDialog_empty => 'Контакти не знайдено';
+  String get messaging_ChooseContact_empty => 'Контакти не знайдено';
 
   @override
-  String get messaging_AddContactDialog_cancel => 'Скасувати';
+  String get messaging_ChooseContact_cancel => 'Скасувати';
 
   @override
   String get messaging_ConfirmDialog_ask => 'Ви впевнені?';

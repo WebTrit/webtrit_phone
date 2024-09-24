@@ -60,20 +60,29 @@ class _GroupInfoState extends State<GroupInfo> {
   onAddUser() async {
     final result = await showDialog<Contact>(
       context: context,
-      builder: (context) => AddContactDialog(
-        contactsRepository: contactsRepository,
-        filter: (contact) {
-          final state = groupCubit.state;
-          if (state is GroupStateReady) {
-            final chat = state.chat;
-            final members = chat.members.map((m) => m.userId).toSet();
-            final isMe = contact.sourceId == widget.userId;
-            final isMember = members.contains(contact.sourceId);
-            final canMessage = contact.canMessage;
-            return !isMe && !isMember && canMessage;
-          }
-          return false;
-        },
+      builder: (context) => BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
+        child: Dialog(
+          insetPadding: const EdgeInsets.all(16),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: ChooseContact(
+              contactsRepository: contactsRepository,
+              filter: (contact) {
+                final state = groupCubit.state;
+                if (state is GroupStateReady) {
+                  final chat = state.chat;
+                  final members = chat.members.map((m) => m.userId).toSet();
+                  final isMe = contact.sourceId == widget.userId;
+                  final isMember = members.contains(contact.sourceId);
+                  final canMessage = contact.canMessage;
+                  return !isMe && !isMember && canMessage;
+                }
+                return false;
+              },
+            ),
+          ),
+        ),
       ),
     );
     if (!mounted) return;
