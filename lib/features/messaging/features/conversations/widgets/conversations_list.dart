@@ -81,6 +81,7 @@ class _ConversationsListState extends State<ConversationsList> {
                       icon: const Icon(Icons.clear),
                       onPressed: () {
                         chatsSearchController.clear();
+                        FocusScope.of(context).unfocus();
                         setState(() {});
                       },
                     ),
@@ -156,6 +157,7 @@ class _ConversationsListState extends State<ConversationsList> {
                       icon: const Icon(Icons.clear),
                       onPressed: () {
                         smsSearchController.clear();
+                        FocusScope.of(context).unfocus();
                         setState(() {});
                       },
                     ),
