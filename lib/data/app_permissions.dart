@@ -21,7 +21,7 @@ class AppPermissions {
 
     final statuses = await Future.wait(permissions.map((permission) => permission.status));
     final isDenied = statuses.every((status) => status.isDenied);
-    _instance = AppPermissions._(isDenied);
+    _instance = AppPermissions._(isDenied, permissions);
   }
 
   factory AppPermissions() {
