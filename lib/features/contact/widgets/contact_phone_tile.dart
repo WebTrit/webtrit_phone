@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+// Follow naming conventions as outlined in https://api.flutter.dev/flutter/widgets/Visibility-class.html
 class ContactPhoneTile extends StatelessWidget {
   const ContactPhoneTile({
     super.key,
