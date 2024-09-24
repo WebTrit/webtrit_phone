@@ -48,13 +48,13 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       };
 
       await AppInfo.init();
-      await AppPermissions.init();
       await AppPreferences.init();
       await DeviceInfo.init();
       await PackageInfo.init();
       await SecureStorage.init();
       await AppThemes.init();
       await FeatureAccess.init();
+      await AppPermissions.init();
       await AppSound.init(outgoingCallRingAsset: Assets.ringtones.outgoingCall1);
       await AppCertificates.init();
       await AppTime.init();
