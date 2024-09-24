@@ -25,7 +25,7 @@ class FeatureAccess {
   final CustomLoginFeature? customLoginFeature;
   final BottomMenuFeature bottomMenuFeature;
   final SettingsFeature settingsFeature;
-  final CallFeature? callFeature;
+  final CallFeature callFeature;
 
   static Future<void> init() async {
     final theme = AppThemes();
@@ -160,7 +160,7 @@ class FeatureAccess {
     }
   }
 
-  static CallFeature? _tryConfigureCallFeature(AppConfig appConfig) {
+  static CallFeature _tryConfigureCallFeature(AppConfig appConfig) {
     final callConfig = appConfig.callConfig;
 
     return CallFeature(
