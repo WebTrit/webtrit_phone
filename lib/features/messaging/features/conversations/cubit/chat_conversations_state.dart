@@ -16,4 +16,4 @@ class ChatConversationsState with EquatableMixin {
   }
 }
 
-typedef ChatWithMessageAndMemebers = (Chat, ChatMessage?, List<Contact>);
+typedef ChatWithMessageAndMemebers = ({Chat chat, ChatMessage? message, List<Contact> contacts});

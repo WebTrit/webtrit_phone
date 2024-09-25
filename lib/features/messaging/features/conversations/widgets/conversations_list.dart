@@ -32,20 +32,19 @@ class _ConversationsListState extends State<ConversationsList> {
         if (conversations.isEmpty) return Center(child: Text(context.l10n.messaging_ConversationsScreen_empty));
 
         final search = chatsSearchController.text.toLowerCase();
-        List<(Chat, ChatMessage?, List<Contact>)> conversationsToShow;
+        List<ChatWithMessageAndMemebers> conversationsToShow;
 
         if (search.isEmpty) {
           conversationsToShow = conversations;
         } else {
           conversationsToShow = conversations.where((e) {
-            final conversation = e.$1;
-            final lastMessage = e.$2;
-            final contacts = e.$3;
-            final groupName = conversation.name?.toLowerCase();
+            var (:chat, :message, :contacts) = e;
+
+            final groupName = chat.name?.toLowerCase();
             final contactNames =
                 contacts.map((e) => '${e.aliasName} + ${e.firstName} + ${e.lastName}'.toLowerCase()).join(' ');
             final contactPhones = contacts.expand((e) => e.phones).map((e) => e.number).join(' ');
-            final lastMessageText = lastMessage?.content ?? '';
+            final lastMessageText = message?.content ?? '';
 
             return groupName?.contains(search) == true ||
                 contactNames.contains(search) ||
@@ -92,11 +91,10 @@ class _ConversationsListState extends State<ConversationsList> {
             Expanded(
               child: ListView(
                 children: conversationsToShow.map((e) {
-                  final conversation = e.$1;
-                  final lastMessage = e.$2;
+                  final (:chat, :message, contacts: _) = e;
                   return ChatConversationsTile(
-                    conversation: conversation,
-                    lastMessage: lastMessage,
+                    conversation: chat,
+                    lastMessage: message,
                     userId: userId,
                   );
                 }).toList(),
@@ -121,9 +119,8 @@ class _ConversationsListState extends State<ConversationsList> {
           conversationsToShow = conversations;
         } else {
           conversationsToShow = conversations.where((e) {
-            final conversation = e.$1;
+            final (conversation, lastMessage) = e;
             final phones = conversation.firstPhoneNumber.toLowerCase() + conversation.secondPhoneNumber.toLowerCase();
-            final lastMessage = e.$2;
             final lastMessageText = lastMessage?.content ?? '';
 
             return phones.contains(search) || lastMessageText.contains(search);
