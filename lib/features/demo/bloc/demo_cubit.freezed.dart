@@ -23,9 +23,7 @@ mixin _$DemoCubitState {
   Map<MainFlavor, DemoActions> get actions =>
       throw _privateConstructorUsedError;
 
-  /// Create a copy of DemoCubitState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $DemoCubitStateCopyWith<DemoCubitState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -56,8 +54,6 @@ class _$DemoCubitStateCopyWithImpl<$Res, $Val extends DemoCubitState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of DemoCubitState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -91,8 +87,6 @@ class _$DemoCubitStateCopyWithImpl<$Res, $Val extends DemoCubitState>
     ) as $Val);
   }
 
-  /// Create a copy of DemoCubitState
-  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $UserInfoCopyWith<$Res>? get userInfo {
@@ -133,8 +127,6 @@ class __$$DemoCubitStateImplCopyWithImpl<$Res>
       _$DemoCubitStateImpl _value, $Res Function(_$DemoCubitStateImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of DemoCubitState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -221,9 +213,7 @@ class _$DemoCubitStateImpl extends _DemoCubitState {
   int get hashCode => Object.hash(runtimeType, flavor, locale, userInfo, enable,
       const DeepCollectionEquality().hash(_actions));
 
-  /// Create a copy of DemoCubitState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$DemoCubitStateImplCopyWith<_$DemoCubitStateImpl> get copyWith =>
@@ -250,11 +240,8 @@ abstract class _DemoCubitState extends DemoCubitState {
   bool get enable;
   @override
   Map<MainFlavor, DemoActions> get actions;
-
-  /// Create a copy of DemoCubitState
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$DemoCubitStateImplCopyWith<_$DemoCubitStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

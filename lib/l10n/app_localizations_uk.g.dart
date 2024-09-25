@@ -2,8 +2,6 @@ import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations.g.dart';
 
-// ignore_for_file: type=lint
-
 /// The translations for Ukrainian (`uk`).
 class AppLocalizationsUk extends AppLocalizations {
   AppLocalizationsUk([String locale = 'uk']) : super(locale);
@@ -476,6 +474,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get main_BottomNavigationBarItemLabel_keypad => 'Клавіатура';
 
   @override
+  String get main_BottomNavigationBarItemLabel_chats => 'Чати';
+
+  @override
   String get main_BottomNavigationBarItemLabel_recents => 'Останні';
 
   @override
@@ -731,6 +732,258 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get messaging_Conversation_failure => 'Помилка завантаження розмови';
+
+  @override
+  String get messaging_ActionBtn_retry => 'Повторить спробу';
+
+  @override
+  String get messaging_MessageView_textcopy => 'Копіювати в буфер обміну';
+
+  @override
+  String get messaging_MessageView_reply => 'Відповісти';
+
+  @override
+  String get messaging_MessageView_forward => 'Переслати';
+
+  @override
+  String get messaging_MessageView_edit => 'Редагувати';
+
+  @override
+  String get messaging_MessageView_delete => 'Видалити';
+
+  @override
+  String get messaging_MessageView_forwarded => '[переслано]';
+
+  @override
+  String get messaging_MessageView_edited => '[відредаговано]';
+
+  @override
+  String get messaging_MessageView_deleted => '[видалено]';
+
+  @override
+  String get messaging_SmsSendingStatus_waiting => 'очікування';
+
+  @override
+  String get messaging_SmsSendingStatus_sent => 'надіслано';
+
+  @override
+  String get messaging_SmsSendingStatus_failed => 'не вдалось';
+
+  @override
+  String get messaging_SmsSendingStatus_delivered => 'доставлено';
+
+  @override
+  String get messaging_ParticipantName_you => 'Ви';
+
+  @override
+  String get messaging_StateBar_initializing => 'ІНІЦІАЛІЗАЦІЯ';
+
+  @override
+  String get messaging_StateBar_connecting => 'ПІДКЛЮЧЕННЯ';
+
+  @override
+  String get messaging_StateBar_error => 'ВІДКЛЮЧЕНО';
+
+  @override
+  String get messaging_ConversationsScreen_startDialog => 'Почати діалог';
+
+  @override
+  String get messaging_ConversationsScreen_empty => 'Немає переписок';
+
+  @override
+  String get messaging_ConversationsScreen_messages_title => 'Повідомлення';
+
+  @override
+  String get messaging_ConversationsScreen_smses_title => 'SMS';
+
+  @override
+  String get messaging_ConversationsScreen_selectNumberSheet_title => 'Виберіть номер';
+
+  @override
+  String get messaging_ConversationsScreen_noNumberAlert_title => 'Немає номера телефону';
+
+  @override
+  String get messaging_ConversationsScreen_noNumberAlert_text => 'Щоб надсилати SMS-повідомлення, потрібно мати номер телефону, прив’язаний до вашого облікового запису';
+
+  @override
+  String get messaging_Conversations_tile_empty => 'Поки немає повідомлень';
+
+  @override
+  String get messaging_Conversations_tile_you => 'Ви';
+
+  @override
+  String get messaging_MessageListView_field_hint => 'Введіть повідомлення';
+
+  @override
+  String get messaging_ConversationScreen_titlePrefix => 'Діалог:';
+
+  @override
+  String get messaging_ConversationInfo_deleteAsk => 'Ви впевнені, що хочете видалити цей діалог?';
+
+  @override
+  String get messaging_ConversationInfo_title => 'Контактна інформація';
+
+  @override
+  String get messaging_ConversationInfo_deleteBtn => 'Видалити діалог';
+
+  @override
+  String get messaging_NewConversation_createGroup => 'Створити групу';
+
+  @override
+  String get messaging_NewConversation_title => 'Новий чат';
+
+  @override
+  String get messaging_NewConversation_cancel => 'Скасувати';
+
+  @override
+  String get messaging_NewConversation_create => 'Створити';
+
+  @override
+  String get messaging_NewConversation_externalContacts_heading => 'Контакти Хмарної АТС';
+
+  @override
+  String get messaging_NewConversation_localContacts_heading => 'Локальні контакти';
+
+  @override
+  String get messaging_NewConversation_contactSearch_hint => 'Пошук контактів';
+
+  @override
+  String get messaging_NewConversation_contactOrNumberSearch_hint => 'Знайдіть або введіть номер телефону';
+
+  @override
+  String get messaging_NewConversation_invite_heading => 'Запросити користувачів:';
+
+  @override
+  String get messaging_NewConversation_next_action => 'Далі';
+
+  @override
+  String get messaging_NewConversation_back_action => 'Назад';
+
+  @override
+  String get messaging_GroupScreen_titlePrefix => 'Група:';
+
+  @override
+  String get messaging_ChooseContact_title => 'Виберіть контакт:';
+
+  @override
+  String get messaging_ChooseContact_empty => 'Контакти не знайдено';
+
+  @override
+  String get messaging_ChooseContact_cancel => 'Скасувати';
+
+  @override
+  String get messaging_ConfirmDialog_ask => 'Ви впевнені?';
+
+  @override
+  String get messaging_ConfirmDialog_confirm => 'Так';
+
+  @override
+  String get messaging_ConfirmDialog_cancel => 'Ні';
+
+  @override
+  String get messaging_GroupAuthorities_noauthorities => 'учасник';
+
+  @override
+  String get messaging_GroupAuthorities_moderator => 'модератор';
+
+  @override
+  String get messaging_GroupAuthorities_owner => 'власник';
+
+  @override
+  String get messaging_GroupInfo_title => 'Інформація про групу';
+
+  @override
+  String get messaging_GroupInfo_leaveAsk => 'Ви впевнені, що бажаєте залишити цю групу?';
+
+  @override
+  String get messaging_GroupInfo_leaveAndDeleteAsk => 'Ви впевнені, що бажаєте залишити та видалити цю групу?';
+
+  @override
+  String get messaging_GroupInfo_removeUserAsk => 'Ви впевнені, що хочете видалити цього користувача з групи?';
+
+  @override
+  String get messaging_GroupInfo_makeModeratorAsk => 'Ви впевнені, що хочете зробити цього користувача модератором?';
+
+  @override
+  String get messaging_GroupInfo_removeModeratorAsk => 'Ви впевнені, що хочете видалити цього користувача з модераторів?';
+
+  @override
+  String get messaging_GroupInfo_titlePrefix => 'Група:';
+
+  @override
+  String get messaging_GroupInfo_groupMembersHeadline => 'Члени групи';
+
+  @override
+  String get messaging_GroupInfo_addUserBtnText => 'Додати користувача';
+
+  @override
+  String get messaging_GroupInfo_leaveBtnText => 'Вийти з групи';
+
+  @override
+  String get messaging_GroupInfo_deleteLeaveBtnText => 'Видалити і залишити';
+
+  @override
+  String get messaging_GroupInfo_makeModeratorBtnText => 'Зробити модератором';
+
+  @override
+  String get messaging_GroupInfo_unmakeModeratorBtnText => 'Прибрати модератора';
+
+  @override
+  String get messaging_GroupInfo_removeUserBtnText => 'Видалити';
+
+  @override
+  String get messaging_GroupNameDialog_title => 'Назва групи';
+
+  @override
+  String get messaging_GroupNameDialog_fieldLabel => 'Назва групи';
+
+  @override
+  String get messaging_GroupNameDialog_fieldHint => 'Введіть назву групи';
+
+  @override
+  String get messaging_GroupNameDialog_fieldValidation_empty => 'Будь ласка, введіть назву групи';
+
+  @override
+  String get messaging_GroupNameDialog_fieldValidation_short => 'Назва групи занадто коротка';
+
+  @override
+  String get messaging_GroupNameDialog_saveBtnText => 'Зберегти';
+
+  @override
+  String get messaging_GroupNameDialog_cancelBtnText => 'Скасувати';
+
+  @override
+  String get messaging_GroupBuilderScreen_screenTitle => 'Створити групу';
+
+  @override
+  String get messaging_GroupBuilderScreen_groupNameHeadline => 'Назва групи';
+
+  @override
+  String get messaging_GroupBuilderScreen_membersHeadline => 'Члени групи';
+
+  @override
+  String get messaging_GroupBuilderScreen_addUserBtnText => 'Додати користувача';
+
+  @override
+  String get messaging_GroupBuilderScreen_submitBtnText => 'Надіслати';
+
+  @override
+  String get messaging_GroupBuilderScreen_nameFieldLabel => 'Назва групи';
+
+  @override
+  String get messaging_GroupBuilderScreen_nameFieldEmpty => 'Будь ласка, введіть назву групи';
+
+  @override
+  String get messaging_GroupBuilderScreen_nameFieldShort => 'Назва групи має містити не менше 3 символів';
+
+  @override
+  String get messaging_GroupBuilderScreen_connectionError => 'Помилка підключення, спробуйте пізніше';
+
+  @override
+  String get messaging_GroupBuilderScreen_submitError => 'Під час створення групи сталася помилка, повторіть спробу';
 
   @override
   String get account_selfCarePasswordExpired_message => 'Термін дії вашого пароля самообслуговування минув. Оновіть його за допомогою самообслуговування.\nДоки пароль не буде змінено, доступ до служби буде обмежено.';

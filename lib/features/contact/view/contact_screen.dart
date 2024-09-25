@@ -4,8 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/utils/utils.dart';
+import 'package:webtrit_phone/features/messaging/extensions/contact.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../contact.dart';
@@ -22,24 +25,37 @@ class ContactScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: BlocBuilder<ContactBloc, ContactState>(
-        builder: (context, state) {
-          final contact = state.contact;
-          final contactPhones = state.contactPhones;
-          final contactEmails = state.contactEmails;
-          if (contact == null || contactPhones == null || contactEmails == null) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            final themeData = Theme.of(context);
-            return BlocBuilder<CallBloc, CallState>(
-              buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
-              builder: (context, callState) {
-                final email = state.contactEmails?.firstOrNull?.address;
-                return ListView(
+    final themeData = Theme.of(context);
+    const chatsEnabled = EnvironmentConfig.CHAT_FEATURE_ENABLE;
+
+    return BlocBuilder<ContactBloc, ContactState>(
+      builder: (context, state) {
+        final contact = state.contact;
+        final contactPhones = state.contactPhones;
+        final contactEmails = state.contactEmails;
+        if (contact == null || contactPhones == null || contactEmails == null) {
+          return const Scaffold(body: Center(child: CircularProgressIndicator()));
+        } else {
+          return BlocBuilder<CallBloc, CallState>(
+            buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
+            builder: (context, callState) {
+              final email = contactEmails.firstOrNull?.address;
+              return Scaffold(
+                appBar: AppBar(
+                  actions: [
+                    if (chatsEnabled && contact.canMessage)
+                      IconButton(
+                        icon: const Icon(Icons.message),
+                        onPressed: () {
+                          context.router.navigate(MessagingRouterPageRoute(children: [
+                            const ConversationsScreenPageRoute(),
+                            ConversationScreenPageRoute(participantId: contact.sourceId),
+                          ]));
+                        },
+                      ),
+                  ],
+                ),
+                body: ListView(
                   children: [
                     Padding(
                       padding: kAllPadding16,
@@ -109,12 +125,12 @@ class ContactScreen extends StatelessWidget {
                         },
                       )
                   ],
-                );
-              },
-            );
-          }
-        },
-      ),
+                ),
+              );
+            },
+          );
+        }
+      },
     );
   }
 }

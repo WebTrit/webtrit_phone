@@ -18,6 +18,7 @@ class ContactPhoneTile extends StatelessWidget {
     this.onAudioPressed,
     this.onVideoPressed,
     this.onTransferPressed,
+    this.onMessagePressed,
   });
 
   final String number;
@@ -32,6 +33,7 @@ class ContactPhoneTile extends StatelessWidget {
   final VoidCallback? onAudioPressed;
   final VoidCallback? onVideoPressed;
   final VoidCallback? onTransferPressed;
+  final GestureTapCallback? onMessagePressed;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +66,12 @@ class ContactPhoneTile extends StatelessWidget {
               onPressed: onVideoPressed,
             ),
           ],
+          if (onMessagePressed != null)
+            IconButton(
+              splashRadius: 24,
+              icon: const Icon(Icons.messenger),
+              onPressed: onMessagePressed,
+            ),
         ],
       ),
       title: CopyToClipboard(

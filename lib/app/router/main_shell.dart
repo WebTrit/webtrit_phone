@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:phoenix_socket/phoenix_socket.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -124,6 +125,35 @@ class _MainShellState extends State<MainShell> {
             webtritApiClient: context.read<WebtritApiClient>(),
           ),
         ),
+        RepositoryProvider<ChatsRepository>(
+          create: (context) => ChatsRepository(
+            appDatabase: context.read<AppDatabase>(),
+          ),
+        ),
+        RepositoryProvider<ChatsOutboxRepository>(
+          create: (context) => ChatsOutboxRepository(
+            appDatabase: context.read<AppDatabase>(),
+          ),
+        ),
+        RepositoryProvider<SmsRepository>(
+          create: (context) => SmsRepository(
+            appDatabase: context.read<AppDatabase>(),
+          ),
+        ),
+        RepositoryProvider<SmsOutboxRepository>(
+          create: (context) => SmsOutboxRepository(
+            appDatabase: context.read<AppDatabase>(),
+          ),
+        ),
+        RepositoryProvider<MainScreenRouteStateRepository>(
+          create: (context) => MainScreenRouteStateRepositoryAutoRouteImpl(),
+        ),
+        RepositoryProvider<RemoteNotificationRepository>(
+          create: (context) => RemoteNotificationRepositoryFirebaseImpl(),
+        ),
+        RepositoryProvider<LocalNotificationRepository>(
+          create: (context) => LocalNotificationRepositoryFLNImpl(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -182,12 +212,49 @@ class _MainShellState extends State<MainShell> {
               )..add(const CallStarted());
             },
           ),
+          if (EnvironmentConfig.CHAT_FEATURE_ENABLE || EnvironmentConfig.SMS_FEATURE_ENABLE)
+            BlocProvider<MessagingBloc>(
+              lazy: false,
+              create: (context) {
+                final appBloc = context.read<AppBloc>();
+                final appPreferences = context.read<AppPreferences>();
+                final chatsRepository = context.read<ChatsRepository>();
+                final chatsOutboxRepository = context.read<ChatsOutboxRepository>();
+                final smsRepository = context.read<SmsRepository>();
+                final smsOutboxRepository = context.read<SmsOutboxRepository>();
+                final token = appBloc.state.token!;
+                final tenantId = appBloc.state.tenantId!;
+
+                final client = PhoenixSocket(
+                  EnvironmentConfig.CHAT_SERVICE_URL,
+                  socketOptions: PhoenixSocketOptions(params: {
+                    'token': token,
+                    'tenant_id': tenantId,
+                  }),
+                );
+
+                return MessagingBloc(
+                  appPreferences,
+                  client,
+                  chatsRepository,
+                  chatsOutboxRepository,
+                  smsRepository,
+                  smsOutboxRepository,
+                )..add(const Connect());
+              },
+            ),
+          if (EnvironmentConfig.CHAT_FEATURE_ENABLE || EnvironmentConfig.SMS_FEATURE_ENABLE)
+            BlocProvider<UnreadCountCubit>(
+              create: (context) {
+                return UnreadCountCubit(
+                  appPreferences: context.read<AppPreferences>(),
+                  chatsRepository: context.read<ChatsRepository>(),
+                  smsRepository: context.read<SmsRepository>(),
+                )..init();
+              },
+            ),
         ],
-        child: Builder(
-          builder: (context) => const CallShell(
-            child: AutoRouter(),
-          ),
-        ),
+        child: Builder(builder: (_) => const CallShell(child: MessagingShell(child: AutoRouter()))),
       ),
     );
   }

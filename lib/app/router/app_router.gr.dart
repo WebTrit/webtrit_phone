@@ -71,6 +71,19 @@ abstract class _$AppRouter extends RootStackRouter {
         child: ContactsScreenPage(sourceTypes: args.sourceTypes),
       );
     },
+    ConversationScreenPageRoute.name: (routeData) {
+      final args = routeData.argsAs<ConversationScreenPageRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ConversationScreenPage(participantId: args.participantId),
+      );
+    },
+    ConversationsScreenPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ConversationsScreenPage(),
+      );
+    },
     DemoWebPageRoute.name: (routeData) {
       final args = routeData.argsAs<DemoWebPageRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -119,6 +132,13 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: FavoritesScreenPage(),
+      );
+    },
+    GroupScreenPageRoute.name: (routeData) {
+      final args = routeData.argsAs<GroupScreenPageRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: GroupScreenPage(chatId: args.chatId),
       );
     },
     HelpScreenPageRoute.name: (routeData) {
@@ -239,6 +259,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const MainShell(),
       );
     },
+    MessagingRouterPageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const MessagingRouterPage(),
+      );
+    },
     NetworkScreenPageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -283,6 +309,17 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: SettingsScreenPage(),
+      );
+    },
+    SmsConversationScreenPageRoute.name: (routeData) {
+      final args = routeData.argsAs<SmsConversationScreenPageRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: SmsConversationScreenPage(
+          firstNumber: args.firstNumber,
+          secondNumber: args.secondNumber,
+          recipientId: args.recipientId,
+        ),
       );
     },
     TermsConditionsScreenPageRoute.name: (routeData) {
@@ -478,6 +515,50 @@ class ContactsScreenPageRouteArgs {
 }
 
 /// generated route for
+/// [ConversationScreenPage]
+class ConversationScreenPageRoute
+    extends PageRouteInfo<ConversationScreenPageRouteArgs> {
+  ConversationScreenPageRoute({
+    required String participantId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ConversationScreenPageRoute.name,
+          args: ConversationScreenPageRouteArgs(participantId: participantId),
+          initialChildren: children,
+        );
+
+  static const String name = 'ConversationScreenPageRoute';
+
+  static const PageInfo<ConversationScreenPageRouteArgs> page =
+      PageInfo<ConversationScreenPageRouteArgs>(name);
+}
+
+class ConversationScreenPageRouteArgs {
+  const ConversationScreenPageRouteArgs({required this.participantId});
+
+  final String participantId;
+
+  @override
+  String toString() {
+    return 'ConversationScreenPageRouteArgs{participantId: $participantId}';
+  }
+}
+
+/// generated route for
+/// [ConversationsScreenPage]
+class ConversationsScreenPageRoute extends PageRouteInfo<void> {
+  const ConversationsScreenPageRoute({List<PageRouteInfo>? children})
+      : super(
+          ConversationsScreenPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ConversationsScreenPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [DemoWebPage]
 class DemoWebPageRoute extends PageRouteInfo<DemoWebPageRouteArgs> {
   DemoWebPageRoute({
@@ -661,6 +742,35 @@ class FavoritesScreenPageRoute extends PageRouteInfo<void> {
   static const String name = 'FavoritesScreenPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [GroupScreenPage]
+class GroupScreenPageRoute extends PageRouteInfo<GroupScreenPageRouteArgs> {
+  GroupScreenPageRoute({
+    required int chatId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          GroupScreenPageRoute.name,
+          args: GroupScreenPageRouteArgs(chatId: chatId),
+          initialChildren: children,
+        );
+
+  static const String name = 'GroupScreenPageRoute';
+
+  static const PageInfo<GroupScreenPageRouteArgs> page =
+      PageInfo<GroupScreenPageRouteArgs>(name);
+}
+
+class GroupScreenPageRouteArgs {
+  const GroupScreenPageRouteArgs({required this.chatId});
+
+  final int chatId;
+
+  @override
+  String toString() {
+    return 'GroupScreenPageRouteArgs{chatId: $chatId}';
+  }
 }
 
 /// generated route for
@@ -947,6 +1057,20 @@ class MainShellRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [MessagingRouterPage]
+class MessagingRouterPageRoute extends PageRouteInfo<void> {
+  const MessagingRouterPageRoute({List<PageRouteInfo>? children})
+      : super(
+          MessagingRouterPageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'MessagingRouterPageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [NetworkScreenPage]
 class NetworkScreenPageRoute extends PageRouteInfo<void> {
   const NetworkScreenPageRoute({List<PageRouteInfo>? children})
@@ -1058,6 +1182,50 @@ class SettingsScreenPageRoute extends PageRouteInfo<void> {
   static const String name = 'SettingsScreenPageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [SmsConversationScreenPage]
+class SmsConversationScreenPageRoute
+    extends PageRouteInfo<SmsConversationScreenPageRouteArgs> {
+  SmsConversationScreenPageRoute({
+    required String firstNumber,
+    required String secondNumber,
+    String? recipientId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          SmsConversationScreenPageRoute.name,
+          args: SmsConversationScreenPageRouteArgs(
+            firstNumber: firstNumber,
+            secondNumber: secondNumber,
+            recipientId: recipientId,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'SmsConversationScreenPageRoute';
+
+  static const PageInfo<SmsConversationScreenPageRouteArgs> page =
+      PageInfo<SmsConversationScreenPageRouteArgs>(name);
+}
+
+class SmsConversationScreenPageRouteArgs {
+  const SmsConversationScreenPageRouteArgs({
+    required this.firstNumber,
+    required this.secondNumber,
+    this.recipientId,
+  });
+
+  final String firstNumber;
+
+  final String secondNumber;
+
+  final String? recipientId;
+
+  @override
+  String toString() {
+    return 'SmsConversationScreenPageRouteArgs{firstNumber: $firstNumber, secondNumber: $secondNumber, recipientId: $recipientId}';
+  }
 }
 
 /// generated route for

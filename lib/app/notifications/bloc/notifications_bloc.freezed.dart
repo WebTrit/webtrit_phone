@@ -85,9 +85,7 @@ abstract class _NotificationsCleared implements NotificationsCleared {
 mixin _$NotificationsState {
   Notification? get lastNotification => throw _privateConstructorUsedError;
 
-  /// Create a copy of NotificationsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $NotificationsStateCopyWith<NotificationsState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -111,8 +109,6 @@ class _$NotificationsStateCopyWithImpl<$Res, $Val extends NotificationsState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of NotificationsState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -146,8 +142,6 @@ class __$$NotificationsStateImplCopyWithImpl<$Res>
       $Res Function(_$NotificationsStateImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of NotificationsState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -187,9 +181,7 @@ class _$NotificationsStateImpl implements _NotificationsState {
   @override
   int get hashCode => Object.hash(runtimeType, lastNotification);
 
-  /// Create a copy of NotificationsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$NotificationsStateImplCopyWith<_$NotificationsStateImpl> get copyWith =>
@@ -203,11 +195,8 @@ abstract class _NotificationsState implements NotificationsState {
 
   @override
   Notification? get lastNotification;
-
-  /// Create a copy of NotificationsState
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$NotificationsStateImplCopyWith<_$NotificationsStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

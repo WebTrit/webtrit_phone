@@ -269,6 +269,8 @@ class AppLocalizationsMapper {
           localizations.main_BottomNavigationBarItemLabel_favorites,
       'main_BottomNavigationBarItemLabel_keypad':
           localizations.main_BottomNavigationBarItemLabel_keypad,
+      'main_BottomNavigationBarItemLabel_chats':
+          localizations.main_BottomNavigationBarItemLabel_chats,
       'main_BottomNavigationBarItemLabel_recents':
           localizations.main_BottomNavigationBarItemLabel_recents,
       'main_CompatibilityIssueDialogActions_logout':
@@ -403,6 +405,168 @@ class AppLocalizationsMapper {
           localizations.webRegistration_ErrorAcknowledgeDialogActions_skip,
       'webRegistration_ErrorAcknowledgeDialog_title':
           localizations.webRegistration_ErrorAcknowledgeDialog_title,
+      'messaging_Conversation_failure':
+          localizations.messaging_Conversation_failure,
+      'messaging_ActionBtn_retry': localizations.messaging_ActionBtn_retry,
+      'messaging_MessageView_textcopy':
+          localizations.messaging_MessageView_textcopy,
+      'messaging_MessageView_reply': localizations.messaging_MessageView_reply,
+      'messaging_MessageView_forward':
+          localizations.messaging_MessageView_forward,
+      'messaging_MessageView_edit': localizations.messaging_MessageView_edit,
+      'messaging_MessageView_delete':
+          localizations.messaging_MessageView_delete,
+      'messaging_MessageView_forwarded':
+          localizations.messaging_MessageView_forwarded,
+      'messaging_MessageView_edited':
+          localizations.messaging_MessageView_edited,
+      'messaging_MessageView_deleted':
+          localizations.messaging_MessageView_deleted,
+      'messaging_SmsSendingStatus_waiting':
+          localizations.messaging_SmsSendingStatus_waiting,
+      'messaging_SmsSendingStatus_sent':
+          localizations.messaging_SmsSendingStatus_sent,
+      'messaging_SmsSendingStatus_failed':
+          localizations.messaging_SmsSendingStatus_failed,
+      'messaging_SmsSendingStatus_delivered':
+          localizations.messaging_SmsSendingStatus_delivered,
+      'messaging_ParticipantName_you':
+          localizations.messaging_ParticipantName_you,
+      'messaging_StateBar_initializing':
+          localizations.messaging_StateBar_initializing,
+      'messaging_StateBar_connecting':
+          localizations.messaging_StateBar_connecting,
+      'messaging_StateBar_error': localizations.messaging_StateBar_error,
+      'messaging_ConversationsScreen_startDialog':
+          localizations.messaging_ConversationsScreen_startDialog,
+      'messaging_ConversationsScreen_empty':
+          localizations.messaging_ConversationsScreen_empty,
+      'messaging_ConversationsScreen_messages_title':
+          localizations.messaging_ConversationsScreen_messages_title,
+      'messaging_ConversationsScreen_smses_title':
+          localizations.messaging_ConversationsScreen_smses_title,
+      'messaging_ConversationsScreen_selectNumberSheet_title':
+          localizations.messaging_ConversationsScreen_selectNumberSheet_title,
+      'messaging_ConversationsScreen_noNumberAlert_title':
+          localizations.messaging_ConversationsScreen_noNumberAlert_title,
+      'messaging_ConversationsScreen_noNumberAlert_text':
+          localizations.messaging_ConversationsScreen_noNumberAlert_text,
+      'messaging_Conversations_tile_empty':
+          localizations.messaging_Conversations_tile_empty,
+      'messaging_Conversations_tile_you':
+          localizations.messaging_Conversations_tile_you,
+      'messaging_MessageListView_field_hint':
+          localizations.messaging_MessageListView_field_hint,
+      'messaging_ConversationScreen_titlePrefix':
+          localizations.messaging_ConversationScreen_titlePrefix,
+      'messaging_ConversationInfo_deleteAsk':
+          localizations.messaging_ConversationInfo_deleteAsk,
+      'messaging_ConversationInfo_title':
+          localizations.messaging_ConversationInfo_title,
+      'messaging_ConversationInfo_deleteBtn':
+          localizations.messaging_ConversationInfo_deleteBtn,
+      'messaging_NewConversation_createGroup':
+          localizations.messaging_NewConversation_createGroup,
+      'messaging_NewConversation_title':
+          localizations.messaging_NewConversation_title,
+      'messaging_NewConversation_cancel':
+          localizations.messaging_NewConversation_cancel,
+      'messaging_NewConversation_create':
+          localizations.messaging_NewConversation_create,
+      'messaging_NewConversation_externalContacts_heading':
+          localizations.messaging_NewConversation_externalContacts_heading,
+      'messaging_NewConversation_localContacts_heading':
+          localizations.messaging_NewConversation_localContacts_heading,
+      'messaging_NewConversation_contactSearch_hint':
+          localizations.messaging_NewConversation_contactSearch_hint,
+      'messaging_NewConversation_contactOrNumberSearch_hint':
+          localizations.messaging_NewConversation_contactOrNumberSearch_hint,
+      'messaging_NewConversation_invite_heading':
+          localizations.messaging_NewConversation_invite_heading,
+      'messaging_NewConversation_next_action':
+          localizations.messaging_NewConversation_next_action,
+      'messaging_NewConversation_back_action':
+          localizations.messaging_NewConversation_back_action,
+      'messaging_GroupScreen_titlePrefix':
+          localizations.messaging_GroupScreen_titlePrefix,
+      'messaging_ChooseContact_title':
+          localizations.messaging_ChooseContact_title,
+      'messaging_ChooseContact_empty':
+          localizations.messaging_ChooseContact_empty,
+      'messaging_ChooseContact_cancel':
+          localizations.messaging_ChooseContact_cancel,
+      'messaging_ConfirmDialog_ask': localizations.messaging_ConfirmDialog_ask,
+      'messaging_ConfirmDialog_confirm':
+          localizations.messaging_ConfirmDialog_confirm,
+      'messaging_ConfirmDialog_cancel':
+          localizations.messaging_ConfirmDialog_cancel,
+      'messaging_GroupAuthorities_noauthorities':
+          localizations.messaging_GroupAuthorities_noauthorities,
+      'messaging_GroupAuthorities_moderator':
+          localizations.messaging_GroupAuthorities_moderator,
+      'messaging_GroupAuthorities_owner':
+          localizations.messaging_GroupAuthorities_owner,
+      'messaging_GroupInfo_title': localizations.messaging_GroupInfo_title,
+      'messaging_GroupInfo_leaveAsk':
+          localizations.messaging_GroupInfo_leaveAsk,
+      'messaging_GroupInfo_leaveAndDeleteAsk':
+          localizations.messaging_GroupInfo_leaveAndDeleteAsk,
+      'messaging_GroupInfo_removeUserAsk':
+          localizations.messaging_GroupInfo_removeUserAsk,
+      'messaging_GroupInfo_makeModeratorAsk':
+          localizations.messaging_GroupInfo_makeModeratorAsk,
+      'messaging_GroupInfo_removeModeratorAsk':
+          localizations.messaging_GroupInfo_removeModeratorAsk,
+      'messaging_GroupInfo_titlePrefix':
+          localizations.messaging_GroupInfo_titlePrefix,
+      'messaging_GroupInfo_groupMembersHeadline':
+          localizations.messaging_GroupInfo_groupMembersHeadline,
+      'messaging_GroupInfo_addUserBtnText':
+          localizations.messaging_GroupInfo_addUserBtnText,
+      'messaging_GroupInfo_leaveBtnText':
+          localizations.messaging_GroupInfo_leaveBtnText,
+      'messaging_GroupInfo_deleteLeaveBtnText':
+          localizations.messaging_GroupInfo_deleteLeaveBtnText,
+      'messaging_GroupInfo_makeModeratorBtnText':
+          localizations.messaging_GroupInfo_makeModeratorBtnText,
+      'messaging_GroupInfo_unmakeModeratorBtnText':
+          localizations.messaging_GroupInfo_unmakeModeratorBtnText,
+      'messaging_GroupInfo_removeUserBtnText':
+          localizations.messaging_GroupInfo_removeUserBtnText,
+      'messaging_GroupNameDialog_title':
+          localizations.messaging_GroupNameDialog_title,
+      'messaging_GroupNameDialog_fieldLabel':
+          localizations.messaging_GroupNameDialog_fieldLabel,
+      'messaging_GroupNameDialog_fieldHint':
+          localizations.messaging_GroupNameDialog_fieldHint,
+      'messaging_GroupNameDialog_fieldValidation_empty':
+          localizations.messaging_GroupNameDialog_fieldValidation_empty,
+      'messaging_GroupNameDialog_fieldValidation_short':
+          localizations.messaging_GroupNameDialog_fieldValidation_short,
+      'messaging_GroupNameDialog_saveBtnText':
+          localizations.messaging_GroupNameDialog_saveBtnText,
+      'messaging_GroupNameDialog_cancelBtnText':
+          localizations.messaging_GroupNameDialog_cancelBtnText,
+      'messaging_GroupBuilderScreen_screenTitle':
+          localizations.messaging_GroupBuilderScreen_screenTitle,
+      'messaging_GroupBuilderScreen_groupNameHeadline':
+          localizations.messaging_GroupBuilderScreen_groupNameHeadline,
+      'messaging_GroupBuilderScreen_membersHeadline':
+          localizations.messaging_GroupBuilderScreen_membersHeadline,
+      'messaging_GroupBuilderScreen_addUserBtnText':
+          localizations.messaging_GroupBuilderScreen_addUserBtnText,
+      'messaging_GroupBuilderScreen_submitBtnText':
+          localizations.messaging_GroupBuilderScreen_submitBtnText,
+      'messaging_GroupBuilderScreen_nameFieldLabel':
+          localizations.messaging_GroupBuilderScreen_nameFieldLabel,
+      'messaging_GroupBuilderScreen_nameFieldEmpty':
+          localizations.messaging_GroupBuilderScreen_nameFieldEmpty,
+      'messaging_GroupBuilderScreen_nameFieldShort':
+          localizations.messaging_GroupBuilderScreen_nameFieldShort,
+      'messaging_GroupBuilderScreen_connectionError':
+          localizations.messaging_GroupBuilderScreen_connectionError,
+      'messaging_GroupBuilderScreen_submitError':
+          localizations.messaging_GroupBuilderScreen_submitError,
       'account_selfCarePasswordExpired_message':
           localizations.account_selfCarePasswordExpired_message,
       'favorites_SnackBar_deleted': (name) =>

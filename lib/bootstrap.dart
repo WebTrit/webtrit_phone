@@ -8,6 +8,7 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
 
@@ -35,6 +36,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
       await _initFirebase();
       await _initFirebaseMessaging();
+      await _initLocalNotifications();
 
       if (!kIsWeb && kDebugMode) {
         FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
@@ -96,13 +98,16 @@ Future<void> _initFirebaseMessaging() async {
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     logger.info('onMessage: ${message.toMap()}');
+    FirebaseNotificationsBroker.handleForegroundNotification(message);
   });
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     logger.info('onMessageOpenedApp: ${message.toMap()}');
+    FirebaseNotificationsBroker.handleOpenedNotification(message);
   });
   final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
   if (initialMessage != null) {
     logger.info('initialMessage: ${initialMessage.toMap()}');
+    FirebaseNotificationsBroker.handleOpenedNotification(initialMessage);
   }
 
   // actual FirebaseMessaging permission request executed in [PermissionsCubit]
@@ -161,4 +166,15 @@ class FCMIsolateDatabase extends AppDatabase {
 
     return _instance!;
   }
+}
+
+Future _initLocalNotifications() async {
+  await FlutterLocalNotificationsPlugin().initialize(
+    const InitializationSettings(
+      iOS: DarwinInitializationSettings(),
+      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+    ),
+    onDidReceiveNotificationResponse: LocalNotificationsBroker.handleActionReceived,
+    onDidReceiveBackgroundNotificationResponse: LocalNotificationsBroker.handleActionReceived,
+  );
 }

@@ -34,9 +34,6 @@ class _$LoginCustomSigninStateCopyWithImpl<$Res,
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  /// Create a copy of LoginCustomSigninState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -56,9 +53,6 @@ class __$$LoginCustomSigninStateImplCopyWithImpl<$Res>
       _$LoginCustomSigninStateImpl _value,
       $Res Function(_$LoginCustomSigninStateImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of LoginCustomSigninState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc

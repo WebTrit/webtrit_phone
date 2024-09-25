@@ -40,12 +40,8 @@ mixin _$ThemeSettings {
   ThemeSvgAsset get secondaryOnboardingLogo =>
       throw _privateConstructorUsedError;
 
-  /// Serializes this ThemeSettings to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of ThemeSettings
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $ThemeSettingsCopyWith<ThemeSettings> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -87,8 +83,6 @@ class _$ThemeSettingsCopyWithImpl<$Res, $Val extends ThemeSettings>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of ThemeSettings
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -152,8 +146,6 @@ class _$ThemeSettingsCopyWithImpl<$Res, $Val extends ThemeSettings>
     ) as $Val);
   }
 
-  /// Create a copy of ThemeSettings
-  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ColorSchemeOverrideCopyWith<$Res>? get lightColorSchemeOverride {
@@ -167,8 +159,6 @@ class _$ThemeSettingsCopyWithImpl<$Res, $Val extends ThemeSettings>
     });
   }
 
-  /// Create a copy of ThemeSettings
-  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ThemeWidgetConfigCopyWith<$Res>? get themeWidgetLightConfig {
@@ -182,8 +172,6 @@ class _$ThemeSettingsCopyWithImpl<$Res, $Val extends ThemeSettings>
     });
   }
 
-  /// Create a copy of ThemeSettings
-  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ThemePageConfigCopyWith<$Res>? get themePageLightConfig {
@@ -197,8 +185,6 @@ class _$ThemeSettingsCopyWithImpl<$Res, $Val extends ThemeSettings>
     });
   }
 
-  /// Create a copy of ThemeSettings
-  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ColorSchemeOverrideCopyWith<$Res>? get darkColorSchemeOverride {
@@ -212,8 +198,6 @@ class _$ThemeSettingsCopyWithImpl<$Res, $Val extends ThemeSettings>
     });
   }
 
-  /// Create a copy of ThemeSettings
-  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ThemeWidgetConfigCopyWith<$Res>? get themeWidgetDarkConfig {
@@ -227,8 +211,6 @@ class _$ThemeSettingsCopyWithImpl<$Res, $Val extends ThemeSettings>
     });
   }
 
-  /// Create a copy of ThemeSettings
-  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ThemePageConfigCopyWith<$Res>? get themePageDarkConfig {
@@ -285,8 +267,6 @@ class __$$ThemeSettingsImplCopyWithImpl<$Res>
       _$ThemeSettingsImpl _value, $Res Function(_$ThemeSettingsImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ThemeSettings
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -439,7 +419,7 @@ class _$ThemeSettingsImpl implements _ThemeSettings {
                 other.secondaryOnboardingLogo == secondaryOnboardingLogo));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -455,9 +435,7 @@ class _$ThemeSettingsImpl implements _ThemeSettings {
       primaryOnboardingLogo,
       secondaryOnboardingLogo);
 
-  /// Create a copy of ThemeSettings
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ThemeSettingsImplCopyWith<_$ThemeSettingsImpl> get copyWith =>
@@ -511,11 +489,8 @@ abstract class _ThemeSettings implements ThemeSettings {
   ThemeSvgAsset get primaryOnboardingLogo;
   @override
   ThemeSvgAsset get secondaryOnboardingLogo;
-
-  /// Create a copy of ThemeSettings
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ThemeSettingsImplCopyWith<_$ThemeSettingsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -573,12 +548,8 @@ mixin _$ColorSchemeOverride {
   Color? get scrim => throw _privateConstructorUsedError;
   Color? get surfaceTint => throw _privateConstructorUsedError;
 
-  /// Serializes this ColorSchemeOverride to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of ColorSchemeOverride
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $ColorSchemeOverrideCopyWith<ColorSchemeOverride> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -648,8 +619,6 @@ class _$ColorSchemeOverrideCopyWithImpl<$Res, $Val extends ColorSchemeOverride>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of ColorSchemeOverride
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -954,8 +923,6 @@ class __$$ColorSchemeOverrideImplCopyWithImpl<$Res>
       $Res Function(_$ColorSchemeOverrideImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ColorSchemeOverride
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1438,7 +1405,7 @@ class _$ColorSchemeOverrideImpl implements _ColorSchemeOverride {
             (identical(other.surfaceTint, surfaceTint) || other.surfaceTint == surfaceTint));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
@@ -1490,9 +1457,7 @@ class _$ColorSchemeOverrideImpl implements _ColorSchemeOverride {
         surfaceTint
       ]);
 
-  /// Create a copy of ColorSchemeOverride
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ColorSchemeOverrideImplCopyWith<_$ColorSchemeOverrideImpl> get copyWith =>
@@ -1651,11 +1616,8 @@ abstract class _ColorSchemeOverride implements ColorSchemeOverride {
   Color? get scrim;
   @override
   Color? get surfaceTint;
-
-  /// Create a copy of ColorSchemeOverride
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ColorSchemeOverrideImplCopyWith<_$ColorSchemeOverrideImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

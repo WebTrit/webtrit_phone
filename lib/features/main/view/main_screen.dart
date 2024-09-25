@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/features/messaging/messaging.dart';
 
 import '../main.dart';
 
@@ -32,18 +33,15 @@ class MainScreen extends StatelessWidget {
         selectedLabelStyle: themeData.textTheme.bodySmall,
         unselectedLabelStyle: themeData.textTheme.bodySmall,
         currentIndex: tabs.indexOf(currentTab),
-        onTap: (index) {
-          final onNavigationBarTap = this.onNavigationBarTap;
-          if (onNavigationBarTap != null) {
-            onNavigationBarTap(tabs[index]);
-          }
-        },
         items: tabs.map((tab) {
-          return BottomNavigationBarItem(
-            icon: Icon(tab.icon),
-            label: context.parseL10n(tab.titleL10n),
-          );
+          final flavor = tab.flavor;
+          Widget icon = Icon(tab.icon);
+          String label = context.parseL10n(tab.titleL10n);
+          if (flavor == MainFlavor.messaging) icon = MessagingFlavorOverlay(child: icon);
+          return BottomNavigationBarItem(icon: icon, label: label);
         }).toList(),
+        onTap: (index) => onNavigationBarTap?.call(tabs[index]),
+        // items: navBarItems,
       ),
     );
 

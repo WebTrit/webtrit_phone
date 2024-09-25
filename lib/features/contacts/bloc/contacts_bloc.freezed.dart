@@ -134,9 +134,7 @@ mixin _$ContactsState {
   String get search => throw _privateConstructorUsedError;
   ContactSourceType get sourceType => throw _privateConstructorUsedError;
 
-  /// Create a copy of ContactsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $ContactsStateCopyWith<ContactsState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -160,8 +158,6 @@ class _$ContactsStateCopyWithImpl<$Res, $Val extends ContactsState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of ContactsState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -200,8 +196,6 @@ class __$$ContactsStateImplCopyWithImpl<$Res>
       _$ContactsStateImpl _value, $Res Function(_$ContactsStateImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ContactsState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -250,9 +244,7 @@ class _$ContactsStateImpl implements _ContactsState {
   @override
   int get hashCode => Object.hash(runtimeType, search, sourceType);
 
-  /// Create a copy of ContactsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ContactsStateImplCopyWith<_$ContactsStateImpl> get copyWith =>
@@ -268,11 +260,8 @@ abstract class _ContactsState implements ContactsState {
   String get search;
   @override
   ContactSourceType get sourceType;
-
-  /// Create a copy of ContactsState
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ContactsStateImplCopyWith<_$ContactsStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

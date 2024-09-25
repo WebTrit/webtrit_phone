@@ -2,8 +2,6 @@ import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations.g.dart';
 
-// ignore_for_file: type=lint
-
 /// The translations for English (`en`).
 class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
@@ -476,6 +474,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get main_BottomNavigationBarItemLabel_keypad => 'Keypad';
 
   @override
+  String get main_BottomNavigationBarItemLabel_chats => 'Chats';
+
+  @override
   String get main_BottomNavigationBarItemLabel_recents => 'Recents';
 
   @override
@@ -731,6 +732,258 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+
+  @override
+  String get messaging_Conversation_failure => 'Conversation load error';
+
+  @override
+  String get messaging_ActionBtn_retry => 'Retry';
+
+  @override
+  String get messaging_MessageView_textcopy => 'Copy to clipboard';
+
+  @override
+  String get messaging_MessageView_reply => 'Reply';
+
+  @override
+  String get messaging_MessageView_forward => 'Forward';
+
+  @override
+  String get messaging_MessageView_edit => 'Edit';
+
+  @override
+  String get messaging_MessageView_delete => 'Delete';
+
+  @override
+  String get messaging_MessageView_forwarded => '[forwarded]';
+
+  @override
+  String get messaging_MessageView_edited => '[edited]';
+
+  @override
+  String get messaging_MessageView_deleted => '[deleted]';
+
+  @override
+  String get messaging_SmsSendingStatus_waiting => 'waiting';
+
+  @override
+  String get messaging_SmsSendingStatus_sent => 'sent';
+
+  @override
+  String get messaging_SmsSendingStatus_failed => 'failed';
+
+  @override
+  String get messaging_SmsSendingStatus_delivered => 'delivered';
+
+  @override
+  String get messaging_ParticipantName_you => 'You';
+
+  @override
+  String get messaging_StateBar_initializing => 'INITIALIZING';
+
+  @override
+  String get messaging_StateBar_connecting => 'CONNECTING';
+
+  @override
+  String get messaging_StateBar_error => 'DISCONNECTED';
+
+  @override
+  String get messaging_ConversationsScreen_startDialog => 'Start dialog';
+
+  @override
+  String get messaging_ConversationsScreen_empty => 'No conversations started yet';
+
+  @override
+  String get messaging_ConversationsScreen_messages_title => 'Messages';
+
+  @override
+  String get messaging_ConversationsScreen_smses_title => 'SMS';
+
+  @override
+  String get messaging_ConversationsScreen_selectNumberSheet_title => 'Select a number';
+
+  @override
+  String get messaging_ConversationsScreen_noNumberAlert_title => 'No phone number';
+
+  @override
+  String get messaging_ConversationsScreen_noNumberAlert_text => 'You need to have a phone number linked to you account to send SMS messages';
+
+  @override
+  String get messaging_Conversations_tile_empty => 'No messages yet';
+
+  @override
+  String get messaging_Conversations_tile_you => 'You';
+
+  @override
+  String get messaging_MessageListView_field_hint => 'Type a message';
+
+  @override
+  String get messaging_ConversationScreen_titlePrefix => 'Dialog:';
+
+  @override
+  String get messaging_ConversationInfo_deleteAsk => 'Are you sure you want to delete this dialog?';
+
+  @override
+  String get messaging_ConversationInfo_title => 'Contact info';
+
+  @override
+  String get messaging_ConversationInfo_deleteBtn => 'Delete dialog';
+
+  @override
+  String get messaging_NewConversation_createGroup => 'Create group';
+
+  @override
+  String get messaging_NewConversation_title => 'New chat';
+
+  @override
+  String get messaging_NewConversation_cancel => 'Cancel';
+
+  @override
+  String get messaging_NewConversation_create => 'Create';
+
+  @override
+  String get messaging_NewConversation_externalContacts_heading => 'Cloud PBX contacts';
+
+  @override
+  String get messaging_NewConversation_localContacts_heading => 'Local contacts';
+
+  @override
+  String get messaging_NewConversation_contactSearch_hint => 'Search contacts';
+
+  @override
+  String get messaging_NewConversation_contactOrNumberSearch_hint => 'Search or enter phone number';
+
+  @override
+  String get messaging_NewConversation_invite_heading => 'Invite users:';
+
+  @override
+  String get messaging_NewConversation_next_action => 'Next';
+
+  @override
+  String get messaging_NewConversation_back_action => 'Back';
+
+  @override
+  String get messaging_GroupScreen_titlePrefix => 'Group:';
+
+  @override
+  String get messaging_ChooseContact_title => 'Choose contact:';
+
+  @override
+  String get messaging_ChooseContact_empty => 'No contacts found';
+
+  @override
+  String get messaging_ChooseContact_cancel => 'Cancel';
+
+  @override
+  String get messaging_ConfirmDialog_ask => 'Are you sure?';
+
+  @override
+  String get messaging_ConfirmDialog_confirm => 'Yes';
+
+  @override
+  String get messaging_ConfirmDialog_cancel => 'No';
+
+  @override
+  String get messaging_GroupAuthorities_noauthorities => 'member';
+
+  @override
+  String get messaging_GroupAuthorities_moderator => 'moderator';
+
+  @override
+  String get messaging_GroupAuthorities_owner => 'owner';
+
+  @override
+  String get messaging_GroupInfo_title => 'Group info';
+
+  @override
+  String get messaging_GroupInfo_leaveAsk => 'Are you sure you want to leave this group?';
+
+  @override
+  String get messaging_GroupInfo_leaveAndDeleteAsk => 'Are you sure you want leave and delete this group?';
+
+  @override
+  String get messaging_GroupInfo_removeUserAsk => 'Are you sure you want to remove this user from the group?';
+
+  @override
+  String get messaging_GroupInfo_makeModeratorAsk => 'Are you sure you want to make this user a moderator?';
+
+  @override
+  String get messaging_GroupInfo_removeModeratorAsk => 'Are you sure you want to remove this user from moderators?';
+
+  @override
+  String get messaging_GroupInfo_titlePrefix => 'Group:';
+
+  @override
+  String get messaging_GroupInfo_groupMembersHeadline => 'Group members';
+
+  @override
+  String get messaging_GroupInfo_addUserBtnText => 'Add user';
+
+  @override
+  String get messaging_GroupInfo_leaveBtnText => 'Leave group';
+
+  @override
+  String get messaging_GroupInfo_deleteLeaveBtnText => 'Delete and leave';
+
+  @override
+  String get messaging_GroupInfo_makeModeratorBtnText => 'Make moderator';
+
+  @override
+  String get messaging_GroupInfo_unmakeModeratorBtnText => 'Unmake moderator';
+
+  @override
+  String get messaging_GroupInfo_removeUserBtnText => 'Remove';
+
+  @override
+  String get messaging_GroupNameDialog_title => 'Group name';
+
+  @override
+  String get messaging_GroupNameDialog_fieldLabel => 'Group name';
+
+  @override
+  String get messaging_GroupNameDialog_fieldHint => 'Enter group name';
+
+  @override
+  String get messaging_GroupNameDialog_fieldValidation_empty => 'Please enter group name';
+
+  @override
+  String get messaging_GroupNameDialog_fieldValidation_short => 'Group name is too short';
+
+  @override
+  String get messaging_GroupNameDialog_saveBtnText => 'Save';
+
+  @override
+  String get messaging_GroupNameDialog_cancelBtnText => 'Cancel';
+
+  @override
+  String get messaging_GroupBuilderScreen_screenTitle => 'Create group';
+
+  @override
+  String get messaging_GroupBuilderScreen_groupNameHeadline => 'Group name';
+
+  @override
+  String get messaging_GroupBuilderScreen_membersHeadline => 'Members';
+
+  @override
+  String get messaging_GroupBuilderScreen_addUserBtnText => 'Add user';
+
+  @override
+  String get messaging_GroupBuilderScreen_submitBtnText => 'Submit';
+
+  @override
+  String get messaging_GroupBuilderScreen_nameFieldLabel => 'Group Name';
+
+  @override
+  String get messaging_GroupBuilderScreen_nameFieldEmpty => 'Please enter a group name';
+
+  @override
+  String get messaging_GroupBuilderScreen_nameFieldShort => 'Group name must be at least 3 characters';
+
+  @override
+  String get messaging_GroupBuilderScreen_connectionError => 'Connection error, please try later';
+
+  @override
+  String get messaging_GroupBuilderScreen_submitError => 'Error happened while creating group, please try again';
 
   @override
   String get account_selfCarePasswordExpired_message => 'Your self-care password has expired. Please update it using your self-care.\nUntil the password is changed, access to the service will be limited.';
