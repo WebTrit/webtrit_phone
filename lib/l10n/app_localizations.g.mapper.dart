@@ -481,6 +481,8 @@ class AppLocalizationsMapper {
           localizations.messaging_NewConversation_contactSearch_hint,
       'messaging_NewConversation_contactOrNumberSearch_hint':
           localizations.messaging_NewConversation_contactOrNumberSearch_hint,
+      'messaging_NewConversation_numberSearch_invalidFormat':
+          localizations.messaging_NewConversation_numberSearch_invalidFormat,
       'messaging_NewConversation_invite_heading':
           localizations.messaging_NewConversation_invite_heading,
       'messaging_NewConversation_next_action':

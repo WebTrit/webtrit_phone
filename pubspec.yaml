@@ -83,7 +83,7 @@ dependencies:
   gravatar_utils: ^1.0.0
   l10n_mapper_generator: ^2.1.2
   dlibphonenumber: ^1.1.22
-  flutter_sim_country_code: ^0.1.2
+  device_region: ^1.4.0
 
   webtrit_api:
     path: ./packages/webtrit_api

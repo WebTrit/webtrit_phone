@@ -854,6 +854,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_NewConversation_contactOrNumberSearch_hint => 'Знайдіть або введіть номер телефону';
 
   @override
+  String get messaging_NewConversation_numberSearch_invalidFormat => 'Нерозпізнаний формат телефону, введіть номер телефону в міжнародному форматі (наприклад, +1234567890)';
+
+  @override
   String get messaging_NewConversation_invite_heading => 'Запросити користувачів:';
 
   @override

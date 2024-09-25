@@ -624,6 +624,8 @@
   "@messaging_NewConversation_contactSearch_hint": {},
   "messaging_NewConversation_contactOrNumberSearch_hint": "Знайдіть або введіть номер телефону",
   "@messaging_NewConversation_contactOrNumberSearch_hint": {},
+  "messaging_NewConversation_numberSearch_invalidFormat": "Нерозпізнаний формат телефону, введіть номер телефону в міжнародному форматі (наприклад, +1234567890)",
+  "@messaging_NewConversation_numberSearch_invalidFormat": {},
   "messaging_NewConversation_invite_heading": "Запросити користувачів:",
   "@messaging_NewConversation_invite_heading": {},
   "messaging_NewConversation_next_action": "Далі",

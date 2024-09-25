@@ -624,6 +624,8 @@
   "@messaging_NewConversation_contactSearch_hint": {},
   "messaging_NewConversation_contactOrNumberSearch_hint": "Cerca o inserisci il numero di telefono",
   "@messaging_NewConversation_contactOrNumberSearch_hint": {},
+  "messaging_NewConversation_numberSearch_invalidFormat": "Formato di telefono non riconosciuto, inserisci un numero di telefono in formato internazionale (ad esempio +1234567890)",
+  "@messaging_NewConversation_numberSearch_invalidFormat": {},
   "messaging_NewConversation_invite_heading": "Invita utenti:",
   "@messaging_NewConversation_invite_heading": {},
   "messaging_NewConversation_next_action": "Prossima",

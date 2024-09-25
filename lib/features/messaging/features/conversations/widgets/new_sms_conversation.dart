@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dlibphonenumber/dlibphonenumber.dart';
-import 'package:flutter_sim_country_code/flutter_sim_country_code.dart';
+import 'package:device_region/device_region.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/features/messaging/extensions/extensions.dart';
@@ -43,6 +43,7 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
   @override
   void initState() {
     super.initState();
+
     contactsSub = widget.contactsRepository.watchContacts('').asyncMap(
       (contacts) async {
         return compute((contacts) {
@@ -54,6 +55,7 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
       },
     ).listen((contacts) {
       final filtered = contacts.where(widget.filter).toList();
+      if (!mounted) return;
       setState(() {
         initializing = false;
         localContacts = filtered.where((contact) => contact.sourceType == ContactSourceType.local).toList();
@@ -61,7 +63,7 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
       });
     });
 
-    FlutterSimCountryCode.simCountryCode.then(
+    DeviceRegion.getSIMCountryCode().then(
       (value) {
         _logger.info('SimCountryCode: $value');
         if (mounted) setState(() => simCountryCode = value);
@@ -97,13 +99,13 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
         : contacts.where((contact) => contact.name.toLowerCase().contains(searchFilterValue)).toList();
   }
 
-  bool get isNumberInField {
+  bool get isValidNumberInField {
     if (searchFilterValue.isEmpty) return false;
     try {
-      final customNumber = phoneUtil.parse(searchFilterValue, simCountryCode);
+      final customNumber = phoneUtil.parse(searchFilterValue, simCountryCode?.toUpperCase());
       this.customNumber = customNumber;
       return phoneUtil.isValidNumber(customNumber);
-    } on NumberParseException catch (e) {
+    } catch (e) {
       _logger.info('NumberParseException: $e');
       return false;
     }
@@ -132,7 +134,7 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
           ),
           leadingWidth: 100,
           actions: [
-            if (isNumberInField)
+            if (isValidNumberInField)
               TextButton(
                 onPressed: onCreateByNumber,
                 child: Text(
@@ -148,15 +150,23 @@ class _NewSmsConversationState extends State<NewSmsConversation> {
             const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: TextField(
+              child: TextFormField(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) {
+                  if (value == null || value.isEmpty) return null;
+                  final hanOnlyNumbers = value.length > 6 && RegExp(r'^[0-9]*$').hasMatch(value);
+
+                  if (hanOnlyNumbers && !isValidNumberInField) {
+                    return context.l10n.messaging_NewConversation_numberSearch_invalidFormat;
+                  }
+                  return null;
+                },
                 decoration: InputDecoration(
                   hintText: context.l10n.messaging_NewConversation_contactOrNumberSearch_hint,
                   fillColor: colorScheme.surface,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                  border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(12)),
                   prefixIcon: const Icon(Icons.search),
+                  errorMaxLines: 3,
                 ),
                 onChanged: (value) => setState(() => searchFilterValue = value.toLowerCase()),
               ),

@@ -854,6 +854,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_NewConversation_contactOrNumberSearch_hint => 'Cerca o inserisci il numero di telefono';
 
   @override
+  String get messaging_NewConversation_numberSearch_invalidFormat => 'Formato di telefono non riconosciuto, inserisci un numero di telefono in formato internazionale (ad esempio +1234567890)';
+
+  @override
   String get messaging_NewConversation_invite_heading => 'Invita utenti:';
 
   @override

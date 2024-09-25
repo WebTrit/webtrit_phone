@@ -1709,6 +1709,12 @@ abstract class AppLocalizations {
   /// **'Search or enter phone number'**
   String get messaging_NewConversation_contactOrNumberSearch_hint;
 
+  /// No description provided for @messaging_NewConversation_numberSearch_invalidFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Unrecognized phone format, please enter a phone number in international format (e.g. +1234567890)'**
+  String get messaging_NewConversation_numberSearch_invalidFormat;
+
   /// No description provided for @messaging_NewConversation_invite_heading.
   ///
   /// In en, this message translates to:
