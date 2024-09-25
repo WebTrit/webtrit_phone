@@ -270,6 +270,7 @@ class DialogWidgetConfig with _$DialogWidgetConfig {
   @themeJsonSerializable
   const factory DialogWidgetConfig({
     ConfirmDialogWidgetConfig? confirmDialog,
+    @Default(SnackBarWidgetConfig()) SnackBarWidgetConfig snackBar,
   }) = _DialogWidgetConfig;
 
   factory DialogWidgetConfig.fromJson(Map<String, dynamic> json) => _$DialogWidgetConfigFromJson(json);
@@ -286,6 +287,20 @@ class ConfirmDialogWidgetConfig with _$ConfirmDialogWidgetConfig {
   }) = _ConfirmDialogWidgetConfig;
 
   factory ConfirmDialogWidgetConfig.fromJson(Map<String, dynamic> json) => _$ConfirmDialogWidgetConfigFromJson(json);
+}
+
+@freezed
+class SnackBarWidgetConfig with _$SnackBarWidgetConfig {
+  // ignore: invalid_annotation_target
+  @themeJsonSerializable
+  const factory SnackBarWidgetConfig({
+    @Default(Color(0xFF75B943)) Color successBackgroundColor,
+    @Default(Color(0xFFE74C3C)) Color errorBackgroundColor,
+    @Default(Color(0xFF494949)) Color infoBackgroundColor,
+    @Default(Color(0xFFF95A14)) Color warningBackgroundColor,
+  }) = _SnackBarWidgetConfig;
+
+  factory SnackBarWidgetConfig.fromJson(Map<String, dynamic> json) => _$SnackBarWidgetConfigFromJson(json);
 }
 
 @freezed

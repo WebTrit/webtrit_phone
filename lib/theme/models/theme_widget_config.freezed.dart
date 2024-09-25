@@ -4375,6 +4375,7 @@ DialogWidgetConfig _$DialogWidgetConfigFromJson(Map<String, dynamic> json) {
 mixin _$DialogWidgetConfig {
   ConfirmDialogWidgetConfig? get confirmDialog =>
       throw _privateConstructorUsedError;
+  SnackBarWidgetConfig get snackBar => throw _privateConstructorUsedError;
 
   /// Serializes this DialogWidgetConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -4392,9 +4393,12 @@ abstract class $DialogWidgetConfigCopyWith<$Res> {
           DialogWidgetConfig value, $Res Function(DialogWidgetConfig) then) =
       _$DialogWidgetConfigCopyWithImpl<$Res, DialogWidgetConfig>;
   @useResult
-  $Res call({ConfirmDialogWidgetConfig? confirmDialog});
+  $Res call(
+      {ConfirmDialogWidgetConfig? confirmDialog,
+      SnackBarWidgetConfig snackBar});
 
   $ConfirmDialogWidgetConfigCopyWith<$Res>? get confirmDialog;
+  $SnackBarWidgetConfigCopyWith<$Res> get snackBar;
 }
 
 /// @nodoc
@@ -4413,12 +4417,17 @@ class _$DialogWidgetConfigCopyWithImpl<$Res, $Val extends DialogWidgetConfig>
   @override
   $Res call({
     Object? confirmDialog = freezed,
+    Object? snackBar = null,
   }) {
     return _then(_value.copyWith(
       confirmDialog: freezed == confirmDialog
           ? _value.confirmDialog
           : confirmDialog // ignore: cast_nullable_to_non_nullable
               as ConfirmDialogWidgetConfig?,
+      snackBar: null == snackBar
+          ? _value.snackBar
+          : snackBar // ignore: cast_nullable_to_non_nullable
+              as SnackBarWidgetConfig,
     ) as $Val);
   }
 
@@ -4436,6 +4445,16 @@ class _$DialogWidgetConfigCopyWithImpl<$Res, $Val extends DialogWidgetConfig>
       return _then(_value.copyWith(confirmDialog: value) as $Val);
     });
   }
+
+  /// Create a copy of DialogWidgetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $SnackBarWidgetConfigCopyWith<$Res> get snackBar {
+    return $SnackBarWidgetConfigCopyWith<$Res>(_value.snackBar, (value) {
+      return _then(_value.copyWith(snackBar: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -4446,10 +4465,14 @@ abstract class _$$DialogWidgetConfigImplCopyWith<$Res>
       __$$DialogWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({ConfirmDialogWidgetConfig? confirmDialog});
+  $Res call(
+      {ConfirmDialogWidgetConfig? confirmDialog,
+      SnackBarWidgetConfig snackBar});
 
   @override
   $ConfirmDialogWidgetConfigCopyWith<$Res>? get confirmDialog;
+  @override
+  $SnackBarWidgetConfigCopyWith<$Res> get snackBar;
 }
 
 /// @nodoc
@@ -4466,12 +4489,17 @@ class __$$DialogWidgetConfigImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? confirmDialog = freezed,
+    Object? snackBar = null,
   }) {
     return _then(_$DialogWidgetConfigImpl(
       confirmDialog: freezed == confirmDialog
           ? _value.confirmDialog
           : confirmDialog // ignore: cast_nullable_to_non_nullable
               as ConfirmDialogWidgetConfig?,
+      snackBar: null == snackBar
+          ? _value.snackBar
+          : snackBar // ignore: cast_nullable_to_non_nullable
+              as SnackBarWidgetConfig,
     ));
   }
 }
@@ -4480,17 +4508,21 @@ class __$$DialogWidgetConfigImplCopyWithImpl<$Res>
 
 @themeJsonSerializable
 class _$DialogWidgetConfigImpl implements _DialogWidgetConfig {
-  const _$DialogWidgetConfigImpl({this.confirmDialog});
+  const _$DialogWidgetConfigImpl(
+      {this.confirmDialog, this.snackBar = const SnackBarWidgetConfig()});
 
   factory _$DialogWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$DialogWidgetConfigImplFromJson(json);
 
   @override
   final ConfirmDialogWidgetConfig? confirmDialog;
+  @override
+  @JsonKey()
+  final SnackBarWidgetConfig snackBar;
 
   @override
   String toString() {
-    return 'DialogWidgetConfig(confirmDialog: $confirmDialog)';
+    return 'DialogWidgetConfig(confirmDialog: $confirmDialog, snackBar: $snackBar)';
   }
 
   @override
@@ -4499,12 +4531,14 @@ class _$DialogWidgetConfigImpl implements _DialogWidgetConfig {
         (other.runtimeType == runtimeType &&
             other is _$DialogWidgetConfigImpl &&
             (identical(other.confirmDialog, confirmDialog) ||
-                other.confirmDialog == confirmDialog));
+                other.confirmDialog == confirmDialog) &&
+            (identical(other.snackBar, snackBar) ||
+                other.snackBar == snackBar));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, confirmDialog);
+  int get hashCode => Object.hash(runtimeType, confirmDialog, snackBar);
 
   /// Create a copy of DialogWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -4525,14 +4559,16 @@ class _$DialogWidgetConfigImpl implements _DialogWidgetConfig {
 
 abstract class _DialogWidgetConfig implements DialogWidgetConfig {
   const factory _DialogWidgetConfig(
-          {final ConfirmDialogWidgetConfig? confirmDialog}) =
-      _$DialogWidgetConfigImpl;
+      {final ConfirmDialogWidgetConfig? confirmDialog,
+      final SnackBarWidgetConfig snackBar}) = _$DialogWidgetConfigImpl;
 
   factory _DialogWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$DialogWidgetConfigImpl.fromJson;
 
   @override
   ConfirmDialogWidgetConfig? get confirmDialog;
+  @override
+  SnackBarWidgetConfig get snackBar;
 
   /// Create a copy of DialogWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -4743,6 +4779,232 @@ abstract class _ConfirmDialogWidgetConfig implements ConfirmDialogWidgetConfig {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ConfirmDialogWidgetConfigImplCopyWith<_$ConfirmDialogWidgetConfigImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+SnackBarWidgetConfig _$SnackBarWidgetConfigFromJson(Map<String, dynamic> json) {
+  return _SnackBarWidgetConfig.fromJson(json);
+}
+
+/// @nodoc
+mixin _$SnackBarWidgetConfig {
+  Color get successBackgroundColor => throw _privateConstructorUsedError;
+  Color get errorBackgroundColor => throw _privateConstructorUsedError;
+  Color get infoBackgroundColor => throw _privateConstructorUsedError;
+  Color get warningBackgroundColor => throw _privateConstructorUsedError;
+
+  /// Serializes this SnackBarWidgetConfig to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of SnackBarWidgetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $SnackBarWidgetConfigCopyWith<SnackBarWidgetConfig> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SnackBarWidgetConfigCopyWith<$Res> {
+  factory $SnackBarWidgetConfigCopyWith(SnackBarWidgetConfig value,
+          $Res Function(SnackBarWidgetConfig) then) =
+      _$SnackBarWidgetConfigCopyWithImpl<$Res, SnackBarWidgetConfig>;
+  @useResult
+  $Res call(
+      {Color successBackgroundColor,
+      Color errorBackgroundColor,
+      Color infoBackgroundColor,
+      Color warningBackgroundColor});
+}
+
+/// @nodoc
+class _$SnackBarWidgetConfigCopyWithImpl<$Res,
+        $Val extends SnackBarWidgetConfig>
+    implements $SnackBarWidgetConfigCopyWith<$Res> {
+  _$SnackBarWidgetConfigCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of SnackBarWidgetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? successBackgroundColor = null,
+    Object? errorBackgroundColor = null,
+    Object? infoBackgroundColor = null,
+    Object? warningBackgroundColor = null,
+  }) {
+    return _then(_value.copyWith(
+      successBackgroundColor: null == successBackgroundColor
+          ? _value.successBackgroundColor
+          : successBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color,
+      errorBackgroundColor: null == errorBackgroundColor
+          ? _value.errorBackgroundColor
+          : errorBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color,
+      infoBackgroundColor: null == infoBackgroundColor
+          ? _value.infoBackgroundColor
+          : infoBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color,
+      warningBackgroundColor: null == warningBackgroundColor
+          ? _value.warningBackgroundColor
+          : warningBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$SnackBarWidgetConfigImplCopyWith<$Res>
+    implements $SnackBarWidgetConfigCopyWith<$Res> {
+  factory _$$SnackBarWidgetConfigImplCopyWith(_$SnackBarWidgetConfigImpl value,
+          $Res Function(_$SnackBarWidgetConfigImpl) then) =
+      __$$SnackBarWidgetConfigImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {Color successBackgroundColor,
+      Color errorBackgroundColor,
+      Color infoBackgroundColor,
+      Color warningBackgroundColor});
+}
+
+/// @nodoc
+class __$$SnackBarWidgetConfigImplCopyWithImpl<$Res>
+    extends _$SnackBarWidgetConfigCopyWithImpl<$Res, _$SnackBarWidgetConfigImpl>
+    implements _$$SnackBarWidgetConfigImplCopyWith<$Res> {
+  __$$SnackBarWidgetConfigImplCopyWithImpl(_$SnackBarWidgetConfigImpl _value,
+      $Res Function(_$SnackBarWidgetConfigImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SnackBarWidgetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? successBackgroundColor = null,
+    Object? errorBackgroundColor = null,
+    Object? infoBackgroundColor = null,
+    Object? warningBackgroundColor = null,
+  }) {
+    return _then(_$SnackBarWidgetConfigImpl(
+      successBackgroundColor: null == successBackgroundColor
+          ? _value.successBackgroundColor
+          : successBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color,
+      errorBackgroundColor: null == errorBackgroundColor
+          ? _value.errorBackgroundColor
+          : errorBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color,
+      infoBackgroundColor: null == infoBackgroundColor
+          ? _value.infoBackgroundColor
+          : infoBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color,
+      warningBackgroundColor: null == warningBackgroundColor
+          ? _value.warningBackgroundColor
+          : warningBackgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color,
+    ));
+  }
+}
+
+/// @nodoc
+
+@themeJsonSerializable
+class _$SnackBarWidgetConfigImpl implements _SnackBarWidgetConfig {
+  const _$SnackBarWidgetConfigImpl(
+      {this.successBackgroundColor = const Color(0xFF75B943),
+      this.errorBackgroundColor = const Color(0xFFE74C3C),
+      this.infoBackgroundColor = const Color(0xFF494949),
+      this.warningBackgroundColor = const Color(0xFFF95A14)});
+
+  factory _$SnackBarWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SnackBarWidgetConfigImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final Color successBackgroundColor;
+  @override
+  @JsonKey()
+  final Color errorBackgroundColor;
+  @override
+  @JsonKey()
+  final Color infoBackgroundColor;
+  @override
+  @JsonKey()
+  final Color warningBackgroundColor;
+
+  @override
+  String toString() {
+    return 'SnackBarWidgetConfig(successBackgroundColor: $successBackgroundColor, errorBackgroundColor: $errorBackgroundColor, infoBackgroundColor: $infoBackgroundColor, warningBackgroundColor: $warningBackgroundColor)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SnackBarWidgetConfigImpl &&
+            (identical(other.successBackgroundColor, successBackgroundColor) ||
+                other.successBackgroundColor == successBackgroundColor) &&
+            (identical(other.errorBackgroundColor, errorBackgroundColor) ||
+                other.errorBackgroundColor == errorBackgroundColor) &&
+            (identical(other.infoBackgroundColor, infoBackgroundColor) ||
+                other.infoBackgroundColor == infoBackgroundColor) &&
+            (identical(other.warningBackgroundColor, warningBackgroundColor) ||
+                other.warningBackgroundColor == warningBackgroundColor));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, successBackgroundColor,
+      errorBackgroundColor, infoBackgroundColor, warningBackgroundColor);
+
+  /// Create a copy of SnackBarWidgetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SnackBarWidgetConfigImplCopyWith<_$SnackBarWidgetConfigImpl>
+      get copyWith =>
+          __$$SnackBarWidgetConfigImplCopyWithImpl<_$SnackBarWidgetConfigImpl>(
+              this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SnackBarWidgetConfigImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _SnackBarWidgetConfig implements SnackBarWidgetConfig {
+  const factory _SnackBarWidgetConfig(
+      {final Color successBackgroundColor,
+      final Color errorBackgroundColor,
+      final Color infoBackgroundColor,
+      final Color warningBackgroundColor}) = _$SnackBarWidgetConfigImpl;
+
+  factory _SnackBarWidgetConfig.fromJson(Map<String, dynamic> json) =
+      _$SnackBarWidgetConfigImpl.fromJson;
+
+  @override
+  Color get successBackgroundColor;
+  @override
+  Color get errorBackgroundColor;
+  @override
+  Color get infoBackgroundColor;
+  @override
+  Color get warningBackgroundColor;
+
+  /// Create a copy of SnackBarWidgetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SnackBarWidgetConfigImplCopyWith<_$SnackBarWidgetConfigImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 

@@ -495,12 +495,17 @@ _$DialogWidgetConfigImpl _$$DialogWidgetConfigImplFromJson(
           ? null
           : ConfirmDialogWidgetConfig.fromJson(
               json['confirmDialog'] as Map<String, dynamic>),
+      snackBar: json['snackBar'] == null
+          ? const SnackBarWidgetConfig()
+          : SnackBarWidgetConfig.fromJson(
+              json['snackBar'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$DialogWidgetConfigImplToJson(
         _$DialogWidgetConfigImpl instance) =>
     <String, dynamic>{
       'confirmDialog': instance.confirmDialog,
+      'snackBar': instance.snackBar,
     };
 
 _$ConfirmDialogWidgetConfigImpl _$$ConfirmDialogWidgetConfigImplFromJson(
@@ -523,6 +528,40 @@ Map<String, dynamic> _$$ConfirmDialogWidgetConfigImplToJson(
           instance.activeButtonColor2, const CSSColorConverter().toJson),
       'defaultButtonColor': _$JsonConverterToJson<String, Color>(
           instance.defaultButtonColor, const CSSColorConverter().toJson),
+    };
+
+_$SnackBarWidgetConfigImpl _$$SnackBarWidgetConfigImplFromJson(
+        Map<String, dynamic> json) =>
+    _$SnackBarWidgetConfigImpl(
+      successBackgroundColor: json['successBackgroundColor'] == null
+          ? const Color(0xFF75B943)
+          : const CSSColorConverter()
+              .fromJson(json['successBackgroundColor'] as String),
+      errorBackgroundColor: json['errorBackgroundColor'] == null
+          ? const Color(0xFFE74C3C)
+          : const CSSColorConverter()
+              .fromJson(json['errorBackgroundColor'] as String),
+      infoBackgroundColor: json['infoBackgroundColor'] == null
+          ? const Color(0xFF494949)
+          : const CSSColorConverter()
+              .fromJson(json['infoBackgroundColor'] as String),
+      warningBackgroundColor: json['warningBackgroundColor'] == null
+          ? const Color(0xFFF95A14)
+          : const CSSColorConverter()
+              .fromJson(json['warningBackgroundColor'] as String),
+    );
+
+Map<String, dynamic> _$$SnackBarWidgetConfigImplToJson(
+        _$SnackBarWidgetConfigImpl instance) =>
+    <String, dynamic>{
+      'successBackgroundColor':
+          const CSSColorConverter().toJson(instance.successBackgroundColor),
+      'errorBackgroundColor':
+          const CSSColorConverter().toJson(instance.errorBackgroundColor),
+      'infoBackgroundColor':
+          const CSSColorConverter().toJson(instance.infoBackgroundColor),
+      'warningBackgroundColor':
+          const CSSColorConverter().toJson(instance.warningBackgroundColor),
     };
 
 _$ActionPadWidgetConfigImpl _$$ActionPadWidgetConfigImplFromJson(

@@ -1,4 +1,12 @@
 {
+  "dialog": {
+    "snackBar": {
+      "successBackgroundColor": "#75B943",
+      "errorBackgroundColor": "#E74C3C",
+      "infoBackgroundColor": "#494949",
+      "warningBackgroundColor": "#F95A14"
+    }
+  },
   "statuses": {
     "registrationStatuses": {
       "online": "#75B943",
