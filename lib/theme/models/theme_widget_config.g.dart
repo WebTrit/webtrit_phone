@@ -35,6 +35,10 @@ _$ThemeWidgetConfigImpl _$$ThemeWidgetConfigImplFromJson(
           ? null
           : ActionPadWidgetConfig.fromJson(
               json['actionPad'] as Map<String, dynamic>),
+      statuses: json['statuses'] == null
+          ? const StatusesWidgetConfig()
+          : StatusesWidgetConfig.fromJson(
+              json['statuses'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$ThemeWidgetConfigImplToJson(
@@ -48,6 +52,7 @@ Map<String, dynamic> _$$ThemeWidgetConfigImplToJson(
       'text': instance.text,
       'dialog': instance.dialog,
       'actionPad': instance.actionPad,
+      'statuses': instance.statuses,
     };
 
 _$ButtonWidgetConfigImpl _$$ButtonWidgetConfigImplFromJson(
@@ -543,4 +548,81 @@ Map<String, dynamic> _$$ActionPadWidgetConfigImplToJson(
       'callStart': instance.callStart,
       'callTransfer': instance.callTransfer,
       'backspacePressed': instance.backspacePressed,
+    };
+
+_$StatusesWidgetConfigImpl _$$StatusesWidgetConfigImplFromJson(
+        Map<String, dynamic> json) =>
+    _$StatusesWidgetConfigImpl(
+      registrationStatuses: json['registrationStatuses'] == null
+          ? const RegistrationStatusesWidgetConfig()
+          : RegistrationStatusesWidgetConfig.fromJson(
+              json['registrationStatuses'] as Map<String, dynamic>),
+      callStatuses: json['callStatuses'] == null
+          ? const CallStatusesWidgetConfig()
+          : CallStatusesWidgetConfig.fromJson(
+              json['callStatuses'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$StatusesWidgetConfigImplToJson(
+        _$StatusesWidgetConfigImpl instance) =>
+    <String, dynamic>{
+      'registrationStatuses': instance.registrationStatuses,
+      'callStatuses': instance.callStatuses,
+    };
+
+_$RegistrationStatusesWidgetConfigImpl
+    _$$RegistrationStatusesWidgetConfigImplFromJson(
+            Map<String, dynamic> json) =>
+        _$RegistrationStatusesWidgetConfigImpl(
+          online: json['online'] == null
+              ? const Color(0xFF75B943)
+              : const CSSColorConverter().fromJson(json['online'] as String),
+          offline: json['offline'] == null
+              ? const Color(0xFFEEF3F6)
+              : const CSSColorConverter().fromJson(json['offline'] as String),
+        );
+
+Map<String, dynamic> _$$RegistrationStatusesWidgetConfigImplToJson(
+        _$RegistrationStatusesWidgetConfigImpl instance) =>
+    <String, dynamic>{
+      'online': const CSSColorConverter().toJson(instance.online),
+      'offline': const CSSColorConverter().toJson(instance.offline),
+    };
+
+_$CallStatusesWidgetConfigImpl _$$CallStatusesWidgetConfigImplFromJson(
+        Map<String, dynamic> json) =>
+    _$CallStatusesWidgetConfigImpl(
+      connectivityNone: json['connectivityNone'] == null
+          ? const Color(0xFFE74C3C)
+          : const CSSColorConverter()
+              .fromJson(json['connectivityNone'] as String),
+      connectError: json['connectError'] == null
+          ? const Color(0xFFE74C3C)
+          : const CSSColorConverter().fromJson(json['connectError'] as String),
+      appUnregistered: json['appUnregistered'] == null
+          ? const Color(0xFF494949)
+          : const CSSColorConverter()
+              .fromJson(json['appUnregistered'] as String),
+      connectIssue: json['connectIssue'] == null
+          ? const Color(0xFFE74C3C)
+          : const CSSColorConverter().fromJson(json['connectIssue'] as String),
+      inProgress: json['inProgress'] == null
+          ? const Color(0xFF123752)
+          : const CSSColorConverter().fromJson(json['inProgress'] as String),
+      ready: json['ready'] == null
+          ? const Color(0xFF75B943)
+          : const CSSColorConverter().fromJson(json['ready'] as String),
+    );
+
+Map<String, dynamic> _$$CallStatusesWidgetConfigImplToJson(
+        _$CallStatusesWidgetConfigImpl instance) =>
+    <String, dynamic>{
+      'connectivityNone':
+          const CSSColorConverter().toJson(instance.connectivityNone),
+      'connectError': const CSSColorConverter().toJson(instance.connectError),
+      'appUnregistered':
+          const CSSColorConverter().toJson(instance.appUnregistered),
+      'connectIssue': const CSSColorConverter().toJson(instance.connectIssue),
+      'inProgress': const CSSColorConverter().toJson(instance.inProgress),
+      'ready': const CSSColorConverter().toJson(instance.ready),
     };

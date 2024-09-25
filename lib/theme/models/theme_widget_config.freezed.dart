@@ -28,6 +28,7 @@ mixin _$ThemeWidgetConfig {
   TextWidgetConfig? get text => throw _privateConstructorUsedError;
   DialogWidgetConfig? get dialog => throw _privateConstructorUsedError;
   ActionPadWidgetConfig? get actionPad => throw _privateConstructorUsedError;
+  StatusesWidgetConfig get statuses => throw _privateConstructorUsedError;
 
   /// Serializes this ThemeWidgetConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -53,7 +54,8 @@ abstract class $ThemeWidgetConfigCopyWith<$Res> {
       InputWidgetConfig? input,
       TextWidgetConfig? text,
       DialogWidgetConfig? dialog,
-      ActionPadWidgetConfig? actionPad});
+      ActionPadWidgetConfig? actionPad,
+      StatusesWidgetConfig statuses});
 
   $ButtonWidgetConfigCopyWith<$Res>? get button;
   $GroupWidgetConfigCopyWith<$Res>? get group;
@@ -63,6 +65,7 @@ abstract class $ThemeWidgetConfigCopyWith<$Res> {
   $TextWidgetConfigCopyWith<$Res>? get text;
   $DialogWidgetConfigCopyWith<$Res>? get dialog;
   $ActionPadWidgetConfigCopyWith<$Res>? get actionPad;
+  $StatusesWidgetConfigCopyWith<$Res> get statuses;
 }
 
 /// @nodoc
@@ -88,6 +91,7 @@ class _$ThemeWidgetConfigCopyWithImpl<$Res, $Val extends ThemeWidgetConfig>
     Object? text = freezed,
     Object? dialog = freezed,
     Object? actionPad = freezed,
+    Object? statuses = null,
   }) {
     return _then(_value.copyWith(
       button: freezed == button
@@ -122,6 +126,10 @@ class _$ThemeWidgetConfigCopyWithImpl<$Res, $Val extends ThemeWidgetConfig>
           ? _value.actionPad
           : actionPad // ignore: cast_nullable_to_non_nullable
               as ActionPadWidgetConfig?,
+      statuses: null == statuses
+          ? _value.statuses
+          : statuses // ignore: cast_nullable_to_non_nullable
+              as StatusesWidgetConfig,
     ) as $Val);
   }
 
@@ -236,6 +244,16 @@ class _$ThemeWidgetConfigCopyWithImpl<$Res, $Val extends ThemeWidgetConfig>
       return _then(_value.copyWith(actionPad: value) as $Val);
     });
   }
+
+  /// Create a copy of ThemeWidgetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $StatusesWidgetConfigCopyWith<$Res> get statuses {
+    return $StatusesWidgetConfigCopyWith<$Res>(_value.statuses, (value) {
+      return _then(_value.copyWith(statuses: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -254,7 +272,8 @@ abstract class _$$ThemeWidgetConfigImplCopyWith<$Res>
       InputWidgetConfig? input,
       TextWidgetConfig? text,
       DialogWidgetConfig? dialog,
-      ActionPadWidgetConfig? actionPad});
+      ActionPadWidgetConfig? actionPad,
+      StatusesWidgetConfig statuses});
 
   @override
   $ButtonWidgetConfigCopyWith<$Res>? get button;
@@ -272,6 +291,8 @@ abstract class _$$ThemeWidgetConfigImplCopyWith<$Res>
   $DialogWidgetConfigCopyWith<$Res>? get dialog;
   @override
   $ActionPadWidgetConfigCopyWith<$Res>? get actionPad;
+  @override
+  $StatusesWidgetConfigCopyWith<$Res> get statuses;
 }
 
 /// @nodoc
@@ -295,6 +316,7 @@ class __$$ThemeWidgetConfigImplCopyWithImpl<$Res>
     Object? text = freezed,
     Object? dialog = freezed,
     Object? actionPad = freezed,
+    Object? statuses = null,
   }) {
     return _then(_$ThemeWidgetConfigImpl(
       button: freezed == button
@@ -329,6 +351,10 @@ class __$$ThemeWidgetConfigImplCopyWithImpl<$Res>
           ? _value.actionPad
           : actionPad // ignore: cast_nullable_to_non_nullable
               as ActionPadWidgetConfig?,
+      statuses: null == statuses
+          ? _value.statuses
+          : statuses // ignore: cast_nullable_to_non_nullable
+              as StatusesWidgetConfig,
     ));
   }
 }
@@ -345,7 +371,8 @@ class _$ThemeWidgetConfigImpl implements _ThemeWidgetConfig {
       this.input,
       this.text,
       this.dialog,
-      this.actionPad});
+      this.actionPad,
+      this.statuses = const StatusesWidgetConfig()});
 
   factory _$ThemeWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$ThemeWidgetConfigImplFromJson(json);
@@ -366,10 +393,13 @@ class _$ThemeWidgetConfigImpl implements _ThemeWidgetConfig {
   final DialogWidgetConfig? dialog;
   @override
   final ActionPadWidgetConfig? actionPad;
+  @override
+  @JsonKey()
+  final StatusesWidgetConfig statuses;
 
   @override
   String toString() {
-    return 'ThemeWidgetConfig(button: $button, group: $group, bar: $bar, picture: $picture, input: $input, text: $text, dialog: $dialog, actionPad: $actionPad)';
+    return 'ThemeWidgetConfig(button: $button, group: $group, bar: $bar, picture: $picture, input: $input, text: $text, dialog: $dialog, actionPad: $actionPad, statuses: $statuses)';
   }
 
   @override
@@ -385,13 +415,15 @@ class _$ThemeWidgetConfigImpl implements _ThemeWidgetConfig {
             (identical(other.text, text) || other.text == text) &&
             (identical(other.dialog, dialog) || other.dialog == dialog) &&
             (identical(other.actionPad, actionPad) ||
-                other.actionPad == actionPad));
+                other.actionPad == actionPad) &&
+            (identical(other.statuses, statuses) ||
+                other.statuses == statuses));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, button, group, bar, picture, input, text, dialog, actionPad);
+  int get hashCode => Object.hash(runtimeType, button, group, bar, picture,
+      input, text, dialog, actionPad, statuses);
 
   /// Create a copy of ThemeWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -419,7 +451,8 @@ abstract class _ThemeWidgetConfig implements ThemeWidgetConfig {
       final InputWidgetConfig? input,
       final TextWidgetConfig? text,
       final DialogWidgetConfig? dialog,
-      final ActionPadWidgetConfig? actionPad}) = _$ThemeWidgetConfigImpl;
+      final ActionPadWidgetConfig? actionPad,
+      final StatusesWidgetConfig statuses}) = _$ThemeWidgetConfigImpl;
 
   factory _ThemeWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$ThemeWidgetConfigImpl.fromJson;
@@ -440,6 +473,8 @@ abstract class _ThemeWidgetConfig implements ThemeWidgetConfig {
   DialogWidgetConfig? get dialog;
   @override
   ActionPadWidgetConfig? get actionPad;
+  @override
+  StatusesWidgetConfig get statuses;
 
   /// Create a copy of ThemeWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -4969,5 +5004,678 @@ abstract class _ActionPadWidgetConfig implements ActionPadWidgetConfig {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ActionPadWidgetConfigImplCopyWith<_$ActionPadWidgetConfigImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+StatusesWidgetConfig _$StatusesWidgetConfigFromJson(Map<String, dynamic> json) {
+  return _StatusesWidgetConfig.fromJson(json);
+}
+
+/// @nodoc
+mixin _$StatusesWidgetConfig {
+  RegistrationStatusesWidgetConfig get registrationStatuses =>
+      throw _privateConstructorUsedError;
+  CallStatusesWidgetConfig get callStatuses =>
+      throw _privateConstructorUsedError;
+
+  /// Serializes this StatusesWidgetConfig to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of StatusesWidgetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $StatusesWidgetConfigCopyWith<StatusesWidgetConfig> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $StatusesWidgetConfigCopyWith<$Res> {
+  factory $StatusesWidgetConfigCopyWith(StatusesWidgetConfig value,
+          $Res Function(StatusesWidgetConfig) then) =
+      _$StatusesWidgetConfigCopyWithImpl<$Res, StatusesWidgetConfig>;
+  @useResult
+  $Res call(
+      {RegistrationStatusesWidgetConfig registrationStatuses,
+      CallStatusesWidgetConfig callStatuses});
+
+  $RegistrationStatusesWidgetConfigCopyWith<$Res> get registrationStatuses;
+  $CallStatusesWidgetConfigCopyWith<$Res> get callStatuses;
+}
+
+/// @nodoc
+class _$StatusesWidgetConfigCopyWithImpl<$Res,
+        $Val extends StatusesWidgetConfig>
+    implements $StatusesWidgetConfigCopyWith<$Res> {
+  _$StatusesWidgetConfigCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of StatusesWidgetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? registrationStatuses = null,
+    Object? callStatuses = null,
+  }) {
+    return _then(_value.copyWith(
+      registrationStatuses: null == registrationStatuses
+          ? _value.registrationStatuses
+          : registrationStatuses // ignore: cast_nullable_to_non_nullable
+              as RegistrationStatusesWidgetConfig,
+      callStatuses: null == callStatuses
+          ? _value.callStatuses
+          : callStatuses // ignore: cast_nullable_to_non_nullable
+              as CallStatusesWidgetConfig,
+    ) as $Val);
+  }
+
+  /// Create a copy of StatusesWidgetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $RegistrationStatusesWidgetConfigCopyWith<$Res> get registrationStatuses {
+    return $RegistrationStatusesWidgetConfigCopyWith<$Res>(
+        _value.registrationStatuses, (value) {
+      return _then(_value.copyWith(registrationStatuses: value) as $Val);
+    });
+  }
+
+  /// Create a copy of StatusesWidgetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CallStatusesWidgetConfigCopyWith<$Res> get callStatuses {
+    return $CallStatusesWidgetConfigCopyWith<$Res>(_value.callStatuses,
+        (value) {
+      return _then(_value.copyWith(callStatuses: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$StatusesWidgetConfigImplCopyWith<$Res>
+    implements $StatusesWidgetConfigCopyWith<$Res> {
+  factory _$$StatusesWidgetConfigImplCopyWith(_$StatusesWidgetConfigImpl value,
+          $Res Function(_$StatusesWidgetConfigImpl) then) =
+      __$$StatusesWidgetConfigImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {RegistrationStatusesWidgetConfig registrationStatuses,
+      CallStatusesWidgetConfig callStatuses});
+
+  @override
+  $RegistrationStatusesWidgetConfigCopyWith<$Res> get registrationStatuses;
+  @override
+  $CallStatusesWidgetConfigCopyWith<$Res> get callStatuses;
+}
+
+/// @nodoc
+class __$$StatusesWidgetConfigImplCopyWithImpl<$Res>
+    extends _$StatusesWidgetConfigCopyWithImpl<$Res, _$StatusesWidgetConfigImpl>
+    implements _$$StatusesWidgetConfigImplCopyWith<$Res> {
+  __$$StatusesWidgetConfigImplCopyWithImpl(_$StatusesWidgetConfigImpl _value,
+      $Res Function(_$StatusesWidgetConfigImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of StatusesWidgetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? registrationStatuses = null,
+    Object? callStatuses = null,
+  }) {
+    return _then(_$StatusesWidgetConfigImpl(
+      registrationStatuses: null == registrationStatuses
+          ? _value.registrationStatuses
+          : registrationStatuses // ignore: cast_nullable_to_non_nullable
+              as RegistrationStatusesWidgetConfig,
+      callStatuses: null == callStatuses
+          ? _value.callStatuses
+          : callStatuses // ignore: cast_nullable_to_non_nullable
+              as CallStatusesWidgetConfig,
+    ));
+  }
+}
+
+/// @nodoc
+
+@themeJsonSerializable
+class _$StatusesWidgetConfigImpl implements _StatusesWidgetConfig {
+  const _$StatusesWidgetConfigImpl(
+      {this.registrationStatuses = const RegistrationStatusesWidgetConfig(),
+      this.callStatuses = const CallStatusesWidgetConfig()});
+
+  factory _$StatusesWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
+      _$$StatusesWidgetConfigImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final RegistrationStatusesWidgetConfig registrationStatuses;
+  @override
+  @JsonKey()
+  final CallStatusesWidgetConfig callStatuses;
+
+  @override
+  String toString() {
+    return 'StatusesWidgetConfig(registrationStatuses: $registrationStatuses, callStatuses: $callStatuses)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$StatusesWidgetConfigImpl &&
+            (identical(other.registrationStatuses, registrationStatuses) ||
+                other.registrationStatuses == registrationStatuses) &&
+            (identical(other.callStatuses, callStatuses) ||
+                other.callStatuses == callStatuses));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, registrationStatuses, callStatuses);
+
+  /// Create a copy of StatusesWidgetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$StatusesWidgetConfigImplCopyWith<_$StatusesWidgetConfigImpl>
+      get copyWith =>
+          __$$StatusesWidgetConfigImplCopyWithImpl<_$StatusesWidgetConfigImpl>(
+              this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$StatusesWidgetConfigImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _StatusesWidgetConfig implements StatusesWidgetConfig {
+  const factory _StatusesWidgetConfig(
+          {final RegistrationStatusesWidgetConfig registrationStatuses,
+          final CallStatusesWidgetConfig callStatuses}) =
+      _$StatusesWidgetConfigImpl;
+
+  factory _StatusesWidgetConfig.fromJson(Map<String, dynamic> json) =
+      _$StatusesWidgetConfigImpl.fromJson;
+
+  @override
+  RegistrationStatusesWidgetConfig get registrationStatuses;
+  @override
+  CallStatusesWidgetConfig get callStatuses;
+
+  /// Create a copy of StatusesWidgetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$StatusesWidgetConfigImplCopyWith<_$StatusesWidgetConfigImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+RegistrationStatusesWidgetConfig _$RegistrationStatusesWidgetConfigFromJson(
+    Map<String, dynamic> json) {
+  return _RegistrationStatusesWidgetConfig.fromJson(json);
+}
+
+/// @nodoc
+mixin _$RegistrationStatusesWidgetConfig {
+  Color get online => throw _privateConstructorUsedError;
+  Color get offline => throw _privateConstructorUsedError;
+
+  /// Serializes this RegistrationStatusesWidgetConfig to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of RegistrationStatusesWidgetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $RegistrationStatusesWidgetConfigCopyWith<RegistrationStatusesWidgetConfig>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $RegistrationStatusesWidgetConfigCopyWith<$Res> {
+  factory $RegistrationStatusesWidgetConfigCopyWith(
+          RegistrationStatusesWidgetConfig value,
+          $Res Function(RegistrationStatusesWidgetConfig) then) =
+      _$RegistrationStatusesWidgetConfigCopyWithImpl<$Res,
+          RegistrationStatusesWidgetConfig>;
+  @useResult
+  $Res call({Color online, Color offline});
+}
+
+/// @nodoc
+class _$RegistrationStatusesWidgetConfigCopyWithImpl<$Res,
+        $Val extends RegistrationStatusesWidgetConfig>
+    implements $RegistrationStatusesWidgetConfigCopyWith<$Res> {
+  _$RegistrationStatusesWidgetConfigCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of RegistrationStatusesWidgetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? online = null,
+    Object? offline = null,
+  }) {
+    return _then(_value.copyWith(
+      online: null == online
+          ? _value.online
+          : online // ignore: cast_nullable_to_non_nullable
+              as Color,
+      offline: null == offline
+          ? _value.offline
+          : offline // ignore: cast_nullable_to_non_nullable
+              as Color,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$RegistrationStatusesWidgetConfigImplCopyWith<$Res>
+    implements $RegistrationStatusesWidgetConfigCopyWith<$Res> {
+  factory _$$RegistrationStatusesWidgetConfigImplCopyWith(
+          _$RegistrationStatusesWidgetConfigImpl value,
+          $Res Function(_$RegistrationStatusesWidgetConfigImpl) then) =
+      __$$RegistrationStatusesWidgetConfigImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({Color online, Color offline});
+}
+
+/// @nodoc
+class __$$RegistrationStatusesWidgetConfigImplCopyWithImpl<$Res>
+    extends _$RegistrationStatusesWidgetConfigCopyWithImpl<$Res,
+        _$RegistrationStatusesWidgetConfigImpl>
+    implements _$$RegistrationStatusesWidgetConfigImplCopyWith<$Res> {
+  __$$RegistrationStatusesWidgetConfigImplCopyWithImpl(
+      _$RegistrationStatusesWidgetConfigImpl _value,
+      $Res Function(_$RegistrationStatusesWidgetConfigImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of RegistrationStatusesWidgetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? online = null,
+    Object? offline = null,
+  }) {
+    return _then(_$RegistrationStatusesWidgetConfigImpl(
+      online: null == online
+          ? _value.online
+          : online // ignore: cast_nullable_to_non_nullable
+              as Color,
+      offline: null == offline
+          ? _value.offline
+          : offline // ignore: cast_nullable_to_non_nullable
+              as Color,
+    ));
+  }
+}
+
+/// @nodoc
+
+@themeJsonSerializable
+class _$RegistrationStatusesWidgetConfigImpl
+    implements _RegistrationStatusesWidgetConfig {
+  const _$RegistrationStatusesWidgetConfigImpl(
+      {this.online = const Color(0xFF75B943),
+      this.offline = const Color(0xFFEEF3F6)});
+
+  factory _$RegistrationStatusesWidgetConfigImpl.fromJson(
+          Map<String, dynamic> json) =>
+      _$$RegistrationStatusesWidgetConfigImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final Color online;
+  @override
+  @JsonKey()
+  final Color offline;
+
+  @override
+  String toString() {
+    return 'RegistrationStatusesWidgetConfig(online: $online, offline: $offline)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$RegistrationStatusesWidgetConfigImpl &&
+            (identical(other.online, online) || other.online == online) &&
+            (identical(other.offline, offline) || other.offline == offline));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, online, offline);
+
+  /// Create a copy of RegistrationStatusesWidgetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$RegistrationStatusesWidgetConfigImplCopyWith<
+          _$RegistrationStatusesWidgetConfigImpl>
+      get copyWith => __$$RegistrationStatusesWidgetConfigImplCopyWithImpl<
+          _$RegistrationStatusesWidgetConfigImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$RegistrationStatusesWidgetConfigImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _RegistrationStatusesWidgetConfig
+    implements RegistrationStatusesWidgetConfig {
+  const factory _RegistrationStatusesWidgetConfig(
+      {final Color online,
+      final Color offline}) = _$RegistrationStatusesWidgetConfigImpl;
+
+  factory _RegistrationStatusesWidgetConfig.fromJson(
+          Map<String, dynamic> json) =
+      _$RegistrationStatusesWidgetConfigImpl.fromJson;
+
+  @override
+  Color get online;
+  @override
+  Color get offline;
+
+  /// Create a copy of RegistrationStatusesWidgetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$RegistrationStatusesWidgetConfigImplCopyWith<
+          _$RegistrationStatusesWidgetConfigImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+CallStatusesWidgetConfig _$CallStatusesWidgetConfigFromJson(
+    Map<String, dynamic> json) {
+  return _CallStatusesWidgetConfig.fromJson(json);
+}
+
+/// @nodoc
+mixin _$CallStatusesWidgetConfig {
+  Color get connectivityNone => throw _privateConstructorUsedError;
+  Color get connectError => throw _privateConstructorUsedError;
+  Color get appUnregistered => throw _privateConstructorUsedError;
+  Color get connectIssue => throw _privateConstructorUsedError;
+  Color get inProgress => throw _privateConstructorUsedError;
+  Color get ready => throw _privateConstructorUsedError;
+
+  /// Serializes this CallStatusesWidgetConfig to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of CallStatusesWidgetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $CallStatusesWidgetConfigCopyWith<CallStatusesWidgetConfig> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $CallStatusesWidgetConfigCopyWith<$Res> {
+  factory $CallStatusesWidgetConfigCopyWith(CallStatusesWidgetConfig value,
+          $Res Function(CallStatusesWidgetConfig) then) =
+      _$CallStatusesWidgetConfigCopyWithImpl<$Res, CallStatusesWidgetConfig>;
+  @useResult
+  $Res call(
+      {Color connectivityNone,
+      Color connectError,
+      Color appUnregistered,
+      Color connectIssue,
+      Color inProgress,
+      Color ready});
+}
+
+/// @nodoc
+class _$CallStatusesWidgetConfigCopyWithImpl<$Res,
+        $Val extends CallStatusesWidgetConfig>
+    implements $CallStatusesWidgetConfigCopyWith<$Res> {
+  _$CallStatusesWidgetConfigCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of CallStatusesWidgetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? connectivityNone = null,
+    Object? connectError = null,
+    Object? appUnregistered = null,
+    Object? connectIssue = null,
+    Object? inProgress = null,
+    Object? ready = null,
+  }) {
+    return _then(_value.copyWith(
+      connectivityNone: null == connectivityNone
+          ? _value.connectivityNone
+          : connectivityNone // ignore: cast_nullable_to_non_nullable
+              as Color,
+      connectError: null == connectError
+          ? _value.connectError
+          : connectError // ignore: cast_nullable_to_non_nullable
+              as Color,
+      appUnregistered: null == appUnregistered
+          ? _value.appUnregistered
+          : appUnregistered // ignore: cast_nullable_to_non_nullable
+              as Color,
+      connectIssue: null == connectIssue
+          ? _value.connectIssue
+          : connectIssue // ignore: cast_nullable_to_non_nullable
+              as Color,
+      inProgress: null == inProgress
+          ? _value.inProgress
+          : inProgress // ignore: cast_nullable_to_non_nullable
+              as Color,
+      ready: null == ready
+          ? _value.ready
+          : ready // ignore: cast_nullable_to_non_nullable
+              as Color,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$CallStatusesWidgetConfigImplCopyWith<$Res>
+    implements $CallStatusesWidgetConfigCopyWith<$Res> {
+  factory _$$CallStatusesWidgetConfigImplCopyWith(
+          _$CallStatusesWidgetConfigImpl value,
+          $Res Function(_$CallStatusesWidgetConfigImpl) then) =
+      __$$CallStatusesWidgetConfigImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {Color connectivityNone,
+      Color connectError,
+      Color appUnregistered,
+      Color connectIssue,
+      Color inProgress,
+      Color ready});
+}
+
+/// @nodoc
+class __$$CallStatusesWidgetConfigImplCopyWithImpl<$Res>
+    extends _$CallStatusesWidgetConfigCopyWithImpl<$Res,
+        _$CallStatusesWidgetConfigImpl>
+    implements _$$CallStatusesWidgetConfigImplCopyWith<$Res> {
+  __$$CallStatusesWidgetConfigImplCopyWithImpl(
+      _$CallStatusesWidgetConfigImpl _value,
+      $Res Function(_$CallStatusesWidgetConfigImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of CallStatusesWidgetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? connectivityNone = null,
+    Object? connectError = null,
+    Object? appUnregistered = null,
+    Object? connectIssue = null,
+    Object? inProgress = null,
+    Object? ready = null,
+  }) {
+    return _then(_$CallStatusesWidgetConfigImpl(
+      connectivityNone: null == connectivityNone
+          ? _value.connectivityNone
+          : connectivityNone // ignore: cast_nullable_to_non_nullable
+              as Color,
+      connectError: null == connectError
+          ? _value.connectError
+          : connectError // ignore: cast_nullable_to_non_nullable
+              as Color,
+      appUnregistered: null == appUnregistered
+          ? _value.appUnregistered
+          : appUnregistered // ignore: cast_nullable_to_non_nullable
+              as Color,
+      connectIssue: null == connectIssue
+          ? _value.connectIssue
+          : connectIssue // ignore: cast_nullable_to_non_nullable
+              as Color,
+      inProgress: null == inProgress
+          ? _value.inProgress
+          : inProgress // ignore: cast_nullable_to_non_nullable
+              as Color,
+      ready: null == ready
+          ? _value.ready
+          : ready // ignore: cast_nullable_to_non_nullable
+              as Color,
+    ));
+  }
+}
+
+/// @nodoc
+
+@themeJsonSerializable
+class _$CallStatusesWidgetConfigImpl implements _CallStatusesWidgetConfig {
+  const _$CallStatusesWidgetConfigImpl(
+      {this.connectivityNone = const Color(0xFFE74C3C),
+      this.connectError = const Color(0xFFE74C3C),
+      this.appUnregistered = const Color(0xFF494949),
+      this.connectIssue = const Color(0xFFE74C3C),
+      this.inProgress = const Color(0xFF123752),
+      this.ready = const Color(0xFF75B943)});
+
+  factory _$CallStatusesWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
+      _$$CallStatusesWidgetConfigImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final Color connectivityNone;
+  @override
+  @JsonKey()
+  final Color connectError;
+  @override
+  @JsonKey()
+  final Color appUnregistered;
+  @override
+  @JsonKey()
+  final Color connectIssue;
+  @override
+  @JsonKey()
+  final Color inProgress;
+  @override
+  @JsonKey()
+  final Color ready;
+
+  @override
+  String toString() {
+    return 'CallStatusesWidgetConfig(connectivityNone: $connectivityNone, connectError: $connectError, appUnregistered: $appUnregistered, connectIssue: $connectIssue, inProgress: $inProgress, ready: $ready)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CallStatusesWidgetConfigImpl &&
+            (identical(other.connectivityNone, connectivityNone) ||
+                other.connectivityNone == connectivityNone) &&
+            (identical(other.connectError, connectError) ||
+                other.connectError == connectError) &&
+            (identical(other.appUnregistered, appUnregistered) ||
+                other.appUnregistered == appUnregistered) &&
+            (identical(other.connectIssue, connectIssue) ||
+                other.connectIssue == connectIssue) &&
+            (identical(other.inProgress, inProgress) ||
+                other.inProgress == inProgress) &&
+            (identical(other.ready, ready) || other.ready == ready));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, connectivityNone, connectError,
+      appUnregistered, connectIssue, inProgress, ready);
+
+  /// Create a copy of CallStatusesWidgetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CallStatusesWidgetConfigImplCopyWith<_$CallStatusesWidgetConfigImpl>
+      get copyWith => __$$CallStatusesWidgetConfigImplCopyWithImpl<
+          _$CallStatusesWidgetConfigImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$CallStatusesWidgetConfigImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _CallStatusesWidgetConfig implements CallStatusesWidgetConfig {
+  const factory _CallStatusesWidgetConfig(
+      {final Color connectivityNone,
+      final Color connectError,
+      final Color appUnregistered,
+      final Color connectIssue,
+      final Color inProgress,
+      final Color ready}) = _$CallStatusesWidgetConfigImpl;
+
+  factory _CallStatusesWidgetConfig.fromJson(Map<String, dynamic> json) =
+      _$CallStatusesWidgetConfigImpl.fromJson;
+
+  @override
+  Color get connectivityNone;
+  @override
+  Color get connectError;
+  @override
+  Color get appUnregistered;
+  @override
+  Color get connectIssue;
+  @override
+  Color get inProgress;
+  @override
+  Color get ready;
+
+  /// Create a copy of CallStatusesWidgetConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$CallStatusesWidgetConfigImplCopyWith<_$CallStatusesWidgetConfigImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
