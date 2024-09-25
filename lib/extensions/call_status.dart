@@ -27,7 +27,6 @@ extension CallStatusColor on CallStatus {
   Color color(BuildContext context) {
     final themeData = Theme.of(context);
     final colorScheme = themeData.colorScheme;
-
     final callStatusStyles = themeData.extension<CallStatusStyles>()?.primary;
 
     switch (this) {
