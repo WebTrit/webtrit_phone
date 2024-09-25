@@ -627,6 +627,25 @@ class ThemeProvider extends InheritedWidget {
     );
   }
 
+  SnackBarStyles snackBarStyles(
+    ColorScheme colors,
+    SnackBarWidgetConfig? snackBarConfig,
+  ) {
+    final successBackgroundColor = snackBarConfig?.successBackgroundColor ?? colors.primary;
+    final errorBackgroundColor = snackBarConfig?.errorBackgroundColor ?? colors.error;
+    final infoBackgroundColor = snackBarConfig?.infoBackgroundColor ?? colors.secondary;
+    final warningBackgroundColor = snackBarConfig?.warningBackgroundColor ?? colors.tertiary;
+
+    return SnackBarStyles(
+      primary: SnackBarStyle(
+        successBackgroundColor: successBackgroundColor,
+        errorBackgroundColor: errorBackgroundColor,
+        infoBackgroundColor: infoBackgroundColor,
+        warningBackgroundColor: warningBackgroundColor,
+      ),
+    );
+  }
+
   AppBarTheme appBarTheme(
     ColorScheme colors,
     ExtTabBarWidgetConfig? extTabBar,
@@ -750,6 +769,10 @@ class ThemeProvider extends InheritedWidget {
         registeredStatusStyle(
           colorScheme,
           themeWidgetConfig?.statuses.registrationStatuses,
+        ),
+        snackBarStyles(
+          colorScheme,
+          themeWidgetConfig?.dialog?.snackBar,
         ),
         actionpadStyles(
           colorScheme,
