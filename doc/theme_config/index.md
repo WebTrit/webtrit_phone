@@ -267,6 +267,15 @@ Example of a component override file:
 - `activeButtonColor2`: Color of the second active button.
 - `defaultButtonColor`: Default color for buttons.
 
+### snackBar
+
+> Represents a snack bar with customizable colors.
+
+- `successBackgroundColor`: Background color for success messages.
+- `errorBackgroundColor`: Background color for error messages.
+- `infoBackgroundColor`: Background color for info messages.
+- `warningBackgroundColor`: Background color for warning messages.
+
 ### actionPad
 
 > Represents a action ui no keypad page.
@@ -282,6 +291,24 @@ Example of a component override file:
 - `backspacePressed`: Style of delete numbers button
     - backgroundColor : background color
     - foregroundColor : foreground color
+
+### registrationStatuses
+
+> Represents the status of the registration process.
+
+- `online`: Color for online status.
+- `offline`: Color for offline status.
+
+### calStatuses
+
+> Represents the status of the call process.
+
+- `connectivityNone`: Color for no connectivity.
+- `connectError`: Color for connection errors.
+- `appUnregistered`: Color for unregistered applications.
+- `connectIssue`: Color for connection issues.
+- `inProgress`: Color for in-progress calls.
+- `ready`: Color for ready calls.
 
 # Page-Specific Overrides
 
