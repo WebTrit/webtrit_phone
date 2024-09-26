@@ -15,10 +15,12 @@ class ContactScreen extends StatelessWidget {
     super.key,
     required this.favoriteVisible,
     required this.transferVisible,
+    required this.videoVisible,
   });
 
   final bool favoriteVisible;
   final bool transferVisible;
+  final bool videoVisible;
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +67,7 @@ class ContactScreen extends StatelessWidget {
                         label: contactPhone.label,
                         favoriteVisible: favoriteVisible,
                         transferVisible: transferVisible,
+                        videoVisible: videoVisible,
                         favorite: contactPhone.favorite,
                         transfer: callState.isBlingTransferInitiated,
                         onFavoriteChanged: (favorite) {

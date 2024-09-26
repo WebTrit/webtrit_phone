@@ -10,6 +10,7 @@ class ContactPhoneTile extends StatelessWidget {
     required this.label,
     required this.favoriteVisible,
     required this.transferVisible,
+    required this.videoVisible,
     required this.favorite,
     required this.transfer,
     this.onTap,
@@ -24,6 +25,7 @@ class ContactPhoneTile extends StatelessWidget {
   final String label;
   final bool favoriteVisible;
   final bool transferVisible;
+  final bool videoVisible;
   final bool favorite;
   final bool transfer;
   final GestureTapCallback? onTap;
@@ -58,11 +60,12 @@ class ContactPhoneTile extends StatelessWidget {
               icon: const Icon(Icons.call),
               onPressed: onAudioPressed,
             ),
-            IconButton(
-              splashRadius: 24,
-              icon: const Icon(Icons.videocam),
-              onPressed: onVideoPressed,
-            ),
+            if (videoVisible)
+              IconButton(
+                splashRadius: 24,
+                icon: const Icon(Icons.videocam),
+                onPressed: onVideoPressed,
+              ),
           ],
         ],
       ),

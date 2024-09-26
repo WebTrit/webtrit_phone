@@ -164,6 +164,7 @@ class FeatureAccess {
     final callConfig = appConfig.callConfig;
 
     return CallFeature(
+      videoEnable: callConfig.videoEnabled,
       transfer: TransferConfig(
         enableBlindTransfer: callConfig.transfer.enableBlindTransfer,
         enableAttendedTransfer: callConfig.transfer.enableAttendedTransfer,
@@ -218,9 +219,11 @@ class SettingsFeature {
 }
 
 class CallFeature {
+  final bool videoEnable;
   final TransferConfig transfer;
 
   CallFeature({
+    required this.videoEnable,
     required this.transfer,
   });
 }
