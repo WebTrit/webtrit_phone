@@ -173,7 +173,7 @@ Map<String, dynamic> _$$AppConfigSettingsItemImplToJson(
 
 _$AppConfigCallImpl _$$AppConfigCallImplFromJson(Map<String, dynamic> json) =>
     _$AppConfigCallImpl(
-      enableVideo: json['enableVideo'] as bool? ?? true,
+      videoEnabled: json['videoEnabled'] as bool? ?? true,
       transfer: json['transfer'] == null
           ? const AppConfigTransfer(
               enableBlindTransfer: true, enableAttendedTransfer: true)
@@ -183,7 +183,7 @@ _$AppConfigCallImpl _$$AppConfigCallImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$AppConfigCallImplToJson(_$AppConfigCallImpl instance) =>
     <String, dynamic>{
-      'enableVideo': instance.enableVideo,
+      'videoEnabled': instance.videoEnabled,
       'transfer': instance.transfer,
     };
 

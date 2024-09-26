@@ -22,7 +22,7 @@ class ContactScreenPage extends StatelessWidget {
     final widget = ContactScreen(
       favoriteVisible: featureAccess.bottomMenuFeature.isTabEnabled(MainFlavor.favorites),
       transferVisible: featureAccess.callFeature.transfer.enableBlindTransfer,
-      videoVisible: featureAccess.callFeature.enableVideo,
+      videoVisible: featureAccess.callFeature.videoEnable,
     );
     final provider = BlocProvider(
       create: (context) {
