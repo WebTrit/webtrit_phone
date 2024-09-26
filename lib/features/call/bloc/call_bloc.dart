@@ -407,7 +407,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
 
     if (newRegistrationStatus.isFailed) {
-      final code = SignalingRegistrationFailedCode.values.byCode(event.registration.code!);
+      final code = SignalingRegistrationFailedCode.values.byCode(event.registration.code);
       final reason = event.registration.reason ?? code.toString();
 
       switch (code) {
