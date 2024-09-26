@@ -125,6 +125,7 @@ class WebtritApiClient {
             _ => ErrorResponse.fromJson(responseDataJson),
           };
           throw RequestFailure(
+            tenantUrl: tenantUrl,
             statusCode: httpResponse.statusCode,
             requestId: xRequestId,
             token: token,
@@ -134,7 +135,12 @@ class WebtritApiClient {
       } catch (e) {
         _logger.severe('${method.toUpperCase()} failed for requestId: $requestId with error: $e');
         if (requestAttempt >= options.retries) {
-          rethrow;
+          throw RequestFailure(
+            tenantUrl: tenantUrl,
+            requestId: xRequestId,
+            token: token,
+            error: null,
+          );
         }
         requestAttempt++;
         await Future.delayed(options.retryDelay);

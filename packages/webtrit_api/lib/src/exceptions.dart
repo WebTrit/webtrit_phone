@@ -2,13 +2,15 @@ import 'models/error.dart';
 
 class RequestFailure implements Exception {
   RequestFailure({
-    required this.statusCode,
+    required this.tenantUrl,
+    this.statusCode,
     required this.requestId,
     this.token,
     this.error,
   });
 
-  final int statusCode;
+  final Uri tenantUrl;
+  final int? statusCode;
   final String requestId;
   final String? token;
   final ErrorResponse? error;
