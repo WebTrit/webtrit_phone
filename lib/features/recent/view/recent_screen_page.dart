@@ -16,7 +16,11 @@ class RecentScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const widget = RecentScreen();
+    final featureAccess = context.read<FeatureAccess>();
+
+    final widget = RecentScreen(
+      videoVisible: featureAccess.callFeature.enableVideo,
+    );
     var provider = BlocProvider(
       create: (context) {
         return RecentBloc(

@@ -13,7 +13,10 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 class RecentScreen extends StatelessWidget {
   const RecentScreen({
     super.key,
+    required this.videoVisible,
   });
+
+  final bool videoVisible;
 
   @override
   Widget build(BuildContext context) {
@@ -70,14 +73,16 @@ class RecentScreen extends StatelessWidget {
                       child: const Icon(Icons.call),
                       onPressed: () => _initiateCall(context, recent, false),
                     ),
-                    const SizedBox(
-                      width: 16,
-                    ),
-                    OutlinedButton(
-                      style: buttonStyle,
-                      child: const Icon(Icons.videocam),
-                      onPressed: () => _initiateCall(context, recent, true),
-                    ),
+                    if (videoVisible) ...[
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      OutlinedButton(
+                        style: buttonStyle,
+                        child: const Icon(Icons.videocam),
+                        onPressed: () => _initiateCall(context, recent, true),
+                      ),
+                    ]
                   ],
                 ),
                 const Divider(
