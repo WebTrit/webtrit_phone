@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 
-import '../extensions/extensions.dart';
 import '../models/models.dart';
+import '../extensions/extensions.dart';
 
 import 'permission_tips.dart';
 
