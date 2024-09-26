@@ -74,6 +74,7 @@ class MainScreenScreenshot extends StatelessWidget {
       case MainFlavor.favorites:
         final widget = FavoritesScreen(
           title: title,
+          videoCallEnable: true,
         );
         final provider = BlocProvider<FavoritesBloc>(
           create: (context) => MockFavoritesBloc.mainScreen(),
